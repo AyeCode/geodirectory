@@ -132,7 +132,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://franklinsquare.com',
 	"twitter"       => 'http://twitter.com/franklinsquare',
 	"facebook"      => 'http://facebook.com/franklinsquare',
-	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -194,7 +194,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://pleasetouchmuseum.com',
 	"twitter"       => 'http://twitter.com/pleasetouchmuseum',
 	"facebook"      => 'http://facebook.com/pleasetouchmuseum',
-	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -248,7 +248,7 @@ $dummy_posts[] = array(
 			"website"       => 'http://longwoodgardens.com',
 			"twitter"       => 'http://twitter.com/longwoodgardens',
 			"facebook"      => 'http://facebook.com/longwoodgardens',
-			"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["GMT":"+0"]',
+			"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00"],["UTC":"+0"]',
 			"post_dummy"    => '1'
 		);
 
@@ -312,7 +312,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://philadelphiazoo.com',
 	"twitter"       => 'http://twitter.com/philadelphiazoo',
 	"facebook"      => 'http://facebook.com/philadelphiazoo',
-	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -363,7 +363,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://ncc.com',
 	"twitter"       => 'http://twitter.com/ncc',
 	"facebook"      => 'http://facebook.com/ncc',
-	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -408,7 +408,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://swp.com',
 	"twitter"       => 'http://twitter.com/swp',
 	"facebook"      => 'http://facebook.com/swp',
-	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -447,7 +447,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://museumwithoutwallsaudio.org/',
 	"twitter"       => 'http://twitter.com/mwwalls',
 	"facebook"      => 'http://facebook.com/mwwalls',
-	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -484,7 +484,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.aampmuseum.org/',
 	"twitter"       => 'http://twitter.com/aampmuseum',
 	"facebook"      => 'http://facebook.com/aampmuseum',
-	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-18:00","We 09:00-17:00","Th 09:00-19:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-18:00","We 09:00-17:00","Th 09:00-19:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -535,7 +535,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.nps.gov/inde',
 	"twitter"       => 'http://twitter.com/nps',
 	"facebook"      => 'http://facebook.com/nps',
-	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -597,7 +597,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.fairmountpark.org/rittenhousesquare.asp',
 	"twitter"       => 'http://twitter.com/fairmountpark',
 	"facebook"      => 'http://facebook.com/fairmountpark',
-	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 09:00-17:00","Tu 09:00-17:00","We 09:00-17:00","Th 09:00-17:00","Fr 09:00-17:00","Sa 09:00-19:00","Su 09:00-17:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -693,7 +693,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.loewshotels.com/en/hotels/philadelphia-hotel/overview.aspx',
 	"twitter"       => 'http://twitter.com/loewshotels',
 	"facebook"      => 'http://facebook.com/loewshotels',
-	"business_hours"=> '["Mo 07:00-23:00","Tu 07:00-23:00","We 07:00-23:00","Th 07:00-23:00","Fr 07:00-23:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-23:00","Tu 07:00-23:00","We 07:00-23:00","Th 07:00-23:00","Fr 07:00-23:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -738,7 +738,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://embassysuites1.hilton.com/en_US/es/hotel/PHLDTES-Embassy-Suites-Philadelphia-Center-City-Pennsylvania/index.do',
 	"twitter"       => 'http://twitter.com/embassysuites1',
 	"facebook"      => 'http://facebook.com/embassysuites1',
-	"business_hours"=> '["Mo 07:00-23:00","Tu 07:00-23:00","We 07:00-23:00","Th 07:00-23:00","Fr 07:00-23:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-23:00","Tu 07:00-23:00","We 07:00-23:00","Th 07:00-23:00","Fr 07:00-23:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -798,7 +798,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://doubletree1.hilton.com/en_US/dt/hotel/PHLBLDT-Doubletree-Hotel-Philadelphia-Pennsylvania/index.do',
 	"twitter"       => 'http://twitter.com/doubletree1',
 	"facebook"      => 'http://facebook.com/doubletree1',
-	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -854,7 +854,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.marriott.com/hotels/travel/phldt-philadelphia-marriott-downtown/',
 	"twitter"       => 'http://twitter.com/marriott',
 	"facebook"      => 'http://facebook.com/marriott',
-	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -899,7 +899,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.theinnatpenn.com/',
 	"twitter"       => 'http://twitter.com/theinnatpenn',
 	"facebook"      => 'http://facebook.com/theinnatpenn',
-	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -959,7 +959,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.theinnatpenn.com/',
 	"twitter"       => 'http://twitter.com/theinnatpenn',
 	"facebook"      => 'http://facebook.com/theinnatpenn',
-	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1018,7 +1018,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.fourseasons.com/philadelphia/',
 	"twitter"       => 'http://twitter.com/fourseasons',
 	"facebook"      => 'http://facebook.com/fourseasons',
-	"business_hours"=> '["Mo 07:00-23:00","Tu 07:00-23:00","We 07:00-23:00","Th 07:00-22:00","Fr 07:00-23:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-23:00","Tu 07:00-23:00","We 07:00-23:00","Th 07:00-22:00","Fr 07:00-23:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1056,7 +1056,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.alexanderinn.com/',
 	"twitter"       => 'http://twitter.com/alexanderinn',
 	"facebook"      => 'http://facebook.com/alexanderinn',
-	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1094,7 +1094,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://book.bestwestern.com/bestwestern/productInfo.do?propertyCode=39087',
 	"twitter"       => 'http://twitter.com/bestwestern',
 	"facebook"      => 'http://facebook.com/bestwestern',
-	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1131,7 +1131,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.chestnuthillhotel.com/',
 	"twitter"       => 'http://twitter.com/chestnuthillhotel',
 	"facebook"      => 'http://facebook.com/chestnuthillhotel',
-	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 07:00-22:00","Tu 07:00-22:00","We 07:00-22:00","Th 07:00-22:00","Fr 07:00-22:00","Sa 07:00-23:00","Su 07:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1187,7 +1187,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.villagewhiskey.com/',
 	"twitter"       => 'http://twitter.com/villagewhiskey',
 	"facebook"      => 'http://facebook.com/villagewhiskey',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1235,7 +1235,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.villagewhiskey.com/',
 	"twitter"       => 'http://twitter.com/villagewhiskey',
 	"facebook"      => 'http://facebook.com/villagewhiskey',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1292,7 +1292,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.parc-restaurant.com/',
 	"twitter"       => 'http://twitter.com/parc-restaurant',
 	"facebook"      => 'http://facebook.com/parc-restaurant',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1347,7 +1347,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.percystreet.com/',
 	"twitter"       => 'http://twitter.com/percystreet',
 	"facebook"      => 'http://facebook.com/percystreet',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1386,7 +1386,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.fourseasons.com/philadelphia/dining',
 	"twitter"       => 'http://twitter.com/fourseasons',
 	"facebook"      => 'http://facebook.com/fourseasons',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1426,7 +1426,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.rittenhousehotel.com/lacroix.cfm',
 	"twitter"       => 'http://twitter.com/rittenhousehotel',
 	"facebook"      => 'http://facebook.com/rittenhousehotel',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1466,7 +1466,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.zamarestaurant.com/',
 	"twitter"       => 'http://twitter.com/zamarestaurant',
 	"facebook"      => 'http://facebook.com/zamarestaurant',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1514,7 +1514,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.sampanphilly.com/',
 	"twitter"       => 'http://twitter.com/sampanphilly',
 	"facebook"      => 'http://facebook.com/sampanphilly',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1556,7 +1556,7 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.morimotorestaurant.com/',
 	"twitter"       => 'http://twitter.com/morimotorestaurant',
 	"facebook"      => 'http://facebook.com/morimotorestaurant',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );
 
@@ -1596,6 +1596,6 @@ $dummy_posts[] = array(
 	"website"       => 'http://www.buddakan.com/',
 	"twitter"       => 'http://twitter.com/buddakan',
 	"facebook"      => 'http://facebook.com/buddakan',
-	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["GMT":"+0"]',
+	"business_hours"=> '["Mo 13:00-22:00","Tu 13:00-22:00","We 13:00-22:00","Th 13:00-22:00","Fr 13:00-22:00","Sa 13:00-23:00","Su 15:00-23:00"],["UTC":"+0"]',
 	"post_dummy"    => '1'
 );

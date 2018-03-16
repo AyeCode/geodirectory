@@ -179,26 +179,26 @@ function geodir_sc_home_map($atts)
         'child_collapse' => apply_filters('widget_child_collapse', $params['child_collapse']),
         'enable_cat_filters' => true,
         'enable_text_search' => true,
-        'enable_post_type_filters' => true,
+        'post_type_filter' => true,
         /**
-         * Filter the widget enable_location_filters value of the map on home/listings page.
+         * Filter the widget location_filter value of the map on home/listings page.
          *
          * This is used when the location addon is used.
          *
          * @since 1.0.0
          * @param bool $val True if location filters should be used, false if not.
          */
-        'enable_location_filters' => apply_filters('geodir_home_map_enable_location_filters', false),
-        'enable_jason_on_load' => false,
-        'enable_marker_cluster' => false,
-        'enable_map_resize_button' => true,
+        'location_filter' => apply_filters('geodir_home_map_enable_location_filters', false),
+        'jason_on_load' => false,
+        'marker_cluster' => false,
+        'map_resize_button' => true,
         'map_class_name' => 'geodir-map-home-page',
         'is_geodir_home_map_widget' => true,
     );
 
 	// Add marker cluster
 	if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
-        $map_args['enable_marker_cluster'] = true;
+        $map_args['marker_cluster'] = true;
         if(geodir_get_option('geodir_marker_cluster_type')) {
             if ($map_args['autozoom']) {
                 $map_args['enable_marker_cluster_no_reposition'] = false;
@@ -210,7 +210,7 @@ function geodir_sc_home_map($atts)
 
         }
 	} else {
-		$map_args['enable_marker_cluster'] = false;
+		$map_args['marker_cluster'] = false;
 	}
 
     // if lat and long set in shortcode, hack it so the map is not repositioned
@@ -386,9 +386,9 @@ function geodir_sc_listing_map($atts) {
             'child_collapse'           => 0,
             'enable_cat_filters'       => false,
             'enable_text_search'       => false,
-            'enable_post_type_filters' => false,
-            'enable_location_filters'  => false,
-            'enable_jason_on_load'     => true,
+            'post_type_filter' => false,
+            'location_filter'  => false,
+            'jason_on_load'     => true,
             'ajax_url'                 => geodir_get_ajax_url(),
             'latitude'                 => isset( $default_location->city_latitude ) ? $default_location->city_latitude : '',
             'longitude'                => isset( $default_location->city_longitude ) ? $default_location->city_longitude : '',
@@ -412,9 +412,9 @@ function geodir_sc_listing_map($atts) {
 
         // Add marker cluster
         if ( isset( $params['marker_cluster'] ) && gdsc_to_bool_val( $params['marker_cluster'] ) && defined( 'GDCLUSTER_VERSION' ) ) {
-            $map_args['enable_marker_cluster'] = true;
+            $map_args['marker_cluster'] = true;
         } else {
-            $map_args['enable_marker_cluster'] = false;
+            $map_args['marker_cluster'] = false;
         }
 
         geodir_draw_map( $map_args );
@@ -459,9 +459,9 @@ function geodir_sc_listing_map($atts) {
             'child_collapse' => 0,
             'enable_cat_filters' => false,
             'enable_text_search' => false,
-            'enable_post_type_filters' => false,
-            'enable_location_filters' => false,
-            'enable_jason_on_load' => true,
+            'post_type_filter' => false,
+            'location_filter' => false,
+            'jason_on_load' => true,
         );
         if (is_single()) {
             global $post;
@@ -491,9 +491,9 @@ function geodir_sc_listing_map($atts) {
 
         // Add marker cluster
         if (isset($params['marker_cluster']) && gdsc_to_bool_val($params['marker_cluster']) && defined('GDCLUSTER_VERSION')) {
-            $map_args['enable_marker_cluster'] = true;
+            $map_args['marker_cluster'] = true;
         } else {
-            $map_args['enable_marker_cluster'] = false;
+            $map_args['marker_cluster'] = false;
         }
         geodir_draw_map($map_args);
         $output = ob_get_contents();

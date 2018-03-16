@@ -38,6 +38,7 @@ function goedir_register_widgets() {
     register_widget( 'GeoDir_Widget_Output_location' );
     register_widget( 'GeoDir_Widget_Author_Actions' );
     register_widget( 'GeoDir_Widget_Listings' );
+	register_widget( 'GeoDir_Widget_Map' );
 
 
 

@@ -1070,9 +1070,9 @@ function geodir_show_detail_page_tabs() {
 		$map_args['child_collapse']           = '0';
 		$map_args['enable_cat_filters']       = false;
 		$map_args['enable_text_search']       = false;
-		$map_args['enable_post_type_filters'] = false;
-		$map_args['enable_location_filters']  = false;
-		$map_args['enable_jason_on_load']     = false;
+		$map_args['post_type_filter'] = false;
+		$map_args['location_filter']  = false;
+		$map_args['jason_on_load']     = false;
 		$map_args['enable_map_direction']     = true;
 		$map_args['map_class_name']           = 'geodir-map-detail-page';
 		$map_args['maptype']                  = ( ! empty( $post->post_mapview ) ) ? $post->post_mapview : 'ROADMAP';
@@ -1127,9 +1127,9 @@ function geodir_show_detail_page_tabs() {
 		$map_args['longitude']                = $address_longitude;
 		$map_args['enable_cat_filters']       = false;
 		$map_args['enable_text_search']       = false;
-		$map_args['enable_post_type_filters'] = false;
-		$map_args['enable_location_filters']  = false;
-		$map_args['enable_jason_on_load']     = false;
+		$map_args['post_type_filter'] = false;
+		$map_args['location_filter']  = false;
+		$map_args['jason_on_load']     = false;
 		$map_args['enable_map_direction']     = true;
 		$map_args['map_class_name']           = 'geodir-map-preview-page';
 		$map_args['posts']           		  = $post->ID;

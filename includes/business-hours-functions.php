@@ -47,7 +47,7 @@ function geodir_day_short_names() {
 }
 
 /**
- * Get GMT Offset.
+ * Get UTC Offset.
  *
  * @since 2.0.0
  *
@@ -120,7 +120,7 @@ function geodir_array_to_schema( $schema_input ) {
 	if ( !empty( $periods ) ) {
 		$property[] = json_encode( $periods );
 	}
-	$property[] = '["GMT":"' . $offset . '"]';
+	$property[] = '["UTC":"' . $offset . '"]';
 
 	$schema = implode( ",", $property );
 	
@@ -169,7 +169,7 @@ function geodir_schema_to_array( $schema ) {
 	}
 	if ( ! empty( $schema_array[1] ) ) {
 		$gmt_offset = str_replace(' ', '', $schema_array[1]);
-		$gmt_offset = str_replace(array('"GMT":"', '"', '[', ']'), '', $schema_array[1]);
+		$gmt_offset = str_replace(array('"UTC":"', '"', '[', ']'), '', $schema_array[1]);
 		$return['offset'] = ( ! empty( $gmt_offset ) ? $gmt_offset : geodir_gmt_offset() );
 	}
 	
@@ -488,3 +488,14 @@ function geodir_update_business_hours( $post_data, $update = false ) {
 	geodir_save_business_hours( $post_ID, $business_hours );
 }
 //add_action( 'geodir_ajax_post_saved', 'geodir_update_business_hours', 0, 2 ); @remove this once we implement search by open_now
+
+function geodir_sanitize_business_hours_value( $value, $custom_field, $post_id, $post, $update ) {
+	if ( ! empty( $value ) && ! is_array( $value ) ) {
+		$value = stripslashes( $value );
+		if ( strpos( $value, '"UTC"' ) === false ) {
+			$value .= ',["UTC":"' . geodir_gmt_offset() . '"]';
+		}
+	}
+	return $value;
+}
+add_filter( 'geodir_custom_field_value_business_hours', 'geodir_sanitize_business_hours_value', 10, 5 );

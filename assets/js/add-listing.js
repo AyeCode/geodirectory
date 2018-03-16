@@ -541,7 +541,7 @@ var GeoDir_Business_Hours = {
 			v += JSON.stringify(pa);
 			v += ',';
 		}
-		v += '["GMT":"' + this.gmt_offset + '"]';
+		v += '["UTC":"' + this.gmt_offset + '"]';
 		return v;
 	},
 	

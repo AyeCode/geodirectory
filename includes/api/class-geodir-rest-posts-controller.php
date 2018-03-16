@@ -1491,12 +1491,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 					continue;
 				}
 
-				$tax_base = $tax;
+				$tax_base = $taxonomy_obj->rest_base;
 
 				$terms_url = add_query_arg(
 					'post',
 					$post->ID,
-					rest_url( 'wp/v2/' . $tax_base )
+					rest_url( $this->namespace . '/' . $tax_base )
 				);
 
 				$links['https://api.w.org/term'][] = array(
@@ -1680,6 +1680,9 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				);
 			}
 		}
+		
+		unset($schema['properties'][ $this->post_type . '_category' ]);
+		unset($schema['properties'][ $this->post_type . '_tags' ]);
 		
 		$schema['properties']['slug'] = array(
 			'description' => __( 'An alphanumeric identifier for the object unique to its type.' ),
@@ -2393,6 +2396,16 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				case 'categories':
 					$args['type']   = 'array';
 					$args['items']  = array( 'type' => 'integer' );
+
+					$schema[ 'default_category' ] = array(
+						'title'		  => __( 'Default category.' ),
+						'description' => __( 'Select default category.' ),
+						'type'        => 'integer',
+						'context'     => array( 'view', 'edit' ),
+						'readonly'    => true,
+						'field_type'  => $field_type,
+						'data_type'   => 'TEXT'
+					);
 				break;
                 case 'phone':
                 case 'text':
