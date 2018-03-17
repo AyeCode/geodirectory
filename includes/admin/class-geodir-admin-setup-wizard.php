@@ -416,13 +416,13 @@ class GeoDir_Admin_Setup_Wizard {
 				$settings = $generalSettings->get_settings('dummy_data');
 
 				// Change the description
-				$settings[0]['title'] = __("Demo content","geodirectory");
-				//$settings[0]['desc'] = __( 'Drag the map or the marker to set the city/town you wish to use as the default location.', 'geodirectory' );
+				$settings[0]['title'] = '';//__("Demo content","geodirectory");
+				$settings[0]['desc'] = '';//__( 'Drag the map or the marker to set the city/town you wish to use as the default location.', 'geodirectory' );
 				GeoDir_Admin_Settings::output_fields($settings);
 				?>
 
 
-			<h2 class="gd-settings-title "><?php _e("Widgets","geodirectory");?></h2>
+<!--			<h2 class="gd-settings-title ">--><?php //_e("Widgets","geodirectory");?><!--</h2>-->
 
 			<table class="form-table gd-dummy-table gd-dummy-widgets">
 				<tbody>
@@ -433,23 +433,50 @@ class GeoDir_Admin_Setup_Wizard {
 
 				<tr>
 					<td>
-						<select class="geodir-select" style="width: 300px;">
-							<?php foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) { ?>
-								<option value="<?php echo esc_attr( $sidebar['id'] ); ?>">
-									<?php echo esc_attr( ucwords( $sidebar['name'] )); ?>
+						<select id='geodir-wizard-widgets' class="geodir-select" >
+							<?php
+							$is_sidebar = '';
+							$maybe_sidebar = '';
+							// get the sidebars
+							foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) {
+								// Check if its called 'sidebar' by name or id.
+								if(strtolower($sidebar['id'])=='sidebar' || strtolower($sidebar['name'])==__('sidebar','geodirectory')){
+									$is_sidebar = $sidebar['id'];
+								}
+
+								if(!$maybe_sidebar && strpos(strtolower($sidebar['name']), __('sidebar','geodirectory')) !== false){
+									$maybe_sidebar = $sidebar['id'];
+								}
+
+								if(strpos(strtolower($sidebar['name']), __('sidebar page','geodirectory')) !== false){
+									$maybe_sidebar = $sidebar['id'];
+								}
+							}
+
+							// set if we have a guess
+							if(!$is_sidebar && $maybe_sidebar){
+								$is_sidebar = $maybe_sidebar;
+							}
+
+							foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) { ?>
+								<option value="<?php echo esc_attr( $sidebar['id'] ); ?>" <?php selected( $is_sidebar, $sidebar['id'] );?>>
+									<?php echo esc_attr( ucwords( $sidebar['name'] )); if($is_sidebar== $sidebar['id']){echo ' '; _e('( Auto detected )','geodirectory');} ?>
 								</option>
-							<?php } ?>
+							<?php }
+
+							?>
 						</select>
+						<?php echo geodir_notification( array('geodir-wizard-widgets-result' => '') );?>
 					</td>
-					<td><input type="button" value="<?php _e("Insert widgets","geodirectory");?>" class="button-primary geodir_dummy_button" onclick="return false;"></td>
+					<td><input type="button" value="<?php _e("Insert widgets","geodirectory");?>" class="button-primary geodir_dummy_button" onclick="gd_wizard_add_widgets('<?php echo wp_create_nonce( "geodir-wizard-widgets" );?>');return false;"></td>
 				</tr>
 				</tbody>
 			</table>
 
 
-			<h2 class="gd-settings-title "><?php _e("Menu items","geodirectory");?></h2>
+<!--			<h2 class="gd-settings-title ">--><?php //_e("Menu items","geodirectory");?><!--</h2>-->
 
-			<table class="form-table gd-dummy-table gd-dummy-widgets">
+			<table class="form-table gd-dummy-table gd-dummy-widgets gd-dummy-posts">
 				<tbody>
 				<tr>
 					<td><strong><?php _e("Select the theme main menu","geodirectory");?></strong></td>
@@ -458,16 +485,69 @@ class GeoDir_Admin_Setup_Wizard {
 
 				<tr>
 					<td>
-						<select class="geodir-select" style="width: 300px;">
-							<option>Main menu</option>
-							<?php foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) { ?>
-								<option value="<?php echo esc_attr( $sidebar['id'] ); ?>">
-									<?php echo esc_attr( ucwords( $sidebar['name'] )); ?>
+						<?php
+
+						$set_menus = get_nav_menu_locations();
+						$set_menus = array_filter($set_menus );
+						//echo '##';
+						//print_r($set_menus);
+
+						if(!empty($set_menus)){
+							//echo '##1';
+							echo "<select id='geodir-wizard-menu-id' data-type='add' class='geodir-select' >";
+
+							foreach($set_menus as $menu_location => $menu_id){
+								$selected = '';
+
+								if(strpos(strtolower($menu_location), 'primary') !== false || strpos(strtolower($menu_location), 'main') !== false){
+									$selected = 'selected="selected"';
+								}
+
+								$menu_item = wp_get_nav_menus($menu_id)[0];
+
+								?>
+								<option value="<?php echo esc_attr( $menu_id ); ?>" <?php echo $selected;?>>
+									<?php echo esc_attr( $menu_item->name); if($selected){echo ' '; _e('( Auto detected )','geodirectory');} ?>
 								</option>
-							<?php } ?>
-						</select>
+								<?php
+							}
+
+							echo "</select>";
+
+
+						}else{//echo '##2';
+							// add new menu to a menu location.
+							$menus = get_registered_nav_menus();
+
+							//print_r($menus );
+
+							if(!empty($menus)){
+								echo "<select id='geodir-wizard-menu-location' data-type='create' class='geodir-select' >";
+
+								foreach($menus as $menu_slug => $menu_name){
+									$selected = '';
+
+									if(strpos(strtolower($menu_slug), 'primary') !== false || strpos(strtolower($menu_slug), 'main') !== false){
+										$selected = 'selected="selected"';
+									}
+									?>
+									<option value="<?php echo esc_attr( $menu_slug ); ?>" <?php echo $selected;?>>
+										<?php  _e('Create new menu in:','geodirectory'); echo ' '. esc_attr( $menu_name ); if($selected){echo ' '; _e('( Auto detected )','geodirectory');} ?>
+									</option>
+									<?php
+								}
+								echo "</select>";
+
+							}
+
+							//print_r($menus);
+						}
+
+						echo geodir_notification( array('geodir-wizard-menu-result' => '') );
+
+						?>
 					</td>
-					<td><input type="button" value="<?php _e("Insert menu items","geodirectory");?>" class="button-primary geodir_dummy_button" onclick="return false;"></td>
+					<td><input type="button" value="<?php _e("Insert menu items","geodirectory");?>" class="button-primary geodir_dummy_button" onclick="gd_wizard_setup_menu('<?php echo wp_create_nonce( "geodir-wizard-setup-menu" );?>');return false;"></td>
 				</tr>
 				</tbody>
 			</table>

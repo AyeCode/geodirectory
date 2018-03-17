@@ -16,7 +16,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 /**
  * GeoDir_Admin_Menus Class.
  */
-class GD_Admin_Menus {
+class GeoDir_Admin_Menus {
 
 	/**
 	 * Hook in tabs.
@@ -353,4 +353,4 @@ class GD_Admin_Menus {
 	}
 }
 
-return new GD_Admin_Menus();
+return new GeoDir_Admin_Menus();

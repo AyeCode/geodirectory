@@ -42,6 +42,8 @@ class GeoDir_AJAX {
 			'order_custom_sort_fields'     => false,
 			'insert_dummy_data'       => false,
 			'delete_dummy_data'       => false,
+			'wizard_insert_widgets'       => false,
+			'wizard_setup_menu'       => false,
 			'post_attachment_upload'       => true,
 			'get_category_select'       => false,
 			'user_add_fav'       => false,
@@ -65,6 +67,58 @@ class GeoDir_AJAX {
 				add_action( 'geodir_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	function wizard_setup_menu(){
+		// security
+		check_ajax_referer( 'geodir-wizard-setup-menu', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		$menu_id = isset($_REQUEST['menu_id']) ?  sanitize_title_with_dashes($_REQUEST['menu_id']) : '';
+		$menu_location = isset($_REQUEST['menu_location']) ?  sanitize_title_with_dashes($_REQUEST['menu_location']) : '';
+
+		
+		$result = GeoDir_Admin_Dummy_Data::setup_menu( $menu_id, $menu_location);
+
+		if(is_wp_error( $result ) ){
+			wp_send_json_error( $result->get_error_message() );
+		}else{
+			//wp_send_json($result);
+			wp_send_json_success($result);
+		}
+
+		//GeoDir_Widget_Best_Of::best_of(array(), $_REQUEST);
+
+		wp_die();
+	}
+	
+	/**
+	 * Adds widgets to sidebar during setup wizard.
+	 */
+	function wizard_insert_widgets(){
+		// security
+		check_ajax_referer( 'geodir-wizard-widgets', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		$sidebar_id = isset($_REQUEST['sidebar_id']) ?  sanitize_title_with_dashes($_REQUEST['sidebar_id']) : '';
+
+		//print_r($_REQUEST);exit;
+		$result = GeoDir_Admin_Dummy_Data::insert_widgets( $sidebar_id);
+
+		if(is_wp_error( $result ) ){
+			wp_send_json_error( $result->get_error_message() );
+		}else{
+			//wp_send_json($result);
+			wp_send_json_success($result);
+		}
+
+		//GeoDir_Widget_Best_Of::best_of(array(), $_REQUEST);
+
+		wp_die();
 	}
 
 	/**

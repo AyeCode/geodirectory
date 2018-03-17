@@ -64,6 +64,13 @@ body{
     }
 
     .gd-dummy-table{
+
+      border-bottom: 1px solid #ddd;
+
+      tr td:last-child{
+        width: 160px;
+      }
+
       &:not(.gd-dummy-widgets){
         .select2-container{
           &.select2-container--default{
@@ -149,6 +156,10 @@ body{
       line-height: 20px;
       width: 100%;
       box-sizing: border-box;
+    }
+
+    .gd-notification{
+      margin-top: 10px;
     }
 
 
