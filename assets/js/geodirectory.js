@@ -352,7 +352,8 @@ jQuery(window).load(function() {
         
         if (urlHash == '#post_map' && window.gdMaps) {
             window.setTimeout(function() {
-                jQuery("#detail_page_map_canvas").goMap();
+                var map_canvas = jQuery('.geodir-map-canvas', jQuery('#post_mapTab')).data('map-canvas');
+				jQuery("#" + map_canvas).goMap();
                 var center = jQuery.goMap.map.getCenter();
                 if (window.gdMaps == 'osm') {
                     jQuery.goMap.map.invalidateSize();

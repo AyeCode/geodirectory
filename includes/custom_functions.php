@@ -1059,7 +1059,7 @@ function geodir_show_detail_page_tabs() {
 			}
 		}
 
-		$map_args['map_canvas_name'] = 'detail_page_map_canvas';
+		$map_args['map_canvas'] = 'detail_page_map_canvas';
 		$map_args['width']           = '600';
 		$map_args['height']          = '300';
 		if ( $gd_post->mapzoom ) {
@@ -1116,7 +1116,7 @@ function geodir_show_detail_page_tabs() {
 			$mapzoom = 12;
 		}
 
-		$map_args['map_canvas_name']          = 'preview_map_canvas';
+		$map_args['map_canvas']          = 'preview_map_canvas';
 		$map_args['width']                    = '950';
 		$map_args['height']                   = '300';
 		$map_args['child_collapse']           = '0';
@@ -1292,7 +1292,8 @@ function geodir_show_detail_page_tabs() {
 
 								break;
 							case 'post_map':
-								geodir_draw_map( $map_args );
+								$geodir_widget_map = new GeoDir_Widget_Map( array() );
+								$geodir_widget_map->post_map( $gd_post );
 								break;
 							case 'reviews':
 								comments_template();

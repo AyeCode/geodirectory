@@ -26,10 +26,12 @@ function  geodir_init_map_jason()
  * @package GeoDirectory
  * @global array $map_canvas_arr Empty array.
  */
-function geodir_init_map_canvas_array()
-{
+function geodir_init_map_canvas_array() {
     global $map_canvas_arr;
     $map_canvas_arr = array();
+
+	global $gd_maps_canvas;
+	$gd_maps_canvas = array();
 }
 
 
@@ -195,12 +197,12 @@ function send_marker_jason_to_js()
  * @param int $cat_parent Optional. Parent term ID to retrieve its child terms. Default 0.
  * @param bool $hide_empty Optional. Do you want to hide the terms that has no posts. Default true.
  * @param int $pading Optional. CSS padding value in pixels. e.g: 12 will be considers as 12px.
- * @param string $map_canvas_name Unique canvas name for your map.
+ * @param string $map_canvas Unique canvas name for your map.
  * @param bool $child_collapse Do you want to collapse child terms by default?.
  * @param bool $is_home_map Optional. Is this a home page map? Default: false.
  * @return string|void
  */
-function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = true, $pading = 0, $map_canvas_name = '', $child_collapse, $is_home_map = false)
+function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = true, $pading = 0, $map_canvas = '', $child_collapse, $is_home_map = false)
 {
     global $cat_count, $geodir_cat_icons, $gd_session;
 
@@ -271,17 +273,17 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
                     }
                 }
 
-                $term_check = '<input type="checkbox" ' . $checked . ' id="' .$map_canvas_name.'_tick_cat_'. $cat_term->term_id . '" class="group_selector ' . $main_list_class . '"';
-                $term_check .= ' name="' . $map_canvas_name . '_cat[]" ';
-                $term_check .= '  title="' . esc_attr(geodir_utf8_ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas_name . '\',false, this)">';
+                $term_check = '<input type="checkbox" ' . $checked . ' id="' .$map_canvas.'_tick_cat_'. $cat_term->term_id . '" class="group_selector ' . $main_list_class . '"';
+                $term_check .= ' name="' . $map_canvas . '_cat[]" ';
+                $term_check .= '  title="' . esc_attr(geodir_utf8_ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas . '\',false, this)">';
                 $term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '"/>';
-                $out .= '<li>' . $term_check . '<label for="' . $map_canvas_name.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><i class="fa fa-long-arrow-down"></i>';
+                $out .= '<li>' . $term_check . '<label for="' . $map_canvas.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><i class="fa fa-long-arrow-down"></i>';
 
             endif;
 
 
             // get sub category by recursion
-            $out .= home_map_taxonomy_walker($cat_taxonomy, $cat_term->term_id, $hide_empty, $pading, $map_canvas_name, $child_collapse, $is_home_map);
+            $out .= home_map_taxonomy_walker($cat_taxonomy, $cat_term->term_id, $hide_empty, $pading, $map_canvas, $child_collapse, $is_home_map);
 
             $out .= '</li>';
 

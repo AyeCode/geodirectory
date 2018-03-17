@@ -208,7 +208,7 @@
                 this.map.zoomControl.setPosition(zoomPosition);
             }
             
-            if (parseInt(options.marker_cluster) === 1 && !options.enable_marker_cluster_server) {
+            if (parseInt(options.marker_cluster) === 1 && !options.marker_cluster_server) {
                 jQuery('#gdOSMprogress').remove();
                 jQuery('#gdOSMprogressBar').remove();
                 jQuery(el).before('<div id="gdOSMprogress"><div id="gdOSMprogressBar"></div></div>');
