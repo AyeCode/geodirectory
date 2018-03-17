@@ -656,7 +656,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	public static function get_google_maps_api_key_setting(){
 		return array(
 			'name' => __( 'Google Maps API KEY', 'geodirectory' ),
-			'desc' => __( 'This is a requirement to use Google Maps. If you would prefer to use the Open Street Maps API, select "show advanced" and set the Maps API to OSM.', 'geodirectory' ),
+			'desc' => __( 'Google Maps <b>requires</b> an API key. Use the button to create a properly configured key using your Google account. </br>Advanced: Open Street Map (OSM) API options.', 'geodirectory' ),
 			'id'   => 'google_maps_api_key',
 			'type' => 'map_key',
 			'default'  => '',
