@@ -39,7 +39,7 @@ require_once('map_functions.php');
  *    @type bool $enable_map_direction Do you want to enable map directions?.
  *    @type bool $marker_cluster Do you want to enable marker cluster?.
  *    @type string $ajax_url Map ajax url.
- *    @type string $map_canvas_name Map canvas name.
+ *    @type string $map_canvas Map canvas name.
  *    @type string $inputText Text search placeholder.
  *    @type string $latitude Map default latitude.
  *    @type string $longitude Map default longitude.
@@ -68,7 +68,7 @@ require_once('map_functions.php');
 function geodir_draw_map($map_args = array())
 {
     global $map_canvas_arr;
-    $map_canvas_name = (!empty($map_args) && $map_args['map_canvas_name'] != '') ? $map_args['map_canvas_name'] : 'home_map_canvas';
+    $map_canvas = (!empty($map_args) && $map_args['map_canvas'] != '') ? $map_args['map_canvas'] : 'home_map_canvas';
     $map_class_name = (!empty($map_args) && isset($map_args['map_class_name'])) ? $map_args['map_class_name'] : '';
 
     $default_location = geodir_get_default_location();
@@ -105,7 +105,7 @@ function geodir_draw_map($map_args = array())
         'enable_map_direction' => $enable_map_direction,
         'marker_cluster' => $marker_cluster,
         'ajax_url' => admin_url( 'admin-ajax.php' ),
-        'map_canvas_name' => $map_canvas_name,
+        'map_canvas' => $map_canvas,
         'inputText' => __('Title or Keyword', 'geodirectory'),
         'latitude' => $map_default_lat,
         'longitude' => $map_default_lng,
@@ -153,9 +153,9 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @param array $geodir_map_options {@see geodir_draw_map()} docblock.
 	 */
-	$geodir_map_options = apply_filters("geodir_map_options_{$map_canvas_name}", $geodir_map_options);
+	$geodir_map_options = apply_filters("geodir_map_options_{$map_canvas}", $geodir_map_options);
 
-    $map_canvas_arr[$map_canvas_name] = array();
+    $map_canvas_arr[$map_canvas] = array();
 
     /**
 	 * Filter the post types to display data on map.
@@ -164,7 +164,7 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @param object $object Objects of post types.
 	 */
-	$post_types = apply_filters("geodir_map_post_type_list_{$map_canvas_name}", geodir_get_posttypes('object'));
+	$post_types = apply_filters("geodir_map_post_type_list_{$map_canvas}", geodir_get_posttypes('object'));
     
    $exclude_post_types = geodir_get_option('geodir_exclude_post_type_on_map');
    $exclude_post_types = is_array( $exclude_post_types ) ? $exclude_post_types : array();
@@ -175,16 +175,16 @@ function geodir_draw_map($map_args = array())
 	 *
 	 * @param array Array of post types to exclude to display data on map.
 	 */
-	$exclude_post_types = apply_filters("geodir_exclude_post_type_on_map_{$map_canvas_name}", $exclude_post_types);
+	$exclude_post_types = apply_filters("geodir_exclude_post_type_on_map_{$map_canvas}", $exclude_post_types);
 
     if (count((array)$post_types) != count($exclude_post_types) || ($jason_on_load)):
         // Set default map options
 
         wp_enqueue_script('geodir-map-widget', geodir_plugin_url() . '/includes/maps/js/map.js',array(),false,true); // @TODO change to map.min.js
 
-        wp_localize_script('geodir-map-widget', $map_canvas_name, $geodir_map_options);
+        wp_localize_script('geodir-map-widget', $map_canvas, $geodir_map_options);
 
-        if ($map_canvas_name == 'detail_page_map_canvas' || $map_canvas_name == 'preview_map_canvas') {
+        if ($map_canvas == 'detail_page_map_canvas' || $map_canvas == 'preview_map_canvas') {
             $map_width = '100%';
         } else {
             $map_width = $geodir_map_options['width'];
@@ -199,41 +199,41 @@ function geodir_draw_map($map_args = array())
 		 */
 		$map_width = apply_filters('geodir_change_map_width', $map_width);
         ?>
-        <div id="catcher_<?php echo $map_canvas_name;?>"></div>
+        <div id="catcher_<?php echo $map_canvas;?>"></div>
         <div class="stick_trigger_container">
             <div class="trigger_sticky triggeroff_sticky"></div>
             <div class="top_banner_section geodir_map_container <?php echo $map_class_name;?>"
-                 id="sticky_map_<?php echo $map_canvas_name;?>"
+                 id="sticky_map_<?php echo $map_canvas;?>"
                  style="min-height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
 
                 <div class="map_background">
                     <div class="top_banner_section_in clearfix">
-                        <div class="<?php echo $map_canvas_name;?>_TopLeft TopLeft"><span class="triggermap" id="<?php echo $map_canvas_name;?>_triggermap" <?php if (!$geodir_map_options['map_resize_button']) { ?> <?php }?>><i class="fa fa-arrows-alt"></i></span></div>
-                        <div class="<?php echo $map_canvas_name;?>_TopRight TopRight"></div>
-                        <div id="<?php echo $map_canvas_name;?>_wrapper" class="main_map_wrapper"
+                        <div class="<?php echo $map_canvas;?>_TopLeft TopLeft"><span class="triggermap" id="<?php echo $map_canvas;?>_triggermap" <?php if (!$geodir_map_options['map_resize_button']) { ?> <?php }?>><i class="fa fa-arrows-alt"></i></span></div>
+                        <div class="<?php echo $map_canvas;?>_TopRight TopRight"></div>
+                        <div id="<?php echo $map_canvas;?>_wrapper" class="main_map_wrapper"
                              style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;">
                             <!-- new map start -->
                             <div class="iprelative">
-                                <div class="geodir_marker_cluster" id="<?php echo $map_canvas_name;?>"
+                                <div class="geodir_marker_cluster" id="<?php echo $map_canvas;?>"
                                      style="height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;"></div>
-                                <div id="<?php echo $map_canvas_name;?>_loading_div" class="loading_div"
+                                <div id="<?php echo $map_canvas;?>_loading_div" class="loading_div"
                                      style=" height:<?php echo $geodir_map_options['height'];?>;width:<?php echo $map_width;?>;"></div>
                                 <!--<div id="home_map_counter"></div>        -->
-                                <div id="<?php echo $map_canvas_name;?>_map_nofound"
+                                <div id="<?php echo $map_canvas;?>_map_nofound"
                                      class="advmap_nofound"><?php echo MAP_NO_RESULTS; ?></div>
-                                <div id="<?php echo $map_canvas_name;?>_map_notloaded"
+                                <div id="<?php echo $map_canvas;?>_map_notloaded"
                                      class="advmap_notloaded"><?php _e('<h3>Google Map Not Loaded</h3><p>Sorry, unable to load Google Maps API.', 'geodirectory'); ?></div>
                             </div>
                             <!-- new map end -->
                         </div>
-                        <div class="<?php echo $map_canvas_name;?>_BottomLeft BottomLeft"></div>
+                        <div class="<?php echo $map_canvas;?>_BottomLeft BottomLeft"></div>
                     </div>
                 </div>
                 <?php if ($geodir_map_options['jason_on_load']) { ?>
-                    <input type="hidden" id="<?php echo $map_canvas_name;?>_jason_enabled" value="1"/>
+                    <input type="hidden" id="<?php echo $map_canvas;?>_jason_enabled" value="1"/>
                 <?php } else {
                     ?>
-                    <input type="hidden" id="<?php echo $map_canvas_name;?>_jason_enabled" value="0"/>
+                    <input type="hidden" id="<?php echo $map_canvas;?>_jason_enabled" value="0"/>
                 <?php }
 
                 if (!$geodir_map_options['enable_text_search'] && !$geodir_map_options['enable_cat_filters'])
@@ -246,11 +246,11 @@ function geodir_draw_map($map_args = array())
                     <div class="gd-input-group gd-get-directions">
                       <div class="gd-input-group-addon gd-directions-left">
                         <div class="gd-input-group">
-                              <input type="text" id="<?php echo $map_canvas_name; ?>_fromAddress" name="from" class="gd-form-control textfield" value="<?php echo ENTER_LOCATION_TEXT; ?>" onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT; ?>';}" onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT; ?>') {this.value = '';}" />
-                              <div id="<?php echo $map_canvas_name; ?>_mylocation" class="gd-input-group-addon gd-map-mylocation" onclick="gdMyGeoDirection();" title="<?php echo esc_attr__('My location', 'geodirectory'); ?>"><i class="fa fa-crosshairs fa-fw"></i></div>
+                              <input type="text" id="<?php echo $map_canvas; ?>_fromAddress" name="from" class="gd-form-control textfield" value="<?php echo ENTER_LOCATION_TEXT; ?>" onblur="if (this.value == '') {this.value = '<?php echo ENTER_LOCATION_TEXT; ?>';}" onfocus="if (this.value == '<?php echo ENTER_LOCATION_TEXT; ?>') {this.value = '';}" />
+                              <div id="<?php echo $map_canvas; ?>_mylocation" class="gd-input-group-addon gd-map-mylocation" onclick="gdMyGeoDirection();" title="<?php echo esc_attr__('My location', 'geodirectory'); ?>"><i class="fa fa-crosshairs fa-fw"></i></div>
                         </div>
                       </div>
-                      <div class="gd-input-group-addon gd-directions-right gd-mylocation-go"><input type="button" value="<?php _e('Get Directions', 'geodirectory'); ?>" class="<?php echo $map_canvas_name; ?>_getdirection" id="directions" onclick="calcRoute('<?php echo $map_canvas_name; ?>')" /></div>
+                      <div class="gd-input-group-addon gd-directions-right gd-mylocation-go"><input type="button" value="<?php _e('Get Directions', 'geodirectory'); ?>" class="<?php echo $map_canvas; ?>_getdirection" id="directions" onclick="geodirFindRoute('<?php echo $map_canvas; ?>')" /></div>
                     </div>
                     <script>
                         <?php if(geodir_is_page('detail')){?>
@@ -264,7 +264,7 @@ function geodir_draw_map($map_args = array())
                                 // Create the autocomplete object, restricting the search
                                 // to geographical location types.
                                 autocomplete = new google.maps.places.Autocomplete(
-                                    /** @type {HTMLInputElement} */(document.getElementById('<?php echo $map_canvas_name;?>_fromAddress')),
+                                    /** @type {HTMLInputElement} */(document.getElementById('<?php echo $map_canvas;?>_fromAddress')),
                                     {types: ['geocode']});
                                 // When the user selects an address from the dropdown,
                                 // populate the address fields in the form.
@@ -272,13 +272,13 @@ function geodir_draw_map($map_args = array())
                                     gd_fillInAddress_ac();
                                 });
                             } else {
-                                jQuery('#<?php echo $map_canvas_name; ?>_fromAddress').hide();
+                                jQuery('#<?php echo $map_canvas; ?>_fromAddress').hide();
                                 jQuery('.gd-get-directions').hide();
-                                jQuery('.<?php echo $map_canvas_name; ?>_getdirection').hide();
+                                jQuery('.<?php echo $map_canvas; ?>_getdirection').hide();
                                 
                                 if (window.gdMaps == 'osm') {
                                     window.setTimeout(function() {
-                                        calcRoute('<?php echo $map_canvas_name;?>');
+                                        geodirFindRoute('<?php echo $map_canvas;?>');
                                     }, 1000);
                                 }
                             }
@@ -293,14 +293,14 @@ function geodir_draw_map($map_args = array())
 
 
                     <div id='directions-options' class="hidden">
-                        <select id="travel-mode" onchange="calcRoute('<?php echo $map_canvas_name; ?>')">
+                        <select id="travel-mode" onchange="geodirFindRoute('<?php echo $map_canvas; ?>')">
                             <option value="driving"><?php _e('Driving', 'geodirectory'); ?></option>
                             <option value="walking"><?php _e('Walking', 'geodirectory'); ?></option>
                             <option value="bicycling"><?php _e('Bicycling', 'geodirectory'); ?></option>
                             <option value="transit"><?php _e('Public Transport', 'geodirectory'); ?></option>
                         </select>
 
-                        <select id="travel-units" onchange="calcRoute('<?php echo $map_canvas_name; ?>')">
+                        <select id="travel-units" onchange="geodirFindRoute('<?php echo $map_canvas; ?>')">
                             <option value="miles"><?php _e('Miles', 'geodirectory'); ?></option>
                             <option <?php if (geodir_get_option('search_distance_long') == 'km') {
                                 echo 'selected="selected"';
@@ -308,7 +308,7 @@ function geodir_draw_map($map_args = array())
                         </select>
                     </div>
 
-                    <div id="<?php echo $map_canvas_name; ?>_directionsPanel" style="width:auto;"></div>
+                    <div id="<?php echo $map_canvas; ?>_directionsPanel" style="width:auto;"></div>
                 <?php 
 				}
 				
@@ -344,33 +344,33 @@ function geodir_draw_map($map_args = array())
                     <div
                         class="map-category-listing<?php echo $map_cat_class;?>">
                         <div class="gd-trigger gd-triggeroff"><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
-                        <div id="<?php echo $map_canvas_name;?>_cat"
-                             class="<?php echo $map_canvas_name;?>_map_category  map_category"
+                        <div id="<?php echo $map_canvas;?>_cat"
+                             class="<?php echo $map_canvas;?>_map_category  map_category"
                              <?php if ($child_collapse){ ?>checked="checked" <?php }?>
                              style="max-height:<?php echo $geodir_map_options['height'];?>;">
                             <input
-                                onkeydown="if(event.keyCode == 13){build_map_ajax_search_param('<?php echo $map_canvas_name; ?>', false)}"
+                                onkeydown="if(event.keyCode == 13){build_map_ajax_search_param('<?php echo $map_canvas; ?>', false)}"
                                 type="text"
                                 class="inputbox <?php echo($geodir_map_options['enable_text_search'] ? '' : 'geodir-hide'); ?>"
-                                id="<?php echo $map_canvas_name; ?>_search_string" name="search"
+                                id="<?php echo $map_canvas; ?>_search_string" name="search"
                                 placeholder="<?php _e('Title', 'geodirectory'); ?>"/>
                             <?php if ($geodir_map_options['enable_cat_filters']) { ?>
                                 <?php if ($geodir_map_options['child_collapse']) { $child_collapse = "1"; ?>
-                                    <input type="hidden" id="<?php echo $map_canvas_name; ?>_child_collapse" value="1"/>
+                                    <input type="hidden" id="<?php echo $map_canvas; ?>_child_collapse" value="1"/>
                                 <?php } else {$child_collapse = "0";
                                     ?>
-                                    <input type="hidden" id="<?php echo $map_canvas_name;?>_child_collapse" value="0"/>
+                                    <input type="hidden" id="<?php echo $map_canvas;?>_child_collapse" value="0"/>
                                 <?php } ?>
-                                <input type="hidden" id="<?php echo $map_canvas_name; ?>_cat_enabled" value="1"/>
+                                <input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="1"/>
                                 <div class="geodir_toggle">
-                                    <?php echo home_map_taxonomy_walker(array($map_search_pt.'category'),0,true,0,$map_canvas_name,$child_collapse,true); ?>
+                                    <?php echo home_map_taxonomy_walker(array($map_search_pt.'category'),0,true,0,$map_canvas,$child_collapse,true); ?>
                                     <script>jQuery( document ).ready(function() {
                                             geodir_show_sub_cat_collapse_button();
                                         });</script>
                                 </div>
                             <?php } else { // end of cat filter ?>
-                                <input type="hidden" id="<?php echo $map_canvas_name; ?>_cat_enabled" value="0"/>
-                                <input type="hidden" id="<?php echo $map_canvas_name; ?>_child_collapse" value="0"/>
+                                <input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="0"/>
+                                <input type="hidden" id="<?php echo $map_canvas; ?>_child_collapse" value="0"/>
                             <?php }?>
                             <div class="BottomRight"></div>
 
@@ -392,21 +392,21 @@ function geodir_draw_map($map_args = array())
 					$city = $country != 'me' ? $city : '';
                     $gd_neighbourhood = $country != 'me' ? $gd_neighbourhood : '';
                     ?>
-                    <input type="hidden" id="<?php echo $map_canvas_name;?>_location_enabled" value="1"/>
-                    <input type="hidden" id="<?php echo $map_canvas_name;?>_country" name="gd_country"
+                    <input type="hidden" id="<?php echo $map_canvas;?>_location_enabled" value="1"/>
+                    <input type="hidden" id="<?php echo $map_canvas;?>_country" name="gd_country"
                            value="<?php echo $country;?>"/>
-                    <input type="hidden" id="<?php echo $map_canvas_name;?>_region" name="gd_region"
+                    <input type="hidden" id="<?php echo $map_canvas;?>_region" name="gd_region"
                            value="<?php echo $region;?>"/>
-                    <input type="hidden" id="<?php echo $map_canvas_name;?>_city" name="gd_city"
+                    <input type="hidden" id="<?php echo $map_canvas;?>_city" name="gd_city"
                            value="<?php echo $city;?>"/>
-                    <input type="hidden" id="<?php echo $map_canvas_name;?>_neighbourhood" name="gd_neighbourhood"
+                    <input type="hidden" id="<?php echo $map_canvas;?>_neighbourhood" name="gd_neighbourhood"
                            value="<?php echo $gd_neighbourhood;?>"/>
                 <?php } else { //end of location filter
                     ?>
-                    <input type="hidden" id="<?php echo $map_canvas_name;?>_location_enabled" value="0"/>
+                    <input type="hidden" id="<?php echo $map_canvas;?>_location_enabled" value="0"/>
                 <?php }?>
 
-                <input type="hidden" id="<?php echo $map_canvas_name;?>_posttype" name="gd_posttype" value="<?php echo $map_search_pt;?>"/>
+                <input type="hidden" id="<?php echo $map_canvas;?>_posttype" name="gd_posttype" value="<?php echo $map_search_pt;?>"/>
 				<?php if ( ! empty( $terms ) ) { ?>
 				<input type="hidden" name="terms" value="<?php echo $terms; ?>"/>
 				<?php } ?>
@@ -428,7 +428,7 @@ function geodir_draw_map($map_args = array())
                     }
                     if (count($map_post_types) > 1) {
                         ?>
-                        <div class="map-places-listing" id="<?php echo $map_canvas_name;?>_posttype_menu"
+                        <div class="map-places-listing" id="<?php echo $map_canvas;?>_posttype_menu"
                              style="max-width:<?php echo $map_width;?>!important;">
 
                             <?php if (isset($geodir_map_options['is_geodir_home_map_widget']) && $map_args['is_geodir_home_map_widget']) { ?>
@@ -440,7 +440,7 @@ function geodir_draw_map($map_args = array())
                                     foreach ($post_types as $post_type => $args) {
                                         if (!in_array($post_type, $exclude_post_types)) {
                                             $class = $map_search_pt == $post_type ? 'class="gd-map-search-pt"' : '';
-											echo '<li id="' . $post_type . '" ' . $class . '><a href="javascript:void(0);" onclick="jQuery(\'#' . $map_canvas_name . '_posttype\').val(\'' . $post_type . '\');build_map_ajax_search_param(\'' . $map_canvas_name . '\', true)">' . __($args->labels->name, 'geodirectory') . '</a></li>';
+											echo '<li id="' . $post_type . '" ' . $class . '><a href="javascript:void(0);" onclick="jQuery(\'#' . $map_canvas . '_posttype\').val(\'' . $post_type . '\');build_map_ajax_search_param(\'' . $map_canvas . '\', true)">' . __($args->labels->name, 'geodirectory') . '</a></li>';
                                         }
                                     }
                                     ?>
@@ -465,9 +465,9 @@ function geodir_draw_map($map_args = array())
         <script type="text/javascript">
 
             jQuery(document).ready(function () {
-                //initMap('<?php echo $map_canvas_name;?>'); // depreciated, no need to load this twice
-                build_map_ajax_search_param('<?php echo $map_canvas_name;?>', false);
-                map_sticky('<?php echo $map_canvas_name;?>');
+                //initMap('<?php echo $map_canvas;?>'); // depreciated, no need to load this twice
+                build_map_ajax_search_param('<?php echo $map_canvas;?>', false);
+                map_sticky('<?php echo $map_canvas;?>');
             });
 
         </script>
@@ -481,15 +481,15 @@ function geodir_draw_map($map_args = array())
                     var heightVH = "<?php echo str_replace("vh", "", $geodir_map_options['height']);?>";
 
                     var ptypeH = '';
-                    if (jQuery("#<?php echo $map_canvas_name;?>_posttype_menu").length) {
-                        ptypeH = jQuery("#<?php echo $map_canvas_name;?>_posttype_menu").outerHeight();
+                    if (jQuery("#<?php echo $map_canvas;?>_posttype_menu").length) {
+                        ptypeH = jQuery("#<?php echo $map_canvas;?>_posttype_menu").outerHeight();
                     }
 
-                    jQuery("#sticky_map_<?php echo $map_canvas_name;?>").css("min-height", screenH * (heightVH / 100) + 'px');
-                    jQuery("#<?php echo $map_canvas_name;?>_wrapper").height(screenH * (heightVH / 100) + 'px');
-                    jQuery("#<?php echo $map_canvas_name;?>").height(screenH * (heightVH / 100) + 'px');
-                    jQuery("#<?php echo $map_canvas_name;?>_loading_div").height(screenH * (heightVH / 100) + 'px');
-                    jQuery("#<?php echo $map_canvas_name;?>_cat").css("max-height", (screenH * (heightVH / 100)) - ptypeH + 'px');
+                    jQuery("#sticky_map_<?php echo $map_canvas;?>").css("min-height", screenH * (heightVH / 100) + 'px');
+                    jQuery("#<?php echo $map_canvas;?>_wrapper").height(screenH * (heightVH / 100) + 'px');
+                    jQuery("#<?php echo $map_canvas;?>").height(screenH * (heightVH / 100) + 'px');
+                    jQuery("#<?php echo $map_canvas;?>_loading_div").height(screenH * (heightVH / 100) + 'px');
+                    jQuery("#<?php echo $map_canvas;?>_cat").css("max-height", (screenH * (heightVH / 100)) - ptypeH + 'px');
 
                 }());
             </script>
@@ -503,11 +503,11 @@ function geodir_draw_map($map_args = array())
                     var screenH = jQuery(window).height();
                     var heightVH = "<?php echo str_replace("px", "", $geodir_map_options['height']);?>";
                     var ptypeH = '';
-                    if (jQuery("#<?php echo $map_canvas_name;?>_posttype_menu").length) {
-                        ptypeH = jQuery("#<?php echo $map_canvas_name;?>_posttype_menu").outerHeight();
+                    if (jQuery("#<?php echo $map_canvas;?>_posttype_menu").length) {
+                        ptypeH = jQuery("#<?php echo $map_canvas;?>_posttype_menu").outerHeight();
                     }
 
-                    jQuery("#<?php echo $map_canvas_name;?>_cat").css("max-height", heightVH - ptypeH + 'px');
+                    jQuery("#<?php echo $map_canvas;?>_cat").css("max-height", heightVH - ptypeH + 'px');
 
                 }());
             </script>
@@ -520,9 +520,9 @@ function geodir_draw_map($map_args = array())
          * @since 1.5.3
          *
          * @param array $geodir_map_options Array of map settings.
-         * @param string $map_canvas_name The canvas name and ID for the map.
+         * @param string $map_canvas The canvas name and ID for the map.
          */
-        do_action('geodir_map_after_render',$geodir_map_options,$map_canvas_name);
+        do_action('geodir_map_after_render',$geodir_map_options,$map_canvas);
 
 
     endif; // Exclude posttypes if end

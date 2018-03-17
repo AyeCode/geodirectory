@@ -147,7 +147,7 @@ class GeoDir_Widget_Main_Map extends WP_Super_Duper {
         $widget_id = isset($widget_args['widget_id']) ? $widget_args['widget_id'] : 'shortcode';
 
         $map_args = array();
-        $map_args['map_canvas_name'] = str_replace('-', '_', $widget_id); //'home_map_canvas'.$str ;
+        $map_args['map_canvas'] = str_replace('-', '_', $widget_id); //'home_map_canvas'.$str ;
         $map_args['width'] = $width;
         $map_args['height'] = $height;
         $map_args['maptype'] = $maptype;
@@ -349,7 +349,7 @@ class GeoDir_Widget_Home_Page_Map extends WP_Widget {
         $scrollwheel = empty($instance['scrollwheel']) ? '0' : apply_filters('widget_scrollwheel', $instance['scrollwheel']);
 
         $map_args = array();
-        $map_args['map_canvas_name'] = str_replace('-', '_', $args['widget_id']); //'home_map_canvas'.$str ;
+        $map_args['map_canvas'] = str_replace('-', '_', $args['widget_id']); //'home_map_canvas'.$str ;
         $map_args['width'] = $width;
         $map_args['height'] = $height;
         $map_args['maptype'] = $maptype;

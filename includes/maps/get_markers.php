@@ -11,9 +11,9 @@ if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'homemap_catl
     $gd_post_type = sanitize_text_field($_REQUEST['post_type']);
     $gd_session->set('homemap_catlist_ptype', $gd_post_type);
     $post_taxonomy = geodir_get_taxonomies($gd_post_type);
-    $map_canvas_name = sanitize_text_field($_REQUEST['map_canvas']);
+    $map_canvas = sanitize_text_field($_REQUEST['map_canvas']);
     $child_collapse = (bool)$_REQUEST['child_collapse'];
-    echo home_map_taxonomy_walker($post_taxonomy, 0, true, 0, $map_canvas_name, $child_collapse, true);
+    echo home_map_taxonomy_walker($post_taxonomy, 0, true, 0, $map_canvas, $child_collapse, true);
     die;
 }
 

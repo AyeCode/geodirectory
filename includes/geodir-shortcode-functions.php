@@ -117,7 +117,7 @@ function geodir_sc_home_map($atts)
     $params = gdsc_validate_map_args($params);
 
     $map_args = array(
-        'map_canvas_name' => 'gd_home_map',
+        'map_canvas' => 'gd_home_map',
         'latitude' => $params['latitude'],
         'longitude' => $params['longitude'],
 
@@ -206,7 +206,7 @@ function geodir_sc_home_map($atts)
                 $map_args['enable_marker_cluster_no_reposition'] = true;
             }
 
-            $map_args['enable_marker_cluster_server'] = true ;
+            $map_args['marker_cluster_server'] = true ;
 
         }
 	} else {
@@ -374,7 +374,7 @@ function geodir_sc_listing_map($atts) {
         $default_location = geodir_get_default_location();
 
         $map_args = array(
-            'map_canvas_name'          => 'gd_listing_map',
+            'map_canvas'          => 'gd_listing_map',
             'width'                    => $params['width'],
             'height'                   => $params['height'],
             'zoom'                     => $params['zoom'],
@@ -448,7 +448,7 @@ function geodir_sc_listing_map($atts) {
         $params = shortcode_atts($defaults, $atts);
         $params = gdsc_validate_map_args($params);
         $map_args = array(
-            'map_canvas_name' => 'gd_listing_map',
+            'map_canvas' => 'gd_listing_map',
             'width' => $params['width'],
             'height' => $params['height'],
             'zoom' => $params['zoom'],

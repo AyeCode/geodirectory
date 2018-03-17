@@ -87,7 +87,7 @@ class GeoDir_Widget_Listing_Page_Map extends WP_Widget {
 			}
 
             $map_args = array();
-            $map_args['map_canvas_name'] = str_replace('-', '_', $args['widget_id']);
+            $map_args['map_canvas'] = str_replace('-', '_', $args['widget_id']);
             $map_args['width'] = $width;
             $map_args['height'] = $height;
 
