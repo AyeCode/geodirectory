@@ -80,6 +80,269 @@ class GeoDir_Defaults {
 		return "[gd_single_closed_text]\n[gd_post_images type='slider' ajax_load='true' slideshow='true' show_title='true' animation='slide' controlnav='1' ]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]";
 	}
 
+
+
+	/**
+	 * The pending post user email subject default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_user_pending_post_subject(){
+		return apply_filters('geodir_email_user_pending_post_subject',__("[[#site_name#]] Your listing has been submitted for approval","geodirectory"));
+	}
+
+	/**
+	 * The pending post user email body default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_user_pending_post_body(){
+		return apply_filters('geodir_email_user_pending_post_body',
+			__("Dear [#client_name#],
+
+You submitted the below listing information. This email is just for your information.
+
+[#listing_link#]
+
+Thank you for your contribution.","geodirectory"
+			)
+		);
+	}
+
+	/**
+	 * The publish post user email subject default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_user_publish_post_subject(){
+		return apply_filters('geodir_email_user_publish_post_subject',__("[[#site_name#]] Listing Published Successfully","geodirectory"));
+	}
+
+	/**
+	 * The publish post user email body default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_user_publish_post_body(){
+		return apply_filters('geodir_email_user_publish_post_body',
+			__("Dear [#client_name#],
+
+Your listing [#listing_link#] has been published. This email is just for your information.
+
+[#listing_link#]
+
+Thank you for your contribution.","geodirectory"
+			)
+		);
+	}
+
+	/**
+	 * The listing owner comment submit email subject default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_owner_comment_submit_subject(){
+		return apply_filters('geodir_email_owner_comment_submit_subject',__("[[#site_name#]] A new comment has been submitted on your listing [#listing_title#]","geodirectory"));
+	}
+
+	/**
+	 * The listing owner comment submit email body default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_owner_comment_submit_body(){
+		return apply_filters('geodir_email_owner_comment_submit_body',
+			__("Dear [#client_name#],
+
+A new comment has been submitted on your listing [#listing_link#].
+
+Author: [#comment_author#] ( IP: [#comment_author_IP#] )
+Email: [#comment_author_email#]
+Listing: [#listing_url#]
+Date: [#comment_date#]
+Comment: [#comment_content#]
+
+Approve it: [#comment_approve_link#]
+Trash it: [#comment_trash_link#]
+Spam it: [#comment_spam_link#]
+
+Thank You.","geodirectory"
+			)
+		);
+	}
+
+	/**
+	 * The listing owner comment approved email subject default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_owner_comment_approved_subject(){
+		return apply_filters('geodir_email_owner_comment_approved_subject',__("[[#site_name#]] A comment on your listing [#listing_title#] has been approved","geodirectory"));
+	}
+
+	/**
+	 * The listing owner comment approved email body default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_owner_comment_approved_body(){
+		return apply_filters('geodir_email_owner_comment_submit_body',
+			__("Dear [#client_name#],
+
+A new comment has been submitted on your listing [#listing_link#].
+
+Author: [#comment_author#] ( IP: [#comment_author_IP#] )
+Email: [#comment_author_email#]
+Listing: [#listing_url#]
+Date: [#comment_date#]
+Comment: [#comment_content#]
+
+Approve it: [#comment_approve_link#]
+Trash it: [#comment_trash_link#]
+Spam it: [#comment_spam_link#]
+
+Thank You.","geodirectory"
+			)
+		);
+	}
+
+	/**
+	 * The commenter comment approved email subject default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_author_comment_approved_subject(){
+		return apply_filters('geodir_email_author_comment_approved_subject',__("[[#site_name#]] Your comment on listing [#listing_title#] has been approved","geodirectory"));
+	}
+
+	/**
+	 * The commenter comment approved email body default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_author_comment_approved_body(){
+		return apply_filters('geodir_email_author_comment_approved_body',
+			__("Dear [#comment_author#],
+
+Your comment on listing [#listing_link#] has been approved.
+
+Comment: [#comment_content#]
+
+Thank You.","geodirectory"
+			)
+		);
+	}
+
+	/**
+	 * The pending post admin email subject default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_admin_pending_post_subject(){
+		return apply_filters('geodir_email_admin_pending_post_subject',__("[[#site_name#]] A new listing has been submitted for review","geodirectory"));
+	}
+
+	/**
+	 * The pending post admin email body default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_admin_pending_post_body(){
+		return apply_filters('geodir_email_admin_pending_post_body',
+			__("Dear Admin,
+
+A new listing has been submitted [#listing_link#]. This email is just for your information.
+
+Thank you,
+[#site_name_url#]","geodirectory")
+		);
+	}
+
+	/**
+	 * The post edited admin email subject default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_admin_post_edit_subject(){
+		return apply_filters('geodir_email_admin_post_edit_subject',__("[[#site_name#]] Listing edited by Author","geodirectory"));
+	}
+
+	/**
+	 * The post edited admin email body default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_admin_post_edit_body(){
+		return apply_filters('geodir_email_admin_post_edit_body',
+			__("Dear Admin,
+
+A listing [#listing_link#] has been edited by it's author [#post_author_name#].
+
+Listing Details:
+Listing ID: [#post_id#]
+Listing URL: [#listing_link#]
+Date: [#current_date#]
+
+This email is just for your information.","geodirectory"
+			)
+		);
+	}
+
+	/**
+	 * The moderate comment admin email subject default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_admin_moderate_comment_subject(){
+		return apply_filters('geodir_email_admin_moderate_comment_subject',__("[[#site_name#]] A new comment is waiting for your approval","geodirectory"));
+	}
+
+	/**
+	 * The moderate comment admin email body default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_admin_moderate_comment_body(){
+		return apply_filters('geodir_email_admin_moderate_comment_body',
+			__("Dear Admin,
+
+A new comment has been submitted on the listing [#listing_link#] and it is waiting for your approval.
+
+Author: [#comment_author#] ( IP: [#comment_author_IP#] )
+Email: [#comment_author_email#]
+Listing: [#listing_url#]
+Date: [#comment_date#]
+Comment: [#comment_content#]
+
+Approve it: [#comment_approve_link#]
+Trash it: [#comment_trash_link#]
+Spam it: [#comment_spam_link#]
+
+Please visit the moderation panel for more details: [#comment_moderation_link#]
+
+Thank You.","geodirectory"
+			)
+		);
+	}
+
+	/**
+	 * The default email name text.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_name(){
+		return get_bloginfo('name');
+	}
+
+	/**
+	 * The default email address.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_address(){
+		return get_bloginfo('admin_email');
+	}
+
 }
 
 
