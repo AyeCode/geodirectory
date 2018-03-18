@@ -157,6 +157,7 @@ class GeoDir_Admin {
 			case 'user-edit' :
 				//include( 'class-wc-admin-profile.php' );
 			break;
+			case 'customize':
 			case 'widgets' :
 				GeoDir_Admin_Widgets::init();
 			break;

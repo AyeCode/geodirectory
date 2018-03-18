@@ -48,6 +48,9 @@ class GeoDir_Admin_Assets {
 		wp_register_style('geodir-leaflet-routing-style', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-leaflet-style', geodir_plugin_url() . '/assets/leaflet/leaflet.css', array(), GEODIRECTORY_VERSION);
 
+		// this should be everywhere
+		wp_enqueue_style('font-awesome');
+
 		// load rating scripts on comments pages
 		if($screen_id == 'comment' || $screen_id == 'edit-comments'){
 			if(geodir_get_option('rating_type')=='font-awesome') {

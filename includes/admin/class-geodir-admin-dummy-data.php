@@ -997,6 +997,7 @@ class GeoDir_Admin_Dummy_Data {
 		}
 
 		$widgets = self::get_dummy_widgets();
+		$widgets = array_reverse($widgets);// flip them as we add them to the start one by one
 		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
 		$inserted = 0;
 		$exist = 0;
@@ -1081,6 +1082,13 @@ class GeoDir_Admin_Dummy_Data {
 	public static function insert_widget_in_sidebar( $widget_id, $widget_data, $sidebar ) {
 		// Retrieve sidebars, widgets and their instances
 		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
+//
+//		print_r($sidebars_widgets[$sidebar]);
+//		array_unshift($sidebars_widgets[$sidebar], "cat");
+//		print_r($sidebars_widgets[$sidebar]);
+//
+//		exit;
+
 		$widget_instances = get_option( 'widget_' . $widget_id, array() );
 		// Retrieve the key of the next widget instance
 		$numeric_keys = array_filter( array_keys( $widget_instances ), 'is_int' );
@@ -1089,7 +1097,13 @@ class GeoDir_Admin_Dummy_Data {
 		if ( ! isset( $sidebars_widgets[ $sidebar ] ) ) {
 			$sidebars_widgets[ $sidebar ] = array();
 		}
-		$sidebars_widgets[ $sidebar ][] = $widget_id . '-' . $next_key;
+
+		// add the widget to the start
+		array_unshift($sidebars_widgets[$sidebar], $widget_id . '-' . $next_key);
+
+		// add array to end
+		//$sidebars_widgets[ $sidebar ][] = $widget_id . '-' . $next_key;
+
 		// Add the new widget instance
 		$widget_instances[ $next_key ] = $widget_data;
 		// Store updated sidebars, widgets and their instances
