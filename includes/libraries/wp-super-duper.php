@@ -157,6 +157,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 */
 				function sd_init_widget($this,$selector) {
 
+					if(!$selector){
+						$selector = 'form';
+					}
 					// only run once.
 					if (jQuery($this).data('sd-widget-enabled')) {
 						return;
@@ -181,6 +184,23 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				/**
+				 * Init a customizer widget.
+				 */
+				function sd_init_customizer_widget(section){
+					if (section.expanded) {
+						section.expanded.bind(function (isExpanding) {
+							if (isExpanding) {
+								// is it a SD widget?
+								if (jQuery(section.container).find('.sd-show-advanced').length) {
+									// init the widget
+									sd_init_widget(jQuery(section.container).find('.sd-show-advanced'),".form");
+								}
+							}
+						});
+					}
+				}
+
+				/**
 				 * If on widgets screen.
 				 */
 				jQuery(function () {
@@ -195,20 +215,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 */
 				if (wp.customize) {
 					wp.customize.bind('ready', function () {
+
+						// init widgets on load
 						wp.customize.control.each(function (section) {
-							if (section.expanded) {
-								section.expanded.bind(function (isExpanding) {
-									if (isExpanding) {
-										// is it a SD widget?
-										if (jQuery(section.container).find('.sd-show-advanced').length) {
-											// init the widget
-											sd_init_widget(jQuery(section.container).find('.sd-show-advanced'),".form");
-										}
-									}
-								});
-							}
+							sd_init_customizer_widget(section);
 						});
+
+						// init widgets on add
+						wp.customize.control.bind('add', function (section) {
+							sd_init_customizer_widget(section);
+						});
+
 					});
+
+
+
 				}
 			</script>
 			<?php
@@ -930,13 +951,19 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function widget_advanced_toggle() {
 
+			$output = '';
 			if ( $this->block_show_advanced() ) {
 				$val = 1;
 			} else {
 				$val = 0;
 			}
+			if($val){
+//				$output .=  '<span class="sd-advanced-button-container"><button class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fa fa-sliders" aria-hidden="true"></i></button></span>';
+			}
 
-			$output = "<input type='hidden'  class='sd-show-advanced' value='$val' />";
+			$output .= "<input type='hidden'  class='sd-show-advanced' value='$val' />";
+
+
 
 
 			return $output;
