@@ -89,6 +89,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					display: block;
 				}
 
+				.sd-argument.sd-require-hide,
 				.sd-advanced-setting.sd-require-hide {
 					display: none;
 				}
@@ -129,11 +130,16 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 * Check a form to see what items shoudl be shown or hidden.
 				 */
 				function sd_show_hide(form) {
+					console.log('show/hide');
 					jQuery(form).find(".sd-argument").each(function () {
 
 						var $element_require = jQuery(this).data('element_require');
 
 						if ($element_require) {
+
+							$element_require = $element_require.replace("&#039;", "'"); // replace single quotes
+							$element_require = $element_require.replace("&quot;", '"'); // replace double quotes
+
 							if (eval($element_require)) {
 								jQuery(this).removeClass('sd-require-hide');
 							} else {
@@ -156,6 +162,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				 * Initialise a individual widget.
 				 */
 				function sd_init_widget($this,$selector) {
+					console.log($selector);
 
 					if(!$selector){
 						$selector = 'form';
@@ -170,7 +177,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					var $button = '<button class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fa fa-sliders" aria-hidden="true"></i></button>';
 					var form = jQuery($this).parents('' + $selector + '');
 
-					if (jQuery($this).val() == '1') {
+					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length==0) {
 						jQuery(form).find('.widget-control-save').after($button);
 					}
 
@@ -208,7 +215,28 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					if (!wp.customize) {
 						sd_init_widgets("form");
 					}
+
+
+					// init on widget added
+					jQuery(document).on('widget-added', function(e, widget){
+						// is it a SD widget?
+						if (jQuery(widget).find('.sd-show-advanced').length) {
+							// init the widget
+							sd_init_widget(jQuery(widget).find('.sd-show-advanced'),"form");
+						}
+					});
+
+					// inint on widget updated
+					jQuery(document).on('widget-updated', function(e, widget){
+						// is it a SD widget?
+						if (jQuery(widget).find('.sd-show-advanced').length) {
+							// init the widget
+							sd_init_widget(jQuery(widget).find('.sd-show-advanced'),"form");
+						}
+					});
+
 				});
+
 
 				/**
 				 * We need to run this before jQuery is ready
@@ -1174,6 +1202,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			//save the widget
 			$instance = array_merge( (array) $old_instance, (array) $new_instance );
 
+			if(empty($this->arguments)){
+				$this->get_arguments();
+			}
+			
+			
 //			print_r($new_instance);
 //			print_r($old_instance);
 //			print_r($instance);

@@ -196,13 +196,13 @@ function send_marker_jason_to_js()
  * @param string $cat_taxonomy Name of the taxonomy e.g place_category.
  * @param int $cat_parent Optional. Parent term ID to retrieve its child terms. Default 0.
  * @param bool $hide_empty Optional. Do you want to hide the terms that has no posts. Default true.
- * @param int $pading Optional. CSS padding value in pixels. e.g: 12 will be considers as 12px.
+ * @param int $padding Optional. CSS padding value in pixels. e.g: 12 will be considers as 12px.
  * @param string $map_canvas Unique canvas name for your map.
  * @param bool $child_collapse Do you want to collapse child terms by default?.
  * @param bool $is_home_map Optional. Is this a home page map? Default: false.
  * @return string|void
  */
-function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = true, $pading = 0, $map_canvas = '', $child_collapse, $is_home_map = false)
+function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $is_home_map = false)
 {
     global $cat_count, $geodir_cat_icons, $gd_session;
 
@@ -231,8 +231,8 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
     //If there are terms, start displaying
     if (count($cat_terms) > 0) {
         //Displaying as a list
-        $p = $pading * 15;
-        $pading++;
+        $p = $padding * 15;
+        $padding++;
 
         if ($cat_parent == 0) {
             $list_class = 'main_list';
@@ -283,7 +283,7 @@ function home_map_taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = 
 
 
             // get sub category by recursion
-            $out .= home_map_taxonomy_walker($cat_taxonomy, $cat_term->term_id, $hide_empty, $pading, $map_canvas, $child_collapse, $is_home_map);
+            $out .= home_map_taxonomy_walker($cat_taxonomy, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $is_home_map);
 
             $out .= '</li>';
 
@@ -468,4 +468,117 @@ function geodir_get_map_api_key($query = false) {
      * @param string $key Google maps api key.
      */
     return apply_filters( 'geodir_google_api_key', $key );
+}
+
+/**
+ * Map Taxonomy walker.
+ *
+ * @since 2.0.0
+ * @package GeoDirectory
+ *
+ * @global object $gd_session GeoDirectory Session object.
+ *
+ * @param string $cat_taxonomy Name of the taxonomy e.g place_category.
+ * @param int $cat_parent Optional. Parent term ID to retrieve its child terms. Default 0.
+ * @param bool $hide_empty Optional. Do you want to hide the terms that has no posts. Default true.
+ * @param int $padding Optional. CSS padding value in pixels. e.g: 12 will be considers as 12px.
+ * @param string $map_canvas Unique canvas name for your map.
+ * @param bool $child_collapse Do you want to collapse child terms by default?.
+ * @param bool $is_home_map Optional. Is this a home page map? Default: false.
+ * @return string|void
+ */
+function geodir_map_taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $is_home_map = false ) {
+    global $cat_count, $geodir_cat_icons, $gd_session;
+
+    $exclude_categories 	= geodir_get_option( 'geodir_exclude_cat_on_map', array() );
+    $exclude_categories_new = geodir_get_option( 'geodir_exclude_cat_on_map_upgrade' );
+
+    // check if exclude categories saved before fix of categories identical names
+    if ($exclude_categories_new) {
+        $gd_cat_taxonomy = isset($cat_taxonomy[0]) ? $cat_taxonomy[0] : '';
+        $exclude_categories = !empty($exclude_categories[$gd_cat_taxonomy]) && is_array($exclude_categories[$gd_cat_taxonomy]) ? array_unique($exclude_categories[$gd_cat_taxonomy]) : array();
+    }
+
+    $exclude_cat_str = implode(',', $exclude_categories);
+
+    if ($exclude_cat_str == '') {
+        $exclude_cat_str = '0';
+    }
+
+    $cat_terms = get_terms( array( 'taxonomy' => $cat_taxonomy, 'parent' => $cat_parent, 'exclude' => $exclude_cat_str, 'hide_empty ' => $hide_empty ) );
+
+    if ($hide_empty) {
+        $cat_terms = geodir_filter_empty_terms($cat_terms);
+    }
+
+    $main_list_class = '';
+    //If there are terms, start displaying
+    if (count($cat_terms) > 0) {
+        //Displaying as a list
+        $p = $padding * 15;
+        $padding++;
+
+        if ($cat_parent == 0) {
+            $list_class = 'main_list';
+            $display = '';
+        } else {
+            $list_class = 'sub_list';
+            $display = !$child_collapse ? '' : 'display:none';
+        }
+
+        $out = '<ul class="treeview ' . $list_class . '" style="margin-left:' . $p . 'px;' . $display . ';">';
+
+        $geodir_cat_icons = geodir_get_term_icon();
+
+        $geodir_default_map_search_pt = (geodir_get_option('geodir_default_map_search_pt')) ? geodir_get_option('geodir_default_map_search_pt') :  'gd_place';
+        if ($is_home_map && $homemap_catlist_ptype = $gd_session->get('homemap_catlist_ptype')) {
+            $geodir_default_map_search_pt = $homemap_catlist_ptype;
+        }
+        $post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type'] : (isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : $geodir_default_map_search_pt);
+        
+        foreach ($cat_terms as $cat_term):
+            $icon = !empty($geodir_cat_icons) && isset($geodir_cat_icons[$cat_term->term_id]) ? $geodir_cat_icons[$cat_term->term_id] : '';
+
+            if (!in_array($cat_term->term_id, $exclude_categories)):
+                //Secret sauce.  Function calls itself to display child elements, if any
+                $checked = 'checked="checked"';
+
+                // Untick the category by default on home map
+                if ($is_home_map && $geodir_home_map_untick = geodir_get_option('geodir_home_map_untick')) {
+                    if (geodir_wpml_is_taxonomy_translated($post_type . 'category')) { // if WPML
+                        global $sitepress;
+                        $default_lang = $sitepress->get_default_language();
+                        $term_id = icl_object_id($cat_term->term_id, $post_type.'category', true, $default_lang);
+                    }else{
+                        $term_id = $cat_term->term_id;
+                    }
+                    if (!empty($geodir_home_map_untick) && in_array($post_type . '_' . $term_id, $geodir_home_map_untick)) {
+                        $checked = '';
+                    }
+                }
+
+                $term_check = '<input type="checkbox" ' . $checked . ' id="' .$map_canvas.'_tick_cat_'. $cat_term->term_id . '" class="group_selector ' . $main_list_class . '"';
+                $term_check .= ' name="' . $map_canvas . '_cat[]" ';
+                $term_check .= '  title="' . esc_attr(geodir_utf8_ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas . '\',false, this)">';
+                $term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '"/>';
+                $out .= '<li>' . $term_check . '<label for="' . $map_canvas.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><i class="fa fa-long-arrow-down"></i>';
+
+            endif;
+
+
+            // get sub category by recursion
+            $out .= geodir_map_taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $is_home_map );
+
+            $out .= '</li>';
+
+        endforeach;
+
+        $out .= '</ul>';
+
+        return $out;
+    } else {
+        if ($cat_parent == 0)
+            return _e('No category', 'geodirectory');
+    }
+    return;
 }

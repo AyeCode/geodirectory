@@ -42,167 +42,184 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
                 'description' => esc_html__('Displays the map.','geodirectory'), 		// widget description
 				'geodirectory' 	=> true,
 				'gd_show_pages' => array(),
-            ),
+            )
         );
 
         parent::__construct( $options );
     }
 	
-	public function set_arguments(){
+	public function set_arguments() {
 		$arguments = array(
-			'title'  => array(
-				'type' 		=> 'text',
-				'title'		=> __( 'Title:', 'geodirectory' ),
-				'desc' 		=> __( 'The widget title.', 'geodirectory' ),
-				'default'  	=> '',
-				'desc_tip' 	=> true,
-				'advanced' 	=> false
+			'title'  	=> array(
+				'type' 				=> 'text',
+				'title'				=> __( 'Title:', 'geodirectory' ),
+				'desc' 				=> __( 'The widget title.', 'geodirectory' ),
+				'default'  			=> '',
+				'desc_tip' 			=> true,
+				'advanced' 			=> false
 			),
-			'map_type'  => array(
-				'type' 			=> 'select',
-				'title' 		=> __('Map type:', 'geodirectory'),
-				'desc' 			=> __('Select map type.', 'geodirectory'),
-				'options'   	=>  array(
-					"auto" 		=> __('Auto', 'geodirectory'),
-					"directory" => __('Directory Map', 'geodirectory'),
-					"archive" 	=> __('Archive Map', 'geodirectory'),
-					"post" 		=> __('Post Map', 'geodirectory'),
-				),
-				'desc_tip' 		=> true,
-				'default'  		=> 'auto',
-				'advanced' 		=> false
-			),
-			'post_type'  => array( // @todo We can implement for multiple CPTs
-				'title' 		=> __('Post Type:', 'geodirectory'),
-				'desc' 			=> __('The custom post type to show on map.', 'geodirectory'),
-				'type' 			=> 'select',
-				'options'   	=>  $this->post_type_options(),
-				'default'  		=> '',
-				'desc_tip' 		=> true,
-				'advanced' 		=> true
-			),
-			'terms'  => array(		// Directory Map only. This should be multiselect & implement for multiple CPTs.
-				'title' 		=> __( 'Categories:', 'geodirectory' ),
-				'desc' 			=> __( 'Displays the posts on map for selected categories.', 'geodirectory' ),
-				'type' 			=> 'select',
-				'multiple' 		=> true,
-				'options'   	=>  $this->get_categories(),
-				'default'  		=> '',
-				'desc_tip' 		=> true,
-				'advanced' 		=> true
-			),
-			'post_id'  		=> array( // Post map only.
-				'type' 		=> 'text',
-				'title'		=> __( 'Post ID:', 'geodirectory' ),
-				'desc' 		=> __( 'Map post id.', 'geodirectory' ),
-				'default'  	=> '',
-				'desc_tip' 	=> true,
-				'advanced' 	=> false
-			),
-			'all_posts'  	=> array( // Archive map only. Enable/disable filter for current results only.
-				'type' 			=> 'checkbox',
-				'title' 		=> __('Show all posts?', 'geodirectory'),
-				'desc' 			=> __('This displays all posts on map from archive page.', 'geodirectory'),
-				'placeholder' 	=> '',
-				'desc_tip' 		=> true,
-				'default'  		=> '0',
-				'advanced' 		=> false
-			),
-			'width'  			=> array(
-				'type' 			=> 'text',
-				'title' 		=> __('Width:', 'geodirectory'),
-				'desc' 			=> __('This is the width of the map, you can use % or px here.', 'geodirectory'),
-				'placeholder' 	=> '100%',
-				'desc_tip' 		=> true,
-				'default'  		=> '100%',
-				'advanced' 		=> false
+			'width'  				=> array(
+				'type' 				=> 'text',
+				'title' 			=> __( 'Width:', 'geodirectory' ),
+				'desc' 				=> __( 'This is the width of the map, you can use % or px here.', 'geodirectory' ),
+				'placeholder' 		=> '100%',
+				'desc_tip' 			=> true,
+				'default'  			=> '100%',
+				'advanced' 			=> false
 			),
 			'height'  => array(
-				'type' 			=> 'text',
-				'title' 		=> __('Height:', 'geodirectory'),
-				'desc' 			=> __('This is the height of the map, you can use %, px or vh here.', 'geodirectory'),
-				'placeholder' 	=> '425px',
-				'desc_tip' 		=> true,
-				'default'  		=> '425px',
-				'advanced' 		=> false
+				'type' 				=> 'text',
+				'title' 			=> __( 'Height:', 'geodirectory' ),
+				'desc' 				=> __( 'This is the height of the map, you can use %, px or vh here.', 'geodirectory' ),
+				'placeholder' 		=> '425px',
+				'desc_tip' 			=> true,
+				'default'  			=> '425px',
+				'advanced' 			=> false
 			),
 			'maptype'  => array(
-				'type' 			=> 'select',
-				'title' 		=> __('Mapview:', 'geodirectory'),
-				'desc' 			=> __('This is the type of map view that will be used by default.', 'geodirectory'),
-				'options'   	=>  array(
-					"ROADMAP" 	=> __('Road Map', 'geodirectory'),
-					"SATELLITE" => __('Satellite Map', 'geodirectory'),
-					"HYBRID" 	=> __('Hybrid Map', 'geodirectory'),
-					"TERRAIN" 	=> __('Terrain Map', 'geodirectory'),
+				'type' 				=> 'select',
+				'title' 			=> __( 'Mapview:', 'geodirectory' ),
+				'desc' 				=> __( 'This is the type of map view that will be used by default.', 'geodirectory' ),
+				'options'   		=>  array(
+					"ROADMAP" 	=> __( 'Road Map', 'geodirectory' ),
+					"SATELLITE" => __( 'Satellite Map', 'geodirectory' ),
+					"HYBRID" 	=> __( 'Hybrid Map', 'geodirectory' ),
+					"TERRAIN" 	=> __( 'Terrain Map', 'geodirectory' ),
 				),
-				'desc_tip' => true,
-				'default'  => 'ROADMAP',
-				'advanced' => false
+				'desc_tip' 			=> true,
+				'default'  			=> 'ROADMAP',
+				'advanced' 			=> true
 			),
 			'zoom'  => array(
-				'type' => 'select',
-				'title' => __('Zoom level:', 'geodirectory'),
-				'desc' => __('This is the zoom level of the map, `auto` is recommended.', 'geodirectory'),
-				'options'   =>  array_merge(array('0' => __('Auto', 'geodirectory')), array_reverse( range(1, 19) )),
-				'placeholder' => '',
-				'desc_tip' => true,
-				'default'  => '0',
-				'advanced' => false
+				'type' 				=> 'select',
+				'title' 			=> __( 'Zoom level:', 'geodirectory' ),
+				'desc' 				=> __( 'This is the zoom level of the map, `auto` is recommended.', 'geodirectory' ),
+				'options'   		=>  array_merge( array( '0' => __( 'Auto', 'geodirectory' ) ), array_reverse( range( 1, 19 ) ) ),
+				'placeholder' 		=> '',
+				'desc_tip' 			=> true,
+				'default'  			=> '0',
+				'advanced' 			=> true
 			),
-			'map_directions'  => array( // Post map only.
-				'type' => 'checkbox',
-				'title' => __('Enable map directions?(for Post map only)', 'geodirectory'),
-				'desc' => __('This enabled post directions for single post map.', 'geodirectory'),
-				'placeholder' => '',
-				'desc_tip' => true,
-				'default'  => '1',
-				'advanced' => false
+			'map_type'  => array(
+				'type' 				=> 'select',
+				'title' 			=> __( 'Map type:', 'geodirectory' ),
+				'desc' 				=> __( 'Select map type.', 'geodirectory' ),
+				'options'   		=>  array(
+					"auto" 		=> __( 'Auto', 'geodirectory' ),
+					"directory" => __( 'Directory Map', 'geodirectory' ),
+					"archive" 	=> __( 'Archive Map', 'geodirectory' ),
+					"post" 		=> __( 'Post Map', 'geodirectory' ),
+				),
+				'desc_tip' 			=> true,
+				'default'  			=> 'auto',
+				'advanced' 			=> false
 			),
-			'marker_cluster'  => array( // Non post map only.
-				'type' => 'checkbox',
-				'title' => __('Enable marker cluster?', 'geodirectory'),
-				'desc' => '',
-				'placeholder' => '',
-				'desc_tip' => true,
-				'default'  => '0',
-				'advanced' => false
+			'post_type'  => array(
+				'type' 				=> 'select',
+				'title' 			=> __( 'Default Post Type:', 'geodirectory' ),
+				'desc' 				=> __( 'The custom post types to show by default.', 'geodirectory' ),
+				'options'   		=> $this->post_type_options(),
+				'default'  			=> '',
+				'desc_tip' 			=> true,
+				'advanced' 			=> false,
+				'element_require' 	=> '[%map_type%]=="directory" || [%map_type%]=="archive"',
 			),
-			'child_collapse'  => array(
-				'type' => 'checkbox',
-				'title' => __('Collapse sub categories:', 'geodirectory'),
-				'desc' => __('This will hide the sub-categories under the parent, requiring a click to show.', 'geodirectory'),
-				'placeholder' => '',
-				'desc_tip' => true,
-				'default'  => '0',
-				'advanced' => false
+			'terms'  => array(
+				'type' 				=> 'select',
+				'title' 			=> __( 'Categories:', 'geodirectory' ),
+				'desc' 				=> __( 'Displays the posts on map for selected categories.', 'geodirectory' ),
+				'multiple' 			=> true,
+				'options'   		=>  $this->get_categories(),
+				'default'  			=> '',
+				'desc_tip' 			=> true,
+				'advanced' 			=> false,
+				'element_require' 	=> '[%map_type%]=="archive"',
 			),
-			'enable_cat_filters'  => array(
-				'type' => 'checkbox',
-				'title' => __('Enable category filter?', 'geodirectory'),
-				'desc' => __('This enables categories filter on map.', 'geodirectory'),
-				'placeholder' => '',
-				'desc_tip' => true,
-				'default'  => '0',
-				'advanced' => false
+			'all_posts'  	=> array(
+				'type' 				=> 'checkbox',
+				'title' 			=> __( 'Show all posts?', 'geodirectory' ),
+				'desc' 				=> __( 'This displays all posts on map from archive page.', 'geodirectory' ),
+				'placeholder' 		=> '',
+				'desc_tip' 			=> true,
+				'value'				=> '1',
+				'default'  			=> '0',
+				'advanced' 			=> false,
+				'element_require' 	=> '[%map_type%]=="archive"',
+			),
+			'post_id'  				=> array(
+				'type' 				=> 'text',
+				'title'				=> __( 'Post ID:', 'geodirectory' ),
+				'desc' 				=> __( 'Map post id.', 'geodirectory' ),
+				'default'  			=> '',
+				'desc_tip' 			=> true,
+				'advanced' 			=> false,
+				'element_require' 	=> '[%map_type%]=="post"',
+			),
+			'search_filter'  	=> array(
+				'type' 				=> 'checkbox',
+				'title' 			=> __( 'Enable search filter?', 'geodirectory' ),
+				'desc' 				=> __( 'This enables search filter on map.', 'geodirectory' ),
+				'placeholder' 		=> '',
+				'desc_tip' 			=> true,
+				'value'				=> '1',
+				'default'  			=> '0',
+				'advanced' 			=> false,
+				'element_require' 	=> '[%map_type%]=="directory"',
 			),
 			'post_type_filter'  => array(
-				'type' => 'checkbox',
-				'title' => __('Enable post type filter?', 'geodirectory'),
-				'desc' => __('This enables post type filter on map.', 'geodirectory'),
-				'placeholder' => '',
-				'desc_tip' => true,
-				'default'  => '0',
-				'advanced' => false
+				'type' 				=> 'checkbox',
+				'title' 			=> __( 'Enable post type filter?', 'geodirectory' ),
+				'desc' 				=> __( 'This enables post type filter on map.', 'geodirectory' ),
+				'placeholder' 		=> '',
+				'desc_tip' 			=> true,
+				'value'				=> '1',
+				'default'  			=> '0',
+				'advanced' 			=> false,
+				'element_require' 	=> '[%map_type%]=="directory"',
 			),
-			'enable_text_search'  => array(
-				'type' => 'checkbox',
-				'title' => __('Enable search filter?', 'geodirectory'),
-				'desc' => __('This enables search filter on map.', 'geodirectory'),
-				'placeholder' => '',
-				'desc_tip' => true,
-				'default'  => '0',
-				'advanced' => false
+			'cat_filter'  		=> array(
+				'type' 				=> 'checkbox',
+				'title' 			=> __( 'Enable category filter?', 'geodirectory' ),
+				'desc' 				=> __( 'This enables categories filter on map.', 'geodirectory' ),
+				'placeholder' 		=> '',
+				'desc_tip' 			=> true,
+				'value'				=> '1',
+				'default'  			=> '0',
+				'advanced' 			=> false,
+				'element_require' 	=> '[%map_type%]=="directory"',
+			),
+			'child_collapse'  	=> array(
+				'type' 				=> 'checkbox',
+				'title' 			=> __( 'Collapse sub categories?', 'geodirectory' ),
+				'desc' 				=> __( 'This will hide the sub-categories under the parent, requiring a click to show.', 'geodirectory' ),
+				'placeholder' 		=> '',
+				'desc_tip' 			=> true,
+				'value'				=> '1',
+				'default'  			=> '0',
+				'advanced' 			=> false,
+				'element_require' 	=> '[%map_type%]=="directory"',
+			),
+			'map_directions'  => array(
+				'type' 				=> 'checkbox',
+				'title' 			=> __( 'Enable map directions?', 'geodirectory' ),
+				'desc' 				=> __( 'Displays post directions for single post map.', 'geodirectory' ),
+				'placeholder' 		=> '',
+				'desc_tip' 			=> true,
+				'value'				=> '1',
+				'default'  			=> '0',
+				'advanced' 			=> false,
+				'element_require' 	=> '[%map_type%]=="post"',
+			),
+			'marker_cluster'  => array(
+				'type' 				=> 'checkbox',
+				'title' 			=> __( 'Enable marker cluster?', 'geodirectory' ),
+				'desc' 				=> __( 'This enables marker cluster on the map.', 'geodirectory' ),
+				'placeholder' 		=> '',
+				'desc_tip' 			=> true,
+				'value'				=> '1',
+				'default'  			=> '0',
+				'advanced' 			=> true,
+				'element_require' 	=> '[%map_type%]!="post"',
 			)
 		);
 		
@@ -267,31 +284,47 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'height' 			=> '425px',
 			'maptype' 			=> 'ROADMAP',
 			'zoom'				=> '0',
-			
 			'post_type'			=> 'gd_place',
 			'terms'				=> array(),
 			'post_id'			=> 0,
-			
 			'all_posts'			=> false,
-			'marker_cluster'	=> false,
+			'search_filter'		=> false,
+			'post_type_filter'	=> true,
+			'cat_filter'		=> true,
+			'child_collapse'	=> false,
 			'map_directions'	=> false,
+			'marker_cluster'	=> false,
         );
 
         $map_args = wp_parse_args( $args, $defaults );
+		
+		if ( ! in_array( $map_args['map_type'], array( 'auto', 'directory', 'archive', 'post' ) ) ) {
+			$map_args['map_type'] = 'auto';
+		}
+		$map_args['default_map_type'] = $map_args['map_type'];
+
+		if ( $map_args['map_type'] == 'auto' ) {
+			if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) {
+				$map_args['map_type'] = 'archive';
+			} elseif ( geodir_is_page( 'detail' ) || geodir_is_page( 'preview' ) ) {
+				$map_args['map_type'] = 'post';
+			} else {
+				$map_args['map_type'] = 'directory';
+			}
+		}
 
 		if ( ! empty( $widget_args['widget_id'] ) ) {
 			$map_args['map_canvas'] = $widget_args['widget_id'];
 		}
+		if ( is_array( $map_args['terms'] ) && ! empty( $map_args['terms'] ) && $map_args['terms'][0] == '0' ) {
+			$map_args['terms'] = array();
+		} else if ( ! is_array( $map_args['terms'] ) && $map_args['terms'] == '0' ) {
+			$map_args['terms'] = array();
+		}
 
-		$post_id 	= absint( $map_args['post_id'] );
 		$post_type 	= ! empty( $map_args['post_type'] ) ? $map_args['post_type'] : geodir_get_current_posttype();
-		$post_type 	= ! empty( $post_id ) ? get_post_type( $post_id ) : $post_type;
 
-		$map_type 	= $map_args['map_type'];
-
-		switch( $map_type ) {
-			case 'directory':
-				break;
+		switch( $map_args['map_type'] ) {
 			case 'archive':
 				if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) {
 					if ( empty( $map_args['all_posts'] ) ) {
@@ -307,11 +340,17 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							}
 						}
 					} else {
-						if ( ! empty( $wp_query ) && $wp_query->is_main_query() && $wp_query->queried_object ) {
+						if ( ! empty( $wp_query ) && $wp_query->is_main_query() ) {
 							$map_args['posts'] = array();
 							$map_args['terms'] = array();
 							if ( ! empty( $wp_query->queried_object ) && ! empty( $wp_query->queried_object->term_id ) ) {
 								$map_args['terms'][] = $wp_query->queried_object->term_id;
+							} else {
+								if ( ! empty( $wp_query->posts ) ) {
+									foreach ( $wp_query->posts as $post ) {
+										$map_args['posts'][] = $post->ID;
+									}
+								}
 							}
 						}
 					}
@@ -322,73 +361,52 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				}
 				break;
 			case 'post':
-				if ( empty( $post_id ) && ( geodir_is_page( 'detail' ) || geodir_is_page( 'preview' ) ) && ! empty( $gd_post->ID ) ) {
+				if ( $map_args['default_map_type'] == 'post' && ! empty( $map_args['post_id'] ) ) {
+					$post_id 	= $map_args['post_id'];
+					$post_type 	= get_post_type( $post_id );
+				} else if ( ( geodir_is_page( 'detail' ) || geodir_is_page( 'preview' ) ) && ! empty( $gd_post->ID ) ) {
 					$post_id 	= $gd_post->ID;
-					$post_type	= $gd_post->post_type;
+					$post_type 	= $gd_post->post_type;
+				} else {
+					$post_id 	= -1; // No results.
 				}
-				break;
-			case 'auto':
-				$map_type 	= 'directory';
-				if ( ( geodir_is_page( 'detail' ) || geodir_is_page( 'preview' ) ) && ! empty( $gd_post->ID ) ) {
-					$map_type 	= 'post';
-					$post_id 	= $gd_post->ID;
-					$post_type	= $gd_post->post_type;
-				} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) {
-					$map_type 	= 'archive';
-					if ( empty( $map_args['all_posts'] ) ) {
-						$map_args['posts'] = array( '-1' ); // No results
 
-						if ( ! empty( $wp_query ) && $wp_query->is_main_query() ) {
-							$map_args['posts'] = array();
-							$map_args['terms'] = array();
-							if ( ! empty( $wp_query->posts ) ) {
-								foreach ( $wp_query->posts as $post ) {
-									$map_args['posts'][] = $post->ID;
-								}
-							}
-						}
-					} else {
-						if ( ! empty( $wp_query ) && $wp_query->is_main_query() && $wp_query->queried_object ) {
-							$map_args['posts'] = array();
-							$map_args['terms'] = array();
-							if ( ! empty( $wp_query->queried_object ) && ! empty( $wp_query->queried_object->term_id ) ) {
-								$map_args['terms'][] = $wp_query->queried_object->term_id;
-							}
-						}
-					}
+				$map_args['posts']			= array( $post_id );
+
+				// Default for post map
+				$map_args['terms'] 			= array();
+				$map_args['marker_cluster'] = false;
+				if ( empty( $map_args['zoom'] ) ) {
+					$map_args['zoom'] 	= 7;
 				}
-				break;
-			default:
-				$map_type 	= 'directory';
 				break;
 		}
 
-		$map_args['map_type'] 	= $map_type;
 		if ( empty( $post_type ) ) {
 			$post_type = 'gd_place'; // @todo implement multiple for CPT
 		}
 		$map_args['post_type'] 	= $post_type;
-		if ( $map_type == 'post' ) {
-			if ( ! empty( $post_id ) ) {
-				$map_args['posts'] 		= array( $post_id );
-			}
-			if ( empty( $map_args['zoom'] ) ) {
-				$map_args['zoom'] 		= 7;
-			}
+
+		// directory map
+		if ( $map_args['map_type'] == 'directory' ) {
+		} else {
+			$map_args['post_type_filter'] 	= false;
+			$map_args['cat_filter'] 		= false;
+			$map_args['search_filter'] 		= false;
+		}
+
+		// archive map
+		if ( $map_args['map_type'] == 'archive' ) {
+		} else {
+			$map_args['all_posts'] 		= false;
 			$map_args['terms'] 			= array();
-			$map_args['marker_cluster'] = false;
+		}
+
+		// post map
+		if ( $map_args['map_type'] == 'post' ) {
 		} else {
 			$map_args['map_directions'] = false;
 			$map_args['post_id'] 		= 0;
-		}
-		if ( $map_type == 'archive' ) {
-
-		} else {
-			$map_args['all_posts'] = false;
-		}
-
-		if ( ! empty( $map_args['terms'] ) && is_array( $map_args['terms'] ) && $map_args['terms'][0] == '0' ) {
-			$map_args['terms'] = array();
 		}
 
 		// geodir_error_log( $map_args, 'map_args', __FILE__, __LINE__ );
@@ -409,17 +427,17 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'maptype' 			=> 'ROADMAP',
 			'zoom'				=> '0',
 			'autozoom'			=> true,
-
 			'post_type'			=> 'gd_place',
 			'terms'				=> '',
 			'posts'				=> '',
-
 			'sticky'			=> false,
 			'map_directions'	=> false,
-			'location_cluster'	=> false,					// @todo implement via LM
+			'marker_cluster'	=> false,
         );
 
         $params = wp_parse_args( $map_args, $defaults );
+		
+		$params['marker_cluster'] = false; // @todo Implement via marker cluster plugin.
 
 		// map type
 		if ( ! in_array( $params['map_type'], array( 'auto', 'directory', 'archive', 'post' ) ) ) {
@@ -687,6 +705,73 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			</div>
 			<?php
 		}
+
+		if ( ! empty( $map_options['cat_filter'] ) || ! empty( $map_options['search_filter'] ) ) {
+			$exclude_post_types = array();
+			$cpts_on_map 		= count( geodir_get_posttypes( 'array' ) ) - count( $exclude_post_types );
+			$cat_filter_class 	= '';
+			if ( ! empty( $map_options['post_type_filter'] ) ) {
+				$cat_filter_class = $cpts_on_map > 1 ? ' gd-map-cat-ptypes' : ' gd-map-cat-floor';
+			}
+			?>
+			<!-- START cat_filter/search_filter -->
+			<div class="map-category-listing-main geodir-map-cat-filter-wrap">
+				<div class="map-category-listing<?php echo $cat_filter_class; ?>">
+					<div class="gd-trigger gd-triggeroff"><i class="fa fa-compress"></i><i class="fa fa-expand"></i></div>
+					<div id="<?php echo $map_canvas; ?>_cat" class="<?php echo $map_canvas; ?>_map_category map_category" <?php checked( ! empty( $map_options['child_collapse'] ), true ); ?> style="max-height:<?php echo $map_options['height']; ?>;">
+						<input 
+							onkeydown="if(event.keyCode == 13){build_map_ajax_search_param('<?php echo $map_canvas; ?>', false);}" 
+							type="text" 
+							class="inputbox <?php echo( $map_options['search_filter'] ? '' : 'geodir-hide' ) ; ?>"
+							id="<?php echo $map_canvas; ?>_search_string" 
+							name="search"
+							placeholder="<?php esc_attr_e( 'Title', 'geodirectory' ); ?>
+							"/>
+						<?php if ( ! empty( $map_options['cat_filter'] ) ) { ?>
+						<input type="hidden" id="<?php echo $map_canvas; ?>_child_collapse" value="<?php echo absint( $map_options['child_collapse'] ); ?>"/>
+						<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="1"/>
+						<div class="geodir_toggle">
+							<?php echo geodir_map_taxonomy_walker( array( $map_options['post_type'] . 'category' ), 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), true ); ?>
+							<script type="text/javascript">jQuery(function(){geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');});</script>
+						</div>
+						<?php } else { ?>
+							<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="0"/>
+							<input type="hidden" id="<?php echo $map_canvas; ?>_child_collapse" value="0"/>
+						<?php } ?>
+						<div class="BottomRight"></div>
+					</div>
+				</div>
+			</div><!-- END cat_filter/search_filter -->
+			<?php
+		}
+
+		if ( ! empty( $map_options['post_type_filter'] ) ) {
+			$map_post_types = self::map_post_types();
+			if ( ! empty( $map_post_types ) && count( array_keys( $map_post_types ) ) > 1 ) {
+			?>
+			<!-- START post_type_filter -->
+			<div class="map-places-listing  geodir-post-type-filter-wrap"" id="<?php echo $map_canvas;?>_posttype_menu" style="max-width:<?php echo $map_width;?>!important;">
+				<div class="geodir-map-posttype-list">
+					<ul class="clearfix place-list">
+					<?php 
+					foreach( $map_post_types as $cpt => $cpt_name ) { 
+						$class = $map_options['post_type'] == $cpt ? 'class="gd-map-search-pt"' : '';
+						?>
+						<li id="<?php echo $cpt . ' ' . $class; ?>><a href="javascript:void(0);" onclick="jQuery('#<?php echo $map_canvas; ?>_posttype').val('<?php echo $cpt; ?>');build_map_ajax_search_param('<?php echo $map_canvas; ?>', true)"><?php echo $cpt_name; ?></a></li>
+					<?php } ?>
+					</ul>
+				</div>
+				<div class="geodir-map-navigation">
+					<ul>
+						<li class="geodir-leftarrow"><a href="#"><i class="fa fa-chevron-left"></i></a></li>
+						<li class="geodir-rightarrow"><a href="#"><i class="fa fa-chevron-right"></i></a>
+						</li>
+					</ul>
+				</div>
+			</div><!-- END post_type_filter -->
+			<?php 
+			}
+		}
 	}
 	
 	public static function custom_script( $map_options ) {
@@ -759,5 +844,18 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		} else {
 			return $output;
 		}
+	}
+	
+	public static function map_post_types() {
+		$map_post_types 	= geodir_get_posttypes( 'options-plural' );
+		$exclude_post_types = geodir_get_option( 'geodir_exclude_post_type_on_map' );
+		if ( ! empty( $exclude_post_types ) && is_array( $exclude_post_types ) ) {
+			foreach ( $exclude_post_types as $post_type ) {
+				if ( ! empty( $map_post_types ) && isset( $map_post_types[ $post_type ] ) ) {
+					unset( $map_post_types[ $post_type ] );
+				}
+			}
+		}
+		return $map_post_types;
 	}
 }
