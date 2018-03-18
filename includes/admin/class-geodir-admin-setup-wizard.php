@@ -581,7 +581,7 @@ class GeoDir_Admin_Setup_Wizard {
 
 		<h1><?php esc_html_e( 'Awesome, your directory is ready!', 'geodirectory' ); ?></h1>
 
-		<?php if ( 'unknown' === geodir_get_option( 'usage_tracking', 'unknown' ) ) { ?>
+		<?php if ( 'unknown' === geodir_get_option( 'usage_tracking', 'unknown' ) || '' === geodir_get_option( 'usage_tracking')  ) { ?>
 			<div class="geodirectory-message geodirectory-tracker">
 				<p><?php printf( __( 'Want to help make GeoDirectory even more awesome? Allow GeoDirectory to collect non-sensitive diagnostic data and usage information. %1$sFind out more%2$s.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/usage-tracking/" target="_blank">', '</a>' ); ?></p>
 				<p class="submit">

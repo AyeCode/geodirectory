@@ -18,28 +18,26 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @since 2.0.0
  */
 function goedir_register_widgets() {
-	register_widget( 'GeoDir_Widget_Search' );
-    register_widget( 'GeoDir_Widget_Best_Of' );
-    register_widget( 'GeoDir_Widget_Categories' );
-    register_widget( 'GeoDir_Widget_Dashboard' );
-    register_widget( 'GeoDir_Widget_Recent_Reviews' );
+    if ( get_option( 'geodirectory_version' )) {
+        register_widget( 'GeoDir_Widget_Search' );
+        register_widget( 'GeoDir_Widget_Best_Of' );
+        register_widget( 'GeoDir_Widget_Categories' );
+        register_widget( 'GeoDir_Widget_Dashboard' );
+        register_widget( 'GeoDir_Widget_Recent_Reviews' );
 
-    // post widgets
-    register_widget( 'GeoDir_Widget_Post_Meta' );
-    register_widget( 'GeoDir_Widget_Post_Images' );
-    register_widget( 'GeoDir_Widget_Post_Title' );
-    register_widget( 'GeoDir_Widget_Post_Rating' );
-    register_widget( 'GeoDir_Widget_Post_Fav' );
+        // post widgets
+        register_widget( 'GeoDir_Widget_Post_Meta' );
+        register_widget( 'GeoDir_Widget_Post_Images' );
+        register_widget( 'GeoDir_Widget_Post_Title' );
+        register_widget( 'GeoDir_Widget_Post_Rating' );
+        register_widget( 'GeoDir_Widget_Post_Fav' );
 
-    // Widgets
-    register_widget( 'GeoDir_Widget_Output_location' );
-    register_widget( 'GeoDir_Widget_Author_Actions' );
-    register_widget( 'GeoDir_Widget_Listings' );
-	register_widget( 'GeoDir_Widget_Map' );
-
-
-
-
+        // Widgets
+        register_widget( 'GeoDir_Widget_Output_location' );
+        register_widget( 'GeoDir_Widget_Author_Actions' );
+        register_widget( 'GeoDir_Widget_Listings' );
+        register_widget( 'GeoDir_Widget_Map' );
+    }
 }
 add_action( 'widgets_init', 'goedir_register_widgets' );
 
@@ -189,246 +187,6 @@ function best_of_show_review_in_excerpt($excerpt) {
     return $excerpt;
 }
 
-/**
- * Get the cpt categories content.
- *
- * @since 1.5.4
- * @since 1.6.6 New parameters $no_cpt_filter &no_cat_filter added.
- *
- * @global object $post The post object.
- * @global bool $gd_use_query_vars If true then use query vars to get current location terms.
- *
- * @param array $params An array of cpt categories parameters.
- * @return string CPT categories content.
- */
-function geodir_cpt_categories_output($params) {
-    global $post, $gd_use_query_vars;
-    
-    $old_gd_use_query_vars = $gd_use_query_vars;
-    
-    $gd_use_query_vars = geodir_is_page('detail') ? true : false;
-    
-    $args = wp_parse_args((array)$params,
-        array(
-            'title' => '',
-            'post_type' => array(), // NULL for all
-            'hide_empty' => '',
-            'show_count' => '',
-            'hide_icon' => '',
-            'cpt_left' => '',
-            'sort_by' => 'count',
-            'max_count' => 'all',
-            'max_level' => '1',
-            'no_cpt_filter' => '',
-            'no_cat_filter' => '',
-			'cpt_ajax' => '',
-        )
-    );
-
-    $sort_by = isset($args['sort_by']) && in_array($args['sort_by'], array('az', 'count')) ? $args['sort_by'] : 'count';
-    $cpt_filter = empty($args['no_cpt_filter']) ? true : false;
-    $cat_filter = empty($args['no_cat_filter']) ? true : false;
-	$cpt_ajax = ! empty( $args['cpt_ajax'] ) ? true : false;
-
-    $gd_post_types = geodir_get_posttypes('array');
-
-    $post_type_arr = !is_array($args['post_type']) ? explode(',', $args['post_type']) : $args['post_type'];
-    $current_posttype = geodir_get_current_posttype();
-
-    $is_listing = false;
-    $is_detail = false;
-    $is_category = false;
-	$current_term_id = 0;
-    $post_ID = 0;
-    $is_listing_page = geodir_is_page('listing');
-    $is_detail_page = geodir_is_page('detail');
-    if ($is_listing_page || $is_detail_page) {
-        $current_posttype = geodir_get_current_posttype();
-
-        if ($current_posttype != '' && isset($gd_post_types[$current_posttype])) {
-            if ($is_detail_page) {
-                $is_detail = true;
-                $post_ID = is_object($post) && !empty($post->ID) ? (int)$post->ID : 0;
-            } else {
-                $is_listing = true;
-                if (is_tax()) { // category page
-                    $current_term_id = get_queried_object_id();
-                    $current_taxonomy = get_query_var('taxonomy');
-                    $current_posttype = geodir_get_current_posttype();
-
-                    if ($current_term_id && $current_posttype && get_query_var('taxonomy') == $current_posttype . 'category') {
-                        $is_category = true;
-                    }
-                }
-            }
-        }
-    }
-
-    $parent_category = 0;
-    if (($is_listing || $is_detail) && $cpt_filter) {
-        $post_type_arr = array($current_posttype);
-    }
-
-    $post_types = array();
-    if (!empty($post_type_arr)) {
-        if (in_array('0', $post_type_arr)) {
-            $post_types = $gd_post_types;
-        } else {
-            foreach ($post_type_arr as $cpt) {
-                if (isset($gd_post_types[$cpt])) {
-                    $post_types[$cpt] = $gd_post_types[$cpt];
-                }
-            }
-        }
-    }
-
-    if (empty($post_type_arr)) {
-        $post_types = $gd_post_types;
-    }
-
-    $hide_empty = !empty($args['hide_empty']) ? true : false;
-    $max_count = strip_tags($args['max_count']);
-    $all_childs = $max_count == 'all' ? true : false;
-    $max_count = $max_count > 0 ? (int)$max_count : 0;
-    $max_level = strip_tags($args['max_level']);
-    $show_count = !empty($args['show_count']) ? true : false;
-    $hide_icon = !empty($args['hide_icon']) ? true : false;
-    $cpt_left = !empty($args['cpt_left']) ? true : false;
-
-    if(!$cpt_left){
-        $cpt_left_class = "gd-cpt-flat";
-    }else{
-        $cpt_left_class = '';
-    }
-
-    $orderby = 'count';
-    $order = 'DESC';
-    if ($sort_by == 'az') {
-        $orderby = 'name';
-        $order = 'ASC';
-    }
-	
-	$via_ajax = ! empty($params['via_ajax']) && wp_doing_ajax() ? $params['via_ajax'] : false;
-	$ajax_cpt = ! empty($params['ajax_cpt']) && $via_ajax ? $params['ajax_cpt'] : '';
-	if ( $via_ajax ) {
-		if ( ! empty( $params['ajax_is_listing'] ) ) {
-			$is_listing = true;
-		}
-		if ( ! empty( $params['ajax_is_detail'] ) ) {
-			$is_detail = true;
-		}
-		if ( ! empty( $params['ajax_is_category'] ) ) {
-			$is_category = true;
-		}
-		if ( ! empty( $params['ajax_post_ID'] ) ) {
-			$post_ID = $params['ajax_post_ID'];
-		}
-		if ( ! empty( $params['ajax_current_term_id'] ) ) {
-			$current_term_id = $params['ajax_current_term_id'];
-		}
-	}
-
-    $output = '';
-    if (!empty($post_types)) {
-		$cpt_options = array();//array('<option value="post">' . wp_sprintf( __( '%s Categories', 'geodirectory' ), 'Post' ) . '</option>');
-		$cpt_list = '';
-        foreach ($post_types as $cpt => $cpt_info) {
-			if ($ajax_cpt && $ajax_cpt !== $cpt) {
-				continue;
-			}
-            $cpt_options[] = '<option value="' . $cpt . '" ' . selected( $cpt, $current_posttype, false ) . '>' . wp_sprintf( __( '%s Categories', 'geodirectory' ), $cpt_info['labels']['singular_name'] ) . '</option>';
-			$parent_category = ($is_category && $cat_filter && $cpt == $current_posttype) ? $current_term_id : 0;
-            $cat_taxonomy = $cpt . 'category';
-            $skip_childs = false;
-            if ($cat_filter && $cpt == $current_posttype && $is_detail && $post_ID) {
-                $skip_childs = true;
-                $categories = get_terms($cat_taxonomy, array('orderby' => $orderby, 'order' => $order, 'hide_empty' => $hide_empty, 'object_ids' => $post_ID));
-            } else {
-                $categories = get_terms($cat_taxonomy, array('orderby' => $orderby, 'order' => $order, 'hide_empty' => $hide_empty, 'parent' => $parent_category));
-            }
-
-            if ($hide_empty) {
-                $categories = geodir_filter_empty_terms($categories);
-            }
-            if ($sort_by == 'count') {
-                $categories = geodir_sort_terms($categories, 'count');
-            }
-
-            if (!empty($categories)) {
-                $term_icons = !$hide_icon ? geodir_get_term_icon() : array();
-                $row_class = '';
-
-                if ($is_listing) {
-                    $row_class = $is_category ? ' gd-cptcat-categ' : ' gd-cptcat-listing';
-                }
-                $cpt_row = '<div class="gd-cptcat-row gd-cptcat-' . $cpt . $row_class . ' '.$cpt_left_class.'">';
-
-                if ($is_category && $cat_filter && $cpt == $current_posttype) {
-                    $term_info = get_term($current_term_id, $cat_taxonomy);
-
-                    $term_icon_url = !empty($term_icons) && isset($term_icons[$term_info->term_id]) ? $term_icons[$term_info->term_id] : '';
-                    $term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr($term_info->name) . ' icon" src="' . $term_icon_url . '" /> ' : '';
-
-                    $count = $show_count ? ' <span class="gd-cptcat-count">(' . $term_info->count . ')</span>' : '';
-                    $cpt_row .= '<h2 class="gd-cptcat-title">' . $term_icon_url . $term_info->name . $count . '</h2>';
-                } else {
-                    $cpt_row .= '<h2 class="gd-cptcat-title">' . __($cpt_info['labels']['name'], 'geodirectory') . '</h2>';
-                }
-                foreach ($categories as $category) {
-                    $term_icon_url = !empty($term_icons) && isset($term_icons[$category->term_id]) ? $term_icons[$category->term_id] : '';
-                    $term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr($category->name) . ' icon" src="' . $term_icon_url . '" /> ' : '';
-
-                    $term_link = get_term_link( $category, $category->taxonomy );
-                    /** Filter documented in includes/general_functions.php **/
-                    $term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );
-
-                    $cpt_row .= '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';
-                    $cpt_row .= '<li class="gd-cptcat-li gd-cptcat-li-main">';
-                    $count = $show_count ? ' <span class="gd-cptcat-count">(' . $category->count . ')</span>' : '';
-                    $cpt_row .= '<h3 class="gd-cptcat-cat"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">'  .$term_icon_url . $category->name . $count . '</a></h3>';
-                    if (!$skip_childs && ($all_childs || $max_count > 0) && ($max_level == 'all' || (int)$max_level > 0)) {
-                        $cpt_row .= geodir_cpt_categories_child_cats($category->term_id, $cpt, $hide_empty, $show_count, $sort_by, $max_count, $max_level, $term_icons);
-                    }
-                    $cpt_row .= '</li>';
-                    $cpt_row .= '</ul>';
-                }
-                $cpt_row .= '</div>';
-
-                $cpt_list .= $cpt_row;
-            }
-        }
-		if ( !$via_ajax && $cpt_ajax && ! empty( $cpt_options ) ) {
-			$post_type = is_array( $args['post_type'] ) ? implode( ',', $args['post_type'] ) : (! empty($args['post_type']) ? $args['post_type'] : '0');
-			$output .= '<div class="gd-cptcats-select"><div class="gd-wgt-params">';
-			$output .= '<input type="hidden" name="post_type" value="' . $post_type . '">';
-			$output .= '<input type="hidden" name="cpt_ajax" value="' . $cpt_ajax . '">';
-			$output .= '<input type="hidden" name="hide_empty" value="' . $hide_empty . '">';
-			$output .= '<input type="hidden" name="show_count" value="' . $show_count . '">';
-			$output .= '<input type="hidden" name="hide_icon" value="' . $hide_icon . '">';
-			$output .= '<input type="hidden" name="cpt_left" value="' . $cpt_left . '">';
-			$output .= '<input type="hidden" name="sort_by" value="' . $sort_by . '">';
-			$output .= '<input type="hidden" name="max_level" value="' . $max_level . '">';
-			$output .= '<input type="hidden" name="max_count" value="' . $max_count . '">';
-			$output .= '<input type="hidden" name="no_cpt_filter" value="' . $args['no_cpt_filter'] . '">';
-			$output .= '<input type="hidden" name="no_cat_filter" value="' . $args['no_cat_filter'] . '">';
-			$output .= '<input type="hidden" name="ajax_is_listing" value="' . $is_listing . '">';
-			$output .= '<input type="hidden" name="ajax_is_detail" value="' . $is_detail . '">';
-			$output .= '<input type="hidden" name="ajax_is_category" value="' . $is_category . '">';
-			$output .= '<input type="hidden" name="ajax_post_ID" value="' . $post_ID . '">';
-			$output .= '<input type="hidden" name="ajax_current_term_id" value="' . $current_term_id . '">';
-			$output .= '</div><select class="geodir-cat-list-tax geodir-select">' . implode( '', $cpt_options ) . '</select>';
-			$output .= '</div><div class="gd-cptcat-rows">';
-		}
-		$output .= $cpt_list;
-		if ( !$via_ajax && $cpt_ajax && ! empty( $cpt_options ) ) {
-			$output .= '</div>';
-		}
-    }
-        
-    $gd_use_query_vars = $old_gd_use_query_vars;
-
-    return $output;
-}
 
 /**
  * Get the child categories content.

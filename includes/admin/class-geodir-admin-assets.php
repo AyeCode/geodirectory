@@ -65,9 +65,7 @@ class GeoDir_Admin_Assets {
 			// load OSM styles if needed.
 			if($geodir_map_name == 'osm'){
 				wp_enqueue_style('geodir-leaflet-style');
-				if (geodir_is_page('details') || geodir_is_page('preview')) {//@todo this should not be needed in admin
-					wp_enqueue_style('geodir-leaflet-routing-style');
-				}
+
 			}
 
 			wp_enqueue_style( 'geodir-admin-css' );
@@ -179,7 +177,7 @@ class GeoDir_Admin_Assets {
 			
 			// only load maps when needed
 			if(
-			( $screen_id == 'geodirectory_page_gd-settings' && isset($_REQUEST['section']) && $_REQUEST['section']=='location' ) ||
+			( $screen_id == 'geodirectory_page_gd-settings' && isset($_REQUEST['section']) && ($_REQUEST['section']=='location' || $_REQUEST['section']=='dummy_data') ) ||
 			( isset($screen->base) && $screen->base=='post' && isset($screen->post_type) &&  substr( $screen->post_type, 0, 3 ) === "gd_" )
 			){
 				wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );

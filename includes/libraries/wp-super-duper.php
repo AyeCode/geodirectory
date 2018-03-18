@@ -178,7 +178,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					var form = jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length==0) {
+						console.log('add advanced button');
+
 						jQuery(form).find('.widget-control-save').after($button);
+					}else{
+						console.log('no advanced button');
+						console.log(jQuery($this).val());
+						console.log(jQuery(form).find('.sd-advanced-button').length);
+
 					}
 
 					// show hide on form change
@@ -219,6 +226,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 					// init on widget added
 					jQuery(document).on('widget-added', function(e, widget){
+						console.log('widget added');
 						// is it a SD widget?
 						if (jQuery(widget).find('.sd-show-advanced').length) {
 							// init the widget
@@ -228,6 +236,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 					// inint on widget updated
 					jQuery(document).on('widget-updated', function(e, widget){
+						console.log('widget updated');
+
 						// is it a SD widget?
 						if (jQuery(widget).find('.sd-show-advanced').length) {
 							// init the widget
@@ -362,7 +372,16 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			//$args
 			$args = $this->string_to_bool( $args );
 
-			return $this->output( $args, array(), $content );
+
+			$calss = isset($this->options['widget_ops']['classname']) ? esc_attr($this->options['widget_ops']['classname']) : '';
+
+			// wrap the shortcode in a dive with the same class as the widget
+			$output = '<div class="'.$calss.'">';
+			$output .= $this->output( $args, array(), $content );
+			$output .= '</div>';
+
+
+			return $output;
 		}
 
 
@@ -455,6 +474,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			//$this->arguments
 			$show      = false;
 			$arguments = $this->arguments;
+
+			if(empty($arguments)){
+				$arguments = $this->get_arguments();
+			}
+
 			if ( ! empty( $arguments ) ) {
 				foreach ( $arguments as $argument ) {
 					if ( isset( $argument['advanced'] ) && $argument['advanced'] ) {

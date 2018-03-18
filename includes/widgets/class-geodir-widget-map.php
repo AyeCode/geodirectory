@@ -35,7 +35,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
                 )
             ),
             'class_name'    	=> __CLASS__,
-            'base_id'       	=> 'gd_widget_map', 									// this us used as the widget id and the shortcode id.
+            'base_id'       	=> 'gd_map', 									// this us used as the widget id and the shortcode id.
             'name'          	=> __('GD > Map','geodirectory'), 						// the name of the widget.
             'widget_ops'    	=> array(
                 'classname'   => 'geodir-wgt-map', 										// widget class
@@ -278,6 +278,9 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
     public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $gd_post, $wp_query;
 
+
+	    ///print_r( $args );exit;
+
 		$defaults = array(
             'map_type'			=> 'auto',
 			'width' 			=> '100%',
@@ -292,7 +295,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'post_type_filter'	=> true,
 			'cat_filter'		=> true,
 			'child_collapse'	=> false,
-			'map_directions'	=> false,
+			'map_directions'	=> true,
 			'marker_cluster'	=> false,
         );
 
@@ -506,7 +509,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 * Display the map.
 	 *
 	 */
-	public static function display_map( $params ) { geodir_error_log( $params, 'display_map', __FILE__, __LINE__ );
+	public static function display_map( $params ) { //geodir_error_log( $params, 'display_map', __FILE__, __LINE__ );
 		global $gd_maps_canvas;
 		if ( empty( $gd_maps_canvas ) ) {
 			$gd_maps_canvas = array();
