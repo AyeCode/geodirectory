@@ -907,6 +907,17 @@ class GeoDir_Admin_Settings {
 			$description  = $value['desc'];
 		}
 
+		if(!empty($value['docs'])){
+
+			$docs_link = " <a class='geodir-docs-link' href='".esc_url($value['docs'])."' >".__('Documentation','geodirectory')."</a>";
+
+			if(in_array( $value['type'], array( 'checkbox' ) )){
+				$description .= $docs_link;
+			}else{
+				$tooltip_html .= $docs_link;
+			}
+		}
+
 		if ( $description && in_array( $value['type'], array( 'textarea', 'radio' ) ) ) {
 			$description = '<p style="margin-top:0">' . wp_kses_post( $description ) . '</p>';
 		} elseif ( $description && in_array( $value['type'], array( 'checkbox' ) ) ) {
@@ -915,11 +926,15 @@ class GeoDir_Admin_Settings {
 			$description = '<span class="description">' . wp_kses_post( $description ) . '</span>';
 		}
 
+
+
 		if ( $tooltip_html && in_array( $value['type'], array( 'checkbox' ) ) ) {
 			$tooltip_html = '<p class="description">' . $tooltip_html . '</p>';
 		} elseif ( $tooltip_html ) {
 			$tooltip_html = geodir_help_tip( $tooltip_html );
 		}
+
+
 
 		return array(
 			'description'  => $description,
