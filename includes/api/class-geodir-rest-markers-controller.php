@@ -38,6 +38,20 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 				'args'            	  => $this->get_collection_params(),
 			)
 		) );
+
+		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', array(
+			'args' => array(
+				'id' => array(
+					'description' => __( 'Unique identifier for the object.' ),
+					'type'        => 'integer',
+				),
+			),
+			array(
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => array( $this, 'get_marker_item' ),
+				'permission_callback' => array( $this, 'get_marker_item_permissions_check' ),
+			)
+		) );
     }
 	
 	/**
@@ -319,5 +333,39 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		}
 
 		return $where;
+	}
+
+	/**
+	 * Retrieves the makers.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return array|WP_Error Array on success, or WP_Error object on failure.
+	 */
+	public function get_marker_item( $request ) {
+		$id = ! empty( $request['id'] ) ? (int)$request['id'] : 0; 
+
+		$response = $id > 0 ? $this->marker_content( $id ) : '';
+
+		return $response;
+	}
+
+	public function marker_content( $id ) {
+		$content = geodir_get_map_popup_content( $id );
+
+		return $content;
+	}
+
+	/**
+	 * Checks if a given request has access to read and manage markers.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return bool True if the request has read access for the item, otherwise false.
+	 */
+	public function get_marker_item_permissions_check( $request ) {
+		return $this->show_in_rest();
 	}
 }

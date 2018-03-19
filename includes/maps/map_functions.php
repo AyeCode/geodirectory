@@ -582,3 +582,30 @@ function geodir_map_taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty
     }
     return;
 }
+
+function geodir_get_map_popup_content( $item ) {
+	global $post, $gd_post;
+
+	$content = '';
+
+	if ( is_int( $item ) ) {
+		$item = geodir_get_post_info( $item );
+	}
+
+	if ( ! ( ! empty( $item->post_type ) && geodir_is_gd_post_type( $item->post_type ) ) ) {
+		return $content;
+	}
+
+	$post		= $item;
+	$gd_post 	= $item;
+
+	setup_postdata( $gd_post );
+
+	$content = GeoDir_Template_Loader::map_popup_template_content();
+
+	if ( $content != '' ) {
+		$content = trim( $content );
+	}
+
+	return $content;
+}

@@ -530,77 +530,78 @@ function geodir_htmlEscape(str) {
 }
 
 // create the marker and set up the event window
-function create_marker(item, map_canvas_var) {
-	if (window.gdMaps == 'osm') {
-		return create_marker_osm(item, map_canvas_var);
-	}
-	jQuery("#" + map_canvas_var).goMap();
-	if (item.lt && item.ln) {
-		var marker_id, title, icon, cs;
-		marker_id = item['m'];
-		title = geodir_htmlEscape(item['t']);
-		cs = item['cs'];
-		icon = item['icon'] ? item['icon'] : geodir_params.default_marker_icon;
-		var latlng = new google.maps.LatLng(item.lt, item.ln);
-		var marker = jQuery.goMap.createMarker({
-			id: marker_id,
-			title: title,
-			position: latlng,
-			visible: true,
-			clickable: true,
-			icon: icon,
-			label: cs
-		});
-		bounds.extend(latlng);
-		// Adding a click event to the marker
-		google.maps.event.addListener(marker, 'spider_click', function() { // 'click' => normal, 'spider_click' => Overlapping Marker Spiderfier
-			is_zooming = true;
-			jQuery("#" + map_canvas_var).goMap();
-			var preview_query_str = '';
-			if (item.post_preview) {
-				preview_query_str = '&post_preview=' + item.post_preview;
-			}
-			if (eval(map_canvas_var).bubble_size) {
-				var marker_url = eval(map_canvas_var).ajax_url + "&geodir_ajax=map_ajax&ajax_action=info&m_id=" + item.m + "&small=1" + preview_query_str;
-			} else {
-				var marker_url = eval(map_canvas_var).ajax_url + "&geodir_ajax=map_ajax&ajax_action=info&m_id=" + item.m + preview_query_str;
-			}
-			var loading = '<div id="map_loading"></div>';
-			gd_infowindow.open(jQuery.goMap.map, marker);
-			gd_infowindow.setContent(loading);
-			jQuery.ajax({
-				type: "GET",
-				url: marker_url,
-				cache: false,
-				dataType: "html",
-				error: function(xhr, error) {
-					alert(error);
-				},
-				success: function(response) {
-					jQuery("#" + map_canvas_var).goMap();
-					response = geodir_htmlEscape(response);
-					gd_infowindow.setContent(response);
-					gd_infowindow.open(jQuery.goMap.map, marker);
-					geodir_fix_marker_pos(map_canvas_var);
-					// give the map 1 second to reposition before allowing it to reload
-					setTimeout(function() {
-						is_zooming = false;
-					}, 1000);
-				}
-			});
-			return;
-		});
-		// Overlapping Marker Spiderfier
-		jQuery.goMap.oms.addMarker(marker);
-		// Adding a visible_changed event to the marker
-		google.maps.event.addListener(marker, 'visible_changed', function() {
-			gd_infowindow.close(jQuery.goMap.map, marker);
-		});
-		return true;
-	} else {
-		//no lat & long, return no marker
-		return false;
-	}
+function create_marker(item, map_canvas) {
+    if (window.gdMaps == 'osm') {
+        return create_marker_osm(item, map_canvas);
+    }
+    var map_options = eval(map_canvas);
+    jQuery("#" + map_canvas).goMap();
+    if (item.lt && item.ln) {
+        var marker_id, title, icon, cs;
+        marker_id = item['m'];
+        title = geodir_htmlEscape(item['t']);
+        cs = item['cs'];
+        icon = item['icon'] ? item['icon'] : geodir_params.default_marker_icon;
+        var latlng = new google.maps.LatLng(item.lt, item.ln);
+        var marker = jQuery.goMap.createMarker({
+            id: marker_id,
+            title: title,
+            position: latlng,
+            visible: true,
+            clickable: true,
+            icon: icon,
+            label: cs
+        });
+        bounds.extend(latlng);
+        // Adding a click event to the marker
+        google.maps.event.addListener(marker, 'spider_click', function() { // 'click' => normal, 'spider_click' => Overlapping Marker Spiderfier
+            var marker_url = map_options.map_ajax_url;
+            is_zooming = true;
+            jQuery("#" + map_canvas).goMap();
+            var preview_query_str = '';
+            if (item.post_preview) {
+                preview_query_str = '&post_preview=' + item.post_preview;
+            }
+            marker_url = marker_url + '' + item.m;
+            if (map_options.bubble_size) {
+                marker_url += '?small=1';
+            }
+            var loading = '<div id="map_loading"></div>';
+            gd_infowindow.open(jQuery.goMap.map, marker);
+            gd_infowindow.setContent(loading);
+            jQuery.ajax({
+                type: "GET",
+                url: marker_url,
+                cache: false,
+                dataType: "json",
+                error: function(xhr, error) {
+                    alert(error);
+                },
+                success: function(response) {
+                    jQuery("#" + map_canvas).goMap();
+                    response = geodir_htmlEscape(response);
+                    gd_infowindow.setContent(response);
+                    gd_infowindow.open(jQuery.goMap.map, marker);
+                    geodir_fix_marker_pos(map_canvas);
+                    // give the map 1 second to reposition before allowing it to reload
+                    setTimeout(function() {
+                        is_zooming = false;
+                    }, 1000);
+                }
+            });
+            return;
+        });
+        // Overlapping Marker Spiderfier
+        jQuery.goMap.oms.addMarker(marker);
+        // Adding a visible_changed event to the marker
+        google.maps.event.addListener(marker, 'visible_changed', function() {
+            gd_infowindow.close(jQuery.goMap.map, marker);
+        });
+        return true;
+    } else {
+        //no lat & long, return no marker
+        return false;
+    }
 }
 
 function geodir_fix_marker_pos(map_canvas_var) {
