@@ -561,6 +561,7 @@ class GeoDir_Admin_Dummy_Data {
 								jQuery(obj).val('<?php _e( 'Insert data', 'geodirectory' );?>');
 								jQuery(obj).prop('disabled', false);
 								jQuery('#' + posttype + '_data_type_count').show();
+								jQuery('#' + posttype + '_data_type_count').prop('disabled', false);
 								jQuery('#' + posttype + '_data_type').prop('disabled', false);
 								geodir_dummy_set_count(jQuery('#' + posttype + '_data_type'), posttype);
 							});
@@ -579,6 +580,7 @@ class GeoDir_Admin_Dummy_Data {
 
 					jQuery(obj).prop('disabled', true);
 					jQuery('#' + posttype + '_data_type').prop('disabled', true);
+					jQuery('#' + posttype + '_data_type_count').prop('disabled', true);
 					jQuery('#' + posttype + '_data_type_count').hide();
 
 					if (insertedCount == 0) {

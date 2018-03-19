@@ -139,7 +139,7 @@
 								class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
 								title="<?php _e( 'This is used as the field setting name here in the backend only.', 'geodirectory' ); ?>">
 							</span>
-							<?php _e( 'Admin title :', 'geodirectory' ); ?>
+							<?php _e( 'Admin name :', 'geodirectory' ); ?>
 						</label>
 						<div class="gd-cf-input-wrap">
 							<input type="text" name="admin_title" id="admin_title"
@@ -168,9 +168,9 @@
 						<label for="frontend_title" class="gd-cf-tooltip-wrap">
 							<span
 								class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
-								title="<?php _e( 'This will be the title for the field on the frontend.', 'geodirectory' ); ?>">
+								title="<?php _e( 'This will be the label for the field input on the frontend.', 'geodirectory' ); ?>">
 							</span>
-							<?php _e( 'Frontend title :', 'geodirectory' ); ?>
+							<?php _e( 'Field label :', 'geodirectory' ); ?>
 						</label>
 						<div class="gd-cf-input-wrap">
 							<input type="text" name="frontend_title" id="frontend_title"
@@ -202,7 +202,7 @@
 								class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
 								title="<?php _e( 'This will be shown below the field on the add listing form.', 'geodirectory' ); ?>">
 							</span>
-							<?php _e( 'Frontend description :', 'geodirectory' ); ?>
+							<?php _e( 'Field description :', 'geodirectory' ); ?>
 						</label>
 						<div class="gd-cf-input-wrap">
 							<input type="text" name="frontend_desc" id="frontend_desc" value="<?php echo $value; ?>"/>
@@ -231,9 +231,9 @@
 						<label for="htmlvar_name" class="gd-cf-tooltip-wrap">
 							<span
 								class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
-								title="<?php _e( 'This is a unique identifier used in the HTML, it MUST NOT contain spaces or special characters.', 'geodirectory' ); ?>">
+								title="<?php _e( 'This is a unique identifier used in the database and HTML, it MUST NOT contain spaces or special characters.', 'geodirectory' ); ?>">
 							</span>
-							<?php _e( 'HTML variable name :', 'geodirectory' ); ?>
+							<?php _e( 'Field key :', 'geodirectory' ); ?>
 						</label>
 						<div class="gd-cf-input-wrap">
 							<input type="text" name="htmlvar_name" id="htmlvar_name" pattern="[a-zA-Z0-9]+"

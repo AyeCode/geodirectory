@@ -1213,7 +1213,7 @@ function geodir_show_detail_page_tabs() {
 							 */
 							echo apply_filters( 'geodir_tab_list_title', $tab_title, $tab_index, $detail_page_tab );
 						} ?>
-						<div id="<?php echo $tab_index; ?>" class="hash-offset"></div>
+						<div id="geodir-tab-content-<?php echo $tab_index; ?>" class="hash-offset"></div>
 						<?php
 						/**
 						 * Called before the details tab content is output per tab.
@@ -1302,7 +1302,7 @@ function geodir_show_detail_page_tabs() {
 								echo $related_listing;
 								break;
 							default: {
-								if ( ( isset( $post->{$tab_index} ) || ( ! isset( $post->{$tab_index} ) && ( strpos( $tab_index, 'gd_tab_' ) !== false || $tab_index == 'link_business' ) ) ) && ! empty( $detail_page_tab['tab_content'] ) ) {
+								if ( ( isset( $gd_post->{$tab_index} ) || ( ! isset( $gd_post->{$tab_index} ) && ( strpos( $tab_index, 'gd_tab_' ) !== false || $tab_index == 'link_business' || $tab_index == 'address' ) ) ) && ! empty( $detail_page_tab['tab_content'] ) ) {
 									echo $detail_page_tab['tab_content'];
 								}
 							}

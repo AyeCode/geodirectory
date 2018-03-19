@@ -197,7 +197,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 				array(
 					'name'     => __( 'Terms and Conditions page', 'geodirectory' ),
-					'desc'     => __( 'Select the page to use for Gd general Info', 'geodirectory' ),
+					'desc'     => __( 'Select the page to use for your terms and conditions.', 'geodirectory' ),
 					'id'       => 'page_terms_conditions',
 					'type'     => 'single_select_page',
 					'class'      => 'geodir-select',
@@ -261,8 +261,8 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				array(
-					'name' => __('Search field default value', 'geodirectory'),
-					'desc' => __('Show the search text box \'placeholder\' value on search form.', 'geodirectory'),
+					'name' => __('Search field placeholder text', 'geodirectory'),
+					'desc' => __('Show the search text box `placeholder` value on search form.', 'geodirectory'),
 					'id' => 'search_default_text',
 					'type' => 'text',
 					'placeholder' => get_search_default_text(),
@@ -271,7 +271,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'advanced' => false
 				),
 				array(
-					'name' => __('Near field default value', 'geodirectory'),
+					'name' => __('Near field placeholder text', 'geodirectory'),
 					'desc' => __('Show the near text box \'placeholder\' value on search form.', 'geodirectory'),
 					'id' => 'search_default_near_text',
 					'type' => 'text',

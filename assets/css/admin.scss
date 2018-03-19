@@ -1,4 +1,5 @@
 //@import "map.css";
+@import "partials/admin_settings";
 @import "partials/extensions";
 @import "partials/ratings";
 @import "partials/add-listing";
@@ -239,6 +240,7 @@ Tooltips
         text-rendering: optimizeLegibility;
         text-shadow: none !important;
         z-index: 9999 !important;
+        white-space: pre-line; /* show line breaks */
         a{
             color: #09afff;
         }
@@ -1300,3 +1302,5 @@ Media Queries
 
 
 }
+
+@import "partials/admin_media_queries";

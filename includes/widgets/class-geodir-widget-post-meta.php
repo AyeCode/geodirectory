@@ -57,9 +57,9 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc' => __('What part of the post meta to show.', 'geodirectory'),
 					'type' => 'select',
 					'options'   =>  array(
-						"all" => __('All', 'geodirectory'),
-						"title" => __('Title', 'geodirectory'),
-						"value" => __('Value', 'geodirectory'),
+						"all" => __('Default (all)', 'geodirectory'),
+						"title" => __('Label only', 'geodirectory'),
+						"value" => __('Value only', 'geodirectory'),
 					),
 					'desc_tip' => true,
 					'advanced' => false
