@@ -72,6 +72,7 @@ class GeoDir_Admin_Help {
 			'content'   =>
 				'<h2>' . __( 'Setup wizard', 'geodirectory' ) . '</h2>' .
 				'<p>' . __( 'If you need to access the setup wizard again, please click on the button below.', 'geodirectory' ) . '</p>' .
+				'<p>' . __( 'Running the wizard again will not delete your current settings. You will have the option to change any current settings.', 'geodirectory' ) . '</p>' .
 				'<p><a href="' . admin_url( 'index.php?page=gd-setup' ) . '" class="button button-primary">' . __( 'Setup wizard', 'geodirectory' ) . '</a></p>',
 
 		) );

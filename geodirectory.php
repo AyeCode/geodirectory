@@ -9,16 +9,42 @@
  *
  * @wordpress-plugin
  * Plugin Name: GeoDirectory
- * Plugin URI: http://wpgeodirectory.com/
- * Description: GeoDirectory plugin for wordpress.
+ * Plugin URI: https://wpgeodirectory.com/
+ * Description: GeoDirectory plugin for WordPress.
  * Version: 2.0.0.0-dev
- * Author: GeoDirectory
- * Author URI: http://wpgeodirectory.com
+ * Author: AyeCode Ltd
+ * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
- * Domain Path: /geodirectory-languages
+ * Domain Path: /languages
  * Requires at least: 3.1
- * Tested up to: 4.9.1
+ * Tested up to: 4.9.5
+ * Update URL: https://github.com/AyeCode/geodirectory/
  */
+
+
+/**
+ * Show WP Easy Updates required admin notification.
+ */
+if(is_admin()){
+	if (!function_exists('ayecode_show_update_plugin_requirement')) {//only load the update file if needed
+		function ayecode_show_update_plugin_requirement() {
+			if ( !defined( 'WP_EASY_UPDATES_ACTIVE' ) ) {
+				?>
+				<div class="notice notice-warning is-dismissible">
+					<p>
+						<strong>
+							<?php
+							echo sprintf( __( 'The plugin %sWP Easy Updates%s is required to check for and update some installed plugins/themes, please install it now.', 'geodirectory' ), '<a href="https://wpeasyupdates.com/" target="_blank" title="WP Easy Updates">', '</a>' );
+							?>
+						</strong>
+					</p>
+				</div>
+				<?php
+			}
+		}
+		add_action( 'admin_notices', 'ayecode_show_update_plugin_requirement' );
+	}
+}
 
 if ( ! class_exists( 'GeoDirectory' ) ) :
 
