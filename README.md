@@ -1,5 +1,5 @@
 # [GeoDirectory](http://wpgeodirectory.com/) #
-[![Build Status](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/badges/build.png?b=master)](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/?branch=master) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/GeoDirectory/geodirectory/blob/master/license.txt)
+[![Build Status](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/badges/build.png?b=master)](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/?branch=master) [![Code Coverage](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/?branch=master) [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/GeoDirectory/geodirectory/?branch=master) [![License](https://img.shields.io/badge/license-GPL--2.0%2B-red.svg)](https://github.com/AyeCode/geodirectory/blob/master/license.txt)
 
 ### Welcome to our GitHub Repository
 
@@ -38,17 +38,17 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 GeoDirectory comes with some dummy data you can use to see how listings look. You can install dummy data from your GeoDirectory back end. 
 
 ## Bugs ##
-If you find an issue, let us know [here](https://github.com/GeoDirectory/geodirectory/issues?state=open)!
+If you find an issue, let us know [here](https://github.com/AyeCode/geodirectory/issues?state=open)!
 
 ## Support ##
 This is a developer's portal for GeoDirectory and should _not_ be used for support. Please visit the [support forums](https://wpgeodirectory.com/support/).
 
 ## Contributions ##
-Anyone is welcome to contribute to GeoDirectory. Please read the [guidelines for contributing](https://github.com/GeoDirectory/geodirectory/blob/master/CONTRIBUTING.md) to this repository.
+Anyone is welcome to contribute to GeoDirectory. Please read the [guidelines for contributing](https://github.com/AyeCode/geodirectory/blob/master/CONTRIBUTING.md) to this repository.
 
 There are various ways you can contribute:
 
-1. Raise an [Issue](https://github.com/GeoDirectory/geodirectory/issues) on GitHub
+1. Raise an [Issue](https://github.com/AyeCode/geodirectory/issues) on GitHub
 2. Send us a Pull Request with your bug fixes and/or new features
 3. Translate GeoDirectory into [different languages](https://wpgeodirectory.com/translate/projects/geodirectory)
 

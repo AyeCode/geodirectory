@@ -61,8 +61,8 @@ class GeoDir_Admin_Help {
 			'content'   =>
 				'<h2>' . __( 'Found a bug?', 'geodirectory' ) . '</h2>' .
 				/* translators: 1: GitHub issues URL 2: GitHub contribution guide URL 3: System status report URL */
-				'<p>' . sprintf( __( 'If you find a bug within GeoDirectory core you can create a ticket via <a href="%1$s">Github issues</a>. Ensure you read the <a href="%2$s">contribution guide</a> prior to submitting your report. To help us solve your issue, please be as descriptive as possible and include your <a href="%3$s">system status report</a>.', 'geodirectory' ), 'https://github.com/GeoDirectory/geodirectory/issues?state=open', 'https://github.com/GeoDirectory/geodirectory/blob/master/CONTRIBUTING.md', admin_url( 'admin.php?page=gd-status' ) ) . '</p>' .
-				'<p><a href="https://github.com/GeoDirectory/geodirectory/issues?state=open" class="button button-primary">' . __( 'Report a bug', 'geodirectory' ) . '</a> <a href="' . admin_url( 'admin.php?page=gd-status' ) . '" class="button">' . __( 'System status', 'geodirectory' ) . '</a></p>',
+				'<p>' . sprintf( __( 'If you find a bug within GeoDirectory core you can create a ticket via <a href="%1$s">Github issues</a>. Ensure you read the <a href="%2$s">contribution guide</a> prior to submitting your report. To help us solve your issue, please be as descriptive as possible and include your <a href="%3$s">system status report</a>.', 'geodirectory' ), 'https://github.com/AyeCode/geodirectory/issues?state=open', 'https://github.com/AyeCode/geodirectory/blob/master/CONTRIBUTING.md', admin_url( 'admin.php?page=gd-status' ) ) . '</p>' .
+				'<p><a href="https://github.com/AyeCode/geodirectory/issues?state=open" class="button button-primary">' . __( 'Report a bug', 'geodirectory' ) . '</a> <a href="' . admin_url( 'admin.php?page=gd-status' ) . '" class="button">' . __( 'System status', 'geodirectory' ) . '</a></p>',
 
 		) );
 
@@ -81,7 +81,7 @@ class GeoDir_Admin_Help {
 			'<p><strong>' . __( 'For more information:', 'geodirectory' ) . '</strong></p>' .
 			'<p><a href="https://wpgeodirectory.com/?utm_source=helptab&utm_medium=product&utm_content=about&utm_campaign=geodirectoryplugin" target="_blank">' . __( 'About GeoDirectory', 'geodirectory' ) . '</a></p>' .
 			'<p><a href="https://wordpress.org/plugins/geodirectory/" target="_blank">' . __( 'WordPress.org project', 'geodirectory' ) . '</a></p>' .
-			'<p><a href="https://github.com/GeoDirectory/geodirectory" target="_blank">' . __( 'Github project', 'geodirectory' ) . '</a></p>' .
+			'<p><a href="https://github.com/AyeCode/geodirectory" target="_blank">' . __( 'Github project', 'geodirectory' ) . '</a></p>' .
 			'<p><a href="https://wpgeodirectory.com/downloads/category/themes/?utm_source=helptab&utm_medium=product&utm_content=geodirthemes&utm_campaign=geodirectoryplugin" target="_blank">' . __( 'Official themes', 'geodirectory' ) . '</a></p>' .
 			'<p><a href="https://wpgeodirectory.com/downloads/category/addons/?utm_source=helptab&utm_medium=product&utm_content=geodirextensions&utm_campaign=geodirectoryplugin" target="_blank">' . __( 'Official extensions', 'geodirectory' ) . '</a></p>'
 		);
