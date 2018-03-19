@@ -15,6 +15,17 @@
         gdMaps = null;
     }
     window.gdMaps = window.gdMaps || gdMaps;
+	
+	if (window.gdMaps === 'google') {
+        console.log('Google Maps API Loaded :)');
+        jQuery('body').addClass('gd-google-maps');
+    } else if (window.gdMaps === 'osm') {
+        console.log('Leaflet | OpenStreetMap API Loaded :)');
+        jQuery('body').addClass('gd-osm-gmaps');
+    } else {
+        console.log('Maps API Not Loaded :(');
+        jQuery('body').addClass('gd-no-gmaps');
+    }
 
     var geocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : {};
 
