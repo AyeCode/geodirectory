@@ -77,7 +77,7 @@ class GeoDir_Admin_Tracker {
 ////echo $result['body'];
 ////		print_r(json_decode($result['body']));
 //		print_r($result['body']);
-		exit;
+		//exit;
 	}
 
 	/**
