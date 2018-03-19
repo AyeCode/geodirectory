@@ -69,7 +69,7 @@ class GeoDir_AJAX {
 		}
 	}
 
-	function wizard_setup_menu(){
+	public static function wizard_setup_menu(){
 		// security
 		check_ajax_referer( 'geodir-wizard-setup-menu', 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -97,7 +97,7 @@ class GeoDir_AJAX {
 	/**
 	 * Adds widgets to sidebar during setup wizard.
 	 */
-	function wizard_insert_widgets(){
+	public static function wizard_insert_widgets(){
 		// security
 		check_ajax_referer( 'geodir-wizard-widgets', 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {

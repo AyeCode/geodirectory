@@ -327,12 +327,12 @@ class GeoDir_Admin_Install {
 			'page_add' => array(
 				'name'    => _x( 'add-listing', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Add Listing', 'Page title', 'geodirectory'),
-				'content' => '[gd_add_listing]',
+				'content' => GeoDir_Defaults::page_add_content(),
 			),
 			'page_search' => array(
 				'name'    => _x( 'search', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Search page', 'Page title', 'geodirectory'),
-				'content' => "[gd_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]",
+				'content' => GeoDir_Defaults::page_search_content(),
 			),
 			'page_terms_conditions' => array(
 				'name'    => _x( 'terms-and-conditions', 'Page slug', 'geodirectory'),
@@ -342,32 +342,22 @@ class GeoDir_Admin_Install {
 			'page_location' => array(
 				'name'    => _x( 'location', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Location', 'Page title', 'geodirectory'),
-				'content' => "[gd_popular_post_category category_limit=10]\n[gd_homepage_map width=100% height=300 scrollwheel=false]\n[gd_search]\n[gd_popular_post_view]",
+				'content' => GeoDir_Defaults::page_location_content(),
 			),
 			'page_archive' => array(
 				'name'    => _x( 'gd-archive', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Archive', 'Page title', 'geodirectory'),
-				'content' => "[gd_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]",
+				'content' => GeoDir_Defaults::page_archive_content(),
 			),
 			'page_archive_item' => array(
 				'name'    => _x( 'gd-archive-item', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Archive Item', 'Page title', 'geodirectory'),
-				'content' => "[gd_archive_item_section type='open' position='left']
-[gd_post_images type='slider' ajax_load='true' slideshow='false' show_title='false' animation='slide' controlnav='1' ]\n
-[gd_archive_item_section type='close' position='left']\n
-[gd_archive_item_section type='open' position='right']\n
-[gd_post_title tag='h2']\n
-[gd_post_rating alignment='left' ]\n
-[gd_post_fav show='' alignment='right' ]\n
-[gd_post_meta key='business_hours' location='listing']\n
-[gd_post_meta key='post_content' location='listing']\n
-[gd_post_meta key='facebook' ]\n
-[gd_archive_item_section type='close' position='right']\n",
+				'content' => GeoDir_Defaults::page_archive_item_content(),
 			),
 			'page_details' => array(
 				'name'    => _x( 'gd-details', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Details', 'Page title', 'geodirectory'),
-				'content' => "[gd_single_closed_text]\n[gd_post_images type='slider' ajax_load='true' slideshow='true' show_title='true' animation='slide' controlnav='1' ]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]",
+				'content' => GeoDir_Defaults::page_details_content(),
 			),
 
 			

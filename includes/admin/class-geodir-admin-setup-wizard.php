@@ -581,7 +581,7 @@ class GeoDir_Admin_Setup_Wizard {
 
 		<h1><?php esc_html_e( 'Awesome, your directory is ready!', 'geodirectory' ); ?></h1>
 
-		<?php if ( 'unknown' === get_option( 'geodirectory_allow_tracking', 'unknown' ) ) : ?>
+		<?php if ( 'unknown' === geodir_get_option( 'usage_tracking', 'unknown' ) || '' === geodir_get_option( 'usage_tracking')  ) { ?>
 			<div class="geodirectory-message geodirectory-tracker">
 				<p><?php printf( __( 'Want to help make GeoDirectory even more awesome? Allow GeoDirectory to collect non-sensitive diagnostic data and usage information. %1$sFind out more%2$s.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/usage-tracking/" target="_blank">', '</a>' ); ?></p>
 				<p class="submit">
@@ -589,7 +589,11 @@ class GeoDir_Admin_Setup_Wizard {
 					<a class="button-secondary button button-large skip"  href="<?php echo esc_url( wp_nonce_url( remove_query_arg( 'gd_tracker_optin', add_query_arg( 'gd_tracker_optout', 'true' ) ), 'gd_tracker_optout', 'gd_tracker_nonce' ) ); ?>"><?php esc_html_e( 'No thanks', 'geodirectory' ); ?></a>
 				</p>
 			</div>
-		<?php endif; ?>
+		<?php }else{ ?>
+			<div class="geodirectory-message geodirectory-tracker">
+				<p><?php _e('Thank you for using GeoDirectory! :)','geodirectory');?></p>
+			</div>
+		<?php } ?>
 
 		<div class="gd-setup-next-steps">
 			<div class="gd-setup-next-steps-first">

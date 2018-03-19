@@ -290,7 +290,7 @@ class GeoDir_Post_Data {
 
 			//$postarr['featured_image'] = $post['featured_image'];// @todo we need to find a way to set default cat on add listing
 
-			geodir_error_log( $postarr, 'postarr', __FILE__, __LINE__ );
+//			geodir_error_log( $postarr, 'postarr', __FILE__, __LINE__ );
 
 			$format = array_fill( 0, count( $postarr ), '%s' );
 

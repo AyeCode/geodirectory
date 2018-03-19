@@ -261,6 +261,13 @@ class GeoDir_Email {
 			default:
 				$subject = geodir_get_option( 'email_' . $email_name . '_subject' );
 				break;
+
+		}
+
+		// Get the default text is empty
+		if(!$subject && method_exists('GeoDir_Defaults','email_' . $email_name . '_subject')){
+			$method = 'email_' . $email_name . '_subject';
+			$subject = GeoDir_Defaults::$method();
 		}
 
 		$subject = self::replace_variables( __( $subject, 'geodirectory' ), $email_name, $email_vars );
@@ -366,7 +373,7 @@ class GeoDir_Email {
 		$mail_from_name = geodir_get_option( 'email_name' );
 
 		if ( ! $mail_from_name ) {
-			$mail_from_name = geodir_get_blogname();
+			$mail_from_name = GeoDir_Defaults::email_name();
 		}
 
 		return apply_filters( 'geodir_get_mail_from_name', stripslashes( $mail_from_name ) );
@@ -381,7 +388,7 @@ class GeoDir_Email {
 		$mail_from = geodir_get_option( 'email_address' );
 
 		if ( ! $mail_from ) {
-			$mail_from = self::get_admin_email();
+			$mail_from = GeoDir_Defaults::email_address();
 		}
 
 		return apply_filters( 'geodir_get_mail_from', $mail_from );
@@ -412,6 +419,12 @@ class GeoDir_Email {
 			default:
 				$content = geodir_get_option( 'email_' . $email_name . '_body' );
 				break;
+		}
+
+		// Get the default text is empty
+		if(!$content && method_exists('GeoDir_Defaults','email_' . $email_name . '_body')){
+			$method = 'email_' . $email_name . '_body';
+			$content = GeoDir_Defaults::$method();
 		}
 
 		$content = self::replace_variables( __( $content, 'geodirectory' ), $email_name, $email_vars );

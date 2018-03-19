@@ -1,0 +1,21 @@
+.geodir-categories-container{
+  ul{
+    float: left;
+    width: 20%;
+    min-width: 170px;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+
+    li{
+      margin: .25em;
+      a{
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        min-width: 170px;
+        display: block;
+      }
+    }
+  }
+}

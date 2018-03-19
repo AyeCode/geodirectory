@@ -106,15 +106,15 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 
 			if ( is_user_logged_in() ) {
 				if ( ! empty( $options['dashboard_title'] ) ) {
-					echo ! empty( $widget_args['before_title'] ) ? $widget_args['before_title'] : "<h2>";
+					echo ! empty( $widget_args['before_title'] ) ? $widget_args['before_title'] : "<h3>";
 					echo __( $options['dashboard_title'], "geodirectory" );
-					echo ! empty( $widget_args['after_title'] ) ? $widget_args['after_title'] : "</h2>";
+					echo ! empty( $widget_args['after_title'] ) ? $widget_args['after_title'] : "</h3>";
 				}
 			} else {
 				if ( ! empty( $options['login_title'] ) ) {
-					echo ! empty( $widget_args['before_title'] ) ? $widget_args['before_title'] : "<h2>";
+					echo ! empty( $widget_args['before_title'] ) ? $widget_args['before_title'] : "<h3>";
 					echo __( $options['login_title'], "geodirectory" );
-					echo ! empty( $widget_args['after_title'] ) ? $widget_args['after_title'] : "</h2>";
+					echo ! empty( $widget_args['after_title'] ) ? $widget_args['after_title'] : "</h3>";
 				}
 			}
 

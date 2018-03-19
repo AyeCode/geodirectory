@@ -40,6 +40,145 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'geodirectory' => true,
                 'gd_show_pages' => array(),
             ),
+//            'arguments' => array(
+//                'title'  => array(
+//                    'title' => __('Title:', 'geodirectory'),
+//                    'desc' => __('The widget title.', 'geodirectory'),
+//                    'type' => 'text',
+//                    //'placeholder' => __( 'My Dashboard', 'geodirectory' ),
+//                    'default'  => '',
+//                    'desc_tip' => true,
+//                    'advanced' => false
+//                ),
+//                'post_type'  => array(
+//                    'title' => __('Default Post Type:', 'geodirectory'),
+//                    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
+//                    'type' => 'select',
+//                    'options'   =>  geodir_get_posttypes('options-plural'),
+//                    'default'  => 'gd_place',
+//                    'desc_tip' => true,
+//                    'advanced' => true
+//                ),
+//                'category'  => array(
+//                    'title' => __('Categories:', 'geodirectory'),
+//                    'desc' => __('The categories to show.', 'geodirectory'),
+//                    'type' => 'select',
+//                    'multiple' => true,
+//                    'options'   =>  $this->get_categories(),
+//                    'default'  => '',
+//                    'desc_tip' => true,
+//                    'advanced' => true
+//                ),
+//                'related_to'  => array(
+//                    'title' => __('Filter listings related to:', 'geodirectory'),
+//                    'desc' => __('Select to filter the listings related to current listing categories/tags on detail page.', 'geodirectory'),
+//                    'type' => 'select',
+//                    'options'   =>  array(
+//                        '' => __('No filter', 'geodirectory'),
+//                        'category' => __('Categories', 'geodirectory'),
+//                        'tags' => __('Tags', 'geodirectory')
+//                    ),
+//                    'default'  => '',
+//                    'desc_tip' => true,
+//                    'advanced' => true
+//                ),
+//                'sort_by'  => array(
+//                    'title' => __('Sort by:', 'geodirectory'),
+//                    'desc' => __('How the listings should be sorted.', 'geodirectory'),
+//                    'type' => 'select',
+//                    'options'   =>  $this->get_sort_options(),
+//                    'default'  => '',
+//                    'desc_tip' => true,
+//                    'advanced' => true
+//                ),
+//                'title_tag'  => array(
+//                    'title' => __('Title tag:', 'geodirectory'),
+//                    'desc' => __('The title tag used for the listings.', 'geodirectory'),
+//                    'type' => 'select',
+//                    'options'   =>  array(
+//                        "h3"        =>  __('h3 (default)', 'geodirectory'),
+//                        "h2"        =>  __('h2 (if main content of page)', 'geodirectory'),
+//                    ),
+//                    'default'  => 'h3',
+//                    'desc_tip' => true,
+//                    'advanced' => true
+//                ),
+//                'layout'  => array(
+//                    'title' => __('Sort by:', 'geodirectory'),
+//                    'desc' => __('How the listings should be sorted.', 'geodirectory'),
+//                    'type' => 'select',
+//                    'options'   =>  array(
+//                        "gridview_onehalf"        =>  __('Grid View (Two Columns)', 'geodirectory'),
+//                        "gridview_onethird"        =>  __('Grid View (Three Columns)', 'geodirectory'),
+//                        "gridview_onefourth"        =>  __('Grid View (Four Columns)', 'geodirectory'),
+//                        "gridview_onefifth"        =>  __('Grid View (Five Columns)', 'geodirectory'),
+//                        "list"        =>  __('List view', 'geodirectory'),
+//                    ),
+//                    'default'  => 'h3',
+//                    'desc_tip' => true,
+//                    'advanced' => true
+//                ),
+//                'post_limit'  => array(
+//                    'title' => __('Posts to show:', 'geodirectory'),
+//                    'desc' => __('The number of posts to show by default.', 'geodirectory'),
+//                    'type' => 'number',
+//                    'default'  => '5',
+//                    'desc_tip' => true,
+//                    'advanced' => true
+//                ),
+//                'add_location_filter'  => array(
+//                    'title' => __("Enable location filter?", 'geodirectory'),
+//                    'type' => 'checkbox',
+//                    'desc_tip' => true,
+//                    'value'  => '1',
+//                    'default'  => '1',
+//                    'advanced' => true
+//                ),
+//                'show_featured_only'  => array(
+//                    'title' => __("Show featured only?", 'geodirectory'),
+//                    'type' => 'checkbox',
+//                    'desc_tip' => true,
+//                    'value'  => '1',
+//                    'default'  => '0',
+//                    'advanced' => true
+//                ),
+//                'with_pics_only'  => array(
+//                    'title' => __("Only show listings with pictures?", 'geodirectory'),
+//                    'type' => 'checkbox',
+//                    'desc_tip' => true,
+//                    'value'  => '1',
+//                    'default'  => '0',
+//                    'advanced' => true
+//                ),
+//                'with_videos_only'  => array(
+//                    'title' => __("Only show listings with videos?", 'geodirectory'),
+//                    'type' => 'checkbox',
+//                    'desc_tip' => true,
+//                    'value'  => '1',
+//                    'default'  => '0',
+//                    'advanced' => true
+//                ),
+//                'use_viewing_post_type'  => array(
+//                    'title' => __("Use current viewing post type?", 'geodirectory'),
+//                    'type' => 'checkbox',
+//                    'desc_tip' => true,
+//                    'value'  => '1',
+//                    'default'  => '0',
+//                    'advanced' => true
+//                ),
+//
+////                'show_featured_only'    => '',
+////            'show_special_only'     => '',
+////            'with_pics_only'        => '',
+////            'with_videos_only'      => '',
+////            'with_pagination'       => '1',
+////            'top_pagination'        => '0',
+////            'bottom_pagination'     => '1',
+////            'without_no_results'    => 0,
+////            'tags'                  => '',
+////            'show_favorites_only'   => '',
+////            'favorites_by_user'     => '',
+//            )
 
         );
 
@@ -56,6 +195,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @return array
      */
     public function set_arguments(){
+
         return array(
             'title'  => array(
                 'title' => __('Title:', 'geodirectory'),
@@ -543,6 +683,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         <div class="geodir_locations geodir_location_listing">
 
             <?php
+
+            if(!isset($before_title)){$before_title = "<h3>";}
+            if(!isset($after_title)){$after_title = "</h3>";}
+
             /**
              * Called before the div containing the title and view all link in popular post view widget.
              *
@@ -588,7 +732,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             $current_map_canvas_arr   = $map_canvas_arr;
             $geodir_is_widget_listing = true;
 
-            geodir_get_template( 'widget-listing-listview.php', array( 'title_tag'=>$title_tag, 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget, 'before_widget' => $before_widget ) );
+            geodir_get_template( 'widget-listing-listview.php', array( 'title_tag'=>$title_tag, 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget) );
 
             $geodir_is_widget_listing = false;
 

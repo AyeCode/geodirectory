@@ -134,11 +134,7 @@ class GeoDir_Admin_Addons {
 	public static function get_section_data( $section_id ) {
 		$section      = self::get_tab( $section_id );
 		$api_url = "https://wpgeodirectory.com/edd-api/v2/products/";
-		//echo '###'.$section;
 		$section_data = '';
-
-//		$all_plugins = get_plugins();
-//		print_r($all_plugins);
 
 		if ( ! empty( $section ) ) {
 			if ( false === ( $section_data = get_transient( 'gd_addons_section_' . $section_id ) ) ) { //@todo restore after testing
@@ -156,8 +152,9 @@ class GeoDir_Admin_Addons {
 		}
 
 		//print_r($section_data);
+		$products = isset($section_data->products) ? $section_data->products : '';
 
-		return apply_filters( 'geodir_addons_section_data', $section_data->products, $section_id );
+		return apply_filters( 'geodir_addons_section_data', $products, $section_id );
 	}
 
 

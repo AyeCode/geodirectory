@@ -90,12 +90,43 @@ abstract class GeoDir_Settings_Page {
 	}
 
 	/**
+	 * Detect if the advanced settings button should be shown or not.
+	 * 
+	 * @return bool
+	 */
+	public function show_advanced(){
+
+		if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-cpt-settings'){return true;} // if on CPT settings then show.
+
+		global $current_section;
+		$show = false;
+		$settings = $this->get_settings($current_section);
+
+		if(!empty($settings)){
+			foreach($settings as $setting){
+				if(isset($setting['advanced']) && $setting['advanced']){
+					$show = true;
+					break;
+				}
+			}
+		}
+
+//		print_r($settings);exit;
+//return true;
+		return $show;
+	}
+
+	/**
 	 * Output the toggle show/hide advanced settings.
 	 */
 	public function output_toggle_advanced(){
 		global $hide_advanced_toggle;
 
 		if($hide_advanced_toggle){ return;}
+
+		// check if we need to show advanced or not
+		if(!$this->show_advanced()){return;}
+
 
 		$show = geodir_get_option( 'admin_show_advanced', false );
 

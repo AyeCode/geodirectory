@@ -135,7 +135,7 @@ class GeoDir_Admin_Dummy_Data {
 
 		$default_location = geodir_get_default_location();
 		if ( $city_bound_lat1 > $city_bound_lat2 ) {
-			$dummy_post_latitude = geodir_random_float( random_float( $city_bound_lat1, $city_bound_lat2 ), geodir_random_float( $city_bound_lat2, $city_bound_lat1 ) );
+			$dummy_post_latitude = geodir_random_float( geodir_random_float( $city_bound_lat1, $city_bound_lat2 ), geodir_random_float( $city_bound_lat2, $city_bound_lat1 ) );
 		} else {
 			$dummy_post_latitude = geodir_random_float( geodir_random_float( $city_bound_lat2, $city_bound_lat1 ), geodir_random_float( $city_bound_lat1, $city_bound_lat2 ) );
 		}
@@ -1020,12 +1020,13 @@ class GeoDir_Admin_Dummy_Data {
 			}
 		}
 
-//
+
 //		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
 //		print_r($sidebars_widgets);
-//		$widget_id = "gd_dashboard";
+//		$widget_id = "gd_categories";
 //		$widget_instances = get_option( 'widget_' . $widget_id, array() );
 //		print_r($widget_instances);
+//		exit;
 
 		if($inserted == 0 && $exist > 0){
 			return __( 'Widgets already exist, none added.' , 'geodirectory' );
@@ -1058,7 +1059,17 @@ class GeoDir_Admin_Dummy_Data {
 				'gd_wgt_showhide'   => 'show_on',
 				'gd_wgt_restrict'   => array('gd-detail'),
 			),
-			//@todo insert the map in auto mode here once the map widget is finished
+			// show map
+			'gd_map' => array(
+				'width' => '100%',
+				'height' => '425px',
+				'maptype' => 'ROADMAP',
+				'zoom' => '0',
+                'map_type' => 'auto',
+				'map_directions' => '1',
+				'gd_wgt_showhide'   => 'show_on',
+				'gd_wgt_restrict'   => array('gd-detail','gd-author','gd-pt','gd-search','gd-listing'),
+			),
 			// show GD Dashboard
 			'gd_dashboard' => array(
 				'dashboard_title'   => __('GD Dashboard','geodirectory'),
@@ -1082,14 +1093,8 @@ class GeoDir_Admin_Dummy_Data {
 	public static function insert_widget_in_sidebar( $widget_id, $widget_data, $sidebar ) {
 		// Retrieve sidebars, widgets and their instances
 		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
-//
-//		print_r($sidebars_widgets[$sidebar]);
-//		array_unshift($sidebars_widgets[$sidebar], "cat");
-//		print_r($sidebars_widgets[$sidebar]);
-//
-//		exit;
-
 		$widget_instances = get_option( 'widget_' . $widget_id, array() );
+
 		// Retrieve the key of the next widget instance
 		$numeric_keys = array_filter( array_keys( $widget_instances ), 'is_int' );
 		$next_key = $numeric_keys ? max( $numeric_keys ) + 1 : 2;

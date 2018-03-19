@@ -38,11 +38,20 @@ class GeoDir_Compatibility {
 		add_action( 'plugins_loaded', array(__CLASS__,'jetpack') );
 
 
+		/*######################################################
+		Primer (theme) :: Fix single page title.
+		######################################################*/
+		add_filter('primer_the_page_title',array(__CLASS__,'primer_title'));
 
+
+		// after_setup_theme checks
 		add_action( 'after_setup_theme', array(__CLASS__,'for_later_checks') );
 
 	}
 
+	/**
+	 * Fix details page title, primer theme breaks it.
+	 */
 	public static function for_later_checks(){
 		/*######################################################
 		Boss. (BuddyBoss)
@@ -51,6 +60,15 @@ class GeoDir_Compatibility {
 			add_action( 'wp_enqueue_scripts', array(__CLASS__,'buddyboss'), 100 );
 			add_filter( 'body_class', array(__CLASS__,'buddyboss_body_class') );
 		}
+	}
+
+	public static function primer_title($title){
+
+		if(geodir_is_page('single')){
+			$title = get_the_title();
+		}
+
+		return $title;
 	}
 
 
