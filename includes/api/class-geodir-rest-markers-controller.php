@@ -346,7 +346,8 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 	public function get_marker_item( $request ) {
 		$id = ! empty( $request['id'] ) ? (int)$request['id'] : 0; 
 
-		$response = $id > 0 ? $this->marker_content( $id ) : '';
+		$response		  = array();
+		$response['html'] = $id > 0 ? $this->marker_content( $id ) : '';
 
 		return $response;
 	}

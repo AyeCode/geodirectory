@@ -203,7 +203,12 @@ class GeoDir_Frontend_Scripts {
 				'deps'    => array( 'photoswipe' ),
 				'version' => '4.1.1',
 			),
-			'geodir-osm-geocode' => array(
+			'leaflet-routing-machine' => array(
+				'src'     =>  geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine' . $suffix . '.js',
+				'deps'    => array('geodir-leaflet'),
+				'version' => GEODIRECTORY_VERSION,
+			),
+			'geodir-leaflet-geo' => array(
 				'src'     => geodir_plugin_url() . '/assets/leaflet/osm.geocode' . $suffix . '.js',
 				'deps'    => array('geodir-leaflet-script'),
 				'version' => GEODIRECTORY_VERSION,
@@ -305,6 +310,18 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 				'has_rtl' => true,
 			),
+			'leaflet' => array(
+				'src'     => geodir_plugin_url() . '/assets/leaflet/leaflet.css',
+				'deps'    => array(),
+				'version' => GEODIRECTORY_VERSION,
+				'has_rtl' => false,
+			),
+			'leaflet-routing-machine' => array(
+				'src'     => geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine.css',
+				'deps'    => array(),
+				'version' => GEODIRECTORY_VERSION,
+				'has_rtl' => false,
+			),
 //			'' => array(
 //				'src'     => ,
 //				'deps'    => array(),
@@ -388,8 +405,12 @@ class GeoDir_Frontend_Scripts {
 			self::enqueue_script('geodir-google-maps');
 			self::enqueue_script('geodir-g-overlappingmarker');
 		}elseif($geodir_map_name == 'osm'){
+			self::enqueue_style('leaflet');
+			self::enqueue_style('leaflet-routing-machine');
+
 			self::enqueue_script('geodir-leaflet');
 			self::enqueue_script('geodir-leaflet-geo');
+			self::enqueue_script('leaflet-routing-machine');
 			self::enqueue_script('geodir-o-overlappingmarker');
 		}
 		wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
