@@ -592,6 +592,10 @@ class GeoDir_Admin_Setup_Wizard {
 		<?php }else{ ?>
 			<div class="geodirectory-message geodirectory-tracker">
 				<p><?php _e('Thank you for using GeoDirectory! :)','geodirectory');?></p>
+				<?php
+				// @todo, send tracking data remove after beta release.
+				GeoDir_Admin_Tracker::send_tracking_data( true );
+				?>
 			</div>
 		<?php } ?>
 

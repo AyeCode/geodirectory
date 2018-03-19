@@ -117,7 +117,55 @@ function geodir_get_images($post_id = 0, $limit = '')
 
     }else{
         // no image code
+        $listing_default_image_id = geodir_get_option('listing_default_image');
+        if($listing_default_image_id){
+            $default_image_post = get_post($listing_default_image_id);
+
+            if($default_image_post){
+
+                $wp_upload_dir = wp_upload_dir();
+
+                $post_images = array();
+                $image = new stdClass();
+                $image->ID = 0;
+                $image->post_id = $default_image_post->ID;
+                $image->user_id = 0;
+                $image->title = '';
+                $image->file = str_replace($wp_upload_dir['basedir'],'', get_attached_file( $listing_default_image_id));
+                $image->mime_type = $default_image_post->post_mime_type;
+                $image->menu_order = 0;
+                $image->is_featured= 0;
+                $image->is_featured= 0;
+                $image->is_approved= 1;
+                $image->metadata= wp_get_attachment_metadata( $listing_default_image_id );
+                $image->type = ' post_image';
+
+                $post_images[] =  $image;
+
+            }
+
+        }
+
+
     }
+
+//  print_r($post_images);
+
+
+//    (
+//    [ID] => 90
+//            [post_id] => 51
+//            [user_id] => 1
+//            [title] =>
+//             =>
+//            [file] => /2018/03/psf8-1.jpg
+//[mime_type] => image/jpeg
+//[menu_order] => 0
+//            [is_featured] => 1
+//            [is_approved] => 1
+//            [metadata] => a:4:{s:5:"width";i:1280;s:6:"height";i:856;s:4:"file";s:19:"/2018/03/psf8-1.jpg";s:10:"image_meta";a:12:{s:8:"aperture";s:1:"0";s:6:"credit";s:0:"";s:6:"camera";s:0:"";s:7:"caption";s:0:"";s:17:"created_timestamp";s:1:"0";s:9:"copyright";s:0:"";s:12:"focal_length";s:1:"0";s:3:"iso";s:1:"0";s:13:"shutter_speed";s:1:"0";s:5:"title";s:0:"";s:11:"orientation";s:1:"0";s:8:"keywords";a:0:{}}}
+//            [type] => post_image
+//        )
 
 
 

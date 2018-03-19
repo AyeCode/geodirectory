@@ -45,7 +45,7 @@ class GeoDir_Admin_Tracker {
 		if ( ! apply_filters( 'geodirectory_tracker_send_override', $override ) ) {
 			// Send a maximum of once per week by default.
 			$last_send = self::get_last_send_time();
-			if ( $last_send && $last_send > apply_filters( 'geodirectory_tracker_last_send_interval', strtotime( '-1 week' ) ) ) {
+			if ( $last_send && $last_send > apply_filters( 'geodirectory_tracker_last_send_interval', strtotime( '-1 day' ) ) ) { //@todo change ot -1 week after beta
 				return; //@todo uncomment after testing
 			}
 		} else {
@@ -67,16 +67,17 @@ class GeoDir_Admin_Tracker {
 				'httpversion' => '1.0',
 				'blocking'    => false, //true, //@todo set this as false for production (only true will give a response)
 				'headers'     => array( 'user-agent' => 'GeoDirectoryTracker/' . md5( esc_url( home_url( '/' ) ) ) . ';' ),
-				'body'        => json_encode( $params ),
-				//'body'        => $params ,
+				//'body'        => json_encode( $params ),
+				'body'        => $params ,
 				'cookies'     => array(),
 			)
 		);
 
 //		echo '###'.self::$api_url;
-//echo $result['body'];
-//		print_r(json_decode($result['body']));
-//		exit;
+////echo $result['body'];
+////		print_r(json_decode($result['body']));
+//		print_r($result['body']);
+		exit;
 	}
 
 	/**
@@ -391,4 +392,4 @@ class GeoDir_Admin_Tracker {
 	}
 }
 
-GeoDir_Admin_Tracker::init();
+

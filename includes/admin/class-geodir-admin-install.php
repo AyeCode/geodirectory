@@ -315,6 +315,10 @@ class GeoDir_Admin_Install {
 	 */
 	private static function create_cron_jobs() {
 		//@todo add crons here
+		wp_clear_scheduled_hook( 'geodirectory_tracker_send_event' );
+
+		wp_schedule_event( time(), apply_filters( 'geodirectory_tracker_event_recurrence', 'daily' ), 'geodirectory_tracker_send_event' );
+
 	}
 
 

@@ -222,6 +222,9 @@ function geodir_terms_and_conditions_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_login_url($args=array()){
+
+	return wp_login_url( geodir_curPageURL() );
+
     $gd_page_id = geodir_get_option('geodir_login_page');
 
     if (function_exists('icl_object_id')) {

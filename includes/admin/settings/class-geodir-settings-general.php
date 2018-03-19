@@ -611,7 +611,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc' => sprintf( __( 'Want to help make GeoDirectory even more awesome? Allow GeoDirectory to collect non-sensitive diagnostic data and usage information. %1$sFind out more%2$s.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/usage-tracking/" target="_blank">', '</a>' ),
 					'id'   => 'usage_tracking',
 					'type' => 'checkbox',
-					'default'  => '',
+					'default'  => '1', // @todo remove this after beta release
 					'advanced' => true
 				),
 

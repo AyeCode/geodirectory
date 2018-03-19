@@ -66,8 +66,8 @@ class GeoDir_Defaults {
 [gd_post_rating alignment='left' ]
 [gd_post_fav show='' alignment='right' ]
 [gd_post_meta key='business_hours' location='listing']
+[gd_output_location location='listing']
 [gd_post_meta key='post_content' location='listing']
-[gd_post_meta key='facebook' ]
 [gd_archive_item_section type='close' position='right']";
 	}
 

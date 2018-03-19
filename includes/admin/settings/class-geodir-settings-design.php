@@ -43,8 +43,8 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 		public function get_sections() {
 
 			$sections = array(
-				''          		=> __( 'Design options', 'geodirectory' ),
-				'archives'      	=> __( 'Archives', 'geodirectory' ),
+				''          		=> __( 'Archives', 'geodirectory' ),
+//				'archives'      	=> __( 'Archives', 'geodirectory' ),
 				'details' 	        => __( 'Details', 'geodirectory' ),
 				'reviews' 		    => __( 'Reviews', 'geodirectory' ),
 				'email_template' 	=> __( 'Email Template', 'geodirectory' ),
@@ -379,12 +379,6 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 					),
 					array('type' => 'sectionend', 'id' => 'design_settings'),
 
-					array('name' => __('Email BCC options', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'email_settings_bcc'),
-
-
-
-
-					array('type' => 'sectionend', 'id' => 'email_settings_bcc'),
 
 				));
 			}

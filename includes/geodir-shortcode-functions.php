@@ -47,6 +47,7 @@ function geodir_sc_add_listing( $atts, $content = '' ) {
         $params['listing_type'] = sanitize_text_field( $_REQUEST['listing_type'] );
     }
 
+    // check if CPT is disabled add listing
     if ( !geodir_add_listing_check_post_type( $params['listing_type'] ) ) {
         return __( 'Adding listings is disabled for this post type..', 'geodirectory' );
     }
@@ -66,7 +67,9 @@ function geodir_sc_add_listing( $atts, $content = '' ) {
             echo "<br />";
             wp_login_form();
         }
-    } else {
+    } elseif(!$user_id && !get_option( 'users_can_register' )){
+        echo geodir_notification( array('add_listing_error'=>__('User registration is disabled, please login to continue.','geodirectory')) );
+    }else {
         GeoDir_Post_Data::add_listing_form();
     }
 
