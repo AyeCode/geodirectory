@@ -32,9 +32,7 @@ class GeoDir_Admin_Notices {
 		'install'             => 'install_notice',
 		'update'              => 'update_notice',
 		'theme_support'       => 'theme_check_notice',
-		'legacy_shipping'     => 'legacy_shipping_notice',
-		'no_shipping_methods' => 'no_shipping_methods_notice',
-		'simplify_commerce'   => 'simplify_commerce_notice',
+		'beta'                => 'beta_notice',
 	);
 
 	/**
@@ -81,6 +79,7 @@ class GeoDir_Admin_Notices {
 	public static function reset_admin_notices() {
 		if ( ! current_theme_supports( 'geodirectory' ) && ! in_array( get_option( 'template' ), geodir_get_core_supported_themes() ) ) {
 			self::add_notice( 'theme_support' );
+			self::add_notice( 'beta' );
 		}
 		self::add_notice( 'template_files' );
 	}
@@ -209,6 +208,13 @@ class GeoDir_Admin_Notices {
 		} else {
 			self::remove_notice( 'theme_support' );
 		}
+	}
+
+	/**
+	 * Show the Theme Check notice.
+	 */
+	public static function beta_notice() {
+		include( 'views/html-notice-beta.php' );
 	}
 
 
