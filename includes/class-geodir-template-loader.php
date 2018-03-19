@@ -332,6 +332,27 @@ class GeoDir_Template_Loader {
 
         return $metadata;
     }
+	
+	/**
+     * Setup the map popup content.
+     *
+     * @since 2.0.0
+     * @return string The filtered content.
+     */
+    public static function map_popup_template_content(){
+		ob_start();
+
+		geodir_get_template_part( 'map', 'popup' );
+
+		$content = ob_get_clean();
+
+		if ( ! empty( $content ) ) {
+			// run the shortcodes on the content
+			$content = do_shortcode( $content );
+		}
+
+		return $content;
+    }
 
 }
 

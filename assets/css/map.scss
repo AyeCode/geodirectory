@@ -180,11 +180,11 @@
     margin-right: 3px;
 }
 
-.geodir-bubble-meta-side .geodir_post_meta.post_address span[itemprop="addressLocality"],
-.geodir-bubble-meta-side .geodir_post_meta.post_address span[itemprop="addressRegion"],
-.geodir-bubble-meta-side .geodir_post_meta.post_address span[itemprop="postalCode"],
-.geodir-bubble-meta-side .geodir_post_meta.post_address span[itemprop="addressCountry"],
-.geodir-bubble-meta-side .geodir_post_meta.post_address br{
+.geodir-bubble-meta-side .geodir_post_meta.address_address span[itemprop="addressLocality"],
+.geodir-bubble-meta-side .geodir_post_meta.address_address span[itemprop="addressRegion"],
+.geodir-bubble-meta-side .geodir_post_meta.address_address span[itemprop="postalCode"],
+.geodir-bubble-meta-side .geodir_post_meta.address_address span[itemprop="addressCountry"],
+.geodir-bubble-meta-side .geodir_post_meta.address_address br{
    display:none;
 }
 
@@ -197,7 +197,7 @@
   overflow-y: hidden;
 }
 
-.geodir-bubble_desc h4 {
+.gd-bubble .geodir-bubble_desc h4 {
     clear: inherit;
     background-color: red;
     position: absolute;
@@ -332,10 +332,24 @@
 
 .geodir-bubble-meta-bottom .geodir-addtofav a {
     visibility: hidden;
+	width: 2em;
+    display: inline-block;
 }
 
 .geodir-bubble-meta-bottom .geodir-addtofav a i {
     visibility: visible;
+}
+
+.gd-bubble .gd-bubble-inside .gd-rating,
+.gd-bubble .gd-bubble-inside .geodir_post_meta {
+    margin: 0;
+}
+.gd-bubble .gd-bubble-inside .geodir_post_meta .gd-rating i.fa {
+    margin-right: 0;
+}
+.gd-bubble .gd-bubble-inside .geodir_post_meta {
+    font-size: 13px!important;
+    line-height: 22px;
 }
 
 /* MAP FULL SCREEN CSS ########################################################################## */
