@@ -673,3 +673,17 @@ function geodir_post_closed_text( $post, $echo = true ) {
         return ob_get_clean();
     }
 }
+
+function geodir_listing_listview_ul_extra_class( $class, $template ) {
+	if ( $template == 'widget' ) {
+		global $gd_layout_class;
+		if ( ! empty( $gd_layout_class ) ) {
+			$class .= ' geodir-gridview ' . $gd_layout_class;
+		} else {
+			$class .= ' geodir-listview';
+		}
+		$class = trim( $class );
+	}
+	return $class;
+}
+add_filter( 'geodir_listing_listview_ul_extra_class', 'geodir_listing_listview_ul_extra_class', 10, 2 );

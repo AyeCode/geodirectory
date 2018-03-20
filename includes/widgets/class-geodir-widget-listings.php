@@ -389,7 +389,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @since   1.6.24 View all link should go to search page with near me selected.
      * @package GeoDirectory
      * @global object $post                    The current post object.
-     * @global string $gridview_columns_widget The girdview style of the listings for widget.
+     * @global string $gd_layout_class The girdview style of the listings for widget.
      * @global bool $geodir_is_widget_listing  Is this a widget listing?. Default: false.
      * @global object $gd_session              GeoDirectory Session object.
      *
@@ -398,7 +398,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @param array|string $instance           The settings for the particular instance of the widget.
      */
     public function output_html( $args = '', $instance = '' ) {
-        global $gd_session, $gd_post;
+        global $gd_session, $gd_post, $post;
 
 
         // prints the widget
@@ -671,7 +671,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			);
 		}
 
-        global $gridview_columns_widget, $geodir_is_widget_listing;
+        global $gd_layout_class, $geodir_is_widget_listing;
 
         $widget_listings = geodir_get_widget_listings( $query_args );
 
@@ -708,10 +708,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             <?php
             if ( strstr( $layout, 'gridview' ) ) {
                 $listing_view_exp        = explode( '_', $layout );
-                $gridview_columns_widget = $layout;
+                $gd_layout_class = $layout;
                 $layout                  = $listing_view_exp[0];
             } else {
-                $gridview_columns_widget = '';
+                $gd_layout_class = '';
             }
 
             if ( ! isset( $character_count ) ) {
@@ -725,23 +725,28 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 $character_count = $character_count == '' ? 50 : apply_filters( 'widget_character_count', $character_count );
             }
 
-            global $post, $map_jason, $map_canvas_arr;
+			if ( isset( $post ) ) {
+				$reset_post = $post;
+			}
+			if ( isset( $gd_post ) ) {
+				$reset_gd_post = $gd_post;
+			}
+			$geodir_is_widget_listing = true;
 
-            $current_post             = $post;
-            $current_map_jason        = $map_jason;
-            $current_map_canvas_arr   = $map_canvas_arr;
-            $geodir_is_widget_listing = true;
+			// geodir_get_template( 'widget-listing-listview.php', array( 'title_tag'=>$title_tag, 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget) );
+			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
 
-            geodir_get_template( 'widget-listing-listview.php', array( 'title_tag'=>$title_tag, 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget) );
+			$geodir_is_widget_listing = false;
 
-            $geodir_is_widget_listing = false;
-
-            $GLOBALS['post'] = $current_post;
-            if ( ! empty( $current_post ) ) {
-                setup_postdata( $current_post );
-            }
-            $map_jason      = $current_map_jason;
-            $map_canvas_arr = $current_map_canvas_arr;
+			if ( isset( $reset_post ) ) {
+				if ( ! empty( $reset_post ) ) {
+					setup_postdata( $reset_post );
+				}
+				$post = $reset_post;
+			}
+			if ( isset( $reset_gd_post ) ) {
+				$gd_post = $reset_gd_post;
+			}
             ?>
         </div>
         <?php
