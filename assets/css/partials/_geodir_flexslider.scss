@@ -395,6 +395,10 @@ html[xmlns] .geodir-slides {
   cursor: default;
 }
 
+.widget-area .geodir-image-wrapper ul.geodir-slides {
+	margin: 0;
+}
+
 @media screen and (max-width: 860px) {
   .geodir-direction-nav .geodir-prev {
     opacity: 1;
