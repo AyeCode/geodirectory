@@ -4,6 +4,7 @@ Reviews count not showing on listing - FIXED
 Category ID settings column too wide - FIXED
 GD > Listings widget now used Archive item page template - FIXED
 CPT custom fields settings show unused save button - FIXED
+Default location setting missing the "Set address on map" button - FIXED
 
 v2.0.0.0-beta
 Initial beta release - INFO
