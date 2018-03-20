@@ -181,7 +181,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 * @param $options
 	 */
 	public function output_images($options){
-		global $post;
+		global $post,$gd_slider_outputs;
 		ob_start();
 
 
@@ -215,7 +215,19 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			}else{
 				//$main_wrapper_class = "geodir-image-container";
 			}
-			$slider_id = uniqid( 'geodir_images_' );
+
+			// Set the slider ID
+			$slider_id = "geodir_images_".$post->ID;
+			if(!is_array($gd_slider_outputs)){
+				$gd_slider_outputs = array();
+			}
+			if(isset($gd_slider_outputs[$post->ID])){
+				$gd_slider_outputs[$post->ID]++;
+				$slider_id .= "_".$gd_slider_outputs[$post->ID];
+			}else{
+				$gd_slider_outputs[$post->ID] = 1;
+			}
+
 			?>
 			<div class="<?php echo $main_wrapper_class;?>" >
 				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fa fa-refresh fa-spin"></i></div>';}?>

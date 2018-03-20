@@ -106,7 +106,7 @@ function geodir_init_slider($id){
 
             jQuery(".geodir_flex-loader").hide(), jQuery("#"+$id).css({
                 visibility: "visible"
-            }), jQuery("#geodir_carousel").css({
+            }), jQuery("#"+$id+"_carousel").css({
                 visibility: "visible"
             });
 
