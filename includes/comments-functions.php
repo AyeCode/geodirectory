@@ -18,15 +18,23 @@ General functions
  * @since 1.6.16 Changes for disable review stars for certain post type.
  * @package GeoDirectory
  *
- * @global object $post The current post object.
- *
- * @param int $number Comments number.
+ * @param int|object $post The current post object.
  */
-function geodir_comments_number( $number ) {
-	global $post;
+function geodir_comments_number( $post = 0 ) {
+	global $gd_post;
+
+	if ( $post === 0 ) {
+		$post = $gd_post;
+	} else if ( is_int( $post ) && $post > 0 ) {
+		$post = geodir_get_post_info( $post );
+	} else if ( is_object( $post ) ) {
+		$post = isset( $post->rating_count ) ? $post : geodir_get_post_info( $post->ID );
+	} else {
+		$post = NULL;
+	}
 
 	if ( !empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
-		$number = get_comments_number();
+		$number = get_comments_number( $post->ID );
 
 		if ( $number > 1 ) {
 			$output = str_replace( '%', number_format_i18n( $number ), __( '% Comments', 'geodirectory' ) );
@@ -36,6 +44,8 @@ function geodir_comments_number( $number ) {
 			$output = __( '1 Comment', 'geodirectory' );
 		}
 	} else {
+		$number = ! empty( $post->rating_count ) ? $post->rating_count : 0;
+
 		if ( $number > 1 ) {
 			$output = str_replace( '%', number_format_i18n( $number ), __( '% Reviews', 'geodirectory' ) );
 		} elseif ( $number == 0 || $number == '' ) {

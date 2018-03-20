@@ -32,29 +32,26 @@ function geodir_listing_post_meta() {
  * Add the some standard info like reviews and favourite.
  */
 function geodir_listing_item_info() {
-	global $gd_post, $post;
-
-	//$post_rating = $gd_post->overall_rating ? $gd_post->overall_rating : 0; //@todo this should have been filled but its not
-
+	global $gd_post;
 	?>
 	<div class="geodir-post-info">
         <span class="gd-list-rating-stars">
            <?php
-           if ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
+           if ( ! empty( $gd_post->post_type ) && geodir_cpt_has_rating_disabled( $gd_post->post_type ) ) {
 	           echo '<i class="fa fa-comments"></i>';
            } else {
-	           $post_rating = geodir_get_post_rating( $post->ID );
-	           echo geodir_get_rating_stars( $post_rating, $post->ID );
+	           $post_rating = geodir_get_post_rating( $gd_post->ID );
+	           echo geodir_get_rating_stars( $post_rating, $gd_post->ID );
            }
            ?>
         </span>
         <span class="gd-list-rating-text">
             <a href="<?php comments_link(); ?>" class="gd-list-rating-link">
-                <?php geodir_comments_number( $post->rating_count ); ?>
+                <?php geodir_comments_number( $gd_post ); ?>
             </a>
         </span>
         <span class="gd-list-favorite">
-            <?php geodir_favourite_html( '', $post->ID ); ?>
+            <?php geodir_favourite_html( '', $gd_post->ID ); ?>
         </span>
 
 	</div>

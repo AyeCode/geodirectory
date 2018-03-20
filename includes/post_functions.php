@@ -1892,3 +1892,31 @@ function geodir_edit_post_link($post_id = '')
     return  geodir_getlink($postlink, array('pid' => $post_id), false);
 
 }
+
+/*
+ * Setup $gd_post variable.
+ */
+function geodir_setup_postdata( $the_post ) {
+	global $post;
+
+	if ( is_int( $the_post ) && $the_post > 0 ) {
+		$the_post = geodir_get_post_info( $the_post );
+	} else if ( is_object( $the_post ) ) {
+		if ( ! isset( $the_post->post_category ) ) {
+			$the_post = geodir_get_post_info( $post->ID );
+		}
+	}
+
+	if ( empty( $the_post->ID ) ) {
+		return;
+	}
+
+	$GLOBALS['gd_post'] = $the_post;
+
+	if ( $post->ID != $the_post->ID ) {
+		setup_postdata( $the_post->ID );
+		if ( $post->ID != $the_post->ID ) {
+			$GLOBALS['post'] = get_post( $the_post->ID );
+		}
+	}
+}

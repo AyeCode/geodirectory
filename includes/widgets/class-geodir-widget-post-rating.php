@@ -147,7 +147,6 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
     public function get_rating_text(){
         global $post,$gd_post;
         ob_start();
-        $rating_count = isset($gd_post->rating_count) ? $gd_post->rating_count : $post->rating_count;
         ?>
         <span class="gd-list-rating-text">
             <?php
@@ -156,7 +155,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
             }
             ?>
             <a href="<?php comments_link(); ?>" class="gd-list-rating-link">
-                <?php geodir_comments_number( $rating_count ); ?>
+                <?php geodir_comments_number( $gd_post ); ?>
             </a>
         </span>
         <?php

@@ -200,7 +200,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                                     /** This action is documented in includes/templates/listing-listview.php */
                                     do_action('geodir_after_review_rating_stars_on_listview', $post_avgratings, $post->ID);
                                     ?><a href="<?php comments_link(); ?>" class="geodir-pcomments"><i
-                                        class="fa fa-comments"></i> <?php geodir_comments_number($post->rating_count); ?>
+                                        class="fa fa-comments"></i> <?php geodir_comments_number($post); ?>
                                     </a>
                                 <?php
                                 }
