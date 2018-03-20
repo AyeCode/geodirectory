@@ -310,7 +310,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget) && !isset($rel
                                     ?>
                                     <a href="<?php comments_link(); ?>" class="geodir-pcomments"><i
                                             class="fa fa-comments"></i>
-                                        <?php geodir_comments_number($post->rating_count); ?></a>
+                                        <?php geodir_comments_number($post); ?></a>
                                 <?php
                                 }
 

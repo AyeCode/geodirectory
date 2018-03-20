@@ -215,10 +215,11 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			}else{
 				//$main_wrapper_class = "geodir-image-container";
 			}
+			$slider_id = uniqid( 'geodir_images_' );
 			?>
 			<div class="<?php echo $main_wrapper_class;?>" >
 				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fa fa-refresh fa-spin"></i></div>';}?>
-				<div id="geodir_images_<?php echo $post->ID;?>" class="<?php echo $second_wrapper_class;?>" <?php
+				<div id="<?php echo $slider_id; ?>" class="<?php echo $second_wrapper_class;?>" <?php
 				if($options['controlnav']==1){echo "data-controlnav='1'";}
 				if($options['animation']=='fade'){echo "data-animation='fade'";}
 				if($options['slideshow']){echo "data-slideshow='1'";}
@@ -247,7 +248,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 						?></ul>
 				</div>
 				<?php if ($options['type']=='slider' && $image_count > 1 && $options['controlnav'] == 2 ) { ?>
-					<div id="geodir_slider_<?php echo $post->ID;?>_carousel" class="geodir_flexslider">
+					<div id="<?php echo $slider_id; ?>_carousel" class="geodir_flexslider">
 						<ul class="geodir-slides clearfix"><?php
 							foreach($post_images as $image){
 								echo "<li>";

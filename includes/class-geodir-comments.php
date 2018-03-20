@@ -628,13 +628,11 @@ class GeoDir_Comments {
 
 		$rating_percent   = $type == 'output' ? 'width:' . $rating / $rating_input_count * 100 . '%;' : '';
 		$foreground_style = $rating_percent || $rating_color ? "style='$rating_percent $rating_color'" : '';
-
+		$rating_wrap_title = $rating_wrap_title ? 'title="' . esc_attr( $rating_wrap_title ) . '"' : '';
 		ob_start();
 		?>
 		<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
-			<span class="gd-rating-wrap" <?php if ( $rating_wrap_title ) {
-				echo "title='" . esc_attr( $rating_wrap_title ) . "''";
-			} ?>>
+			<span class="gd-rating-wrap" <?php echo $rating_wrap_title; ?>>
 				<span class="gd-rating-foreground" <?php echo $foreground_style; ?>>
 				<?php echo $rating_html; ?>
 				</span>

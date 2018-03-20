@@ -46,6 +46,7 @@ class GeoDir_Post_Data {
 
 		// set up $gd_post;
 		add_action( 'wp', array( __CLASS__, 'init_gd_post' ), 5 );
+		add_action( 'the_post', array( __CLASS__, 'the_gd_post' ), 10, 2 );
 
 		if(!is_admin()){
 			add_filter( 'pre_get_posts', array( __CLASS__, 'show_public_preview' ) );
@@ -1198,6 +1199,23 @@ class GeoDir_Post_Data {
 		}
 		
 		return $posts;
+	}
+	
+	/**
+	 * Set global $gd_post data.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param WP_Post  $post The Post object (passed by reference).
+	 * @param WP_Query $this The current Query object (passed by reference).
+	 * @return WP_Post The Post object.
+	 */
+	public static function the_gd_post( $post, $wp_query = array() ) {
+		if ( ! empty( $post->post_type ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
+			$GLOBALS['gd_post'] = geodir_get_post_info( $post->ID );
+		}
+
+		return $post;
 	}
 
 }

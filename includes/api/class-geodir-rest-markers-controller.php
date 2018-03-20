@@ -173,7 +173,11 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		$join = "LEFT JOIN {$detail_table} AS pd ON pd.post_id = p.ID";
 		$join = apply_filters( 'geodir_rest_markers_query_join', $join, $request );
 		
-		$where = "p.post_status = 'publish'";
+		if ( ! empty( $request['post'] ) && is_array( $request['post'] ) && count( $request['post'] ) == 1 ) {
+			$where = "p.post_status IN('publish', 'pending', 'draft', 'gd-closed')";
+		} else {
+			$where = "p.post_status = 'publish'";
+		}
 		$where = apply_filters( 'geodir_rest_markers_query_where', $where, $request );
 
 		if ( $where ) {
