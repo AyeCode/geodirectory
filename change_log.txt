@@ -1,5 +1,12 @@
-v 2.0.0
-Location filter & current post type filter added in recent reviews widget - ADDED
+v2.0.0.1-beta
+More then one image slider with same id on same page not working - FIXED
+Reviews count not showing on listing - FIXED
+Category ID settings column too wide - FIXED
+GD > Listings widget now used Archive item page template - FIXED
+CPT custom fields settings show unused save button - FIXED
+
+v2.0.0.0-beta
+Initial beta release - INFO
 
 v1.6.22
 Comment replies should not add review structured data - FIXED

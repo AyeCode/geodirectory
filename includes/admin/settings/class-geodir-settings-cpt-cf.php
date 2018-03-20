@@ -95,6 +95,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 */
 		public function output() {
 
+			global $hide_save_button;
+
+			$hide_save_button = true;
+
 			$listing_type = self::$post_type;
 
 			$sub_tab = self::$sub_tab;

@@ -61,15 +61,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 		 * @return array
 		 */
 		public function get_sections() {
-
-			$sections = array(
-				''             => __( 'General', 'geodirectory' ),
-				'display'      => __( 'Display', 'geodirectory' ),
-				'inventory'    => __( 'Inventory', 'geodirectory' ),
-				'downloadable' => __( 'Downloadable products', 'geodirectory' ),
-			);
 			$sections = array();
-
 			return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
 		}
 

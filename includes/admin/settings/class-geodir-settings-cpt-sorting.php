@@ -76,18 +76,9 @@ if ( ! class_exists( 'GD_Settings_Cpt', false ) ) :
 		 * Output the settings.
 		 */
 		public function output() {
-//		global $current_section, $hide_save_button;
-//
-//		$settings = $this->get_settings( $current_section );
-//
-//		GeoDir_Admin_Settings::output_fields( $settings );
-//
-//		// hide save button on dummy data page
-//		if ( 'dummy_data' == $current_section ) {
-//			$hide_save_button = true;
-//		}
+			global $hide_save_button;
 
-			//geodir_custom_post_type_form();
+			$hide_save_button = true;
 
 			$listing_type = self::$post_type;
 
