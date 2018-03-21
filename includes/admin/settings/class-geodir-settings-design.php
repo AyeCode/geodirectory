@@ -224,6 +224,18 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 						'advanced' => false
 					),
 
+					array(
+						'type' => 'select',
+						'id' => 'details_page_template',
+						'name' => __('Page template file', 'geodirectory'),
+						'desc' => __('Select the page template to use for the details page output.', 'geodirectory'),
+						'class' => 'geodir-select',
+						'options' => $this->single_page_templates(),
+						'default' => '',
+						'desc_tip' => true,
+						'advanced' => false,
+					),
+
 					array('type' => 'sectionend', 'id' => 'admin_design_details_settings'),
 
 
@@ -424,6 +436,47 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 			$types['plain'] = __( 'Plain text', 'geodirectory' );
 
 			return $types;
+		}
+
+		/**
+		 * Get the array of possible single page templates to use.
+		 *
+		 * @return array
+		 */
+		public function single_page_templates(){
+
+			$templates = array(
+				''          =>  __("Auto","geodirectory"),
+			);
+
+			// check single.php
+			if(locate_template( 'single.php' )){
+				$templates['single.php'] = 'single.php';
+			}
+
+			// check singular.php
+			if(locate_template( 'singular.php' )){
+				$templates['singular.php'] = 'singular.php';
+			}
+
+			// check index.php
+			if(locate_template( 'index.php' )){
+				$templates['index.php'] = 'index.php';
+			}
+
+			// check page.php
+			if(locate_template( 'page.php' )){
+				$templates['page.php'] = 'page.php';
+			}
+
+			$page_templates = get_page_templates();
+			if(!empty($page_templates)){
+				foreach($page_templates as $name => $page){
+					$templates[$page] = $page." ( ".$name." )";
+				}
+			}
+
+			return $templates;
 		}
 
 

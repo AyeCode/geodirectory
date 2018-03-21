@@ -1345,7 +1345,7 @@ function geodir_show_detail_page_tabs() {
 			do_action( 'geodir_after_tab_list' );
 			?>
 			<?php if ( ! $tab_list ){ ?></dl><?php } ?>
-		<ul class="geodir-tabs-content entry-content <?php if ( $tab_list ) { ?>geodir-tabs-list<?php } ?>"
+		<ul class="geodir-tabs-content geodir-entry-content <?php if ( $tab_list ) { ?>geodir-tabs-list<?php } ?>"
 		    style="position:relative;">
 			<?php
 			foreach ( $arr_detail_page_tabs as $detail_page_tab ) {
