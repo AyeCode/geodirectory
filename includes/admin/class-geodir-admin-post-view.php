@@ -229,7 +229,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			$geodir_posttypes  = array_keys( $geodir_post_types );
 
 			if ( isset( $post->post_type ) && in_array( $post->post_type, $geodir_posttypes ) ):
-
+				$post_type_object = get_post_type_object( $post->post_type );
 				$geodir_posttype = $post->post_type;
 				$post_typename   = __( $geodir_post_types[ $geodir_posttype ]['labels']['singular_name'], 'geodirectory' );
 				$post_typename   = geodir_ucwords( $post_typename );
@@ -242,6 +242,12 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 					__CLASS__,
 					'listing_setting'
 				), $geodir_posttype, 'normal', 'high' );
+				if ( post_type_supports( $geodir_posttype, 'author' ) && current_user_can( $post_type_object->cap->edit_others_posts ) ) {
+					add_meta_box( 'geodir_mbox_owner', wp_sprintf( __( '%s Owner', 'geodirectory' ), $post_typename ), array(
+						__CLASS__,
+						'owner_meta_box'
+					), $geodir_posttype, 'normal', 'core' );
+				}
 			endif;
 
 		}
@@ -282,6 +288,28 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			 */
 			do_action( 'geodir_after_default_field_in_meta_box' );
 			echo '</div>';
+		}
+		
+		/**
+		 * Prints post owner meta box content.
+		 *
+		 * @since 2.0.0
+		 * @package GeoDirectory
+		 * @global object $post The post object.
+		 * @global int $user_ID The user ID.
+		 */
+		public static function owner_meta_box() {
+			global $post, $user_ID;
+			?>
+			<label class="screen-reader-text" for="post_author_override"><?php _e('Author'); ?></label>
+			<?php
+				wp_dropdown_users( array(
+					'who' => '',
+					'name' => 'post_author_override',
+					'selected' => empty($post->ID) ? $user_ID : $post->post_author,
+					'include_selected' => true,
+					'show' => 'display_name_with_login',
+				) );
 		}
 
 		/**
@@ -389,6 +417,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 
 				remove_meta_box('postimagediv', $post->post_type, 'side');
 				remove_meta_box('revisionsdiv', $post->post_type, 'normal');
+				remove_meta_box('authordiv', $post->post_type, 'normal');
 
 				//remove_meta_box($post->post_type.'category' . 'div', $post->post_type, 'normal');
 

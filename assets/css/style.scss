@@ -2549,6 +2549,18 @@ body > span[style*='top: -999px']{display: none;}
 .gd-bh-expanded .fa-caret-down {
 	display: none;
 }
+.gd-bubble .gd-bh-days-list:first-child {
+	margin-top: 3px;
+}
+.gd-bubble .gd-bh-days-list {
+	padding: 1px 7px;
+	word-wrap: normal;
+	white-space: nowrap
+}
+.gd-bubble .gd-bh-expand .fa {
+	margin-left: 5px;
+	margin-right: 0;
+}
 /* business hours end */
 /* closed down message start */
 .gd-has-closed {
