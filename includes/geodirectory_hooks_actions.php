@@ -1350,7 +1350,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
                 $type = $field;
                 $field_name = $field['htmlvar_name'];
 
-                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false  && ((isset($gd_post->{$field_name}) && $gd_post->{$field_name} != '') || $field['type'] == 'fieldset' || $field['type'] == 'address') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy'))) {
+                if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false  && ((isset($gd_post->{$field_name}) && $gd_post->{$field_name} != '') || $field['type'] == 'fieldset' || $field['type'] == 'address') && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy', 'business_hours'))) {
                     if ($type['type'] == 'datepicker' && ($gd_post->{$type['htmlvar_name']} == '' || $gd_post->{$type['htmlvar_name']} == '0000-00-00')) {
                         continue;
                     }
@@ -1385,7 +1385,7 @@ function geodir_detail_page_custom_field_tab($tabs_arr)
 
                 if (isset($field['show_in']) && strpos($field['show_in'], '[owntab]') !== false
                     && ((isset($gd_post->{$field_name}) && $gd_post->{$field_name} != '') || $field['type'] == 'fieldset' || $field['type'] == 'address')
-                    && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy'))) {
+                    && in_array($field['type'], array('text', 'datepicker', 'textarea', 'time', 'phone', 'email', 'select', 'multiselect', 'url', 'html', 'fieldset', 'radio', 'checkbox', 'file','address','taxonomy', 'business_hours'))) {
 
 
                     $label = $field['frontend_title'] != '' ? $field['frontend_title'] : $field['admin_title'];

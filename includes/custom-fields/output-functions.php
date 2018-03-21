@@ -2049,12 +2049,12 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
                     $field_icon = '';
                 }
 
-				$extra_class = '';
+				$extra_class = $location == 'owntab' ? ' gd-bh-expanded' : ' gd-bh-toggled';
 				if ( ! empty( $business_hours['extra']['has_closed'] ) ) {
 					$extra_class .= ' gd-bh-closed';
 				}
 				
-                $html = '<div class="geodir_post_meta gd-bh-show-field gd-bh-toggled ' . $cf['css_class'] . ' ' . $html_var . $extra_class . '" style="clear:both;">';
+                $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' ' . $html_var . $extra_class . '" style="clear:both;">';
 				$html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
                 $html .= '<span class="gd-bh-expand-range" data-offset="' . geodir_gmt_offset() . '" data-offsetsec="' . ( geodir_gmt_offset( false ) * HOUR_IN_SECONDS ) . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range">' . $show_value . '</span>';
 				$html .= '<span class="gd-bh-expand"><i class="fa fa-caret-up"></i><i class="fa fa-caret-down"></i></span></span>';

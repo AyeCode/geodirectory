@@ -229,7 +229,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			$geodir_posttypes  = array_keys( $geodir_post_types );
 
 			if ( isset( $post->post_type ) && in_array( $post->post_type, $geodir_posttypes ) ):
-
+				$post_type_object = get_post_type_object( $post->post_type );
 				$geodir_posttype = $post->post_type;
 				$post_typename   = __( $geodir_post_types[ $geodir_posttype ]['labels']['singular_name'], 'geodirectory' );
 				$post_typename   = geodir_ucwords( $post_typename );
@@ -242,6 +242,12 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 					__CLASS__,
 					'listing_setting'
 				), $geodir_posttype, 'normal', 'high' );
+				if ( post_type_supports( $geodir_posttype, 'author' ) && current_user_can( $post_type_object->cap->edit_others_posts ) ) {
+					add_meta_box( 'geodir_mbox_owner', wp_sprintf( __( '%s Owner', 'geodirectory' ), $post_typename ), array(
+						__CLASS__,
+						'owner_meta_box'
+					), $geodir_posttype, 'normal', 'core' );
+				}
 			endif;
 
 		}
@@ -282,6 +288,23 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			 */
 			do_action( 'geodir_after_default_field_in_meta_box' );
 			echo '</div>';
+		}
+		
+		public static function owner_meta_box() {
+			global $post, $user_ID;
+			$curent_user_id = empty($post->ID) ? $user_ID : $post->post_author;
+			$user = get_user_by( 'id', $curent_user_id );
+			/* translators: 1: user display name 2: user ID 3: user email */
+			$curent_user_name	= sprintf(
+				esc_html__( '%1$s (#%2$s &ndash; %3$s)', 'geodirectory' ),
+				$user->display_name,
+				absint( $user->ID ),
+				$user->user_email
+			);
+			?>
+			<label class="screen-reader-text" for="post_author_override"><?php _e('User', 'geodirectory'); ?></label>
+			<select class="geodir-user-search" name="post_author_override" id="post_author_override" data-placeholder="<?php esc_attr_e( 'Search for a user&hellip;', 'geodirectory' ); ?>" data-allow_clear="true"><option value="<?php echo esc_attr( $curent_user_id ); ?>" selected="selected"><?php echo $curent_user_name; ?><option></select>
+			<?php
 		}
 
 		/**
@@ -389,6 +412,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 
 				remove_meta_box('postimagediv', $post->post_type, 'side');
 				remove_meta_box('revisionsdiv', $post->post_type, 'normal');
+				remove_meta_box('authordiv', $post->post_type, 'normal');
 
 				//remove_meta_box($post->post_type.'category' . 'div', $post->post_type, 'normal');
 

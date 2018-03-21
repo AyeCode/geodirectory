@@ -281,6 +281,7 @@ function geodir_params()
 		'txt_closed_now' => __('Closed now', 'geodirectory'),
 		'txt_closed' => __('Closed', 'geodirectory'),
 		'gmt_offset' => geodir_gmt_offset(),
+		'search_users_nonce' => wp_create_nonce( 'search-users' )
     );
 
     /**

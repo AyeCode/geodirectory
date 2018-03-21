@@ -582,7 +582,9 @@ function create_marker(item, map_canvas) {
                     html = typeof response == 'object' && response.html ? geodir_htmlEscape(response.html) : '';
                     gd_infowindow.setContent(html);
                     gd_infowindow.open(jQuery.goMap.map, marker);
-                    geodir_fix_marker_pos(map_canvas);
+					setTimeout(function() {
+						jQuery(document.body).trigger('geodir_map_infowindow_open', [{map: 'google', canvas: map_canvas, content: html}]);
+					}, 100);
                     // give the map 1 second to reposition before allowing it to reload
                     setTimeout(function() {
                         is_zooming = false;
@@ -1220,7 +1222,9 @@ function create_marker_osm(item, map_canvas) {
                     jQuery("#" + map_canvas).goMap();
                     html = typeof response == 'object' && response.html ? geodir_htmlEscape(response.html) : '';
                     marker.bindPopup(html);
-                    geodir_fix_marker_pos(map_canvas);
+					setTimeout(function() {
+						jQuery(document.body).trigger('geodir_map_infowindow_open', [{map: 'osm', canvas: map_canvas, content: html}]);
+					}, 100);
                     // give the map 1 second to reposition before allowing it to reload
                     setTimeout(function() {
                         is_zooming = false;

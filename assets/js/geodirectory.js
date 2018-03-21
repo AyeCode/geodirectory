@@ -95,7 +95,7 @@ jQuery(function($) {
         geodir_init_lazy_load();
     }
 	
-	$('.gd-bh-show-field .gd-bh-expand-range').on('click', function(e){
+	$(document).on('click', '.gd-bh-show-field .gd-bh-expand-range', function(e){
 		var $wrap = $(this).closest('.geodir_post_meta')
 		var $hours = $wrap.find('.gd-bh-open-hours')
 		if($hours.is(':visible')){
@@ -112,8 +112,13 @@ jQuery(function($) {
 		}, 60000);
 		geodir_refresh_business_hours();
 	}
-
-
+	$('body').bind('geodir_map_infowindow_open', function(e, data) {
+		/* Render business hours */
+		if (data.content && $(data.content).find('.gd-bh-show-field').length) {
+			geodir_refresh_business_hours();
+		}
+		geodir_fix_marker_pos(data.canvas);
+	});
 });
 
 
@@ -802,60 +807,61 @@ function gd_fav_save(post_id) {
 
 function geodir_refresh_business_hours() {
     jQuery('.gd-bh-show-field').each(function() {
-        var $this, d, $d, hours, day, mins, time, hasOpen = false,
-            hasClosed = false,
-            isOpen, o, c, label, times = [],
-            opens = [];
-        d = new Date(), utc = d.getTime() + (d.getTimezoneOffset() * 60000), d = new Date(utc + (parseInt(jQuery('.gd-bh-expand-range', $this).data('offsetsec')) * 1000));
-        $this = jQuery(this), hours = d.getHours(), mins = d.getMinutes(), day = d.getDay();
-        if (day < 1) {
-            day = 7;
-        }
-        time = ("0" + hours).slice(-2) + ("0" + mins).slice(-2);
-		jQuery(this).attr('data-t', time);
-        $d = jQuery(this).find('[data-day="' + parseInt(day) + '"]');
-        if ($d.length) {
-            $this.removeClass('gd-bh-open gd-bh-close');
-            $this.find('div').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today');
-            $d.addClass('gd-bh-days-today');
-            if ($d.data('closed') != '1') {
-                $d.find('.gd-bh-slot').each(function() {
-                    isOpen = false;
-                    o = jQuery(this).data('open'), c = jQuery(this).data('close');
-                    if (o != 'undefined' && c != 'undefined' && o !== '' && c !== '') {
-                        if (parseInt(o) <= time && time <= parseInt(c)) {
-                            isOpen = true;
-                        }
-                    }
-                    if (isOpen) {
-                        hasOpen = true;
-                        jQuery(this).addClass('gd-bh-slot-open');
-                        opens.push(jQuery(this).find('.gd-bh-slot-r').html());
-                    } else {
-                        jQuery(this).addClass('gd-bh-slot-close');
-                    }
-                    times.push(jQuery(this).find('.gd-bh-slot-r').html());
-                });
-            } else {
-                hasClosed = true;
-            }
-            if (hasOpen) {
-                times = opens;
-                $d.addClass('gd-bh-days-open');
-            } else {
-                $d.addClass('gd-bh-days-close');
-            }
-            jQuery('.gd-bh-today-range', $this).html(times.join(', '));
-        }
-        if (hasOpen) {
-            label = geodir_params.txt_open_now;
-            $this.addClass('gd-bh-open');
-        } else {
-            label = geodir_params.txt_closed_now;
-            $this.addClass('gd-bh-close');
-        }
-        jQuery('.geodir-i-biz-hours font', $this).html(label);
+        geodir_refresh_business_hour(jQuery(this));
     });
+}
+
+function geodir_refresh_business_hour($this) {
+	var d, $d, hours, day, mins, time, hasOpen = false, hasClosed = false, isOpen, o, c, label, times = [], opens = [];
+	d = new Date(), utc = d.getTime() + (d.getTimezoneOffset() * 60000), d = new Date(utc + (parseInt(jQuery('.gd-bh-expand-range', $this).data('offsetsec')) * 1000));
+	hours = d.getHours(), mins = d.getMinutes(), day = d.getDay();
+	if (day < 1) {
+		day = 7;
+	}
+	time = ("0" + hours).slice(-2) + ("0" + mins).slice(-2);
+	$this.attr('data-t', time);
+	$d = $this.find('[data-day="' + parseInt(day) + '"]');
+	if ($d.length) {
+		$this.removeClass('gd-bh-open gd-bh-close');
+		$this.find('div').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today');
+		$d.addClass('gd-bh-days-today');
+		if ($d.data('closed') != '1') {
+			$d.find('.gd-bh-slot').each(function() {
+				isOpen = false;
+				o = jQuery(this).data('open'), c = jQuery(this).data('close');
+				if (o != 'undefined' && c != 'undefined' && o !== '' && c !== '') {
+					if (parseInt(o) <= time && time <= parseInt(c)) {
+						isOpen = true;
+					}
+				}
+				if (isOpen) {
+					hasOpen = true;
+					jQuery(this).addClass('gd-bh-slot-open');
+					opens.push(jQuery(this).find('.gd-bh-slot-r').html());
+				} else {
+					jQuery(this).addClass('gd-bh-slot-close');
+				}
+				times.push(jQuery(this).find('.gd-bh-slot-r').html());
+			});
+		} else {
+			hasClosed = true;
+		}
+		if (hasOpen) {
+			times = opens;
+			$d.addClass('gd-bh-days-open');
+		} else {
+			$d.addClass('gd-bh-days-close');
+		}
+		jQuery('.gd-bh-today-range', $this).html(times.join(', '));
+	}
+	if (hasOpen) {
+		label = geodir_params.txt_open_now;
+		$this.addClass('gd-bh-open');
+	} else {
+		label = geodir_params.txt_closed_now;
+		$this.addClass('gd-bh-close');
+	}
+	jQuery('.geodir-i-biz-hours font', $this).html(label);
 }
 
 /**
