@@ -83,6 +83,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			// price fields
 			add_filter('geodir_cfa_extra_fields_text',array( $this,'price_fields'),10,4);
+			
+			// post badge fields
+			add_filter('geodir_cfa_extra_fields_post_badge',array( $this,'post_badge_fields'),10,4);
 
 
 
@@ -93,18 +96,21 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			add_filter( 'geodir_cfa_htmlvar_name_taxonomy', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_htmlvar_name_business_hours', '__return_empty_string', 10, 4 );
 
-			// default_value not needed for textarea, html, file, fieldset, taxonomy, address, business_hours
+			// default_value not needed for textarea, html, file, fieldset, taxonomy, address, business_hours, post_badge
 			add_filter( 'geodir_cfa_default_value_file', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_default_value_taxonomy', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_default_value_address', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_default_value_fieldset', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_default_value_business_hours', '__return_empty_string', 10, 4 );
+			add_filter( 'geodir_cfa_default_value_post_badge', '__return_empty_string', 10, 4 );
 
 			// is_required not needed for fieldset
 			add_filter( 'geodir_cfa_is_required_fieldset', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_required_msg_fieldset', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_is_required_business_hours', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_required_msg_business_hours', '__return_empty_string', 10, 4 );
+			add_filter( 'geodir_cfa_is_required_post_badge', '__return_empty_string', 10, 4 );
+			add_filter( 'geodir_cfa_required_msg_post_badge', '__return_empty_string', 10, 4 );
 
 			// field_icon not needed for fieldset
 			add_filter( 'geodir_cfa_field_icon_fieldset', '__return_empty_string', 10, 4 );
@@ -120,6 +126,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			add_filter( 'geodir_cfa_cat_sort_taxonomy', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_cat_sort_address', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_cat_sort_business_hours', '__return_empty_string', 10, 4 );
+			add_filter( 'geodir_cfa_cat_sort_post_badge', '__return_empty_string', 10, 4 );
 		}
 
 		/*
@@ -892,6 +899,69 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			$output = ob_get_clean();
 
+			return $output;
+		}
+		
+		/*
+		 * The post badge input setting.
+		 */
+		public static function post_badge_fields($output,$result_str,$cf,$field_info){
+			$extra_fields = !empty($field_info->extra_fields) ? maybe_unserialize($field_info->extra_fields) : NULL;
+
+			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
+			$badge_type = ! empty( $extra_fields['badge_type'] ) ? $extra_fields['badge_type'] : 'featured';
+			$badge_key = ! empty( $extra_fields['badge_key'] ) ? $extra_fields['badge_key'] : '';
+			$badge_condition = ! empty( $extra_fields['badge_condition'] ) ? $extra_fields['badge_condition'] : 'is_equal';
+			$badge_search = ! empty( $extra_fields['badge_search'] ) ? $extra_fields['badge_search'] : '';
+			ob_start();
+			?>
+			<li>
+				<label for="badge_type">
+					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title='<?php _e( 'Select the badge type for the field.', 'geodirectory' ); ?>'></span> <?php _e( 'Badge Type:', 'geodirectory' ); ?>
+				</label>
+				<div class="gd-cf-input-wrap">
+					<select name="extra[badge_type]" id="badge_type" onchange="javascript:gd_post_badge_changed(this, '<?php echo $result_str; ?>');">
+						<option value="featured" <?php selected( 'featured', $badge_type ); ?>><?php _e( 'Featured', 'geodirectory' ); ?></option>
+						<option value="new" <?php selected( 'new', $badge_type ); ?>><?php _e( 'New', 'geodirectory' ); ?></option>
+						<option value="custom" <?php selected( 'custom', $badge_type ); ?>><?php _e( 'Custom', 'geodirectory' ); ?></option>
+						<option value="manual" <?php selected( 'manual', $badge_type ); ?>><?php _e( 'Manual', 'geodirectory' ); ?></option>
+					</select>
+				</div>
+			</li>
+			<li>
+				<label for="badge_key">
+					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title='<?php _e( 'Select the custom field key.', 'geodirectory' ); ?>'></span> <?php _e( 'Field Key:', 'geodirectory' ); ?>
+				</label>
+				<div class="gd-cf-input-wrap">
+					<select name="extra[badge_key]" id="badge_key"><?php // @todo list all cpt fields;?>
+						<option value="field1" <?php selected( 'field1', $badge_type ); ?>><?php _e( 'Field1', 'geodirectory' ); ?></option>
+						<option value="field2" <?php selected( 'field2', $badge_type ); ?>><?php _e( 'Field2', 'geodirectory' ); ?></option>
+					</select>
+				</div>
+			</li>
+			<li>
+				<label for="badge_condition">
+					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title='<?php _e( 'Select the custom field key.', 'geodirectory' ); ?>'></span> <?php _e( 'Field Key:', 'geodirectory' ); ?>
+				</label>
+				<div class="gd-cf-input-wrap">
+					<select name="extra[badge_condition]" id="badge_key"><?php // @todo list all cpt fields;?>
+						<option value="is_equal" <?php selected( 'is_equal', $badge_condition ); ?>><?php _e( 'is equal', 'geodirectory' ); ?></option>
+						<option value="is_less_than" <?php selected( 'is_less_than', $badge_condition ); ?>><?php _e( 'is less than', 'geodirectory' ); ?></option>
+						<option value="is_more_than" <?php selected( 'is_more_than', $badge_condition ); ?>><?php _e( 'is more than', 'geodirectory' ); ?></option>
+						<option value="is_not_empty" <?php selected( 'is_not_empty', $badge_condition ); ?>><?php _e( 'is not empty', 'geodirectory' ); ?></option>
+						<option value="is_contains" <?php selected( 'is_contains', $badge_condition ); ?>><?php _e( 'is contains', 'geodirectory' ); ?></option>
+					</select>
+				</div>
+			</li>
+			<li><label for="frontend_desc" class="gd-cf-tooltip-wrap">
+<?php _e( 'Contains text:', 'geodirectory' ); ?>
+</label>
+<div class="gd-cf-input-wrap">
+<input type="text" name="extra[badge_search]" id="badge_search" value="<?php echo esc_attr($badge_search); ?>"/>
+</div>
+</li>
+			<?php
+			$output .= ob_get_clean();
 			return $output;
 		}
 
