@@ -1,6 +1,7 @@
 v2.0.0.2-beta
 Business Hours not working on map popup - FIXED
 Backend author filed should show all users not only authors - FIXED
+Backend add listing has no validation - FIXED
 
 v2.0.0.1-beta
 More then one image slider with same id on same page not working - FIXED
