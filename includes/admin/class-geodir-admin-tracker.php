@@ -46,13 +46,13 @@ class GeoDir_Admin_Tracker {
 			// Send a maximum of once per week by default.
 			$last_send = self::get_last_send_time();
 			if ( $last_send && $last_send > apply_filters( 'geodirectory_tracker_last_send_interval', strtotime( '-1 day' ) ) ) { //@todo change ot -1 week after beta
-				return; //@todo uncomment after testing
+				//return; //@todo uncomment after testing
 			}
 		} else {
 			// Make sure there is at least a 1 hour delay between override sends, we don't want duplicate calls due to double clicking links.
 			$last_send = self::get_last_send_time();
 			if ( $last_send && $last_send > strtotime( '-1 hours' ) ) {
-				return;//@todo uncomment after testing
+				//return;//@todo uncomment after testing
 			}
 		}
 
@@ -77,7 +77,7 @@ class GeoDir_Admin_Tracker {
 ////echo $result['body'];
 ////		print_r(json_decode($result['body']));
 //		print_r($result['body']);
-		//exit;
+//		exit;
 	}
 
 	/**
@@ -99,6 +99,7 @@ class GeoDir_Admin_Tracker {
 		$data['url']                = home_url();
 		$data['email']              = apply_filters( 'geodirectory_tracker_admin_email', get_option( 'admin_email' ) );
 		$data['theme']              = self::get_theme_info();
+		$data['version']            = GeoDir()->version;
 
 
 		//return $data;

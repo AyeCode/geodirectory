@@ -790,9 +790,7 @@ class GeoDir_Admin_Settings {
 						//jQuery('.gd-advanced-toggle')
 
 						jQuery( ".gd-advanced-toggle" ).click(function() {
-							jQuery( "#default_location_set_address_button" ).slideToggle( 0, function() {
-								// Animation complete.
-							});
+							///jQuery( "#default_location_set_address_button" ).toggle();
 						});
 					</script>
 
@@ -909,7 +907,7 @@ class GeoDir_Admin_Settings {
 
 		if(!empty($value['docs'])){
 
-			$docs_link = "<a class='geodir-docs-link' href='".esc_url($value['docs'])."' target='_blank'>".__('Documentation','geodirectory')."<i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
+			$docs_link = "<a class='geodir-docs-link' href='".esc_url($value['docs'])."' target='_blank'>".__('Documentation','geodirectory')." <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
 
 			if(in_array( $value['type'], array( 'checkbox' ) )){
 				$description .= $docs_link;
