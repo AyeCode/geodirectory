@@ -10,6 +10,8 @@ Category ID settings column too wide - FIXED
 GD > Listings widget now used Archive item page template - FIXED
 CPT custom fields settings show unused save button - FIXED
 Default location setting missing the "Set address on map" button - FIXED
+Lan/Lon HTML5 number inputs can show comma instead of decimal depending on browser language - FIXED
+submit_ip is varchar(20) which will not support IPv6 address - FIXED
 
 v2.0.0.0-beta
 Initial beta release - INFO

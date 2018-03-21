@@ -877,7 +877,7 @@ class GeoDir_Admin_Install {
 		$columns['link_business'] = "link_business varchar(10) NULL DEFAULT NULL";
 		$columns['is_featured'] = "is_featured tinyint(1) NOT NULL DEFAULT '0'";
 		$columns['featured_image'] = "featured_image varchar( 254 ) NULL DEFAULT NULL";
-		$columns['submit_ip'] = "submit_ip varchar(20) NULL DEFAULT NULL";
+		$columns['submit_ip'] = "submit_ip varchar(100) NULL DEFAULT NULL";
 		$columns['overall_rating'] = "overall_rating float(11) DEFAULT '0'";
 		$columns['rating_count'] = "rating_count int(11) DEFAULT '0'";
 

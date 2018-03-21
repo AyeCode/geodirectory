@@ -440,7 +440,8 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'default_location_latitude',
 					'type' => 'number',
 					'custom_attributes' => array(
-						'min'           => 'any',
+						'min'           => '-90',
+						'max'           => '90',
 						'step'          => 'any',
 					),
 					'desc_tip' => true,
@@ -454,7 +455,8 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'default_location_longitude',
 					'type' => 'number',
 					'custom_attributes' => array(
-						'min'           => 'any',
+						'min'           => '-180',
+						'max'           => '180',
 						'step'          => 'any',
 					),
 					'desc_tip' => true,

@@ -290,6 +290,7 @@ class GeoDir_Admin_Settings {
 								class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
 								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 								<?php echo implode( ' ', $custom_attributes ); ?>
+								<?php if($value['type']=='number'){echo "lang='EN'";} // HTML5 number input can change number format depending on browser language, we don't want that ?>
 								/> <?php echo $description; ?>
 						</td>
 					</tr><?php
