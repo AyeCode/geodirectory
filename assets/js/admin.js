@@ -916,10 +916,71 @@ jQuery(function($) {
 					$this.trigger('change.select2');
 				}
             });
+			// Ajax user search
+			$(':input.geodir-user-search').filter(':not(.enhanced)').each(function() {
+				var select2_args = {
+					allowClear: $(this).data('allow_clear') ? true : false,
+					placeholder: $(this).data('placeholder'),
+					minimumInputLength: $(this).data('min_input_length') ? $(this).data('min_input_length') : '1',
+					escapeMarkup: function(m) {
+						return m;
+					},
+					ajax: {
+						url: geodir_params.ajax_url,
+						dataType: 'json',
+						delay: 1000,
+						data: function(params) {
+							return {
+								term: params.term,
+								action: 'geodir_json_search_users',
+								security: geodir_params.search_users_nonce,
+								exclude: $(this).data('exclude')
+							};
+						},
+						processResults: function(data) {
+							var terms = [];
+							if (data) {
+								$.each(data, function(id, text) {
+									terms.push({
+										id: id,
+										text: text
+									});
+								});
+							}
+							return {
+								results: terms
+							};
+						},
+						cache: true
+					}
+				};
+				select2_args = $.extend(select2_args, geodirSelect2FormatString());
+				var $select2 = $(this).select2(select2_args);
+				$select2.addClass('enhanced');
+				$select2.data('select2').$container.addClass('gd-select2-container');
+				$select2.data('select2').$dropdown.addClass('gd-select2-container');
+				if ($(this).data('sortable')) {
+					var $select = $(this);
+					var $list = $(this).next('.select2-container').find('ul.select2-selection__rendered');
+					$list.sortable({
+						placeholder: 'ui-state-highlight select2-selection__choice',
+						forcePlaceholderSize: true,
+						items: 'li:not(.select2-search__field)',
+						tolerance: 'pointer',
+						stop: function() {
+							$($list.find('.select2-selection__choice').get().reverse()).each(function() {
+								var id = $(this).data('data').id;
+								var option = $select.find('option[value="' + id + '"]')[0];
+								$select.prepend(option);
+							});
+						}
+					});
+				}
+			});
         }).trigger('geodir-select-init');
         $('html').on('click', function(event) {
             if (this === event.target) {
-                $('.geodir-select').filter('.select2-hidden-accessible').select2('close');
+                $('.geodir-select, :input.geodir-user-search').filter('.select2-hidden-accessible').select2('close');
             }
         });
     } catch (err) {

@@ -290,26 +290,21 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			echo '</div>';
 		}
 		
-		/**
-		 * Prints post owner meta box content.
-		 *
-		 * @since 2.0.0
-		 * @package GeoDirectory
-		 * @global object $post The post object.
-		 * @global int $user_ID The user ID.
-		 */
 		public static function owner_meta_box() {
 			global $post, $user_ID;
+			$curent_user_id = empty($post->ID) ? $user_ID : $post->post_author;
+			$user = get_user_by( 'id', $curent_user_id );
+			/* translators: 1: user display name 2: user ID 3: user email */
+			$curent_user_name	= sprintf(
+				esc_html__( '%1$s (#%2$s &ndash; %3$s)', 'geodirectory' ),
+				$user->display_name,
+				absint( $user->ID ),
+				$user->user_email
+			);
 			?>
-			<label class="screen-reader-text" for="post_author_override"><?php _e('Author'); ?></label>
+			<label class="screen-reader-text" for="post_author_override"><?php _e('User', 'geodirectory'); ?></label>
+			<select class="geodir-user-search" name="post_author_override" id="post_author_override" data-placeholder="<?php esc_attr_e( 'Search for a user&hellip;', 'geodirectory' ); ?>" data-allow_clear="true"><option value="<?php echo esc_attr( $curent_user_id ); ?>" selected="selected"><?php echo $curent_user_name; ?><option></select>
 			<?php
-				wp_dropdown_users( array(
-					'who' => '',
-					'name' => 'post_author_override',
-					'selected' => empty($post->ID) ? $user_ID : $post->post_author,
-					'include_selected' => true,
-					'show' => 'display_name_with_login',
-				) );
 		}
 
 		/**

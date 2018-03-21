@@ -55,6 +55,7 @@ class GeoDir_AJAX {
 			'save_api_key'			=> false,
 			'bestof'			=> true,
 			'cpt_categories' => true,
+			'json_search_users' => false,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -636,6 +637,117 @@ class GeoDir_AJAX {
 		}
 	}
 	
+	/**
+	 * Search for customers and return json.
+	 */
+	public static function json_search_users() {
+		ob_start();
+
+		check_ajax_referer( 'search-users', 'security' );
+
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			wp_die( -1 );
+		}
+
+		$term    = geodir_clean( stripslashes( $_GET['term'] ) );
+		$exclude = array();
+		$limit   = '';
+
+		if ( empty( $term ) ) {
+			wp_die();
+		}
+
+		$user_ids = array();
+		// Search by ID.
+		if ( is_numeric( $term ) ) {
+			$user = get_user_by( 'id', intval( $term ) );
+
+			// Customer does not exists.
+			if ( ! empty( $user ) ) {
+				$user_ids = array( $user->ID );
+			}
+		}
+
+		if ( empty( $user_ids ) ) {
+			if ( 3 > strlen( $term ) ) {
+				$limit = 20;
+			}
+			$user_ids = GeoDir_AJAX::search_users( $term, $limit );
+		}
+
+		$exclude_ids = ! empty( $_GET['exclude'] ) && is_array( $_GET['exclude'] ) ? $_GET['exclude'] : array();
+
+		$found_users = array();
+		if ( ! empty( $user_ids ) ) {
+			foreach ( $user_ids as $user_id ) {
+				$user = get_user_by( 'id', $user_id );
+				if ( empty( $user ) ) {
+					continue;
+				}
+				if ( ! empty( $exclude_ids ) && in_array( $user_id, $exclude_ids ) ) {
+					continue;
+				}
+
+				/* translators: 1: user display name 2: user ID 3: user email */
+				$found_users[ $user_id ] = wp_sprintf(
+					esc_html__( '%1$s (#%2$s &ndash; %3$s)', 'geodirectory' ),
+					$user->display_name,
+					absint( $user->ID ),
+					$user->user_email
+				);
+			}
+		}
+
+		wp_send_json( apply_filters( 'geodir_json_search_found_users', $found_users ) );
+	}
+
+	/**
+	 * Search users and return user IDs.
+	 *
+	 * @param  string     $term
+	 * @param  int|string $limit
+	 *
+	 * @return array
+	 */
+	public static function search_users( $term, $limit = '' ) {
+		$results = apply_filters( 'geodir_user_pre_search_customers', false, $term, $limit );
+		if ( is_array( $results ) ) {
+			return $results;
+		}
+
+		$main_query = new WP_User_Query( apply_filters( 'geodir_user_search_users', array(
+			'search'         => '*' . esc_attr( $term ) . '*',
+			'search_columns' => array( 'user_login', 'user_url', 'user_email', 'user_nicename', 'display_name' ),
+			'fields'         => 'ID',
+			'number'         => $limit,
+		), $term, $limit, 'main_query' ) );
+
+		$meta_query = new WP_User_Query( apply_filters( 'geodir_user_search_users', array(
+			'fields'         => 'ID',
+			'number'         => $limit,
+			'meta_query'     => array(
+				'relation' => 'OR',
+				array(
+					'key'     => 'first_name',
+					'value'   => $term,
+					'compare' => 'LIKE',
+				),
+				array(
+					'key'     => 'last_name',
+					'value'   => $term,
+					'compare' => 'LIKE',
+				),
+			),
+		), $term, $limit, 'meta_query' ) );
+
+		$results = wp_parse_id_list( array_merge( (array) $main_query->get_results(), (array) $meta_query->get_results() ) );
+
+		if ( $limit && count( $results ) > $limit ) {
+			$results = array_slice( $results, 0, $limit );
+		}
+
+		return $results;
+	}	
 }
 
 
