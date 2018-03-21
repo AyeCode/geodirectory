@@ -1104,6 +1104,36 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
+			// Post Badge
+			$custom_fields['post_badge'] = array(
+                'field_type'  => 'post_badge',
+                'class'       => 'gd-post-badge',
+                'icon'        => 'fa fa-certificate',
+                'name'        => __( 'Post Badge', 'geodirectory' ),
+                'description' => __( 'Adds a badge like Sale, New, Featured etc on the listing image.', 'geodirectory' ),
+                'defaults'    => array(
+	                'data_type'          => 'TEXT',
+	                'admin_title'        => 'Post Badge',
+	                'frontend_title'     => 'Post Badge',
+	                'frontend_desc'      => '',
+	                'htmlvar_name'       => 'post_badge',
+	                'is_active'          => true,
+	                'for_admin_use'      => false,
+	                'default_value'      => '',
+	                'show_in'            => '[listing]',
+	                'is_required'        => false,
+	                'option_values'      => '',
+	                'validation_pattern' => '',
+	                'validation_msg'     => '',
+	                'required_msg'       => '',
+	                'field_icon'         => 'fa fa-certificate',
+	                'css_class'          => '',
+	                'cat_sort'           => false,
+	                'cat_filter'         => false
+                )
+
+			);
+
 
 			/**
 			 * @see `geodir_custom_fields`

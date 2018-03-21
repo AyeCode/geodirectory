@@ -375,4 +375,8 @@ function gd_toggle_switch_display(){
     });
 }
 
-
+function gd_post_badge_changed(el) {
+    var type;
+	type = jQuery(el).val();
+	console.log(type);
+}
