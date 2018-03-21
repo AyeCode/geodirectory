@@ -12,6 +12,7 @@ CPT custom fields settings show unused save button - FIXED
 Default location setting missing the "Set address on map" button - FIXED
 Lan/Lon HTML5 number inputs can show comma instead of decimal depending on browser language - FIXED
 submit_ip is varchar(20) which will not support IPv6 address - FIXED
+Tab description does not respect non-HTML line breaks - FIXED
 
 v2.0.0.0-beta
 Initial beta release - INFO

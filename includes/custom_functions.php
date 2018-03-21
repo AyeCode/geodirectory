@@ -1244,12 +1244,12 @@ function geodir_show_detail_page_tabs() {
 								do_action( 'geodir_before_description_on_listing_detail' );
 								if ( geodir_is_page( 'detail' ) ) {
 									//the_content();
-									echo stripslashes( $post->post_content );
+									echo wpautop(stripslashes( $post->post_content ));
 									//print_r($post);
 								} else {
 									/** This action is documented in geodirectory_template_actions.php */
 									//echo apply_filters( 'the_content', stripslashes( $post->post_desc ) );
-									echo stripslashes( $post->post_content );
+									echo wpautop(stripslashes( $post->post_content ));
 								}
 
 								/**
