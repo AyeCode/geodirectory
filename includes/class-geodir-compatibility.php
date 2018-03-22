@@ -50,6 +50,27 @@ class GeoDir_Compatibility {
 	}
 
 	/**
+	 * Theme single template compatibility check.
+	 *
+	 * @param string $theme
+	 *
+	 * @return mixed|string
+	 */
+	public static function theme_single_template($theme = ''){
+
+
+		if(!$theme){
+			$theme = get_template();
+		}
+
+		$themes = array(
+			'twentyseventeen'   => 'single.php',
+		);
+
+		return isset($themes[$theme]) ? $themes[$theme] : '';
+	}
+
+	/**
 	 * Fix details page title, primer theme breaks it.
 	 */
 	public static function for_later_checks(){

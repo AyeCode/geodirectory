@@ -1244,12 +1244,12 @@ function geodir_show_detail_page_tabs() {
 								do_action( 'geodir_before_description_on_listing_detail' );
 								if ( geodir_is_page( 'detail' ) ) {
 									//the_content();
-									echo stripslashes( $post->post_content );
+									echo wpautop(stripslashes( $post->post_content ));
 									//print_r($post);
 								} else {
 									/** This action is documented in geodirectory_template_actions.php */
 									//echo apply_filters( 'the_content', stripslashes( $post->post_desc ) );
-									echo stripslashes( $post->post_content );
+									echo wpautop(stripslashes( $post->post_content ));
 								}
 
 								/**
@@ -1345,7 +1345,7 @@ function geodir_show_detail_page_tabs() {
 			do_action( 'geodir_after_tab_list' );
 			?>
 			<?php if ( ! $tab_list ){ ?></dl><?php } ?>
-		<ul class="geodir-tabs-content entry-content <?php if ( $tab_list ) { ?>geodir-tabs-list<?php } ?>"
+		<ul class="geodir-tabs-content geodir-entry-content <?php if ( $tab_list ) { ?>geodir-tabs-list<?php } ?>"
 		    style="position:relative;">
 			<?php
 			foreach ( $arr_detail_page_tabs as $detail_page_tab ) {

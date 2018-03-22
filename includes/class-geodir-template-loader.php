@@ -69,18 +69,38 @@ class GeoDir_Template_Loader {
     private static function get_template_loader_default_file() {
         global $wp_query;
         $default_file = '';
-        if ( geodir_is_singular() ) { // @todo we should make it use the "GD Details template" page template.
-            //$default_file = 'single-listing.php';
-            $default_file = 'page.php';
-            $page_id = geodir_details_page_id();
-            if($page_id &&  $template = get_page_template_slug( $page_id )){
-                if(is_page_template( $template )){
-                    $default_file = $template;
+        if ( geodir_is_singular() ) {
+
+
+            $single_template = geodir_get_option('details_page_template');
+            //echo '###'.$single_template.'###';
+            if($single_template && locate_template( $single_template )){
+                $default_file = $single_template;
+            }else{
+                //$default_file = 'single-listing.php';
+                //$default_file = 'page.php';
+                //$default_file = 'single.php';
+                $page_id = geodir_details_page_id();
+                if($page_id &&  $template = get_page_template_slug( $page_id )){
+                    if(is_page_template( $template )){
+                        $default_file = $template;
+                    }
+                }else{
+                    // check if we have a theme compat setting.
+                    //$default_file = 'page.php';
+                    if($theme_template = GeoDir_Compatibility::theme_single_template()){
+                        $default_file = $theme_template;
+                    }else{
+                         $default_file = 'page.php'; //  fallback to page.php
+                    }
                 }
+                //echo '###'.$default_file;
+                //self::setup_singular_page();
+                //$default_file = 'index.php';
             }
-            //echo '###'.$default_file;
-            //self::setup_singular_page();
-            //$default_file = 'index.php';
+
+
+            // setup the page content
             add_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
         } elseif ( geodir_is_taxonomy() ) {// @todo we should make it use the "GD Archive template" page template.
             $default_file = 'page.php'; // i think index.php works better here, more likely to have paging

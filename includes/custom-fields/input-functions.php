@@ -1141,9 +1141,12 @@ function geodir_cfi_address($html,$cf){
                     <?php echo PLACE_ADDRESS_LAT; ?>
                     <?php if ($is_required) echo '<span>*</span>'; ?>
                 </label>
-                <input type="text" field_type="<?php echo $type; ?>" name="<?php echo 'latitude'; ?>"
+                <input type="number" field_type="<?php echo $type; ?>" name="<?php echo 'latitude'; ?>"
                        id="<?php echo $prefix . 'latitude'; ?>" class="geodir_textfield"
-                       value="<?php echo esc_attr(stripslashes($lat)); ?>" size="25"/>
+                       value="<?php echo esc_attr(stripslashes($lat)); ?>" size="25"
+                       min="-90" max="90" step="any" lang='EN'
+
+                />
                 <span class="geodir_message_note"><?php echo GET_LATITUDE_MSG; ?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
@@ -1156,9 +1159,11 @@ function geodir_cfi_address($html,$cf){
                     <?php echo PLACE_ADDRESS_LNG; ?>
                     <?php if ($is_required) echo '<span>*</span>'; ?>
                 </label>
-                <input type="text" field_type="<?php echo $type; ?>" name="<?php echo 'longitude'; ?>"
+                <input type="number" field_type="<?php echo $type; ?>" name="<?php echo 'longitude'; ?>"
                        id="<?php echo $prefix . 'longitude'; ?>" class="geodir_textfield"
-                       value="<?php echo esc_attr(stripslashes($lng)); ?>" size="25"/>
+                       value="<?php echo esc_attr(stripslashes($lng)); ?>" size="25"
+                       min="-180" max="180" step="any" lang='EN'
+                />
                 <span class="geodir_message_note"><?php echo GET_LOGNGITUDE_MSG; ?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
