@@ -210,7 +210,7 @@ class GeoDir_Frontend_Scripts {
 			),
 			'geodir-leaflet-geo' => array(
 				'src'     => geodir_plugin_url() . '/assets/leaflet/osm.geocode' . $suffix . '.js',
-				'deps'    => array('geodir-leaflet-script'),
+				'deps'    => array('geodir-leaflet'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-o-overlappingmarker' => array(

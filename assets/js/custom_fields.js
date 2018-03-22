@@ -1,19 +1,16 @@
-jQuery(document).ready(function () {
-
-
+jQuery(document).ready(function() {
     //fire the toggle displays on advanced search show/hide
-    jQuery(".gd-advanced-toggle").click(function () {
-        setTimeout(function(){
+    jQuery(".gd-advanced-toggle").click(function() {
+        setTimeout(function() {
             gd_toggle_switch_display();
         }, 100);
-
     });
 
-
-
-    jQuery("#gd-form-builder-tab ul li a").click(function () {
+    jQuery("#gd-form-builder-tab ul li a").click(function() {
         console.log(1);
-        if(!jQuery(this).attr('id')){return;}
+        if (!jQuery(this).attr('id')) {
+            return;
+        }
         console.log(2);
         //var type = jQuery(this).attr('id').replace('gd-', '');
         var type = jQuery(this).data("field-type");
@@ -26,15 +23,12 @@ jQuery(document).ready(function () {
         console.log(3);
         console.log(manage_field_type);
         if (manage_field_type == 'general' || manage_field_type == 'cpt-sorting') {
-
-            if(manage_field_type == 'general'){
+            if (manage_field_type == 'general') {
                 var action = "geodir_get_custom_field_form";
-            }else if(manage_field_type == 'cpt-sorting'){
+            } else if (manage_field_type == 'cpt-sorting') {
                 var action = "geodir_get_custom_field_sorting_form";
             }
-
-
-            jQuery.get(ajaxurl + '?action='+action, {
+            jQuery.get(ajaxurl + '?action=' + action, {
                 field_type: type,
                 field_type_key: type_key,
                 listing_type: post_type,
@@ -43,30 +37,30 @@ jQuery(document).ready(function () {
                 manage_field_type: manage_field_type,
                 custom_type: custom_type,
                 security: gd_nonce
-            }, function (data) {
-                
-                if(jQuery('.field_row_main ul.core li').length > 0){
+            }, function(data) {
+                if (jQuery('.field_row_main ul.core li').length > 0) {
                     jQuery('.field_row_main ul.core').append(data);
-                }else{
+                } else {
                     jQuery('.field_row_main ul.core').html(data);
                 }
                 jQuery('#licontainer_' + id).find('#sort_order').val(parseInt(jQuery('#licontainer_' + id).index()) + 1);
-
                 // int the new select2 boxes
                 jQuery("select.geodir-select").trigger('geodir-select-init');
                 jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
-
-                show_hide('field_frm'+id);
+                show_hide('field_frm' + id);
                 jQuery('html, body').animate({
-                    scrollTop: jQuery("#licontainer_"+id).offset().top
+                    scrollTop: jQuery("#licontainer_" + id).offset().top
                 }, 1000);
-
                 // init new tooltips
                 gd_init_tooltips();
-
                 // init the toggle displays
                 gd_toggle_switch_display();
-
+				// Bind event
+				if (manage_field_type == 'general') {
+					jQuery(document.body).trigger('geodir_on_get_custom_field', [{id: id,field: data}]);
+				} else if (manage_field_type == 'cpt-sorting') {
+					jQuery(document.body).trigger('geodir_on_sort_custom_field', [{id: id,field: data}]);
+				}
             });
             if (manage_field_type == 'sorting_options') {
                 jQuery(this).closest('li').hide();
@@ -78,28 +72,36 @@ jQuery(document).ready(function () {
         cursor: 'move',
         placeholder: "ui-state-highlight",
         cancel: "input,label,select",
-        update: function () {
-           // var manage_field_type = jQuery(this).closest('#geodir-selected-fields').find(".manage_field_type").val();
+        update: function() {
+            // var manage_field_type = jQuery(this).closest('#geodir-selected-fields').find(".manage_field_type").val();
             var manage_field_type = jQuery(".manage_field_type").val();
-
             //var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
             var order = jQuery(this).sortable("serialize");
-
-
-
             // update the sort values on drag/drop
-            if(manage_field_type == 'general' ){
+            if (manage_field_type == 'general') {
                 gd_order_custom_fields(order);
-            }else if(manage_field_type == 'cpt-sorting'){
+            } else if (manage_field_type == 'cpt-sorting') {
                 gd_order_custom_sort_fields(order);
             }
         }
     });
-
     //gd_toggle_display();
     gd_toggle_switch_display();
-
-
+	if (jQuery('#gd-form-builder-tab #badge_type').length) {
+		jQuery('#gd-form-builder-tab #badge_type').each(function(){
+			jQuery(this).trigger('change');
+		});
+	}
+	jQuery('body').bind('geodir_on_save_custom_field', function(e, data) {
+		if (data.id && jQuery('#licontainer_' + data.id).find('#badge_type').length) {
+			jQuery(jQuery('#licontainer_' + data.id).find('#badge_type')).trigger('change');
+		}
+	});
+	jQuery('body').bind('geodir_on_get_custom_field', function(e, data) {
+		if (data.id && jQuery('#licontainer_' + data.id).find('#badge_type').length) {
+			jQuery(jQuery('#licontainer_' + data.id).find('#badge_type')).trigger('change');
+		}
+	});
 });
 
 function gd_data_type_changed(obj, cont) {
@@ -108,15 +110,12 @@ function gd_data_type_changed(obj, cont) {
         if (jQuery(obj).val() == 'FLOAT') {
             jQuery('#licontainer_' + cont).find('.decimal-point-wrapper').show();
         }
-
         if (jQuery(obj).val() == 'FLOAT' || jQuery(obj).val() == 'INT') {
             jQuery('#licontainer_' + cont).find('.gdcf-price-extra-set').show();
-
-            if(jQuery('#licontainer_' + cont).find(".gdcf-price-extra-set input[name='extra[is_price]']:checked").val()=='1'){
+            if (jQuery('#licontainer_' + cont).find(".gdcf-price-extra-set input[name='extra[is_price]']:checked").val() == '1') {
                 jQuery('#licontainer_' + cont).find('.gdcf-price-extra').show();
             }
-
-        }else{
+        } else {
             jQuery('#licontainer_' + cont).find('.gdcf-price-extra-set').hide();
             jQuery('#licontainer_' + cont).find('.gdcf-price-extra').hide();
         }
@@ -124,67 +123,47 @@ function gd_data_type_changed(obj, cont) {
 }
 
 function gd_save_custom_field(id) {
-
-    
     // we will add a html_var from the title input during validation
     if (jQuery('#licontainer_' + id + ' #frontend_title').length > 0) {
-
-        var frontend_title= jQuery('#licontainer_' + id + ' #frontend_title').val();
-
+        var frontend_title = jQuery('#licontainer_' + id + ' #frontend_title').val();
         if (frontend_title == '') {
-
             alert(geodir_params.custom_field_not_blank_var);
-
             return false;
         }
-
     }
-
     var fieldrequest = jQuery('#licontainer_' + id).find("select, textarea, input").serialize();
     var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest;
-
-
     jQuery.ajax({
         'url': ajaxurl + '?action=geodir_save_custom_field',
         'type': 'POST',
         'data': request_data,
-        'success': function (result) {
-
+        'success': function(result) {
             var res = result;
-            if(res.success == false){
+            if (res.success == false) {
                 alert(res.data);
-            }else {
+            } else {
                 jQuery('#licontainer_' + id).replaceWith(jQuery.trim(result));
-
                 var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=custom_fields';
-
                 jQuery.get(ajaxurl + '?action=geodir_ajax_action&create_field=true', order,
-                    function (theResponse) {
+                    function(theResponse) {
                         //alert(theResponse);
                     });
-
                 jQuery('.field_frm').hide();
+				jQuery(document.body).trigger('geodir_on_save_custom_field', [{id: id,field: res}]);
             }
-
             // int the new select2 boxes
             jQuery("select.geodir-select").trigger('geodir-select-init');
             jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
-
-
         }
     });
-
-
 }
-
 
 function show_hide(id) {
     jQuery('#' + id).toggle();
 }
 
-function show_hide_radio(id,sh,cl) {
-
-    setTimeout(function(){
+function show_hide_radio(id, sh, cl) {
+    setTimeout(function() {
         gd_toggle_switch_display();
     }, 100);
     // if(sh=='hide'){
@@ -192,37 +171,30 @@ function show_hide_radio(id,sh,cl) {
     // }else{
     //     jQuery( id ).closest( '.widefat' ).find('.'+cl).show('fast');
     // }
-
 }
 
-
 function gd_delete_custom_field(id, nonce) {
-
     var confarmation = confirm(geodir_params.custom_field_delete);
-
     if (confarmation == true) {
-
         // if its a new field not yet added then we just dump it, no need to run ajax
         if (id.substring(0, 3) == "new") {
             jQuery('#licontainer_' + id).remove();
-        }else{
+        } else {
             jQuery.get(ajaxurl + '?action=geodir_delete_custom_field', {
                     field_id: id,
                     field_ins_upd: 'delete',
                     security: nonce
                 },
-                function (data) {
+                function(data) {
                     var res = data;
-                    if(!res.success){
+                    if (!res.success) {
                         alert(res.data);
-                    }else{
+                    } else {
                         jQuery('#licontainer_' + id).remove();
                     }
                 });
         }
-
     }
-
 }
 
 /**
@@ -232,13 +204,13 @@ function gd_delete_custom_field(id, nonce) {
  */
 function gd_order_custom_fields(order) {
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
-    order = order + "&security="+gd_nonce;
+    order = order + "&security=" + gd_nonce;
     jQuery.ajax({
         'url': ajaxurl + '?action=geodir_order_custom_fields',
         'type': 'POST',
         'data': order,
-        'success': function (result) {
-            if(result.success==false){
+        'success': function(result) {
+            if (result.success == false) {
                 alert(result.data);
             }
         }
@@ -252,131 +224,108 @@ function gd_order_custom_fields(order) {
  */
 function gd_order_custom_sort_fields(order) {
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
-    order = order + "&security="+gd_nonce;
+    order = order + "&security=" + gd_nonce;
     jQuery.ajax({
         'url': ajaxurl + '?action=geodir_order_custom_sort_fields',
         'type': 'POST',
         'data': order,
-        'success': function (result) {
-            if(result.success==false){
+        'success': function(result) {
+            if (result.success == false) {
                 alert(result.data);
             }
         }
     });
 }
 
-
 /* ================== CUSTOM SORT FIELDS =================== */
-
 function gd_save_sort_field(id) {
-
     var fieldrequest = jQuery('#licontainer_' + id).find("select, textarea, input").serialize();
     var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest;
-
     jQuery.ajax({
         'url': ajaxurl + '?action=geodir_save_custom_sort_field',
         'type': 'POST',
         'data': request_data,
-        'success': function (result) {
-
+        'success': function(result) {
             jQuery('#licontainer_' + id).replaceWith(jQuery.trim(result));
-
             var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=sorting_options';
-
             // check and set the default
             // jQuery.get(ajaxurl + '?action=geodir_ajax_action&create_field=true', order,
             //     function (theResponse) {
-
-                    jQuery('#licontainer_' + id).find('input[name="is_default"]').each(function () {
-                        if (jQuery(this).attr('checked') == 'checked') {
-                            jQuery('.field_row_main').find('input[name="is_default"]').not(this).attr('checked', false);
-                        }
-                    });
-
-
-               // });
-
+            jQuery('#licontainer_' + id).find('input[name="is_default"]').each(function() {
+                if (jQuery(this).attr('checked') == 'checked') {
+                    jQuery('.field_row_main').find('input[name="is_default"]').not(this).attr('checked', false);
+                }
+            });
+            // });
             jQuery('.field_frm').hide();
-
-
         }
     });
-
 }
 
-
 function gd_delete_sort_field(id, nonce, obj) {
-
     var confarmation = confirm(geodir_params.custom_field_delete);
-
     if (confarmation == true) {
         // if its a new field not yet added then we just dump it, no need to run ajax
         if (id.substring(0, 3) == "new") {
             jQuery('#licontainer_' + id).remove();
-        }else {
-
+        } else {
             jQuery.get(ajaxurl + '?action=geodir_delete_custom_sort_field', {
                     field_id: id,
                     _wpnonce: nonce
                 },
-                function (data) {
+                function(data) {
                     jQuery('#licontainer_' + id).remove();
-
                     var field_type = jQuery(obj).closest('li').find('#field_type').val();
                     var htmlvar_name = jQuery(obj).closest('li').find('#htmlvar_name').val();
-
                     jQuery('#gd-' + field_type + '-_-' + htmlvar_name).closest('li').show();
-
                 });
         }
-
     }
-
 }
-
-
 
 /**
  * Hides selected fields if they are only supposed to show if a switch field is set to true.
  */
-function gd_toggle_switch_display(){
-    jQuery("[data-gdat-display-switch-set]").each(function(){
-
-
+function gd_toggle_switch_display() {
+    jQuery("[data-gdat-display-switch-set]").each(function() {
         var toggleClass = jQuery(this).data('gdat-display-switch-set');
         var switchValue = jQuery(this).find('input:checked').val();
-
-        jQuery(this).parent().find('.'+toggleClass).each(function(){
-
-            
+        jQuery(this).parent().find('.' + toggleClass).each(function() {
             // if advanced item
-            if(jQuery(this).hasClass('gd-advanced-setting')){
-
+            if (jQuery(this).hasClass('gd-advanced-setting')) {
                 // if visible
-                if(jQuery(this).hasClass('gda-show') && switchValue == 1){
+                if (jQuery(this).hasClass('gda-show') && switchValue == 1) {
                     jQuery(this).show();
-                }else{
+                } else {
                     jQuery(this).hide();
                 }
-            }else{ // its not advanced but we still need to check if its should be shown
+            } else { // its not advanced but we still need to check if its should be shown
                 // if visible
-                if(switchValue == 1){
+                if (switchValue == 1) {
                     jQuery(this).show();
-                }else{
+                } else {
                     jQuery(this).hide();
                 }
             }
-
-
         });
-
-
-
     });
 }
 
-function gd_post_badge_changed(el) {
-    var type;
-	type = jQuery(el).val();
-	console.log(type);
+function gd_post_badge_changed(el, cont) {
+    var type = jQuery(el).val(),
+        $wrap = jQuery('#licontainer_' + cont);
+    jQuery('.gd-extra-post-badge', $wrap).hide();
+	jQuery('.gd-extra-bt-' + type, $wrap).show();
+	jQuery('#badge_condition', $wrap).trigger('change');
+}
+
+function gd_badge_condition_changed(el, cont) {
+    var val = jQuery(el).val(),
+        $wrap = jQuery('#licontainer_' + cont),
+		$row = jQuery('#badge_search', $wrap).closest('.gd-extra-post-badge');
+	if (jQuery('#badge_type', $wrap).val() == 'custom' && (val != 'is_empty' && val != 'is_not_empty')) {
+		$row.show();
+	} else {
+		$row.hide();
+	}
 }

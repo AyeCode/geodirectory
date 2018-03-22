@@ -2083,3 +2083,229 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
     return $html;
 }
 add_filter('geodir_custom_field_output_business_hours','geodir_cf_business_hours',10,4);
+
+/**
+ * Filter the post badge custom field output to show a link.
+ *
+ * @param string $html The html to be output.
+ * @param string $location The location name of the output location.
+ * @param object $cf The custom field object info.
+ *
+ * @since 2.0.0
+ * @return string The html to output.
+ */
+function geodir_cf_post_badge( $html, $location, $cf, $p = '' ) {
+    // check we have the post value
+    if ( is_numeric( $p ) ) {
+		$gd_post = geodir_get_post_info( $p );
+	} else { 
+		global $gd_post;
+	}
+
+    if ( ! is_array( $cf ) && $cf != '' ) {
+        $cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
+        if ( empty( $cf ) ) {
+			return NULL;
+		}
+    }
+
+    // Block demo content
+    if ( geodir_is_block_demo() ){
+        $gd_post->{$cf['htmlvar_name']} = '1';
+    }
+
+    $html_var = $cf['htmlvar_name'];
+
+    // Check if there is a location specific filter.
+    if ( has_filter( "geodir_custom_field_output_post_badge_loc_{$location}" ) ) {
+        /**
+         * Filter the business hours html by location.
+         *
+         * @param string $html The html to filter.
+         * @param array $cf The custom field array.
+         * @since 2.0.0
+         */
+        $html = apply_filters( "geodir_custom_field_output_post_badge_loc_{$location}", $html, $cf );
+    }
+
+    // Check if there is a custom field specific filter.
+    if ( has_filter( "geodir_custom_field_output_post_badge_var_{$html_var}" ) ) {
+        /**
+         * Filter the business hours html by individual custom field.
+         *
+         * @param string $html The html to filter.
+         * @param string $location The location to output the html.
+         * @param array $cf The custom field array.
+         * @since 2.0.0
+         */
+        $html = apply_filters( "geodir_custom_field_output_post_badge_var_{$html_var}", $html, $location, $cf );
+    }
+
+    // Check if there is a custom field key specific filter.
+    if( has_filter( "geodir_custom_field_output_post_badge_key_{$cf['field_type_key']}" ) ) {
+        /**
+         * Filter the business hours html by field type key.
+         *
+         * @param string $html The html to filter.
+         * @param string $location The location to output the html.
+         * @param array $cf The custom field array.
+         * @since 2.0.0
+         */
+        $html = apply_filters( "geodir_custom_field_output_post_badge_key_{$cf['field_type_key']}", $html, $location, $cf );
+    }
+
+    // If not html then we run the standard output.
+    if ( empty( $html ) ) {
+        $field_title	= __( $cf['frontend_title'], 'geodirectory' );
+		$extra_fields 	= !empty( $cf['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
+		$badge_type 	= ! empty( $extra_fields['badge_type'] ) ? $extra_fields['badge_type'] : '';
+
+		if ( $badge_type ) {
+			$badge = '';
+			switch ( $badge_type ) {
+				case 'featured':
+					if ( ! empty( $gd_post->is_featured ) ) {
+						$badge = __( 'FEATURED', 'geodirectory' );
+					}
+					break;
+				case 'new':
+					$diff_days = ! empty( $extra_fields['diff_days'] ) && (int)$extra_fields['diff_days'] > 0 ? (int)$extra_fields['diff_days'] : 2;
+					$new_time	= strtotime( get_the_time( 'Y-m-d' ) ) + ( DAY_IN_SECONDS * $diff_days );
+					$now_time	= strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
+					if ( $new_time >= $now_time ) {
+						$badge = __( 'NEW', 'geodirectory' );
+					}
+					break;
+				case 'custom':
+					$match_field = ! empty( $extra_fields['badge_key'] ) ? $extra_fields['badge_key'] : '';
+					if ( ! empty( $match_field ) && ! empty( $extra_fields['badge_condition'] ) && isset( $gd_post->{$match_field} ) ) {
+						$search 		= ! empty( $extra_fields['badge_search'] ) ? $extra_fields['badge_search'] : '';
+						$match_value 	= trim( $gd_post->{$match_field} );
+						$match_found 	= false;
+						switch ( $extra_fields['badge_condition'] ) {
+							case 'is_equal':
+								$match_found = (bool)( $search != '' && $match_value == $search );
+								break;
+							case 'is_not_equal':
+								$match_found = (bool)( $search != '' && $match_value == $search );
+								break;
+							case 'is_greater_than':
+								$match_found = (bool)( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value > $search );
+								break;
+							case 'is_less_than':
+								$match_found = (bool)( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value < $search );
+								break;
+							case 'is_empty':
+								$match_found = (bool)( $match_value === '' || $match_value === false || is_null( $match_value ) );
+								break;
+							case 'is_not_empty':
+								$match_found = (bool)( $match_value !== '' && $match_value !== false && ! is_null( $match_value ) );
+								break;
+							case 'is_contains':
+								$match_found = (bool)( $search != '' && strpos( $match_value, $search ) !== false );
+								break;
+							case 'is_not_contains':
+								$match_found = (bool)( $search != '' && strpos( $match_value, $search ) === false );
+								break;
+						}
+						if ( $match_found ) {
+							$badge = $field_title;
+						}
+					}
+					break;
+				case 'manual':
+					if ( $gd_post->{$html_var} == '1' ) {
+						$badge = ! empty( $extra_fields['default_badge'] ) ? $extra_fields['default_badge'] : __( $cf['frontend_title'], 'geodirectory' );
+					}
+					break;
+			}
+			if ( ! empty( $badge ) ) {
+				$field_icon = geodir_field_icon_proccess($cf);
+                if (strpos($field_icon, 'http') !== false) {
+                    $field_icon_af = '';
+                } else if ($field_icon == '') {
+                    $field_icon_af = '';
+                } else {
+                    $field_icon_af = $field_icon;
+                    $field_icon = '';
+                }
+
+				$html = '<div class="geodir_post_meta gd-post-badge-meta ' . $cf['css_class'] . ' ' . $html_var . '" style="clear:both;">';
+				$html .= '<div class="gd-post-badge"><div class="gd-badge gd-badge-css gd-badge-rq  gd-badge-css-rq"><div class="gd-badge-sq1"></div><div class="gd-badge-sq2"></div><div class="gd-badge-css-text"><div class="gd-badge-text">' . $badge . '</div></div></div></div>'; // @todo yet to customize
+				$html .= '</div>';
+			}
+		}
+    }
+
+    return $html;
+}
+add_filter( 'geodir_custom_field_output_post_badge','geodir_cf_post_badge', 10, 4 );
+
+// @todo move style in css file
+function geodir_badge_style() {
+	?>
+<style>
+.gd-post-badge {
+	position: relative;
+	min-height: 100px;
+	border: solid 1px #f7f7f7;
+	display: block;
+	width: 100%;
+}
+.gd-badge {
+    position   : absolute;
+    box-sizing : border-box;
+    text-align : center;
+    z-index    : 10;
+}
+.gd-badge-css-rq{
+	color: #FFFFFF;
+	font-family: "Open Sans",sans-serif;
+	position:relative;
+	box-sizing: border-box;
+	position: absolute;
+	background-color: transparent;
+	width: 65px;
+	height: 65px;
+	overflow:hidden;
+	top: -4px;bottom: auto;left: auto;right: -4px;-ms-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); -webkit-transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg); transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);opacity: 1;
+}
+.gd-badge-css-rq div.gd-badge-sq1{
+	position: absolute;
+	z-index: 12;
+	top:0;
+	left:2px;
+	border-bottom: 4px solid orange;
+	border-left: 3px solid transparent;
+	width:10px;
+}
+.gd-badge-css-rq div.gd-badge-sq2{
+	position: absolute;
+	z-index: 12;
+	bottom:2px;
+	right:0px;
+	border-left: 4px solid orange;
+	border-bottom: 3px solid transparent;
+	height:10px;
+}
+.gd-badge-css-rq div.gd-badge-css-text{
+	background: orange;
+	font-size: 10px;
+	font-weight: bold;
+	line-height: 22px;
+	position: absolute;
+	text-align: center;
+	z-index: 14;
+	-webkit-transform: rotate(45deg);
+	-ms-transform: rotate(45deg);
+	transform: rotate(45deg);
+	top: 11px;
+	left: -7px;
+	width: 100px;
+	text-align: center;
+}
+
+	</style>
+	<?php
+}
+add_action( 'wp_footer', 'geodir_badge_style' );

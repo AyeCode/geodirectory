@@ -1,3 +1,7 @@
+v2.0.0.3-beta
+OSM add listing page JS error - FIXED
+Autozoom not working for single marker on the map - FIXED
+
 v2.0.0.2-beta
 Business Hours not working on map popup - FIXED
 Backend author filed should show all users not only authors - FIXED

@@ -906,6 +906,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		 * The post badge input setting.
 		 */
 		public static function post_badge_fields($output,$result_str,$cf,$field_info){
+			$custom_fields = self::badge_field_keys( $field_info->post_type );
 			$extra_fields = !empty($field_info->extra_fields) ? maybe_unserialize($field_info->extra_fields) : NULL;
 
 			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
@@ -913,6 +914,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			$badge_key = ! empty( $extra_fields['badge_key'] ) ? $extra_fields['badge_key'] : '';
 			$badge_condition = ! empty( $extra_fields['badge_condition'] ) ? $extra_fields['badge_condition'] : 'is_equal';
 			$badge_search = ! empty( $extra_fields['badge_search'] ) ? $extra_fields['badge_search'] : '';
+			$default_badge = ! empty( $extra_fields['default_badge'] ) ? $extra_fields['default_badge'] : '';
+			$diff_days = ! empty( $extra_fields['diff_days'] ) && (int)$extra_fields['diff_days'] > 0 ? (int)$extra_fields['diff_days'] : 2;
+			if ( empty( $default_badge ) ) {
+				if ( ! empty( $field_info->frontend_title ) ) {
+					$default_badge = $field_info->frontend_title;
+				} elseif ( ! empty( $cf['defaults']['frontend_title'] ) ) {
+					$default_badge = $cf['defaults']['frontend_title'];
+				}
+			}
 			ob_start();
 			?>
 			<li>
@@ -928,43 +938,90 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					</select>
 				</div>
 			</li>
-			<li>
+			<li class="gd-extra-post-badge gd-extra-bt-custom">
 				<label for="badge_key">
 					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title='<?php _e( 'Select the custom field key.', 'geodirectory' ); ?>'></span> <?php _e( 'Field Key:', 'geodirectory' ); ?>
 				</label>
 				<div class="gd-cf-input-wrap">
-					<select name="extra[badge_key]" id="badge_key"><?php // @todo list all cpt fields;?>
-						<option value="field1" <?php selected( 'field1', $badge_type ); ?>><?php _e( 'Field1', 'geodirectory' ); ?></option>
-						<option value="field2" <?php selected( 'field2', $badge_type ); ?>><?php _e( 'Field2', 'geodirectory' ); ?></option>
+					<select name="extra[badge_key]" id="badge_key">
+						<?php foreach ( $custom_fields as $value => $label ) { ?>
+						<option value="<?php echo esc_attr( $value ); ?>" <?php selected( $value, $badge_key ); ?>><?php echo $label; ?></option>
+						<?php } ?>
 					</select>
 				</div>
 			</li>
-			<li>
+			<li class="gd-extra-post-badge gd-extra-bt-custom">
 				<label for="badge_condition">
-					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title='<?php _e( 'Select the custom field key.', 'geodirectory' ); ?>'></span> <?php _e( 'Field Key:', 'geodirectory' ); ?>
+					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title='<?php _e( 'Select the custom field condition.', 'geodirectory' ); ?>'></span> <?php _e( 'Field condition:', 'geodirectory' ); ?>
 				</label>
 				<div class="gd-cf-input-wrap">
-					<select name="extra[badge_condition]" id="badge_key"><?php // @todo list all cpt fields;?>
+					<select name="extra[badge_condition]" id="badge_condition" onchange="javascript:gd_badge_condition_changed(this, '<?php echo $result_str; ?>');"><?php // @todo list all cpt fields;?>
 						<option value="is_equal" <?php selected( 'is_equal', $badge_condition ); ?>><?php _e( 'is equal', 'geodirectory' ); ?></option>
+						<option value="is_not_equal" <?php selected( 'is_not_equal', $badge_condition ); ?>><?php _e( 'is not equal', 'geodirectory' ); ?></option>
+						<option value="is_greater_than" <?php selected( 'is_greater_than', $badge_condition ); ?>><?php _e( 'is greater than', 'geodirectory' ); ?></option>
 						<option value="is_less_than" <?php selected( 'is_less_than', $badge_condition ); ?>><?php _e( 'is less than', 'geodirectory' ); ?></option>
-						<option value="is_more_than" <?php selected( 'is_more_than', $badge_condition ); ?>><?php _e( 'is more than', 'geodirectory' ); ?></option>
+						<option value="is_empty" <?php selected( 'is_empty', $badge_condition ); ?>><?php _e( 'is empty', 'geodirectory' ); ?></option>
 						<option value="is_not_empty" <?php selected( 'is_not_empty', $badge_condition ); ?>><?php _e( 'is not empty', 'geodirectory' ); ?></option>
 						<option value="is_contains" <?php selected( 'is_contains', $badge_condition ); ?>><?php _e( 'is contains', 'geodirectory' ); ?></option>
+						<option value="is_not_contains" <?php selected( 'is_not_contains', $badge_condition ); ?>><?php _e( 'is not contains', 'geodirectory' ); ?></option>
 					</select>
 				</div>
 			</li>
-			<li><label for="frontend_desc" class="gd-cf-tooltip-wrap">
-<?php _e( 'Contains text:', 'geodirectory' ); ?>
-</label>
-<div class="gd-cf-input-wrap">
-<input type="text" name="extra[badge_search]" id="badge_search" value="<?php echo esc_attr($badge_search); ?>"/>
-</div>
-</li>
+			<li class="gd-extra-post-badge">
+				<label for="badge_search" class="gd-cf-tooltip-wrap">
+					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title="<?php _e( 'Match this texr with field value to display post badge.', 'geodirectory' ); ?>">
+					</span>
+					<?php _e( 'Text to match:', 'geodirectory' ); ?>
+				</label>
+				<div class="gd-cf-input-wrap">
+					<input type="text" name="extra[badge_search]" id="badge_search" value="<?php echo esc_attr( $badge_search ); ?>"/>
+				</div>
+			</li>
+			<li class="gd-extra-post-badge gd-extra-bt-manual">
+				<label for="default_badge" class="gd-cf-tooltip-wrap">
+					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title="<?php _e( 'Badge to show on listing.', 'geodirectory' ); ?>">
+					</span>
+					<?php _e( 'Default Badge:', 'geodirectory' ); ?>
+				</label>
+				<div class="gd-cf-input-wrap">
+					<input type="text" name="extra[default_badge]" id="default_badge" value="<?php echo esc_attr( $default_badge ); ?>"/>
+				</div>
+			</li>
+			<li class="gd-extra-post-badge gd-extra-bt-new">
+				<label for="diff_days" class="gd-cf-tooltip-wrap">
+					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title="<?php _e( 'Show the "NEW" badge for posts that are newer than X days.', 'geodirectory' ); ?>">
+					</span>
+					<?php _e( 'New posts newer than days:', 'geodirectory' ); ?>
+				</label>
+				<div class="gd-cf-input-wrap">
+					<input class="medium-text" type="number" min="1" lang="EN" name="extra[diff_days]" id="diff_days" value="<?php echo $diff_days; ?>"/>
+				</div>
+			</li>
 			<?php
 			$output .= ob_get_clean();
 			return $output;
 		}
+		
+		/**
+		 * Gets an array of custom field keys for post badge.
+		 *
+		 * @return array
+		 */
+		public static function badge_field_keys( $post_type = 'gd_place', $package_id = '', $default = 'all', $fields_location = 'none' ) {
+			$fields = geodir_post_custom_fields( $package_id, $default, $post_type, $fields_location );
+			$keys = array();
+			$keys[] = __( 'Select Key', 'geodirectory' );
+			if ( !empty( $fields ) ) {
+				foreach( $fields as $field ) {
+					if ( apply_filters( 'geodir_badge_field_skip_key', false, $field ) || $field['field_type'] == 'post_badge' ) {
+						continue;
+					}
+					$keys[ $field['htmlvar_name'] ] = $field['htmlvar_name'] . ' ( ' . __( $field['admin_title'], 'geodirectory' ) . ' )';
+				}
+			}
 
+			return apply_filters( 'geodir_badge_field_keys', $keys, $package_id, $default, $post_type, $fields_location );
+		}
 	}
 
 endif;

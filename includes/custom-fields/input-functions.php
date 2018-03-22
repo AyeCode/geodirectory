@@ -2093,3 +2093,53 @@ function geodir_cfi_business_hours( $html, $cf ) {
 	return $html;
 }
 add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hours', 10, 2 );
+
+/**
+ * Get the html input for the custom field: post_badge
+ *
+ * @param string $html The html to be filtered.
+ * @param array $cf The custom field array details.
+ * @since 2.0.0
+ *
+ * @return string The html to output for the custom field.
+ */
+function geodir_cfi_post_badge( $html, $cf ) {
+    if ( empty( $html ) ) {
+        $extra_fields 	= !empty( $cf['extra_fields'] ) ? maybe_unserialize( $cf['extra_fields'] ) : NULL;
+		$badge_type 	= ! empty( $extra_fields['badge_type'] ) ? $extra_fields['badge_type'] : '';
+		$field_name		= $cf['name'];
+		ob_start();
+		if ( $badge_type == 'manual' ) {
+			$field_type		= $cf['type'];
+			$field_label	= __( $cf['frontend_title'], 'geodirectory' );
+			$field_desc		= __( $cf['desc'], 'geodirectory' );
+			$field_value 	= geodir_get_cf_value( $cf );
+			if ( $field_value != '1' ) {
+				$field_value = '0';
+			}
+			$checked		= $field_value == '1' ? true : false;
+
+			if ( ! empty( $extra_fields['default_badge'] ) ) {
+				$field_label = $extra_fields['default_badge'];
+			}
+		?>
+		<div id="<?php echo $field_name; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
+            <label for="gd_<?php echo $field_name; ?>"> <?php echo $field_label; ?> </label>
+            <input type="hidden" name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>" value="<?php echo $field_value; ?>"/>
+            <input id="gd_<?php echo $field_name; ?>" <?php checked( $checked, true ); ?> value="1" class="gd-checkbox" field_type="<?php echo $cf['type']; ?>" type="checkbox" onchange="if(this.checked){jQuery('#<?php echo $field_name; ?>').val('1');} else{ jQuery('#<?php echo $field_name; ?>').val('0');}"/>
+            <?php echo $field_desc; ?>
+        </div>
+        <?php
+		} else {
+			?>
+			<div id="<?php echo $field_name; ?>_row" class="geodir_form_row clearfix gd-fieldset-details" style="display:none!important">
+				<input type="hidden" name="<?php echo $field_name; ?>" id="<?php echo $field_name; ?>" value="0"/>
+			</div>
+			<?php
+		}
+        $html = ob_get_clean();
+    }
+	
+	return $html;
+}
+add_filter( 'geodir_custom_field_input_post_badge', 'geodir_cfi_post_badge', 10, 2 );

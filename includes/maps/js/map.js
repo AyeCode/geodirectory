@@ -455,6 +455,9 @@ function parse_marker_jason(json, map_canvas_var) {
 		} else {
 			if (options.enable_marker_cluster_no_reposition) {} //dont reposition after load
 			else {
+				if (options.autozoom && parseInt(json.total) == 1) {
+					jQuery.goMap.map.setZoom(13);
+				}
 				jQuery.goMap.map.setCenter(center);
 			}
 		}
@@ -1113,7 +1116,11 @@ function parse_marker_jason_osm(json, map_canvas_var) {
             if (options.enable_marker_cluster_no_reposition) {
                 //dont reposition after load
             } else {
-                jQuery.goMap.map.setView(center, jQuery.goMap.map.getZoom());
+                setZoom = jQuery.goMap.map.getZoom();
+				if (options.autozoom && parseInt(json.total) == 1) {
+					setZoom = 13;
+				}
+				jQuery.goMap.map.setView(center, setZoom);
             }
         }
         if (jQuery.goMap.map.getZoom() > parseInt(options.maxZoom)) {
