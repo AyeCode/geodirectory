@@ -1,3 +1,6 @@
+v2.0.0.3-beta
+Shortcode builder button added to pages/posts - ADDED
+
 v2.0.0.2-beta
 Business Hours not working on map popup - FIXED
 Backend author filed should show all users not only authors - FIXED

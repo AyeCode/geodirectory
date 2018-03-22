@@ -28,9 +28,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * Take the array options and use them to build.
 		 */
 		public function __construct( $options ) {
+			global $sd_widgets;
+
+
 
 			//print_r($options);exit;
-
+			$sd_widgets[$options['base_id']] = array('name'=> $options['name'],'class_name'=>$options['class_name']);
 			$this->base_id = $options['base_id'];
 			// lets filter the options before we do anything
 			$options       = apply_filters( "wp_super_duper_options_{$this->base_id}", $options );
@@ -72,8 +75,214 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 				//echo '###';
 				$sd_widget_scripts = true;
+
+				// add shortcode insert button once
+				add_action( 'media_buttons',array( $this, 'shortcode_insert_button' ) );
+				//if( !wp_doing_ajax() ){
+					add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
+				//}
+
 			}
 
+		}
+
+		public static function get_widget_settings(){
+			global $sd_widgets;
+//			print_r($_REQUEST);
+//			echo '####';
+
+			$shortcode = isset($_REQUEST['shortcode']) && $_REQUEST['shortcode'] ? sanitize_title_with_dashes($_REQUEST['shortcode']) : '';
+			if(!$shortcode){return;}
+			$widget_args = isset($sd_widgets[$shortcode]) ? $sd_widgets[$shortcode] :'';
+			if(!$widget_args){return;}
+			$class_name = isset($widget_args['class_name']) && $widget_args['class_name'] ? $widget_args['class_name'] : '';
+			if(!$class_name){return;}
+
+
+
+			//print_r( $sd_widgets );
+
+
+			// invoke an instance method
+//			$instance = new Instance();
+//			call_user_func( array( $instance, 'method' ) );
+			$widget = new $class_name;
+
+//			print_r($widget->form(array()));
+			ob_start();
+			$widget->form(array());
+			$form = ob_get_clean();
+			echo "<form id='$shortcode'>".$form."<div class=\"widget-control-save\"></div></form>";
+//			echo "<div id='sd-shortcode-output'></div>";
+
+			echo "<style>".$widget->widget_css()."</style>";
+			echo "<script>".$widget->widget_js()."</script>";
+				?>
+			<script>//alert(123);</script>
+			<?php
+			wp_die();
+		}
+
+		public function shortcode_insert_button(){
+			global $sd_widgets;
+			add_thickbox();
+			?>
+			<div id="my-content-id" style="display:none;">
+
+				<div class="sd-shortcode-left-wrap">
+					<?php
+					//print_r( $sd_widgets );
+					if(!empty($sd_widgets)){
+						echo '<select onchange="sd_get_shortcode_options(this);">';
+						echo "<option>".__('Select shortcode')."</option>";
+						foreach($sd_widgets as $shortcode => $class){
+							echo "<option value='".esc_attr($shortcode)."'>".esc_attr($shortcode)." (".esc_attr($class['name']).")</option>";
+						}
+						echo "</select>";
+
+					}
+					?>
+					<div id="sd-shortcode-settings"></div>
+
+				</div>
+
+				<div  class="sd-shortcode-right-wrap">
+					<textarea id='sd-shortcode-output' disabled></textarea>
+					<div id='sd-shortcode-output-actions'>
+						<button class="button" onclick="sd_insert_shortcode()"><?php _e('Insert shortcode');?></button>
+						<button class="button" onclick="sd_copy_to_clipboard()"><?php _e('Copy shortcode');?></button>
+					</div>
+				</div>
+
+
+
+			</div>
+
+
+<!--			<a href="#TB_inline?width=600&height=550&inlineId=my-content-id" class="thickbox button"><i class="fa fa-cubes" aria-hidden="true"></i></a>-->
+			<a href="#TB_inline?width=100%&height=550&inlineId=my-content-id" class="thickbox button" title="<?php _e('Add Shortcode');?>"><i class="fa fa-cubes" aria-hidden="true"></i></a>
+
+			<style>
+				.sd-shortcode-left-wrap{
+					float: left;
+					width: 60%;
+				}
+				.sd-shortcode-left-wrap .gd-help-tip{
+					float: none;
+				}
+				.sd-shortcode-right-wrap{
+					float: right;
+					width: 35%;
+				}
+				#sd-shortcode-output{
+					height: 250px;
+					width: 100%;
+				}
+			</style>
+			<script>
+
+				function sd_insert_shortcode(){
+					$shortcode = jQuery('#sd-shortcode-output').val();
+					if($shortcode){
+//						jQuery('.wp-editor-area').append($shortcode);
+						console.log(jQuery("#wp-content-editor-container textarea").attr("aria-hidden"));
+						if(tinyMCE && tinyMCE.activeEditor && jQuery("#wp-content-editor-container textarea").attr( "aria-hidden")=="true") {
+							tinyMCE.execCommand('mceInsertContent', false, $shortcode);
+						}else{
+							//jQuery('#wp-content-editor-container textarea').val($shortcode);
+//							$( '#wp-content-editor-container' ).find( 'textarea' ).val( 'Some default Text' );
+								var $txt = jQuery("#wp-content-editor-container textarea");
+								var caretPos = $txt[0].selectionStart;
+								var textAreaTxt = $txt.val();
+								var txtToAdd = $shortcode;
+								$txt.val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos) );
+						}
+						tb_remove();
+					}
+				}
+
+				function sd_copy_to_clipboard(){
+					/* Get the text field */
+					var copyText = document.getElementById("sd-shortcode-output");
+
+					/* Select the text field */
+					copyText.select();
+
+					/* Copy the text inside the text field */
+					document.execCommand("Copy");
+
+					/* Alert the copied text */
+					alert("Copied the text: " + copyText.value);
+				}
+				function sd_get_shortcode_options($this){
+					console.log($this);
+					console.log(jQuery($this).val());
+					$short_code = jQuery($this).val();
+					if($short_code){
+
+						var data = {
+							'action': 'super_duper_get_widget_settings',
+							'shortcode': $short_code,
+							'attributes': 123,
+							'post_id': 321,
+							'_ajax_nonce': '<?php echo wp_create_nonce( 'super_duper_output_shortcode' );?>'
+						};
+
+						jQuery.post(ajaxurl, data, function (response) {
+							console.log(response);
+							jQuery('#sd-shortcode-settings').html(response);
+
+
+//
+							jQuery('#'+$short_code).on('change', 'select', function() {
+								sd_build_shortcode($short_code);
+							}); // take care of select tags
+
+							jQuery('#'+$short_code).on('change keypress keyup', 'input', function() {
+								sd_build_shortcode($short_code);
+							});
+
+							sd_build_shortcode($short_code);
+
+							// resize the window to fit
+							jQuery('#TB_ajaxContent').css('width','auto');
+
+
+							return response;
+						});
+					}
+
+				}
+
+				function sd_build_shortcode($id){
+//					alert($id);
+
+					$output = "["+$id;
+
+					$form_data = jQuery("#"+$id).serializeArray();
+					if($form_data ){
+						$form_data.forEach(function(element) {
+
+							if(element.value){
+								$field_name = element.name.substr(element.name.indexOf("][") + 2);
+								$field_name = $field_name.replace("]", "");
+								$output = $output +" "+$field_name+'="'+element.value+'"';
+							}
+
+							console.log(element);
+							console.log(element.name);
+//							console.log(element.name.substr(element.name.indexOf("][") + 2));
+//							val.substr(val.indexOf("][") + 1)
+//							$field_name = element.name.match(/\d+/)[0];//jQuery('[name="'+element.name+'"]').index();
+//							console.log($field_name);
+						});
+					}
+					console.log($form_data );
+					$output = $output +"]";
+					jQuery('#sd-shortcode-output').html($output);
+				}
+			</script>
+			<?php
 		}
 
 		public function widget_css() {
@@ -983,12 +1192,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function form( $instance ) {
 
+
 			// set it as a SD widget
 			echo $this->widget_advanced_toggle();
 
 
 			echo "<p>" . esc_attr( $this->options['widget_ops']['description'] ) . "</p>";
 			$arguments = $this->get_arguments();
+//			print_r($instance );
+//			echo '###';
+//			print_r($arguments  );
+
 			if ( is_array( $arguments ) ) {
 				foreach ( $arguments as $key => $args ) {
 					$this->widget_inputs( $args, $instance );
