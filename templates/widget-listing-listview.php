@@ -68,7 +68,7 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                                 <?php
                                 /** This action is documented in includes/templates/listing-listview.php */
                                 do_action('geodir_before_badge_on_image', $post);
-                                if ($post->is_featured) {
+                                if ($post->featured) {
                                     echo geodir_show_badges_on_image('featured', $post, get_permalink());
                                 }
 

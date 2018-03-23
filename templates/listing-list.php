@@ -34,7 +34,7 @@ global $post;
                                  * @see 'geodir_after_badge_on_image'
                                  */
                                 do_action('geodir_before_badge_on_image', $post);
-                                if (isset($post->is_featured) && $post->is_featured) {
+                                if (isset($post->featured) && $post->featured) {
                                     echo geodir_show_badges_on_image('featured', $post, get_permalink());
                                 }
 

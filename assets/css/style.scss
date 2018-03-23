@@ -2602,3 +2602,49 @@ body > span[style*='top: -999px']{display: none;}
 .gd-wgt-cpt-ajax .gd-cptcat-row:last-child .gd-cptcat-li:last-child {
 	border-bottom: 0;
 }
+/* BADGE STYLE START */
+.gd-badge-meta {
+	display: inline-block;
+	margin-left: .2em;
+	margin-right: .2em;
+}
+.gd-badge {
+  display: inline;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: baseline;
+  cursor: default;
+  font-size: 90$;
+  border-radius: .25em;
+  padding: .28em .56em .26em;
+  font-weight: 600;
+  line-height: 1.25em;
+  background-color: #337ab7;
+  color: #fff
+}
+.gd-badge-meta:empty,
+.gd-badge:empty {
+  display: none;
+}
+.gd-badge-sm .gd-badge {
+	font-size: 75%;
+	padding: .28em .55em .36em;
+}
+.gd-badge-md .gd-badge {
+	font-size: 125%;
+	padding: .27em .575em .3em;
+}
+.gd-badge-lg .gd-badge {
+	font-size: 150%;
+	padding: .27em .575em .3em;
+	font-weight: 500;
+}
+.gd-badge-xl .gd-badge {
+	font-size: 175%;
+	padding: .27em .55em .3em;
+	font-weight: 500;
+}
+.gd-badge .fa {
+	margin-right: .4em;
+}
+/* BADGE STYLE END */

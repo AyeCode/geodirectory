@@ -240,7 +240,7 @@
 							       title="<?php _e( 'Must not contain spaces or special characters', 'geodirectory' ); ?>"
 							       value="<?php if ( $value ) {
 								       echo preg_replace( '/geodir_/', '', $value, 1 );
-							       } ?>" <?php if ( $field->is_default ) {
+							       } ?>" <?php if ( $field->is_default || $value == 'featured' || $value == 'new_badge' ) {
 								echo 'readonly="readonly"';
 							} ?> />
 						</div>

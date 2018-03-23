@@ -119,6 +119,13 @@ jQuery(function($) {
 		}
 		geodir_fix_marker_pos(data.canvas);
 	});
+	$('.gd-badge-meta .gd-badge').each(function(){
+		var badge = $(this).data('badge');
+		if (badge && $(this).closest('.post-' + $(this).data('id')).length) {
+			badge = 'geodir-badge-' + badge;
+			$(this).closest('.post-' + $(this).data('id')).removeClass(badge).addClass(badge);
+		}
+	});
 });
 
 
