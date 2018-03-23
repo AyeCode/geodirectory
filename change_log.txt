@@ -1,6 +1,9 @@
-v2.0.0.3-beta
+v2.0.0.4-beta
 OSM add listing page JS error - FIXED
 Autozoom not working for single marker on the map - FIXED
+
+v2.0.0.3-beta
+Shortcode builder button added to pages/posts - ADDED
 
 v2.0.0.2-beta
 Business Hours not working on map popup - FIXED

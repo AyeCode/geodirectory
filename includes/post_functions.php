@@ -492,7 +492,7 @@ if (!function_exists('geodir_save_post_images')) {
                             $attachment['file'] = $file_path;
                             $attachment['mime_type'] = $uploaded_file_type;
                             $attachment['menu_order'] = $menu_order;
-                            $attachment['is_featured'] = 0;
+                            $attachment['featured'] = 0;
 
                             $attachment_set = '';
 
@@ -875,7 +875,7 @@ if (!function_exists('geodir_get_images_old')) {
         $not_featured = '';
         $sub_dir = '';
         if (!$add_featured)
-            $not_featured = " AND is_featured = 0 ";
+            $not_featured = " AND featured = 0 ";
 
         $arrImages = $wpdb->get_results(
             $wpdb->prepare(

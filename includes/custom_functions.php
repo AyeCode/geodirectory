@@ -25,7 +25,7 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
 	$package_info['pid']              = 0;
 	$package_info['days']             = 0;
 	$package_info['amount']           = 0;
-	$package_info['is_featured']      = 0;
+	$package_info['featured']         = 0;
 	$package_info['image_limit']      = '';
 	$package_info['sendtofriend']     = 1;
 
@@ -40,7 +40,7 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
 	 * @type int $pid              Package ID. Default 0.
 	 * @type int $days             Package validity in Days. Default 0.
 	 * @type int $amount           Package amount. Default 0.
-	 * @type int $is_featured      Is this featured package? Default 0.
+	 * @type int $featured      Is this featured package? Default 0.
 	 * @type string $image_limit   Image limit for this package. Default "".
 	 * @type int $google_analytics Add analytics to this package. Default 1.
 	 * @type int $sendtofriend     Send to friend. Default 1.

@@ -422,6 +422,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'icon'        => 'fa fa-file',
 					'name'        => __( 'File Upload', 'geodirectory' ),
 					'description' => __( 'Adds a file input', 'geodirectory' )
+				),
+				'badge'        => array(
+					'field_type'  => 'badge',
+					'class'       => 'gd-badge',
+					'icon'        => 'fa fa-certificate',
+					'name'        => __( 'Post Badge', 'geodirectory' ),
+					'description' => __( 'Add a post badge input', 'geodirectory' )
 				)
 			);
 
@@ -1104,36 +1111,79 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
-			// Post Badge
-			$custom_fields['post_badge'] = array(
-                'field_type'  => 'post_badge',
-                'class'       => 'gd-post-badge',
-                'icon'        => 'fa fa-certificate',
-                'name'        => __( 'Post Badge', 'geodirectory' ),
-                'description' => __( 'Adds a badge like Sale, New, Featured etc on the listing image.', 'geodirectory' ),
+			// Featured Badge
+			$custom_fields['featured'] = array(
+                'field_type'  => 'badge',
+                'class'       => 'gd-badge',
+                'icon'        => '',
+                'name'        => __( 'Featured Badge', 'geodirectory' ),
+                'description' => __( 'Show a FEATURED badge the listing.', 'geodirectory' ),
                 'defaults'    => array(
 	                'data_type'          => 'TEXT',
-	                'admin_title'        => 'Post Badge',
-	                'frontend_title'     => 'Post Badge',
-	                'frontend_desc'      => '',
-	                'htmlvar_name'       => 'post_badge',
+	                'admin_title'        => 'Featured Badge',
+	                'frontend_title'     => 'FEATURED',
+	                'frontend_desc'      => __( 'Show a FEATURED badge the listing.', 'geodirectory' ),
+	                'htmlvar_name'       => 'featured',
 	                'is_active'          => true,
-	                'for_admin_use'      => false,
+	                'for_admin_use'      => true,
 	                'default_value'      => '',
-	                'show_in'            => '[listing]',
+	                'show_in'            => '',
 	                'is_required'        => false,
 	                'option_values'      => '',
 	                'validation_pattern' => '',
 	                'validation_msg'     => '',
 	                'required_msg'       => '',
-	                'field_icon'         => 'fa fa-certificate',
+	                'field_icon'         => '',
 	                'css_class'          => '',
 	                'cat_sort'           => false,
-	                'cat_filter'         => false
+	                'cat_filter'         => false,
+					'extra_fields'       => array(
+						'badge_type'			=> 'custom',
+						'badge_key'				=> 'featured',
+						'badge_condition'		=> 'is_not_empty',
+						'badge_search'			=> '',
+						'bg_color'				=> '#ff8333',
+						'txt_color'				=> '#ffffff'
+					)
                 )
-
 			);
 
+			// New Post Badge
+			$custom_fields['new_badge'] = array(
+                'field_type'  => 'badge',
+                'class'       => 'gd-badge',
+                'icon'        => '',
+                'name'        => __( 'New Post Badge', 'geodirectory' ),
+                'description' => __( 'Show a NEW badge the listing.', 'geodirectory' ),
+                'defaults'    => array(
+	                'data_type'          => 'TEXT',
+	                'admin_title'        => 'New Post Badge',
+	                'frontend_title'     => 'NEW',
+	                'frontend_desc'      => '',
+	                'htmlvar_name'       => 'new_badge',
+	                'is_active'          => true,
+	                'for_admin_use'      => true,
+	                'default_value'      => '',
+	                'show_in'            => '',
+	                'is_required'        => false,
+	                'option_values'      => '',
+	                'validation_pattern' => '',
+	                'validation_msg'     => '',
+	                'required_msg'       => '',
+	                'field_icon'         => '',
+	                'css_class'          => '',
+	                'cat_sort'           => false,
+	                'cat_filter'         => false,
+					'extra_fields'       => array(
+						'badge_type'			=> 'custom',
+						'badge_key'				=> 'post_date',
+						'badge_condition'		=> 'is_less_than',
+						'badge_search'			=> '+7',
+						'bg_color' 				=> '#008000',
+						'txt_color'				=> '#ffffff'
+					)
+                )
+			);
 
 			/**
 			 * @see `geodir_custom_fields`
@@ -1605,6 +1655,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				 */
 				do_action('geodir_after_custom_field_deleted', $field_id, $field->htmlvar_name, $post_type);
 
+				// Set featured = 0 on remove CF from field
+				if ( $htmlvar_name == 'featured' ) {
+					$wpdb->query("UPDATE " . $plugin_prefix . $post_type . "_detail SET featured=0");
+				}
+				
 				if ($field->field_type == 'address') {
 					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_address`");
 					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_city`");
@@ -1616,7 +1671,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_mapview`");
 					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_mapzoom`");
 				} else {
-					if ($field->field_type != 'fieldset') {
+					if ($field->field_type != 'fieldset' && $htmlvar_name != 'featured') {
 						$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "`");
 					}
 				}
@@ -1697,7 +1752,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			if(is_wp_error( $exists ) ){
 				return new WP_Error( 'failed', $exists->get_error_message() );
 			}elseif( $exists && !$field->field_id ){
-				return new WP_Error( 'failed', __( "Field HTML variable name MUST be unique, duplicate field detected, please fix and re-save.", "geodirectory" ) );
+				if ( $field->htmlvar_name == 'featured' || $field->htmlvar_name == 'new_badge' ) {
+					return new WP_Error( 'failed', wp_sprintf( __( "%s field already exists, it can not be used twice.", "geodirectory" ),  $field->htmlvar_name ) );
+				} else {
+					return new WP_Error( 'failed', __( "Field HTML variable name MUST be unique, duplicate field detected, please fix and re-save.", "geodirectory" ) );
+				}
 			}
 
 			$column_attr = $field->data_type;
@@ -1875,7 +1934,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 				// check if its a default field that does not need a column added
 				$default_fields = self::get_default_field_htmlvars();
-				if(!in_array($field->htmlvar_name,$default_fields)){
+				if(!in_array($field->htmlvar_name,$default_fields) && $field->htmlvar_name != 'featured'){
 
 					// Add the new column to the details table.
 					$add_details_column = geodir_add_column_if_not_exist($plugin_prefix . $field->post_type . '_detail', $field->htmlvar_name, $column_attr);

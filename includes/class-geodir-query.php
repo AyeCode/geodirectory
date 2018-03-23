@@ -277,7 +277,7 @@ class GeoDir_Query {
 			}
 			$s = stripslashes_deep( $s );
 			$s = wp_specialchars_decode($s,ENT_QUOTES);
-			$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".is_featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN ( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN ( " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s ) THEN 1 ELSE 0 END AS gd_content", array($s, $s, $s . '%', '% ' . $s . '%', $s, $s . ' %', '% ' . $s . ' %', '% ' . $s));
+			$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".featured='1' THEN 1 ELSE 0 END AS gd_featured, CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN ( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN ( " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s ) THEN 1 ELSE 0 END AS gd_content", array($s, $s, $s . '%', '% ' . $s . '%', $s, $s . ' %', '% ' . $s . ' %', '% ' . $s));
 		}
 
 		//echo '###fileds:'.$fields;
@@ -587,7 +587,7 @@ class GeoDir_Query {
 				$orderby = " " . $table . ".overall_rating DESC, " . $table . ".rating_count DESC, ";
 				break;
 			case 'featured':
-				$orderby = $table . ".is_featured asc, ";
+				$orderby = $table . ".featured asc, ";
 				break;
 			case 'nearest':
 				$orderby = " distance asc, ";
@@ -609,7 +609,7 @@ class GeoDir_Query {
 				$orderby = " " . $table . ".overall_rating ASC, " . $table . ".rating_count ASC, ";
 				break;
 			default:
-				$orderby .= $table . ".is_featured asc, $wpdb->posts.post_date desc";
+				$orderby .= $table . ".featured asc, $wpdb->posts.post_date desc";
 				break;
 		endswitch;
 
@@ -624,7 +624,7 @@ class GeoDir_Query {
 		$orderby = apply_filters('geodir_posts_order_by_sort', $orderby, $sort_by, $table);
 
 		if($sort_by != 'random'){
-			//$orderby .= $table . ".is_featured asc, $wpdb->posts.post_date desc, $wpdb->posts.post_title ";
+			//$orderby .= $table . ".featured asc, $wpdb->posts.post_date desc, $wpdb->posts.post_title ";
 		}
 
 		

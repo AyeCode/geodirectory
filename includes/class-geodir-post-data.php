@@ -144,8 +144,8 @@ class GeoDir_Post_Data {
 			if ( isset( $gd_post['link_business'] ) ) {
 				$postarr['link_business'] = $gd_post['link_business'];
 			}
-			if ( isset( $gd_post['is_featured'] ) ) {
-				$postarr['is_featured'] = $gd_post['is_featured'];
+			if ( isset( $gd_post['featured'] ) ) {
+				$postarr['featured'] = $gd_post['featured'];
 			}
 			if ( ! $update ) {
 				$postarr['submit_ip'] = $_SERVER['REMOTE_ADDR'];

@@ -1167,7 +1167,7 @@ function geodir_widget_listings_get_order( $query_args ) {
 			$orderby = $wpdb->posts . ".post_date DESC, ";
 			break;
 		case 'featured':
-			$orderby = $table . ".is_featured ASC, ". $wpdb->posts . ".post_date DESC, ";
+			$orderby = $table . ".featured ASC, ". $wpdb->posts . ".post_date DESC, ";
 			break;
 		case 'az':
 			$orderby = $wpdb->posts . ".post_title ASC, ";
@@ -1307,8 +1307,8 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$orderby = apply_filters( 'geodir_filter_widget_listings_orderby', $orderby, $table, $post_type );
 		
 		$second_orderby = array();
-		if ( strpos( $orderby, strtolower( $table . ".is_featured" )  ) === false ) {
-			$second_orderby[] = $table . ".is_featured ASC";
+		if ( strpos( $orderby, strtolower( $table . ".featured" )  ) === false ) {
+			$second_orderby[] = $table . ".featured ASC";
 		}
 		
 		if ( strpos( $orderby, strtolower( $wpdb->posts . ".post_date" )  ) === false ) {
@@ -1457,7 +1457,7 @@ function geodir_function_widget_listings_where( $where ) {
 		}
 
 		if ( ! empty( $query_args['show_featured_only'] ) ) {
-			$where .= " AND " . $table . ".is_featured = '1'";
+			$where .= " AND " . $table . ".featured = '1'";
 		}
 
 		if ( ! empty( $query_args['show_special_only'] ) ) {

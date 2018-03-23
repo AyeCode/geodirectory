@@ -2095,7 +2095,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hours', 10, 2 );
 
 /**
- * Get the html input for the custom field: post_badge
+ * Get the html input for the custom field: badge
  *
  * @param string $html The html to be filtered.
  * @param array $cf The custom field array details.
@@ -2103,13 +2103,13 @@ add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hou
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cfi_post_badge( $html, $cf ) {
+function geodir_cfi_badge( $html, $cf ) {
     if ( empty( $html ) ) {
         $extra_fields 	= !empty( $cf['extra_fields'] ) ? maybe_unserialize( $cf['extra_fields'] ) : NULL;
 		$badge_type 	= ! empty( $extra_fields['badge_type'] ) ? $extra_fields['badge_type'] : '';
 		$field_name		= $cf['name'];
 		ob_start();
-		if ( $badge_type == 'manual' ) {
+		if ( $badge_type == 'manual' || $field_name == 'featured' ) {
 			$field_type		= $cf['type'];
 			$field_label	= __( $cf['frontend_title'], 'geodirectory' );
 			$field_desc		= __( $cf['desc'], 'geodirectory' );
@@ -2118,10 +2118,6 @@ function geodir_cfi_post_badge( $html, $cf ) {
 				$field_value = '0';
 			}
 			$checked		= $field_value == '1' ? true : false;
-
-			if ( ! empty( $extra_fields['default_badge'] ) ) {
-				$field_label = $extra_fields['default_badge'];
-			}
 		?>
 		<div id="<?php echo $field_name; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
             <label for="gd_<?php echo $field_name; ?>"> <?php echo $field_label; ?> </label>
@@ -2142,4 +2138,4 @@ function geodir_cfi_post_badge( $html, $cf ) {
 	
 	return $html;
 }
-add_filter( 'geodir_custom_field_input_post_badge', 'geodir_cfi_post_badge', 10, 2 );
+add_filter( 'geodir_custom_field_input_badge', 'geodir_cfi_badge', 10, 2 );

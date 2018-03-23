@@ -2557,7 +2557,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				$row['title'] = $image->title;
 				$row['src'] = geodir_get_image_src( $image, 'original' );
 				$row['thumbnail'] = geodir_get_image_src( $image, 'thumbnail' );
-				$row['featured'] = (bool) $image->is_featured;
+				$row['featured'] = (bool) $image->featured;
 				$row['position'] = $image->menu_order;
 
 				$images[] = $row;
@@ -2831,7 +2831,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		}
 		
 		// Extra fields
-		$data['featured'] 		= (bool) $post->is_featured;
+		$data['featured'] 		= (bool) $post->featured;
 		$data['rating'] 		= (float) $post->overall_rating;
 		$data['rating_count'] 	= (int) $post->rating_count;
 		

@@ -382,7 +382,7 @@ function geodir_listing_class( $post = null, $classes = array() ) {
             $classes[] = 'gd-post-' . $post->post_type;
         }
         
-        if ( !empty( $post->is_featured ) ) {
+        if ( !empty( $post->featured ) ) {
             $classes[] = 'gd-post-featured';
         }
     }

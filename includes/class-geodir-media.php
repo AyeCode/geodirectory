@@ -247,7 +247,7 @@ class GeoDir_Media {
 				'file' => $metadata['file'],
 				'mime_type' => $file['type'],
 				'menu_order' => $order,
-				'is_featured' => $order === 0 ? 1 : 0,
+				'featured' => $order === 0 ? 1 : 0,
 				'is_approved' => $is_approved,
 				'metadata' => maybe_serialize($metadata)
 			),
@@ -315,7 +315,7 @@ class GeoDir_Media {
 				'file' => $file,
 				'mime_type' => $file_type,
 				'menu_order' => $order,
-				'is_featured' => $order === 0 ? 1 : 0,
+				'featured' => $order === 0 ? 1 : 0,
 				'is_approved' => $is_approved,
 				'metadata' => maybe_serialize($metadata)
 			),
@@ -401,7 +401,7 @@ class GeoDir_Media {
 				'title' => $image_title,
 				'caption' => $image_caption,
 				'menu_order' => $order,
-				'is_featured' => $order === 0 ? 1 : 0,
+				'featured' => $order === 0 ? 1 : 0,
 			),
 			array('ID' => $image_id),
 			array(

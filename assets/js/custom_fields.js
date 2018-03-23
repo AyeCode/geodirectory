@@ -94,12 +94,12 @@ jQuery(document).ready(function() {
 	}
 	jQuery('body').bind('geodir_on_save_custom_field', function(e, data) {
 		if (data.id && jQuery('#licontainer_' + data.id).find('#badge_type').length) {
-			jQuery(jQuery('#licontainer_' + data.id).find('#badge_type')).trigger('change');
+			jQuery('#licontainer_' + data.id).find('#badge_type').trigger('change');
 		}
 	});
 	jQuery('body').bind('geodir_on_get_custom_field', function(e, data) {
 		if (data.id && jQuery('#licontainer_' + data.id).find('#badge_type').length) {
-			jQuery(jQuery('#licontainer_' + data.id).find('#badge_type')).trigger('change');
+			jQuery('#licontainer_' + data.id).find('#badge_type').trigger('change');
 		}
 	});
 });
@@ -149,7 +149,9 @@ function gd_save_custom_field(id) {
                         //alert(theResponse);
                     });
                 jQuery('.field_frm').hide();
-				jQuery(document.body).trigger('geodir_on_save_custom_field', [{id: id,field: res}]);
+				var field_id = jQuery(result).find('#field_id').val();
+				field_id = field_id ? field_id : id;
+				jQuery(document.body).trigger('geodir_on_save_custom_field', [{id: field_id,field: res}]);
             }
             // int the new select2 boxes
             jQuery("select.geodir-select").trigger('geodir-select-init');
@@ -311,7 +313,7 @@ function gd_toggle_switch_display() {
     });
 }
 
-function gd_post_badge_changed(el, cont) {
+function gd_badge_changed(el, cont) {
     var type = jQuery(el).val(),
         $wrap = jQuery('#licontainer_' + cont);
     jQuery('.gd-extra-post-badge', $wrap).hide();
