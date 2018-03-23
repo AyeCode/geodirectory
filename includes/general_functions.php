@@ -1307,9 +1307,9 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$orderby = apply_filters( 'geodir_filter_widget_listings_orderby', $orderby, $table, $post_type );
 		
 		$second_orderby = array();
-		if ( strpos( $orderby, strtolower( $table . ".featured" )  ) === false ) {
-			$second_orderby[] = $table . ".featured ASC";
-		}
+//		if ( strpos( $orderby, strtolower( $table . ".featured" )  ) === false ) {
+//			$second_orderby[] = $table . ".featured ASC";
+//		}
 		
 		if ( strpos( $orderby, strtolower( $wpdb->posts . ".post_date" )  ) === false ) {
 			$second_orderby[] = $wpdb->posts . ".post_date DESC";

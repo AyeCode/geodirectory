@@ -527,4 +527,3 @@ add_action('dynamic_sidebar_before','xzxzxxz');
 function xzxzxxz(){
 	//echo '###';
 }
-

@@ -51,6 +51,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'pages' 	=> __( 'Pages', 'geodirectory' ),
 			'search' 	=> __( 'Search', 'geodirectory' ),
 			'dummy_data' 	=> __( 'Dummy Data', 'geodirectory' ),
+			'developer' 	=> __( 'Developer', 'geodirectory' ),
 			'uninstall' 	=> __( 'Uninstall', 'geodirectory' ),
 		);
 
@@ -93,7 +94,38 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 	 */
 	public function get_settings( $current_section = '' ) {
 
-		if ( 'uninstall' == $current_section ) {
+		if ( 'developer' == $current_section ) {
+
+			/**
+			 * Filter GD general settings array.
+			 *
+			 * @since 1.0.0
+			 * @package GeoDirectory
+			 */
+			$settings = apply_filters( 'geodir_developer_options', array(
+				array(
+					'title' => __( 'Uninstall Settings', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => '',
+					'id'    => 'developer_options',
+					//'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Advanced settings', 'geodirectory' ),
+					'desc'     => __( 'Disable advanced toggle, show advanced settings at all times (not recommended).', 'geodirectory' ),
+					'id'       => 'admin_disable_advanced',
+					'type'     => 'checkbox',
+					//'desc_tip' => true,
+					//'advanced' => true
+				),
+
+
+
+
+				array( 'type' => 'sectionend', 'id' => 'developer_options' ),
+			));
+		}elseif ( 'uninstall' == $current_section ) {
 
 			/**
 			 * Filter GD general settings array.

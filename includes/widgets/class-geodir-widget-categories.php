@@ -144,7 +144,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'advanced' => true
                 ),
                 'no_cpt_filter'  => array(
-                    'title' => __("Don't filter for current viewing post type", 'geodirectory'),
+                    'title' => __("Do not filter for current viewing post type", 'geodirectory'),
                     'type' => 'checkbox',
                     'desc_tip' => true,
                     'value'  => '1',
@@ -152,7 +152,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'advanced' => true
                 ),
                 'no_cat_filter'  => array(
-                    'title' => __("Don't filter for current viewing category", 'geodirectory'),
+                    'title' => __("Do not filter for current viewing category", 'geodirectory'),
                     'type' => 'checkbox',
                     'desc_tip' => true,
                     'value'  => '1',

@@ -109,25 +109,10 @@ jQuery(window).load(function() {
  * Init the tooltips
  */
 function gd_init_tooltips(){
-    // Tooltips
-    jQuery('.gd-help-tip').tooltip({
-        // content: function() {
-        //     return jQuery(this).prop('title');
-        // },
-        // tooltipClass: 'gd-ui-tooltip',
-        // position: {
-        //     my: 'center top',
-        //     at: 'center bottom+10',
-        //     collision: 'flipfit',
-        // },
-        // hide: {
-        //     duration: 200,
-        // },
-        // show: {
-        //     duration: 200,
-        // },
 
-        content: function () {
+    // we create, then destroy then create so we can ajax load and then call this function with impunity.
+    jQuery('.gd-help-tip').tooltip().tooltip('destroy').tooltip({
+             content: function () {
             return jQuery(this).prop('title');
         },
         tooltipClass: 'gd-ui-tooltip',

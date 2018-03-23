@@ -143,7 +143,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			<div class="inside">
 
-				<div id="gd-form-builder-tab" class="gd-tabs-panel">
+				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
 
 					<?php
 					/**
@@ -163,7 +163,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			<h3><?php _e( 'Predefined Fields', 'geodirectory' ); ?></h3>
 			<div class="inside">
 
-				<div id="gd-form-builder-tab" class="gd-tabs-panel">
+				<div id="gd-form-builder-tab-predefined" class="gd-form-builder-tab gd-tabs-panel">
 
 					<?php
 					/**
@@ -423,13 +423,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'name'        => __( 'File Upload', 'geodirectory' ),
 					'description' => __( 'Adds a file input', 'geodirectory' )
 				),
-				'badge'        => array(
-					'field_type'  => 'badge',
-					'class'       => 'gd-badge',
-					'icon'        => 'fa fa-certificate',
-					'name'        => __( 'Post Badge', 'geodirectory' ),
-					'description' => __( 'Add a post badge input', 'geodirectory' )
-				)
+//				'badge'        => array(
+//					'field_type'  => 'badge',
+//					'class'       => 'gd-badge',
+//					'icon'        => 'fa fa-certificate',
+//					'name'        => __( 'Post Badge', 'geodirectory' ),
+//					'description' => __( 'Add a post badge input', 'geodirectory' )
+//				)
 			);
 
 			/**
@@ -1111,79 +1111,79 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
-			// Featured Badge
-			$custom_fields['featured'] = array(
-                'field_type'  => 'badge',
-                'class'       => 'gd-badge',
-                'icon'        => '',
-                'name'        => __( 'Featured Badge', 'geodirectory' ),
-                'description' => __( 'Show a FEATURED badge the listing.', 'geodirectory' ),
-                'defaults'    => array(
-	                'data_type'          => 'TEXT',
-	                'admin_title'        => 'Featured Badge',
-	                'frontend_title'     => 'FEATURED',
-	                'frontend_desc'      => __( 'Show a FEATURED badge the listing.', 'geodirectory' ),
-	                'htmlvar_name'       => 'featured',
-	                'is_active'          => true,
-	                'for_admin_use'      => true,
-	                'default_value'      => '',
-	                'show_in'            => '',
-	                'is_required'        => false,
-	                'option_values'      => '',
-	                'validation_pattern' => '',
-	                'validation_msg'     => '',
-	                'required_msg'       => '',
-	                'field_icon'         => '',
-	                'css_class'          => '',
-	                'cat_sort'           => false,
-	                'cat_filter'         => false,
-					'extra_fields'       => array(
-						'badge_type'			=> 'custom',
-						'badge_key'				=> 'featured',
-						'badge_condition'		=> 'is_not_empty',
-						'badge_search'			=> '',
-						'bg_color'				=> '#ff8333',
-						'txt_color'				=> '#ffffff'
-					)
-                )
-			);
-
-			// New Post Badge
-			$custom_fields['new_badge'] = array(
-                'field_type'  => 'badge',
-                'class'       => 'gd-badge',
-                'icon'        => '',
-                'name'        => __( 'New Post Badge', 'geodirectory' ),
-                'description' => __( 'Show a NEW badge the listing.', 'geodirectory' ),
-                'defaults'    => array(
-	                'data_type'          => 'TEXT',
-	                'admin_title'        => 'New Post Badge',
-	                'frontend_title'     => 'NEW',
-	                'frontend_desc'      => '',
-	                'htmlvar_name'       => 'new_badge',
-	                'is_active'          => true,
-	                'for_admin_use'      => true,
-	                'default_value'      => '',
-	                'show_in'            => '',
-	                'is_required'        => false,
-	                'option_values'      => '',
-	                'validation_pattern' => '',
-	                'validation_msg'     => '',
-	                'required_msg'       => '',
-	                'field_icon'         => '',
-	                'css_class'          => '',
-	                'cat_sort'           => false,
-	                'cat_filter'         => false,
-					'extra_fields'       => array(
-						'badge_type'			=> 'custom',
-						'badge_key'				=> 'post_date',
-						'badge_condition'		=> 'is_less_than',
-						'badge_search'			=> '+7',
-						'bg_color' 				=> '#008000',
-						'txt_color'				=> '#ffffff'
-					)
-                )
-			);
+//			// Featured Badge
+//			$custom_fields['featured'] = array(
+//                'field_type'  => 'badge',
+//                'class'       => 'gd-badge',
+//                'icon'        => '',
+//                'name'        => __( 'Featured Badge', 'geodirectory' ),
+//                'description' => __( 'Show a FEATURED badge the listing.', 'geodirectory' ),
+//                'defaults'    => array(
+//	                'data_type'          => 'TEXT',
+//	                'admin_title'        => 'Featured Badge',
+//	                'frontend_title'     => 'FEATURED',
+//	                'frontend_desc'      => __( 'Show a FEATURED badge the listing.', 'geodirectory' ),
+//	                'htmlvar_name'       => 'featured',
+//	                'is_active'          => true,
+//	                'for_admin_use'      => true,
+//	                'default_value'      => '',
+//	                'show_in'            => '',
+//	                'is_required'        => false,
+//	                'option_values'      => '',
+//	                'validation_pattern' => '',
+//	                'validation_msg'     => '',
+//	                'required_msg'       => '',
+//	                'field_icon'         => '',
+//	                'css_class'          => '',
+//	                'cat_sort'           => false,
+//	                'cat_filter'         => false,
+//					'extra_fields'       => array(
+//						'badge_type'			=> 'custom',
+//						'badge_key'				=> 'featured',
+//						'badge_condition'		=> 'is_not_empty',
+//						'badge_search'			=> '',
+//						'bg_color'				=> '#ff8333',
+//						'txt_color'				=> '#ffffff'
+//					)
+//                )
+//			);
+//
+//			// New Post Badge
+//			$custom_fields['new_badge'] = array(
+//                'field_type'  => 'badge',
+//                'class'       => 'gd-badge',
+//                'icon'        => '',
+//                'name'        => __( 'New Post Badge', 'geodirectory' ),
+//                'description' => __( 'Show a NEW badge the listing.', 'geodirectory' ),
+//                'defaults'    => array(
+//	                'data_type'          => 'TEXT',
+//	                'admin_title'        => 'New Post Badge',
+//	                'frontend_title'     => 'NEW',
+//	                'frontend_desc'      => '',
+//	                'htmlvar_name'       => 'new_badge',
+//	                'is_active'          => true,
+//	                'for_admin_use'      => true,
+//	                'default_value'      => '',
+//	                'show_in'            => '',
+//	                'is_required'        => false,
+//	                'option_values'      => '',
+//	                'validation_pattern' => '',
+//	                'validation_msg'     => '',
+//	                'required_msg'       => '',
+//	                'field_icon'         => '',
+//	                'css_class'          => '',
+//	                'cat_sort'           => false,
+//	                'cat_filter'         => false,
+//					'extra_fields'       => array(
+//						'badge_type'			=> 'custom',
+//						'badge_key'				=> 'post_date',
+//						'badge_condition'		=> 'is_less_than',
+//						'badge_search'			=> '+7',
+//						'bg_color' 				=> '#008000',
+//						'txt_color'				=> '#ffffff'
+//					)
+//                )
+//			);
 
 			/**
 			 * @see `geodir_custom_fields`

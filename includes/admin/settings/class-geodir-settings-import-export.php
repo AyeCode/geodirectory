@@ -671,6 +671,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 						});
 
 						gd_process_export_posts(el, post_type, total_posts, chunk_size, pages, 1, filters, true);
+						return false; // prevent submit
 					});
 
 					jQuery.fn.gdposts_timer = function() {
@@ -706,6 +707,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 						var pages = Math.ceil( total_cats / chunk_size );
 
 						gd_process_export_cats(el, post_type, total_cats, chunk_size, pages, 1);
+						return false;//prevent form submit
 					});
 
 					jQuery.fn.gdcats_timer = function() {

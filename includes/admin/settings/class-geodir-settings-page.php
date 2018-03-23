@@ -91,7 +91,7 @@ abstract class GeoDir_Settings_Page {
 
 	/**
 	 * Detect if the advanced settings button should be shown or not.
-	 * 
+	 *
 	 * @return bool
 	 */
 	public function show_advanced(){
@@ -128,7 +128,9 @@ abstract class GeoDir_Settings_Page {
 		if(!$this->show_advanced()){return;}
 
 
-		$show = geodir_get_option( 'admin_show_advanced', false );
+		$show = geodir_get_option( 'admin_disable_advanced', false );
+
+		if($show){return;} // don't show advanced toggle
 
 		$text_show = __("Show Advanced","geodirectory");
 		$text_hide = __("Hide Advanced","geodirectory");

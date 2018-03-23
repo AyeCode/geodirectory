@@ -1,6 +1,10 @@
 v2.0.0.4-beta
+Tooltips on CPT settings can become stuck when adding a new field - FIXED
+Search and archive pages, if no listings found, page is blank - FIXED
+Added developer settings section, added setting to disable advanced settings toggle - ADDED
 OSM add listing page JS error - FIXED
 Autozoom not working for single marker on the map - FIXED
+Export button on FireFox causes page refresh which means no access to CSV - FIXED
 
 v2.0.0.3-beta
 Shortcode builder button added to pages/posts - ADDED

@@ -29,6 +29,25 @@ class GeoDir_Post_types {
 		add_action( 'init', array( __CLASS__, 'register_post_status' ), 9 );
 		add_filter( 'rest_api_allowed_post_types', array( __CLASS__, 'rest_api_allowed_post_types' ) );
 		add_action( 'geodir_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
+
+		// Prevent Gutenberg editing GD CPTs, we only allow editing of the template pages.
+		add_filter( 'gutenberg_can_edit_post_type', array( __CLASS__, 'disable_gutenberg'), 10, 2 );
+	}
+
+	/**
+	 * Disable Gutenberg for GD CPTs.
+	 * 
+	 * @param $is_enabled
+	 * @param $post_type
+	 *
+	 * @return bool
+	 */
+	public function disable_gutenberg($is_enabled, $post_type){
+		if (in_array($post_type, geodir_get_posttypes())) {
+			return false;
+		}
+
+		return $is_enabled;
 	}
 
 	/**

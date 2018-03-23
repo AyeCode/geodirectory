@@ -65,12 +65,16 @@ class GeoDir_Shortcodes {
         global $wp_query;
         if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || (is_author() && !empty($wp_query->query['gd_favs'])) ){
             ob_start();
-            // geodir_get_template_part('listing', 'listview');
-            geodir_get_template_part('content', 'archive-listing');
-            //geodir_action_listings_content();
+
+            // check if we have listings or if we are faking it
+            if($wp_query->post_count == 1 && empty($wp_query->posts)){
+                geodir_no_listings_found();
+            }else{
+                geodir_get_template_part('content', 'archive-listing');
+            }
             return ob_get_clean();
         }else{
-            return "";
+            return "xxx";
         }
     }
 
