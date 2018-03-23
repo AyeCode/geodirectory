@@ -115,12 +115,13 @@ class GeoDir_Admin_Install {
 		GeoDir_Post_types::register_post_status();
 		GeoDir_Post_types::register_taxonomies();
 
+		self::create_uncategorized_categories();
 
 		// Also register endpoints - this needs to be done prior to rewrite rule flush
-		//WC()->query->init_query_vars();
-		//WC()->query->add_endpoints();
-		//WC_API::add_endpoint();
-		//WC_Auth::add_endpoint();
+		//()->query->init_query_vars();
+		//()->query->add_endpoints();
+		//_API::add_endpoint();
+		//_Auth::add_endpoint();
 
 		///return; // @todo remove after testing
 
@@ -203,7 +204,6 @@ class GeoDir_Admin_Install {
 		$fields = apply_filters('geodir_before_default_custom_fields_saved', $fields);
 		foreach ($fields as $field_index => $field) {
 			geodir_custom_field_save($field);
-
 		}
 	}
 	/**
@@ -375,6 +375,31 @@ class GeoDir_Admin_Install {
 	}
 
 	/**
+	 * Create a category for each CPT.
+	 *
+	 * So users can start adding posts right away.
+	 */
+	public static function create_uncategorized_categories(){
+		$post_types = geodir_get_posttypes();
+		if(!empty($post_types)){
+			foreach($post_types as $post_type){
+				$taxonomy = $post_type.'category';
+				if(!get_option($taxonomy.'_installed',false)){
+					$dummy_categories['uncategorized'] = array(
+						'name'        => 'Uncategorized',
+						'icon'        => GEODIRECTORY_PLUGIN_URL . '/assets/images/pin.png',
+						'schema_type' => ''
+					);
+					GeoDir_Admin_Dummy_Data::create_taxonomies( $post_type, $dummy_categories );
+					update_option($taxonomy.'_installed',true);
+				}
+
+			}
+		}
+
+	}
+
+	/**
 	 * Default options.
 	 *
 	 * Sets up the default options used on the settings page.
@@ -512,7 +537,7 @@ class GeoDir_Admin_Install {
 		// Table for storing place attribute - these are user defined
 		$tables .= " CREATE TABLE " . $plugin_prefix . "gd_place_detail (
 						".implode (",",self::db_cpt_default_columns(false)).",
-						".implode (",",self::db_cpt_default_keys(false))." 
+						".implode (", \n",self::db_cpt_default_keys(false))." 
 						) $collate; ";
 
 		// Table for storing place images - these are user defined
@@ -875,7 +900,7 @@ class GeoDir_Admin_Install {
 		$columns['post_category'] = "post_category varchar(254) NULL DEFAULT NULL";
 		$columns['default_category'] = "default_category INT NULL DEFAULT NULL";
 		$columns['link_business'] = "link_business varchar(10) NULL DEFAULT NULL";
-		$columns['featured'] = "featured tinyint(1) NOT NULL DEFAULT '0'";
+		//$columns['featured'] = "featured tinyint(1) NOT NULL DEFAULT '0'";
 		$columns['featured_image'] = "featured_image varchar( 254 ) NULL DEFAULT NULL";
 		$columns['submit_ip'] = "submit_ip varchar(100) NULL DEFAULT NULL";
 		$columns['overall_rating'] = "overall_rating float(11) DEFAULT '0'";
@@ -921,8 +946,8 @@ class GeoDir_Admin_Install {
 		$keys = array();
 
 		// Standard keys
-		$keys['post_id'] = "PRIMARY KEY (post_id)";
-		$keys['featured'] = "KEY featured (featured)";
+		$keys['post_id'] = "PRIMARY KEY  (post_id)";
+		//$keys['featured'] = "KEY featured (featured)";
 
 		// Location keys
 		if(!$locationless){
