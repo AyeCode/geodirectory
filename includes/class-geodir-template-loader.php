@@ -91,7 +91,7 @@ class GeoDir_Template_Loader {
                     if($theme_template = GeoDir_Compatibility::theme_single_template()){
                         $default_file = $theme_template;
                     }else{
-                         $default_file = 'page.php'; //  fallback to page.php
+                         //$default_file = 'page.php'; //  fallback to page.php
                     }
                 }
                 //echo '###'.$default_file;
@@ -192,7 +192,10 @@ class GeoDir_Template_Loader {
         global $gd_temp_wp_query;
 
         // Set our temp var with the main query posts.
+
+
         $gd_temp_wp_query = $wp_query->posts;
+
 
         // Set the main query to our archive page template
         if(geodir_is_page('search')){
@@ -203,8 +206,11 @@ class GeoDir_Template_Loader {
         $archive_page = get_post($archive_page_id);
         $wp_query->posts = array($archive_page);
 
-        //$wp_query->current_post = $wp_query->post_count-1;
 
+        // if no posts ar found then the page will not display so we fake it
+        if(empty($gd_temp_wp_query)){
+            $wp_query->post_count = 1;
+        }
 
         // add the filter to call our own loop for the archive page content.
         add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );

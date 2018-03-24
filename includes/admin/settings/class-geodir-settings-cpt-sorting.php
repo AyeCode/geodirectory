@@ -123,7 +123,7 @@ if ( ! class_exists( 'GD_Settings_Cpt', false ) ) :
 			?>
 			<div class="inside">
 
-				<div id="gd-form-builder-tab" class="gd-tabs-panel">
+				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
 					<ul>
 						<?php
 						$sort_options = self::custom_sort_options( self::$post_type );
@@ -204,7 +204,7 @@ if ( ! class_exists( 'GD_Settings_Cpt', false ) ) :
 			?>
 			<div class="inside">
 
-				<div id="gd-form-builder-tab" class="gd-tabs-panel">
+				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
 					<div class="field_row_main">
 						<ul class="core">
 							<?php

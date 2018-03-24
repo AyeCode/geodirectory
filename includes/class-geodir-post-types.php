@@ -29,6 +29,25 @@ class GeoDir_Post_types {
 		add_action( 'init', array( __CLASS__, 'register_post_status' ), 9 );
 		add_filter( 'rest_api_allowed_post_types', array( __CLASS__, 'rest_api_allowed_post_types' ) );
 		add_action( 'geodir_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
+
+		// Prevent Gutenberg editing GD CPTs, we only allow editing of the template pages.
+		add_filter( 'gutenberg_can_edit_post_type', array( __CLASS__, 'disable_gutenberg'), 10, 2 );
+	}
+
+	/**
+	 * Disable Gutenberg for GD CPTs.
+	 * 
+	 * @param $is_enabled
+	 * @param $post_type
+	 *
+	 * @return bool
+	 */
+	public function disable_gutenberg($is_enabled, $post_type){
+		if (in_array($post_type, geodir_get_posttypes())) {
+			return false;
+		}
+
+		return $is_enabled;
 	}
 
 	/**
@@ -47,6 +66,8 @@ class GeoDir_Post_types {
 		do_action( 'geodirectory_register_taxonomy' );
 
 		$taxonomies = self::get_taxonomy_defaults();
+
+//		print_r($taxonomies );exit;
 		// If custom taxonomies are present, register them
 		if (is_array($taxonomies)) {
 			// Sort taxonomies
@@ -147,10 +168,13 @@ class GeoDir_Post_types {
 
 		$taxonomies = geodir_get_option('taxonomies', array());
 		$post_types = geodir_get_option('post_types', array());
+
+//		print_r($post_types);exit;
 		if(empty($taxonomies)){
 
 
 			$listing_slug = isset($post_types['gd_place']['rewrite']['slug']) ? $post_types['gd_place']['rewrite']['slug'] : 'places';
+			$singular_name = isset($post_types['gd_place']['labels']['singular_name']) ? $post_types['gd_place']['labels']['singular_name'] : 'Place';
 
 
 			// Place tags
@@ -164,18 +188,18 @@ class GeoDir_Post_types {
 				'query_var' => true,
 
 				'labels' => array(
-					'name' => __('Place Tags', 'geodirectory'),
-					'singular_name' => __('Place Tag', 'geodirectory'),
-					'search_items' => __('Search Place Tags', 'geodirectory'),
-					'popular_items' => __('Popular Place Tags', 'geodirectory'),
-					'all_items' => __('All Place Tags', 'geodirectory'),
-					'edit_item' => __('Edit Place Tag', 'geodirectory'),
-					'update_item' => __('Update Place Tag', 'geodirectory'),
-					'add_new_item' => __('Add New Place Tag', 'geodirectory'),
-					'new_item_name' => __('New Place Tag Name', 'geodirectory'),
-					'add_or_remove_items' => __('Add or remove Place tags', 'geodirectory'),
-					'choose_from_most_used' => __('Choose from the most used Place tags', 'geodirectory'),
-					'separate_items_with_commas' => __('Separate Place tags with commas', 'geodirectory'),
+					'name' => sprintf( __('%s Tags', 'geodirectory'), $singular_name ),
+					'singular_name' => sprintf( __('%s Tag', 'geodirectory'), $singular_name ),
+					'search_items' => sprintf( __('Search %s Tags', 'geodirectory'), $singular_name ),
+					'popular_items' => sprintf( __('Popular %s Tags', 'geodirectory'), $singular_name ),
+					'all_items' => sprintf( __('All %s Tags', 'geodirectory'), $singular_name ),
+					'edit_item' => sprintf( __('Edit %s Tag', 'geodirectory'), $singular_name ),
+					'update_item' => sprintf( __('Update %s Tag', 'geodirectory'), $singular_name ),
+					'add_new_item' => sprintf( __('Add New %s Tag', 'geodirectory'), $singular_name ),
+					'new_item_name' => sprintf( __('New %s Tag Name', 'geodirectory'), $singular_name ),
+					'add_or_remove_items' => sprintf( __('Add or remove %s tags', 'geodirectory'), $singular_name ),
+					'choose_from_most_used' => sprintf( __('Choose from the most used %s tags', 'geodirectory'), $singular_name ),
+					'separate_items_with_commas' => sprintf( __('Separate %s tags with commas', 'geodirectory'), $singular_name ),
 				),
 			);
 
@@ -190,16 +214,16 @@ class GeoDir_Post_types {
 				'rewrite' => array('slug' => $listing_slug, 'with_front' => false, 'hierarchical' => true),
 				'query_var' => true,
 				'labels' => array(
-					'name' => __('Place Categories', 'geodirectory'),
-					'singular_name' => __('Place Category', 'geodirectory'),
-					'search_items' => __('Search Place Categories', 'geodirectory'),
-					'popular_items' => __('Popular Place Categories', 'geodirectory'),
-					'all_items' => __('All Place Categories', 'geodirectory'),
-					'edit_item' => __('Edit Place Category', 'geodirectory'),
-					'update_item' => __('Update Place Category', 'geodirectory'),
-					'add_new_item' => __('Add New Place Category', 'geodirectory'),
-					'new_item_name' => __('New Place Category', 'geodirectory'),
-					'add_or_remove_items' => __('Add or remove Place categories', 'geodirectory'),
+					'name' => sprintf( __('%s Categories', 'geodirectory'), $singular_name ),
+					'singular_name' => sprintf( __('%s Category', 'geodirectory'), $singular_name ),
+					'search_items' => sprintf( __('Search %s Categories', 'geodirectory'), $singular_name ),
+					'popular_items' => sprintf( __('Popular %s Categories', 'geodirectory'), $singular_name ),
+					'all_items' => sprintf( __('All %s Categories', 'geodirectory'), $singular_name ),
+					'edit_item' => sprintf( __('Edit %s Category', 'geodirectory'), $singular_name ),
+					'update_item' => sprintf( __('Update %s Category', 'geodirectory'), $singular_name ),
+					'add_new_item' => sprintf( __('Add New %s Category', 'geodirectory'), $singular_name ),
+					'new_item_name' => sprintf( __('New %s Category', 'geodirectory'), $singular_name ),
+					'add_or_remove_items' => sprintf( __('Add or remove %s categories', 'geodirectory'), $singular_name ),
 				),
 			);
 
@@ -227,6 +251,42 @@ class GeoDir_Post_types {
 				}else{// its a category
 					$taxonomies[$key]['args']['rewrite']['slug'] = $cat_slug ? $listing_slug.'/'.$cat_slug : $listing_slug;
 				}
+
+				// Dynamically create the labels from the CPT labels
+				$singular_name = isset($post_types[$taxonomy['object_type']]['labels']['singular_name']) ? $post_types[$taxonomy['object_type']]['labels']['singular_name'] : 'Place';
+				if(stripos(strrev($key), "sgat_") === 0){ // its a tag
+					$taxonomies[$key]['args']['labels'] = array(
+						'name' => sprintf( __('%s Tags', 'geodirectory'), $singular_name ),
+						'singular_name' => sprintf( __('%s Tag', 'geodirectory'), $singular_name ),
+						'search_items' => sprintf( __('Search %s Tags', 'geodirectory'), $singular_name ),
+						'popular_items' => sprintf( __('Popular %s Tags', 'geodirectory'), $singular_name ),
+						'all_items' => sprintf( __('All %s Tags', 'geodirectory'), $singular_name ),
+						'edit_item' => sprintf( __('Edit %s Tag', 'geodirectory'), $singular_name ),
+						'update_item' => sprintf( __('Update %s Tag', 'geodirectory'), $singular_name ),
+						'add_new_item' => sprintf( __('Add New %s Tag', 'geodirectory'), $singular_name ),
+						'new_item_name' => sprintf( __('New %s Tag Name', 'geodirectory'), $singular_name ),
+						'add_or_remove_items' => sprintf( __('Add or remove %s tags', 'geodirectory'), $singular_name ),
+						'choose_from_most_used' => sprintf( __('Choose from the most used %s tags', 'geodirectory'), $singular_name ),
+						'separate_items_with_commas' => sprintf( __('Separate %s tags with commas', 'geodirectory'), $singular_name ),
+					);
+				}else{// its a category
+					$taxonomies[$key]['args']['labels'] = array(
+						'name' => sprintf( __('%s Categories', 'geodirectory'), $singular_name ),
+						'singular_name' => sprintf( __('%s Category', 'geodirectory'), $singular_name ),
+						'search_items' => sprintf( __('Search %s Categories', 'geodirectory'), $singular_name ),
+						'popular_items' => sprintf( __('Popular %s Categories', 'geodirectory'), $singular_name ),
+						'all_items' => sprintf( __('All %s Categories', 'geodirectory'), $singular_name ),
+						'edit_item' => sprintf( __('Edit %s Category', 'geodirectory'), $singular_name ),
+						'update_item' => sprintf( __('Update %s Category', 'geodirectory'), $singular_name ),
+						'add_new_item' => sprintf( __('Add New %s Category', 'geodirectory'), $singular_name ),
+						'new_item_name' => sprintf( __('New %s Category', 'geodirectory'), $singular_name ),
+						'add_or_remove_items' => sprintf( __('Add or remove %s categories', 'geodirectory'), $singular_name ),
+					);
+				}
+
+
+
+
 			}
 		}
 

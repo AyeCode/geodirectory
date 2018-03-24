@@ -22,7 +22,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'block-output'   => array( // the block visual output elements as an array
 				array(
 					'element' => 'div',
-					'title'   => __( 'Placeholder1', 'geodirectory' ),
+					'title'   => __( 'Placeholder image', 'geodirectory' ),
 					'class'   => '[%className%]',
 					'style'   => '{background: "#eee",width: "100%", height: "450px", position:"relative"}',
 					array(

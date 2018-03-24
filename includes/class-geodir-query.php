@@ -609,7 +609,7 @@ class GeoDir_Query {
 				$orderby = " " . $table . ".overall_rating ASC, " . $table . ".rating_count ASC, ";
 				break;
 			default:
-				$orderby .= $table . ".featured asc, $wpdb->posts.post_date desc";
+				$orderby .= " $wpdb->posts.post_date desc";
 				break;
 		endswitch;
 
