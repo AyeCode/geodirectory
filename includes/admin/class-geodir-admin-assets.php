@@ -51,8 +51,8 @@ class GeoDir_Admin_Assets {
 		// this should be everywhere
 		wp_enqueue_style('font-awesome');
 
-		// load rating scripts on comments pages
-		if($screen_id == 'comment' || $screen_id == 'edit-comments'){
+		// load rating scripts on comments & dashboard page.
+		if($screen_id == 'comment' || $screen_id == 'edit-comments' || $screen_id == 'dashboard'){
 			if(geodir_get_option('rating_type')=='font-awesome') {
 				wp_enqueue_style('font-awesome');
 			}
@@ -126,7 +126,7 @@ class GeoDir_Admin_Assets {
 		
 
 		// Register scripts
-		wp_register_script('select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), '4.0.4' );
+		wp_register_script('select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), '4.0.5' );
 		wp_register_script('geodir-custom-fields-script', geodir_plugin_url() . '/assets/js/custom_fields'.$suffix.'.js', array('select2','jquery','jquery-ui-sortable'), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-g-overlappingmarker-script', geodir_plugin_url() . '/assets/jawj/oms'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-o-overlappingmarker-script', geodir_plugin_url() . '/assets/jawj/oms-leaflet'.$suffix.'.js', array(), GEODIRECTORY_VERSION);

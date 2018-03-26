@@ -1115,11 +1115,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 //			$custom_fields['featured'] = array(
 //                'field_type'  => 'badge',
 //                'class'       => 'gd-badge',
-//                'icon'        => '',
+//                'icon'        => 'fa fa-certificate',
 //                'name'        => __( 'Featured Badge', 'geodirectory' ),
 //                'description' => __( 'Show a FEATURED badge the listing.', 'geodirectory' ),
 //                'defaults'    => array(
-//	                'data_type'          => 'TEXT',
+//	                'data_type'          => 'TINYINT',
 //	                'admin_title'        => 'Featured Badge',
 //	                'frontend_title'     => 'FEATURED',
 //	                'frontend_desc'      => __( 'Show a FEATURED badge the listing.', 'geodirectory' ),
@@ -1149,18 +1149,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 //			);
 //
 //			// New Post Badge
-//			$custom_fields['new_badge'] = array(
+//			$custom_fields['new'] = array(
 //                'field_type'  => 'badge',
 //                'class'       => 'gd-badge',
-//                'icon'        => '',
+//                'icon'        => 'fa fa-certificate',
 //                'name'        => __( 'New Post Badge', 'geodirectory' ),
 //                'description' => __( 'Show a NEW badge the listing.', 'geodirectory' ),
 //                'defaults'    => array(
-//	                'data_type'          => 'TEXT',
+//	                'data_type'          => 'TINYINT',
 //	                'admin_title'        => 'New Post Badge',
 //	                'frontend_title'     => 'NEW',
 //	                'frontend_desc'      => '',
-//	                'htmlvar_name'       => 'new_badge',
+//	                'htmlvar_name'       => 'new',
 //	                'is_active'          => true,
 //	                'for_admin_use'      => true,
 //	                'default_value'      => '',
@@ -1526,7 +1526,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			if($field->data_type == ''){
 
 				switch ($field->field_type){
-
+					case 'badge':
 					case 'checkbox':
 						$value = 'TINYINT';
 						break;
@@ -1752,7 +1752,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			if(is_wp_error( $exists ) ){
 				return new WP_Error( 'failed', $exists->get_error_message() );
 			}elseif( $exists && !$field->field_id ){
-				if ( $field->htmlvar_name == 'featured' || $field->htmlvar_name == 'new_badge' ) {
+				if ( $field->htmlvar_name == 'featured' || $field->htmlvar_name == 'new' ) {
 					return new WP_Error( 'failed', wp_sprintf( __( "%s field already exists, it can not be used twice.", "geodirectory" ),  $field->htmlvar_name ) );
 				} else {
 					return new WP_Error( 'failed', __( "Field HTML variable name MUST be unique, duplicate field detected, please fix and re-save.", "geodirectory" ) );
@@ -1764,6 +1764,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 //				case 'address':
 //					echo $field->field_type; //@todo we need to do stuff here
 //					break;
+				case 'badge':
 				case 'checkbox':
 					$column_attr .= "( 1 ) NOT NULL ";
 					if ((int)$field->default_value === 1) {
