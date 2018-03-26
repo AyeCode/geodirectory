@@ -520,7 +520,7 @@ if ( ! class_exists( 'GD_Settings_Cpt', false ) ) :
 			if($field->data_type == ''){
 
 				switch ($field->field_type){
-
+					case 'badge':
 					case 'checkbox':
 						$value = 'TINYINT';
 						break;

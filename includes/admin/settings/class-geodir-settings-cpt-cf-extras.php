@@ -931,8 +931,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			$txt_color 	= ! empty( $extra_fields['txt_color'] ) ? $extra_fields['txt_color'] : '#ffffff';
 			$search_placeholder = '';
 			ob_start();
-			if ( $htmlvar_name == 'featured' || $htmlvar_name == 'new_badge' ) { 
-				if ( $htmlvar_name == 'new_badge' ) {
+			if ( $htmlvar_name == 'featured' || $htmlvar_name == 'new' ) { 
+				if ( $htmlvar_name == 'new' ) {
 					$badge_key = 'post_date';
 					$badge_condition = 'is_greater_than';
 					$search_placeholder = '+7';
@@ -995,7 +995,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				<label for="badge_search" class="gd-cf-tooltip-wrap">
 					<span class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help" title="<?php _e( 'Match this text with field value to display post badge.', 'geodirectory' ); ?>">
 					</span>
-					<?php if ( $htmlvar_name == 'new_badge' ) { ?>
+					<?php if ( $htmlvar_name == 'new' ) { ?>
 					<?php _e( 'Post newer then days (ex: +7):', 'geodirectory' ); ?>
 					<?php } else { ?>
 					<?php _e( 'Value to match:', 'geodirectory' ); ?>

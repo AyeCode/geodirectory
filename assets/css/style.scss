@@ -154,9 +154,9 @@ ul#breadcrumbs {
     margin-right: 3%;
 }
 
-.geodir-tabs-content.entry-content > li {
-    margin: 0px 2%;
-    width: 96%;
+.geodir-tabs-content.geodir-entry-content > li {
+    margin: 0px 14px;
+    width: calc(100% - 28px);
 }
 
 /* taxonomies */

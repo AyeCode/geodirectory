@@ -1236,6 +1236,9 @@ table.gd_status_table th.run-tool {
 .geodir_form_row .gd-select2-container ul {
     float: none;
 }
+.gd-select2-container .select2-selection--multiple .select2-search__field {
+  width: 100% !important
+}
 /* select2 end */
 .geodirectory-message {
 	a.button-primary,
@@ -1279,6 +1282,17 @@ table.gd_status_table th.run-tool {
 			transition: all 0.1s ease-in-out;
 		}
 	}
+}
+
+#dashboard_activity .gd-rating.gd-rating-output {
+	padding: 12px 10px 0 12px;
+	margin: 0;
+	box-shadow: inset 0 1px 0 #0000001a;
+	margin-bottom: -13px;
+	z-index: 1;
+	border-bottom: solid 1px #fafafa;
+	background: #fafafa;
+	text-align: right;
 }
 
 /********************************************************
