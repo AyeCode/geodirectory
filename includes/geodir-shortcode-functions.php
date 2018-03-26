@@ -2662,3 +2662,42 @@ function geodir_sc_single_meta_value($post_id,$key){
 
     return $output;
 }
+
+/**
+ * Outputs single meta from a super block.
+ * 
+ * @param $atts
+ * @param string $content
+ * @param string $widget_args
+ *
+ * @return mixed|string|void
+ */
+function geodir_sc_post_badge( $atts = array(), $content = '', $widget_args = array() ) {
+    global $post;
+
+	$post_id 	= ! empty( $atts['id'] ) ? $atts['id'] : ( ! empty( $post->ID ) ? $post->ID : 0 );
+	$post_type 	= $post_id ? get_post_type( $post_id ) : '';
+
+	$atts['id'] = $post_id;
+
+	// Errors.
+    $errors = array();
+    if ( empty( $atts['id'] ) ) {
+		$errors[] = __('post id is missing','geodirectory');
+	}
+	if ( empty( $post_type ) ) {
+		$errors[] = __('invalid post type','geodirectory');
+	}
+	if ( empty( $atts['key'] ) ) {
+		$errors[] = __('field key is missing', 'geodirectory');
+	}
+
+	$output = '';
+    if ( ! empty( $errors ) ){
+        $output .= implode( ", ", $errors );
+    }
+
+    $output = geodir_get_post_badge( $post_id, $atts );
+
+    return $output;
+}

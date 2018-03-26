@@ -1920,3 +1920,145 @@ function geodir_setup_postdata( $the_post ) {
 		}
 	}
 }
+
+function geodir_get_post_badge( $post_id, $args = array() ) {
+	global $gd_post;
+
+	$output = '';
+	if ( empty( $post_id ) ) {
+		return $output;
+	}
+
+	$post_type 	= get_post_type( $post_id );
+
+	// check if its demo content
+    if ( $post_type == 'page' && geodir_is_block_demo() ) {
+        $post_type = 'gd_place';
+    }
+
+	if ( ! geodir_is_gd_post_type( $post_type ) ) {
+		return $output;
+	}
+
+	$defaults = array(
+		'key'        		=> '',
+		'condition'  		=> '',
+		'search'     		=> 'is_equal',
+		'badge'       		=> '',
+		'bg_color'         	=> '#0073aa',
+		'txt_color'        	=> '#ffffff',
+		'size'       		=> '',
+		'alignment'        	=> ''
+	);
+    $args = shortcode_atts( $defaults, $args, 'gd_post_badge' );
+
+	$match_field = $args['key'];
+	$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
+
+	if ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) {
+		$badge	= $args['badge'];
+
+		// Check if there is a specific filter for field.
+		if ( has_filter( 'geodir_output_badge_field_key_' . $match_field ) ) {
+			$output = apply_filters( 'geodir_output_badge_field_key_' . $match_field, $output, $find_post, $args );
+		}
+				
+		if ( $match_field !== 'post_date' ) {
+			$fields = geodir_post_custom_fields( '',  'all', $post_type , 'none' );
+
+			$field = array();
+			foreach( $fields as $field_info ) {
+				if ( $match_field == $field_info['htmlvar_name'] ) {
+					$field = $field_info;
+					break;
+				}
+			}
+			if ( ! empty( $field ) ) {
+				if ( empty( $badge ) ) {
+					$badge = $field['frontend_title'];
+				}
+
+				// Check if there is a specific filter for key type.
+				if ( has_filter( 'geodir_output_badge_key_' . $field['field_type_key'] ) ) {
+					$output = apply_filters( 'geodir_output_badge_key_' . $field['field_type_key'], $output, $find_post, $args, $field );
+				}
+
+				// Check if there is a specific filter for condition.
+				if ( has_filter( 'geodir_output_badge_condition_' . $args['condition'] ) ) {
+					$output = apply_filters( 'geodir_output_badge_condition_' . $args['condition'], $output, $find_post, $args, $field );
+				}
+			} else {
+				return $output;
+			}
+		}
+		
+		// If not then we run the standard output.
+		if ( empty( $output ) ) {
+			$search = $args['search'];
+
+			$match_value = trim( $find_post->{$match_field} );
+			$match_found = false;
+
+			if ( $match_field == 'post_date' ) {
+				if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
+					$search = '+' . $search;
+				}
+				$until_time	= strtotime( get_the_time( 'Y-m-d' ) . ' ' . $search . ' days' );
+				$now_time	= strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
+				if ( $until_time >= $now_time ) {
+					$match_found = true;
+				}
+			} elseif ( $match_field == 'featured' ) {
+				if ( ! empty( $find_post->{$match_field} ) ) {
+					$match_found = true;
+				}
+			} else {
+				switch ( $args['condition'] ) {
+					case 'is_equal':
+						$match_found = (bool)( $search != '' && $match_value == $search );
+						break;
+					case 'is_not_equal':
+						$match_found = (bool)( $search != '' && $match_value == $search );
+						break;
+					case 'is_greater_than':
+						$match_found = (bool)( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value > $search );
+						break;
+					case 'is_less_than':
+						$match_found = (bool)( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value < $search );
+						break;
+					case 'is_empty':
+						$match_found = (bool)( $match_value === '' || $match_value === false && $match_value === '0' || is_null( $match_value ) );
+						break;
+					case 'is_not_empty':
+						$match_found = (bool)( $match_value !== '' && $match_value !== false && $match_value !== '0' && ! is_null( $match_value ) );
+						break;
+					case 'is_contains':
+						$match_found = (bool)( $search != '' && stripos( $match_value, $search ) !== false );
+						break;
+					case 'is_not_contains':
+						$match_found = (bool)( $search != '' && stripos( $match_value, $search ) === false );
+						break;
+				}
+			}
+			if ( $match_found ) {
+				if ( empty( $badge ) && $match_field == 'post_date' ) {
+					$badge = __( 'NEW', 'geodirectory' );
+				}
+
+				$class = '';
+				if ( ! empty( $args['size'] ) ) {
+					$class .= ' gd-badge-' . sanitize_title( $args['size'] );
+				}
+				if ( ! empty( $args['alignment'] ) ) {
+					$class .= ' align' . $args['alignment'];
+				}
+
+				$output = '<div class="gd-badge-meta ' . trim( $class ) . '">';
+				$output .= '<div data-id="' . $find_post->ID . '" class="gd-badge" data-badge="' . $match_field . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . __( $badge, 'geodirectory' ) . '</div>';
+				$output .= '</div>';
+			}
+		}
+	}
+
+	return $output;
+}

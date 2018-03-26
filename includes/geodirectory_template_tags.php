@@ -466,47 +466,6 @@ function geodir_add_sharelocation_scripts() {
 <?php
 }
 
-
-/**
- * Displays badges on the listings pages over the thumbnail.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $which The badge type.
- * @param object $post The post object.
- * @param string $link The link to the post.
- * @return string|void The link HTML.
- */
-function geodir_show_badges_on_image($which, $post, $link)
-{
-    $return = '';
-    switch ($which) {
-        case 'featured':
-            /**
-             * Filter the featured image badge html that appears in the listings pages over the thumbnail.
-             *
-             * @since 1.0.0
-             * @param object $post The post object.
-             * @param string $link The link to the post.
-             */
-            $return = apply_filters('geodir_featured_badge_on_image', '<a href="' . $link . '"><span class="geodir_featured_img">&nbsp;</span></a>',$post,$link);
-            break;
-        case 'new' :
-            /**
-             * Filter the new image badge html that appears in the listings pages over the thumbnail.
-             *
-             * @since 1.0.0
-             * @param object $post The post object.
-             * @param string $link The link to the post.
-             */
-            $return = apply_filters('geodir_new_badge_on_image', '<a href="' . $link . '"><span class="geodir_new_listing">&nbsp;</span></a>',$post,$link);
-            break;
-
-    }
-    
-    return $return;
-}
-
 /**
  * Dequeue scripts to fix JS conflicts.
  *

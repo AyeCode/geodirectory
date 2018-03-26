@@ -23,39 +23,6 @@ global $post;
                                 <a href="<?php the_permalink(); ?>">
                                     <?php echo $fimage; ?>
                                 </a>
-                                <?php
-                                /**
-                                 * Called before badges are output.
-                                 *
-                                 * Called on the listings template after the image has been output and before the badges like `new` or `featured` are output.
-                                 *
-                                 * @since 1.0.0
-                                 * @param object $post The post object.
-                                 * @see 'geodir_after_badge_on_image'
-                                 */
-                                do_action('geodir_before_badge_on_image', $post);
-                                if (isset($post->featured) && $post->featured) {
-                                    echo geodir_show_badges_on_image('featured', $post, get_permalink());
-                                }
-
-                                $geodir_days_new = (int)geodir_get_option('geodir_listing_new_days');
-
-                                if (round(abs(strtotime($post->post_date) - strtotime(date('Y-m-d'))) / 86400) < $geodir_days_new) {
-                                    echo geodir_show_badges_on_image('new', $post, get_permalink());
-                                }
-
-                                /**
-                                 * Called after badges are output.
-                                 *
-                                 * Called on the listings template after the image and badges like `new` or `featured` have been output.
-                                 *
-                                 * @since 1.0.0
-                                 * @param object $post The post object.
-                                 * @see 'geodir_before_badge_on_image'
-                                 */
-                                do_action('geodir_after_badge_on_image', $post);
-                                ?>
-
 
                             <?php } ?>
 

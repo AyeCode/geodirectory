@@ -66,19 +66,6 @@ if ($gd_session->get('gd_listing_view') && !isset($before_widget)) {
                             <?php if ($fimage = geodir_show_featured_image($post->ID, 'list-thumb', true, false, $post->featured_image)) { ?>
                                 <a href="<?php the_permalink(); ?>"><?php echo $fimage; ?></a>
                                 <?php
-                                /** This action is documented in includes/templates/listing-listview.php */
-                                do_action('geodir_before_badge_on_image', $post);
-                                if ($post->featured) {
-                                    echo geodir_show_badges_on_image('featured', $post, get_permalink());
-                                }
-
-
-                                if (round(abs(strtotime($post->post_date) - strtotime(date('Y-m-d'))) / 86400) < $geodir_days_new) {
-                                    echo geodir_show_badges_on_image('new', $post, get_permalink());
-                                }
-
-                                /** This action is documented in includes/templates/listing-listview.php */
-                                do_action('geodir_after_badge_on_image', $post);
                             }
                             ?>
                         </div>

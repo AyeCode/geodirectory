@@ -2603,6 +2603,9 @@ body > span[style*='top: -999px']{display: none;}
 	border-bottom: 0;
 }
 /* BADGE STYLE START */
+.geodir-post-badge{
+	display: inline-block;
+}
 .gd-badge-meta {
 	display: inline-block;
 	margin-left: .2em;
@@ -2622,24 +2625,25 @@ body > span[style*='top: -999px']{display: none;}
   background-color: #337ab7;
   color: #fff
 }
+.geodir-post-badge:empty,
 .gd-badge-meta:empty,
 .gd-badge:empty {
   display: none;
 }
-.gd-badge-sm .gd-badge {
+.gd-badge-small .gd-badge {
 	font-size: 75%;
 	padding: .28em .55em .36em;
 }
-.gd-badge-md .gd-badge {
+.gd-badge-medium .gd-badge {
 	font-size: 125%;
 	padding: .27em .575em .3em;
 }
-.gd-badge-lg .gd-badge {
+.gd-badge-large .gd-badge {
 	font-size: 150%;
 	padding: .27em .575em .3em;
 	font-weight: 500;
 }
-.gd-badge-xl .gd-badge {
+.gd-badge-extra-large .gd-badge {
 	font-size: 175%;
 	padding: .27em .55em .3em;
 	font-weight: 500;

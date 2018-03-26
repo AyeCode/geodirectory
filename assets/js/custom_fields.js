@@ -115,20 +115,9 @@ jQuery(document).ready(function () {
 
     //gd_toggle_display();
     gd_toggle_switch_display();
-    if (jQuery('#gd-form-builder-tab #badge_type').length) {
-        jQuery('#gd-form-builder-tab #badge_type').each(function () {
-            jQuery(this).trigger('change');
-        });
-    }
     jQuery('body').bind('geodir_on_save_custom_field', function (e, data) {
-        if (data.id && jQuery('#licontainer_' + data.id).find('#badge_type').length) {
-            jQuery('#licontainer_' + data.id).find('#badge_type').trigger('change');
-        }
     });
     jQuery('body').bind('geodir_on_get_custom_field', function (e, data) {
-        if (data.id && jQuery('#licontainer_' + data.id).find('#badge_type').length) {
-            jQuery('#licontainer_' + data.id).find('#badge_type').trigger('change');
-        }
     });
 });
 
@@ -406,23 +395,4 @@ function gd_toggle_switch_display() {
 
 
     });
-}
-
-function gd_badge_changed(el, cont) {
-    var type = jQuery(el).val(),
-        $wrap = jQuery('#licontainer_' + cont);
-    jQuery('.gd-extra-post-badge', $wrap).hide();
-    jQuery('.gd-extra-bt-' + type, $wrap).show();
-    jQuery('#badge_condition', $wrap).trigger('change');
-}
-
-function gd_badge_condition_changed(el, cont) {
-    var val = jQuery(el).val(),
-        $wrap = jQuery('#licontainer_' + cont),
-        $row = jQuery('#badge_search', $wrap).closest('.gd-extra-post-badge');
-    if (jQuery('#badge_type', $wrap).val() == 'custom' && (val != 'is_empty' && val != 'is_not_empty')) {
-        $row.show();
-    } else {
-        $row.hide();
-    }
 }
