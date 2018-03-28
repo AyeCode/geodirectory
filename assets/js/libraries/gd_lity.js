@@ -195,14 +195,14 @@
             var initGallery = function() {
                 if(has_next){
                     jQuery( ".lity-nav-right" ).click(function() {
+                        instance.close(); // close the original
                         instance.opener().parent().next('li').find('a').trigger( "click" ); // open the next one
-                        instance.close(); // close the oringal
                     });
                 }
                 if(has_prev){
                     jQuery( ".lity-nav-left" ).click(function() {
+                        instance.close(); // close the original
                         instance.opener().parent().prev('li').find('a').trigger( "click" ); // open the next one
-                        instance.close(); // close the oringal
                     });
                 }
             };

@@ -143,7 +143,8 @@ class GeoDir_Admin_Assets {
 		wp_register_script('geodir-google-maps', 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra , array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-leaflet-script', geodir_plugin_url() . '/assets/leaflet/leaflet'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-leaflet-routing-script', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
-		
+		wp_register_script('geodir-lity', geodir_plugin_url() . '/assets/js/libraries/gd_lity'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
+
 		if ( $page == 'geodirectory' ) {
 			wp_register_script( 'raphael', '//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js', array('jquery'), '2.1.0' );
 			wp_register_script( 'morris', '//cdnjs.cloudflare.com/ajax/libs/morris.js/0.5.1/morris.min.js', array('jquery'), '0.5.1' );
@@ -165,7 +166,10 @@ class GeoDir_Admin_Assets {
 		// Admin scripts for GD pages only
 		if ( in_array( $screen_id, geodir_get_screen_ids() ) ) {
 			wp_enqueue_script( 'wp-color-picker' );
-			
+
+			// gd lightbox
+			wp_enqueue_script( 'geodir-lity' );
+
 			// timepicker
 			wp_enqueue_script( 'geodir-jquery-ui-timepicker' );
 			

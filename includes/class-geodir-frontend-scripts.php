@@ -253,8 +253,8 @@ class GeoDir_Frontend_Scripts {
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
-			'lity' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/libraries/lity' . $suffix . '.js',
+			'geodir_lity' => array(
+				'src'     => geodir_plugin_url() . '/assets/js/libraries/gd_lity' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
@@ -396,7 +396,7 @@ class GeoDir_Frontend_Scripts {
 
 
 		self::enqueue_script( 'geodirectory' );
-		self::enqueue_script( 'lity' );
+		self::enqueue_script( 'geodir_lity' );
 		self::enqueue_script( 'jquery-flexslider' );
 
 		// Details only?
