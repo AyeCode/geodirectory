@@ -1263,7 +1263,8 @@ function geodir_show_detail_page_tabs() {
 								echo $geodir_post_detail_fields;
 								break;
 							case 'post_images':
-								echo $thumb_image;
+								//echo $thumb_image;
+								echo do_shortcode('[gd_post_images type="gallery" ajax_load="1" show_title="1" link_to="lightbox"]');
 								break;
 							case 'post_video':
 								// some browsers hide $_POST data if used for embeds so we replace with a placeholder

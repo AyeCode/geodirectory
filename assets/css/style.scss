@@ -1,4 +1,5 @@
 
+@import "libraries/lity";
 @import "partials/helpers";
 @import "partials/search_form";
 @import "partials/notifications";
@@ -9,6 +10,7 @@
 @import "partials/output_location";
 @import "partials/widget_dashboard";
 @import "partials/widget_categories";
+@import "partials/widget_images";
 @import "partials/maps";
 
 
@@ -304,13 +306,7 @@ ul#breadcrumbs {
 	margin-right: 4px;
 }
 
-#geodir-post-gallery a {
-    margin-right: 6px;
-    margin-bottom: 5px;
-    display: inline-block;
-    text-align: center;
-    border: 1px solid #CCCCCC;
-}
+
 
 ul.geodir-tabs-content li {
     padding-top: 10px;
@@ -955,36 +951,6 @@ body.geodir-x-search {
     margin-bottom: 15px;
     display: inline-block;
     vertical-align: top;
-}
-
-#geodir-post-gallery a {
-    box-sizing: border-box;
-    display: inline-block;
-    position: relative;
-    width: 24%;
-}
-
-#geodir-post-gallery a:after {
-    content: '';
-    display: block;
-    margin-top: 65%;
-}
-
-#geodir-post-gallery a .geodir_thumbnail {
-    padding: 0px;
-    float: left;
-    width: 100px;
-    background-position: 50% 50%;
-    background-repeat: no-repeat;
-    background-size: cover;
-    min-width: 92%;
-    max-width: 92%;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    margin: 4%;
 }
 
 .geodir_category_list_view li.geodir-gridview .geodir-post-img {

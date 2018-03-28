@@ -521,6 +521,10 @@ class GeoDir_Media {
 		$sql_args = array();
 		$sql_args[] = $type;
 		$sql_args[] = $post_id;
+
+
+
+
 		if($limit){
 			$limit_sql = ' LIMIT %d ';
 			$limit = absint($limit);
@@ -531,6 +535,9 @@ class GeoDir_Media {
 			return $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id IN (%d,%d)  ORDER BY menu_order $limit_sql",$sql_args));
 		}else{
 			if($limit){$sql_args[] = $limit;}
+//			echo '###'.$wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE  1 = %d  ORDER BY menu_order",1);
+//			print_r($wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE  1 = %d  ORDER BY menu_order",1)));
+//			exit;
 			return $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id = %d ORDER BY menu_order $limit_sql",$sql_args));
 		}
 	}

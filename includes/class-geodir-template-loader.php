@@ -166,6 +166,7 @@ class GeoDir_Template_Loader {
             $content = GeoDir_Defaults::page_archive_content();
         }
 
+        //$content = wpautop($content);// add double line breaks
         // run the shortcodes on the content
         $content = do_shortcode($content);
 
@@ -246,6 +247,7 @@ class GeoDir_Template_Loader {
             $content = GeoDir_Defaults::page_details_content();
         }
 
+        //$content = wpautop($content);// add double line breaks
         // run the shortcodes on the content
         $content = do_shortcode($content);
 
