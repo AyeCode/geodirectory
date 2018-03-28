@@ -595,4 +595,26 @@ class GeoDir_Media {
 
 		return $upload;
 	}
+
+	/**
+	 * Update the revision images IDs to the parent post on save.
+	 * 
+	 * @param $post_id
+	 * @param $revision_id
+	 */
+	public static function revision_to_parent($post_id,$revision_id){
+		if(!empty($post_id) && !empty($revision_id)){
+			global $wpdb;
+			$result = $wpdb->update(
+				GEODIR_ATTACHMENT_TABLE,
+				array(
+					'post_id' => $post_id
+				),
+				array('post_id' => $revision_id),
+				array(
+					'%d'
+				)
+			);
+		}
+	}
 }

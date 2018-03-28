@@ -100,7 +100,7 @@ class GeoDir_Post_Data {
 	public static function save_post( $post_id, $post, $update ) {
 		global $wpdb, $plugin_prefix;
 
-	//echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
+	///echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
 
 
 
@@ -344,10 +344,18 @@ class GeoDir_Post_Data {
 	 */
 	public static function save_post_images( $post_id = 0, $post_images = array(), $dummy = false ) {
 
+
+		//echo $post_id.'###'.$post_images;exit;
 		// check for changes, maybe we don't need to run the whole function
 		$curImages = GeoDir_Media::get_post_images_edit_string( $post_id );
 		if ( $curImages == $post_images ) {
 			return false;
+		}
+
+		// Re-assign revision images to parent
+		if(isset($_REQUEST['post_parent']) && $_REQUEST['post_parent'] && wp_is_post_revision( absint($_REQUEST['ID']) )){
+			$revision_id = absint($_REQUEST['ID']);
+			GeoDir_Media::revision_to_parent($post_id,$revision_id);
 		}
 
 		$featured_image = '';
