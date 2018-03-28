@@ -144,26 +144,7 @@ jQuery(document).ready(function() {
     });
 
 
-    var e = "undefined" != typeof geodir_params.gd_modal && 1 == parseInt(geodir_params.gd_modal) ? !0 : !1;
-    e || jQuery("#geodir-post-gallery a").lightBox({
-        overlayOpacity: .5,
-        imageLoading: geodir_params.plugin_url + "/assets/images/lightbox-ico-loading.gif",
-        imageBtnNext: geodir_params.plugin_url + "/assets/images/lightbox-btn-next.gif",
-        imageBtnPrev: geodir_params.plugin_url + "/assets/images/lightbox-btn-prev.gif",
-        imageBtnClose: geodir_params.plugin_url + "/assets/images/lightbox-btn-close.gif",
-        imageBlank: geodir_params.plugin_url + "/assets/images/lightbox-blank.gif"
-    }), jQuery("a.b_sendtofriend").click(function(e) {
-        geodir_get_popup_forms(e, jQuery(this), "b_sendtofriend", "basic-modal-content")
-    }), jQuery("a.b_send_inquiry").click(function(e) {
-        geodir_get_popup_forms(e, jQuery(this), "b_send_inquiry", "basic-modal-content2")
-    }), jQuery(document).delegate("#agt_mail_agent .is_required:visible,#send_to_frnd .is_required:visible", "blur", function() {
-        geodir_popup_validate_field(this)
-    }), jQuery(document).delegate("#agt_mail_agent, #send_to_frnd", "submit", function() {
-        var e = !0;
-        return jQuery(this).find(".is_required:visible").each(function() {
-            geodir_popup_validate_field(this) || (e = geodir_popup_validate_field(this))
-        }), e ? !0 : !1
-    });
+    
 
 
 

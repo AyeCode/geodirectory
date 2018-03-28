@@ -6,14 +6,16 @@
  * @package GeoDirectory
  */
 
-function geodir_image_tag_ajaxify($img_tag){
+function geodir_image_tag_ajaxify($img_tag,$lazy_load = true){
 
-   // data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==
-    //<img src="https://ppldb.com/v2/wp-content/uploads/2018/02/sample-picture-1-300x200.jpg"
-    // alt="image-340" width="600" height="400"
-    // class="align size-medium geodir-image-340"
-    // srcset="https://ppldb.com/v2/wp-content/uploads//2018/02/sample-picture-1-300x200.jpg 300w, https://ppldb.com/v2/wp-content/uploads//2018/02/sample-picture-1.jpg 600w" sizes="(max-width: 600px) 100vw, 600px" />
-    $img_tag = str_replace(array("src=","srcset="),array("src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAABCAQAAACC0sM2AAAADklEQVR42mP8X88wLAAAK5IBgMYCdqgAAAAASUVORK5CYII=' data-src=","data-srcset="),$img_tag);
+    
+    $strip = array("src=","srcset=");
+    $replace = array("src='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGQAAAABCAQAAACC0sM2AAAADklEQVR42mP8X88wLAAAK5IBgMYCdqgAAAAASUVORK5CYII=' data-src=","data-srcset=");
+    if($lazy_load){
+        $strip[] = 'class="';
+        $replace[] = 'class="geodir-lazy-load ';
+    }
+    $img_tag = str_replace($strip,$replace,$img_tag);
 
     return $img_tag;
 }
@@ -56,7 +58,7 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
 
     $id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
     $title = isset( $image->title ) && $image->title ? 'title="' . esc_attr( $image->title ) . '" ' : '';
-    $alt = isset( $image->title ) && $image->title ? $image->title : 'image-'.$id;
+    $alt = isset( $image->caption ) && $image->caption ? $image->caption : 'image-'.$id;
     $class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id;
 
     /**
@@ -111,6 +113,8 @@ function geodir_get_images($post_id = 0, $limit = '')
 {
 
     $post_images = GeoDir_Media::get_post_images($post_id,$limit);
+
+//    print_r( $post_images );
     if(!empty($post_images)){
 
         // wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id );

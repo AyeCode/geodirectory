@@ -37,9 +37,9 @@ jQuery.fn.gdunveil = function(threshold, callback,extra1) {
         var source = this.getAttribute(attrib);
         source = source || this.getAttribute("data-src");
         if (source) {
-            //this.setAttribute("src", source);
-            // $(this).removeClass('geodir_lazy_load_thumbnail');
-            jQuery(this).css('background-image', 'url("' + source + '")');
+            this.setAttribute("src", source);
+            jQuery(this).removeClass('geodir-lazy-load');
+            //jQuery(this).css('background-image', 'url("' + source + '")');
             if (typeof callback === "function") callback.call(this);
         }
     });
@@ -75,7 +75,7 @@ jQuery.fn.gdunveil = function(threshold, callback,extra1) {
 
 function geodir_init_lazy_load(){
     // load for GD images
-    jQuery(".geodir_thumbnail").gdunveil(100,function() {this.style.opacity = 1;},'#geodir_content');
+    jQuery(".geodir-lazy-load").gdunveil(100,function() {this.style.opacity = 1;},'#geodir_content');
 
     // fire when the image tab is clicked on details page
     jQuery('#gd-tabs').click(function() {
@@ -91,9 +91,8 @@ function geodir_init_lazy_load(){
 
 jQuery(function($) {
     // start lazy load if it's turned on
-    if(geodirectory_params.lazy_load==1){
-        geodir_init_lazy_load();
-    }
+    geodir_init_lazy_load();
+
 	
 	$(document).on('click', '.gd-bh-show-field .gd-bh-expand-range', function(e){
 		var $wrap = $(this).closest('.geodir_post_meta')
@@ -446,7 +445,7 @@ jQuery(document).ready(function() {
         if (input_field.attr('data-type') == 'autofill' && input_field.attr('data-fill') != '') {
             var data_fill = input_field.attr('data-fill');
             var fill_value = jQuery(this).val();
-            jQuery.get(geodirectory_params.ajax_url, {
+            jQuery.get(geodir_params.ajax_url, {
                 autofill: data_fill,
                 fill_str: fill_value
             }, function(data) {
@@ -517,17 +516,17 @@ jQuery(document).ready(function() {
         }, "fast");
     }
     
-    var gd_modal = "undefined" != typeof geodirectory_params.gd_modal && 1 == parseInt(geodirectory_params.gd_modal) ? false : true;
+    var gd_modal = "undefined" != typeof geodir_params.gd_modal && 1 == parseInt(geodir_params.gd_modal) ? false : true;
     
     if (gd_modal) {
         jQuery(".geodir-custom-post-gallery").each(function() {
             jQuery("a", this).lightBox({
                 overlayOpacity: .5,
-                imageLoading: geodirectory_params.plugin_url + "/assets/images/lightbox-ico-loading.gif",
-                imageBtnNext: geodirectory_params.plugin_url + "/assets/images/lightbox-btn-next.gif",
-                imageBtnPrev: geodirectory_params.plugin_url + "/assets/images/lightbox-btn-prev.gif",
-                imageBtnClose: geodirectory_params.plugin_url + "/assets/images/lightbox-btn-close.gif",
-                imageBlank: geodirectory_params.plugin_url + "/assets/images/lightbox-blank.gif"
+                imageLoading: geodir_params.plugin_url + "/assets/images/lightbox-ico-loading.gif",
+                imageBtnNext: geodir_params.plugin_url + "/assets/images/lightbox-btn-next.gif",
+                imageBtnPrev: geodir_params.plugin_url + "/assets/images/lightbox-btn-prev.gif",
+                imageBtnClose: geodir_params.plugin_url + "/assets/images/lightbox-btn-close.gif",
+                imageBlank: geodir_params.plugin_url + "/assets/images/lightbox-blank.gif"
             })
         });
     }
@@ -771,13 +770,13 @@ function gd_fav_save(post_id) {
     }
 
     jQuery.ajax({
-        url: geodirectory_params.ajax_url,
+        url: geodir_params.ajax_url,
         type: 'GET',
         dataType: 'json',
         data: {
             action: 'geodir_user_add_fav',
             type_action: ajax_action,
-            security: geodirectory_params.basic_nonce,
+            security: geodir_params.basic_nonce,
             pid: post_id
         },
         timeout: 20000,
@@ -792,15 +791,15 @@ function gd_fav_save(post_id) {
                     jQuery('.favorite_property_' + post_id+' a')
                         .removeClass('geodir-removetofav-icon')
                         .addClass('geodir-addtofav-icon')
-                        .attr("title", geodirectory_params.text_add_fav)
-                        .html('<i class="'+geodirectory_params.icon_fav+'"></i>'+' '+geodirectory_params.text_fav);
+                        .attr("title", geodir_params.text_add_fav)
+                        .html('<i class="'+geodir_params.icon_fav+'"></i>'+' '+geodir_params.text_fav);
 
                 }else{
                     jQuery('.favorite_property_' + post_id+' a')
                         .removeClass('geodir-addtofav-icon')
                         .addClass('geodir-removetofav-icon')
-                        .attr("title", geodirectory_params.text_remove_fav)
-                        .html('<i class="'+geodirectory_params.icon_unfav+'"></i>'+' '+geodirectory_params.text_unfav);
+                        .attr("title", geodir_params.text_remove_fav)
+                        .html('<i class="'+geodir_params.icon_unfav+'"></i>'+' '+geodir_params.text_unfav);
 
                 }
             }else{
@@ -941,12 +940,12 @@ function gd_delete_post($post_id){
     if (confirm(message)) {
 
         jQuery.ajax({
-            url: geodirectory_params.ajax_url,
+            url: geodir_params.ajax_url,
             type: 'POST',
             dataType: 'json',
             data: {
                 action: 'geodir_user_delete_post',
-                security: geodirectory_params.basic_nonce,
+                security: geodir_params.basic_nonce,
                 post_id: $post_id
             },
             timeout: 20000,

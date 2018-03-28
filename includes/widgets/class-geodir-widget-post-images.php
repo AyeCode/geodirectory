@@ -141,6 +141,20 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'element_require' => '[%type%]=="slider"',
 					'advanced' => true
+				),
+				'link_to'  => array(
+					'title' => __('Link to:', 'geodirectory'),
+					'desc' => __('Link images to where.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"post" => __('Post', 'geodirectory'),
+						"lightbox" => __('Lightbox image', 'geodirectory'),
+					),
+					'default'  => '',
+					'desc_tip' => true,
+					//'element_require' => '[%type%]=="slider"',
+					'advanced' => true
 				)
 			)
 		);
@@ -194,6 +208,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'controlnav'=> '2', // 0 = none, 1 =  standard, 2 = thumbnails
 			'show_title'=> '1',
 			'limit'     => '',
+			'link_to'     => '',
+			'image_size'     => '',
 		);
 
 		/**
@@ -201,19 +217,32 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		 */
 		$options = wp_parse_args( $options, $defaults );
 
+		if($options['type']=='image'){
+			$options['limit'] = 1;
+		}
+
 		//print_r($options);echo '###';
 
 		$post_images = geodir_get_images($post->ID, $options['limit']);
+
+		//print_r( $post_images );
 		
 
 		if (!empty($post_images)) {
 			$main_wrapper_class = "geodir-image-container";
 			$second_wrapper_class = "geodir-image-wrapper";
+			$ul_class = "geodir-post-image";
+			$image_size = isset($options['image_size']) && $options['image_size'] ? $options['image_size'] : 'medium_large';
+
+
+
 			if($options['type']=='slider'){
 				$main_wrapper_class .= " geodir_flex-container ";
 				$second_wrapper_class .= " geodir_flexslider geodir-slider ";
-			}else{
-				//$main_wrapper_class = "geodir-image-container";
+				$ul_class = "geodir-slides";
+			}elseif($options['type']=='gallery'){
+				if(!$image_size){$image_size = 'medium_large';}
+				$ul_class = "geodir-gallery";
 			}
 
 			// Set the slider ID
@@ -228,6 +257,23 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				$gd_slider_outputs[$post->ID] = 1;
 			}
 
+			// image link
+			$link = '';
+			$link_tag_open = "";
+			$link_tag_close = "";
+			if($options['link_to']=='post'){
+				$link = get_the_permalink($post->ID);
+				$link_tag_open = "<a href='%s'>";
+				$link_tag_close = "</a>";
+			}elseif($options['link_to']=='lightbox'){
+				$link = '';
+				$link_tag_open = "<a href='%s' class='geodir-lightbox-image' data-lity>";
+				$link_tag_close = "</a>";
+			}
+
+
+
+
 			?>
 			<div class="<?php echo $main_wrapper_class;?>" >
 				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fa fa-refresh fa-spin"></i></div>';}?>
@@ -236,20 +282,30 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				if($options['animation']=='fade'){echo "data-animation='fade'";}
 				if($options['slideshow']){echo "data-slideshow='1'";}
 				?>>
-					<ul class="geodir-slides clearfix"><?php
+					<ul class="<?php echo esc_attr($ul_class );?> geodir-images clearfix"><?php
 						$image_count = 0;
 						foreach($post_images as $image){
 							echo "<li>";
 							//print_r($image);
-							$img_tag = geodir_get_image_tag($image,'medium');
+							$img_tag = geodir_get_image_tag($image,$image_size );
 							$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
 							$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
 
+
+							// image link
+							if($options['link_to']=='lightbox'){
+								$link = geodir_get_image_src($image, 'large');
+							}
+
 							// ajaxify images
 							if($options['ajax_load'] && $image_count){
-								$img_tag = geodir_image_tag_ajaxify($img_tag);
+								$img_tag = geodir_image_tag_ajaxify($img_tag,$options['type']!='slider');
 							}
+							// output image
+							echo $link_tag_open ? sprintf($link_tag_open,esc_url($link)) : '';
 							echo $img_tag;
+							echo $link_tag_close;
+
 
 							if($options['type']=='slider' && $options['show_title'] && !empty($image->title)){
 								echo '<p class="flex-caption">'.$image->title.'</p>';

@@ -253,6 +253,11 @@ class GeoDir_Frontend_Scripts {
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
+			'lity' => array(
+				'src'     => geodir_plugin_url() . '/assets/js/libraries/lity' . $suffix . '.js',
+				'deps'    => array(),
+				'version' => GEODIRECTORY_VERSION,
+			),
 //			'' => array(
 //				'src'     => ,
 //				'deps'    => array(),
@@ -363,7 +368,7 @@ class GeoDir_Frontend_Scripts {
 
 		// geodir_params
 		wp_localize_script('geodirectory', 'geodir_params', geodir_params()); //@todo we need to do this the nice way
-		
+
 
 
 
@@ -391,11 +396,12 @@ class GeoDir_Frontend_Scripts {
 
 
 		self::enqueue_script( 'geodirectory' );
+		self::enqueue_script( 'lity' );
 		self::enqueue_script( 'jquery-flexslider' );
 
 		// Details only?
 		self::enqueue_script( 'geodir-post' );
-		self::enqueue_script( 'geodir-jquery-lightbox' );
+		//self::enqueue_script( 'geodir-jquery-lightbox' );
 
 
 		// Map stuff
