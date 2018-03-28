@@ -26,6 +26,7 @@ function goedir_register_widgets() {
         register_widget( 'GeoDir_Widget_Recent_Reviews' );
 
         // post widgets
+		register_widget( 'GeoDir_Widget_Post_Badge' );
         register_widget( 'GeoDir_Widget_Post_Meta' );
         register_widget( 'GeoDir_Widget_Post_Images' );
         register_widget( 'GeoDir_Widget_Post_Title' );
