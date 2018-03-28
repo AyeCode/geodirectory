@@ -3,6 +3,7 @@ Double five star bars in dashboard activity box - FIXED
 Select2 updated to v4.0.5 - CHANGED
 Post badge feature implemented - CHANGED
 Post images CSS and lightbox added - ADDED
+New images not being added to current listings - FIXED
 
 v2.0.0.4-beta
 Tooltips on CPT settings can become stuck when adding a new field - FIXED
