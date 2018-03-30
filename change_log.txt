@@ -5,6 +5,8 @@ Post badge feature implemented - CHANGED
 Post images CSS and lightbox added - ADDED
 New images not being added to current listings - FIXED
 WP dashboard recent GD reviews block - FIXED
+Ninja Forms can now be used to create contact fomrs and more (install wizard step remains) - ADDED
+KLEO theme deprecated_function problem - FIXED
 
 v2.0.0.4-beta
 Tooltips on CPT settings can become stuck when adding a new field - FIXED

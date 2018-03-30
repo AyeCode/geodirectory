@@ -53,7 +53,7 @@ class GeoDir_AJAX {
 			'bestof'			=> true,
 			'cpt_categories' => true,
 			'json_search_users' => false,
-			'ninja_forms' => false,
+			'ninja_forms' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -88,12 +88,15 @@ class GeoDir_AJAX {
 		add_action('wp_print_styles', function () {global $wp_styles; $wp_styles->queue = array('font-awesome');}, 1000);
 		add_action('wp_print_scripts', function () {global $wp_scripts; $wp_scripts->queue = array('jquery');}, 1000);
 
+		echo '<!DOCTYPE html><html lang="en-US"><head>';
 		wp_head();
 		echo "<style>body { background: #fff;padding: 20px 50px;}</style>";
+		echo '</head><body>';
 		//echo "<div class='lity-show'>";
 		echo do_shortcode( "[ninja_form id=$form_id]" );
 		//echo "</div>";
 		wp_footer();
+		echo '</body></html>';
 		wp_die();
 	}
 
