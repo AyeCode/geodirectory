@@ -298,8 +298,10 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 							}
 
 							// ajaxify images
-							if($options['ajax_load'] && $image_count){
+							if($options['type']=='slider' && $options['ajax_load'] && $image_count){
 								$img_tag = geodir_image_tag_ajaxify($img_tag,$options['type']!='slider');
+							}elseif($options['ajax_load']){
+								$img_tag = geodir_image_tag_ajaxify($img_tag);
 							}
 							// output image
 							echo $link_tag_open ? sprintf($link_tag_open,esc_url($link)) : '';

@@ -37,6 +37,10 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_action( 'plugins_loaded', array(__CLASS__,'jetpack') );
 
+		/*######################################################
+		Ninja Forms :: Add our own form tags.
+		######################################################*/
+		add_action( 'ninja_forms_loaded', array(__CLASS__,'ninja_forms'));
 
 		/*######################################################
 		Primer (theme) :: Fix single page title.
@@ -44,9 +48,18 @@ class GeoDir_Compatibility {
 		add_filter('primer_the_page_title',array(__CLASS__,'primer_title'));
 
 
+
 		// after_setup_theme checks
 		add_action( 'after_setup_theme', array(__CLASS__,'for_later_checks') );
 
+	}
+
+	/**
+	 * Add our own tags to ninja forms.
+	 */
+	public static function ninja_forms(){
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-ninja-forms.php' );
+		Ninja_Forms()->merge_tags[ 'geodirectory' ] = new GeoDir_Ninja_Forms_MergeTags();
 	}
 
 	/**

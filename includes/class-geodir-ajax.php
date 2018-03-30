@@ -22,10 +22,7 @@ class GeoDir_AJAX {
 	public static function init() {
 		self::add_ajax_events();
 	}
-
-
-
-
+	
 	/**
 	 * Hook in methods - uses WordPress ajax handlers (admin-ajax).
 	 */
@@ -56,6 +53,7 @@ class GeoDir_AJAX {
 			'bestof'			=> true,
 			'cpt_categories' => true,
 			'json_search_users' => false,
+			'ninja_forms' => false,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -68,6 +66,35 @@ class GeoDir_AJAX {
 				add_action( 'geodir_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	public static function ninja_forms(){
+
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		$post_id = isset($_REQUEST['p']) ? absint($_REQUEST['p']) : url_to_postid( wp_get_referer() );
+		$form_id = isset($_REQUEST['extra']) ? absint($_REQUEST['extra']) : '';
+		if(!$post_id || !$form_id){return 'no post id';}
+		global $post;
+		$post = get_post( $post_id );
+		// fake the post_id for ninja forms
+		add_filter( 'url_to_postid', function ($url){global $post;return add_query_arg( 'p', $post->ID, $url );});
+
+		/*
+		 * We only need the form and its basic CSS/JS so we hack away all lots of others stuff in a naughty way.
+		 */
+		remove_all_actions( 'wp_footer');
+		add_action( 'wp_footer', 'wp_print_footer_scripts', 20 );
+		add_action('wp_print_styles', function () {global $wp_styles; $wp_styles->queue = array('font-awesome');}, 1000);
+		add_action('wp_print_scripts', function () {global $wp_scripts; $wp_scripts->queue = array('jquery');}, 1000);
+
+		wp_head();
+		echo "<style>body { background: #fff;padding: 20px 50px;}</style>";
+		//echo "<div class='lity-show'>";
+		echo do_shortcode( "[ninja_form id=$form_id]" );
+		//echo "</div>";
+		wp_footer();
+		wp_die();
 	}
 
 	public static function wizard_setup_menu(){

@@ -29,6 +29,7 @@ class GeoDir_Admin_Addons {
 		$tabs = array(
 			'addons' => __("Addons", "geodirectory"),
 			'themes' => __("Themes", "geodirectory"),
+			'recommended_plugins' => __("Recommended plugins", "geodirectory"),
 		);
 
 		return $tabs;

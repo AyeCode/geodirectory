@@ -212,7 +212,8 @@ final class GeoDirectory {
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-autoloader.php' );
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/formatting-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/core-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/deprecated-functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/core-functions.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-datetime.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/functions.php' );
         $geodir_options = geodir_get_settings();

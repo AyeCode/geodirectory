@@ -108,6 +108,8 @@
     max-width: 1000px;
     min-height:25vh;
     color: #505050;
+    overflow: auto;
+    overflow: auto;
     input,select{
       width: 100%;
       padding: 5px;
@@ -292,6 +294,7 @@
   height: 100%;
   box-shadow: var(--lity-shadow);
   background: #000;
+  border-radius: 4px;
 }
 
 .lity-hide {
