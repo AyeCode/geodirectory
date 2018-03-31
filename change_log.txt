@@ -4,6 +4,8 @@ Quick edit screen breaks layout of columns - FIXED
 CPT settings, required toggle now shown as standard - CHANGED
 CPT settings, show/hide advanced settings button moved inside settings - CHANGED
 CPT settings, opening one setting will now close all others - CHANGED
+Email output mailto spam prevention link not working - FIXED
+New setup wizard step added to install recommend plugins - ADDED
 
 v2.0.0.5-beta
 Double five star bars in dashboard activity box - FIXED

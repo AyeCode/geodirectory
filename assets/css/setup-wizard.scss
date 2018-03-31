@@ -171,6 +171,16 @@ body{
     padding-top: 20px;
   }
 
+  .gd-wizard-recommend{
+    .gd-help-tip{
+      float: none;
+      margin: 2px 0 0 0;
+    }
+    i.fa-check-circle{
+      color: #1aab00;
+    }
+  }
+
 }
 
 // setup steps
