@@ -1,3 +1,7 @@
+v2.0.0.6-beta
+If categories are removed via quick edit we try to add default category - ADDED
+Quick edit screen breaks layout of columns - FIXED
+
 v2.0.0.5-beta
 Double five star bars in dashboard activity box - FIXED
 Select2 updated to v4.0.5 - CHANGED

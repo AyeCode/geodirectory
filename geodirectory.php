@@ -309,7 +309,7 @@ final class GeoDirectory {
                 add_action( $hook, 'geodir_admin_upgrade_notice', 20, 2 );
             }
 
-	        if( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow) {
+	        if( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow || ( defined('DOING_AJAX') && DOING_AJAX && $_REQUEST['action']=='inline-save')) {
 		        GeoDir_Admin_Post_View::init();
 	        }
 	        

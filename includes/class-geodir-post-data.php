@@ -100,7 +100,7 @@ class GeoDir_Post_Data {
 	public static function save_post( $post_id, $post, $update ) {
 		global $wpdb, $plugin_prefix;
 
-	///echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
+	//echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
 
 
 
@@ -189,10 +189,23 @@ class GeoDir_Post_Data {
 				$post_categories = !is_array($post_categories) ? array_filter(explode(",",$post_categories)) : $post_categories;
 				$categories = array_map( 'absint', $post_categories );
 				$categories = array_filter(array_unique($categories));// remove duplicates and empty values
-				$postarr['post_category'] = "," . implode( ",", $categories ) . ",";
 
-				if ( empty( $postarr['default_category'] ) && ! empty( $categories[0] ) ) {
-					$postarr['default_category'] = $categories[0]; // set first category as a default if default category not found
+//				print_r( $categories );
+				// if the listing has no cat try to set it as Uncategorized.
+				if(empty($categories)){
+					$uncategorized = get_term_by( 'name', "Uncategorized", $post_type.'category');
+					if(isset($uncategorized->term_id)){
+						$categories[] = $uncategorized->term_id;
+						wp_set_post_terms( $post_id, $categories, $post_type.'category' );
+					}
+				}
+//				print_r( $categories );exit;
+
+				$postarr['post_category'] = "," . implode( ",", $categories ) . ",";
+				$default_category = isset($categories[0]) ? $categories[0] : $categories[1];
+
+				if ( empty( $postarr['default_category'] ) && ! empty( $default_category ) ) {
+					$postarr['default_category'] = $default_category; // set first category as a default if default category not found
 				}
 
 				// if logged out user we need to manually add cats
