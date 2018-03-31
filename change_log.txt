@@ -1,6 +1,9 @@
 v2.0.0.6-beta
 If categories are removed via quick edit we try to add default category - ADDED
 Quick edit screen breaks layout of columns - FIXED
+CPT settings, required toggle now shown as standard - CHANGED
+CPT settings, show/hide advanced settings button moved inside settings - CHANGED
+CPT settings, opening one setting will now close all others - CHANGED
 
 v2.0.0.5-beta
 Double five star bars in dashboard activity box - FIXED

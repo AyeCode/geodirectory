@@ -155,13 +155,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 						<?php if ($value == '1') {
 							echo 'checked';
 						} ?>/>
-					<label onclick="show_hide_radio(this,'show','gdcf-price-extra');" for="is_price_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
+					<label onclick="gd_show_hide_radio(this,'show','gdcf-price-extra');" for="is_price_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
 
 					<input type="radio" id="is_price_no<?php echo $radio_id;?>" name="extra[is_price]" class="gdri-disabled" value="0"
 						<?php if ($value == '0' || !$value) {
 							echo 'checked';
 						} ?>/>
-					<label onclick="show_hide_radio(this,'hide','gdcf-price-extra');" for="is_price_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
+					<label onclick="gd_show_hide_radio(this,'hide','gdcf-price-extra');" for="is_price_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
 
 				</div>
 			</li>
@@ -511,13 +511,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 						<?php if (isset($address['show_zip']) && $address['show_zip'] == '1') {
 							echo 'checked';
 						} ?>/>
-					<label onclick="show_hide_radio(this,'show','cf-zip-lable');" for="show_zip_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
+					<label onclick="gd_show_hide_radio(this,'show','cf-zip-lable');" for="show_zip_yes<?php echo $radio_id;?>" class="gdcb-enable"><span><?php _e('Yes', 'geodirectory'); ?></span></label>
 
 					<input type="radio" id="show_zip_no<?php echo $radio_id;?>" name="extra[show_zip]" class="gdri-disabled" value="0"
 						<?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {
 							echo 'checked';
 						} ?>/>
-					<label onclick="show_hide_radio(this,'hide','cf-zip-lable');" for="show_zip_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
+					<label onclick="gd_show_hide_radio(this,'hide','cf-zip-lable');" for="show_zip_no<?php echo $radio_id;?>" class="gdcb-disable"><span><?php _e('No', 'geodirectory'); ?></span></label>
 
 
 				</div>

@@ -69,7 +69,7 @@ jQuery(document).ready(function () {
                 jQuery("select.geodir-select").trigger('geodir-select-init');
                 jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
 
-                show_hide('field_frm' + id);
+                gd_show_hide('field_frm' + id);
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#licontainer_" + id).offset().top
                 }, 1000);
@@ -79,6 +79,14 @@ jQuery(document).ready(function () {
 
                 // init the toggle displays
                 gd_toggle_switch_display();
+
+                // init the advanced settings toggle
+                if(jQuery('.gd-advanced-toggle').hasClass('gda-hide')){
+                    jQuery("#licontainer_" + id + " .gd-advanced-toggle").addClass("gda-hide");
+                    jQuery("#licontainer_" + id + " .gd-advanced-setting, #default_location_set_address_button").addClass("gda-show");
+                }
+                init_advanced_settings();
+
                 // Bind event
                 if (manage_field_type == 'general') {
                     jQuery(document.body).trigger('geodir_on_get_custom_field', [{id: id, field: data}]);
@@ -202,11 +210,15 @@ function gd_save_custom_field(id) {
 }
 
 
-function show_hide(id) {
+function gd_show_hide(id) {
+    // if its a CPT setting then close the other settings first
+    if (id.substring(0, 9) == "field_frm") {
+        jQuery('.field_frm').not('#' + id).hide()
+    }
     jQuery('#' + id).toggle();
 }
 
-function show_hide_radio(id, sh, cl) {
+function gd_show_hide_radio(id, sh, cl) {
 
     setTimeout(function () {
         gd_toggle_switch_display();

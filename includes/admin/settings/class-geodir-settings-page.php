@@ -128,10 +128,16 @@ abstract class GeoDir_Settings_Page {
 		if(!$this->show_advanced()){return;}
 
 
+		$this->toggle_advanced_button();
+
+	}
+
+	public static function toggle_advanced_button(){
+
 		$show = geodir_get_option( 'admin_disable_advanced', false );
 
 		if($show){return;} // don't show advanced toggle
-
+		
 		$text_show = __("Show Advanced","geodirectory");
 		$text_hide = __("Hide Advanced","geodirectory");
 
@@ -144,14 +150,8 @@ abstract class GeoDir_Settings_Page {
 			$text = $text_hide;
 			$toggle_CSS = 'gda-hide';
 		}
-//		echo "<style>.gd-advanced-setting,#default_location_set_address_button{display: $css;}
-//
-//
-//</style>";
-
 		?>
 		<style>
-
 			.gd-advanced-setting,#default_location_set_address_button{display: none;}
 			.gd-advanced-setting.gda-show,#default_location_set_address_button.gda-show{display: block;}
 			tr.gd-advanced-setting.gda-show{display: table-row;}
@@ -173,33 +173,10 @@ abstract class GeoDir_Settings_Page {
 		echo "</button>";
 
 		?>
-<script>
-	//jQuery('.gd-advanced-toggle')
-//
-//	jQuery( ".gd-advanced-toggle" ).click(function() {
-//		if(jQuery( ".gd-advanced-setting" ).is(":visible")){
-//			jQuery('.gd-advanced-toggle').text("<?php //echo $text_show;?>//");
-//		}else{
-//			jQuery('.gd-advanced-toggle').text("<?php //echo $text_hide;?>//");
-//		}
-//		jQuery( ".gd-advanced-setting" ).slideToggle( 0, function() {
-//			// Animation complete.
-//		});
-//	});
-
-	jQuery( ".gd-advanced-toggle" ).click(function() {
-
-		jQuery(".gd-advanced-toggle").toggleClass("gda-hide");
-		console.log('toggle');
-
-
-		jQuery(".gd-advanced-setting, #default_location_set_address_button").toggleClass("gda-show");
-//		jQuery( ".gd-advanced-setting" ).slideToggle( 0, function() {
-//			// Animation complete.
-//		});
-	});
-</script>
-<?php
+		<script>
+			init_advanced_settings();
+		</script>
+		<?php
 	}
 
 	/**

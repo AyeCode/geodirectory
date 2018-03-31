@@ -449,18 +449,18 @@ $pages            = $system_status->get_pages();
 	<tbody>
 		<tr>
 			<td data-export-label="Secure connection (HTTPS)"><?php _e( 'Secure connection (HTTPS)', 'geodirectory' ); ?>:</td>
-			<td class="help"><?php echo geodir_help_tip( __( 'Is the connection to your store secure?', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Is the connection to your site secure?', 'geodirectory' ) ); ?></td>
 			<td>
 				<?php if ( $security['secure_connection'] ) : ?>
 					<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>
 				<?php else : ?>
-					<mark class="error"><span class="dashicons dashicons-warning"></span><?php echo __( 'Your store is not using HTTPS.', 'geodirectory' ); ?></mark>
+					<mark class="error"><span class="dashicons dashicons-warning"></span><?php echo __( 'Your site is not using HTTPS.', 'geodirectory' ); ?></mark>
 				<?php endif; ?>
 			</td>
 		</tr>
 		<tr>
 			<td data-export-label="Hide errors from visitors"><?php _e( 'Hide errors from visitors', 'geodirectory' ); ?></td>
-			<td class="help"><?php echo geodir_help_tip( __( 'Error messages can contain sensitive information about your store environment. These should be hidden from untrusted visitors.', 'geodirectory' ) ); ?></td>
+			<td class="help"><?php echo geodir_help_tip( __( 'Error messages can contain sensitive information about your site environment. These should be hidden from untrusted visitors.', 'geodirectory' ) ); ?></td>
 			<td>
 				<?php if ( $security['hide_errors'] ) : ?>
 					<mark class="yes"><span class="dashicons dashicons-yes"></span></mark>

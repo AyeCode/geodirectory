@@ -20,20 +20,20 @@
 <li class="text" id="licontainer_<?php echo $field->id; ?>">
 	<div class="title title<?php echo $field->id; ?> gd-fieldset"
 	     title="<?php _e( 'Double Click to toggle and drag-drop to sort', 'geodirectory' ); ?>"
-	     ondblclick="show_hide('field_frm<?php echo $field->id; ?>')">
+	     ondblclick="gd_show_hide('field_frm<?php echo $field->id; ?>')">
 		<?php
 		if ( $field->field_type == 'fieldset' ) {
 			?>
 			<i class="fa fa-long-arrow-left " aria-hidden="true"></i>
 			<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
 			<b style="cursor:pointer;"
-			   onclick="show_hide('field_frm<?php echo $field->id; ?>')"><?php echo geodir_ucwords( __( 'Fieldset:', 'geodirectory' ) . ' ' . $field->admin_title ); ?></b>
+			   onclick="gd_show_hide('field_frm<?php echo $field->id; ?>')"><?php echo geodir_ucwords( __( 'Fieldset:', 'geodirectory' ) . ' ' . $field->admin_title ); ?></b>
 			<?php
 		} else {
 			echo $field_icon;
 			?>
 			<b style="cursor:pointer;"
-			   onclick="show_hide('field_frm<?php echo $field->id; ?>')"><?php echo geodir_ucwords( ' ' . $field->admin_title . ' (' . $field->field_type_name . ')' ); ?></b>
+			   onclick="gd_show_hide('field_frm<?php echo $field->id; ?>')"><?php echo geodir_ucwords( ' ' . $field->admin_title . ' (' . $field->field_type_name . ')' ); ?></b>
 			<?php
 		}
 		?>
@@ -564,7 +564,7 @@
 						$value = $cf['defaults']['is_required'];
 					}
 					?>
-					<li class="gd-advanced-setting">
+					<li class="">
 						<label for="is_required" class="gd-cf-tooltip-wrap">
 							<span
 								class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
@@ -580,7 +580,7 @@
 								<?php if ( $value == '1' ) {
 									echo 'checked';
 								} ?>/>
-							<label onclick="show_hide_radio(this,'show','cf-is-required-msg');"
+							<label onclick="gd_show_hide_radio(this,'show','cf-is-required-msg');"
 							       for="is_required_yes<?php echo $radio_id; ?>"
 							       class="gdcb-enable"><span><?php _e( 'Yes', 'geodirectory' ); ?></span></label>
 
@@ -589,7 +589,7 @@
 								<?php if ( $value == '0' || ! $value ) {
 									echo 'checked';
 								} ?>/>
-							<label onclick="show_hide_radio(this,'hide','cf-is-required-msg');"
+							<label onclick="gd_show_hide_radio(this,'hide','cf-is-required-msg');"
 							       for="is_required_no<?php echo $radio_id; ?>"
 							       class="gdcb-disable"><span><?php _e( 'No', 'geodirectory' ); ?></span></label>
 
@@ -835,7 +835,12 @@
 							                                    value="<?php echo esc_attr( __( 'Delete', 'geodirectory' ) ); ?>"
 							                                    onclick="gd_delete_custom_field('<?php echo esc_attr( $field->id ); ?>', '<?php echo $nonce; ?>')"
 							                                    class="button"/></a>
-						<?php endif; ?>
+						<?php endif;
+
+						GeoDir_Settings_Page::toggle_advanced_button();
+						
+						
+						?>
 					</div>
 				</li>
 			</ul>
