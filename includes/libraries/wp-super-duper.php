@@ -79,7 +79,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				// add shortcode insert button once
 				add_action( 'media_buttons',array( $this, 'shortcode_insert_button' ) );
 				//if( !wp_doing_ajax() ){
-					add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
+				add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
 				//}
 
 			}
@@ -117,7 +117,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			echo "<style>".$widget->widget_css()."</style>";
 			echo "<script>".$widget->widget_js()."</script>";
-				?>
+			?>
 			<script>//alert(123);</script>
 			<?php
 			wp_die();
@@ -159,7 +159,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			</div>
 
 
-<!--			<a href="#TB_inline?width=600&height=550&inlineId=my-content-id" class="thickbox button"><i class="fa fa-cubes" aria-hidden="true"></i></a>-->
+			<!--			<a href="#TB_inline?width=600&height=550&inlineId=my-content-id" class="thickbox button"><i class="fa fa-cubes" aria-hidden="true"></i></a>-->
 			<a href="#TB_inline?width=100%&height=550&inlineId=my-content-id" class="thickbox button" title="<?php _e('Add Shortcode');?>"><i class="fa fa-cubes" aria-hidden="true"></i></a>
 
 			<style>
@@ -191,11 +191,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						}else{
 							//jQuery('#wp-content-editor-container textarea').val($shortcode);
 //							$( '#wp-content-editor-container' ).find( 'textarea' ).val( 'Some default Text' );
-								var $txt = jQuery("#wp-content-editor-container textarea");
-								var caretPos = $txt[0].selectionStart;
-								var textAreaTxt = $txt.val();
-								var txtToAdd = $shortcode;
-								$txt.val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos) );
+							var $txt = jQuery("#wp-content-editor-container textarea");
+							var caretPos = $txt[0].selectionStart;
+							var textAreaTxt = $txt.val();
+							var txtToAdd = $shortcode;
+							$txt.val(textAreaTxt.substring(0, caretPos) + txtToAdd + textAreaTxt.substring(caretPos) );
 						}
 						tb_remove();
 					}
@@ -883,6 +883,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									}
 
 									foreach($this->arguments as $key => $args){
+									$custom_attributes = !empty($args['custom_attributes']) ? $this->array_to_attributes($args['custom_attributes']) : '';
 									$options = '';
 									$extra = '';
 									$require = '';
@@ -940,6 +941,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										}?>
 											<?php echo $options;?>
 											<?php echo $extra;?>
+											<?php echo $custom_attributes;?>
 											onChange: function ( <?php echo $key;?> ) {
 												<?php echo $onchange;?>
 											}
@@ -1029,6 +1031,33 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				'</script>'
 			), '', $output );
 		}
+
+		/**
+		 * Convert an array of attributes to block string.
+		 *
+		 * @todo there is prob a faster way to do this, also we could add some validation here.
+		 * @param $custom_attributes
+		 *
+		 * @return string
+		 */
+		public function array_to_attributes($custom_attributes, $html = false){
+			$attributes = '';
+			if(!empty($custom_attributes)){
+
+				if($html){
+					foreach($custom_attributes as $key => $val){
+						$attributes .= " $key='$val' ";
+					}
+				}else{
+					foreach($custom_attributes as $key => $val){
+						$attributes .= "'$key': '$val',";
+					}
+				}
+			}
+
+			return $attributes;
+		}
+
 
 		/**
 		 * A self looping function to create the output for JS block elements.
@@ -1261,6 +1290,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 //print_r($args );
 			$class           = "";
 			$element_require = "";
+			$custom_attributes = "";
 
 			// get value
 			if ( isset( $instance[ $args['name'] ] ) ) {
@@ -1288,6 +1318,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$element_require = $args['element_require'];
 			}
 
+			// custom_attributes
+			if( isset( $args['custom_attributes']) && $args['custom_attributes']){
+				$custom_attributes = $this->array_to_attributes($args['custom_attributes'],true);
+			}
+
+
+
 
 			// before wrapper
 			?>
@@ -1312,10 +1349,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						<label
 							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
 						<input <?php echo $placeholder; ?> class="widefat"
-						                                   id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-						                                   name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
-						                                   type="<?php echo esc_attr( $args['type'] ); ?>"
-						                                   value="<?php echo esc_attr( $value ); ?>">
+							<?php echo $custom_attributes;?>
+							                               id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+							                               name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
+							                               type="<?php echo esc_attr( $args['type'] ); ?>"
+							                               value="<?php echo esc_attr( $value ); ?>">
 						<?php
 
 						break;
@@ -1324,8 +1362,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						<label
 							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
 						<select <?php echo $placeholder; ?> class="widefat"
-						                                    id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-						                                    name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
+							<?php echo $custom_attributes;?>
+							                                id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+							                                name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
 							<?php if ( isset( $args['multiple'] ) && $args['multiple'] ) {
 								echo "multiple";
 							} //@todo not implemented yet due to gutenberg not supporting it
@@ -1346,6 +1385,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						?>
 						<input <?php echo $placeholder; ?>
 							<?php checked( 1, $value, true ) ?>
+							<?php echo $custom_attributes;?>
 							class="widefat" id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
 							name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="checkbox"
 							value="1">
@@ -1443,8 +1483,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			if(empty($this->arguments)){
 				$this->get_arguments();
 			}
-			
-			
+
+
 //			print_r($new_instance);
 //			print_r($old_instance);
 //			print_r($instance);

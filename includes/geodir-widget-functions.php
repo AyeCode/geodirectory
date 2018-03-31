@@ -38,6 +38,12 @@ function goedir_register_widgets() {
         register_widget( 'GeoDir_Widget_Author_Actions' );
         register_widget( 'GeoDir_Widget_Listings' );
         register_widget( 'GeoDir_Widget_Map' );
+
+        // 3rd party widgets
+        if(class_exists('Ninja_Forms')){
+            register_widget( 'GeoDir_Widget_Ninja_Forms' );
+
+        }
     }
 }
 add_action( 'widgets_init', 'goedir_register_widgets' );

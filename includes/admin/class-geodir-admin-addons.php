@@ -29,6 +29,7 @@ class GeoDir_Admin_Addons {
 		$tabs = array(
 			'addons' => __("Addons", "geodirectory"),
 			'themes' => __("Themes", "geodirectory"),
+			' recommended_plugins' => __("Recommended plugins", "geodirectory"),
 		);
 
 		return $tabs;
@@ -273,5 +274,24 @@ class GeoDir_Admin_Addons {
 		$current_section = isset( $_GET['section'] ) ? sanitize_text_field( $_GET['section'] ) : current( $section_keys );
 		$current_tab     = empty( $_GET['tab'] ) ? 'addons' : sanitize_title( $_GET['tab'] );
 		include_once( dirname( __FILE__ ) . '/views/html-admin-page-addons.php' );
+	}
+
+	public static function get_recommend_wp_plugins(){
+		$plugins = array(
+			'ninja-forms' => array(
+				'url'   => 'https://wordpress.org/plugins/ninja-forms/',
+				'slug'   => 'ninja-forms',
+				'name'   => 'Ninja Forms',
+				'desc'   => __('Setup forms such as contact or booking forms for your listings.','geodirectory'),
+			),
+			'userswp' => array(
+				'url'   => 'https://wordpress.org/plugins/userswp/',
+				'slug'   => 'userswp',
+				'name'   => 'UsersWP',
+				'desc'   => __('Allow frontend user login and registration as well as slick profile pages.','geodirectory'),
+			)
+		);
+
+		return $plugins;
 	}
 }

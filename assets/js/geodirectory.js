@@ -964,3 +964,76 @@ function gd_delete_post($post_id){
         return false;
     }
 }
+
+function gd_ajax_lightboxX($action,$nonce,$post_id,$extra){
+    if($action){
+        if(!$nonce || $nonce==''){$nonce = geodirectory_params.basic_nonce;}
+        $content = "<div class='geodir-ajax-content ''>Loading content</div>";
+        $lightbox = '';
+
+        if($action=='geodir_ninja_forms'){
+            // clear all form data so we can reload the same form via ajax
+            delete form;
+            delete formDisplay;
+            delete nfForms;
+        }
+
+        jQuery.ajax({
+            url: geodir_params.ajax_url,
+            type: 'POST',
+           // dataType: 'json',
+            data: {
+                action: $action,
+                security: $nonce,
+                post_id: $post_id,
+                extra: $extra
+            },
+            //timeout: 20000,
+            beforeSend: function() {
+                $lightbox = lity($content);
+            },
+            success: function(content) {
+                //jQuery('.geodir-ajax-content').html(content);
+                jQuery('.geodir-ajax-content').addClass('lity-show').html(content);
+            }
+        });
+    }
+}
+
+function gd_ajax_lightbox($action,$nonce,$post_id,$extra){
+    if($action){
+        if(!$nonce || $nonce==''){$nonce = geodirectory_params.basic_nonce;}
+        $content = "<div class='geodir-ajax-content ''>Loading content</div>";
+        $lightbox = '';
+
+        if($action=='geodir_ninja_forms'){
+            // clear all form data so we can reload the same form via ajax
+            delete form;
+            delete formDisplay;
+            delete nfForms;
+        }
+
+        $lightbox = lity(geodir_params.ajax_url+"?action="+$action+"&security="+$nonce+"&p="+$post_id+"&extra="+$extra);
+        return;
+
+        jQuery.ajax({
+            url: geodir_params.ajax_url,
+            type: 'POST',
+            // dataType: 'json',
+            data: {
+                action: $action,
+                security: $nonce,
+                post_id: $post_id,
+                extra: $extra
+            },
+            //timeout: 20000,
+            beforeSend: function() {
+                $lightbox = lity($content);
+            },
+            success: function(content) {
+                //jQuery('.geodir-ajax-content').html(content);
+                jQuery('.geodir-ajax-content').addClass('lity-show').html(content);
+            }
+        });
+    }
+}

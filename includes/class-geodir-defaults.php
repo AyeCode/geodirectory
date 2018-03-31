@@ -59,7 +59,7 @@ class GeoDir_Defaults {
 	 */
 	public static function page_archive_item_content(){
 		return "[gd_archive_item_section type='open' position='left']
-[gd_post_images type='slider' ajax_load='true' slideshow='false' show_title='false' animation='slide' controlnav='1' ]
+[gd_post_images type='image' ajax_load='true' link_to='post' ]
 [gd_archive_item_section type='close' position='left']
 [gd_archive_item_section type='open' position='right']
 [gd_post_title tag='h2']
