@@ -867,7 +867,7 @@ function geodir_ninja_forms_contact_template(){
         "payment_gateways": "",
         "payment_total": "",
         "tag": "",
-        "to": "{system:admin_email}{GD:listing_email}",
+        "to": "{GD:listing_email}",
         "email_subject": "New contact form: {wp:site_title}",
         "email_message": "<p>{field:message}<\/p><p>-{field:name} ( {field:email} )<\/p>",
         "from_name": "",
@@ -875,7 +875,7 @@ function geodir_ninja_forms_contact_template(){
         "reply_to": "{field:email}",
         "email_format": "html",
         "cc": "",
-        "bcc": "",
+        "bcc": "{system:admin_email}",
         "attach_csv": "0",
         "email_message_plain": ""
     }, {
