@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags:  directory plugin, business directory, listings, classifieds, real estate
 Requires at least: 3.1
 Tested up to: 4.9.5
-Stable tag: 2.0.0.5-beta
+Stable tag: 2.0.0.7-beta
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 

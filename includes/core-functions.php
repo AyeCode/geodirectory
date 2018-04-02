@@ -205,10 +205,10 @@ function geodir_params()
     $arr_alert_msg = array(
         'plugin_url' => geodir_plugin_url(),
         'ajax_url' => $ajax_url,
-        'custom_field_not_blank_var' => __('Frontend title must not be blank', 'geodirectory'),
+        'custom_field_not_blank_var' => __('Field label must not be blank', 'geodirectory'),
         'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', 'geodirectory'),
-        'custom_field_unique_name' => __('HTML Variable Name should be a unique name.', 'geodirectory'),
-        'custom_field_delete' => __('Are you wish to delete this field?', 'geodirectory'),
+        'custom_field_unique_name' => __('Field key must be unique.', 'geodirectory'),
+        'custom_field_delete' => __('Are you sure you wish to delete this field?', 'geodirectory'),
         //start not show alert msg
         'tax_meta_class_succ_del_msg' => __('File has been successfully deleted.', 'geodirectory'),
         'tax_meta_class_not_permission_to_del_msg' => __('You do NOT have permission to delete this file.', 'geodirectory'),

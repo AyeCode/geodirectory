@@ -14,7 +14,7 @@
 	<form><!-- we need to wrap in a form so we can use radio buttons with same name -->
 		<div class="title title<?php echo $field->id; ?> gd-fieldset"
 		     title="<?php _e( 'Double Click to toggle and drag-drop to sort', 'geodirectory' ); ?>"
-		     ondblclick="show_hide('field_frm<?php echo $field->id; ?>')">
+		     ondblclick="gd_show_hide('field_frm<?php echo $field->id; ?>')">
 			<?php
 
 			?>
@@ -26,7 +26,7 @@
 
 			<?php echo $field_icon; ?>
 			<b style="cursor:pointer;"
-			   onclick="show_hide('field_frm<?php echo $field->id; ?>')"><?php echo geodir_ucwords( __( 'Field:', 'geodirectory' ) . ' (' . $frontend_title . ')' ); ?></b>
+			   onclick="gd_show_hide('field_frm<?php echo $field->id; ?>')"><?php echo geodir_ucwords( __( 'Field:', 'geodirectory' ) . ' (' . $frontend_title . ')' ); ?></b>
 
 		</div>
 
@@ -65,7 +65,7 @@
 								<?php if ( $value == '1' ) {
 									echo 'checked';
 								} ?>/>
-							<label onclick="show_hide_radio(this,'show','cfs-asc-title');"
+							<label onclick="gd_show_hide_radio(this,'show','cfs-asc-title');"
 							       for="asc_yes<?php echo $radio_id; ?>"
 							       class="gdcb-enable"><span><?php _e( 'Yes', 'geodirectory' ); ?></span></label>
 
@@ -74,7 +74,7 @@
 								<?php if ( $value == '0' || ! $value ) {
 									echo 'checked';
 								} ?>/>
-							<label onclick="show_hide_radio(this,'hide','cfs-asc-title');"
+							<label onclick="gd_show_hide_radio(this,'hide','cfs-asc-title');"
 							       for="asc_no<?php echo $radio_id; ?>"
 							       class="gdcb-disable"><span><?php _e( 'No', 'geodirectory' ); ?></span></label>
 
@@ -138,7 +138,7 @@
 								<?php if ( $value == '1' ) {
 									echo 'checked';
 								} ?>/>
-							<label onclick="show_hide_radio(this,'show','cfs-desc-title');"
+							<label onclick="gd_show_hide_radio(this,'show','cfs-desc-title');"
 							       for="desc_yes<?php echo $radio_id; ?>"
 							       class="gdcb-enable"><span><?php _e( 'Yes', 'geodirectory' ); ?></span></label>
 
@@ -147,7 +147,7 @@
 								<?php if ( $value == '0' || ! $value ) {
 									echo 'checked';
 								} ?>/>
-							<label onclick="show_hide_radio(this,'hide','cfs-desc-title');"
+							<label onclick="gd_show_hide_radio(this,'hide','cfs-desc-title');"
 							       for="desc_no<?php echo $radio_id; ?>"
 							       class="gdcb-disable"><span><?php _e( 'No', 'geodirectory' ); ?></span></label>
 

@@ -38,6 +38,21 @@ class GeoDir_Admin {
 			GeoDir_Admin_Widgets::init();
 		}
 
+		// hide the plugin install button on setup wizard plugin more info iframe
+		add_action("admin_print_footer_scripts-plugin-install.php",array($this,'hide_plugin_install'));
+
+	}
+
+	/**
+	 * This hides the install plugin from more info iframe on the setup wizard.
+	 */
+	public function hide_plugin_install(){
+		if(
+			isset($_REQUEST['tab']) && $_REQUEST['tab']=='plugin-information'
+			&& isset($_REQUEST['gd_wizard_recommend']) && $_REQUEST['gd_wizard_recommend']=='true'
+		){
+			echo "<style>#plugin-information-footer{display: none;}</style>";
+		}
 	}
 
 	/**

@@ -65,11 +65,11 @@ class GeoDir_Admin_Setup_Wizard {
 				'view'    => array( $this, 'setup_default_location' ),
 				'handler' => array( $this, 'setup_default_location_save' ),
 			),
-//			'recommend' => array(
-//				'name'    => __( 'Recommend', 'geodirectory' ),
-//				'view'    => array( $this, 'setup_recommend' ),
-//				'handler' => array( $this, 'setup_recommend_save' ),
-//			),
+			'recommend' => array(
+				'name'    => __( 'Recommend', 'geodirectory' ),
+				'view'    => array( $this, 'setup_recommend' ),
+				'handler' => array( $this, 'setup_recommend_save' ),
+			),
 			'content' => array(
 				'name'    => __( 'Content', 'geodirectory' ),
 				'view'    => array( $this, 'setup_content' ),
@@ -114,6 +114,7 @@ class GeoDir_Admin_Setup_Wizard {
 		wp_register_script('geodir-leaflet-geo-script', geodir_plugin_url() . '/assets/leaflet/osm.geocode'.$suffix.'.js', array('geodir-leaflet-script'), GEODIRECTORY_VERSION);
 		wp_register_script('select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-admin-script', geodir_plugin_url() . '/assets/js/admin'.$suffix.'.js', array('jquery','jquery-ui-tooltip','thickbox'), GEODIRECTORY_VERSION);
+		wp_register_script('geodir-lity', geodir_plugin_url() . '/assets/js/libraries/gd_lity'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
 		wp_add_inline_script( 'geodir-admin-script', "var ajaxurl = '".admin_url( 'admin-ajax.php' )."';", 'before' );
 
@@ -128,6 +129,7 @@ class GeoDir_Admin_Setup_Wizard {
 			'select2',
 			'geodir-admin-script',
 			'jquery-ui-progressbar',
+			'geodir-lity',
 		);
 
 		// add maps if needed
@@ -583,6 +585,7 @@ class GeoDir_Admin_Setup_Wizard {
 	public function setup_recommend() {
 		?>
 		<form method="post">
+			<div class="gd-wizard-recommend">
 
 			<h2 class="gd-settings-title "><?php _e("Recommend Plugins","geodirectory");?></h2>
 
@@ -590,184 +593,79 @@ class GeoDir_Admin_Setup_Wizard {
 
 			<?php
 
+			include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
+
 			$recommend_wp_plugins = GeoDir_Admin_Addons::get_recommend_wp_plugins();
+
+//			$status = install_plugin_install_status( array("slug"=>"two-factor","version"=>""));
+//			print_r($status);
 
 			if(!empty($recommend_wp_plugins)){
 				echo "<ul>";
+				$installed_text = "<i class=\"fa fa-check-circle\"></i> ".__('Installed','geodirectory');
+				echo "<input type='hidden' id='gd-installing-text' value='<i class=\"fa fa-refresh fa-spin\"></i> ".__('Installing','geodirectory')."' >";
+				echo "<input type='hidden' id='gd-installed-text' value='$installed_text' >";
 				foreach ($recommend_wp_plugins as $plugin){
-					echo "<li>";
-					echo $plugin['name'];
+
+					$status = install_plugin_install_status( array("slug"=>$plugin['slug'],"version"=>""));
+					//print_r($status);
+
+					$plugin_status = isset($status['status']) ? $status['status'] : '';
+					$url = isset($status['url']) ? $status['url'] : '';
+
+					$nonce = wp_create_nonce( 'updates' );
+
+					if($plugin_status=='install'){// required installation
+						$checked = "checked";
+						$disabled = "";
+						$checkbox_class = "class='gd_install_plugins'";
+					}else{
+						$checked = "checked";
+						$disabled = "disabled";
+						$checkbox_class = "";
+					}
+
+
+					echo "<li class='".$plugin['slug']."'>";
+					echo "<input type='checkbox' id='".$plugin['slug']."' $checked $disabled $checkbox_class />";
+					echo $plugin['name']." ".geodir_help_tip($plugin['desc']);
+					echo " | <a href='".admin_url( "plugin-install.php?gd_wizard_recommend=true&tab=plugin-information&plugin=".$plugin['slug'])."' data-lity>more info</a>";
+					if($plugin_status=='install' && $url){
+						//echo " | <a href='#' onclick='gd_wizard_install_plugin(\"".$plugin['slug']."\",\"$nonce\");return false;'>install</a>";
+						echo " | <span class='gd-plugin-status' >( ".__('Tick to install','geodirectory')." )</span>";
+					}else{
+						if(!empty($plugin_status)){
+							$plugin_status = $installed_text;
+						}
+						echo " | <span class='gd-plugin-status'>$plugin_status</span>";
+					}
 					echo "</li>";
 
 				}
 				echo "</ul>";
 			}
 			?>
-			<ul>
-				<li>x</li>
-				<li>x</li>
-				<li>x</li>
-				<li>x</li>
-				<li>x</li>
-				<li>x</li>
-				<li>x</li>
-				<li>x</li>
-				<li>x</li>
-				<li>x</li>
-			</ul>
-
-
-			<?php
-			//$settings = array();
-
-			$generalSettings = new GeoDir_Settings_General();
-			$settings = $generalSettings->get_settings('dummy_data');
-
-			// Change the description
-			$settings[0]['title'] = '';//__("Demo content","geodirectory");
-			$settings[0]['desc'] = '';//__( 'Drag the map or the marker to set the city/town you wish to use as the default location.', 'geodirectory' );
-			GeoDir_Admin_Settings::output_fields($settings);
-			?>
-
-
-
-
-
-			<table class="form-table gd-dummy-table gd-dummy-widgets">
-				<tbody>
-				<tr>
-					<td><strong><?php _e("xSelect the theme sidebar","geodirectory");?></strong></td>
-					<td><strong><?php _e("Action","geodirectory");?></strong></td>
-				</tr>
-
-				<tr>
-					<td>
-						<select id='geodir-wizard-widgets' class="geodir-select" >
-							<?php
-							$is_sidebar = '';
-							$maybe_sidebar = '';
-							// get the sidebars
-							foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) {
-								// Check if its called 'sidebar' by name or id.
-								if(strtolower($sidebar['id'])=='sidebar' || strtolower($sidebar['name'])==__('sidebar','geodirectory')){
-									$is_sidebar = $sidebar['id'];
-								}
-
-								if(!$maybe_sidebar && strpos(strtolower($sidebar['name']), __('sidebar','geodirectory')) !== false){
-									$maybe_sidebar = $sidebar['id'];
-								}
-
-								if(strpos(strtolower($sidebar['name']), __('sidebar page','geodirectory')) !== false){
-									$maybe_sidebar = $sidebar['id'];
-								}
-							}
-
-							// set if we have a guess
-							if(!$is_sidebar && $maybe_sidebar){
-								$is_sidebar = $maybe_sidebar;
-							}
-
-							foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) { ?>
-								<option value="<?php echo esc_attr( $sidebar['id'] ); ?>" <?php selected( $is_sidebar, $sidebar['id'] );?>>
-									<?php echo esc_attr( ucwords( $sidebar['name'] )); if($is_sidebar== $sidebar['id']){echo ' '; _e('( Auto detected )','geodirectory');} ?>
-								</option>
-							<?php }
-
-							?>
-						</select>
-						<?php echo geodir_notification( array('geodir-wizard-widgets-result' => '') );?>
-					</td>
-					<td><input type="button" value="<?php _e("Insert widgets","geodirectory");?>" class="button-primary geodir_dummy_button" onclick="gd_wizard_add_widgets('<?php echo wp_create_nonce( "geodir-wizard-widgets" );?>');return false;"></td>
-				</tr>
-				</tbody>
-			</table>
-
-
-			<!--			<h2 class="gd-settings-title ">--><?php //_e("Menu items","geodirectory");?><!--</h2>-->
-
-			<table class="form-table gd-dummy-table gd-dummy-widgets gd-dummy-posts">
-				<tbody>
-				<tr>
-					<td><strong><?php _e("Select the theme main menu","geodirectory");?></strong></td>
-					<td><strong><?php _e("Action","geodirectory");?></strong></td>
-				</tr>
-
-				<tr>
-					<td>
-						<?php
-
-						$set_menus = get_nav_menu_locations();
-						$set_menus = array_filter($set_menus );
-						//echo '##';
-						//print_r($set_menus);
-
-						if(!empty($set_menus)){
-							//echo '##1';
-							echo "<select id='geodir-wizard-menu-id' data-type='add' class='geodir-select' >";
-
-							foreach($set_menus as $menu_location => $menu_id){
-								$selected = '';
-
-								if(strpos(strtolower($menu_location), 'primary') !== false || strpos(strtolower($menu_location), 'main') !== false){
-									$selected = 'selected="selected"';
-								}
-
-								$menu_item = wp_get_nav_menus($menu_id)[0];
-
-								?>
-								<option value="<?php echo esc_attr( $menu_id ); ?>" <?php echo $selected;?>>
-									<?php echo esc_attr( $menu_item->name); if($selected){echo ' '; _e('( Auto detected )','geodirectory');} ?>
-								</option>
-								<?php
-							}
-
-							echo "</select>";
-
-
-						}else{//echo '##2';
-							// add new menu to a menu location.
-							$menus = get_registered_nav_menus();
-
-							//print_r($menus );
-
-							if(!empty($menus)){
-								echo "<select id='geodir-wizard-menu-location' data-type='create' class='geodir-select' >";
-
-								foreach($menus as $menu_slug => $menu_name){
-									$selected = '';
-
-									if(strpos(strtolower($menu_slug), 'primary') !== false || strpos(strtolower($menu_slug), 'main') !== false){
-										$selected = 'selected="selected"';
-									}
-									?>
-									<option value="<?php echo esc_attr( $menu_slug ); ?>" <?php echo $selected;?>>
-										<?php  _e('Create new menu in:','geodirectory'); echo ' '. esc_attr( $menu_name ); if($selected){echo ' '; _e('( Auto detected )','geodirectory');} ?>
-									</option>
-									<?php
-								}
-								echo "</select>";
-
-							}
-
-							//print_r($menus);
-						}
-
-						echo geodir_notification( array('geodir-wizard-menu-result' => '') );
-
-						?>
-					</td>
-					<td><input type="button" value="<?php _e("Insert menu items","geodirectory");?>" class="button-primary geodir_dummy_button" onclick="gd_wizard_setup_menu('<?php echo wp_create_nonce( "geodir-wizard-setup-menu" );?>');return false;"></td>
-				</tr>
-				</tbody>
-			</table>
+		</div>
 
 			<p class="gd-setup-actions step">
-				<input type="submit" class="button-primary button button-large button-next" value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step" />
+				<input type="submit" class="button-primary button button-large button-next gd-install-recommend" value="<?php esc_attr_e( 'Install', 'geodirectory' ); ?>" name="install_recommend" onclick="gd_wizard_install_plugins('<?php echo $nonce;?>');return false;" />
+				<input type="submit" class="button-primary button button-large button-next gd-continue-recommend" value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step" />
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>" class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
 				<?php wp_nonce_field( 'gd-setup' ); ?>
 			</p>
 		</form>
 		<?php
+	}
+
+	/**
+	 * Dummy data save.
+	 *
+	 * This is done via ajax so we just pass onto the next step.
+	 */
+	public function setup_recommend_save() {
+		check_admin_referer( 'gd-setup' );
+		wp_redirect( esc_url_raw( $this->get_next_step_link() ) );
+		exit;
 	}
 
 	/**

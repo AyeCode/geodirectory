@@ -199,9 +199,9 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				array(
 					'title' => __( 'Page Settings', 'geodirectory' ),
 					'type'  => 'title',
-					//'desc'  => 'Drag the map or the marker to set the city/town you wish to use as the default location, then click save changes.',
+					'desc'  => 'These are essential pages used by GD, you can set the pages here and edit the title/slug of the page via WP page settings.',
 					'id'    => 'page_options',
-					//'desc_tip' => true,
+					'desc_tip' => true,
 				),
 				array(
 					'name'     => __( 'Location page', 'geodirectory' ),

@@ -1068,3 +1068,12 @@ if ((window.gdSetMap=='google' || window.gdSetMap=='auto') && window.google && t
     gdMaps = 'osm';
 }
 window.gdMaps = window.gdMaps || gdMaps;
+
+
+function init_advanced_settings(){
+    jQuery( ".gd-advanced-toggle" ).off("click").click(function() {
+        jQuery(".gd-advanced-toggle").toggleClass("gda-hide");
+        console.log('toggle');
+        jQuery(".gd-advanced-setting, #default_location_set_address_button").toggleClass("gda-show");
+    });
+}

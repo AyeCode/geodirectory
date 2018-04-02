@@ -289,7 +289,20 @@ class GeoDir_Admin_Addons {
 				'slug'   => 'userswp',
 				'name'   => 'UsersWP',
 				'desc'   => __('Allow frontend user login and registration as well as slick profile pages.','geodirectory'),
-			)
+			),
+			// just testing script for below plugins
+//			'ewww-image-optimizer' => array(
+//				'url'   => 'https://wordpress.org/plugins/ewww-image-optimizer/',
+//				'slug'   => 'ewww-image-optimizer',
+//				'name'   => 'EWWW Image Optimizer',
+//				'desc'   => __('testing','geodirectory'),
+//			),
+//			'hide-admin-bar' => array(
+//				'url'   => 'https://wordpress.org/plugins/hide-admin-bar/',
+//				'slug'   => 'hide-admin-bar',
+//				'name'   => 'Hide admin bar',
+//				'desc'   => __('testing','geodirectory'),
+//			),
 		);
 
 		return $plugins;
