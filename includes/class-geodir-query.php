@@ -668,7 +668,7 @@ class GeoDir_Query {
 				}
 				break;
 			default:
-				if(isset($default_sort) && $sort_by == $default_sort){
+				if($sort_by == $default_sort){
 					$order_by_parts[] = "$wpdb->posts.post_date desc";
 				}else{
 					$order_by_parts[] = $this->custom_sort($orderby, $sort_by, $table);
@@ -777,6 +777,8 @@ class GeoDir_Query {
 					default:
 						if ($this->column_exist($table, $sort_by)) {
 							$orderby = $table . "." . $sort_by . " " . $order;
+						}else{
+							$orderby = "$wpdb->posts.post_date desc";
 						}
 						break;
 

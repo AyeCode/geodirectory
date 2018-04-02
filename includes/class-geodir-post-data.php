@@ -63,6 +63,8 @@ class GeoDir_Post_Data {
 		// add mandatory not to add listing page
 		add_action( 'geodir_add_listing_form_start',  array( __CLASS__, 'add_listing_mandatory_note'), -10, 3 );
 
+		// add schema
+		add_action('wp_head', array( __CLASS__, 'schema'), 10);
 
 
 	}
@@ -1237,6 +1239,186 @@ class GeoDir_Post_Data {
 		}
 
 		return $post;
+	}
+
+
+	/**
+	 * Output the posts microdata in the source code.
+	 *
+	 * This micordata is used by things like Google as a standard way of declaring things like telephone numbers etc.
+	 *
+	 * @global bool $preview True of on a preview page. False if not.
+	 * @global object $post The current post object.
+	 * @param object $post Optional. The post object or blank.
+	 */
+	public function schema($post='')
+	{
+
+		global $gd_post,$post;
+		if (!geodir_is_page('detail')) {
+			return;
+		}else{
+			//print_r($gd_post);return;
+		}
+
+		// url
+		$c_url = geodir_curPageURL();
+		$upload_dir = wp_upload_dir();
+
+		// post reviews
+		if (empty($gd_post->rating_count)) {
+			$reviews = '';
+		} else {
+			$post_reviews = get_comments(array('post_id' => $post->ID, 'status' => 'approve'));
+			foreach ($post_reviews as $review) {
+
+				if($rating_value = GeoDir_Comments::get_comment_rating($review->comment_ID)){
+					$reviews[] = array(
+						"@type" => "Review",
+						"author" => $review->comment_author,
+						"datePublished" => $review->comment_date,
+						"description" => $review->comment_content,
+						"reviewRating" => array(
+							"@type" => "Rating",
+							"bestRating" => "5",// @todo this will need to be filtered for review manager if user changes the score.
+							"ratingValue" => $rating_value,
+							"worstRating" => "1"
+						)
+					);
+				}
+
+			}
+
+		}
+
+		// post images
+		$post_images = geodir_get_images($post->ID, '10');
+
+		//print_r($post_images);
+		if (empty($post_images)) {
+			$images = array();
+		} else {
+			$i_arr = array();
+			foreach ($post_images as $img) {
+				//$i_arr[] = $img->src;
+				$image_meta = maybe_unserialize($img->metadata);
+
+				//print_r( $img );
+				//print_r($image_meta);
+				$i_arr[] = array(
+					"@type"     => "ImageObject",
+				    "author"    => !empty($img->user_id) ? get_the_author_meta('display_name', $img->user_id) : '',
+					"contentLocation"   => isset($gd_post->street) ? $gd_post->street.", ".$gd_post->city.", ".$gd_post->country : '',
+					"url"    => $upload_dir['baseurl'].$img->file,
+					"datePublished" => $post->post_date, //@todo we need to add a date field to the attachment table
+					"caption"   =>  $img->caption,
+					"name" => $img->title,
+					"representativeOfPage" => true,
+					"thumbnail" =>  geodir_get_image_src($img, 'medium'),
+				);
+			}
+
+			if (count($i_arr) == 1) {
+				$images = $i_arr[0];
+			} else {
+				$images = $i_arr;
+			}
+
+		}
+
+		//print_r($post);
+		// external links
+		$external_links =  array();
+		$external_links[] = $gd_post->website;
+		$external_links[] = $gd_post->twitter;
+		$external_links[] = $gd_post->facebook;
+		$external_links = array_filter($external_links);
+
+		if(!empty($external_links)){
+			$external_links = array_values($external_links);
+		}
+
+		// schema type
+		$schema_type = 'LocalBusiness';
+		if(isset($gd_post->default_category) && $gd_post->default_category){
+			$cat_schema = get_term_meta( $gd_post->default_category, 'ct_cat_schema', true );
+			if($cat_schema){$schema_type = $cat_schema;}
+			if(!$cat_schema && $schema_type=='LocalBusiness' && $post->post_type=='gd_event'){$schema_type = 'Event';}
+		}
+
+		$schema = array();
+		$schema['@context'] = "https://schema.org";
+		$schema['@type'] = $schema_type;
+		$schema['name'] = $post->post_title;
+		$schema['description'] = wp_strip_all_tags( $post->post_content, true );
+		$schema['telephone'] = $gd_post->phone;
+		$schema['url'] = $c_url;
+		$schema['sameAs'] = $external_links;
+		$schema['image'] = $images;
+		$schema['address'] = array(
+			"@type" => "PostalAddress",
+			"streetAddress" => $gd_post->street,
+			"addressLocality" => $gd_post->city,
+			"addressRegion" => $gd_post->region,
+			"addressCountry" => $gd_post->country,
+			"postalCode" => $gd_post->zip
+		);
+		if(!empty($gd_post->business_hours)){
+			$business_hours = explode(",[",$gd_post->business_hours);
+			$business_hours = isset($business_hours[0]) ? $business_hours[0] : $business_hours;
+			$business_hours = str_replace(array('["','"]'),'',$business_hours);
+			$business_hours = explode('","',$business_hours);
+			$schema['openingHours'] = $business_hours;
+		}
+
+		if($gd_post->latitude && $gd_post->longitude) {
+			$schema['geo'] = array(
+				"@type" => "GeoCoordinates",
+				"latitude" => $gd_post->latitude,
+				"longitude" => $gd_post->longitude
+			);
+		}
+
+		if($gd_post->overall_rating) {
+			$schema['aggregateRating'] = array(
+				"@type" => "AggregateRating",
+				"ratingValue" => $gd_post->overall_rating,
+				"bestRating" => "5", // @todo this will need to be filtered for review manager if user changes the score.
+				"worstRating" => "1",
+				"ratingCount" => $gd_post->rating_count,
+			);
+		}
+		$schema['review'] = $reviews;
+
+		/**
+		 * Allow the schema JSON-LD info to be filtered.
+		 *
+		 * @since 1.5.4
+		 * @since 1.5.7 Added $post variable.
+		 * @param array $schema The array of schema data to be filtered.
+		 * @param object $post The post object.
+		 */
+		$schema = apply_filters('geodir_details_schema', $schema,$post);
+
+		//print_r($schema);
+
+		echo '<script type="application/ld+json">' . json_encode($schema) . '</script>';
+
+
+		$uploads = wp_upload_dir();
+		$facebook_og = (isset($gd_post->featured_image) && $gd_post->featured_image) ? '<meta property="og:image" content="'.$uploads['baseurl'].$gd_post->featured_image.'"/>' : '';
+
+		/**
+		 * Show facebook open graph meta info
+		 *
+		 * @since 1.6.6
+		 * @param string $facebook_og The open graph html to be filtered.
+		 * @param object $post The post object.
+		 */
+		echo apply_filters('geodir_details_facebook_og', $facebook_og,$post);
+
+
+
 	}
 
 }
