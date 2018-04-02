@@ -179,10 +179,12 @@ class GeoDir_Admin_Assets {
 				wp_enqueue_script('geodir-add-listing');
 			}
 			
+			$load_gomap_script = apply_filters( 'geodir_load_gomap_script', false );
 			// only load maps when needed
 			if(
 			( $screen_id == 'geodirectory_page_gd-settings' && isset($_REQUEST['section']) && ($_REQUEST['section']=='location' || $_REQUEST['section']=='dummy_data') ) ||
-			( isset($screen->base) && $screen->base=='post' && isset($screen->post_type) &&  substr( $screen->post_type, 0, 3 ) === "gd_" )
+			( isset($screen->base) && $screen->base=='post' && isset($screen->post_type) &&  substr( $screen->post_type, 0, 3 ) === "gd_" ) ||
+			$load_gomap_script
 			){
 				wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
 				wp_enqueue_script( 'geodir-goMap-script' );
