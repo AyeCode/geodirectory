@@ -1128,8 +1128,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 	                'required_msg'       => '',
 	                'field_icon'         => '',
 	                'css_class'          => '',
-	                'cat_sort'           => false,
-	                'cat_filter'         => false
+	                'cat_sort'           => true,
+	                'cat_filter'         => true
                )
 			);
 

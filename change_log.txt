@@ -1,3 +1,6 @@
+v2.0.0.8-beta
+Sorting options not working on archive pages - FIXED
+
 v2.0.0.7-beta
 Ninja Forms template used wrong format for to field - FIXED
 

@@ -564,54 +564,120 @@ class GeoDir_Query {
 
 		$table = geodir_db_cpt_table($geodir_post_type);
 
+		$order_by_parts = array();
+
+
+		//echo '###'.$sort_by;
+//
+//		switch ($sort_by):
+//			case 'newest':
+//				$orderby = "$wpdb->posts.post_date desc, ";
+//				break;
+//			case 'oldest':
+//				$orderby = "$wpdb->posts.post_date asc, ";
+//				break;
+//			case 'low_review':
+//			case 'rating_count_asc':
+//				$orderby = $table . ".rating_count ASC, " . $table . ".overall_rating ASC, ";
+//				break;
+//			case 'high_review':
+//			case 'rating_count_desc':
+//				$orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
+//				break;
+//			case 'low_rating':
+//				$orderby = "( " . $table . ".overall_rating  ) ASC, " . $table . ".rating_count ASC,  ";
+//				break;
+//			case 'high_rating':
+//				$orderby = " " . $table . ".overall_rating DESC, " . $table . ".rating_count DESC, ";
+//				break;
+//			case 'featured':
+//				$orderby = $table . ".featured asc, ";
+//				break;
+//			case 'nearest':
+//				$orderby = " distance asc, ";
+//				break;
+//			case 'farthest':
+//				$orderby = " distance desc, ";
+//				break;
+//			case 'random':
+//				$orderby = " rand() ";
+//				break;
+//			case 'az':
+//				$orderby = "$wpdb->posts.post_title asc, ";
+//				break;
+//			// sort by rating
+//			case 'overall_rating_desc':
+//				$orderby = " " . $table . ".overall_rating DESC, " . $table . ".rating_count DESC, ";
+//				break;
+//			case 'overall_rating_asc':
+//				$orderby = " " . $table . ".overall_rating ASC, " . $table . ".rating_count ASC, ";
+//				break;
+//			default:
+//				$orderby .= " $wpdb->posts.post_date desc";
+//				break;
+//		endswitch;
+
 
 		switch ($sort_by):
-			case 'newest':
-				$orderby = "$wpdb->posts.post_date desc, ";
+			case 'random': // @todo, i think we should remove random, its a bad idea for so many reasons.
+				$order_by_parts[] = "rand()";
 				break;
-			case 'oldest':
-				$orderby = "$wpdb->posts.post_date asc, ";
+			case 'title_asc':
+				$order_by_parts[] = "$wpdb->posts.post_title asc";
 				break;
-			case 'low_review':
-			case 'rating_count_asc':
-				$orderby = $table . ".rating_count ASC, " . $table . ".overall_rating ASC, ";
+			case 'title_desc':
+				$order_by_parts[] = "$wpdb->posts.post_title desc";
 				break;
-			case 'high_review':
-			case 'rating_count_desc':
-				$orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
+			case 'add_date_asc':
+				$order_by_parts[] = "$wpdb->posts.post_date asc";
 				break;
-			case 'low_rating':
-				$orderby = "( " . $table . ".overall_rating  ) ASC, " . $table . ".rating_count ASC,  ";
+			case 'add_date_desc':
+				$order_by_parts[] = "$wpdb->posts.post_date desc";
 				break;
-			case 'high_rating':
-				$orderby = " " . $table . ".overall_rating DESC, " . $table . ".rating_count DESC, ";
+			case 'review_asc':
+				$order_by_parts[] = $table . ".rating_count ASC";
+				$order_by_parts[] = $table . ".overall_rating ASC";
 				break;
-			case 'featured':
-				$orderby = $table . ".featured asc, ";
+			case 'review_desc':
+				$order_by_parts[] = $table . ".rating_count DESC";
+				$order_by_parts[] = $table . ".overall_rating DESC";
 				break;
-			case 'nearest':
-				$orderby = " distance asc, ";
-				break;
-			case 'farthest':
-				$orderby = " distance desc, ";
-				break;
-			case 'random':
-				$orderby = " rand() ";
-				break;
-			case 'az':
-				$orderby = "$wpdb->posts.post_title asc, ";
-				break;
-			// sort by rating
-			case 'overall_rating_desc':
-				$orderby = " " . $table . ".overall_rating DESC, " . $table . ".rating_count DESC, ";
-				break;
-			case 'overall_rating_asc':
-				$orderby = " " . $table . ".overall_rating ASC, " . $table . ".rating_count ASC, ";
+			case 'rating_asc':
+			case 'rating_desc':
+				$rating_order = $sort_by == 'rating_asc' ? "ASC" : "DESC";
+				$use_bayesian = apply_filters('geodir_use_bayesian',true,$table);
+				$avg_rating = 0;
+				if($use_bayesian){
+					$avg_num_votes = get_transient( 'gd_avg_num_votes_'.$table );
+					if(!$avg_num_votes){
+						$avg_num_votes = $wpdb->get_var("SELECT SUM(rating_count) FROM $table");
+						if($avg_num_votes){
+							$avg_rating = get_transient( 'gd_avg_rating_'.$table );
+							if(!$avg_rating){
+								$avg_rating = $wpdb->get_var("SELECT SUM(overall_rating) FROM $table")/$avg_num_votes;
+							}
+							set_transient( 'gd_avg_num_votes_'.$table, $avg_num_votes, 12 * HOUR_IN_SECONDS );
+							set_transient( 'gd_avg_rating_'.$table, $avg_rating , 12 * HOUR_IN_SECONDS );
+						}
+					}
+					if(!$avg_num_votes){ $avg_num_votes = 0;}
+					$order_by_parts[] = " (( $avg_num_votes * $avg_rating ) + (" . $table . ".rating_count * " . $table . ".overall_rating ))  / ( $avg_num_votes + " . $table . ".rating_count )  $rating_order";
+				}else{
+					$order_by_parts[] = $table . ".overall_rating $rating_order";
+					$order_by_parts[] = $table . ".rating_count $rating_order";
+				}
 				break;
 			default:
-				$orderby .= " $wpdb->posts.post_date desc";
+				if(isset($default_sort) && $sort_by == $default_sort){
+					$order_by_parts[] = "$wpdb->posts.post_date desc";
+				}else{
+					$order_by_parts[] = $this->custom_sort($orderby, $sort_by, $table);
+				}
 				break;
 		endswitch;
+
+
+		$orderby = implode(", ",$order_by_parts);
 
 		/**
 		 * Filter order by SQL.
@@ -636,6 +702,116 @@ class GeoDir_Query {
 
 		return $orderby;
 	}
+
+	/**
+	 * Listing orderby custom sort.
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 * @param string $orderby The orderby query string.
+	 * @param string $sort_by Sortby query string.
+	 * @param string $table Listing table name.
+	 * @return string Modified orderby query.
+	 */
+	public function custom_sort($orderby, $sort_by, $table)
+	{
+
+		global $wpdb;
+
+		if ($sort_by != '' && (!is_search() || ( isset($_REQUEST['s']) && isset($_REQUEST['snear']) && $_REQUEST['snear']=='' && ( $_REQUEST['s']=='' ||  $_REQUEST['s']==' ') ) )) {
+
+			$sort_array = explode('_', $sort_by);
+
+			$sort_by_count = count($sort_array);
+
+			$order = $sort_array[$sort_by_count - 1];
+
+			if ($sort_by_count > 1 && ($order == 'asc' || $order == 'desc')) {
+
+				$sort_by = str_replace('_' . $order, '', $sort_by);
+
+				switch ($sort_by):
+
+					case 'post_date':
+					case 'comment_count':
+
+						$orderby = "$wpdb->posts." . $sort_by . " " . $order . ", ".$table . ".overall_rating " . $order . ", ";
+						break;
+
+					case 'distance':
+						$orderby = $sort_by . " " . $order . ", ";
+						break;
+
+
+					// sort by rating
+					case 'overall_rating':
+
+						$use_bayesian = apply_filters('gd_use_bayesian',true,$table);
+						$avg_rating = 0;
+						if($use_bayesian){
+							$avg_num_votes = get_transient( 'gd_avg_num_votes_'.$table );
+							if(!$avg_num_votes){
+								$avg_num_votes = $wpdb->get_var("SELECT SUM(rating_count) FROM $table");
+								if($avg_num_votes){
+
+									$avg_rating = get_transient( 'gd_avg_rating_'.$table );
+									if(!$avg_rating){
+										$avg_rating = $wpdb->get_var("SELECT SUM(overall_rating) FROM $table")/$avg_num_votes;
+									}
+									set_transient( 'gd_avg_num_votes_'.$table, $avg_num_votes, 12 * HOUR_IN_SECONDS );
+									set_transient( 'gd_avg_rating_'.$table, $avg_rating , 12 * HOUR_IN_SECONDS );
+								}
+							}
+
+							if(!$avg_num_votes){ $avg_num_votes = 0;}
+
+							$orderby = " (( $avg_num_votes * $avg_rating ) + (" . $table . ".rating_count * " . $table . ".overall_rating ))  / ( $avg_num_votes + " . $table . ".rating_count )  $order , ";
+
+							//$orderby = " ( " . $table . ".rating_count * " . $table . ".overall_rating ) + (" . $table . ".rating_count * " . $table . ".overall_rating )   / ( " . $table . ".rating_count + " . $table . ".rating_count )  $order , "; // seems to work mostly with no extra overheads
+						}else{
+							$orderby = " " . $table . "." . $sort_by . "  " . $order . ", " . $table . ".rating_count " . $order . ", ";
+						}
+
+						break;
+
+
+					default:
+						if ($this->column_exist($table, $sort_by)) {
+							$orderby = $table . "." . $sort_by . " " . $order;
+						}
+						break;
+
+				endswitch;
+
+			}
+
+		}
+
+		return $orderby;
+	}
+
+	/**
+	 * Check table column exist or not.
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 * @param string $db The table name.
+	 * @param string $column The column name.
+	 * @return bool If column exists returns true. Otherwise false.
+	 */
+	public function column_exist($db, $column)
+	{
+		global $wpdb;
+		$exists = false;
+		$columns = $wpdb->get_col("show columns from $db");
+		foreach ($columns as $c) {
+			if ($c == $column) {
+				$exists = true;
+				break;
+			}
+		}
+		return $exists;
+	}
+
+
 
 	/**
 	 * Remove the query.
