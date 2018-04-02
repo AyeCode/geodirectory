@@ -45,7 +45,7 @@ jQuery(function($) {
             $(':input.geodir-select').filter(':not(.enhanced)').each(function() {
                 var $this = $(this);
 				var select2_args = $.extend({
-                    minimumResultsForSearch: 10,
+                    minimumResultsForSearch: ($this.data('tags') ? 0 : (parseInt($this.data('min-results')) > 0 ? parseInt($this.data('min-results')) : 10)),
                     allowClear: $(this).data('allow_clear') ? true : false,
                     containerCssClass: 'gd-select2-selection',
                     dropdownCssClass: 'gd-select2-dropdown',
@@ -87,7 +87,7 @@ jQuery(function($) {
             $(':input.geodir-select-nostd').filter(':not(.enhanced)').each(function() {
                 var $this = $(this);
 				var select2_args = $.extend({
-                    minimumResultsForSearch: 10,
+                    minimumResultsForSearch: ($this.data('tags') ? 0 : (parseInt($this.data('min-results')) > 0 ? parseInt($this.data('min-results')) : 10)),
                     allowClear: true,
                     containerCssClass: 'gd-select2-selection',
                     dropdownCssClass: 'gd-select2-dropdown',
