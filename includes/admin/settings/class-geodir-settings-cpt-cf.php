@@ -524,7 +524,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'data_type'          => 'TEXT',
 					'admin_title'        => 'Contact Email',
 					'frontend_title'     => 'Email',
-					'frontend_desc'      => 'You can enter your business or listing website.',
+					'frontend_desc'      => 'You can enter the contact email for your listing.',
 					'htmlvar_name'       => 'email',
 					'is_active'          => true,
 					'for_admin_use'      => false,
