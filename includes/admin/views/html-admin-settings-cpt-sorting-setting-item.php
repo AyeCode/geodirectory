@@ -7,7 +7,7 @@
  * @package GeoDirectory
  */
 
-
+//print_r($field);
 ?>
 
 <li class="text" id="licontainer_<?php echo $field->id; ?>">

@@ -609,7 +609,7 @@ function geodir_display_sort_options() {
     $sort_by = '';
 
     if ( isset( $_REQUEST['sort_by'] ) ) {
-        $sort_by = $_REQUEST['sort_by'];
+        $sort_by = esc_attr($_REQUEST['sort_by']);
     }
 
     $gd_post_type = geodir_get_current_posttype();
@@ -664,7 +664,7 @@ function geodir_display_sort_options() {
 
         <div class="geodir-tax-sort">
 
-            <select name="sort_by" id="sort_by" onchange="javascript:window.location=this.value;">
+            <select name="sort_by" class="geodir-select geodir-sort-by"  onchange="javascript:window.location=this.value;">
 
                 <option
                     value="<?php echo esc_url( add_query_arg( 'sort_by', '' ) ); ?>" <?php if ( $sort_by == '' ) {

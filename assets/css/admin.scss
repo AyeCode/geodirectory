@@ -6,7 +6,12 @@
 @import "partials/add-listing";
 @import "partials/notifications";
 
-
+//listing page
+.image.column-image img{
+    width: 100%;
+    height: auto;
+    max-width: 150px;
+}
 /********************************************************
 Add/Edit post
 ********************************************************/
