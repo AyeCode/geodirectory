@@ -119,6 +119,7 @@ function geodir_draw_map($map_args = array())
         'autozoom' => true,
         'bubble_size' => 'small',
         'token' => '68f48005e256696074e1da9bf9f67f06',
+        '_wpnonce' => wp_create_nonce('wp_rest'),
         'navigationControlOptions' => array('position' => 'TOP_LEFT', 'style' => 'ZOOM_PAN'),
 		'map_ajax_url' => geodir_rest_markers_url()
     );

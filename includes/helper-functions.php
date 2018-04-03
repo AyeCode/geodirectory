@@ -221,55 +221,16 @@ function geodir_terms_and_conditions_page_id(){
  * @since 1.5.3
  * @return int|null Return the page ID if present or null if not.
  */
-function geodir_login_url($args=array()){
-
-	return wp_login_url( geodir_curPageURL() );
-
-    $gd_page_id = geodir_get_option('geodir_login_page');
-
-    if (function_exists('icl_object_id')) {
-        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-    }
-
-    if (function_exists('geodir_location_geo_home_link')) {
-        remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
-    }
-
-    if (geodir_is_wpml()){
-        $home_url = icl_get_home_url();
-    }else{
-        $home_url = home_url();
-    }
-
-    if (function_exists('geodir_location_geo_home_link')) {
-        add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
-    }
-
-    if($gd_page_id){
-        $post = get_post($gd_page_id);
-        $slug = $post->post_name;
-        //$login_url = get_permalink($gd_page_id );// get_permalink can only be user after theme-Setup hook, any earlier and it errors
-        $login_url = trailingslashit($home_url)."$slug/";
-    }else{
-        $login_url = trailingslashit($home_url)."?geodir_signup=true";
-    }
-
-    if($args){
-        $login_url = add_query_arg($args,$login_url );
-    }
-
-    /**
-     * Filter the GeoDirectory login page url.
-     *
-     * This filter can be used to change the GeoDirectory page url.
-     *
-     * @since 1.5.3
-     * @package GeoDirectory
-     * @param string $login_url The url of the login page.
-     * @param array $args The array of query args used.
-     * @param int $gd_page_id The page id of the GD login page.
-     */
-	    return apply_filters('geodir_login_url',$login_url,$args,$gd_page_id);
+function geodir_login_url($redirect = ''){
+	//( defined( 'REST_REQUEST' ) && REST_REQUEST )
+	if(empty($redirect)){
+		if( defined( 'REST_REQUEST' ) && REST_REQUEST ){
+			$redirect = wp_get_referer();
+		}else{
+			$redirect = geodir_curPageURL();
+		}
+	}
+	return wp_login_url( $redirect );
 }
 
 /**
