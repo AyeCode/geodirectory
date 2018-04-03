@@ -364,11 +364,11 @@
 								class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
 								title="<?php
 								if ( $field->field_type == 'checkbox' ) {
-									_e( 'Should the checkbox be checked by default?', 'geodirectory' );
+									esc_attr_e( 'Should the checkbox be checked by default?', 'geodirectory' );
 								} else if ( $field->field_type == 'email' ) {
-									_e( 'A default value for the field, usually blank. Ex: info@mysite.com', 'geodirectory' );
+									esc_attr_e( 'A default value for the field, usually blank. Ex: info@mysite.com', 'geodirectory' );
 								} else {
-									_e( 'A default value for the field, usually blank. (for "link" this will be used as the link text)', 'geodirectory' );
+									esc_attr_e( 'A default value for the field, usually blank. (for "link" this will be used as the link text)', 'geodirectory' );
 								}
 								?>">
 							</span>

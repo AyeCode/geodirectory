@@ -765,7 +765,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 
         $category_taxonomy = geodir_get_taxonomies($post_type);
-        $categories = get_terms($category_taxonomy[0], array('orderby' => 'count', 'order' => 'DESC'));
+        $categories = get_terms($category_taxonomy[0], array('orderby' => 'count', 'order' => 'DESC','hide_empty' => false));
 
 
         if(!is_wp_error( $categories )){
