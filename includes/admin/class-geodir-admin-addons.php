@@ -194,12 +194,12 @@ class GeoDir_Admin_Addons {
 
 		//manuall checks
 		if($addon->info->title =="Whoop!"){
-			return true;
+			$addon->info->title = "Whoop";
 		}
 
 		foreach($all_themes as $theme ){
-			//print_r($theme);
-			//echo '###'.$addon->info->title;
+//			print_r($theme);
+//			echo '####'.$addon->info->title;
 			if($addon->info->title == $theme->get( 'Name' )){
 				return true;
 			}
@@ -232,6 +232,7 @@ class GeoDir_Admin_Addons {
 		if($current_tab == 'addons' && isset($addon->info->id) && $addon->info->id){
 			$installed = self::is_plugin_installed($addon->info->id);
 		}elseif($current_tab == 'themes' && isset($addon->info->id) && $addon->info->id) {
+//			print_r($addon);
 			$installed = self::is_theme_installed($addon);
 		}
 

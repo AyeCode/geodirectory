@@ -4,6 +4,7 @@ Favorites not adding/removing due to var rename - FIXED
 Favorites not adding/removing in map info window - FIXED
 Some custom fields not allowing sort by option - FIXED
 Added warning if changing default city when listings are present - ADDED
+Backend edit review rating missing - FIXED
 
 v2.0.0.8-beta
 Sorting options not working on archive pages - FIXED

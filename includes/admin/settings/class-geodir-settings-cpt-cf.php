@@ -1698,7 +1698,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				if ( $field->htmlvar_name == 'featured' ) {
 					return new WP_Error( 'failed', wp_sprintf( __( "%s field already exists, it can not be used twice.", "geodirectory" ),  $field->htmlvar_name ) );
 				} else {
-					return new WP_Error( 'failed', __( "Field HTML variable name MUST be unique, duplicate field detected, please fix and re-save.", "geodirectory" ) );
+					return new WP_Error( 'failed', __( "Field key name MUST be unique, duplicate field detected, please fix and re-save.", "geodirectory" ) );
 				}
 			}
 
