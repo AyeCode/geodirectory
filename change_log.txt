@@ -1,6 +1,7 @@
 v2.0.0.9-beta
 Add listing page shows info might be lost even after save - FIXED
 Favorites not adding/removing due to var rename - FIXED
+Some custom fields not allowing sort by option - FIXED
 
 v2.0.0.8-beta
 Sorting options not working on archive pages - FIXED
