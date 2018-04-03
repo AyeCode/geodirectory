@@ -967,7 +967,7 @@ function gd_delete_post($post_id){
 
 function gd_ajax_lightboxX($action,$nonce,$post_id,$extra){
     if($action){
-        if(!$nonce || $nonce==''){$nonce = geodirectory_params.basic_nonce;}
+        if(!$nonce || $nonce==''){$nonce = geodir_params.basic_nonce;}
         $content = "<div class='geodir-ajax-content ''>Loading content</div>";
         $lightbox = '';
 
@@ -1002,7 +1002,7 @@ function gd_ajax_lightboxX($action,$nonce,$post_id,$extra){
 
 function gd_ajax_lightbox($action,$nonce,$post_id,$extra){
     if($action){
-        if(!$nonce || $nonce==''){$nonce = geodirectory_params.basic_nonce;}
+        if(!$nonce || $nonce==''){$nonce = geodir_params.basic_nonce;}
         $content = "<div class='geodir-ajax-content ''>Loading content</div>";
         $lightbox = '';
 

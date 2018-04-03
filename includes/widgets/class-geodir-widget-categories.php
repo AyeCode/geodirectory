@@ -255,7 +255,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                         $container.html('<i class="fa fa-cog fa-spin"></i>');
                         var data = {
                             'action': 'geodir_cpt_categories',
-                            'security': geodirectory_params.basic_nonce,
+                            'security': geodir_params.basic_nonce,
                             'ajax_cpt': jQuery(this).val()
                         };
                         jQuery('.gd-wgt-params', $widgetBox).find('input').each(function() {
@@ -263,7 +263,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                                 data[jQuery(this).attr('name')] = jQuery(this).val();
                             }
                         });
-                        jQuery.post(geodirectory_params.ajax_url, data, function(response) {
+                        jQuery.post(geodir_params.ajax_url, data, function(response) {
                             $container.html(response);
                             $container.removeClass('gd-loading');
                         });
