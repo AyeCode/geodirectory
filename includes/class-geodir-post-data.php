@@ -312,6 +312,8 @@ class GeoDir_Post_Data {
 
 			//print_r($gd_post);print_r( $postarr );exit;
 
+			$postarr = apply_filters( 'geodir_save_post_data', $postarr, $gd_post, $post, $update );
+
 			if ( $update ) {// update
 				$wpdb->update(
 					$table,
