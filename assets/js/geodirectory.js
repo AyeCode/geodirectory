@@ -864,7 +864,7 @@ function geodir_refresh_business_hour($this) {
 		label = geodir_params.txt_open_now;
 		$this.addClass('gd-bh-open');
 	} else {
-		label = geodir_params.txt_closed_now;
+		label = hasClosed ? geodir_params.txt_closed_today : geodir_params.txt_closed_now;
 		$this.addClass('gd-bh-close');
 	}
 	jQuery('.geodir-i-biz-hours font', $this).html(label);
