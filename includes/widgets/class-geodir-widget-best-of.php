@@ -516,7 +516,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
                     var data = {
                         'action': 'geodir_bestof',
-                        'security': geodirectory_params.basic_nonce,
+                        'security': geodir_params.basic_nonce,
                         'post_type': post_type,
                         'excerpt_type': excerpt_type,
                         'post_limit': post_limit,
@@ -531,12 +531,12 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                     loading.show();
 
                     console.log(data );
-                    jQuery.post(geodirectory_params.ajax_url, data, function (response) {
+                    jQuery.post(geodir_params.ajax_url, data, function (response) {
                         container.html(response);
                         jQuery(widgetBox).find('.geodir_category_list_view li .geodir-post-img .geodir_thumbnail img').css('display', 'block');
 
                         // start lazy load if it's turned on
-                        if(geodirectory_params.lazy_load==1){
+                        if(geodir_params.lazy_load==1){
                             geodir_init_lazy_load();
                         }
 

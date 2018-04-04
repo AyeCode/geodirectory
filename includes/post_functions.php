@@ -1391,6 +1391,8 @@ function geodir_favourite_html($user_id, $post_id)
      */
     $unfavourite_icon = apply_filters('geodir_unfavourite_icon', 'fa fa-heart');
 
+//    echo get_current_user_id().'###';print_r($current_user);
+
     $user_meta_data = '';
     if (isset($current_user->data->ID))
         $user_meta_data = geodir_get_user_favourites($current_user->data->ID);

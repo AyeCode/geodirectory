@@ -524,7 +524,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'data_type'          => 'TEXT',
 					'admin_title'        => 'Contact Email',
 					'frontend_title'     => 'Email',
-					'frontend_desc'      => 'You can enter your business or listing website.',
+					'frontend_desc'      => 'You can enter the contact email for your listing.',
 					'htmlvar_name'       => 'email',
 					'is_active'          => true,
 					'for_admin_use'      => false,
@@ -1698,7 +1698,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				if ( $field->htmlvar_name == 'featured' ) {
 					return new WP_Error( 'failed', wp_sprintf( __( "%s field already exists, it can not be used twice.", "geodirectory" ),  $field->htmlvar_name ) );
 				} else {
-					return new WP_Error( 'failed', __( "Field HTML variable name MUST be unique, duplicate field detected, please fix and re-save.", "geodirectory" ) );
+					return new WP_Error( 'failed', __( "Field key name MUST be unique, duplicate field detected, please fix and re-save.", "geodirectory" ) );
 				}
 			}
 

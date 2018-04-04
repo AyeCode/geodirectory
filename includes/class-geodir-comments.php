@@ -543,7 +543,7 @@ class GeoDir_Comments {
 		$post_types = geodir_get_posttypes();
 
 		if ( ! empty( $post_type )
-		     && in_array( $post->post_type, $post_types )
+		     && in_array( $post_type , $post_types )
 		     && ! ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post_type ) )
 		) {
 			$rating = 0;

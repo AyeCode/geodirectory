@@ -5,7 +5,6 @@
  * Document load functions
  */
 jQuery(function($) {
-    console.log("ready!");
     // Start polling the form for auto saves
     geodir_auto_save_poll(geodir_get_form_data());
     /// check validation on blur
@@ -114,7 +113,7 @@ function geodir_auto_save_poll(old_form_data) {
     if (jQuery("#geodirectory-add-post").length) {
         setTimeout(function() {
             // only save if the forum data has changed
-            if (old_form_data != geodir_get_form_data()) {
+            if (jQuery("#geodirectory-add-post").length && old_form_data != geodir_get_form_data()) {
                 console.log('form has changed');
                 geodir_auto_save_post();
                 geodir_changes_made = true; // flag changes have been made
@@ -131,7 +130,7 @@ function geodir_auto_save_post() {
     form_data += "&action=geodir_auto_save_post";
     jQuery.ajax({
         type: "POST",
-        url: geodirectory_params.ajax_url,
+        url: geodir_params.ajax_url,
         data: form_data, // serializes the form's elements.
         success: function(data) {
             if (data.success) {
@@ -158,7 +157,7 @@ function geodir_save_post() {
     console.log(form_data);
     jQuery.ajax({
         type: "POST",
-        url: geodirectory_params.ajax_url,
+        url: geodir_params.ajax_url,
         data: form_data, // serializes the form's elements.
         success: function(data) {
             if (data.success) {
@@ -184,7 +183,7 @@ function geodir_delete_revision() {
     form_data += "&action=geodir_delete_revision";
     jQuery.ajax({
         type: "POST",
-        url: geodirectory_params.ajax_url,
+        url: geodir_params.ajax_url,
         data: form_data, // serializes the form's elements.
         success: function(data) {
             if (data.success) {

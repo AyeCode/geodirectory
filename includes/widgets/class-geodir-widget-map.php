@@ -839,6 +839,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'fullscreenControl'        => false,
 			'maxZoom'                  => 21,
 			'token'                    => '68f48005e256696074e1da9bf9f67f06',
+			'_wpnonce' => wp_create_nonce('wp_rest'),
 			'navigationControlOptions' => array(
 				'position' => 'TOP_LEFT',
 				'style'    => 'ZOOM_PAN'

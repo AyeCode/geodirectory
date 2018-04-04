@@ -559,6 +559,7 @@ function create_marker(item, map_canvas) {
         // Adding a click event to the marker
         google.maps.event.addListener(marker, 'spider_click', function() { // 'click' => normal, 'spider_click' => Overlapping Marker Spiderfier
             var marker_url = map_options.map_ajax_url;
+            console.log(map_options);
             is_zooming = true;
             jQuery("#" + map_canvas).goMap();
             var preview_query_str = '';
@@ -574,7 +575,7 @@ function create_marker(item, map_canvas) {
             gd_infowindow.setContent(loading);
             jQuery.ajax({
                 type: "GET",
-                url: marker_url,
+                url: marker_url+"?_wpnonce="+map_options._wpnonce,
                 cache: false,
                 dataType: "json",
                 error: function(xhr, error) {

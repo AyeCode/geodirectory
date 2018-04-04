@@ -10,7 +10,7 @@ function geodir_custom_field_output_textarea_var_post_content($html,$location,$c
 
 	if($location=='listing'){
 		global $post;
-		$html = '<div class="geodir_post_meta gd-read-more-wrap ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" ><p>';
+		$html = '<div class="geodir_post_meta gd-read-more-wrap ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" ><p>';
 		$html .= wp_strip_all_tags( $post->{$cf['htmlvar_name']}, true );
 		$html .= '</p><p class="gd-read-more"><a href="#" class="gd-read-more-button">'.esc_attr__('Read More','geodirectory').'</a></p></div>';
 	}
@@ -49,7 +49,7 @@ function geodir_predefined_custom_field_output_twitter_feed($html,$location,$cf)
 		}
 
 
-		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;">';
+		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;">';
 
 		$html .= '<a class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/'.$post->{$cf['htmlvar_name']}.'">Tweets by '.$post->{$cf['htmlvar_name']}.'</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
 		$html .= '</div>';
@@ -88,7 +88,7 @@ function geodir_predefined_custom_field_output_get_directions($html,$location,$c
 
 		$link_text = isset( $post->{$cf['default_value']} ) ? $post->{$cf['default_value']} : __( 'Get Directions', 'geodirectory' );
 
-		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' ' . $cf['htmlvar_name'] . '" style="clear:both;">';
+		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;">';
 
 		if(isset( $cf['field_icon'] ) && $cf['field_icon']){
 			$html .= $field_icon_af;

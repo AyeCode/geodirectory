@@ -228,7 +228,7 @@ class GeoDir_Frontend_Scripts {
 				'deps'    => array('plupload','jquery','jquery-ui-sortable'),
 				'version' => GEODIRECTORY_VERSION,
 			),
-			'geodirectory' => array(
+			'geodir' => array(
 				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
@@ -367,7 +367,7 @@ class GeoDir_Frontend_Scripts {
 		self::register_styles();
 
 		// geodir_params
-		wp_localize_script('geodirectory', 'geodir_params', geodir_params()); //@todo we need to do this the nice way
+		//wp_localize_script('geodirectory', 'geodir_params', geodir_params()); //@todo we need to do this the nice way
 
 
 
@@ -395,7 +395,7 @@ class GeoDir_Frontend_Scripts {
 		}
 
 
-		self::enqueue_script( 'geodirectory' );
+		self::enqueue_script( 'geodir' );
 		self::enqueue_script( 'geodir_lity' );
 		self::enqueue_script( 'jquery-flexslider' );
 
@@ -449,7 +449,7 @@ class GeoDir_Frontend_Scripts {
 		global $wp;
 
 		switch ( $handle ) {
-			case 'geodirectory' :
+			case 'geodir' :
 				/**
 				 * Filter the `geodir_var` data array that outputs the  wp_localize_script() translations and variables.
 				 *
@@ -482,7 +482,7 @@ class GeoDir_Frontend_Scripts {
 						'text_unfav'        => apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT),
 						'icon_fav'          => apply_filters('geodir_favourite_icon', 'fa fa-heart'),
 						'icon_unfav'        => apply_filters('geodir_unfavourite_icon', 'fa fa-heart'),
-					)
+					) + geodir_params()
 				);
 			break;
 			case 'geodir-select2' :

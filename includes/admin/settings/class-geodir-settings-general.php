@@ -71,9 +71,30 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 		// hide save button on dummy data page
 		if ( 'dummy_data' == $current_section ) {
 			$hide_save_button = true;
+		}elseif('location' == $current_section ) {
+			// check if there are already listing before saving new location
+			global $wpdb;
+			$post_types        = geodir_get_posttypes();
+			$post_types_string = implode( ",", $post_types );
+			$cpt_count   = count( $post_types );
+			$cptp        = array_fill( 0, $cpt_count, "%s" );
+			$cptp_string = implode( ",", $cptp );
+			$has_posts   = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type IN ($cptp_string) LIMIT 1", $post_types_string ) );
+			if ( $has_posts ) {
+				?>
+				<script>
+					jQuery(function () {
+						var default_location_city = jQuery("#default_location_city").val();
+						jQuery(".geodir-save-button").click(function () {
+							if(default_location_city && default_location_city != jQuery("#default_location_city").val()){
+								return confirm("<?php _e( "Are you sure? This can break current listings.", "geodirectory" );?>");
+							}
+						});
+					});
+				</script>
+				<?php
+			}
 		}
-
-
 	}
 
 

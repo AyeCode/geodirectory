@@ -206,7 +206,7 @@ function geodir_params()
         'plugin_url' => geodir_plugin_url(),
         'ajax_url' => $ajax_url,
         'custom_field_not_blank_var' => __('Field label must not be blank', 'geodirectory'),
-        'custom_field_not_special_char' => __('Please do not use special character and spaces in HTML Variable Name.', 'geodirectory'),
+        'custom_field_not_special_char' => __('Please do not use special character and spaces in field key Variable Name.', 'geodirectory'),
         'custom_field_unique_name' => __('Field key must be unique.', 'geodirectory'),
         'custom_field_delete' => __('Are you sure you wish to delete this field?', 'geodirectory'),
         //start not show alert msg

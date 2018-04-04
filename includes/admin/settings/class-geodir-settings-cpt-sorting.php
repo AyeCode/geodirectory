@@ -372,12 +372,12 @@ if ( ! class_exists( 'GD_Settings_Cpt', false ) ) :
 			// if field template not provided get it
 			if(empty($cf)){
 				$cf_arr  = self::custom_sort_options($field->post_type);
-				$cf = (isset($cf_arr[$field->field_type])) ? $cf_arr[$field->field_type] : ''; // the field type
+				//$cf = (isset($cf_arr[$field->field_type])) ? $cf_arr[$field->field_type] : ''; // the field type
 				if(!$cf){
 					foreach ($cf_arr as $cf_temp){
 						if($cf_temp['htmlvar_name']==$field->field_type_key){
 							$cf = $cf_temp;
-							$field = (object) array_merge((array) $field, (array) $cf_temp); 
+							$field = (object) array_merge((array) $field, (array) $cf_temp);
 							break;
 						}
 					}
@@ -568,7 +568,7 @@ if ( ! class_exists( 'GD_Settings_Cpt', false ) ) :
 
 
 
-			//print_r($field);//exit;
+//			print_r($field);//exit;
 
 			// Check field exists.
 			$exists = self::field_exists($field->htmlvar_name,$field->post_type);

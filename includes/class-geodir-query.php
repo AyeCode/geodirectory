@@ -542,6 +542,7 @@ class GeoDir_Query {
 
 		$sort_by = '';
 		$orderby = ' ';
+		$default_sort = '';
 
 		if ($snear != '') {
 			$orderby .= " distance,";
@@ -668,6 +669,7 @@ class GeoDir_Query {
 				}
 				break;
 			default:
+//				echo $sort_by.'###'.$default_sort;
 				if($sort_by == $default_sort){
 					$order_by_parts[] = "$wpdb->posts.post_date desc";
 				}else{
