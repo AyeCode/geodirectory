@@ -1,3 +1,7 @@
+v2.0.0.10-beta
+gd_map shortcode should not show "Enable marker cluster?" if plugin not active - FIXED
+Business Hours: add a text if place is closed whole day - ADDED
+
 v2.0.0.9-beta
 Add listing page shows info might be lost even after save - FIXED
 Favorites not adding/removing due to var rename - FIXED
@@ -29,7 +33,7 @@ Post badge feature implemented - CHANGED
 Post images CSS and lightbox added - ADDED
 New images not being added to current listings - FIXED
 WP dashboard recent GD reviews block - FIXED
-Ninja Forms can now be used to create contact fomrs and more (install wizard step remains) - ADDED
+Ninja Forms can now be used to create contact forms and more (install wizard step remains) - ADDED
 KLEO theme deprecated_function problem - FIXED
 
 v2.0.0.4-beta
@@ -258,7 +262,7 @@ Price output settings added to numerical text custom fields - ADDED
 Settings added to remove data on plugin uninstall - ADDED
 
 v1.6.8
-Address field output containd class post instead of post_address - FIXED
+Address field output contains class post instead of post_address - FIXED
 Video and special offers tabs can show twice - FIXED
 Custom field position change function sometimes not run - FIXED
 Multiselect custom field can now be show as comma separated by adding class `gd-comma-list` - ADDED
@@ -279,10 +283,10 @@ Mouse scroll zoom control setting not working for OpenStreetMap - FIXED
 Popular post view widget -> "Post Type:" setting not working on CPT pages - FIXED
 Responsive video shortcode - ADDED
 Claim listing error message incorrect class - FIXED
-Address field not showing the same on prview page - FIXED
+Address field not showing the same on pr view page - FIXED
 Options added in CPT categories widget to disable viewing post type & category filters - ADDED
 Server side marker clustering not working with OpenStreetMap - FIXED
-BuddyPress admin bar not availble for non admin users - FIXED
+BuddyPress admin bar not available for non admin users - FIXED
 Fixed map marker title special characters encoding - FIXED
 Let popup forms template override from theme - FIXED
 Added a filter to modify My Dashboard widget title - ADDED

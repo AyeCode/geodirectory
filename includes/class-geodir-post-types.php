@@ -42,7 +42,7 @@ class GeoDir_Post_types {
 	 *
 	 * @return bool
 	 */
-	public function disable_gutenberg($is_enabled, $post_type){
+	public static function disable_gutenberg($is_enabled, $post_type){
 		if (in_array($post_type, geodir_get_posttypes())) {
 			return false;
 		}

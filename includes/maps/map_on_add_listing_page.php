@@ -467,21 +467,20 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         }
         if (set_map_val_in_fields) {
             if (getCountry) {
-                /* TODO multilocations */
-                jQuery('#<?php echo $prefix .'country'; ?> option[value=""]').attr("selected",false);
-                jQuery('#<?php echo $prefix.'country';?> option[data-country_code="' + getCountryISO + '"]').attr("selected", true);
-               // jQuery("#<?php echo $prefix.'country';?>").trigger("chosen:updated");
-                jQuery("#<?php echo $prefix.'country';?>").trigger('change');
-                //alert(123);
+               setCountry = jQuery('#<?php echo $prefix . 'country'; ?> option[data-country_code="' + getCountryISO + '"]').val();
+			   if (!setCountry) {
+				   setCountry = getCountry;
+			   }
+			   jQuery("#<?php echo $prefix . 'country'; ?>").val(setCountry).trigger('change.select2');
             }
             if (getState) {
-                if (jQuery('input[id="<?php echo $prefix.'region';?>"]').attr('id')) {
-                    jQuery("#<?php echo $prefix.'region';?>").val(getState);
+                if (jQuery('input[id="<?php echo $prefix . 'region'; ?>"]').attr('id')) {
+                    jQuery("#<?php echo $prefix . 'region'; ?>").val(getState).trigger('change.select2');
                 }
             }
             if (getCity) {
-                if (jQuery('input[id="<?php echo $prefix.'city';?>"]').attr('id')) {
-                    jQuery("#<?php echo $prefix.'city';?>").val(getCity);
+                if (jQuery('input[id="<?php echo $prefix . 'city'; ?>"]').attr('id')) {
+                    jQuery("#<?php echo $prefix . 'city'; ?>").val(getCity).trigger('change.select2');
                 }
             }
         }

@@ -493,8 +493,10 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'default'         => '0',
 				'advanced'        => false,
 				'element_require' => '[%map_type%]=="post"',
-			),
-			'marker_cluster'   => array(
+			)
+		);
+		if ( defined( 'GDCLUSTER_VERSION' ) ) { // @todo we can move this in marker cluster plugin.
+			$arguments['marker_cluster'] = array(
 				'type'            => 'checkbox',
 				'title'           => __( 'Enable marker cluster?', 'geodirectory' ),
 				'desc'            => __( 'This enables marker cluster on the map.', 'geodirectory' ),
@@ -504,8 +506,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'default'         => '0',
 				'advanced'        => true,
 				'element_require' => '[%map_type%]!="post"',
-			)
-		);
+			);
+		}
 
 		return $arguments;
 	}

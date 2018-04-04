@@ -1251,7 +1251,7 @@ class GeoDir_Post_Data {
 	 * @global object $post The current post object.
 	 * @param object $post Optional. The post object or blank.
 	 */
-	public function schema($post='')
+	public static function schema($post='')
 	{
 
 		global $gd_post,$post;

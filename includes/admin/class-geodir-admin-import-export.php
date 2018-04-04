@@ -121,7 +121,12 @@ class GeoDir_Admin_Import_Export {
 			}
 				break;
 			default:
-				echo "Your favorite color is neither red, blue, nor green!";
+				if ( has_filter( 'geodir_ajax_imex_' . sanitize_key( $task ) ) ) {
+					return apply_filters( 'geodir_ajax_imex_' . sanitize_key( $task ), array() );
+				} else {
+					return new WP_Error( 'gd-error', __( "Your favorite color is neither red, blue, nor green!", "geodirectory" ) );
+				}
+				break;
 		}
 
 		wp_defer_term_counting( false );
