@@ -897,7 +897,7 @@ function geodirFindRoute(map_canvas) {
 }
 
 function gdGetTravelMode($wrap) {
-    var mode = jQuery('#travel-mode').val();
+    var mode = jQuery('#travel-mode', $wrap).val();
     if (mode == 'driving') {
         return google.maps.DirectionsTravelMode.DRIVING;
     } else if (mode == 'walking') {
@@ -912,7 +912,7 @@ function gdGetTravelMode($wrap) {
 }
 
 function gdGetTravelUnits($wrap) {
-    var mode = jQuery('#travel-units').val();
+    var mode = jQuery('#travel-units', $wrap).val();
     if (mode == 'kilometers') {
         return google.maps.DirectionsUnitSystem.METRIC;
     } else {
