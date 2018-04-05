@@ -25,22 +25,42 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		<?php if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) : ?>
 			<ul class="gd-products">
-				<?php foreach ( $addons as $addon ) : ?>
+				<?php foreach ( $addons as $addon ) :
+					if(388371==$addon->info->id){continue;}// don't show GD Dashbaord
+					?>
 					<li class="gd-product">
-						<a href="<?php echo esc_attr( $addon->info->link ); ?>">
-							<h3><?php echo esc_html( $addon->info->title ); ?></h3>
+							<div class="gd-product-title">
+								<h3><?php
+									if ( ! empty( $addon->info->excerpt) ){
+										echo geodir_help_tip( $addon->info->excerpt );
+									}
+									echo esc_html( $addon->info->title ); ?></h3>
+							</div>
 
 							<span class="gd-product-image">
 								<?php if ( ! empty( $addon->info->thumbnail) ) : ?>
 									<img src="<?php echo esc_attr( $addon->info->thumbnail ); ?>"/>
-								<?php endif; ?>
+								<?php endif;
+
+								if(isset($addon->info->link) && substr( $addon->info->link, 0, 21 ) === "https://wordpress.org"){
+									echo '<a href="'.admin_url('/plugin-install.php?gd_wizard_recommend=true&amp;tab=plugin-information&amp;plugin='.$addon->info->slug).')" data-lity="">';
+									echo '<span class="gd-product-info">'.__('More info','geodirectory').'</span>';
+									echo '</a>';
+								}elseif(isset($addon->info->link) && substr( $addon->info->link, 0, 26 ) === "https://wpgeodirectory.com"){
+									if(defined('WP_EASY_UPDATES_ACTIVE')){
+										$url = admin_url('/plugin-install.php?gd_wizard_recommend=true&amp;tab=plugin-information&amp;plugin='.$addon->info->slug.'&item_id='.$addon->info->id.'&update_url=https://wpgeodirectory.com');
+									}else{
+										$url = '#gd-wpeu-required-for-external';
+									}
+									echo '<a href="'.$url.'" data-lity="">';
+									echo '<span class="gd-product-info">'.__('More info','geodirectory').'</span>';
+									echo '</a>';
+								}
+
+								?>
+
 							</span>
 
-							<span class="gd-product-excerpt">
-								<?php if ( ! empty( $addon->info->excerpt) ) : ?>
-									<p><?php echo wp_kses_post( $addon->info->excerpt ); ?></p>
-								<?php endif; ?>
-							</span>
 
 							<span class="gd-product-button">
 								<?php
@@ -49,9 +69,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</span>
 
 
-							<span class="gd-price"><?php // echo wp_kses_post( $addon->price ); ?></span>
+							<span class="gd-price"><?php //print_r($addon); //echo wp_kses_post( $addon->price ); ?></span>
 
-						</a>
+<!--						<a href="--><?php //echo esc_attr( $addon->info->link ); ?><!--">-->
+<!--						</a>-->
 					</li>
 				<?php endforeach; ?>
 			</ul>
@@ -67,5 +88,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php }elseif($current_tab =='themes'){?>
 		<p><?php printf( __( 'All of our GeoDirectory Themes can be found on GeoDirectory.com here: <a href="%s">GeoDirectory Themes</a>', 'geodirectory' ), 'https://wpgeodirectory.com/downloads/category/themes/' ); ?></p>
 	<?php }?>
+
+	<div id="gd-wpeu-required-for-external" class="lity-hide "><span class="gd-notification "><?php _e("The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='https://wpeasyupdates.com/wp-easy-updates.zip'>download</a> and install it now.","geodirectory");?></span></div>
 
 </div>

@@ -5,22 +5,75 @@
     background: #fff;
     border: 1px solid #ccc;
     float: left;
-    padding: 14px;
+    //padding: 14px;
     position: relative;
     margin: 0 15px 15px 0;
     width: 320px;
-    height: 315px;
+    //height: 315px;
+
+    &:hover{
+      .gd-product-image{
+        .gd-product-info{
+          display: block;
+        }
+      }
+    }
+
+    a{
+      text-decoration: none;
+    }
+
+    h3{
+      background: #f9f9f9;
+      padding: 15px;
+      margin: 0;
+      .gd-help-tip{
+        float: none;
+        margin: 0;
+      }
+    }
 
     .gd-product-image{
       max-height: 155px;
       display: block;
       overflow: hidden;
+      border-top: 1px solid #ddd;
+      border-bottom: 1px solid #ddd;
+      position: relative;
+      .gd-product-info{
+        position: absolute;
+        top: 40%;
+        left: calc(40% - 14px);
+        background: #000000b5;
+        padding: 5px 10px;
+        border-radius: 4px;
+        color: #fff;
+        display: none;
+      }
     }
 
+    .gd-product-excerpt{
+      border-bottom: 1px solid #ddd;
+      display: block;
+      padding: 5px 10px;
+      p{
+        margin: 0;
+      }
+    }
+
+    .gd-product-button{
+      min-height: 40px;
+      display: block;
+      background: #f9f9f9;
+      .addons-price-text{
+        margin: 10px 0 0 6px;
+        float: left;
+
+      }
+    }
     .addons-button{
-      position: absolute;
-      bottom: 14px;
-      right: 14px;
+      float: right;
+      margin: 5px 6px 0 0;
     }
 
     img{

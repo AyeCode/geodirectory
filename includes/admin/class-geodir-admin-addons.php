@@ -29,7 +29,7 @@ class GeoDir_Admin_Addons {
 		$tabs = array(
 			'addons' => __("Addons", "geodirectory"),
 			'themes' => __("Themes", "geodirectory"),
-			' recommended_plugins' => __("Recommended plugins", "geodirectory"),
+			'recommended_plugins' => __("Recommended plugins", "geodirectory"),
 		);
 
 		return $tabs;
@@ -135,9 +135,14 @@ class GeoDir_Admin_Addons {
 	public static function get_section_data( $section_id ) {
 		$section      = self::get_tab( $section_id );
 		$api_url = "https://wpgeodirectory.com/edd-api/v2/products/";
-		$section_data = '';
+		$section_data = new stdClass();
 
-		if ( ! empty( $section ) ) {
+		//echo '###'.$section_id;
+
+		if($section_id=='recommended_plugins'){
+			$section_data->products = self::get_recommend_wp_plugins_edd_formatted();
+		}
+		elseif ( ! empty( $section ) ) {
 			if ( false === ( $section_data = get_transient( 'gd_addons_section_' . $section_id ) ) ) { //@todo restore after testing
 			//if ( 1==1) {
 				$raw_section = wp_safe_remote_get( esc_url_raw( add_query_arg( array( 'category' => $section_id, 'number' => 100),$api_url) ), array( 'user-agent' => 'GeoDirectory Addons Page' ) );
@@ -146,7 +151,7 @@ class GeoDir_Admin_Addons {
 					$section_data = json_decode( wp_remote_retrieve_body( $raw_section ) );
 
 					if ( ! empty( $section_data->products ) ) {
-						set_transient( 'gd_addons_section_' . $section_id, $section_data, WEEK_IN_SECONDS );
+						set_transient( 'gd_addons_section_' . $section_id, $section_data, DAY_IN_SECONDS );
 					}
 				}
 			}
@@ -228,39 +233,75 @@ class GeoDir_Admin_Addons {
 		$url = isset($addon->info->link) ? $addon->info->link : '';
 		$class = 'button-primary';
 		$installed = false;
+		$onclick = '';
 
 		if($current_tab == 'addons' && isset($addon->info->id) && $addon->info->id){
 			$installed = self::is_plugin_installed($addon->info->id);
 		}elseif($current_tab == 'themes' && isset($addon->info->id) && $addon->info->id) {
 //			print_r($addon);
 			$installed = self::is_theme_installed($addon);
+		}elseif($current_tab == 'recommended_plugins' && isset($addon->info->slug) && $addon->info->slug){
+			include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
+			$status = install_plugin_install_status(array("slug"=>$addon->info->slug,"version"=>""));
+			$installed = isset($status['status']) && $status['status']=='install' ? false : true;
+
+//		print_r($addon);print_r($status);
+			$slug = $addon->info->slug;
+			$nonce = wp_create_nonce( 'updates' );
+			$onclick = " onclick='gd_recommended_install_plugin(this,\"$slug\",\"$nonce\");return false;' ";
+
 		}
 
 
 		//print_r($addon);
 
-		if(isset($addon->info->id) && $addon->info->id && $installed ){
+		if( $installed ){
 			$button_text = __('Installed','geodirectory');
 			$class = ' button-secondary disabled';
-		}elseif(isset($addon->pricing) && !empty($addon->pricing)){
+		}else{
+			$button_text = __('Install','geodirectory');
+		}
+
+		if(isset($addon->pricing) && !empty($addon->pricing)){
 			if(is_object($addon->pricing)){
 				$prices = (Array)$addon->pricing;
 				$price = reset($prices);
 				if($price!='0.00'){
-					$button_text = sprintf( __('From: $%d', 'geodirectory'), $price);
+					$price_text = sprintf( __('From: $%d', 'geodirectory'), $price);
 				}
 			}else{
-				$button_text = sprintf( __('From: $%d', 'geodirectory'), $addon->pricing);
+				$price_text = sprintf( __('From: $%d', 'geodirectory'), $addon->pricing);
 			}
+		}
+
+		//$price_text = 'From: $123';
+
+		if(!$installed && isset($price_text)){
+			?>
+			<a
+				target="_blank"
+				class="addons-price-text"
+				href="<?php echo esc_url( $url ); ?>">
+				<?php echo esc_html( $price_text ); ?>
+			</a>
+			<?php
 		}
 
 		?>
 		<a
+			data-text-installed="<?php _e('Installed','geodirectory');?>"
+			data-text-install="<?php _e('Install','geodirectory');?>"
+			data-text-installing="<?php _e('Installing','geodirectory');?>"
+			data-text-error="<?php _e('Error','geodirectory');?>"
+			<?php echo $onclick;?>
+			target="_blank"
 			class="addons-button  <?php echo esc_attr( $class ); ?>"
 			href="<?php echo esc_url( $url ); ?>">
 			<?php echo esc_html( $button_text ); ?>
 		</a>
 		<?php
+
+
 	}
 
 
@@ -277,6 +318,10 @@ class GeoDir_Admin_Addons {
 		include_once( dirname( __FILE__ ) . '/views/html-admin-page-addons.php' );
 	}
 
+	/**
+	 * A list of recommended wp.org plugins.
+	 * @return array
+	 */
 	public static function get_recommend_wp_plugins(){
 		$plugins = array(
 			'ninja-forms' => array(
@@ -284,12 +329,13 @@ class GeoDir_Admin_Addons {
 				'slug'   => 'ninja-forms',
 				'name'   => 'Ninja Forms',
 				'desc'   => __('Setup forms such as contact or booking forms for your listings.','geodirectory'),
+				'thumbnail' => "https://ps.w.org/ninja-forms/assets/banner-772x250.png"
 			),
 			'userswp' => array(
 				'url'   => 'https://wordpress.org/plugins/userswp/',
 				'slug'   => 'userswp',
 				'name'   => 'UsersWP',
-				'desc'   => __('Allow frontend user login and registration as well as slick profile pages.','geodirectory'),
+				'desc'   => __('Allow frontend user login and registration as well as have slick profile pages.','geodirectory'),
 			),
 			// just testing script for below plugins
 //			'ewww-image-optimizer' => array(
@@ -307,5 +353,29 @@ class GeoDir_Admin_Addons {
 		);
 
 		return $plugins;
+	}
+
+	/**
+	 * Format the recommended list of wp.org plugins for our extensions section output.
+	 *
+	 * @return array
+	 */
+	public static function get_recommend_wp_plugins_edd_formatted(){
+		$formatted = array();
+		$plugins = self::get_recommend_wp_plugins();
+
+		foreach($plugins as $plugin){
+			$product = new stdClass();
+			$product->info = new stdClass();
+			$product->info->id = '';
+			$product->info->slug = isset($plugin['slug']) ? $plugin['slug'] : '';
+			$product->info->title = isset($plugin['name']) ? $plugin['name'] : '';
+			$product->info->excerpt = isset($plugin['desc']) ? $plugin['desc'] : '';
+			$product->info->link = isset($plugin['url']) ? $plugin['url'] : '';
+			$product->info->thumbnail = isset($plugin['thumbnail']) ? $plugin['thumbnail'] : "https://ps.w.org/".$plugin['slug']."/assets/banner-772x250.png";
+			$formatted[] = $product;
+		}
+
+		return $formatted;
 	}
 }
