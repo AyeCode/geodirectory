@@ -174,7 +174,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 			$upload_dir = wp_sprintf( CSV_TRANSFER_IMG_FOLDER, str_replace( ABSPATH, '', $uploads['path'] ) );
 			?>
 			<script type="text/javascript">
-				var timoutC, timoutP, timoutL, timoutH, timoutR;
+				var timoutC, timoutP, timoutR;
 
 				function gd_imex_PrepareImport(el, type) {
 					var cont = jQuery(el).closest('.gd-imex-box');
@@ -321,11 +321,6 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 									jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.data + '</p>');
 									jQuery('#gd-import-msg', cont).show();
 								} else {
-									//console.log(gd_processed);
-									//gd_processed = gd_processed + parseInt(data.processed);						console.log(gd_processed);
-
-									//gd_processed = Math.min(gd_processed, total);						console.log(gd_processed);
-
 									gd_created = gd_created + parseInt(data.created);
 									gd_updated = gd_updated + parseInt(data.updated);
 									gd_skipped = gd_skipped + parseInt(data.skipped);
@@ -344,8 +339,6 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 									if (type=='post') {
 										jQuery('#gd_invalid_addr', cont).val(gd_invalid_addr);
 									}
-
-									//console.log(gd_processed+'###'+total);
 
 									if (parseInt(gd_processed) == parseInt(total)) {
 										jQuery('#gd-import-done', cont).text(total);
@@ -388,18 +381,6 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 											if (type=='post') {
 												clearTimeout(timoutP);
 												timoutP = setTimeout(function () {
-													gd_imex_StartImport(el, type);
-												}, 0);
-											}
-											if (type=='loc') {
-												clearTimeout(timoutL);
-												timoutL = setTimeout(function () {
-													gd_imex_StartImport(el, type);
-												}, 0);
-											}
-											if (type=='hood') {
-												clearTimeout(timoutH);
-												timoutH = setTimeout(function () {
 													gd_imex_StartImport(el, type);
 												}, 0);
 											}
@@ -486,20 +467,6 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 							gd_imex_StartImport(el, type);
 						}, 0);
 					}
-
-					if (type=='loc') {
-						clearTimeout(timoutL);
-						timoutL = setTimeout(function () {
-							gd_imex_StartImport(el, type);
-						}, 0);
-					}
-
-					if (type=='hood') {
-						clearTimeout(timoutH);
-						timoutH = setTimeout(function () {
-							gd_imex_StartImport(el, type);
-						}, 0);
-					}
 					if (type=='review') {
 						clearTimeout(timoutR);
 						timoutR = setTimeout(function () {
@@ -550,22 +517,17 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 						gdMsg += msgParse;
 					}
 
-					if ((type=='post' && invalid_addr > 0) || (type=='loc' && invalid > 0)) {
-						if (type=='loc') {
-							invalid_addr = invalid;
-						}
+					if (type=='post' && invalid_addr > 0) {
 						var msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank/invalid address(city, region, country, latitude, longitude).', 'geodirectory' ), '%s', '%d' ) );?></p>';
 						msgParse = msgParse.replace("%s", invalid_addr);
 						msgParse = msgParse.replace("%d", total);
 						gdMsg += msgParse;
 					}
 
-					if (invalid > 0 && type!='loc') {
+					if (invalid > 0) {
 						var msgParse;
 
-						if (type=='hood') {
-							msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to invalid neighbourhood data(name, latitude, longitude) or invalid location data(either location_id or city/region/country is empty)', 'geodirectory' ), '%s', '%d' ) );?></p>';
-						} else if (type=='review') {
+						if (type=='review') {
 							msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to invalid comment content / post ID / rating / user details(user id or author name, author email).', 'geodirectory' ), '%s', '%d' ) );?></p>';
 						} else {
 							msgParse = '<p><?php echo addslashes( sprintf( __( '%s / %s item(s) could not be added due to blank title/invalid post type/invalid characters used in data.', 'geodirectory' ), '%s', '%d' ) );?></p>';
@@ -876,7 +838,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 						var $this, $parent, sExport, fields = '', iPerPage;
 						$this = $(el);
 						$parent = $this.closest('.postbox');
-						sExport = $this.data('export'); console.log(sExport);
+						sExport = $this.data('export');
 						iPerPage = parseInt($('#gd_chunk_size', $parent).val());
 						if (!sExport) {
 							return false;
@@ -962,7 +924,6 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 							beforeSend: function(xhr, settings) {},
 							success: function(res) {
 								$submit.prop('disabled', false);
-								console.log(res);
 								if (typeof res == 'object') {
 									if (typeof res.success != 'undefined' && res.success == false) {
 										gd_progressbar($parent, 0, '<i class="fa fa-warning"></i>' + res.data);
@@ -1041,7 +1002,6 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 							dataType: 'json',
 							cache: false,
 							success: function(data) {
-								console.log(data);
 								if(typeof data == 'object') {
 									if(data.success) {
 										jQuery('#gd-import-msg', cont).find('#message').removeClass('error').addClass('updated').html('<p>' + data.data + '</p>');

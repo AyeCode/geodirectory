@@ -98,6 +98,13 @@ class GeoDir_Admin_Import_Export {
 					return new WP_Error( 'gd-error', __( "Your favorite color is neither red, blue, nor green!", "geodirectory" ) );
 				}
 				break;
+			case "import":
+				if ( ! empty( $_POST['_import'] ) && has_filter( 'geodir_ajax_import_' . sanitize_key( $_POST['_import'] ) ) ) {
+					return apply_filters( 'geodir_ajax_import_' . sanitize_key( $_POST['_import'] ), array() );
+				} else {
+					return new WP_Error( 'gd-error', __( "Your favorite color is neither red, blue, nor green!", "geodirectory" ) );
+				}
+				break;
 			case "export":
 				if ( ! empty( $_POST['_export'] ) && has_filter( 'geodir_ajax_export_' . sanitize_key( $_POST['_export'] ) ) ) {
 					return apply_filters( 'geodir_ajax_export_' . sanitize_key( $_POST['_export'] ), array() );
