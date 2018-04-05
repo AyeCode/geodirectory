@@ -99,6 +99,19 @@
   transition: transform var(--lity-transition-duration) var(--lity-transition-timing-function);
 
 
+  .lity-iframe-container{
+    &:before{
+      content: "Loading";
+      color: #fff;
+      font-size: 20px;
+      top: 0;
+      position: absolute;
+      top: 45%;
+      left: 44%;
+    }
+
+  }
+
   .lity-show{
     display: block !important;
     background: #fff;

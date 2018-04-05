@@ -118,13 +118,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			echo "<style>".$widget->widget_css()."</style>";
 			echo "<script>".$widget->widget_js()."</script>";
 			?>
-			<script>//alert(123);</script>
 			<?php
 			wp_die();
 		}
 
 		public function shortcode_insert_button(){
-			global $sd_widgets;
+			global $sd_widgets,$shortcode_insert_button_once;
+			if($shortcode_insert_button_once){return;}
 			add_thickbox();
 			?>
 			<div id="my-content-id" style="display:none;">
@@ -142,7 +142,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 					}
 					?>
-					<div id="sd-shortcode-settings"></div>
+					<div class="sd-shortcode-settings"></div>
 
 				</div>
 
@@ -215,8 +215,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					alert("Copied the text: " + copyText.value);
 				}
 				function sd_get_shortcode_options($this){
-					console.log($this);
-					console.log(jQuery($this).val());
+					//console.log($this);
+					//console.log(jQuery($this).val());
 					$short_code = jQuery($this).val();
 					if($short_code){
 
@@ -230,7 +230,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 						jQuery.post(ajaxurl, data, function (response) {
 							console.log(response);
-							jQuery('#sd-shortcode-settings').html(response);
+							jQuery('.sd-shortcode-settings').html(response);
 
 
 //
@@ -283,6 +283,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 			</script>
 			<?php
+			$shortcode_insert_button_once = true;
 		}
 
 		public function widget_css() {

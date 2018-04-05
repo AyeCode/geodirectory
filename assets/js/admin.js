@@ -1077,3 +1077,54 @@ function init_advanced_settings(){
         jQuery(".gd-advanced-setting, #default_location_set_address_button").toggleClass("gda-show");
     });
 }
+
+function gd_recommended_install_plugin($this,$slug,$nonce){
+    //alert($slug);
+
+    var data = {
+        'action':           'install-plugin',
+        '_ajax_nonce':       $nonce,
+        'slug':              $slug
+    };
+
+    jQuery.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: data, // serializes the form's elements.
+        beforeSend: function()
+        {
+            jQuery($this).html('<i class="fa fa-refresh fa-spin" ></i> ' + jQuery($this).data("text-installing")).attr("disabled", true);
+        },
+        success: function(data)
+        {
+            // if(data.data){
+            //     jQuery( ".geodir-wizard-widgets-result" ).text(data.data);
+            // }
+            console.log(data);
+            if(data.success){
+                jQuery($this).html(jQuery($this).data("text-installed")).removeClass('button-primary').addClass('button-secondary');
+
+                //gd_wizard_check_plugins();
+                //gd_wizard_install_plugins($nonce);
+                if(data.data.activateUrl){
+                    gd_recommended_activate_plugin($this,data.data.activateUrl,$slug);
+                }
+            }else{
+                jQuery($this).html(jQuery($this).data("text-error"));
+                alert('something went wrong');
+            }
+        }
+    });
+}
+
+/**
+ * Try to silently activate the plugin after install.
+ *
+ * @param $url
+ */
+function gd_recommended_activate_plugin($this,$url,$slug){
+
+    jQuery.post($url, function(data, status){
+        console.log($slug+'plugin activated')
+    });
+}

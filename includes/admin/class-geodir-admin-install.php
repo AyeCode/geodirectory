@@ -588,8 +588,8 @@ class GeoDir_Admin_Install {
 		  city varchar(50) DEFAULT '',
 		  region varchar(50) DEFAULT '',
 		  country varchar(50) DEFAULT '',
-		  latitude varchar(20) DEFAULT '',
-		  longitude varchar(20) DEFAULT '',
+		  latitude varchar(22) DEFAULT '',
+		  longitude varchar(22) DEFAULT '',
 		  UNIQUE KEY comment_id (comment_id)
 		) $collate; ";
 			
@@ -916,8 +916,8 @@ class GeoDir_Admin_Install {
 			$columns['region'] = "region VARCHAR( 50 ) NULL";
 			$columns['country'] = "country VARCHAR( 50 ) NULL";
 			$columns['zip'] = "zip VARCHAR( 20 ) NULL";
-			$columns['latitude'] = "latitude VARCHAR( 20 ) NULL";
-			$columns['longitude'] = "longitude VARCHAR( 20 ) NULL";
+			$columns['latitude'] = "latitude VARCHAR( 22 ) NULL";
+			$columns['longitude'] = "longitude VARCHAR( 22 ) NULL";
 			$columns['mapview'] = "mapview VARCHAR( 15 ) NULL";
 			$columns['mapzoom'] = "mapzoom VARCHAR( 3 ) NULL";
 		}
