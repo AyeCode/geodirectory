@@ -172,7 +172,7 @@
             iframeUrl = transferHash(hashUrl, iframeUrl);
         }
 
-        return '<div class="lity-iframe-container"><iframe frameborder="0" allowfullscreen src="' + iframeUrl + '"/></div>';
+        return '<div class="lity-iframe-container"><iframe onload="jQuery(\'.lity-iframe-container .fa\').remove();" frameborder="0" allowfullscreen src="' + iframeUrl + '"/><i class="fa fa-refresh fa-spin fa-3x fa-fw"></i></div>';
     }
 
     function error(msg) {
@@ -180,6 +180,7 @@
     }
 
     function imageHandler(target, instance) {
+
         // Generate Gallery
         var has_next = instance.opener().parent().next('li').find('a').length;
         console.log(has_next);

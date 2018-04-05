@@ -90,5 +90,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php }?>
 
 	<div id="gd-wpeu-required-for-external" class="lity-hide "><span class="gd-notification "><?php _e("The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='https://wpeasyupdates.com/wp-easy-updates.zip'>download</a> and install it now.","geodirectory");?></span></div>
+	<div id="gd-recommended-buy" class="lity-hide ">
+		<span class="gd-notification noti-white">
+			<h3 class="gd-recommended-buy-title"><?php _e("Licence key","geodirectory");?></h3>
+			<input class="gd-recommended-buy-key" type="text" placeholder="<?php _e("Enter your licence key","geodirectory");?>"> <button class="button-primary gd-recommended-buy-button" ><?php _e("Install","geodirectory");?></button>
+			<br>
+			<?php
+			echo sprintf( __('%sFind your licence key here%s OR %sBuy one here%s', 'plugin-domain'), '<a href="https://wpgeodirectory.com/your-account/" target="_blank">','</a>','<a class="gd-recommended-buy-link" href="https://wpgeodirectory.com/downloads/category/addons/" target="_blank">','</a>' );
+			?>
+		</span>
+	</div>
 
 </div>

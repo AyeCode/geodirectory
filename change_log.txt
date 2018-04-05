@@ -4,6 +4,7 @@ Business Hours: add a text if place is closed whole day - ADDED
 Shortcode builder not working with WooCommerce products - FIXED
 lat/lon DB length increased from 20 to 22 chars to account for negative decimals - CHANGED
 Map direction unit conflicts when multiple maps are on the page - FIXED
+Extensions screen improvements functionality and UI - CHANGED
 
 v2.0.0.9-beta
 Add listing page shows info might be lost even after save - FIXED

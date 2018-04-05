@@ -41,4 +41,22 @@
   .gd-info{
 
   }
+
+  &.noti-white{
+    background: white;
+    color: #555;
+    a{
+      color: #555;
+      text-decoration: underline;
+      &:visited {
+        color: #555;
+      }
+      &:hover {
+        color: #ccc;
+      }
+      &:active {
+        color: #555;
+      }
+    }
+  }
 }

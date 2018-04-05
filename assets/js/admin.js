@@ -1117,6 +1117,71 @@ function gd_recommended_install_plugin($this,$slug,$nonce){
     });
 }
 
+function gd_recommended_buy_popup($this,$slug,$nonce,$item_id){
+
+    $url = jQuery($this).attr("href");
+    $title = jQuery($this).parent().parent().find(".gd-product-title h3").html();
+    jQuery('#gd-recommended-buy .gd-recommended-buy-title').html($title);
+    jQuery('#gd-recommended-buy .gd-recommended-buy-link').attr("href",$url);
+    $lightbox = lity('#gd-recommended-buy');
+
+    jQuery(".gd-recommended-buy-button").unbind('click').click(function(){
+        $licence =  jQuery(".gd-recommended-buy-key").val();
+        if($licence==''){
+            alert("Please enter a key");
+        }else{
+            jQuery(".gd-recommended-buy-key").val('');
+            $lightbox.close();
+            gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,$licence);
+        }
+    });
+}
+
+function gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,$licence){
+
+    // @todo remove once out of beta
+    alert("This feature is not yet implemented in the beta");
+    return false;
+
+    var data = {
+        'action':           'install-plugin',
+        '_ajax_nonce':       $nonce,
+        'slug':              $slug,
+        'update_url':        "https://wpgeodirectory.com",
+        'item_id':           $item_id,
+        'license':           $licence
+    };
+
+    jQuery.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: data, // serializes the form's elements.
+        beforeSend: function()
+        {
+            jQuery($this).html('<i class="fa fa-refresh fa-spin" ></i> ' + jQuery($this).data("text-installing")).attr("disabled", true);
+        },
+        success: function(data)
+        {
+            // if(data.data){
+            //     jQuery( ".geodir-wizard-widgets-result" ).text(data.data);
+            // }
+            console.log(data);
+            if(data.success){
+                jQuery($this).html(jQuery($this).data("text-installed")).removeClass('button-primary').addClass('button-secondary');
+
+                //gd_wizard_check_plugins();
+                //gd_wizard_install_plugins($nonce);
+                if(data.data.activateUrl){
+                    gd_recommended_activate_plugin($this,data.data.activateUrl,$slug);
+                }
+            }else{
+                jQuery($this).html(jQuery($this).data("text-error"));
+                alert('something went wrong');
+            }
+        }
+    });
+}
+
 /**
  * Try to silently activate the plugin after install.
  *
