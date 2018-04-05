@@ -3,6 +3,7 @@ gd_map shortcode should not show "Enable marker cluster?" if plugin not active -
 Business Hours: add a text if place is closed whole day - ADDED
 Shortcode builder not working with WooCommerce products - FIXED
 lat/lon DB length increased from 20 to 22 chars to account for negative decimals - CHANGED
+Map direction unit conflicts when multiple maps are on the page - FIXED
 
 v2.0.0.9-beta
 Add listing page shows info might be lost even after save - FIXED
