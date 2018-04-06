@@ -1021,7 +1021,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'class'       => 'gd-get-directions',
 				'icon'        => 'fa fa-location-arrow',
 				'name'        => __( 'Get Directions Link', 'geodirectory' ),
-				'description' => __( 'Adds a input for twitter username and outputs feed.', 'geodirectory' ),
+				'description' => __( 'Adds a link to be able to get directions to the post.', 'geodirectory' ),
 				'defaults'    => array(
 					'data_type'          => 'VARCHAR',
 					'admin_title'        => 'Get Directions',
