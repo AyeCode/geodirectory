@@ -5,14 +5,27 @@
     background: #fff;
     border: 1px solid #ccc;
     float: left;
-    //padding: 14px;
     position: relative;
-    margin: 0 15px 15px 0;
-    width: 320px;
-    //height: 315px;
+    margin: 0 0 15px 0;
+    box-sizing: border-box;
+    width: 32%;
+    margin-left: 2%;
+
+    &:nth-child(3n+1){
+      margin-left: 0;
+    }
+
+    @media screen and (max-width: 600px)
+    {
+      width: calc(100% - 15px);
+    }
+
 
     &:hover{
       .gd-product-image{
+        img{
+          opacity: 0.75;
+        }
         .gd-product-info{
           display: block;
         }
@@ -34,21 +47,36 @@
     }
 
     .gd-product-image{
-      max-height: 155px;
+      max-height: 198px;
       display: block;
       overflow: hidden;
       border-top: 1px solid #ddd;
       border-bottom: 1px solid #ddd;
       position: relative;
+      box-sizing: border-box;
+
+      img{
+        float: left;
+      }
+
+      @media screen and (max-width: 600px)
+      {
+        max-height: 318px;
+      }
+
       .gd-product-info{
         position: absolute;
-        top: 40%;
-        left: calc(40% - 14px);
+        top: calc(50% - 14px);
+        left: calc(50% - 39px);
         background: #000000b5;
         padding: 5px 10px;
         border-radius: 4px;
         color: #fff;
         display: none;
+        @media screen and (max-width: 600px)
+        {
+          display: block;
+        }
       }
     }
 
@@ -80,5 +108,18 @@
       max-width: 100%;
     }
 
+  }
+}
+
+//popup
+#gd-recommended-buy{
+  input{
+    padding: 5px;
+    box-sizing: border-box;
+    border-radius: 2px;
+    border: 1px solid #ccc;
+  }
+  h3{
+    margin: 0 0 6px 0;
   }
 }

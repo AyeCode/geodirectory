@@ -237,15 +237,19 @@ class GeoDir_Admin_Addons {
 
 		if($current_tab == 'addons' && isset($addon->info->id) && $addon->info->id){
 			$installed = self::is_plugin_installed($addon->info->id);
+			if(defined('WP_EASY_UPDATES_ACTIVE')){
+				include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
+				$installed = self::is_plugin_installed($addon->info->id);
+				$slug = $addon->info->slug;
+				$nonce = wp_create_nonce( 'updates' );
+				$onclick = " onclick='gd_recommended_buy_popup(this,\"$slug\",\"$nonce\",\"".$addon->info->id."\");return false;' ";
+			}
 		}elseif($current_tab == 'themes' && isset($addon->info->id) && $addon->info->id) {
-//			print_r($addon);
 			$installed = self::is_theme_installed($addon);
 		}elseif($current_tab == 'recommended_plugins' && isset($addon->info->slug) && $addon->info->slug){
 			include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
 			$status = install_plugin_install_status(array("slug"=>$addon->info->slug,"version"=>""));
 			$installed = isset($status['status']) && $status['status']=='install' ? false : true;
-
-//		print_r($addon);print_r($status);
 			$slug = $addon->info->slug;
 			$nonce = wp_create_nonce( 'updates' );
 			$onclick = " onclick='gd_recommended_install_plugin(this,\"$slug\",\"$nonce\");return false;' ";
@@ -253,7 +257,7 @@ class GeoDir_Admin_Addons {
 		}
 
 
-		//print_r($addon);
+//		print_r($addon);
 
 		if( $installed ){
 			$button_text = __('Installed','geodirectory');
@@ -272,6 +276,15 @@ class GeoDir_Admin_Addons {
 			}else{
 				$price_text = sprintf( __('From: $%d', 'geodirectory'), $addon->pricing);
 			}
+
+			if( !$installed ){
+				if(!defined('WP_EASY_UPDATES_ACTIVE')){
+					$button_text = __('Buy now','geodirectory');
+				}
+			}
+
+		}else{
+			$price_text = __('Free', 'geodirectory');
 		}
 
 		//$price_text = 'From: $123';

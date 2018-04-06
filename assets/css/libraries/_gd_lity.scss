@@ -100,14 +100,14 @@
 
 
   .lity-iframe-container{
-    &:before{
-      content: "Loading";
+
+    .fa{
+      position: absolute;
+      z-index: 0;
+      left: 48%;
+      top: 50%;
       color: #fff;
       font-size: 20px;
-      top: 0;
-      position: absolute;
-      top: 45%;
-      left: 44%;
     }
 
   }
