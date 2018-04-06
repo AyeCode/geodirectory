@@ -1535,8 +1535,9 @@ div#jquery-lightbox {
 	font-size: .5em;
 }
 .gd-cptcat-row.gd-cpt-flat{
-  width: 100%;
-  margin-right: 0px;
+    width: 100%;
+    margin-right: 0px;
+    max-width: 240px;
 }
 .gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat {
   float: left;

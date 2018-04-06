@@ -378,7 +378,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'type'        => 'select',
 				'title'       => __( 'Zoom level:', 'geodirectory' ),
 				'desc'        => __( 'This is the zoom level of the map, `auto` is recommended.', 'geodirectory' ),
-				'options'     => array_merge( array( '0' => __( 'Auto', 'geodirectory' ) ), array_reverse( range( 1, 19 ) ) ),
+				'options'     => array_merge( array( '0' => __( 'Auto', 'geodirectory' ) ),  range( 1, 19 )  ),
 				'placeholder' => '',
 				'desc_tip'    => true,
 				'default'     => '0',

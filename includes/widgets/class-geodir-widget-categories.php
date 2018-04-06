@@ -48,14 +48,17 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                 ),
                 'title_tag'  => array(
 	                'title' => __('Title tag:', 'geodirectory'),
-	                'desc' => __('The tag used to display the category title.', 'geodirectory'),
+	                'desc' => __('The tag used to display the auto generated CPT title.', 'geodirectory'),
 	                'type' => 'select',
 	                'options'   =>  array(
-		                'span'      => 'span',
+		                'h6'      => 'h6',
+		                'h5'      => 'h5',
+		                'h4'      => 'h4',
 		                'h3'      => 'h3',
 		                'h2'      => 'h2',
+		                'hide'      => 'hide',
 	                ),
-	                'default'  => 'span',
+	                'default'  => 'h4',
 	                'desc_tip' => true,
 	                'advanced' => true
                 ),
@@ -86,13 +89,13 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'default'  => 0,
                     'advanced' => true
                 ),
-                'show_count'  => array(
-                    'title' => __('Show count:', 'geodirectory'),
+                'hide_count'  => array(
+                    'title' => __('Hide count:', 'geodirectory'),
                     'desc' => __('This will show the number of listings in the categories.', 'geodirectory'),
                     'type' => 'checkbox',
                     'desc_tip' => true,
                     'value'  => '1',
-                    'default'  => 1,
+                    'default'  => 0,
                     'advanced' => true
                 ),
                 'hide_icon'  => array(
@@ -138,7 +141,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'title' => __('Max sub-cat to show:', 'geodirectory'),
                     'desc' => __('The maximum number of sub categories to show.', 'geodirectory'),
                     'type' => 'select',
-                    'options'   =>  array_merge(array('all' => __('All', 'geodirectory')), array_reverse( range(0, 10) )),
+                    'options'   =>  array_merge(array('all' => __('All', 'geodirectory')), range(0, 10) ),
                     'default'  => 'all',
                     'desc_tip' => true,
                     'advanced' => true
@@ -185,8 +188,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
         $defaults = array(
             'post_type' => '0', // 0 =  all
             'hide_empty' => '0',
+            'hide_count' => '0',
 			'cpt_ajax' => '0',
-	        'title_tag' => 'span',
+	        'title_tag' => 'h4',
         );
 
         /**
@@ -201,9 +205,12 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 		$ajax_class = ! empty( $options['cpt_ajax'] ) ? ' gd-wgt-cpt-ajax' : '';
 
-        echo '<div class="gd-categories-widget ' . $ajax_class . '">';
-        echo $output;
-        echo '</div>';
+	    if($output){
+		    echo '<div class="gd-categories-widget ' . $ajax_class . '">';
+		    echo $output;
+		    echo '</div>';
+	    }
+
 
         return ob_get_clean();
     }
@@ -301,7 +308,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'title_tag' => 'span',
 				'post_type' => array(), // NULL for all
 				'hide_empty' => '',
-				'show_count' => '',
+				'hide_count' => '',
 				'hide_icon' => '',
 				'cpt_left' => '',
 				'sort_by' => 'count',
@@ -379,11 +386,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		$all_childs = $max_count == 'all' ? true : false;
 		$max_count = $max_count > 0 ? (int)$max_count : 0;
 		$max_level = strip_tags($args['max_level']);
-		$show_count = !empty($args['show_count']) ? true : false;
+		$hide_count = !empty($args['hide_count']) ? true : false;
 		$hide_icon = !empty($args['hide_icon']) ? true : false;
 		$cpt_left = !empty($args['cpt_left']) ? true : false;
 
-		if(!$cpt_left){
+		if($cpt_left){
 			$cpt_left_class = "gd-cpt-flat";
 		}else{
 			$cpt_left_class = '';
@@ -457,10 +464,10 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						$term_icon_url = !empty($term_icons) && isset($term_icons[$term_info->term_id]) ? $term_icons[$term_info->term_id] : '';
 						$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr($term_info->name) . ' icon" src="' . $term_icon_url . '" /> ' : '';
 
-						$count = $show_count ? ' <span class="gd-cptcat-count">(' . $term_info->count . ')</span>' : '';
-						$cpt_row .= '<h3 class="gd-cptcat-title">' . $term_icon_url . $term_info->name . $count . '</h3>';
+						$count = !$hide_count ? ' <span class="gd-cptcat-count">(' . $term_info->count . ')</span>' : '';
+						if($args['title_tag'] !="hide") $cpt_row .= '<'.$args['title_tag'].' class="gd-cptcat-title">' . $term_icon_url . $term_info->name . $count . '</'.$args['title_tag'].'>';
 					} else {
-						$cpt_row .= '<h3 class="gd-cptcat-title">' . __($cpt_info['labels']['name'], 'geodirectory') . '</h3>';
+						if($args['title_tag'] !="hide") $cpt_row .= '<'.$args['title_tag'].' class="gd-cptcat-title">' . __($cpt_info['labels']['name'], 'geodirectory') . '</'.$args['title_tag'].'>';
 					}
 					foreach ($categories as $category) {
 						$term_icon_url = !empty($term_icons) && isset($term_icons[$category->term_id]) ? $term_icons[$category->term_id] : '';
@@ -472,10 +479,10 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 						$cpt_row .= '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';
 						$cpt_row .= '<li class="gd-cptcat-li gd-cptcat-li-main">';
-						$count = $show_count ? ' <span class="gd-cptcat-count">(' . $category->count . ')</span>' : '';
-						$cpt_row .= '<'.$args['title_tag'].' class="gd-cptcat-cat"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">'  .$term_icon_url . $category->name . $count . '</a></'.$args['title_tag'].'>';
+						$count = !$hide_count ? ' <span class="gd-cptcat-count">(' . $category->count . ')</span>' : '';
+						$cpt_row .= '<span class="gd-cptcat-cat"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">'  .$term_icon_url . $category->name . $count . '</a></span>';
 						if (!$skip_childs && ($all_childs || $max_count > 0) && ($max_level == 'all' || (int)$max_level > 0)) {
-							$cpt_row .= geodir_cpt_categories_child_cats($category->term_id, $cpt, $hide_empty, $show_count, $sort_by, $max_count, $max_level, $term_icons);
+							$cpt_row .= geodir_cpt_categories_child_cats($category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons);
 						}
 						$cpt_row .= '</li>';
 						$cpt_row .= '</ul>';
@@ -491,7 +498,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$output .= '<input type="hidden" name="post_type" value="' . $post_type . '">';
 				$output .= '<input type="hidden" name="cpt_ajax" value="' . $cpt_ajax . '">';
 				$output .= '<input type="hidden" name="hide_empty" value="' . $hide_empty . '">';
-				$output .= '<input type="hidden" name="show_count" value="' . $show_count . '">';
+				$output .= '<input type="hidden" name="hide_count" value="' . $hide_count . '">';
 				$output .= '<input type="hidden" name="hide_icon" value="' . $hide_icon . '">';
 				$output .= '<input type="hidden" name="cpt_left" value="' . $cpt_left . '">';
 				$output .= '<input type="hidden" name="sort_by" value="' . $sort_by . '">';

@@ -519,7 +519,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'class'       => 'gd-email',
 				'icon'        => 'fa fa-envelope-o',
 				'name'        => __( 'Contact Email', 'geodirectory' ),
-				'description' => __( 'Adds a email input. This can be used by other plugins if the htmlvar remains `email`. It will also be used int he contact form.', 'geodirectory' ),
+				'description' => __( 'Adds a email input. This can be used by other plugins if the field key remains `email`, for example by Ninja Forms.', 'geodirectory' ),
 				'defaults'    => array(
 					'data_type'          => 'TEXT',
 					'admin_title'        => 'Contact Email',

@@ -88,9 +88,10 @@ function geodir_cfi_text($html,$cf){
 
         $value = geodir_get_cf_value($cf);
         $type = $cf['type'];
+        $fix_html5_decimals = '';
         //number and float validation $validation_pattern
-        if(isset($cf['data_type']) && $cf['data_type']=='INT'){$type = 'number';}
-        elseif(isset($cf['data_type']) && $cf['data_type']=='FLOAT'){$type = 'float';}
+        if(isset($cf['data_type']) && $cf['data_type']=='INT'){$type = 'number'; $fix_html5_decimals =' lang="EN" ';}
+        elseif(isset($cf['data_type']) && $cf['data_type']=='FLOAT'){$type = 'float';$fix_html5_decimals =' lang="EN" ';}
 
         //validation
         if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
@@ -111,6 +112,7 @@ function geodir_cfi_text($html,$cf){
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <input field_type="<?php echo $type;?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
+                   <?php echo $fix_html5_decimals;?>
                    value="<?php echo esc_attr(stripslashes($value));?>" type="<?php echo $type;?>" class="geodir_textfield" <?php echo $validation;echo $validation_msg;?> />
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>

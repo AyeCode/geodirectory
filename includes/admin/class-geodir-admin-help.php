@@ -44,7 +44,7 @@ class GeoDir_Admin_Help {
 				'<p>' . sprintf(
 					/* translators: %s: Documentation URL */
 					__( 'Should you need help understanding, using, or extending GeoDirectory, <a href="%s">please read our documentation</a>. You will find all kinds of resources including snippets, tutorials and much more.', 'geodirectory' ),
-					'https://wpgeodirectory.com/docs/category/core/?utm_source=helptab&utm_medium=product&utm_content=docs&utm_campaign=geodirectoryplugin'
+					'https://wpgeodirectory.com/docs-v2/geodirectory/?utm_source=helptab&utm_medium=product&utm_content=docs&utm_campaign=geodirectoryplugin'
 				) . '</p>' .
 				'<p>' . sprintf(
 					/* translators: %s: Forum URL */

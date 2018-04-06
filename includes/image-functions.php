@@ -120,10 +120,38 @@ function geodir_get_images($post_id = 0, $limit = '')
         // wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id );
 
     }else{
+
+
+        $default_img_id = '';
+
         // no image code
-        $listing_default_image_id = geodir_get_option('listing_default_image');
-        if($listing_default_image_id){
-            $default_image_post = get_post($listing_default_image_id);
+
+        // cat image
+        if(geodir_is_page('archive')){
+            if($term_id = get_queried_object_id()){
+                $term_img = get_term_meta( $term_id, 'ct_cat_default_img', true);
+            }
+        }
+
+        if(empty($term_img)){
+            $default_term_id = geodir_get_post_meta($post_id,'default_category');
+            if($default_term_id){
+                $term_img = get_term_meta( $default_term_id, 'ct_cat_default_img', true);
+            }
+        }
+
+        if(!empty($term_img)){
+            $default_img_id = $term_img['id'];
+        }else{
+            $listing_default_image_id = geodir_get_option('listing_default_image');
+            if( $listing_default_image_id ){
+                $default_img_id = $listing_default_image_id;
+            }
+        }
+
+        // default image
+        if($default_img_id){
+            $default_image_post = get_post($default_img_id);
 
             if($default_image_post){
 
@@ -134,18 +162,16 @@ function geodir_get_images($post_id = 0, $limit = '')
                 $image->ID = 0;
                 $image->post_id = $default_image_post->ID;
                 $image->user_id = 0;
-                $image->title = '';
-                $image->file = str_replace($wp_upload_dir['basedir'],'', get_attached_file( $listing_default_image_id));
+                $image->title = __('Placeholder image','geodirectory');
+                $image->caption = '';
+                $image->file = str_replace($wp_upload_dir['basedir'],'', get_attached_file( $default_img_id));
                 $image->mime_type = $default_image_post->post_mime_type;
                 $image->menu_order = 0;
                 $image->featured= 0;
-                $image->featured= 0;
                 $image->is_approved= 1;
-                $image->metadata= wp_get_attachment_metadata( $listing_default_image_id );
-                $image->type = ' post_image';
-
+                $image->metadata= wp_get_attachment_metadata( $default_img_id );
+                $image->type = 'post_image';
                 $post_images[] =  $image;
-
             }
 
         }
@@ -153,7 +179,7 @@ function geodir_get_images($post_id = 0, $limit = '')
 
     }
 
-//  print_r($post_images);
+// print_r($post_images);
 
 
 //    (

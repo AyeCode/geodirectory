@@ -528,3 +528,5 @@ add_action('dynamic_sidebar_before','xzxzxxz');
 function xzxzxxz(){
 	//echo '###';
 }
+add_filter( 'widget_text', 'do_shortcode' ); //@todo remove me
+	

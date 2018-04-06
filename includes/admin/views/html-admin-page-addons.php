@@ -24,11 +24,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</nav>
 
 		<?php if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) : ?>
-			<ul class="gd-products">
-				<?php foreach ( $addons as $addon ) :
+			<ul class="gd-products"><?php foreach ( $addons as $addon ) :
 					if(388371==$addon->info->id){continue;}// don't show GD Dashbaord
-					?>
-					<li class="gd-product">
+					?><li class="gd-product">
 							<div class="gd-product-title">
 								<h3><?php
 									if ( ! empty( $addon->info->excerpt) ){
@@ -73,9 +71,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 <!--						<a href="--><?php //echo esc_attr( $addon->info->link ); ?><!--">-->
 <!--						</a>-->
-					</li>
-				<?php endforeach; ?>
-			</ul>
+					</li><?php endforeach; ?></ul>
 		<?php endif; ?>
 
 	<?php } ?>
