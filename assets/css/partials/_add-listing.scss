@@ -98,3 +98,12 @@
 .gd-term-handle .gd-term-checked.gd-default-term .gd-make-default-term {
 	display: none !important;
 }
+
+#geodir_post_images{
+	.inside{
+		img{
+			max-width: 100%;
+			height: auto;
+		}
+	}
+}

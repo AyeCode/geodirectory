@@ -23,46 +23,7 @@ header("Content-type: text/javascript; charset=utf-8");
 if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'cat') { // Retrives markers data for categories
     echo get_markers();
     exit;
-} else if (isset($_REQUEST['ajax_action']) && $_REQUEST['ajax_action'] == 'info') { // Retrives marker info window html
-    /**
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @global object $gd_session GeoDirectory Session object.
-     */
-    global $wpdb, $plugin_prefix, $gd_session;
-
-    if ($_REQUEST['m_id'] != '') {
-        $pid = (int)$_REQUEST['m_id'];
-    } else {
-        echo __('No marker data found', 'geodirectory');
-        exit;
-    }
-
-    if (isset($_REQUEST['post_preview']) && $_REQUEST['post_preview'] != '' && $gd_ses_listing = $gd_session->get('listing')) {
-        $post = (object)$gd_ses_listing;
-        echo geodir_get_infowindow_html($post, $_REQUEST['post_preview']);
-    } else {
-        $geodir_post_type = get_post_type($pid);
-
-        $table = $plugin_prefix . $geodir_post_type . '_detail';
-
-        $sql = $wpdb->prepare("SELECT * FROM " . $table . " WHERE post_id = %d", array($pid));
-
-        $postinfo = $wpdb->get_results($sql);
-
-        $data_arr = array();
-
-        if ($postinfo) {
-            $srcharr = array("'", "/", "-", '"', '\\');
-            $replarr = array("&prime;", "&frasl;", "&ndash;", "&ldquo;", '');
-
-            foreach ($postinfo as $postinfo_obj) {
-                echo geodir_get_infowindow_html($postinfo_obj);
-            }
-        }
-    }
-    exit;
-}
+} 
 
 /**
  * Retrive markers data to use in map

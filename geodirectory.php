@@ -252,7 +252,6 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-filter-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-content-listing-functions.php' );
 	    GeoDir_Comments::init();
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-shortcode-functions.php' );
@@ -528,5 +527,4 @@ add_action('dynamic_sidebar_before','xzxzxxz');
 function xzxzxxz(){
 	//echo '###';
 }
-add_filter( 'widget_text', 'do_shortcode' ); //@todo remove me
-	
+

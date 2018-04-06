@@ -184,1104 +184,133 @@ function geodir_save_post_meta($post_id, $postmeta = '', $meta_value = '')
 }
 
 
-if (!function_exists('geodir_delete_post_meta')) {
-    /**
-     * Delete post custom fields.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @param int $post_id The post ID.
-     * @param string $postmeta Detail table column name.
-     * @todo check if this is depreciated
-     * @todo Fix unknown variable mval
-     * @return bool
-     */
-    function geodir_delete_post_meta($post_id, $postmeta)
-    {
+/**
+ * Delete post custom fields.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @param int $post_id The post ID.
+ * @param string $postmeta Detail table column name.
+ * @todo check if this is depreciated
+ * @todo Fix unknown variable mval
+ * @return bool
+ */
+function geodir_delete_post_meta($post_id, $postmeta)
+{
 
-        global $wpdb, $plugin_prefix;
+    global $wpdb, $plugin_prefix;
 
-        $post_type = get_post_type($post_id);
+    $post_type = get_post_type($post_id);
 
-        $table = $plugin_prefix . $post_type . '_detail';
+    $table = $plugin_prefix . $post_type . '_detail';
 
-        if (is_array($postmeta) && !empty($postmeta) && $post_id) {
-            $post_meta_set_query = '';
+    if (is_array($postmeta) && !empty($postmeta) && $post_id) {
+        $post_meta_set_query = '';
 
-            foreach ($postmeta as $mkey) {
-                if ($mval != '')
-                    $post_meta_set_query .= $mkey . " = '', ";
-            }
+        foreach ($postmeta as $mkey) {
+            if ($mval != '')
+                $post_meta_set_query .= $mkey . " = '', ";
+        }
 
-            $post_meta_set_query = trim($post_meta_set_query, ", ");
-            
-            if (empty($post_meta_set_query) || trim($post_meta_set_query) == '') {
-                return false;
-            }
-
-            if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $postmeta . "'") != '') {
-
-                $wpdb->query(
-                    $wpdb->prepare(
-                        "UPDATE " . $table . " SET " . $post_meta_set_query . " where post_id = %d",
-                        array($post_id)
-                    )
-                );
-
-                return true;
-            }
-
-        } elseif ($postmeta != '' && $post_id) {
-            if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $postmeta . "'") != '') {
-
-                $wpdb->query(
-                    $wpdb->prepare(
-                        "UPDATE " . $table . " SET " . $postmeta . "= '' where post_id = %d",
-                        array($post_id)
-                    )
-                );
-
-                return true;
-            }
-
-        } else
+        $post_meta_set_query = trim($post_meta_set_query, ", ");
+        
+        if (empty($post_meta_set_query) || trim($post_meta_set_query) == '') {
             return false;
-    }
+        }
+
+        if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $postmeta . "'") != '') {
+
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE " . $table . " SET " . $post_meta_set_query . " where post_id = %d",
+                    array($post_id)
+                )
+            );
+
+            return true;
+        }
+
+    } elseif ($postmeta != '' && $post_id) {
+        if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $postmeta . "'") != '') {
+
+            $wpdb->query(
+                $wpdb->prepare(
+                    "UPDATE " . $table . " SET " . $postmeta . "= '' where post_id = %d",
+                    array($post_id)
+                )
+            );
+
+            return true;
+        }
+
+    } else
+        return false;
 }
 
 
-if (!function_exists('geodir_get_post_meta')) {
+
+/**
+ * Get post custom meta.
+ *
+ * @since 1.0.0
+ * @since 1.6.20 Hook added to filter value.
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @param int $post_id The post ID.
+ * @param string $meta_key The meta key to retrieve.
+ * @param bool $single Optional. Whether to return a single value. Default false.
+ * @todo single variable not yet implemented.
+ * @return bool|mixed|null|string Will be an array if $single is false. Will be value of meta data field if $single is true.
+ */
+function geodir_get_post_meta($post_id, $meta_key, $single = false) {
+    if (!$post_id) {
+        return false;
+    }
+    global $wpdb, $plugin_prefix,$preview;
+
+    $all_postypes = geodir_get_posttypes();
+
+    $post_type = get_post_type($post_id);
+
+    if($post_type == 'revision'){
+        $post_type = get_post_type(wp_get_post_parent_id($post_id));
+    }
+
+    // check if preview
+    if($preview){
+        $post_id = GeoDir_Post_Data::get_post_preview_id($post_id);
+    }
+
+    if (!in_array($post_type, $all_postypes))
+        return false;
+
+    $table = $plugin_prefix . $post_type . '_detail';
+
+    if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'") != '') {
+        $meta_value = $wpdb->get_var($wpdb->prepare("SELECT " . $meta_key . " from " . $table . " where post_id = %d", array($post_id)));
+        
+        if ($meta_value && $meta_value !== '') {
+            $meta_value = maybe_serialize($meta_value);
+        }
+    } else {
+        $meta_value = false;
+    }
+    
     /**
-     * Get post custom meta.
+     * Filter the listing custom meta.
      *
-     * @since 1.0.0
-     * @since 1.6.20 Hook added to filter value.
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
+     * @since 1.6.20
+     * 
+     * @param bool|mixed|null|string $meta_value Will be an array if $single is false. Will be value of meta data field if $single is true.
      * @param int $post_id The post ID.
      * @param string $meta_key The meta key to retrieve.
      * @param bool $single Optional. Whether to return a single value. Default false.
-     * @todo single variable not yet implemented.
-     * @return bool|mixed|null|string Will be an array if $single is false. Will be value of meta data field if $single is true.
      */
-    function geodir_get_post_meta($post_id, $meta_key, $single = false) {
-        if (!$post_id) {
-            return false;
-        }
-        global $wpdb, $plugin_prefix,$preview;
-
-        $all_postypes = geodir_get_posttypes();
-
-        $post_type = get_post_type($post_id);
-
-        if($post_type == 'revision'){
-            $post_type = get_post_type(wp_get_post_parent_id($post_id));
-        }
-
-        // check if preview
-        if($preview){
-            $post_id = GeoDir_Post_Data::get_post_preview_id($post_id);
-        }
-
-        if (!in_array($post_type, $all_postypes))
-            return false;
-
-        $table = $plugin_prefix . $post_type . '_detail';
-
-        if ($wpdb->get_var("SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'") != '') {
-            $meta_value = $wpdb->get_var($wpdb->prepare("SELECT " . $meta_key . " from " . $table . " where post_id = %d", array($post_id)));
-            
-            if ($meta_value && $meta_value !== '') {
-                $meta_value = maybe_serialize($meta_value);
-            }
-        } else {
-            $meta_value = false;
-        }
-        
-        /**
-         * Filter the listing custom meta.
-         *
-         * @since 1.6.20
-         * 
-         * @param bool|mixed|null|string $meta_value Will be an array if $single is false. Will be value of meta data field if $single is true.
-         * @param int $post_id The post ID.
-         * @param string $meta_key The meta key to retrieve.
-         * @param bool $single Optional. Whether to return a single value. Default false.
-         */
-        return apply_filters( 'geodir_get_post_meta', $meta_value, $post_id, $meta_key, $single );
-    }
+    return apply_filters( 'geodir_get_post_meta', $meta_value, $post_id, $meta_key, $single );
 }
-
-
-if (!function_exists('geodir_save_post_images')) {
-    /**
-     * Save post attachments.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @global object $current_user Current user object.
-     * @param int $post_id The post ID.
-     * @param array $post_image Post image urls as an array.
-     * @param bool $dummy Optional. Is this a dummy listing? Default false.
-     */
-    function geodir_save_post_images($post_id = 0, $post_image = array(), $dummy = false)
-    {
-
-
-        global $wpdb, $plugin_prefix, $current_user;
-
-        $post_type = get_post_type($post_id);
-
-        $table = $plugin_prefix . $post_type . '_detail';
-
-        $post_images = geodir_get_images($post_id);
-
-        $wpdb->query(
-            $wpdb->prepare(
-                "UPDATE " . $table . " SET featured_image = '' where post_id =%d",
-                array($post_id)
-            )
-        );
-
-        $invalid_files = $post_images;
-        $valid_file_ids = array();
-        $valid_files_condition = '';
-        $geodir_uploaddir = '';
-
-        $remove_files = array();
-
-        if (!empty($post_image)) {
-
-            $uploads = wp_upload_dir();
-            $uploads_dir = $uploads['path'];
-
-            $geodir_uploadpath = $uploads['path'];
-            $geodir_uploadurl = $uploads['url'];
-            $sub_dir = isset($uploads['subdir']) ? $uploads['subdir'] : '';
-
-            $invalid_files = array();
-            $postcurr_images = array();
-
-            for ($m = 0; $m < count($post_image); $m++) {
-                $menu_order = $m + 1;
-
-                $file_path = '';
-                /* --------- start ------- */
-
-                $split_img_path = explode(str_replace(array('http://','https://'),'',$uploads['baseurl']), str_replace(array('http://','https://'),'',$post_image[$m]));
-
-                $split_img_file_path = isset($split_img_path[1]) ? $split_img_path[1] : '';
-
-
-                if (!$find_image = $wpdb->get_var($wpdb->prepare("SELECT ID FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE file=%s AND post_id = %d", array($split_img_file_path, $post_id)))) {
-
-                    /* --------- end ------- */
-                    $curr_img_url = $post_image[$m];
-
-                    $image_name_arr = explode('/', $curr_img_url);
-
-                    $count_image_name_arr = count($image_name_arr) - 2;
-
-                    $count_image_name_arr = ($count_image_name_arr >= 0) ? $count_image_name_arr : 0;
-
-                    $curr_img_dir = $image_name_arr[$count_image_name_arr];
-
-                    $filename = end($image_name_arr);
-                    if (strpos($filename, '?') !== false) {
-                        list($filename) = explode('?', $filename);
-                    }
-
-                    $curr_img_dir = str_replace($uploads['baseurl'], "", $curr_img_url);
-                    $curr_img_dir = str_replace($filename, "", $curr_img_dir);
-
-                    $img_name_arr = explode('.', $filename);
-
-                    $file_title = isset($img_name_arr[0]) ? $img_name_arr[0] : $filename;
-                    if (!empty($img_name_arr) && count($img_name_arr) > 2) {
-                        $new_img_name_arr = $img_name_arr;
-                        if (isset($new_img_name_arr[count($img_name_arr) - 1])) {
-                            unset($new_img_name_arr[count($img_name_arr) - 1]);
-                            $file_title = implode('.', $new_img_name_arr);
-                        }
-                    }
-                    $file_title = sanitize_file_name($file_title);
-                    $file_name = sanitize_file_name($filename);
-
-                    $arr_file_type = wp_check_filetype($filename);
-
-                    $uploaded_file_type = $arr_file_type['type'];
-
-                    // Set an array containing a list of acceptable formats
-                    $allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png');
-
-                    // If the uploaded file is the right format
-                    if (in_array($uploaded_file_type, $allowed_file_types)) {
-                        if (!function_exists('wp_handle_upload')) {
-                            require_once(ABSPATH . 'wp-admin/includes/file.php');
-                        }
-
-                        if (!is_dir($geodir_uploadpath)) {
-                            mkdir($geodir_uploadpath);
-                        }
-
-                        $external_img = false;
-                        if (strpos( str_replace( array('http://','https://'),'',$curr_img_url ), str_replace(array('http://','https://'),'',$uploads['baseurl'] ) ) !== false) {
-                        } else {
-                            $external_img = true;
-                        }
-
-                        if ($dummy || $external_img) {
-                            $uploaded_file = array();
-                            $uploaded = (array)fetch_remote_file($curr_img_url);
-
-                            if (isset($uploaded['error']) && empty($uploaded['error'])) {
-                                $new_name = basename($uploaded['file']);
-                                $uploaded_file = $uploaded;
-                            }else{
-                                print_r($uploaded);exit;
-                            }
-                            $external_img = false;
-                        } else {
-                            $new_name = $post_id . '_' . $file_name;
-
-                            if ($curr_img_dir == $sub_dir) {
-                                $img_path = $geodir_uploadpath . '/' . $filename;
-                                $img_url = $geodir_uploadurl . '/' . $filename;
-                            } else {
-                                $img_path = $uploads_dir . '/temp_' . $current_user->data->ID . '/' . $filename;
-                                $img_url = $uploads['url'] . '/temp_' . $current_user->data->ID . '/' . $filename;
-                            }
-
-                            $uploaded_file = '';
-
-                            if (file_exists($img_path)) {
-                                $uploaded_file = copy($img_path, $geodir_uploadpath . '/' . $new_name);
-                                $file_path = '';
-                            } else if (file_exists($uploads['basedir'] . $curr_img_dir . $filename)) {
-                                $uploaded_file = true;
-                                $file_path = $curr_img_dir . '/' . $filename;
-                            }
-
-                            if ($curr_img_dir != $geodir_uploaddir && file_exists($img_path))
-                                unlink($img_path);
-                        }
-
-                        if (!empty($uploaded_file)) {
-                            if (!isset($file_path) || !$file_path) {
-                                $file_path = $sub_dir . '/' . $new_name;
-                            }
-
-                            $postcurr_images[] = str_replace(array('http://','https://'),'',$uploads['baseurl'] . $file_path);
-
-                            if ($menu_order == 1) {
-
-                                $wpdb->query($wpdb->prepare("UPDATE " . $table . " SET featured_image = %s where post_id =%d", array($file_path, $post_id)));
-
-                            }
-
-                            // Set up options array to add this file as an attachment
-                            $attachment = array();
-                            $attachment['post_id'] = $post_id;
-                            $attachment['title'] = $file_title;
-                            $attachment['content'] = '';
-                            $attachment['file'] = $file_path;
-                            $attachment['mime_type'] = $uploaded_file_type;
-                            $attachment['menu_order'] = $menu_order;
-                            $attachment['featured'] = 0;
-
-                            $attachment_set = '';
-
-                            foreach ($attachment as $key => $val) {
-                                if ($val != '')
-                                    $attachment_set .= $key . " = '" . $val . "', ";
-                            }
-
-                            $attachment_set = trim($attachment_set, ", ");
-
-                            $wpdb->query("INSERT INTO " . GEODIR_ATTACHMENT_TABLE . " SET " . $attachment_set);
-
-                            $valid_file_ids[] = $wpdb->insert_id;
-                        }
-
-                    }
-
-
-                } else {
-                    $valid_file_ids[] = $find_image;
-
-                    $postcurr_images[] = str_replace(array('http://','https://'),'',$post_image[$m]);
-
-                    $wpdb->query(
-                        $wpdb->prepare(
-                            "UPDATE " . GEODIR_ATTACHMENT_TABLE . " SET menu_order = %d where file =%s AND post_id =%d",
-                            array($menu_order, $split_img_path[1], $post_id)
-                        )
-                    );
-
-                    if ($menu_order == 1)
-                        $wpdb->query($wpdb->prepare("UPDATE " . $table . " SET featured_image = %s where post_id =%d", array($split_img_path[1], $post_id)));
-
-                }
-
-
-            }
-
-            if (!empty($valid_file_ids)) {
-
-                $remove_files = $valid_file_ids;
-
-                $remove_files_length = count($remove_files);
-                $remove_files_format = array_fill(0, $remove_files_length, '%d');
-                $format = implode(',', $remove_files_format);
-                $valid_files_condition = " ID NOT IN ($format) AND ";
-
-            }
-
-            //Get and remove all old images of post from database to set by new order
-
-            if (!empty($post_images)) {
-
-                foreach ($post_images as $img) {
-
-                    if (!in_array(str_replace(array('http://','https://'),'',$img->src), $postcurr_images)) {
-
-                        $invalid_files[] = (object)array('src' => $img->src);
-
-                    }
-
-                }
-
-            }
-
-            $invalid_files = (object)$invalid_files;
-        }
-
-        $remove_files[] = $post_id;
-
-        $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE " . $valid_files_condition . " post_id = %d", $remove_files));
-
-        if (!empty($invalid_files))
-            geodir_remove_attachments($invalid_files);
-    }
-
-}
-
-/**
- * Remove current user's temporary images.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $current_user Current user object.
- **/
-function geodir_remove_temp_images()
-{
-
-    global $current_user;
-
-    $uploads = wp_upload_dir();
-    $uploads_dir = $uploads['path'];
-
-    /*	if(is_dir($uploads_dir.'/temp_'.$current_user->data->ID)){
-
-			$dirPath = $uploads_dir.'/temp_'.$current_user->data->ID;
-			if (substr($dirPath, strlen($dirPath) - 1, 1) != '/') {
-				$dirPath .= '/';
-			}
-			$files = glob($dirPath . '*', GLOB_MARK);
-			foreach ($files as $file) {
-				if (is_dir($file)) {
-					self::deleteDir($file);
-				} else {
-					unlink($file);
-				}
-			}
-			rmdir($dirPath);
-	}	*/
-
-    $dirname = $uploads_dir . '/temp_' . $current_user->ID;
-    geodir_delete_directory($dirname);
-}
-
-
-/**
- * Delete a directory.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $dirname Directory name that needs to be deleted.
- * @return bool
- */
-function geodir_delete_directory($dirname)
-{
-    $dir_handle = '';
-    if (is_dir($dirname))
-        $dir_handle = opendir($dirname);
-    if (!$dir_handle)
-        return false;
-    while ($file = readdir($dir_handle)) {
-        if ($file != "." && $file != "..") {
-            if (!is_dir($dirname . "/" . $file))
-                unlink($dirname . "/" . $file);
-            else
-                geodir_delete_directory($dirname . '/' . $file);
-        }
-    }
-    closedir($dir_handle);
-    rmdir($dirname);
-    return true;
-
-}
-
-
-if (!function_exists('geodir_remove_attachments')) {
-    /**
-     * Remove post attachments.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @param array $postcurr_images Array of image objects.
-     */
-    function geodir_remove_attachments($postcurr_images = array())
-    {
-        // Unlink all past images of post
-        if (!empty($postcurr_images)) {
-
-            $uploads = wp_upload_dir();
-            $uploads_dir = $uploads['path'];
-
-            foreach ($postcurr_images as $postimg) {
-                $image_name_arr = explode('/', $postimg->src);
-                $filename = end($image_name_arr);
-                if (file_exists($uploads_dir . '/' . $filename))
-                    unlink($uploads_dir . '/' . $filename);
-            }
-
-        } // endif
-        // Unlink all past images of post end
-    }
-}
-
-if (!function_exists('geodir_get_featured_image')) {
-    /**
-     * Gets the post featured image.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @global object $post The current post object.
-     * @global string $plugin_prefix Geodirectory plugin table prefix.
-     * @param int|string $post_id The post ID.
-     * @param string $size Optional. Thumbnail size. Default: thumbnail.
-     * @param bool $no_image Optional. Do you want to return the default image when no image is available? Default: false.
-     * @param bool|string $file Optional. The file path from which you want to get the image details. Default: false.
-     * @return bool|object Image details as an object.
-     */
-    function geodir_get_featured_image($post_id = '', $size = '', $no_image = false, $file = false)
-    {
-
-        /*$img_arr['src'] = get_the_post_thumbnail_url( $post_id,  'medium');//medium/thumbnail
-        $img_arr['path'] = '';
-        $img_arr['width'] = '';
-        $img_arr['height'] = '';
-        $img_arr['title'] = '';
-        return (object)$img_arr;*/
-        global $wpdb, $plugin_prefix, $post;
-
-        if (isset($post->ID) && isset($post->post_type) && $post->ID == $post_id) {
-            $post_type = $post->post_type;
-        } else {
-            $post_type = get_post_type($post_id);
-        }
-
-        if (!in_array($post_type, geodir_get_posttypes())) {
-            return false;// if not a GD CPT return;
-        }
-
-
-        $list_img_size = geodir_get_option('geodir_listing_img_size','default');
-
-        if( $size=='list-thumb' && $list_img_size != 'default' ){
-            $fimg = get_the_post_thumbnail_url($post_id,$list_img_size);
-            if($fimg){
-                $uploads = wp_upload_dir(); 
-                $uploads_baseurl = $uploads['baseurl'];
-                $file = str_replace($uploads_baseurl,'',$fimg);
-            }
-        }
-
-        $table = $plugin_prefix . $post_type . '_detail';
-
-        if (!$file) {
-            if (isset($post->featured_image)) {
-                $file = $post->featured_image;
-            } else {
-                $file = $wpdb->get_var($wpdb->prepare("SELECT featured_image FROM " . $table . " WHERE post_id = %d", array($post_id)));
-            }
-        }
-
-        if ($file != NULL && $file != '' && (($uploads = wp_upload_dir()) && false === $uploads['error'])) {
-            $img_arr = array();
-
-            $file_info = pathinfo($file);
-            $sub_dir = '';
-            if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..') {
-                $sub_dir = stripslashes_deep($file_info['dirname']);
-            }
-
-            $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
-            $uploads_baseurl = $uploads['baseurl'];
-            $uploads_path = $uploads['path'];
-
-            $file_name = $file_info['basename'];
-
-            $uploads_url = $uploads_baseurl . $sub_dir;
-
-            $img_src = $uploads_url . '/' . $file_name;
-            // jetpack CDN check
-            if (strpos($file, '.wp.com/') !== false) {
-                $img_src = $file;
-            }
-
-            /*
-             * Allows the filter of image src for such things as CDN change.
-             *
-             * @since 1.5.7
-             * @param string $url The full image url.
-             * @param string $file_name The image file name and directory path.
-             * @param string $uploads_url The server upload directory url.
-             * @param string $uploads_baseurl The uploads dir base url.
-             */
-            $img_arr['src'] = apply_filters('geodir_get_featured_image_src',$img_src,$file_name,$uploads_url,$uploads_baseurl);
-            $img_arr['path'] = $uploads_path . '/' . $file_name;
-            $width = 0;
-            $height = 0;
-            if (is_file($img_arr['path']) && file_exists($img_arr['path'])) {
-                $imagesize = getimagesize($img_arr['path']);
-                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
-                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
-            }
-            $img_arr['width'] = $width;
-            $img_arr['height'] = $height;
-            $img_arr['title'] = $post->post_title;
-        } elseif ($post_images = geodir_get_images($post_id, 1)) {
-            foreach ($post_images as $image) {
-                return $image;
-            }
-        } else if ($no_image) {
-            $img_arr = array();
-
-            $default_img = '';
-            if (isset($post->default_category) && $post->default_category) {
-                $default_cat = $post->default_category;
-            } else {
-                $default_cat = geodir_get_post_meta($post_id, 'default_category', true);
-            }
-
-            $default_img = geodir_get_cat_image( $default_cat, true );
-            if ( !$default_img ) {
-                $default_img = geodir_get_option( 'geodir_listing_no_img' );
-            }
-
-            if (!empty($default_img)) {
-                $uploads = wp_upload_dir(); // Array of key => value pairs
-                $uploads_baseurl = $uploads['baseurl'];
-                $uploads_path = $uploads['path'];
-
-                $img_arr = array();
-
-                $file_info = pathinfo($default_img);
-
-                $file_name = $file_info['basename'];
-
-                $img_arr['src'] = $default_img;
-                $img_arr['path'] = $uploads_path . '/' . $file_name;
-
-                $width = 0;
-                $height = 0;
-                if (is_file($img_arr['path']) && file_exists($img_arr['path'])) {
-                    $imagesize = getimagesize($img_arr['path']);
-                    $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
-                    $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
-                }
-                $img_arr['width'] = $width;
-                $img_arr['height'] = $height;
-
-                $img_arr['title'] = $post->post_title; // add the title to the array
-            }
-        }
-
-        if (!empty($img_arr))
-            return (object)$img_arr;//return (object)array( 'src' => $file_url, 'path' => $file_path );
-        else
-            return false;
-    }
-}
-
-if (!function_exists('geodir_show_featured_image')) {
-    /**
-     * Gets the post featured image.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @param int|string $post_id The post ID.
-     * @param string $size Optional. Thumbnail size. Default: thumbnail.
-     * @param bool $no_image Optional. Do you want to return the default image when no image is available? Default: false.
-     * @param bool $echo Optional. Do you want to print it instead of returning it? Default: true.
-     * @param bool|string $fimage Optional. The file path from which you want to get the image details. Default: false.
-     * @return bool|string Returns image html.
-     */
-    function geodir_show_featured_image($post_id = '', $size = 'thumbnail', $no_image = false, $echo = true, $fimage = false)
-    {
-        $image = geodir_get_featured_image($post_id, $size, $no_image, $fimage);
-
-        $html = geodir_show_image($image, $size, $no_image, false);
-
-        if (!empty($html) && $echo) {
-            echo $html;
-        } elseif (!empty($html)) {
-            return $html;
-        } else
-            return false;
-    }
-}
-
-if (!function_exists('geodir_get_images_old')) {
-    /**
-     * Gets the post images.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @global object $wpdb WordPress Database object.
-     * @param int $post_id The post ID.
-     * @param string $img_size Optional. Thumbnail size.
-     * @param bool $no_images Optional. Do you want to return the default image when no image is available? Default: false.
-     * @param bool $add_featured Optional. Do you want to include featured images too? Default: true.
-     * @param int|string $limit Optional. Number of images.
-     * @return array|bool Returns images as an array. Each item is an object.
-     */
-    function geodir_get_images_old($post_id = 0, $img_size = '', $no_images = false, $add_featured = true, $limit = '')
-    {
-        global $wpdb;
-        if ($limit) {
-            $limit_q = " LIMIT $limit ";
-        } else {
-            $limit_q = '';
-        }
-        $not_featured = '';
-        $sub_dir = '';
-        if (!$add_featured)
-            $not_featured = " AND featured = 0 ";
-
-        $arrImages = $wpdb->get_results(
-            $wpdb->prepare(
-                "SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE mime_type like %s AND post_id = %d" . $not_featured . " ORDER BY menu_order ASC, ID DESC $limit_q ",
-                array('%image%', $post_id)
-            )
-        );
-
-        $counter = 0;
-        $return_arr = array();
-
-        if (!empty($arrImages)) {
-            foreach ($arrImages as $attechment) {
-
-                $img_arr = array();
-                $img_arr['id'] = $attechment->ID;
-                $img_arr['user_id'] = isset($attechment->user_id) ? $attechment->user_id : 0;
-
-                $file_info = pathinfo($attechment->file);
-
-                if ($file_info['dirname'] != '.' && $file_info['dirname'] != '..')
-                    $sub_dir = stripslashes_deep($file_info['dirname']);
-
-                $uploads = wp_upload_dir(trim($sub_dir, '/')); // Array of key => value pairs
-                $uploads_baseurl = $uploads['baseurl'];
-                $uploads_path = $uploads['path'];
-
-                $file_name = $file_info['basename'];
-
-                $uploads_url = $uploads_baseurl . $sub_dir;
-                /*
-                * Allows the filter of image src for such things as CDN change.
-                *
-                * @since 1.5.7
-                * @param string $url The full image url.
-                * @param string $file_name The image file name and directory path.
-                * @param string $uploads_url The server upload directory url.
-                * @param string $uploads_baseurl The uploads dir base url.
-                */
-                $img_arr['src'] = apply_filters('geodir_get_images_src',$uploads_url . '/' . $file_name,$file_name,$uploads_url,$uploads_baseurl);
-                $img_arr['path'] = $uploads_path . '/' . $file_name;
-                $width = 0;
-                $height = 0;
-                if (is_file($img_arr['path']) && file_exists($img_arr['path'])) {
-                    $imagesize = getimagesize($img_arr['path']);
-                    $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
-                    $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
-                }
-                $img_arr['width'] = $width;
-                $img_arr['height'] = $height;
-
-                $img_arr['file'] = $file_name; // add the title to the array
-                $img_arr['title'] = $attechment->title; // add the title to the array
-                $img_arr['caption'] = isset($attechment->caption) ? $attechment->caption : ''; // add the caption to the array
-               // $img_arr['content'] = $attechment->content; // add the description to the array
-                $img_arr['is_approved'] = isset($attechment->is_approved) ? $attechment->is_approved : ''; // used for user image moderation. For backward compatibility Default value is 1.
-
-                $return_arr[] = (object)$img_arr;
-
-                $counter++;
-            }
-            //return (object)$return_arr;
-            /**
-             * Filter the images array so things can be changed.
-             *
-             * @since 1.6.20
-             * @param array $return_arr The array of image objects.
-             */
-            return apply_filters('geodir_get_images_arr',$return_arr);
-        } else if ($no_images) {
-            $default_cat = geodir_get_post_meta( $post_id, 'default_category', true );
-            $default_img = geodir_get_cat_image( $default_cat, true );
-            
-            if ( !$default_img ) {
-                $default_img = geodir_get_option( 'geodir_listing_no_img' );
-            }
-
-            if (!empty($default_img)) {
-                $uploads = wp_upload_dir(); // Array of key => value pairs
-                
-                $image_path = $default_img;
-                if (!path_is_absolute($image_path)) {
-                    $image_path = str_replace($uploads['baseurl'], $uploads['basedir'], $image_path);
-                }
-
-                $file_info = pathinfo($default_img);
-                $file_name = $file_info['basename'];
-
-                $width = '';
-                $height = '';
-                if (is_file($image_path) && file_exists($image_path)) {
-                    $imagesize = getimagesize($image_path);
-                    $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
-                    $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
-                }
-                
-                $img_arr = array();
-                $img_arr['src'] = $default_img;
-                $img_arr['path'] = $image_path;
-                $img_arr['width'] = $width;
-                $img_arr['height'] = $height;
-                $img_arr['file'] = $file_name; // add the title to the array
-                $img_arr['title'] = $file_info['filename']; // add the title to the array
-                //$img_arr['content'] = $file_info['filename']; // add the description to the array
-
-                $return_arr[] = (object)$img_arr;
-
-                /**
-                 * Filter the images array so things can be changed.
-                 * 
-                 * @since 1.6.20
-                 * @param array $return_arr The array of image objects.
-                 */
-                return apply_filters('geodir_get_images_arr',$return_arr);
-            } else
-                return false;
-        }
-    }
-}
-
-
-
-
-if (!function_exists('geodir_show_image')) {
-    /**
-     * Show image using image details.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @param array|object $request Image info either as an array or object.
-     * @param string $size Optional. Thumbnail size. Default: thumbnail.
-     * @param bool $no_image Optional. Do you want to return the default image when no image is available? Default: false.
-     * @param bool $echo Optional. Do you want to print it instead of returning it? Default: true.
-     * @return bool|string Returns image html.
-     */
-    function geodir_show_image($request = array(), $size = 'thumbnail', $no_image = false, $echo = true)
-    {
-        $image = new stdClass();
-
-        $html = '';
-        if (!empty($request)) {
-            if (!is_object($request)){
-                $request = (object)$request;
-            }
-
-            if (isset($request->src) && !isset($request->path)) {
-                $request->path = $request->src;
-            }
-
-            /*
-             * getimagesize() works faster from path than url so we try and get path if we can.
-             */
-            $upload_dir = wp_upload_dir();
-            $img_no_http = str_replace(array("http://", "https://"), "", $request->path);
-            $upload_no_http = str_replace(array("http://", "https://"), "", $upload_dir['baseurl']);
-            if (strpos($img_no_http, $upload_no_http) !== false) {
-                $request->path = str_replace( $img_no_http,$upload_dir['basedir'], $request->path);
-            }
-            
-            $width = 0;
-            $height = 0;
-            if (is_file($request->path) && file_exists($request->path)) {
-                $imagesize = getimagesize($request->path);
-                $width = !empty($imagesize) && isset($imagesize[0]) ? $imagesize[0] : '';
-                $height = !empty($imagesize) && isset($imagesize[1]) ? $imagesize[1] : '';
-            }
-
-
-            $image->src = $request->src;
-            $image->width = $width;
-            $image->height = $height;
-            $image->title = isset($request->title) ? $request->title : '';
-
-            $max_size = (object)geodir_get_imagesize($size);
-
-            if (!is_wp_error($max_size)) {
-                if ($image->width) {
-                    if ($image->height >= $image->width) {
-                        $width_per = round(((($image->width * ($max_size->h / $image->height)) / $max_size->w) * 100), 2);
-                    } else if ($image->width < ($max_size->h)) {
-                        $width_per = round((($image->width / $max_size->w) * 100), 2);
-                    } else
-                        $width_per = 100;
-                }
-
-                if (is_admin() && !isset($_REQUEST['geodir_ajax'])){
-                    $html = '<div class="geodir_thumbnail"><img style="max-height:' . $max_size->h . 'px;" alt="place image" src="' . $image->src . '"  /></div>';
-                } else {
-                    if($size=='widget-thumb' || !geodir_get_option('geodir_lazy_load',1)){
-                        $html = '<div class="geodir_thumbnail" style="background-image:url(\'' . $image->src . '\');" title="'.$image->title.'" aria-label="'.$image->title.'" ></div>';
-                    }else{
-                        $html = '<div data-src="'.str_replace(' ','%20',$image->src).'" class="geodir_thumbnail geodir_lazy_load_thumbnail" title="'.$image->title.'" aria-label="'.$image->title.'"></div>';
-                    }
-
-                }
-            }
-        }
-
-        if (!empty($html) && $echo) {
-            echo $html;
-        } elseif (!empty($html)) {
-            return $html;
-        } else
-            return false;
-    }
-}
-
-
-
-if (!function_exists('geodir_get_infowindow_html')) {
-    /**
-     * Set post Map Marker info html.
-     *
-     * @since 1.0.0
-     * @since 1.5.4 Modified to add new action "geodir_infowindow_meta_before".
-     * @since 1.6.16 Changes for disable review stars for certain post type.
-     * @since 1.6.18 Fix: Map marker not showing custom fields in bubble info.
-     * @package GeoDirectory
-     * @global array $geodir_addon_list List of active GeoDirectory extensions.
-     * @global object $gd_session GeoDirectory Session object.
-     * @param object $postinfo_obj The post details object.
-     * @param string $post_preview Is this a post preview?.
-     * @global object $post WordPress Post object.
-     * @return mixed|string|void
-     */
-    function geodir_get_infowindow_html($postinfo_obj, $post_preview = '') {
-        global $preview, $gd_post, $gd_session;
-        $srcharr = array("'", "/", "-", '"', '\\');
-        $replarr = array("&prime;", "&frasl;", "&ndash;", "&ldquo;", '');
-
-        if ($gd_session->get('listing') && isset($post_preview) && $post_preview != '') {
-            $ID = '';
-            $plink = '';
-
-            if (isset($postinfo_obj->pid)) {
-                $ID = $postinfo_obj->pid;
-                $plink = get_permalink($ID);
-            }
-
-            $title = str_replace($srcharr, $replarr, ($postinfo_obj->post_title));
-            $lat = $postinfo_obj->post_latitude;
-            $lng = $postinfo_obj->post_longitude;
-        } else {
-            $ID = $postinfo_obj->post_id;
-            $title = str_replace($srcharr, $replarr, htmlentities($postinfo_obj->post_title, ENT_COMPAT, 'UTF-8')); // fix by Stiofan
-            $title = wp_specialchars_decode($title); // Fixed #post-320722 on 2016-12-08
-            $plink = get_permalink($ID);
-            $lat = htmlentities(geodir_get_post_meta($ID, 'post_latitude', true));
-            $lng = htmlentities(geodir_get_post_meta($ID, 'post_longitude', true));
-        }
-        
-        // Some theme overwrites global gd listing $post
-        if (!empty($ID) && (!empty($gd_post->ID) && $gd_post->ID != $ID) || empty($gd_post)) {
-            $gd_post = geodir_get_post_info($ID);
-        }
-        
-        $post_type = $ID ? get_post_type($ID) : '';
-
-        // filter field as per price package
-        global $geodir_addon_list;
-        if ($post_type && defined('GEODIRPAYMENT_VERSION')) {
-            $package_id = isset($postinfo_obj->package_id) && $postinfo_obj->package_id ? $postinfo_obj->package_id : NULL;
-            $field_name = 'geodir_contact';
-            if (!check_field_visibility($package_id, $field_name, $post_type)) {
-                $contact = '';
-            }
-
-            $field_name = 'geodir_timing';
-            if (!check_field_visibility($package_id, $field_name, $post_type)) {
-                $timing = '';
-            }
-        }
-
-        if ($lat && $lng) {
-            ob_start(); ?>
-            <div class="gd-bubble" style="">
-                <div class="gd-bubble-inside">
-                    <?php
-                    $comment_count = '';
-                    $rating_star = '';
-                    if ($ID != '' && $post_type != '' && !geodir_cpt_has_rating_disabled($post_type)) {
-                        $rating_star = '';
-                        $comment_count = geodir_get_review_count_total($ID);
-
-                        if (!$preview) {
-                            $post_avgratings = geodir_get_post_rating($ID);
-
-                            $rating_star = geodir_get_rating_stars($post_avgratings, $ID, false);
-
-                            /**
-                             * Filter to change rating stars
-                             *
-                             * You can use this filter to change Rating stars.
-                             *
-                             * @since 1.0.0
-                             * @package GeoDirectory
-                             * @param string $rating_star Rating stars.
-                             * @param float $post_avgratings Average ratings of the post.
-                             * @param int $ID The post ID.
-                             */
-                            $rating_star = apply_filters('geodir_review_rating_stars_on_infowindow', $rating_star, $post_avgratings, $ID);
-                        }
-                    }
-                    ?>
-                    <div class="geodir-bubble_desc">
-                        <h4>
-                            <a href="<?php if ($plink != '') {
-                                echo $plink;
-                            } else {
-                                echo 'javascript:void(0);';
-                            } ?>"><?php echo $title; ?></a>
-                        </h4>
-                        <?php
-                        if ($gd_session->get('listing') && isset($post_preview) && $post_preview != '') {
-                            $post_images = array();
-                            if (!empty($postinfo_obj->post_images)) {
-                                $post_images = explode(",", $postinfo_obj->post_images);
-                            }
-
-                            if (!empty($post_images)) {
-                                ?>
-                                <div class="geodir-bubble_image"><a href="<?php if ($plink != '') {
-                                        echo $plink;
-                                    } else {
-                                        echo 'javascript:void(0);';
-                                    } ?>"><img alt="bubble image" style="max-height:50px;"
-                                               src="<?php echo $post_images[0]; ?>"/></a></div>
-                            <?php
-                            }else{
-                                echo '<div class="geodir-bubble_image"></div>';
-                            }
-                        } else {
-                            if ($image = geodir_show_featured_image($ID, 'widget-thumb', true, false, $postinfo_obj->featured_image)) {
-                                ?>
-                                <div class="geodir-bubble_image"><a href="<?php echo $plink; ?>"><?php echo $image; ?></a></div>
-                            <?php
-                            }else{
-                                echo '<div class="geodir-bubble_image"></div>';
-                            }
-                        }
-                        ?>
-                        <div class="geodir-bubble-meta-side">
-                            <?php
-                            /**
-                             * Fires before the meta info in the map info window.
-                             *
-                             * This can be used to add more info to the map info window before the normal meta info.
-                             *
-                             * @since 1.5.4
-                             * @param int $ID The post id.
-                             * @param object $postinfo_obj The posts info as an object.
-                             * @param bool|string $post_preview True if currently in post preview page. Empty string if not.                           *
-                             */
-                            do_action('geodir_infowindow_meta_before', $ID, $postinfo_obj, $post_preview);
-
-                            echo geodir_show_listing_info('mapbubble');
-
-                            /**
-                             * Fires after the meta info in the map info window.
-                             *
-                             * This can be used to add more info to the map info window after the normal meta info.
-                             *
-                             * @since 1.4.2
-                             * @param object $postinfo_obj The posts info as an object.
-                             * @param bool|string $post_preview True if currently in post preview page. Empty string if not.                           *
-                             */
-                            do_action('geodir_infowindow_meta_after',$postinfo_obj,$post_preview );
-                            ?>
-                        </div>
-                        <?php
-                        if ($ID) {
-                            $post_author = isset($postinfo_obj->post_author) ? $postinfo_obj->post_author : get_post_field('post_author', $ID);
-                            ?>
-                            <div class="geodir-bubble-meta-fade"></div>
-                            <div class="geodir-bubble-meta-bottom">
-                                <?php if ($rating_star != '') { ?>
-                                <span class="geodir-bubble-rating"><?php echo $rating_star;?></span>
-                                <?php } ?>
-                                <span class="geodir-bubble-fav"><?php echo geodir_favourite_html($post_author, $ID);?></span>
-                                <span class="geodir-bubble-reviews">
-                                    <a href="<?php echo get_comments_link($ID); ?>" class="geodir-pcomments"><i class="fa fa-comments"></i> <?php echo get_comments_number($ID); ?></a>
-                                </span>
-                            </div>
-                        <?php } ?>
-                    </div>
-                </div>
-            </div>
-            <?php
-            $html = ob_get_clean();
-            /**
-             * Filter to change infowindow html
-             *
-             * You can use this filter to change infowindow html.
-             *
-             * @since 1.0.0
-             * @package GeoDirectory
-             * @param string $html Infowindow html.
-             * @param object $postinfo_obj The Post object.
-             * @param bool|string $post_preview Is this a post preview?
-             */
-            $html = apply_filters('geodir_custom_infowindow_html', $html, $postinfo_obj, $post_preview);
-            return $html;
-        }
-    }
-}
-
 
 /**
  * Default post status for new posts.
@@ -1290,21 +319,9 @@ if (!function_exists('geodir_get_infowindow_html')) {
  * @package GeoDirectory
  * @return string Returns the default post status for new posts. Ex: draft, publish etc.
  */
-function geodir_new_post_default_status()
-{
+function geodir_new_post_default_status(){
     return GeoDir_Post_Data::get_post_default_status();
-
 }
-
-
-
-
-
-
-
-
-
-
 
 /**
  * This function would display the html content for add to favorite or remove from favorite.

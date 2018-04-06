@@ -1077,63 +1077,7 @@ function geodir_show_detail_page_tabs() {
 		$map_args['map_class_name']           = 'geodir-map-detail-page';
 		$map_args['maptype']                  = ( ! empty( $post->post_mapview ) ) ? $post->post_mapview : 'ROADMAP';
 		$map_args['posts']           		  = $post->ID;
-	} else if ( geodir_is_page( 'preview' ) ) {
-		$video          = isset( $post->geodir_video ) ? $post->geodir_video : '';
-		$special_offers = isset( $post->geodir_special_offers ) ? $post->geodir_special_offers : '';
-
-		if ( isset( $post->post_images ) ) {
-			$post->post_images = trim( $post->post_images, "," );
-		}
-
-		if ( isset( $post->post_images ) && ! empty( $post->post_images ) ) {
-			$post_images = explode( ",", $post->post_images );
-		}
-
-		$thumb_image = '';
-		if ( ! empty( $post_images ) ) {
-			foreach ( $post_images as $image ) {
-				if ( $image != '' ) {
-					$thumb_image .= '<a href="' . $image . '">';
-					$thumb_image .= geodir_show_image( array( 'src' => $image ), 'thumbnail', true, false );
-					$thumb_image .= '</a>';
-				}
-			}
-		}
-
-		global $map_jason;
-		$marker_json      = $post->marker_json != '' ? json_decode( $post->marker_json, true ) : array();
-		$marker_icon      = ( ! empty( $marker_json ) && ! empty( $marker_json['i'] ) ) ? $marker_json['i'] : '';
-		$icon_size        = geodir_get_marker_size( $marker_icon );
-		$marker_json['w'] = $icon_size['w'];
-		$marker_json['h'] = $icon_size['h'];
-		$map_jason[]      = json_encode( $marker_json );
-
-		$address_latitude  = isset( $post->post_latitude ) ? $post->post_latitude : '';
-		$address_longitude = isset( $post->post_longitude ) ? $post->post_longitude : '';
-		$mapview           = isset( $post->post_mapview ) ? $post->post_mapview : '';
-		$mapzoom           = isset( $post->post_mapzoom ) ? $post->post_mapzoom : '';
-		if ( ! $mapzoom ) {
-			$mapzoom = 12;
-		}
-
-		$map_args['map_canvas']          = 'preview_map_canvas';
-		$map_args['width']                    = '950';
-		$map_args['height']                   = '300';
-		$map_args['child_collapse']           = '0';
-		$map_args['maptype']                  = $mapview;
-		$map_args['autozoom']                 = false;
-		$map_args['zoom']                     = "$mapzoom";
-		$map_args['latitude']                 = $address_latitude;
-		$map_args['longitude']                = $address_longitude;
-		$map_args['enable_cat_filters']       = false;
-		$map_args['enable_text_search']       = false;
-		$map_args['post_type_filter'] = false;
-		$map_args['location_filter']  = false;
-		$map_args['jason_on_load']     = false;
-		$map_args['enable_map_direction']     = true;
-		$map_args['map_class_name']           = 'geodir-map-preview-page';
-		$map_args['posts']           		  = $post->ID;
-	}
+	} 
 
 	$arr_detail_page_tabs = geodir_detail_page_tabs_list();// get this sooner so we can get the active tab for the user
 

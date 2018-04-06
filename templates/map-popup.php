@@ -28,9 +28,7 @@ global $gd_post;
         <div class="geodir-bubble_desc">
 			[gd_post_title tag='h4']
 			<div class="geodir-bubble_image">
-				<?php if ( $featured_image = geodir_show_featured_image( $gd_post->ID, 'widget-thumb', true, false, $gd_post->featured_image ) ) { ?>
-				<a href="<?php the_permalink(); ?>"><?php echo $featured_image; ?></a>
-				<?php } ?>
+				[gd_post_images type="image" link_to="post" ajax_load="0"]
 			</div>
 			<div class="geodir-bubble-meta-side">
 				[gd_output_location location="mapbubble"]
