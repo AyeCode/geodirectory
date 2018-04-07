@@ -245,7 +245,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							sd_build_shortcode($short_code);
 
 							// resize the window to fit
-							jQuery('#TB_ajaxContent').css('width','auto');
+							jQuery('#TB_ajaxContent').css('width','auto').css('height','calc(100% - 46px)');
 
 
 							return response;
@@ -585,11 +585,35 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			$calss = isset($this->options['widget_ops']['classname']) ? esc_attr($this->options['widget_ops']['classname']) : '';
 
-			// wrap the shortcode in a dive with the same class as the widget
-			$output = '<div class="'.$calss.'">';
-			$output .= $this->output( $args, array(), $content );
-			$output .= '</div>';
 
+
+
+			$shortcode_args = array();
+			$output = '';
+			$main_content = $this->output( $args, $shortcode_args, $content );
+			if($main_content){
+				// wrap the shortcode in a dive with the same class as the widget
+				$output .= '<div class="'.$calss.'">';
+				if(!empty($args['title'])){
+					// if its a shortcode and there is a title try to grab the title wrappers
+					$shortcode_args = array('before_title'=>'', 'after_title' => '');
+					if(empty($instance)){
+						global $wp_registered_sidebars;
+						if(!empty($wp_registered_sidebars)){
+							foreach($wp_registered_sidebars as $sidebar){
+								if(!empty($sidebar['before_title'])){
+									$shortcode_args['before_title'] = $sidebar['before_title'];
+									$shortcode_args['after_title'] = $sidebar['after_title'];
+									break;
+								}
+							}
+						}
+					}
+					$output .= $this->output_title($shortcode_args,$args);
+				}
+				$output .= $main_content;
+				$output .= '</div>';
+			}
 
 			return $output;
 		}
@@ -1201,18 +1225,33 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			// get the filtered values
 			$argument_values = $this->argument_values( $instance );
-
+			$argument_values = $this->string_to_bool( $argument_values );
 			$output = $this->output( $argument_values, $args );
 
 			if ( $output ) {
 				echo $args['before_widget'];
-				if ( ! empty( $instance['title'] ) ) {
-					echo $args['before_title'] . apply_filters( 'widget_title', $instance['title'] ) . $args['after_title'];
-				}
-				$argument_values = $this->string_to_bool( $argument_values );
+				echo $this->output_title($args, $instance);
 				echo $output;
 				echo $args['after_widget'];
 			}
+		}
+
+		/**
+		 * Output the super title.
+		 *
+		 * @param $args
+		 * @param array $instance
+		 *
+		 * @return string
+		 */
+		public function output_title($args, $instance = array()){
+			$output = '';
+			if ( ! empty( $instance['title'] ) ) {
+				/** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
+				$title = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
+				$output = $args['before_title'] . $title . $args['after_title'];
+			}
+			return $output;
 		}
 
 		/**

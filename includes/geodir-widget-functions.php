@@ -211,7 +211,7 @@ function best_of_show_review_in_excerpt($excerpt) {
  * @param int $depth Category depth level. Default 1.
  * @return string Html content.
  */
-function geodir_cpt_categories_child_cats($parent_id, $cpt, $hide_empty, $show_count, $sort_by, $max_count, $max_level, $term_icons, $depth = 1) {
+function geodir_cpt_categories_child_cats($parent_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons, $depth = 1) {
     $cat_taxonomy = $cpt . 'category';
 
     $orderby = 'count';
@@ -246,11 +246,11 @@ function geodir_cpt_categories_child_cats($parent_id, $cpt, $hide_empty, $show_c
         $term_link = get_term_link( $category, $category->taxonomy );
         /** Filter documented in includes/general_functions.php **/
         $term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );
-        $count = $show_count ? ' <span class="gd-cptcat-count">(' . $category->count . ')</span>' : '';
+        $count = !$hide_count ? ' <span class="gd-cptcat-count">(' . $category->count . ')</span>' : '';
 
         $content .= '<li class="gd-cptcat-li gd-cptcat-li-sub">';
         $content .= '<a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">' . $term_icon_url . $category->name . $count . '</a></li>';
-        $content .= geodir_cpt_categories_child_cats($category->term_id, $cpt, $hide_empty, $show_count, $sort_by, $max_count, $max_level, $term_icons, $depth);
+        $content .= geodir_cpt_categories_child_cats($category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons, $depth);
     }
     $content .= '</li></ul>';
 

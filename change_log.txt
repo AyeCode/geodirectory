@@ -5,6 +5,10 @@ Shortcode builder not working with WooCommerce products - FIXED
 lat/lon DB length increased from 20 to 22 chars to account for negative decimals - CHANGED
 Map direction unit conflicts when multiple maps are on the page - FIXED
 Extensions screen improvements functionality and UI - CHANGED
+Super Duper Class chnaged to show shortcode title like widget title if used - CHANGED
+Shortcode builder not using 100% height on large displays - FIXED
+Category widget output slightly changed for title_tag - CHANGED
+Default image not checking for default category image - FIXED
 
 v2.0.0.9-beta
 Add listing page shows info might be lost even after save - FIXED

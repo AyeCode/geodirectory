@@ -320,9 +320,9 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 
 			wp_nonce_field( plugin_basename( __FILE__ ), 'geodir_post_attachments_noncename' );
 
-			if ( geodir_get_featured_image( $post_id, 'thumbnail' ) ) {
+			if ( $featured_image = get_the_post_thumbnail( $post_id, 'medium' ) ) {
 				echo '<h4>' . __( 'Featured Image', 'geodirectory' ) . '</h4>';
-				geodir_show_featured_image( $post_id, 'thumbnail' );
+				echo $featured_image;
 			}
 
 			$image_limit = 0;

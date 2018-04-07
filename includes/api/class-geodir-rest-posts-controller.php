@@ -2534,7 +2534,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	}
 	
 	public function get_featured_image( $post ) {
-		$image = geodir_get_featured_image( $post->ID, 'thumbnail' );
+		$image = GeoDir_Media::get_post_images($post->ID,1); //@todo kiran i changed, this please check it over, might need tweaking
 
 		$featured_image = array();
 		if ( ! empty( $image ) ) {

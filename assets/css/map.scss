@@ -132,6 +132,15 @@
     width: 100%;
 }
 
+.geodir-bubble_image{
+    max-height: 168px;
+    .geodir-images{
+        img{
+            max-width: 100% !important;
+        }
+    }
+}
+
 .geodir-bubble-meta-side {
     display: inline-block;
     vertical-align: top;

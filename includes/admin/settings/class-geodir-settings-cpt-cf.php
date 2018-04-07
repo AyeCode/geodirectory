@@ -519,7 +519,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'class'       => 'gd-email',
 				'icon'        => 'fa fa-envelope-o',
 				'name'        => __( 'Contact Email', 'geodirectory' ),
-				'description' => __( 'Adds a email input. This can be used by other plugins if the htmlvar remains `email`. It will also be used int he contact form.', 'geodirectory' ),
+				'description' => __( 'Adds a email input. This can be used by other plugins if the field key remains `email`, for example by Ninja Forms.', 'geodirectory' ),
 				'defaults'    => array(
 					'data_type'          => 'TEXT',
 					'admin_title'        => 'Contact Email',
@@ -1021,7 +1021,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'class'       => 'gd-get-directions',
 				'icon'        => 'fa fa-location-arrow',
 				'name'        => __( 'Get Directions Link', 'geodirectory' ),
-				'description' => __( 'Adds a input for twitter username and outputs feed.', 'geodirectory' ),
+				'description' => __( 'Adds a link to be able to get directions to the post.', 'geodirectory' ),
 				'defaults'    => array(
 					'data_type'          => 'VARCHAR',
 					'admin_title'        => 'Get Directions',

@@ -11,7 +11,7 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.0.0.9-beta
+ * Version: 2.0.0.10-beta
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
@@ -60,7 +60,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.0.0.9-beta';
+    public $version = '2.0.0.10-beta';
     
     /**
      * GeoDirectory instance.
@@ -252,7 +252,6 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-filter-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-content-listing-functions.php' );
 	    GeoDir_Comments::init();
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-shortcode-functions.php' );
@@ -528,3 +527,4 @@ add_action('dynamic_sidebar_before','xzxzxxz');
 function xzxzxxz(){
 	//echo '###';
 }
+

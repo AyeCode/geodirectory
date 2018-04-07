@@ -74,7 +74,7 @@ class GeoDir_Shortcodes {
             }
             return ob_get_clean();
         }else{
-            return "xxx";
+            return __("No listings found that mach your criteria.","geodirectory");
         }
     }
 

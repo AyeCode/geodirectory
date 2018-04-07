@@ -604,7 +604,7 @@ if (!function_exists('geodir_save_post_file_fields')) {
         geodir_save_post_meta( $post_id, $field_id, $file_urls );
 
         if ( !empty( $invalid_files ) ) {
-            geodir_remove_attachments( $invalid_files );
+            //geodir_remove_attachments( $invalid_files );// @todo remove the file if fails
         }
     }
 }

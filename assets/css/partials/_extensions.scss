@@ -4,7 +4,8 @@
   .gd-product{
     background: #fff;
     border: 1px solid #ccc;
-    float: left;
+    //float: left;
+    display: inline-block;
     position: relative;
     margin: 0 0 15px 0;
     box-sizing: border-box;

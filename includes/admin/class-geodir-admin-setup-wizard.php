@@ -730,7 +730,7 @@ class GeoDir_Admin_Setup_Wizard {
 			<div class="gd-setup-next-steps-last">
 				<h2><?php _e( 'Learn more', 'geodirectory' ); ?></h2>
 				<ul>
-					<li class="gd-getting-started"><a href="https://wpgeodirectory.com/docs/category/getting-started/?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=geodirectoryplugin"><?php esc_html_e( 'Getting started guide', 'geodirectory' ); ?></a></li>
+					<li class="gd-getting-started"><a href="https://wpgeodirectory.com/docs-v2/geodirectory/getting-started/?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=geodirectoryplugin"><?php esc_html_e( 'Getting started guide', 'geodirectory' ); ?></a></li>
 					<li class="gd-newsletter"><a href="https://wpgeodirectory.com/newsletter-signup/?utm_source=setupwizard&utm_medium=product&utm_content=newsletter&utm_campaign=geodirectoryplugin"><?php esc_html_e( 'Get GeoDirectory advice in your inbox', 'geodirectory' ); ?></a></li>
 					<li class="gd-get-help"><a href="https://wpgeodirectory.com/support/?utm_source=setupwizard&utm_medium=product&utm_content=docs&utm_campaign=geodirectoryplugin"><?php esc_html_e( 'Have questions? Get help.', 'geodirectory' ); ?></a></li>
 				</ul>

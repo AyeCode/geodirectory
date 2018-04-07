@@ -1372,7 +1372,7 @@ function geodir_cf_file($html,$location,$cf,$p=''){
                         if (in_array($uploaded_file_type, $image_file_types)) {
                             $file_paths .= '<div class="geodir-custom-post-gallery" class="clearfix">';
                             $file_paths .= '<a href="'.$file.'">';
-                            $file_paths .= geodir_show_image(array('src' => $file), 'thumbnail', false, false);
+                            $file_paths .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
                             $file_paths .= '</a>';
                             //$file_paths .= '<img src="'.$file.'"  />';	
                             $file_paths .= '</div>';
