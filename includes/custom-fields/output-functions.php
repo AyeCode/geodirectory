@@ -1237,7 +1237,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
                 $html .= '</span><span class="geodir-email-address-output">';
                 $email = $gd_post->{$cf['htmlvar_name']} ;
-                if(!empty($e_split = explode('@',$email)) && $email!='testing@example.com'){
+                if(!empty($email) && ($email!='testing@example.com') && ($e_split = explode('@',$email))){
                     /**
                      * Filter email custom field name output.
                      *
