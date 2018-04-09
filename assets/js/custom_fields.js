@@ -15,6 +15,11 @@ jQuery(document).ready(function () {
         if (!jQuery(this).attr('id')) {
             return;
         }
+
+        // check if its a single use item and if its already in use.
+
+
+
         console.log(2);
         //var type = jQuery(this).attr('id').replace('gd-', '');
         var type = jQuery(this).data("field-type");
@@ -24,7 +29,23 @@ jQuery(document).ready(function () {
         var id = 'new' + jQuery(".field_row_main ul.core li:last").index();
         var manage_field_type = jQuery(".manage_field_type").val();
         var gd_nonce = jQuery("#gd_new_field_nonce").val();
+        var single_use = jQuery(this).data("field-single-use");
         console.log(3);
+
+        if(single_use){
+            console.log('single use');
+            var is_used = false;
+            jQuery('input[name^="htmlvar_name"]').each(function(i){
+                if(jQuery(this).val() == single_use){
+                    is_used = true;
+                    alert(geodir_params.txt_single_use);
+                }
+            });
+            if(is_used){
+                return false;
+            }
+        }
+
         console.log(manage_field_type);
         if (manage_field_type == 'general' || manage_field_type == 'cpt-sorting') {
 

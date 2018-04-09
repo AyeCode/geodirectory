@@ -1,14 +1,14 @@
 <li class="gd-cf-tooltip-wrap">
 	<?php
-//	if ( isset( $cf['description'] ) && $cf['description'] ) {
-//		echo '<div class="gdcf-tooltip">' . $cf['description'] . '</div>';
-//	} ?>
+//print_r($cf);
+	?>
 
 
 	<a id="gd-<?php echo $id; ?>"
 	   data-field-custom-type="<?php echo sanitize_text_field($cf['field_type']); ?>"
 	   data-field-type-key="<?php echo sanitize_text_field($id); ?>"
 	   data-field-type="<?php echo sanitize_text_field($cf['field_type']); ?>"
+	   data-field-single-use="<?php echo isset($cf['single_use']) && $cf['single_use'] ? sanitize_text_field($cf['single_use']) : 0; ?>"
 	   class="gd-draggable-form-items <?php echo sanitize_text_field($cf['class']); ?>"
 	   href="javascript:void(0);">
 
