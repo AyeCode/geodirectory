@@ -261,6 +261,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         global $gd_session, $gd_post, $post;
 
 
+        //print_r($instance);
+
         // prints the widget
         extract( $args, EXTR_SKIP );
 
@@ -329,7 +331,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          *
          * @param string $instance ['list_sort'] Listing sort by type.
          */
-        $list_sort             = empty( $instance['list_sort'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['list_sort'] );
+        $list_sort             = empty( $instance['sort_by'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['sort_by'] );
         /**
          * Filter widget's "title_tag" type.
          *
@@ -533,6 +535,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
         global $gd_layout_class, $geodir_is_widget_listing;
 
+//        print_r($query_args);
+
         $widget_listings = geodir_get_widget_listings( $query_args );
 
         if ( $hide_if_empty && empty( $widget_listings ) ) {
@@ -595,6 +599,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 			// geodir_get_template( 'widget-listing-listview.php', array( 'title_tag'=>$title_tag, 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget) );
 			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+            //geodir_get_template_part('content', 'widget-listing');
+
 
 			$geodir_is_widget_listing = false;
 
@@ -648,6 +654,19 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             "high_rating"        =>  __('Highest rating', 'geodirectory'),
             "random"        =>  __('Random', 'geodirectory'),
         );
+
+        $sort_options = geodir_get_sort_options( $post_type );
+        if(!empty($sort_options)){
+            foreach($sort_options as $sort_option){
+                if(!empty($sort_option->sort_asc) && !empty($sort_option->asc_title)){
+                    $options[$sort_option->htmlvar_name."_asc"] = __($sort_option->asc_title,'geodirectory');
+                }
+                if(!empty($sort_option->sort_desc) && !empty($sort_option->desc_title)){
+                    $options[$sort_option->htmlvar_name."_desc"] = __($sort_option->desc_title,'geodirectory');
+                }
+            }
+        }
+        //print_r($sort_options);echo '###';
 
         return $options;
     }

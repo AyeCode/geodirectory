@@ -1,3 +1,6 @@
+v2.0.0.11-beta
+gd_listings shortcode/widget sort_by can now use custom sort_by options - CHANGED
+
 v2.0.0.10-beta
 gd_map shortcode should not show "Enable marker cluster?" if plugin not active - FIXED
 Business Hours: add a text if place is closed whole day - ADDED
