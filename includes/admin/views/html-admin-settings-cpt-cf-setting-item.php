@@ -214,7 +214,6 @@
 				// htmlvar_name
 				do_action( "geodir_cfa_before_htmlvar_name_{$field->field_type}", $cf, $field);
 
-
 				if ( has_filter( "geodir_cfa_htmlvar_name_{$field->field_type}" ) ) {
 
 					echo apply_filters( "geodir_cfa_htmlvar_name_{$field->field_type}", '', $field->id, $cf, $field );
@@ -240,7 +239,7 @@
 							       title="<?php _e( 'Must not contain spaces or special characters', 'geodirectory' ); ?>"
 							       value="<?php if ( $value ) {
 								       echo preg_replace( '/geodir_/', '', $value, 1 );
-							       } ?>" <?php if ( $field->is_default || $value == 'featured' ) {
+							       } ?>" <?php if ( $field->is_default || (isset($field->single_use) && $field->single_use) ) {
 								echo 'readonly="readonly"';
 							} ?> />
 						</div>

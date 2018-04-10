@@ -29,14 +29,5 @@ global $gd_post;
 	// get content from GD Archive Item page template
 	echo GeoDir_Template_Loader::archive_item_template_content();
 
-
-//	do_action( 'geodir_before_listing_item' );
-//
-//	do_action( 'geodir_listing_item_content_left' );
-//
-//	do_action( 'geodir_listing_item_content_right' );
-//
-//	do_action( 'geodir_after_listing_item' );
-
 	?>
 </li>

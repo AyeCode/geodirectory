@@ -490,6 +490,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
                 'icon'        => 'fa fa-clock-o',
                 'name'        => __( 'Business Hours', 'geodirectory' ),
                 'description' => __( 'Adds a business hours input. This can display when the listing is open/closed/', 'geodirectory' ),
+                'single_use'         => 'business_hours',
                 'defaults'    => array(
 	                'data_type'          => 'TEXT',
 	                'admin_title'        => 'Business Hours',
@@ -508,7 +509,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 	                'field_icon'         => 'fa fa-clock-o',
 	                'css_class'          => '',
 	                'cat_sort'           => false,
-	                'cat_filter'         => false
+	                'cat_filter'         => false,
+	                'single_use'         => true
                 )
 
 			);
@@ -520,6 +522,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'icon'        => 'fa fa-envelope-o',
 				'name'        => __( 'Contact Email', 'geodirectory' ),
 				'description' => __( 'Adds a email input. This can be used by other plugins if the field key remains `email`, for example by Ninja Forms.', 'geodirectory' ),
+				'single_use'  => 'email',
 				'defaults'    => array(
 					'data_type'          => 'TEXT',
 					'admin_title'        => 'Contact Email',
@@ -538,7 +541,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'field_icon'         => 'fa fa-envelope-o',
 					'css_class'          => '',
 					'cat_sort'           => false,
-					'cat_filter'         => false
+					'cat_filter'         => false,
+			        'single_use'         => true
+
 				)
 			);
 
@@ -1111,6 +1116,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
                'icon'        => 'fa fa-certificate',
                'name'        => __( 'Featured', 'geodirectory' ),
                'description' => __( 'Mark listing as a featured.', 'geodirectory' ),
+               'single_use'         => 'featured',
                'defaults'    => array(
 	                'data_type'          => 'TINYINT',
 	                'admin_title'        => 'Featured',
@@ -1129,7 +1135,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 	                'field_icon'         => '',
 	                'css_class'          => '',
 	                'cat_sort'           => true,
-	                'cat_filter'         => true
+	                'cat_filter'         => true,
+	                'single_use'         => true
+
                )
 			);
 

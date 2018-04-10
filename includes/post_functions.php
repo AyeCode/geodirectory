@@ -922,7 +922,8 @@ function geodir_setup_postdata( $the_post ) {
 		$the_post = geodir_get_post_info( $the_post );
 	} else if ( is_object( $the_post ) ) {
 		if ( ! isset( $the_post->post_category ) ) {
-			$the_post = geodir_get_post_info( $post->ID );
+            $post_id = isset($the_post->ID) ? $the_post->ID : $post->ID;
+			$the_post = geodir_get_post_info( $post_id );
 		}
 	}
 

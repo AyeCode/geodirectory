@@ -435,29 +435,6 @@ function geodir_admin_current_post_type() {
 
 
 
-/**
- * Check table column exist or not.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @param string $db The table name.
- * @param string $column The column name.
- * @return bool If column exists returns true. Otherwise false.
- */
-function geodir_column_exist($db, $column)
-{
-	global $wpdb;
-	$exists = false;
-	$columns = $wpdb->get_col("show columns from $db");
-	foreach ($columns as $c) {
-		if ($c == $column) {
-			$exists = true;
-			break;
-		}
-	}
-	return $exists;
-}
 
 
 /**

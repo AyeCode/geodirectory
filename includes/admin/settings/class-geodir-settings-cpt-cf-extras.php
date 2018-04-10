@@ -89,7 +89,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			// htmlvar not needed for fieldset, taxonomy, business_hours
 			add_filter( 'geodir_cfa_htmlvar_name_fieldset', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_htmlvar_name_taxonomy', '__return_empty_string', 10, 4 );
-			add_filter( 'geodir_cfa_htmlvar_name_business_hours', '__return_empty_string', 10, 4 );
+			//add_filter( 'geodir_cfa_htmlvar_name_business_hours', '__return_empty_string', 10, 4 );
 
 			// default_value not needed for textarea, html, file, fieldset, taxonomy, address, business_hours
 			add_filter( 'geodir_cfa_default_value_file', '__return_empty_string', 10, 4 );

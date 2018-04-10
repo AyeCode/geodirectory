@@ -565,59 +565,30 @@ class GeoDir_Query {
 
 		$table = geodir_db_cpt_table($geodir_post_type);
 
+		$orderby = self::sort_by_sql($sort_by, $geodir_post_type);
+		/**
+		 * Filter order by SQL.
+		 *
+		 * @since 1.0.0
+		 * @param string $orderby The orderby query string.
+		 * @param string $sort_by Sortby query string.
+		 * @param string $table Listing table name.
+		 */
+		$orderby = apply_filters('geodir_posts_order_by_sort', $orderby, $sort_by, $table);
+
+		if($sort_by != 'random'){
+			//$orderby .= $table . ".featured asc, $wpdb->posts.post_date desc, $wpdb->posts.post_title ";
+		}
+
+		return $orderby;
+	}
+
+	public static function sort_by_sql($sort_by = 'title_asc',$post_type = "gd_place"){
+		global $wpdb;
+
+		$orderby = '';
+		$table = geodir_db_cpt_table($post_type);
 		$order_by_parts = array();
-
-
-		//echo '###'.$sort_by;
-//
-//		switch ($sort_by):
-//			case 'newest':
-//				$orderby = "$wpdb->posts.post_date desc, ";
-//				break;
-//			case 'oldest':
-//				$orderby = "$wpdb->posts.post_date asc, ";
-//				break;
-//			case 'low_review':
-//			case 'rating_count_asc':
-//				$orderby = $table . ".rating_count ASC, " . $table . ".overall_rating ASC, ";
-//				break;
-//			case 'high_review':
-//			case 'rating_count_desc':
-//				$orderby = $table . ".rating_count DESC, " . $table . ".overall_rating DESC, ";
-//				break;
-//			case 'low_rating':
-//				$orderby = "( " . $table . ".overall_rating  ) ASC, " . $table . ".rating_count ASC,  ";
-//				break;
-//			case 'high_rating':
-//				$orderby = " " . $table . ".overall_rating DESC, " . $table . ".rating_count DESC, ";
-//				break;
-//			case 'featured':
-//				$orderby = $table . ".featured asc, ";
-//				break;
-//			case 'nearest':
-//				$orderby = " distance asc, ";
-//				break;
-//			case 'farthest':
-//				$orderby = " distance desc, ";
-//				break;
-//			case 'random':
-//				$orderby = " rand() ";
-//				break;
-//			case 'az':
-//				$orderby = "$wpdb->posts.post_title asc, ";
-//				break;
-//			// sort by rating
-//			case 'overall_rating_desc':
-//				$orderby = " " . $table . ".overall_rating DESC, " . $table . ".rating_count DESC, ";
-//				break;
-//			case 'overall_rating_asc':
-//				$orderby = " " . $table . ".overall_rating ASC, " . $table . ".rating_count ASC, ";
-//				break;
-//			default:
-//				$orderby .= " $wpdb->posts.post_date desc";
-//				break;
-//		endswitch;
-
 
 		switch ($sort_by):
 			case 'random': // @todo, i think we should remove random, its a bad idea for so many reasons.
@@ -670,37 +641,17 @@ class GeoDir_Query {
 				break;
 			default:
 //				echo $sort_by.'###'.$default_sort;
+				$default_sort = geodir_get_posts_default_sort( $post_type );
 				if($sort_by == $default_sort){
 					$order_by_parts[] = "$wpdb->posts.post_date desc";
 				}else{
-					$order_by_parts[] = $this->custom_sort($orderby, $sort_by, $table);
+					$order_by_parts[] = self::custom_sort($orderby, $sort_by, $table);
 				}
 				break;
 		endswitch;
 
 
 		$orderby = implode(", ",$order_by_parts);
-
-		/**
-		 * Filter order by SQL.
-		 *
-		 * @since 1.0.0
-		 * @param string $orderby The orderby query string.
-		 * @param string $sort_by Sortby query string.
-		 * @param string $table Listing table name.
-		 */
-		$orderby = apply_filters('geodir_posts_order_by_sort', $orderby, $sort_by, $table);
-
-		if($sort_by != 'random'){
-			//$orderby .= $table . ".featured asc, $wpdb->posts.post_date desc, $wpdb->posts.post_title ";
-		}
-
-		
-		
-
-		//echo '###default###'.$default_sort.'###';
-
-	//echo '###'.$orderby;
 
 		return $orderby;
 	}
@@ -714,7 +665,7 @@ class GeoDir_Query {
 	 * @param string $table Listing table name.
 	 * @return string Modified orderby query.
 	 */
-	public function custom_sort($orderby, $sort_by, $table)
+	public static function custom_sort($orderby, $sort_by, $table)
 	{
 
 		global $wpdb;
@@ -777,7 +728,7 @@ class GeoDir_Query {
 
 
 					default:
-						if ($this->column_exist($table, $sort_by)) {
+						if (self::column_exist($table, $sort_by)) {
 							$orderby = $table . "." . $sort_by . " " . $order;
 						}else{
 							$orderby = "$wpdb->posts.post_date desc";
@@ -801,7 +752,7 @@ class GeoDir_Query {
 	 * @param string $column The column name.
 	 * @return bool If column exists returns true. Otherwise false.
 	 */
-	public function column_exist($db, $column)
+	public static function column_exist($db, $column)
 	{
 		global $wpdb;
 		$exists = false;
