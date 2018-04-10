@@ -151,7 +151,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 	// @TODO implement country, region, city, hood for multilocation etc
 	search = jQuery('#' + map_canvas + '_search_string').val();
 
-	query_string += '?post_type=' + post_type;
+	query_string += 'post_type=' + post_type;
 	jQuery('[name="' + map_canvas + '_cat[]"]:checked').each(function() {
 		if (jQuery(this).val()) {
 			query_string += '&term[]=' + jQuery(this).val();
@@ -400,7 +400,11 @@ function map_ajax_search(map_canvas_var, query_string, marker_jason, hide_loadin
         jQuery('#' + map_canvas_var + '_loading_div').hide();
         return;
     }
-    var query_url = eval(map_canvas_var).map_ajax_url + query_string;
+    var query_url = eval(map_canvas_var).map_ajax_url;
+	if (query_string) {
+		u = query_url.indexOf('?') === -1 ? '?' : '&';
+		query_url += u + query_string;
+	}
     if (gd_current_query == map_canvas_var + '-' + query_url) { jQuery('#' + map_canvas_var + '_loading_div').hide(); } //dont run again
     else {
         gd_current_query = map_canvas_var + '-' + query_url;
@@ -567,15 +571,17 @@ function create_marker(item, map_canvas) {
                 preview_query_str = '&post_preview=' + item.post_preview;
             }
             marker_url = marker_url + '' + item.m;
+			post_data = marker_url.indexOf('?') === -1 ? '?' : '&';
+			post_data += '_wpnonce=' + map_options._wpnonce;
             if (map_options.bubble_size) {
-                marker_url += '?small=1';
+                post_data += '&small=1';
             }
             var loading = '<div id="map_loading"></div>';
             gd_infowindow.open(jQuery.goMap.map, marker);
             gd_infowindow.setContent(loading);
             jQuery.ajax({
                 type: "GET",
-                url: marker_url+"?_wpnonce="+map_options._wpnonce,
+                url: marker_url + post_data,
                 cache: false,
                 dataType: "json",
                 error: function(xhr, error) {
@@ -1208,8 +1214,10 @@ function create_marker_osm(item, map_canvas) {
                 jQuery("#" + map_canvas).goMap();
             }
             marker_url = marker_url + '' + item.m;
+			post_data = marker_url.indexOf('?') === -1 ? '?' : '&';
+			post_data += '_wpnonce=' + map_options._wpnonce;
             if (options.bubble_size) {
-                marker_url += '?small=1';
+                post_data += '&small=1';
             }
             var loading = '<div id="map_loading"></div>';
             var maxH = jQuery("#" + map_canvas).height();
@@ -1220,7 +1228,7 @@ function create_marker_osm(item, map_canvas) {
             }).openPopup();
             jQuery.ajax({
                 type: "GET",
-                url: marker_url,
+                url: marker_url + post_data,
                 cache: false,
                 dataType: "json",
                 error: function(xhr, error) {
