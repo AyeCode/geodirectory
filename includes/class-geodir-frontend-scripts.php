@@ -170,7 +170,7 @@ class GeoDir_Frontend_Scripts {
 			),
 			'geodir-select2' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/geodir-select2' . $suffix . '.js',
-				'deps'    => array( 'jquery' ),
+				'deps'    => array( 'jquery', 'select2' ),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-jquery-ui-timepicker' => array(
