@@ -63,9 +63,9 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
 				    'type' => 'select',
 				    'options'   =>  array(
-					    'bestof-tabs-on-top' => __('Tabs on top','geodirectory'),
-					    'bestof-tabs-on-left' => __('Tabs on left','geodirectory'),
-					    'bestof-tabs-as-dropdown' => __('Tabs as dropdown','geodirectory'),
+					    'top' => __('Tabs on top','geodirectory'),
+					    'left' => __('Tabs on left','geodirectory'),
+					    'dropdown' => __('Tabs as dropdown','geodirectory'),
                     ),
 				    'default'  => 'bestof-tabs-on-top',
 				    'desc_tip' => true,
@@ -168,7 +168,12 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
          *
          * @param string $instance ['tab_layout'] Best of widget tab layout name.
          */
-        $tab_layout = empty($instance['tab_layout']) ? 'bestof-tabs-on-top' : apply_filters('bestof_widget_tab_layout', $instance['tab_layout']);
+        $tab_layout = empty($instance['tab_layout']) ? 'top' : apply_filters('bestof_widget_tab_layout', $instance['tab_layout']);
+	    if($tab_layout=='top' || $tab_layout=='left'){
+		    $tab_layout = "bestof-tabs-on-".$tab_layout;
+	    }elseif($tab_layout =='dropdown'){
+		    $tab_layout = "bestof-tabs-as-".$tab_layout;
+	    }
         if(!defined( 'DOING_AJAX' ))  echo '<div class="geodir_bestof_widget bestof-widget-tab-layout ' . $tab_layout . '">';
 
         $loc_terms = geodir_get_current_location_terms();
@@ -317,19 +322,19 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
         if ($tab_layout == 'bestof-tabs-as-dropdown') {
             $layout[] = $tab_layout;
         } else {
-            $layout[] = 'bestof-tabs-as-dropdown';
+            //$layout[] = 'bestof-tabs-as-dropdown';
             $layout[] = $tab_layout;
         }
 
-
-	    if(!defined( 'DOING_AJAX' )) echo $before_title . __($title,'geodirectory') . $after_title;
+	    $final_html = '';
+	    $nav_html = '';
 
         //term navigation - start
-	    if(!defined( 'DOING_AJAX' )) echo '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
+	    if(!defined( 'DOING_AJAX' )) $nav_html = '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
 
-        $final_html = '';
+
         foreach ($layout as $tab_layout) {
-            $nav_html = '';
+
             $is_dropdown = ($tab_layout == 'bestof-tabs-as-dropdown') ? true : false;
 
             if ($is_dropdown) {
@@ -387,12 +392,10 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             } else {
                 $nav_html .= '</dl>';
             }
-            $final_html .= $nav_html;
+            //$final_html .= $nav_html;
         }
-        if ($terms) {
-	        if(!defined( 'DOING_AJAX' ))echo $final_html;
-        }
-	    if(!defined( 'DOING_AJAX' )) echo '</div>';
+
+	    if(!defined( 'DOING_AJAX' )) $nav_html .= '</div>';
         //term navigation - end
 
         //first term listings by default - start
@@ -426,12 +429,23 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             <input type="hidden" id="bestof_widget_char_count" name="bestof_widget_char_count"
                    value="<?php echo $character_count; ?>">
             <div class="geo-bestof-contentwrap geodir-tabs-content" style="position: relative; z-index: 0;">
-            <p id="geodir-bestof-loading" class="geodir-bestof-loading"><i class="fa fa-cog fa-spin"></i></p>
+
 		    <?php
+		    if ($terms) {
+			    if(!defined( 'DOING_AJAX' ))echo $nav_html;
+		    }
+		    ?>
+
+		    <?php
+
+
+
+
+		    echo '<div id="geodir-bestof-places">';
 	    }
 
 
-            echo '<div id="geodir-bestof-places">';
+
 	    //print_r($instance);
 	    //print_r($query_args);
             if ($terms) {
@@ -447,7 +461,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                  */
                 $view_all_link = apply_filters('geodir_bestof_widget_view_all_link', $view_all_link, $post_type, $first_term);
 
-                echo '<h3 class="bestof-cat-title">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '<a href="' . esc_url($view_all_link) . '">' . __("View all", 'geodirectory') . '</a></h3>';
+                echo '<h4 class="bestof-cat-title">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '<a href="' . esc_url($view_all_link) . '">' . __("View all", 'geodirectory') . '</a></h4>';
             }
             if ($excerpt_type == 'show-reviews') {
                 add_filter('get_the_excerpt', 'best_of_show_review_in_excerpt');
@@ -456,11 +470,14 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             if ($excerpt_type == 'show-reviews') {
                 remove_filter('get_the_excerpt', 'best_of_show_review_in_excerpt');
             }
-            echo "</div>";
+
 
 	    if(!defined( 'DOING_AJAX' )) {
+		    echo "</div>";
 		    ?>
-            </div>
+		    <p id="geodir-bestof-loading" class="geodir-bestof-loading"><i class="fa fa-cog fa-spin"></i></p>
+
+		    </div>
 		    <?php //first term listings by default - end
 		    ?>
 		    <?php

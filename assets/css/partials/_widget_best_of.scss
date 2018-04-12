@@ -1,0 +1,117 @@
+.geodir-best-of{
+
+  #gd-bestof-tabs{
+  }
+
+  .geo-bestof-contentwrap{
+    border-top: none;
+    .geodir-tabs{
+      .geodir-bestof-cat-list{
+        a{
+          text-decoration: none;
+          &:active,&:focus{
+            outline: 0;
+            outline-style: none;
+          }
+
+          span{
+            display: block;
+            overflow: hidden;
+            padding-top: 10px;
+            line-height: 14px;
+            vertical-align: middle;
+          }
+
+          small{
+            color: #757575;
+            line-height: 10px;
+            display: block;
+          }
+        }
+
+        .bestof-cat-icon {
+          float: left;
+          position: relative;
+          margin: 8px;
+          height: 30px;
+          margin-left: 0;
+        }
+      }
+    }
+
+    #geodir-bestof-places{
+      padding: 10px;
+      clear: both;
+      border: 1px #e1e1e1 solid;
+
+      h3,h4{
+        &.bestof-cat-title{
+          a{
+            float: right;
+            font-size: 14px;
+          }
+        }
+      }
+    }
+  }
+
+  .bestof-tabs-on-left{
+    .geo-bestof-contentwrap{
+      border: 1px #e1e1e1 solid;
+
+      .geodir-tabs{
+        display: inline-block;
+        width: 20%;
+        vertical-align: top;
+        .geodir-bestof-cat-list{
+          dd{
+            width:100%;
+            border-right: 1px solid #e1e1e1;
+            &.geodir-tab-active{
+              border-right: none;
+              a{
+                border-top: 1px solid #e1e1e1;
+                border-left: 2px #45B8F2 solid;
+              }
+            }
+
+            &:first-of-type{
+                a{
+                  border-top: none;
+                }
+            }
+
+            &:last-child{
+              border-bottom: 1px solid #e1e1e1;
+              a{
+                height: 46px;
+              }
+            }
+            a{
+              padding: 0 0 0 3px;
+              span{
+                text-overflow: ellipsis;
+                white-space: nowrap;
+              }
+            }
+          }
+        }
+      }
+
+      #geodir-bestof-places{
+        display: inline-block;
+        border: none;
+        width: 79%;
+        overflow: hidden;
+      }
+    }
+  }
+
+
+  #geodir-bestof-loading {
+    text-align: center;
+    padding: 50px 0;
+    display: none;
+  }
+
+}

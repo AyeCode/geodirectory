@@ -101,7 +101,8 @@ function geodir_bestof_places_by_term($query_args) {
     $gd_session->set('gd_listing_view', '1');
     $geodir_is_widget_listing = true;
 
-    geodir_get_template( 'widget-listing-listview.php', array( 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget, 'before_widget' => $before_widget ) );
+    geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+
 
     $geodir_is_widget_listing = false;
 

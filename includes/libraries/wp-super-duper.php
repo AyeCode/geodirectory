@@ -92,11 +92,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 //			echo '####';
 
 			$shortcode = isset($_REQUEST['shortcode']) && $_REQUEST['shortcode'] ? sanitize_title_with_dashes($_REQUEST['shortcode']) : '';
-			if(!$shortcode){return;}
+			if(!$shortcode){wp_die();}
 			$widget_args = isset($sd_widgets[$shortcode]) ? $sd_widgets[$shortcode] :'';
-			if(!$widget_args){return;}
+			if(!$widget_args){wp_die();}
 			$class_name = isset($widget_args['class_name']) && $widget_args['class_name'] ? $widget_args['class_name'] : '';
-			if(!$class_name){return;}
+			if(!$class_name){wp_die();}
 
 
 

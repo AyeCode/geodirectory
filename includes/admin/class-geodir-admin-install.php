@@ -955,7 +955,7 @@ class GeoDir_Admin_Install {
 		}
 
 
-		return apply_filters('geodir_db_cpt_default_columns',$keys,$locationless);
+		return apply_filters('geodir_db_cpt_default_keys',$keys,$locationless);
 	}
 }
 
