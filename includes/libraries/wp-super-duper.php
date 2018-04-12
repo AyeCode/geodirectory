@@ -51,8 +51,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			if ( isset( $options['class_name'] ) ) {
 				// register widget
 				$this->class_name = $options['class_name'];
-				$this->register_widget();
-
+				
 				// register shortcode
 				$this->register_shortcode();
 
@@ -513,15 +512,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $options;
-		}
-
-		/**
-		 * Register the parent widget class
-		 */
-		public function register_widget() {
-//		add_action( 'widgets_init', function () {
-//			register_widget( $this->class_name );
-//		} );
 		}
 
 		/**

@@ -19,16 +19,13 @@ class GeoDir_Shortcodes {
      */
     public static function init() {
         $shortcodes = array(
-            'gd_add_listing'            => __CLASS__ . '::gd_add_listing',
             'gd_single_taxonomies'      => __CLASS__ . '::gd_single_taxonomies',
             'gd_single_tabs'            => __CLASS__ . '::gd_single_tabs',
             'gd_single_next_prev'       => __CLASS__ . '::gd_single_next_prev',
             'gd_loop'                   => __CLASS__ . '::gd_loop', // only for GD archive page
             'gd_loop_paging'            => __CLASS__ . '::gd_loop_paging', // only for GD archive page
-            'gd_loop_actions'            => __CLASS__ . '::gd_loop_actions', // only for GD archive page
+            'gd_loop_actions'           => __CLASS__ . '::gd_loop_actions', // only for GD archive page
             'gd_single_closed_text'    	=> __CLASS__ . '::gd_single_closed_text', // only on GD detail page
-            //'gd_single_meta'    	=> __CLASS__ . '::gd_single_meta', // only on GD detail page
-
             'gd_archive_item_section'            => __CLASS__ . '::gd_archive_item_section',
 
 
@@ -55,10 +52,7 @@ class GeoDir_Shortcodes {
 
         return ob_get_clean();
     }
-    
-    public static function gd_add_listing( $atts = array(), $content = null ) {
-        return self::shortcode_wrapper( 'geodir_sc_add_listing', $atts, $content  );
-    }
+
 
 
     public static function gd_loop( $atts = array(), $content = null ) {

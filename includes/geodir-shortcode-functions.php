@@ -10,71 +10,7 @@ if (!defined('WPINC')) {
     die;
 }
 
-/**
- * The geodirectory add listing shortcode.
- *
- * This implements the functionality of the shortcode for displaying geodirectory add listing page form.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param array $atts {
- *     Attributes of the shortcode.
- *
- *     @type string $pid            Post ID. If passed post will be edited. Default empty.
- *     @type string $listing_type   Post type of listing. Default gd_place.
- *     @type string $login_msg      Message to display when user not logged in.
- *     @type bool   $show_login     Do you want to display login widget when user not logged in?. Default: false.
- *
- * }
- * @return string Add listing page HTML.
- */
-function geodir_sc_add_listing( $atts, $content = '' ) {
-    $default_post_type = geodir_add_listing_default_post_type();
 
-    $defaults = array(
-        'pid'           => '',
-        'listing_type'  => $default_post_type,
-        'login_msg'     => __( 'You must login to post.', 'geodirectory' ),
-        'show_login'    => true,
-    );
-
-    $params = shortcode_atts( $defaults, $atts, 'gd_add_listing' );
-    
-    if ( !empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
-        $params['pid'] = absint( $_REQUEST['pid'] );
-        $params['listing_type'] = $post_type;
-    } else if ( isset( $_REQUEST['listing_type'] ) ) {
-        $params['listing_type'] = sanitize_text_field( $_REQUEST['listing_type'] );
-    }
-
-    // check if CPT is disabled add listing
-    if ( !geodir_add_listing_check_post_type( $params['listing_type'] ) ) {
-        return __( 'Adding listings is disabled for this post type..', 'geodirectory' );
-    }
-
-    foreach ( $params as $key => $value ) {
-        $_REQUEST[ $key ] = $value;
-    }
-
-    $user_id = get_current_user_id();
-
-    ob_start();
-
-    //
-    if ( !$user_id && !geodir_get_option('post_logged_out')) {
-        echo geodir_notification( array('login_msg'=>$params['login_msg']) );
-        if ( $params['show_login'] ) {
-            echo "<br />";
-            wp_login_form();
-        }
-    } elseif(!$user_id && !get_option( 'users_can_register' )){
-        echo geodir_notification( array('add_listing_error'=>__('User registration is disabled, please login to continue.','geodirectory')) );
-    }else {
-        GeoDir_Post_Data::add_listing_form();
-    }
-
-    return ob_get_clean();
-}
 
 /**
  * The geodirectory home page map shortcode.
