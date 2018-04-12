@@ -40,8 +40,9 @@ function goedir_register_widgets() {
         register_widget( 'GeoDir_Widget_Map' );
 
         // Non Widgets
-        include_once(GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-add-listing.php');
-        include_once(GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-single-taxonomies.php');
+        new GeoDir_Widget_Add_Listing();
+        new GeoDir_Widget_Single_Taxonomies();
+        new GeoDir_Widget_Single_Tabs();
 
         // 3rd party widgets
         if(class_exists('Ninja_Forms')){
