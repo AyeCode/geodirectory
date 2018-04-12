@@ -1,5 +1,14 @@
-.geodir-dashbaord{
-  select.geodir-select{
-    width:100%;
+.geodir-dashbaord {
+  ul.geodir-loginbox-list {
+    li {
+      list-style: none;
+      display: block;
+      padding-bottom: 10px;
+      margin-bottom: 0;
+
+      select.geodir-select {
+        width: 100%;
+      }
+    }
   }
 }

@@ -2491,7 +2491,7 @@ function geodir_sc_single_meta($atts, $content = '') {
 
 
             }else{
-                $output = "there is no key";
+               $output = __('Key does not exist','geodirectory');
             }
         }
     }
