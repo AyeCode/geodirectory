@@ -175,6 +175,3 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
     }
 
 }
-
-// we register the SD widget without registering it as a WP widget
-new GeoDir_Widget_Add_Listing();

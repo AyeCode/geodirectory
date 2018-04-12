@@ -19,7 +19,6 @@ class GeoDir_Shortcodes {
      */
     public static function init() {
         $shortcodes = array(
-            'gd_single_next_prev'       => __CLASS__ . '::gd_single_next_prev',
             'gd_loop'                   => __CLASS__ . '::gd_loop', // only for GD archive page
             'gd_loop_paging'            => __CLASS__ . '::gd_loop_paging', // only for GD archive page
             'gd_loop_actions'           => __CLASS__ . '::gd_loop_actions', // only for GD archive page
@@ -111,11 +110,6 @@ class GeoDir_Shortcodes {
         return self::shortcode_wrapper( 'geodir_sc_single_slider', $atts, $content  );
     }
 
-
-    public static function gd_single_next_prev( $atts = array(), $content = null ) {
-        return self::shortcode_wrapper( 'geodir_sc_single_next_prev', $atts, $content  );
-    }
-	
 	public static function gd_single_closed_text( $atts = array(), $content = null ) {
         return self::shortcode_wrapper( 'geodir_sc_single_closed_text', $atts, $content  );
     }

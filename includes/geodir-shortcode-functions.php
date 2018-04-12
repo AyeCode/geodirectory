@@ -2154,24 +2154,7 @@ function geodir_sc_single_slider()
     }
 }
 
-/**
- * Outputs the prev/next links of the post details page.
- *
- * This is called by a filter 'geodir_details_next_prev' and can be replaced.
- *
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_sc_single_next_prev()
-{
-    ?>
-    <div class="geodir-pos_navigation clearfix">
-    <div
-        class="geodir-post_left"><?php previous_post_link('%link', '' . __('Previous', 'geodirectory'), false) ?></div>
-    <div
-        class="geodir-post_right"><?php next_post_link('%link', __('Next', 'geodirectory') . '', false) ?></div>
-    </div><?php
-}
+
 
 /**
  * Outputs the closed post status text on the post details page.
