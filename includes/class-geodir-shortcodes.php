@@ -19,7 +19,6 @@ class GeoDir_Shortcodes {
      */
     public static function init() {
         $shortcodes = array(
-            'gd_loop'                   => __CLASS__ . '::gd_loop', // only for GD archive page
             'gd_loop_paging'            => __CLASS__ . '::gd_loop_paging', // only for GD archive page
             'gd_loop_actions'           => __CLASS__ . '::gd_loop_actions', // only for GD archive page
             'gd_archive_item_section'            => __CLASS__ . '::gd_archive_item_section',
@@ -48,25 +47,7 @@ class GeoDir_Shortcodes {
 
         return ob_get_clean();
     }
-
-
-
-    public static function gd_loop( $atts = array(), $content = null ) {
-        global $wp_query;
-        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || (is_author() && !empty($wp_query->query['gd_favs'])) ){
-            ob_start();
-
-            // check if we have listings or if we are faking it
-            if($wp_query->post_count == 1 && empty($wp_query->posts)){
-                geodir_no_listings_found();
-            }else{
-                geodir_get_template_part('content', 'archive-listing');
-            }
-            return ob_get_clean();
-        }else{
-            return __("No listings found that mach your criteria.","geodirectory");
-        }
-    }
+    
 
     public static function gd_loop_paging( $atts = array(), $content = null ) {
         if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
