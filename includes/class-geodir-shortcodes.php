@@ -19,7 +19,6 @@ class GeoDir_Shortcodes {
      */
     public static function init() {
         $shortcodes = array(
-            'gd_single_taxonomies'      => __CLASS__ . '::gd_single_taxonomies',
             'gd_single_tabs'            => __CLASS__ . '::gd_single_tabs',
             'gd_single_next_prev'       => __CLASS__ . '::gd_single_next_prev',
             'gd_loop'                   => __CLASS__ . '::gd_loop', // only for GD archive page
@@ -113,9 +112,6 @@ class GeoDir_Shortcodes {
         return self::shortcode_wrapper( 'geodir_sc_single_slider', $atts, $content  );
     }
 
-    public static function gd_single_taxonomies( $atts = array(), $content = null ) {
-        return self::shortcode_wrapper( 'geodir_sc_single_taxonomies', $atts, $content  );
-    }
 
     public static function gd_single_tabs( $atts = array(), $content = null ) {
         return self::shortcode_wrapper( 'geodir_show_detail_page_tabs', $atts, $content  );

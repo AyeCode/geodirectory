@@ -41,6 +41,7 @@ function goedir_register_widgets() {
 
         // Non Widgets
         include_once(GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-add-listing.php');
+        include_once(GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-single-taxonomies.php');
 
         // 3rd party widgets
         if(class_exists('Ninja_Forms')){

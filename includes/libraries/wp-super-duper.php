@@ -131,6 +131,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				<div class="sd-shortcode-left-wrap">
 					<?php
 					//print_r( $sd_widgets );
+					asort($sd_widgets );
 					if(!empty($sd_widgets)){
 						echo '<select onchange="sd_get_shortcode_options(this);">';
 						echo "<option>".__('Select shortcode')."</option>";
