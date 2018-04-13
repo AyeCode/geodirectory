@@ -4,6 +4,8 @@ Some predefined custom fields are single use only and now show a warning if atte
 Search still looks for featured column even if missing - FIXED
 Best of widget CSS and template changes - FIXED
 GD Dashboard widget refactored to remove login form when logged out - CHANGED
+Fieldset shows error when being added - FIXED
+Add listing can sometime show default city warning multiple times - FIXED
 
 v2.0.0.10-beta
 gd_map shortcode should not show "Enable marker cluster?" if plugin not active - FIXED

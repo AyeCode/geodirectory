@@ -343,21 +343,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'default'  => '',
 					'advanced' => true
 				),
-				array(
-					'name' => __('Advanced pagination', 'geodirectory'),
-					'desc' => __('This will add extra pagination info like "Showing listings x-y of z" after/before pagination.', 'geodirectory'),
-					'id' => 'search_advanced_pagination',
-					'type' => 'select',
-					'class' => 'geodir-select',
-					'options' => array(
-						'' => __('Never Display', 'geodirectory'),
-						'after' => __('After Pagination', 'geodirectory'),
-						'before' => __('Before Pagination', 'geodirectory')
-					),
-					'desc_tip' => true,
-					'default'  => '',
-					'advanced' => true
-				),
 
 
 				array( 'type' => 'sectionend', 'id' => 'search_options' ),
