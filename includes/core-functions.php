@@ -282,6 +282,7 @@ function geodir_params()
 		'txt_closed_today' => __('Today closed', 'geodirectory'),
         'txt_closed' => __('Closed', 'geodirectory'),
         'txt_single_use' => __("This field is single use only and is already being used.", 'geodirectory'),
+        'txt_page_settings' => __("Page selections should not be the same, please correct the issue to continue.", 'geodirectory'),
         'txt_save_other_setting' => __('Please save the current setting before adding a new one.', 'geodirectory'),
 		'gmt_offset' => geodir_gmt_offset(),
 		'search_users_nonce' => wp_create_nonce( 'search-users' )

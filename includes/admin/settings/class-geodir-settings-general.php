@@ -283,7 +283,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc_tip' => true,
 				),
 				array(
-					'name'     => __( 'Archive page item', 'geodirectory' ),
+					'name'     => __( 'Archive item page', 'geodirectory' ),
 					'desc'     => __( 'Select the page to use for GD archive items, this is the item template used on taxonomy and CPT pages', 'geodirectory' ),
 					'id'       => 'page_archive_item',
 					'type'     => 'single_select_page',

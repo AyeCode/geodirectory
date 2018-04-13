@@ -1237,7 +1237,7 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
                 $html .= '</span><span class="geodir-email-address-output">';
                 $email = $gd_post->{$cf['htmlvar_name']} ;
-                if(!empty($email) && ($email!='testing@example.com') && ($e_split = explode('@',$email))){
+                if(!empty($email) && ($email!='testing@example.com') && ($e_split = explode('@',$email)) && !defined( 'REST_REQUEST' )){
                     /**
                      * Filter email custom field name output.
                      *
@@ -1248,6 +1248,8 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                      */
                     $email_name = apply_filters('geodir_email_field_name_output',$email,$cf);
                     $html .=  "<script>document.write('<a href=\"mailto:'+'$e_split[0]' + '@' + '$e_split[1]'+'\">$email_name</a>')</script>";
+                }elseif(defined( 'REST_REQUEST' ) && REST_REQUEST){
+                    $html .=  "<a href='mailto:$email'>$email</a>";
                 }else{
                     $html .=  $email;
                 }

@@ -103,6 +103,9 @@ jQuery(window).load(function() {
 		gdColorPicker.wpColorPicker();
 	}
 
+    // Save settings validation
+    gd_settings_validation();
+
 });
 
 /**
@@ -1191,5 +1194,36 @@ function gd_recommended_activate_plugin($this,$url,$slug){
 
     jQuery.post($url, function(data, status){
         console.log($slug+'plugin activated')
+    });
+}
+
+// Some settings validation
+
+
+
+
+function gd_settings_validation(){
+    jQuery("#mainform").submit(function(e){
+        $error = '';
+
+        if(jQuery('#page_location').length){
+            var arr = [];
+            jQuery("#mainform select").each(function(){
+                var value = jQuery(this).val();
+                if(value ){
+                    if (arr.indexOf(value) == -1)
+                        arr.push(value);
+                    else
+                        $error = geodir_params.txt_page_settings;
+                }
+               });
+        }
+
+        if($error != ''){
+            console.log(arr);
+            alert($error );
+            return false;
+        }
+
     });
 }

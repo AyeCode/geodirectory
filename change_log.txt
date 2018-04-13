@@ -6,6 +6,9 @@ Best of widget CSS and template changes - FIXED
 GD Dashboard widget refactored to remove login form when logged out - CHANGED
 Fieldset shows error when being added - FIXED
 Add listing can sometime show default city warning multiple times - FIXED
+Email custom field not showing in map bubble if set to do so - FIXED
+Multiselect custom field not resizing DB varchar value on options change - FIXED
+General style and spelling corrections - FIXED
 
 v2.0.0.10-beta
 gd_map shortcode should not show "Enable marker cluster?" if plugin not active - FIXED
@@ -68,7 +71,7 @@ Shortcode builder button added to pages/posts - ADDED
 
 v2.0.0.2-beta
 Business Hours not working on map popup - FIXED
-Backend author filed should show all users not only authors - FIXED
+Backend author field should show all users not only authors - FIXED
 Backend add listing has no validation - FIXED
 Lat/Lon HTML5 number inputs can show comma instead of decimal depending on browser language - FIXED
 submit_ip is varchar(20) which will not support IPv6 address - FIXED
@@ -421,7 +424,7 @@ Added filters to be able to add your own vars to titles and meta - ADDED
 Some plugins/themes can unset the page_id which breaks some features - FIXED
 Events with long running times sometimes not showing on the map - FIXED
 Some notification subjects not translatable - FIXED
-Datepicker custom filed now has filter to add extra params - ADDED
+Datepicker custom field now has filter to add extra params - ADDED
 Visual Composer can throw error for widget view all links - FIXED
 Added TouristAttraction schema type for categories - ADDED
 Added filter to be able to add/remove schema types - ADDED

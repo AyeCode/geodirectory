@@ -59,7 +59,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 geodir_get_template_part('content', 'archive-listing');
             }
         }else{
-            _e("No listings found that mach your criteria.","geodirectory");
+            _e("No listings found that match your selection.","geodirectory");
         }
 
         return ob_get_clean();
