@@ -46,6 +46,7 @@ function goedir_register_widgets() {
         new GeoDir_Widget_Single_Next_Prev();
         new GeoDir_Widget_Single_Closed_Text();
         new GeoDir_Widget_Loop();
+        new GeoDir_Widget_Loop_Paging();
 
         // 3rd party widgets
         if(class_exists('Ninja_Forms')){

@@ -19,7 +19,6 @@ class GeoDir_Shortcodes {
      */
     public static function init() {
         $shortcodes = array(
-            'gd_loop_paging'            => __CLASS__ . '::gd_loop_paging', // only for GD archive page
             'gd_loop_actions'           => __CLASS__ . '::gd_loop_actions', // only for GD archive page
             'gd_archive_item_section'            => __CLASS__ . '::gd_archive_item_section',
 
@@ -48,16 +47,6 @@ class GeoDir_Shortcodes {
         return ob_get_clean();
     }
     
-
-    public static function gd_loop_paging( $atts = array(), $content = null ) {
-        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
-            ob_start();
-            geodir_loop_paging();
-            return ob_get_clean();
-        }else{
-            return "";
-        }
-    }
 
     public static function gd_loop_actions( $atts = array(), $content = null ) {
         if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
