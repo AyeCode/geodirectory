@@ -21,12 +21,12 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
-            'block-keywords'=> "['loop','archive','geodir']",
+            'block-keywords'=> "['loop','paging','geodir']",
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_loop_paging', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Loop Paging','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-loop-container', // widget class
+                'classname'   => 'geodir-loop-paging-container', // widget class
                 'description' => esc_html__('Shows the pagination links if the current query has multiple pages of results.','geodirectory'), // widget description
                 'geodirectory' => true,
                 'gd_show_pages' => array(),
