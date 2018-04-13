@@ -581,8 +581,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			$shortcode_args = array();
 			$output = '';
+			$no_wrap = isset($this->options['no_wrap']) && $this->options['no_wrap'] ?  true : false;
 			$main_content = $this->output( $args, $shortcode_args, $content );
-			if($main_content){
+			if($main_content && !$no_wrap){
 				// wrap the shortcode in a dive with the same class as the widget
 				$output .= '<div class="'.$calss.'">';
 				if(!empty($args['title'])){
@@ -604,6 +605,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 				$output .= $main_content;
 				$output .= '</div>';
+			}elseif($main_content && $no_wrap){
+				$output .= $main_content;
 			}
 
 			return $output;
