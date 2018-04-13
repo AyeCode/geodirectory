@@ -11,6 +11,7 @@
 @import "partials/widget_dashboard";
 @import "partials/widget_categories";
 @import "partials/widget_images";
+@import "partials/widget_best_of";
 @import "partials/maps";
 
 
@@ -1110,39 +1111,6 @@ body.geodir-x-search {
     margin-right: 0px;
 }
 
-/* GD > Loginbox */
-.geodir-loginbox-list li {
-    list-style: none;
-    display: block;
-    padding-bottom: 10px;
-    border-bottom: 1px #ccc solid;
-    margin-bottom: 10px;
-}
-
-.geodir-loginbox-list i.fa {
-    margin-right: 5px;
-}
-
-.loginform1 .user_login1,
-.loginform1 .user_pass1 {
-    width: 100%;
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    box-sizing: border-box;
-}
-
-.loginform1 .b_signin {
-    margin-left: 0px;
-}
-
-.geodir-new-forgot-link {
-    font-size: 12px;
-    padding-top: 5px;
-}
-
-a.goedir-forgot-link {
-    float: right;
-}
 
 /* GD >Social like */
 .geodir-widget.geodir_social_like_widget {
@@ -1302,136 +1270,6 @@ div#jquery-lightbox {
 
 /* ----- 20-02-2015 ----*/
 
-#geodir-bestof-places {
-    padding: 10px;
-    clear: both;
-}
-
-#geodir-bestof-loading {
-    text-align: center;
-    padding: 50px 0;
-    display: none;
-}
-
-.geodir-bestof-cat-list a {
-    text-decoration: none;
-}
-
-.geodir-bestof-cat-list a:active, .geodir-bestof-cat-list a:focus {
-    outline: 0;
-    outline-style: none;
-    outline-width: 0;
-}
-
-.geodir-bestof-cat-list a span {
-    display: block;
-    overflow: hidden;
-    padding-bottom: 5px;
-    line-height: 18px;
-    padding-bottom: 5px;
-    vertical-align: middle;
-    display: inline-block;
-}
-
-.geodir-bestof-cat-list a small {
-    color: #757575;
-    line-height: 1px;
-    display: block;
-}
-
-#geodir-bestof-places h3.bestof-cat-title a {
-    float: right;
-    font-size: 13px;
-}
-
-.geo-bestof-contentwrap {
-    border: 1px #e1e1e1 solid;
-    border-top: none;
-}
-
-.bestof-tabs-on-top section.widget.geodir_bestof_widget,
-.bestof-tabs-on-left section.widget.geodir_bestof_widget,
-.bestof-tabs-as-dropdown section.widget.geodir_bestof_widget {
-    clear: both;
-    background-color: #fff;
-    padding: 10px;
-    margin-bottom: 10px;
-}
-
-.bestof-tabs-on-left .gd-bestof-tabs {
-    position: relative;
-    float: left;
-    width: 200px;
-}
-
-.bestof-tabs-on-left .geo-bestof-contentwrap {
-    position: relative;
-    float: right;
-    width: 100%;
-    margin-left: -200px;
-    border-top: 1px #e1e1e1 solid;
-    border-left: none;
-}
-
-.bestof-tabs-on-left #geodir-bestof-places,
-.bestof-tabs-on-left #geodir-bestof-loading {
-    position: relative;
-    margin-left: 200px;
-}
-
-.bestof-tabs-on-left dl.geodir-tab-head dd {
-    float: none;
-}
-
-.bestof-tabs-on-left dl.geodir-tab-head dd:last-child {
-    border-right: none;
-}
-
-.bestof-tabs-on-left dl.geodir-tab-head dd a {
-    border-bottom: none;
-}
-
-.bestof-tabs-on-left dl.geodir-tab-head dd a {
-    border-right: 1px #e1e1e1 solid;
-    padding-right: 0px;
-}
-
-.bestof-tabs-on-left dl.geodir-tab-head dd.geodir-tab-active a {
-    border-top: 1px #e1e1e1 solid !important;
-    border-left: 1px #45B8F2 solid !important;
-    border-right: none !important;
-}
-
-.bestof-tabs-on-left #geodir-bestof-places {
-    padding: 15px;
-}
-
-.bestof-tabs-on-left #geodir-bestof-places h3 {
-    margin: 0;
-}
-
-#geodir_bestof_tab_dd {
-    margin-bottom: 10px;
-}
-
-.bestof-cat-icon {
-    float: left;
-    position: relative;
-    margin: 8px;
-    height: 30px;
-    margin-left: 0;
-}
-
-.bestof-tabs-on-left section.widget.geodir_bestof_widget {
-    overflow: hidden;
-}
-
-.bestof-tabs-on-left #geodir_bestof_tab_dd,
-.bestof-tabs-on-left .geodir-chosen-container,
-.bestof-tabs-on-top #geodir_bestof_tab_dd,
-.bestof-tabs-on-top .geodir-chosen-container {
-    display: none;
-}
 
 /*shortcode styles*/
 

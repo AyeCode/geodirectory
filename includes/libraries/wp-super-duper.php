@@ -51,8 +51,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			if ( isset( $options['class_name'] ) ) {
 				// register widget
 				$this->class_name = $options['class_name'];
-				$this->register_widget();
-
+				
 				// register shortcode
 				$this->register_shortcode();
 
@@ -92,11 +91,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 //			echo '####';
 
 			$shortcode = isset($_REQUEST['shortcode']) && $_REQUEST['shortcode'] ? sanitize_title_with_dashes($_REQUEST['shortcode']) : '';
-			if(!$shortcode){return;}
+			if(!$shortcode){wp_die();}
 			$widget_args = isset($sd_widgets[$shortcode]) ? $sd_widgets[$shortcode] :'';
-			if(!$widget_args){return;}
+			if(!$widget_args){wp_die();}
 			$class_name = isset($widget_args['class_name']) && $widget_args['class_name'] ? $widget_args['class_name'] : '';
-			if(!$class_name){return;}
+			if(!$class_name){wp_die();}
 
 
 
@@ -132,6 +131,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				<div class="sd-shortcode-left-wrap">
 					<?php
 					//print_r( $sd_widgets );
+					asort($sd_widgets );
 					if(!empty($sd_widgets)){
 						echo '<select onchange="sd_get_shortcode_options(this);">';
 						echo "<option>".__('Select shortcode')."</option>";
@@ -513,15 +513,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $options;
-		}
-
-		/**
-		 * Register the parent widget class
-		 */
-		public function register_widget() {
-//		add_action( 'widgets_init', function () {
-//			register_widget( $this->class_name );
-//		} );
 		}
 
 		/**

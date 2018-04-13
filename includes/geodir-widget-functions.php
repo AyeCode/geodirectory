@@ -39,6 +39,14 @@ function goedir_register_widgets() {
         register_widget( 'GeoDir_Widget_Listings' );
         register_widget( 'GeoDir_Widget_Map' );
 
+        // Non Widgets
+        new GeoDir_Widget_Add_Listing();
+        new GeoDir_Widget_Single_Taxonomies();
+        new GeoDir_Widget_Single_Tabs();
+        new GeoDir_Widget_Single_Next_Prev();
+        new GeoDir_Widget_Single_Closed_Text();
+        new GeoDir_Widget_Loop();
+
         // 3rd party widgets
         if(class_exists('Ninja_Forms')){
             register_widget( 'GeoDir_Widget_Ninja_Forms' );
@@ -101,7 +109,8 @@ function geodir_bestof_places_by_term($query_args) {
     $gd_session->set('gd_listing_view', '1');
     $geodir_is_widget_listing = true;
 
-    geodir_get_template( 'widget-listing-listview.php', array( 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget, 'before_widget' => $before_widget ) );
+    geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+
 
     $geodir_is_widget_listing = false;
 
