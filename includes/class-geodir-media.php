@@ -241,6 +241,7 @@ class GeoDir_Media {
 			GEODIR_ATTACHMENT_TABLE,
 			array(
 				'post_id' => $post_id,
+				'date_gmt'    => gmdate('Y-m-d H:i:s'),
 				'user_id'   => get_current_user_id(),
 				'title' => $image_title,
 				'caption' => $image_caption,
@@ -253,6 +254,7 @@ class GeoDir_Media {
 			),
 			array(
 				'%d',
+				'%s',
 				'%d',
 				'%s',
 				'%s',
@@ -309,6 +311,7 @@ class GeoDir_Media {
 			GEODIR_ATTACHMENT_TABLE,
 			array(
 				'post_id' => $post_id,
+				'date_gmt'    => gmdate('Y-m-d H:i:s'),
 				'user_id'   => get_current_user_id(),
 				'title' => $image_title,
 				'caption' => $image_caption,
@@ -321,6 +324,7 @@ class GeoDir_Media {
 			),
 			array(
 				'%d',
+				'%s',
 				'%d',
 				'%s',
 				'%s',

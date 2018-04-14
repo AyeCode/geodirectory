@@ -544,6 +544,7 @@ class GeoDir_Admin_Install {
 		$tables .= " CREATE TABLE " . GEODIR_ATTACHMENT_TABLE . " (
 						ID int(11) NOT NULL AUTO_INCREMENT,
 						post_id int(11) NOT NULL,
+						date_gmt datetime NULL default null,
 						user_id int(11) DEFAULT NULL,
 						title varchar(254) NULL DEFAULT NULL,
 						caption varchar(254) NULL DEFAULT NULL,
