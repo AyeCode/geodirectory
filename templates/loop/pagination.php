@@ -16,9 +16,10 @@ if ( $wp_query->max_num_pages <= 1 ) {
 <nav class="geodir-pagination">
 	<?php
 
-	$search_advanced_pagination = geodir_get_option('search_advanced_pagination');
+	//$gd_advanced_pagination = geodir_get_option('search_advanced_pagination');
+	global $gd_advanced_pagination;
 	$pagination_info = '';
-	if ($search_advanced_pagination != '') {
+	if ($gd_advanced_pagination != '') {
 		global $posts_per_page, $wpdb, $paged;
 
 		$post_type = geodir_get_current_posttype();
@@ -81,7 +82,7 @@ if ( $wp_query->max_num_pages <= 1 ) {
 
 	}
 
-	if($search_advanced_pagination=='before' && $pagination_info){
+	if($gd_advanced_pagination=='before' && $pagination_info){
 		echo $pagination_info;
 	}
 
@@ -98,7 +99,7 @@ if ( $wp_query->max_num_pages <= 1 ) {
 		'mid_size'     => 3,
 	) ) );
 
-	if($search_advanced_pagination=='after' && $pagination_info){
+	if($gd_advanced_pagination=='after' && $pagination_info){
 		echo $pagination_info;
 	}
 	?>

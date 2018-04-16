@@ -414,14 +414,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				<label for="option_values" class="gd-cf-tooltip-wrap">
 					<span
 						class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
-						title='
-						<?php _e( 'Option Values should be separated by comma.', 'geodirectory' ); ?><br/>
+						title='<?php _e( 'Option Values should be separated by comma.', 'geodirectory' ); ?><br/>
 						<?php _e('If using for a "tick filter" place a / and then either a 1 for true or 0 for false', 'geodirectory');?><br/>
 						<?php _e('eg: "No Dogs Allowed/0,Dogs Allowed/1" (Select only, not multiselect)', 'geodirectory');?><br/>
 						<small><?php if ($field_type == 'multiselect' || $field_type == 'select') { ?>
-								<br/>
 								<span><?php _e('- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'geodirectory'); ?></span>
-								<br/>
 								<span><?php _e('eg: "{optgroup}Pets Allowed|No Dogs Allowed/0,Dogs Allowed/1{/optgroup},{optgroup}Sports|Cricket/Cricket,Football/Football,Hockey{/optgroup}"', 'geodirectory'); ?></span>
 							<?php } ?></small>
 						'>

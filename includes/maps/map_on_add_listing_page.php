@@ -96,6 +96,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
     var oldstr_address;
     var oldstr_zip;
     var strictBounds;
+    var doingGeocode = false;
     function geocodePosition(latLon, address) {
         console.log(address);
         if (address && (address.locality || address.postal_town) && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
@@ -107,7 +108,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         }
 
         geocoder.geocode(doGeoCode, function (responses) {
-            geocodeResponse(responses)
+            geocodeResponse(responses);
         });
     }
     
@@ -119,6 +120,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
             var getCity = '';
             var getState = '';
             var getCountry = '';
+
             getCountryISO = '';
 
             street_number = '';
@@ -410,7 +412,8 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
                 jQuery.goMap.map.setCenter(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
                 baseMarker.setPosition(new google.maps.LatLng('<?php echo $default_lat; ?>', '<?php echo $default_lng; ?>'));
                 updateMarkerPosition(baseMarker.getPosition());
-                geocodePosition(baseMarker.getPosition());
+                //geocodePosition(baseMarker.getPosition());
+                setTimeout(function(){jQuery('#address_street,#address_zip').val('');}, 100);
             }
             <?php } ?>
             updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry);

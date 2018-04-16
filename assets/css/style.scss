@@ -281,7 +281,7 @@ ul#breadcrumbs {
     padding: 10px;
 }
 
-.geodir-company_info p {
+.geodir-company_info > p {
     padding: 5px 0 15px 0;
     margin: 5px 0 10px 0;
     border-bottom: 1px #eee solid;
@@ -1258,14 +1258,16 @@ div#jquery-lightbox {
     z-index: 1520
 }
 
+
 .gd-cats-display-radio,
 .gd-cats-display-checkbox,
-.gd_multi_choice {
+ul.gd_multi_choice {
     margin-left: 0px;
     max-height: 150px;
     overflow-y: scroll;
     border: 1px #ccc solid;
     padding: 10px;
+    list-style: none;
 }
 
 /* ----- 20-02-2015 ----*/

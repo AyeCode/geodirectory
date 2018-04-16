@@ -251,6 +251,7 @@ Tooltips
         text-shadow: none !important;
         z-index: 9999 !important;
         white-space: pre-line; /* show line breaks */
+        word-wrap:break-word;
         a{
             color: #09afff;
         }

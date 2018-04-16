@@ -753,7 +753,7 @@
 						<label for="cat_sort" class="gd-cf-tooltip-wrap">
 							<span
 								class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
-								title="<?php _e( 'Lets you use this filed as a sorting option, set from sorting options above.', 'geodirectory' ); ?>">
+								title="<?php _e( 'Lets you use this field as a sorting option, set from sorting options above.', 'geodirectory' ); ?>">
 							</span>
 							<?php _e( 'Include this field in sorting options :', 'geodirectory' ); ?>
 						</label>

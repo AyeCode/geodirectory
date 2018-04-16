@@ -283,7 +283,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc_tip' => true,
 				),
 				array(
-					'name'     => __( 'Archive page item', 'geodirectory' ),
+					'name'     => __( 'Archive item page', 'geodirectory' ),
 					'desc'     => __( 'Select the page to use for GD archive items, this is the item template used on taxonomy and CPT pages', 'geodirectory' ),
 					'id'       => 'page_archive_item',
 					'type'     => 'single_select_page',
@@ -339,21 +339,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id' => 'search_default_button_text',
 					'type' => 'text',
 					'placeholder' => get_search_default_button_text(),
-					'desc_tip' => true,
-					'default'  => '',
-					'advanced' => true
-				),
-				array(
-					'name' => __('Advanced pagination', 'geodirectory'),
-					'desc' => __('This will add extra pagination info like "Showing listings x-y of z" after/before pagination.', 'geodirectory'),
-					'id' => 'search_advanced_pagination',
-					'type' => 'select',
-					'class' => 'geodir-select',
-					'options' => array(
-						'' => __('Never Display', 'geodirectory'),
-						'after' => __('After Pagination', 'geodirectory'),
-						'before' => __('Before Pagination', 'geodirectory')
-					),
 					'desc_tip' => true,
 					'default'  => '',
 					'advanced' => true
