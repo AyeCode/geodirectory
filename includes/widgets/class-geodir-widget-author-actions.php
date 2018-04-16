@@ -36,7 +36,8 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 				'classname'   	=> 'geodir-author-actions', // widget class
 				'description' 	=> esc_html__( 'Display author actions.', 'geodirectory' ), // widget description
 				'geodirectory' 	=> true,
-				'gd_show_pages' => array( 'detail' ),
+				'gd_wgt_showhide' => 'show_on',
+				'gd_wgt_restrict' => array( 'gd-detail' ),
 			),
 			'arguments'     => array(
 				'hide_edit'  => array(

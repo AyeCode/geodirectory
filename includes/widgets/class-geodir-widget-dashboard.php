@@ -36,7 +36,6 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 			    'description' => esc_html__('Shows the user dashboard to logged in users.','geodirectory'), // widget description
 			    'customize_selective_refresh' => true,
 			    'geodirectory' => true,
-			    'gd_show_pages' => array(),
 		    ),
 		    'arguments'     => array(
 			    'title'  => array(

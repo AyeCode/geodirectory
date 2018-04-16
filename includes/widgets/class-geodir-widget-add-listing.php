@@ -42,7 +42,6 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                 'classname'   => 'geodir-add-listing-container', // widget class
                 'description' => esc_html__('Shows the GeoDirectory add listing form.','geodirectory'), // widget description
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
         );
 

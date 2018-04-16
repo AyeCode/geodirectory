@@ -31,7 +31,6 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
                 'classname'   => 'geodir-search-container', // widget class
                 'description' => esc_html__('Shows the GeoDirectory search bar.','geodirectory'), // widget description
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
 
             //@todo add options via advanced search

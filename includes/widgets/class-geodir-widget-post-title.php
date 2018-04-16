@@ -43,10 +43,10 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_title', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Post Title','geodirectory'), // the name of the widget.
-			//'disable_widget'=> true,
 			'widget_ops'    => array(
 				'classname'   => 'geodir-post-title', // widget class
 				'description' => esc_html__('This shows a GD post title with link.','geodirectory'), // widget description
+				'geodirectory' => true,
 			),
 			'arguments'     => array(
 				'tag'  => array(

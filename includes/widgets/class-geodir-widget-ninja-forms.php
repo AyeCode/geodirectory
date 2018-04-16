@@ -38,7 +38,8 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 'description' => esc_html__('Lets you use a ninja form to send to listings.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
+                'gd_wgt_showhide' => 'show_on',
+                'gd_wgt_restrict' => array( 'gd-detail' ),
             ),
 
         );

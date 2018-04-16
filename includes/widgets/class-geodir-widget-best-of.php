@@ -37,7 +37,6 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			    'description' => esc_html__('Shows the best of listings from categories.','geodirectory'), // widget description
 			    'customize_selective_refresh' => true,
 			    'geodirectory' => true,
-			    'gd_show_pages' => array(),
 		    ),
 		    'arguments'     => array(
 			    'title'  => array(

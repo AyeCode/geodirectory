@@ -27,7 +27,8 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 				'description' => esc_html__('This shows a post single post meta.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,
-				'gd_show_pages' => array( 'detail' ),
+				'gd_wgt_showhide' => 'show_on',
+				'gd_wgt_restrict' => array( 'gd-detail' ), //@todo implement this on all other widgets
 			),
 			'arguments'     => array(
 				'id'  => array(
@@ -87,7 +88,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc_tip' => true,
 					'default'  => '',
 					'advanced' => false
-				)
+				),
 			)
 		);
 
@@ -97,6 +98,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 	}
 
+	//gd_wgt_showhide
 
 	/**
 	 * The Super block output function.

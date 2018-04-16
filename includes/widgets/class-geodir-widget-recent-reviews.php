@@ -35,7 +35,6 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
                 'description' => esc_html__('Display a list of recent reviews from GeoDirectory listings.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
             'arguments'     => array(
                 'title'  => array(
