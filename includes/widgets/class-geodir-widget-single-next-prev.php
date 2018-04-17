@@ -29,7 +29,6 @@ class GeoDir_Widget_Single_Next_Prev extends WP_Super_Duper {
                 'classname'   => 'geodir-single-taxonomies-container', // widget class
                 'description' => esc_html__('Shows the current post`s next and previous post links on the details page.','geodirectory'), // widget description
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
         );
 

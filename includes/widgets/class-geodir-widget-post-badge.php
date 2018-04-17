@@ -26,7 +26,6 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'classname'     => 'geodir-post-badge',                                     	// widget class
 				'description'   => esc_html__( 'Displays the post badge.', 'geodirectory' ),	// widget description
 				'geodirectory'  => true,
-				'gd_show_pages' => array(),
 			)
 		);
 

@@ -29,7 +29,6 @@ class GeoDir_Widget_Single_Closed_Text extends WP_Super_Duper {
                 'classname'   => 'geodir-single-taxonomies-container', // widget class
                 'description' => esc_html__('Shows a closed down warning text if a post has the closed status.','geodirectory'), // widget description
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
         );
 

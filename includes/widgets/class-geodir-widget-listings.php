@@ -38,7 +38,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'description' => esc_html__('Shows the GD listings filtered by your choices.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
         );
 

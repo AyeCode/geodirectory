@@ -29,7 +29,6 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 'classname'   => 'geodir-single-tabs-container', // widget class
                 'description' => esc_html__('Shows the current post`s tabs information.','geodirectory'), // widget description
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
         );
 

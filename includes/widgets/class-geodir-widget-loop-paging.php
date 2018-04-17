@@ -29,7 +29,6 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
                 'classname'   => 'geodir-loop-paging-container', // widget class
                 'description' => esc_html__('Shows the pagination links if the current query has multiple pages of results.','geodirectory'), // widget description
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
             'arguments'     => array(
                 'show_advanced'  => array(

@@ -29,7 +29,6 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 'classname'   => 'geodir-loop-container', // widget class
                 'description' => esc_html__('Shows the current posts from the main WP query according to the URL.  This is only used on the `GD Archive template` page.  It loops through each post and outputs the `GD Archive Item` template.','geodirectory'), // widget description
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
         );
 

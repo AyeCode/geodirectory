@@ -71,6 +71,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'widget_ops'    => array(
 				'classname'   => 'geodir-post-slider', // widget class
 				'description' => esc_html__('This shows a GD post image.','geodirectory'), // widget description
+				'geodirectory' => true,
 			),
 			'arguments'     => array(
 				'type'  => array(

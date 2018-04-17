@@ -46,7 +46,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'classname'     => 'geodir-wgt-map',                                        // widget class
 				'description'   => esc_html__( 'Displays the map.', 'geodirectory' ),        // widget description
 				'geodirectory'  => true,
-				'gd_show_pages' => array(),
 			)
 		);
 

@@ -1,5 +1,6 @@
 v2.0.0.12-beta
 Attachment table date_gmt field added - ADDED
+Widget show/hide settings improved for better UI - CHANGED
 
 v2.0.0.11-beta
 gd_listings shortcode/widget sort_by can now use custom sort_by options - CHANGED

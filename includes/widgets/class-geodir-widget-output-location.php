@@ -34,7 +34,8 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
                 'description' => esc_html__('This can be used to output many custom fields in one location.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
-                'gd_show_pages' => array( 'detail' ),
+                'gd_wgt_showhide' => 'show_on',
+                'gd_wgt_restrict' => array( 'gd-detail' ),
             ),
             'arguments'     => array(
                 'location'  => array(

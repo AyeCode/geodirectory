@@ -34,7 +34,9 @@ class GeoDir_Admin {
 		// Add labels to the GD pages.
 		add_filter('display_post_states',array( $this, 'set_page_labels' ),10,2);
 
-		if ( ! empty( $_POST['action'] ) && $_POST['action'] == 'save-widget' ) { // handle save widget
+		global $pagenow;
+//		echo $pagenow.'###';exit;
+		if ( ! empty( $_POST['action'] ) && ($_POST['action'] == 'save-widget' || $_POST['action'] == 'update-widget') || $pagenow == 'widgets.php' || $pagenow == 'customize.php' ) { // handle save widget
 			GeoDir_Admin_Widgets::init();
 		}
 

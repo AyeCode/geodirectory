@@ -36,6 +36,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$sd_widgets[$options['base_id']] = array('name'=> $options['name'],'class_name'=>$options['class_name']);
 			$this->base_id = $options['base_id'];
 			// lets filter the options before we do anything
+			$options       = apply_filters( "wp_super_duper_options", $options );
 			$options       = apply_filters( "wp_super_duper_options_{$this->base_id}", $options );
 			$options       = $this->add_name_from_key( $options );
 			$this->options = $options;
@@ -801,7 +802,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
 								} elseif ( $args['type'] == 'select' && ! empty( $args['multiple'] ) ) {
 									$type    = 'array';
-									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+									if(is_array($args['default'])){
+										$default = isset( $args['default'] ) ? "['" . implode("','", $args['default']) . "']" : "[]";
+									}else{
+										$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
+									}
 								} elseif ( $args['type'] == 'multiselect' ) {
 									$type    = 'array';
 									$default = isset( $args['default'] ) ? "'" . $args['default'] . "'" : "''";
@@ -1330,7 +1335,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			if ( isset( $instance[ $args['name'] ] ) ) {
 				$value = $instance[ $args['name'] ];
 			} elseif ( ! isset( $instance[ $args['name'] ] ) && ! empty( $args['default'] ) ) {
-				$value = esc_html( $args['default'] );
+				$value = is_array($args['default']) ? array_map("esc_html",$args['default']) : esc_html( $args['default'] );
 			} else {
 				$value = '';
 			}
@@ -1392,23 +1397,30 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 						break;
 					case "select":
+						$multiple = isset( $args['multiple'] ) && $args['multiple']  ? true : false;
+						if($multiple){if(empty($value)){$value = array();}}
 						?>
 						<label
 							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
 						<select <?php echo $placeholder; ?> class="widefat"
 							<?php echo $custom_attributes;?>
 							                                id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							                                name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
-							<?php if ( isset( $args['multiple'] ) && $args['multiple'] ) {
+							                                name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); if($multiple){echo "[]";}?>"
+							<?php if ($multiple) {
 								echo "multiple";
 							} //@todo not implemented yet due to gutenberg not supporting it
 							?>
 						>
 							<?php
 
+
 							if ( ! empty( $args['options'] ) ) {
 								foreach ( $args['options'] as $val => $label ) {
-									echo "<option value='$val' " . selected( $value, $val, false ) . ">$label</option>";
+//									print_r($value);
+//									echo '@@@'.print_r($val,true),'@@@';
+//									echo '###'.$value.'###';
+									if ($multiple) {$selected = in_array($val,$value) ? 'selected="selected"' : ''; }else{$selected = selected( $value, $val, false );}
+									echo "<option value='$val' " . $selected . ">$label</option>";
 								}
 							}
 							?>
@@ -1511,6 +1523,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @todo we should add some sanitation here.
 		 */
 		public function update( $new_instance, $old_instance ) {
+//			print_r($new_instance);
+//			print_r($old_instance);
+//			exit;
 			//save the widget
 			$instance = array_merge( (array) $old_instance, (array) $new_instance );
 

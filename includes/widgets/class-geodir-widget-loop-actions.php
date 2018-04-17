@@ -29,7 +29,6 @@ class GeoDir_Widget_Loop_Actions extends WP_Super_Duper {
                 'classname'   => 'geodir-loop-actions-container', // widget class
                 'description' => esc_html__('Shows the archive loop actions such as sort by and grid view,  only used on Archive template page, usually above `gd_loop`.','geodirectory'), // widget description
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
         );
 

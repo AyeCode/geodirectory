@@ -30,7 +30,6 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
                 'classname'   => 'geodir-archive-item-section-container', // widget class
                 'description' => esc_html__('This provides opening and closing sections to be able to wrap output and split the archive item template into left and right.','geodirectory'), // widget description
                 'geodirectory' => true,
-                'gd_show_pages' => array(),
             ),
             'arguments'     => array(
                 'type'  => array(
