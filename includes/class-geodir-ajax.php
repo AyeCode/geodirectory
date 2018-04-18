@@ -54,6 +54,7 @@ class GeoDir_AJAX {
 			'cpt_categories' => true,
 			'json_search_users' => false,
 			'ninja_forms' => true,
+			'get_tabs_form' => false,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -66,6 +67,35 @@ class GeoDir_AJAX {
 				add_action( 'geodir_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	/**
+	 * Get tabs input form.
+	 */
+	public static function get_tabs_form(){
+		// security
+		check_ajax_referer( 'gd_new_field_nonce', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		//print_r($_REQUEST);exit;
+
+		$tab_type = isset($_POST['tab_type']) && $_POST['tab_type'] ? esc_attr($_POST['tab_type']) : '';
+
+		if(!$tab_type){
+			wp_send_json_error( __("No tab_type provided.","geodirectory") );
+		}else{
+			$result = GeoDir_Settings_Cpt_Tabs::get_tab_item($_POST);
+			
+			if(is_wp_error( $result ) ){
+				wp_send_json_error( $result->get_error_message() );
+			}else{
+				wp_send_json_success($result);
+			}
+		}
+
+		wp_die();
 	}
 
 	public static function ninja_forms(){

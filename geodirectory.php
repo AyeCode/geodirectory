@@ -142,7 +142,8 @@ final class GeoDirectory {
 		$this->define( 'GEODIR_API_KEYS_TABLE', $plugin_prefix . 'api_keys' ); // rest api keys table
         $this->define( 'GEODIR_ATTACHMENT_TABLE', $plugin_prefix . 'attachments' ); // attachments table
         $this->define( 'GEODIR_COUNTRIES_TABLE', $plugin_prefix . 'countries' ); // countries table
-        $this->define( 'GEODIR_CUSTOM_FIELDS_TABLE', $plugin_prefix . 'custom_fields' ); // custom fields table
+	    $this->define( 'GEODIR_CUSTOM_FIELDS_TABLE', $plugin_prefix . 'custom_fields' ); // custom fields table
+	    $this->define( 'GEODIR_TABS_LAYOUT_TABLE', $plugin_prefix . 'tabs_layout' ); // custom fields table
         $this->define( 'GEODIR_CUSTOM_SORT_FIELDS_TABLE', $plugin_prefix . 'custom_sort_fields' ); // custom sort fields table
         $this->define( 'GEODIR_ICON_TABLE', $plugin_prefix . 'post_icon' ); // post icon table
         $this->define( 'GEODIR_REVIEW_TABLE', $plugin_prefix . 'post_review' ); // post review table

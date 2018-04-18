@@ -645,7 +645,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$argument_values = array();
 
 			if ( empty( $this->arguments ) ) {
-				$this->arguments = $this->set_arguments();
+				$this->arguments = $this->get_arguments();
 			}
 
 			if ( ! empty( $this->arguments ) ) {
@@ -669,8 +669,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 		public function get_arguments() {
 			if ( empty( $this->arguments ) ) {
-				$this->arguments = $this->add_name_from_key( $this->set_arguments(), true );
+				$this->arguments =  $this->set_arguments();
 			}
+
+			$this->arguments = apply_filters('wp_super_duper_arguments',$this->arguments,$this->options);
+			$this->arguments = $this->add_name_from_key( $this->arguments, true );
+
 
 			return $this->arguments;
 		}
@@ -1325,7 +1329,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function widget_inputs( $args, $instance ) {
 
-//print_r($instance );
+//print_r($instance );echo '###';
 //print_r($args );
 			$class           = "";
 			$element_require = "";

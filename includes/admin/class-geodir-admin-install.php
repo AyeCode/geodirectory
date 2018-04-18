@@ -534,6 +534,21 @@ class GeoDir_Admin_Install {
 							  ) $collate; ";
 
 
+		// Table for storing tabs layout settings
+		$tables .= " CREATE TABLE " . GEODIR_TABS_LAYOUT_TABLE . " (
+							  id int(11) NOT NULL AUTO_INCREMENT,
+							  post_type varchar(100) NULL,
+							  sort_order int(11) NOT NULL,
+							  tab_layout varchar(100) NOT NULL,
+							  tab_type varchar(100) NOT NULL,
+							  tab_level int(11) NOT NULL,
+							  tab_name varchar(255) NOT NULL,
+							  tab_icon varchar(255) NOT NULL,
+							  tab_key varchar(255) NOT NULL,
+							  tab_content text NULL DEFAULT NULL,
+							  PRIMARY KEY  (id)
+							  ) $collate; ";
+
 		// Table for storing place attribute - these are user defined
 		$tables .= " CREATE TABLE " . $plugin_prefix . "gd_place_detail (
 						".implode (",",self::db_cpt_default_columns(false)).",
