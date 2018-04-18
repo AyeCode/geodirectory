@@ -18,17 +18,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 class GeoDir_Admin_Widgets {
 
 	public static function init(){
-		add_filter( 'wp_super_duper_options', array(__CLASS__, 'add_show_hide_widget_options') );
+		//add_filter( 'wp_super_duper_options', array(__CLASS__, 'add_show_hide_widget_options') );
+		add_filter( 'wp_super_duper_arguments', array(__CLASS__, 'add_show_hide_widget_options'), 10, 2 );
 	}
 
-	public static function add_show_hide_widget_options($options){
+	public static function add_show_hide_widget_options($arguments,$options){
 
+		
 		if(isset($options['textdomain']) && $options['textdomain'] == GEODIRECTORY_TEXTDOMAIN){
 			$gd_wgt_showhide = isset($options['widget_ops']['gd_wgt_showhide']) && $options['widget_ops']['gd_wgt_showhide'] ? $options['widget_ops']['gd_wgt_showhide'] : '';
 			$gd_wgt_restrict = isset($options['widget_ops']['gd_wgt_restrict']) && $options['widget_ops']['gd_wgt_restrict'] ? $options['widget_ops']['gd_wgt_restrict'] : '';
-			$options['arguments']['gd_wgt_showhide'] = array(
+			$arguments['gd_wgt_showhide'] = array(
 				'title' => __('Show / Hide Options:', 'geodirectory'),
-				'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
+				'desc' => __('Where the widget should be shown.', 'geodirectory'),
 				'type' => 'select',
 				'options'   =>  array(
 					"show" => __('Show everywhere', 'geodirectory'),
@@ -41,9 +43,9 @@ class GeoDir_Admin_Widgets {
 				'advanced' => false
 			);
 
-			$options['arguments']['gd_wgt_restrict'] = array(
+			$arguments['gd_wgt_restrict'] = array(
 				'title' => __('GD Pages:', 'geodirectory'),
-				'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
+				'desc' => __('The pages that should be included/excluded.', 'geodirectory'),
 				'type' => 'select',
 				'multiple' => true,
 				'options'   =>  array(
@@ -61,7 +63,7 @@ class GeoDir_Admin_Widgets {
 				'element_require' => '[%gd_wgt_showhide%]=="show_on" || [%gd_wgt_showhide%]=="hide_on"',
 			);
 		}
-		return $options;
+		return $arguments;
 	}
 
 }

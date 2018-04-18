@@ -12,12 +12,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
+if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 	/**
 	 * GeoDir_Admin_Settings_General.
 	 */
-	class GeoDir_Settings_Cpt_Sorting extends GeoDir_Settings_Page {
+	class GeoDir_Settings_Cpt_Tabs extends GeoDir_Settings_Page {
 
 		/**
 		 * Post type.
@@ -42,14 +42,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			self::$sub_tab   = ! empty( $_REQUEST['tab'] ) ? sanitize_title( $_REQUEST['tab'] ) : 'general';
 
 
-			$this->id    = 'cpt-sorting';
-			$this->label = __( 'Sorting options', 'geodirectory' );
+			$this->id    = 'cpt-tabs';
+			$this->label = __( 'Tabs Layout', 'geodirectory' );
 
 			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
-			//add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
-			//add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
-			//add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
+
+			add_action( 'geodir_manage_tabs_available_fields', array( $this, 'output_standard_fields' ) );
+			//add_action( 'geodir_manage_tabs_available_fields_predefined', array( $this, 'output_predefined_fields' ) );
+			//add_action( 'geodir_manage_tabs_available_fields_custom', array( $this, 'output_custom_fields' ) );
 
 
 		}
@@ -62,7 +63,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		public function get_sections() {
 
 			$sections = array(
-				'' => __( 'Custom Fields', 'geodirectory' ),
+				//'' => __( 'Custom Fields', 'geodirectory' ),
 				//	'location'       => __( 'Custom fields', 'geodirectory' ),
 				//	'pages' 	=> __( 'Sorting options', 'geodirectory' ),
 				//'dummy_data' 	=> __( 'Dummy Data', 'geodirectory' ),
@@ -121,54 +122,67 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 */
 		public function left_panel_content() {
 			?>
+			<h3><?php _e( 'Custom Fields', 'geodirectory' ); ?></h3>
+
 			<div class="inside">
 
 				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
-					<ul>
-						<?php
-						$sort_options = self::custom_sort_options( self::$post_type );
 
-						if(!empty($sort_options)){
-							foreach ( $sort_options as $key => $val ) {
-								$val = stripslashes_deep( $val ); // strip slashes
+					<?php
+					/**
+					 * Adds the available fields to the custom fields settings page per post type.
+					 *
+					 * @since 1.0.0
+					 *
+					 * @param string $sub_tab The current settings tab name.
+					 */
+					do_action( 'geodir_manage_tabs_available_fields', self::$sub_tab ); ?>
 
-								$check_html_variable = self::field_exists( $val['htmlvar_name'], self::$post_type );
-								$display             = $check_html_variable ? ' style="display:none;"' : '';
-								?>
-
-								<li class="gd-cf-tooltip-wrap" <?php echo $display; ?>>
-									<a id="gd-<?php echo $val['field_type']; ?>-_-<?php echo $val['htmlvar_name']; ?>"
-									   data-field-type-key="<?php echo sanitize_text_field( $val['htmlvar_name'] ); ?>"
-									   data-field-type="<?php echo sanitize_text_field( $val['field_type'] ); ?>"
-									   class="gd-draggable-form-items  gd-<?php echo sanitize_text_field( $val['field_type'] ); ?> geodir-sort-<?php echo sanitize_text_field( $val['htmlvar_name'] ); ?>"
-									   href="javascript:void(0);">
-										<?php if ( isset( $val['field_icon'] ) && strpos( $val['field_icon'], 'fa fa-' ) !== false ) {
-											echo '<i class="' . sanitize_text_field( $val['field_icon'] ) . '" aria-hidden="true"></i>';
-										} elseif ( isset( $val['field_icon'] ) && $val['field_icon'] ) {
-											echo '<b style="background-image: url("' . sanitize_text_field( $val['field_icon'] ) . '")"></b>';
-										} else {
-											echo '<i class="fa fa-cog" aria-hidden="true"></i>';
-										} ?>
-										<?php echo sanitize_text_field( $val['frontend_title'] ); ?>
-										<?php if ( ! empty( $val['description'] ) ) { ?>
-										<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help"
-										      title="<?php echo sanitize_text_field( $val['description'] ); ?>">
-										<?php } ?>
-								</span>
-									</a>
-								</li>
-
-								<?php
-							}
-						}
-						?>
-					</ul>
 					<div style="clear:both"></div>
-
 				</div>
+
+			</div>
+
+			<h3><?php _e( 'Predefined Fields', 'geodirectory' ); ?></h3>
+			<div class="inside">
+
+				<div id="gd-form-builder-tab-predefined" class="gd-form-builder-tab gd-tabs-panel">
+
+					<?php
+					/**
+					 * Adds the available fields to the custom fields predefined settings page per post type.
+					 *
+					 * @since 1.6.9
+					 *
+					 * @param string $sub_tab The current settings tab name.
+					 */
+					do_action( 'geodir_manage_tabs_available_fields_predefined', self::$sub_tab ); ?>
+
+					<div style="clear:both"></div>
+				</div>
+
+			</div>
+
+			<h3><?php _e( 'Custom Fields', 'geodirectory' ); ?></h3>
+			<div class="inside">
+
+				<div id="gd-form-builder-tab" class="gd-tabs-panel">
+
+					<?php
+					/**
+					 * Adds the available fields to the custom fields custom added settings page per post type.
+					 *
+					 * @since 1.6.9
+					 *
+					 * @param string $sub_tab The current settings tab name.
+					 */
+					do_action( 'geodir_manage_tabs_available_fields_custom', self::$sub_tab ); ?>
+
+					<div style="clear:both"></div>
+				</div>
+
 			</div>
 			<?php
-
 		}
 
 
@@ -201,39 +215,44 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @package GeoDirectory
 		 */
 		public function right_panel_content() {
+
+			$type = "post";
+			$post_type = self::$post_type;
+			global $wpdb;
+			$tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".GEODIR_TABS_LAYOUT_TABLE." WHERE post_type=%s AND tab_layout=%s ORDER BY sort_order ASC",$post_type,$type));
+			print_r($tabs);
 			?>
 			<div class="inside">
 
 				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
 					<div class="field_row_main">
-						<ul class="core">
+						<div class="dd gd-tabs-layout" >
+							
 							<?php
-							global $wpdb;
 
-							$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND field_type != 'address' ORDER BY sort_order ASC", array( self::$post_type ) ) );
 
-							if ( ! empty( $fields ) ) {
-								foreach ( $fields as $field ) {
-									//$result_str = $field->id;
-									$result_str    = $field;
-									$field_type    = $field->field_type;
-									$field_ins_upd = 'display';
+							if ( ! empty( $tabs ) ) {
+								echo '<ul class="dd-list gd-tabs-sortable">';
+								$last_level = '0';
+								foreach ( $tabs as $id => $tab ) {
+									if($last_level=='0' && $tab->tab_level == '1'){echo '<ul class="dd-list">';}
+									include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-tab-item.php' );
+									if($last_level=='1' && $tab->tab_level == '0'){echo '</ul>';}
 
-									$default = false;
-									self::output_custom_field_setting_item( $field_type, $result_str, $field_ins_upd, $default );
-
-									//geodir_custom_sort_field_adminhtml( $field_type, $result_str, $field_ins_upd, $default );
+									$last_level = $tab->tab_level;
 								}
-							}else{
-								_e("Select fields from the left to be able to add new sort options.","geodirectory");
+								echo '</ul>';
+							} else {
+								_e( 'No tab items have been added yet.', 'geodirectory' );
 							}
-							?>
-						</ul>
-					</div>
-					<div style="clear:both"></div>
-				</div>
 
+							?>
+
+						</div>
+					</div>
+				</div>
 			</div>
+					
 			<?php
 		}
 
@@ -763,10 +782,95 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		}
 
 
+		/**
+		 * Adds admin html for custom fields available fields.
+		 *
+		 * @since 1.0.0
+		 * @since 1.6.9 Added
+		 *
+		 * @param string $type The custom field type, predefined, custom or blank for default
+		 *
+		 * @package GeoDirectory
+		 */
+		public function output_standard_fields() {
+			global $wpdb, $plugin_prefix;
+			$listing_type = self::$post_type;
+
+			$table = GEODIR_CUSTOM_FIELDS_TABLE;
+
+			//$cfs = self::fields_standard( self::$post_type );
+			$cfs = $wpdb->get_results($wpdb->prepare("SELECT * FROM $table WHERE post_type=%s",self::$post_type));
+			//print_r($cfs );
+			?>
+			<ul class="full gd-cf-tooltip-wrap">
+				<li>
+					<a id="gd-fieldset"
+					   class="gd-draggable-form-items gd-fieldset"
+					   href="javascript:void(0);"
+					   data-field-custom-type=""
+					   data-field-type="fieldset"
+					   data-field-type-key="fieldset">
+
+						<i class="fa fa-long-arrow-left " aria-hidden="true"></i>
+						<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+						<?php _e( 'Fieldset (section separator)', 'geodirectory' ); ?>
+
+						<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help" title="<?php _e( 'This adds a section separator with a title.', 'geodirectory' );?>"></span>
+					</a>
+				</li>
+			</ul>
+
+			<?php
+
+
+			if ( ! empty( $cfs ) ) {
+				echo '<ul>';
+				foreach ( $cfs as $id => $cf ) {
+					$cf = (array)$cf;
+					//include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-cf-option-item.php' );
+					?>
+					<li>
+						<a id="gd-<?php echo esc_attr($cf['htmlvar_name']); ?>"
+						   class="gd-draggable-form-items gd-fieldset"
+						   href="javascript:void(0);"
+						   data-tab_type="meta"
+						   data-tab_name="<?php echo !empty($cf['admin_title']) ? esc_attr($cf['admin_title']) : esc_attr($cf['frontend_title']); ?>"
+						   data-tab_icon="<?php echo isset($cf['field_icon']) && $cf['field_icon'] ? $cf['field_icon'] : "fa-cog";?>"
+						   data-tab_key="<?php echo esc_attr($cf['htmlvar_name']); ?>"
+						   data-tab_content=""
+							onclick="gd_tabs_add_tab(this);return false;">
+
+							<i class="fa <?php echo isset($cf['field_icon']) && $cf['field_icon'] ? $cf['field_icon'] : "fa-cog";?> " aria-hidden="true"></i>
+							<?php echo !empty($cf['admin_title']) ? esc_attr($cf['admin_title']) : esc_attr($cf['frontend_title']); ?>
+
+<!--							<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help" title="--><?php //_e( 'This adds a section separator with a title.', 'geodirectory' );?><!--"></span>-->
+						</a>
+					</li>
+					<?php
+				}
+				echo '</ul>';
+			} else {
+				_e( 'There are no custom fields here yet.', 'geodirectory' );
+			}
+
+		}
+
+		/**
+		 * Output the admin cpt settings fields left panel content.
+		 *
+		 * @since 2.0.0
+		 * @package GeoDirectory
+		 */
+		public static function get_tab_item($tab) {
+			ob_start();
+			$tab = (object)$tab;
+			include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-tab-item.php' );
+			return ob_get_clean();
+		}
 
 
 	}
 
 endif;
 
-return new GeoDir_Settings_Cpt_Sorting();
+return new GeoDir_Settings_Cpt_Tabs();

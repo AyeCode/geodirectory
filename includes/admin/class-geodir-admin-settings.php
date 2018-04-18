@@ -52,7 +52,9 @@ class GeoDir_Admin_Settings {
 			if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-cpt-settings'){
 				//$settings[] = include( 'settings/class-geodir-settings-cpt-cf.php' );
 				$settings[] = include( 'settings/class-geodir-settings-cpt-sorting.php' );
+				$settings[] = include( 'settings/class-geodir-settings-cpt-tabs.php' );
 				$settings[] = include( 'settings/class-geodir-settings-cpt.php' );
+
 			} else {
 				$settings[] = include( 'settings/class-geodir-settings-general.php' );
 				$settings[] = include( 'settings/class-geodir-settings-emails.php' );

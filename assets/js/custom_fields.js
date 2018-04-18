@@ -148,6 +148,9 @@ jQuery(document).ready(function () {
     });
     jQuery('body').bind('geodir_on_get_custom_field', function (e, data) {
     });
+
+    // init tabs layout settings
+    gd_init_tabs_layout();
 });
 
 function gd_data_type_changed(obj, cont) {
@@ -427,5 +430,58 @@ function gd_toggle_switch_display() {
         });
 
 
+    });
+}
+
+///////////////////////////////////////////////////////////
+//////////////// TABS LAYOUT //////////////////////////////
+///////////////////////////////////////////////////////////
+
+function gd_init_tabs_layout(){
+    jQuery('.gd-tabs-sortable').nestedSortable({
+        maxLevels: 2,
+        items: 'li',
+        helper:	'clone',
+        placeholder: 'placeholder',
+        forcePlaceholderSize: true,
+        listType: 'ul'
+    });
+}
+
+function gd_tabs_item_settings($this){
+    jQuery($this).parent().find('.dd-setting').toggle();
+}
+
+function gd_tabs_add_tab($this){
+
+    var gd_nonce = jQuery("#gd_new_field_nonce").val();
+    var $tab_type = jQuery($this).data('tab_type');
+    var $tab_name = jQuery($this).data('tab_name');
+    var $tab_icon = jQuery($this).data('tab_icon');
+    var $tab_key = jQuery($this).data('tab_key');
+    var $tab_content = jQuery($this).data('tab_content');
+    var data = {
+        'action':           'geodir_get_tabs_form',
+        'security':          gd_nonce,
+        'tab_name':          $tab_name,
+        'tab_type':          $tab_type,
+        'tab_icon':          $tab_icon,
+        'tab_key':           $tab_key,
+        'tab_content':       $tab_content
+    };
+    jQuery.ajax({
+        'url': ajaxurl,
+        'type': 'POST',
+        'data': data,
+        'success': function (result) {
+
+            console.log(result);
+            if(result.success){
+                jQuery('.gd-tabs-sortable').append(result.data);
+                gd_init_tabs_layout();
+            }else{
+                alert("something went wrong");
+            }
+        }
     });
 }
