@@ -392,8 +392,9 @@ class GeoDir_Admin_Import_Export {
 	 *
 	 * @return array
 	 */
-	public static function validate_post( $post_info ) {
+	public static function validate_post( $row ) {
 
+		$post_info = $row;
 		// validate post_type
 		if(isset($post_info['post_type']) && $post_info['post_type']){
 			$post_type = esc_attr($post_info['post_type']);
@@ -458,7 +459,7 @@ class GeoDir_Admin_Import_Export {
 			$post_info = esc_attr__('Address city, region or country missing','geodirectory');
 		}
 
-		return $post_info;
+		return apply_filters( 'geodir_import_validate_post', $post_info, $row );
 	}
 
 	/**
@@ -1728,7 +1729,7 @@ class GeoDir_Admin_Import_Export {
 	 * @param string $post_type The post type.
 	 * @return string SQL where clause part.
 	 */
-	function filter_where_query($where = '', $post_type = '') {
+	public static function filter_where_query($where = '', $post_type = '') {
 		global $wpdb;
 
 		$filters = !empty( $_REQUEST['gd_imex'] ) && is_array( $_REQUEST['gd_imex'] ) ? $_REQUEST['gd_imex'] : NULL;

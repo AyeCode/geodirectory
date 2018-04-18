@@ -746,6 +746,7 @@ function geodir_search_wait(on){
         gdSearchDoing = 0;
         jQuery('.geodir_submit_search').removeClass('gd-wait-btnsearch').prop('disabled', false);
         jQuery('.showFilters').prop('disabled', false);
+		gdsText = jQuery('input[type="button"].geodir_submit_search').data('title');
         jQuery('input[type="button"].geodir_submit_search').val(gdsText);
 
         jQuery('button.geodir_submit_search').html(gd_search_icon);

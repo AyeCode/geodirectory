@@ -687,3 +687,18 @@ function geodir_listing_listview_ul_extra_class( $class, $template ) {
 	return $class;
 }
 add_filter( 'geodir_listing_listview_ul_extra_class', 'geodir_listing_listview_ul_extra_class', 10, 2 );
+
+/**
+ * Front end listing view extra actions.
+ *
+ * This function adds extra actions in listing page top actions.
+ *
+ * @since  2.0.0
+ * @package GeoDirectory
+ *
+ */
+function geodir_extra_loop_actions() {
+	$post_type = geodir_get_current_posttype();
+
+	do_action( 'geodir_extra_loop_actions', $post_type );
+}

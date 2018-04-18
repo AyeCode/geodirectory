@@ -74,7 +74,7 @@
 		<div id="field_frm<?php echo $field->id; ?>" class="field_frm" style="display:none;">
 			<input type="hidden" name="security" value="<?php echo sanitize_text_field( $nonce ); ?>"/>
 			<input type="hidden" name="post_type" id="post_type"
-			       value="<?php echo sanitize_text_field( self::$post_type ); ?>"/>
+			       value="<?php echo sanitize_text_field( $field->post_type ); ?>"/>
 			<input type="hidden" name="field_type" id="field_type"
 			       value="<?php echo sanitize_text_field( $field->field_type ); ?>"/>
 			<input type="hidden" name="field_type_key" id="field_type_key"
@@ -444,7 +444,7 @@
 								'address',
 								'taxonomy',
 								'business_hours'
-							) ) ) {
+							) ) || apply_filters( 'geodir_enable_field_type_in_owntab', false, $field->field_type, $field ) ) {
 							} else {
 								unset( $show_in_locations['[owntab]'] );
 							}
