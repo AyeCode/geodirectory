@@ -920,7 +920,8 @@ table.gd_status_table th.run-tool {
 }
 
 /* select2 start */
-.geodir_form_row select.geodir-select {
+.geodir_form_row select.geodir-select,
+.geodir_form_row select.geodir-select-search {
     width: calc(70% - 1px);
 }
 .geodir_form_row .main_cat_list select,

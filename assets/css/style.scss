@@ -1972,7 +1972,8 @@ body > span[style*='top: -999px']{display: none;}
     border: 0;
     margin-bottom: 0;
 }
-.geodir_form_row select.geodir-select {
+.geodir_form_row select.geodir-select,
+.geodir_form_row select.geodir-select-search {
     width: calc(70% - 1px);
 }
 .geodir_form_row .main_cat_list select,
