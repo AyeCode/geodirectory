@@ -1445,7 +1445,7 @@ function geodir_search_form_submit_button() {
 
 
 	?>
-	<button class="geodir_submit_search <?php echo $fa_class; ?>"><?php _e( $default_search_button_label ,'geodirectory'); ?>
+	<button class="geodir_submit_search <?php echo $fa_class; ?>" data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php _e( $default_search_button_label ,'geodirectory'); ?></button>
 	<?php
 }
 

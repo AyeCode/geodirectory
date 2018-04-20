@@ -132,10 +132,11 @@ class GeoDir_Post_Data {
 
 				if ( isset( $gd_post[ $cf->htmlvar_name ] ) ) {
 					$gd_post_value = $gd_post[ $cf->htmlvar_name ];
+					$gd_post_value = apply_filters("geodir_custom_field_value_{$cf->field_type}", $gd_post_value, $gd_post, $cf, $post_id, $post, $update);
 					if ( is_array( $gd_post_value ) ) {
 						$gd_post_value = ! empty( $gd_post_value ) ? implode( ',', $gd_post_value ) : '';
 					}
-					$postarr[ $cf->htmlvar_name ] = apply_filters("geodir_custom_field_value_{$cf->field_type}", $gd_post_value, $cf, $post_id, $post, $update);
+					$postarr[ $cf->htmlvar_name ] = $gd_post_value;
 				}
 
 			}
@@ -306,13 +307,13 @@ class GeoDir_Post_Data {
 
 			//$postarr['featured_image'] = $post['featured_image'];// @todo we need to find a way to set default cat on add listing
 
-//			geodir_error_log( $postarr, 'postarr', __FILE__, __LINE__ );
-
 			$format = array_fill( 0, count( $postarr ), '%s' );
 
 			//print_r($gd_post);print_r( $postarr );exit;
 
 			$postarr = apply_filters( 'geodir_save_post_data', $postarr, $gd_post, $post, $update );
+
+			//geodir_error_log( $postarr, 'save_post_data', __FILE__, __LINE__ );
 
 			if ( $update ) {// update
 				$wpdb->update(
@@ -1331,9 +1332,15 @@ class GeoDir_Post_Data {
 		//print_r($post);
 		// external links
 		$external_links =  array();
-		$external_links[] = $gd_post->website;
-		$external_links[] = $gd_post->twitter;
-		$external_links[] = $gd_post->facebook;
+		if ( ! empty( $gd_post->website ) ) {
+			$external_links[] = $gd_post->website;
+		}
+		if ( ! empty( $gd_post->twitter ) ) {
+			$external_links[] = $gd_post->twitter;
+		}
+		if ( ! empty( $gd_post->facebook ) ) {
+			$external_links[] = $gd_post->facebook;
+		}
 		$external_links = array_filter($external_links);
 
 		if(!empty($external_links)){
@@ -1353,7 +1360,9 @@ class GeoDir_Post_Data {
 		$schema['@type'] = $schema_type;
 		$schema['name'] = $post->post_title;
 		$schema['description'] = wp_strip_all_tags( $post->post_content, true );
-		$schema['telephone'] = $gd_post->phone;
+		if ( ! empty( $gd_post->phone ) ) {
+			$schema['telephone'] = $gd_post->phone;
+		}
 		$schema['url'] = $c_url;
 		$schema['sameAs'] = $external_links;
 		$schema['image'] = $images;

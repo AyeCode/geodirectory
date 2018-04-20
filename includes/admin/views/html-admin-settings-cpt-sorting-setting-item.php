@@ -32,7 +32,7 @@
 
 		<div id="field_frm<?php echo $field->id; ?>" class="field_frm" style="display:none;">
 			<input type="hidden" name="_wpnonce" value="<?php echo $nonce; ?>"/>
-			<input type="hidden" name="post_type" id="post_type" value="<?php echo self::$post_type; ?>"/>
+			<input type="hidden" name="post_type" id="post_type" value="<?php echo $field->post_type; ?>"/>
 			<input type="hidden" name="field_type" id="field_type" value="<?php echo $field->field_type; ?>"/>
 			<input type="hidden" name="field_id" id="field_id" value="<?php echo $field->id; ?>"/>
 			<input type="hidden" name="data_type" id="data_type" value="<?php if ( isset( $field->data_type ) ) {

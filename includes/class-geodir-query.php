@@ -82,6 +82,7 @@ class GeoDir_Query {
 		remove_all_filters('posts_search');
 		remove_all_filters('posts_fields');
 		remove_all_filters('posts_join');
+		remove_all_filters('posts_groupby');
 		remove_all_filters('posts_orderby');
 		remove_all_filters('posts_where');
 
@@ -107,9 +108,11 @@ class GeoDir_Query {
 		 */
 		if(geodir_is_page('post_type') || geodir_is_page('archive') ){
 
+			add_filter( 'posts_fields', array( $this, 'posts_fields' ) );
 			add_filter( 'posts_join', array( $this, 'posts_join' ) );
 			add_filter( 'posts_where', array( $this, 'posts_where' ) );
 			add_filter( 'posts_where', array( $this, 'author_where' ) );
+			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ) );
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
 
 		}elseif(geodir_is_page('search')){
@@ -129,6 +132,7 @@ class GeoDir_Query {
 			add_filter( 'posts_fields', array( $this, 'posts_fields' ) );
 			add_filter( 'posts_where', array( $this, 'posts_where' ) );
 			//add_filter( 'posts_limits', array( $this, 'posts_limits' ),10,2 );
+			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ) );
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
 
 			// setup search globals
@@ -214,79 +218,81 @@ class GeoDir_Query {
 	 *
 	 * @return string
 	 */
-	public function posts_fields($fields){
-		global $wpdb, $table_prefix, $geodir_post_type;
-		global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear, $gd_session;
+	public function posts_fields($fields, $query = array()){
+		if ( ! ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) ) {
+			global $wpdb, $table_prefix, $geodir_post_type;
+			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear, $gd_session;
 
 
-		$table = geodir_db_cpt_table($geodir_post_type);
+			$table = geodir_db_cpt_table($geodir_post_type);
 
-		$fields .= ", " . $table . ".* ";
-
-
-		if ($snear != '' || $gd_session->get('all_near_me')) {
-			$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('search_distance_long'));
-
-			if ($gd_session->get('all_near_me')) {
-				$mylat = $gd_session->get('user_lat');
-				$mylon = $gd_session->get('user_lon');
-			}
-
-			$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) )))as distance ";
-		}
+			$fields .= ", " . $table . ".* ";
 
 
-		global $s;// = get_search_query();
-		if (geodir_is_page('search') && $s && trim($s) != '') {
-			$keywords = explode(" ", $s);
+			if ($snear != '' || $gd_session->get('all_near_me')) {
+				$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('search_distance_long'));
 
-			if(is_array($keywords) && $klimit = geodir_get_option('geodir_search_word_limit')){
-				foreach($keywords as $kkey=>$kword){
-					if(geodir_utf8_strlen($kword)<=$klimit){
-						unset($keywords[$kkey]);
-					}
+				if ($gd_session->get('all_near_me')) {
+					$mylat = $gd_session->get('user_lat');
+					$mylon = $gd_session->get('user_lon');
 				}
+
+				$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) )))as distance ";
 			}
 
 
-			if (count($keywords) > 1) {
-				$parts = array(
-					'AND' => 'gd_alltitlematch_part',
-					'OR' => 'gd_titlematch_part'
-				);
-				$gd_titlematch_part = "";
-				foreach ($parts as $key => $part) {
-					$gd_titlematch_part .= " CASE WHEN ";
-					$count = 0;
-					foreach ($keywords as $keyword) {
-						$keyword = trim($keyword);
-						$keyword  = wp_specialchars_decode($keyword ,ENT_QUOTES);
-						$count++;
-						if ($count < count($keywords)) {
-							// $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' " . $key . " ";
-							$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title LIKE '" . $keyword . "' OR " . $wpdb->posts . ".post_title LIKE '" . $keyword . "%%' OR " . $wpdb->posts . ".post_title LIKE '%% " . $keyword . "%%' ) " . $key . " ";
-						} else {
-							//$gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' ";
-							$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title LIKE '" . $keyword . "' OR " . $wpdb->posts . ".post_title LIKE '" . $keyword . "%%' OR " . $wpdb->posts . ".post_title LIKE '%% " . $keyword . "%%' ) ";
+			global $s;// = get_search_query();
+			if (geodir_is_page('search') && $s && trim($s) != '') {
+				$keywords = explode(" ", $s);
+
+				if(is_array($keywords) && $klimit = geodir_get_option('geodir_search_word_limit')){
+					foreach($keywords as $kkey=>$kword){
+						if(geodir_utf8_strlen($kword)<=$klimit){
+							unset($keywords[$kkey]);
 						}
 					}
-					$gd_titlematch_part .= "THEN 1 ELSE 0 END AS " . $part . ",";
 				}
-			} else {
-				$gd_titlematch_part = "";
-			}
-			$s = stripslashes_deep( $s );
-			$s = wp_specialchars_decode($s,ENT_QUOTES);
 
-			if(geodir_column_exist($table,'featured')){
-				$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".featured=%d THEN 1 ELSE 0 END AS gd_featured ", 1);
+
+				if (count($keywords) > 1) {
+					$parts = array(
+						'AND' => 'gd_alltitlematch_part',
+						'OR' => 'gd_titlematch_part'
+					);
+					$gd_titlematch_part = "";
+					foreach ($parts as $key => $part) {
+						$gd_titlematch_part .= " CASE WHEN ";
+						$count = 0;
+						foreach ($keywords as $keyword) {
+							$keyword = trim($keyword);
+							$keyword  = wp_specialchars_decode($keyword ,ENT_QUOTES);
+							$count++;
+							if ($count < count($keywords)) {
+								// $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' " . $key . " ";
+								$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title LIKE '" . $keyword . "' OR " . $wpdb->posts . ".post_title LIKE '" . $keyword . "%%' OR " . $wpdb->posts . ".post_title LIKE '%% " . $keyword . "%%' ) " . $key . " ";
+							} else {
+								//$gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' ";
+								$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title LIKE '" . $keyword . "' OR " . $wpdb->posts . ".post_title LIKE '" . $keyword . "%%' OR " . $wpdb->posts . ".post_title LIKE '%% " . $keyword . "%%' ) ";
+							}
+						}
+						$gd_titlematch_part .= "THEN 1 ELSE 0 END AS " . $part . ",";
+					}
+				} else {
+					$gd_titlematch_part = "";
+				}
+				$s = stripslashes_deep( $s );
+				$s = wp_specialchars_decode($s,ENT_QUOTES);
+
+				if(geodir_column_exist($table,'featured')){
+					$fields .= $wpdb->prepare(", CASE WHEN " . $table . ".featured=%d THEN 1 ELSE 0 END AS gd_featured ", 1);
+				}
+				$fields .= $wpdb->prepare(", CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN ( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN ( " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s ) THEN 1 ELSE 0 END AS gd_content", array( $s, $s, $s . '%', '% ' . $s . '%', $s, $s . ' %', '% ' . $s . ' %', '% ' . $s));
 			}
-			$fields .= $wpdb->prepare(", CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN ( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN ( " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s ) THEN 1 ELSE 0 END AS gd_content", array( $s, $s, $s . '%', '% ' . $s . '%', $s, $s . ' %', '% ' . $s . ' %', '% ' . $s));
 		}
 
 		//echo '###fields:'.$fields;
 
-		return $fields;
+		return apply_filters( 'geodir_posts_fields', $fields, $query );
 	}
 
 	public function posts_limits($limits,$query){
@@ -302,7 +308,7 @@ class GeoDir_Query {
 	 *
 	 * @return mixed
 	 */
-	public function posts_where($where){
+	public function posts_where($where, $query = array()){
 
 		global $wpdb,$geodir_post_type,$wp_query;
 		//echo '###'.$where;
@@ -474,7 +480,7 @@ class GeoDir_Query {
 
 		}
 
-		return $where;
+		return apply_filters( 'geodir_posts_where', $where, $query );
 	}
 
 	public function author_where($where){
@@ -515,7 +521,7 @@ class GeoDir_Query {
 	 *
 	 * @return string
 	 */
-	public function posts_join($join){
+	public function posts_join($join, $query = array()){
 
 		global $wpdb, $table_prefix, $geodir_post_type;
 
@@ -533,7 +539,11 @@ class GeoDir_Query {
 
 		$join .= " INNER JOIN " . $table . " ON (" . $table . ".post_id = $wpdb->posts.ID)  "; // @todo inner join seems faster but we should so tests with large datasets
 
-		return $join;
+		return apply_filters( 'geodir_posts_join', $join, $query );
+	}
+
+	public function posts_groupby( $groupby, $query = array() ) {
+		return apply_filters( 'geodir_posts_groupby', $groupby, $query );
 	}
 
 	/**
@@ -541,7 +551,7 @@ class GeoDir_Query {
 	 *
 	 * @return mixed
 	 */
-	public function posts_orderby($orderby){
+	public function posts_orderby($orderby, $query = array()){
 		global $wpdb, $table_prefix, $geodir_post_type,$snear;
 
 		$sort_by = '';
@@ -577,8 +587,9 @@ class GeoDir_Query {
 		 * @param string $orderby The orderby query string.
 		 * @param string $sort_by Sortby query string.
 		 * @param string $table Listing table name.
+		 * @param WP_Query $query The WP_Query.
 		 */
-		$orderby = apply_filters('geodir_posts_order_by_sort', $orderby, $sort_by, $table);
+		$orderby = apply_filters('geodir_posts_order_by_sort', $orderby, $sort_by, $table, $query);
 
 		if($sort_by != 'random'){
 			//$orderby .= $table . ".featured asc, $wpdb->posts.post_date desc, $wpdb->posts.post_title ";

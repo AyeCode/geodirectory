@@ -219,7 +219,7 @@ class GeoDir_Admin_Dummy_Data {
 	public static function create_dummy_posts( $request ) {
 
 
-		global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$dummy_post_index,$dummy_image_url,$plugin_prefix;
+		global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$dummy_post_index,$dummy_image_url,$plugin_prefix, $dummy_categories, $dummy_custom_fields, $dummy_posts;
 //		$city_bound_lat1 = geodir_is_valid_lat($request['city_bound_lat1']) ? $request['city_bound_lat1'] : '';
 //		$city_bound_lng1 = geodir_is_valid_lon($request['city_bound_lng1']) ? $request['city_bound_lng1'] : '';
 //		$city_bound_lat2 = geodir_is_valid_lat($request['city_bound_lat2']) ? $request['city_bound_lat2'] : '';
@@ -234,7 +234,7 @@ class GeoDir_Admin_Dummy_Data {
 		$data_type = sanitize_key($request['data_type']);
 
 		ini_set( 'max_execution_time', 999999 ); //300 seconds = 5 minutes
-		$data_types = self::dummy_data_types();
+		$data_types = self::dummy_data_types($post_type);
 
 		$total_count = 0;
 		$dummy_post_index = $item_index;
@@ -274,13 +274,12 @@ class GeoDir_Admin_Dummy_Data {
 					 * @package GeoDirectory
 					 */
 					include_once( 'dummy-data/property_rent.php' );
+				} else {
+					do_action( 'geodir_dummy_data_include_file', $post_type, $data_type, $val, $item_index );
 				}
-							
-
 			}
 
 			$dummy_image_url = apply_filters( 'dummy_image_url', $dummy_image_url,$post_type, $data_type, $item_index );
-			
 
 			/**
 			 * Fires action before each dummy data item.
@@ -289,13 +288,7 @@ class GeoDir_Admin_Dummy_Data {
 			 * 
 			 */
 			do_action( 'geodir_insert_dummy_data_loop', $post_type, $data_type, $item_index );
-
-
-
-			
-			
 		}
-
 
 		// Do the data insert
 		if($dummy_post_index === 0){
@@ -381,14 +374,11 @@ class GeoDir_Admin_Dummy_Data {
 
 				$cpts = geodir_get_posttypes( 'array' );
 
-				$data_types = self::dummy_data_types();
-
 				$nonce = wp_create_nonce( 'geodir_dummy_data' );
 
 				foreach ( $cpts as $post_type => $cpt ) {
 
-					$data_types_for = apply_filters( 'geodir_dummy_date_types_for', $data_types, $post_type );
-
+					$data_types = self::dummy_data_types( $post_type );
 
 					$set_dt = geodir_get_option( $post_type . '_dummy_data_type' );
 
@@ -407,11 +397,13 @@ class GeoDir_Admin_Dummy_Data {
 
 					$select_disabled = $post_counts > 0 ? 'disabled' : '';
 					echo "<td>";
-					echo "<select id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='geodir-select'>";
+					echo "<select id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='geodir-select' style='min-width:200px'>";
 
-					foreach ( $data_types_for as $key => $val ) {
+					$c = 0;
+					foreach ( $data_types as $key => $val ) {
+						$c++;
 						$selected = ( $key == $set_dt ) ? "selected='selected'" : '';
-						if ( $selected || count( $data_types_for ) == 1 ) {
+						if ( $selected || $c == 1 ) {
 							$count = $val['count'];
 						}
 						echo "<option $selected value='$key' data-count='" . $val['count'] . "'>" . $val['name'] . "</option>";
@@ -419,14 +411,14 @@ class GeoDir_Admin_Dummy_Data {
 					echo "</select>";
 
 					$select_display = $post_counts > 0 ? 'display:none;' : '';
-					echo "<select id='" . $post_type . "_data_type_count' style='min-width:65px;$select_display' class='geodir-select'>";
+					echo "<span class='gd-data-type-count' style='$select_display'><select id='" . $post_type . "_data_type_count' style='min-width:65px;' class='geodir-select'>";
 					$x = 1;
 					while ( $x <= $count ) {
 						$selected = ( $x == $count ) ? "selected='selected'" : '';
 						echo "<option $selected value='$x'>" . $x . "</option>";
 						$x ++;
 					}
-					echo "</select>";
+					echo "</select></span>";
 					echo "</td>";
 
 
@@ -560,7 +552,7 @@ class GeoDir_Admin_Dummy_Data {
 								jQuery(obj).removeClass('gd-remove-data');
 								jQuery(obj).val('<?php _e( 'Insert data', 'geodirectory' );?>');
 								jQuery(obj).prop('disabled', false);
-								jQuery('#' + posttype + '_data_type_count').show();
+								jQuery('#' + posttype + '_data_type_count').closest('.gd-data-type-count').show();
 								jQuery('#' + posttype + '_data_type_count').prop('disabled', false);
 								jQuery('#' + posttype + '_data_type').prop('disabled', false);
 								geodir_dummy_set_count(jQuery('#' + posttype + '_data_type'), posttype);
@@ -581,7 +573,7 @@ class GeoDir_Admin_Dummy_Data {
 					jQuery(obj).prop('disabled', true);
 					jQuery('#' + posttype + '_data_type').prop('disabled', true);
 					jQuery('#' + posttype + '_data_type_count').prop('disabled', true);
-					jQuery('#' + posttype + '_data_type_count').hide();
+					jQuery('#' + posttype + '_data_type_count').closest('.gd-data-type-count').hide();
 
 					if (insertedCount == 0) {
 						insertedCount++;
@@ -676,7 +668,7 @@ class GeoDir_Admin_Dummy_Data {
 	 *
 	 * @return array
 	 */
-	public static function dummy_data_types() {
+	public static function dummy_data_types( $post_type = 'gd_place' ) {
 		$data = array(
 			'standard_places' => array(
 				'name'  => __( 'Default', 'geodirectory' ),
@@ -692,7 +684,7 @@ class GeoDir_Admin_Dummy_Data {
 			)
 		);
 
-		return apply_filters( 'geodir_dummy_data_types', $data );
+		return apply_filters( 'geodir_dummy_data_types', $data, $post_type );
 	}
 
 	/**
