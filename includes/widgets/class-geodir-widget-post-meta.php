@@ -23,7 +23,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'base_id'       => 'gd_post_meta', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Post Meta','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-meta', // widget class
+				'classname'   => 'geodir-post-meta-container', // widget class
 				'description' => esc_html__('This shows a post single post meta.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,
@@ -58,9 +58,11 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc' => __('What part of the post meta to show.', 'geodirectory'),
 					'type' => 'select',
 					'options'   =>  array(
-						"all" => __('Default (all)', 'geodirectory'),
-						"title" => __('Label only', 'geodirectory'),
-						"value" => __('Value only', 'geodirectory'),
+						"" => __('icon + label + value', 'geodirectory'),
+						"icon-value" => __('icon + value', 'geodirectory'),
+						"label-value" => __('label + value', 'geodirectory'),
+						"value" => __('value', 'geodirectory'),
+						"label" => __('label', 'geodirectory'),
 					),
 					'desc_tip' => true,
 					'advanced' => false

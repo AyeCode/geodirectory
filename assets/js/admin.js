@@ -11,7 +11,7 @@ jQuery(window).load(function() {
 
     // tooltips
     gd_init_tooltips();
-    
+
     // rating click
     jQuery( 'a.gd-rating-link' ).click( function() {
         jQuery.post( ajaxurl, { action: 'geodirectory_rated' } );
@@ -95,7 +95,7 @@ jQuery(window).load(function() {
         $this.hide();
         return false;
     });
-	
+
 	// Load color picker
 	var gdColorPicker = jQuery('.gd-color-picker');
 	console.log('gdColorPicker');
@@ -379,7 +379,7 @@ jQuery(document).ready(function() {
             // start the process
             gd_process_diagnose_step( 0, ptype, diagnose, result_container );
         }
-        
+
     });
 
     geodir_enable_fix_buttons(); // enabel fix buttons

@@ -12,11 +12,13 @@
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_checkbox($html,$location,$cf,$p=''){
+function geodir_cf_checkbox($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -41,9 +43,10 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_checkbox_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_checkbox_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -54,9 +57,10 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_checkbox_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_checkbox_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -67,9 +71,10 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_checkbox_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_checkbox_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -84,6 +89,7 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
             endif;
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -93,17 +99,21 @@ function geodir_cf_checkbox($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
-            $html = '<div class="geodir_post_meta  ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-checkbox" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= ( trim( $cf['frontend_title'] ) ) ? __( $cf['frontend_title'], 'geodirectory' ) . ': ' : '';
-            $html .= '</span>' . $html_val . '</div>';
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-checkbox" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $html_val;
+
+            $html .= '</div>';
         endif;
 
     }
 
     return $html;
 }
-add_filter('geodir_custom_field_output_checkbox','geodir_cf_checkbox',10,4);
-
+add_filter('geodir_custom_field_output_checkbox','geodir_cf_checkbox',10,5);
 
 /**
  * Get the html output for the custom field: fieldset
@@ -192,11 +202,13 @@ add_filter('geodir_custom_field_output_fieldset','geodir_cf_fieldset',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_url($html,$location,$cf,$p=''){
+function geodir_cf_url($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -221,9 +233,10 @@ function geodir_cf_url($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_url_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_url_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -234,9 +247,10 @@ function geodir_cf_url($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_url_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_url_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -247,9 +261,10 @@ function geodir_cf_url($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_url_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_url_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -258,6 +273,7 @@ function geodir_cf_url($html,$location,$cf,$p=''){
         if ($gd_post->{$cf['htmlvar_name']}):
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -287,6 +303,12 @@ function geodir_cf_url($html,$location,$cf,$p=''){
 
             // all search engines that use the nofollow value exclude links that use it from their ranking calculation
             $rel = strpos($website, get_site_url()) !== false ? '' : 'rel="nofollow"';
+
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-website" style="' . $field_icon . '">' . $field_icon_af;
+            //if($output=='' || isset($output['label']))$html .= $field_icon_af ? '<span class="geodir_post_meta_title" >'.$field_icon_af . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
             /**
              * Filter custom field website name.
              *
@@ -296,7 +318,9 @@ function geodir_cf_url($html,$location,$cf,$p=''){
              * @param string $website Website URL.
              * @param int $gd_post->ID Post ID.
              */
-            $html = '<div class="geodir_post_meta  ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '"><span class="geodir-i-website" style="' . $field_icon . '">' . $field_icon_af . '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $gd_post->ID) . '</strong></a></span></div>';
+            if($output=='' || isset($output['value']))$html .= '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $gd_post->ID) . '</strong></a>';
+
+            $html .= '</div>';
 
         endif;
 
@@ -304,7 +328,7 @@ function geodir_cf_url($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_url','geodir_cf_url',10,4);
+add_filter('geodir_custom_field_output_url','geodir_cf_url',10,5);
 
 
 /**
@@ -313,11 +337,13 @@ add_filter('geodir_custom_field_output_url','geodir_cf_url',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_phone($html,$location,$cf,$p=''){
+function geodir_cf_phone($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -342,9 +368,11 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_phone_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_phone_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -355,9 +383,11 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_phone_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_phone_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -368,9 +398,11 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_phone_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_phone_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -379,6 +411,7 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
         if ($gd_post->{$cf['htmlvar_name']}):
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -389,9 +422,14 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
             }
 
 
-            $html = '<div class="geodir_post_meta  ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-contact" style="' . $field_icon . '">' . $field_icon_af .
-                    $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '&nbsp;';
-            $html .= '</span><a href="tel:' . preg_replace('/[^0-9+]/', '', $gd_post->{$cf['htmlvar_name']}) . '">' . $gd_post->{$cf['htmlvar_name']} . '</a></div>';
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-phone" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= '<a href="tel:' . preg_replace('/[^0-9+]/', '', $gd_post->{$cf['htmlvar_name']}) . '">' . $gd_post->{$cf['htmlvar_name']} . '</a>';
+
+            $html .= '</div>';
 
         endif;
 
@@ -399,7 +437,7 @@ function geodir_cf_phone($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_phone','geodir_cf_phone',10,4);
+add_filter('geodir_custom_field_output_phone','geodir_cf_phone',10,5);
 
 
 /**
@@ -408,11 +446,13 @@ add_filter('geodir_custom_field_output_phone','geodir_cf_phone',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_time($html,$location,$cf,$p=''){
+function geodir_cf_time($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -437,9 +477,11 @@ function geodir_cf_time($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_time_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_time_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -450,9 +492,11 @@ function geodir_cf_time($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_time_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_time_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -463,9 +507,11 @@ function geodir_cf_time($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_time_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_time_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -479,6 +525,7 @@ function geodir_cf_time($html,$location,$cf,$p=''){
                 $value = date(get_option('time_format'), strtotime($gd_post->{$cf['htmlvar_name']}));
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -488,10 +535,14 @@ function geodir_cf_time($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
-            $html = '<div class="geodir_post_meta  ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-time" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '&nbsp;';
-            $html .= '</span>' . $value . '</div>';
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-time" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $value;
+
+            $html .= '</div>';
 
         endif;
 
@@ -499,7 +550,7 @@ function geodir_cf_time($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_time','geodir_cf_time',10,4);
+add_filter('geodir_custom_field_output_time','geodir_cf_time',10,5);
 
 
 /**
@@ -508,11 +559,13 @@ add_filter('geodir_custom_field_output_time','geodir_cf_time',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_datepicker($html,$location,$cf,$p=''){
+function geodir_cf_datepicker($html,$location,$cf,$p='',$output=''){
     global $preview;
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -537,9 +590,11 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_datepicker_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_datepicker_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -550,9 +605,11 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_datepicker_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_datepicker_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -563,9 +620,11 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_datepicker_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_datepicker_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -602,7 +661,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
             }
 
             $field_icon = geodir_field_icon_proccess($cf);
-
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -614,9 +673,14 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
 
 
 
-            $html = '<div class="geodir_post_meta  ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-datepicker" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>' . $value . '</div>';
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-datepicker" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $value;
+
+            $html .= '</div>';
 
         endif;
 
@@ -624,7 +688,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_datepicker','geodir_cf_datepicker',10,4);
+add_filter('geodir_custom_field_output_datepicker','geodir_cf_datepicker',10,5);
 
 
 /**
@@ -633,11 +697,13 @@ add_filter('geodir_custom_field_output_datepicker','geodir_cf_datepicker',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_text($html,$location,$cf,$p=''){
+function geodir_cf_text($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -662,9 +728,11 @@ function geodir_cf_text($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_text_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_text_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -675,9 +743,11 @@ function geodir_cf_text($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_text_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_text_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -688,9 +758,11 @@ function geodir_cf_text($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_text_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_text_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     
@@ -703,6 +775,7 @@ function geodir_cf_text($html,$location,$cf,$p=''){
             $class = ($cf['htmlvar_name'] == 'geodir_timing') ? "geodir-i-time" : "geodir-i-text";
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -711,11 +784,6 @@ function geodir_cf_text($html,$location,$cf,$p=''){
                 $field_icon_af = $field_icon;
                 $field_icon = '';
             }
-
-
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="'.$class.'" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>';
 
             $value = $gd_post->{$cf['htmlvar_name']};
             if(isset($cf['data_type']) && ($cf['data_type']=='INT' || $cf['data_type']=='FLOAT') && isset($cf['extra_fields']) && $cf['extra_fields']){
@@ -726,8 +794,13 @@ function geodir_cf_text($html,$location,$cf,$p=''){
                 }
             }
 
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
-            $html .= $value;
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon '.$class.'" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $value;
+
             $html .= '</div>';
 
         endif;
@@ -736,7 +809,7 @@ function geodir_cf_text($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_text','geodir_cf_text',10,4);
+add_filter('geodir_custom_field_output_text','geodir_cf_text',10,5);
 
 
 /**
@@ -745,11 +818,13 @@ add_filter('geodir_custom_field_output_text','geodir_cf_text',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_radio($html,$location,$cf,$p=''){
+function geodir_cf_radio($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -774,9 +849,11 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_radio_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_radio_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -787,9 +864,11 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_radio_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_radio_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -800,9 +879,11 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_radio_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_radio_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -830,6 +911,7 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
             }
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -839,17 +921,21 @@ function geodir_cf_radio($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-radio" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>' . $html_val . '</div>';
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-radio" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $html_val;
+
+            $html .= '</div>';
         endif;
 
     }
 
     return $html;
 }
-add_filter('geodir_custom_field_output_radio','geodir_cf_radio',10,4);
+add_filter('geodir_custom_field_output_radio','geodir_cf_radio',10,5);
 
 
 /**
@@ -858,12 +944,14 @@ add_filter('geodir_custom_field_output_radio','geodir_cf_radio',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  * @since 1.6.18 Fix: Custom field should display label instead of value if set in option values.
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_select($html,$location,$cf,$p=''){
+function geodir_cf_select($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -888,9 +976,11 @@ function geodir_cf_select($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_select_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_select_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -901,9 +991,11 @@ function geodir_cf_select($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_select_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_select_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -914,9 +1006,11 @@ function geodir_cf_select($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_select_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_select_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -938,6 +1032,7 @@ function geodir_cf_select($html,$location,$cf,$p=''){
             }
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -947,17 +1042,21 @@ function geodir_cf_select($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>' . $field_value . '</div>';
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $field_value;
+
+            $html .= '</div>';
         endif;
 
     }
 
     return $html;
 }
-add_filter('geodir_custom_field_output_select','geodir_cf_select',10,4);
+add_filter('geodir_custom_field_output_select','geodir_cf_select',10,5);
 
 
 /**
@@ -966,11 +1065,13 @@ add_filter('geodir_custom_field_output_select','geodir_cf_select',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_multiselect($html,$location,$cf,$p=''){
+function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -996,9 +1097,11 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_multiselect_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_multiselect_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -1009,9 +1112,11 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_multiselect_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_multiselect_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -1022,9 +1127,11 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_multiselect_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_multiselect_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -1038,6 +1145,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
             }
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -1066,22 +1174,26 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
                 }
             }
 
-
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>';
+            $field_value = '';
 
             if (count($option_values) > 1) {
-                $html .= '<ul>';
+                $field_value .= '<ul>';
 
                 foreach ($option_values as $val) {
-                    $html .= '<li>' . $val . '</li>';
+                    $field_value .= '<li>' . $val . '</li>';
                 }
 
-                $html .= '</ul>';
+                $field_value .= '</ul>';
             } else {
-                $html .= __($gd_post->{$cf['htmlvar_name']}, 'geodirectory');
+                $field_value .= __($gd_post->{$cf['htmlvar_name']}, 'geodirectory');
             }
+
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $field_value;
 
             $html .= '</div>';
         endif;
@@ -1090,7 +1202,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_multiselect','geodir_cf_multiselect',10,4);
+add_filter('geodir_custom_field_output_multiselect','geodir_cf_multiselect',10,5);
 
 
 /**
@@ -1099,11 +1211,13 @@ add_filter('geodir_custom_field_output_multiselect','geodir_cf_multiselect',10,4
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_email($html,$location,$cf,$p=''){
+function geodir_cf_email($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -1128,9 +1242,11 @@ function geodir_cf_email($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_email_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_email_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -1141,9 +1257,11 @@ function geodir_cf_email($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_email_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_email_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -1154,35 +1272,26 @@ function geodir_cf_email($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_email_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_email_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
     if(empty($html)){
 
         global $preview;
-        if ($cf['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail') || geodir_is_page('preview'))) {
+        if ($cf['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail'))) {
             return ''; // Remove Send Enquiry | Send To Friend from listings page
         }
 
-        $package_info = (array)geodir_post_package_info(array(), $gd_post, $gd_post->post_type);
 
-        if ($cf['htmlvar_name'] == 'geodir_email' && ((isset($package_info['sendtofriend']) && $package_info['sendtofriend']) || $gd_post->{$cf['htmlvar_name']})) {
-            global $send_to_friend;
-            $send_to_friend = true;
-            $b_send_inquiry = '';
-            $b_sendtofriend = '';
-
-            $html = '';
-            if (!$preview) {
-                $b_send_inquiry = 'b_send_inquiry';
-                $b_sendtofriend = 'b_sendtofriend';
-                $html = '<input type="hidden" name="geodir_popup_post_id" value="' . $gd_post->ID . '" /><div class="geodir_display_popup_forms"></div>';
-            }
+        if ($gd_post->{$cf['htmlvar_name']}) {
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -1192,77 +1301,42 @@ function geodir_cf_email($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
-            $html .= '<div class="geodir_post_meta  ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
-            $seperator = '';
-            if ($gd_post->{$cf['htmlvar_name']}) {
-                $b_send_inquiry_url = apply_filters('b_send_inquiry_url', 'javascript:void(0);');
-                $html .= '<a href="'.$b_send_inquiry_url.'" class="' . $b_send_inquiry . '" >' . SEND_INQUIRY . '</a>';
-                $seperator = ' | ';
+            $email = $gd_post->{$cf['htmlvar_name']} ;
+            $value = '';
+            if(!empty($email) && ($email!='testing@example.com') && ($e_split = explode('@',$email)) && !defined( 'REST_REQUEST' )){
+                /**
+                 * Filter email custom field name output.
+                 *
+                 * @since 1.5.3
+                 *
+                 * @param string $email The email string being output.
+                 * @param array $cf Custom field variables array.
+                 */
+                $email_name = apply_filters('geodir_email_field_name_output',$email,$cf);
+                $value .=  "<script>document.write('<a href=\"mailto:'+'$e_split[0]' + '@' + '$e_split[1]'+'\">$email_name</a>')</script>";
+            }elseif(defined( 'REST_REQUEST' ) && REST_REQUEST){
+                $value .=  "<a href='mailto:$email'>$email</a>";
+            }else{
+                $value .=  $email;
             }
 
-            if (isset($package_info['sendtofriend']) && $package_info['sendtofriend']) {
-                $b_sendtofriend_url = apply_filters('b_sendtofriend_url', 'javascript:void(0);');
-                $html .= $seperator . '<a href="'.$b_sendtofriend_url.'" class="' . $b_sendtofriend . '">' . SEND_TO_FRIEND . '</a>';
-            }
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
-            $html .= '</span></div>';
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $value;
 
-
-            if (isset($_REQUEST['send_inquiry']) && $_REQUEST['send_inquiry'] == 'success') {
-                $html .= '<p class="sucess_msg">' . SEND_INQUIRY_SUCCESS . '</p>';
-            } elseif (isset($_REQUEST['sendtofrnd']) && $_REQUEST['sendtofrnd'] == 'success') {
-                $html .= '<p class="sucess_msg">' . SEND_FRIEND_SUCCESS . '</p>';
-            } elseif (isset($_REQUEST['emsg']) && $_REQUEST['emsg'] == 'captch') {
-                $html .= '<p class="error_msg_fix">' . WRONG_CAPTCH_MSG . '</p>';
-            }
-
-            /*if(!$preview){require_once (geodir_plugin_path().'/includes/templates/popup-forms.php');}*/
-
-        } else {
-
-            if ($gd_post->{$cf['htmlvar_name']}) {
-
-                $field_icon = geodir_field_icon_proccess($cf);
-                if (strpos($field_icon, 'http') !== false) {
-                    $field_icon_af = '';
-                } elseif ($field_icon == '') {
-                    $field_icon_af = '<i class="fa fa-envelope"></i>';
-                } else {
-                    $field_icon_af = $field_icon;
-                    $field_icon = '';
-                }
-
-
-                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
-                $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-                $html .= '</span><span class="geodir-email-address-output">';
-                $email = $gd_post->{$cf['htmlvar_name']} ;
-                if(!empty($email) && ($email!='testing@example.com') && ($e_split = explode('@',$email)) && !defined( 'REST_REQUEST' )){
-                    /**
-                     * Filter email custom field name output.
-                     *
-                     * @since 1.5.3
-                     *
-                     * @param string $email The email string being output.
-                     * @param array $cf Custom field variables array.
-                     */
-                    $email_name = apply_filters('geodir_email_field_name_output',$email,$cf);
-                    $html .=  "<script>document.write('<a href=\"mailto:'+'$e_split[0]' + '@' + '$e_split[1]'+'\">$email_name</a>')</script>";
-                }elseif(defined( 'REST_REQUEST' ) && REST_REQUEST){
-                    $html .=  "<a href='mailto:$email'>$email</a>";
-                }else{
-                    $html .=  $email;
-                }
-                $html .= '</span></div>';
-            }
-
+            $html .= '</div>';
         }
+
+
 
     }
 
     return $html;
 }
-add_filter('geodir_custom_field_output_email','geodir_cf_email',10,4);
+add_filter('geodir_custom_field_output_email','geodir_cf_email',10,5);
 
 
 /**
@@ -1271,12 +1345,14 @@ add_filter('geodir_custom_field_output_email','geodir_cf_email',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_file($html,$location,$cf,$p=''){
+function geodir_cf_file($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -1288,7 +1364,7 @@ function geodir_cf_file($html,$location,$cf,$p=''){
     }
 
     // Block demo content
-    //@todo this custom field is not working, so we need to fix it and thentest
+    //@todo this custom field is not working, so we need to fix it and then test
     if( geodir_is_block_demo() ){
         $gd_post->{$cf['htmlvar_name']} = 'testing@example.com';
     }
@@ -1302,9 +1378,11 @@ function geodir_cf_file($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_file_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_file_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -1315,9 +1393,11 @@ function geodir_cf_file($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_file_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_file_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -1328,9 +1408,11 @@ function geodir_cf_file($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_file_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_file_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -1392,6 +1474,7 @@ function geodir_cf_file($html,$location,$cf,$p=''){
                 }
 
                 $field_icon = geodir_field_icon_proccess($cf);
+                $output = geodir_field_output_process($output);
                 if (strpos($field_icon, 'http') !== false) {
                     $field_icon_af = '';
                 } elseif ($field_icon == '') {
@@ -1401,11 +1484,14 @@ function geodir_cf_file($html,$location,$cf,$p=''){
                     $field_icon = '';
                 }
 
-                $html = '<div class="geodir_post_meta  ' . $cf['css_class'] . ' geodir-custom-file-box geodir-field-' . $cf['htmlvar_name'] . '"><div class="geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
-                $html .= '<span style="display: inline-block; vertical-align: top; padding-right: 14px;">';
-                $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-                $html .= '</span>';
-                $html .= $file_paths . '</div></div>';
+                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+                if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-file" style="' . $field_icon . '">' . $field_icon_af;
+                if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+                if($output=='' || isset($output['icon']))$html .= '</span>';
+                if($output=='' || isset($output['value']))$html .= $file_paths;
+
+                $html .= '</div>';
 
             endif;
         endif;
@@ -1414,7 +1500,7 @@ function geodir_cf_file($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_file','geodir_cf_file',10,4);
+add_filter('geodir_custom_field_output_file','geodir_cf_file',10,5);
 
 
 
@@ -1424,11 +1510,13 @@ add_filter('geodir_custom_field_output_file','geodir_cf_file',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_textarea($html,$location,$cf,$p=''){
+function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -1453,9 +1541,11 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_textarea_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -1466,9 +1556,11 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_textarea_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -1479,9 +1571,11 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_textarea_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -1490,6 +1584,7 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
         if (!empty($gd_post->{$cf['htmlvar_name']})) {
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -1500,9 +1595,21 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
             }
 
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>' . wpautop($gd_post->{$cf['htmlvar_name']}) . '</div>';
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+           // if($output=='' || isset($output['value']))$html .= wpautop($gd_post->{$cf['htmlvar_name']});
+            if($cf['htmlvar_name']=='post_content'){
+                if($output=='' || isset($output['value']))$html .= wpautop(stripslashes($gd_post->{$cf['htmlvar_name']}));
+            }else{
+                if($output=='' || isset($output['value']))$html .= apply_filters('the_content',stripslashes($gd_post->{$cf['htmlvar_name']}));
+            }
+            //$html .= wp_oembed_get($gd_post->{$cf['htmlvar_name']});
+
+
+            $html .= '</div>';
 
         }
 
@@ -1510,7 +1617,7 @@ function geodir_cf_textarea($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_textarea','geodir_cf_textarea',10,4);
+add_filter('geodir_custom_field_output_textarea','geodir_cf_textarea',10,5);
 
 
 
@@ -1520,11 +1627,13 @@ add_filter('geodir_custom_field_output_textarea','geodir_cf_textarea',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_html($html,$location,$cf,$p=''){
+function geodir_cf_html($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -1549,9 +1658,11 @@ function geodir_cf_html($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_html_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_html_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -1562,9 +1673,11 @@ function geodir_cf_html($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_html_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_html_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -1575,9 +1688,11 @@ function geodir_cf_html($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_html_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_html_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -1586,6 +1701,7 @@ function geodir_cf_html($html,$location,$cf,$p=''){
         if (!empty($gd_post->{$cf['htmlvar_name']})) {
 
             $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -1595,9 +1711,14 @@ function geodir_cf_html($html,$location,$cf,$p=''){
                 $field_icon = '';
             }
 
-            $html = '<div class="geodir_post_meta  ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;"><span class="geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-            $html .= '</span>' . wpautop($gd_post->{$cf['htmlvar_name']}) . '</div>';
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= wpautop($gd_post->{$cf['htmlvar_name']});
+
+            $html .= '</div>';
 
         }
 
@@ -1605,7 +1726,7 @@ function geodir_cf_html($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_html','geodir_cf_html',10,4);
+add_filter('geodir_custom_field_output_html','geodir_cf_html',10,5);
 
 
 
@@ -1615,11 +1736,13 @@ add_filter('geodir_custom_field_output_html','geodir_cf_html',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_taxonomy($html,$location,$cf,$p=''){
+function geodir_cf_taxonomy($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -1661,9 +1784,11 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_taxonomy_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_taxonomy_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -1674,9 +1799,11 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_taxonomy_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_taxonomy_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -1687,14 +1814,15 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_taxonomy_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_taxonomy_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
     if(empty($html)){
-
 
         if($html_var=='post_category'){
             $post_taxonomy = $gd_post->post_type . 'category';
@@ -1723,7 +1851,8 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
                     $term = trim($term);
 
                     if ($term != '') {
-                        $term = get_term_by('id', $term, $post_taxonomy);
+                        $ttype = $html_var == 'post_tags' ? 'name' : 'id';
+                        $term = get_term_by( $ttype, $term, $post_taxonomy);
                         if (is_object($term)) {
                             $links[] = "<a href='" . esc_attr(get_term_link($term, $post_taxonomy)) . "'>" . $term->name . "</a>";
                             $terms[] = $term;
@@ -1743,6 +1872,7 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
 
             if ($html_value != '') {
                 $field_icon = geodir_field_icon_proccess($cf);
+                $output = geodir_field_output_process($output);
                 if (strpos($field_icon, 'http') !== false) {
                     $field_icon_af = '';
                 } else if ($field_icon == '') {
@@ -1752,9 +1882,14 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
                     $field_icon = '';
                 }
 
-                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $html_var . '" style="clear:both;"><span class="geodir-i-taxonomy geodir-i-category" style="' . $field_icon . '">' . $field_icon_af;
-                $html .= (trim($cf['frontend_title'])) ? __($cf['frontend_title'], 'geodirectory') . ': ' : '';
-                $html .= '</span> ' . $html_value . '</div>';
+                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+                if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-taxonomy" style="' . $field_icon . '">' . $field_icon_af;
+                if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+                if($output=='' || isset($output['icon']))$html .= '</span>';
+                if($output=='' || isset($output['value']))$html .= $html_value;
+
+                $html .= '</div>';
             }
         }
 
@@ -1762,9 +1897,9 @@ function geodir_cf_taxonomy($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_tags','geodir_cf_taxonomy',10,4);
-add_filter('geodir_custom_field_output_categories','geodir_cf_taxonomy',10,4);
-add_filter('geodir_custom_field_output_taxonomy','geodir_cf_taxonomy',10,4);
+add_filter('geodir_custom_field_output_tags','geodir_cf_taxonomy',10,5);
+add_filter('geodir_custom_field_output_categories','geodir_cf_taxonomy',10,5);
+add_filter('geodir_custom_field_output_taxonomy','geodir_cf_taxonomy',10,5);
 
 
 /**
@@ -1773,12 +1908,14 @@ add_filter('geodir_custom_field_output_taxonomy','geodir_cf_taxonomy',10,4);
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
  * @since 1.6.6
  * @since 1.6.21 New hook added to filter address fields being displayed.
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_address($html,$location,$cf,$p=''){
+function geodir_cf_address($html,$location,$cf,$p='',$output=''){
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -1805,9 +1942,11 @@ function geodir_cf_address($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_address_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_address_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -1818,9 +1957,11 @@ function geodir_cf_address($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_address_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_address_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -1831,9 +1972,11 @@ function geodir_cf_address($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_address_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_address_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -1905,6 +2048,7 @@ function geodir_cf_address($html,$location,$cf,$p=''){
         if ($gd_post->street) {
 
             $field_icon = geodir_field_icon_proccess( $cf );
+            $output = geodir_field_output_process($output);
             if ( strpos( $field_icon, 'http' ) !== false ) {
                 $field_icon_af = '';
             } elseif ( $field_icon == '' ) {
@@ -1913,11 +2057,7 @@ function geodir_cf_address($html,$location,$cf,$p=''){
                 $field_icon_af = $field_icon;
                 $field_icon    = '';
             }
-            
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $html_var . '" style="clear:both;"  itemscope itemtype="https://schema.org/PostalAddress">';
-            $html .= '<span class="geodir-i-location" style="' . $field_icon . '">' . $field_icon_af;
-            $html .= ( trim( $cf['frontend_title'] ) ) ? __( $cf['frontend_title'], 'geodirectory' ) . ': ' : '&nbsp;';
-            $html .= '</span>';
+
             
             $address_fields = array();
 
@@ -1951,16 +2091,23 @@ function geodir_cf_address($html,$location,$cf,$p=''){
             
             if (!empty($address_fields) && is_array($address_fields)) {
                 $address_fields = array_values($address_fields);
-                $html .= implode('<br>', $address_fields);
+                $address_fields = implode('<br>', $address_fields);
             }
-            
+
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-address" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $address_fields;
+
             $html .= '</div>';
         }
     }
 
     return $html;
 }
-add_filter('geodir_custom_field_output_address','geodir_cf_address',10,4);
+add_filter('geodir_custom_field_output_address','geodir_cf_address',10,5);
 
 
 
@@ -1970,11 +2117,12 @@ add_filter('geodir_custom_field_output_address','geodir_cf_address',10,4);
  * @param string $html The html to be output.
  * @param string $location The location name of the output location.
  * @param object $cf The custom field object info.
+ * @param string $output The output string that tells us what to output.
  *
  * @since 2.0.0
  * @return string The html to output.
  */
-function geodir_cf_business_hours($html,$location,$cf,$p=''){
+function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
     else{ global $gd_post;}
@@ -1998,9 +2146,10 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
          *
          * @param string $html The html to filter.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
          * @since 2.0.0
          */
-        $html = apply_filters("geodir_custom_field_output_business_hours_loc_{$location}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_output_business_hours_loc_{$location}",$html,$cf,$output);
     }
 
     // Check if there is a custom field specific filter.
@@ -2011,9 +2160,10 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
          * @since 2.0.0
          */
-        $html = apply_filters("geodir_custom_field_output_business_hours_var_{$html_var}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_business_hours_var_{$html_var}",$html,$location,$cf,$output);
     }
 
     // Check if there is a custom field key specific filter.
@@ -2024,9 +2174,10 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
          * @param string $html The html to filter.
          * @param string $location The location to output the html.
          * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
          * @since 2.0.0
          */
-        $html = apply_filters("geodir_custom_field_output_business_hours_key_{$cf['field_type_key']}",$html,$location,$cf);
+        $html = apply_filters("geodir_custom_field_output_business_hours_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
     // If not html then we run the standard output.
@@ -2042,6 +2193,7 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
 
             if (!empty($show_value)) {
                 $field_icon = geodir_field_icon_proccess($cf);
+                $output = geodir_field_output_process($output);
                 if (strpos($field_icon, 'http') !== false) {
                     $field_icon_af = '';
                 } else if ($field_icon == '') {
@@ -2078,6 +2230,16 @@ function geodir_cf_business_hours($html,$location,$cf,$p=''){
 					$html .= '</div></div>';
 				}
 				$html .= '</div></div>';
+
+                ###
+//                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+//
+//                if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-field-' . $html_var . $extra_class . '" style="' . $field_icon . '">' . $field_icon_af;
+//                if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+//                if($output=='' || isset($output['icon']))$html .= '</span>';
+//                if($output=='' || isset($output['value']))$html .= $address_fields;
+//
+//                $html .= '</div>';
             }
         }
     }

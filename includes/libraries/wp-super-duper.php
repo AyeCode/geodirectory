@@ -122,12 +122,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			wp_die();
 		}
 
-		public function shortcode_insert_button(){
+		public static function shortcode_insert_button($insert_shortcode_function=''){
 			global $sd_widgets,$shortcode_insert_button_once;
 			if($shortcode_insert_button_once){return;}
 			add_thickbox();
 			?>
-			<div id="my-content-id" style="display:none;">
+			<div id="super-duper-content" style="display:none;">
 
 				<div class="sd-shortcode-left-wrap">
 					<?php
@@ -160,8 +160,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			</div>
 
 
-			<!--			<a href="#TB_inline?width=600&height=550&inlineId=my-content-id" class="thickbox button"><i class="fa fa-cubes" aria-hidden="true"></i></a>-->
-			<a href="#TB_inline?width=100%&height=550&inlineId=my-content-id" class="thickbox button" title="<?php _e('Add Shortcode');?>"><i class="fa fa-cubes" aria-hidden="true"></i></a>
+			<a href="#TB_inline?width=100%&height=550&inlineId=super-duper-content" class="thickbox button super-duper-content-open" title="<?php _e('Add Shortcode');?>"><i class="fa fa-cubes" aria-hidden="true"></i></a>
 
 			<style>
 				.sd-shortcode-left-wrap{
@@ -182,6 +181,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			</style>
 			<script>
 
+				<?php
+					if($insert_shortcode_function){
+						echo $insert_shortcode_function;
+					}else{
+				?>
 				function sd_insert_shortcode(){
 					$shortcode = jQuery('#sd-shortcode-output').val();
 					if($shortcode){
@@ -201,6 +205,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						tb_remove();
 					}
 				}
+				<?php }?>
 
 				function sd_copy_to_clipboard(){
 					/* Get the text field */

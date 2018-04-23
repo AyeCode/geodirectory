@@ -1945,9 +1945,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			 */
 			$show_in_locations = array(
 				"[detail]"    => __( "Details page sidebar", 'geodirectory' ),
-				"[moreinfo]"  => __( "More info tab", 'geodirectory' ),
+				//"[moreinfo]"  => __( "More info tab", 'geodirectory' ),
 				"[listing]"   => __( "Listings page", 'geodirectory' ),
-				"[owntab]"    => __( "Details page own tab", 'geodirectory' ),
+				//"[owntab]"    => __( "Details page own tab", 'geodirectory' ),
 				"[mapbubble]" => __( "Map bubble", 'geodirectory' ),
 			);
 
