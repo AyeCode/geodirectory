@@ -14,13 +14,13 @@
  */
 function geodir_get_weekdays() {
    $weekdays = array( 
-       'Mo'    	=> __( 'Monday', 'geodirectory' ), 
-       'Tu'  	=> __( 'Tuesday', 'geodirectory' ),  
-       'We' 	=> __( 'Wednesday', 'geodirectory' ),  
-       'Th'  	=> __( 'Thursday', 'geodirectory' ),  
-       'Fr'    	=> __( 'Friday', 'geodirectory' ),  
-       'Sa'  	=> __( 'Saturday', 'geodirectory' ),
-       'Su'    	=> __( 'Sunday' , 'geodirectory' )
+       'Mo'    	=> __( 'Monday' ), 
+       'Tu'  	=> __( 'Tuesday' ),  
+       'We' 	=> __( 'Wednesday' ),  
+       'Th'  	=> __( 'Thursday' ),  
+       'Fr'    	=> __( 'Friday' ),  
+       'Sa'  	=> __( 'Saturday' ),
+       'Su'    	=> __( 'Sunday' )
    );
 
    return apply_filters( 'geodir_get_weekdays', $weekdays );
