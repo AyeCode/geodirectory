@@ -38,8 +38,12 @@
   }
 
   // @todo we need to add different types here
-  .gd-info{
+  &.gd-info{
 
+  }
+
+  &.gd-warn{
+    background: #fb887b;
   }
 
   &.noti-white{

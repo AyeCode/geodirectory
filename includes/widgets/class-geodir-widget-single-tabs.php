@@ -48,15 +48,127 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
     public function output($args = array(), $widget_args = array(),$content = ''){
         global $preview, $post,$gd_post;
         ob_start();
-        ?>
+        $post_type = $post->post_type;
+        $tabs = self::get_tab_settings($post_type);
 
-        <?php
+        if(!empty($tabs)){
+            echo '<div class="geodir-tabs" id="gd-tabs">';
 
-        $this->detail_page_tabs();
+            // tabs head
+            echo '<dl class="geodir-tab-head">';
+            foreach($tabs as $tab){
+                if($tab->tab_level>0){continue;}
+
+                echo '<dt></dt> <!-- added to comply with validation -->';
+                echo '<dd class="">';
+                echo '<a data-tab="#'.esc_attr($tab->tab_key).'" data-status="enable">';
+                if($tab->tab_icon){
+                    echo '<i class="fa '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
+                }
+                echo esc_attr__($tab->tab_name,'geodirectory').'</a>';
+                echo '</dd>';
+
+            }
+            echo '</dl>';
+
+            // tabs content
+            echo '<ul class="geodir-tabs-content geodir-entry-content ">';
+            foreach($tabs as $tab){
+                if($tab->tab_level>0){continue;}
+
+                echo '<li id="'.esc_attr($tab->tab_key).'Tab" >';
+                echo '<div id="geodir-tab-content-'.esc_attr($tab->tab_key).'" class="hash-offset"></div>';
+
+                //echo "content".esc_attr($tab->tab_key);
+
+                echo self::tab_content($tab);
+
+
+
+                echo '<li>';
+
+            }
+            echo '</ul>';
+
+            echo '</div>';
+        }
+
+       // echo "<hr style='clear:both;'>";
+
+
+       // $this->detail_page_tabs();
 
         return ob_get_clean();
     }
 
+    public function tab_content($tab,$child=false) {
+
+        // main content
+        if(!empty($tab->tab_content)){ // override content
+            echo stripslashes( $tab->tab_content );
+        }elseif($tab->tab_type=='meta'){ // meta info
+            echo do_shortcode('[gd_post_meta key="'.$tab->tab_key.'" show="value"]');
+        }elseif($tab->tab_type=='standard'){ // meta info
+            if($tab->tab_key=='reviews'){
+                comments_template();
+            }
+        }
+
+
+
+        self::tab_content_child($tab);
+    }
+
+    public function tab_content_child($tab) {
+        global $post;
+        $post_type = $post->post_type;
+        $tabs = self::get_tab_settings($post_type);
+        $parent_id = $tab->id;
+
+        foreach($tabs as $child_tab){
+            if($child_tab->tab_parent==$parent_id){
+                if(!empty($child_tab->tab_content)){ // override content
+                    echo stripslashes( $child_tab->tab_content );
+                }elseif($child_tab->tab_type=='meta'){ // meta info
+                    echo do_shortcode('[gd_post_meta key="'.$child_tab->tab_key.'"]');
+                }elseif($child_tab->tab_type=='fieldset'){ // meta info
+                    self:: output_fieldset($child_tab);
+                }elseif($tab->tab_type=='standard'){ // meta info
+                    if($tab->tab_key=='reviews'){
+                        comments_template();
+                    }
+                }
+            }
+        }
+
+    }
+
+    public function output_fieldset($tab){
+        echo '<div class="geodir_post_meta  gd-fieldset">';
+        echo "<h4>";
+        if($tab->tab_icon){
+            echo '<i class="fa '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
+        }
+        if($tab->tab_name){
+            esc_attr_e($tab->tab_name,'geodirectory');
+        }
+        echo "</h4>";
+        echo "</div>";
+
+    }
+
+
+    public function get_tab_settings($post_type){
+        global $wpdb,$geodir_tab_layout_settings;
+
+        if($geodir_tab_layout_settings){
+            $tabs = $geodir_tab_layout_settings;
+        }else{
+            $geodir_tab_layout_settings = $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".GEODIR_TABS_LAYOUT_TABLE." WHERE post_type=%s ORDER BY sort_order ASC",$post_type));
+        }
+
+        return $tabs;
+    }
     /**
      * The main function responsible for displaying tabs in frontend detail page.
      *

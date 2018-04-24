@@ -55,6 +55,9 @@ class GeoDir_AJAX {
 			'json_search_users' => false,
 			'ninja_forms' => true,
 			'get_tabs_form' => false,
+			'save_tab_item' => false,
+			'save_tabs_order' => false,
+			'delete_tab' => false,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -67,6 +70,94 @@ class GeoDir_AJAX {
 				add_action( 'geodir_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	/**
+	 * Get tabs input form.
+	 */
+	public static function delete_tab(){
+		// security
+		check_ajax_referer( 'gd_new_field_nonce', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		//print_r($_REQUEST);exit;
+
+		$tab_id = isset($_POST['tab_id']) && $_POST['tab_id'] ? absint($_POST['tab_id']) : '';
+
+		if(!$tab_id){
+			wp_send_json_error( __("No tab_id provided.","geodirectory") );
+		}else{
+			$post_type = isset($_POST['post_type']) && $_POST['post_type'] ? esc_attr($_POST['post_type']) : '';
+			$result = GeoDir_Settings_Cpt_Tabs::delete_tab($tab_id,$post_type);
+
+			if(is_wp_error( $result ) ){
+				wp_send_json_error( $result->get_error_message() );
+			}else{
+				wp_send_json_success();
+			}
+		}
+
+		wp_die();
+	}
+
+	/**
+	 * Get tabs input form.
+	 */
+	public static function save_tabs_order(){
+		// security
+		check_ajax_referer( 'gd_new_field_nonce', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		//print_r($_REQUEST);exit;
+
+		$tabs = isset($_POST['tabs']) && $_POST['tabs'] ? $_POST['tabs'] : '';
+
+		if(!$tabs){
+			wp_send_json_error( __("No tabs provided.","geodirectory") );
+		}else{
+			$result = GeoDir_Settings_Cpt_Tabs::set_tabs_orders($tabs);
+
+			if(is_wp_error( $result ) ){
+				wp_send_json_error( $result->get_error_message() );
+			}else{
+				wp_send_json_success();
+			}
+		}
+
+		wp_die();
+	}
+
+	/**
+	 * Save tab item.
+	 */
+	public static function save_tab_item(){
+		// security
+		check_ajax_referer( 'gd_new_field_nonce', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		//print_r($_REQUEST);exit;
+
+		$tab_type = isset($_POST['tab_type']) && $_POST['tab_type'] ? esc_attr($_POST['tab_type']) : '';
+
+		if(!$tab_type){
+			wp_send_json_error( __("No tab_type provided.","geodirectory") );
+		}else{
+			$result = GeoDir_Settings_Cpt_Tabs::save_tab_item($_POST);
+
+			if(is_wp_error( $result ) ){
+				wp_send_json_error( $result->get_error_message() );
+			}else{
+				wp_send_json_success($result);
+			}
+		}
+
+		wp_die();
 	}
 
 	/**
@@ -87,7 +178,7 @@ class GeoDir_AJAX {
 			wp_send_json_error( __("No tab_type provided.","geodirectory") );
 		}else{
 			$result = GeoDir_Settings_Cpt_Tabs::get_tab_item($_POST);
-			
+
 			if(is_wp_error( $result ) ){
 				wp_send_json_error( $result->get_error_message() );
 			}else{

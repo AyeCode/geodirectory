@@ -316,61 +316,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'desc_tip' => true,
 					'advanced' => true
 				),
-				// tab labels
-				array(
-					'name'     => __( 'Profile tab label', 'geodirectory' ),
-					'desc'     => __( 'Text label for "Profile" tab on post detail page.(optional)', 'geodirectory' ),
-					'id'       => 'label_post_profile',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true
-				),
-				array(
-					'name'     => __( 'More Info tab label', 'geodirectory' ),
-					'desc'     => __( 'Text label for "More Info" tab on post detail page.(optional)', 'geodirectory' ),
-					'id'       => 'label_post_info',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true
-				),
-				array(
-					'name'     => __( 'Photos tab label', 'geodirectory' ),
-					'desc'     => __( 'Text label for "Photos" tab on post detail page.(optional)', 'geodirectory' ),
-					'id'       => 'label_post_images',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true
-				),
-				array(
-					'name'     => __( 'Map tab label', 'geodirectory' ),
-					'desc'     => __( 'Text label for "Map" tab on post detail page.(optional)', 'geodirectory' ),
-					'id'       => 'label_post_map',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true
-				),
-				array(
-					'name'     => __( 'Reviews tab label', 'geodirectory' ),
-					'desc'     => __( 'Text label for "Reviews" tab on post detail page.(optional)', 'geodirectory' ),
-					'id'       => 'label_reviews',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true
-				),
-				array(
-					'name'     => __( 'Related Listing tab label', 'geodirectory' ),
-					'desc'     => __( 'Text label for "Related Listing" tab on post detail page.(optional)', 'geodirectory' ),
-					'id'       => 'label_related_listing',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true
-				),
+				
 
 
 				array( 'type' => 'sectionend', 'id' => 'cpt_settings_labels' ),

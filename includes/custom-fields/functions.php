@@ -354,6 +354,13 @@ if (!function_exists('geodir_get_field_infoby')) {
 }
 
 
+/**
+ * Process the field icon to html.
+ *
+ * @param $cf
+ *
+ * @return string
+ */
 function geodir_field_icon_proccess($cf){
 
 
@@ -366,6 +373,21 @@ function geodir_field_icon_proccess($cf){
     }
 
     return $field_icon;
+}
+
+/**
+ * Process the field output string to a reversed array.
+ *
+ * @param $output
+ *
+ * @return array
+ */
+function geodir_field_output_process($output){
+
+    if(!empty($output) && !is_array($output)){
+        $output = array_flip(explode("-",$output)); // for speed
+    }
+    return $output;
 }
 
 if (!function_exists('geodir_show_listing_info')) {

@@ -59,7 +59,7 @@ class GeoDir_Admin_Install {
 	 *
 	 * This check is done on all requests and runs if the versions do not match.
 	 */
-	public static function check_version() { //self::install(); // @todo remove after testing
+	public static function check_version() { self::install(); // @todo remove after testing
 		if ( ! defined( 'IFRAME_REQUEST' ) && get_option( 'geodirectory_version' ) !== GeoDir()->version ) {
 			self::install();
 			do_action( 'geodirectory_updated' );
@@ -106,6 +106,7 @@ class GeoDir_Admin_Install {
 		self::insert_countries();
 		self::create_options();
 		self::insert_default_fields();
+		self::insert_default_tabs();
 		self::create_pages();
 
 
@@ -204,6 +205,80 @@ class GeoDir_Admin_Install {
 		$fields = apply_filters('geodir_before_default_custom_fields_saved', $fields);
 		foreach ($fields as $field_index => $field) {
 			geodir_custom_field_save($field);
+		}
+	}
+
+	/*
+	 * Insert the default field for the CPTs
+	 */
+	public static function insert_default_tabs($post_type = 'gd_place'){
+		$fields = array();
+		
+		// Profile / description
+		$fields[] = array(
+			'post_type'     => $post_type,
+			'tab_layout'    => 'post',
+			'tab_type'      => 'meta',
+			'tab_name'      => __('Profile','geodirectory'),
+			'tab_icon'      => 'fa-home',
+			'tab_key'       => 'post_content',
+			'tab_content'   => '',
+			'sort_order'    => '1',
+			'tab_level'     => '0'
+		);
+
+		// Photos
+		$fields[] = array(
+			'post_type'     => $post_type,
+			'tab_layout'    => 'post',
+			'tab_type'      => 'standard',
+			'tab_name'      => __('Photos','geodirectory'),
+			'tab_icon'      => 'fa-picture-o',
+			'tab_key'       => 'post_images',
+			'tab_content'   => '[gd_post_images type="gallery" ajax_load="1" slideshow="1" show_title="1" animation="slide" controlnav="1" link_to="lightbox"]',
+			'sort_order'    => '2',
+			'tab_level'     => '0'
+		);
+
+		// Photos
+		$fields[] = array(
+			'post_type'     => $post_type,
+			'tab_layout'    => 'post',
+			'tab_type'      => 'standard',
+			'tab_name'      => __('Map','geodirectory'),
+			'tab_icon'      => 'fa-globe',
+			'tab_key'       => 'post_map',
+			'tab_content'   => '[gd_map width="100%" height="325px" maptype="ROADMAP" zoom="0" map_type="post" map_directions="1"]',
+			'sort_order'    => '3',
+			'tab_level'     => '0'
+		);
+
+		// Reviews
+		$fields[] = array(
+			'post_type'     => $post_type,
+			'tab_layout'    => 'post',
+			'tab_type'      => 'standard',
+			'tab_name'      => __('Reviews','geodirectory'),
+			'tab_icon'      => 'fa-comments',
+			'tab_key'       => 'reviews',
+			'tab_content'   => '',
+			'sort_order'    => '4',
+			'tab_level'     => '0'
+		);
+
+
+		/**
+		 * Filter the array of default tabs DB table data.
+		 *
+		 * @since 1.0.0
+		 * @param string $fields The default tabs fields as an array.
+		 */
+		$fields = apply_filters('geodir_before_default_tabs_saved', $fields);
+		$has_tabs = GeoDir_Settings_Cpt_Tabs::get_tabs_fields($post_type);
+		if(empty($has_tabs)){
+			foreach ($fields as $field_index => $field) {
+				GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+			}
 		}
 	}
 	/**
@@ -540,6 +615,7 @@ class GeoDir_Admin_Install {
 							  post_type varchar(100) NULL,
 							  sort_order int(11) NOT NULL,
 							  tab_layout varchar(100) NOT NULL,
+							  tab_parent varchar(100) NOT NULL,
 							  tab_type varchar(100) NOT NULL,
 							  tab_level int(11) NOT NULL,
 							  tab_name varchar(255) NOT NULL,

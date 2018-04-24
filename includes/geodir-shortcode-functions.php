@@ -2209,21 +2209,25 @@ function geodir_sc_single_meta($atts, $content = '') {
             }
             if(!empty($field)){
 
-                if($atts['show']=='value'){
+                if($atts['show']=='valuexxx'){
                     $output = geodir_sc_single_meta_value($atts['id'],$atts['key']);
                 }else{
-                    //echo '###3';
+                    //echo '###3'.$atts['key'];
                     //print_r($field);
+                    //print_r($atts);
+
+                    // add css_alignment
                     if($atts['alignment']=='left'){$field['css_class'] .= " alignleft ";}
                     if($atts['alignment']=='center'){$field['css_class'] .= " aligncenter ";}
                     if($atts['alignment']=='right'){$field['css_class'] .= " alignright ";}
 
-                    $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id']);
+
+                    $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id'],$atts['show']);
                 }
 
 
             }else{
-               $output = __('Key does not exist','geodirectory');
+               //$output = __('Key does not exist','geodirectory');
             }
         }
     }

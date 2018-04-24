@@ -440,21 +440,57 @@ function gd_toggle_switch_display() {
 function gd_init_tabs_layout(){
     jQuery('.gd-tabs-sortable').nestedSortable({
         maxLevels: 2,
+        handle: 'div.dd-handle',
         items: 'li',
+        toleranceElement: 'form', // @todo remove this if problems
         helper:	'clone',
         placeholder: 'placeholder',
         forcePlaceholderSize: true,
-        listType: 'ul'
+        listType: 'ul',
+        update: function (event, ui) {
+            gd_tabs_save_order();
+            //console.log(jQuery('.gd-tabs-sortable').nestedSortable('serialize'));
+        }
     });
+    // int the new select2 boxes
+    jQuery("select.geodir-select").trigger('geodir-select-init');
+    jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
 }
 
+/**
+ * Show the tab settings, closing all other open setting first.
+ *
+ * @param $this
+ */
 function gd_tabs_item_settings($this){
-    jQuery($this).parent().find('.dd-setting').toggle();
+
+    var is_open = !jQuery($this).parent().find('.dd-setting').is(':hidden');
+    jQuery('.dd-setting').hide();
+    if(is_open){
+        jQuery($this).addClass("fa-caret-down").removeClass( "fa-caret-up");
+        jQuery($this).parent().find('.dd-setting').hide().removeClass( "gd-tab-settings-open" );
+    }else{
+        jQuery($this).addClass("fa-caret-up").removeClass( "fa-caret-down");
+        jQuery($this).parent().find('.dd-setting').show().addClass( "gd-tab-settings-open" );
+    }
+
+
 }
 
 function gd_tabs_add_tab($this){
 
+    // check if there is an unsaved field
+    if (jQuery('#setName_').length) {
+        alert(geodir_params.txt_save_other_setting);
+        jQuery('html, body').animate({
+            scrollTop: jQuery("#setName_").offset().top
+        }, 1000);
+        return;
+    }
+
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
+    var $post_type = jQuery("#new_post_type").val();
+    var $tab_layout = jQuery($this).data('tab_layout');
     var $tab_type = jQuery($this).data('tab_type');
     var $tab_name = jQuery($this).data('tab_name');
     var $tab_icon = jQuery($this).data('tab_icon');
@@ -463,12 +499,15 @@ function gd_tabs_add_tab($this){
     var data = {
         'action':           'geodir_get_tabs_form',
         'security':          gd_nonce,
+        'post_type':         $post_type,
+        'tab_layout':        $tab_layout,
         'tab_name':          $tab_name,
         'tab_type':          $tab_type,
         'tab_icon':          $tab_icon,
         'tab_key':           $tab_key,
         'tab_content':       $tab_content
     };
+
     jQuery.ajax({
         'url': ajaxurl,
         'type': 'POST',
@@ -479,8 +518,118 @@ function gd_tabs_add_tab($this){
             if(result.success){
                 jQuery('.gd-tabs-sortable').append(result.data);
                 gd_init_tabs_layout();
+                jQuery('.gd-tabs-sortable > li:last-child .fa-caret-down').trigger('click');
+                jQuery('html, body').animate({
+                    scrollTop: jQuery("#setName_").offset().top
+                }, 1000);
             }else{
                 alert("something went wrong");
+            }
+        }
+    });
+}
+
+function gd_tabs_save_tab($this){
+
+    var $form = jQuery($this).closest("form");
+    console.log($form.serialize());
+    var gd_nonce = jQuery("#gd_new_field_nonce").val();
+
+    var data = $form.serialize() + "&security="+gd_nonce + "&action=geodir_save_tab_item";
+    jQuery.ajax({
+        'url': ajaxurl,
+        'type': 'POST',
+        'data': data,
+        'success': function (result) {
+
+            console.log(result);
+            if(result.success){
+                var $li = jQuery($form).closest("li");
+                jQuery( $li ).replaceWith( result.data );
+                gd_init_tabs_layout();
+                gd_tabs_save_order();
+            }else{
+                alert(result.data);
+            }
+        }
+    });
+}
+
+function gd_tabs_delete_tab($this){
+
+    var $form = jQuery($this).closest("form");
+    var $li = jQuery($form).closest("li");
+    console.log($form.serialize());
+    var gd_nonce = jQuery("#gd_new_field_nonce").val();
+    var $post_type = jQuery("#new_post_type").val();
+    var $tab_id = jQuery($form).find("input[name=id]").val();
+
+    if(!$tab_id){
+        jQuery($form).closest("li").remove();
+        return;
+    }
+    //alert($tab_id);return;
+
+    var data = {
+        'action':           'geodir_delete_tab',
+        'security':          gd_nonce,
+        'post_type':         $post_type,
+        'tab_id':            $tab_id
+    };
+
+    jQuery.ajax({
+        'url': ajaxurl,
+        'type': 'POST',
+        'data': data,
+        'success': function (result) {
+
+            console.log(result);
+            if(result.success){
+                var $li = jQuery($form).closest("li").remove();
+                gd_init_tabs_layout();
+            }else{
+                alert(result.data);
+            }
+        }
+    });
+}
+
+function gd_tabs_save_order(){
+    $tabs = jQuery('.gd-tabs-sortable').nestedSortable('toArray', {startDepthCount: 0});
+    console.log($tabs);
+    var $order = {};
+    jQuery.each($tabs, function( index, tab ) {
+        console.log( index + ": " + tab );
+        if(tab.id){
+            $order[index] = {id:tab.id, tab_level: tab.depth,tab_parent: tab.parent_id};
+        }
+    });
+    console.log($order);
+
+    // return;
+
+
+
+    var gd_nonce = jQuery("#gd_new_field_nonce").val();
+
+    var data = {
+        'action':           'geodir_save_tabs_order',
+        'security':          gd_nonce,
+        'tabs':              $order
+    };
+    jQuery.ajax({
+        'url': ajaxurl,
+        'type': 'POST',
+        'data': data,
+        'success': function (result) {
+
+            console.log(result);
+            if(result.success){
+                // var $li = jQuery($form).closest("li");
+                // jQuery( $li ).replaceWith( result.data );
+                // gd_init_tabs_layout();
+            }else{
+                alert(result.data);
             }
         }
     });
