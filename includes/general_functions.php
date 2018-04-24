@@ -217,13 +217,13 @@ function geodir_curPageURL() {
  */
 function geodir_get_weekday() {
 	return array(
-		__( 'Sunday', 'geodirectory' ),
-		__( 'Monday', 'geodirectory' ),
-		__( 'Tuesday', 'geodirectory' ),
-		__( 'Wednesday', 'geodirectory' ),
-		__( 'Thursday', 'geodirectory' ),
-		__( 'Friday', 'geodirectory' ),
-		__( 'Saturday', 'geodirectory' )
+		__( 'Sunday' ),
+		__( 'Monday' ),
+		__( 'Tuesday' ),
+		__( 'Wednesday' ),
+		__( 'Thursday' ),
+		__( 'Friday' ),
+		__( 'Saturday' )
 	);
 }
 
