@@ -122,7 +122,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			wp_die();
 		}
 
-		public static function shortcode_insert_button($insert_shortcode_function=''){
+		public static function shortcode_insert_button($editor_id = '',$insert_shortcode_function=''){
 			global $sd_widgets,$shortcode_insert_button_once;
 			if($shortcode_insert_button_once){return;}
 			add_thickbox();
@@ -182,7 +182,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			<script>
 
 				<?php
-					if($insert_shortcode_function){
+					if(!empty($insert_shortcode_function)){
 						echo $insert_shortcode_function;
 					}else{
 				?>

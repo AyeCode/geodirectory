@@ -67,6 +67,18 @@
     border: 1px #e1e1e1 solid;
     clear: both;
     //border-top: none;
+
+
+
+    &.geodir-tabs-as-list{
+      border: none;
+      &>li{
+        margin: 0;
+        .gd-tab-list-title{
+          i{margin-right: 6px}
+        }
+      }
+    }
     #reviewsTab{
       .comments-area{
         margin: 0;
