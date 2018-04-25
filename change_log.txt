@@ -1,6 +1,8 @@
 v2.0.0.12-beta
 Attachment table date_gmt field added - ADDED
 Widget show/hide settings improved for better UI - CHANGED
+Post meta widget refactored to give the `show` options more flexibility - CHANGED
+Tabs Layout section added to be able to drag/drop create the details page tabs - ADDED
 
 v2.0.0.11-beta
 gd_listings shortcode/widget sort_by can now use custom sort_by options - CHANGED

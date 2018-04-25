@@ -1818,10 +1818,10 @@ function geodir_cfi_tags($html,$cf){
                     if(!empty($value)){
                         $value_array = array_map('trim',explode(",",$value));
                     }
-                    if (!empty($option_values_arr) && is_array($current_tags_arr)) {
+                    if (!empty($option_values_arr) || !empty($current_tags_arr)) {
                         $select_options .= '<optgroup label="'.__('Popular tags','geodirectory').'">';
                         foreach ($option_values_arr as $option_row) {
-                            if(in_array($option_row,$current_tags_arr)){
+                            if(is_array($current_tags_arr) && in_array($option_row,$current_tags_arr)){
                                 continue;
                             }
                             $option_label = isset($option_row['label']) ? $option_row['label'] : '';

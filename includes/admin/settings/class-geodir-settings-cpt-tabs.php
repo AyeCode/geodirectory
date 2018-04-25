@@ -498,7 +498,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 			// insert the required code for the SD button.
 			$js_insert_function = self::insert_shortcode_function();
-			WP_Super_Duper::shortcode_insert_button($js_insert_function);
+			WP_Super_Duper::shortcode_insert_button('',$js_insert_function);
 
 
 			$cfs = self::get_custom_fields();
