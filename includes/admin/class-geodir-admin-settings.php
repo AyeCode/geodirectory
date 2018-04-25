@@ -623,6 +623,14 @@ class GeoDir_Admin_Settings {
 						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?> <?php echo $tooltip_html; ?></th>
 						<td class="forminp">
 							<?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'geodirectory' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?> <?php echo $description; ?>
+
+							<?php if($args['selected']){?>
+							<a href="<?php echo get_edit_post_link( $args['selected'] ); ?>" class="button gd-page-setting-edit"><?php _e('Edit Page','geodirectory');?></a>
+
+								<?php if(empty($value['is_template_page'])){?>
+								<a href="<?php echo get_permalink($args['selected']);?>" class="button gd-page-setting-view"><?php _e('View Page','geodirectory');?></a>
+							<?php }}?>
+
 						</td>
 					</tr><?php
 					break;

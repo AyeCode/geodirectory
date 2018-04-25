@@ -20,7 +20,11 @@ class GeoDir_Template_Loader {
         // remove the theme featured output
         add_action( "wp", array(__CLASS__,'disable_theme_featured_output') );
 
+        // disable GD page templates on frontend
+        add_action( "wp", array(__CLASS__,'disable_page_templates_frontend') );
+
     }
+
 
     /**
      * Load a template.
@@ -382,6 +386,19 @@ class GeoDir_Template_Loader {
 		return $content;
     }
 
+    /**
+     * Disable our page templates from frontend viewing.
+     */
+    public static function disable_page_templates_frontend(){
+        global $post;
+        if(isset($post->ID) && (
+                $post->ID == geodir_get_option('page_details')
+                || $post->ID == geodir_get_option('page_archive')
+                || $post->ID == geodir_get_option('page_archive_item')
+            )){
+            wp_die( __( 'Sorry, this is a page template and can not be accessed from the frontend, it is used for building the layouts of GeoDirectory sections.','geodirectory' ) );
+        }
+    }
 }
 
 GeoDir_Template_Loader::init();
