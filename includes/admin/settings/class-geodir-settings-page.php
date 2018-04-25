@@ -42,6 +42,35 @@ abstract class GeoDir_Settings_Page {
 		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 		add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
 		add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+
+	}
+
+	public function font_awesome_select(){
+		?>
+		<div  id="gd-font-awesome-select" class="gd-notification lity-hide noti-white">
+		<select
+
+			name="tab_icon"
+			class="regular-text geodir-select"
+			data-fa-icons="1"  tabindex="-1" aria-hidden="true"
+		    onchange="jQuery('.gd-tabs-panel li form #field_icon').val(jQuery(this).val());jQuery('.lity-close').trigger('click');"
+		>
+			<?php
+			include_once( dirname( __FILE__ ) . '/../settings/data_fontawesome.php' );
+			echo "<option value=''>".__('None','geodirectory')."</option>";
+			//$tab_icon = str_replace("fa ","",$tab->tab_icon);
+			foreach ( geodir_font_awesome_array() as $key => $val ) {
+				?>
+				<option value="<?php echo esc_attr( $key ); ?>" data-fa-icon="<?php echo esc_attr( $key ); ?>" <?php
+				//selected( $tab_icon, $key );
+				?>><?php echo $key ?></option>
+				<?php
+			}
+			?>
+		</select>
+		</div>
+		<?php
+
 	}
 
 	/**

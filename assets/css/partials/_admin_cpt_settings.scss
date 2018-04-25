@@ -121,3 +121,9 @@
   }
 }
 
+
+html.lity-active{
+  .select2-container--open{
+    z-index: 555555;
+  }
+}

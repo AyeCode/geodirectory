@@ -666,7 +666,7 @@
 								class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
 								title='<?php _e( 'Upload icon using media and enter its url path, or enter font awesome class eg:"fa fa-home"', 'geodirectory' ); ?>'>
 							</span>
-							<?php _e( 'Upload icon :', 'geodirectory' ); ?>
+							<?php _e( 'Icon :', 'geodirectory' ); ?>  <a href="#gd-font-awesome-select" data-lity><?php _e('Select Icon','geodirectory');?></a>
 						</label>
 						<div class="gd-cf-input-wrap">
 							<input type="text" name="field_icon" id="field_icon"
