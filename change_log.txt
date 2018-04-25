@@ -1,3 +1,7 @@
+v2.0.0.13-beta
+Page templates for building layouts now restricted from frontend viewing - CHANGED
+GD page settings now containg link to edit/view pages when set - ADDED
+
 v2.0.0.12-beta
 Attachment table date_gmt field added - ADDED
 Widget show/hide settings improved for better UI - CHANGED
