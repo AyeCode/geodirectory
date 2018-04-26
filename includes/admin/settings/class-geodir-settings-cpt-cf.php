@@ -1278,8 +1278,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				$extra_fields = $field->extra_fields;
 			}
 			$validation_pattern = isset($field->validation_pattern) ? $field->validation_pattern : '';
-			$field = stripslashes_deep( $field ); // strip slashes from labels
-			$field->validation_pattern = $validation_pattern;// we need the validation pattern without slashes stripped.
+			$field = wp_unslash( $field ); // strip slashes from labels
+			$field->validation_pattern = str_replace('\\\\', '\\', $validation_pattern);// we need the validation pattern without slashes stripped.
 			if ( isset( $field->extra_fields ) ) {
 				$field->extra_fields = $extra_fields;
 			}
