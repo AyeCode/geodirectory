@@ -69,6 +69,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				add_action( 'geodir_manage_available_fields_custom', array( $this, 'output_custom_fields' ) );
 			}
 
+			add_action( 'admin_footer', array( $this, 'font_awesome_select' ) );
+
+
 		}
 
 		/**

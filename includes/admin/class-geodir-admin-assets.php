@@ -164,6 +164,8 @@ class GeoDir_Admin_Assets {
 		}
 
 
+
+
 		// Admin scripts for GD pages only
 		if ( in_array( $screen_id, geodir_get_screen_ids() ) ) {
 			wp_enqueue_script( 'wp-color-picker' );
@@ -248,6 +250,12 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_script( 'geodir-admin-term-script' );
 		}
 
+		// load only on widgets screen
+		if($screen_id == 'widgets' || $screen_id =='customize'){
+			wp_add_inline_script( 'admin-widgets', $this->widget_title_js() );
+			wp_add_inline_script( 'customize-controls', $this->widget_title_js() );
+		}
+
 
 		// System status.
 		if ( $gd_screen_id . '_page_gd-status' === $screen_id ) {
@@ -278,6 +286,87 @@ class GeoDir_Admin_Assets {
 			);
 		}
 
+	}
+
+
+	public function widget_title_js(){
+		ob_start();
+		?>
+		<script>
+			// add widget titles
+			gd_add_post_meta_widget_titles();
+
+			// inint on widget updated
+			jQuery(document).on('widget-updated', function(e, widget){
+				gd_add_post_meta_widget_titles();
+			});
+			/*
+			 * Add a title to the post meta widget so it is easer to distinguish them.
+			 */
+			function gd_add_post_meta_widget_titles(){
+				setTimeout(function(){
+				jQuery( ".widget-inside .id_base" ).each(function( index ) {
+					if(jQuery( this ).val() =='gd_post_meta'){
+						var $widget_id = jQuery(this).parent().find('.widget-id').val();
+						var $key = jQuery('#widget-'+$widget_id+'-key').val();
+						if($key){
+							jQuery(this).closest('.widget').find('.in-widget-title').html(": "+$key);
+						}
+					}
+				});
+				}, 200);
+			}
+
+//			function gd_add_post_meta_widget_titles_customizer(){
+//				setTimeout(function(){
+//					jQuery( ".widget-inside .id_base" ).each(function( index ) {
+//						if(jQuery( this ).val() =='gd_post_meta'){
+//
+//							var $widget_id = jQuery(this).parent().find('.widget-id').val();
+//							var $key = jQuery('#widget-'+$widget_id+'-key').val();
+//							alert($widget_id );
+//							//alert(1+$key);
+//							if($key){
+//								jQuery(this).closest('.widget').find('.in-widget-title').html(": "+$key);
+//							}
+//						}
+//					});
+//				}, 5000);
+//			}
+
+			// init cusotmiser widget actions
+			/**
+			 * We need to run this before jQuery is ready
+			 */
+//			if (wp.customize) {
+//				//alert(1111);
+//				wp.customize.bind('ready', function () {
+//					gd_add_post_meta_widget_titles_customizer();
+//					//alert(2222);
+//					// init widgets on load
+//					wp.customize.control.each(function (section) {//alert(11112);
+//						//gd_add_post_meta_widget_titles();
+//					});
+//
+//					// init widgets on add
+//					wp.customize.control.bind('add', function (section) {//alert(11113);
+//						//gd_add_post_meta_widget_titles();
+//					});
+//
+//				});
+//			}
+			</script>
+		<?php
+		$output = ob_get_clean();
+
+		/*
+		 * We only add the <script> tags for code highlighting, so we strip them from the output.
+		 */
+
+		return str_replace( array(
+			'<script>',
+			'</script>'
+		), '', $output );
 	}
 
 
