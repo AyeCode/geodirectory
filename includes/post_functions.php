@@ -933,7 +933,11 @@ function geodir_setup_postdata( $the_post ) {
 
 	$GLOBALS['gd_post'] = $the_post;
 
-	if ( $post->ID != $the_post->ID ) {
+	if ( empty( $post ) ) {
+		$post = get_post( $the_post->ID );
+		setup_postdata( $post );
+		$GLOBALS['post'] = $post;
+	} else if ( ! empty( $post ) && $post->ID != $the_post->ID ) {
 		setup_postdata( $the_post->ID );
 		if ( $post->ID != $the_post->ID ) {
 			$GLOBALS['post'] = get_post( $the_post->ID );

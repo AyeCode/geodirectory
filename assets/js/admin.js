@@ -105,7 +105,6 @@ jQuery(window).load(function() {
 
     // Save settings validation
     gd_settings_validation();
-
 });
 
 /**
@@ -1321,4 +1320,44 @@ function gd_settings_validation(){
         }
 
     });
+}
+
+jQuery(function($){
+	if ($('input#default_location_city').length && $('input#default_location_timezone').length) {
+		$(document).on('change', '[name="default_location_city"]', function(e){
+			geodir_fill_timezone($(this));
+			e.preventDefault();
+		});
+	}
+});
+function geodir_fill_timezone($el) {
+	var lat = $el.closest('form').find('[name="default_location_latitude"]').val();
+	var lng = $el.closest('form').find('[name="default_location_longitude"]').val();
+	lat = lat ? lat.trim() : '';
+	lng = lng ? lng.trim() : '';
+	if (lat && lng) {
+		var url = 'https://maps.googleapis.com/maps/api/timezone/json?sensor=false';
+		url += '&location=' + lat + ',' + lng;
+		url += '&timestamp=' + (Math.round((new Date().getTime())/1000)).toString();
+		jQuery.ajax({
+		   url:url,
+		}).done(function(response){
+		   if (response && typeof response == 'object' && response.rawOffset != 'undefined') {
+			   offset = response.rawOffset;
+			   offset = geodir_seconds_to_hm(offset);
+			   $el.closest('form').find('[name="default_location_timezone"]').val(offset);
+		   }
+		});
+	}
+}
+
+function geodir_seconds_to_hm(value) {
+	var prefix = value < 0 ? '-' : '+';
+	value = Math.abs(value);
+	var hours = Math.floor(value / 3600);
+	var minutes = Math.floor((value - (hours * 3600)) / 60);
+	var result = hours;
+	result += ":" + (minutes < 10 ? "0" + minutes : minutes);
+	result = prefix + '' +  result;
+	return result;
 }
