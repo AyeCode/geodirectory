@@ -2,6 +2,7 @@ v2.0.0.13-beta
 Page templates for building layouts now restricted from frontend viewing - CHANGED
 GD page settings now containg link to edit/view pages when set - ADDED
 Custom fields icon now has option to select font awesome icon from a list - ADDED
+validation_pattern for custom fields can have slashes stripped which can break validation - FIXED
 
 v2.0.0.12-beta
 Attachment table date_gmt field added - ADDED

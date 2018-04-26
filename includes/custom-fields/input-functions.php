@@ -95,7 +95,7 @@ function geodir_cfi_text($html,$cf){
 
         //validation
         if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
-            $validation = 'pattern="'.$cf['validation_pattern'].'"';
+            $validation = ' pattern="'.$cf['validation_pattern'].'" ';
         }else{$validation='';}
 
         // validation message
