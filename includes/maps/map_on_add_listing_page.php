@@ -477,13 +477,13 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
 			   jQuery("#<?php echo $prefix . 'country'; ?>").val(setCountry).trigger('change.select2');
             }
             if (getState) {
-                if (jQuery('input[id="<?php echo $prefix . 'region'; ?>"]').attr('id')) {
-                    jQuery("#<?php echo $prefix . 'region'; ?>").val(getState).trigger('change.select2');
+                if (jQuery("input#<?php echo $prefix . 'region'; ?>").length) {
+                    jQuery("#<?php echo $prefix . 'region'; ?>").val(getState);
                 }
             }
             if (getCity) {
-                if (jQuery('input[id="<?php echo $prefix . 'city'; ?>"]').attr('id')) {
-                    jQuery("#<?php echo $prefix . 'city'; ?>").val(getCity).trigger('change.select2');
+                if (jQuery("input#<?php echo $prefix . 'city'; ?>").length) {
+                    jQuery("#<?php echo $prefix . 'city'; ?>").val(getCity);
                 }
             }
         }

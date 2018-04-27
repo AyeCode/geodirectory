@@ -505,16 +505,13 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 				array(
 					'name'     => __( 'Timezone', 'geodirectory' ),
-					'desc'     => __( 'Set the site timezone.', 'geodirectory' ),
+					'desc'     => __( 'Set the site timezone. Ex: +5:30 or GMT+5:30 or UTC+5:30', 'geodirectory' ),
 					'id'       => 'default_location_timezone',
 					'type'     => 'text',
 					'css'      => 'min-width:300px;',
 					'desc_tip' => true,
-					'placeholder' => geodir_gmt_offset(),
+					'placeholder' => geodir_wp_gmt_offset(),
 					'advanced' => true,
-					'custom_attributes' => array(
-						'api_key' => geodir_get_map_api_key()
-					),
 					'required' => true
 				),
 

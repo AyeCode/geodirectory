@@ -55,9 +55,54 @@ function geodir_day_short_names() {
  * @return string Formatted offset.
  */
 function geodir_gmt_offset( $formatted = true ) {
+	$offset = geodir_get_option( 'default_location_timezone' );
+	if ( $offset == '' ) {
+		return geodir_wp_gmt_offset( $formatted );
+	} else {
+		$offset = preg_replace( '/\s+/', '', $offset );
+	}
+
+	if ( strpos( strtoupper( $offset ), 'UTC' ) === 0 || strpos( strtoupper( $offset ), 'GMT' ) === 0 ) {
+		$offset = substr( $offset, 3, strlen( $offset ) -3 );
+	}
+	if ( strpos( $offset, '+' ) !== 0 && strpos( $offset, '-' ) !== 0 ) {
+		$offset = $offset > 0 ? '+' . $offset : '-' . $offset;
+	}
+
+	$seconds = iso8601_timezone_to_offset( $offset );
+
+	if ( ! $formatted ) {
+		return $seconds;
+	}
+
+	$formatted_offset = geodir_seconds_to_hhmm( $seconds );
+
+	return $formatted_offset;
+}
+
+function geodir_seconds_to_hhmm( $seconds ) {
+	$sign = $seconds < 0 ? '-' : '+';
+	$seconds = absint( $seconds );
+	$hours = floor( $seconds / 3600 );
+	$minutes = floor( ( $seconds - ( $hours * 3600 ) ) / 60 );
+	$hhmm = $hours;
+	$hhmm .= ":" . ( $minutes < 10 ? "0" . (string) $minutes : (string) $minutes );
+	$hhmm = $sign . '' .  $hhmm;
+	return $hhmm;
+}
+
+/**
+ * Get WP UTC Offset.
+ *
+ * @since 2.0.0
+ *
+ * @param bool $formatted Format the offset.
+ * @return string Formatted offset.
+ */
+function geodir_wp_gmt_offset( $formatted = true ) {
 	$offset = get_option( 'gmt_offset' );
 	if ( ! $formatted ) {
-		return $offset;
+		return $offset * HOUR_IN_SECONDS;
 	}
 
 	if ( 0 <= $offset ) {

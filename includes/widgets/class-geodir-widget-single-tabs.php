@@ -195,7 +195,9 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         }elseif($tab->tab_type=='standard'){ // meta info
             if($tab->tab_key=='reviews'){
                 comments_template();
-            }
+            } else {
+				do_action( 'geodir_standard_tab_content', $tab );
+			}
         }
 
 

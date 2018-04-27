@@ -467,3 +467,15 @@ function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 2
 function geodir_get_core_supported_themes() {
 	return array( 'directory-starter', 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
 }
+
+function geodir_setup_timezone_api( $prefix ) {
+	?>
+	if (jQuery('[name="<?php echo $prefix; ?>region"]').length && jQuery('[name="<?php echo $prefix; ?>timezone"]').length) {
+		if (getState && getState != jQuery('[name="<?php echo $prefix; ?>region"]').data('prev-value')) {
+			geodir_fill_timezone('<?php echo $prefix; ?>');
+		}
+		jQuery('[name="<?php echo $prefix; ?>region"]').attr('data-prev-value', getState);
+	}
+	<?php
+}
+add_action( 'geodir_update_marker_address', 'geodir_setup_timezone_api', 1, 1 );

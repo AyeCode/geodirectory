@@ -49,7 +49,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
 
 			add_action( 'geodir_manage_tabs_available_fields', array( $this, 'output_standard_fields' ) );
-			add_action( 'geodir_manage_tabs_available_fields_predefined', array( $this, 'output_predefined_fields' ) );
+			add_action( 'geodir_manage_tabs_available_fields_predefined', array( $this, 'output_predefined_fields' ), 1, 2 );
 			add_action( 'geodir_manage_tabs_available_fields_custom', array( $this, 'output_custom_fields' ) );
 
 
@@ -156,7 +156,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 					 *
 					 * @param string $sub_tab The current settings tab name.
 					 */
-					do_action( 'geodir_manage_tabs_available_fields_predefined', self::$sub_tab ); ?>
+					do_action( 'geodir_manage_tabs_available_fields_predefined', self::$sub_tab, self::$post_type ); ?>
 
 					<div style="clear:both"></div>
 				</div>
@@ -446,12 +446,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		 *
 		 * @package GeoDirectory
 		 */
-		public function output_predefined_fields() {
-			$cfs = self::get_predefined_fields();
+		public function output_predefined_fields( $sub_tab, $post_type ) {
+			$cfs = self::get_predefined_fields( $post_type );
 			self::output_fields($cfs);
 		}
 
-		public function get_predefined_fields(){
+		public function get_predefined_fields( $post_type ){
 			$fields = array();
 
 			// Reviews
@@ -481,7 +481,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 				'tab_content'=> '[gd_post_images type="gallery" ajax_load="1" slideshow="1" show_title="1" animation="slide" controlnav="1" link_to="lightbox"]'
 			);
 
-			return $fields;
+			return apply_filters( 'geodir_cpt_settings_tabs_predefined_fields', $fields, $post_type );
 		}
 
 		/**

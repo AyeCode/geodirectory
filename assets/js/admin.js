@@ -1322,30 +1322,29 @@ function gd_settings_validation(){
     });
 }
 
-jQuery(function($){
-	if ($('input#default_location_city').length && $('input#default_location_timezone').length) {
-		$(document).on('change', '[name="default_location_city"]', function(e){
-			geodir_fill_timezone($(this));
-			e.preventDefault();
-		});
-	}
-});
-function geodir_fill_timezone($el) {
-	var lat = $el.closest('form').find('[name="default_location_latitude"]').val();
-	var lng = $el.closest('form').find('[name="default_location_longitude"]').val();
+function geodir_fill_timezone(prefix) {
+	var $form = jQuery('[name="' + prefix + 'timezone"]').closest('form');
+	var lat = jQuery('[name="' + prefix + 'latitude"]', $form).val();
+	var lng = jQuery('[name="' + prefix + 'longitude"]', $form).val();
 	lat = lat ? lat.trim() : '';
 	lng = lng ? lng.trim() : '';
 	if (lat && lng) {
-		var url = 'https://maps.googleapis.com/maps/api/timezone/json?sensor=false';
-		url += '&location=' + lat + ',' + lng;
+		var url = 'https://maps.googleapis.com/maps/api/timezone/json';
+		url += '?location=' + lat + ',' + lng;
 		url += '&timestamp=' + (Math.round((new Date().getTime())/1000)).toString();
+		url += '&key=' + geodir_params.google_api_key;
 		jQuery.ajax({
 		   url:url,
 		}).done(function(response){
-		   if (response && typeof response == 'object' && response.rawOffset != 'undefined') {
-			   offset = response.rawOffset;
-			   offset = geodir_seconds_to_hm(offset);
-			   $el.closest('form').find('[name="default_location_timezone"]').val(offset);
+		   if (response && typeof response == 'object') {
+			   if (typeof response.rawOffset != 'undefined') {
+				   offset = response.rawOffset;
+				   offset = geodir_seconds_to_hm(offset);
+				   jQuery('[name="' + prefix + 'timezone"]', $form).val(offset);
+			   }
+			   if (response.errorMessage) {
+				   console.log(response.errorMessage);
+			   }
 		   }
 		});
 	}
