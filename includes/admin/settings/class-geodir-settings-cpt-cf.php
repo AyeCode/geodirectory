@@ -1023,34 +1023,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
-			// Get directions link
-			$custom_fields['get_directions'] = array( // The key value should be unique and not contain any spaces.
-				'field_type'  => 'text',
-				'class'       => 'gd-get-directions',
-				'icon'        => 'fa fa-location-arrow',
-				'name'        => __( 'Get Directions Link', 'geodirectory' ),
-				'description' => __( 'Adds a link to be able to get directions to the post.', 'geodirectory' ),
-				'defaults'    => array(
-					'data_type'          => 'VARCHAR',
-					'admin_title'        => 'Get Directions',
-					'frontend_title'         => 'Get Directions',
-					'frontend_desc'         => '',
-					'htmlvar_name'       => 'get_directions',
-					'is_active'          => true,
-					'for_admin_use'      => true,
-					'default_value'      => 'Get Directions',
-					'show_in'            => '[detail],[listing]',
-					'is_required'        => false,
-					'validation_pattern' => '',
-					'validation_msg'     => '',
-					'required_msg'       => '',
-					'field_icon'         => 'fa fa-location-arrow',
-					'css_class'          => '',
-					'cat_sort'           => false,
-					'cat_filter'         => false
-				)
-			);
-
 
 			// JOB TYPE CF
 

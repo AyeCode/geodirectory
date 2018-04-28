@@ -101,6 +101,7 @@ class GeoDir_Admin_Install {
 		//include_once( dirname( __FILE__ ) . '/class-geodir-admin-notices.php' );
 
 
+		self::upgrades(); // do any db upgrades
 		self::remove_admin_notices();
 		self::create_tables();
 		self::insert_countries();
@@ -1048,6 +1049,20 @@ class GeoDir_Admin_Install {
 
 
 		return apply_filters('geodir_db_cpt_default_keys',$keys,$locationless);
+	}
+
+	/**
+	 * Run some upgrade scripts.
+	 */
+	public static function upgrades(){
+
+		/**
+		 * DB type change for post_images
+		 */
+		if (version_compare(get_option( 'geodirectory_version' ), '2.0.0.13-beta', '<=')) {
+			global $wpdb;
+			$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
+		}
 	}
 }
 
