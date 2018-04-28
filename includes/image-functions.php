@@ -170,7 +170,7 @@ function geodir_get_images($post_id = 0, $limit = '')
                 $image->featured= 0;
                 $image->is_approved= 1;
                 $image->metadata= wp_get_attachment_metadata( $default_img_id );
-                $image->type = 'post_image';
+                $image->type = 'post_images';
                 $post_images[] =  $image;
             }
 

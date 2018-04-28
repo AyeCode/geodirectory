@@ -1443,7 +1443,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		private static function sanatize_extra( $value ){
 			if( is_array($value) ){
 				if(empty($value)){$value = '';}else{
-					$value = maybe_serialize(array_map( 'sanitize_text_field', $value ));
+//					$value = maybe_serialize(array_map( 'sanitize_text_field', $value ));
+					foreach($value as $key => $val){
+						$value[$key] = self::sanatize_extra($val);
+					}
+					$value = maybe_serialize($value);
+
 				}
 			}else{
 				$value = sanitize_text_field($value );
@@ -1695,10 +1700,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 */
 		public static function save_custom_field($field = array()){
 			global $wpdb, $plugin_prefix;
-
+			//print_r($field);
 			$field = self::sanatize_custom_field($field);
 
-			//print_r($field);//exit;
+			//print_r($field);exit;
 			
 			// Check field exists.
 			$exists = self::field_exists($field);

@@ -80,6 +80,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			// file type input
 			add_filter('geodir_cfa_extra_fields_file',array( $this,'file_types'),10,4);
+			add_filter('geodir_cfa_extra_fields_file',array( $this,'file_limit'),10,4);
+
+			// post_images
+			add_filter('geodir_cfa_extra_fields_67yimages',array( $this,'file_limit'),10,4);
 
 			// price fields
 			add_filter('geodir_cfa_extra_fields_text',array( $this,'price_fields'),10,4);
@@ -308,7 +312,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			$allowed_file_types = geodir_allowed_mime_types();
 
 			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
-			$gd_file_types = !empty($extra_fields) && !empty($extra_fields['gd_file_types']) ? $extra_fields['gd_file_types'] : array('*');
+			$gd_file_types = !empty($extra_fields) && !empty($extra_fields['gd_file_types']) ? maybe_unserialize($extra_fields['gd_file_types']) : array('*');
 			?>
 			<li>
 				<label for="gd_file_types" class="gd-cf-tooltip-wrap">
@@ -329,6 +333,35 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 							</optgroup>
 						<?php } ?>
 					</select>
+				</div>
+			</li>
+
+			<?php
+
+			$output .= ob_get_clean();
+			return $output;
+		}
+
+		/*
+		 * file type input.
+		 */
+		public static function file_limit($output,$result_str,$cf,$field_info){
+			ob_start();
+
+			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
+			$gd_file_limit = !empty($extra_fields) && !empty($extra_fields['file_limit']) ? maybe_unserialize($extra_fields['file_limit']) : '';
+
+			?>
+			<li>
+				<label for="gd_file_limit" class="gd-cf-tooltip-wrap">
+					<span
+						class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
+						title='<?php _e( 'Select the file upload limit, 0 = unlimited.', 'geodirectory' ); ?>'>
+                    </span>
+					<?php _e('File upload limit:', 'geodirectory'); ?>
+				</label>
+				<div class="gd-cf-input-wrap">
+					<input type="number" name="extra[file_limit]" id="gd_file_limit" value="<?php echo esc_attr($gd_file_limit);?>">
 				</div>
 			</li>
 			<?php

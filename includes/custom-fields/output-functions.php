@@ -1421,17 +1421,35 @@ function geodir_cf_file($html,$location,$cf,$p='',$output=''){
         if (!empty($gd_post->{$cf['htmlvar_name']})):
 
             $files = explode(",", $gd_post->{$cf['htmlvar_name']});
+
+            $files = GeoDir_Media::get_attachments_by_type($gd_post->ID,$html_var);
+
+            //echo '####';
+            //print_r($files );
             if (!empty($files)):
 
                 $extra_fields = !empty($cf['extra_fields']) ? stripslashes_deep(maybe_unserialize($cf['extra_fields'])) : NULL;
                 $allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
 
+                $upload_dir = wp_upload_dir();
+                $upload_basedir = $upload_dir['basedir'];
+                $upload_baseurl = $upload_dir['baseurl'];
                 $file_paths = '';
                 foreach ($files as $file) {
-                    $file = !empty( $file ) ? geodir_file_relative_url( $file, true ) : '';
+
+                    //print_r($file);
+                    $file_path = isset($file->file) ? $file->file : '';
+                    $title = isset($file->title) ? $file->title : '';
+                    $desc = isset($file->caption) ? $file->caption : '';
+                    $url = $upload_baseurl.$file_path;
+//echo $file_path.'###'.$title.'###'.$desc;
+
+                    //continue;
+
+                    //$file = !empty( $file ) ? geodir_file_relative_url( $file, true ) : '';
                     
                     if ( !empty( $file ) ) {
-                        $image_name_arr = explode('/', $file);
+                        $image_name_arr = explode('/', $url);
                         $curr_img_dir = $image_name_arr[count($image_name_arr) - 2];
                         $filename = end($image_name_arr);
                         $img_name_arr = explode('.', $filename);
@@ -1453,22 +1471,22 @@ function geodir_cf_file($html,$location,$cf,$p='',$output=''){
                         $audio_file_types = array('audio/mpeg', 'audio/ogg', 'audio/mp4', 'audio/vnd.wav', 'audio/basic', 'audio/mid');
 
                         // If the uploaded file is image
-                        if (in_array($uploaded_file_type, $image_file_types)) {
+                        if (1==2 && in_array($uploaded_file_type, $image_file_types)) {
                             $file_paths .= '<div class="geodir-custom-post-gallery" class="clearfix">';
-                            $file_paths .= '<a href="'.$file.'">';
+                            $file_paths .= '<a href="'.$url.'">';
                             $file_paths .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
                             $file_paths .= '</a>';
-                            //$file_paths .= '<img src="'.$file.'"  />';	
+                            $file_paths .= '<img src="'.$url.'"  />';
                             $file_paths .= '</div>';
-                        }elseif (in_array($uploaded_file_type, $audio_file_types)) {// if audio
+                        }elseif (1==2 && in_array($uploaded_file_type, $audio_file_types)) {// if audio
                             $ext_path = '_' . $html_var . '_';
                             $filename = explode($ext_path, $filename);
                             $file_paths .= '<span class="gd-audio-name">'.$filename[count($filename) - 1].'</span>';
-                            $file_paths .= do_shortcode('[audio src="'.$file.'" ]');
+                            $file_paths .= do_shortcode('[audio src="'.$url.'" ]');
                         } else {
                             $ext_path = '_' . $html_var . '_';
                             $filename = explode($ext_path, $filename);
-                            $file_paths .= '<a href="' . $file . '" target="_blank">' . $filename[count($filename) - 1] . '</a>';
+                            $file_paths .= '<a class="gd-meta-file" href="' . $url . '" target="_blank" data-lity title="'.esc_attr($title).'">' . $filename[count($filename) - 1] . '</a>';
                         }
                     }
                 }

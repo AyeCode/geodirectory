@@ -297,12 +297,25 @@ class GeoDir_Post_Data {
 
 			// set post images
 			if ( isset( $gd_post['post_images'] ) ) {
-				$featured_image = self::save_post_images( $post_id, $gd_post['post_images'], $is_dummy);
+				$featured_image = self::save_files( $post_id, $gd_post['post_images'], 'post_images', $is_dummy);
 				if ( $featured_image !== false ) {
 					$postarr['featured_image'] = $featured_image;
 				}
 			}
 			unset( $postarr['post_images'] ); // unset the post_images as we save it in another table.
+
+			// process attachments
+			$file_fields = GeoDir_Media::get_file_fields($post_type);
+
+			if(!empty($file_fields)){// we have file fields
+				foreach($file_fields as $key => $extensions){
+					if(isset($postarr[$key])){ // its a attachment
+						//$postarr[$key] = GeoDir_Media::update_file_attachment($post_id,$key,$postarr[$key]);
+						self::save_files( $post_id,$postarr[$key],$key);
+						//unset( $postarr[$key]);
+					}
+				}
+			}
 
 
 			//$postarr['featured_image'] = $post['featured_image'];// @todo we need to find a way to set default cat on add listing
@@ -337,6 +350,7 @@ class GeoDir_Post_Data {
 
 	}
 
+	
 
 
 	/*
@@ -345,7 +359,6 @@ class GeoDir_Post_Data {
 	public static function set_object_terms( $object_id, $terms, $tt_ids, $taxonomy, $append = false, $old_tt_ids ) {
 
 	}
-
 
 	/**
 	 * Save post attachments.
@@ -360,13 +373,12 @@ class GeoDir_Post_Data {
 	 * @param array $post_image Post image urls as an array.
 	 * @param bool $dummy Optional. Is this a dummy listing? Default false.
 	 */
-	public static function save_post_images( $post_id = 0, $post_images = array(), $dummy = false ) {
+	public static function save_files( $post_id = 0, $files = array(),$field = '', $dummy = false ) {
 
 
-		//echo $post_id.'###'.$post_images;exit;
-		// check for changes, maybe we don't need to run the whole function
-		$curImages = GeoDir_Media::get_post_images_edit_string( $post_id );
-		if ( $curImages == $post_images ) {
+		// check for changes, maybe we don't need to run the whole function if there are no changes
+		$current_files = GeoDir_Media::get_field_edit_string($post_id,$field);
+		if ( $current_files == $files ) {
 			return false;
 		}
 
@@ -383,9 +395,9 @@ class GeoDir_Post_Data {
 			return null;
 		}
 
-		// If array is empty then we delete all images.
-		if ( empty( $post_images ) ) {
-			if ( GeoDir_Media::delete_post_images( $post_id ) ) {
+		// If array is empty then we delete all files.
+		if ( empty( $files ) ) {
+			if ( GeoDir_Media::delete_files($post_id,$field)) {
 				return '';
 			} else {
 				return false;
@@ -393,49 +405,48 @@ class GeoDir_Post_Data {
 		} else {
 
 			// convert to array if not already an array
-			if ( ! is_array( $post_images ) ) {
-				$post_images = explode( ",", $post_images );
+			if ( ! is_array( $files ) ) {
+				$files = explode( ",", $files );
 			}
 
-			$image_ids = array();
+			$file_ids = array();
 
 
 
-			foreach ( $post_images as $order => $image_string ) {
-				$image_info = array();
+			foreach ( $files as $order => $file_string ) {
+				$file_info = array();
 				// check if the string contains more info
-				if ( strpos( $image_string, '|' ) !== false ) {
-					$image_info = explode( "|", $image_string );
+				if ( strpos( $file_string, '|' ) !== false ) {
+					$file_info = explode( "|", $file_string );
 				} else {
-					$image_info[0] = $image_string;
+					$file_info[0] = $file_string;
 				}
 
 				/*
-				 * $image_info[0] = image_url;
-				 * $image_info[1] = image_id;
-				 * $image_info[2] = image_title;
-				 * $image_info[3] = image_caption;
+				 * $file_info[0] = file_url;
+				 * $file_info[1] = file_id;
+				 * $file_info[2] = file_title;
+				 * $file_info[3] = file_caption;
 				 */
-				$image_url     = isset( $image_info[0] ) ? sanitize_text_field( $image_info[0] ) : '';
-				$image_id      = ! empty( $image_info[1] ) ? absint( $image_info[1] ) : '';
-				$image_title   = ! empty( $image_info[2] ) ? sanitize_text_field( $image_info[2] ) : '';
-				$image_caption = ! empty( $image_info[3] ) ? sanitize_text_field( $image_info[3] ) : '';
-				$approved      = 1; // we approve all images on save
+				$file_url     = isset( $file_info[0] ) ? sanitize_text_field( $file_info[0] ) : '';
+				$file_id      = ! empty( $file_info[1] ) ? absint( $file_info[1] ) : '';
+				$file_title   = ! empty( $file_info[2] ) ? sanitize_text_field( $file_info[2] ) : '';
+				$file_caption = ! empty( $file_info[3] ) ? sanitize_text_field( $file_info[3] ) : '';
+				$approved      = 1; // we approve all files on save
 
-				// check if we already have the image.
-				if ( $image_url && $image_id ) { // we already have the image so just update the title, caption and order id
+				// check if we already have the file.
+				if ( $file_url && $file_id ) { // we already have the image so just update the title, caption and order id
 					// update the image
-					$file        = GeoDir_Media::update_image_texts( $image_id, $post_id, $image_url, $image_title, $image_caption, $order, $approved );
-					$image_ids[] = $image_id;
+					$file        = GeoDir_Media::update_attachment( $file_id, $post_id, $field, $file_url, $file_title, $file_caption, $order, $approved );
+					$file_ids[] = $file_id;
 				} else { // its a new image we have to insert.
 					
-					
-					if(defined('GEODIR_DOING_IMPORT') && strpos($image_url, 'http') !== 0){// if doing import and its not a full url then add placeholder attachment
+					if(defined('GEODIR_DOING_IMPORT') && strpos($file_url, 'http') !== 0){// if doing import and its not a full url then add placeholder attachment
 						// insert the image
-						$file = GeoDir_Media::insert_placeholder_image_attachment( $post_id, $image_url, $image_title, $image_caption, $order , $approved );
+						$file = GeoDir_Media::insert_placeholder_image_attachment( $post_id, $file_url, $file_title, $file_caption, $order , $approved );//@todo
 					}else{
 						// insert the image
-						$file = GeoDir_Media::insert_image_attachment( $post_id, $image_url, $image_title, $image_caption, $order , $approved );
+						$file = GeoDir_Media::insert_attachment( $post_id,$field , $file_url, $file_title, $file_caption, $order , $approved );
 					}
 				}
 
@@ -445,7 +456,7 @@ class GeoDir_Post_Data {
 					// fail silently so the rest of the post data can be inserted
 				} else {
 					// its featured so assign it
-					if ( $order == 0 ) {
+					if ( $order == 0 && $field == 'post_images' ) {
 						$featured_image = $file;
 					}
 				}
@@ -453,14 +464,14 @@ class GeoDir_Post_Data {
 			}
 
 
-			// Check if there are any missing image ids we need to delete
-			if ( ! empty( $curImages ) && ! empty( $post_images ) && ! empty( $image_ids ) ) {
-				$curImages_arr = explode( ",", $curImages );
+			// Check if there are any missing file ids we need to delete
+			if ( ! empty( $current_files ) && ! empty( $files ) && ! empty( $file_ids ) ) {
+				$current_files_arr = explode( ",", $current_files );
 
-				foreach ( $curImages_arr as $curImage ) {
-					$curImage_arr = explode( "|", $curImage );
-					if ( isset( $curImage_arr[1] ) && $curImage_arr[1] && ! in_array( $curImage_arr[1], $image_ids ) ) {
-						GeoDir_Media::delete_attachment( $curImage_arr[1], $post_id );
+				foreach ( $current_files_arr as $current_file ) {
+					$current_file_arr = explode( "|", $current_file );
+					if ( isset( $current_file_arr[1] ) && $current_file_arr[1] && ! in_array( $current_file_arr[1], $file_ids ) ) {
+						GeoDir_Media::delete_attachment( $current_file_arr[1], $post_id );
 					}
 				}
 			}
@@ -468,10 +479,9 @@ class GeoDir_Post_Data {
 
 		}
 
-
 		return $featured_image;
-
 	}
+
 
 	/**
 	 * If is a GD post then save the post data to temp array for later `save_post` hook.
@@ -1130,7 +1140,7 @@ class GeoDir_Post_Data {
 		);
 
 		/* Delete Attachments*/
-		GeoDir_Media::delete_post_images($id);
+		GeoDir_Media::delete_files($id,'all');
 
 		return true;
 	}

@@ -645,7 +645,7 @@ class GeoDir_Admin_Install {
 						featured tinyint(1) NULL DEFAULT '0',
 						is_approved tinyint(1) NULL DEFAULT '1',
 						metadata text NULL DEFAULT NULL,
-					    type varchar(254) NULL DEFAULT 'post_image',
+					    type varchar(254) NULL DEFAULT 'post_images',
 						PRIMARY KEY  (ID)
 						) $collate ; ";
 
