@@ -1237,8 +1237,12 @@ class GeoDir_Post_Data {
 	 * @return WP_Post The Post object.
 	 */
 	public static function the_gd_post( $post, $wp_query = array() ) {
+		global $gd_post;
+
 		if ( ! empty( $post->post_type ) && in_array( $post->post_type, geodir_get_posttypes() ) ) {
-			$GLOBALS['gd_post'] = geodir_get_post_info( $post->ID );
+			if ( ! ( ! empty( $gd_post ) && is_object( $gd_post ) && $gd_post->ID == $post->ID && isset( $post->post_category ) ) ) {
+				$GLOBALS['gd_post'] = geodir_get_post_info( $post->ID );
+			}
 		}
 
 		return $post;

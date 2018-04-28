@@ -536,6 +536,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 //        print_r($query_args);
 
+		/*
+		 * Filter widget listings query args.
+		 */
+		$query_args = apply_filters( 'geodir_widget_listings_query_args', $query_args, $instance );
+
         $widget_listings = geodir_get_widget_listings( $query_args );
 
         if ( $hide_if_empty && empty( $widget_listings ) ) {

@@ -465,6 +465,10 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             if ($excerpt_type == 'show-reviews') {
                 add_filter('get_the_excerpt', 'best_of_show_review_in_excerpt');
             }
+			/*
+			 * Filter widget listings query args.
+			 */
+			$query_args = apply_filters( 'geodir_widget_listings_query_args', $query_args, $instance );
             geodir_bestof_places_by_term($query_args);
             if ($excerpt_type == 'show-reviews') {
                 remove_filter('get_the_excerpt', 'best_of_show_review_in_excerpt');

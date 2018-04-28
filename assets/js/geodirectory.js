@@ -821,6 +821,8 @@ function geodir_refresh_business_hours() {
 function geodir_refresh_business_hour($this) {
 	var d, $d, hours, day, mins, time, hasOpen = false, hasClosed = false, isOpen, o, c, label, times = [], opens = [];
 	d = new Date(), utc = d.getTime() + (d.getTimezoneOffset() * 60000), d = new Date(utc + (parseInt(jQuery('.gd-bh-expand-range', $this).data('offsetsec')) * 1000));
+	date = d.getFullYear() + '-' + (("0" + (d.getMonth())).slice(-2)) + '-' + (("0" + (d.getDate())).slice(-2)) + 'T' + (("0" + (d.getHours())).slice(-2)) + ':' + (("0" + (d.getMinutes())).slice(-2)) + ':' + (("0" + (d.getSeconds())).slice(-2));
+	jQuery('.gd-bh-expand-range', $this).attr('data-date', date);
 	hours = d.getHours(), mins = d.getMinutes(), day = d.getDay();
 	if (day < 1) {
 		day = 7;
