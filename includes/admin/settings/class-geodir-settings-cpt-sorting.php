@@ -268,7 +268,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					'data_type'      => '',
 					'field_type'     => 'random',
 					'frontend_title' => 'Random',
-					'htmlvar_name'   => 'post_title',
+					'htmlvar_name'   => 'post_status',
 					'field_icon'     => 'fa fa-random',
 					'description'    => __( 'Random sort (not recommended for large sites)', 'geodirectory' )
 				);

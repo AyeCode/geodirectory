@@ -547,72 +547,59 @@ add_action( 'template_redirect', 'geodir_template_redirect' );
 function geodir_list_view_select() {
 	global $gd_session;
 	?>
-	<script type="text/javascript">
+<script type="text/javascript">
+	function geodir_list_view_select(list) {
+		val = list.value;
+		if (!val) {
+			return;
+		}
+		var listSel = jQuery(list).parents().find('.geodir-loop-container .geodir-category-list-view');
+		if (val != 1) {
+			jQuery(listSel).addClass('geodir-gridview');
+			jQuery(listSel).removeClass('geodir-listview');
+		} else {
+			jQuery(listSel).addClass('geodir-listview');
+		}
 
-		function geodir_list_view_select(list) {
-			//alert(listval);
-			val = list.value;
-			if (!val) {
-				return;
-			}
+		if (val == 1) {
+			jQuery(listSel).removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
+		} else if (val == 2) {
+			jQuery(listSel).removeClass('gridview_onethird gridview_onefourth gridview_onefifth');
+			jQuery(listSel).addClass('gridview_onehalf');
+		} else if (val == 3) {
+			jQuery(listSel).removeClass('gridview_onehalf gridview_onefourth gridview_onefifth');
+			jQuery(listSel).addClass('gridview_onethird');
+		} else if (val == 4) {
+			jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefifth');
+			jQuery(listSel).addClass('gridview_onefourth');
+		} else if (val == 5) {
+			jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefourth');
+			jQuery(listSel).addClass('gridview_onefifth');
+		}
 
-			//var listSel = jQuery(list).parent().parent().next('.geodir-category-list-view');
-			var listSel = jQuery(list).parents().find('.geodir-category-list-view');
-			console.log(listSel);
-			if (val != 1) {
-				jQuery(listSel).addClass('geodir-gridview');
-				jQuery(listSel).removeClass('geodir-listview');
-			} else {
-				jQuery(listSel).addClass('geodir-listview');
-			}
-
-			if (val == 1) {
-				jQuery(listSel).removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
-			}
-			else if (val == 2) {
-				jQuery(listSel).removeClass('gridview_onethird gridview_onefourth gridview_onefifth');
-				jQuery(listSel).addClass('gridview_onehalf');
-				//jQuery(listSel).GDswitchClass('gridview_onethird gridview_onefourth gridview_onefifth', 'gridview_onehalf', 600);
-			}
-			else if (val == 3) {
-				jQuery(listSel).removeClass('gridview_onehalf gridview_onefourth gridview_onefifth');
-				jQuery(listSel).addClass('gridview_onethird');
-				//jQuery(listSel).GDswitchClass('gridview_onehalf gridview_onefourth gridview_onefifth', 'gridview_onethird', 600);
-			}
-			else if (val == 4) {
-				jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefifth');
-				jQuery(listSel).addClass('gridview_onefourth');
-				//jQuery(listSel).GDswitchClass('gridview_onehalf gridview_onethird gridview_onefifth', 'gridview_onefourth', 600);
-			}
-			else if (val == 5) {
-				jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefourth');
-				jQuery(listSel).addClass('gridview_onefifth');
-				//jQuery(listSel).GDswitchClass('gridview_onehalf gridview_onethird gridview_onefourth', 'gridview_onefifth', 600);
-			}
-
-
-			// triger the window resize so the slider can resize to fit, animation takes 0.6s
+		// triger the window resize so the slider can resize to fit, animation takes 0.6s
+		jQuery(window).trigger('resize');
+		setTimeout(function() {
 			jQuery(window).trigger('resize');
-			setTimeout(function(){jQuery(window).trigger('resize');}, 600);
+		}, 600);
 
-			// store the user selection
-			localStorage.setItem("gd_list_view", val);
-		}
+		// store the user selection
+		localStorage.setItem("gd_list_view", val);
+	}
 
-		// set the current user selection if set
-		if (typeof(Storage) !== "undefined") {
-			var gd_list_view = localStorage.getItem("gd_list_view");
-			if(gd_list_view){
-				setTimeout(function(){
-					jQuery('#gd_list_view').val(gd_list_view).trigger('change');
-				}, 10);// we need to give it a very short time so the page loads the actual html
-			}
+	// set the current user selection if set
+	if (typeof(Storage) !== "undefined") {
+		var gd_list_view = localStorage.getItem("gd_list_view");
+		if (gd_list_view) {
+			setTimeout(function() {
+				jQuery('#gd_list_view').val(gd_list_view).trigger('change');
+			}, 10); // we need to give it a very short time so the page loads the actual html
 		}
-	</script>
+	}
+</script>
 	<div class="geodir-list-view-select">
-		<select name="gd_list_view" id="gd_list_view" onchange="geodir_list_view_select(this);" class="geodir-select" style="min-width: 130px;    border-radius: 4px;">
+		<select name="gd_list_view" id="gd_list_view" onchange="geodir_list_view_select(this);" class="geodir-select" style="min-width:130px;border-radius:4px;">
 			<?php $listing_view = (int) $gd_session->get( 'gd_listing_view' ); ?>
-<!--			<option value="">--><?php //_e( 'View:', 'geodirectory' ); ?><!--</option>-->
 			<option
 				value="1" <?php selected( 1, $listing_view ); ?>><?php _e( 'View: List', 'geodirectory' ); ?></option>
 			<option

@@ -75,11 +75,10 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			// check if there are already listing before saving new location
 			global $wpdb;
 			$post_types        = geodir_get_posttypes();
-			$post_types_string = implode( ",", $post_types );
 			$cpt_count   = count( $post_types );
 			$cptp        = array_fill( 0, $cpt_count, "%s" );
 			$cptp_string = implode( ",", $cptp );
-			$has_posts   = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type IN ($cptp_string) LIMIT 1", $post_types_string ) );
+			$has_posts   = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type IN ($cptp_string) LIMIT 1", $post_types ) );
 			if ( $has_posts ) {
 				?>
 				<script>
@@ -503,6 +502,17 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc_tip' => true,
 					'default'  => '-75.16359824536897',
 					'advanced' => true
+				),
+				array(
+					'name'     => __( 'Timezone', 'geodirectory' ),
+					'desc'     => __( 'Set the site timezone. Ex: +5:30 or GMT+5:30 or UTC+5:30', 'geodirectory' ),
+					'id'       => 'default_location_timezone',
+					'type'     => 'text',
+					'css'      => 'min-width:300px;',
+					'desc_tip' => true,
+					'placeholder' => geodir_wp_gmt_offset(),
+					'advanced' => true,
+					'required' => true
 				),
 
 				array(

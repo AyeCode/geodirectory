@@ -609,15 +609,18 @@ class GeoDir_Query {
 			case 'random': // @todo, i think we should remove random, its a bad idea for so many reasons.
 				$order_by_parts[] = "rand()";
 				break;
+			case 'az':
 			case 'title_asc':
 				$order_by_parts[] = "$wpdb->posts.post_title asc";
 				break;
+			case 'za':
 			case 'title_desc':
 				$order_by_parts[] = "$wpdb->posts.post_title desc";
 				break;
 			case 'add_date_asc':
 				$order_by_parts[] = "$wpdb->posts.post_date asc";
 				break;
+			case 'latest':
 			case 'add_date_desc':
 				$order_by_parts[] = "$wpdb->posts.post_date desc";
 				break;
@@ -625,12 +628,17 @@ class GeoDir_Query {
 				$order_by_parts[] = $table . ".rating_count ASC";
 				$order_by_parts[] = $table . ".overall_rating ASC";
 				break;
+			case 'high_review':
 			case 'review_desc':
 				$order_by_parts[] = $table . ".rating_count DESC";
 				$order_by_parts[] = $table . ".overall_rating DESC";
 				break;
 			case 'rating_asc':
 			case 'rating_desc':
+			case 'high_rating':
+				if ( $sort_by == 'high_rating' ) {
+					$sort_by = 'rating_desc';
+				}
 				$rating_order = $sort_by == 'rating_asc' ? "ASC" : "DESC";
 				$use_bayesian = apply_filters('geodir_use_bayesian',true,$table);
 				$avg_rating = 0;
