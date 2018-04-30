@@ -58,6 +58,7 @@ class GeoDir_AJAX {
 			'save_tab_item' => false,
 			'save_tabs_order' => false,
 			'delete_tab' => false,
+			'manual_map' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -70,6 +71,43 @@ class GeoDir_AJAX {
 				add_action( 'geodir_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	function manual_map(){
+		$prefix = isset($_POST['trigger']) ? esc_attr($_POST['trigger']): 'geodir_manual_location_';
+		echo "<style>
+		.lity-show #".$prefix."set_address_button,
+		.lity-show .TopLeft,
+		.lity-show .TopRight,
+		.lity-show .BottomRight,
+		.lity-show .BottomLeft{
+		display: none;
+		}
+		
+		.lity-show .geodir_map_container{
+		margin-top: 0 !important;
+		}
+		
+		</style>";
+
+		// try and center the map as close to the user as possible.
+		$ip = $_SERVER['REMOTE_ADDR'];
+		if($ip){
+			global $mapzoom;
+			$addr_details = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip));
+			$mylat = stripslashes(geodir_utf8_ucfirst($addr_details['geoplugin_latitude']));
+			$mylon = stripslashes(geodir_utf8_ucfirst($addr_details['geoplugin_longitude']));
+			if($mylat){$lat = $mylat; $lng = $mylon; $mapzoom = 8;}// pass to the map as the starting position
+		}
+
+		add_filter('geodir_add_listing_map_restrict','__return_false');
+		include_once(dirname( __FILE__ ) . '/maps/map_on_add_listing_page.php');
+		?>
+		<input type="hidden" id="<?php echo $prefix.'latitude';?>">
+		<input type="hidden" id="<?php echo $prefix.'longitude';?>">
+		<button style="float: right;margin: 10px 0 0 0;" onclick="if(jQuery('#<?php echo $prefix.'latitude';?>').val()==''){alert('<?php _e('Please drag the marker or the map to set the position.','geodirectory');?>');}else{jQuery(window).triggerHandler('<?php echo $prefix;?>', [jQuery('#<?php echo $prefix.'latitude';?>').val(), jQuery('#<?php echo $prefix.'longitude';?>').val()]);}"><?php _e('Set my location','geodirectory');?></button>
+		<?php
+		wp_die();
 	}
 
 	/**

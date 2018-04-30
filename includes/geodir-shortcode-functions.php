@@ -2217,9 +2217,9 @@ function geodir_sc_single_meta($atts, $content = '') {
                     //print_r($atts);
 
                     // add css_alignment
-                    if($atts['alignment']=='left'){$field['css_class'] .= " alignleft ";}
-                    if($atts['alignment']=='center'){$field['css_class'] .= " aligncenter ";}
-                    if($atts['alignment']=='right'){$field['css_class'] .= " alignright ";}
+                    if($atts['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
+                    if($atts['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
+                    if($atts['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
 
 
                     $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id'],$atts['show']);

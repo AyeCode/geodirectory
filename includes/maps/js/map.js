@@ -1289,7 +1289,41 @@ function gdMyGeoPositionError(err) {
         default:
             msg = geodir_params.geoErrDEFAULT;
     }
-    alert(msg);
+    gd_manually_set_user_position(msg,'gdMyGeoPositionSuccess');
+    //alert(msg);
+}
+
+function gd_manually_set_user_position($msg,$successFunction){
+    if(window.confirm("ERROR: "+$msg+ "\nWould you like to manually set your location?")){
+
+        jQuery.post(geodir_params.ajax_url, {
+            action: 'geodir_manual_map',
+            trigger: $successFunction+'_trigger'
+        }, function(data) {
+            if (data) {
+                $lity = lity("<div class='lity-show'>"+data+"</div>");
+                // map center is off due to lightbox zoom effect so we resize to fix
+                setTimeout(function(){
+                    jQuery('.lity-show .geodir_map_container').css('width','90%').css('width','99.99999%');
+                }, 500);
+
+                jQuery( window ).off($successFunction+'_trigger');
+                jQuery( window ).on( $successFunction+'_trigger', function (event,lat,lon)
+                {
+                    if(lat && lon){
+                        var position ={};
+                        position.latitude = lat;
+                        position.longitude = lon;
+                        window[$successFunction](position);
+                        $lity.close();
+                    }
+                });
+
+                return false;
+            }
+        });
+
+    }
 }
 
 function gdMyGeoPositionSuccess(position) {
@@ -1315,6 +1349,7 @@ function gdMyGeoGetDirections(address) {
         geodirFindRoute(map_canvas);
     } else if (window.gdMaps == 'osm') {
         jQuery('.leaflet-routing-geocoders .leaflet-routing-geocoder:last input').val(address).focus();
+        setTimeout(function(){jQuery('.leaflet-routing-geocoders .leaflet-routing-geocoder:last input').trigger({type: 'keypress', which: 13, keyCode: 13});}, 1000);
     }
 }
 function geodir_map_directions_init(map_canvas) {

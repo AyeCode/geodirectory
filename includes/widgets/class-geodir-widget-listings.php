@@ -653,7 +653,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         $options = array(
             "az"        =>  __('A-Z', 'geodirectory'),
             "latest"        =>  __('Latest', 'geodirectory'),
-            "featured"        =>  __('Featured', 'geodirectory'),
             "high_review"        =>  __('Most reviews', 'geodirectory'),
             "high_rating"        =>  __('Highest rating', 'geodirectory'),
             "random"        =>  __('Random', 'geodirectory'),

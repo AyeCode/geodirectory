@@ -49,7 +49,7 @@
 							echo ' <a href="#TB_inline?width=100%&height=550&inlineId=super-duper-content" class="thickbox button super-duper-content-open" title="'. __('Add Shortcode','geodirectory').'"><i class="fa fa-cubes" aria-hidden="true"></i></a>';
 						}
 						?><br>
-						<textarea name="tab_content" id="gd-tab-content-<?php echo $tab->id;?>" placeholder="<?php _e('Add shortcode here.','geodirectory');?>"><?php echo stripslashes($tab->tab_content);?></textarea>
+						<textarea name="tab_content" id="gd-tab-content-<?php echo $tab->id;?>" placeholder="<?php _e('Add shortcodes here.','geodirectory');?>"><?php echo stripslashes($tab->tab_content);?></textarea>
 					</label>
 				</p>
 				<?php

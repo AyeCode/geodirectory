@@ -449,6 +449,14 @@ class GeoDir_Admin_Dummy_Data {
 			?>
 			<script type="text/javascript">
 
+				/**
+				 * Prevent navigation away if installing dummy data.
+				 */
+				var geodir_installing_dummy_data = false;
+				window.onbeforeunload = function() {
+					return geodir_installing_dummy_data  ? "Dummy data has not fully installed yet!" : null; // @todo make translatable
+				};
+
 				function geodir_dummy_set_count(data, cpt) {
 
 					var dateTypeCount = jQuery(data).find(':selected').data('count');
@@ -548,6 +556,7 @@ class GeoDir_Admin_Dummy_Data {
 						jQuery.post(ajaxurl,
 							data,
 							function (data) {
+								geodir_installing_dummy_data = false;
 								gd_progressbar('.gd_progressbar_container_' + posttype, 100, '<i class="fa fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
 								jQuery(obj).removeClass('gd-remove-data');
 								jQuery(obj).val('<?php _e( 'Insert data', 'geodirectory' );?>');
@@ -564,6 +573,7 @@ class GeoDir_Admin_Dummy_Data {
 
 				function gdInstallDummyData(obj, nonce, posttype, insertedCount) {
 
+					geodir_installing_dummy_data = true;
 
 					if (jQuery(obj).hasClass('gd-remove-data')) {
 						gdRemoveDummyData(obj, nonce, posttype);
@@ -648,6 +658,7 @@ class GeoDir_Admin_Dummy_Data {
 							gdInstallDummyData(obj, nonce, posttype, insertedCount);
 						}
 						else {
+							geodir_installing_dummy_data = false;
 							percentage = 100;
 							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fa fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
 							jQuery(obj).addClass('gd-remove-data');
