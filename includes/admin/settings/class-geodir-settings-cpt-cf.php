@@ -550,6 +550,41 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
+			// Email
+			$custom_fields['logo'] = array( // The key value should be unique and not contain any spaces.
+				'field_type'  => 'file',
+				'class'       => 'gd-logo',
+				'icon'        => 'fa fa-picture-o',
+				'name'        => __( 'Company Logo', 'geodirectory' ),
+				'description' => __( 'Adds a logo input. This can be used by other plugins if the field key remains `logo`.', 'geodirectory' ),
+				'single_use'  => 'logo',
+				'defaults'    => array(
+					'data_type'          => 'TEXT',
+					'admin_title'        => 'Logo',
+					'frontend_title'     => 'Logo',
+					'frontend_desc'      => 'You can upload your company logo.',
+					'htmlvar_name'       => 'logo',
+					'is_active'          => true,
+					'for_admin_use'      => false,
+					'default_value'      => '',
+					'show_in'            => '',
+					'is_required'        => false,
+					'option_values'      => '',
+					'validation_pattern' => '',
+					'validation_msg'     => '',
+					'required_msg'       => '',
+					'field_icon'         => 'fa fa-picture-o',
+					'css_class'          => '',
+					'cat_sort'           => false,
+					'cat_filter'         => false,
+					'extra_fields'       => array(
+						'gd_file_types'     => array( 'jpg','jpe','jpeg','gif','png','bmp','ico'),
+						'file_limit'        => 1,
+					),
+					'single_use'         => true,
+				)
+			);
+
 			// Website
 			$custom_fields['website'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'url',
