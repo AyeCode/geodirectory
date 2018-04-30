@@ -1315,12 +1315,11 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response object.
 	 */
-	public function prepare_item_for_response( $post, $request ) {
-		$gd_post 			= geodir_get_post_info( $post->ID );
-		$post				= $gd_post;
-		$GLOBALS['gd_post'] = $gd_post;
-		$GLOBALS['post'] 	= $post;
-		setup_postdata( $post );
+	public function prepare_item_for_response( $the_post, $request ) {
+		global $gd_post, $post;
+		$gd_post = $the_post;
+		$post = $the_post;
+		geodir_setup_postdata( $gd_post );
 
 		$schema = $this->get_item_schema();
 
@@ -2482,7 +2481,14 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     $args['format'] = 'uri';
                     break;
                 default:
-                    $continue = true;
+					if ( has_filter( 'geodir_rest_post_custom_fields_schema' ) ) {
+						$args = apply_filters( 'geodir_rest_post_custom_fields_schema', $args, $this->post_type, $field, $custom_fields, $package_id, $default );
+						if ( empty( $args ) ) {
+							continue;
+						}
+					} else {
+						$continue = true;
+					}
                     break;
             }
             
@@ -2534,14 +2540,20 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	}
 	
 	public function get_featured_image( $post ) {
-		$image = GeoDir_Media::get_post_images($post->ID,1); //@todo kiran i changed, this please check it over, might need tweaking
+		$images = geodir_get_images($post->ID,1);
 
 		$featured_image = array();
-		if ( ! empty( $image ) ) {
+		if ( ! empty( $images ) && ! empty( $images[0] ) ) {
+			$image = $images[0];
+			if ( ! empty( $image->metadata ) ) {
+				$image->metadata = maybe_unserialize( $image->metadata );
+			}
+			$featured_image['id'] = $image->ID;
 			$featured_image['title'] = $image->title;
-			$featured_image['src'] = $image->src;
-			$featured_image['width'] = $image->width;
-			$featured_image['height'] = $image->height;
+			$featured_image['src'] = geodir_get_image_src( $image, 'original' );
+			$featured_image['thumbnail'] = geodir_get_image_src( $image, 'thumbnail' );
+			$featured_image['width'] = ! empty( $image->metadata ) && isset( $image->metadata['width'] ) ? $image->metadata['width'] : '';
+			$featured_image['height'] = ! empty( $image->metadata ) && isset( $image->metadata['height'] ) ? $image->metadata['height'] : '';
 		}
 		return $featured_image;
 	}

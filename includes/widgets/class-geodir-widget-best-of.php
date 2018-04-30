@@ -280,8 +280,10 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
         if (is_tax()) {
             $taxonomy = get_query_var('taxonomy');
             $cur_term = get_query_var('term');
-            $term_data = get_term_by('name', $cur_term, $taxonomy);
-            $term_args['parent'] = $term_data->term_id;
+            $term_data = get_term_by('slug', $cur_term, $taxonomy);
+			if ( ! empty( $term_data ) && ! is_wp_error( $term_data ) ) {
+				$term_args['parent'] = $term_data->term_id;
+			}
         }
 
         $terms = get_terms($category_taxonomy[0], $term_args);
