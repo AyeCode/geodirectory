@@ -346,7 +346,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			<?php
 
 
-			$curImages = GeoDir_Media::get_post_images_edit_string( $post_id );
+			$curImages = GeoDir_Media::get_field_edit_string($post_id,'post_images');
 
 
 			// adjust values here

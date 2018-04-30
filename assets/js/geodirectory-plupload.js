@@ -24,7 +24,8 @@ jQuery(document).ready(function ($) {
             pconfig = JSON.parse(geodir_plupload_params.base_plupload_config);
             pconfig["browse_button"] = imgId + pconfig["browse_button"];
             pconfig["container"] = imgId + pconfig["container"];
-            if(pconfig["drop_element"]){ pconfig["drop_element"] = imgId + pconfig["drop_element"];} // only add drop area if there is one
+            //if(pconfig["drop_element"]){ pconfig["drop_element"] = imgId + pconfig["drop_element"];} // only add drop area if there is one
+            pconfig["drop_element"] = imgId + 'dropbox';
             pconfig["file_data_name"] = imgId + pconfig["file_data_name"];
             pconfig["multipart_params"]["imgid"] = imgId;
             pconfig["multipart_params"]["post_id"] = post_id;
@@ -33,18 +34,9 @@ jQuery(document).ready(function ($) {
             if ($this.hasClass("plupload-upload-uic-multiple")) {
                 pconfig["multi_selection"] = true;
             }
-
-            // resizing in JS can actually cause a small image to grow in size and can lower quality of image even if set to 100%
-            /* if ($this.find(".plupload-resize").exists()) {
-                var w = parseInt($this.find(".plupload-width").attr("id").replace("plupload-width", ""));
-                var h = parseInt($this.find(".plupload-height").attr("id").replace("plupload-height", ""));
-                pconfig["resize"] = {
-                    width: w,
-                    height: h,
-                    quality: 90
-                };
-            } */
+            
 			var allowed_exts = jQuery('#' + imgId + '_allowed_types').val();
+            console.log('###'+allowed_exts);
 			allowed_exts = allowed_exts && allowed_exts != '' ? allowed_exts : '';
 			if (imgId == 'post_images' && typeof geodir_params.gd_allowed_img_types != 'undefined' && geodir_params.gd_allowed_img_types != '') {
 				allowed_exts = geodir_params.gd_allowed_img_types;
@@ -59,7 +51,28 @@ jQuery(document).ready(function ($) {
             uploader.bind('Init', function (up) {
                 //alert(1);
             });
+
+            uploader.bind('Init', function(up, params) {
+                if (uploader.features.dragdrop) {
+                    var drop_id = imgId + 'dropbox';
+                    var target = jQuery('#'+drop_id);
+
+                    target.on("dragenter", function(event) {
+                        target.addClass("dragover");
+                    });
+
+                    target.on("dragleave", function(event) {
+                        target.removeClass("dragover");
+                    });
+
+                    target.on("drop", function() {
+                        target.removeClass("dragover");
+                    });
+                }
+            });
+
             uploader.init();
+
             uploader.bind('Error', function (up, files) {
                 if (files.code == -600) {
                     jQuery('#' + imgId + 'upload-error').addClass('upload-error');
@@ -96,6 +109,8 @@ jQuery(document).ready(function ($) {
             totalImg = jQuery("#" + imgId + "totImg").val();
             limitImg = jQuery("#" + imgId + "image_limit").val();
 
+            console.log();
+
             //a file was added in the queue
             //totalImg = geodir_plupload_params.totalImg;
             //limitImg = geodir_plupload_params.image_limit;
@@ -103,8 +118,8 @@ jQuery(document).ready(function ($) {
                 jQuery('#' + imgId + 'upload-error').html('');
                 jQuery('#' + imgId + 'upload-error').removeClass('upload-error');
 
-                if (limitImg && $this.hasClass("plupload-upload-uic-multiple") && jQuery("#" + imgId + "image_limit").val()) {
-                    if (totalImg == limitImg && parseInt(limitImg) > 0) {
+                if (limitImg && $this.hasClass("plupload-upload-uic-multiple") && jQuery("#" + imgId + "image_limit").val() > 0) {
+                    if (totalImg >= limitImg && parseInt(limitImg) > 0) {
                         while (up.files.length > 0) {
                             up.removeFile(up.files[0]);
                         } // remove images
@@ -138,13 +153,6 @@ jQuery(document).ready(function ($) {
                         jQuery('#' + imgId + 'upload-error').html(msgErr);
                         return false;
                     }
-
-                    /*if((parseInt(up.files.length)+parseInt(totalImg)>parseInt(limitImg)) && parseInt(limitImg) > 0){
-                     while(up.files.length > 0) {up.removeFile(up.files[0]);} // remove images
-                     jQuery('#'+imgId+'upload-error').addClass('upload-error');
-                     jQuery('#'+imgId+'upload-error').html('You may only upload another '+(parseInt(limitImg)-parseInt(totalImg))+' with this package, please try again.');
-                     return false;
-                     }*/
                 }
 
                 $.each(files, function (i, file) {
@@ -252,24 +260,29 @@ function plu_show_thumbs(imgId) {
             if(dotIndex < fileNameIndex){continue;}
             var file_name = image_url.substr(fileNameIndex, dotIndex < fileNameIndex ? loc.length : dotIndex);
 
-            /*if (file_ext == 'pdf' || file_ext == 'xlsx' || file_ext == 'xls' || file_ext == 'csv' || file_ext == 'docx' || file_ext == 'doc' || file_ext == 'txt') {
-                file_name = file_name.split(imgId + '_');
-                var thumb = $('<div class="thumb geodir_file" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><a target="_blank" href="' + images[i] + '">' + file_name[file_name.length - 1] + '</a></div>');
-            } else {
-                var thumb = $('<div class="thumb" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><img src="' + images[i] + '" alt=""  /></div>');
-            }*/
-			if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico') {
-                var thumb = $('<div class="thumb" id="thumb' + imgId + i + '">' +
-                    '<img data-id="'+image_id+'" data-title="'+image_title+'" data-caption="'+image_caption+'" src="' + image_url + '" alt=""  />' +
-                    '<div class="gd-thumb-actions">'+
-                    '<span class="thumbeditlink" onclick="gd_edit_image_meta('+imgId+','+i+');"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>' +
-                    '<span class="thumbremovelink" id="thumbremovelink' + imgId + i + '"><i class="fa fa-trash-o" aria-hidden="true"></i></span>' +
-                    '</div>'+
-                    '</div>');
-            } else {
-                file_name = file_name.split(imgId + '_');
-                var thumb = $('<div class="thumb geodir_file" id="thumb' + imgId + i + '"><div class="thumbi"><a id="thumbremovelink' + imgId + i + '" href="#">' + txtRemove + '</a></div><a target="_blank" href="' +image_url + '">' + file_name[file_name.length - 1] + '</a></div>');
+            var file_display = '';
+            var file_display_class = '';
+            if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico') {
+                file_display ='<img class="gd-file-info" data-id="'+image_id+'" data-title="'+image_title+'" data-caption="'+image_caption+'" data-src="' + image_url + '" src="' + image_url + '" alt=""  />';
+            }else{
+                var file_type_class = 'fa-file-o';
+                if (file_ext == 'pdf') {file_type_class = 'fa-file-pdf-o';}
+                else if(file_ext == 'zip' || file_ext == 'tar'){file_type_class = 'fa-file-archive-o';}
+                else if(file_ext == 'doc' || file_ext == 'odt'){file_type_class = 'fa-file-word-o';}
+                else if(file_ext == 'txt' || file_ext == 'text'){file_type_class = 'fa-file-text-o';}
+                else if(file_ext == 'csv' || file_ext == 'ods' || file_ext == 'ots'){file_type_class = 'fa-file-excel-o';}
+                else if(file_ext == 'avi' || file_ext == 'mp4' || file_ext == 'mov'){file_type_class = 'fa-file-video-o';}
+                file_display_class = 'file-thumb';
+                file_display ='<i title="'+file_name+'" class="fa '+file_type_class+' gd-file-info" data-id="'+image_id+'" data-title="'+image_title+'" data-caption="'+image_caption+'" data-src="' + image_url + '" aria-hidden="true"></i>';
             }
+
+            var thumb = $('<div class="thumb '+file_display_class+'" id="thumb' + imgId + i + '">' +
+                file_display +
+                '<div class="gd-thumb-actions">'+
+                '<span class="thumbeditlink" onclick="gd_edit_image_meta('+imgId+','+i+');"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>' +
+                '<span class="thumbremovelink" id="thumbremovelink' + imgId + i + '"><i class="fa fa-trash-o" aria-hidden="true"></i></span>' +
+                '</div>'+
+                '</div>');
 
             thumbsC.append(thumb);
 
@@ -302,8 +315,8 @@ function plu_show_thumbs(imgId) {
         thumbsC.sortable({
             update: function (event, ui) {
                 var kimages = [];
-                thumbsC.find("img").each(function () {
-                    kimages[kimages.length] = $(this).attr("src")+"|"+$(this).data("id")+"|"+$(this).data("title")+"|"+$(this).data("caption");
+                thumbsC.find(".gd-file-info").each(function () {
+                    kimages[kimages.length] = $(this).data("src")+"|"+$(this).data("id")+"|"+$(this).data("title")+"|"+$(this).data("caption");
                     $("#" + imgId).val(kimages.join());
                     plu_show_thumbs(imgId);
                     console.log("plu_show_thumbs-sortable-run");
@@ -318,8 +331,8 @@ function plu_show_thumbs(imgId) {
     console.log("run basics");
 
     var kimages = [];
-    thumbsC.find("img").each(function () {
-        kimages[kimages.length] = $(this).attr("src")+"|"+$(this).data("id")+"|"+$(this).data("title")+"|"+$(this).data("caption");
+    thumbsC.find(".gd-file-info").each(function () {
+        kimages[kimages.length] = $(this).data("src")+"|"+$(this).data("id")+"|"+$(this).data("title")+"|"+$(this).data("caption");
         $("#" + imgId).val(kimages.join());
         //plu_show_thumbs(imgId);
         console.log("run basics-run");

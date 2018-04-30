@@ -518,18 +518,6 @@ jQuery(document).ready(function() {
     
     var gd_modal = "undefined" != typeof geodir_params.gd_modal && 1 == parseInt(geodir_params.gd_modal) ? false : true;
     
-    if (gd_modal) {
-        jQuery(".geodir-custom-post-gallery").each(function() {
-            jQuery("a", this).lightBox({
-                overlayOpacity: .5,
-                imageLoading: geodir_params.plugin_url + "/assets/images/lightbox-ico-loading.gif",
-                imageBtnNext: geodir_params.plugin_url + "/assets/images/lightbox-btn-next.gif",
-                imageBtnPrev: geodir_params.plugin_url + "/assets/images/lightbox-btn-prev.gif",
-                imageBtnClose: geodir_params.plugin_url + "/assets/images/lightbox-btn-close.gif",
-                imageBlank: geodir_params.plugin_url + "/assets/images/lightbox-blank.gif"
-            })
-        });
-    }
 
     /* Show Hide Rating for reply */
     jQuery('.gd_comment_replaylink a').bind('click', function() {

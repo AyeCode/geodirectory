@@ -66,6 +66,7 @@ function geodir_fix_cpt_rewrite_slug() {
 /**
  * Update DB Version.
  */
-function geodir_update_2001_dev_db_version() {
-	GeoDir_Admin_Install::update_db_version( '2.0.0.1-dev' );
+function geodir_upgrade_20013() {
+    global $wpdb;
+	$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
 }

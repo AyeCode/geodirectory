@@ -801,8 +801,8 @@ class GeoDir_Admin_Import_Export {
 			foreach ( $posts as $post_info ) {
 
 				// add the post_images column
-				$post_info['post_images'] = GeoDir_Media::get_post_images_edit_string( $post_info['ID'] );
-
+				$post_info['post_images'] = GeoDir_Media::get_field_edit_string( $post_info['ID'],'post_images');
+				
 				// fill in the CSV header
 				if ( $i === 0 ) {
 					$csv_rows[] = array_keys( $post_info );

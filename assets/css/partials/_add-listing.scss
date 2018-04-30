@@ -116,3 +116,42 @@
 		}
 	}
 }
+
+.geodir-add-files{
+	.geodir-files-dropbox{
+		border:4px dashed #ccc;
+		min-height:100px;
+		height:auto;
+		padding:10px;
+		text-align:center;
+
+
+
+		&.dragover{
+			background: #1abfe466;
+			border-color: #0b0b0b;
+			* {
+				pointer-events: none !important; // this is needed so the child elements dont affect the drag fiel over event
+			}
+		}
+
+		.geodir-dropbox-title{
+			font-weight: bold;
+			font-size: 22px;
+			color: #444;
+			small{
+				font-weight: initial;
+				display: block;
+				font-size: 14px;
+			}
+		}
+		.geodir-dropbox-file-types{
+			font-size: 10px;
+			color: #aaa;
+		}
+
+		.plupload-thumbs{
+			border-top:1px solid #ccc; padding-top:10px;
+		}
+	}
+}

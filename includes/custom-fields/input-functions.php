@@ -95,7 +95,7 @@ function geodir_cfi_text($html,$cf){
 
         //validation
         if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
-            $validation = 'pattern="'.$cf['validation_pattern'].'"';
+            $validation = ' pattern="'.$cf['validation_pattern'].'" ';
         }else{$validation='';}
 
         // validation message
@@ -1561,170 +1561,6 @@ add_filter('geodir_custom_field_input_categories','geodir_cfi_categories',10,2);
 
 
 /**
- * Get the html input for the custom field: file
- *
- * @param string $html The html to be filtered.
- * @param array $cf The custom field array details.
- * @since 1.6.6
- *
- * @return string The html to output for the custom field.
- */
-function geodir_cfi_file($html,$cf){
-
-    $html_var = $cf['htmlvar_name'];
-
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_input_file_{$html_var}")){
-        /**
-         * Filter the file html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_input_file_{$html_var}",$html,$cf);
-    }
-
-    // If no html then we run the standard output.
-    if(empty($html)) {
-
-        ob_start(); // Start  buffering;
-        $value = geodir_get_cf_value($cf);
-        if ( !empty( $value ) ) {
-            $value_arr = explode( ",", $value );
-            $values = array();
-            
-            if ( !empty( $value_arr ) ) {
-                foreach ( $value_arr as $value_str ) {
-                    if ( !empty( $value_str ) ) {
-                        $values[] = geodir_file_relative_url( $value_str, true );
-                    }
-                }
-            }
-            
-            $value = !empty( $values) ? implode( ",", $values ) : '';
-        }
-
-        $name = $cf['name'];
-        $frontend_title = $cf['frontend_title'];
-        $frontend_desc = $cf['desc'];
-        $is_required = $cf['is_required'];
-        $required_msg = $cf['required_msg'];
-        $extra_fields = unserialize($cf['extra_fields']);
-
-
-        // adjust values here
-        $file_id = $name; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
-
-        if ($value != '') {
-
-            $file_value = trim($value, ","); // this will be initial value of the above form field. Image urls.
-
-        } else
-            $file_value = '';
-
-        if (isset($extra_fields['file_multiple']) && $extra_fields['file_multiple'])
-            $file_multiple = true; // allow multiple files upload
-        else
-            $file_multiple = false;
-
-        if (isset($extra_fields['image_limit']) && $extra_fields['image_limit'])
-            $file_image_limit = $extra_fields['image_limit'];
-        else
-            $file_image_limit = 1;
-
-        $file_width = geodir_media_image_large_width(); // If you want to automatically resize all uploaded images then provide width here (in pixels)
-
-        $file_height = geodir_media_image_large_height(); // If you want to automatically resize all uploaded images then provide height here (in pixels)
-
-        if (!empty($file_value)) {
-            $curImages = explode(',', $file_value);
-            if (!empty($curImages))
-                $file_totImg = count($curImages);
-        }
-
-        $allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? implode(",", $extra_fields['gd_file_types']) : '';
-        $display_file_types = $allowed_file_types != '' ? '.' . implode(", .", $extra_fields['gd_file_types']) : '';
-
-        ?>
-        <?php /*?> <h5 class="geodir-form_title"> <?php echo $frontend_title; ?>
-				 <?php if($file_image_limit!=0 && $file_image_limit==1 ){echo '<br /><small>('.__('You can upload').' '.$file_image_limit.' '.__('image with this package').')</small>';} ?>
-				 <?php if($file_image_limit!=0 && $file_image_limit>1 ){echo '<br /><small>('.__('You can upload').' '.$file_image_limit.' '.__('images with this package').')</small>';} ?>
-				 <?php if($file_image_limit==0){echo '<br /><small>('.__('You can upload unlimited images with this package').')</small>';} ?>
-			</h5>   <?php */
-        ?>
-
-        <div id="<?php echo $name;?>_row"
-             class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-
-            <div id="<?php echo $file_id; ?>dropbox" style="text-align:center;">
-                <label
-                    style="text-align:left; padding-top:10px;"><?php $frontend_title = __($frontend_title, 'geodirectory');
-                    echo $frontend_title; ?><?php if ($is_required) echo '<span>*</span>';?></label>
-                <input class="geodir-custom-file-upload" field_type="file" type="hidden"
-                       name="<?php echo $file_id; ?>" id="<?php echo $file_id; ?>"
-                       value="<?php echo esc_attr($file_value); ?>"/>
-                <input type="hidden" name="<?php echo $file_id; ?>image_limit"
-                       id="<?php echo $file_id; ?>image_limit" value="<?php echo $file_image_limit; ?>"/>
-                <?php if ($allowed_file_types != '') { ?>
-                    <input type="hidden" name="<?php echo $file_id; ?>_allowed_types"
-                           id="<?php echo $file_id; ?>_allowed_types" value="<?php echo esc_attr($allowed_file_types); ?>" data-exts="<?php echo esc_attr($display_file_types);?>"/>
-                <?php } ?>
-                <input type="hidden" name="<?php echo $file_id; ?>totImg" id="<?php echo $file_id; ?>totImg"
-                       value="<?php if (isset($file_totImg)) {
-                           echo esc_attr($file_totImg);
-                       } else {
-                           echo '0';
-                       } ?>"/>
-
-                <div style="float:left; width:55%;">
-                    <div
-                        class="plupload-upload-uic hide-if-no-js <?php if ($file_multiple): ?>plupload-upload-uic-multiple<?php endif; ?>"
-                        id="<?php echo $file_id; ?>plupload-upload-ui" style="float:left; width:30%;">
-                        <?php /*?><h4><?php _e('Drop files to upload');?></h4><br/><?php */
-                        ?>
-                        <input id="<?php echo $file_id; ?>plupload-browse-button" type="button"
-                               value="<?php ($file_image_limit > 1 ? esc_attr_e('Select Files', 'geodirectory') : esc_attr_e('Select File', 'geodirectory') ); ?>"
-                               class="geodir_button" style="margin-top:10px;"/>
-                            <span class="ajaxnonceplu"
-                                  id="ajaxnonceplu<?php echo wp_create_nonce($file_id . 'pluploadan'); ?>"></span>
-                        <?php if ($file_width && $file_height): ?>
-                            <span class="plupload-resize"></span>
-                            <span class="plupload-width" id="plupload-width<?php echo $file_width; ?>"></span>
-                            <span class="plupload-height" id="plupload-height<?php echo $file_height; ?>"></span>
-                        <?php endif; ?>
-                        <div class="filelist"></div>
-                    </div>
-                    <div
-                        class="plupload-thumbs <?php if ($file_multiple): ?>plupload-thumbs-multiple<?php endif; ?> "
-                        id="<?php echo $file_id; ?>plupload-thumbs"
-                        style=" clear:inherit; margin-top:0; margin-left:15px; padding-top:10px; float:left; width:50%;">
-                    </div>
-                    <?php /*?><span id="upload-msg" ><?php _e('Please drag &amp; drop the images to rearrange the order');?></span><?php */
-                    ?>
-
-                    <span id="<?php echo $file_id; ?>upload-error" style="display:none"></span>
-
-                </div>
-            </div>
-            <span class="geodir_message_note"><?php _e($frontend_desc, 'geodirectory');?> <?php echo ( $display_file_types != '' ? __('Allowed file types:', 'geodirectory') . ' ' . $display_file_types : '' );?></span>
-            <?php if ($is_required) { ?>
-                <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
-
-
-        <?php
-        $html = ob_get_clean();
-    }
-
-    return $html;
-}
-add_filter('geodir_custom_field_input_file','geodir_cfi_file',10,2);
-
-
-
-/**
  * Get the html input for the custom field: tags
  *
  * @param string $html The html to be filtered.
@@ -1863,157 +1699,7 @@ function geodir_cfi_tags($html,$cf){
 }
 add_filter('geodir_custom_field_input_tags','geodir_cfi_tags',10,2);
 
-/**
- * Get the html input for the custom field: images
- *
- * @param string $html The html to be filtered.
- * @param array $cf The custom field array details.
- * @since 1.6.6
- *
- * @return string The html to output for the custom field.
- */
-function geodir_cfi_images($html,$cf){
 
-    //return '#######';
-
-    // we use the standard WP tags UI in backend
-    if(is_admin()){
-        return '';
-    }
-
-    $html_var = $cf['htmlvar_name'];
-
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_input_images_{$html_var}")){
-        /**
-         * Filter the multiselect html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_input_images_{$html_var}",$html,$cf);
-    }
-
-    // If no html then we run the standard output.
-    if(empty($html)) {
-        global $gd_session,$gd_post,$post;
-
-        ob_start(); // Start  buffering;
-        $value = geodir_get_cf_value($cf);
-
-        //print_r($cf);exit;
-
-        $curImages = '';
-        
-
-        $package_info = array();
-        $package_info = geodir_post_package_info($package_info, $post->ID);
-
-        // adjust values here
-        $id = $cf['htmlvar_name'];//"post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
-
-        $multiple = true; // allow multiple files upload
-
-        $width = geodir_media_image_large_width(); // If you want to automatically resize all uploaded images then provide width here (in pixels)
-
-        $height = geodir_media_image_large_height(); // If you want to automatically resize all uploaded images then provide height here (in pixels)
-
-        $thumb_img_arr = array();
-        $totImg = 0;
-
-        $revision_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->ID : '';
-        $post_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->post_parent : $gd_post->ID;
-
-        $curImages = GeoDir_Media::get_post_images_edit_string($post_id,$revision_id); 
-
-        if ($curImages != '')
-            $svalue = $curImages; // this will be initial value of the above form field. Image urls.
-        else
-            $svalue = '';
-
-        $image_limit = isset($package_info->image_limit) ? $package_info->image_limit : '0';
-        $show_image_input_box = ($image_limit != '0');
-        /**
-         * Filter to be able to show/hide the image upload section of the add listing form.
-         *
-         * @since 1.0.0
-         * @param bool $show_image_input_box Set true to show. Set false to not show.
-         * @param string $listing_type The custom post type slug.
-         */
-        $show_image_input_box = apply_filters('geodir_image_uploader_on_add_listing', $show_image_input_box, $gd_post->post_type);
-        if ($show_image_input_box) {
-            add_thickbox();
-            ?>
-
-        <div id="<?php echo $cf['name']; ?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
-
-            <label>
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
-            <span class="geodir_message_note gd_images_desc"><?php _e($cf['desc'], 'geodirectory'); ?></span>
-
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-
-            <h5 id="geodir_form_title_row" class="geodir-form_title">
-                <?php if ( $image_limit == 1 ) {
-                    echo '<br /><small>(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'image with this package', 'geodirectory' ) . ')</small>';
-                } ?>
-                <?php if ( $image_limit > 1 ) {
-                    echo '<br /><small>(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'images with this package', 'geodirectory' ) . ')</small>';
-                } ?>
-                <?php if ( $image_limit == '' ) {
-                    echo '<br /><small>(' . __( 'You can upload unlimited images with this package', 'geodirectory' ) . ')</small>';
-                } ?>
-            </h5>
-
-            <div class="geodir_form_row clearfix " id="<?php echo $id; ?>dropbox"
-                 style="border:1px solid #ccc;min-height:100px;height:auto;padding:10px;text-align:center;">
-                <input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>" class="<?php if ($cf['is_required']) echo 'gd_image_required_field'; ?>"/>
-                <input type="hidden" name="<?php echo $id; ?>image_limit" id="<?php echo $id; ?>image_limit"
-                       value="<?php echo $image_limit; ?>"/>
-                <input type="hidden" name="<?php echo $id; ?>totImg" id="<?php echo $id; ?>totImg"
-                       value="<?php echo $totImg; ?>" />
-
-                <div
-                    class="plupload-upload-uic hide-if-no-js <?php if ( $multiple ): ?>plupload-upload-uic-multiple<?php endif; ?>"
-                    id="<?php echo $id; ?>plupload-upload-ui">
-                    <h4><?php _e( 'Drop files to upload', 'geodirectory' ); ?></h4><br/>
-                    <input id="<?php echo $id; ?>plupload-browse-button" type="button"
-                           value="<?php esc_attr_e( 'Select Files', 'geodirectory' ); ?>" class="geodir_button"/>
-                    <span class="ajaxnonceplu"
-                          id="ajaxnonceplu<?php echo wp_create_nonce( $id . 'pluploadan' ); ?>"></span>
-                    <?php if ( $width && $height ): ?>
-                        <span class="plupload-resize"></span>
-                        <span class="plupload-width" id="plupload-width<?php echo $width; ?>"></span>
-                        <span class="plupload-height" id="plupload-height<?php echo $height; ?>"></span>
-                    <?php endif; ?>
-                    <div class="filelist"></div>
-                </div>
-
-                <div class="plupload-thumbs <?php if ( $multiple ): ?>plupload-thumbs-multiple<?php endif; ?> clearfix"
-                     id="<?php echo $id; ?>plupload-thumbs" style="border-top:1px solid #ccc; padding-top:10px;">
-                </div>
-                <span
-                    id="upload-msg"><?php _e( 'Please drag &amp; drop the images to rearrange the order', 'geodirectory' ); ?></span>
-                <span id="<?php echo $id; ?>upload-error" style="display:none"></span>
-
-                <span style="display: none" id="gd-image-meta-input" class="lity-hide lity-show"></span>
-            </div>
-        </div>
-            <?php
-        }
-        $html = ob_get_clean();
-    }
-
-    return $html;
-}
-add_filter('geodir_custom_field_input_images','geodir_cfi_images',10,2);
 
 /**
  * Get the html input for the custom field: business_hours
@@ -2095,3 +1781,164 @@ function geodir_cfi_business_hours( $html, $cf ) {
 	return $html;
 }
 add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hours', 10, 2 );
+
+
+
+/**
+ * Get the html input for the custom field: images
+ *
+ * @param string $html The html to be filtered.
+ * @param array $cf The custom field array details.
+ * @since 1.6.6
+ *
+ * @return string The html to output for the custom field.
+ */
+function  geodir_cfi_files($html,$cf){
+
+    //return '#######';
+
+    $html_var = $cf['htmlvar_name'];
+
+    // we use the standard WP tags UI in backend
+    if(is_admin() && $html_var == 'post_images'){
+        return '';
+    }
+
+
+
+    // Check if there is a custom field specific filter.
+    if(has_filter("geodir_custom_field_input_files_{$html_var}")){
+        /**
+         * Filter the multiselect html by individual custom field.
+         *
+         * @param string $html The html to filter.
+         * @param array $cf The custom field array.
+         * @since 1.6.6
+         */
+        $html = apply_filters("geodir_custom_field_input_files_{$html_var}",$html,$cf);
+    }
+
+    // If no html then we run the standard output.
+    if(empty($html)) {
+        global $gd_post,$post;
+
+        ob_start(); // Start  buffering;
+
+        //print_r($cf);exit;
+
+        $extra_fields = maybe_unserialize($cf['extra_fields']);
+        $file_limit = !empty($extra_fields) && !empty($extra_fields['file_limit']) ? maybe_unserialize($extra_fields['file_limit']) : '';
+//echo $html_var.'###';
+        if($file_limit===''){
+            if($html_var=='post_images'){
+                $file_limit = '0';
+            }else{
+                $file_limit = '1';
+            }
+        }
+
+        $allowed_file_types = isset($extra_fields['gd_file_types']) ? maybe_unserialize($extra_fields['gd_file_types']) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico');
+        $display_file_types = $allowed_file_types != '' ? '.' . implode(", .", $allowed_file_types) : '';
+        if(!empty($allowed_file_types)){$allowed_file_types = implode(",",$allowed_file_types);}
+
+
+        // adjust values here
+        $id = $cf['htmlvar_name'];//"post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
+
+        $multiple = true; // allow multiple files upload
+
+
+
+        $revision_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->ID : '';
+        $post_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->post_parent : $gd_post->ID;
+
+        //$files = GeoDir_Media::get_post_images_edit_string($post_id,$revision_id,);
+        $files = GeoDir_Media::get_field_edit_string($post_id,$html_var,$revision_id);
+
+        if(!empty($files)){
+            $total_files = count(explode(',',$files));
+        }else{
+            $total_files = 0;
+        }
+
+
+//        echo $html_var.'###'.$files;
+
+        $image_limit = $file_limit;
+        $show_image_input_box = true;//($image_limit != '0');
+        /**
+         * Filter to be able to show/hide the image upload section of the add listing form.
+         *
+         * @since 1.0.0
+         * @param bool $show_image_input_box Set true to show. Set false to not show.
+         * @param string $listing_type The custom post type slug.
+         */
+        $show_image_input_box = apply_filters('geodir_file_uploader_on_add_listing', $show_image_input_box, $gd_post->post_type);
+        if ($show_image_input_box) {
+            add_thickbox();  
+            ?>
+
+            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> geodir_form_row clearfix gd-fieldset-details geodir-add-files">
+
+                <label>
+                    <?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
+                    echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; ?>
+                    <?php if ( $cf['is_required'] ) {
+                        echo '<span>*</span>';
+                    } ?>
+                </label>
+                <span class="geodir_message_note gd_images_desc"><?php esc_attr_e( $cf['desc'], 'geodirectory' ); ?></span>
+
+                <?php if ( $cf['is_required'] ) { ?>
+                    <span class="geodir_message_error"><?php _e( $cf['required_msg'], 'geodirectory' ); ?></span>
+                <?php } ?>
+
+                <h5 id="geodir_form_title_row" class="geodir-form_title">
+                    <?php if ( $image_limit == 1 ) {
+                        echo '<br /><small>(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'file', 'geodirectory' ) . ')</small>';
+                    } ?>
+                    <?php if ( $image_limit > 1 ) {
+                        echo '<br /><small>(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'files', 'geodirectory' ) . ')</small>';
+                    } ?>
+                    <?php if ( $image_limit == '' ) {
+                        echo '<br /><small>(' . __( 'You can upload unlimited files with this package', 'geodirectory' ) . ')</small>';
+                    } ?>
+                </h5>
+
+                <div class="geodir_form_row clearfix geodir-files-dropbox" id="<?php echo $id; ?>dropbox" >
+                    <input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $files; ?>"
+                           class="<?php if ( $cf['is_required'] ) {
+                               echo 'gd_image_required_field';
+                           } ?>"/>
+                    <input type="hidden" name="<?php echo $id; ?>image_limit" id="<?php echo $id; ?>image_limit" value="<?php echo $image_limit; ?>"/>
+                    <input type="hidden" name="<?php echo $id; ?>totImg" id="<?php echo $id; ?>totImg" value="<?php echo $total_files; ?>"/>
+                    <?php if ($allowed_file_types != '') { ?>
+                        <input type="hidden" name="<?php echo $id; ?>_allowed_types" id="<?php echo $id; ?>_allowed_types" value="<?php echo esc_attr($allowed_file_types); ?>" data-exts="<?php echo esc_attr($display_file_types);?>"/>
+                    <?php } ?>
+
+                    <div class="plupload-upload-uic hide-if-no-js <?php if ( $multiple ){echo "plupload-upload-uic-multiple";} ?>" id="<?php echo $id; ?>plupload-upload-ui">
+                        <div class="geodir-dropbox-title"><?php _e( 'Drop files here <small>or</small>', 'geodirectory' ); ?></div>
+                        <input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php esc_attr_e( 'Select Files', 'geodirectory' ); ?>" class="geodir_button"/>
+                        <div class="geodir-dropbox-file-types"><?php echo ( $display_file_types != '' ? __('Allowed file types:', 'geodirectory') . ' ' . $display_file_types : '' );?></div>
+                        <span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce( $id . 'pluploadan' ); ?>"></span>
+                        <div class="filelist"></div>
+                    </div>
+
+                    <div class="plupload-thumbs <?php if ( $multiple ){echo "plupload-thumbs-multiple";} ?> clearfix" id="<?php echo $id; ?>plupload-thumbs"></div>
+                    <span id="upload-msg"><?php _e( 'Please drag &amp; drop the files to rearrange the order', 'geodirectory' ); ?></span>
+                    <span id="<?php echo $id; ?>upload-error" style="display:none"></span>
+                    <span style="display: none" id="gd-image-meta-input" class="lity-hide lity-show"></span>
+                </div>
+                <?php if ($cf['is_required']) { ?>
+                    <span class="geodir_message_error"><?php esc_attr_e($cf['required_msg'], 'geodirectory'); ?></span>
+                <?php } ?>
+            </div>
+            <?php
+        }
+        $html = ob_get_clean();
+    }
+
+    return $html;
+}
+add_filter('geodir_custom_field_input_images','geodir_cfi_files',10,2);
+add_filter('geodir_custom_field_input_file','geodir_cfi_files',10,2);

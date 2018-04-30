@@ -1023,34 +1023,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
-			// Get directions link
-			$custom_fields['get_directions'] = array( // The key value should be unique and not contain any spaces.
-				'field_type'  => 'text',
-				'class'       => 'gd-get-directions',
-				'icon'        => 'fa fa-location-arrow',
-				'name'        => __( 'Get Directions Link', 'geodirectory' ),
-				'description' => __( 'Adds a link to be able to get directions to the post.', 'geodirectory' ),
-				'defaults'    => array(
-					'data_type'          => 'VARCHAR',
-					'admin_title'        => 'Get Directions',
-					'frontend_title'         => 'Get Directions',
-					'frontend_desc'         => '',
-					'htmlvar_name'       => 'get_directions',
-					'is_active'          => true,
-					'for_admin_use'      => true,
-					'default_value'      => 'Get Directions',
-					'show_in'            => '[detail],[listing]',
-					'is_required'        => false,
-					'validation_pattern' => '',
-					'validation_msg'     => '',
-					'required_msg'       => '',
-					'field_icon'         => 'fa fa-location-arrow',
-					'css_class'          => '',
-					'cat_sort'           => false,
-					'cat_filter'         => false
-				)
-			);
-
 
 			// JOB TYPE CF
 
@@ -1277,7 +1249,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			if ( isset( $field->extra_fields ) ) {
 				$extra_fields = $field->extra_fields;
 			}
-			$field = stripslashes_deep( $field ); // strip slashes from labels
+			$validation_pattern = isset($field->validation_pattern) ? $field->validation_pattern : '';
+			$field = wp_unslash( $field ); // strip slashes from labels
+			$field->validation_pattern = str_replace('\\\\', '\\', $validation_pattern);// we need the validation pattern without slashes stripped.
 			if ( isset( $field->extra_fields ) ) {
 				$field->extra_fields = $extra_fields;
 			}
@@ -1441,7 +1415,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		private static function sanatize_extra( $value ){
 			if( is_array($value) ){
 				if(empty($value)){$value = '';}else{
-					$value = maybe_serialize(array_map( 'sanitize_text_field', $value ));
+//					$value = maybe_serialize(array_map( 'sanitize_text_field', $value ));
+					foreach($value as $key => $val){
+						$value[$key] = self::sanatize_extra($val);
+					}
+					$value = maybe_serialize($value);
+
 				}
 			}else{
 				$value = sanitize_text_field($value );
@@ -1693,10 +1672,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 */
 		public static function save_custom_field($field = array()){
 			global $wpdb, $plugin_prefix;
-
+			//print_r($field);
 			$field = self::sanatize_custom_field($field);
 
-			//print_r($field);//exit;
+			//print_r($field);exit;
 			
 			// Check field exists.
 			$exists = self::field_exists($field);
