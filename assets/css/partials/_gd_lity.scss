@@ -296,6 +296,9 @@
   pointer-events: auto;
   transform: translateZ(0);
   -webkit-overflow-scrolling: touch;
+  @media(max-width:767px) {
+    height: 85vh;
+  }
 }
 
 .lity-iframe-container iframe {

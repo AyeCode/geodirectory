@@ -443,7 +443,7 @@ class GeoDir_Post_Data {
 					
 					if(defined('GEODIR_DOING_IMPORT') && strpos($file_url, 'http') !== 0){// if doing import and its not a full url then add placeholder attachment
 						// insert the image
-						$file = GeoDir_Media::insert_placeholder_image_attachment( $post_id, $file_url, $file_title, $file_caption, $order , $approved );//@todo
+						$file = GeoDir_Media::insert_attachment( $post_id,$field , $file_url, $file_title, $file_caption, $order , $approved, true );
 					}else{
 						// insert the image
 						$file = GeoDir_Media::insert_attachment( $post_id,$field , $file_url, $file_title, $file_caption, $order , $approved );
@@ -456,8 +456,8 @@ class GeoDir_Post_Data {
 					// fail silently so the rest of the post data can be inserted
 				} else {
 					// its featured so assign it
-					if ( $order == 0 && $field == 'post_images' ) {
-						$featured_image = $file;
+					if ( $order == 0 && $field == 'post_images' && isset($file['file']) ) {
+						$featured_image = $file['file'];
 					}
 				}
 

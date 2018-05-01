@@ -156,9 +156,24 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					//'element_require' => '[%type%]=="slider"',
 					'advanced' => true
+				),
+				'show_logo'  => array(
+					'title' => __('Show logo:', 'geodirectory'),
+					'desc' => __('Show the listing logo first if uploaded.', 'geodirectory'),
+					'type' => 'checkbox',
+					'desc_tip' => true,
+					'value'  => '1',
+					'default'  => 0,
+					'advanced' => true
 				)
 			)
 		);
+
+		// maybe show logo options
+//		global $wpdb;
+//		if($wpdb->get_var("SELECT id FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE htmlvar_name='logo' LIMIT 1")){
+//
+//		}
 
 
 		parent::__construct( $options );
@@ -211,6 +226,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'limit'     => '',
 			'link_to'     => '',
 			'image_size'     => '',
+			'show_logo'     => 'false',
 		);
 
 		/**
@@ -224,7 +240,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 		//print_r($options);echo '###';
 
-		$post_images = geodir_get_images($post->ID, $options['limit']);
+		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo']);
 
 		//print_r( $post_images );
 		

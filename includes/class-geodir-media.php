@@ -98,15 +98,10 @@ class GeoDir_Media {
 		if ( isset( $status['url'] ) && $post_id) {
 
 			// insert to DB
-			$file_path = self::insert_attachment($post_id,$field_id,$status['url'],'', '', -1,1);
-
-			$file_id = '';
-			if($file_path){
-				$file_id = self::get_id_from_file_path($file_path,$post_id);
-			}
+			$file_info = self::insert_attachment($post_id,$field_id,$status['url'],'', '', -1,1);
 
 			$wp_upload_dir = wp_upload_dir();
-			echo $wp_upload_dir['baseurl'] . $file_path ."|$file_id||";
+			echo $wp_upload_dir['baseurl'] . $file_info['file'] ."|".$file_info['ID']."||";
 
 		} elseif( isset( $status['url'] )) {
 			echo $status['url'];
@@ -218,76 +213,6 @@ class GeoDir_Media {
 	}
 
 	/**
-	 * Insert the placeholder image info to the DB and return the attachment ID.
-	 *
-	 * This is used for CSV import so the image can be added to the listing and uploaded after.
-	 *
-	 * @param $post_id
-	 * @param $image_url
-	 * @param string $image_title
-	 * @param string $image_caption
-	 * @param string $order
-	 * @param int $is_approved
-	 *
-	 * @return array|WP_Error
-	 */
-	public static function insert_placeholder_file_attachment($post_id,$image_url,$image_title = '', $image_caption = '', $order = '', $is_approved = 1){
-		global $wpdb;
-
-		// check we have what we need
-		if(!$post_id || !$image_url){
-			return new WP_Error( 'image_insert', __( "No post_id or image url, image insert failed.", "geodirectory" ) );
-		}
-
-		$upload_dir = wp_upload_dir();
-
-		$file = $upload_dir['subdir'].'/'.basename($image_url);
-		$file_type = wp_check_filetype( basename($image_url));
-		$metadata = '';
-
-
-		// insert into the DB
-		$result = $wpdb->insert(
-			GEODIR_ATTACHMENT_TABLE,
-			array(
-				'post_id' => $post_id,
-				'date_gmt'    => gmdate('Y-m-d H:i:s'),
-				'user_id'   => get_current_user_id(),
-				'title' => $image_title,
-				'caption' => $image_caption,
-				'file' => $file,
-				'mime_type' => $file_type,
-				'menu_order' => $order,
-				'featured' => $order === 0 ? 1 : 0,
-				'is_approved' => $is_approved,
-				'metadata' => maybe_serialize($metadata)
-			),
-			array(
-				'%d',
-				'%s',
-				'%d',
-				'%s',
-				'%s',
-				'%s',
-				'%s',
-				'%d',
-				'%d',
-				'%d',
-				'%s'
-			)
-		);
-
-		// if DB save failed then return error object
-		if ( !$result ) {
-			return new WP_Error( 'image_insert', __( "Failed to insert image info to DB.", "geodirectory" ) );
-		}
-
-		// return the file path
-		return $metadata['file'];
-
-	}
-
-	/**
 	 * Insert the file info to the DB and return the attachment ID.
 	 *
 	 * @param $post_id
@@ -296,6 +221,7 @@ class GeoDir_Media {
 	 * @param string $caption
 	 * @param string $order
 	 * @param int $is_approved
+	 * @param bool $is_placeholder If the images is a placeholder url and should not be auto imported.
 	 *
 	 * @return array|WP_Error
 	 */
@@ -328,7 +254,11 @@ class GeoDir_Media {
 				}
 
 				$metadata = wp_get_attachment_metadata( $attachment_id );
-				$file = wp_check_filetype(basename($url));
+				$file_type = wp_check_filetype(basename($url));
+				$file = array(
+					'file'  => $metadata['file'],
+					'type'  => $file_type['type']
+				);
 
 				// only set the featured image if its approved
 				if($is_approved ){
@@ -369,23 +299,25 @@ class GeoDir_Media {
 			$file_type = $file['type'];
 		}
 
+		$file_info = array(
+			'post_id' => $post_id,
+			'date_gmt'    => gmdate('Y-m-d H:i:s'),
+			'user_id'   => get_current_user_id(),
+			'title' => $title,
+			'caption' => $caption,
+			'file' => $file,
+			'mime_type' => $file_type,
+			'menu_order' => $order,
+			'featured' => $order === 0 ? 1 : 0,
+			'is_approved' => $is_approved,
+			'metadata' => maybe_serialize($metadata),
+			'type'  => $type
+		);
+
 		// insert into the DB
 		$result = $wpdb->insert(
 			GEODIR_ATTACHMENT_TABLE,
-			array(
-				'post_id' => $post_id,
-				'date_gmt'    => gmdate('Y-m-d H:i:s'),
-				'user_id'   => get_current_user_id(),
-				'title' => $title,
-				'caption' => $caption,
-				'file' => $file,
-				'mime_type' => $file_type,
-				'menu_order' => $order,
-				'featured' => $order === 0 ? 1 : 0,
-				'is_approved' => $is_approved,
-				'metadata' => maybe_serialize($metadata),
-				'type'  => $type
-			),
+			$file_info,
 			array(
 				'%d',
 				'%s',
@@ -403,12 +335,14 @@ class GeoDir_Media {
 		);
 
 		// if DB save failed then return error object
-		if ( !$result ) {
+		if ( $result === false ) {
 			return new WP_Error( 'file_insert', __( "Failed to insert file info to DB.", "geodirectory" ) );
 		}
 
-		// return the file path
-		return $file;
+		$file_info['ID'] = $wpdb->insert_id;
+
+		// return the file info
+		return $file_info;
 
 	}
 
@@ -518,8 +452,6 @@ class GeoDir_Media {
 			}
 		}
 
-		// check if file is local
-
 		// insert into the DB
 		$result = $wpdb->update(
 			GEODIR_ATTACHMENT_TABLE,
@@ -548,7 +480,7 @@ class GeoDir_Media {
 
 
 		// return the file path
-		return $wpdb->get_var($wpdb->prepare("SELECT file FROM ".GEODIR_ATTACHMENT_TABLE." WHERE ID = %d",$file_id));
+		return $wpdb->get_row($wpdb->prepare("SELECT * FROM ".GEODIR_ATTACHMENT_TABLE." WHERE ID = %d",$file_id));
 
 	}
 

@@ -199,7 +199,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 			<h2 class="title"><?php _e('GeoDirectory Taxonomies'); ?></h2>
 			<p><?php
 				/* translators: %s: placeholder that must come at the start of the URL */
-				printf( __( 'If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/attractions/</code>. Tags can not be blank, category slug can only be blank if the main structure has more than one tag used.','geodirectory' ),  home_url()  . '/' .  $base_slug  ); ?></p>
+				printf( __( 'If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/attractions/</code>. Tags can not be blank, category slug can only be blank if the GD permalinks are using more than one tag.','geodirectory' ),  home_url()  . '/' .  $base_slug  ); ?></p>
 
 			<table class="form-table">
 				<tr>

@@ -314,9 +314,9 @@
 						<label for="for_admin_use" class="gd-cf-tooltip-wrap">
 							<span
 								class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
-								title="<?php _e( 'If yes is selected then only site admin can see and edit this field.', 'geodirectory' ); ?>">
+								title="<?php _e( 'If yes is selected then only site admin can see and edit this field on the add listing page.', 'geodirectory' ); ?>">
 							</span>
-							<?php _e( 'For admin use only? :', 'geodirectory' ); ?>
+							<?php _e( 'Admin only edit :', 'geodirectory' ); ?>
 						</label>
 						<div class="gd-cf-input-wrap gd-switch">
 

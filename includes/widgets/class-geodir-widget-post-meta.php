@@ -81,16 +81,16 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
-				'location'  => array(
-					'name' => 'location',
-					'title' => __('Location key:', 'geodirectory'),
-					'desc' => __('Meta values can be filtered to show differently in some location types.', 'geodirectory'),
-					'type' => 'text',
-					'placeholder' => 'mapbubble',
-					'desc_tip' => true,
-					'default'  => '',
-					'advanced' => false
-				),
+//				'location'  => array(
+//					'name' => 'location',
+//					'title' => __('Location key:', 'geodirectory'),
+//					'desc' => __('Meta values can be filtered to show differently in some location types.', 'geodirectory'),
+//					'type' => 'text',
+//					'placeholder' => 'mapbubble',
+//					'desc_tip' => true,
+//					'default'  => '',
+//					'advanced' => false
+//				),
 			)
 		);
 
