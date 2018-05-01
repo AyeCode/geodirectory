@@ -554,3 +554,54 @@ function geodir_rest_markers_url( $query_args = array() ) {
 
 	return apply_filters( 'geodir_rest_markers_url', $url, $query_args );
 }
+
+function geodir_rest_post_sort_options( $post_type ) {
+    $sort_options = geodir_get_sort_options( $post_type );
+    
+    $default_orderby = 'post_date';
+    $default_order = 'desc';
+
+	$orderby_options = array();
+    if ( !empty( $sort_options ) ) {
+        $has_default = false;
+        $fields = array();
+        foreach ( $sort_options as $sort ) {
+            $sort = stripslashes_deep( $sort );
+
+			$field_name = $sort->htmlvar_name;
+            $field_label = __( $sort->frontend_title, 'geodirectory' );
+
+			if ( $sort->field_type == 'random' ) {
+				$field_name = 'random';
+			}
+
+			if ( $sort->sort_asc ) {
+                $orderby_options[ $field_name . '_asc' ] = $sort->asc_title ? __( $sort->asc_title, 'geodirectory' ) : $field_label;
+            }
+
+			if ( $sort->sort_desc ) {
+                $orderby_options[ $field_name . '_desc' ] = $sort->desc_title ? __( $sort->desc_title, 'geodirectory' ) : $field_label;
+            }
+
+			if ( ! $sort->sort_asc && ! $sort->sort_desc ) {
+				$orderby_options[ $field_name ] = $field_label;
+			}
+
+			if ( (int)$sort->is_default == 1 ) {
+                $has_default = true;
+                $default_order = $sort->sort_desc ? 'desc' : 'asc';
+                $default_orderby = $sort->default_order;
+            }
+
+            $fields[] = $field_name;
+        }
+        
+        if ( ! $has_default && ! in_array( $default_orderby, $fields ) ) {
+            $default_orderby = $default_orderby . '_' . $default_order;
+        }
+    }
+
+	$options = array( 'orderby_options' => $orderby_options, 'default_orderby' => $default_orderby, 'default_order' => $default_order );
+
+    return apply_filters( 'geodir_rest_post_sort_options', $options, $post_type );
+}

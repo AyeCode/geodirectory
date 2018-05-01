@@ -337,7 +337,15 @@ class GeoDir_API {
 	}
 
 	public static function rest_posts_orderby( $orderby, $wp_query, $post_type ) {
-		return $orderby;
+		global $geodir_post_type;
+		$geodir_post_type = $post_type;
+
+		$table = geodir_db_cpt_table( $post_type );
+		$sort_by = $wp_query->query_vars['orderby'];
+
+		$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
+
+		return apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $wp_query );
 	}
 
 	public static function rest_posts_limits( $limits, $wp_query, $post_type ) {

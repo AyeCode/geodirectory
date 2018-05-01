@@ -374,7 +374,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			return $error;
 		}
 
-		$post = get_post( (int) $id );
+		$post = geodir_get_post_info( (int) $id );
 		if ( empty( $post ) || empty( $post->ID ) || $this->post_type !== $post->post_type ) {
 			return $error;
 		}
@@ -1987,23 +1987,35 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			'type'               => 'integer',
 		);
 
+		$default_order = 'desc';
+		$default_orderby = 'date';
+		$orderby_options = array( 'date' );
+
+		$sort_options  = geodir_rest_post_sort_options( $this->post_type );
+		if ( ! empty( $sort_options ) ) {
+			if ( ! empty( $sort_options['default_order'] ) ) {
+				$default_order = $sort_options['default_order'];
+			}
+			if ( ! empty( $sort_options['default_orderby'] ) ) {
+				$default_orderby = $sort_options['default_orderby'];
+			}
+			if ( ! empty( $sort_options['orderby_options'] ) ) {
+				$orderby_options = array_keys( $sort_options['orderby_options'] );
+			}
+		}
+
 		$query_params['order'] = array(
 			'description'        => __( 'Order sort attribute ascending or descending.' ),
 			'type'               => 'string',
-			'default'            => 'desc',
+			'default'            => $default_order,
 			'enum'               => array( 'asc', 'desc' ),
 		);
 
 		$query_params['orderby'] = array(
 			'description'        => __( 'Sort collection by object attribute.' ),
 			'type'               => 'string',
-			'default'            => 'date',
-			'enum'               => array(
-				'date',
-				'id',
-				'slug',
-				'title',
-			),
+			'default'            => $default_orderby,
+			'enum'               => $orderby_options,
 		);
 
 		$post_type = get_post_type_object( $this->post_type );

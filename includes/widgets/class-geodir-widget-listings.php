@@ -470,12 +470,19 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             $viewall_url = '';
         }
 
+		$distance_to_post = $list_sort == 'distance_asc' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) && geodir_is_page( 'detail' ) ? true : false;
+		
+		if ( $list_sort == 'distance_asc' && ! $distance_to_post ) {
+			$list_sort = geodir_get_posts_default_sort( $post_type );
+		}
+
         $query_args = array(
             'posts_per_page' => $post_number,
             'is_geodir_loop' => true,
             'gd_location'    => $add_location_filter ? true : false,
             'post_type'      => $post_type,
-            'order_by'       => $list_sort
+            'order_by'       => $list_sort,
+			'distance_to_post' => $distance_to_post
         );
 
         if ( $character_count ) {
@@ -656,6 +663,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             "high_review"        =>  __('Most reviews', 'geodirectory'),
             "high_rating"        =>  __('Highest rating', 'geodirectory'),
             "random"        =>  __('Random', 'geodirectory'),
+			"distance_asc" =>  __('Distance to current post (details page only)', 'geodirectory'),
         );
 
         $sort_options = geodir_get_sort_options( $post_type );
