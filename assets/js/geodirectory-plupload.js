@@ -35,7 +35,6 @@ jQuery(document).ready(function ($) {
             }
 
 			var allowed_exts = jQuery('#' + imgId + '_allowed_types').val();
-            console.log('###'+allowed_exts);
 			allowed_exts = allowed_exts && allowed_exts != '' ? allowed_exts : '';
 			if (imgId == 'post_images' && typeof geodir_params.gd_allowed_img_types != 'undefined' && geodir_params.gd_allowed_img_types != '') {
 				allowed_exts = geodir_params.gd_allowed_img_types;
@@ -105,8 +104,8 @@ jQuery(document).ready(function ($) {
                     jQuery('#' + imgId + 'upload-error').html(files.message);
                 }
             });
-            totalImg = jQuery("#" + imgId + "totImg").val();
-            limitImg = jQuery("#" + imgId + "image_limit").val();
+            //totalImg = jQuery("#" + imgId + "totImg").val();
+            //limitImg = jQuery("#" + imgId + "image_limit").val();
 
             console.log();
 
@@ -114,6 +113,8 @@ jQuery(document).ready(function ($) {
             //totalImg = geodir_plupload_params.totalImg;
             //limitImg = geodir_plupload_params.image_limit;
             uploader.bind('FilesAdded', function (up, files) {
+                var totalImg = jQuery("#" + imgId + "totImg").val();
+                var limitImg = jQuery("#" + imgId + "image_limit").val();
                 jQuery('#' + imgId + 'upload-error').html('');
                 jQuery('#' + imgId + 'upload-error').removeClass('upload-error');
 
@@ -171,8 +172,8 @@ jQuery(document).ready(function ($) {
             var i = 0;
             var indexes = new Array();
             uploader.bind('FileUploaded', function (up, file, response) {
-                //totalImg++;
                 //up.removeFile(up.files[0]); // remove images
+                var totalImg = jQuery("#" + imgId + "totImg").val();
                 indexes[i] = up;
                 clearInterval(timer);
                 timer = setTimeout(function () {
@@ -184,6 +185,7 @@ jQuery(document).ready(function ($) {
                 // add url to the hidden field
                 if ($this.hasClass("plupload-upload-uic-multiple")) {
                     totalImg++;
+                    jQuery("#" + imgId + "totImg").val(totalImg);
                     // multiple
                     var v1 = $.trim($("#" + imgId).val());
                     if (v1) {
@@ -214,6 +216,9 @@ function geodir_remove_file_index(indexes) {
 }
 
 function plu_show_thumbs(imgId) {
+
+    var totalImg = jQuery("#" + imgId + "totImg").val();
+    var limitImg = jQuery("#" + imgId + "image_limit").val();
     console.log("plu_show_thumbs");
     var $ = jQuery;
     var thumbsC = $("#" + imgId + "plupload-thumbs");
@@ -289,7 +294,10 @@ function plu_show_thumbs(imgId) {
 
                 console.log("plu_show_thumbs-thumbremovelink");
 
-                if (jQuery('#' + imgId + 'plupload-upload-ui').hasClass("plupload-upload-uic-multiple")) totalImg--; // remove image from total
+                if (jQuery('#' + imgId + 'plupload-upload-ui').hasClass("plupload-upload-uic-multiple")){
+                    totalImg--; // remove image from total
+                    jQuery("#" + imgId + "totImg").val(totalImg);
+                }
                 jQuery('#' + imgId + 'upload-error').html('');
                 jQuery('#' + imgId + 'upload-error').removeClass('upload-error');
                 var ki = $(this).attr("id").replace("thumbremovelink" + imgId, "");
@@ -333,8 +341,6 @@ function plu_show_thumbs(imgId) {
     thumbsC.find(".gd-file-info").each(function () {
         kimages[kimages.length] = $(this).data("src")+"|"+$(this).data("id")+"|"+$(this).data("title")+"|"+$(this).data("caption");
         $("#" + imgId).val(kimages.join());
-        //plu_show_thumbs(imgId);
-        console.log("run basics-run");
     });
 }
 

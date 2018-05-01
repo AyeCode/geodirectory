@@ -1177,33 +1177,19 @@ function geodir_cfi_address($html,$cf){
             <div id="geodir_<?php echo $prefix . 'mapview'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
                 <label><?php _e($mapview_title, 'geodirectory'); ?></label>
 
-
-                    <span class="geodir_user_define"><input field_type="<?php echo $type; ?>" type="radio"
-                                                            class="gd-checkbox"
-                                                            name="<?php echo 'mapview'; ?>"
-                                                            id="<?php echo $prefix . 'mapview'; ?>" <?php if ($mapview == 'ROADMAP' || $mapview == '') {
-                            echo 'checked="checked"';
-                        } ?>  value="ROADMAP" size="25"/> <?php _e('Default Map', 'geodirectory'); ?></span>
-                    <span class="geodir_user_define"> <input field_type="<?php echo $type; ?>" type="radio"
-                                                             class="gd-checkbox"
-                                                             name="<?php echo 'mapview'; ?>"
-                                                             id="map_view1" <?php if ($mapview == 'SATELLITE') {
-                            echo 'checked="checked"';
-                        } ?> value="SATELLITE" size="25"/> <?php _e('Satellite Map', 'geodirectory'); ?></span>
-
-                    <span class="geodir_user_define"><input field_type="<?php echo $type; ?>" type="radio"
-                                                            class="gd-checkbox"
-                                                            name="<?php echo 'mapview'; ?>"
-                                                            id="map_view2" <?php if ($mapview == 'HYBRID') {
-                            echo 'checked="checked"';
-                        } ?>  value="HYBRID" size="25"/> <?php _e('Hybrid Map', 'geodirectory'); ?></span>
-					<span class="geodir_user_define"><input field_type="<?php echo $type; ?>" type="radio"
-                                                            class="gd-checkbox"
-                                                            name="<?php echo  'mapview'; ?>"
-                                                            id="map_view3" <?php if ($mapview == 'TERRAIN') {
-                            echo 'checked="checked"';
-                        } ?>  value="TERRAIN" size="25"/> <?php _e('Terrain Map', 'geodirectory'); ?></span>
-
+                <select  name="<?php echo 'mapview'; ?>" id="<?php echo $prefix . 'mapview'; ?>" class="geodir-select">
+                    <?php
+                    $mapview_options = array(
+                        'ROADMAP'=>__('Default Map', 'geodirectory'),
+                        'SATELLITE'=>__('Satellite Map', 'geodirectory'),
+                        'HYBRID'=>__('Hybrid Map', 'geodirectory'),
+                        'TERRAIN'=>__('Terrain Map', 'geodirectory'),
+                    );
+                    foreach($mapview_options as $val => $name){
+                        echo "<option value='$val' ".selected($val,$mapview,false)." >$name</option>";
+                    }
+                    ?>
+                </select>
 
             </div>
         <?php }?>
