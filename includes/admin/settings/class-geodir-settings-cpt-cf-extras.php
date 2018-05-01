@@ -356,7 +356,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				<label for="gd_file_limit" class="gd-cf-tooltip-wrap">
 					<span
 						class="gd-help-tip gd-help-tip-float-none gd-help-tip-no-margin dashicons dashicons-editor-help"
-						title='<?php _e( 'Select the file upload limit, 0 = unlimited.', 'geodirectory' ); ?>'>
+						title='<?php _e( 'Select the number of files that can be uploaded, 0 = unlimited.', 'geodirectory' ); ?>'>
                     </span>
 					<?php _e('File upload limit:', 'geodirectory'); ?>
 				</label>

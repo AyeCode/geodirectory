@@ -480,7 +480,7 @@ class GeoDir_Media {
 
 
 		// return the file path
-		return $wpdb->get_row($wpdb->prepare("SELECT * FROM ".GEODIR_ATTACHMENT_TABLE." WHERE ID = %d",$file_id));
+		return $wpdb->get_row($wpdb->prepare("SELECT * FROM ".GEODIR_ATTACHMENT_TABLE." WHERE ID = %d",$file_id),ARRAY_A);
 
 	}
 

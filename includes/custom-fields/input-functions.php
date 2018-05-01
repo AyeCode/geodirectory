@@ -1893,18 +1893,6 @@ function  geodir_cfi_files($html,$cf){
                     <span class="geodir_message_error"><?php _e( $cf['required_msg'], 'geodirectory' ); ?></span>
                 <?php } ?>
 
-                <h5 id="geodir_form_title_row" class="geodir-form_title">
-                    <?php if ( $image_limit == 1 ) {
-                        echo '<br /><small>(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'file', 'geodirectory' ) . ')</small>';
-                    } ?>
-                    <?php if ( $image_limit > 1 ) {
-                        echo '<br /><small>(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'files', 'geodirectory' ) . ')</small>';
-                    } ?>
-                    <?php if ( $image_limit == '' ) {
-                        echo '<br /><small>(' . __( 'You can upload unlimited files with this package', 'geodirectory' ) . ')</small>';
-                    } ?>
-                </h5>
-
                 <div class="geodir_form_row clearfix geodir-files-dropbox" id="<?php echo $id; ?>dropbox" >
                     <input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $files; ?>"
                            class="<?php if ( $cf['is_required'] ) {
@@ -1920,6 +1908,17 @@ function  geodir_cfi_files($html,$cf){
                         <div class="geodir-dropbox-title"><?php _e( 'Drop files here <small>or</small>', 'geodirectory' ); ?></div>
                         <input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php esc_attr_e( 'Select Files', 'geodirectory' ); ?>" class="geodir_button"/>
                         <div class="geodir-dropbox-file-types"><?php echo ( $display_file_types != '' ? __('Allowed file types:', 'geodirectory') . ' ' . $display_file_types : '' );?></div>
+                        <div class="geodir-dropbox-file-limit">
+                            <?php if ( $image_limit == 1 ) {
+                                echo '(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'file', 'geodirectory' ) . ')';
+                            } ?>
+                            <?php if ( $image_limit > 1 ) {
+                                echo '(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'files', 'geodirectory' ) . ')';
+                            } ?>
+                            <?php if ( $image_limit == '' ) {
+                                echo '(' . __( 'You can upload unlimited files with this package', 'geodirectory' ) . ')';
+                            } ?>
+                        </div>
                         <span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce( $id . 'pluploadan' ); ?>"></span>
                         <div class="filelist"></div>
                     </div>
