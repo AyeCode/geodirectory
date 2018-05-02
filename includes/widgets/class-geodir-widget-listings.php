@@ -14,6 +14,7 @@
  */
 class GeoDir_Widget_Listings extends WP_Super_Duper {
 
+	public $view_all_link;
 
     /**
      * Register the popular posts widget.
@@ -554,32 +555,13 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             return;
         }
 
+		if ( ! empty( $viewall_url ) ) {
+			$this->view_all_link = '<a href="' . esc_url( $viewall_url ) .'" class="geodir-viewall">' . __( 'View all', 'geodirectory' ) . '</a>';
+			add_filter( 'widget_title', array( $this, 'title_filter' ), 10, 3 );
+		}
+
         ?>
         <div class="geodir_locations geodir_location_listing">
-
-            <?php
-
-            if(!isset($before_title)){$before_title = "<h3>";}
-            if(!isset($after_title)){$after_title = "</h3>";}
-
-            /**
-             * Called before the div containing the title and view all link in popular post view widget.
-             *
-             * @since 1.0.0
-             */
-            do_action( 'geodir_before_view_all_link_in_widget' ); ?>
-            <div class="geodir_list_heading clearfix">
-                <?php echo $before_title . $title . $after_title; ?>
-                <a href="<?php echo $viewall_url; ?>"
-                   class="geodir-viewall"><?php _e( 'View all', 'geodirectory' ); ?></a>
-            </div>
-            <?php
-            /**
-             * Called after the div containing the title and view all link in popular post view widget.
-             *
-             * @since 1.0.0
-             */
-            do_action( 'geodir_after_view_all_link_in_widget' ); ?>
             <?php
             if ( strstr( $layout, 'gridview' ) ) {
                 $listing_view_exp        = explode( '_', $layout );
@@ -680,6 +662,18 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         //print_r($sort_options);echo '###';
 
         return $options;
+    }
+
+	public function title_filter( $title, $instance, $id_base ) {
+
+		$view_all_link = apply_filters( 'geodir_widget_view_all_link', $this->view_all_link, $instance, $id_base );
+
+        if ( ! empty( $view_all_link ) ) {
+            $title = $title . $view_all_link;
+        }
+
+        remove_filter( 'widget_title', array( $this, 'title_filter' ), 10 );
+        return $title;
     }
 
 
