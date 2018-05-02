@@ -6,6 +6,14 @@
 			}
 		}
 	}
+
+	.geodir_preview_button{
+		margin-left: 20px;
+		i{
+			font-size: 12px;
+			vertical-align: text-top;
+		}
+	}
 }
 /* business hours start */
 .geodir_form_row .gd-bh-field {
@@ -124,8 +132,7 @@
 		height:auto;
 		padding:10px;
 		text-align:center;
-
-
+		margin: 10px 0;
 
 		&.dragover{
 			background: #1abfe466;
@@ -145,7 +152,8 @@
 				font-size: 14px;
 			}
 		}
-		.geodir-dropbox-file-types{
+		.geodir-dropbox-file-types,
+		.geodir-dropbox-file-limit{
 			font-size: 10px;
 			color: #aaa;
 		}

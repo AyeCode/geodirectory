@@ -76,6 +76,15 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         $post_type = $post->post_type;
         $tabs = self::get_tab_settings($post_type);
 
+//       print_r( $tabs);
+
+        // get the tab contents first so we can decide to output the tab head
+        $tabs_content = array();
+        foreach($tabs as $tab){
+            $tabs_content[$tab->id."tab"] = self::tab_content($tab);
+        }
+
+
         if(!empty($tabs)){
             echo '<div class="geodir-tabs" id="gd-tabs">';
 
@@ -94,11 +103,10 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 $count = 0;
                 foreach($tabs as $tab){
                     if($tab->tab_level>0){continue;}
+                    if(empty($tabs_content[$tab->id."tab"])){continue;}
 
                     $tab_class = $count==0 ? 'geodir-tab-active' :'';
                     $data_status = '';//$count==0 ? 'data-status="enable"' : '';
-
-
                     echo '<dt></dt> <!-- added to comply with validation -->';
                     echo '<dd class="'.$tab_class .'">';
                     echo '<a data-tab="#'.esc_attr($tab->tab_key).'" data-status="enable">';
@@ -108,7 +116,6 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                     echo esc_attr__($tab->tab_name,'geodirectory').'</a>';
                     echo '</dd>';
                     $count++;
-
                 }
 
 
@@ -120,6 +127,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             echo '<ul class="geodir-tabs-content geodir-entry-content '.$list_class.'">';
             foreach($tabs as $tab){
                 if($tab->tab_level>0){continue;}
+                if(empty($tabs_content[$tab->id."tab"])){continue;}
 
                 $add_tab = $args['show_as_list'] ? '' : 'Tab';
                 echo '<li id="'.esc_attr($tab->tab_key).$add_tab.'" >';
@@ -142,14 +150,9 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 }
                 echo '<div id="geodir-tab-content-'.esc_attr($tab->tab_key).'" class="hash-offset"></div>';
 
-                //echo "content".esc_attr($tab->tab_key);
-
-                echo self::tab_content($tab);
-
-
+                echo $tabs_content[$tab->id."tab"];
 
                 echo '</li>';
-
             }
             echo '</ul>';
 
@@ -187,9 +190,10 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 
     public function tab_content($tab,$child=false) {
 
+        ob_start();
         // main content
         if(!empty($tab->tab_content)){ // override content
-            echo stripslashes( $tab->tab_content );
+            echo do_shortcode(stripslashes( $tab->tab_content ));
         }elseif($tab->tab_type=='meta'){ // meta info
             echo do_shortcode('[gd_post_meta key="'.$tab->tab_key.'" show="value"]');
         }elseif($tab->tab_type=='standard'){ // meta info
@@ -200,12 +204,13 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 			}
         }
 
-
-
         self::tab_content_child($tab);
+
+        return ob_get_clean();
     }
 
     public function tab_content_child($tab) {
+        ob_start();
         global $post;
         $post_type = $post->post_type;
         $tabs = self::get_tab_settings($post_type);
@@ -226,10 +231,12 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 }
             }
         }
+        return ob_get_clean();
 
     }
 
     public function output_fieldset($tab){
+        ob_start();
         echo '<div class="geodir_post_meta  gd-fieldset">';
         echo "<h4>";
         if($tab->tab_icon){
@@ -241,6 +248,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         echo "</h4>";
         echo "</div>";
 
+        return ob_get_clean();
     }
 
 

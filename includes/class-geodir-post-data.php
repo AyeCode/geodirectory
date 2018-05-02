@@ -298,7 +298,8 @@ class GeoDir_Post_Data {
 			// set post images
 			if ( isset( $gd_post['post_images'] ) ) {
 				$featured_image = self::save_files( $post_id, $gd_post['post_images'], 'post_images', $is_dummy);
-				if ( $featured_image !== false ) {
+				//echo '###'.$featured_image;
+				if ( !empty($featured_image) ) {
 					$postarr['featured_image'] = $featured_image;
 				}
 			}
@@ -722,7 +723,7 @@ class GeoDir_Post_Data {
 				if(geodir_get_option('post_preview')){
 					$preview_link = self::get_preview_link( $post );
 					$preview_id = !empty($post->post_parent) ? $post->post_parent : $post->ID;
-					echo "<a href='$preview_link' target='wp-preview-".$preview_id."' class='geodir_button geodir_preview_button'>". __( 'Preview Listing', 'geodirectory' )."</a>";
+					echo "<a href='$preview_link' target='wp-preview-".$preview_id."' class='geodir_button geodir_preview_button'>". __( 'Preview Listing', 'geodirectory' )." <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
 				}
 				?>
             <span class="geodir_message_note"
