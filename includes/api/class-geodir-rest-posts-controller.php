@@ -1311,40 +1311,45 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param WP_Post         $post    Post object.
+	 * @param WP_Post         $the_post    Post object.
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_REST_Response Response object.
 	 */
-	public function prepare_item_for_response( $post, $request ) {
-		$gd_post 			= geodir_get_post_info( $post->ID );
-		$post				= $gd_post;
-		$GLOBALS['gd_post'] = $gd_post;
-		$GLOBALS['post'] 	= $post;
-		setup_postdata( $post );
+	public function prepare_item_for_response( $the_post, $request ) {
+		global $gd_post, $post;
+
+		if ( isset( $the_post->default_category ) ) {
+			$post = get_post( $the_post->ID );
+			$gd_post = $the_post;
+		} else {
+			$post = $the_post;
+			$gd_post = geodir_get_post_info( $the_post->ID );
+		}
+		geodir_setup_postdata( $gd_post );
 
 		$schema = $this->get_item_schema();
 
-		$data = $this->get_post_data( $post, $request );
+		$data = $this->get_post_data( $gd_post, $request, $post );
 
 		// Default fields
 		if ( ! empty( $schema['properties']['parent'] ) ) {
-			$data['parent'] = (int) $post->post_parent;
+			$data['parent'] = (int) $gd_post->post_parent;
 		}
 
 		if ( ! empty( $schema['properties']['comment_status'] ) ) {
-			$data['comment_status'] = $post->comment_status;
+			$data['comment_status'] = $gd_post->comment_status;
 		}
 
 		if ( ! empty( $schema['properties']['ping_status'] ) ) {
-			$data['ping_status'] = $post->ping_status;
+			$data['ping_status'] = $gd_post->ping_status;
 		}
 
 		if ( ! empty( $schema['properties']['sticky'] ) ) {
-			$data['sticky'] = is_sticky( $post->ID );
+			$data['sticky'] = is_sticky( $gd_post->ID );
 		}
 
 		if ( ! empty( $schema['properties']['format'] ) ) {
-			$data['format'] = get_post_format( $post->ID );
+			$data['format'] = get_post_format( $gd_post->ID );
 
 			// Fill in blank post format.
 			if ( empty( $data['format'] ) ) {
@@ -1353,14 +1358,14 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		}
 
 		if ( ! empty( $schema['properties']['meta'] ) ) {
-			$data['meta'] = $this->meta->get_value( $post->ID, $request );
+			$data['meta'] = $this->meta->get_value( $gd_post->ID, $request );
 		}
 
 		if ( ! empty( $schema['properties']['guid'] ) ) {
 			$data['guid'] = array(
 				/** This filter is documented in wp-includes/post-template.php */
-				'rendered' => apply_filters( 'get_the_guid', $post->guid, $post->ID ),
-				'raw'      => $post->guid,
+				'rendered' => apply_filters( 'get_the_guid', $gd_post->guid, $post->ID ),
+				'raw'      => $gd_post->guid,
 			);
 		}
 
@@ -1988,23 +1993,35 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			'type'               => 'integer',
 		);
 
+		$default_order = 'desc';
+		$default_orderby = 'date';
+		$orderby_options = array( 'date' );
+
+		$sort_options  = geodir_rest_post_sort_options( $this->post_type );
+		if ( ! empty( $sort_options ) ) {
+			if ( ! empty( $sort_options['default_order'] ) ) {
+				$default_order = $sort_options['default_order'];
+			}
+			if ( ! empty( $sort_options['default_orderby'] ) ) {
+				$default_orderby = $sort_options['default_orderby'];
+			}
+			if ( ! empty( $sort_options['orderby_options'] ) ) {
+				$orderby_options = array_keys( $sort_options['orderby_options'] );
+			}
+		}
+
 		$query_params['order'] = array(
 			'description'        => __( 'Order sort attribute ascending or descending.' ),
 			'type'               => 'string',
-			'default'            => 'desc',
+			'default'            => $default_order,
 			'enum'               => array( 'asc', 'desc' ),
 		);
 
 		$query_params['orderby'] = array(
 			'description'        => __( 'Sort collection by object attribute.' ),
 			'type'               => 'string',
-			'default'            => 'date',
-			'enum'               => array(
-				'date',
-				'id',
-				'slug',
-				'title',
-			),
+			'default'            => $default_orderby,
+			'enum'               => $orderby_options,
 		);
 
 		$post_type = get_post_type_object( $this->post_type );
@@ -2190,6 +2207,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'data_type'    => $data_type,
 						'context'       => array( 'view', 'edit' ),
 						'title'         => !empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ),
+						'description'   => __( 'Zip/Post Code', 'geodirectory' ),
 						'required'      => (bool) ( $required && !empty( $extra_fields['show_zip'] ) ),
 						'extra_fields'  => array(
 							'show' => (bool) ! empty( $extra_fields['show_zip'] )
@@ -2482,7 +2500,14 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     $args['format'] = 'uri';
                     break;
                 default:
-                    $continue = true;
+					if ( has_filter( 'geodir_rest_post_custom_fields_schema' ) ) {
+						$args = apply_filters( 'geodir_rest_post_custom_fields_schema', $args, $this->post_type, $field, $custom_fields, $package_id, $default );
+						if ( empty( $args ) ) {
+							continue;
+						}
+					} else {
+						$continue = true;
+					}
                     break;
             }
             
@@ -2533,21 +2558,27 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		return $terms;
 	}
 	
-	public function get_featured_image( $post ) {
-		$image = GeoDir_Media::get_post_images($post->ID,1); //@todo kiran i changed, this please check it over, might need tweaking
+	public function get_featured_image( $gd_post ) {
+		$images = geodir_get_images($gd_post->ID,1);
 
 		$featured_image = array();
-		if ( ! empty( $image ) ) {
+		if ( ! empty( $images ) && ! empty( $images[0] ) ) {
+			$image = $images[0];
+			if ( ! empty( $image->metadata ) ) {
+				$image->metadata = maybe_unserialize( $image->metadata );
+			}
+			$featured_image['id'] = $image->ID;
 			$featured_image['title'] = $image->title;
-			$featured_image['src'] = $image->src;
-			$featured_image['width'] = $image->width;
-			$featured_image['height'] = $image->height;
+			$featured_image['src'] = geodir_get_image_src( $image, 'original' );
+			$featured_image['thumbnail'] = geodir_get_image_src( $image, 'thumbnail' );
+			$featured_image['width'] = ! empty( $image->metadata ) && isset( $image->metadata['width'] ) ? $image->metadata['width'] : '';
+			$featured_image['height'] = ! empty( $image->metadata ) && isset( $image->metadata['height'] ) ? $image->metadata['height'] : '';
 		}
 		return $featured_image;
 	}
 	
-	public function get_post_images( $post ) {
-		$post_images = geodir_get_images( $post->ID );
+	public function get_post_images( $gd_post ) {
+		$post_images = geodir_get_images( $gd_post->ID );
 		
 		$images = array();
 		if ( ! empty( $post_images ) ) {
@@ -2572,16 +2603,16 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		return $taxonomies;
 	}
 	
-	public function get_post_data( $post, $request ) {
+	public function get_post_data( $gd_post, $request, $post ) {
 		$data = array();
 
 		$schema 		= $this->get_item_schema();
 		$taxonomies 	= $this->get_taxonomies();
-		$post_fields 	= array_keys( (array) $post );
+		$post_fields 	= array_keys( (array) $gd_post );
 
 		// ID
 		if ( ! empty( $schema['properties']['id'] ) ) {
-			$data['id'] = $post->ID;
+			$data['id'] = $gd_post->ID;
 		}
 		
 		// Title
@@ -2589,8 +2620,8 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			add_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
 
 			$data['title'] = array(
-				'raw'      => $post->post_title,
-				'rendered' => get_the_title( $post->ID ),
+				'raw'      => $gd_post->post_title,
+				'rendered' => get_the_title( $gd_post->ID ),
 			);
 
 			remove_filter( 'protected_title_format', array( $this, 'protected_title_format' ) );
@@ -2598,32 +2629,32 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		
 		// Slug
 		if ( ! empty( $schema['properties']['slug'] ) ) {
-			$data['slug'] = $post->post_name;
+			$data['slug'] = $gd_post->post_name;
 		}
 		
 		// Link
 		if ( ! empty( $schema['properties']['link'] ) ) {
-			$data['link'] = get_permalink( $post->ID );
+			$data['link'] = get_permalink( $gd_post->ID );
 		}
 		
 		// Status
 		if ( ! empty( $schema['properties']['status'] ) ) {
-			$data['status'] = $post->post_status;
+			$data['status'] = $gd_post->post_status;
 		}
 
 		// Type
 		if ( ! empty( $schema['properties']['type'] ) ) {
-			$data['type'] = $post->post_type;
+			$data['type'] = $gd_post->post_type;
 		}
 		
 		// Author
 		if ( ! empty( $schema['properties']['author'] ) ) {
-			$data['author'] = (int) $post->post_author;
+			$data['author'] = (int) $gd_post->post_author;
 		}
 
 		// Date
 		if ( ! empty( $schema['properties']['date'] ) ) {
-			$data['date'] = $this->prepare_date_response( $post->post_date_gmt, $post->post_date );
+			$data['date'] = $this->prepare_date_response( $gd_post->post_date_gmt, $gd_post->post_date );
 		}
 
 		// Date GMT
@@ -2632,17 +2663,17 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			// date of the draft should be updated each time it is saved (see
 			// #38883).  In this case, shim the value based on the `post_date`
 			// field with the site's timezone offset applied.
-			if ( '0000-00-00 00:00:00' === $post->post_date_gmt ) {
-				$post_date_gmt = get_gmt_from_date( $post->post_date );
+			if ( '0000-00-00 00:00:00' === $gd_post->post_date_gmt ) {
+				$post_date_gmt = get_gmt_from_date( $gd_post->post_date );
 			} else {
-				$post_date_gmt = $post->post_date_gmt;
+				$post_date_gmt = $gd_post->post_date_gmt;
 			}
 			$data['date_gmt'] = $this->prepare_date_response( $post_date_gmt );
 		}
 
 		// Modified Date
 		if ( ! empty( $schema['properties']['modified'] ) ) {
-			$data['modified'] = $this->prepare_date_response( $post->post_modified_gmt, $post->post_modified );
+			$data['modified'] = $this->prepare_date_response( $gd_post->post_modified_gmt, $gd_post->post_modified );
 		}
 
 		// Modified Date GMT
@@ -2651,10 +2682,10 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			// `post_date_gmt` comments above).  In this case, shim the value
 			// based on the `post_modified` field with the site's timezone
 			// offset applied.
-			if ( '0000-00-00 00:00:00' === $post->post_modified_gmt ) {
-				$post_modified_gmt = date( 'Y-m-d H:i:s', strtotime( $post->post_modified ) - ( get_option( 'gmt_offset' ) * 3600 ) );
+			if ( '0000-00-00 00:00:00' === $gd_post->post_modified_gmt ) {
+				$post_modified_gmt = date( 'Y-m-d H:i:s', strtotime( $gd_post->post_modified ) - ( get_option( 'gmt_offset' ) * 3600 ) );
 			} else {
-				$post_modified_gmt = $post->post_modified_gmt;
+				$post_modified_gmt = $gd_post->post_modified_gmt;
 			}
 			$data['modified_gmt'] = $this->prepare_date_response( $post_modified_gmt );
 		}
@@ -2671,20 +2702,20 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		if (  empty( $schema['properties']['content'] ) ) {
 			$data['content'] = array(
-				'raw'       => $post->post_content,
+				'raw'       => $gd_post->post_content,
 				/** This filter is documented in wp-includes/post-template.php */
-				'rendered'  => post_password_required( $post ) ? '' : apply_filters( 'the_content', $post->post_content ),
-				'protected' => (bool) $post->post_password,
+				'rendered'  => post_password_required( $post ) ? '' : apply_filters( 'the_content', $gd_post->post_content ),
+				'protected' => (bool) $gd_post->post_password,
 			);
 		}
 
 		if ( ! empty( $schema['properties']['excerpt'] ) ) {
 			/** This filter is documented in wp-includes/post-template.php */
-			$excerpt = apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $post->post_excerpt, $post ) );
+			$excerpt = apply_filters( 'the_excerpt', apply_filters( 'get_the_excerpt', $gd_post->post_excerpt, $post ) );
 			$data['excerpt'] = array(
-				'raw'       => $post->post_excerpt,
+				'raw'       => $gd_post->post_excerpt,
 				'rendered'  => post_password_required( $post ) ? '' : $excerpt,
-				'protected' => (bool) $post->post_password,
+				'protected' => (bool) $gd_post->post_password,
 			);
 		}
 
@@ -2695,7 +2726,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		
 		// Categories
 		if ( isset( $taxonomies[ $this->cat_taxonomy ] ) && ! empty( $schema['properties']['post_category'] ) ) {
-			$data['default_category'] = $post->default_category;
+			$data['default_category'] = $gd_post->default_category;
 			$data['post_category'] = $this->get_taxonomy_terms( $post, $this->cat_taxonomy );
 		}
 		
@@ -2716,7 +2747,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 			$extra_fields 	= ! empty( $field_info['extra_fields'] ) ? $field_info['extra_fields'] : NULL;
 			$option_values 	= ! empty( $field_info['arg_options']['rendered_options'] ) ? $field_info['arg_options']['rendered_options'] : NULL;
-			$field_value 	= $post->{$field_name};
+			$field_value 	= $gd_post->{$field_name};
 
 			switch ( $field_info['field_type'] ) {
 				case 'business_hours':
@@ -2831,21 +2862,21 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		}
 		
 		// Extra fields
-		$data['featured'] 		= (bool) $post->featured;
-		$data['rating'] 		= (float) $post->overall_rating;
-		$data['rating_count'] 	= (int) $post->rating_count;
+		$data['featured'] 		= (bool) $gd_post->featured;
+		$data['rating'] 		= (float) $gd_post->overall_rating;
+		$data['rating_count'] 	= (int) $gd_post->rating_count;
 		
 		// Featured image
 		if ( ! empty( $schema['properties']['featured_media'] ) ) {
-			$data['featured_media'] = (int) get_post_thumbnail_id( $post->ID );
-			$data['featured_image'] = $this->get_featured_image( $post );
+			$data['featured_media'] = (int) get_post_thumbnail_id( $gd_post->ID );
+			$data['featured_image'] = $this->get_featured_image( $gd_post );
 		}
 		
 		// Images
 		if ( ! empty( $schema['properties']['post_images'] ) ) {
-			$data['images'] = $this->get_post_images( $post );
+			$data['images'] = $this->get_post_images( $gd_post );
 		}
 
-		return apply_filters( 'geodir_rest_get_post_data', $data, $post, $request, $this );
+		return apply_filters( 'geodir_rest_get_post_data', $data, $gd_post, $request, $this );
 	}
 }

@@ -11,6 +11,7 @@ Setup wizard does not warn user if they try to continue while dummy data is bein
 Logo predefined field added, post_images shortcode/widget now has option to show logo as first image - ADDED
 Preview listing link now has icon to show it opens in new window - ADDED
 Tabs show even if no content in them - FIXED
+Option added in GD Listings widget to show nearest listings - ADDED
 
 v2.0.0.12-beta
 Attachment table date_gmt field added - ADDED

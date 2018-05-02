@@ -110,6 +110,9 @@ class GeoDir_API {
 
 		// Init REST API routes.
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 100 );
+		add_action( 'rest_api_init', array( $this, 'register_rest_query' ), 101 );
+
+		add_action( 'pre_get_posts', array( __CLASS__, 'rest_posts_request' ), 10, 2 );
 	}
 
 	/**
@@ -146,7 +149,7 @@ class GeoDir_API {
 	 * Register REST API routes.
 	 * @since 2.0.0
 	 */
-	public function register_rest_routes() {			
+	public function register_rest_routes() {
 		global $wp_post_types;
 
 		// Register settings to the REST API.
@@ -254,6 +257,99 @@ class GeoDir_API {
 				}
 			}
 		}
+	}
+
+	public static function is_rest() {
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
+			return true;
+		}
+		return false;
+	}
+
+	public static function register_rest_query() {
+		if ( self::is_rest() ) {
+			add_filter( 'posts_clauses_request', array( __CLASS__, 'posts_clauses_request' ), 10, 2 );
+		}
+	}
+
+	public static function posts_clauses_request( $clauses, $wp_query ) {
+		$post_type  = !empty( $wp_query->query_vars['post_type'] ) ? $wp_query->query_vars['post_type'] : '';
+
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
+			return $clauses;
+		}
+
+		$clauses['distinct']    = apply_filters( 'geodir_rest_posts_clauses_distinct', $clauses['distinct'], $wp_query, $post_type );
+		$clauses['fields']      = apply_filters( 'geodir_rest_posts_clauses_fields', $clauses['fields'], $wp_query, $post_type );
+		$clauses['join']        = apply_filters( 'geodir_rest_posts_clauses_join', $clauses['join'], $wp_query, $post_type );
+		$clauses['where']       = apply_filters( 'geodir_rest_posts_clauses_where', $clauses['where'], $wp_query, $post_type );
+		$clauses['groupby']     = apply_filters( 'geodir_rest_posts_clauses_groupby', $clauses['groupby'], $wp_query, $post_type );
+		$clauses['orderby']     = apply_filters( 'geodir_rest_posts_clauses_orderby', $clauses['orderby'], $wp_query, $post_type );
+		$clauses['limits']      = apply_filters( 'geodir_rest_posts_clauses_limits', $clauses['limits'], $wp_query, $post_type );
+
+		return apply_filters( 'geodir_rest_posts_clauses_request', $clauses, $wp_query, $post_type );
+	}
+
+	public static function rest_posts_request( $query ) {
+		if ( self::is_rest() ) {
+			add_filter( 'geodir_rest_posts_clauses_distinct', array( __CLASS__, 'rest_posts_distinct' ), 10, 3 );
+			add_filter( 'geodir_rest_posts_clauses_fields', array( __CLASS__, 'rest_posts_fields' ), 10, 3 );
+			add_filter( 'geodir_rest_posts_clauses_join', array( __CLASS__, 'rest_posts_join' ), 10, 3 );
+			add_filter( 'geodir_rest_posts_clauses_where', array( __CLASS__, 'rest_posts_where' ), 10, 3 );
+			add_filter( 'geodir_rest_posts_clauses_groupby', array( __CLASS__, 'rest_posts_groupby' ), 10, 3 );
+			add_filter( 'geodir_rest_posts_clauses_orderby', array( __CLASS__, 'rest_posts_orderby' ), 10, 3 );
+			add_filter( 'geodir_rest_posts_clauses_limits', array( __CLASS__, 'rest_posts_limits' ), 10, 3 );
+		}
+	}
+
+	public static function rest_posts_distinct( $distinct, $wp_query, $post_type ) {
+		return $distinct;
+	}
+
+	public static function rest_posts_fields( $fields, $wp_query, $post_type ) {
+		if ( trim( $fields ) != '' ) {
+			$fields .= ", ";
+		}
+
+		$table = geodir_db_cpt_table( $post_type );
+
+		$fields .= "{$table}.*";
+
+		return $fields;
+	}
+
+	public static function rest_posts_join( $join, $wp_query, $post_type ) {
+		global $wpdb;
+
+		$table = geodir_db_cpt_table( $post_type );
+
+		$join .= " LEFT JOIN {$table} ON ( {$table}.post_id = {$wpdb->posts}.ID )";
+
+		return $join;
+	}
+
+	public static function rest_posts_where( $where, $wp_query, $post_type ) {
+		return $where;
+	}
+
+	public static function rest_posts_groupby( $groupby, $wp_query, $post_type ) {
+		return $groupby;
+	}
+
+	public static function rest_posts_orderby( $orderby, $wp_query, $post_type ) {
+		global $geodir_post_type;
+		$geodir_post_type = $post_type;
+
+		$table = geodir_db_cpt_table( $post_type );
+		$sort_by = $wp_query->query_vars['orderby'];
+
+		$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
+
+		return apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $wp_query );
+	}
+
+	public static function rest_posts_limits( $limits, $wp_query, $post_type ) {
+		return $limits;
 	}
 
 }

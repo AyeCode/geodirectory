@@ -50,6 +50,7 @@ function goedir_register_widgets() {
         new GeoDir_Widget_Loop_Paging();
         new GeoDir_Widget_Loop_Actions();
         new GeoDir_Widget_Archive_Item_Section();
+		new GeoDir_Widget_Post_Distance();
 
         // 3rd party widgets
         if(class_exists('Ninja_Forms')){

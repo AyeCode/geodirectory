@@ -710,11 +710,11 @@ class GeoDir_Query {
 					case 'post_date':
 					case 'comment_count':
 
-						$orderby = "$wpdb->posts." . $sort_by . " " . $order . ", ".$table . ".overall_rating " . $order . ", ";
+						$orderby = "$wpdb->posts." . $sort_by . " " . $order . ", ".$table . ".overall_rating " . $order;
 						break;
 
 					case 'distance':
-						$orderby = $sort_by . " " . $order . ", ";
+						$orderby = $sort_by . " " . $order;
 						break;
 
 
@@ -740,11 +740,11 @@ class GeoDir_Query {
 
 							if(!$avg_num_votes){ $avg_num_votes = 0;}
 
-							$orderby = " (( $avg_num_votes * $avg_rating ) + (" . $table . ".rating_count * " . $table . ".overall_rating ))  / ( $avg_num_votes + " . $table . ".rating_count )  $order , ";
+							$orderby = " (( $avg_num_votes * $avg_rating ) + (" . $table . ".rating_count * " . $table . ".overall_rating ))  / ( $avg_num_votes + " . $table . ".rating_count )  $order";
 
 							//$orderby = " ( " . $table . ".rating_count * " . $table . ".overall_rating ) + (" . $table . ".rating_count * " . $table . ".overall_rating )   / ( " . $table . ".rating_count + " . $table . ".rating_count )  $order , "; // seems to work mostly with no extra overheads
 						}else{
-							$orderby = " " . $table . "." . $sort_by . "  " . $order . ", " . $table . ".rating_count " . $order . ", ";
+							$orderby = " " . $table . "." . $sort_by . "  " . $order . ", " . $table . ".rating_count " . $order;
 						}
 
 						break;

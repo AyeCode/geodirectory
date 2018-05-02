@@ -1512,3 +1512,20 @@ function geodir_get_endpoint_url( $endpoint, $value = '', $permalink = '' ) {
 
 	return apply_filters( 'geodir_get_endpoint_url', $url, $endpoint, $value, $permalink );
 }
+
+function geodir_array_splice_assoc( $input, $offset, $length, $replacement ) {
+	$replacement = (array) $replacement;
+	
+	$key_indices = array_flip( array_keys( $input ) );
+
+	if ( isset( $input[ $offset ] ) && is_string( $offset ) ) {
+		$offset = $key_indices[ $offset ];
+	}
+	if ( isset( $input[ $length ] ) && is_string( $length ) ) {
+		$length = $key_indices[ $length ] - $offset;
+	}
+
+	$input = array_slice( $input, 0, $offset, true ) + $replacement + array_slice( $input, $offset + $length, null, true );
+
+	return $input;
+}
