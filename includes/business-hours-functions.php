@@ -81,12 +81,12 @@ function geodir_gmt_offset( $formatted = true ) {
 }
 
 /**
- * Convert the seconds to hmmm.
+ * Converts the business seconds to hhmm.
  *
  * @since 2.0.0
  *
- * @param string $seconds.
- * @return string Formatted hmmm.
+ * @param string $seconds business hour seconds.
+ * @return string Formatted hhmm.
  */
 function geodir_seconds_to_hhmm( $seconds ) {
 	$sign = $seconds < 0 ? '-' : '+';
@@ -127,11 +127,11 @@ function geodir_wp_gmt_offset( $formatted = true ) {
 }
 
 /**
- * Return the default weekdays.
+ * Get the default value for business hour.
  *
  * @since 2.0.0
  *
- * @return array default weekdays.
+ * @return array default business hour.
  */
 function geodir_bh_default_values() {
 	$weekdays = geodir_get_weekdays();
@@ -147,12 +147,12 @@ function geodir_bh_default_values() {
 }
 
 /**
- * Convert array to schema.
+ * Converts business hour array settings to schema output.
  *
  * @since 2.0.0
  *
- * @param array $schema_input.
- * @return string $schema.
+ * @param array $schema_input A business hour array.
+ * @return string $schema converted schema.
  */
 function geodir_array_to_schema( $schema_input ) {
 	if ( empty( $schema_input ) || ! is_array( $schema_input ) ) {
@@ -196,12 +196,12 @@ function geodir_array_to_schema( $schema_input ) {
 }
 
 /**
- * Convert schema to array.
+ * Converts business hour schema to array output.
  *
  * @since 2.0.0
  *
- * @param string $schema.
- * @return array $return.
+ * @param string $schema business hour schema.
+ * @return array $return offset and hour.
  */
 function geodir_schema_to_array( $schema ) {
 	if ( empty( $schema ) ) {
@@ -253,12 +253,12 @@ function geodir_schema_to_array( $schema ) {
 }
 
 /**
- * Convert the parse property string to array.
+ * Converts the parse property string to array output.
  *
  * @since 2.0.0
  *
- * @param string $str.
- * @return array $property.
+ * @param string $str A property day hour values.
+ * @return array $property converted property.
  */
 function geodir_parse_property( $str ) {
 	$arr = explode( ' ', $str );
@@ -282,12 +282,12 @@ function geodir_parse_property( $str ) {
 }
 
 /**
- * Convert the parse days string to array.
+ * Converts the parse days string to array output.
  *
  * @since 2.0.0
  *
- * @param string $days_str.
- * @return array $return.
+ * @param string $days_str A parse days value.
+ * @return array $return unique parse day.
  */
 function geodir_parse_days( $days_str ) {
 	$days_names = array_values( geodir_day_short_names() );
@@ -318,12 +318,12 @@ function geodir_parse_days( $days_str ) {
 }
 
 /**
- * Convert days range string to array.
+ * Converts days range string to array output.
  *
  * @since 2.0.0
  *
- * @param string $days_str.
- * @return array $return.
+ * @param string $days_str A parse days range value.
+ * @return array $return parse days range.
  */
 function geodir_parse_days_range( $days_str ) {
 	$days_names = geodir_day_short_names();
@@ -355,12 +355,12 @@ function geodir_parse_days_range( $days_str ) {
 }
 
 /**
- * Convert parse hours string to array.
+ * Converts parse hours string to array output.
  *
  * @since 2.0.0
  *
- * @param string $hours_str.
- * @return array $return.
+ * @param string $hours_str hours string.
+ * @return array $return opens and closes hour.
  */
 function geodir_parse_hours( $hours_str ) {
 	$hours_str = trim( $hours_str );
@@ -381,11 +381,11 @@ function geodir_parse_hours( $hours_str ) {
 }
 
 /**
- * Convert hour range string to array.
+ * Converts hour range string to array output.
  *
  * @since 2.0.0
  *
- * @param string $hours_str.
+ * @param string $hours_str hours string.
  * @return array $return.
  */
 function geodir_parse_hours_range( $hours_str ) {
@@ -405,11 +405,11 @@ function geodir_parse_hours_range( $hours_str ) {
 }
 
 /**
- * Get Business hours.
+ * Get business hours.
  *
  * @since 2.0.0
  *
- * @param string $value.
+ * @param string $value A business hour values.
  * @return array $hours.
  */
 function geodir_get_business_hours( $value = '' ) {
