@@ -295,8 +295,8 @@ class GeoDir_Media {
 				$file['file'] = "/"._wp_relative_upload_path($file['file']);
 			}
 
-			$file = $file['file'];
 			$file_type = $file['type'];
+			$file = $file['file'];
 		}
 
 		$file_info = array(
