@@ -184,7 +184,6 @@ return; //@todo we need to update this
 ###############################################
 ########### LISTINGS PAGE ACTIONS #############
 ###############################################
-add_action('geodir_listings_page_title', 'geodir_action_listings_title', 10);
 /**
  * Outputs the listings template title.
  *

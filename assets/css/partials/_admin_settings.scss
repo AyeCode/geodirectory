@@ -13,3 +13,15 @@
     margin-left: 2px;
   }
 }
+
+.wrap.geodirectory{
+  .form-table{
+    .forminp{
+      input[type='text'],input[type='number'],input[type='email']{
+        padding: 8px 5px;
+        height: auto;
+      }
+    }
+  }
+
+}

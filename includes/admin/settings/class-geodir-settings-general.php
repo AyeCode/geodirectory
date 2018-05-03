@@ -47,9 +47,10 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 		$sections = array(
 			''          	=> __( 'General', 'geodirectory' ),
-			'location'       => __( 'Default location', 'geodirectory' ),
-			'pages' 	=> __( 'Pages', 'geodirectory' ),
-			'search' 	=> __( 'Search', 'geodirectory' ),
+			'location'      => __( 'Default location', 'geodirectory' ),
+			'pages' 	    => __( 'Pages', 'geodirectory' ),
+			'seo' 	        => __( 'Titles & Meta', 'geodirectory' ),
+			'search' 	    => __( 'Search', 'geodirectory' ),
 			'dummy_data' 	=> __( 'Dummy Data', 'geodirectory' ),
 			'developer' 	=> __( 'Developer', 'geodirectory' ),
 			'uninstall' 	=> __( 'Uninstall', 'geodirectory' ),
@@ -298,6 +299,316 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 
 				array( 'type' => 'sectionend', 'id' => 'page_template_options' ),
+			));
+		}
+		else if ( 'seo' == $current_section ) {
+			/**
+			 * Filter GD general settings array.
+			 *
+			 * @since 1.0.0
+			 * @package GeoDirectory
+			 */
+			$settings = apply_filters( 'geodir_seo_options', array(
+				array(
+					'title' => __( 'Titles & Meta Settings', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => 'Here you can set the titles and meta info for your GeoDirectory pages.',
+					'id'    => 'seo_options',
+					//'desc_tip' => true,
+				),
+
+				// CPT archive
+				array(
+					'title' => __( 'Post type page', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => 'The root page of a GD CPT eg: /places/',
+					'id'    => 'seo_cpt',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_cpt_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_cpt_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_cpt_meta_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_cpt_meta_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Description', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta description to use for the page', 'geodirectory' ),
+					'id'       => 'seo_cpt_meta_description',
+					'type'     => 'textarea',
+					'placeholder' => GeoDir_Defaults::seo_cpt_meta_description(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array( 'type' => 'sectionend', 'id' => 'seo_cpt' ),
+
+				// Archive
+				array(
+					'title' => __( 'Archive pages', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => 'The GD category and tags pages.',
+					'id'    => 'seo_archive',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Category Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_cat_archive_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_cat_archive_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Category Meta Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_cat_archive_meta_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_cat_archive_meta_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Category Meta Description', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta description to use for the page', 'geodirectory' ),
+					'id'       => 'seo_cat_archive_meta_description',
+					'type'     => 'textarea',
+					'placeholder' => GeoDir_Defaults::seo_cat_archive_meta_description(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Tag Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_tag_archive_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_tag_archive_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Tag Meta Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_tag_archive_meta_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_tag_archive_meta_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Tag Meta Description', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta description to use for the page', 'geodirectory' ),
+					'id'       => 'seo_tag_archive_meta_description',
+					'type'     => 'textarea',
+					'placeholder' => GeoDir_Defaults::seo_tag_archive_meta_description(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array( 'type' => 'sectionend', 'id' => 'seo_archive' ),
+
+				// Single (details)
+				array(
+					'title' => __( 'Single post pages', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => 'The GD single post details page.',
+					'id'    => 'seo_single',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_single_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_single_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_single_meta_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_single_meta_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Description', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta description to use for the page', 'geodirectory' ),
+					'id'       => 'seo_single_meta_description',
+					'type'     => 'textarea',
+					'placeholder' => GeoDir_Defaults::seo_single_meta_description(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array( 'type' => 'sectionend', 'id' => 'seo_single' ),
+
+
+				// location page
+				array(
+					'title' => __( 'Location page', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => 'The location page.',
+					'id'    => 'seo_location',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_location_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_location_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_location_meta_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_location_meta_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Description', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta description to use for the page', 'geodirectory' ),
+					'id'       => 'seo_location_meta_description',
+					'type'     => 'textarea',
+					'placeholder' => GeoDir_Defaults::seo_location_meta_description(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array( 'type' => 'sectionend', 'id' => 'seo_location' ),
+
+
+				// search page
+				array(
+					'title' => __( 'Search page', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => 'The search page.',
+					'id'    => 'seo_search',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_search_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_search_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_search_meta_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_search_meta_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Description', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta description to use for the page', 'geodirectory' ),
+					'id'       => 'seo_search_meta_description',
+					'type'     => 'textarea',
+					'placeholder' => GeoDir_Defaults::seo_search_meta_description(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array( 'type' => 'sectionend', 'id' => 'seo_search' ),
+
+				// add listing
+				array(
+					'title' => __( 'Add listing page', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => 'The add listing page.',
+					'id'    => 'seo_add_listing',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Add Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_add_listing_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_add_listing_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Edit Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_add_listing_title_edit',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_add_listing_title_edit(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Title', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta title to use for the page', 'geodirectory' ),
+					'id'       => 'seo_add_listing_meta_title',
+					'type'     => 'text',
+					'placeholder' => GeoDir_Defaults::seo_add_listing_meta_title(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array(
+					'name'     => __( 'Meta Description', 'geodirectory' ),
+					'desc'     => __( 'Enter the meta description to use for the page', 'geodirectory' ),
+					'id'       => 'seo_add_listing_meta_description',
+					'type'     => 'textarea',
+					'placeholder' => GeoDir_Defaults::seo_add_listing_meta_description(),
+					'class'     => 'large-text',
+					'desc_tip' => true,
+				),
+
+				array( 'type' => 'sectionend', 'id' => 'seo_add_listing' ),
+
+
+
+
+				array( 'type' => 'sectionend', 'id' => 'seo_archive_options' ),
 			));
 		}
 

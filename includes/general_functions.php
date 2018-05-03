@@ -347,16 +347,16 @@ function geodir_is_page( $gdpage = '' ) {
 			}
 			break;
 		case 'search':
-//			if ( is_search() && isset( $_REQUEST['geodir_search'] ) ) {
-//				return true;
-//			}
+			if ( isset( $_REQUEST['geodir_search'] ) || (is_page() && $page_id == geodir_search_page_id()) ) {
+				return true;
+			}
 //			if ( (is_page() && $page_id == geodir_search_page_id()) || (is_archive() && $page_id == geodir_search_page_id()) ) {
 //				return true;
 //			}
 
-			if ( isset( $_REQUEST['geodir_search'] ) ) {
-				return true;
-			}
+//			if ( isset( $_REQUEST['geodir_search'] ) ) {
+//				return true;
+//			}
 			break;
 		case 'info': // @depreciated
 			if ( is_page() && $page_id && $page_id == geodir_info_page_id() ) {

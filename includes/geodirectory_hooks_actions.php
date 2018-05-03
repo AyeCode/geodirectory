@@ -172,8 +172,6 @@ add_action('wp_footer', 'send_marker_jason_to_js'); // Show map for listings wit
 
 
 
-add_action('wp_head', 'geodir_add_meta_keywords');
-
 /* Sharelocation scripts */
 //global $geodir_addon_list;
 //if(!empty($geodir_addon_list) && array_key_exists('geodir_sharelocation_manager', $geodir_addon_list) && $geodir_addon_list['geodir_sharelocation_manager'] == 'yes') { 
@@ -309,59 +307,6 @@ function geodir_add_to_favourite_link()
     <?php
     }
 }
-
-/**
- * Outputs social buttons.
- *
- * Outputs social sharing buttons twitter,facebook and google plus into a containing div if not on the add listing preview page.
- *
- * @global bool $preview True if the current page is add listing preview page. False if not.
- * @since 1.0.0
- * @package GeoDirectory
- */
-function geodir_social_sharing_buttons()
-{
-    global $preview;
-    ob_start(); // Start  buffering;
-    /**
-     * This action is called before the social buttons twitter,facebook and google plus are output in a containing div.
-     *
-     * @since 1.0.0
-     */
-    do_action('geodir_before_social_sharing_buttons');
-    if (!$preview) {
-        ?>
-        <div class="likethis">
-            <?php geodir_twitter_tweet_button(); ?>
-            <?php geodir_fb_like_button(); ?>
-            <?php geodir_google_plus_button(); ?>
-        </div>
-    <?php
-    }// end of if, if its a preview or not
-
-    /**
-     * This action is called after the social buttons twitter,facebook and google plus are output in a containing div.
-     *
-     * @since 1.0.0
-     */
-    do_action('geodir_after_social_sharing_buttons');
-    $content_html = ob_get_clean();
-    if (trim($content_html) != '')
-        $content_html = '<div class="geodir-company_info geodir-details-sidebar-social-sharing">' . $content_html . '</div>';
-    if ((int)geodir_get_option('geodir_disable_tfg_buttons_section') != 1) {
-        /**
-         * Filter the geodir_social_sharing_buttons() function content.
-         *
-         * @param string $content_html The output html of the geodir_social_sharing_buttons() function.
-         */
-        $content_html = apply_filters('geodir_social_sharing_buttons_html', $content_html);
-    }
-
-    return $content_html;
-
-
-}
-
 
 
 /**
@@ -874,92 +819,6 @@ function geodir_term_slug_is_exists($slug_exists, $slug, $term_id)
 
 
 
-add_filter('pre_get_document_title', 'geodir_custom_page_title', 100);
-add_filter('wp_title', 'geodir_custom_page_title', 100, 2);
-/**
- * Set custom page title.
- *
- * @since 1.0.0
- * @since 1.6.18 Option added to disable overwrite by Yoast SEO titles & metas on GD pages.
- * @package GeoDirectory
- * @global object $wp WordPress object.
- * @param string $title Old title.
- * @param string $sep Title separator.
- * @return string Modified title.
- */
-function geodir_custom_page_title($title = '', $sep = '')
-{
-    global $wp;
-    if ((class_exists('WPSEO_Frontend') || class_exists('All_in_One_SEO_Pack')) && !geodir_disable_yoast_seo_metas()) {
-        return $title;
-    }
-
-    if ($sep == '') {
-        /**
-         * Filter the page title separator.
-         *
-         * @since 1.0.0
-         * @package GeoDirectory
-         * @param string $sep The separator, default: `|`.
-         */
-        $sep = apply_filters('geodir_page_title_separator', '|');
-    }
-
-
-    $gd_page = '';
-    if(geodir_is_page('home')){
-        $gd_page = 'home';
-        $title = (geodir_get_option('geodir_meta_title_homepage')) ? geodir_get_option('geodir_meta_title_homepage') : $title;
-    }
-    elseif(geodir_is_page('detail')){
-        $gd_page = 'detail';
-        $title = (geodir_get_option('geodir_meta_title_detail')) ? geodir_get_option('geodir_meta_title_detail') : $title;
-    }
-    elseif(geodir_is_page('pt')){
-        $gd_page = 'pt';
-        $title = (geodir_get_option('geodir_meta_title_pt')) ? geodir_get_option('geodir_meta_title_pt') : $title;
-    }
-    elseif(geodir_is_page('listing')){
-        $gd_page = 'listing';
-        $title = (geodir_get_option('geodir_meta_title_listing')) ? geodir_get_option('geodir_meta_title_listing') : $title;
-    }
-    elseif(geodir_is_page('location')){
-        $gd_page = 'location';
-        $title = (geodir_get_option('geodir_meta_title_location')) ? geodir_get_option('geodir_meta_title_location') : $title;
-    }
-    elseif(geodir_is_page('search')){
-        $gd_page = 'search';
-        $title = (geodir_get_option('geodir_meta_title_search')) ? geodir_get_option('geodir_meta_title_search') : $title;
-    }
-    elseif(geodir_is_page('add-listing')){
-        $gd_page = 'add-listing';
-        $title = (geodir_get_option('geodir_meta_title_add-listing')) ? geodir_get_option('geodir_meta_title_add-listing') : $title;
-    }
-    elseif(geodir_is_page('author')){
-        $gd_page = 'author';
-        $title = (geodir_get_option('geodir_meta_title_author')) ? geodir_get_option('geodir_meta_title_author') : $title;
-    }
-    elseif(geodir_is_page('login')){
-        $gd_page = 'login';
-        $title = (geodir_get_option('geodir_meta_title_login')) ? geodir_get_option('geodir_meta_title_login') : $title;
-    }
-    elseif(geodir_is_page('listing-success')){
-        $gd_page = 'listing-success';
-        $title = (geodir_get_option('geodir_meta_title_listing-success')) ? geodir_get_option('geodir_meta_title_listing-success') : $title;
-    }
-
-
-    /**
-     * Filter page meta title to replace variables.
-     *
-     * @since 1.5.4
-     * @param string $title The page title including variables.
-     * @param string $gd_page The GeoDirectory page type if any.
-     * @param string $sep The title separator symbol.
-     */
-    return apply_filters('geodir_seo_meta_title', __($title, 'geodirectory'), $gd_page, $sep);
-
-}
 
 
 
