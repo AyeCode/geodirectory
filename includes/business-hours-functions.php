@@ -80,6 +80,14 @@ function geodir_gmt_offset( $formatted = true ) {
 	return $formatted_offset;
 }
 
+/**
+ * Convert the seconds to hmmm.
+ *
+ * @since 2.0.0
+ *
+ * @param string $seconds.
+ * @return string Formatted hmmm.
+ */
 function geodir_seconds_to_hhmm( $seconds ) {
 	$sign = $seconds < 0 ? '-' : '+';
 	$seconds = absint( $seconds );
@@ -118,6 +126,13 @@ function geodir_wp_gmt_offset( $formatted = true ) {
 	return $formatted_offset;
 }
 
+/**
+ * Return the default weekdays.
+ *
+ * @since 2.0.0
+ *
+ * @return array default weekdays.
+ */
 function geodir_bh_default_values() {
 	$weekdays = geodir_get_weekdays();
 	
@@ -131,6 +146,14 @@ function geodir_bh_default_values() {
 	return apply_filters( 'geodir_bh_default_values', $default );
 }
 
+/**
+ * Convert array to schema.
+ *
+ * @since 2.0.0
+ *
+ * @param array $schema_input.
+ * @return string $schema.
+ */
 function geodir_array_to_schema( $schema_input ) {
 	if ( empty( $schema_input ) || ! is_array( $schema_input ) ) {
 		return $schema_input;
@@ -172,6 +195,14 @@ function geodir_array_to_schema( $schema_input ) {
 	return $schema;
 }
 
+/**
+ * Convert schema to array.
+ *
+ * @since 2.0.0
+ *
+ * @param string $schema.
+ * @return array $return.
+ */
 function geodir_schema_to_array( $schema ) {
 	if ( empty( $schema ) ) {
 		return array();
@@ -221,6 +252,14 @@ function geodir_schema_to_array( $schema ) {
 	return $return;
 }
 
+/**
+ * Convert the parse property string to array.
+ *
+ * @since 2.0.0
+ *
+ * @param string $str.
+ * @return array $property.
+ */
 function geodir_parse_property( $str ) {
 	$arr = explode( ' ', $str );
 	$property = array();
@@ -242,6 +281,14 @@ function geodir_parse_property( $str ) {
 	return $property;
 }
 
+/**
+ * Convert the parse days string to array.
+ *
+ * @since 2.0.0
+ *
+ * @param string $days_str.
+ * @return array $return.
+ */
 function geodir_parse_days( $days_str ) {
 	$days_names = array_values( geodir_day_short_names() );
 	$days_str = trim( $days_str );
@@ -270,6 +317,14 @@ function geodir_parse_days( $days_str ) {
 	return $return;
 }
 
+/**
+ * Convert days range string to array.
+ *
+ * @since 2.0.0
+ *
+ * @param string $days_str.
+ * @return array $return.
+ */
 function geodir_parse_days_range( $days_str ) {
 	$days_names = geodir_day_short_names();
 	$day_nos = array_flip( $days_names );
@@ -299,6 +354,14 @@ function geodir_parse_days_range( $days_str ) {
 	return $return;
 }
 
+/**
+ * Convert parse hours string to array.
+ *
+ * @since 2.0.0
+ *
+ * @param string $hours_str.
+ * @return array $return.
+ */
 function geodir_parse_hours( $hours_str ) {
 	$hours_str = trim( $hours_str );
 	$hours_arr = explode( ',', $hours_str );
@@ -317,6 +380,14 @@ function geodir_parse_hours( $hours_str ) {
 	return $return;
 }
 
+/**
+ * Convert hour range string to array.
+ *
+ * @since 2.0.0
+ *
+ * @param string $hours_str.
+ * @return array $return.
+ */
 function geodir_parse_hours_range( $hours_str ) {
 	$hours_arr = explode( '-', $hours_str );
 	
@@ -333,6 +404,14 @@ function geodir_parse_hours_range( $hours_str ) {
 	return $return;
 }
 
+/**
+ * Get Business hours.
+ *
+ * @since 2.0.0
+ *
+ * @param string $value.
+ * @return array $hours.
+ */
 function geodir_get_business_hours( $value = '' ) {
 	if ( empty( $value ) ) {
 		return NULL;
