@@ -13,6 +13,7 @@ Preview listing link now has icon to show it opens in new window - ADDED
 Tabs show even if no content in them - FIXED
 Option added in GD Listings widget to show nearest listings - ADDED
 Titles and Meta settings page added and implemented - ADDED
+Shortcode builder outputs multiselect values as array instead of sting - FIXED
 
 v2.0.0.12-beta
 Attachment table date_gmt field added - ADDED
