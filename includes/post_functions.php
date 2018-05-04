@@ -647,9 +647,6 @@ function geodir_only_supportable_attachments_remove($file)
 
 }
 
-
-
-
 /**
  * Function to copy custom meta info on WPML copy.
  *
