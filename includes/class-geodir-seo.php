@@ -151,8 +151,16 @@ class GeoDir_SEO {
 		if(geodir_is_page( 'pt' )){self::$gd_page = 'pt';
 			$post_type       = geodir_get_current_posttype();
 			$post_type_info  = get_post_type_object( $post_type );
-			self::$title = !empty($gd_settings['seo_cpt_title']) ? $gd_settings['seo_cpt_title'] : GeoDir_Defaults::seo_cpt_title();
-			self::$meta_title = !empty($gd_settings['seo_cpt_meta_title']) ? $gd_settings['seo_cpt_meta_title'] : GeoDir_Defaults::seo_cpt_meta_title();
+			if(isset($post_type_info->seo['title']) && !empty($post_type_info->seo['title'])){
+				self::$title = $post_type_info->seo['title'];
+			}else{
+				self::$title = !empty($gd_settings['seo_cpt_title']) ? $gd_settings['seo_cpt_title'] : GeoDir_Defaults::seo_cpt_title();
+			}
+			if(isset($post_type_info->seo['meta_title']) && !empty($post_type_info->seo['meta_title'])){
+				self::$meta_title = $post_type_info->seo['meta_title'];
+			}else{
+				self::$meta_title = !empty($gd_settings['seo_cpt_meta_title']) ? $gd_settings['seo_cpt_meta_title'] : GeoDir_Defaults::seo_cpt_meta_title();
+			}
 			if(isset($post_type_info->seo['meta_description']) && !empty($post_type_info->seo['meta_description'])){
 				self::$meta_description = $post_type_info->seo['meta_description'];
 			}else{
@@ -313,6 +321,20 @@ class GeoDir_SEO {
 			$string = str_replace( "%%search_near%%", $search_near, $string );
 		}
 
+		// page numbers
+		if ( strpos( $string, '%%page%%' ) !== false ) {
+			$page  = geodir_title_meta_page( self::$sep );
+			$string = str_replace( "%%page%%", $page, $string );
+		}
+		if ( strpos( $string, '%%pagenumber%%' ) !== false ) {
+			$pagenumber = geodir_title_meta_pagenumber();
+			$string      = str_replace( "%%pagenumber%%", $pagenumber, $string );
+		}
+		if ( strpos( $string, '%%pagetotal%%' ) !== false ) {
+			$pagetotal = geodir_title_meta_pagetotal();
+			$string     = str_replace( "%%pagetotal%%", $pagetotal, $string );
+		}
+
 
 		// CPT vars
 		if($gd_page == 'pt'){
@@ -330,29 +352,65 @@ class GeoDir_SEO {
 	 * @return array
 	 */
 	public static function variables($gd_page = ''){
-		//        'desc' => '%%title%%, %%sitename%%, %%sitedesc%%, %%excerpt%%, %%pt_single%%, %%pt_plural%%, %%category%%, %%id%%, %%sep%%, %%location%%, %%in_location%%, %%in_location_single%%, %%location_single%%, %%location_country%%, %%in_location_country%%, %%location_region%%, %%in_location_region%%, %%location_city%%, %%in_location_city%%, %%location_sep%%, %%search_term%%, %%search_near%%, %%name%%, %%page%%, %%pagenumber%%, %%pagetotal%%',
+		//    %%search_term%%, %%search_near%%, %%name%%, %%page%%, %%pagenumber%%, %%pagetotal%%',
+//		* %%page%%                        Replaced with the current page number (i.e. page 2 of 4)
+// * %%pagetotal%%                Replaced with the current page total
+//                                                               * %%pagenumber%%                Replaced with the current page number
 
+		// generic
 		$vars = array(
 			'%%title%%' => __('The current post title.','geodirectory'),
-			'%%sitename%%' => __('The site ','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
-			'' => __('','geodirectory'),
+			'%%sitename%%' => __('The site name from general settings: site title. ','geodirectory'),
+			'%%sitedesc%%' => __('The site description from general settings: tagline.','geodirectory'),
+			'%%excerpt%%' => __('The current post excerpt.','geodirectory'),
+			'%%sep%%' => __('The separator mostly used in meta titles.','geodirectory'),
+			'%%pt_single%%' => __('Post type singular name.','geodirectory'),
+			'%%pt_plural%%' => __('Post type plural name.','geodirectory'),
+			'%%category%%' => __('The current category name.','geodirectory'),
+			'%%id%%' => __('The current post id.','geodirectory'),
+			'%%location%%' => __('The full current location eg: United States, Pennsylvania, Philadelphia','geodirectory'),
+			'%%in_location%%' => __('The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia','geodirectory'),
+			'%%in_location_single%%' => __('The current viewing location type single name eg: Philadelphia','geodirectory'),
+			'%%location_country%%' => __('The current viewing country eg: United States','geodirectory'),
+			'%%in_location_country%%' => __('The current viewing country prefixed with `in` eg: in United States','geodirectory'),
+			'%%location_region%%' => __('The current viewing region eg: Pennsylvania','geodirectory'),
+			'%%in_location_region%%' => __('The current viewing region prefixed with `in` eg: in Pennsylvania','geodirectory'),
+			'%%location_city%%' => __('The current viewing city eg: Philadelphia','geodirectory'),
+			'%%in_location_city%%' => __('The current viewing city prefixed with `in` eg: in Philadelphia','geodirectory'),
+//			'' => __('','geodirectory'),
 		);
-		
+
+
+		// search page only
+		if($gd_page == 'search' ){
+			$vars['%%search_term%%'] = __('The currently used search for term.','geodirectory');
+			$vars['%%search_near%%'] = __('The currently used search near term.','geodirectory');
+		}
+
+		// paging
+		if($gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive'){
+			$vars['%%page%%'] = __('Current page number eg: page 2 of 4','geodirectory');
+			$vars['%%pagetotal%%'] = __('Total pages eg: 101','geodirectory');
+			$vars['%%pagenumber%%'] = __('Current page number eg: 99','geodirectory');
+		}
+
+
 		return $vars;
+	}
+	
+	public static function helper_tags($page = ''){
+		$output = '';
+		$variables = self::variables($page);
+		if(!empty($variables)){
+			$output .= '<ul class="geodir-helper-tags">';
+			foreach($variables as $variable => $desc){
+				$output .= "<li><span class='geodir-helper-tag'>".esc_attr($variable)."</span>".geodir_help_tip( $desc )."</li>";
+			}
+			$output .= '</ul>';
+
+		}
+		
+		return $output;
 	}
 	
 }

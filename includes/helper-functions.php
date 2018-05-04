@@ -1100,7 +1100,8 @@ function geodir_tool_restore_cpt_from_taxonomies() {
             'is_custom' => $is_custom,
             'listing_order' => '1',
             'seo' => array (
-                'meta_keyword' => '',
+	            'title' => '',
+	            'meta_title' => '',
                 'meta_description' => '',
             ),
             'show_in_nav_menus' => 1,

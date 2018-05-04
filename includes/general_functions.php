@@ -3207,8 +3207,12 @@ function geodir_load_cpt_text_translation( $translation_texts = array() ) {
 			}
 
 			if ( ! empty( $seo ) ) {
-				if ( isset( $seo['meta_keyword'] ) && $seo['meta_keyword'] != '' && ! in_array( $seo['meta_keyword'], $translation_texts ) ) {
-					$translation_texts[] = normalize_whitespace( $seo['meta_keyword'] );
+				if ( isset( $seo['title'] ) && $seo['title'] != '' && ! in_array( $seo['title'], $translation_texts ) ) {
+					$translation_texts[] = normalize_whitespace( $seo['title'] );
+				}
+				
+				if ( isset( $seo['meta_title'] ) && $seo['meta_title'] != '' && ! in_array( $seo['meta_title'], $translation_texts ) ) {
+					$translation_texts[] = normalize_whitespace( $seo['meta_title'] );
 				}
 
 				if ( isset( $seo['meta_description'] ) && $seo['meta_description'] != '' && ! in_array( $seo['meta_description'], $translation_texts ) ) {

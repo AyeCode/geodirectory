@@ -324,6 +324,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc'  => 'The root page of a GD CPT eg: /places/',
 					'id'    => 'seo_cpt',
 					'desc_tip' => true,
+					'seo_helper_tags' => 'pt'
 				),
 
 				array(
@@ -365,6 +366,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc'  => 'The GD category and tags pages.',
 					'id'    => 'seo_archive',
 					'desc_tip' => true,
+					'seo_helper_tags' => 'archive'
 				),
 
 				array(
@@ -436,6 +438,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc'  => 'The GD single post details page.',
 					'id'    => 'seo_single',
 					'desc_tip' => true,
+					'seo_helper_tags' => 'single'
 				),
 
 				array(
@@ -478,6 +481,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc'  => 'The location page.',
 					'id'    => 'seo_location',
 					'desc_tip' => true,
+					'seo_helper_tags' => 'location'
 				),
 
 				array(
@@ -520,6 +524,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc'  => 'The search page.',
 					'id'    => 'seo_search',
 					'desc_tip' => true,
+					'seo_helper_tags' => 'search'
 				),
 
 				array(
@@ -561,6 +566,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc'  => 'The add listing page.',
 					'id'    => 'seo_add_listing',
 					'desc_tip' => true,
+					'seo_helper_tags' => 'add-listing'
 				),
 
 				array(
