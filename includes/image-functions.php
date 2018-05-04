@@ -6,6 +6,18 @@
  * @package GeoDirectory
  */
 
+/**
+ * Function for replace images tag src and class values.
+ *
+ * Check if $lazy_load is true then replace image tag class value
+ * else replace only image src value.
+ *
+ * @since 2.0.0
+ *
+ * @param string $img_tag Image tag html.
+ * @param bool $lazy_load Optional. Default true.
+ * @return string $img_tag.
+ */
 function geodir_image_tag_ajaxify($img_tag,$lazy_load = true){
 
     
@@ -20,6 +32,15 @@ function geodir_image_tag_ajaxify($img_tag,$lazy_load = true){
     return $img_tag;
 }
 
+/**
+ * Function for get image src path by image object.
+ *
+ * @since 2.0.0
+ *
+ * @param object $image image object.
+ * @param string $size Optional. Set image size. Default medium.
+ * @return string $img_src Image path.
+ */
 function geodir_get_image_src($image, $size = 'medium'){
     $img_src = '';
 
@@ -42,6 +63,16 @@ function geodir_get_image_src($image, $size = 'medium'){
     return $img_src;
 }
 
+/**
+ * Get the image tag.
+ *
+ * @since 2.0.0
+ *
+ * @param object $image Image data.
+ * @param string $size Optional. Get the image size. Default medium.
+ * @param string $align Optional. get the image alignment value. Default null.
+ * @return string $html Image tag.
+ */
 function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
     //function geodir_get_image_tag( $id, $alt, $title, $align, $size = 'medium' ) {
 
@@ -91,9 +122,6 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
      */
     return apply_filters( 'geodir_get_image_tag', $html, $id, $alt, $title, $align, $size );
 }
-
-
-
 
 
 /**

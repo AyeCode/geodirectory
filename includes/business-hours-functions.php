@@ -85,7 +85,7 @@ function geodir_gmt_offset( $formatted = true ) {
  *
  * @since 2.0.0
  *
- * @param string $seconds Required. A business hours value in schema form.
+ * @param string $seconds A business hours value in schema form.
  * @return string $hhmm Formatted hhmm.
  */
 function geodir_seconds_to_hhmm( $seconds ) {
@@ -152,7 +152,7 @@ function geodir_bh_default_values() {
  * @since 2.0.0
  *
  * @param array $schema_input {
- *      Required. Arguments to retrieve business hours schema.
+ *      Arguments to retrieve business hours schema.
  *
  *      @type int       $hours      Get the business hour.
  *      @type string    $offset     Get the business hour offset.
@@ -205,7 +205,7 @@ function geodir_array_to_schema( $schema_input ) {
  *
  * @since 2.0.0
  *
- * @param string $schema Required. Business hour schema.
+ * @param string $schema Business hour schema.
  * @return array $return Offset and hour.
  */
 function geodir_schema_to_array( $schema ) {
@@ -262,7 +262,7 @@ function geodir_schema_to_array( $schema ) {
  *
  * @since 2.0.0
  *
- * @param string $str Required. A property values for business hour.
+ * @param string $str A property values for business hour.
  * @return array $property Parse property.
  */
 function geodir_parse_property( $str ) {
@@ -291,7 +291,7 @@ function geodir_parse_property( $str ) {
  *
  * @since 2.0.0
  *
- * @param string $days_str Required. A parse days values for business hour.
+ * @param string $days_str A parse days values for business hour.
  * @return array $return Unique parse day.
  */
 function geodir_parse_days( $days_str ) {
@@ -327,7 +327,7 @@ function geodir_parse_days( $days_str ) {
  *
  * @since 2.0.0
  *
- * @param string $days_str Required. A parse days range value.
+ * @param string $days_str A parse days range value.
  * @return array $return Parse days names.
  */
 function geodir_parse_days_range( $days_str ) {
@@ -364,7 +364,7 @@ function geodir_parse_days_range( $days_str ) {
  *
  * @since 2.0.0
  *
- * @param string $hours_str Required. A business hours string.
+ * @param string $hours_str A business hours string.
  * @return array $return Opens and closes hours.
  */
 function geodir_parse_hours( $hours_str ) {
@@ -390,7 +390,7 @@ function geodir_parse_hours( $hours_str ) {
  *
  * @since 2.0.0
  *
- * @param string $hours_str Required. A business hours string.
+ * @param string $hours_str A business hours string.
  * @return array $return Opens and closes hours.
  */
 function geodir_parse_hours_range( $hours_str ) {
@@ -414,7 +414,7 @@ function geodir_parse_hours_range( $hours_str ) {
  *
  * @since 2.0.0
  *
- * @param string $value Optional. A business hour values.
+ * @param string $value Optional. A business hour values. Default null.
  * @return array $hours List of hour data.
  */
 function geodir_get_business_hours( $value = '' ) {
@@ -540,7 +540,7 @@ function geodir_get_business_hours( $value = '' ) {
  *
  * @since 2.0.0
  *
- * @param string $hm Required. Hour minutes string.
+ * @param string $hm Hour minutes string.
  * @param int $day_no Optional. Day number integer. Default 0.
  * @return int Hours minutes.
  */
@@ -565,7 +565,7 @@ function geodir_hhmm_to_bh_minutes( $hm, $day_no = 0 ) {
  *
  * @since 2.0.0
  *
- * @param int $post_ID Required. Places post id.
+ * @param int $post_ID Places post id.
  * @param string $data Optional. Business hour metadata. Default NULL.
  * @return int|false $saved The number of rows inserted, or false on error.
  */
@@ -604,7 +604,7 @@ function geodir_save_business_hours( $post_ID, $data = NULL ) {
  *
  * @since 2.0.0
  *
- * @param int $post_ID Required. Places post id.
+ * @param int $post_ID Places post id.
  * @return int|false Number of rows affected/selected or false on error.
  */
 function geodir_delete_business_hours( $post_ID ) {
@@ -622,8 +622,8 @@ function geodir_delete_business_hours( $post_ID ) {
  *
  * @since 2.0.0
  *
- * @param array $post_data Required. Business hours data.
- * @param bool $update True or false. Default false.
+ * @param array $post_data Business hours data.
+ * @param bool $update Optional. True or false. Default false.
  */
 function geodir_update_business_hours( $post_data, $update = false ) {
 	global $gd_business_hours_updated;
@@ -657,11 +657,11 @@ function geodir_update_business_hours( $post_data, $update = false ) {
  *
  * @since 2.0.0
  *
- * @param string $value Required. Business hours value.
- * @param string $custom_field Optional. Custom field.
- * @param int $post_id Optional. Post id.
- * @param object $post Optional. Post.
- * @param string $update Optional. Update.
+ * @param string $value Business hours value.
+ * @param string $custom_field Custom field.
+ * @param int $post_id Post id.
+ * @param object $post Post.
+ * @param string $update Update.
  * @return string $value Sanitize business hours.
  */
 function geodir_sanitize_business_hours_value( $value, $custom_field, $post_id, $post, $update ) {

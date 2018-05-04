@@ -6,6 +6,14 @@
  * @package GeoDirectory
  */
 
+/**
+ * function for post content textarea custom field output.
+ *
+ * @param string $html Custom field textarea html.
+ * @param string $location Location values.
+ * @param array $cf Custom fields values.
+ * @return string $html
+ */
 function geodir_custom_field_output_textarea_var_post_content($html,$location,$cf){
 
 	if($location=='listing'){

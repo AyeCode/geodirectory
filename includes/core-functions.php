@@ -6,7 +6,7 @@
  * @package GeoDirectory
  */
  
- /*
+ /**
  * A function to log GD errors no matter the type given.
  *
  * This function will log GD errors if the WP_DEBUG constant is true, it can be filtered.
@@ -16,7 +16,7 @@
  * @package GeoDirectory
  */
 function geodir_error_log( $log, $title = '', $file = '', $line = '', $exit = false ) {
-    /*
+    /**
      * A filter to override the WP_DEBUG setting for function geodir_error_log().
      *
      * @since 1.5.7
@@ -48,6 +48,17 @@ function geodir_error_log( $log, $title = '', $file = '', $line = '', $exit = fa
     }
 }
 
+/**
+ * doing_it_wrong function.
+ *
+ * A function is called when mark something as being incorrectly called.
+ *
+ * @since 2.0.0
+ *
+ * @param $function The function that was called.
+ * @param $message A message explaining what has been done incorrectly.
+ * @param $version The version of WordPress where the message was added.
+ */
 function geodir_doing_it_wrong( $function, $message, $version ) {
     $message .= ' Backtrace: ' . wp_debug_backtrace_summary();
 
@@ -59,6 +70,16 @@ function geodir_doing_it_wrong( $function, $message, $version ) {
     }
 }
 
+/**
+ * is_singular function.
+ *
+ * The function for existing single post of any post type.
+ *
+ * @since 2.0.0
+ *
+ * @param array $post_types Optional. Array of post types. Default array().
+ * @return bool Whether the query is for an existing single post of any of the given post types.
+ */
 function geodir_is_singular( $post_types = array() ) {
     if ( empty( $post_types ) ) {
         $post_types = geodir_get_posttypes();
@@ -67,6 +88,19 @@ function geodir_is_singular( $post_types = array() ) {
     return is_singular( $post_types ) || geodir_is_page( 'preview' );
 }
 
+/**
+ * is_taxonomy function.
+ *
+ * The function for an existing custom taxonomy archive page?
+ *
+ * If the $taxonomies parameter is specified, this function will additionally
+ * check if the query is for that specific $taxonomies.
+ *
+ * @since 2.0.0
+ *
+ * @param array $taxonomies Optional. Taxonomies slugs. Default array().
+ * @return bool True for custom taxonomy archive pages, false for built-in taxonomies.
+ */
 function geodir_is_taxonomy( $taxonomies = array() ) {
     if ( empty( $taxonomis ) ) {
         $taxonomis = geodir_get_taxonomies( '', true );
@@ -75,6 +109,14 @@ function geodir_is_taxonomy( $taxonomies = array() ) {
     return is_tax( $taxonomis );
 }
 
+/**
+ * In this function existing post type archive page?
+ *
+ * @since 2.0.0
+ *
+ * @param array $post_types Optional. Array of post types. Default array().
+ * @return bool
+ */
 function geodir_is_post_type_archive( $post_types = array() ) {
     if ( empty( $post_types ) ) {
         $post_types = geodir_get_posttypes();
