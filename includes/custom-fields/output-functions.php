@@ -1620,9 +1620,21 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
             if($output=='' || isset($output['icon']))$html .= '</span>';
            // if($output=='' || isset($output['value']))$html .= wpautop($gd_post->{$cf['htmlvar_name']});
             if($cf['htmlvar_name']=='post_content'){
-                if($output=='' || isset($output['value']))$html .= wpautop(stripslashes($gd_post->{$cf['htmlvar_name']}));
+                if($output=='' || isset($output['value'])){
+                    if(isset($output['strip'])){
+                        $html .=  wp_strip_all_tags( wpautop(stripslashes($gd_post->{$cf['htmlvar_name']})) );
+                    }else{
+                        $html .= wpautop(stripslashes($gd_post->{$cf['htmlvar_name']}));
+                    }
+                }
             }else{
-                if($output=='' || isset($output['value']))$html .= apply_filters('the_content',stripslashes($gd_post->{$cf['htmlvar_name']}));
+                if($output=='' || isset($output['value'])){
+                    if(isset($output['strip'])){
+                        $html .=  wp_strip_all_tags( apply_filters('the_content',stripslashes($gd_post->{$cf['htmlvar_name']})));
+                    }else{
+                        $html .= apply_filters('the_content',stripslashes($gd_post->{$cf['htmlvar_name']}));
+                    }
+                }
             }
             //$html .= wp_oembed_get($gd_post->{$cf['htmlvar_name']});
 

@@ -7,28 +7,6 @@
  */
 
 /**
- * function for post content textarea custom field output.
- *
- * @param string $html Custom field textarea html.
- * @param string $location Location values.
- * @param array $cf Custom fields values.
- * @return string $html
- */
-function geodir_custom_field_output_textarea_var_post_content($html,$location,$cf){
-
-	if($location=='listing'){
-		global $post;
-		$html = '<div class="geodir_post_meta gd-read-more-wrap ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" ><p>';
-		$html .= wp_strip_all_tags( $post->{$cf['htmlvar_name']}, true );
-		$html .= '</p><p class="gd-read-more"><a href="#" class="gd-read-more-button">'.esc_attr__('Read More','geodirectory').'</a></p></div>';
-	}
-
-	return $html;
-}
-
-add_filter('geodir_custom_field_output_textarea_var_post_content','geodir_custom_field_output_textarea_var_post_content',15,3);
-
-/**
  * Filter the custom field output.
  *
  * @param string $html The html to be output.

@@ -84,6 +84,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             $tabs_content[$tab->id."tab"] = self::tab_content($tab);
         }
 
+//        print_r( $tabs_content);
 
         if(!empty($tabs)){
             echo '<div class="geodir-tabs" id="gd-tabs">';
@@ -204,7 +205,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 			}
         }
 
-        self::tab_content_child($tab);
+        echo self::tab_content_child($tab);
 
         return ob_get_clean();
     }
@@ -224,8 +225,8 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                     echo do_shortcode('[gd_post_meta key="'.$child_tab->tab_key.'"]');
                 }elseif($child_tab->tab_type=='fieldset'){ // meta info
                     self:: output_fieldset($child_tab);
-                }elseif($tab->tab_type=='standard'){ // meta info
-                    if($tab->tab_key=='reviews'){
+                }elseif($child_tab->tab_type=='standard'){ // meta info
+                    if($child_tab->tab_key=='reviews'){
                         comments_template();
                     }
                 }

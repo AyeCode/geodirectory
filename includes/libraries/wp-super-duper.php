@@ -275,7 +275,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						if(element && element.value) {
 							$field_name = element.name.substr(element.name.indexOf("][") + 2);
 							$field_name = $field_name.replace("]", "");
-							/
 							// check if its a multiple
 							if($field_name.includes("[]")){
 								multiSelectsRemove[multiSelectsRemove.length] = index;

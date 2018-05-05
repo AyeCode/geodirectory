@@ -14,6 +14,7 @@ Tabs show even if no content in them - FIXED
 Option added in GD Listings widget to show nearest listings - ADDED
 Titles and Meta settings page added and implemented - ADDED
 Shortcode builder outputs multiselect values as array instead of sting - FIXED
+Default placeholder images for listings will now use the image title/caption if set - CHANGED
 
 v2.0.0.12-beta
 Attachment table date_gmt field added - ADDED

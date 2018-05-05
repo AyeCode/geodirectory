@@ -196,7 +196,7 @@ function geodir_get_images($post_id = 0, $limit = '',$logo = false)
                 $default_image_post = get_post($default_img_id);
 
                 if($default_image_post){
-
+                    
                     $wp_upload_dir = wp_upload_dir();
 
                     $post_images = array();
@@ -204,8 +204,8 @@ function geodir_get_images($post_id = 0, $limit = '',$logo = false)
                     $image->ID = 0;
                     $image->post_id = $default_image_post->ID;
                     $image->user_id = 0;
-                    $image->title = __('Placeholder image','geodirectory');
-                    $image->caption = '';
+                    $image->title = !empty($default_image_post->post_title) ? $default_image_post->post_title : __('Placeholder image','geodirectory');
+                    $image->caption = !empty($default_image_post->post_excerpt) ? $default_image_post->post_excerpt : '';
                     $image->file = str_replace($wp_upload_dir['basedir'],'', get_attached_file( $default_img_id));
                     $image->mime_type = $default_image_post->post_mime_type;
                     $image->menu_order = 0;

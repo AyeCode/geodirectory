@@ -2208,23 +2208,14 @@ function geodir_sc_single_meta($atts, $content = '') {
                 }
             }
             if(!empty($field)){
+                if($atts['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
+                if($atts['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
+                if($atts['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
+                $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id'],$atts['show']);
 
-                if($atts['show']=='valuexxx'){
-                    $output = geodir_sc_single_meta_value($atts['id'],$atts['key']);
-                }else{
-                    //echo '###3'.$atts['key'];
-                    //print_r($field);
-                    //print_r($atts);
-
-                    // add css_alignment
-                    if($atts['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
-                    if($atts['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
-                    if($atts['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
-
-
-                    $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id'],$atts['show']);
+                if($field['name']=='post_content'){
+                    //$output = wp_strip_all_tags($output);
                 }
-
 
             }else{
                //$output = __('Key does not exist','geodirectory');
@@ -2236,25 +2227,6 @@ function geodir_sc_single_meta($atts, $content = '') {
     return $output;
 }
 
-function geodir_sc_single_meta_value($post_id,$key){
-    global $gd_post;
-    $output = '';
-
-    if($key=='post_title'){
-        //print_r($gd_post);
-        if(isset($gd_post->ID) && $gd_post->ID==$post_id ){
-            $title = $gd_post->post_title;
-        }else{
-            $title = get_the_title( $post_id );
-        }
-
-        $output = '<h2 class="geodir-meta-title"><a href="'.get_the_permalink($post_id).'" >'.esc_attr($title).'</a></h2>';
-    }else{
-        $output = 'not implemented yet'; // @todo implement
-    }
-
-    return $output;
-}
 
 /**
  * Outputs single meta from a super block.
