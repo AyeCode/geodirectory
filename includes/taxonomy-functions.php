@@ -10,8 +10,6 @@
  */
 
 
-
-
 if (!function_exists('geodir_get_taxonomies')) {
     /**
      * Get all custom taxonomies.
@@ -414,10 +412,16 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
 }
 
 
-
-
-
 $gd_wpml_get_languages = "";
+
+/**
+ * Get the WPML language from the url.
+ *
+ * @since 2.0.0
+ *
+ * @param string $url.
+ * @return string|bool
+ */
 function geodir_wpml_get_lang_from_url($url) {
     global $sitepress, $gd_wpml_get_languages;
     
@@ -451,6 +455,14 @@ function geodir_wpml_get_lang_from_url($url) {
     return false;
 }
 
+/**
+ * Function for WPML post slug translation turned on.
+ *
+ * @since 2.0.0
+ *
+ * @param $post_type Get listing posttype.
+ * @return string $settings.
+ */
 function geodir_wpml_slug_translation_turned_on($post_type) {
 
     global $sitepress;

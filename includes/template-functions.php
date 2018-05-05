@@ -6,18 +6,56 @@
  * @package GeoDirectory
  */
 
+/**
+ * get_templates_dir function.
+ *
+ * The function is return templates dir path.
+ *
+ * @since 2.0.0
+ *
+ * @return string Templates dir path.
+ */
 function geodir_get_templates_dir() {
     return GEODIRECTORY_PLUGIN_DIR . 'templates';
 }
 
+/**
+ * get_templates_url function.
+ *
+ * The function is return templates dir url.
+ *
+ * @since 2.0.0
+ *
+ * @return string Templates dir url.
+ */
 function geodir_get_templates_url() {
     return GEODIRECTORY_PLUGIN_URL . '/templates';
 }
 
+/**
+ * get_theme_template_dir_name function.
+ *
+ * The function is return theme template dir name.
+ *
+ * @since 2.0.0
+ *
+ * @return string Theme template dir name.
+ */
 function geodir_get_theme_template_dir_name() {
     return untrailingslashit( apply_filters( 'geodir_templates_dir', 'geodirectory' ) );
 }
 
+/**
+ * get_template_part function.
+ *
+ * The function is use for load templates files.
+ *
+ * @since 2.0.0
+ *
+ * @param string $slug Template slug.
+ * @param string $name Optional. Template name. Default null.
+ * @return string
+ */
 function geodir_get_template_part( $slug, $name = '' ) {
     $load_template = apply_filters( 'geodir_allow_template_part_' . $slug . '_' . $name, true );
     if ( false === $load_template ) {
@@ -56,6 +94,16 @@ function geodir_get_template_part( $slug, $name = '' ) {
     }
 }
 
+/**
+ * The function is for include templates files.
+ *
+ * @since 2.0.0
+ *
+ * @param $template_name Template name.
+ * @param array $args Optional. Template arguments. Default array().
+ * @param string $template_path Optional. Template path. Default null.
+ * @param string $default_path Optional. Default path. Default null.
+ */
 function geodir_get_template( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
     if ( !empty( $args ) && is_array( $args ) ) {
         extract( $args );
@@ -78,12 +126,35 @@ function geodir_get_template( $template_name, $args = array(), $template_path = 
     do_action( 'geodir_after_template_part', $template_name, $template_path, $located, $args );
 }
 
+/**
+ * The function is use to get template html.
+ *
+ * @since 2.0.0
+ *
+ * @param $template_name Template name.
+ * @param array $args Optional. Template arguments. Default array().
+ * @param string $template_path Optional. Template dir path. Default null.
+ * @param string $default_path Optional. Template default path. Default null.
+ * @return string Template html.
+ *
+ */
 function geodir_get_template_html( $template_name, $args = array(), $template_path = '', $default_path = '' ) {
     ob_start();
     geodir_get_template( $template_name, $args, $template_path, $default_path );
     return ob_get_clean();
 }
 
+/**
+ * The function is use for Retrieve the name of the highest
+ * priority template file that exists.
+ *
+ * @since  2.0.0
+ *
+ * @param $template_name Template files to search for, in order.
+ * @param string $template_path Optional. Template path. Default null.
+ * @param string $default_path Optional. Default path. Default null.
+ * @return string Template path.
+ */
 function geodir_locate_template( $template_name, $template_path = '', $default_path = '' ) {
     if ( !$template_path ) {
         $template_path = geodir_get_theme_template_dir_name();
@@ -272,7 +343,16 @@ function geodir_font_awesome_rating_css() {
 	}
 }
 
-
+/**
+ * The function is use for page title.
+ *
+ * Check if $echo true then echo page title else return page title.
+ *
+ * @since 2.0.0
+ *
+ * @param bool $echo Optional. Default true.
+ * @return string Page title.
+ */
 function geodir_page_title( $echo = true ) {
     if ( is_search() ) {
         $page_title = sprintf( __( 'Search results: &ldquo;%s&rdquo;', 'geodirectory' ), get_search_query() );
@@ -295,6 +375,16 @@ function geodir_page_title( $echo = true ) {
     }
 }
 
+/**
+ * The function is use for listing loop header content.
+ *
+ * Check if $echo true then echo template content else return $echo.
+ *
+ * @since 2.0.0
+ *
+ * @param bool $echo Optional. Default true.
+ * @return string Loop header listing html.
+ */
 function geodir_listing_loop_header( $echo = true ) {
     ob_start();
         
@@ -319,6 +409,17 @@ function geodir_listing_loop_header( $echo = true ) {
     }
 }
 
+/**
+ * The function use for listing loop start content.
+ *
+ * Check if $echo true then echo listing loop start template content
+ * else return listing loop start template content.
+ *
+ * @since 2.0.0
+ *
+ * @param bool $echo Optional. Default true.
+ * @return string Listing loop start content.
+ */
 function geodir_listing_loop_start( $echo = true ) {
     global $gridview_columns, $grid_view_class, $gd_session, $related_nearest, $related_parent_lat, $related_parent_lon;
     /**
@@ -349,6 +450,18 @@ function geodir_listing_loop_start( $echo = true ) {
     }
 }
 
+/**
+ * The function use for listing loop end content.
+ *
+ * Check if $echo true then echo listing loop start template content
+ * else return listing loop start template content.
+ *
+ * @since 2.0.0
+ *
+ * @param bool $echo Optional. Default true.
+ * @return string Listing loop end content.
+ *
+ */
 function geodir_listing_loop_end( $echo = true ) {
     ob_start();
 
@@ -361,11 +474,14 @@ function geodir_listing_loop_end( $echo = true ) {
     }
 }
 
-
-
-
-
-
+/**
+ * The function is use for add listing classes in particular post.
+ *
+ * @since 2.0.0
+ *
+ * @param object $post Optional. Default null.
+ * @param array $classes Optional. Default array.
+ */
 function geodir_listing_class( $post = null, $classes = array() ) {
     if ( !is_array( $classes ) ) {
         $classes = array();
@@ -437,6 +553,14 @@ function geodir_listing_attrs( $post = null, $attrs = array() ) {
     }
 }
 
+/**
+ * The function is use for add listing inner class.
+ *
+ * @since 2.0.0
+ *
+ * @param object $post Optional. Default null.
+ * @param array $classes Optional. Default array.
+ */
 function geodir_listing_inner_class( $post = null, $classes = array() ) {
     if ( !is_array( $classes ) ) {
         $classes = array();
@@ -466,6 +590,17 @@ function geodir_listing_inner_class( $post = null, $classes = array() ) {
     }
 }
 
+/**
+ * listing_old_classes function.
+ *
+ * The function is add new class in listing old classes.
+ *
+ * @since 2.0.0
+ *
+ * @param array $classes Listing old classes.
+ * @param object $post Post object.
+ * @return array $classes Listing old with new classes.
+ */
 function geodir_listing_old_classes( $classes, $post ) {
     global $grid_view_class;
     
@@ -478,6 +613,17 @@ function geodir_listing_old_classes( $classes, $post ) {
     return $classes;
 }
 
+/**
+ * listing_inner_old_classes function.
+ *
+ * The function is add new class in listing inner old classes.
+ *
+ * @since 2.0.0
+ *
+ * @param array $classes Listing inner old classes.
+ * @param object $post post object.
+ * @return array $classes Listing inner add old with new classes.
+ */
 function geodir_listing_inner_old_classes( $classes, $post ) {
     /**
      * Add a class to the `article` tag inside the `li` element on the listings list template.
@@ -529,9 +675,6 @@ function geodir_template_redirect() {
     }
 }
 add_action( 'template_redirect', 'geodir_template_redirect' );
-
-
-
 
 /**
  * Front end listing view template selection.
@@ -641,6 +784,20 @@ function geodir_get_page_id( $page, $wpml = true ) {
 	return $page ? absint( $page ) : -1;
 }
 
+/**
+ * post_closed_text function.
+ *
+ * The function is use for display post closed text content.
+ *
+ * Check if $echo is true then echo post closed text html content
+ * else return post closed text html content.
+ *
+ * @since 2.0.0
+ *
+ * @param object $post Post object.
+ * @param bool $echo Optional. Default true.
+ * @return string Post closed text.
+ */
 function geodir_post_closed_text( $post, $echo = true ) {
 	if ( ! empty( $post ) && ! empty( $post->post_type ) ) {
 		$cpt_name = geodir_strtolower( geodir_post_type_singular_name( $post->post_type ) );
@@ -661,6 +818,15 @@ function geodir_post_closed_text( $post, $echo = true ) {
     }
 }
 
+/**
+ * Function for add extra listing listview class in ul.
+ *
+ * @since 2.0.0
+ *
+ * @param string $class Listing listview ul class.
+ * @param string $template listing template.
+ * @return string $class
+ */
 function geodir_listing_listview_ul_extra_class( $class, $template ) {
 	if ( $template == 'widget' ) {
 		global $gd_layout_class;

@@ -98,7 +98,7 @@ class GeoDir_Media {
 		if ( isset( $status['url'] ) && $post_id) {
 
 			// insert to DB
-			$file_info = self::insert_attachment($post_id,$field_id,$status['url'],'', '', -1,1);
+			$file_info = self::insert_attachment($post_id,$field_id,$status['url'],'', '', -1,0);
 
 			$wp_upload_dir = wp_upload_dir();
 			echo $wp_upload_dir['baseurl'] . $file_info['file'] ."|".$file_info['ID']."||";
@@ -652,7 +652,9 @@ class GeoDir_Media {
 			$wp_upload_dir = wp_upload_dir();
 			$files_arr = array();
 			foreach( $files as $file ){
+				if($file->menu_order=="-1"){return;}
 				$is_approved = isset($file->is_approved) && $file->is_approved ? '' : '|0';
+				if($file->menu_order=="-1"){$is_approved = "|-1";}
 				$files_arr[] = $wp_upload_dir['baseurl'].$file->file."|".$file->ID."|".$file->title."|".$file->caption . $is_approved;
 			}
 			return implode(",",$files_arr);

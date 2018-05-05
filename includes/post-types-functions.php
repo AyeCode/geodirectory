@@ -122,7 +122,7 @@ function geodir_post_type_options( $plural_name = false, $translated = false ) {
  * @since 2.0.0
  *
  * @param string $post_type The post type.
- * @return boll True if given post type is GD post type, otherwise False.
+ * @return bool True if given post type is GD post type, otherwise False.
  */
 function geodir_is_gd_post_type( $post_type ) {
     global $gd_is_post_type;
@@ -154,6 +154,14 @@ function geodir_is_gd_post_type( $post_type ) {
     return false;
 }
 
+/**
+ * Get posttype object by posttype.
+ *
+ * @since 2.0.0
+ *
+ * @param string $post_type Get post type.
+ * @return object $post_type_obj.
+ */
 function geodir_post_type_object( $post_type ) {
     if ( geodir_is_gd_post_type( $post_type ) ) {
         $post_types = geodir_get_posttypes( 'object' );
@@ -166,6 +174,18 @@ function geodir_post_type_object( $post_type ) {
     return $post_type_obj;
 }
 
+/**
+ * Get posttype name by posttype.
+ *
+ * Check if $translated is true then post name get in translated
+ * else post name without translated.
+ *
+ * @since 2.0.0
+ *
+ * @param string $post_type Get posttype.
+ * @param bool $translated Optional. Default false.
+ * @return string Posttype name.
+ */
 function geodir_post_type_name( $post_type, $translated = false ) {
     $post_type_obj = geodir_post_type_object( $post_type );
     
@@ -181,6 +201,18 @@ function geodir_post_type_name( $post_type, $translated = false ) {
     return apply_filters( 'geodir_post_type_name', $name, $post_type, $translated );
 }
 
+/**
+ * Get the posttype singular name by posttype.
+ *
+ * Check if $translated is true then display translated singular name
+ * else without translated name.
+ *
+ * @since 2.0.0
+ *
+ * @param string $post_type Get posttype.
+ * @param bool $translated Optional. Default false.
+ * @return string posttype singular name.
+ */
 function geodir_post_type_singular_name( $post_type, $translated = false ) {
     $post_type_obj = geodir_post_type_object( $post_type );
     
@@ -216,6 +248,13 @@ function geodir_add_listing_allowed_post_types() {
     return apply_filters( 'geodir_add_listing_allowed_post_types', $allowed_post_types  );
 }
 
+/**
+ * Get default listing posttype.
+ *
+ * @since 2.0.0
+ *
+ * @return string $post_type default listing posttype.
+ */
 function geodir_add_listing_default_post_type() {
     $post_types = geodir_add_listing_allowed_post_types();
 
@@ -224,6 +263,14 @@ function geodir_add_listing_default_post_type() {
     return apply_filters( 'geodir_add_listing_default_post_type', $post_type );
 }
 
+/**
+ * Function for check listing posttype.
+ *
+ * @since 2.0.0
+ *
+ * @param $post_type Get posttype.
+ * @return bool $return.
+ */
 function geodir_add_listing_check_post_type( $post_type ) {
     if ( !geodir_is_gd_post_type( $post_type ) ) {
         return false;

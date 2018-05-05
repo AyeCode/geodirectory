@@ -78,6 +78,7 @@ class GeoDir_Compatibility {
 
 		$themes = array(
 			'twentyseventeen'   => 'single.php',
+			'primer'   => 'page.php',
 		);
 
 		return isset($themes[$theme]) ? $themes[$theme] : '';

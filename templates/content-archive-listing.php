@@ -31,7 +31,7 @@ global $gridview_columns, $gd_session, $related_nearest, $related_parent_lat, $r
 ?>
 
 	<ul class="geodir-category-list-view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'listing'); ?>">
-		<?php if (have_posts()) :
+		<?php if (have_posts()) {
 
 			/**
 			 * Called inside the `ul` of the listings template, but before any `li` elements.
@@ -41,12 +41,12 @@ global $gridview_columns, $gd_session, $related_nearest, $related_parent_lat, $r
 			 * @since 1.0.0
 			 * @see 'geodir_after_listing_post_listview'
 			 */
-			do_action('geodir_before_listing_post_listview');
+			do_action( 'geodir_before_listing_post_listview' );
 
-			while (have_posts()) : the_post();
+			while ( have_posts() ) : the_post();
 
-				geodir_get_template_part('content', 'listing');
-			
+				geodir_get_template_part( 'content', 'listing' );
+
 			endwhile;
 
 			/**
@@ -57,23 +57,11 @@ global $gridview_columns, $gd_session, $related_nearest, $related_parent_lat, $r
 			 * @since 1.0.0
 			 * @see 'geodir_before_listing_post_listview'
 			 */
-			do_action('geodir_after_listing_post_listview');
+			do_action( 'geodir_after_listing_post_listview' );
 
-		else:
-			$favorite = isset($_REQUEST['list']) && $_REQUEST['list'] == 'favourite' ? true : false;
-
-			/**
-			 * Called inside the `ul` of the listings template, when no listing found.
-			 *
-			 * @since 1.5.5
-			 * @param string 'listing-listview' Listing listview template.
-			 * @param bool $favorite Are favorite listings results?
-			 */
-			do_action('geodir_message_not_found_on_listing', 'listing-listview', $favorite);
-
-			geodir_no_listings_found(); //@todo implement this and no the old above message
-			
-		endif;
+		}else {
+			geodir_no_listings_found();
+		}
 
 		?>
 	</ul>  <!-- geodir_category_list_view ends here-->

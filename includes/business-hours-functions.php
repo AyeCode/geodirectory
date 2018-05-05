@@ -80,6 +80,14 @@ function geodir_gmt_offset( $formatted = true ) {
 	return $formatted_offset;
 }
 
+/**
+ * Converts the business seconds to hhmm.
+ *
+ * @since 2.0.0
+ *
+ * @param string $seconds A business hours value in schema form.
+ * @return string $hhmm Formatted hhmm.
+ */
 function geodir_seconds_to_hhmm( $seconds ) {
 	$sign = $seconds < 0 ? '-' : '+';
 	$seconds = absint( $seconds );
@@ -118,6 +126,13 @@ function geodir_wp_gmt_offset( $formatted = true ) {
 	return $formatted_offset;
 }
 
+/**
+ * Get the default value for business hour.
+ *
+ * @since 2.0.0
+ *
+ * @return array $default Default business hour.
+ */
 function geodir_bh_default_values() {
 	$weekdays = geodir_get_weekdays();
 	
@@ -131,6 +146,19 @@ function geodir_bh_default_values() {
 	return apply_filters( 'geodir_bh_default_values', $default );
 }
 
+/**
+ * Converts business hour array settings to schema output.
+ *
+ * @since 2.0.0
+ *
+ * @param array $schema_input {
+ *      Arguments to retrieve business hours schema.
+ *
+ *      @type int       $hours      Get the business hour.
+ *      @type string    $offset     Get the business hour offset.
+ * }
+ * @return string $schema Converted schema.
+ */
 function geodir_array_to_schema( $schema_input ) {
 	if ( empty( $schema_input ) || ! is_array( $schema_input ) ) {
 		return $schema_input;
@@ -172,6 +200,14 @@ function geodir_array_to_schema( $schema_input ) {
 	return $schema;
 }
 
+/**
+ * Converts business hour schema to array output.
+ *
+ * @since 2.0.0
+ *
+ * @param string $schema Business hour schema.
+ * @return array $return Offset and hour.
+ */
 function geodir_schema_to_array( $schema ) {
 	if ( empty( $schema ) ) {
 		return array();
@@ -221,6 +257,14 @@ function geodir_schema_to_array( $schema ) {
 	return $return;
 }
 
+/**
+ * Converts the parse property string to array output.
+ *
+ * @since 2.0.0
+ *
+ * @param string $str A property values for business hour.
+ * @return array $property Parse property.
+ */
 function geodir_parse_property( $str ) {
 	$arr = explode( ' ', $str );
 	$property = array();
@@ -242,6 +286,14 @@ function geodir_parse_property( $str ) {
 	return $property;
 }
 
+/**
+ * Converts the parse days string to array output.
+ *
+ * @since 2.0.0
+ *
+ * @param string $days_str A parse days values for business hour.
+ * @return array $return Unique parse day.
+ */
 function geodir_parse_days( $days_str ) {
 	$days_names = array_values( geodir_day_short_names() );
 	$days_str = trim( $days_str );
@@ -270,6 +322,14 @@ function geodir_parse_days( $days_str ) {
 	return $return;
 }
 
+/**
+ * Converts days range string to array output.
+ *
+ * @since 2.0.0
+ *
+ * @param string $days_str A parse days range value.
+ * @return array $return Parse days names.
+ */
 function geodir_parse_days_range( $days_str ) {
 	$days_names = geodir_day_short_names();
 	$day_nos = array_flip( $days_names );
@@ -299,6 +359,14 @@ function geodir_parse_days_range( $days_str ) {
 	return $return;
 }
 
+/**
+ * Converts parse hours string to array output.
+ *
+ * @since 2.0.0
+ *
+ * @param string $hours_str A business hours string.
+ * @return array $return Opens and closes hours.
+ */
 function geodir_parse_hours( $hours_str ) {
 	$hours_str = trim( $hours_str );
 	$hours_arr = explode( ',', $hours_str );
@@ -317,6 +385,14 @@ function geodir_parse_hours( $hours_str ) {
 	return $return;
 }
 
+/**
+ * Converts the business hour range string to array output.
+ *
+ * @since 2.0.0
+ *
+ * @param string $hours_str A business hours string.
+ * @return array $return Opens and closes hours.
+ */
 function geodir_parse_hours_range( $hours_str ) {
 	$hours_arr = explode( '-', $hours_str );
 	
@@ -333,6 +409,14 @@ function geodir_parse_hours_range( $hours_str ) {
 	return $return;
 }
 
+/**
+ * Get business hours.
+ *
+ * @since 2.0.0
+ *
+ * @param string $value Optional. A business hour values. Default null.
+ * @return array $hours List of hour data.
+ */
 function geodir_get_business_hours( $value = '' ) {
 	if ( empty( $value ) ) {
 		return NULL;
@@ -451,6 +535,15 @@ function geodir_get_business_hours( $value = '' ) {
 	return apply_filters( 'geodir_get_business_hours', $hours, $data );
 }
 
+/**
+ * Converts hhmm to business hour minutes.
+ *
+ * @since 2.0.0
+ *
+ * @param string $hm Hour minutes string.
+ * @param int $day_no Optional. Day number integer. Default 0.
+ * @return int Hours minutes.
+ */
 function geodir_hhmm_to_bh_minutes( $hm, $day_no = 0 ) {
 	$hours = $hm;
 	$minutes = 0;
@@ -467,6 +560,15 @@ function geodir_hhmm_to_bh_minutes( $hm, $day_no = 0 ) {
     return ( ( $hours * 60 ) + $minutes ) + $diff;
 }
 
+/**
+ * Save the business hours.
+ *
+ * @since 2.0.0
+ *
+ * @param int $post_ID Places post id.
+ * @param string $data Optional. Business hour metadata. Default NULL.
+ * @return int|false $saved The number of rows inserted, or false on error.
+ */
 function geodir_save_business_hours( $post_ID, $data = NULL ) {
 	global $wpdb;
 
@@ -497,6 +599,14 @@ function geodir_save_business_hours( $post_ID, $data = NULL ) {
 	return $saved;
 }
 
+/**
+ * Delete the business hours.
+ *
+ * @since 2.0.0
+ *
+ * @param int $post_ID Places post id.
+ * @return int|false Number of rows affected/selected or false on error.
+ */
 function geodir_delete_business_hours( $post_ID ) {
 	global $wpdb;
 	
@@ -507,6 +617,14 @@ function geodir_delete_business_hours( $post_ID ) {
 	return $wpdb->query( $wpdb->prepare( "DELETE FROM `" . GEODIR_BUSINESS_HOURS_TABLE . "` WHERE `post_id` = %d", array( $post_ID ) ) );
 }
 
+/**
+ * Update the business hours.
+ *
+ * @since 2.0.0
+ *
+ * @param array $post_data Business hours data.
+ * @param bool $update Optional. True or false. Default false.
+ */
 function geodir_update_business_hours( $post_data, $update = false ) {
 	global $gd_business_hours_updated;
 
@@ -534,6 +652,18 @@ function geodir_update_business_hours( $post_data, $update = false ) {
 }
 //add_action( 'geodir_ajax_post_saved', 'geodir_update_business_hours', 0, 2 ); @remove this once we implement search by open_now
 
+/**
+ * Sanitize business hours value.
+ *
+ * @since 2.0.0
+ *
+ * @param string $value Business hours value.
+ * @param string $custom_field Custom field.
+ * @param int $post_id Post id.
+ * @param object $post Post.
+ * @param string $update Update.
+ * @return string $value Sanitize business hours.
+ */
 function geodir_sanitize_business_hours_value( $value, $custom_field, $post_id, $post, $update ) {
 	if ( ! empty( $value ) && ! is_array( $value ) ) {
 		$value = stripslashes( $value );

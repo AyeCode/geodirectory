@@ -664,7 +664,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         return $options;
     }
 
-	public function title_filter( $title, $instance, $id_base ) {
+	public function title_filter( $title = '', $instance ='', $id_base = '' ) {
 
 		$view_all_link = apply_filters( 'geodir_widget_view_all_link', $this->view_all_link, $instance, $id_base );
 

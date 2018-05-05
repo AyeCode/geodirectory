@@ -323,29 +323,37 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 
 				array(
-					'title'    => __( 'SEO', 'geodirectory' ),
+					'title'    => __( 'SEO Overrides', 'geodirectory' ),
 					'type'     => 'title',
-					'desc'     => '',
+					'desc'     => __( 'Main settings are set from the General>Titles & Meta settings, here you can override those per CPT.', 'geodirectory' ),
 					'id'       => 'cpt_settings_seo',
-					//'desc_tip' => true,
+					'desc_tip' => true,
 					'advanced' => true,
 				),
-
 				array(
-					'name'     => __( 'Meta Keywords', 'geodirectory' ),
-					'desc'     => __( 'Meta keywords will appear in head tag of this post type listing page.', 'geodirectory' ),
-					'id'       => 'meta_keyword',
-					'type'     => 'textarea',
-					'class'    => '',
+					'name'     => __( 'Title', 'geodirectory' ),
+					'desc'     => __( 'The page title will appear on the post type archive page.', 'geodirectory' ),
+					'id'       => 'meta_title',
+					'type'     => 'text',
+					'class'    => 'large-text',
+					'desc_tip' => true,
+					'advanced' => true,
+				),
+				array(
+					'name'     => __( 'Meta Title', 'geodirectory' ),
+					'desc'     => __( 'Meta title will appear in head tag of this post type archive page.', 'geodirectory' ),
+					'id'       => 'meta_title',
+					'type'     => 'text',
+					'class'    => 'large-text',
 					'desc_tip' => true,
 					'advanced' => true,
 				),
 				array(
 					'name'     => __( 'Meta Description', 'geodirectory' ),
-					'desc'     => __( 'Meta description will appear in head tag of this post type listing page.', 'geodirectory' ),
+					'desc'     => __( 'Meta description will appear in head tag of this post type archive page.', 'geodirectory' ),
 					'id'       => 'meta_description',
 					'type'     => 'textarea',
-					'class'    => '',
+					'class'    => 'large-text',
 					'desc_tip' => true,
 					'advanced' => true,
 				),
@@ -466,7 +474,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['disable_frontend_add'] = isset($raw['disable_frontend_add']) && $raw['disable_frontend_add'] ? absint($raw['disable_frontend_add']) : 0;
 
 			// seo content
-			$output[$post_type]['seo']['meta_keyword'] = isset($raw['meta_keyword']) && $raw['meta_keyword'] ? sanitize_text_field($raw['meta_keyword']) : '';
+			$output[$post_type]['seo']['title'] = isset($raw['title']) && $raw['title'] ? sanitize_text_field($raw['title']) : '';
+			$output[$post_type]['seo']['meta_title'] = isset($raw['meta_title']) && $raw['meta_title'] ? sanitize_text_field($raw['meta_title']) : '';
 			$output[$post_type]['seo']['meta_description'] = isset($raw['meta_description']) && $raw['meta_description'] ? sanitize_text_field($raw['meta_description']) : '';
 
 			// menu icon @todo do we need this?

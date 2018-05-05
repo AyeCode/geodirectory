@@ -261,11 +261,53 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				function sd_build_shortcode($id){
-//					alert($id);
+
+					var multiSelects = {};
+					var multiSelectsRemove = [];
 
 					$output = "["+$id;
 
 					$form_data = jQuery("#"+$id).serializeArray();
+
+
+					// run checks for multiselects
+					jQuery.each($form_data, function( index, element) {
+						if(element && element.value) {
+							$field_name = element.name.substr(element.name.indexOf("][") + 2);
+							$field_name = $field_name.replace("]", "");
+							/
+							// check if its a multiple
+							if($field_name.includes("[]")){
+								multiSelectsRemove[multiSelectsRemove.length] = index;
+								$field_name = $field_name.replace("[]", "");
+								if($field_name in multiSelects){
+									multiSelects[$field_name] = multiSelects[$field_name]+","+element.value;
+								}else{
+									multiSelects[$field_name] = element.value;
+								}
+							}
+						}
+					});
+
+					// fix multiselects if any are found
+					if(multiSelectsRemove.length){
+
+						// remove all multiselects
+						multiSelectsRemove.reverse();
+						multiSelectsRemove.forEach(function(index) {
+							$form_data.splice( index, 1 );
+						});
+
+						$ms_arr = [];
+						// add multiselets back
+						jQuery.each(multiSelects, function( index, value) {
+							$ms_arr[$ms_arr.length] = {"name": "[]["+index+"]","value":value};
+						});
+						$form_data = $form_data.concat($ms_arr);
+					}
+
+
+
 					if($form_data ){
 						$form_data.forEach(function(element) {
 
@@ -273,17 +315,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								$field_name = element.name.substr(element.name.indexOf("][") + 2);
 								$field_name = $field_name.replace("]", "");
 								$output = $output +" "+$field_name+'="'+element.value+'"';
+
 							}
 
-							console.log(element);
-							console.log(element.name);
-//							console.log(element.name.substr(element.name.indexOf("][") + 2));
-//							val.substr(val.indexOf("][") + 1)
-//							$field_name = element.name.match(/\d+/)[0];//jQuery('[name="'+element.name+'"]').index();
-//							console.log($field_name);
 						});
 					}
-					console.log($form_data );
 					$output = $output +"]";
 					jQuery('#sd-shortcode-output').html($output);
 				}

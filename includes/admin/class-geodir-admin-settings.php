@@ -252,6 +252,11 @@ class GeoDir_Admin_Settings {
 					if ( ! empty( $value['desc'] ) && (!isset($value['desc_tip']) || !$value['desc_tip']) ) {
 						echo wpautop( wptexturize( wp_kses_post( $value['desc'] ) ) );
 					}
+
+					if(isset($value['seo_helper_tags']) && $value['seo_helper_tags']){
+						echo GeoDir_SEO::helper_tags($value['seo_helper_tags']);
+					}
+
 					echo '<table class="form-table">' . "\n\n";
 					if ( ! empty( $value['id'] ) ) {
 						do_action( 'geodir_settings_' . sanitize_title( $value['id'] ) );

@@ -6,14 +6,6 @@
  * @package GeoDirectory
  */
 
-
-
-
-
-
-
-
-
 function geodir_related_posts_fields($fields) {
     global $wp_query, $wpdb, $table, $post;
 

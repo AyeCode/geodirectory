@@ -323,7 +323,7 @@ class GeoDir_Post_Data {
 
 			$format = array_fill( 0, count( $postarr ), '%s' );
 
-			//print_r($gd_post);print_r( $postarr );exit;
+//			print_r($gd_post);print_r( $postarr );exit;
 
 			$postarr = apply_filters( 'geodir_save_post_data', $postarr, $gd_post, $post, $update );
 
@@ -376,9 +376,9 @@ class GeoDir_Post_Data {
 	 */
 	public static function save_files( $post_id = 0, $files = array(),$field = '', $dummy = false ) {
 
-
 		// check for changes, maybe we don't need to run the whole function if there are no changes
 		$current_files = GeoDir_Media::get_field_edit_string($post_id,$field);
+//		echo $current_files.'###x'.$files;
 		if ( $current_files == $files ) {
 			return false;
 		}
@@ -433,7 +433,8 @@ class GeoDir_Post_Data {
 				$file_id      = ! empty( $file_info[1] ) ? absint( $file_info[1] ) : '';
 				$file_title   = ! empty( $file_info[2] ) ? sanitize_text_field( $file_info[2] ) : '';
 				$file_caption = ! empty( $file_info[3] ) ? sanitize_text_field( $file_info[3] ) : '';
-				$approved      = 1; // we approve all files on save
+				$approved      = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE  ? '-1' : 1; // we approve all files on save, not auto-save
+
 
 				// check if we already have the file.
 				if ( $file_url && $file_id ) { // we already have the image so just update the title, caption and order id
@@ -939,6 +940,12 @@ class GeoDir_Post_Data {
 	 * @param array $post_data The post info, usually POST data.
 	 */
 	public static function auto_save_post( $post_data ) {
+		
+		// set that we are doing an auto save
+		if ( ! defined( 'DOING_AUTOSAVE' ) ) {
+			define( 'DOING_AUTOSAVE', true );
+		}
+		
 		// its a post revision
 		if ( isset( $post_data['post_parent'] ) && $post_data['post_parent'] ) {
 			$post_data['post_type'] = 'revision'; //  post type is not sent but we know if it has a parent then its a revision.
