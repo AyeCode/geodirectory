@@ -312,7 +312,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				array(
 					'title' => __( 'Titles & Meta Settings', 'geodirectory' ),
 					'type'  => 'title',
-					'desc'  => 'Here you can set the titles and meta info for your GeoDirectory pages.',
+					'desc'  => 'Here you can set the titles and meta info for your GeoDirectory pages. <b>Click the tags to copy to clipboard</b>',
 					'id'    => 'seo_options',
 					//'desc_tip' => true,
 				),

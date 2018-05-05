@@ -352,10 +352,6 @@ class GeoDir_SEO {
 	 * @return array
 	 */
 	public static function variables($gd_page = ''){
-		//    %%search_term%%, %%search_near%%, %%name%%, %%page%%, %%pagenumber%%, %%pagetotal%%',
-//		* %%page%%                        Replaced with the current page number (i.e. page 2 of 4)
-// * %%pagetotal%%                Replaced with the current page total
-//                                                               * %%pagenumber%%                Replaced with the current page number
 
 		// generic
 		$vars = array(
@@ -404,7 +400,7 @@ class GeoDir_SEO {
 		if(!empty($variables)){
 			$output .= '<ul class="geodir-helper-tags">';
 			foreach($variables as $variable => $desc){
-				$output .= "<li><span class='geodir-helper-tag'>".esc_attr($variable)."</span>".geodir_help_tip( $desc )."</li>";
+				$output .= "<li><span class='geodir-helper-tag' title='".__("Click to copy","geodirectory")."'>".esc_attr($variable)."</span>".geodir_help_tip( $desc )."</li>";
 			}
 			$output .= '</ul>';
 

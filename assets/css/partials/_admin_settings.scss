@@ -29,12 +29,13 @@
     list-style: none;
     li{
       float: left;
-      background-color: #ccc;
+      background-color: #fff;
       padding: 3px;
       margin: 2px;
       border-radius: 3px;
-      color: #4c4c4c;
+      color: #6d6d6d;
       cursor: pointer;
+      border: 1px solid #e4e4e4;
       .gd-help-tip{
         float: none;
         margin: 0;
@@ -43,6 +44,18 @@
       .geodir-helper-tag{
         position: relative;
         transition: all 0.9s ease-out 0s;
+        &::before{
+          content: " ";
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          margin: -29px 0 0 -4px;
+          margin-left: -5px;
+          border-width: 5px;
+          border-style: solid;
+          border-color: black transparent transparent transparent;
+          display: none;
+        }
         &::after{
           content: "Copied";
           position: absolute;
@@ -56,8 +69,10 @@
           padding: 4px 10px;
           opacity: 0;
           transition: all 0.9s ease-out 0s;
+          display: none;
         }
-        &.geodir-tag-copied::after{
+        &.geodir-tag-copied::after, &.geodir-tag-copied::before{
+          display: block;
           opacity: 100;
           transition: all 0.9s ease-out 0s;
         }
