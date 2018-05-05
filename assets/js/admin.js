@@ -1381,6 +1381,7 @@ function geodir_init_helper_tags(){
         //$temp_input = jQuery('#geodir-helper-tag-input').
         //jQuery(this).selText();
         if(document.execCommand("Copy")){
+            jQuery('#geodir-helper-tag-input').remove();
             jQuery(this).find('.geodir-helper-tag').addClass('geodir-tag-copied');
             $this = this;
             setTimeout(function(){
