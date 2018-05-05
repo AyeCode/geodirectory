@@ -15,6 +15,7 @@ Option added in GD Listings widget to show nearest listings - ADDED
 Titles and Meta settings page added and implemented - ADDED
 Shortcode builder outputs multiselect values as array instead of sting - FIXED
 Default placeholder images for listings will now use the image title/caption if set - CHANGED
+Details slider initial load height very tall, max-height set - CHANGED
 
 v2.0.0.12-beta
 Attachment table date_gmt field added - ADDED

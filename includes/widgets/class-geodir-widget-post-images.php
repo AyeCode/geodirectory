@@ -255,7 +255,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 			if($options['type']=='slider'){
 				$main_wrapper_class .= " geodir_flex-container ";
-				$second_wrapper_class .= " geodir_flexslider geodir-slider ";
+				$second_wrapper_class .= " geodir_flexslider geodir-slider geodir-slider-loading ";
 				$ul_class = "geodir-slides";
 			}elseif($options['type']=='gallery'){
 				if(!$image_size){$image_size = 'medium_large';}
