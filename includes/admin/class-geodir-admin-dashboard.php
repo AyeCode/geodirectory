@@ -85,7 +85,7 @@ class GeoDir_Admin_Dashboard {
 			$navs[$post_type] = geodir_post_type_name( $post_type );
 		}
 
-		$this->navs = apply_filters( 'geodir_dashboard_period_options', $navs );
+		$this->navs = apply_filters( 'geodir_dashboard_navs', $navs );
 	}
 	
 	/**
