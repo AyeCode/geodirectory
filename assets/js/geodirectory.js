@@ -361,7 +361,7 @@ jQuery(window).load(function() {
         jQuery(contentLocation).closest('.geodir-tabs-content').children('li').hide();
         jQuery(contentLocation).fadeIn();
         jQuery(contentLocation).css({
-            'display': 'inline-block'
+            'display': 'block'
         });
         
         if (urlHash == '#post_map' && window.gdMaps) {

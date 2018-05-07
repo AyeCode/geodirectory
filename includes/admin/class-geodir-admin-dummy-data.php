@@ -46,6 +46,24 @@ class GeoDir_Admin_Dummy_Data {
 				// insert the category
 				$category_return = wp_insert_term( $category['name'], $post_type . 'category' );
 
+				// attach the meta data
+				if(isset($category_return['term_id']) ){
+					// schema
+					if(!empty($category['schema_type'])){
+						update_term_meta( $category_return['term_id'], 'ct_cat_schema' , $category['schema_type']);
+					}
+
+					// font icon
+					if(!empty($category['font_icon'])){
+						update_term_meta( $category_return['term_id'], 'ct_cat_font_icon' , $category['font_icon']);
+					}
+
+					// color
+					if(!empty($category['color'])){
+						update_term_meta( $category_return['term_id'], 'ct_cat_color' , $category['color']);
+					}
+				}
+
 				// attach the icon
 				if(!empty($category['icon']) && isset($category_return['term_id']) ){
 					$uploaded = (array) GeoDir_Media::get_external_media ( $category['icon'] );
