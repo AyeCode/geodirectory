@@ -284,6 +284,14 @@ class GeoDir_Permalinks {
 		return $post_link;
 	}
 
+    /**
+     * Function get the post location slugs.
+     *
+     * @since 2.0.0
+     *
+     * @param object $post Post object.
+     * @return object Post location slugs.
+     */
 	private static function get_post_location_slugs($post){
 		return apply_filters('geodir_post_permalinks',geodir_get_default_location(), $post);
 

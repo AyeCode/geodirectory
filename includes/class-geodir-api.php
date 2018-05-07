@@ -214,7 +214,12 @@ class GeoDir_API {
 			new GeoDir_Register_WP_Admin_Settings( $page, 'page' );
 		}
 	}
-	
+
+    /**
+     * Function for show in rest setup.
+     *
+     * @since 2.0.0
+     */
 	public function setup_show_in_rest() {
 		global $wp_post_types, $wp_taxonomies;
 
@@ -259,6 +264,15 @@ class GeoDir_API {
 		}
 	}
 
+    /**
+     * Function check if rest request.
+     *
+     * Check if REST_REQUEST then return true else return false.
+     *
+     * @since 2.0.0
+     *
+     * @return bool
+     */
 	public static function is_rest() {
 		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 			return true;
@@ -266,12 +280,26 @@ class GeoDir_API {
 		return false;
 	}
 
+    /**
+     * Function for register rest query.
+     *
+     * @since 2.0.0
+     */
 	public static function register_rest_query() {
 		if ( self::is_rest() ) {
 			add_filter( 'posts_clauses_request', array( __CLASS__, 'posts_clauses_request' ), 10, 2 );
 		}
 	}
 
+    /**
+     * Function for request to posts clauses.
+     *
+     * @since 2.0.0
+     *
+     * @param array $clauses A value of posts clauses request.
+     * @param object $wp_query wp_query object.
+     * @return array $clauses.
+     */
 	public static function posts_clauses_request( $clauses, $wp_query ) {
 		$post_type  = !empty( $wp_query->query_vars['post_type'] ) ? $wp_query->query_vars['post_type'] : '';
 
@@ -290,6 +318,13 @@ class GeoDir_API {
 		return apply_filters( 'geodir_rest_posts_clauses_request', $clauses, $wp_query, $post_type );
 	}
 
+    /**
+     * Function for request to rest posts.
+     *
+     * @since 2.0.0
+     *
+     * @param $query
+     */
 	public static function rest_posts_request( $query ) {
 		if ( self::is_rest() ) {
 			add_filter( 'geodir_rest_posts_clauses_distinct', array( __CLASS__, 'rest_posts_distinct' ), 10, 3 );
@@ -302,10 +337,30 @@ class GeoDir_API {
 		}
 	}
 
+    /**
+     * Function for distinct rest posts.
+     *
+     * @since 2.0.0
+     *
+     * @param string $distinct Rest posts distinct value.
+     * @param object $wp_query wp_query object.
+     * @param string $post_type Post type.
+     * @return string $distinct.
+     */
 	public static function rest_posts_distinct( $distinct, $wp_query, $post_type ) {
 		return $distinct;
 	}
 
+    /**
+     * Function for rest posts fields.
+     *
+     * @since 2.0.0
+     *
+     * @param string $fields Posts fields.
+     * @param object $wp_query Wp_query object.
+     * @param string $post_type Post type.
+     * @return string $fields.
+     */
 	public static function rest_posts_fields( $fields, $wp_query, $post_type ) {
 		if ( trim( $fields ) != '' ) {
 			$fields .= ", ";
@@ -318,6 +373,16 @@ class GeoDir_API {
 		return $fields;
 	}
 
+    /**
+     * Function for join rest posts.
+     *
+     * @since 2.0.0
+     *
+     * @param string $join Query join value.
+     * @param object $wp_query Wp_query object.
+     * @param string $post_type Post type.
+     * @return string $join.
+     */
 	public static function rest_posts_join( $join, $wp_query, $post_type ) {
 		global $wpdb;
 
@@ -328,14 +393,44 @@ class GeoDir_API {
 		return $join;
 	}
 
+    /**
+     * Function for where rest posts.
+     *
+     * @since 2.0.0
+     *
+     * @param string $where Query where value.
+     * @param object $wp_query Wp_query object.
+     * @param string $post_type Post type.
+     * @return string $where.
+     */
 	public static function rest_posts_where( $where, $wp_query, $post_type ) {
 		return $where;
 	}
 
+    /**
+     * Function for groupby rest posts.
+     *
+     * @since 2.0.0
+     *
+     * @param string $groupby Query groupby value.
+     * @param object $wp_query Wp_query object.
+     * @param string $post_type Post type.
+     * @return string $groupby.
+     */
 	public static function rest_posts_groupby( $groupby, $wp_query, $post_type ) {
 		return $groupby;
 	}
 
+    /**
+     * Function for orderby rest posts.
+     *
+     * @since 2.0.0
+     *
+     * @param string $orderby Query orderby value.
+     * @param object $wp_query Wp_query object.
+     * @param string $post_type Post type.
+     * @return string $orderby.
+     */
 	public static function rest_posts_orderby( $orderby, $wp_query, $post_type ) {
 		global $geodir_post_type;
 		$geodir_post_type = $post_type;
@@ -348,6 +443,16 @@ class GeoDir_API {
 		return apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $wp_query );
 	}
 
+    /**
+     * Function for limits to rest posts.
+     *
+     * @since 2.0.0
+     *
+     * @param string $limits
+     * @param object $wp_query Wp_query object.
+     * @param string $post_type Post type.
+     * @return string $limits.
+     */
 	public static function rest_posts_limits( $limits, $wp_query, $post_type ) {
 		return $limits;
 	}

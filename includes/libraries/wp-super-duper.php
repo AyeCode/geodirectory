@@ -86,6 +86,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 		}
 
+        /**
+         * Function for get widget settings.
+         *
+         * @since 2.0.0
+         */
 		public static function get_widget_settings(){
 			global $sd_widgets;
 //			print_r($_REQUEST);
@@ -122,6 +127,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			wp_die();
 		}
 
+        /**
+         * Function for insert button in shortcode.
+         *
+         * @since 2.0.0
+         *
+         * @param string $editor_id Optional. Shortcode editor id. Default null.
+         * @param string $insert_shortcode_function Optional. Insert shotcode function. Default null.
+         */
 		public static function shortcode_insert_button($editor_id = '',$insert_shortcode_function=''){
 			global $sd_widgets,$shortcode_insert_button_once;
 			if($shortcode_insert_button_once){return;}
@@ -185,6 +198,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					if(!empty($insert_shortcode_function)){
 						echo $insert_shortcode_function;
 					}else{
+
+                /**
+                 * Function for super duper insert shortcode.
+                 *
+                 * @since 2.0.0
+                 */
 				?>
 				function sd_insert_shortcode(){
 					$shortcode = jQuery('#sd-shortcode-output').val();
@@ -668,10 +687,24 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			return $argument_values;
 		}
 
+        /**
+         * Function for set arguments in super duper.
+         *
+         * @since 2.0.0
+         *
+         * @return array Set arguments.
+         */
 		public function set_arguments() {
 			return $this->arguments;
 		}
 
+        /**
+         * Function for get arguments in super duper.
+         *
+         * @since 2.0.0
+         *
+         * @return array Get arguments.
+         */
 		public function get_arguments() {
 			if ( empty( $this->arguments ) ) {
 				$this->arguments =  $this->set_arguments();
@@ -1313,6 +1346,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 		}
 
+        /**
+         * Function for convert require element.
+         *
+         * @since 2.0.0
+         *
+         * @param string $input Input element.
+         * @return string $output
+         */
 		public function convert_element_require( $input ) {
 
 			$input = str_replace( "'", '"', $input );// we only want double quotes

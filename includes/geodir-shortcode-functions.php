@@ -2236,6 +2236,17 @@ function geodir_sc_single_meta($atts, $content = '') {
     return $output;
 }
 
+/**
+ * Get the shortcode single meta value.
+ *
+ * Check if $key equal to post_title then return post title.
+ *
+ * @since 2.0.0
+ *
+ * @param int $post_id Post id.
+ * @param string $key key is type of meta value.
+ * @return string $output.
+ */
 function geodir_sc_single_meta_value($post_id,$key){
     global $gd_post;
     $output = '';

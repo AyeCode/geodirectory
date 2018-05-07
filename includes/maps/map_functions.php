@@ -408,6 +408,15 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
     }
 }
 
+
+/**
+ * Function for get default marker icon.
+ *
+ * @since 2.0.0
+ *
+ * @param bool $full_path Optional. Default marker icon full path. Default false.
+ * @return string $icon.
+ */
 function geodir_default_marker_icon( $full_path = false ) {
     $icon = geodir_get_option( 'geodir_default_marker_icon' );
     
@@ -583,6 +592,14 @@ function geodir_map_taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty
     return;
 }
 
+/**
+ * Function for get map popup content.
+ *
+ * @since 2.0.0
+ *
+ * @param int|object $item Map popup content item int or objects values.
+ * @return string $content.
+ */
 function geodir_get_map_popup_content( $item ) {
 	global $post, $gd_post;
 
