@@ -98,6 +98,11 @@ add_action( 'wp_ajax_geodir_stats_ajax', 'geodir_dashboard_ajax_stats' );
 
 // Listings
 function geodir_dashboard_listings_stats( $stats, $type, $period ) {
+	$post_types	= geodir_get_posttypes();
+	if ( ! ( $type == 'all' || in_array( $type, $post_types ) ) ) {
+		return $stats;
+	}
+
 	$listing_stats = geodir_dashboard_post_types_stats( $type, $period );
 
 	$stat_key = 'listings';
@@ -191,6 +196,11 @@ function geodir_dashboard_query_posts_count( $post_type, $statuses = array(), $w
 
 // Reviews
 function geodir_dashboard_reviews_stats( $stats, $type, $period ) {
+	$post_types	= geodir_get_posttypes();
+	if ( ! ( $type == 'all' || in_array( $type, $post_types ) ) ) {
+		return $stats;
+	}
+
 	$review_stats = geodir_dashboard_post_types_reviews_stats( $type, $period );
 
 	$stat_key = 'reviews';
