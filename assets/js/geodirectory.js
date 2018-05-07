@@ -882,6 +882,10 @@ function geodir_refresh_business_hour($this) {
 function init_read_more(){
     var $el, $ps, $up, totalHeight;
 
+    jQuery('.geodir-category-list-view  .geodir-field-post_content').each(function() {
+        jQuery(this).addClass('gd-read-more-wrap').wrapInner( "<p></p>").append('<p class="gd-read-more"><a href="#" class="gd-read-more-button">'+geodir_params.txt_read_more+'</a></p>');
+    });
+
     // Make the read more visable if the text needs it
     jQuery('.gd-read-more-wrap').each(function() {
         var height = jQuery( this ).height();

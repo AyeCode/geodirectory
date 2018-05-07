@@ -2036,125 +2036,6 @@ add_action('wp_ajax_geodir_sclistings', 'geodir_sclistings_callback');
 add_action('wp_ajax_nopriv_geodir_sclistings', 'geodir_sclistings_callback');
 
 
-
-/**
- * Output the details page slider HTML.
- *
- * @since 1.0.0
- * @since 1.5.4 itemprop="image" removed as added via JSON-LD.
- * @since 1.5.7 Hide default image on listing detail preview page.
- * @package GeoDirectory
- * @global bool $preview True of on a preview page. False if not.
- * @global object $post The current post object.
- * @todo this needs fixed to use preview images and also it should be changed to use views so we can switch slider type if we want in future.
- */
-function geodir_sc_single_slider()
-{
-    global $preview, $post;
-
-
-    if ($preview) {
-        //$preview_get_images = geodir_get_images($post->ID, 'thumbnail', geodir_get_option('geodir_listing_no_img'));
-		$preview_get_images = geodir_get_images($post->ID);
-
-        $preview_post_images = array();
-        if ($preview_get_images) {
-            foreach ($preview_get_images as $row) {
-                $preview_post_images[] = $row->src;
-            }
-        }
-        if (!empty($preview_post_images)) {
-            $post->post_images = implode(',', $preview_post_images);
-        }
-    }
-
-    if ($preview) {
-        $post_images = array();
-        if (isset($post->post_images) && !empty($post->post_images)) {
-            $post->post_images = trim($post->post_images, ",");
-            $post_images = explode(",", $post->post_images);
-        }
-
-        $main_slides = '';
-        $nav_slides = '';
-        $slides = 0;
-
-        if (!empty($post_images)) {
-            foreach ($post_images as $image) {
-                if (!empty($image)) {
-                    $sizes = getimagesize(trim($image));
-                    $width = !empty($sizes) && isset($sizes[0]) ? $sizes[0] : 0;
-                    $height = !empty($sizes) && isset($sizes[1]) ? $sizes[1] : 0;
-
-                    if ($image && $width && $height) {
-                        $image = (object)array('src' => $image, 'width' => $width, 'height' => $height);
-                    }
-
-                    if (isset($image->src)) {
-                        if ($image->height >= 400) {
-                            $spacer_height = 0;
-                        } else {
-                            $spacer_height = ((400 - $image->height) / 2);
-                        }
-
-                        $image_title = isset($image->title) ? $image->title : '';
-
-                        $main_slides .= '<li><img src="' . geodir_plugin_url() . "/assets/images/spacer.gif" . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:' . $spacer_height . 'px;margin:0 auto;" />';
-                        $main_slides .= '<img src="' . $image->src . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:400px;margin:0 auto;" /></li>';
-                        $nav_slides .= '<li><img src="' . $image->src . '" alt="' . $image_title . '" title="' . $image_title . '" style="max-height:48px;margin:0 auto;" /></li>';
-                        $slides++;
-                    }
-                }
-            }// endfore
-        } //end if
-    } else {
-        $main_slides = '';
-        $nav_slides = '';
-        /**
-         * Filter if default images should show on the details page.
-         *
-         * @param bool $use_default_image Default false.
-         * @since 1.6.16
-         */
-        $use_default_image = apply_filters('geodir_details_default_image_show', false);
-        //$post_images = geodir_get_images($post->ID, 'thumbnail', $use_default_image); // Hide default image on listing preview/detail page.
-		$post_images = geodir_get_images($post->ID); // Hide default image on listing preview/detail page.
-        $slides = 0;
-
-        if (!empty($post_images)) {
-            foreach ($post_images as $image) {
-                if ($image->height >= 400) {
-                    $spacer_height = 0;
-                } else {
-                    $spacer_height = ((400 - $image->height) / 2);
-                }
-                $caption = '';//(!empty($image->caption)) ? '<p class="flex-caption">'.$image->caption.'</p>' : '';
-                $main_slides .= '<li><img src="' . geodir_plugin_url() . "/assets/images/spacer.gif" . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:' . $spacer_height . 'px;margin:0 auto;" />';
-                $main_slides .= '<img src="' . $image->src . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:400px;margin:0 auto;" />'.$caption.'</li>';
-                $nav_slides .= '<li><img src="' . $image->src . '" alt="' . $image->title . '" title="' . $image->title . '" style="max-height:48px;margin:0 auto;" /></li>';
-                $slides++;
-            }
-        }// endfore
-    }
-
-    if (!empty($post_images)) {
-        ?>
-        <div class="geodir_flex-container">
-            <div class="geodir_flex-loader"><i class="fa fa-refresh fa-spin"></i></div>
-            <div id="geodir_slider" class="geodir_flexslider ">
-                <ul class="geodir-slides clearfix"><?php echo $main_slides; ?></ul>
-            </div>
-            <?php if ($slides > 1) { ?>
-                <div id="geodir_carousel" class="geodir_flexslider">
-                    <ul class="geodir-slides clearfix"><?php echo $nav_slides; ?></ul>
-                </div>
-            <?php } ?>
-        </div>
-        <?php
-    }
-}
-
-
 /**
  * Outputs single meta from a super block.
  * 
@@ -2208,23 +2089,14 @@ function geodir_sc_single_meta($atts, $content = '') {
                 }
             }
             if(!empty($field)){
+                if($atts['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
+                if($atts['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
+                if($atts['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
+                $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id'],$atts['show']);
 
-                if($atts['show']=='valuexxx'){
-                    $output = geodir_sc_single_meta_value($atts['id'],$atts['key']);
-                }else{
-                    //echo '###3'.$atts['key'];
-                    //print_r($field);
-                    //print_r($atts);
-
-                    // add css_alignment
-                    if($atts['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
-                    if($atts['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
-                    if($atts['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
-
-
-                    $output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id'],$atts['show']);
+                if($field['name']=='post_content'){
+                    //$output = wp_strip_all_tags($output);
                 }
-
 
             }else{
                //$output = __('Key does not exist','geodirectory');
@@ -2233,37 +2105,6 @@ function geodir_sc_single_meta($atts, $content = '') {
     }
 
     
-    return $output;
-}
-
-/**
- * Get the shortcode single meta value.
- *
- * Check if $key equal to post_title then return post title.
- *
- * @since 2.0.0
- *
- * @param int $post_id Post id.
- * @param string $key key is type of meta value.
- * @return string $output.
- */
-function geodir_sc_single_meta_value($post_id,$key){
-    global $gd_post;
-    $output = '';
-
-    if($key=='post_title'){
-        //print_r($gd_post);
-        if(isset($gd_post->ID) && $gd_post->ID==$post_id ){
-            $title = $gd_post->post_title;
-        }else{
-            $title = get_the_title( $post_id );
-        }
-
-        $output = '<h2 class="geodir-meta-title"><a href="'.get_the_permalink($post_id).'" >'.esc_attr($title).'</a></h2>';
-    }else{
-        $output = 'not implemented yet'; // @todo implement
-    }
-
     return $output;
 }
 

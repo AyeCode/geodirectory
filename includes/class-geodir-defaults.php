@@ -68,7 +68,7 @@ class GeoDir_Defaults {
 [gd_post_fav show='' alignment='right' ]
 [gd_post_meta key='business_hours' location='listing']
 [gd_output_location location='listing']
-[gd_post_meta key='post_content' location='listing']
+[gd_post_meta key='post_content' show='value-strip']
 [gd_archive_item_section type='close' position='right']";
 	}
 
@@ -342,6 +342,204 @@ Thank You.","geodirectory"
 	 */
 	public static function email_address(){
 		return get_bloginfo('admin_email');
+	}
+
+	/**
+	 * The default CPT page title.
+	 *
+	 * @return string
+	 */
+	public static function seo_cpt_title(){
+		return __("All %%pt_plural%% %%in_location_single%%","geodirectory");
+	}
+
+	/**
+	 * The default CPT meta title.
+	 *
+	 * @return string
+	 */
+	public static function seo_cpt_meta_title(){
+		return __("%%pt_plural%% %%in_location%% %%sep%% %%sitename%%","geodirectory");
+	}
+
+	/**
+	 * The default CPT meta description.
+	 *
+	 * @return string
+	 */
+	public static function seo_cpt_meta_description(){
+		return __("%%pt_plural%% %%in_location%%","geodirectory");
+	}
+
+	/**
+	 * The default cat archive page title.
+	 *
+	 * @return string
+	 */
+	public static function seo_cat_archive_title(){
+		return __("All %%category%% %%in_location_single%%","geodirectory");
+	}
+
+	/**
+	 * The default cat archive meta title.
+	 *
+	 * @return string
+	 */
+	public static function seo_cat_archive_meta_title(){
+		return __("%%category%% %%in_location%% %%sep%% %%sitename%%","geodirectory");
+	}
+
+	/**
+	 * The default cat archive meta description.
+	 *
+	 * @return string
+	 */
+	public static function seo_cat_archive_meta_description(){
+		return __("Posts related to Category: %%category%% %%in_location%%","geodirectory");
+	}
+
+	/**
+	 * The default tag archive page title.
+	 *
+	 * @return string
+	 */
+	public static function seo_tag_archive_title(){
+		return __("Tag: %%tag%% %%in_location_single%%","geodirectory");
+	}
+
+	/**
+	 * The default tag archive meta title.
+	 *
+	 * @return string
+	 */
+	public static function seo_tag_archive_meta_title(){
+		return __("%%tag%% %%in_location%% %%sep%% %%sitename%%","geodirectory");
+	}
+
+	/**
+	 * The default tag archive meta description.
+	 *
+	 * @return string
+	 */
+	public static function seo_tag_archive_meta_description(){
+		return __("Posts related to Tag: %%tag%% %%in_location%%","geodirectory");
+	}
+
+	/**
+	 * The default single page title.
+	 *
+	 * @return string
+	 */
+	public static function seo_single_title(){
+		return __("%%title%%","geodirectory");
+	}
+
+	/**
+	 * The default single meta title.
+	 *
+	 * @return string
+	 */
+	public static function seo_single_meta_title(){
+		return __("%%title%% %%sep%% %%sitename%%","geodirectory");
+	}
+
+	/**
+	 * The default single meta description.
+	 *
+	 * @return string
+	 */
+	public static function seo_single_meta_description(){
+		return __("%%excerpt%%","geodirectory");
+	}
+
+	/**
+	 * The default location page title.
+	 *
+	 * @return string
+	 */
+	public static function seo_location_title(){
+		return __("%%title%%","geodirectory");
+	}
+
+	/**
+	 * The default location meta title.
+	 *
+	 * @return string
+	 */
+	public static function seo_location_meta_title(){
+		return __("%%title%% %%location%% %%sep%% %%sitename%%","geodirectory");
+	}
+
+	/**
+	 * The default location meta description.
+	 *
+	 * @return string
+	 */
+	public static function seo_location_meta_description(){
+		return __("%%location%%","geodirectory");
+	}
+
+	/**
+	 * The default search page title.
+	 *
+	 * @return string
+	 */
+	public static function seo_search_title(){
+		return __("Search results for: %%search_term%% %%search_near%%","geodirectory");
+	}
+
+	/**
+	 * The default search meta title.
+	 *
+	 * @return string
+	 */
+	public static function seo_search_meta_title(){
+		return __("%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep%% %%sitename%%","geodirectory");
+	}
+
+	/**
+	 * The default search meta description.
+	 *
+	 * @return string
+	 */
+	public static function seo_search_meta_description(){
+		return __("%%pt_plural%% search results for %%search_term%%, Near %%search_near%%","geodirectory");
+	}
+
+	/**
+	 * The default add_listing page title.
+	 *
+	 * @return string
+	 */
+	public static function seo_add_listing_title(){
+		return __("Add %%pt_single%%","geodirectory");
+	}
+
+	/**
+	 * The default add_listing page title when editing.
+	 *
+	 * @return string
+	 */
+	public static function seo_add_listing_title_edit(){
+		return __("Edit %%pt_single%%","geodirectory");
+	}
+
+	/**
+	 * The default add_listing meta title.
+	 *
+	 * @return string
+	 */
+	public static function seo_add_listing_meta_title(){
+		return __("Add %%pt_single%% %%sep%% %%sitename%%","geodirectory");
+	}
+
+	/**
+	 * The default add_listing meta description.
+	 *
+	 * @return string
+	 */
+	public static function seo_add_listing_meta_description(){
+		return __("Add your %%pt_single%% to %%sitename%%","geodirectory");
 	}
 
 }

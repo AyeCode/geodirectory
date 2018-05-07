@@ -105,6 +105,9 @@ jQuery(window).load(function() {
 
     // Save settings validation
     gd_settings_validation();
+
+    // init helper tags
+    geodir_init_helper_tags();
 });
 
 /**
@@ -1359,4 +1362,32 @@ function geodir_seconds_to_hm(value) {
 	result += ":" + (minutes < 10 ? "0" + minutes : minutes);
 	result = prefix + '' +  result;
 	return result;
+}
+
+function geodir_init_helper_tags(){
+    jQuery(".geodir-helper-tags li").click(function(event){
+
+
+
+        $tag = jQuery(this).find('.geodir-helper-tag').text();
+        if(jQuery('#geodir-helper-tag-input').length){
+            jQuery('#geodir-helper-tag-input').val($tag);
+            jQuery('#geodir-helper-tag-input').select();
+        }else{
+            jQuery( "body" ).append( "<input type='text' id='geodir-helper-tag-input'>" );
+            jQuery('#geodir-helper-tag-input').val($tag);
+            jQuery('#geodir-helper-tag-input').select();
+        }
+        //$temp_input = jQuery('#geodir-helper-tag-input').
+        //jQuery(this).selText();
+        if(document.execCommand("Copy")){
+            jQuery('#geodir-helper-tag-input').remove();
+            jQuery(this).find('.geodir-helper-tag').addClass('geodir-tag-copied');
+            $this = this;
+            setTimeout(function(){
+                jQuery($this).find('.geodir-helper-tag').removeClass('geodir-tag-copied');
+            }, 1000);
+        }
+
+    });
 }

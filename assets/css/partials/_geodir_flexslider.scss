@@ -13,6 +13,10 @@
   margin-bottom: 10px;
   position: relative;
 
+  .geodir-slider-loading{
+    max-height: 400px;
+  }
+
   .geodir-image-wrapper{
     .geodir-viewport{
       margin-bottom: 5px;
@@ -219,9 +223,9 @@ html[xmlns] .geodir-slides {
 
   &:before{
     font-family: FontAwesome;
-    font-size: 16px;
+    font-size: 40px;
     display: inline-block;
-    content: '\f061';
+    content: '\f105';
     color: #FFF;
     text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
     line-height: 40px;

@@ -103,6 +103,7 @@ function geodir_init_slider($id){
 
             // chrome 53 introduced a bug, so we need to repaint the slider when shown.
             jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
+            jQuery("#"+$id).removeClass('geodir-slider-loading');
 
             jQuery(".geodir_flex-loader").hide(), jQuery("#"+$id).css({
                 visibility: "visible"
