@@ -34,7 +34,11 @@ if (post_password_required())
      */
     do_action('geodir_before_review_list'); ?>
 
-    <?php if (have_comments()) : ?>
+    <?php if (have_comments()) :
+
+        $post_rating = geodir_get_post_rating( $post->ID );
+        echo geodir_get_rating_stars( $post_rating, $post->ID );
+        ?>
         <h2 class="comments-title">
             <?php
             printf(_n('1 Review <span class="r-title-on">on</span> <span class="r-title">&ldquo;%2$s&rdquo;</span>', '%1$s Reviews <span>on</span> <span class="r-title"> &ldquo;%2$s&rdquo;</span>', get_comments_number(), 'geodirectory'),

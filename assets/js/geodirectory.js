@@ -125,6 +125,9 @@ jQuery(function($) {
 			$(this).closest('.post-' + $(this).data('id')).removeClass(badge).addClass(badge);
 		}
 	});
+
+    // init reply link text changed
+    gd_init_comment_reply_link();
 });
 
 
@@ -1031,4 +1034,54 @@ function gd_ajax_lightbox($action,$nonce,$post_id,$extra){
             }
         });
     }
+}
+
+/**
+ * Change the texts for the reply/review comments section.
+ */
+function gd_init_comment_reply_link(){
+
+    jQuery(".geodir-comments-area .comment-reply-link").click(function(event){
+
+        setTimeout(function(){
+
+            jQuery('#reply-title').contents().filter(function() {
+                return this.nodeType == 3
+            }).each(function(){
+                this.textContent = this.textContent.replace(geodir_params.txt_leave_a_review,geodir_params.txt_leave_a_reply);
+            });
+
+            $html = jQuery('#respond .comment-form-comment').html();
+            $new_html = $html.replace(geodir_params.txt_review_text,geodir_params.txt_reply_text);
+            jQuery('#respond .comment-form-comment').html($new_html);
+
+            $html = jQuery('#respond input.submit').val();
+            $new_html = $html.replace(geodir_params.txt_post_review,geodir_params.txt_post_reply);
+            jQuery('#respond input.submit').val($new_html);
+
+            jQuery('#respond .gd-rating-input').hide();
+        }, 10);
+    });
+
+    jQuery("#cancel-comment-reply-link").click(function(event){
+
+        setTimeout(function(){
+
+            jQuery('#reply-title').contents().filter(function() {
+                return this.nodeType == 3
+            }).each(function(){
+                this.textContent = this.textContent.replace(geodir_params.txt_leave_a_reply,geodir_params.txt_leave_a_review);
+            });
+
+            $html = jQuery('#respond .comment-form-comment').html();
+            $new_html = $html.replace(geodir_params.txt_reply_text,geodir_params.txt_review_text);
+            jQuery('#respond .comment-form-comment').html($new_html);
+
+            $html = jQuery('#respond input.submit').val();
+            $new_html = $html.replace(geodir_params.txt_post_reply,geodir_params.txt_post_review);
+            jQuery('#respond input.submit').val($new_html);
+
+            jQuery('#respond .gd-rating-input').show();
+        }, 10);
+    });
 }
