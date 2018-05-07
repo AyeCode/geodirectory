@@ -4,6 +4,7 @@
 @import "partials/search_form";
 @import "partials/notifications";
 @import "partials/ratings";
+@import "partials/reviews";
 @import "partials/add-listing";
 @import "partials/listings";
 @import "partials/geodir_flexslider";
@@ -163,10 +164,6 @@ ul#breadcrumbs {
     margin-right: 3%;
 }
 
-.geodir-tabs-content.geodir-entry-content > li {
-    margin: 0px 14px;
-    width: calc(100% - 28px);
-}
 
 /* taxonomies */
 .geodir_post_taxomomies {

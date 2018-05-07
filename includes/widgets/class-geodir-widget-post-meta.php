@@ -61,8 +61,9 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 						"" => __('icon + label + value', 'geodirectory'),
 						"icon-value" => __('icon + value', 'geodirectory'),
 						"label-value" => __('label + value', 'geodirectory'),
-						"value" => __('value', 'geodirectory'),
 						"label" => __('label', 'geodirectory'),
+						"value" => __('value', 'geodirectory'),
+						"value-strip" => __('value (strip_tags)', 'geodirectory'),
 					),
 					'desc_tip' => true,
 					'advanced' => false

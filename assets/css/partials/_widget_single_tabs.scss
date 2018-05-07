@@ -14,61 +14,56 @@
 .geodir-tabs{
   dl.geodir-tab-head {
     margin: 0px;
-    height: auto;
-    //border-bottom: 1px #e1e1e1 solid;
     display: block;
     margin-top: 0;
     position: relative;
     z-index: 1;
+    border-bottom: 1px solid #e2e2e2;
     i{
       padding-right: 5px;
     }
+
+    dd {
+      display: inline-block;
+      cursor: pointer;
+      margin: 0;
+      padding: 0;
+      a {
+        padding: 8px 11px;
+        font-size: 14px;
+        display: block;
+        font-weight: normal;
+        border-right: none;
+        border-bottom: none;
+        box-shadow: none;
+        -webkit-filter: grayscale(100%); /* Safari 6.0 - 9.0 */
+        filter: grayscale(100%);
+        &:hover{
+          filter: grayscale(0%);
+        }
+      }
+      &.geodir-tab-active a {
+        background: #FFFFFF;
+        cursor: default;
+        border-bottom: 1px #45B8F2 solid;
+        box-sizing: content-box;
+        -webkit-filter: grayscale(0%); /* Safari 6.0 - 9.0 */
+        filter: grayscale(0%);
+      }
+    }
+
+    dt{
+      display: none;
+    }
   }
 
-  dl.geodir-tab-head dd {
-    height: 48px;
-    float: left;
-    display: block;
-    cursor: pointer;
-    margin: 0;
-    padding: 0;
-  }
 
-  dl.geodir-tab-head dd a {
-    font-weight: bold;
-    height: 48px;
-    line-height: 48px;
-    padding: 0 11px;
-    font-size: 13px;
-    display: block;
-    font-weight: normal;
-    border: 1px solid #e1e1e1;
-    border-right: none;
-    border-bottom: none;
-    box-shadow: none;
-  }
-
-  dl.geodir-tab-head dd.geodir-tab-active a {
-    background: #FFFFFF;
-    cursor: default;
-    border-bottom: none;
-    border-top: 1px #45B8F2 solid;
-    box-sizing: content-box;
-  }
-
-  dl.geodir-tab-head dd:last-child {
-    border-right: 1px #e1e1e1 solid;
-  }
 
   ul.geodir-tabs-content {
     margin: 0 0 10px 0;
     padding: 0;
     min-height: 350px;
-    border: 1px #e1e1e1 solid;
     clear: both;
-    //border-top: none;
-
-
 
     &.geodir-tabs-as-list{
       border: none;
@@ -79,12 +74,12 @@
         }
       }
     }
-    #reviewsTab{
-      .comments-area{
-        margin: 0;
-        padding: 0;
-      }
+
+    .comments-area{
+       margin: 0;
+       padding: 0;
     }
+
   }
 
   .geodir-tabs-content > li {

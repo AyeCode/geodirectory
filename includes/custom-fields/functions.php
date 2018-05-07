@@ -366,8 +366,8 @@ function geodir_field_icon_proccess($cf){
 
     if (strpos($cf['field_icon'], 'http') !== false) {
         $field_icon = ' background: url(' . $cf['field_icon'] . ') no-repeat left center;background-size:18px 18px;padding-left: 21px;';
-    } elseif (strpos($cf['field_icon'], 'fa fa-') !== false) {
-        $field_icon = '<i class="' . $cf['field_icon'] . '"></i>';
+    } elseif (strpos($cf['field_icon'], 'fa fa-') !== false || strpos($cf['field_icon'], 'fa-') !== false) {
+        $field_icon = '<i class="fa ' . $cf['field_icon'] . '"></i>';
     }else{
         $field_icon = $cf['field_icon'];
     }

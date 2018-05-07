@@ -20,7 +20,7 @@ if (post_password_required())
     return;
 ?>
 
-<div id="comments" class="comments-area">
+<div id="comments" class="comments-area geodir-comments-area">
 
     <?php // You can start editing here -- including this comment! ?>
 
@@ -50,11 +50,11 @@ if (post_password_required())
          */
         do_action('geodir_after_review_list_title'); ?>
 
-        <ol class="commentlist">
+        <ul class="commentlist">
             <?php $reverse_top_level = null;// @todo we need to do this more efficient than "is_plugin_active" // is_plugin_active('geodir_review_rating_manager/geodir_review_rating_manager.php') ? false : null; ?>
 			<?php wp_list_comments(array('callback' => array('GeoDir_Comments','list_comments_callback'), 'reverse_top_level' => $reverse_top_level, 'style' => 'ol'));
             ?>
-        </ol><!-- .commentlist -->
+        </ul><!-- .commentlist -->
 
         <?php if (get_comment_pages_count() > 1 && get_option('page_comments')) : // are there comments to navigate through ?>
             <nav id="comment-nav-below" class="navigation" role="navigation">

@@ -235,7 +235,7 @@ class GeoDir_SEO {
 		}
 
 		if ( strpos( $string, '%%excerpt%%' ) !== false ) {
-			$string = str_replace( "%%excerpt%%", strip_tags( get_the_excerpt() ), $string );
+			$string = str_replace( "%%excerpt%%", strip_tags( wp_trim_excerpt($post->post_content) ), $string );
 		}
 
 		// archive
