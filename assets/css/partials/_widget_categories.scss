@@ -1,21 +1,151 @@
 .geodir-categories-container{
   ul{
-    float: left;
-    width: 20%;
-    min-width: 170px;
+    display: inline-block;
+    width: 33%;
+    min-width: 185px;
     list-style: none;
     padding: 0;
     margin: 0;
 
+    &.gd-cpt-flat{
+      clear: both;
+    }
+
     li{
       margin: .25em;
+      background: #f5f5f5;
+      min-height: 45px;
+      height: 45px;
+      border-radius: 2px;
+
+      .gd-cptcat-cat-left{
+        display: inline-block;
+        width: 25%;
+        border-radius: 2px;
+        border-top-right-radius: 0;
+        border-bottom-right-radius: 0;
+      }
+      .gd-cptcat-cat-right{
+        display: inline-block;
+        width: 75%;
+        a{
+          padding-left: 8px;
+        }
+      }
+
       a{
         text-overflow: ellipsis;
         overflow: hidden;
         white-space: nowrap;
-        min-width: 170px;
+        //min-width: 170px;
+        height: 45px;
         display: block;
+        line-height: 45px;
+        font-size: 14px;
+        color: #4a4a4a;
+        font-weight: bold;
+
+        .gd-cptcat-icon{
+          margin: 0;
+          padding: 0;
+          height: 100%;
+          font-size: 25px;
+          i{
+            text-align: center;
+            width: 100%;
+            color: #fff;
+          }
+          img{
+            width: auto;
+            height: 50%;
+            display: block;
+            margin: auto;
+            margin-top: 25%;
+          }
+        }
+
+        .gd-cptcat-count{
+          background: #9facbb;
+          border-radius: 15px;
+          padding: 2px 4px;
+          font-size: 10px;
+          color: #fff;
+        }
       }
     }
   }
 }
+
+//
+//
+///* cpt categories widget */
+//#geodir_content .geodir_cpt_categories_widget{
+//  padding: 0;
+//}
+//.gd-cptcat-row {
+//  min-width: 240px;
+//  margin-right: 1.5em;
+//  display: inline-table;
+//}
+//.gd-cptcat-ul {
+//  margin-top: .5em;
+//}
+//.gd-cptcat-row > .gd-cptcat-ul {
+//  padding-left: 1em;
+//}
+//.gd-cptcat-row .gd-cptcat-title {
+//  background-position: right bottom 3px;
+//  background-repeat: no-repeat;
+//  background-size: auto 85%;
+//  border-bottom: 1px solid #f01d4f;
+//  padding-bottom: 5px;
+//  text-align: left;
+//}
+//.gd-cptcat-row .gd-cptcat-li {
+//  margin: .25em;
+//}
+//.gd-cptcat-li h3 {
+//  margin: 0;
+//}
+//.gd-cptcat-li a img  {
+//  height: 1.1em;
+//  vertical-align: middle;
+//}
+//.gd-cptcat-title > img  {
+//  height: 1.1em;
+//  vertical-align: middle;
+//}
+//.gd-cptcat-li .gd-cptcat-count, .gd-cptcat-title > .gd-cptcat-count {
+//  color: #f01d4f;
+//  font-weight: normal;
+//  font-size: 13px;
+//  vertical-align: middle;
+//  display: inline-block;
+//}
+//.gd-cptcat-title > .gd-cptcat-count  {
+//  font-size: .5em;
+//}
+//.gd-cptcat-row.gd-cpt-flat{
+//  width: 100%;
+//  margin-right: 0px;
+//  max-width: 240px;
+//}
+//.gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat {
+//  float: left;
+//  width: 20%;
+//  min-width: 170px;
+//}
+//
+//.gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat li a
+//{
+//  text-overflow: ellipsis;
+//  overflow: hidden;
+//  white-space: nowrap;
+//  min-width: 170px;
+//  display: block;
+//}
+//
+//.gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat li ul li a
+//{
+//  min-width: 155px;
+//}
