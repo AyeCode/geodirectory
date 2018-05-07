@@ -14,6 +14,7 @@
 @import "partials/widget_images";
 @import "partials/widget_best_of";
 @import "partials/widget_single_tabs";
+@import "partials/widget_recent_reviews";
 @import "partials/maps";
 
 
@@ -1000,37 +1001,6 @@ ul li .geodir_featured_img {
 
 .geodir-sidebar-wrap {
     overflow: visible;
-}
-
-/* GD > Recent Reviews */
-.geodir_reviewer_content {
-    float: left;
-    width: 86%;
-}
-
-ul.geodir_recent_reviews li {
-    border-bottom: 1px solid #ccc;
-    min-height: 60px;
-    padding: 20px 0;
-}
-
-.geodir_reviewer_image {
-    float: left;
-    margin: 1.5px 4% 0 0;
-    width: 10%;
-}
-
-.geodir_recent_reviews .geodir-rating {
-    padding: 5px 0 0;
-}
-
-.geodir_reviewer_text {
-    line-height: 20px;
-}
-
-.geodir_reviewer_image img {
-    max-width: 100%;
-    height: auto;
 }
 
 /* ----- 18-07-2014 ----*/

@@ -62,7 +62,7 @@ class GeoDir_WP_Dashboard {
 	}
 	
 	public function recent_reviews_html( $total_items = 5 ) {
-		$reviews = geodir_get_recent_reviews( 50, $total_items, 140 );
+		$reviews = GeoDir_Widget_Recent_Reviews::get_recent_reviews( 50, $total_items, 140 );
 
 		if ( ! empty( $reviews ) ) {
 			echo '<div id="gd-latest-reviews" class="activity-block">';
