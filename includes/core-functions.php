@@ -335,7 +335,8 @@ function geodir_params()
         'txt_save_other_setting' => __('Please save the current setting before adding a new one.', 'geodirectory'),
 		'gmt_offset' => geodir_gmt_offset(),
 		'search_users_nonce' => wp_create_nonce( 'search-users' ),
-		'google_api_key' => geodir_get_map_api_key()
+		'google_api_key' => geodir_get_map_api_key(),
+		'mapLanguage' => geodir_get_map_default_language()
     );
 
     /**

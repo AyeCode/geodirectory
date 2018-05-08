@@ -853,7 +853,7 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
 .gd-osm-gmaps .leaflet-top .leaflet-control {
     margin-top: 30px
 }
-#post_address.ui-autocomplete-loading {
+input[name="street"].ui-autocomplete-loading {
     background-image:url(../images/classic-loader.gif);
     background-repeat: no-repeat;
     background-position: center right 9px;

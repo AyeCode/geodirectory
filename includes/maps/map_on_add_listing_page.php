@@ -473,6 +473,8 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
                setCountry = jQuery('#<?php echo $prefix . 'country'; ?> option[data-country_code="' + getCountryISO + '"]').val();
 			   if (!setCountry) {
 				   setCountry = getCountry;
+			   } else {
+				   getCountry = setCountry;
 			   }
 			   jQuery("#<?php echo $prefix . 'country'; ?>").val(setCountry).trigger('change.select2');
             }
