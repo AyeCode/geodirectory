@@ -1215,7 +1215,7 @@ function create_marker_osm(item, map_canvas) {
             }
             marker_url = marker_url + '' + item.m;
 			post_data = marker_url.indexOf('?') === -1 ? '?' : '&';
-			post_data += '_wpnonce=' + map_options._wpnonce;
+			post_data += '_wpnonce=' + options._wpnonce;
             if (options.bubble_size) {
                 post_data += '&small=1';
             }
