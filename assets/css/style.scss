@@ -14,6 +14,7 @@
 @import "partials/widget_images";
 @import "partials/widget_best_of";
 @import "partials/widget_single_tabs";
+@import "partials/widget_recent_reviews";
 @import "partials/maps";
 
 
@@ -255,114 +256,6 @@ ul.geodir-tabs-content li h3 {
     margin-right: 0px;
 }
 
-/* comments/reviews area */
-#comments .comments-title {
-    margin: 0;
-}
-
-#reviewsTab ol.commentlist li {
-    width: auto;
-    padding: 0;
-    border-bottom: 1px #ccc dashed;
-}
-
-#reviewsTab .comments-area ol.commentlist article {
-    margin: 15px 0;
-}
-
-#reviewsTab .comments-area article header cite, #reviewsTab .comments-area article header time, #reviewsTab .comments-area article header span.item {
-    margin: 0 0 0 12%;
-    display: block;
-}
-
-#reviewsTab .comments-area article header {
-    margin-bottom: 15px;
-}
-
-#reviewsTab .comments-area .comment-content p span {
-    font-size: 14px;
-    font-weight: bold;
-    margin-bottom: 5px;
-    color: #666;
-    padding-top: 3px;
-}
-
-#reviewsTab .comments-area .comment-content p {
-    margin-bottom: 8px;
-}
-
-#reviewsTab .commentlist {
-    width: 100%;
-}
-
-#reviewsTab .comments-area .comment-author {
-    float: none;
-    max-width: 100%;
-}
-
-#reviewsTab .comments-area .comment-content {
-    float: none;
-    width: 100%;
-}
-
-#reviewsTab .comments-area article header {
-    margin: 0 0 5px;
-    overflow: hidden;
-    position: relative;
-}
-
-#reviewsTab .comments-area article header img {
-    position: relative;
-    float: left;
-    padding: 0;
-    line-height: 0;
-    top: 0px;
-    left: 0px;
-}
-
-#reviewsTab .comments-area article header cite {
-    font-style: normal;
-    font-size: 15px;
-    line-height: 20px;
-}
-
-#reviewsTab .comments-area .comment-author cite {
-    color: inherit;
-    font-style: normal;
-    font-weight: normal;
-}
-
-#reviewsTab .comments-area .bypostauthor cite span {
-    position: absolute;
-    margin-left: 5px;
-    padding: 2px 5px;
-    font-size: 10px;
-    color: #fff;
-    background-color: #21759b;
-    background-image: none;
-    border: 1px solid #1f6f93;
-    border-radius: 2px;
-    box-shadow: none;
-    line-height: 14px;
-}
-
-#reviewsTab .commentlist .children {
-    margin-left: 48px;
-}
-
-#reviewsTab .commentlist .children li.comment .fn {
-    display: inline;
-}
-
-.err-no-rating {
-    border: 1px solid red;
-    color: #fff;
-    display: block;
-    font-size: 90%;
-    margin: 7px 0 5px 0;
-    padding: 5px 7px;
-    background-color: red
-}
 
 /* ########################################
 listings page 
@@ -1110,37 +1003,6 @@ ul li .geodir_featured_img {
     overflow: visible;
 }
 
-/* GD > Recent Reviews */
-.geodir_reviewer_content {
-    float: left;
-    width: 86%;
-}
-
-ul.geodir_recent_reviews li {
-    border-bottom: 1px solid #ccc;
-    min-height: 60px;
-    padding: 20px 0;
-}
-
-.geodir_reviewer_image {
-    float: left;
-    margin: 1.5px 4% 0 0;
-    width: 10%;
-}
-
-.geodir_recent_reviews .geodir-rating {
-    padding: 5px 0 0;
-}
-
-.geodir_reviewer_text {
-    line-height: 20px;
-}
-
-.geodir_reviewer_image img {
-    max-width: 100%;
-    height: auto;
-}
-
 /* ----- 18-07-2014 ----*/
 
 .geodir-company_info .geodir_post_meta {
@@ -1258,77 +1120,7 @@ ul.gd_multi_choice {
 .page.hentry .geodir-sc-gd-listings .geodir_category_list_view > li {
 	margin-left: 0;
 }
-/* cpt categories widget */
-#geodir_content .geodir_cpt_categories_widget{
-  padding: 0;
-}
-.gd-cptcat-row {
-	min-width: 240px;
-	margin-right: 1.5em;
-    display: inline-table;
-}
-.gd-cptcat-ul {
-	margin-top: .5em;
-}
-.gd-cptcat-row > .gd-cptcat-ul {
-	padding-left: 1em;
-}
-.gd-cptcat-row .gd-cptcat-title {
-  background-position: right bottom 3px;
-  background-repeat: no-repeat;
-  background-size: auto 85%;
-  border-bottom: 1px solid #f01d4f;
-  padding-bottom: 5px;
-  text-align: left;
-}
-.gd-cptcat-row .gd-cptcat-li {
-	margin: .25em;
-}
-.gd-cptcat-li h3 {
-	margin: 0;
-}
-.gd-cptcat-li a img  {
-	height: 1.1em;
-	vertical-align: middle;
-}
-.gd-cptcat-title > img  {
-	height: 1.1em;
-	vertical-align: middle;
-}
-.gd-cptcat-li .gd-cptcat-count, .gd-cptcat-title > .gd-cptcat-count {
-	color: #f01d4f;
-	font-weight: normal;
-	font-size: 13px;
-	vertical-align: middle;
-	display: inline-block;
-}
-.gd-cptcat-title > .gd-cptcat-count  {
-	font-size: .5em;
-}
-.gd-cptcat-row.gd-cpt-flat{
-    width: 100%;
-    margin-right: 0px;
-    max-width: 240px;
-}
-.gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat {
-  float: left;
-  width: 20%;
-  min-width: 170px;
-}
 
-.gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat li a
-{
-  text-overflow: ellipsis;
-  overflow: hidden;
-  white-space: nowrap;
-  min-width: 170px;
-  display: block;
-}
-
-.gd-cptcat-ul.gd-cptcat-parent.gd-cpt-flat li ul li a
-{
-  min-width: 155px;
-}
 
 #lightbox-container-image #lightbox-image {
   max-width: none
