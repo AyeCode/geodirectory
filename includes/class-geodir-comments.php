@@ -411,7 +411,7 @@ class GeoDir_Comments {
 				$rating = self::get_comment_rating( $comment->comment_ID );
 			}
 			if ( $rating != 0 && ! is_admin() ) {
-				return '<div><div class="gd-rating-text">' . __( 'Overall Rating', 'geodirectory' ) . ': <div class="rating">' . $rating . '</div></div>' . geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div><div class="description">' . $content . '</div>';
+				return '<div class="description">' . $content . '</div>';
 			} else {
 				return $content;
 			}
@@ -479,15 +479,18 @@ class GeoDir_Comments {
 						printf( '<cite><b class="reviewer">%1$s</b> %2$s</cite>',
 							get_comment_author_link(),
 							// If current post author is also comment author, make it known visually.
-							( $comment->user_id === $post->post_author ) ? '<span>' . __( 'Post author', 'geodirectory' ) . '</span>' : ''
+							( $comment->user_id === $post->post_author ) ? '<span class="geodir-review-author">' . __( 'Post author', 'geodirectory' ) . '</span>' : ''
 						);
-						echo "<span class='item'><small><span class='fn'>$post->post_title</span></small></span>";
-						printf( '<a href="%1$s"><time datetime="%2$s" class="dtreviewed">%3$s<span class="value-title" title="%2$s"></span></time></a>',
+						$rating = self::get_comment_rating( $comment->comment_ID );
+						if($rating != 0){
+							echo '<div class="geodir-review-ratings">'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
+						}
+						printf( '<a class="geodir-review-time" href="%1$s"><span class="geodir-review-time" title="%3$s">%2$s</span></a>',
 							esc_url( get_comment_link( $comment->comment_ID ) ),
-							get_comment_time( 'c' ),
-							/* translators: 1: date, 2: time */
+							sprintf( _x( '%s ago', '%s = human-readable time difference', 'geodirectory' ), human_time_diff( get_comment_time( 'U' ), current_time( 'timestamp' ) ) ),
 							sprintf( __( '%1$s at %2$s', 'geodirectory' ), get_comment_date(), get_comment_time() )
 						);
+
 						?>
 					</header>
 					<!-- .comment-meta -->

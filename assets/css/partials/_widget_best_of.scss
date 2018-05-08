@@ -5,44 +5,11 @@
 
   .geo-bestof-contentwrap{
     border-top: none;
-    .geodir-tabs{
-      .geodir-bestof-cat-list{
-        a{
-          text-decoration: none;
-          &:active,&:focus{
-            outline: 0;
-            outline-style: none;
-          }
-
-          span{
-            display: block;
-            overflow: hidden;
-            padding-top: 10px;
-            line-height: 14px;
-            vertical-align: middle;
-          }
-
-          small{
-            color: #757575;
-            line-height: 10px;
-            display: block;
-          }
-        }
-
-        .bestof-cat-icon {
-          float: left;
-          position: relative;
-          margin: 8px;
-          height: 30px;
-          margin-left: 0;
-        }
-      }
-    }
 
     #geodir-bestof-places{
-      padding: 10px;
+      padding: 0 0 10px 0;
       clear: both;
-      border: 1px #e1e1e1 solid;
+      //border: 1px #e1e1e1 solid;
 
       h3,h4{
         &.bestof-cat-title{
@@ -53,47 +20,109 @@
         }
       }
     }
+
+    ul.geodir-bestof-cat-list{
+      list-style: none;
+      padding: 0;
+      margin: 0;
+
+      &.gd-cpt-flat{
+        clear: both;
+      }
+
+      li{
+        margin: .25em;
+        background: #f5f5f5;
+        min-height: 45px;
+        height: 45px;
+        border-radius: 2px;
+        display: inline-block;
+        min-width: 115px;
+
+        &.geodir-tab-active{
+          background: #37befb;
+          .gd-cptcat-cat-right{
+            a,small{
+              color: #fff;
+            }
+          }
+        }
+
+        .gd-cptcat-cat-left{
+          display: inline-block;
+          width: 30%;
+          border-radius: 2px;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+        }
+        .gd-cptcat-cat-right{
+          display: inline-block;
+          width: 70%;
+          a{
+            padding-left: 8px;
+          }
+        }
+
+        a{
+          text-overflow: ellipsis;
+          overflow: hidden;
+          white-space: nowrap;
+          height: 45px;
+          display: block;
+          line-height:31px;
+          font-size: 12px;
+          color: #4a4a4a;
+
+          small{
+            line-height: 0;
+            display: block;
+          }
+
+          .gd-cptcat-icon{
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-size: 25px;
+            i{
+              text-align: center;
+              width: 100%;
+              color: #fff;
+              line-height: 45px;
+            }
+            img{
+              width: auto;
+              height: 50%;
+              display: block;
+              margin: auto;
+              margin-top: 25%;
+            }
+          }
+
+          .gd-cptcat-count{
+            background: #9facbb;
+            border-radius: 15px;
+            padding: 2px 4px;
+            font-size: 10px;
+            color: #fff;
+          }
+        }
+      }
+    }
+
   }
 
   .bestof-tabs-on-left{
     .geo-bestof-contentwrap{
-      border: 1px #e1e1e1 solid;
+      //border: 1px #e1e1e1 solid;
 
       .geodir-tabs{
         display: inline-block;
         width: 20%;
         vertical-align: top;
-        .geodir-bestof-cat-list{
-          dd{
-            width:100%;
-            border-right: 1px solid #e1e1e1;
-            &.geodir-tab-active{
-              border-right: none;
-              a{
-                border-top: 1px solid #e1e1e1;
-                border-left: 2px #45B8F2 solid;
-              }
-            }
-
-            &:first-of-type{
-                a{
-                  border-top: none;
-                }
-            }
-
-            &:last-child{
-              border-bottom: 1px solid #e1e1e1;
-              a{
-                height: 46px;
-              }
-            }
-            a{
-              padding: 0 0 0 3px;
-              span{
-                text-overflow: ellipsis;
-                white-space: nowrap;
-              }
-            }
+        ul.geodir-bestof-cat-list{
+          li{
+            margin: 0;
+            min-width: 100%;
           }
         }
       }
@@ -104,6 +133,17 @@
         width: 79%;
         overflow: hidden;
       }
+
+
+
+
+
+
+
+
+
+
+
     }
   }
 

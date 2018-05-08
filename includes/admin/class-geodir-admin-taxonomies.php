@@ -89,10 +89,23 @@ class GeoDir_Admin_Taxonomies {
         </div>
         <?php do_action( 'geodir_add_category_after_cat_default_img', $taxonomy ); ?>
         <div class="form-field term-ct_cat_icon-wrap gd-term-form-field form-required">
-            <label for="ct_cat_icon"><?php _e( 'Category Icon', 'geodirectory' ); ?></label>
+            <label for="ct_cat_icon"><?php _e( 'Map Icon', 'geodirectory' ); ?></label>
             <?php echo $this->render_cat_icon(); ?>
         </div>
         <?php do_action( 'geodir_add_category_after_cat_icon', $taxonomy ); ?>
+        
+        <div class="form-field term-ct_cat_font_icon-wrap gd-term-form-field">
+            <label for="ct_cat_font_icon"><?php _e( 'Category Icon', 'geodirectory' ); ?></label>
+            <?php echo $this->render_cat_font_icon(); ?>
+        </div>
+        <?php do_action( 'geodir_add_category_after_cat_font_icon', $taxonomy ); ?>
+
+        <div class="form-field term-ct_cat_color-wrap gd-term-form-field">
+            <label for="ct_cat_color"><?php _e( 'Category Color', 'geodirectory' ); ?></label>
+            <?php echo $this->render_cat_color(); ?>
+        </div>
+        <?php do_action( 'geodir_add_category_after_cat_color', $taxonomy ); ?>
+        
         <div class="form-field term-ct_cat_schema-wrap gd-term-form-field ">
             <label for="ct_cat_schema"><?php _e( 'Schema Type', 'geodirectory' ); ?></label>
             <?php echo $this->render_cat_schema(); ?>
@@ -114,6 +127,8 @@ class GeoDir_Admin_Taxonomies {
         $cat_top_desc = get_term_meta( $term->term_id, 'ct_cat_top_desc', true );
         $cat_default_img = get_term_meta( $term->term_id, 'ct_cat_default_img', true );
         $cat_icon = get_term_meta( $term->term_id, 'ct_cat_icon', true );
+        $cat_font_icon = get_term_meta( $term->term_id, 'ct_cat_font_icon', true );
+        $cat_color = get_term_meta( $term->term_id, 'ct_cat_color', true );
         $cat_schema = get_term_meta( $term->term_id, 'ct_cat_schema', true );
         if ( !empty( $cat_default_img['id'] ) ) {
             $cat_default_img['full'] = geodir_get_cat_image( $term->term_id, true );
@@ -134,11 +149,25 @@ class GeoDir_Admin_Taxonomies {
         </tr>
         <?php do_action( 'geodir_edit_category_after_cat_default_img', $term, $taxonomy ); ?>
         <tr class="form-field term-ct_cat_icon-wrap gd-term-form-field form-required">
-            <th scope="row"><label for="ct_cat_icon"><?php _e( 'Category Icon', 'geodirectory' ); ?></label></th>
+            <th scope="row"><label for="ct_cat_icon"><?php _e( 'Map Icon', 'geodirectory' ); ?></label></th>
             <td><?php echo $this->render_cat_icon( $cat_icon ); ?></td>
         </tr>
         <?php do_action( 'geodir_edit_category_after_cat_icon', $term, $taxonomy ); ?>
-        <tr class="form-field term-ct_cat_schema-wrap gd-term-form-field">
+
+        <tr class="form-field term-ct_cat_font_icon-wrap gd-term-form-field">
+            <th scope="row"><label for="ct_cat_font_icon"><?php _e( 'Category Icon', 'geodirectory' ); ?></label></th>
+            <td><?php echo $this->render_cat_font_icon( $cat_font_icon ); ?></td>
+        </tr>
+        <?php do_action( 'geodir_edit_category_after_cat_font_icon', $term, $taxonomy ); ?>
+
+        <tr class="form-field term-ct_cat_color-wrap gd-term-form-field">
+            <th scope="row"><label for="ct_cat_color"><?php _e( 'Category Color', 'geodirectory' ); ?></label></th>
+            <td><?php echo $this->render_cat_color( $cat_color ); ?></td>
+        </tr>
+        <?php do_action( 'geodir_edit_category_after_cat_color', $term, $taxonomy ); ?>
+
+
+        <tr class="form-field term-ct_cat_schema-wrap gd-term-form-field ">
             <th scope="row"><label for="ct_cat_schema"><?php _e( 'Schema Type', 'geodirectory' ); ?></label></th>
             <td><?php echo $this->render_cat_schema( stripslashes( $cat_schema ) ); ?></td>
         </tr>
@@ -240,6 +269,74 @@ class GeoDir_Admin_Taxonomies {
     }
 
     /**
+     * Get render cat font icon html.
+     *
+     * @since 2.0.0
+     *
+     * @param string $cat_icon Optional. Font cat icon. Default null.
+     * @param string $id Optional. Category id. Default ct_cat_font_icon.
+     * @param string $name Optional. Category name. Default null.
+     * @return string Font icon html.
+     */
+    public function render_cat_font_icon( $cat_icon = '', $id = 'ct_cat_font_icon', $name = '' ) {
+        if ( empty( $name ) ) {
+            $name = $id;
+        }
+        ob_start();
+        ?>
+        <select
+            name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>"
+            class="regular-text geodir-select postform"
+            data-fa-icons="1"  tabindex="-1" aria-hidden="true"
+        >
+            <?php
+            include_once( dirname( __FILE__ ) . '/settings/data_fontawesome.php' );
+            echo "<option value=''>".__('None','geodirectory')."</option>";
+            foreach ( geodir_font_awesome_array() as $key => $val ) {
+                ?>
+                <option value="<?php echo esc_attr( $key ); ?>" data-fa-icon="<?php echo esc_attr( $key ); ?>" <?php
+                selected( $cat_icon, $key );
+                ?>><?php echo $key ?></option>
+                <?php
+            }
+            ?>
+        </select>
+        <p class="description clear"><?php _e( 'Choose a category icon', 'geodirectory' ); ?></p>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
+     * Get render cat color html.
+     *
+     * @since 2.0.0
+     *
+     * @param string $cat_color Optional. Category color. Default null.
+     * @param string $id Optional. Category id. Default ct_cat_color.
+     * @param string $name Optional. Category name. Default null.
+     * @return string cat color html.
+     */
+    public function render_cat_color( $cat_color = '', $id = 'ct_cat_color', $name = ''  ) {
+        if ( empty( $name ) ) {
+            $name = $id;
+        }
+
+        ob_start();
+        ?>
+        <input
+            name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>"
+            type="text"
+            dir="ltr"
+            value="<?php echo esc_attr( $cat_color ); ?>"
+            class="gd-color-picker"
+            placeholder="<?php  ?>"
+            data-default-color=""/>
+        <p class="description"><?php _e( 'Select the schema to use for this category', 'geodirectory' ); ?></p>
+        <?php
+        return ob_get_clean();
+    }
+
+    /**
      * Get render schema html.
      *
      * @since 2.0.0
@@ -307,6 +404,16 @@ class GeoDir_Admin_Taxonomies {
             }
             
             update_term_meta( $term_id, 'ct_cat_icon', $cat_icon );
+        }
+
+        // Category font icon.
+        if ( isset( $_POST['ct_cat_font_icon'] ) ) {
+            update_term_meta( $term_id, 'ct_cat_font_icon', sanitize_text_field( $_POST['ct_cat_font_icon'] ) );
+        }
+
+        // Category color.
+        if ( isset( $_POST['ct_cat_color'] ) ) {
+            update_term_meta( $term_id, 'ct_cat_color', sanitize_text_field( $_POST['ct_cat_color'] ) );
         }
         
         // Category schema.

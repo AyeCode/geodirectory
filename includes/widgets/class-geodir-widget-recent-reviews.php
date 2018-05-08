@@ -148,7 +148,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
         $use_viewing_post_type = apply_filters( 'geodir_recent_reviews_widget_use_viewing_post_type', empty( $instance['use_viewing_post_type'] ) ? false : true, $instance, $this->id_base );
         $post_type = $use_viewing_post_type ? geodir_get_current_posttype() : '';
 
-        $comments_li = geodir_get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter);
+        $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter);
 
 		$content = '';
         if ( !empty( $comments_li ) ) {
@@ -163,4 +163,135 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 
 		return $content;
     }
+
+
+	/**
+	 * Returns the recent reviews.
+	 *
+	 * @since   1.0.0
+	 * @since   1.6.21 Recent reviews doesn't working well with WPML.
+	 * @since   2.0.0 Location filter & current post type filter added.
+	 * @package GeoDirectory
+	 *
+	 * @global object $wpdb        WordPress Database object.
+	 *
+	 * @param int $g_size          Optional. Avatar size in pixels. Default 60.
+	 * @param int $no_comments     Optional. Number of reviews you want to display. Default: 10.
+	 * @param int $comment_lenth   Optional. Maximum number of characters you want to display. After that read more link
+	 *                             will appear.
+	 * @param bool $show_pass_post Optional. Not yet implemented.
+	 * @param string $post_type    The post type.
+	 * @param bool $add_location_filter Whether the location filter is active. Default false.
+	 *
+	 * @return string Returns the recent reviews html.
+	 */
+	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false ) {
+		global $wpdb, $tablecomments, $tableposts, $rating_table_name, $table_prefix;
+		$tablecomments = $wpdb->comments;
+		$tableposts    = $wpdb->posts;
+		$comments_echo  = '';
+		$join = '';
+		$where = '';
+
+		if ( !empty( $post_type ) ) {
+			$where .= $wpdb->prepare( " AND p.post_type = %s", $post_type );
+		}
+
+		$location_allowed = !empty( $post_type ) && function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
+		if ( $location_allowed && $add_location_filter && defined( 'GEODIRLOCATION_VERSION' ) ) {
+			$source = geodir_is_page( 'search' ) ? 'session' : 'query_vars';
+			$location_terms = geodir_get_current_location_terms( $source );
+			$country = !empty( $location_terms['gd_country'] ) ? get_actual_location_name( 'country', $location_terms['gd_country'] ) : '';
+			$region = !empty( $location_terms['gd_region'] ) ? get_actual_location_name( 'region', $location_terms['gd_region'] ) : '';
+			$city = !empty( $location_terms['gd_city'] ) ? get_actual_location_name( 'city', $location_terms['gd_city'] ) : '';
+
+			if ( $country ) {
+				$where .= $wpdb->prepare( " AND r.country LIKE %s", $country );
+			}
+			if ( $region ) {
+				$where .= $wpdb->prepare( " AND r.region LIKE %s", $region );
+			}
+			if ( $city ) {
+				$where .= $wpdb->prepare( " AND r.city LIKE %s", $city );
+			}
+		}
+
+		if (geodir_is_wpml()) {
+			$lang_code = ICL_LANGUAGE_CODE;
+
+			if ($lang_code) {
+				$join .= " JOIN " . $table_prefix . "icl_translations AS icltr2 ON icltr2.element_id = c.comment_post_ID AND p.ID = icltr2.element_id AND CONCAT('post_', p.post_type) = icltr2.element_type LEFT JOIN " . $table_prefix . "icl_translations AS icltr_comment ON icltr_comment.element_id = c.comment_ID AND icltr_comment.element_type = 'comment'";
+				$where .= " AND icltr2.language_code = '" . $lang_code . "' AND (icltr_comment.language_code IS NULL OR icltr_comment.language_code = icltr2.language_code)";
+			}
+		}
+
+		$request = "SELECT c.comment_ID, c.comment_author, c.comment_author_email, c.comment_content, c.comment_date, r.rating, r.user_id, r.post_id, r.post_type FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN " . $wpdb->comments . " AS c ON c.comment_ID = r.comment_id JOIN " . $wpdb->posts . " AS p ON p.ID = c.comment_post_ID " . $join . " WHERE c.comment_parent = 0 AND c.comment_approved = 1 AND r.rating > 0 AND p.post_status = 'publish' " . $where . " ORDER BY c.comment_date DESC, c.comment_ID DESC LIMIT 5";
+
+		$comments = $wpdb->get_results( $request );
+
+		foreach ( $comments as $comment ) {
+			$comment_id      = $comment->comment_ID;
+			$comment_content = strip_tags( $comment->comment_content );
+			$comment_content = preg_replace( '#(\\[img\\]).+(\\[\\/img\\])#', '', $comment_content );
+
+			$permalink            = get_permalink( $comment->post_id ) . "#comment-" . $comment->comment_ID;
+			$comment_author_email = $comment->comment_author_email;
+			$comment_post_ID      = $comment->post_id;
+
+			$post_title        = get_the_title( $comment_post_ID );
+			$permalink         = get_permalink( $comment_post_ID );
+			$comment_permalink = $permalink . "#comment-" . $comment->comment_ID;
+			$read_more         = '<a class="comment_excerpt" href="' . $comment_permalink . '">' . __( 'Read more', 'geodirectory' ) . '</a>';
+
+			$comment_content_length = strlen( $comment_content );
+			if ( $comment_content_length > $comment_lenth ) {
+				$comment_excerpt = geodir_utf8_substr( $comment_content, 0, $comment_lenth ) . '... ' . $read_more;
+			} else {
+				$comment_excerpt = $comment_content;
+			}
+
+			if ( $comment->user_id ) {
+				$user_profile_url = get_author_posts_url( $comment->user_id );
+			} else {
+				$user_profile_url = '';
+			}
+
+			if ( $comment_id ) {
+				$comments_echo .= '<li class="clearfix">';
+
+
+				$comments_echo .= '<span class="geodir_reviewer_content">';
+
+				$comments_echo .= "<span class=\"li" . $comment_id . " geodir_reviewer_image\">";
+				if ( function_exists( 'get_avatar' ) ) {
+					$avatar_size = apply_filters( 'geodir_comment_avatar_size', 44 );
+					$comments_echo .= get_avatar( $comment, $avatar_size );
+				}
+
+				$comments_echo .= "</span>\n";
+
+
+				if ( $comment->user_id ) {
+					$comments_echo .= '<a href="' . get_author_posts_url( $comment->user_id ) . '">';
+				}
+				$comments_echo .= '<span class="geodir_reviewer_author">' . $comment->comment_author . '</span> ';
+				if ( $comment->user_id ) {
+					$comments_echo .= '</a>';
+				}
+				$comments_echo .= '<span class="geodir_reviewer_reviewed">' . __( 'reviewed', 'geodirectory' ) . '</span> ';
+
+
+				$comments_echo .= '<a href="' . $permalink . '" class="geodir_reviewer_title">' . $post_title . '</a>';
+				$comments_echo .= geodir_get_rating_stars( $comment->rating, $comment_post_ID );
+				$comments_echo .= '<p class="geodir_reviewer_text">' . $comment_excerpt . '';
+				$comments_echo .= '</p>';
+
+				$comments_echo .= "</span>\n";
+				$comments_echo .= '</li>';
+			}
+		}
+
+		return $comments_echo;
+	}
+
 }
