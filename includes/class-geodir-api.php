@@ -216,7 +216,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for show in rest setup.
+     * Setup GeoDir show in rest.
      *
      * @since 2.0.0
      */
@@ -281,7 +281,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for register rest query.
+     * Register to rest query.
      *
      * @since 2.0.0
      */
@@ -292,7 +292,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for request to posts clauses.
+     * Request to posts clauses.
      *
      * @since 2.0.0
      *
@@ -319,7 +319,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for request to rest posts.
+     * Request to rest posts.
      *
      * @since 2.0.0
      *
@@ -338,7 +338,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for distinct rest posts.
+     * Distinct to rest posts.
      *
      * @since 2.0.0
      *
@@ -352,7 +352,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for rest posts fields.
+     * Rest to posts fields.
      *
      * @since 2.0.0
      *
@@ -374,7 +374,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for join rest posts.
+     * Join to rest posts.
      *
      * @since 2.0.0
      *
@@ -394,7 +394,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for where rest posts.
+     * GeoDir Where to rest posts.
      *
      * @since 2.0.0
      *
@@ -408,7 +408,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for groupby rest posts.
+     * Groupby to rest posts.
      *
      * @since 2.0.0
      *
@@ -422,7 +422,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for orderby rest posts.
+     * Orderby to rest posts.
      *
      * @since 2.0.0
      *
@@ -444,7 +444,7 @@ class GeoDir_API {
 	}
 
     /**
-     * Function for limits to rest posts.
+     * Limits to rest posts.
      *
      * @since 2.0.0
      *

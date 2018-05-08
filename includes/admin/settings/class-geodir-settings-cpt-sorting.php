@@ -691,9 +691,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 		}
 
-		/*
-		 * Blank all defaults for a post type.
-		 */
+
+        /**
+         * Blank all defaults for a post type.
+         *
+         * @since 2.0.0
+         *
+         * @global object $wpdb WordPress Database object.
+         *
+         * @param $post_type Post type value.
+         */
 		public static function blank_default_order($post_type){
 			global $wpdb;
 

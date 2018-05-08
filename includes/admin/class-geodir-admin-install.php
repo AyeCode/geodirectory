@@ -191,9 +191,11 @@ class GeoDir_Admin_Install {
 		}
 	}
 
-	/*
-	 * Insert the default field for the CPTs
-	 */
+    /**
+     * Insert the default field for the CPTs.
+     *
+     * @since 2.0.0
+     */
 	public static function insert_default_fields(){
 		$fields = GeoDir_Admin_Dummy_Data::default_custom_fields('gd_place');
 
@@ -209,9 +211,13 @@ class GeoDir_Admin_Install {
 		}
 	}
 
-	/*
-	 * Insert the default field for the CPTs
-	 */
+    /**
+     * Insert the default field for the CPTs.
+     *
+     * @since 2.0.0
+     *
+     * @param string $post_type Optional. Post type. Default gd_place.
+     */
 	public static function insert_default_tabs($post_type = 'gd_place'){
 		$fields = array();
 		
@@ -282,9 +288,12 @@ class GeoDir_Admin_Install {
 			}
 		}
 	}
-	/**
-	 * Insert the default countries if needed.
-	 */
+
+    /**
+     * Insert the default countries if needed.
+     *
+     * @since 2.0.0
+     */
 	public static function insert_countries(){
 		global $wpdb;
 		$country_table_empty = $wpdb->get_var("SELECT COUNT(CountryId) FROM " . GEODIR_COUNTRIES_TABLE );
@@ -326,6 +335,8 @@ class GeoDir_Admin_Install {
 
 	/**
 	 * Update GeoDirectory version to current.
+     *
+     * @since 2.0.0
 	 */
 	private static function update_gd_version() {
 		delete_option( 'geodirectory_version' );
@@ -344,6 +355,8 @@ class GeoDir_Admin_Install {
 
 	/**
 	 * Push all needed DB updates to the queue for processing.
+     *
+     * @since 2.0.0
 	 */
 	private static function update() {
 		$current_db_version = get_option( 'geodirectory_db_version' );
@@ -388,6 +401,8 @@ class GeoDir_Admin_Install {
 
 	/**
 	 * Create cron jobs (clear them first).
+     *
+     * @since 2.0.0
 	 */
 	private static function create_cron_jobs() {
 		//@todo add crons here
@@ -400,6 +415,8 @@ class GeoDir_Admin_Install {
 
 	/**
 	 * Create pages that the plugin relies on, storing page IDs in variables.
+     *
+     * @since 2.0.0
 	 */
 	public static function create_pages() {
 
@@ -454,6 +471,8 @@ class GeoDir_Admin_Install {
 	 * Create a category for each CPT.
 	 *
 	 * So users can start adding posts right away.
+     *
+     * @since 2.0.0
 	 */
 	public static function create_uncategorized_categories(){
 		$post_types = geodir_get_posttypes();
@@ -479,6 +498,8 @@ class GeoDir_Admin_Install {
 	 * Default options.
 	 *
 	 * Sets up the default options used on the settings page.
+     *
+     * @since 2.0.0
 	 */
 	private static function create_options() {
 		// Include settings so that we can run through defaults
@@ -516,6 +537,9 @@ class GeoDir_Admin_Install {
 	 *		geodir_custom_fields - Custom fields table.
 	 *		geodir_custom_sort_fields - Custom fields sorting table.
 	 *		geodir_post_review - Listing reviews table.
+     *
+     * @global object $wpdb WordPress Database object.
+     * @since 2.0.0
 	 */
 	private static function create_tables() {
 		global $wpdb;
@@ -538,7 +562,12 @@ class GeoDir_Admin_Install {
 	 * Changing indexes may cause duplicate index notices in logs due to https://core.trac.wordpress.org/ticket/34870 but dropping
 	 * indexes first causes too much load on some servers/larger DB.
 	 *
-	 * @return string
+     * @since 2.0.0
+     *
+     * @global object $wpdb WordPress Database object.
+     * @global object $plugin_prefix WordPress plugin prefix.
+     *
+	 * @return string $tables.
 	 */
 	private static function get_schema() {
 		global $wpdb, $plugin_prefix;
@@ -715,9 +744,17 @@ class GeoDir_Admin_Install {
 	}
 
 
-	/**
-	 * Show plugin changes. Code adapted from W3 Total Cache.
-	 */
+    /**
+     * Show plugin changes. Code adapted from W3 Total Cache.
+     *
+     * @since 2.0.0
+     *
+     * @param array $args {
+     *      An array to update message arguments.
+     *
+     *      @type string $Version Plugin version.
+     * }
+     */
 	public static function in_plugin_update_message( $args ) {
 		$transient_name = 'gd_upgrade_notice_' . $args['Version'];
 
@@ -1051,9 +1088,13 @@ class GeoDir_Admin_Install {
 		return apply_filters('geodir_db_cpt_default_keys',$keys,$locationless);
 	}
 
-	/**
-	 * Run some upgrade scripts.
-	 */
+    /**
+     * Run some upgrade scripts.
+     *
+     * @since 2.0.0
+     *
+     * @global object $wpdb WordPress Database object.
+     */
 	public static function upgrades(){
 
 		/**

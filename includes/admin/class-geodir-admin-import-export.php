@@ -18,6 +18,15 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_Admin_Import_Export {
 
+    /**
+     * Start import export.
+     *
+     * @since 2.0.0
+     *
+     * @global object $wp_filesystem Wordpress file system object.
+     *
+     * @return bool|WP_Error
+     */
 	public static function start_import_export() {
 		global $wp_filesystem;
 
@@ -1786,7 +1795,15 @@ class GeoDir_Admin_Import_Export {
 
 		return NULL;
 	}
-	
+
+    /**
+     * Switch locale.
+     *
+     * @since 2.0.0
+     *
+     * @param string $locale Switch Locale value.
+     * @return string $active_lang.
+     */
 	public static function switch_locale( $locale ) {
 		$active_lang = '';
 		$is_wpml = geodir_is_wpml();
@@ -1797,7 +1814,15 @@ class GeoDir_Admin_Import_Export {
 		}
 		return $active_lang;
 	}
-	
+
+    /**
+     * Restore locale.
+     *
+     * @since 2.0.0
+     *
+     * @param string $locale Restore locale value.
+     * @return bool
+     */
 	public static function restore_locale( $locale ) {
 		if ( ! $locale ) {
 			return false;

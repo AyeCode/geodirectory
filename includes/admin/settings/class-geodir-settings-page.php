@@ -45,6 +45,11 @@ abstract class GeoDir_Settings_Page {
 
 	}
 
+    /**
+     * Get font awesome selectbox.
+     *
+     * @since 2.0.0
+     */
 	public function font_awesome_select(){
 		?>
 		<div  id="gd-font-awesome-select" class="gd-notification lity-hide noti-white">
@@ -161,6 +166,11 @@ abstract class GeoDir_Settings_Page {
 
 	}
 
+    /**
+     * Toggle advanced button.
+     *
+     * @since 2.0.0
+     */
 	public static function toggle_advanced_button(){
 
 		$show = geodir_get_option( 'admin_disable_advanced', false );
