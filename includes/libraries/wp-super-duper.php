@@ -87,7 +87,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
         /**
-         * Function for get widget settings.
+         * Get widget settings.
          *
          * @since 2.0.0
          */
@@ -128,7 +128,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
         /**
-         * Function for insert button in shortcode.
+         * Insert button in shortcode.
          *
          * @since 2.0.0
          *
@@ -576,7 +576,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
 		/**
-		 * Register the parent shortcode
+		 * Register the parent shortcode.
+         *
+         * @since 2.0.0
 		 */
 		public function register_shortcode() {
 			add_shortcode( $this->base_id, array( $this, 'shortcode_output' ) );
@@ -585,6 +587,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 		/**
 		 * Render the shortcode via ajax so we can return it to Gutenberg.
+         *
+         * @since 2.0.0
 		 */
 		public static function render_shortcode() {
 
@@ -723,7 +727,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
         /**
-         * Function for set arguments in super duper.
+         * Set arguments in super duper.
          *
          * @since 2.0.0
          *
@@ -734,7 +738,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
         /**
-         * Function for get arguments in super duper.
+         * Get arguments in super duper.
          *
          * @since 2.0.0
          *
@@ -1382,7 +1386,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
         /**
-         * Function for convert require element.
+         * Convert require element.
          *
          * @since 2.0.0
          *

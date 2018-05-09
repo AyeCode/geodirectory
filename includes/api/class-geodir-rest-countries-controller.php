@@ -256,11 +256,25 @@ class GeoDir_REST_Countries_Controller extends WP_REST_Controller {
 
         return $params;
     }
-    
+
+    /**
+     * Show in rest.
+     *
+     * @since 2.0.0
+     *
+     * @return bool
+     */
     public function show_in_rest() {
         return apply_filters( 'geodir_rest_countries_show_in_rest', true, $this );
     }
-	
+
+    /**
+     * Get countries.
+     *
+     * @since 2.0.0
+     *
+     * @return array $countries.
+     */
 	public function get_countries() {
 		$countries = geodir_rest_get_countries( $args );
 

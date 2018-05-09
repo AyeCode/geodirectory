@@ -348,6 +348,14 @@ class Emogrifier {
 		}
 	}
 
+    /**
+     * String to lower.
+     *
+     * @since 2.0.0
+     *
+     * @param array $m
+     * @return string
+     */
 	public function strtolower(array $m) {
 		return strtolower($m[0]);
 	}
@@ -486,6 +494,13 @@ class Emogrifier {
 		return array('css' => $css, 'media' => self::$_media);
 	}
 
+    /**
+     * Media concat.
+     *
+     * @since 2.0.0
+     *
+     * @param array $matches Matches result array.
+     */
 	private function _media_concat( $matches ) {
 		self::$_media .= $matches[0];
 	}

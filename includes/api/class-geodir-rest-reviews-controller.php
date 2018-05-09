@@ -1555,7 +1555,18 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 
 		return $clauses;
 	}
-	
+
+    /**
+     * Get review.
+     *
+     * @since 2.0.0
+     *
+     * @param int $comment_ID Comment id.
+     *
+     * @global object $wpdb WordPress Database object.
+     *
+     * @return array|object
+     */
 	public static function get_review( $comment_ID ) {
 		global $wpdb;
 

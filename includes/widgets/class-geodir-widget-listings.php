@@ -612,7 +612,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
     }
 
 
-
+    /**
+     * Get categories.
+     *
+     * @since 2.0.0
+     *
+     * @param string $post_type Optional. Post type. Default gd_place0
+     * @return array $options.s
+     */
     public function get_categories($post_type = 'gd_place'){
         $options = array(
             '0'     => __('All', 'geodirectory')
@@ -638,6 +645,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         return $options;
     }
 
+    /**
+     * Get sort options.
+     *
+     * @since 2.0.0
+     *
+     * @param string $post_type Optional. Post type. Default gd_place.
+     * @return array $options.
+     */
     public function get_sort_options($post_type = 'gd_place'){
         $options = array(
             "az"        =>  __('A-Z', 'geodirectory'),
@@ -664,6 +679,16 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         return $options;
     }
 
+    /**
+     * Title filter.
+     *
+     * @since 2.0.0
+     *
+     * @param string $title Optional. Title. Default null.
+     * @param string $instance Optional. Instance. Default null.
+     * @param string $id_base Optional. Base ID. Default null.
+     * @return string $title
+     */
 	public function title_filter( $title = '', $instance ='', $id_base = '' ) {
 
 		$view_all_link = apply_filters( 'geodir_widget_view_all_link', $this->view_all_link, $instance, $id_base );

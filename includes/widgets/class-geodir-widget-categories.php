@@ -16,6 +16,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
     /**
      * Register the categories with WordPress.
      *
+     * @since 2.0.0
+     *
      */
     public function __construct() {
 
@@ -218,7 +220,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
     /**
      * Get the post type options for search.
      *
-     * @return array
+     * @since 2.0.0
+     *
+     * @return array $options
      */
     public function post_type_options(){
         $options = array('0'=>__('Auto','geodirectory'));
@@ -232,7 +236,14 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
         return $options;
     }
-	
+
+    /**
+     * Get categories.
+     *
+     * @since 2.0.0
+     *
+     * @param array $params Category parameter.
+     */
 	public static function get_categories( $params ) {
 		$params['via_ajax'] = true;
 		$output = self::categories_output( $params );

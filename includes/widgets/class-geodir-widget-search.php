@@ -13,6 +13,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
     /**
      * Register the advanced search widget with WordPress.
      *
+     * @since 2.0.0
      */
     public function __construct() {
 
@@ -111,7 +112,9 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
     /**
      * Get the post type options for search.
      *
-     * @return array
+     * @since 2.0.0
+     *
+     * @return array $options
      */
     public function post_type_options(){
         $options = array(''=>__('Auto','geodirectory'));

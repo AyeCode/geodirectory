@@ -114,6 +114,13 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 
     }
 
+    /**
+     * Get favorite list html.
+     *
+     * @since 2.0.0
+     *
+     * @return string Favorite Html.
+     */
     public function get_fav_html(){
         global $post;
         ob_start();

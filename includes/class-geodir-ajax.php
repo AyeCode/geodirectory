@@ -73,6 +73,11 @@ class GeoDir_AJAX {
 		}
 	}
 
+    /**
+     * Manual map
+     *
+     * @since 2.0.0
+     */
 	function manual_map(){
 		$prefix = isset($_POST['trigger']) ? esc_attr($_POST['trigger']): 'geodir_manual_location_';
 		echo "<style>
@@ -110,9 +115,11 @@ class GeoDir_AJAX {
 		wp_die();
 	}
 
-	/**
-	 * Get tabs input form.
-	 */
+    /**
+     * Delete Tab input form
+     *
+     * @since 2.0.0
+     */
 	public static function delete_tab(){
 		// security
 		check_ajax_referer( 'gd_new_field_nonce', 'security' );
@@ -141,7 +148,9 @@ class GeoDir_AJAX {
 	}
 
 	/**
-	 * Get tabs input form.
+	 * Save tabs order input form.
+     *
+     * @since 2.0.0s
 	 */
 	public static function save_tabs_order(){
 		// security
@@ -171,6 +180,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Save tab item.
+     *
+     * @since 2.0.0
 	 */
 	public static function save_tab_item(){
 		// security
@@ -200,6 +211,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Get tabs input form.
+     *
+     * @since 2.0.0
 	 */
 	public static function get_tabs_form(){
 		// security
@@ -227,6 +240,13 @@ class GeoDir_AJAX {
 		wp_die();
 	}
 
+    /**
+     * Get Ninja forms html.
+     *
+     * @since 2.0.0
+     *
+     * @return string
+     */
 	public static function ninja_forms(){
 
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
@@ -259,6 +279,11 @@ class GeoDir_AJAX {
 		wp_die();
 	}
 
+    /**
+     * Setup wizard menu.
+     *
+     * @since 2.0.0
+     */
 	public static function wizard_setup_menu(){
 		// security
 		check_ajax_referer( 'geodir-wizard-setup-menu', 'security' );
@@ -286,6 +311,8 @@ class GeoDir_AJAX {
 	
 	/**
 	 * Adds widgets to sidebar during setup wizard.
+     *
+     * @since 2.0.0
 	 */
 	public static function wizard_insert_widgets(){
 		// security
@@ -313,6 +340,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Best of listings widget ajax.
+     *
+     * @since 2.0.0
 	 */
 	public static function bestof(){
 		//print_r($_REQUEST);exit;
@@ -326,6 +355,8 @@ class GeoDir_AJAX {
 	
 	/**
 	 * GD Categories widget ajax.
+     *
+     * @since 2.0.0
 	 */
 	public static function cpt_categories(){
 		// security
@@ -338,6 +369,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * User delete post.
+     *
+     * @since 2.0.0
 	 */
 	public static function user_delete_post(){
 		//print_r($_REQUEST);exit;
@@ -361,6 +394,11 @@ class GeoDir_AJAX {
 		wp_die();
 	}
 
+    /**
+     * Import export.
+     *
+     * @since 2.0.0
+     */
 	public static function import_export(){
 		// security
 		check_ajax_referer( 'geodir_import_export_nonce', '_nonce' );
@@ -384,6 +422,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Auto save post revisions and auto-drafts.
+     *
+     * @since 2.0.0
 	 */
 	public static function auto_save_post(){
 		//print_r($_REQUEST);exit;
@@ -402,7 +442,10 @@ class GeoDir_AJAX {
 	}
 
 	/**
-	 * Auto save post revisions and auto-drafts.
+	 * Delete post revisions and auto-drafts.
+     *
+     * @since 2.0.0
+     *
 	 */
 	public static function delete_revision(){
 		//print_r($_REQUEST);exit;
@@ -422,6 +465,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Save the post.
+     *
+     * @since 2.0.0
 	 */
 	public static function save_post(){
 		// security
@@ -441,6 +486,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Add post to user favs.
+     *
+     * @since 2.0.0
 	 */
 	public static function user_add_fav(){
 		// security
@@ -467,8 +514,12 @@ class GeoDir_AJAX {
 		}
 		wp_die();
 	}
-	
-	
+
+    /**
+     * Get category select.
+     *
+     * @since 2.0.0
+     */
 	public static function get_category_select(){
 		// security
 		//check_ajax_referer( 'geodir_get_category_select');
@@ -485,6 +536,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to get a custom field sorting form.
+     *
+     * @since 2.0.0
 	 */
 	public static function get_custom_field_sorting_form(){
 		// security
@@ -504,7 +557,12 @@ class GeoDir_AJAX {
 		echo $cfs->output_custom_field_setting_item('',$field);
 		wp_die();
 	}
-	
+
+    /**
+     * Post attachment upload.
+     *
+     * @since 2.0.0
+     */
 	public static function post_attachment_upload(){
 		// security
 		check_ajax_referer( 'geodir_attachment_upload', '_ajax_nonce' );
@@ -517,6 +575,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to insert dummy data.
+     *
+     * @since 2.0.0
 	 */
 	public static function insert_dummy_data(){
 		// security
@@ -539,6 +599,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to delete dummy data.
+     *
+     * @since 2.0.0
 	 */
 	public static function delete_dummy_data(){
 		// security
@@ -561,6 +623,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to get a custom field form.
+     *
+     * @since 2.0.0
 	 */
 	public static function get_custom_field_form(){
 		// security
@@ -585,6 +649,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to save a custom sort field.
+     *
+     * @since 2.0.0
 	 */
 	public static function save_custom_sort_field(){
 		// security
@@ -606,6 +672,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to delete a custom sort field.
+     *
+     * @since 2.0.0
 	 */
 	public static function delete_custom_sort_field(){
 		// security
@@ -634,6 +702,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to save a custom field.
+     *
+     * @since 2.0.0
 	 */
 	public static function save_custom_field(){
 		// security
@@ -655,6 +725,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to delete a custom field.
+     *
+     * @since 2.0.0
 	 */
 	public static function delete_custom_field(){
 		// security
@@ -683,6 +755,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to save the custom fields sort order.
+     *
+     * @since 2.0.0
 	 */
 	public static function order_custom_fields(){
 		// security
@@ -710,6 +784,8 @@ class GeoDir_AJAX {
 
 	/**
 	 * Admin action to save the custom sort fields sort order.
+     *
+     * @since 2.0.0
 	 */
 	public static function order_custom_sort_fields(){
 		// security
@@ -737,6 +813,8 @@ class GeoDir_AJAX {
 	
 	/**
 	 * Create/Update API key.
+     *
+     * @since 2.0.0
 	 */
 	public static function save_api_key() {
 		ob_start();
@@ -828,6 +906,8 @@ class GeoDir_AJAX {
 	
 	/**
 	 * Search for customers and return json.
+     *
+     * @since 2.0.0
 	 */
 	public static function json_search_users() {
 		ob_start();
