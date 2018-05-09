@@ -65,7 +65,11 @@ jQuery(function($) {
                         $('.gd-stats-items', $wrap).html(stats_html);
                     }
                     if (res.chart_params) {
-                        geodir_dashboard_chart(res.chart_params);
+                        if (res.chart_type && res.chart_type == 'bar') {
+							geodir_dashboard_bar_chart(res.chart_params);
+						} else {
+							geodir_dashboard_line_chart(res.chart_params);
+						}
                     }
                 }
                 geodir_dashboard_wait('end');
@@ -91,9 +95,34 @@ jQuery(function($) {
         }
     }
 
-    function geodir_dashboard_chart(custom_params) {
-        var default_params, chart_params, gd_chart, labels = '';
-        $('#gd-dashboard-chart').html('');
+    function geodir_dashboard_bar_chart(custom_params) {
+        var default_params, chart_params, gd_chart, labels = '', chartId;
+        default_params = {
+            element: 'gd-dashboard-chart',
+            data: [],
+            xkey: 'key',
+            ykeys: [],
+            labels: [],
+            hideHover: 'auto',
+            resize: true,
+            parseTime: false,
+            yLabelFormat: function(y) {
+                return y != Math.round(y) ? '' : y;
+            },
+        };
+        chart_params = $.extend(default_params, custom_params);
+		chartId = default_params.element;
+		$('#' + chartId).html('');
+        try {
+			gd_chart = Morris.Bar(chart_params);
+			$('#' + chartId).closest('.gd-stats-chart').find('.gd-chart-legends').html('');
+		} catch (err) {
+			console.log(err.message);
+		}
+    }
+
+	function geodir_dashboard_line_chart(custom_params) {
+        var default_params, chart_params, gd_chart, labels = '', chartId;
         default_params = {
             element: 'gd-dashboard-chart',
             data: [],
@@ -111,23 +140,29 @@ jQuery(function($) {
             },
         };
         chart_params = $.extend(default_params, custom_params);
-        gd_chart = Morris.Line(chart_params);
-        if (gd_chart.options.labels && gd_chart.options.labels.length) {
-            gd_chart.options.labels.forEach(function(label, i) {
-                labels += '<span class="gd-dash-legend" data-color="' + gd_chart.options.lineColors[i] + '"><span class="color" style="background-color:' + gd_chart.options.lineColors[i] + '"></span> <span class="gd-dash-label">' + label + '</span></span>';
-            });
-        }
-        $('#gd-dashboard-chart').closest('.gd-stats-chart').find('.gd-chart-legends').html(labels);
-		$('.gd-dash-legend').bind('click', function(e) {
-			if ($(this).hasClass('gd-morris-hidden')) {
-				$(this).removeClass('gd-morris-hidden');
-				$('#gd-morris-style', $(this)).remove();
-			} else {
-				var c = $(this).data('color');
-				var cL = $(this).data('color').toLowerCase();
-				$(this).addClass('gd-morris-hidden');
-				$(this).append('<style id="gd-morris-style">#gd-dashboard-chart circle[fill="' + cL + '"],#gd-dashboard-chart .morris-hover-point[style="color: ' + c + '"],#gd-dashboard-chart path[stroke="' + cL + '"]{display:none;}</style>');
+		chartId = default_params.element;
+		$('#' + chartId).html('');
+        try {
+			gd_chart = Morris.Line(chart_params);
+			if (gd_chart.options.labels && gd_chart.options.labels.length) {
+				gd_chart.options.labels.forEach(function(label, i) {
+					labels += '<span class="gd-dash-legend" data-color="' + gd_chart.options.lineColors[i] + '"><span class="color" style="background-color:' + gd_chart.options.lineColors[i] + '"></span> <span class="gd-dash-label">' + label + '</span></span>';
+				});
 			}
-		});
+			$('#' + chartId).closest('.gd-stats-chart').find('.gd-chart-legends').html(labels);
+			$('.gd-dash-legend').bind('click', function(e) {
+				if ($(this).hasClass('gd-morris-hidden')) {
+					$(this).removeClass('gd-morris-hidden');
+					$('#gd-morris-style', $(this)).remove();
+				} else {
+					var c = $(this).data('color');
+					var cL = $(this).data('color').toLowerCase();
+					$(this).addClass('gd-morris-hidden');
+					$(this).append('<style id="gd-morris-style">#gd-dashboard-chart circle[fill="' + cL + '"],#gd-dashboard-chart .morris-hover-point[style="color: ' + c + '"],#gd-dashboard-chart path[stroke="' + cL + '"]{display:none;}</style>');
+				}
+			});
+		} catch (err) {
+			console.log(err.message);
+		}
     }
 });
