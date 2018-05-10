@@ -163,8 +163,12 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
  * Returns an array of all countries.
  *
  * @since 2.0.0
+ *
  * @package GeoDirectory
+ *
  * @global object $wpdb WordPress Database object.
+ *
+ * @return array $countries
  */
 function geodir_get_countries()
 {

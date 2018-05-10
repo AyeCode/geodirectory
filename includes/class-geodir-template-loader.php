@@ -12,6 +12,8 @@ class GeoDir_Template_Loader {
 
     /**
      * Hook in methods.
+     *
+     * @since 2.0.0
      */
     public static function init() {
         // filter the templates
@@ -37,6 +39,8 @@ class GeoDir_Template_Loader {
      * For beginners, it also looks for a geodirectory.php template first. If the user adds.
      * this to the theme (containing a geodirectory() inside) this will be used for all.
      * geodirectory templates.
+     *
+     * @since 2.0.0
      *
      * @param mixed $template
      * @return string
@@ -267,8 +271,8 @@ class GeoDir_Template_Loader {
      * Get an array of filenames to search for a given template.
      *
      * @since  2.0.0
-     * @param  string $file The default file name.
-     * @return string[]
+     * @param  string $default_file The default file name.
+     * @return array $search_files.
      */
     private static function get_template_loader_files( $default_file ) {
         $search_files = apply_filters( 'geodir_template_loader_files', array(), $default_file );
@@ -294,7 +298,7 @@ class GeoDir_Template_Loader {
      * Setup the GD Archive page content.
      *
      * @since 2.0.0
-     * @return string The filtered content.
+     * @return string $content The filtered content.
      */
     public static function archive_item_template_content(){
 
@@ -336,6 +340,8 @@ class GeoDir_Template_Loader {
 
     /**
      * Attempt to remove the theme featured image output if set to do so.
+     *
+     * @since 2.0.0
      */
     public static function disable_theme_featured_output(){
         if(geodir_is_singular() && geodir_get_option('details_disable_featured',true) ){
@@ -345,13 +351,15 @@ class GeoDir_Template_Loader {
 
     /**
      * Filter the post_meta _thumbnail_id
-     * 
-     * @param $metadata
-     * @param $object_id
-     * @param $meta_key
-     * @param $single
      *
-     * @return bool
+     * @since 2.0.0
+     * 
+     * @param bool $metadata metadata.
+     * @param int $object_id object id.
+     * @param string $meta_key meta key.
+     * @param string $single single.
+     *
+     * @return bool $metadata.
      */
     public static function filter_thumbnail_id($metadata, $object_id, $meta_key, $single){
 
@@ -388,6 +396,10 @@ class GeoDir_Template_Loader {
 
     /**
      * Disable our page templates from frontend viewing.
+     *
+     * @global object $post WordPress Post object.
+     *
+     * @since 2.0.0
      */
     public static function disable_page_templates_frontend(){
         global $post;

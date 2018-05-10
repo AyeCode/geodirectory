@@ -37,6 +37,8 @@ class GeoDir_Email {
 
 	/**
 	 * Get the email logo.
+     *
+     * @since 2.0.0
 	 *
 	 * @return string Logo url.
 	 */
@@ -70,6 +72,8 @@ class GeoDir_Email {
 	/**
 	 * Get the email header template.
 	 *
+     * @since 2.0.0
+     *
 	 * @param string $email_heading
 	 * @param string $email_name
 	 * @param array $email_vars
@@ -110,6 +114,8 @@ class GeoDir_Email {
 
 	/**
 	 * Get the email footer template.
+     *
+     * @since 2.0.0
 	 *
 	 * @param string $email_name
 	 * @param array $email_vars
@@ -134,15 +140,17 @@ class GeoDir_Email {
 
 	/**
 	 * Get the email message wraped in the header and footer.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $message
-	 * @param string $email_name
-	 * @param array $email_vars
-	 * @param string $email_heading
-	 * @param bool $plain_text
-	 * @param bool $sent_to_admin
+	 * @param string $message Message.
+	 * @param string $email_name Optional. Email name. Default null.
+	 * @param array $email_vars Optional. Email vars. Default array.
+	 * @param string $email_heading Optional. Email header. Default null.
+	 * @param bool $plain_text Optional. Plain text. Default false.
+	 * @param bool $sent_to_admin Optional. Send to admin. Default false.
 	 *
-	 * @return string
+	 * @return string $message.
 	 */
 	public static function email_wrap_message( $message, $email_name = '', $email_vars = array(), $email_heading = '', $plain_text = false, $sent_to_admin = false ) {
 		// Buffer
@@ -167,8 +175,10 @@ class GeoDir_Email {
 	/**
 	 * Send to friend email.
 	 *
-	 * @param $post
-	 * @param $data
+     * @since 2.0.0
+     *
+	 * @param object $post Post object.
+	 * @param array $data Email data arguments.
 	 *
 	 * @return bool|void
 	 */
@@ -230,8 +240,10 @@ class GeoDir_Email {
 
 	/**
 	 * Check if the email is enabled for the email type.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $email_name
+	 * @param string $email_name Email name.
 	 *
 	 * @return mixed|void
 	 */
@@ -249,9 +261,11 @@ class GeoDir_Email {
 
 	/**
 	 * Get the email subject by type.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $email_name
-	 * @param array $email_vars
+	 * @param string $email_name Optional. Email name. Default null.
+	 * @param array $email_vars Optional. Email vars. Default array.
 	 *
 	 * @return mixed|void
 	 */
@@ -277,10 +291,12 @@ class GeoDir_Email {
 
 	/**
 	 * Replace variables in the email text.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $content
-	 * @param string $email_name
-	 * @param array $email_vars
+	 * @param string $content Content.
+	 * @param string $email_name Optional. Email name. Default null.
+	 * @param array $email_vars Optional. Email vars. Default array.
 	 *
 	 * @return mixed|void
 	 */
@@ -366,6 +382,8 @@ class GeoDir_Email {
 
 	/**
 	 * Get the from name for outgoing emails.
+     *
+     * @since 2.0.0
 	 *
 	 * @return string Site name.
 	 */
@@ -381,6 +399,8 @@ class GeoDir_Email {
 
 	/**
 	 * Get the from address for outgoing emails.
+     *
+     * @since 2.0.0
 	 *
 	 * @return string|mixed|void The email ID.
 	 */
@@ -396,6 +416,8 @@ class GeoDir_Email {
 
 	/**
 	 * Get the site admin email.
+     *
+     * @since 2.0.0
 	 *
 	 * @return mixed|void
 	 */
@@ -407,9 +429,11 @@ class GeoDir_Email {
 
 	/**
 	 * Get the email content by type.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $email_name
-	 * @param array $email_vars
+	 * @param string $email_name Optional. Email name. Default null.
+	 * @param array $email_vars Optional. Email vars. Default array.
 	 *
 	 * @return mixed|void
 	 */
@@ -434,11 +458,13 @@ class GeoDir_Email {
 
 	/**
 	 * Get the email headers for sending.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $email_name
-	 * @param array $email_vars
-	 * @param string $from_email
-	 * @param string $from_name
+	 * @param string $email_name Email name.
+	 * @param array $email_vars Optional. Email vars. Default array.
+	 * @param string $from_email Optional. From email. Default null.
+	 * @param string $from_name Optional. From name. Default null.
 	 *
 	 * @return mixed|void
 	 */
@@ -456,11 +482,13 @@ class GeoDir_Email {
 
 	/**
 	 * Get the content type of the email html or plain.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $content_type
-	 * @param string $email_type
+	 * @param string $content_type Optional. Content type. Default text/html.
+	 * @param string $email_type Optional. Email type. Default null.
 	 *
-	 * @return string
+	 * @return string $content_type
 	 */
 	public static function get_content_type( $content_type = 'text/html', $email_type = '' ) {
 		if ( empty( $email_type ) ) {
@@ -481,6 +509,8 @@ class GeoDir_Email {
 
 	/**
 	 * Get the email type from settings, html/plain.
+     *
+     * @since 2.0.0
 	 *
 	 * @return mixed|void
 	 */
@@ -496,9 +526,11 @@ class GeoDir_Email {
 
 	/**
 	 * Get the email attachments per type.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $email_name
-	 * @param array $email_vars
+	 * @param string $email_name Optional. Email name. Default null.
+	 * @param array $email_vars Optional. Email vars. Default array.
 	 *
 	 * @return mixed|void
 	 */
@@ -509,13 +541,17 @@ class GeoDir_Email {
 	}
 
 	/**
-	 * @param $to
-	 * @param $subject
-	 * @param $message
-	 * @param $headers
-	 * @param array $attachments
-	 * @param string $email_name
-	 * @param array $email_vars
+     * Send email.
+     *
+     * @since 2.0.0
+     *
+	 * @param string $to To email address.
+	 * @param string $subject Email subject.
+	 * @param string $message Email message.
+	 * @param string $headers Email Headers.
+	 * @param array $attachments Optional. Email attachments. Default array.
+	 * @param string $email_name Optional. Email name. Default null.
+	 * @param array $email_vars Optional. Email vars. Default null.
 	 *
 	 * @return bool
 	 */
@@ -543,12 +579,14 @@ class GeoDir_Email {
 
 	/**
 	 * Style the body of the email content.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $content
-	 * @param string $email_name
-	 * @param array $email_vars
+	 * @param string $content Email content.
+	 * @param string $email_name Optional. Email name. Default null.
+	 * @param array $email_vars Optional. Email vars. Default array.
 	 *
-	 * @return string
+	 * @return string $content.
 	 */
 	public static function style_body( $content, $email_name = '', $email_vars = array() ) {
 		// make sure we only inline CSS for html emails
@@ -584,7 +622,9 @@ class GeoDir_Email {
 	/**
 	 * Check if the admin BCC is active for the email type.
 	 *
-	 * @param string $email_name
+     * @since 2.0.0
+     *
+	 * @param string $email_name Optional. Email name. Default null.
 	 *
 	 * @return mixed|void
 	 */
@@ -602,9 +642,11 @@ class GeoDir_Email {
 
 	/**
 	 * Send enquiry email.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post
-	 * @param $data
+	 * @param object $post Post data object.
+	 * @param array $data Data array.
 	 *
 	 * @return bool
 	 */
@@ -671,9 +713,11 @@ class GeoDir_Email {
 
 	/**
 	 * Send the user an email when their post is published.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post
-	 * @param array $data
+	 * @param object $post Post data object.
+	 * @param array $data Optional. Data array. Default array.
 	 *
 	 * @return bool
 	 */
@@ -734,9 +778,17 @@ class GeoDir_Email {
 
 	/**
 	 * Send some email son post save.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post_data
-	 * @param bool $update
+     * @global object $gd_notified_edited Geo Directory notified edited object.
+     *
+	 * @param array $post_data {
+     *      An array for post data.
+     *      @type int @ID Post ID.
+     * }
+     *
+	 * @param bool $update Optional. Update value. Default false.
 	 */
 	public static function send_email_on_post_saved( $post_data, $update = false ) {
 		global $gd_notified_edited;
@@ -774,9 +826,11 @@ class GeoDir_Email {
 
 	/**
 	 * Send the admin an email when a post is edited.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post
-	 * @param array $data
+	 * @param object $post Post data object.
+	 * @param array $data Optional. Data array. Default array.
 	 *
 	 * @return bool|void
 	 */
@@ -826,9 +880,11 @@ class GeoDir_Email {
 
 	/**
 	 * Send the admin the post pending review email.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post
-	 * @param array $data
+	 * @param object $post Post data object.
+	 * @param array $data Optional. Data array. Default array.
 	 *
 	 * @return bool|void
 	 */
@@ -877,9 +933,11 @@ class GeoDir_Email {
 
 	/**
 	 * Send the user an email about their post pending review.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post
-	 * @param array $data
+	 * @param object $post Post data object.
+	 * @param array $data Optional. Data array. Default array.
 	 *
 	 * @return bool
 	 */
@@ -940,9 +998,11 @@ class GeoDir_Email {
 
 	/**
 	 * Send the listing owner a notification about a new comment.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $comment
-	 * @param array $data
+	 * @param object $comment Comment object.
+	 * @param array $data Optional. Data array. Default array.
 	 *
 	 * @return bool
 	 */
@@ -1038,9 +1098,11 @@ class GeoDir_Email {
 
 	/**
 	 * Send the listing owner notification when comment approved.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $comment
-	 * @param array $data
+	 * @param object $comment Comment object.
+	 * @param array $data Optional. Data array. Default array.
 	 *
 	 * @return bool
 	 */
@@ -1107,9 +1169,11 @@ class GeoDir_Email {
 
 	/**
 	 * Send the comment author an email when their comment is approved.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $comment
-	 * @param array $data
+	 * @param object $comment Comment object.
+	 * @param array $data Optional. Data array. Default array.
 	 *
 	 * @return bool
 	 */

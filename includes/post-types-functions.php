@@ -418,9 +418,14 @@ function get_post_type_plural_label($post_type, $echo = false, $translate = fals
  * For example "Post updated. View Post." becomes "Place updated. View Place".
  *
  * @since 1.0.0
+ *
  * @package GeoDirectory
+ *
  * @global object $post WordPress Post object.
- * @global int $post_ID WordPress Post ID.
+ * @global object $post_ID WordPress Post ID.
+ *
+ * @param array $messages Messages.
+ * @return array $messages.
  */
 function geodir_custom_update_messages($messages)
 {

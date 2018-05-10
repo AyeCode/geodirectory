@@ -37,6 +37,8 @@ class GeoDir_Background_Updater extends WP_Background_Process {
 	 * Dispatch updater.
 	 *
 	 * Updater will still run via cron job if this fails for any reason.
+     *
+     * @since 2.0.0
 	 */
 	public function dispatch() {
 		$dispatched = parent::dispatch();
@@ -51,6 +53,8 @@ class GeoDir_Background_Updater extends WP_Background_Process {
 	 *
 	 * Restart the background process if not already running
 	 * and data exists in the queue.
+     *
+     * @since 2.0.0
 	 */
 	public function handle_cron_healthcheck() {
 		if ( $this->is_process_running() ) {
@@ -69,6 +73,8 @@ class GeoDir_Background_Updater extends WP_Background_Process {
 
 	/**
 	 * Schedule fallback event.
+     *
+     * @since 2.0.0
 	 */
 	protected function schedule_event() {
 		if ( ! wp_next_scheduled( $this->cron_hook_identifier ) ) {
@@ -78,6 +84,9 @@ class GeoDir_Background_Updater extends WP_Background_Process {
 
 	/**
 	 * Is the updater running?
+     *
+     * @since 2.0.0
+     *
 	 * @return boolean
 	 */
 	public function is_updating() {
@@ -85,14 +94,16 @@ class GeoDir_Background_Updater extends WP_Background_Process {
 	}
 
 	/**
-	 * Task
+	 * Task.
 	 *
 	 * Override this method to perform any actions required on each
 	 * queue item. Return the modified item for further processing
 	 * in the next pass through. Or, return false to remove the
 	 * item from the queue.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $callback Update callback function
+	 * @param string $callback Update callback function.
 	 * @return mixed
 	 */
 	protected function task( $callback ) {
@@ -110,10 +121,12 @@ class GeoDir_Background_Updater extends WP_Background_Process {
 	}
 
 	/**
-	 * Complete
+	 * Complete.
 	 *
 	 * Override if applicable, but ensure that the below actions are
 	 * performed, or, call parent::complete().
+     *
+     * @since 2.0.0
 	 */
 	protected function complete() {
 		geodir_error_log( 'Data update complete' );

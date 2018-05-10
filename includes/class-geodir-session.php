@@ -290,6 +290,8 @@ class GeoDir_Session {
 
 	/**
 	 * Starts a new session if one hasn't started yet.
+     *
+     * @since 2.0.0
 	 */
 	public function maybe_start_session() {
 		if ( !session_id() && !headers_sent() && !isset($_POST['newcontent'])) { // @todo this is a quick hack to make the edit theme/plugin fiels work with new WP edit feature

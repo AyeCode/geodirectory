@@ -47,10 +47,12 @@ class GeoDir_Permalinks {
 
 	/**
 	 * Add author page pretty urls.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $rules
+	 * @param array $rules Rules.
 	 *
-	 * @return mixed
+	 * @return array $rules.
 	 */
 	public static function author_cpt_rules( $rules ){
 		global $wp_rewrite;
@@ -354,6 +356,8 @@ class GeoDir_Permalinks {
 
 	/**
 	 * Add GD rewrite tags.
+     *
+     * @since 2.0.0
 	 */
 	public static function rewrite_tags(){
 		add_rewrite_tag('%country%', '([^&]+)');
@@ -365,8 +369,10 @@ class GeoDir_Permalinks {
 
 	/**
 	 * Get the slug for user favs.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $cpt_slug
+	 * @param string $cpt_slug Optional. Custom Posttype slug. Default null.
 	 *
 	 * @return mixed|void
 	 */
@@ -376,8 +382,10 @@ class GeoDir_Permalinks {
 
 	/**
 	 * Get the slug for the search page.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $search_slug
+	 * @param string $search_slug Optional. Search slug. Default search.
 	 *
 	 * @return string
 	 */

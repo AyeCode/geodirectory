@@ -29,6 +29,8 @@ class GeoDir_SEO {
 
 	/**
 	 * Initiate the class.
+     *
+     * @since 2.0.0
 	 */
 	public static function init() {
 		// bail if we have a SEO plugin installed.
@@ -58,10 +60,12 @@ class GeoDir_SEO {
 
 	/**
 	 * Set the global var when a menu is being output.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $menu
+	 * @param string $menu Menu.
 	 *
-	 * @return mixed
+	 * @return string $menu
 	 */
 	public static function set_menu_global($menu){
 		self::$doing_menu = true;
@@ -70,10 +74,12 @@ class GeoDir_SEO {
 
 	/**
 	 * Unset the global var when a menu has finished being output.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $menu
+	 * @param string $menu Menu.
 	 *
-	 * @return mixed
+	 * @return string $menu
 	 */
 	public static function unset_menu_global($menu){
 		self::$doing_menu = false;
@@ -83,11 +89,13 @@ class GeoDir_SEO {
 
 	/**
 	 * Output a page title.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $title
-	 * @param int $id
+	 * @param string $title Optional. Title. Default null.
+	 * @param int $id Optional. ID. Default 0.
 	 *
-	 * @return string
+	 * @return string $title.
 	 */
 	public static function output_title($title = '', $id = 0){
 		if(self::$title && empty($id)  && !self::$doing_menu ){
@@ -100,9 +108,11 @@ class GeoDir_SEO {
 
 	/**
 	 * Output a page meta title.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $title
-	 * @param string $sep
+	 * @param string $title Optional. Title. Default null.
+	 * @param string $sep Optional. Separator. Default null.
 	 *
 	 * @return mixed|void
 	 */
@@ -126,6 +136,8 @@ class GeoDir_SEO {
 
 	/**
 	 * Output a page meta description.
+     *
+     * @since 2.0.0
 	 */
 	public static function output_description(){
 		$description = self::$meta_description;
@@ -144,6 +156,8 @@ class GeoDir_SEO {
 
 	/**
 	 * Set the title and meta info depending on the current page being visited.
+     *
+     * @since 2.0.0
 	 */
 	public static function set_meta(){
 		$gd_settings = geodir_get_settings();
@@ -206,11 +220,16 @@ class GeoDir_SEO {
 
 	/**
 	 * Replace variables with values.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $string
-	 * @param string $gd_page
+	 * @param string $string Optional. String. Default null.
+	 * @param string $gd_page Optional. Geo directory page. Default null.
+     *
+     * @global object $post WordPress post object.
+     * @global object $gd_post Geo directory post object.
 	 *
-	 * @return mixed|string
+	 * @return string $string.
 	 */
 	public static function replace_variable($string = '',$gd_page = ''){
 		global $post,$gd_post;
@@ -346,10 +365,12 @@ class GeoDir_SEO {
 
 	/**
 	 * Returns an array of allowed variables and their descriptions.
+     *
+     * @since 2.0.0
 	 * 
-	 * @param string $gd_page
+	 * @param string $gd_page Optional. Geo directory page. Default null.
 	 *
-	 * @return array
+	 * @return array $vars.
 	 */
 	public static function variables($gd_page = ''){
 
@@ -393,7 +414,15 @@ class GeoDir_SEO {
 
 		return $vars;
 	}
-	
+
+    /**
+     * Helper tags.
+     *
+     * @since 2.0.0
+     *
+     * @param string $page optional. Page. Default null.
+     * @return string $output.
+     */
 	public static function helper_tags($page = ''){
 		$output = '';
 		$variables = self::variables($page);
