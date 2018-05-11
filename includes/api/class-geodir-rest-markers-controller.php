@@ -116,7 +116,14 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		 */
 		return apply_filters( 'geodir_rest_markers_collection_params', $query_params );
 	}
-    
+
+    /**
+     * Show in rest.
+     *
+     * @since 2.0.0
+     *
+     * @return bool
+     */
     public function show_in_rest() {
         return apply_filters( 'geodir_rest_markers_show_in_rest', true, $this );
     }
@@ -160,7 +167,20 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 
 		return rest_ensure_response( $response );
 	}
-	
+
+    /**
+     * Get Markers.
+     *
+     * @since 2.0.0
+     *
+     * @param array $request {
+     *      An array request post details.
+     *
+     *      @type string $post_type Post type.
+     *      @type array $post Post array.
+     * }
+     * @return array $items.
+     */
 	public function get_markers( $request ) {
         global $wpdb, $plugin_prefix;
 
@@ -235,6 +255,15 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		'i' => '34'						icon id
 	);
 	*/
+    /**
+     * Prepare item for response.
+     *
+     * @since 2.0.0
+     *
+     * @param object $item Request marker data.
+     * @param WP_REST_Request $request  Request used to generate the response.
+     * @return mixed|void|WP_Error|WP_REST_Response
+     */
 	public function prepare_item_for_response( $item, $request ) {
 		global $geodir_icon_basedir, $geodir_rest_cache_marker, $geodir_rest_cache_icons;
 		if ( empty( $geodir_rest_cache_marker ) ) {
@@ -312,7 +341,22 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		 */
 		return apply_filters( 'geodir_rest_prepare_marker', $response, $item, $request );
 	}
-	
+
+    /**
+     * Set Where Query.
+     *
+     * @since 2.0.0
+     *
+     * @param string $where Where.
+     * @param array $request {
+     *      An array of query request.
+     *
+     *      @type string $search Search.
+     *      @type array $post Post array.
+     *      @type array $term Term array.
+     * }
+     * @return string $where
+     */
 	public function set_query_where( $where, $request ) {
 		global $wpdb;
 
@@ -356,6 +400,14 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		return $response;
 	}
 
+    /**
+     * Get marker content.
+     *
+     * @since 2.0.0
+     *
+     * @param int $id Id.
+     * @return string $content.
+     */
 	public function marker_content( $id ) {
 		$content = geodir_get_map_popup_content( $id );
 

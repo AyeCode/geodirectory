@@ -44,6 +44,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Show the setup wizard.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_wizard() {
 		if ( empty( $_GET['page'] ) || 'gd-setup' !== $_GET['page'] ) {
@@ -207,6 +209,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Setup Wizard Header.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_wizard_header() {
 		?>
@@ -227,6 +231,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Setup Wizard Footer.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_wizard_footer() {
 		?>
@@ -240,6 +246,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Output the steps.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_wizard_steps() {
 		$ouput_steps = $this->steps;
@@ -261,6 +269,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Output the content for the current step.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_wizard_content() {
 		echo '<div class="gd-setup-content">';
@@ -270,6 +280,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Introduction step.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_introduction() {
 		?>
@@ -285,6 +297,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Setup maps api.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_maps() {
 		?>
@@ -326,6 +340,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Save Maps Settings.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_maps_save() {
 		check_admin_referer( 'gd-setup' );
@@ -342,6 +358,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Default Location settings.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_default_location() {
 
@@ -396,6 +414,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Shows an error message if there is a problem with the google maps api key settings.
+     *
+     * @since 2.0.0
 	 */
 	public function google_maps_api_check(){
 		//maps_api
@@ -422,6 +442,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Save Default Location Settings.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_default_location_save() {
 		check_admin_referer( 'gd-setup' );
@@ -436,6 +458,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Dummy Data setup.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_content() {
 		?>
@@ -597,6 +621,8 @@ class GeoDir_Admin_Setup_Wizard {
 	 * Dummy data save.
 	 *
 	 * This is done via ajax so we just pass onto the next step.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_content_save() {
 		check_admin_referer( 'gd-setup' );
@@ -606,6 +632,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Dummy Data setup.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_recommend() {
 		?>
@@ -686,6 +714,8 @@ class GeoDir_Admin_Setup_Wizard {
 	 * Dummy data save.
 	 *
 	 * This is done via ajax so we just pass onto the next step.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_recommend_save() {
 		check_admin_referer( 'gd-setup' );
@@ -695,6 +725,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Final step.
+     *
+     * @since 2.0.0
 	 */
 	public function setup_ready() {
 		$this->setup_ready_actions();
@@ -741,6 +773,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 	/**
 	 * Actions on the final step.
+     *
+     * @since 2.0.0
 	 */
 	private function setup_ready_actions() {
 		GeoDir_Admin_Notices::remove_notice( 'install' );

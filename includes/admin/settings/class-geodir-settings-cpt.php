@@ -369,7 +369,20 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			return apply_filters( 'geodir_get_settings_' . $this->id, $settings, $current_section );
 		}
 
-
+        /**
+         * Set GeoDir current values.
+         *
+         * @since 2.0.0
+         *
+         * @param array $settings {
+         *      An array of settings.
+         *
+         *      @type string $id Settings id.
+         *      @type string $default Settings default id.
+         *      @type string $custom_attributes Settings custom attributes.
+         * }
+         * @return array $settings.
+         */
 		public static function set_current_values($settings){
 
 			if(self::$post_type){
@@ -409,6 +422,22 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			return $settings;
 		}
 
+        /**
+         * Sanatize post type.
+         *
+         * @since 2.0.0
+         *
+         * @param array $raw {
+         *      An array sanatize posttype.
+         *
+         * @type string $new_post_type New sanatize posttype.
+         * @type string $name New posttype name.
+         * @type string $singular_name New Posttype singular name.
+         * @type string $slug New posttype slug.
+         * }
+         *
+         * @return array $output.
+         */
 		public static function sanatize_post_type( $raw ) {
 			$output = array();
 

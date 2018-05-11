@@ -13,6 +13,8 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
     /**
      * Register the advanced search widget with WordPress.
      *
+     * @since 2.0.0
+     *
      */
     public function __construct() {
 

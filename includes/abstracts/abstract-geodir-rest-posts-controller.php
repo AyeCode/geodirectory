@@ -778,7 +778,12 @@ class Geodir_REST_Posts_Controller extends WP_REST_Posts_Controller {
          */
         return apply_filters( "geodir_rest_pre_insert_listing", $prepared_post, $this->post_type, $request );
 	}
-    
+
+    /**
+     * Register GeoDir listing fields.
+     *
+     * @since 2.0.0
+     */
     public function register_listing_fields() {
         $listing_schema = $this->geodir_get_item_schema();
         
@@ -791,7 +796,16 @@ class Geodir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             register_rest_field( $this->post_type, $name, $args );
         }
     }
-    
+
+    /**
+     * GeoDir get item schema.
+     *
+     * @since 2.0.0
+     *
+     * @param string $package_id Optional. Package id. Default null.
+     * @param string $default Optional. Custom field default value. Default all.
+     * @return array Item schema array values.
+     */
     public function geodir_get_item_schema( $package_id = '', $default = 'all' ) {
         $custom_fields  = geodir_post_custom_fields( $package_id, $default, $this->post_type );
         
@@ -1098,11 +1112,32 @@ class Geodir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
         return apply_filters( 'geodir_listing_item_schema', $schema, $this->post_type, $package_id, $default );
     }
-    
+
+    /**
+     * GeoDir get item callback.
+     *
+     * @since 2.0.0
+     *
+     * @param object $object Item object.
+     * @param string $field_name Field name.
+     * @param string $request Item request.
+     * @param string $object_type Object type.
+     * @return object $object.
+     */
     public function geodir_get_callback( $object, $field_name, $request, $object_type ) {
         return $object;
     }
-    
+
+    /**
+     * GeoDir update item callback.
+     *
+     * @param string $value Item value.
+     * @param object $object Item object.
+     * @param string $field_name Field name.
+     * @param string $request Item request.
+     * @param string $object_type Object type.
+     * @return bool.
+     */
     public function geodir_update_callback( $value, $object, $field_name, $request, $object_type ) {
         return true;
     }

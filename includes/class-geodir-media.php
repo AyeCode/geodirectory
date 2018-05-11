@@ -13,6 +13,8 @@ class GeoDir_Media {
 
 	/**
 	 * Get the post type fields that are for file uploads and return the allowed file types.
+     *
+     * @since 2.0.0
 	 *
 	 * @param $post_type
 	 *
@@ -35,10 +37,12 @@ class GeoDir_Media {
 
 	/**
 	 * Check if the file type is an image.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $mime_type
+	 * @param string $mime_type Image mime type.
 	 *
-	 * @return bool|resource
+	 * @return bool $image
 	 */
 	public static function is_image($mime_type){
 
@@ -116,11 +120,13 @@ class GeoDir_Media {
 
 	/**
 	 * Get the attachment id from the file path.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $path
-	 * @param string $post_id
+	 * @param string $path File path.
+	 * @param string $post_id Optional. Post id. Default null.
 	 *
-	 * @return null|string
+	 * @return null|string $result.
 	 */
 	public static function get_id_from_file_path($path,$post_id = ''){
 		global $wpdb;
@@ -139,10 +145,12 @@ class GeoDir_Media {
 
 	/**
 	 * Create the image sizes and return the image metadata.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $file
+	 * @param array $file File array.
 	 *
-	 * @return array
+	 * @return array $metadata.
 	 */
 	public static function create_image_sizes( $file ){
 		$metadata = array();
@@ -214,14 +222,17 @@ class GeoDir_Media {
 
 	/**
 	 * Insert the file info to the DB and return the attachment ID.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post_id
-	 * @param $url
-	 * @param string $title
-	 * @param string $caption
-	 * @param string $order
-	 * @param int $is_approved
-	 * @param bool $is_placeholder If the images is a placeholder url and should not be auto imported.
+	 * @param int $post_id Post ID.
+     * @param string $type Optional. Type. Default file.
+	 * @param string $url URl.
+	 * @param string $title Optional. Title. Default null.
+	 * @param string $caption Optional. Caption. Default null.
+	 * @param string $order Optional. Order. Default null.
+	 * @param int $is_approved Optional. Is approved. Default 1.
+	 * @param bool $is_placeholder Optional. If the images is a placeholder url and should not be auto imported. Default false.
 	 *
 	 * @return array|WP_Error
 	 */
@@ -346,18 +357,16 @@ class GeoDir_Media {
 
 	}
 
-	/**
-	 * Insert the image info to the DB and return the attachment ID.
-	 *
-	 * @param $post_id
-	 * @param $image_url
-	 * @param string $image_title
-	 * @param string $image_caption
-	 * @param string $order
-	 * @param int $is_approved
-	 *
-	 * @return array|WP_Error
-	 */
+    /**
+     * Insert the image info to the DB and return the attachment ID.
+     *
+     * @since 2.0.0
+     *
+     * @param int $post_id Post ID.
+     * @param string $type Type.
+     * @param string $file_string Optional. File string. Default null.
+     * @return int|string
+     */
 	public static function update_texts($post_id,$type,$file_string='') {
 		global $wpdb;
 
@@ -402,20 +411,22 @@ class GeoDir_Media {
 		return $return;
 	}
 
-	/**
-	 * Insert the image info to the DB and return the attachment ID.
-	 *
-	 * @param int $file_id
-	 * @param int $post_id
-	 * @param string $field
-	 * @param string $file_url
-	 * @param string $file_title
-	 * @param string $file_caption
-	 * @param string $order
-	 * @param int $is_approved
-	 *
-	 * @return array|WP_Error
-	 */
+    /**
+     * Insert the image info to the DB and return the attachment ID.
+     *
+     * @since 2.0.0
+     *
+     * @param int $file_id File id.
+     * @param int $post_id Post id.
+     * @param string $field Field value.
+     * @param string $file_url File url.
+     * @param string $file_title Optional. File title. Default null.
+     * @param string $file_caption Optional. File caption. Default null.
+     * @param string $order Optional. Order. Default null.
+     * @param string $is_approved Optional. Is approved. Default 1.
+     *
+     * @return array|null|object|void|WP_Error
+     */
 	public static function update_attachment($file_id, $post_id,$field,$file_url,$file_title = '', $file_caption = '', $order = '',$is_approved = '1'){
 		global $wpdb;
 

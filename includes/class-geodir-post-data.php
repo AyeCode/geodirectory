@@ -17,7 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_Post_Data {
 
-	/*
+	/**
 	 * Temporarily save the GD post data.
 	 *
 	 * @var array
@@ -82,6 +82,17 @@ class GeoDir_Post_Data {
 	}
 
 
+    /**
+     * Save auto draft.
+     *
+     * @since 2.0.0
+     *
+     * @param array $post_info {
+     *      An array for post info.
+     *
+     *      @type string $ID Post id.
+     * }
+     */
 	public static function save_auto_draft( $post_info ) {
 
 		// check if we already have an auto draft
@@ -94,6 +105,8 @@ class GeoDir_Post_Data {
 
 	/**
 	 * Save post metadata when a post is saved.
+     *
+     * @since 2.0.0
 	 *
 	 * @param int $post_id The post ID.
 	 * @param WP_Post $post The post object.
@@ -354,26 +367,24 @@ class GeoDir_Post_Data {
 	
 
 
-	/*
+	/**
 	 * Not needed at present.
 	 */
 	public static function set_object_terms( $object_id, $terms, $tt_ids, $taxonomy, $append = false, $old_tt_ids ) {
 
 	}
 
-	/**
-	 * Save post attachments.
-	 *
-	 * @since 1.0.0
-	 * @package GeoDirectory
-	 * @global object $wpdb WordPress Database object.
-	 * @global string $plugin_prefix Geodirectory plugin table prefix.
-	 * @global object $current_user Current user object.
-	 *
-	 * @param int $post_id The post ID.
-	 * @param array $post_image Post image urls as an array.
-	 * @param bool $dummy Optional. Is this a dummy listing? Default false.
-	 */
+    /**
+     * Save post attachments.
+     *
+     * @since 2.0.0
+     *
+     * @param int $post_id Optional. Post id. Default 0.
+     * @param array $files Optional. Files. Array.
+     * @param string $field Optional. Field. Default null.
+     * @param bool $dummy Optional. Dummy. Default false.
+     * @return bool|null|string
+     */
 	public static function save_files( $post_id = 0, $files = array(),$field = '', $dummy = false ) {
 
 		// check for changes, maybe we don't need to run the whole function if there are no changes
@@ -487,8 +498,15 @@ class GeoDir_Post_Data {
 
 	/**
 	 * If is a GD post then save the post data to temp array for later `save_post` hook.
+     *
+     * @since 2.0.0
 	 *
-	 * @param array $data
+	 * @param array $data {
+     *      An array for post data.
+     *
+     *      @type string $post_type post type.
+     *      @type string $post_parent post parent.
+     * }
 	 *
 	 * @return array
 	 */
@@ -742,12 +760,14 @@ class GeoDir_Post_Data {
 
 	/**
 	 * Get the auto drafts for the user.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $user_id
-	 * @param string $post_type
-	 * @param int $post_parent
+	 * @param string $user_id Optional. User id. Default null.
+	 * @param string $post_type Optional. Post type. Default null.
+	 * @param int $post_parent Optional. Post parent. Default 0.
 	 *
-	 * @return array
+	 * @return array $posts_array.
 	 */
 	public static function get_user_auto_drafts( $user_id = '', $post_type = '', $post_parent = 0 ) {
 
@@ -794,9 +814,11 @@ class GeoDir_Post_Data {
 
 	/**
 	 * Check if the user owns the post.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post_id
-	 * @param $user_id
+	 * @param int $post_id Post ID.
+	 * @param int $user_id User ID.
 	 *
 	 * @return bool
 	 */
@@ -817,11 +839,18 @@ class GeoDir_Post_Data {
 		return $owner;
 	}
 
-	/**
-	 * Delete the post revision.
-	 * 
-	 * @param $post_data
-	 */
+    /**
+     * Delete the post revision.
+     *
+     * @since 2.0.0
+     *
+     * @param array $post_data {
+     *      An array for Post data.
+     *
+     *      @type string $ID Post id.
+     * }
+     * @return bool|WP_Error
+     */
 	public static function delete_revision( $post_data ){
 
 		if(!self::owner_check($post_data['ID'],get_current_user_id())){
@@ -841,8 +870,10 @@ class GeoDir_Post_Data {
 
 	/**
 	 * Try to get the preview id from the post parent id.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $parent_id
+	 * @param int $parent_id Parent ID.
 	 *
 	 * @return int|null|string
 	 */
@@ -872,10 +903,14 @@ class GeoDir_Post_Data {
 
 	/**
 	 * Create the auto draft and return the post object with the title blank.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post_type
+	 * @param string $post_type Post type.
+     *
+     * @global object $gd_session Geo Directory session object.
 	 *
-	 * @return WP_Post
+	 * @return object $post.
 	 */
 	public static function create_auto_draft( $post_type ) {
 		global $gd_session;
@@ -891,11 +926,14 @@ class GeoDir_Post_Data {
 		return $post;
 	}
 
-	/**
-	 * Output the add lsiting user notes.
-	 *
-	 * @param $user_notes
-	 */
+    /**
+     * Output the add lsiting user notes.
+     *
+     * @since 2.0.0
+     *
+     * @param array $user_notes User notes.
+     * @return string $notes
+     */
 	public static function output_user_notes( $user_notes ) {
 		$notes = '';
 		foreach ( $user_notes as $key => $user_note ) {
@@ -909,6 +947,8 @@ class GeoDir_Post_Data {
 
 	/**
 	 * Get the preview link for the post.
+     *
+     * @since 2.0.0
 	 *
 	 * @param $post
 	 *
@@ -934,11 +974,19 @@ class GeoDir_Post_Data {
 		return get_preview_post_link( $post_id, $query_args );
 	}
 
-	/**
-	 * Function to auto save a post if auto-draft or revision.
-	 *
-	 * @param array $post_data The post info, usually POST data.
-	 */
+    /**
+     * Function to auto save a post if auto-draft or revision.
+     *
+     * @since 2.0.0
+     *
+     * @param array $post_data {
+     *      An array for post data.
+     *
+     *      @type string $post_parent Post Parent.
+     *      @type string $post_type Post Type.
+     * }
+     * @return int|WP_Error
+     */
 	public static function auto_save_post( $post_data ) {
 		
 		// set that we are doing an auto save
@@ -960,10 +1008,21 @@ class GeoDir_Post_Data {
 
 	/**
 	 * Save the post from frontend ajax.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post_data
+	 * @param array $post_data {
+     *      An array for post data.
+     *
+     *      @type string $post_parent Post Parent.
+     *      @type string $ID Post ID.
+     *      @type string $post_status Post status.
+     *      @type string $user_login Post User login.
+     *      @type string $user_email Post User email.
+     *      @type string $post_author Post author.
+     * }
 	 *
-	 * @return int|WP_Error
+	 * @return int|WP_Error $result
 	 */
 	public static function ajax_save_post( $post_data ) {
 
@@ -1033,11 +1092,21 @@ class GeoDir_Post_Data {
 
 	}
 
-	/**
-	 * Get the message to display on ajax post save.
-	 *
-	 * @param $post_data
-	 */
+    /**
+     * Get the message to display on ajax post save.
+     *
+     * @since 2.0.0
+     *
+     * @param array $post_data {
+     *      An array for post data.
+     *
+     * @type string $post_parent Post parent.
+     * @type string $post_status Post status.
+     * @type string $ID Post ID.
+     *
+     * }
+     * @return string
+     */
 	public static function ajax_save_post_message($post_data){
 
 		$message = '';
@@ -1079,9 +1148,11 @@ class GeoDir_Post_Data {
 
 	/**
 	 * Remove any old post revisions.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $post_id
-	 * @param $user_id
+	 * @param int $post_id Post id.
+	 * @param int $user_id User id.
 	 */
 	public static function remove_post_revisions($post_id,$user_id){
 		$posts = wp_get_post_revisions( $post_id, array( 'check_enabled' => false, 'author' => $user_id  ) );
@@ -1097,6 +1168,8 @@ class GeoDir_Post_Data {
 
 	/**
 	 * Get the default status for new listings.
+     *
+     * @since 2.0.0
 	 *
 	 * @return mixed|string
 	 */
@@ -1108,7 +1181,9 @@ class GeoDir_Post_Data {
 	/**
 	 * Removes the post meta and attachments.
 	 *
-	 * @param $id
+     * @since 2.0.0
+     *
+	 * @param int $id Post id.
 	 *
 	 * @return bool|void
 	 */
@@ -1222,7 +1297,16 @@ class GeoDir_Post_Data {
 
 		return $posts;
 	}
-	
+
+    /**
+     * Set closed status.
+     *
+     * @since 2.0.0
+     *
+     * @param object $posts Posts object.
+     * @param object $wp_query Wordpress query object.
+     * @return object $posts.
+     */
 	public static function set_closed_status( $posts, $wp_query ) {
 		global $wp_post_statuses, $gd_reset_closed;
 		
@@ -1234,6 +1318,15 @@ class GeoDir_Post_Data {
 		return $posts;
 	}
 
+    /**
+     * Reset closed status.
+     *
+     * @since 2.0.0
+     *
+     * @param object $posts Post object.
+     * @param object $wp_query Wordpress query object.
+     * @return object $posts.
+     */
 	public static function reset_closed_status( $posts, $wp_query ) {
 		global $wp_post_statuses, $gd_reset_closed;
 		

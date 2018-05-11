@@ -289,7 +289,16 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			do_action( 'geodir_after_default_field_in_meta_box' );
 			echo '</div>';
 		}
-		
+
+        /**
+         * Owner meta box.
+         *
+         * @since 2.0.0
+         *
+         * @global object $post WordPress post object.
+         * @global object $user_ID WordPress user_ID object.
+         *
+         */
 		public static function owner_meta_box() {
 			global $post, $user_ID;
 			$curent_user_id = empty($post->ID) ? $user_ID : $post->post_author;
@@ -447,7 +456,13 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				}
 			}
 		}
-		
+
+        /**
+         * Add scripts in Posts footer.
+         *
+         * @since 2.0.0
+         *
+         */
 		public static function posts_footer() {
 			$screen		= get_current_screen();
 			$screen_id	= $screen ? $screen->id : '';
@@ -469,7 +484,13 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			</script>
 			<?php
 		}
-		
+
+        /**
+         * Add scripts in post form footer.
+         *
+         * @since 2.0.0
+         *
+         */
 		public static function post_form_footer() {
 			global $post;
 
@@ -503,7 +524,18 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			</script>
 			<?php
 		}
-		
+
+        /**
+         * Posts column status.
+         *
+         * @since 2.0.0
+         *
+         * @param string $status Post column status.
+         * @param object $post Post object.
+         * @param string $column Post column.
+         * @param string $mode Post mode.
+         * @return string $status.
+         */
 		public static function posts_column_status( $status, $post, $column, $mode ) {
 			if ( $column == 'date' && ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) {
 				$statuses = geodir_get_custom_statuses();

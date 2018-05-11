@@ -121,6 +121,13 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 
     }
 
+    /**
+     * Get rating stars html.
+     *
+     * @since 2.0.0
+     *
+     * @return string Rating stars html.
+     */
     public function get_rating_stars(){
         global $post;
         ob_start();
@@ -145,6 +152,13 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         return ob_get_clean();
     }
 
+    /**
+     * Get rating text html.
+     *
+     * @since 2.0.0
+     *
+     * @return string rating text html.
+     */
     public function get_rating_text(){
         global $post,$gd_post;
         ob_start();

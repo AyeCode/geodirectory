@@ -13,6 +13,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
     /**
      * Register the advanced search widget with WordPress.
      *
+     * @since 2.0.0
      */
     public function __construct() {
 
@@ -189,6 +190,15 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         return ob_get_clean();
     }
 
+    /**
+     * Get tab content.
+     *
+     * @since 2.0.0
+     *
+     * @param object $tab Tab object.
+     * @param bool $child Optional. Tab child. Default false.
+     * @return string
+     */
     public function tab_content($tab,$child=false) {
 
         ob_start();
@@ -210,6 +220,14 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         return ob_get_clean();
     }
 
+    /**
+     * Get tab content child.
+     *
+     * @since 2.0.0
+     *
+     * @param object $tab Tab object.
+     * @return string
+     */
     public function tab_content_child($tab) {
         ob_start();
         global $post;
@@ -236,6 +254,14 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 
     }
 
+    /**
+     * Fieldset html output.
+     *
+     * @since 2.0.0
+     *
+     * @param object $tab Tab object.
+     * @return string
+     */
     public function output_fieldset($tab){
         ob_start();
         echo '<div class="geodir_post_meta  gd-fieldset">';
@@ -252,7 +278,18 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         return ob_get_clean();
     }
 
-
+    /**
+     * Get tab settings.
+     *
+     * @since 2.0.0
+     *
+     * @param string $post_type Post type.
+     *
+     * @global object $wpdb WordPress Database object.
+     * @global object $geodir_tab_layout_settings Geo directory tab layout settings object.
+     *
+     * @return array|object $tabs.
+     */
     public function get_tab_settings($post_type){
         global $wpdb,$geodir_tab_layout_settings;
 

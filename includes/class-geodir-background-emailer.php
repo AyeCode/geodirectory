@@ -34,9 +34,11 @@ class GeoDir_Background_Emailer extends WP_Background_Process {
 	 */
 	protected $action = 'geodir_emailer';
 
-	/**
-	 * Initiate new background process
-	 */
+    /**
+     * GeoDir_Background_Emailer constructor.
+     *
+     * @since 2.0.0
+     */
 	public function __construct() {
 		parent::__construct();
 		add_action( 'shutdown', array( $this, 'dispatch_queue' ) );
@@ -44,6 +46,8 @@ class GeoDir_Background_Emailer extends WP_Background_Process {
 
 	/**
 	 * Schedule fallback event.
+     *
+     * @since 2.0.0
 	 */
 	protected function schedule_event() {
 		if ( ! wp_next_scheduled( $this->cron_hook_identifier ) ) {
@@ -52,12 +56,14 @@ class GeoDir_Background_Emailer extends WP_Background_Process {
 	}
 
 	/**
-	 * Task
-	 *
+	 * Task.
+     *
 	 * Override this method to perform any actions required on each
 	 * queue item. Return the modified item for further processing
 	 * in the next pass through. Or, return false to remove the
 	 * item from the queue.
+     *
+     * @since 2.0.0
 	 *
 	 * @param string $callback Update callback function
 	 * @return mixed
@@ -77,6 +83,8 @@ class GeoDir_Background_Emailer extends WP_Background_Process {
 
 	/**
 	 * Save and run queue.
+     *
+     * @since 2.0.0
 	 */
 	public function dispatch_queue() {
 		if ( ! empty( $this->data ) ) {
@@ -85,7 +93,9 @@ class GeoDir_Background_Emailer extends WP_Background_Process {
 	}
 
 	/**
-	 * Get post args
+	 * Get post args.
+     *
+     * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -114,10 +124,12 @@ class GeoDir_Background_Emailer extends WP_Background_Process {
 	}
 
 	/**
-	 * Handle
+	 * Handle.
 	 *
 	 * Pass each queue item to the task handler, while remaining
 	 * within server memory and time limit constraints.
+     *
+     * @since 2.0.0
 	 */
 	protected function handle() {
 		$this->lock_process();

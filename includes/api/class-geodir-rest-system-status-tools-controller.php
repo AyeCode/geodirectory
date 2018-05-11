@@ -373,7 +373,16 @@ class GeoDir_REST_System_Status_Tools_Controller extends GeoDir_REST_Controller 
 
 		return array( 'success' => $ran, 'message' => $message );
 	}
-	
+
+    /**
+     * Check reviews.
+     *
+     * @since 2.0.0
+     *
+     * @global object $wpdb WordPress Database object.
+     *
+     * @return bool $checked
+     */
 	public function check_reviews() {
 		global $wpdb;
 		
@@ -387,7 +396,16 @@ class GeoDir_REST_System_Status_Tools_Controller extends GeoDir_REST_Controller 
 		
 		return $checked;
 	}
-	
+
+    /**
+     * Check reviews location.
+     *
+     * @since 2.0.0
+     *
+     * @global object $wpdb WordPress Database object.
+     *
+     * @return bool
+     */
 	public function check_reviews_location() {
 		global $wpdb;
 

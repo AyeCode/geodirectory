@@ -20,9 +20,13 @@ if ( ! class_exists( 'GeoDir_WP_Dashboard', false ) ) :
  */
 class GeoDir_WP_Dashboard {
 
-	/**
-	 * Hook in tabs.
-	 */
+    /**
+     * GeoDir_WP_Dashboard constructor.
+     *
+     * Hook in tabs.
+     *
+     * @since 20.0
+     */
 	public function __construct() {
 		// Only hook in admin parts if the user has admin access
 		if ( current_user_can( 'manage_options' )  ) {
@@ -30,9 +34,11 @@ class GeoDir_WP_Dashboard {
 		}
 	}
 
-	/**
-	 * Init dashboard widgets.
-	 */
+    /**
+     * GeoDir_WP_Dashboard Init widgets.
+     *
+     * @since 2.0.0
+     */
 	public function init() {
 		if ( current_user_can( 'manage_options' ) ) {
 			wp_add_dashboard_widget( 'geodir_dashboard_recent_reviews', __( 'GeoDirectory Recent Reviews', 'geodirectory' ), array( $this, 'recent_reviews' ) );
@@ -40,15 +46,19 @@ class GeoDir_WP_Dashboard {
 		// wp_add_dashboard_widget( 'geodir_dashboard_status', __( 'GeoDirectory Status', 'geodirectory' ), array( $this, 'status_widget' ) ); // @todo Implement this after all addons converted to v2
 	}
 
-	/**
-	 * Show status widget.
-	 */
+    /**
+     * Show status widget.
+     *
+     * @since 2.0.0.
+     */
 	public function status_widget() {
 		// GD dashboard stats
 	}
 
 	/**
 	 * Recent reviews widget.
+     *
+     * @since 2.0.0
 	 */
 	public function recent_reviews() {
 		$recent_reviews = $this->recent_reviews_html();
@@ -60,7 +70,16 @@ class GeoDir_WP_Dashboard {
 			echo '</div>';
 		}
 	}
-	
+
+    /**
+     * Recent review html.
+     *
+     * @since 2.0.0
+     *
+     * @param int $total_items Optional. Display review items. Default 5.
+     *
+     * @return bool
+     */
 	public function recent_reviews_html( $total_items = 5 ) {
 		$reviews = GeoDir_Widget_Recent_Reviews::get_recent_reviews( 50, $total_items, 140 );
 

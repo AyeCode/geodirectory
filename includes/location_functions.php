@@ -163,8 +163,12 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
  * Returns an array of all countries.
  *
  * @since 2.0.0
+ *
  * @package GeoDirectory
+ *
  * @global object $wpdb WordPress Database object.
+ *
+ * @return array $countries
  */
 function geodir_get_countries()
 {
@@ -633,7 +637,16 @@ function geodir_replace_location_variables($content, $location_array = array(), 
 }
 add_filter('geodir_replace_location_variables', 'geodir_replace_location_variables');
 
-
+/**
+ * Function for replace location values.
+ *
+ * @since 2.0.0
+ *
+ * @param array $location_array Optional. The array of location variables. Default array().
+ * @param string $sep Optional. The separator. Default null.
+ * @param string $gd_page Optional.The page being filtered. Default null.
+ * @return array $location_replace_vars.
+ */
 function geodir_location_replace_vars($location_array = array(), $sep = NULL, $gd_page = ''){
 
     global $wp;

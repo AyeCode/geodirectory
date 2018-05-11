@@ -107,6 +107,13 @@ class GeoDir_Admin_Dummy_Data {
 		return true;
 	}
 
+    /**
+     * Create dummy fields.
+     *
+     * @since 2.0.0
+     *
+     * @param array $fields Dummy fields values.
+     */
 	public static function create_dummy_fields( $fields ) {
 
 		/**
@@ -148,6 +155,14 @@ class GeoDir_Admin_Dummy_Data {
 		geodir_update_option( $post_type . '_dummy_data_type', '' );
 	}
 
+    /**
+     * Add dummy address.
+     *
+     * @since 2.0.0
+     *
+     * @param array $post_info Optional. Post Infromations. Default array().
+     * @return array $post_info.
+     */
 	public static function add_dummy_address($post_info = array()){
 		global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2;
 
@@ -1124,6 +1139,15 @@ class GeoDir_Admin_Dummy_Data {
 		update_option( 'widget_' . $widget_id, $widget_instances );
 	}
 
+    /**
+     * Setup menu.
+     *
+     * @since 2.0.0
+     *
+     * @param string $menu_id Optional. Menu id. Default null.
+     * @param string $menu_location Optional. Menu location. Default null.
+     * @return string|WP_Error.
+     */
 	public static function setup_menu($menu_id = '',$menu_location = ''){
 
 		$menu_id = sanitize_title_with_dashes($menu_id);

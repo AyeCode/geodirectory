@@ -182,6 +182,11 @@ class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags
 	 */
     protected $id = 'geodirectory';
 
+    /**
+     * GeoDir_Ninja_Forms_MergeTags constructor.
+     *
+     * @since 2.0.0
+     */
     public function __construct()
     {
         parent::__construct();
@@ -211,7 +216,15 @@ class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags
     public function init(){ /* This section intentionally left blank. */ }
     public function admin_init(){ /* This section intentionally left blank. */ }
 
-
+    /**
+     * Get Post id.
+     *
+     * @since 2.0.0
+     *
+     * @global object $post WordPress post object.
+     *
+     * @return int $post_id.
+     */
     protected function post_id()
     {
         global $post;
@@ -255,6 +268,15 @@ class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags
 
 
 add_filter('ninja_forms_new_form_templates','geodir_add_ninja_forms_template');
+
+/**
+ * Add ninja forms template.
+ *
+ * @since 2.0.0
+ *
+ * @param array $templates Templates.
+ * @return array
+ */
 function geodir_add_ninja_forms_template($templates){
 
     $new_templates['formtemplate-geodirectory-contactform'] = array(
@@ -267,6 +289,13 @@ function geodir_add_ninja_forms_template($templates){
     return $new_templates + $templates;
 }
 
+/**
+ * Ninja forms contact Templates.
+ *
+ * @since 2.0.0
+ *
+ * @return string settings templates.
+ */
 function geodir_ninja_forms_contact_template(){
     return '{
     "settings": {

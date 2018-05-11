@@ -1229,6 +1229,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			<?php
 		}
 
+        /**
+         * GeoDir get all fields by posttype.
+         *
+         * @since 2.0.0
+         *
+         * @param string $post_type Post type.
+         * @return string Return all fields.
+         */
 		public function get_all_fields($post_type){
 			$cf_arr1 = self::fields_standard($post_type);
 			$cf_arr2 = self::fields_predefined($post_type);
@@ -1447,6 +1455,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			return (int)$last_order + 1;
 		}
 
+        /**
+         * GeoDir sanitize extra values.
+         *
+         * @since 2.0.0
+         *
+         * @param string|array $value Extra values.
+         * @return array|string.
+         */
 		private static function sanatize_extra( $value ){
 			if( is_array($value) ){
 				if(empty($value)){$value = '';}else{
@@ -1464,6 +1480,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			return $value;
 		}
 
+        /**
+         * GeoDir sanitize show on pkg.
+         *
+         * @since 2.0.0
+         *
+         * @param array $value Show log values.
+         * @return string $value.
+         */
 		private static function sanatize_show_on_pkg( $value ){
 			if(is_array($value)  ){
 				if(empty($value)){$value = '';}else{
@@ -1474,6 +1498,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			return $value;
 		}
 
+        /**
+         * GeoDir sanitize show in text fields values.
+         *
+         * @since 2.0.0
+         *
+         * @param array $value Array values.
+         * @return string $value.
+         */
 		private static function sanatize_show_in( $value ){
 			if(is_array($value)){
 				if(empty($value)){$value = '';}else {
@@ -1560,6 +1592,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 		}
 
+        /**
+         * GeoDir save sort item.
+         *
+         * @since 2.0.0
+         *
+         * @global object $wpdb WordPress Database object.
+         *
+         * @param object $field Item field object.
+         */
 		private static function save_sort_item($field){
 			global $wpdb;
 
@@ -1944,6 +1985,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		}
 
 
+        /**
+         * GeoDir get custom post type custom fields values.
+         *
+         * @since 2.0.0
+         *
+         * @param string $post_type Optional. Post type values . Default gd_place.
+         *
+         * @global object $wpdb WordPress Database object.
+         *
+         * @return array|object Return results in array or object.
+         */
 		public static function get_cpt_custom_fields($post_type = 'gd_place'){
 			global $wpdb;
 			return $wpdb->get_results($wpdb->prepare("SELECT * FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE  post_type = %s",$post_type));

@@ -915,43 +915,15 @@ function geodir_string_values_to_options($option_values = '', $translated = fals
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+/**
+ * Get currency number format.
+ *
+ * @since 2.0.0
+ *
+ * @param string $number Optional. Currency number. Default null.
+ * @param string $cf Optional. Custom fields. Default null.
+ * @return string $number.
+ */
 function geodir_currency_format_number($number='',$cf=''){
 
     $cs = isset($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : '';

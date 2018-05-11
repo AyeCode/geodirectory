@@ -109,6 +109,8 @@ function geodir_get_formated_time( $time ) {
 /**
  * GeoDirectory Date Format.
  *
+ * @since 2.0.0
+ *
  * @return string
  */
 function geodir_date_format() {
@@ -122,6 +124,8 @@ function geodir_date_format() {
 /**
  * GeoDirectory Time Format.
  *
+ * @since 2.0.0
+ *
  * @return string
  */
 function geodir_time_format() {
@@ -134,6 +138,8 @@ function geodir_time_format() {
 
 /**
  * GeoDirectory Date Time Format.
+ *
+ * @since 2.0.0
  *
  * @return string
  */
@@ -220,6 +226,8 @@ function geodir_get_rounding_precision() {
  * Sanitize, remove decimals, and optionally round + trim off zeros.
  *
  * This function does not remove thousands - this should be done before passing a value to the function.
+ *
+ * @since 2.0.0
  *
  * @param  float|string $number Expects either a float or a string with a decimal separator only (no thousands)
  * @param  mixed $dp number of decimal points to use, blank to use geodir_get_price_decimals, or false to avoid all rounding.

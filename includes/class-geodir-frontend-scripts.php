@@ -69,24 +69,30 @@ class GeoDir_Frontend_Scripts {
 		) );
 	}
 
-	/**
-	 * Return protocol relative asset URL.
-	 * @param string $path
-	 */
+    /**
+     * Return protocol relative asset URL.
+     *
+     * @since 2.0.0
+     *
+     * @param string $path URL Path.
+     * @return string
+     */
 	private static function get_asset_url( $path ) {
 		return str_replace( array( 'http:', 'https:' ), '', plugins_url( $path, geodir_plugin_url() ) );
 	}
 
 	/**
 	 * Register a script for use.
+     *
+     * @since 2.0.0
 	 *
 	 * @uses   wp_register_script()
 	 * @access private
-	 * @param  string   $handle
-	 * @param  string   $path
-	 * @param  string[] $deps
-	 * @param  string   $version
-	 * @param  boolean  $in_footer
+	 * @param  string   $handle Handle.
+	 * @param  string   $path Path.
+	 * @param  array $deps Optional.  Deps. Default jquery.
+	 * @param  string   $version Optional. Version Default GEODIRECTORY_VERSION.
+	 * @param  boolean  $in_footer Optional. In footer. Default true.
 	 */
 	private static function register_script( $handle, $path, $deps = array( 'jquery' ), $version = GEODIRECTORY_VERSION, $in_footer = true ) {
 		self::$scripts[] = $handle;
@@ -95,14 +101,16 @@ class GeoDir_Frontend_Scripts {
 
 	/**
 	 * Register and enqueue a script for use.
+     *
+     * @since 2.0.0
 	 *
 	 * @uses   wp_enqueue_script()
 	 * @access private
-	 * @param  string   $handle
-	 * @param  string   $path
-	 * @param  string[] $deps
-	 * @param  string   $version
-	 * @param  boolean  $in_footer
+	 * @param  string   $handle Handle.
+	 * @param  string   $path Optional. Script path. Default null.
+	 * @param  array $deps Optional. Deps. Default jquery.
+	 * @param  string   $version Optional. Version. Default GEODIRECTORY_VERSION.
+	 * @param  boolean  $in_footer Optional. In footer. Default true.
 	 */
 	private static function enqueue_script( $handle, $path = '', $deps = array( 'jquery' ), $version = GEODIRECTORY_VERSION, $in_footer = true ) {
 		if ( ! in_array( $handle, self::$scripts ) && $path ) {
@@ -113,15 +121,17 @@ class GeoDir_Frontend_Scripts {
 
 	/**
 	 * Register a style for use.
+     *
+     * @since 2.0.0
 	 *
 	 * @uses   wp_register_style()
 	 * @access private
-	 * @param  string   $handle
-	 * @param  string   $path
-	 * @param  string[] $deps
-	 * @param  string   $version
-	 * @param  string   $media
-	 * @param  boolean  $has_rtl
+	 * @param  string   $handle Handle.
+	 * @param  string   $path Style path.
+	 * @param  array  $deps Optional. Deps. Default array.
+	 * @param  string   $version Optional. Version. Default GEODIRECTORY_VERSION.
+	 * @param  string   $media Optional. Media. Default all.
+	 * @param  boolean  $has_rtl Optional. Has rtl. Default false.
 	 */
 	private static function register_style( $handle, $path, $deps = array(), $version = GEODIRECTORY_VERSION, $media = 'all', $has_rtl = false ) {
 		self::$styles[] = $handle;
@@ -134,15 +144,17 @@ class GeoDir_Frontend_Scripts {
 
 	/**
 	 * Register and enqueue a styles for use.
+     *
+     * @since 2.0.0
 	 *
 	 * @uses   wp_enqueue_style()
 	 * @access private
-	 * @param  string   $handle
-	 * @param  string   $path
-	 * @param  string[] $deps
-	 * @param  string   $version
-	 * @param  string   $media
-	 * @param  boolean  $has_rtl
+	 * @param  string   $handle Handle.
+	 * @param  string   $path Optional. Style path. Default null.
+	 * @param  array $deps Optional. Deps. Default array.
+	 * @param  string   $version Optional. Version. Default GEODIRECTORY_VERSION.
+	 * @param  string   $media Optional. Media. Default all.
+	 * @param  boolean  $has_rtl Optional. Has rtl. Default false.
 	 */
 	private static function enqueue_style( $handle, $path = '', $deps = array(), $version = GEODIRECTORY_VERSION, $media = 'all', $has_rtl = false ) {
 		if ( ! in_array( $handle, self::$styles ) && $path ) {
@@ -153,6 +165,8 @@ class GeoDir_Frontend_Scripts {
 
 	/**
 	 * Register all GeoDir scripts.
+     *
+     * @since 2.0.0
 	 */
 	private static function register_scripts() {
 
@@ -276,6 +290,8 @@ class GeoDir_Frontend_Scripts {
 
 	/**
 	 * Register all GeoDir styles.
+     *
+     * @since 2.0.0
 	 */
 	private static function register_styles() {
 		$register_styles = array(
@@ -354,6 +370,8 @@ class GeoDir_Frontend_Scripts {
 
 	/**
 	 * Register/queue frontend scripts.
+     *
+     * @since 2.0.0
 	 */
 	public static function load_scripts() {
 		global $post;
@@ -441,6 +459,9 @@ class GeoDir_Frontend_Scripts {
 
 	/**
 	 * Return data for script handles.
+     *
+     * @since 2.0.0
+     *
 	 * @access private
 	 * @param  string $handle
 	 * @return array|bool
@@ -551,6 +572,8 @@ class GeoDir_Frontend_Scripts {
 
 	/**
 	 * Localize scripts only when enqueued.
+     *
+     * @since 2.0.0
 	 */
 	public static function localize_printed_scripts() {
 		foreach ( self::$scripts as $handle ) {

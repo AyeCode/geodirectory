@@ -216,24 +216,21 @@ function geodir_detail_reviews_tab_title( $tabs_arr ) {
 add_filter( 'geodir_detail_page_tab_list_extend', 'geodir_detail_reviews_tab_title', 1000, 1 );
 
 
-
-
-
-
-
-
-
-
-
-
 /*######################################################
 Email functions
 ######################################################*/
 
-
-
-//@todo Kiran, is this the best place for these functions?
-
+/**
+ * Function for check comment notify to moderator.
+ *
+ * @since 2.0.0
+ *
+ * @todo Kiran, is this the best place for these functions?
+ *
+ * @param bool $maybe_notify Comment notify value.
+ * @param int $comment_id Comment id.
+ * @return bool $maybe_notify.
+ */
 function geodir_check_notify_moderator( $maybe_notify, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
@@ -246,6 +243,15 @@ function geodir_check_notify_moderator( $maybe_notify, $comment_id ) {
 
 add_filter( 'notify_moderator', 'geodir_check_notify_moderator', 99999, 2 );
 
+/**
+ * The function is use for add admin email address for comment moderation recipients.
+ *
+ * @since 2.0.0
+ *
+ * @param array $emails Multiple emails address.
+ * @param int $comment_id Comment id.
+ * @return array $emails.
+ */
 function geodir_comment_moderation_recipients( $emails, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
@@ -258,6 +264,15 @@ function geodir_comment_moderation_recipients( $emails, $comment_id ) {
 
 add_filter( 'comment_moderation_recipients', 'geodir_comment_moderation_recipients', 10, 2 );
 
+/**
+ * Function for get comment moderation subject.
+ *
+ * @since 2.0.0
+ *
+ * @param string $subject Comment moderation subject.
+ * @param int $comment_id Comment id.
+ * @return string $subject.
+ */
 function geodir_comment_moderation_subject( $subject, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
@@ -278,6 +293,15 @@ function geodir_comment_moderation_subject( $subject, $comment_id ) {
 
 add_filter( 'comment_moderation_subject', 'geodir_comment_moderation_subject', 10, 2 );
 
+/**
+ * Function for get comment moderation text.
+ *
+ * @since 2.0.0
+ *
+ * @param $message Comment message.
+ * @param int $comment_id Comment id.
+ * @return string $message.
+ */
 function geodir_comment_moderation_text( $message, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
@@ -315,6 +339,15 @@ function geodir_comment_moderation_text( $message, $comment_id ) {
 
 add_filter( 'comment_moderation_text', 'geodir_comment_moderation_text', 10, 2 );
 
+/**
+ * Function for get comment moderation headers.
+ *
+ * @since 2.0.0
+ *
+ * @param string $headers Comment headers.
+ * @param int $comment_id Comment id.
+ * @return string $headers.
+ */
 function geodir_comment_moderation_headers( $headers, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
@@ -335,6 +368,15 @@ function geodir_comment_moderation_headers( $headers, $comment_id ) {
 
 add_filter( 'comment_moderation_headers', 'geodir_comment_moderation_headers', 10, 2 );
 
+/**
+ * Function for check comment notify to post author.
+ *
+ * @since 2.0.0
+ *
+ * @param bool $maybe_notify Comment notify value.
+ * @param int $comment_id Comment id.
+ * @return bool $maybe_notify.
+ */
 function geodir_check_notify_post_author( $maybe_notify, $comment_id ) {
 	$comment = get_comment( $comment_id );
 
@@ -347,6 +389,14 @@ function geodir_check_notify_post_author( $maybe_notify, $comment_id ) {
 
 add_filter( 'notify_post_author', 'geodir_check_notify_post_author', 99999, 2 );
 
+/**
+ * Function for should notify to comment author.
+ *
+ * @since 2.0.0
+ *
+ * @param object $comment Comment object.
+ * @return bool $notify.
+ */
 function geodir_should_notify_comment_author( $comment ) {
 	if ( is_object( $comment ) && isset( $comment->comment_ID ) ) {
 		$comment_id = $comment->comment_ID;
@@ -366,6 +416,14 @@ function geodir_should_notify_comment_author( $comment ) {
 	return apply_filters( 'geodir_should_notify_comment_author', $notify, $comment_id );
 }
 
+/**
+ * Function for should notify to listing author.
+ *
+ * @since 2.0.0
+ *
+ * @param object $comment Comment object.
+ * @return bool $notify..
+ */
 function geodir_should_notify_listing_author( $comment ) {
 	if ( is_object( $comment ) && isset( $comment->comment_ID ) ) {
 		$comment_id = $comment->comment_ID;
@@ -385,6 +443,13 @@ function geodir_should_notify_listing_author( $comment ) {
 	return apply_filters( 'geodir_should_notify_listing_author', $notify, $comment_id );
 }
 
+/**
+ * Function for notify on comment approved.
+ *
+ * @since 2.0.0
+ *
+ * @param object $comment Comment object.
+ */
 function geodir_notify_on_comment_approved( $comment ) {
 	if ( ! ( ! empty( $comment->comment_post_ID ) && geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) ) {
 		return;
@@ -454,6 +519,12 @@ function geodir_new_comment_notify_postauthor( $comment_ID ) {
 
 add_action( 'comment_post', 'geodir_new_comment_notify_postauthor', 99999, 1 );
 
+/**
+ * Function for template redirect when comment is approve.
+ *
+ * @since 2.0.0
+ *
+ */
 function geodir_post_author_moderate_comment() {
 	if ( empty( $_REQUEST['_gd_action'] ) ) {
 		return;
@@ -501,6 +572,17 @@ function geodir_post_author_moderate_comment() {
 
 add_action( 'template_redirect', 'geodir_post_author_moderate_comment' );
 
+
+/**
+ * Function for delete comment metadata by comment id.
+ *
+ * Check if comment status 1 or approve then delete comment metadata.
+ *
+ * @since 2.0.0
+ *
+ * @param int $comment_ID Comment id.
+ * @param string $comment_status Comment status.
+ */
 function geodir_handle_comment_status_change( $comment_ID, $comment_status ) {
 	if ( ! ( $comment_status == '1' || $comment_status == 'approve' ) ) {
 		delete_comment_meta( $comment_ID, 'gd_comment_author_notified' );

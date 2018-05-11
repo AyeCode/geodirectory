@@ -52,6 +52,8 @@ class GeoDir_Post_types {
 
 	/**
 	 * Register core taxonomies.
+     *
+     * @since 2.0.0
 	 */
 	public static function register_taxonomies() {
 
@@ -98,6 +100,8 @@ class GeoDir_Post_types {
 
 	/**
 	 * Get the post type defaults.
+     *
+     * @since 2.0.0
 	 */
 	private static function get_post_type_defaults() {
 
@@ -163,6 +167,8 @@ class GeoDir_Post_types {
 
 	/**
 	 * Get the taxonomy defaults.
+     *
+     * @since 2.0.0
 	 */
 	private static function get_taxonomy_defaults() {
 
@@ -299,6 +305,8 @@ class GeoDir_Post_types {
 
 	/**
 	 * Register core post types.
+     *
+     * @since 2.0.0
 	 */
 	public static function register_post_types() {
 		if ( ! is_blog_installed() || post_type_exists( 'gd_place' ) ) {
@@ -354,6 +362,8 @@ class GeoDir_Post_types {
 	
 	/**
 	 * Register our custom post statuses, used for listing status.
+     *
+     * @since 2.0.0
 	 */
 	public static function register_post_status() {
 
@@ -377,6 +387,8 @@ class GeoDir_Post_types {
 
 	/**
 	 * Flush rewrite rules.
+     *
+     * @since 2.0.0
 	 */
 	public static function flush_rewrite_rules() {
 		flush_rewrite_rules();
@@ -385,9 +397,11 @@ class GeoDir_Post_types {
 
 	/**
 	 * Added product for Jetpack related posts.
+     *
+     * @since 2.0.0
 	 *
-	 * @param  array $post_types
-	 * @return array
+	 * @param  array $post_types Post types.
+	 * @return array $post_types.
 	 */
 	public static function rest_api_allowed_post_types( $post_types ) {
 		$post_types[] = 'gd_place';

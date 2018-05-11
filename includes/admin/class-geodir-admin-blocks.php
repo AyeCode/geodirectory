@@ -49,6 +49,12 @@ class GeoDir_Admin_Blocks {
 	 */
 	private function __construct() {}
 
+    /**
+     * Includes files.
+     *
+     * @since 2.0.0
+     * @access private
+     */
 	private function includes() {
 
 		//require_once( plugin_dir_path( __FILE__ ) . 'inc/block-types.php' );
@@ -67,6 +73,11 @@ class GeoDir_Admin_Blocks {
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue' ) );
 	}
 
+    /**
+     * Enqueue scripts and styles.
+     *
+     * @since 2.0.0
+     */
 	public function enqueue() {
 
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';

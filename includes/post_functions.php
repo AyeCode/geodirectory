@@ -328,10 +328,14 @@ function geodir_new_post_default_status(){
  *
  * @since 1.0.0
  * @package GeoDirectory
+ *
  * @global object $current_user Current user object.
  * @global object $post The current post object.
- * @param int $user_id The user ID.
- * @param int $post_id The post ID.
+ *
+ * @param int $user_id User id.
+ * @param int $post_id Post id.
+ *
+ * @return string
  */
 function geodir_favourite_html($user_id, $post_id)
 {
@@ -838,6 +842,13 @@ function geodir_max_excerpt( $charlength ) {
     return $out;
 }
 
+/**
+ * Get custom statuses.
+ *
+ * @since 2.0.0
+ *
+ * @return array $custom_statuses.
+ */
 function geodir_get_custom_statuses() {
 	$custom_statuses = array(
 		'gd-closed' => _x( 'Closed down', 'Listing status', 'geodirectory' )
@@ -846,6 +857,13 @@ function geodir_get_custom_statuses() {
     return apply_filters( 'geodir_listing_custom_statuses', $custom_statuses );
 }
 
+/**
+ * Get post statuses.
+ *
+ * @since 2.0.0
+ *
+ * @return array $statuses.
+ */
 function geodir_get_post_statuses() {
     $default_statuses = get_post_statuses();
 	$custom_statuses = geodir_get_custom_statuses();
@@ -877,6 +895,14 @@ function geodir_get_post_status_name( $status ) {
 	return $status_name;
 }
 
+/**
+ * Post is closed.
+ *
+ * @since 2.0.0
+ *
+ * @param object $post Post object.
+ * @return bool $closed
+ */
 function geodir_post_is_closed( $post ) {
 	if ( empty( $post ) ) {
 		return false;
@@ -909,8 +935,12 @@ function geodir_edit_post_link($post_id = '')
 
 }
 
-/*
+/**
  * Setup $gd_post variable.
+ *
+ * @since 2.0.0
+ *
+ * @param int $the_post the post.
  */
 function geodir_setup_postdata( $the_post ) {
 	global $post;
@@ -942,6 +972,18 @@ function geodir_setup_postdata( $the_post ) {
 	}
 }
 
+/**
+ * Get post badge.
+ *
+ * @since 2.0.0
+ *
+ * @param int $post_id Post id/
+ * @param array $args Optional. Post arguments. Default array.
+ *
+ * @global object $gd_post GD post object.
+ *
+ * @return string $output.
+ */
 function geodir_get_post_badge( $post_id, $args = array() ) {
 	global $gd_post;
 

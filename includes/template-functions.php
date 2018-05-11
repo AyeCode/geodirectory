@@ -644,6 +644,12 @@ add_filter( 'geodir_listing_inner_classes', 'geodir_listing_inner_old_classes', 
 
 /**
  * Handle redirects before content is output - hooked into template_redirect so is_page works.
+ *
+ * @since 2.0.0
+ *
+ * @global object $wp_query WordPress Query object.
+ * @global object $wp WordPress post object.
+ * @global object $post post object.
  */
 function geodir_template_redirect() {
     global $wp_query, $wp, $post;
@@ -761,6 +767,8 @@ function geodir_list_view_select() {
 
 /**
  * Output the listing archive image
+ *
+ * @since 2.0.0
  */
 function geodir_listing_archive_image(){
 
@@ -769,7 +777,10 @@ function geodir_listing_archive_image(){
 /**
  * Retrieve page ids - used for myaccount, edit_address, shop, cart, checkout, pay, view_order, terms. returns -1 if no page is found.
  *
+ * @since 2.0.0
+ *
  * @param string $page
+ * @param  bool $wpml Optional. WPML .Default true.
  * @return int
  */
 function geodir_get_page_id( $page, $wpml = true ) {

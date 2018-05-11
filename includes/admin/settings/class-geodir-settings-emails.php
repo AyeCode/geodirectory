@@ -495,7 +495,15 @@ Thank you,
 				)
 			);
 		}
-		
+
+        /**
+         * Global email tags.
+         *
+         * @since  2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         * @return array|string $tags.
+         */
 		public function global_email_tags( $inline = true ) { 
 			$tags = array( '[#blogname#]', '[#site_name#]', '[#site_url#]', '[#site_name_url#]', '[#login_url#]', '[#login_link#]', '[#date#]', '[#time#]', '[#date_time#]', '[#current_date#]', '[#to_name#]', '[#to_email#]', '[#from_name#]', '[#from_email#]' );
 			
@@ -508,6 +516,15 @@ Thank you,
 			return $tags;
 		}
 
+        /**
+         * Send enquiry mail tags.
+         *
+         * @since 2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         *
+         * @return array|string $tags.
+         */
 		public function send_enquiry_email_tags( $inline = true ) { 
 			$global_tags = $this->global_email_tags( false );
 
@@ -521,7 +538,16 @@ Thank you,
 			
 			return $tags;
 		}
-		
+
+        /**
+         * User pending post email tags.
+         *
+         * @since  2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         *
+         * @return array|string $tags.
+         */
 		public function user_pending_post_email_tags( $inline = true ) { 
 			$global_tags = $this->global_email_tags( false );
 
@@ -535,7 +561,16 @@ Thank you,
 			
 			return $tags;
 		}
-		
+
+        /**
+         * User publish post email tags.
+         *
+         * @since  2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         *
+         * @return array|string $tags.
+         */
 		public function user_publish_post_email_tags( $inline = true ) { 
 			$global_tags = $this->global_email_tags( false );
 
@@ -549,7 +584,16 @@ Thank you,
 			
 			return $tags;
 		}
-		
+
+        /**
+         * Owner submit comment email tags.
+         *
+         * @since  2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         *
+         * @return array|string $tags.
+         */
 		public function owner_comment_submit_email_tags( $inline = true ) { 
 			$global_tags = $this->global_email_tags( false );
 
@@ -563,7 +607,16 @@ Thank you,
 			
 			return $tags;
 		}
-		
+
+        /**
+         * Owner approved comment email tags.
+         *
+         * @since  2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         *
+         * @return array|string $tags.
+         */
 		public function owner_comment_approved_email_tags( $inline = true ) { 
 			$global_tags = $this->global_email_tags( false );
 
@@ -577,7 +630,16 @@ Thank you,
 			
 			return $tags;
 		}
-		
+
+        /**
+         * Author approved comment email tags.
+         *
+         * @since  2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         *
+         * @return array|string $tags.
+         */
 		public function author_comment_approved_email_tags( $inline = true ) { 
 			$global_tags = $this->global_email_tags( false );
 
@@ -591,7 +653,16 @@ Thank you,
 			
 			return $tags;
 		}
-		
+
+        /**
+         * Admin pending post email tags.
+         *
+         * @since  2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         *
+         * @return array|string $tags.
+         */
 		public function admin_pending_post_email_tags( $inline = true ) { 
 			$global_tags = $this->global_email_tags( false );
 
@@ -605,7 +676,16 @@ Thank you,
 			
 			return $tags;
 		}
-		
+
+        /**
+         * Admin edit post email tags.
+         *
+         * @since  2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         *
+         * @return array|string $tags.
+         */
 		public function admin_post_edit_email_tags( $inline = true ) { 
 			$global_tags = $this->global_email_tags( false );
 
@@ -619,7 +699,16 @@ Thank you,
 			
 			return $tags;
 		}
-		
+
+        /**
+         * Admin moderate comment email tags.
+         *
+         * @since  2.0.0
+         *
+         * @param bool $inline Optional. Email tag inline value. Default true.
+         *
+         * @return array|string $tags.
+         */
 		public function admin_moderate_comment_email_tags( $inline = true ) { 
 			$global_tags = $this->global_email_tags( false );
 

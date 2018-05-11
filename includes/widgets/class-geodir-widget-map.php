@@ -18,7 +18,9 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	public $arguments;
 
 	/**
-	 * Sets up the widgets name etc
+	 * Sets up the widgets name etc.
+     *
+     * @since 2.0.0
 	 */
 	public function __construct() {
 
@@ -152,6 +154,23 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		<?php
 	}
 
+    /**
+     * Custom Content html.
+     *
+     * @since 2.0.0
+     *
+     * @param array $map_options {
+     *      An array for map options.
+     *
+     *      @type string $map_canvas Map canvas value.
+     *      @type string $map_directions Map Direction values.
+     *      @type string $cat_filter Category filter value.
+     *      @type string $search_filter Search filter value.
+     *      @type string $post_type_filter Post type filter value.
+     *      @type string $post_type Post type.
+     *      @type string $child_collapse child collapse value.
+     * }
+     */
 	public static function custom_content( $map_options ) {
 		$map_canvas = $map_options['map_canvas'];
 		if ( ! empty( $map_options['map_directions'] ) ) {
@@ -273,6 +292,13 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		}
 	}
 
+    /**
+     *Get Map post types.
+     *
+     * @since 2.0.0
+     *
+     * @return array $map_post_types.
+     */
 	public static function map_post_types() {
 		$map_post_types     = geodir_get_posttypes( 'options-plural' );
 		$exclude_post_types = geodir_get_option( 'geodir_exclude_post_type_on_map' );
@@ -287,6 +313,20 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		return $map_post_types;
 	}
 
+    /**
+     * Custom scripts.
+     *
+     * @since 2.0.0
+     *
+     * @param array $map_options {
+     *      An array for map options.
+     *
+     *      @type string $map_canvas Map canvas value.
+     *      @type string $sticky map sticky value.
+     *      @type string $map_directions map directions.
+     *      @type string $height map height.
+     * }
+     */
 	public static function custom_script( $map_options ) {
 		$map_canvas = $map_options['map_canvas'];
 		?>
@@ -326,11 +366,14 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		<?php
 	}
 
-	/*
-	 * Display the map.
-	 *
-	 */
 
+    /**
+     * Set map arguments.
+     *
+     * @since 2.0.0
+     *
+     * @return array $arguments.
+     */
 	public function set_arguments() {
 		$arguments = array(
 			'title'            => array(
@@ -511,15 +554,13 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		return $arguments;
 	}
 
-	/*
-	 * Display the map.
-	 *
-	 */
 
 	/**
 	 * Get the post type options.
+     *
+     * @since 2.0.0
 	 *
-	 * @return array
+	 * @return array $options.
 	 */
 	public function post_type_options() {
 		$options = array(
@@ -535,6 +576,14 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		return $options;
 	}
 
+    /**
+     * Get categories.
+     *
+     * @since 2.0.0
+     *
+     * @param string $post_type Optional. Posttype. Default gd_place.
+     * @return array $options.
+     */
 	public function get_categories( $post_type = 'gd_place' ) {
 		$options    = array(
 			'0' => __( 'All', 'geodirectory' )
@@ -556,6 +605,15 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		return $options;
 	}
 
+    /**
+     * Get Post map.
+     *
+     * @since 2.0.0
+     *
+     * @param object $post Post object.
+     * @param bool $echo Optional. echo. Default true.
+     * @return string $output.
+     */
 	public function post_map( $post, $echo = true ) {
 		if ( is_int( $post ) ) {
 			$post = geodir_get_post_info( $post );
@@ -739,6 +797,14 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		return self::render_map( $map_args );
 	}
 
+    /**
+     * Rander map.
+     *
+     * @since 2.0.0
+     *
+     * @param array $map_args Map arguments array.
+     * @return string $content.
+     */
 	public static function render_map( $map_args ) {
 		$defaults = array(
 			'map_type'       => 'auto',                    // auto, directory, archive, post
@@ -824,6 +890,13 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		return $content;
 	}
 
+    /**
+     * Display Map.
+     *
+     * @since 2.0.0
+     *
+     * @param array $params map arguments array.
+     */
 	public static function display_map( $params ) { //geodir_error_log( $params, 'display_map', __FILE__, __LINE__ );
 		global $gd_maps_canvas;
 		if ( empty( $gd_maps_canvas ) ) {

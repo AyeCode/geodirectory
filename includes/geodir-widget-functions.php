@@ -193,8 +193,14 @@ function geodir_bestof_callback() {
     geodir_die();
 }
 
-
-
+/**
+ * Function for show best review in excerpt.
+ *
+ * @since 2.0.0
+ *
+ * @param string $excerpt Best review excerpt value.
+ * @return string $excerpt.
+ */
 function best_of_show_review_in_excerpt($excerpt) {
     global $wpdb, $post;
 
@@ -271,6 +277,15 @@ function geodir_cpt_categories_child_cats($parent_id, $cpt, $hide_empty, $hide_c
     return $content;
 }
 
+/**
+ * Function for get features parse image or icon.
+ *
+ * @since 2.0.0
+ *
+ * @param string $image Features parse image url.
+ * @param string $icon_color Icon color.
+ * @return string $image
+ */
 function geodir_features_parse_image($image, $icon_color) {
     if (substr($image, 0, 4) === "http") {
         $image = '<img src="' . $image . '" />';
@@ -283,6 +298,14 @@ function geodir_features_parse_image($image, $icon_color) {
     return $image;
 }
 
+/**
+ * Function for get features parse description.
+ *
+ * @since 2.0.0
+ *
+ * @param string $desc Features parse description.
+ * @return string $desc.
+ */
 function geodir_features_parse_desc($desc) {
     return $desc;
 }
@@ -358,6 +381,13 @@ function show_listing_widget_map() {
     wp_localize_script('geodir-listing-map-widget', 'listing_map_args', $listing_map_args);
 }
 
+/**
+ * Function for widget pages options.
+ *
+ * @since 2.0.0
+ *
+ * @return array $gd_widget_pages.
+ */
 function geodir_widget_pages_options() {
     global $gd_widget_pages;
 
@@ -385,6 +415,13 @@ function geodir_widget_pages_options() {
     return apply_filters( 'geodir_widget_pages_options', $gd_widget_pages );
 }
 
+/**
+ * Function for widget page id bases detail.
+ *
+ * @since 2.0.0
+ *
+ * @return array $id_bases.
+ */
 function geodir_detail_page_widget_id_bases() {
     $id_bases = array(
         'detail_user_actions',
@@ -397,6 +434,14 @@ function geodir_detail_page_widget_id_bases() {
     return apply_filters( 'geodir_detail_page_widget_id_bases', $id_bases );
 }
 
+/**
+ * Function for check is detail page widget.
+ *
+ * @since 2.0.0
+ *
+ * @param string $id_base widget page id base.
+ * @return bool $return.
+ */
 function geodir_is_detail_page_widget( $id_base ) {
     $widgets = geodir_detail_page_widget_id_bases();
     
@@ -405,6 +450,22 @@ function geodir_is_detail_page_widget( $id_base ) {
     return apply_filters( 'geodir_is_detail_page_widget', $return, $id_base, $widgets );
 }
 
+/**
+ * Function for display widget c
+ *
+ *
+ * @since 2.0.0
+ *
+ * @param array $instance {
+ *      An array display widget arguments.
+ *
+ *      @type string $gd_wgt_showhide Widget display type.
+ *      @type string $gd_wgt_restrict Widget restrict pages.
+ * }
+ * @param object $widget Display widget options.
+ * @param array $args Widget arguments.
+ * @return bool|array $instance
+ */
 function geodir_widget_display_callback( $instance, $widget, $args ) {
     if ( !empty( $widget->widget_options['geodirectory'] ) && !empty( $instance['gd_wgt_showhide'] ) ) {
         $display_type = !empty( $instance['gd_wgt_showhide'] ) ? $instance['gd_wgt_showhide'] : '';
