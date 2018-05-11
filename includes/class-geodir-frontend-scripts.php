@@ -422,7 +422,7 @@ class GeoDir_Frontend_Scripts {
 		wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
 		wp_enqueue_script( 'geodir-goMap' );
 
-		
+		wp_enqueue_script( 'jquery-ui-autocomplete' );
 	}
 
 	/**

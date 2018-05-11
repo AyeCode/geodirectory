@@ -1,6 +1,9 @@
+v2.0.0.14-beta
+Map default language setting is not working for OpenStreetMap - FIXED
+
 v2.0.0.13-beta
 Page templates for building layouts now restricted from frontend viewing - CHANGED
-GD page settings now containg link to edit/view pages when set - ADDED
+GD page settings now contains link to edit/view pages when set - ADDED
 Custom fields icon now has option to select font awesome icon from a list - ADDED
 validation_pattern for custom fields can have slashes stripped which can break validation - FIXED
 File upload custom field can now accept multiple files - CHANGED
@@ -44,7 +47,7 @@ Shortcode builder not working with WooCommerce products - FIXED
 lat/lon DB length increased from 20 to 22 chars to account for negative decimals - CHANGED
 Map direction unit conflicts when multiple maps are on the page - FIXED
 Extensions screen improvements functionality and UI - CHANGED
-Super Duper Class chnaged to show shortcode title like widget title if used - CHANGED
+Super Duper Class changed to show shortcode title like widget title if used - CHANGED
 Shortcode builder not using 100% height on large displays - FIXED
 Category widget output slightly changed for title_tag - CHANGED
 Default image not checking for default category image - FIXED

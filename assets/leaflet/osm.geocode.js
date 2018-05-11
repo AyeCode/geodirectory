@@ -421,7 +421,7 @@ function gd_osm_parse_name(name, search) {
 }
 
 function geocodePositionOSM(latLon, address, countrycodes, updateMap, callback) {
-    data = {format: 'json', addressdetails: 1, limit: 1};
+    data = {format: 'json', addressdetails: 1, limit: 1, 'accept-language': geodir_params.mapLanguage};
     
     if (address) {
         type = 'search';

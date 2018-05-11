@@ -1339,6 +1339,61 @@ table.gd_status_table th.run-tool {
 	margin-top: 5px;
 }
 
+/* OSM map autocomplete search */
+input[name="street"].ui-autocomplete-loading {
+    background-image:url(../images/classic-loader.gif);
+    background-repeat: no-repeat;
+    background-position: center right 9px;
+}
+.gd-osm-results {
+    background-color: #fff;
+    border-radius: 2px;
+    border: none !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    box-sizing: border-box;
+    overflow: hidden;
+    position: absolute !important;
+    z-index: 1000;
+    width: auto !important;
+}
+.gd-osm-results .ui-menu-item {
+    border: none !important;
+    border-top: 1px solid #e6e6e6 !important;
+    color: #777!important;
+    cursor: default;
+    font-size: 12px;
+    line-height: 30px;
+    overflow: hidden;
+    padding: 0 4px !important;
+    text-align: left;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    background: none !important;
+    margin: 0 !important;
+    font-family: Arial,sans-serif!important;
+}
+.gd-osm-results .ui-menu-item span {
+    color: #777;
+    font-size: 11px;
+}
+.gd-osm-results .ui-menu-item > span .gdOQ,
+.gd-osm-results .ui-menu-item > span .gdOH {
+    color: #333!important;
+    font-size: 12px;
+}
+.gd-osm-results .ui-menu-item:hover {
+    background-color: #fafafa !important;
+}
+.gd-osm-results .ui-menu-item .fa {
+    margin-right: 5px;
+}
+.gd-osm-results .ui-menu-item:hover .fa {
+    color: #3887be!important;
+}
+.gd-osm-results .ui-menu-item  .gdOH {
+    font-weight: 700;
+}
+
 /********************************************************
 Media Queries
 ********************************************************/
