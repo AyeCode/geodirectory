@@ -1020,6 +1020,11 @@ function geodir_remove_last_word($text) {
     return '';
 }
 
+/**
+ * Restore tool from custom post type taxonomies.
+ *
+ * @since 2.0.0
+ */
 function geodir_tool_restore_cpt_from_taxonomies() {
     $cpts = geodir_get_posttypes();
     if ( !empty( $cpts ) ) {
@@ -1265,6 +1270,15 @@ function geodir_utf8_ucfirst( $str, $lower_str_end = false, $encoding = 'UTF-8' 
     return ucfirst( $str );
 }
 
+/**
+ * Total listings count.
+ *
+ * @param bool $post_type Optional Post type. Default false.
+ *
+ * @global object $wpdb WordPress Database object.
+ *
+ * @return int $count.
+ */
 function geodir_total_listings_count($post_type = false)
 {
 	global $wpdb;
@@ -1286,10 +1300,24 @@ function geodir_total_listings_count($post_type = false)
 	return $count;
 }
 
+/**
+ * Get diagnose step max items.
+ *
+ * @return int
+ */
 function geodir_get_diagnose_step_max_items() {
 	return 5;
 }
 
+/**
+ * File relative url.
+ *
+ * @since 2.0.0
+ *
+ * @param string $url URL.
+ * @param bool $full_path Optional. Full Path. Default false.
+ * @return string
+ */
 function geodir_file_relative_url( $url, $full_path = false ) {
     $url = trim( $url );
     
@@ -1344,6 +1372,14 @@ function geodir_file_relative_url( $url, $full_path = false ) {
     return apply_filters( 'geodir_file_relative_url', $relative_url, $url, $full_path );
 }
 
+/**
+ * Check is image file.
+ *
+ * @since 2.0.0
+ *
+ * @param string $url URL.
+ * @return bool
+ */
 function geodir_is_image_file( $url ) {
     if ( !empty( $url ) ) {
         $filetype = wp_check_filetype( $url );
@@ -1356,10 +1392,25 @@ function geodir_is_image_file( $url ) {
     return false;
 }
 
+/**
+ * Get php arguments separator output.
+ *
+ * @since 2.0.0
+ *
+ * @return string
+ */
 function geodir_get_php_arg_separator_output() {
     return ini_get( 'arg_separator.output' );
 }
 
+/**
+ * RGB from hex.
+ *
+ * @since 2.0.0
+ *
+ * @param string $color Color.
+ * @return array $rgb.
+ */
 function geodir_rgb_from_hex( $color ) {
     $color = str_replace( '#', '', $color );
 	
@@ -1377,6 +1428,15 @@ function geodir_rgb_from_hex( $color ) {
     return $rgb;
 }
 
+/**
+ * HEX darker.
+ *
+ * @since 2.0.0
+ *
+ * @param string $color Color.
+ * @param int $factor Optional. Factor. Default 30.
+ * @return string $color.
+ */
 function geodir_hex_darker( $color, $factor = 30 ) {
     $base  = geodir_rgb_from_hex( $color );
     if ( empty( $base ) ) {
@@ -1399,6 +1459,15 @@ function geodir_hex_darker( $color, $factor = 30 ) {
     return $color;
 }
 
+/**
+ * Hex lighter.
+ *
+ * @since 2.0.0
+ *
+ * @param string $color Color.
+ * @param int $factor Optional. factor. Default 30.
+ * @return string $color.
+ */
 function geodir_hex_lighter( $color, $factor = 30 ) {
     $base  = geodir_rgb_from_hex( $color );
     if ( empty( $base ) ) {
@@ -1423,6 +1492,16 @@ function geodir_hex_lighter( $color, $factor = 30 ) {
     return $color;
 }
 
+/**
+ * Get Light or dark.
+ *
+ * @since 2.0.0
+ *
+ * @param string $color color.
+ * @param string $dark Optional. Dark. Default #000000.
+ * @param string $light Optional. Light. Default #FFFFFF.
+ * @return string
+ */
 function geodir_light_or_dark( $color, $dark = '#000000', $light = '#FFFFFF' ) {
     $hex = str_replace( '#', '', $color );
     if ( empty( $hex ) ) {
@@ -1438,6 +1517,14 @@ function geodir_light_or_dark( $color, $dark = '#000000', $light = '#FFFFFF' ) {
     return $brightness > 155 ? $dark : $light;
 }
 
+/**
+ * Format hex.
+ *
+ * @since 2.0.0
+ *
+ * @param string $hex hex.
+ * @return string
+ */
 function geodir_format_hex( $hex ) {
     $hex = trim( str_replace( '#', '', $hex ) );
 	if ( empty( $hex ) ) {
@@ -1478,6 +1565,8 @@ function geodir_user_roles($exclude = array()){
  *
  * Gets the URL for an endpoint, which varies depending on permalink settings.
  *
+ * @since 2.0.0
+ *
  * @param  string $endpoint  Endpoint slug.
  * @param  string $value     Query param value.
  * @param  string $permalink Permalink.
@@ -1514,6 +1603,17 @@ function geodir_get_endpoint_url( $endpoint, $value = '', $permalink = '' ) {
 	return apply_filters( 'geodir_get_endpoint_url', $url, $endpoint, $value, $permalink );
 }
 
+/**
+ * Array splice assoc.
+ *
+ * @since 2.0.0
+ *
+ * @param string $input Input value.
+ * @param string $offset Offset.
+ * @param string $length Length.
+ * @param string $replacement Replacement.
+ * @return array $input.
+ */
 function geodir_array_splice_assoc( $input, $offset, $length, $replacement ) {
 	$replacement = (array) $replacement;
 	

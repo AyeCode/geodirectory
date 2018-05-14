@@ -64,6 +64,9 @@ class GeoDir_Admin_Status {
 
 	/**
 	 * Get tools.
+     *
+     * @since 2.0.0
+     *
 	 * @return array of tools
 	 */
 	public static function get_tools() {
@@ -106,6 +109,9 @@ class GeoDir_Admin_Status {
 
 	/**
 	 * Scan the template files.
+     *
+     * @since 2.0.0
+     *
 	 * @param  string $template_path
 	 * @return array
 	 */
@@ -136,6 +142,9 @@ class GeoDir_Admin_Status {
 
 	/**
 	 * Get latest version of a theme by slug.
+     *
+     * @since 2.0.0
+     *
 	 * @param  object $theme WP_Theme object.
 	 * @return string Version number if found.
 	 */

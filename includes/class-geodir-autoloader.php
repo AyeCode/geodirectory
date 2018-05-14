@@ -22,7 +22,9 @@ class GeoDir_Autoloader {
     private $include_path = '';
 
     /**
-     * The Constructor.
+     * GeoDir_Autoloader constructor.
+     *
+     * @since 2.0.0
      */
     public function __construct() {
         if ( function_exists( "__autoload" ) ) {
@@ -37,6 +39,8 @@ class GeoDir_Autoloader {
     /**
      * Take a class name and turn it into a file name.
      *
+     * @since 2.0.0
+     *
      * @param  string $class
      * @return string
      */
@@ -46,6 +50,8 @@ class GeoDir_Autoloader {
 
     /**
      * Include a class file.
+     *
+     * @since 2.0.0
      *
      * @param  string $path
      * @return bool successful or not
@@ -60,6 +66,8 @@ class GeoDir_Autoloader {
 
     /**
      * Auto-load GeoDir classes on demand to reduce memory consumption.
+     *
+     * @since 2.0.0
      *
      * @param string $class
      */

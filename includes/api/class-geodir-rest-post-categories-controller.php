@@ -27,7 +27,7 @@ class GeoDir_REST_Post_Categories_Controller extends GeoDir_REST_Terms_Controlle
 	 *
 	 * @since 2.0.0
 	 *
-	 * @param obj             $item    Term object.
+	 * @param object             $item    Term object.
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_REST_Response $response Response object.
 	 */

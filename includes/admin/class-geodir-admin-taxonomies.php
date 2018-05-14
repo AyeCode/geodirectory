@@ -174,7 +174,17 @@ class GeoDir_Admin_Taxonomies {
         <?php do_action( 'geodir_edit_category_bottom', $term, $taxonomy ); ?>
         <?php
     }
-    
+
+    /**
+     * Render cat top description.
+     *
+     * @since 2.0.0
+     *
+     * @param string $content Optional. Render cat content. Default null.
+     * @param string $id Optional. Cat ID. Default ct_cat_top_desc.
+     * @param string $name Optional. Cat name. Default null.
+     * @return string Description.
+     */
     public function render_cat_top_desc( $content = '', $id = 'ct_cat_top_desc', $name = '' ) {
         if ( empty( $name ) ) {
             $name = $id;
@@ -187,7 +197,17 @@ class GeoDir_Admin_Taxonomies {
         ?><p class="description"><?php _e( 'This will appear at the top of the category listing.', 'geodirectory' ); ?></p><?php
         return ob_get_clean();
     }
-    
+
+    /**
+     * Get Render category default image html.
+     *
+     * @since 2.0.0
+     *
+     * @param array $default_img Optional. Render cat image. Default array().
+     * @param string $id Optional. Cat ID. Default ct_cat_default_img.
+     * @param string $name Optional. Cat name. Default null.
+     * @return string Render default image html.
+     */
     public function render_cat_default_img( $default_img = array(), $id = 'ct_cat_default_img', $name = '' ) {
         if ( empty( $name ) ) {
             $name = $id;
@@ -212,7 +232,17 @@ class GeoDir_Admin_Taxonomies {
         <?php
         return ob_get_clean();
     }
-    
+
+    /**
+     * Get render category icon html.
+     *
+     * @since 2.0.0
+     *
+     * @param array $cat_icon Optional. Default array.
+     * @param string $id Optional. Cat ID. Default ct_cat_icon.
+     * @param string $name Optional. Cat name. Default null.
+     * @return string Category icon html
+     */
     public function render_cat_icon( $cat_icon = array(), $id = 'ct_cat_icon', $name = '' ) {
         if ( empty( $name ) ) {
             $name = $id;
@@ -238,6 +268,16 @@ class GeoDir_Admin_Taxonomies {
         return ob_get_clean();
     }
 
+    /**
+     * Get render cat font icon html.
+     *
+     * @since 2.0.0
+     *
+     * @param string $cat_icon Optional. Font cat icon. Default null.
+     * @param string $id Optional. Category id. Default ct_cat_font_icon.
+     * @param string $name Optional. Category name. Default null.
+     * @return string Font icon html.
+     */
     public function render_cat_font_icon( $cat_icon = '', $id = 'ct_cat_font_icon', $name = '' ) {
         if ( empty( $name ) ) {
             $name = $id;
@@ -266,6 +306,16 @@ class GeoDir_Admin_Taxonomies {
         return ob_get_clean();
     }
 
+    /**
+     * Get render cat color html.
+     *
+     * @since 2.0.0
+     *
+     * @param string $cat_color Optional. Category color. Default null.
+     * @param string $id Optional. Category id. Default ct_cat_color.
+     * @param string $name Optional. Category name. Default null.
+     * @return string cat color html.
+     */
     public function render_cat_color( $cat_color = '', $id = 'ct_cat_color', $name = ''  ) {
         if ( empty( $name ) ) {
             $name = $id;
@@ -285,7 +335,17 @@ class GeoDir_Admin_Taxonomies {
         <?php
         return ob_get_clean();
     }
-    
+
+    /**
+     * Get render schema html.
+     *
+     * @since 2.0.0
+     *
+     * @param string $cat_schema Optional. Cat schema value. Default null.
+     * @param string $id Optional. Cat id. Default ct_cat_schema.
+     * @param string $name Optional. Cat name. Default null.
+     * @return string Category schema html.
+     */
     public function render_cat_schema( $cat_schema = '', $id = 'ct_cat_schema', $name = ''  ) {
         $schemas = self::get_schemas();
         
@@ -418,6 +478,17 @@ class GeoDir_Admin_Taxonomies {
         return $columns;
     }
 
+    /**
+     * Taxonomy walker.
+     *
+     * @since 2.0.0
+     *
+     * @param string $cat_taxonomy Category taxonomy.
+     * @param int $cat_parent Optional. Category parent ID. Default 0.
+     * @param bool $hide_empty Optional. Taxonomy hide empty. Default false.
+     * @param int $pading Optional. Pading value . Default 0.
+     * @return string Taxonomy walker html.
+     */
     public static function taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = false, $pading = 0)
     {
         global $cat_display, $post_cat, $exclude_cats;
@@ -489,8 +560,19 @@ class GeoDir_Admin_Taxonomies {
         return '';
     }
 
-    /*
+    /**
      * Get CPT taxonomy select.
+     *
+     * Check if $echo is true then select category html echo
+     * else return select category html.
+     *
+     * @since 2.0.0
+     *
+     * @param string $post_type Optional. Post type. Default null.
+     * @param string $selected Optional. Category selected. Default null.
+     * @param bool $is_tag Optional. Is tag. Default false.
+     * @param bool $echo Optional. Html echo. Default true.
+     * @return string
      */
     public static function get_category_select($post_type = '', $selected = '', $is_tag = false, $echo = true){
         $html = '';

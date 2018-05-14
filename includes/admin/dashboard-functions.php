@@ -7,6 +7,15 @@ add_filter( 'geodir_dashboard_get_stats', 'geodir_dashboard_reviews_stats', 2, 3
 //add_filter( 'geodir_dashboard_get_stats', 'geodir_dashboard_revenues_stats', 5, 3 ); 			// 5. Revenues
 add_filter( 'geodir_dashboard_get_stats', 'geodir_dashboard_users_stats', 6, 3 ); 				// 6. Users
 
+/**
+ * Dashboard starts and end dates.
+ *
+ * @since 2.0.0
+ *
+ * @param string $period Optional. Dates Month period. Default this_month.
+ *
+ * @return array $dates.
+ */
 function geodir_dashboard_start_end_dates( $period = 'this_month' ) {
 	$dates = array();
 
@@ -57,6 +66,16 @@ function geodir_dashboard_start_end_dates( $period = 'this_month' ) {
 	return apply_filters( 'geodir_dashboard_start_end_dates', $dates, $period );
 }
 
+/**
+ * Dashboard default chart parameters.
+ *
+ * @since 2.0.0
+ *
+ * @param $type Type.
+ * @param $period Start and end date Month period.
+ *
+ * @return array $params
+ */
 function geodir_dashboard_default_chart_params( $type, $period ) {
 	$params = array();
 
@@ -74,6 +93,11 @@ function geodir_dashboard_default_chart_params( $type, $period ) {
 	return apply_filters( 'geodir_dashboard_default_chart_params', $params, $type, $period );
 }
 
+/**
+ * Dashboard ajax state.
+ *
+ * @since 2.0.0
+ */
 function geodir_dashboard_ajax_stats() {
 	$data = array();
 	
@@ -96,7 +120,16 @@ function geodir_dashboard_ajax_stats() {
 }
 add_action( 'wp_ajax_geodir_stats_ajax', 'geodir_dashboard_ajax_stats' );
 
-// Listings
+/**
+ * Dashboard listings states.
+ *
+ * @since 2.0.0
+ *
+ * @param array $stats Listing states array.
+ * @param string $type Listing type.
+ * @param string $period period.
+ * @return array $stats
+ */
 function geodir_dashboard_listings_stats( $stats, $type, $period ) {
 	$post_types	= geodir_get_posttypes();
 	if ( ! ( $type == 'all' || in_array( $type, $post_types ) ) ) {
@@ -134,6 +167,16 @@ function geodir_dashboard_listings_stats( $stats, $type, $period ) {
 	return $stats;
 }
 
+/**
+ * Dashboard post types states.
+ *
+ * @since 2.0.0
+ *
+ * @param string $type Optional. Listing type Default all.
+ * @param string $period Optional. Period. Default all.
+ * @param array $statuses Optional. Statuses. Default array.
+ * @return array $stats.
+ */
 function geodir_dashboard_post_types_stats( $type = 'all', $period = 'all', $statuses = array() ) {
 	$post_types	= geodir_get_posttypes( 'array' );
 	if ( ! empty( $type ) && $type != 'all' ) {
@@ -154,6 +197,16 @@ function geodir_dashboard_post_types_stats( $type = 'all', $period = 'all', $sta
 	return apply_filters( 'geodir_dashboard_post_types_stats', $stats, $type, $period, $statuses );
 }
 
+/**
+ * Dashboard post type states.
+ *
+ * @since 2.0.0
+ *
+ * @param $post_type Post type.
+ * @param string $period Optional. Period. Default all.
+ * @param array $statuses Optional. Statuses. Default array.
+ * @return array $stats.
+ */
 function geodir_dashboard_post_type_stats( $post_type, $period = 'all', $statuses = array() ) {
 	$dates = geodir_dashboard_start_end_dates( $period );
 
@@ -176,6 +229,16 @@ function geodir_dashboard_post_type_stats( $post_type, $period = 'all', $statuse
 	return apply_filters( 'geodir_dashboard_post_type_stats', $stats, $period, $post_type, $statuses );
 }
 
+/**
+ * Dashboard posts Query count.
+ *
+ * @since 2.0.0
+ *
+ * @param $post_type Post type.
+ * @param array $statuses Optional. Statuses. Default array.
+ * @param string $where Optional. Where. Default null.
+ * @return array $count.
+ */
 function geodir_dashboard_query_posts_count( $post_type, $statuses = array(), $where = '' ) {
 	global $wpdb;
 
@@ -194,7 +257,16 @@ function geodir_dashboard_query_posts_count( $post_type, $statuses = array(), $w
 	return apply_filters( 'geodir_dashboard_query_posts_count', $count, $post_type, $statuses, $where );
 }
 
-// Reviews
+/**
+ * Dashboard reviews stats.
+ *
+ * @since 2.0.0
+ *
+ * @param $stats State.
+ * @param $type Type.
+ * @param $period Period.
+ * @return array $stats.
+ */
 function geodir_dashboard_reviews_stats( $stats, $type, $period ) {
 	$post_types	= geodir_get_posttypes();
 	if ( ! ( $type == 'all' || in_array( $type, $post_types ) ) ) {
@@ -232,6 +304,16 @@ function geodir_dashboard_reviews_stats( $stats, $type, $period ) {
 	return $stats;
 }
 
+/**
+ * Dashboard Post type reviews stats.
+ *
+ * @since 2.0.0
+ *
+ * @param string $type Optional. Type. Default all.
+ * @param string $period Optional. Period. Default all.
+ * @param array $statuses Optional. Statuses. Default array.
+ * @return array $stats.
+ */
 function geodir_dashboard_post_types_reviews_stats( $type = 'all', $period = 'all', $statuses = array() ) {
 	$post_types	= geodir_get_posttypes( 'array' );
 	if ( ! empty( $type ) && $type != 'all' ) {
@@ -252,6 +334,16 @@ function geodir_dashboard_post_types_reviews_stats( $type = 'all', $period = 'al
 	return apply_filters( 'geodir_dashboard_post_type_reviews_stats', $stats, $type, $period, $statuses );
 }
 
+/**
+ * Dashboard post type reviews state.
+ *
+ * @since 2.0.0
+ *
+ * @param string $post_type Post type.
+ * @param string $period Optional. Period Default all.
+ * @param array $statuses Optional. Statuses. Default array.
+ * @return array $stats.
+ */
 function geodir_dashboard_post_type_reviews_stats( $post_type, $period = 'all', $statuses = array() ) {
 	$dates = geodir_dashboard_start_end_dates( $period );
 
@@ -274,6 +366,16 @@ function geodir_dashboard_post_type_reviews_stats( $post_type, $period = 'all', 
 	return apply_filters( 'geodir_dashboard_post_type_reviews_stats', $stats, $period, $post_type, $statuses );
 }
 
+/**
+ * Dashboard reviews count.
+ *
+ * @since 2.0.0
+ *
+ * @param string $post_type Posttype.
+ * @param array $statuses Optional. Statuses. Default array.
+ * @param string $where Optional. Where. Default null.
+ * @return array $count.
+ */
 function geodir_dashboard_query_reviews_count( $post_type, $statuses = array(), $where = '' ) {
 	global $wpdb;
 
@@ -292,7 +394,16 @@ function geodir_dashboard_query_reviews_count( $post_type, $statuses = array(), 
 	return apply_filters( 'geodir_dashboard_query_reviews_count', $count, $post_type, $statuses, $where );
 }
 
-// Users
+/**
+ * Dashboard users stats.
+ *
+ * @since 2.0.0
+ *
+ * @param array $stats Stats.
+ * @param string $type Type.
+ * @param string $period Period.
+ * @return array $stats.
+ */
 function geodir_dashboard_users_stats( $stats, $type, $period ) {
 	if ( $type != 'all' ) {
 		return $stats;
@@ -327,6 +438,16 @@ function geodir_dashboard_users_stats( $stats, $type, $period ) {
 	return $stats;
 }
 
+/**
+ * Dashboard get users stats.
+ *
+ * @since 2.0.0
+ *
+ * @param string $type Optional. Type. Default all.
+ * @param string $period Optional. Period. Default all.
+ * @param array $statuses Optional. Statuses. Default array.
+ * @return array $stats.
+ */
 function geodir_dashboard_get_users_stats( $type = 'all', $period = 'all', $statuses = array() ) {
 	$dates = geodir_dashboard_start_end_dates( $period );
 
@@ -349,6 +470,15 @@ function geodir_dashboard_get_users_stats( $type = 'all', $period = 'all', $stat
 	return apply_filters( 'geodir_dashboard_get_users_stats', $stats, $type, $period, $statuses );
 }
 
+/**
+ * Dashboard users count.
+ *
+ * @since 2.0.0
+ *
+ * @param array $statuses Optional. Statuses. Default array.
+ * @param string $where Optional. Where. Default null.
+ * @return array $count.
+ */
 function geodir_dashboard_query_users_count( $statuses = array(), $where = '' ) {
 	global $wpdb;
 
@@ -367,8 +497,19 @@ function geodir_dashboard_query_users_count( $statuses = array(), $where = '' ) 
 	return apply_filters( 'geodir_dashboard_query_users_count', $count, $statuses, $where );
 }
 
-// @todo integrate via addons
-// Claimed Listings
+
+/**
+ * Dashboard claimed listings stats.
+ *
+ * @since 2.0.0
+ *
+ * @todo integrate via addons
+ *
+ * @param array $stats stats.
+ * @param string $type Type.
+ * @param string $period Period.
+ * @return array $stats.
+ */
 function geodir_dashboard_claimed_listings_stats( $stats, $type, $period ) {
 	$stat_key = 'claimed_listings';
 	$stat_label = __( 'Claimed Listings', 'geodirectory' );
@@ -391,7 +532,16 @@ function geodir_dashboard_claimed_listings_stats( $stats, $type, $period ) {
 	return $stats;
 }
 
-// Paid Listings
+/**
+ * Dashboard paid listings stats.
+ *
+ * @since 2.0.0
+ *
+ * @param array $stats Stats.
+ * @param string $type Type.
+ * @param string $period Period.
+ * @return array $stats.
+ */
 function geodir_dashboard_paid_listings_stats( $stats, $type, $period ) {
 	$stat_key = 'paid_listings';
 	$stat_label = __( 'Paid Listings', 'geodirectory' );
@@ -414,7 +564,16 @@ function geodir_dashboard_paid_listings_stats( $stats, $type, $period ) {
 	return $stats;
 }
 
-// Revenues
+/**
+ * Dashboard revenue stats.
+ *
+ * @since 2.0.0
+ *
+ * @param array $stats Stats.
+ * @param string $type Type.
+ * @param string $period Period.
+ * @return array $stats.
+ */
 function geodir_dashboard_revenues_stats( $stats, $type, $period ) {
 	$stat_key = 'revenues';
 	$stat_label = __( 'Revenues', 'geodirectory' );
@@ -437,6 +596,13 @@ function geodir_dashboard_revenues_stats( $stats, $type, $period ) {
 	return $stats;
 }
 
+/**
+ * Dashboard get pending stats.
+ *
+ * @since 2.0.0
+ *
+ * @return array $stats.
+ */
 function geodir_dashboard_get_pending_stats() {
 	$stats = array();
 	$stats['listings'] = array(

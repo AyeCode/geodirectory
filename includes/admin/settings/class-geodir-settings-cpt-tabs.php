@@ -208,6 +208,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			return sprintf( __( 'Drag and drop the items to create the %s tabs.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
+        /**
+         * Get tab fields.
+         *
+         * @since 2.0.0
+         *
+         * @param string $post_type Post type value.
+         * @param string $type Optional. Tab layout values. .Default post.
+         *
+         * @global object $wpdb WordPress Database object.
+         *
+         * @return array|object.
+         */
 		public static function get_tabs_fields($post_type,$type='post'){
 			global $wpdb;
 			return $wpdb->get_results($wpdb->prepare("SELECT * FROM ".GEODIR_TABS_LAYOUT_TABLE." WHERE post_type=%s AND tab_layout=%s ORDER BY sort_order ASC",$post_type,$type));
@@ -304,6 +316,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			return ob_get_clean();
 		}
 
+        /**
+         * Delete loop tabs output.
+         *
+         * @since 2.0.0
+         *
+         * @param array $tabs Tab Fields information.
+         * @param bool $sub Optional. Tab sub values. Default false.
+         */
 		public static function loop_tabs_output_delete_me($tabs,$sub = false){
 			if(!empty($tabs)){
 				foreach($tabs as $key => $tab){
@@ -402,6 +422,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 		}
 
+        /**
+         * Get standard fields.
+         *
+         * @since 2.0.0
+         *
+         * @global object $wpdb WordPress Database object.
+         *
+         * @return array $fields.
+         */
 		public function get_standard_fields(){
 			global $wpdb;
 			$fields = array();
@@ -451,6 +480,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			self::output_fields($cfs);
 		}
 
+        /**
+         * Get predefined fields.
+         *
+         * @since 2.0.0
+         *
+         * @param string $post_type Posttype values.
+         * @return array $fields.
+         */
 		public function get_predefined_fields( $post_type ){
 			$fields = array();
 
@@ -505,6 +542,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			self::output_fields($cfs);
 		}
 
+        /**
+         * Insert the shortcode function.
+         *
+         * @since 2.0.0
+         *
+         * @return string
+         */
 		public function insert_shortcode_function(){
 			ob_start();
 			?>
@@ -520,6 +564,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 		}
 
+        /**
+         * Get shortcode custom fields.
+         *
+         * @since 2.0.0
+         *
+         * @return array $fields.
+         */
 		public function get_custom_fields(){
 			$fields = array();
 
@@ -613,9 +664,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 		}
 
-		/**
-		 * Set the tabs order and count level.
-		 */
+
+        /**
+         * Set the tabs order and count level.
+         *
+         * @since 2.0.0
+         *
+         * @param array $tabs Optional. Default array.
+         *
+         * @global object $wpdb WordPress Database object.
+         *
+         * @return bool|WP_Error.
+         */
 		public static function set_tabs_orders($tabs = array()){
 			global $wpdb;
 
@@ -642,9 +702,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			}
 		}
 
-		/**
-		 * Delete a tab.
-		 */
+        /**
+         * Delete a tab.
+         *
+         * @since 2.0.0
+         *
+         * @global object $wpdb WordPress Database object.
+         *
+         * @param int $tab_id Tab id.
+         * @param string $post_type posttype.
+         * @return bool|WP_Error.
+         */
 		public static function delete_tab($tab_id,$post_type = ''){
 			global $wpdb;
 			if (!empty($tab_id)) {
@@ -666,9 +734,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			}
 		}
 
-		/**
-		 * Delete a tabs children.
-		 */
+        /**
+         * Delete a tabs children.
+         *
+         * @since 2.0.0
+         *
+         * @param int $tab_id Tab id.
+         * @param string $post_type Optional. Post type values. Default null.
+         */
 		public static function delete_tab_children($tab_id,$post_type = ''){
 			global $wpdb;
 

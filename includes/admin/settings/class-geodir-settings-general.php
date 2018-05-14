@@ -994,6 +994,13 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 		return apply_filters( 'geodir_get_settings_' . $this->id, $settings );
 	}
 
+    /**
+     * Get map language settings.
+     *
+     * @since 2.0.0
+     *
+     * @return array Language settings.
+     */
 	public static function get_map_language_setting(){
 		return array(
 			'name'       => __( 'Default map language', 'geodirectory' ),
@@ -1008,6 +1015,13 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 		);
 	}
 
+    /**
+     * Get Maps api settings.
+     *
+     * @since 2.0.0
+     *
+     * @return array Map Api settings.
+     */
 	public static function get_maps_api_setting(){
 		return array(
 			'name'       => __( 'Maps API', 'geodirectory' ),
@@ -1024,8 +1038,14 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'advanced' => true
 		);
 	}
-	
-	
+
+    /**
+     * Get google maps api key settings.
+     *
+     * @since 2.0.0
+     *
+     * @return array Google maps api key settings.
+     */
 	public static function get_google_maps_api_key_setting(){
 		return array(
 			'name' => __( 'Google Maps API KEY', 'geodirectory' ),

@@ -344,15 +344,12 @@ function geodir_category_count_script() {
 
 }
 
-
-
-
-
-
-
-
-
-
+/**
+ * Listing bounce map pin on hover script.
+ *
+ * @since 2.0.0
+ *
+ */
 function geodir_listing_bounce_map_pin_on_hover() {
 	if ( geodir_get_option( 'geodir_listing_hover_bounce_map_pin', true ) ) {
 		?>
@@ -380,7 +377,11 @@ function geodir_listing_bounce_map_pin_on_hover() {
 add_action( 'geodir_after_listing_listview', 'geodir_listing_bounce_map_pin_on_hover', 10 );
 
 
-
+/**
+ * Search form submit button.
+ *
+ * @since 2.0.0
+ */
 function geodir_search_form_submit_button() {
 	$default_search_button_label = geodir_get_option('search_default_button_text');
 	if(!$default_search_button_label){$default_search_button_label = get_search_default_button_text();}
@@ -412,6 +413,11 @@ function geodir_search_form_submit_button() {
 
 add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5000 );
 
+/**
+ * Search form post type input.
+ *
+ * @since 2.0.0
+ */
 function geodir_search_form_post_type_input() {
 	global $geodir_search_post_type;
 	$post_types     = apply_filters( 'geodir_search_form_post_types', geodir_get_posttypes( 'object' ) );
@@ -469,6 +475,11 @@ function geodir_search_form_post_type_input() {
 	}
 }
 
+/**
+ * Search form search inputs.
+ *
+ * @since 2.0.0
+ */
 function geodir_search_form_search_input() {
 	$default_search_for_text = geodir_get_option('search_default_text');
 	if(!$default_search_for_text){$default_search_for_text = get_search_default_text();}
@@ -485,6 +496,11 @@ function geodir_search_form_search_input() {
 	<?php
 }
 
+/**
+ * Search form near inputs.
+ *
+ * @since 2.0.0
+ */
 function geodir_search_form_near_input() {
 
 	$default_near_text = geodir_get_option('search_default_near_text');
@@ -556,6 +572,14 @@ add_action( 'geodir_search_form_inputs', 'geodir_search_form_post_type_input', 1
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_search_input', 20 );
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
 
+/**
+ * Get search post type.
+ *
+ * @since 2.0.0
+ *
+ * @param string $pt Optional. Post type. Default null.
+ * @return string $geodir_search_post_type.
+ */
 function geodir_get_search_post_type($pt=''){
 	global $geodir_search_post_type;
 
@@ -572,6 +596,11 @@ function geodir_get_search_post_type($pt=''){
 	return $geodir_search_post_type;
 }
 
+/**
+ * Search form.
+ *
+ * @since 2.0.0
+ */
 function geodir_search_form(){
 
 	geodir_get_search_post_type();

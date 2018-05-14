@@ -14,6 +14,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Function for api enabled.
+ *
+ * @since 2.0.0
+ *
+ * @return bool $api_enabled.
+ */
 function geodir_api_enabled() {
 	$api_enabled = geodir_get_option( 'rest_api_enabled' ) ? true : false;
 	return apply_filters( 'geodir_api_enabled', $api_enabled );
@@ -299,6 +306,14 @@ function geodir_rest_check_manager_permissions( $object, $context = 'read' ) {
 	return apply_filters( 'geodir_rest_check_permissions', $permission, $context, 0, $object );
 }
 
+/**
+ * Function for rest get countries.
+ *
+ * @since 2.0.0
+ *
+ * @param array $params Optional. Countries argument parameters. Default array().
+ * @return array $items.
+ */
 function geodir_rest_get_countries( $params = array() ) {
     global $wpdb;
     
@@ -342,6 +357,14 @@ function geodir_rest_get_countries( $params = array() ) {
     return $items;
 }
 
+/**
+ * Function for get rest country by id.
+ *
+ * @since 2.0.0
+ *
+ * @param int $value Country id.
+ * @return array $rows.
+ */
 function geodir_rest_country_by_id( $value ) {
     $rows = geodir_rest_get_countries( array( 'where' => "AND CountryId = '" . (int)$value . "'", 'limit' => 1 ) );
     
@@ -350,6 +373,14 @@ function geodir_rest_country_by_id( $value ) {
     }
 }
 
+/**
+ * Function for get rest country by name.
+ *
+ * @since 2.0.0
+ *
+ * @param string $value Country name.
+ * @return array $rows.
+ */
 function geodir_rest_country_by_name( $value ) {
     $rows = geodir_rest_get_countries( array( 'where' => "AND Country LIKE '" . wp_slash( $value ) . "'", 'limit' => 1 ) );
     
@@ -358,6 +389,14 @@ function geodir_rest_country_by_name( $value ) {
     }
 }
 
+/**
+ * Function for get rest country by iso2.
+ *
+ * @since 2.0.0
+ *
+ * @param string $value Country iso2 value.
+ * @return array $rows.
+ */
 function geodir_rest_country_by_iso2( $value ) {
     $rows = geodir_rest_get_countries( array( 'where' => "AND ISO2 LIKE '" . wp_slash( $value ) . "'", 'limit' => 1 ) );
 
@@ -368,6 +407,14 @@ function geodir_rest_country_by_iso2( $value ) {
     return NULL;
 }
 
+/**
+ * Function for convert datatype to filed type.
+ *
+ * @since 2.0.0
+ *
+ * @param string $data_type Data type.
+ * @return string $type.
+ */
 function geodir_rest_data_type_to_field_type( $data_type ) {
     switch ( strtolower( $data_type ) ) {
         case 'float':
@@ -389,6 +436,19 @@ function geodir_rest_data_type_to_field_type( $data_type ) {
     return $type;
 }
 
+/**
+ * Function for get enum values.
+ *
+ * @since 2.0.0
+ *
+ * @param array $options {
+ *      Get enum option values.
+ *
+ *      @type string $value enum option value.
+ *      @type string  $optgroup enum option group value.
+ * }
+ * @return array $values.
+ */
 function geodir_rest_get_enum_values( $options ) {
     $values = array();
     
@@ -403,6 +463,16 @@ function geodir_rest_get_enum_values( $options ) {
     return $values;
 }
 
+/**
+ * Function for rest validate request arguments.
+ *
+ * @since 2.0.0
+ *
+ * @param string $value Request argument value.
+ * @param object $request Request argument object.
+ * @param string $param Request argument parameter.
+ * @return bool|string Return true or Wp_error.
+ */
 function geodir_rest_validate_request_arg( $value, $request, $param ) {
     $attributes = $request->get_attributes();
     if ( ! isset( $attributes['args'][ $param ] ) || ! is_array( $attributes['args'][ $param ] ) ) {
@@ -413,6 +483,16 @@ function geodir_rest_validate_request_arg( $value, $request, $param ) {
     return geodir_rest_validate_value_from_schema( $value, $args, $param );
 }
 
+/**
+ * Function for rest validate value from schema.
+ *
+ * @since 2.0.0
+ *
+ * @param string $value Request argument value.
+ * @param array $args Request validate value schema array.
+ * @param string $param Request argument parameter.
+ * @return bool|string Return true or Wp_error.
+ */
 function geodir_rest_validate_value_from_schema( $value, $args, $param = '' ) {
     if ( 'array' === $args['type'] ) {
         if ( ! is_array( $value ) ) {
@@ -542,6 +622,14 @@ function geodir_rest_validate_value_from_schema( $value, $args, $param = '' ) {
     return true;
 }
 
+/**
+ * Function for get rest markers url.
+ *
+ * @since 2.0.0
+ *
+ * @param array $query_args Optional. Rest markers url query argument. Default array.
+ * @return string $url.
+ */
 function geodir_rest_markers_url( $query_args = array() ) {
 	$namespace = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION;
 	$rest_base = 'markers';
@@ -555,6 +643,14 @@ function geodir_rest_markers_url( $query_args = array() ) {
 	return apply_filters( 'geodir_rest_markers_url', $url, $query_args );
 }
 
+/**
+ * Function for rest sort options by posttype.
+ *
+ * @since 2.0.0
+ *
+ * @param string $post_type Posttype.
+ * @return array $options.
+ */
 function geodir_rest_post_sort_options( $post_type ) {
     $sort_options = geodir_get_sort_options( $post_type );
     

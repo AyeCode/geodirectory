@@ -123,6 +123,13 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		return $output;
 	}
 
+    /**
+     * Author actions.
+     *
+     * @since 2.0.0
+     *
+     * @return array
+     */
 	public function author_actions(){
 		return array(
 			'edit' => __("Edit","geodirectory"),

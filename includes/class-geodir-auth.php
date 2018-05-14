@@ -393,6 +393,8 @@ class GeoDir_Auth {
 	
 	/**
 	 * Process the login form.
+     *
+     * @since 2.0.0
 	 */
 	public static function process_login() {
 		// The global form-login.php template used `_wpnonce` in template versions < 3.3.0.

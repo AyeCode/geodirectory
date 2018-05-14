@@ -16,7 +16,13 @@
 /* Helper functions */
 /*-----------------------------------------------------------------------------------*/
 
-
+/**
+ * Get ajax url.
+ *
+ * @since 2.0.0
+ *
+ * @return string
+ */
 function geodir_get_ajax_url()
 {
     return admin_url('admin-ajax.php');
@@ -711,6 +717,15 @@ function geodir_taxonomy_breadcrumb() {
 	echo '<li> > ' . $term->name . '</li>';
 }
 
+/**
+ * Wpml post type archive link.
+ *
+ * @since 2.0.0
+ *
+ * @param string $link link.
+ * @param string $post_type Post type.
+ * @return string $link.
+ */
 function geodir_wpml_post_type_archive_link($link, $post_type){
 	if (function_exists('icl_object_id')) {
 		$post_types   = geodir_get_posttypes();
@@ -2833,7 +2848,7 @@ function geodir_get_client_name( $user_id ) {
 
 
 add_filter( 'wpseo_replacements', 'geodir_wpseo_replacements', 10, 1 );
-/*
+/**
  * Add location variables to wpseo replacements.
  *
  * @since 1.5.4
@@ -3481,6 +3496,13 @@ function geodir_wp_theme_name() {
     return $theme->name;
 }
 
+/**
+ * Theme Compatibility file.
+ *
+ * @since 2.0.0
+ *
+ * @return string $compatibility_file.
+ */
 function geodir_theme_compatibility_file() {
     $theme = geodir_wp_theme_name();
     
@@ -3489,12 +3511,26 @@ function geodir_theme_compatibility_file() {
     return apply_filters( 'geodir_theme_compatibility_file', $compatibility_file, $theme );
 }
 
+/**
+ * Get blog name.
+ *
+ * @since 2.0.0
+ *
+ * @return string $blogname.
+ */
 function geodir_get_blogname() {
     $blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
     
     return apply_filters( 'geodir_get_blogname', $blogname );
 }
 
+/**
+ * Get blog url
+ *
+ * @since 2.0.0
+ *
+ * @return string $blogurl.
+ */
 function geodir_get_blogurl() {
     $blogurl = home_url( '/' );
     

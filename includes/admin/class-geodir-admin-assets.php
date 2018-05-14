@@ -289,6 +289,13 @@ class GeoDir_Admin_Assets {
 	}
 
 
+    /**
+     * Add widget title js.
+     *
+     * @since 2.0.0
+     *
+     * @return string Widget title script.
+     */
 	public function widget_title_js(){
 		ob_start();
 		?>

@@ -9,6 +9,8 @@ class GeoDir_Comments {
 
 	/**
 	 * Initiate the comments class.
+     *
+     * @since 2.0.0
 	 */
 	public static function init() {
 		add_action( 'comment_form_logged_in_after', array( __CLASS__, 'rating_input' ) );
@@ -36,6 +38,8 @@ class GeoDir_Comments {
 	/**
 	 * Update post overall rating and rating count.
 	 *
+     * @since 2.0.0
+     *
 	 * @global object $wpdb WordPress Database object.
 	 * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 *
@@ -84,8 +88,10 @@ class GeoDir_Comments {
 	 * Get review details using comment ID.
 	 *
 	 * Returns review details using comment ID. If no reviews returns false.
+     *
+     * @since 2.0.0
 	 *
-	 * @param int $comment_id The comment ID.
+	 * @param int $comment_id Optional. The comment ID. Default 0.
 	 *
 	 * @global object $wpdb WordPress Database object.
 	 * @return bool|mixed
@@ -109,6 +115,8 @@ class GeoDir_Comments {
 
 	/**
 	 * Delete review details when deleting comment.
+     *
+     * @since 2.0.0
 	 *
 	 * @param int $comment_id The comment ID.
 	 *
@@ -132,11 +140,14 @@ class GeoDir_Comments {
 
 	/**
 	 * Update comment rating.
+     *
+     * @since 2.0.0
 	 *
-	 * @param int $comment_id The comment ID.
+	 * @param int $comment_id Optional. The comment ID. Default 0.
 	 *
 	 * @global object $wpdb WordPress Database object.
 	 * @global string $plugin_prefix Geodirectory plugin table prefix.
+     *
 	 * @global int $user_ID The current user ID.
 	 */
 	public static function edit_comment( $comment_id = 0 ) {
@@ -178,6 +189,8 @@ class GeoDir_Comments {
 	/**
 	 * Update comment status when changing the rating.
 	 *
+     * @since 2.0.0
+     *
 	 * @param int $comment_id The comment ID.
 	 * @param int|string $status The comment status.
 	 *
@@ -226,6 +239,8 @@ class GeoDir_Comments {
 	/**
 	 * Save rating details for a comment.
 	 *
+     * @since 2.0.0
+     *
 	 * @param int $comment The comment ID.
 	 *
 	 * @global object $wpdb WordPress Database object.
@@ -307,6 +322,8 @@ class GeoDir_Comments {
 
 	/**
 	 * Check whether the current post is open for reviews.
+     *
+     * @since 2.0.0
 	 *
 	 * @param bool $open Whether the current post is open for reviews.
 	 * @param int $post_id The post ID.
@@ -323,7 +340,7 @@ class GeoDir_Comments {
 	}
 
 	/**
-	 * Fix comment count by not listing replies as reviews
+	 * Fix comment count by not listing replies as reviews.
 	 *
 	 * @since 1.0.0
 	 * @package GeoDirectory
@@ -354,6 +371,8 @@ class GeoDir_Comments {
 	 * Sets the comment template.
 	 *
 	 * Sets the comment template using filter {@see 'comments_template'}.
+     *
+     * @since 2.0.0
 	 *
 	 * @global object $post The current post object.
 	 * @param string $comment_template Old comment template.
@@ -392,6 +411,8 @@ class GeoDir_Comments {
 
 	/**
 	 * Add rating information in comment text.
+     *
+     * @since 2.0.0
 	 *
 	 * @param string $content The comment content.
 	 * @param object|string $comment The comment object.
@@ -420,6 +441,8 @@ class GeoDir_Comments {
 
 	/**
 	 * Comment HTML markup.
+     *
+     * @since 2.0.0
 	 *
 	 * @global object $post The current post object.
 	 *
@@ -556,16 +579,23 @@ class GeoDir_Comments {
 			echo self::rating_input_html( $rating );
 		}
 	}
-	
-	/**
-	 * The rating input html.
-	 */
+
+    /**
+     * The rating input html.
+     *
+     * @since 2.0.0
+     *
+     * @param string $rating Rating value.
+     * @return string
+     */
 	public static function rating_input_html( $rating ) {
 		return self::rating_html( $rating, 'input' );
 	}
 
 	/**
 	 * Get the default rating count.
+     *
+     * @since 2.0.0
 	 *
 	 * @return int
 	 */
@@ -575,9 +605,11 @@ class GeoDir_Comments {
 
 	/**
 	 * Get the rating input html.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $rating
-	 * @param string $type
+	 * @param string $rating Rating.
+	 * @param string $type Optional. Type. Default output.
 	 *
 	 * @return string
 	 */
@@ -657,8 +689,10 @@ class GeoDir_Comments {
 
 	/**
 	 * Get the rating output html.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $rating
+	 * @param string $rating Rating.
 	 *
 	 * @return string
 	 */
@@ -668,6 +702,8 @@ class GeoDir_Comments {
 
 	/**
 	 * The default rating texts.
+     *
+     * @since 2.0.0
 	 *
 	 * @return mixed|void
 	 */
@@ -685,6 +721,8 @@ class GeoDir_Comments {
 
 	/**
 	 * The rating texts used on the site.
+     *
+     * @since 2.0.0
 	 *
 	 * @return mixed|void
 	 */
@@ -706,6 +744,8 @@ class GeoDir_Comments {
 	 * Get average overall rating of a Post.
 	 *
 	 * Returns average overall rating of a Post. If no results, returns false.
+     *
+     * @since 2.0.0
 	 *
 	 * @param int $post_id The post ID.
 	 * @param int $force_query Optional. Do you want force run the query? Default: 0.
@@ -745,6 +785,8 @@ class GeoDir_Comments {
 	 * Get review count of a Post.
 	 *
 	 * Returns review count of a Post. If no results, returns false.
+     *
+     * @since 2.0.0
 	 *
 	 * @param int $post_id The post ID.
 	 *
@@ -772,6 +814,8 @@ class GeoDir_Comments {
 	 * Get overall rating of a comment.
 	 *
 	 * Returns overall rating of a comment. If no results, returns false.
+     *
+     * @since 2.0.0
 	 *
 	 * @param int $comment_id The comment ID.
 	 *

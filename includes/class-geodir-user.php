@@ -136,8 +136,10 @@ class GeoDir_User {
 
 	/**
 	 * Get the user favs.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $user_id
+	 * @param string $user_id Optional. User id. Default null.
 	 *
 	 * @return array|bool|mixed
 	 */
@@ -171,10 +173,14 @@ class GeoDir_User {
 
 	/**
 	 * Get the fav counts per post type for a user.
+     *
+     * @since 2.0.0
 	 *
-	 * @param int $user_id
+	 * @param int $user_id Optional. User id. Default 0.
+     *
+     * @global object $wpdb WordPress Database object.
 	 *
-	 * @return array
+	 * @return array $user_listing.
 	 */
 	public static function get_post_type_fav_counts( $user_id = 0 ) {
 		global $wpdb;
@@ -208,9 +214,11 @@ class GeoDir_User {
 
 	/**
 	 * Get the users favourites in a select or a string.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $user_id
-	 * @param string $output_type
+	 * @param string $user_id Optional. User id. Default null.
+	 * @param string $output_type Optional. Output type. Default select.
 	 *
 	 * @return string
 	 */
@@ -293,9 +301,11 @@ class GeoDir_User {
 
 	/**
 	 * Show the users listings in a select or string.
+     *
+     * @since 2.0.0
 	 *
-	 * @param string $user_id
-	 * @param string $output_type
+	 * @param string $user_id Optional. User id. Default null.
+	 * @param string $output_type Optional. Output type. Default select.
 	 *
 	 * @return string
 	 */
@@ -371,14 +381,12 @@ class GeoDir_User {
 
 	}
 
-	/**
-	 * Get the add listing links.
-	 *
-	 * @param string $user_id
-	 * @param string $output_type
-	 *
-	 * @return string
-	 */
+    /**
+     * Get the add listing links.
+     *
+     * @since 2.0.0
+     *
+     */
 	public static function show_add_listings() {
 
 		$post_types = geodir_get_posttypes( 'object' );
@@ -430,7 +438,15 @@ class GeoDir_User {
 
 	}
 
-
+    /**
+     * Delete Post.
+     *
+     * @since 2.0.0
+     *
+     * @param int $post_id Post id.
+     *
+     * @return bool|WP_Error
+     */
 	public static function delete_post($post_id){
 	    if(!geodir_listing_belong_to_current_user($post_id)){
 		    return new WP_Error( 'gd-delete-failed', __( "You do not have permission to delete this post.", "geodirectory" ) );

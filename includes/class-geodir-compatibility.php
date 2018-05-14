@@ -15,6 +15,8 @@ class GeoDir_Compatibility {
 
 	/**
 	 * Initiate the compatibility class.
+     *
+     * @since 2.0.0
 	 */
 	public static function init() {
 
@@ -56,6 +58,8 @@ class GeoDir_Compatibility {
 
 	/**
 	 * Add our own tags to ninja forms.
+     *
+     * @since 2.0.0
 	 */
 	public static function ninja_forms(){
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/widgets/class-geodir-widget-ninja-forms.php' );
@@ -64,6 +68,8 @@ class GeoDir_Compatibility {
 
 	/**
 	 * Theme single template compatibility check.
+     *
+     * @since 2.0.0
 	 *
 	 * @param string $theme
 	 *
@@ -86,6 +92,8 @@ class GeoDir_Compatibility {
 
 	/**
 	 * Fix details page title, primer theme breaks it.
+     *
+     * @since 2.0.0
 	 */
 	public static function for_later_checks(){
 		/*######################################################
@@ -97,6 +105,14 @@ class GeoDir_Compatibility {
 		}
 	}
 
+    /**
+     * Primer Title.
+     *
+     * @since 2.0.0
+     *
+     * @param string $title Title.
+     * @return string $title.
+     */
 	public static function primer_title($title){
 
 		if(geodir_is_page('single')){
@@ -185,15 +201,20 @@ class GeoDir_Compatibility {
 		Boss. (BuddyBoss)
 	######################################################*/
 
-	/*
-	 * Disable their select boxes as they break ours.
-	 */
+    /**
+     * Disable their select boxes as they break ours.
+     *
+     * @since 2.0.0
+     *
+     */
 	public static function buddyboss() {
 		wp_dequeue_script( 'selectboxes' );
 	}
 
 	/**
 	 * Add `page` body class on GD pages to help with padding.
+     *
+     * @since 2.0.0
 	 *
 	 * @param $classes
 	 *

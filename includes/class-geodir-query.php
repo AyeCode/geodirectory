@@ -51,6 +51,11 @@ class GeoDir_Query {
 		$this->init_query_vars();
 	}
 
+    /**
+     * Set globals.
+     *
+     * @since 2.0.0
+     */
 	public function set_globals(){
 		global $geodir_post_type;
 
@@ -62,6 +67,8 @@ class GeoDir_Query {
 
 	/**
 	 * Hook into pre_get_posts to do the main product query.
+     *
+     * @since 2.0.0
 	 *
 	 * @param mixed $q query object
 	 */
@@ -212,9 +219,12 @@ class GeoDir_Query {
 
 
 	/**
-	 * Filter the posts fields string
+	 * Filter the posts fields string.
+     *
+     * @since 2.0.0
 	 *
-	 * @param $fields
+	 * @param string $fields fields.
+     * @param array $query Optional. fields query. Default array.
 	 *
 	 * @return string
 	 */
@@ -295,6 +305,15 @@ class GeoDir_Query {
 		return apply_filters( 'geodir_posts_fields', $fields, $query );
 	}
 
+    /**
+     * Posts limits.
+     *
+     * @since 2.0.0
+     *
+     * @param string $limits Limits.
+     * @param string $query Query.
+     * @return string $limits.
+     */
 	public function posts_limits($limits,$query){
 		echo '###limit###'.$limits;
 
@@ -304,7 +323,10 @@ class GeoDir_Query {
 	}
 
 	/**
-	 * @param $where
+     * Posts where.
+     *
+	 * @param string $where Where.
+     * @param  array $query Optional. Query. Default array.
 	 *
 	 * @return mixed
 	 */
@@ -483,6 +505,18 @@ class GeoDir_Query {
 		return apply_filters( 'geodir_posts_where', $where, $query );
 	}
 
+    /**
+     * Author where.
+     *
+     * @since 2.0.0
+     *
+     * @param string $where where.
+     *
+     * @global object $wp_query WordPress query object.
+     * @global object $wpdb WordPress Database object.
+     *
+     * @return mixed|string
+     */
 	public function author_where($where){
 		global $wp_query,$wpdb;
 //echo '####';exit;
@@ -516,11 +550,21 @@ class GeoDir_Query {
 		return $where;
 	}
 
-	/**
-	 * @param $join
-	 *
-	 * @return string
-	 */
+
+    /**
+     * Posts join.
+     *
+     * @since 2.0.0
+     *
+     * @param string $join join.
+     * @param array $query Optional. Query. Default array.
+     *
+     * @global object $wpdb WordPress Database object.
+     * @global object $table_prefix WordPress Database object.
+     * @global object $geodir_post_type WordPress Database object.
+     *
+     * @return mixed|void
+     */
 	public function posts_join($join, $query = array()){
 
 		global $wpdb, $table_prefix, $geodir_post_type;
@@ -542,13 +586,26 @@ class GeoDir_Query {
 		return apply_filters( 'geodir_posts_join', $join, $query );
 	}
 
+    /**
+     * Posts group by.
+     *
+     * @since 2.0.0
+     *
+     * @param string $groupby Group by.
+     * @param array $query Optional. Query. Default array.
+     * @return mixed|void
+     */
 	public function posts_groupby( $groupby, $query = array() ) {
 		return apply_filters( 'geodir_posts_groupby', $groupby, $query );
 	}
 
 	/**
-	 * @param $orderby
-	 *
+     * Posts Order by.
+     *
+     * @since 2.0.0
+     *
+	 * @param string $orderby Order by.
+	 * @param array $query Optional. Query. Default array.
 	 * @return mixed
 	 */
 	public function posts_orderby($orderby, $query = array()){
@@ -598,6 +655,18 @@ class GeoDir_Query {
 		return $orderby;
 	}
 
+    /**
+     * Sort by sql.
+     *
+     * @since 2.0.0
+     *
+     * @param string $sort_by Optional. Sort by. Default title_asc.
+     * @param string $post_type Optional. Post type. Default gd_place.
+     *
+     * @global object $wpdb WordPress Database object.
+     *
+     * @return string
+     */
 	public static function sort_by_sql($sort_by = 'title_asc',$post_type = "gd_place"){
 		global $wpdb;
 
@@ -681,6 +750,8 @@ class GeoDir_Query {
 
 	/**
 	 * Listing orderby custom sort.
+     *
+     * @since 2.0.0
 	 *
 	 * @global object $wpdb WordPress Database object.
 	 * @param string $orderby The orderby query string.
@@ -769,8 +840,11 @@ class GeoDir_Query {
 
 	/**
 	 * Check table column exist or not.
+     *
+     * @since 2.0.0
 	 *
 	 * @global object $wpdb WordPress Database object.
+     *
 	 * @param string $db The table name.
 	 * @param string $column The column name.
 	 * @return bool If column exists returns true. Otherwise false.
@@ -793,6 +867,8 @@ class GeoDir_Query {
 
 	/**
 	 * Remove the query.
+     *
+     * @since 2.0.0
 	 */
 	public function remove_product_query() {
 		remove_action( 'pre_get_posts', array( $this, 'pre_get_posts' ) );
@@ -918,6 +994,10 @@ class GeoDir_Query {
 
 	/**
 	 * Parse the request and look for query vars - endpoints may not be supported.
+     *
+     * @global object $wp WordPress object.
+     *
+     * @since 2.0.0
 	 */
 	public function parse_request() {
 		global $wp;
@@ -970,6 +1050,8 @@ class GeoDir_Query {
 
 	/**
 	 * Get any errors from querystring.
+     *
+     * @since 2.0.0
 	 */
 	public function get_errors() {
 		if ( ! empty( $_GET['gd_error'] ) && ( $error = sanitize_text_field( $_GET['gd_error'] ) ) && ! wc_has_notice( $error, 'error' ) ) {
@@ -979,6 +1061,8 @@ class GeoDir_Query {
 
 	/**
 	 * Init query vars by loading options.
+     *
+     * @since 2.0.0
 	 */
 	public function init_query_vars() {
 		// Query vars to add to WP.
@@ -997,6 +1081,8 @@ class GeoDir_Query {
 
 	/**
 	 * Add query vars.
+     *
+     * @since 2.0.0
 	 *
 	 * @access public
 	 *
@@ -1014,6 +1100,8 @@ class GeoDir_Query {
 
 	/**
 	 * Get query vars.
+     *
+     * @since 2.0.0
 	 *
 	 * @return array
 	 */
@@ -1023,6 +1111,8 @@ class GeoDir_Query {
 
 	/**
 	 * Get query current active query var.
+     *
+     * @since 2.0.0
 	 *
 	 * @return string
 	 */
@@ -1038,19 +1128,26 @@ class GeoDir_Query {
 	}
 
 
-
-	/**
-	 * Are we currently on the front page?
-	 * @return boolean
-	 */
+    /**
+     * Are we currently on the front page?
+     *
+     * @since 2.0.0
+     *
+     * @param object $q page object.
+     * @return bool
+     */
 	private function is_showing_page_on_front( $q ) {
 		return $q->is_home() && 'page' === get_option( 'show_on_front' );
 	}
 
-	/**
-	 * Is the front page a page we define?
-	 * @return boolean
-	 */
+    /**
+     * Is the front page a page we define?
+     *
+     * @since 2.0.0
+     *
+     * @param int $page_id Page id.
+     * @return bool
+     */
 	private function page_on_front_is( $page_id ) {
 		return absint( get_option( 'page_on_front' ) ) === absint( $page_id );
 	}

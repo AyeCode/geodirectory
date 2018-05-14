@@ -2057,7 +2057,6 @@ function geodir_sc_single_meta($atts, $content = '') {
     return $output;
 }
 
-
 /**
  * Outputs single meta from a super block.
  * 

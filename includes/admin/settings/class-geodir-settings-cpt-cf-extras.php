@@ -124,9 +124,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			add_filter( 'geodir_cfa_cat_sort_business_hours', '__return_empty_string', 10, 4 );
 		}
 
-		/*
-		 * Price fields
-		 */
+
+        /**
+         * Price fields.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Price fields html output.
+         * @param string $result_str Price fields results.
+         * @param array $cf Custom fields value.
+         * @param object $field_info Price fiels information.
+         * @return string $output.
+         */
 		public static function price_fields($output,$result_str,$cf,$field_info){
 			ob_start();
 
@@ -304,9 +313,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-		/*
-		 * file type input.
-		 */
+	    /**
+         * File type input.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output File input html output.
+         * @param string $result_str File type result.
+         * @param array $cf File type input custom fields.
+         * @param object $field_info File type fields information.
+         * @return string $output.
+         */
 		public static function file_types($output,$result_str,$cf,$field_info){
 			ob_start();
 			$allowed_file_types = geodir_allowed_mime_types();
@@ -342,9 +359,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-		/*
-		 * file type input.
-		 */
+
+        /**
+         * File limit input.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output
+         * @param string $result_str
+         * @param array $cf
+         * @param object $field_info
+         * @return string $output.
+         */
 		public static function file_limit($output,$result_str,$cf,$field_info){
 			ob_start();
 
@@ -370,9 +396,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-		/*
-		 * Datepicker date format.
-		 */
+		/**
+         * Datepicker date format.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Datepicker html output.
+         * @param string $result_str Results string.
+         * @param array $cf Datepicker custom fields values.
+         * @param object $field_info Datepicker fields information.
+         * @return string $output.
+         */
 		public static function date_format($output,$result_str,$cf,$field_info){
 			ob_start();
 			$extra = array();
@@ -427,9 +461,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-		/*
-		 * Multiple input option values.
-		 */
+
+        /**
+         * Multiple input option values.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Html output.
+         * @param string $result_str Results string.
+         * @param array $cf Input custom fields.
+         * @param object $field_info Fields information.
+         * @return string $output.
+         */
 		public static function option_values($output,$result_str,$cf,$field_info){
 
 			ob_start();
@@ -471,9 +514,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-		/*
-		 * The multiselect input setting.
-		 */
+        /**
+         * The multiselect input setting.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Html output.
+         * @param string $result_str Results string.
+         * @param array $cf Custom fields values.
+         * @param object $field_info fields information.
+         * @return string $output.
+         */
 		public static function multiselect_input($output,$result_str,$cf,$field_info){
 			ob_start();
 
@@ -505,9 +556,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-		/*
-		 * The address setting.
-		 */
+
+        /**
+         * The address setting fields.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Html output.
+         * @param string $result_str Results string.
+         * @param array $cf Custom fields values.
+         * @param object $field_info Fields information.
+         * @return string $output.
+         */
 		public static function address_fields($output,$result_str,$cf,$field_info){
 
 			ob_start();
@@ -685,9 +745,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output.$html;
 		}
 
-		/*
-		 * The category display_type setting.
-		 */
+        /**
+         * The category display_type setting.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Html output.
+         * @param string $result_str Results string.
+         * @param array $cf Custom fields values
+         * @param object $field Extra fields information.
+         * @return string $output.
+         */
 		public static function category_input_type( $output, $result_str, $cf, $field ) {
 
 			if ( $field->htmlvar_name == 'post_category' ) {
@@ -736,9 +804,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-		/*
-		 * Add HTML5 validation pattern fields.
-		 */
+        /**
+         * Add HTML5 validation pattern fields.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Html output.
+         * @param string $result_str Result string.
+         * @param array $cf Custom fields values.
+         * @param object $field_info Extra fields information.
+         * @return string $output.
+         */
 		public static function validation_pattern( $output, $result_str, $cf, $field_info ) {
 			ob_start();
 
@@ -790,9 +866,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-		/*
-		 * Advanced WYSIWYG editor option.
-		 */
+        /**
+         * Advanced WYSIWYG editor option.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Html output.
+         * @param string $result_str Results string.
+         * @param array $cf Custom fields values.
+         * @param object $field_info Extra fields information.
+         * @return string $output.
+         */
 		public static function advanced_editor( $output, $result_str, $cf, $field_info ) {
 
 			ob_start();
@@ -848,10 +932,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
-
-		/*
-		 * Add a data type selector fro text inputs
-		 */
+        /**
+         * Add a data type selector fro text inputs.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Html output.
+         * @param string $result_str Results string.
+         * @param array $cf Custom fields value.
+         * @param object $field_info Extra fields information.
+         * @return string $output.
+         */
 		public static function data_type( $output, $result_str, $cf, $field_info ) {
 			ob_start();
 

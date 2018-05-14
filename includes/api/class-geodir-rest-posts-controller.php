@@ -2109,7 +2109,16 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		return $statuses;
 	}
-	
+
+    /**
+     * Get custom fields schema.
+     *
+     * @since 2.0.0
+     *
+     * @param string $package_id Optional. Package id. Default null.
+     * @param string $default Optional. Default. Default all.
+     * @return array $schema.
+     */
 	public function get_custom_fields_schema( $package_id = '', $default = 'all' ) {
         $custom_fields  = geodir_post_custom_fields( $package_id, $default, $this->post_type );
         
@@ -2557,7 +2566,15 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		return $terms;
 	}
-	
+
+    /**
+     * Get featured image.
+     *
+     * @since 2.0.0
+     *
+     * @param object $gd_post GD post object.
+     * @return array $featured_image.
+     */
 	public function get_featured_image( $gd_post ) {
 		$images = geodir_get_images($gd_post->ID,1);
 
@@ -2576,7 +2593,15 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		}
 		return $featured_image;
 	}
-	
+
+    /**
+     * Get Post image.
+     *
+     * @since 2.0.0
+     *
+     * @param object $gd_post GD post Object.
+     * @return array $images
+     */
 	public function get_post_images( $gd_post ) {
 		$post_images = geodir_get_images( $gd_post->ID );
 		
@@ -2596,13 +2621,30 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		}
 		return $images;
 	}
-	
+
+    /**
+     * Get taxonomies.
+     *
+     * @since 2.0.0
+     *
+     * @return array $taxonomies.
+     */
 	public function get_taxonomies() {
 		$taxonomies = wp_list_filter( get_object_taxonomies( $this->post_type, 'objects' ), array( 'show_in_rest' => true ) );
 
 		return $taxonomies;
 	}
-	
+
+    /**
+     * Get post data.
+     *
+     * @since 2.0.0
+     *
+     * @param object $gd_post GD post object.
+     * @param string $request Request.
+     * @param object $post Post object.
+     * @return array $data
+     */
 	public function get_post_data( $gd_post, $request, $post ) {
 		$data = array();
 

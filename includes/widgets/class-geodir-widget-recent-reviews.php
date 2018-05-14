@@ -17,6 +17,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
     /**
      * Register the categories with WordPress.
      *
+     * @since 2.0.0
+     *
      */
     public function __construct() {
 
