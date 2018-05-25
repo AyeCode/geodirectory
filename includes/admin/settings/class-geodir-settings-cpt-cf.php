@@ -1306,7 +1306,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			// Set if this is a default field
 			$default = isset( $field->is_admin ) ? $field->is_admin : '';
 
-			// Remove Send Enquiry | Send To Friend from listings page
+			// Remove Send Enquiry from listings page
 			$display_on_listing = true;
 			$htmlvar_name = isset( $field->htmlvar_name ) && $field->htmlvar_name != '' ? $field->htmlvar_name : '';
 			if ( $htmlvar_name == 'geodir_email' ) {

@@ -150,9 +150,7 @@ jQuery(document).ready(function() {
 
 
     // let the popups open via url param
-    if(gdUrlParam('gd_popup')=='send_friend' && jQuery('a.b_sendtofriend').length){
-        jQuery('.b_sendtofriend').trigger("click");
-    }else if(gdUrlParam('gd_popup')=='send_enquiry' && jQuery('a.b_send_inquiry').length){
+    if(gdUrlParam('gd_popup')=='send_enquiry' && jQuery('a.b_send_inquiry').length){
         jQuery('.b_send_inquiry').trigger("click");
     }
 

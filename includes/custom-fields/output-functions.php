@@ -1284,7 +1284,7 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
 
         global $preview;
         if ($cf['htmlvar_name'] == 'geodir_email' && !(geodir_is_page('detail'))) {
-            return ''; // Remove Send Enquiry | Send To Friend from listings page
+            return ''; // Remove Send Enquiry from listings page
         }
 
 

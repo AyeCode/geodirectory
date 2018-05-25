@@ -205,7 +205,7 @@ final class GeoDirectory {
      * @return void
      */
     private function includes() {
-        global $pagenow, $geodir_options;
+        global $pagenow, $geodir_options, $wp_version;
 
         /**
          * Class autoloader.
@@ -328,6 +328,11 @@ final class GeoDirectory {
                 require_once( $compatibility_file );
             }
         }
+
+		// If curent WP Version >= 4.9.6.
+		if ( version_compare( $wp_version, '4.9.6', '>=' ) ) {
+			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-privacy.php' );
+		}
 
         $this->query = new GeoDir_Query();
 		$this->api   = new GeoDir_API();
