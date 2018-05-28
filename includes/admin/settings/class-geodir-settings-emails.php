@@ -432,13 +432,6 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'default' => 0,
 					),
 					array(
-						'name' => __('Send to friend', 'geodirectory'),
-						'desc' => __('This will send a BCC email to the site admin on send to friend submit.', 'geodirectory'),
-						'id' => 'email_bcc_send_friend',
-						'type' => 'checkbox',
-						'default' => 0,
-					),
-					array(
 						'name' => __('Send enquiry', 'geodirectory'),
 						'desc' => __('This will send a BCC email to the site admin on send enquiry submit.', 'geodirectory'),
 						'id' => 'email_bcc_send_enquiry',

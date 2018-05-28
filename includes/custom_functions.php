@@ -27,7 +27,6 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
 	$package_info['amount']           = 0;
 	$package_info['featured']         = 0;
 	$package_info['image_limit']      = '';
-	$package_info['sendtofriend']     = 1;
 
 	/**
 	 * Filter listing package info.
@@ -43,7 +42,6 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
 	 * @type int $featured      Is this featured package? Default 0.
 	 * @type string $image_limit   Image limit for this package. Default "".
 	 * @type int $google_analytics Add analytics to this package. Default 1.
-	 * @type int $sendtofriend     Send to friend. Default 1.
 	 *
 	 * }
 	 * @param object|string $post  The post object.
@@ -136,91 +134,6 @@ function geodir_send_inquiry( $request ) {
 	 * @param string $url Redirect url.
 	 */
 	$redirect_to = apply_filters( 'geodir_send_enquiry_after_submit_redirect', $redirect_to );
-	wp_redirect( $redirect_to );
-	geodir_die();
-}
-
-/**
- * Send Email to a friend.
- *
- * This function let the user to send Email to a friend.
- * Email content will be used WP Admin -> Geodirectory -> Notifications -> Other Emails -> Send to friend
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param array $request       {
- *                             The submitted form fields as an array.
- *
- * @type string $sendact       Enquiry type. Default "email_frnd".
- * @type string $pid           Post ID.
- * @type string $to_name       Friend name.
- * @type string $to_email      Friend email.
- * @type string $yourname      Sender name.
- * @type string $youremail     Sender email.
- * @type string $frnd_subject  Email subject.
- * @type string $frnd_comments Email Message.
- *
- * }
- */
-function geodir_send_friend( $request ) {
-	if ( ! GeoDir_Email::is_email_enabled( 'send_friend' ) ) {
-		return false;
-	}
-
-	$request = ! empty( $request ) ? stripslashes_deep( $request ) : $request;
-
-	$post_id = ! empty( $request['pid'] ) ? (int)$request['pid'] : 0;
-	if ( ! $post_id ) {
-		return false;
-	}
-
-	$gd_post = geodir_get_post_info( $post_id );
-	if ( empty( $gd_post ) ) {
-		return false;
-	}
-
-	$data = $request;
-	$data['post_id'] = $gd_post->ID;
-	$data['from_name'] = ! empty( $request['yourname'] ) ? $request['yourname'] : '';
-	$data['from_email'] = ! empty( $request['youremail'] ) ? $request['youremail'] : '';
-	$data['subject'] = ! empty( $request['frnd_subject'] ) ? $request['frnd_subject'] : '';
-	$data['comments'] = ! empty( $request['frnd_comments'] ) ? $request['frnd_comments'] : '';
-
-	$allow = apply_filters( 'geodir_allow_send_to_friend_email', true, $gd_post, $data );
-	if ( ! $allow ) {
-		return false;
-	}
-
-	/**
-	 * Send to friend email.
-	 *
-	 * @since 2.0.0
-	 *
-	 * @param object $gd_post The post object.
-	 * @param array $data {
-	 *	   The submitted form fields as an array.
-	 *
-	 * 	   @type string $friend_name   Friend name.
-	 * 	   @type string $user_email    Friend email.
-	 * 	   @type string $user_name     Sender name.
-	 * 	   @type string $user_email    Sender email.
-	 * 	   @type string $subject       Email subject.
-	 *     @type string $comments      Email Message.
-	 *
-	 * }
-	 */
-	do_action( 'geodir_send_to_friend_email', $gd_post, $data );
-
-	$redirect_to = add_query_arg( array( 'sendtofrnd' => 'success' ), get_permalink( $post_id ) );
-	/**
-	 * Filter redirect url after the send to friend email is sent.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $url Redirect url.
-	 */
-	$redirect_to = apply_filters( 'geodir_send_to_friend_after_submit_redirect', $redirect_to );
 	wp_redirect( $redirect_to );
 	geodir_die();
 }

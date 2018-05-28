@@ -26,7 +26,6 @@ class GeoDir_Email {
 		add_action( 'geodir_email_footer', array( __CLASS__, 'email_footer' ), 10, 4 );
 
 		// hooks email actions
-		add_action( 'geodir_send_to_friend_email', array( __CLASS__, 'send_to_friend_email' ), 10, 2 );
 		add_action( 'geodir_send_enquiry_email', array( __CLASS__, 'send_enquiry_email' ), 10, 2 );
 
 		// frontend post save emails
@@ -170,72 +169,6 @@ class GeoDir_Email {
 		$message = ob_get_clean();
 
 		return $message;
-	}
-
-	/**
-	 * Send to friend email.
-	 *
-     * @since 2.0.0
-     *
-	 * @param object $post Post object.
-	 * @param array $data Email data arguments.
-	 *
-	 * @return bool|void
-	 */
-	public static function send_to_friend_email( $post, $data ) {
-		$email_name = 'send_friend';
-
-		if ( ! self::is_email_enabled( $email_name ) ) {
-			return false;
-		}
-
-		$defaults           = array(
-			'from_name'  => '',
-			'from_email' => '',
-			'to_name'    => '',
-			'to_email'   => '',
-			'subject'    => '',
-			'comments'   => ''
-		);
-		$email_vars         = wp_parse_args( $data, $defaults );
-		$email_vars['post'] = $post;
-
-		if ( empty( $post ) || ! is_email( $email_vars['to_email'] ) ) {
-			return;
-		}
-
-		$recipient = $email_vars['to_email'];
-
-		do_action( 'geodir_pre_send_to_friend_email', $email_name, $email_vars );
-
-		$subject      = self::get_subject( $email_name, $email_vars );
-		$message_body = self::get_content( $email_name, $email_vars );
-		$headers      = self::get_headers( $email_name, $email_vars, $email_vars['from_email'], $email_vars['from_name'] );
-		$attachments  = self::get_attachments( $email_name, $email_vars );
-
-		$plain_text = self::get_email_type() != 'html' ? true : false;
-		$template   = $plain_text ? 'emails/plain/geodir-email-' . $email_name . '.php' : 'emails/geodir-email-' . $email_name . '.php';
-
-		$content = geodir_get_template_html( $template, array(
-			'email_name'    => $email_name,
-			'email_vars'    => $email_vars,
-			'email_heading'	=> '',
-			'sent_to_admin' => false,
-			'plain_text'    => $plain_text,
-			'message_body'  => $message_body,
-		) );
-
-		$sent = self::send( $recipient, $subject, $content, $headers, $attachments );
-
-		if ( self::is_admin_bcc_active( $email_name ) ) {
-			$recipient = self::get_admin_email();
-			$subject .= ' - ADMIN BCC COPY';
-			self::send( $recipient, $subject, $content, $headers, $attachments );
-		}
-
-		do_action( 'geodir_post_send_to_friend_email', $email_name, $email_vars );
-
-		return $sent;
 	}
 
 	/**
