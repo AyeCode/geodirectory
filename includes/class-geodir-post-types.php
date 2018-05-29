@@ -32,6 +32,8 @@ class GeoDir_Post_types {
 
 		// Prevent Gutenberg editing GD CPTs, we only allow editing of the template pages.
 		add_filter( 'gutenberg_can_edit_post_type', array( __CLASS__, 'disable_gutenberg'), 10, 2 );
+
+		add_action( 'geodir_post_type_saved', 'geodir_reorder_post_types', 999 );
 	}
 
 	/**

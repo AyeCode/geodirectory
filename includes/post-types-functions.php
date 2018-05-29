@@ -733,3 +733,37 @@ function geodir_display_sort_options() {
     }
 
 }
+
+function geodir_reorder_post_types() {
+	$post_types = geodir_get_option( 'post_types', array() );
+
+	if ( empty( $post_types ) ) {
+		return;
+	}
+
+	$temp_post_types = array();
+	$temp_keys = array();
+
+	foreach ( $post_types as $post_type => $args ) {
+		if ( ! empty( $temp_post_types ) ) {
+			if ( empty( $args['listing_order'] ) || ( ! empty( $args['listing_order'] ) && array_key_exists( $args['listing_order'], $temp_post_types ) ) ) {
+				$args['listing_order'] = max( array_keys( $temp_post_types ) ) + 1;
+			}
+		} else {
+			if ( empty( $args['listing_order'] ) ) {
+				$args['listing_order'] = 1;
+			}
+		}
+		$temp_post_types[ $args['listing_order'] ] = $args;
+		$temp_keys[ $args['listing_order'] ] = $post_type;
+	}
+
+	ksort( $temp_post_types );
+
+	$save_post_types = array();
+	foreach( $temp_post_types as $post_type => $args ) {
+		$save_post_types[ $temp_keys[ $post_type ] ] = $args;
+	}
+
+	geodir_update_option( 'post_types', $save_post_types );
+}

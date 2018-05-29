@@ -280,7 +280,11 @@ class GeoDir_Admin_Settings {
 				case 'number':
 				case 'password' :
 
-					$option_value = self::get_option( $value['id'], $value['default'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
 					//echo $value['id'].'zzz'.$option_value;
 					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
 						<th scope="row" class="titledesc">
@@ -305,7 +309,11 @@ class GeoDir_Admin_Settings {
 
 				// Color picker.
 				case 'color' :
-					$option_value = self::get_option( $value['id'], $value['default'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
 
 					?><tr valign="top" class="gd-row-color-picker <?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
 						<th scope="row" class="titledesc">
@@ -335,12 +343,20 @@ class GeoDir_Admin_Settings {
 					wp_enqueue_media();
 
 
-					$option_value = self::get_option( $value['id'], $value['default'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
 					$image_size = ! empty( $value['image_size'] ) ? $value['image_size'] : 'thumbnail';
 
 					if($option_value){
 						$remove_class = '';
-						$show_img = wp_get_attachment_image($option_value, $image_size);
+						if ( strpos( $option_value, 'dashicons-' ) === 0 ) {
+							$show_img = '<div class="dashicons-before ' . esc_attr( $option_value ) . '"></div>';
+						} else {
+							$show_img = wp_get_attachment_image($option_value, $image_size);
+						}
 					}else{
 						$remove_class = 'hidden';
 						$show_img = '<img src="'.admin_url( 'images/media-button-image.gif' ).'" />';
@@ -368,7 +384,11 @@ class GeoDir_Admin_Settings {
 				// Textarea
 				case 'textarea':
 
-					$option_value = self::get_option( $value['id'], $value['default'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
 
 					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
 						<th scope="row" class="titledesc">
@@ -395,7 +415,11 @@ class GeoDir_Admin_Settings {
 				// Editor
 				case 'editor':
 					global $wp_version;
-					$option_value = self::get_option( $value['id'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'] );
+					}
 					if ( empty( $option_value ) && empty( $value['allow_blank'] ) ) {
 						$option_value = isset( $value['default'] ) ? $value['default'] : '';
 					}
@@ -433,7 +457,11 @@ class GeoDir_Admin_Settings {
 				case 'select' :
 				case 'multiselect' :
 
-					$option_value = self::get_option( $value['id'], $value['default'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
 
 					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
 						<th scope="row" class="titledesc">
@@ -474,7 +502,11 @@ class GeoDir_Admin_Settings {
 				// Radio inputs
 				case 'radio' :
 
-					$option_value = self::get_option( $value['id'], $value['default'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
 
 					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
 						<th scope="row" class="titledesc">
@@ -511,7 +543,11 @@ class GeoDir_Admin_Settings {
 				// Checkbox input
 				case 'checkbox' :
 
-					$option_value    = self::get_option( $value['id'], $value['default'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
 					$visbility_class = array();
 
 					if ( ! isset( $value['hide_if_checked'] ) ) {
@@ -582,7 +618,11 @@ class GeoDir_Admin_Settings {
 				case 'image_width' :
 
 					$image_size       = str_replace( '_image_size', '', $value['id'] );
-					$size             = geodir_get_image_size( $image_size );
+					if ( isset( $value['value'] ) ) {
+						$size = $value['value'];
+					} else {
+						$size = geodir_get_image_size( $image_size );
+					}
 					$width            = isset( $size['width'] ) ? $size['width'] : $value['default']['width'];
 					$height           = isset( $size['height'] ) ? $size['height'] : $value['default']['height'];
 					$crop             = isset( $size['crop'] ) ? $size['crop'] : $value['default']['crop'];
@@ -608,6 +648,11 @@ class GeoDir_Admin_Settings {
 
 				// Single page selects
 				case 'single_select_page' :
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'] );
+					}
 
 					$args = array(
 						'name'             => $value['id'],
@@ -617,7 +662,7 @@ class GeoDir_Admin_Settings {
 						'show_option_none' => ' ',
 						'class'            => ' regular-text '.$value['class'],
 						'echo'             => false,
-						'selected'         => absint( self::get_option( $value['id'] ) ),
+						'selected'         => absint( $option_value ),
 					);
 
 					if ( isset( $value['args'] ) ) {
@@ -642,7 +687,11 @@ class GeoDir_Admin_Settings {
 
 				// Single country selects
 				case 'single_select_country' :
-					$country_setting = (string) self::get_option( $value['id'] );
+					if ( isset( $value['value'] ) ) {
+						$country_setting = (string) $value['value'];
+					} else {
+						$country_setting = (string) self::get_option( $value['id'] );
+					}
 
 					if ( strstr( $country_setting, ':' ) ) {
 						$country_setting = explode( ':', $country_setting );
@@ -671,12 +720,16 @@ class GeoDir_Admin_Settings {
 				// Country multiselects
 				case 'multi_select_countries' :
 
-					$selections = (array) self::get_option( $value['id'] );
+					if ( isset( $value['value'] ) ) {
+						$selections = (array) $value['value'];
+					} else {
+						$selections = (array) self::get_option( $value['id'] );
+					}
 
 					if ( ! empty( $value['options'] ) ) {
 						$countries = $value['options'];
 					} else {
-						$countries = WC()->countries->countries;
+						$countries = geodir_get_countries();
 					}
 
 					asort( $countries );
@@ -825,7 +878,11 @@ class GeoDir_Admin_Settings {
 
 				case 'map_key' :
 					add_thickbox();// add the thickbox js/css
-					$option_value = self::get_option( $value['id'], $value['default'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
 					//echo $value['id'].'zzz'.$option_value;
 					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
 					<th scope="row" class="titledesc">
@@ -858,7 +915,11 @@ class GeoDir_Admin_Settings {
 					$value['options'] = geodir_font_awesome_array();
 					$rating_color = geodir_get_option('rating_color','#ff9900');
 
-					$option_value = self::get_option( $value['id'], $value['default'] );
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
 
 					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
 						<th scope="row" class="titledesc">
