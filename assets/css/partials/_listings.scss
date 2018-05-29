@@ -1,9 +1,9 @@
 // The CSS for the listing/archive page.
 body { // wrapping ina  body tag makes rules more specific
 	ul.geodir-category-list-view {
-		list-style: none;
-		margin: 0;
-		padding: 0;
+		list-style: none !important;
+		margin: 0 !important;
+		padding: 0 !important;
 
 		& > li {
 			margin: 0;
@@ -158,16 +158,10 @@ body { // wrapping ina  body tag makes rules more specific
 		&.geodir-gridview {
 
 			& > li {
-				//border: 1px #e1e1e1 solid; // remove, only here for testing spacing
 				width: auto;
 				margin-bottom: 15px;
 				display: inline-block;
 				vertical-align: top;
-
-				// transitions
-				//transition-property: all;
-				//transition-duration: 0.6s;
-				//transition-timing-function: ease-out;
 
 				.gd-list-item-left, .gd-list-item-right {
 					display: block;
@@ -216,6 +210,43 @@ body { // wrapping ina  body tag makes rules more specific
 				& > li:nth-child(5n+1) {
 					margin-left: 0;
 				}
+			}
+
+		}
+
+		@media only screen and (max-width: $media-tablet) {
+			& > li {
+				width: auto;
+				margin-bottom: 15px;
+				display: inline-block;
+				vertical-align: top;
+
+				.gd-list-item-left, .gd-list-item-right {
+					display: block;
+					width: 100%;
+					float: none;
+					padding: 0;
+					margin: 0;
+					clear: both;
+				}
+			}
+
+			& > li {
+				width: 48% !important;
+				margin-left: 0 !important;
+			}
+			& > li:nth-child(2n+0) {
+				margin-left: 4% !important;
+			}
+		}
+
+		@media only screen and (max-width: $media-phone-small) {
+			& > li {
+				width: 100% !important;
+				margin-left: 0 !important;
+			}
+			& > li:nth-child(2n+0) {
+				margin-left: 0 !important;
 			}
 		}
 	}

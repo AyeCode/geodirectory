@@ -325,6 +325,7 @@ if (!function_exists('geodir_get_field_infoby')) {
      * Get custom field using key and value.
      *
      * @since 1.0.0
+     * @since 2.0.0 Returns array instead of object.
      * @package GeoDirectory
      * @global object $wpdb WordPress Database object.
      * @param string $key The key you want to look for.
@@ -341,7 +342,8 @@ if (!function_exists('geodir_get_field_infoby')) {
             $wpdb->prepare(
                 "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type=%s AND " . $key . "='" . $value . "'",
                 array($geodir_post_type)
-            )
+            ),
+            ARRAY_A
         );
 
         if ($filter) {
