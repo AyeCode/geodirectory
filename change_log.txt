@@ -4,6 +4,7 @@ GDPR compliance - ADDED
 Remove send to friend functionality as it against the GDPR policy - CHANGED
 CSS responsive changes and fixes - FIXED
 Search page with no query returns its own page - FIXED
+Categories widget sub cats not displaying correctly - FIXED
 
 v2.0.0.13-beta
 Page templates for building layouts now restricted from frontend viewing - CHANGED

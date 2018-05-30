@@ -6,6 +6,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    vertical-align: top;
 
     @media only screen and (max-width: $media-phone) {
       width: 50%;
@@ -24,6 +25,18 @@
       min-height: 45px;
       height: 45px;
       border-radius: 2px;
+
+      &.gd-cptcat-li-sub-container{
+        background: none;
+        height: auto;
+
+        ul.gd-cptcat-sub{
+          width: 100%;
+          li{
+            margin: .25em 0 .25em .5em;
+          }
+        }
+      }
 
       .gd-cptcat-cat-left{
         display: inline-block;

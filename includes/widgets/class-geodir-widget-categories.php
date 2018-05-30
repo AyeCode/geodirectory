@@ -485,22 +485,25 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						$cat_font_icon = get_term_meta( $category->term_id, 'ct_cat_font_icon', true );
 						$cat_color = get_term_meta( $category->term_id, 'ct_cat_color', true );
 						$cat_color = $cat_color ? $cat_color : '#ababab';
-
 						$term_icon = $cat_font_icon ? '<i class="fa '.$cat_font_icon.'" aria-hidden="true"></i>' : $term_icon_url;
 
 						$term_link = get_term_link( $category, $category->taxonomy );
 						/** Filter documented in includes/general_functions.php **/
 						$term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );
+						$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $category->count . '</span>' : '';
+
 
 						$cpt_row .= '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';
-						$cpt_row .= '<li class="gd-cptcat-li gd-cptcat-li-main">';
-						$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $category->count . '</span>' : '';
-						$cpt_row .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">';
-						$cpt_row .= "<span class='gd-cptcat-icon' >$term_icon</span>";
-						$cpt_row .= '</a></span>';
-						
-						$cpt_row .= '<span class="gd-cptcat-cat-right"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">';
-						$cpt_row .= $category->name . $count . '</a></span>';
+//						$cpt_row .= '<li class="gd-cptcat-li gd-cptcat-li-main">';
+//						$cpt_row .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">';
+//						$cpt_row .= "<span class='gd-cptcat-icon' >$term_icon</span>";
+//						$cpt_row .= '</a></span>';
+//						$cpt_row .= '<span class="gd-cptcat-cat-right"><a href="' . esc_url($term_link) . '" title="' . esc_attr($category->name) . '">';
+//						$cpt_row .= $category->name . $count . '</a></span>';
+
+						$cpt_row .= geodir_cpt_categories_output('gd-cptcat-li-main',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon);
+
+
 						if (!$skip_childs && ($all_childs || $max_count > 0) && ($max_level == 'all' || (int)$max_level > 0)) {
 							$cpt_row .= geodir_cpt_categories_child_cats($category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons);
 						}
