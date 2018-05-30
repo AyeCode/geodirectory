@@ -1,9 +1,9 @@
 .geodir-image-container{
   ul.geodir-images{
-    list-style: none;
+    list-style: none !important; // we never want a list style here
     clear: both;
-    margin: 0;
-    padding: 0;
+    margin: 0 !important;
+    padding: 0 !important;
     box-sizing: border-box;
     li{
       box-sizing: border-box;

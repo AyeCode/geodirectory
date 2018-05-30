@@ -1,3 +1,8 @@
+// media query variables
+$media-desktop: 1200px;
+$media-tablet: 800px;
+$media-phone: 600px;
+$media-phone-small: 400px;
 
 @import "partials/gd_lity";
 @import "partials/helpers";

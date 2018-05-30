@@ -54,6 +54,8 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
             // check if we have listings or if we are faking it
             if($wp_query->post_count == 1 && empty($wp_query->posts)){
                 geodir_no_listings_found();
+            }elseif(geodir_is_page('search') && !isset($_REQUEST['geodir_search'])){
+                geodir_no_listings_found();
             }else{
                 geodir_get_template_part('content', 'archive-listing');
             }
