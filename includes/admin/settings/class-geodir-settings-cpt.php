@@ -86,7 +86,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 			//echo '###';
 			
-			$cpt = self::sanatize_post_type( $_POST );geodir_error_log( $_POST, 'POST', __FILE__, __LINE__ );geodir_error_log( $cpt, 'cpt', __FILE__, __LINE__ );
+			$cpt = self::sanatize_post_type( $_POST );
 			//print_r( $_POST );
 			//echo $current_section;
 			$settings = $this->get_settings( $current_section );
@@ -95,21 +95,19 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			if(is_wp_error( $cpt) ){
 				$cpt->get_error_message(); exit;
 			}
-			$post_types = geodir_get_option('post_types', array());geodir_error_log( $post_types, 'post_types 1', __FILE__, __LINE__ );
-			if(empty($post_types)){
+			$post_types = geodir_get_option('post_types', array());
+			if ( empty( $post_types ) ) {
 				$post_types = $cpt;
-			}else{
+			} else {
 				$post_types = array_merge($post_types,$cpt);
-			}geodir_error_log( $post_types, 'post_types 2', __FILE__, __LINE__ );
-
-
-			//print_r($post_types );exit;
-
+			}
 
 			//Update custom post types
 			geodir_update_option( 'post_types', $post_types );
 
-			do_action( 'geodir_post_type_saved', $cpt );
+			foreach ( $cpt as $post_type => $args ) {
+				do_action( 'geodir_post_type_saved', $post_type, $args );
+			}
 
 			//$settings = $this->get_settings( $current_section );
 			//GeoDir_Admin_Settings::save_fields( $settings );
@@ -137,6 +135,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				'post_type' => $post_type,
 				'slug' => ( ! empty( $post_type_option['has_archive'] ) ? $post_type_option['has_archive'] : '' ),
 				'menu_icon' => '',
+				'description' => '',
 
 				// Labels
 				'name' => '',
@@ -176,7 +175,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$post_type_values['title'] = ( ! empty( $post_type_option['seo']['title'] ) ? $post_type_option['seo']['title'] : '' );
 			$post_type_values['meta_title'] = ( ! empty( $post_type_option['seo']['meta_title'] ) ? $post_type_option['seo']['meta_title'] : '' );
 			$post_type_values['meta_description'] = ( ! empty( $post_type_option['seo']['meta_description'] ) ? $post_type_option['seo']['meta_description'] : '' );
-			geodir_error_log( $post_type_values, 'post_type_values', __FILE__, __LINE__ );
+
 			// we need to trick the settings to show the current values
 
 			$settings  = apply_filters( "geodir_cpt_settings_{$post_type}", array(
@@ -405,6 +404,25 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 				array( 'type' => 'sectionend', 'id' => 'cpt_settings_labels' ),
 
+				array(
+					'title'    => __( 'Description', 'geodirectory' ),
+					'type'     => 'title',
+					'desc'     => '',
+					'id'       => 'cpt_settings_description',
+					'desc_tip' => false,
+					'advanced' => true,
+				),
+				array(
+					'name'     => __( 'Description', 'geodirectory' ),
+					'desc'     => __( 'A short descriptive summary of what the post type is.', 'geodirectory' ),
+					'id'       => 'description',
+					'type'     => 'textarea',
+					'class'    => 'large-text',
+					'desc_tip' => true,
+					'advanced' => true,
+					'value'	   => $post_type_values['description']
+				),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
 
 				array(
 					'title'    => __( 'SEO Overrides', 'geodirectory' ),
@@ -561,21 +579,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['labels'] = array(
 				'name' => $name,
 				'singular_name' => $singular_name,
-				'add_new' => isset($raw['add_new']) && $raw['add_new'] ? sanitize_text_field($raw['add_new']) : _x( 'Add New', $post_type, 'geodir_custom_posts' ),
-				'add_new_item' => isset($raw['add_new_item']) && $raw['add_new_item'] ? sanitize_text_field($raw['add_new_item']) : __( 'Add New ' . $singular_name, 'geodir_custom_posts' ),
-				'edit_item' => isset($raw['edit_item']) && $raw['edit_item'] ? sanitize_text_field($raw['edit_item']) : __( 'Edit ' . $singular_name, 'geodir_custom_posts' ),
-				'new_item' => isset($raw['new_item']) && $raw['new_item'] ? sanitize_text_field($raw['new_item']) : __( 'New ' . $singular_name, 'geodir_custom_posts' ),
-				'view_item' => isset($raw['view_item']) && $raw['view_item'] ? sanitize_text_field($raw['view_item']) : __( 'View ' . $singular_name, 'geodir_custom_posts' ),
-				'search_items' => isset($raw['search_items']) && $raw['search_items'] ? sanitize_text_field($raw['search_items']) : __( 'Search ' . $name, 'geodir_custom_posts' ),
-				'not_found' => isset($raw['not_found']) && $raw['not_found'] ? sanitize_text_field($raw['not_found']) : __( 'No ' . $name . ' found.', 'geodir_custom_posts' ),
-				'not_found_in_trash' => isset($raw['not_found_in_trash']) && $raw['not_found_in_trash'] ? sanitize_text_field($raw['not_found_in_trash']) : __( 'No ' . $name . ' found in Trash.', 'geodir_custom_posts' ),
-				'label_post_profile' => isset($raw['label_post_profile']) && $raw['label_post_profile'] ? sanitize_text_field($raw['label_post_profile']) : '',
-				'label_post_info' => isset($raw['label_post_info']) && $raw['label_post_info'] ? sanitize_text_field($raw['label_post_info']) : '',
-				'label_post_images' => isset($raw['label_post_images']) && $raw['label_post_images'] ? sanitize_text_field($raw['label_post_images']) : '',
-				'label_post_map' => isset($raw['label_post_map']) && $raw['label_post_map'] ? sanitize_text_field($raw['label_post_map']) : '',
-				'label_reviews' => isset($raw['label_reviews']) && $raw['label_reviews'] ? sanitize_text_field($raw['label_reviews']) : '',
-				'label_related_listing' => isset($raw['label_related_listing']) && $raw['label_related_listing'] ? sanitize_text_field($raw['label_related_listing']) : ''
+				'add_new' => isset($raw['add_new']) && $raw['add_new'] ? sanitize_text_field($raw['add_new']) : _x( 'Add New', $post_type, 'geodirectory' ),
+				'add_new_item' => isset($raw['add_new_item']) && $raw['add_new_item'] ? sanitize_text_field($raw['add_new_item']) : __( 'Add New ' . $singular_name, 'geodirectory' ),
+				'edit_item' => isset($raw['edit_item']) && $raw['edit_item'] ? sanitize_text_field($raw['edit_item']) : __( 'Edit ' . $singular_name, 'geodirectory' ),
+				'new_item' => isset($raw['new_item']) && $raw['new_item'] ? sanitize_text_field($raw['new_item']) : __( 'New ' . $singular_name, 'geodirectory' ),
+				'view_item' => isset($raw['view_item']) && $raw['view_item'] ? sanitize_text_field($raw['view_item']) : __( 'View ' . $singular_name, 'geodirectory' ),
+				'search_items' => isset($raw['search_items']) && $raw['search_items'] ? sanitize_text_field($raw['search_items']) : __( 'Search ' . $name, 'geodirectory' ),
+				'not_found' => isset($raw['not_found']) && $raw['not_found'] ? sanitize_text_field($raw['not_found']) : __( 'No ' . $name . ' found.', 'geodirectory' ),
+				'not_found_in_trash' => isset($raw['not_found_in_trash']) && $raw['not_found_in_trash'] ? sanitize_text_field($raw['not_found_in_trash']) : __( 'No ' . $name . ' found in trash.', 'geodirectory' )
 			);
+			// Post type description
+			$output[$post_type]['description'] = ! empty( $raw['description'] ) ? trim( $raw['description'] ) : '';
 
 			// defaults that likely wont change
 			$output[$post_type]['can_export'] = true;
@@ -586,12 +600,26 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['public'] = true;
 			$output[$post_type]['query_var'] = true;
 			$output[$post_type]['show_in_nav_menus'] = true;
-			$output[$post_type]['rewrite'] = array('slug' => $slug);
-			$output[$post_type]['supports'] = array('title','editor','author','thumbnail','excerpt','custom-fields','comments');
-			$output[$post_type]['taxonomies'] = array($post_type."category",$post_type."_tags");
-			//$output[$post_type][''] = '';
-			//$output[$post_type][''] = '';
-
+			$output[$post_type]['rewrite'] = array(
+				'slug' => $slug,
+				'with_front' => false,
+				'hierarchical' => true,
+				'feeds' => true
+			);
+			$output[$post_type]['supports'] = array(
+				'title',
+				'editor',
+				'author',
+				'thumbnail',
+				'excerpt',
+				'custom-fields',
+				'comments',
+				'revisions'
+			);
+			$output[$post_type]['taxonomies'] = array( 
+				$post_type . "category",
+				$post_type . "_tags"
+			);
 
 			// list order
 			$output[$post_type]['listing_order'] = isset($raw['order']) && $raw['order'] ? absint($raw['order']) : 0;
@@ -606,7 +634,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['seo']['meta_title'] = isset($raw['meta_title']) && $raw['meta_title'] ? sanitize_text_field($raw['meta_title']) : '';
 			$output[$post_type]['seo']['meta_description'] = isset($raw['meta_description']) && $raw['meta_description'] ? sanitize_text_field($raw['meta_description']) : '';
 
-			// menu icon @todo do we need this?
+			$output[$post_type]['menu_icon'] = !empty( $raw['menu_icon'] ) ? $raw['menu_icon'] : '';
+			$output[$post_type]['default_image'] = !empty( $raw['default_image'] ) ? $raw['default_image'] : '';
 
 			return apply_filters('geodir_save_post_type', $output, $post_type, $raw);
 
