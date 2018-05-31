@@ -537,10 +537,12 @@ class GeoDir_Admin_Taxonomies {
                         $checked = 'checked="checked"';
                 }
 
+                $child_dash = $p > 0 ? str_repeat("-", $p/20).' ' : '';
+
                 if ($cat_display == 'radio')
                     $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="post_category[]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" data-cradio="default_category">' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
                 elseif ($cat_display == 'select' || $cat_display == 'multiselect')
-                    $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</option>';
+                    $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . $child_dash . geodir_utf8_ucfirst($cat_term->name) . '</option>';
 
                 else {
 					$class = $checked ? 'class="gd-term-checked"' : '';

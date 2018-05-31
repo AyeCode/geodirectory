@@ -288,13 +288,17 @@ class GeoDir_SEO {
 			$string = str_replace( "%%excerpt%%", strip_tags( wp_trim_excerpt($post->post_content) ), $string );
 		}
 
+		if ( strpos( $string, '%%id%%' ) !== false ) {
+			$string = str_replace( "%%id%%", absint($post->ID), $string );
+		}
+
 		// archive
 		if ( strpos( $string, '%%category%%' ) !== false ) {
 			$cat_name = '';
 
 			if ( $gd_page == 'single' ) {
 				if ( $gd_post->default_category ) {
-					$cat      = get_term( $post->default_category, $post->post_type . 'category' );
+					$cat      = get_term( $gd_post->default_category, $post->post_type . 'category' );
 					$cat_name = ( isset( $cat->name ) ) ? $cat->name : '';
 				}
 			} else if ( $gd_page == 'archive' ) {

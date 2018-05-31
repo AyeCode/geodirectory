@@ -25,8 +25,65 @@ function geodir_clean( $var ) {
 	if ( is_array( $var ) ) {
 		return array_map( 'geodir_clean', $var );
 	} else {
-		return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
+		return is_scalar( $var ) ? geodir_sanitize_text_field( $var ) : $var;
 	}
+}
+
+/**
+ * Emulate the WP native sanitize_text_field function in a %%variable%% safe way.
+ *
+ * @see   https://core.trac.wordpress.org/browser/trunk/src/wp-includes/formatting.php for the original
+ *
+ * Sanitize a string from user input or from the db.
+ *
+ * - Check for invalid UTF-8,
+ * - Convert single < characters to entity,
+ * - Strip all tags,
+ * - Remove line breaks, tabs and extra white space,
+ * - Strip octets - BUT DO NOT REMOVE (part of) VARIABLES WHICH WILL BE REPLACED.
+ *
+ * @static
+ *
+ * @since 2.0.0
+ *
+ * @param string $value String value to sanitize.
+ *
+ * @return string
+ */
+function geodir_sanitize_text_field( $value ) {
+	$filtered = wp_check_invalid_utf8( $value );
+
+	if ( strpos( $filtered, '<' ) !== false ) {
+		$filtered = wp_pre_kses_less_than( $filtered );
+		// This will strip extra whitespace for us.
+		$filtered = wp_strip_all_tags( $filtered, true );
+	}
+	else {
+		$filtered = trim( preg_replace( '`[\r\n\t ]+`', ' ', $filtered ) );
+	}
+
+	$found = false;
+	while ( preg_match( '`[^%](%[a-f0-9]{2})`i', $filtered, $match ) ) {
+		$filtered = str_replace( $match[1], '', $filtered );
+		$found    = true;
+	}
+	unset( $match );
+
+	if ( $found ) {
+		// Strip out the whitespace that may now exist after removing the octets.
+		$filtered = trim( preg_replace( '` +`', ' ', $filtered ) );
+	}
+
+	/**
+	 * Filter a sanitized text field string.
+	 *
+	 * @since WP 2.9.0
+	 *
+	 * @param string $filtered The sanitized string.
+	 * @param string $str      The string prior to being sanitized.
+	 */
+
+	return apply_filters( 'sanitize_text_field', $filtered, $value );
 }
 
 /**

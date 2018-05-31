@@ -11,6 +11,8 @@ OSM address encoder fails if site is non SSL - FIXED
 Added setting to be able to disable Yoast SEO on GD pages (if active) - ADDED
 Yoast details page og and twitter descriptions using template text instead of post text - FIXED
 SD Widget added to be able to display the catregory description text - ADDED
+Some problems with title and meta variables not saving or displaying correctly - FIXED
+Categories on add listing page have no hierarchical distinction - FIXED
 
 v2.0.0.13-beta
 Page templates for building layouts now restricted from frontend viewing - CHANGED
