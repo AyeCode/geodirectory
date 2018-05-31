@@ -13,7 +13,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package  GeoDirectory/Classes
  * @category Class
  * @author   AyeCode
- * @todo need a way to output the tag variables so users can easily select and insert them
  */
 class GeoDir_SEO {
 
@@ -33,8 +32,26 @@ class GeoDir_SEO {
      * @since 2.0.0
 	 */
 	public static function init() {
+		add_action( 'init',array(__CLASS__,'maybe_run') );
+	}
+
+	public static function yoast_enabled(){
+		global $geodir_options;
+		return defined( 'WPSEO_VERSION')  && ( !isset($geodir_options['wpseo_disable']) || ( isset($geodir_options['wpseo_disable']) && $geodir_options['wpseo_disable']=='0' ) )   ? true : false;
+		//return ( defined( 'WPSEO_VERSION')  )  ? true : false;
+	}
+
+	public static function maybe_run(){
+
+///if(self::yoast_enabled()){echo '###1';}else{echo '###0';}
+		//print_r($geodir_options);
+
 		// bail if we have a SEO plugin installed.
-		if( class_exists( 'WPSEO_Frontend' ) || class_exists( 'All_in_One_SEO_Pack' )  || is_admin() ){
+		if(
+			self::yoast_enabled() // don't run if active and not set to be disabled
+		    || class_exists( 'All_in_One_SEO_Pack' )  // don't run if active
+		    || is_admin()  // no need to run in wp-admin
+		){
 			return;
 		}
 
@@ -54,9 +71,14 @@ class GeoDir_SEO {
 		add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
 
 		// meta description
-		add_action('wp_head', array(__CLASS__,'output_description'));
-
+		if(defined( 'WPSEO_VERSION')){
+			add_filter('wpseo_metadesc', array(__CLASS__,'get_description'), 10, 1);
+		}else{
+			add_action('wp_head', array(__CLASS__,'output_description'));
+		}
 	}
+
+
 
 	/**
 	 * Set the global var when a menu is being output.
@@ -133,13 +155,12 @@ class GeoDir_SEO {
 		return apply_filters('geodir_seo_meta_title', __($title, 'geodirectory'), self::$gd_page, $sep);
 	}
 
-
 	/**
-	 * Output a page meta description.
-     *
-     * @since 2.0.0
+	 * Get a page meta description.
+	 *
+	 * @since 2.0.0
 	 */
-	public static function output_description(){
+	public static function get_description($description=''){
 		$description = self::$meta_description;
 		if(!empty($description)){
 			$description = esc_attr($description);
@@ -151,7 +172,17 @@ class GeoDir_SEO {
 		 *
 		 * @param string $description Meta description.
 		 */
-		echo apply_filters( 'geodir_seo_meta_description', '<meta name="description" content="' . $description . '" />', $description );
+		return apply_filters( 'geodir_seo_meta_description', $description);
+	}
+
+	/**
+	 * Output a page meta description.
+     *
+     * @since 2.0.0
+	 */
+	public static function output_description(){
+		$description = self::get_description();
+		echo '<meta name="description" content="' . $description . '" />';
 	}
 
 	/**

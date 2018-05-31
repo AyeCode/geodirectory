@@ -234,30 +234,32 @@ class GeoDir_Template_Loader {
      *
      * @since 2.0.0
      */
-    public static function setup_singular_page(){
+    public static function setup_singular_page($content){
 
         // remove our filter so we don't get stuck in a loop
         remove_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
 
+        if(in_the_loop()) {
 
-        // get the main query
-        global $wp_query;
+            // get the main query
+            global $wp_query;
 
-        //print_r($wp_query);
+            //print_r($wp_query);
 
 
-        // get the archive template page content
-        $page_id = geodir_details_page_id();
-        $content = get_post_field('post_content', $page_id  );
+            // get the archive template page content
+            $page_id = geodir_details_page_id();
+            $content = get_post_field( 'post_content', $page_id );
 
-        // if the content is blank then just add the main loop
-        if($content==''){
-            $content = GeoDir_Defaults::page_details_content();
+            // if the content is blank then just add the main loop
+            if ( $content == '' ) {
+                $content = GeoDir_Defaults::page_details_content();
+            }
+
+            //$content = wpautop($content);// add double line breaks
+            // run the shortcodes on the content
+            $content = do_shortcode( $content );
         }
-
-        //$content = wpautop($content);// add double line breaks
-        // run the shortcodes on the content
-        $content = do_shortcode($content);
 
         // add our filter back
         add_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );

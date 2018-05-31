@@ -476,7 +476,7 @@ function geodir_get_location_link($which_location = 'current') {
  * @return array|bool Returns address on success.
  */
 function geodir_get_osm_address_by_lat_lan($lat, $lng) {
-    $url = is_ssl() ? 'https:' : 'http:';
+    $url = 'https:';
     $url .= '//nominatim.openstreetmap.org/reverse?format=json&lat=' . trim($lat) . '&lon=' . trim($lng) . '&zoom=16&addressdetails=1&email=' . get_option('admin_email');
 
     $ch = curl_init();

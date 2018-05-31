@@ -892,19 +892,13 @@ function geodir_cf_radio($html,$location,$cf,$p='',$output=''){
         $html_val = isset($gd_post->{$cf['htmlvar_name']}) ? __($gd_post->{$cf['htmlvar_name']}, 'geodirectory') : '';
         if (isset($gd_post->{$cf['htmlvar_name']}) && $gd_post->{$cf['htmlvar_name']} != ''):
 
-            if ($gd_post->{$cf['htmlvar_name']} == 'f' || $gd_post->{$cf['htmlvar_name']} == '0') {
-                $html_val = __('No', 'geodirectory');
-            } else if ($gd_post->{$cf['htmlvar_name']} == 't' || $gd_post->{$cf['htmlvar_name']} == '1') {
-                $html_val = __('Yes', 'geodirectory');
-            } else {
-                if (!empty($cf['option_values'])) {
-                    $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);
+            if (!empty($cf['option_values'])) {
+                $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);
 
-                    if (!empty($cf_option_values)) {
-                        foreach ($cf_option_values as $cf_option_value) {
-                            if (isset($cf_option_value['value']) && $cf_option_value['value'] == $gd_post->{$cf['htmlvar_name']}) {
-                                $html_val = $cf_option_value['label'];
-                            }
+                if (!empty($cf_option_values)) {
+                    foreach ($cf_option_values as $cf_option_value) {
+                        if (isset($cf_option_value['value']) && $cf_option_value['value'] == $gd_post->{$cf['htmlvar_name']}) {
+                            $html_val = $cf_option_value['label'];
                         }
                     }
                 }
@@ -1016,8 +1010,8 @@ function geodir_cf_select($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if ($gd_post->{$cf['htmlvar_name']}):
-            $field_value = __($gd_post->{$cf['htmlvar_name']}, 'geodirectory');
+        if (isset($gd_post->{$cf['htmlvar_name']}) && $gd_post->{$cf['htmlvar_name']} != ''):
+            $field_value = isset($gd_post->{$cf['htmlvar_name']}) ? __($gd_post->{$cf['htmlvar_name']}, 'geodirectory') : '';
 
             if (!empty($cf['option_values'])) {
                 $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);

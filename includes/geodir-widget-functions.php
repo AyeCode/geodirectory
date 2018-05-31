@@ -22,6 +22,7 @@ function goedir_register_widgets() {
         register_widget( 'GeoDir_Widget_Search' );
         register_widget( 'GeoDir_Widget_Best_Of' );
         register_widget( 'GeoDir_Widget_Categories' );
+        register_widget( 'GeoDir_Widget_Category_Description' );
         register_widget( 'GeoDir_Widget_Dashboard' );
         register_widget( 'GeoDir_Widget_Recent_Reviews' );
 
