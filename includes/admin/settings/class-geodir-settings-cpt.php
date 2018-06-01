@@ -177,7 +177,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$post_type_values['meta_description'] = ( ! empty( $post_type_option['seo']['meta_description'] ) ? $post_type_option['seo']['meta_description'] : '' );
 
 			// we need to trick the settings to show the current values
-
 			$settings  = apply_filters( "geodir_cpt_settings_{$post_type}", array(
 
 
@@ -471,7 +470,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 			//set_current_values()
 
-			return apply_filters( 'geodir_get_settings_' . $this->id, $settings, $current_section );
+			return apply_filters( 'geodir_get_settings_' . $this->id, $settings, $current_section, $post_type_values );
 		}
 
         /**
