@@ -52,6 +52,7 @@ abstract class GeoDir_Settings_Page {
      */
 	public function font_awesome_select(){
 		?>
+		<style>.gd-notification.lity-hide{display: none;}</style>
 		<div  id="gd-font-awesome-select" class="gd-notification lity-hide noti-white">
 		<select
 

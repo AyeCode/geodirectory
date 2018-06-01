@@ -24,6 +24,8 @@ class GeoDir_Compatibility {
 		Yoast (WP SEO)
 		######################################################*/
 		add_filter( 'option_wpseo_taxonomy_meta', array(__CLASS__,'wpseo_taxonomy_meta'), 10, 2 );
+		// add setting to be able to disable yoast on GD pages
+		add_filter( 'geodir_seo_options', array(__CLASS__,'wpseo_disable'), 10 );
 
 		/*######################################################
 		Disqus (comments system) :: If Disqus plugin is active, do some fixes to show on blogs but no on GD post types
@@ -54,6 +56,34 @@ class GeoDir_Compatibility {
 		// after_setup_theme checks
 		add_action( 'after_setup_theme', array(__CLASS__,'for_later_checks') );
 
+	}
+
+	public static function wpseo_disable($options){
+
+		if( defined( 'WPSEO_VERSION' ) ){
+			$new_options = array(
+				array(
+					'title' => __( 'Yoast SEO detected', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => geodir_notification( array('yoast_detected'=>__('The Yoast SEO plugin has been detected and will take over the GeoDirectory Settings unless disabled below.','geodirectory')) ),
+					'id'    => 'yoast_detected',
+					//'desc_tip' => true,
+				),
+				array(
+					'name' => __( 'Disable Yoast', 'geodirectory' ),
+					'desc' => __( 'Disable overwrite by Yoast SEO titles & metas on GD pages?', 'geodirectory' ),
+					'id'   => 'wpseo_disable',
+					'type' => 'checkbox',
+					'default'  => '0',
+				),
+				array( 'type' => 'sectionend', 'id' => 'yoast_detected' )
+			);
+
+			array_splice( $options, 1, 0, $new_options ); // splice in at position 1
+		}
+
+
+		return $options;
 	}
 
 	/**

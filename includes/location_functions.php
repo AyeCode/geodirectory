@@ -388,24 +388,24 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
         if ($city != '' && $city)
             $location_array['gd_city'] = urldecode($city);
     } else {
-        if ((isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] == 'me') || (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] == 'me') || (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] == 'me')) {
+        if ((isset($wp->query_vars['country']) && $wp->query_vars['country'] == 'me') || (isset($wp->query_vars['region']) && $wp->query_vars['region'] == 'me') || (isset($wp->query_vars['city']) && $wp->query_vars['city'] == 'me')) {
             return $location_array;
         }
 
-        $country = (isset($wp->query_vars['gd_country']) && $wp->query_vars['gd_country'] != '') ? $wp->query_vars['gd_country'] : '';
+        $country = (isset($wp->query_vars['country']) && $wp->query_vars['country'] != '') ? $wp->query_vars['country'] : '';
 
-        $region = (isset($wp->query_vars['gd_region']) && $wp->query_vars['gd_region'] != '') ? $wp->query_vars['gd_region'] : '';
+        $region = (isset($wp->query_vars['region']) && $wp->query_vars['region'] != '') ? $wp->query_vars['region'] : '';
 
-        $city = (isset($wp->query_vars['gd_city']) && $wp->query_vars['gd_city'] != '') ? $wp->query_vars['gd_city'] : '';
+        $city = (isset($wp->query_vars['city']) && $wp->query_vars['city'] != '') ? $wp->query_vars['city'] : '';
 
         if ($country != '')
-            $location_array['gd_country'] = urldecode($country);
+            $location_array['country'] = urldecode($country);
 
         if ($region != '')
-            $location_array['gd_region'] = urldecode($region);
+            $location_array['region'] = urldecode($region);
 
         if ($city != '')
-            $location_array['gd_city'] = urldecode($city);
+            $location_array['city'] = urldecode($city);
 			
 		// Fix category link in ajax popular category widget on change post type
 		if (empty($location_array) && defined('DOING_AJAX') && DOING_AJAX) {
@@ -476,7 +476,7 @@ function geodir_get_location_link($which_location = 'current') {
  * @return array|bool Returns address on success.
  */
 function geodir_get_osm_address_by_lat_lan($lat, $lng) {
-    $url = is_ssl() ? 'https:' : 'http:';
+    $url = 'https:';
     $url .= '//nominatim.openstreetmap.org/reverse?format=json&lat=' . trim($lat) . '&lon=' . trim($lng) . '&zoom=16&addressdetails=1&email=' . get_option('admin_email');
 
     $ch = curl_init();
@@ -656,12 +656,12 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
     if (empty($location_array)) {
         $location_array = geodir_get_current_location_terms('query_vars');
     }
-
+    
     $location_terms = array();
-    $location_terms['gd_neighbourhood'] = !empty($wp->query_vars['gd_neighbourhood']) ? $wp->query_vars['gd_neighbourhood'] : '';
-    $location_terms['gd_city'] = !empty($wp->query_vars['gd_city']) ? $wp->query_vars['gd_city'] : '';
-    $location_terms['gd_region'] = !empty($wp->query_vars['gd_region']) ? $wp->query_vars['gd_region'] : '';
-    $location_terms['gd_country'] = !empty($wp->query_vars['gd_country']) ? $wp->query_vars['gd_country'] : '';
+    $location_terms['gd_neighbourhood'] = !empty($wp->query_vars['neighbourhood']) ? $wp->query_vars['neighbourhood'] : '';
+    $location_terms['gd_city'] = !empty($wp->query_vars['city']) ? $wp->query_vars['city'] : '';
+    $location_terms['gd_region'] = !empty($wp->query_vars['region']) ? $wp->query_vars['region'] : '';
+    $location_terms['gd_country'] = !empty($wp->query_vars['country']) ? $wp->query_vars['country'] : '';
 
     $location_names = array();
     foreach ($location_terms as $type => $location) {
