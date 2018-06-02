@@ -633,7 +633,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['seo']['meta_title'] = isset($raw['meta_title']) && $raw['meta_title'] ? sanitize_text_field($raw['meta_title']) : '';
 			$output[$post_type]['seo']['meta_description'] = isset($raw['meta_description']) && $raw['meta_description'] ? sanitize_text_field($raw['meta_description']) : '';
 
-			$output[$post_type]['menu_icon'] = !empty( $raw['menu_icon'] ) ? $raw['menu_icon'] : '';
+			$output[$post_type]['menu_icon'] = !empty( $raw['menu_icon'] ) ? $raw['menu_icon'] : 'dashicons-admin-post';
 			$output[$post_type]['default_image'] = !empty( $raw['default_image'] ) ? $raw['default_image'] : '';
 
 			return apply_filters('geodir_save_post_type', $output, $post_type, $raw);

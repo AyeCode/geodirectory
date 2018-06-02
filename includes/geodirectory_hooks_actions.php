@@ -1619,7 +1619,7 @@ function geodir_wpml_set_filter() {
             add_action('comment_post', 'gepdir_wpml_sync_comment', 100, 1);
         }
         
-        add_action('geodir_after_save_listing', 'geodir_wpml_duplicate_listing', 100, 2);
+        //add_action('geodir_after_save_listing', 'geodir_wpml_duplicate_listing', 100, 2);
         add_action( 'geodir_edit_post_link_html', 'geodir_wpml_frontend_duplicate_listing', 0, 1 );
         if (is_admin()) {
             add_filter( 'geodir_design_settings', 'geodir_wpml_duplicate_settings', 10, 1 );
