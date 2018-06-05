@@ -175,21 +175,7 @@ class GeoDir_Permalinks {
 			$post_types = geodir_get_posttypes('array');
 			$cpt_slug = $post_types[$gd_post->post_type]['rewrite']['slug'];
 
-			// Alter the CPT slug if WPML is set to do so
-			if(geodir_wpml_is_post_type_translated($gd_post->post_type)){
-				if ( geodir_wpml_slug_translation_turned_on( $gd_post->post_type ) && $language_code = geodir_wpml_get_lang_from_url($post_link)) {
-
-					$org_slug = $cpt_slug;
-					$cpt_slug = apply_filters( 'wpml_translate_single_string',
-						$cpt_slug,
-						'WordPress',
-						'URL slug: ' . $cpt_slug,
-						$language_code);
-
-					if(!$cpt_slug){$cpt_slug = $org_slug;}
-
-				}
-			}
+			$cpt_slug = apply_filters( 'geodir_post_permalink_structure_cpt_slug', $cpt_slug, $gd_post, $post_link );
 
 			$permalink .= $cpt_slug.$permalink_structure;
 

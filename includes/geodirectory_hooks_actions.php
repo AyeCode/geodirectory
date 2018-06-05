@@ -1583,96 +1583,6 @@ function geodir_add_nav_menu_class( $args )
 add_filter( 'wp_nav_menu_args', 'geodir_add_nav_menu_class' );
 
 /**
- * Filters WordPress locale ID.
- *
- * Load current WPML language when editing the GD CPT.
- *
- * @since 1.6.16
- * @package GeoDirectory
- *
- * @param string $locale The locale ID.
- * @return string Filtered locale ID.
- */
-function geodir_wpml_filter_locale($locale) {
-    global $sitepress;
-    
-    $post_type = !empty($_REQUEST['post_type']) ? $_REQUEST['post_type'] : (!empty($_REQUEST['post']) ? get_post_type($_REQUEST['post']) : '');
-    
-    if (!empty($sitepress) && $sitepress->is_post_edit_screen() && $post_type && in_array($post_type, geodir_get_posttypes()) && $current_lang = $sitepress->get_current_language()) {
-        $locale = $sitepress->get_locale($current_lang);
-    }
-    
-    return $locale;
-}
-
-/**
- * Set WordPress locale filter.
- *
- * @since 1.6.16
- * @package GeoDirectory
- */
-function geodir_wpml_set_filter() {
-    if (function_exists('icl_object_id')) {
-        global $sitepress;
-        
-        if ($sitepress->get_setting('sync_comments_on_duplicates')) {
-            add_action('comment_post', 'gepdir_wpml_sync_comment', 100, 1);
-        }
-        
-        //add_action('geodir_after_save_listing', 'geodir_wpml_duplicate_listing', 100, 2);
-        add_action( 'geodir_edit_post_link_html', 'geodir_wpml_frontend_duplicate_listing', 0, 1 );
-        if (is_admin()) {
-            add_filter( 'geodir_design_settings', 'geodir_wpml_duplicate_settings', 10, 1 );
-        }
-    }
-}
-add_filter('plugins_loaded', 'geodir_wpml_set_filter');
-
-/**
- * Filters the WPML language switcher urls for GeoDirectory pages.
- *
- * @since 1.6.16
- *
- * @param array    $languages WPML active languages.
- * @return array Filtered languages.
- */
-function geodir_wpml_filter_ls_languages($languages) {    
-    if (geodir_is_geodir_page()) {        
-        $keep_vars = array();
-        
-        if (geodir_is_page('add-listing')) {
-            $keep_vars = array('listing_type', 'package_id');
-        } else if (geodir_is_page('search')) {
-            $keep_vars = array('geodir_search', 'stype', 'snear', 'set_location_type', 'set_location_val', 'sgeo_lat', 'sgeo_lon');
-        } else if (geodir_is_page('author')) {
-            $keep_vars = array('geodir_dashbord', 'stype', 'list');
-        } else if (geodir_is_page('login')) {
-            $keep_vars = array('forgot', 'signup');
-        }        
-        
-        if (!empty($keep_vars)) {
-            foreach ( $languages as $code => $url) {
-                $filter_url = $url['url'];
-                
-                foreach ($keep_vars as $var) {
-                    if (isset($_GET[$var]) && !is_array($_GET[$var])) {
-                        $filter_url = remove_query_arg(array($var), $filter_url);
-                        $filter_url = add_query_arg(array($var => $_GET[$var]), $filter_url);
-                    }
-                }
-                
-                if ($filter_url != $url['url']) {
-                    $languages[$code]['url'] = $filter_url;
-                }
-            }
-        }
-    }
-
-    return $languages;
-}
-add_filter( 'icl_ls_languages', 'geodir_wpml_filter_ls_languages', 11, 1 );
-
-/**
  * Remove Yoast SEO hook if disabled on GD pages.
  *
  * @since 1.6.18
@@ -1692,34 +1602,6 @@ function geodir_remove_yoast_seo_metas(){
         remove_action( 'template_redirect', 'wpseo_frontend_head_init', 999 );
     }
 }
-
-/**
- * Set the WPML language for AJAX requests for non logged user.
- *
- * Custom AJAX requests always return the default language content.
- *
- * @since 1.6.18
- *
- * @global object $sitepress Sitepress WPML object.
- *
- */
- function geodir_wpml_ajax_set_guest_lang() {    
-    if ( geodir_is_wpml() && wpml_is_ajax() && !is_user_logged_in() ) {
-        if ( empty( $_GET['lang'] ) && !( !empty( $_SERVER['REQUEST_URI'] ) && preg_match( '@\.(css|js|png|jpg|gif|jpeg|bmp)@i', basename( preg_replace( '@\?.*$@', '', $_SERVER['REQUEST_URI'] ) ) ) ) ) {
-            global $sitepress;
-            
-            $referer = wp_get_referer();
-            
-            $current_lang = $sitepress->get_current_language();
-            $referrer_lang = $sitepress->get_language_from_url( $referer );
-            
-            if ( $referrer_lang && $current_lang != $referrer_lang ) {
-                $_GET['lang'] = $referrer_lang;
-            }
-        }
-    }
-}
-add_action( 'plugins_loaded', 'geodir_wpml_ajax_set_guest_lang', -1 );
 
 /**
  * Change country slug czech-republic to czechia and redirect.
