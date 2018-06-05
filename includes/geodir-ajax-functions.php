@@ -232,40 +232,6 @@ function geodir_ajax_handler() {
         geodir_helper_cat_list_output($terms, intval($_REQUEST['limit']));
         exit();
     }
-    
-    if ( !empty($_REQUEST['geodir_ajax'] ) && $_REQUEST['geodir_ajax'] == 'duplicate' && geodir_is_wpml() ) {
-        if ( !empty( $_REQUEST['_nonce'] ) && wp_verify_nonce( $_REQUEST['_nonce'], 'geodir_duplicate_nonce' ) ) {
-            $json = array();
-            $json['success'] = false;
-            
-            $post_id = !empty( $_REQUEST['post_id'] ) ? absint( $_REQUEST['post_id'] ) : 0;
-            $langs = !empty( $_REQUEST['dups'] ) ? explode( ',', sanitize_text_field( $_REQUEST['dups'] ) ) : array();
-            
-            if ( !empty( $post_id ) && !empty( $langs ) ) {
-                if ( geodir_wpml_allowed_to_duplicate( $post_id ) ) {
-                    global $sitepress;
-                    
-                    $element_type = 'post_' . get_post_type( $post_id );
-                    $master_post_id = $sitepress->get_original_element_id( $post_id, $element_type );
-                    
-                    if ( $master_post_id == $post_id ) {
-                        $_REQUEST['icl_ajx_action'] = 'make_duplicates';
-                        
-                        foreach ( $langs as $lang ) {
-                            $return = $sitepress->make_duplicate( $master_post_id, $lang );
-                        }
-                        $json['success'] = true;
-                    } else {
-                        $json['error'] = __( 'Translation can be done from original listing only.', 'geodirectory' );
-                    }
-                } else {
-                    $json['error'] = __( 'You are not allowed to translate this listing.', 'geodirectory' );
-                }
-            }
-            
-            wp_send_json( $json );
-        }
-    }
 
     geodir_die();
 }

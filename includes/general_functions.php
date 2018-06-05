@@ -718,49 +718,6 @@ function geodir_taxonomy_breadcrumb() {
 }
 
 /**
- * Wpml post type archive link.
- *
- * @since 2.0.0
- *
- * @param string $link link.
- * @param string $post_type Post type.
- * @return string $link.
- */
-function geodir_wpml_post_type_archive_link($link, $post_type){
-	if (function_exists('icl_object_id')) {
-		$post_types   = geodir_get_posttypes();
-		
-		if ( isset( $post_types[ $post_type ] ) ) {
-			$slug = $post_types[ $post_type ]['rewrite']['slug'];
-
-			// Alter the CPT slug if WPML is set to do so
-			if ( geodir_wpml_is_post_type_translated( $post_type ) ) {
-				if ( geodir_wpml_slug_translation_turned_on( $post_type ) && $language_code = geodir_wpml_get_lang_from_url( $link) ) {
-
-					$org_slug = $slug;
-					$slug     = apply_filters( 'wpml_translate_single_string',
-						$slug,
-						'WordPress',
-						'URL slug: ' . $slug,
-						$language_code );
-                    
-					if ( ! $slug ) {
-						$slug = $org_slug;
-					} else {
-						$link = str_replace( $org_slug, $slug, $link );
-					}
-				}
-			}
-		}
-	}
-
-	return $link;
-}
-add_filter( 'post_type_archive_link','geodir_wpml_post_type_archive_link', 1000, 2);
-
-
-
-/**
  * Move Images from a remote url to upload directory.
  *
  * @since   1.0.0
@@ -2607,7 +2564,9 @@ function geodirectory_load_db_language() {
 		foreach ( $contents_strings as $string ) {
 			if ( is_scalar( $string ) && $string != '' ) {
 				$string = str_replace( "'", "\'", $string );
-				geodir_wpml_register_string( $string );
+
+				do_action( 'geodir_language_file_add_string', $string );
+
 				$contents .= PHP_EOL . "__('" . $string . "', 'geodirectory');";
 			}
 		}
@@ -3453,36 +3412,6 @@ function geodir_remove_hentry( $class ) {
 }
 
 //add_filter( 'post_class', 'geodir_remove_hentry' ); //@todo we dont seem to need to remove this with new template system
-
-/**
- * Registers a individual text string for WPML translation.
- *
- * @since 1.6.16 Details page add locations to the term links.
- * @package GeoDirectory
- *
- * @param string $string The string that needs to be translated.
- * @param string $domain The plugin domain. Default geodirectory.
- * @param string $name The name of the string which helps to know what's being translated.
- */
-function geodir_wpml_register_string( $string, $domain = 'geodirectory', $name = '' ) {
-    do_action( 'wpml_register_single_string', $domain, $name, $string );
-}
-
-/**
- * Retrieves an individual WPML text string translation.
- *
- * @since 1.6.16 Details page add locations to the term links.
- * @package GeoDirectory
- *
- * @param string $string The string that needs to be translated.
- * @param string $domain The plugin domain. Default geodirectory.
- * @param string $name The name of the string which helps to know what's being translated.
- * @param string $language_code Return the translation in this language. Default is NULL which returns the current language.
- * @return string The translated string.
- */
-function geodir_wpml_translate_string( $string, $domain = 'geodirectory', $name = '', $language_code = NULL ) {
-    return apply_filters( 'wpml_translate_single_string', $string, $domain, $name, $language_code );
-}
 
 /**
  * Get current WP theme name.

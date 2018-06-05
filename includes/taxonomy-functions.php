@@ -415,66 +415,6 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
 $gd_wpml_get_languages = "";
 
 /**
- * Get the WPML language from the url.
- *
- * @since 2.0.0
- *
- * @param string $url.
- * @return string|bool
- */
-function geodir_wpml_get_lang_from_url($url) {
-    global $sitepress, $gd_wpml_get_languages;
-    
-    if (geodir_is_wpml()) {
-        return $sitepress->get_language_from_url($url);
-    }
-    
-    if (isset($_REQUEST['lang']) && $_REQUEST['lang']) {
-        return $_REQUEST['lang'];
-    }
-
-    $url = str_replace(array("http://","https://"),"",$url);
-
-    // site_url() seems to work better than get_bloginfo('url') here, WPML can change get_bloginfo('url') to add the lang.
-    $site_url = str_replace(array("http://","https://"),"",site_url());
-
-    $url = str_replace($site_url,"",$url);
-
-    $segments = explode('/', trim($url, '/'));
-
-    if ($gd_wpml_get_languages) {
-        $langs = $gd_wpml_get_languages;
-    } else {
-        $gd_wpml_get_languages = $sitepress->get_active_languages();
-    }
-
-    if (isset($segments[0]) && $segments[0] && array_key_exists($segments[0], $gd_wpml_get_languages)) {
-        return $segments[0];
-    }
-
-    return false;
-}
-
-/**
- * Function for WPML post slug translation turned on.
- *
- * @since 2.0.0
- *
- * @param $post_type Get listing posttype.
- * @return string $settings.
- */
-function geodir_wpml_slug_translation_turned_on($post_type) {
-
-    global $sitepress;
-    $settings = $sitepress->get_settings();
-    return isset($settings['posts_slug_translation']['types'][$post_type])
-    && $settings['posts_slug_translation']['types'][$post_type]
-    && isset($settings['posts_slug_translation']['on'])
-    && $settings['posts_slug_translation']['on'];
-}
-
-
-/**
  * Retrieve the term link.
  *
  * @since 1.0.0
@@ -582,30 +522,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
             $termlink = $sitepress->post_type_archive_link_filter( $termlink, $post_type);
         }*/
 
-        // Alter the CPT slug if WPML is set to do so
-        if (function_exists('icl_object_id')) {
-            $post_types = geodir_get_posttypes('array');
-            $post_type = str_replace("category","",$taxonomy);
-            $post_type = str_replace("_tags","",$post_type);
-            $slug = $post_types[$post_type]['rewrite']['slug'];
-            if (geodir_wpml_is_post_type_translated($post_type) && geodir_wpml_slug_translation_turned_on($post_type)) {
-                global $sitepress;
-                $default_lang = $sitepress->get_default_language();
-                $language_code = geodir_wpml_get_lang_from_url($termlink);
-                if (!$language_code ) {
-                    $language_code  = $default_lang;
-                }
-
-                $org_slug = $slug;
-                $slug = apply_filters('wpml_translate_single_string', $slug, 'WordPress', 'URL slug: ' . $slug, $language_code);
-
-                if (!$slug) {
-                    $slug = $org_slug;
-                }
-
-                $termlink = trailingslashit(preg_replace("/" . preg_quote($org_slug, "/") . "/", $slug  ,$termlink, 1));
-            }
-        }
+		$termlink = apply_filters( 'geodir_term_link', $termlink, $term, $taxonomy );
     }
     
     return $termlink;

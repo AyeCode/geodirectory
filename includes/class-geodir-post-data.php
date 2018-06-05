@@ -120,7 +120,7 @@ class GeoDir_Post_Data {
 
 
 		// only fire if $post_temp is set
-		if ( $gd_post = self::$post_temp ) {
+		if ( $gd_post = self::$post_temp ) {gddev_log( $_REQUEST, wp_debug_backtrace_summary(), __FILE__, __LINE__ );geodir_error_log( $gd_post, 'post_temp', __FILE__, __LINE__ );
 
 			$is_dummy = isset($gd_post['post_dummy']) && $gd_post['post_dummy'] && isset($_REQUEST['action']) && $_REQUEST['action']=='geodir_insert_dummy_data' ? true : false;
 
@@ -338,7 +338,7 @@ class GeoDir_Post_Data {
 
 //			print_r($gd_post);print_r( $postarr );exit;
 
-			$postarr = apply_filters( 'geodir_save_post_data', $postarr, $gd_post, $post, $update );
+			$postarr = apply_filters( 'geodir_save_post_data', $postarr, $gd_post, $post, $update );geodir_error_log( $postarr, 'postarr', __FILE__, __LINE__ );
 
 			//geodir_error_log( $postarr, 'save_post_data', __FILE__, __LINE__ );
 
