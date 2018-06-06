@@ -1134,19 +1134,12 @@ class GeoDir_Admin_Import_Export {
 			$csv_row[] = 'cat_posttype';
 			$csv_row[] = 'cat_parent';
 			$csv_row[] = 'cat_schema';
-			// WPML
-			$is_wpml = geodir_wpml_is_taxonomy_translated( $taxonomy );
-			if ( $is_wpml ) {
-				$csv_row[] = 'cat_language';
-				$csv_row[] = 'cat_id_original';
-			}
-			// WPML
 			$csv_row[] = 'cat_description';
 			$csv_row[] = 'cat_top_description';
 			$csv_row[] = 'cat_image';
 			$csv_row[] = 'cat_icon';
 
-			$csv_rows[] = $csv_row;
+			$csv_rows[] = apply_filters( 'geodir_export_categories_csv_columns', $csv_row, $post_type );
 
 			foreach ( $terms as $term ) {
 				$cat_icon  = geodir_get_cat_icon( $term->term_id, true );
@@ -1165,18 +1158,12 @@ class GeoDir_Admin_Import_Export {
 				$csv_row[] = $post_type;
 				$csv_row[] = $cat_parent;
 				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_schema', true );
-				// WPML
-				if ( $is_wpml ) {
-					$csv_row[] = geodir_get_language_for_element( $term->term_id, 'tax_' . $taxonomy );
-					$csv_row[] = self::wpml_original_post_id( $term->term_id, 'tax_' . $taxonomy );
-				}
-				// WPML
 				$csv_row[] = $term->description;
 				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_top_desc', true );
 				$csv_row[] = $cat_image;
 				$csv_row[] = $cat_icon;
 
-				$csv_rows[] = $csv_row;
+				$csv_rows[] = apply_filters( 'geodir_export_categories_csv_row', $csv_row, $term->term_id, $post_type );
 			}
 		}
 
@@ -1267,19 +1254,7 @@ class GeoDir_Admin_Import_Export {
 						$cat_language    = $cat_info['cat_language'];
 						$uploads         = wp_upload_dir();
 
-						// WPML
-						if ( $is_wpml && geodir_wpml_is_taxonomy_translated( $taxonomy ) && $cat_id_original > 0 && $cat_language != '' ) {
-							$wpml_element_type = 'tax_' . $taxonomy;
-							$source_language   = geodir_get_language_for_element( $cat_id_original, $wpml_element_type );
-							$source_language   = $source_language != '' ? $source_language : $sitepress->get_default_language();
-
-							$trid = $sitepress->get_element_trid( $cat_id_original, $wpml_element_type );
-
-							$sitepress->set_element_language_details( $term_id, $wpml_element_type, $trid, $cat_language, $source_language );
-						}
-						// WPML
-
-						//print_r($term_data);
+						do_action( 'geodir_category_imported', $term_id, $term_data );
 
 						if ( isset( $term_data['cat_top_description'] ) ) {
 							update_term_meta( $term_id, 'ct_cat_top_desc', $term_data['cat_top_description'] );
@@ -1372,26 +1347,14 @@ class GeoDir_Admin_Import_Export {
 		$cat_info_fixed['cat_top_description'] = isset( $cat_info['cat_top_description'] ) && $cat_info['cat_top_description'] ? esc_attr( $cat_info['cat_top_description'] ) : '';
 		$cat_info_fixed['image']               = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
 		$cat_info_fixed['icon']                = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
-		//$cat_info_fixed[''] = isset($cat_info['']) && $cat_info[''] ? $cat_info[''] : '';
-		//$cat_info_fixed[''] = isset($cat_info['']) && $cat_info[''] ? $cat_info[''] : '';
-
-		// WPML
-		$is_wpml = geodir_is_wpml();
-		if ( $is_wpml ) {
-			$cat_info_fixed['cat_language']    = isset( $cat_info['cat_language'] ) && $cat_info['cat_language'] ? trim( $cat_info['cat_language'] ) : '';
-			$cat_info_fixed['cat_id_original'] = isset( $cat_info['cat_id_original'] ) && $cat_info['cat_id_original'] ? absint( $cat_info['cat_id_original'] ) : '';
-		}
-		// WPML
-
 
 		// validate @todo validate the info
 
-
 		// temp image fix
-		$cat_info_fixed['image'] = $cat_info_fixed['image'] != '' ? basename( $cat_info_fixed['image'] ) : '';
-		$cat_info_fixed['icon']  = $cat_info_fixed['icon'] != '' ? basename( $cat_info_fixed['icon'] ) : '';
+		$cat_info_fixed['image'] 				= $cat_info_fixed['image'] != '' ? basename( $cat_info_fixed['image'] ) : '';
+		$cat_info_fixed['icon']  				= $cat_info_fixed['icon'] != '' ? basename( $cat_info_fixed['icon'] ) : '';
 
-		return $cat_info_fixed;
+		return apply_filter( 'geodir_import_category_validate_item', $cat_info_fixed, $cat_info );
 	}
 	
 	/**
@@ -1709,24 +1672,6 @@ class GeoDir_Admin_Import_Export {
 		$mimes['json'] = 'application/json';
 
 		return $mimes;
-	}
-
-	/**
-	 * Get WPML original translation element id.
-	 *
-	 * @global object $sitepress Sitepress WPML object.
-	 *
-	 * @param int $element_id Post ID or Term id.
-	 * @param string $element_type Element type. Ex: post_gd_place or tax_gd_placecategory.
-	 * @return Original element id.
-	 */
-	public static function wpml_original_post_id($element_id, $element_type) {
-		global $sitepress;
-
-		$original_element_id = $sitepress->get_original_element_id($element_id, $element_type);
-		$element_id = $element_id != $original_element_id ? $original_element_id : '';
-
-		return $element_id;
 	}
 
 	/**

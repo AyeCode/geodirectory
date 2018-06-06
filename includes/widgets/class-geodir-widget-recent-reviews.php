@@ -192,8 +192,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		$tablecomments = $wpdb->comments;
 		$tableposts    = $wpdb->posts;
 		$comments_echo  = '';
-		$join = '';
-		$where = '';
+		$join = "JOIN " . $wpdb->comments . " AS c ON c.comment_ID = r.comment_id JOIN " . $wpdb->posts . " AS p ON p.ID = c.comment_post_ID";
+		$where = "c.comment_parent = 0 AND c.comment_approved = 1 AND r.rating > 0 AND p.post_status = 'publish'";
 
 		if ( !empty( $post_type ) ) {
 			$where .= $wpdb->prepare( " AND p.post_type = %s", $post_type );
@@ -218,16 +218,12 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			}
 		}
 
-		if (geodir_is_wpml()) {
-			$lang_code = ICL_LANGUAGE_CODE;
+		$join = apply_filters( 'geodir_recent_reviews_query_join', $join, $post_type, $add_location_filter );
+		$where = apply_filters( 'geodir_recent_reviews_query_where', $where, $post_type, $add_location_filter );
 
-			if ($lang_code) {
-				$join .= " JOIN " . $table_prefix . "icl_translations AS icltr2 ON icltr2.element_id = c.comment_post_ID AND p.ID = icltr2.element_id AND CONCAT('post_', p.post_type) = icltr2.element_type LEFT JOIN " . $table_prefix . "icl_translations AS icltr_comment ON icltr_comment.element_id = c.comment_ID AND icltr_comment.element_type = 'comment'";
-				$where .= " AND icltr2.language_code = '" . $lang_code . "' AND (icltr_comment.language_code IS NULL OR icltr_comment.language_code = icltr2.language_code)";
-			}
-		}
+		$where = ! empty( $where ) ? "WHERE {$where}" : "";
 
-		$request = "SELECT c.comment_ID, c.comment_author, c.comment_author_email, c.comment_content, c.comment_date, r.rating, r.user_id, r.post_id, r.post_type FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN " . $wpdb->comments . " AS c ON c.comment_ID = r.comment_id JOIN " . $wpdb->posts . " AS p ON p.ID = c.comment_post_ID " . $join . " WHERE c.comment_parent = 0 AND c.comment_approved = 1 AND r.rating > 0 AND p.post_status = 'publish' " . $where . " ORDER BY c.comment_date DESC, c.comment_ID DESC LIMIT 5";
+		$request = "SELECT c.comment_ID, c.comment_author, c.comment_author_email, c.comment_content, c.comment_date, r.rating, r.user_id, r.post_id, r.post_type FROM " . GEODIR_REVIEW_TABLE . " AS r {$join} {$where} ORDER BY c.comment_date DESC, c.comment_ID DESC LIMIT 5";
 
 		$comments = $wpdb->get_results( $request );
 

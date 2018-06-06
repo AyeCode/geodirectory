@@ -364,15 +364,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         $title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
 
         $categories = $category;
-        if ( ! empty( $category ) && $category[0] != '0' ) {
-            $category_taxonomy = geodir_get_taxonomies( $post_type );
-
-            ######### WPML #########
-            if ( geodir_wpml_is_taxonomy_translated( $category_taxonomy[0] ) ) {
-                $category = geodir_lang_object_ids( $category, $category_taxonomy[0] );
-            }
-            ######### WPML #########
-        }
+		$category_taxonomy = $post_type . 'category';
+		$category = apply_filters( 'geodir_filter_query_var_categories', $category, $post_type );
 
         if ( isset( $instance['character_count'] ) ) {
             /**
@@ -508,9 +501,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         }
         $hide_if_empty = ! empty( $instance['hide_if_empty'] ) ? true : false;
 
-        if ( ! empty( $categories ) && $categories[0] != '0' && !empty( $category_taxonomy ) ) {
+        if ( ! empty( $categories ) && $categories[0] != '0' ) {
             $tax_query = array(
-                'taxonomy' => $category_taxonomy[0],
+                'taxonomy' => $category_taxonomy,
                 'field'    => 'id',
                 'terms'    => $category
             );

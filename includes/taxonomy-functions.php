@@ -411,9 +411,6 @@ function geodir_get_catlist($cat_taxonomy, $parrent = 0, $selected = false)
     }
 }
 
-
-$gd_wpml_get_languages = "";
-
 /**
  * Retrieve the term link.
  *

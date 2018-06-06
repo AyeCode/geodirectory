@@ -232,27 +232,12 @@ function geodir_get_terms_count( $post_type ) {
 
 	$taxonomy = $post_type . 'category';
 
-	// WPML
-	$is_wpml     = geodir_is_wpml();
-	$active_lang = 'all';
-	if ( $is_wpml ) {
-		global $sitepress;
-		$active_lang = $sitepress->get_current_language();
-
-		if ( $active_lang != 'all' ) {
-			$sitepress->switch_lang( 'all', true );
-		}
-	}
-	// WPML
+	do_action( 'geodir_before_count_terms', $post_type, $taxonomy, $args );
 
 	$count_terms = wp_count_terms( $taxonomy, $args );
 
-	// WPML
-	if ( $is_wpml && $active_lang !== 'all' ) {
-		global $sitepress;
-		$sitepress->switch_lang( $active_lang, true );
-	}
-	// WPML
+	do_action( 'geodir_after_count_terms', $post_type, $taxonomy, $args );
+
 	$count_terms = ! is_wp_error( $count_terms ) ? $count_terms : 0;
 
 	return $count_terms;

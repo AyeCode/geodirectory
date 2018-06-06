@@ -543,23 +543,6 @@ function geodir_is_wpml() {
 }
 
 /**
- * Get WPML language code for current term.
- *
- * @since 1.5.0
- *
- * @global object $sitepress Sitepress WPML object.
- *
- * @param int $element_id Post ID or Term id.
- * @param string $element_type Element type. Ex: post_gd_place or tax_gd_placecategory.
- * @return Language code.
- */
-function geodir_get_language_for_element($element_id, $element_type) {
-    global $sitepress;
-
-    return $sitepress->get_language_for_element($element_id, $element_type);
-}
-
-/**
  * Get the CPT that disabled review stars.
  *
  * @since 1.6.16
@@ -639,79 +622,6 @@ function geodir_cpt_has_favourite_disabled( $post_type = '') {
  */
 function geodir_disable_yoast_seo_metas() {
     return (bool)geodir_get_option( 'geodir_disable_yoast_meta' );
-}
-
-/**
- * Add setting for WPML front-end duplicate translation in design page setting section.
- *
- * @since 1.6.18
- *
- * @param array $settings GD design settings array.
- * @return array Filtered GD design settings array..
- */
-function geodir_wpml_duplicate_settings( $settings = array() ) {
-    $new_settings = array();
-    
-    foreach ( $settings as $key => $setting ) {
-        
-        if ( isset( $setting['type'] ) && $setting['type'] == 'sectionend' && $setting['id'] == 'detail_page_settings' ) {
-            $new_settings[] = array(
-                'name' => __('Disable WPML duplicate translation', 'geodirectory'),
-                'desc' => __('Select post types to disable front end WPML duplicate translation. For selected post types the WPML duplicate option will be disabled from listing detail page sidebar.', 'geodirectory'),
-                'tip' => '',
-                'id' => 'geodir_wpml_disable_duplicate',
-                'css' => 'min-width:300px;',
-                'std' => '',
-                'type' => 'multiselect',
-                'placeholder_text' => __('Select post types', 'geodirectory'),
-                'class' => 'geodir-select',
-                'options' => geodir_post_type_options()
-            );
-        }
-        $new_settings[] = $setting;
-    }
-    
-    return $new_settings;
-}
-
-/**
- * Checks if a given taxonomy is currently translated.
- *
- * @since 1.6.22
- *
- * @param string $taxonomy name/slug of a taxonomy.
- * @return bool true if the taxonomy is currently set to being translatable in WPML.
- */
-function geodir_wpml_is_taxonomy_translated( $taxonomy ) {
-    if ( empty( $taxonomy ) || !geodir_is_wpml() || !function_exists( 'is_taxonomy_translated' ) ) {
-        return false;
-    }
-    
-    if ( is_taxonomy_translated( $taxonomy ) ) {
-        return true;
-    }
-    
-    return false;
-}
-
-/**
- * Checks if a given post_type is currently translated.
- *
- * @since 1.6.22
- *
- * @param string $post_type name/slug of a post_type.
- * @return bool true if the post_type is currently set to being translatable in WPML.
- */
-function geodir_wpml_is_post_type_translated( $post_type ) {
-    if ( empty( $post_type ) || !geodir_is_wpml() || !function_exists( 'is_post_type_translated' ) ) {
-        return false;
-    }
-    
-    if ( is_post_type_translated( $post_type ) ) {
-        return true;
-    }
-    
-    return false;
 }
 
 /**
