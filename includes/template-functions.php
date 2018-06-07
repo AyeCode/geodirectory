@@ -780,19 +780,15 @@ function geodir_listing_archive_image(){
  * @since 2.0.0
  *
  * @param string $page
- * @param  bool $wpml Optional. WPML .Default true.
+ * @param  bool $translated Optional. Translated page ID .Default true.
  * @return int
  */
-function geodir_get_page_id( $page, $wpml = true ) {
-	$page = geodir_get_option( 'page_' . $page );
-	
-	if ( $wpml && function_exists( 'icl_object_id' ) ) {
-		$page =  icl_object_id( $page, 'page', true );
-	}
-	
-	$page = apply_filters( 'geodir_get_' . $page . '_page_id', $page, $wpml );
+function geodir_get_page_id( $page, $translated = true ) {
+	$page_id = geodir_get_option( 'page_' . $page );
 
-	return $page ? absint( $page ) : -1;
+	$page_id = apply_filters( 'geodir_get_page_id', $page_id, $page, $translated );
+
+	return $page_id ? absint( $page_id ) : -1;
 }
 
 /**

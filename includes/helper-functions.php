@@ -30,13 +30,9 @@ function geodir_db_cpt_table($post_type){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_add_listing_page_id(){
-    $gd_page_id = geodir_get_option('page_add');
+    $gd_page_id = geodir_get_page_id( 'add' );
 
-    if (function_exists('icl_object_id')) {
-        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-    }
-
-    return $gd_page_id;
+	return apply_filters( 'geodir_add_listing_page_id', $gd_page_id );
 }
 
 /**
@@ -48,13 +44,9 @@ function geodir_add_listing_page_id(){
  * @todo we need to remove this function and all references to it.
  */
 function geodir_preview_page_id(){
-    $gd_page_id = geodir_get_option('page_preview');
+    $gd_page_id = geodir_get_page_id( 'preview' );
 
-    if (function_exists('icl_object_id')) {
-        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-    }
-
-    return $gd_page_id;
+	return apply_filters( 'geodir_preview_page_id', $gd_page_id );
 }
 
 /**
@@ -66,13 +58,9 @@ function geodir_preview_page_id(){
  * @todo we need to remove this function and all references to it.
  */
 function geodir_success_page_id(){
-    $gd_page_id = geodir_get_option('page_success');
+    $gd_page_id = geodir_get_page_id( 'success' );
 
-    if (function_exists('icl_object_id')) {
-        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-    }
-
-    return $gd_page_id;
+	return apply_filters( 'geodir_success_page_id', $gd_page_id );
 }
 
 /**
@@ -83,13 +71,9 @@ function geodir_success_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_location_page_id(){
-    $gd_page_id = geodir_get_option('page_location');
+    $gd_page_id = geodir_get_page_id( 'location' );
 
-    if (function_exists('icl_object_id')) {
-        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-    }
-
-    return $gd_page_id;
+	return apply_filters( 'geodir_location_page_id', $gd_page_id );
 }
 
 /**
@@ -101,13 +85,9 @@ function geodir_location_page_id(){
  * @deprecated No longer needed since version 2.0.0
  */
 function geodir_info_page_id(){
-    $gd_page_id = geodir_get_option('geodir_info_page');
+    $gd_page_id = geodir_get_page_id( 'info' );
 
-    if (function_exists('icl_object_id')) {
-        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-    }
-
-    return $gd_page_id;
+	return apply_filters( 'geodir_info_page_id', $gd_page_id );
 }
 
 /**
@@ -119,13 +99,9 @@ function geodir_info_page_id(){
  * @deprecated No longer needed since version 2.0.0
  */
 function geodir_login_page_id(){
-    $gd_page_id = geodir_get_option('geodir_login_page');
+    $gd_page_id = geodir_get_page_id( 'login' );
 
-    if (function_exists('icl_object_id')) {
-        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-    }
-
-    return $gd_page_id;
+	return apply_filters( 'geodir_login_page_id', $gd_page_id );
 }
 
 /**
@@ -136,13 +112,9 @@ function geodir_login_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_archive_page_id(){
-	$gd_page_id = geodir_get_option('page_archive');
+	$gd_page_id = geodir_get_page_id( 'archive' );
 
-	if (function_exists('icl_object_id')) {
-		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-	}
-
-	return $gd_page_id;
+	return apply_filters( 'geodir_archive_page_id', $gd_page_id );
 }
 
 /**
@@ -153,13 +125,9 @@ function geodir_archive_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_archive_item_page_id(){
-	$gd_page_id = geodir_get_option('page_archive_item');
+	$gd_page_id = geodir_get_page_id( 'archive_item' );
 
-	if (function_exists('icl_object_id')) {
-		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-	}
-
-	return $gd_page_id;
+	return apply_filters( 'geodir_archive_item_page_id', $gd_page_id );
 }
 
 /**
@@ -170,13 +138,9 @@ function geodir_archive_item_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_search_page_id(){
-	$gd_page_id = geodir_get_option('page_search');
+	$gd_page_id = geodir_get_page_id( 'search' );
 
-	if (function_exists('icl_object_id')) {
-		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-	}
-
-	return $gd_page_id;
+	return apply_filters( 'geodir_search_page_id', $gd_page_id );
 }
 
 /**
@@ -187,13 +151,9 @@ function geodir_search_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_details_page_id(){
-	$gd_page_id = geodir_get_option('page_details');
+	$gd_page_id = geodir_get_page_id( 'details' );
 
-	if (function_exists('icl_object_id')) {
-		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-	}
-
-	return $gd_page_id;
+	return apply_filters( 'geodir_details_page_id', $gd_page_id );
 }
 
 /**
@@ -204,13 +164,9 @@ function geodir_details_page_id(){
  * @return int|null Return the page ID if present or null if not.
  */
 function geodir_terms_and_conditions_page_id(){
-	$gd_page_id = geodir_get_option('page_terms_conditions');
+	$gd_page_id = geodir_get_page_id( 'terms_conditions' );
 
-	if (function_exists('icl_object_id')) {
-		$gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-	}
-
-	return $gd_page_id;
+	return apply_filters( 'geodir_terms_and_conditions_page_id', $gd_page_id );
 }
 
 
@@ -242,11 +198,7 @@ function geodir_login_url($redirect = ''){
  * @return string Info page url.
  */
 function geodir_info_url($args=array()){
-    $gd_page_id = geodir_get_option('geodir_info_page');
-
-    if (function_exists('icl_object_id')) {
-        $gd_page_id =  icl_object_id($gd_page_id, 'page', true);
-    }
+    $gd_page_id = geodir_info_page_id( 'info' );
 
     if (function_exists('geodir_location_geo_home_link')) {
         remove_filter('home_url', 'geodir_location_geo_home_link', 100000);

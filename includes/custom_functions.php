@@ -528,21 +528,6 @@ add_action( 'wp_ajax_geodir_search_form', 'geodir_search_form' );
 add_action( 'wp_ajax_nopriv_geodir_search_form', 'geodir_search_form' );
 
 /**
- * Check wpml active or not.
- *
- * @since 1.5.0
- *
- * @return True if WPML is active else False.
- */
-function geodir_is_wpml() {
-    if (function_exists('icl_object_id')) {
-        return true;
-    }
-
-    return false;
-}
-
-/**
  * Get the CPT that disabled review stars.
  *
  * @since 1.6.16

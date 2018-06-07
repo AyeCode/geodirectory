@@ -882,40 +882,6 @@ function geodir_get_author_info( $aid ) {
 	}
 }
 
-
-
-/*
-Language translation helper functions
-*/
-
-/**
- * Function to get the translated category id's.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param array $ids_array Category IDs.
- * @param string $type     Category taxonomy.
- *
- * @return array Category IDs.
- */
-function geodir_lang_object_ids( $ids_array, $type ) {
-	if ( function_exists( 'icl_object_id' ) ) {
-		$res = array();
-		foreach ( $ids_array as $id ) {
-			$xlat = icl_object_id( $id, $type, false );
-			if ( ! is_null( $xlat ) ) {
-				$res[] = $xlat;
-			}
-		}
-
-		return $res;
-	} else {
-		return $ids_array;
-	}
-}
-
-
 /**
  * function to add class to body when multi post type is active.
  *

@@ -664,15 +664,8 @@ class GeoDir_Admin_Import_Export {
 		$chunk_per_page = $chunk_per_page < 50 || $chunk_per_page > 100000 ? 5000 : $chunk_per_page;
 		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
 
-		// WPML
-		$is_wpml = geodir_is_wpml();
-		if ( $is_wpml ) {
-			global $sitepress;
-			$active_lang = ICL_LANGUAGE_CODE;
+		do_action( 'geodir_export_posts_set_globals', $post_type );
 
-			$sitepress->switch_lang( 'all', true );
-		}
-		// WPML
 		if ( $post_type == 'gd_event' ) {
 			//add_filter( 'geodir_imex_export_posts_query', 'geodir_imex_get_events_query', 10, 2 ); // @todo this shoudl be done from events plugin
 		}
@@ -692,11 +685,9 @@ class GeoDir_Admin_Import_Export {
 
 		if ( isset( $_REQUEST['_c'] ) ) {
 			$json['total'] = $posts_count;
-			// WPML
-			if ( $is_wpml ) {
-				$sitepress->switch_lang( $active_lang, true );
-			}
-			// WPML
+
+			do_action( 'geodir_export_posts_reset_globals', $post_type );
+
 			wp_send_json( $json );
 			geodir_die();
 		} else if ( isset( $_REQUEST['_st'] ) ) {
@@ -705,11 +696,9 @@ class GeoDir_Admin_Import_Export {
 			$percentage = min( $percentage, 100 );
 
 			$json['percentage'] = $percentage;
-			// WPML
-			if ( $is_wpml ) {
-				$sitepress->switch_lang( $active_lang, true );
-			}
-			// WPML
+
+			do_action( 'geodir_export_posts_reset_globals', $post_type );
+
 			wp_send_json( $json );
 			geodir_die();
 		} else {
@@ -764,13 +753,8 @@ class GeoDir_Admin_Import_Export {
 					}
 				}
 			}
-			// WPML
-			if ( $is_wpml ) {
-				$sitepress->switch_lang( $active_lang, true );
-			}
-			// WPML
-			//wp_send_json( $json );
-			//wp_send_json( $json );
+
+			do_action( 'geodir_export_posts_reset_globals', $post_type );
 		}
 
 		return $json;
@@ -1006,15 +990,8 @@ class GeoDir_Admin_Import_Export {
 		$chunk_page_no  = isset( $_REQUEST['_p'] ) ? absint( $_REQUEST['_p'] ) : 1;
 		$csv_file_dir   = self::import_export_cache_path( false );
 
-		// WPML
-		$is_wpml = geodir_is_wpml();
-		if ( $is_wpml ) {
-			global $sitepress;
-			$active_lang = ICL_LANGUAGE_CODE;
+		do_action( 'geodir_export_categories_set_globals', $post_type );
 
-			$sitepress->switch_lang( 'all', true );
-		}
-		// WPML
 		$file_name = $post_type . 'category_' . date( 'dmyHi' );
 
 		$terms_count    = geodir_get_terms_count( $post_type );
@@ -1031,11 +1008,9 @@ class GeoDir_Admin_Import_Export {
 			$percentage = min( $percentage, 100 );
 
 			$json['percentage'] = $percentage;
-			// WPML
-			if ( $is_wpml ) {
-				$sitepress->switch_lang( $active_lang, true );
-			}
-			// WPML
+
+			do_action( 'geodir_export_categories_reset_globals', $post_type );
+
 			wp_send_json( $json );
 		} else {
 			if ( ! $terms_count > 0 ) {
@@ -1084,12 +1059,8 @@ class GeoDir_Admin_Import_Export {
 					$json['error'] = __( 'ERROR: Could not create csv file. This is usually due to inconsistent file permissions.', 'geodirectory' );
 				}
 			}
-			// WPML
-			if ( $is_wpml ) {
-				$sitepress->switch_lang( $active_lang, true );
-			}
-			// WPML
-			//wp_send_json( $json );
+
+			do_action( 'geodir_export_categories_reset_globals', $post_type );
 		}
 
 		return $json;
@@ -1183,17 +1154,6 @@ class GeoDir_Admin_Import_Export {
 		$processed ++;
 		$rows = self::get_csv_rows( $processed, $limit );
 
-		// WPML
-		$is_wpml = geodir_is_wpml();
-		if ( $is_wpml ) {
-			global $sitepress;
-			$active_lang = ICL_LANGUAGE_CODE;
-		}
-		// WPML
-
-		//print_r($rows);exit;
-
-
 		if ( ! empty( $rows ) ) {
 			$created = 0;
 			$updated = 0;
@@ -1216,12 +1176,7 @@ class GeoDir_Admin_Import_Export {
 				//print_r($cat_info );exit;
 
 				if ( $cat_info ) {
-
-					// WPML
-					if ( $is_wpml && $cat_info['cat_language'] != '' ) {
-						$sitepress->switch_lang( $cat_info['cat_language'], true );
-					}
-					// WPML
+					do_action( 'geodir_import_category_set_globals', $cat_info );
 
 					// Update
 					if ( isset( $cat_info['term_id'] ) && $cat_info['term_id'] ) {
@@ -1296,11 +1251,7 @@ class GeoDir_Admin_Import_Export {
 					}
 					///////////////////////////////////////////////////////////////////// update term meta end
 
-					// WPML
-					if ( $is_wpml && $cat_info['cat_language'] != '' ) {
-						$sitepress->switch_lang( $active_lang, true );
-					}
-					// WPML
+					do_action( 'geodir_import_category_reset_globals', $cat_info );
 
 				} else {
 					$invalid ++;
@@ -1750,14 +1701,7 @@ class GeoDir_Admin_Import_Export {
      * @return string $active_lang.
      */
 	public static function switch_locale( $locale ) {
-		$active_lang = '';
-		$is_wpml = geodir_is_wpml();
-		if ( $is_wpml ) {
-			global $sitepress;
-			$active_lang = $sitepress->get_current_language();
-			$sitepress->switch_lang( 'all', true );
-		}
-		return $active_lang;
+		return apply_filters( 'geodir_switch_locale', $locale );
 	}
 
     /**
@@ -1769,16 +1713,7 @@ class GeoDir_Admin_Import_Export {
      * @return bool
      */
 	public static function restore_locale( $locale ) {
-		if ( ! $locale ) {
-			return false;
-		}
-
-		$is_wpml = geodir_is_wpml();
-		if ( $is_wpml ) {
-			global $sitepress;
-			$sitepress->switch_lang( $locale, true );
-		}
-		return true;
+		return apply_filters( 'geodir_restore_locale', $locale );
 	}
 	
 	/**

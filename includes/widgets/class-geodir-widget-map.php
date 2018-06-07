@@ -793,7 +793,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$map_args['post_id']        = 0;
 		}
 
-		// geodir_error_log( $map_args, 'map_args', __FILE__, __LINE__ );
 		return self::render_map( $map_args );
 	}
 
@@ -897,7 +896,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
      *
      * @param array $params map arguments array.
      */
-	public static function display_map( $params ) { //geodir_error_log( $params, 'display_map', __FILE__, __LINE__ );
+	public static function display_map( $params ) {
 		global $gd_maps_canvas;
 		if ( empty( $gd_maps_canvas ) ) {
 			$gd_maps_canvas = array();
