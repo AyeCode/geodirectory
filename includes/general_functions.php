@@ -882,40 +882,6 @@ function geodir_get_author_info( $aid ) {
 	}
 }
 
-
-
-/*
-Language translation helper functions
-*/
-
-/**
- * Function to get the translated category id's.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param array $ids_array Category IDs.
- * @param string $type     Category taxonomy.
- *
- * @return array Category IDs.
- */
-function geodir_lang_object_ids( $ids_array, $type ) {
-	if ( function_exists( 'icl_object_id' ) ) {
-		$res = array();
-		foreach ( $ids_array as $id ) {
-			$xlat = icl_object_id( $id, $type, false );
-			if ( ! is_null( $xlat ) ) {
-				$res[] = $xlat;
-			}
-		}
-
-		return $res;
-	} else {
-		return $ids_array;
-	}
-}
-
-
 /**
  * function to add class to body when multi post type is active.
  *
@@ -1019,95 +985,6 @@ function geodir_option_version_backup( $geodir_option_name ) {
 }
 
 /**
- * display add listing page for wpml.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param int $page_id The page ID.
- *
- * @return int Page ID.
- */
-function get_page_id_geodir_add_listing_page( $page_id ) {
-	if ( geodir_wpml_multilingual_status() ) {
-		$post_type = 'post_page';
-		$page_id   = geodir_get_wpml_element_id( $page_id, $post_type );
-	}
-
-	return $page_id;
-}
-
-/**
- * Returns wpml multilingual status.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @return bool Returns true when sitepress multilingual CMS active. else returns false.
- */
-function geodir_wpml_multilingual_status() {
-	if ( function_exists( 'icl_object_id' ) ) {
-		return true;
-	}
-
-	return false;
-}
-
-/**
- * Returns WPML element ID.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param int $page_id      The page ID.
- * @param string $post_type The post type.
- *
- * @return int Element ID when exists. Else the page id.
- */
-function geodir_get_wpml_element_id( $page_id, $post_type ) {
-	global $sitepress;
-	if ( geodir_wpml_multilingual_status() && ! empty( $sitepress ) && isset( $sitepress->queries ) ) {
-		$trid = $sitepress->get_element_trid( $page_id, $post_type );
-
-		if ( $trid > 0 ) {
-			$translations = $sitepress->get_element_translations( $trid, $post_type );
-
-			$lang = $sitepress->get_current_language();
-			$lang = $lang ? $lang : $sitepress->get_default_language();
-
-			if ( ! empty( $translations ) && ! empty( $lang ) && isset( $translations[ $lang ] ) && isset( $translations[ $lang ]->element_id ) && ! empty( $translations[ $lang ]->element_id ) ) {
-				$page_id = $translations[ $lang ]->element_id;
-			}
-		}
-	}
-
-	return $page_id;
-}
-
-/**
- * WPML check element ID.
- *
- * @since      1.0.0
- * @package    GeoDirectory
- * @deprecated 1.4.6 No longer needed as we handle translating GD pages as normal now.
- */
-function geodir_wpml_check_element_id() {
-	global $sitepress;
-	if ( geodir_wpml_multilingual_status() && ! empty( $sitepress ) && isset( $sitepress->queries ) ) {
-		$el_type      = 'post_page';
-		$el_id        = geodir_get_option( 'geodir_add_listing_page' );
-		$default_lang = $sitepress->get_default_language();
-		$el_details   = $sitepress->get_element_language_details( $el_id, $el_type );
-
-		if ( ! ( $el_id > 0 && $default_lang && ! empty( $el_details ) && isset( $el_details->language_code ) && $el_details->language_code == $default_lang ) ) {
-			if ( ! $el_details->source_language_code ) {
-				$sitepress->set_element_language_details( $el_id, $el_type, '', $default_lang );
-				$sitepress->icl_translations_cache->clear();
-			}
-		}
-	}
-}
-
-/**
  * Returns orderby SQL using the given query args.
  *
  * @since   1.0.0
@@ -1162,7 +1039,6 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	$post_type = empty( $query_args['post_type'] ) ? 'gd_place' : $query_args['post_type'];
 	$table     = $plugin_prefix . $post_type . '_detail';
-	$supports_wpml = geodir_wpml_is_post_type_translated( $post_type );
 
 	$fields = $wpdb->posts . ".*, " . $table . ".*";
 	/**
@@ -1178,18 +1054,6 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	$join = "INNER JOIN " . $table . " ON (" . $table . ".post_id = " . $wpdb->posts . ".ID)";
 
-	########### WPML ###########
-
-	if ( $supports_wpml ) {
-		global $sitepress;
-		$lang_code = ICL_LANGUAGE_CODE;
-		if ( $lang_code ) {
-			$join .= " JOIN " . $table_prefix . "icl_translations icl_t ON icl_t.element_id = " . $table_prefix . "posts.ID";
-		}
-	}
-
-	########### WPML ###########
-
 	/**
 	 * Filter widget listing join clause string part that is being used for query.
 	 *
@@ -1204,13 +1068,6 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	$where = " AND ( " . $wpdb->posts . ".post_status = 'publish' " . $post_status . " ) AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
 
-	########### WPML ###########
-	if ( $supports_wpml ) {
-		if ( $lang_code ) {
-			$where .= " AND icl_t.language_code = '$lang_code' AND icl_t.element_type = 'post_$post_type' ";
-		}
-	}
-	########### WPML ###########
 	/**
 	 * Filter widget listing where clause string part that is being used for query.
 	 *
@@ -1966,15 +1823,8 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	$title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
 
 	$categories = $category;
-	if ( ! empty( $category ) && $category[0] != '0' ) {
-		$category_taxonomy = geodir_get_taxonomies( $post_type );
-
-		######### WPML #########
-		if ( geodir_wpml_is_taxonomy_translated( $category_taxonomy[0] ) ) {
-			$category = geodir_lang_object_ids( $category, $category_taxonomy[0] );
-		}
-		######### WPML #########
-	}
+	$category_taxonomy = $post_type . 'category';
+	$category = apply_filters( 'geodir_filter_query_var_categories', $category, $post_type );
 
 	if ( isset( $instance['character_count'] ) ) {
 		/**
@@ -2103,9 +1953,9 @@ function geodir_popular_postview_output( $args = '', $instance = '' ) {
 	}
 	$hide_if_empty = ! empty( $instance['hide_if_empty'] ) ? true : false;
 
-	if ( ! empty( $categories ) && $categories[0] != '0' && !empty( $category_taxonomy ) ) {
+	if ( ! empty( $categories ) && $categories[0] != '0' ) {
 		$tax_query = array(
-			'taxonomy' => $category_taxonomy[0],
+			'taxonomy' => $category_taxonomy,
 			'field'    => 'id',
 			'terms'    => $category
 		);

@@ -265,21 +265,14 @@ function geodir_sc_listing_map($atts) {
         );
 
         if ( ! empty( $params['category'] ) && isset( $params['category'][0] ) && (int) $params['category'][0] != 0 ) {
-            $category_taxonomy = geodir_get_taxonomies( $params['post_type'] );
+			$category = apply_filters( 'geodir_filter_query_var_categories', $params['category'], $params['post_type'] );
+			$tax_query = array(
+				'taxonomy' => $params['post_type'] . 'category',
+				'field'    => 'id',
+				'terms'    => $category
+			);
 
-            ######### WPML #########
-            if ( geodir_wpml_is_taxonomy_translated( $category_taxonomy[0] ) ) {
-                $category = geodir_lang_object_ids( $params['category'], $category_taxonomy[0] );
-            }
-            ######### WPML #########
-
-            $tax_query = array(
-                'taxonomy' => $category_taxonomy[0],
-                'field'    => 'id',
-                'terms'    => $params['category']
-            );
-
-            $query_args['tax_query'] = array( $tax_query );
+			$query_args['tax_query'] = array( $tax_query );
         }
 
         $add_post_in_marker_array = true;
@@ -1683,21 +1676,14 @@ function geodir_sc_gd_listings_output($args = array()) {
     $with_no_results = !empty($args['without_no_results']) ? false : true;
 
     if (!empty($category) && isset($category[0]) && $category[0] != '0') {
-        $category_taxonomy = geodir_get_taxonomies($post_type);
+		$category = apply_filters( 'geodir_filter_query_var_categories', $params['category'], $params['post_type'] );
+		$tax_query = array(
+			'taxonomy' => $params['post_type'] . 'category',
+			'field'    => 'id',
+			'terms'    => $category
+		);
 
-        ######### WPML #########
-        if (geodir_wpml_is_taxonomy_translated($category_taxonomy[0])) {
-            $category = geodir_lang_object_ids($category, $category_taxonomy[0]);
-        }
-        ######### WPML #########
-
-        $tax_query = array(
-            'taxonomy' => $category_taxonomy[0],
-            'field' => 'id',
-            'terms' => $category
-        );
-
-        $query_args['tax_query'] = array($tax_query);
+		$query_args['tax_query'] = array( $tax_query );
     }
     
     if (!empty($tags)) {

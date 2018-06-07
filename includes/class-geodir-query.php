@@ -488,18 +488,6 @@ class GeoDir_Query {
                     AND $wpdb->posts.post_type in ('$post_types')
                     AND ($wpdb->posts.post_status = 'publish') ";
 			}
-
-			########### WPML ###########
-			if ( geodir_wpml_is_post_type_translated( $post_types ) ) {
-				$lang_code = ICL_LANGUAGE_CODE;
-
-				if ($lang_code && $post_types) {
-					$where .= " AND icl_t.language_code = '".$lang_code."' AND icl_t.element_type IN('post_" . $post_types . "') ";
-				}
-			}
-			########### WPML ###########
-
-
 		}
 
 		return apply_filters( 'geodir_posts_where', $where, $query );
@@ -568,16 +556,6 @@ class GeoDir_Query {
 	public function posts_join($join, $query = array()){
 
 		global $wpdb, $table_prefix, $geodir_post_type;
-
-		########### WPML ###########
-		if ( geodir_wpml_is_post_type_translated( $geodir_post_type ) ) {
-			global $sitepress;
-			$lang_code = ICL_LANGUAGE_CODE;
-			if ($lang_code) {
-				$join .= "JOIN " . $table_prefix . "icl_translations icl_t ON icl_t.element_id = " . $table_prefix . "posts.ID";
-			}
-		}
-		########### WPML ###########
 
 		$table = geodir_db_cpt_table($geodir_post_type);
 
