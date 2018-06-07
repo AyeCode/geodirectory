@@ -222,8 +222,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			$cfs = self::fields_standard( self::$post_type );
 			?>
-			<ul class="full gd-cf-tooltip-wrap">
-				<li>
+			<ul class="full ">
+				<li class="gd-cf-tooltip-wrap">
 					<a id="gd-fieldset"
 					   class="gd-draggable-form-items gd-fieldset"
 					   href="javascript:void(0);"
@@ -1189,6 +1189,98 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 */
 		public function right_panel_content() {
 			global $wpdb;
+			$post_type = self::$post_type;
+			$fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type = %s ORDER BY sort_order ASC", array($post_type)));
+
+			//print_r($tabs);
+			?>
+			<form></form> <!-- chrome removes the first form inside a form for some reason so we need this ?> -->
+			<div class="inside">
+
+				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
+					<div class="field_row_main">
+						<div class="dd gd-tabs-layout" >
+
+							<?php
+
+
+							echo '<ul class="dd-list gd-tabs-sortable gd-custom-fields-sortable">';
+
+							if ( ! empty( $fields ) ) {
+
+								echo self::loop_fields_output($fields);
+
+							} else {
+								_e( 'No tab items have been added yet.', 'geodirectory' );
+							}
+							echo '</ul>';
+
+							?>
+
+						</div>
+					</div>
+				</div>
+			</div>
+
+			<?php
+		}
+
+		/**
+		 * Loop through the base to output them with the different levels.
+		 * @param $tabs
+		 * @param string $tab_id
+		 *
+		 * @return string
+		 */
+		public static function loop_fields_output($tabs,$tab_id = ''){
+			ob_start();
+
+			if(!empty($tabs)){
+				foreach($tabs as $key => $tab){
+
+					if($tab_id && $tab->id!=$tab_id){
+						continue;
+					}elseif($tab_id && $tab->id==$tab_id && $tab->tab_level > 0){
+						echo self::output_custom_field_setting_item($tab->id,$tab); break;
+					}
+
+					if($tab->tab_level=='1' ){continue;}
+
+
+					$tab_rendered = self::output_custom_field_setting_item($tab->id,$tab);
+					$tab_rendered = str_replace("</li>","",$tab_rendered);
+					$child_tabs = '';
+					foreach($tabs as $child_tab){
+						if($child_tab->tab_parent==$tab->id){
+							$child_tabs .= self::output_custom_field_setting_item($child_tab->id,$child_tab);
+						}
+					}
+
+					if($child_tabs){
+						$tab_rendered .= "<ul>";
+						$tab_rendered .= $child_tabs;
+						$tab_rendered .= "</ul>";
+					}
+
+					echo $tab_rendered;
+					echo "</li>";
+
+					unset($tabs[$key]);
+
+				}
+			}
+			return ob_get_clean();
+		}
+
+		
+		/**
+		 * Output the admin cpt settings fields left panel content.
+		 *
+		 * @since 2.0.0
+		 * @package GeoDirectory
+		 */
+		public function right_panel_content_DELETE() {
+			global $wpdb;
 
 			$listing_type = self::$post_type;
 			$post_type = self::$post_type;
@@ -1260,6 +1352,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		function output_custom_field_setting_item($field_id = '',$field = '',$cf = array())
 		{
 
+			ob_start();
 			// if field not provided get it
 			if (!is_object($field) && $field_id) {
 				global $wpdb;
@@ -1354,6 +1447,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			 * @since 2.0.0
 			 */
 			include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-cf-setting-item.php' );
+			return ob_get_clean();
 
 		}
 
@@ -1380,6 +1474,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 *    @type string $htmlvar_name Html variable name. This should be a unique name.
 		 *    @type string $clabels Section Title which will appear in backend.
 		 *    @type string $default_value The default value (for "link" this will be used as the link text).
+		 *    @type string $placeholder_value The placeholder text to be displayed in the input before user input.
 		 *    @type string $sort_order The display order of this field in backend. e.g. 5.
 		 *    @type string $is_default Either "1" or "0". If "0" is used then the field will be displayed as main form field or additional field.
 		 *    @type string $for_admin_use Either "1" or "0". If "0" is used then only site admin can edit this field.
@@ -1415,6 +1510,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field->frontend_desc = isset( $input['frontend_desc'] ) ? sanitize_text_field( $input['frontend_desc'] ) : '';
 			$field->clabels = isset( $input['clabels'] ) ? sanitize_text_field( $input['clabels'] ) : null;
 			$field->default_value = isset( $input['default_value'] ) ? sanitize_text_field( $input['default_value'] ) : '';
+			$field->placeholder_value = isset( $input['placeholder_value'] ) ? sanitize_text_field( $input['placeholder_value'] ) : '';
 			$field->sort_order = isset( $input['sort_order'] ) ? absint( $input['sort_order'] ) : self::default_sort_order();
 			$field->is_active = isset( $input['is_active'] ) ? absint( $input['is_active'] ) : 0;
 			$field->is_default  = isset( $input['is_default'] ) ? absint( $input['is_default'] ) : 0;
@@ -1700,28 +1796,28 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @param array $field_ids List of field ids.
 		 * @return array|bool Returns field ids when success, else returns false.
 		 */
-		public function set_field_orders($field_ids = array()){
+		public function set_field_orders($tabs = array()){
 			global $wpdb;
 
 			$count = 0;
-			if (!empty($field_ids)) {
-				$post_meta_info = false;
-				foreach ( $field_ids as $id ) {
-					$post_meta_info = $wpdb->update(
+			if (!empty($tabs)) {
+				$result = false;
+				foreach ( $tabs as $index => $info ) {
+					$result = $wpdb->update(
 						GEODIR_CUSTOM_FIELDS_TABLE,
-						array('sort_order' => $count),
-						array('id' => absint($id)),
-						array('%d')
+						array('sort_order' => $index,'tab_level' => $info['tab_level'],'tab_parent' => $info['tab_parent']),
+						array('id' => absint($info['id'])),
+						array('%d','%d','%d')
 					);
 					$count ++;
 				}
-				if($post_meta_info !== false){
+				if($result !== false){
 					return true;
 				}else{
-					return new WP_Error( 'failed', __( "Failed to sort custom fields.", "geodirectory" ) );
+					return new WP_Error( 'failed', __( "Failed to sort tab items.", "geodirectory" ) );
 				}
 			}else{
-				return new WP_Error( 'failed', __( "Failed to sort custom fields.", "geodirectory" ) );
+				return new WP_Error( 'failed', __( "Failed to sort tab items.", "geodirectory" ) );
 			}
 		}
 
@@ -1774,10 +1870,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 //					echo $field->field_type; //@todo we need to do stuff here
 //					break;
 				case 'checkbox':
-					$column_attr .= "( 1 ) NOT NULL ";
-					if ((int)$field->default_value === 1) {
-						$column_attr .= " DEFAULT '1'";
-					}
+					$column_attr .= "( 1 ) NULL ";
+//					if ((int)$field->default_value === 1) {
+//						$column_attr .= " DEFAULT '1'";
+//					}
 					break;
 				case 'multiselect':
 				case 'select':
@@ -1811,9 +1907,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					}
 
 					$column_attr .= "( $op_size ) NULL ";
-					if ($field->default_value != '') {
-						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->default_value);
-					}
+//					if ($field->default_value != '') {
+//						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->default_value);
+//					}
 
 					// Update the field size to new max
 					if($exists) {
@@ -1870,6 +1966,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'frontend_desc' => $field->frontend_desc,
 				'clabels' => $field->clabels,
 				'default_value' => $field->default_value,
+				'placeholder_value' => $field->placeholder_value,
 				'sort_order' => $field->sort_order,
 				'is_active' => $field->is_active,
 				'is_default' => $field->is_default,
@@ -1900,6 +1997,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'%s', // frontend_desc
 				'%s', // clabels
 				'%s', // default_value
+				'%s', // placeholder_value
 				'%d', // sort_order
 				'%d', // is_active
 				'%d', // is_default
@@ -2031,7 +2129,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			 */
 			return apply_filters( 'geodir_show_in_locations', $show_in_locations, $field, $field_type );
 		}
-
+		
 	}
 
 endif;

@@ -249,7 +249,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 							<?php
 
 
-							echo '<ul class="dd-list gd-tabs-sortable">';
+							echo '<ul class="dd-list gd-tabs-sortable gd-tabs-layout-sortable">';
 
 							if ( ! empty( $tabs ) ) {
 

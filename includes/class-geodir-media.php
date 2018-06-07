@@ -301,6 +301,15 @@ class GeoDir_Media {
 				return $metadata;
 			}
 
+			/**
+			 * Filter the raw file info before save to database.
+			 *
+			 * This allows us to pass the raw path to things like image optimize plugins.
+			 *
+			 * @since 2.0.0
+			 */
+			$file = apply_filters('geodir_insert_attachment_file',$file,$post_id);
+
 			// pre slash the file path
 			if(!empty($file['file'])){
 				$file['file'] = "/"._wp_relative_upload_path($file['file']);

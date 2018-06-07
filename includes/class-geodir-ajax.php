@@ -150,7 +150,7 @@ class GeoDir_AJAX {
 	/**
 	 * Save tabs order input form.
      *
-     * @since 2.0.0s
+     * @since 2.0.0
 	 */
 	public static function save_tabs_order(){
 		// security
@@ -718,7 +718,7 @@ class GeoDir_AJAX {
 			wp_send_json_error( $result->get_error_message() );
 		}else{
 			$cfs = new GeoDir_Settings_Cpt_Cf();
-			$cfs->output_custom_field_setting_item($result);
+			echo $cfs->output_custom_field_setting_item($result);
 		}
 		wp_die();
 	}
@@ -759,27 +759,57 @@ class GeoDir_AJAX {
      * @since 2.0.0
 	 */
 	public static function order_custom_fields(){
+//		// security
+//		check_ajax_referer( 'gd_new_field_nonce', 'security' );
+//		if ( ! current_user_can( 'manage_options' ) ) {
+//			wp_die( -1 );
+//		}
+//
+//		$field_ids = array();
+//		if (!empty($_REQUEST['licontainer']) && is_array($_REQUEST['licontainer'])) {
+//			foreach ($_REQUEST['licontainer'] as $field_id) {
+//				$field_ids[] = absint($field_id);
+//			}
+//		}
+//
+//		$cfs = new GeoDir_Settings_Cpt_Cf();
+//		$result = $cfs->set_field_orders($field_ids);
+//
+//		if(is_wp_error( $result ) ){
+//			wp_send_json_error( $result->get_error_message() );
+//		}else{
+//			wp_send_json_success();
+//		}
+
+		//////
+
 		// security
 		check_ajax_referer( 'gd_new_field_nonce', 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
 
-		$field_ids = array();
-		if (!empty($_REQUEST['licontainer']) && is_array($_REQUEST['licontainer'])) {
-			foreach ($_REQUEST['licontainer'] as $field_id) {
-				$field_ids[] = absint($field_id);
+		//print_r($_REQUEST);exit;
+
+		$tabs = isset($_POST['tabs']) && $_POST['tabs'] ? $_POST['tabs'] : '';
+
+		if(!$tabs){
+			wp_send_json_error( __("No tabs provided.","geodirectory") );
+		}else{
+
+			$cfs = new GeoDir_Settings_Cpt_Cf();
+			$result = $cfs->set_field_orders($tabs);
+			
+			//$result = GeoDir_Settings_Cpt_Tabs::set_tabs_orders($tabs);
+
+			if(is_wp_error( $result ) ){
+				wp_send_json_error( $result->get_error_message() );
+			}else{
+				wp_send_json_success();
 			}
 		}
 
-		$cfs = new GeoDir_Settings_Cpt_Cf();
-		$result = $cfs->set_field_orders($field_ids);
-
-		if(is_wp_error( $result ) ){
-			wp_send_json_error( $result->get_error_message() );
-		}else{
-			wp_send_json_success();
-		}
+		wp_die();
 	}
 
 	/**

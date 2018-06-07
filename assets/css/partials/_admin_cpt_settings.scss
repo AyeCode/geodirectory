@@ -12,6 +12,14 @@
     }
   }
 
+  .dd-setting-name{
+    .gd-help-tip{
+      float: none;
+      margin: 0;
+    }
+  }
+
+
   .dd-item,
   .dd-empty,
   .dd-placeholder {
@@ -97,12 +105,21 @@
         input{
           float: right;
         }
+        .button-primary.gd-advanced-toggle{
+          margin: 0 10px;
+        }
       }
 
       label{
         width: 100%;
+        margin-bottom: 0 !important;
         input,select,textarea{
           width: 100%;
+        }
+        input[type=checkbox]{
+          width: auto;
+          display: block;
+          margin: 3px;
         }
       }
 
