@@ -141,6 +141,9 @@ class GeoDir_Permalinks {
 				$gd_post = geodir_get_post_info($post_obj->ID);
 			}
 
+			if ( empty( $gd_post ) ) {
+				return $post_link;
+			}
 
 			// if we don't the GD post info then get it.
 			if(!isset($gd_post->default_category)){
