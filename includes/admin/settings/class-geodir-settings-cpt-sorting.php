@@ -43,7 +43,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 
 			$this->id    = 'cpt-sorting';
-			$this->label = __( 'Sorting options', 'geodirectory' );
+			$this->label = __( 'Sorting', 'geodirectory' );
 
 			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );

@@ -43,7 +43,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 
 			$this->id    = 'cpt-tabs';
-			$this->label = __( 'Tabs Layout', 'geodirectory' );
+			$this->label = __( 'Tabs', 'geodirectory' );
 
 			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
