@@ -24,7 +24,7 @@ $gd_posttypes = geodir_get_posttypes( 'array' );
 
 $gd_posttypes_option = '';
 foreach ( $gd_posttypes as $gd_posttype => $row ) {
-$gd_posttypes_option .= '<option value="' . $gd_posttype . '" data-cats="' . (int)geodir_get_terms_count( $gd_posttype ) . '" data-posts="' . (int)geodir_get_posts_count( $gd_posttype ) . '">' . __( $row['labels']['name'], 'geodirectory' ) . '</option>';
+$gd_posttypes_option .= '<option value="' . $gd_posttype . '" data-posts="' . (int)geodir_get_posts_count( $gd_posttype ) . '">' . __( $row['labels']['name'], 'geodirectory' ) . '</option>';
 }
 wp_enqueue_script( 'jquery-ui-progressbar' );
 

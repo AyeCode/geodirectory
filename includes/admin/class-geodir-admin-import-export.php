@@ -798,10 +798,11 @@ class GeoDir_Admin_Import_Export {
 				
 				// fill in the CSV header
 				if ( $i === 0 ) {
-					$csv_rows[] = array_keys( $post_info );
+					$columns = array_keys( $post_info );
+					$csv_rows[] = apply_filters( 'geodir_export_posts_csv_columns', $columns, $post_type );
 				}
 
-				$csv_rows[] = $post_info;
+				$csv_rows[] = apply_filters( 'geodir_export_posts_csv_row', $post_info, $post_info['ID'], $post_type );
 				$i ++;
 			}
 		}

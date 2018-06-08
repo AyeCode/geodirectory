@@ -879,6 +879,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		if ( is_array( $params['posts'] ) ) {
 			$params['posts'] = ! empty( $params['posts'] ) ? implode( ',', $params['posts'] ) : '';
 		}
+		
+		$params = apply_filters( 'geodir_map_params', $params, $map_args );
 
 		ob_start();
 
