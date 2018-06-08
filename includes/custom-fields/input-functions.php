@@ -112,7 +112,9 @@ function geodir_cfi_text($html,$cf){
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <input field_type="<?php echo $type;?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
-                   <?php echo $fix_html5_decimals;?>
+                   <?php echo $fix_html5_decimals;
+                   if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; }
+                   ?>
                    value="<?php echo esc_attr(stripslashes($value));?>" type="<?php echo $type;?>" class="geodir_textfield" <?php echo $validation;echo $validation_msg;?> />
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
@@ -172,6 +174,7 @@ function geodir_cfi_email($html,$cf){
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <input field_type="<?php echo $cf['type'];?>" name="<?php  echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
+                   <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
                    value="<?php echo esc_attr(stripslashes($value));?>" type="email" class="geodir_textfield"/>
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
@@ -232,6 +235,7 @@ function geodir_cfi_phone($html,$cf){
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <input field_type="<?php echo $cf['type'];?>" name="<?php  echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
+                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
                    value="<?php echo esc_attr(stripslashes($value));?>" type="tel" class="geodir_textfield"/>
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
@@ -292,6 +296,7 @@ function geodir_cfi_url($html,$cf){
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <input field_type="<?php echo $cf['type'];?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
+                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
                    value="<?php echo esc_attr(stripslashes($value));?>" type="url" class="geodir_textfield"
                    oninvalid="setCustomValidity('<?php _e('Please enter a valid URL including http://', 'geodirectory'); ?>')"
                    onchange="try{setCustomValidity('')}catch(e){}"
@@ -514,6 +519,7 @@ function geodir_cfi_textarea($html,$cf){
             } else {
 
                 ?><textarea field_type="<?php echo $cf['type'];?>" class="geodir_textarea" name="<?php echo $cf['name'];?>"
+                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
                             id="<?php echo $cf['name'];?>"><?php echo stripslashes($value);?></textarea><?php
 
             }?>
@@ -888,6 +894,7 @@ function geodir_cfi_datepicker($html,$cf){
             </label>
 
             <input field_type="<?php echo $cf['type'];?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
+                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
                    value="<?php echo esc_attr($value);?>" type="text" class="geodir_textfield"/>
 
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
@@ -960,6 +967,7 @@ function geodir_cfi_time($html,$cf){
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <input readonly="readonly" field_type="<?php echo $cf['type'];?>" name="<?php echo $name;?>"
+                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
                    id="<?php echo $name;?>" value="<?php echo esc_attr($value);?>" type="text" class="geodir_textfield"/>
 
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
@@ -1078,7 +1086,7 @@ function geodir_cfi_address($html,$cf){
             <?php if ($locate_me) { ?>
             <div class="gd-input-group gd-locate-me">
             <?php } ?>
-                <input type="text" field_type="<?php echo $type;?>" name="<?php echo 'street';?>" id="<?php echo $prefix . 'street';?>" class="geodir_textfield<?php echo $locate_me_class;?>" value="<?php echo esc_attr(stripslashes($street)); ?>" />
+                <input type="text" field_type="<?php echo $type;?>" name="<?php echo 'street';?>" id="<?php echo $prefix . 'street';?>" class="geodir_textfield<?php echo $locate_me_class;?>" value="<?php echo esc_attr(stripslashes($street)); ?>" <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?> />
                 <?php if ($locate_me) { ?>
                 <span onclick="gdGeoLocateMe(this, 'add-listing');" class="gd-locate-me-btn gd-input-group-addon" title="<?php esc_attr_e('My location', 'geodirlocation'); ?>"><i class="fa fa-crosshairs fa-fw" aria-hidden="true"></i></span>
             </div>

@@ -75,7 +75,7 @@ class GeoDir_Privacy extends GeoDir_Abstract_Privacy {
 	public function get_privacy_message() {
 
 		$content = '<h2>' . __( 'Listings', 'geodirectory' ) . '</h2>' .
-		           '<p>' . __( 'We collect information about you during the add listing process on our site. This information may include, but is not limited to, your name, email address, phone number, address, locations details including GPS co-ordinates and any other details that might be requested from you for the purpose of adding your business/personal listings.', 'geodirectory' ) . '</p>' .
+		           '<p>' . __( 'We collect information about you during the add listing process on our site. This information may include, but is not limited to, your name, IP address, email address, phone number, address, locations details including GPS co-ordinates and any other details that might be requested from you for the purpose of adding your business/personal listings.', 'geodirectory' ) . '</p>' .
 		           '<p>' . __( 'Handling this data also allows us to:', 'geodirectory' ) . '</p>' .
 		           '<ul>' .
 		           '<li>' . __( '- Display this information in a public facing manner (such as a web page or API request) and allow website users to search and view submitted listing information.', 'geodirectory' ) . '</li>' .
@@ -83,7 +83,7 @@ class GeoDir_Privacy extends GeoDir_Abstract_Privacy {
 		           '<li>' . __( '- Provide a way for users to contact your listing via the provided contact information.', 'geodirectory' ) . '</li>' .
 		           '<li>' . __( '- Notify you of user interactions such as but not limited to review and contact notifications.', 'geodirectory' ) . '</li>' .
 		           '<li>' . __( '- Respond to your queries or complaints.', 'geodirectory' ) . '</li>' .
-		           '<li>' . __( '- Set up and administer your account, provide technical and/or customer support, and to verify your identity. We do this on the basis of our legitimate business interests.', 'geodirectory' ) . '</li>' .
+		           '<li>' . __( '- Set up and administer your account, provide technical and/or customer support, spam prevention and to verify your identity. We do this on the basis of our legitimate business interests.', 'geodirectory' ) . '</li>' .
 		           '</ul>' .
 		           '<h2>' . __( 'Reviews', 'geodirectory' ) . '</h2>' .
 		           '<p>' . __( 'We collect information about you during the leave a review process on our site. This information may include, but is not limited to, your name, email address, IP address, website url, image(s), review ratings and review texts.', 'geodirectory' ) . '</p>' .
@@ -92,6 +92,7 @@ class GeoDir_Privacy extends GeoDir_Abstract_Privacy {
 		           '<li>' . __( '- Display this information in a public facing manner (such as a web page or API request).', 'geodirectory' ) . '</li>' .
 		           '<li>' . __( '- Notify you of interactions such as approval or rejection of your review.', 'geodirectory' ) . '</li>' .
 		           '<li>' . __( '- Notify you of user interactions such as reply notifications.', 'geodirectory' ) . '</li>' .
+		           '<li>' . __( '- Spam prevention.', 'geodirectory' ) . '</li>' .
 		           '</ul>' .
 		           '<h2>' . __( 'Listing contact forms', 'geodirectory' ) . '</h2>' .
 		           '<p>' . __( 'We may collect information about you when you submit a contact form to a listing. This information may include, but is not limited to, your name, email address, IP address and contact texts.', 'geodirectory' ) . '</p>' .

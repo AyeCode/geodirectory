@@ -633,7 +633,7 @@ class GeoDir_Post_Data {
 		do_action( 'geodir_before_add_listing_form', $listing_type, $post, $package_info );
 		?>
 		<form name="geodirectory-add-post" id="geodirectory-add-post"
-		      action="<?php echo get_page_link( geodir_preview_page_id() ); ?>" method="post"
+		      action="<?php echo get_page_link( $post->ID ); ?>" method="post"
 		      enctype="multipart/form-data">
 			<input type="hidden" name="action" value="geodir_save_post"/>
 			<input type="hidden" name="preview" value="<?php echo sanitize_text_field( $listing_type ); ?>"/>

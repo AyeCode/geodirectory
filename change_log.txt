@@ -13,6 +13,8 @@ Yoast details page og and twitter descriptions using template text instead of po
 SD Widget added to be able to display the catregory description text - ADDED
 Some problems with title and meta variables not saving or displaying correctly - FIXED
 Categories on add listing page have no hierarchical distinction - FIXED
+Custom fields not have placeholder setting where applicable - ADDED
+Custom fields settings converted to new style to be more WP like - CHANGED
 
 v2.0.0.13-beta
 Page templates for building layouts now restricted from frontend viewing - CHANGED
