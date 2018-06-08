@@ -691,6 +691,8 @@ class GeoDir_Admin_Install {
 			frontend_title varchar(255) NOT NULL,
 			htmlvar_name varchar(255) NOT NULL,
 			sort_order int(11) NOT NULL,
+			tab_parent varchar(100) NOT NULL,
+			tab_level int(11) NOT NULL,
 			is_active int(11) NOT NULL,
 			is_default int(11) NOT NULL,
 			default_order varchar(255) NOT NULL,

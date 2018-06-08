@@ -7,7 +7,7 @@
 
   li{
     margin: 5px 0 !important;
-    form{
+    .dd-form{
       border: 1px #DFDFDF solid;
     }
   }
@@ -39,7 +39,7 @@
     color: #333;
     text-decoration: none;
     font-weight: bold;
-    background: #F1F1F1;
+    background: #fafafa;
     box-sizing: border-box;
     -moz-box-sizing: border-box;
   }
