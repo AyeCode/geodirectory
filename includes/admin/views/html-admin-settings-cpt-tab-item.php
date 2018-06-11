@@ -1,5 +1,5 @@
 <li class="dd-item" data-id="1" id="setName_<?php echo $tab->id;?>">
-	<form>
+	<div class="dd-form">
 		<i class="fa fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
 		<div class="dd-handle">
 			<i class="fa <?php echo esc_attr($tab->tab_icon);?>" aria-hidden="true"></i>
@@ -69,5 +69,5 @@
 				<input type="button" class="button button-primary" name="save" id="save" value="<?php _e("Save","geodirectory");?>" onclick="gd_tabs_save_tab(this);return false;">
 			</p>
 		</div>
-	</form>
+	</div>
 </li>

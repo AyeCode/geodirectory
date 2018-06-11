@@ -251,6 +251,7 @@ function geodir_params()
         'custom_field_not_special_char' => __('Please do not use special character and spaces in field key Variable Name.', 'geodirectory'),
         'custom_field_unique_name' => __('Field key must be unique.', 'geodirectory'),
         'custom_field_delete' => __('Are you sure you wish to delete this field?', 'geodirectory'),
+        'custom_field_delete_children' => __('You must move or remove child elements first.', 'geodirectory'),
         //start not show alert msg
         'tax_meta_class_succ_del_msg' => __('File has been successfully deleted.', 'geodirectory'),
         'tax_meta_class_not_permission_to_del_msg' => __('You do NOT have permission to delete this file.', 'geodirectory'),

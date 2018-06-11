@@ -1194,7 +1194,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			//print_r($tabs);
 			?>
-			<form></form> <!-- chrome removes the first form inside a form for some reason so we need this ?> -->
 			<div class="inside">
 
 				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
@@ -1271,55 +1270,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			}
 			return ob_get_clean();
 		}
-
 		
-		/**
-		 * Output the admin cpt settings fields left panel content.
-		 *
-		 * @since 2.0.0
-		 * @package GeoDirectory
-		 */
-		public function right_panel_content_DELETE() {
-			global $wpdb;
-
-			$listing_type = self::$post_type;
-			$post_type = self::$post_type;
-			$sub_tab =  self::$sub_tab;
-			?>
-			<div class="inside">
-
-				<div id="gd-form-builder-tab" class="gd-tabs-panel">
-					<div class="field_row_main">
-						<ul class="core">
-							<?php
-							global $wpdb;
-							$fields = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type = %s ORDER BY sort_order ASC", array($listing_type)));
-
-							if (!empty($fields)) {
-
-
-								$cf_arr = self::get_all_fields($post_type);
-
-
-								foreach ($fields as $field) {
-
-									$cf = (isset($cf_arr[$field->field_type_key])) ? $cf_arr[$field->field_type_key] : ''; // the field type
-
-
-									self::output_custom_field_setting_item('',$field,$cf);
-
-									//include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-cf-setting-item.php' );
-								}
-							}
-							?></ul>
-
-					</div>
-					<div style="clear:both"></div>
-				</div>
-
-			</div>
-			<?php
-		}
 
         /**
          * GeoDir get all fields by posttype.

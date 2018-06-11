@@ -91,7 +91,7 @@ jQuery(document).ready(function () {
                 jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
 
                 //gd_show_hide('field_frm' + id);
-                jQuery("#setName_" + id + " form > .fa-caret-down").trigger("click");
+                jQuery("#setName_" + id + " .dd-form > .fa-caret-down").trigger("click");
                 jQuery('html, body').animate({
                     scrollTop: jQuery("#setName_" + id).offset().top
                 }, 1000);
@@ -153,6 +153,8 @@ jQuery(document).ready(function () {
     });
 
 
+    // init sort options
+    gd_init_sort_options();
     // init custom fields settings
     gd_init_custom_fields_sortable();
     // init tabs layout settings
@@ -197,7 +199,7 @@ function gd_save_custom_field(id) {
 
     }
 
-    var fieldrequest = jQuery('#setName_' + id).find("select, textarea, input").serialize();
+    var fieldrequest = jQuery('#setName_' + id +' > .dd-form').find("select, textarea, input").serialize();
     var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest;
 
 
@@ -307,41 +309,6 @@ function gd_order_custom_sort_fields(order) {
 
 /* ================== CUSTOM SORT FIELDS =================== */
 
-function gd_save_sort_field(id) {
-
-    var fieldrequest = jQuery('#setName_' + id).find("select, textarea, input").serialize();
-    var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest;
-
-    jQuery.ajax({
-        'url': ajaxurl + '?action=geodir_save_custom_sort_field',
-        'type': 'POST',
-        'data': request_data,
-        'success': function (result) {
-
-            jQuery('#setName_' + id).replaceWith(jQuery.trim(result));
-
-            var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=sorting_options';
-
-            // check and set the default
-            // jQuery.get(ajaxurl + '?action=geodir_ajax_action&create_field=true', order,
-            //     function (theResponse) {
-
-            jQuery('#setName_' + id).find('input[name="is_default"]').each(function () {
-                if (jQuery(this).attr('checked') == 'checked') {
-                    jQuery('.field_row_main').find('input[name="is_default"]').not(this).attr('checked', false);
-                }
-            });
-
-
-            // });
-
-            jQuery('.field_frm').hide();
-
-
-        }
-    });
-
-}
 
 
 function gd_delete_sort_field(id, nonce, obj) {
@@ -415,7 +382,71 @@ function gd_toggle_switch_display() {
 ///////////////////////////////////////////////////////////
 //////////////// SORT OPTIONS /////////////////////////////
 ///////////////////////////////////////////////////////////
+function gd_init_sort_options(){
+    jQuery('.gd-sortable-sortable').nestedSortable({
+        maxLevels: 2,
+        handle: 'div.dd-handle',
+        items: 'li',
+        //toleranceElement: 'form', // @todo remove this if problems
+        disableNestingClass: 'mjs-nestedSortable-no-nesting',
+        helper:	'clone',
+        placeholder: 'placeholder',
+        forcePlaceholderSize: true,
+        listType: 'ul',
+        update: function (event, ui) {
+            gd_tabs_save_order('geodir_order_custom_sort_fields');
+        }
+    });
+    // int the new select2 boxes
+    jQuery("select.geodir-select").trigger('geodir-select-init');
+    jQuery("select.geodir-select-nostd").trigger('geodir-select-init');
+}
 
+function gd_save_sort_field(id) {
+
+    var fieldrequest = jQuery('#setName_' + id + ' > .dd-form').find("select, textarea, input").serialize();
+    var request_data = 'create_field=true&field_ins_upd=submit&' + fieldrequest;
+
+    jQuery.ajax({
+        'url': ajaxurl + '?action=geodir_save_custom_sort_field',
+        'type': 'POST',
+        'data': request_data,
+        'success': function (result) {
+
+            console.log(result);
+            if (result.success == false) {
+                alert(result.data);
+            }else{
+                jQuery('#setName_' + id).replaceWith(jQuery.trim(result));
+
+                var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=sorting_options';
+
+                // check and set the default
+                // jQuery.get(ajaxurl + '?action=geodir_ajax_action&create_field=true', order,
+                //     function (theResponse) {
+
+                jQuery('#setName_' + id).find('input[name="is_default"]').each(function () {
+                    if (jQuery(this).attr('checked') == 'checked') {
+                        jQuery('.field_row_main').find('input[name="is_default"]').not(this).attr('checked', false);
+                    }
+                });
+                // });
+            }
+
+            // console.log(result);
+            // if(result.success){
+            //     var $li = jQuery($form).closest("li");
+            //     jQuery( $li ).replaceWith( result.data );
+            //     gd_init_tabs_layout();
+            //     gd_tabs_save_order();
+            // }else{
+            //     alert(result.data);
+            // }
+
+        }
+    });
+
+}
 ///////////////////////////////////////////////////////////
 //////////////// CUSTOM FIELDS ////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -432,7 +463,6 @@ function gd_init_custom_fields_sortable(){
         listType: 'ul',
         update: function (event, ui) {
             gd_tabs_save_order('geodir_order_custom_fields');
-            //console.log(jQuery('.gd-tabs-sortable').nestedSortable('serialize'));
         }
     });
     // int the new select2 boxes
@@ -442,50 +472,38 @@ function gd_init_custom_fields_sortable(){
 
 function gd_delete_custom_field(id, nonce) {
 
-    var confarmation = confirm(geodir_params.custom_field_delete);
+    // check if it has children, if so don't delete
+    if(jQuery('#setName_' + id + ' ul li.dd-item').length){
+        alert(geodir_params.custom_field_delete_children);
+    }else{
+        var confarmation = confirm(geodir_params.custom_field_delete);
 
-    if (confarmation == true) {
+        if (confarmation == true) {
 
-        // if its a new field not yet added then we just dump it, no need to run ajax
-        if (id.substring(0, 3) == "new") {
-            jQuery('#setName_' + id).remove();
-        } else {
-            jQuery.get(ajaxurl + '?action=geodir_delete_custom_field', {
-                    field_id: id,
-                    field_ins_upd: 'delete',
-                    security: nonce
-                },
-                function (data) {
-                    var res = data;
-                    if (!res.success) {
-                        alert(res.data);
-                    } else {
-                        jQuery('#setName_' + id).remove();
-                    }
-                });
-        }
-    }
-}
-
-/**
- * Sort the custom fields when drag & dropped.
- *
- * @param order
- */
-function gd_order_custom_fields(order) {
-    var gd_nonce = jQuery("#gd_new_field_nonce").val();
-    order = order + "&security=" + gd_nonce;
-    jQuery.ajax({
-        'url': ajaxurl + '?action=geodir_order_custom_fields',
-        'type': 'POST',
-        'data': order,
-        'success': function (result) {
-            if (result.success == false) {
-                alert(result.data);
+            // if its a new field not yet added then we just dump it, no need to run ajax
+            if (id.substring(0, 3) == "new") {
+                jQuery('#setName_' + id).remove();
+            } else {
+                jQuery.get(ajaxurl + '?action=geodir_delete_custom_field', {
+                        field_id: id,
+                        field_ins_upd: 'delete',
+                        security: nonce
+                    },
+                    function (data) {
+                        var res = data;
+                        if (!res.success) {
+                            alert(res.data);
+                        } else {
+                            jQuery('#setName_' + id).remove();
+                        }
+                    });
             }
         }
-    });
+    }
+
+
 }
+
 ///////////////////////////////////////////////////////////
 //////////////// TABS LAYOUT //////////////////////////////
 ///////////////////////////////////////////////////////////
@@ -585,11 +603,11 @@ function gd_tabs_add_tab($this){
 
 function gd_tabs_save_tab($this){
 
-    var $form = jQuery($this).closest("form");
-    console.log($form.serialize());
+    var $form = jQuery($this).closest(".dd-form");
+    console.log($form.find("select, textarea, input").serialize());
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
 
-    var data = $form.serialize() + "&security="+gd_nonce + "&action=geodir_save_tab_item";
+    var data = $form.find("select, textarea, input").serialize() + "&security="+gd_nonce + "&action=geodir_save_tab_item";
     jQuery.ajax({
         'url': ajaxurl,
         'type': 'POST',
@@ -601,7 +619,7 @@ function gd_tabs_save_tab($this){
                 var $li = jQuery($form).closest("li");
                 jQuery( $li ).replaceWith( result.data );
                 gd_init_tabs_layout();
-                gd_tabs_save_order();
+                gd_tabs_save_order('geodir_save_tabs_order');
             }else{
                 alert(result.data);
             }
@@ -611,7 +629,7 @@ function gd_tabs_save_tab($this){
 
 function gd_tabs_delete_tab($this){
 
-    var $form = jQuery($this).closest("form");
+    var $form = jQuery($this).closest(".dd-form");
     var $li = jQuery($form).closest("li");
     console.log($form.serialize());
     var gd_nonce = jQuery("#gd_new_field_nonce").val();

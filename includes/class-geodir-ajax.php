@@ -553,6 +553,7 @@ class GeoDir_AJAX {
 		$field->post_type = isset($_REQUEST['listing_type']) ? sanitize_text_field($_REQUEST['listing_type']) : '';
 		$field->field_type = isset($_REQUEST['field_type']) ? sanitize_text_field($_REQUEST['field_type']) : '';
 		$field->field_type_key = isset($_REQUEST['field_type_key']) ? sanitize_text_field($_REQUEST['field_type_key']) : '';
+		$field->htmlvar_name = isset($_REQUEST['field_type_key']) ? sanitize_text_field($_REQUEST['field_type_key']) : '';
 
 		echo $cfs->output_custom_field_setting_item('',$field);
 		wp_die();
@@ -664,8 +665,20 @@ class GeoDir_AJAX {
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
+
+			//print_r($result);
+			global $wpdb;
+			$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE id = %d OR tab_parent = %d ORDER BY sort_order ASC", array( $result, $result ) ) );
+//echo '###'.$result;
+//			print_r($fields);
+//			loop_fields_output($tabs,$tab_id = '')
+
 			$cfs = new GeoDir_Settings_Cpt_Sorting();
-			$cfs->output_custom_field_setting_item($result);
+			if(count($fields) > 1){
+				echo $cfs->loop_fields_output($fields);
+			}else{
+				echo $cfs->output_custom_field_setting_item($result);
+			}
 		}
 		wp_die();
 	}
@@ -759,30 +772,6 @@ class GeoDir_AJAX {
      * @since 2.0.0
 	 */
 	public static function order_custom_fields(){
-//		// security
-//		check_ajax_referer( 'gd_new_field_nonce', 'security' );
-//		if ( ! current_user_can( 'manage_options' ) ) {
-//			wp_die( -1 );
-//		}
-//
-//		$field_ids = array();
-//		if (!empty($_REQUEST['licontainer']) && is_array($_REQUEST['licontainer'])) {
-//			foreach ($_REQUEST['licontainer'] as $field_id) {
-//				$field_ids[] = absint($field_id);
-//			}
-//		}
-//
-//		$cfs = new GeoDir_Settings_Cpt_Cf();
-//		$result = $cfs->set_field_orders($field_ids);
-//
-//		if(is_wp_error( $result ) ){
-//			wp_send_json_error( $result->get_error_message() );
-//		}else{
-//			wp_send_json_success();
-//		}
-
-		//////
-
 		// security
 		check_ajax_referer( 'gd_new_field_nonce', 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -824,21 +813,22 @@ class GeoDir_AJAX {
 			wp_die( -1 );
 		}
 
-		$field_ids = array();
-		if (!empty($_REQUEST['licontainer']) && is_array($_REQUEST['licontainer'])) {
-			foreach ($_REQUEST['licontainer'] as $field_id) {
-				$field_ids[] = absint($field_id);
+		$tabs = isset($_POST['tabs']) && $_POST['tabs'] ? $_POST['tabs'] : '';
+
+		if(!$tabs){
+			wp_send_json_error( __("No tabs provided.","geodirectory") );
+		}else{
+			$cfs = new GeoDir_Settings_Cpt_Sorting();
+			$result = $cfs->set_field_orders($tabs);
+
+			if(is_wp_error( $result ) ){
+				wp_send_json_error( $result->get_error_message() );
+			}else{
+				wp_send_json_success();
 			}
 		}
 
-		$cfs = new GeoDir_Settings_Cpt_Sorting();
-		$result = $cfs->set_field_orders($field_ids);
-
-		if(is_wp_error( $result ) ){
-			wp_send_json_error( $result->get_error_message() );
-		}else{
-			wp_send_json_success();
-		}
+		wp_die();
 	}
 	
 	/**

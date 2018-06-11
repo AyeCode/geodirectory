@@ -20,7 +20,7 @@
 $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 'mjs-nestedSortable-no-nesting';
 ?>
 <li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>">
-	<form>
+	<div class="dd-form">
 		<i class="fa fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
 		<div class="dd-handle">
 			<?php
@@ -694,10 +694,15 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 
 
 			<p class="gd-tab-actions">
+				<?php
+				$core_fields = array('post_title','post_content','post_tags','post_category','address','post_images');
+				if(!in_array($field->htmlvar_name,$core_fields)){
+				?>
 				<a class="item-delete submitdelete deletion" id="delete-16" href="javascript:void(0);" onclick="gd_delete_custom_field('<?php echo esc_attr( $field->id ); ?>','<?php echo $nonce; ?>');return false;"><?php _e("Remove","geodirectory");?></a>
+				<?php }else{echo "<a>&nbsp;</a>";}?>
 				<input type="button" class="button button-primary" name="save" id="save" value="<?php _e("Save","geodirectory");?>" onclick="gd_save_custom_field('<?php echo esc_attr( $field->id ); ?>');return false;">
 				<?php GeoDir_Settings_Page::toggle_advanced_button();?>
 			</p>
 		</div>
-	</form>
+	</div>
 </li>

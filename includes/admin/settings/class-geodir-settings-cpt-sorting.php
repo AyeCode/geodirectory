@@ -43,7 +43,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 
 			$this->id    = 'cpt-sorting';
-			$this->label = __( 'Sorting options', 'geodirectory' );
+			$this->label = __( 'Sorting', 'geodirectory' );
 
 			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
@@ -133,7 +133,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 								$val = stripslashes_deep( $val ); // strip slashes
 
 								$check_html_variable = self::field_exists( $val['htmlvar_name'], self::$post_type );
-								$display             = $check_html_variable ? ' style="display:none;"' : '';
+								$display             = '';//$check_html_variable ? ' style="display:none;"' : '';
+								//print_r($val);
 								?>
 
 								<li class="gd-cf-tooltip-wrap" <?php echo $display; ?>>
@@ -142,8 +143,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 									   data-field-type="<?php echo sanitize_text_field( $val['field_type'] ); ?>"
 									   class="gd-draggable-form-items  gd-<?php echo sanitize_text_field( $val['field_type'] ); ?> geodir-sort-<?php echo sanitize_text_field( $val['htmlvar_name'] ); ?>"
 									   href="javascript:void(0);">
-										<?php if ( isset( $val['field_icon'] ) && strpos( $val['field_icon'], 'fa fa-' ) !== false ) {
-											echo '<i class="' . sanitize_text_field( $val['field_icon'] ) . '" aria-hidden="true"></i>';
+										<?php if ( isset( $val['field_icon'] ) && strpos( $val['field_icon'], 'fa-' ) !== false ) {
+											echo '<i class="fa ' . sanitize_text_field( $val['field_icon'] ) . '" aria-hidden="true"></i>';
 										} elseif ( isset( $val['field_icon'] ) && $val['field_icon'] ) {
 											echo '<b style="background-image: url("' . sanitize_text_field( $val['field_icon'] ) . '")"></b>';
 										} else {
@@ -202,39 +203,99 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 */
 		public function right_panel_content() {
 			?>
+			<form></form> <!-- chrome removes the first form inside a form for some reason so we need this ?> -->
 			<div class="inside">
 
 				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
 					<div class="field_row_main">
-						<ul class="core">
-							<?php
-							global $wpdb;
+						<div class="dd gd-tabs-layout" >
+							<ul class="dd-list gd-tabs-sortable gd-sortable-sortable">
+								<?php
+								global $wpdb;
 
-							$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND field_type != 'address' ORDER BY sort_order ASC", array( self::$post_type ) ) );
+								$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND field_type != 'address' ORDER BY sort_order ASC", array( self::$post_type ) ) );
 
-							if ( ! empty( $fields ) ) {
-								foreach ( $fields as $field ) {
-									//$result_str = $field->id;
-									$result_str    = $field;
-									$field_type    = $field->field_type;
-									$field_ins_upd = 'display';
+								if ( ! empty( $fields ) ) {
 
-									$default = false;
-									self::output_custom_field_setting_item( $field_type, $result_str, $field_ins_upd, $default );
+									echo self::loop_fields_output($fields);
 
-									//geodir_custom_sort_field_adminhtml( $field_type, $result_str, $field_ins_upd, $default );
+								} else {
+									_e( 'Select fields from the left to be able to add new sort options.', 'geodirectory' );
 								}
-							}else{
-								_e("Select fields from the left to be able to add new sort options.","geodirectory");
-							}
-							?>
-						</ul>
+
+
+
+//								if ( ! empty( $fields ) ) {
+//									foreach ( $fields as $field ) {
+//										//$result_str = $field->id;
+//										$result_str    = $field;
+//										$field_type    = $field->field_type;
+//										$field_ins_upd = 'display';
+//
+//										$default = false;
+//										self::output_custom_field_setting_item( $field_type, $result_str);
+//
+//										//geodir_custom_sort_field_adminhtml( $field_type, $result_str, $field_ins_upd, $default );
+//									}
+//								}else{
+//									_e("Select fields from the left to be able to add new sort options.","geodirectory");
+//								}
+								?>
+							</ul>
+						</div>
 					</div>
 					<div style="clear:both"></div>
 				</div>
 
 			</div>
 			<?php
+		}
+
+		/**
+		 * Loop through the base to output them with the different levels.
+		 * @param $tabs
+		 * @param string $tab_id
+		 *
+		 * @return string
+		 */
+		public static function loop_fields_output($tabs,$tab_id = ''){
+			ob_start();
+
+			if(!empty($tabs)){
+				foreach($tabs as $key => $tab){
+
+					if($tab_id && $tab->id!=$tab_id){
+						continue;
+					}elseif($tab_id && $tab->id==$tab_id && $tab->tab_level > 0){
+						echo self::output_custom_field_setting_item($tab->id,$tab); break;
+					}
+
+					if($tab->tab_level=='1' ){continue;}
+
+
+					$tab_rendered = self::output_custom_field_setting_item($tab->id,$tab);
+					$tab_rendered = str_replace("</li>","",$tab_rendered);
+					$child_tabs = '';
+					foreach($tabs as $child_tab){
+						if($child_tab->tab_parent==$tab->id){
+							$child_tabs .= self::output_custom_field_setting_item($child_tab->id,$child_tab);
+						}
+					}
+
+					if($child_tabs){
+						$tab_rendered .= "<ul>";
+						$tab_rendered .= $child_tabs;
+						$tab_rendered .= "</ul>";
+					}
+
+					echo $tab_rendered;
+					echo "</li>";
+
+					unset($tabs[$key]);
+
+				}
+			}
+			return ob_get_clean();
 		}
 
 
@@ -357,12 +418,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @param string $field_ins_upd When set to "submit" displays form.
 		 * @param string $field_type_key The key of the custom field.
 		 */
-		function output_custom_field_setting_item($field_id = '',$field = '',$cf = array())
+		public static function output_custom_field_setting_item($field_id = '',$field = '',$cf = array())
 		{
-			//$field_type, $result_str, $field_ins_upd = '', $field_type_key=''
-			//$field_id = '',$field = '',$cf = array()
-
-
+			ob_start();
 			// if field not provided get it
 			if (!is_object($field) && $field_id) {
 				global $wpdb;
@@ -375,7 +433,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 				//$cf = (isset($cf_arr[$field->field_type])) ? $cf_arr[$field->field_type] : ''; // the field type
 				if(!$cf){
 					foreach ($cf_arr as $cf_temp){
-						if($cf_temp['htmlvar_name']==$field->field_type_key){
+						if(isset($field->htmlvar_name) && $cf_temp['htmlvar_name']==$field->htmlvar_name){
 							$cf = $cf_temp;
 							$field = (object) array_merge((array) $field, (array) $cf_temp);
 							break;
@@ -383,6 +441,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					}
 				}
 			}
+
+			//print_r(print_r($field));
+
+
 
 			$field = stripslashes_deep( $field );
 
@@ -411,9 +473,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 			$field_icon = '<i class="fa fa-cog" aria-hidden="true"></i>';
 
-			if ( isset( $cf['field_icon'] ) && strpos( $cf['field_icon'], 'fa fa-' ) !== false ) {
-				$field_icon = '<i class="' . $cf['field_icon'] . '" aria-hidden="true"></i>';
-			} elseif ( isset( $cf['field_icon'] ) && $cso['field_icon'] ) {
+
+//			print_r($cf);
+			if ( isset( $cf['field_icon'] ) && strpos( $cf['field_icon'], 'fa-' ) !== false ) {
+				$field_icon = '<i class="fa ' . $cf['field_icon'] . '" aria-hidden="true"></i>';
+			} elseif ( isset( $cf['field_icon'] ) && $cf['field_icon'] ) {
 				$field_icon = '<b style="background-image: url("' . $cf['field_icon'] . '")"></b>';
 			}
 
@@ -428,6 +492,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			 * @since 2.0.0
 			 */
 			include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-sorting-setting-item.php' );
+			return ob_get_clean();
 
 		}
 
@@ -568,10 +633,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 
 
-//			print_r($field);//exit;
+//			print_r($field);exit;
 
 			// Check field exists.
-			$exists = self::field_exists($field->htmlvar_name,$field->post_type);
+			//$exists = self::field_exists($field->htmlvar_name,$field->post_type);
+			$exists = isset($field->field_id) && $field->field_id > 0 ? true : false;
 
 
 //			if($exists){echo '###exizts';}else{echo '###nonexists';}
@@ -584,7 +650,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			if(is_wp_error( $exists ) ){
 				return new WP_Error( 'failed', $exists->get_error_message() );
 			}elseif( $exists && !$field->field_id ){
-				return new WP_Error( 'failed', __( "Duplicate field detected, save failed.", "geodirectory" ) );
+				//return new WP_Error( 'failed', __( "Duplicate field detected, save failed.", "geodirectory" ) );
 			}
 
 
@@ -657,26 +723,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 			}
 
-//			$default_order = '';
-//			if ($is_default != '') {
-//				$default_order = $is_default;
-//				$is_default = '1';
-//			}
-//
-//
-//			$check_html_variable = $wpdb->get_var(
-//				$wpdb->prepare(
-//					"select htmlvar_name from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where htmlvar_name = %s and post_type = %s and field_type=%s ",
-//					array($cehhtmlvar_name, $post_type, $field_type)
-//				)
-//			);
-//
-//			if ($is_default == 1) {
-//
-//				$wpdb->query($wpdb->prepare("update " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " set is_default='0', default_order='' where post_type = %s", array($post_type)));
-//
-//			}
-
 
 			/**
 			 * Called after all custom sort fields are saved for a post.
@@ -726,7 +772,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			if ($field_id != '') {
 				$cf = trim($field_id, '_');
 
-				$wpdb->query($wpdb->prepare("delete from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where id= %d ", array($cf)));
+				$wpdb->query($wpdb->prepare("delete from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where id= %d OR tab_parent= %d ", array($cf,$cf)));
 
 				return $field_id;
 
@@ -744,28 +790,28 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @param array $field_ids List of field ids.
 		 * @return array|bool Returns field ids when success, else returns false.
 		 */
-		public function set_field_orders($field_ids = array()){
+		public function set_field_orders($tabs = array()){
 			global $wpdb;
 
 			$count = 0;
-			if (!empty($field_ids)) {
-				$post_meta_info = false;
-				foreach ( $field_ids as $id ) {
-					$post_meta_info = $wpdb->update(
+			if (!empty($tabs)) {
+				$result = false;
+				foreach ( $tabs as $index => $info ) {
+					$result = $wpdb->update(
 						GEODIR_CUSTOM_SORT_FIELDS_TABLE,
-						array('sort_order' => $count),
-						array('id' => absint($id)),
-						array('%d')
+						array('sort_order' => $index,'tab_level' => $info['tab_level'],'tab_parent' => $info['tab_parent']),
+						array('id' => absint($info['id'])),
+						array('%d','%d','%d')
 					);
 					$count ++;
 				}
-				if($post_meta_info !== false){
+				if($result !== false){
 					return true;
 				}else{
-					return new WP_Error( 'failed', __( "Failed to sort custom fields.", "geodirectory" ) );
+					return new WP_Error( 'failed', __( "Failed to sort tab items.", "geodirectory" ) );
 				}
 			}else{
-				return new WP_Error( 'failed', __( "Failed to sort custom fields.", "geodirectory" ) );
+				return new WP_Error( 'failed', __( "Failed to sort tab items.", "geodirectory" ) );
 			}
 		}
 
