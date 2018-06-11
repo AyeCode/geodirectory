@@ -25,7 +25,7 @@ class GeoDir_Permalinks {
 	 */
 	public static function init() {
 
-		add_filter( 'post_type_link', array( __CLASS__, 'post_permalink_structure'), 10, 4);
+		add_filter( 'post_type_link', array( __CLASS__, 'post_permalink_structure'), 0, 4);
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
 		add_action('init', array( __CLASS__, 'rewrite_tags'), 10, 0);
@@ -164,7 +164,7 @@ class GeoDir_Permalinks {
 				remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
 			}
 
-			$permalink = trailingslashit(get_bloginfo('url'));
+			$permalink = trailingslashit( home_url() );
 
 			if (function_exists('geodir_location_geo_home_link')) {
 				add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
