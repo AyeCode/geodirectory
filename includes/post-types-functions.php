@@ -572,29 +572,32 @@ function geodir_get_current_posttype() {
  * @return bool|null|string Returns default sort results, when the post type is valid. Otherwise returns false.
  */
 function geodir_get_posts_default_sort( $post_type ) {
-
     global $wpdb;
 
-    if ( $post_type != '' ) {
+	$default_sort = '';
 
+    if ( $post_type != '' ) {
         $all_postypes = geodir_get_posttypes();
 
         if ( ! in_array( $post_type, $all_postypes ) ) {
             return false;
         }
 
-        $sort_field_info = $wpdb->get_var( $wpdb->prepare( "select default_order from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where	post_type= %s and is_active=%d and is_default=%d", array(
+        $field = $wpdb->get_row( $wpdb->prepare( "SELECT field_type, htmlvar_name, sort FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND is_active = %d AND is_default = %d", array(
             $post_type,
             1,
             1
         ) ) );
 
-        if ( ! empty( $sort_field_info ) ) {
-            return $sort_field_info;
+        if ( ! empty( $field ) ) {
+            if ( $field->field_type == 'random' ) {
+				$default_sort = 'random';
+			} else {
+				$default_sort = $field->htmlvar_name . '_' . $field->sort;
+			}
         }
-
     }
-
+	return $default_sort;
 }
 
 
@@ -688,13 +691,13 @@ function geodir_display_sort_options() {
             }else{
                 if ( $sort->sort == 'asc' ) {
                     $key   = $sort->htmlvar_name . '_asc';
-                    ( $sort_by == $key || ( $sort->is_default == '1' && $sort->default_order == $key && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
+                    ( $sort_by == $key || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
                     $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
                 }
 
                 if ( $sort->sort == 'desc' ) {
                     $key   = $sort->htmlvar_name . '_desc';
-                    ( $sort_by == $key || ( $sort->is_default == '1' && $sort->default_order == $key && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
+                    ( $sort_by == $key || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
                     $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
                 }
             }

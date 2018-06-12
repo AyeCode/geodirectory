@@ -315,7 +315,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @since 1.6.9
 		 * @package GeoDirectory
 		 */
-		public function fields_custom( $post_type = '' ) {
+		public static function fields_custom( $post_type = '' ) {
 
 			$custom_fields = array();
 
@@ -481,7 +481,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @package GeoDirectory
 		 * @see `geodir_custom_field_save` for array details.
 		 */
-		function fields_predefined( $post_type ) {
+		public static function fields_predefined( $post_type ) {
 
 			$custom_fields = array();
 
@@ -1280,7 +1280,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
          * @param string $post_type Post type.
          * @return string Return all fields.
          */
-		public function get_all_fields($post_type){
+		public static function get_all_fields($post_type){
 			$cf_arr1 = self::fields_standard($post_type);
 			$cf_arr2 = self::fields_predefined($post_type);
 			$cf_arr3 = self::fields_custom($post_type);
@@ -1300,7 +1300,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @param string $field_ins_upd When set to "submit" displays form.
 		 * @param string $field_type_key The key of the custom field.
 		 */
-		function output_custom_field_setting_item($field_id = '',$field = '',$cf = array())
+		public static function output_custom_field_setting_item($field_id = '',$field = '',$cf = array())
 		{
 
 			ob_start();
@@ -1747,7 +1747,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @param array $field_ids List of field ids.
 		 * @return array|bool Returns field ids when success, else returns false.
 		 */
-		public function set_field_orders($tabs = array()){
+		public static function set_field_orders($tabs = array()){
 			global $wpdb;
 
 			$count = 0;
