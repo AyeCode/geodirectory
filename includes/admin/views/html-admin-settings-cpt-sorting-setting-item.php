@@ -29,103 +29,43 @@ $tab_class = isset($field->field_type) && $field->field_type=='random' ? 'mjs-ne
 			<input type="hidden" name="data_type" id="data_type" value="<?php if ( isset( $field->data_type ) ) {echo $field->data_type;} ?>"/>
 			<input type="hidden" name="htmlvar_name" id="htmlvar_name" value="<?php echo $field->htmlvar_name; ?>"/>
 
+			<p class="dd-setting-name gd-advanced-setting">
+				<label for="gd-admin-title-<?php echo $field->id;?>">
+					<?php
+					echo geodir_help_tip( __( 'This is the text used for the sort option.', 'geodirectory' ));
+					_e('Frontend title','geodirectory') ?>
+					<input type="text" name="frontend_title" id="frontend_title" value="<?php echo esc_attr( $frontend_title ) ?>"/>
+				</label>
+			</p>
+
 			<?php if ( $field->field_type != 'random' ) { ?>
 
-				<input type="hidden" name="frontend_title" id="frontend_title"
-				       value="<?php echo esc_attr( $frontend_title ); ?>"/>
-
-				<p class="dd-setting-name" data-gdat-display-switch-set="gdat-asc-sort">
-					<label for="gd-asc-<?php echo $field->id;?>">
+				<p class="dd-setting-name">
+					<label for="gd-sort-<?php echo $field->id;?>">
 						<?php
-						echo geodir_help_tip( __( 'Select if you want to show this option in the sort options. (A-Z,0-100 or OFF)', 'geodirectory' ));
-						_e('Show Ascending Sort (low to high)','geodirectory') ?>
-						<?php $value = ( isset( $field->sort_asc ) && $field->sort_asc ) ? $field->sort_asc : 0; ?>
-						<input type="hidden" name="asc" value="0" />
-						<input type="checkbox" name="asc" value="1" <?php checked( $value, 1, true );?> onclick="gd_show_hide_radio(this,'show','cfs-asc-title');" />
+						echo geodir_help_tip( __( 'Select the sort direction: (A-Z or Z-A)', 'geodirectory' ));
+						_e('Ascending or Descending','geodirectory') ?>
+						<select name="sort" id="gd-sort-<?php echo $field->id;?>">
+							<?php $value = isset( $field->sort ) && $field->sort=='desc'  ? 'desc' : 'asc'; ?>
+							<option value="asc" <?php selected( 'asc', $value, true ); ?>><?php _e( 'Ascending', 'geodirectory' ); ?></option>
+							<option	value="desc" <?php selected( 'desc', $value, true ); ?>><?php _e( 'Descending', 'geodirectory' ); ?></option>
+						</select>
 					</label>
 				</p>
-
-				<p class="dd-setting-name cfs-asc-title gdat-asc-sort">
-					<label for="gd-asc_title-<?php echo $field->id;?>">
-						<?php
-						echo geodir_help_tip( __( 'This is the text used for the sort option.', 'geodirectory' ));
-						_e('Ascending title','geodirectory') ?>
-						<?php $value = ( isset( $field->asc_title ) && $field->asc_title ) ? esc_attr( $field->asc_title ) : ''; ?>
-						<input type="text" name="asc_title" id="asc_title" value="<?php echo $value; ?>"/>
-					</label>
-				</p>
-
-				<p class="dd-setting-name cfs-asc-title gdat-asc-sort">
-					<label for="gd-is_default-<?php echo $field->id;?>">
-						<?php
-						echo geodir_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'geodirectory' ));
-						_e('Default sort?','geodirectory') ?>
-						<input type="radio" name="is_default"
-						       value="<?php echo $field->htmlvar_name; ?>_asc" <?php if ( isset( $field->default_order ) && $field->default_order == $field->htmlvar_name . '_asc' ) {
-							echo 'checked="checked"';
-						} ?>/>
-					</label>
-				</p>
-
-				<p class="dd-setting-name" data-gdat-display-switch-set="gdat-desc-sort">
-					<label for="gd-desc-<?php echo $field->id;?>">
-						<?php
-						echo geodir_help_tip( __( 'Select if you want to show this option in the sort options. (Z-A,100-0 or ON)', 'geodirectory' ));
-						_e('Show Descending Sort (high to low)','geodirectory') ?>
-						<?php $value = ( isset( $field->sort_desc ) && $field->sort_desc ) ? $field->sort_desc : 0; ?>
-						<input type="hidden" name="desc" value="0" />
-						<input type="checkbox" name="desc" value="1" <?php checked( $value, 1, true );?> onclick="gd_show_hide_radio(this,'show','cfs-desc-title');" />
-					</label>
-				</p>
-
-				<p class="dd-setting-name cfs-desc-title gdat-desc-sort">
-					<label for="gd-desc_title-<?php echo $field->id;?>">
-						<?php
-						echo geodir_help_tip( __( 'This is the text used for the sort option.', 'geodirectory' ));
-						_e('Descending title','geodirectory') ?>
-						<?php $value = ( isset( $field->desc_title ) && $field->desc_title ) ? esc_attr( $field->desc_title ) : ''; ?>
-						<input type="text" name="desc_title" id="desc_title" value="<?php echo $value; ?>"/>
-					</label>
-				</p>
-
-				<p class="dd-setting-name cfs-desc-title gdat-desc-sort">
-					<label for="gd-is_default-<?php echo $field->id;?>">
-						<?php
-						echo geodir_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'geodirectory' ));
-						_e('Default sort?','geodirectory') ?>
-						<input type="radio" name="is_default"
-						       value="<?php echo $field->htmlvar_name; ?>_desc" <?php if ( isset( $field->default_order ) && $field->default_order == $field->htmlvar_name . '_desc' ) {
-							echo 'checked="checked"';
-						} ?>/>
-					</label>
-				</p>
-
-			<?php } else {?>
-
-				<p class="dd-setting-name gd-advanced-setting">
-					<label for="gd-admin-title-<?php echo $field->id;?>">
-						<?php
-						echo geodir_help_tip( __( 'This is the text used for the sort option.', 'geodirectory' ));
-						_e('Frontend title','geodirectory') ?>
-						<?php $value = esc_attr( $frontend_title ) ?>
-						<input type="text" name="frontend_title" id="frontend_title" value="<?php echo $value; ?>"/>
-					</label>
-				</p>
-
-				<p class="dd-setting-name cfs-desc-title gdat-desc-sort">
-					<label for="gd-is_default-<?php echo $field->id;?>">
-						<?php
-						echo geodir_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'geodirectory' ));
-						_e('Default sort?','geodirectory') ?>
-						<input type="radio" name="is_default"
-						       value="<?php echo $field->htmlvar_name; ?>_desc" <?php if ( isset( $field->default_order ) && $field->default_order == $field->htmlvar_name . '_desc' ) {
-							echo 'checked="checked"';
-						} ?>/>
-					</label>
-				</p>
-
-
+				
 			<?php } ?>
+
+				<p class="dd-setting-name dd-default-sort">
+					<label for="gd-is_default-<?php echo $field->id;?>">
+						<?php
+						echo geodir_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'geodirectory' ));
+						_e('Default sort?','geodirectory') ?>
+						<input type="radio" name="is_default"
+						       value="1" <?php if ( isset( $field->is_default ) && $field->is_default == 1 ) {
+							echo 'checked="checked"';
+						} ?>/>
+					</label>
+				</p>
 
 				<p class="dd-setting-name">
 					<label for="gd-is_active-<?php echo $field->id;?>">

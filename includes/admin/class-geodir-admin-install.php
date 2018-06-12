@@ -695,11 +695,7 @@ class GeoDir_Admin_Install {
 			tab_level int(11) NOT NULL,
 			is_active int(11) NOT NULL,
 			is_default int(11) NOT NULL,
-			default_order varchar(255) NOT NULL,
-			sort_asc int(11) NOT NULL,
-			sort_desc int(11) NOT NULL,
-			asc_title varchar(255) NOT NULL,
-			desc_title varchar(255) NOT NULL,
+			sort varchar(5) DEFAULT 'asc',
 			PRIMARY KEY  (id)
 			) $collate; ";
 

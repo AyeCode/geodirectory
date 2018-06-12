@@ -420,28 +420,15 @@ function gd_save_sort_field(id) {
                 jQuery('#setName_' + id).replaceWith(jQuery.trim(result));
 
                 var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=sorting_options';
-
-                // check and set the default
-                // jQuery.get(ajaxurl + '?action=geodir_ajax_action&create_field=true', order,
-                //     function (theResponse) {
-
+                
                 jQuery('#setName_' + id).find('input[name="is_default"]').each(function () {
                     if (jQuery(this).attr('checked') == 'checked') {
                         jQuery('.field_row_main').find('input[name="is_default"]').not(this).attr('checked', false);
                     }
                 });
-                // });
-            }
 
-            // console.log(result);
-            // if(result.success){
-            //     var $li = jQuery($form).closest("li");
-            //     jQuery( $li ).replaceWith( result.data );
-            //     gd_init_tabs_layout();
-            //     gd_tabs_save_order();
-            // }else{
-            //     alert(result.data);
-            // }
+                gd_tabs_save_order('geodir_order_custom_sort_fields');
+            }
 
         }
     });

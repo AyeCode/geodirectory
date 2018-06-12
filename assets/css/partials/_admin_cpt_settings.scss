@@ -1,4 +1,15 @@
 .gd-tabs-sortable{
+
+  &.gd-sortable-sortable{
+    .dd-item{
+      .dd-item{
+        .dd-default-sort{
+          display: none;
+        }
+      }
+    }
+  }
+
   ul{
     padding-left: 25px;
 
@@ -116,7 +127,7 @@
         input,select,textarea{
           width: 100%;
         }
-        input[type=checkbox]{
+        input[type=checkbox],input[type=radio]{
           width: auto;
           display: block;
           margin: 3px;

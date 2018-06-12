@@ -619,7 +619,7 @@ function geodir_get_sort_options( $post_type ) {
             return false;
         }
 
-        $sort_field_info = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type=%s AND is_active=%d AND (sort_asc=1 || sort_desc=1 || field_type='random') AND field_type != 'address' ORDER BY sort_order ASC", array(
+        $sort_field_info = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type=%s AND is_active=%d AND field_type != 'address' AND tab_parent = '0' ORDER BY sort_order ASC", array(
             $post_type,
             1
         ) ) );
@@ -677,34 +677,26 @@ function geodir_display_sort_options() {
 
             $label = __( $sort->frontend_title, 'geodirectory' );
 
-            if ( $sort->field_type == 'random' ) {
-                $key = $sort->field_type;
-                ( $sort_by == $key || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
-            }
-
             if ( $sort->htmlvar_name == 'comment_count' ) {
                 $sort->htmlvar_name = 'rating_count';
             }
 
-            if ( $sort->sort_asc ) {
-                $key   = $sort->htmlvar_name . '_asc';
-                $label = $sort->frontend_title;
-                if ( $sort->asc_title ) {
-                    $label = $sort->asc_title;
-                }
-                ( $sort_by == $key || ( $sort->is_default == '1' && $sort->default_order == $key && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
+            if ( $sort->field_type == 'random' ) {
+                $key = $sort->field_type;
+                ( $sort_by == $key || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
                 $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
-            }
+            }else{
+                if ( $sort->sort == 'asc' ) {
+                    $key   = $sort->htmlvar_name . '_asc';
+                    ( $sort_by == $key || ( $sort->is_default == '1' && $sort->default_order == $key && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
+                    $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
+                }
 
-            if ( $sort->sort_desc ) {
-                $key   = $sort->htmlvar_name . '_desc';
-                $label = $sort->frontend_title;
-                if ( $sort->desc_title ) {
-                    $label = $sort->desc_title;
+                if ( $sort->sort == 'desc' ) {
+                    $key   = $sort->htmlvar_name . '_desc';
+                    ( $sort_by == $key || ( $sort->is_default == '1' && $sort->default_order == $key && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
+                    $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
                 }
-                ( $sort_by == $key || ( $sort->is_default == '1' && $sort->default_order == $key && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
             }
 
         }
