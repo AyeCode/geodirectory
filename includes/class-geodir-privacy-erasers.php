@@ -37,10 +37,11 @@ class GeoDir_Privacy_Erasers {
 		}
 
 		$page           = (int) $page;
+		$number			= 10;
 		$items_removed  = false;
 		$items_retained = false;
 
-		$reviews = self::reviews_by_author( $email_address, $page );
+		$reviews = self::reviews_by_author( $email_address, $page, $number );
 
 		if ( empty( $reviews ) ) {
 			return $response;
@@ -52,7 +53,7 @@ class GeoDir_Privacy_Erasers {
 			$anonymized_review                         		= array();
 			$anonymized_review['user_id']               	= 0;
 
-			$review_id = (int) $review->id;
+			$review_id = (int) $review->comment_id;
 
 			/**
 			 * Filters whether to anonymize the review.
@@ -80,7 +81,7 @@ class GeoDir_Privacy_Erasers {
 			}
 
 			$args = array(
-				'id' => $review_id,
+				'comment_id' => $review_id,
 			);
 
 			$updated = $wpdb->update( GEODIR_REVIEW_TABLE, $anonymized_review, $args );

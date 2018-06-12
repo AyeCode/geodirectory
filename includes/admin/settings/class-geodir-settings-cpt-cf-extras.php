@@ -735,7 +735,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					<?php
 					echo geodir_help_tip( __( 'Select if you want to show the advanced editor on add listing page.', 'geodirectory' ));
 					_e( 'Show advanced editor :', 'geodirectory' );
-					$extra = maybe_unserialize( $field_info->extra_fields );
+					$extra = ! empty( $field_info->extra_fields ) ? maybe_unserialize( $field_info->extra_fields ) : array();
 
 					$value = '';
 					if ( is_array( $extra ) && isset( $extra['advanced_editor'] ) ) {

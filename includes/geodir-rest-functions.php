@@ -669,24 +669,21 @@ function geodir_rest_post_sort_options( $post_type ) {
 
 			if ( $sort->field_type == 'random' ) {
 				$field_name = 'random';
+				$sort->sort = '';
 			}
 
-			if ( $sort->sort_asc ) {
-                $orderby_options[ $field_name . '_asc' ] = $sort->asc_title ? __( $sort->asc_title, 'geodirectory' ) : $field_label;
-            }
-
-			if ( $sort->sort_desc ) {
-                $orderby_options[ $field_name . '_desc' ] = $sort->desc_title ? __( $sort->desc_title, 'geodirectory' ) : $field_label;
-            }
-
-			if ( ! $sort->sort_asc && ! $sort->sort_desc ) {
+			if ( $sort->sort == 'asc' ) {
+                $orderby_options[ $field_name . '_asc' ] = $field_label;
+            } else if ( $sort->sort == 'desc' ) {
+                $orderby_options[ $field_name . '_desc' ] = $field_label;
+            } else {
 				$orderby_options[ $field_name ] = $field_label;
 			}
 
 			if ( (int)$sort->is_default == 1 ) {
                 $has_default = true;
-                $default_order = $sort->sort_desc ? 'desc' : 'asc';
-                $default_orderby = $sort->default_order;
+                $default_order = $sort->sort ? 'desc' : 'asc';
+                $default_orderby = $field_name;
             }
 
             $fields[] = $field_name;

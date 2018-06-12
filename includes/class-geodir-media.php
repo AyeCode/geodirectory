@@ -104,8 +104,12 @@ class GeoDir_Media {
 			// insert to DB
 			$file_info = self::insert_attachment($post_id,$field_id,$status['url'],'', '', -1,0);
 
-			$wp_upload_dir = wp_upload_dir();
-			echo $wp_upload_dir['baseurl'] . $file_info['file'] ."|".$file_info['ID']."||";
+			if ( is_wp_error( $file_info ) ) {
+				//geodir_error_log( $file_info->get_error_message(), 'post_attachment_upload', __FILE__, __LINE__ );
+			} else {
+				$wp_upload_dir = wp_upload_dir();
+				echo $wp_upload_dir['baseurl'] . $file_info['file'] ."|".$file_info['ID']."||";
+			}
 
 		} elseif( isset( $status['url'] )) {
 			echo $status['url'];
@@ -529,7 +533,10 @@ class GeoDir_Media {
 			$file_type = wp_check_filetype(basename($url));
 
 			// Set an array containing a list of acceptable formats
-			if(!empty($file_type['ext']) && !empty($file_type['type']) && (in_array($file_type['type'],$allowed_file_types) || in_array($file_type['ext'],$allowed_file_types))){}else{return false;}
+			if ( ! empty( $file_type['ext'] ) && ! empty( $file_type['type'] ) && ( in_array( '*', $allowed_file_types ) || in_array( $file_type['type'], $allowed_file_types ) || in_array( $file_type['ext'], $allowed_file_types ) ) ) {
+			} else {
+				return false;
+			}
 
 			// Set the fiel name tot he title if it exists
 			$_file_name = !empty($file_name) ? $file_name.".".$file_type['ext'] : basename( $url );

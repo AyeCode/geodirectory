@@ -579,7 +579,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			if(!$field->htmlvar_name){$field->htmlvar_name =str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['frontend_title'] ) );} // we use original input so the special chars are no converted already
 
 			// setup the default sort
-			if( !$field->default_order && $field->is_default ){$field->default_order = sanitize_text_field($input['is_default']);}
+			//if( !$field->default_order && $field->is_default ){$field->default_order = sanitize_text_field($input['is_default']);}
 
 			return $field;
 
