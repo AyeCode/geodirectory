@@ -59,7 +59,7 @@ abstract class GeoDir_Settings_Page {
 			name="tab_icon"
 			class="regular-text geodir-select"
 			data-fa-icons="1"  tabindex="-1" aria-hidden="true"
-		    onchange="jQuery('.gd-tabs-panel li form #field_icon').filter(':visible').val(jQuery(this).val());jQuery('.lity-close').trigger('click');"
+		    onchange="jQuery('.gd-tabs-sortable li #field_icon').filter(':visible').val(jQuery(this).val());jQuery('.lity-close').trigger('click');"
 		>
 			<?php
 			include_once( dirname( __FILE__ ) . '/../settings/data_fontawesome.php' );
