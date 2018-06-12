@@ -435,7 +435,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					foreach ($cf_arr as $cf_temp){
 						if(isset($field->htmlvar_name) && $cf_temp['htmlvar_name']==$field->htmlvar_name){
 							$cf = $cf_temp;
-							$field = (object) array_merge((array) $field, (array) $cf_temp);
+							//$field = (object) array_merge((array) $field, (array) $cf_temp);
+							$field = (object) array_merge((array) $cf_temp, (array)  $field);
 							break;
 						}
 					}
@@ -458,6 +459,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 
 			//$htmlvar_name = isset( $field_type_key ) ? $field_type_key : '';
+
+			///print_r($field);
 
 			$frontend_title = '';
 			if ( $frontend_title == '' ) {
@@ -561,13 +564,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			$field->data_type = isset( $input['data_type'] ) ? sanitize_text_field( $input['data_type'] ) : '';
 			$field->htmlvar_name = isset( $input['htmlvar_name'] ) ? str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['htmlvar_name'] ) ) : null;
 			$field->frontend_title = isset( $input['frontend_title'] ) ? sanitize_text_field( $input['frontend_title'] ) : null;
-			$field->asc = isset( $input['asc'] ) ? absint( $input['asc'] ) : 0;
-			$field->asc_title = isset( $input['asc_title'] ) ? sanitize_text_field( $input['asc_title'] ) : $field->frontend_title." ASC";
-			$field->desc = isset( $input['desc'] ) ? absint( $input['desc'] ) : 0;
-			$field->desc_title = isset( $input['desc_title'] ) ? sanitize_text_field( $input['desc_title'] ) : $field->frontend_title." DESC";
+			$field->sort = isset( $input['sort'] ) ? sanitize_text_field( $input['sort'] ) : 'asc';
+			//$field->asc = isset( $input['asc'] ) ? absint( $input['asc'] ) : 0;
+			//$field->asc_title = isset( $input['asc_title'] ) ? sanitize_text_field( $input['asc_title'] ) : $field->frontend_title." ASC";
+			//$field->desc = isset( $input['desc'] ) ? absint( $input['desc'] ) : 0;
+			//$field->desc_title = isset( $input['desc_title'] ) ? sanitize_text_field( $input['desc_title'] ) : $field->frontend_title." DESC";
 			$field->is_active = isset( $input['is_active'] ) ? absint( $input['is_active'] ) : 0;
 			$field->is_default = isset( $input['is_default'] ) && $input['is_default'] ? 1 : 0;
-			$field->default_order = isset( $input['default_order'] ) ? sanitize_text_field( $input['default_order'] ) : '';
+			//$field->default_order = isset( $input['default_order'] ) ? sanitize_text_field( $input['default_order'] ) : '';
 			$field->sort_order = isset( $input['sort_order'] ) ? absint( $input['sort_order'] ) : self::default_sort_order();
 
 			// Set some default after sanitation
@@ -655,11 +659,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 
 
-
 			// if this is set as the default blank all the others first just incase.
 			if($field->is_default){
 				self::blank_default_order($field->post_type);
 			}
+
 
 			$db_data = array(
 				'post_type' => $field->post_type,
@@ -668,14 +672,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 				'frontend_title' => $field->frontend_title,
 				'htmlvar_name' => $field->htmlvar_name,
 				'sort_order' => $field->sort_order,
+				'sort' => $field->sort,
 				'is_active' => $field->is_active,
 				'is_default' => $field->is_default,
-				'default_order' => $field->default_order,
-				'sort_asc' => $field->asc,
-				'sort_desc' => $field->desc,
-				'asc_title' => $field->asc_title,
-				'desc_title' => $field->desc_title,
+				//'default_order' => $field->default_order,
+				//'sort_asc' => $field->asc,
+				//'sort_desc' => $field->desc,
+				//'asc_title' => $field->asc_title,
+				//'desc_title' => $field->desc_title,
 			);
+
+			//print_r($db_data);exit;
 
 			$db_format = array(
 				'%s', // post_type
@@ -684,13 +691,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 				'%s', // frontend_title
 				'%s', // htmlvar_name
 				'%d', // sort_order
+				'%s', // sort
 				'%d', // is_active
 				'%d', // is_default
-				'%s', // default_order
-				'%d', // asc
-				'%d', // desc
-				'%s', // asc_title
-				'%s', // desc_title
+//				'%s', // default_order
+//				'%d', // asc
+//				'%d', // desc
+//				'%s', // asc_title
+//				'%s', // desc_title
 			);
 
 			if($exists){

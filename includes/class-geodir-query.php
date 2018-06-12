@@ -615,6 +615,10 @@ class GeoDir_Query {
 		$table = geodir_db_cpt_table($geodir_post_type);
 
 		$orderby = self::sort_by_sql($sort_by, $geodir_post_type);
+
+		$orderby = self::sort_by_children($orderby,$sort_by, $geodir_post_type);
+
+//		echo '###'.$orderby;exit;
 		/**
 		 * Filter order by SQL.
 		 *
@@ -633,6 +637,42 @@ class GeoDir_Query {
 		return $orderby;
 	}
 
+	public static function sort_by_children($orderby,$sort_by, $geodir_post_type){
+		global $wpdb;
+
+		$sort_array = explode('_', $sort_by);
+
+		$sort_by_count = count($sort_array);
+
+		$order = $sort_array[$sort_by_count - 1];
+
+		$htmlvar_name = str_replace('_' . $order, '', $sort_by);
+
+
+
+
+			$parent_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND sort = %s AND post_type = %s",$htmlvar_name,$order, $geodir_post_type));
+//echo $wpdb->prepare("SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND post_type = %s",$sort_by, $geodir_post_type).'###'.$parent_id;exit;
+//		echo $sort_by.'###'.$order.$parent_id;exit;
+
+		if($parent_id){
+			$children = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND tab_parent = %d ORDER BY sort_order ASC",$geodir_post_type,$parent_id));
+			//print_r($children);exit;
+
+			if($children){
+				//print_r($children);exit;
+				foreach($children as $child){
+					$child_sort_by = $child->htmlvar_name."_".$child->sort;
+					$orderby .= " ," . self::sort_by_sql($child_sort_by,$geodir_post_type);
+				}
+			}
+		}
+
+		//@todo make sub sort items work
+
+		return $orderby;
+	}
+
     /**
      * Sort by sql.
      *
@@ -645,22 +685,27 @@ class GeoDir_Query {
      *
      * @return string
      */
-	public static function sort_by_sql($sort_by = 'title_asc',$post_type = "gd_place"){
+	public static function sort_by_sql($sort_by = 'post_title_asc',$post_type = "gd_place"){
 		global $wpdb;
+
+		//echo '###'.$sort_by;
 
 		$orderby = '';
 		$table = geodir_db_cpt_table($post_type);
 		$order_by_parts = array();
 
 		switch ($sort_by):
+			case 'post_status_desc':
 			case 'random': // @todo, i think we should remove random, its a bad idea for so many reasons.
 				$order_by_parts[] = "rand()";
 				break;
 			case 'az':
+			case 'post_title_asc':
 			case 'title_asc':
 				$order_by_parts[] = "$wpdb->posts.post_title asc";
 				break;
 			case 'za':
+			case 'post_title_desc':
 			case 'title_desc':
 				$order_by_parts[] = "$wpdb->posts.post_title desc";
 				break;
@@ -737,7 +782,7 @@ class GeoDir_Query {
 	 * @param string $table Listing table name.
 	 * @return string Modified orderby query.
 	 */
-	public static function custom_sort($orderby, $sort_by, $table)
+	public static function  custom_sort($orderby, $sort_by, $table)
 	{
 
 		global $wpdb;
@@ -801,6 +846,7 @@ class GeoDir_Query {
 
 					default:
 						if (self::column_exist($table, $sort_by)) {
+//							echo '###'.$table . "." . $sort_by . " " . $order;exit;
 							$orderby = $table . "." . $sort_by . " " . $order;
 						}else{
 							$orderby = "$wpdb->posts.post_date desc";
