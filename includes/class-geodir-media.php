@@ -276,7 +276,7 @@ class GeoDir_Media {
 				);
 
 				// only set the featured image if its approved
-				if($is_approved ){
+				if($is_approved && !wp_is_post_revision( absint($post_id) ) ){
 					set_post_thumbnail($post_id, $attachment_id);
 				}
 			}else{
@@ -449,7 +449,7 @@ class GeoDir_Media {
 		}
 
 		// if menu order is 0 then its featured and we need to set the post thumbnail
-		if($order === 0 && $field=='post_images'){
+		if($order === 0 && $field=='post_images' && !wp_is_post_revision( absint($post_id) )){
 			// Get the path to the upload directory.
 			$wp_upload_dir = wp_upload_dir();
 			$filename = $wp_upload_dir['basedir'] . $wpdb->get_var($wpdb->prepare("SELECT file FROM ".GEODIR_ATTACHMENT_TABLE." WHERE ID = %d",$file_id));
@@ -701,6 +701,7 @@ class GeoDir_Media {
 		$result = '';
 		if($field=='all'){
 			$result = $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = %d", $post_id));
+			//wp_is_post_revision( absint($_REQUEST['ID']) )
 			delete_post_thumbnail( $post_id);
 		}elseif($field){
 			$result = $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = %d AND type = %s", $post_id,$field));
