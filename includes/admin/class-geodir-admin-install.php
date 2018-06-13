@@ -1101,7 +1101,7 @@ class GeoDir_Admin_Install {
 		/**
 		 * DB type change for post_images
 		 */
-		if (version_compare(get_option( 'geodirectory_version' ), '2.0.0.13-beta', '<=')) {
+		if (get_option( 'geodirectory_version' ) && version_compare(get_option( 'geodirectory_version' ), '2.0.0.13-beta', '<=')) {
 			global $wpdb;
 			$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
 		}
