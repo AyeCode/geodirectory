@@ -481,6 +481,7 @@ class GeoDir_Admin_Import_Export {
 	public static function get_post_gps_from_address( $post_info ) {
 
 		// @todo if users require a higher limit we should look at https://locationiq.org/
+		// @todo we should add OSM geocoder here is not using Gmaps.
 
 		$address = array();
 		$api_url = "https://maps.googleapis.com/maps/api/geocode/json?address=";

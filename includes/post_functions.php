@@ -87,7 +87,6 @@ function geodir_get_post_info($post_id = '')
     
     global $wpdb, $plugin_prefix, $post, $post_info,$preview;
 
-
     if ($post_id == '' && !empty($post))
         $post_id = $post->ID;
 
@@ -125,6 +124,9 @@ function geodir_get_post_info($post_id = '')
 			  AND pd.post_id = %d", $post_id));
 
     $post_detail = $wpdb->get_row($query);
+
+    // check for distance setting
+    if(!empty($post_detail) && !empty($post->distance)){$post_detail->distance = $post->distance;}
 
     return (!empty($post_detail)) ? $post_info = $post_detail : $post_info = false;
 
