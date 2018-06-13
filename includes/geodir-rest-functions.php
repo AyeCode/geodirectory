@@ -682,7 +682,7 @@ function geodir_rest_post_sort_options( $post_type ) {
 
 			if ( (int)$sort->is_default == 1 ) {
                 $has_default = true;
-                $default_order = $sort->sort ? 'desc' : 'asc';
+                $default_order = $sort->sort == 'desc' ? 'desc' : 'asc';
                 $default_orderby = $field_name;
             }
 

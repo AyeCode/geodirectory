@@ -661,7 +661,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 			// if this is set as the default blank all the others first just incase.
 			if($field->is_default){
-				self::blank_default_order($field->post_type);
+				self::blank_default($field->post_type);
 			}
 
 
@@ -755,11 +755,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
          *
          * @param $post_type Post type value.
          */
-		public static function blank_default_order($post_type){
+		public static function blank_default($post_type){
 			global $wpdb;
 
 			// blank all first
-			$wpdb->query($wpdb->prepare("update " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " set is_default='0', default_order='' where post_type = %s", array($post_type)));
+			$wpdb->query($wpdb->prepare("update " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " set is_default='0' where post_type = %s", array($post_type)));
 
 		}
 

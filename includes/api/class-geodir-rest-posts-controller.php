@@ -2008,6 +2008,10 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			if ( ! empty( $sort_options['orderby_options'] ) ) {
 				$orderby_options = array_keys( $sort_options['orderby_options'] );
 			}
+
+			if ( $default_orderby != 'random' ) {
+				$default_orderby = $default_orderby . '_' . $default_order;
+			}
 		}
 
 		$query_params['order'] = array(

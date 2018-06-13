@@ -175,13 +175,11 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						<?php
 						echo geodir_help_tip( __( 'This is a unique identifier used in the database and HTML, it MUST NOT contain spaces or special characters.', 'geodirectory' ));
 						_e( 'Field key :', 'geodirectory' ); ?>
-						<input type="text" name="htmlvar_name" id="htmlvar_name" pattern="[a-zA-Z0-9]+"
+						<input type="text" name="htmlvar_name" id="htmlvar_name" pattern="[a-zA-Z0-9]+" maxlength="50"
 						       title="<?php _e( 'Must not contain spaces or special characters', 'geodirectory' ); ?>"
 						       value="<?php if ( $value ) {
 							       echo preg_replace( '/geodir_/', '', $value, 1 );
-						       } ?>" <?php if ( $field->is_default || (isset($field->single_use) && $field->single_use) ) {
-							echo 'readonly="readonly"';
-						} ?> />
+						       } ?>" <?php if ( ! empty( $value ) && $value != 'geodir_' ) { echo 'readonly="readonly"'; } ?> />
 					</label>
 				</p>
 				<?php
