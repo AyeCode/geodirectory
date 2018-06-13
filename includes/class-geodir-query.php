@@ -587,15 +587,13 @@ class GeoDir_Query {
 	 * @return mixed
 	 */
 	public function posts_orderby($orderby, $query = array()){
-		global $wpdb, $table_prefix, $geodir_post_type,$snear;
+		global $wpdb, $table_prefix, $geodir_post_type,$snear,$s;
 
 		$sort_by = '';
 		$orderby = ' ';
 		$default_sort = '';
 
-		if ($snear != '') {
-			$orderby .= " distance,";
-		}
+
 
 		if ( get_query_var( 'order_by' ) ) {
 			$sort_by = get_query_var( 'order_by' );
@@ -606,11 +604,23 @@ class GeoDir_Query {
 		}
 
 		if ( $sort_by == '' ) {
-			$default_sort = geodir_get_posts_default_sort( $geodir_post_type );
-			if ( !empty( $default_sort ) ) {
-				$sort_by = $default_sort;
+
+
+			if ($snear != '') {
+				//$orderby .= " distance,";
+				$sort_by = 'distance_asc';
+			}elseif(is_search() && isset($_REQUEST['geodir_search']) && $s && trim($s) != ''){
+				$sort_by = 'search_best';
+			}else{
+				$default_sort = geodir_get_posts_default_sort( $geodir_post_type );
+				if ( !empty( $default_sort ) ) {
+					$sort_by = $default_sort;
+				}
 			}
+
 		}
+
+		//if(geodir_is_page('search')){}
 
 		$table = geodir_db_cpt_table($geodir_post_type);
 
@@ -663,7 +673,11 @@ class GeoDir_Query {
 				//print_r($children);exit;
 				foreach($children as $child){
 					$child_sort_by = $child->htmlvar_name."_".$child->sort;
-					$orderby .= " ," . self::sort_by_sql($child_sort_by,$geodir_post_type);
+					$child_sort = self::sort_by_sql($child_sort_by,$geodir_post_type);
+					if($child_sort){
+						$orderby .= " ,".$child_sort;
+					}
+					//$orderby .= " ," . self::sort_by_sql($child_sort_by,$geodir_post_type);
 				}
 			}
 		}
@@ -695,6 +709,13 @@ class GeoDir_Query {
 		$order_by_parts = array();
 
 		switch ($sort_by):
+			case 'distance_asc':
+				$order_by_parts[] = "distance";
+				$order_by_parts[] = self::search_sort();
+				break;
+			case 'search_best':
+				$order_by_parts[] = self::search_sort();
+				break;
 			case 'post_status_desc':
 			case 'random': // @todo, i think we should remove random, its a bad idea for so many reasons.
 				$order_by_parts[] = "rand()";
@@ -767,6 +788,35 @@ class GeoDir_Query {
 
 
 		$orderby = implode(", ",$order_by_parts);
+
+		return $orderby;
+	}
+
+	public static function search_sort($orderby = ''){
+		global $s;
+		if (is_search() && isset($_REQUEST['geodir_search']) && $s && trim($s) != '') {
+			$keywords = explode(" ", $s);
+			if(is_array($keywords) && $klimit = get_option('geodir_search_word_limit')){
+				foreach($keywords as $kkey=>$kword){
+					if(geodir_utf8_strlen($kword)<=$klimit){
+						unset($keywords[$kkey]);
+					}
+				}
+			}
+//
+//			if (count($keywords) > 1) {
+//				$orderby = "( gd_titlematch * 2 + gd_featured * 5 + gd_exacttitle * 10 + gd_alltitlematch_part * 100 + gd_titlematch_part * 50 + gd_content * 1.5) DESC";
+//			} else {
+//				$orderby = "( gd_titlematch * 2 + gd_featured * 5 + gd_exacttitle * 10 + gd_content * 1.5) DESC";
+//			}
+
+			if (count($keywords) > 1) {
+				$orderby = "( gd_titlematch * 2  + gd_exacttitle * 10 + gd_alltitlematch_part * 100 + gd_titlematch_part * 50 + gd_content * 1.5) DESC";
+			} else {
+				$orderby = "( gd_titlematch * 2  + gd_exacttitle * 10 + gd_content * 1.5) DESC";
+			}
+
+		}
 
 		return $orderby;
 	}
