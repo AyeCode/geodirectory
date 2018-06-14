@@ -1994,8 +1994,8 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		);
 
 		$default_order = 'desc';
-		$default_orderby = 'date';
-		$orderby_options = array( 'date' );
+		$default_orderby = 'post_date';
+		$orderby_options = array();
 
 		$sort_options  = geodir_rest_post_sort_options( $this->post_type );
 		if ( ! empty( $sort_options ) ) {
@@ -2008,10 +2008,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			if ( ! empty( $sort_options['orderby_options'] ) ) {
 				$orderby_options = array_keys( $sort_options['orderby_options'] );
 			}
-
-			if ( $default_orderby != 'random' ) {
-				$default_orderby = $default_orderby . '_' . $default_order;
-			}
+		}
+		if ( $default_orderby != 'random' ) {
+			$default_orderby = $default_orderby . '_' . $default_order;
+		}
+		if ( ! in_array( $default_orderby, $orderby_options ) ) {
+			$orderby_options[] = $default_orderby;
 		}
 
 		$query_params['order'] = array(
