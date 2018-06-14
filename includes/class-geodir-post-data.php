@@ -312,7 +312,7 @@ class GeoDir_Post_Data {
 			if ( isset( $gd_post['post_images'] ) ) {
 				$featured_image = self::save_files( $post_id, $gd_post['post_images'], 'post_images', $is_dummy);
 				//echo '###'.$featured_image;
-				if ( !empty($featured_image) ) {
+				if ( !empty($featured_image) && !wp_is_post_revision( absint($post_id) )  ) {
 					$postarr['featured_image'] = $featured_image;
 				}
 			}
@@ -1222,8 +1222,10 @@ class GeoDir_Post_Data {
 			)
 		);
 
-		/* Delete Attachments*/
-		GeoDir_Media::delete_files($id,'all');
+		/* Delete Attachments if not revision*/
+		if(!wp_is_post_revision( absint($id) )){
+			GeoDir_Media::delete_files($id,'all');
+		}
 
 		return true;
 	}
