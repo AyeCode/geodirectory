@@ -137,6 +137,7 @@ class GeoDir_API {
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-post-tags-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-posts-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-reviews-controller.php' );
+		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-fields-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-settings-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-setting-options-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-controller.php' );
@@ -184,6 +185,7 @@ class GeoDir_API {
 				'Geodir_REST_Taxonomies_Controller',
 				'GeoDir_REST_Reviews_Controller',
 				'GeoDir_REST_Post_Types_Controller',
+				'GeoDir_REST_Fields_Controller',
 				'GeoDir_REST_Settings_Controller',
 				'GeoDir_REST_Setting_Options_Controller',
 				'GeoDir_REST_System_Status_Controller',
