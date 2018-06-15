@@ -14,10 +14,22 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
      *
      * @access public
      */
-    public function __construct() {
-        $this->namespace = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION;
+    public function __construct( $post_type = '' ) {
+		$this->namespace = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION;
 		$this->rest_base = 'fields';
 		$this->object_type = 'field';
+
+		$this->post_type    	= $post_type;
+		$this->post_type_obj    = array();
+		$this->post_type_slug	= '';
+
+		if ( ! empty( $this->post_type ) ) {
+			$this->post_type_obj 	= get_post_type_object( $post_type );
+			if ( ! empty( $this->post_type_obj ) ) {
+				$this->post_type_slug = ! empty( $this->post_type_obj->rest_base ) ? $this->post_type_obj->rest_base : $this->post_type_obj->name;
+				$this->rest_base = $this->post_type_slug . '/fields';
+			}
+		}
     }
 
     /**
@@ -39,6 +51,10 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 			'schema' => array( $this, 'get_public_item_schema' ),
 		) );
 
+		$schema = $this->get_item_schema();
+		$get_item_args = array(
+			'context'  => $this->get_context_param( array( 'default' => 'view' ) ),
+		);
         register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', array(
 			'args' => array(
 				'id' => array(
@@ -93,14 +109,19 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		 * present in $registered will be set.
 		 */
 		$parameter_mappings = array(
-			'post_type'      => 'post_type',
-			'title'          => 'frontend_title',
 			'name'           => 'htmlvar_name',
+			'post_type'      => 'post_type',
 			'status'         => 'is_active',
+			'post'			 => 'post',
+			'package'	     => 'packages',
+			'default'		 => 'is_default',
+			'access'		 => 'for_admin_use', // 1 = admin, 0 = public, NULL or all = all
+			'location'		 => 'show_in',
 			'order'          => 'order',
 			'orderby'        => 'orderby',
 			'page'           => 'paged',
-			'search'         => 's',
+			'search'         => 'search',
+			'per_page'		 => 'per_page'
 		);
 
 		/*
@@ -111,6 +132,22 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 			if ( isset( $registered[ $api_param ], $request[ $api_param ] ) ) {
 				$args[ $wp_param ] = $request[ $api_param ];
 			}
+		}
+
+		if ( isset( $args['per_page'] ) ) {
+			$args['per_page'] = absint( $args['per_page'] );
+		} else {
+			$args['per_page'] = $this->items_per_page();
+		}
+
+		if ( isset( $registered['offset'] ) && ! empty( $request['offset'] ) ) {
+			$args['offset'] = $request['offset'];
+		} else {
+			$args['offset']  = $args['per_page'] > 0 ? ( $request['page'] - 1 ) * $args['per_page'] : ( $request['page'] - 1 );
+		}
+
+		if ( ! empty( $args['search'] ) ) {
+			$args['search'] = '*' . $args['search'] . '*';
 		}
 
 		/**
@@ -126,22 +163,26 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		$args = apply_filters( "geodir_rest_fields_query", $args, $request );
 		$query_args = $this->prepare_items_query( $args, $request );
 		
-        $items = $this->get_fields( $query_args );
+		$query_args['count_total'] = true;
+		
+        $results = $this->get_fields( $query_args );
 
         $fields = array();
-        foreach ( $items as $row ) {
-            if ( ! $this->check_read_permission( $row ) ) {
-				continue;
-			}
+		if ( ! empty( $results['results'] ) ) {
+			foreach ( $results['results'] as $row ) {
+				if ( ! $this->check_read_permission( $row ) ) {
+					continue;
+				}
 
-			$item   = $this->prepare_item_for_response( $row, $request );
-            $fields[] = $this->prepare_response_for_collection( $item );
-        }
+				$item   = $this->prepare_item_for_response( $row, $request );
+				$fields[] = $this->prepare_response_for_collection( $item );
+			}
+		}
 
         $page = (int) $query_args['paged'];
-		$total_fields = 10;
+		$total_fields = ! empty( $results['total_rows'] ) ? $results['total_rows'] : 0;
 
-		$max_pages = ceil( $total_fields / $this->items_per_page() );
+		$max_pages = $total_fields > 0 ? ( ! empty( $args['per_page'] ) ? ceil( $total_fields / $args['per_page'] ) : 1 ) : 0;
 
 		if ( $page > $max_pages && $total_fields > 0 ) {
 			return new WP_Error( 'geodir_rest_field_invalid_page_number', __( 'The page number requested is larger than the number of pages available.' ), array( 'status' => 400 ) );
@@ -201,18 +242,8 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 			$query_args[ $key ] = apply_filters( "geodir_rest_field_query_var-{$key}", $value );
 		}
 
-		if ( 'post' !== $this->post_type || ! isset( $query_args['ignore_sticky_posts'] ) ) {
-			$query_args['ignore_sticky_posts'] = true;
-		}
-
 		if ( isset( $query_args['orderby'] ) && isset( $request['orderby'] ) ) {
-			$orderby_mappings = array(
-				'id'             => 'id',
-				'post_type'      => 'post_type',
-				'title' 		 => 'frontend_title',
-				'name' 			 => 'htmlvar_name',
-				'sort_order'     => 'sort_order',
-			);
+			$orderby_mappings = $this->orderby_options();
 
 			if ( isset( $orderby_mappings[ $request['orderby'] ] ) ) {
 				$query_args['orderby'] = $orderby_mappings[ $request['orderby'] ];
@@ -362,19 +393,67 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
      * @return array Collection parameters.
      */
     public function get_collection_params() {
-        $query_params = array();
+        $query_params = parent::get_collection_params();
 
 		$query_params['context']['default'] = 'view';
 
-		$query_params['offset'] = array(
-			'description'        => __( 'Offset the result set by a specific number of items.' ),
+		$query_params['status'] = array(
+			'description'        => __( 'Field status.' ),
+			'type'               => 'string',
+			'default'            => '1',
+		);
+
+		$query_params['name'] = array(
+			'description'        => __( 'Filter by field key.' ),
+			'type'               => 'string',
+			'default'            => '',
+		);
+
+		if ( empty( $this->post_type ) ) {
+			$query_params['post_type'] = array(
+				'description'        => __( 'Filter by post type.' ),
+				'type'               => 'string',
+				'default'            => '',
+			);
+		}
+
+		$query_params['post'] = array(
+			'description'        => __( 'Filter by post.' ),
 			'type'               => 'integer',
+			'default'            => '0',
+		);
+
+		$query_params['package'] = array(
+			'description'        => __( 'Filter by package.' ),
+			'type'               => 'integer',
+			'default'            => '0',
+		);
+
+		$query_params['default'] = array(
+			'description'        => __( 'Filter default feilds.' ),
+			'type'               => 'string',
+			'default'            => 'all',
+			'enum'               => array( '1', '0', 'all' ),
+		);
+
+		$query_params['access'] = array(
+			'description'        => __( 'Filter by admin use only feilds.' ),
+			'type'               => 'string',
+			'default'            => 'all',
+			'enum'               => array( '1', '0', 'all' ),
+		);
+
+		$query_params['location'] = array(
+			'description'        => __( 'Filter by feilds location.' ),
+			'type'               => 'string',
+			'default'            => 'none',
+			'enum'               => array( 'detail', 'listing', 'mapbubble', 'none' ),
 		);
 
 		$query_params['order'] = array(
 			'description'        => __( 'Order sort attribute ascending or descending.' ),
 			'type'               => 'string',
-			'default'            => 'desc',
+			'default'            => 'asc',
 			'enum'               => array( 'asc', 'desc' ),
 		);
 
@@ -382,12 +461,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 			'description'        => __( 'Sort collection by object attribute.' ),
 			'type'               => 'string',
 			'default'            => 'order',
-			'enum'               => array(
-				'id',
-				'name',
-				'title',
-				'order',
-			),
+			'enum'               => array_keys( $this->orderby_options() ),
 		);
 
 		/**
@@ -432,9 +506,118 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 	public function get_fields( $args ) {
 		global $wpdb;
 
-		$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE is_active = %d ORDER BY sort_order ASC, frontend_title ASC", array( 1 ) ) );
+		$query_fields = '*';
+		if ( isset( $args['count_total'] ) && $args['count_total'] ) {
+			$query_fields = 'SQL_CALC_FOUND_ROWS ' . $query_fields;
+		}
+		$query_from = "FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
+		$query_where = "WHERE 1=1";
+		
+		// nicename
+		if ( ! empty( $args['htmlvar_name'] ) ) {
+			$query_where .= $wpdb->prepare( ' AND htmlvar_name = %s', $args['htmlvar_name'] );
+		}
 
-		return $fields;
+		if ( ! empty( $args['post_type'] ) ) {
+			$query_where .= $wpdb->prepare( ' AND post_type = %s', $args['post_type'] );
+		}
+
+		if ( ! empty( $args['show_in'] ) && $args['show_in'] != 'none' ) {
+			$query_where .= " AND show_in LIKE '%[" . $args['show_in'] . "]%'";
+		}
+
+		if ( ! empty( $args['packages'] ) ) {
+			$query_where .= $wpdb->prepare( ' FIND_IN_SET( %d, packages )', array( $args['packages'] ) );
+		}
+
+		if ( isset( $args['is_active'] ) && $args['is_active'] !== '' ) {
+			$query_where .= $wpdb->prepare( ' AND is_active = %d', (int) $args['is_active'] );
+		}
+
+		if ( isset( $args['is_default'] ) && $args['is_default'] !== '' && $args['is_default'] != 'all' ) {
+			$query_where .= $wpdb->prepare( ' AND is_default = %d', (int) $args['is_default'] );
+		}
+
+		if ( isset( $args['for_admin_use'] ) && $args['for_admin_use'] !== '' ) {
+			$query_where .= $wpdb->prepare( ' AND for_admin_use = %d', (int) $args['for_admin_use'] );
+		}
+
+		$orderby_array = array();
+		if ( ! empty( $args['orderby'] ) ) {
+			$orderby_array[] = $args['orderby'] . ' ' . ( ! empty( $args['order'] ) && strtolower( $args['order'] ) == 'asc' ? 'ASC' : 'DESC' );
+		}
+		$orderby_array[] = 'frontend_title ASC';
+		$query_orderby = 'ORDER BY ' . implode( ', ', $orderby_array );
+		
+		// limit
+		if ( isset( $args['per_page'] ) && $args['per_page'] > 0 ) {
+			if ( $args['offset'] ) {
+				$query_limit = $wpdb->prepare("LIMIT %d, %d", $args['offset'], $args['per_page']);
+			} else {
+				$query_limit = $wpdb->prepare( "LIMIT %d, %d", $args['per_page'] * ( $args['paged'] - 1 ), $args['per_page'] );
+			}
+		} else {
+			$query_limit = '';
+		}
+
+		$search = '';
+		if ( isset( $args['search'] ) ) {
+			$search = trim( $args['search'] );
+		}
+
+		if ( $search ) {
+			$leading_wild = ( ltrim($search, '*') != $search );
+			$trailing_wild = ( rtrim($search, '*') != $search );
+			if ( $leading_wild && $trailing_wild )
+				$wild = 'both';
+			elseif ( $leading_wild )
+				$wild = 'leading';
+			elseif ( $trailing_wild )
+				$wild = 'trailing';
+			else
+				$wild = false;
+			if ( $wild )
+				$search = trim($search, '*');
+
+			$search_columns = array();
+			if ( is_numeric( $search ) ) {
+				$search_columns = array( 'id' );
+			} else {
+				$search_columns = array( 'id', 'frontend_title', 'htmlvar_name', 'frontend_desc', 'admin_title', 'post_type' );
+			}
+
+			$query_where .= $this->get_search_sql( $search, $search_columns, $wild );
+		}
+
+		$sql = "SELECT $query_fields $query_from $query_where $query_orderby $query_limit";
+
+		$results = $wpdb->get_results( $sql );
+		
+		$total_rows = 0;
+		if ( isset( $args['count_total'] ) && $args['count_total'] ) {
+			$total_rows = (int) $wpdb->get_var( 'SELECT FOUND_ROWS()' );
+		}
+
+		return array( 'results' => $results, 'total_rows' => $total_rows );
+	}
+
+	protected function get_search_sql( $string, $cols, $wild = false ) {
+		global $wpdb;
+
+		$searches = array();
+		$leading_wild = ( 'leading' == $wild || 'both' == $wild ) ? '%' : '';
+		$trailing_wild = ( 'trailing' == $wild || 'both' == $wild ) ? '%' : '';
+		$like = $leading_wild . $wpdb->esc_like( $string ) . $trailing_wild;
+
+		foreach ( $cols as $col ) {
+			if ( 'id' == $col || 'htmlvar_name' == $col ) {
+				$searches[] = $wpdb->prepare( "$col = %s", $string );
+			} else {
+				$searches[] = $wpdb->prepare( "$col LIKE %s", $like );
+			}
+		}
+
+		return ' AND (' . implode(' OR ', $searches) . ')';
 	}
 
     /**
@@ -472,6 +655,16 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 	 */
 	public function check_read_permission( $field ) {
 		return true;
+	}
+
+	public function orderby_options() {
+		return $orderby = array(
+			'id'             => 'id',
+			'type'      	 => 'post_type',
+			'title' 		 => 'frontend_title',
+			'name' 			 => 'htmlvar_name',
+			'order'     	 => 'sort_order',
+		);
 	}
 
 }
