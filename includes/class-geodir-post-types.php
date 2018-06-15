@@ -331,7 +331,7 @@ class GeoDir_Post_types {
 			foreach ($post_types as $post_type => $args):
 
 				if (!empty($args['rewrite']['slug'])) {
-					$args['rewrite']['slug'] = _x($args['rewrite']['slug'], 'URL slug', 'geodirectory');
+					$args['rewrite']['slug'] = apply_filters( 'geodir_post_type_rewrite_slug', $args['rewrite']['slug'], $post_type );
 				}
 				$args = stripslashes_deep($args);
 

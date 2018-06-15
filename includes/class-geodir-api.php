@@ -156,6 +156,8 @@ class GeoDir_API {
 		// Register settings to the REST API.
 		$this->register_wp_admin_settings();
 
+		$show_in_rest = array();
+
 		if ( geodir_api_enabled() ) {
             $gd_post_types = geodir_get_posttypes();
 
@@ -167,6 +169,8 @@ class GeoDir_API {
                 if ( empty( $post_type->show_in_rest ) ) {
                     continue;
                 }
+
+				$show_in_rest[] = $post_type->name;
 
                 $class = ! empty( $post_type->rest_controller_class ) ? $post_type->rest_controller_class : 'WP_REST_Posts_Controller';
 
@@ -200,8 +204,15 @@ class GeoDir_API {
 		}
 
 		foreach ( $controllers as $controller ) {
-			$this->$controller = new $controller();
-			$this->$controller->register_routes();
+			$obj_controller = new $controller();
+			$obj_controller->register_routes();
+
+			if ( ! empty( $show_in_rest ) && $controller == 'GeoDir_REST_Fields_Controller' ) {
+				foreach ( $show_in_rest as $post_type ) {
+					$obj_controller = new $controller( $post_type );
+					$obj_controller->register_routes();
+				}
+			}
 		}
 
 	}
