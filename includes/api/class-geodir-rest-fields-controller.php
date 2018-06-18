@@ -41,7 +41,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
      */
     public function register_routes() {
 
-        register_rest_route( $this->namespace, '/' . $this->rest_base, array(
+		register_rest_route( $this->namespace, '/' . $this->rest_base, array(
 			array(
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => array( $this, 'get_items' ),
@@ -55,7 +55,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		$get_item_args = array(
 			'context'  => $this->get_context_param( array( 'default' => 'view' ) ),
 		);
-        register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', array(
+		register_rest_route( $this->namespace, '/' . $this->rest_base . '/(?P<id>[\d]+)', array(
 			'args' => array(
 				'id' => array(
 					'description' => __( 'Unique identifier for the object.', 'geodirectory' ),
@@ -150,6 +150,10 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 			$args['search'] = '*' . $args['search'] . '*';
 		}
 
+		if ( empty( $args['packages'] ) && ! empty( $args['post'] ) && ( $package = (array) geodir_post_package_info( array(), $args['post'], get_post_type( $this->post_type ) ) ) ) {
+			$args['packages'] = $package['pid'];
+		}
+
 		/**
 		 * Filters the query arguments for a request.
 		 *
@@ -185,7 +189,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		$max_pages = $total_fields > 0 ? ( ! empty( $args['per_page'] ) ? ceil( $total_fields / $args['per_page'] ) : 1 ) : 0;
 
 		if ( $page > $max_pages && $total_fields > 0 ) {
-			return new WP_Error( 'geodir_rest_field_invalid_page_number', __( 'The page number requested is larger than the number of pages available.' ), array( 'status' => 400 ) );
+			return new WP_Error( 'geodir_rest_field_invalid_page_number', __( 'The page number requested is larger than the number of pages available.', 'geodirectory' ), array( 'status' => 400 ) );
 		}
 
 		$response  = rest_ensure_response( $fields );
@@ -264,7 +268,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
     public function get_item_permissions_check( $request ) {
 
         if ( ! $this->show_in_rest() ) {
-            return new WP_Error( 'rest_cannot_view', __( 'Sorry, you are not allowed to view countries.' ), array( 'status' => rest_authorization_required_code() ) );
+            return new WP_Error( 'rest_cannot_view', __( 'Sorry, you are not allowed to view countries.', 'geodirectory' ), array( 'status' => rest_authorization_required_code() ) );
         }
 
         return true;
@@ -300,7 +304,140 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
      * @return WP_REST_Response Response object.
      */
     public function prepare_item_for_response( $field, $request ) {
-        $data = $field;
+        $data   = array();
+		$schema = $this->get_item_schema();
+
+		$admin_title = trim( $field->admin_title );
+
+		if ( ! empty( $schema['properties']['id'] ) ) {
+			$data['id'] = $field->id;
+		}
+
+		if ( ! empty( $schema['properties']['type'] ) ) {
+			$data['type'] = $field->post_type;
+		}
+
+		if ( ! empty( $schema['properties']['name'] ) ) {
+			$data['name'] = $field->htmlvar_name;
+		}
+
+		if ( ! empty( $schema['properties']['title'] ) ) {
+			$title = trim( $field->frontend_title );
+			if ( empty( $title ) ) {
+				$title = $admin_title;
+			}
+
+			$data['title'] = __( $title, 'geodirectory' );
+		}
+
+		if ( ! empty( $schema['properties']['admin_title'] ) ) {
+			$data['admin_title'] = __( $admin_title, 'geodirectory' );
+		}
+
+		if ( ! empty( $schema['properties']['description'] ) ) {
+			$description = trim( $field->frontend_desc );
+			$data['description'] = ! empty( $description ) ? __( $description, 'geodirectory' ) : $description;
+		}
+
+		if ( ! empty( $schema['properties']['data_type'] ) ) {
+			$data['data_type'] = $field->data_type;
+		}
+
+		if ( ! empty( $schema['properties']['field_type'] ) ) {
+			$data['field_type'] = $field->field_type;
+		}
+
+		if ( ! empty( $schema['properties']['field_type_key'] ) ) {
+			$data['field_type_key'] = $field->field_type_key;
+		}
+
+		if ( ! empty( $schema['properties']['decimal_point'] ) ) {
+			$data['decimal_point'] = $field->data_type == 'FLOAT' ? absint( $field->decimal_point ) : '';
+		}
+
+		if ( ! empty( $schema['properties']['default_value'] ) ) {
+			$data['default_value'] = $field->default_value;
+		}
+
+		if ( ! empty( $schema['properties']['placeholder'] ) ) {
+			$placeholder = trim( $field->placeholder_value );
+			if ( ! empty( $placeholder ) ) {
+				$placeholder = __( $placeholder, 'geodirectory' );
+			}
+			$data['placeholder'] = $placeholder;
+		}
+
+		if ( ! empty( $schema['properties']['required'] ) ) {
+			$data['required'] = (bool) $field->is_required;
+		}
+
+		if ( ! empty( $schema['properties']['required_msg'] ) ) {
+			$data['required_msg'] = ! empty( $field->required_msg ) ? __( $field->required_msg, 'geodirectory' ) : '';
+		}
+
+		if ( ! empty( $schema['properties']['validation_pattern'] ) ) {
+			$data['validation_pattern'] = $field->validation_pattern;
+		}
+
+		if ( ! empty( $schema['properties']['validation_msg'] ) ) {
+			$data['validation_msg'] = ! empty( $field->validation_msg ) ? __( $field->validation_msg, 'geodirectory' ) : '';
+		}
+
+		if ( ! empty( $schema['properties']['option_values'] ) ) {
+			$data['option_values'] = ! empty( $field->option_values ) ? stripslashes_deep( geodir_string_values_to_options( $field->option_values, true ) ) : '';
+		}
+
+		if ( ! empty( $schema['properties']['location'] ) ) {
+			$data['location'] = ! empty( $field->show_in ) ? explode( ',', str_replace( array( '[', ']' ), '', $field->show_in ) ) : '';
+		}
+
+		if ( ! empty( $schema['properties']['order'] ) ) {
+			$data['order'] = absint( $field->sort_order );
+		}
+
+		if ( ! empty( $schema['properties']['icon'] ) ) {
+			$data['icon'] = $field->field_icon;
+		}
+
+		if ( ! empty( $schema['properties']['class'] ) ) {
+			$data['class'] = $field->css_class;
+		}
+
+		if ( ! empty( $schema['properties']['default'] ) ) {
+			$data['default'] = (bool) $field->is_default;
+		}
+
+		if ( ! empty( $schema['properties']['private'] ) ) {
+			$data['private'] = (bool) $field->for_admin_use;
+		}
+
+		if ( ! empty( $schema['properties']['status'] ) ) {
+			$data['status'] = absint( $field->is_active );
+		}
+
+		if ( ! empty( $schema['properties']['packages'] ) ) {
+			$data['packages'] = ! empty( $field->packages ) ? explode( ',', $field->packages ) : '';
+		}
+
+		if ( ! empty( $schema['properties']['tab_parent'] ) ) {
+			$data['tab_parent'] = $field->tab_parent;
+		}
+
+		if ( ! empty( $schema['properties']['tab_level'] ) ) {
+			$data['tab_level'] = absint( $field->tab_level );
+		}
+
+		if ( ! empty( $schema['properties']['sorting'] ) ) {
+			$data['sorting'] = (bool) $field->cat_sort;
+		}
+
+		if ( ! empty( $schema['properties']['searching'] ) ) {
+			$data['searching'] = (bool) $field->cat_filter;
+		}
+
+		if ( ! empty( $schema['properties']['extra_fields'] ) ) {
+			$data['extra_fields'] = ! empty( $field->extra_fields ) ? maybe_unserialize( $field->extra_fields ) : '';
+		}
 
         $context    = 'view';
         $data       = $this->add_additional_fields_to_object( $data, $request );
@@ -359,30 +496,162 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
             'type'                 => 'object',
             'properties'           => array(
                 'id'              => array(
-					'description' => __( 'Unique identifier for the object.' ),
+					'description' => __( 'The field id.', 'geodirectory' ),
 					'type'        => 'integer',
 					'context'     => array( 'view' ),
 					'readonly'    => true,
 				),
-                'name'             => array(
-					'description' => __( 'An alphabetic identifier for the object unique to its type.' ),
+				'type'            => array(
+					'description' => __( 'Field post type.', 'geodirectory' ),
 					'type'        => 'string',
 					'context'     => array( 'view' ),
 				),
-                'title'             => array(
-                    'description'  => __( 'The field title.' ),
+                'name'            => array(
+					'description' => __( 'Field name. A unique identifier used in the database and HTML, it MUST NOT contain spaces or special characters.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+                'title'            => array(
+                    'description'  => __( 'Field title.', 'geodirectory' ),
                     'type'         => 'string',
                     'context'      => array( 'view' ),
                 ),
-                'type'            => array(
-					'description' => __( 'The post type.' ),
+                'admin_title'      => array(
+                    'description'  => __( 'Field title for backend use.', 'geodirectory' ),
+                    'type'         => 'string',
+                    'context'      => array( 'view' ),
+                ),
+				'description'      => array(
+                    'description'  => __( 'Field description displayed on add listing form.', 'geodirectory' ),
+                    'type'         => 'string',
+                    'context'      => array( 'view' ),
+                ),
+                'data_type'       => array(
+					'description' => __( 'Field data type. Eg: VARCHAR, TEXT etc', 'geodirectory' ),
 					'type'        => 'string',
 					'context'     => array( 'view' ),
-					'readonly'    => true,
+				),
+                'field_type'      => array(
+					'description' => __( 'Field type. Eg: text, url select, multiselect, radio, checkbox etc', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+                'field_type_key'  => array(
+					'description' => __( 'Field type key. Eg: text, url select, multiselect, radio, checkbox etc', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+				'decimal_point'       => array(
+					'description' => __( 'The number of decimal points for float value.', 'geodirectory' ),
+					'type'        => 'integer',
+					'context'     => array( 'view' ),
+				),
+                'default_value'   => array(
+					'description' => __( 'Field default value, usually blank', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+                'placeholder'     => array(
+					'description' => __( 'Field placeholder text.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+                'required'        => array(
+					'description' => __( 'Is required field?', 'geodirectory' ),
+					'type'        => 'boolean',
+					'context'     => array( 'view' ),
+				),
+                'required_msg'    => array(
+					'description' => __( 'Error message for required field.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+                'validation_pattern'    => array(
+					'description' => __( 'Regex expression for HTML5 pattern validation.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+                'validation_msg'    => array(
+					'description' => __( 'Validation message to show to the user if validation fails.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+				'option_values'		  => array(
+					'description' => __( 'Option values for select, multiselect, radio, checkbox.', 'geodirectory' ),
+					'type'        => 'array',
+					'context'     => array( 'view' ),
+				),
+				'location'		  => array(
+					'description' => __( 'Field output locations.', 'geodirectory' ),
+					'type'        => 'array',
+					'context'     => array( 'view' ),
+				),
+                'order'           => array(
+					'description' => __( 'Field display order.', 'geodirectory' ),
+					'type'        => 'integer',
+					'context'     => array( 'view' ),
+				),
+				'icon'           => array(
+					'description' => __( 'Field icon. Eg: "fa fa-home"', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+				'class'           => array(
+					'description' => __( 'Custom css class for field custom style.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+				'default'          => array(
+					'description' => __( 'Is GeoDirectory default field?', 'geodirectory' ),
+					'type'        => 'boolean',
+					'context'     => array( 'view' ),
+				),
+				'private'         => array(
+					'description' => __( 'Is admin use only?', 'geodirectory' ),
+					'type'        => 'boolean',
+					'context'     => array( 'view' ),
+				),
+                'status'          => array(
+					'description' => __( 'Field status.', 'geodirectory' ),
+					'type'        => 'integer',
+					'context'     => array( 'view' ),
+				),
+				'packages'          => array(
+					'description' => __( 'Field packages.', 'geodirectory' ),
+					'type'        => 'array',
+					'context'     => array( 'view' ),
+				),
+				'sorting'         => array(
+					'description' => __( 'Show field in post sorting?', 'geodirectory' ),
+					'type'        => 'boolean',
+					'context'     => array( 'view' ),
+				),
+				'searching'       => array(
+					'description' => __( 'Show field in post search?', 'geodirectory' ),
+					'type'        => 'boolean',
+					'context'     => array( 'view' ),
+				),
+				'extra_fields'       => array(
+					'description' => __( 'Field extra setting', 'geodirectory' ),
+					'type'        => 'array',
+					'context'     => array( 'view' ),
+				),
+                'tab_parent'      => array(
+					'description' => __( 'Field parent tab.', 'geodirectory' ),
+					'type'        => 'string',
+					'context'     => array( 'view' ),
+				),
+                'tab_level'       => array(
+					'description' => __( 'Field tab level.', 'geodirectory' ),
+					'type'        => 'interer',
+					'context'     => array( 'view' ),
 				)
             ),
         );
-        return $this->add_additional_fields_schema( $schema );
+
+		$schema = $this->add_additional_fields_schema( $schema );
+
+        return apply_filters( 'geodir_rest_field_item_schema', $schema, $this );
     }
 
     /**
@@ -398,67 +667,67 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 		$query_params['context']['default'] = 'view';
 
 		$query_params['status'] = array(
-			'description'        => __( 'Field status.' ),
+			'description'        => __( 'Field status.', 'geodirectory' ),
 			'type'               => 'string',
 			'default'            => '1',
 		);
 
 		$query_params['name'] = array(
-			'description'        => __( 'Filter by field key.' ),
+			'description'        => __( 'Filter by field key.', 'geodirectory' ),
 			'type'               => 'string',
 			'default'            => '',
 		);
 
 		if ( empty( $this->post_type ) ) {
 			$query_params['post_type'] = array(
-				'description'        => __( 'Filter by post type.' ),
+				'description'        => __( 'Filter by post type.', 'geodirectory' ),
 				'type'               => 'string',
 				'default'            => '',
 			);
 		}
 
 		$query_params['post'] = array(
-			'description'        => __( 'Filter by post.' ),
+			'description'        => __( 'Filter by post.', 'geodirectory' ),
 			'type'               => 'integer',
 			'default'            => '0',
 		);
 
 		$query_params['package'] = array(
-			'description'        => __( 'Filter by package.' ),
+			'description'        => __( 'Filter by package.', 'geodirectory' ),
 			'type'               => 'integer',
 			'default'            => '0',
 		);
 
 		$query_params['default'] = array(
-			'description'        => __( 'Filter default feilds.' ),
+			'description'        => __( 'Filter default fields.', 'geodirectory' ),
 			'type'               => 'string',
 			'default'            => 'all',
 			'enum'               => array( '1', '0', 'all' ),
 		);
 
 		$query_params['access'] = array(
-			'description'        => __( 'Filter by admin use only feilds.' ),
+			'description'        => __( 'Filter by admin use only fields.', 'geodirectory' ),
 			'type'               => 'string',
 			'default'            => 'all',
 			'enum'               => array( '1', '0', 'all' ),
 		);
 
 		$query_params['location'] = array(
-			'description'        => __( 'Filter by feilds location.' ),
+			'description'        => __( 'Filter by fields location.', 'geodirectory' ),
 			'type'               => 'string',
 			'default'            => 'none',
 			'enum'               => array( 'detail', 'listing', 'mapbubble', 'none' ),
 		);
 
 		$query_params['order'] = array(
-			'description'        => __( 'Order sort attribute ascending or descending.' ),
+			'description'        => __( 'Order sort attribute ascending or descending.', 'geodirectory' ),
 			'type'               => 'string',
 			'default'            => 'asc',
 			'enum'               => array( 'asc', 'desc' ),
 		);
 
 		$query_params['orderby'] = array(
-			'description'        => __( 'Sort collection by object attribute.' ),
+			'description'        => __( 'Sort collection by object attribute.', 'geodirectory' ),
 			'type'               => 'string',
 			'default'            => 'order',
 			'enum'               => array_keys( $this->orderby_options() ),
@@ -631,7 +900,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 	protected function get_field( $id ) {
 		global $wpdb;
 
-		$error = new WP_Error( 'geodir_rest_field_invalid_id', __( 'Invalid field ID.' ), array( 'status' => 404 ) );
+		$error = new WP_Error( 'geodir_rest_field_invalid_id', __( 'Invalid field ID.', 'geodirectory' ), array( 'status' => 404 ) );
 		if ( (int) $id <= 0 ) {
 			return $error;
 		}
