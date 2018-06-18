@@ -78,7 +78,7 @@ $dummy_custom_fields[] = array('post_type' => $post_type,
                                'is_active' => '1',
                                'option_values' => '',
                                'is_default' => '0',
-                               'show_in' => '[owntab][detail]',
+                               'show_in' => '[owntab],[detail]',
                                'show_on_pkg' => '',
 							   'field_icon' => 'fa fa-clock-o',
                                'clabels' => __('Business Hours', 'geodirectory'));

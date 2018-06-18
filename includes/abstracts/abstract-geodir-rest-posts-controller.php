@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @package  GeoDirectory/Abstracts
  * @version  2.0.0
  */
-class Geodir_REST_Posts_Controller extends WP_REST_Posts_Controller {
+class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 	/**
 	 * Post type.
