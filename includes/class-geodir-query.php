@@ -55,15 +55,18 @@ class GeoDir_Query {
      * Set globals.
      *
      * @since 2.0.0
-     */
-	public function set_globals(){
-		global $geodir_post_type;
+	 *
+	 * @param mixed $q query object
+	 */
+	public function set_globals( $q ){
+		global $wp_query, $geodir_post_type;
+
+		if ( empty( $wp_query ) ) {
+			$wp_query = $q;
+		}
 
 		$geodir_post_type = geodir_get_current_posttype();
 	}
-
-
-
 
 	/**
 	 * Hook into pre_get_posts to do the main product query.
