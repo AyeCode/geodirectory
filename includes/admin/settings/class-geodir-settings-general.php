@@ -637,7 +637,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc' => __('Show the search text box `placeholder` value on search form.', 'geodirectory'),
 					'id' => 'search_default_text',
 					'type' => 'text',
-					'placeholder' => get_search_default_text(),
+					'placeholder' => geodir_get_search_default_text(),
 					'desc_tip' => true,
 					'default'  => '',
 					'advanced' => false
@@ -647,7 +647,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc' => __('Show the near text box \'placeholder\' value on search form.', 'geodirectory'),
 					'id' => 'search_default_near_text',
 					'type' => 'text',
-					'placeholder' => get_search_default_near_text(),
+					'placeholder' => geodir_get_search_default_near_text(),
 					'desc_tip' => true,
 					'default'  => '',
 					'advanced' => false
@@ -657,7 +657,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc' => __('Show the search button label on search form. You can use font awesome unicode here (minus the &) from:', 'geodirectory')." <a href='http://fontawesome.io/cheatsheet/' target='_blank'>http://fontawesome.io/cheatsheet/</a>",
 					'id' => 'search_default_button_text',
 					'type' => 'text',
-					'placeholder' => get_search_default_button_text(),
+					'placeholder' => geodir_get_search_default_button_text(),
 					'desc_tip' => true,
 					'default'  => '',
 					'advanced' => true

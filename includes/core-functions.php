@@ -185,7 +185,7 @@ function geodir_set_permalink_structure( $permalink_structure = '' ) {
  * @since 2.0.0
  * @return string|void
  */
-function get_search_default_text(){
+function geodir_get_search_default_text(){
     return __('Search for','geodirectory');
 }
 
@@ -195,7 +195,7 @@ function get_search_default_text(){
  * @since 2.0.0
  * @return string|void
  */
-function get_search_default_near_text(){
+function geodir_get_search_default_near_text(){
     return __('Near','geodirectory');
 }
 
@@ -205,7 +205,7 @@ function get_search_default_near_text(){
  * @since 2.0.0
  * @return string|void
  */
-function get_search_default_button_text(){
+function geodir_get_search_default_button_text(){
     return __('#xf002;','geodirectory');
 }
 
