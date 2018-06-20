@@ -297,7 +297,7 @@ add_action( 'geodir_after_listing_listview', 'geodir_listing_bounce_map_pin_on_h
  */
 function geodir_search_form_submit_button() {
 	$default_search_button_label = geodir_get_option('search_default_button_text');
-	if(!$default_search_button_label){$default_search_button_label = get_search_default_button_text();}
+	if(!$default_search_button_label){$default_search_button_label = geodir_get_search_default_button_text();}
 
 
 
@@ -395,7 +395,7 @@ function geodir_search_form_post_type_input() {
  */
 function geodir_search_form_search_input() {
 	$default_search_for_text = geodir_get_option('search_default_text');
-	if(!$default_search_for_text){$default_search_for_text = get_search_default_text();}
+	if(!$default_search_for_text){$default_search_for_text = geodir_get_search_default_text();}
 	?>
 	<div class='gd-search-input-wrapper gd-search-field-search'>
 		<input class="search_text" name="s"
@@ -417,7 +417,7 @@ function geodir_search_form_search_input() {
 function geodir_search_form_near_input() {
 
 	$default_near_text = geodir_get_option('search_default_near_text');
-	if(!$default_near_text){$default_near_text = get_search_default_near_text();}
+	if(!$default_near_text){$default_near_text = geodir_get_search_default_near_text();}
 
 	if ( isset( $_REQUEST['snear'] ) && $_REQUEST['snear'] != '' ) {
 		$near = esc_attr( stripslashes_deep( $_REQUEST['snear'] ) );
