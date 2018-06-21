@@ -442,3 +442,206 @@ function geodir_column_exist($db, $column)
 	}
 	return $exists;
 }
+
+/**
+ * Register Widgets.
+ *
+ * @since 2.0.0
+ */
+function goedir_register_widgets() {
+	if ( get_option( 'geodirectory_version' )) {
+		register_widget( 'GeoDir_Widget_Search' );
+		register_widget( 'GeoDir_Widget_Best_Of' );
+		register_widget( 'GeoDir_Widget_Categories' );
+		register_widget( 'GeoDir_Widget_Category_Description' );
+		register_widget( 'GeoDir_Widget_Dashboard' );
+		register_widget( 'GeoDir_Widget_Recent_Reviews' );
+
+		// post widgets
+		register_widget( 'GeoDir_Widget_Post_Badge' );
+		register_widget( 'GeoDir_Widget_Post_Meta' );
+		register_widget( 'GeoDir_Widget_Post_Images' );
+		register_widget( 'GeoDir_Widget_Post_Title' );
+		register_widget( 'GeoDir_Widget_Post_Rating' );
+		register_widget( 'GeoDir_Widget_Post_Fav' );
+		register_widget( 'GeoDir_Widget_Post_Directions' );
+
+		// Widgets
+		register_widget( 'GeoDir_Widget_Output_location' );
+		register_widget( 'GeoDir_Widget_Author_Actions' );
+		register_widget( 'GeoDir_Widget_Listings' );
+		register_widget( 'GeoDir_Widget_Map' );
+
+		// Non Widgets
+		new GeoDir_Widget_Add_Listing();
+		new GeoDir_Widget_Single_Taxonomies();
+		new GeoDir_Widget_Single_Tabs();
+		new GeoDir_Widget_Single_Next_Prev();
+		new GeoDir_Widget_Single_Closed_Text();
+		new GeoDir_Widget_Loop();
+		new GeoDir_Widget_Loop_Paging();
+		new GeoDir_Widget_Loop_Actions();
+		new GeoDir_Widget_Archive_Item_Section();
+		new GeoDir_Widget_Post_Distance();
+
+		// 3rd party widgets
+		if(class_exists('Ninja_Forms')){
+			register_widget( 'GeoDir_Widget_Ninja_Forms' );
+
+		}
+	}
+}
+add_action( 'widgets_init', 'goedir_register_widgets' );
+
+/**
+ * Function for widget pages options.
+ *
+ * @since 2.0.0
+ *
+ * @return array $gd_widget_pages.
+ */
+function geodir_widget_pages_options() {
+	global $gd_widget_pages;
+
+	if ( !empty( $gd_widget_pages ) && is_array( $gd_widget_pages ) ) {
+		return $gd_widget_pages;
+	}
+
+	$gd_widget_pages = array();
+	$gd_widget_pages['gd'] = array(
+		'label'     => __( 'GD Pages', 'geodirectory' ),
+		'pages'     => array(
+			'add-listing'       => __( 'Add Listing Page', 'geodirectory' ),
+			'author'            => __( 'Author Page', 'geodirectory' ),
+			'detail'            => __( 'Listing Detail Page', 'geodirectory' ),
+			'preview'           => __( 'Listing Preview Page', 'geodirectory' ),
+			'listing-success'   => __( 'Listing Success Page', 'geodirectory' ),
+			'location'          => __( 'Location Page', 'geodirectory' ),
+			'login'             => __( 'Login Page', 'geodirectory' ),
+			'pt'                => __( 'Post Type Archive', 'geodirectory' ),
+			'search'            => __( 'Search Page', 'geodirectory' ),
+			'listing'           => __( 'Taxonomies Page', 'geodirectory' ),
+		),
+	);
+
+	return apply_filters( 'geodir_widget_pages_options', $gd_widget_pages );
+}
+
+/**
+ * Function for widget page id bases detail.
+ *
+ * @since 2.0.0
+ *
+ * @return array $id_bases.
+ */
+function geodir_detail_page_widget_id_bases() {
+	$id_bases = array(
+		'detail_user_actions',
+		'detail_social_sharing',
+		'detail_sidebar',
+		'detail_sidebar_info',
+		'detail_rating_stars',
+	);
+
+	return apply_filters( 'geodir_detail_page_widget_id_bases', $id_bases );
+}
+
+/**
+ * Function for check is detail page widget.
+ *
+ * @since 2.0.0
+ *
+ * @param string $id_base widget page id base.
+ * @return bool $return.
+ */
+function geodir_is_detail_page_widget( $id_base ) {
+	$widgets = geodir_detail_page_widget_id_bases();
+
+	$return = ! empty( $id_base ) && ! empty( $widgets ) && in_array( $id_base, $widgets ) ? true : false;
+
+	return apply_filters( 'geodir_is_detail_page_widget', $return, $id_base, $widgets );
+}
+
+/**
+ * Function for display widget c
+ *
+ *
+ * @since 2.0.0
+ *
+ * @param array $instance {
+ *      An array display widget arguments.
+ *
+ *      @type string $gd_wgt_showhide Widget display type.
+ *      @type string $gd_wgt_restrict Widget restrict pages.
+ * }
+ * @param object $widget Display widget options.
+ * @param array $args Widget arguments.
+ * @return bool|array $instance
+ */
+function geodir_widget_display_callback( $instance, $widget, $args ) {
+	if ( !empty( $widget->widget_options['geodirectory'] ) && !empty( $instance['gd_wgt_showhide'] ) ) {
+		$display_type = !empty( $instance['gd_wgt_showhide'] ) ? $instance['gd_wgt_showhide'] : '';
+		$pages = !empty( $instance['gd_wgt_restrict'] ) && is_array( $instance['gd_wgt_restrict'] ) ? $instance['gd_wgt_restrict'] : array();
+
+		$show = $instance;
+
+		if ( $display_type == 'show' ) {
+			$show = $instance; // Show on all pages.
+		} else if ( $display_type == 'hide' ) {
+			$show = false; // Hide on all pages.
+		} else if ( $display_type == 'gd' ) {
+			if ( ! geodir_is_geodir_page() ) {
+				$show = false; // Show only on GD pages.
+			}
+		} else {
+			if ( geodir_is_detail_page_widget( $widget->id_base ) ) {
+				if ( geodir_is_page( 'detail' ) ) {
+					if ( ! in_array( 'gd-detail', $pages ) ) {
+						$show = false;
+					}
+				} else if ( geodir_is_page( 'preview' ) ) {
+					if ( ! in_array( 'gd-preview', $pages ) ) {
+						$show = false;
+					}
+				} else {
+					$show = false;
+				}
+			} else {
+				$gd_widget_pages = geodir_widget_pages_options();
+				$gd_page = '';
+
+				if ( !empty( $gd_widget_pages['gd']['pages'] ) ) {
+					$gd_pages = $gd_widget_pages['gd']['pages'];
+
+					foreach ( $gd_pages as $page => $page_title ) {
+						if ( geodir_is_page( $page ) ) {
+							$gd_page = $page;
+							break;
+						}
+					}
+				}
+
+				if ( $display_type == 'show_on' ) {
+					if ( $gd_page && in_array( 'gd-' . $gd_page, $pages ) ) {
+						$show = $instance;
+					} else {
+						$show = false;
+					}
+				} else if ( $display_type == 'hide_on' ) {
+					if ( $gd_page && in_array( 'gd-' . $gd_page, $pages ) ) {
+						$show = false;
+					} else {
+						$show = $instance;
+					}
+				} else {
+					$show = false;
+				}
+			}
+		}
+
+		$instance = $show;
+	}
+
+	return $instance;
+}
+add_filter( 'widget_display_callback', 'geodir_widget_display_callback', 10, 3 );

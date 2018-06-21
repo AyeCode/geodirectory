@@ -217,64 +217,64 @@ function geodir_sclistings_callback(){
 function geodir_sc_single_meta(){
     _deprecated_function( 'geodir_sc_single_meta', '2.0.0' );
 }
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
+
+/**
+ * @deprecated
+ */
+function geodir_bestof_places_by_term(){
+    _deprecated_function( 'geodir_bestof_places_by_term', '2.0.0' );
+}
+
+/**
+ * @deprecated
+ */
+function geodir_features_parse_image(){
+    _deprecated_function( 'geodir_features_parse_image', '2.0.0' );
+}
+
+/**
+ * @deprecated
+ */
+function geodir_features_parse_desc(){
+    _deprecated_function( 'geodir_features_parse_desc', '2.0.0' );
+}
+/**
+ * @deprecated
+ */
+function init_listing_map_script(){
+    _deprecated_function( 'init_listing_map_script', '2.0.0' );
+}
+/**
+ * @deprecated
+ */
+function create_list_jsondata(){
+    _deprecated_function( 'create_list_jsondata', '2.0.0' );
+}
+/**
+ * @deprecated
+ */
+function show_listing_widget_map(){
+    _deprecated_function( 'show_listing_widget_map', '2.0.0' );
+}
+
+/**
+ * @deprecated
+ */
+function (){
+    _deprecated_function( '', '2.0.0' );
+}
+
+/**
+ * @deprecated
+ */
+function (){
+    _deprecated_function( '', '2.0.0' );
+}
+
+/**
+ * @deprecated
+ */
+function (){
+    _deprecated_function( '', '2.0.0' );
+}
 

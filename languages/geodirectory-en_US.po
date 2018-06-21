@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoDirectory 2.0.0.0-dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-21 14:55+0100\n"
-"PO-Revision-Date: 2018-06-21 14:55+0100\n"
+"POT-Creation-Date: 2018-06-21 15:45+0100\n"
+"PO-Revision-Date: 2018-06-21 15:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1343,7 +1343,7 @@ msgid "CPT Add Listing"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:191
-#: includes/geodir-widget-functions.php:425
+#: includes/core-functions.php:512
 msgid "GD Pages"
 msgstr ""
 
@@ -1911,39 +1911,39 @@ msgid "The pages that should be included/excluded."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:117
-#: includes/geodir-widget-functions.php:427
+#: includes/core-functions.php:514
 msgid "Add Listing Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:118
-#: includes/geodir-widget-functions.php:428
+#: includes/core-functions.php:515
 msgid "Author Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:119
-#: includes/geodir-widget-functions.php:429
+#: includes/core-functions.php:516
 msgid "Listing Detail Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:120
-#: includes/geodir-widget-functions.php:432
+#: includes/core-functions.php:519
 msgid "Location Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:121
-#: includes/geodir-widget-functions.php:434
+#: includes/core-functions.php:521
 msgid "Post Type Archive"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:122
 #: includes/admin/settings/class-geodir-settings-general.php:244
 #: includes/api/class-geodir-rest-system-status-controller.php:830
-#: includes/geodir-widget-functions.php:435
+#: includes/core-functions.php:522
 msgid "Search Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:123
-#: includes/geodir-widget-functions.php:436
+#: includes/core-functions.php:523
 msgid "Taxonomies Page"
 msgstr ""
 
@@ -8983,6 +8983,18 @@ msgstr ""
 msgid "Please save the current setting before adding a new one."
 msgstr ""
 
+#: includes/core-functions.php:517
+msgid "Listing Preview Page"
+msgstr ""
+
+#: includes/core-functions.php:518
+msgid "Listing Success Page"
+msgstr ""
+
+#: includes/core-functions.php:520
+msgid "Login Page"
+msgstr ""
+
 #: includes/custom-fields/functions.php:180
 msgid "Auto Draft"
 msgstr ""
@@ -9171,7 +9183,7 @@ msgstr ""
 msgid "Me"
 msgstr ""
 
-#: includes/general_functions.php:1850 includes/geodir-widget-functions.php:185
+#: includes/general_functions.php:1850
 #: includes/widgets/class-geodir-widget-best-of.php:498
 #: includes/widgets/class-geodir-widget-listings.php:552
 msgid "View all"
@@ -9288,25 +9300,6 @@ msgstr ""
 #: includes/geodir-rest-functions.php:616
 #, php-format
 msgid "%1$s must be between %2$d (inclusive) and %3$d (inclusive)"
-msgstr ""
-
-#: includes/geodir-widget-functions.php:185
-#: includes/widgets/class-geodir-widget-best-of.php:201
-#: includes/widgets/class-geodir-widget-best-of.php:498
-#, php-format
-msgid "Best of %s"
-msgstr ""
-
-#: includes/geodir-widget-functions.php:430
-msgid "Listing Preview Page"
-msgstr ""
-
-#: includes/geodir-widget-functions.php:431
-msgid "Listing Success Page"
-msgstr ""
-
-#: includes/geodir-widget-functions.php:433
-msgid "Login Page"
 msgstr ""
 
 #: includes/geodirectory_hooks_actions.php:307
@@ -9915,6 +9908,12 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:98
 #: includes/widgets/class-geodir-widget-listings.php:178
 msgid "Use current viewing post type?"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-best-of.php:201
+#: includes/widgets/class-geodir-widget-best-of.php:498
+#, php-format
+msgid "Best of %s"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:389

@@ -257,7 +257,6 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-super-duper.php' );
 	    //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-country-database.php' );
 	    //$wp_country_database = new WP_Country_Database();
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-widget-functions.php' );
 
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_template_tags.php' );
