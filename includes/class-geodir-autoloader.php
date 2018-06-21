@@ -73,13 +73,11 @@ class GeoDir_Autoloader {
      */
     public function autoload( $class ) {
 
-       // echo '###'.$class." \n";
         $class = strtolower( $class );
 
         if ( 0 !== strpos( $class, 'geodir_' ) ) {
             return;
         }
-        //echo 'xxx'.$class." \n";;
 
         $file  = $this->get_file_name_from_class( $class );
         $path  = '';
@@ -93,9 +91,7 @@ class GeoDir_Autoloader {
         }elseif ( strpos( $class, 'geodir_settings' ) === 0 ) {
             $path = $this->include_path . 'admin/settings/';
         }
-
-        //echo '///'.$path.$file;
-
+        
         if ( empty( $path ) || ! $this->load_file( $path . $file ) ) {
             $this->load_file( $this->include_path . $file );
         }

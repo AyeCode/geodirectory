@@ -206,7 +206,7 @@ function geodir_get_search_default_near_text(){
  * @return string|void
  */
 function geodir_get_search_default_button_text(){
-    return __('#xf002;','geodirectory');
+    return __('fa-search','geodirectory');
 }
 
 

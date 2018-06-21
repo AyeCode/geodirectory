@@ -1,5 +1,7 @@
-v2.0.0.15-beta
+v2.0.0.15-rc
+Updated from font-awesome v4 to v5 - CHANGED
 Rest api route & endpoints for fields - ADDED
+priceRange custom field added and schema output added - ADDED
 Font Awesome & Popup maker raises Uncaught Error - FIXED
 
 v2.0.0.14-beta

@@ -86,7 +86,7 @@
     &.ui-sortable-handle{
       background: none !important;
     }
-    i.fa-caret-down,i.fa-caret-up{
+    .fa-caret-down,.fa-caret-up{
       position: absolute;
       right: 0;
       padding: 12px;
@@ -98,7 +98,7 @@
       font-weight: initial;
     }
     .dd-handle{
-      i.fa{
+      .fa{
         position: relative;
         padding: 0;
       }

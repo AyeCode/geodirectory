@@ -1518,6 +1518,11 @@ class GeoDir_Post_Data {
 		}
 		$schema['review'] = $reviews;
 
+		// PriceRange
+		if(!empty($gd_post->price_range)){
+			$schema['priceRange'] = esc_attr($gd_post->price_range);
+		}
+
 		/**
 		 * Allow the schema JSON-LD info to be filtered.
 		 *

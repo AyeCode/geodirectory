@@ -45,30 +45,6 @@ class GeoDir_Frontend_Scripts {
 		add_action( 'wp_print_footer_scripts', array( __CLASS__, 'localize_printed_scripts' ), 5 );
 	}
 
-	/**
-	 * Get styles for the frontend.
-	 *
-	 * @return array
-	 */
-	public static function get_styles() {
-		return apply_filters( 'geodir_enqueue_styles', array(
-			'geodirectory-smallscreen' => array(
-				'src'     => self::get_asset_url( 'assets/css/geodirectory-smallscreen.css' ),
-				'deps'    => 'geodirectory-media-queries',
-				'version' => GEODIRECTORY_VERSION,
-				'media'   => 'only screen and (max-width: ' . apply_filters( 'geodir_style_smallscreen_breakpoint', $breakpoint = '768px' ) . ')',
-				'has_rtl' => true,
-			),
-			'geodirectory-general' => array(
-				'src'     => self::get_asset_url( 'assets/css/geodirectory.css' ),
-				'deps'    => '',
-				'version' => GEODIRECTORY_VERSION,
-				'media'   => 'all',
-				'has_rtl' => true,
-			),
-		) );
-	}
-
     /**
      * Return protocol relative asset URL.
      *
@@ -207,16 +183,6 @@ class GeoDir_Frontend_Scripts {
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
-			'photoswipe' => array(
-				'src'     => self::get_asset_url( 'assets/js/photoswipe/photoswipe' . $suffix . '.js' ), // @todo we have not added this yet but lets :)
-				'deps'    => array(),
-				'version' => '4.1.1',
-			),
-			'photoswipe-ui-default'  => array(
-				'src'     => self::get_asset_url( 'assets/js/photoswipe/photoswipe-ui-default' . $suffix . '.js' ),// @todo we have not added this yet but lets :)
-				'deps'    => array( 'photoswipe' ),
-				'version' => '4.1.1',
-			),
 			'leaflet-routing-machine' => array(
 				'src'     =>  geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine' . $suffix . '.js',
 				'deps'    => array('geodir-leaflet'),
@@ -252,16 +218,6 @@ class GeoDir_Frontend_Scripts {
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
-			'geodir-post' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/post' . $suffix . '.js#asyncload',
-				'deps'    => array(),
-				'version' => GEODIRECTORY_VERSION,
-			),
-			'geodir-jquery-lightbox' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/jquery.lightbox-0.5' . $suffix . '.js',
-				'deps'    => array(),
-				'version' => GEODIRECTORY_VERSION,
-			),
 			'geodir-add-listing' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/add-listing' . $suffix . '.js',
 				'deps'    => array(),
@@ -272,16 +228,16 @@ class GeoDir_Frontend_Scripts {
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
-//			'' => array(
-//				'src'     => ,
-//				'deps'    => array(),
-//				'version' => GEODIRECTORY_VERSION,
-//			),
-//			'' => array(
-//				'src'     => ,
-//				'deps'    => array(),
-//				'version' => GEODIRECTORY_VERSION,
-//			),
+			'font-awesome' => array(
+				'src'     => 'https://use.fontawesome.com/releases/v5.0.13/js/all.js', //@todo these probably need to be loaded locally
+				'deps'    => array('font-awesome-shim'),
+				'version' => GEODIRECTORY_VERSION,
+			),
+			'font-awesome-shim' => array(
+				'src'     => 'https://use.fontawesome.com/releases/v5.0.13/js/v4-shims.js',
+				'deps'    => array(),
+				'version' => GEODIRECTORY_VERSION,
+			),
 		);
 		foreach ( $register_scripts as $name => $props ) {
 			self::register_script( $name, $props['src'], $props['deps'], $props['version'] );
@@ -295,18 +251,6 @@ class GeoDir_Frontend_Scripts {
 	 */
 	private static function register_styles() {
 		$register_styles = array(
-			'photoswipe' => array(
-				'src'     => self::get_asset_url( 'assets/css/photoswipe/photoswipe.css' ),// @todo we have not added this yet but lets :)
-				'deps'    => array(),
-				'version' => GEODIRECTORY_VERSION,
-				'has_rtl' => false,
-			),
-			'photoswipe-default-skin' => array(
-				'src'     => self::get_asset_url( 'assets/css/photoswipe/default-skin/default-skin.css' ),// @todo we have not added this yet but lets :)
-				'deps'    => array( 'photoswipe' ),
-				'version' => GEODIRECTORY_VERSION,
-				'has_rtl' => false,
-			),
 			'select2' => array(
 				'src'     =>  geodir_plugin_url() . '/assets/css/select2/select2.css',
 				'deps'    => array(),
@@ -315,12 +259,6 @@ class GeoDir_Frontend_Scripts {
 			),
 			'geodir-core' => array(
 				'src'     => geodir_plugin_url() . '/assets/css/gd_core_frontend.css',
-				'deps'    => array(),
-				'version' => GEODIRECTORY_VERSION,
-				'has_rtl' => false,
-			),
-			'font-awesome' => array(
-				'src'     => '//maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 				'has_rtl' => false,
@@ -343,25 +281,6 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 				'has_rtl' => false,
 			),
-//			'' => array(
-//				'src'     => ,
-//				'deps'    => array(),
-//				'version' => GEODIRECTORY_VERSION,
-//				'has_rtl' => false,
-//			),
-//			'' => array(
-//				'src'     => ,
-//				'deps'    => array(),
-//				'version' => GEODIRECTORY_VERSION,
-//				'has_rtl' => false,
-//			),
-//			'' => array(
-//				'src'     => ,
-//				'deps'    => array(),
-//				'version' => GEODIRECTORY_VERSION,
-//				'has_rtl' => false,
-//			),
-
 		);
 		foreach ( $register_styles as $name => $props ) {
 			self::register_style( $name, $props['src'], $props['deps'], $props['version'], 'all', $props['has_rtl'] );
@@ -376,54 +295,45 @@ class GeoDir_Frontend_Scripts {
 	public static function load_scripts() {
 		global $post;
 
-//		if ( ! did_action( 'before_geodir_init' ) ) {
-//			return;
-//		}
-
 		// register scripts/styles
 		self::register_scripts();
 		self::register_styles();
 
-		// geodir_params
-		//wp_localize_script('geodirectory', 'geodir_params', geodir_params()); //@todo we need to do this the nice way
-
-
-
-
-		// for add listing page only
-		self::enqueue_script( 'geodir-plupload' );
-		self::enqueue_script( 'geodir-add-listing' );
-
-
-		// detals page
-		
-
-
-
+		// global enqueues
+		// css
 		self::enqueue_style( 'select2' );
+		self::enqueue_style( 'geodir-core' );
+		// js
+		self::enqueue_script( 'font-awesome' );
 		self::enqueue_script( 'select2' );
 		self::enqueue_script( 'geodir-select2' );
-		
-		self::enqueue_script( 'geodir-jquery-ui-timepicker' );
+		self::enqueue_script( 'geodir' );
+		self::enqueue_script( 'geodir_lity' );
 
-		self::enqueue_style( 'geodir-core' );
-		self::enqueue_style( 'font-awesome' );
+
+		//rtl
 		if(is_rtl()){
 			self::enqueue_style( 'geodir-rtl' );
 		}
 
 
-		self::enqueue_script( 'geodir' );
-		self::enqueue_script( 'geodir_lity' );
-		self::enqueue_script( 'jquery-flexslider' );
+		// add-listing
+		if(geodir_is_page('add-listing')){
+			self::enqueue_script( 'geodir-plupload' );
+			self::enqueue_script( 'geodir-add-listing' );
+			self::enqueue_script( 'geodir-jquery-ui-timepicker' );
 
-		// Details only?
-		self::enqueue_script( 'geodir-post' );
-		//self::enqueue_script( 'geodir-jquery-lightbox' );
+			wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
+
+		}
+
+		// details page
+		if(geodir_is_page('single')){
+			self::enqueue_script( 'jquery-flexslider' );
+		}
 
 
-		// Map stuff
-		// add maps if needed
+		// Maps
 		$geodir_map_name = geodir_map_name();
 		if (in_array($geodir_map_name, array('auto', 'google'))) {
 			self::enqueue_script('geodir-google-maps');
@@ -437,10 +347,11 @@ class GeoDir_Frontend_Scripts {
 			self::enqueue_script('leaflet-routing-machine');
 			self::enqueue_script('geodir-o-overlappingmarker');
 		}
-		wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
-		wp_enqueue_script( 'geodir-goMap' );
+		if($geodir_map_name!='none'){
+			wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
+			wp_enqueue_script( 'geodir-goMap' );
+		}
 
-		wp_enqueue_script( 'jquery-ui-autocomplete' );
 	}
 
 	/**

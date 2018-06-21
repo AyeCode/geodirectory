@@ -281,7 +281,7 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
                 if ($cf['name'] == 'geodir_facebook') {
                     $field_icon_af = '<i class="fa fa-facebook-square"></i>';
                 } elseif ($cf['name'] == 'geodir_twitter') {
-                    $field_icon_af = '<i class="fa fa-twitter-square"></i>';
+                    $field_icon_af = '<i class="fab fa-twitter-square"></i>';
                 } else {
                     $field_icon_af = '<i class="fa fa-link"></i>';
                 }

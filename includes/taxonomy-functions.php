@@ -10,85 +10,83 @@
  */
 
 
-if (!function_exists('geodir_get_taxonomies')) {
-    /**
-     * Get all custom taxonomies.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     * @param string $post_type The post type.
-     * @param bool $tages_taxonomies Is this a tag taxonomy?. Default: false.
-     * @return array|bool Taxonomies on success. false on failure.
-     */
-    function geodir_get_taxonomies($post_type = '', $tages_taxonomies = false)
-    {
+/**
+ * Get all custom taxonomies.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $post_type The post type.
+ * @param bool $tages_taxonomies Is this a tag taxonomy?. Default: false.
+ * @return array|bool Taxonomies on success. false on failure.
+ */
+function geodir_get_taxonomies($post_type = '', $tages_taxonomies = false)
+{
 
-        $taxonomies = array();
-        $gd_taxonomies = array();
+    $taxonomies = array();
+    $gd_taxonomies = array();
 
-        if ($taxonomies = geodir_get_option('taxonomies')) {
-
-
-            $gd_taxonomies = array_keys($taxonomies);
+    if ($taxonomies = geodir_get_option('taxonomies')) {
 
 
-            if ($post_type != '')
-                $gd_taxonomies = array();
+        $gd_taxonomies = array_keys($taxonomies);
 
-            $i = 0;
-            foreach ($taxonomies as $taxonomy => $args) {
 
-                if ($post_type != '' && $args['object_type'] == $post_type)
-                    $gd_taxonomies[] = $taxonomy;
+        if ($post_type != '')
+            $gd_taxonomies = array();
 
-                if ($tages_taxonomies === false && strpos($taxonomy, '_tag') !== false) {
-                    if (array_search($taxonomy, $gd_taxonomies) !== false)
-                        unset($gd_taxonomies[array_search($taxonomy, $gd_taxonomies)]);
-                }
+        $i = 0;
+        foreach ($taxonomies as $taxonomy => $args) {
 
+            if ($post_type != '' && $args['object_type'] == $post_type)
+                $gd_taxonomies[] = $taxonomy;
+
+            if ($tages_taxonomies === false && strpos($taxonomy, '_tag') !== false) {
+                if (array_search($taxonomy, $gd_taxonomies) !== false)
+                    unset($gd_taxonomies[array_search($taxonomy, $gd_taxonomies)]);
             }
 
-            $gd_taxonomies = array_values($gd_taxonomies);
         }
 
-        /**
-         * Filter the taxonomies.
-         *
-         * @since 1.0.0
-         * @param array $gd_taxonomies The taxonomy array.
-         */
-        $taxonomies = apply_filters('geodir_taxonomy', $gd_taxonomies);
-
-        if (!empty($taxonomies)) {
-            return $taxonomies;
-        } else {
-            return false;
-        }
+        $gd_taxonomies = array_values($gd_taxonomies);
     }
-}
 
-if (!function_exists(' geodir_get_categories_dl')) {
     /**
-     * Get categories dropdown HTML.
+     * Filter the taxonomies.
      *
      * @since 1.0.0
-     * @package GeoDirectory
-     * @param string $post_type The post type.
-     * @param string $selected The selected value.
-     * @param bool $tages_taxonomies Is this a tag taxonomy?. Default: false.
-     * @param bool $echo Prints the HTML when set to true. Default: true.
-     * @return void|string Dropdown HTML.
+     * @param array $gd_taxonomies The taxonomy array.
      */
-    function  geodir_get_categories_dl($post_type = '', $selected = '', $is_tags = false, $echo = true)
-    {
+    $taxonomies = apply_filters('geodir_taxonomy', $gd_taxonomies);
 
-        $tax = new GeoDir_Admin_Taxonomies();
-        $html = $tax->get_category_select($post_type, $selected, $is_tags , $echo);
-
-        if (!$echo)
-            return $html;
+    if (!empty($taxonomies)) {
+        return $taxonomies;
+    } else {
+        return false;
     }
 }
+
+
+/**
+ * Get categories dropdown HTML.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $post_type The post type.
+ * @param string $selected The selected value.
+ * @param bool $tages_taxonomies Is this a tag taxonomy?. Default: false.
+ * @param bool $echo Prints the HTML when set to true. Default: true.
+ * @return void|string Dropdown HTML.
+ */
+function  geodir_get_categories_dl($post_type = '', $selected = '', $is_tags = false, $echo = true)
+{
+
+    $tax = new GeoDir_Admin_Taxonomies();
+    $html = $tax->get_category_select($post_type, $selected, $is_tags , $echo);
+
+    if (!$echo)
+        return $html;
+}
+
 
 
 /**
@@ -246,126 +244,6 @@ if (!function_exists('geodir_custom_taxonomy_walker')) {
             return $out;
         }
         return;
-    }
-}
-
-
-/**
- * Category Selection Interface in add/edit listing form.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $request_taxonomy The taxonomy name.
- * @param int $parrent The parent term ID.
- * @param bool|string $selected The selected value.
- * @param bool $main_selected Not yet implemented.
- * @param bool $default Is this the default category? Default: false.
- * @param string $exclude Excluded terms list. Serialized base64 encoded string.
- */
-function geodir_addpost_categories_html($request_taxonomy, $parrent, $selected = false, $main_selected = true, $default = false, $exclude = '')
-{
-    global $exclude_cats;
-
-    if ($exclude != '') {
-        $exclude_cats = maybe_unserialize(base64_decode($exclude));
-
-        if(is_array( $exclude_cats)){
-            $exclude_cats = array_map( 'intval', $exclude_cats );
-        }else{
-            $exclude_cats = intval($exclude_cats);
-        }
-
-    }
-
-    if ((is_array($exclude_cats) && !empty($exclude_cats) && !in_array($parrent, $exclude_cats)) ||
-        (!is_array($exclude_cats) || empty($exclude_cats))
-    ) {
-        ?>
-
-        <?php $main_cat = get_term($parrent, $request_taxonomy); ?>
-
-        <div class="post_catlist_item">
-            <span class="gd-catlist-remove" onclick="jQuery(this).closest('div').remove();update_listing_cat(this);"><i class="fa fa-times"></i></span>
-            <div class="gd-catlist-chkbox gd-catlist-row">
-                <input type="checkbox" value="<?php echo $main_cat->term_id;?>" class="listing_main_cat" onchange="if(jQuery(this).is(':checked')){jQuery(this).closest('div').find('.post_default_category').prop('checked',false).show();}else{jQuery(this).closest('div').find('.post_default_category').prop('checked',false).hide();};update_listing_cat()" checked="checked" disabled="disabled"/> 
-                <span> <?php printf(__('Add listing in %s category', 'geodirectory'), geodir_ucwords($main_cat->name));?></span>
-            </div>
-            <div class="post_default_category gd-catlist-row">
-                <input id="post_default_category" type="radio" name="post_default_category" value="<?php echo $main_cat->term_id;?>" onchange="update_listing_cat()" <?php if ($default) echo ' checked="checked" ';?> /> 
-                <span><?php printf(__('Set %s as default category', 'geodirectory'), geodir_ucwords($main_cat->name));?> </span>
-            </div>
-            <?php
-            $cat_terms = get_terms($request_taxonomy, array('parent' => $main_cat->term_id, 'hide_empty' => false, 'exclude' => $exclude_cats));
-            if (!empty($cat_terms)) { ?>
-                <div class="gd-catlist-subcatlist gd-catlist-row">
-                    <span> <?php printf(__('Add listing in category', 'geodirectory')); ?></span>
-                    <?php geodir_get_catlist($request_taxonomy, $parrent, $selected) ?>
-                </div>
-            <?php } ?>
-        </div>
-
-    <?php }
-}
-
-
-/**
- * Categories HTML for edit post page.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $request_taxonomy The taxonomy ID.
- * @param int $request_postid The post ID.
- * @param array $post_categories The post catagories.
- */
-function geodir_editpost_categories_html($request_taxonomy, $request_postid, $post_categories)
-{
-
-    if (!empty($post_categories) && array_key_exists($request_taxonomy, $post_categories)) {
-        $post_cat_str = $post_categories[$request_taxonomy];
-        $post_cat_array = explode("#", $post_cat_str);
-        if (is_array($post_cat_array)) {
-            $post_cat_array = array_unique( $post_cat_array );
-
-			foreach ($post_cat_array as $post_cat_html) {
-
-                $post_cat_info = explode(":", $post_cat_html);
-                $post_maincat_str = $post_cat_info[0];
-
-                if (!empty($post_maincat_str)) {
-                    $post_maincat_info = explode(",", $post_maincat_str);
-                    $post_maincat_id = $post_maincat_info[0];
-                    ($post_maincat_info[1] == 'y') ? $post_maincat_selected = true : $post_maincat_selected = false;
-                    (end($post_maincat_info) == 'd') ? $post_maincat_default = true : $post_maincat_default = false;
-                }
-                $post_sub_catid = '';
-                if (isset($post_cat_info[1]) && !empty($post_cat_info[1])) {
-                    $post_sub_catid = (int)$post_cat_info[1];
-                }
-
-                geodir_addpost_categories_html($request_taxonomy, $post_maincat_id, $post_sub_catid, $post_maincat_selected, $post_maincat_default);
-
-            }
-        } else {
-
-            $post_cat_info = explode(":", $post_cat_str);
-            $post_maincat_str = $post_cat_info[0];
-
-            $post_sub_catid = '';
-
-            if (!empty($post_maincat_str)) {
-                $post_maincat_info = explode(",", $post_maincat_str);
-                $post_maincat_id = $post_maincat_info[0];
-                ($post_maincat_info[1] == 'y') ? $post_maincat_selected = true : $post_maincat_selected = false;
-                (end($post_maincat_info) == 'd') ? $post_maincat_default = true : $post_maincat_default = false;
-            }
-
-            if (isset($post_cat_info[1]) && !empty($post_cat_info[1])) {
-                $post_sub_catid = (int)$post_cat_info[1];
-            }
-
-            geodir_addpost_categories_html($request_taxonomy, $post_maincat_id, $post_sub_catid, $post_maincat_selected, $post_maincat_default);
-
-        }
     }
 }
 

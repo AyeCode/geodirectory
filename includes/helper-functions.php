@@ -1578,3 +1578,40 @@ function geodir_array_splice_assoc( $input, $offset, $length, $replacement ) {
 
 	return $input;
 }
+
+/**
+ * Get the post type categories as an array of options.
+ *
+ * @param string $post_type
+ *
+ * @return array
+ */
+function geodir_category_options( $post_type = 'gd_place' ){
+	// check for cache
+	$cache = wp_cache_get( "gd_category_options_".$post_type, 'gd_category_options' );
+	if($cache){
+		return $cache;
+	}
+
+	$options    = array(
+		'0' => __( 'All', 'geodirectory' )
+	);
+	$post_types = geodir_get_posttypes();
+
+	if ( ! in_array( $post_type, $post_types ) ) {
+		$post_type = 'gd_place';
+	}
+
+	$terms = get_terms( array( 'taxonomy' => $post_type . 'category', 'orderby' => 'count', 'order' => 'DESC' ) );
+
+	if ( ! is_wp_error( $terms ) ) {
+		foreach ( $terms as $term ) {
+			$options[ $term->term_id ] = geodir_utf8_ucfirst( $term->name );
+		}
+	}
+
+	// set cache
+	wp_cache_set( "gd_category_options_".$post_type, $options, 'gd_category_options' );
+
+	return $options;
+}

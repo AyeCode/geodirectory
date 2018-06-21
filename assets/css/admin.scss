@@ -412,8 +412,11 @@ div.update-nag{width: 95%;}
 .gd-locate-me .gd-locate-me-btn:hover {
     color: #333!important;
 }
-.gd-locate-me .gd-locate-me-btn .fa {
-    font-size: 150%!important;
+.gd-locate-me .gd-locate-me-btn,
+.gd-locate-me .gd-locate-me-btn svg.svg-inline--fa,
+.gd-locate-me .gd-locate-me-btn .fa,
+.gd-locate-me .gd-locate-me-btn .fa-crosshairs{
+    font-size: 150% !important;
 }
 .wp-list-table .column-cat_default_img,
 .wp-list-table .column-cat_ID_num {

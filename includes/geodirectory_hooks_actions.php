@@ -55,52 +55,10 @@ global $geodir_addon_list;
  */
 apply_filters('geodir_build_addon_list', $geodir_addon_list);
 
-//add_action('wp_ajax_geodir_ajax_action', "geodir_ajax_handler");
-
-//add_action('wp_ajax_nopriv_geodir_ajax_action', 'geodir_ajax_handler');
-
-/* Pluploader */
-//add_action('wp_ajax_plupload_action', "geodir_plupload_action");
-//
-//add_action('wp_ajax_nopriv_plupload_action', 'geodir_plupload_action'); // call for not logged in ajax
-
-////////////////////////
-/* REWRITE RULES */
-////////////////////////
-
-//add_filter('rewrite_rules_array', 'geodir_listing_rewrite_rules');
-
-////////////////////////
-/* QUERY VARS */
-////////////////////////
-
-//add_filter('query_vars', 'geodir_add_location_var');
-//add_filter('query_vars', 'geodir_add_geodir_page_var');
-//add_action('wp', 'geodir_add_page_id_in_query_var'); // problem fix in wordpress 3.8
-//if (geodir_get_option('permalink_structure') != '')
-//add_filter('parse_request', 'geodir_set_location_var_in_session_in_core');
-//add_filter('parse_request', 'geodir_set_is_geodir_page');
-
-//add_filter('parse_query', 'geodir_modified_query');
-
-
-////////////////////////
-/* ON WP LOAD ACTIONS */
-////////////////////////
-
-//add_action( 'wp_loaded','geodir_flush_rewrite_rules' );
-add_action('wp_loaded', 'geodir_on_wp_loaded', 10); // todo details page forms, we need to change this to proper ajax
-
-//add_action('wp', 'geodir_on_wp', 10);
-
 
 /////////////////////////////
 /* ON WP HEAD ACTIONS */
 /////////////////////////////
-
-
-
-// add_action('admin_head', 'geodir_header_scripts'); // Removed since 1.5.0
 
 add_action('wp_head', 'geodir_init_map_jason'); // Related to MAP
 
@@ -108,26 +66,14 @@ add_action('wp_head', 'geodir_init_map_canvas_array'); // Related to MAP
 
 add_action('wp_head', 'geodir_restrict_widget'); // Related to widgets
 
-//////////////////////////////
-/* ENQUEUE SCRIPTS AND STYLES */
-//////////////////////////////
-
-//add_action('wp_enqueue_scripts', 'geodir_templates_scripts');
-
-//add_action('wp_enqueue_scripts', 'geodir_templates_styles', 8);
-
 
 /////////////////////////
 /* CATEGORY / TAXONOMY / CUSTOM POST ACTIONS */
 /////////////////////////
 
-//add_action('edited_term','geodir_update_markers_oncatedit',10,3);
-
 add_filter('term_link', 'geodir_get_term_link', 10, 3);
 
 add_filter('post_type_archive_link', 'geodir_get_posttype_link', 10, 2);
-
-//add_filter('post_type_link', 'geodir_listing_permalink_structure', 10, 4);
 
 ////////////////////////
 /* POST AND LOOP ACTIONS */

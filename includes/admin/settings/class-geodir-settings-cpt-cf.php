@@ -648,7 +648,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['twitter'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'url',
 				'class'       => 'gd-twitter',
-				'icon'        => 'fa fa-twitter',
+				'icon'        => 'fab fa-twitter',
 				'name'        => __( 'Twitter', 'geodirectory' ),
 				'description' => __( 'Adds a twitter url input. This can be used by other plugins if the htmlvar remains `twitter`.', 'geodirectory' ),
 				'defaults'    => array(
@@ -666,7 +666,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-twitter',
+					'field_icon'         => 'fab fa-twitter',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false
@@ -825,6 +825,35 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 						'currency_symbol'           => '$',
 						'currency_symbol_placement' => 'left'
 					)
+				)
+			);
+
+			// price rage (used as priceRange schema)
+			$custom_fields['price_range'] = array( // The key value should be unique and not contain any spaces.
+				'field_type'  => 'select',
+				'class'       => 'gd-price-range',
+				'icon'        => 'fa fa-usd',
+				'name'        => __( 'Price Range', 'geodirectory' ),
+				'description' => __( 'Adds a schema price range input.', 'geodirectory' ),
+				'defaults'    => array(
+					'data_type'          => 'VARCHAR',
+					'admin_title'        => 'Price Range',
+					'frontend_title'     => 'Price Range',
+					'frontend_desc'      => 'Enter the price range for the business.',
+					'htmlvar_name'       => 'price_range',
+					'is_active'          => true,
+					'for_admin_use'      => false,
+					'default_value'      => '',
+					'show_in'            => '[detail],[listing]',
+					'is_required'        => false,
+					'option_values'      => __( 'Select Price Range/', 'geodirectory' ).',$,$$,$$$,$$$$',
+					'validation_pattern' => '',
+					'validation_msg'     => '',
+					'required_msg'       => '',
+					'field_icon'         => 'fa fa-usd',
+					'css_class'          => '',
+					'cat_sort'           => true,
+					'cat_filter'         => true
 				)
 			);
 
@@ -1034,7 +1063,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['twitter_feed'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'text',
 				'class'       => 'gd-twitter',
-				'icon'        => 'fa fa-twitter',
+				'icon'        => 'fab fa-twitter',
 				'name'        => __( 'Twitter feed', 'geodirectory' ),
 				'description' => __( 'Adds a input for twitter username and outputs feed.', 'geodirectory' ),
 				'defaults'    => array(
@@ -1051,7 +1080,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '^[A-Za-z0-9_]{1,32}$',
 					'validation_msg'     => 'Please enter a valid twitter username.',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-twitter',
+					'field_icon'         => 'fab fa-twitter',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false

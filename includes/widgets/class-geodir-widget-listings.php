@@ -614,28 +614,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @return array $options.s
      */
     public function get_categories($post_type = 'gd_place'){
-        $options = array(
-            '0'     => __('All', 'geodirectory')
-        );
-        $all_postypes = geodir_get_posttypes();
-
-        if (!in_array($post_type, $all_postypes))
-            $post_type = 'gd_place';
-
-
-        $category_taxonomy = geodir_get_taxonomies($post_type);
-        $categories = get_terms($category_taxonomy[0], array('orderby' => 'count', 'order' => 'DESC','hide_empty' => false));
-
-
-        if(!is_wp_error( $categories )){
-            foreach ($categories as $category_obj) {
-
-                $options[$category_obj->term_id] = geodir_utf8_ucfirst($category_obj->name);
-            }
-        }
-
-
-        return $options;
+	    return geodir_category_options($post_type);
     }
 
     /**
