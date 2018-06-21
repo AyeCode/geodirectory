@@ -619,7 +619,8 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				<p class="gd-advanced-setting" <?php echo $hide_cat_sort; ?>>
 					<label for="cat_sort" class="dd-setting-name">
 						<?php
-						$css_class_tool_tip = __( 'Lets you use this field as a sorting option, set from sorting options above.', 'geodirectory' );
+						$tool_tip = __( 'Lets you use this field as a sorting option, set from sorting options above.', 'geodirectory' );
+						echo geodir_help_tip( $tool_tip );
 						_e( 'Include this field in sorting options', 'geodirectory' ); ?>
 						<input type="hidden" name="cat_sort" value="0" />
 						<input type="checkbox" name="cat_sort" value="1" <?php checked( $value, 1, true );?> />
@@ -627,6 +628,8 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				</p>
 				<?php
 			}
+
+			do_action( 'geodir_cfa_before_extra_fields', $cf, $field );
 
 			// extra_fields
 			if ( has_filter( "geodir_cfa_extra_fields_{$field->field_type}" ) ) {
