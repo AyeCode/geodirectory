@@ -123,7 +123,66 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		 */
 		extract($args, EXTR_SKIP);
 
-		return geodir_sc_single_meta( $args, $content = '' );
+		global $post;
+
+		$original_id = isset($atts['id']) ? $atts['id'] : '';
+		$atts['location'] = !empty($atts['location']) ? $atts['location'] : 'none';
+		$output = '';
+		$atts = shortcode_atts( array(
+			'id'    => $post->ID,
+			'key'    => '', // the meta key : email
+			'show'    => '', // title,value (default blank, all)
+			'alignment'    => '', // left,right,center
+			'location'  => 'none',
+		), $atts, 'gd_post_meta' );
+		$atts['id'] = !empty($atts['id']) ? $atts['id'] : $post->ID;
+
+		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($atts['id']);
+
+
+		// print_r($atts);
+		// error checks
+		$errors = array();
+		if(empty($atts['key'])){$errors[] = __('key is missing','geodirectory');}
+		if(empty($atts['id'])){$errors[] = __('id is missing','geodirectory');}
+		if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
+
+		if(!empty($errors)){
+			$output .= implode(", ",$errors);
+		}
+
+		// check if its demo content
+		if($post_type == 'page' && !empty($atts['id']) && geodir_is_block_demo()){
+			$post_type = 'gd_place';
+		}
+
+		if(geodir_is_gd_post_type($post_type)){ //echo '###2';
+			$fields = geodir_post_custom_fields('',  'all', $post_type , 'none');
+
+			if(!empty($fields)){
+				$field = array();
+				foreach($fields as $field_info){
+					if($atts['key']==$field_info['htmlvar_name']){
+						$field = $field_info;
+					}
+				}
+				if(!empty($field)){
+					if($atts['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
+					if($atts['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
+					if($atts['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
+					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id'],$atts['show']);
+
+					if($field['name']=='post_content'){
+						//$output = wp_strip_all_tags($output);
+					}
+
+				}else{
+					//$output = __('Key does not exist','geodirectory');
+				}
+			}
+		}
+		
+		return $output;
 
 	}
 
