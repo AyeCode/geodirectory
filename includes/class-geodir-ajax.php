@@ -126,9 +126,7 @@ class GeoDir_AJAX {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-
-		//print_r($_REQUEST);exit;
-
+		
 		$tab_id = isset($_POST['tab_id']) && $_POST['tab_id'] ? absint($_POST['tab_id']) : '';
 
 		if(!$tab_id){
@@ -159,8 +157,6 @@ class GeoDir_AJAX {
 			wp_die( -1 );
 		}
 
-		//print_r($_REQUEST);exit;
-
 		$tabs = isset($_POST['tabs']) && $_POST['tabs'] ? $_POST['tabs'] : '';
 
 		if(!$tabs){
@@ -190,8 +186,6 @@ class GeoDir_AJAX {
 			wp_die( -1 );
 		}
 
-		//print_r($_REQUEST);exit;
-
 		$tab_type = isset($_POST['tab_type']) && $_POST['tab_type'] ? esc_attr($_POST['tab_type']) : '';
 
 		if(!$tab_type){
@@ -220,8 +214,6 @@ class GeoDir_AJAX {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-
-		//print_r($_REQUEST);exit;
 
 		$tab_type = isset($_POST['tab_type']) && $_POST['tab_type'] ? esc_attr($_POST['tab_type']) : '';
 
@@ -271,9 +263,7 @@ class GeoDir_AJAX {
 		wp_head();
 		echo "<style>body { background: #fff;padding: 20px 50px;}</style>";
 		echo '</head><body>';
-		//echo "<div class='lity-show'>";
 		echo do_shortcode( "[ninja_form id=$form_id]" );
-		//echo "</div>";
 		wp_footer();
 		echo '</body></html>';
 		wp_die();
@@ -293,18 +283,13 @@ class GeoDir_AJAX {
 
 		$menu_id = isset($_REQUEST['menu_id']) ?  sanitize_title_with_dashes($_REQUEST['menu_id']) : '';
 		$menu_location = isset($_REQUEST['menu_location']) ?  sanitize_title_with_dashes($_REQUEST['menu_location']) : '';
-
-		
 		$result = GeoDir_Admin_Dummy_Data::setup_menu( $menu_id, $menu_location);
 
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
-			//wp_send_json($result);
 			wp_send_json_success($result);
 		}
-
-		//GeoDir_Widget_Best_Of::best_of(array(), $_REQUEST);
 
 		wp_die();
 	}
@@ -323,17 +308,13 @@ class GeoDir_AJAX {
 
 		$sidebar_id = isset($_REQUEST['sidebar_id']) ?  sanitize_title_with_dashes($_REQUEST['sidebar_id']) : '';
 
-		//print_r($_REQUEST);exit;
 		$result = GeoDir_Admin_Dummy_Data::insert_widgets( $sidebar_id);
 
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
-			//wp_send_json($result);
 			wp_send_json_success($result);
 		}
-
-		//GeoDir_Widget_Best_Of::best_of(array(), $_REQUEST);
 
 		wp_die();
 	}
@@ -344,7 +325,6 @@ class GeoDir_AJAX {
      * @since 2.0.0
 	 */
 	public static function bestof(){
-		//print_r($_REQUEST);exit;
 		// security
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
@@ -373,7 +353,6 @@ class GeoDir_AJAX {
      * @since 2.0.0
 	 */
 	public static function user_delete_post(){
-		//print_r($_REQUEST);exit;
 		// security
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
@@ -414,7 +393,6 @@ class GeoDir_AJAX {
 			wp_send_json_error( $result['error'] );
 		}else{
 			wp_send_json($result);
-			//wp_send_json_success($result);
 		}
 
 		wp_die();
@@ -426,7 +404,6 @@ class GeoDir_AJAX {
      * @since 2.0.0
 	 */
 	public static function auto_save_post(){
-		//print_r($_REQUEST);exit;
 		// security
 		check_ajax_referer( 'geodir-save-post', 'security' );
 
@@ -448,7 +425,6 @@ class GeoDir_AJAX {
      *
 	 */
 	public static function delete_revision(){
-		//print_r($_REQUEST);exit;
 		// security
 		check_ajax_referer( 'geodir-save-post', 'security' );
 
@@ -526,7 +502,6 @@ class GeoDir_AJAX {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-		//print_r($_REQUEST);exit;
 		$selected = isset($_REQUEST['selected']) ? $_REQUEST['selected'] : '';
 		$tax = new GeoDir_Admin_Taxonomies();
 		$tax->get_category_select($_REQUEST['post_type'], $selected, false, true);
@@ -568,8 +543,6 @@ class GeoDir_AJAX {
 		// security
 		check_ajax_referer( 'geodir_attachment_upload', '_ajax_nonce' );
 		
-		//echo '###';
-		//GeoDir_Media::post_image_upload();
 		GeoDir_Media::post_attachment_upload();
 		wp_die();
 	}
@@ -594,7 +567,6 @@ class GeoDir_AJAX {
 			wp_send_json_success();
 		}
 
-		//print_r($_REQUEST);
 		wp_die();
 	}
 
@@ -609,7 +581,7 @@ class GeoDir_AJAX {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-		//print_r($_REQUEST);exit;
+
 		$result = GeoDir_Admin_Dummy_Data::delete_dummy_posts( $_REQUEST['post_type'] );
 
 		if(is_wp_error( $result ) ){
@@ -618,7 +590,6 @@ class GeoDir_AJAX {
 			wp_send_json_success();
 		}
 
-		//print_r($_REQUEST);
 		wp_die();
 	}
 
@@ -634,8 +605,6 @@ class GeoDir_AJAX {
 			wp_die( -1 );
 		}
 
-		//include( dirname( __FILE__ ) . '/admin/settings/class-geodir-settings-page.php' );
-		//include( dirname( __FILE__ ) . '/admin/settings/class-geodir-settings-cpt-cf.php' );
 		$cfs = new GeoDir_Settings_Cpt_Cf();
 
 		$field = new stdClass();
@@ -666,19 +635,15 @@ class GeoDir_AJAX {
 			wp_send_json_error( $result->get_error_message() );
 		}else{
 
-			//print_r($result);
 			global $wpdb;
 			$fields = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE id = %d OR tab_parent = %d ORDER BY sort_order ASC", array( $result, $result ) ) );
-//echo '###'.$result;
-//			print_r($fields);
-//			loop_fields_output($tabs,$tab_id = '')
-
 			$cfs = new GeoDir_Settings_Cpt_Sorting();
 			if(count($fields) > 1){
 				echo $cfs->loop_fields_output($fields);
 			}else{
 				echo $cfs->output_custom_field_setting_item($result);
 			}
+
 		}
 		wp_die();
 	}
@@ -690,14 +655,11 @@ class GeoDir_AJAX {
 	 */
 	public static function delete_custom_sort_field(){
 		// security
-		//print_r($_REQUEST);
 		$field_id = absint($_REQUEST['field_id']);
 		check_ajax_referer( 'custom_fields_'.$field_id, 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-
-		//print_r($_REQUEST);
 
 		$cfs = new GeoDir_Settings_Cpt_Sorting();
 		$result = $cfs->delete_custom_field($field_id);
@@ -743,14 +705,11 @@ class GeoDir_AJAX {
 	 */
 	public static function delete_custom_field(){
 		// security
-		//print_r($_REQUEST);
 		$field_id = absint($_REQUEST['field_id']);
 		check_ajax_referer( 'custom_fields_'.$field_id, 'security' );
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( -1 );
 		}
-
-		//print_r($_REQUEST);
 
 		$cfs = new GeoDir_Settings_Cpt_Cf();
 		$result = $cfs->delete_custom_field($field_id);
@@ -1038,5 +997,3 @@ class GeoDir_AJAX {
 		return $results;
 	}	
 }
-
-

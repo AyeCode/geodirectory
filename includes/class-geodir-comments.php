@@ -796,6 +796,12 @@ class GeoDir_Comments {
 	public static function get_post_review_count_total( $post_id = 0 ) {
 		global $wpdb;
 
+		// check for cache
+		$cache = wp_cache_get( "gd_post_review_count_total_".$post_id, 'gd_post_review_count_total' );
+		if($cache){
+			return $cache;
+		}
+
 		$results = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(r.rating) FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN {$wpdb->comments} AS cmt ON cmt.comment_ID = r.comment_id WHERE r.post_id = %d AND cmt.comment_approved = '1' AND r.rating > 0",
@@ -804,6 +810,8 @@ class GeoDir_Comments {
 		);
 
 		if ( ! empty( $results ) ) {
+			// set cache
+			wp_cache_set( "gd_post_review_count_total_".$post_id, $results, 'gd_post_review_count_total' );
 			return $results;
 		} else {
 			return false;
@@ -825,15 +833,24 @@ class GeoDir_Comments {
 	public static function get_comment_rating( $comment_id = 0 ) {
 		global $wpdb;
 
-		$reatings = $wpdb->get_var(
+		// check for cache
+		$cache = wp_cache_get( "gd_comment_rating_".$comment_id, 'gd_comment_rating' );
+		if($cache){
+			return $cache;
+		}
+
+		$ratings = $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT rating FROM " . GEODIR_REVIEW_TABLE . " WHERE comment_id = %d",
 				array( $comment_id )
 			)
 		);
 
-		if ( $reatings ) {
-			return $reatings;
+		if ( $ratings ) {
+			// set cache
+			wp_cache_set( "gd_comment_rating_".$comment_id, $ratings, 'gd_comment_rating' );
+
+			return $ratings;
 		} else {
 			return false;
 		}

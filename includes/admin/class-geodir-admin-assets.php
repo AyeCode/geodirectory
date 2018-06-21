@@ -44,18 +44,12 @@ class GeoDir_Admin_Assets {
 		wp_register_style('geodir-jquery-ui-css', geodir_plugin_url() . '/assets/css/jquery-ui.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-pluplodar-css', geodir_plugin_url() . '/assets/css/pluploader.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-rtl-style', geodir_plugin_url() . '/assets/css/rtl.css', array(), GEODIRECTORY_VERSION);
-		wp_register_style('font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-leaflet-routing-style', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-leaflet-style', geodir_plugin_url() . '/assets/leaflet/leaflet.css', array(), GEODIRECTORY_VERSION);
 
-		// this should be everywhere
-		wp_enqueue_style('font-awesome');
 
 		// load rating scripts on comments & dashboard page.
 		if($screen_id == 'comment' || $screen_id == 'edit-comments' || $screen_id == 'dashboard'){
-			if(geodir_get_option('rating_type')=='font-awesome') {
-				wp_enqueue_style('font-awesome');
-			}
 			wp_enqueue_style('geodir-admin-css');
 		}
 
@@ -73,7 +67,6 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_style( 'geodir-jquery-ui-timepicker-css' );
 			wp_enqueue_style( 'geodir-jquery-ui-css' );
 			wp_enqueue_style( 'wp-color-picker' );
-			wp_enqueue_style( 'font-awesome' );
 			wp_enqueue_style( 'geodir-pluplodar-css');
 			wp_enqueue_style( 'geodir-rtl-style');
 
@@ -145,6 +138,11 @@ class GeoDir_Admin_Assets {
 		wp_register_script('geodir-leaflet-routing-script', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-lity', geodir_plugin_url() . '/assets/js/libraries/gd_lity'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-nestable-script', geodir_plugin_url() . '/assets/js/libraries/jquery.nestable'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
+		wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.0.13/js/all.js', array('font-awesome-shim'), GEODIRECTORY_VERSION);
+		wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.0.13/js/v4-shims.js', array(), GEODIRECTORY_VERSION);
+
+		// this should be everywhere
+		wp_enqueue_script( 'font-awesome' );
 
 		if ( $page == 'geodirectory' ) {
 			wp_register_script( 'raphael', '//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js', array('jquery'), '2.1.0' );

@@ -216,20 +216,16 @@ html[xmlns] .geodir-slides {
   border-radius: 50%;
   text-align: center;
   box-shadow: none;
+  font-size: 40px;
+  color: #FFF;
+  text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
+  line-height: 40px;
 
   &:hover{
     box-shadow: none !important;
+    color: #FFF;
   }
 
-  &:before{
-    font-family: FontAwesome;
-    font-size: 40px;
-    display: inline-block;
-    content: '\f105';
-    color: #FFF;
-    text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.3);
-    line-height: 40px;
-  }
 }
 
 .geodir-direction-nav .geodir-next {

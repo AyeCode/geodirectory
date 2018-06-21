@@ -247,21 +247,11 @@ class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags
      */
     public function email()
     {
-
         $post_id = $this->post_id();
 
         if( ! $post_id ) return '';
         $listing_email = geodir_get_post_meta($post_id,'email',true);
         return $listing_email ? $listing_email : '';
-
-//        print_r($this);
-//
-//
-//        echo '###';print_r($post);exit;
-//        return "stiofansisland@gmail.com";
-//        // Do stuff here.
-//        $listing_email = geodir_get_post_meta($post->ID,'email',true);
-//        return $listing_email ? $listing_email : '';
     }
 }
 

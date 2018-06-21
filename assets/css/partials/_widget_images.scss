@@ -40,21 +40,26 @@
 
       a.geodir-lightbox-image{
 
+        .fa-search-plus{
+          display: none;
+        }
 
-        &:hover:after{
-          content: "\f00e";
-          display: block;
-          font: normal normal normal 14px/1 FontAwesome;
-          text-rendering: auto;
-          -webkit-font-smoothing: antialiased;
-          -moz-osx-font-smoothing: grayscale;
-          position: absolute;
-          color: #ffffffbd;
-          background: #0000002b;
-          width: 100%;
-          height: 100%;
-          padding-top: 25%;
-          font-size: 25px;
+        &:hover{
+
+          .fa-search-plus{
+            display: block;
+            text-rendering: auto;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            position: absolute;
+            color: #ffffffbd;
+            background: #0000002b;
+            width: 100%;
+            height: 100%;
+            padding-top: 25%;
+            padding-bottom: 20%;
+          }
+
         }
         &:hover img{
           transform: scale(1.1);

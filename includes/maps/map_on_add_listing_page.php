@@ -685,7 +685,9 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
             alert('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
         }
     }
-    
+
+    <?php $geodir_map_name = geodir_map_name();
+    if($geodir_map_name!='none'){ ?>
     jQuery(function ($) {
         $("#<?php echo $prefix.'map';?>").goMap({
             latitude: <?php echo $prefix;?>CITY_MAP_CENTER_LAT,
@@ -813,6 +815,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
             });
         }
     });
+    <?php }?>
     /* ]]> */
 </script>
 <?php

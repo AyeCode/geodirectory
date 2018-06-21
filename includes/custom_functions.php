@@ -52,93 +52,6 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
 }
 
 /**
- * Send enquiry to listing author
- *
- * This function let the user to send Enquiry to listing author. If listing author email not available, then admin
- * email will be used. Email content will be used WP Admin -> Geodirectory -> Notifications -> Other Emails -> Email
- * enquiry
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @global object $wpdb    WordPress Database object.
- *
- * @param array $request   {
- *                         The submitted form fields as an array.
- *
- * @type string $sendact   Enquiry type. Default "send_inqury".
- * @type string $pid       Post ID.
- * @type string $inq_name  Sender name.
- * @type string $inq_email Sender mail.
- * @type string $inq_phone Sender phone.
- * @type string $inq_msg   Email message.
- *
- * }
- */
-function geodir_send_inquiry( $request ) {
-	// strip slashes from text
-	if ( ! GeoDir_Email::is_email_enabled( 'send_enquiry' ) ) {
-		return false;
-	}
-
-	$request = ! empty( $request ) ? stripslashes_deep( $request ) : $request;
-
-	$post_id = ! empty( $request['pid'] ) ? (int)$request['pid'] : 0;
-	if ( ! $post_id ) {
-		return false;
-	}
-
-	$gd_post = geodir_get_post_info( $post_id );
-	if ( empty( $gd_post ) ) {
-		return false;
-	}
-
-	$data = $request;
-	$data['post_id'] = $gd_post->ID;
-	$data['from_name'] = ! empty( $request['inq_name'] ) ? $request['inq_name'] : '';
-	$data['from_email'] = ! empty( $request['inq_email'] ) ? $request['inq_email'] : '';
-	$data['phone'] = ! empty( $request['inq_phone'] ) ? $request['inq_phone'] : '';
-	$data['comments'] = ! empty( $request['inq_msg'] ) ? $request['inq_msg'] : '';
-
-	$allow = apply_filters( 'geodir_allow_send_enquiry_email', true, $gd_post, $data );
-	if ( ! $allow ) {
-		return false;
-	}
-	
-	/**
-	 * Send enquiry email.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param object $gd_post The post object.
-	 * @param array $data {
-	 *     The submitted form fields as an array.
-	 *
-	 *     @type string $sendact    Enquiry type. Default "send_inqury".
-	 *     @type string $pid        Post ID.
-	 *     @type string $from_name  Sender name.
-	 *     @type string $from_email Sender mail.
-	 *     @type string $phone 	    Sender phone.
-	 *     @type string $comments   Email message.
-	 *
-	 * }
-	 */
-	do_action( 'geodir_send_enquiry_email', $gd_post, $data );
-	
-	$redirect_to = add_query_arg( array( 'send_inquiry' => 'success' ), get_permalink( $post_id ) );
-
-	/**
-	 * Filter redirect url after the send enquiry email is sent.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param string $url Redirect url.
-	 */
-	$redirect_to = apply_filters( 'geodir_send_enquiry_after_submit_redirect', $redirect_to );
-	wp_redirect( $redirect_to );
-	geodir_die();
-}
-
-/**
  * Adds open div before the tab content.
  *
  * This function adds open div before the tab content like post information, post images, reviews etc.
@@ -313,14 +226,14 @@ function geodir_search_form_submit_button() {
 	$default_search_button_label = apply_filters( 'geodir_search_default_search_button_text', $default_search_button_label );
 
 	$fa_class = '';
-	if ( strpos( $default_search_button_label, '#x' ) !== false ) {
+	if ( strpos( $default_search_button_label, 'fa-' ) !== false ) {
 		$fa_class = 'fa';
-		$default_search_button_label = "&".$default_search_button_label;
+		//$default_search_button_label = "&".$default_search_button_label;
 	}
 
 
 	?>
-	<button class="geodir_submit_search <?php echo $fa_class; ?>" data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php _e( $default_search_button_label ,'geodirectory'); ?></button>
+	<button class="geodir_submit_search " data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'"></i>';}else{ _e( $default_search_button_label ,'geodirectory'); }?></button>
 	<?php
 }
 

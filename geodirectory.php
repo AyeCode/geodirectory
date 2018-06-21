@@ -205,7 +205,7 @@ final class GeoDirectory {
      * @return void
      */
     private function includes() {
-        global $pagenow, $geodir_options, $wp_version;
+        global $pagenow, $geodir_options, $wp_version,$wp_country_database;
 
         /**
          * Class autoloader.
@@ -220,22 +220,16 @@ final class GeoDirectory {
         $geodir_options = geodir_get_settings();
 
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-post-types.php' ); // Registers post types
-
-        //print_r($geodir_options);
-        
+	    
         if ( !defined( 'GEODIR_LATITUDE_ERROR_MSG' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
         }
-
-
-
+	    
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
 	    GeoDir_Email::init();// set up the email class
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/validation-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-ajax-functions.php' ); // @todo remove onece replced with below class-gd-ajax.php
-        //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-gd-ajax.php' );
         GeoDir_AJAX::init();
 	    GeoDir_Post_Data::init(); // post data
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
@@ -260,9 +254,10 @@ final class GeoDirectory {
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/business-hours-functions.php' );
 
 
-        //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_taxonomy_hooks_actions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_hooks_actions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-super-duper.php' );
+	    //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-country-database.php' );
+	    //$wp_country_database = new WP_Country_Database();
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-widget-functions.php' );
 
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_functions.php' );
@@ -289,10 +284,6 @@ final class GeoDirectory {
                 require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin-taxonomies.php' );
             }
 
-	        
-
-
-	        //include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin.php' );
             new GeoDir_Admin(); // init the GD admin class
 
 	        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin-functions.php' );
@@ -487,48 +478,3 @@ function GeoDir() {
 }
 // Global for backwards compatibility.
 $GLOBALS['geodirectory'] = GeoDir();
-
-
-//$fields = geodir_default_custom_fields('gd_place');
-//
-///**
-// * Filter the array of default custom fields DB table data.
-// *
-// * @since 1.0.0
-// * @param string $fields The default custom fields as an array.
-// */
-//$fields = apply_filters('geodir_before_default_custom_fields_saved', $fields);
-//foreach ($fields as $field_index => $field) {
-//    geodir_custom_field_save($field);
-//
-//}
-
-//function my_project_updated_send_email( $post_id, $post, $update ) {
-//
-//    print_r($post);exit;
-//}
-//add_action( 'wp_insert_post', 'my_project_updated_send_email', 10, 3 );
-
-//function adding_custom_meta_boxes( $post_type, $post ) {
-//
-//	//print_r($post);exit;
-//
-//	add_meta_box(
-//		'my-meta-box',
-//		__( 'My Meta Box' ),
-//		'render_my_meta_box',
-//		'post',
-//		'normal',
-//		'default'
-//	);
-//}
-//add_action( 'add_meta_boxes', 'adding_custom_meta_boxes', 1, 2 );
-//function render_my_meta_box(){
-//	echo 'zzzz';
-//}
-
-//@todo we should add a dydanmic text to the theme sidebars that will allow a user to one click add recomended widgets
-add_action('dynamic_sidebar_before','xzxzxxz');
-function xzxzxxz(){
-	//echo '###';
-}

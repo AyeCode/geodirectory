@@ -252,6 +252,12 @@ jQuery(document).ready(function($) {
     // ini read more
     init_read_more();
 
+    // init any sliders
+    jQuery('.geodir-slider').each(function(i, obj) {
+        // init the sliders
+        geodir_init_slider(obj.id);
+    });
+
 
     //toggle detail page tabs mobile menu
     jQuery('#geodir-tab-mobile-menu').click(function() {
@@ -306,6 +312,10 @@ jQuery(document).ready(function($) {
 
     // setup search forms
     geodir_setup_search_form();
+
+
+    // init the rating inputs, delay needed for font awesome to load
+    setTimeout(function(){gd_init_rating_input();}, 100);
 
 
 
@@ -963,41 +973,14 @@ function gd_delete_post($post_id){
     }
 }
 
-function gd_ajax_lightboxX($action,$nonce,$post_id,$extra){
-    if($action){
-        if(!$nonce || $nonce==''){$nonce = geodir_params.basic_nonce;}
-        $content = "<div class='geodir-ajax-content ''>Loading content</div>";
-        $lightbox = '';
-
-        if($action=='geodir_ninja_forms'){
-            // clear all form data so we can reload the same form via ajax
-            delete form;
-            delete formDisplay;
-            delete nfForms;
-        }
-
-        jQuery.ajax({
-            url: geodir_params.ajax_url,
-            type: 'POST',
-           // dataType: 'json',
-            data: {
-                action: $action,
-                security: $nonce,
-                post_id: $post_id,
-                extra: $extra
-            },
-            //timeout: 20000,
-            beforeSend: function() {
-                $lightbox = lity($content);
-            },
-            success: function(content) {
-                //jQuery('.geodir-ajax-content').html(content);
-                jQuery('.geodir-ajax-content').addClass('lity-show').html(content);
-            }
-        });
-    }
-}
-
+/**
+ * Loads an action inot a lity lighbox, such as the ninja form shortcode.
+ *
+ * @param $action
+ * @param $nonce
+ * @param $post_id
+ * @param $extra
+ */
 function gd_ajax_lightbox($action,$nonce,$post_id,$extra){
     if($action){
         if(!$nonce || $nonce==''){$nonce = geodir_params.basic_nonce;}
@@ -1159,4 +1142,162 @@ function geodir_osm_autocomplete_search() {
     } catch (err) {
 		console.log(err.message);
     }
+}
+
+/**
+ * Load a slider image via ajax.
+ *
+ * @param slide
+ */
+function geodir_ajax_load_slider(slide){
+    // fix the srcset
+    if(real_srcset = jQuery(slide).find('img').attr("data-srcset")){
+        jQuery(slide).find('img').attr("srcset",real_srcset);
+    }
+    // fix the src
+    if(real_src = jQuery(slide).find('img').attr("data-src")){
+        jQuery(slide).find('img').attr("src",real_src);
+    }
+}
+
+/**
+ * Init a slider by id.
+ *
+ * @param $id
+ */
+function geodir_init_slider($id){
+
+    // chrome 53 introduced a bug, so we need to repaint the slider when shown.
+    jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
+
+    jQuery("#"+$id+"_carousel").flexslider({
+        animation: "slide",
+        namespace: "geodir-",
+        selector: ".geodir-slides > li",
+        controlNav: !1,
+        directionNav: !1,
+        animationLoop: !1,
+        slideshow: !1,
+        itemWidth: 75,
+        itemMargin: 5,
+        asNavFor: "#"+$id,
+        rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
+    }), jQuery("#"+$id).flexslider({
+        animation: jQuery("#"+$id).attr("data-animation")=='fade' ? "fade" : "slide",
+        selector: ".geodir-slides > li",
+        namespace: "geodir-",
+        // controlNav: !0,
+        controlNav: parseInt(jQuery("#"+$id).attr("data-controlnav")),
+        directionNav: 1,
+        prevText: '<i class="fas fa-angle-right"></i>',// we flip with CSS
+        nextText: '<i class="fas fa-angle-right"></i>',
+        animationLoop: !0,
+        slideshow: parseInt(jQuery("#"+$id).attr("data-slideshow")),
+        sync: "#"+$id+"_carousel",
+        start: function(slider) {
+
+            // chrome 53 introduced a bug, so we need to repaint the slider when shown.
+            jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
+            jQuery("#"+$id).removeClass('geodir-slider-loading');
+
+            jQuery(".geodir_flex-loader").hide(), jQuery("#"+$id).css({
+                visibility: "visible"
+            }), jQuery("#"+$id+"_carousel").css({
+                visibility: "visible"
+            });
+
+
+            // Ajaxify the slider if needed.
+            next = slider.slides.eq(slider.currentSlide + 1);
+            // fix the srcset
+            if(real_srcset = jQuery(next).find('img').attr("data-srcset")){
+                jQuery(next).find('img').attr("srcset",real_srcset);
+            }
+            // fix the src
+            if(real_src = jQuery(next).find('img').attr("data-src")){
+                jQuery(next).find('img').attr("src",real_src);
+            }
+        },
+        before: function(slider){
+            // Ajaxify the slider if needed.
+            animatingTo = slider.slides.eq(slider.animatingTo);
+            next_next = slider.slides.eq(slider.currentSlide + 2);
+            geodir_ajax_load_slider(next_next);// load the next-next slide via ajax so its always loaded early
+            geodir_ajax_load_slider(animatingTo); // double check the current slide is loaded (in-case user goes backwards)
+        },
+        rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
+    });
+
+}
+
+/**
+ * Init the rating inputs.
+ */
+function gd_init_rating_input(){
+    /**
+     * Rating script for ratings inputs.
+     * @info This is shared in both post.js and admin.js any changes shoudl be made to both.
+     */
+    jQuery(".gd-rating-input").each(function () {
+
+        if (geodir_params.rating_type =='font-awesome') { // font awesome rating
+            //$type = 'i';
+            $type = 'svg';
+        }else{// image
+            $type = 'img';
+        }
+
+        $total = jQuery(this).find('.gd-rating-foreground > ' + $type).length;
+        $parent = this;
+
+        console.log($total);
+
+        // set the current star value and text
+        $value = jQuery($parent).find('input').val();
+        if($value > 0){
+            jQuery($parent).find('.gd-rating-foreground').width( $value / $total * 100 + '%');
+            jQuery($parent).find('.gd-rating-text').text( jQuery($parent).find($type+':eq('+ ($value - 1) +')').attr("title"));
+        }
+
+        // loop all rating stars
+        jQuery(this).find($type).each(function (index) {
+            $original_rating = jQuery($parent).find('input').val();
+
+            $original_percent = $original_rating / $total * 100;
+            $rating_set = false;
+
+            jQuery(this).hover(
+                function () {
+                    $percent = 0;
+                    $rating = index + 1;
+                    $rating_text = jQuery(this).attr("title");
+                    $original_rating_text = jQuery($parent).find('.gd-rating-text').text();
+                    if ($rating > $total) {
+                        $rating = $rating - $total;
+                    }
+                    $percent = $rating / $total * 100;
+                    jQuery($parent).find('.gd-rating-foreground').width($percent + '%');
+                    jQuery($parent).find('.gd-rating-text').text($rating_text);
+                },
+                function () {
+                    if (!$rating_set) {
+                        jQuery($parent).find('.gd-rating-foreground').width($original_percent + '%');
+                        jQuery($parent).find('.gd-rating-text').text($original_rating_text);
+                    } else {
+                        $rating_set = false;
+                    }
+                }
+            );
+
+            jQuery(this).click(function () {
+                $original_percent = $percent;
+                $original_rating = $rating;
+                jQuery($parent).find('input').val($rating);
+                jQuery($parent).find('.gd-rating-text').text($rating_text);
+                $rating_set = true;
+            });
+
+        });
+
+    });
 }

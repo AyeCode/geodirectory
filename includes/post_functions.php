@@ -84,7 +84,12 @@ function geodir_set_postcat_structure($post_id, $taxonomy, $default_cat = '', $c
  */
 function geodir_get_post_info($post_id = '')
 {
-    
+    // check for cache
+    $cache = wp_cache_get( "gd_post_".$post_id, 'gd_post' );
+    if($cache){
+        return $cache;
+    }
+
     global $wpdb, $plugin_prefix, $post, $post_info,$preview;
 
     if ($post_id == '' && !empty($post))
@@ -128,7 +133,14 @@ function geodir_get_post_info($post_id = '')
     // check for distance setting
     if(!empty($post_detail) && !empty($post->distance)){$post_detail->distance = $post->distance;}
 
-    return (!empty($post_detail)) ? $post_info = $post_detail : $post_info = false;
+    $return = (!empty($post_detail)) ? $post_info = $post_detail : $post_info = false;
+
+    // set cache
+    if(!empty($post_detail)){
+        wp_cache_set( "gd_post_".$post_id, $post_detail, 'gd_post' );
+    }
+    
+    return $return;
 
 }
 

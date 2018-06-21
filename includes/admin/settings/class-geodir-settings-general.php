@@ -654,7 +654,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 				array(
 					'name' => __('Search button label', 'geodirectory'),
-					'desc' => __('Show the search button label on search form. You can use font awesome unicode here (minus the &) from:', 'geodirectory')." <a href='http://fontawesome.io/cheatsheet/' target='_blank'>http://fontawesome.io/cheatsheet/</a>",
+					'desc' => __('Show the search button label on search form. You can use a font awesome class here.', 'geodirectory'),
 					'id' => 'search_default_button_text',
 					'type' => 'text',
 					'placeholder' => geodir_get_search_default_button_text(),

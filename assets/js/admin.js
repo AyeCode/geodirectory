@@ -363,8 +363,10 @@ function gd_progressbar(el, value, label) {
     }
 }
 
-jQuery(document).ready(function($) {
-
+/**
+ * Init the rating inputs.
+ */
+function gd_init_admin_rating_input(){
     /**
      * Rating script for ratings inputs.
      * @info This is shared in both post.js and admin.js any changes shoudl be made to both.
@@ -372,7 +374,7 @@ jQuery(document).ready(function($) {
     jQuery(".gd-rating-input").each(function () {
 
         if (geodir_params.rating_type =='font-awesome') { // font awesome rating
-            $type = 'i'
+            $type = 'svg'
         }else{// image
             $type = 'img'
         }
@@ -428,6 +430,13 @@ jQuery(document).ready(function($) {
         });
 
     });
+    
+}
+
+jQuery(document).ready(function($) {
+
+    // init the rating inputs, delay needed for font awesome to load
+    setTimeout(function(){gd_init_admin_rating_input();}, 100);
 
     jQuery('#geodir_location_prefix').attr('disabled', 'disabled');
     jQuery('.button-primary').click(function() {
