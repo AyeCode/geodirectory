@@ -125,26 +125,26 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 		global $post;
 
-		$original_id = isset($atts['id']) ? $atts['id'] : '';
-		$atts['location'] = !empty($atts['location']) ? $atts['location'] : 'none';
+		$original_id = isset($args['id']) ? $args['id'] : '';
+		$args['location'] = !empty($args['location']) ? $args['location'] : 'none';
 		$output = '';
-		$atts = shortcode_atts( array(
+		$args = shortcode_atts( array(
 			'id'    => $post->ID,
 			'key'    => '', // the meta key : email
 			'show'    => '', // title,value (default blank, all)
 			'alignment'    => '', // left,right,center
 			'location'  => 'none',
-		), $atts, 'gd_post_meta' );
-		$atts['id'] = !empty($atts['id']) ? $atts['id'] : $post->ID;
+		), $args, 'gd_post_meta' );
+		$args['id'] = !empty($args['id']) ? $args['id'] : $post->ID;
 
-		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($atts['id']);
+		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
 
 
-		// print_r($atts);
+		// print_r($args);
 		// error checks
 		$errors = array();
-		if(empty($atts['key'])){$errors[] = __('key is missing','geodirectory');}
-		if(empty($atts['id'])){$errors[] = __('id is missing','geodirectory');}
+		if(empty($args['key'])){$errors[] = __('key is missing','geodirectory');}
+		if(empty($args['id'])){$errors[] = __('id is missing','geodirectory');}
 		if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
 
 		if(!empty($errors)){
@@ -152,7 +152,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		}
 
 		// check if its demo content
-		if($post_type == 'page' && !empty($atts['id']) && geodir_is_block_demo()){
+		if($post_type == 'page' && !empty($args['id']) && geodir_is_block_demo()){
 			$post_type = 'gd_place';
 		}
 
@@ -162,15 +162,15 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			if(!empty($fields)){
 				$field = array();
 				foreach($fields as $field_info){
-					if($atts['key']==$field_info['htmlvar_name']){
+					if($args['key']==$field_info['htmlvar_name']){
 						$field = $field_info;
 					}
 				}
 				if(!empty($field)){
-					if($atts['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
-					if($atts['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
-					if($atts['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
-					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$atts['location'],$field,$atts['id'],$atts['show']);
+					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
+					if($args['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
+					if($args['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
+					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
 
 					if($field['name']=='post_content'){
 						//$output = wp_strip_all_tags($output);
@@ -181,7 +181,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 				}
 			}
 		}
-		
+
 		return $output;
 
 	}

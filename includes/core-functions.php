@@ -645,3 +645,53 @@ function geodir_widget_display_callback( $instance, $widget, $args ) {
 	return $instance;
 }
 add_filter( 'widget_display_callback', 'geodir_widget_display_callback', 10, 3 );
+
+
+global $geodir_addon_list;
+/**
+ * Build an array of installed addons.
+ *
+ * This filter builds an array of installed addons which can be used to check what exactly is installed.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $geodir_addon_list The array of installed plugins $geodir_addon_list['geodir_location_manager'].
+ */
+apply_filters('geodir_build_addon_list', $geodir_addon_list);
+
+/**
+ * Add GeoDirectory link to the WordPress admin bar.
+ *
+ * This function adds a link to the GeoDirectory backend to the WP admin bar via a hook.
+ *    add_action('admin_bar_menu', 'geodir_admin_bar_site_menu', 31);
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param object $wp_admin_bar The admin bar object.
+ */
+function geodir_admin_bar_site_menu($wp_admin_bar) {
+	if ( current_user_can( 'manage_options' ) ) {
+		$wp_admin_bar->add_menu( array( 'parent' => 'appearance', 'id' => 'geodirectory', 'title' => __( 'GeoDirectory', 'geodirectory' ), 'href' => admin_url( 'admin.php?page=geodirectory' ) ) );
+	}
+}
+add_action('admin_bar_menu', 'geodir_admin_bar_site_menu', 31);
+
+/**
+ * Clean url.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $url Url.
+ * @param string $original_url Original url.
+ * @param string $_context Context.
+ * @return string Modified url.
+ */
+function so_handle_038($url, $original_url, $_context)
+{
+	if (strstr($url, "maps.google.com/maps/api/js") !== false) {
+		$url = str_replace("&#038;", "&amp;", $url); // or $url = $original_url
+	}
+
+	return $url;
+}
+add_filter('clean_url', 'so_handle_038', 99, 3);

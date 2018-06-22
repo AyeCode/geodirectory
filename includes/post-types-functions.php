@@ -452,6 +452,7 @@ function geodir_custom_update_messages($messages)
 
     return $messages;
 }
+add_filter('post_updated_messages', 'geodir_custom_update_messages');
 
 /**
  * Get Custom Post Type info.

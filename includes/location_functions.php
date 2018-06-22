@@ -782,3 +782,38 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
      */
     return apply_filters( 'geodir_filter_location_replace_variables', $location_replace_vars, $location_array, $gd_page, $sep );
 }
+
+/**
+ * Check location slug.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @global object $wpdb WordPress Database object.
+ * @global string $table_prefix WordPress Database Table prefix.
+ * @param string $slug Term slug.
+ * @return string Modified term slug.
+ */
+function geodir_location_slug_check($slug)
+{
+
+    global $wpdb, $table_prefix;
+
+    $slug_exists = $wpdb->get_var($wpdb->prepare("SELECT slug FROM " . $table_prefix . "terms WHERE slug=%s", array($slug)));
+
+    if ($slug_exists) {
+
+        $suffix = 1;
+        do {
+            $alt_location_name = _truncate_post_slug($slug, 200 - (strlen($suffix) + 1)) . "-$suffix";
+            $location_slug_check = $wpdb->get_var($wpdb->prepare("SELECT slug FROM " . $table_prefix . "terms WHERE slug=%s", array($alt_location_name)));
+            $suffix++;
+        } while ($location_slug_check && $suffix < 100);
+
+        $slug = $alt_location_name;
+
+    }
+
+    return $slug;
+
+}
+add_filter('geodir_location_slug_check', 'geodir_location_slug_check');

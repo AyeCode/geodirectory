@@ -260,21 +260,56 @@ function show_listing_widget_map(){
 /**
  * @deprecated
  */
-function (){
-    _deprecated_function( '', '2.0.0' );
+function geodir_font_awesome_rating_stars_html(){
+    _deprecated_function( 'geodir_font_awesome_rating_stars_html', '2.0.0' );
 }
 
 /**
  * @deprecated
  */
-function (){
-    _deprecated_function( '', '2.0.0' );
+function geodir_show_listing_post_excerpt(){
+    _deprecated_function( 'geodir_show_listing_post_excerpt', '2.0.0' );
 }
-
-/**
- * @deprecated
- */
-function (){
-    _deprecated_function( '', '2.0.0' );
-}
+//
+///**
+// * @deprecated
+// */
+//function (){
+//    _deprecated_function( '', '2.0.0' );
+//}
+//
+///**
+// * @deprecated
+// */
+//function (){
+//    _deprecated_function( '', '2.0.0' );
+//}
+//
+///**
+// * @deprecated
+// */
+//function (){
+//    _deprecated_function( '', '2.0.0' );
+//}
+//
+///**
+// * @deprecated
+// */
+//function (){
+//    _deprecated_function( '', '2.0.0' );
+//}
+//
+///**
+// * @deprecated
+// */
+//function (){
+//    _deprecated_function( '', '2.0.0' );
+//}
+//
+///**
+// * @deprecated
+// */
+//function (){
+//    _deprecated_function( '', '2.0.0' );
+//}
 

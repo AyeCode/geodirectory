@@ -790,7 +790,7 @@ class GeoDir_Query {
 		endswitch;
 
 
-		$orderby = implode(", ",$order_by_parts);
+		$orderby = implode(", ",array_filter($order_by_parts));
 
 		return $orderby;
 	}

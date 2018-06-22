@@ -303,6 +303,7 @@ function geodir_get_term_link($termlink, $term, $taxonomy)
 {
     return geodir_term_link($termlink, $term, $taxonomy); // taxonomy_functions.php
 }
+add_filter('term_link', 'geodir_get_term_link', 10, 3);
 
 /**
  * Retrieve the post type archive permalink.
@@ -317,6 +318,7 @@ function geodir_get_posttype_link($link, $post_type)
 {
     return geodir_posttype_link($link, $post_type); // taxonomy_functions.php
 }
+add_filter('post_type_archive_link', 'geodir_get_posttype_link', 10, 2);
 
 /**
  * Returns the term link with parameters.

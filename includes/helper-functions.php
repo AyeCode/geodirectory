@@ -337,35 +337,6 @@ function geodir_parse_custom_field_url($url, $formatted = true) {
 	return $return;
 }
 
-/**
- * Set parent categories to fix categories tree structure.
- *
- * @since 1.5.7
- * @package GeoDirectory
- *
- * @param array $request_info Listing request info.
- * @return array Modified listing request info.
- */
-function geodir_attach_parent_categories($request_info) {
-	if (!empty($request_info['post_category']) && is_array($request_info['post_category'])) {
-		foreach ($request_info['post_category'] as $taxomony => $term_ids) {			
-			$attach_term_ids = array();
-			
-			if (!empty($term_ids) && is_array($term_ids) && taxonomy_exists($taxomony) && strpos($taxomony, 'category') !== false) {
-				$attach_term_ids = geodir_add_parent_terms($term_ids, $taxomony);
-				
-				if (!empty($attach_term_ids)) {
-					if (!isset($request_info['post_default_category'])) {
-						$request_info['post_default_category'] = $attach_term_ids[0];
-					}
-					$request_info['post_category'][$taxomony] = $attach_term_ids;
-				}
-			}
-		}
-	}
-	
-	return $request_info;
-}
 
 /**
  * Add the parent terms in current terms.

@@ -237,7 +237,6 @@ final class GeoDirectory {
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/image-functions.php' );
