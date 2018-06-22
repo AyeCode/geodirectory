@@ -194,7 +194,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		$join = apply_filters( 'geodir_rest_markers_query_join', $join, $request );
 		
 		if ( ! empty( $request['post'] ) && is_array( $request['post'] ) && count( $request['post'] ) == 1 ) {
-			$where = "p.post_status IN('publish', 'pending', 'draft', 'gd-closed')";
+			$where = "p.post_status IN('publish', 'pending', 'draft', 'gd-closed','inherit')";
 		} else {
 			$where = "p.post_status = 'publish'";
 		}

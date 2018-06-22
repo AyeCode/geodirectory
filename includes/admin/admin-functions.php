@@ -464,3 +464,18 @@ function geodir_setup_timezone_api( $prefix ) {
 	<?php
 }
 add_action( 'geodir_update_marker_address', 'geodir_setup_timezone_api', 1, 1 );
+
+/**
+ * Add body class for current active map.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $class The class of the HTML element.
+ * @return string Modified class string.
+ */
+function geodir_admin_body_class_active_map($class = '') {
+	$class .= ' gd-map-' . geodir_map_name();
+
+	return $class;
+}
+add_filter('admin_body_class', 'geodir_admin_body_class_active_map', 100);

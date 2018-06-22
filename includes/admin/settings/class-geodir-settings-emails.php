@@ -82,39 +82,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 			if($current_section == 'other_emails'){
 				$settings = apply_filters( 'geodir_other_email_settings', array(
-
-					array('name' => __('Send enquiry', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_send_enquiry_settings'),
-
-					array(
-						'name' => __('Enable email', 'geodirectory'),
-						'desc' => __('This will enable the "Send enquiry" option for the details page.', 'geodirectory'),
-						'id' => 'email_send_enquiry',
-						'type' => 'checkbox',
-						'default' => 1,
-					),
-					array(
-						'name' => __('Subject', 'geodirectory'),
-						'desc' => __('The email subject.', 'geodirectory'),
-						'id' => 'email_send_enquiry_subject',
-						'type' => 'text',
-						'class' => 'large-text',
-						'desc_tip' => true,
-						'placeholder' => $this->send_enquiry_subject(),
-						'advanced' => true
-					),
-					array(
-						'name' => __('Body', 'geodirectory'),
-						'desc' => __('The email body, this can be text or HTML.', 'geodirectory'),
-						'id' => 'email_send_enquiry_body',
-						'type' => 'textarea',
-						'class' => 'code gd-email-body',
-						'desc_tip' => true,
-						'advanced' => true,
-						'placeholder' => $this->send_enquiry_body(),
-						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->send_enquiry_email_tags()
-					),
-
-					array('type' => 'sectionend', 'id' => 'user_send_enquiry_settings'),
+					
 
 				));
 			}
@@ -453,41 +421,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 
 
-		/**
-		 * The default send enquiry email subject text.
-		 *
-		 * @since 2.0.0
-		 * @return string
-		 */
-		public function send_enquiry_subject(){
-			return apply_filters('geodir_email_send_enquiry_subject',__("[[#site_name#]] Website Enquiry","geodirectory"));
-		}
 
-		/**
-		 * The default send enquiry email body text.
-		 *
-		 * @since 2.0.0
-		 * @return string
-		 */
-		public function send_enquiry_body(){
-			return apply_filters('geodir_email_send_enquiry_body',
-				__("Dear [#to_name#],
-
-An enquiry has been sent from: [#listing_link#]
-
-===============================
-[#comments#]
-
-From : [#from_name#]
-Email : [#from_email#]
-Phone : [#phone#]
-===============================
-
-Thank you,
-[#site_name_url#]","geodirectory"
-				)
-			);
-		}
 
         /**
          * Global email tags.
@@ -509,28 +443,6 @@ Thank you,
 			return $tags;
 		}
 
-        /**
-         * Send enquiry mail tags.
-         *
-         * @since 2.0.0
-         *
-         * @param bool $inline Optional. Email tag inline value. Default true.
-         *
-         * @return array|string $tags.
-         */
-		public function send_enquiry_email_tags( $inline = true ) { 
-			$global_tags = $this->global_email_tags( false );
-
-			$tags = array_merge( $global_tags, array( '[#post_id#]', '[#post_status#]', '[#post_date#]', '[#post_author_ID#]', '[#post_author_name#]', '[#client_name#]', '[#listing_title#]', '[#listing_url#]', '[#listing_link#]', '[#phone#]', '[#comments#]' ) );
-			
-			$tags = apply_filters( 'geodir_email_send_enquiry_email_tags', $tags );
-
-			if ( $inline ) {
-				$tags = '<code>' . implode( '</code> <code>', $tags ) . '</code>';
-			}
-			
-			return $tags;
-		}
 
         /**
          * User pending post email tags.

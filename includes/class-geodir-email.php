@@ -572,78 +572,7 @@ class GeoDir_Email {
 
 		return apply_filters( 'geodir_mail_admin_bcc_active', $active, $email_name );
 	}
-
-	/**
-	 * Send enquiry email.
-     *
-     * @since 2.0.0
-	 *
-	 * @param object $post Post data object.
-	 * @param array $data Data array.
-	 *
-	 * @return bool
-	 */
-	public static function send_enquiry_email( $post, $data ) {
-		$email_name = 'send_enquiry';
-
-		if ( ! self::is_email_enabled( $email_name ) ) {
-			return false;
-		}
-
-		$defaults           = array(
-			'from_name'  => '',
-			'from_email' => '',
-			'phone'      => '',
-			'comments'   => ''
-		);
-		$email_vars         = wp_parse_args( $data, $defaults );
-		$email_vars['post'] = $post;
-
-		$email_vars['to_name']  = geodir_get_client_name( $post->post_author );
-		$email_vars['to_email'] = geodir_get_post_meta( $post->ID, 'geodir_email', true );
-		if ( empty( $email_vars['to_email'] ) ) {
-			$author_data            = get_userdata( $post->post_author );
-			$email_vars['to_email'] = ! empty( $author_data->user_email ) ? $author_data->user_email : '';
-		}
-
-		if ( empty( $post ) || ! is_email( $email_vars['to_email'] ) ) {
-			return;
-		}
-
-		$recipient = $email_vars['to_email'];
-
-		do_action( 'geodir_pre_send_enquiry_email', $email_name, $email_vars );
-
-		$subject      = self::get_subject( $email_name, $email_vars );
-		$message_body = self::get_content( $email_name, $email_vars );
-		$headers      = self::get_headers( $email_name, $email_vars, $email_vars['from_email'], $email_vars['from_name'] );
-		$attachments  = self::get_attachments( $email_name, $email_vars );
-
-		$plain_text = self::get_email_type() != 'html' ? true : false;
-		$template   = $plain_text ? 'emails/plain/geodir-email-' . $email_name . '.php' : 'emails/geodir-email-' . $email_name . '.php';
-
-		$content = geodir_get_template_html( $template, array(
-			'email_name'    => $email_name,
-			'email_vars'    => $email_vars,
-			'email_heading'	=> '',
-			'sent_to_admin' => false,
-			'plain_text'    => $plain_text,
-			'message_body'  => $message_body,
-		) );
-
-		$sent = self::send( $recipient, $subject, $content, $headers, $attachments );
-
-		if ( self::is_admin_bcc_active( $email_name ) ) {
-			$recipient = self::get_admin_email();
-			$subject .= ' - ADMIN BCC COPY';
-			self::send( $recipient, $subject, $content, $headers, $attachments );
-		}
-
-		do_action( 'geodir_post_send_enquiry_email', $email_name, $email_vars );
-
-		return $sent;
-	}
-
+	
 	/**
 	 * Send the user an email when their post is published.
      *

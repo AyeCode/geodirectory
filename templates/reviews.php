@@ -16,7 +16,8 @@
  * the visitor has not yet entered the password we will
  * return early without loading the comments.
  */
-if (post_password_required())
+global $preview;
+if (post_password_required() || $preview)
     return;
 ?>
 

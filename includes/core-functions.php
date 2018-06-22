@@ -695,3 +695,61 @@ function so_handle_038($url, $original_url, $_context)
 	return $url;
 }
 add_filter('clean_url', 'so_handle_038', 99, 3);
+
+/**
+ * Add body class for current active map.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ * @param array $classes The class array of the HTML element.
+ * @return array Modified class array.
+ */
+function geodir_body_class_active_map($classes = array()) {
+	$classes[] = 'gd-map-' . geodir_map_name();
+	return $classes;
+}
+add_filter('body_class', 'geodir_body_class_active_map', 100);
+
+/**
+ * remove rating stars fields if disabled.
+ *
+ * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
+ * @package GeoDirectory
+ */
+function geodir_init_no_rating() {
+	if (geodir_rating_disabled_post_types()) {
+		add_filter('geodir_get_sort_options', 'geodir_no_rating_get_sort_options', 100, 2);
+	}
+}
+add_action('init', 'geodir_init_no_rating', 100);
+
+
+/**
+ * Skip overall rating sort option when rating disabled.
+ *
+ * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
+ * @package GeoDirectory
+ * @param array $options Sort options array.
+ * @param string $post_type The post type.
+ * @return array Modified sort options array.
+ */
+function geodir_no_rating_get_sort_options($options, $post_type = '') {
+	if (!empty($post_type) && geodir_cpt_has_rating_disabled($post_type)) {
+		$new_options = array();
+
+		if (!empty($options)) {
+			foreach ($options as $option) {
+				if (is_object($option) && isset($option->htmlvar_name) && $option->htmlvar_name == 'overall_rating') {
+					continue;
+				}
+				$new_options[] = $option;
+			}
+
+			$options = $new_options;
+		}
+	}
+
+	return $options;
+}

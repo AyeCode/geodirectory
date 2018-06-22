@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoDirectory 2.0.0.0-dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-21 15:45+0100\n"
-"PO-Revision-Date: 2018-06-21 15:45+0100\n"
+"POT-Creation-Date: 2018-06-22 19:12+0100\n"
+"PO-Revision-Date: 2018-06-22 19:12+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -394,8 +394,7 @@ msgstr ""
 #: includes/admin/admin-functions.php:22
 #: includes/admin/class-geodir-admin-assets.php:93
 #: includes/admin/class-geodir-admin-menus.php:48
-#: includes/class-geodir-privacy.php:24
-#: includes/geodirectory_hooks_actions.php:419
+#: includes/class-geodir-privacy.php:24 includes/core-functions.php:674
 msgid "GeoDirectory"
 msgstr ""
 
@@ -524,7 +523,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-api-keys-table-list.php:155
 #: includes/admin/views/html-keys-edit.php:88
-#: includes/class-geodir-comments.php:514
+#: includes/class-geodir-comments.php:537
 #, php-format
 msgid "%1$s at %2$s"
 msgstr ""
@@ -569,7 +568,7 @@ msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-assets.php:211
-#: includes/class-geodir-frontend-scripts.php:449
+#: includes/class-geodir-frontend-scripts.php:662
 msgid "Allowed Files"
 msgstr ""
 
@@ -610,7 +609,7 @@ msgid "Total"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dashboard.php:100
-#: includes/admin/class-geodir-admin-menus.php:49 language.php:168
+#: includes/admin/class-geodir-admin-menus.php:49 language.php:165
 msgid "Dashboard"
 msgstr ""
 
@@ -697,7 +696,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:718
 #: includes/admin/class-geodir-admin-permalink-settings.php:66
 #: includes/admin/class-geodir-admin-permalink-settings.php:140
-#: includes/admin/class-geodir-admin-taxonomies.php:549
+#: includes/admin/class-geodir-admin-taxonomies.php:766
 #: includes/widgets/class-geodir-widget-post-images.php:137
 msgid "Default"
 msgstr ""
@@ -727,7 +726,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:391
 #: includes/class-geodir-post-data.php:672
 #: includes/widgets/class-geodir-widget-ninja-forms.php:203 language.php:37
-#: language.php:62 language.php:157 language.php:178
+#: language.php:62 language.php:154 language.php:175
 #: templates/popup-forms.php:65
 msgid "Email"
 msgstr ""
@@ -740,7 +739,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:781
 #: includes/admin/class-geodir-admin-dummy-data.php:789
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:593 language.php:63
-#: language.php:158
+#: language.php:155
 msgid "Website"
 msgstr ""
 
@@ -843,7 +842,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:933
 #: includes/admin/class-geodir-admin-dummy-data.php:935
 #: includes/admin/class-geodir-admin-dummy-data.php:944 language.php:67
-#: language.php:216
+#: language.php:213
 msgid "Category"
 msgstr ""
 
@@ -1191,7 +1190,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-design.php:49
 #: includes/admin/settings/class-geodir-settings-design.php:88
 #: includes/admin/settings/class-geodir-settings-import-export.php:46
-#: includes/class-geodir-privacy.php:88 language.php:143
+#: includes/class-geodir-privacy.php:88 language.php:140
 msgid "Reviews"
 msgstr ""
 
@@ -1574,12 +1573,12 @@ msgid "The changes you made will be lost if you navigate away from this page."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:376
-#: includes/admin/class-geodir-admin-taxonomies.php:227
+#: includes/admin/class-geodir-admin-taxonomies.php:444
 msgid "Upload Image"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:377
-#: includes/admin/class-geodir-admin-taxonomies.php:228
+#: includes/admin/class-geodir-admin-taxonomies.php:445
 msgid "Remove Image"
 msgstr ""
 
@@ -1765,58 +1764,58 @@ msgstr ""
 msgid "Your changes have been saved."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:82
-#: includes/admin/class-geodir-admin-taxonomies.php:142
+#: includes/admin/class-geodir-admin-taxonomies.php:299
+#: includes/admin/class-geodir-admin-taxonomies.php:359
 msgid "Category Top Description"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:87
-#: includes/admin/class-geodir-admin-taxonomies.php:147
+#: includes/admin/class-geodir-admin-taxonomies.php:304
+#: includes/admin/class-geodir-admin-taxonomies.php:364
 msgid "Default Listing Image"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:92
-#: includes/admin/class-geodir-admin-taxonomies.php:152
+#: includes/admin/class-geodir-admin-taxonomies.php:309
+#: includes/admin/class-geodir-admin-taxonomies.php:369
 msgid "Map Icon"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:98
-#: includes/admin/class-geodir-admin-taxonomies.php:158
+#: includes/admin/class-geodir-admin-taxonomies.php:315
+#: includes/admin/class-geodir-admin-taxonomies.php:375
 msgid "Category Icon"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:104
-#: includes/admin/class-geodir-admin-taxonomies.php:164
+#: includes/admin/class-geodir-admin-taxonomies.php:321
+#: includes/admin/class-geodir-admin-taxonomies.php:381
 msgid "Category Color"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:110
-#: includes/admin/class-geodir-admin-taxonomies.php:171
+#: includes/admin/class-geodir-admin-taxonomies.php:327
+#: includes/admin/class-geodir-admin-taxonomies.php:388
 msgid "Schema Type"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:197
+#: includes/admin/class-geodir-admin-taxonomies.php:414
 msgid "This will appear at the top of the category listing."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:231
+#: includes/admin/class-geodir-admin-taxonomies.php:448
 msgid "Choose a default image for the listing within this category."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:262
+#: includes/admin/class-geodir-admin-taxonomies.php:479
 msgid "Upload Icon"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:263
+#: includes/admin/class-geodir-admin-taxonomies.php:480
 msgid "Remove Icon"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:266
-#: includes/admin/class-geodir-admin-taxonomies.php:304
+#: includes/admin/class-geodir-admin-taxonomies.php:483
+#: includes/admin/class-geodir-admin-taxonomies.php:521
 msgid "Choose a category icon"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:294
+#: includes/admin/class-geodir-admin-taxonomies.php:511
 #: includes/admin/settings/class-geodir-settings-page.php:66
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:29
 #: includes/widgets/class-geodir-widget-post-badge.php:127
@@ -1828,32 +1827,32 @@ msgstr ""
 msgid "None"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:334
-#: includes/admin/class-geodir-admin-taxonomies.php:363
+#: includes/admin/class-geodir-admin-taxonomies.php:551
+#: includes/admin/class-geodir-admin-taxonomies.php:580
 msgid "Select the schema to use for this category"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:439
+#: includes/admin/class-geodir-admin-taxonomies.php:656
 msgid "Default Image"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:440
+#: includes/admin/class-geodir-admin-taxonomies.php:657
 msgid "Cat ID"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:549
+#: includes/admin/class-geodir-admin-taxonomies.php:766
 #, php-format
 msgid "Make %s default category"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:549
+#: includes/admin/class-geodir-admin-taxonomies.php:766
 msgid "Make default"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:585
+#: includes/admin/class-geodir-admin-taxonomies.php:802
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:23
 #: includes/geodirectory_template_actions.php:202
-#: includes/helper-functions.php:1597
+#: includes/helper-functions.php:1568
 #: includes/widgets/class-geodir-widget-categories.php:136
 #: includes/widgets/class-geodir-widget-categories.php:145
 #: includes/widgets/class-geodir-widget-post-fav.php:45
@@ -1861,8 +1860,102 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:609
+#: includes/admin/class-geodir-admin-taxonomies.php:826
 msgid "Default (LocalBusiness)"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:41
+msgid "Check reviews"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:42
+#: includes/admin/class-geodir-admin-tools.php:47
+#: includes/admin/class-geodir-admin-tools.php:56
+#: includes/admin/class-geodir-admin-tools.php:61
+#: includes/admin/diagnostic-functions.php:52
+#: includes/admin/diagnostic-functions.php:63
+#: includes/admin/diagnostic-functions.php:73
+#: includes/admin/diagnostic-functions.php:106
+#: includes/admin/diagnostic-functions.php:120
+#: includes/admin/diagnostic-functions.php:131
+#: includes/admin/diagnostic-functions.php:142
+#: includes/admin/diagnostic-functions.php:152
+#: includes/admin/diagnostic-functions.php:161
+msgid "Run"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:43
+msgid "Check reviews for correct location and content settings."
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:46
+msgid "Create default GeoDirectory pages"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:50
+msgid "Note:"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:51
+msgid ""
+"This tool will install all the missing GeoDirectory pages. Pages already "
+"defined and set up will not be replaced."
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:55
+msgid "Term counts"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:57
+msgid "This tool will recount the listing terms."
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:60
+msgid "DB text translation"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:62
+msgid ""
+"This tool will collect any texts stored in the DB and put them in the file "
+"db-language.php so they can then be used to translate them by translations "
+"tools."
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:81
+msgid "Reviews checked."
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:83
+msgid "No reviews checked."
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:94
+msgid "Terms successfully recounted"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:98
+msgid "All missing GeoDirectory pages successfully installed"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:102
+msgid "File successfully created: "
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:104
+msgid "There was a problem creating the file, please check file permissions: "
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:119
+#, php-format
+msgid "There was an error calling %s"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:121
+msgid "Tool ran."
+msgstr ""
+
+#: includes/admin/class-geodir-admin-tools.php:125
+msgid "There was an error calling this tool. There is no callback present."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-users.php:38
@@ -2074,21 +2167,6 @@ msgstr ""
 
 #: includes/admin/diagnostic-functions.php:49
 msgid "Checks if the GD pages are installed correctly or not."
-msgstr ""
-
-#: includes/admin/diagnostic-functions.php:52
-#: includes/admin/diagnostic-functions.php:63
-#: includes/admin/diagnostic-functions.php:73
-#: includes/admin/diagnostic-functions.php:106
-#: includes/admin/diagnostic-functions.php:120
-#: includes/admin/diagnostic-functions.php:131
-#: includes/admin/diagnostic-functions.php:142
-#: includes/admin/diagnostic-functions.php:152
-#: includes/admin/diagnostic-functions.php:161
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:122
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:127
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:136
-msgid "Run"
 msgstr ""
 
 #: includes/admin/diagnostic-functions.php:59
@@ -2394,21 +2472,21 @@ msgstr ""
 msgid "-->FAILED: Details page fix failed"
 msgstr ""
 
-#: includes/admin/diagnostic-functions.php:938
+#: includes/admin/diagnostic-functions.php:939
 msgid ""
 "Fail to load custom fields in to file for translation, please check file "
 "permission:"
 msgstr ""
 
-#: includes/admin/diagnostic-functions.php:941
+#: includes/admin/diagnostic-functions.php:942
 msgid "Load custom fields in to file for translation: ok"
 msgstr ""
 
-#: includes/admin/diagnostic-functions.php:1025
+#: includes/admin/diagnostic-functions.php:1026
 msgid "Table dropped, refresh page to reinstall."
 msgstr ""
 
-#: includes/admin/diagnostic-functions.php:1030
+#: includes/admin/diagnostic-functions.php:1031
 msgid "Something went wrong."
 msgstr ""
 
@@ -3342,7 +3420,7 @@ msgid "Sort by date added"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:350
-#: language.php:141
+#: language.php:138
 msgid "Review"
 msgstr ""
 
@@ -3412,7 +3490,7 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:184 language.php:215
+#: includes/admin/settings/class-geodir-settings-cpt.php:184 language.php:212
 msgid "Post Type"
 msgstr ""
 
@@ -3502,7 +3580,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:296
 #: includes/admin/views/html-admin-page-status-report.php:576
-#: includes/class-geodir-post-data.php:666 language.php:35 language.php:156
+#: includes/class-geodir-post-data.php:666 language.php:35 language.php:153
 msgid "Name"
 msgstr ""
 
@@ -3798,12 +3876,12 @@ msgid "Listing submitted"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-design.php:255
-#: includes/admin/settings/class-geodir-settings-emails.php:326
+#: includes/admin/settings/class-geodir-settings-emails.php:294
 msgid "Listing edited"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-design.php:262
-#: includes/admin/settings/class-geodir-settings-emails.php:360
+#: includes/admin/settings/class-geodir-settings-emails.php:328
 msgid "Moderate comment"
 msgstr ""
 
@@ -3963,205 +4041,172 @@ msgstr ""
 msgid "Other emails"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:86
-#: includes/admin/settings/class-geodir-settings-emails.php:435
-msgid "Send enquiry"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:89
-#: includes/admin/settings/class-geodir-settings-emails.php:128
-#: includes/admin/settings/class-geodir-settings-emails.php:163
-#: includes/admin/settings/class-geodir-settings-emails.php:195
-#: includes/admin/settings/class-geodir-settings-emails.php:227
-#: includes/admin/settings/class-geodir-settings-emails.php:258
-#: includes/admin/settings/class-geodir-settings-emails.php:295
-#: includes/admin/settings/class-geodir-settings-emails.php:330
-#: includes/admin/settings/class-geodir-settings-emails.php:364
-msgid "Enable email"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:90
-msgid "This will enable the \"Send enquiry\" option for the details page."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:96
-#: includes/admin/settings/class-geodir-settings-emails.php:135
-#: includes/admin/settings/class-geodir-settings-emails.php:170
-#: includes/admin/settings/class-geodir-settings-emails.php:202
-#: includes/admin/settings/class-geodir-settings-emails.php:234
-#: includes/admin/settings/class-geodir-settings-emails.php:265
-#: includes/admin/settings/class-geodir-settings-emails.php:302
-#: includes/admin/settings/class-geodir-settings-emails.php:337
-#: includes/admin/settings/class-geodir-settings-emails.php:371
-msgid "Subject"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:97
-#: includes/admin/settings/class-geodir-settings-emails.php:136
-#: includes/admin/settings/class-geodir-settings-emails.php:171
-#: includes/admin/settings/class-geodir-settings-emails.php:203
-#: includes/admin/settings/class-geodir-settings-emails.php:235
-#: includes/admin/settings/class-geodir-settings-emails.php:266
-#: includes/admin/settings/class-geodir-settings-emails.php:303
-#: includes/admin/settings/class-geodir-settings-emails.php:338
-#: includes/admin/settings/class-geodir-settings-emails.php:372
-msgid "The email subject."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:106
-#: includes/admin/settings/class-geodir-settings-emails.php:145
-#: includes/admin/settings/class-geodir-settings-emails.php:180
-#: includes/admin/settings/class-geodir-settings-emails.php:212
-#: includes/admin/settings/class-geodir-settings-emails.php:244
-#: includes/admin/settings/class-geodir-settings-emails.php:275
-#: includes/admin/settings/class-geodir-settings-emails.php:312
-#: includes/admin/settings/class-geodir-settings-emails.php:347
-#: includes/admin/settings/class-geodir-settings-emails.php:381
-msgid "Body"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:107
-#: includes/admin/settings/class-geodir-settings-emails.php:146
-#: includes/admin/settings/class-geodir-settings-emails.php:181
-#: includes/admin/settings/class-geodir-settings-emails.php:213
-#: includes/admin/settings/class-geodir-settings-emails.php:245
-#: includes/admin/settings/class-geodir-settings-emails.php:276
-#: includes/admin/settings/class-geodir-settings-emails.php:313
-#: includes/admin/settings/class-geodir-settings-emails.php:348
-#: includes/admin/settings/class-geodir-settings-emails.php:382
-msgid "The email body, this can be text or HTML."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:114
-#: includes/admin/settings/class-geodir-settings-emails.php:153
-#: includes/admin/settings/class-geodir-settings-emails.php:188
-#: includes/admin/settings/class-geodir-settings-emails.php:220
-#: includes/admin/settings/class-geodir-settings-emails.php:252
-#: includes/admin/settings/class-geodir-settings-emails.php:283
-#: includes/admin/settings/class-geodir-settings-emails.php:320
-#: includes/admin/settings/class-geodir-settings-emails.php:355
-#: includes/admin/settings/class-geodir-settings-emails.php:389
-msgid "Available template tags:"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:125
-#: includes/admin/settings/class-geodir-settings-emails.php:292
+#: includes/admin/settings/class-geodir-settings-emails.php:93
+#: includes/admin/settings/class-geodir-settings-emails.php:260
 msgid "Pending listing submitted"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:129
+#: includes/admin/settings/class-geodir-settings-emails.php:96
+#: includes/admin/settings/class-geodir-settings-emails.php:131
+#: includes/admin/settings/class-geodir-settings-emails.php:163
+#: includes/admin/settings/class-geodir-settings-emails.php:195
+#: includes/admin/settings/class-geodir-settings-emails.php:226
+#: includes/admin/settings/class-geodir-settings-emails.php:263
+#: includes/admin/settings/class-geodir-settings-emails.php:298
+#: includes/admin/settings/class-geodir-settings-emails.php:332
+msgid "Enable email"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-emails.php:97
 msgid ""
 "Send an email to user when their submitted listing is under pending review."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:159
-#: includes/admin/settings/class-geodir-settings-emails.php:421
+#: includes/admin/settings/class-geodir-settings-emails.php:103
+#: includes/admin/settings/class-geodir-settings-emails.php:138
+#: includes/admin/settings/class-geodir-settings-emails.php:170
+#: includes/admin/settings/class-geodir-settings-emails.php:202
+#: includes/admin/settings/class-geodir-settings-emails.php:233
+#: includes/admin/settings/class-geodir-settings-emails.php:270
+#: includes/admin/settings/class-geodir-settings-emails.php:305
+#: includes/admin/settings/class-geodir-settings-emails.php:339
+msgid "Subject"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-emails.php:104
+#: includes/admin/settings/class-geodir-settings-emails.php:139
+#: includes/admin/settings/class-geodir-settings-emails.php:171
+#: includes/admin/settings/class-geodir-settings-emails.php:203
+#: includes/admin/settings/class-geodir-settings-emails.php:234
+#: includes/admin/settings/class-geodir-settings-emails.php:271
+#: includes/admin/settings/class-geodir-settings-emails.php:306
+#: includes/admin/settings/class-geodir-settings-emails.php:340
+msgid "The email subject."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-emails.php:113
+#: includes/admin/settings/class-geodir-settings-emails.php:148
+#: includes/admin/settings/class-geodir-settings-emails.php:180
+#: includes/admin/settings/class-geodir-settings-emails.php:212
+#: includes/admin/settings/class-geodir-settings-emails.php:243
+#: includes/admin/settings/class-geodir-settings-emails.php:280
+#: includes/admin/settings/class-geodir-settings-emails.php:315
+#: includes/admin/settings/class-geodir-settings-emails.php:349
+msgid "Body"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-emails.php:114
+#: includes/admin/settings/class-geodir-settings-emails.php:149
+#: includes/admin/settings/class-geodir-settings-emails.php:181
+#: includes/admin/settings/class-geodir-settings-emails.php:213
+#: includes/admin/settings/class-geodir-settings-emails.php:244
+#: includes/admin/settings/class-geodir-settings-emails.php:281
+#: includes/admin/settings/class-geodir-settings-emails.php:316
+#: includes/admin/settings/class-geodir-settings-emails.php:350
+msgid "The email body, this can be text or HTML."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-emails.php:121
+#: includes/admin/settings/class-geodir-settings-emails.php:156
+#: includes/admin/settings/class-geodir-settings-emails.php:188
+#: includes/admin/settings/class-geodir-settings-emails.php:220
+#: includes/admin/settings/class-geodir-settings-emails.php:251
+#: includes/admin/settings/class-geodir-settings-emails.php:288
+#: includes/admin/settings/class-geodir-settings-emails.php:323
+#: includes/admin/settings/class-geodir-settings-emails.php:357
+msgid "Available template tags:"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-emails.php:127
+#: includes/admin/settings/class-geodir-settings-emails.php:389
 msgid "Listing published"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:164
+#: includes/admin/settings/class-geodir-settings-emails.php:132
 msgid "Send an email to user when their listing is published."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:193
-#: includes/admin/settings/class-geodir-settings-emails.php:428
+#: includes/admin/settings/class-geodir-settings-emails.php:161
+#: includes/admin/settings/class-geodir-settings-emails.php:396
 msgid "Listing owner comment submitted"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:196
+#: includes/admin/settings/class-geodir-settings-emails.php:164
 msgid "Send an email to the listing owner when a comment is submitted."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:225
+#: includes/admin/settings/class-geodir-settings-emails.php:193
 msgid "Listing owner comment approved"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:228
+#: includes/admin/settings/class-geodir-settings-emails.php:196
 msgid "Send an email to the listing owner when a comment is approved."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:256
+#: includes/admin/settings/class-geodir-settings-emails.php:224
 msgid "Comment author comment approved"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:259
+#: includes/admin/settings/class-geodir-settings-emails.php:227
 msgid "Send an email to the comment author when a comment is approved."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:296
+#: includes/admin/settings/class-geodir-settings-emails.php:264
 msgid ""
 "Send an email to admin when the listing submitted by a user is under pending "
 "review."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:331
+#: includes/admin/settings/class-geodir-settings-emails.php:299
 msgid "Send an email when a listing is edited by a user."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:365
+#: includes/admin/settings/class-geodir-settings-emails.php:333
 msgid ""
 "Send an email when a comment/review needs approval. This will takeover the "
 "standard WordPress email."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:399
+#: includes/admin/settings/class-geodir-settings-emails.php:367
 msgid "Email sender options"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:402
+#: includes/admin/settings/class-geodir-settings-emails.php:370
 msgid "Sender name"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:403
+#: includes/admin/settings/class-geodir-settings-emails.php:371
 msgid "How the sender name appears in outgoing GeoDirectory emails."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:410
+#: includes/admin/settings/class-geodir-settings-emails.php:378
 msgid "Email address"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:411
+#: includes/admin/settings/class-geodir-settings-emails.php:379
 msgid "How the sender email appears in outgoing GeoDirectory emails."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:419
+#: includes/admin/settings/class-geodir-settings-emails.php:387
 msgid "Email BCC options"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:422
+#: includes/admin/settings/class-geodir-settings-emails.php:390
 msgid "This will send a BCC email to the site admin on listing published."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:429
+#: includes/admin/settings/class-geodir-settings-emails.php:397
 msgid ""
 "This will send a BCC email to the site admin on listing owner comment "
 "submitted."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-emails.php:436
+#: includes/admin/settings/class-geodir-settings-emails.php:403
+msgid "Send enquiry"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-emails.php:404
 msgid "This will send a BCC email to the site admin on send enquiry submit."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:463
-msgid "[[#site_name#]] Website Enquiry"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-emails.php:474
-msgid ""
-"Dear [#to_name#],\n"
-"\n"
-"An enquiry has been sent from: [#listing_link#]\n"
-"\n"
-"===============================\n"
-"[#comments#]\n"
-"\n"
-"From : [#from_name#]\n"
-"Email : [#from_email#]\n"
-"Phone : [#phone#]\n"
-"===============================\n"
-"\n"
-"Thank you,\n"
-"[#site_name_url#]"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:50
@@ -6083,7 +6128,7 @@ msgid "Pending"
 msgstr ""
 
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:184
-#: language.php:163
+#: language.php:160
 msgid "Spam"
 msgstr ""
 
@@ -7376,92 +7421,33 @@ msgstr ""
 msgid "Sorry, you cannot update resource."
 msgstr ""
 
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:121
-msgid "Check reviews"
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:123
-msgid "Check reviews for correct location and content settings."
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:126
-msgid "Create default GeoDirectory pages"
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:130
-msgid "Note:"
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:131
-msgid ""
-"This tool will install all the missing GeoDirectory pages. Pages already "
-"defined and set up will not be replaced."
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:135
-msgid "Term counts"
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:137
-msgid "This tool will recount the listing terms."
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:174
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:193
+#: includes/api/class-geodir-rest-system-status-tools-controller.php:144
+#: includes/api/class-geodir-rest-system-status-tools-controller.php:163
 msgid "Invalid tool ID."
 msgstr ""
 
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:243
+#: includes/api/class-geodir-rest-system-status-tools-controller.php:213
 msgid "A unique identifier for the tool."
 msgstr ""
 
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:251
+#: includes/api/class-geodir-rest-system-status-tools-controller.php:221
 msgid "Tool name."
 msgstr ""
 
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:259
+#: includes/api/class-geodir-rest-system-status-tools-controller.php:229
 msgid "What running the tool will do."
 msgstr ""
 
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:267
+#: includes/api/class-geodir-rest-system-status-tools-controller.php:237
 msgid "Tool description."
 msgstr ""
 
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:275
+#: includes/api/class-geodir-rest-system-status-tools-controller.php:245
 msgid "Did the tool run successfully?"
 msgstr ""
 
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:280
+#: includes/api/class-geodir-rest-system-status-tools-controller.php:250
 msgid "Tool return message."
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:334
-msgid "Reviews checked."
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:336
-msgid "No reviews checked."
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:347
-msgid "Terms successfully recounted"
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:351
-msgid "All missing GeoDirectory pages successfully installed"
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:363
-#, php-format
-msgid "There was an error calling %s"
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:365
-msgid "Tool ran."
-msgstr ""
-
-#: includes/api/class-geodir-rest-system-status-tools-controller.php:369
-msgid "There was an error calling this tool. There is no callback present."
 msgstr ""
 
 #: includes/api/class-geodir-rest-taxonomies-controller.php:35
@@ -7518,37 +7504,37 @@ msgid "Limit results to taxonomies associated with a specific post type."
 msgstr ""
 
 #: includes/business-hours-functions.php:17 includes/general_functions.php:227
-#: includes/helper-functions.php:581
+#: includes/helper-functions.php:552
 msgid "Monday"
 msgstr ""
 
 #: includes/business-hours-functions.php:18 includes/general_functions.php:228
-#: includes/helper-functions.php:582
+#: includes/helper-functions.php:553
 msgid "Tuesday"
 msgstr ""
 
 #: includes/business-hours-functions.php:19 includes/general_functions.php:229
-#: includes/helper-functions.php:583
+#: includes/helper-functions.php:554
 msgid "Wednesday"
 msgstr ""
 
 #: includes/business-hours-functions.php:20 includes/general_functions.php:230
-#: includes/helper-functions.php:584
+#: includes/helper-functions.php:555
 msgid "Thursday"
 msgstr ""
 
 #: includes/business-hours-functions.php:21 includes/general_functions.php:231
-#: includes/helper-functions.php:585
+#: includes/helper-functions.php:556
 msgid "Friday"
 msgstr ""
 
 #: includes/business-hours-functions.php:22 includes/general_functions.php:232
-#: includes/helper-functions.php:586
+#: includes/helper-functions.php:557
 msgid "Saturday"
 msgstr ""
 
 #: includes/business-hours-functions.php:23 includes/general_functions.php:226
-#: includes/helper-functions.php:580
+#: includes/helper-functions.php:551
 msgid "Sunday"
 msgstr ""
 
@@ -7687,67 +7673,66 @@ msgstr ""
 msgid "Username is required."
 msgstr ""
 
-#: includes/class-geodir-comments.php:481
+#: includes/class-geodir-comments.php:504
 msgid "Pingback:"
 msgstr ""
 
-#: includes/class-geodir-comments.php:481
+#: includes/class-geodir-comments.php:504
 msgid "(Edit)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:505
+#: includes/class-geodir-comments.php:528
 msgid "Post author"
 msgstr ""
 
-#: includes/class-geodir-comments.php:513
+#: includes/class-geodir-comments.php:536
 #, php-format
 msgid "%s ago"
 msgstr ""
 
-#: includes/class-geodir-comments.php:522
+#: includes/class-geodir-comments.php:545
 msgid "Your comment is awaiting moderation."
 msgstr ""
 
-#: includes/class-geodir-comments.php:531
-#: includes/widgets/class-geodir-widget-author-actions.php:107
-#: includes/widgets/class-geodir-widget-author-actions.php:135 language.php:161
+#: includes/class-geodir-comments.php:554
+#: includes/widgets/class-geodir-widget-author-actions.php:124 language.php:158
 msgid "Edit"
 msgstr ""
 
-#: includes/class-geodir-comments.php:534 language.php:160
+#: includes/class-geodir-comments.php:557 language.php:157
 msgid "Reply"
 msgstr ""
 
-#: includes/class-geodir-comments.php:632
+#: includes/class-geodir-comments.php:655
 #, php-format
 msgid "%d star rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:632
+#: includes/class-geodir-comments.php:655
 msgid "No rating yet!"
 msgstr ""
 
-#: includes/class-geodir-comments.php:680
+#: includes/class-geodir-comments.php:703
 msgid "Select a rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:712
+#: includes/class-geodir-comments.php:735
 msgid "Terrible"
 msgstr ""
 
-#: includes/class-geodir-comments.php:713
+#: includes/class-geodir-comments.php:736
 msgid "Poor"
 msgstr ""
 
-#: includes/class-geodir-comments.php:714
+#: includes/class-geodir-comments.php:737
 msgid "Average"
 msgstr ""
 
-#: includes/class-geodir-comments.php:715
+#: includes/class-geodir-comments.php:738
 msgid "Very Good"
 msgstr ""
 
-#: includes/class-geodir-comments.php:716
+#: includes/class-geodir-comments.php:739
 msgid "Excellent"
 msgstr ""
 
@@ -7769,11 +7754,11 @@ msgstr ""
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:92
+#: includes/class-geodir-defaults.php:93
 msgid "[[#site_name#]] Your listing has been submitted for approval"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:102
+#: includes/class-geodir-defaults.php:103
 msgid ""
 "Dear [#client_name#],\n"
 "\n"
@@ -7785,11 +7770,11 @@ msgid ""
 "Thank you for your contribution."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:119
+#: includes/class-geodir-defaults.php:120
 msgid "[[#site_name#]] Listing Published Successfully"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:129
+#: includes/class-geodir-defaults.php:130
 msgid ""
 "Dear [#client_name#],\n"
 "\n"
@@ -7801,14 +7786,14 @@ msgid ""
 "Thank you for your contribution."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:146
+#: includes/class-geodir-defaults.php:147
 msgid ""
 "[[#site_name#]] A new comment has been submitted on your listing "
 "[#listing_title#]"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:156
-#: includes/class-geodir-defaults.php:191
+#: includes/class-geodir-defaults.php:157
+#: includes/class-geodir-defaults.php:192
 msgid ""
 "Dear [#client_name#],\n"
 "\n"
@@ -7827,17 +7812,17 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:181
+#: includes/class-geodir-defaults.php:182
 msgid ""
 "[[#site_name#]] A comment on your listing [#listing_title#] has been approved"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:216
+#: includes/class-geodir-defaults.php:217
 msgid ""
 "[[#site_name#]] Your comment on listing [#listing_title#] has been approved"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:226
+#: includes/class-geodir-defaults.php:227
 msgid ""
 "Dear [#comment_author#],\n"
 "\n"
@@ -7848,11 +7833,11 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:243
+#: includes/class-geodir-defaults.php:244
 msgid "[[#site_name#]] A new listing has been submitted for review"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:253
+#: includes/class-geodir-defaults.php:254
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -7863,11 +7848,11 @@ msgid ""
 "[#site_name_url#]"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:268
+#: includes/class-geodir-defaults.php:269
 msgid "[[#site_name#]] Listing edited by Author"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:278
+#: includes/class-geodir-defaults.php:279
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -7882,11 +7867,11 @@ msgid ""
 "This email is just for your information."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:298
+#: includes/class-geodir-defaults.php:299
 msgid "[[#site_name#]] A new comment is waiting for your approval"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:308
+#: includes/class-geodir-defaults.php:309
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -7909,110 +7894,110 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:353
+#: includes/class-geodir-defaults.php:354
 #, php-format
 msgid "All %%pt_plural%% %%in_location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:362
+#: includes/class-geodir-defaults.php:363
 #, php-format
 msgid "%%pt_plural%% %%in_location%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:371
+#: includes/class-geodir-defaults.php:372
 #, php-format
 msgid "%%pt_plural%% %%in_location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:380
+#: includes/class-geodir-defaults.php:381
 #, php-format
 msgid "All %%category%% %%in_location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:389
+#: includes/class-geodir-defaults.php:390
 #, php-format
 msgid "%%category%% %%in_location%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:398
+#: includes/class-geodir-defaults.php:399
 #, php-format
 msgid "Posts related to Category: %%category%% %%in_location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:407
+#: includes/class-geodir-defaults.php:408
 #, php-format
 msgid "Tag: %%tag%% %%in_location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:416
+#: includes/class-geodir-defaults.php:417
 #, php-format
 msgid "%%tag%% %%in_location%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:425
+#: includes/class-geodir-defaults.php:426
 #, php-format
 msgid "Posts related to Tag: %%tag%% %%in_location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:434
-#: includes/class-geodir-defaults.php:461
+#: includes/class-geodir-defaults.php:435
+#: includes/class-geodir-defaults.php:462
 #, php-format
 msgid "%%title%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:443
+#: includes/class-geodir-defaults.php:444
 #, php-format
 msgid "%%title%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:452
+#: includes/class-geodir-defaults.php:453
 #, php-format
 msgid "%%excerpt%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:470
+#: includes/class-geodir-defaults.php:471
 #, php-format
 msgid "%%title%% %%location%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:479
+#: includes/class-geodir-defaults.php:480
 #, php-format
 msgid "%%location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:488
+#: includes/class-geodir-defaults.php:489
 #, php-format
 msgid "Search results for: %%search_term%% %%search_near%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:497
+#: includes/class-geodir-defaults.php:498
 #, php-format
 msgid ""
 "%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep"
 "%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:506
+#: includes/class-geodir-defaults.php:507
 #, php-format
 msgid "%%pt_plural%% search results for %%search_term%%, Near %%search_near%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:515
+#: includes/class-geodir-defaults.php:516
 #, php-format
 msgid "Add %%pt_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:524
+#: includes/class-geodir-defaults.php:525
 #, php-format
 msgid "Edit %%pt_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:533
+#: includes/class-geodir-defaults.php:534
 #, php-format
 msgid "Add %%pt_single%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:542
+#: includes/class-geodir-defaults.php:543
 #, php-format
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
@@ -8030,60 +8015,98 @@ msgstr ""
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1121
+#: includes/class-geodir-email.php:1050
 msgid "Author"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:423
+#: includes/class-geodir-frontend-scripts.php:141
+#: includes/class-geodir-frontend-scripts.php:142
+msgid "In:"
+msgstr ""
+
+#: includes/class-geodir-frontend-scripts.php:167
+msgid "Search was not successful for the following reason :"
+msgstr ""
+
+#: includes/class-geodir-frontend-scripts.php:176
+msgid "Search was not successful for the requested address."
+msgstr ""
+
+#: includes/class-geodir-frontend-scripts.php:222
+#: includes/core-functions.php:304
+msgid "Unable to find your location"
+msgstr ""
+
+#: includes/class-geodir-frontend-scripts.php:225
+#: includes/core-functions.php:305
+msgid "Permission denied in finding your location"
+msgstr ""
+
+#: includes/class-geodir-frontend-scripts.php:228
+#: includes/core-functions.php:306
+msgid "Your location is currently unknown"
+msgstr ""
+
+#: includes/class-geodir-frontend-scripts.php:231
+#: includes/core-functions.php:307
+msgid "Attempt to find location took too long"
+msgstr ""
+
+#: includes/class-geodir-frontend-scripts.php:234
+#: includes/core-functions.php:308
+msgid "Location detection not supported in browser"
+msgstr ""
+
+#: includes/class-geodir-frontend-scripts.php:636
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:424
+#: includes/class-geodir-frontend-scripts.php:637
 #: includes/core-functions.php:310
 msgid "No matches found"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:425
+#: includes/class-geodir-frontend-scripts.php:638
 #: includes/core-functions.php:311
 msgid "Loading failed"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:426
+#: includes/class-geodir-frontend-scripts.php:639
 #: includes/core-functions.php:312
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:427
+#: includes/class-geodir-frontend-scripts.php:640
 #: includes/core-functions.php:313
 msgid "Please enter %item% or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:428
+#: includes/class-geodir-frontend-scripts.php:641
 #: includes/core-functions.php:314
 msgid "Please delete 1 character"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:429
+#: includes/class-geodir-frontend-scripts.php:642
 #: includes/core-functions.php:315
 msgid "Please delete %item% characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:430
+#: includes/class-geodir-frontend-scripts.php:643
 #: includes/core-functions.php:316
 msgid "You can only select 1 item"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:431
+#: includes/class-geodir-frontend-scripts.php:644
 #: includes/core-functions.php:317
 msgid "You can only select %item% items"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:432
+#: includes/class-geodir-frontend-scripts.php:645
 #: includes/core-functions.php:318
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:433
+#: includes/class-geodir-frontend-scripts.php:646
 #: includes/core-functions.php:319
 msgid "Searching&hellip;"
 msgstr ""
@@ -8351,7 +8374,7 @@ msgstr ""
 msgid "places"
 msgstr ""
 
-#: includes/class-geodir-post-types.php:375 includes/post_functions.php:801
+#: includes/class-geodir-post-types.php:375 includes/post_functions.php:798
 msgid "Closed down"
 msgstr ""
 
@@ -8723,16 +8746,14 @@ msgid "% Reviews"
 msgstr ""
 
 #: includes/comments-functions.php:52
-#: includes/widgets/class-geodir-widget-best-of.php:387
 msgid "No Reviews"
 msgstr ""
 
 #: includes/comments-functions.php:54
-#: includes/widgets/class-geodir-widget-best-of.php:391
 msgid "1 Review"
 msgstr ""
 
-#: includes/comments-functions.php:200 language.php:142
+#: includes/comments-functions.php:200 language.php:139
 msgid "Comments"
 msgstr ""
 
@@ -8856,12 +8877,12 @@ msgid "Reply text"
 msgstr ""
 
 #: includes/core-functions.php:284 includes/core-functions.php:323
-#: templates/reviews.php:105
+#: templates/reviews.php:106
 msgid "Post Review"
 msgstr ""
 
 #: includes/core-functions.php:285 includes/core-functions.php:328
-#: templates/reviews.php:106
+#: templates/reviews.php:107
 msgid "Review text"
 msgstr ""
 
@@ -8909,32 +8930,12 @@ msgstr ""
 msgid "Via {viaNumber}"
 msgstr ""
 
-#: includes/core-functions.php:302 language.php:165
+#: includes/core-functions.php:302 language.php:162
 msgid "Enter Your Location"
 msgstr ""
 
 #: includes/core-functions.php:303
 msgid "My Location"
-msgstr ""
-
-#: includes/core-functions.php:304 includes/geodirectory_template_tags.php:430
-msgid "Unable to find your location"
-msgstr ""
-
-#: includes/core-functions.php:305 includes/geodirectory_template_tags.php:433
-msgid "Permission denied in finding your location"
-msgstr ""
-
-#: includes/core-functions.php:306 includes/geodirectory_template_tags.php:436
-msgid "Your location is currently unknown"
-msgstr ""
-
-#: includes/core-functions.php:307 includes/geodirectory_template_tags.php:439
-msgid "Attempt to find location took too long"
-msgstr ""
-
-#: includes/core-functions.php:308 includes/geodirectory_template_tags.php:442
-msgid "Location detection not supported in browser"
 msgstr ""
 
 #: includes/core-functions.php:309
@@ -8953,7 +8954,7 @@ msgstr ""
 msgid "Post reply"
 msgstr ""
 
-#: includes/core-functions.php:325 templates/reviews.php:104
+#: includes/core-functions.php:325 templates/reviews.php:105
 msgid "Leave a Review"
 msgstr ""
 
@@ -9047,7 +9048,7 @@ msgstr ""
 #: includes/custom-fields/input-functions.php:1524
 #: includes/custom-fields/input-functions.php:1528
 #: includes/taxonomy-functions.php:275
-#: includes/widgets/class-geodir-widget-best-of.php:342
+#: includes/widgets/class-geodir-widget-best-of.php:344
 msgid "Select Category"
 msgstr ""
 
@@ -9103,27 +9104,27 @@ msgstr ""
 msgid "Expand opening hours"
 msgstr ""
 
-#: includes/custom_functions.php:534
+#: includes/custom_functions.php:447
 #: includes/widgets/class-geodir-widget-listings.php:127
 msgid "Grid View (Two Columns)"
 msgstr ""
 
-#: includes/custom_functions.php:535
+#: includes/custom_functions.php:448
 #: includes/widgets/class-geodir-widget-listings.php:128
 msgid "Grid View (Three Columns)"
 msgstr ""
 
-#: includes/custom_functions.php:536
+#: includes/custom_functions.php:449
 #: includes/widgets/class-geodir-widget-listings.php:129
 msgid "Grid View (Four Columns)"
 msgstr ""
 
-#: includes/custom_functions.php:537
+#: includes/custom_functions.php:450
 #: includes/widgets/class-geodir-widget-listings.php:130
 msgid "Grid View (Five Columns)"
 msgstr ""
 
-#: includes/custom_functions.php:538
+#: includes/custom_functions.php:451
 #: includes/widgets/class-geodir-widget-listings.php:131
 msgid "List view"
 msgstr ""
@@ -9173,23 +9174,7 @@ msgstr ""
 msgid "GeoDirectory: fetch_remote_file() failed to delete temp file."
 msgstr ""
 
-#: includes/general_functions.php:1749
-#: includes/widgets/class-geodir-widget-listings.php:429
-msgid "Near:"
-msgstr ""
-
-#: includes/general_functions.php:1749
-#: includes/widgets/class-geodir-widget-listings.php:429
-msgid "Me"
-msgstr ""
-
-#: includes/general_functions.php:1850
-#: includes/widgets/class-geodir-widget-best-of.php:498
-#: includes/widgets/class-geodir-widget-listings.php:552
-msgid "View all"
-msgstr ""
-
-#: includes/general_functions.php:2975
+#: includes/general_functions.php:2177
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
@@ -9302,35 +9287,6 @@ msgstr ""
 msgid "%1$s must be between %2$d (inclusive) and %3$d (inclusive)"
 msgstr ""
 
-#: includes/geodirectory_hooks_actions.php:307
-msgid "reviews"
-msgstr ""
-
-#: includes/geodirectory_hooks_actions.php:307
-msgid "review"
-msgstr ""
-
-#: includes/geodirectory_hooks_actions.php:309
-msgid "based on"
-msgstr ""
-
-#: includes/geodirectory_hooks_actions.php:529
-#: includes/template-functions.php:225
-msgid "No listings found which match your selection."
-msgstr ""
-
-#: includes/geodirectory_hooks_actions.php:1340
-msgid "Published"
-msgstr ""
-
-#: includes/geodirectory_hooks_actions.php:1342
-msgid "Not published"
-msgstr ""
-
-#: includes/geodirectory_hooks_actions.php:1347
-msgid "Status: "
-msgstr ""
-
 #: includes/geodirectory_template_actions.php:204
 msgid "My Favorite"
 msgstr ""
@@ -9359,182 +9315,169 @@ msgstr ""
 msgid " For :"
 msgstr ""
 
-#: includes/geodirectory_template_tags.php:135 templates/loop/pagination.php:63
+#: includes/geodirectory_template_tags.php:114 templates/loop/pagination.php:63
 #, php-format
 msgid "Showing %s %d-%d of %d"
 msgstr ""
 
-#: includes/geodirectory_template_tags.php:137 templates/loop/pagination.php:65
+#: includes/geodirectory_template_tags.php:116 templates/loop/pagination.php:65
 #, php-format
 msgid "Showing listings %d-%d of %d"
 msgstr ""
 
-#: includes/geodirectory_template_tags.php:349
-#: includes/geodirectory_template_tags.php:350
-msgid "In:"
-msgstr ""
-
-#: includes/geodirectory_template_tags.php:375
-msgid "Search was not successful for the following reason :"
-msgstr ""
-
-#: includes/geodirectory_template_tags.php:384
-msgid "Search was not successful for the requested address."
-msgstr ""
-
-#: includes/helper-functions.php:589
+#: includes/helper-functions.php:560
 msgid "January"
 msgstr ""
 
-#: includes/helper-functions.php:590
+#: includes/helper-functions.php:561
 msgid "February"
 msgstr ""
 
-#: includes/helper-functions.php:591
+#: includes/helper-functions.php:562
 msgid "March"
 msgstr ""
 
-#: includes/helper-functions.php:592
+#: includes/helper-functions.php:563
 msgid "April"
 msgstr ""
 
-#: includes/helper-functions.php:593 includes/helper-functions.php:607
+#: includes/helper-functions.php:564 includes/helper-functions.php:578
 msgid "May"
 msgstr ""
 
-#: includes/helper-functions.php:594
+#: includes/helper-functions.php:565
 msgid "June"
 msgstr ""
 
-#: includes/helper-functions.php:595
+#: includes/helper-functions.php:566
 msgid "July"
 msgstr ""
 
-#: includes/helper-functions.php:596
+#: includes/helper-functions.php:567
 msgid "August"
 msgstr ""
 
-#: includes/helper-functions.php:597
+#: includes/helper-functions.php:568
 msgid "September"
 msgstr ""
 
-#: includes/helper-functions.php:598
+#: includes/helper-functions.php:569
 msgid "October"
 msgstr ""
 
-#: includes/helper-functions.php:599
+#: includes/helper-functions.php:570
 msgid "November"
 msgstr ""
 
-#: includes/helper-functions.php:600
+#: includes/helper-functions.php:571
 msgid "December"
 msgstr ""
 
-#: includes/helper-functions.php:603
+#: includes/helper-functions.php:574
 msgid "Jan"
 msgstr ""
 
-#: includes/helper-functions.php:604
+#: includes/helper-functions.php:575
 msgid "Feb"
 msgstr ""
 
-#: includes/helper-functions.php:605
+#: includes/helper-functions.php:576
 msgid "Mar"
 msgstr ""
 
-#: includes/helper-functions.php:606
+#: includes/helper-functions.php:577
 msgid "Apr"
 msgstr ""
 
-#: includes/helper-functions.php:608
+#: includes/helper-functions.php:579
 msgid "Jun"
 msgstr ""
 
-#: includes/helper-functions.php:609
+#: includes/helper-functions.php:580
 msgid "Jul"
 msgstr ""
 
-#: includes/helper-functions.php:610
+#: includes/helper-functions.php:581
 msgid "Aug"
 msgstr ""
 
-#: includes/helper-functions.php:611
+#: includes/helper-functions.php:582
 msgid "Sep"
 msgstr ""
 
-#: includes/helper-functions.php:612
+#: includes/helper-functions.php:583
 msgid "Oct"
 msgstr ""
 
-#: includes/helper-functions.php:613
+#: includes/helper-functions.php:584
 msgid "Nov"
 msgstr ""
 
-#: includes/helper-functions.php:614
+#: includes/helper-functions.php:585
 msgid "Dec"
 msgstr ""
 
-#: includes/helper-functions.php:617
+#: includes/helper-functions.php:588
 msgid "Sun"
 msgstr ""
 
-#: includes/helper-functions.php:618
+#: includes/helper-functions.php:589
 msgid "Mon"
 msgstr ""
 
-#: includes/helper-functions.php:619
+#: includes/helper-functions.php:590
 msgid "Tue"
 msgstr ""
 
-#: includes/helper-functions.php:620
+#: includes/helper-functions.php:591
 msgid "Wed"
 msgstr ""
 
-#: includes/helper-functions.php:621
+#: includes/helper-functions.php:592
 msgid "Thu"
 msgstr ""
 
-#: includes/helper-functions.php:622
+#: includes/helper-functions.php:593
 msgid "Fri"
 msgstr ""
 
-#: includes/helper-functions.php:623
+#: includes/helper-functions.php:594
 msgid "Sat"
 msgstr ""
 
-#: includes/helper-functions.php:626 includes/helper-functions.php:632
+#: includes/helper-functions.php:597 includes/helper-functions.php:603
 msgid "S"
 msgstr ""
 
-#: includes/helper-functions.php:627
+#: includes/helper-functions.php:598
 msgid "M"
 msgstr ""
 
-#: includes/helper-functions.php:628 includes/helper-functions.php:630
+#: includes/helper-functions.php:599 includes/helper-functions.php:601
 msgid "T"
 msgstr ""
 
-#: includes/helper-functions.php:629
+#: includes/helper-functions.php:600
 msgid "W"
 msgstr ""
 
-#: includes/helper-functions.php:631
+#: includes/helper-functions.php:602
 msgid "F"
 msgstr ""
 
-#: includes/helper-functions.php:635
+#: includes/helper-functions.php:606
 msgid "am"
 msgstr ""
 
-#: includes/helper-functions.php:636
+#: includes/helper-functions.php:607
 msgid "pm"
 msgstr ""
 
-#: includes/helper-functions.php:637
+#: includes/helper-functions.php:608
 msgid "AM"
 msgstr ""
 
-#: includes/helper-functions.php:638
+#: includes/helper-functions.php:609
 msgid "PM"
 msgstr ""
 
@@ -9574,7 +9517,7 @@ msgstr ""
 msgid "to"
 msgstr ""
 
-#: includes/maps/map_functions.php:291 includes/maps/map_functions.php:578
+#: includes/maps/map_functions.php:118 includes/maps/map_functions.php:405
 msgid "No category"
 msgstr ""
 
@@ -9682,15 +9625,15 @@ msgstr ""
 msgid "%s draft updated. <a target=\"_blank\" href=\"%s\">Preview %s</a>"
 msgstr ""
 
-#: includes/post-types-functions.php:719
+#: includes/post-types-functions.php:720
 msgid "Sort By"
 msgstr ""
 
-#: includes/post_functions.php:768 includes/post_functions.php:781
+#: includes/post_functions.php:765 includes/post_functions.php:778
 msgid "Read more [...]"
 msgstr ""
 
-#: includes/post_functions.php:1055
+#: includes/post_functions.php:1052
 msgid "NEW"
 msgstr ""
 
@@ -9703,37 +9646,41 @@ msgstr ""
 msgid "No favorite listings found which match your selection."
 msgstr ""
 
-#: includes/template-functions.php:358
+#: includes/template-functions.php:225
+msgid "No listings found which match your selection."
+msgstr ""
+
+#: includes/template-functions.php:293
 #, php-format
 msgid "Search results: &ldquo;%s&rdquo;"
 msgstr ""
 
-#: includes/template-functions.php:361
+#: includes/template-functions.php:296
 #, php-format
 msgid "&nbsp;&ndash; Page %s"
 msgstr ""
 
-#: includes/template-functions.php:753
+#: includes/template-functions.php:688
 msgid "View: List"
 msgstr ""
 
-#: includes/template-functions.php:755
+#: includes/template-functions.php:690
 msgid "View: Grid 2"
 msgstr ""
 
-#: includes/template-functions.php:757
+#: includes/template-functions.php:692
 msgid "View: Grid 3"
 msgstr ""
 
-#: includes/template-functions.php:759
+#: includes/template-functions.php:694
 msgid "View: Grid 4"
 msgstr ""
 
-#: includes/template-functions.php:761
+#: includes/template-functions.php:696
 msgid "View: Grid 5"
 msgstr ""
 
-#: includes/template-functions.php:812
+#: includes/template-functions.php:747
 msgid "business"
 msgstr ""
 
@@ -9826,7 +9773,7 @@ msgid "GD > Author Actions"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-author-actions.php:44
-msgid "Hide edit:"
+msgid "Hide edit"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-author-actions.php:45
@@ -9834,16 +9781,39 @@ msgid "Hide the edit action."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-author-actions.php:53
-msgid "Hide delete:"
+msgid "Hide delete"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-author-actions.php:54
 msgid "Hide the delete action."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-author-actions.php:111
-#: includes/widgets/class-geodir-widget-author-actions.php:136 language.php:162
+#: includes/widgets/class-geodir-widget-author-actions.php:62
+msgid "Show on author page only"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-author-actions.php:63
+msgid "Show the action only on the author page."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-author-actions.php:128 language.php:159
 msgid "Delete"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-author-actions.php:165
+msgid "Published"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-author-actions.php:167
+msgid "Awaiting review"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-author-actions.php:170
+msgid "Not published"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-author-actions.php:175
+msgid "Status: "
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:34
@@ -9911,13 +9881,14 @@ msgid "Use current viewing post type?"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:201
-#: includes/widgets/class-geodir-widget-best-of.php:498
+#: includes/widgets/class-geodir-widget-best-of.php:500
 #, php-format
 msgid "Best of %s"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-best-of.php:389
-msgid " Reviews"
+#: includes/widgets/class-geodir-widget-best-of.php:500
+#: includes/widgets/class-geodir-widget-listings.php:552
+msgid "View all"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:32
@@ -10093,6 +10064,14 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-listings.php:170
 msgid "Only show listings with videos?"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:429
+msgid "Near:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:429
+msgid "Me"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-listings.php:631
@@ -11068,255 +11047,241 @@ msgid "Verify Listing"
 msgstr ""
 
 #: language.php:131
-msgid "Send Enquiry"
-msgstr ""
-
-#: language.php:132
-msgid ""
-"Hi there, I would like to enquire about this place. I would like to ask more "
-"info about..."
-msgstr ""
-
-#: language.php:133
-msgid "Enquiry sent successfully"
-msgstr ""
-
-#: language.php:134
 msgid "Enter correct verification code."
 msgstr ""
 
-#: language.php:137
+#: language.php:134
 msgid "Place Your Review"
 msgstr ""
 
-#: language.php:138
+#: language.php:135
 msgid "Your Comments"
 msgstr ""
 
-#: language.php:139
+#: language.php:136
 msgid "Rate this place by clicking a star below :"
 msgstr ""
 
-#: language.php:140
+#: language.php:137
 msgid "Comment"
 msgstr ""
 
-#: language.php:144
+#: language.php:141
 msgid "Submit Review"
 msgstr ""
 
-#: language.php:146
+#: language.php:143
 msgid "Business Owner"
 msgstr ""
 
-#: language.php:147
+#: language.php:144
 msgid "Site Admin"
 msgstr ""
 
-#: language.php:148
+#: language.php:145
 msgid "Trackbacks For This Post"
 msgstr ""
 
-#: language.php:149
+#: language.php:146
 msgid "Your review is awaiting moderation."
 msgstr ""
 
-#: language.php:150
+#: language.php:147
 msgid "Review are closed."
 msgstr ""
 
-#: language.php:151
+#: language.php:148
 msgid "Post Your Review"
 msgstr ""
 
-#: language.php:152
+#: language.php:149
 msgid "You must be"
 msgstr ""
 
-#: language.php:153
+#: language.php:150
 msgid "logged in"
 msgstr ""
 
-#: language.php:154
+#: language.php:151
 msgid "to post a review."
 msgstr ""
 
-#: language.php:155 language.php:171 templates/auth/form-grant-access.php:30
+#: language.php:152 language.php:168 templates/auth/form-grant-access.php:30
 msgid "Logout"
 msgstr ""
 
-#: language.php:159
+#: language.php:156
 msgid "Add Comment"
 msgstr ""
 
-#: language.php:166
+#: language.php:163
 msgid "Read More..."
 msgstr ""
 
-#: language.php:169
+#: language.php:166
 msgid "Edit Profile"
 msgstr ""
 
-#: language.php:170
+#: language.php:167
 msgid "Change Password"
 msgstr ""
 
-#: language.php:172
+#: language.php:169
 msgid "Welcome"
 msgstr ""
 
-#: language.php:176
+#: language.php:173
 msgid "Forgot Password?"
 msgstr ""
 
-#: language.php:177
+#: language.php:174
 msgid "E-mail"
 msgstr ""
 
-#: language.php:179
+#: language.php:176
 msgid "Password"
 msgstr ""
 
-#: language.php:180
+#: language.php:177
 msgid "Confirm Password"
 msgstr ""
 
-#: language.php:182
+#: language.php:179
 msgid "Enter your user password, must be 7 characters or more"
 msgstr ""
 
-#: language.php:183
+#: language.php:180
 msgid "Password must be 7 characters or more"
 msgstr ""
 
-#: language.php:184
+#: language.php:181
 msgid "Passwords do not match"
 msgstr ""
 
-#: language.php:186
+#: language.php:183
 msgid "Remember me on this computer"
 msgstr ""
 
-#: language.php:187
+#: language.php:184
 msgid "Get New Password"
 msgstr ""
 
-#: language.php:189
+#: language.php:186
 msgid "Sign Up Now"
 msgstr ""
 
-#: language.php:190
+#: language.php:187
 msgid "Personal Information"
 msgstr ""
 
-#: language.php:191
+#: language.php:188
 msgid "Full Name"
 msgstr ""
 
-#: language.php:192
+#: language.php:189
 msgid "(Note: A password will be e-mailed to you for future usage)"
 msgstr ""
 
-#: language.php:193
+#: language.php:190
 msgid "Register Now"
 msgstr ""
 
-#: language.php:194 language.php:196
+#: language.php:191 language.php:193
 msgid "Sign In"
 msgstr ""
 
-#: language.php:195
+#: language.php:192
 msgid "Register"
 msgstr ""
 
-#: language.php:197
+#: language.php:194
 msgid "Invalid Username/Password."
 msgstr ""
 
-#: language.php:198
+#: language.php:195
 msgid "Registration complete. Please check your e-mail for login details."
 msgstr ""
 
-#: language.php:199
+#: language.php:196
 msgid "We just sent you a new password. Kindly check your e-mail now."
 msgstr ""
 
-#: language.php:200
+#: language.php:197
 msgid ""
 "A confirmation link has been sent to you via email. Kindly check your e-mail "
 "now."
 msgstr ""
 
-#: language.php:201
+#: language.php:198
 msgid "User registration has been disabled by the admin."
 msgstr ""
 
-#: language.php:202
+#: language.php:199
 msgid "You are now logged out."
 msgstr ""
 
-#: language.php:203
+#: language.php:200
 msgid ""
 "Please enter your e-mail address as username. You will receive a new "
 "password via e-mail."
 msgstr ""
 
-#: language.php:204
+#: language.php:201
 msgid "Invalid Email, Please check"
 msgstr ""
 
-#: language.php:205
+#: language.php:202
 msgid "Check your e-mail for your new password."
 msgstr ""
 
-#: language.php:206
+#: language.php:203
 msgid "How many sample data you would like to populate on your site?"
 msgstr ""
 
-#: language.php:207
+#: language.php:204
 msgid "Insert sample data please"
 msgstr ""
 
-#: language.php:208
+#: language.php:205
 msgid "Yes Delete Please!"
 msgstr ""
 
-#: language.php:209
+#: language.php:206
 msgid ""
 "GeoDirectory sample data has been populated on your site. Wish to delete "
 "sample data?"
 msgstr ""
 
-#: language.php:210
+#: language.php:207
 msgid "Please Wait! We are importing dummy data."
 msgstr ""
 
-#: language.php:211
+#: language.php:208
 msgid "Please Wait! We are deleting dummy data."
 msgstr ""
 
-#: language.php:212
+#: language.php:209
 msgid "read more"
 msgstr ""
 
-#: language.php:213
+#: language.php:210
 msgid "Are you sure you want to deselect this post type?"
 msgstr ""
 
-#: language.php:214
+#: language.php:211
 msgid "S.No."
 msgstr ""
 
-#: language.php:217
+#: language.php:214
 msgid "Data inserted successfully."
 msgstr ""
 
-#: language.php:218
+#: language.php:215
 #, php-format
 msgid "%s record(s) inserted."
 msgstr ""
 
-#: language.php:221
+#: language.php:218
 #, php-format
 msgid ""
 "%s out of %s record(s) could not be inserted due to blank address. Address "
@@ -11324,7 +11289,7 @@ msgid ""
 "post_longitude are mandatory fields."
 msgstr ""
 
-#: language.php:223
+#: language.php:220
 #, php-format
 msgid ""
 "%s out of %s record(s) could not be inserted due to invalid address. You can "
@@ -11332,1141 +11297,1141 @@ msgid ""
 "enabled."
 msgstr ""
 
-#: language.php:226
+#: language.php:223
 #, php-format
 msgid ""
 "%s out of %s record(s) could not be inserted due to invalid/blank post type. "
 "Only use geodirectory's post type."
 msgstr ""
 
-#: language.php:229
+#: language.php:226
 #, php-format
 msgid "%s out of %s record(s) could not be inserted due to blank post title."
 msgstr ""
 
-#: language.php:231
+#: language.php:228
 #, php-format
 msgid "Please transfer all new images to <b>'%s'</b> folder."
 msgstr ""
 
-#: language.php:232
+#: language.php:229
 msgid ""
 "File you are uploading is not valid. First colum should be \"Post Title\"."
 msgstr ""
 
-#: language.php:233
+#: language.php:230
 msgid "Please upload CSV file only."
 msgstr ""
 
-#: language.php:234
+#: language.php:231
 msgid "Select CSV file to upload"
 msgstr ""
 
-#: language.php:235
+#: language.php:232
 msgid "Select & Upload CSV"
 msgstr ""
 
-#: language.php:236
+#: language.php:233
 msgid "Import data now"
 msgstr ""
 
-#: language.php:237
+#: language.php:234
 msgid "Please select csv file."
 msgstr ""
 
-#: language.php:239
+#: language.php:236
 msgid "featured_img_class"
 msgstr ""
 
-#: language.php:244
+#: language.php:241
 msgid "Afghanistan"
 msgstr ""
 
-#: language.php:245
+#: language.php:242
 msgid "Albania"
 msgstr ""
 
-#: language.php:246
+#: language.php:243
 msgid "Algeria"
 msgstr ""
 
-#: language.php:247
+#: language.php:244
 msgid "American Samoa"
 msgstr ""
 
-#: language.php:248
+#: language.php:245
 msgid "Andorra"
 msgstr ""
 
-#: language.php:249
+#: language.php:246
 msgid "Angola"
 msgstr ""
 
-#: language.php:250
+#: language.php:247
 msgid "Anguilla"
 msgstr ""
 
-#: language.php:251
+#: language.php:248
 msgid "Antarctica"
 msgstr ""
 
-#: language.php:252
+#: language.php:249
 msgid "Antigua and Barbuda"
 msgstr ""
 
-#: language.php:253
+#: language.php:250
 msgid "Argentina"
 msgstr ""
 
-#: language.php:254
+#: language.php:251
 msgid "Armenia"
 msgstr ""
 
-#: language.php:255
+#: language.php:252
 msgid "Aruba"
 msgstr ""
 
-#: language.php:256
+#: language.php:253
 msgid "Ashmore and Cartier"
 msgstr ""
 
-#: language.php:257
+#: language.php:254
 msgid "Australia"
 msgstr ""
 
-#: language.php:258
+#: language.php:255
 msgid "Austria"
 msgstr ""
 
-#: language.php:259
+#: language.php:256
 msgid "Azerbaijan"
 msgstr ""
 
-#: language.php:260
+#: language.php:257
 msgid "Bahrain"
 msgstr ""
 
-#: language.php:261
+#: language.php:258
 msgid "Baker Island"
 msgstr ""
 
-#: language.php:262
+#: language.php:259
 msgid "Bangladesh"
 msgstr ""
 
-#: language.php:263
+#: language.php:260
 msgid "Barbados"
 msgstr ""
 
-#: language.php:264
+#: language.php:261
 msgid "Bassas da India"
 msgstr ""
 
-#: language.php:265
+#: language.php:262
 msgid "Belarus"
 msgstr ""
 
-#: language.php:266
+#: language.php:263
 msgid "Belgium"
 msgstr ""
 
-#: language.php:267
+#: language.php:264
 msgid "Belize"
 msgstr ""
 
-#: language.php:268
+#: language.php:265
 msgid "Benin"
 msgstr ""
 
-#: language.php:269
+#: language.php:266
 msgid "Bermuda"
 msgstr ""
 
-#: language.php:270
+#: language.php:267
 msgid "Bhutan"
 msgstr ""
 
-#: language.php:271
+#: language.php:268
 msgid "Bolivia"
 msgstr ""
 
-#: language.php:272
+#: language.php:269
 msgid "Bosnia and Herzegovina"
 msgstr ""
 
-#: language.php:273
+#: language.php:270
 msgid "Botswana"
 msgstr ""
 
-#: language.php:274
+#: language.php:271
 msgid "Bouvet Island"
 msgstr ""
 
-#: language.php:275
+#: language.php:272
 msgid "Brazil"
 msgstr ""
 
-#: language.php:276
+#: language.php:273
 msgid "British Indian Ocean Territory"
 msgstr ""
 
-#: language.php:277
+#: language.php:274
 msgid "British Virgin Islands"
 msgstr ""
 
-#: language.php:278
+#: language.php:275
 msgid "Brunei Darussalam"
 msgstr ""
 
-#: language.php:279
+#: language.php:276
 msgid "Bulgaria"
 msgstr ""
 
-#: language.php:280
+#: language.php:277
 msgid "Burkina Faso"
 msgstr ""
 
-#: language.php:281
+#: language.php:278
 msgid "Burma"
 msgstr ""
 
-#: language.php:282
+#: language.php:279
 msgid "Burundi"
 msgstr ""
 
-#: language.php:283
+#: language.php:280
 msgid "Cambodia"
 msgstr ""
 
-#: language.php:284
+#: language.php:281
 msgid "Cameroon"
 msgstr ""
 
-#: language.php:285
+#: language.php:282
 msgid "Canada"
 msgstr ""
 
-#: language.php:286
+#: language.php:283
 msgid "Cape Verde"
 msgstr ""
 
-#: language.php:287
+#: language.php:284
 msgid "Cayman Islands"
 msgstr ""
 
-#: language.php:288
+#: language.php:285
 msgid "Central African Republic"
 msgstr ""
 
-#: language.php:289
+#: language.php:286
 msgid "Chad"
 msgstr ""
 
-#: language.php:290
+#: language.php:287
 msgid "Chile"
 msgstr ""
 
-#: language.php:291
+#: language.php:288
 msgid "China"
 msgstr ""
 
-#: language.php:292
+#: language.php:289
 msgid "Christmas Island"
 msgstr ""
 
-#: language.php:293
+#: language.php:290
 msgid "Clipperton Island"
 msgstr ""
 
-#: language.php:294
+#: language.php:291
 msgid "Cocos (Keeling) Islands"
 msgstr ""
 
-#: language.php:295
+#: language.php:292
 msgid "Colombia"
 msgstr ""
 
-#: language.php:296
+#: language.php:293
 msgid "Comoros"
 msgstr ""
 
-#: language.php:297
+#: language.php:294
 msgid "Congo, Democratic Republic of the"
 msgstr ""
 
-#: language.php:298
+#: language.php:295
 msgid "Congo, Republic of the"
 msgstr ""
 
-#: language.php:299
+#: language.php:296
 msgid "Cook Islands"
 msgstr ""
 
-#: language.php:300
+#: language.php:297
 msgid "Coral Sea Islands"
 msgstr ""
 
-#: language.php:301
+#: language.php:298
 msgid "Costa Rica"
 msgstr ""
 
-#: language.php:302
+#: language.php:299
 msgid "Cote d'Ivoire"
 msgstr ""
 
-#: language.php:303
+#: language.php:300
 msgid "Croatia"
 msgstr ""
 
-#: language.php:304
+#: language.php:301
 msgid "Cuba"
 msgstr ""
 
-#: language.php:305
+#: language.php:302
 msgid "Cyprus"
 msgstr ""
 
-#: language.php:306
+#: language.php:303
 msgid "Czech Republic"
 msgstr ""
 
-#: language.php:307
+#: language.php:304
 msgid "Czechia"
 msgstr ""
 
-#: language.php:308
+#: language.php:305
 msgid "Denmark"
 msgstr ""
 
-#: language.php:309
+#: language.php:306
 msgid "Djibouti"
 msgstr ""
 
-#: language.php:310
+#: language.php:307
 msgid "Dominica"
 msgstr ""
 
-#: language.php:311
+#: language.php:308
 msgid "Dominican Republic"
 msgstr ""
 
-#: language.php:312
+#: language.php:309
 msgid "East Timor"
 msgstr ""
 
-#: language.php:313
+#: language.php:310
 msgid "Ecuador"
 msgstr ""
 
-#: language.php:314
+#: language.php:311
 msgid "Egypt"
 msgstr ""
 
-#: language.php:315
+#: language.php:312
 msgid "El Salvador"
 msgstr ""
 
-#: language.php:316
+#: language.php:313
 msgid "Equatorial Guinea"
 msgstr ""
 
-#: language.php:317
+#: language.php:314
 msgid "Eritrea"
 msgstr ""
 
-#: language.php:318
+#: language.php:315
 msgid "Estonia"
 msgstr ""
 
-#: language.php:319
+#: language.php:316
 msgid "Ethiopia"
 msgstr ""
 
-#: language.php:320
+#: language.php:317
 msgid "Europa Island"
 msgstr ""
 
-#: language.php:321
+#: language.php:318
 msgid "Falkland Islands (Islas Malvinas)"
 msgstr ""
 
-#: language.php:322
+#: language.php:319
 msgid "Faroe Islands"
 msgstr ""
 
-#: language.php:323
+#: language.php:320
 msgid "Fiji"
 msgstr ""
 
-#: language.php:324
+#: language.php:321
 msgid "Finland"
 msgstr ""
 
-#: language.php:325
+#: language.php:322
 msgid "France"
 msgstr ""
 
-#: language.php:326
+#: language.php:323
 msgid "France, Metropolitan"
 msgstr ""
 
-#: language.php:327
+#: language.php:324
 msgid "French Guiana"
 msgstr ""
 
-#: language.php:328
+#: language.php:325
 msgid "French Polynesia"
 msgstr ""
 
-#: language.php:329
+#: language.php:326
 msgid "French Southern and Antarctic Lands"
 msgstr ""
 
-#: language.php:330
+#: language.php:327
 msgid "Gabon"
 msgstr ""
 
-#: language.php:331
+#: language.php:328
 msgid "Gaza Strip"
 msgstr ""
 
-#: language.php:332
+#: language.php:329
 msgid "Georgia"
 msgstr ""
 
-#: language.php:333
+#: language.php:330
 msgid "Germany"
 msgstr ""
 
-#: language.php:334
+#: language.php:331
 msgid "Ghana"
 msgstr ""
 
-#: language.php:335
+#: language.php:332
 msgid "Gibraltar"
 msgstr ""
 
-#: language.php:336
+#: language.php:333
 msgid "Glorioso Islands"
 msgstr ""
 
-#: language.php:337
+#: language.php:334
 msgid "Greece"
 msgstr ""
 
-#: language.php:338
+#: language.php:335
 msgid "Greenland"
 msgstr ""
 
-#: language.php:339
+#: language.php:336
 msgid "Grenada"
 msgstr ""
 
-#: language.php:340
+#: language.php:337
 msgid "Guadeloupe"
 msgstr ""
 
-#: language.php:341
+#: language.php:338
 msgid "Guam"
 msgstr ""
 
-#: language.php:342
+#: language.php:339
 msgid "Guatemala"
 msgstr ""
 
-#: language.php:343
+#: language.php:340
 msgid "Guernsey"
 msgstr ""
 
-#: language.php:344
+#: language.php:341
 msgid "Guinea"
 msgstr ""
 
-#: language.php:345
+#: language.php:342
 msgid "Guinea-Bissau"
 msgstr ""
 
-#: language.php:346
+#: language.php:343
 msgid "Guyana"
 msgstr ""
 
-#: language.php:347
+#: language.php:344
 msgid "Haiti"
 msgstr ""
 
-#: language.php:348
+#: language.php:345
 msgid "Heard Island and McDonald Islands"
 msgstr ""
 
-#: language.php:349
+#: language.php:346
 msgid "Holy See (Vatican City)"
 msgstr ""
 
-#: language.php:350
+#: language.php:347
 msgid "Honduras"
 msgstr ""
 
-#: language.php:351
+#: language.php:348
 msgid "Hong Kong (SAR)"
 msgstr ""
 
-#: language.php:352
+#: language.php:349
 msgid "Howland Island"
 msgstr ""
 
-#: language.php:353
+#: language.php:350
 msgid "Hungary"
 msgstr ""
 
-#: language.php:354
+#: language.php:351
 msgid "Iceland"
 msgstr ""
 
-#: language.php:355
+#: language.php:352
 msgid "India"
 msgstr ""
 
-#: language.php:356
+#: language.php:353
 msgid "Indonesia"
 msgstr ""
 
-#: language.php:357
+#: language.php:354
 msgid "Iran"
 msgstr ""
 
-#: language.php:358
+#: language.php:355
 msgid "Iraq"
 msgstr ""
 
-#: language.php:359
+#: language.php:356
 msgid "Ireland"
 msgstr ""
 
-#: language.php:360
+#: language.php:357
 msgid "Israel"
 msgstr ""
 
-#: language.php:361
+#: language.php:358
 msgid "Italy"
 msgstr ""
 
-#: language.php:362
+#: language.php:359
 msgid "Jamaica"
 msgstr ""
 
-#: language.php:363
+#: language.php:360
 msgid "Jan Mayen"
 msgstr ""
 
-#: language.php:364
+#: language.php:361
 msgid "Japan"
 msgstr ""
 
-#: language.php:365
+#: language.php:362
 msgid "Jarvis Island"
 msgstr ""
 
-#: language.php:366
+#: language.php:363
 msgid "Jersey"
 msgstr ""
 
-#: language.php:367
+#: language.php:364
 msgid "Johnston Atoll"
 msgstr ""
 
-#: language.php:368
+#: language.php:365
 msgid "Jordan"
 msgstr ""
 
-#: language.php:369
+#: language.php:366
 msgid "Juan de Nova Island"
 msgstr ""
 
-#: language.php:370
+#: language.php:367
 msgid "Kazakhstan"
 msgstr ""
 
-#: language.php:371
+#: language.php:368
 msgid "Kenya"
 msgstr ""
 
-#: language.php:372
+#: language.php:369
 msgid "Kingman Reef"
 msgstr ""
 
-#: language.php:373
+#: language.php:370
 msgid "Kiribati"
 msgstr ""
 
-#: language.php:374
+#: language.php:371
 msgid "Korea, North"
 msgstr ""
 
-#: language.php:375
+#: language.php:372
 msgid "Korea, South"
 msgstr ""
 
-#: language.php:376
+#: language.php:373
 msgid "Kuwait"
 msgstr ""
 
-#: language.php:377
+#: language.php:374
 msgid "Kyrgyzstan"
 msgstr ""
 
-#: language.php:378
+#: language.php:375
 msgid "Laos"
 msgstr ""
 
-#: language.php:379
+#: language.php:376
 msgid "Latvia"
 msgstr ""
 
-#: language.php:380
+#: language.php:377
 msgid "Lebanon"
 msgstr ""
 
-#: language.php:381
+#: language.php:378
 msgid "Lesotho"
 msgstr ""
 
-#: language.php:382
+#: language.php:379
 msgid "Liberia"
 msgstr ""
 
-#: language.php:383
+#: language.php:380
 msgid "Libya"
 msgstr ""
 
-#: language.php:384
+#: language.php:381
 msgid "Liechtenstein"
 msgstr ""
 
-#: language.php:385
+#: language.php:382
 msgid "Lithuania"
 msgstr ""
 
-#: language.php:386
+#: language.php:383
 msgid "Luxembourg"
 msgstr ""
 
-#: language.php:387
+#: language.php:384
 msgid "Macao"
 msgstr ""
 
-#: language.php:388
+#: language.php:385
 msgid "Macedonia, The Former Yugoslav Republic of"
 msgstr ""
 
-#: language.php:389
+#: language.php:386
 msgid "Madagascar"
 msgstr ""
 
-#: language.php:390
+#: language.php:387
 msgid "Malawi"
 msgstr ""
 
-#: language.php:391
+#: language.php:388
 msgid "Malaysia"
 msgstr ""
 
-#: language.php:392
+#: language.php:389
 msgid "Maldives"
 msgstr ""
 
-#: language.php:393
+#: language.php:390
 msgid "Mali"
 msgstr ""
 
-#: language.php:394
+#: language.php:391
 msgid "Malta"
 msgstr ""
 
-#: language.php:395
+#: language.php:392
 msgid "Man, Isle of"
 msgstr ""
 
-#: language.php:396
+#: language.php:393
 msgid "Marshall Islands"
 msgstr ""
 
-#: language.php:397
+#: language.php:394
 msgid "Martinique"
 msgstr ""
 
-#: language.php:398
+#: language.php:395
 msgid "Mauritania"
 msgstr ""
 
-#: language.php:399
+#: language.php:396
 msgid "Mauritius"
 msgstr ""
 
-#: language.php:400
+#: language.php:397
 msgid "Mayotte"
 msgstr ""
 
-#: language.php:401
+#: language.php:398
 msgid "Mexico"
 msgstr ""
 
-#: language.php:402
+#: language.php:399
 msgid "Micronesia, Federated States of"
 msgstr ""
 
-#: language.php:403
+#: language.php:400
 msgid "Midway Islands"
 msgstr ""
 
-#: language.php:404
+#: language.php:401
 msgid "Miscellaneous (French)"
 msgstr ""
 
-#: language.php:405
+#: language.php:402
 msgid "Moldova"
 msgstr ""
 
-#: language.php:406
+#: language.php:403
 msgid "Monaco"
 msgstr ""
 
-#: language.php:407
+#: language.php:404
 msgid "Mongolia"
 msgstr ""
 
-#: language.php:408
+#: language.php:405
 msgid "Montenegro"
 msgstr ""
 
-#: language.php:409
+#: language.php:406
 msgid "Montserrat"
 msgstr ""
 
-#: language.php:410
+#: language.php:407
 msgid "Morocco"
 msgstr ""
 
-#: language.php:411
+#: language.php:408
 msgid "Mozambique"
 msgstr ""
 
-#: language.php:412
+#: language.php:409
 msgid "Myanmar"
 msgstr ""
 
-#: language.php:413
+#: language.php:410
 msgid "Namibia"
 msgstr ""
 
-#: language.php:414
+#: language.php:411
 msgid "Nauru"
 msgstr ""
 
-#: language.php:415
+#: language.php:412
 msgid "Navassa Island"
 msgstr ""
 
-#: language.php:416
+#: language.php:413
 msgid "Nepal"
 msgstr ""
 
-#: language.php:417
+#: language.php:414
 msgid "Netherlands"
 msgstr ""
 
-#: language.php:418
+#: language.php:415
 msgid "Netherlands Antilles"
 msgstr ""
 
-#: language.php:419
+#: language.php:416
 msgid "New Caledonia"
 msgstr ""
 
-#: language.php:420
+#: language.php:417
 msgid "New Zealand"
 msgstr ""
 
-#: language.php:421
+#: language.php:418
 msgid "Nicaragua"
 msgstr ""
 
-#: language.php:422
+#: language.php:419
 msgid "Niger"
 msgstr ""
 
-#: language.php:423
+#: language.php:420
 msgid "Nigeria"
 msgstr ""
 
-#: language.php:424
+#: language.php:421
 msgid "Niue"
 msgstr ""
 
-#: language.php:425
+#: language.php:422
 msgid "Norfolk Island"
 msgstr ""
 
-#: language.php:426
+#: language.php:423
 msgid "Northern Mariana Islands"
 msgstr ""
 
-#: language.php:427
+#: language.php:424
 msgid "Norway"
 msgstr ""
 
-#: language.php:428
+#: language.php:425
 msgid "Oman"
 msgstr ""
 
-#: language.php:429
+#: language.php:426
 msgid "Pakistan"
 msgstr ""
 
-#: language.php:430
+#: language.php:427
 msgid "Palau"
 msgstr ""
 
-#: language.php:431
+#: language.php:428
 msgid "Palestinian Territory, Occupied"
 msgstr ""
 
-#: language.php:432
+#: language.php:429
 msgid "Palmyra Atoll"
 msgstr ""
 
-#: language.php:433
+#: language.php:430
 msgid "Panama"
 msgstr ""
 
-#: language.php:434
+#: language.php:431
 msgid "Papua New Guinea"
 msgstr ""
 
-#: language.php:435
+#: language.php:432
 msgid "Paracel Islands"
 msgstr ""
 
-#: language.php:436
+#: language.php:433
 msgid "Paraguay"
 msgstr ""
 
-#: language.php:437
+#: language.php:434
 msgid "Peru"
 msgstr ""
 
-#: language.php:438
+#: language.php:435
 msgid "Philippines"
 msgstr ""
 
-#: language.php:439
+#: language.php:436
 msgid "Pitcairn Islands"
 msgstr ""
 
-#: language.php:440
+#: language.php:437
 msgid "Poland"
 msgstr ""
 
-#: language.php:441
+#: language.php:438
 msgid "Portugal"
 msgstr ""
 
-#: language.php:442
+#: language.php:439
 msgid "Puerto Rico"
 msgstr ""
 
-#: language.php:443
+#: language.php:440
 msgid "Qatar"
 msgstr ""
 
-#: language.php:444
+#: language.php:441
 msgid "Romania"
 msgstr ""
 
-#: language.php:445
+#: language.php:442
 msgid "Russia"
 msgstr ""
 
-#: language.php:446
+#: language.php:443
 msgid "Rwanda"
 msgstr ""
 
-#: language.php:447
+#: language.php:444
 msgid "Saint Helena"
 msgstr ""
 
-#: language.php:448
+#: language.php:445
 msgid "Saint Kitts and Nevis"
 msgstr ""
 
-#: language.php:449
+#: language.php:446
 msgid "Saint Lucia"
 msgstr ""
 
-#: language.php:450
+#: language.php:447
 msgid "Saint Pierre and Miquelon"
 msgstr ""
 
-#: language.php:451
+#: language.php:448
 msgid "Saint Vincent and the Grenadines"
 msgstr ""
 
-#: language.php:452
+#: language.php:449
 msgid "Samoa"
 msgstr ""
 
-#: language.php:453
+#: language.php:450
 msgid "San Marino"
 msgstr ""
 
-#: language.php:454
+#: language.php:451
 msgid "Saudi Arabia"
 msgstr ""
 
-#: language.php:455
+#: language.php:452
 msgid "Senegal"
 msgstr ""
 
-#: language.php:456
+#: language.php:453
 msgid "Serbia"
 msgstr ""
 
-#: language.php:457
+#: language.php:454
 msgid "Serbia and Montenegro"
 msgstr ""
 
-#: language.php:458
+#: language.php:455
 msgid "Seychelles"
 msgstr ""
 
-#: language.php:459
+#: language.php:456
 msgid "Sierra Leone"
 msgstr ""
 
-#: language.php:460
+#: language.php:457
 msgid "Singapore"
 msgstr ""
 
-#: language.php:461
+#: language.php:458
 msgid "Slovakia"
 msgstr ""
 
-#: language.php:462
+#: language.php:459
 msgid "Slovenia"
 msgstr ""
 
-#: language.php:463
+#: language.php:460
 msgid "Solomon Islands"
 msgstr ""
 
-#: language.php:464
+#: language.php:461
 msgid "Somalia"
 msgstr ""
 
-#: language.php:465
+#: language.php:462
 msgid "South Africa"
 msgstr ""
 
-#: language.php:466
+#: language.php:463
 msgid "South Georgia and the South Sandwich Islands"
 msgstr ""
 
-#: language.php:467
+#: language.php:464
 msgid "Spain"
 msgstr ""
 
-#: language.php:468
+#: language.php:465
 msgid "Spratly Islands"
 msgstr ""
 
-#: language.php:469
+#: language.php:466
 msgid "Sri Lanka"
 msgstr ""
 
-#: language.php:470
+#: language.php:467
 msgid "Sudan"
 msgstr ""
 
-#: language.php:471
+#: language.php:468
 msgid "Suriname"
 msgstr ""
 
-#: language.php:472
+#: language.php:469
 msgid "Svalbard"
 msgstr ""
 
-#: language.php:473
+#: language.php:470
 msgid "Swaziland"
 msgstr ""
 
-#: language.php:474
+#: language.php:471
 msgid "Sweden"
 msgstr ""
 
-#: language.php:475
+#: language.php:472
 msgid "Switzerland"
 msgstr ""
 
-#: language.php:476
+#: language.php:473
 msgid "Syria"
 msgstr ""
 
-#: language.php:477
+#: language.php:474
 msgid "Taiwan"
 msgstr ""
 
-#: language.php:478
+#: language.php:475
 msgid "Tajikistan"
 msgstr ""
 
-#: language.php:479
+#: language.php:476
 msgid "Tanzania"
 msgstr ""
 
-#: language.php:480
+#: language.php:477
 msgid "Thailand"
 msgstr ""
 
-#: language.php:481
+#: language.php:478
 msgid "The Bahamas"
 msgstr ""
 
-#: language.php:482
+#: language.php:479
 msgid "The Gambia"
 msgstr ""
 
-#: language.php:483
+#: language.php:480
 msgid "Togo"
 msgstr ""
 
-#: language.php:484
+#: language.php:481
 msgid "Tokelau"
 msgstr ""
 
-#: language.php:485
+#: language.php:482
 msgid "Tonga"
 msgstr ""
 
-#: language.php:486
+#: language.php:483
 msgid "Trinidad and Tobago"
 msgstr ""
 
-#: language.php:487
+#: language.php:484
 msgid "Tromelin Island"
 msgstr ""
 
-#: language.php:488
+#: language.php:485
 msgid "Tunisia"
 msgstr ""
 
-#: language.php:489
+#: language.php:486
 msgid "Turkey"
 msgstr ""
 
-#: language.php:490
+#: language.php:487
 msgid "Turkmenistan"
 msgstr ""
 
-#: language.php:491
+#: language.php:488
 msgid "Turks and Caicos Islands"
 msgstr ""
 
-#: language.php:492
+#: language.php:489
 msgid "Tuvalu"
 msgstr ""
 
-#: language.php:493
+#: language.php:490
 msgid "Uganda"
 msgstr ""
 
-#: language.php:494
+#: language.php:491
 msgid "Ukraine"
 msgstr ""
 
-#: language.php:495
+#: language.php:492
 msgid "United Arab Emirates"
 msgstr ""
 
-#: language.php:496
+#: language.php:493
 msgid "United Kingdom"
 msgstr ""
 
-#: language.php:497
+#: language.php:494
 msgid "United States"
 msgstr ""
 
-#: language.php:498
+#: language.php:495
 msgid "United States Minor Outlying Islands"
 msgstr ""
 
-#: language.php:499
+#: language.php:496
 msgid "Uruguay"
 msgstr ""
 
-#: language.php:500
+#: language.php:497
 msgid "Uzbekistan"
 msgstr ""
 
-#: language.php:501
+#: language.php:498
 msgid "Vanuatu"
 msgstr ""
 
-#: language.php:502
+#: language.php:499
 msgid "Venezuela"
 msgstr ""
 
-#: language.php:503
+#: language.php:500
 msgid "Vietnam"
 msgstr ""
 
-#: language.php:504
+#: language.php:501
 msgid "Virgin Islands"
 msgstr ""
 
-#: language.php:507
+#: language.php:504
 msgid "Wake Island"
 msgstr ""
 
-#: language.php:508
+#: language.php:505
 msgid "Wallis and Futuna"
 msgstr ""
 
-#: language.php:509
+#: language.php:506
 msgid "West Bank"
 msgstr ""
 
-#: language.php:510
+#: language.php:507
 msgid "Western Sahara"
 msgstr ""
 
-#: language.php:511
+#: language.php:508
 msgid "Western Samoa"
 msgstr ""
 
-#: language.php:512
+#: language.php:509
 msgid "Yemen"
 msgstr ""
 
-#: language.php:513
+#: language.php:510
 msgid "Yugoslavia"
 msgstr ""
 
-#: language.php:514
+#: language.php:511
 msgid "Zaire"
 msgstr ""
 
-#: language.php:515
+#: language.php:512
 msgid "Zambia"
 msgstr ""
 
-#: language.php:516
+#: language.php:513
 msgid "Zimbabwe"
 msgstr ""
 
-#: language.php:517
+#: language.php:514
 msgid "Curaçao"
 msgstr ""
 
-#: language.php:518
+#: language.php:515
 msgid "Caribbean Netherlands"
 msgstr ""
 
@@ -12520,7 +12485,7 @@ msgstr ""
 msgid "Send"
 msgstr ""
 
-#: templates/reviews.php:44
+#: templates/reviews.php:45
 #, php-format
 msgid ""
 "1 Review <span class=\"r-title-on\">on</span> <span class=\"r-title\">&ldquo;"
@@ -12531,23 +12496,23 @@ msgid_plural ""
 msgstr[0] ""
 msgstr[1] ""
 
-#: templates/reviews.php:65
+#: templates/reviews.php:66
 msgid "Review navigation"
 msgstr ""
 
-#: templates/reviews.php:68
+#: templates/reviews.php:69
 msgid "&larr; Older Reviews"
 msgstr ""
 
-#: templates/reviews.php:70
+#: templates/reviews.php:71
 msgid "Newer Reviews &rarr;"
 msgstr ""
 
-#: templates/reviews.php:79
+#: templates/reviews.php:80
 msgid "Reviews are closed."
 msgstr ""
 
-#: templates/reviews.php:107
+#: templates/reviews.php:108
 #, php-format
 msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
 msgstr ""

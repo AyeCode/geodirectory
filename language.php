@@ -128,9 +128,6 @@ define('IMAGE_SAVE_ORDERING_MSG', __('Note : You can sort images once the post i
 
 /* ---- Place Detail ---- */
 define('VERIFY_PAGE_TITLE', __('Verify Listing', 'geodirectory'));
-define('SEND_INQUIRY', __('Send Enquiry', 'geodirectory'));
-define('SEND_INQUIRY_SAMPLE_CONTENT', __('Hi there, I would like to enquire about this place. I would like to ask more info about...', 'geodirectory'));
-define('SEND_INQUIRY_SUCCESS', __('Enquiry sent successfully', 'geodirectory'));
 define('WRONG_CAPTCH_MSG', __('Enter correct verification code.', 'geodirectory'));
 
 //comments.php

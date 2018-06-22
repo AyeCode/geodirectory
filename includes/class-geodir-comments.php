@@ -40,7 +40,7 @@ class GeoDir_Comments {
 
 	/**
 	 * Channge the comments url hash to review types.
-	 * 
+	 *
 	 * @param $comments_link
 	 * @param $post_id
 	 *
@@ -638,7 +638,7 @@ class GeoDir_Comments {
 	 */
 	public static function rating_html( $rating, $type = 'output' ) {
 
-		$rating_icon  = esc_attr( geodir_get_option( 'rating_icon', 'fa-star' ) );
+		$rating_icon  = esc_attr( geodir_get_option( 'rating_icon', 'fas fa-star' ) );
 		$rating_color = esc_attr( geodir_get_option( 'rating_color' ) );
 		if ( $rating_color == '#ff9900' ) {
 			$rating_color = '';
@@ -678,7 +678,7 @@ class GeoDir_Comments {
 
 			while ( $i <= $rating_input_count ) {
 				$rating_title = $type == 'input' ? "title='$rating_texts[$i]'" : '';
-				$rating_html .= '<i class="fa ' . $rating_icon . '" ' . $rating_title . '></i>';
+				$rating_html .= '<i class="' . $rating_icon . '" ' . $rating_title . '></i>';
 				$i ++;
 			}
 		}

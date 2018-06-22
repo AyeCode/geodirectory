@@ -685,14 +685,12 @@ function geodir_function_post_updated($post_ID, $post_after, $post_before)
 			if ( empty( $gd_post ) ) {
 				return;
 			}
-			// Send email to usre
+			// Send email to user
 			GeoDir_Email::send_user_publish_post_email( $gd_post );
         }
     }
 }
-
-add_action('wp_head', 'geodir_fb_like_thumbnail');
-
+add_action('post_updated', 'geodir_function_post_updated', 16, 3);
 
 /**
  * Adds the featured image to the place details page header so facebook can use it when sharing the link.
@@ -713,8 +711,7 @@ function geodir_fb_like_thumbnail(){
 
     }
 }
-
-
+add_action('wp_head', 'geodir_fb_like_thumbnail');
 
 /**
  * Limit the listing excerpt.

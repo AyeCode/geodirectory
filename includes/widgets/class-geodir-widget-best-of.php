@@ -288,22 +288,24 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
         $terms = get_terms($category_taxonomy[0], $term_args);
 
-        $term_reviews = geodir_count_reviews_by_terms();
-        $a_terms = array();
-        foreach ($terms as $term) {
+//        $term_reviews = geodir_count_reviews_by_terms();
+//        $a_terms = array();
+//        foreach ($terms as $term) {
+//
+//
+//            if ($term->count > 0) {
+//                if (isset($term_reviews[$term->term_id])) {
+//                    $term->review_count = $term_reviews[$term->term_id];
+//                } else {
+//                    $term->review_count = '0';
+//                }
+//
+//                $a_terms[] = $term;
+//            }
+//
+//        }
 
-
-            if ($term->count > 0) {
-                if (isset($term_reviews[$term->term_id])) {
-                    $term->review_count = $term_reviews[$term->term_id];
-                } else {
-                    $term->review_count = '0';
-                }
-
-                $a_terms[] = $term;
-            }
-
-        }
+	    $a_terms = $terms;
 
 
         $terms = apply_filters('bestof_widget_sort_terms', geodir_sort_terms($a_terms, 'review_count'), $a_terms);
@@ -381,17 +383,17 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	                    $nav_html .= '<span class="gd-cptcat-cat-right"><a data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" title="' . esc_attr($cat->name) . '">';
 	                    $nav_html .= $cat->name;
 	                    $nav_html .= '<small>';
-	                    if (isset($cat->review_count)) {
-		                    $num_reviews = $cat->review_count;
-		                    if ($num_reviews == 0) {
-			                    $reviews = __('No Reviews', 'geodirectory');
-		                    } elseif ($num_reviews > 1) {
-			                    $reviews = $num_reviews . __(' Reviews', 'geodirectory');
-		                    } else {
-			                    $reviews = __('1 Review', 'geodirectory');
-		                    }
-		                    $nav_html .= $reviews;
-	                    }
+//	                    if (isset($cat->review_count)) {
+//		                    $num_reviews = $cat->review_count;
+//		                    if ($num_reviews == 0) {
+//			                    $reviews = __('No Reviews', 'geodirectory');
+//		                    } elseif ($num_reviews > 1) {
+//			                    $reviews = $num_reviews . __(' Reviews', 'geodirectory');
+//		                    } else {
+//			                    $reviews = __('1 Review', 'geodirectory');
+//		                    }
+//		                    $nav_html .= $reviews;
+//	                    }
 	                    $nav_html .= '</small>';
 	                    $nav_html .= '</a></span>';
 

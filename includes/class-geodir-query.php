@@ -340,7 +340,8 @@ class GeoDir_Query {
 
 		$table = geodir_db_cpt_table($geodir_post_type);
 
-		$where .= $wpdb->prepare(" AND $wpdb->posts.post_type = %s AND $wpdb->posts.post_status = 'publish' ",$geodir_post_type);
+		//$where .= $wpdb->prepare(" AND $wpdb->posts.post_type = %s AND $wpdb->posts.post_status = 'publish' ",$geodir_post_type);
+		$where .= $wpdb->prepare(" AND $wpdb->posts.post_type = %s ",$geodir_post_type);
 
 		if(geodir_is_page('search')){
 			global $wpdb, $geodir_post_type, $plugin_prefix, $dist, $mylat, $mylon, $snear, $s, $s_A, $s_SA, $search_term, $gd_session;
@@ -510,7 +511,7 @@ class GeoDir_Query {
      */
 	public function author_where($where){
 		global $wp_query,$wpdb;
-//echo '####';exit;
+//echo '####'.$where;exit;
 		// author saves/favs filter
 		if(is_author() && !empty($wp_query->query['gd_favs']) ){
 
@@ -535,6 +536,13 @@ class GeoDir_Query {
 					$where = str_replace("$wpdb->posts.post_type = 'post'",$gd_cpt_replace,$where);
 				}
 
+			}
+		}elseif(is_author()){
+			$user_id = get_current_user_id();
+
+			$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
+			if($author_id && $author_id == $user_id){
+				$where = str_replace("{$wpdb->posts}.post_status = 'publish'","{$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'draft' OR {$wpdb->posts}.post_status = 'pending'",$where);
 			}
 		}
 

@@ -38,7 +38,7 @@ class GeoDir_Admin_Status {
 		$tools = self::get_tools();
 
 		if ( ! empty( $_GET['action'] ) && ! empty( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'], 'debug_action' ) ) {
-			$tools_controller = new GeoDir_REST_System_Status_Tools_Controller;
+			$tools_controller = new GeoDir_Admin_Tools();
 			$action           = geodir_clean( $_GET['action'] );
 
 			if ( array_key_exists( $action, $tools ) ) {
@@ -48,15 +48,15 @@ class GeoDir_Admin_Status {
 			}
 
 			if ( $response['success'] ) {
-				echo '<div class="updated inline"><p>' . esc_html( $response['message'] ) . '</p></div>';
+				echo '<div class="notice notice-success inline"><p>' . esc_html( $response['message'] ) . '</p></div>';
 			} else {
-				echo '<div class="error inline"><p>' . esc_html( $response['message'] ) . '</p></div>';
+				echo '<div class="notice notice-error inline"><p>' . esc_html( $response['message'] ) . '</p></div>';
 			}
 		}
 
 		// Display message if settings settings have been saved
 		if ( isset( $_REQUEST['settings-updated'] ) ) {
-			echo '<div class="updated inline"><p>' . __( 'Your changes have been saved.', 'geodirectory' ) . '</p></div>';
+			echo '<div class="notice notice-success inline"><p>' . __( 'Your changes have been saved.', 'geodirectory' ) . '</p></div>';
 		}
 
 		include_once( dirname( __FILE__ ) . '/views/html-admin-page-status-tools.php' );
@@ -70,7 +70,7 @@ class GeoDir_Admin_Status {
 	 * @return array of tools
 	 */
 	public static function get_tools() {
-		$tools_controller = new GeoDir_REST_System_Status_Tools_Controller;
+		$tools_controller = new GeoDir_Admin_Tools();
 		return $tools_controller->get_tools();
 	}
 
