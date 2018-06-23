@@ -146,7 +146,7 @@ function geodir_search_form_submit_button() {
 
 
 	?>
-	<button class="geodir_submit_search " data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'"></i>';}else{ _e( $default_search_button_label ,'geodirectory'); }?></button>
+	<button class="geodir_submit_search " data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>" aria-label="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'"></i>';}else{ _e( $default_search_button_label ,'geodirectory'); }?><span class="sr-only"><?php _e( $default_search_button_label, 'geodirectory' ); ?></span></button>
 	<?php
 }
 
@@ -229,7 +229,8 @@ function geodir_search_form_search_input() {
 			       echo esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
 		       } ?>" type="text"
 		       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"
-		       placeholder="<?php esc_html_e($default_search_for_text,'geodirectory') ?>"
+		       placeholder="<?php esc_html_e($default_search_for_text,'geodirectory') ?>" 
+			   aria-label="<?php esc_html_e($default_search_for_text,'geodirectory') ?>"
 		/>
 	</div>
 	<?php
@@ -300,7 +301,8 @@ function geodir_search_form_near_input() {
 	?>
 	<input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
 	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>
-	       placeholder="<?php esc_html_e($default_near_text,'geodirectory') ?>"
+	       placeholder="<?php esc_html_e($default_near_text,'geodirectory') ?>" 
+		   aria-label="<?php esc_html_e($default_near_text,'geodirectory') ?>"
 	/>
 	<?php
 	do_action('geodir_after_near_input');
