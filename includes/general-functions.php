@@ -6,16 +6,6 @@
  * @package GeoDirectory
  */
 
-
-/**
- * Get All Plugin functions from WordPress
- */
-//include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
-
-/*-----------------------------------------------------------------------------------*/
-/* Helper functions */
-/*-----------------------------------------------------------------------------------*/
-
 /**
  * Get ajax url.
  *
@@ -23,9 +13,8 @@
  *
  * @return string
  */
-function geodir_get_ajax_url()
-{
-    return admin_url('admin-ajax.php');
+function geodir_get_ajax_url() {
+	return admin_url( 'admin-ajax.php' );
 }
 
 /**
@@ -55,7 +44,7 @@ function geodir_plugin_path() {
 	if ( defined( 'GEODIRECTORY_PLUGIN_DIR' ) ) {
 		return GEODIRECTORY_PLUGIN_DIR;
 	}
-	
+
 	if ( defined( 'GD_TESTING_MODE' ) && GD_TESTING_MODE ) {
 		return dirname( dirname( __FILE__ ) );
 	} else {
@@ -85,9 +74,6 @@ function geodir_is_plugin_active( $plugin ) {
 	return false;
 }
 
-
-
-
 /**
  * Return a formatted link with parameters.
  *
@@ -96,8 +82,8 @@ function geodir_is_plugin_active( $plugin ) {
  * @since   1.0.0
  * @package GeoDirectory
  *
- * @param string $url                  The main url to be used.
- * @param array $params                The arguments array.
+ * @param string $url The main url to be used.
+ * @param array $params The arguments array.
  * @param bool $use_existing_arguments Do you want to use existing arguments? Default: false.
  *
  * @return string Formatted link.
@@ -141,7 +127,7 @@ function geodir_getlink( $url, $params = array(), $use_existing_arguments = fals
  *
  * @since   1.0.0
  * @package GeoDirectory
- * @global object $wpdb     WordPress Database object.
+ * @global object $wpdb WordPress Database object.
  *
  * @param string $post_type The post type.
  *
@@ -173,17 +159,17 @@ function geodir_get_addlisting_link( $post_type = '' ) {
  */
 function geodir_curPageURL() {
 	$pageURL = 'http';
-	if (isset($_SERVER['HTTPS']) && !empty($_SERVER['HTTPS']) && (strtolower($_SERVER['HTTPS']) == 'on')) {
+	if ( isset( $_SERVER['HTTPS'] ) && ! empty( $_SERVER['HTTPS'] ) && ( strtolower( $_SERVER['HTTPS'] ) == 'on' ) ) {
 		$pageURL .= "s";
 	}
 	$pageURL .= "://";
-	
+
 	/*
 	 * Since we are assigning the URI from the server variables, we first need
 	 * to determine if we are running on apache or IIS.  If PHP_SELF and REQUEST_URI
 	 * are present, we will assume we are running on apache.
 	 */
-	if (!empty($_SERVER['PHP_SELF']) && !empty($_SERVER['REQUEST_URI'])) {
+	if ( ! empty( $_SERVER['PHP_SELF'] ) && ! empty( $_SERVER['REQUEST_URI'] ) ) {
 		// To build the entire URI we need to prepend the protocol, and the http host
 		// to the URI string.
 		$pageURL .= $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
@@ -196,13 +182,13 @@ function geodir_curPageURL() {
 		 * IIS uses the SCRIPT_NAME variable instead of a REQUEST_URI variable... thanks, MS
 		 */
 		$pageURL .= $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'];
-		
+
 		// If the query string exists append it to the URI string
-		if (isset($_SERVER['QUERY_STRING']) && !empty($_SERVER['QUERY_STRING'])) {
+		if ( isset( $_SERVER['QUERY_STRING'] ) && ! empty( $_SERVER['QUERY_STRING'] ) ) {
 			$pageURL .= '?' . $_SERVER['QUERY_STRING'];
 		}
 	}
-	
+
 	/**
 	 * Filter the current page URL returned by function geodir_curPageURL().
 	 *
@@ -259,9 +245,9 @@ function geodir_get_weeks() {
  * @since   1.5.7 Updated to validate buddypress dashboard listings page as a author page.
  * @package GeoDirectory
  * @global object $wp_query WordPress Query object.
- * @global object $post     The current post object.
+ * @global object $post The current post object.
  *
- * @param string $gdpage    The page type.
+ * @param string $gdpage The page type.
  *
  * @return bool If valid returns true. Otherwise false.
  */
@@ -270,12 +256,10 @@ function geodir_is_page( $gdpage = '' ) {
 	global $wp_query, $post, $wp;
 	//if(!is_admin()):
 	$page_id = '';// get_query_var( 'page_id' ) ? get_query_var( 'page_id' ) : '';
-	//echo $page_id .'xxx';
-	if(empty($page_id) && $wp_query->is_page && $wp_query->queried_object_id){
+
+	if ( empty( $page_id ) && $wp_query->is_page && $wp_query->queried_object_id ) {
 		$page_id = $wp_query->queried_object_id;
 	}
-//echo $gdpage.'###'.$page_id ;
-	//print_r($wp_query);
 
 	switch ( $gdpage ):
 		case 'add-listing':
@@ -342,7 +326,7 @@ function geodir_is_page( $gdpage = '' ) {
 			}
 			break;
 		case 'author':
-			if ( is_author()) {
+			if ( is_author() ) {
 				return true;
 			}
 
@@ -353,24 +337,7 @@ function geodir_is_page( $gdpage = '' ) {
 			}
 			break;
 		case 'search':
-			if ( isset( $_REQUEST['geodir_search'] ) || (is_page() && $page_id == geodir_search_page_id()) ) {
-				return true;
-			}
-//			if ( (is_page() && $page_id == geodir_search_page_id()) || (is_archive() && $page_id == geodir_search_page_id()) ) {
-//				return true;
-//			}
-
-//			if ( isset( $_REQUEST['geodir_search'] ) ) {
-//				return true;
-//			}
-			break;
-		case 'info': // @depreciated
-			if ( is_page() && $page_id && $page_id == geodir_info_page_id() ) {
-				return true;
-			}
-			break;
-		case 'login': // @depreciated
-			if ( is_page() && $page_id === geodir_login_page_id() ) {
+			if ( isset( $_REQUEST['geodir_search'] ) || ( is_page() && $page_id == geodir_search_page_id() ) ) {
 				return true;
 			}
 			break;
@@ -408,8 +375,7 @@ function geodir_is_page( $gdpage = '' ) {
  */
 function geodir_set_is_geodir_page( $wp ) {
 	if ( ! is_admin() ) {
-		//$wp->query_vars['gd_is_geodir_page'] = false;
-		//print_r()
+
 		if ( empty( $wp->query_vars ) || ! array_diff( array_keys( $wp->query_vars ), array(
 				'preview',
 				'page',
@@ -420,8 +386,6 @@ function geodir_set_is_geodir_page( $wp ) {
 			if ( geodir_is_page( 'home' ) ) {
 				$wp->query_vars['gd_is_geodir_page'] = true;
 			}
-
-
 		}
 
 		if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $wp->query_vars['page_id'] ) ) {
@@ -485,21 +449,6 @@ function geodir_set_is_geodir_page( $wp ) {
 			$wp->query_vars['gd_is_geodir_page'] = true;
 		}
 
-
-//check if homepage
-		if ( ! isset( $wp->query_vars['gd_is_geodir_page'] )
-		     && ! isset( $wp->query_vars['page_id'] )
-		     && ! isset( $wp->query_vars['pagename'] )
-		     && is_page_geodir_home()
-		) {
-			$wp->query_vars['gd_is_geodir_page'] = true;
-		}
-		//echo $wp->query_vars['gd_is_geodir_page'] ;
-		/*echo "<pre>" ;
-		print_r($wp) ;
-		echo "</pre>" ;
-	//	exit();
-			*/
 	} // end of is admin
 }
 
@@ -585,235 +534,100 @@ function geodir_get_image_size( $image_size ) {
 */
 
 
-if ( ! function_exists( 'createRandomString' ) ) {
-	/**
-	 * Creates random string.
-	 *
-	 * @since   1.0.0
-	 * @package GeoDirectory
-	 * @return string Random string.
-	 */
-	function createRandomString() {
-		$chars = "abcdefghijkmlnopqrstuvwxyz1023456789";
-		srand( (double) microtime() * 1000000 );
-		$i       = 0;
-		$rstring = '';
-		while ( $i <= 25 ) {
-			$num     = rand() % 33;
-			$tmp     = substr( $chars, $num, 1 );
-			$rstring = $rstring . $tmp;
-			$i ++;
-		}
-
-		return $rstring;
+/**
+ * Creates random string.
+ *
+ * @since   1.0.0
+ * @package GeoDirectory
+ * @return string Random string.
+ */
+function createRandomString() {
+	$chars = "abcdefghijkmlnopqrstuvwxyz1023456789";
+	srand( (double) microtime() * 1000000 );
+	$i       = 0;
+	$rstring = '';
+	while ( $i <= 25 ) {
+		$num     = rand() % 33;
+		$tmp     = substr( $chars, $num, 1 );
+		$rstring = $rstring . $tmp;
+		$i ++;
 	}
-}
 
-if ( ! function_exists( 'geodir_getDistanceRadius' ) ) {
-	/**
-	 * Calculates the distance radius.
-	 *
-	 * @since   1.0.0
-	 * @package GeoDirectory
-	 *
-	 * @param string $uom Measurement unit type.
-	 *
-	 * @return float The mean radius.
-	 */
-	function geodir_getDistanceRadius( $uom = 'km' ) {
-//	Use Haversine formula to calculate the great circle distance between two points identified by longitude and latitude
-		switch ( geodir_strtolower( $uom ) ):
-			case 'km'    :
-				$earthMeanRadius = 6371.009; // km
-				break;
-			case 'm'    :
-			case 'meters'    :
-				$earthMeanRadius = 6371.009 * 1000; // km
-				break;
-			case 'miles'    :
-				$earthMeanRadius = 3958.761; // miles
-				break;
-			case 'yards'    :
-			case 'yds'    :
-				$earthMeanRadius = 3958.761 * 1760; // yards
-				break;
-			case 'feet'    :
-			case 'ft'    :
-				$earthMeanRadius = 3958.761 * 1760 * 3; // feet
-				break;
-			case 'nm'    :
-				$earthMeanRadius = 3440.069; //  miles
-				break;
-			default:
-				$earthMeanRadius = 3958.761; // miles
-				break;
-		endswitch;
-
-		return $earthMeanRadius;
-	}
-}
-
-
-if ( ! function_exists( 'geodir_calculateDistanceFromLatLong' ) ) {
-	/**
-	 * Calculate the great circle distance between two points identified by longitude and latitude.
-	 *
-	 * @since   1.0.0
-	 * @package GeoDirectory
-	 *
-	 * @param array $point1 Latitude and Longitude of point 1.
-	 * @param array $point2 Latitude and Longitude of point 2.
-	 * @param string $uom   Unit of measurement.
-	 *
-	 * @return float The distance.
-	 */
-	function geodir_calculateDistanceFromLatLong( $point1, $point2, $uom = 'km' ) {
-//	Use Haversine formula to calculate the great circle distance between two points identified by longitude and latitude
-
-		$earthMeanRadius = geodir_getDistanceRadius( $uom );
-
-		$deltaLatitude  = deg2rad( (float) $point2['latitude'] - (float) $point1['latitude'] );
-		$deltaLongitude = deg2rad( (float) $point2['longitude'] - (float) $point1['longitude'] );
-		$a              = sin( $deltaLatitude / 2 ) * sin( $deltaLatitude / 2 ) +
-		                  cos( deg2rad( (float) $point1['latitude'] ) ) * cos( deg2rad( (float) $point2['latitude'] ) ) *
-		                  sin( $deltaLongitude / 2 ) * sin( $deltaLongitude / 2 );
-		$c              = 2 * atan2( sqrt( $a ), sqrt( 1 - $a ) );
-		$distance       = $earthMeanRadius * $c;
-
-		return $distance;
-
-	}
+	return $rstring;
 }
 
 
 /**
- * Generates breadcrumb for taxonomy (category, tags etc.) pages.
+ * Calculates the distance radius.
  *
  * @since   1.0.0
  * @package GeoDirectory
+ *
+ * @param string $uom Measurement unit type.
+ *
+ * @return float The mean radius.
  */
-function geodir_taxonomy_breadcrumb() {
+function geodir_getDistanceRadius( $uom = 'km' ) {
+//	Use Haversine formula to calculate the great circle distance between two points identified by longitude and latitude
+	switch ( geodir_strtolower( $uom ) ):
+		case 'km'    :
+			$earthMeanRadius = 6371.009; // km
+			break;
+		case 'm'    :
+		case 'meters'    :
+			$earthMeanRadius = 6371.009 * 1000; // km
+			break;
+		case 'miles'    :
+			$earthMeanRadius = 3958.761; // miles
+			break;
+		case 'yards'    :
+		case 'yds'    :
+			$earthMeanRadius = 3958.761 * 1760; // yards
+			break;
+		case 'feet'    :
+		case 'ft'    :
+			$earthMeanRadius = 3958.761 * 1760 * 3; // feet
+			break;
+		case 'nm'    :
+			$earthMeanRadius = 3440.069; //  miles
+			break;
+		default:
+			$earthMeanRadius = 3958.761; // miles
+			break;
+	endswitch;
 
-	$term   = get_term_by( 'slug', get_query_var( 'term' ), get_query_var( 'taxonomy' ) );
-	$parent = $term->parent;
-
-	while ( $parent ):
-		$parents[]  = $parent;
-		$new_parent = get_term_by( 'id', $parent, get_query_var( 'taxonomy' ) );
-		$parent     = $new_parent->parent;
-	endwhile;
-
-	if ( ! empty( $parents ) ):
-		$parents = array_reverse( $parents );
-
-		foreach ( $parents as $parent ):
-			$item = get_term_by( 'id', $parent, get_query_var( 'taxonomy' ) );
-			$url  = get_term_link( $item, get_query_var( 'taxonomy' ) );
-			echo '<li> > <a href="' . $url . '">' . $item->name . '</a></li>';
-		endforeach;
-
-	endif;
-
-	echo '<li> > ' . $term->name . '</li>';
+	return $earthMeanRadius;
 }
 
+
+
 /**
- * Move Images from a remote url to upload directory.
+ * Calculate the great circle distance between two points identified by longitude and latitude.
  *
  * @since   1.0.0
  * @package GeoDirectory
  *
- * @param string $url The remote image url.
+ * @param array $point1 Latitude and Longitude of point 1.
+ * @param array $point2 Latitude and Longitude of point 2.
+ * @param string $uom Unit of measurement.
  *
- * @return array|WP_Error The uploaded data as array. When failure returns error.
+ * @return float The distance.
  */
-function fetch_remote_file( $url ) {
-	exit; //@todo this function shoudl no longer be needed
-	// extract the file name and extension from the url
-	require_once( ABSPATH . 'wp-includes/pluggable.php' );
-	$file_name = basename( $url );
-	if ( strpos( $file_name, '?' ) !== false ) {
-		list( $file_name ) = explode( '?', $file_name );
-	}
-	$dummy        = false;
-	$add_to_cache = false;
-	$key          = null;
-	if ( strpos( $url, '/dummy/' ) !== false ) {
-		$dummy = true;
-		$key   = "dummy_" . str_replace( '.', '_', $file_name );
-		$value = get_transient( 'cached_dummy_images' );
-		if ( $value ) {
-			if ( isset( $value[ $key ] ) ) {
-				return $value[ $key ];
-			} else {
-				$add_to_cache = true;
-			}
-		} else {
-			$add_to_cache = true;
-		}
-	}
+function geodir_calculateDistanceFromLatLong( $point1, $point2, $uom = 'km' ) {
+//	Use Haversine formula to calculate the great circle distance between two points identified by longitude and latitude
 
-	// get placeholder file in the upload dir with a unique, sanitized filename
+	$earthMeanRadius = geodir_getDistanceRadius( $uom );
 
-	$post_upload_date = isset( $post['upload_date'] ) ? $post['upload_date'] : '';
+	$deltaLatitude  = deg2rad( (float) $point2['latitude'] - (float) $point1['latitude'] );
+	$deltaLongitude = deg2rad( (float) $point2['longitude'] - (float) $point1['longitude'] );
+	$a              = sin( $deltaLatitude / 2 ) * sin( $deltaLatitude / 2 ) +
+	                  cos( deg2rad( (float) $point1['latitude'] ) ) * cos( deg2rad( (float) $point2['latitude'] ) ) *
+	                  sin( $deltaLongitude / 2 ) * sin( $deltaLongitude / 2 );
+	$c              = 2 * atan2( sqrt( $a ), sqrt( 1 - $a ) );
+	$distance       = $earthMeanRadius * $c;
 
-	$upload = wp_upload_bits( $file_name, 0, '', $post_upload_date );
-	if ( $upload['error'] ) {
-		return new WP_Error( 'upload_dir_error', $upload['error'] );
-	}
+	return $distance;
 
-
-	sleep( 0.3 );// if multiple remote file this can cause the remote server to timeout so we add a slight delay
-
-	// fetch the remote url and write it to the placeholder file
-	$headers = wp_remote_get( $url, array( 'stream' => true, 'filename' => $upload['file'] ) );
-
-	$log_message = '';
-	if ( is_wp_error( $headers ) ) {
-		geodir_error_log( $headers->get_error_message(), 'import_file_error (' . $url . ')', __FILE__, __LINE__ );
-
-		return new WP_Error( 'import_file_error', $headers->get_error_message() );
-	}
-
-	// clear cache to make compat with EWWW Image Optimizer
-	if(defined( 'EWWW_IMAGE_OPTIMIZER_PLUGIN_FILE')){
-		clearstatcache();
-	}
-	$filesize = filesize( $upload['file'] );
-	// request failed
-	if ( ! $headers ) {
-		$log_message = __( 'Remote server did not respond', 'geodirectory' );
-	} // make sure the fetch was successful
-	elseif ( $headers['response']['code'] != '200' ) {
-		$log_message = sprintf( __( 'Remote server returned error response %1$d %2$s', 'geodirectory' ), esc_html( $headers['response'] ), get_status_header_desc( $headers['response'] ) );
-	} elseif ( isset( $headers['headers']['content-length'] ) && $filesize != $headers['headers']['content-length'] ) {
-		$log_message = __( 'Remote file is incorrect size', 'geodirectory' );
-	} elseif ( 0 == $filesize ) {
-		$log_message = __( 'Zero size file downloaded', 'geodirectory' );
-	}
-
-	if ( $log_message ) {
-		$del = unlink( $upload['file'] );
-		if ( ! $del ) {
-			geodir_error_log( __( 'GeoDirectory: fetch_remote_file() failed to delete temp file.', 'geodirectory' ) );
-		}
-
-		return new WP_Error( 'import_file_error', $log_message );
-	}
-
-	if ( $dummy && $add_to_cache && is_array( $upload ) ) {
-		$images = get_transient( 'cached_dummy_images' );
-		if ( is_array( $images ) ) {
-			$images[ $key ] = $upload;
-		} else {
-			$images = array( $key => $upload );
-		}
-
-		//setting the cache using the WP Transient API
-		set_transient( 'cached_dummy_images', $images, 60 * 10 ); //10 minutes cache
-	}
-
-	return $upload;
 }
 
 /**
@@ -843,52 +657,12 @@ function geodir_max_upload_size() {
 }
 
 /**
- * Check if dummy folder exists or not.
- *
- * Check if dummy folder exists or not , if not then fetch from live url.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @return bool If dummy folder exists returns true, else false.
- */
-function geodir_dummy_folder_exists() {
-	$path = geodir_plugin_path() . '/includes/admin/dummy/';
-	if ( ! is_dir( $path ) ) {
-		return false;
-	} else {
-		return true;
-	}
-
-}
-
-/**
- * Get the author info.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- *
- * @param int $aid      The author ID.
- *
- * @return object Author info.
- */
-function geodir_get_author_info( $aid ) {
-	global $wpdb;
-	/*$infosql = "select * from $wpdb->users where ID=$aid";*/
-	$infosql = $wpdb->prepare( "select * from $wpdb->users where ID=%d", array( $aid ) );
-	$info    = $wpdb->get_results( $infosql );
-	if ( $info ) {
-		return $info[0];
-	}
-}
-
-/**
  * function to add class to body when multi post type is active.
  *
  * @since   1.0.0
  * @since   1.5.6 Add geodir-page class to body for all gd pages.
  * @package GeoDirectory
- * @global object $wpdb  WordPress Database object.
+ * @global object $wpdb WordPress Database object.
  *
  * @param array $classes Body CSS classes.
  *
@@ -919,7 +693,7 @@ function geodir_custom_posts_body_class( $classes ) {
 		$classes[] = 'geodir-page';
 	}
 
-	if ( geodir_is_page('search') ) {
+	if ( geodir_is_page( 'search' ) ) {
 		$classes[] = 'geodir-page-search';
 	}
 
@@ -928,72 +702,16 @@ function geodir_custom_posts_body_class( $classes ) {
 
 add_filter( 'body_class', 'geodir_custom_posts_body_class' ); // let's add a class to the body so we can style the new addition to the search
 
-
-/**
- * Returns available map zoom levels.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @return array Available map zoom levels.
- */
-function geodir_map_zoom_level() {
-	/**
-	 * Filter GD map zoom level.
-	 *
-	 * @since 1.0.0
-	 */
-	return apply_filters( 'geodir_map_zoom_level', array(
-		1,
-		2,
-		3,
-		4,
-		5,
-		6,
-		7,
-		8,
-		9,
-		10,
-		11,
-		12,
-		13,
-		14,
-		15,
-		16,
-		17,
-		18,
-		19
-	) );
-
-}
-
-
-/**
- * This function takes backup of an option so they can be restored later.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $geodir_option_name Option key.
- */
-function geodir_option_version_backup( $geodir_option_name ) {
-	$version_date  = time();
-	$geodir_option = geodir_get_option( $geodir_option_name );
-
-	if ( ! empty( $geodir_option ) ) {
-		add_option( $geodir_option_name . '_' . $version_date, $geodir_option );
-	}
-}
-
 /**
  * Returns orderby SQL using the given query args.
  *
  * @since   1.0.0
  * @since   1.6.18 Allow order by custom field in widget listings results sorting.
  * @package GeoDirectory
- * @global object $wpdb          WordPress Database object.
+ * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
- * @param array $query_args      The query array.
+ * @param array $query_args The query array.
  *
  * @return string Orderby SQL.
  */
@@ -1009,7 +727,7 @@ function geodir_widget_listings_get_order( $query_args ) {
 
 	$sort_by = ! empty( $query_args['order_by'] ) ? $query_args['order_by'] : '';
 
-	$orderby = GeoDir_Query::sort_by_sql($sort_by,$post_type);
+	$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
 
 //	echo '###'.$orderby.'###';
 	return $orderby;
@@ -1023,12 +741,12 @@ function geodir_widget_listings_get_order( $query_args ) {
  * @since   1.4.2 New parameter $count_only added
  * @since   1.6.11 FIXED: GD listings query returns wrong total when category has sub categories.
  * @since   1.6.18 Allow order by custom field in widget listings results sorting.
- * @global object $wpdb          WordPress Database object.
+ * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
- * @global string $table_prefix  WordPress Database Table prefix.
+ * @global string $table_prefix WordPress Database Table prefix.
  *
- * @param array $query_args      The query array.
- * @param  int|bool $count_only  If true returns listings count only, otherwise returns array
+ * @param array $query_args The query array.
+ * @param  int|bool $count_only If true returns listings count only, otherwise returns array
  *
  * @return mixed Result object.
  */
@@ -1046,8 +764,8 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $fields    Fields string.
-	 * @param string $table     Table name.
+	 * @param string $fields Fields string.
+	 * @param string $table Table name.
 	 * @param string $post_type Post type.
 	 */
 	$fields = apply_filters( 'geodir_filter_widget_listings_fields', $fields, $table, $post_type );
@@ -1059,7 +777,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $join      Join clause string.
+	 * @param string $join Join clause string.
 	 * @param string $post_type Post type.
 	 */
 	$join = apply_filters( 'geodir_filter_widget_listings_join', $join, $post_type );
@@ -1073,7 +791,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $where     Where clause string.
+	 * @param string $where Where clause string.
 	 * @param string $post_type Post type.
 	 */
 	$where = apply_filters( 'geodir_filter_widget_listings_where', $where, $post_type );
@@ -1085,7 +803,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	 *
 	 * @since 1.0.0
 	 *
-	 * @param string $groupby   Group by clause string.
+	 * @param string $groupby Group by clause string.
 	 * @param string $post_type Post type.
 	 */
 	$groupby = apply_filters( 'geodir_filter_widget_listings_groupby', $groupby, $post_type );
@@ -1102,12 +820,12 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param string $orderby   Order by clause string.
-		 * @param string $table     Table name.
+		 * @param string $orderby Order by clause string.
+		 * @param string $table Table name.
 		 * @param string $post_type Post type.
 		 */
 		$orderby = apply_filters( 'geodir_filter_widget_listings_orderby', $orderby, $table, $post_type );
-		
+
 		$orderby = $orderby != '' ? " ORDER BY " . $orderby : '';
 
 		$limit = ! empty( $query_args['posts_per_page'] ) ? $query_args['posts_per_page'] : 5;
@@ -1116,7 +834,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		 *
 		 * @since 1.0.0
 		 *
-		 * @param int $limit        Query results limit.
+		 * @param int $limit Query results limit.
 		 * @param string $post_type Post type.
 		 */
 		$limit = apply_filters( 'geodir_filter_widget_listings_limit', $limit, $post_type );
@@ -1137,7 +855,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 			" . $limit;
 		$rows = $wpdb->get_results( $sql );
 	}
-	
+
 	unset( $GLOBALS['gd_query_args_widgets'] );
 	unset( $gd_query_args_widgets );
 
@@ -1149,10 +867,10 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
  *
  * @since   1.0.0
  * @package GeoDirectory
- * @global object $wpdb          WordPress Database object.
+ * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
- * @param string $fields         Fields SQL.
+ * @param string $fields Fields SQL.
  *
  * @return string Modified fields SQL.
  */
@@ -1165,8 +883,8 @@ function geodir_function_widget_listings_fields( $fields ) {
 	}
 
 	if ( ! empty( $query_args['distance_to_post'] ) && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
-		$post_type = $gd_post->post_type != 'revision' ? $gd_post->post_type: get_post_type(wp_get_post_parent_id($gd_post->ID));
-		$table = $plugin_prefix . $post_type . '_detail';
+		$post_type = $gd_post->post_type != 'revision' ? $gd_post->post_type : get_post_type( wp_get_post_parent_id( $gd_post->ID ) );
+		$table     = $plugin_prefix . $post_type . '_detail';
 
 		$radius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
 
@@ -1176,15 +894,18 @@ function geodir_function_widget_listings_fields( $fields ) {
 	return $fields;
 }
 
+add_filter( 'geodir_filter_widget_listings_fields', 'geodir_function_widget_listings_fields' );
+
+
 /**
  * Listing query join clause SQL part for widgets.
  *
  * @since   1.0.0
  * @package GeoDirectory
- * @global object $wpdb          WordPress Database object.
+ * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
- * @param string $join           Join clause SQL.
+ * @param string $join Join clause SQL.
  *
  * @return string Modified join clause SQL.
  */
@@ -1213,16 +934,19 @@ function geodir_function_widget_listings_join( $join ) {
 	return $join;
 }
 
+add_filter( 'geodir_filter_widget_listings_join', 'geodir_function_widget_listings_join' );
+
+
 /**
  * Listing query where clause SQL part for widgets.
  *
  * @since   1.0.0
  * @since   1.6.18 New attributes added in gd_listings shortcode to filter user favorite listings.
  * @package GeoDirectory
- * @global object $wpdb          WordPress Database object.
+ * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
- * @param string $where          Where clause SQL.
+ * @param string $where Where clause SQL.
  *
  * @return string Modified where clause SQL.
  */
@@ -1264,15 +988,15 @@ function geodir_function_widget_listings_where( $where ) {
 		if ( ! empty( $query_args['with_videos_only'] ) ) {
 			$where .= " AND ( " . $table . ".video != '' AND " . $table . ".video IS NOT NULL )";
 		}
-        
+
 		if ( ! empty( $query_args['show_favorites_only'] ) ) {
 			$user_favorites = '-1';
-			
-			if ( !empty( $query_args['favorites_by_user'] ) ) {
-				$user_favorites = geodir_get_user_favourites( (int)$query_args['favorites_by_user']);
-				$user_favorites = !empty($user_favorites) && is_array($user_favorites) ? implode("','", $user_favorites) : '-1';
+
+			if ( ! empty( $query_args['favorites_by_user'] ) ) {
+				$user_favorites = geodir_get_user_favourites( (int) $query_args['favorites_by_user'] );
+				$user_favorites = ! empty( $user_favorites ) && is_array( $user_favorites ) ? implode( "','", $user_favorites ) : '-1';
 			}
-			
+
 			$where .= " AND `" . $wpdb->posts . "`.`ID` IN('" . $user_favorites . "')";
 		}
 
@@ -1288,15 +1012,18 @@ function geodir_function_widget_listings_where( $where ) {
 	return $where;
 }
 
+add_filter( 'geodir_filter_widget_listings_where', 'geodir_function_widget_listings_where' );
+
+
 /**
  * Listing query orderby clause SQL part for widgets.
  *
  * @since   1.0.0
  * @package GeoDirectory
- * @global object $wpdb          WordPress Database object.
+ * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
- * @param string $orderby        Orderby clause SQL.
+ * @param string $orderby Orderby clause SQL.
  *
  * @return string Modified orderby clause SQL.
  */
@@ -1311,15 +1038,18 @@ function geodir_function_widget_listings_orderby( $orderby ) {
 	return $orderby;
 }
 
+add_filter( 'geodir_filter_widget_listings_orderby', 'geodir_function_widget_listings_orderby' );
+
+
 /**
  * Listing query limit for widgets.
  *
  * @since   1.0.0
  * @package GeoDirectory
- * @global object $wpdb          WordPress Database object.
+ * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
- * @param int $limit             Query limit.
+ * @param int $limit Query limit.
  *
  * @return int Query limit.
  */
@@ -1338,73 +1068,7 @@ function geodir_function_widget_listings_limit( $limit ) {
 	return $limit;
 }
 
-/**
- * WP media large width.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param int $default         Default width.
- * @param string|array $params Image parameters.
- *
- * @return int Large size width.
- */
-function geodir_media_image_large_width( $default = 800, $params = '' ) {
-	$large_size_w = get_option( 'large_size_w' );
-	$large_size_w = $large_size_w > 0 ? $large_size_w : $default;
-	$large_size_w = absint( $large_size_w );
-
-	if ( ! geodir_get_option( 'geodir_use_wp_media_large_size' ) ) {
-		$large_size_w = 800;
-	}
-
-	/**
-	 * Filter large image width.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $large_size_w    Large image width.
-	 * @param int $default         Default width.
-	 * @param string|array $params Image parameters.
-	 */
-	$large_size_w = apply_filters( 'geodir_filter_media_image_large_width', $large_size_w, $default, $params );
-
-	return $large_size_w;
-}
-
-/**
- * WP media large height.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param int $default   Default height.
- * @param string $params Image parameters.
- *
- * @return int Large size height.
- */
-function geodir_media_image_large_height( $default = 800, $params = '' ) {
-	$large_size_h = get_option( 'large_size_h' );
-	$large_size_h = $large_size_h > 0 ? $large_size_h : $default;
-	$large_size_h = absint( $large_size_h );
-
-	if ( ! geodir_get_option( 'geodir_use_wp_media_large_size' ) ) {
-		$large_size_h = 800;
-	}
-
-	/**
-	 * Filter large image height.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param int $large_size_h    Large image height.
-	 * @param int $default         Default height.
-	 * @param string|array $params Image parameters.
-	 */
-	$large_size_h = apply_filters( 'geodir_filter_media_image_large_height', $large_size_h, $default, $params );
-
-	return $large_size_h;
-}
+add_filter( 'geodir_filter_widget_listings_limit', 'geodir_function_widget_listings_limit' );
 
 /**
  * Sanitize location name.
@@ -1412,8 +1076,8 @@ function geodir_media_image_large_height( $default = 800, $params = '' ) {
  * @since   1.0.0
  * @package GeoDirectory
  *
- * @param string $type    Location type. Can be gd_country, gd_region, gd_city.
- * @param string $name    Location name.
+ * @param string $type Location type. Can be gd_country, gd_region, gd_city.
+ * @param string $name Location name.
  * @param bool $translate Do you want to translate the name? Default: true.
  *
  * @return string Sanitized name.
@@ -1439,63 +1103,6 @@ function geodir_sanitize_location_name( $type, $name, $translate = true ) {
 
 	return $return;
 }
-
-
-
-
-/**
- * Checks whether the current page is geodirectory home page or not.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @return bool If current page is GD home page returns true, else false.
- */
-function is_page_geodir_home() {
-	global $wpdb;
-	$cur_url = str_replace( array( "https://", "http://", "www." ), array( '', '', '' ), geodir_curPageURL() );
-	if ( function_exists( 'geodir_location_geo_home_link' ) ) {
-		remove_filter( 'home_url', 'geodir_location_geo_home_link', 100000 );
-	}
-	$home_url = home_url( '', 'http' );
-	if ( function_exists( 'geodir_location_geo_home_link' ) ) {
-		add_filter( 'home_url', 'geodir_location_geo_home_link', 100000, 2 );
-	}
-	$home_url = str_replace( "www.", "", $home_url );
-	if ( ( strpos( $home_url, $cur_url ) !== false || strpos( $home_url . '/', $cur_url ) !== false ) && ( 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) && get_option( 'page_on_front' ) == geodir_get_option( 'geodir_home_page' ) ) ) {
-		return true;
-	} elseif ( get_query_var( 'page_id' ) == get_option( 'page_on_front' ) && 'page' == get_option( 'show_on_front' ) && get_option( 'page_on_front' ) && get_option( 'page_on_front' ) == geodir_get_option( 'geodir_home_page' ) ) {
-		return true;
-	} else {
-		return false;
-	}
-
-}
-
-
-/**
- * Returns homepage canonical url for SEO plugins.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @global object $post The current post object.
- *
- * @param string $url   The old url.
- *
- * @return string The canonical URL.
- */
-function geodir_wpseo_homepage_canonical( $url ) {
-	global $post;
-
-	if ( is_page_geodir_home() ) {
-		return home_url();
-	}
-
-	return $url;
-}
-
-add_filter( 'wpseo_canonical', 'geodir_wpseo_homepage_canonical', 10 );
-add_filter( 'aioseop_canonical_url', 'geodir_wpseo_homepage_canonical', 10 );
 
 /**
  * Add extra fields to google maps script call.
@@ -1524,60 +1131,6 @@ function geodir_googlemap_script_extra_details_page( $extra ) {
 
 add_filter( 'geodir_googlemap_script_extra', 'geodir_googlemap_script_extra_details_page', 101, 1 );
 
-
-/**
- * Generates category list HTML.
- *
- * @since   1.0.0
- * @package GeoDirectory
- * @global string $geodir_post_category_str The geodirectory post category.
- *
- * @param array $terms                      An array of term objects.
- * @param int $category_limit               Number of categories to display by default.
- * @param bool $category_restrict           If the cat limit should be hidden or not shown.
- */
-function geodir_helper_cat_list_output( $terms, $category_limit , $category_restrict=false) {
-	global $geodir_post_category_str, $cat_count;
-	$term_icons = geodir_get_term_icon();
-
-	$geodir_post_category_str = array();
-
-
-	foreach ( $terms as $cat ) {
-		$post_type     = str_replace( "category", "", $cat->taxonomy );
-		$term_icon_url = ! empty( $term_icons ) && isset( $term_icons[ $cat->term_id ] ) ? $term_icons[ $cat->term_id ] : '';
-
-		$cat_count ++;
-
-		$geodir_post_category_str[] = array( 'posttype' => $post_type, 'termid' => $cat->term_id );
-
-		$class_row  = $cat_count > $category_limit ? 'geodir-pcat-hide geodir-hide' : 'geodir-pcat-show';
-		if($category_restrict && $cat_count > $category_limit ){
-			continue;
-		}
-		$total_post = $cat->count;
-
-		$term_link = get_term_link( $cat, $cat->taxonomy );
-		/**
-		 * Filer the category term link.
-		 *
-		 * @since 1.4.5
-		 *
-		 * @param string $term_link The term permalink.
-		 * @param int $cat          ->term_id The term id.
-		 * @param string $post_type Wordpress post type.
-		 */
-		$term_link = apply_filters( 'geodir_category_term_link', $term_link, $cat->term_id, $post_type );
-
-		echo '<li class="' . $class_row . '"><a href="' . $term_link . '">';
-		echo '<img alt="' . esc_attr( $cat->name ) . ' icon" style="height:20px;vertical-align:middle;" src="' . $term_icon_url . '"/> <span class="cat-link">';
-		echo $cat->name . '</span> <span class="geodir_term_class geodir_link_span geodir_category_class_' . $post_type . '_' . $cat->term_id . '">(' . $total_post . ')</span> ';
-		echo '</a></li>';
-	}
-}
-
-
-
 /*-----------------------------------------------------------------------------------*/
 /*  Term count functions
 /*-----------------------------------------------------------------------------------*/
@@ -1587,7 +1140,7 @@ function geodir_helper_cat_list_output( $terms, $category_limit , $category_rest
  * @since   1.0.0
  * @package GeoDirectory
  *
- * @param array $data  Count data array.
+ * @param array $data Count data array.
  * @param object $term The term object.
  *
  * @return int Post count.
@@ -1702,8 +1255,6 @@ function geodir_sort_by_count_obj( $a, $b ) {
 function geodir_sort_by_review_count_obj( $a, $b ) {
 	return $a->review_count < $b->review_count;
 }
-
-
 
 
 /**
@@ -1829,13 +1380,13 @@ function geodir_wpseo_replacements( $vars ) {
 	 * @package GeoDirectory
 	 *
 	 * @param array $location_array The array of location variables.
-	 * @param array $vars           The page title variables.
+	 * @param array $vars The page title variables.
 	 */
-	$location_array  = apply_filters( 'geodir_filter_title_variables_location_arr_seo', $location_array, $vars );
+	$location_array = apply_filters( 'geodir_filter_title_variables_location_arr_seo', $location_array, $vars );
 
 
-	$location_replace_vars = geodir_location_replace_vars($location_array, NULL, '');
-	$vars = $vars + $location_replace_vars;
+	$location_replace_vars = geodir_location_replace_vars( $location_array, null, '' );
+	$vars                  = $vars + $location_replace_vars;
 
 	/**
 	 * Filter the title variables after standard ones have been filtered for wpseo.
@@ -1843,7 +1394,7 @@ function geodir_wpseo_replacements( $vars ) {
 	 * @since   1.5.7
 	 * @package GeoDirectory
 	 *
-	 * @param string $vars          The title with variables.
+	 * @param string $vars The title with variables.
 	 * @param array $location_array The array of location variables.
 	 */
 	return apply_filters( 'geodir_wpseo_replacements_vars', $vars, $location_array );
@@ -1885,12 +1436,12 @@ add_filter( 'geodir_seo_meta_description_pre', 'geodir_filter_title_variables', 
  * @since   1.5.7
  * @package GeoDirectory
  *
- * @global object $wp     WordPress object.
- * @global object $post   The current post object.
+ * @global object $wp WordPress object.
+ * @global object $post The current post object.
  *
- * @param string $title   The title with variables.
+ * @param string $title The title with variables.
  * @param string $gd_page The page being filtered.
- * @param string $sep     The separator, default: `|`.
+ * @param string $sep The separator, default: `|`.
  *
  * @return string Title after filtered variables.
  */
@@ -2004,7 +1555,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	// location variables
 	$gd_post_type   = geodir_get_current_posttype();
 	$location_array = geodir_get_current_location_terms( 'query_vars', $gd_post_type );
-	
+
 	/**
 	 * Filter the title variables location variables array
 	 *
@@ -2012,12 +1563,12 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	 * @package GeoDirectory
 	 *
 	 * @param array $location_array The array of location variables.
-	 * @param string $title         The title with variables..
-	 * @param string $gd_page       The page being filtered.
-	 * @param string $sep           The separator, default: `|`.
+	 * @param string $title The title with variables..
+	 * @param string $gd_page The page being filtered.
+	 * @param string $sep The separator, default: `|`.
 	 */
-	$location_array  = apply_filters( 'geodir_filter_title_variables_location_arr', $location_array, $title, $gd_page, $sep );
-	
+	$location_array = apply_filters( 'geodir_filter_title_variables_location_arr', $location_array, $title, $gd_page, $sep );
+
 	if ( $gd_page == 'location' && get_query_var( 'gd_country_full' ) ) {
 		if ( get_query_var( 'gd_country_full' ) ) {
 			$location_array['gd_country'] = get_query_var( 'gd_country_full' );
@@ -2032,20 +1583,20 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 			$location_array['gd_neighbourhood'] = get_query_var( 'gd_neighbourhood_full' );
 		}
 	}
-	
+
 	/**
 	 * Filter the location terms variables.
 	 *
 	 * @since   1.6.16
 	 * @package GeoDirectory
 	 *
-	 * @param string $title         The title with variables.
+	 * @param string $title The title with variables.
 	 * @param array $location_array The array of location variables.
-	 * @param string $gd_page       The page being filtered.
-	 * @param string $sep           The separator, default: `|`.
+	 * @param string $gd_page The page being filtered.
+	 * @param string $sep The separator, default: `|`.
 	 */
 	$title = apply_filters( 'geodir_replace_location_variables', $title, $location_array, $gd_page, $sep );
-	
+
 	if ( strpos( $title, '%%search_term%%' ) !== false ) {
 		$search_term = '';
 		if ( isset( $_REQUEST['s'] ) ) {
@@ -2102,15 +1653,14 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	 * @since   1.5.7
 	 * @package GeoDirectory
 	 *
-	 * @param string $title         The title with variables.
+	 * @param string $title The title with variables.
 	 * @param array $location_array The array of location variables.
-	 * @param string $gd_page       The page being filtered.
-	 * @param string $sep           The separator, default: `|`.
+	 * @param string $gd_page The page being filtered.
+	 * @param string $sep The separator, default: `|`.
 	 */
 
 	return apply_filters( 'geodir_filter_title_variables_vars', $title, $location_array, $gd_page, $sep );
 }
-
 
 
 /**
@@ -2150,11 +1700,12 @@ function geodir_remove_location_terms( $location_terms = array() ) {
 
 	/**
 	 * Filter the remove location terms array.
-	 * 
+	 *
 	 * @since 1.6.22
+	 *
 	 * @param array $location_terms The array of location terms.
 	 */
-	return apply_filters('geodir_remove_location_terms',$location_terms);
+	return apply_filters( 'geodir_remove_location_terms', $location_terms );
 }
 
 /**
@@ -2221,13 +1772,13 @@ function geodir_title_meta_pagetotal() {
 /**
  * Determine the page numbering of the current post/page/cpt.
  *
- * @param string $request   'nr'|'max' - whether to return the page number or the max number of pages.
+ * @param string $request 'nr'|'max' - whether to return the page number or the max number of pages.
  *
  * @since   1.6.0
  * @package GeoDirectory
  *
  * @global object $wp_query WordPress Query object.
- * @global object $post     The current post object.
+ * @global object $post The current post object.
  *
  * @return int|null The current page numbering.
  */
@@ -2297,7 +1848,7 @@ function geodir_filter_empty_terms( $terms ) {
 			 * @since 1.6.6
 			 *
 			 * @param array $return The array of terms to return.
-			 * @param object $term  The term object.
+			 * @param object $term The term object.
 			 */
 			$return = apply_filters( 'geodir_filter_empty_terms_filter', $return, $term );
 		}
@@ -2306,26 +1857,6 @@ function geodir_filter_empty_terms( $terms ) {
 	return $return;
 }
 
-
-/**
- * Remove the hentry class structured data from details pages.
- *
- * @since 1.6.5
- *
- * @param $class
- *
- * @return array
- */
-function geodir_remove_hentry( $class ) {
-	if ( geodir_is_page( 'detail' ) ) {
-		$class = array_diff( $class, array( 'hentry' ) );
-	}
-
-	return $class;
-}
-
-//add_filter( 'post_class', 'geodir_remove_hentry' ); //@todo we dont seem to need to remove this with new template system
-
 /**
  * Get current WP theme name.
  *
@@ -2333,24 +1864,9 @@ function geodir_remove_hentry( $class ) {
  * @package GeoDirectory
  */
 function geodir_wp_theme_name() {
-    $theme = wp_get_theme();
-    
-    return $theme->name;
-}
+	$theme = wp_get_theme();
 
-/**
- * Theme Compatibility file.
- *
- * @since 2.0.0
- *
- * @return string $compatibility_file.
- */
-function geodir_theme_compatibility_file() {
-    $theme = geodir_wp_theme_name();
-    
-    $compatibility_file = GEODIRECTORY_PLUGIN_DIR . 'includes/compatibility/class-geodir-' . geodir_strtolower( sanitize_file_name( $theme ) ) . '.php' ;
-
-    return apply_filters( 'geodir_theme_compatibility_file', $compatibility_file, $theme );
+	return $theme->name;
 }
 
 /**
@@ -2361,9 +1877,9 @@ function geodir_theme_compatibility_file() {
  * @return string $blogname.
  */
 function geodir_get_blogname() {
-    $blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
-    
-    return apply_filters( 'geodir_get_blogname', $blogname );
+	$blogname = wp_specialchars_decode( get_option( 'blogname' ), ENT_QUOTES );
+
+	return apply_filters( 'geodir_get_blogname', $blogname );
 }
 
 /**
@@ -2374,7 +1890,7 @@ function geodir_get_blogname() {
  * @return string $blogurl.
  */
 function geodir_get_blogurl() {
-    $blogurl = home_url( '/' );
-    
-    return apply_filters( 'geodir_get_blogurl', $blogurl );
+	$blogurl = home_url( '/' );
+
+	return apply_filters( 'geodir_get_blogurl', $blogurl );
 }

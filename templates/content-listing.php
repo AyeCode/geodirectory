@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $gd_post;
 
 ?>
-<li <?php post_class(); ?>>
+<li <?php post_class(); ?> data-post-id="<?php echo esc_attr($gd_post->ID);?>">
 	<?php
 
 	// get content from GD Archive Item page template

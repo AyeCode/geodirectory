@@ -4,7 +4,6 @@
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @todo fix location variable
  * @return string
  */
 function geodir_get_current_city_lat()
@@ -20,7 +19,6 @@ function geodir_get_current_city_lat()
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @todo fix location variable
  * @return string
  */
 function geodir_get_current_city_lng()
@@ -312,19 +310,7 @@ function geodir_add_new_location($location_info = array())
     }
 }
 
-/**
- * Returns random float number.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param int $min The minimum number. Default: 0.
- * @param int $max The maximum number. Default: 1.
- * @return float
- */
-function geodir_random_float($min = 0, $max = 1)
-{
-    return $min + mt_rand() / mt_getrandmax() * ($max - $min);
-}
+
 
 /**
  * Returns address using latitude and longitude.

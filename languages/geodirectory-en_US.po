@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: GeoDirectory 2.0.0.0-dev\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-22 19:12+0100\n"
-"PO-Revision-Date: 2018-06-22 19:12+0100\n"
+"POT-Creation-Date: 2018-06-23 10:23+0100\n"
+"PO-Revision-Date: 2018-06-23 10:23+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -568,7 +568,7 @@ msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-assets.php:211
-#: includes/class-geodir-frontend-scripts.php:662
+#: includes/class-geodir-frontend-scripts.php:699
 msgid "Allowed Files"
 msgstr ""
 
@@ -1851,7 +1851,6 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:802
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:23
-#: includes/geodirectory_template_actions.php:202
 #: includes/helper-functions.php:1568
 #: includes/widgets/class-geodir-widget-categories.php:136
 #: includes/widgets/class-geodir-widget-categories.php:145
@@ -4221,8 +4220,7 @@ msgstr ""
 msgid "Titles & Meta"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:53
-#: includes/geodirectory_template_actions.php:306 language.php:21
+#: includes/admin/settings/class-geodir-settings-general.php:53 language.php:21
 msgid "Search"
 msgstr ""
 
@@ -8019,94 +8017,94 @@ msgstr ""
 msgid "Author"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:141
-#: includes/class-geodir-frontend-scripts.php:142
+#: includes/class-geodir-frontend-scripts.php:178
+#: includes/class-geodir-frontend-scripts.php:179
 msgid "In:"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:167
+#: includes/class-geodir-frontend-scripts.php:204
 msgid "Search was not successful for the following reason :"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:176
+#: includes/class-geodir-frontend-scripts.php:213
 msgid "Search was not successful for the requested address."
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:222
+#: includes/class-geodir-frontend-scripts.php:259
 #: includes/core-functions.php:304
 msgid "Unable to find your location"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:225
+#: includes/class-geodir-frontend-scripts.php:262
 #: includes/core-functions.php:305
 msgid "Permission denied in finding your location"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:228
+#: includes/class-geodir-frontend-scripts.php:265
 #: includes/core-functions.php:306
 msgid "Your location is currently unknown"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:231
+#: includes/class-geodir-frontend-scripts.php:268
 #: includes/core-functions.php:307
 msgid "Attempt to find location took too long"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:234
+#: includes/class-geodir-frontend-scripts.php:271
 #: includes/core-functions.php:308
 msgid "Location detection not supported in browser"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:636
+#: includes/class-geodir-frontend-scripts.php:673
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:637
+#: includes/class-geodir-frontend-scripts.php:674
 #: includes/core-functions.php:310
 msgid "No matches found"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:638
+#: includes/class-geodir-frontend-scripts.php:675
 #: includes/core-functions.php:311
 msgid "Loading failed"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:639
+#: includes/class-geodir-frontend-scripts.php:676
 #: includes/core-functions.php:312
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:640
+#: includes/class-geodir-frontend-scripts.php:677
 #: includes/core-functions.php:313
 msgid "Please enter %item% or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:641
+#: includes/class-geodir-frontend-scripts.php:678
 #: includes/core-functions.php:314
 msgid "Please delete 1 character"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:642
+#: includes/class-geodir-frontend-scripts.php:679
 #: includes/core-functions.php:315
 msgid "Please delete %item% characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:643
+#: includes/class-geodir-frontend-scripts.php:680
 #: includes/core-functions.php:316
 msgid "You can only select 1 item"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:644
+#: includes/class-geodir-frontend-scripts.php:681
 #: includes/core-functions.php:317
 msgid "You can only select %item% items"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:645
+#: includes/class-geodir-frontend-scripts.php:682
 #: includes/core-functions.php:318
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:646
+#: includes/class-geodir-frontend-scripts.php:683
 #: includes/core-functions.php:319
 msgid "Searching&hellip;"
 msgstr ""
@@ -9174,7 +9172,7 @@ msgstr ""
 msgid "GeoDirectory: fetch_remote_file() failed to delete temp file."
 msgstr ""
 
-#: includes/general_functions.php:2177
+#: includes/general_functions.php:2187
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
@@ -9285,44 +9283,6 @@ msgstr ""
 #: includes/geodir-rest-functions.php:616
 #, php-format
 msgid "%1$s must be between %2$d (inclusive) and %3$d (inclusive)"
-msgstr ""
-
-#: includes/geodirectory_template_actions.php:204
-msgid "My Favorite"
-msgstr ""
-
-#: includes/geodirectory_template_actions.php:237
-#: includes/geodirectory_template_actions.php:250
-msgid "'"
-msgstr ""
-
-#: includes/geodirectory_template_actions.php:237
-#: includes/geodirectory_template_actions.php:250
-msgid "'s"
-msgstr ""
-
-#: includes/geodirectory_template_actions.php:238
-#: includes/geodirectory_template_actions.php:240
-#: includes/geodirectory_template_actions.php:251
-#: includes/geodirectory_template_actions.php:253
-#: includes/geodirectory_template_actions.php:281
-#: includes/geodirectory_template_actions.php:291
-#: includes/geodirectory_template_actions.php:301
-msgid " in"
-msgstr ""
-
-#: includes/geodirectory_template_actions.php:306
-msgid " For :"
-msgstr ""
-
-#: includes/geodirectory_template_tags.php:114 templates/loop/pagination.php:63
-#, php-format
-msgid "Showing %s %d-%d of %d"
-msgstr ""
-
-#: includes/geodirectory_template_tags.php:116 templates/loop/pagination.php:65
-#, php-format
-msgid "Showing listings %d-%d of %d"
 msgstr ""
 
 #: includes/helper-functions.php:560
@@ -12471,6 +12431,16 @@ msgstr ""
 
 #: templates/loop/no-listings-found.php:11
 msgid "No listings were found matching your selection."
+msgstr ""
+
+#: templates/loop/pagination.php:63
+#, php-format
+msgid "Showing %s %d-%d of %d"
+msgstr ""
+
+#: templates/loop/pagination.php:65
+#, php-format
+msgid "Showing listings %d-%d of %d"
 msgstr ""
 
 #: templates/popup-forms.php:51

@@ -1058,22 +1058,7 @@ class GeoDir_Query {
 			if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $_REQUEST['geodir_search'] ) ) {
 				$wp->query_vars['gd_is_geodir_page'] = true;
 			}
-
-
-//check if homepage
-			if ( ! isset( $wp->query_vars['gd_is_geodir_page'] )
-			     && ! isset( $wp->query_vars['page_id'] )
-			     && ! isset( $wp->query_vars['pagename'] )
-			     && is_page_geodir_home()
-			) {
-				$wp->query_vars['gd_is_geodir_page'] = true;
-			}
-			//echo $wp->query_vars['gd_is_geodir_page'] ;
-			/*echo "<pre>" ;
-			print_r($wp) ;
-			echo "</pre>" ;
-		//	exit();
-				*/
+		
 		} // end of is admin
 	}
 

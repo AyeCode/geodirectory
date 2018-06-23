@@ -128,6 +128,9 @@ jQuery(function($) {
 
     // init reply link text changed
     gd_init_comment_reply_link();
+
+    // bounce the map markers
+    geodir_animate_markers();
 });
 
 
@@ -1300,4 +1303,23 @@ function gd_init_rating_input(){
         });
 
     });
+}
+
+/**
+ * Bounce the marker when the listing item is hovered over.
+ */
+function geodir_animate_markers(){
+    if (typeof(animate_marker) == 'function') {
+        var groupTab = jQuery("ul.geodir-category-list-view").children("li");
+        groupTab.hover(function () {
+            animate_marker('listing_map_canvas', String(jQuery(this).data("post-id")));
+        }, function () {
+            stop_marker_animation('listing_map_canvas', String(jQuery(this).data("post-id")));
+        });
+    } else {
+        window.animate_marker = function () {
+        };
+        window.stop_marker_animation = function () {
+        };
+    }
 }

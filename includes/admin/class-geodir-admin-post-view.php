@@ -364,11 +364,6 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			$svalue = $curImages; // this will be initial value of the above form field. Image urls.
 
 			$multiple = true; // allow multiple files upload
-
-			$width = geodir_media_image_large_width(); // If you want to automatically resize all uploaded images then provide width here (in pixels)
-
-			$height = geodir_media_image_large_height(); // If you want to automatically resize all uploaded images then provide height here (in pixels)
-
 			?>
 
 			<div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox"
@@ -383,11 +378,6 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 					       value="<?php _e( 'Select Files', 'geodirectory' ); ?>" class="button"/>
 					<span class="ajaxnonceplu"
 					      id="ajaxnonceplu<?php echo wp_create_nonce( $id . 'pluploadan' ); ?>"></span>
-					<?php if ( $width && $height ): ?>
-						<span class="plupload-resize"></span>
-						<span class="plupload-width" id="plupload-width<?php echo $width; ?>"></span>
-						<span class="plupload-height" id="plupload-height<?php echo $height; ?>"></span>
-					<?php endif; ?>
 					<div class="filelist"></div>
 				</div>
 				<div class="plupload-thumbs <?php if ( $multiple ): ?>plupload-thumbs-multiple<?php endif; ?> clearfix"
