@@ -529,7 +529,7 @@ function geodir_get_term_icon( $term_id = false, $rebuild = false ) {
         if ( isset( $terms_icons[ $term_id ] ) ) {
             return $terms_icons[ $term_id ];
         } else {
-            return geodir_default_marker_icon( true );
+            return GeoDir_Maps::default_marker_icon( true );
         }
     }
     

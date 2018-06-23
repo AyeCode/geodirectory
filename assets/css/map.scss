@@ -369,7 +369,7 @@
     z-index: 100;
     cursor: pointer;
     font-size: 20px;
-    color: #FFF;
+    color: #555;
     text-shadow: 1px 1px 4px rgba(38, 38, 38, 1);
     transition: font-size 0.5s;
 }
@@ -452,6 +452,7 @@
     padding: 8px 13px;
     z-index: 9999999;
     cursor: pointer;
+	color: #555;
 }
 
 .gd-trigger.triggermap_fullscreen {

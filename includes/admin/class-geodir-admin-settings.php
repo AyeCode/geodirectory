@@ -851,7 +851,7 @@ class GeoDir_Admin_Settings {
                      *
                      * @since 1.0.0
                      */
-                    include( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_on_add_listing_page.php' );
+                    include( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
 					?>
 						</td>
 					</tr>

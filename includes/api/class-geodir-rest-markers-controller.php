@@ -300,7 +300,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 				$icon_url = geodir_get_cat_icon( $default_category, false, true );
 				if ( empty( $icon_url ) ) {
 					$icon_id = 'd';
-					$icon_url = geodir_default_marker_icon( false );
+					$icon_url = GeoDir_Maps::default_marker_icon( false );
 				}
 
 				if ( $default_category ) {
@@ -313,7 +313,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 					$icon_width 	= $geodir_rest_cache_marker[ $icon_url ]['w'];
 					$icon_height 	= $geodir_rest_cache_marker[ $icon_url ]['h'];
 				} else {
-					$icon_size = geodir_get_marker_size( $geodir_icon_basedir . $icon_url );
+					$icon_size = GeoDir_Maps::get_marker_size( $geodir_icon_basedir . $icon_url );
 					if ( ! empty( $icon_size ) ) {
 						$icon_width 	= $icon_size['w'];
 						$icon_height 	= $icon_size['h'];
@@ -409,7 +409,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
      * @return string $content.
      */
 	public function marker_content( $id ) {
-		$content = geodir_get_map_popup_content( $id );
+		$content = GeoDir_Maps::marker_popup_content( $id );
 
 		return $content;
 	}

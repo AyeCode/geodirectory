@@ -244,8 +244,8 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 	 */
 	$allowed_img_types = apply_filters( 'geodir_allowed_post_image_exts', array( 'jpg', 'jpeg', 'jpe', 'gif', 'png' ) );
 
-	$default_marker_icon   = geodir_default_marker_icon( true );
-	$default_marker_size   = geodir_get_marker_size( $default_marker_icon, array( 'w' => 20, 'h' => 34 ) );
+	$default_marker_icon   = GeoDir_Maps::default_marker_icon( true );
+	$default_marker_size   = GeoDir_Maps::get_marker_size( $default_marker_icon, array( 'w' => 20, 'h' => 34 ) );
 	$default_marker_width  = $default_marker_size['w'];
 	$default_marker_height = $default_marker_size['h'];
 
@@ -301,7 +301,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'rating_type'                                  => geodir_get_option( 'rating_type' ) ? geodir_get_option( 'rating_type' ) : 'font-awesome',
 		'reviewrating'                                 => defined( 'GEODIRREVIEWRATING_VERSION' ) ? 1 : '',
 		'multirating'                                  => defined( 'GEODIRREVIEWRATING_VERSION' ) && geodir_get_option( 'geodir_reviewrating_enable_rating' ) ? true : false,
-		'map_name'                                     => geodir_map_name(),
+		'map_name'                                     => GeoDir_Maps::active_map(),
 		'osmStart'                                     => __( 'Start', 'geodirectory' ),
 		'osmVia'                                       => __( 'Via {viaNumber}', 'geodirectory' ),
 		'osmEnd'                                       => __( 'Enter Your Location', 'geodirectory' ),
@@ -341,8 +341,8 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_save_other_setting'                       => __( 'Please save the current setting before adding a new one.', 'geodirectory' ),
 		'gmt_offset'                                   => geodir_gmt_offset(),
 		'search_users_nonce'                           => wp_create_nonce( 'search-users' ),
-		'google_api_key'                               => geodir_get_map_api_key(),
-		'mapLanguage'                                  => geodir_get_map_default_language()
+		'google_api_key'                               => GeoDir_Maps::google_api_key(),
+		'mapLanguage'                                  => GeoDir_Maps::map_language()
 	);
 
 	/**
@@ -730,7 +730,7 @@ function so_handle_038( $url, $original_url, $_context ) {
  * @return array Modified class array.
  */
 function geodir_body_class_active_map( $classes = array() ) {
-	$classes[] = 'gd-map-' . geodir_map_name();
+	$classes[] = 'gd-map-' . GeoDir_Maps::active_map();
 
 	return $classes;
 }

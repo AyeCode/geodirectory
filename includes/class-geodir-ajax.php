@@ -106,7 +106,7 @@ class GeoDir_AJAX {
 		}
 
 		add_filter('geodir_add_listing_map_restrict','__return_false');
-		include_once(dirname( __FILE__ ) . '/maps/map_on_add_listing_page.php');
+		include_once(GEODIRECTORY_PLUGIN_DIR . 'templates/map.php');
 		?>
 		<input type="hidden" id="<?php echo $prefix.'latitude';?>">
 		<input type="hidden" id="<?php echo $prefix.'longitude';?>">
