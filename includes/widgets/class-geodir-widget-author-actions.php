@@ -41,7 +41,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			),
 			'arguments'     => array(
 				'hide_edit'  => array(
-					'title' => __('Hide edit:', 'geodirectory'),
+					'title' => __('Hide edit', 'geodirectory'),
 					'desc' => __('Hide the edit action.', 'geodirectory'),
 					'type' => 'checkbox',
 					'value'=> '1',
@@ -50,8 +50,17 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 					'advanced' => true
 				),
 				'hide_delete'  => array(
-					'title' => __('Hide delete:', 'geodirectory'),
+					'title' => __('Hide delete', 'geodirectory'),
 					'desc' => __('Hide the delete action.', 'geodirectory'),
+					'type' => 'checkbox',
+					'value'=> '1',
+					'default'=> '0',
+					'desc_tip' => true,
+					'advanced' => true
+				),
+				'author_page_only'  => array(
+					'title' => __('Show on author page only', 'geodirectory'),
+					'desc' => __('Show the action only on the author page.', 'geodirectory'),
 					'type' => 'checkbox',
 					'value'=> '1',
 					'default'=> '0',
@@ -82,6 +91,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		$defaults = array(
 			'hide_edit'      => 0,
 			'hide_delete'      => 0,
+			'author_page_only'      => 0,
 		);
 
 		/**
@@ -89,14 +99,21 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		 */
 		$args = wp_parse_args( $args, $defaults );
 
+		$show = true;
+
+		if( $args['author_page_only'] && !geodir_is_page('author')){
+			$show = false;
+		}
+
 		$output = '';
-		if(!empty($post->ID) && geodir_listing_belong_to_current_user($post->ID)){
+		if( $show && !empty($post->ID) && geodir_listing_belong_to_current_user($post->ID)){
 			ob_start();
 
 			echo '<div class="geodir_post_meta  gd-author-actions" ">';
 
 			do_action( 'geodir_widget_before_detail_user_actions' );
 
+			self::post_status_author_page();// the post status on the author page
 
 			if(!$args['hide_edit']){
 				$post_id = $post->ID;
@@ -111,8 +128,6 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 				echo '<span class="gd_user_action delete_link"><i class="fa fa-trash"></i> <a href="javascript:void(0);" onclick="gd_delete_post('.$post_id.');">' . __('Delete', 'geodirectory') . '</a></span>';
 			}
 
-
-
 			do_action( 'geodir_widget_after_detail_user_actions' );
 
 			echo "</div>";
@@ -123,18 +138,53 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		return $output;
 	}
 
-    /**
-     * Author actions.
-     *
-     * @since 2.0.0
-     *
-     * @return array
-     */
-	public function author_actions(){
-		return array(
-			'edit' => __("Edit","geodirectory"),
-			'delete' => __("Delete","geodirectory"),
-		);
+
+	/**
+	 * Adds post status on author page when the author is current user.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @global object $wpdb WordPress Database object.
+	 * @global object $post The current post object.
+	 */
+	public static function post_status_author_page()
+	{
+		global $wpdb, $post;
+
+		$html = '';
+		if (get_current_user_id()) {
+
+			$is_author_page = apply_filters('geodir_post_status_is_author_page', geodir_is_page('author'));
+			if ($is_author_page && !empty($post) && isset($post->post_author) && $post->post_author == get_current_user_id()) {
+
+				// we need to query real status direct as we dynamically change the status for author on author page so even non author status can view them.
+				$real_status = $wpdb->get_var("SELECT post_status from $wpdb->posts WHERE ID=$post->ID");
+				$status = "<strong>(";
+				$status_icon = '<i class="fas fa-play"></i>';
+				if ($real_status == 'publish') {
+					$status .= __('Published', 'geodirectory');
+				} elseif($real_status == 'pending') {
+					$status .= __('Awaiting review', 'geodirectory');
+					$status_icon = '<i class="fas fa-pause"></i>';
+				}else {
+					$status .= __('Not published', 'geodirectory');
+					$status_icon = '<i class="fas fa-pause"></i>';
+				}
+				$status .= ")</strong>";
+
+				$html = '<span class="gd_user_action geodir-post-status">' . $status_icon . ' <font class="geodir-status-label">' . __('Status: ', 'geodirectory') . '</font>' . $status . '</span>';
+			}
+		}
+
+		if ($html != '') {
+			/**
+			 * Filter the post status text on the author page.
+			 *
+			 * @since 1.0.0
+			 * @param string $html The HTML of the status.
+			 */
+			echo apply_filters('geodir_filter_status_text_on_author_page', $html);
+		}
 	}
 }
 

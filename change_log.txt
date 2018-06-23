@@ -3,6 +3,8 @@ Updated from font-awesome v4 to v5 - CHANGED
 Rest api route & endpoints for fields - ADDED
 priceRange custom field added and schema output added - ADDED
 Font Awesome & Popup maker raises Uncaught Error - FIXED
+DB translate texts tool added - ADDED
+Show author own posts on author page if draft or pending - CHANGED
 
 v2.0.0.14-beta
 Map default language setting is not working for OpenStreetMap - FIXED

@@ -33,6 +33,29 @@ class GeoDir_Comments {
 		add_action( 'wp_set_comment_status', array(__CLASS__, 'status_change'), 10, 2 );
 		add_action( 'edit_comment', array(__CLASS__, 'edit_comment') );
 		add_action( 'delete_comment', array(__CLASS__, 'delete_comment') );
+
+		// change the comment hash to review hash
+		add_filter('get_comments_link', array(__CLASS__,'get_comments_link'), 10, 2);
+	}
+
+	/**
+	 * Channge the comments url hash to review types.
+	 *
+	 * @param $comments_link
+	 * @param $post_id
+	 *
+	 * @return mixed
+	 */
+	public static function get_comments_link($comments_link, $post_id) {
+		$post_type = get_post_type($post_id);
+
+		$all_postypes = geodir_get_posttypes();
+		if (in_array($post_type, $all_postypes)) {
+			$comments_link = str_replace('#comments', '#reviews', $comments_link);
+			$comments_link = str_replace('#respond', '#reviews', $comments_link);
+		}
+
+		return $comments_link;
 	}
 	
 	/**
@@ -615,7 +638,7 @@ class GeoDir_Comments {
 	 */
 	public static function rating_html( $rating, $type = 'output' ) {
 
-		$rating_icon  = esc_attr( geodir_get_option( 'rating_icon', 'fa-star' ) );
+		$rating_icon  = esc_attr( geodir_get_option( 'rating_icon', 'fas fa-star' ) );
 		$rating_color = esc_attr( geodir_get_option( 'rating_color' ) );
 		if ( $rating_color == '#ff9900' ) {
 			$rating_color = '';
@@ -655,7 +678,7 @@ class GeoDir_Comments {
 
 			while ( $i <= $rating_input_count ) {
 				$rating_title = $type == 'input' ? "title='$rating_texts[$i]'" : '';
-				$rating_html .= '<i class="fa ' . $rating_icon . '" ' . $rating_title . '></i>';
+				$rating_html .= '<i class="' . $rating_icon . '" ' . $rating_title . '></i>';
 				$i ++;
 			}
 		}

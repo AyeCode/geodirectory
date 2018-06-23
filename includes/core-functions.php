@@ -442,3 +442,314 @@ function geodir_column_exist($db, $column)
 	}
 	return $exists;
 }
+
+/**
+ * Register Widgets.
+ *
+ * @since 2.0.0
+ */
+function goedir_register_widgets() {
+	if ( get_option( 'geodirectory_version' )) {
+		register_widget( 'GeoDir_Widget_Search' );
+		register_widget( 'GeoDir_Widget_Best_Of' );
+		register_widget( 'GeoDir_Widget_Categories' );
+		register_widget( 'GeoDir_Widget_Category_Description' );
+		register_widget( 'GeoDir_Widget_Dashboard' );
+		register_widget( 'GeoDir_Widget_Recent_Reviews' );
+
+		// post widgets
+		register_widget( 'GeoDir_Widget_Post_Badge' );
+		register_widget( 'GeoDir_Widget_Post_Meta' );
+		register_widget( 'GeoDir_Widget_Post_Images' );
+		register_widget( 'GeoDir_Widget_Post_Title' );
+		register_widget( 'GeoDir_Widget_Post_Rating' );
+		register_widget( 'GeoDir_Widget_Post_Fav' );
+		register_widget( 'GeoDir_Widget_Post_Directions' );
+
+		// Widgets
+		register_widget( 'GeoDir_Widget_Output_location' );
+		register_widget( 'GeoDir_Widget_Author_Actions' );
+		register_widget( 'GeoDir_Widget_Listings' );
+		register_widget( 'GeoDir_Widget_Map' );
+
+		// Non Widgets
+		new GeoDir_Widget_Add_Listing();
+		new GeoDir_Widget_Single_Taxonomies();
+		new GeoDir_Widget_Single_Tabs();
+		new GeoDir_Widget_Single_Next_Prev();
+		new GeoDir_Widget_Single_Closed_Text();
+		new GeoDir_Widget_Loop();
+		new GeoDir_Widget_Loop_Paging();
+		new GeoDir_Widget_Loop_Actions();
+		new GeoDir_Widget_Archive_Item_Section();
+		new GeoDir_Widget_Post_Distance();
+
+		// 3rd party widgets
+		if(class_exists('Ninja_Forms')){
+			register_widget( 'GeoDir_Widget_Ninja_Forms' );
+
+		}
+	}
+}
+add_action( 'widgets_init', 'goedir_register_widgets' );
+
+/**
+ * Function for widget pages options.
+ *
+ * @since 2.0.0
+ *
+ * @return array $gd_widget_pages.
+ */
+function geodir_widget_pages_options() {
+	global $gd_widget_pages;
+
+	if ( !empty( $gd_widget_pages ) && is_array( $gd_widget_pages ) ) {
+		return $gd_widget_pages;
+	}
+
+	$gd_widget_pages = array();
+	$gd_widget_pages['gd'] = array(
+		'label'     => __( 'GD Pages', 'geodirectory' ),
+		'pages'     => array(
+			'add-listing'       => __( 'Add Listing Page', 'geodirectory' ),
+			'author'            => __( 'Author Page', 'geodirectory' ),
+			'detail'            => __( 'Listing Detail Page', 'geodirectory' ),
+			'preview'           => __( 'Listing Preview Page', 'geodirectory' ),
+			'listing-success'   => __( 'Listing Success Page', 'geodirectory' ),
+			'location'          => __( 'Location Page', 'geodirectory' ),
+			'login'             => __( 'Login Page', 'geodirectory' ),
+			'pt'                => __( 'Post Type Archive', 'geodirectory' ),
+			'search'            => __( 'Search Page', 'geodirectory' ),
+			'listing'           => __( 'Taxonomies Page', 'geodirectory' ),
+		),
+	);
+
+	return apply_filters( 'geodir_widget_pages_options', $gd_widget_pages );
+}
+
+/**
+ * Function for widget page id bases detail.
+ *
+ * @since 2.0.0
+ *
+ * @return array $id_bases.
+ */
+function geodir_detail_page_widget_id_bases() {
+	$id_bases = array(
+		'detail_user_actions',
+		'detail_social_sharing',
+		'detail_sidebar',
+		'detail_sidebar_info',
+		'detail_rating_stars',
+	);
+
+	return apply_filters( 'geodir_detail_page_widget_id_bases', $id_bases );
+}
+
+/**
+ * Function for check is detail page widget.
+ *
+ * @since 2.0.0
+ *
+ * @param string $id_base widget page id base.
+ * @return bool $return.
+ */
+function geodir_is_detail_page_widget( $id_base ) {
+	$widgets = geodir_detail_page_widget_id_bases();
+
+	$return = ! empty( $id_base ) && ! empty( $widgets ) && in_array( $id_base, $widgets ) ? true : false;
+
+	return apply_filters( 'geodir_is_detail_page_widget', $return, $id_base, $widgets );
+}
+
+/**
+ * Function for display widget c
+ *
+ *
+ * @since 2.0.0
+ *
+ * @param array $instance {
+ *      An array display widget arguments.
+ *
+ *      @type string $gd_wgt_showhide Widget display type.
+ *      @type string $gd_wgt_restrict Widget restrict pages.
+ * }
+ * @param object $widget Display widget options.
+ * @param array $args Widget arguments.
+ * @return bool|array $instance
+ */
+function geodir_widget_display_callback( $instance, $widget, $args ) {
+	if ( !empty( $widget->widget_options['geodirectory'] ) && !empty( $instance['gd_wgt_showhide'] ) ) {
+		$display_type = !empty( $instance['gd_wgt_showhide'] ) ? $instance['gd_wgt_showhide'] : '';
+		$pages = !empty( $instance['gd_wgt_restrict'] ) && is_array( $instance['gd_wgt_restrict'] ) ? $instance['gd_wgt_restrict'] : array();
+
+		$show = $instance;
+
+		if ( $display_type == 'show' ) {
+			$show = $instance; // Show on all pages.
+		} else if ( $display_type == 'hide' ) {
+			$show = false; // Hide on all pages.
+		} else if ( $display_type == 'gd' ) {
+			if ( ! geodir_is_geodir_page() ) {
+				$show = false; // Show only on GD pages.
+			}
+		} else {
+			if ( geodir_is_detail_page_widget( $widget->id_base ) ) {
+				if ( geodir_is_page( 'detail' ) ) {
+					if ( ! in_array( 'gd-detail', $pages ) ) {
+						$show = false;
+					}
+				} else if ( geodir_is_page( 'preview' ) ) {
+					if ( ! in_array( 'gd-preview', $pages ) ) {
+						$show = false;
+					}
+				} else {
+					$show = false;
+				}
+			} else {
+				$gd_widget_pages = geodir_widget_pages_options();
+				$gd_page = '';
+
+				if ( !empty( $gd_widget_pages['gd']['pages'] ) ) {
+					$gd_pages = $gd_widget_pages['gd']['pages'];
+
+					foreach ( $gd_pages as $page => $page_title ) {
+						if ( geodir_is_page( $page ) ) {
+							$gd_page = $page;
+							break;
+						}
+					}
+				}
+
+				if ( $display_type == 'show_on' ) {
+					if ( $gd_page && in_array( 'gd-' . $gd_page, $pages ) ) {
+						$show = $instance;
+					} else {
+						$show = false;
+					}
+				} else if ( $display_type == 'hide_on' ) {
+					if ( $gd_page && in_array( 'gd-' . $gd_page, $pages ) ) {
+						$show = false;
+					} else {
+						$show = $instance;
+					}
+				} else {
+					$show = false;
+				}
+			}
+		}
+
+		$instance = $show;
+	}
+
+	return $instance;
+}
+add_filter( 'widget_display_callback', 'geodir_widget_display_callback', 10, 3 );
+
+
+global $geodir_addon_list;
+/**
+ * Build an array of installed addons.
+ *
+ * This filter builds an array of installed addons which can be used to check what exactly is installed.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param array $geodir_addon_list The array of installed plugins $geodir_addon_list['geodir_location_manager'].
+ */
+apply_filters('geodir_build_addon_list', $geodir_addon_list);
+
+/**
+ * Add GeoDirectory link to the WordPress admin bar.
+ *
+ * This function adds a link to the GeoDirectory backend to the WP admin bar via a hook.
+ *    add_action('admin_bar_menu', 'geodir_admin_bar_site_menu', 31);
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param object $wp_admin_bar The admin bar object.
+ */
+function geodir_admin_bar_site_menu($wp_admin_bar) {
+	if ( current_user_can( 'manage_options' ) ) {
+		$wp_admin_bar->add_menu( array( 'parent' => 'appearance', 'id' => 'geodirectory', 'title' => __( 'GeoDirectory', 'geodirectory' ), 'href' => admin_url( 'admin.php?page=geodirectory' ) ) );
+	}
+}
+add_action('admin_bar_menu', 'geodir_admin_bar_site_menu', 31);
+
+/**
+ * Clean url.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param string $url Url.
+ * @param string $original_url Original url.
+ * @param string $_context Context.
+ * @return string Modified url.
+ */
+function so_handle_038($url, $original_url, $_context)
+{
+	if (strstr($url, "maps.google.com/maps/api/js") !== false) {
+		$url = str_replace("&#038;", "&amp;", $url); // or $url = $original_url
+	}
+
+	return $url;
+}
+add_filter('clean_url', 'so_handle_038', 99, 3);
+
+/**
+ * Add body class for current active map.
+ *
+ * @since 1.6.16
+ * @package GeoDirectory
+ * @param array $classes The class array of the HTML element.
+ * @return array Modified class array.
+ */
+function geodir_body_class_active_map($classes = array()) {
+	$classes[] = 'gd-map-' . geodir_map_name();
+	return $classes;
+}
+add_filter('body_class', 'geodir_body_class_active_map', 100);
+
+/**
+ * remove rating stars fields if disabled.
+ *
+ * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
+ * @package GeoDirectory
+ */
+function geodir_init_no_rating() {
+	if (geodir_rating_disabled_post_types()) {
+		add_filter('geodir_get_sort_options', 'geodir_no_rating_get_sort_options', 100, 2);
+	}
+}
+add_action('init', 'geodir_init_no_rating', 100);
+
+
+/**
+ * Skip overall rating sort option when rating disabled.
+ *
+ * @since 1.0.0
+ * @since 1.6.16 Changes for disable review stars for certain post type.
+ * @package GeoDirectory
+ * @param array $options Sort options array.
+ * @param string $post_type The post type.
+ * @return array Modified sort options array.
+ */
+function geodir_no_rating_get_sort_options($options, $post_type = '') {
+	if (!empty($post_type) && geodir_cpt_has_rating_disabled($post_type)) {
+		$new_options = array();
+
+		if (!empty($options)) {
+			foreach ($options as $option) {
+				if (is_object($option) && isset($option->htmlvar_name) && $option->htmlvar_name == 'overall_rating') {
+					continue;
+				}
+				$new_options[] = $option;
+			}
+
+			$options = $new_options;
+		}
+	}
+
+	return $options;
+}

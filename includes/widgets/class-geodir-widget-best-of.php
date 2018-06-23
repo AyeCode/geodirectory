@@ -288,22 +288,24 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
         $terms = get_terms($category_taxonomy[0], $term_args);
 
-        $term_reviews = geodir_count_reviews_by_terms();
-        $a_terms = array();
-        foreach ($terms as $term) {
+//        $term_reviews = geodir_count_reviews_by_terms();
+//        $a_terms = array();
+//        foreach ($terms as $term) {
+//
+//
+//            if ($term->count > 0) {
+//                if (isset($term_reviews[$term->term_id])) {
+//                    $term->review_count = $term_reviews[$term->term_id];
+//                } else {
+//                    $term->review_count = '0';
+//                }
+//
+//                $a_terms[] = $term;
+//            }
+//
+//        }
 
-
-            if ($term->count > 0) {
-                if (isset($term_reviews[$term->term_id])) {
-                    $term->review_count = $term_reviews[$term->term_id];
-                } else {
-                    $term->review_count = '0';
-                }
-
-                $a_terms[] = $term;
-            }
-
-        }
+	    $a_terms = $terms;
 
 
         $terms = apply_filters('bestof_widget_sort_terms', geodir_sort_terms($a_terms, 'review_count'), $a_terms);
@@ -381,17 +383,17 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	                    $nav_html .= '<span class="gd-cptcat-cat-right"><a data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" title="' . esc_attr($cat->name) . '">';
 	                    $nav_html .= $cat->name;
 	                    $nav_html .= '<small>';
-	                    if (isset($cat->review_count)) {
-		                    $num_reviews = $cat->review_count;
-		                    if ($num_reviews == 0) {
-			                    $reviews = __('No Reviews', 'geodirectory');
-		                    } elseif ($num_reviews > 1) {
-			                    $reviews = $num_reviews . __(' Reviews', 'geodirectory');
-		                    } else {
-			                    $reviews = __('1 Review', 'geodirectory');
-		                    }
-		                    $nav_html .= $reviews;
-	                    }
+//	                    if (isset($cat->review_count)) {
+//		                    $num_reviews = $cat->review_count;
+//		                    if ($num_reviews == 0) {
+//			                    $reviews = __('No Reviews', 'geodirectory');
+//		                    } elseif ($num_reviews > 1) {
+//			                    $reviews = $num_reviews . __(' Reviews', 'geodirectory');
+//		                    } else {
+//			                    $reviews = __('1 Review', 'geodirectory');
+//		                    }
+//		                    $nav_html .= $reviews;
+//	                    }
 	                    $nav_html .= '</small>';
 	                    $nav_html .= '</a></span>';
 
@@ -498,15 +500,15 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                 echo '<h4 class="bestof-cat-title">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '<a href="' . esc_url($view_all_link) . '">' . __("View all", 'geodirectory') . '</a></h4>';
             }
             if ($excerpt_type == 'show-reviews') {
-                add_filter('get_the_excerpt', 'best_of_show_review_in_excerpt');
+                add_filter('get_the_excerpt', array(__CLASS__,'best_of_show_review_in_excerpt'));
             }
 			/*
 			 * Filter widget listings query args.
 			 */
 			$query_args = apply_filters( 'geodir_widget_listings_query_args', $query_args, $instance );
-            geodir_bestof_places_by_term($query_args);
+            self::bestof_places_by_term($query_args);
             if ($excerpt_type == 'show-reviews') {
-                remove_filter('get_the_excerpt', 'best_of_show_review_in_excerpt');
+                remove_filter('get_the_excerpt', array(__CLASS__,'best_of_show_review_in_excerpt'));
             }
 
 
@@ -522,6 +524,98 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		    echo "</div>";
 	    }
     }
+
+	/**
+	 * Function for show best review in excerpt.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $excerpt Best review excerpt value.
+	 * @return string $excerpt.
+	 */
+	public static function best_of_show_review_in_excerpt($excerpt) {
+		global $wpdb, $post;
+
+		$query = $wpdb->prepare( "SELECT cmt.comment_content FROM " . GEODIR_REVIEW_TABLE . " AS r INNER JOIN {$wpdb->comments} AS cmt ON cmt.comment_ID = r.comment_id WHERE cmt.comment_post_ID = %d ORDER BY cmt.comment_date DESC, cmt.comment_id DESC", array( $post->ID ) );
+		$review = $wpdb->get_row( $query );
+
+		if ( ! empty( $review ) ) {
+			$excerpt = strip_tags( $review->comment_content );
+		}
+
+		return $excerpt;
+	}
+
+	/**
+	 * Display the best of widget listings using the given query args.
+	 *
+	 * @since 1.3.9
+	 *
+	 * @global object $post The current post object.
+	 * @global array $map_jason Map data in json format.
+	 * @global array $map_canvas_arr Map canvas array.
+	 * @global string $gridview_columns_widget The girdview style of the listings for widget.
+	 * @global object $gd_session GeoDirectory Session object.
+	 *
+	 * @param array $query_args The query array.
+	 */
+	public static function bestof_places_by_term($query_args) {
+		global $gd_session;
+
+		/**
+		 * This action called before querying widget listings.
+		 *
+		 * @since 1.0.0
+		 */
+		do_action('geodir_bestof_get_widget_listings_before');
+
+		$widget_listings = geodir_get_widget_listings($query_args);
+
+		/**
+		 * This action called after querying widget listings.
+		 *
+		 * @since 1.0.0
+		 */
+		do_action('geodir_bestof_get_widget_listings_after');
+
+		$character_count = isset($query_args['excerpt_length']) ? $query_args['excerpt_length'] : '';
+
+		if (!isset($character_count)) {
+			/** This filter is documented in geodirectory-widgets/geodirectory_bestof_widget.php */
+			$character_count = $character_count == '' ? 50 : apply_filters('bestof_widget_character_count', $character_count);
+		}
+
+		global $post, $map_jason, $map_canvas_arr, $gridview_columns_widget, $geodir_is_widget_listing;
+		$current_post = $post;
+		$current_map_jason = $map_jason;
+		$current_map_canvas_arr = $map_canvas_arr;
+		$current_grid_view = $gridview_columns_widget;
+		$gridview_columns_widget = null;
+
+		$gd_listing_view_set = $gd_session->get('gd_listing_view') ? true : false;
+		$gd_listing_view_old = $gd_listing_view_set ? $gd_session->get('gd_listing_view') : '';
+
+		$gd_session->set('gd_listing_view', '1');
+		$geodir_is_widget_listing = true;
+
+		geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+
+
+		$geodir_is_widget_listing = false;
+
+		$GLOBALS['post'] = $current_post;
+		if (!empty($current_post)) {
+			setup_postdata($current_post);
+		}
+		if ($gd_listing_view_set) { // Set back previous value
+			$gd_session->set('gd_listing_view', $gd_listing_view_old);
+		} else {
+			$gd_session->un_set('gd_listing_view');
+		}
+		$map_jason = $current_map_jason;
+		$map_canvas_arr = $current_map_canvas_arr;
+		$gridview_columns_widget = $current_grid_view;
+	}
 
 	// Javascript
 

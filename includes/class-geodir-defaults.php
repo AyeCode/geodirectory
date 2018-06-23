@@ -63,6 +63,7 @@ class GeoDir_Defaults {
 [gd_archive_item_section type='close' position='left']
 [gd_archive_item_section type='open' position='right']
 [gd_post_title tag='h2']
+[gd_author_actions author_page_only='1']
 [gd_post_distance]
 [gd_post_rating alignment='left' ]
 [gd_post_fav show='' alignment='right' ]

@@ -148,8 +148,33 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
+		global $post;
 
-		return geodir_sc_post_badge( $args, $content, $widget_args );
+		$post_id 	= ! empty( $args['id'] ) ? $args['id'] : ( ! empty( $post->ID ) ? $post->ID : 0 );
+		$post_type 	= $post_id ? get_post_type( $post_id ) : '';
+
+		$args['id'] = $post_id;
+
+		// Errors.
+		$errors = array();
+		if ( empty( $args['id'] ) ) {
+			$errors[] = __('post id is missing','geodirectory');
+		}
+		if ( empty( $post_type ) ) {
+			$errors[] = __('invalid post type','geodirectory');
+		}
+		if ( empty( $args['key'] ) ) {
+			$errors[] = __('field key is missing', 'geodirectory');
+		}
+
+		$output = '';
+		if ( ! empty( $errors ) ){
+			$output .= implode( ", ", $errors );
+		}
+
+		$output = geodir_get_post_badge( $post_id, $args );
+
+		return $output;
 	}
 
 	/**

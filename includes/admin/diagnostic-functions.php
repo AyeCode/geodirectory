@@ -929,7 +929,8 @@ function geodir_diagnose_default_pages()
 function geodir_diagnose_load_db_language() {
     global $wpdb;
 	
-	$is_error_during_diagnose = geodirectory_load_db_language();
+    $tools_controller = new GeoDir_Admin_Tools();
+    $is_error_during_diagnose = $tools_controller->load_db_language();
 
     $output_str = '';
     $fix_button_txt = '';

@@ -237,7 +237,6 @@ final class GeoDirectory {
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/listing_filters.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/image-functions.php' );
@@ -250,15 +249,12 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
 	    GeoDir_Comments::init();
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-shortcode-functions.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/business-hours-functions.php' );
 
 
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_hooks_actions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-super-duper.php' );
 	    //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-country-database.php' );
 	    //$wp_country_database = new WP_Country_Database();
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodir-widget-functions.php' );
 
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_template_tags.php' );
@@ -306,9 +302,7 @@ final class GeoDirectory {
 	        }
 	        
         }
-        
-        $this->load_db_language();
-        
+	    
         if ( $this->is_request( 'frontend' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
 
@@ -346,26 +340,6 @@ final class GeoDirectory {
 
         // Init action.
         do_action( 'geodirectory_init' );
-    }
-    
-    /**
-     * Load the language for custom fields, custom text.
-     */
-    public function load_db_language() {
-        $language_file = GEODIRECTORY_PLUGIN_DIR . 'db-language.php';
-        
-        // Load language string file if not created yet.
-        if ( ! file_exists( $language_file ) ) {
-            geodirectory_load_db_language();
-        }
-
-        if ( file_exists( $language_file ) ) {
-            try {
-                require_once( $language_file );
-            } catch ( Exception $e ) {
-                geodir_error_log( $e->getMessage(), 'Language Error' );
-            }
-        }
     }
     
     /**

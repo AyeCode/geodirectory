@@ -51,97 +51,10 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
 
 }
 
-/**
- * Adds open div before the tab content.
- *
- * This function adds open div before the tab content like post information, post images, reviews etc.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $hash_key
- */
-function geodir_before_tab_content( $hash_key ) {
-	switch ( $hash_key ) {
-		case 'post_info' :
-			echo '<div class="geodir-company_info field-group">';
-			break;
-		case 'post_images' :
-			/**
-			 * Filter post gallery HTML id.
-			 *
-			 * @since 1.0.0
-			 */
-			echo ' <div id="' . apply_filters( 'geodir_post_gallery_id', 'geodir-post-gallery' ) . '" class="clearfix" >';
-			break;
-		case 'reviews' :
-			echo '<div id="reviews-wrap" class="clearfix"> ';
-			break;
-		case 'post_video':
-			echo ' <div id="post_video-wrap" class="clearfix">';
-			break;
-		case 'special_offers':
-			echo '<div id="special_offers-wrap" class="clearfix">';
-			break;
-	}
-}
-
-/**
- * Adds closing div after the tab content.
- *
- * This function adds closing div after the tab content like post information, post images, reviews etc.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $hash_key
- */
-function geodir_after_tab_content( $hash_key ) {
-	switch ( $hash_key ) {
-		case 'post_info' :
-			echo '</div>';
-			break;
-		case 'post_images' :
-			echo '</div>';
-			break;
-		case 'reviews' :
-			echo '</div>';
-			break;
-		case 'post_video':
-			echo '</div>';
-			break;
-		case 'special_offers':
-			echo '</div>';
-			break;
-	}
-}
 
 
 
 
-
-/**
- * Removes the section title
- *
- * Removes the section title "Posts sort options", if the custom field type is multiselect or textarea or taxonomy.
- * Can be found here. WP Admin -> Geodirectory -> Place settings -> Custom fields
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $title      The section title.
- * @param string $field_type The field type.
- *
- * @return string Returns the section title.
- */
-function geodir_advance_customfields_heading( $title, $field_type ) {
-
-	if ( in_array( $field_type, array( 'multiselect', 'textarea', 'taxonomy' ) ) ) {
-		$title = '';
-	}
-
-	return $title;
-}
 
 
 

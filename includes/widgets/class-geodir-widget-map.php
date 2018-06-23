@@ -733,7 +733,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 					$post_type = get_post_type( $post_id );
 				} else if ( ( geodir_is_page( 'detail' ) || geodir_is_page( 'preview' ) ) && ! empty( $gd_post->ID ) ) {
 					$post_id   = $gd_post->ID;
-					$post_type = $gd_post->post_type;
+					$post_type = $gd_post->post_type != 'revision' ? $gd_post->post_type: get_post_type(wp_get_post_parent_id($gd_post->ID));
 				} else {
 					$post_id = - 1; // No results.
 				}

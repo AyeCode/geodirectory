@@ -36,6 +36,19 @@ class GeoDir_Admin_Taxonomies {
      * Constructor.
      */
     public function __construct() {
+
+
+        // update term slug in details table when changed
+        add_action('edited_term', array( $this, 'update_term_slug'), 1, 3);
+        add_action('create_term', array( $this, 'update_term_slug'), 1, 3);
+
+        // filter function to check if term slug exists
+        add_filter( 'geodir_term_slug_is_exists', array( $this,'term_slug_is_exists'), 0, 3);
+        add_filter( 'geodir_term_slug_is_exists', array( $this,'check_term_to_post_slug'), 10, 3 );
+
+        // make sure post slug is unique
+        add_filter( 'wp_unique_post_slug', array( $this,'check_post_to_term_slug'), 101, 6 );
+
         if ( empty( $_REQUEST['taxonomy'] ) ) {
             return;
         }
@@ -65,6 +78,210 @@ class GeoDir_Admin_Taxonomies {
             // update term icons on cat update/create
             add_action( 'created_term', array( $this, 'update_term_icons'), 10, 3 );
             add_action( 'edited_term', array( $this, 'update_term_icons'), 10, 3 );
+        }
+    }
+
+    /**
+     * Filters the unique post slug.
+     *
+     * @since 1.6.20
+     *
+     * @global object $wpdb WordPress Database object.
+     *
+     * @param string $slug          The post slug.
+     * @param int    $post_ID       Post ID.
+     * @param string $post_status   The post status.
+     * @param string $post_type     Post type.
+     * @param int    $post_parent   Post parent ID
+     * @param string $original_slug The original post slug.
+     */
+    public function check_post_to_term_slug( $slug, $post_ID, $post_status, $post_type, $post_parent, $original_slug ) {
+        global $wpdb;
+
+        if ( $post_type && strpos( $post_type, 'gd_' ) === 0 ) {
+            $posts_join = apply_filters( 'geodir_unique_post_slug_posts_join', "", $post_ID, $post_type );
+            $posts_where = apply_filters( 'geodir_unique_post_slug_posts_where', "", $post_ID, $post_type );
+            $terms_join = apply_filters( 'geodir_unique_post_slug_terms_join', "", $post_ID, $post_type );
+            $terms_where = apply_filters( 'geodir_unique_post_slug_terms_where', "", $post_ID, $post_type );
+
+            $term_slug_check = $wpdb->get_var( $wpdb->prepare( "SELECT t.slug FROM $wpdb->terms AS t LEFT JOIN $wpdb->term_taxonomy AS tt ON tt.term_id = t.term_id {$terms_join} WHERE t.slug = '%s' AND ( tt.taxonomy = '" . $post_type . "category' OR tt.taxonomy = '" . $post_type . "_tags' ) {$terms_where} LIMIT 1", $slug ) );
+
+            if ( $term_slug_check ) {
+                $suffix = 1;
+
+                do {
+                    $alt_slug = _truncate_post_slug( $original_slug, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
+
+                    $term_check = $wpdb->get_var( $wpdb->prepare( "SELECT t.slug FROM $wpdb->terms AS t LEFT JOIN $wpdb->term_taxonomy AS tt ON tt.term_id = t.term_id {$terms_join} WHERE t.slug = '%s' AND ( tt.taxonomy = '" . $post_type . "category' OR tt.taxonomy = '" . $post_type . "_tags' ) {$terms_where} LIMIT 1", $alt_slug ) );
+
+                    $post_check = !$term_check && $wpdb->get_var( $wpdb->prepare( "SELECT p.post_name FROM $wpdb->posts p {$posts_join} WHERE p.post_name = %s AND p.post_type = %s AND p.ID != %d {$posts_where} LIMIT 1", $alt_slug, $post_type, $post_ID ) );
+
+                    $term_slug_check = $term_check || $post_check;
+
+                    $suffix++;
+                } while ( $term_slug_check );
+
+                $slug = $alt_slug;
+            }
+        }
+
+        return $slug;
+    }
+
+    /**
+     * Check whether a post name with slug exists or not.
+     *
+     * @since 1.6.20
+     *
+     * @global object $wpdb WordPress Database object.
+     * @global array $gd_term_post_type Cached array for term post type.
+     * @global array $gd_term_taxonomy Cached array for term taxonomy.
+     *
+     * @param bool $slug_exists Default: false.
+     * @param string $slug Term slug.
+     * @param int $term_id The term ID.
+     * @return bool true when exists. false when not exists.
+     */
+    public function check_term_to_post_slug( $slug_exists, $slug, $term_id ) {
+        global $wpdb, $gd_term_post_type, $gd_term_taxonomy;
+
+        if ( $slug_exists ) {
+            return $slug_exists;
+        }
+
+        if ( !empty( $gd_term_taxonomy ) && isset($gd_term_taxonomy[$term_id]) ) {
+            $taxonomy = $gd_term_taxonomy[$term_id];
+        } else {
+            $taxonomy = $wpdb->get_var( $wpdb->prepare( "SELECT taxonomy FROM $wpdb->term_taxonomy WHERE term_id = %d LIMIT 1", $term_id ) );
+            $gd_term_taxonomy[$term_id] = $taxonomy;
+        }
+
+        if ( empty($taxonomy) ) {
+            return $slug_exists;
+        }
+
+        if ( !empty( $gd_term_post_type ) && $gd_term_post_type[$term_id] ) {
+            $post_type = $gd_term_post_type[$term_id];
+        } else {
+            $taxonomy_obj = get_taxonomy( $taxonomy );
+            $post_type = !empty( $taxonomy_obj->object_type ) ? $taxonomy_obj->object_type[0] : NULL;
+        }
+
+        $posts_join = apply_filters( 'geodir_unique_term_slug_posts_join', "", $term_id, $taxonomy, $post_type );
+        $posts_where = apply_filters( 'geodir_unique_term_slug_posts_where', "", $term_id, $taxonomy, $post_type );
+
+        if ( $post_type && $wpdb->get_var( $wpdb->prepare( "SELECT p.post_name FROM $wpdb->posts p {$posts_join} WHERE p.post_name = %s AND p.post_type = %s {$posts_where} LIMIT 1", $slug, $post_type ) ) ) {
+            $slug_exists = true;
+        }
+
+        return $slug_exists;
+    }
+
+
+    /**
+     * Check whether a term slug exists or not.
+     *
+     * @since 1.0.0
+     * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $table_prefix WordPress Database Table prefix.
+     * @param bool $slug_exists Default: false.
+     * @param string $slug Term slug.
+     * @param int $term_id The term ID.
+     * @return bool true when exists. false when not exists.
+     */
+    public function term_slug_is_exists($slug_exists, $slug, $term_id)
+    {
+
+        global $wpdb, $table_prefix;
+
+        $default_location = geodir_get_default_location();
+
+        $country_slug = $default_location->country_slug;
+        $region_slug = $default_location->region_slug;
+        $city_slug = $default_location->city_slug;
+
+        if ($country_slug == $slug || $region_slug == $slug || $city_slug == $slug)
+            return $slug_exists = true;
+
+        if ($wpdb->get_var($wpdb->prepare("SELECT slug FROM " . $table_prefix . "terms WHERE slug=%s AND term_id != %d", array($slug, $term_id))))
+            return $slug_exists = true;
+
+        return $slug_exists;
+    }
+
+    /**
+     * Update term slug.
+     *
+     * @since 1.0.0
+     * @since 1.5.3 Modified to update tag in detail table when tag updated.
+     * @package GeoDirectory
+     * @global object $wpdb WordPress Database object.
+     * @global string $plugin_prefix Geodirectory plugin table prefix.
+     * @global string $table_prefix WordPress Database Table prefix.
+     * @param int|string $term_id The term ID.
+     * @param int $tt_id term Taxonomy ID.
+     * @param string $taxonomy Taxonomy slug.
+     */
+    public function update_term_slug($term_id, $tt_id, $taxonomy)
+    {
+
+        global $wpdb, $plugin_prefix, $table_prefix;
+
+        $tern_data = get_term_by('id', $term_id, $taxonomy);
+
+        $slug = $tern_data->slug;
+
+        /**
+         * Filter if a term slug exists.
+         *
+         * @since 1.0.0
+         * @package GeoDirectory
+         * @param bool $bool Default: false.
+         * @param string $slug The term slug.
+         * @param int $term_id The term ID.
+         */
+        $slug_exists = apply_filters('geodir_term_slug_is_exists', false, $slug, $term_id);
+
+        if ($slug_exists) {
+
+            $suffix = 1;
+            do {
+                $new_slug = _truncate_post_slug($slug, 200 - (strlen($suffix) + 1)) . "-$suffix";
+
+                /** This action is documented in geodirectory_hooks_actions.php */
+                $term_slug_check = apply_filters('geodir_term_slug_is_exists', false, $new_slug, $term_id);
+
+                $suffix++;
+            } while ($term_slug_check && $suffix < 100);
+
+            $slug = $new_slug;
+
+            //wp_update_term( $term_id, $taxonomy, array('slug' => $slug) );
+
+            $wpdb->query($wpdb->prepare("UPDATE " . $table_prefix . "terms SET slug=%s WHERE term_id=%d", array($slug, $term_id)));
+
+        }
+
+        // Update tag in detail table.
+        $taxonomy_obj = get_taxonomy($taxonomy);
+        $post_type = !empty($taxonomy_obj) ? $taxonomy_obj->object_type[0] : NULL;
+
+        $post_types = geodir_get_posttypes();
+        if ($post_type && in_array($post_type, $post_types) && $post_type . '_tags' == $taxonomy) {
+            $posts_obj = $wpdb->get_results($wpdb->prepare("SELECT object_id FROM " . $wpdb->term_relationships . " WHERE term_taxonomy_id = %d", array($tt_id)));
+
+            if (!empty($posts_obj)) {
+                foreach ($posts_obj as $post_obj) {
+                    $post_id = $post_obj->object_id;
+
+                    $raw_tags = wp_get_object_terms($post_id, $post_type . '_tags', array('fields' => 'names'));
+                    $post_tags = !empty($raw_tags) ? implode(',', $raw_tags) : '';
+
+                    $listing_table = $plugin_prefix . $post_type . '_detail';
+                    $wpdb->query($wpdb->prepare("UPDATE " . $listing_table . " SET post_tags=%s WHERE post_id =%d", array($post_tags, $post_id)));
+                }
+            }
         }
     }
 
