@@ -1586,3 +1586,17 @@ function geodir_category_options( $post_type = 'gd_place' ){
 
 	return $options;
 }
+
+/**
+ * Returns random float number.
+ *
+ * @since 1.0.0
+ * @package GeoDirectory
+ * @param int $min The minimum number. Default: 0.
+ * @param int $max The maximum number. Default: 1.
+ * @return float
+ */
+function geodir_random_float($min = 0, $max = 1)
+{
+	return $min + mt_rand() / mt_getrandmax() * ($max - $min);
+}

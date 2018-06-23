@@ -221,8 +221,5 @@ function geodir_get_images($post_id = 0, $limit = '',$logo = false)
 
     }
 
-// print_r($post_images);
-
-
     return $post_images;
 }

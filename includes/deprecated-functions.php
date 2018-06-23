@@ -270,20 +270,20 @@ function geodir_font_awesome_rating_stars_html(){
 function geodir_show_listing_post_excerpt(){
     _deprecated_function( 'geodir_show_listing_post_excerpt', '2.0.0' );
 }
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
+
+/**
+ * @deprecated
+ */
+function geodir_pagination(){
+    _deprecated_function( 'geodir_pagination', '2.0.0' );
+}
+
+/**
+ * @deprecated
+ */
+function is_page_geodir_home(){
+    _deprecated_function( 'is_page_geodir_home', '2.0.0' );
+}
 //
 ///**
 // * @deprecated

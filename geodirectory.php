@@ -235,10 +235,9 @@ final class GeoDirectory {
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
 	    GeoDir_SEO::init();
 
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general_functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-functions.php' );
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post_functions.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/image-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/taxonomy-functions.php' );
@@ -248,7 +247,7 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/comments-functions.php' );
 	    GeoDir_Comments::init();
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location_functions.php' );
+        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location-functions.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/business-hours-functions.php' );
 
 
@@ -258,8 +257,6 @@ final class GeoDirectory {
 
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_template_tags.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_tags.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/geodirectory_template_actions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
 
@@ -305,13 +302,6 @@ final class GeoDirectory {
 	    
         if ( $this->is_request( 'frontend' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
-
-            // Theme Compatibility
-            $compatibility_file = geodir_theme_compatibility_file();
-            
-            if ( is_file( $compatibility_file ) && file_exists( $compatibility_file ) ) {
-                require_once( $compatibility_file );
-            }
         }
 
 		// If curent WP Version >= 4.9.6.

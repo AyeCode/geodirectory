@@ -46,6 +46,43 @@ class GeoDir_Frontend_Scripts {
 
 		// locations scripts
 		add_action('wp_footer', array( __CLASS__, 'js_location_functions' )); //@todo this script needs overhalled
+
+		// fix script conflicts, eg flexslider being added twice
+		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'fix_script_conflicts'), 100 );
+
+		// allow async tags
+		add_filter('clean_url', array( __CLASS__, 'js_async'), 11, 1);
+
+	}
+
+
+	/**
+	 * Adds async tag to javascript for faster page loading.
+	 *
+	 * @since 1.0.0
+	 * @package GeoDirectory
+	 * @param string $url The javascript file url.
+	 * @return string The modified javascript string.
+	 */
+	public static function js_async($url)
+	{
+		if (strpos($url, '#asyncload')===false)
+			return $url;
+		else
+			return str_replace('#asyncload', '', $url)."' defer async='async";
+	}
+
+	/**
+	 * Dequeue scripts to fix JS conflicts.
+	 *
+	 * @since 1.6.22
+	 */
+	public static function fix_script_conflicts() {
+		if(geodir_is_page('single')) {
+			if ( wp_script_is( 'flexslider', 'enqueued' ) && wp_script_is( 'jquery-flexslider', 'enqueued' ) ) {
+				wp_dequeue_script( 'flexslider' );
+			}
+		}
 	}
 
 	/**
@@ -377,77 +414,77 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-jquery-ui-timepicker' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/jquery.ui.timepicker' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets/js/jquery.ui.timepicker' . $suffix . '.js#asyncload',
 				'deps'    => array('jquery-ui-datepicker', 'jquery-ui-slider'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-google-maps' => array(
-				'src'     => 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra,
+				'src'     => 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra."#asyncload",
 				'deps'    => array(),
 				'version' => '',
 			),
 			'geodir-g-overlappingmarker' => array(
-				'src'     => geodir_plugin_url() . '/assets/jawj/oms' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets/jawj/oms' . $suffix . '.js#asyncload',
 				'deps'    => array( 'jquery' ),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-leaflet' => array(
-				'src'     => geodir_plugin_url() . '/assets/leaflet/leaflet' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets/leaflet/leaflet' . $suffix . '.js#asyncload',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'leaflet-routing-machine' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine' . $suffix . '.js',
+				'src'     =>  geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine' . $suffix . '.js#asyncload',
 				'deps'    => array('geodir-leaflet'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-leaflet-geo' => array(
-				'src'     => geodir_plugin_url() . '/assets/leaflet/osm.geocode' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets/leaflet/osm.geocode' . $suffix . '.js#asyncload',
 				'deps'    => array('geodir-leaflet'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-o-overlappingmarker' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/jawj/oms-leaflet' . $suffix . '.js',
+				'src'     =>  geodir_plugin_url() . '/assets/jawj/oms-leaflet' . $suffix . '.js#asyncload',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-goMap' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js#asyncload',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-plupload' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/geodirectory-plupload' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets/js/geodirectory-plupload' . $suffix . '.js#asyncload',
 				'deps'    => array('plupload','jquery','jquery-ui-sortable'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory' . $suffix . '.js',
+				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory' . $suffix . '.js#asyncload',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'jquery-flexslider' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/jquery.flexslider' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets/js/jquery.flexslider' . $suffix . '.js#asyncload',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-add-listing' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/add-listing' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets/js/add-listing' . $suffix . '.js#asyncload',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir_lity' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/libraries/gd_lity' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets/js/libraries/gd_lity' . $suffix . '.js#asyncload',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'font-awesome' => array(
-				'src'     => 'https://use.fontawesome.com/releases/v5.0.13/js/all.js', //@todo these probably need to be loaded locally
+				'src'     => 'https://use.fontawesome.com/releases/v5.0.13/js/all.js#asyncload', //@todo these probably need to be loaded locally
 				'deps'    => array('font-awesome-shim'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'font-awesome-shim' => array(
-				'src'     => 'https://use.fontawesome.com/releases/v5.0.13/js/v4-shims.js',
+				'src'     => 'https://use.fontawesome.com/releases/v5.0.13/js/v4-shims.js#asyncload',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
