@@ -1077,7 +1077,7 @@ function geodir_cfi_address($html,$cf){
          */
         $lng = apply_filters('geodir_default_longitude', $lng, $is_admin);
 
-        $locate_me = !empty($extra_fields['show_map']) && geodir_map_name() != 'none' ? true : false;
+        $locate_me = !empty($extra_fields['show_map']) && GeoDir_Maps::active_map() != 'none' ? true : false;
         $locate_me_class = $locate_me ? ' gd-form-control' : '';
         ?>
         <div id="geodir_<?php echo $prefix . 'street';?>_row"
@@ -1134,7 +1134,7 @@ function geodir_cfi_address($html,$cf){
                  *
                  * @since 1.0.0
                  */
-                include( GEODIRECTORY_PLUGIN_DIR . 'includes/maps/map_on_add_listing_page.php' );
+                include( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
                 if ($lat_lng_blank) {
                     $lat = '';
                     $lng = '';

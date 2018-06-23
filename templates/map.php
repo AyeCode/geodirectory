@@ -58,8 +58,8 @@ if (is_admin() && isset($_REQUEST['tab']) && $mapzoom == '') {
  * @param bool $var Whether to auto fill country, state, city values in fields.
  */
 $auto_change_map_fields = apply_filters('geodir_auto_change_map_fields', true);
-$marker_icon = geodir_default_marker_icon( true );
-$icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
+$marker_icon = GeoDir_Maps::default_marker_icon( true );
+$icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
 ?>
 <script type="text/javascript">
     /* <![CDATA[ */
@@ -686,7 +686,7 @@ $icon_size = geodir_get_marker_size($marker_icon, array('w' => 20, 'h' => 34));
         }
     }
 
-    <?php $geodir_map_name = geodir_map_name();
+    <?php $geodir_map_name = GeoDir_Maps::active_map();
     if($geodir_map_name!='none'){ ?>
     jQuery(function ($) {
         $("#<?php echo $prefix.'map';?>").goMap({

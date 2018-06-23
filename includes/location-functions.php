@@ -323,7 +323,7 @@ function geodir_add_new_location($location_info = array())
  */
 function geodir_get_address_by_lat_lan($lat, $lng)
 {
-    $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng). geodir_get_map_api_key(true) ;
+    $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng). GeoDir_Maps::google_api_key(true) ;
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);

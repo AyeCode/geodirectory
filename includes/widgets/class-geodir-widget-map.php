@@ -245,7 +245,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							       value="<?php echo absint( $map_options['child_collapse'] ); ?>"/>
 							<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="1"/>
 							<div class="geodir_toggle">
-								<?php echo geodir_map_taxonomy_walker( array( $map_options['post_type'] . 'category' ), 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), true ); ?>
+								<?php echo GeoDir_Maps::get_categories_filter( array( $map_options['post_type'] . 'category' ), 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), true ); ?>
 								<script type="text/javascript">jQuery(function () {
 										geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');
 									});</script>
@@ -915,7 +915,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$gd_maps_canvas[ $map_options['map_canvas'] ] = $map_options;
 
 		// Set map options to JS
-		wp_enqueue_script( 'geodir-map-widget', geodir_plugin_url() . '/includes/maps/js/map.js', array(), false, true ); // @TODO change to map.min.js
+		wp_enqueue_script( 'geodir-map-widget' );
 		wp_localize_script( 'geodir-map-widget', $map_options['map_canvas'], $map_options );
 
 		?>

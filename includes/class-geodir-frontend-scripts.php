@@ -396,8 +396,8 @@ class GeoDir_Frontend_Scripts {
 	 */
 	private static function register_scripts() {
 
-		$map_lang = "&language=" . geodir_get_map_default_language();
-		$map_key = geodir_get_map_api_key(true);
+		$map_lang = "&language=" . GeoDir_Maps::map_language();
+		$map_key = GeoDir_Maps::google_api_key(true);
 		/** This filter is documented in geodirectory_template_tags.php */
 		$map_extra = apply_filters('geodir_googlemap_script_extra', '');
 
@@ -414,67 +414,72 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-jquery-ui-timepicker' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/jquery.ui.timepicker' . $suffix . '.js#asyncload',
+				'src'     => geodir_plugin_url() . '/assets/js/jquery.ui.timepicker' . $suffix . '.js',
 				'deps'    => array('jquery-ui-datepicker', 'jquery-ui-slider'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-google-maps' => array(
-				'src'     => 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra."#asyncload",
+				'src'     => 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra,
 				'deps'    => array(),
 				'version' => '',
 			),
 			'geodir-g-overlappingmarker' => array(
-				'src'     => geodir_plugin_url() . '/assets/jawj/oms' . $suffix . '.js#asyncload',
+				'src'     => geodir_plugin_url() . '/assets/jawj/oms' . $suffix . '.js',
 				'deps'    => array( 'jquery' ),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-leaflet' => array(
-				'src'     => geodir_plugin_url() . '/assets/leaflet/leaflet' . $suffix . '.js#asyncload',
+				'src'     => geodir_plugin_url() . '/assets/leaflet/leaflet' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'leaflet-routing-machine' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine' . $suffix . '.js#asyncload',
+				'src'     =>  geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine' . $suffix . '.js',
 				'deps'    => array('geodir-leaflet'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-leaflet-geo' => array(
-				'src'     => geodir_plugin_url() . '/assets/leaflet/osm.geocode' . $suffix . '.js#asyncload',
+				'src'     => geodir_plugin_url() . '/assets/leaflet/osm.geocode' . $suffix . '.js',
 				'deps'    => array('geodir-leaflet'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-o-overlappingmarker' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/jawj/oms-leaflet' . $suffix . '.js#asyncload',
+				'src'     =>  geodir_plugin_url() . '/assets/jawj/oms-leaflet' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-goMap' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js#asyncload',
+				'src'     => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js',
+				'deps'    => array(),
+				'version' => GEODIRECTORY_VERSION,
+			),
+			'geodir-map-widget' => array(
+				'src'     => geodir_plugin_url() . '/assets/js/map' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-plupload' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/geodirectory-plupload' . $suffix . '.js#asyncload',
+				'src'     => geodir_plugin_url() . '/assets/js/geodirectory-plupload' . $suffix . '.js',
 				'deps'    => array('plupload','jquery','jquery-ui-sortable'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory' . $suffix . '.js#asyncload',
+				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'jquery-flexslider' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/jquery.flexslider' . $suffix . '.js#asyncload',
+				'src'     => geodir_plugin_url() . '/assets/js/jquery.flexslider' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-add-listing' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/add-listing' . $suffix . '.js#asyncload',
+				'src'     => geodir_plugin_url() . '/assets/js/add-listing' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir_lity' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/libraries/gd_lity' . $suffix . '.js#asyncload',
+				'src'     => geodir_plugin_url() . '/assets/js/libraries/gd_lity' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
@@ -584,7 +589,7 @@ class GeoDir_Frontend_Scripts {
 
 
 		// Maps
-		$geodir_map_name = geodir_map_name();
+		$geodir_map_name = GeoDir_Maps::active_map();
 		if (in_array($geodir_map_name, array('auto', 'google'))) {
 			self::enqueue_script('geodir-google-maps');
 			self::enqueue_script('geodir-g-overlappingmarker');
@@ -598,7 +603,7 @@ class GeoDir_Frontend_Scripts {
 			self::enqueue_script('geodir-o-overlappingmarker');
 		}
 		if($geodir_map_name!='none'){
-			wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
+			wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".GeoDir_Maps::active_map()."';", 'before' );
 			wp_enqueue_script( 'geodir-goMap' );
 		}
 

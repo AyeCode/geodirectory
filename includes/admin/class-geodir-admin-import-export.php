@@ -485,7 +485,7 @@ class GeoDir_Admin_Import_Export {
 
 		$address = array();
 		$api_url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-		$api_key = geodir_get_map_api_key();
+		$api_key = GeoDir_Maps::google_api_key();
 
 
 		// if we don't have either the street or zip then we can't get an accurate address
@@ -563,7 +563,7 @@ class GeoDir_Admin_Import_Export {
 		// @todo if users require a higher limit we should look at https://locationiq.org/
 
 		$api_url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-		$api_key = geodir_get_map_api_key();
+		$api_key = GeoDir_Maps::google_api_key();
 
 
 		// if we don't have either the street or zip then we can't get an accurate address

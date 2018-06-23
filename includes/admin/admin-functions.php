@@ -474,7 +474,7 @@ add_action( 'geodir_update_marker_address', 'geodir_setup_timezone_api', 1, 1 );
  * @return string Modified class string.
  */
 function geodir_admin_body_class_active_map($class = '') {
-	$class .= ' gd-map-' . geodir_map_name();
+	$class .= ' gd-map-' . GeoDir_Maps::active_map();
 
 	return $class;
 }

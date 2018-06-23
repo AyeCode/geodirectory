@@ -87,7 +87,7 @@ class GeoDir_Admin_Setup_Wizard {
 		$this->steps = apply_filters( 'geodirectory_setup_wizard_steps', $default_steps );
 		$this->step = isset( $_GET['step'] ) ? sanitize_key( $_GET['step'] ) : current( array_keys( $this->steps ) );
 		$suffix     = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$geodir_map_name = geodir_map_name();
+		$geodir_map_name = GeoDir_Maps::active_map();
 
 		// load OSM styles if needed.
 		if($geodir_map_name == 'osm'){
@@ -96,8 +96,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 
 		// map arguments
-		$map_lang = "&language=" . geodir_get_map_default_language();
-		$map_key = geodir_get_map_api_key(true);
+		$map_lang = "&language=" . GeoDir_Maps::map_language();
+		$map_key = GeoDir_Maps::google_api_key(true);
 		/**
 		 * Filter the variables that are added to the end of the google maps script call.
 		 *
@@ -119,7 +119,7 @@ class GeoDir_Admin_Setup_Wizard {
 		wp_register_script('geodir-lity', geodir_plugin_url() . '/assets/js/libraries/gd_lity'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.0.13/js/all.js', array('font-awesome-shim'), GEODIRECTORY_VERSION);
 		wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.0.13/js/v4-shims.js', array(), GEODIRECTORY_VERSION);
-		wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
+		wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".GeoDir_Maps::active_map()."';", 'before' );
 		wp_add_inline_script( 'geodir-admin-script', "var ajaxurl = '".admin_url( 'admin-ajax.php' )."';", 'before' );
 
 

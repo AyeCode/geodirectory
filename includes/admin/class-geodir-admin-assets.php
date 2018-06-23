@@ -34,7 +34,7 @@ class GeoDir_Admin_Assets {
 
 		$screen         = get_current_screen();
 		$screen_id      = $screen ? $screen->id : '';
-		$geodir_map_name = geodir_map_name();
+		$geodir_map_name = GeoDir_Maps::active_map();
 		$page = ! empty( $_GET['page'] ) ? $_GET['page'] : '';
 
 		// Register admin styles
@@ -94,11 +94,11 @@ class GeoDir_Admin_Assets {
 		$suffix       = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$post_type   = isset($_REQUEST['post_type']) && $_REQUEST['post_type'] ? sanitize_text_field($_REQUEST['post_type']) : '';
 		$page 		  = ! empty( $_GET['page'] ) ? $_GET['page'] : '';
-		$geodir_map_name = geodir_map_name();
+		$geodir_map_name = GeoDir_Maps::active_map();
 		
 		// map arguments
-		$map_lang = "&language=" . geodir_get_map_default_language();
-		$map_key = geodir_get_map_api_key(true);
+		$map_lang = "&language=" . GeoDir_Maps::map_language();
+		$map_key = GeoDir_Maps::google_api_key(true);
 		/**
 		 * Filter the variables that are added to the end of the google maps script call.
 		 *
@@ -187,7 +187,7 @@ class GeoDir_Admin_Assets {
 			( isset($screen->base) && $screen->base=='post' && isset($screen->post_type) &&  substr( $screen->post_type, 0, 3 ) === "gd_" ) ||
 			$load_gomap_script
 			){
-				wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".geodir_map_name()."';", 'before' );
+				wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".GeoDir_Maps::active_map()."';", 'before' );
 				wp_enqueue_script( 'geodir-goMap-script' );
 			}
 			wp_enqueue_script( 'geodir-admin-script' );
