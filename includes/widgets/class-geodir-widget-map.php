@@ -182,7 +182,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						<div class="gd-input-group">
 							<input type="text" id="<?php echo $map_canvas; ?>_fromAddress" name="from"
 							       class="gd-form-control textfield" value=""
-							       placeholder="<?php esc_attr_e( 'Enter your location', 'geodirectory' ); ?>"/>
+							       placeholder="<?php esc_attr_e( 'Enter your location', 'geodirectory' ); ?>" 
+							       aria-label="<?php esc_attr_e( 'Enter your location', 'geodirectory' ); ?>"/>
 							<div id="<?php echo $map_canvas; ?>_mylocation"
 							     class="gd-input-group-addon gd-map-mylocation"
 							     onclick="gdMyGeoDirection('<?php echo $map_canvas; ?>');"
@@ -191,20 +192,21 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						</div>
 					</div>
 					<div class="gd-input-group-addon gd-directions-right gd-mylocation-go"><input type="button"
-					                                                                              value="<?php esc_attr_e( 'Get Directions', 'geodirectory' ); ?>"
+					                                                                              value="<?php esc_attr_e( 'Get Directions', 'geodirectory' ); ?>" 
+					                                                                              aria-label="<?php esc_attr_e( 'Get Directions', 'geodirectory' ); ?>"
 					                                                                              class="gd-map-get-directions <?php echo $map_canvas; ?>_getdirection"
 					                                                                              id="directions"
 					                                                                              onclick="geodirFindRoute('<?php echo $map_canvas; ?>')"/>
 					</div>
 				</div>
 				<div id='directions-options' class="hidden">
-					<select id="travel-mode" onchange="geodirFindRoute('<?php echo $map_canvas; ?>')">
+					<select id="travel-mode" onchange="geodirFindRoute('<?php echo $map_canvas; ?>')" aria-label="<?php esc_attr_e( 'Travel mode', 'geodirectory' ); ?>">
 						<option value="driving"><?php _e( 'Driving', 'geodirectory' ); ?></option>
 						<option value="walking"><?php _e( 'Walking', 'geodirectory' ); ?></option>
 						<option value="bicycling"><?php _e( 'Bicycling', 'geodirectory' ); ?></option>
 						<option value="transit"><?php _e( 'Public Transport', 'geodirectory' ); ?></option>
 					</select>
-					<select id="travel-units" onchange="geodirFindRoute('<?php echo $map_canvas; ?>')">
+					<select id="travel-units" onchange="geodirFindRoute('<?php echo $map_canvas; ?>')" aria-label="<?php esc_attr_e( 'Distance unit', 'geodirectory' ); ?>">
 						<option
 							value="miles" <?php selected( 'miles' == $distance_unit, true ); ?>><?php _e( 'Miles', 'geodirectory' ); ?></option>
 						<option
@@ -780,7 +782,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	}
 
     /**
-     * Rander map.
+     * Render map.
      *
      * @since 2.0.0
      *

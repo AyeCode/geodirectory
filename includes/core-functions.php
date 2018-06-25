@@ -332,6 +332,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_reply_text'                               => __( 'Reply text', 'geodirectory' ),
 		'txt_review_text'                              => __( 'Review text', 'geodirectory' ),
 		'txt_read_more'                                => __( 'Read more', 'geodirectory' ),
+		'txt_about_listing'                            => __( 'about this listing', 'geodirectory' ),
 		'txt_open_now'                                 => __( 'Open now', 'geodirectory' ),
 		'txt_closed_now'                               => __( 'Closed now', 'geodirectory' ),
 		'txt_closed_today'                             => __( 'Today closed', 'geodirectory' ),
@@ -339,6 +340,8 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_single_use'                               => __( "This field is single use only and is already being used.", 'geodirectory' ),
 		'txt_page_settings'                            => __( "Page selections should not be the same, please correct the issue to continue.", 'geodirectory' ),
 		'txt_save_other_setting'                       => __( 'Please save the current setting before adding a new one.', 'geodirectory' ),
+		'txt_previous'                            	   => __( 'Previous', 'geodirectory' ),
+		'txt_next'                            		   => __( 'Next', 'geodirectory' ),
 		'gmt_offset'                                   => geodir_gmt_offset(),
 		'search_users_nonce'                           => wp_create_nonce( 'search-users' ),
 		'google_api_key'                               => GeoDir_Maps::google_api_key(),
@@ -854,7 +857,7 @@ function geodir_search_form_submit_button() {
 	}
 
 	?>
-	<button class="geodir_submit_search " data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'"></i>';}else{ _e( $default_search_button_label ,'geodirectory'); }?></button>
+	<button class="geodir_submit_search " data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>" aria-label="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'"></i>';}else{ _e( $default_search_button_label ,'geodirectory'); }?><span class="sr-only"><?php _e( $default_search_button_label, 'geodirectory' ); ?></span></button>
 	<?php
 }
 
@@ -937,7 +940,8 @@ function geodir_search_form_search_input() {
 			       echo esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
 		       } ?>" type="text"
 		       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"
-		       placeholder="<?php esc_html_e($default_search_for_text,'geodirectory') ?>"
+		       placeholder="<?php esc_html_e($default_search_for_text,'geodirectory') ?>" 
+		       aria-label="<?php esc_html_e($default_search_for_text,'geodirectory') ?>"
 		/>
 	</div>
 	<?php

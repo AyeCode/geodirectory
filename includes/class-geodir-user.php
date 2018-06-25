@@ -279,7 +279,6 @@ class GeoDir_User {
 					?>
 					<li>
 						<select id="geodir_my_favourites" class="geodir-select"
-						        onchange="window.location.href=this.value"
 						        option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
 						        data-placeholder="<?php echo esc_attr( __( 'My Favorites', 'geodirectory' ) ); ?>">
 							<option value="" disabled="disabled" selected="selected"
@@ -361,9 +360,10 @@ class GeoDir_User {
 			if ( $output_type == 'select' ) {
 				?>
 				<li>
-					<select id="geodir_my_listings" class="geodir-select" onchange="window.location.href=this.value"
+					<select id="geodir_my_listings" class="geodir-select" 
 					        option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
-					        data-placeholder="<?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?>">
+					        data-placeholder="<?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?>" 
+					        aria-label="<?php esc_attr_e( 'My Listings' ,'geodirectory' ); ?>">
 						<option value="" disabled="disabled" selected="selected"
 						        style='display:none;'><?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?></option>
 						<?php echo implode("",$listing_links) ; ?>
@@ -425,9 +425,10 @@ class GeoDir_User {
 
 		if ( $addlisting_links != '' ) { ?>
 
-			<li><select id="geodir_add_listing" class="geodir-select" onchange="window.location.href=this.value"
+			<li><select id="geodir_add_listing" class="geodir-select" 
 			            option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false"
-			            data-placeholder="<?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?>">
+			            data-placeholder="<?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?>" 
+			            aria-label="<?php esc_attr_e( 'Add Listing' ,'geodirectory' ); ?>">
 					<option value="" disabled="disabled" selected="selected"
 					        style='display:none;'><?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?></option>
 					<?php echo $addlisting_links; ?>

@@ -712,8 +712,7 @@ function geodir_display_sort_options() {
 
         <div class="geodir-tax-sort">
 
-            <select name="sort_by" class="geodir-select geodir-sort-by"  onchange="javascript:window.location=this.value;" aria-label="<?php esc_attr_e( 'Sort By' ,'geodirectory' ); ?>">>
-
+            <select name="sort_by" class="geodir-select geodir-sort-by" aria-label="<?php esc_attr_e( 'Sort By' ,'geodirectory' ); ?>">>
                 <option
                     value="<?php echo esc_url( add_query_arg( 'sort_by', '' ) ); ?>" <?php if ( $sort_by == '' ) {
                     echo 'selected="selected"';
