@@ -37,6 +37,11 @@ class GeoDir_Admin_Tools {
 	 */
 	public function get_tools() {
 		$tools = array(
+			'clear_version_numbers' => array(
+				'name'    => __( 'Clear version numbers', 'geodirectory' ),
+				'button'  => __( 'Run', 'geodirectory' ),
+				'desc'    => __( 'This will force install/upgrade functions to run.', 'geodirectory' ),
+			),
 			'check_reviews' => array(
 				'name'    => __( 'Check reviews', 'geodirectory' ),
 				'button'  => __( 'Run', 'geodirectory' ),
@@ -76,6 +81,13 @@ class GeoDir_Admin_Tools {
 		global $wpdb;
 		$ran = true;
 		switch ( $tool ) {
+			case 'clear_version_numbers' :
+				if ($message = $this->clear_version_numbers()) {
+				} else {
+					$message = __( 'Something went wrong.', 'geodirectory' );
+					$ran     = false;
+				}
+				break;
 			case 'check_reviews' :
 				if ($this->check_reviews()) {
 					$message = __( 'Reviews checked.', 'geodirectory' );
@@ -104,7 +116,6 @@ class GeoDir_Admin_Tools {
 					$message = __( 'There was a problem creating the file, please check file permissions: ', 'geodirectory' ). geodir_plugin_path() . 'db-language.php';
 					$ran     = false;
 				}
-
 				break;
 			default :
 				$tools = $this->get_tools();
@@ -128,6 +139,16 @@ class GeoDir_Admin_Tools {
 		}
 
 		return array( 'success' => $ran, 'message' => $message );
+	}
+
+	/**
+	 * Clear version numbers so install/upgrade functions will run.
+	 * 
+	 * @return string|void
+	 */
+	public function clear_version_numbers(){
+		delete_option( 'geodirectory_version' );
+		return __( 'Version numbers cleared. Install/upgrade functions will run on next page load.', 'geodirectory' );
 	}
 
 

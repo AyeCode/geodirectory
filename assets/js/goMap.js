@@ -15,7 +15,7 @@
         gdMaps = null;
     }
     window.gdMaps = window.gdMaps || gdMaps;
-	
+
 	if (window.gdMaps === 'google') {
         console.log('Google Maps API Loaded :)');
         jQuery('body').addClass('gd-google-maps');
@@ -194,13 +194,13 @@
                     console.log(e);
                 }
             }
-            
+
             if (!baseLayer) {
                 var osmUrl = '//{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 osmAttrib = 'Map data &copy; <a href="https://openstreetmap.org/copyright">OpenStreetMap</a> contributors',
                 baseLayer = L.tileLayer(osmUrl, {maxZoom: opts.maxZoom, attribution: osmAttrib});
             }
-            
+
             this.map = new L.Map(el, myOptions).addLayer(baseLayer);
 
             if (customMap && myOptions.defaultOverlays && myOptions.defaultOverlays.length > 0) {
@@ -214,16 +214,16 @@
                     }
                 }
             }
-            
+
             if (myOptions.zoomControl && (zoomPosition = this.parsePosition(opts.zoomControlOptions.position, 'topleft')) !== 'topleft') {
                 this.map.zoomControl.setPosition(zoomPosition);
             }
-            
+
             if (parseInt(options.marker_cluster) === 1 && !options.marker_cluster_server) {
                 jQuery('#gdOSMprogress').remove();
                 jQuery('#gdOSMprogressBar').remove();
                 jQuery(el).before('<div id="gdOSMprogress"><div id="gdOSMprogressBar"></div></div>');
-                
+
                 function gdOSMUpdateProgressBar(processed, total, elapsed, layersArray) {
                     processed = Math.min(processed, total);
                     if (elapsed > 1000) {
@@ -241,7 +241,7 @@
             } else {
                 this.gdlayers = new L.featureGroup([]);
             }
-            
+
             // Overlapping Marker Spiderfier LeafLet
             this.oms = new OverlappingMarkerSpiderfier(this.map);
 
@@ -297,18 +297,18 @@
                 return f();
             });
         },
-        
+
         Geocoder: function (options) {
             return new L.Control.gdGeoCode({
                 provider: new L.gdGeoCode.Provider.OpenStreetMap()
             });
         },
 
-        geocode: function (address, options) {            
+        geocode: function (address, options) {
             var gdcoder = new L.Control.gdGeoCode({ provider: new L.gdGeoCode.Provider.OpenStreetMap() });
             var results = gdcoder.geosearch(address);
         },
-        
+
         parsePosition: function (position, $default) {
             var parsed = position;
             if (position && typeof position == 'string') {
@@ -340,7 +340,7 @@
             } else if (typeof $default !== 'undefined') {
                 parsed = $default;
             }
-            
+
             return parsed;
         },
 
@@ -489,7 +489,7 @@
         getBounds: function () {
             return this.map.getBounds();
         },
-        
+
         getGDMarkers: function () {
             return this.gdlayers;
         },
@@ -565,7 +565,7 @@
                 }
                 else if (this.opts.icon)
                     options.icon = this.opts.icon;
-                
+
                 if (options.icon) {
                     iconOptions = {
                         iconUrl: options.icon,
@@ -600,11 +600,11 @@
                     if (marker.className) {
                         iconOptions.className = marker.className;
                     }
-                    
+
                     if (marker.clustered) {
                         options.clustered = true;
                         var c = 'marker-cluster marker-cluster-';
-                        
+
                         if (marker.title < 10) {
                             c += 'small';
                         } else if (marker.title < 100) {
@@ -617,7 +617,7 @@
                         marker.w = 40;
                         marker.h = 40;
                     }
-                    
+
                     if (!iconOptions.iconSize && marker.w && marker.h && parseInt(marker.w) > 0 && parseInt(marker.h) > 0) {
                         var w = parseFloat(marker.w);
                         var h = parseFloat(marker.h);
@@ -625,7 +625,7 @@
                         iconOptions.iconAnchor = [((w / 2) - 1), h];
                         iconOptions.popupAnchor = [0, (h * -1) + (h * 0.05)];
                     }
-                    
+
                     if (marker.clustered) {
                         options.icon = new L.DivIcon(iconOptions);
                     } else {
@@ -635,7 +635,7 @@
                 } else {
                     options.icon = new L.Icon.Default();
                 }
-                
+
                 options.position = marker.position ? marker.position : L.latLng(marker.latitude, marker.longitude);
 
                 var cmarker = new L.Marker(options.position, options);
@@ -669,7 +669,7 @@
                 }
                 return true;
             }
-            
+
             var index = $.inArray(marker, this.markers), current;
             if (index > -1) {
                 this.tmpMarkers.splice(index, 1);
@@ -691,26 +691,26 @@
             }
             return false;
         },
-        
+
         clearMarkers: function () {
             var allMarkers = this.gdlayers;
             this.gdlayers.eachLayer(function(marker) {
                 allMarkers.removeLayer(marker);
             });
             this.gdlayers = allMarkers;
-            
+
             this.singleMarker = false;
             this.lockGeocode = false;
             this.markers = [];
             this.tmpMarkers = [];
             this.geoMarkers = [];
         },
-        
+
         isVisible: function (latlng) {
             return this.map.getBounds().contains(latlng);
         }
     }
-    
+
     $.goMapBase = {
         defaults: {
             address: '', // Street, City, Country
@@ -852,9 +852,9 @@
 
             this.map = new google.maps.Map(el, myOptions);
             this.overlay = new MyOverlay(this.map);
-            
+
             // Overlapping Marker Spiderfier
-            this.oms = new OverlappingMarkerSpiderfier(this.map, { 
+            this.oms = new OverlappingMarkerSpiderfier(this.map, {
                 markersWontMove: true,   // we promise not to move any markers, allowing optimizations
                 markersWontHide: true,   // we promise not to change visibility of any markers, allowing optimizations
                 basicFormatEvents: true  // allow the library to skip calculating advanced formatting information

@@ -38,7 +38,6 @@ class GeoDir_Admin_Install {
 		add_action( 'init', array( __CLASS__, 'check_version' ), 5 );
 		add_action( 'init', array( __CLASS__, 'init_background_updater' ), 5 );
 		add_action( 'admin_init', array( __CLASS__, 'install_actions' ) );
-		//add_action( 'in_plugin_update_message-woocommerce/woocommerce.php', array( __CLASS__, 'in_plugin_update_message' ) );
 		//add_filter( 'plugin_action_links_' . GEODIRECTORY_PLUGIN_BASENAME, array( __CLASS__, 'plugin_action_links' ) );
 		add_filter( 'plugin_row_meta', array( __CLASS__, 'plugin_row_meta' ), 10, 2 );
 		add_filter( 'wpmu_drop_tables', array( __CLASS__, 'wpmu_drop_tables' ) );
@@ -59,7 +58,7 @@ class GeoDir_Admin_Install {
 	 *
 	 * This check is done on all requests and runs if the versions do not match.
 	 */
-	public static function check_version() { //self::install(); // @todo remove after testing
+	public static function check_version() {
 		if ( ! defined( 'IFRAME_REQUEST' ) && get_option( 'geodirectory_version' ) !== GeoDir()->version ) {
 			self::install();
 			do_action( 'geodirectory_updated' );
@@ -124,9 +123,7 @@ class GeoDir_Admin_Install {
 		//()->query->add_endpoints();
 		//_API::add_endpoint();
 		//_Auth::add_endpoint();
-
-		///return; // @todo remove after testing
-
+		
 		self::create_cron_jobs();
 
 		// Queue upgrades/setup wizard
@@ -407,9 +404,7 @@ class GeoDir_Admin_Install {
 	private static function create_cron_jobs() {
 		//@todo add crons here
 		wp_clear_scheduled_hook( 'geodirectory_tracker_send_event' );
-
 		wp_schedule_event( time(), apply_filters( 'geodirectory_tracker_event_recurrence', 'daily' ), 'geodirectory_tracker_send_event' );
-
 	}
 
 
