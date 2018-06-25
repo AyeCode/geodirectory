@@ -680,9 +680,14 @@ function geodir_list_view_select() {
 			}, 10); // we need to give it a very short time so the page loads the actual html
 		}
 	}
+	jQuery(function($) {
+		$('#gd_list_view[name="gd_list_view"]').on('change', function(e){
+			geodir_list_view_select(this);
+		});
+	});
 </script>
 	<div class="geodir-list-view-select">
-		<select name="gd_list_view" id="gd_list_view" onchange="geodir_list_view_select(this);" class="geodir-select" style="min-width:130px;border-radius:4px;" aria-label="<?php esc_attr_e( 'Layout','geodirectory' ) ?>">
+		<select name="gd_list_view" id="gd_list_view" class="geodir-select" style="min-width:130px;border-radius:4px;" aria-label="<?php esc_attr_e( 'Layout','geodirectory' ) ?>">
 			<?php $listing_view = (int) $gd_session->get( 'gd_listing_view' ); ?>
 			<option
 				value="1" <?php selected( 1, $listing_view ); ?>><?php _e( 'View: List', 'geodirectory' ); ?></option>
