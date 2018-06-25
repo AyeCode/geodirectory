@@ -36,28 +36,6 @@ class GeoDir_Admin_Addons {
 	}
 
 	/**
-	 * Get featured for the addons screen
-	 *
-	 * @return array of objects
-	 */
-	public static function get_featured() {
-		if ( false === ( $featured = get_transient( 'geodir_addons_featured' ) ) ) {
-			$raw_featured = wp_safe_remote_get( 'https://d3t0oesq8995hv.cloudfront.net/add-ons/featured.json', array( 'user-agent' => 'GeoDirectory Addons Page' ) );
-			if ( ! is_wp_error( $raw_featured ) ) {
-				$featured = json_decode( wp_remote_retrieve_body( $raw_featured ) );
-				if ( $featured ) {
-					set_transient( 'geodir_addons_featured', $featured, WEEK_IN_SECONDS );
-				}
-			}
-		}
-
-		if ( is_object( $featured ) ) {
-			self::output_featured_sections( $featured->sections );
-			return $featured;
-		}
-	}
-
-	/**
 	 * Get sections for the addons screen
 	 *
 	 * @return array of objects
@@ -67,7 +45,7 @@ class GeoDir_Admin_Addons {
 		return array(); //@todo we prob don't need these yet.
 
 		if ( false === ( $sections = get_transient( 'geodir_addons_sections' ) ) ) {
-			$raw_sections = wp_safe_remote_get( 'https://d3t0oesq8995hv.cloudfront.net/addon-sections.json', array( 'user-agent' => 'GeoDirectory Addons Page' ) );
+			$raw_sections = wp_safe_remote_get( '#url', array( 'user-agent' => 'GeoDirectory Addons Page' ) );
 			if ( ! is_wp_error( $raw_sections ) ) {
 				$sections = json_decode( wp_remote_retrieve_body( $raw_sections ) );
 
@@ -145,7 +123,7 @@ class GeoDir_Admin_Addons {
 		elseif ( ! empty( $section ) ) {
 			if ( false === ( $section_data = get_transient( 'gd_addons_section_' . $section_id ) ) ) { //@todo restore after testing
 			//if ( 1==1) {
-				$raw_section = wp_safe_remote_get( esc_url_raw( add_query_arg( array( 'category' => $section_id, 'number' => 100),$api_url) ), array( 'user-agent' => 'GeoDirectory Addons Page' ) );
+				$raw_section = wp_safe_remote_get( esc_url_raw( add_query_arg( array( 'category' => $section_id, 'number' => 100),$api_url) ), array( 'user-agent' => 'GeoDirectory Addons Page','timeout'     => 15, ) );
 
 				if ( ! is_wp_error( $raw_section ) ) {
 					$section_data = json_decode( wp_remote_retrieve_body( $raw_section ) );

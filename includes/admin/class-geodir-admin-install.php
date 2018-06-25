@@ -1034,9 +1034,6 @@ class GeoDir_Admin_Install {
 
 		// Location fields
 		if(!$locationless){
-			$columns['marker_json'] = "marker_json text NULL DEFAULT NULL"; //@todo do we even still need this?
-			$columns['location_id'] = "location_id int(11) NOT NULL"; //@todo do we even still need this?
-			$columns['locations'] = "locations varchar( 254 ) NULL DEFAULT NULL"; //@todo do we even still need this?
 			$columns['street'] = "street VARCHAR( 254 ) NULL";
 			$columns['city'] = "city VARCHAR( 50 ) NULL";
 			$columns['region'] = "region VARCHAR( 50 ) NULL";
@@ -1077,7 +1074,9 @@ class GeoDir_Admin_Install {
 
 		// Location keys
 		if(!$locationless){
-			$keys['locations'] = "KEY locations (locations($max_index_length))";
+			$keys['country'] = "KEY country (country(50))";
+			$keys['region'] = "KEY region (region(50))";
+			$keys['city'] = "KEY city (city(50))";
 		}
 
 
