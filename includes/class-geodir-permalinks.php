@@ -31,19 +31,38 @@ class GeoDir_Permalinks {
 		add_action('init', array( __CLASS__, 'rewrite_tags'), 10, 0);
 		add_action('init', array( __CLASS__, 'rewrite_rules'), 10, 0);
 
-
 		//add_action('init', array( __CLASS__, 'author_cpt_rules'), 10, 0);
 
 		add_filter( 'author_rewrite_rules', array( __CLASS__, 'author_cpt_rules' ) );
 		//add_action( 'author_rewrite_rules', array( __CLASS__, 'author_cpt_rules' ) );
 
 
+		add_action('init', array( __CLASS__, 'rewrite_locations'), 10);
 
+		//add_action('init', array( __CLASS__, 'kill_feed_rewrites'),10000000000);
 
 
 	}
 
-	
+	public static function kill_feed_rewrites($rules){
+
+		print_r(get_option( 'rewrite_rules' ));
+
+		echo '###';exit;
+
+		return $rules;
+	}
+
+	/**
+	 * Add the locations page rewrite rules.
+	 */
+	public static function rewrite_locations(){
+		global $wp_query;
+		//print_r($wp_query);
+		//add_rewrite_rule( self::search_slug().'/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
+
+		$gd_permalink_structure = "";
+	}
 
 	/**
 	 * Add author page pretty urls.
@@ -81,6 +100,9 @@ class GeoDir_Permalinks {
 
 		return $rules;
 	}
+
+
+
 
 	/**
 	 * Returns permalink structure using post link.
@@ -290,7 +312,6 @@ class GeoDir_Permalinks {
 
 	/**
 	 * Register GD rewrite rules.
-	 * @todo if the cate and the place permailnks contain the same amount of arguments they can clash, we need to add js checking for it
 	 */
 	public static function rewrite_rules() {
 		$gd_permalink_structure = geodir_get_permalink_structure();
@@ -339,8 +360,15 @@ class GeoDir_Permalinks {
 		}
 
 
-		// add search paging rewrite // @todo we need to replace search with the current GD search page slug
+		// add search paging rewrite
 		add_rewrite_rule( self::search_slug().'/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
+
+
+		// locations page
+		add_rewrite_rule( self::location_slug()."/([^/]+)/([^/]+)/([^/]+)/?", 'index.php?pagename='.self::location_slug().'&country=$matches[1]&region=$matches[2]&city=$matches[3]', 'top' );
+		add_rewrite_rule( self::location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.self::location_slug().'country=$matches[1]&region=$matches[2]', 'top' );
+		add_rewrite_rule( self::location_slug()."/([^/]+)/?", 'index.php?pagename='.self::location_slug().'country=$matches[1]', 'top' );
+
 	}
 
 	/**
@@ -387,6 +415,26 @@ class GeoDir_Permalinks {
 		}
 
 		return apply_filters('geodir_rewrite_search_slug',$search_slug);
+	}
+
+	/**
+	 * Get the slug for the locations page.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $location_slug Optional. Search slug. Default search.
+	 *
+	 * @return string
+	 */
+	public static function location_slug($location_slug = 'location' ){
+
+		if($page_id = geodir_location_page_id()){
+			if($slug = get_post_field( 'post_name', $page_id )){
+				$location_slug = $slug;
+			}
+		}
+
+		return apply_filters('geodir_rewrite_location_slug',$location_slug);
 	}
 
 

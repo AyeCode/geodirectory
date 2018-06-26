@@ -441,3 +441,6 @@ function GeoDir() {
 }
 // Global for backwards compatibility.
 $GLOBALS['geodirectory'] = GeoDir();
+
+//$cron_jobs = get_option( 'cron' );
+//print_r($cron_jobs);

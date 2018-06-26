@@ -45,14 +45,14 @@ class GeoDir_Admin_Tracker {
 		if ( ! apply_filters( 'geodirectory_tracker_send_override', $override ) ) {
 			// Send a maximum of once per week by default.
 			$last_send = self::get_last_send_time();
-			if ( $last_send && $last_send > apply_filters( 'geodirectory_tracker_last_send_interval', strtotime( '-1 day' ) ) ) { //@todo change ot -1 week after beta
-				//return; //@todo uncomment after testing
+			if ( $last_send && $last_send > apply_filters( 'geodirectory_tracker_last_send_interval', strtotime( '-1 week' ) ) ) {
+				return;
 			}
 		} else {
 			// Make sure there is at least a 1 hour delay between override sends, we don't want duplicate calls due to double clicking links.
 			$last_send = self::get_last_send_time();
 			if ( $last_send && $last_send > strtotime( '-1 hours' ) ) {
-				//return;//@todo uncomment after testing
+				return;
 			}
 		}
 
@@ -65,19 +65,12 @@ class GeoDir_Admin_Tracker {
 				'timeout'     => 45,
 				'redirection' => 5,
 				'httpversion' => '1.0',
-				'blocking'    => false, //true, //@todo set this as false for production (only true will give a response)
+				'blocking'    => false, //true, //set this as false for production (only true will give a response if testing)
 				'headers'     => array( 'user-agent' => 'GeoDirectoryTracker/' . md5( esc_url( home_url( '/' ) ) ) . ';' ),
-				//'body'        => json_encode( $params ),
 				'body'        => $params ,
 				'cookies'     => array(),
 			)
 		);
-
-//		echo '###'.self::$api_url;
-////echo $result['body'];
-////		print_r(json_decode($result['body']));
-//		print_r($result['body']);
-//		exit;
 	}
 
 	/**

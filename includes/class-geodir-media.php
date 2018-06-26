@@ -250,7 +250,7 @@ class GeoDir_Media {
 		$metadata = '';
 		if($is_placeholder){ // if a placeholder image, such as a image name that will be uploaded manually to the upload dir
 			$upload_dir = wp_upload_dir();
-			$file = $upload_dir['subdir'].'/'.basename($url);
+			$file = $upload_dir['path'].'/'.basename($url);
 			$file_type = wp_check_filetype( basename($url));
 		}else{
 			$post_type = get_post_type($post_id);
@@ -270,8 +270,9 @@ class GeoDir_Media {
 
 				$metadata = wp_get_attachment_metadata( $attachment_id );
 				$file_type = wp_check_filetype(basename($url));
+				$upload_dir = wp_upload_dir();
 				$file = array(
-					'file'  => $metadata['file'],
+					'file'  => $upload_dir['basedir'].'/'.$metadata['file'],
 					'type'  => $file_type['type']
 				);
 

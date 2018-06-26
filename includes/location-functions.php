@@ -349,55 +349,35 @@ function geodir_get_address_by_lat_lan($lat, $lng)
  * @global object $wp WordPress object.
  * @global object $gd_session GeoDirectory Session object.
  *
- * @param string $location_array_from Place to look for location array. Default: 'session'.
+ * @param string $location_array_from Place to look for location array. Default: 'session'. @depreciated
  * @param string $gd_post_type The post type.
  * @return array The location term array.
  */
-function geodir_get_current_location_terms($location_array_from = 'session', $gd_post_type = '')
+function geodir_get_current_location_terms($location_array_from = null, $gd_post_type = '')
 {
-    global $wp, $gd_session;
+    global $wp;
     $location_array = array();
-    if ($location_array_from == 'session') {
-        if ($gd_session->get('gd_country') == 'me' || $gd_session->get('gd_region') == 'me' || $gd_session->get('gd_city') == 'me') {
-            return $location_array;
-        }
 
-        $country = isset($_REQUEST['gd_country']) ? $_REQUEST['gd_country'] : $gd_session->get('gd_country');
-        if ($country != '' && $country)
-            $location_array['gd_country'] = urldecode($country);
-
-        $region = isset($_REQUEST['gd_region']) ? $_REQUEST['gd_region'] : $gd_session->get('gd_region');
-        if ($region != '' && $region)
-            $location_array['gd_region'] = urldecode($region);
-
-        $city = isset($_REQUEST['gd_city']) ? $_REQUEST['gd_city'] : $gd_session->get('gd_city');
-        if ($city != '' && $city)
-            $location_array['gd_city'] = urldecode($city);
-    } else {
-        if ((isset($wp->query_vars['country']) && $wp->query_vars['country'] == 'me') || (isset($wp->query_vars['region']) && $wp->query_vars['region'] == 'me') || (isset($wp->query_vars['city']) && $wp->query_vars['city'] == 'me')) {
-            return $location_array;
-        }
-
-        $country = (isset($wp->query_vars['country']) && $wp->query_vars['country'] != '') ? $wp->query_vars['country'] : '';
-
-        $region = (isset($wp->query_vars['region']) && $wp->query_vars['region'] != '') ? $wp->query_vars['region'] : '';
-
-        $city = (isset($wp->query_vars['city']) && $wp->query_vars['city'] != '') ? $wp->query_vars['city'] : '';
-
-        if ($country != '')
-            $location_array['country'] = urldecode($country);
-
-        if ($region != '')
-            $location_array['region'] = urldecode($region);
-
-        if ($city != '')
-            $location_array['city'] = urldecode($city);
-			
-		// Fix category link in ajax popular category widget on change post type
-		if (empty($location_array) && defined('DOING_AJAX') && DOING_AJAX) {
-			$location_array = geodir_get_current_location_terms('session');
-		}
+    if ((isset($wp->query_vars['country']) && $wp->query_vars['country'] == 'me') || (isset($wp->query_vars['region']) && $wp->query_vars['region'] == 'me') || (isset($wp->query_vars['city']) && $wp->query_vars['city'] == 'me')) {
+        return $location_array;
     }
+
+    $country = (isset($wp->query_vars['country']) && $wp->query_vars['country'] != '') ? $wp->query_vars['country'] : '';
+
+    $region = (isset($wp->query_vars['region']) && $wp->query_vars['region'] != '') ? $wp->query_vars['region'] : '';
+
+    $city = (isset($wp->query_vars['city']) && $wp->query_vars['city'] != '') ? $wp->query_vars['city'] : '';
+
+    if ($country != '')
+        $location_array['country'] = urldecode($country);
+
+    if ($region != '')
+        $location_array['region'] = urldecode($region);
+
+    if ($city != '')
+        $location_array['city'] = urldecode($city);
+
+
 
 
 	/**
@@ -420,6 +400,10 @@ function geodir_get_current_location_terms($location_array_from = 'session', $gd
 	$location_array = apply_filters( 'geodir_current_location_terms', $location_array, $location_array_from, $gd_post_type );
 
     return $location_array;
+
+}
+
+function geodir_location_name_from_slug($slug,$type){
 
 }
 

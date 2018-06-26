@@ -169,7 +169,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 			query_string += '&term[]=' + terms.join("&term[]=");
 		}
 	}
-	
+
 	// Posts
 	posts = options.posts;
 	if (posts) {
