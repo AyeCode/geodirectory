@@ -318,19 +318,18 @@ function geodir_fav_allowed_post_types(){
  *
  * @global bool $geodir_add_location_url If true it will add location name in url.
  * @global object $post WordPress Post object.
- * @global object $gd_session GeoDirectory Session object.
  *
  * @param string $link The post link.
  * @param string $post_type The post type.
  * @return string The modified link.
  */
 function geodir_posttype_link($link, $post_type) {
-    global $geodir_add_location_url, $post, $gd_session;
+    global $geodir_add_location_url, $post;
 
     $location_terms = array();
 
     if (in_array($post_type, geodir_get_posttypes())) {
-        if (geodir_get_option('geodir_add_location_url') && $gd_session->get('gd_multi_location') == 1) {
+        if (geodir_get_option('geodir_add_location_url')) {
             if(geodir_is_page('detail') && !empty($post) && isset($post->country_slug)) {
                 $location_terms = array(
                     'gd_country' => $post->country_slug,

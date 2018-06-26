@@ -200,7 +200,7 @@ function geodir_get_cf_value($cf) {
  * @return mixed|void
  */
 function geodir_get_cf_default_category_value() {
-    global $post,$gd_session,$gd_post;
+    global $post,$gd_post;
     if (is_admin()) {
         global $post;
 
@@ -237,14 +237,13 @@ function geodir_get_cf_default_category_value() {
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
  * @global array $geodir_addon_list List of active GeoDirectory extensions.
- * @global object $gd_session GeoDirectory Session object.
  *
  * @param int|string $package_id The package ID.
  * @param string $default Optional. When set to "default" it will display only default fields.
  * @param string $post_type Optional. The wordpress post type.
  */
 function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $post_type = 'gd_place') {
-    global $is_default, $mapzoom, $gd_session;
+    global $is_default, $mapzoom;
 
     $listing_type = $post_type;
 

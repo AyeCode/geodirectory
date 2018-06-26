@@ -225,7 +225,6 @@ final class GeoDirectory {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
         }
 	    
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-session.php' );
 	    GeoDir_Email::init();// set up the email class
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/validation-functions.php' );

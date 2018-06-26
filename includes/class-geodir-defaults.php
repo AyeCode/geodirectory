@@ -32,7 +32,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_search_content(){
-		return "[gd_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]";
+		return "[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
 	}
 
 	/**
@@ -50,7 +50,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_archive_content(){
-		return "[gd_category_description]\n[gd_search]\n[gd_loop_actions]\n[gd_loop]\n[gd_loop_paging]";
+		return "[gd_category_description]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
 	}
 	/**
 	 * The content for the archive item page.

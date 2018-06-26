@@ -11,8 +11,6 @@
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
  * @global object $wp_query WordPress Query object.
- * @global string $gridview_columns The girdview style of the listings.
- * @global object $gd_session GeoDirectory Session object.
  */
 
 /**
@@ -24,12 +22,9 @@
  */
 do_action('geodir_before_listing_listview');
 
-global $gridview_columns, $gd_session, $related_nearest, $related_parent_lat, $related_parent_lon;
-
-
+global $related_nearest, $related_parent_lat, $related_parent_lon;
 
 ?>
-
 	<ul class="geodir-category-list-view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'listing'); ?>">
 		<?php if (have_posts()) {
 

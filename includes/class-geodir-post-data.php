@@ -540,12 +540,11 @@ class GeoDir_Post_Data {
 	 * @global object $current_user Current user object.
 	 * @global object $post The current post object.
 	 * @global object $post_images Image objects of current post if available.
-	 * @global object $gd_session GeoDirectory Session object.
 	 * @todo make the form work in sections with fieldsets, all collapsed apart from the one ur on.
 	 */
 	public static function add_listing_form() {
 
-		global $cat_display, $post_cat, $current_user, $gd_session, $gd_post;
+		global $cat_display, $post_cat, $current_user, $gd_post;
 		$page_id       = get_the_ID();
 		$post          = '';
 		$submit_button = '';
@@ -789,16 +788,15 @@ class GeoDir_Post_Data {
 			);
 			$posts_array = get_posts( $args );
 		}else{
-			global $gd_session;
-			// if its a logged out user the add the session id as post meta
-			$session_id = $gd_session->get_id();
+			// if its a logged out user the add current nonce as post meta
+			$current_nonce = wp_create_nonce('_gd_logged_out_post_author');
 			$args        = array(
 				'posts_per_page'   => - 1,
 				'orderby'          => 'date',
 				'order'            => 'DESC',
 				'post_type'        => $post_type,
 				'meta_key'         => '_gd_logged_out_post_author',
-				'meta_value'       => $session_id,
+				'meta_value'       => $current_nonce,
 				'post_status'      => 'auto-draft',
 				'suppress_filters' => true
 			);
@@ -827,10 +825,9 @@ class GeoDir_Post_Data {
 		if(!$post_id){ return false;}
 		$author_id = get_post_field( 'post_author', $post_id );
 
-		if(!$user_id){// check if the current session owns the post with no author
-			global $gd_session;
-			$post_session_id = get_post_meta($post_id,'_gd_logged_out_post_author',true);
-			if($post_session_id && $post_session_id == $gd_session->get_id()){
+		if(!$user_id){// check if the current nonce owns the post with no author
+			$post_current_nonce = get_post_meta($post_id,'_gd_logged_out_post_author',true);
+			if($post_current_nonce && $post_current_nonce == wp_create_nonce('_gd_logged_out_post_author')){
 				$owner = true;
 			}
 		}elseif($author_id == $user_id){
@@ -907,19 +904,16 @@ class GeoDir_Post_Data {
      * @since 2.0.0
 	 *
 	 * @param string $post_type Post type.
-     *
-     * @global object $gd_session Geo Directory session object.
 	 *
 	 * @return object $post.
 	 */
 	public static function create_auto_draft( $post_type ) {
-		global $gd_session;
 		require_once( ABSPATH . 'wp-admin/includes/post.php' );
 		$post = get_default_post_to_edit( $post_type, true );
 
-		// if its a logged out user the add the session id as post meta
-		if($post->post_author == 0 && $session_id = $gd_session->get_id()){
-			update_post_meta($post->ID,'_gd_logged_out_post_author',$session_id);
+		// if its a logged out user the add current nonce as post meta
+		if($post->post_author == 0 && ($current_nonce = wp_create_nonce('_gd_logged_out_post_author'))){
+			update_post_meta($post->ID,'_gd_logged_out_post_author',$current_nonce);
 		}
 
 		$post->post_title = ''; // don't show title as "Auto Draft"
@@ -1287,7 +1281,7 @@ class GeoDir_Post_Data {
 		}
 		//$posts[0]->post_status = 'publish';
 
-		// check id post has no author and if the current user owns it (via session)
+		// check id post has no author and if the current user owns it
 		if(!get_current_user_id() && self::owner_check($posts[0]->ID,0)){
 			$posts[0]->post_status = 'publish';
 

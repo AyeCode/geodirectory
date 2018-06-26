@@ -200,7 +200,6 @@ function geodir_loop_paging() {
 
 /**
  * Display loop actions such as sort order and listing view type.
- *
  */
 function geodir_loop_actions() {
 	do_action('geodir_before_loop_actions');
@@ -242,28 +241,30 @@ function geodir_display_message_not_found_on_listing($template_listview = 'listi
  * Get listing listview class for current column length.
  *
  * @since 1.5.7
- * @param int $columns Column length(ex: 1,2,3,4,5). Default empty.
+ * @param int $layout Listing view(1,2,3,4,5,gridview_onehalf,gridview_onethird,gridview_onefourth,gridview_onefifth). Default empty.
  * @return string Listing listview class.
  */
 function geodir_convert_listing_view_class($columns = '') {
 	$class = '';
 	
-	switch ((int)$columns) {
-		case 1:
-			$class = '';
-		break;
-		case 2:
+	switch ($columns) {
+		case '2':
+		case 'gridview_onehalf':
 			$class = 'gridview_onehalf';
 		break;
-		case 3:
+		case '3':
+		case 'gridview_onethird':
 			$class = 'gridview_onethird';
 		break;
-		case 4:
+		case '4':
+		case 'gridview_onefourth':
 			$class = 'gridview_onefourth';
 		break;
-		case 5:
+		case '5':
+		case 'gridview_onefifth':
 			$class = 'gridview_onefifth';
 		break;
+		case '1':
 		default:
 			$class = '';
 		break;
@@ -356,27 +357,13 @@ function geodir_listing_loop_header( $echo = true ) {
  * @return string Listing loop start content.
  */
 function geodir_listing_loop_start( $echo = true ) {
-    global $gridview_columns, $grid_view_class, $gd_session, $related_nearest, $related_parent_lat, $related_parent_lon;
-    /**
-     * Filter the default grid view class.
-     *
-     * This can be used to filter the default grid view class but can be overridden by a user $_SESSION.
-     *
-     * @since 1.0.0
-     * @param string $gridview_columns The grid view class, can be '', 'gridview_onehalf', 'gridview_onethird', 'gridview_onefourth' or 'gridview_onefifth'.
-     */
-    $grid_view_class = apply_filters( 'geodir_grid_view_widget_columns', $gridview_columns );
-    if ( $gd_session->get( 'gd_listing_view' ) && !isset( $before_widget ) && !isset( $related_posts ) ) {
-        $grid_view_class = geodir_convert_listing_view_class( $gd_session->get( 'gd_listing_view' ) );
-    }
+    global $grid_view_class, $related_nearest, $related_parent_lat, $related_parent_lon;
     
     ob_start();
     
     $GLOBALS['geodir_loop']['loop'] = 0;
     
     $header_options = geodir_listing_loop_header( false );
-    
-    //geodir_get_template( 'listing/loop-start.php', array( 'header_options' => $header_options ) );
     
     if ( $echo ) {
         echo ob_get_clean();
@@ -626,79 +613,89 @@ add_action( 'template_redirect', 'geodir_template_redirect' );
  * @since   1.0.0
  * @package GeoDirectory
  *
- * @global object $gd_session GeoDirectory Session object.
  */
 function geodir_list_view_select() {
-	global $gd_session;
 	?>
 <script type="text/javascript">
-	function geodir_list_view_select(list) {
-		val = list.value;
-		if (!val) {
-			return;
-		}
-		var listSel = jQuery(list).parents().find('.geodir-loop-container .geodir-category-list-view');
-		if (val != 1) {
-			jQuery(listSel).addClass('geodir-gridview');
-			jQuery(listSel).removeClass('geodir-listview');
-		} else {
-			jQuery(listSel).addClass('geodir-listview');
-		}
+	function geodir_list_view_select($list) {
+	    val = $list.val();
+	    if (!val) {
+	        return;
+	    }
+	    var listSel = $list.parents().find('.geodir-loop-container .geodir-category-list-view');
+	    if (val != 1) {
+	        jQuery(listSel).addClass('geodir-gridview');
+	        jQuery(listSel).removeClass('geodir-listview');
+	    } else {
+	        jQuery(listSel).addClass('geodir-listview');
+	    }
 
-		if (val == 1) {
-			jQuery(listSel).removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
-		} else if (val == 2) {
-			jQuery(listSel).removeClass('gridview_onethird gridview_onefourth gridview_onefifth');
-			jQuery(listSel).addClass('gridview_onehalf');
-		} else if (val == 3) {
-			jQuery(listSel).removeClass('gridview_onehalf gridview_onefourth gridview_onefifth');
-			jQuery(listSel).addClass('gridview_onethird');
-		} else if (val == 4) {
-			jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefifth');
-			jQuery(listSel).addClass('gridview_onefourth');
-		} else if (val == 5) {
-			jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefourth');
-			jQuery(listSel).addClass('gridview_onefifth');
-		}
+	    if (val == 1) {
+	        jQuery(listSel).removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
+	    } else if (val == 2) {
+	        jQuery(listSel).removeClass('gridview_onethird gridview_onefourth gridview_onefifth');
+	        jQuery(listSel).addClass('gridview_onehalf');
+	    } else if (val == 3) {
+	        jQuery(listSel).removeClass('gridview_onehalf gridview_onefourth gridview_onefifth');
+	        jQuery(listSel).addClass('gridview_onethird');
+	    } else if (val == 4) {
+	        jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefifth');
+	        jQuery(listSel).addClass('gridview_onefourth');
+	    } else if (val == 5) {
+	        jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefourth');
+	        jQuery(listSel).addClass('gridview_onefifth');
+	    }
 
-		// triger the window resize so the slider can resize to fit, animation takes 0.6s
-		jQuery(window).trigger('resize');
-		setTimeout(function() {
-			jQuery(window).trigger('resize');
-		}, 600);
+	    // triger the window resize so the slider can resize to fit, animation takes 0.6s
+	    jQuery(window).trigger('resize');
+	    setTimeout(function() {
+	        jQuery(window).trigger('resize');
+	    }, 600);
 
-		// store the user selection
-		localStorage.setItem("gd_list_view", val);
+	    // store the user selection
+	    localStorage.setItem("gd_list_view", val);
 	}
 
 	// set the current user selection if set
 	if (typeof(Storage) !== "undefined") {
-		var gd_list_view = localStorage.getItem("gd_list_view");
-		if (gd_list_view) {
-			setTimeout(function() {
-				jQuery('#gd_list_view').val(gd_list_view).trigger('change');
-			}, 10); // we need to give it a very short time so the page loads the actual html
-		}
+	    var gd_list_view = localStorage.getItem("gd_list_view");
+		setTimeout(function() {
+			if (!gd_list_view) {
+				$ul = jQuery('.geodir-loop-container .geodir-category-list-view');
+				if ($ul.hasClass('gridview_onefifth')) {
+					gd_list_view = 5;
+				} else if ($ul.hasClass('gridview_onefourth')) {
+					gd_list_view = 4;
+				} else if ($ul.hasClass('gridview_onethird')) {
+					gd_list_view = 3;
+				} else if ($ul.hasClass('gridview_onehalf')) {
+					gd_list_view = 2;
+				} else {
+					gd_list_view = 1;
+				}
+			}
+			jQuery('#gd_list_view[name="gd_list_view"]').val(gd_list_view);
+			geodir_list_view_select(jQuery('#gd_list_view[name="gd_list_view"]'));
+		}, 10); // we need to give it a very short time so the page loads the actual html
 	}
 	jQuery(function($) {
-		$('#gd_list_view[name="gd_list_view"]').on('change', function(e){
-			geodir_list_view_select(this);
-		});
+	    $('#gd_list_view[name="gd_list_view"]').on('change', function(e) {
+	        geodir_list_view_select($(this));
+	    });
 	});
 </script>
 	<div class="geodir-list-view-select">
 		<select name="gd_list_view" id="gd_list_view" class="geodir-select" style="min-width:130px;border-radius:4px;" aria-label="<?php esc_attr_e( 'Layout','geodirectory' ) ?>">
-			<?php $listing_view = (int) $gd_session->get( 'gd_listing_view' ); ?>
 			<option
-				value="1" <?php selected( 1, $listing_view ); ?>><?php _e( 'View: List', 'geodirectory' ); ?></option>
+				value="1"><?php _e( 'View: List', 'geodirectory' ); ?></option>
 			<option
-				value="2" <?php selected( 2, $listing_view ); ?>><?php _e( 'View: Grid 2', 'geodirectory' ); ?></option>
+				value="2"><?php _e( 'View: Grid 2', 'geodirectory' ); ?></option>
 			<option
-				value="3" <?php selected( 3, $listing_view ); ?>><?php _e( 'View: Grid 3', 'geodirectory' ); ?></option>
+				value="3"><?php _e( 'View: Grid 3', 'geodirectory' ); ?></option>
 			<option
-				value="4" <?php selected( 4, $listing_view ); ?>><?php _e( 'View: Grid 4', 'geodirectory' ); ?></option>
+				value="4"><?php _e( 'View: Grid 4', 'geodirectory' ); ?></option>
 			<option
-				value="5" <?php selected( 5, $listing_view ); ?>><?php _e( 'View: Grid 5', 'geodirectory' ); ?></option>
+				value="5"><?php _e( 'View: Grid 5', 'geodirectory' ); ?></option>
 		</select>
 	</div>
 	<?php
@@ -770,20 +767,23 @@ function geodir_post_closed_text( $post, $echo = true ) {
  *
  * @since 2.0.0
  *
+ * @global string $gd_layout_class Listing view class.
+ *
  * @param string $class Listing listview ul class.
  * @param string $template listing template.
  * @return string $class
  */
 function geodir_listing_listview_ul_extra_class( $class, $template ) {
-	if ( $template == 'widget' ) {
-		global $gd_layout_class;
-		if ( ! empty( $gd_layout_class ) ) {
-			$class .= ' geodir-gridview ' . $gd_layout_class;
-		} else {
-			$class .= ' geodir-listview';
-		}
-		$class = trim( $class );
+	global $gd_layout_class;
+
+	$class .= ' geodir-' . $template . '-posts';
+	if ( ! empty( $gd_layout_class ) ) {
+		$class .= ' geodir-gridview ' . $gd_layout_class;
+	} else {
+		$class .= ' geodir-listview';
 	}
+	$class = trim( $class );
+
 	return $class;
 }
 add_filter( 'geodir_listing_listview_ul_extra_class', 'geodir_listing_listview_ul_extra_class', 10, 2 );

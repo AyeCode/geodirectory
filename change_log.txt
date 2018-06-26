@@ -7,6 +7,7 @@ DB translate texts tool added - ADDED
 Show author own posts on author page if draft or pending - CHANGED
 defer and  async tags added to all GD JS - CHANGED
 iframe api generation broken (by Google iframe restrictions) changed to new window popup - FIXED
+WP Session removed - CHANGED
 
 v2.0.0.14-beta
 Map default language setting is not working for OpenStreetMap - FIXED

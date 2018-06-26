@@ -251,14 +251,13 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @global object $post                    The current post object.
      * @global string $gd_layout_class The girdview style of the listings for widget.
      * @global bool $geodir_is_widget_listing  Is this a widget listing?. Default: false.
-     * @global object $gd_session              GeoDirectory Session object.
      *
      * @param array|string $args               Display arguments including before_title, after_title, before_widget, and
      *                                         after_widget.
      * @param array|string $instance           The settings for the particular instance of the widget.
      */
     public function output_html( $args = '', $instance = '' ) {
-        global $gd_session, $gd_post, $post;
+        global $gd_post, $post;
 
 
         //print_r($instance);
@@ -415,20 +414,15 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
         $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
         $location_url  = implode( '/', $location_url );
-        $skip_location = false;
-        if ( ! $add_location_filter && $gd_session->get( 'gd_multi_location' ) ) {
-            $skip_location = true;
-            $gd_session->un_set( 'gd_multi_location' );
-        }
 
-        if ( $location_allowed && $add_location_filter && $gd_session->get( 'all_near_me' ) && geodir_is_page( 'location' ) ) {
+        if ( $location_allowed && $add_location_filter && ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) && geodir_is_page( 'location' ) ) {
             $viewall_url = add_query_arg( array(
                 'geodir_search' => 1,
                 'stype' => $post_type,
                 's' => '',
                 'snear' => __( 'Near:', 'geodiradvancesearch' ) . ' ' . __( 'Me', 'geodiradvancesearch' ),
-                'sgeo_lat' => $gd_session->get( 'user_lat' ),
-                'sgeo_lon' => $gd_session->get( 'user_lon' )
+                'sgeo_lat' => $user_lat,
+                'sgeo_lon' => $user_lon
             ), geodir_search_page_base_url() );
 
             if ( ! empty( $category ) && !in_array( '0', $category ) ) {
@@ -454,10 +448,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
                 $geodir_add_location_url = null;
             }
-        }
-
-        if ( $skip_location ) {
-            $gd_session->set( 'gd_multi_location', 1 );
         }
 
         if ( is_wp_error( $viewall_url ) ) {
@@ -535,8 +525,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
         global $gd_layout_class, $geodir_is_widget_listing;
 
-//        print_r($query_args);
-
 		/*
 		 * Filter widget listings query args.
 		 */
@@ -553,17 +541,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			add_filter( 'widget_title', array( $this, 'title_filter' ), 10, 3 );
 		}
 
+		$gd_layout_class = geodir_convert_listing_view_class( $layout );
         ?>
         <div class="geodir_locations geodir_location_listing">
             <?php
-            if ( strstr( $layout, 'gridview' ) ) {
-                $listing_view_exp        = explode( '_', $layout );
-                $gd_layout_class = $layout;
-                $layout                  = $listing_view_exp[0];
-            } else {
-                $gd_layout_class = '';
-            }
-
             if ( ! isset( $character_count ) ) {
                 /**
                  * Filter the widget's excerpt character count.
@@ -583,10 +564,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			}
 			$geodir_is_widget_listing = true;
 
-			// geodir_get_template( 'widget-listing-listview.php', array( 'title_tag'=>$title_tag, 'widget_listings' => $widget_listings, 'character_count' => $character_count, 'gridview_columns_widget' => $gridview_columns_widget) );
 			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
-            //geodir_get_template_part('content', 'widget-listing');
-
 
 			$geodir_is_widget_listing = false;
 

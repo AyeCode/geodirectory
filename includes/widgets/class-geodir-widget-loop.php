@@ -46,10 +46,15 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
      * @return mixed|string|void
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
-        global $wp_query;
+        global $wp_query, $gd_layout_class;
 
         ob_start();
         if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || (is_author() && !empty($wp_query->query['gd_favs'])) ){
+			$widget_args = wp_parse_args( $widget_args, array(
+				'layout' => ''
+			) );
+
+			$gd_layout_class = geodir_convert_listing_view_class( $widget_args['layout'] );
 
             // check if we have listings or if we are faking it
             if($wp_query->post_count == 1 && empty($wp_query->posts)){

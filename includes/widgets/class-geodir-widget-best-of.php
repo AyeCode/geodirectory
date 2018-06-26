@@ -552,16 +552,10 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	 * @since 1.3.9
 	 *
 	 * @global object $post The current post object.
-	 * @global array $map_jason Map data in json format.
-	 * @global array $map_canvas_arr Map canvas array.
-	 * @global string $gridview_columns_widget The girdview style of the listings for widget.
-	 * @global object $gd_session GeoDirectory Session object.
 	 *
 	 * @param array $query_args The query array.
 	 */
 	public static function bestof_places_by_term($query_args) {
-		global $gd_session;
-
 		/**
 		 * This action called before querying widget listings.
 		 *
@@ -585,21 +579,13 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			$character_count = $character_count == '' ? 50 : apply_filters('bestof_widget_character_count', $character_count);
 		}
 
-		global $post, $map_jason, $map_canvas_arr, $gridview_columns_widget, $geodir_is_widget_listing;
+		global $post, $geodir_is_widget_listing, $gd_layout_class;
 		$current_post = $post;
-		$current_map_jason = $map_jason;
-		$current_map_canvas_arr = $map_canvas_arr;
-		$current_grid_view = $gridview_columns_widget;
-		$gridview_columns_widget = null;
 
-		$gd_listing_view_set = $gd_session->get('gd_listing_view') ? true : false;
-		$gd_listing_view_old = $gd_listing_view_set ? $gd_session->get('gd_listing_view') : '';
-
-		$gd_session->set('gd_listing_view', '1');
 		$geodir_is_widget_listing = true;
+		$gd_layout_class = '';
 
 		geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
-
 
 		$geodir_is_widget_listing = false;
 
@@ -607,14 +593,6 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		if (!empty($current_post)) {
 			setup_postdata($current_post);
 		}
-		if ($gd_listing_view_set) { // Set back previous value
-			$gd_session->set('gd_listing_view', $gd_listing_view_old);
-		} else {
-			$gd_session->un_set('gd_listing_view');
-		}
-		$map_jason = $current_map_jason;
-		$map_canvas_arr = $current_map_canvas_arr;
-		$gridview_columns_widget = $current_grid_view;
 	}
 
 	// Javascript
