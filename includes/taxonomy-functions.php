@@ -336,7 +336,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
     $geodir_taxonomies = geodir_get_taxonomies('', true);
 
     if (isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy, $geodir_taxonomies)) {
-        global $geodir_add_location_url, $gd_session;
+        global $geodir_add_location_url;
         $include_location = false;
         $request_term = array();
         $add_location_url = geodir_get_option('geodir_add_location_url');
@@ -348,7 +348,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
             if ($geodir_add_location_url && $add_location_url) {
                 $include_location = true;
             }
-        } elseif ($add_location_url && $gd_session->get('gd_multi_location') == 1) {
+        } elseif ($add_location_url) {
             $include_location = true;
         } elseif ($add_location_url && $location_manager && geodir_is_page('detail')) {
             $include_location = true;
@@ -366,8 +366,8 @@ function geodir_term_link($termlink, $term, $taxonomy) {
                     'gd_city' => $post->city_slug
                 );
                 
-                if ($neighbourhood_active && !empty($location_terms['gd_city']) && $gd_ses_neighbourhood = $gd_session->get('gd_neighbourhood')) {
-                    $location_terms['gd_neighbourhood'] = $gd_ses_neighbourhood;
+                if ( $neighbourhood_active && !empty( $location_terms['gd_city'] ) && ( $gd_neighbourhood = get_query_var( 'gd_neighbourhood' ) ) ) {
+                    $location_terms['gd_neighbourhood'] = $gd_neighbourhood;
                 }
             } else {
                 $location_terms = geodir_get_current_location_terms('query_vars');

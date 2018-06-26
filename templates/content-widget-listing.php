@@ -11,8 +11,6 @@
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
  * @global object $wp_query WordPress Query object.
- * @global string $gridview_columns The girdview style of the listings.
- * @global object $gd_session GeoDirectory Session object.
  */
 
 /**

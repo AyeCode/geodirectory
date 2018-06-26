@@ -234,7 +234,7 @@ class GeoDir_Query {
 	public function posts_fields($fields, $query = array()){
 		if ( ! ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) ) {
 			global $wpdb, $table_prefix, $geodir_post_type;
-			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear, $gd_session;
+			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear;
 
 
 			$table = geodir_db_cpt_table($geodir_post_type);
@@ -242,15 +242,10 @@ class GeoDir_Query {
 			$fields .= ", " . $table . ".* ";
 
 
-			if ($snear != '' || $gd_session->get('all_near_me')) {
+			if ( $snear != '' || ( ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) ) ) {
 				$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('search_distance_long'));
 
-				if ($gd_session->get('all_near_me')) {
-					$mylat = $gd_session->get('user_lat');
-					$mylon = $gd_session->get('user_lon');
-				}
-
-				$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) )))as distance ";
+				$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($user_lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($user_lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($user_lon - " . $table . ".longitude) * pi()/180 / 2), 2) )))as distance ";
 			}
 
 
@@ -344,7 +339,7 @@ class GeoDir_Query {
 		$where .= $wpdb->prepare(" AND $wpdb->posts.post_type = %s ",$geodir_post_type);
 
 		if(geodir_is_page('search')){
-			global $wpdb, $geodir_post_type, $plugin_prefix, $dist, $mylat, $mylon, $snear, $s, $s_A, $s_SA, $search_term, $gd_session;
+			global $wpdb, $geodir_post_type, $plugin_prefix, $dist, $mylat, $mylon, $snear, $s, $s_A, $s_SA, $search_term;
 
 
 			$search_term = 'OR';
@@ -454,8 +449,8 @@ class GeoDir_Query {
 			}
 
 			if ($snear != '') {
-				if (is_numeric($gd_session->get('near_me_range')) && !isset($_REQUEST['sdist'])) {
-					$dist = $gd_session->get('near_me_range');
+				if ( ( $near_me_range = get_query_var( 'near_me_range' ) ) && ! isset( $_REQUEST['sdist'] ) ) {
+					$dist = get_query_var('near_me_range');
 				}
 				$lon1 = $mylon - $dist / abs(cos(deg2rad($mylat)) * 69);
 				$lon2 = $mylon + $dist / abs(cos(deg2rad($mylat)) * 69);

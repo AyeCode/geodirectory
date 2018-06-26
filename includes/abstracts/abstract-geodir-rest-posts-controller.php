@@ -469,7 +469,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */
 	public function create_item( $request ) {
-        global $post, $wpdb, $gd_permalink_cache, $gd_session;
+        global $post, $wpdb, $gd_permalink_cache;
         
 		if ( ! empty( $request['id'] ) ) {
 			return new WP_Error( 'rest_post_exists', __( 'Cannot create existing post.' ), array( 'status' => 400 ) );
@@ -482,11 +482,6 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		}
 
 		$prepared_post->post_type = $this->post_type;
-        
-        $session_listing = !empty( $gd_session ) ? $gd_session->get( 'listing' ) : '';
-        if ( !empty( $session_listing ) ) {
-            $gd_session->un_set('listing');
-        }
 
 		$post_id = wp_insert_post( wp_slash( (array) $prepared_post ), true );
         
@@ -499,10 +494,6 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             $gd_post = $this->prepare_item_for_geodir_database( $request, $post_id );
             
             $post_id = geodir_save_listing( $gd_post, null, true );
-        }
-        
-        if ( !empty( $session_listing ) ) {
-            $gd_session->set( 'listing', $session_listing );
         }
 
 		if ( is_wp_error( $post_id ) ) {
@@ -595,7 +586,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
 	 */
 	public function update_item( $request ) {
-        global $post, $wpdb, $gd_session;
+        global $post, $wpdb;
         
 		$id   = (int) $request['id'];
 		$post = get_post( $id );
@@ -609,12 +600,6 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 		if ( is_wp_error( $post ) ) {
 			return $post;
 		}
-        
-                    
-        $session_listing = !empty( $gd_session ) ? $gd_session->get( 'listing' ) : '';
-        if ( !empty( $session_listing ) ) {
-            $gd_session->un_set('listing');
-        }
 
 		// convert the post object to an array, otherwise wp_update_post will expect non-escaped input.
 		$post_id = wp_update_post( wp_slash( (array) $post ), true );
@@ -623,10 +608,6 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             $gd_post = $this->prepare_item_for_geodir_database( $request, $post_id );
             
             $post_id = geodir_save_listing( $gd_post, null, true );
-        }
-        
-        if ( !empty( $session_listing ) ) {
-            $gd_session->set( 'listing', $session_listing );
         }
 
 		if ( is_wp_error( $post_id ) ) {
