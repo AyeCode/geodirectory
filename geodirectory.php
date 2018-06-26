@@ -79,6 +79,8 @@ final class GeoDirectory {
      * @var    GeoDirectory_Settings
      */
     public $settings;
+
+	public $location;
     
     /**
      * Main GeoDirectory Instance.
@@ -105,6 +107,8 @@ final class GeoDirectory {
 
             self::$instance->includes();
             self::$instance->init_hooks();
+
+	        
 
             do_action( 'geodirectory_loaded' );
         }
@@ -316,8 +320,12 @@ final class GeoDirectory {
      * @since  2.3
      */
     private function init_hooks() {
-        add_action( 'init', array( $this, 'init' ), 0 );
+	    add_action( 'init', array( $this, 'init' ), 0 );
     }
+
+	public function init_location(){
+
+	}
     
     /**
      * Init GeoDirectory when WordPress Initialises.
@@ -325,6 +333,10 @@ final class GeoDirectory {
     public function init() {
         // Before init action.
         do_action( 'geodirectory_before_init' );
+
+		// locations
+	    $calss_name = apply_filters('geodir_location_instance','GeoDir_Location');
+	    $this->location = new $calss_name;
 
         // Init action.
         do_action( 'geodirectory_init' );
@@ -443,3 +455,5 @@ $GLOBALS['geodirectory'] = GeoDir();
 
 //$cron_jobs = get_option( 'cron' );
 //print_r($cron_jobs);
+
+	

@@ -162,15 +162,15 @@ class GeoDir_Query {
 
 			if (isset($_REQUEST['sgeo_lat'])) {
 				$mylat = (float)esc_attr($_REQUEST['sgeo_lat']);
-			} else {
-				$mylat = (float)geodir_get_current_city_lat();
-			} //  Latitude
+			} //else {
+//				$mylat = (float)geodir_get_current_city_lat();
+//			} //  Latitude
 
 			if (isset($_REQUEST['sgeo_lon'])) {
 				$mylon = (float)esc_attr($_REQUEST['sgeo_lon']);
-			} else {
-				$mylon = (float)geodir_get_current_city_lng();
-			} //  Distance
+			} //else {
+//				$mylon = (float)geodir_get_current_city_lng();
+//			} //  Distance
 
 			if (isset($_REQUEST['snear'])) {
 				$snear = trim(esc_attr($_REQUEST['snear']));

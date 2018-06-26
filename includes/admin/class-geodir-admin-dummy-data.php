@@ -164,9 +164,9 @@ class GeoDir_Admin_Dummy_Data {
      * @return array $post_info.
      */
 	public static function add_dummy_address($post_info = array()){
-		global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2;
+		global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$geodirectory;
 
-		$default_location = geodir_get_default_location();
+		$default_location = $geodirectory->location->get_default_location();
 		if ( $city_bound_lat1 > $city_bound_lat2 ) {
 			$dummy_post_latitude = geodir_random_float( geodir_random_float( $city_bound_lat1, $city_bound_lat2 ), geodir_random_float( $city_bound_lat2, $city_bound_lat1 ) );
 		} else {
@@ -383,14 +383,10 @@ class GeoDir_Admin_Dummy_Data {
 	 * @param string $post_type The post type.
 	 */
 	public static function dummy_data_ui() {
-
-//		$x = geodir_get_external_media( 'http://wpgeodirectory.com/dummy/cat_icon/Attractions.png' );
-//		print_r($x);exit;
-
 		wp_enqueue_script( 'jquery-ui-progressbar' );
-		global $wpdb, $plugin_prefix;
+		global $wpdb, $plugin_prefix,$geodirectory;
 
-		if ( ! geodir_is_default_location_set() ) {
+		if ( ! $geodirectory->location->is_default_location_set() ) {
 			echo '<div class="updated fade"><p><strong>' . sprintf( __( 'Please %sclick here%s to set a default location, this will help to set location of all dummy data.', 'geodirectory' ), '<a href=\'' . admin_url( 'admin.php?page=geodirectory&tab=default_location_settings' ) . '\'>', '</a>' ) . '</strong></p></div>';
 		} else {
 
@@ -471,7 +467,7 @@ class GeoDir_Admin_Dummy_Data {
 			<?php
 
 
-			$default_location = geodir_get_default_location();
+			$default_location = $geodirectory->location->get_default_location();
 
 			//echo '###';print_r($default_location );
 			$city           = isset( $default_location->city ) ? $default_location->city : '';

@@ -220,6 +220,8 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		}
 		
 		$sql = "SELECT {$fields} FROM {$wpdb->posts} AS p {$join} {$where} {$group_by} {$order_by} {$limit}";
+
+		//echo $sql;
 		
 		$sql = apply_filters( 'geodir_rest_markers_query', $sql, $request );
 		
@@ -380,6 +382,15 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 			}
 		}
 
+		// locations
+		global $geodirectory;
+
+		//print_r($geodirectory);
+		if(!empty($request['country'])){ $country = $geodirectory->location->get_country_name_from_slug($request['country']); $where .= $wpdb->prepare(" AND pd.country = %s ",$country);}
+		if(!empty($request['region'])){ $region = $geodirectory->location->get_region_name_from_slug($request['region']); $where .= $wpdb->prepare(" AND pd.region = %s ",$region);}
+		if(!empty($request['city'])){ $city = $geodirectory->location->get_city_name_from_slug($request['city']); $where .= $wpdb->prepare(" AND pd.city = %s ",$city);}
+		if(!empty($request['neighbourhood'])){ $neighbourhood = $geodirectory->location->get_neighbourhood_name_from_slug($request['neighbourhood']); $where .= $wpdb->prepare(" AND pd.neighbourhood = %s ",$neighbourhood);}
+		
 		return $where;
 	}
 

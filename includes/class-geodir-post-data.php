@@ -113,7 +113,7 @@ class GeoDir_Post_Data {
 	 * @param bool $update Whether this is an existing post being updated or not.
 	 */
 	public static function save_post( $post_id, $post, $update ) {
-		global $wpdb, $plugin_prefix;
+		global $wpdb, $plugin_prefix,$geodirectory;
 
 	//echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
 
@@ -277,7 +277,7 @@ class GeoDir_Post_Data {
 			if ( isset( $gd_post['city'] ) ) {
 				$postarr['city'] = $gd_post['city'];
 			} else {
-				$default_location = geodir_get_default_location();
+				$default_location = $geodirectory->location->get_default_location();
 				$postarr['city'] = $default_location->city;
 				$postarr['region'] = $default_location->region;
 				$postarr['country'] = $default_location->country;

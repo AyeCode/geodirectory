@@ -93,6 +93,7 @@ class GeoDir_Frontend_Scripts {
 	 * @package GeoDirectory
 	 */
 	public static function js_location_functions() {
+		global $geodirectory;
 		$default_search_for_text = SEARCH_FOR_TEXT;
 		if (geodir_get_option('geodir_search_field_default_text'))
 			$default_search_for_text = __(geodir_get_option('geodir_search_field_default_text'), 'geodirectory');
@@ -101,7 +102,7 @@ class GeoDir_Frontend_Scripts {
 		if (geodir_get_option('geodir_near_field_default_text'))
 			$default_near_text = __(geodir_get_option('geodir_near_field_default_text'), 'geodirectory');
 
-		$search_location = geodir_get_default_location();
+		$search_location = $geodirectory->location->get_default_location();
 
 		$default_search_for_text = addslashes(stripslashes($default_search_for_text));
 		$default_near_text = addslashes(stripslashes($default_near_text));
