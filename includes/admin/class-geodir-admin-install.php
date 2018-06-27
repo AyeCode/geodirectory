@@ -843,22 +843,66 @@ class GeoDir_Admin_Install {
 	}
 
 	/**
+	 * Return a list of GeoDirectory tables. Used to make sure all WC tables are dropped when uninstalling the plugin
+	 * in a single site or multi site environment.
+	 *
+	 * @return array GeoDir tables.
+	 */
+	public static function get_tables() {
+		global $wpdb, $plugin_prefix;
+
+		$tables = array();
+		$tables[] = GEODIR_API_KEYS_TABLE;
+		$tables[] = GEODIR_ATTACHMENT_TABLE;
+		$tables[] = GEODIR_BUSINESS_HOURS_TABLE;
+		$tables[] = GEODIR_COUNTRIES_TABLE;
+		$tables[] = GEODIR_CUSTOM_FIELDS_TABLE;
+		$tables[] = GEODIR_CUSTOM_SORT_FIELDS_TABLE;
+		$tables[] = GEODIR_REVIEW_TABLE;
+		$tables[] = GEODIR_TABS_LAYOUT_TABLE;
+
+		$post_types = array_keys( (array) geodir_get_option( 'post_types' ) );
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type ) {
+				$tables[] = "{$plugin_prefix}{$post_type}_detail";
+			}
+		}
+
+		/**
+		 * Filter the list of known GeoDirectory tables.
+		 *
+		 * If GeoDirectory plugins need to add new tables, they can inject them here.
+		 *
+		 * @param array $tables An array of GeoDirectory-specific database table names.
+		 */
+		$tables = apply_filters( 'geodir_install_get_tables', $tables );
+
+		return $tables;
+	}
+
+	/**
+	 * Drop GeoDirectory tables.
+	 *
+	 * @return void
+	 */
+	public static function drop_tables() {
+		global $wpdb;
+
+		$tables = self::get_tables();
+
+		foreach ( $tables as $table ) {
+			$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
+		}
+	}
+
+	/**
 	 * Uninstall tables when MU blog is deleted.
-	 * @param  array $tables
+	 *
+	 * @param  array $tables List of tables that will be deleted by WP.
 	 * @return string[]
 	 */
 	public static function wpmu_drop_tables( $tables ) {
-		global $wpdb;
-
-		$tables[] = $wpdb->prefix . GEODIR_API_KEYS_TABLE;
-		$tables[] = $wpdb->prefix . GEODIR_ATTACHMENT_TABLE;
-		$tables[] = $wpdb->prefix . GEODIR_BUSINESS_HOURS_TABLE;
-		$tables[] = $wpdb->prefix . GEODIR_COUNTRIES_TABLE;
-		$tables[] = $wpdb->prefix . GEODIR_CUSTOM_FIELDS_TABLE;
-		$tables[] = $wpdb->prefix . GEODIR_CUSTOM_SORT_FIELDS_TABLE;
-		$tables[] = $wpdb->prefix . GEODIR_REVIEW_TABLE;
-
-		return $tables;
+		return array_merge( $tables, self::get_tables() );
 	}
 
 	/**

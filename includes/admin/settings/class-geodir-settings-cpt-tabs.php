@@ -596,6 +596,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		public static function get_tab_item($tab) {
 			ob_start();
 			$tab = (object)$tab;
+			if ( ! isset( $tab->id ) ) {
+				$tab->id = '';
+			}
 			include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-tab-item.php' );
 			return ob_get_clean();
 		}

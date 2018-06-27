@@ -160,7 +160,7 @@ class GeoDir_Admin_Dummy_Data {
      *
      * @since 2.0.0
      *
-     * @param array $post_info Optional. Post Infromations. Default array().
+     * @param array $post_info Optional. Post Information. Default array().
      * @return array $post_info.
      */
 	public static function add_dummy_address($post_info = array()){
@@ -483,7 +483,7 @@ class GeoDir_Admin_Dummy_Data {
 				 */
 				var geodir_installing_dummy_data = false;
 				window.onbeforeunload = function() {
-					return geodir_installing_dummy_data  ? "Dummy data has not fully installed yet!" : null; // @todo make translatable
+					return geodir_installing_dummy_data  ? "<?php esc_attr_e( 'Dummy data has not fully installed yet!', 'geodirectory' ); ?>" : null;
 				};
 
 				function geodir_dummy_set_count(data, cpt) {
@@ -1065,7 +1065,7 @@ class GeoDir_Admin_Dummy_Data {
 	public static function get_dummy_widgets(){
 
 		$widgets = array(
-			// show the authro action on the details sidebar
+			// show the author action on the details sidebar
 			'gd_author_actions' => array(
 				'hide_edit'          => false,
 				'hide_delete'          => false,
