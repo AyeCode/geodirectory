@@ -16,7 +16,7 @@
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
  * Domain Path: /languages
- * Requires at least: 3.1
+ * Requires at least: 3.5
  * Tested up to: 4.9.6
  * Update URL: https://github.com/AyeCode/geodirectory/
  */

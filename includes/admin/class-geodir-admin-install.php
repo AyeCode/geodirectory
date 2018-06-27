@@ -553,7 +553,7 @@ class GeoDir_Admin_Install {
 		}
 
 		// Table for storing post custom fields - these are user defined
-		$tables .= " CREATE TABLE " . GEODIR_CUSTOM_FIELDS_TABLE . " (
+		$tables = " CREATE TABLE " . GEODIR_CUSTOM_FIELDS_TABLE . " (
 							  id int(11) NOT NULL AUTO_INCREMENT,
 							  post_type varchar(100) NULL,
 							  data_type varchar(100) NULL DEFAULT NULL,
