@@ -187,8 +187,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							<div id="<?php echo $map_canvas; ?>_mylocation"
 							     class="gd-input-group-addon gd-map-mylocation"
 							     onclick="gdMyGeoDirection('<?php echo $map_canvas; ?>');"
-							     title="<?php echo esc_attr__( 'My location', 'geodirectory' ); ?>"><i
-									class="fa fa-crosshairs fa-fw"></i></div>
+							     title="<?php echo esc_attr__( 'My location', 'geodirectory' ); ?>">
+								<i class="fas fa-crosshairs"></i></div>
 						</div>
 					</div>
 					<div class="gd-input-group-addon gd-directions-right gd-mylocation-go"><input type="button"

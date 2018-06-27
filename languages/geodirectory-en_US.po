@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.0-dev\n"
+"Project-Id-Version: GeoDirectory 2.0.0.0-rc\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-27 16:37+0100\n"
-"PO-Revision-Date: 2018-06-27 16:37+0100\n"
+"POT-Creation-Date: 2018-06-27 18:26+0100\n"
+"PO-Revision-Date: 2018-06-27 18:26+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -6221,17 +6221,11 @@ msgstr ""
 
 #: includes/admin/views/html-notice-beta.php:12
 msgid ""
-"This GeoDirectory core beta is a very early release and is not recommended "
-"from a production site."
+"GeoDirectory addons are not supported yet, v2 versions of addons will start "
+"to be released very soon."
 msgstr ""
 
-#: includes/admin/views/html-notice-beta.php:13
-msgid ""
-"GeoDirectory addons are not supported yet, this is a core beta, addons will "
-"be supported once core is out of beta."
-msgstr ""
-
-#: includes/admin/views/html-notice-beta.php:15
+#: includes/admin/views/html-notice-beta.php:14
 #: includes/admin/views/html-notice-theme-support.php:16
 #: includes/admin/views/html-notice-updated.php:14
 msgid "Dismiss"
@@ -9451,8 +9445,8 @@ msgstr ""
 msgid "Select Country"
 msgstr ""
 
-#: includes/location-functions.php:401 includes/location-functions.php:403
-#: includes/location-functions.php:409
+#: includes/location-functions.php:402 includes/location-functions.php:404
+#: includes/location-functions.php:410
 #, php-format
 msgid "in %s"
 msgstr ""
@@ -11274,6 +11268,10 @@ msgstr ""
 
 #: language.php:236
 msgid "featured_img_class"
+msgstr ""
+
+#: language.php:241
+msgid "Afghanistan"
 msgstr ""
 
 #: language.php:242

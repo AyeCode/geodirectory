@@ -1,4 +1,4 @@
-v2.0.0.15-rc
+v2.0.0.0-rc
 Updated from font-awesome v4 to v5 - CHANGED
 Rest api route & endpoints for fields - ADDED
 priceRange custom field added and schema output added - ADDED
@@ -8,7 +8,7 @@ Show author own posts on author page if draft or pending - CHANGED
 defer and  async tags added to all GD JS - CHANGED
 iframe api generation broken (by Google iframe restrictions) changed to new window popup - FIXED
 WP Session removed - CHANGED
-Allow to remove GeoDirectory data on uninstall plugin - ADDED
+Remove GeoDirectory data on uninstall if set to do so - ADDED
 WP_Country_Database Class implemented to replace own country DB table - CHANGED
 
 v2.0.0.14-beta

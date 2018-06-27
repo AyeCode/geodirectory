@@ -11,7 +11,7 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.0.0.14-beta
+ * Version: 2.0.0.0-rc
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
@@ -60,7 +60,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.0.0.14-beta';
+    public $version = '2.0.0.0-rc';
     
     /**
      * GeoDirectory instance.

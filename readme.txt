@@ -7,7 +7,7 @@ Tags:  directory plugin, business directory, listings, classifieds, real estate
 Requires at least: 3.5
 Requires PHP: 5.3
 Tested up to: 4.9.6
-Stable tag: 2.0.0.14-beta
+Stable tag: 2.0.0.0-rc
 
 
 Create huge location-based business directories with this fully-featured directory plugin. In a few clicks you could be the next Yelp or Tripadvisor.
@@ -152,9 +152,17 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 
 == Changelog ==
 
-= 2.0.0.2-dev =
-
-* Updated change log
-* Added WP Easy Updates for auto updates.
+= 2.0.0.0-rc =
+* Updated from font-awesome v4 to v5 - CHANGED
+* Rest api route & endpoints for fields - ADDED
+* priceRange custom field added and schema output added - ADDED
+* Font Awesome & Popup maker raises Uncaught Error - FIXED
+* DB translate texts tool added - ADDED
+* Show author own posts on author page if draft or pending - CHANGED
+* defer and  async tags added to all GD JS - CHANGED
+* iframe api generation broken (by Google iframe restrictions) changed to new window popup - FIXED
+* WP Session removed - CHANGED
+* Remove GeoDirectory data on uninstall if set to do so - ADDED
+* WP_Country_Database Class implemented to replace own country DB table - CHANGED
 
 == Upgrade Notice ==
