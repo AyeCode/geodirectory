@@ -788,6 +788,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
      * @return array Item schema array values.
      */
     public function geodir_get_item_schema( $package_id = '', $default = 'all' ) {
+	    global $geodirectory;
         $custom_fields  = geodir_post_custom_fields( $package_id, $default, $this->post_type );
         
         $schema = array();
@@ -836,7 +837,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                 case 'address':
                     $prefix     = $name . '_';
                     $name       = 'address';
-                    $location   = geodir_get_default_location();
+                    $location   = $geodirectory->location->get_default_location();
                     $country    = !empty( $location->country ) ? $location->country : '';
                     $region     = !empty( $location->region ) ? $location->region : '';
                     $city       = !empty( $location->city ) ? $location->city : '';

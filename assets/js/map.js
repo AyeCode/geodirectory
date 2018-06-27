@@ -148,10 +148,18 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 	map_type = options.map_type;
 	post_type = options.post_type;
 
-	// @TODO implement country, region, city, hood for multilocation etc
+    // post type
+    query_string += 'post_type=' + post_type;
+
+    // locations
+    if(options.country){ query_string += "&country=" + options.country; }
+    if(options.region){ query_string += "&region=" + options.region; }
+    if(options.city){ query_string += "&city=" + options.city; }
+    if(options.neighbourhood){ query_string += "&neighbourhood=" + options.neighbourhood; }
+
 	search = jQuery('#' + map_canvas + '_search_string').val();
 
-	query_string += 'post_type=' + post_type;
+
 	jQuery('[name="' + map_canvas + '_cat[]"]:checked').each(function() {
 		if (jQuery(this).val()) {
 			query_string += '&term[]=' + jQuery(this).val();

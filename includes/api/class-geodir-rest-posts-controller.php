@@ -2126,6 +2126,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
      * @return array $schema.
      */
 	public function get_custom_fields_schema( $package_id = '', $default = 'all' ) {
+		global $geodirectory;
         $custom_fields  = geodir_post_custom_fields( $package_id, $default, $this->post_type );
         
         $schema = array();
@@ -2165,7 +2166,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             switch ( $field_type ) {
                 case 'address':
                     $name       		= 'street';
-                    $default_location   = geodir_get_default_location();
+                    $default_location   = $geodirectory->location->get_default_location();
                     $country    		= !empty( $default_location->country ) ? $default_location->country : '';
                     $region     		= !empty( $default_location->region ) ? $default_location->region : '';
                     $city       		= !empty( $default_location->city ) ? $default_location->city : '';

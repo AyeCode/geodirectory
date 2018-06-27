@@ -663,6 +663,10 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'child_collapse'   => false,
 			'map_directions'   => true,
 			'marker_cluster'   => false,
+			'country'          => '',
+			'region'           => '',
+			'city'             => '',
+			'neighbourhood'    => '',
 		);
 
 		$map_args = wp_parse_args( $args, $defaults );
@@ -778,6 +782,13 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$map_args['post_id']        = 0;
 		}
 
+		// location
+		$current_location = GeoDir()->location;
+		$map_args['country'] = isset($current_location->country_slug) ?  $current_location->country_slug : '';
+		$map_args['region'] = isset($current_location->region_slug) ?  $current_location->region_slug : '';
+		$map_args['city'] = isset($current_location->city_slug) ?  $current_location->city_slug : '';
+		$map_args['neighbourhood'] = isset($current_location->neighbourhood_slug) ?  $current_location->neighbourhood_slug : '';
+
 		return self::render_map( $map_args );
 	}
 
@@ -790,6 +801,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
      * @return string $content.
      */
 	public static function render_map( $map_args ) {
+		global $geodirectory;
 		$defaults = array(
 			'map_type'       => 'auto',                    // auto, directory, archive, post
 			'map_canvas'     => '',
@@ -850,7 +862,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		}
 		// default latitude, longitude
 		if ( empty( $params['default_lat'] ) || empty( $params['default_lng'] ) ) {
-			$default_location = geodir_get_default_location();
+			$default_location = $geodirectory->location->get_default_location();
 
 			$params['default_lat'] = $default_location->latitude;
 			$params['default_lng'] = $default_location->longitude;

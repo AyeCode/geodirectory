@@ -1,82 +1,5 @@
 <?php
-/**
- * Returns current city latitude.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @return string
- */
-function geodir_get_current_city_lat()
-{
-    $location = geodir_get_default_location();
-    $lat = isset($location->city_latitude) ? $location->city_latitude : '39.952484';
 
-    return $lat;
-}
-
-/**
- * Returns current city longitude.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @return string
- */
-function geodir_get_current_city_lng()
-{
-    $location = geodir_get_default_location();
-    $lng = isset($location->city_longitude) ? $location->city_longitude : '-75.163786';
-    return $lng;
-}
-
-
-/**
- * Returns the default location.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @return object
- */
-function geodir_get_default_location()
-{
-
-    $location = new stdClass();
-    $location->city = geodir_get_option('default_location_city');
-    $location->region = geodir_get_option('default_location_region');
-    $location->country = geodir_get_option('default_location_country');
-    $location->latitude = geodir_get_option('default_location_latitude');
-    $location->longitude = geodir_get_option('default_location_longitude');
-
-    // slugs 
-    $location->city_slug = sanitize_title($location->city);
-    $location->region_slug = sanitize_title($location->region);
-    $location->country_slug = sanitize_title($location->country);
-
-    /**
-     * Filter the default location.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     *
-     * @param string $location_result The default location object.
-     */
-    return $location_result = apply_filters('geodir_get_default_location', $location );
-}
-
-/**
- * Checks whether the default location is set or not.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @return bool
- */
-function geodir_is_default_location_set()
-{
-    $default_location = geodir_get_default_location();
-    if (!empty($default_location))
-        return true;
-    else
-        return false;
-}
 
 /**
  * Returns location slug using location string.
@@ -101,26 +24,6 @@ function create_location_slug($location_string)
 
 }
 
-/**
- * Returns location object using location id.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @param string $id The location ID.
- * @return object The location object.
- */
-function geodir_get_location($id = '')
-{
-    /**
-     * Filter the location information.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     *
-     * @param string $id The location ID.
-     */
-    return $location_result = apply_filters('geodir_get_location_by_id', geodir_get_option('geodir_default_location'), $id);
-}
 
 /**
  * Returns country selection dropdown box.
@@ -189,130 +92,6 @@ function geodir_get_countries()
 
 
 /**
- * Handles location form submitted data.
- *
- * @since 1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
- */
-function geodir_location_form_submit()
-{
-
-    global $wpdb, $plugin_prefix;
-    if (isset($_REQUEST['add_location'])) {
-
-        $location_info = array(
-            'city' => $_REQUEST['city'],
-            'region' => $_REQUEST['region'],
-            'country' => $_REQUEST['country'],
-            'geo_lat' => $_REQUEST['latitude'],
-            'geo_lng' => $_REQUEST['longitude'],
-            'is_default' => $_REQUEST['is_default'],
-            'update_city' => $_REQUEST['update_city']
-        );
-
-        $old_location = geodir_get_default_location();
-
-        $locationid = geodir_add_new_location($location_info);
-
-        $default_location = geodir_get_location($locationid);
-
-        //UPDATE AND DELETE LISTING
-        $posttype = geodir_get_posttypes();
-        if (isset($_REQUEST['listing_action']) && $_REQUEST['listing_action'] == 'delete') {
-
-            foreach ($posttype as $posttypeobj) {
-                $post_locations = '[' . $default_location->city_slug . '],[' . $default_location->region_slug . '],[' . $default_location->country_slug . ']'; // set all overall post location
-
-                $sql = $wpdb->prepare(
-                    "UPDATE " . $plugin_prefix . $posttypeobj . "_detail SET post_city=%s, post_region=%s, post_country=%s, post_locations=%s WHERE post_location_id=%d AND ( post_city!=%s OR post_region!=%s OR post_country!=%s OR post_locations!=%s OR post_locations IS NULL)",
-                    array($_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'], $post_locations, $locationid, $_REQUEST['city'], $_REQUEST['region'], $_REQUEST['country'], $post_locations)
-                );
-                $wpdb->query($sql);
-            }
-        }
-    }
-}
-
-/**
- * Adds new location using location info.
- *
- * @since 1.0.0
- * @since 1.6.16 Fix country translation.
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
- * @param array $location_info {
- *     Array of location info arguments.
- *
- *     @type string         $city               The city string.
- *     @type string         $region             The region string.
- *     @type string         $country            The country string.
- *     @type string         $geo_lat            The latitude string.
- *     @type string         $geo_lng            The longitude string.
- *     @type string|bool    $is_default         Is this the default location?.
- * }
- * @return string|bool Location ID on success. False when Fail.
- */
-function geodir_add_new_location($location_info = array())
-{
-    global $wpdb;
-
-    if (!empty($location_info)) {
-        $location_city = ($location_info['city'] != '') ? $location_info['city'] : 'all';
-        $location_region = ($location_info['region'] != '') ? $location_info['region'] : 'all';
-        $location_country = ($location_info['country'] != '') ? geodir_get_normal_country($location_info['country']) : 'all';
-        $location_lat = ($location_info['geo_lat'] != '') ? $location_info['geo_lat'] : '';
-        $location_lng = ($location_info['geo_lng'] != '') ? $location_info['geo_lng'] : '';
-        $is_default = isset($location_info['is_default']) ? $location_info['is_default'] : '';
-        $country_slug = create_location_slug(__($location_country, 'geodirectory'));
-        $region_slug = create_location_slug($location_region);
-        $city_slug = create_location_slug($location_city);
-        
-        /**
-         * Filter add new location data.
-         *
-         * @since 1.0.0
-         */
-        $geodir_location = (object)apply_filters('geodir_add_new_location', array('location_id' => 0,
-            'country' => $location_country,
-            'region' => $location_region,
-            'city' => $location_city,
-            'country_slug' => $country_slug,
-            'region_slug' => $region_slug,
-            'city_slug' => $city_slug,
-            'city_latitude' => $location_lat,
-            'city_longitude' => $location_lng,
-            'is_default' => $is_default
-        ));
-
-        /* // Not allowed to create country in DB : 2016-12-09
-        if ($geodir_location->country) {
-
-            $get_country = $wpdb->get_var($wpdb->prepare("SELECT Country FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country=%s", array($geodir_location->country)));
-
-            if (empty($get_country)) {
-
-                $wpdb->query($wpdb->prepare("INSERT INTO " . GEODIR_COUNTRIES_TABLE . " (Country, Title) VALUES (%s,%s)", array($geodir_location->country, $geodir_location->country)));
-
-            }
-
-        }
-        */
-
-        if ($geodir_location->is_default)
-            geodir_update_option('geodir_default_location', $geodir_location);
-
-        return $geodir_location->location_id;
-
-    } else {
-        return false;
-    }
-}
-
-
-
-/**
  * Returns address using latitude and longitude.
  *
  * @since 1.0.0
@@ -354,6 +133,8 @@ function geodir_get_address_by_lat_lan($lat, $lng)
  */
 function geodir_get_current_location_terms($location_array_from = null, $gd_post_type = '')
 {
+
+//    print_r(GeoDir()->location);
     global $wp;
     $location_array = array();
 
@@ -445,8 +226,8 @@ function geodir_get_location_link($which_location = 'current') {
  * @return array|bool Returns address on success.
  */
 function geodir_get_osm_address_by_lat_lan($lat, $lng) {
-    $url = 'https:';
-    $url .= '//nominatim.openstreetmap.org/reverse?format=json&lat=' . trim($lat) . '&lon=' . trim($lng) . '&zoom=16&addressdetails=1&email=' . get_option('admin_email');
+
+    $url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' . trim($lat) . '&lon=' . trim($lng) . '&zoom=16&addressdetails=1&email=' . get_option('admin_email');
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -475,78 +256,7 @@ function geodir_get_osm_address_by_lat_lan($lat, $lng) {
     }
 }
 
-/**
- * Get normal untranslated country name.
- *
- * @since 1.6.16
- * @package GeoDirectory
- * @param string $country The country name.
- * @return string Returns the country.
- */
-function geodir_get_normal_country($country) {
-    global $wpdb;
-    if ($result = geodir_get_country_by_name($country)) {
-        return $result;
-    }
-    
-    if (defined('POST_LOCATION_TABLE')) {
-        $rows = $wpdb->get_results($wpdb->prepare("SELECT DISTINCT country FROM " . POST_LOCATION_TABLE . " WHERE country NOT LIKE %s ORDER BY location_id ASC", $country));
-        if (!empty($rows)) {
-            foreach ($rows as $row) {
-                $translated = __($row->country, 'geodirectory');
-                if (geodir_strtolower($translated) == geodir_strtolower($country) && $result = geodir_get_country_by_name($row->country)) {
-                    return $result;
-                }
-            }
-        }
-        
-        $rows = $wpdb->get_results( $wpdb->prepare( "SELECT DISTINCT country FROM " . POST_LOCATION_TABLE . " WHERE country_slug LIKE %s AND country NOT LIKE %s ORDER BY location_id", $country, $country ) );
-        if (!empty($rows)) {
-            foreach ($rows as $row) {
-                $translated = __($row->country, 'geodirectory');
-                if (geodir_strtolower($translated) == geodir_strtolower($country) && $result = geodir_get_country_by_name($row->country)) {
-                    return $result;
-                }
-            }
-        }
-    }
-    
-    $default_location = geodir_get_default_location();
-    if (!empty($default_location->country) && $result = geodir_get_country_by_name($default_location->country)) {
-        return $result;
-    }
-    
-    if (!empty($default_location->country_slug) && $result = geodir_get_country_by_name($default_location->country_slug)) {
-        return $result;
-    }
-    
-    if (!empty($default_location->country_ISO2) && $result = geodir_get_country_by_name($default_location->country_ISO2, true)) {
-        return $result;
-    }
-    
-    return $country;
-}
 
-/**
- * Get ISO2 of the country.
- *
- * @since 1.6.16
- * @package GeoDirectory
- * @param string $country The country name.
- * @return string Country ISO2 code.
- */
-function geodir_get_country_iso2($country) {
-    global $wpdb;
-    
-    if ($result = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", $country))) {
-        return $result;
-    }
-    if ($result = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", geodir_get_normal_country($country)))) {
-        return $result;
-    }
-    
-    return $country;
-}
 
 /**
  * Get the country name from DB.

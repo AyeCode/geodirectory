@@ -193,9 +193,9 @@ class GeoDir_Admin_Taxonomies {
     public function term_slug_is_exists($slug_exists, $slug, $term_id)
     {
 
-        global $wpdb, $table_prefix;
+        global $wpdb, $table_prefix,$geodirectory;
 
-        $default_location = geodir_get_default_location();
+        $default_location = $geodirectory->location->get_default_location();
 
         $country_slug = $default_location->country_slug;
         $region_slug = $default_location->region_slug;

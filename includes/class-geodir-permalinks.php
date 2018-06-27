@@ -305,8 +305,11 @@ class GeoDir_Permalinks {
      * @param object $post Post object.
      * @return object Post location slugs.
      */
-	private static function get_post_location_slugs($post){
-		return apply_filters('geodir_post_permalinks',geodir_get_default_location(), $post);
+	private static function get_post_location_slugs($gd_post){
+		//print_r($gd_post);echo '###';
+		global $geodirectory;
+		//return apply_filters('geodir_post_permalinks',geodir_get_default_location(), $gd_post);
+		return apply_filters('geodir_post_permalinks',$geodirectory->location->get_post_location($gd_post), $gd_post);
 
 	}
 
@@ -366,8 +369,8 @@ class GeoDir_Permalinks {
 
 		// locations page
 		add_rewrite_rule( self::location_slug()."/([^/]+)/([^/]+)/([^/]+)/?", 'index.php?pagename='.self::location_slug().'&country=$matches[1]&region=$matches[2]&city=$matches[3]', 'top' );
-		add_rewrite_rule( self::location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.self::location_slug().'country=$matches[1]&region=$matches[2]', 'top' );
-		add_rewrite_rule( self::location_slug()."/([^/]+)/?", 'index.php?pagename='.self::location_slug().'country=$matches[1]', 'top' );
+		add_rewrite_rule( self::location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.self::location_slug().'&country=$matches[1]&region=$matches[2]', 'top' );
+		add_rewrite_rule( self::location_slug()."/([^/]+)/?", 'index.php?pagename='.self::location_slug().'&country=$matches[1]', 'top' );
 
 	}
 

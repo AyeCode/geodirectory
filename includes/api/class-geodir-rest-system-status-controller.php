@@ -787,13 +787,14 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 	 * @return array
 	 */
 	public function get_settings() {
+		global $geodirectory;
 		// Return array of useful settings for debugging.
 		return array(
 			'api_enabled'              => geodir_get_option( 'rest_api_enabled' ) ? true : false,
 			'upload_max_filesize'      => geodir_get_option( 'upload_max_filesize' ),
 			'default_status'      	   => geodir_get_option( 'default_status' ),
 			'maps_api_key'      	   => geodir_get_option( 'google_maps_api_key' ) ? true : false,
-			'default_location'         => geodir_is_default_location_set(),
+			'default_location'         => $geodirectory->location->is_default_location_set(),
 		);
 	}
 

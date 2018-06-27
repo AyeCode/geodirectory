@@ -643,7 +643,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 		$view_all_link = apply_filters( 'geodir_widget_view_all_link', $this->view_all_link, $instance, $id_base );
 
-        if ( ! empty( $view_all_link ) ) {
+        if ( ! empty( $view_all_link ) && $title) {
             $title = $title . $view_all_link;
         }
 

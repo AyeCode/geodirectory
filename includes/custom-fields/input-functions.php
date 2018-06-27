@@ -1012,7 +1012,7 @@ function geodir_cfi_address($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        global $post,$gd_post;
+        global $post,$gd_post,$geodirectory;
 
         if(empty($gd_post)){
             $gd_post = geodir_get_post_info($post->ID);
@@ -1045,7 +1045,7 @@ function geodir_cfi_address($html,$cf){
        $mapzoom = isset( $gd_post->mapzoom ) ? $gd_post->mapzoom : '';
 
 
-        $location = geodir_get_default_location();
+        $location = $geodirectory->location->get_default_location();
         if (empty($city)) $city = isset($location->city) ? $location->city : '';
         if (empty($region)) $region = isset($location->region) ? $location->region : '';
         if (empty($country)) $country = isset($location->country) ? $location->country : '';

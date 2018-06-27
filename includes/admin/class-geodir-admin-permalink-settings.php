@@ -54,11 +54,12 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 		 * Show the settings.
 		 */
 		public function settings() {
+			global $geodirectory;
 			echo wpautop( __( 'These settings control the permalinks used specifically for GeoDirectory CPTs', 'geodirectory' ) );
 
 			// Get shop page
 			$base_slug    = geodir_get_ctp_slug( 'gd_place' );
-			$default_location = geodir_get_default_location();
+			$default_location = $geodirectory->location->get_default_location();
 			//print_r($default_location);
 
 

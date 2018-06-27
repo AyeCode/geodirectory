@@ -30,8 +30,8 @@ $is_map_restrict = apply_filters('geodir_add_listing_map_restrict', true);
  * @param bool $var Whether to change the country, state, city values in fields.
  */
 $auto_change_address_fields_pin_move = apply_filters('geodir_auto_change_address_fields_pin_move', true);
-
-$default_location = geodir_get_default_location();
+global $geodirectory;
+$default_location = $geodirectory->location->get_default_location();
 $defaultcity = isset($default_location->city) ? $default_location->city : '';
 $lat_lng_blank = false;
 if ( (!isset($lat) || $lat == '' ) && (!isset($lat) || $lng == '')) {
@@ -515,7 +515,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             <?php
             if(!defined('GEODIRLOCATION_TEXTDOMAIN')){
                 global $wpdb;
-                $location_result = geodir_get_default_location();
+                $location_result = $geodirectory->location->get_default_location();
                 if(!empty($location_result)){
                     $ISO2 = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country=%s",$location_result->country));
                     echo "ISO2 = '$ISO2';";

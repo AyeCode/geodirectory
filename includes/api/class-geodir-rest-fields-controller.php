@@ -121,7 +121,11 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 			'orderby'        => 'orderby',
 			'page'           => 'paged',
 			'search'         => 'search',
-			'per_page'		 => 'per_page'
+			'per_page'		 => 'per_page',
+			'country'		 => 'country',
+			'region'		 => 'region',
+			'city'		     => 'city',
+			'neighbourhood'  => 'neighbourhood',
 		);
 
 		/*
@@ -133,6 +137,8 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 				$args[ $wp_param ] = $request[ $api_param ];
 			}
 		}
+
+	    
 
 		if ( isset( $args['per_page'] ) ) {
 			$args['per_page'] = absint( $args['per_page'] );
