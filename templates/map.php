@@ -517,7 +517,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 global $wpdb;
                 $location_result = $geodirectory->location->get_default_location();
                 if(!empty($location_result)){
-                    $ISO2 = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country=%s",$location_result->country));
+                    $ISO2 = wp_country_database()->get_country_iso2($location_result->country);
                     echo "ISO2 = '$ISO2';";
                 }
             }

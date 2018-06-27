@@ -103,7 +103,6 @@ class GeoDir_Admin_Install {
 		self::upgrades(); // do any db upgrades
 		self::remove_admin_notices();
 		self::create_tables();
-		self::insert_countries();
 		self::create_options();
 		self::insert_default_fields();
 		self::insert_default_tabs();
@@ -284,33 +283,6 @@ class GeoDir_Admin_Install {
 				GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
 			}
 		}
-	}
-
-    /**
-     * Insert the default countries if needed.
-     *
-     * @since 2.0.0
-     */
-	public static function insert_countries(){
-		global $wpdb;
-		$country_table_empty = $wpdb->get_var("SELECT COUNT(CountryId) FROM " . GEODIR_COUNTRIES_TABLE );
-
-		if ($country_table_empty == 0) {
-			$countries_insert = '';
-
-			// include the default country data
-			include_once( dirname( __FILE__ ) . '/settings/data_countries.php' );
-
-			/**
-			 * Filter the SQL query that inserts the country DB table data.
-			 *
-			 * @since 1.0.0
-			 * @param string $sql The SQL insert query string.
-			 */
-			$countries_insert = apply_filters('geodir_before_country_data_insert', $countries_insert);
-			$wpdb->query($countries_insert);
-		}
-
 	}
 	
 	/**
@@ -579,26 +551,6 @@ class GeoDir_Admin_Install {
 		if ( $wpdb->has_cap( 'collation' ) ) {
 			$collate = $wpdb->get_charset_collate();
 		}
-		
-		// Countries table
-		$tables = "CREATE TABLE " . GEODIR_COUNTRIES_TABLE . " (
-						CountryId smallint AUTO_INCREMENT NOT NULL ,
-						Country varchar (50) NOT NULL ,
-						FIPS104 varchar (2) NOT NULL ,
-						ISO2 varchar (2) NOT NULL ,
-						ISO3 varchar (3) NOT NULL ,
-						ISON varchar (4) NOT NULL ,
-						Internet varchar (2) NOT NULL ,
-						Capital varchar (25) NULL ,
-						MapReference varchar (50) NULL ,
-						NationalitySingular varchar (35) NULL ,
-						NationalityPlural varchar (35) NULL ,
-						Currency varchar (30) NULL ,
-						CurrencyCode varchar (3) NULL ,
-						Population bigint NULL ,
-						Title varchar (50) NULL ,
-						Comment varchar (255) NULL ,
-						PRIMARY KEY  (CountryId)) $collate; ";
 
 		// Table for storing post custom fields - these are user defined
 		$tables .= " CREATE TABLE " . GEODIR_CUSTOM_FIELDS_TABLE . " (
@@ -855,7 +807,6 @@ class GeoDir_Admin_Install {
 		$tables[] = GEODIR_API_KEYS_TABLE;
 		$tables[] = GEODIR_ATTACHMENT_TABLE;
 		$tables[] = GEODIR_BUSINESS_HOURS_TABLE;
-		$tables[] = GEODIR_COUNTRIES_TABLE;
 		$tables[] = GEODIR_CUSTOM_FIELDS_TABLE;
 		$tables[] = GEODIR_CUSTOM_SORT_FIELDS_TABLE;
 		$tables[] = GEODIR_REVIEW_TABLE;

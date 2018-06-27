@@ -36,16 +36,16 @@ function create_location_slug($location_string)
  */
 function geodir_get_country_dl($post_country = '', $prefix = '')
 {
-    global $wpdb;
+    global $wpdb,$wp_country_database;
 
-    $rows = $wpdb->get_results("SELECT Country,ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " ORDER BY Country ASC");
+    $rows = $wp_country_database->get_countries();
     
     $ISO2 = array();
     $countries = array();
     
     foreach ($rows as $row) {
-        $ISO2[$row->Country] = $row->ISO2;
-        $countries[$row->Country] = __($row->Country, 'geodirectory');
+        $ISO2[$row->name] = $row->alpha2Code;
+        $countries[$row->name] = __($row->name, 'geodirectory');
     }
     
     asort($countries);
@@ -73,21 +73,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
  */
 function geodir_get_countries()
 {
-    global $wpdb;
-
-    $rows = $wpdb->get_results("SELECT Country,ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " ORDER BY Country ASC");
-
-    $ISO2 = array();
-    $countries = array();
-
-    foreach ($rows as $row) {
-        $ISO2[$row->Country] = $row->ISO2;
-        $countries[$row->Country] = __($row->Country, 'geodirectory');
-    }
-
-    asort($countries);
-
-    return $countries;
+    return wp_country_database()->get_countries();
 }
 
 
@@ -255,31 +241,6 @@ function geodir_get_osm_address_by_lat_lan($lat, $lng) {
         return false;
     }
 }
-
-
-
-/**
- * Get the country name from DB.
- *
- * @since 1.6.16
- * @package GeoDirectory
- * @param string $country The country name or iso2.
- * @param bool $iso2 If true it searches by country iso2.
- * @return string|null Country ISO2 code.
- */
-function geodir_get_country_by_name($country, $iso2 = false) {
-    global $wpdb;
-    
-    if ($result = $wpdb->get_var($wpdb->prepare("SELECT Country FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", $country))) {
-        return $result;
-    }
-    if ($iso2 && $result = $wpdb->get_var($wpdb->prepare("SELECT Country FROM " . GEODIR_COUNTRIES_TABLE . " WHERE ISO2 LIKE %s", $country))) {
-        return $result;
-    }
-    
-    return NULL;
-}
-
 
 /**
  * Replace the location variables.

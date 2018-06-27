@@ -16,29 +16,41 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 
 
 		public $version = "1.0.0.0-dev";
-		public $db_version = "1.0.0.0-dev";
+		public $db_version = "1.0.0";
 		public $db_version_current;
 		public $db_table;
-
+		private static $instance = null;
 
 		/**
+		 * Main WP_Country_Database Instance.
 		 *
+		 * Ensures only one instance of WP_Country_Database is loaded or can be loaded.
+		 *
+		 * @since 1.0.0
+		 * @static
+		 * @see GeoDir()
+		 * @return WP_Country_Database - Main instance.
 		 */
-		public function __construct() {
-			global $wpdb;
-			$this->db_table = $wpdb->prefix."countries";
+		public static function instance() {
+			if ( ! isset( self::$instance ) && ! ( self::$instance instanceof WP_Country_Database ) ) {
+				self::$instance = new WP_Country_Database;
 
-			// get current db version
-			$this->db_version_current = get_option('wp_country_database_version', false);
+				global $wpdb;
+				$prefix = isset($wpdb->base_prefix) ? $wpdb->base_prefix : $wpdb->prefix;
+				self::$instance->db_table = $prefix."countries";
 
-			if(!$this->db_version_current){
-				$this->install();
+				// get current db version
+				self::$instance->db_version_current = get_site_option('wp_country_database_version', false);
+
+				if(!self::$instance->db_version_current || self::$instance->db_version_current < self::$instance->db_version){
+					self::$instance->upgrade();
+				}
 			}
 
-
+			return self::$instance;
 		}
 
-		public function install(){
+		public function upgrade(){
 			$this->create_table();
 			$this->insert_countries();
 		}
@@ -106,13 +118,14 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 		
 		public function insert_countries(){
 			global $wpdb;
+
+			// empty table first
+			$this->empty_table();
+
 			// make sure the table is empty
 			if(empty($this->get_countries())){
 				$countries = $this->get_latest_countries();
 				$table_keys = $this->table_keys();
-				if (($key = array_search("ID", $table_keys)) !== false) {
-					unset($table_keys[$key]);
-				}
 				$countries_sql = "INSERT INTO `" . $this->db_table . "` (`".implode("`,`",$table_keys)."`) VALUES ";
 				$first = '';
 				foreach($countries as $country){
@@ -124,68 +137,32 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 					$first = ',';
 				}
 
-				echo $countries_sql;
-				//$prepare_sql = $wpdb->prepare();
-
 				$result = $wpdb->query($countries_sql);
+				if ( is_wp_error( $result ) ) {
+					$error_string = $result->get_error_message();
+					echo '<div id="message" class="error"><p>' . $error_string . '</p></div>';
+				}else{
+					update_site_option( 'wp_country_database_version', $this->db_version );
+						return true;
+				}
 
-				print_r($result);
-
-//				print_r($countries);
-				exit;
 			}
 
+			return false;
+		}
+
+		/**
+		 * Empty the country database.
+		 */
+		private function empty_table(){
+			global $wpdb;
+			$wpdb->query("DELETE FROM `" . $this->db_table . "` WHERE 1 = 1;");
 		}
 
 		public function get_latest_countries(){
-			global $wpdb;
-
-			$args = array('timeout' => 120);
-
-			$response = wp_remote_get("https://restcountries.eu/rest/v2/all",$args);
-
-			if ( is_wp_error( $response ) ) {
-				// have a backup if it all goes peat tong
-				$error_message = $response->get_error_message();
-				echo "Something went wrong: $error_message";
-			} else {
-//				print_r(json_decode($response['body']));exit;
-				$countries = json_decode($response['body']);
-
-				if(!empty($countries)){
-					return $this->format_countries($countries);
-				}
-			}
-
-		}
-
-		public function format_countries($countries){
-			$formatted_countries = array();
-
-			foreach($countries as $country){
-				$formatted_countries[] = array(
-					"name" => isset($country->name) ? esc_attr( $country->name ): '',
-					"slug" => isset($country->name) ? sanitize_title( $country->name ): '',
-					"alpha2Code" => isset($country->alpha2Code) ? esc_attr( $country->alpha2Code ): '',
-					"alpha3Code" => isset($country->alpha3Code) ? esc_attr( $country->alpha3Code ): '',
-					"callingCodes" => !empty($country->callingCodes) ? implode(",",$country->callingCodes ): '',
-					"capital" => isset($country->capital) ? esc_attr( $country->capital ): '',
-					"region" => isset($country->region) ? esc_attr( $country->region ): '',
-					"subregion" => isset($country->subregion) ? esc_attr( $country->subregion ): '',
-					"population" => isset($country->population) ? absint( $country->population ): '',
-					"latlng" => isset($country->latlng) ? implode(",",$country->latlng ): '',
-					"demonym" => isset($country->demonym) ? esc_attr( $country->demonym): '',
-					"timezones" => isset($country->timezones) ? implode(",",$country->timezones ): '',
-					"currency_name" => isset($country->currencies[0]->name) ? esc_attr( $country->currencies[0]->name): '',
-					"currency_code" => isset($country->currencies[0]->code) ? esc_attr( $country->currencies[0]->code): '',
-					"currency_symbol" => isset($country->currencies[0]->symbol) ? esc_attr( $country->currencies[0]->symbol): '',
-					"flag" => isset($country->flag) ? esc_attr( $country->flag ): '',
-					"address_format" => $this->get_country_address_format(esc_attr( $country->alpha2Code ))
-				);
-			}
-			
-			//print_r($formatted_countries);exit;
-			return $formatted_countries;
+			$wp_countries = array();
+			include_once(__DIR__."/wp-country-database-data.php");
+			return $wp_countries;
 		}
 
 		public function get_country_address_format($ISO2){
@@ -194,16 +171,110 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 			return '';
 		}
 
-		public function get_countries(){
+		/**
+		 * Get the countries.
+		 *
+		 * @param array $params
+		 *
+		 * @return array|null|object
+		 */
+		public function get_countries($params = array()){
 			global $wpdb;
 
-			$countries = $wpdb->get_results("SELECT * FROM " . $this->db_table . " ORDER BY name ASC");
+			$defaults = array(
+				'fields'        => array(), // an array of fields
+				'where'         => array(),
+				'like'          => array(),
+				'order'         => 'name',
+				'orderby'       => 'ASC',
+				'limit'			=> '' // All
+			);
+
+			$args = wp_parse_args( $params, $defaults );
+
+			// fields
+			if(is_array($args['fields']) && !empty($args['fields'])){
+				$fields_arr = array();
+				foreach ($args['fields'] as $field){
+					if(in_array($field,$this->table_keys())){
+						$fields_arr[] = $wpdb->prepare("%s",$field);
+					}
+				}
+
+				if(!empty($fields_arr)){
+					$fields = implode(",",$fields_arr);
+				}else{
+					$fields = '*';
+				}
+			}else{
+				$fields = '*';
+			}
+
+			//limit
+			$limit = $args['fields'] ? " LIMIT " . absint( $args['limit'] ) : '';
+
+			$order = in_array($args['order'],$this->table_keys()) ? $args['order'] : 'name';
+			$orderby = $args['orderby']=='ASC' ? 'ASC' : 'DESC';
+
+			// where
+			$where = '';
+			if(is_array($args['where']) && !empty($args['where'])){
+				foreach($args['where'] as $w_field => $w_value){
+					if(in_array($w_field,$this->table_keys())){
+						$where .= $wpdb->prepare(" AND $w_field = %s ",$w_value);
+					}
+				}
+			}
+
+			// like
+			if(is_array($args['like']) && !empty($args['like'])){
+				foreach($args['like'] as $l_field => $l_value){
+					if(in_array($l_field,$this->table_keys())){
+						$where .= $wpdb->prepare(" AND $l_field LIKE %s ",'%'.$wpdb->esc_like($l_value) .'%' );
+					}
+				}
+			}
+
+			$query = "SELECT $fields FROM " . $this->db_table . " WHERE 1=1 $where ORDER BY $order $orderby $limit";
+
+			$countries = $wpdb->get_results($query);
 
 			return $countries;
 		}
 
 
+		/**
+		 * Get the country iso2 cod from country name.
+		 * 
+		 * @param $country_name
+		 *
+		 * @return null|string
+		 */
+		public function get_country_iso2($country_name){
+			global $wpdb;
+			return $wpdb->get_var($wpdb->prepare("SELECT alpha2Code FROM " . $this->db_table . " WHERE name LIKE %s", $country_name));
+		}
+
 
 	}
 
+	/**
+	 * The main function responsible for returning the one true WP_Country_Database
+	 * Instance to functions everywhere.
+	 *
+	 * Use this function like you would a global variable, except without needing
+	 * to declare the global.
+	 *
+	 * Example: <?php $wp_country_database = wp_country_database(); ?>
+	 *
+	 * @since 1.0.0
+	 * @return WP_Country_Database The one true WP_Country_Database Instance
+	 */
+	function wp_country_database() {
+		return WP_Country_Database::instance();
+	}
+
+	global $wp_country_database;
+	// Global for backwards compatibility.
+	$GLOBALS['wp_country_database'] = $wp_country_database = wp_country_database();
 }
