@@ -7,7 +7,7 @@ Tags:  directory plugin, business directory, listings, classifieds, real estate
 Requires at least: 3.5
 Requires PHP: 5.3
 Tested up to: 4.9.6
-Stable tag: 2.0.0.0-rc
+Stable tag: 2.0.0.15-rc
 
 
 Create huge location-based business directories with this fully-featured directory plugin. In a few clicks you could be the next Yelp or Tripadvisor.
