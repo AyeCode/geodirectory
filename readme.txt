@@ -1,12 +1,14 @@
 === GeoDirectory - Business Directory Plugin ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
-Tags:  directory plugin, business directory, listings, classifieds, real estate
-Requires at least: 3.1
-Tested up to: 4.9.6
-Stable tag: 2.0.0.14-beta
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
+Tags:  directory plugin, business directory, listings, classifieds, real estate
+Requires at least: 3.5
+Requires PHP: 5.3
+Tested up to: 4.9.6
+Stable tag: 2.0.0.16-rc
+
 
 Create huge location-based business directories with this fully-featured directory plugin. In a few clicks you could be the next Yelp or Tripadvisor.
 
@@ -41,7 +43,7 @@ We have been wholly focused on directory tools for WordPress since 2011. That's 
 * Create a local directory, based on a single location, using the GeoDirectory free core plugin. Focus on a street or go as wide as a city. Expand to multiple locations or make a global directory with our MultiLocation premium add-on.
 * It provides a front end form that lets you edit through a drag and drop form builder, which allows visitors to submit their listings autonomously.
 * Quickly create a front-end submission form, using GeoDirectory's intuitive drag-and-drop form builder. Users submit listings autonomously. Add any custom field; choose from 13 field types. Use the Advanced Search premium add-on to filter search by any custom field.
-* 15+ widgets and 12+ widget areas.
+* 17+ widgets/shortcodes/blocks.
 * 2 different Google Maps widgets. Create unlimited categories with ajax-loading custom markers
 * Built-in forms for User Reviews, Send-to-Friend and Business Enquiry.
 * Search by zip code or location name using the default search widget. Easily filter listings by proximity, rating, reviews or date. Search by user location using the Advanced Search premium add-on.
@@ -112,7 +114,7 @@ Get timely and friendly support for both Core Plugin and add-ons at our official
 
 = Minimum Requirements =
 
-* WordPress 3.1 or greater
+* WordPress 3.5 or greater
 * PHP version 5.3 or greater
 * MySQL version 5.0 or greater
 
@@ -150,9 +152,17 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 
 == Changelog ==
 
-= 2.0.0.2-dev =
-
-* Updated change log
-* Added WP Easy Updates for auto updates.
+= 2.0.0.0-rc =
+* Updated from font-awesome v4 to v5 - CHANGED
+* Rest api route & endpoints for fields - ADDED
+* priceRange custom field added and schema output added - ADDED
+* Font Awesome & Popup maker raises Uncaught Error - FIXED
+* DB translate texts tool added - ADDED
+* Show author own posts on author page if draft or pending - CHANGED
+* defer and  async tags added to all GD JS - CHANGED
+* iframe api generation broken (by Google iframe restrictions) changed to new window popup - FIXED
+* WP Session removed - CHANGED
+* Remove GeoDirectory data on uninstall if set to do so - ADDED
+* WP_Country_Database Class implemented to replace own country DB table - CHANGED
 
 == Upgrade Notice ==

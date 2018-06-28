@@ -175,36 +175,6 @@ class GeoDir_Location {
 	}
 
 	/**
-	 * Get normal untranslated country name.
-	 *
-	 * @since 1.6.16
-	 * @package GeoDirectory
-	 * @param string $country The country name.
-	 * @return string Returns the country.
-	 */
-	public function get_untranslated_country($country) {
-		global $wpdb;
-		if ($result = geodir_get_country_by_name($country)) {
-			return $result;
-		}
-
-		$default_location = $this->get_default_location();
-		if (!empty($default_location->country) && $result = geodir_get_country_by_name($default_location->country)) {
-			return $result;
-		}
-
-		if (!empty($default_location->country_slug) && $result = geodir_get_country_by_name($default_location->country_slug)) {
-			return $result;
-		}
-
-		if (!empty($default_location->country_ISO2) && $result = geodir_get_country_by_name($default_location->country_ISO2, true)) {
-			return $result;
-		}
-
-		return $country;
-	}
-
-	/**
 	 * Get ISO2 of the country.
 	 *
 	 * @since 1.6.16
@@ -213,12 +183,9 @@ class GeoDir_Location {
 	 * @return string Country ISO2 code.
 	 */
 	function get_country_iso2($country) {
-		global $wpdb;
+		global $wp_country_database;
 
-		if ($result = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", $country))) {
-			return $result;
-		}
-		if ($result = $wpdb->get_var($wpdb->prepare("SELECT ISO2 FROM " . GEODIR_COUNTRIES_TABLE . " WHERE Country LIKE %s", $this->get_untranslated_country($country)))) {
+		if ($result = $wp_country_database->get_country_iso2($country)) {
 			return $result;
 		}
 

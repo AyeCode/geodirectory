@@ -485,12 +485,12 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'font-awesome' => array(
-				'src'     => 'https://use.fontawesome.com/releases/v5.0.13/js/all.js#asyncload',
+				'src'     => 'https://use.fontawesome.com/releases/v5.1.0/js/all.js#asyncload',
 				'deps'    => array('font-awesome-shim'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'font-awesome-shim' => array(
-				'src'     => 'https://use.fontawesome.com/releases/v5.0.13/js/v4-shims.js#asyncload',
+				'src'     => 'https://use.fontawesome.com/releases/v5.1.0/js/v4-shims.js#asyncload',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),

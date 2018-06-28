@@ -11,12 +11,12 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.0.0.14-beta
+ * Version: 2.0.0.16-rc
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
  * Domain Path: /languages
- * Requires at least: 3.1
+ * Requires at least: 3.5
  * Tested up to: 4.9.6
  * Update URL: https://github.com/AyeCode/geodirectory/
  */
@@ -60,7 +60,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.0.0.14-beta';
+    public $version = '2.0.0.16-rc';
     
     /**
      * GeoDirectory instance.
@@ -145,7 +145,6 @@ final class GeoDirectory {
         // Database tables
 		$this->define( 'GEODIR_API_KEYS_TABLE', $plugin_prefix . 'api_keys' ); // rest api keys table
         $this->define( 'GEODIR_ATTACHMENT_TABLE', $plugin_prefix . 'attachments' ); // attachments table
-        $this->define( 'GEODIR_COUNTRIES_TABLE', $plugin_prefix . 'countries' ); // countries table
 	    $this->define( 'GEODIR_CUSTOM_FIELDS_TABLE', $plugin_prefix . 'custom_fields' ); // custom fields table
 	    $this->define( 'GEODIR_TABS_LAYOUT_TABLE', $plugin_prefix . 'tabs_layout' ); // custom fields table
         $this->define( 'GEODIR_CUSTOM_SORT_FIELDS_TABLE', $plugin_prefix . 'custom_sort_fields' ); // custom sort fields table
@@ -209,9 +208,12 @@ final class GeoDirectory {
      * @return void
      */
     private function includes() {
-        global $pagenow, $geodir_options, $wp_version,$wp_country_database;
+        global $pagenow, $geodir_options, $wp_version;
 
-        /**
+	    // libs
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-country-database.php' );
+
+	    /**
          * Class autoloader.
          */
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-autoloader.php' );
@@ -255,8 +257,6 @@ final class GeoDirectory {
 
 
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-super-duper.php' );
-	    //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-country-database.php' );
-	    //$wp_country_database = new WP_Country_Database();
 
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-maps.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
@@ -455,5 +455,3 @@ $GLOBALS['geodirectory'] = GeoDir();
 
 //$cron_jobs = get_option( 'cron' );
 //print_r($cron_jobs);
-
-	

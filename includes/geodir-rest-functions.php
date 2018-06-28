@@ -313,37 +313,25 @@ function geodir_rest_check_manager_permissions( $object, $context = 'read' ) {
  *
  * @param array $params Optional. Countries argument parameters. Default array().
  * @return array $items.
+ * @todo kiran, please check this, i implemented new country class
  */
 function geodir_rest_get_countries( $params = array() ) {
     global $wpdb;
     
     $defaults = array(
-        'fields'        => 'CountryId AS id, Country AS name, ISO2 as iso2, ISO3 as iso3, Country AS title',
-        'search'        => '',
+	    'fields'        => array(),
+	    'where'        => array(),
+	    'like'        => array(),
         'translated'    => true,
-        'order'         => 'Country',
+        'order'         => 'name',
         'orderby'       => 'ASC',
-		'limit'			=> -1 // All
+		'limit'			=> '' // All
     );
     
     $args = wp_parse_args( $params, $defaults );
-    
-    $where = '';
-    if ( !empty( $args['search'] ) ) {
-        $where .= "AND Country LIKE '" . wp_slash( $args['search'] ) . "%' ";
-    }
-    
-    if ( !empty( $args['where'] ) ) {
-        $where .= $args['where'];
-    }
-    
-    $sql = "SELECT " . $args['fields'] . " FROM " . GEODIR_COUNTRIES_TABLE . " WHERE 1 " . $where . " ORDER BY " . $args['order'] . " " . $args['orderby'];
-	if ( !empty( $args['limit'] ) && absint( $args['limit'] ) > 0 ) {
-        $sql .= " LIMIT " . absint( $args['limit'] );
-    }
 	
-    $items = $wpdb->get_results( $sql );
-    
+	$items = wp_country_database()->get_countries($args);
+
     if ( empty( $args['translated'] ) ) {
         return $items;
     }

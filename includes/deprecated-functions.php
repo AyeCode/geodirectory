@@ -313,12 +313,12 @@ function geodir_get_default_location(){
     _deprecated_function( 'geodir_get_default_location', '2.0.0' );
 }
 
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
+/**
+ * @deprecated
+ */
+function geodir_get_country_by_name(){
+    _deprecated_function( 'geodir_get_country_by_name', '2.0.0' );
+}
 //
 ///**
 // * @deprecated
