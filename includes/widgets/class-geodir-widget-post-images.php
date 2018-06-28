@@ -27,7 +27,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'style'   => '{background: "#eee",width: "100%", height: "450px", position:"relative"}',
 					array(
 						'element' => 'i',
-						'if_class'   => '[%animation%]=="fade" ? "fa fa-picture-o gd-fadein-animation" : "fa fa-picture-o gd-right-left-animation"',
+						'if_class'   => '[%animation%]=="fade" ? "far fa-image gd-fadein-animation" : "far fa-image gd-right-left-animation"',
 						'style'   => '{"text-align": "center", "vertical-align": "middle", "line-height": "450px", width: "100%","font-size":"140px",color:"#aaa"}',
 					),
 					array(
@@ -45,7 +45,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					array(
 						'element' => 'i',
 						'element_repeat' => '10',
-						'class'   => 'fa fa-circle',
+						'class'   => 'fas fa-circle',
 						'style'   => '{background: "#eee","text-align": "center", "vertical-align": "middle","font-size":"10px",color:"#aaa",margin:"0.2%"}',
 
 					),
@@ -58,7 +58,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					array(
 						'element' => 'i',
 						'element_repeat' => '5',
-						'class'   => 'fa fa-picture-o',
+						'class'   => 'far fa-image',
 						'style'   => '{background: "#eee","text-align": "center", "vertical-align": "middle", "line-height": "65px", width: "19.6%",height:"65px","font-size":"35px",color:"#aaa",margin:"0.2%"}',
 
 					),
@@ -293,7 +293,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 			?>
 			<div class="<?php echo $main_wrapper_class;?>" >
-				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fa fa-sync fa-spin"></i></div>';}?>
+				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fas fa-sync fa-spin"></i></div>';}?>
 				<div id="<?php echo $slider_id; ?>" class="<?php echo $second_wrapper_class;?>" <?php
 				if($options['controlnav']==1){echo "data-controlnav='1'";}
 				if($options['animation']=='fade'){echo "data-animation='fade'";}

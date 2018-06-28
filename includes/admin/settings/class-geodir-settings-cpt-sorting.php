@@ -144,11 +144,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 									   class="gd-draggable-form-items  gd-<?php echo sanitize_text_field( $val['field_type'] ); ?> geodir-sort-<?php echo sanitize_text_field( $val['htmlvar_name'] ); ?>"
 									   href="javascript:void(0);">
 										<?php if ( isset( $val['field_icon'] ) && strpos( $val['field_icon'], 'fa-' ) !== false ) {
-											echo '<i class="fa ' . sanitize_text_field( $val['field_icon'] ) . '" aria-hidden="true"></i>';
+											echo '<i class="fas ' . sanitize_text_field( $val['field_icon'] ) . '" aria-hidden="true"></i>';
 										} elseif ( isset( $val['field_icon'] ) && $val['field_icon'] ) {
 											echo '<b style="background-image: url("' . sanitize_text_field( $val['field_icon'] ) . '")"></b>';
 										} else {
-											echo '<i class="fa fa-cog" aria-hidden="true"></i>';
+											echo '<i class="fas fa-cog" aria-hidden="true"></i>';
 										} ?>
 										<?php echo sanitize_text_field( $val['frontend_title'] ); ?>
 										<?php if ( ! empty( $val['description'] ) ) { ?>
@@ -330,7 +330,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					'field_type'     => 'random',
 					'frontend_title' => 'Random',
 					'htmlvar_name'   => 'post_status',
-					'field_icon'     => 'fa fa-random',
+					'field_icon'     => 'fas fa-random',
 					'description'    => __( 'Random sort (not recommended for large sites)', 'geodirectory' )
 				);
 
@@ -340,7 +340,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					'field_type'     => 'datetime',
 					'frontend_title' => __( 'Add date', 'geodirectory' ),
 					'htmlvar_name'   => 'post_date',
-					'field_icon'     => 'fa fa-calendar',
+					'field_icon'     => 'fas fa-calendar',
 					'description'    => __( 'Sort by date added', 'geodirectory' )
 				);
 				$fields['bigint'] = array(
@@ -349,7 +349,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					'field_type'     => 'bigint',
 					'frontend_title' => __( 'Review', 'geodirectory' ),
 					'htmlvar_name'   => 'comment_count',
-					'field_icon'     => 'fa fa-commenting-o',
+					'field_icon'     => 'far fa-comment-dots',
 					'description'    => __( 'Sort by the number of reviews', 'geodirectory' )
 				);
 				$fields['float'] = array(
@@ -358,7 +358,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					'field_type'     => 'float',
 					'frontend_title' => __( 'Rating', 'geodirectory' ),
 					'htmlvar_name'   => 'overall_rating',
-					'field_icon'     => 'fa fa-star-o',
+					'field_icon'     => 'fas fa-star',
 					'description'    => __( 'Sort by the overall rating value', 'geodirectory' )
 				);
 				$fields['text'] = array(
@@ -367,7 +367,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					'field_type'     => 'text',
 					'frontend_title' => __( 'Title', 'geodirectory' ),
 					'htmlvar_name'   => 'post_title',
-					'field_icon'     => 'fa fa-sort-alpha-desc',
+					'field_icon'     => 'fas fa-sort-alpha-up',
 					'description'    => __( 'Sort alphabetically by title', 'geodirectory' )
 				);
 
@@ -474,20 +474,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 			$nonce = wp_create_nonce( 'custom_fields_' . $field->id );
 
-			$field_icon = '<i class="fa fa-cog" aria-hidden="true"></i>';
-
-
-//			print_r($cf);
-			if ( isset( $cf['field_icon'] ) && strpos( $cf['field_icon'], 'fa-' ) !== false ) {
-				$field_icon = '<i class="fa ' . $cf['field_icon'] . '" aria-hidden="true"></i>';
-			} elseif ( isset( $cf['field_icon'] ) && $cf['field_icon'] ) {
+			if ( isset( $cf['field_icon'] ) && geodir_is_fa_icon( $cf['field_icon'] ) ) {
+				$field_icon = '<i class="' . $cf['field_icon'] . '" aria-hidden="true"></i>';
+			} elseif ( isset( $cf['field_icon'] ) && geodir_is_icon_url( $cf['field_icon'] ) ) {
 				$field_icon = '<b style="background-image: url("' . $cf['field_icon'] . '")"></b>';
+			} else {
+				$field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
 			}
 
-
 			$radio_id = ( isset( $field->htmlvar_name ) ) ? $field->htmlvar_name . $field->field_type : rand( 5, 500 );
-
-			//print_r($field);
 
 			/**
 			 * Contains custom field html.

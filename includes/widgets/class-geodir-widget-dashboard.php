@@ -127,7 +127,7 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 			/*
 			 * if we are not adding any login functionalitty then we should prob remove this also
 			?>
-			<li><i class="fa fa-sign-out"></i><a class="signin" href="<?php echo wp_logout_url( home_url() ); ?>"><?php _e( 'Logout', 'geodirectory' ); ?></a></li>
+			<li><i class="fas fa-sign-out-alt"></i><a class="signin" href="<?php echo wp_logout_url( home_url() ); ?>"><?php _e( 'Logout', 'geodirectory' ); ?></a></li>
 			<?php
 			*/
 

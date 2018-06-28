@@ -175,7 +175,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			</div>
 
 
-			<a href="#TB_inline?width=100%&height=550&inlineId=super-duper-content" class="thickbox button super-duper-content-open" title="<?php _e('Add Shortcode');?>"><i class="fa fa-cubes" aria-hidden="true"></i></a>
+			<a href="#TB_inline?width=100%&height=550&inlineId=super-duper-content" class="thickbox button super-duper-content-open" title="<?php _e('Add Shortcode');?>"><i class="fas fa-cubes" aria-hidden="true"></i></a>
 
 			<style>
 				.sd-shortcode-left-wrap{
@@ -446,7 +446,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						jQuery($this).data('sd-widget-enabled', true);
 					}
 
-					var $button = '<button class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fa fa-sliders" aria-hidden="true"></i></button>';
+					var $button = '<button class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
 					var form = jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length==0) {
@@ -1375,7 +1375,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$val = 0;
 			}
 			if($val){
-//				$output .=  '<span class="sd-advanced-button-container"><button class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fa fa-sliders" aria-hidden="true"></i></button></span>';
+//				$output .=  '<span class="sd-advanced-button-container"><button class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button></span>';
 			}
 
 			$output .= "<input type='hidden'  class='sd-show-advanced' value='$val' />";

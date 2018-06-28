@@ -668,8 +668,8 @@ class GeoDir_Frontend_Scripts {
 						'text_fav'          => apply_filters('geodir_favourite_text', FAVOURITE_TEXT),
 						'text_remove_fav'   => apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT),
 						'text_unfav'        => apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT),
-						'icon_fav'          => apply_filters('geodir_favourite_icon', 'fa fa-heart'),
-						'icon_unfav'        => apply_filters('geodir_unfavourite_icon', 'fa fa-heart'),
+						'icon_fav'          => apply_filters('geodir_favourite_icon', 'fas fa-heart'),
+						'icon_unfav'        => apply_filters('geodir_unfavourite_icon', 'fas fa-heart'),
 					) + geodir_params()
 				);
 			break;

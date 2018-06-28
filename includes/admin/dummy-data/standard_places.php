@@ -38,20 +38,20 @@ $dummy_categories['restaurants'] = array(
 $dummy_categories['food-nightlife'] = array(
 	'name'        => 'Food Nightlife',
 	'icon'        => $dummy_image_url . 'cat_icon/Food_Nightlife.png',
-	'font_icon'   => 'fa-glass',
+	'font_icon'   => 'fa-glass-martini',
 	'color'       => '#803fc7',
 );
 $dummy_categories['festival'] = array(
 	'name'        => 'Festival',
 	'icon'        => $dummy_image_url . 'cat_icon/Festival.png',
 	'schema_type' => 'Event',
-	'font_icon'   => 'fa-ticket',
+	'font_icon'   => 'fa-ticket-alt',
 	'color'       => '#20abce',
 );
 $dummy_categories['videos'] = array(
 	'name'        => 'Videos',
 	'icon'        => $dummy_image_url . 'cat_icon/Videos.png',
-	'font_icon'   => 'fa-video-camera',
+	'font_icon'   => 'fa-video',
 	'color'       => '#ff3e27',
 );
 $dummy_categories['feature'] = array(
@@ -80,7 +80,7 @@ $dummy_custom_fields[] = array('post_type' => $post_type,
                                'is_default' => '0',
                                'show_in' => '[owntab],[detail]',
                                'show_on_pkg' => '',
-							   'field_icon' => 'fa fa-clock-o',
+							   'field_icon' => 'fas fa-clock',
                                'clabels' => __('Business Hours', 'geodirectory'));
 
 

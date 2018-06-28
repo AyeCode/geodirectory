@@ -21,7 +21,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 ?>
 <li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>">
 	<div class="dd-form">
-		<i class="fa fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
+		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
 		<div class="dd-handle">
 			<?php
 			echo $field_icon;
@@ -539,7 +539,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				<p class="gd-advanced-setting">
 					<label for="field_icon" class="dd-setting-name">
 						<?php
-						echo geodir_help_tip( __( 'Upload icon using media and enter its url path, or enter font awesome class eg:"fa fa-home"', 'geodirectory' ));
+						echo geodir_help_tip( __( 'Upload icon using media and enter its url path, or enter font awesome class eg:"fas fa-home"', 'geodirectory' ));
 						_e( 'Icon :', 'geodirectory' ); ?>  <a href="#gd-font-awesome-select" data-lity><?php _e('Select Icon','geodirectory');?></a>
 						<input type="text" name="field_icon" id="field_icon"  value="<?php echo $value; ?>"/>
 					</label>

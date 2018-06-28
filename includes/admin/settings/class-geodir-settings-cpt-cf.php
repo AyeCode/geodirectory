@@ -231,8 +231,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					   data-field-type="fieldset"
 					   data-field-type-key="fieldset">
 
-						<i class="fa fa-long-arrow-left " aria-hidden="true"></i>
-						<i class="fa fa-long-arrow-right " aria-hidden="true"></i>
+						<i class="fas fa-long-arrow-alt-left " aria-hidden="true"></i>
+						<i class="fas fa-long-arrow-alt-right " aria-hidden="true"></i>
 						<?php _e( 'Fieldset (section separator)', 'geodirectory' ); ?>
 
 						<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help" title="<?php _e( 'This adds a section separator with a title.', 'geodirectory' );?>"></span>
@@ -338,91 +338,91 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'text'        => array(
 					'field_type'  => 'text',
 					'class'       => 'gd-text',
-					'icon'        => 'fa fa-minus',
+					'icon'        => 'fas fa-minus',
 					'name'        => __( 'Text', 'geodirectory' ),
 					'description' => __( 'Add any sort of text field, text or numbers', 'geodirectory' )
 				),
 				'datepicker'  => array(
 					'field_type'  => 'datepicker',
 					'class'       => 'gd-datepicker',
-					'icon'        => 'fa fa-calendar',
+					'icon'        => 'fas fa-calendar',
 					'name'        => __( 'Date', 'geodirectory' ),
 					'description' => __( 'Adds a date picker.', 'geodirectory' )
 				),
 				'textarea'    => array(
 					'field_type'  => 'textarea',
 					'class'       => 'gd-textarea',
-					'icon'        => 'fa fa-bars',
+					'icon'        => 'fas fa-bars',
 					'name'        => __( 'Textarea', 'geodirectory' ),
 					'description' => __( 'Adds a textarea', 'geodirectory' )
 				),
 				'time'        => array(
 					'field_type'  => 'time',
 					'class'       => 'gd-time',
-					'icon'        => 'fa fa-clock-o',
+					'icon'        => 'fas fa-clock',
 					'name'        => __( 'Time', 'geodirectory' ),
 					'description' => __( 'Adds a time picker', 'geodirectory' )
 				),
 				'checkbox'    => array(
 					'field_type'  => 'checkbox',
 					'class'       => 'gd-checkbox',
-					'icon'        => 'fa fa-check-square-o',
+					'icon'        => 'fas fa-check-square',
 					'name'        => __( 'Checkbox', 'geodirectory' ),
 					'description' => __( 'Adds a checkbox', 'geodirectory' )
 				),
 				'phone'       => array(
 					'field_type'  => 'phone',
 					'class'       => 'gd-phone',
-					'icon'        => 'fa fa-phone',
+					'icon'        => 'fas fa-phone',
 					'name'        => __( 'Phone', 'geodirectory' ),
 					'description' => __( 'Adds a phone input', 'geodirectory' )
 				),
 				'radio'       => array(
 					'field_type'  => 'radio',
 					'class'       => 'gd-radio',
-					'icon'        => 'fa fa-dot-circle-o',
+					'icon'        => 'far fa-dot-circle',
 					'name'        => __( 'Radio', 'geodirectory' ),
 					'description' => __( 'Adds a radio input', 'geodirectory' )
 				),
 				'email'       => array(
 					'field_type'  => 'email',
 					'class'       => 'gd-email',
-					'icon'        => 'fa fa-envelope-o',
+					'icon'        => 'far fa-envelope',
 					'name'        => __( 'Email', 'geodirectory' ),
 					'description' => __( 'Adds a email input', 'geodirectory' )
 				),
 				'select'      => array(
 					'field_type'  => 'select',
 					'class'       => 'gd-select',
-					'icon'        => 'fa fa-caret-square-o-down',
+					'icon'        => 'fas fa-caret-square-down',
 					'name'        => __( 'Select', 'geodirectory' ),
 					'description' => __( 'Adds a select input', 'geodirectory' )
 				),
 				'multiselect' => array(
 					'field_type'  => 'multiselect',
 					'class'       => 'gd-multiselect',
-					'icon'        => 'fa fa-caret-square-o-down',
+					'icon'        => 'fas fa-caret-square-down',
 					'name'        => __( 'Multi Select', 'geodirectory' ),
 					'description' => __( 'Adds a multiselect input', 'geodirectory' )
 				),
 				'url'         => array(
 					'field_type'  => 'url',
 					'class'       => 'gd-url',
-					'icon'        => 'fa fa-link',
+					'icon'        => 'fas fa-link',
 					'name'        => __( 'URL', 'geodirectory' ),
 					'description' => __( 'Adds a url input', 'geodirectory' )
 				),
 				'html'        => array(
 					'field_type'  => 'html',
 					'class'       => 'gd-html',
-					'icon'        => 'fa fa-code',
+					'icon'        => 'fas fa-code',
 					'name'        => __( 'HTML', 'geodirectory' ),
 					'description' => __( 'Adds a html input textarea', 'geodirectory' )
 				),
 				'file'        => array(
 					'field_type'  => 'file',
 					'class'       => 'gd-file',
-					'icon'        => 'fa fa-file',
+					'icon'        => 'far fa-file',
 					'name'        => __( 'File Upload', 'geodirectory' ),
 					'description' => __( 'Adds a file input', 'geodirectory' )
 				)
@@ -490,7 +490,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['business_hours'] = array(
                 'field_type'  => 'business_hours',
                 'class'       => 'gd-business-hours',
-                'icon'        => 'fa fa-clock-o',
+                'icon'        => 'fas fa-clock',
                 'name'        => __( 'Business Hours', 'geodirectory' ),
                 'description' => __( 'Adds a business hours input. This can display when the listing is open/closed/', 'geodirectory' ),
                 'single_use'         => 'business_hours',
@@ -509,7 +509,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 	                'validation_pattern' => '',
 	                'validation_msg'     => '',
 	                'required_msg'       => '',
-	                'field_icon'         => 'fa fa-clock-o',
+	                'field_icon'         => 'fas fa-clock',
 	                'css_class'          => '',
 	                'cat_sort'           => false,
 	                'cat_filter'         => false,
@@ -522,7 +522,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['contact_email'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'email',
 				'class'       => 'gd-email',
-				'icon'        => 'fa fa-envelope-o',
+				'icon'        => 'far fa-envelope',
 				'name'        => __( 'Contact Email', 'geodirectory' ),
 				'description' => __( 'Adds a email input. This can be used by other plugins if the field key remains `email`, for example by Ninja Forms.', 'geodirectory' ),
 				'single_use'  => 'email',
@@ -541,7 +541,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-envelope-o',
+					'field_icon'         => 'far fa-envelope',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false,
@@ -554,7 +554,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['logo'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'file',
 				'class'       => 'gd-logo',
-				'icon'        => 'fa fa-picture-o',
+				'icon'        => 'far fa-image',
 				'name'        => __( 'Company Logo', 'geodirectory' ),
 				'description' => __( 'Adds a logo input. This can be used by other plugins if the field key remains `logo`.', 'geodirectory' ),
 				'single_use'  => 'logo',
@@ -573,7 +573,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-picture-o',
+					'field_icon'         => 'far fa-image',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false,
@@ -589,7 +589,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['website'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'url',
 				'class'       => 'gd-website',
-				'icon'        => 'fa fa-external-link',
+				'icon'        => 'fas fa-external-link-alt',
 				'name'        => __( 'Website', 'geodirectory' ),
 				'description' => __( 'Adds a website input. This can be used by other plugins if the htmlvar remains `website`.', 'geodirectory' ),
 				'defaults'    => array(
@@ -607,7 +607,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-external-link',
+					'field_icon'         => 'fas fa-external-link-alt',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false
@@ -619,7 +619,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['facebook'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'url',
 				'class'       => 'gd-facebook',
-				'icon'        => 'fa fa-facebook-official',
+				'icon'        => 'fab fa-facebook',
 				'name'        => __( 'Facebook', 'geodirectory' ),
 				'description' => __( 'Adds a facebook url input. This can be used by other plugins if the htmlvar remains `facebook`.', 'geodirectory' ),
 				'defaults'    => array(
@@ -637,7 +637,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-external-link',
+					'field_icon'         => 'fas fa-external-link-alt',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false
@@ -677,7 +677,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['instagram'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'url',
 				'class'       => 'gd-instagram',
-				'icon'        => 'fa fa-instagram',
+				'icon'        => 'fab fa-instagram',
 				'name'        => __( 'Instagram', 'geodirectory' ),
 				'description' => __( 'Adds a instagram url input. This can be used by other plugins if the htmlvar remains `instagram`.', 'geodirectory' ),
 				'defaults'    => array(
@@ -695,7 +695,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-instagram',
+					'field_icon'         => 'fab fa-instagram',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false
@@ -706,7 +706,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['terms_conditions'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'checkbox',
 				'class'       => 'gd-terms-conditions',
-				'icon'        => 'fa fa-file-text-o',
+				'icon'        => 'fas fa-file-alt',
 				'name'        => __( 'Terms &amp; Conditions', 'geodirectory' ),
 				'description' => __( 'Adds a terms and conditions checkbox to your add listing page, the text links to your GD terms and conditions page set in the pages settings.', 'geodirectory' ),
 				'defaults'    => array(
@@ -724,7 +724,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => __('You MUST accept our terms and conditions to continue.','geodirectory'),
-					'field_icon'         => 'fa fa-file-text-o',
+					'field_icon'         => 'fas fa-file-alt',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false
@@ -735,7 +735,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['video'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'textarea',
 				'class'       => 'gd-video',
-				'icon'        => 'fa fa-video-camera',
+				'icon'        => 'fas fa-video',
 				'name'        => __( 'Video', 'geodirectory' ),
 				'description' => __( 'Adds a video url/code input. This can be used by other plugins if the htmlvar remains `video`.', 'geodirectory' ),
 				'defaults'    => array(
@@ -753,7 +753,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-instagram',
+					'field_icon'         => 'fab fa-instagram',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false
@@ -764,7 +764,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['special_offers'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'textarea',
 				'class'       => 'gd-special-offers',
-				'icon'        => 'fa fa-gift',
+				'icon'        => 'fas fa-gift',
 				'name'        => __( 'Special Offers', 'geodirectory' ),
 				'description' => __( 'Adds a Special Offers textarea input. This can be used by other plugins if the htmlvar remains `special_offers`.', 'geodirectory' ),
 				'defaults'    => array(
@@ -782,7 +782,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-gift',
+					'field_icon'         => 'fas fa-gift',
 					'css_class'          => '',
 					'cat_sort'           => false,
 					'cat_filter'         => false
@@ -795,7 +795,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['price'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'text',
 				'class'       => 'gd-price',
-				'icon'        => 'fa fa-usd',
+				'icon'        => 'fas fa-dollar-sign',
 				'name'        => __( 'Price', 'geodirectory' ),
 				'description' => __( 'Adds a input for a price field. This will let you filter and sort by price.', 'geodirectory' ),
 				'defaults'    => array(
@@ -813,7 +813,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '\d+(\.\d{2})?',
 					'validation_msg'     => 'Please enter number and decimal only ie: 100.50',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-usd',
+					'field_icon'         => 'fas fa-dollar-sign',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true,
@@ -832,7 +832,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['price_range'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'select',
 				'class'       => 'gd-price-range',
-				'icon'        => 'fa fa-usd',
+				'icon'        => 'fas fa-dollar-sign',
 				'name'        => __( 'Price Range', 'geodirectory' ),
 				'description' => __( 'Adds a schema price range input.', 'geodirectory' ),
 				'defaults'    => array(
@@ -850,7 +850,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-usd',
+					'field_icon'         => 'fas fa-dollar-sign',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -861,7 +861,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['property_status'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'select',
 				'class'       => 'gd-property-status',
-				'icon'        => 'fa fa-home',
+				'icon'        => 'fas fa-home',
 				'name'        => __( 'Property Status', 'geodirectory' ),
 				'description' => __( 'Adds a select input to be able to set the status of a property ie: For Sale, For Rent', 'geodirectory' ),
 				'defaults'    => array(
@@ -879,7 +879,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-home',
+					'field_icon'         => 'fas fa-home',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -890,7 +890,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['property_furnishing'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'select',
 				'class'       => 'gd-property-furnishing',
-				'icon'        => 'fa fa-home',
+				'icon'        => 'fas fa-home',
 				'name'        => __( 'Property Furnishing', 'geodirectory' ),
 				'description' => __( 'Adds a select input to be able to set the furnishing status of a property ie: Unfurnished, Furnished', 'geodirectory' ),
 				'defaults'    => array(
@@ -908,7 +908,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-th-large',
+					'field_icon'         => 'fas fa-th-large',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -919,7 +919,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['property_type'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'select',
 				'class'       => 'gd-property-type',
-				'icon'        => 'fa fa-home',
+				'icon'        => 'fas fa-home',
 				'name'        => __( 'Property Type', 'geodirectory' ),
 				'description' => __( 'Adds a select input for the property type ie: Detached house, Apartment', 'geodirectory' ),
 				'defaults'    => array(
@@ -937,7 +937,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-home',
+					'field_icon'         => 'fas fa-home',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -948,7 +948,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['property_bedrooms'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'select',
 				'class'       => 'gd-property-bedrooms',
-				'icon'        => 'fa fa-home',
+				'icon'        => 'fas fa-home',
 				'name'        => __( 'Property Bedrooms', 'geodirectory' ),
 				'description' => __( 'Adds a select input for the number of bedrooms.', 'geodirectory' ),
 				'defaults'    => array(
@@ -966,7 +966,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-bed',
+					'field_icon'         => 'fas fa-bed',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -977,7 +977,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['property_bathrooms'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'select',
 				'class'       => 'gd-property-bathrooms',
-				'icon'        => 'fa fa-home',
+				'icon'        => 'fas fa-home',
 				'name'        => __( 'Property Bathrooms', 'geodirectory' ),
 				'description' => __( 'Adds a select input for the number of bathrooms.', 'geodirectory' ),
 				'defaults'    => array(
@@ -995,7 +995,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-bold',
+					'field_icon'         => 'fas fa-bold',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -1006,7 +1006,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['property_area'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'text',
 				'class'       => 'gd-area',
-				'icon'        => 'fa fa-home',
+				'icon'        => 'fas fa-home',
 				'name'        => __( 'Property Area', 'geodirectory' ),
 				'description' => __( 'Adds a input for the property area.', 'geodirectory' ),
 				'defaults'    => array(
@@ -1023,7 +1023,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '\d+(\.\d{2})?',
 					'validation_msg'     => 'Please enter the property area in numbers only: 1500',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-area-chart',
+					'field_icon'         => 'fas fa-chart-area',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -1034,7 +1034,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['property_features'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'multiselect',
 				'class'       => 'gd-property-features',
-				'icon'        => 'fa fa-home',
+				'icon'        => 'fas fa-home',
 				'name'        => __( 'Property Features', 'geodirectory' ),
 				'description' => __( 'Adds a select input for the property features.', 'geodirectory' ),
 				'defaults'    => array(
@@ -1052,7 +1052,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-plus-square',
+					'field_icon'         => 'fas fa-plus-square',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -1094,7 +1094,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['job_type'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'select',
 				'class'       => 'gd-job-type',
-				'icon'        => 'fa fa-briefcase',
+				'icon'        => 'fas fa-briefcase',
 				'name'        => __( 'Job Type', 'geodirectory' ),
 				'description' => __( 'Adds a select input to be able to set the type of a job ie: Full Time, Part Time', 'geodirectory' ),
 				'defaults'    => array(
@@ -1112,7 +1112,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-briefcase',
+					'field_icon'         => 'fas fa-briefcase',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -1123,7 +1123,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['job_sector'] = array( // The key value should be unique and not contain any spaces.
 				'field_type'  => 'select',
 				'class'       => 'gd-job-type',
-				'icon'        => 'fa fa-briefcase',
+				'icon'        => 'fas fa-briefcase',
 				'name'        => __( 'Job Sector', 'geodirectory' ),
 				'description' => __( 'Adds a select input to be able to set the type of a job Sector ie: Private Sector,Public Sector', 'geodirectory' ),
 				'defaults'    => array(
@@ -1141,7 +1141,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'validation_pattern' => '',
 					'validation_msg'     => '',
 					'required_msg'       => '',
-					'field_icon'         => 'fa fa-briefcase',
+					'field_icon'         => 'fas fa-briefcase',
 					'css_class'          => '',
 					'cat_sort'           => true,
 					'cat_filter'         => true
@@ -1152,7 +1152,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$custom_fields['featured'] = array(
                'field_type'  => 'checkbox',
                'class'       => 'gd-checkbox',
-               'icon'        => 'fa fa-certificate',
+               'icon'        => 'fas fa-certificate',
                'name'        => __( 'Featured', 'geodirectory' ),
                'description' => __( 'Mark listing as a featured.', 'geodirectory' ),
                'single_use'         => 'featured',
@@ -1404,12 +1404,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$icon = isset( $cf['icon'] ) ? $cf['icon'] : ( isset( $field->field_icon ) ? $field->field_icon : '' );
 
 			// Set the field icon
-			if ( strpos( $icon, 'fa fa-' ) !== false ) {
+			if ( geodir_is_fa_icon( $icon ) ) {
 				$field_icon = '<i class="' . $icon . '" aria-hidden="true"></i>';
-			} elseif ( $icon ) {
+			} elseif ( geodir_is_icon_url( $icon ) ) {
 				$field_icon = '<b style="background-image: url("' . $icon . '")"></b>';
 			} else {
-				$field_icon = '<i class="fa fa-cog" aria-hidden="true"></i>';
+				$field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
 			}
 
 			// if field type name is missing set it from main settings

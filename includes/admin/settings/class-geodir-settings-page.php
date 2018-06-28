@@ -64,7 +64,7 @@ abstract class GeoDir_Settings_Page {
 			<?php
 			include_once( dirname( __FILE__ ) . '/../settings/data_fontawesome.php' );
 			echo "<option value=''>".__('None','geodirectory')."</option>";
-			//$tab_icon = str_replace("fa ","",$tab->tab_icon);
+			//$tab_icon = str_replace("fas ","",$tab->tab_icon);
 			foreach ( geodir_font_awesome_array() as $key => $val ) {
 				?>
 				<option value="<?php echo esc_attr( $key ); ?>" data-fa-icon="<?php echo esc_attr( $key ); ?>" <?php

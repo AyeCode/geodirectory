@@ -572,7 +572,7 @@ class GeoDir_Admin_Dummy_Data {
 
 						jQuery('.gd_progressbar_' + posttype).progressbar({value: 0});
 
-						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '<i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Removing data...', 'geodirlocation' ) );?>');
+						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '<i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Removing data...', 'geodirlocation' ) );?>');
 
 
 
@@ -586,7 +586,7 @@ class GeoDir_Admin_Dummy_Data {
 							data,
 							function (data) {
 								geodir_installing_dummy_data = false;
-								gd_progressbar('.gd_progressbar_container_' + posttype, 100, '<i class="fa fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
+								gd_progressbar('.gd_progressbar_container_' + posttype, 100, '<i class="fas fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
 								jQuery(obj).removeClass('gd-remove-data');
 								jQuery(obj).val('<?php _e( 'Insert data', 'geodirectory' );?>');
 								jQuery(obj).prop('disabled', false);
@@ -645,7 +645,7 @@ class GeoDir_Admin_Dummy_Data {
 
 						jQuery('.gd_progressbar_' + posttype).progressbar({value: 0});
 
-						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '0% (0 / ' + dateTypeCount + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Creating categories and custom fields...', 'geodirlocation' ) );?>');
+						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '0% (0 / ' + dateTypeCount + ') <i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Creating categories and custom fields...', 'geodirlocation' ) );?>');
 					}
 
 					if (!(typeof bound_lat_lng == 'object' && bound_lat_lng.length == 4)) {
@@ -682,14 +682,14 @@ class GeoDir_Admin_Dummy_Data {
 							percentage = percentage > 100 ? 100 : percentage;
 
 
-							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fa fa-refresh fa-spin"></i><?php echo esc_attr( __( 'Inserting data...', 'geodirlocation' ) );?>');
+							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Inserting data...', 'geodirlocation' ) );?>');
 							console.log(insertedCount);
 							gdInstallDummyData(obj, nonce, posttype, insertedCount);
 						}
 						else {
 							geodir_installing_dummy_data = false;
 							percentage = 100;
-							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fa fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
+							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
 							jQuery(obj).addClass('gd-remove-data');
 							jQuery(obj).val('<?php _e( 'Remove data', 'geodirectory' );?>');
 							jQuery(obj).prop('disabled', false);
@@ -887,7 +887,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'is_required' => '1',
 		                  'show_in' =>  '[mapbubble]',
 		                  'show_on_pkg' => $package,
-		                  'field_icon' => 'fa fa-minus',
+		                  'field_icon' => 'fas fa-minus',
 		                  'clabels' => __('Title', 'geodirectory'));
 
 		$fields[] = array('post_type' => $post_type,
@@ -904,7 +904,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'is_required' => '1',
 		                  'show_in' => '',
 		                  'show_on_pkg' => $package,
-		                  'field_icon' => 'fa fa-minus',
+		                  'field_icon' => 'fas fa-minus',
 		                  'clabels' => __('Description', 'geodirectory'));
 
 		$fields[] = array('post_type' => $post_type,
@@ -920,7 +920,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'is_active' => '1',
 		                  'show_in'   =>  '[detail]',
 		                  'show_on_pkg' => $package,
-		                  'field_icon' => 'fa fa-tags',
+		                  'field_icon' => 'fas fa-tags',
 		                  'clabels' => __('Tags', 'geodirectory'));
 
 		$fields[] = array('post_type' => $post_type,
@@ -936,7 +936,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'is_active' => '1',
 		                  'show_in'   =>  '[detail]',
 		                  'show_on_pkg' => $package,
-		                  'field_icon' => 'fa fa-folder-open',
+		                  'field_icon' => 'fas fa-folder-open',
 		                  'clabels' => __('Category', 'geodirectory'),
 						  'extra' => array(
 							'cat_display_type' => 'multiselect'
@@ -959,7 +959,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'show_on_pkg' => $package,
 		                  'required_msg' => __('Address fields are required', 'geodirectory'),
 		                  'clabels' => __('Address', 'geodirectory'),
-		                  'field_icon' => 'fa fa-map-marker',
+		                  'field_icon' => 'fas fa-map-marker-alt',
 		                  'extra' => array('show_city' => 1, 'city_lable' => __('City', 'geodirectory'),
 		                                   'show_region' => 1, 'region_lable' => __('Region', 'geodirectory'),
 		                                   'show_country' => 1, 'country_lable' => __('Country', 'geodirectory'),
@@ -984,7 +984,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'show_in'   =>  '',
 		                  'show_on_pkg' => $package,
 		                  'clabels' => __('Images', 'geodirectory'),
-		                  'field_icon' => 'fa fa-picture-o');
+		                  'field_icon' => 'far fa-image');
 
 
 

@@ -269,7 +269,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                         var $widgetBox = jQuery(this).closest('.geodir-categories-container');
                         var $container = jQuery('.gd-cptcat-rows', $widgetBox);
                         $container.addClass('gd-loading');
-                        $container.html('<i class="fa fa-cog fa-spin"></i>');
+                        $container.html('<i class="fas fa-cog fa-spin"></i>');
                         var data = {
                             'action': 'geodir_cpt_categories',
                             'security': geodir_params.basic_nonce,
@@ -485,7 +485,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						$cat_font_icon = get_term_meta( $category->term_id, 'ct_cat_font_icon', true );
 						$cat_color = get_term_meta( $category->term_id, 'ct_cat_color', true );
 						$cat_color = $cat_color ? $cat_color : '#ababab';
-						$term_icon = $cat_font_icon ? '<i class="fa '.$cat_font_icon.'" aria-hidden="true"></i>' : $term_icon_url;
+						$term_icon = $cat_font_icon ? '<i class="fas '.$cat_font_icon.'" aria-hidden="true"></i>' : $term_icon_url;
 
 						$term_link = get_term_link( $category, $category->taxonomy );
 						/** Filter documented in includes/general_functions.php **/
@@ -606,7 +606,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			$cat_font_icon = get_term_meta( $category->term_id, 'ct_cat_font_icon', true );
 			$cat_color = get_term_meta( $category->term_id, 'ct_cat_color', true );
 			$cat_color = $cat_color ? $cat_color : '#ababab';
-			$term_icon = $cat_font_icon ? '<i class="fa '.$cat_font_icon.'" aria-hidden="true"></i>' : $term_icon_url;
+			$term_icon = $cat_font_icon ? '<i class="fas '.$cat_font_icon.'" aria-hidden="true"></i>' : $term_icon_url;
 			$term_link = get_term_link( $category, $category->taxonomy );
 			/** Filter documented in includes/general_functions.php **/
 			$term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );

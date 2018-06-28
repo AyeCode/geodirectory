@@ -13,7 +13,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='random' ? 'mjs-ne
 
 <li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>">
 	<div class="dd-form">
-		<i class="fa fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
+		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
 		<div class="dd-handle">
 			<?php
 			echo $field_icon;

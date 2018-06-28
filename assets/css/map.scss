@@ -185,7 +185,7 @@
     margin: 5px 0px;
 }
 
-.geodir-bubble-meta-side i.fa{
+.geodir-bubble-meta-side .svg-inline--fa{
     margin-right: 3px;
 }
 
@@ -345,7 +345,7 @@
     display: inline-block;
 }
 
-.geodir-bubble-meta-bottom .geodir-addtofav a i {
+.geodir-bubble-meta-bottom .geodir-addtofav a svg {
     visibility: visible;
 }
 
@@ -353,7 +353,7 @@
 .gd-bubble .gd-bubble-inside .geodir_post_meta {
     margin: 0;
 }
-.gd-bubble .gd-bubble-inside .geodir_post_meta .gd-rating i.fa {
+.gd-bubble .gd-bubble-inside .geodir_post_meta .gd-rating .svg-inline--fa {
     margin-right: 0;
 }
 .gd-bubble .gd-bubble-inside .geodir_post_meta {
@@ -681,7 +681,7 @@
     width: 10px;
 }
 
-.fa-long-arrow-down, .fa-long-arrow-up {
+.fa-long-arrow-alt-down, .fa-long-arrow-alt-up {
     margin-left: 4px;
     cursor: pointer;
 }
@@ -898,10 +898,10 @@ input[name="street"].ui-autocomplete-loading {
 .gd-osm-results .ui-menu-item:hover {
     background-color: #fafafa !important;
 }
-.gd-osm-results .ui-menu-item .fa {
+.gd-osm-results .ui-menu-item .svg-inline--fa {
     margin-right: 5px;
 }
-.gd-osm-results .ui-menu-item:hover .fa {
+.gd-osm-results .ui-menu-item:hover .svg-inline--fa {
     color: #3887be!important;
 }
 .gd-osm-results .ui-menu-item  .gdOH {

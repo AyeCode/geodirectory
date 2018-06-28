@@ -852,12 +852,12 @@ function geodir_search_form_submit_button() {
 	$default_search_button_label = apply_filters( 'geodir_search_default_search_button_text', $default_search_button_label );
 
 	$fa_class = false;
-	if ( strpos( $default_search_button_label, 'fa-' ) !== false ) {
+	if ( geodir_is_fa_icon( $default_search_button_label ) ) {
 		$fa_class = true;
 	}
 
 	?>
-	<button class="geodir_submit_search " data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>" aria-label="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'"></i>';}else{ _e( $default_search_button_label ,'geodirectory'); }?><span class="sr-only"><?php _e( $default_search_button_label, 'geodirectory' ); ?></span></button>
+	<button class="geodir_submit_search" data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>" aria-label="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'"></i><span class="sr-only">' . __( 'Search', 'geodirectory' ). '</span>';}else{ echo __( $default_search_button_label ,'geodirectory') . '<span class="sr-only">' . $default_search_button_label . '</span>'; }?></button>
 	<?php
 }
 

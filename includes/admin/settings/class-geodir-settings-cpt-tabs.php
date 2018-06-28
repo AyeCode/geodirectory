@@ -392,7 +392,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 						   data-tab_content="<?php echo esc_attr($cf['tab_content']); ?>"
 						   onclick="gd_tabs_add_tab(this);return false;">
 
-							<i class="fa <?php echo esc_attr($cf['tab_icon']); ?>" aria-hidden="true"></i>
+							<i class="fas <?php echo esc_attr($cf['tab_icon']); ?>" aria-hidden="true"></i>
 							<?php echo esc_attr($cf['tab_name']); ?>
 
 							<!--							<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help" title="--><?php //_e( 'This adds a section separator with a title.', 'geodirectory' );?><!--"></span>-->
@@ -513,7 +513,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			$fields[] = array(
 				'tab_type'   => 'standard',
 				'tab_name'   => __('Photos','geodirectory'),
-				'tab_icon'   => 'fa-picture-o',
+				'tab_icon'   => 'fa-image',
 				'tab_key'    => 'post_images',
 				'tab_content'=> '[gd_post_images type="gallery" ajax_load="1" slideshow="1" show_title="1" animation="slide" controlnav="1" link_to="lightbox"]'
 			);
