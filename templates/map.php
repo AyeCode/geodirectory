@@ -648,6 +648,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     }
     
     function geocodeResponseOSM(response, updateMap) {
+        console.log(response);
         if (response.display_address) {
             var getAddress = response.display_address;
             var getZip = response.postcode;

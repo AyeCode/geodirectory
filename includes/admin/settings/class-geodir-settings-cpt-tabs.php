@@ -440,7 +440,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			$fields[] = array(
 				'tab_type'   => 'fieldset',
 				'tab_name'   => __('Fieldset','geodirectory'),
-				'tab_icon'   => 'fa-minus',
+				'tab_icon'   => 'fas fa-minus',
 				'tab_key'    => '',
 				'tab_content'=> ''
 			);
@@ -453,7 +453,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 					$fields[] = array(
 						'tab_type'   => 'meta',
 						'tab_name'   => !empty($cf['admin_title']) ? esc_attr($cf['admin_title']) : esc_attr($cf['frontend_title']),
-						'tab_icon'   => isset($cf['field_icon']) && $cf['field_icon'] ? $cf['field_icon'] : "fa-cog",
+						'tab_icon'   => isset($cf['field_icon']) && $cf['field_icon'] ? $cf['field_icon'] : "fas fa-cog",
 						'tab_key'    => esc_attr($cf['htmlvar_name']),
 						'tab_content'=> ''
 					);
@@ -495,7 +495,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			$fields[] = array(
 				'tab_type'   => 'standard',
 				'tab_name'   => __('Reviews','geodirectory'),
-				'tab_icon'   => 'fa-comments',
+				'tab_icon'   => 'fas fa-comments',
 				'tab_key'    => 'reviews',
 				'tab_content'=> ''
 			);
@@ -504,7 +504,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			$fields[] = array(
 				'tab_type'   => 'standard',
 				'tab_name'   => __('Map','geodirectory'),
-				'tab_icon'   => 'fa-globe',
+				'tab_icon'   => 'fas fa-globe',
 				'tab_key'    => 'post_map',
 				'tab_content'=> '[gd_map width="100%" height="425px" maptype="ROADMAP" zoom="0" map_type="post" map_directions="1"]'
 			);
@@ -513,7 +513,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			$fields[] = array(
 				'tab_type'   => 'standard',
 				'tab_name'   => __('Photos','geodirectory'),
-				'tab_icon'   => 'fa-image',
+				'tab_icon'   => 'fas fa-image',
 				'tab_key'    => 'post_images',
 				'tab_content'=> '[gd_post_images type="gallery" ajax_load="1" slideshow="1" show_title="1" animation="slide" controlnav="1" link_to="lightbox"]'
 			);
@@ -578,7 +578,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			$fields[] = array(
 				'tab_type'   => 'shortcode',
 				'tab_name'   => __('Shortcode','geodirectory'),
-				'tab_icon'   => 'fa-cubes',
+				'tab_icon'   => 'fas fa-cubes',
 				'tab_key'    => '',
 				'tab_content'=> ''
 				

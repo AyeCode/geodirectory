@@ -185,6 +185,7 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 				'fields'        => array(), // an array of fields
 				'where'         => array(),
 				'like'          => array(),
+				'in'            => array(),
 				'order'         => 'name',
 				'orderby'       => 'ASC',
 				'limit'			=> '' // All
@@ -197,7 +198,7 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 				$fields_arr = array();
 				foreach ($args['fields'] as $field){
 					if(in_array($field,$this->table_keys())){
-						$fields_arr[] = $wpdb->prepare("%s",$field);
+						$fields_arr[] = $field;
 					}
 				}
 
@@ -211,7 +212,7 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 			}
 
 			//limit
-			$limit = $args['fields'] ? " LIMIT " . absint( $args['limit'] ) : '';
+			$limit = $args['limit'] ? " LIMIT " . absint( $args['limit'] ) : '';
 
 			$order = in_array($args['order'],$this->table_keys()) ? $args['order'] : 'name';
 			$orderby = $args['orderby']=='ASC' ? 'ASC' : 'DESC';
@@ -235,7 +236,21 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 				}
 			}
 
+			// IN
+			if(is_array($args['in']) && !empty($args['in'])){
+				foreach($args['in'] as $i_field => $i_value){
+					if(in_array($i_field,$this->table_keys())){
+						if(is_array($i_value) && !empty($i_value)){
+							$i_values = implode(',', array_fill(0, count($i_value), '%s'));
+							$where .= $wpdb->prepare(" AND $i_field IN ($i_values) ",$i_value);
+						}
+					}
+				}
+			}
+
 			$query = "SELECT $fields FROM " . $this->db_table . " WHERE 1=1 $where ORDER BY $order $orderby $limit";
+
+//			echo '###'.$query;
 
 			$countries = $wpdb->get_results($query);
 

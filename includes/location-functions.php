@@ -61,7 +61,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
 }
 
 /**
- * Returns an array of all countries.
+ * Returns an array of all countries by key val where the key is the country name untranslated and the val is the country name translated.
  *
  * @since 2.0.0
  *
@@ -73,7 +73,13 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
  */
 function geodir_get_countries()
 {
-    return wp_country_database()->get_countries();
+    $rows = wp_country_database()->get_countries();
+    $countries = array();
+    foreach ($rows as $row) {
+        $countries[$row->name] = __($row->name, 'geodirectory');
+    }
+    asort($countries);
+    return $countries;
 }
 
 

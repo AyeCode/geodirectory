@@ -148,6 +148,7 @@ class GeoDir_Admin_Tools {
 	 */
 	public function clear_version_numbers(){
 		delete_option( 'geodirectory_version' );
+		do_action( 'geodir_clear_version_numbers');
 		return __( 'Version numbers cleared. Install/upgrade functions will run on next page load.', 'geodirectory' );
 	}
 
