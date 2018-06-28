@@ -741,7 +741,7 @@ class GeoDir_Post_Data {
 				if(geodir_get_option('post_preview')){
 					$preview_link = self::get_preview_link( $post );
 					$preview_id = !empty($post->post_parent) ? $post->post_parent : $post->ID;
-					echo "<a href='$preview_link' target='wp-preview-".$preview_id."' class='geodir_button geodir_preview_button'>". __( 'Preview Listing', 'geodirectory' )." <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
+					echo "<a href='$preview_link' target='wp-preview-".$preview_id."' class='geodir_button geodir_preview_button'>". __( 'Preview Listing', 'geodirectory' )." <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
 				}
 				?>
             <span class="geodir_message_note"

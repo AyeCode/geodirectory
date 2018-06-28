@@ -229,7 +229,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			<!-- START cat_filter/search_filter -->
 			<div class="map-category-listing-main geodir-map-cat-filter-wrap">
 				<div class="map-category-listing<?php echo $cat_filter_class; ?>">
-					<div class="gd-trigger gd-triggeroff"><i class="fa fa-compress"></i><i class="fa fa-expand"></i>
+					<div class="gd-trigger gd-triggeroff"><i class="fas fa-compress"></i><i class="fas fa-expand"></i>
 					</div>
 					<div id="<?php echo $map_canvas; ?>_cat"
 					     class="<?php echo $map_canvas; ?>_map_category map_category" <?php checked( ! empty( $map_options['child_collapse'] ), true ); ?>
@@ -283,8 +283,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				</div>
 				<div class="geodir-map-navigation">
 					<ul>
-						<li class="geodir-leftarrow"><a href="#"><i class="fa fa-chevron-left"></i></a></li>
-						<li class="geodir-rightarrow"><a href="#"><i class="fa fa-chevron-right"></i></a>
+						<li class="geodir-leftarrow"><a href="#"><i class="fas fa-chevron-left"></i></a></li>
+						<li class="geodir-rightarrow"><a href="#"><i class="fas fa-chevron-right"></i></a>
 						</li>
 					</ul>
 				</div>
@@ -948,7 +948,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						<div class="top_banner_section_in clearfix">
 							<div class="<?php echo $map_canvas; ?>_TopLeft TopLeft"><span class="triggermap"
 							                                                              id="<?php echo $map_canvas; ?>_triggermap"><i
-										class="fa fa-arrows-alt"></i></span></div>
+										class="fas fa-arrows-alt"></i></span></div>
 							<div class="<?php echo $map_canvas; ?>_TopRight TopRight"></div>
 							<div id="<?php echo $map_canvas; ?>_wrapper" class="main_map_wrapper"
 							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;">

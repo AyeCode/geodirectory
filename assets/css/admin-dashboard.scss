@@ -3216,7 +3216,7 @@ a.badge:focus {
 	color: #8c94a7;
 	cursor: default;
 }
-.gd-pending-item .panel-title .pull-right .fa {
+.gd-pending-item .panel-title .pull-right .svg-inline--fa {
 	font-size: 18px;
 	font-weight: bold;
 	margin-top: 2px;
@@ -3236,7 +3236,7 @@ a.badge:focus {
 	margin: auto;
 	vertical-align: middle;
 	line-height: normal;
-	padding: 3px 6px 4px 6px;
+	padding: 3px 6px 4.8px 6px;
 	width: 28px;
 	margin-right: 3px;
 }
@@ -3301,7 +3301,7 @@ a.badge:focus {
 	display: block;
 	font-size: 13px;
 }
-.gd-row-cpt .gd-stat-lbl .fa {
+.gd-row-cpt .gd-stat-lbl .svg-inline--fa {
 	font-size: 16px;
 	vertical-align: text-bottom;
 	margin-right: 3px;
@@ -3469,9 +3469,10 @@ a.badge:focus {
 	vertical-align: middle;
 	color: #555;
 }
-.gd-stat .gd-stat-icon > .fa {
+.gd-stat .gd-stat-icon > .svg-inline--fa {
 	line-height: 70px;
-	font-size: 2.5em;
+	font-size: 2.25em;
+	margin-top: 0.75em;
 }
 .gd-chart-legends {
 	margin-bottom: 10px;

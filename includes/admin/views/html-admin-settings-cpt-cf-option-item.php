@@ -12,12 +12,12 @@
 	   class="gd-draggable-form-items <?php echo sanitize_text_field($cf['class']); ?>"
 	   href="javascript:void(0);">
 
-		<?php if ( isset( $cf['icon'] ) && strpos( $cf['icon'], 'fa fa-' ) !== false ) {
+		<?php if ( isset( $cf['icon'] ) && geodir_is_fa_icon( $cf['icon'] ) ) {
 			echo '<i class="' . sanitize_text_field($cf['icon']) . '" aria-hidden="true"></i>';
-		} elseif ( isset( $cf['icon'] ) && $cf['icon'] ) {
+		} elseif ( isset( $cf['icon'] ) && geodir_is_icon_url( $cf['icon'] ) ) {
 			echo '<b style="background-image: url("' . sanitize_text_field($cf['icon']) . '")"></b>';
 		} else {
-			echo '<i class="fa fa-cog" aria-hidden="true"></i>';
+			echo '<i class="fas fa-cog" aria-hidden="true"></i>';
 		} ?>
 		<?php echo sanitize_text_field($cf['name']); ?>
 		

@@ -29,7 +29,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                     'style'   => '{background: "#eee",width: "100%", height: "450px", position:"relative"}',
                     array(
                         'element' => 'i',
-                        'if_class'   => '[%animation%]=="fade" ? "fa fa-file-text gd-fadein-animation" : "fa fa-picture-o gd-right-left-animation"',
+                        'if_class'   => '[%animation%]=="fade" ? "fas fa-file-alt gd-fadein-animation" : "far fa-image gd-right-left-animation"',
                         'style'   => '{"text-align": "center", "vertical-align": "middle", "line-height": "450px", width: "100%","font-size":"40px",color:"#aaa"}',
                         'content' => ' '.__( 'Add listing form placeholder', 'geodirectory' ),
                     ),

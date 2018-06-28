@@ -142,7 +142,7 @@ function geodir_dashboard_listings_stats( $stats, $type, $period ) {
 	$stat_label = __( 'Listings', 'geodirectory' );
 
 	$stats['stats'][ $stat_key ] = array(
-		'icon' => 'fa-list-ul',
+		'icon' => 'fas fa-list-ul',
 		'label' => $stat_label,
 		'value' => ! empty( $listing_stats['total'] ) ? (int)$listing_stats['total'] : 0
 	);
@@ -279,7 +279,7 @@ function geodir_dashboard_reviews_stats( $stats, $type, $period ) {
 	$stat_label = __( 'Reviews', 'geodirectory' );
 
 	$stats['stats'][ $stat_key ] = array(
-		'icon' => 'fa-star',
+		'icon' => 'fas fa-star',
 		'label' => $stat_label,
 		'value' => ! empty( $review_stats['total'] ) ? (int)$review_stats['total'] : 0
 	);
@@ -415,7 +415,7 @@ function geodir_dashboard_users_stats( $stats, $type, $period ) {
 	$stat_label = __( 'Users', 'geodirectory' );
 
 	$stats['stats'][ $stat_key ] = array(
-		'icon' => 'fa-users',
+		'icon' => 'fas fa-users',
 		'label' => $stat_label,
 		'value' => ! empty( $user_stats['total'] ) ? (int)$user_stats['total'] : 0
 	);
@@ -515,7 +515,7 @@ function geodir_dashboard_claimed_listings_stats( $stats, $type, $period ) {
 	$stat_label = __( 'Claimed Listings', 'geodirectory' );
 
 	$stats['stats'][ $stat_key ] = array(
-		'icon' => 'fa-briefcase',
+		'icon' => 'fas fa-briefcase',
 		'label' => $stat_label,
 		'value' => 0
 	);
@@ -547,7 +547,7 @@ function geodir_dashboard_paid_listings_stats( $stats, $type, $period ) {
 	$stat_label = __( 'Paid Listings', 'geodirectory' );
 
 	$stats['stats'][ $stat_key ] = array(
-		'icon' => 'fa-shopping-cart',
+		'icon' => 'fas fa-shopping-cart',
 		'label' => $stat_label,
 		'value' => 0
 	);
@@ -579,7 +579,7 @@ function geodir_dashboard_revenues_stats( $stats, $type, $period ) {
 	$stat_label = __( 'Revenues', 'geodirectory' );
 
 	$stats['stats'][ $stat_key ] = array(
-		'icon' => 'fa-usd',
+		'icon' => 'fas fa-dollar-sign',
 		'label' => $stat_label,
 		'value' => 0
 	);
@@ -606,13 +606,13 @@ function geodir_dashboard_revenues_stats( $stats, $type, $period ) {
 function geodir_dashboard_get_pending_stats() {
 	$stats = array();
 	$stats['listings'] = array(
-		'icon' => 'fa-list-ul',
+		'icon' => 'fas fa-list-ul',
 		'label' => __( 'Pending Listings', 'geodirectory' ),
 		'total' => 0,
 		'url' => '',
 	);
 	$stats['reviews'] = array(
-		'icon' => 'fa-star',
+		'icon' => 'fas fa-star',
 		'label' => __( 'Pending Reviews', 'geodirectory' ),
 		'total' => 0,
 		'url' => admin_url( 'edit-comments.php?comment_type=comment&comment_status=moderated' ),
@@ -620,7 +620,7 @@ function geodir_dashboard_get_pending_stats() {
 	// @todo implement via claim listng addon
 	/*
 	$stats['claim_listings'] = array(
-		'icon' => 'fa-exclamation-circle',
+		'icon' => 'fas fa-exclamation-circle',
 		'label' => __( 'Pending Claimed', 'geodirectory' ),
 		'total' => 0,
 		'url' => '',
@@ -633,7 +633,7 @@ function geodir_dashboard_get_pending_stats() {
 		$items = array();
 		foreach ( $item_stats['post_types'] as $post_type => $data ) {
 			$items[] = array(
-				'icon' => 'fa-map-marker',
+				'icon' => 'fas fa-map-marker-alt',
 				'label' => geodir_post_type_name( $post_type ),
 				'total' => $data['total'],
 				'url' => admin_url( 'edit.php?post_status=pending&post_type=' . $post_type ),
@@ -648,7 +648,7 @@ function geodir_dashboard_get_pending_stats() {
 		$items = array();
 		foreach ( $item_stats['post_types'] as $post_type => $data ) {
 			$items[] = array(
-				'icon' => 'fa-map-marker',
+				'icon' => 'fas fa-map-marker-alt',
 				'label' => geodir_post_type_name( $post_type ),
 				'total' => $data['total'],
 				'url' => '',
@@ -662,7 +662,7 @@ function geodir_dashboard_get_pending_stats() {
 	/*
 	$items = array();
 	$items[] = array(
-		'icon' => 'fa-map-marker',
+		'icon' => 'fas fa-map-marker-alt',
 		'label' => 'Places',
 		'total' => 0
 	);

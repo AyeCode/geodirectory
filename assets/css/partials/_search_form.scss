@@ -129,7 +129,7 @@ body {
                 cursor: pointer;
                 width: 38px;
                 box-sizing: border-box;
-                .fa {
+                .svg-inline--fa {
                   font-size: 30px;
                   line-height: 37px;
                   margin: 0;
@@ -167,14 +167,9 @@ body {
   }
 }
 
-.geodir_submit_search.fa{
+.geodir_submit_search.fas {
   font-family: FontAwesome;
 }
-
-
-
-
-
 
 /*
 #################################################

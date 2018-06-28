@@ -23,7 +23,7 @@ function gd_wizard_add_widgets($security){
         data: data, // serializes the form's elements.
         beforeSend: function()
         {
-            jQuery( ".geodir-wizard-widgets-result" ).html('<i class="fa fa-refresh fa-spin" style="font-size:18px"></i>');
+            jQuery( ".geodir-wizard-widgets-result" ).html('<i class="fas fa-sync fa-spin" style="font-size:18px"></i>');
 
         },
         success: function(data)
@@ -60,7 +60,7 @@ function gd_wizard_setup_menu($security){
         data: data, // serializes the form's elements.
         beforeSend: function()
         {
-            jQuery( ".geodir-wizard-menu-result" ).html('<i class="fa fa-refresh fa-spin" style="font-size:18px"></i>');
+            jQuery( ".geodir-wizard-menu-result" ).html('<i class="fas fa-sync fa-spin" style="font-size:18px"></i>');
 
         },
         success: function(data)

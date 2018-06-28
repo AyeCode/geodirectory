@@ -95,9 +95,9 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 
                 ?>
                 <div id="geodir-tab-mobile-menu">
-<!--                    <i class="fa fa-bars"></i>-->
+<!--                    <i class="fas fa-bars"></i>-->
                     <span class="geodir-mobile-active-tab"></span>
-                    <i class="fa fa-sort-desc"></i>
+                    <i class="fas fa-sort-down"></i>
                 </div>
                 <?php
                 echo '<dl class="geodir-tab-head">';
@@ -113,7 +113,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                     echo '<dd class="'.$tab_class .'">';
                     echo '<a data-tab="#'.esc_attr($tab->tab_key).'" data-status="enable">';
                     if($tab->tab_icon){
-                        echo '<i class="fa '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
+                        echo '<i class="fas '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
                     }
                     echo esc_attr__($tab->tab_name,'geodirectory').'</a>';
                     echo '</dd>';
@@ -136,7 +136,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 if ( $args['show_as_list'] ) {
                     $tab_icon = '';
                     if($tab->tab_icon){
-                        $tab_icon = '<i class="fa '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
+                        $tab_icon = '<i class="fas '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
                     }
                     $tab_title = '<span class="gd-tab-list-title" ><a href="#' . esc_attr($tab->tab_key) . '">' . $tab_icon . esc_attr__( $tab->tab_name, 'geodirectory' ) . '</a></span><hr />';
 
@@ -267,7 +267,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         echo '<div class="geodir_post_meta  gd-fieldset">';
         echo "<h4>";
         if($tab->tab_icon){
-            echo '<i class="fa '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
+            echo '<i class="fas '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
         }
         if($tab->tab_name){
             esc_attr_e($tab->tab_name,'geodirectory');

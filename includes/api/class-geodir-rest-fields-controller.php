@@ -598,7 +598,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 					'context'     => array( 'view' ),
 				),
 				'icon'           => array(
-					'description' => __( 'Field icon. Eg: "fa fa-home"', 'geodirectory' ),
+					'description' => __( 'Field icon. Eg: "fas fa-home"', 'geodirectory' ),
 					'type'        => 'string',
 					'context'     => array( 'view' ),
 				),

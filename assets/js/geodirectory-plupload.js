@@ -269,13 +269,13 @@ function plu_show_thumbs(imgId) {
             if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico') {
                 file_display ='<img class="gd-file-info" data-id="'+image_id+'" data-title="'+image_title+'" data-caption="'+image_caption+'" data-src="' + image_url + '" src="' + image_url + '" alt=""  />';
             }else{
-                var file_type_class = 'fa-file-o';
-                if (file_ext == 'pdf') {file_type_class = 'fa-file-pdf-o';}
-                else if(file_ext == 'zip' || file_ext == 'tar'){file_type_class = 'fa-file-archive-o';}
-                else if(file_ext == 'doc' || file_ext == 'odt'){file_type_class = 'fa-file-word-o';}
-                else if(file_ext == 'txt' || file_ext == 'text'){file_type_class = 'fa-file-text-o';}
-                else if(file_ext == 'csv' || file_ext == 'ods' || file_ext == 'ots'){file_type_class = 'fa-file-excel-o';}
-                else if(file_ext == 'avi' || file_ext == 'mp4' || file_ext == 'mov'){file_type_class = 'fa-file-video-o';}
+                var file_type_class = 'fa-file';
+                if (file_ext == 'pdf') {file_type_class = 'fa-file-pdf';}
+                else if(file_ext == 'zip' || file_ext == 'tar'){file_type_class = 'fa-file-archive';}
+                else if(file_ext == 'doc' || file_ext == 'odt'){file_type_class = 'fa-file-word';}
+                else if(file_ext == 'txt' || file_ext == 'text'){file_type_class = 'fa-file-text';}
+                else if(file_ext == 'csv' || file_ext == 'ods' || file_ext == 'ots'){file_type_class = 'fa-file-excel';}
+                else if(file_ext == 'avi' || file_ext == 'mp4' || file_ext == 'mov'){file_type_class = 'fa-file-video';}
                 file_display_class = 'file-thumb';
                 file_display ='<i title="'+file_name+'" class="fa '+file_type_class+' gd-file-info" data-id="'+image_id+'" data-title="'+image_title+'" data-caption="'+image_caption+'" data-src="' + image_url + '" aria-hidden="true"></i>';
             }
@@ -283,8 +283,8 @@ function plu_show_thumbs(imgId) {
             var thumb = $('<div class="thumb '+file_display_class+'" id="thumb' + imgId + i + '">' +
                 file_display +
                 '<div class="gd-thumb-actions">'+
-                '<span class="thumbeditlink" onclick="gd_edit_image_meta('+imgId+','+i+');"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></span>' +
-                '<span class="thumbremovelink" id="thumbremovelink' + imgId + i + '"><i class="fa fa-trash-o" aria-hidden="true"></i></span>' +
+                '<span class="thumbeditlink" onclick="gd_edit_image_meta('+imgId+','+i+');"><i class="far fa-edit" aria-hidden="true"></i></span>' +
+                '<span class="thumbremovelink" id="thumbremovelink' + imgId + i + '"><i class="fas fa-trash-alt" aria-hidden="true"></i></span>' +
                 '</div>'+
                 '</div>');
 

@@ -303,7 +303,7 @@ Progress bar
 	color: #444;
 	width: 100%
 }
-.gd-progress-label .fa {
+.gd-progress-label .svg-inline--fa {
 	margin-left: 7px;
 	font-size: 14px;
 	margin-right: 5px;
@@ -381,6 +381,11 @@ Import/export
     margin-right: 15px;
     width: 140px;
 }
+.wrap.geodirectory .form-table .forminp .gd-import-export input[type="text"],
+.wrap.geodirectory .form-table .forminp .gd-import-export input[type="number"],
+.wrap.geodirectory .form-table .forminp .gd-import-export input[type="email"] {
+	padding: 3px 5px;
+}
 div.update-nag{width: 95%;}
 
 .wp-core-ui .button-primary.gd-remove-data{
@@ -414,9 +419,8 @@ div.update-nag{width: 95%;}
 }
 .gd-locate-me .gd-locate-me-btn,
 .gd-locate-me .gd-locate-me-btn svg.svg-inline--fa,
-.gd-locate-me .gd-locate-me-btn .fa,
 .gd-locate-me .gd-locate-me-btn .fa-crosshairs{
-    font-size: 150% !important;
+    font-size: 110% !important;
 }
 .wp-list-table .column-cat_default_img,
 .wp-list-table .column-cat_ID_num {
@@ -918,7 +922,7 @@ table.gd_status_table th.run-tool {
 .geodirectory_page_gd-status .geodirectory > .updated {
 	border: 0;
 }
-.select2-selection_gd_custom .fa {
+.select2-selection_gd_custom .svg-inline--fa {
 	font-size: 110%;
 	margin-right: 3px;
 	font-weight: normal;
@@ -1388,10 +1392,10 @@ input[name="street"].ui-autocomplete-loading {
 .gd-osm-results .ui-menu-item:hover {
     background-color: #fafafa !important;
 }
-.gd-osm-results .ui-menu-item .fa {
+.gd-osm-results .ui-menu-item .svg-inline--fa {
     margin-right: 5px;
 }
-.gd-osm-results .ui-menu-item:hover .fa {
+.gd-osm-results .ui-menu-item:hover .svg-inline--fa {
     color: #3887be!important;
 }
 .gd-osm-results .ui-menu-item  .gdOH {

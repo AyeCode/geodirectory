@@ -236,7 +236,7 @@ class GeoDir_Admin_Install {
 			'tab_layout'    => 'post',
 			'tab_type'      => 'standard',
 			'tab_name'      => __('Photos','geodirectory'),
-			'tab_icon'      => 'fa-picture-o',
+			'tab_icon'      => 'fa-image',
 			'tab_key'       => 'post_images',
 			'tab_content'   => '[gd_post_images type="gallery" ajax_load="1" slideshow="1" show_title="1" animation="slide" controlnav="1" link_to="lightbox"]',
 			'sort_order'    => '2',

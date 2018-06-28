@@ -443,7 +443,7 @@ function geodir_cfi_checkbox($html,$cf){
             if(isset($cf['field_type_key']) && $cf['field_type_key']=='terms_conditions'){
                 $tc = geodir_terms_and_conditions_page_id();
                 $tc_link = get_permalink($tc);
-                echo "<a href='$tc_link' target='_blank'>".__($cf['desc'], 'geodirectory')." <i class=\"fa fa-external-link\" aria-hidden=\"true\"></i></a>";
+                echo "<a href='$tc_link' target='_blank'>".__($cf['desc'], 'geodirectory')." <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
             }else{
                 _e($cf['desc'], 'geodirectory');
             }
@@ -1088,7 +1088,7 @@ function geodir_cfi_address($html,$cf){
             <?php } ?>
                 <input type="text" field_type="<?php echo $type;?>" name="<?php echo 'street';?>" id="<?php echo $prefix . 'street';?>" class="geodir_textfield<?php echo $locate_me_class;?>" value="<?php echo esc_attr(stripslashes($street)); ?>" <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?> />
                 <?php if ($locate_me) { ?>
-                <span onclick="gdGeoLocateMe(this, 'add-listing');" class="gd-locate-me-btn gd-input-group-addon" title="<?php esc_attr_e('My location', 'geodirlocation'); ?>"><i class="fa fa-crosshairs fa-fw" aria-hidden="true"></i></span>
+                <span onclick="gdGeoLocateMe(this, 'add-listing');" class="gd-locate-me-btn gd-input-group-addon" title="<?php esc_attr_e('My location', 'geodirlocation'); ?>"><i class="fas fa-crosshairs fa-fw" aria-hidden="true"></i></span>
             </div>
             <?php } ?>
             <span class="geodir_message_note"><?php _e($frontend_desc, 'geodirectory');?></span>
@@ -1743,7 +1743,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"></th></tr>
 						</thead>
 						<tbody>
-							<tr style="display:none!important"><td colspan="3" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" data-field="open" data-bh="time"> - <input type="text" data-field="close" data-bh="time"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a></div></td></tr>
+							<tr style="display:none!important"><td colspan="3" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" data-field="open" data-bh="time"> - <input type="text" data-field="close" data-bh="time"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fas fa-minus-circle"></i></a></div></td></tr>
 							<?php foreach ( $weekdays as $day_no => $day ) { ?>
 							<tr class="gd-bh-item">
 								<td class="gd-bh-day"><?php echo $day; ?></td>
@@ -1751,14 +1751,14 @@ function geodir_cfi_business_hours( $html, $cf ) {
 									<?php if ( ! empty( $hours[ $day_no ] ) ) { $slots = $hours[ $day_no ]; ?>
 										<?php foreach ( $slots as $slot ) { $open = ! empty( $slot['opens'] ) ? $slot['opens'] : ''; $close = ! empty( $slot['closes'] ) ? $slot['closes'] : ''; ?>
 										<div class="gd-bh-hours">
-											<input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]" data-field="open" data-bh="time" value="<?php echo $open; ?>"> - <input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]" data-field="close" data-bh="time" value="<?php echo $close; ?>"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fa fa-minus-circle"></i></a>
+											<input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]" data-field="open" data-bh="time" value="<?php echo $open; ?>"> - <input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]" data-field="close" data-bh="time" value="<?php echo $close; ?>"> <a href="javascript:void(0);" class="gd-bh-remove"><i class="fas fa-minus-circle"></i></a>
 										</div>
 										<?php } ?>
 									<?php } else { ?>
 									<div class="gd-bh-closed"><?php _e( 'Closed', 'geodirectory' ); ?></div>
 									<?php } ?>
 								</td>
-								<td class="gd-bh-act"><a href="javascript:void(0);" class="gd-bh-add"><i class="fa fa-plus-circle"></i></a></td>
+								<td class="gd-bh-act"><a href="javascript:void(0);" class="gd-bh-add"><i class="fas fa-plus-circle"></i></a></td>
 							</tr>
 							<?php } ?>
 						</tbody>

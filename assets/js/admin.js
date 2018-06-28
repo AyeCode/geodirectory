@@ -275,7 +275,7 @@ jQuery(document).ready(function() {
                     '</tr>').insertAfter(jQuery('#' + diagnose +'_'+ ptype));
 
                 jQuery('#gd_progressbar').progressbar({value: 0});
-                jQuery('#gd_progressbar .gd-progress-label').html('<i class="fa fa-refresh fa-spin"></i> Processing...');
+                jQuery('#gd_progressbar .gd-progress-label').html('<i class="fas fa-sync fa-spin"></i> Processing...');
 
             }
 
@@ -316,7 +316,7 @@ function gd_process_diagnose_step(step, ptype, diagnose, result_container) {
             } else {
                 resp = JSON.parse(data);
                 jQuery('#gd_progressbar').progressbar({value: resp.percent});
-                jQuery('#gd_progressbar .gd-progress-label').html('<i class="fa fa-refresh fa-spin"></i> Processing...');
+                jQuery('#gd_progressbar .gd-progress-label').html('<i class="fas fa-sync fa-spin"></i> Processing...');
                 gd_process_diagnose_step(parseInt( resp.step ), ptype, diagnose, result_container)
             }
         },
@@ -997,7 +997,7 @@ function gd_recommended_install_plugin($this,$slug,$nonce){
         data: data, // serializes the form's elements.
         beforeSend: function()
         {
-            jQuery($this).html('<i class="fa fa-refresh fa-spin" ></i> ' + jQuery($this).data("text-installing")).attr("disabled", true);
+            jQuery($this).html('<i class="fas fa-sync fa-spin" ></i> ' + jQuery($this).data("text-installing")).attr("disabled", true);
         },
         success: function(data)
         {
@@ -1062,7 +1062,7 @@ function gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,$licenc
         data: data, // serializes the form's elements.
         beforeSend: function()
         {
-            jQuery($this).html('<i class="fa fa-refresh fa-spin" ></i> ' + jQuery($this).data("text-installing")).attr("disabled", true);
+            jQuery($this).html('<i class="fas fa-sync fa-spin" ></i> ' + jQuery($this).data("text-installing")).attr("disabled", true);
         },
         success: function(data)
         {
@@ -1257,7 +1257,7 @@ function geodir_osm_autocomplete_search() {
                     label = gd_highlight(label, this.term);
                 }
 
-                return jQuery("<li>").width(jQuery('input[name="street"]', $form).outerWidth()).append('<i class="fa fa-map-marker"></i><span>' + label + '</span>').appendTo(ul);
+                return jQuery("<li>").width(jQuery('input[name="street"]', $form).outerWidth()).append('<i class="fas fa-map-marker-alt"></i><span>' + label + '</span>').appendTo(ul);
             };
         }
     } catch (err) {
