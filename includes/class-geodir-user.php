@@ -280,7 +280,8 @@ class GeoDir_User {
 					<li>
 						<select id="geodir_my_favourites" class="geodir-select"
 						        option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
-						        data-placeholder="<?php echo esc_attr( __( 'My Favorites', 'geodirectory' ) ); ?>">
+						        data-placeholder="<?php esc_attr_e( 'My Favorites', 'geodirectory' ); ?>" 
+								aria-label="<?php esc_attr_e( 'My Favorites', 'geodirectory' ); ?>">
 							<option value="" disabled="disabled" selected="selected"
 							        style='display:none;'><?php echo esc_attr( __( 'My Favorites', 'geodirectory' ) ); ?></option>
 							<?php echo $favourite_links; ?>

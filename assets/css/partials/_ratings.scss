@@ -44,6 +44,10 @@
       color: #ccc;
     }
 
+	svg {
+      margin: 0 1px
+    }
+
     svg::before {
       letter-spacing: 2px;
     }

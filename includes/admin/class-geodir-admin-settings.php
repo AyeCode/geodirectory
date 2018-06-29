@@ -987,7 +987,7 @@ class GeoDir_Admin_Settings {
 
 		if(!empty($value['docs'])){
 
-			$docs_link = "<a class='geodir-docs-link' href='".esc_url($value['docs'])."' target='_blank'>".__('Documentation','geodirectory')." <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
+			$docs_link = "<a class='geodir-docs-link' href='".esc_url($value['docs'])."' target='_blank'>".__('Documentation','geodirectory')." <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\" aria-hidden=\"true\"></i></a>";
 
 			if(in_array( $value['type'], array( 'checkbox' ) )){
 				$description .= $docs_link;

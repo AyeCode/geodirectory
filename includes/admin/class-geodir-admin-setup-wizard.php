@@ -657,8 +657,8 @@ class GeoDir_Admin_Setup_Wizard {
 
 			if(!empty($recommend_wp_plugins)){
 				echo "<ul>";
-				$installed_text = "<i class=\"fas fa-check-circle\"></i> ".__('Installed','geodirectory');
-				echo "<input type='hidden' id='gd-installing-text' value='<i class=\"fas fa-sync fa-spin\"></i> ".__('Installing','geodirectory')."' >";
+				$installed_text = "<i class=\"fas fa-check-circle\" aria-hidden=\"true\"></i> ".__('Installed','geodirectory');
+				echo "<input type='hidden' id='gd-installing-text' value='<i class=\"fas fa-sync fa-spin\" aria-hidden=\"true\"></i> ".__('Installing','geodirectory')."' >";
 				echo "<input type='hidden' id='gd-installed-text' value='$installed_text' >";
 				foreach ($recommend_wp_plugins as $plugin){
 

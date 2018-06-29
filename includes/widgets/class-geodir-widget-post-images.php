@@ -285,7 +285,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			}elseif($options['link_to']=='lightbox'){
 				$link = '';
 				$link_tag_open = "<a href='%s' class='geodir-lightbox-image' data-lity>";
-				$link_tag_close = "<i class=\"fas fa-search-plus\"></i></a>";
+				$link_tag_close = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
 			}
 
 
@@ -293,7 +293,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 			?>
 			<div class="<?php echo $main_wrapper_class;?>" >
-				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fas fa-sync fa-spin"></i></div>';}?>
+				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';}?>
 				<div id="<?php echo $slider_id; ?>" class="<?php echo $second_wrapper_class;?>" <?php
 				if($options['controlnav']==1){echo "data-controlnav='1'";}
 				if($options['animation']=='fade'){echo "data-animation='fade'";}

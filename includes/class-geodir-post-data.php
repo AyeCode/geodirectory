@@ -717,14 +717,14 @@ class GeoDir_Post_Data {
 				/*<!--<script>-->*/
 				document.write('<inp' + 'ut type="hidden" id="geodir_sp' + 'amblocker_top_form" name="geodir_sp' + 'amblocker" value="64"/>');
 			</script>
-			<noscript>
+			<noscript aria-hidden="true">
 				<div>
 					<label><?php _e( 'Type 64 into this box', 'geodirectory' ); ?></label>
 					<input type="text" id="geodir_spamblocker_top_form" name="geodir_spamblocker" value=""
 					       maxlength="10"/>
 				</div>
 			</noscript>
-			<input type="text" id="geodir_filled_by_spam_bot_top_form" name="geodir_filled_by_spam_bot" value=""/>
+			<input type="text" id="geodir_filled_by_spam_bot_top_form" name="geodir_filled_by_spam_bot" value="" aria-label="<?php esc_attr_e( 'Type 64 into this box', 'geodirectory' ); ?>"/>
 
 
 			<!-- end captcha code -->

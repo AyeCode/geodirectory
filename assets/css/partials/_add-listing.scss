@@ -57,8 +57,12 @@
 	width: 25px;
 	text-align: center;
 }
+.gd-bh-item span.gd-bh-add:hover,
+.gd-bh-item span.gd-bh-remove:hover {
+	color: #333;
+}
 .gd-bh-item .gd-bh-time input[type="text"] {
-	width: 90px;
+	width: 5em;
 	text-align: center;
 	display: inline-block;
 	padding: 3px 5px;
@@ -70,7 +74,7 @@
 	padding: 9px 0;
 }
 .gd-bh-item .svg-inline--fa {
-	font-size: 125%;
+	font-size: 110%;
 	cursor: pointer;
 }
 .gd-bh-item a {

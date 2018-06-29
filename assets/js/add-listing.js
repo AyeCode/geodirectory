@@ -96,6 +96,11 @@ jQuery(function($) {
         });
         $('.geodir_form_row input[data-cradio]:first').trigger('change');
     }
+	if ($('.gd-locate-me .gd-locate-me-btn').length) {
+        $('.gd-locate-me .gd-locate-me-btn').on('click', function(e) {
+            gdGeoLocateMe(this, 'add-listing');
+        });
+    }
 });
 /**
  * Prevent navigation away if there are unsaved changes.

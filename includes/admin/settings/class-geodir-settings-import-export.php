@@ -698,9 +698,9 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 							if (typeof filters !== 'undefined' && filters && doFilter) {
 								getTotal = true;
 								attach += '&_c=1';
-								gd_progressbar(el, 0, '<i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Preparing...', 'geodirectory' ) );?>');
+								gd_progressbar(el, 0, '<i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Preparing...', 'geodirectory' ) );?>');
 							} else {
-								gd_progressbar(el, 0, '0% (0 / ' + total_posts + ') <i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+								gd_progressbar(el, 0, '0% (0 / ' + total_posts + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
 							}
 							jQuery(el).find('#gd_timer').text('00:00:01');
 							jQuery('#gd_ie_ex_files', el).html('');
@@ -718,7 +718,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 								if (typeof data == 'object') {
 									if (typeof data.error != 'undefined' && data.error) {
-										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle"></i>' + data.error);
+										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.error);
 										window.clearInterval(timer_posts);
 									} else {
 										if (getTotal) {
@@ -734,11 +734,11 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 										} else {
 											if (pages < page || pages == page) {
 												window.clearInterval(timer_posts);
-												gd_progressbar(el, 100, '100% (' + total_posts + ' / ' + total_posts + ') <i class="fas fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
+												gd_progressbar(el, 100, '100% (' + total_posts + ' / ' + total_posts + ') <i class="fas fa-check" aria-hidden="true"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
 											} else {
 												var percentage = Math.round(((page * chunk_size) / total_posts) * 100);
 												percentage = percentage > 100 ? 100 : percentage;
-												gd_progressbar(el, percentage, '' + percentage + '% (' + ( page * chunk_size ) + ' / ' + total_posts + ') <i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+												gd_progressbar(el, percentage, '' + percentage + '% (' + ( page * chunk_size ) + ' / ' + total_posts + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
 											}
 											if (typeof data.files != 'undefined' && jQuery(data.files).length ) {
 												var obj_files = data.files;
@@ -769,7 +769,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 					function gd_process_export_cats(el, post_type, total_cats, chunk_size, pages, page) {
 						if (page < 2) {
-							gd_progressbar(el, 0, '0% (0 / ' + total_cats + ') <i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+							gd_progressbar(el, 0, '0% (0 / ' + total_cats + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
 							jQuery(el).find('#gd_timer').text('00:00:01');
 							jQuery('#gd_ie_ex_files', el).html('');
 						}
@@ -786,16 +786,16 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 								if (typeof data == 'object') {
 									if (typeof data.error != 'undefined' && data.error) {
-										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle"></i>' + data.error);
+										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.error);
 										window.clearInterval(timer_cats);
 									} else {
 										if (pages < page || pages == page) {
 											window.clearInterval(timer_cats);
-											gd_progressbar(el, 100, '100% (' + total_cats + ' / ' + total_cats + ') <i class="fas fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
+											gd_progressbar(el, 100, '100% (' + total_cats + ' / ' + total_cats + ') <i class="fas fa-check" aria-hidden="true"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
 										} else {
 											var percentage = Math.round(((page * chunk_size) / total_cats) * 100);
 											percentage = percentage > 100 ? 100 : percentage;
-											gd_progressbar(el, percentage, '' + percentage + '% (' + ( page * chunk_size ) + ' / ' + total_cats + ') <i class="fas fa-sync fa-spin"></i><?php esc_attr_e( 'Exporting...', 'geodirectory' );?>');
+											gd_progressbar(el, percentage, '' + percentage + '% (' + ( page * chunk_size ) + ' / ' + total_cats + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php esc_attr_e( 'Exporting...', 'geodirectory' );?>');
 										}
 										if (typeof data.files != 'undefined' && jQuery(data.files).length ) {
 											var obj_files = data.files;
@@ -858,7 +858,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 							$('.gd_timer', $parent).gdtimer(vSec);
 						}, 1000);
 						
-						gd_progressbar($parent, 0, '<i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Preparing export...', 'geodirectory' ) ); ?>');
+						gd_progressbar($parent, 0, '<i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Preparing export...', 'geodirectory' ) ); ?>');
 						$('#gd_timer', $parent).text('00:00:01');
 						$('#gd_ie_ex_files', $parent).html('');
 						
@@ -878,14 +878,14 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 										if ( parseInt(res.total) > 0) {
 											err = false;
 											$this.data('total', res.total);
-											gd_progressbar($parent, 0, '0% (0 / ' + res.total + ') <i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
+											gd_progressbar($parent, 0, '0% (0 / ' + res.total + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Exporting...', 'geodirectory' ) );?>');
 											geodir_export($parent, sExport, fields, iPerPage, 1);
 										} else {
-											gd_progressbar($parent, 0, '<i class="fas fa-info-circle"></i><?php echo esc_attr( __( 'No records to export.', 'geodirectory' ) );?>');
+											gd_progressbar($parent, 0, '<i class="fas fa-info-circle" aria-hidden="true"></i><?php echo esc_attr( __( 'No records to export.', 'geodirectory' ) );?>');
 										}
 									} else {
 										if (typeof res.success != 'undefined' && res.success == false) {
-											gd_progressbar($parent, 0, '<i class="fas fa-exclamation-triangle"></i>' + res.data);
+											gd_progressbar($parent, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + res.data);
 										}
 									}
 								}
@@ -897,7 +897,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 							error: function(xhr, sStatus, oErr) {
 								console.log(sStatus + ': ' + oErr.message);
 								$this.prop('disabled', false);
-								gd_progressbar($parent, 0, '<i class="fas fa-exclamation-triangle"></i>' + sStatus + ': ' + xhr.responseText);
+								gd_progressbar($parent, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + sStatus + ': ' + xhr.responseText);
 								window.clearInterval(timer);
 								return;
 							},
@@ -926,16 +926,16 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 								$submit.prop('disabled', false);
 								if (typeof res == 'object') {
 									if (typeof res.success != 'undefined' && res.success == false) {
-										gd_progressbar($parent, 0, '<i class="fas fa-exclamation-triangle"></i>' + res.data);
+										gd_progressbar($parent, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + res.data);
 										window.clearInterval(timer);
 									} else {
 										if (iPages < iPage || iPages == iPage) {
 											window.clearInterval(timer);
-											gd_progressbar($parent, 100, '100% (' + iTotal + ' / ' + iTotal + ') <i class="fas fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory ' ) );?>');
+											gd_progressbar($parent, 100, '100% (' + iTotal + ' / ' + iTotal + ') <i class="fas fa-check" aria-hidden="true"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory ' ) );?>');
 										} else {
 											var percentage = Math.round(((iPage * iPerPage) / iTotal) * 100);
 											percentage = percentage > 100 ? 100 : percentage;
-											gd_progressbar($parent, percentage, percentage + '% (' + (iPage * iPerPage) + ' / ' + iTotal + ') <i class="fas fa-sync fa-spin"></i><?php esc_attr_e( 'Exporting...', 'geodirectory ' );?>');
+											gd_progressbar($parent, percentage, percentage + '% (' + (iPage * iPerPage) + ' / ' + iTotal + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php esc_attr_e( 'Exporting...', 'geodirectory ' );?>');
 										}
 										if (typeof res.files != 'undefined' && $(res.files).length) {
 											var obj_files = res.files;
@@ -956,7 +956,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 								console.log(sStatus + ': ' + oErr.message);
 								$submit.prop('disabled', false);
 								if (page < 2) {
-									gd_progressbar($parent, 0, '<i class="fas fa-exclamation-triangle"></i>' + sStatus + ': ' + xhr.responseText);
+									gd_progressbar($parent, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + sStatus + ': ' + xhr.responseText);
 								}
 								window.clearInterval(timer);
 								return;

@@ -374,7 +374,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	                    $cat_color = get_term_meta( $cat->term_id, 'ct_cat_color', true );
 	                    $cat_color = $cat_color ? $cat_color : '#ababab';
 
-	                    $term_icon = $cat_font_icon ? '<i class="fas '.$cat_font_icon.'" aria-hidden="true"></i>' : $term_icon_url;
+	                    $term_icon = $cat_font_icon ? '<i class="fas '.$cat_font_icon.'" aria-hidden="true" aria-hidden="true"></i>' : $term_icon_url;
 
 	                    $nav_html .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" title="' . esc_attr($cat->name) . '">';
 	                    $nav_html .= "<span class='gd-cptcat-icon' >$term_icon</span>";
@@ -515,7 +515,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	    if(!defined( 'DOING_AJAX' )) {
 		    echo "</div>";
 		    ?>
-		    <p id="geodir-bestof-loading" class="geodir-bestof-loading"><i class="fas fa-cog fa-spin"></i></p>
+		    <p id="geodir-bestof-loading" class="geodir-bestof-loading"><i class="fas fa-cog fa-spin" aria-hidden="true"></i></p>
 
 		    </div>
 		    <?php //first term listings by default - end

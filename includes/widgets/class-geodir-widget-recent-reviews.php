@@ -239,7 +239,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			$post_title        = get_the_title( $comment_post_ID );
 			$permalink         = get_permalink( $comment_post_ID );
 			$comment_permalink = $permalink . "#comment-" . $comment->comment_ID;
-			$read_more         = '<a class="comment_excerpt" href="' . $comment_permalink . '">' . __( 'Read more', 'geodirectory' ) . '</a>';
+			$read_more         = '<a class="comment_excerpt" href="' . $comment_permalink . '">' . __( 'Read more', 'geodirectory' ) . '<span class="gd-visuallyhidden">' . __( 'about this listing', 'geodirectory' ) . '</span></a>';
 
 			$comment_content_length = strlen( $comment_content );
 			if ( $comment_content_length > $comment_lenth ) {
@@ -263,7 +263,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 				$comments_echo .= "<span class=\"li" . $comment_id . " geodir_reviewer_image\">";
 				if ( function_exists( 'get_avatar' ) ) {
 					$avatar_size = apply_filters( 'geodir_comment_avatar_size', 44 );
-					$comments_echo .= get_avatar( $comment, $avatar_size );
+					$comments_echo .= get_avatar( $comment, $avatar_size, '', $comment_id . ' comment avatar' );
 				}
 
 				$comments_echo .= "</span>\n";

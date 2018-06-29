@@ -572,7 +572,7 @@ class GeoDir_Admin_Dummy_Data {
 
 						jQuery('.gd_progressbar_' + posttype).progressbar({value: 0});
 
-						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '<i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Removing data...', 'geodirlocation' ) );?>');
+						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '<i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Removing data...', 'geodirlocation' ) );?>');
 
 
 
@@ -586,7 +586,7 @@ class GeoDir_Admin_Dummy_Data {
 							data,
 							function (data) {
 								geodir_installing_dummy_data = false;
-								gd_progressbar('.gd_progressbar_container_' + posttype, 100, '<i class="fas fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
+								gd_progressbar('.gd_progressbar_container_' + posttype, 100, '<i class="fas fa-check" aria-hidden="true"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
 								jQuery(obj).removeClass('gd-remove-data');
 								jQuery(obj).val('<?php _e( 'Insert data', 'geodirectory' );?>');
 								jQuery(obj).prop('disabled', false);
@@ -645,7 +645,7 @@ class GeoDir_Admin_Dummy_Data {
 
 						jQuery('.gd_progressbar_' + posttype).progressbar({value: 0});
 
-						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '0% (0 / ' + dateTypeCount + ') <i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Creating categories and custom fields...', 'geodirlocation' ) );?>');
+						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '0% (0 / ' + dateTypeCount + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Creating categories and custom fields...', 'geodirlocation' ) );?>');
 					}
 
 					if (!(typeof bound_lat_lng == 'object' && bound_lat_lng.length == 4)) {
@@ -682,14 +682,14 @@ class GeoDir_Admin_Dummy_Data {
 							percentage = percentage > 100 ? 100 : percentage;
 
 
-							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-sync fa-spin"></i><?php echo esc_attr( __( 'Inserting data...', 'geodirlocation' ) );?>');
+							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Inserting data...', 'geodirlocation' ) );?>');
 							console.log(insertedCount);
 							gdInstallDummyData(obj, nonce, posttype, insertedCount);
 						}
 						else {
 							geodir_installing_dummy_data = false;
 							percentage = 100;
-							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-check"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
+							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-check" aria-hidden="true"></i><?php echo esc_attr( __( 'Complete!', 'geodirlocation' ) );?>');
 							jQuery(obj).addClass('gd-remove-data');
 							jQuery(obj).val('<?php _e( 'Remove data', 'geodirectory' );?>');
 							jQuery(obj).prop('disabled', false);
