@@ -81,6 +81,8 @@ final class GeoDirectory {
     public $settings;
 
 	public $location;
+
+	public $permalinks;
     
     /**
      * Main GeoDirectory Instance.
@@ -239,6 +241,7 @@ final class GeoDirectory {
 	    GeoDir_Post_Data::init(); // post data
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
 	    GeoDir_SEO::init();
+	    GeoDir_Taxonomies::init();
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-functions.php' );
@@ -260,7 +263,7 @@ final class GeoDirectory {
 
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-maps.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
+        //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
 
 	    if(defined( 'GUTENBERG_DEVELOPMENT_MODE' )){
 		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/block-types.php' );
@@ -335,8 +338,12 @@ final class GeoDirectory {
         do_action( 'geodirectory_before_init' );
 
 		// locations
-	    $calss_name = apply_filters('geodir_location_instance','GeoDir_Location');
-	    $this->location = new $calss_name;
+	    $location_class_name = apply_filters('geodir_location_instance','GeoDir_Location');
+	    $this->location = new $location_class_name;
+
+	    // permalinks
+	    $permalinks_class_name = apply_filters('geodir_class_permalinks','GeoDir_Permalinks');
+	    $this->permalinks = new $permalinks_class_name;
 
         // Init action.
         do_action( 'geodirectory_init' );

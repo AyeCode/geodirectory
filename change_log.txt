@@ -1,3 +1,6 @@
+v2.0.0.17-rc
+Image slider widget not working on listing pages - FIXED
+
 v2.0.0.16-rc
 Updated from font-awesome v4 to v5 - CHANGED
 Rest api route & endpoints for fields - ADDED
