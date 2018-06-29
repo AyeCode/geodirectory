@@ -857,7 +857,7 @@ function geodir_search_form_submit_button() {
 	}
 
 	?>
-	<button class="geodir_submit_search" data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>" aria-label="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'"></i><span class="sr-only">' . __( 'Search', 'geodirectory' ). '</span>';}else{ echo __( $default_search_button_label ,'geodirectory') . '<span class="sr-only">' . $default_search_button_label . '</span>'; }?></button>
+	<button class="geodir_submit_search" data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>" aria-label="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'" aria-hidden="true"></i><span class="sr-only">' . __( 'Search', 'geodirectory' ). '</span>';}else{ echo __( $default_search_button_label ,'geodirectory') . '<span class="sr-only">' . $default_search_button_label . '</span>'; }?></button>
 	<?php
 }
 

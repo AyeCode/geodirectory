@@ -678,7 +678,7 @@ class GeoDir_Comments {
 
 			while ( $i <= $rating_input_count ) {
 				$rating_title = $type == 'input' ? "title='$rating_texts[$i]'" : '';
-				$rating_html .= '<i class="' . $rating_icon . '" ' . $rating_title . '></i>';
+				$rating_html .= '<i class="' . $rating_icon . '" aria-hidden="true" ' . $rating_title . '></i>';
 				$i ++;
 			}
 		}

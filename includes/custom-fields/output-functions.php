@@ -279,11 +279,11 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
             } elseif ($field_icon == '') {
 
                 if ($cf['name'] == 'geodir_facebook') {
-                    $field_icon_af = '<i class="fab fa-facebook-square"></i>';
+                    $field_icon_af = '<i class="fab fa-facebook-square" aria-hidden="true"></i>';
                 } elseif ($cf['name'] == 'geodir_twitter') {
-                    $field_icon_af = '<i class="fab fa-twitter-square"></i>';
+                    $field_icon_af = '<i class="fab fa-twitter-square" aria-hidden="true"></i>';
                 } else {
-                    $field_icon_af = '<i class="fas fa-link"></i>';
+                    $field_icon_af = '<i class="fas fa-link" aria-hidden="true"></i>';
                 }
 
             } else {
@@ -415,7 +415,7 @@ function geodir_cf_phone($html,$location,$cf,$p='',$output=''){
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="fas fa-phone"></i>';
+                $field_icon_af = '<i class="fas fa-phone" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -529,7 +529,7 @@ function geodir_cf_time($html,$location,$cf,$p='',$output=''){
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="fas fa-clock"></i>';
+                $field_icon_af = '<i class="fas fa-clock" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -665,7 +665,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p='',$output=''){
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="fas fa-calendar"></i>';
+                $field_icon_af = '<i class="fas fa-calendar" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -779,7 +779,7 @@ function geodir_cf_text($html,$location,$cf,$p='',$output=''){
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = ($cf['htmlvar_name'] == 'geodir_timing') ? '<i class="fas fa-clock"></i>' : "";
+                $field_icon_af = ($cf['htmlvar_name'] == 'geodir_timing') ? '<i class="fas fa-clock" aria-hidden="true"></i>' : "";
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -1289,7 +1289,7 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="far fa-envelope"></i>';
+                $field_icon_af = '<i class="far fa-envelope" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -2076,7 +2076,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ( strpos( $field_icon, 'http' ) !== false ) {
                 $field_icon_af = '';
             } elseif ( $field_icon == '' ) {
-                $field_icon_af = '<i class="fas fa-home"></i>';
+                $field_icon_af = '<i class="fas fa-home" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon    = '';
@@ -2235,7 +2235,7 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                 $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . '" style="clear:both;">';
 				$html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
                 $html .= '<span class="gd-bh-expand-range" data-offset="' . geodir_gmt_offset() . '" data-offsetsec="' . geodir_gmt_offset( false ) . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range">' . $show_value . '</span>';
-				$html .= '<span class="gd-bh-expand"><i class="fas fa-caret-up"></i><i class="fas fa-caret-down"></i></span></span>';
+				$html .= '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span></span>';
 				$html .= '<div class="gd-bh-open-hours">';
 				foreach ( $business_hours['days'] as $day => $slots ) {
 					$class = '';

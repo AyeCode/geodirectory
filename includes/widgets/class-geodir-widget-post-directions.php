@@ -71,7 +71,7 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 		if(isset($gd_post->latitude) && $gd_post->latitude) {
 			?>
 			<div class="geodir_post_meta  geodir_get_directions" style="clear:both;">
-				<span class="geodir_post_meta_icon geodir-i-address" style=""><i class="fas fa-location-arrow"></i></span>
+				<span class="geodir_post_meta_icon geodir-i-address" style=""><i class="fas fa-location-arrow" aria-hidden="true"></i></span>
 				<span class="geodir_post_meta_title">
 					<a href="https://maps.google.com/?daddr=<?php echo esc_attr($gd_post->latitude);?>,<?php echo esc_attr($gd_post->longitude);?>"
 					target="_blank"><?php esc_attr_e( 'Get Directions', 'geodirectory' ); ?></a>

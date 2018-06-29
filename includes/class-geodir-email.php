@@ -879,6 +879,10 @@ class GeoDir_Email {
 			return false;
 		}
 
+		if ( ! geodir_is_gd_post_type( get_post_type( $comment->comment_post_ID ) ) ) {
+			return false;
+		}
+
 		$gd_post = geodir_get_post_info( $comment->comment_post_ID );
 		if ( empty( $gd_post ) ) {
 			return false;

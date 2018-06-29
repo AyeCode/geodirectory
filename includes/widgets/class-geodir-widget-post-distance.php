@@ -57,7 +57,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 
 		ob_start();
         ?>
-        <span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road"></i> </span><?php echo $distance; ?>
+        <span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road" aria-hidden="true"></i> </span><?php echo $distance; ?>
         <?php
         return ob_get_clean();
     }

@@ -28,7 +28,7 @@ function geodir_predefined_custom_field_output_twitter_feed($html,$location,$cf)
 		if (strpos($field_icon, 'http') !== false) {
 			$field_icon_af = '';
 		} elseif ($field_icon == '') {
-			$field_icon_af = ($cf['htmlvar_name'] == 'geodir_timing') ? '<i class="fas fa-clock"></i>' : "";
+			$field_icon_af = ($cf['htmlvar_name'] == 'geodir_timing') ? '<i class="fas fa-clock" aria-hidden="true"></i>' : "";
 		} else {
 			$field_icon_af = $field_icon;
 			$field_icon = '';

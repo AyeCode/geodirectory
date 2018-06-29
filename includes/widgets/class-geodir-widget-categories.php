@@ -269,7 +269,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                         var $widgetBox = jQuery(this).closest('.geodir-categories-container');
                         var $container = jQuery('.gd-cptcat-rows', $widgetBox);
                         $container.addClass('gd-loading');
-                        $container.html('<i class="fas fa-cog fa-spin"></i>');
+                        $container.html('<i class="fas fa-cog fa-spin" aria-hidden="true"></i>');
                         var data = {
                             'action': 'geodir_cpt_categories',
                             'security': geodir_params.basic_nonce,

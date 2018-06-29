@@ -135,7 +135,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         <span class="gd-list-rating-stars">
            <?php
            if ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
-               echo '<i class="fas fa-comments"></i>';
+               echo '<i class="fas fa-comments" aria-hidden="true"></i>';
            } else {
                if(geodir_is_block_demo()){
                    $post_rating = "5";
@@ -166,7 +166,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         <span class="gd-list-rating-text">
             <?php
             if ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
-                echo '<i class="fas fa-comments"></i>';
+                echo '<i class="fas fa-comments" aria-hidden="true"></i>';
             }
             ?>
             <a href="<?php comments_link(); ?>" class="gd-list-rating-link">

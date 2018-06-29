@@ -97,7 +97,7 @@ class GeoDir_Admin_Dashboard {
 		<div class="wrap gd-dashboard">
 			<div class="row gd-dash-row gd-row-head">
 				<div class="col-lg-12">
-					<h1 class="page-header gd-dash-title"><?php _e( 'Dashboard', 'geodirectory' ); ?> <button type="button" data-handle="gd-toggle-dashboard" class="gd-handlediv"><span class="gd-toggle-indicator"><i class="fas fa-angle-down"></i><i class="fas fa-angle-up"></i></span></button></h1>
+					<h1 class="page-header gd-dash-title"><?php _e( 'Dashboard', 'geodirectory' ); ?> <button type="button" data-handle="gd-toggle-dashboard" class="gd-handlediv"><span class="gd-toggle-indicator"><i class="fas fa-angle-down" aria-hidden="true"></i><i class="fas fa-angle-up" aria-hidden="true"></i></span></button></h1>
 				</div>
 			</div>
 			<div class="gd-toggle-dashboard">
@@ -109,7 +109,7 @@ class GeoDir_Admin_Dashboard {
 			<?php foreach ( $this->pending_stats as $item => $item_data ) { ?>
 				<div class="col-lg-4 col-md-6" data-pending-type="<?php echo $item; ?>">
 					<div class="panel panel-info gd-collapsed gd-pending-item">
-						<div class="panel-heading gd-collapse"><h3 class="panel-title"><span class="badge gd-icon"><i class="fas <?php echo $item_data['icon']; ?>"></i></span> <?php echo $item_data['label']; ?><span class="badge gd-stat-no"><?php echo $item_data['total']; ?></span> <span class="pull-right"><i class="fas fa-angle-down"></i></span></h3></div>
+						<div class="panel-heading gd-collapse"><h3 class="panel-title"><span class="badge gd-icon"><i class="fas <?php echo $item_data['icon']; ?>" aria-hidden="true"></i></span> <?php echo $item_data['label']; ?><span class="badge gd-stat-no"><?php echo $item_data['total']; ?></span> <span class="pull-right"><i class="fas fa-angle-down" aria-hidden="true"></i></span></h3></div>
 						<div class="gd-collapsable">
 							<div class="panel-body text-center">
 								<div class="row gd-row-cpt">
@@ -119,7 +119,7 @@ class GeoDir_Admin_Dashboard {
 												<?php if ( ! empty( $cpt_data['url'] ) ) { ?><a href="<?php echo esc_url( $cpt_data['url'] ); ?>"><?php } ?>
 												<div class="panel panel-default">
 													<div class="panel-body">
-														<span class="gd-stat-lbl"><i class="fas <?php echo $cpt_data['icon']; ?>"></i> <?php echo $cpt_data['label']; ?></span>
+														<span class="gd-stat-lbl"><i class="fas <?php echo $cpt_data['icon']; ?>" aria-hidden="true"></i> <?php echo $cpt_data['label']; ?></span>
 														<span class="gd-stat-val"><?php echo $cpt_data['total']; ?></span>
 													</div>
 												</div>
@@ -165,8 +165,8 @@ class GeoDir_Admin_Dashboard {
 								</div>
 							</div>
 							<div class="gd-stats-data gd-stats-wait"> 
-								<div class="gd-stat-loader" style="display:none;"><i class="fas fa-spinner fa-spin fa-3x fa-fw"></i><span class="sr-only">Loading...</span></div>
-								<div class="gd-stat-format" style="display:none!important"><div class="col-xs-12 col-sm-6 col-md-4 col-lg-2 gd-stat gd-stat-{stat}"><div class="well text-center"><span class="gd-stat-icon"><i class="{icon}"></i></span><span class="gd-stat-name">{label}</span><span class="gd-stat-no">{value}</span></div></div></div>
+								<div class="gd-stat-loader" style="display:none;"><i class="fas fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only">Loading...</span></div>
+								<div class="gd-stat-format" style="display:none!important"><div class="col-xs-12 col-sm-6 col-md-4 col-lg-2 gd-stat gd-stat-{stat}"><div class="well text-center"><span class="gd-stat-icon"><i class="{icon}" aria-hidden="true"></i></span><span class="gd-stat-name">{label}</span><span class="gd-stat-no">{value}</span></div></div></div>
 								<div class="gd-stats-details">
 									<div class="row gd-stats-items">
 									</div>

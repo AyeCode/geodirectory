@@ -95,9 +95,9 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 
                 ?>
                 <div id="geodir-tab-mobile-menu">
-<!--                    <i class="fas fa-bars"></i>-->
+<!--                    <i class="fas fa-bars" aria-hidden="true"></i>-->
                     <span class="geodir-mobile-active-tab"></span>
-                    <i class="fas fa-sort-down"></i>
+                    <i class="fas fa-sort-down" aria-hidden="true"></i>
                 </div>
                 <?php
                 echo '<dl class="geodir-tab-head">';

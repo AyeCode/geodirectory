@@ -121,11 +121,11 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 					$post_id = (int)$_REQUEST['pid'];
 				}
 				$editlink = geodir_edit_post_link($post_id);
-				echo '<span class="gd_user_action edit_link"><i class="fas fa-pencil-alt"></i> <a href="' . esc_url($editlink) . '">' . __('Edit', 'geodirectory') . '</a></span>';
+				echo '<span class="gd_user_action edit_link"><i class="fas fa-pencil-alt" aria-hidden="true"></i> <a href="' . esc_url($editlink) . '">' . __('Edit', 'geodirectory') . '</a></span>';
 			}
 
 			if(!$args['hide_delete']) {
-				echo '<span class="gd_user_action delete_link"><i class="fas fa-trash"></i> <a href="javascript:void(0);" onclick="gd_delete_post('.$post_id.');">' . __('Delete', 'geodirectory') . '</a></span>';
+				echo '<span class="gd_user_action delete_link"><i class="fas fa-trash" aria-hidden="true"></i> <a href="javascript:void(0);" onclick="gd_delete_post('.$post_id.');">' . __('Delete', 'geodirectory') . '</a></span>';
 			}
 
 			do_action( 'geodir_widget_after_detail_user_actions' );
@@ -160,15 +160,15 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 				// we need to query real status direct as we dynamically change the status for author on author page so even non author status can view them.
 				$real_status = $wpdb->get_var("SELECT post_status from $wpdb->posts WHERE ID=$post->ID");
 				$status = "<strong>(";
-				$status_icon = '<i class="fas fa-play"></i>';
+				$status_icon = '<i class="fas fa-play" aria-hidden="true"></i>';
 				if ($real_status == 'publish') {
 					$status .= __('Published', 'geodirectory');
 				} elseif($real_status == 'pending') {
 					$status .= __('Awaiting review', 'geodirectory');
-					$status_icon = '<i class="fas fa-pause"></i>';
+					$status_icon = '<i class="fas fa-pause" aria-hidden="true"></i>';
 				}else {
 					$status .= __('Not published', 'geodirectory');
-					$status_icon = '<i class="fas fa-pause"></i>';
+					$status_icon = '<i class="fas fa-pause" aria-hidden="true"></i>';
 				}
 				$status .= ")</strong>";
 

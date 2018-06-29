@@ -15,6 +15,6 @@
  ?>
 
 <div class="gd-notification gd-has-closed">
-	<i class="fas fa-exclamation-circle"></i> 
+	<i class="fas fa-exclamation-circle" aria-hidden="true"></i> 
 	<?php echo wp_sprintf( __( 'This %s appears to have closed down and may be removed soon.', 'geodirectory' ), $cpt_name ); ?>
 </div>
