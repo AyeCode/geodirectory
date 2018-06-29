@@ -480,6 +480,7 @@ class GeoDir_Admin_Settings {
 								<?php echo ! empty( $value['placeholder'] ) ? ' data-placeholder="' . esc_attr( $value['placeholder'] ) . '"' : ''; ?>
 								>
 								<?php
+								print_r($value['options'] );
 									foreach ( $value['options'] as $key => $val ) {
 										?>
 										<option value="<?php echo esc_attr( $key ); ?>" <?php
