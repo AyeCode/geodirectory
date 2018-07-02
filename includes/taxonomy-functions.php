@@ -18,6 +18,7 @@
  * @param string $post_type The post type.
  * @param bool $tages_taxonomies Is this a tag taxonomy?. Default: false.
  * @return array|bool Taxonomies on success. false on failure.
+ * @todo moved to class
  */
 function geodir_get_taxonomies($post_type = '', $tages_taxonomies = false)
 {
@@ -303,7 +304,7 @@ function geodir_get_term_link($termlink, $term, $taxonomy)
 {
     return geodir_term_link($termlink, $term, $taxonomy); // taxonomy_functions.php
 }
-add_filter('term_link', 'geodir_get_term_link', 10, 3);
+//add_filter('term_link', 'geodir_get_term_link', 10, 3);
 
 /**
  * Retrieve the post type archive permalink.

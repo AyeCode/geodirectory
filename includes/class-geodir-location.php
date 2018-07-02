@@ -192,6 +192,17 @@ class GeoDir_Location {
 		return $country;
 	}
 
+	/**
+	 * An array of the used location vars.
+	 *
+	 * These are used in the where queries.
+	 *
+	 * @return array
+	 */
+	public function allowed_query_variables(){
+		return array('country','region','city');
+	}
+
 }
 
 

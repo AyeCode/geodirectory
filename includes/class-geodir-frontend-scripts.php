@@ -339,7 +339,7 @@ class GeoDir_Frontend_Scripts {
 	 * @param  string   $version Optional. Version. Default GEODIRECTORY_VERSION.
 	 * @param  boolean  $in_footer Optional. In footer. Default true.
 	 */
-	private static function enqueue_script( $handle, $path = '', $deps = array( 'jquery' ), $version = GEODIRECTORY_VERSION, $in_footer = true ) {
+	public static function enqueue_script( $handle, $path = '', $deps = array( 'jquery' ), $version = GEODIRECTORY_VERSION, $in_footer = true ) {
 		if ( ! in_array( $handle, self::$scripts ) && $path ) {
 			self::register_script( $handle, $path, $deps, $version, $in_footer );
 		}
@@ -585,7 +585,7 @@ class GeoDir_Frontend_Scripts {
 
 		// details page
 		if(geodir_is_page('single')){
-			self::enqueue_script( 'jquery-flexslider' );
+			//self::enqueue_script( 'jquery-flexslider' ); // moved to widget
 		}
 
 

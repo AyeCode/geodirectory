@@ -20,32 +20,41 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_Permalinks {
 
-	/**
-	 * Hook in methods.
-	 */
-	public static function init() {
+	public function __construct() {
+		// add rewrite tags (query params)
+		add_action('init', array( $this, 'rewrite_tags'), 10, 0);
 
-		add_filter( 'post_type_link', array( __CLASS__, 'post_permalink_structure'), 0, 4);
+		// post (single) rewrite rules
+		add_action('init', array( $this, 'post_rewrite_rules'), 10, 0);
+
+		// location page rewrite rules
+		add_action('init', array( $this, 'location_rewrite_rules'), 11,0);
+
+		// search page rewrite rules
+		add_action('init', array( $this, 'search_rewrite_rules'), 11,0);
+
+		// author page permalinks
+		add_filter( 'author_rewrite_rules', array( $this, 'author_rewrite_rules' ) );
+
+		// post (single) url filter
+		add_filter( 'post_type_link', array( $this, 'post_url'), 0, 4);
+
+
+
+
+
+
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
-		add_action('init', array( __CLASS__, 'rewrite_tags'), 10, 0);
-		add_action('init', array( __CLASS__, 'rewrite_rules'), 10, 0);
-
-		//add_action('init', array( __CLASS__, 'author_cpt_rules'), 10, 0);
-
-		add_filter( 'author_rewrite_rules', array( __CLASS__, 'author_cpt_rules' ) );
-		//add_action( 'author_rewrite_rules', array( __CLASS__, 'author_cpt_rules' ) );
-
-
-		add_action('init', array( __CLASS__, 'rewrite_locations'), 10);
-
-		//add_action('init', array( __CLASS__, 'kill_feed_rewrites'),10000000000);
-
-
+		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
 	}
+	
 
-	public static function kill_feed_rewrites($rules){
+	// @todo remove after testing
+	public function temp_check_rules($rules){
 
+		global $wp_rewrite;
+		print_r( $wp_rewrite );
 		print_r(get_option( 'rewrite_rules' ));
 
 		echo '###';exit;
@@ -56,12 +65,19 @@ class GeoDir_Permalinks {
 	/**
 	 * Add the locations page rewrite rules.
 	 */
-	public static function rewrite_locations(){
-		global $wp_query;
-		//print_r($wp_query);
-		//add_rewrite_rule( self::search_slug().'/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
+	public function location_rewrite_rules(){
+		// locations page
+		add_rewrite_rule( $this->location_slug()."/([^/]+)/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]&city=$matches[3]', 'top' );
+		add_rewrite_rule( $this->location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]', 'top' );
+		add_rewrite_rule( $this->location_slug()."/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]', 'top' );
+	}
 
-		$gd_permalink_structure = "";
+	/**
+	 * Add the search page rewrite rules.
+	 */
+	public function search_rewrite_rules(){
+		// add search paging rewrite
+		add_rewrite_rule( $this->search_slug() . '/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
 	}
 
 	/**
@@ -73,7 +89,7 @@ class GeoDir_Permalinks {
 	 *
 	 * @return array $rules.
 	 */
-	public static function author_cpt_rules( $rules ){
+	public function author_rewrite_rules( $rules ){
 		global $wp_rewrite;
 
 		$post_types = geodir_get_posttypes( 'array' );
@@ -82,7 +98,7 @@ class GeoDir_Permalinks {
 			foreach($post_types as $post_type => $cpt){
 
 				$cpt_slug = isset($cpt['rewrite']['slug']) ? $cpt['rewrite']['slug'] : '';
-				$saves_slug = self::favs_slug( $cpt_slug );
+				$saves_slug = $this->favs_slug( $cpt_slug );
 
 				// add CPT author rewrite rules
 				$rules[$wp_rewrite->author_base."/([^/]+)/$cpt_slug/?$"] = 'index.php?author_name=$matches[1]&post_type='.$post_type;
@@ -95,8 +111,6 @@ class GeoDir_Permalinks {
 				$rules[$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]';
 			}
 		}
-
-		//if(is_admin()){print_r($rules );exit;} // for testing
 
 		return $rules;
 	}
@@ -123,7 +137,7 @@ class GeoDir_Permalinks {
 	 * @param bool $sample Is this a sample post?.
 	 * @return string The post link.
 	 */
-	public static function post_permalink_structure($post_link, $post_obj, $leavename, $sample)
+	public function post_url($post_link, $post_obj, $leavename, $sample)
 	{
 		//echo '###'.$post_link."<br />".$sample." \n" ;
 		//print_r($post_obj);
@@ -209,7 +223,7 @@ class GeoDir_Permalinks {
 			 * Add Country if needed. (%country%)
 			 */
 			if (strpos($permalink, '%country%') !== false) {
-				$locations = self::get_post_location_slugs($gd_post);
+				$locations = $this->get_post_location_slugs($gd_post);
 				if(isset($locations->country_slug) && $locations->country_slug){
 					$permalink = str_replace('%country%',$locations->country_slug,$permalink);
 				}
@@ -219,7 +233,7 @@ class GeoDir_Permalinks {
 			 * Add Region if needed. (%region%)
 			 */
 			if (strpos($permalink, '%region%') !== false) {
-				$locations = isset($locations) ? $locations : self::get_post_location_slugs($gd_post);
+				$locations = isset($locations) ? $locations : $this->get_post_location_slugs($gd_post);
 				if(isset($locations->region_slug) && $locations->region_slug){
 					$permalink = str_replace('%region%',$locations->region_slug,$permalink);
 				}
@@ -229,7 +243,7 @@ class GeoDir_Permalinks {
 			 * Add City if needed. (%city%)
 			 */
 			if (strpos($permalink, '%city%') !== false) {
-				$locations = isset($locations) ? $locations : self::get_post_location_slugs($gd_post);
+				$locations = isset($locations) ? $locations : $this->get_post_location_slugs($gd_post);
 				if(isset($locations->city_slug) && $locations->city_slug){
 					$permalink = str_replace('%city%',$locations->city_slug,$permalink);
 				}
@@ -305,7 +319,7 @@ class GeoDir_Permalinks {
      * @param object $post Post object.
      * @return object Post location slugs.
      */
-	private static function get_post_location_slugs($gd_post){
+	private function get_post_location_slugs($gd_post){
 		//print_r($gd_post);echo '###';
 		global $geodirectory;
 		//return apply_filters('geodir_post_permalinks',geodir_get_default_location(), $gd_post);
@@ -316,10 +330,10 @@ class GeoDir_Permalinks {
 	/**
 	 * Register GD rewrite rules.
 	 */
-	public static function rewrite_rules() {
+	public function post_rewrite_rules() {
 		$gd_permalink_structure = geodir_get_permalink_structure();
 
-		$post_types = geodir_get_posttypes('array');
+		$post_types = geodir_get_posttypes( 'array' );
 
 		if ( ! empty( $post_types ) ) {
 			if ( empty( $gd_permalink_structure ) ) {
@@ -330,61 +344,51 @@ class GeoDir_Permalinks {
 			foreach ( $post_types as $cpt => $post_type ) {
 
 				$cpt_permalink_arr = $permalink_arr;
-				foreach($cpt_permalink_arr as $key => $val){
-					if($val=='%category%'){
-						$cpt_permalink_arr[$key] = "%".$cpt."category%";
+				foreach ( $cpt_permalink_arr as $key => $val ) {
+					if ( $val == '%category%' ) {
+						$cpt_permalink_arr[ $key ] = "%" . $cpt . "category%";
 					}
 				}
 
 				// add the post single permalinks
-				//$regex = '^' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
-				$regex = '' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
-				$redirect = 'index.php?';
-				$match = 1;
+				$regex      = '' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
+				$redirect   = 'index.php?';
+				$match      = 1;
 				$query_vars = array();
 
-				foreach( $cpt_permalink_arr as $tag ) {
+				foreach ( $cpt_permalink_arr as $tag ) {
 					$tag = trim( $tag, "%" );
-					if ( $tag == "postname") {
+					if ( $tag == "postname" ) {
 						$query_vars[] = "$cpt=" . '$matches[' . $match . ']';
 					} else {
 						$query_vars[] = trim( $tag, "%" ) . '=$matches[' . $match . ']';
 					}
-					$match++;
+					$match ++;
 				}
 				if ( ! empty( $query_vars ) ) {
 					$redirect .= implode( '&', $query_vars );
 				}
-//geodir_error_log( $redirect, $regex, __FILE__, __LINE__ );
-				//echo '###'.$redirect."\n";
-				$after = $gd_permalink_structure=="/%postname%/" ? 'bottom' : 'top';
+
+				$after = $gd_permalink_structure == "/%postname%/" ? 'bottom' : 'top';
 				add_rewrite_rule( $regex, $redirect, $after );
 			}
 		}
-
-
-		// add search paging rewrite
-		add_rewrite_rule( self::search_slug().'/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
-
-
-		// locations page
-		add_rewrite_rule( self::location_slug()."/([^/]+)/([^/]+)/([^/]+)/?", 'index.php?pagename='.self::location_slug().'&country=$matches[1]&region=$matches[2]&city=$matches[3]', 'top' );
-		add_rewrite_rule( self::location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.self::location_slug().'&country=$matches[1]&region=$matches[2]', 'top' );
-		add_rewrite_rule( self::location_slug()."/([^/]+)/?", 'index.php?pagename='.self::location_slug().'&country=$matches[1]', 'top' );
-
 	}
+
+
+
 
 	/**
 	 * Add GD rewrite tags.
      *
      * @since 2.0.0
 	 */
-	public static function rewrite_tags(){
+	public function rewrite_tags(){
 		add_rewrite_tag('%country%', '([^&]+)');
 		add_rewrite_tag('%region%', '([^&]+)');
 		add_rewrite_tag('%city%', '([^&]+)');
-		// add_rewrite_tag('%category%', '([^&]+)'); // conflicts with standard category rewrite rule.
 		add_rewrite_tag('%gd_favs%', '([^&]+)');
+		add_rewrite_tag('%sort_by%', '([^&]+)');
 	}
 
 	/**
@@ -396,7 +400,7 @@ class GeoDir_Permalinks {
 	 *
 	 * @return mixed|void
 	 */
-	public static function favs_slug($cpt_slug = '' ){
+	public function favs_slug($cpt_slug = '' ){
 		return apply_filters('geodir_rewrite_favs_slug','favs',$cpt_slug);
 	}
 
@@ -409,7 +413,7 @@ class GeoDir_Permalinks {
 	 *
 	 * @return string
 	 */
-	public static function search_slug($search_slug = 'search' ){
+	public function search_slug($search_slug = 'search' ){
 
 		if($page_id = geodir_search_page_id()){
 			if($slug = get_post_field( 'post_name', $page_id )){
@@ -429,7 +433,7 @@ class GeoDir_Permalinks {
 	 *
 	 * @return string
 	 */
-	public static function location_slug($location_slug = 'location' ){
+	public function location_slug($location_slug = 'location' ){
 
 		if($page_id = geodir_location_page_id()){
 			if($slug = get_post_field( 'post_name', $page_id )){
@@ -443,4 +447,4 @@ class GeoDir_Permalinks {
 
 }
 
-GeoDir_Permalinks::init();
+

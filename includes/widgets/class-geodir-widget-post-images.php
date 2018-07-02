@@ -254,6 +254,9 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 
 			if($options['type']=='slider'){
+				// enqueue flexslider JS
+				GeoDir_Frontend_Scripts::enqueue_script( 'jquery-flexslider' );
+
 				$main_wrapper_class .= " geodir_flex-container ";
 				$second_wrapper_class .= " geodir_flexslider geodir-slider geodir-slider-loading ";
 				$ul_class = "geodir-slides";
