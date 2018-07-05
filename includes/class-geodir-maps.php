@@ -145,7 +145,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		
 		if ( ! $icon ) {
 			$icon = geodir_file_relative_url( GEODIRECTORY_PLUGIN_URL . '/assets/images/pin.png' );
-			geodir_update_option( 'geodir_default_marker_icon', $icon );
+			geodir_update_option( 'map_default_marker_icon', $icon );
 		}
 		
 		$icon = geodir_file_relative_url( $icon, $full_path );
@@ -220,7 +220,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	public static function get_categories_filter( $cat_taxonomy, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $is_home_map = false ) {
 		global $cat_count, $geodir_cat_icons;
 
-		$exclude_categories 	= geodir_get_option( 'geodir_exclude_cat_on_map', array() );
+		$exclude_categories 	= geodir_get_option( 'exclude_cat_on_map', array() );
 		$exclude_categories_new = geodir_get_option( 'geodir_exclude_cat_on_map_upgrade' );
 
 		// check if exclude categories saved before fix of categories identical names

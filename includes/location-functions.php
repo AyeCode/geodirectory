@@ -464,3 +464,36 @@ function geodir_location_slug_check($slug)
 
 }
 add_filter('geodir_location_slug_check', 'geodir_location_slug_check');
+
+function geodir_geo_by_ip( $ip = '' ) {
+	$geo = array();
+
+	$geoplugin_data = geodir_geoplugin_data( $ip );
+	if ( ! empty( $geoplugin_data ) && ! empty( $geoplugin_data['geoplugin_latitude'] ) && ! empty( $geoplugin_data['geoplugin_longitude'] ) ) {
+		$geo['latitude'] = $geoplugin_data['geoplugin_latitude'];
+		$geo['longitude'] = $geoplugin_data['geoplugin_longitude'];
+	}
+
+	return apply_filters( 'geodir_geo_by_ip', $geo, $ip );
+}
+
+function geodir_geoplugin_data( $ip = '' ) {
+	global $wp_version;
+
+	if ( empty( $ip ) ) {
+		$ip = geodir_get_ip();
+	}
+
+	if ( empty( $ip ) ) {
+		return NULL;
+	}
+
+	$geoplugin_data = array();
+	$url = 'http://www.geoplugin.net/php.gp?ip=' . $ip;
+	$response = file_get_contents( $url );
+	if ( ! empty( $response ) ) {
+		$geoplugin_data = maybe_unserialize( $response );
+	}
+
+	return apply_filters( 'geodir_geoplugin_data', $geoplugin_data, $ip );
+}

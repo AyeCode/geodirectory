@@ -94,13 +94,15 @@ class GeoDir_Frontend_Scripts {
 	 */
 	public static function js_location_functions() {
 		global $geodirectory;
-		$default_search_for_text = SEARCH_FOR_TEXT;
-		if (geodir_get_option('geodir_search_field_default_text'))
-			$default_search_for_text = __(geodir_get_option('geodir_search_field_default_text'), 'geodirectory');
+		$default_search_for_text = geodir_get_option( 'search_default_text' );
+		if ( ! $default_search_for_text ) {
+			$default_search_for_text = geodir_get_search_default_text();
+		}
 
-		$default_near_text = NEAR_TEXT;
-		if (geodir_get_option('geodir_near_field_default_text'))
-			$default_near_text = __(geodir_get_option('geodir_near_field_default_text'), 'geodirectory');
+		$default_near_text = geodir_get_option( 'search_default_near_text' );
+		if ( ! $default_near_text ) {
+			$default_near_text = geodir_get_search_default_near_text();
+		}
 
 		$search_location = $geodirectory->location->get_default_location();
 
@@ -188,7 +190,7 @@ class GeoDir_Frontend_Scripts {
 						initialise2();
 					} else {
 						<?php
-						$near_add = geodir_get_option('geodir_search_near_addition');
+						$near_add = geodir_get_option('search_near_addition');
 						/**
 						 * Adds any extra info to the near search box query when trying to geolocate it via google api.
 						 *
