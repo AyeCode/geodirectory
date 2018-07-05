@@ -303,7 +303,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
      */
 	public static function map_post_types() {
 		$map_post_types     = geodir_get_posttypes( 'options-plural' );
-		$exclude_post_types = geodir_get_option( 'geodir_exclude_post_type_on_map' );
+		$exclude_post_types = geodir_get_option( 'exclude_post_type_on_map' );
 		if ( ! empty( $exclude_post_types ) && is_array( $exclude_post_types ) ) {
 			foreach ( $exclude_post_types as $post_type ) {
 				if ( ! empty( $map_post_types ) && isset( $map_post_types[ $post_type ] ) ) {
