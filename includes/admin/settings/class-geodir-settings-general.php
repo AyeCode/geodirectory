@@ -125,7 +125,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			 */
 			$settings = apply_filters( 'geodir_developer_options', array(
 				array(
-					'title' => __( 'Uninstall Settings', 'geodirectory' ),
+					'title' => __( 'Developer Settings', 'geodirectory' ),
 					'type'  => 'title',
 					'desc'  => '',
 					'id'    => 'developer_options',
