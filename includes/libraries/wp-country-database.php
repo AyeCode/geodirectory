@@ -270,6 +270,18 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 			return $wpdb->get_var($wpdb->prepare("SELECT alpha2Code FROM " . $this->db_table . " WHERE name LIKE %s", $country_name));
 		}
 
+		/**
+		 * Get the country iso2 cod from country name.
+		 *
+		 * @param $country_name
+		 *
+		 * @return null|string
+		 */
+		public function get_country_slug($country_name){
+			global $wpdb;
+			return $wpdb->get_var($wpdb->prepare("SELECT slug FROM " . $this->db_table . " WHERE name LIKE %s", $country_name));
+		}
+
 
 	}
 

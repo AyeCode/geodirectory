@@ -118,10 +118,12 @@
     padding: 15px;
     border-radius: 4px;
     min-width: 50vw;
+    @media(max-width:767px) {
+      min-width: 98vw;
+    }
     max-width: 1000px;
     min-height:25vh;
     color: #505050;
-    overflow: auto;
     overflow: auto;
     input,select{
       width: 100%;

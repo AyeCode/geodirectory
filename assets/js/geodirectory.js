@@ -1323,3 +1323,30 @@ function geodir_animate_markers(){
         };
     }
 }
+
+/**
+ * Test if browser local storage is available.
+ * 
+ * @returns {boolean}
+ */
+function geodir_is_localstorage(){
+    var test = 'geodirectory';
+    try {
+        localStorage.setItem(test, test);
+        localStorage.removeItem(test);
+        return true;
+    } catch(e) {
+        return false;
+    }
+}
+
+/**
+ * Prevent onclick affecting parent elements.
+ *
+ * @param e
+ */
+function geodir_cancelBubble(e){
+    var evt = e ? e:window.event;
+    if (evt.stopPropagation)    evt.stopPropagation();
+    if (evt.cancelBubble!=null) evt.cancelBubble = true;
+}

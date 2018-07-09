@@ -516,6 +516,30 @@ function geodir_rest_markers_url( $query_args = array() ) {
 }
 
 /**
+ * Function for get rest markers url.
+ *
+ * @since 2.0.0
+ *
+ * @param array $query_args Optional. Rest markers url query argument. Default array.
+ * @return string $url.
+ */
+function geodir_rest_url($rest_base = '', $query_args = array() ) {
+	$namespace = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION;
+
+	if($rest_base){
+		$url = rest_url( sprintf( '%s/%s/', $namespace, $rest_base ) );
+	}else{
+		$url = rest_url( sprintf( '%s/', $namespace ) );
+	}
+
+	if ( ! empty( $query_args ) && is_array( $query_args ) ) {
+		$url = add_query_arg( $query_args, $url );
+	}
+
+	return apply_filters( 'geodir_rest_url', $url, $query_args );
+}
+
+/**
  * Function for rest sort options by posttype.
  *
  * @since 2.0.0

@@ -238,12 +238,15 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$options['limit'] = 1;
 		}
 
-		//print_r($options);echo '###';
 
 		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo']);
 
-		//print_r( $post_images );
-		
+
+		// make it just a image if only one
+		if($options['type']=='slider' && count($post_images) == 1){
+			$options['type']='image';
+		}
+
 
 		if (!empty($post_images)) {
 			$main_wrapper_class = "geodir-image-container";

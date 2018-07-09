@@ -199,6 +199,24 @@ class GeoDir_Admin_Menus {
 				</div>
 			<?php }
 
+			// custom additional
+			foreach ($endpoints as $key => $endpoint){
+				if($key != 'cpt_archives' && $key != 'cpt_add_listing' && $key != 'pages'){
+					$title = ucwords( str_replace("_"," ",$key));
+					?>
+					<h4><?php esc_attr_e($title ,'geodirectory');?></h4>
+					<div id="tabs-panel-geodirectory-endpoints" class="tabs-panel tabs-panel-active">
+						<ul id="geodirectory-endpoints-checklist" class="categorychecklist form-no-clear">
+							<?php
+							$walker = new Walker_Nav_Menu_Checklist(array());
+							echo walk_nav_menu_tree(array_map('wp_setup_nav_menu_item', $endpoints[$key]), 0, (object) array('walker' => $walker));
+							?>
+						</ul>
+					</div>
+				<?php }
+
+			}
+
 
 
 				?>
@@ -226,7 +244,6 @@ class GeoDir_Admin_Menus {
 		$items['cpt_archives'] = array();
 		$items['cpt_add_listing'] = array();
 		$items['pages'] = array();
-		$items['special'] = array();
 		$loop_index = 999;
 
 		// Get the add listing page id and url
@@ -340,16 +357,16 @@ class GeoDir_Admin_Menus {
 					$add_item->url = trailingslashit($add_listing_page_url)."?listing_type=$name";
 					$add_item->target = '';
 					$add_item->attr_title = '';
-					$add_item->classes = array('gd-menu-item');
+					$add_item->classes = array('gd-menu-item','geodir-location-switcher');
 					$add_item->xfn = '';
 
 					$items['cpt_add_listing'][$name] = $add_item;
 				}
-
 			}
 		}
+		
 
-		return apply_filters( 'geodirectory_menu_items', $items );
+		return apply_filters( 'geodirectory_menu_items', $items,$loop_index );
 	}
 }
 
