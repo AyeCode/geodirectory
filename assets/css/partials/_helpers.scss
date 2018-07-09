@@ -1,3 +1,7 @@
+.gd-hide{
+  display: none;
+}
+
 .gd-align-left{
   float: left;
 }
@@ -10,6 +14,23 @@
   text-align: center;
 }
 
+
+// IOS style scroll bars
+.gd-ios-scrollbars::-webkit-scrollbar
+{
+  width: 5px;  /* for vertical scrollbars */
+  height: 5px; /* for horizontal scrollbars */
+}
+
+.gd-ios-scrollbars::-webkit-scrollbar-track
+{
+  background: rgba(128, 128, 128, 0.1);
+}
+
+.gd-ios-scrollbars::-webkit-scrollbar-thumb
+{
+  background: rgba(128, 128, 128, 0.5);
+}
 /*--------------------------------------------------------------
 # Alignments
 --------------------------------------------------------------*/

@@ -46,13 +46,14 @@ class GeoDir_Permalinks {
 
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
-		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
+//		add_action('init', array( $this, 'temp_check_rules'),10000000000);
 	}
 	
 
 	// @todo remove after testing
 	public function temp_check_rules($rules){
 
+		if(is_admin()){return;}
 		global $wp_rewrite;
 		print_r( $wp_rewrite );
 		print_r(get_option( 'rewrite_rules' ));
@@ -67,9 +68,9 @@ class GeoDir_Permalinks {
 	 */
 	public function location_rewrite_rules(){
 		// locations page
-		add_rewrite_rule( $this->location_slug()."/([^/]+)/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]&city=$matches[3]', 'top' );
-		add_rewrite_rule( $this->location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]', 'top' );
-		add_rewrite_rule( $this->location_slug()."/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]', 'top' );
+		add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]&city=$matches[3]', 'top' );
+		add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]', 'top' );
+		add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]', 'top' );
 	}
 
 	/**
@@ -77,7 +78,7 @@ class GeoDir_Permalinks {
 	 */
 	public function search_rewrite_rules(){
 		// add search paging rewrite
-		add_rewrite_rule( $this->search_slug() . '/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
+		add_rewrite_rule( "^".$this->search_slug() . '/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
 	}
 
 	/**
@@ -101,14 +102,14 @@ class GeoDir_Permalinks {
 				$saves_slug = $this->favs_slug( $cpt_slug );
 
 				// add CPT author rewrite rules
-				$rules[$wp_rewrite->author_base."/([^/]+)/$cpt_slug/?$"] = 'index.php?author_name=$matches[1]&post_type='.$post_type;
-				$rules[$wp_rewrite->author_base."/([^/]+)/$cpt_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&post_type='.$post_type.'&paged=$matches[2]';
+				$rules["^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/?$"] = 'index.php?author_name=$matches[1]&post_type='.$post_type;
+				$rules["^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&post_type='.$post_type.'&paged=$matches[2]';
 
 				// favs
-				$rules[$wp_rewrite->author_base."/([^/]+)/$saves_slug/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1';
-				$rules[$wp_rewrite->author_base."/([^/]+)/$saves_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&paged=$matches[2]';
-				$rules[$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type;
-				$rules[$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]';
+				$rules["^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1';
+				$rules["^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&paged=$matches[2]';
+				$rules["^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type;
+				$rules["^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]';
 			}
 		}
 
@@ -351,7 +352,7 @@ class GeoDir_Permalinks {
 				}
 
 				// add the post single permalinks
-				$regex      = '' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
+				$regex      = '^' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
 				$redirect   = 'index.php?';
 				$match      = 1;
 				$query_vars = array();

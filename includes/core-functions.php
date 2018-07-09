@@ -252,6 +252,10 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 	$arr_alert_msg = array(
 		'plugin_url'                                   => geodir_plugin_url(),
 		'ajax_url'                                     => $ajax_url,
+		'api_url'                                      => geodir_rest_url(),
+		'location_base_url'                            => geodir_get_location_link('base'),
+		'location_url'                                 => geodir_get_location_link('current'),
+		'search_base_url'                              => get_permalink(geodir_get_page_id('search')),
 		'custom_field_not_blank_var'                   => __( 'Field label must not be blank', 'geodirectory' ),
 		'custom_field_not_special_char'                => __( 'Please do not use special character and spaces in field key Variable Name.', 'geodirectory' ),
 		'custom_field_unique_name'                     => __( 'Field key must be unique.', 'geodirectory' ),
