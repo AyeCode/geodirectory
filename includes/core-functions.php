@@ -939,14 +939,18 @@ function geodir_search_form_search_input() {
 	if(!$default_search_for_text){$default_search_for_text = geodir_get_search_default_text();}
 	?>
 	<div class='gd-search-input-wrapper gd-search-field-search'>
+		<?php 	do_action('geodir_before_search_for_input');?>
 		<input class="search_text" name="s"
 		       value="<?php if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
-			       echo esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
+			       $search_term = esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
+			       echo str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
 		       } ?>" type="text"
 		       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"
+		       onClick="this.select();"
 		       placeholder="<?php esc_html_e($default_search_for_text,'geodirectory') ?>" 
 		       aria-label="<?php esc_html_e($default_search_for_text,'geodirectory') ?>"
 		/>
+		<?php 	do_action('geodir_after_search_for_input');?>
 	</div>
 	<?php
 }
@@ -1012,21 +1016,38 @@ function geodir_search_form_near_input() {
 
 
 	echo "<div class='gd-search-input-wrapper gd-search-field-near' $near_input_extra>";
-	do_action('geodir_before_near_input');
+	do_action('geodir_before_search_near_input');
 	?>
 	<input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
 	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>
+	       onClick="this.select();"
 	       placeholder="<?php esc_html_e($default_near_text,'geodirectory') ?>"
 	       aria-label="<?php esc_html_e($default_near_text,'geodirectory') ?>"
 	/>
 	<?php
-	do_action('geodir_after_near_input');
+	do_action('geodir_after_search_near_input');
 	echo "</div>";
 }
 
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_post_type_input', 10 );
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_search_input', 20 );
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
+
+/**
+ * Adds a icon to the search near input.
+ */
+function geodir_search_near_label() {
+	echo '<i class="fas fa-map-marker-alt geodir-search-input-label"></i>';
+}
+add_action('geodir_before_search_near_input','geodir_search_near_label');
+
+/**
+ * Adds a icon to the search for input.
+ */
+function geodir_search_for_label() {
+	echo '<i class="fas fa-search geodir-search-input-label"></i>';
+}
+add_action('geodir_before_search_for_input','geodir_search_for_label');
 
 /**
  * Get search post type.

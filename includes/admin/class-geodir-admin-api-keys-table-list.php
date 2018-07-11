@@ -195,7 +195,8 @@ class GeoDir_Admin_API_Keys_Table_List extends WP_List_Table {
 		$search = '';
 
 		if ( ! empty( $_REQUEST['s'] ) ) {
-			$search = "AND description LIKE '%" . esc_sql( $wpdb->esc_like( geodir_clean( $_REQUEST['s'] ) ) ) . "%' ";
+			$search_term = str_replace(array("%E2%80%99","’"),array("%27","'"),$_REQUEST['s']);// apple suck
+			$search = "AND description LIKE '%" . esc_sql( $wpdb->esc_like( geodir_clean( $search_term ) ) ) . "%' ";
 		}
 
 		// Get the API keys
