@@ -86,4 +86,5 @@ $form_class = apply_filters('geodir_search_form_class', $form_class);
     </div>
     <input name="sgeo_lat" class="sgeo_lat" type="hidden" value=""/>
     <input name="sgeo_lon" class="sgeo_lon" type="hidden" value=""/>
+    <?php do_action('geodir_search_hidden_fields');?>
 </form>

@@ -93,13 +93,28 @@ body {
           .gd-search-input-wrapper {
             width: 28%;
             float: left;
-            padding: 0 3px;
-            margin: 5px 0;
+            padding: 0;
+            margin: 5px 3px;
             -webkit-flex: 50;
             flex: 50;
             min-width: 150px;
+            position: relative;
             select, input[type=text], select.search_by_post {
               width: 100%;
+            }
+            .geodir-search-input-label{
+              position: absolute;
+              color: #ccc;
+              font-size: 15px;
+              margin: 0;
+              top: 12px;
+              left: 10px;
+              &+input{
+                padding-left: 24px;
+                &.search_text{
+                  padding-left: 26px;
+                }
+              }
             }
           }
           .gd-search-input-wrapper.gd-search-field-cpt {

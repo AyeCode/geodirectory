@@ -82,6 +82,11 @@ if ( $wp_query->max_num_pages <= 1 ) {
 
 	}
 
+	if (function_exists('geodir_location_geo_home_link')) {
+		remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+	}
+
+
 	if($gd_advanced_pagination=='before' && $pagination_info){
 		echo $pagination_info;
 	}
@@ -102,5 +107,10 @@ if ( $wp_query->max_num_pages <= 1 ) {
 	if($gd_advanced_pagination=='after' && $pagination_info){
 		echo $pagination_info;
 	}
+
+	if (function_exists('geodir_location_geo_home_link')) {
+		add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+	}
+
 	?>
 </nav>
