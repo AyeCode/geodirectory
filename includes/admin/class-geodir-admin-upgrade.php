@@ -18,78 +18,92 @@ if ( ! defined( 'ABSPATH' ) ) {
 class GeoDir_Admin_Upgrade {
 
 	public static function init() {
-		add_action( 'geodir_v1_to_v2_convert_options_after', array( __CLASS__, 'set_permalink_structure' ), 10, 1 );
+		add_action( 'geodir_update_200_settings_after', array( __CLASS__, 'update_200_set_permalink_structure' ), 10, 1 );
+	}
 
+	public static function update_200() {
 		// Start
-		self::start_conversion();
+		self::update_200_start();
 
 		// Options
-		self::convert_options();
+		self::update_200_settings();
 
 		// Fields
-		self::convert_fields();
+		self::update_200_fields();
 
 		// Categories & Tags
-		self::convert_terms();
+		self::update_200_terms();
 
 		// Posts
-		self::convert_posts();
+		self::update_200_posts();
 
 		// End
-		self::end_conversion();
+		self::update_200_complete();
 	}
 
-	public static function start_conversion() {
-		do_action( 'geodir_v1_to_v2_start_conversion' );
+	public static function update_200_start() {
+		do_action( 'geodir_update_200_start' );
 	}
 
-	public static function convert_options() {
-		do_action( 'geodir_v1_to_v2_convert_options_before' );
+	public static function update_200_settings() {
+		do_action( 'geodir_update_200_options_before' );
 
 		$saved_options = get_option( 'geodir_settings' );
 		if ( empty( $saved_options ) ) {
 			$saved_options = array();
 		}
 
-		$update_options = self::get_options();
+		$update_options = self::update_200_get_options();
 		foreach ( $update_options as $key => $value ) {
 			$saved_options[ $key ] = $value;
 		}
+		/*$default_options = self::update_200_default_options();
+		foreach ( $update_options as $key => $value ) {
+			$saved_options[ $key ] = $value;
+		}*/
 
 		update_option( 'geodir_settings', $saved_options );
 
-		do_action( 'geodir_v1_to_v2_convert_options_after' );
+		do_action( 'geodir_update_200_options_after' );
 	}
 
-	public static function convert_fields() {
-		do_action( 'geodir_v1_to_v2_convert_fields_before' );
+	public static function update_200_fields() {
+		do_action( 'geodir_update_200_fields_before' );
 
-		self::convert_fields();
+		// Custom fields
+		self::update_200_custom_fields();
 
-		do_action( 'geodir_v1_to_v2_convert_fields_after' );
+		// Post fields
+		self::update_200_post_fields();
+
+		do_action( 'geodir_update_200_fields_after' );
 	}
 
-	public static function convert_terms() {
-		do_action( 'geodir_v1_to_v2_convert_terms_before' );
+	public static function update_200_terms() {
+		do_action( 'geodir_update_200_terms_before' );
 
-		self::convert_term_meta();
+		self::update_200_term_metas();
 
-		do_action( 'geodir_v1_to_v2_convert_terms_after' );
+		do_action( 'geodir_update_200_terms_after' );
 	}
 
-	public static function convert_posts() {
-		do_action( 'geodir_v1_to_v2_convert_posts_before' );
+	public static function update_200_posts() {
+		do_action( 'geodir_update_200_posts_before' );
 
-		self::convert_post_tables();
+		self::update_200_reviews();
+		self::update_200_attachments();
 
-		do_action( 'geodir_v1_to_v2_convert_posts_after' );
+		do_action( 'geodir_update_200_posts_after' );
 	}
 
-	public static function end_conversion() {
-		do_action( 'geodir_v1_to_v2_end_conversion' );
+	public static function update_200_complete() {
+		do_action( 'geodir_update_200_complete' );
+		
+		// Flush rules after update
+		do_action( 'geodir_flush_rewrite_rules' );
 	}
 
-	public static function get_options() {
+	public static function update_200_get_options() {
 		$v1_post_types = get_option( 'geodir_post_types' );
 		$v2_post_types = array();
 		if ( ! empty( $old_post_types ) ) {
@@ -115,7 +129,7 @@ class GeoDir_Admin_Upgrade {
 					$data['menu_icon'] = 'dashicons-admin-site';
 				}
 
-				$data['default_image'] = self::generate_attachment_id( get_option( 'geodir_cpt_img_' . $post_type ) );
+				$data['default_image'] = self::update_200_generate_attachment_id( get_option( 'geodir_cpt_img_' . $post_type ) );
 
 				$data['disable_reviews'] = ! in_array( $post_type, (array) get_option( 'geodir_disable_rating_cpt' ) );
 				$data['disable_favorites'] = 0;
@@ -201,16 +215,16 @@ class GeoDir_Admin_Upgrade {
 			'admin_uninstall' => get_option( 'geodir_un_geodirectory' ),
 			'map_cache' => get_option( 'geodir_enable_map_cache' ),
 			'admin_blocked_roles' => array( 'subscriber' ),
-			'listing_default_image' => self::generate_attachment_id( get_option( 'geodir_listing_no_img' ) ),
+			'listing_default_image' => self::update_200_generate_attachment_id( get_option( 'geodir_listing_no_img' ) ),
 			'rating_color' => get_option( 'geodir_reviewrating_fa_full_rating_color', '#ff9900' ),
 			'rating_color_off' => '#afafaf',
 			'rating_type' => get_option( 'geodir_reviewrating_enable_font_awesome' ) ? 'font-awesome' : 'image',
-			'rating_icon' => 'fas fa-star';
-			'rating_image' => self::generate_attachment_id( get_option( 'geodir_default_rating_star_icon' ) ),
+			'rating_icon' => 'fas fa-star',
+			'rating_image' => self::update_200_generate_attachment_id( get_option( 'geodir_default_rating_star_icon' ) ),
 			'default_location_city' => $default_location['city'],
 			'default_location_region' => $default_location['region'],
 			'default_location_country' => $default_location['country'],
-			'default_location_latitude' => $default_location['city_v'],
+			'default_location_latitude' => $default_location['city_latitude'],
 			'default_location_longitude' => $default_location['city_longitude'],
 			'default_location_timezone' => '',
 
@@ -229,10 +243,10 @@ class GeoDir_Admin_Upgrade {
 			'ga_client_secret' => get_option( 'geodir_ga_client_secret' )
 		);
 
-		return apply_filters( 'geodir_v1_to_v2_get_options', $options );
+		return apply_filters( 'geodir_update_200_get_options', $options );
 	}
 
-	public static function generate_attachment_id( $image_url ) {
+	public static function update_200_generate_attachment_id( $image_url ) {
 		if ( empty( $image_url ) ) {
 			return '';
 		}
@@ -247,6 +261,338 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		return '';
+	}
+
+	public static function update_200_set_permalink_structure() {
+		if ( get_option( 'geodir_add_location_url' ) ) {
+			$show_location_url = get_option( 'geodir_show_location_url' );
+
+			if ( $show_location_url == 'all' ) {
+				$permalink_structure = '/%country%/%region%/%city%/%category%/%postname%/';
+			} else if ( $show_location_url == 'country_city' ) {
+				$permalink_structure = '/%country%/%city%/%category%/%postname%/';
+			} else if ( $show_location_url == 'region_city' ) {
+				$permalink_structure = '/%region%/%city%/%category%/%postname%/';
+			} else {
+				$permalink_structure = '/%city%/%category%/%postname%/';
+			}
+		} else {
+			$permalink_structure = '/%category%/%postname%/';
+		}
+
+		if ( ! get_option( 'geodir_add_categories_url' ) ) {
+			$permalink_structure = str_replace( '/%category%', '', $permalink_structure );
+		}
+
+		geodir_set_permalink_structure( $permalink_structure );
+	}
+
+	public static function update_200_term_metas() {
+	    global $wpdb;
+
+		// Migrate tax meta.
+		$term_meta_options = $wpdb->get_results( "SELECT option_name, option_value FROM " . $wpdb->options . " WHERE option_name LIKE 'tax_meta_%'" );
+
+		foreach ( $term_meta_options as $option ) {
+			$explode = explode( '_', $option->option_name );
+			$index = count( $explode ) - 1;
+			
+			if ( !empty( $explode[ $index ] ) ) {
+				$term_id = $explode[ $index ];
+				$value = maybe_unserialize( $option->option_value );
+				$value = !empty( $value[0] ) && is_array( $value[0] ) ? $value[0] : $value;
+				
+				if ( !empty( $value ) && is_array( $value ) ) {
+					foreach ( $value as $meta_key => $meta_value ) {
+						if ( $meta_key == 'ct_cat_icon' || $meta_key == 'ct_cat_default_img' ) {
+							if ( empty( $meta_value['src'] ) ) {
+								continue;
+							}
+							
+							$meta_value['src'] = geodir_file_relative_url( $meta_value['src'] );
+						}
+
+						update_term_meta( $term_id, $meta_key, $meta_value );
+					}
+				}
+			}
+		}
+	}
+
+	public static function update_200_custom_fields() {
+		global $wpdb;
+
+		// Custom fields
+		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
+
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE admin_desc frontend_desc text NULL DEFAULT NULL;" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL;" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_active` `is_active` TINYINT(1) NOT NULL DEFAULT '1';" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_default` `is_default` TINYINT(1) NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_required` `is_required` TINYINT(1) NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `for_admin_use` `for_admin_use` TINYINT(1) NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `placeholder_value` text NULL DEFAULT NULL AFTER `default_value`;" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_level` int(11) NOT NULL AFTER `sort_order`;" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`;" );
+		
+		// changing data type ENUM to TINYINT sets '0' to '2'
+		$wpdb->query( "UPDATE `{$custom_fields_table}` SET `is_active` = '0' WHERE is_active = '2';" );
+		$wpdb->query( "UPDATE `{$custom_fields_table}` SET `is_default` = '0' WHERE is_default = '2';" );
+		$wpdb->query( "UPDATE `{$custom_fields_table}` SET `is_required` = '0' WHERE is_required = '2';" );
+		$wpdb->query( "UPDATE `{$custom_fields_table}` SET `for_admin_use` = '0' WHERE for_admin_use = '2';" );
+
+		$results = $wpdb->get_results( "SELECT * FROM `{$custom_fields_table}`" );
+
+		foreach ( $results as $row ) {
+			$update = false;
+
+			if ( in_array( $row->htmlvar_name, array( 'geodir_contact', 'is_featured' ) ) ) {
+				if ( $row->htmlvar_name == 'geodir_contact' ) {
+					$row->htmlvar_name = 'phone';
+				}
+				if ( $row->htmlvar_name == 'is_featured' ) {
+					$row->htmlvar_name = 'featured';
+				}
+				$update = true;
+			}
+			if ( strpos( $row->htmlvar_name, 'geodir_' ) === 0 ) {
+				$row->htmlvar_name = strtolower( substr( $row->htmlvar_name, 7 ) );
+				$update = true;
+			}
+
+			if ( $row->field_type == 'taxonomy' ) {
+				$row->field_type = 'categories';
+				$row->field_type_key = 'categories';
+				$row->htmlvar_name = 'post_category';
+
+				$update = true;
+			}
+
+			if ( empty( $row->field_type_type ) ) {
+				$row->field_type_type = $row->field_type;
+
+				$update = true;
+			}
+
+			if ( empty( $row->data_type ) ) {
+				if ( $row->field_type == 'textarea' || $row->field_type == 'html' || $row->field_type == 'url' ) {
+					$data_type = 'TEXT';
+				} else if ( $row->field_type == 'checkbox' ) {
+					$data_type = 'TINYINT';
+				} else if ( $row->field_type == 'datepicker' ) {
+					$data_type = 'DATE';
+				} else if ( $row->field_type == 'time' ) {
+					$data_type = 'TIME';
+				} else {
+					$data_type = 'VARCHAR';
+				}
+				$row->data_type = $data_type;
+
+				$update = true;
+			}
+
+			if ( ! empty( $row->field_icon ) && ( strpos( $row->field_icon, 'fa ' ) === 0 || strpos( $row->field_icon, 'fa-' ) === 0 ) ) {
+				$field_icon = $row->field_icon;
+				$field_icon = str_replace( 'fa ', 'fas ', $field_icon );
+				$field_icon = str_replace( 'fa-usd', 'fa-dollar-sign', $field_icon );
+				$field_icon = str_replace( 'fa-money', 'fa-money-bill-alt', $field_icon );
+				$row->field_icon = $field_icon;
+
+				$update = true;
+			}
+
+			if ( $update ) {
+				$wpdb->update( $custom_fields_table, (array) $row, array( 'id' => $row->id ) );
+			}
+		}
+
+		// Sorting fields
+		$custom_sort_fields_table = GEODIR_CUSTOM_SORT_FIELDS_TABLE;
+
+		$results = $wpdb->get_results( "SELECT * FROM `{$custom_sort_fields_table}`" );
+
+		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL;" );
+		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` ADD `tab_level` int(11) NOT NULL AFTER `sort_order`;" );
+		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`;" );
+		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` ADD sort varchar(5) DEFAULT 'asc';" );
+
+		if ( ! empty( $results ) ) {
+			foreach ( $results as $row ) {
+				$htmlvar_name = $row->htmlvar_name;
+
+				if ( $htmlvar_name == 'geodir_contact' ) {
+					$htmlvar_name = 'phone';
+				}
+				if ( $htmlvar_name == 'is_featured' ) {
+					$htmlvar_name = 'featured';
+				}
+				if ( strpos( $htmlvar_name, 'geodir_' ) === 0 ) {
+					$htmlvar_name = strtolower( substr( $htmlvar_name, 7 ) );
+				}
+
+				if ( ! empty( $row->data_type ) ) {
+					$data_type = $row->data_type;
+				} else {
+					$data_type = $wpdb->get_var( $wpdb->prepare( "SELECT data_type FROM `{$custom_fields_table}` WHERE htmlvar_name = %s", $htmlvar_name ) );
+				}
+				if ( empty( $data_type ) ) {
+					$data_type = 'VARCHAR';
+				}
+
+				$data = array();
+				$data['post_type'] = $row->post_type;
+				$data['data_type'] = $data_type;
+				$data['field_type'] = $row->field_type;
+				$data['htmlvar_name'] = $htmlvar_name;
+				$data['sort_order'] = $row->sort_order;
+				$data['is_active'] = $row->is_active;
+
+				if ( $row->field_type == 'random' ) {
+					$data['htmlvar_name'] = 'post_status';
+					$data['frontend_title'] = $row->site_title;
+					$data['is_default'] = ! empty( $row->is_default ) ? 1 : 0;
+					$data['sort'] = 'asc';
+
+					$wpdb->update( $custom_sort_fields_table, (array) $data, array( 'id' => $row->id ) );
+				} else {
+					$update = true;
+					if ( ! empty( $row->sort_asc ) ) {
+						$is_default = ! empty( $row->is_default ) && $row->htmlvar_name . '_asc' ==  $row->default_order ? 1 : 0;
+						$asc_data = $data;
+						$asc_data['frontend_title'] = ! empty( $row->asc_title ) ? $row->asc_title : $row->site_title;
+						$asc_data['is_default'] = $is_default;
+						$asc_data['sort'] = 'asc';
+
+						$wpdb->update( $custom_sort_fields_table, (array) $asc_data, array( 'id' => $row->id ) );
+						$update = false;
+					}
+					if ( ! empty( $row->sort_desc ) ) {
+						$is_default = ! empty( $row->is_default ) && $row->htmlvar_name . '_desc' ==  $row->default_order ? 1 : 0;
+						$desc_data = $data;
+						$desc_data['frontend_title'] = ! empty( $row->desc_title ) ? $row->desc_title : $row->site_title;
+						$desc_data['is_default'] = $is_default;
+						$desc_data['sort'] = 'desc';
+
+						if ( $update ) {
+							$wpdb->update( $custom_sort_fields_table, (array) $desc_data, array( 'id' => $row->id ) );
+						} else {
+							$wpdb->insert( $custom_sort_fields_table, (array) $desc_data );
+						}
+					}
+				}
+			}
+		}
+	}
+
+	public static function update_200_post_fields() {
+		global $wpdb;
+
+		$post_types = geodir_get_posttypes(); 
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $key => $post_type ) {
+				$table = $wpdb->prefix . 'geodir_' . $post_type . '_detail';
+				
+				$columns = @$wpdb->get_results("DESC {$table}");
+
+				if ( empty( $columns ) ) {
+					continue;
+				}
+
+				$fields = array();
+				foreach ( $columns as $key => $column ) {
+					$fields[ $column->Field ] = (array) $column;
+				}
+				$columns = array_keys( $fields );
+
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$post_type}category post_category varchar(254) DEFAULT NULL;" );
+				if ( in_array( 'post_location_id', $columns ) ) {
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_location_id location_id int(11) NOT NULL;" );
+				}
+				if ( in_array( 'is_featured', $columns ) ) {
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_featured featured tinyint(1) NOT NULL DEFAULT '0';" );
+					// changing data type ENUM to TINYINT sets '0' to '2'
+					$wpdb->query( "UPDATE `{$table}` SET `featured` = '0' WHERE featured = '2';" );
+				}
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE submit_ip `submit_ip` varchar(100) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_locations `locations` varchar(254) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_address `street` varchar(254) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_city `city` varchar(50) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_region `region` varchar(50) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_country `country` varchar(50) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_zip `zip` varchar(20) NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_latitude `latitude` varchar(22)  DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_longitude `longitude` varchar(22) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_mapview `mapview` varchar(15) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_mapzoom `mapzoom` varchar(3) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_contact `phone` varchar(254) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_email `email` varchar(254) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_website `website` text;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_twitter `twitter` text;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_facebook `facebook` text;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_video `video` text;" );
+				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_special_offers `special_offers` text;" );
+
+				$wpdb->query( "ALTER TABLE {$table} DROP INDEX post_locations, ADD INDEX locations(locations(191))" );
+				$wpdb->query( "ALTER TABLE {$table} ADD INDEX country(country)" );
+				$wpdb->query( "ALTER TABLE {$table} ADD INDEX region(region)" );
+				$wpdb->query( "ALTER TABLE {$table} ADD INDEX city(city)" );
+				$wpdb->query( "ALTER TABLE {$table} DROP INDEX is_featured" );
+
+				foreach ( $columns as $key => $column ) {
+					if ( strpos( $column, 'geodir_' ) === 0 && ! in_array( $column, array( 'geodir_contact', 'geodir_email', 'geodir_website', 'geodir_twitter', 'geodir_facebook', 'geodir_video', 'geodir_special_offers' ) ) ) {
+						$new_column = strtolower( substr( $fields[ $column ]['Field'], 7 ) );
+						$data_type = $fields[ $column ]['Type'];
+						$null = strtolower( $fields[ $column ]['Null'] ) == 'no' ? ' NOT NULL' : '';
+						$default = $fields[ $column ]['Default'] !== '' && $fields[ $column ]['Default'] !== NULL ? " DEFAULT " . $fields[ $column ]['Default'] : ( strtolower( $fields[ $column ]['Null'] ) == 'yes' ? ' DEFAULT NULL' : '' );
+
+						$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$column} `{$new_column}` {$data_type}{$null}{$default};" );
+					}
+				}
+			}
+		}
+	}
+
+	public static function update_200_reviews() {
+		global $wpdb;
+		
+		$reviews_table = GEODIR_REVIEW_TABLE;
+		
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `id`;" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_id post_id bigint(20) DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `post_title`;" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_type post_type varchar(20) DEFAULT '';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE user_id user_id bigint(20) DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE comment_id comment_id bigint(20) DEFAULT NULL, ADD UNIQUE (`comment_id`);" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `rating_ip`;" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE overall_rating rating float DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE comment_images attachments text DEFAULT '';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `wasthis_review`;" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `status`;" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `post_status`;" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `post_date`;" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_city city varchar(50) DEFAULT '';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_region region varchar(50) DEFAULT '';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_country country varchar(50) DEFAULT '';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_latitude latitude varchar(22) DEFAULT '';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_longitude longitude varchar(22) DEFAULT '';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `comment_content`;" );
+	}
+
+	public static function update_200_attachments() {
+		global $wpdb;
+		
+		$attachments_table = GEODIR_ATTACHMENT_TABLE;
+
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` DROP `content`;" );
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `is_featured` `featured` TINYINT(1) NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `is_approved` `is_approved` TINYINT(1) NULL DEFAULT '1';" );
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` ADD `date_gmt` datetime NULL default NULL AFTER `post_id`;" );
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` ADD `type` varchar(254) NULL DEFAULT 'post_images';" );
+
+		// changing data type ENUM to TINYINT sets '0' to '2'
+		$wpdb->query( "UPDATE `{$attachments_table}` SET `featured` = '0' WHERE featured = '2';" );
+		$wpdb->query( "UPDATE `{$attachments_table}` SET `is_approved` = '0' WHERE is_approved = '2';" );
 	}
 
 	/**
@@ -371,278 +717,5 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		return $attachment_id;
-	}
-
-	public static function set_permalink_structure() {
-		if ( get_option( 'geodir_add_location_url' ) ) {
-			$show_location_url = get_option( 'geodir_show_location_url' );
-
-			if ( $show_location_url == 'all' ) {
-				$permalink_structure = '/%country%/%region%/%city%/%category%/%postname%/';
-			} else if ( $show_location_url == 'country_city' ) {
-				$permalink_structure = '/%country%/%city%/%category%/%postname%/';
-			} else if ( $show_location_url == 'region_city' ) {
-				$permalink_structure = '/%region%/%city%/%category%/%postname%/';
-			} else {
-				$permalink_structure = '/%city%/%category%/%postname%/';
-			}
-		} else {
-			$permalink_structure = '/%category%/%postname%/';
-		}
-
-		if ( ! get_option( 'geodir_add_categories_url' ) ) {
-			$permalink_structure = str_replace( '/%category%', '', $permalink_structure );
-		}
-
-		geodir_set_permalink_structure( $permalink_structure );
-	}
-
-	public static function convert_term_meta() {
-	   // Migrate tax meta.
-		$term_meta_options = self::get_old_term_meta_options();
-
-		foreach ( $term_meta_options as $option ) {
-			$explode = explode( '_', $option->option_name );
-			$index = count( $explode ) - 1;
-			
-			if ( !empty( $explode[ $index ] ) ) {
-				$term_id = $explode[ $index ];
-				$value = maybe_unserialize( $option->option_value );
-				$value = !empty( $value[0] ) && is_array( $value[0] ) ? $value[0] : $value;
-				
-				if ( !empty( $value ) && is_array( $value ) ) {
-					foreach ( $value as $meta_key => $meta_value ) {
-						if ( $meta_key == 'ct_cat_icon' || $meta_key == 'ct_cat_default_img' ) {
-							if ( empty( $meta_value['src'] ) ) {
-								continue;
-							}
-							
-							$meta_value['src'] = geodir_file_relative_url( $meta_value['src'] );
-						}
-
-						update_term_meta( $term_id, $meta_key, $meta_value );
-					}
-				}
-			}
-		}
-	}
-
-	public static function get_old_term_meta_options() {
-		global $wpdb;
-
-		$results = $wpdb->get_results( "SELECT option_name, option_value FROM " . $wpdb->options . " WHERE option_name LIKE 'tax_meta_%'" );
-
-		return $results;
-	}
-
-	public static function convert_fields() {
-		global $wpdb;
-
-		// Custom fields
-		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
-
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE admin_desc frontend_desc text NULL DEFAULT NULL;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_active` `is_active` TINYINT(1) NOT NULL DEFAULT '1';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_default` `is_default` TINYINT(1) NOT NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_required` `is_required` TINYINT(1) NOT NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `for_admin_use` `for_admin_use` TINYINT(1) NOT NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `placeholder_value` text NULL DEFAULT NULL AFTER `default_value`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_level` int(11) NOT NULL AFTER `sort_order`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`;" );
-
-		$results = $wpdb->get_results( "SELECT * FROM `{$custom_fields_table}`" );
-
-		foreach ( $results as $row ) {
-			$update = false;
-
-			if ( strpos( $row->htmlvar_name, 'geodir_' ) === 0 ) {
-				$row->htmlvar_name = strtolower( substr( $row->htmlvar_name, 7 ) );
-				$update = true;
-			}
-
-			if ( $row->field_type == 'taxonomy' ) {
-				$row->field_type = 'categories';
-				$row->field_type_key = 'categories';
-				$row->htmlvar_name = 'post_category';
-
-				$update = true;
-			}
-
-			if ( empty( $row->field_type_type ) ) {
-				$row->field_type_type = $row->field_type;
-
-				$update = true;
-			}
-
-			if ( empty( $row->data_type ) ) {
-				if ( $row->field_type == 'textarea' || $row->field_type == 'html' || $row->field_type == 'url' ) {
-					$data_type = 'TEXT';
-				} else if ( $row->field_type == 'checkbox' ) {
-					$data_type = 'TINYINT';
-				} else if ( $row->field_type == 'datepicker' ) {
-					$data_type = 'DATE';
-				} else if ( $row->field_type == 'time' ) {
-					$data_type = 'TIME';
-				} else {
-					$data_type = 'VARCHAR';
-				}
-				$row->data_type = $data_type;
-
-				$update = true;
-			}
-
-			if ( ! empty( $row->field_icon ) && ( strpos( $row->field_icon, 'fa ' ) === 0 || strpos( $row->field_icon, 'fa-' ) === 0 ) ) {
-				$field_icon = $row->field_icon;
-				$field_icon = str_replace( 'fa ', 'fas ', $field_icon );
-				$field_icon = str_replace( 'fa-usd', 'fa-dollar-sign', $field_icon );
-				$field_icon = str_replace( 'fa-money', 'fa-money-bill-alt', $field_icon );
-				$row->field_icon = $field_icon;
-
-				$update = true;
-			}
-
-			if ( $update ) {
-				$wpdb->update( $custom_fields_table, (array) $row, array( 'id' => $row->id ) );
-			}
-		}
-
-		// Sorting fields
-		$custom_sort_fields_table = GEODIR_CUSTOM_SORT_FIELDS_TABLE;
-
-		$results = $wpdb->get_results( "SELECT * FROM `{$custom_sort_fields_table}`" );
-
-		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL;" );
-		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` ADD `tab_level` int(11) NOT NULL AFTER `sort_order`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` ADD sort varchar(5) DEFAULT 'asc';" );
-
-		if ( ! empty( $results ) ) {
-			foreach ( $results as $row ) {
-				$htmlvar_name = $row->htmlvar_name;
-
-				if ( strpos( $htmlvar_name, 'geodir_' ) === 0 ) {
-					$htmlvar_name = strtolower( substr( $htmlvar_name, 7 ) );
-				}
-
-				if ( ! empty( $row->data_type ) ) {
-					$data_type = $row->data_type;
-				} else {
-					$data_type = $wpdb->get_var( $wpdb->prepare( "SELECT data_type FROM `{$custom_fields_table}` WHERE htmlvar_name = %s", $htmlvar_name ) );
-				}
-				if ( empty( $data_type ) ) {
-					$data_type = 'VARCHAR';
-				}
-
-				$data = array();
-				$data['post_type'] = $row->post_type;
-				$data['data_type'] = $data_type;
-				$data['field_type'] = $row->field_type;
-				$data['htmlvar_name'] = $htmlvar_name;
-				$data['sort_order'] = $row->sort_order;
-				$data['is_active'] = $row->is_active;
-
-				if ( $row->field_type == 'random' ) {
-					$data['htmlvar_name'] = 'post_status';
-					$data['frontend_title'] = $row->site_title;
-					$data['is_default'] = ! empty( $row->is_default ) ? 1 : 0;
-					$data['sort'] = 'asc';
-
-					$wpdb->update( $custom_sort_fields_table, (array) $data, array( 'id' => $row->id ) );
-				} else {
-					$update = true;
-					if ( ! empty( $row->sort_asc ) ) {
-						$is_default = ! empty( $row->is_default ) && $row->htmlvar_name . '_asc' ==  $row->default_order ? 1 : 0;
-						$asc_data = $data;
-						$asc_data['frontend_title'] = ! empty( $row->asc_title ) ? $row->asc_title : $row->site_title;
-						$asc_data['is_default'] = $is_default;
-						$asc_data['sort'] = 'asc';
-
-						$wpdb->update( $custom_sort_fields_table, (array) $asc_data, array( 'id' => $row->id ) );
-						$update = false;
-					}
-					if ( ! empty( $row->sort_desc ) ) {
-						$is_default = ! empty( $row->is_default ) && $row->htmlvar_name . '_desc' ==  $row->default_order ? 1 : 0;
-						$desc_data = $data;
-						$desc_data['frontend_title'] = ! empty( $row->desc_title ) ? $row->desc_title : $row->site_title;
-						$desc_data['is_default'] = $is_default;
-						$desc_data['sort'] = 'desc';
-
-						if ( $update ) {
-							$wpdb->update( $custom_sort_fields_table, (array) $desc_data, array( 'id' => $row->id ) );
-						} else {
-							$wpdb->insert( $custom_sort_fields_table, (array) $desc_data );
-						}
-					}
-				}
-			}
-		}
-	}
-
-	public static function convert_post_tables() {
-		global $wpdb;
-
-		$post_types = geodir_get_posttypes();
-
-		if ( ! empty( $post_types ) ) {
-			foreach ( $post_types as $key => $post_type ) {
-				$table = $wpdb->prefix . 'geodir_' . $post_type . '_detail';
-				
-				$columns = @$wpdb->get_results("DESC {$table}");
-
-				if ( empty( $columns ) ) {
-					continue;
-				}
-
-				$fields = array();
-				foreach ( $columns as $key => $column ) {
-					$fields[ $column->Field ] = (array) $column;
-				}
-				$columns = array_keys( $fields );
-
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$post_type}category post_category varchar(254) DEFAULT NULL;" );
-				if ( in_array( 'post_location_id', $columns ) ) {
-					$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_location_id location_id int(11) NOT NULL;" );
-				}
-				if ( in_array( 'is_featured', $columns ) ) {
-					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_featured featured tinyint(1) NOT NULL DEFAULT '0';" );
-				}
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE submit_ip `submit_ip` varchar(100) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_locations `locations` varchar(254) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_address `street` varchar(254) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_city `city` varchar(50) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_region `region` varchar(50) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_country `country` varchar(50) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_zip `zip` varchar(20) NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_latitude `latitude` varchar(22)  DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_longitude `longitude` varchar(22) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_mapview `mapview` varchar(15) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_mapzoom `mapzoom` varchar(3) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_contact `phone` varchar(254) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_email `email` varchar(254) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_website `website` text;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_twitter `twitter` text;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_facebook `facebook` text;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_video `video` text;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_special_offers `special_offers` text;" );
-
-				$wpdb->query( "ALTER TABLE {$table} DROP INDEX post_locations, ADD INDEX locations(locations(191))" );
-				$wpdb->query( "ALTER TABLE {$table} ADD INDEX country(country)" );
-				$wpdb->query( "ALTER TABLE {$table} ADD INDEX region(region)" );
-				$wpdb->query( "ALTER TABLE {$table} ADD INDEX city(city)" );
-				$wpdb->query( "ALTER TABLE {$table} DROP INDEX is_featured" );
-
-				foreach ( $columns as $key => $column ) {
-					if ( strpos( $column, 'geodir_' ) === 0 && ! in_array( $column, array( 'geodir_contact', 'geodir_email', 'geodir_website', 'geodir_twitter', 'geodir_facebook', 'geodir_video', 'geodir_special_offers' ) ) ) {
-						$new_column = strtolower( substr( $fields[ $column ]['Field'], 7 ) );
-						$data_type = $fields[ $column ]['Type'];
-						$null = strtolower( $fields[ $column ]['Null'] ) == 'no' ? ' NOT NULL' : '';
-						$default = $fields[ $column ]['Default'] !== '' && $fields[ $column ]['Default'] !== NULL ? " DEFAULT " . $fields[ $column ]['Default'] : ( strtolower( $fields[ $column ]['Null'] ) == 'yes' ? ' DEFAULT NULL' : '' );
-
-						$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$column} `{$new_column}` {$data_type}{$null}{$default};" );
-					}
-				}
-			}
-		}
 	}
 }

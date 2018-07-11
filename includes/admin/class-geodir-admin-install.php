@@ -19,12 +19,9 @@ class GeoDir_Admin_Install {
 
 	/** @var array DB updates and callbacks that need to be run per version */
 	private static $db_updates = array(
-		/*'2.0.0' => array(
-			'geodir_update_200_file_paths',
-			'geodir_update_200_permalinks',
-		)*/
-		/*'2.0.0.1-dev' => array(
-			'geodir_update_2001_dev_db_version',
+		/*'2.0.0.0' => array(
+			'geodir_update_200',
+			'geodir_update_200_db_version',
 		),*/
 	);
 
