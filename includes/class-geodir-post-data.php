@@ -1544,9 +1544,91 @@ class GeoDir_Post_Data {
 		 * @param object $post The post object.
 		 */
 		echo apply_filters('geodir_details_facebook_og', $facebook_og,$post);
+	}
 
+	/**
+	 * Displays the classes for the post container element.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string|array $class   One or more classes to add to the class list.
+	 * @param int|WP_Post  $post_id Optional. Post ID or post object. Defaults to the global `$post`.
+	 */
+	public static function post_class( $class = '', $post_id = null ) {
+		// Separates classes with a single space, collates classes for post DIV
+		echo 'class="' . join( ' ', self::get_post_class( $class, $post_id ) ) . '"';
+	}
 
+	/**
+	 * Simplified version of the get_post_class() function.
+	 *
+	 * @param string $class
+	 * @param null $post_id
+	 *
+	 * @return array
+	 */
+	public static function get_post_class( $class = '', $post_id = null ) {
+		global $gd_post;
+		$post = $gd_post;
 
+		$classes = array();
+
+		if ( $class ) {
+			if ( ! is_array( $class ) ) {
+				$class = preg_split( '#\s+#', $class );
+			}
+			$classes = array_map( 'esc_attr', $class );
+		} else {
+			// Ensure that we always coerce class to being an array.
+			$class = array();
+		}
+
+		if ( ! $post ) {
+			return $classes;
+		}
+
+		$classes[] = 'post-' . $post->ID;
+		if ( ! is_admin() ) {
+			$classes[] = $post->post_type;
+		}
+		$classes[] = 'type-' . $post->post_type;
+		$classes[] = 'status-' . $post->post_status;
+
+		if ( ! empty( $post->post_password ) ) {
+			$classes[] = 'post-password-protected';
+		}
+
+		// Post thumbnails.
+		if ( !empty($gd_post->featured_image)) {
+			$classes[] = 'has-post-thumbnail';
+		}
+
+		// sticky for Sticky Posts
+		if ( is_sticky( $post->ID ) ) {
+			if ( is_home() && ! is_paged() ) {
+				$classes[] = 'sticky';
+			} elseif ( is_admin() ) {
+				$classes[] = 'status-sticky';
+			}
+		}
+
+		// hentry for hAtom compliance
+		//$classes[] = 'hentry';
+
+		$classes = array_map( 'esc_attr', $classes );
+
+		/**
+		 * Filters the list of CSS class names for the current post.
+		 *
+		 * @since 2.7.0
+		 *
+		 * @param string[] $classes An array of post class names.
+		 * @param string[] $class   An array of additional class names added to the post.
+		 * @param int      $post_id The post ID.
+		 */
+		$classes = apply_filters( 'post_class', $classes, $class, $post->ID );
+
+		return array_unique( $classes );
 	}
 
 }

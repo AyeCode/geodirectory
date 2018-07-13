@@ -46,7 +46,7 @@ class GeoDir_Permalinks {
 
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
-//		add_action('init', array( $this, 'temp_check_rules'),10000000000);
+		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
 	}
 	
 

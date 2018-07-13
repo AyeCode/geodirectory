@@ -138,7 +138,7 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
  * @return array|bool Returns images as an array. Each item is an object.
  */
 function geodir_get_images($post_id = 0, $limit = '',$logo = false)
-{
+{   global $gd_post;
 
     $post_images = GeoDir_Media::get_post_images($post_id,$limit);
 
@@ -155,11 +155,15 @@ function geodir_get_images($post_id = 0, $limit = '',$logo = false)
 
     }else{
 
+
+
         $logo_image = false;
-        if($logo){
-            $logo_image = GeoDir_Media::get_attachments_by_type($post_id,'logo',1);
-            if($logo_image){
-                $post_images = $logo_image;
+        if(isset($gd_post->ID) && $gd_post->ID==$post_id && isset($gd_post->logo)) {
+            if ( $logo ) {
+                $logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
+                if ( $logo_image ) {
+                    $post_images = $logo_image;
+                }
             }
         }
 

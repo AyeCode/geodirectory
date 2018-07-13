@@ -18,10 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_Taxonomies {
 
-	/**
-	 * Hook in methods.
-	 */
-	public static function init() {
+	public function __construct() {
+		
 
 	}
 

@@ -684,32 +684,30 @@ class GeoDir_Query {
 
 		$htmlvar_name = str_replace('_' . $order, '', $sort_by);
 
+		if($htmlvar_name && $order) {
 
 
+			$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND sort = %s AND post_type = %s", $htmlvar_name, $order, $geodir_post_type ) );
 
-			$parent_id = $wpdb->get_var($wpdb->prepare("SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND sort = %s AND post_type = %s",$htmlvar_name,$order, $geodir_post_type));
-//echo $wpdb->prepare("SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND post_type = %s",$sort_by, $geodir_post_type).'###'.$parent_id;exit;
-//		echo $sort_by.'###'.$order.$parent_id;exit;
 
-		if($parent_id){
-			$children = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND tab_parent = %d ORDER BY sort_order ASC",$geodir_post_type,$parent_id));
-			//print_r($children);exit;
-
-			if($children){
+			if ( $parent_id ) {
+				$children = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND tab_parent = %d ORDER BY sort_order ASC", $geodir_post_type, $parent_id ) );
 				//print_r($children);exit;
-				foreach($children as $child){
-					$child_sort_by = $child->htmlvar_name."_".$child->sort;
-					$child_sort = self::sort_by_sql($child_sort_by,$geodir_post_type);
-					if($child_sort){
-						$orderby .= " ,".$child_sort;
+
+				if ( $children ) {
+					//print_r($children);exit;
+					foreach ( $children as $child ) {
+						$child_sort_by = $child->htmlvar_name . "_" . $child->sort;
+						$child_sort    = self::sort_by_sql( $child_sort_by, $geodir_post_type );
+						if ( $child_sort ) {
+							$orderby .= " ," . $child_sort;
+						}
+						//$orderby .= " ," . self::sort_by_sql($child_sort_by,$geodir_post_type);
 					}
-					//$orderby .= " ," . self::sort_by_sql($child_sort_by,$geodir_post_type);
 				}
 			}
 		}
-
-		//@todo make sub sort items work
-
+		
 		return $orderby;
 	}
 
