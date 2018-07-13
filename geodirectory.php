@@ -288,6 +288,7 @@ final class GeoDirectory {
 	        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/diagnostic-functions.php' );
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/dashboard-functions.php' );
             GeoDir_Admin_Install::init(); // init the install class
+			GeoDir_Admin_Upgrade::init(); // init the upgrade class
 	        GeoDir_Admin_Tracker::init(); // tracking data
             require_once( GEODIRECTORY_PLUGIN_DIR . 'upgrade.php' );
 

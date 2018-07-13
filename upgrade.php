@@ -70,3 +70,11 @@ function geodir_upgrade_20013() {
     global $wpdb;
 	$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
 }
+
+function geodir_update_200() {
+	GeoDir_Admin_Upgrade::update_200();
+}
+
+function geodir_update_200_db_version() {
+	GeoDir_Admin_Install::update_db_version( '2.0.0.0' );
+}
