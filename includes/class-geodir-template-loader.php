@@ -128,8 +128,10 @@ class GeoDir_Template_Loader {
             //$default_file = 'location.php';
         } elseif ( geodir_is_page( 'search' ) ) {
             $default_file = 'page.php';
-            //$default_file = 'index.php';
-            //$default_file = 'search.php';
+            // If no posts found on search it goes to 404 so we fake it.
+            //$wp_query->found_posts = 1;
+            $wp_query->is_404 = '';
+            //$wp_query->is_page = 1;
             self::setup_archive_loop_as_page();
         } elseif ( geodir_is_page( 'login' ) ) {
            // $default_file = '';//signup.php';

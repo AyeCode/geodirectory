@@ -1015,10 +1015,10 @@ function geodir_search_form_near_input() {
 	$near_class = apply_filters( 'geodir_search_near_class', '' );
 
 
-	echo "<div class='gd-search-input-wrapper gd-search-field-near' $near_input_extra>";
+	echo "<div class='gd-search-input-wrapper gd-search-field-near $near_class' $near_input_extra>";
 	do_action('geodir_before_search_near_input');
 	?>
-	<input name="snear" class="snear <?php echo $near_class; ?>" type="text" value="<?php echo $near; ?>"
+	<input name="snear" class="snear" type="text" value="<?php echo $near; ?>"
 	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>
 	       onClick="this.select();"
 	       placeholder="<?php esc_html_e($default_near_text,'geodirectory') ?>"
@@ -1037,7 +1037,10 @@ add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
  * Adds a icon to the search near input.
  */
 function geodir_search_near_label() {
-	echo '<i class="fas fa-map-marker-alt geodir-search-input-label"></i>';
+	echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
+	echo '<i class="fas fa-map-marker-alt gd-show"></i>';
+	echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
+	echo '</span>';
 }
 add_action('geodir_before_search_near_input','geodir_search_near_label');
 
@@ -1045,7 +1048,10 @@ add_action('geodir_before_search_near_input','geodir_search_near_label');
  * Adds a icon to the search for input.
  */
 function geodir_search_for_label() {
-	echo '<i class="fas fa-search geodir-search-input-label"></i>';
+	echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
+	echo '<i class="fas fa-search gd-show"></i>';
+	echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
+	echo '</span>';
 }
 add_action('geodir_before_search_for_input','geodir_search_for_label');
 

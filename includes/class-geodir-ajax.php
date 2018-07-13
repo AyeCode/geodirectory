@@ -80,6 +80,7 @@ class GeoDir_AJAX {
      */
 	function manual_map(){
 		$prefix = isset($_POST['trigger']) ? esc_attr($_POST['trigger']): 'geodir_manual_location_';
+//		$prefix = 'geodir_manual_location_';
 		echo "<style>
 		.lity-show #".$prefix."set_address_button,
 		.lity-show .TopLeft,
@@ -99,9 +100,9 @@ class GeoDir_AJAX {
 		$ip = $_SERVER['REMOTE_ADDR'];
 		if($ip){
 			global $mapzoom;
-			$addr_details = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip));
-			$mylat = stripslashes(geodir_utf8_ucfirst($addr_details['geoplugin_latitude']));
-			$mylon = stripslashes(geodir_utf8_ucfirst($addr_details['geoplugin_longitude']));
+			$addr_details = geodir_geo_by_ip();
+			$mylat = $addr_details['latitude'];
+			$mylon = $addr_details['longitude'];
 			if($mylat){$lat = $mylat; $lng = $mylon; $mapzoom = 8;}// pass to the map as the starting position
 		}
 

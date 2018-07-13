@@ -31,6 +31,21 @@
 {
   background: rgba(128, 128, 128, 0.5);
 }
+
+// icon hover swap
+.gd-icon-hover-swap{
+  cursor: pointer;
+  &:hover{
+    .gd-show{
+      display: none;
+    }
+
+    .gd-hide{
+      display: inline-block;
+    }
+  }
+}
+
 /*--------------------------------------------------------------
 # Alignments
 --------------------------------------------------------------*/
