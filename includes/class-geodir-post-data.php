@@ -1383,6 +1383,7 @@ class GeoDir_Post_Data {
 		if (empty($gd_post->rating_count)) {
 			$reviews = '';
 		} else {
+			$reviews = array();
 			$post_reviews = get_comments(array('post_id' => $post->ID, 'status' => 'approve'));
 			foreach ($post_reviews as $review) {
 
