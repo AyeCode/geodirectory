@@ -99,15 +99,16 @@ body {
             flex: 50;
             min-width: 150px;
             position: relative;
+            color: #ccc;
+
             select, input[type=text], select.search_by_post {
               width: 100%;
             }
             .geodir-search-input-label{
               position: absolute;
-              color: #ccc;
               font-size: 15px;
               margin: 0;
-              top: 12px;
+              top: 6px;
               left: 10px;
               &+input{
                 padding-left: 24px;
