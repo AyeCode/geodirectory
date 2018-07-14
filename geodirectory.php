@@ -241,7 +241,6 @@ final class GeoDirectory {
 	    GeoDir_Post_Data::init(); // post data
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
 	    GeoDir_SEO::init();
-	    GeoDir_Taxonomies::init();
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/template-functions.php' );
@@ -339,12 +338,16 @@ final class GeoDirectory {
         do_action( 'geodirectory_before_init' );
 
 		// locations
-	    $location_class_name = apply_filters('geodir_location_instance','GeoDir_Location');
+	    $location_class_name = apply_filters('geodir_class_location','GeoDir_Location');
 	    $this->location = new $location_class_name;
 
 	    // permalinks
 	    $permalinks_class_name = apply_filters('geodir_class_permalinks','GeoDir_Permalinks');
 	    $this->permalinks = new $permalinks_class_name;
+
+	    // taxonomies
+	    $taxonomies_class_name = apply_filters('geodir_class_taxonomies','GeoDir_Taxonomies');
+	    $this->taxonomies = new $taxonomies_class_name;
 
         // Init action.
         do_action( 'geodirectory_init' );

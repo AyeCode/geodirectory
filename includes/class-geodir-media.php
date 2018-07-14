@@ -634,7 +634,7 @@ class GeoDir_Media {
 
 		// check for cache
 		$cache = wp_cache_get( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id, 'gd_attachments_by_type' );
-		if($cache){
+		if($cache !== false){
 			return $cache;
 		}
 

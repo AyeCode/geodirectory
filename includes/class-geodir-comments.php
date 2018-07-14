@@ -817,11 +817,15 @@ class GeoDir_Comments {
 	 * @return bool|null|string
 	 */
 	public static function get_post_review_count_total( $post_id = 0 ) {
-		global $wpdb;
+		global $wpdb,$gd_post;
+
+		if(isset($gd_post->ID) && $gd_post->ID==$post_id && isset($gd_post->rating_count)){
+			return $gd_post->rating_count;
+		}
 
 		// check for cache
 		$cache = wp_cache_get( "gd_post_review_count_total_".$post_id, 'gd_post_review_count_total' );
-		if($cache){
+		if($cache !== false){
 			return $cache;
 		}
 

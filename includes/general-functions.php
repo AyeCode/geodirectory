@@ -1071,40 +1071,6 @@ function geodir_function_widget_listings_limit( $limit ) {
 add_filter( 'geodir_filter_widget_listings_limit', 'geodir_function_widget_listings_limit' );
 
 /**
- * Sanitize location name.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param string $type Location type. Can be gd_country, gd_region, gd_city.
- * @param string $name Location name.
- * @param bool $translate Do you want to translate the name? Default: true.
- *
- * @return string Sanitized name.
- */
-function geodir_sanitize_location_name( $type, $name, $translate = true ) {
-	if ( $name == '' ) {
-		return null;
-	}
-
-	$type = $type == 'gd_country' ? 'country' : $type;
-	$type = $type == 'gd_region' ? 'region' : $type;
-	$type = $type == 'gd_city' ? 'city' : $type;
-
-	$return = $name;
-	if ( function_exists( 'get_actual_location_name' ) ) {
-		$return = get_actual_location_name( $type, $name, $translate );
-	} else {
-		$return = preg_replace( '/-(\d+)$/', '', $return );
-		$return = preg_replace( '/[_-]/', ' ', $return );
-		$return = geodir_ucwords( $return );
-		$return = $translate ? __( $return, 'geodirectory' ) : $return;
-	}
-
-	return $return;
-}
-
-/**
  * Add extra fields to google maps script call.
  *
  * @since   1.0.0

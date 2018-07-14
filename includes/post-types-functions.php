@@ -574,6 +574,12 @@ function geodir_get_current_posttype() {
 function geodir_get_posts_default_sort( $post_type ) {
     global $wpdb;
 
+    // check cache
+    $cache = wp_cache_get("geodir_get_posts_default_sort_{$post_type}");
+    if($cache !== false){
+        return $cache;
+    }
+
 	$default_sort = '';
 
     if ( $post_type != '' ) {
@@ -597,6 +603,9 @@ function geodir_get_posts_default_sort( $post_type ) {
 			}
         }
     }
+
+    wp_cache_set("geodir_get_posts_default_sort_{$post_type}", $default_sort );
+
 	return $default_sort;
 }
 
@@ -614,6 +623,12 @@ function geodir_get_posts_default_sort( $post_type ) {
  */
 function geodir_get_sort_options( $post_type ) {
     global $wpdb;
+
+    // check cache
+    $cache = wp_cache_get("geodir_get_sort_options_{$post_type}");
+    if($cache !== false){
+        return $cache;
+    }
 
     if ( $post_type != '' ) {
         $all_postypes = geodir_get_posttypes();
@@ -635,7 +650,11 @@ function geodir_get_sort_options( $post_type ) {
          * @param array $sort_field_info Unfiltered sort field array.
          * @param string $post_type      Post type.
          */
-        return apply_filters( 'geodir_get_sort_options', $sort_field_info, $post_type );
+        $sort_field_info = apply_filters( 'geodir_get_sort_options', $sort_field_info, $post_type );
+        
+        wp_cache_set("geodir_get_sort_options_{$post_type}", $sort_field_info );
+
+        return $sort_field_info;
     }
 
 }

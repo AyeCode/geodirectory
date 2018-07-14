@@ -243,11 +243,14 @@ function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
 
 	$table = $plugin_prefix . $post_type . '_detail';
 
-	if ( $wpdb->get_var( "SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'" ) != '' ) {
+	if ( $table && $meta_key ) {
+		//if ( $wpdb->get_var( "SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'" ) != '' ) {
 		$meta_value = $wpdb->get_var( $wpdb->prepare( "SELECT `" . $meta_key . "` from " . $table . " where post_id = %d", array( $post_id ) ) );
 
 		if ( $meta_value && $meta_value !== '' ) {
 			$meta_value = maybe_serialize( $meta_value );
+		}else{
+			$meta_value = false;
 		}
 	} else {
 		$meta_value = false;

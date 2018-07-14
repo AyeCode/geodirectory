@@ -95,6 +95,12 @@ class GeoDir_Location {
 	public function get_default_location()
 	{
 
+		// check cache
+		$cache = wp_cache_get("geodir_get_default_location");
+		if($cache !== false){
+			return $cache;
+		}
+
 		$location = new stdClass();
 		$location->city = geodir_get_option('default_location_city');
 		$location->region = geodir_get_option('default_location_region');
@@ -115,7 +121,12 @@ class GeoDir_Location {
 		 *
 		 * @param string $location_result The default location object.
 		 */
-		return $location_result = apply_filters('geodir_get_default_location', $location );
+		$location_result = apply_filters('geodir_get_default_location', $location );
+
+		wp_cache_set("geodir_get_default_location", $location_result );
+
+
+		return $location_result;
 	}
 
 
