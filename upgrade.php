@@ -71,10 +71,26 @@ function geodir_upgrade_20013() {
 	$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
 }
 
-function geodir_update_200() {
-	GeoDir_Admin_Upgrade::update_200();
+function geodir_update_200_settings() {
+	GeoDir_Admin_Upgrade::update_200_settings();
+}
+
+function geodir_update_200_fields() {
+	GeoDir_Admin_Upgrade::update_200_fields();
+}
+
+function geodir_update_200_terms() {
+	GeoDir_Admin_Upgrade::update_200_terms();
+}
+
+function geodir_update_200_posts() {
+	GeoDir_Admin_Upgrade::update_200_posts();
+}
+
+function geodir_update_200_merge_data() {
+	GeoDir_Admin_Upgrade::update_200_merge_data();
 }
 
 function geodir_update_200_db_version() {
-	GeoDir_Admin_Install::update_db_version( '2.0.0.0' );
+	GeoDir_Admin_Upgrade::update_200_db_version();
 }

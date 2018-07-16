@@ -21,35 +21,13 @@ class GeoDir_Admin_Upgrade {
 		add_action( 'geodir_update_200_settings_after', array( __CLASS__, 'update_200_set_permalink_structure' ), 10, 1 );
 	}
 
-	public static function update_200() {
-		// Start
-		self::update_200_start();
-
-		// Options
-		self::update_200_settings();
-
-		// Fields
-		self::update_200_fields();
-
-		// Categories & Tags
-		self::update_200_terms();
-
-		// Posts
-		self::update_200_posts();
-
-		// End
-		self::update_200_complete();
-	}
-
-	public static function update_200_start() {
-		do_action( 'geodir_update_200_start' );
-	}
-
 	public static function update_200_settings() {
-		do_action( 'geodir_update_200_options_before' );
+		do_action( 'geodir_update_200_settings_before' );
+
+		self::create_default_options();
 
 		$saved_options = get_option( 'geodir_settings' );
-		if ( empty( $saved_options ) ) {
+		if ( empty( $saved_options ) || ! is_array( $saved_options ) ) {
 			$saved_options = array();
 		}
 
@@ -57,14 +35,10 @@ class GeoDir_Admin_Upgrade {
 		foreach ( $update_options as $key => $value ) {
 			$saved_options[ $key ] = $value;
 		}
-		/*$default_options = self::update_200_default_options();
-		foreach ( $update_options as $key => $value ) {
-			$saved_options[ $key ] = $value;
-		}*/
 
 		update_option( 'geodir_settings', $saved_options );
 
-		do_action( 'geodir_update_200_options_after' );
+		do_action( 'geodir_update_200_settings_after' );
 	}
 
 	public static function update_200_fields() {
@@ -96,11 +70,65 @@ class GeoDir_Admin_Upgrade {
 		do_action( 'geodir_update_200_posts_after' );
 	}
 
-	public static function update_200_complete() {
-		do_action( 'geodir_update_200_complete' );
+	public static function update_200_merge_data() {
+		self::create_tables();
+		self::insert_default_fields();
+		self::insert_default_tabs();
+		self::create_pages();
+
+		GeoDir_Post_types::register_post_status();
+
+		GeoDir_Admin_Install::create_uncategorized_categories();
 		
-		// Flush rules after update
+		self::create_cron_jobs();
+
+		// Queue upgrades/setup wizard
+		//self::maybe_enable_setup_wizard();
+	}
+
+	public static function update_200_db_version() {
+		// Update GD version
+		self::update_gd_version();
+
+		// Update DB version
+		GeoDir_Admin_Install::update_db_version( GEODIRECTORY_VERSION );
+
+		// Flush rules after install
 		do_action( 'geodir_flush_rewrite_rules' );
+
+		// Trigger action
+		do_action( 'geodirectory_v2_updated' );
+	}
+
+	/**
+	 * Default options.
+	 *
+	 * Sets up the default options used on the settings page.
+     *
+     * @since 2.0.0
+	 */
+	public static function create_default_options() {
+		// Include settings so that we can run through defaults
+		include_once( dirname( __FILE__ ) . '/class-geodir-admin-settings.php' );
+		
+		$current_settings = geodir_get_settings();
+
+		$settings = GeoDir_Admin_Settings::get_settings_pages();
+
+		foreach ( $settings as $section ) {
+			if ( ! method_exists( $section, 'get_settings' ) ) {
+				continue;
+			}
+			$subsections = array_unique( array_merge( array( '' ), array_keys( $section->get_sections() ) ) );
+
+			foreach ( $subsections as $subsection ) {
+				foreach ( $section->get_settings( $subsection ) as $value ) {
+					if ( !isset($current_settings[$value['id']]) && isset( $value['default'] ) && isset( $value['id'] ) ) {
+						geodir_update_option($value['id'], $value['default']);
+					}
+				}
+			}
+		}
 	}
 
 	public static function update_200_get_options() {
@@ -152,6 +180,9 @@ class GeoDir_Admin_Upgrade {
 			'city_latitude' => '',
 			'city_longitude' => '',
 		) );
+
+		$default_marker_icon = get_option( 'geodir_default_marker_icon' );
+		$default_marker_icon = str_replace( 'geodirectory-functions/map-functions/icons', 'assets/images', $default_marker_icon );
 		
 		// Core options
 		$options = array(
@@ -170,7 +201,7 @@ class GeoDir_Admin_Upgrade {
 			'search_default_text' => get_option( 'geodir_search_field_default_text' ),
 			'search_default_near_text' => get_option( 'geodir_near_field_default_text' ),
 			'search_default_button_text' => get_option( 'geodir_search_button_label' ),
-			'map_default_marker_icon' => geodir_file_relative_url( get_option( 'geodir_default_marker_icon' ) ),
+			'map_default_marker_icon' => self::update_200_generate_attachment_id( $default_marker_icon ),
 			'exclude_post_type_on_map' => get_option( 'geodir_exclude_post_type_on_map' ),
 			'exclude_cat_on_map' => get_option( 'geodir_exclude_cat_on_map' ),
 			'email_admin_pending_post' => get_option( 'geodir_notify_post_submit' ),
@@ -251,9 +282,9 @@ class GeoDir_Admin_Upgrade {
 			return '';
 		}
 
-		$upload = self::upload_image_from_url( $image_url ); // @todo move function to GeoDir_Media class & replace self to GeoDir_Media
+		$upload = GeoDir_Media::upload_image_from_url( $image_url );
 		if ( ! empty( $upload ) && ! is_wp_error( $upload ) && ! empty( $upload['file'] ) ) {
-			$attachment_id = self::set_uploaded_image_as_attachment( $upload ); // @todo move function to GeoDir_Media class & replace self to GeoDir_Media
+			$attachment_id = GeoDir_Media::set_uploaded_image_as_attachment( $upload );
 
 			if ( ! empty( $attachment_id ) && ! is_wp_error( $attachment_id ) ) {
 				return $attachment_id;
@@ -327,25 +358,18 @@ class GeoDir_Admin_Upgrade {
 
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE admin_desc frontend_desc text NULL DEFAULT NULL;" );
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL;" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `placeholder_value` text NULL DEFAULT NULL AFTER `default_value`;" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_level` int(11) NOT NULL AFTER `sort_order`;" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`;" );
+
+		$results = $wpdb->get_results( "SELECT * FROM `{$custom_fields_table}`" );
+
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_active` `is_active` TINYINT(1) NOT NULL DEFAULT '1';" );
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_default` `is_default` TINYINT(1) NOT NULL DEFAULT '0';" );
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_required` `is_required` TINYINT(1) NOT NULL DEFAULT '0';" );
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `for_admin_use` `for_admin_use` TINYINT(1) NOT NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `placeholder_value` text NULL DEFAULT NULL AFTER `default_value`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_level` int(11) NOT NULL AFTER `sort_order`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`;" );
-		
-		// changing data type ENUM to TINYINT sets '0' to '2'
-		$wpdb->query( "UPDATE `{$custom_fields_table}` SET `is_active` = '0' WHERE is_active = '2';" );
-		$wpdb->query( "UPDATE `{$custom_fields_table}` SET `is_default` = '0' WHERE is_default = '2';" );
-		$wpdb->query( "UPDATE `{$custom_fields_table}` SET `is_required` = '0' WHERE is_required = '2';" );
-		$wpdb->query( "UPDATE `{$custom_fields_table}` SET `for_admin_use` = '0' WHERE for_admin_use = '2';" );
-
-		$results = $wpdb->get_results( "SELECT * FROM `{$custom_fields_table}`" );
 
 		foreach ( $results as $row ) {
-			$update = false;
-
 			if ( in_array( $row->htmlvar_name, array( 'geodir_contact', 'is_featured' ) ) ) {
 				if ( $row->htmlvar_name == 'geodir_contact' ) {
 					$row->htmlvar_name = 'phone';
@@ -353,25 +377,37 @@ class GeoDir_Admin_Upgrade {
 				if ( $row->htmlvar_name == 'is_featured' ) {
 					$row->htmlvar_name = 'featured';
 				}
-				$update = true;
 			}
 			if ( strpos( $row->htmlvar_name, 'geodir_' ) === 0 ) {
 				$row->htmlvar_name = strtolower( substr( $row->htmlvar_name, 7 ) );
-				$update = true;
 			}
 
 			if ( $row->field_type == 'taxonomy' ) {
 				$row->field_type = 'categories';
 				$row->field_type_key = 'categories';
 				$row->htmlvar_name = 'post_category';
-
-				$update = true;
+				$extra_fields = maybe_unserialize( $row->extra_fields );
+				if ( ! empty( $extra_fields ) ) {
+					if ( $extra_fields == 'ajax_chained' ) {
+						$cat_display_type = 'multiselect';
+					} else {
+						$cat_display_type = $extra_fields;
+					}
+				} else {
+					$cat_display_type = 'select';
+				}
+				$row->extra_fields = maybe_serialize( array( 'cat_display_type' => $cat_display_type ) );
 			}
 
-			if ( empty( $row->field_type_type ) ) {
-				$row->field_type_type = $row->field_type;
+			if ( $row->field_type == 'address' ) {
+				$row->htmlvar_name = 'address';
+				if ( empty( $row->field_icon ) ) {
+					$row->field_icon = 'fas fa-map-marker-alt';
+				}
+			}
 
-				$update = true;
+			if ( empty( $row->field_type_key ) ) {
+				$row->field_type_key = $row->field_type;
 			}
 
 			if ( empty( $row->data_type ) ) {
@@ -387,8 +423,6 @@ class GeoDir_Admin_Upgrade {
 					$data_type = 'VARCHAR';
 				}
 				$row->data_type = $data_type;
-
-				$update = true;
 			}
 
 			if ( ! empty( $row->field_icon ) && ( strpos( $row->field_icon, 'fa ' ) === 0 || strpos( $row->field_icon, 'fa-' ) === 0 ) ) {
@@ -397,13 +431,13 @@ class GeoDir_Admin_Upgrade {
 				$field_icon = str_replace( 'fa-usd', 'fa-dollar-sign', $field_icon );
 				$field_icon = str_replace( 'fa-money', 'fa-money-bill-alt', $field_icon );
 				$row->field_icon = $field_icon;
-
-				$update = true;
 			}
+			$row->is_active = (int) $row->is_active;
+			$row->is_default = (int) $row->is_default;
+			$row->is_required = (int) $row->is_required;
+			$row->for_admin_use = (int) $row->for_admin_use;
 
-			if ( $update ) {
-				$wpdb->update( $custom_fields_table, (array) $row, array( 'id' => $row->id ) );
-			}
+			$wpdb->update( $custom_fields_table, (array) $row, array( 'id' => $row->id ) );
 		}
 
 		// Sorting fields
@@ -446,6 +480,7 @@ class GeoDir_Admin_Upgrade {
 				$data['htmlvar_name'] = $htmlvar_name;
 				$data['sort_order'] = $row->sort_order;
 				$data['is_active'] = $row->is_active;
+				$data['tab_parent'] = 0;
 
 				if ( $row->field_type == 'random' ) {
 					$data['htmlvar_name'] = 'post_status';
@@ -595,127 +630,123 @@ class GeoDir_Admin_Upgrade {
 		$wpdb->query( "UPDATE `{$attachments_table}` SET `is_approved` = '0' WHERE is_approved = '2';" );
 	}
 
-	/**
-	 * Upload image from URL.
-	 *
-	 * @since 2.0.0
-	 * @param string $image_url
-	 * @return array|WP_Error Attachment data or error message.
-	 */
-	public static function upload_image_from_url( $image_url ) {
-		$file_name  = basename( current( explode( '?', $image_url ) ) );
-		$parsed_url = @parse_url( $image_url );
+	private static function create_tables() {
+		global $wpdb;
 
-		// Check parsed URL.
-		if ( ! $parsed_url || ! is_array( $parsed_url ) ) {
-			return new WP_Error( 'geodir_invalid_image_url', sprintf( __( 'Invalid URL %s.', 'geodirectory' ), $image_url ), array( 'status' => 400 ) );
+		$wpdb->hide_errors();
+
+		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+		dbDelta( GeoDir_Admin_Install::get_schema() );
+
+	}
+
+	private static function insert_default_fields() {
+		global $gd_v2_update_default_fields;
+
+		if ( ! empty( $gd_v2_update_default_fields ) ) {
+			return;
 		}
 
-		// Ensure url is valid.
-		$image_url = esc_url_raw( $image_url );
+		add_filter( 'geodir_default_custom_fields', array( __CLASS__, 'filter_custom_fields' ), 100, 3 );
 
-		// Get the file.
-		$response = wp_safe_remote_get( $image_url, array(
-			'timeout' => 10,
-		) );
+		GeoDir_Admin_Install::insert_default_fields();
 
-		if ( is_wp_error( $response ) ) {
-			return new WP_Error( 'geodir_invalid_remote_image_url', sprintf( __( 'Error getting remote image %s.', 'geodirectory' ), $image_url ) . ' ' . sprintf( __( 'Error: %s.', 'geodirectory' ), $response->get_error_message() ), array( 'status' => 400 ) );
-		} elseif ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			return new WP_Error( 'geodir_invalid_remote_image_url', sprintf( __( 'Error getting remote image %s.', 'geodirectory' ), $image_url ), array( 'status' => 400 ) );
-		}
+		remove_all_filters( 'geodir_default_custom_fields' );
 
-		// Ensure we have a file name and type.
-		$wp_filetype = wp_check_filetype( $file_name );
+		$gd_v2_update_default_fields = true;
+	}
 
-		if ( ! $wp_filetype['type'] ) {
-			$headers = wp_remote_retrieve_headers( $response );
-			if ( isset( $headers['content-disposition'] ) && strstr( $headers['content-disposition'], 'filename=' ) ) {
-				$disposition = end( explode( 'filename=', $headers['content-disposition'] ) );
-				$disposition = sanitize_file_name( $disposition );
-				$file_name   = $disposition;
-			} elseif ( isset( $headers['content-type'] ) && strstr( $headers['content-type'], 'image/' ) ) {
-				$file_name = 'image.' . str_replace( 'image/', '', $headers['content-type'] );
+	private static function insert_default_tabs() {
+		global $wpdb;
+
+		GeoDir_Admin_Install::insert_default_tabs();
+
+		// merge tabs from custom fields
+		$results = $wpdb->get_results( "SELECT * FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE show_in LIKE '%[owntab]%' AND is_active = '1'" );
+		if ( ! empty( $results ) ) {
+			$sort_order = count( $results );
+			foreach ( $results as $key => $row ) {
+				if ( $row->htmlvar_name && ! in_array( $row->htmlvar_name, array( 'post_content', 'post_images' ) ) ) {
+					$sort_order++;
+
+					$field = array(
+						'post_type'     => $row->post_type,
+						'tab_layout'    => 'post',
+						'tab_type'      => 'meta',
+						'tab_name'      => __( $row->frontend_title, 'geodirectory' ),
+						'tab_icon'      => ( geodir_is_fa_icon( $row->field_icon ) ? $row->field_icon : '' ),
+						'tab_key'       => $row->htmlvar_name,
+						'tab_content'   => '',
+						'sort_order'    => $sort_order,
+						'tab_level'     => '0',
+						'tab_parent'    => '0'
+					);
+
+					GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+				}
 			}
-			unset( $headers );
+		}
+	}
 
-			// Recheck filetype
-			$wp_filetype = wp_check_filetype( $file_name );
+	private static function create_pages() {
+		global $wpdb;
 
-			if ( ! $wp_filetype['type'] ) {
-				return new WP_Error( 'geodir_invalid_image_type', __( 'Invalid image type.', 'geodirectory' ), array( 'status' => 400 ) );
-			}
+		$page_location = geodir_get_option( 'page_location' );
+		if ( $page_location && ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT ID, post_content FROM {$wpdb->posts} WHERE ID = %d", array( (int)$page_location ) ) ) ) ) {
+			$post_content = $row->post_content . ' ' . GeoDir_Defaults::page_location_content();
+			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = %s WHERE ID = %d", array( trim( $post_content ), (int)$page_location ) ) );
+		}
+		$page_add = geodir_get_option( 'page_add' );
+		if ( $page_add && ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT ID, post_content FROM {$wpdb->posts} WHERE ID = %d", array( (int)$page_add ) ) ) ) ) {
+			$post_content = $row->post_content . ' ' . GeoDir_Defaults::page_add_content();
+			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = %s WHERE ID = %d", array( trim( $post_content ), (int)$page_add ) ) );
 		}
 
-		// Upload the file.
-		$upload = wp_upload_bits( $file_name, '', wp_remote_retrieve_body( $response ) );
-
-		if ( $upload['error'] ) {
-			return new WP_Error( 'geodir_image_upload_error', $upload['error'], array( 'status' => 400 ) );
-		}
-
-		// Get filesize.
-		$filesize = filesize( $upload['file'] );
-
-		if ( 0 == $filesize ) {
-			@unlink( $upload['file'] );
-			unset( $upload );
-
-			return new WP_Error( 'geodir_image_upload_file_error', __( 'Zero size file downloaded.', 'geodirectory' ), array( 'status' => 400 ) );
-		}
-
-		do_action( 'geodir_uploaded_image_from_url', $upload, $image_url );
-
-		return $upload;
+		GeoDir_Admin_Install::create_pages();
 	}
 
 	/**
-	 * Set uploaded image as attachment.
-	 *
-	 * @since 2.0.0
-	 * @param array $upload Upload information from wp_upload_bits.
-	 * @param int $id Post ID. Default to 0.
-	 * @return int Attachment ID
+	 * Create cron jobs (clear them first).
+     *
+     * @since 2.0.0
 	 */
-	public static function set_uploaded_image_as_attachment( $upload, $id = 0 ) {
-		if ( empty( $upload['file'] ) ) {
-			return false;
-		}
+	private static function create_cron_jobs() {
+		//@todo add crons here
+		wp_clear_scheduled_hook( 'geodirectory_tracker_send_event' );
+		wp_schedule_event( time(), apply_filters( 'geodirectory_tracker_event_recurrence', 'daily' ), 'geodirectory_tracker_send_event' );
+	}
 
-		$info    = wp_check_filetype( $upload['file'] );
-		if ( empty( $info['type'] ) ) {
-			return false;
-		}
+	/**
+	 * Update GeoDirectory version to current.
+     *
+     * @since 2.0.0
+	 */
+	private static function update_gd_version() {
+		delete_option( 'geodirectory_version' );
+		add_option( 'geodirectory_version', GEODIRECTORY_VERSION );
+	}
 
-		$title   = '';
-		$content = '';
+	
 
-		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
-			include_once( ABSPATH . 'wp-admin/includes/image.php' );
-		}
+	public static function filter_custom_fields( $fields, $post_type, $package_id = 0 ) {
+		global $wpdb;
 
-		if ( $image_meta = wp_read_image_metadata( $upload['file'] ) ) {
-			if ( trim( $image_meta['title'] ) && ! is_numeric( sanitize_title( $image_meta['title'] ) ) ) {
-				$title = geodir_clean( $image_meta['title'] );
+		$filter_fields = array();
+		foreach( $fields as $key => $field ) {
+			if ( $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE post_type = %s AND htmlvar_name = %s", array( $field['post_type'], $field['htmlvar_name'] ) ) ) ) {
+				continue;
 			}
-			if ( trim( $image_meta['caption'] ) ) {
-				$content = geodir_clean( $image_meta['caption'] );
+			if ( empty( $field['sort_order'] ) ) {
+				if ( $field['htmlvar_name'] == 'post_title' ) {
+					$field['sort_order'] = 1;
+				} else if ( in_array( $field['htmlvar_name'], array( 'post_content', 'post_tags' ) ) ) {
+					$field['sort_order'] = 1;
+				}
 			}
+			$filter_fields[] = $field;
 		}
 
-		$attachment = array(
-			'post_mime_type' => $info['type'],
-			'guid'           => $upload['url'],
-			'post_parent'    => $id,
-			'post_title'     => $title ? $title : basename( $upload['file'] ),
-			'post_content'   => $content,
-		);
-
-		$attachment_id = wp_insert_attachment( $attachment, $upload['file'], $id );
-		if ( ! is_wp_error( $attachment_id ) ) {
-			wp_update_attachment_metadata( $attachment_id, wp_generate_attachment_metadata( $attachment_id, $upload['file'] ) );
-		}
-
-		return $attachment_id;
+		return $filter_fields;
 	}
 }
