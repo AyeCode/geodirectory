@@ -124,7 +124,15 @@ class GeoDir_SEO {
 			$title = self::$title;
 		}elseif(self::$title && !empty($id) && get_queried_object_id() == $id && !in_the_loop()  && !self::$doing_menu ){
 			$title = self::$title;
+			/**
+			 * Filter page title to replace variables.
+			 *
+			 * @param string $title The page title including variables.
+			 * @param string $id The page id.
+			 */
+			$title = apply_filters('geodir_seo_title', __($title, 'geodirectory'), $title, $id);
 		}
+
 		return $title;
 	}
 
@@ -422,8 +430,9 @@ class GeoDir_SEO {
 			'%%category%%' => __('The current category name.','geodirectory'),
 			'%%id%%' => __('The current post id.','geodirectory'),
 			'%%location%%' => __('The full current location eg: United States, Pennsylvania, Philadelphia','geodirectory'),
+			'%%location_single%%' => __('The current viewing location type single name eg: Philadelphia','geodirectory'),
 			'%%in_location%%' => __('The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia','geodirectory'),
-			'%%in_location_single%%' => __('The current viewing location type single name eg: Philadelphia','geodirectory'),
+			'%%in_location_single%%' => __('The current viewing location type single name prefixed with `in` eg: Philadelphia','geodirectory'),
 			'%%location_country%%' => __('The current viewing country eg: United States','geodirectory'),
 			'%%in_location_country%%' => __('The current viewing country prefixed with `in` eg: in United States','geodirectory'),
 			'%%location_region%%' => __('The current viewing region eg: Pennsylvania','geodirectory'),

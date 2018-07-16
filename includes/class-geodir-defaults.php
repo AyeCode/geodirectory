@@ -459,7 +459,7 @@ Thank You.","geodirectory"
 	 * @return string
 	 */
 	public static function seo_location_title(){
-		return __("%%title%%","geodirectory");
+		return __("%%location_single%%","geodirectory");
 	}
 
 	/**

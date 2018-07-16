@@ -20,6 +20,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_Permalinks {
 
+	public $rewrite_rule_problem = '';
+	public $rewrite_rules = array();
+
 	public function __construct() {
 		// add rewrite tags (query params)
 		add_action('init', array( $this, 'rewrite_tags'), 10, 0);
@@ -41,12 +44,56 @@ class GeoDir_Permalinks {
 
 
 
-
+		// search page rewrite rules
+		add_action('init', array( $this, 'insert_rewrite_rules'), 20,0);
 
 
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
 		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
+	}
+
+	public function insert_rewrite_rules(){
+
+		if(!empty($this->rewrite_rules)){
+			// organise the right order
+			usort($this->rewrite_rules, array( $this, "sort_rewrites"));
+			foreach($this->rewrite_rules as $rule){
+				add_rewrite_rule($rule['regex'],$rule['redirect'],$rule['after']);
+			}
+		}
+	}
+
+	function sort_rewrites($b, $a) {
+		if ($a['count'] == $b['count']) {
+			return 0;
+		}
+		return ($a['count'] < $b['count']) ? -1 : 1;
+	}
+
+	public function rewrite_rule_problem_notice() {
+		?>
+		<div class="notice notice-error">
+			<p><?php _e( '<b>GeoDirectory permalink error</b> the following rule appears twice:', 'geodirectory' ); echo " ". esc_attr( $this->rewrite_rule_problem ); ?></p>
+			<p><?php _e( '<b>Try making the GeoDirectory permalinks more unique.</b>', 'geodirectory' );?></p>
+		</div>
+		<?php
+	}
+
+	public function add_rewrite_rule($regex, $redirect, $after = ''){
+
+		if(isset($this->rewrite_rules[$regex])){
+			//echo 'permalink problem';exit;
+			$this->rewrite_rule_problem = $regex;
+			add_action( 'admin_notices', array($this,'rewrite_rule_problem_notice') );
+		}
+		$this->rewrite_rules[$regex] = array(
+			'regex'     => $regex,
+			'redirect'  => $redirect,
+			'after'     => $after,
+			'count'     => count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
+			//'countx'     => explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex))
+		);
 	}
 	
 
@@ -68,9 +115,9 @@ class GeoDir_Permalinks {
 	 */
 	public function location_rewrite_rules(){
 		// locations page
-		add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]&city=$matches[3]', 'top' );
-		add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]', 'top' );
-		add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]', 'top' );
+		$this->add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]&city=$matches[3]', 'top' );
+		$this->add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]&region=$matches[2]', 'top' );
+		$this->add_rewrite_rule( "^".$this->location_slug()."/([^/]+)/?", 'index.php?pagename='.$this->location_slug().'&country=$matches[1]', 'top' );
 	}
 
 	/**
@@ -78,7 +125,7 @@ class GeoDir_Permalinks {
 	 */
 	public function search_rewrite_rules(){
 		// add search paging rewrite
-		add_rewrite_rule( "^".$this->search_slug() . '/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
+		$this->add_rewrite_rule( "^".$this->search_slug() . '/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
 	}
 
 	/**
@@ -102,14 +149,14 @@ class GeoDir_Permalinks {
 				$saves_slug = $this->favs_slug( $cpt_slug );
 
 				// add CPT author rewrite rules
-				$rules["^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/?$"] = 'index.php?author_name=$matches[1]&post_type='.$post_type;
-				$rules["^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&post_type='.$post_type.'&paged=$matches[2]';
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/?$",'index.php?author_name=$matches[1]&post_type='.$post_type);
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&post_type='.$post_type.'&paged=$matches[2]');
 
 				// favs
-				$rules["^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1';
-				$rules["^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&paged=$matches[2]';
-				$rules["^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type;
-				$rules["^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$"] = 'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]';
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/?$",'index.php?author_name=$matches[1]&gd_favs=1');
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&paged=$matches[2]');
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type);
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]');
 			}
 		}
 
@@ -371,7 +418,7 @@ class GeoDir_Permalinks {
 				}
 
 				$after = $gd_permalink_structure == "/%postname%/" ? 'bottom' : 'top';
-				add_rewrite_rule( $regex, $redirect, $after );
+				$this->add_rewrite_rule( $regex, $redirect, $after );
 			}
 		}
 	}
