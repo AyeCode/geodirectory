@@ -142,6 +142,10 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 */
 	public static function default_marker_icon( $full_path = false ) {
 		$icon = geodir_get_option( 'map_default_marker_icon' );
+
+		if ( ! empty( $icon ) && (int) $icon > 0 ) {
+			$icon = wp_get_attachment_url( $icon );
+		}
 		
 		if ( ! $icon ) {
 			$icon = geodir_file_relative_url( GEODIRECTORY_PLUGIN_URL . '/assets/images/pin.png' );

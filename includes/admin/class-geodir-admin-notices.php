@@ -179,15 +179,28 @@ class GeoDir_Admin_Notices {
 	 * If we need to update, include a message with the update button.
 	 */
 	public static function update_notice() {
-		if ( version_compare( get_option( 'geodirectory_db_version' ), GEODIRECTORY_VERSION, '<' ) ) {
-			$updater = new GeoDir_Background_Updater();
-			if ( $updater->is_updating() || ! empty( $_GET['do_update_geodirectory'] ) ) {
-				include( 'views/html-notice-updating.php' );
+		if ( version_compare( get_option( 'geodirectory_db_version' ), '2.0.0.0', '<' ) ) {
+			if ( version_compare( get_option( 'geodirectory_db_version' ), GEODIRECTORY_VERSION, '<' ) ) {
+				$updater = new GeoDir_Background_Updater();
+				if ( $updater->is_updating() || ! empty( $_GET['do_update_geodirectory'] ) ) {
+					include( 'views/html-notice-updating.php' );
+				} else {
+					include( 'views/html-notice-v2-update.php' );
+				}
 			} else {
-				include( 'views/html-notice-update.php' );
+				include( 'views/html-notice-updated.php' );
 			}
 		} else {
-			include( 'views/html-notice-updated.php' );
+			if ( version_compare( get_option( 'geodirectory_db_version' ), GEODIRECTORY_VERSION, '<' ) ) {
+				$updater = new GeoDir_Background_Updater();
+				if ( $updater->is_updating() || ! empty( $_GET['do_update_geodirectory'] ) ) {
+					include( 'views/html-notice-updating.php' );
+				} else {
+					include( 'views/html-notice-update.php' );
+				}
+			} else {
+				include( 'views/html-notice-updated.php' );
+			}
 		}
 	}
 

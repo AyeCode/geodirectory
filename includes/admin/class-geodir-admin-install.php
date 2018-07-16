@@ -20,7 +20,11 @@ class GeoDir_Admin_Install {
 	/** @var array DB updates and callbacks that need to be run per version */
 	private static $db_updates = array(
 		/*'2.0.0.0' => array(
-			'geodir_update_200',
+			'geodir_update_200_settings',
+			'geodir_update_200_fields',
+			'geodir_update_200_terms',
+			'geodir_update_200_posts',
+			'geodir_update_200_merge_data',
 			'geodir_update_200_db_version',
 		),*/
 	);
@@ -56,9 +60,13 @@ class GeoDir_Admin_Install {
 	 * This check is done on all requests and runs if the versions do not match.
 	 */
 	public static function check_version() {
-		if ( ! defined( 'IFRAME_REQUEST' ) && get_option( 'geodirectory_version' ) !== GeoDir()->version ) {
-			self::install();
-			do_action( 'geodirectory_updated' );
+		if ( ! defined( 'IFRAME_REQUEST' ) ) {
+			if ( self::is_v2_upgrade() ) {
+				GeoDir_Admin_Notices::add_notice( 'update' );
+			} else if ( get_option( 'geodirectory_version' ) !== GeoDir()->version ) {
+				self::install();
+				do_action( 'geodirectory_updated' );
+			}
 		}
 	}
 
@@ -155,6 +163,24 @@ class GeoDir_Admin_Install {
 	 */
 	private static function is_new_install() {
 		return is_null( get_option( 'geodirectory_version', null ) ) && is_null( get_option( 'geodirectory_db_version', null ) );
+	}
+
+	/**
+	 * Is v1 to v2 upgrade.
+	 *
+	 * @since 2.0.0
+	 * @return boolean
+	 */
+	private static function is_v2_upgrade() {
+		if ( self::is_new_install() ) {
+			return false;
+		}
+
+		if ( get_option( 'geodirectory_db_version' ) && version_compare( get_option( 'geodirectory_db_version' ), '2.0.0.0', '<' ) ) {
+			return true;
+		}
+
+		return false;
 	}
 
 	/**
@@ -533,7 +559,7 @@ class GeoDir_Admin_Install {
      *
 	 * @return string $tables.
 	 */
-	private static function get_schema() {
+	public static function get_schema() {
 		global $wpdb, $plugin_prefix;
 
 		/*
