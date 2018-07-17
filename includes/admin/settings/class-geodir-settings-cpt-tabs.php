@@ -378,7 +378,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			if ( ! empty( $cfs ) ) {
 				echo '<ul>';
 				foreach ( $cfs as $id => $cf ) {
-					$cf = (array)$cf;
+					$cf = stripslashes_deep( (array)$cf );
 					?>
 					<li>
 						<a id="gd-<?php echo esc_attr($cf['tab_key']); ?>"
@@ -599,6 +599,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			if ( ! isset( $tab->id ) ) {
 				$tab->id = '';
 			}
+			$tab = stripslashes_deep( $tab );
 			include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-tab-item.php' );
 			return ob_get_clean();
 		}

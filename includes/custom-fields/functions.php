@@ -347,6 +347,10 @@ if (!function_exists('geodir_get_field_infoby')) {
             ARRAY_A
         );
 
+		if ( ! empty( $filter ) ) {
+			$filter = stripslashes_deep( $filter );
+		}
+
         if ($filter) {
             return $filter;
         } else {

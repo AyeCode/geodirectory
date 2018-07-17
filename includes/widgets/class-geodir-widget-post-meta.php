@@ -167,6 +167,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					}
 				}
 				if(!empty($field)){
+					$field = stripslashes_deep( $field );
 					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
 					if($args['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
 					if($args['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}

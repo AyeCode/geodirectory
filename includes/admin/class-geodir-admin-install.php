@@ -19,14 +19,14 @@ class GeoDir_Admin_Install {
 
 	/** @var array DB updates and callbacks that need to be run per version */
 	private static $db_updates = array(
-		/*'2.0.0.0' => array(
+		'2.0.0.0' => array(
 			'geodir_update_200_settings',
 			'geodir_update_200_fields',
 			'geodir_update_200_terms',
 			'geodir_update_200_posts',
 			'geodir_update_200_merge_data',
 			'geodir_update_200_db_version',
-		),*/
+		),
 	);
 
 	/** @var object Background update class */

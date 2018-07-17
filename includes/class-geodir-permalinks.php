@@ -146,7 +146,7 @@ class GeoDir_Permalinks {
 			foreach($post_types as $post_type => $cpt){
 
 				$cpt_slug = isset($cpt['rewrite']['slug']) ? $cpt['rewrite']['slug'] : '';
-				$saves_slug = $this->favs_slug( $cpt_slug );
+				$saves_slug = self::favs_slug( $cpt_slug );
 
 				// add CPT author rewrite rules
 				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/?$",'index.php?author_name=$matches[1]&post_type='.$post_type);
@@ -448,7 +448,7 @@ class GeoDir_Permalinks {
 	 *
 	 * @return mixed|void
 	 */
-	public function favs_slug($cpt_slug = '' ){
+	public static function favs_slug($cpt_slug = '' ){
 		return apply_filters('geodir_rewrite_favs_slug','favs',$cpt_slug);
 	}
 

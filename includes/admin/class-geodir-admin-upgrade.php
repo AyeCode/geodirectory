@@ -83,7 +83,7 @@ class GeoDir_Admin_Upgrade {
 		self::create_cron_jobs();
 
 		// Queue upgrades/setup wizard
-		//self::maybe_enable_setup_wizard();
+		self::maybe_enable_setup_wizard();
 	}
 
 	public static function update_200_db_version() {
@@ -432,6 +432,10 @@ class GeoDir_Admin_Upgrade {
 				$field_icon = str_replace( 'fa-money', 'fa-money-bill-alt', $field_icon );
 				$row->field_icon = $field_icon;
 			}
+			if ( empty( $row->htmlvar_name ) ) {
+				$title = ( ! empty( $row->frontend_title ) ? $row->frontend_title : $row->admin_title );
+				$row->htmlvar_name = str_replace( '-', '_', sanitize_key( str_replace( ' ', '_', $title ) ) . '_' . $row->id );
+			}
 			$row->is_active = (int) $row->is_active;
 			$row->is_default = (int) $row->is_default;
 			$row->is_required = (int) $row->is_required;
@@ -516,6 +520,9 @@ class GeoDir_Admin_Upgrade {
 					}
 				}
 			}
+
+			// update sorting fields sort order
+			self::update_200_sort_fields_sort_order();
 		}
 	}
 
@@ -642,19 +649,14 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	private static function insert_default_fields() {
-		global $gd_v2_update_default_fields;
-
-		if ( ! empty( $gd_v2_update_default_fields ) ) {
-			return;
-		}
-
-		add_filter( 'geodir_default_custom_fields', array( __CLASS__, 'filter_custom_fields' ), 100, 3 );
+		add_filter( 'geodir_before_default_custom_fields_saved', array( __CLASS__, 'filter_custom_fields_saved' ), 100, 1 );
 
 		GeoDir_Admin_Install::insert_default_fields();
 
-		remove_all_filters( 'geodir_default_custom_fields' );
+		remove_filter( 'geodir_before_default_custom_fields_saved', array( __CLASS__, 'filter_custom_fields_saved' ), 100, 1 );
 
-		$gd_v2_update_default_fields = true;
+		// update custom fields sort order
+		self::update_200_fields_sort_order();
 	}
 
 	private static function insert_default_tabs() {
@@ -663,13 +665,10 @@ class GeoDir_Admin_Upgrade {
 		GeoDir_Admin_Install::insert_default_tabs();
 
 		// merge tabs from custom fields
-		$results = $wpdb->get_results( "SELECT * FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE show_in LIKE '%[owntab]%' AND is_active = '1'" );
+		$results = $wpdb->get_results( "SELECT post_type, htmlvar_name, frontend_title, field_icon, sort_order FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE show_in LIKE '%[owntab]%' AND is_active = '1'" );
 		if ( ! empty( $results ) ) {
-			$sort_order = count( $results );
 			foreach ( $results as $key => $row ) {
 				if ( $row->htmlvar_name && ! in_array( $row->htmlvar_name, array( 'post_content', 'post_images' ) ) ) {
-					$sort_order++;
-
 					$field = array(
 						'post_type'     => $row->post_type,
 						'tab_layout'    => 'post',
@@ -678,7 +677,7 @@ class GeoDir_Admin_Upgrade {
 						'tab_icon'      => ( geodir_is_fa_icon( $row->field_icon ) ? $row->field_icon : '' ),
 						'tab_key'       => $row->htmlvar_name,
 						'tab_content'   => '',
-						'sort_order'    => $sort_order,
+						'sort_order'    => $row->sort_order,
 						'tab_level'     => '0',
 						'tab_parent'    => '0'
 					);
@@ -687,6 +686,9 @@ class GeoDir_Admin_Upgrade {
 				}
 			}
 		}
+
+		// update detail tabs sort order
+		self::update_200_post_tabs_sort_order();
 	}
 
 	private static function create_pages() {
@@ -718,6 +720,16 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	/**
+	 * See if we need the wizard or not.
+	 *
+	 * @since 2.0.0
+	 */
+	private static function maybe_enable_setup_wizard() {
+		GeoDir_Admin_Notices::add_notice( 'install' );
+		set_transient( '_gd_activation_redirect', 1, 30 );
+	}
+
+	/**
 	 * Update GeoDirectory version to current.
      *
      * @since 2.0.0
@@ -729,7 +741,7 @@ class GeoDir_Admin_Upgrade {
 
 	
 
-	public static function filter_custom_fields( $fields, $post_type, $package_id = 0 ) {
+	public static function filter_custom_fields_saved( $fields ) {
 		global $wpdb;
 
 		$filter_fields = array();
@@ -740,13 +752,111 @@ class GeoDir_Admin_Upgrade {
 			if ( empty( $field['sort_order'] ) ) {
 				if ( $field['htmlvar_name'] == 'post_title' ) {
 					$field['sort_order'] = 1;
-				} else if ( in_array( $field['htmlvar_name'], array( 'post_content', 'post_tags' ) ) ) {
-					$field['sort_order'] = 1;
+				} else if ( $field['htmlvar_name'] == 'post_content' ) {
+					$field['sort_order'] = 2;
+				} else if ( $field['htmlvar_name'] == 'post_category' ) {
+					$field['sort_order'] = 3;
+				} else if ( $field['htmlvar_name'] == 'post_tags' ) {
+					$field['sort_order'] = 4;
+				} else if ( $field['htmlvar_name'] == 'address' ) {
+					$field['sort_order'] = 5;
 				}
 			}
 			$filter_fields[] = $field;
 		}
 
 		return $filter_fields;
+	}
+
+	public static function update_200_fields_sort_order() {
+		global $wpdb;
+
+		$post_types = (array) geodir_get_option( 'post_types' );
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type => $data ) {
+				if ( empty( $post_type ) ) {
+					continue;
+				}
+
+				$results = $wpdb->get_results( $wpdb->prepare( "SELECT id, htmlvar_name, sort_order FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE post_type = %s ORDER BY sort_order ASC", array( $post_type ) ) );
+
+				if ( ! empty( $results ) ) {
+					$save_order = array();
+					$sort_order = 5;
+					foreach ( $results as $key => $row ) {
+						if ( in_array( $row->htmlvar_name, array( 'post_title', 'post_content', 'post_category', 'post_tags', 'address' ) ) ) {
+							if ( $row->htmlvar_name == 'post_title' ) {
+								$row->sort_order = 1;
+							} else if ( $row->htmlvar_name == 'post_content' ) {
+								$row->sort_order = 2;
+							} else if ( $row->htmlvar_name == 'post_category' ) {
+								$row->sort_order = 3;
+							} else if ( $row->htmlvar_name == 'post_tags' ) {
+								$row->sort_order = 4;
+							} else {
+								$row->sort_order = 5;
+							}
+						} else {
+							$sort_order++;
+							$row->sort_order = $sort_order;
+						}
+						$save_order[] = $row;
+					}
+
+					foreach ( $save_order as $key => $save ) {
+						$wpdb->query( $wpdb->prepare( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = %d WHERE id = %d", array( $save->sort_order, $save->id ) ) );
+					}
+				}
+			}
+		}
+	}
+
+	public static function update_200_sort_fields_sort_order() {
+		global $wpdb;
+
+		$post_types = (array) geodir_get_option( 'post_types' );
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type => $data ) {
+				if ( empty( $post_type ) ) {
+					continue;
+				}
+
+				$results = $wpdb->get_results( $wpdb->prepare( "SELECT id FROM `" . GEODIR_CUSTOM_SORT_FIELDS_TABLE . "` WHERE post_type = %s ORDER BY sort_order ASC, id ASC", array( $post_type ) ) );
+
+				if ( ! empty( $results ) ) {
+					$sort_order = 0;
+					foreach ( $results as $key => $row ) {
+						$sort_order++;
+						$wpdb->update( GEODIR_CUSTOM_SORT_FIELDS_TABLE, array( 'sort_order' => $sort_order ), array( 'id' => $row->id ) );
+					}
+				}
+			}
+		}
+	}
+
+	public static function update_200_post_tabs_sort_order() {
+		global $wpdb;
+
+		$post_types = (array) geodir_get_option( 'post_types' );
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type => $data ) {
+				if ( empty( $post_type ) ) {
+					continue;
+				}
+
+				$results = $wpdb->get_results( $wpdb->prepare( "SELECT id FROM `" . GEODIR_TABS_LAYOUT_TABLE . "` WHERE post_type = %s ORDER BY sort_order ASC, id ASC", array( $post_type ) ) );
+
+				if ( ! empty( $results ) ) {
+					$sort_order = 0;
+					foreach ( $results as $key => $row ) {
+						$sort_order++;
+						$wpdb->update( GEODIR_TABS_LAYOUT_TABLE, array( 'sort_order' => $sort_order ), array( 'id' => $row->id ) );
+					}
+				}
+			}
+		}
 	}
 }
