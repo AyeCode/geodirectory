@@ -51,11 +51,23 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_filter('primer_the_page_title',array(__CLASS__,'primer_title'));
 
+		/*######################################################
+		Beaver Builder :: Fix font-awesome.
+		######################################################*/
+		add_filter('wp_print_scripts',array(__CLASS__,'beaver_builder'),100);
+
+
 
 
 		// after_setup_theme checks
 		add_action( 'after_setup_theme', array(__CLASS__,'for_later_checks') );
 
+	}
+
+	public static function beaver_builder(){
+		if(isset($_REQUEST['fl_builder'])){
+			wp_dequeue_script( 'font-awesome' );
+		}
 	}
 
 	public static function wpseo_disable($options){

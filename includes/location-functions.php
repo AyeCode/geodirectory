@@ -488,12 +488,24 @@ function geodir_geoplugin_data( $ip = '' ) {
 		return NULL;
 	}
 
-	$geoplugin_data = array();
-	$url = 'http://www.geoplugin.net/php.gp?ip=' . $ip;
-	$response = file_get_contents( $url );
-	if ( ! empty( $response ) ) {
-		$geoplugin_data = maybe_unserialize( $response );
-	}
+    $geoplugin_data = array();
 
-	return apply_filters( 'geodir_geoplugin_data', $geoplugin_data, $ip );
+    // check transient cache
+    $cache = get_transient( 'geodir_ip_location_'.$ip );
+    if($cache === false){
+
+        $url = 'http://www.geoplugin.net/php.gp?ip=' . $ip;
+        $response = file_get_contents( $url );
+        if ( ! empty( $response ) ) {
+            $geoplugin_data = maybe_unserialize( $response );
+        }
+    }else{
+        $geoplugin_data = $cache;
+    }
+
+    $geoplugin_data  = apply_filters( 'geodir_geoplugin_data', $geoplugin_data, $ip );
+
+    set_transient( 'geodir_ip_location_'.$ip, $geoplugin_data, 24 * HOUR_IN_SECONDS ); // cache ip location for 24 hours
+
+	return $geoplugin_data;
 }
