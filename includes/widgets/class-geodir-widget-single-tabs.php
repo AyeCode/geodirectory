@@ -115,7 +115,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                     if($tab->tab_icon){
                         echo '<i class="fas '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
                     }
-                    echo esc_attr__($tab->tab_name,'geodirectory').'</a>';
+                    echo stripslashes(esc_attr__($tab->tab_name,'geodirectory')).'</a>';
                     echo '</dd>';
                     $count++;
                 }
