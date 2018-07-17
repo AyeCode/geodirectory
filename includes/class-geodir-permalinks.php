@@ -91,7 +91,8 @@ class GeoDir_Permalinks {
 			'regex'     => $regex,
 			'redirect'  => $redirect,
 			'after'     => $after,
-			'count'     => count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
+			'count'     => (10 * count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ) ) - (substr_count($regex,'([^/]+)') + substr_count($regex,'([^/]*)'))//count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
+			//'count'     => count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
 			//'countx'     => explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex))
 		);
 	}
