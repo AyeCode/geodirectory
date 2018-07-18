@@ -113,8 +113,14 @@ function geodir_get_listing_slug($object_type = '')
             $object_info = $post_types[$object_type];
             $listing_slug = $object_info['listing_slug'];
         } elseif (!empty($taxonomies) && array_key_exists($object_type, $taxonomies)) {
-            $object_info = $taxonomies[$object_type];
-            $listing_slug = $object_info['listing_slug'];
+
+            $temp_object_type = $object_type.'...'; // add '...' so we can ensure we are only stripping the last bit of the string.
+            if(stripos(strrev($object_type), "sgat_") === 0){// its a tag
+                $cpt = str_replace("_tags...","",$temp_object_type);
+            }else{// its a cat
+                $cpt = str_replace("category...","",$temp_object_type);
+            }
+            $listing_slug = $post_types[$cpt]['rewrite']['slug'];
         }
 
     }
