@@ -82,7 +82,7 @@ jQuery(window).load(function() {
         var $this = jQuery(this);
         var $wrap = $this.closest('.gd-upload-img');
         var field = $wrap.data('field');
-        jQuery('.gd-upload-display', $wrap).find('img').attr('src', geodir_params.img_spacer).removeAttr('width height sizes alt class');
+        jQuery('.gd-upload-display', $wrap).find('img').attr('src', geodir_params.img_spacer).removeAttr('width height sizes alt class srcset');
 		if (field) {
 			if (jQuery('[name="' + field + '[id]"]').length > 0) {
 				jQuery('[name="' + field + '[id]"]').val('');
