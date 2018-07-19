@@ -22,6 +22,8 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	public static function update_200_settings() {
+		global $geodir_options;
+
 		do_action( 'geodir_update_200_settings_before' );
 
 		self::create_default_options();
@@ -37,6 +39,8 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		update_option( 'geodir_settings', $saved_options );
+
+		$geodir_options = geodir_get_settings();
 
 		do_action( 'geodir_update_200_settings_after' );
 	}
@@ -93,7 +97,8 @@ class GeoDir_Admin_Upgrade {
 		// Update DB version
 		GeoDir_Admin_Install::update_db_version( GEODIRECTORY_VERSION );
 
-		// Flush rules after install
+		// Flush rules after upgrade
+		flush_rewrite_rules();
 		do_action( 'geodir_flush_rewrite_rules' );
 
 		// Trigger action
@@ -134,8 +139,8 @@ class GeoDir_Admin_Upgrade {
 	public static function update_200_get_options() {
 		$v1_post_types = get_option( 'geodir_post_types' );
 		$v2_post_types = array();
-		if ( ! empty( $old_post_types ) ) {
-			foreach( $old_post_types as $post_type => $data ) {
+		if ( ! empty( $v1_post_types ) ) {
+			foreach( $v1_post_types as $post_type => $data ) {
 				if ( ! empty( $data['labels'] ) ) {
 					$remove_labels = array( 'label_post_profile', 'label_post_info', 'label_post_images', 'label_post_map', 'label_reviews', 'label_related_listing' );
 					foreach ( $remove_labels as $label ) {
@@ -159,7 +164,7 @@ class GeoDir_Admin_Upgrade {
 
 				$data['default_image'] = self::update_200_generate_attachment_id( get_option( 'geodir_cpt_img_' . $post_type ) );
 
-				$data['disable_reviews'] = ! in_array( $post_type, (array) get_option( 'geodir_disable_rating_cpt' ) );
+				$data['disable_reviews'] = in_array( $post_type, (array) get_option( 'geodir_disable_rating_cpt' ) );
 				$data['disable_favorites'] = 0;
 				$data['disable_frontend_add'] = ! in_array( $post_type, (array) get_option( 'geodir_allow_posttype_frontend' ) );
 
@@ -180,9 +185,6 @@ class GeoDir_Admin_Upgrade {
 			'city_latitude' => '',
 			'city_longitude' => '',
 		) );
-
-		$default_marker_icon = get_option( 'geodir_default_marker_icon' );
-		$default_marker_icon = str_replace( 'geodirectory-functions/map-functions/icons', 'assets/images', $default_marker_icon );
 		
 		// Core options
 		$options = array(
@@ -201,7 +203,7 @@ class GeoDir_Admin_Upgrade {
 			'search_default_text' => get_option( 'geodir_search_field_default_text' ),
 			'search_default_near_text' => get_option( 'geodir_near_field_default_text' ),
 			'search_default_button_text' => get_option( 'geodir_search_button_label' ),
-			'map_default_marker_icon' => self::update_200_generate_attachment_id( $default_marker_icon ),
+			'map_default_marker_icon' => self::update_200_generate_attachment_id( get_option( 'geodir_default_marker_icon' ) ),
 			'exclude_post_type_on_map' => get_option( 'geodir_exclude_post_type_on_map' ),
 			'exclude_cat_on_map' => get_option( 'geodir_exclude_cat_on_map' ),
 			'email_admin_pending_post' => get_option( 'geodir_notify_post_submit' ),
@@ -258,6 +260,8 @@ class GeoDir_Admin_Upgrade {
 			'default_location_latitude' => $default_location['city_latitude'],
 			'default_location_longitude' => $default_location['city_longitude'],
 			'default_location_timezone' => '',
+			'permalink_category_base' => 'category',
+			'permalink_tag_base' => 'tags',
 
 			// Google Analytics options
 			'ga_stats' => get_option( 'geodir_ga_stats' ),
@@ -274,6 +278,10 @@ class GeoDir_Admin_Upgrade {
 			'ga_client_secret' => get_option( 'geodir_ga_client_secret' )
 		);
 
+		if ( $options['rating_type'] == 'image' && empty( $options['rating_image'] ) ) {
+			$options['rating_type'] = 'font-awesome';
+		}
+
 		return apply_filters( 'geodir_update_200_get_options', $options );
 	}
 
@@ -281,6 +289,9 @@ class GeoDir_Admin_Upgrade {
 		if ( empty( $image_url ) ) {
 			return '';
 		}
+
+		$image_url = str_replace( 'geodirectory-assets/', 'assets/', $image_url );
+		$image_url = str_replace( 'geodirectory-functions/map-functions/icons', 'assets/images', $image_url );
 
 		$upload = GeoDir_Media::upload_image_from_url( $image_url );
 		if ( ! empty( $upload ) && ! is_wp_error( $upload ) && ! empty( $upload['file'] ) ) {
@@ -314,6 +325,11 @@ class GeoDir_Admin_Upgrade {
 		if ( ! get_option( 'geodir_add_categories_url' ) ) {
 			$permalink_structure = str_replace( '/%category%', '', $permalink_structure );
 		}
+
+		if ( ! empty( $permalink_structure ) ) {
+			$permalink_structure = preg_replace( '#/+#', '/', '/' . str_replace( '#', '', $permalink_structure ) );
+		}
+		$permalink_structure = sanitize_option( 'permalink_structure', $permalink_structure );
 
 		geodir_set_permalink_structure( $permalink_structure );
 	}
@@ -726,7 +742,6 @@ class GeoDir_Admin_Upgrade {
 	 */
 	private static function maybe_enable_setup_wizard() {
 		GeoDir_Admin_Notices::add_notice( 'install' );
-		set_transient( '_gd_activation_redirect', 1, 30 );
 	}
 
 	/**
