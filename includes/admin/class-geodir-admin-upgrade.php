@@ -100,11 +100,12 @@ class GeoDir_Admin_Upgrade {
 		// Flush rules after upgrade
 		flush_rewrite_rules();
 		do_action( 'geodir_flush_rewrite_rules' );
+		wp_schedule_single_event( time(), 'geodir_flush_rewrite_rules' );
 
 		// Trigger action
 		do_action( 'geodirectory_v2_updated' );
 	}
-
+	
 	/**
 	 * Default options.
 	 *
