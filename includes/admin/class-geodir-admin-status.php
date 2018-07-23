@@ -129,10 +129,14 @@ class GeoDir_Admin_Status {
 					if ( is_dir( $template_path . DIRECTORY_SEPARATOR . $value ) ) {
 						$sub_files = self::scan_template_files( $template_path . DIRECTORY_SEPARATOR . $value );
 						foreach ( $sub_files as $sub_file ) {
-							$result[] = $value . DIRECTORY_SEPARATOR . $sub_file;
+							if($value != 'index.php') {
+								$result[] = $value . DIRECTORY_SEPARATOR . $sub_file;
+							}
 						}
 					} else {
-						$result[] = $value;
+						if($value != 'index.php'){
+							$result[] = $value;
+						}
 					}
 				}
 			}

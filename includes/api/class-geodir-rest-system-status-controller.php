@@ -737,6 +737,8 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 		$override_files     = array();
 		$outdated_templates = false;
 		$scan_files         = GeoDir_Admin_Status::scan_template_files( GeoDir()->plugin_path() . '/templates/' );
+
+		//print_r($scan_files );exit;
 		foreach ( $scan_files as $file ) {
 			if ( file_exists( get_stylesheet_directory() . '/' . $file ) ) {
 				$theme_file = get_stylesheet_directory() . '/' . $file;

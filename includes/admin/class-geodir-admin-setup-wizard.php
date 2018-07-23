@@ -661,7 +661,7 @@ class GeoDir_Admin_Setup_Wizard {
 				echo "<input type='hidden' id='gd-installing-text' value='<i class=\"fas fa-sync fa-spin\" aria-hidden=\"true\"></i> ".__('Installing','geodirectory')."' >";
 				echo "<input type='hidden' id='gd-installed-text' value='$installed_text' >";
 				foreach ($recommend_wp_plugins as $plugin){
-
+//					print_r($plugin);
 					$status = install_plugin_install_status( array("slug"=>$plugin['slug'],"version"=>""));
 					//print_r($status);
 
@@ -699,8 +699,77 @@ class GeoDir_Admin_Setup_Wizard {
 				}
 				echo "</ul>";
 			}
+			/*
 			?>
-		</div>
+
+				<h2 class="gd-settings-title "><?php _e("GeoDirectory Addons","geodirectory");?></h2>
+
+				<p><?php _e("Below are the GeoDirectory addons that you may with to install at this point.","geodirectory");?></p>
+
+				<?php
+				
+				$gd_plugins = GeoDir_Admin_Addons::get_section_data( 'addons' );
+
+				//print_r($addons);
+
+				//			$status = install_plugin_install_status( array("slug"=>"two-factor","version"=>""));
+				//			print_r($status);
+
+				if(!empty($gd_plugins)){
+					echo "<ul>";
+					$installed_text = "<i class=\"fas fa-check-circle\" aria-hidden=\"true\"></i> ".__('Installed','geodirectory');
+					echo "<input type='hidden' id='gd-installing-text' value='<i class=\"fas fa-sync fa-spin\" aria-hidden=\"true\"></i> ".__('Installing','geodirectory')."' >";
+					echo "<input type='hidden' id='gd-installed-text' value='$installed_text' >";
+					foreach ($gd_plugins  as $plugin){
+
+						// convert to array
+						$plugin = (array)$plugin->info;
+						$plugin['name'] = $plugin['title'];
+
+//						print_r($plugin);exit;
+
+						$status = install_plugin_install_status( array("slug"=>$plugin['slug'],"version"=>""));
+						//print_r($status);
+
+						$plugin_status = isset($status['status']) ? $status['status'] : '';
+						$url = isset($status['url']) ? $status['url'] : '';
+
+						$nonce = wp_create_nonce( 'updates' );
+
+						if($plugin_status=='install'){// required installation
+							$checked = "checked";
+							$disabled = "";
+							$checkbox_class = "class='gd_install_plugins'";
+						}else{
+							$checked = "checked";
+							$disabled = "disabled";
+							$checkbox_class = "";
+						}
+
+//http://localhost/wp-admin/plugin-install.php?gd_wizard_recommend=true&tab=plugin-information&plugin=list-manager&item_id=69994&update_url=https://wpgeodirectory.com
+						echo "<li class='".$plugin['slug']."'>";
+						echo "<input type='checkbox' id='".$plugin['slug']."' $checked $disabled $checkbox_class />";
+						echo $plugin['name']." "; echo !empty($plugin['desc']) ? geodir_help_tip($plugin['desc']) : '';
+						echo " | <a href='".admin_url( "plugin-install.php?gd_wizard_recommend=true&tab=plugin-information&plugin=".$plugin['slug'])."&item_id=".$plugin['id']."&update_url=https://wpgeodirectory.com' data-lity>more info</a>";
+						if($plugin_status=='install' && $url){
+							//echo " | <a href='#' onclick='gd_wizard_install_plugin(\"".$plugin['slug']."\",\"$nonce\");return false;'>install</a>";
+							echo " | <span class='gd-plugin-status' >( ".__('Tick to install','geodirectory')." )</span>";
+						}else{
+							if(!empty($plugin_status)){
+								$plugin_status = $installed_text;
+							}
+							echo " | <span class='gd-plugin-status'>$plugin_status</span>";
+						}
+						echo "</li>";
+
+					}
+					echo "</ul>";
+				}
+			*/
+				?>
+
+
+			</div>
 
 			<p class="gd-setup-actions step">
 				<input type="submit" class="button-primary button button-large button-next gd-install-recommend" value="<?php esc_attr_e( 'Install', 'geodirectory' ); ?>" name="install_recommend" onclick="gd_wizard_install_plugins('<?php echo $nonce;?>');return false;" />

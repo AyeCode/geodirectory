@@ -556,7 +556,6 @@ function geodir_diagnose_multisite_conversion()
     $table_arr = array(
 		'geodir_api_keys' => __('API Keys', 'geodirectory'),
 		'geodir_business_hours' => __('Business Hours', 'geodirectory'),
-		'geodir_countries' => __('Countries', 'geodirectory'),
         'geodir_custom_fields' => __('Custom fields', 'geodirectory'),
         'geodir_post_icon' => __('Post icon', 'geodirectory'),
         'geodir_attachments' => __('Attachments', 'geodirectory'),
@@ -573,7 +572,7 @@ function geodir_diagnose_multisite_conversion()
      * Filter the array of tables to check during the GD>Tools multisite DB conversion tool check, this allows addons to add their DB tables to the checks.
      *
      * @since 1.0.0
-     * @param array $table_arr The array of tables to check, array('geodir_countries' => __('Countries', 'geodirectory'),...
+     * @param array $table_arr The array of tables to check, array('geodir_post_review' => __('Reviews', 'geodirectory'),...
      */
     $table_arr = apply_filters('geodir_diagnose_multisite_conversion', $table_arr);
 
