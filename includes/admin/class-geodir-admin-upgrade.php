@@ -26,10 +26,14 @@ class GeoDir_Admin_Upgrade {
 			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_lm_create_default_options' ), 10 );
 			add_action( 'geodir_update_200_post_fields', array( __CLASS__, 'update_200_lm_post_fields' ), 10, 1 );
 			add_action( 'geodir_update_200_term_metas', array( __CLASS__, 'update_200_lm_term_metas' ), 10 );
+			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_lm_create_tables' ), 10 );
+			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_lm_update_version' ), 10 );
 		}
 	}
 
 	public static function update_200_settings() {
+		global $geodir_options;
+
 		do_action( 'geodir_update_200_settings_before' );
 
 		self::create_default_options();
@@ -45,6 +49,8 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		update_option( 'geodir_settings', $saved_options );
+
+		$geodir_options = geodir_get_settings();
 
 		do_action( 'geodir_update_200_settings_after' );
 	}
@@ -102,7 +108,9 @@ class GeoDir_Admin_Upgrade {
 		GeoDir_Admin_Install::update_db_version( GEODIRECTORY_VERSION );
 
 		// Flush rules after install
+		flush_rewrite_rules();
 		do_action( 'geodir_flush_rewrite_rules' );
+		wp_schedule_single_event( time(), 'geodir_flush_rewrite_rules' );
 
 		// Trigger action
 		do_action( 'geodirectory_v2_updated' );
@@ -144,8 +152,8 @@ class GeoDir_Admin_Upgrade {
 	public static function update_200_get_options() {
 		$v1_post_types = get_option( 'geodir_post_types' );
 		$v2_post_types = array();
-		if ( ! empty( $old_post_types ) ) {
-			foreach( $old_post_types as $post_type => $data ) {
+		if ( ! empty( $v1_post_types ) ) {
+			foreach( $v1_post_types as $post_type => $data ) {
 				if ( ! empty( $data['labels'] ) ) {
 					$remove_labels = array( 'label_post_profile', 'label_post_info', 'label_post_images', 'label_post_map', 'label_reviews', 'label_related_listing' );
 					foreach ( $remove_labels as $label ) {
@@ -169,7 +177,7 @@ class GeoDir_Admin_Upgrade {
 
 				$data['default_image'] = self::update_200_generate_attachment_id( get_option( 'geodir_cpt_img_' . $post_type ) );
 
-				$data['disable_reviews'] = ! in_array( $post_type, (array) get_option( 'geodir_disable_rating_cpt' ) );
+				$data['disable_reviews'] = in_array( $post_type, (array) get_option( 'geodir_disable_rating_cpt' ) );
 				$data['disable_favorites'] = 0;
 				$data['disable_frontend_add'] = ! in_array( $post_type, (array) get_option( 'geodir_allow_posttype_frontend' ) );
 
@@ -191,9 +199,6 @@ class GeoDir_Admin_Upgrade {
 			'city_longitude' => '',
 		) );
 
-		$default_marker_icon = get_option( 'geodir_default_marker_icon' );
-		$default_marker_icon = str_replace( 'geodirectory-functions/map-functions/icons', 'assets/images', $default_marker_icon );
-		
 		// Core options
 		$options = array(
 			'taxonomies' => get_option( 'geodir_taxonomies' ),
@@ -211,7 +216,7 @@ class GeoDir_Admin_Upgrade {
 			'search_default_text' => get_option( 'geodir_search_field_default_text' ),
 			'search_default_near_text' => get_option( 'geodir_near_field_default_text' ),
 			'search_default_button_text' => get_option( 'geodir_search_button_label' ),
-			'map_default_marker_icon' => self::update_200_generate_attachment_id( $default_marker_icon ),
+			'map_default_marker_icon' => self::update_200_generate_attachment_id( get_option( 'geodir_default_marker_icon' ) ),
 			'exclude_post_type_on_map' => get_option( 'geodir_exclude_post_type_on_map' ),
 			'exclude_cat_on_map' => get_option( 'geodir_exclude_cat_on_map' ),
 			'email_admin_pending_post' => get_option( 'geodir_notify_post_submit' ),
@@ -268,6 +273,8 @@ class GeoDir_Admin_Upgrade {
 			'default_location_latitude' => $default_location['city_latitude'],
 			'default_location_longitude' => $default_location['city_longitude'],
 			'default_location_timezone' => '',
+			'permalink_category_base' => 'category',
+			'permalink_tag_base' => 'tags',
 
 			// Google Analytics options
 			'ga_stats' => get_option( 'geodir_ga_stats' ),
@@ -284,6 +291,10 @@ class GeoDir_Admin_Upgrade {
 			'ga_client_secret' => get_option( 'geodir_ga_client_secret' )
 		);
 
+		if ( $options['rating_type'] == 'image' && empty( $options['rating_image'] ) ) {
+			$options['rating_type'] = 'font-awesome';
+		}
+
 		return apply_filters( 'geodir_update_200_get_options', $options );
 	}
 
@@ -291,6 +302,9 @@ class GeoDir_Admin_Upgrade {
 		if ( empty( $image_url ) ) {
 			return '';
 		}
+
+		$image_url = str_replace( 'geodirectory-assets/', 'assets/', $image_url );
+		$image_url = str_replace( 'geodirectory-functions/map-functions/icons', 'assets/images', $image_url );
 
 		$upload = GeoDir_Media::upload_image_from_url( $image_url );
 		if ( ! empty( $upload ) && ! is_wp_error( $upload ) && ! empty( $upload['file'] ) ) {
@@ -324,6 +338,11 @@ class GeoDir_Admin_Upgrade {
 		if ( ! get_option( 'geodir_add_categories_url' ) ) {
 			$permalink_structure = str_replace( '/%category%', '', $permalink_structure );
 		}
+
+		if ( ! empty( $permalink_structure ) ) {
+			$permalink_structure = preg_replace( '#/+#', '/', '/' . str_replace( '#', '', $permalink_structure ) );
+		}
+		$permalink_structure = sanitize_option( 'permalink_structure', $permalink_structure );
 
 		geodir_set_permalink_structure( $permalink_structure );
 	}
@@ -660,6 +679,7 @@ class GeoDir_Admin_Upgrade {
 
 		dbDelta( GeoDir_Admin_Install::get_schema() );
 
+		do_action( 'geodir_update_200_create_tables' );
 	}
 
 	private static function insert_default_fields() {
@@ -740,7 +760,6 @@ class GeoDir_Admin_Upgrade {
 	 */
 	private static function maybe_enable_setup_wizard() {
 		GeoDir_Admin_Notices::add_notice( 'install' );
-		set_transient( '_gd_activation_redirect', 1, 30 );
 	}
 
 	/**
@@ -751,6 +770,8 @@ class GeoDir_Admin_Upgrade {
 	private static function update_gd_version() {
 		delete_option( 'geodirectory_version' );
 		add_option( 'geodirectory_version', GEODIRECTORY_VERSION );
+
+		do_action( 'geodir_update_200_update_gd_version' );
 	}
 
 	
@@ -876,7 +897,7 @@ class GeoDir_Admin_Upgrade {
 
 	// Location Manager
 	public static function has_location_manager() {
-		return ! is_null( get_option( 'geodir_location_db_version', null ) );
+		return ! is_null( get_option( 'geodirlocation_db_version', null ) ) && ( is_null( get_option( 'geodir_location_db_version', null ) ) || ( get_option( 'geodir_location_db_version' ) && version_compare( get_option( 'geodir_location_db_version' ), '2.0.0.0', '<' ) ) );
 	}
 
 	public static function update_200_lm_create_default_options() {
@@ -939,8 +960,12 @@ class GeoDir_Admin_Upgrade {
 		global $wpdb;
 
 		if ( ! empty( $post_types ) ) {
-			foreach ( $post_types as $post_type => $data ) {
+			foreach ( $post_types as $key => $post_type ) {
 				$table = $wpdb->prefix . 'geodir_' . $post_type . '_detail';
+
+				if ( geodir_column_exist( $table, 'neighbourhood' ) ) {
+					continue;
+				}
 
 				if ( geodir_column_exist( $table, 'post_neighbourhood' ) ) {
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_neighbourhood neighbourhood VARCHAR(50) NULL" );
@@ -958,31 +983,103 @@ class GeoDir_Admin_Upgrade {
 		$term_meta_options = $wpdb->get_results( "SELECT option_name, option_value FROM " . $wpdb->options . " WHERE option_name LIKE 'geodir_cat_loc_gd_%'" );
 
 		if ( ! empty( $term_meta_options ) ) {
-			return;
-			foreach ( $term_meta_options as $option ) {
-				$explode = explode( '_', $option->option_name );
-				$index = count( $explode ) - 1;
-				
-				if ( !empty( $explode[ $index ] ) ) {
-					$term_id = $explode[ $index ];
-					$value = maybe_unserialize( $option->option_value );
-					$value = !empty( $value[0] ) && is_array( $value[0] ) ? $value[0] : $value;
-					
-					if ( !empty( $value ) && is_array( $value ) ) {
-						foreach ( $value as $meta_key => $meta_value ) {
-							if ( $meta_key == 'ct_cat_icon' || $meta_key == 'ct_cat_default_img' ) {
-								if ( empty( $meta_value['src'] ) ) {
-									continue;
-								}
-								
-								$meta_value['src'] = geodir_file_relative_url( $meta_value['src'] );
-							}
+			$update_meta = array();
+			foreach ( $term_meta_options as $key => $option ) {
+				$name = str_replace( 'geodir_cat_loc_', '', $option->option_name );
+				$value = strpos( $option->option_value, 'a:' ) === 0 ? maybe_unserialize( $option->option_value ) : $option->option_value;
 
-							//update_term_meta( $term_id, $meta_key, $meta_value );
+				if ( is_array( $value ) ) { // city
+					if ( empty( $value['gd_cat_loc_cat_id'] ) ) {
+						continue;
+					}
+					$term_id = (int) $value['gd_cat_loc_cat_id'];
+
+					if ( isset( $value['gd_cat_loc_default'] ) ) {
+						$update_meta[ $term_id ]['gd_desc_custom'] = empty( $value['gd_cat_loc_default'] ) ? true : false;
+					}
+
+					if ( ! empty( $value['gd_cat_loc_loc_id'] ) && isset( $value['gd_cat_loc_desc'] ) ) {
+						$update_meta[ $term_id ]['gd_desc_id_' . $value['gd_cat_loc_loc_id'] ] = $value['gd_cat_loc_desc'];
+					}
+				} else { // country, region
+					$term_id = 0;
+					$type = '';
+
+					if ( strpos( $name, '_co_' ) > 0 ) {
+						$type = 'co';
+						$names = explode( '_co_', $name, 2 );
+						if ( ! empty( $names ) ) {
+							$names_id = explode( '_', $names[0] );
+							if ( ! empty( $names_id ) && (int) $names_id[ count( $names_id ) - 1 ] > 0 ) {
+								$term_id = (int) $names_id[ count( $names_id ) - 1 ];
+							}
+						}
+					} else if ( strpos( $name, '_re_' ) > 0 ) {
+						$type = 're';
+						$names = explode( '_re_', $name, 2 );
+						if ( ! empty( $names ) ) {
+							$names_id = explode( '_', $names[0] );
+							if ( ! empty( $names_id ) && (int) $names_id[ count( $names_id ) - 1 ] > 0 ) {
+								$term_id = (int) $names_id[ count( $names_id ) - 1 ];
+							}
+						}
+					}
+
+					if ( $term_id > 0 ) {
+						$update_meta[ $term_id ]['gd_desc_' . $type . '_' . $names[1] ] = $value;
+					}
+				}
+			}
+
+			if ( ! empty( $update_meta ) ) {
+				foreach ( $update_meta as $term_id => $metas ) {
+					if ( ! empty( $metas ) ) {
+						foreach ( $metas as $meta_key => $meta_value ) {
+							update_term_meta( $term_id, $meta_key, $meta_value );
 						}
 					}
 				}
 			}
 		}
+	}
+
+	public static function update_200_lm_create_tables() {
+		global $wpdb, $plugin_prefix;
+
+		// Locations table
+		$locations_table = $plugin_prefix . 'post_locations';
+
+		$wpdb->query( "ALTER TABLE `{$locations_table}` DROP `country_ISO2`" );
+		$wpdb->query( "ALTER TABLE `{$locations_table}` DROP `city_meta`" );
+		$wpdb->query( "ALTER TABLE `{$locations_table}` DROP `city_desc`" );
+		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE city_latitude latitude varchar(22) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE city_longitude longitude varchar(22) NOT NULL" );
+
+		// Neighbourhoods table
+		$neighbourhoods_table = $plugin_prefix . 'post_neighbourhood';
+
+		$wpdb->query( "ALTER TABLE `{$neighbourhoods_table}` ADD image int(11) NOT NULL" );
+
+		// Location seo table
+		$seo_table = $plugin_prefix . 'location_seo';
+
+		$wpdb->query( "ALTER TABLE `{$seo_table}` DROP `date_created`" );	
+		$wpdb->query( "ALTER TABLE `{$seo_table}` DROP `date_updated`" );
+		$wpdb->query( "ALTER TABLE `{$seo_table}` DROP `seo_title`" );
+		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_meta_title meta_title varchar(254) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_meta_desc meta_desc text NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_desc location_desc text NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_image image varchar(254) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_image_tagline image_tagline varchar(140) NOT NULL" );
+	}
+
+	public static function update_200_lm_update_version() {
+		$version = defined( 'GEODIRLOCATION_VERSION' ) && version_compare( GEODIRLOCATION_VERSION, '2.0.0.0', '>=' ) ? GEODIRLOCATION_VERSION : '2.0.0.0';
+
+		delete_option( 'geodir_location_version' );
+		add_option( 'geodir_location_version', $version );
+
+		delete_option( 'geodir_location_db_version' );
+		add_option( 'geodir_location_db_version', $version );
 	}
 }
