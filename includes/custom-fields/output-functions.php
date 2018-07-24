@@ -2081,7 +2081,20 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 $field_icon_af = $field_icon;
                 $field_icon    = '';
             }
+            
+            $address_items = array(
+                'street',
+                'neighbourhood',
+                'city',
+                'region',
+                'zip',
+                'country',
+            );
 
+            $address_template = apply_filters(
+                "geodir_cf_address_template",
+                "%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%"
+            );
             
             $address_fields = array();
 
@@ -2112,11 +2125,19 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
              * @since 1.6.21
              */
             $address_fields = apply_filters('geodir_custom_field_output_address_fields', $address_fields, $gd_post, $cf, $location);
-            
-            if (!empty($address_fields) && is_array($address_fields)) {
-                $address_fields = array_values($address_fields);
-                $address_fields = implode('<br>', $address_fields);
+
+
+            foreach($address_items as $type){
+                // normal value
+                $value = isset($address_fields[$type]) ? $address_fields[$type] : '';
+                $address_template = str_replace('%%'.$type.'%%', $value ,$address_template);
+
+                // value with line break
+                $value_br = isset($address_fields[$type]) ? $address_fields[$type]."<br>" : '';
+                $address_template = str_replace('%%'.$type.'_br%%', $value_br ,$address_template);
             }
+
+            $address_fields = $address_template;
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
