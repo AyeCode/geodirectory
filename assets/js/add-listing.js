@@ -8,8 +8,12 @@ jQuery(function($) {
     // Start polling the form for auto saves
     geodir_auto_save_poll(geodir_get_form_data());
     /// check validation on blur
-    jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").blur(function() {
-        geodir_validate_field(this);
+    jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").delay( 2000 ).blur(function() {
+        // give some time inc ase another script is filling data
+        $this = this;
+        setTimeout(function() {
+            geodir_validate_field($this);
+        }, 100)
     });
     // Check for validation on click for checkbox, radio
     jQuery('#geodirectory-add-post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function() {

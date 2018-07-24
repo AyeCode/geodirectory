@@ -645,14 +645,7 @@ $pages            = $system_status->get_pages();
 		</tr>
 	</thead>
 	<tbody>
-		<?php /*if ( $theme['has_geodir_file'] ) : // TODO ?>
-		<tr>
-			<td data-export-label="Archive Template"><?php _e( 'Archive template', 'geodirectory' ); ?>:</td>
-			<td class="help">&nbsp;</td>
-			<td><?php _e( 'Your theme has a geodirectory.php file, you will not be able to override the geodirectory/archive-listing.php custom template since geodirectory.php has priority over archive-product.php. This is intended to prevent display issues.', 'geodirectory' ); ?></td>
-		</tr>
-		<?php endif */?>
-		<?php
+		<?php 		
 			if ( ! empty( $theme['overrides'] ) ) { ?>
 					<tr>
 						<td data-export-label="Overrides"><?php _e( 'Overrides', 'geodirectory' ); ?></td>

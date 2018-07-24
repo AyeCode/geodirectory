@@ -122,6 +122,19 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			add_filter( 'geodir_cfa_cat_sort_taxonomy', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_cat_sort_address', '__return_empty_string', 10, 4 );
 			add_filter( 'geodir_cfa_cat_sort_business_hours', '__return_empty_string', 10, 4 );
+			
+			// address field is always required
+			add_filter( 'geodir_cfa_is_required_address', array($this,'is_required'), 10, 4 );
+
+		}
+
+		/**
+		 * Output hidden required field.
+		 *
+		 * @return string
+		 */
+		public function is_required(){
+			return "<input type=\"hidden\" name=\"is_required\" value=\"1\" />";
 		}
 
 

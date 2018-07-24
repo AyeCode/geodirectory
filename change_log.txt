@@ -4,6 +4,8 @@ Fieldset title with special characters outputs incorrect css class - FIXED
 List view sorting not working - FIXED
 Search shows 404 title if no results with location search - FIXED
 Beaver builder editor functionality limited due to font-awesome conflict - FIXED
+Required date field validation fires too early - FIXED
+Business hours short names broken if weekdays translated - FIXED
 
 v2.0.0.17-rc
 Image slider widget not working on listing pages - FIXED

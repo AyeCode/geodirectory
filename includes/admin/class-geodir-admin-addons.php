@@ -30,7 +30,10 @@ class GeoDir_Admin_Addons {
 			'addons' => __("Addons", "geodirectory"),
 			'themes' => __("Themes", "geodirectory"),
 			'recommended_plugins' => __("Recommended plugins", "geodirectory"),
+			'membership' => __("Membership", "geodirectory"),
 		);
+
+		
 
 		return $tabs;
 	}

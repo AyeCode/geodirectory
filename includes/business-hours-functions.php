@@ -11,19 +11,33 @@
  *
  * @since 2.0.0
  * @return array $weekdays The days of the week
+ * @param bool $untranslated If the returned day names should be translated or not.
  */
-function geodir_get_weekdays() {
-   $weekdays = array( 
-       'Mo'    	=> __( 'Monday' ), 
-       'Tu'  	=> __( 'Tuesday' ),  
-       'We' 	=> __( 'Wednesday' ),  
-       'Th'  	=> __( 'Thursday' ),  
-       'Fr'    	=> __( 'Friday' ),  
-       'Sa'  	=> __( 'Saturday' ),
-       'Su'    	=> __( 'Sunday' )
-   );
+function geodir_get_weekdays($untranslated = false) {
 
-   return apply_filters( 'geodir_get_weekdays', $weekdays );
+	if($untranslated){
+		$weekdays = array(
+			'Mo'    => 'Monday',
+			'Tu'  	=> 'Tuesday',
+			'We' 	=> 'Wednesday',
+			'Th'  	=> 'Thursday',
+			'Fr'    => 'Friday',
+			'Sa'  	=> 'Saturday',
+			'Su'    => 'Sunday'
+		);
+	}else{
+		$weekdays = array(
+			'Mo'    	=> __( 'Monday' ),
+			'Tu'  	=> __( 'Tuesday' ),
+			'We' 	=> __( 'Wednesday' ),
+			'Th'  	=> __( 'Thursday' ),
+			'Fr'    	=> __( 'Friday' ),
+			'Sa'  	=> __( 'Saturday' ),
+			'Su'    	=> __( 'Sunday' )
+		);
+	}
+
+   return apply_filters( 'geodir_get_weekdays', $weekdays,$untranslated );
 }
 
 /**
@@ -429,7 +443,7 @@ function geodir_get_business_hours( $value = '' ) {
 	}
 	
 	if ( ! empty( $data['hours'] ) || ! empty( $data['offset'] ) ) {
-		$days = geodir_get_weekdays();
+		$days = geodir_get_weekdays(true);
 		$day_nos = array_flip( geodir_day_short_names() );
 
 		$date_format = get_option( 'date_format' );

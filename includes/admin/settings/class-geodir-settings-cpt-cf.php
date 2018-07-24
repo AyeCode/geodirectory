@@ -556,7 +556,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'class'       => 'gd-logo',
 				'icon'        => 'far fa-image',
 				'name'        => __( 'Company Logo', 'geodirectory' ),
-				'description' => __( 'Adds a logo input. This can be used by other plugins if the field key remains `logo`.', 'geodirectory' ),
+				'description' => __( 'Adds a logo input. This can be used in conjunction with the `GD > Post Images` widget, there is a setting to allow it to use the logo if available. This can also be used by other plugins if the field key remains `logo`.', 'geodirectory' ),
 				'single_use'  => 'logo',
 				'defaults'    => array(
 					'data_type'          => 'TEXT',

@@ -523,7 +523,6 @@ class GeoDir_Admin_Install {
 	 *		geodir_api_keys - API keys table.
 	 *		geodir_attachments - Listing attachments table.
 	 *		geodir_business_hours - Business hours table.
-	 *		geodir_countries - Countries table.
 	 *		geodir_custom_fields - Custom fields table.
 	 *		geodir_custom_sort_fields - Custom fields sorting table.
 	 *		geodir_post_review - Listing reviews table.
