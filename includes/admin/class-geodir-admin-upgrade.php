@@ -199,6 +199,11 @@ class GeoDir_Admin_Upgrade {
 			'city_longitude' => '',
 		) );
 
+		$rating_color = get_option( 'geodir_reviewrating_fa_full_rating_color', '#ff9900' );
+		if ( $rating_color == '#757575' ) {
+			$rating_color = '#ff9900';
+		}
+
 		// Core options
 		$options = array(
 			'taxonomies' => get_option( 'geodir_taxonomies' ),
@@ -262,7 +267,7 @@ class GeoDir_Admin_Upgrade {
 			'map_cache' => get_option( 'geodir_enable_map_cache' ),
 			'admin_blocked_roles' => array( 'subscriber' ),
 			'listing_default_image' => self::update_200_generate_attachment_id( get_option( 'geodir_listing_no_img' ) ),
-			'rating_color' => get_option( 'geodir_reviewrating_fa_full_rating_color', '#ff9900' ),
+			'rating_color' => $rating_color,
 			'rating_color_off' => '#afafaf',
 			'rating_type' => get_option( 'geodir_reviewrating_enable_font_awesome' ) ? 'font-awesome' : 'image',
 			'rating_icon' => 'fas fa-star',
