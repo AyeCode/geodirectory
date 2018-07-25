@@ -501,7 +501,7 @@ class GeoDir_Query {
 		foreach($location_vars as $location_var){
 			if(get_query_var($location_var)){
 				$method_name = "get_{$location_var}_name_from_slug";
-				$var_name = $geodirectory->location->$method_name(get_query_var($location_var));
+				$var_name = $location_var=='neighbourhood' ? get_query_var($location_var) : $geodirectory->location->$method_name(get_query_var($location_var));
 				if($var_name ){
 					$where .= $wpdb->prepare(" AND ".$table.".".$location_var." = %s ",$var_name);
 				}

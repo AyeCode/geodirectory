@@ -44,8 +44,14 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
     $countries = array();
     
     foreach ($rows as $row) {
+//        print_r($row);
         $ISO2[$row->name] = $row->alpha2Code;
         $countries[$row->name] = __($row->name, 'geodirectory');
+
+        $gps = explode(",",$row->latlng);
+        $latlng[$row->name]['lat'] = isset($gps[0]) ? $gps[0] : '';
+        $latlng[$row->name]['lon'] = isset($gps[1]) ? $gps[1] : '';
+
     }
     
     asort($countries);
@@ -53,8 +59,9 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
     $out_put = '<option ' . selected('', $post_country, false) . ' value="">' . __('Select Country', 'geodirectory') . '</option>';
     foreach ($countries as $country => $name) {
         $ccode = $ISO2[$country];
+        $gps = $latlng[$country];
 
-        $out_put .= '<option ' . selected($post_country, $country, false) . ' value="' . esc_attr($country) . '" data-country_code="' . $ccode . '">' . $name . '</option>';
+        $out_put .= '<option ' . selected($post_country, $country, false) . ' value="' . esc_attr($country) . '" data-country_code="' . $ccode . '" data-country_lat="' . $gps['lat'] . '" data-country_lon="' . $gps['lon'] . '" >' . $name . '</option>';
     }
 
     echo $out_put;
