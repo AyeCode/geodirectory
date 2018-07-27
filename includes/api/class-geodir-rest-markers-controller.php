@@ -391,6 +391,21 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		if(!empty($request['city'])){ $city = $geodirectory->location->get_city_name_from_slug($request['city']); $where .= $wpdb->prepare(" AND pd.city = %s ",$city);}
 		if(!empty($request['neighbourhood'])){ $neighbourhood = $geodirectory->location->get_neighbourhood_name_from_slug($request['neighbourhood']); $where .= $wpdb->prepare(" AND pd.neighbourhood = %s ",$neighbourhood);}
 		
+		// limited to area
+		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ){
+			$lat = filter_var($request['lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+			$lon = filter_var($request['lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+			if($request['dist']){
+				$between = geodir_get_between_latlon($lat,$lon,$request['dist']);
+			}else{
+				$between = geodir_get_between_latlon($lat,$lon);
+			}
+			$where .= $wpdb->prepare(" AND pd.latitude between %f AND %f ",$between['lat1'],$between['lat2']);
+			$where .= $wpdb->prepare(" AND pd.longitude between %f AND %f ",$between['lon1'],$between['lon2']);
+
+//			echo '###'.$where;
+		}
+
 		return $where;
 	}
 

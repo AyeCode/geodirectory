@@ -949,6 +949,7 @@ function geodir_search_form_search_input() {
 		       onClick="this.select();"
 		       placeholder="<?php esc_html_e($default_search_for_text,'geodirectory') ?>" 
 		       aria-label="<?php esc_html_e($default_search_for_text,'geodirectory') ?>"
+		       autocomplete="off"
 		/>
 		<?php 	do_action('geodir_after_search_for_input');?>
 	</div>
@@ -1023,6 +1024,7 @@ function geodir_search_form_near_input() {
 	       onClick="this.select();"
 	       placeholder="<?php esc_html_e($default_near_text,'geodirectory') ?>"
 	       aria-label="<?php esc_html_e($default_near_text,'geodirectory') ?>"
+	       autocomplete="off"
 	/>
 	<?php
 	do_action('geodir_after_search_near_input');

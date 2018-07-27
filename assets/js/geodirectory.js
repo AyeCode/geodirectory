@@ -1355,3 +1355,124 @@ function geodir_cancelBubble(e){
     if (evt.stopPropagation)    evt.stopPropagation();
     if (evt.cancelBubble!=null) evt.cancelBubble = true;
 }
+
+
+
+/**
+ * Get the user GPS position.
+ *
+ * @param $success The function to call on sucess.
+ * @param $fail The function to all on fail.
+ */
+function gd_get_user_position($success,$fail){
+    window.gd_user_position_success_callback = $success;
+    window.gd_user_position_fail_callback = $fail;
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(gd_user_position_success, gd_user_position_fail);
+    } else {
+        gd_user_position_fail(-1)
+    }
+}
+
+/**
+ * The function called on success of getting user position, it will then call the callback function.
+ * Not used direct.
+ *
+ * @param position
+ */
+function gd_user_position_success(position) {
+    var coords = position.coords || position.coordinate || position;
+    if (coords && coords.latitude && coords.longitude) {
+        // run the success function
+        var fn = window.gd_user_position_success_callback;
+        if(typeof fn === 'function') {
+            fn(coords.latitude,coords.longitude);
+        }
+    }
+}
+
+/**
+ * The function called on fail of getting user position, it will then call the callback function.
+ * Not used direct.
+ *
+ * @param err
+ */
+function gd_user_position_fail(err) {
+    var msg;
+    switch (err.code) {
+        case err.UNKNOWN_ERROR:
+            msg = geodir_params.geoErrUNKNOWN_ERROR;
+            break;
+        case err.PERMISSION_DENINED:
+            msg = geodir_params.geoErrPERMISSION_DENINED;
+            break;
+        case err.POSITION_UNAVAILABLE:
+            msg = geodir_params.geoErrPOSITION_UNAVAILABLE;
+            break;
+        case err.BREAK:
+            msg = geodir_params.geoErrBREAK;
+            break;
+        default:
+            msg = geodir_params.geoErrDEFAULT;
+    }
+    if(window.gd_user_position_success){
+        $success = window.gd_user_position_success_callback;
+    }else{
+        $success = '';
+    }
+    gd_manually_set_user_position(msg,$success);
+}
+
+/**
+ * Lets the user set their position manually on a map.
+ * Not called direct.
+ *
+ * @param $msg
+ */
+function gd_manually_set_user_position($msg){
+    if(window.confirm("ERROR: "+$msg+ "\nWould you like to manually set your location?")){
+
+        var $prefix = "geodir_manual_location_";
+
+        jQuery.post(geodir_params.ajax_url, {
+            action: 'geodir_manual_map',
+            trigger: $prefix+'_trigger'
+            //trigger: $successFunction
+        }, function(data) {
+            if (data) {
+                $lity = lity("<div class='lity-show'>"+data+"</div>");
+                // map center is off due to lightbox zoom effect so we resize to fix
+                setTimeout(function(){
+                    jQuery('.lity-show .geodir_map_container').css('width','90%').css('width','99.99999%');
+                }, 500);
+
+                jQuery( window ).off($prefix+'_trigger');
+                jQuery( window ).on( $prefix+'_trigger', function (event,lat,lon)
+                {
+                    if(lat && lon){
+                        var position ={};
+                        position.latitude = lat;
+                        position.longitude = lon;
+                        // window[$successFunction](position);
+                        var fn = window.gd_user_position_success_callback;
+                        if(typeof fn === 'function') {
+                            fn(lat,lon);
+                        }
+                        $lity.close();
+                    }
+                });
+
+                return false;
+            }
+        });
+
+    }else{
+        // call the fail function if exists
+        if(window.gd_user_position_fail_callback ){
+            var fn = window.gd_user_position_fail_callback;
+            if(typeof fn === 'function') {
+                fn();
+            }
+        }
+    }
+}

@@ -599,6 +599,39 @@ function geodir_getDistanceRadius( $uom = 'km' ) {
 	return $earthMeanRadius;
 }
 
+function geodir_get_between_latlon($lat,$lon,$dist=''){
+
+	if(!$dist){
+		if(get_query_var('dist')){
+			$dist = get_query_var('dist');
+		}else{
+			$dist = geodir_get_option('search_radius',5); // seems to work in miles
+		}
+	}
+
+	// sanatize just in case
+	$lat = filter_var($lat, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+	$lon = filter_var($lon, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+	$dist = is_numeric($dist) && $dist > 0 ? $dist : 5;
+	
+	$lon1 = $lon - $dist / abs(cos(deg2rad($lat)) * 69);
+	$lon2 = $lon + $dist / abs(cos(deg2rad($lat)) * 69);
+	$lat1 = $lat - ($dist / 69);
+	$lat2 = $lat + ($dist / 69);
+
+	$rlon1 = is_numeric(min($lon1, $lon2)) ? min($lon1, $lon2) : '';
+	$rlon2 = is_numeric(max($lon1, $lon2)) ? max($lon1, $lon2) : '';
+	$rlat1 = is_numeric(min($lat1, $lat2)) ? min($lat1, $lat2) : '';
+	$rlat2 = is_numeric(max($lat1, $lat2)) ? max($lat1, $lat2) : '';
+
+	return array(
+		'lat1' => $rlat1,
+		'lat2' => $rlat2,
+		'lon1' => $rlon1,
+		'lon2' => $rlon2,
+	);
+}
+
 
 
 /**

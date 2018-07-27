@@ -18,6 +18,8 @@ class GeoDir_Location {
 
 	public $country;
 	public $country_slug;
+	public $country_iso2;
+	public $country_iso3;
 	public $region;
 	public $region_slug;
 	public $city;
@@ -61,6 +63,7 @@ class GeoDir_Location {
 
 		// is_default
 		$location->is_default = 1;
+		
 
 		/**
 		 * Filter the default location.
@@ -83,6 +86,7 @@ class GeoDir_Location {
 		$this->type = $location_result->type;
 		$this->is_default = $location_result->is_default;
 		$this->id = $location_result->id;
+		
 	}
 
 	/**
@@ -202,6 +206,43 @@ class GeoDir_Location {
 
 		return $country;
 	}
+
+	/**
+	 * Get ISO2 of the country.
+	 *
+	 * @since 1.6.16
+	 * @package GeoDirectory
+	 * @param string $country The country name.
+	 * @return string Country ISO2 code.
+	 */
+	function get_country_iso3($country) {
+		global $wp_country_database;
+
+		if ($result = $wp_country_database->get_country_iso3($country)) {
+			return $result;
+		}
+
+		return $country;
+	}
+
+
+	/**
+	 * Get the lat and lon from the query var
+	 *
+	 * @return array
+	 */
+	public function get_latlon(){
+		global $wp;
+		$latlon = array();
+		if(!empty($wp->query_vars['latlon'])){
+			$gps = explode(",",$wp->query_vars['latlon']);
+			$latlon['lat'] = isset($gps[0]) ? filter_var($gps[0], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : '';
+			$latlon['lon'] = isset($gps[1]) ? filter_var($gps[1], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : '';
+		}
+
+		return $latlon;
+	}
+
 
 	/**
 	 * An array of the used location vars.

@@ -453,29 +453,17 @@ class GeoDir_Query {
 			}
 
 			if ($snear != '') {
-				if ( ( $near_me_range = get_query_var( 'near_me_range' ) ) && ! isset( $_REQUEST['sdist'] ) ) {
-					$dist = get_query_var('near_me_range');
-				}
-				$lon1 = $mylon - $dist / abs(cos(deg2rad($mylat)) * 69);
-				$lon2 = $mylon + $dist / abs(cos(deg2rad($mylat)) * 69);
-				$lat1 = $mylat - ($dist / 69);
-				$lat2 = $mylat + ($dist / 69);
-
-				$rlon1 = is_numeric(min($lon1, $lon2)) ? min($lon1, $lon2) : '';
-				$rlon2 = is_numeric(max($lon1, $lon2)) ? max($lon1, $lon2) : '';
-				$rlat1 = is_numeric(min($lat1, $lat2)) ? min($lat1, $lat2) : '';
-				$rlat2 = is_numeric(max($lat1, $lat2)) ? max($lat1, $lat2) : '';
-
-
-
+				
+				$between = geodir_get_between_latlon($mylat,$mylon,$dist);
 				$where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
 			                    $content_where 
 								$terms_sql
 							)
 						AND $wpdb->posts.post_type in ('{$post_types}')
-						AND ($wpdb->posts.post_status = 'publish')
-						AND ( " . $table . ".latitude between $rlat1 and $rlat2 )
-						AND ( " . $table . ".longitude between $rlon1 and $rlon2 ) ";
+						AND ($wpdb->posts.post_status = 'publish')";
+
+				$where .= $wpdb->prepare(" AND latitude between %f and %f AND longitude between %f and %f ",$between['lat1'],$between['lat2'],$between['lon1'],$between['lon2']);
+
 
 				if (isset($_REQUEST['sdist']) && $_REQUEST['sdist'] != 'all') {
 					$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('search_distance_long'));
