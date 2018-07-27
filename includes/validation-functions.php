@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return bool
  */
 function geodir_is_valid_lat($latitude){
-    if (preg_match("/^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,6}$/", $latitude)) {
+    if (preg_match("/^-?([1-8]?[1-9]|[1-9]0)\.{1}\d{1,20}$/", $latitude)) {
         return true;
     } else {
         return false;
@@ -36,7 +36,7 @@ function geodir_is_valid_lat($latitude){
  * @return bool
  */
 function geodir_is_valid_lon($longitude){
-    if(preg_match("/^-?([1]?[1-7][1-9]|[1]?[1-8][0]|[1-9]?[0-9])\.{1}\d{1,6}$/",
+    if(preg_match("/^-?([1]?[1-7][1-9]|[1]?[1-8][0]|[1-9]?[0-9])\.{1}\d{1,20}$/",
         $longitude)) {
         return true;
     } else {

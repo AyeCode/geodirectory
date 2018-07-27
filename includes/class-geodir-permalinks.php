@@ -87,11 +87,27 @@ class GeoDir_Permalinks {
 			$this->rewrite_rule_problem = $regex;
 			add_action( 'admin_notices', array($this,'rewrite_rule_problem_notice') );
 		}
+
+		$static_sections = 0;
+		$sections = explode("/", str_replace('^/','',$regex));
+		if(!empty($sections)){
+			foreach ($sections as $section){
+				if(substr( $section, 0, 1 ) === "("){
+
+				}else{
+					$static_sections++;
+				}
+			}
+		}
 		$this->rewrite_rules[$regex] = array(
 			'regex'     => $regex,
 			'redirect'  => $redirect,
 			'after'     => $after,
-			'count'     => (10 * count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ) ) - (substr_count($regex,'([^/]+)') + substr_count($regex,'([^/]*)'))//count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
+			'count'     =>
+				(10 * count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ) )
+				- (substr_count($regex,'([^/]+)') + substr_count($regex,'([^/]*)'))
+			+ ($static_sections * 11)
+			//'count'     => (10 * count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ) ) - (substr_count($regex,'([^/]+)') + substr_count($regex,'([^/]*)'))//count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
 			//'count'     => count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
 			//'countx'     => explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex))
 		);
@@ -438,7 +454,11 @@ class GeoDir_Permalinks {
 		add_rewrite_tag('%city%', '([^&]+)');
 		add_rewrite_tag('%gd_favs%', '([^&]+)');
 		add_rewrite_tag('%sort_by%', '([^&]+)');
+		add_rewrite_tag('%latlon%', '((\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?))');
+		add_rewrite_tag('%dist%', '((?=.+)(?:[1-9]\d*|0)?(?:\.\d+))');
 	}
+
+	
 
 	/**
 	 * Get the slug for user favs.

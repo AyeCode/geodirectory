@@ -134,29 +134,18 @@ function geodir_get_current_location_terms($location_array_from = null, $gd_post
 {
 
 //    print_r(GeoDir()->location);
-    global $wp;
+    global $wp,$geodirectory;
     $location_array = array();
+
+    $location_terms = $geodirectory->location->allowed_query_variables();
 
     if ((isset($wp->query_vars['country']) && $wp->query_vars['country'] == 'me') || (isset($wp->query_vars['region']) && $wp->query_vars['region'] == 'me') || (isset($wp->query_vars['city']) && $wp->query_vars['city'] == 'me')) {
         return $location_array;
     }
 
-    $country = (isset($wp->query_vars['country']) && $wp->query_vars['country'] != '') ? $wp->query_vars['country'] : '';
-
-    $region = (isset($wp->query_vars['region']) && $wp->query_vars['region'] != '') ? $wp->query_vars['region'] : '';
-
-    $city = (isset($wp->query_vars['city']) && $wp->query_vars['city'] != '') ? $wp->query_vars['city'] : '';
-
-    if ($country != '')
-        $location_array['country'] = urldecode($country);
-
-    if ($region != '')
-        $location_array['region'] = urldecode($region);
-
-    if ($city != '')
-        $location_array['city'] = urldecode($city);
-
-
+    foreach($location_terms as $location_term){
+        $location_array[$location_term] = isset($geodirectory->location->{$location_term."_slug"}) ? $geodirectory->location->{$location_term."_slug"} : '';
+    }
 
 
 	/**

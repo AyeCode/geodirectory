@@ -667,6 +667,9 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'region'           => '',
 			'city'             => '',
 			'neighbourhood'    => '',
+			'lat'    => '',
+			'lon'    => '',
+			'dist'    => '',
 		);
 
 		$map_args = wp_parse_args( $args, $defaults );
@@ -788,6 +791,15 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$map_args['region'] = isset($current_location->region_slug) ?  $current_location->region_slug : '';
 		$map_args['city'] = isset($current_location->city_slug) ?  $current_location->city_slug : '';
 		$map_args['neighbourhood'] = isset($current_location->neighbourhood_slug) ?  $current_location->neighbourhood_slug : '';
+		if( empty($map_args['country']) && empty($map_args['region']) && empty($map_args['city']) && empty($map_args['neighbourhood']) && !empty($current_location->latitude)){
+			$map_args['lat'] = isset($current_location->latitude) ?  $current_location->latitude : '';
+			$map_args['lon'] = isset($current_location->longitude) ?  $current_location->longitude : '';
+			if(get_query_var('near')){
+				$map_args['dist'] = get_query_var('dist');
+			}
+		}
+
+
 
 		return self::render_map( $map_args );
 	}
