@@ -56,12 +56,37 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_filter('wp_print_scripts',array(__CLASS__,'beaver_builder'),100);
 
-
+		/*######################################################
+		WP Easy Updates :: Allow beta addons if set
+		######################################################*/
+		add_filter('wp_easy_updates_api_params',array(__CLASS__,'wp_easy_updates'),10, 2);
 
 
 		// after_setup_theme checks
 		add_action( 'after_setup_theme', array(__CLASS__,'for_later_checks') );
 
+	}
+
+	/**
+	 * @param $api_params
+	 * @param $_src
+	 *
+	 * @return mixed
+	 */
+	public static function wp_easy_updates($api_params,$_src){
+
+		if ( geodir_get_option('admin_enable_beta') && strpos($_src, 'wpgeodirectory.com') !== false) {
+			if(!empty($api_params['update_array'])){
+				foreach($api_params['update_array'] as $key => $val){
+					$api_params['update_array'][$key]['beta'] = true;
+				}
+			}
+
+			$api_params['beta'] = true;
+
+		}
+
+		return $api_params;
 	}
 
 	public static function beaver_builder(){

@@ -141,6 +141,16 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					//'advanced' => true
 				),
 
+				array(
+					'name'     => __( 'Enable beta addons', 'geodirectory' ),
+					'desc'     => __( 'This will allow beta addons to be installed.', 'geodirectory' ),
+					'id'       => 'admin_enable_beta',
+					'type'     => 'checkbox',
+					'default'  => '1',
+					//'desc_tip' => true,
+					//'advanced' => true
+				),
+
 
 
 
