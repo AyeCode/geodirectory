@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.0-rc\n"
+"Project-Id-Version: GeoDirectory 2.0.0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-07-27 11:35+0100\n"
-"PO-Revision-Date: 2018-07-27 11:35+0100\n"
+"POT-Creation-Date: 2018-07-27 13:58+0100\n"
+"PO-Revision-Date: 2018-07-27 13:58+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -189,7 +189,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:965
 #: includes/admin/class-geodir-admin-settings.php:710
 #: includes/admin/class-geodir-admin-settings.php:742
-#: includes/admin/settings/class-geodir-settings-general.php:781
+#: includes/admin/settings/class-geodir-settings-general.php:791
 #: includes/api/class-geodir-rest-posts-controller.php:2183
 msgid "Country"
 msgstr ""
@@ -201,7 +201,7 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:861
 #: includes/admin/class-geodir-admin-dummy-data.php:964
-#: includes/admin/settings/class-geodir-settings-general.php:771
+#: includes/admin/settings/class-geodir-settings-general.php:781
 #: includes/api/class-geodir-rest-posts-controller.php:2197
 msgid "Region"
 msgstr ""
@@ -213,7 +213,7 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:870
 #: includes/admin/class-geodir-admin-dummy-data.php:963
-#: includes/admin/settings/class-geodir-settings-general.php:761
+#: includes/admin/settings/class-geodir-settings-general.php:771
 #: includes/api/class-geodir-rest-posts-controller.php:2211
 msgid "City"
 msgstr ""
@@ -807,10 +807,10 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:891
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:368
 #: includes/admin/settings/class-geodir-settings-cpt.php:435
-#: includes/admin/settings/class-geodir-settings-general.php:331
-#: includes/admin/settings/class-geodir-settings-general.php:445
-#: includes/admin/settings/class-geodir-settings-general.php:488
-#: includes/admin/settings/class-geodir-settings-general.php:531
+#: includes/admin/settings/class-geodir-settings-general.php:341
+#: includes/admin/settings/class-geodir-settings-general.php:455
+#: includes/admin/settings/class-geodir-settings-general.php:498
+#: includes/admin/settings/class-geodir-settings-general.php:541
 #: includes/widgets/class-geodir-widget-map.php:243
 #: includes/widgets/class-geodir-widget-map.php:244
 msgid "Title"
@@ -1222,7 +1222,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-install.php:421
 #: includes/admin/class-geodir-admin-menus.php:284
-#: includes/admin/settings/class-geodir-settings-general.php:522
+#: includes/admin/settings/class-geodir-settings-general.php:532
 msgid "Search page"
 msgstr ""
 
@@ -1364,14 +1364,14 @@ msgid "Add to menu"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:265
-#: includes/admin/settings/class-geodir-settings-general.php:228
-#: includes/admin/settings/class-geodir-settings-general.php:479
+#: includes/admin/settings/class-geodir-settings-general.php:238
+#: includes/admin/settings/class-geodir-settings-general.php:489
 #: includes/api/class-geodir-rest-system-status-controller.php:825
 msgid "Location page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:303
-#: includes/admin/settings/class-geodir-settings-general.php:252
+#: includes/admin/settings/class-geodir-settings-general.php:262
 #: includes/api/class-geodir-rest-system-status-controller.php:837
 msgid "Terms and Conditions page"
 msgstr ""
@@ -1748,7 +1748,7 @@ msgid "Tick to install"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:810
-#: includes/admin/settings/class-geodir-settings-general.php:981
+#: includes/admin/settings/class-geodir-settings-general.php:991
 #, php-format
 msgid ""
 "Want to help make GeoDirectory even more awesome? Allow GeoDirectory to "
@@ -2056,7 +2056,7 @@ msgid "Post Type Archive"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:122
-#: includes/admin/settings/class-geodir-settings-general.php:244
+#: includes/admin/settings/class-geodir-settings-general.php:254
 #: includes/api/class-geodir-rest-system-status-controller.php:833
 #: includes/core-functions.php:540
 msgid "Search Page"
@@ -3706,11 +3706,11 @@ msgid "The page title will appear on the post type archive page."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:445
-#: includes/admin/settings/class-geodir-settings-general.php:341
-#: includes/admin/settings/class-geodir-settings-general.php:455
-#: includes/admin/settings/class-geodir-settings-general.php:498
-#: includes/admin/settings/class-geodir-settings-general.php:541
-#: includes/admin/settings/class-geodir-settings-general.php:593
+#: includes/admin/settings/class-geodir-settings-general.php:351
+#: includes/admin/settings/class-geodir-settings-general.php:465
+#: includes/admin/settings/class-geodir-settings-general.php:508
+#: includes/admin/settings/class-geodir-settings-general.php:551
+#: includes/admin/settings/class-geodir-settings-general.php:603
 msgid "Meta Title"
 msgstr ""
 
@@ -3719,11 +3719,11 @@ msgid "Meta title will appear in head tag of this post type archive page."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:455
-#: includes/admin/settings/class-geodir-settings-general.php:351
-#: includes/admin/settings/class-geodir-settings-general.php:465
-#: includes/admin/settings/class-geodir-settings-general.php:508
-#: includes/admin/settings/class-geodir-settings-general.php:551
-#: includes/admin/settings/class-geodir-settings-general.php:603
+#: includes/admin/settings/class-geodir-settings-general.php:361
+#: includes/admin/settings/class-geodir-settings-general.php:475
+#: includes/admin/settings/class-geodir-settings-general.php:518
+#: includes/admin/settings/class-geodir-settings-general.php:561
+#: includes/admin/settings/class-geodir-settings-general.php:613
 msgid "Meta Description"
 msgstr ""
 
@@ -4275,99 +4275,96 @@ msgid ""
 "recommended)."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:159
+#: includes/admin/settings/class-geodir-settings-general.php:145
+msgid "Enable beta addons"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-general.php:146
+msgid "This will allow beta addons to be installed."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-general.php:169
 msgid "Uninstall Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:167
+#: includes/admin/settings/class-geodir-settings-general.php:177
 msgid "Remove Data on Uninstall?"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:168
+#: includes/admin/settings/class-geodir-settings-general.php:178
 msgid ""
 "Check this box if you would like GeoDirectory to completely remove all of "
 "its data when the plugin is deleted."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:191
+#: includes/admin/settings/class-geodir-settings-general.php:201
 msgid "Dummy data installer"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:221
+#: includes/admin/settings/class-geodir-settings-general.php:231
 msgid "Page Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:229
+#: includes/admin/settings/class-geodir-settings-general.php:239
 msgid "Select the page to use for locations"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:236
-#: includes/admin/settings/class-geodir-settings-general.php:564
+#: includes/admin/settings/class-geodir-settings-general.php:246
+#: includes/admin/settings/class-geodir-settings-general.php:574
 #: includes/api/class-geodir-rest-system-status-controller.php:829
 msgid "Add listing page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:237
+#: includes/admin/settings/class-geodir-settings-general.php:247
 msgid "Select the page to use for adding listings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:245
+#: includes/admin/settings/class-geodir-settings-general.php:255
 msgid "Select the page to use as the GD search page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:253
+#: includes/admin/settings/class-geodir-settings-general.php:263
 msgid "Select the page to use for your terms and conditions."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:262
+#: includes/admin/settings/class-geodir-settings-general.php:272
 msgid "Template Page Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:270
+#: includes/admin/settings/class-geodir-settings-general.php:280
 #: includes/api/class-geodir-rest-system-status-controller.php:845
 msgid "Details Page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:271
+#: includes/admin/settings/class-geodir-settings-general.php:281
 msgid "Select the page to use as the GD details page template"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:279
+#: includes/admin/settings/class-geodir-settings-general.php:289
 #: includes/api/class-geodir-rest-system-status-controller.php:841
 msgid "Archive page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:280
+#: includes/admin/settings/class-geodir-settings-general.php:290
 msgid "Select the page to use for GD archives such as taxonomy and CPT pages"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:288
+#: includes/admin/settings/class-geodir-settings-general.php:298
 msgid "Archive item page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:289
+#: includes/admin/settings/class-geodir-settings-general.php:299
 msgid ""
 "Select the page to use for GD archive items, this is the item template used "
 "on taxonomy and CPT pages"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:313
+#: includes/admin/settings/class-geodir-settings-general.php:323
 msgid "Titles & Meta Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:322
-msgid "Post type page"
-msgstr ""
-
 #: includes/admin/settings/class-geodir-settings-general.php:332
-#: includes/admin/settings/class-geodir-settings-general.php:374
-#: includes/admin/settings/class-geodir-settings-general.php:404
-#: includes/admin/settings/class-geodir-settings-general.php:446
-#: includes/admin/settings/class-geodir-settings-general.php:489
-#: includes/admin/settings/class-geodir-settings-general.php:532
-#: includes/admin/settings/class-geodir-settings-general.php:574
-#: includes/admin/settings/class-geodir-settings-general.php:584
-msgid "Enter the title to use for the page"
+msgid "Post type page"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:342
@@ -4376,8 +4373,9 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:456
 #: includes/admin/settings/class-geodir-settings-general.php:499
 #: includes/admin/settings/class-geodir-settings-general.php:542
+#: includes/admin/settings/class-geodir-settings-general.php:584
 #: includes/admin/settings/class-geodir-settings-general.php:594
-msgid "Enter the meta title to use for the page"
+msgid "Enter the title to use for the page"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:352
@@ -4387,283 +4385,293 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:509
 #: includes/admin/settings/class-geodir-settings-general.php:552
 #: includes/admin/settings/class-geodir-settings-general.php:604
+msgid "Enter the meta title to use for the page"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-general.php:362
+#: includes/admin/settings/class-geodir-settings-general.php:404
+#: includes/admin/settings/class-geodir-settings-general.php:434
+#: includes/admin/settings/class-geodir-settings-general.php:476
+#: includes/admin/settings/class-geodir-settings-general.php:519
+#: includes/admin/settings/class-geodir-settings-general.php:562
+#: includes/admin/settings/class-geodir-settings-general.php:614
 msgid "Enter the meta description to use for the page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:364
+#: includes/admin/settings/class-geodir-settings-general.php:374
 msgid "Archive pages"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:373
+#: includes/admin/settings/class-geodir-settings-general.php:383
 msgid "Category Title"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:383
+#: includes/admin/settings/class-geodir-settings-general.php:393
 msgid "Category Meta Title"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:393
+#: includes/admin/settings/class-geodir-settings-general.php:403
 msgid "Category Meta Description"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:403
+#: includes/admin/settings/class-geodir-settings-general.php:413
 msgid "Tag Title"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:413
+#: includes/admin/settings/class-geodir-settings-general.php:423
 msgid "Tag Meta Title"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:423
+#: includes/admin/settings/class-geodir-settings-general.php:433
 msgid "Tag Meta Description"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:436
+#: includes/admin/settings/class-geodir-settings-general.php:446
 msgid "Single post pages"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:573
+#: includes/admin/settings/class-geodir-settings-general.php:583
 msgid "Add Title"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:583
+#: includes/admin/settings/class-geodir-settings-general.php:593
 msgid "Edit Title"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:630
+#: includes/admin/settings/class-geodir-settings-general.php:640
 msgid "Search bar settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:636
+#: includes/admin/settings/class-geodir-settings-general.php:646
 msgid "Search field placeholder text"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:637
+#: includes/admin/settings/class-geodir-settings-general.php:647
 msgid "Show the search text box `placeholder` value on search form."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:646
+#: includes/admin/settings/class-geodir-settings-general.php:656
 msgid "Near field placeholder text"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:647
+#: includes/admin/settings/class-geodir-settings-general.php:657
 msgid "Show the near text box 'placeholder' value on search form."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:656
+#: includes/admin/settings/class-geodir-settings-general.php:666
 msgid "Search button label"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:657
+#: includes/admin/settings/class-geodir-settings-general.php:667
 msgid ""
 "Show the search button label on search form. You can use a font awesome "
 "class here."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:670
+#: includes/admin/settings/class-geodir-settings-general.php:680
 msgid "Search results settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:676
+#: includes/admin/settings/class-geodir-settings-general.php:686
 msgid "Search near radius"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:677
+#: includes/admin/settings/class-geodir-settings-general.php:687
 msgid "Limits the search radius to X miles/km (lower numbers help with speed) "
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:685
+#: includes/admin/settings/class-geodir-settings-general.php:695
 msgid "Search distances"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:686
+#: includes/admin/settings/class-geodir-settings-general.php:696
 msgid "Show search distances in miles or km"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:691
+#: includes/admin/settings/class-geodir-settings-general.php:701
 #: includes/widgets/class-geodir-widget-map.php:211
 msgid "Miles"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:692
+#: includes/admin/settings/class-geodir-settings-general.php:702
 #: includes/widgets/class-geodir-widget-map.php:213
 msgid "Kilometers"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:699
+#: includes/admin/settings/class-geodir-settings-general.php:709
 msgid "Search distances short"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:700
+#: includes/admin/settings/class-geodir-settings-general.php:710
 msgid "If distance is less than 0.01 show distance in meters or feet"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:705
+#: includes/admin/settings/class-geodir-settings-general.php:715
 msgid "Feet"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:706
+#: includes/admin/settings/class-geodir-settings-general.php:716
 msgid "Meters"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:713
+#: includes/admin/settings/class-geodir-settings-general.php:723
 msgid "Search near additional"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:714
+#: includes/admin/settings/class-geodir-settings-general.php:724
 msgid ""
 "This is useful if your directory is limited to one location such as: New "
 "York or Australia (this setting should be blank if using default country, "
 "regions etc with multilocation addon as it will automatically add them)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:717
+#: includes/admin/settings/class-geodir-settings-general.php:727
 msgid "New York"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:723
+#: includes/admin/settings/class-geodir-settings-general.php:733
 msgid "Individual word search limit"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:724
+#: includes/admin/settings/class-geodir-settings-general.php:734
 msgid ""
 "With this option you can limit individual words being searched for, for "
 "example searching for `Jo Brown` would return results with words like "
 "`Jones`, you can exclude these types of small character words if you wish."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:729
+#: includes/admin/settings/class-geodir-settings-general.php:739
 msgid "Disabled"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:730
+#: includes/admin/settings/class-geodir-settings-general.php:740
 msgid "1 Character words excluded"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:731
+#: includes/admin/settings/class-geodir-settings-general.php:741
 msgid "2 Character words and less excluded"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:732
+#: includes/admin/settings/class-geodir-settings-general.php:742
 msgid "3 Character words and less excluded"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:753
+#: includes/admin/settings/class-geodir-settings-general.php:763
 #: includes/admin/views/html-admin-page-status-report.php:350
 msgid "Set default location"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:762
+#: includes/admin/settings/class-geodir-settings-general.php:772
 msgid "The default location city name."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:772
+#: includes/admin/settings/class-geodir-settings-general.php:782
 msgid "The default location region name."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:782
+#: includes/admin/settings/class-geodir-settings-general.php:792
 msgid "The default location country name."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:795
+#: includes/admin/settings/class-geodir-settings-general.php:805
 msgid "City Latitude"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:796
+#: includes/admin/settings/class-geodir-settings-general.php:806
 msgid "The latitude of the default location."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:810
+#: includes/admin/settings/class-geodir-settings-general.php:820
 msgid "City Longitude"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:811
+#: includes/admin/settings/class-geodir-settings-general.php:821
 msgid "The longitude of the default location."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:824
+#: includes/admin/settings/class-geodir-settings-general.php:834
 msgid "Timezone"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:825
+#: includes/admin/settings/class-geodir-settings-general.php:835
 msgid "Set the site timezone. Ex: +5:30 or GMT+5:30 or UTC+5:30"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:851
+#: includes/admin/settings/class-geodir-settings-general.php:861
 msgid "Site Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:858
+#: includes/admin/settings/class-geodir-settings-general.php:868
 msgid "Restrict wp-admin"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:859
+#: includes/admin/settings/class-geodir-settings-general.php:869
 msgid "The user roles that should be restricted from the wp-admin area."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:874
+#: includes/admin/settings/class-geodir-settings-general.php:884
 msgid "Listing Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:882
+#: includes/admin/settings/class-geodir-settings-general.php:892
 msgid "User deleted posts"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:883
+#: includes/admin/settings/class-geodir-settings-general.php:893
 msgid ""
 "If checked a user deleted post will go to trash, otherwise it will be "
 "permanently deleted"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:891
+#: includes/admin/settings/class-geodir-settings-general.php:901
 #: includes/admin/views/html-admin-page-status-report.php:340
 #: includes/api/class-geodir-rest-system-status-controller.php:416
 msgid "New listing default status"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:892
+#: includes/admin/settings/class-geodir-settings-general.php:902
 #: includes/admin/views/html-admin-page-status-report.php:341
 msgid ""
 "This is the post status a new listing will get when submitted from the "
 "frontend."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:898
+#: includes/admin/settings/class-geodir-settings-general.php:908
 msgid "Pending Review"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:899
+#: includes/admin/settings/class-geodir-settings-general.php:909
 #: language.php:93
 msgid "Publish"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:906
+#: includes/admin/settings/class-geodir-settings-general.php:916
 msgid "Allow posting without logging in?"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:907
+#: includes/admin/settings/class-geodir-settings-general.php:917
 msgid ""
 "If checked non logged in users will be able to post listings from the "
 "frontend."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:915
+#: includes/admin/settings/class-geodir-settings-general.php:925
 msgid "Show preview button?"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:916
+#: includes/admin/settings/class-geodir-settings-general.php:926
 msgid ""
 "If checked a preview button will be shown on the add listing page so uses "
 "can preview their post."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:924
+#: includes/admin/settings/class-geodir-settings-general.php:934
 #: includes/admin/views/html-admin-page-status-report.php:335
 #: includes/api/class-geodir-rest-system-status-controller.php:410
 msgid "Max upload file size(in mb)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:925
+#: includes/admin/settings/class-geodir-settings-general.php:935
 msgid ""
 "(Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then "
 "0(ZERO), for ex: 2. This setting will overwrite the max upload file size "
@@ -4671,51 +4679,51 @@ msgid ""
 "GeoDirectory plugins.)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:937
+#: includes/admin/settings/class-geodir-settings-general.php:947
 msgid "Map Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:950
-msgid "Default marker icon"
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-general.php:951
-msgid ""
-"This is the marker icon used if the category does not have a marker icon set."
-msgstr ""
-
 #: includes/admin/settings/class-geodir-settings-general.php:960
-msgid "Enable map cache"
+msgid "Default marker icon"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:961
 msgid ""
+"This is the marker icon used if the category does not have a marker icon set."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-general.php:970
+msgid "Enable map cache"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-general.php:971
+msgid ""
 "This will cache the map JSON for 24 hours or until a GD listing is saved."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:972
+#: includes/admin/settings/class-geodir-settings-general.php:982
 msgid "Tracking Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:980
+#: includes/admin/settings/class-geodir-settings-general.php:990
 msgid "Allow Usage Tracking?"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1006
+#: includes/admin/settings/class-geodir-settings-general.php:1016
 msgid "Default map language"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1007
+#: includes/admin/settings/class-geodir-settings-general.php:1017
 msgid ""
 "URLs will only be in one language, this will determine the language location "
 "slugs get. You should avoid changing this after listings have been added."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1027
+#: includes/admin/settings/class-geodir-settings-general.php:1037
 msgid "Maps API"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1028
+#: includes/admin/settings/class-geodir-settings-general.php:1038
 msgid ""
 "- Google Maps API will force to load Google JS library only.\n"
 "- OpenStreetMap API will force to load OpenStreetMap JS library only.\n"
@@ -4725,243 +4733,243 @@ msgid ""
 "- Disable Maps will disable and hides maps for entire site."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1051
+#: includes/admin/settings/class-geodir-settings-general.php:1061
 #: includes/admin/views/html-admin-page-status-report.php:345
 msgid "Google Maps API KEY"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1052
+#: includes/admin/settings/class-geodir-settings-general.php:1062
 msgid ""
 "Google Maps <b>requires</b> an API key. Use the button to create a properly "
 "configured key using your Google account. </br>Advanced: Open Street Map "
 "(OSM) API options."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1081
+#: includes/admin/settings/class-geodir-settings-general.php:1091
 msgid "Automatic (recommended)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1082
+#: includes/admin/settings/class-geodir-settings-general.php:1092
 msgid "Google Maps API"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1083
+#: includes/admin/settings/class-geodir-settings-general.php:1093
 msgid "OpenStreetMap API"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1084
+#: includes/admin/settings/class-geodir-settings-general.php:1094
 msgid "Disable Maps"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1095
+#: includes/admin/settings/class-geodir-settings-general.php:1105
 msgid "ARABIC"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1096
+#: includes/admin/settings/class-geodir-settings-general.php:1106
 msgid "BASQUE"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1097
+#: includes/admin/settings/class-geodir-settings-general.php:1107
 msgid "BULGARIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1098
+#: includes/admin/settings/class-geodir-settings-general.php:1108
 msgid "BENGALI"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1099
+#: includes/admin/settings/class-geodir-settings-general.php:1109
 msgid "CATALAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1100
+#: includes/admin/settings/class-geodir-settings-general.php:1110
 msgid "CZECH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1101
+#: includes/admin/settings/class-geodir-settings-general.php:1111
 msgid "DANISH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1102
+#: includes/admin/settings/class-geodir-settings-general.php:1112
 msgid "GERMAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1103
+#: includes/admin/settings/class-geodir-settings-general.php:1113
 msgid "GREEK"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1104
+#: includes/admin/settings/class-geodir-settings-general.php:1114
 msgid "ENGLISH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1105
+#: includes/admin/settings/class-geodir-settings-general.php:1115
 msgid "ENGLISH (AUSTRALIAN)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1106
+#: includes/admin/settings/class-geodir-settings-general.php:1116
 msgid "ENGLISH (GREAT BRITAIN)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1107
+#: includes/admin/settings/class-geodir-settings-general.php:1117
 msgid "SPANISH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1108
+#: includes/admin/settings/class-geodir-settings-general.php:1118
 msgid "FARSI"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1109
+#: includes/admin/settings/class-geodir-settings-general.php:1119
 msgid "FINNISH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1110
+#: includes/admin/settings/class-geodir-settings-general.php:1120
 msgid "FILIPINO"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1111
+#: includes/admin/settings/class-geodir-settings-general.php:1121
 msgid "FRENCH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1112
+#: includes/admin/settings/class-geodir-settings-general.php:1122
 msgid "GALICIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1113
+#: includes/admin/settings/class-geodir-settings-general.php:1123
 msgid "GUJARATI"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1114
+#: includes/admin/settings/class-geodir-settings-general.php:1124
 msgid "HINDI"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1115
+#: includes/admin/settings/class-geodir-settings-general.php:1125
 msgid "CROATIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1116
+#: includes/admin/settings/class-geodir-settings-general.php:1126
 msgid "HUNGARIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1117
+#: includes/admin/settings/class-geodir-settings-general.php:1127
 msgid "INDONESIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1118
+#: includes/admin/settings/class-geodir-settings-general.php:1128
 msgid "ITALIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1119
+#: includes/admin/settings/class-geodir-settings-general.php:1129
 msgid "HEBREW"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1120
+#: includes/admin/settings/class-geodir-settings-general.php:1130
 msgid "JAPANESE"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1121
+#: includes/admin/settings/class-geodir-settings-general.php:1131
 msgid "KANNADA"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1122
+#: includes/admin/settings/class-geodir-settings-general.php:1132
 msgid "KOREAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1123
+#: includes/admin/settings/class-geodir-settings-general.php:1133
 msgid "LITHUANIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1124
+#: includes/admin/settings/class-geodir-settings-general.php:1134
 msgid "LATVIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1125
+#: includes/admin/settings/class-geodir-settings-general.php:1135
 msgid "MALAYALAM"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1126
+#: includes/admin/settings/class-geodir-settings-general.php:1136
 msgid "MARATHI"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1127
+#: includes/admin/settings/class-geodir-settings-general.php:1137
 msgid "DUTCH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1128
+#: includes/admin/settings/class-geodir-settings-general.php:1138
 msgid "NORWEGIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1129
+#: includes/admin/settings/class-geodir-settings-general.php:1139
 msgid "POLISH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1130
+#: includes/admin/settings/class-geodir-settings-general.php:1140
 msgid "PORTUGUESE"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1131
+#: includes/admin/settings/class-geodir-settings-general.php:1141
 msgid "PORTUGUESE (BRAZIL)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1132
+#: includes/admin/settings/class-geodir-settings-general.php:1142
 msgid "PORTUGUESE (PORTUGAL)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1133
+#: includes/admin/settings/class-geodir-settings-general.php:1143
 msgid "ROMANIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1134
+#: includes/admin/settings/class-geodir-settings-general.php:1144
 msgid "RUSSIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1135
+#: includes/admin/settings/class-geodir-settings-general.php:1145
 msgid "SLOVAK"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1136
+#: includes/admin/settings/class-geodir-settings-general.php:1146
 msgid "SLOVENIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1137
+#: includes/admin/settings/class-geodir-settings-general.php:1147
 msgid "SERBIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1138
+#: includes/admin/settings/class-geodir-settings-general.php:1148
 msgid "\tSWEDISH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1139
+#: includes/admin/settings/class-geodir-settings-general.php:1149
 msgid "TAGALOG"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1140
+#: includes/admin/settings/class-geodir-settings-general.php:1150
 msgid "TAMIL"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1141
+#: includes/admin/settings/class-geodir-settings-general.php:1151
 msgid "TELUGU"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1142
+#: includes/admin/settings/class-geodir-settings-general.php:1152
 msgid "THAI"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1143
+#: includes/admin/settings/class-geodir-settings-general.php:1153
 msgid "TURKISH"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1144
+#: includes/admin/settings/class-geodir-settings-general.php:1154
 msgid "UKRAINIAN"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1145
+#: includes/admin/settings/class-geodir-settings-general.php:1155
 msgid "VIETNAMESE"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1146
+#: includes/admin/settings/class-geodir-settings-general.php:1156
 msgid "CHINESE (SIMPLIFIED)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-general.php:1147
+#: includes/admin/settings/class-geodir-settings-general.php:1157
 msgid "CHINESE (TRADITIONAL)"
 msgstr ""
 
@@ -7789,21 +7797,21 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:78
+#: includes/class-geodir-compatibility.php:103
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:80
+#: includes/class-geodir-compatibility.php:105
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "Settings unless disabled below."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:85
+#: includes/class-geodir-compatibility.php:110
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:86
+#: includes/class-geodir-compatibility.php:111
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
