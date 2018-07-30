@@ -1,3 +1,6 @@
+v2.0.0.19
+API keys not listed - FIXED
+
 v2.0.0.18
 Image slider widget not working on listing pages - FIXED
 Single image slider will now output as just an image - CHANGED

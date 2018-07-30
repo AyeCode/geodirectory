@@ -585,7 +585,10 @@ class GeoDir_Admin_Upgrade {
 
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$post_type}category post_category varchar(254) DEFAULT NULL;" );
 				if ( in_array( 'post_location_id', $columns ) ) {
-					$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_location_id location_id int(11) NOT NULL;" );
+					$wpdb->query( "ALTER TABLE `{$table}` DROP `post_location_id`" );
+				}
+				if ( in_array( 'post_locations', $columns ) ) {
+					$wpdb->query( "ALTER TABLE `{$table}` DROP `post_locations`" );
 				}
 				if ( in_array( 'is_featured', $columns ) ) {
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_featured featured tinyint(1) NOT NULL DEFAULT '0';" );
@@ -593,7 +596,6 @@ class GeoDir_Admin_Upgrade {
 					$wpdb->query( "UPDATE `{$table}` SET `featured` = '0' WHERE featured = '2';" );
 				}
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE submit_ip `submit_ip` varchar(100) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_locations `locations` varchar(254) DEFAULT NULL;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_address `street` varchar(254) DEFAULT NULL;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_city `city` varchar(50) DEFAULT NULL;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_region `region` varchar(50) DEFAULT NULL;" );
@@ -611,7 +613,6 @@ class GeoDir_Admin_Upgrade {
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_video `video` text;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_special_offers `special_offers` text;" );
 
-				$wpdb->query( "ALTER TABLE {$table} DROP INDEX post_locations, ADD INDEX locations(locations(191))" );
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX country(country)" );
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX region(region)" );
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX city(city)" );
