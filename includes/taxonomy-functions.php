@@ -347,7 +347,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
         $include_location = false;
         $request_term = array();
         $add_location_url = geodir_get_option('geodir_add_location_url');
-        $location_manager = defined('POST_LOCATION_TABLE') ? true : false;
+        $location_manager = defined('GEODIR_LOCATIONS_TABLE') ? true : false;
 
         $listing_slug = geodir_get_listing_slug($taxonomy);
 
@@ -364,7 +364,7 @@ function geodir_term_link($termlink, $term, $taxonomy) {
         if ($include_location) {
             global $post;
             
-            $neighbourhood_active = $location_manager && geodir_get_option('location_neighbourhoods') ? true : false;
+            $neighbourhood_active = $location_manager && geodir_get_option('lm_enable_neighbourhoods') ? true : false;
             
             if (geodir_is_page('detail') && isset($post->country_slug)) {
                 $location_terms = array(
