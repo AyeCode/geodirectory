@@ -1674,11 +1674,11 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
  * @return array Location terms.
  */
 function geodir_remove_location_terms( $location_terms = array() ) {
-	$location_manager = defined( 'POST_LOCATION_TABLE' ) ? true : false;
+	$location_manager = defined( 'GEODIR_LOCATIONS_TABLE' ) ? true : false;
 
 	if ( ! empty( $location_terms ) && $location_manager ) {
-		$hide_country_part = geodir_get_option( 'geodir_location_hide_country_part' );
-		$hide_region_part  = geodir_get_option( 'geodir_location_hide_region_part' );
+		$hide_country_part = geodir_get_option( 'lm_hide_country_part' );
+		$hide_region_part  = geodir_get_option( 'lm_hide_region_part' );
 
 		if ( $hide_region_part && $hide_country_part ) {
 			if ( isset( $location_terms['gd_country'] ) ) {
