@@ -1761,6 +1761,8 @@ function geodir_cfi_business_hours( $html, $cf ) {
 								<td class="gd-bh-act"><span class="gd-bh-add"><i class="fas fa-plus-circle" aria-hidden="true"></i></span></td>
 							</tr>
 							<?php } ?>
+							<tr class="gd-tz-item">
+								<td colspan="3"><label form="<?php echo $htmlvar_name; ?>_f_timezone"><?php _e( 'Timezone', 'geodirectory' ); ?></label> <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( geodir_wp_gmt_offset() ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN"></td></tr>
 						</tbody>
 					</table>
 				</div>

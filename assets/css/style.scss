@@ -2038,6 +2038,8 @@ body > span[style*='top: -999px']{display: none;}
 	display: block;
 	clear: both;
 	padding: 4px 10px;
+	white-space: nowrap;
+	word-wrap: normal;
 }
 .gd-bh-days-list div {
 	display: inline-block;

@@ -399,6 +399,7 @@ var GeoDir_Business_Hours = {
         this.$field = jQuery('[name="' + this.field + '"]');
         this.$wrap = this.$field.closest('.gd-bh-row');
         this.sample = jQuery('.gd-bh-items .gd-bh-blank').html();
+		this.default_offset = geodir_params.gmt_offset;
         this.gmt_offset = (params.offset ? params.offset : geodir_params.gmt_offset);
         jQuery('[data-field="active"]', this.$wrap).on("change", function(e) {
             $wrap = this.$wrap;
@@ -410,6 +411,19 @@ var GeoDir_Business_Hours = {
             $this.setValue();
             e.preventDefault();
         });
+		jQuery('[data-field="timezone"]', this.$wrap).on("change", function(e) {
+			$this.setValue();
+            e.preventDefault();
+		});
+		jQuery('[name="latitude"], [name="longitude"]', this.$wrap.closest('form')).on("change", function(e) {
+			if (!window.gdTzApi) {
+				window.gdTzApi = true;
+				setTimeout(function() {
+					$this.getTimezone('[data-field="timezone"]');
+				}, 1000);
+			}
+            e.preventDefault();
+		});
         // add slot
         jQuery(".gd-bh-add", this.$wrap).on("click", function(e) {
             $this.addSlot(jQuery(this));
@@ -471,7 +485,7 @@ var GeoDir_Business_Hours = {
         this.$field.trigger('change');
     },
     toSchema: function() {
-        var $this, $item, $slot, d, o, c, ha, h, pa, v;
+        var $this, $item, $slot, d, o, c, ha, h, pa, v, tz;
         $this = this;
         pa = [];
         jQuery('.gd-bh-item', $this.$wrap).each(function() {
@@ -503,7 +517,11 @@ var GeoDir_Business_Hours = {
             v += JSON.stringify(pa);
             v += ',';
         }
-        v += '["UTC":"' + this.gmt_offset + '"]';
+		tz = jQuery('[data-field="timezone"]', $this.$wrap).val().trim();
+		if (tz === '' || tz === null || tz == 'undefined') {
+			tz = this.default_offset;
+		}
+        v += '["UTC":"' + tz + '"]';
         return v;
     },
     timepickers: function() {
@@ -518,5 +536,49 @@ var GeoDir_Business_Hours = {
                 });
             }
         });
-    }
+    },
+	getTimezone: function(el, prefix) {
+		var $this = this, $form, lat, lng, url;
+		if (!prefix) {
+			prefix = '';
+		}
+
+		$form = jQuery(el).closest('form');
+		lat = jQuery('[name="' + prefix + 'latitude"]', $form).val();
+		lng = jQuery('[name="' + prefix + 'longitude"]', $form).val();
+		lat = lat ? lat.trim() : '';
+		lng = lng ? lng.trim() : '';
+		if (lat && lng) {
+			url = 'https://maps.googleapis.com/maps/api/timezone/json';
+			url += '?location=' + lat + ',' + lng;
+			url += '&timestamp=' + (Math.round((new Date().getTime())/1000)).toString();
+			url += '&key=' + geodir_params.google_api_key;
+			jQuery.ajax({
+			   url:url,
+			}).done(function(response){
+			   if (response && typeof response == 'object') {
+				   if (typeof response.rawOffset != 'undefined') {
+					   offset = response.dstOffset + response.rawOffset;
+					   offset = $this.secondsToHM(offset);
+					   jQuery(el).val(offset).trigger('change');
+				   }
+				   if (response.errorMessage) {
+					   console.log(response.errorMessage);
+				   }
+			   }
+			   window.gdTzApi = false;
+			});
+		}
+	},
+	secondsToHM: function(value) {
+		var $this = this, prefix, hours, minutes, result;
+		prefix = value < 0 ? '-' : '+';
+		value = Math.abs(value);
+		hours = Math.floor(value / 3600);
+		minutes = Math.floor((value - (hours * 3600)) / 60);
+		result = hours;
+		result += ":" + (minutes < 10 ? "0" + minutes : minutes);
+		result = prefix + '' +  result;
+		return result;
+	}
 }

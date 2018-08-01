@@ -80,6 +80,26 @@
 .gd-bh-item a {
 	text-decoration: none;
 }
+.geodir_form_row {
+	.gd-tz-item {
+		label {
+			float: none;
+			width: auto;
+			margin-right: 10px;
+		}
+	}
+}
+.gd-bh-items {
+	.gd-tz-item {
+		td {
+			padding-left: 10px;
+		}
+
+		input {
+			width: 5em
+		}
+	}
+}
 /* business hours end */
 .select2-selection_gd_field [type="radio"] {
 	margin-right: 0;
