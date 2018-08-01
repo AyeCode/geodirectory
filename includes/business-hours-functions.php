@@ -66,10 +66,11 @@ function geodir_day_short_names() {
  * @since 2.0.0
  *
  * @param bool $formatted Format the offset.
+ * @param string $offeset Default offset.
  * @return string Formatted offset.
  */
-function geodir_gmt_offset( $formatted = true ) {
-	$offset = geodir_get_option( 'default_location_timezone' );
+function geodir_gmt_offset( $offeset = '', $formatted = true ) {
+	$offset = $offeset || $offeset == '0' ? $offeset : geodir_get_option( 'default_location_timezone' );
 	if ( $offset == '' ) {
 		return geodir_wp_gmt_offset( $formatted );
 	} else {
@@ -542,7 +543,7 @@ function geodir_get_business_hours( $value = '' ) {
 			'date_format' => $date_format,
 			'time_format' => $time_format,
 			'full_date_format' => $date_format . ' ' . $time_format,
-			'offset' => ! empty( $data['hours']['offset'] ) ? $data['hours']['offset'] : geodir_gmt_offset()
+			'offset' => isset( $data['offset'] ) && $data['offset'] !== '' ? $data['offset'] : geodir_gmt_offset()
 		);
 	}
 

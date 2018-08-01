@@ -444,12 +444,12 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     }
     function updateMarkerPosition(markerlatLng) {
         jQuery("#<?php echo $prefix.'map';?>").goMap();
-        jQuery('#<?php echo $prefix.'latitude';?>').val(markerlatLng.lat());
-        jQuery('#<?php echo $prefix.'longitude';?>').val(markerlatLng.lng());
+        jQuery('#<?php echo $prefix.'latitude';?>').val(markerlatLng.lat()).trigger('change');
+        jQuery('#<?php echo $prefix.'longitude';?>').val(markerlatLng.lng()).trigger('change');
     }
     function updateMarkerPositionOSM(markerlatLng) {
-        jQuery('#<?php echo $prefix.'latitude';?>').val(markerlatLng.lat);
-        jQuery('#<?php echo $prefix.'longitude';?>').val(markerlatLng.lng);
+        jQuery('#<?php echo $prefix.'latitude';?>').val(markerlatLng.lat).trigger('change');
+        jQuery('#<?php echo $prefix.'longitude';?>').val(markerlatLng.lng).trigger('change');
     }
     function updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry) {
         var set_map_val_in_fields = '<?php echo addslashes_gpc($auto_change_map_fields);?>';
