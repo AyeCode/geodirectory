@@ -1,4 +1,4 @@
-v2.0.0.20
+v2.0.0.21
 Some dummy category icons not updated to FA5 - FIXED
 Installed dummy data type not reflected on settings screen - FIXED
 Don't show add listing `we found a post` message if no main info has been added - CHANGED
