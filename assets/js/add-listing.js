@@ -556,9 +556,10 @@ var GeoDir_Business_Hours = {
 			jQuery.ajax({
 			   url:url,
 			}).done(function(response){
+                console.log(response);
 			   if (response && typeof response == 'object') {
 				   if (typeof response.rawOffset != 'undefined') {
-					   offset = response.dstOffset + response.rawOffset;
+					   offset = response.rawOffset;
 					   offset = $this.secondsToHM(offset);
 					   jQuery(el).val(offset).trigger('change');
 				   }
