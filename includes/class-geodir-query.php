@@ -138,12 +138,12 @@ class GeoDir_Query {
 			//$q->set('is_page',false);
 			//$q->set('is_search',true);
 			//$q->set('post_type','gd_place');
-			add_filter( 'posts_join', array( $this, 'posts_join' ) );
-			add_filter( 'posts_fields', array( $this, 'posts_fields' ) );
-			add_filter( 'posts_where', array( $this, 'posts_where' ) );
+			add_filter( 'posts_join', array( $this, 'posts_join' ), 1, 2 );
+			add_filter( 'posts_fields', array( $this, 'posts_fields' ), 1, 2 );
+			add_filter( 'posts_where', array( $this, 'posts_where' ), 1, 2 );
 			//add_filter( 'posts_limits', array( $this, 'posts_limits' ),10,2 );
-			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ) );
-			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ) );
+			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 1, 2 );
+			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ), 1, 2 );
 
 			// setup search globals
 			global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA;
@@ -427,16 +427,20 @@ class GeoDir_Query {
 				$terms_where = apply_filters("geodir_search_terms_where"," AND ($wpdb->terms.name LIKE \"$s\" OR $wpdb->terms.name LIKE \"$s%\" OR $wpdb->terms.name LIKE \"% $s%\" OR $wpdb->terms.name IN ($s_A)) ");
 			}
 
-			// get term sql
-			$term_sql = "SELECT $wpdb->term_taxonomy.term_id 
-                    FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
-                    WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id 
-                    AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id 
-                    AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} ) 
-                    $terms_where 
-                    GROUP BY $wpdb->term_taxonomy.term_id";
+			if ( geodir_is_page( 'search' ) && isset( $_REQUEST['spost_category'] ) && ( ( is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'][0] ) ) || ( ! is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'] ) ) ) ) {
+				$term_results = array();
+			} else {
+				// get term sql
+				$term_sql = "SELECT $wpdb->term_taxonomy.term_id 
+						FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
+						WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id 
+						AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id 
+						AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} ) 
+						$terms_where 
+						GROUP BY $wpdb->term_taxonomy.term_id";
 
-			$term_results = $wpdb->get_results( $term_sql );
+				$term_results = $wpdb->get_results( $term_sql );
+			}
 			$term_ids = array();
 			$terms_sql = '';
 
@@ -477,7 +481,7 @@ class GeoDir_Query {
                         $terms_sql 
                     )
                     AND $wpdb->posts.post_type in ('$post_types')
-                    AND ($wpdb->posts.post_status = 'publish') ";
+                    AND $wpdb->posts.post_status = 'publish' ";
 			}
 		}
 
