@@ -102,6 +102,11 @@ class GeoDir_Admin_Dummy_Data {
 				}
 
 			}
+
+
+
+			// set the dummy data type
+			geodir_update_option( $post_type . '_dummy_data_type', esc_attr($_REQUEST['data_type']) );
 		}
 
 		return true;

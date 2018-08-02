@@ -18,46 +18,46 @@ $dummy_categories['attractions'] = array(
 	'name'        => 'Attractions',
 	'icon'        => $dummy_image_url . 'cat_icon/Attractions.png',
 	'schema_type' => 'TouristAttraction',
-	'font_icon'   => 'fa-star',
+	'font_icon'   => 'fas fa-star',
 	'color'       => '#62ab43',
 );
 $dummy_categories['hotels'] = array(
 	'name'        => 'Hotels',
 	'icon'        => $dummy_image_url . 'cat_icon/Hotels.png',
 	'schema_type' => 'Hotel',
-	'font_icon'   => 'fa-bed',
+	'font_icon'   => 'fas fa-bed',
 	'color'       => '#008972',
 );
 $dummy_categories['restaurants'] = array(
 	'name'        => 'Restaurants',
 	'icon'        => $dummy_image_url . 'cat_icon/Restaurants.png',
 	'schema_type' => 'Restaurant',
-	'font_icon'   => 'fa-cutlery',
+	'font_icon'   => 'fas fa-utensils',
 	'color'       => '#bc2b15',
 );
 $dummy_categories['food-nightlife'] = array(
 	'name'        => 'Food Nightlife',
 	'icon'        => $dummy_image_url . 'cat_icon/Food_Nightlife.png',
-	'font_icon'   => 'fa-glass-martini',
+	'font_icon'   => 'fas fa-glass-martini',
 	'color'       => '#803fc7',
 );
 $dummy_categories['festival'] = array(
 	'name'        => 'Festival',
 	'icon'        => $dummy_image_url . 'cat_icon/Festival.png',
 	'schema_type' => 'Event',
-	'font_icon'   => 'fa-ticket-alt',
+	'font_icon'   => 'fas fa-ticket-alt',
 	'color'       => '#20abce',
 );
 $dummy_categories['videos'] = array(
 	'name'        => 'Videos',
 	'icon'        => $dummy_image_url . 'cat_icon/Videos.png',
-	'font_icon'   => 'fa-video',
+	'font_icon'   => 'fas fa-video',
 	'color'       => '#ff3e27',
 );
 $dummy_categories['feature'] = array(
 	'name'        => 'Feature',
 	'icon'        => $dummy_image_url . 'cat_icon/Feature.png',
-	'font_icon'   => 'fa-heart',
+	'font_icon'   => 'fas fa-heart',
 	'color'       => '#ef7337',
 );
 

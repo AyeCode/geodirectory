@@ -37,7 +37,7 @@ class GeoDir_Permalinks {
 		add_action('init', array( $this, 'search_rewrite_rules'), 11,0);
 
 		// author page permalinks
-		add_filter( 'author_rewrite_rules', array( $this, 'author_rewrite_rules' ) );
+		add_filter( 'init', array( $this, 'author_rewrite_rules' ) );
 
 		// post (single) url filter
 		add_filter( 'post_type_link', array( $this, 'post_url'), 0, 4);
@@ -51,6 +51,19 @@ class GeoDir_Permalinks {
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
 		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
+	}
+
+	// @todo remove after testing
+	public function temp_check_rules($rules){
+
+		if(is_admin()){return;}
+		global $wp_rewrite;
+		print_r( $wp_rewrite );
+		//print_r(get_option( 'rewrite_rules' ));
+
+		echo '###';exit;
+
+		return $rules;
 	}
 
 	public function insert_rewrite_rules(){
@@ -82,10 +95,14 @@ class GeoDir_Permalinks {
 
 	public function add_rewrite_rule($regex, $redirect, $after = ''){
 
+		// check if there are double rules
 		if(isset($this->rewrite_rules[$regex])){
-			//echo 'permalink problem';exit;
-			$this->rewrite_rule_problem = $regex;
-			add_action( 'admin_notices', array($this,'rewrite_rule_problem_notice') );
+			global $geodirectory;
+			$parts = explode( '/([^/]*)/?', $regex );
+			if(count($parts) == 2 && isset($geodirectory->settings['permalink_structure']) && $geodirectory->settings['permalink_structure']==''){}else{
+				$this->rewrite_rule_problem = $regex;
+				add_action( 'admin_notices', array($this,'rewrite_rule_problem_notice') );
+			}
 		}
 
 		$static_sections = 0;
@@ -114,18 +131,7 @@ class GeoDir_Permalinks {
 	}
 	
 
-	// @todo remove after testing
-	public function temp_check_rules($rules){
-
-		if(is_admin()){return;}
-		global $wp_rewrite;
-		print_r( $wp_rewrite );
-		print_r(get_option( 'rewrite_rules' ));
-
-		echo '###';exit;
-
-		return $rules;
-	}
+	
 
 	/**
 	 * Add the locations page rewrite rules.
@@ -166,14 +172,14 @@ class GeoDir_Permalinks {
 				$saves_slug = self::favs_slug( $cpt_slug );
 
 				// add CPT author rewrite rules
-				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/?$",'index.php?author_name=$matches[1]&post_type='.$post_type);
-				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&post_type='.$post_type.'&paged=$matches[2]');
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/?$",'index.php?author_name=$matches[1]&post_type='.$post_type,'top');
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&post_type='.$post_type.'&paged=$matches[2]','top');
 
 				// favs
 				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/?$",'index.php?author_name=$matches[1]&gd_favs=1');
-				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&paged=$matches[2]');
-				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type);
-				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]');
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&paged=$matches[2]','top');
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type,'top');
+				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]','top');
 			}
 		}
 

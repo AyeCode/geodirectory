@@ -111,7 +111,7 @@ jQuery(function($) {
  */
 var geodir_changes_made = false;
 window.onbeforeunload = function() {
-    return geodir_changes_made ? "You may lose changes if you navigate away now!" : null; // @todo make translatable
+    return geodir_changes_made ? geodir_params.txt_lose_changes : null; // @todo make translatable
 };
 /**
  * Poll the form looking for changes every 10 seconds, if we detect a change then auto save
@@ -119,7 +119,7 @@ window.onbeforeunload = function() {
  * @param old_form_data
  */
 function geodir_auto_save_poll(old_form_data) {
-    if (jQuery("#geodirectory-add-post").length) {
+    if (jQuery("#geodirectory-add-post").length && geodir_params.autosave > 0) {
         setTimeout(function() {
             // only save if the forum data has changed
             if (jQuery("#geodirectory-add-post").length && old_form_data != geodir_get_form_data()) {
@@ -128,7 +128,7 @@ function geodir_auto_save_poll(old_form_data) {
                 geodir_changes_made = true; // flag changes have been made
             }
             geodir_auto_save_poll(geodir_get_form_data()); // run the function again.
-        }, 10000);
+        }, geodir_params.autosave);
     }
 }
 /**

@@ -215,8 +215,8 @@ function geodir_get_location_link($which_location = 'current') {
  */
 function geodir_get_osm_address_by_lat_lan($lat, $lng) {
 
-    // we need the protocol to be "//" as a http site call to their https server fails.
-    $url = '//nominatim.openstreetmap.org/reverse?format=json&lat=' . trim($lat) . '&lon=' . trim($lng) . '&zoom=16&addressdetails=1&email=' . get_option('admin_email');
+    // we need the protocol to be "//" as a http site call to their https server fails. EDIT, it seems to require HTTPS now :/
+    $url = 'https://nominatim.openstreetmap.org/reverse?format=json&lat=' . trim($lat) . '&lon=' . trim($lng) . '&zoom=16&addressdetails=1&email=' . get_option('admin_email');
 
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);

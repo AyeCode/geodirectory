@@ -504,7 +504,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 			$fields[] = array(
 				'tab_type'   => 'standard',
 				'tab_name'   => __('Map','geodirectory'),
-				'tab_icon'   => 'fas fa-globe',
+				'tab_icon'   => 'fas fa-globe-americas',
 				'tab_key'    => 'post_map',
 				'tab_content'=> '[gd_map width="100%" height="425px" maptype="ROADMAP" zoom="0" map_type="post" map_directions="1"]'
 			);

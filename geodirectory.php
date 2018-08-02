@@ -225,7 +225,7 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/core-functions.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-datetime.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/functions.php' );
-        $geodir_options = geodir_get_settings();
+	    $this->settings = $geodir_options = geodir_get_settings();
 
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-post-types.php' ); // Registers post types
 	    
