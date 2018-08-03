@@ -1,5 +1,12 @@
-v2.0.0.19
+v2.0.0.21
+Some dummy category icons not updated to FA5 - FIXED
+Installed dummy data type not reflected on settings screen - FIXED
+Don't show add listing `we found a post` message if no main info has been added - CHANGED
 API keys not listed - FIXED
+Multiselect output for single item is different than for multiple, both now use li - CHANGED
+Business hours now shows timezone input to be able to adjust manually - ADDED
+Author favs and listing links lead to 404 - FIXED
+Sorting not working if set as default - FIXED
 
 v2.0.0.18
 Image slider widget not working on listing pages - FIXED

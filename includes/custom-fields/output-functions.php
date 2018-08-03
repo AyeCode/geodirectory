@@ -1170,7 +1170,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
 
             $field_value = '';
 
-            if (count($option_values) > 1) {
+            if (count($option_values) ) {
                 $field_value .= '<ul>';
 
                 foreach ($option_values as $val) {
@@ -1178,8 +1178,6 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
                 }
 
                 $field_value .= '</ul>';
-            } else {
-                $field_value .= __($gd_post->{$cf['htmlvar_name']}, 'geodirectory');
             }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';

@@ -31,6 +31,15 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 				'gd_wgt_restrict' => array( 'gd-detail' ), //@todo implement this on all other widgets
 			),
 			'arguments'     => array(
+				'title'  => array(
+					'title' => __('Title:', 'geodirectory'),
+					'desc' => __('Extra main title if needed.', 'geodirectory'),
+					'type' => 'text',
+					'placeholder' => __( 'Extra main title if needed.', 'geodirectory' ),
+					'default'  => '',
+					'desc_tip' => true,
+					'advanced' => true
+				),
 				'id'  => array(
 					'name' => 'id',
 					'title' => __('Post ID:', 'geodirectory'),

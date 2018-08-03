@@ -622,7 +622,7 @@ class GeoDir_Query {
 		}
 
 		if ( $sort_by == '' ) {
-
+//echo '###';exit;
 
 			if ($snear != '') {
 				//$orderby .= " distance,";
@@ -631,6 +631,7 @@ class GeoDir_Query {
 				$sort_by = 'search_best';
 			}else{
 				$default_sort = geodir_get_posts_default_sort( $geodir_post_type );
+//				echo '###'.$default_sort;exit;
 				if ( !empty( $default_sort ) ) {
 					$sort_by = $default_sort;
 				}
@@ -794,7 +795,7 @@ class GeoDir_Query {
 			default:
 //				echo $sort_by.'###'.$default_sort;
 				$default_sort = geodir_get_posts_default_sort( $post_type );
-				if($sort_by == $default_sort){
+				if($default_sort == '' && $sort_by == $default_sort){
 					$order_by_parts[] = "$wpdb->posts.post_date desc";
 				}else{
 					$order_by_parts[] = self::custom_sort($orderby, $sort_by, $table);

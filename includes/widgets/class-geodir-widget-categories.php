@@ -461,6 +461,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 				if (!empty($categories)) {
 					$term_icons = !$hide_icon ? geodir_get_term_icon() : array();
+
+//					print_r($term_icons);
 					$row_class = '';
 
 					if ($is_listing) {

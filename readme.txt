@@ -6,8 +6,8 @@ License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags:  directory plugin, business directory, listings, classifieds, real estate
 Requires at least: 4.5
 Requires PHP: 5.3
-Tested up to: 4.9.6
-Stable tag: 2.0.0.18
+Tested up to: 4.9.7
+Stable tag: 2.0.0.21
 
 
 Create huge location-based business directories with this fully-featured directory plugin. In a few clicks you could be the next Yelp or Tripadvisor.

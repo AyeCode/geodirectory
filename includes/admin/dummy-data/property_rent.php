@@ -15,20 +15,28 @@ $dummy_categories  = array();
 $dummy_categories['apartments'] = array(
 	'name'        => 'Apartments',
 	'icon'        => $dummy_image_url . 'cat_icon/Apartments.png',
-	'schema_type' => 'Residence'
+	'schema_type' => 'Residence',
+	'font_icon'   => 'fas fa-building',
+	'color'       => '#254e4e',
 );
 $dummy_categories['houses'] = array(
 	'name'        => 'Houses',
 	'icon'        => $dummy_image_url . 'cat_icon/Houses.png',
-	'schema_type' => 'Residence'
+	'schema_type' => 'Residence',
+	'font_icon'   => 'fas fa-home',
+	'color'       => '#5551b9',
 );
 $dummy_categories['commercial'] = array(
 	'name'        => 'Commercial',
 	'icon'        => $dummy_image_url . 'cat_icon/Commercial.png',
+	'font_icon'   => 'fas fa-industry',
+	'color'       => '#852d2d',
 );
 $dummy_categories['land'] = array(
 	'name'        => 'Land',
 	'icon'        => $dummy_image_url . 'cat_icon/Land.png',
+	'font_icon'   => 'fas fa-map',
+	'color'       => '#84612d',
 );
 
 // Set any custom fields

@@ -595,7 +595,9 @@ class GeoDir_Post_Data {
 				$post_id     = absint( $post->ID );
 				$post        = $gd_post = geodir_get_post_info( $post_id );
 
-				$user_notes['has-auto-draft'] = sprintf( __('Hey, we found a post you started earlier and are showing it below. If you would prefer to start again then please %sclick here%s to remove this revision.', 'plugin-domain'), "<a href='javascript:void(0)' onclick='geodir_delete_revision();'>", "</a>" );
+				if($post->post_modified_gmt!='0000-00-00 00:00:00'){
+					$user_notes['has-auto-draft'] = sprintf( __('Hey, we found a post you started earlier and are showing it below. If you would prefer to start again then please %sclick here%s to remove this revision.', 'plugin-domain'), "<a href='javascript:void(0)' onclick='geodir_delete_revision();'>", "</a>" );
+				}
 			} else {
 				// Create the auto draft
 				$post    = $gd_post = self::create_auto_draft( $listing_type );
