@@ -126,7 +126,7 @@ class GeoDir_Frontend_Scripts {
 					var s = ' ';
 					var $form = jQuery(this).closest('form');
 
-					if (jQuery("#sdist input[type='radio']:checked").length != 0) dist = jQuery("#sdist input[type='radio']:checked").val();
+					if (jQuery("#sdistance input[type='radio']:checked").length != 0) dist = jQuery("#sdistance input[type='radio']:checked").val();
 					if (jQuery('.search_text', $form).val() == '' || jQuery('.search_text', $form).val() == '<?php echo $default_search_for_text;?>') jQuery('.search_text', $form).val(s);
 
 					// Disable location based search for disabled location post type.
