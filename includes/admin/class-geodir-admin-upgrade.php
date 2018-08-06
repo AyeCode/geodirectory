@@ -29,6 +29,14 @@ class GeoDir_Admin_Upgrade {
 			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_lm_create_tables' ), 10 );
 			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_lm_update_version' ), 10 );
 		}
+
+		if ( self::has_advance_search() ) {
+			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_search_get_options' ), 11, 1 );
+
+			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_search_create_default_options' ), 11 );
+			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_search_create_tables' ), 10 );
+			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_search_update_version' ), 11 );
+		}
 	}
 
 	public static function update_200_settings() {
@@ -1087,5 +1095,121 @@ class GeoDir_Admin_Upgrade {
 
 		delete_option( 'geodir_location_db_version' );
 		add_option( 'geodir_location_db_version', $version );
+	}
+
+	// Advance search
+	public static function has_advance_search() {
+		return ! is_null( get_option( 'geodiradvancesearch_db_version', null ) ) && ( is_null( get_option( 'geodir_advance_search_db_version', null ) ) || ( get_option( 'geodir_advance_search_db_version' ) && version_compare( get_option( 'geodir_advance_search_db_version' ), '2.0.0.0', '<' ) ) );
+	}
+
+	public static function update_200_search_get_options( $options = array() ) {
+		$merge_options = array(
+			'advs_enable_autocompleter' => get_option( 'geodir_enable_autocompleter' ),
+			'advs_autocompleter_autosubmit' => get_option( 'geodir_autocompleter_autosubmit' ),
+			'advs_autocompleter_min_chars' => get_option( 'geodir_autocompleter_min_chars' ),
+			'advs_autocompleter_max_results' => get_option( 'geodir_autocompleter_max_results' ),
+			'advs_autocompleter_filter_location' => get_option( 'geodir_autocompleter_filter_location' ),
+			'advs_enable_autocompleter_near' => get_option( 'geodir_enable_autocompleter_near' ),
+			'advs_autocompleter_autosubmit_near' => get_option( 'geodir_autocompleter_autosubmit_near' ),
+			'advs_first_load_redirect' => get_option( 'geodir_first_load_redirect' ),
+			'advs_autolocate_ask' => get_option( 'geodir_autolocate_ask' ),
+			'advs_near_me_dist' => get_option( 'geodir_near_me_dist' ),
+			'advs_search_display_searched_params' => get_option( 'geodir_search_display_searched_params' ),
+		);
+
+		return array_merge( $options, $merge_options );
+	}
+
+	public static function update_200_search_create_default_options() {
+		if ( ! ( defined( 'GEODIRADVANCESEARCH_VERSION' ) && version_compare( GEODIRADVANCESEARCH_VERSION, '2.0.0.0', '<=' ) ) ) {
+			$default_options = array(
+				'advs_enable_autocompleter' => '1',
+				'advs_autocompleter_autosubmit' => '1',
+				'advs_autocompleter_min_chars' => '3',
+				'advs_autocompleter_max_results' => '10',
+				'advs_autocompleter_filter_location' => '',
+				'advs_enable_autocompleter_near' => '1',
+				'advs_autocompleter_autosubmit_near' => '0',
+				'advs_first_load_redirect' => 'no',
+				'advs_autolocate_ask' => '0',
+				'advs_near_me_dist' => '40',
+				'advs_search_display_searched_params' => '0'
+			);
+
+			foreach ( $default_options as $key => $value ) {
+				geodir_update_option( $key, $value );
+			}
+		}
+	}
+
+	public static function update_200_search_create_tables() {
+		global $wpdb, $plugin_prefix;
+
+		// Advance search fields table
+		$table = $plugin_prefix . 'custom_advance_search_fields';
+
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE site_htmlvar_name htmlvar_name varchar(255) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_site_name admin_title varchar(255) NULL DEFAULT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE front_search_title frontend_title varchar(255) NULL DEFAULT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_site_type field_type varchar(100) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE first_search_value range_start int(11) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE search_min_value range_min int(11) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE search_max_value range_max int(11) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE expand_custom_value range_expand int(11) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE searching_range_mode range_mode tinyint(1) NOT NULL DEFAULT '0'" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE search_diff_value range_step int(11) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_input_type input_type varchar(100) NULL DEFAULT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_data_type data_type varchar(100) NULL DEFAULT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE first_search_text range_from_title varchar(255) NULL DEFAULT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE last_search_text range_to_title varchar(255) NULL DEFAULT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_desc description text NULL DEFAULT NULL" );
+
+		// Update fields data
+		$results = $wpdb->get_results( "SELECT id, htmlvar_name, field_type, post_type FROM `{$table}`" );
+
+		if ( ! empty( $results ) ) {
+			foreach ( $results as $row ) {
+				$data = array();
+
+				$htmlvar_name = $row->htmlvar_name;
+
+				if ( $htmlvar_name == 'dist' ) {
+					$htmlvar_name = 'distance';
+				} else if ( $htmlvar_name == 'geodir_contact' ) {
+					$htmlvar_name = 'phone';
+				} else if ( $htmlvar_name == 'is_featured' ) {
+					$htmlvar_name = 'featured';
+				} else if ( $htmlvar_name == 'fieldset' && $row->field_type == 'fieldset' ) {
+					$htmlvar_name = 'fieldset_' . $row->id; // Fix duplicate htmlvar name
+				}
+
+				if ( $row->field_type == 'taxonomy' ) {
+					$htmlvar_name = 'post_category';
+					$data['field_type'] = 'categories';
+				}
+
+				if ( strpos( $htmlvar_name, 'geodir_' ) === 0 ) {
+					$htmlvar_name = strtolower( substr( $htmlvar_name, 7 ) );
+				}
+
+				if ( $htmlvar_name === $row->htmlvar_name ) {
+					continue;
+				}
+
+				$data['htmlvar_name'] = $htmlvar_name;
+
+				$wpdb->update( $table, $data, array( 'id' => $row->id ) );
+			}
+		}
+	}
+
+	public static function update_200_search_update_version() {
+		$version = defined( 'GEODIR_ADV_SEARCH_VERSION' ) && version_compare( GEODIR_ADV_SEARCH_VERSION, '2.0.0.0', '>=' ) ? GEODIR_ADV_SEARCH_VERSION : '2.0.0.0';
+
+		delete_option( 'geodir_advance_search_version' );
+		add_option( 'geodir_advance_search_version', $version );
+
+		delete_option( 'geodir_advance_search_db_version' );
+		add_option( 'geodir_advance_search_db_version', $version );
 	}
 }

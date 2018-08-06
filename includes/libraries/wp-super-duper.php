@@ -1314,10 +1314,20 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$output = $this->output( $argument_values, $args );
 
 			if ( $output ) {
-				echo $args['before_widget'];
+				// Before widget
+				$before_widget = $args['before_widget'];
+				$before_widget = apply_filters( 'wp_super_duper_before_widget', $before_widget, $args, $instance, $this );
+				$before_widget = apply_filters( 'wp_super_duper_before_widget_' . $this->base_id, $before_widget, $args, $instance, $this );
+
+				// After widget
+				$after_widget = $args['after_widget'];
+				$after_widget = apply_filters( 'wp_super_duper_after_widget', $after_widget, $args, $instance, $this );
+				$after_widget = apply_filters( 'wp_super_duper_after_widget_' . $this->base_id, $after_widget, $args, $instance, $this );
+				
+				echo $before_widget;
 				echo $this->output_title($args, $instance);
 				echo $output;
-				echo $args['after_widget'];
+				echo $after_widget;
 			}
 		}
 
