@@ -706,7 +706,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 					if ( empty( $map_args['all_posts'] ) ) {
 						$map_args['posts'] = array( '-1' ); // No results
 
-						if ( ! empty( $wp_query ) && $wp_query->is_main_query() ) {
+						if ( ! empty( $wp_query ) && $wp_query->is_main_query() && ! empty( $wp_query->found_posts ) ) {
 							$map_args['posts'] = array();
 							$map_args['terms'] = array();
 							if ( ! empty( $wp_query->posts ) ) {
@@ -726,6 +726,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 									foreach ( $wp_query->posts as $post ) {
 										$map_args['posts'][] = $post->ID;
 									}
+								} else {
+									$map_args['posts'] = array( '-1' ); // No results
 								}
 							}
 						}

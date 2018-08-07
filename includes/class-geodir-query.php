@@ -151,8 +151,8 @@ class GeoDir_Query {
 			if (isset($_REQUEST['scat']) && $_REQUEST['scat'] == 'all') $_REQUEST['scat'] = '';
 			//if(isset($_REQUEST['s']) && $_REQUEST['s'] == '+') $_REQUEST['s'] = '';
 
-			if (isset($_REQUEST['sdist'])) {
-				($_REQUEST['sdist'] != '0' && $_REQUEST['sdist'] != '') ? $dist = esc_attr($_REQUEST['sdist']) : $dist = 25000;
+			if (isset($_REQUEST['sdistance'])) {
+				($_REQUEST['sdistance'] != '0' && $_REQUEST['sdistance'] != '') ? $dist = esc_attr($_REQUEST['sdistance']) : $dist = 25000;
 			} elseif (geodir_get_option('search_radius') != '') {
 				$dist = geodir_get_option('search_radius');//search_radius
 
@@ -469,14 +469,15 @@ class GeoDir_Query {
 				$where .= $wpdb->prepare(" AND latitude between %f and %f AND longitude between %f and %f ",$between['lat1'],$between['lat2'],$between['lon1'],$between['lon2']);
 
 
-				if (isset($_REQUEST['sdist']) && $_REQUEST['sdist'] != 'all') {
+				if (isset($_REQUEST['sdistance']) && $_REQUEST['sdistance'] != 'all') {
 					$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('search_distance_long'));
 					$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
 				}
 
 			} else {
+				$post_title_where = $s != "" ? "{$wpdb->posts}.post_title LIKE \"$s\"" : "1";
 				$where .= " AND ( 
-						($wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
+						( $post_title_where $better_search_terms )
                         $content_where  
                         $terms_sql 
                     )
