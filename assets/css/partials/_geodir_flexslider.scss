@@ -189,8 +189,11 @@ html[xmlns] .geodir-slides {
 }
 
 /* Direction Nav */
-.geodir-direction-nav {
+ul.geodir-direction-nav {
   *height: 0;
+  padding: 0 !important;
+  line-height: 0;
+  list-style-type: none !important;
 }
 
 .geodir-direction-nav a {

@@ -85,9 +85,6 @@ class GeoDir_Template_Loader {
             if($single_template && locate_template( $single_template )){
                 $default_file = $single_template;
             }else{
-                //$default_file = 'single-listing.php';
-                //$default_file = 'page.php';
-                //$default_file = 'single.php';
                 $page_id = geodir_details_page_id();
                 if($page_id &&  $template = get_page_template_slug( $page_id )){
                     if(is_page_template( $template )){
@@ -95,16 +92,12 @@ class GeoDir_Template_Loader {
                     }
                 }else{
                     // check if we have a theme compat setting.
-                    //$default_file = 'page.php';
                     if($theme_template = GeoDir_Compatibility::theme_single_template()){
                         $default_file = $theme_template;
                     }else{
                          //$default_file = 'page.php'; //  fallback to page.php
                     }
                 }
-                //echo '###'.$default_file;
-                //self::setup_singular_page();
-                //$default_file = 'index.php';
             }
 
 
@@ -133,11 +126,7 @@ class GeoDir_Template_Loader {
             $wp_query->is_404 = '';
             //$wp_query->is_page = 1;
             self::setup_archive_loop_as_page();
-        } elseif ( geodir_is_page( 'login' ) ) {
-           // $default_file = '';//signup.php';
-        } elseif ( geodir_is_page( 'listing-success' ) ) {
-           // $default_file = 'listing-success.php';
-        } else {
+        }  else {
             $default_file = '';
         }
 

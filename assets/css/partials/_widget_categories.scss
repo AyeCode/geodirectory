@@ -3,8 +3,8 @@
     display: inline-block;
     width: 33%;
     min-width: 185px;
-    list-style: none;
-    padding: 0;
+    list-style: none !important;
+    padding: 0 !important;
     margin: 0;
     vertical-align: top;
 
@@ -20,6 +20,7 @@
     }
 
     li{
+      list-style: none !important;
       margin: .25em;
       background: #f5f5f5;
       min-height: 45px;

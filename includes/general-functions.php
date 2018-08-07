@@ -469,6 +469,34 @@ function geodir_is_geodir_page() {
 	}
 }
 
+/**
+ * Checks whether a page id is a GD page or not.
+ *
+ * @since   2.0.0.22
+ * @package GeoDirectory
+
+ * @return bool If the page is GD page returns true. Otherwise false.
+ */
+function geodir_is_geodir_page_id($id) {
+	global $geodirectory;
+	if(!empty($geodirectory->settings['page_add']) && $geodirectory->settings['page_add'] == $id ){
+		return true;
+	}elseif(!empty($geodirectory->settings['page_location']) && $geodirectory->settings['page_add'] == $id ){
+		return true;
+	}elseif(!empty($geodirectory->settings['page_search']) && $geodirectory->settings['page_search'] == $id ){
+		return true;
+	}elseif(!empty($geodirectory->settings['page_terms_conditions']) && $geodirectory->settings['page_terms_conditions'] == $id ){
+		return true;
+	}elseif(!empty($geodirectory->settings['page_details']) && $geodirectory->settings['page_details'] == $id ){
+		return true;
+	}elseif(!empty($geodirectory->settings['page_archive']) && $geodirectory->settings['page_archive'] == $id ){
+		return true;
+	}elseif(!empty($geodirectory->settings['page_archive_item']) && $geodirectory->settings['page_archive_item'] == $id ){
+		return true;
+	}
+	return false;
+}
+
 if ( ! function_exists( 'geodir_get_imagesize' ) ) {
 	/**
 	 * Get image size using the size key .

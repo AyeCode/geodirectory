@@ -262,12 +262,12 @@ body { // wrapping ina  body tag makes rules more specific
 .geodir-pagination{
 
 	ul.page-numbers{
-		list-style: none;
+		list-style: none !important;
 		border-top: 1px #eee solid;
 		overflow: hidden;
 		min-width: 170px;
 		margin: 0;
-		padding: 20px 0;
+		padding: 20px 0 !important;
 		li{
 			position: relative;
 			float: left;

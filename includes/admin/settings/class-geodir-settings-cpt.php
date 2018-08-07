@@ -176,6 +176,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$post_type_values['meta_title'] = ( ! empty( $post_type_option['seo']['meta_title'] ) ? $post_type_option['seo']['meta_title'] : '' );
 			$post_type_values['meta_description'] = ( ! empty( $post_type_option['seo']['meta_description'] ) ? $post_type_option['seo']['meta_description'] : '' );
 
+//			print_r( $post_type_values );
+
 			// we need to trick the settings to show the current values
 			$settings  = apply_filters( "geodir_cpt_settings_{$post_type}", array(
 

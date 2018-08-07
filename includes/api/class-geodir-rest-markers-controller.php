@@ -389,7 +389,8 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		if(!empty($request['country'])){ $country = $geodirectory->location->get_country_name_from_slug($request['country']); $where .= $wpdb->prepare(" AND pd.country = %s ",$country);}
 		if(!empty($request['region'])){ $region = $geodirectory->location->get_region_name_from_slug($request['region']); $where .= $wpdb->prepare(" AND pd.region = %s ",$region);}
 		if(!empty($request['city'])){ $city = $geodirectory->location->get_city_name_from_slug($request['city']); $where .= $wpdb->prepare(" AND pd.city = %s ",$city);}
-		if(!empty($request['neighbourhood'])){ $neighbourhood = $geodirectory->location->get_neighbourhood_name_from_slug($request['neighbourhood']); $where .= $wpdb->prepare(" AND pd.neighbourhood = %s ",$neighbourhood);}
+		if(!empty($request['neighbourhood'])){ $neighbourhood = sanitize_title($request['neighbourhood']);
+			$where .= $wpdb->prepare(" AND pd.neighbourhood = %s ",$neighbourhood);}
 		
 		// limited to area
 		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ){

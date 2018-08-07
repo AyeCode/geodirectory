@@ -138,6 +138,8 @@ class GeoDir_Admin_Tools {
 				break;
 		}
 
+		do_action("geodir_tool_{$tool}",$ran,$message);
+
 		return array( 'success' => $ran, 'message' => $message );
 	}
 
