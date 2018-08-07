@@ -214,9 +214,11 @@ class GeoDir_Admin_Install {
      * Insert the default field for the CPTs.
      *
      * @since 2.0.0
+     *
+     * @param string $post_type Optional. Post type. Default gd_place.
      */
-	public static function insert_default_fields(){
-		$fields = GeoDir_Admin_Dummy_Data::default_custom_fields('gd_place');
+	public static function insert_default_fields($post_type = 'gd_place'){
+		$fields = GeoDir_Admin_Dummy_Data::default_custom_fields($post_type);
 
 		/**
 		 * Filter the array of default custom fields DB table data.

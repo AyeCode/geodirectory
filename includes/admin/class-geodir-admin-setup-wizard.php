@@ -381,11 +381,10 @@ class GeoDir_Admin_Setup_Wizard {
 				// check if there are already listing before saving new location
 				global $wpdb;
 				$post_types        = geodir_get_posttypes();
-				$post_types_string = implode( ",", $post_types );
 				$cpt_count   = count( $post_types );
 				$cptp        = array_fill( 0, $cpt_count, "%s" );
 				$cptp_string = implode( ",", $cptp );
-				$has_posts   = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type IN ($cptp_string) LIMIT 1", $post_types_string ) );
+				$has_posts   = $wpdb->get_var( $wpdb->prepare( "SELECT ID FROM $wpdb->posts WHERE post_type IN ($cptp_string) LIMIT 1", $post_types ) );
 				if ( $has_posts ) {
 					?>
 					<script>

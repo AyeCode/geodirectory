@@ -165,9 +165,9 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         ?>
         <span class="gd-list-rating-text">
             <?php
-            if ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
-                echo '<i class="fas fa-comments" aria-hidden="true"></i>';
-            }
+            //if ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
+                //echo '<i class="fas fa-comments" aria-hidden="true"></i>';
+            //}
             ?>
             <a href="<?php comments_link(); ?>" class="gd-list-rating-link">
                 <?php geodir_comments_number( $gd_post ); ?>
