@@ -636,29 +636,45 @@ class GeoDir_Comments {
 	 *
 	 * @return string
 	 */
-	public static function rating_html( $rating, $type = 'output' ) {
+	public static function rating_html( $rating, $type = 'output', $overrides = array() ) {
 
-		$rating_icon  = esc_attr( geodir_get_option( 'rating_icon', 'fas fa-star' ) );
-		$rating_color = esc_attr( geodir_get_option( 'rating_color' ) );
+        $defaults = array(
+            'rating_icon' => esc_attr( geodir_get_option( 'rating_icon', 'fas fa-star' ) ),
+            'rating_color' => esc_attr( geodir_get_option( 'rating_color' ) ),
+            'rating_color_off' => esc_attr( geodir_get_option( 'rating_color_off' ) ),
+            'rating_texts' => self::rating_texts(),
+            'rating_image' => geodir_get_option( 'rating_image' ),
+            'rating_type' => esc_attr( geodir_get_option( 'rating_type' ) ),
+            'rating_input_count' => self::rating_input_count(),
+            'id' => 'geodir_overallrating',
+            'type' => $type,
+        );
+
+        $args = wp_parse_args( $overrides, $defaults );
+
+        $type = $args['type'];
+        $rating_icon  = $args['rating_icon'];
+
+		$rating_color = $args['rating_color'];
 		if ( $rating_color == '#ff9900' ) {
 			$rating_color = '';
 		}
-		$rating_color_off = esc_attr( geodir_get_option( 'rating_color_off' ) );
+		$rating_color_off = $args['rating_color_off'];
 		if ( $rating_color_off == '#afafaf' ) {
 			$rating_color_off = '';
 		} else {
 			$rating_color_off = "style='color:$rating_color_off;'";
 		}
-		$rating_texts      = self::rating_texts();
+		$rating_texts      = $args['rating_texts'];
 		$rating_wrap_title = '';
 		if ( $type == 'output' ) {
 			$rating_wrap_title = $rating ? sprintf( __( '%d star rating', 'geodirectory' ), $rating ) : __( "No rating yet!", "geodirectory" );
 		}
 		$rating_html        = '';
-		$rating_input_count = self::rating_input_count();
+		$rating_input_count = $args['rating_input_count'];
 		$i                  = 1;
-		$rating_type        = esc_attr( geodir_get_option( 'rating_type' ) );
-		if ( $rating_type == 'image' && $rating_image_id = geodir_get_option( 'rating_image' ) ) {
+		$rating_type        = $args['rating_type'];
+		if ( $rating_type == 'image' && $rating_image_id = $args['rating_image'] ) {
 			$rating_image = wp_get_attachment_url( $rating_image_id );
 			while ( $i <= $rating_input_count ) {
 				$rating_title = $type == 'input' ? "title='$rating_texts[$i]'" : '';
@@ -701,7 +717,7 @@ class GeoDir_Comments {
 			<?php if ( $type == 'input' ) { ?>
 				<span class="gd-rating-text"
 				      data-title="<?php _e( 'Select a rating', 'geodirectory' ); ?>"><?php _e( 'Select a rating', 'geodirectory' ); ?></span>
-				<input type="hidden" id="geodir_overallrating" name="geodir_overallrating"
+				<input type="hidden" id="<?php echo $args['id']; ?>" name="<?php echo $args['id']; ?>"
 				       value="<?php echo esc_attr( $rating ); ?>"/>
 			<?php } ?>
 		</div>
