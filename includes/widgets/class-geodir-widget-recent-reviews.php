@@ -199,8 +199,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			$where .= $wpdb->prepare( " AND p.post_type = %s", $post_type );
 		}
 
-		$location_allowed = !empty( $post_type ) && function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
-		if ( $location_allowed && $add_location_filter && defined( 'GEODIRLOCATION_VERSION' ) ) {
+		if ( GeoDir_Post_types::supports( $post_type, 'location' ) && $add_location_filter && defined( 'GEODIRLOCATION_VERSION' ) ) {
 			$source = geodir_is_page( 'search' ) ? 'session' : 'query_vars';
 			$location_terms = geodir_get_current_location_terms( $source );
 			$country = !empty( $location_terms['gd_country'] ) ? get_actual_location_name( 'country', $location_terms['gd_country'] ) : '';

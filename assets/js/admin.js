@@ -904,6 +904,9 @@ function geodirSelect2TemplateSelection($el, data, main) {
         rEl += '</span>';
         return jQuery(rEl);
     }
+	if ($el.data('dashicons') && $option.data('dashicon')) {
+		return jQuery('<span class="select2-selection_gd_dashicon"><span class="dashicons ' + $option.data('dashicon') + '"></span><span class="gd-dashicon-text"> ' + data.text + '</span></span>');
+    }
     return data.text;
 }
 
