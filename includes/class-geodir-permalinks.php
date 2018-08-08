@@ -50,7 +50,7 @@ class GeoDir_Permalinks {
 
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
-		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
+//		add_action('init', array( $this, 'temp_check_rules'),10000000000);
 	}
 
 	// @todo remove after testing
@@ -67,6 +67,8 @@ class GeoDir_Permalinks {
 	}
 
 	public function insert_rewrite_rules(){
+
+//		print_r($this->rewrite_rules);
 
 		if(!empty($this->rewrite_rules)){
 			// organise the right order
@@ -95,10 +97,13 @@ class GeoDir_Permalinks {
 
 	public function add_rewrite_rule($regex, $redirect, $after = ''){
 
+//		echo $regex . "\n";
+//		echo $redirect . "\n";
+
 		// check if there are double rules
 		if(isset($this->rewrite_rules[$regex])){
 			global $geodirectory;
-			$parts = explode( '/([^/]*)/?', $regex );
+			$parts = explode( '/([^/]*)/?$', $regex );
 			if(count($parts) == 2 && isset($geodirectory->settings['permalink_structure']) && $geodirectory->settings['permalink_structure']==''){}else{
 				$this->rewrite_rule_problem = $regex;
 				add_action( 'admin_notices', array($this,'rewrite_rule_problem_notice') );
@@ -517,6 +522,25 @@ class GeoDir_Permalinks {
 		}
 
 		return apply_filters('geodir_rewrite_location_slug',$location_slug);
+	}
+
+
+	/**
+	 * Tell if the current core permalink structure ends with a slash or not.
+	 *
+	 * @return bool
+	 */
+	public function is_slash(){
+		global $wp_rewrite;
+		$permalink_structure = isset($wp_rewrite->permalink_structure) ? $wp_rewrite->permalink_structure : '';
+		if($permalink_structure){
+			if(substr("testers", -1)=='/'){
+				return true;
+			}
+		}
+
+		return false;
+
 	}
 
 

@@ -149,9 +149,12 @@ class GeoDir_Compatibility {
 			$theme = get_template();
 		}
 
+//		echo '###'.$theme;
+
 		$themes = array(
 			'twentyseventeen'   => 'single.php',
 			'primer'   => 'page.php',
+			//'directory-starter'   => 'page-gd.php',
 		);
 
 		return isset($themes[$theme]) ? $themes[$theme] : '';

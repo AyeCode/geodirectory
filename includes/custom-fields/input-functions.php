@@ -1119,9 +1119,7 @@ function geodir_cfi_address($html,$cf){
                 <input type="text" field_type="<?php echo $type; ?>" name="<?php echo 'zip'; ?>"
                        id="<?php echo $prefix . 'zip'; ?>" class="geodir_textfield autofill"
                        value="<?php echo esc_attr(stripslashes($zip)); ?>"/>
-                <?php /*if($is_required) {?>
-					<span class="geodir_message_error"><?php echo _e($required_msg,'geodirectory');?></span>
-					<?php }*/ ?>
+                <span class="geodir_message_note"><?php echo sprintf( __('Please enter listing %s', 'geodirectory'), __($zip_title, 'geodirectory') );?></span>
             </div>
         <?php } ?>
 
@@ -1198,7 +1196,7 @@ function geodir_cfi_address($html,$cf){
                     }
                     ?>
                 </select>
-
+                <span class="geodir_message_note"><?php _e('Please select listing map view to use', 'geodirectory');?></span>
             </div>
         <?php }?>
 

@@ -205,7 +205,7 @@ class GeoDir_Admin_Upgrade {
 				}
 
 				$data['seo'] = array(
-					'title' => ( isset( $data['seo']['title'] ) ? $data['seo']['title'] : $data['labels']['name'] ),
+					'title' => ( isset( $data['seo']['title'] ) ? $data['seo']['title'] : '' ),
                     'meta_title' => ( isset( $data['seo']['meta_title'] ) ? $data['seo']['meta_title'] : '' ),
                     'meta_description' => ( isset( $data['seo']['meta_description'] ) ? $data['seo']['meta_description'] : '' ),
 				);

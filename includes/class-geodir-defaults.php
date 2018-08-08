@@ -360,7 +360,7 @@ Thank You.","geodirectory"
 	 * @return string
 	 */
 	public static function seo_cpt_meta_title(){
-		return __("%%pt_plural%% %%in_location%% %%sep%% %%sitename%%","geodirectory");
+		return __("%%pt_plural%% %%in_location%% %%page%% %%sep%% %%sitename%%","geodirectory");
 	}
 
 	/**
@@ -387,7 +387,7 @@ Thank You.","geodirectory"
 	 * @return string
 	 */
 	public static function seo_cat_archive_meta_title(){
-		return __("%%category%% %%in_location%% %%sep%% %%sitename%%","geodirectory");
+		return __("%%category%% %%in_location%% %%page%% %%sep%% %%sitename%%","geodirectory");
 	}
 
 	/**
@@ -414,7 +414,7 @@ Thank You.","geodirectory"
 	 * @return string
 	 */
 	public static function seo_tag_archive_meta_title(){
-		return __("%%tag%% %%in_location%% %%sep%% %%sitename%%","geodirectory");
+		return __("%%tag%% %%in_location%% %%page%% %%sep%% %%sitename%%","geodirectory");
 	}
 
 	/**
