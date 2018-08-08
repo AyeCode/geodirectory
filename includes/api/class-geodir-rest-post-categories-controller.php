@@ -118,6 +118,14 @@ class GeoDir_REST_Post_Categories_Controller extends GeoDir_REST_Terms_Controlle
 			$data['icon'] = $icon;
 		}
 
+		if ( ! empty( $schema['properties']['fa_icon'] ) ) {
+			$data['fa_icon'] = get_term_meta( $item->term_id, 'ct_cat_font_icon', true );
+		}
+
+		if ( ! empty( $schema['properties']['fa_icon_color'] ) ) {
+			$data['fa_icon_color'] = get_term_meta( $item->term_id, 'ct_cat_color', true );
+		}
+
 		if ( ! empty( $schema['properties']['schema'] ) ) {
 			$data['schema'] = get_term_meta( $item->term_id, 'ct_cat_schema', true );
 		}
@@ -263,6 +271,18 @@ class GeoDir_REST_Post_Categories_Controller extends GeoDir_REST_Terms_Controlle
 					'context'     => array( 'view' ),
 				),
 			),
+		);
+
+		$schema['properties']['fa_icon'] = array(
+			'description'  => __( 'The category font-awesome icon.', 'geodirectory' ),
+			'type'         => 'string',
+			'context'      => array( 'view' ),
+		);
+
+		$schema['properties']['fa_icon_color'] = array(
+			'description'  => __( 'The category font-awesome icon color.', 'geodirectory' ),
+			'type'         => 'string',
+			'context'      => array( 'view' ),
 		);
 		
 		$schema['properties']['schema'] = array(
