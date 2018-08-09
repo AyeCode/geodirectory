@@ -919,15 +919,20 @@ function geodir_search_form_post_type_input() {
 		}else{
 			if(! empty( $post_types )){
 				$pt_arr = (array)$post_types;
-				echo '<input type="hidden" name="stype" value="' . key( $pt_arr  ) . '"  />';
+				$pt_slug = isset($pt_arr['rewrite']['slug']) ? esc_attr($pt_arr['rewrite']['slug']) : 'places';
+				echo '<input type="hidden" name="stype" value="' . key( $pt_arr  ) . '" data-slug="'.$pt_slug.'" />';
 			}else{
-				echo '<input type="hidden" name="stype" value="gd_place"  />';
+				echo '<input type="hidden" name="stype" value="gd_place"  data-slug="places"/>';
 			}
 
 		}
 
 	}elseif ( ! empty( $post_types ) ) {
-		echo '<input type="hidden" name="stype" value="gd_place"  />';
+		$pt_arr = (array)$post_types;
+		$key = key( $pt_arr);
+		$pt_arr = (array)$pt_arr[$key];
+		$pt_slug = isset($pt_arr->rewrite->slug) ? esc_attr($pt_arr->rewrite->slug) : 'places';
+		echo '<input type="hidden" name="stype" value="gd_place" data-slug="'.$pt_slug.'" />';
 	}
 }
 
@@ -942,7 +947,7 @@ function geodir_search_form_search_input() {
 	?>
 	<div class='gd-search-input-wrapper gd-search-field-search'>
 		<?php 	do_action('geodir_before_search_for_input');?>
-		<input class="search_text" name="s"
+		<input class="search_text gd_search_text" name="s"
 		       value="<?php if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
 			       $search_term = esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
 			       echo str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
