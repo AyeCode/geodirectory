@@ -242,7 +242,7 @@ class GeoDir_Permalinks {
 			 */
 
 			// Check if a pretty permalink is required
-			$permalink_structure = geodir_get_permalink_structure();
+			$permalink_structure = apply_filters( 'geodir_post_permalink_structure', geodir_get_permalink_structure(), $post_obj->post_type );
 			if (strpos($permalink_structure, '%postname%') === false || empty($permalink_structure)) {
 				return $post_link;
 			}
@@ -425,6 +425,8 @@ class GeoDir_Permalinks {
 						$cpt_permalink_arr[ $key ] = "%" . $cpt . "category%";
 					}
 				}
+
+				$cpt_permalink_arr = apply_filters( 'geodir_post_permalink_structure_params', $cpt_permalink_arr, $cpt, $post_type );
 
 				// add the post single permalinks
 				$regex      = '^' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
