@@ -79,6 +79,25 @@ class GeoDir_Taxonomies {
 		}
 	}
 
+	/**
+	 * Check a taxonomy's support for a given feature.
+	 *
+	 * @param string $taxonomy  The taxonomy being checked.
+	 * @param string $feature   The feature being checked.
+	 * @param bool $default     Default value.
+	 * @return bool Whether the taxonomy supports the given feature.
+	 */
+	public static function supports( $taxonomy, $feature, $default = true ) {
+		if ( geodir_taxonomy_type( $taxonomy ) == 'category' ) {
+			$post_type = substr( $taxonomy, 0, strlen( $taxonomy ) - 8 );
+		} else if ( geodir_taxonomy_type( $taxonomy ) == 'tag' ) {
+			$post_type = substr( $taxonomy, 0, strlen( $taxonomy ) - 5 );
+		} else {
+			$post_type = $taxonomy;
+		}
+		return apply_filters( 'geodir_taxonomy_supports', $default, $taxonomy, $post_type, $feature );
+	}
+
 }
 
 

@@ -233,16 +233,15 @@ class GeoDir_Query {
 	 */
 	public function posts_fields($fields, $query = array()){
 		if ( ! ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) ) {
-			global $wpdb, $table_prefix, $geodir_post_type;
 			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear;
-
+			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 
 			$table = geodir_db_cpt_table($geodir_post_type);
 
 			$fields .= ", " . $table . ".* ";
 
 
-			if ( $snear != '' || ( ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) ) ) {
+			if ( $support_location && ( $snear != '' || ( ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) ) ) ) {
 				$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('search_distance_long'));
 
 				if(!empty($user_lat)){
@@ -337,6 +336,7 @@ class GeoDir_Query {
 		global $wpdb,$geodir_post_type,$wp_query;
 		//echo '###'.$where;
 
+		$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 		$table = geodir_db_cpt_table($geodir_post_type);
 
 		//$where .= $wpdb->prepare(" AND $wpdb->posts.post_type = %s AND $wpdb->posts.post_status = 'publish' ",$geodir_post_type);
@@ -456,7 +456,7 @@ class GeoDir_Query {
 				}
 			}
 
-			if ($snear != '') {
+			if ($support_location && $snear != '') {
 				
 				$between = geodir_get_between_latlon($mylat,$mylon,$dist);
 				$where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
@@ -489,18 +489,19 @@ class GeoDir_Query {
 
 		// add our own location query vars
 		global $geodirectory;
-		// only query known location variables
-		$location_vars = $geodirectory->location->allowed_query_variables();
-		foreach($location_vars as $location_var){
-			if(get_query_var($location_var)){
-				$method_name = "get_{$location_var}_name_from_slug";
-				$var_name = $location_var=='neighbourhood' ? get_query_var($location_var) : $geodirectory->location->$method_name(get_query_var($location_var));
-				if($var_name ){
-					$where .= $wpdb->prepare(" AND ".$table.".".$location_var." = %s ",$var_name);
+		if ( $support_location ) {
+			// only query known location variables
+			$location_vars = $geodirectory->location->allowed_query_variables();
+			foreach($location_vars as $location_var){
+				if(get_query_var($location_var)){
+					$method_name = "get_{$location_var}_name_from_slug";
+					$var_name = $location_var=='neighbourhood' ? get_query_var($location_var) : $geodirectory->location->$method_name(get_query_var($location_var));
+					if($var_name ){
+						$where .= $wpdb->prepare(" AND ".$table.".".$location_var." = %s ",$var_name);
+					}
 				}
 			}
 		}
-
 
 		return apply_filters( 'geodir_posts_where', $where, $query );
 	}
@@ -608,6 +609,7 @@ class GeoDir_Query {
 	public function posts_orderby($orderby, $query = array()){
 		global $wpdb, $table_prefix, $geodir_post_type,$snear,$s;
 
+		$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 		$sort_by = '';
 		$orderby = ' ';
 		$default_sort = '';
@@ -625,7 +627,7 @@ class GeoDir_Query {
 		if ( $sort_by == '' ) {
 //echo '###';exit;
 
-			if ($snear != '') {
+			if ($support_location && $snear != '') {
 				//$orderby .= " distance,";
 				$sort_by = 'distance_asc';
 			}elseif(is_search() && isset($_REQUEST['geodir_search']) && $s && trim($s) != ''){

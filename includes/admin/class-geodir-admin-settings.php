@@ -954,6 +954,68 @@ class GeoDir_Admin_Settings {
 						</td>
 					</tr><?php
 					break;
+				case 'dashicon' :
+					$value['options'] = geodir_dashicon_options();
+
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
+					$option_value = GeoDir_Post_types::sanitize_menu_icon( $option_value );
+
+					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+						<th scope="row" class="titledesc">
+							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<?php echo $tooltip_html; ?>
+						</th>
+						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+							<select
+								name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
+								id="<?php echo esc_attr( $value['id'] ); ?>"
+								style="<?php echo esc_attr( $value['css'] ); ?>"
+								class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
+								<?php echo implode( ' ', $custom_attributes ); ?>
+								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
+								>
+								<?php
+								foreach ( $value['options'] as $key => $val ) {
+									?>
+									<option value="<?php echo esc_attr( $key ); ?>" data-dashicon="<?php echo esc_attr( $key ); ?>" <?php
+									if ( is_array( $option_value ) ) {
+										selected( in_array( $key, $option_value ), true );
+									} else {
+										selected( $option_value, $key );
+									}
+									?>><?php echo str_replace( 'dashicons-', '', $key ); ?></option>
+									<?php
+								}
+								?>
+							</select> <?php echo $description; ?>
+						</td>
+					</tr><?php
+					break;
+					case 'hidden' :
+						if ( isset( $value['value'] ) ) {
+							$option_value = $value['value'];
+						} else {
+							$option_value = self::get_option( $value['id'], $value['default'] );
+						}
+						?><tr valign="top" style="display:none!important">
+							<th scope="row" class="titledesc">
+								<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							</th>
+							<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+								<input
+									name="<?php echo esc_attr( $value['id'] ); ?>"
+									id="<?php echo esc_attr( $value['id'] ); ?>"
+									type="hidden"
+									value="<?php echo esc_attr( $option_value ); ?>"
+									<?php echo implode( ' ', $custom_attributes ); ?>
+									/> <?php echo $description; ?>
+							</td>
+						</tr><?php
+					break;
 
 				// Default: run an action
 				default:

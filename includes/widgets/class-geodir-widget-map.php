@@ -915,6 +915,10 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$gd_maps_canvas = array();
 		}
 
+		if ( ! apply_filters( 'geodir_check_display_map', true, $params ) ) {
+			return;
+		}
+
 		add_action( 'wp_footer', array( __CLASS__, 'add_script' ), 100 );
 		add_action( 'geodir_map_custom_content', array( __CLASS__, 'custom_content' ), 10 );
 		add_action( 'geodir_map_custom_script', array( __CLASS__, 'custom_script' ), 10 );
