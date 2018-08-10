@@ -412,7 +412,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             $location_url[] = $city;
         }
 
-        $location_allowed = function_exists( 'geodir_cpt_no_location' ) && geodir_cpt_no_location( $post_type ) ? false : true;
+        $location_allowed = GeoDir_Post_types::supports( $post_type, 'location' );
         $location_url  = implode( '/', $location_url );
 
         if ( $location_allowed && $add_location_filter && ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) && geodir_is_page( 'location' ) ) {

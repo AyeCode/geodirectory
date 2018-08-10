@@ -184,7 +184,7 @@ function geodir_location_name_from_slug($slug,$type){
  * @return bool|string
  */
 function geodir_get_location_link($which_location = 'current') {
-    $location_link = get_permalink(geodir_location_page_id());
+    $location_link = trailingslashit( get_permalink(geodir_location_page_id()) );
 
     if ($which_location == 'base') {
         return $location_link;

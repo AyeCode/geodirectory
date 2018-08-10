@@ -411,5 +411,29 @@ class GeoDir_Post_types {
 		return $post_types;
 	}
 
+	public static function sanitize_menu_icon( $icon ) {
+		if ( empty( $icon ) ) {
+			return NULL;
+		}
+
+		if ( strpos( $icon, 'dashicons-' ) === false ) {
+			$icon = 'dashicons-' . $icon;
+		}
+
+		return $icon;
+	}
+
+	/**
+	 * Check a post type's support for a given feature.
+	 *
+	 * @param string $post_type The post type being checked.
+	 * @param string $feature   The feature being checked.
+	 * @param bool $default     Default value.
+	 * @return bool Whether the post type supports the given feature.
+	 */
+	public static function supports( $post_type, $feature, $default = true ) {
+		return apply_filters( 'geodir_post_type_supports', $default, $post_type, $feature );
+	}
+
 }
 GeoDir_Post_types::init();

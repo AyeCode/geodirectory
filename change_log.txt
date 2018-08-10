@@ -2,7 +2,7 @@ v2.0.0.22
 Business hours not taking into account daylight savings time (DST) - FIXED
 Inline quick save resets the location to default - FIXED
 Problems with permalinks that have no trialing slash - FIXED
-Add category font icon & font icon color values in api response - ADDED
+Added category font icon & font icon color values in api response - ADDED
 
 v2.0.0.21
 Some dummy category icons not updated to FA5 - FIXED

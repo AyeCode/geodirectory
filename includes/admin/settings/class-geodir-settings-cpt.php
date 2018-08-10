@@ -176,8 +176,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$post_type_values['meta_title'] = ( ! empty( $post_type_option['seo']['meta_title'] ) ? $post_type_option['seo']['meta_title'] : '' );
 			$post_type_values['meta_description'] = ( ! empty( $post_type_option['seo']['meta_description'] ) ? $post_type_option['seo']['meta_description'] : '' );
 
-//			print_r( $post_type_values );
-
 			// we need to trick the settings to show the current values
 			$settings  = apply_filters( "geodir_cpt_settings_{$post_type}", array(
 
@@ -244,13 +242,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 				array(
 					'name'     => __( 'Menu icon', 'geodirectory' ),
-					'desc'     => __( 'The image to be used as the menu icon (16px x 16px recommended)', 'geodirectory' ),
+					'desc'     => __( 'The icon to be used in the admin menu from the post type.', 'geodirectory' ),
+					'class'    => 'geodir-select',
 					'id'       => 'menu_icon',
-					'type'     => 'image',
-					'default'  => '',
+					'type'     => 'dashicon',
+					'default'  => 'admin-site',
 					'desc_tip' => true,
 					'advanced' => true,
-					'value'	   => $post_type_values['menu_icon']
+					'value'	   => $post_type_values['menu_icon'],
+					'custom_attributes' => array(
+						'data-dashicons' => true
+					)
 				),
 
 				array(
@@ -635,7 +637,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['seo']['meta_title'] = isset($raw['meta_title']) && $raw['meta_title'] ? sanitize_text_field($raw['meta_title']) : '';
 			$output[$post_type]['seo']['meta_description'] = isset($raw['meta_description']) && $raw['meta_description'] ? sanitize_text_field($raw['meta_description']) : '';
 
-			$output[$post_type]['menu_icon'] = !empty( $raw['menu_icon'] ) ? $raw['menu_icon'] : 'dashicons-admin-post';
+			$output[$post_type]['menu_icon'] = !empty( $raw['menu_icon'] ) ? GeoDir_Post_types::sanitize_menu_icon( $raw['menu_icon'] ) : 'dashicons-admin-post';
 			$output[$post_type]['default_image'] = !empty( $raw['default_image'] ) ? $raw['default_image'] : '';
 
 			return apply_filters('geodir_save_post_type', $output, $post_type, $raw);

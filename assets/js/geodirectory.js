@@ -677,7 +677,7 @@ function geodir_resize_rating_stars(re) {
 }
 
 function geodir_load_search_form(stype, el) {
-    var $adv_show = jQuery(el).closest('.geodir_advance_search_widget').attr('data-show-adv');
+    var $adv_show = jQuery(el).closest('.geodir-search-container').attr('data-show-adv');
 
     jQuery.ajax({
         url: geodir_params.ajax_url,
@@ -693,7 +693,7 @@ function geodir_load_search_form(stype, el) {
         },
         success: function(data, textStatus, xhr) {
             // replace whole form
-            jQuery(el).closest('.geodir_advance_search_widget').html(data);
+            jQuery(el).closest('.geodir-search-container').html(data);
 
             geodir_setup_search_form();
             // trigger a custom event wen setting up the search form so we can hook to it from addons

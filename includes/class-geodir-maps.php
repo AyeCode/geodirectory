@@ -225,13 +225,9 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		global $cat_count, $geodir_cat_icons;
 
 		$exclude_categories 	= geodir_get_option( 'exclude_cat_on_map', array() );
-		$exclude_categories_new = geodir_get_option( 'geodir_exclude_cat_on_map_upgrade' );
 
-		// check if exclude categories saved before fix of categories identical names
-		if ($exclude_categories_new) {
-			$gd_cat_taxonomy = isset($cat_taxonomy[0]) ? $cat_taxonomy[0] : '';
-			$exclude_categories = !empty($exclude_categories[$gd_cat_taxonomy]) && is_array($exclude_categories[$gd_cat_taxonomy]) ? array_unique($exclude_categories[$gd_cat_taxonomy]) : array();
-		}
+		$gd_cat_taxonomy = isset($cat_taxonomy[0]) ? $cat_taxonomy[0] : '';
+		$exclude_categories = !empty($exclude_categories[$gd_cat_taxonomy]) && is_array($exclude_categories[$gd_cat_taxonomy]) ? array_unique($exclude_categories[$gd_cat_taxonomy]) : array();
 
 		$exclude_cat_str = implode(',', $exclude_categories);
 
@@ -240,9 +236,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		}
 
 		$cat_terms = get_terms( array( 'taxonomy' => $cat_taxonomy, 'parent' => $cat_parent, 'exclude' => $exclude_cat_str, 'hide_empty ' => $hide_empty ) );
-
-//		print_r( $cat_terms );echo '###';
-
+		
 		if ($hide_empty) {
 			$cat_terms = geodir_filter_empty_terms($cat_terms);
 		}
