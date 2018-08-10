@@ -22,6 +22,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public $options;
 		public $base_id;
 		public $arguments = array();
+		public $instance = array();
 		private $class_name;
 
 		/**
@@ -712,6 +713,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public function argument_values( $instance ) {
 			$argument_values = array();
 
+			// set widget instance
+			$this->instance = $instance;
+
 			if ( empty( $this->arguments ) ) {
 				$this->arguments = $this->get_arguments();
 			}
@@ -754,7 +758,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$this->arguments =  $this->set_arguments();
 			}
 
-			$this->arguments = apply_filters('wp_super_duper_arguments',$this->arguments,$this->options);
+			$this->arguments = apply_filters('wp_super_duper_arguments',$this->arguments,$this->options, $this->instance);
 			$this->arguments = $this->add_name_from_key( $this->arguments, true );
 
 
@@ -1356,6 +1360,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function form( $instance ) {
 
+			// set widget instance
+			$this->instance = $instance;
 
 			// set it as a SD widget
 			echo $this->widget_advanced_toggle();
@@ -1632,6 +1638,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 //			exit;
 			//save the widget
 			$instance = array_merge( (array) $old_instance, (array) $new_instance );
+
+			// set widget instance
+			$this->instance = $instance;
 
 			if(empty($this->arguments)){
 				$this->get_arguments();

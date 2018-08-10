@@ -232,11 +232,11 @@ class GeoDir_SEO {
 			}
 		}elseif(geodir_is_page( 'archive' )){self::$gd_page = 'archive';
 			$queried_object = get_queried_object();
-			if(isset($queried_object->taxonomy) && $queried_object->taxonomy == 'gd_placecategory'){
+			if(isset($queried_object->taxonomy) && geodir_taxonomy_type($queried_object->taxonomy) == 'category' && geodir_is_gd_taxonomy($queried_object->taxonomy)){
 				self::$title = !empty($gd_settings['seo_cat_archive_title']) ? $gd_settings['seo_cat_archive_title'] : GeoDir_Defaults::seo_cat_archive_title();
 				self::$meta_title = !empty($gd_settings['seo_cat_archive_meta_title']) ? $gd_settings['seo_cat_archive_meta_title'] : GeoDir_Defaults::seo_cat_archive_meta_title();
 				self::$meta_description = !empty($gd_settings['seo_cat_archive_meta_description']) ? $gd_settings['seo_cat_archive_meta_description'] : GeoDir_Defaults::seo_cat_archive_meta_description();
-			}elseif(isset($queried_object->taxonomy) && $queried_object->taxonomy == 'gd_place_tags'){
+			}elseif(isset($queried_object->taxonomy) && geodir_taxonomy_type($queried_object->taxonomy) == 'tag' && geodir_is_gd_taxonomy($queried_object->taxonomy)){
 				self::$title = !empty($gd_settings['seo_tag_archive_title']) ? $gd_settings['seo_tag_archive_title'] : GeoDir_Defaults::seo_tag_archive_title();
 				self::$meta_title = !empty($gd_settings['seo_tag_archive_meta_title']) ? $gd_settings['seo_tag_archive_meta_title'] : GeoDir_Defaults::seo_tag_archive_meta_title();
 				self::$meta_description = !empty($gd_settings['seo_tag_archive_meta_description']) ? $gd_settings['seo_tag_archive_meta_description'] : GeoDir_Defaults::seo_tag_archive_meta_description();
