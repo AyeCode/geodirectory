@@ -236,9 +236,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		}
 
 		$cat_terms = get_terms( array( 'taxonomy' => $cat_taxonomy, 'parent' => $cat_parent, 'exclude' => $exclude_cat_str, 'hide_empty ' => $hide_empty ) );
-
-//		print_r( $cat_terms );echo '###';
-
+		
 		if ($hide_empty) {
 			$cat_terms = geodir_filter_empty_terms($cat_terms);
 		}
