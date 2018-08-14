@@ -261,7 +261,7 @@ class GeoDir_Admin_Upgrade {
 			'email_admin_post_edit_body' => get_option( 'geodir_post_edited_email_content_admin' ),
 			'default_location' => get_option( 'geodir_default_location' ),
 			'map_language' => get_option( 'geodir_default_map_language' ),
-			'gd_term_icons' => get_option( 'gd_term_icons' ),
+			'gd_term_icons' => '', // force rebuild terms icon on upgrade
 			'upload_max_filesize' => get_option( 'geodir_upload_max_filesize' ),
 			'search_word_limit' => get_option( 'geodir_search_word_limit' ),
 			'email_bcc_user_publish_post' => get_option( 'geodir_bcc_listing_published' ),

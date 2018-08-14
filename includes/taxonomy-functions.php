@@ -562,7 +562,7 @@ function geodir_is_gd_taxonomy( $taxonomy ) {
         return false;
     }
     
-    if ( strpos( $taxonomy, 'gd_' ) !== 0 ) {
+    if ( ! geodir_taxonomy_type( $taxonomy ) ) {
         return false;
     }
     
