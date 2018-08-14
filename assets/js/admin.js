@@ -108,6 +108,9 @@ jQuery(window).load(function() {
 
     // init helper tags
     geodir_init_helper_tags();
+
+    setTimeout(function(){geodir_admin_init_rating_input();}, 200);
+
 });
 
 /**
@@ -1266,4 +1269,70 @@ function geodir_osm_autocomplete_search() {
     } catch (err) {
 		console.log(err.message);
     }
+}
+
+/**
+ * Init the rating inputs.
+ */
+function geodir_admin_init_rating_input(){
+    /**
+     * Rating script for ratings inputs.
+     * @info This is shared in both post.js and admin.js any changes shoudl be made to both.
+     */
+    jQuery(".gd-rating-input").each(function () {
+
+        $total = jQuery(this).find('.gd-rating-foreground > svg, .gd-rating-foreground > img').length;
+        $parent = this;
+
+        console.log($total);
+
+        // set the current star value and text
+        $value = jQuery(this).closest('.gd-rating-input').find('input').val();
+        if($value > 0){
+            jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground').width( $value / $total * 100 + '%');
+            jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text( jQuery(this).closest('.gd-rating-input').find('svg'+':eq('+ ($value - 1) +'), img'+':eq('+ ($value - 1) +')').attr("title"));
+        }
+
+        // loop all rating stars
+        jQuery(this).find('svg, img').each(function (index) {
+            $original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();
+            $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > svg, .gd-rating-foreground > svg').length;
+            $original_percent = $original_rating / $total * 100;
+            $rating_set = false;
+
+            jQuery(this).hover(
+                function () {
+                    $percent = 0;
+                    $rating = index + 1;
+                    $rating_text = jQuery(this).attr("title");
+                    $original_rating_text = jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text();
+                    $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > svg, .gd-rating-foreground > img').length;
+                    if ($rating > $total) {
+                        $rating = $rating - $total;
+                    }
+                    $percent = $rating / $total * 100;
+                    jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground').width($percent + '%');
+                    jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text($rating_text);
+                },
+                function () {
+                    if (!$rating_set) {
+                        jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground').width($original_percent + '%');
+                        jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text($original_rating_text);
+                    } else {
+                        $rating_set = false;
+                    }
+                }
+            );
+
+            jQuery(this).click(function () {
+                $original_percent = $percent;
+                $original_rating = $rating;
+                jQuery(this).closest('.gd-rating-input').find('input').val($rating);
+                jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text($rating_text);
+                $rating_set = true;
+            });
+
+        });
+
+    });
 }
