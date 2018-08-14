@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.22\n"
+"Project-Id-Version: GeoDirectory 2.0.0.23\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-09 16:15+0100\n"
-"PO-Revision-Date: 2018-08-09 16:15+0100\n"
+"POT-Creation-Date: 2018-08-14 12:35+0100\n"
+"PO-Revision-Date: 2018-08-14 12:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -5944,7 +5944,7 @@ msgid "Tab content:"
 msgstr ""
 
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:51
-#: includes/libraries/wp-super-duper.php:178
+#: includes/libraries/wp-super-duper.php:179
 msgid "Add Shortcode"
 msgstr ""
 
@@ -7726,7 +7726,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:791
+#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:836
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -7773,36 +7773,36 @@ msgstr ""
 msgid "Reply"
 msgstr ""
 
-#: includes/class-geodir-comments.php:655
+#: includes/class-geodir-comments.php:671
 #, php-format
 msgid "%d star rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:655
+#: includes/class-geodir-comments.php:671
 msgid "No rating yet!"
 msgstr ""
 
-#: includes/class-geodir-comments.php:703
+#: includes/class-geodir-comments.php:719
 msgid "Select a rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:735
+#: includes/class-geodir-comments.php:751
 msgid "Terrible"
 msgstr ""
 
-#: includes/class-geodir-comments.php:736
+#: includes/class-geodir-comments.php:752
 msgid "Poor"
 msgstr ""
 
-#: includes/class-geodir-comments.php:737
+#: includes/class-geodir-comments.php:753
 msgid "Average"
 msgstr ""
 
-#: includes/class-geodir-comments.php:738
+#: includes/class-geodir-comments.php:754
 msgid "Very Good"
 msgstr ""
 
-#: includes/class-geodir-comments.php:739
+#: includes/class-geodir-comments.php:755
 msgid "Excellent"
 msgstr ""
 
@@ -8193,33 +8193,41 @@ msgstr ""
 msgid "No post_id or file url, file insert failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:364
+#: includes/class-geodir-media.php:365
 msgid "Failed to insert file info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:449
+#: includes/class-geodir-media.php:450
 msgid "No image_id, post_id or image url, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:503
+#: includes/class-geodir-media.php:504
 msgid "Failed to update image info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:779
+#: includes/class-geodir-media.php:606
+msgid "Invalid URL Provided."
+msgstr ""
+
+#: includes/class-geodir-media.php:612
+msgid "Could not create Temporary file."
+msgstr ""
+
+#: includes/class-geodir-media.php:824
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:791 includes/class-geodir-media.php:793
+#: includes/class-geodir-media.php:836 includes/class-geodir-media.php:838
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:814
+#: includes/class-geodir-media.php:859
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:832
+#: includes/class-geodir-media.php:877
 msgid "Zero size file downloaded."
 msgstr ""
 
@@ -8713,111 +8721,116 @@ msgstr ""
 msgid "Near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:434
+#: includes/class-geodir-seo.php:447
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:435
+#: includes/class-geodir-seo.php:448
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:436
+#: includes/class-geodir-seo.php:449
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:437
+#: includes/class-geodir-seo.php:450
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:438
+#: includes/class-geodir-seo.php:451
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:439
+#: includes/class-geodir-seo.php:452
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:440
+#: includes/class-geodir-seo.php:453
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:441
+#: includes/class-geodir-seo.php:454
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:442
+#: includes/class-geodir-seo.php:455
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:443
+#: includes/class-geodir-seo.php:456
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:444
+#: includes/class-geodir-seo.php:457
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:445
+#: includes/class-geodir-seo.php:458
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:446
+#: includes/class-geodir-seo.php:459
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:447
+#: includes/class-geodir-seo.php:460
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:448
+#: includes/class-geodir-seo.php:461
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:449
+#: includes/class-geodir-seo.php:462
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:450
+#: includes/class-geodir-seo.php:463
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:451
+#: includes/class-geodir-seo.php:464
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:452
+#: includes/class-geodir-seo.php:465
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:459
+#: includes/class-geodir-seo.php:472
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:460
+#: includes/class-geodir-seo.php:473
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:465
+#: includes/class-geodir-seo.php:478
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:466
+#: includes/class-geodir-seo.php:479
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:467
+#: includes/class-geodir-seo.php:480
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:488
+#: includes/class-geodir-seo.php:485
+msgid ""
+"Show any custom field by using its field key prefixed with an _underscore"
+msgstr ""
+
+#: includes/class-geodir-seo.php:506
 msgid "Click to copy"
 msgstr ""
 
-#: includes/class-geodir-template-loader.php:404
+#: includes/class-geodir-template-loader.php:407
 msgid ""
 "Sorry, this is a page template and can not be accessed from the frontend, it "
 "is used for building the layouts of GeoDirectory sections."
@@ -9547,15 +9560,15 @@ msgstr ""
 msgid "Every %d minutes"
 msgstr ""
 
-#: includes/libraries/wp-super-duper.php:153
+#: includes/libraries/wp-super-duper.php:154
 msgid "Select shortcode"
 msgstr ""
 
-#: includes/libraries/wp-super-duper.php:168
+#: includes/libraries/wp-super-duper.php:169
 msgid "Insert shortcode"
 msgstr ""
 
-#: includes/libraries/wp-super-duper.php:169
+#: includes/libraries/wp-super-duper.php:170
 msgid "Copy shortcode"
 msgstr ""
 

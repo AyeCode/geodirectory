@@ -124,7 +124,10 @@ class GeoDir_Template_Loader {
             // If no posts found on search it goes to 404 so we fake it.
             //$wp_query->found_posts = 1;
             $wp_query->is_404 = '';
-            //$wp_query->is_page = 1;
+            $wp_query->is_page = 1;
+            $wp_query->is_archive = 1;
+            $wp_query->is_search = 1;
+//            echo '###';exit;
             self::setup_archive_loop_as_page();
         }  else {
             $default_file = '';

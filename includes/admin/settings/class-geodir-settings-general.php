@@ -687,7 +687,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc' => __('Limits the search radius to X miles/km (lower numbers help with speed) ', 'geodirectory'),
 					'id' => 'search_radius',
 					'type' => 'number',
-					'default'  => '5',
+					'default'  => '7', // largest city in the world is 6.33
 					'desc_tip' => true,
 					'advanced' => false
 				),

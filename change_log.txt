@@ -1,3 +1,9 @@
+v2.0.0.23
+Search page can sometimes show no title if no results - FIXED
+Single page SEO can now use any custom field by using the field key prefixed with an _underscore eg: %%_email%% - ADDED
+Changes for Ratings and CPTs addons - CHANGED
+Media not downloading all external media urls - FIXED
+
 v2.0.0.22
 Business hours not taking into account daylight savings time (DST) - FIXED
 Inline quick save resets the location to default - FIXED

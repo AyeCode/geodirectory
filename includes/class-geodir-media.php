@@ -250,8 +250,9 @@ class GeoDir_Media {
 		$metadata = '';
 		if($is_placeholder){ // if a placeholder image, such as a image name that will be uploaded manually to the upload dir
 			$upload_dir = wp_upload_dir();
-			$file = $upload_dir['path'].'/'.basename($url);
-			$file_type = wp_check_filetype( basename($url));
+			$file = $upload_dir['subdir'].'/'.basename($url);
+			$file_type_arr = wp_check_filetype( basename($url));
+			$file_type = $file_type_arr['type'];
 		}else{
 			$post_type = get_post_type($post_id);
 			// check for revisions
@@ -272,7 +273,7 @@ class GeoDir_Media {
 				$file_type = wp_check_filetype(basename($url));
 				$upload_dir = wp_upload_dir();
 				$file = array(
-					'file'  => $upload_dir['basedir'].'/'.$metadata['file'],
+					'file'  => $upload_dir['subdir'].'/'.$metadata['file'],
 					'type'  => $file_type['type']
 				);
 
@@ -338,7 +339,7 @@ class GeoDir_Media {
 			'metadata' => maybe_serialize($metadata),
 			'type'  => $type
 		);
-
+		
 		// insert into the DB
 		$result = $wpdb->insert(
 			GEODIR_ATTACHMENT_TABLE,
@@ -526,12 +527,12 @@ class GeoDir_Media {
 		$timeout_seconds = 5;
 
 		// Download file to temp dir
-		$temp_file = download_url( $url, $timeout_seconds );
+		$temp_file = self::download_url( $url, $timeout_seconds );
 
 		if ( ! is_wp_error( $temp_file ) ) {
 
 			// make sure its an image
-			$file_type = wp_check_filetype(basename($url));
+			$file_type = wp_check_filetype(basename( parse_url( $url, PHP_URL_PATH ) ));
 
 			// Set an array containing a list of acceptable formats
 			if ( ! empty( $file_type['ext'] ) && ! empty( $file_type['type'] ) && ( in_array( '*', $allowed_file_types ) || in_array( $file_type['type'], $allowed_file_types ) || in_array( $file_type['ext'], $allowed_file_types ) ) ) {
@@ -539,7 +540,7 @@ class GeoDir_Media {
 				return false;
 			}
 
-			// Set the fiel name tot he title if it exists
+			// Set the file name tot he title if it exists
 			$_file_name = !empty($file_name) ? $file_name.".".$file_type['ext'] : basename( $url );
 
 			// Array based on $_FILE as seen in PHP file uploads
@@ -589,6 +590,50 @@ class GeoDir_Media {
 		}else{
 			return $temp_file; // WP-error
 		}
+	}
+
+	/**
+	 * Duplicate of the WP function but we allow urls with query args.
+	 *
+	 * @param $url
+	 * @param int $timeout
+	 *
+	 * @return array|bool|string|WP_Error
+	 */
+	public static function download_url($url, $timeout = 300){
+		//WARNING: The file is not automatically deleted, The script must unlink() the file.
+		if ( ! $url )
+			return new WP_Error('http_no_url', __('Invalid URL Provided.'));
+
+		$url_filename = basename( parse_url( $url, PHP_URL_PATH ) );
+
+		$tmpfname = wp_tempnam( $url_filename );
+		if ( ! $tmpfname )
+			return new WP_Error('http_no_file', __('Could not create Temporary file.'));
+
+		// WE CHANGE THIS TO LET US DOWNLOAD URLS WITH QUERY ARGS
+		$response = wp_remote_get( $url, array( 'timeout' => $timeout, 'stream' => true, 'filename' => $tmpfname ) );
+
+		if ( is_wp_error( $response ) ) {
+			unlink( $tmpfname );
+			return $response;
+		}
+
+		if ( 200 != wp_remote_retrieve_response_code( $response ) ){
+			unlink( $tmpfname );
+			return new WP_Error( 'http_404', trim( wp_remote_retrieve_response_message( $response ) ) );
+		}
+
+		$content_md5 = wp_remote_retrieve_header( $response, 'content-md5' );
+		if ( $content_md5 ) {
+			$md5_check = verify_file_md5( $tmpfname, $content_md5 );
+			if ( is_wp_error( $md5_check ) ) {
+				unlink( $tmpfname );
+				return $md5_check;
+			}
+		}
+
+		return $tmpfname;
 	}
 
 

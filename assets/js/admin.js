@@ -1209,7 +1209,7 @@ function geodir_osm_autocomplete_search() {
             jQuery('input[name="street"]', $form).autocomplete({
                 source: function(request, response) {
                     jQuery.ajax({
-                        url: (location.protocol === 'https:' ? 'https:' : 'http:') + '//nominatim.openstreetmap.org/search',
+                        url: (location.protocol === 'https:' ? 'https:' : 'https:') + '//nominatim.openstreetmap.org/search',
                         dataType: "json",
                         data: {
                             q: request.term,
