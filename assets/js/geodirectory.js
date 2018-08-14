@@ -1248,29 +1248,22 @@ function gd_init_rating_input(){
      */
     jQuery(".gd-rating-input").each(function () {
 
-        if (geodir_params.rating_type =='font-awesome') { // font awesome rating
-            //$type = 'i';
-            $type = 'svg';
-        }else{// image
-            $type = 'img';
-        }
-
-        $total = jQuery(this).find('.gd-rating-foreground > ' + $type).length;
+        $total = jQuery(this).find('.gd-rating-foreground > svg, .gd-rating-foreground > img').length;
         $parent = this;
 
         console.log($total);
 
         // set the current star value and text
-        $value = jQuery($parent).find('input').val();
+        $value = jQuery(this).closest('.gd-rating-input').find('input').val();
         if($value > 0){
-            jQuery($parent).find('.gd-rating-foreground').width( $value / $total * 100 + '%');
-            jQuery($parent).find('.gd-rating-text').text( jQuery($parent).find($type+':eq('+ ($value - 1) +')').attr("title"));
+            jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground').width( $value / $total * 100 + '%');
+            jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text( jQuery(this).closest('.gd-rating-input').find('svg, img'+':eq('+ ($value - 1) +')').attr("title"));
         }
 
         // loop all rating stars
-        jQuery(this).find($type).each(function (index) {
-            $original_rating = jQuery($parent).find('input').val();
-
+        jQuery(this).find('svg, img').each(function (index) {
+            $original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();
+            $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > svg, .gd-rating-foreground > svg').length;
             $original_percent = $original_rating / $total * 100;
             $rating_set = false;
 
@@ -1279,18 +1272,19 @@ function gd_init_rating_input(){
                     $percent = 0;
                     $rating = index + 1;
                     $rating_text = jQuery(this).attr("title");
-                    $original_rating_text = jQuery($parent).find('.gd-rating-text').text();
+                    $original_rating_text = jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text();
+                    $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > svg, .gd-rating-foreground > img').length;
                     if ($rating > $total) {
                         $rating = $rating - $total;
                     }
                     $percent = $rating / $total * 100;
-                    jQuery($parent).find('.gd-rating-foreground').width($percent + '%');
-                    jQuery($parent).find('.gd-rating-text').text($rating_text);
+                    jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground').width($percent + '%');
+                    jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text($rating_text);
                 },
                 function () {
                     if (!$rating_set) {
-                        jQuery($parent).find('.gd-rating-foreground').width($original_percent + '%');
-                        jQuery($parent).find('.gd-rating-text').text($original_rating_text);
+                        jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground').width($original_percent + '%');
+                        jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text($original_rating_text);
                     } else {
                         $rating_set = false;
                     }
@@ -1300,8 +1294,8 @@ function gd_init_rating_input(){
             jQuery(this).click(function () {
                 $original_percent = $percent;
                 $original_rating = $rating;
-                jQuery($parent).find('input').val($rating);
-                jQuery($parent).find('.gd-rating-text').text($rating_text);
+                jQuery(this).closest('.gd-rating-input').find('input').val($rating);
+                jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text($rating_text);
                 $rating_set = true;
             });
 
