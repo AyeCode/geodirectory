@@ -415,6 +415,19 @@ class GeoDir_SEO {
 
 		}
 
+		// let custom fields be used
+		if ( strpos( $string, '%%_' ) !== false ) {
+			$matches_count = preg_match_all('/%%_[^%%_]*%%/',$string,$matches);
+			if($matches_count && !empty($matches[0])){
+				$matches = $matches[0];
+				foreach($matches as $cf){
+					$field_name = str_replace(array("%%_","%%"),"",$cf);
+					$cf_value = isset($gd_post->{$field_name}) ? $gd_post->{$field_name} : geodir_get_post_meta($post->ID,$field_name,true);
+					$string     = str_replace( "%%_{$field_name}%%", $cf_value, $string );
+				}
+			}
+		}
+
 		return $string;
 	}
 
@@ -465,6 +478,11 @@ class GeoDir_SEO {
 			$vars['%%page%%'] = __('Current page number eg: page 2 of 4','geodirectory');
 			$vars['%%pagetotal%%'] = __('Total pages eg: 101','geodirectory');
 			$vars['%%pagenumber%%'] = __('Current page number eg: 99','geodirectory');
+		}
+
+		// single page
+		if($gd_page == 'single' ){
+			$vars['%%_FIELD-KEY%%'] = __('Show any custom field by using its field key prefixed with an _underscore','geodirectory');
 		}
 
 
