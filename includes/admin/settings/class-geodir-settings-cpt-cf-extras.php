@@ -83,7 +83,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			add_filter('geodir_cfa_extra_fields_file',array( $this,'file_limit'),10,4);
 
 			// post_images
-			add_filter('geodir_cfa_extra_fields_67yimages',array( $this,'file_limit'),10,4);
+			add_filter('geodir_cfa_extra_fields_images',array( $this,'file_limit'),10,4);
 
 			// price fields
 			add_filter('geodir_cfa_extra_fields_text',array( $this,'price_fields'),10,4);
