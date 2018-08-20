@@ -2,6 +2,7 @@ v2.0.0.24
 Changing CPT slug does not change the slug in the search bar for API - FIXED
 Media table added `other_id` column which can be used to filter things quickly - ADDED
 Genesis theme archive pages broken if excerpt limited - FIXED
+Favourites not showing on author page if the user is not the author - FIXED
 
 v2.0.0.23
 Search page can sometimes show no title if no results - FIXED

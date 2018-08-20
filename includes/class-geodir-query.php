@@ -526,6 +526,9 @@ class GeoDir_Query {
 
 			$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
 			if($author_id){
+
+				//echo $where.'###'.$author_id;exit;
+				$where = str_replace("AND ($wpdb->posts.post_author = $author_id)","",$where); // remove the author restriction
 				$user_favs = geodir_get_user_favourites( $author_id );
 				if(empty($user_favs)){
 					$fav_in = "''"; // blank it so we get no results
