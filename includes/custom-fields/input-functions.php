@@ -1868,11 +1868,14 @@ function  geodir_cfi_files($html,$cf){
          * @param string $listing_type The custom post type slug.
          */
         $show_image_input_box = apply_filters('geodir_file_uploader_on_add_listing', $show_image_input_box, $gd_post->post_type);
+
+
+
         if ($show_image_input_box) {
             add_thickbox();  
             ?>
 
-            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> geodir_form_row clearfix gd-fieldset-details geodir-add-files">
+            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> geodir_form_row clearfix gd-fieldset-details ">
 
                 <label for="<?php echo $id; ?>">
                     <?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
@@ -1885,44 +1888,25 @@ function  geodir_cfi_files($html,$cf){
 
                 <?php if ( $cf['is_required'] ) { ?>
                     <span class="geodir_message_error"><?php _e( $cf['required_msg'], 'geodirectory' ); ?></span>
-                <?php } ?>
+                <?php }
 
-                <div class="geodir_form_row clearfix geodir-files-dropbox" id="<?php echo $id; ?>dropbox" >
-                    <input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $files; ?>"
-                           class="<?php if ( $cf['is_required'] ) {
-                               echo 'gd_image_required_field';
-                           } ?>"/>
-                    <input type="hidden" name="<?php echo $id; ?>image_limit" id="<?php echo $id; ?>image_limit" value="<?php echo $image_limit; ?>"/>
-                    <input type="hidden" name="<?php echo $id; ?>totImg" id="<?php echo $id; ?>totImg" value="<?php echo $total_files; ?>"/>
-                    <?php if ($allowed_file_types != '') { ?>
-                        <input type="hidden" name="<?php echo $id; ?>_allowed_types" id="<?php echo $id; ?>_allowed_types" value="<?php echo esc_attr($allowed_file_types); ?>" data-exts="<?php echo esc_attr($display_file_types);?>"/>
-                    <?php } ?>
 
-                    <div class="plupload-upload-uic hide-if-no-js <?php if ( $multiple ){echo "plupload-upload-uic-multiple";} ?>" id="<?php echo $id; ?>plupload-upload-ui">
-                        <div class="geodir-dropbox-title"><?php _e( 'Drop files here <small>or</small>', 'geodirectory' ); ?></div>
-                        <input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php esc_attr_e( 'Select Files', 'geodirectory' ); ?>" class="geodir_button"/>
-                        <div class="geodir-dropbox-file-types"><?php echo ( $display_file_types != '' ? __('Allowed file types:', 'geodirectory') . ' ' . $display_file_types : '' );?></div>
-                        <div class="geodir-dropbox-file-limit">
-                            <?php if ( $image_limit == 1 ) {
-                                echo '(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'file', 'geodirectory' ) . ')';
-                            } ?>
-                            <?php if ( $image_limit > 1 ) {
-                                echo '(' . __( 'You can upload', 'geodirectory' ) . ' ' . $image_limit . ' ' . __( 'files', 'geodirectory' ) . ')';
-                            } ?>
-                            <?php if ( $image_limit == '' ) {
-                                echo '(' . __( 'You can upload unlimited files with this package', 'geodirectory' ) . ')';
-                            } ?>
-                        </div>
-                        <span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce( $id . 'pluploadan' ); ?>"></span>
-                        <div class="filelist"></div>
-                    </div>
+                // params for file upload
+                $is_required = $cf['is_required'];
 
-                    <div class="plupload-thumbs <?php if ( $multiple ){echo "plupload-thumbs-multiple";} ?> clearfix" id="<?php echo $id; ?>plupload-thumbs"></div>
-                    <span id="upload-msg"><?php _e( 'Please drag &amp; drop the files to rearrange the order', 'geodirectory' ); ?></span>
-                    <span id="<?php echo $id; ?>upload-error" style="display:none"></span>
-                    <span style="display: none" id="gd-image-meta-input" class="lity-hide lity-show"></span>
-                </div>
-                <?php if ($cf['is_required']) { ?>
+                // the file upload template
+                echo geodir_get_template_html( "file-upload.php", array(
+                    'id'                  => $id,
+                    'is_required'         => $is_required,
+                    'files'	              => $files,
+                    'image_limit'         => $image_limit,
+                    'total_files'         => $total_files,
+                    'allowed_file_types'  => $allowed_file_types,
+                    'display_file_types'  => $display_file_types,
+                    'multiple'            => $multiple,
+                ) );
+
+                if ($cf['is_required']) { ?>
                     <span class="geodir_message_error"><?php esc_attr_e($cf['required_msg'], 'geodirectory'); ?></span>
                 <?php } ?>
             </div>

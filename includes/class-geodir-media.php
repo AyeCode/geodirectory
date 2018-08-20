@@ -240,7 +240,7 @@ class GeoDir_Media {
 	 *
 	 * @return array|WP_Error
 	 */
-	public static function insert_attachment($post_id,$type = 'file',$url,$title = '', $caption = '', $order = '', $is_approved = 1,$is_placeholder = false){
+	public static function insert_attachment($post_id,$type = 'file',$url,$title = '', $caption = '', $order = '', $is_approved = 1,$is_placeholder = false,$other_id = ''){
 		global $wpdb;
 
 		// check we have what we need
@@ -337,7 +337,8 @@ class GeoDir_Media {
 			'featured' => $order === 0 ? 1 : 0,
 			'is_approved' => $is_approved,
 			'metadata' => maybe_serialize($metadata),
-			'type'  => $type
+			'type'  => $type,
+			'other_id' => $other_id
 		);
 		
 		// insert into the DB
@@ -356,7 +357,8 @@ class GeoDir_Media {
 				'%d',
 				'%d',
 				'%s',
-				'%s'
+				'%s',
+				'%d'
 			)
 		);
 
@@ -442,7 +444,7 @@ class GeoDir_Media {
      *
      * @return array|null|object|void|WP_Error
      */
-	public static function update_attachment($file_id, $post_id,$field,$file_url,$file_title = '', $file_caption = '', $order = '',$is_approved = '1'){
+	public static function update_attachment($file_id, $post_id,$field,$file_url,$file_title = '', $file_caption = '', $order = '',$is_approved = '1',$other_id = ''){
 		global $wpdb;
 
 		// check we have what we need
@@ -478,24 +480,33 @@ class GeoDir_Media {
 			}
 		}
 
+		$data = array(
+			'title' => $file_title,
+			'caption' => $file_caption,
+			'menu_order' => $order,
+			'featured' => $order === 0 && $field=='post_images' ? 1 : 0,
+			'is_approved' => $is_approved,
+		);
+
+		$format = array(
+			'%s',
+			'%s',
+			'%d',
+			'%d',
+			'%d'
+		);
+
+		if($other_id){
+			$data['other_id'] = $other_id;
+			$format[] = '%d';
+		}
+
 		// insert into the DB
 		$result = $wpdb->update(
 			GEODIR_ATTACHMENT_TABLE,
-			array(
-				'title' => $file_title,
-				'caption' => $file_caption,
-				'menu_order' => $order,
-				'featured' => $order === 0 && $field=='post_images' ? 1 : 0,
-				'is_approved' => $is_approved,
-			),
+			$data,
 			array('ID' => $file_id),
-			array(
-				'%s',
-				'%s',
-				'%d',
-				'%d',
-				'%d'
-			)
+			$format
 		);
 
 
@@ -674,11 +685,11 @@ class GeoDir_Media {
 	 *
 	 * @return array|null|object
 	 */
-	public static function get_attachments_by_type($post_id,$type = 'post_images',$limit = '',$revision_id =''){
+	public static function get_attachments_by_type($post_id,$type = 'post_images',$limit = '',$revision_id ='',$other_id = ''){
 		global $wpdb;
 
 		// check for cache
-		$cache = wp_cache_get( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id, 'gd_attachments_by_type' );
+		$cache = wp_cache_get( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id.$other_id, 'gd_attachments_by_type' );
 		if($cache !== false){
 			return $cache;
 		}
@@ -687,23 +698,30 @@ class GeoDir_Media {
 		$sql_args = array();
 		$sql_args[] = $type;
 		$sql_args[] = $post_id;
+		$other_id_sql = '';
 		
 		if($limit){
 			$limit_sql = ' LIMIT %d ';
 			$limit = absint($limit);
 		}
+
+		if($other_id){
+			$other_id_sql = ' AND other_id = %d ';
+			$other_id  = absint($other_id);
+			$sql_args[] = $other_id;
+		}
 		if($revision_id ){
 			$sql_args[] = $revision_id;
 			if($limit){$sql_args[] = $limit;}
-			$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id IN (%d,%d)  ORDER BY menu_order $limit_sql",$sql_args));
+			$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id IN (%d,%d) $other_id_sql ORDER BY menu_order $limit_sql",$sql_args));
 			// set cache
-			wp_cache_set( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id, $results, 'gd_attachments_by_type' );
+			wp_cache_set( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id.$other_id, $results, 'gd_attachments_by_type' );
 			return $results;
 		}else{
 			if($limit){$sql_args[] = $limit;}
-			$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id = %d ORDER BY menu_order $limit_sql",$sql_args));
+			$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id = %d $other_id_sql ORDER BY menu_order $limit_sql",$sql_args));
 			// set cache
-			wp_cache_set( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id, $results, 'gd_attachments_by_type' );
+			wp_cache_set( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id.$other_id, $results, 'gd_attachments_by_type' );
 			return $results;
 		}
 	}
@@ -731,8 +749,8 @@ class GeoDir_Media {
 	 *
 	 * @return string
 	 */
-	public static function get_field_edit_string($post_id,$field,$revision_id = ''){
-		$files = self::get_attachments_by_type($post_id,$field,'',$revision_id );
+	public static function get_field_edit_string($post_id,$field,$revision_id = '',$other_id = ''){
+		$files = self::get_attachments_by_type($post_id,$field,'',$revision_id,$other_id );
 
 		if(!empty($files)){
 			$wp_upload_dir = wp_upload_dir();
