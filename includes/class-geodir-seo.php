@@ -417,7 +417,7 @@ class GeoDir_SEO {
 
 		// let custom fields be used
 		if ( strpos( $string, '%%_' ) !== false ) {
-			$matches_count = preg_match_all('/%%_[^%%_]*%%/',$string,$matches);
+			$matches_count = preg_match_all('/%%_[^%%]*%%/',$string,$matches);
 			if($matches_count && !empty($matches[0])){
 				$matches = $matches[0];
 				foreach($matches as $cf){

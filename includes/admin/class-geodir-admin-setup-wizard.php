@@ -421,17 +421,21 @@ class GeoDir_Admin_Setup_Wizard {
 	public function google_maps_api_check(){
 		//maps_api
 
+		$display = "display: none;";
 		$maps_api = geodir_get_option('maps_api');
 		if($maps_api=='auto' || $maps_api=='google'){
 			$maps_api_key = geodir_get_option('google_maps_api_key');
-			if(empty($maps_api_key)){
+			if($maps_api=='google' && empty($maps_api_key)){
+				$message = esc_html__( 'You have not set a Google Maps API key, please press the back button in your browser and add a key otherwise Open Street Maps (OSM) will be used instead.', 'geodirectory' );
+				$display = '';
+			}elseif(empty($maps_api_key)){
 				$message = esc_html__( 'You have not set a Google Maps API key, please press the back button in your browser and add a key.', 'geodirectory' );
 			}else{
 				$message = esc_html__( 'There is a problem with the Google Maps API key you have set, please press the back button in your browser and add a valid key.', 'geodirectory' );
 			}
 
 		?>
-		<p class="gd-google-api-error" style="display: none;">
+		<p class="gd-google-api-error" style="<?php echo $display;?>">
 			<?php echo '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i> '.$message; ?>
 		</p>
 		<script>
