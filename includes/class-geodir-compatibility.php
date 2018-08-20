@@ -61,10 +61,24 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_filter('wp_easy_updates_api_params',array(__CLASS__,'wp_easy_updates'),10, 2);
 
+		/*######################################################
+		Genesis (theme) :: Fix archive pages excerpt.
+		######################################################*/
+		add_filter('genesis_pre_get_option_content_archive',array(__CLASS__,'genesis_content_archive'));
+
 
 		// after_setup_theme checks
 		add_action( 'after_setup_theme', array(__CLASS__,'for_later_checks') );
 
+	}
+
+	public static function genesis_content_archive($val){
+
+		if(geodir_is_page('archive') || geodir_is_page('post_type')){
+			$val = 'excerpts';
+		}
+
+		return $val;
 	}
 
 	/**

@@ -930,7 +930,7 @@ function geodir_search_form_post_type_input() {
 	}elseif ( ! empty( $post_types ) ) {
 		$pt_arr = (array)$post_types;
 		$key = key( $pt_arr);
-		$pt_arr = (array)$pt_arr[$key];
+		$pt_arr = $pt_arr[$key];
 		$pt_slug = isset($pt_arr->rewrite->slug) ? esc_attr($pt_arr->rewrite->slug) : 'places';
 		echo '<input type="hidden" name="stype" value="gd_place" data-slug="'.$pt_slug.'" />';
 	}

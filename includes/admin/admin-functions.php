@@ -26,6 +26,7 @@ function geodir_get_screen_ids() {
 		'geodirectory_page_gd-settings',
 		'geodirectory_page_gd-status',
 		'geodirectory_page_gd-addons',
+		'comment'
 	);
 
 

@@ -10,6 +10,7 @@ body { // wrapping ina  body tag makes rules more specific
 			padding: 20px 0 0 0;
 			clear: both;
 			font-size: 12px;
+			list-style: none !important;
 		}
 
 		li {
@@ -278,6 +279,7 @@ body { // wrapping ina  body tag makes rules more specific
 			border: 1px solid #eee;
 			border-right: none;
 			margin: 0;
+			list-style: none !important;
 
 			&:first-child{
 				border-top-left-radius: 4px;
