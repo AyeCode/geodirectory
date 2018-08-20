@@ -35,6 +35,10 @@ class GeoDir_Maps {
 	 */
 	public static function active_map() {
 		$active_map = geodir_get_option( 'maps_api', 'google' );
+
+		if(($active_map =='google' || $active_map =='auto') && !geodir_get_option( 'google_maps_api_key' )){
+			$active_map = 'osm';
+		}
 		
 		if ( ! in_array( $active_map, array( 'none', 'auto', 'google', 'osm' ) ) ) {
 			$active_map = 'auto';

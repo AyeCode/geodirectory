@@ -42,15 +42,40 @@ class GeoDir_Permalinks {
 		// post (single) url filter
 		add_filter( 'post_type_link', array( $this, 'post_url'), 0, 4);
 
-
-
 		// search page rewrite rules
 		add_action('init', array( $this, 'insert_rewrite_rules'), 20,0);
 
 
+		// make child cat not contain parent cat url
+		add_filter('term_link', array($this,'term_url_no_parent'), 9, 3);
+
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
 //		add_action('init', array( $this, 'temp_check_rules'),10000000000);
+	}
+
+	/**
+	 * Remove the parent slug from the term link.
+	 * 
+	 * @param $termlink
+	 * @param $term
+	 * @param $taxonomy
+	 *
+	 * @return mixed
+	 */
+	public function term_url_no_parent($termlink, $term, $taxonomy){
+		$geodir_taxonomies = GeoDir_Taxonomies::get_taxonomies('', true);
+
+		if (!empty($term->parent) && isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy, $geodir_taxonomies)) {
+			//print_r($term);
+			$parent = get_term( $term->parent, $taxonomy );
+			$parent_slug = isset($parent->slug) ? $parent->slug : '';
+			if($parent_slug){
+				$termlink = str_replace("$parent_slug/","",$termlink);
+			}
+		}
+
+		return $termlink;
 	}
 
 	// @todo remove after testing

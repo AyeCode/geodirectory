@@ -344,6 +344,11 @@ class GeoDir_Post_types {
 				// force support post revisions
 				$args['supports'][] = 'revisions';
 
+				// force to show above GD main menu item
+				$args['show_ui'] = true;
+				$args['show_in_menu'] = true;
+				$args['menu_position'] = 55;
+
 				/**
 				 * Filter post type args.
 				 *
@@ -352,6 +357,8 @@ class GeoDir_Post_types {
 				 * @param string $post_type The post type.
 				 */
 				$args = apply_filters('geodir_post_type_args', $args, $post_type);
+
+				//print_r($args);
 
 				register_post_type($post_type, $args);
 

@@ -273,7 +273,7 @@ class GeoDir_Media {
 				$file_type = wp_check_filetype(basename($url));
 				$upload_dir = wp_upload_dir();
 				$file = array(
-					'file'  => $upload_dir['subdir'].'/'.$metadata['file'],
+					'file'  => $upload_dir['subdir'].'/'.basename($metadata['file']),
 					'type'  => $file_type['type']
 				);
 
@@ -318,7 +318,7 @@ class GeoDir_Media {
 
 			// pre slash the file path
 			if(!empty($file['file'])){
-				$file['file'] = "/"._wp_relative_upload_path($file['file']);
+				$file['file'] =  strrev ( trailingslashit( strrev ( _wp_relative_upload_path($file['file']) ) ) );
 			}
 
 			$file_type = $file['type'];
