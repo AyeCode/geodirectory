@@ -457,6 +457,8 @@ class GeoDir_Admin_Setup_Wizard {
 		$settings = $generalSettings->get_settings('location');
 		GeoDir_Admin_Settings::save_fields( $settings );
 
+		do_action( 'geodir_setup_wizard_default_location_saved', $settings );
+
 		wp_redirect( esc_url_raw( $this->get_next_step_link() ) );
 		exit;
 	}
