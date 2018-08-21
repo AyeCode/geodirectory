@@ -48,8 +48,9 @@ class GeoDir_Admin_Settings {
 
 			include_once( dirname( __FILE__ ) . '/settings/class-geodir-settings-page.php' );
 
+			$post_type = isset($_REQUEST['post_type']) ? sanitize_title($_REQUEST['post_type']) : '';
 			// CPT Settings
-			if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-cpt-settings'){
+			if(isset($_REQUEST['page']) && $_REQUEST['page']==$post_type.'-settings'){
 				//$settings[] = include( 'settings/class-geodir-settings-cpt-cf.php' );
 				$settings[] = include( 'settings/class-geodir-settings-cpt-sorting.php' );
 				$settings[] = include( 'settings/class-geodir-settings-cpt-tabs.php' );

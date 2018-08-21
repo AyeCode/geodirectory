@@ -38,7 +38,7 @@ function geodir_get_screen_ids() {
 			$screen_ids[] = 'edit-' . $post_type; // CPT view screen
 			$screen_ids[] = 'edit-' . $post_type . '_tags'; // CPT tags screen
 			$screen_ids[] = 'edit-' . $post_type . 'category'; // CPT category screen
-			$screen_ids[] = $post_type . '_page_gd-cpt-settings'; // CPT settings page
+			$screen_ids[] = $post_type . '_page_'.$post_type.'-settings'; // CPT settings page
 		}
 	}
 

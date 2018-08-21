@@ -70,7 +70,7 @@ class GeoDir_Admin_Menus {
 			foreach($post_types as $name => $cpt){
 				//echo '###'.$name;
 				//print_r($cpt);
-				add_submenu_page('edit.php?post_type='.$name, __('Settings', 'geodirectory'), __('Settings', 'geodirectory'), 'manage_options', 'gd-cpt-settings', array( $this, 'settings_page' ) );
+				add_submenu_page('edit.php?post_type='.$name, __('Settings', 'geodirectory'), __('Settings', 'geodirectory'), 'manage_options', $name.'-settings', array( $this, 'settings_page' ) );
 			}
 		}
 	}
