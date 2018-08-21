@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.23\n"
+"Project-Id-Version: GeoDirectory 2.0.0.24\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-14 12:35+0100\n"
-"PO-Revision-Date: 2018-08-14 12:35+0100\n"
+"POT-Creation-Date: 2018-08-21 17:08+0100\n"
+"PO-Revision-Date: 2018-08-21 17:08+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -421,13 +421,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:244
 #: includes/admin/class-geodir-admin-addons.php:286
-#: includes/admin/class-geodir-admin-setup-wizard.php:659
+#: includes/admin/class-geodir-admin-setup-wizard.php:665
 msgid "Installed"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:247
 #: includes/admin/class-geodir-admin-addons.php:287
-#: includes/admin/class-geodir-admin-setup-wizard.php:774
+#: includes/admin/class-geodir-admin-setup-wizard.php:780
 #: includes/admin/views/html-admin-page-addons.php:123
 msgid "Install"
 msgstr ""
@@ -443,7 +443,7 @@ msgid "Buy now"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:288
-#: includes/admin/class-geodir-admin-setup-wizard.php:660
+#: includes/admin/class-geodir-admin-setup-wizard.php:666
 msgid "Installing"
 msgstr ""
 
@@ -645,8 +645,8 @@ msgid "Data Type"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:404
-#: includes/admin/class-geodir-admin-setup-wizard.php:488
-#: includes/admin/class-geodir-admin-setup-wizard.php:540
+#: includes/admin/class-geodir-admin-setup-wizard.php:494
+#: includes/admin/class-geodir-admin-setup-wizard.php:546
 #: includes/admin/diagnostic-functions.php:42
 msgid "Action"
 msgstr ""
@@ -734,7 +734,6 @@ msgstr ""
 #: includes/class-geodir-post-data.php:675
 #: includes/widgets/class-geodir-widget-ninja-forms.php:203 language.php:37
 #: language.php:62 language.php:154 language.php:175
-#: templates/popup-forms.php:65
 msgid "Email"
 msgstr ""
 
@@ -1274,30 +1273,30 @@ msgstr ""
 msgid "GD Details"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:794
+#: includes/admin/class-geodir-admin-install.php:795
 msgid "View GeoDirectory settings"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:810
+#: includes/admin/class-geodir-admin-install.php:811
 msgid "View GeoDirectory documentation"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:811
+#: includes/admin/class-geodir-admin-install.php:812
 msgid "Visit GeoDirectory support"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:812
+#: includes/admin/class-geodir-admin-install.php:813
 msgid "View translations"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:991
+#: includes/admin/class-geodir-admin-install.php:992
 #, php-format
 msgid ""
 "%1$s could not be installed (%2$s). <a href=\"%3$s\">Please install it "
 "manually by clicking here.</a>"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:1017
+#: includes/admin/class-geodir-admin-install.php:1018
 #, php-format
 msgid ""
 "%1$s was installed but could not be activated. <a href=\"%2$s\">Please "
@@ -1537,8 +1536,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:344
 #: includes/admin/class-geodir-admin-post-view.php:347
-#: includes/custom-fields/input-functions.php:1907
-#: includes/custom-fields/input-functions.php:1910
+#: templates/file-upload.php:43 templates/file-upload.php:46
 msgid "You can upload"
 msgstr ""
 
@@ -1559,7 +1557,7 @@ msgid "Drop files to upload"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:378
-#: includes/custom-fields/input-functions.php:1903
+#: templates/file-upload.php:38
 msgid "Select Files"
 msgstr ""
 
@@ -1683,8 +1681,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:335
 #: includes/admin/class-geodir-admin-setup-wizard.php:407
-#: includes/admin/class-geodir-admin-setup-wizard.php:613
-#: includes/admin/class-geodir-admin-setup-wizard.php:775
+#: includes/admin/class-geodir-admin-setup-wizard.php:619
+#: includes/admin/class-geodir-admin-setup-wizard.php:781
 msgid "Continue"
 msgstr ""
 
@@ -1699,55 +1697,55 @@ msgstr ""
 msgid "Are you sure? This can break current listings."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:487
+#: includes/admin/class-geodir-admin-setup-wizard.php:493
 msgid "Select the theme sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:500
-#: includes/admin/class-geodir-admin-setup-wizard.php:504
+#: includes/admin/class-geodir-admin-setup-wizard.php:506
+#: includes/admin/class-geodir-admin-setup-wizard.php:510
 msgid "sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:508
+#: includes/admin/class-geodir-admin-setup-wizard.php:514
 msgid "sidebar page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:520
-#: includes/admin/class-geodir-admin-setup-wizard.php:567
-#: includes/admin/class-geodir-admin-setup-wizard.php:592
+#: includes/admin/class-geodir-admin-setup-wizard.php:526
+#: includes/admin/class-geodir-admin-setup-wizard.php:573
+#: includes/admin/class-geodir-admin-setup-wizard.php:598
 msgid "( Auto detected )"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:528
+#: includes/admin/class-geodir-admin-setup-wizard.php:534
 msgid "Insert widgets"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:539
+#: includes/admin/class-geodir-admin-setup-wizard.php:545
 msgid "Select the theme main menu"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:592
+#: includes/admin/class-geodir-admin-setup-wizard.php:598
 msgid "Create new menu in:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:607
+#: includes/admin/class-geodir-admin-setup-wizard.php:613
 msgid "Insert menu items"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:644
+#: includes/admin/class-geodir-admin-setup-wizard.php:650
 msgid "Recommend Plugins"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:646
+#: includes/admin/class-geodir-admin-setup-wizard.php:652
 msgid ""
 "Below are a few recommend plugins that will help you with your directory."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:689
+#: includes/admin/class-geodir-admin-setup-wizard.php:695
 msgid "Tick to install"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:809
+#: includes/admin/class-geodir-admin-setup-wizard.php:815
 #: includes/admin/settings/class-geodir-settings-general.php:991
 #, php-format
 msgid ""
@@ -1756,11 +1754,11 @@ msgid ""
 "more%2$s."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:817
+#: includes/admin/class-geodir-admin-setup-wizard.php:823
 msgid "Thank you for using GeoDirectory! :)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:829
+#: includes/admin/class-geodir-admin-setup-wizard.php:835
 msgid "Learn more"
 msgstr ""
 
@@ -7726,7 +7724,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:836
+#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:854
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -7806,21 +7804,21 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:103
+#: includes/class-geodir-compatibility.php:117
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:105
+#: includes/class-geodir-compatibility.php:119
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "Settings unless disabled below."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:110
+#: includes/class-geodir-compatibility.php:124
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:111
+#: includes/class-geodir-compatibility.php:125
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
@@ -8185,7 +8183,7 @@ msgstr ""
 msgid "Searching&hellip;"
 msgstr ""
 
-#: includes/class-geodir-maps.php:300
+#: includes/class-geodir-maps.php:304
 msgid "No category"
 msgstr ""
 
@@ -8193,49 +8191,49 @@ msgstr ""
 msgid "No post_id or file url, file insert failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:365
+#: includes/class-geodir-media.php:367
 msgid "Failed to insert file info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:450
+#: includes/class-geodir-media.php:452
 msgid "No image_id, post_id or image url, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:504
+#: includes/class-geodir-media.php:515
 msgid "Failed to update image info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:606
+#: includes/class-geodir-media.php:617
 msgid "Invalid URL Provided."
 msgstr ""
 
-#: includes/class-geodir-media.php:612
+#: includes/class-geodir-media.php:623
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:824
+#: includes/class-geodir-media.php:842
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:836 includes/class-geodir-media.php:838
+#: includes/class-geodir-media.php:854 includes/class-geodir-media.php:856
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:859
+#: includes/class-geodir-media.php:877
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:877
+#: includes/class-geodir-media.php:895
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:92
+#: includes/class-geodir-permalinks.php:117
 msgid "<b>GeoDirectory permalink error</b> the following rule appears twice:"
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:93
+#: includes/class-geodir-permalinks.php:118
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
@@ -8487,11 +8485,11 @@ msgstr ""
 msgid "places"
 msgstr ""
 
-#: includes/class-geodir-post-types.php:375 includes/post-functions.php:531
+#: includes/class-geodir-post-types.php:382 includes/post-functions.php:531
 msgid "Closed down"
 msgstr ""
 
-#: includes/class-geodir-post-types.php:380
+#: includes/class-geodir-post-types.php:387
 #, php-format
 msgid "Closed down <span class=\"count\">(%s)</span>"
 msgid_plural "Closed down <span class=\"count\">(%s)</span>"
@@ -9241,30 +9239,6 @@ msgstr ""
 #: includes/custom-fields/input-functions.php:1744
 #: includes/custom-fields/input-functions.php:1752
 msgid "Close"
-msgstr ""
-
-#: includes/custom-fields/input-functions.php:1902
-msgid "Drop files here <small>or</small>"
-msgstr ""
-
-#: includes/custom-fields/input-functions.php:1904
-msgid "Allowed file types:"
-msgstr ""
-
-#: includes/custom-fields/input-functions.php:1907
-msgid "file"
-msgstr ""
-
-#: includes/custom-fields/input-functions.php:1910
-msgid "files"
-msgstr ""
-
-#: includes/custom-fields/input-functions.php:1913
-msgid "You can upload unlimited files with this package"
-msgstr ""
-
-#: includes/custom-fields/input-functions.php:1921
-msgid "Please drag &amp; drop the files to rearrange the order"
 msgstr ""
 
 #: includes/custom-fields/output-functions.php:719
@@ -12529,6 +12503,30 @@ msgstr ""
 msgid "Application authentication request"
 msgstr ""
 
+#: templates/file-upload.php:36
+msgid "Drop files here <small>or</small>"
+msgstr ""
+
+#: templates/file-upload.php:40
+msgid "Allowed file types:"
+msgstr ""
+
+#: templates/file-upload.php:43
+msgid "file"
+msgstr ""
+
+#: templates/file-upload.php:46
+msgid "files"
+msgstr ""
+
+#: templates/file-upload.php:49
+msgid "You can upload unlimited files with this package"
+msgstr ""
+
+#: templates/file-upload.php:60
+msgid "Please drag &amp; drop the files to rearrange the order"
+msgstr ""
+
 #: templates/loop/no-listings-found.php:11
 msgid "No listings were found matching your selection."
 msgstr ""
@@ -12554,18 +12552,6 @@ msgstr ""
 
 #: templates/map.php:839
 msgid "<h3>Map Not Loaded</h3><p>Sorry, unable to load Maps API."
-msgstr ""
-
-#: templates/popup-forms.php:51
-msgid "Your Name"
-msgstr ""
-
-#: templates/popup-forms.php:74
-msgid "Phone number"
-msgstr ""
-
-#: templates/popup-forms.php:89
-msgid "Send"
 msgstr ""
 
 #: templates/reviews.php:45

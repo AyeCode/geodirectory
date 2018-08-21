@@ -133,6 +133,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
 
                 $add_tab = $args['show_as_list'] ? '' : 'Tab';
                 echo '<li id="'.esc_attr($tab->tab_key).$add_tab.'" >';
+                echo "<span id='".esc_attr($tab->tab_key)."'></span>";
                 if ( $args['show_as_list'] ) {
                     $tab_icon = '';
                     if($tab->tab_icon){
