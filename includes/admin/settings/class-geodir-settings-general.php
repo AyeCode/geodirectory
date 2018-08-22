@@ -168,7 +168,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				array(
 					'title' => __( 'Uninstall Settings', 'geodirectory' ),
 					'type'  => 'title',
-					'desc'  => '',
+					'desc'  => '<b>' . __( 'NOTE: Addons should be deleted before core to ensure complete uninstall.', 'geodirectory' ) . '</b>',
 					'id'    => 'uninstall_options',
 					//'desc_tip' => true,
 				),

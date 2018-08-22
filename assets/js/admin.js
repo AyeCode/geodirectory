@@ -111,7 +111,35 @@ jQuery(window).load(function() {
 
     setTimeout(function(){geodir_admin_init_rating_input();}, 200);
 
+	// Tick all addons option if core uninstall ticked
+	var $coreUn = jQuery('.geodirectory_page_gd-settings input[name="admin_uninstall"]');
+	if ($coreUn.length) {
+		$coreUn.click(function() {
+			geodir_handle_uninstall_option(jQuery(this));
+		});
+		if ($coreUn.is(':checked')) {
+			geodir_handle_uninstall_option($coreUn);
+		}
+	}
+
 });
+
+function geodir_handle_uninstall_option($el) {
+	var $form = $el.closest('#mainform');
+	if ($el.is(':checked')) {
+		$form.find('input[type="checkbox"]').each(function(){
+			if (jQuery(this).prop('id') != 'admin_uninstall') {
+				jQuery(this).attr('onclick', 'return false').prop('checked', true);
+				jQuery(this).css({opacity:0.5});
+			}
+		});
+	} else {
+		$form.find('input[type="checkbox"]').each(function(){
+			jQuery(this).removeAttr('onclick');
+			jQuery(this).css({opacity:1});
+		});
+	}
+}
 
 /**
  * Init the tooltips
