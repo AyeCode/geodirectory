@@ -150,7 +150,6 @@ final class GeoDirectory {
 	    $this->define( 'GEODIR_CUSTOM_FIELDS_TABLE', $plugin_prefix . 'custom_fields' ); // custom fields table
 	    $this->define( 'GEODIR_TABS_LAYOUT_TABLE', $plugin_prefix . 'tabs_layout' ); // custom fields table
         $this->define( 'GEODIR_CUSTOM_SORT_FIELDS_TABLE', $plugin_prefix . 'custom_sort_fields' ); // custom sort fields table
-        $this->define( 'GEODIR_ICON_TABLE', $plugin_prefix . 'post_icon' ); // post icon table
         $this->define( 'GEODIR_REVIEW_TABLE', $plugin_prefix . 'post_review' ); // post review table
 		$this->define( 'GEODIR_BUSINESS_HOURS_TABLE', $plugin_prefix . 'business_hours' ); // business hours table
 		
