@@ -131,7 +131,8 @@ abstract class GeoDir_Settings_Page {
 	 */
 	public function show_advanced(){
 
-		if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-cpt-settings'){return true;} // if on CPT settings then show.
+		$post_type = isset($_REQUEST['post_type']) ? sanitize_title($_REQUEST['post_type']) : '';
+		if(isset($_REQUEST['page']) && $_REQUEST['page']==$post_type.'-settings'){return true;} // if on CPT settings then show.
 
 		global $current_section;
 		$show = false;

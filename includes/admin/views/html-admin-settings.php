@@ -11,10 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<form method="<?php echo esc_attr( apply_filters( 'geodir_settings_form_method_tab_' . $current_tab, 'post' ) ); ?>" id="mainform" action="" enctype="multipart/form-data">
 		<nav class="nav-tab-wrapper gd-nav-tab-wrapper">
 			<?php
-				foreach ( $tabs as $name => $label ) {
-					if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-cpt-settings'){
-						$cpt = isset($_REQUEST['post_type']) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
-						echo '<a href="' . admin_url( 'edit.php?post_type=' . $cpt . '&page=gd-cpt-settings&tab=' . $name ) . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
+			$cpt = isset($_REQUEST['post_type']) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
+
+			foreach ( $tabs as $name => $label ) {
+					if(isset($_REQUEST['page']) && $_REQUEST['page']== $cpt.'-settings'){
+						echo '<a href="' . admin_url( 'edit.php?post_type=' . $cpt . '&page='.$cpt.'-settings&tab=' . $name ) . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
 					}else{
 						echo '<a href="' . admin_url( 'admin.php?page=gd-settings&tab=' . $name ) . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
 					}

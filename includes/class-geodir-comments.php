@@ -35,7 +35,7 @@ class GeoDir_Comments {
 		add_action( 'delete_comment', array(__CLASS__, 'delete_comment') );
 
 		// change the comment hash to review hash
-		add_filter('get_comments_link', array(__CLASS__,'get_comments_link'), 10, 2);
+		add_filter('get_comments_link', array(__CLASS__,'get_comments_link'), 15, 2);
 	}
 
 	/**

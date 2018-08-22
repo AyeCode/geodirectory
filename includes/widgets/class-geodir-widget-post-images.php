@@ -294,9 +294,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				$link_tag_close = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
 			}
 
-
-
-
 			?>
 			<div class="<?php echo $main_wrapper_class;?>" >
 				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';}?>
