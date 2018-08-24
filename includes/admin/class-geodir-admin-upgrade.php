@@ -20,8 +20,8 @@ class GeoDir_Admin_Upgrade {
 	public static function init() {
 		add_action( 'geodir_update_200_settings_after', array( __CLASS__, 'update_200_set_permalink_structure' ), 10, 1 );
 
-		// Custpm post types
-		if ( self::has_custom_post_types() ) {
+		// Custom post types
+		if ( self::needs_upgrade( 'custom_post_types' ) ) {
 			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_cp_get_options' ), 10, 1 );
 
 			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_cp_create_default_options' ), 10 );
@@ -30,7 +30,7 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		// Location manager
-		if ( self::has_location_manager() ) {
+		if ( self::needs_upgrade( 'location_manager' ) ) {
 			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_lm_get_options' ), 11, 1 );
 
 			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_lm_create_default_options' ), 11 );
@@ -41,13 +41,43 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		// Advance search
-		if ( self::has_advance_search() ) {
+		if ( self::needs_upgrade( 'advance_search' ) ) {
 			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_search_get_options' ), 12, 1 );
 
 			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_search_create_default_options' ), 12 );
 			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_search_create_tables' ), 12 );
 			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_search_update_version' ), 12 );
 		}
+
+		// Event manager
+		if ( self::needs_upgrade( 'event_manager' ) ) {
+			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_event_get_options' ), 10, 1 );
+
+			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_event_create_default_options' ), 10 );
+			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_event_create_tables' ), 10 );
+			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_event_update_version' ), 10 );
+		}
+	}
+
+	public static function needs_upgrade( $plugin ) {
+		$found = false;
+
+		switch ( $plugin ) {
+			case 'advance_search':
+				$found = ! is_null( get_option( 'geodiradvancesearch_db_version', null ) ) && ( is_null( get_option( 'geodir_advance_search_db_version', null ) ) || ( get_option( 'geodir_advance_search_db_version' ) && version_compare( get_option( 'geodir_advance_search_db_version' ), '2.0.0.0', '<' ) ) );
+			break;
+			case 'custom_post_types':
+				$found = ! is_null( get_option( 'geodir_custom_posts_db_version', null ) ) && ( is_null( get_option( 'geodir_cp_db_version', null ) ) || ( get_option( 'geodir_cp_db_version' ) && version_compare( get_option( 'geodir_cp_db_version' ), '2.0.0.0', '<' ) ) );
+			break;
+			case 'event_manager':
+				$found = ! is_null( get_option( 'geodirevents_db_version', null ) ) && ( is_null( get_option( 'geodir_event_db_version', null ) ) || ( get_option( 'geodir_event_db_version' ) && version_compare( get_option( 'geodir_event_db_version' ), '2.0.0.0', '<' ) ) );
+			break;
+			case 'location_manager':
+				$found = ! is_null( get_option( 'geodirlocation_db_version', null ) ) && ( is_null( get_option( 'geodir_location_db_version', null ) ) || ( get_option( 'geodir_location_db_version' ) && version_compare( get_option( 'geodir_location_db_version' ), '2.0.0.0', '<' ) ) );
+			break;
+		}
+
+		return $found;
 	}
 
 	public static function update_200_settings() {
@@ -200,7 +230,7 @@ class GeoDir_Admin_Upgrade {
 				$data['disable_favorites'] = 0;
 				$data['disable_frontend_add'] = ! in_array( $post_type, (array) get_option( 'geodir_allow_posttype_frontend' ) );
 
-				if ( self::has_custom_post_types() ) {
+				if ( self::needs_upgrade( 'custom_post_types' ) ) {
 					$data['disable_location'] = in_array( $post_type, (array) get_option( 'geodir_cpt_disable_location' ) );
 				}
 
@@ -627,7 +657,9 @@ class GeoDir_Admin_Upgrade {
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_latitude `latitude` varchar(22)  DEFAULT NULL;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_longitude `longitude` varchar(22) DEFAULT NULL;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_mapview `mapview` varchar(15) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_mapzoom `mapzoom` varchar(3) DEFAULT NULL;" );
+				if ( in_array( 'post_mapzoom', $columns ) ) {
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_mapzoom `mapzoom` varchar(3) DEFAULT NULL;" );
+				}
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_contact `phone` varchar(254) DEFAULT NULL;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_email `email` varchar(254) DEFAULT NULL;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_website `website` text;" );
@@ -635,6 +667,10 @@ class GeoDir_Admin_Upgrade {
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_facebook `facebook` text;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_video `video` text;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_special_offers `special_offers` text;" );
+				if ( $post_type == 'gd_event' ) {
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_recurring recurring TINYINT(1) DEFAULT '0';" );
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE recurring_dates event_dates TEXT NOT NULL;" );
+				}
 
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX country(country)" );
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX region(region)" );
@@ -937,10 +973,6 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	// Custom post types
-	public static function has_custom_post_types() {
-		return ! is_null( get_option( 'geodir_custom_posts_db_version', null ) ) && ( is_null( get_option( 'geodir_cp_db_version', null ) ) || ( get_option( 'geodir_cp_db_version' ) && version_compare( get_option( 'geodir_cp_db_version' ), '2.0.0.0', '<' ) ) );
-	}
-
 	public static function update_200_cp_get_options( $options = array() ) {
 		$merge_options = array(
 			'linked_post_types' => get_option( 'geodir_linked_post_types' ),
@@ -978,10 +1010,6 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	// Location Manager
-	public static function has_location_manager() {
-		return ! is_null( get_option( 'geodirlocation_db_version', null ) ) && ( is_null( get_option( 'geodir_location_db_version', null ) ) || ( get_option( 'geodir_location_db_version' ) && version_compare( get_option( 'geodir_location_db_version' ), '2.0.0.0', '<' ) ) );
-	}
-
 	public static function update_200_lm_create_default_options() {
 		if ( ! ( defined( 'GEODIRLOCATION_VERSION' ) && version_compare( GEODIRLOCATION_VERSION, '2.0.0.0', '<=' ) ) ) {
 			$default_options = array(
@@ -1167,10 +1195,6 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	// Advance search
-	public static function has_advance_search() {
-		return ! is_null( get_option( 'geodiradvancesearch_db_version', null ) ) && ( is_null( get_option( 'geodir_advance_search_db_version', null ) ) || ( get_option( 'geodir_advance_search_db_version' ) && version_compare( get_option( 'geodir_advance_search_db_version' ), '2.0.0.0', '<' ) ) );
-	}
-
 	public static function update_200_search_get_options( $options = array() ) {
 		$merge_options = array(
 			'advs_enable_autocompleter' => get_option( 'geodir_enable_autocompleter' ),
@@ -1281,5 +1305,71 @@ class GeoDir_Admin_Upgrade {
 
 		delete_option( 'geodir_advance_search_db_version' );
 		add_option( 'geodir_advance_search_db_version', $version );
+	}
+
+	// Event Manager
+	public static function update_200_event_get_options( $options = array() ) {
+		$merge_options = array(
+			'event_default_filter' => get_option( 'geodir_event_defalt_filter' ),
+			'event_disable_recurring' => get_option( 'geodir_event_disable_recurring' ),
+			'event_hide_past_dates' => get_option( 'geodir_event_hide_past_dates' ),
+			'event_map_popup_count' => get_option( 'geodir_event_infowindow_dates_count' ),
+			'event_map_popup_dates' => get_option( 'geodir_event_infowindow_dates_filter' ),
+			'event_field_date_format' => get_option( 'geodir_event_date_format_feild' ),
+			'event_display_date_format' => get_option( 'geodir_event_date_format' ),
+			'event_use_custom_format' => get_option( 'geodir_event_date_use_custom' ),
+			'event_custom_date_format' => get_option( 'geodir_event_date_format_custom' ),
+			'event_link_any_user' => get_option( 'geodir_event_link_any' )
+		);
+
+		return array_merge( $options, $merge_options );
+	}
+
+	public static function update_200_event_create_default_options() {
+		if ( ! ( defined( 'GDEVENTS_VERSION' ) && version_compare( GDEVENTS_VERSION, '2.0.0.0', '<=' ) ) ) {
+			$default_options = array(
+				'event_default_filter' => 'upcoming',
+				'event_disable_recurring' => '0',
+				'event_hide_past_dates' => '0',
+				'event_map_popup_count' => '1',
+				'event_map_popup_dates' => 'upcoming',
+				'event_field_date_format' => 'Y-m-d',
+				'event_display_date_format' => get_option( 'date_format' ),
+				'event_use_custom_format' => '0',
+				'event_custom_date_format' => '',
+				'event_link_any_user' => '0',
+				'geodir_event_linked_count' => '5',
+				'geodir_event_linked_event_type' => 'upcoming',
+				'geodir_event_linked_single_event' => '0',
+				'geodir_event_linked_sortby' => 'latest',
+				'geodir_event_linked_listing_view' => 'gridview_onehalf',
+			);
+
+			foreach ( $default_options as $key => $value ) {
+				geodir_update_option( $key, $value );
+			}
+		}
+	}
+
+	public static function update_200_event_create_tables() {
+		global $wpdb, $plugin_prefix;
+		
+		// Event schedule table
+		$table = $plugin_prefix . 'event_schedule';
+
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE event_date start_date date NOT NULL DEFAULT '0000-00-00'" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE event_enddate end_date date NOT NULL DEFAULT '0000-00-00'" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE event_starttime start_time time NOT NULL DEFAULT '00:00:00'" );
+		$wpdb->query( "ALTER TABLE `{$table}` CHANGE event_endtime end_time time NOT NULL DEFAULT '00:00:00'" );
+	}
+
+	public static function update_200_event_update_version() {
+		$version = defined( 'GEODIR_EVENT_VERSION' ) && version_compare( GEODIR_EVENT_VERSION, '2.0.0.0', '>=' ) ? GEODIR_EVENT_VERSION : '2.0.0.0';
+
+		delete_option( 'geodir_event_version' );
+		add_option( 'geodir_event_version', $version );
+
+		delete_option( 'geodir_event_db_version' );
+		add_option( 'geodir_event_db_version', $version );
 	}
 }
