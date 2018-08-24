@@ -156,7 +156,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'advanced' => true
                 ),
                 'no_cat_filter'  => array(
-                    'title' => __("Do not filter for current viewing category", 'geodirectory'),
+                    'title' => __("Tick to show all the categories. Leave unticked to show only child categories of current viewing category.", 'geodirectory'),
                     'type' => 'checkbox',
                     'desc_tip' => true,
                     'value'  => '1',
