@@ -74,17 +74,21 @@ function geodir_comments_number( $post = 0 ) {
  *
  * @return string Rating HTML.
  */
-function geodir_get_rating_stars( $rating = '', $post_id, $small = false ) {
+function geodir_get_rating_stars( $rating = '', $post_id, $label = '' ) {
 	if ( ! empty( $post_id ) && geodir_cpt_has_rating_disabled( (int) $post_id ) ) {
 		return null;
 	}
 
-	//echo '###'.$rating.'###';
 	if(empty($rating)){
 		$rating = geodir_get_post_rating( $post_id );
 	}
 
-	$r_html = GeoDir_Comments::rating_output($rating);
+	$args = array();
+	if($label){
+		$args['rating_label'] = $label;
+	}
+
+	$r_html = GeoDir_Comments::rating_output($rating, $args);
 
 	return apply_filters( 'geodir_get_rating_stars_html', $r_html, $rating, 5 );
 }

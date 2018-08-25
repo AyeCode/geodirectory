@@ -354,7 +354,9 @@ class GeoDir_Permalinks {
 			 * Add Category if needed. (%category%)
 			 */
 			if (strpos($permalink, '%category%') !== false) {
-				if(isset($gd_post->default_category) && $gd_post->default_category){
+				if(is_admin() && isset($_POST['default_category']) && $_POST['default_category']){
+					$term = get_term_by('id', absint($_POST['default_category']), $gd_post->post_type."category");
+				}elseif(isset($gd_post->default_category) && $gd_post->default_category){
 					$term = get_term_by('id', absint($gd_post->default_category), $gd_post->post_type."category");
 				}elseif(isset($gd_post->post_category) && $gd_post->post_category){
 					$cat_id = explode(",", trim($gd_post->post_category, ","));
@@ -561,7 +563,7 @@ class GeoDir_Permalinks {
 		global $wp_rewrite;
 		$permalink_structure = isset($wp_rewrite->permalink_structure) ? $wp_rewrite->permalink_structure : '';
 		if($permalink_structure){
-			if(substr("testers", -1)=='/'){
+			if(substr($permalink_structure, -1)=='/'){
 				return true;
 			}
 		}

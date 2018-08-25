@@ -642,6 +642,7 @@ class GeoDir_Comments {
             'rating_icon' => esc_attr( geodir_get_option( 'rating_icon', 'fas fa-star' ) ),
             'rating_color' => esc_attr( geodir_get_option( 'rating_color' ) ),
             'rating_color_off' => esc_attr( geodir_get_option( 'rating_color_off' ) ),
+            'rating_label' => '',
             'rating_texts' => self::rating_texts(),
             'rating_image' => geodir_get_option( 'rating_image' ),
             'rating_type' => esc_attr( geodir_get_option( 'rating_type' ) ),
@@ -652,8 +653,20 @@ class GeoDir_Comments {
 
         $args = wp_parse_args( $overrides, $defaults );
 
+		// rating label
+		$rating_label = $args['rating_label'];
+
+		if(!$rating_label && $type == 'input' ){
+			/**
+			 * Filter the label for main rating.
+			 *
+			 * This is not shown everywhere but is used by reviews manager.
+			 */
+			$rating_label = apply_filters('geodir_overall_rating_label','');
+		}
+
         $type = $args['type'];
-        $rating_icon  = $args['rating_icon'];
+        $rating_icon  = $args['rating_icon'] . " fa-fw";
 
 		$rating_color = $args['rating_color'];
 		if ( $rating_color == '#ff9900' ) {
@@ -704,6 +717,13 @@ class GeoDir_Comments {
 		$foreground_style = $rating_percent || $rating_color ? "style='$rating_percent $rating_color'" : '';
 		$rating_wrap_title = $rating_wrap_title ? 'title="' . esc_attr( $rating_wrap_title ) . '"' : '';
 		ob_start();
+
+		echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap">';
+		if($rating_label){
+			?>
+			<span class="gd-rating-label"><?php echo esc_attr($rating_label);?>: </span>
+			<?php
+		}
 		?>
 		<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
 			<span class="gd-rating-wrap" <?php echo $rating_wrap_title; ?>>
@@ -722,6 +742,7 @@ class GeoDir_Comments {
 			<?php } ?>
 		</div>
 		<?php
+		echo "</div>";
 
 		return ob_get_clean();
 	}
@@ -735,8 +756,8 @@ class GeoDir_Comments {
 	 *
 	 * @return string
 	 */
-	public static function rating_output( $rating ) {
-		return self::rating_html( $rating );
+	public static function rating_output( $rating, $overrides ) {
+		return self::rating_html( $rating , 'output',$overrides );
 	}
 
 	/**
