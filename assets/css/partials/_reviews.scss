@@ -70,10 +70,15 @@
     }
 
     .geodir-review-ratings{
-      .gd-rating-output{
+      .gd-rating-output,.gd-rating-output-wrap{
         display: inline-block;
         font-size: 20px;
       }
+
+    }
+
+    .reviewer,cite{
+      vertical-align: middle;
     }
 
     .description{

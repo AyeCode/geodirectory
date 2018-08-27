@@ -187,6 +187,32 @@ class GeoDir_Compatibility {
 			add_action( 'wp_enqueue_scripts', array(__CLASS__,'buddyboss'), 100 );
 			add_filter( 'body_class', array(__CLASS__,'buddyboss_body_class') );
 		}
+
+		/*######################################################
+		Genesis theme (Corporate Pro)
+		######################################################*/
+		if(function_exists('corporate_body_classes')){
+			add_filter( 'body_class', array(__CLASS__,'genesis_corporate_pro_body_class') );
+		}
+	}
+
+	/**
+	 * Fix some layut issues with genesis coroporate pro theme.
+	 * 
+	 * @param $classes
+	 *
+	 * @return array
+	 */
+	public static function genesis_corporate_pro_body_class($classes){
+
+		if ( geodir_is_geodir_page() ) {
+			if (($key = array_search('archive', $classes)) !== false) {
+				unset($classes[$key]);
+			}
+			$classes[] = 'page';
+		}
+
+		return $classes;
 	}
 
     /**

@@ -1,3 +1,7 @@
+v2.0.0.25
+is_slash() permalink method not working which could casue some urls to not end with a slash - FIXED
+Listings published from wp-admin can send wrong category in url of email to users - FIXED
+
 v2.0.0.24
 Changing CPT slug does not change the slug in the search bar for API - FIXED
 Media table added `other_id` column which can be used to filter things quickly - ADDED

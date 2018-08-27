@@ -37,8 +37,6 @@ if (post_password_required() || $preview)
 
     <?php if (have_comments()) :
 
-        $post_rating = geodir_get_post_rating( $post->ID );
-        echo geodir_get_rating_stars( $post_rating, $post->ID );
         ?>
         <h2 class="comments-title">
             <?php
@@ -48,6 +46,15 @@ if (post_password_required() || $preview)
         </h2>
 
         <?php
+
+        /**
+         * Filter the label for main rating.
+         *
+         * This is not shown everywhere but is used by reviews manager.
+         */
+        $overall_label = apply_filters('geodir_overall_rating_label','');
+        $post_rating = geodir_get_post_rating( $post->ID );
+        echo "<div class='gd-main-overall-rating'>" . geodir_get_rating_stars( $post_rating, $post->ID, $overall_label ) . "</div>";
         /**
          * Called after displaying review listing title.
          *
