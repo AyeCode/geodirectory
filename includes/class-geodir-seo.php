@@ -486,7 +486,7 @@ class GeoDir_SEO {
 		}
 
 
-		return $vars;
+		return apply_filters( 'geodir_seo_variables', $vars, $gd_page );
 	}
 
     /**

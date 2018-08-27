@@ -45,7 +45,7 @@ class GeoDir_Admin_Upgrade {
 			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_search_get_options' ), 12, 1 );
 
 			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_search_create_default_options' ), 12 );
-			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_search_create_tables' ), 12 );
+			add_action( 'geodir_update_200_custom_fields', array( __CLASS__, 'update_200_search_custom_fields' ), 12 );
 			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_search_update_version' ), 12 );
 		}
 
@@ -613,6 +613,8 @@ class GeoDir_Admin_Upgrade {
 			// update sorting fields sort order
 			self::update_200_sort_fields_sort_order();
 		}
+
+		do_action( 'geodir_update_200_custom_fields' );
 	}
 
 	public static function update_200_post_fields() {
@@ -1236,7 +1238,7 @@ class GeoDir_Admin_Upgrade {
 		}
 	}
 
-	public static function update_200_search_create_tables() {
+	public static function update_200_search_custom_fields() {
 		global $wpdb, $plugin_prefix;
 
 		// Advance search fields table
@@ -1338,11 +1340,11 @@ class GeoDir_Admin_Upgrade {
 				'event_use_custom_format' => '0',
 				'event_custom_date_format' => '',
 				'event_link_any_user' => '0',
-				'geodir_event_linked_count' => '5',
-				'geodir_event_linked_event_type' => 'upcoming',
-				'geodir_event_linked_single_event' => '0',
-				'geodir_event_linked_sortby' => 'latest',
-				'geodir_event_linked_listing_view' => 'gridview_onehalf',
+				'event_linked_count' => '5',
+				'event_linked_event_type' => 'upcoming',
+				'event_linked_single_event' => '0',
+				'event_linked_sortby' => 'latest',
+				'event_linked_listing_view' => 'gridview_onehalf',
 			);
 
 			foreach ( $default_options as $key => $value ) {
