@@ -2030,7 +2030,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 				// check if its a default field that does not need a column added
 				$default_fields = self::get_default_field_htmlvars();
-				if(!in_array($field->htmlvar_name,$default_fields) && $field->field_type != 'fieldset'){
+				if(!in_array($field->htmlvar_name,$default_fields) && ! apply_filters( 'geodir_cfa_skip_column_add', $field->field_type == 'fieldset', $field ) ){
 
 					// Add the new column to the details table.
 					$add_details_column = geodir_add_column_if_not_exist($plugin_prefix . $field->post_type . '_detail', $field->htmlvar_name, $column_attr);

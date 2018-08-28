@@ -428,7 +428,7 @@ class GeoDir_SEO {
 			}
 		}
 
-		return $string;
+		return apply_filters( 'geodir_replace_seo_vars', $string, $gd_page );
 	}
 
 	/**
