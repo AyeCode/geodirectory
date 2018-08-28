@@ -1,6 +1,8 @@
 v2.0.0.25
 is_slash() permalink method not working which could casue some urls to not end with a slash - FIXED
 Listings published from wp-admin can send wrong category in url of email to users - FIXED
+New post preview going to 404 for logged in users - FIXED
+Kleo theme not using GD titles - FIXED
 
 v2.0.0.24
 Changing CPT slug does not change the slug in the search bar for API - FIXED

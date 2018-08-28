@@ -194,7 +194,7 @@ class GeoDir_Permalinks {
 		global $wp_rewrite;
 
 		$post_types = geodir_get_posttypes( 'array' );
-
+		$saves_slug_arr = array();
 		if(!empty($post_types)){
 			foreach($post_types as $post_type => $cpt){
 
@@ -206,10 +206,14 @@ class GeoDir_Permalinks {
 				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$cpt_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&post_type='.$post_type.'&paged=$matches[2]','top');
 
 				// favs
-				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/?$",'index.php?author_name=$matches[1]&gd_favs=1');
-				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&paged=$matches[2]','top');
+				if(!isset($saves_slug_arr[$saves_slug])){ // only add this once unless the favs slug changes per CPT
+					$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/?$",'index.php?author_name=$matches[1]&gd_favs=1');
+					$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&paged=$matches[2]','top');
+				}
 				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type,'top');
 				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]','top');
+
+				$saves_slug_arr[$saves_slug] = $saves_slug;
 			}
 		}
 

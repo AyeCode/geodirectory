@@ -244,6 +244,7 @@ class GeoDir_Admin_Settings {
 						$advanced = (isset($value['advanced']) && $value['advanced']) ? "gd-advanced-setting" :'';
 						echo '<h2 class="gd-settings-title '.$advanced.'">';
 						echo esc_html( $value['title'] );
+						if(!empty($value['title_html'])){echo $value['title_html'];}
 						if(isset($value['desc_tip']) && $value['desc_tip']){
 							echo $tooltip_html;
 						}

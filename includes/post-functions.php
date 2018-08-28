@@ -241,6 +241,14 @@ function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
 		return false;
 	}
 
+	/**
+	 * Short circuit the DB query if needed.
+	 */
+	$pre_value = apply_filters( 'geodir_pre_get_post_meta', null, $post_id, $meta_key, $single );
+	if($pre_value!==null){
+		return $pre_value;
+	}
+
 	$table = $plugin_prefix . $post_type . '_detail';
 
 	if ( $table && $meta_key ) {

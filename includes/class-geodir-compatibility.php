@@ -66,10 +66,31 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_filter('genesis_pre_get_option_content_archive',array(__CLASS__,'genesis_content_archive'));
 
+		/*######################################################
+		Kleo (theme) :: Fix page titles.
+		######################################################*/
+		add_filter( 'kleo_title_args', array( __CLASS__, 'kleo_title_args' ) );
 
 		// after_setup_theme checks
 		add_action( 'after_setup_theme', array(__CLASS__,'for_later_checks') );
 
+	}
+
+	/**
+	 * Fix the page title args on Kleo theme.
+	 *
+	 * @param $args
+	 *
+	 * @return mixed
+	 */
+	public static function kleo_title_args($args){
+
+		$title = GeoDir_SEO::set_meta();
+		if($title){
+			$args['title'] = $title;
+		}
+
+		return $args;
 	}
 
 	public static function genesis_content_archive($val){
