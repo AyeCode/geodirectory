@@ -116,7 +116,7 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
 
-        global $post;
+        global $post,$gd_post;
 
         $defaults = array(
             'form_id' => '',
@@ -135,7 +135,7 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
         $show = false;
         $post_id = isset($post->ID) ? $post->ID : '';
         if($args['post_contact']=='1'){
-            if(isset($post->post_type) && in_array($post->post_type, geodir_get_posttypes()) && geodir_get_post_meta($post_id,'email',true)) {
+            if(isset($post->post_type) && in_array($post->post_type, geodir_get_posttypes()) && isset($gd_post->email) && $gd_post->email) {
                 $show = true;
             }
         }else{

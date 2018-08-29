@@ -427,7 +427,7 @@ class GeoDir_SEO {
 				$matches = $matches[0];
 				foreach($matches as $cf){
 					$field_name = str_replace(array("%%_","%%"),"",$cf);
-					$cf_value = isset($gd_post->{$field_name}) ? $gd_post->{$field_name} : geodir_get_post_meta($post->ID,$field_name,true);
+					$cf_value = isset($gd_post->{$field_name}) ? $gd_post->{$field_name} : '';//geodir_get_post_meta($post->ID,$field_name,true);
 					$string     = str_replace( "%%_{$field_name}%%", $cf_value, $string );
 				}
 			}

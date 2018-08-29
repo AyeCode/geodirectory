@@ -1,3 +1,7 @@
+v2.0.0.26
+GD > Listings widget can somtimes add "View All" links to other widgets - FIXED
+Changes for CPT addon compatibility - CHANGED
+
 v2.0.0.25
 is_slash() permalink method not working which could casue some urls to not end with a slash - FIXED
 Listings published from wp-admin can send wrong category in url of email to users - FIXED

@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.25\n"
+"Project-Id-Version: GeoDirectory 2.0.0.26\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-08-28 18:05+0100\n"
-"PO-Revision-Date: 2018-08-28 18:05+0100\n"
+"POT-Creation-Date: 2018-08-29 16:22+0100\n"
+"PO-Revision-Date: 2018-08-29 16:22+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -8232,11 +8232,11 @@ msgstr ""
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:117
+#: includes/class-geodir-permalinks.php:141
 msgid "<b>GeoDirectory permalink error</b> the following rule appears twice:"
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:118
+#: includes/class-geodir-permalinks.php:142
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
@@ -9141,7 +9141,7 @@ msgstr ""
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1051 includes/core-functions.php:1062
+#: includes/core-functions.php:1054 includes/core-functions.php:1065
 msgid "Clear field"
 msgstr ""
 

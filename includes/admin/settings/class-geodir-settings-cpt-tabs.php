@@ -50,7 +50,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 			add_action( 'geodir_manage_tabs_available_fields', array( $this, 'output_standard_fields' ) );
 			add_action( 'geodir_manage_tabs_available_fields_predefined', array( $this, 'output_predefined_fields' ), 1, 2 );
-			add_action( 'geodir_manage_tabs_available_fields_custom', array( $this, 'output_custom_fields' ) );
+			add_action( 'geodir_manage_tabs_available_fields_custom', array( $this, 'output_custom_fields' ),1,2 );
 
 
 		}
@@ -136,7 +136,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 					 *
 					 * @param string $sub_tab The current settings tab name.
 					 */
-					do_action( 'geodir_manage_tabs_available_fields', self::$sub_tab ); ?>
+					do_action( 'geodir_manage_tabs_available_fields', self::$sub_tab, self::$post_type  ); ?>
 
 					<div style="clear:both"></div>
 				</div>
@@ -176,7 +176,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 					 *
 					 * @param string $sub_tab The current settings tab name.
 					 */
-					do_action( 'geodir_manage_tabs_available_fields_custom', self::$sub_tab ); ?>
+					do_action( 'geodir_manage_tabs_available_fields_custom', self::$sub_tab, self::$post_type  ); ?>
 
 					<div style="clear:both"></div>
 				</div>
@@ -531,14 +531,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		 *
 		 * @package GeoDirectory
 		 */
-		public function output_custom_fields() {
+		public function output_custom_fields($sub_tab = '', $post_type ='' ) {
 
 			// insert the required code for the SD button.
 			$js_insert_function = self::insert_shortcode_function();
 			WP_Super_Duper::shortcode_insert_button('',$js_insert_function);
 
 
-			$cfs = self::get_custom_fields();
+			$cfs = self::get_custom_fields($post_type);
 			self::output_fields($cfs);
 		}
 
@@ -571,7 +571,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
          *
          * @return array $fields.
          */
-		public function get_custom_fields(){
+		public function get_custom_fields($post_type){
 			$fields = array();
 
 			// shortcode
@@ -584,7 +584,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 				
 			);
 
-			return $fields;
+			return apply_filters( 'geodir_cpt_settings_tabs_custom_fields', $fields, $post_type );
 		}
 
 		/**

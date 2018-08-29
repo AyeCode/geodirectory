@@ -67,8 +67,7 @@ class GeoDir_Permalinks {
 		$geodir_taxonomies = GeoDir_Taxonomies::get_taxonomies('', true);
 
 		if (!empty($term->parent) && isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy, $geodir_taxonomies)) {
-			//print_r($term);
-			$parent = get_term( $term->parent, $taxonomy );
+			$parent = self::get_term_parent_info($term->parent, $taxonomy );
 			$parent_slug = isset($parent->slug) ? $parent->slug : '';
 			if($parent_slug){
 				$termlink = str_replace("$parent_slug/","",$termlink);
@@ -76,6 +75,31 @@ class GeoDir_Permalinks {
 		}
 
 		return $termlink;
+	}
+
+	/**
+	 * Loop through and get the category parent.
+	 *
+	 * @param $term_id
+	 * @param $taxonomy
+	 * @param string $slug
+	 *
+	 * @return array|null|WP_Error|WP_Term
+	 */
+	public function get_term_parent_info($term_id, $taxonomy,$slug='' ){
+		$parent = get_term( $term_id, $taxonomy );
+
+		if($slug){
+			$parent->slug = $parent->slug."/".$slug;
+		}
+		if (!empty($parent->parent)){
+
+			$term = self::get_term_parent_info($parent->parent, $taxonomy,$parent->slug );
+		}else{
+			$term = $parent;
+		}
+
+		return $term;
 	}
 
 	// @todo remove after testing
