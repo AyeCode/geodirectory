@@ -56,7 +56,7 @@ class GeoDir_SEO {
 		}
 
 		// set a global so we don't change the menu items titles
-		add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'));
+		add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
 		add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
 
 		// meta title
@@ -89,8 +89,11 @@ class GeoDir_SEO {
 	 *
 	 * @return string $menu
 	 */
-	public static function set_menu_global($menu){
-		self::$doing_menu = true;
+	public static function set_menu_global($menu,$args){
+		if(null == $menu){
+			self::$doing_menu = true;
+		}
+
 		return $menu;
 	}
 
@@ -266,6 +269,8 @@ class GeoDir_SEO {
 		if(self::$title){self::$title = self::replace_variable(self::$title,self::$gd_page);}
 		if(self::$meta_title){self::$meta_title = self::replace_variable(self::$meta_title,self::$gd_page);}
 		if(self::$meta_description){self::$meta_description = self::replace_variable(self::$meta_description,self::$gd_page);}
+		
+		return self::$title;
 	}
 
 	/**

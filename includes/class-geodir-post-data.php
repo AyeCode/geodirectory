@@ -1286,7 +1286,10 @@ class GeoDir_Post_Data {
 		//$posts[0]->post_status = 'publish';
 
 		// check id post has no author and if the current user owns it
-		if(!get_current_user_id() && self::owner_check($posts[0]->ID,0)){
+		if(
+		( !get_current_user_id() && self::owner_check($posts[0]->ID,0) )
+		||  ( !isset($_REQUEST['preview_nonce']) && get_current_user_id() && self::owner_check($posts[0]->ID,get_current_user_id()) )
+		){
 			$posts[0]->post_status = 'publish';
 
 			// Disable comments and pings for this post.

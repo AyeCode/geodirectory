@@ -1061,7 +1061,7 @@ function gd_init_comment_reply_link(){
             $new_html = $html.replace(geodir_params.txt_post_review,geodir_params.txt_post_reply);
             jQuery('#respond input.submit').val($new_html);
 
-            jQuery('#respond .gd-rating-input').hide();
+            jQuery('#respond .gd-rating-input-wrap').hide();
         }, 10);
     });
 
@@ -1083,7 +1083,7 @@ function gd_init_comment_reply_link(){
             $new_html = $html.replace(geodir_params.txt_post_reply,geodir_params.txt_post_review);
             jQuery('#respond input.submit').val($new_html);
 
-            jQuery('#respond .gd-rating-input').show();
+            jQuery('#respond .gd-rating-input-wrap').show();
         }, 10);
     });
 }
