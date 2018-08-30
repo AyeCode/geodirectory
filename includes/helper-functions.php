@@ -1031,7 +1031,6 @@ function geodir_tool_restore_cpt_from_taxonomies() {
                 'meta_description' => '',
             ),
             'show_in_nav_menus' => 1,
-            'link_business' => 0,
             'linkable_to' => '',
             'linkable_from' => '',
         );
