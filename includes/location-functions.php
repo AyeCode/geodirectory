@@ -4,24 +4,15 @@
 /**
  * Returns location slug using location string.
  *
- * @since 1.0.0
+ * @since 2.0.0
  * @package GeoDirectory
  * @param string $location_string The location string.
  * @return string The location slug.
  */
-function create_location_slug($location_string)
-{
+function geodir_create_location_slug( $location_string ) {
+	global $geodirectory;
 
-    /**
-     * Filter the location slug.
-     *
-     * @since 1.0.0
-     * @package GeoDirectory
-     *
-     * @param string $location_string Sanitized location string.
-     */
-    return urldecode(apply_filters('geodir_location_slug_check', sanitize_title($location_string)));
-
+    return $geodirectory->location->create_location_slug( $location_string );
 }
 
 
