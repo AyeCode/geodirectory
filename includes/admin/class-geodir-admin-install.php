@@ -1045,7 +1045,6 @@ class GeoDir_Admin_Install {
 		$columns['post_tags'] = "post_tags text NULL DEFAULT NULL";
 		$columns['post_category'] = "post_category varchar(254) NULL DEFAULT NULL";
 		$columns['default_category'] = "default_category INT NULL DEFAULT NULL";
-		$columns['link_business'] = "link_business varchar(10) NULL DEFAULT NULL";
 		$columns['featured'] = "featured tinyint(1) NOT NULL DEFAULT '0'";
 		$columns['featured_image'] = "featured_image varchar( 254 ) NULL DEFAULT NULL";
 		$columns['submit_ip'] = "submit_ip varchar(100) NULL DEFAULT NULL";

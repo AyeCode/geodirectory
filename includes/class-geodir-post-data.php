@@ -157,9 +157,6 @@ class GeoDir_Post_Data {
 			// Set the defaults.
 			$postarr['post_id']     = $post_id;
 			$postarr['post_status'] = $post->post_status;
-			if ( isset( $gd_post['link_business'] ) ) {
-				$postarr['link_business'] = $gd_post['link_business'];
-			}
 			if ( isset( $gd_post['featured'] ) ) {
 				$postarr['featured'] = $gd_post['featured'];
 			}
