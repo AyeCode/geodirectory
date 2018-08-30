@@ -899,9 +899,12 @@ function geodir_search_form_post_type_input() {
 			<select name="stype" class="search_by_post">
 				<?php foreach ( $post_types as $post_type => $info ):
 					global $wpdb;
+					$pt_slug = isset($info->rewrite->slug) ? esc_attr($info->rewrite->slug) : 'places';
 					?>
 
-					<option data-label="<?php echo get_post_type_archive_link( $post_type ); ?>"
+					<option
+						<?php echo ' data-slug="'.$pt_slug.'" ';?>
+						data-label="<?php echo get_post_type_archive_link( $post_type ); ?>"
 					        value="<?php echo $post_type; ?>" <?php if ( isset( $_REQUEST['stype'] ) ) {
 						if ( $post_type == $_REQUEST['stype'] ) {
 							echo 'selected="selected"';

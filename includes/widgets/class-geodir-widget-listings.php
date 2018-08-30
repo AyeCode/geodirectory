@@ -536,7 +536,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             return;
         }
 
-		if ( ! empty( $viewall_url ) ) {
+		if ( ! empty( $viewall_url ) && isset($args['before_widget']) ) {
 			$this->view_all_link = '<a href="' . esc_url( $viewall_url ) .'" class="geodir-viewall">' . __( 'View all', 'geodirectory' ) . '</a>';
 			add_filter( 'widget_title', array( $this, 'title_filter' ), 10, 3 );
 		}
