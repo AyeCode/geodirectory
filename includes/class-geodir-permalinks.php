@@ -394,7 +394,7 @@ class GeoDir_Permalinks {
 					}
 				}
 
-				if(isset($term) && $term->slug){
+				if(!empty($term) && $term->slug){
 					$permalink = str_replace('%category%',$term->slug,$permalink);
 				}
 			}

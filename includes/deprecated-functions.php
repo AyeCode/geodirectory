@@ -326,6 +326,13 @@ function geodir_get_country_by_name(){
 function geodir_get_normal_country(){
     _deprecated_function( 'geodir_get_normal_country', '2.0.0' );
 }
+
+/**
+ * @deprecated
+ */
+function create_location_slug( $location_string ) {
+	_deprecated_function( 'create_location_slug', '2.0.0', 'geodir_create_location_slug()' );
+}
 //
 ///**
 // * @deprecated
