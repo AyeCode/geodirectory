@@ -95,7 +95,10 @@ class GeoDir_Taxonomies {
 		} else {
 			$post_type = $taxonomy;
 		}
-		return apply_filters( 'geodir_taxonomy_supports', $default, $taxonomy, $post_type, $feature );
+
+		$value = GeoDir_Post_types::supports( $post_type, $feature, $default );
+
+		return apply_filters( 'geodir_taxonomy_supports', $value, $taxonomy, $post_type, $feature );
 	}
 
 }
