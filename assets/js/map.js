@@ -184,6 +184,22 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 	// Posts
 	posts = options.posts;
 	if (posts) {
+
+        // archive pages
+        if(posts == 'geodir-loop-container'){
+            var idarray = jQuery(".geodir-loop-container")
+                .find("li") //Find the spans
+                .map(function() { return jQuery(this).data("post-id") }) //Project Ids
+                .get(); //ToArray
+
+            if(idarray){
+                posts = idarray;
+            }else{
+                posts = '-1';
+            }
+            console.log(idarray);
+        }
+
 		if ( typeof posts == 'object' || typeof posts == 'array' ) {
 		} else {
 			posts = posts.split(',');

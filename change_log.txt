@@ -1,5 +1,13 @@
 v2.0.0.27
+Search not searching tags - FIXED
+Comments section can sometimes show on the search page - FIXED
+Show CPT selector options in search widget settings if more than one CPT exists - ADDED
+Changing tab on details page now triggers window resize to adjust styles - ADDED
+Featured image not properly delete on post delete - FIXED
+Function to remove category parent slug could partially remove other url parts - FIXED
+OSM cant handel geocode search of UK post codes missing the space - FIXED
 Column looses the value after converting ENUM to TINYINT data type on upgrade - FIXED
+404 rescue function added to try and automatically redirect GD 404s to their new permalink url - ADDED
 
 v2.0.0.26
 GD > Listings widget can somtimes add "View All" links to other widgets - FIXED

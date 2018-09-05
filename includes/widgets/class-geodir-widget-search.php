@@ -18,6 +18,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
     public function __construct() {
 
 
+
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
@@ -44,23 +45,34 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
 //                    'default'  => 'image',
 //                    'desc_tip' => true,
 //                    'advanced' => true
-//                ),
-//                'show_filters'  => array(
-//                    'title' => __('Show filters:', 'geodirectory'),
-//                    'desc' => __('Slide or fade transition.', 'geodirectory'),
-//                    'type' => 'select',
-//                    'options'   =>  array(
-//                        "slide" => __('Slide', 'geodirectory'),
-//                        "fade" => __('Fade', 'geodirectory'),
-//                    ),
-//                    'default'  => 'slide',
-//                    'desc_tip' => true,
-//                    'element_require' => '[%type%]=="slider"',
-//                    'advanced' => true
-//                ),
-//
+//                )
 //            )
         );
+
+        $post_types =  $this->post_type_options();
+
+        if(count($post_types) > 2){
+            $options['arguments'] = array(
+                'post_type'  => array(
+                    'title' => __('Default Post Type:', 'geodirectory'),
+                    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
+                    'type' => 'select',
+                    'options'   =>  $this->post_type_options(),
+                    'default'  => 'image',
+                    'desc_tip' => true,
+                    'advanced' => true
+                ),
+                'post_type_hide'  => array(
+                    'title' => __('Hide Post Type Selector:', 'geodirectory'),
+                    'desc' => __('Hide the CPT selector (if not on search page) this can be used to setup a specific CPT search and not give the option to change the CPT.', 'geodirectory'),
+                    'type' => 'checkbox',
+                    'desc_tip' => true,
+                    'value'  => '1',
+                    'default'  => '',
+                    'advanced' => true
+                )
+            );
+        }
 
 
         parent::__construct( $options );
@@ -92,10 +104,17 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
         // prints the widget
         extract($args, EXTR_SKIP);
 
+        // set the CPT to be used.
         if(isset($post_type) && $post_type){
             geodir_get_search_post_type($post_type);// set the post type
         }else{
             geodir_get_search_post_type();// set the post type
+        }
+
+        // set if the cpt selector should be hidden
+        global $geodir_search_post_type_hide;
+        if(isset($post_type_hide) && $post_type_hide){
+            $geodir_search_post_type_hide = true;
         }
 
         geodir_get_template_part('listing', 'filter-form');
@@ -104,6 +123,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
         // after outputing the search reset the CPT
         global $geodir_search_post_type;
         $geodir_search_post_type = '';
+        $geodir_search_post_type_hide = false;
 
         return ob_get_clean();
     }
@@ -117,14 +137,12 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
      * @return array $options
      */
     public function post_type_options(){
-        $options = array(''=>__('Auto','geodirectory'));
-
+        $options = array();
         $post_types = geodir_get_posttypes('options-plural');
         if(!empty($post_types)){
+        $options = array(''=>__('Auto','geodirectory'));
             $options = array_merge($options,$post_types);
         }
-
-        //print_r($options);
 
         return $options;
     }

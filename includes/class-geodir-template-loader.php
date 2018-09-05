@@ -155,6 +155,10 @@ class GeoDir_Template_Loader {
         global $wp_query,$gd_temp_wp_query;
         $wp_query->posts = $gd_temp_wp_query;
 
+        // stop any GD archive pages outputing the comments section
+        global $gd_is_comment_template_set;
+        $gd_is_comment_template_set = true;
+
         // get the archive template page content
         if(geodir_is_page('search')){
             $archive_page_id = geodir_search_page_id();

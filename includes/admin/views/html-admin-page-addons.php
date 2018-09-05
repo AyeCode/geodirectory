@@ -116,7 +116,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<?php }?>
 
 	<div id="gd-wpeu-required-activation" class="lity-hide "><span class="gd-notification "><?php printf( __("The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='%s'>activate</a> it now.","geodirectory"),wp_nonce_url(admin_url('plugins.php?action=activate&plugin=wp-easy-updates/external-updates.php'), 'activate-plugin_wp-easy-updates/external-updates.php'));?></span></div>
-	<div id="gd-wpeu-required-for-external" class="lity-hide "><span class="gd-notification "><?php _e("The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='http://localhost/wp-admin/plugin-install.php?tab=upload&wpeu-install=true' onclick='window.open(\"https://wpeasyupdates.com/wp-easy-updates.zip\", \"_blank\");' >download</a> and install it now.","geodirectory");?></span></div>
+	<div id="gd-wpeu-required-for-external" class="lity-hide "><span class="gd-notification "><?php printf(  __("The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='%s' onclick='window.open(\"https://wpeasyupdates.com/wp-easy-updates.zip\", \"_blank\");' >download</a> and install it now.","geodirectory"),admin_url("plugin-install.php?tab=upload&wpeu-install=true"));?></span></div>
 	<div id="gd-recommended-buy" class="lity-hide ">
 		<span class="gd-notification noti-white">
 			<h3 class="gd-recommended-buy-title"><?php _e("Licence key","geodirectory");?></h3>

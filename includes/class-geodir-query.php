@@ -365,6 +365,7 @@ class GeoDir_Query {
 
 			$where = '';
 			$better_search_terms = '';
+			$terms_sql = '';
 			if (isset($_REQUEST['stype']))
 				$post_types = esc_attr(wp_strip_all_tags($_REQUEST['stype']));
 			else
@@ -395,6 +396,9 @@ class GeoDir_Query {
 							 * @param string $keyword The single keyword being searched.
 							 */
 							$better_search_terms .= apply_filters("geodir_search_better_search_terms",' OR ( ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '" OR ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '%" OR ' . $wpdb->posts . '.post_title LIKE "% ' . $keyword . '%" )',$keywords,$keyword);
+
+							// tags
+							$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %s , ".$table.".post_tags ) ",$keyword);
 						}
 					}
 				}
@@ -442,7 +446,7 @@ class GeoDir_Query {
 				$term_results = $wpdb->get_results( $term_sql );
 			}
 			$term_ids = array();
-			$terms_sql = '';
+			//$terms_sql = '';
 
 			if ( !empty( $term_results ) ) {
 				foreach ( $term_results as $term_id ) {

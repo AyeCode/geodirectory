@@ -481,7 +481,7 @@ function geodir_is_geodir_page_id($id) {
 	global $geodirectory;
 	if(!empty($geodirectory->settings['page_add']) && $geodirectory->settings['page_add'] == $id ){
 		return true;
-	}elseif(!empty($geodirectory->settings['page_location']) && $geodirectory->settings['page_add'] == $id ){
+	}elseif(!empty($geodirectory->settings['page_location']) && $geodirectory->settings['page_location'] == $id ){
 		return true;
 	}elseif(!empty($geodirectory->settings['page_search']) && $geodirectory->settings['page_search'] == $id ){
 		return true;

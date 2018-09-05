@@ -408,6 +408,9 @@ jQuery(window).load(function() {
                 }, 500);
             }
         }
+
+        // trigger the window resize to content can adjust
+        jQuery(window).trigger('resize');
     } // end activateTab()
     
     jQuery('dl.geodir-tab-head').each(function() {

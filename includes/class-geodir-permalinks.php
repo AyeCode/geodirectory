@@ -45,13 +45,97 @@ class GeoDir_Permalinks {
 		// search page rewrite rules
 		add_action('init', array( $this, 'insert_rewrite_rules'), 20,0);
 
-
 		// make child cat not contain parent cat url
 		add_filter('term_link', array($this,'term_url_no_parent'), 9, 3);
+
+		// try and recover from 404 if GD CPT detected
+		add_action('wp',array($this,'_404_rescue'));
 
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
 //		add_action('init', array( $this, 'temp_check_rules'),10000000000);
+	}
+
+	/**
+	 * Check the 404 page to see if its a GD CPT and if we can find the correct page.
+	 *
+	 * This can help with GDv1 -> GDv2 sites auto tell search engines the urls have moved.
+	 */
+	public function _404_rescue(){
+		if(is_404() && geodir_get_option("enable_404_rescue",1)){
+			global $wp_query,$wp;
+			$post_type = isset($wp_query->query_vars['post_type']) ? $wp_query->query_vars['post_type'] : '';
+			if (in_array($post_type, geodir_get_posttypes())) {
+				$url_segments = explode("/",$wp->request);
+
+				$maybe_slug = end($url_segments);
+
+				if( $maybe_slug ){
+					array_shift($url_segments);// remove the CPT slug
+					$location_segments = array();
+					$location_string = '';
+					$redirect = '';
+					$is_cat = get_term_by( 'slug', $maybe_slug, $post_type."category");
+					if(!empty($is_cat)){
+
+						foreach($url_segments as $url_segment){
+							if($url_segment == $maybe_slug ){continue;}
+
+							// check its not a term also
+							if(empty(get_term_by( 'slug', $url_segment, $post_type."category"))){
+								$location_segments[] = $url_segment;
+							}
+						}
+
+						if(!empty($location_segments)){
+							$location_string = implode("/",$location_segments);
+						}
+
+						$term_link = get_term_link( $maybe_slug, $post_type."category" );
+
+						if($term_link){
+							$redirect = trailingslashit($term_link).$location_string;
+							if(self::is_slash()){
+								$redirect = trailingslashit($redirect);
+							}
+						}
+
+					}elseif($is_tag = get_term_by( 'slug', $maybe_slug, $post_type."_tags")){
+
+						foreach($url_segments as $url_segment){
+							if($url_segment == $maybe_slug ){continue;}
+
+							// check its not a term also
+							if(empty(get_term_by( 'slug', $url_segment, $post_type."_tags"))){
+								$location_segments[] = $url_segment;
+							}
+						}
+
+						if(!empty($location_segments)){
+							$location_string = implode("/",$location_segments);
+						}
+
+						$term_link = get_term_link( $maybe_slug, $post_type."_tags" );
+
+						if($term_link){
+							$redirect = trailingslashit($term_link).$location_string;
+							if(self::is_slash()){
+								$redirect = trailingslashit($redirect);
+							}
+						}
+					}elseif($is_post = get_page_by_path($maybe_slug,OBJECT,$post_type)){
+						$redirect = get_permalink($is_post->ID);
+					}
+
+
+					// redirect if needed and if its not to the same url
+					if($redirect && $redirect != geodir_curPageURL()){
+						wp_redirect($redirect,'301');exit;
+					}
+				}
+
+			}
+		}
 	}
 
 	/**
@@ -70,7 +154,7 @@ class GeoDir_Permalinks {
 			$parent = self::get_term_parent_info($term->parent, $taxonomy );
 			$parent_slug = isset($parent->slug) ? $parent->slug : '';
 			if($parent_slug){
-				$termlink = str_replace("$parent_slug/","",$termlink);
+				$termlink = str_replace("/$parent_slug/","/",$termlink);
 			}
 		}
 
