@@ -453,9 +453,13 @@ class GeoDir_Admin_Upgrade {
 
 		$results = $wpdb->get_results( "SELECT * FROM `{$custom_fields_table}`" );
 
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_active` `is_active` CHAR(1) NOT NULL DEFAULT '1';" );
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_active` `is_active` TINYINT(1) NOT NULL DEFAULT '1';" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_default` `is_default` CHAR(1) NOT NULL DEFAULT '0';" );
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_default` `is_default` TINYINT(1) NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_required` `is_required` CHAR(1) NOT NULL DEFAULT '0';" );
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_required` `is_required` TINYINT(1) NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `for_admin_use` `for_admin_use` CHAR(1) NOT NULL DEFAULT '0';" );
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `for_admin_use` `for_admin_use` TINYINT(1) NOT NULL DEFAULT '0';" );
 
 		foreach ( $results as $row ) {
@@ -646,9 +650,9 @@ class GeoDir_Admin_Upgrade {
 					$wpdb->query( "ALTER TABLE `{$table}` DROP `post_locations`" );
 				}
 				if ( in_array( 'is_featured', $columns ) ) {
-					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_featured featured tinyint(1) NOT NULL DEFAULT '0';" );
-					// changing data type ENUM to TINYINT sets '0' to '2'
-					$wpdb->query( "UPDATE `{$table}` SET `featured` = '0' WHERE featured = '2';" );
+					// Converting the ENUM to TINYINT directly might give unexpected results. So we should start by converting column to a CHAR(1) and then to TINYINT(1).
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_featured featured char(1) NOT NULL DEFAULT '0';" );
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE featured featured tinyint(1) NOT NULL DEFAULT '0';" );
 				}
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE submit_ip `submit_ip` varchar(100) DEFAULT NULL;" );
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_address `street` varchar(254) DEFAULT NULL;" );
@@ -727,14 +731,12 @@ class GeoDir_Admin_Upgrade {
 		$attachments_table = GEODIR_ATTACHMENT_TABLE;
 
 		$wpdb->query( "ALTER TABLE `{$attachments_table}` DROP `content`;" );
-		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `is_featured` `featured` TINYINT(1) NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `is_featured` `featured` CHAR(1) NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `featured` `featured` TINYINT(1) NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `is_approved` `is_approved` CHAR(1) NULL DEFAULT '1';" );
 		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `is_approved` `is_approved` TINYINT(1) NULL DEFAULT '1';" );
 		$wpdb->query( "ALTER TABLE `{$attachments_table}` ADD `date_gmt` datetime NULL default NULL AFTER `post_id`;" );
 		$wpdb->query( "ALTER TABLE `{$attachments_table}` ADD `type` varchar(254) NULL DEFAULT 'post_images';" );
-
-		// changing data type ENUM to TINYINT sets '0' to '2'
-		$wpdb->query( "UPDATE `{$attachments_table}` SET `featured` = '0' WHERE featured = '2';" );
-		$wpdb->query( "UPDATE `{$attachments_table}` SET `is_approved` = '0' WHERE is_approved = '2';" );
 	}
 
 	private static function create_tables() {
@@ -1167,6 +1169,8 @@ class GeoDir_Admin_Upgrade {
 		$wpdb->query( "ALTER TABLE `{$locations_table}` DROP `city_desc`" );
 		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE city_latitude latitude varchar(22) NOT NULL" );
 		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE city_longitude longitude varchar(22) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE is_default is_default CHAR(1) NOT NULL DEFAULT '0'" );
+		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE is_default is_default TINYINT(1) NOT NULL DEFAULT '0'" );
 
 		// Neighbourhoods table
 		$neighbourhoods_table = $plugin_prefix . 'post_neighbourhood';

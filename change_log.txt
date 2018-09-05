@@ -1,3 +1,6 @@
+v2.0.0.27
+Column looses the value after converting ENUM to TINYINT data type on upgrade - FIXED
+
 v2.0.0.26
 GD > Listings widget can somtimes add "View All" links to other widgets - FIXED
 Changes for CPT addon compatibility - CHANGED
