@@ -96,4 +96,18 @@
       padding-top: 0;
     }
   }
+
+
+  .geodir-category-list-view{
+    .geodir-post-meta-container{
+      border-bottom: none;
+      padding: 0;
+      &:last-child{
+        border-bottom: none;
+      }
+      &:first-child{
+        padding-top: 0;
+      }
+    }
+  }
 }

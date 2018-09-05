@@ -334,12 +334,12 @@ function create_location_slug( $location_string ) {
 	_deprecated_function( 'create_location_slug', '2.0.0', 'geodir_create_location_slug()' );
 }
 //
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
+/**
+ * @deprecated
+ */
+function geodir_is_reviews_show(){
+    _deprecated_function( 'geodir_is_reviews_show', '2.0.0' );
+}
 //
 ///**
 // * @deprecated

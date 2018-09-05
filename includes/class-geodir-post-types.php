@@ -349,7 +349,7 @@ class GeoDir_Post_types {
 				// force to show above GD main menu item
 				$args['show_ui'] = true;
 				$args['show_in_menu'] = true;
-				$args['menu_position'] = 56;
+				$args['menu_position'] = "56.2".  $args['listing_order'];
 
 				/**
 				 * Filter post type args.

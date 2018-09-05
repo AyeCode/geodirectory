@@ -645,7 +645,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		global $gd_post, $wp_query;
 
 
-		///print_r( $args );exit;
+//		print_r( $args );exit;
 
 		$defaults = array(
 			'map_type'         => 'auto',
@@ -707,13 +707,16 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						$map_args['posts'] = array( '-1' ); // No results
 
 						if ( ! empty( $wp_query ) && $wp_query->is_main_query() && ! empty( $wp_query->found_posts ) ) {
-							$map_args['posts'] = array();
+							/*
+							 * If the map is put before the query then we can't get the info here so we simply pull the IDS from the loop container
+							 */
+							$map_args['posts'] = 'geodir-loop-container';
 							$map_args['terms'] = array();
-							if ( ! empty( $wp_query->posts ) ) {
-								foreach ( $wp_query->posts as $post ) {
-									$map_args['posts'][] = $post->ID;
-								}
-							}
+//							if ( ! empty( $wp_query->posts ) ) {
+//								foreach ( $wp_query->posts as $post ) {
+//									$map_args['posts'][] = $post->ID;
+//								}
+//							}
 						}
 					} else {
 						if ( ! empty( $wp_query ) && $wp_query->is_main_query() ) {
@@ -787,19 +790,22 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$map_args['post_id']        = 0;
 		}
 
+		//print_r($map_args);
 		// location
 		$current_location = GeoDir()->location;
-		$map_args['country'] = isset($current_location->country_slug) ?  $current_location->country_slug : '';
-		$map_args['region'] = isset($current_location->region_slug) ?  $current_location->region_slug : '';
-		$map_args['city'] = isset($current_location->city_slug) ?  $current_location->city_slug : '';
-		$map_args['neighbourhood'] = isset($current_location->neighbourhood_slug) ?  $current_location->neighbourhood_slug : '';
+		$map_args['country'] = !empty($current_location->country_slug) ?  $current_location->country_slug : $map_args['country'];
+		$map_args['region'] = !empty($current_location->region_slug) ?  $current_location->region_slug : $map_args['region'];
+		$map_args['city'] = !empty($current_location->city_slug) ?  $current_location->city_slug : $map_args['city'];
+		$map_args['neighbourhood'] = !empty($current_location->neighbourhood_slug) ?  $current_location->neighbourhood_slug : $map_args['neighbourhood'];
 		if( empty($map_args['country']) && empty($map_args['region']) && empty($map_args['city']) && empty($map_args['neighbourhood']) && !empty($current_location->latitude)){
-			$map_args['lat'] = isset($current_location->latitude) ?  $current_location->latitude : '';
-			$map_args['lon'] = isset($current_location->longitude) ?  $current_location->longitude : '';
+			$map_args['lat'] = !empty($current_location->latitude) ?  $current_location->latitude : '';
+			$map_args['lon'] = !empty($current_location->longitude) ?  $current_location->longitude : '';
 			if(get_query_var('near')){
 				$map_args['dist'] = get_query_var('dist');
 			}
 		}
+
+		//print_r($map_args);
 
 
 

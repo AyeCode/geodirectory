@@ -407,6 +407,12 @@ class GeoDir_Comments {
 		$post_types = geodir_get_posttypes();
 
 		if ( ! ( is_singular() && ( have_comments() || ( isset( $post->comment_status ) && 'open' == $post->comment_status ) ) ) ) {
+
+			// if we already loaded the template don't load it again
+			if($gd_is_comment_template_set){
+				return geodir_plugin_path() . '/index.php'; // a blank template to remove default if called more than once.
+			}
+
 			return $comment_template;
 		}
 		if ( in_array( $post->post_type, $post_types ) ) { // assuming there is a post type called business

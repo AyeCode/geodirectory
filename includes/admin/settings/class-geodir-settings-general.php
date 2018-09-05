@@ -142,6 +142,16 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				array(
+					'name'     => __( 'Enable 404 rescue', 'geodirectory' ),
+					'desc'     => __( 'This will check 404 pages where a GD CPT is identified and try and redirect to the correct url. This should help tell search engines about term or post permalink changes.', 'geodirectory' ),
+					'id'       => 'enable_404_rescue',
+					'type'     => 'checkbox',
+					'default'  => '1',
+					//'desc_tip' => true,
+					//'advanced' => true
+				),
+
+				array(
 					'name'     => __( 'Enable beta addons', 'geodirectory' ),
 					'desc'     => __( 'This will allow beta addons to be installed.', 'geodirectory' ),
 					'id'       => 'admin_enable_beta',

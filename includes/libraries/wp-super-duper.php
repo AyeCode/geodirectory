@@ -1549,6 +1549,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
 						<?php
 						break;
+					case "hidden":
+						?>
+						<input id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+							name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="hidden"
+							value="<?php echo esc_attr( $value ); ?>">
+						<?php
+						break;
 					default:
 						echo "No input type found!"; // @todo we need to add more input types.
 				}

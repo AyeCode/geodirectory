@@ -243,7 +243,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 }elseif($child_tab->tab_type=='meta'){ // meta info
                     echo do_shortcode('[gd_post_meta key="'.$child_tab->tab_key.'"]');
                 }elseif($child_tab->tab_type=='fieldset'){ // meta info
-                    self:: output_fieldset($child_tab);
+                    self::output_fieldset($child_tab);
                 }elseif($child_tab->tab_type=='standard'){ // meta info
                     if($child_tab->tab_key=='reviews'){
                         comments_template();

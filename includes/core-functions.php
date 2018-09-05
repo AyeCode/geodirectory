@@ -875,7 +875,7 @@ add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5
  * @since 2.0.0
  */
 function geodir_search_form_post_type_input() {
-	global $geodir_search_post_type;
+	global $geodir_search_post_type,$geodir_search_post_type_hide;
 	$post_types     = apply_filters( 'geodir_search_form_post_types', geodir_get_posttypes( 'object' ) );
 	$curr_post_type = $geodir_search_post_type;
 
@@ -889,7 +889,12 @@ function geodir_search_form_post_type_input() {
 			}
 		}
 
-		if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
+		$show_select = true;
+		if($geodir_search_post_type_hide == true && !isset( $_REQUEST['stype'] ) ){
+			$show_select = false;
+		}
+
+		if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 && $show_select) {
 
 			$new_style = geodir_get_option( 'geodir_show_search_old_search_from' ) ? false : true;
 			if ( $new_style ) {
@@ -905,7 +910,8 @@ function geodir_search_form_post_type_input() {
 					<option
 						<?php echo ' data-slug="'.$pt_slug.'" ';?>
 						data-label="<?php echo get_post_type_archive_link( $post_type ); ?>"
-					        value="<?php echo $post_type; ?>" <?php if ( isset( $_REQUEST['stype'] ) ) {
+					        value="<?php echo $post_type; ?>" <?php
+					if ( isset( $_REQUEST['stype'] ) ) {
 						if ( $post_type == $_REQUEST['stype'] ) {
 							echo 'selected="selected"';
 						}

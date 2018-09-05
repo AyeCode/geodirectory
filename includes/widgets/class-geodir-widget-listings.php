@@ -260,7 +260,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         global $gd_post, $post;
 
 
-        //print_r($instance);
+//        print_r($instance);
 
         // prints the widget
         extract( $args, EXTR_SKIP );
@@ -466,7 +466,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             'gd_location'    => $add_location_filter ? true : false,
             'post_type'      => $post_type,
             'order_by'       => $list_sort,
-			'distance_to_post' => $distance_to_post
+			'distance_to_post' => $distance_to_post,
         );
 
         if ( $character_count ) {
@@ -529,6 +529,13 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		 * Filter widget listings query args.
 		 */
 		$query_args = apply_filters( 'geodir_widget_listings_query_args', $query_args, $instance );
+
+	    $query_args['country'] = isset($instance['country']) ? $instance['country'] : '';
+	    $query_args['region'] = isset($instance['region']) ? $instance['region'] : '';
+	    $query_args['city'] = isset($instance['city']) ? $instance['city'] : '';
+
+//	    print_r($args );
+//	    print_r($query_args );
 
         $widget_listings = geodir_get_widget_listings( $query_args );
 

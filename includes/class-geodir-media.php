@@ -771,21 +771,50 @@ class GeoDir_Media {
 	 * @param $post_id
 	 *
 	 * @return false|int
-	 * @todo we need to remove the images from the folders.
 	 */
 	public static function delete_files($post_id,$field=''){
 		global $wpdb;
 		$result = '';
 		if($field=='all'){
+			$files = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = %d", $post_id));
+			if(!empty($files)){
+				self::delete_file($files);
+			}
 			$result = $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = %d", $post_id));
-			//wp_is_post_revision( absint($_REQUEST['ID']) )
-			delete_post_thumbnail( $post_id);
 		}elseif($field){
+			$files = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = %d AND type = %s", $post_id,$field));
+			if(!empty($files)){
+				self::delete_file($files);
+			}
 			$result = $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE post_id = %d AND type = %s", $post_id,$field));
-			delete_post_thumbnail( $post_id);
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Delete files from the attachment table.
+	 * 
+	 * @param $files
+	 */
+	public static function delete_file($files){
+
+		if(!empty($files)){
+			$wp_upload_dir = wp_upload_dir();
+			foreach($files as $file){
+				if(isset($file->file) && $file->file){
+					// check if its a post thumbnail also
+					if(isset($file->featured) && $file->featured){
+						$post_thumbnail_id = get_post_thumbnail_id( $file->post_id );
+						wp_delete_attachment( $post_thumbnail_id, true);
+					}else{
+						$file_path = $wp_upload_dir['basedir'] . $file->file;
+						@wp_delete_file( $file_path );
+					}
+				}
+			}
+		}
+
 	}
 
 	/**
