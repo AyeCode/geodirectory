@@ -34,6 +34,8 @@ class GeoDir_Post_types {
 		add_filter( 'gutenberg_can_edit_post_type', array( __CLASS__, 'disable_gutenberg'), 10, 2 );
 
 		add_action( 'geodir_post_type_saved', 'geodir_reorder_post_types', 999 );
+
+		add_filter( 'geodir_post_type_supports', array( __CLASS__, 'default_supports' ), -10, 3 );
 	}
 
 	/**
@@ -440,6 +442,24 @@ class GeoDir_Post_types {
 	 */
 	public static function supports( $post_type, $feature, $default = true ) {
 		return apply_filters( 'geodir_post_type_supports', $default, $post_type, $feature );
+	}
+
+	/**
+	 * Set default post type's support for a given feature.
+	 *
+	 * @param bool $value       True if supports else False.
+	 * @param string $post_type The post type being checked.
+	 * @param string $feature   The feature being checked.
+	 * @return bool Whether the post type supports the given feature.
+	 */
+	public static function default_supports( $value, $post_type, $feature ) {
+		switch ( $feature ) {
+			case 'events':
+				$value = defined( 'GEODIR_EVENT_VERSION' ) ? true : false;
+				break;
+		}
+
+		return $value;
 	}
 
 }
