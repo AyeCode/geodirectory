@@ -105,7 +105,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
         extract($args, EXTR_SKIP);
 
         // set the CPT to be used.
-        if(isset($post_type) && $post_type){
+        if(isset($post_type) && $post_type && geodir_is_gd_post_type($post_type)){
             geodir_get_search_post_type($post_type);// set the post type
         }else{
             geodir_get_search_post_type();// set the post type
