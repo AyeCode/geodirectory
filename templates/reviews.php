@@ -22,6 +22,7 @@ if (post_password_required() || $preview)
 ?>
 
 <div id="comments" class="comments-area geodir-comments-area">
+    <div class="commentlist-wrap">
 
     <?php // You can start editing here -- including this comment! ?>
 
@@ -99,7 +100,7 @@ if (post_password_required() || $preview)
      * @since 1.5.7
      */
     do_action('geodir_before_review_form'); ?>
-
+    </div>
     <?php
     /**
      * Filters comment form args

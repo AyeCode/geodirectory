@@ -48,12 +48,65 @@ class GeoDir_Permalinks {
 		// make child cat not contain parent cat url
 		add_filter('term_link', array($this,'term_url_no_parent'), 9, 3);
 
+		// maybe make the details page 404 if the locations vars are wrong
+		add_action('wp',array($this,'maybe_404'));
+
 		// try and recover from 404 if GD CPT detected
 		add_action('wp',array($this,'_404_rescue'));
 
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
 //		add_action('init', array( $this, 'temp_check_rules'),10000000000);
+	}
+
+	public function maybe_404(){
+		if(geodir_is_page('single')){
+			global $wp_query,$gd_post,$geodirectory;
+			
+			$should_404 = false;
+			$post_type = isset($wp_query->query_vars['post_type']) ? $wp_query->query_vars['post_type'] : '';
+			$post_locations = $geodirectory->location->get_post_location($gd_post);
+
+			// check country
+			if(isset($wp_query->query_vars['country']) && isset($gd_post->country) && $wp_query->query_vars['country']){
+				if(isset($post_locations->country_slug) && $post_locations->country_slug!=$wp_query->query_vars['country']){
+					$should_404 = true;
+				}
+			}
+
+			// check region
+			if(!$should_404 && isset($wp_query->query_vars['region']) && isset($gd_post->region) && $wp_query->query_vars['region']){
+				if(isset($post_locations->region_slug) && $post_locations->region_slug!=$wp_query->query_vars['region']){
+					$should_404 = true;
+				}
+			}
+
+			// check city
+			if(!$should_404 && isset($wp_query->query_vars['city']) && isset($gd_post->city) && $wp_query->query_vars['city']){
+				if(isset($post_locations->city_slug) && $post_locations->city_slug!=$wp_query->query_vars['city']){
+					$should_404 = true;
+				}
+			}
+
+			// check category
+			if(!$should_404 && isset($wp_query->query_vars[$post_type."category"]) && $wp_query->query_vars[$post_type."category"] && isset($gd_post->default_category) && $gd_post->default_category){
+
+				$is_cat = get_term_by( 'slug', $wp_query->query_vars[$post_type."category"], $post_type."category");
+//				print_r($is_cat);echo $wp_query->query_vars[$post_type."category"].'####';exit;
+
+				if(!$is_cat || ( isset($is_cat->term_id) && $is_cat->term_id!=$gd_post->default_category)){
+					$should_404 = true;
+				}
+			}
+
+
+			
+			if($should_404){
+				$wp_query->set_404();
+				status_header(404);
+			}
+		}
+
 	}
 
 	/**

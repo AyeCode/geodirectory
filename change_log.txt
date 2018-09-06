@@ -8,6 +8,7 @@ Function to remove category parent slug could partially remove other url parts -
 OSM cant handel geocode search of UK post codes missing the space - FIXED
 Column looses the value after converting ENUM to TINYINT data type on upgrade - FIXED
 404 rescue function added to try and automatically redirect GD 404s to their new permalink url - ADDED
+Details page url can use wrong locations or category in url without showing a 404 - FIXED
 
 v2.0.0.26
 GD > Listings widget can somtimes add "View All" links to other widgets - FIXED
