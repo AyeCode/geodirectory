@@ -111,6 +111,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 			//$settings = $this->get_settings( $current_section );
 			//GeoDir_Admin_Settings::save_fields( $settings );
+
+			// run the create tables function to add our new columns.
+			GeoDir_Admin_Install::create_tables();
 		}
 
 		/**

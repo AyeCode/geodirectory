@@ -24,6 +24,10 @@ class GeoDir_Admin_Dummy_Data {
 	public function __construct() {
 
 	}
+	
+	public static function create_sort_fields(){
+		
+	}
 
 	/**
 	 * Default taxonomies
@@ -279,6 +283,7 @@ class GeoDir_Admin_Dummy_Data {
 		
 		$dummy_categories = array();
 		$dummy_custom_fields = array();
+		$dummy_sort_fields = array();
 		$dummy_posts = array();
 		$dummy_image_url = '';
 		foreach ( $data_types as $key => $val ) {
@@ -336,9 +341,15 @@ class GeoDir_Admin_Dummy_Data {
 
 			// insert custom fields
 			if( !empty($dummy_custom_fields) ){
-
 				foreach ($dummy_custom_fields as $field_index => $field) {
 					geodir_custom_field_save($field);
+				}
+			}
+
+			// insert sort fields
+			if( !empty($dummy_sort_fields) ){
+				foreach ($dummy_sort_fields as $field_index => $field) {
+					GeoDir_Settings_Cpt_Sorting::save_custom_field($field);
 				}
 			}
 

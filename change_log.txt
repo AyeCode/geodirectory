@@ -1,3 +1,9 @@
+v2.0.0.28
+Search adds all terms to query if search field is blank - FIXED
+Category widget, hide icon option not working - FIXED
+Sort by options added to dummy data insert - ADDED
+Only show sort option is there are more than one - CHANGED
+
 v2.0.0.27
 Search not searching tags - FIXED
 Comments section can sometimes show on the search page - FIXED

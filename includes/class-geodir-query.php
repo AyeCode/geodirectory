@@ -434,8 +434,10 @@ class GeoDir_Query {
 			if ( geodir_is_page( 'search' ) && isset( $_REQUEST['spost_category'] ) && ( ( is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'][0] ) ) || ( ! is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'] ) ) ) ) {
 				$term_results = array();
 			} else {
-				// get term sql
-				$term_sql = "SELECT $wpdb->term_taxonomy.term_id 
+
+				if( $s != '' ){
+					// get term sql
+					$term_sql = "SELECT $wpdb->term_taxonomy.term_id 
 						FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
 						WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id 
 						AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id 
@@ -443,19 +445,21 @@ class GeoDir_Query {
 						$terms_where 
 						GROUP BY $wpdb->term_taxonomy.term_id";
 
-				$term_results = $wpdb->get_results( $term_sql );
-			}
-			$term_ids = array();
-			//$terms_sql = '';
+					$term_results = $wpdb->get_results( $term_sql );
 
-			if ( !empty( $term_results ) ) {
-				foreach ( $term_results as $term_id ) {
-					$term_ids[] = $term_id;
-				}
-				if ( !empty ( $term_ids ) ) {
+					$term_ids  = array();
+					$terms_sql = '';
 
-					foreach ( $term_ids as $term ) {
-						$terms_sql .= " OR FIND_IN_SET( $term->term_id , ".$table.".post_category ) ";
+					if ( ! empty( $term_results ) ) {
+						foreach ( $term_results as $term_id ) {
+							$term_ids[] = $term_id;
+						}
+						if ( ! empty ( $term_ids ) ) {
+
+							foreach ( $term_ids as $term ) {
+								$terms_sql .= " OR FIND_IN_SET( $term->term_id , " . $table . ".post_category ) ";
+							}
+						}
 					}
 				}
 			}
@@ -479,7 +483,7 @@ class GeoDir_Query {
 				}
 
 			} else {
-				$post_title_where = $s != "" ? "{$wpdb->posts}.post_title LIKE \"$s\"" : "1";
+				$post_title_where = $s != "" ? "{$wpdb->posts}.post_title LIKE \"$s\"" : "1=1";
 				$where .= " AND ( 
 						( $post_title_where $better_search_terms )
                         $content_where  

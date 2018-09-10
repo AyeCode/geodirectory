@@ -632,11 +632,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 
 
-//			print_r($field);exit;
+			//print_r($field);exit;
 
 			// Check field exists.
-			//$exists = self::field_exists($field->htmlvar_name,$field->post_type);
-			$exists = isset($field->field_id) && $field->field_id > 0 ? true : false;
+			$exists = self::field_exists($field->htmlvar_name,$field->post_type);
+//			$exists = isset($field->field_id) && $field->field_id > 0 ? true : false;
 
 
 //			if($exists){echo '###exizts';}else{echo '###nonexists';}
@@ -650,6 +650,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 				return new WP_Error( 'failed', $exists->get_error_message() );
 			}elseif( $exists && !$field->field_id ){
 				//return new WP_Error( 'failed', __( "Duplicate field detected, save failed.", "geodirectory" ) );
+				return ''; // return blank, probably dummy data being inserted.
 			}
 
 
@@ -670,11 +671,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 				'sort' => $field->sort,
 				'is_active' => $field->is_active,
 				'is_default' => $field->is_default,
-				//'default_order' => $field->default_order,
-				//'sort_asc' => $field->asc,
-				//'sort_desc' => $field->desc,
-				//'asc_title' => $field->asc_title,
-				//'desc_title' => $field->desc_title,
 			);
 
 			//print_r($db_data);exit;
@@ -689,11 +685,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 				'%s', // sort
 				'%d', // is_active
 				'%d', // is_default
-//				'%s', // default_order
-//				'%d', // asc
-//				'%d', // desc
-//				'%s', // asc_title
-//				'%s', // desc_title
 			);
 
 			if($exists){

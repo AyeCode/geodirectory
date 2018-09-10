@@ -614,7 +614,7 @@ add_action( 'template_redirect', 'geodir_template_redirect' );
  * @package GeoDirectory
  *
  */
-function geodir_list_view_select() {
+function geodir_list_view_select($post_type) {
 	?>
 <script type="text/javascript">
 	function geodir_list_view_select($list) {
@@ -700,6 +700,7 @@ function geodir_list_view_select() {
 	</div>
 	<?php
 }
+add_action('geodir_extra_loop_actions','geodir_list_view_select',8);
 
 
 /**
