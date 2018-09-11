@@ -273,10 +273,10 @@ class GeoDir_Media {
 				$file_type = wp_check_filetype(basename($url));
 				$upload_dir = wp_upload_dir();
 				$file = array(
-					'file'  => $upload_dir['subdir'].'/'.basename($metadata['file']),
+					'file'  => $upload_dir['path'].'/'.basename($metadata['file']),
 					'type'  => $file_type['type']
 				);
-
+				
 				// only set the featured image if its approved
 				if($is_approved && !wp_is_post_revision( absint($post_id) ) ){
 					set_post_thumbnail($post_id, $attachment_id);
@@ -290,6 +290,7 @@ class GeoDir_Media {
 			if ( is_wp_error($file  ) ) {
 				return $file;
 			}
+
 
 			if(isset($file['type']) && $file['type']){
 				if(self::is_image($file['type'])){

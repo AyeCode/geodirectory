@@ -454,11 +454,18 @@ class GeoDir_Post_types {
 	 * @return bool Whether the post type supports the given feature.
 	 */
 	public static function default_supports( $value, $post_type, $feature ) {
+		$post_types = geodir_get_posttypes('array');
+//		print_r($post_types );exit;
 		switch ( $feature ) {
 			case 'events':
-				$value = defined( 'GEODIR_EVENT_VERSION' ) ? true : false;
+				if(isset($post_types[$post_type]) && isset($post_types[$post_type]['supports_events']) && $post_types[$post_type]['supports_events']){
+					$value = defined( 'GEODIR_EVENT_VERSION' ) ? true : false;
+				}else{
+					$value = false;
+				}
 				break;
 		}
+
 
 		return $value;
 	}

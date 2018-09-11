@@ -260,8 +260,7 @@ class GeoDir_Admin_Dummy_Data {
 	 */
 	public static function create_dummy_posts( $request ) {
 
-
-		global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$dummy_post_index,$dummy_image_url,$plugin_prefix, $dummy_categories, $dummy_custom_fields, $dummy_posts;
+		global $city_bound_lat1, $city_bound_lng1, $city_bound_lat2, $city_bound_lng2,$dummy_post_index,$dummy_image_url,$plugin_prefix, $dummy_categories, $dummy_custom_fields, $dummy_posts,$dummy_sort_fields;
 //		$city_bound_lat1 = geodir_is_valid_lat($request['city_bound_lat1']) ? $request['city_bound_lat1'] : '';
 //		$city_bound_lng1 = geodir_is_valid_lon($request['city_bound_lng1']) ? $request['city_bound_lng1'] : '';
 //		$city_bound_lat2 = geodir_is_valid_lat($request['city_bound_lat2']) ? $request['city_bound_lat2'] : '';
@@ -332,7 +331,7 @@ class GeoDir_Admin_Dummy_Data {
 			 */
 			do_action( 'geodir_insert_dummy_data_loop', $post_type, $data_type, $item_index );
 		}
-
+		
 		// Do the data insert
 		if($dummy_post_index === 0){
 
@@ -351,6 +350,8 @@ class GeoDir_Admin_Dummy_Data {
 				foreach ($dummy_sort_fields as $field_index => $field) {
 					GeoDir_Settings_Cpt_Sorting::save_custom_field($field);
 				}
+
+
 			}
 
 			// insert categories

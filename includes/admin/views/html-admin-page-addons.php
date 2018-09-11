@@ -110,9 +110,9 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="clearfix" ></div>
 
 	<?php if($current_tab =='addons'){?>
-	<p><?php printf( __( 'All of our GeoDirectory Addons can be found on GeoDirectory.com here: <a href="%s">GeoDirectory Addons</a>', 'geodirectory' ), 'https://wpgeodirectory.com/downloads/category/addons/' ); ?></p>
+	<p><?php printf( __( 'All of our GeoDirectory Addons can be found on WPGeoDirectory.com here: <a href="%s">GeoDirectory Addons</a>', 'geodirectory' ), 'https://wpgeodirectory.com/downloads/category/addons/' ); ?></p>
 	<?php }elseif($current_tab =='themes'){?>
-		<p><?php printf( __( 'All of our GeoDirectory Themes can be found on GeoDirectory.com here: <a href="%s">GeoDirectory Themes</a>', 'geodirectory' ), 'https://wpgeodirectory.com/downloads/category/themes/' ); ?></p>
+		<p><?php printf( __( 'All of our GeoDirectory Themes can be found on WPGeoDirectory.com here: <a href="%s">GeoDirectory Themes</a>', 'geodirectory' ), 'https://wpgeodirectory.com/downloads/category/themes/' ); ?></p>
 	<?php }?>
 
 	<div id="gd-wpeu-required-activation" class="lity-hide "><span class="gd-notification "><?php printf( __("The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='%s'>activate</a> it now.","geodirectory"),wp_nonce_url(admin_url('plugins.php?action=activate&plugin=wp-easy-updates/external-updates.php'), 'activate-plugin_wp-easy-updates/external-updates.php'));?></span></div>
