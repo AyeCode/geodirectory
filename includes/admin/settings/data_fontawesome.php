@@ -262,6 +262,7 @@ function geodir_font_awesome_array() {
 		'fas fa-glass-martini' => 'f000',
 		'fas fa-glasses' => 'f530',
 		'fas fa-globe' => 'f0ac',
+		'fas fa-globe-americas' => 'f57d',
 		'fas fa-golf-ball' => 'f450',
 		'fas fa-graduation-cap' => 'f19d',
 		'fas fa-greater-than' => 'f531',
