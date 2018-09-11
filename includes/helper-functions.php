@@ -109,12 +109,13 @@ function geodir_login_page_id(){
  *
  * @package Geodirectory
  * @since 2.0.0
+ * @param string $post_type Post type.
  * @return int|null Return the page ID if present or null if not.
  */
-function geodir_archive_page_id(){
-	$gd_page_id = geodir_get_page_id( 'archive' );
+function geodir_archive_page_id($post_type = ''){
+	$gd_page_id = geodir_get_page_id( 'archive', $post_type );
 
-	return apply_filters( 'geodir_archive_page_id', $gd_page_id );
+	return apply_filters( 'geodir_archive_page_id', $gd_page_id, $post_type );
 }
 
 /**
@@ -122,12 +123,13 @@ function geodir_archive_page_id(){
  *
  * @package Geodirectory
  * @since 2.0.0
+ * @param string $post_type Post type.
  * @return int|null Return the page ID if present or null if not.
  */
-function geodir_archive_item_page_id(){
-	$gd_page_id = geodir_get_page_id( 'archive_item' );
+function geodir_archive_item_page_id($post_type = ''){
+	$gd_page_id = geodir_get_page_id( 'archive_item', $post_type );
 
-	return apply_filters( 'geodir_archive_item_page_id', $gd_page_id );
+	return apply_filters( 'geodir_archive_item_page_id', $gd_page_id, $post_type );
 }
 
 /**
@@ -148,12 +150,13 @@ function geodir_search_page_id(){
  *
  * @package Geodirectory
  * @since 2.0.0
+ * @param string $post_type Post type.
  * @return int|null Return the page ID if present or null if not.
  */
-function geodir_details_page_id(){
-	$gd_page_id = geodir_get_page_id( 'details' );
+function geodir_details_page_id($post_type = ''){
+	$gd_page_id = geodir_get_page_id( 'details', $post_type );
 
-	return apply_filters( 'geodir_details_page_id', $gd_page_id );
+	return apply_filters( 'geodir_details_page_id', $gd_page_id, $post_type );
 }
 
 /**

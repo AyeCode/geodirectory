@@ -493,6 +493,8 @@ function geodir_is_geodir_page_id($id) {
 		return true;
 	}elseif(!empty($geodirectory->settings['page_archive_item']) && $geodirectory->settings['page_archive_item'] == $id ){
 		return true;
+	}elseif( geodir_is_cpt_template_page( $id ) ){
+		return true;
 	}
 	return false;
 }
@@ -1921,4 +1923,69 @@ function geodir_get_blogurl() {
 	$blogurl = home_url( '/' );
 
 	return apply_filters( 'geodir_get_blogurl', $blogurl );
+}
+
+/**
+ * Checks whether a page id is a GD CPT template page or not.
+ *
+ * @since   2.0.0.28
+ * @package GeoDirectory
+
+ * @return bool If the page is a GD CPT template page returns true. Otherwise false.
+ */
+function geodir_is_cpt_template_page( $id ) {
+	$return = wp_cache_get( 'geodir_check_cpt_template_page:' . $id, 'geodir_cpt_template_page' );
+
+	if ( $return !== false ) {
+		return (bool)$return;
+	}
+
+	$return = 0;
+
+	if ( ! empty( $id ) && ( $pages = geodir_cpt_template_pages() ) ) {
+		if ( in_array( $id, $pages ) ) {
+			$return = true;
+		}
+	}
+
+	wp_cache_set( 'geodir_check_cpt_template_page:' . $id, $return, 'geodir_cpt_template_page' );
+
+	return $return;
+}
+
+/**
+ * Get CPT templage page ids.
+ *
+ * @since   2.0.0.28
+ * @package GeoDirectory
+
+ * @return array CPT template page ids.
+ */
+function geodir_cpt_template_pages() {
+	$page_ids = wp_cache_get( 'geodir_cpt_template_pages', 'geodir_cpt_template_page' );
+
+	if ( $page_ids !== false ) {
+		return (array)$page_ids;
+	}
+
+	$post_types = geodir_get_posttypes( 'object' );
+	$pages = array( 'page_details', 'page_archive', 'page_archive_item' );
+
+	$page_ids = array();
+
+	foreach ( $post_types as $post_type => $post_type_obj ) {
+		foreach ( $pages as $page ) {
+			if ( ! empty( $post_type_obj->{$page} ) ) {
+				$page_ids[] = absint( $post_type_obj->{$page} );
+			}
+		}
+	}
+
+	if ( ! empty( $page_ids ) ) {
+		$page_ids = array_unique( $page_ids );
+	}
+
+	wp_cache_set( 'geodir_cpt_template_pages', $page_ids, 'geodir_cpt_template_page' );
+
+	return $page_ids;
 }

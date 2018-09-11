@@ -125,6 +125,22 @@ class GeoDir_Admin {
 			                                                   geodir_help_tip( __( 'This is the page that will be used for your terms and conditions.', 'geodirectory' ) );
 		}
 
+		$post_types = geodir_get_posttypes( 'array' );
+		foreach ( $post_types as $post_type => $post_type_arr ) {
+			$name = $post_type_arr['labels']['singular_name'];
+
+			if ( ! empty( $post_type_arr[ 'page_archive' ] ) && $post->ID == $post_type_arr[ 'page_archive' ] ) {
+				$post_states['geodir_archive_page_' . $post_type] = wp_sprintf( __( 'GD Archive template (%s)', 'geodirectory' ), $name ) .
+													  geodir_help_tip( wp_sprintf( __( 'Used to design the %s archive pages but should never be linked to directly.', 'geodirectory' ), $name ) );
+			} else if ( ! empty( $post_type_arr[ 'page_archive_item' ] ) && $post->ID == $post_type_arr[ 'page_archive_item' ] ) {
+				$post_states['geodir_archive_item_page_' . $post_type] = wp_sprintf( __( 'GD Archive Item template (%s)', 'geodirectory' ), $name ) .
+													  geodir_help_tip( wp_sprintf( __( 'Used to design the %s archive items but should never be linked to directly.', 'geodirectory' ), $name ) );
+			} else if ( ! empty( $post_type_arr[ 'page_details' ] ) && $post->ID == $post_type_arr[ 'page_details' ] ) {
+				$post_states['geodir_details_page_' . $post_type] = wp_sprintf( __( 'GD Details template (%s)', 'geodirectory' ), $name ) .
+													  geodir_help_tip( wp_sprintf( __( 'Used to design the %s details page but should never be linked to directly.', 'geodirectory' ), $name ) );
+			}
+		}
+
 		return $post_states;
 	}
 

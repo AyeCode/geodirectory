@@ -27,7 +27,7 @@ global $gd_post;
 	<?php
 
 	// get content from GD Archive Item page template
-	echo GeoDir_Template_Loader::archive_item_template_content();
+	echo GeoDir_Template_Loader::archive_item_template_content($gd_post->post_type);
 
 	?>
 </li>

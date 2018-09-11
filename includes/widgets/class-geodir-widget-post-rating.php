@@ -139,7 +139,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
            } else {
                if(geodir_is_block_demo()){
                    $post_rating = "5";
-               }elseif(isset($post->ID) && $post->ID == geodir_details_page_id()){
+               }elseif(isset($post->ID) && ( $post->ID == geodir_details_page_id() || $post->ID == geodir_details_page_id( $post->post_type ) )){
                    $post_rating = "5";
                }else{
                    $post_rating = geodir_get_post_rating( $post->ID );

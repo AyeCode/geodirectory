@@ -3,6 +3,8 @@ Search adds all terms to query if search field is blank - FIXED
 Category widget, hide icon option not working - FIXED
 Sort by options added to dummy data insert - ADDED
 Only show sort option is there are more than one - CHANGED
+Deleted tag still displayed on the listing detail page - FIXED
+Options added to select archive, archive item & details pages for each cpt from the cpt settings - ADDED
 
 v2.0.0.27
 Search not searching tags - FIXED
@@ -11,17 +13,17 @@ Show CPT selector options in search widget settings if more than one CPT exists 
 Changing tab on details page now triggers window resize to adjust styles - ADDED
 Featured image not properly delete on post delete - FIXED
 Function to remove category parent slug could partially remove other url parts - FIXED
-OSM cant handel geocode search of UK post codes missing the space - FIXED
+OSM cant handle geocode search of UK post codes missing the space - FIXED
 Column looses the value after converting ENUM to TINYINT data type on upgrade - FIXED
 404 rescue function added to try and automatically redirect GD 404s to their new permalink url - ADDED
 Details page url can use wrong locations or category in url without showing a 404 - FIXED
 
 v2.0.0.26
-GD > Listings widget can somtimes add "View All" links to other widgets - FIXED
+GD > Listings widget can sometimes add "View All" links to other widgets - FIXED
 Changes for CPT addon compatibility - CHANGED
 
 v2.0.0.25
-is_slash() permalink method not working which could casue some urls to not end with a slash - FIXED
+is_slash() permalink method not working which could cause some urls to not end with a slash - FIXED
 Listings published from wp-admin can send wrong category in url of email to users - FIXED
 New post preview going to 404 for logged in users - FIXED
 Kleo theme not using GD titles - FIXED

@@ -42,6 +42,9 @@ class GeoDir_Admin_Taxonomies {
         add_action('edited_term', array( $this, 'update_term_slug'), 1, 3);
         add_action('create_term', array( $this, 'update_term_slug'), 1, 3);
 
+		// Update post data when term deleted
+		add_action( 'delete_term', array( $this, 'on_delete_term' ), 0, 5 );
+
         // filter function to check if term slug exists
         add_filter( 'geodir_term_slug_is_exists', array( $this,'term_slug_is_exists'), 0, 3);
         add_filter( 'geodir_term_slug_is_exists', array( $this,'check_term_to_post_slug'), 10, 3 );
@@ -999,6 +1002,44 @@ class GeoDir_Admin_Taxonomies {
             geodir_update_option( 'gd_term_icons', '' ); // Rebuild term icons.
         }
     }
+
+	/**
+	 * Update post data on term delete.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 *
+	 * @param int     $term         Term ID.
+	 * @param int     $tt_id        Term taxonomy ID.
+	 * @param string  $taxonomy     Taxonomy slug.
+	 * @param mixed   $deleted_term Copy of the already-deleted term, in the form specified
+	 *                              by the parent function. WP_Error otherwise.
+	 * @param array   $object_ids   List of term object IDs.
+	 */
+	public function on_delete_term( $term, $tt_id, $taxonomy = '', $deleted_term = array(), $object_ids = array() ) {
+		global $wpdb;
+
+		if ( ! geodir_is_gd_taxonomy( $taxonomy ) ) {
+            return;
+        }
+
+		if ( ! empty( $object_ids ) && geodir_taxonomy_type( $taxonomy ) == 'tag' && ( $taxonomy_obj = get_taxonomy( $taxonomy ) ) ) {
+			$post_type = !empty( $taxonomy_obj ) ? $taxonomy_obj->object_type[0] : '';
+
+			if ( $post_type ) {
+				$table = geodir_db_cpt_table( $post_type );
+			
+				foreach ( $object_ids as $post_id ) {
+					$post_tags = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'names' ) );
+					$post_tags = ! empty( $post_tags ) && ! is_wp_error( $post_tags ) ? array_map( 'trim', $post_tags ) : '';
+					$post_tags = ! empty( $post_tags ) ? implode( ',', array_filter( array_unique( $post_tags ) ) ) : '';
+
+					$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET post_tags = %s WHERE post_id = %d", array( $post_tags, $post_id ) ) );
+				}
+			}
+		}
+	}
 
 }
 

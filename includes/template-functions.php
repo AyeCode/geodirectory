@@ -718,13 +718,21 @@ function geodir_listing_archive_image(){
  * @since 2.0.0
  *
  * @param string $page
+ * @param string $post_type Post type.
  * @param  bool $translated Optional. Translated page ID .Default true.
  * @return int
  */
-function geodir_get_page_id( $page, $translated = true ) {
-	$page_id = geodir_get_option( 'page_' . $page );
+function geodir_get_page_id( $page, $post_type = '', $translated = true ) {
+	$page_id = 0;
+	if ( ! empty( $post_type ) ) {
+		$page_id = geodir_get_cpt_page_id( $page, $post_type );
+	}
 
-	$page_id = apply_filters( 'geodir_get_page_id', $page_id, $page, $translated );
+	if ( ! $page_id ) {
+		$page_id = geodir_get_option( 'page_' . $page );
+	}
+
+	$page_id = apply_filters( 'geodir_get_page_id', $page_id, $page, $post_type, $translated );
 
 	return $page_id ? absint( $page_id ) : -1;
 }
@@ -802,4 +810,37 @@ function geodir_extra_loop_actions() {
 	$post_type = geodir_get_current_posttype();
 
 	do_action( 'geodir_extra_loop_actions', $post_type );
+}
+
+/**
+ * Retrieve CPT page id.
+ *
+ * @since 2.0.28
+ *
+ * @param string $page
+ * @param string $post_type Post type.
+ * @return int
+ */
+function geodir_get_cpt_page_id( $page, $post_type = '' ) {
+	$page_id = 0;
+	$pages = array( 'page_details', 'page_archive', 'page_archive_item' );
+
+	if ( empty( $page ) || ! in_array( 'page_' . $page, $pages ) ) {
+		return $page_id;;
+	}
+
+	$page_id = wp_cache_get( "geodir_cpt_template_page_id:{$post_type}:{$page}", 'geodir_cpt_template_page' );
+
+	if ( $page_id !== false ) {
+		return $page_id;
+	}
+
+	$post_types = geodir_get_posttypes( 'array' );
+	if ( ! empty( $post_types ) && ! empty( $post_types[ $post_type ][ 'page_' . $page ] ) ) {
+		$page_id = (int)$post_types[ $post_type ][ 'page_' . $page ];
+	}
+
+	wp_cache_set( "geodir_cpt_template_page_id:{$post_type}:{$page}", $page_id, 'geodir_cpt_template_page' );
+
+	return $page_id;
 }
