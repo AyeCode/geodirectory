@@ -170,6 +170,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				'disable_reviews' => '0',
 				'disable_favorites' => '0',
 				'disable_frontend_add' => '0',
+				// Page template
+				'page_details' => '0',
+				'page_archive' => '0',
+				'page_archive_item' => '0',
 			) );
 
 			$post_type_values['order'] = ( isset( $post_type_option['listing_order'] ) ? $post_type_option['listing_order'] : '' );
@@ -469,6 +473,66 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'value'	   => $post_type_values['meta_description']
 				),
 
+				// Page template
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_page' ),
+
+				array(
+					'title'    => __( 'Template Page Settings', 'geodirectory' ),
+					'type'     => 'title',
+					'desc'     => __( 'Template pages are used to design the respective pages and should never be linked to directly.', 'geodirectory' ),
+					'id'       => 'cpt_settings_page',
+					'desc_tip' => true,
+					'advanced' => true,
+				),
+				array(
+					'name'     => __( 'Details Page', 'geodirectory' ),
+					'desc'     => __( 'Select the page to use as the GD details page template', 'geodirectory' ),
+					'id'       => 'page_details',
+					'type'     => 'single_select_page',
+					'is_template_page' => true,
+					'class'    => 'geodir-select',
+					'desc_tip' => true,
+					'advanced' => true,
+					'value'	   => $post_type_values['page_details'],
+					'args'     => array(
+						'show_option_none' => wp_sprintf( __( 'Default (%s)', 'geodirectory' ), get_the_title( geodir_get_option( 'page_details' ) ) ),
+						'option_none_value' => '0',
+						'sort_column' => 'post_title',
+					)
+				),
+				array(
+					'name'     => __( 'Archive page', 'geodirectory' ),
+					'desc'     => __( 'Select the page to use for GD archives such as taxonomy and CPT pages', 'geodirectory' ),
+					'id'       => 'page_archive',
+					'type'     => 'single_select_page',
+					'is_template_page' => true,
+					'class'    => 'geodir-select',
+					'desc_tip' => true,
+					'advanced' => true,
+					'value'	   => $post_type_values['page_archive'],
+					'args'     => array(
+						'show_option_none' => wp_sprintf( __( 'Default (%s)', 'geodirectory' ), get_the_title( geodir_get_option( 'page_archive' ) ) ),
+						'option_none_value' => '0',
+						'sort_column' => 'post_title',
+					)
+				),
+				array(
+					'name'     => __( 'Archive item page', 'geodirectory' ),
+					'desc'     => __( 'Select the page to use for GD archive items, this is the item template used on taxonomy and CPT pages', 'geodirectory' ),
+					'id'       => 'page_archive_item',
+					'type'     => 'single_select_page',
+					'is_template_page' => true,
+					'class'    => 'geodir-select',
+					'desc_tip' => true,
+					'advanced' => true,
+					'value'	   => $post_type_values['page_archive_item'],
+					'args'     => array(
+						'show_option_none' => wp_sprintf( __( 'Default (%s)', 'geodirectory' ), get_the_title( geodir_get_option( 'page_archive_item' ) ) ),
+						'option_none_value' => '0',
+						'sort_column' => 'post_title',
+					)
+				),
+
 
 				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
 
@@ -642,6 +706,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 			$output[$post_type]['menu_icon'] = !empty( $raw['menu_icon'] ) ? GeoDir_Post_types::sanitize_menu_icon( $raw['menu_icon'] ) : 'dashicons-admin-post';
 			$output[$post_type]['default_image'] = !empty( $raw['default_image'] ) ? $raw['default_image'] : '';
+
+			// Page template
+			$output[$post_type]['page_details'] = isset( $raw['page_details'] ) ? (int)$raw['page_details'] : 0;
+			$output[$post_type]['page_archive'] = isset( $raw['page_archive'] ) ? (int)$raw['page_archive'] : 0;
+			$output[$post_type]['page_archive_item'] = isset( $raw['page_archive_item'] ) ? (int)$raw['page_archive_item'] : 0;
 
 			return apply_filters('geodir_save_post_type', $output, $post_type, $raw);
 

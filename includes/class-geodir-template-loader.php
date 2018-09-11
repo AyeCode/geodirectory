@@ -85,7 +85,8 @@ class GeoDir_Template_Loader {
             if($single_template && locate_template( $single_template )){
                 $default_file = $single_template;
             }else{
-                $page_id = geodir_details_page_id();
+				$post_type = geodir_get_current_posttype();
+                $page_id = geodir_details_page_id($post_type);
                 if($page_id &&  $template = get_page_template_slug( $page_id )){
                     if(is_page_template( $template )){
                         $default_file = $template;
@@ -163,7 +164,8 @@ class GeoDir_Template_Loader {
         if(geodir_is_page('search')){
             $archive_page_id = geodir_search_page_id();
         }else{
-            $archive_page_id = geodir_archive_page_id();
+            $post_type = geodir_get_current_posttype();
+			$archive_page_id = geodir_archive_page_id($post_type);
         }
         $content = get_post_field('post_content', $archive_page_id  );
 
@@ -208,7 +210,8 @@ class GeoDir_Template_Loader {
         if(geodir_is_page('search')){
             $archive_page_id = geodir_search_page_id();
         }else{
-            $archive_page_id = geodir_archive_page_id();
+			$post_type = geodir_get_current_posttype();
+            $archive_page_id = geodir_archive_page_id($post_type);
         }
         $archive_page = get_post($archive_page_id);
         $wp_query->posts = array($archive_page);
@@ -246,7 +249,8 @@ class GeoDir_Template_Loader {
 
 
             // get the archive template page content
-            $page_id = geodir_details_page_id();
+            $post_type = geodir_get_current_posttype();
+			$page_id = geodir_details_page_id($post_type);
             $content = get_post_field( 'post_content', $page_id );
 
             // if the content is blank then just add the main loop
@@ -298,9 +302,10 @@ class GeoDir_Template_Loader {
      * Setup the GD Archive page content.
      *
      * @since 2.0.0
+	 * @param string $post_type Post type.
      * @return string $content The filtered content.
      */
-    public static function archive_item_template_content(){
+    public static function archive_item_template_content($post_type = ''){
 
         // remove our filter so we don't get stuck in a loop
        // remove_filter( 'the_content', array( __CLASS__, 'setup_archive_item_page_content' ) );
@@ -316,7 +321,7 @@ class GeoDir_Template_Loader {
        // if(geodir_is_page('search')){
             //$archive_page_id = geodir_search_page_id();
        // }else{
-            $archive_page_id = geodir_archive_item_page_id();
+            $archive_page_id = geodir_archive_item_page_id($post_type);
         //}
         $content = get_post_field('post_content', $archive_page_id  );
 
@@ -407,6 +412,7 @@ class GeoDir_Template_Loader {
                 $post->ID == geodir_get_option('page_details')
                 || $post->ID == geodir_get_option('page_archive')
                 || $post->ID == geodir_get_option('page_archive_item')
+				|| geodir_is_cpt_template_page( $post->ID )
             )){
             wp_die( __( 'Sorry, this is a page template and can not be accessed from the frontend, it is used for building the layouts of GeoDirectory sections.','geodirectory' ) );
         }

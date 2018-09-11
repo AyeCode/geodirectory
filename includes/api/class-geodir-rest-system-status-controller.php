@@ -850,7 +850,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 
 		$pages_output = array();
 		foreach ( $check_pages as $page_name => $values ) {
-			$page_id  = geodir_get_page_id( $values['option'], false );
+			$page_id  = geodir_get_page_id( $values['option'], '', false );
 			$page_set = $page_exists = $page_visible = false;
 			$shortcode_present = $shortcode_required = false;
 
