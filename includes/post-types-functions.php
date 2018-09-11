@@ -668,7 +668,7 @@ function geodir_get_sort_options( $post_type ) {
  * @global object $wp_query WordPress Query object.
  * @todo this function can be made much simpler
  */
-function geodir_display_sort_options() {
+function geodir_display_sort_options($post_type) {
     global $wp_query;
 
     /**
@@ -686,14 +686,14 @@ function geodir_display_sort_options() {
         $sort_by = esc_attr($_REQUEST['sort_by']);
     }
 
-    $gd_post_type = geodir_get_current_posttype();
+    $gd_post_type = $post_type;
 
     $sort_options = geodir_get_sort_options( $gd_post_type );
 
 
     $sort_field_options = '';
 
-    if ( ! empty( $sort_options ) ) {
+    if ( ! empty( $sort_options ) && count($sort_options) > 1 ) {
         foreach ( $sort_options as $sort ) {
             $sort = stripslashes_deep( $sort ); // strip slashes
 
@@ -746,6 +746,7 @@ function geodir_display_sort_options() {
     }
 
 }
+add_action('geodir_extra_loop_actions','geodir_display_sort_options',5);
 
 function geodir_reorder_post_types() {
 	$post_types = geodir_get_option( 'post_types', array() );

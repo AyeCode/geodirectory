@@ -482,12 +482,18 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						if($args['title_tag'] !="hide") $cpt_row .= '<'.$args['title_tag'].' class="gd-cptcat-title">' . __($cpt_info['labels']['name'], 'geodirectory') . '</'.$args['title_tag'].'>';
 					}
 					foreach ($categories as $category) {
-						$term_icon_url = !empty($term_icons) && isset($term_icons[$category->term_id]) ? $term_icons[$category->term_id] : '';
-						$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr($category->name) . ' icon" src="' . $term_icon_url . '" /> ' : '';
-						$cat_font_icon = get_term_meta( $category->term_id, 'ct_cat_font_icon', true );
-						$cat_color = get_term_meta( $category->term_id, 'ct_cat_color', true );
-						$cat_color = $cat_color ? $cat_color : '#ababab';
-						$term_icon = $cat_font_icon ? '<i class="fas '.$cat_font_icon.'" aria-hidden="true"></i>' : $term_icon_url;
+						$term_icon = '';
+						$cat_color ='';
+
+						if(!$hide_icon) {
+							$term_icon_url = ! empty( $term_icons ) && isset( $term_icons[ $category->term_id ] ) ? $term_icons[ $category->term_id ] : '';
+							$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr( $category->name ) . ' icon" src="' . $term_icon_url . '" /> ' : '';
+							$cat_font_icon = get_term_meta( $category->term_id, 'ct_cat_font_icon', true );
+							$cat_color     = get_term_meta( $category->term_id, 'ct_cat_color', true );
+							$cat_color     = $cat_color ? $cat_color : '#ababab';
+							$term_icon     = $cat_font_icon ? '<i class="fas ' . $cat_font_icon . '" aria-hidden="true"></i>' : $term_icon_url;
+						}
+
 
 						$term_link = get_term_link( $category, $category->taxonomy );
 						/** Filter documented in includes/general_functions.php **/
@@ -497,11 +503,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 						$cpt_row .= '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';
 
-						$cpt_row .= self::categories_loop_output('gd-cptcat-li-main',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon);
+						$cpt_row .= self::categories_loop_output('gd-cptcat-li-main',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon,$hide_icon);
 
 
 						if (!$skip_childs && ($all_childs || $max_count > 0) && ($max_level == 'all' || (int)$max_level > 0)) {
-							$cpt_row .= self::child_cats($category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons);
+							$cpt_row .= self::child_cats($category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons,$hide_icon);
 						}
 						$cpt_row .= '</li>';
 						$cpt_row .= '</ul>';
@@ -544,13 +550,18 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		return $output;
 	}
 
-	public static function categories_loop_output($li_class = 'gd-cptcat-li-main',$hide_count=false,$cat_count='',$cat_color,$term_link,$cat_name,$cat_icon){
+	public static function categories_loop_output($li_class = 'gd-cptcat-li-main',$hide_count=false,$cat_count='',$cat_color,$term_link,$cat_name,$cat_icon,$hide_icon){
 		$cpt_row = '';
 		$cpt_row .= '<li class="gd-cptcat-li '.$li_class.'">';
 		$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $cat_count . '</span>' : '';
-		$cpt_row .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '">';
-		$cpt_row .= "<span class='gd-cptcat-icon' >$cat_icon</span>";
-		$cpt_row .= '</a></span>';
+
+		if(!$hide_icon){
+			$cpt_row .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '">';
+			$cpt_row .= "<span class='gd-cptcat-icon' >$cat_icon</span>";
+			$cpt_row .= '</a></span>';
+		}
+
+
 		$cpt_row .= '<span class="gd-cptcat-cat-right"><a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '">';
 		$cpt_row .= $cat_name . $count . '</a></span>';
 
@@ -573,7 +584,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	 * @param int $depth Category depth level. Default 1.
 	 * @return string Html content.
 	 */
-	public static function child_cats($parent_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons, $depth = 1) {
+	public static function child_cats($parent_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons,$hide_icon, $depth = 1) {
 		$cat_taxonomy = $cpt . 'category';
 
 		$orderby = 'count';
@@ -614,9 +625,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			$term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );
 			$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $category->count . '</span>' : '';
 
-			$content .= self::categories_loop_output('gd-cptcat-li-sub',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon);
+			$content .= self::categories_loop_output('gd-cptcat-li-sub',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon,$hide_icon);
 
-			$content .= self::child_cats($category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons, $depth);
+			$content .= self::child_cats($category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons,$hide_icon, $depth);
 		}
 		$content .= '</li></ul>';
 

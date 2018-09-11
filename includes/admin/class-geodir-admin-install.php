@@ -532,7 +532,7 @@ class GeoDir_Admin_Install {
      * @global object $wpdb WordPress Database object.
      * @since 2.0.0
 	 */
-	private static function create_tables() {
+	public static function create_tables() {
 		global $wpdb;
 
 		$wpdb->hide_errors();
@@ -590,8 +590,8 @@ class GeoDir_Admin_Install {
 							  default_value text NULL DEFAULT NULL,
 							  placeholder_value text NULL DEFAULT NULL,
 							  sort_order int(11) NOT NULL,
-							  tab_parent varchar(100) NOT NULL,
-							  tab_level int(11) NOT NULL,
+							  tab_parent varchar(100) NOT NULL DEFAULT '0',
+							  tab_level int(11) NOT NULL DEFAULT '0',
 							  option_values text NULL DEFAULT NULL,
 							  clabels text NULL DEFAULT NULL,
 							  is_active tinyint(1) NOT NULL DEFAULT '1',
@@ -629,11 +629,29 @@ class GeoDir_Admin_Install {
 							  PRIMARY KEY  (id)
 							  ) $collate; ";
 
-		// Table for storing place attribute - these are user defined
-		$tables .= " CREATE TABLE " . $plugin_prefix . "gd_place_detail (
-						".implode (",",self::db_cpt_default_columns(false)).",
+
+		// run through all GD CPTs
+
+		$post_types = geodir_get_option( 'post_types', array() );
+
+		if(empty($post_types)){
+			// Table for storing place attribute - these are user defined
+			$tables .= " CREATE TABLE " . $plugin_prefix . "gd_place_detail (
+						".implode (", \n",self::db_cpt_default_columns()).",
 						".implode (", \n",self::db_cpt_default_keys(false))." 
 						) $collate; ";
+		}else{
+			foreach($post_types as $post_type => $cpt){
+				// Table for storing place attribute - these are user defined
+				$tables .= " CREATE TABLE " . $plugin_prefix . $post_type . "_detail (
+						".implode (", \n",self::db_cpt_default_columns($cpt)).",
+						".implode (", \n",self::db_cpt_default_keys(false))." 
+						) $collate; ";
+			}
+
+			//print_r($tables);exit;
+		}
+
 
 		// Table for storing place images - these are user defined
 		$tables .= " CREATE TABLE " . GEODIR_ATTACHMENT_TABLE . " (
@@ -663,8 +681,8 @@ class GeoDir_Admin_Install {
 			frontend_title varchar(255) NOT NULL,
 			htmlvar_name varchar(255) NOT NULL,
 			sort_order int(11) NOT NULL,
-			tab_parent varchar(100) NOT NULL,
-			tab_level int(11) NOT NULL,
+			tab_parent varchar(100) NOT NULL DEFAULT '0',
+			tab_level int(11) NOT NULL DEFAULT '0',
 			is_active int(11) NOT NULL,
 			is_default int(11) NOT NULL,
 			sort varchar(5) DEFAULT 'asc',
@@ -1034,7 +1052,7 @@ class GeoDir_Admin_Install {
 	 *
 	 * @return array The array of default fields.
 	 */
-	public static function db_cpt_default_columns($locationless = false){
+	public static function db_cpt_default_columns($cpt = array()){
 
 		$columns = array();
 
@@ -1052,7 +1070,7 @@ class GeoDir_Admin_Install {
 		$columns['rating_count'] = "rating_count int(11) DEFAULT '0'";
 
 		// Location fields
-		if(!$locationless){
+		if(!isset($cpt['disable_location']) || !$cpt['disable_location']){
 			$columns['street'] = "street VARCHAR( 254 ) NULL";
 			$columns['city'] = "city VARCHAR( 50 ) NULL";
 			$columns['region'] = "region VARCHAR( 50 ) NULL";
@@ -1065,7 +1083,7 @@ class GeoDir_Admin_Install {
 		}
 
 
-		return apply_filters('geodir_db_cpt_default_columns',$columns,$locationless);
+		return apply_filters('geodir_db_cpt_default_columns',$columns,$cpt);
 	}
 
 	/**
@@ -1076,7 +1094,7 @@ class GeoDir_Admin_Install {
 	 *
 	 * @return array The array of default fields.
 	 */
-	public static function db_cpt_default_keys($locationless = false){
+	public static function db_cpt_default_keys($cpt = array()){
 
 		/*
 		 * Indexes have a maximum size of 767 bytes. Historically, we haven't need to be concerned about that.
@@ -1092,14 +1110,14 @@ class GeoDir_Admin_Install {
 		//$keys['featured'] = "KEY featured (featured)";
 
 		// Location keys
-		if(!$locationless){
+		if(!isset($cpt['disable_location']) || !$cpt['disable_location']){
 			$keys['country'] = "KEY country (country(50))";
 			$keys['region'] = "KEY region (region(50))";
 			$keys['city'] = "KEY city (city(50))";
 		}
 
 
-		return apply_filters('geodir_db_cpt_default_keys',$keys,$locationless);
+		return apply_filters('geodir_db_cpt_default_keys',$keys,$cpt);
 	}
 
     /**

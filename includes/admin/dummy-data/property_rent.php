@@ -42,6 +42,66 @@ $dummy_categories['land'] = array(
 // Set any custom fields
 $dummy_custom_fields = GeoDir_Admin_Dummy_Data::extra_custom_fields($post_type); // set extra default fields
 
+// Set any sort fields
+$dummy_sort_fields = array();
+
+// date added
+$dummy_sort_fields[] = array(
+	'post_type' => $post_type,
+	'data_type' => '',
+	'field_type' => 'datetime',
+	'frontend_title' => __('Newest','geodirectory'),
+	'htmlvar_name' => 'post_date',
+	'sort' => 'desc',
+	'is_active' => '1',
+	'is_default' => '1',
+);
+
+// title
+$dummy_sort_fields[] = array(
+	'post_type' => $post_type,
+	'data_type' => 'VARCHAR',
+	'field_type' => 'text',
+	'frontend_title' => __('Title','geodirectory'),
+	'htmlvar_name' => 'post_title',
+	'sort' => 'asc',
+	'is_active' => '1',
+	'is_default' => '0',
+);
+// price
+$dummy_sort_fields[] = array(
+	'post_type' => $post_type,
+	'data_type' => 'FLOAT',
+	'field_type' => 'text',
+	'frontend_title' => __('Price','geodirectory'),
+	'htmlvar_name' => 'price',
+	'sort' => 'asc',
+	'is_active' => '1',
+	'is_default' => '0',
+);
+// rating
+$dummy_sort_fields[] = array(
+	'post_type' => $post_type,
+	'data_type' => 'VARCHAR',
+	'field_type' => 'float',
+	'frontend_title' => __('Rating','geodirectory'),
+	'htmlvar_name' => 'overall_rating',
+	'sort' => 'desc',
+	'is_active' => '1',
+	'is_default' => '0',
+);
+// Bedrooms
+$dummy_sort_fields[] = array(
+	'post_type' => $post_type,
+	'data_type' => 'VARCHAR',
+	'field_type' => 'select',
+	'frontend_title' => __('Bedrooms','geodirectory'),
+	'htmlvar_name' => 'property_bedrooms',
+	'sort' => 'asc',
+	'is_active' => '1',
+	'is_default' => '0',
+);
+
 // Set dummy posts
 $dummy_posts = array();
 $dummy_posts[] = array(

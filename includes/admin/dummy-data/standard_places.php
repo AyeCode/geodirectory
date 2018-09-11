@@ -84,6 +84,45 @@ $dummy_custom_fields[] = array('post_type' => $post_type,
                                'clabels' => __('Business Hours', 'geodirectory'));
 
 
+// Set any sort fields
+$dummy_sort_fields = array();
+
+// date added
+$dummy_sort_fields[] = array(
+	'post_type' => $post_type,
+	'data_type' => '',
+	'field_type' => 'datetime',
+	'frontend_title' => __('Newest','geodirectory'),
+	'htmlvar_name' => 'post_date',
+	'sort' => 'desc',
+	'is_active' => '1',
+	'is_default' => '1',
+);
+
+// title
+$dummy_sort_fields[] = array(
+	'post_type' => $post_type,
+	'data_type' => 'VARCHAR',
+	'field_type' => 'text',
+	'frontend_title' => __('Title','geodirectory'),
+	'htmlvar_name' => 'post_title',
+	'sort' => 'asc',
+	'is_active' => '1',
+	'is_default' => '0',
+);
+
+// rating
+$dummy_sort_fields[] = array(
+	'post_type' => $post_type,
+	'data_type' => 'VARCHAR',
+	'field_type' => 'float',
+	'frontend_title' => __('Rating','geodirectory'),
+	'htmlvar_name' => 'overall_rating',
+	'sort' => 'desc',
+	'is_active' => '1',
+	'is_default' => '0',
+);
+
 // Set dummy posts
 $dummy_posts = array();
 
