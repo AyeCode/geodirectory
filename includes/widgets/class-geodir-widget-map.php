@@ -537,6 +537,16 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'default'         => '0',
 				'advanced'        => false,
 				'element_require' => '[%map_type%]=="post"',
+			),
+			'scrollwheel'   => array(
+				'type'            => 'checkbox',
+				'title'           => __( 'Enable mouse scroll zoom?', 'geodirectory' ),
+				'desc'            => __( 'Lets the map be scrolled with the mouse scroll wheel.', 'geodirectory' ),
+				'placeholder'     => '',
+				'desc_tip'        => true,
+				'value'           => '1',
+				'default'         => '0',
+				'advanced'        => true,
 			)
 		);
 		if ( defined( 'GDCLUSTER_VERSION' ) ) { // @todo we can move this in marker cluster plugin.

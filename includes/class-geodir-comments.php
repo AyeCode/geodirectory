@@ -77,19 +77,19 @@ class GeoDir_Comments {
 		}
 		$detail_table         = $plugin_prefix . $post_type . '_detail';
 		$post_newrating       = geodir_get_post_rating( $post_id, 1 );
-		$post_newrating_count = geodir_get_review_count_total( $post_id );
+		$post_newrating_count = geodir_get_review_count_total( $post_id, 1 );
 
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $detail_table . "'" ) == $detail_table ) {
 
-			$wpdb->query(
-				$wpdb->prepare(
-					"UPDATE " . $detail_table . " SET
-						overall_rating = %f,
-						rating_count = %f
-						where post_id = %d",
-					array( $post_newrating, $post_newrating_count, $post_id )
-				)
-			);
+//			$wpdb->query(
+//				$wpdb->prepare(
+//					"UPDATE " . $detail_table . " SET
+//						overall_rating = %f,
+//						rating_count = %f
+//						where post_id = %d",
+//					array( $post_newrating, $post_newrating_count, $post_id )
+//				)
+//			);
 
 			update_post_meta( $post_id, 'overall_rating', $post_newrating );
 			update_post_meta( $post_id, 'rating_count', $post_newrating_count );
@@ -859,16 +859,16 @@ class GeoDir_Comments {
 	 * @global object $wpdb WordPress Database object.
 	 * @return bool|null|string
 	 */
-	public static function get_post_review_count_total( $post_id = 0 ) {
+	public static function get_post_review_count_total( $post_id = 0, $force_query = 0  ) {
 		global $wpdb,$gd_post;
 
-		if(isset($gd_post->ID) && $gd_post->ID==$post_id && isset($gd_post->rating_count)){
+		if(isset($gd_post->ID) && $gd_post->ID==$post_id && isset($gd_post->rating_count) && !$force_query){
 			return $gd_post->rating_count;
 		}
 
 		// check for cache
 		$cache = wp_cache_get( "gd_post_review_count_total_".$post_id, 'gd_post_review_count_total' );
-		if($cache !== false){
+		if($cache !== false && !$force_query){
 			return $cache;
 		}
 

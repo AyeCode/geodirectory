@@ -97,7 +97,9 @@ function geodir_post_custom_fields($package_id = '', $default = 'all', $post_typ
                 "label" => $post_meta_info_obj->clabels,
                 "default" => $post_meta_info_obj->default_value,
                 "type" => $post_meta_info_obj->field_type,
-                "desc" => $post_meta_info_obj->frontend_desc);
+                "desc" => $post_meta_info_obj->frontend_desc,
+                "post_type" => $post_meta_info_obj->post_type,
+            );
 
             if ($post_meta_info_obj->field_type) {
                 $options = explode(',', $post_meta_info_obj->option_values);
@@ -112,9 +114,9 @@ function geodir_post_custom_fields($package_id = '', $default = 'all', $post_typ
             $pricearr = explode(',', $post_meta_info_obj->packages);
 
             if ($package_id != '' && in_array($package_id, $pricearr)) {
-                $return_arr[$post_meta_info_obj->sort_order] = $custom_fields;
+                $return_arr[$post_meta_info_obj->sort_order.$post_meta_info_obj->post_type] = $custom_fields;
             } elseif ($package_id == '') {
-                $return_arr[$post_meta_info_obj->sort_order] = $custom_fields;
+                $return_arr[$post_meta_info_obj->sort_order.$post_meta_info_obj->post_type] = $custom_fields;
             }
         }
     }

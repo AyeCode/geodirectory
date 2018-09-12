@@ -8,6 +8,41 @@
  * @param $security
  * @returns {boolean}
  */
+function gd_wizard_add_widgets_top($security){
+    var $sidebar_id = jQuery( "#geodir-wizard-widgets-top" ).val();
+
+    var data = {
+        'action':           'geodir_wizard_insert_widgets_top',
+        'security':          $security,
+        'sidebar_id':        $sidebar_id
+    };
+
+    jQuery.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: data, // serializes the form's elements.
+        beforeSend: function()
+        {
+            jQuery( ".geodir-wizard-widgets-top-result" ).html('<i class="fas fa-sync fa-spin" style="font-size:18px"></i>');
+
+        },
+        success: function(data)
+        {
+            if(data.data){
+                jQuery( ".geodir-wizard-widgets-top-result" ).text(data.data);
+            }
+        }
+    });
+
+    return false;
+}
+
+/**
+ * Add widgets from setup wizard.
+ *
+ * @param $security
+ * @returns {boolean}
+ */
 function gd_wizard_add_widgets($security){
     var $sidebar_id = jQuery( "#geodir-wizard-widgets" ).val();
 

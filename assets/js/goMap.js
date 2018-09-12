@@ -186,6 +186,8 @@
                 defaultOverlays: typeof opts.osmOverlays !== 'undefined' && opts.osmOverlays ? opts.osmOverlays : [],
             };
 
+            console.log(myOptions);
+
             if (myOptions.defaultBaseLayer) {
                 try {
                     baseLayer = L.tileLayer.provider(myOptions.defaultBaseLayer);

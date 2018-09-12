@@ -1023,7 +1023,7 @@ class GeoDir_Admin_Dummy_Data {
 	 *
 	 * @return string|void|WP_Error
 	 */
-	public static function insert_widgets($sidebar_id){
+	public static function insert_widgets($sidebar_id, $type = ''){
 
 		$sidebar_id = sanitize_title_with_dashes($sidebar_id);
 
@@ -1032,7 +1032,11 @@ class GeoDir_Admin_Dummy_Data {
 			return new WP_Error( 'gd-dummy-widgets-insert', __( "The sidebar id is not valid.", "geodirectory" ) );
 		}
 
-		$widgets = self::get_dummy_widgets();
+		if($type == 'top'){
+			$widgets = self::get_dummy_widgets('top');
+		}else{
+			$widgets = self::get_dummy_widgets();
+		}
 		$widgets = array_reverse($widgets);// flip them as we add them to the start one by one
 		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
 		$inserted = 0;
@@ -1056,14 +1060,6 @@ class GeoDir_Admin_Dummy_Data {
 			}
 		}
 
-
-//		$sidebars_widgets = get_option( 'sidebars_widgets', array() );
-//		print_r($sidebars_widgets);
-//		$widget_id = "gd_categories";
-//		$widget_instances = get_option( 'widget_' . $widget_id, array() );
-//		print_r($widget_instances);
-//		exit;
-
 		if($inserted == 0 && $exist > 0){
 			return __( 'Widgets already exist, none added.' , 'geodirectory' );
 		}elseif($inserted > 0){
@@ -1079,43 +1075,66 @@ class GeoDir_Admin_Dummy_Data {
 	 *
 	 * @return mixed|void
 	 */
-	public static function get_dummy_widgets(){
+	public static function get_dummy_widgets($type = ''){
 
-		$widgets = array(
-			// show the author action on the details sidebar
-			'gd_author_actions' => array(
-				'hide_edit'          => false,
-				'hide_delete'          => false,
-				'gd_wgt_showhide'   => 'show_on',
-				'gd_wgt_restrict'   => array('gd-detail'),
-			),
-			// show details sidebar
-			'gd_output_location' => array(
-				'location'          => '[detail]',
-				'gd_wgt_showhide'   => 'show_on',
-				'gd_wgt_restrict'   => array('gd-detail'),
-			),
-			// show map
-			'gd_map' => array(
-				'width' => '100%',
-				'height' => '425px',
-				'maptype' => 'ROADMAP',
-				'zoom' => '0',
-                'map_type' => 'auto',
-				'map_directions' => '1',
-				'gd_wgt_showhide'   => 'show_on',
-				'gd_wgt_restrict'   => array('gd-detail','gd-author','gd-pt','gd-search','gd-listing'),
-			),
-			// show GD Dashboard
-			'gd_dashboard' => array(
-				'dashboard_title'   => __('GD Dashboard','geodirectory'),
-				'show_login'        => true,
-				'login_title'        => __('Login','geodirectory'),
-				'gd_wgt_showhide'   => 'show',
-				'gd_wgt_restrict'   => array(),
-			),
+		if($type=='top'){
+			$widgets = array(
+				// show map
+				'gd_map' => array(
+					'width' => '100%',
+					'height' => '425px',
+					'maptype' => 'ROADMAP',
+					'zoom' => '0',
+					'map_type' => 'auto',
+					'map_directions' => '0',
+					'gd_wgt_showhide'   => 'show_on',
+					'gd_wgt_restrict'   => array('gd-pt','gd-search','gd-listing','gd-location'),
+				),
+				// show GD search
+				'gd_search' => array(
+					'gd_wgt_showhide'   => 'show_on',
+					'gd_wgt_restrict'   => array('gd-pt','gd-search','gd-listing','gd-location'),
+				),
 
-		);
+			);
+		}else{
+			$widgets = array(
+				// show the author action on the details sidebar
+				'gd_author_actions' => array(
+					'hide_edit'          => false,
+					'hide_delete'          => false,
+					'gd_wgt_showhide'   => 'show_on',
+					'gd_wgt_restrict'   => array('gd-detail'),
+				),
+				// show details sidebar
+				'gd_output_location' => array(
+					'location'          => '[detail]',
+					'gd_wgt_showhide'   => 'show_on',
+					'gd_wgt_restrict'   => array('gd-detail'),
+				),
+				// show map
+				'gd_map' => array(
+					'width' => '100%',
+					'height' => '425px',
+					'maptype' => 'ROADMAP',
+					'zoom' => '0',
+					'map_type' => 'auto',
+					'map_directions' => '1',
+					'gd_wgt_showhide'   => 'show_on',
+					'gd_wgt_restrict'   => array('gd-detail','gd-author','gd-pt','gd-search','gd-listing'),
+				),
+				// show GD Dashboard
+				'gd_dashboard' => array(
+					'dashboard_title'   => __('GD Dashboard','geodirectory'),
+					'show_login'        => true,
+					'login_title'        => __('Login','geodirectory'),
+					'gd_wgt_showhide'   => 'show',
+					'gd_wgt_restrict'   => array(),
+				),
+
+			);
+		}
+
 		return apply_filters('geodir_dummy_widgets',$widgets);
 	}
 
