@@ -79,7 +79,6 @@ class GeoDir_Template_Loader {
         $default_file = '';
         if ( geodir_is_singular() ) {
 
-
             $single_template = geodir_get_option('details_page_template');
             //echo '###'.$single_template.'###';
             if($single_template && locate_template( $single_template )){
@@ -133,6 +132,10 @@ class GeoDir_Template_Loader {
         }  else {
             $default_file = '';
         }
+
+        //$default_file = 'geodirectory.php';
+
+      //  echo '###'.$default_file;
 
         return $default_file;
     }

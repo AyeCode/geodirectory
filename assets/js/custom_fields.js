@@ -123,27 +123,27 @@ jQuery(document).ready(function () {
     });
 
 
-    jQuery(".field_row_main ul.core").sortable({
-        opacity: 0.8,
-        cursor: 'move',
-        placeholder: "ui-state-highlight",
-        cancel: "input,label,select",
-        update: function () {
-            // var manage_field_type = jQuery(this).closest('#geodir-selected-fields').find(".manage_field_type").val();
-            var manage_field_type = jQuery(".manage_field_type").val();
-
-            //var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
-            var order = jQuery(this).sortable("serialize");
-
-
-            // update the sort values on drag/drop
-            if (manage_field_type == 'general') {
-                gd_order_custom_fields(order);
-            } else if (manage_field_type == 'cpt-sorting') {
-                gd_order_custom_sort_fields(order);
-            }
-        }
-    });
+    // jQuery(".field_row_main ul.core").sortable({
+    //     opacity: 0.8,
+    //     cursor: 'move',
+    //     placeholder: "ui-state-highlight",
+    //     cancel: "input,label,select",
+    //     update: function () {
+    //         // var manage_field_type = jQuery(this).closest('#geodir-selected-fields').find(".manage_field_type").val();
+    //         var manage_field_type = jQuery(".manage_field_type").val();
+    //
+    //         //var order = jQuery(this).sortable("serialize") + '&update=update&manage_field_type=' + manage_field_type;
+    //         var order = jQuery(this).sortable("serialize");
+    //
+    //
+    //         // update the sort values on drag/drop
+    //         if (manage_field_type == 'general') {
+    //             gd_order_custom_fields(order);
+    //         } else if (manage_field_type == 'cpt-sorting') {
+    //             gd_order_custom_sort_fields(order);
+    //         }
+    //     }
+    // });
 
     //gd_toggle_display();
     gd_toggle_switch_display();
@@ -215,17 +215,13 @@ function gd_save_custom_field(id) {
             } else {
                 jQuery('#setName_' + id).replaceWith(jQuery.trim(result));
 
-                var order = jQuery(".field_row_main ul.core").sortable("serialize") + '&update=update&manage_field_type=custom_fields';
-
-                // jQuery.get(ajaxurl + '?action=geodir_ajax_action&create_field=true', order,
-                //     function (theResponse) {
-                //         //alert(theResponse);
-                //     });
-
                 jQuery('.field_frm').hide();
                 var field_id = jQuery(result).find('#field_id').val();
                 field_id = field_id ? field_id : id;
                 jQuery(document.body).trigger('geodir_on_save_custom_field', [{id: field_id, field: res}]);
+
+                // save order on save
+                gd_tabs_save_order('geodir_order_custom_sort_fields');
             }
 
             // int the new select2 boxes
@@ -482,6 +478,8 @@ function gd_delete_custom_field(id, nonce) {
                             alert(res.data);
                         } else {
                             jQuery('#setName_' + id).remove();
+                            // save order on save
+                            gd_tabs_save_order('geodir_order_custom_sort_fields');
                         }
                     });
             }
