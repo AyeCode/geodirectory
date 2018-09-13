@@ -126,7 +126,7 @@ function geodir_get_post_rating( $post_id = 0, $force_query = 0 ) {
  * @return bool|null|string
  */
 function geodir_get_review_count_total( $post_id = 0 ) {
-	return GeoDir_Comments::get_post_review_count_total( $post_id );
+	return GeoDir_Comments::get_post_review_count_total( $post_id, $force_query = 0   );
 }
 
 /**

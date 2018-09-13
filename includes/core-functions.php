@@ -927,8 +927,13 @@ function geodir_search_form_post_type_input() {
 			}
 		}else{
 			if(! empty( $post_types )){
-				$pt_arr = (array)$post_types;
-				$pt_slug = isset($pt_arr['rewrite']['slug']) ? esc_attr($pt_arr['rewrite']['slug']) : 'places';
+				$post_types = (array)$post_types;
+				if($curr_post_type && isset($post_types[$curr_post_type])){
+					$pt_arr = $post_types[$curr_post_type];
+				}else{
+					$pt_arr = reset($post_types);
+				}
+				$pt_slug = isset($pt_arr->rewrite->slug) ? esc_attr($pt_arr->rewrite->slug) : 'places';
 				echo '<input type="hidden" name="stype" value="' . key( $pt_arr  ) . '" data-slug="'.$pt_slug.'" />';
 			}else{
 				echo '<input type="hidden" name="stype" value="gd_place"  data-slug="places"/>';

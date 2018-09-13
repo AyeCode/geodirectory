@@ -551,7 +551,6 @@ class GeoDir_Post_Data {
 		$post_parent   = '';
 		$user_notes    = array();
 
-
 		$user_id = get_current_user_id();
 
 		// if we have the post id.

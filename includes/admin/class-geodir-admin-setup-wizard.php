@@ -484,9 +484,71 @@ class GeoDir_Admin_Setup_Wizard {
 				GeoDir_Admin_Settings::output_fields($settings);
 				?>
 
+			<?php
+			$gd_sidebar_top = get_theme_support( 'geodirectory-sidebar-top' );
+			if(isset($gd_sidebar_top[0])){
+				$gd_sidebar_top = $gd_sidebar_top[0];
+				?>
+				<table class="form-table gd-dummy-table gd-dummy-widgets">
+					<tbody>
+					<tr>
+						<td><strong><?php _e("Select the theme top sidebar","geodirectory");?></strong></td>
+						<td><strong><?php _e("Action","geodirectory");?></strong></td>
+					</tr>
 
-<!--			<h2 class="gd-settings-title ">--><?php //_e("Widgets","geodirectory");?><!--</h2>-->
+					<tr>
+						<td>
+							<select id='geodir-wizard-widgets-top' class="geodir-select" >
+								<?php
+								$is_sidebar = '';
+								$maybe_sidebar = '';
+								$gd_sidebar = get_theme_support( 'geodirectory-sidebar-top' );
+								if(isset($gd_sidebar[0])){
+									$gd_sidebar = $gd_sidebar[0];
+								}
 
+								// get the sidebars
+								foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) {
+
+									if($gd_sidebar && $gd_sidebar==strtolower($sidebar['id'])){
+										$is_sidebar = $sidebar['id'];break;
+									}
+									// Check if its called 'sidebar' by name or id.
+									if(strtolower($sidebar['id'])=='sidebar' || strtolower($sidebar['name'])==__('sidebar','geodirectory')){
+										$is_sidebar = $sidebar['id'];break;
+									}
+
+									if(!$maybe_sidebar && strpos(strtolower($sidebar['name']), __('sidebar','geodirectory')) !== false){
+										$maybe_sidebar = $sidebar['id'];
+									}
+
+									if(strpos(strtolower($sidebar['name']), __('sidebar page','geodirectory')) !== false){
+										$maybe_sidebar = $sidebar['id'];
+									}
+								}
+
+								// set if we have a guess
+								if(!$is_sidebar && $maybe_sidebar){
+									$is_sidebar = $maybe_sidebar;
+								}
+
+								foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) { ?>
+									<option value="<?php echo esc_attr( $sidebar['id'] ); ?>" <?php selected( $is_sidebar, $sidebar['id'] );?>>
+										<?php echo esc_attr( ucwords( $sidebar['name'] )); if($is_sidebar == $sidebar['id']){echo ' '; _e('( Auto detected )','geodirectory');} ?>
+									</option>
+								<?php }
+
+								?>
+							</select>
+							<?php echo geodir_notification( array('geodir-wizard-widgets-top-result' => '') );?>
+						</td>
+						<td><input type="button" value="<?php _e("Insert widgets","geodirectory");?>" class="button-primary geodir_dummy_button" onclick="gd_wizard_add_widgets_top('<?php echo wp_create_nonce( "geodir-wizard-widgets-top" );?>');return false;"></td>
+					</tr>
+					</tbody>
+				</table>
+				<?php
+			}
+			?>
 			<table class="form-table gd-dummy-table gd-dummy-widgets">
 				<tbody>
 				<tr>
@@ -500,11 +562,21 @@ class GeoDir_Admin_Setup_Wizard {
 							<?php
 							$is_sidebar = '';
 							$maybe_sidebar = '';
+							$gd_sidebar = get_theme_support( 'geodirectory-sidebar' );
+							if(isset($gd_sidebar[0])){
+								$gd_sidebar = $gd_sidebar[0];
+							}
+//							print_r($gd_sidebar);
+//							echo '###';exit;
 							// get the sidebars
 							foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) {
+
+								if($gd_sidebar && $gd_sidebar==strtolower($sidebar['id'])){
+									$is_sidebar = $sidebar['id'];break;
+								}
 								// Check if its called 'sidebar' by name or id.
 								if(strtolower($sidebar['id'])=='sidebar' || strtolower($sidebar['name'])==__('sidebar','geodirectory')){
-									$is_sidebar = $sidebar['id'];
+									$is_sidebar = $sidebar['id'];break;
 								}
 
 								if(!$maybe_sidebar && strpos(strtolower($sidebar['name']), __('sidebar','geodirectory')) !== false){
@@ -523,7 +595,7 @@ class GeoDir_Admin_Setup_Wizard {
 
 							foreach ( $GLOBALS['wp_registered_sidebars'] as $sidebar ) { ?>
 								<option value="<?php echo esc_attr( $sidebar['id'] ); ?>" <?php selected( $is_sidebar, $sidebar['id'] );?>>
-									<?php echo esc_attr( ucwords( $sidebar['name'] )); if($is_sidebar== $sidebar['id']){echo ' '; _e('( Auto detected )','geodirectory');} ?>
+									<?php echo esc_attr( ucwords( $sidebar['name'] )); if($is_sidebar == $sidebar['id']){echo ' '; _e('( Auto detected )','geodirectory');} ?>
 								</option>
 							<?php }
 
@@ -536,8 +608,6 @@ class GeoDir_Admin_Setup_Wizard {
 				</tbody>
 			</table>
 
-
-<!--			<h2 class="gd-settings-title ">--><?php //_e("Menu items","geodirectory");?><!--</h2>-->
 
 			<table class="form-table gd-dummy-table gd-dummy-widgets gd-dummy-posts">
 				<tbody>

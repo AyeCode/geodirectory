@@ -1,3 +1,11 @@
+v2.0.0.29
+Custom fields order can be broken if saved-moved-saved - FIXED
+Add listing shortcode using default CPT instead of selected one - FIXED
+Hiding the CPT on search can make advanced search use wrong post type - FIXED
+Comment count can be cached when a new comment is posted - FIXED
+Added theme support options for top sidebar - ADDED
+Option added to maps widget to enable mouse-scroll zoom - ADDED
+
 v2.0.0.28
 Search adds all terms to query if search field is blank - FIXED
 Category widget, hide icon option not working - FIXED

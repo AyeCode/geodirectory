@@ -590,7 +590,7 @@ function geodir_template_redirect() {
 
                     if ( !empty( $regex_matches ) && !empty( $regex_matches[2] ) == 'gd_add_listing' && !empty( $regex_matches[3] ) ) {
                         $shortcode_atts = shortcode_parse_atts( $regex_matches[3] );
-                        $post_type = !empty( $shortcode_atts ) && !empty( $shortcode_atts['listing_type'] ) ? $shortcode_atts['listing_type'] : $post_type;
+                        $post_type = !empty( $shortcode_atts ) && !empty( $shortcode_atts['post_type'] ) ? $shortcode_atts['post_type'] : $post_type;
                     }
                 }
             }

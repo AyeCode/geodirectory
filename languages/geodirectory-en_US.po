@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.28\n"
+"Project-Id-Version: GeoDirectory 2.0.0.29\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-11 14:46+0100\n"
-"PO-Revision-Date: 2018-09-11 14:46+0100\n"
+"POT-Creation-Date: 2018-09-12 18:51+0100\n"
+"PO-Revision-Date: 2018-09-12 18:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -421,13 +421,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:244
 #: includes/admin/class-geodir-admin-addons.php:286
-#: includes/admin/class-geodir-admin-setup-wizard.php:665
+#: includes/admin/class-geodir-admin-setup-wizard.php:735
 msgid "Installed"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:247
 #: includes/admin/class-geodir-admin-addons.php:287
-#: includes/admin/class-geodir-admin-setup-wizard.php:780
+#: includes/admin/class-geodir-admin-setup-wizard.php:850
 #: includes/admin/views/html-admin-page-addons.php:123
 msgid "Install"
 msgstr ""
@@ -443,7 +443,7 @@ msgid "Buy now"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:288
-#: includes/admin/class-geodir-admin-setup-wizard.php:666
+#: includes/admin/class-geodir-admin-setup-wizard.php:736
 msgid "Installing"
 msgstr ""
 
@@ -645,8 +645,9 @@ msgid "Data Type"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:416
-#: includes/admin/class-geodir-admin-setup-wizard.php:494
-#: includes/admin/class-geodir-admin-setup-wizard.php:546
+#: includes/admin/class-geodir-admin-setup-wizard.php:496
+#: includes/admin/class-geodir-admin-setup-wizard.php:556
+#: includes/admin/class-geodir-admin-setup-wizard.php:616
 #: includes/admin/diagnostic-functions.php:42
 msgid "Action"
 msgstr ""
@@ -731,7 +732,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:779
 #: includes/admin/class-geodir-admin-dummy-data.php:787
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:391
-#: includes/class-geodir-post-data.php:672
+#: includes/class-geodir-post-data.php:671
 #: includes/widgets/class-geodir-widget-ninja-forms.php:203 language.php:37
 #: language.php:62 language.php:154 language.php:175
 msgid "Email"
@@ -798,7 +799,7 @@ msgid "Note: List out any special offers (optional)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:890
-#: includes/class-geodir-post-data.php:616
+#: includes/class-geodir-post-data.php:615
 msgid "Listing"
 msgstr ""
 
@@ -898,49 +899,49 @@ msgstr ""
 msgid "The sidebar id is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1068
+#: includes/admin/class-geodir-admin-dummy-data.php:1064
 msgid "Widgets already exist, none added."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1070
+#: includes/admin/class-geodir-admin-dummy-data.php:1066
 msgid "Widgets inserted"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1072
+#: includes/admin/class-geodir-admin-dummy-data.php:1068
 msgid ""
 "Something went wrong and no inserted, you can do this manually in Appearance "
 "> Widgets"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1111
+#: includes/admin/class-geodir-admin-dummy-data.php:1128
 msgid "GD Dashboard"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1113
+#: includes/admin/class-geodir-admin-dummy-data.php:1130
 #: includes/admin/diagnostic-functions.php:781
 #: includes/class-geodir-email.php:253 language.php:30
 #: templates/auth/form-login.php:45
 msgid "Login"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1171
-#: includes/admin/class-geodir-admin-dummy-data.php:1184
+#: includes/admin/class-geodir-admin-dummy-data.php:1190
+#: includes/admin/class-geodir-admin-dummy-data.php:1203
 msgid "The menu is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1276
+#: includes/admin/class-geodir-admin-dummy-data.php:1295
 msgid "Menu already exists."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1282
+#: includes/admin/class-geodir-admin-dummy-data.php:1301
 msgid "Menu items already exist, none added."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1284
+#: includes/admin/class-geodir-admin-dummy-data.php:1303
 msgid "Menu items added successfully."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-dummy-data.php:1286
+#: includes/admin/class-geodir-admin-dummy-data.php:1305
 msgid "Something went wrong, you can manually add items in Appearance > Menus"
 msgstr ""
 
@@ -1684,8 +1685,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-setup-wizard.php:335
 #: includes/admin/class-geodir-admin-setup-wizard.php:407
-#: includes/admin/class-geodir-admin-setup-wizard.php:619
-#: includes/admin/class-geodir-admin-setup-wizard.php:781
+#: includes/admin/class-geodir-admin-setup-wizard.php:689
+#: includes/admin/class-geodir-admin-setup-wizard.php:851
 msgid "Continue"
 msgstr ""
 
@@ -1700,55 +1701,64 @@ msgstr ""
 msgid "Are you sure? This can break current listings."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:493
-msgid "Select the theme sidebar"
+#: includes/admin/class-geodir-admin-setup-wizard.php:495
+msgid "Select the theme top sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:506
-#: includes/admin/class-geodir-admin-setup-wizard.php:510
+#: includes/admin/class-geodir-admin-setup-wizard.php:517
+#: includes/admin/class-geodir-admin-setup-wizard.php:521
+#: includes/admin/class-geodir-admin-setup-wizard.php:578
+#: includes/admin/class-geodir-admin-setup-wizard.php:582
 msgid "sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:514
+#: includes/admin/class-geodir-admin-setup-wizard.php:525
+#: includes/admin/class-geodir-admin-setup-wizard.php:586
 msgid "sidebar page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:526
-#: includes/admin/class-geodir-admin-setup-wizard.php:573
+#: includes/admin/class-geodir-admin-setup-wizard.php:537
 #: includes/admin/class-geodir-admin-setup-wizard.php:598
+#: includes/admin/class-geodir-admin-setup-wizard.php:643
+#: includes/admin/class-geodir-admin-setup-wizard.php:668
 msgid "( Auto detected )"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:534
+#: includes/admin/class-geodir-admin-setup-wizard.php:545
+#: includes/admin/class-geodir-admin-setup-wizard.php:606
 msgid "Insert widgets"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:545
+#: includes/admin/class-geodir-admin-setup-wizard.php:555
+msgid "Select the theme sidebar"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-setup-wizard.php:615
 msgid "Select the theme main menu"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:598
+#: includes/admin/class-geodir-admin-setup-wizard.php:668
 msgid "Create new menu in:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:613
+#: includes/admin/class-geodir-admin-setup-wizard.php:683
 msgid "Insert menu items"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:650
+#: includes/admin/class-geodir-admin-setup-wizard.php:720
 msgid "Recommend Plugins"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:652
+#: includes/admin/class-geodir-admin-setup-wizard.php:722
 msgid ""
 "Below are a few recommend plugins that will help you with your directory."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:695
+#: includes/admin/class-geodir-admin-setup-wizard.php:765
 msgid "Tick to install"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:815
+#: includes/admin/class-geodir-admin-setup-wizard.php:885
 #: includes/admin/settings/class-geodir-settings-general.php:1001
 #, php-format
 msgid ""
@@ -1757,11 +1767,11 @@ msgid ""
 "more%2$s."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:823
+#: includes/admin/class-geodir-admin-setup-wizard.php:893
 msgid "Thank you for using GeoDirectory! :)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:835
+#: includes/admin/class-geodir-admin-setup-wizard.php:905
 msgid "Learn more"
 msgstr ""
 
@@ -3650,7 +3660,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:307
 #: includes/admin/views/html-admin-page-status-report.php:576
-#: includes/class-geodir-post-data.php:666 language.php:35 language.php:153
+#: includes/class-geodir-post-data.php:665 language.php:35 language.php:153
 msgid "Name"
 msgstr ""
 
@@ -4138,7 +4148,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-categories.php:228
 #: includes/widgets/class-geodir-widget-map.php:425
 #: includes/widgets/class-geodir-widget-map.php:436
-#: includes/widgets/class-geodir-widget-map.php:569
+#: includes/widgets/class-geodir-widget-map.php:579
 #: includes/widgets/class-geodir-widget-search.php:143
 msgid "Auto"
 msgstr ""
@@ -6313,7 +6323,7 @@ msgid "Generate API key"
 msgstr ""
 
 #: includes/admin/views/html-keys-edit.php:110
-#: includes/class-geodir-ajax.php:878
+#: includes/class-geodir-ajax.php:904
 msgid "Revoke key"
 msgstr ""
 
@@ -7702,52 +7712,52 @@ msgstr ""
 msgid "Closed now"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:114
+#: includes/class-geodir-ajax.php:115
 msgid "Please drag the marker or the map to set the position."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:114
+#: includes/class-geodir-ajax.php:115
 msgid "Set my location"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:134
+#: includes/class-geodir-ajax.php:135
 msgid "No tab_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:164 includes/class-geodir-ajax.php:746
-#: includes/class-geodir-ajax.php:779
+#: includes/class-geodir-ajax.php:165 includes/class-geodir-ajax.php:772
+#: includes/class-geodir-ajax.php:805
 msgid "No tabs provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:193 includes/class-geodir-ajax.php:222
+#: includes/class-geodir-ajax.php:194 includes/class-geodir-ajax.php:223
 msgid "No tab_type provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:363
+#: includes/class-geodir-ajax.php:389
 msgid "No post_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:487 includes/class-geodir-ajax.php:490
+#: includes/class-geodir-ajax.php:513 includes/class-geodir-ajax.php:516
 msgid "Action failed."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:812
+#: includes/class-geodir-ajax.php:838
 msgid "Description is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:815
+#: includes/class-geodir-ajax.php:841
 msgid "User is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:818
+#: includes/class-geodir-ajax.php:844
 msgid "Permissions is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:847
+#: includes/class-geodir-ajax.php:873
 msgid "API Key updated successfully."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:877
+#: includes/class-geodir-ajax.php:903
 msgid ""
 "API Key generated successfully. Make sure to copy your new keys now as the "
 "secret key will be hidden once you leave this page."
@@ -8320,7 +8330,7 @@ msgstr ""
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:573
+#: includes/class-geodir-post-data.php:572
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -8328,7 +8338,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:598
+#: includes/class-geodir-post-data.php:597
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -8336,62 +8346,62 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:663
+#: includes/class-geodir-post-data.php:662
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:668
+#: includes/class-geodir-post-data.php:667
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:674
+#: includes/class-geodir-post-data.php:673
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:723
-#: includes/class-geodir-post-data.php:728
+#: includes/class-geodir-post-data.php:722
+#: includes/class-geodir-post-data.php:727
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:735
+#: includes/class-geodir-post-data.php:734
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:745
+#: includes/class-geodir-post-data.php:744
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:855
+#: includes/class-geodir-post-data.php:854
 msgid "You do not own this post"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:863
+#: includes/class-geodir-post-data.php:862
 msgid "Delete revision failed."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1115
+#: includes/class-geodir-post-data.php:1114
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1120
+#: includes/class-geodir-post-data.php:1119
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1130
+#: includes/class-geodir-post-data.php:1129
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1137
+#: includes/class-geodir-post-data.php:1136
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1235
+#: includes/class-geodir-post-data.php:1234
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -8911,7 +8921,7 @@ msgstr ""
 msgid "Click to copy"
 msgstr ""
 
-#: includes/class-geodir-template-loader.php:417
+#: includes/class-geodir-template-loader.php:420
 msgid ""
 "Sorry, this is a page template and can not be accessed from the frontend, it "
 "is used for building the layouts of GeoDirectory sections."
@@ -9217,11 +9227,11 @@ msgstr ""
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1060 includes/core-functions.php:1071
+#: includes/core-functions.php:1065 includes/core-functions.php:1076
 msgid "Clear field"
 msgstr ""
 
-#: includes/custom-fields/functions.php:182
+#: includes/custom-fields/functions.php:184
 msgid "Auto Draft"
 msgstr ""
 
@@ -10389,21 +10399,29 @@ msgstr ""
 msgid "Displays post directions for single post map."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:545
+#: includes/widgets/class-geodir-widget-map.php:543
+msgid "Enable mouse scroll zoom?"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-map.php:544
+msgid "Lets the map be scrolled with the mouse scroll wheel."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-map.php:555
 msgid "Enable marker cluster?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:546
+#: includes/widgets/class-geodir-widget-map.php:556
 msgid "This enables marker cluster on the map."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:987 language.php:77
+#: includes/widgets/class-geodir-widget-map.php:997 language.php:77
 msgid ""
 "<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your "
 "search criteria and try again.</p>"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:989
+#: includes/widgets/class-geodir-widget-map.php:999
 msgid "<h3>Google Map Not Loaded</h3><p>Sorry, unable to load Google Maps API."
 msgstr ""
 

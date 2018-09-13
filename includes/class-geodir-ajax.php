@@ -39,6 +39,7 @@ class GeoDir_AJAX {
 			'order_custom_sort_fields'     => false,
 			'insert_dummy_data'       => false,
 			'delete_dummy_data'       => false,
+			'wizard_insert_widgets_top'       => false,
 			'wizard_insert_widgets'       => false,
 			'wizard_setup_menu'       => false,
 			'post_attachment_upload'       => true,
@@ -299,6 +300,31 @@ class GeoDir_AJAX {
 	 * Adds widgets to sidebar during setup wizard.
      *
      * @since 2.0.0
+	 */
+	public static function wizard_insert_widgets_top(){
+		// security
+		check_ajax_referer( 'geodir-wizard-widgets-top', 'security' );
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		$sidebar_id = isset($_REQUEST['sidebar_id']) ?  sanitize_title_with_dashes($_REQUEST['sidebar_id']) : '';
+
+		$result = GeoDir_Admin_Dummy_Data::insert_widgets( $sidebar_id, 'top');
+
+		if(is_wp_error( $result ) ){
+			wp_send_json_error( $result->get_error_message() );
+		}else{
+			wp_send_json_success($result);
+		}
+
+		wp_die();
+	}
+
+	/**
+	 * Adds widgets to sidebar during setup wizard.
+	 *
+	 * @since 2.0.0
 	 */
 	public static function wizard_insert_widgets(){
 		// security

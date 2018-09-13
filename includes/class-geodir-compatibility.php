@@ -180,17 +180,24 @@ class GeoDir_Compatibility {
 	public static function theme_single_template($theme = ''){
 
 
+
 		if(!$theme){
 			$theme = get_template();
 		}
 
 //		echo '###'.$theme;
 
-		$themes = array(
-			'twentyseventeen'   => 'single.php',
-			'primer'   => 'page.php',
-			//'directory-starter'   => 'page-gd.php',
-		);
+		$themes = array();
+
+		if(get_theme_support( 'geodirectory' )){
+			$themes[$theme] = 'geodirectory.php';
+		}else{
+			$themes = array(
+				'twentyseventeen'   => 'single.php',
+				'primer'   => 'page.php',
+			);
+		}
+
 
 		return isset($themes[$theme]) ? $themes[$theme] : '';
 	}
