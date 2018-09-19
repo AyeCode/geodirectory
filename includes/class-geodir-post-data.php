@@ -214,8 +214,13 @@ class GeoDir_Post_Data {
 				}
 //				print_r( $categories );exit;
 
-				$postarr['post_category'] = "," . implode( ",", $categories ) . ",";
-				$default_category = isset($categories[0]) ? $categories[0] : $categories[1];
+				if ( ! empty( $categories ) ) {
+					$postarr['post_category'] = "," . implode( ",", $categories ) . ",";
+					$default_category = isset($categories[0]) ? $categories[0] : $categories[1];
+				} else {
+					$postarr['post_category'] = '';
+					$default_category = '';
+				}
 
 				if ( empty( $postarr['default_category'] ) && ! empty( $default_category ) ) {
 					$postarr['default_category'] = $default_category; // set first category as a default if default category not found
