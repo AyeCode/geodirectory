@@ -148,7 +148,11 @@ class GeoDir_Template_Loader {
      * @return string The filtered content.
      */
     public static function setup_archive_page_content(){
+		global $post;
 
+		// Backpup post.
+		$gd_backup_post = $post;
+		
         // remove our filter so we don't get stuck in a loop
         remove_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
 
@@ -187,6 +191,10 @@ class GeoDir_Template_Loader {
         // fake the has_posts() to false so it will not loop any more.
         $wp_query->current_post = $wp_query->post_count;
 
+		// Set original post.
+		if ( ! empty( $gd_backup_post ) ) {
+			$post = $gd_backup_post;
+		}
         return $content;
     }
 
