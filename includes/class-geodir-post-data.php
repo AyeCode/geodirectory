@@ -117,8 +117,6 @@ class GeoDir_Post_Data {
 
 	//echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
 
-
-
 		// only fire if $post_temp is set
 		if ( $gd_post = self::$post_temp ) {
 
@@ -130,6 +128,7 @@ class GeoDir_Post_Data {
 			} elseif ( $gd_post['post_type'] == 'revision' ) {
 				$gd_post['post_type'] = get_post_type( $gd_post['post_parent'] );
 			}
+
 			$post_type = esc_attr($gd_post['post_type']); // set the post type early
 
 			// unhook this function so it doesn't loop infinitely
@@ -234,7 +233,7 @@ class GeoDir_Post_Data {
 
 			// Set tags
 
-			// check fro dummy data tags
+			// check for dummy data tags
 			if( empty($gd_post['post_tags']) && isset($gd_post['tax_input'][$post_type.'_tags']) && !empty($gd_post['tax_input'][$post_type.'_tags'])){
 
 				// quick edit returns tag ids, we need the strings
@@ -515,10 +514,11 @@ class GeoDir_Post_Data {
 	 * @return array
 	 */
 	public static function wp_insert_post_data( $data, $postarr ) {
+
 		// check its a GD CPT first
 		if (
 			( isset( $data['post_type'] ) && in_array( $data['post_type'], geodir_get_posttypes() ) )
-			|| ( isset( $data['post_type'] ) && $data['post_type'] == 'revision' && in_array( get_post_type( $data['post_parent'] ), geodir_get_posttypes() ) )
+			|| ( isset( $data['post_type'] ) && $data['post_type'] == 'revision'  && in_array( get_post_type( $data['post_parent'] ), geodir_get_posttypes() ) && (!isset(self::$post_temp) || empty(self::$post_temp)) )
 		) {
 			self::$post_temp = $postarr;
 		}

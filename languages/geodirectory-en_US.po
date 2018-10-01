@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.29\n"
+"Project-Id-Version: GeoDirectory 2.0.0.30\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-09-12 18:51+0100\n"
-"PO-Revision-Date: 2018-09-12 18:51+0100\n"
+"POT-Creation-Date: 2018-10-01 12:38+0100\n"
+"PO-Revision-Date: 2018-10-01 12:39+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -394,7 +394,7 @@ msgstr ""
 #: includes/admin/admin-functions.php:22
 #: includes/admin/class-geodir-admin-assets.php:93
 #: includes/admin/class-geodir-admin-menus.php:48
-#: includes/class-geodir-privacy.php:24 includes/core-functions.php:703
+#: includes/class-geodir-privacy.php:24 includes/core-functions.php:704
 msgid "GeoDirectory"
 msgstr ""
 
@@ -527,7 +527,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-api-keys-table-list.php:155
 #: includes/admin/views/html-keys-edit.php:88
-#: includes/class-geodir-comments.php:543
+#: includes/class-geodir-comments.php:540
 #, php-format
 msgid "%1$s at %2$s"
 msgstr ""
@@ -732,7 +732,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:779
 #: includes/admin/class-geodir-admin-dummy-data.php:787
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:391
-#: includes/class-geodir-post-data.php:671
+#: includes/class-geodir-post-data.php:676
 #: includes/widgets/class-geodir-widget-ninja-forms.php:203 language.php:37
 #: language.php:62 language.php:154 language.php:175
 msgid "Email"
@@ -799,7 +799,7 @@ msgid "Note: List out any special offers (optional)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:890
-#: includes/class-geodir-post-data.php:615
+#: includes/class-geodir-post-data.php:620
 msgid "Listing"
 msgstr ""
 
@@ -1353,7 +1353,7 @@ msgid "CPT Add Listing"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:191
-#: includes/core-functions.php:532
+#: includes/core-functions.php:533
 msgid "GD Pages"
 msgstr ""
 
@@ -1838,7 +1838,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-page.php:66
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:31
 #: includes/widgets/class-geodir-widget-post-badge.php:127
-#: includes/widgets/class-geodir-widget-post-fav.php:58
+#: includes/widgets/class-geodir-widget-post-fav.php:60
 #: includes/widgets/class-geodir-widget-post-images.php:138
 #: includes/widgets/class-geodir-widget-post-images.php:151
 #: includes/widgets/class-geodir-widget-post-meta.php:86
@@ -1871,9 +1871,10 @@ msgstr ""
 #: includes/admin/class-geodir-admin-taxonomies.php:805
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:23
 #: includes/helper-functions.php:1572
-#: includes/widgets/class-geodir-widget-categories.php:136
 #: includes/widgets/class-geodir-widget-categories.php:145
-#: includes/widgets/class-geodir-widget-post-fav.php:45
+#: includes/widgets/class-geodir-widget-categories.php:154
+#: includes/widgets/class-geodir-widget-categories.php:163
+#: includes/widgets/class-geodir-widget-post-fav.php:47
 #: includes/widgets/class-geodir-widget-post-rating.php:47
 msgid "All"
 msgstr ""
@@ -2042,39 +2043,39 @@ msgid "The pages that should be included/excluded."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:117
-#: includes/core-functions.php:534
+#: includes/core-functions.php:535
 msgid "Add Listing Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:118
-#: includes/core-functions.php:535
+#: includes/core-functions.php:536
 msgid "Author Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:119
-#: includes/core-functions.php:536
+#: includes/core-functions.php:537
 msgid "Listing Detail Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:120
-#: includes/core-functions.php:539
+#: includes/core-functions.php:540
 msgid "Location Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:121
-#: includes/core-functions.php:541
+#: includes/core-functions.php:542
 msgid "Post Type Archive"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:122
 #: includes/admin/settings/class-geodir-settings-general.php:264
 #: includes/api/class-geodir-rest-system-status-controller.php:833
-#: includes/core-functions.php:542
+#: includes/core-functions.php:543
 msgid "Search Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:123
-#: includes/core-functions.php:543
+#: includes/core-functions.php:544
 msgid "Taxonomies Page"
 msgstr ""
 
@@ -2798,7 +2799,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:280
 #: includes/widgets/class-geodir-widget-archive-item-section.php:51
 #: includes/widgets/class-geodir-widget-post-badge.php:128
-#: includes/widgets/class-geodir-widget-post-fav.php:59
+#: includes/widgets/class-geodir-widget-post-fav.php:61
 #: includes/widgets/class-geodir-widget-post-meta.php:87
 #: includes/widgets/class-geodir-widget-post-rating.php:61
 msgid "Left"
@@ -2807,7 +2808,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:281
 #: includes/widgets/class-geodir-widget-archive-item-section.php:52
 #: includes/widgets/class-geodir-widget-post-badge.php:130
-#: includes/widgets/class-geodir-widget-post-fav.php:61
+#: includes/widgets/class-geodir-widget-post-fav.php:63
 #: includes/widgets/class-geodir-widget-post-meta.php:89
 #: includes/widgets/class-geodir-widget-post-rating.php:63
 msgid "Right"
@@ -3075,7 +3076,7 @@ msgid "There are no custom fields here yet."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:342
-#: includes/widgets/class-geodir-widget-post-fav.php:47
+#: includes/widgets/class-geodir-widget-post-fav.php:49
 #: includes/widgets/class-geodir-widget-post-rating.php:49
 msgid "Text"
 msgstr ""
@@ -3660,7 +3661,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:307
 #: includes/admin/views/html-admin-page-status-report.php:576
-#: includes/class-geodir-post-data.php:665 language.php:35 language.php:153
+#: includes/class-geodir-post-data.php:670 language.php:35 language.php:153
 msgid "Name"
 msgstr ""
 
@@ -4145,7 +4146,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-design.php:449
 #: includes/widgets/class-geodir-widget-add-listing.php:164
-#: includes/widgets/class-geodir-widget-categories.php:228
+#: includes/widgets/class-geodir-widget-categories.php:247
 #: includes/widgets/class-geodir-widget-map.php:425
 #: includes/widgets/class-geodir-widget-map.php:436
 #: includes/widgets/class-geodir-widget-map.php:579
@@ -4354,7 +4355,7 @@ msgid "Titles & Meta"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:53
-#: includes/core-functions.php:866 language.php:21
+#: includes/core-functions.php:867 language.php:21
 msgid "Search"
 msgstr ""
 
@@ -7834,66 +7835,66 @@ msgstr ""
 msgid "Username is required."
 msgstr ""
 
-#: includes/class-geodir-comments.php:510
+#: includes/class-geodir-comments.php:507
 msgid "Pingback:"
 msgstr ""
 
-#: includes/class-geodir-comments.php:510
+#: includes/class-geodir-comments.php:507
 msgid "(Edit)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:534
+#: includes/class-geodir-comments.php:531
 msgid "Post author"
 msgstr ""
 
-#: includes/class-geodir-comments.php:542
+#: includes/class-geodir-comments.php:539
 #, php-format
 msgid "%s ago"
 msgstr ""
 
-#: includes/class-geodir-comments.php:551
+#: includes/class-geodir-comments.php:548
 msgid "Your comment is awaiting moderation."
 msgstr ""
 
-#: includes/class-geodir-comments.php:560
+#: includes/class-geodir-comments.php:557
 #: includes/widgets/class-geodir-widget-author-actions.php:124 language.php:158
 msgid "Edit"
 msgstr ""
 
-#: includes/class-geodir-comments.php:563 language.php:157
+#: includes/class-geodir-comments.php:560 language.php:157
 msgid "Reply"
 msgstr ""
 
-#: includes/class-geodir-comments.php:690
+#: includes/class-geodir-comments.php:687
 #, php-format
 msgid "%d star rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:690
+#: includes/class-geodir-comments.php:687
 msgid "No rating yet!"
 msgstr ""
 
-#: includes/class-geodir-comments.php:745
+#: includes/class-geodir-comments.php:742
 msgid "Select a rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:778
+#: includes/class-geodir-comments.php:775
 msgid "Terrible"
 msgstr ""
 
-#: includes/class-geodir-comments.php:779
+#: includes/class-geodir-comments.php:776
 msgid "Poor"
 msgstr ""
 
-#: includes/class-geodir-comments.php:780
+#: includes/class-geodir-comments.php:777
 msgid "Average"
 msgstr ""
 
-#: includes/class-geodir-comments.php:781
+#: includes/class-geodir-comments.php:778
 msgid "Very Good"
 msgstr ""
 
-#: includes/class-geodir-comments.php:782
+#: includes/class-geodir-comments.php:779
 msgid "Excellent"
 msgstr ""
 
@@ -8330,7 +8331,7 @@ msgstr ""
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:572
+#: includes/class-geodir-post-data.php:577
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -8338,7 +8339,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:597
+#: includes/class-geodir-post-data.php:602
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -8346,62 +8347,62 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:662
+#: includes/class-geodir-post-data.php:667
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:667
+#: includes/class-geodir-post-data.php:672
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:673
+#: includes/class-geodir-post-data.php:678
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:722
 #: includes/class-geodir-post-data.php:727
+#: includes/class-geodir-post-data.php:732
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:734
+#: includes/class-geodir-post-data.php:739
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:744
+#: includes/class-geodir-post-data.php:749
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:854
+#: includes/class-geodir-post-data.php:859
 msgid "You do not own this post"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:862
+#: includes/class-geodir-post-data.php:867
 msgid "Delete revision failed."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1114
+#: includes/class-geodir-post-data.php:1119
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1119
+#: includes/class-geodir-post-data.php:1124
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1129
+#: includes/class-geodir-post-data.php:1134
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1136
+#: includes/class-geodir-post-data.php:1141
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1234
+#: includes/class-geodir-post-data.php:1239
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -8515,7 +8516,7 @@ msgstr ""
 
 #: includes/class-geodir-post-types.php:227
 #: includes/class-geodir-post-types.php:284
-#: includes/widgets/class-geodir-widget-categories.php:444
+#: includes/widgets/class-geodir-widget-categories.php:469
 #, php-format
 msgid "%s Categories"
 msgstr ""
@@ -8921,7 +8922,7 @@ msgstr ""
 msgid "Click to copy"
 msgstr ""
 
-#: includes/class-geodir-template-loader.php:420
+#: includes/class-geodir-template-loader.php:433
 msgid ""
 "Sorry, this is a page template and can not be accessed from the frontend, it "
 "is used for building the layouts of GeoDirectory sections."
@@ -9215,19 +9216,19 @@ msgstr ""
 msgid "You may lose changes if you navigate away now!"
 msgstr ""
 
-#: includes/core-functions.php:537
+#: includes/core-functions.php:538
 msgid "Listing Preview Page"
 msgstr ""
 
-#: includes/core-functions.php:538
+#: includes/core-functions.php:539
 msgid "Listing Success Page"
 msgstr ""
 
-#: includes/core-functions.php:540
+#: includes/core-functions.php:541
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1065 includes/core-functions.php:1076
+#: includes/core-functions.php:1069 includes/core-functions.php:1080
 msgid "Clear field"
 msgstr ""
 
@@ -9362,7 +9363,7 @@ msgstr ""
 msgid "Given image size is not valid"
 msgstr ""
 
-#: includes/general-functions.php:1758
+#: includes/general-functions.php:1754
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
@@ -10010,58 +10011,74 @@ msgid "This will hide the category icons from the list."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:112
-msgid "Show single column:"
+msgid "Use category image:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:113
-msgid "This will show list in single column."
+msgid "This will use the category default image instead of the icons."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:121
+msgid "Show single column:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-categories.php:122
+msgid "This will show list in single column."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-categories.php:130
 #: includes/widgets/class-geodir-widget-listings.php:102
 msgid "Sort by:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:122
+#: includes/widgets/class-geodir-widget-categories.php:131
 msgid "Sort categories by."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:125
+#: includes/widgets/class-geodir-widget-categories.php:134
 msgid "Count"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:126
+#: includes/widgets/class-geodir-widget-categories.php:135
 #: includes/widgets/class-geodir-widget-listings.php:615
 msgid "A-Z"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:133
+#: includes/widgets/class-geodir-widget-categories.php:142
 msgid "Max sub-cat depth:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:134
+#: includes/widgets/class-geodir-widget-categories.php:143
 msgid "The maximum number of sub category levels to show."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:142
+#: includes/widgets/class-geodir-widget-categories.php:151
+msgid "Max cats to show:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-categories.php:152
+msgid "The maximum number of categories to show."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-categories.php:160
 msgid "Max sub-cat to show:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:143
+#: includes/widgets/class-geodir-widget-categories.php:161
 msgid "The maximum number of sub categories to show."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:151
+#: includes/widgets/class-geodir-widget-categories.php:169
 msgid "Do not filter for current viewing post type"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:159
+#: includes/widgets/class-geodir-widget-categories.php:177
 msgid ""
 "Tick to show all the categories. Leave unticked to show only child "
 "categories of current viewing category."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:253
+#: includes/widgets/class-geodir-widget-categories.php:272
 msgid "No categories found"
 msgstr ""
 
@@ -10600,21 +10617,21 @@ msgid "Extra Large"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:124
-#: includes/widgets/class-geodir-widget-post-fav.php:54
+#: includes/widgets/class-geodir-widget-post-fav.php:56
 #: includes/widgets/class-geodir-widget-post-meta.php:82
 #: includes/widgets/class-geodir-widget-post-rating.php:56
 msgid "Alignment:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:125
-#: includes/widgets/class-geodir-widget-post-fav.php:55
+#: includes/widgets/class-geodir-widget-post-fav.php:57
 #: includes/widgets/class-geodir-widget-post-meta.php:83
 #: includes/widgets/class-geodir-widget-post-rating.php:57
 msgid "How the item should be positioned on the page."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:129
-#: includes/widgets/class-geodir-widget-post-fav.php:60
+#: includes/widgets/class-geodir-widget-post-fav.php:62
 #: includes/widgets/class-geodir-widget-post-meta.php:88
 #: includes/widgets/class-geodir-widget-post-rating.php:62
 msgid "Center"
@@ -10696,19 +10713,19 @@ msgstr ""
 msgid "GD > Post Favorite"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-fav.php:41
+#: includes/widgets/class-geodir-widget-post-fav.php:43
 #: includes/widgets/class-geodir-widget-post-meta.php:66
 #: includes/widgets/class-geodir-widget-post-rating.php:43
 msgid "Show:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-fav.php:42
+#: includes/widgets/class-geodir-widget-post-fav.php:44
 #: includes/widgets/class-geodir-widget-post-meta.php:67
 #: includes/widgets/class-geodir-widget-post-rating.php:44
 msgid "What part of the post meta to show."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-fav.php:46
+#: includes/widgets/class-geodir-widget-post-fav.php:48
 #: includes/widgets/class-geodir-widget-post-rating.php:48
 msgid "Stars"
 msgstr ""

@@ -339,7 +339,7 @@ class GeoDir_Permalinks {
 	 */
 	public function search_rewrite_rules(){
 		// add search paging rewrite
-		$this->add_rewrite_rule( "^".$this->search_slug() . '/page/([^/]+)/?', 'index.php?paged=$matches[1]', 'top' );
+		$this->add_rewrite_rule( "^".$this->search_slug() . '/page/([^/]+)/?', 'index.php?pagename='.$this->search_slug().'&paged=$matches[1]', 'top' );
 	}
 
 	/**

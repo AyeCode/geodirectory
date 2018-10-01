@@ -82,6 +82,13 @@
             display: block;
             margin: auto;
             margin-top: 25%;
+            &.attachment-thumbnail{
+              height: 100%;
+              margin-top: 0;
+              border-radius: 2px;
+              border-top-right-radius: 0;
+              border-bottom-right-radius: 0;
+            }
           }
         }
 

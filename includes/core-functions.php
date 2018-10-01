@@ -469,6 +469,7 @@ function geodir_column_exist( $db, $column ) {
  * @since 2.0.0
  */
 function goedir_register_widgets() {
+
 	if ( get_option( 'geodirectory_version' ) ) {
 		register_widget( 'GeoDir_Widget_Search' );
 		register_widget( 'GeoDir_Widget_Best_Of' );
@@ -930,11 +931,14 @@ function geodir_search_form_post_type_input() {
 				$post_types = (array)$post_types;
 				if($curr_post_type && isset($post_types[$curr_post_type])){
 					$pt_arr = $post_types[$curr_post_type];
+					$pt_value = $curr_post_type;
 				}else{
+					$pt_value = key( $post_types );
 					$pt_arr = reset($post_types);
 				}
+
 				$pt_slug = isset($pt_arr->rewrite->slug) ? esc_attr($pt_arr->rewrite->slug) : 'places';
-				echo '<input type="hidden" name="stype" value="' . key( $pt_arr  ) . '" data-slug="'.$pt_slug.'" />';
+				echo '<input type="hidden" name="stype" value="' . esc_attr( $pt_value  ) . '" data-slug="'.$pt_slug.'" />';
 			}else{
 				echo '<input type="hidden" name="stype" value="gd_place"  data-slug="places"/>';
 			}

@@ -114,9 +114,9 @@ function geodir_post_custom_fields($package_id = '', $default = 'all', $post_typ
             $pricearr = explode(',', $post_meta_info_obj->packages);
 
             if ($package_id != '' && in_array($package_id, $pricearr)) {
-                $return_arr[$post_meta_info_obj->sort_order.$post_meta_info_obj->post_type] = $custom_fields;
+                $return_arr[$post_meta_info_obj->sort_order.$post_meta_info_obj->post_type.$post_meta_info_obj->htmlvar_name] = $custom_fields;
             } elseif ($package_id == '') {
-                $return_arr[$post_meta_info_obj->sort_order.$post_meta_info_obj->post_type] = $custom_fields;
+                $return_arr[$post_meta_info_obj->sort_order.$post_meta_info_obj->post_type.$post_meta_info_obj->htmlvar_name] = $custom_fields;
             }
         }
     }

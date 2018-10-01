@@ -232,12 +232,12 @@ if (!function_exists('geodir_custom_taxonomy_walker')) {
                 }
 
                 if ($cat_display == 'radio')
-                    $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
+                    $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="tax_input[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
                 elseif ($cat_display == 'select' || $cat_display == 'multiselect')
                     $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</option>';
 
                 else {
-                    $out .= '<span style="display:block"><input style="display:inline-block" type="checkbox" field_type="checkbox" name="post_category[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
+                    $out .= '<span style="display:block"><input style="display:inline-block" type="checkbox" field_type="checkbox" name="tax_input[' . $cat_term->taxonomy . '][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" >' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
                 }
 
                 // Call recurson to print sub cats
