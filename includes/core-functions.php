@@ -794,49 +794,6 @@ function geodir_no_rating_get_sort_options( $options, $post_type = '' ) {
 	return $options;
 }
 
-
-/**
- * Returns package information as an objects.
- *
- * @since   1.0.0
- * @package GeoDirectory
- *
- * @param array $package_info Package info array.
- * @param object|string $post The post object.
- * @param string $post_type   The post type.
- *
- * @return object Returns filtered package info as an object.
- */
-function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) {
-	$package_info['pid']              = 0;
-	$package_info['days']             = 0;
-	$package_info['amount']           = 0;
-	$package_info['featured']         = 0;
-	$package_info['image_limit']      = '';
-
-	/**
-	 * Filter listing package info.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @param array $package_info  {
-	 *                             Attributes of the package_info.
-	 *
-	 * @type int $pid              Package ID. Default 0.
-	 * @type int $days             Package validity in Days. Default 0.
-	 * @type int $amount           Package amount. Default 0.
-	 * @type int $featured      Is this featured package? Default 0.
-	 * @type string $image_limit   Image limit for this package. Default "".
-	 * @type int $google_analytics Add analytics to this package. Default 1.
-	 *
-	 * }
-	 * @param object|string $post  The post object.
-	 * @param string $post_type    The post type.
-	 */
-	return (object) apply_filters( 'geodir_post_package_info', $package_info, $post, $post_type );
-
-}
-
 /**
  * Search form submit button.
  *

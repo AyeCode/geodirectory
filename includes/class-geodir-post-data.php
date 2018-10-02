@@ -619,9 +619,7 @@ class GeoDir_Post_Data {
 
 		$cpt_singular_name = ( isset( $post_type_info['labels']['singular_name'] ) && $post_type_info['labels']['singular_name'] ) ? __( $post_type_info['labels']['singular_name'], 'geodirectory' ) : __( 'Listing', 'geodirectory' );
 
-		$package_info = array();
-		$package_info = geodir_post_package_info( $package_info, $post );
-
+		$package = geodir_get_post_package( $post, $listing_type );
 
 		// user notes
 		if ( ! empty( $user_notes ) ) {
@@ -634,7 +632,7 @@ class GeoDir_Post_Data {
 		$security_nonce = wp_create_nonce( "geodir-save-post" );
 
 
-		do_action( 'geodir_before_add_listing_form', $listing_type, $post, $package_info );
+		do_action( 'geodir_before_add_listing_form', $listing_type, $post, $package );
 		?>
 		<form name="geodirectory-add-post" id="geodirectory-add-post"
 		      action="<?php echo get_page_link( $post->ID ); ?>" method="post"
@@ -654,7 +652,7 @@ class GeoDir_Post_Data {
 			if ( isset( $_REQUEST['pid'] ) && $_REQUEST['pid'] != '' ) { ?>
 			<?php }
 
-			do_action( 'geodir_add_listing_form_start', $listing_type, $post, $package_info );
+			do_action( 'geodir_add_listing_form_start', $listing_type, $post, $package );
 
 
 
@@ -703,10 +701,7 @@ class GeoDir_Post_Data {
 			do_action( 'geodir_before_main_form_fields' );
 
 
-			$package_info = array();
-			$package_info = geodir_post_package_info( $package_info, $post );
-
-			geodir_get_custom_fields_html( $package_info->pid, 'all', $listing_type );
+			geodir_get_custom_fields_html( $package->id, 'all', $listing_type );
 
 			/**
 			 * Called on the add listing page form for frontend just after the image upload field.
@@ -752,13 +747,13 @@ class GeoDir_Post_Data {
             <span class="geodir_message_note"
                   style="padding-left:0px;"> <?php //_e( 'Note: You will be able to see a preview in the next page', 'geodirectory' ); ?></span>
 			</div>
-			<?php do_action( 'geodir_add_listing_form_end', $listing_type, $post, $package_info ); ?>
+			<?php do_action( 'geodir_add_listing_form_end', $listing_type, $post, $package ); ?>
 		</form>
 
 		<?php
 
 
-		do_action( 'geodir_after_add_listing_form', $listing_type, $post, $package_info );
+		do_action( 'geodir_after_add_listing_form', $listing_type, $post, $package );
 		wp_reset_query();
 	}
 
@@ -1235,7 +1230,7 @@ class GeoDir_Post_Data {
 	 * @since 1.0.0
 	 * @package GeoDirectory
 	 */
-	public static function add_listing_mandatory_note( $listing_type = '', $post = array(), $package_info = array() ) {
+	public static function add_listing_mandatory_note( $listing_type = '', $post = array(), $package = array() ) {
 		?><p class="geodir-note "><span class="geodir-required">*</span>&nbsp;<?php echo __('Indicates mandatory fields', 'geodirectory'); ?></p><?php
 	}
 

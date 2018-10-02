@@ -57,86 +57,83 @@ function geodir_is_block_demo(){
  * @param string $fields_location Optional. Where exactly are you going to place this custom fields?.
  * @return array|mixed|void Returns custom fields.
  */
-function geodir_post_custom_fields($package_id = '', $default = 'all', $post_type = 'gd_place', $fields_location = 'none')
-{
+function geodir_post_custom_fields( $package_id = '', $default = 'all', $post_type = 'gd_place', $fields_location = 'none' ) {
     global $wpdb, $geodir_post_custom_fields_cache;
 
     $cache_stored = $post_type . '_' . $package_id . '_' . $default . '_' . $fields_location;
 
-    if (array_key_exists($cache_stored, $geodir_post_custom_fields_cache)) {
-        return $geodir_post_custom_fields_cache[$cache_stored];
+    if ( array_key_exists( $cache_stored, $geodir_post_custom_fields_cache ) ) {
+        return $geodir_post_custom_fields_cache[ $cache_stored ];
     }
 
-    $default_query = '';
+	$where = array( $wpdb->prepare( "is_active = %d", 1 ) );
+	if ( $post_type != 'all' ) {
+		$where[] = $wpdb->prepare( "post_type = %s", $post_type );
+	}
+	if ( $fields_location != 'none' ) {
+		$where[] = "show_in LIKE '%%[" . esc_sql( $fields_location ) . "]%%'";
+	}
+	if ( $default == 'default' ) {
+		$where[] = $wpdb->prepare( "is_admin = %d", 1 );
+    } else if ( $default == 'custom' ) {
+		$where[] = $wpdb->prepare( "is_admin = %d", 0 );
+	}
 
-    if ($default == 'default')
-        $default_query .= " and is_admin IN ('1') ";
-    elseif ($default == 'custom')
-        $default_query .= " and is_admin = '0' ";
+	$where = ! empty( $where ) ? "WHERE " . implode( " AND ", $where ) : '';
 
-    if ($fields_location == 'none') {
-    } else{
-        $fields_location = esc_sql( $fields_location );
-        $default_query .= " and show_in LIKE '%%[$fields_location]%%' ";
-    }
-    
-    $post_type_sql = $post_type != 'all' ? $wpdb->prepare(" and post_type = %s ",$post_type) : '';
+	$where = apply_filters( 'geodir_post_custom_fields_query_where', $where, $post_type, $package_id, $default, $fields_location );
 
-    $post_meta_info = $wpdb->get_results(
-        "select * from " . GEODIR_CUSTOM_FIELDS_TABLE . " where is_active = '1' {$post_type_sql}  {$default_query} order by sort_order asc,admin_title asc"
-    );
+    $fields = $wpdb->get_results( "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " {$where} ORDER BY sort_order ASC, admin_title ASC" );
 
+    $custom_fields = array();
+    if ( $fields ) {
+        foreach ( $fields as $key => $field ) {
+            $skip = apply_filters( 'geodir_post_custom_fields_skip_field', false, $field, $package_id, $default, $fields_location );
+			$skip = apply_filters( 'geodir_post_custom_fields_skip_field_' . $field->htmlvar_name, $skip, $field, $package_id, $default, $fields_location );
 
-    $return_arr = array();
-    if ($post_meta_info) {
+			if ( $skip ) {
+				continue;
+			}
 
-        foreach ($post_meta_info as $post_meta_info_obj) {
-
-            $custom_fields = array(
-                "name" => $post_meta_info_obj->htmlvar_name,
-                "label" => $post_meta_info_obj->clabels,
-                "default" => $post_meta_info_obj->default_value,
-                "type" => $post_meta_info_obj->field_type,
-                "desc" => $post_meta_info_obj->frontend_desc,
-                "post_type" => $post_meta_info_obj->post_type,
+			$custom_field = array(
+                "name" => $field->htmlvar_name,
+                "label" => $field->clabels,
+                "default" => $field->default_value,
+                "type" => $field->field_type,
+                "desc" => $field->frontend_desc,
+                "post_type" => $field->post_type,
             );
 
-            if ($post_meta_info_obj->field_type) {
-                $options = explode(',', $post_meta_info_obj->option_values);
-                $custom_fields["options"] = $options;
+            if ( $field->field_type ) {
+                $options = explode( ',', $field->option_values );
+                $custom_field["options"] = $options;
             }
 
-            foreach ($post_meta_info_obj as $key => $val) {
-                $custom_fields[$key] = $val;
+            foreach ( $field as $field_key => $val ) {
+                $custom_field[ $field_key ] = $val;
             }
 
-            $pricearr = array();
-            $pricearr = explode(',', $post_meta_info_obj->packages);
-
-            if ($package_id != '' && in_array($package_id, $pricearr)) {
-                $return_arr[$post_meta_info_obj->sort_order.$post_meta_info_obj->post_type.$post_meta_info_obj->htmlvar_name] = $custom_fields;
-            } elseif ($package_id == '') {
-                $return_arr[$post_meta_info_obj->sort_order.$post_meta_info_obj->post_type.$post_meta_info_obj->htmlvar_name] = $custom_fields;
-            }
+            $custom_fields[ $field->sort_order . $field->post_type . $field->htmlvar_name ] = $custom_field;
         }
     }
-    $geodir_post_custom_fields_cache[$cache_stored] = $return_arr;
 
-    if (has_filter('geodir_filter_geodir_post_custom_fields')) {
+    if ( has_filter('geodir_filter_geodir_post_custom_fields' ) ) {
         /**
          * Filter the post custom fields array.
          *
          * @since 1.0.0
          *
-         * @param array $return_arr Post custom fields array.
+         * @param array $custom_fields Post custom fields array.
          * @param int|string $package_id The package ID.
          * @param string $post_type Optional. The wordpress post type.
          * @param string $fields_location Optional. Where exactly are you going to place this custom fields?.
          */
-        $return_arr = apply_filters('geodir_filter_geodir_post_custom_fields', $return_arr, $package_id, $post_type, $fields_location);
+        $custom_fields = apply_filters( 'geodir_filter_geodir_post_custom_fields', $custom_fields, $package_id, $post_type, $fields_location );
     }
 
-    return $return_arr;
+	$geodir_post_custom_fields_cache[ $cache_stored ] = $custom_fields;
+
+    return $custom_fields;
 }
 
 
