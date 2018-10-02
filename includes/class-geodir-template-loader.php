@@ -291,6 +291,11 @@ class GeoDir_Template_Loader {
      */
     private static function get_template_loader_files( $default_file ) {
         $search_files = apply_filters( 'geodir_template_loader_files', array(), $default_file );
+
+        if(geodir_is_page('archive') || geodir_is_page('search')){
+           $search_files[] = 'geodirectory-archive.php';
+        }
+
         $search_files[] = 'geodirectory.php';
 
         if ( geodir_is_taxonomy() ) {

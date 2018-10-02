@@ -738,20 +738,6 @@ function geodir_custom_posts_body_class( $classes ) {
 		$classes[] = 'geodir_custom_posts';
 	}
 
-	// fix body class for signup page
-	if ( geodir_is_page( 'login' ) ) {
-		$new_classes   = array();
-		$new_classes[] = 'signup page-geodir-signup';
-		if ( ! empty( $classes ) ) {
-			foreach ( $classes as $class ) {
-				if ( $class && $class != 'home' && $class != 'blog' ) {
-					$new_classes[] = $class;
-				}
-			}
-		}
-		$classes = $new_classes;
-	}
-
 	if ( geodir_is_geodir_page() ) {
 		$classes[] = 'geodir-page';
 	}
@@ -759,6 +745,16 @@ function geodir_custom_posts_body_class( $classes ) {
 	if ( geodir_is_page( 'search' ) ) {
 		$classes[] = 'geodir-page-search';
 	}
+
+	if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) {
+		$post_type = geodir_get_current_posttype();
+		$classes[] = 'geodir-archive';
+
+		if(isset($post_types->{$post_type}) && isset($post_types->{$post_type}->disable_location) && $post_types->{$post_type}->disable_location){
+			$classes[] = 'geodir-archive-locationless';
+		}
+	}
+
 
 	return $classes;
 }
@@ -1988,4 +1984,31 @@ function geodir_cpt_template_pages() {
 	wp_cache_set( 'geodir_cpt_template_pages', $page_ids, 'geodir_cpt_template_page' );
 
 	return $page_ids;
+}
+
+/**
+ * Get CPT templage page for the CPT.
+ *
+ * @since   2.0.0.30
+ * @package GeoDirectory
+
+ * @return int The page id.
+ */
+function geodir_cpt_template_page($page,$post_type) {
+
+	$default = geodir_get_option($page);
+	$page_id = $default ? $default : '';
+	$pages = array( 'page_details', 'page_archive', 'page_archive_item' );
+
+
+	// bail if its not a CPT template
+	if(in_array($page,$pages)){
+
+		$post_types = geodir_get_posttypes( 'object' );
+		if(isset($post_types->{$post_type}->page_details) && $post_types->{$post_type}->page_details){
+			$page_id = $post_types->{$post_type}->page_details;
+		}
+	}
+
+	return $page_id;
 }

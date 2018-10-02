@@ -68,7 +68,28 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
             _e("No listings found that match your selection.","geodirectory");
         }
 
+        // add filter to make main page comments closed after the GD loop
+        add_filter( 'comments_open', array(__CLASS__,'comments_open'),10,2);
+
         return ob_get_clean();
+    }
+
+    /**
+     * Filter to close the comments for archive pages after the GD loop.
+     * 
+     * @param $open
+     * @param $post_id
+     *
+     * @return bool
+     */
+    public static function comments_open($open, $post_id){
+
+        global $post;
+        if(isset($post->ID) && $post->ID==$post_id){
+            $open = false;
+        }
+
+        return $open;
     }
 
 }

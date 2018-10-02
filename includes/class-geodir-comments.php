@@ -81,18 +81,15 @@ class GeoDir_Comments {
 
 		if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $detail_table . "'" ) == $detail_table ) {
 
-//			$wpdb->query(
-//				$wpdb->prepare(
-//					"UPDATE " . $detail_table . " SET
-//						overall_rating = %f,
-//						rating_count = %f
-//						where post_id = %d",
-//					array( $post_newrating, $post_newrating_count, $post_id )
-//				)
-//			);
-
-			update_post_meta( $post_id, 'overall_rating', $post_newrating );
-			update_post_meta( $post_id, 'rating_count', $post_newrating_count );
+			$wpdb->query(
+				$wpdb->prepare(
+					"UPDATE " . $detail_table . " SET
+						overall_rating = %f,
+						rating_count = %f
+						where post_id = %d",
+					array( $post_newrating, $post_newrating_count, $post_id )
+				)
+			);
 		}
 		/**
 		 * Called after Updating post overall rating and rating count.
@@ -339,7 +336,7 @@ class GeoDir_Comments {
 			 */
 			do_action( 'geodir_after_save_comment', $_REQUEST, 'Comment Your Post' );
 
-			self::update_post_rating( $post_id );
+			self::update_post_rating( $post_id,$gd_post->post_type );
 		}
 	}
 

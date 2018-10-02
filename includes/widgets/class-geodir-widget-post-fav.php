@@ -34,6 +34,8 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
                 'description' => esc_html__('This shows a GD post favorite link.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
+                'gd_wgt_showhide' => 'show_on',
+                'gd_wgt_restrict' => array( 'gd-detail' ),
             ),
             'arguments'     => array(
                 'show'  => array(

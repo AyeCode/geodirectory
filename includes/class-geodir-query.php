@@ -448,7 +448,6 @@ class GeoDir_Query {
 					$term_results = $wpdb->get_results( $term_sql );
 
 					$term_ids  = array();
-					$terms_sql = '';
 
 					if ( ! empty( $term_results ) ) {
 						foreach ( $term_results as $term_id ) {
