@@ -156,8 +156,8 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 			$args['search'] = '*' . $args['search'] . '*';
 		}
 
-		if ( empty( $args['packages'] ) && ! empty( $args['post'] ) && ( $package = (array) geodir_post_package_info( array(), $args['post'], get_post_type( $this->post_type ) ) ) ) {
-			$args['packages'] = $package['pid'];
+		if ( empty( $args['packages'] ) && ! empty( $args['post'] ) && ( $package_id = geodir_get_post_package_id( $args['post'], get_post_type( $this->post_type ) ) ) ) {
+			$args['packages'] = $package_id;
 		}
 
 		/**

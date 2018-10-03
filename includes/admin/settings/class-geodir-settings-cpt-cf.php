@@ -1500,7 +1500,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field->field_icon = isset( $input['field_icon'] ) ? sanitize_text_field( $input['field_icon'] ) : '';
 			$field->show_in = isset( $input['show_in'] ) ? self::sanatize_show_in( $input['show_in'] ) : '';
 			$field->option_values = isset( $input['option_values'] ) ? self::sanitize_option_values( $input['option_values'] ) : '';
-			$field->packages = isset( $input['show_on_pkg'] ) ? self::sanatize_show_on_pkg( $input['show_on_pkg'] ) : array(); //@todo maybe have sanatize function
+			$field->packages = isset( $input['show_on_pkg'] ) ? self::sanatize_show_on_pkg( $input['show_on_pkg'] ) : ''; //@todo maybe have sanatize function
 			$field->cat_sort = isset( $input['cat_sort'] ) ? absint( $input['cat_sort'] ) : 0;
 			$field->cat_filter = isset( $input['cat_filter'] ) ? absint( $input['cat_filter'] ) : 0;
 			$field->data_type = isset( $input['data_type'] ) ? sanitize_text_field( $input['data_type'] ) : '';
@@ -1515,7 +1515,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			if(!$field->admin_title){$field->admin_title = $field->frontend_title;}
 			if(!$field->htmlvar_name){$field->htmlvar_name =str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['frontend_title'] ) );} // we use original input so the special chars are no converted already
 
-			return $field;
+			return apply_filters( 'geodir_cpt_cf_sanatize_custom_field', $field, $input );
 
 		}
 

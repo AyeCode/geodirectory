@@ -1275,20 +1275,13 @@ function geodir_cfi_taxonomy($html,$cf){
                 $exclude_cats = array();
 
                 if ($is_admin == '1') {
-
-                    $post_type = get_post_type();
-
-                    $package_info = array();
-
-                    $package_info = (array)geodir_post_package_info($package_info, $post, $post_type);
-
-                    if (!empty($package_info)) {
-
-                        if (isset($package_info['cat']) && $package_info['cat'] != '') {
-
-                            $exclude_cats = explode(',', $package_info['cat']);
-
-                        }
+                    $package = geodir_get_post_package( $post, $cf['post_type'] );
+					if ( ! empty( $package ) && isset( $package->exclude_category ) ) {
+						if ( is_array( $package->exclude_category ) ) {
+							$exclude_cats = $package->exclude_category;
+						} else {
+							$exclude_cats = $package->exclude_category != '' ? explode( ',', $package->exclude_category ) : array();
+						}
                     }
                 }
 
@@ -1443,20 +1436,13 @@ function geodir_cfi_categories($html,$cf){
                 $exclude_cats = array();
 
                 if ($is_admin == '1') {
-
-                    $post_type = get_post_type();
-
-                    $package_info = array();
-
-                    $package_info = (array)geodir_post_package_info($package_info, $post, $post_type);
-
-                    if (!empty($package_info)) {
-
-                        if (isset($package_info['cat']) && $package_info['cat'] != '') {
-
-                            $exclude_cats = explode(',', $package_info['cat']);
-
-                        }
+                    $package = geodir_get_post_package( $post, $cf['post_type'] );
+					if ( ! empty( $package ) && isset( $package->exclude_category ) ) {
+						if ( is_array( $package->exclude_category ) ) {
+							$exclude_cats = $package->exclude_category;
+						} else {
+							$exclude_cats = $package->exclude_category != '' ? explode( ',', $package->exclude_category ) : array();
+						}
                     }
                 }
 

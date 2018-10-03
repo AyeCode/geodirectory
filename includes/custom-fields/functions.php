@@ -413,14 +413,11 @@ if (!function_exists('geodir_show_listing_info')) {
     function geodir_show_listing_info($fields_location = '') {
         global $post, $preview, $wpdb;
 
-        $package_info = array();
-
-        $package_info = geodir_post_package_info($package_info, $post);
-        $post_package_id = !empty($package_info->pid) ? $package_info->pid : '';
         $p_type = !empty($post->post_type) ? $post->post_type : geodir_get_current_posttype();
+		$package_id = geodir_get_post_package_id( $post, $p_type );
 
         ob_start();
-        $fields_info = geodir_post_custom_fields($post_package_id, 'all', $p_type, $fields_location);
+        $fields_info = geodir_post_custom_fields($package_id, 'all', $p_type, $fields_location);
 
         if (!empty($fields_info)) {
             $post = stripslashes_deep($post); // strip slashes

@@ -399,61 +399,12 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				<?php
 			}
 
+			do_action( "geodir_cfa_after_show_in_field", $cf, $field );
 
 			// advanced_editor @todo this should be added via action
 			if ( has_filter( "geodir_cfa_advanced_editor_{$field->field_type}" ) ) {
 				echo apply_filters( "geodir_cfa_advanced_editor_{$field->field_type}", '', $field->id, $cf, $field );
 			}
-
-
-			// @todo this should be added via action
-
-			$pricearr = array();
-			if ( isset( $field->packages ) && $field->packages != '' ) {
-				$pricearr = explode( ',', trim( $field->packages, ',' ) );
-			} else {
-				$package_info = array();
-
-				$package_info = geodir_post_package_info( $package_info, '', self::$post_type );
-				$pricearr[]   = $package_info->pid;
-			}
-
-			ob_start()
-			?>
-
-			<select style="display:none" name="show_on_pkg[]" id="show_on_pkg" multiple="multiple">
-				<?php
-				if ( ! empty( $pricearr ) ) {
-					foreach ( $pricearr as $val ) {
-						?>
-						<option selected="selected"
-						        value="<?php echo esc_attr( $val ); ?>" ><?php echo $val; ?></option><?php
-					}
-				}
-				?>
-			</select>
-
-			<?php
-			$html = ob_get_clean();
-
-			/**
-			 * Filter the price packages list.
-			 *
-			 * Filter the price packages list in custom field form in admin
-			 * custom fields settings.
-			 *
-			 * @since 1.0.0
-			 *
-			 * @param string $html The price packages content.
-			 * @param object $field Current field object.
-			 */
-			echo $html = apply_filters( 'geodir_packages_list_on_custom_fields', $html, $field );
-
-?>
-
-
-
-			<?php
 
 			// is_required
 			do_action( "geodir_cfa_before_is_required_{$field->field_type}", $cf, $field);
