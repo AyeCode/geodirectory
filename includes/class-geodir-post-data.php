@@ -1137,6 +1137,8 @@ class GeoDir_Post_Data {
 			}
 		}
 
+		$message = apply_filters( 'geodir_ajax_save_post_message', $message, $post_data );
+
 		return self::output_user_notes(array('gd-info'=>$message));
 	}
 
