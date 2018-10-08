@@ -615,6 +615,45 @@ class GeoDir_Admin_Settings {
 						<?php
 					}
 					break;
+				
+				// Checkbox input
+				case 'multicheckbox' :
+
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
+
+					?>
+					<tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>" >
+						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?></th>
+						<td class="forminp forminp-checkbox">
+							<div class="geodir-mcheck-rows geodir-mcheck-<?php echo sanitize_key( $value['id'] ); ?>">
+								<?php foreach( $value['options'] as $key => $title ) { 
+								if ( ! empty( $option_value ) && is_array( $option_value ) && in_array( $key, $option_value ) ) { 
+									$checked = true;
+								} else { 
+									$checked = false; 
+								}
+								?>
+								<div class="geodir-mcheck-row">
+									<input
+										name="<?php echo esc_attr( $value['id'] ); ?>[<?php echo $key; ?>]"
+										id="<?php echo esc_attr( $value['id'] . '-' . sanitize_key( $key ) ); ?>"
+										type="checkbox"
+										class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
+										value="<?php echo $key; ?>"
+										<?php checked( $checked, true ); ?>
+										<?php echo implode( ' ', $custom_attributes ); ?>
+									/> <label for="<?php echo $value['id'] . '-' . sanitize_key( $key ) ?>"><?php echo $title ?></label></div>
+								<?php } ?>
+								<?php echo $tooltip_html; ?>
+							</div>
+						</td>
+					</tr>
+						<?php
+					break;
 
 				// Image width settings
 				case 'image_width' :
