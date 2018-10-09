@@ -627,7 +627,10 @@ class GeoDir_Admin_Settings {
 
 					?>
 					<tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>" >
-						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?></th>
+						<th scope="row" class="titledesc">
+							<label><?php echo esc_html( $value['title'] ); ?></label>
+							<?php echo $tooltip_html; ?>
+						</th>
 						<td class="forminp forminp-checkbox">
 							<div class="geodir-mcheck-rows geodir-mcheck-<?php echo sanitize_key( $value['id'] ); ?>">
 								<?php foreach( $value['options'] as $key => $title ) { 
@@ -648,7 +651,7 @@ class GeoDir_Admin_Settings {
 										<?php echo implode( ' ', $custom_attributes ); ?>
 									/> <label for="<?php echo $value['id'] . '-' . sanitize_key( $key ) ?>"><?php echo $title ?></label></div>
 								<?php } ?>
-								<?php echo $tooltip_html; ?>
+								<?php echo $description; ?>
 							</div>
 						</td>
 					</tr>
@@ -1173,6 +1176,9 @@ class GeoDir_Admin_Settings {
 				case 'multiselect' :
 				case 'multi_select_countries' :
 					$value = array_filter( array_map( 'geodir_clean', (array) $raw_value ) );
+					break;
+				case 'multicheckbox' :
+					$value = array_map( 'geodir_clean', (array) $raw_value );
 					break;
 				case 'image_width' :
 					$value = array();
