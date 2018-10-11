@@ -650,7 +650,7 @@ if (!function_exists('geodir_custom_sort_field_adminhtml')) {
     }
 }
 
-if (!function_exists('check_field_visibility')) {
+if (!function_exists('geodir_check_field_visibility')) {
     /**
      * Check field visibility as per price package.
      *
@@ -663,21 +663,10 @@ if (!function_exists('check_field_visibility')) {
      * @param string $post_type Optional. The wordpress post type.
      * @return bool Returns true when field visible, otherwise false.
      */
-    function check_field_visibility($package_id, $field_name, $post_type)
-    {
-        global $wpdb, $geodir_addon_list;
-        if (!(isset($geodir_addon_list['geodir_payment_manager']) && $geodir_addon_list['geodir_payment_manager'] == 'yes')) {
-            return true;
-        }
-        if (!$package_id || !$field_name || !$post_type) {
-            return true;
-        }
-        $sql = $wpdb->prepare("SELECT id FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE is_active='1' AND htmlvar_name=%s AND post_type=%s AND FIND_IN_SET(%s, packages)", array($field_name, $post_type, (int)$package_id));
+    function geodir_check_field_visibility( $package_id, $field_name, $post_type ) {
+        $show = true;
 
-        if ($wpdb->get_var($sql)) {
-            return true;
-        }
-        return false;
+		return apply_filters( 'geodir_check_field_visibility', $show, $field_name, $package_id, $post_type );
     }
 }
 
