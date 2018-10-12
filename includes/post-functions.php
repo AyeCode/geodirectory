@@ -890,3 +890,43 @@ function geodir_previous_next_post_where( $where, $in_same_term, $excluded_terms
 
 add_filter( 'get_previous_post_where', 'geodir_previous_next_post_where', 10, 5 );
 add_filter( 'get_next_post_where', 'geodir_previous_next_post_where', 10, 5 );
+
+/**
+ * Returns package information as an objects.
+ *
+ * @since   2.0.0
+ * @package GeoDirectory
+ * @deprecated
+ *
+ * @param object|string $post The post object.
+ * @param string $post_type   The post type.
+ *
+ * @return object Returns filtered package info as an object.
+ */
+function geodir_get_post_package_id( $post = '', $post_type = '' ) {
+	$package = geodir_get_post_package( $post, $post_type );
+
+	$package_id = ! empty( $package ) && ! empty( $package->id ) ? $package->id : 0;
+
+	return $package_id;
+}
+
+/**
+ * Returns package information as an objects.
+ *
+ * @since   2.0.0
+ * @package GeoDirectory
+ * @deprecated
+ *
+ * @param object|string $post The post object.
+ * @param string $post_type   The post type.
+ *
+ * @return object Returns filtered package info as an object.
+ */
+function geodir_get_post_package( $post = '', $post_type = '' ) {
+	$package = array(
+		'id' => 0,
+	);
+
+	return (object)apply_filters( 'geodir_get_post_package', (object)$package, $post, $post_type );
+}

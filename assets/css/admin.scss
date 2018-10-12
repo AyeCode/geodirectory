@@ -581,6 +581,20 @@ Custom Post Type Settings
     font-size: 14px;
     color: #666666;
 }
+#geodir-selected-fields ul li label input,
+#geodir-selected-fields ul li label select,
+#geodir-selected-fields ul li label textarea,
+#geodir-selected-fields ul li label span {
+	font-weight: normal;
+}
+
+.gd-tabs-sortable .gd-select2-selection > ul > li {
+	margin-left: 7px!important;
+}
+
+.gd-tabs-sortable .select2-search input[type="search"] {
+	height: inherit !important;
+}
 
 #geodir-selected-fields .fa-info-circle{
     color: #3673cc;

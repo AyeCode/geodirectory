@@ -508,7 +508,7 @@ function geodir_cfi_textarea($html,$cf){
             </label><?php
 
 
-            if (is_array($extra_fields) && in_array('1', $extra_fields)) {
+            if ( apply_filters( 'geodir_custom_field_allow_html_editor', true, $cf ) ) {
 
                 $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);?>
 
@@ -1274,21 +1274,14 @@ function geodir_cfi_taxonomy($html,$cf){
 
                 $exclude_cats = array();
 
+				$package = geodir_get_post_package( $post, $cf['post_type'] );
                 if ($is_admin == '1') {
-
-                    $post_type = get_post_type();
-
-                    $package_info = array();
-
-                    $package_info = (array)geodir_post_package_info($package_info, $post, $post_type);
-
-                    if (!empty($package_info)) {
-
-                        if (isset($package_info['cat']) && $package_info['cat'] != '') {
-
-                            $exclude_cats = explode(',', $package_info['cat']);
-
-                        }
+					if ( ! empty( $package ) && isset( $package->exclude_category ) ) {
+						if ( is_array( $package->exclude_category ) ) {
+							$exclude_cats = $package->exclude_category;
+						} else {
+							$exclude_cats = $package->exclude_category != '' ? explode( ',', $package->exclude_category ) : array();
+						}
                     }
                 }
 
@@ -1307,34 +1300,18 @@ function geodir_cfi_taxonomy($html,$cf){
                 }
 
 
-                global $geodir_addon_list;
-                if (!empty($geodir_addon_list) && array_key_exists('geodir_payment_manager', $geodir_addon_list) && $geodir_addon_list['geodir_payment_manager'] == 'yes') {
+                $category_limit = ! empty( $package ) && isset( $package->category_limit ) ? absint( $package->category_limit ) : 0;
+				$category_limit = (int) apply_filters( 'geodir_cfi_post_categories_limit', $category_limit, $post, $package );
 
-                    $catadd_limit = $wpdb->get_var(
-                        $wpdb->prepare(
-                            "SELECT cat_limit FROM " . GEODIR_PRICE_TABLE . " WHERE pid = %d",
-                            array($package_id)
-                        )
-                    );
-
-
-                } else {
-                    $catadd_limit = 0;
-                }
-
-
-                if ($cat_display != '') {
-
+                if ( $cat_display != '' ) {
                     $required_limit_msg = '';
-                    if ($catadd_limit > 0 && $cat_display != 'select' && $cat_display != 'radio') {
-
-                        $required_limit_msg = __('Only select', 'geodirectory') . ' ' . $catadd_limit . __(' categories for this package.', 'geodirectory');
-
+                    if ( $category_limit > 0 && $cat_display != 'select' && $cat_display != 'radio' ) {
+                        $required_limit_msg = wp_sprintf( __( 'Only select %d categories for this package.', 'geodirectory' ), array( $category_limit ) );
                     } else {
                         $required_limit_msg = $required_msg;
                     }
 
-                    echo '<input type="hidden" cat_limit="' . $catadd_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
+                    echo '<input type="hidden" cat_limit="' . $category_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
 					echo '<input type="hidden" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
 
 
@@ -1357,7 +1334,7 @@ function geodir_cfi_taxonomy($html,$cf){
 
                     }
 
-                    echo geodir_custom_taxonomy_walker($taxonomy, $catadd_limit = 0);
+                    echo geodir_custom_taxonomy_walker($taxonomy, $category_limit = 0);
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect')
                         echo '</select>';
@@ -1442,21 +1419,14 @@ function geodir_cfi_categories($html,$cf){
 
                 $exclude_cats = array();
 
+				$package = geodir_get_post_package( $post, $cf['post_type'] );
                 if ($is_admin == '1') {
-
-                    $post_type = get_post_type();
-
-                    $package_info = array();
-
-                    $package_info = (array)geodir_post_package_info($package_info, $post, $post_type);
-
-                    if (!empty($package_info)) {
-
-                        if (isset($package_info['cat']) && $package_info['cat'] != '') {
-
-                            $exclude_cats = explode(',', $package_info['cat']);
-
-                        }
+					if ( ! empty( $package ) && isset( $package->exclude_category ) ) {
+						if ( is_array( $package->exclude_category ) ) {
+							$exclude_cats = $package->exclude_category;
+						} else {
+							$exclude_cats = $package->exclude_category != '' ? explode( ',', $package->exclude_category ) : array();
+						}
                     }
                 }
 
@@ -1466,46 +1436,24 @@ function geodir_cfi_categories($html,$cf){
 				} else {
 					$cat_display = 'select';
 				}
-                //echo '###'.$cat_display;print_r($cf)
-
-//                if (isset($_REQUEST['backandedit']) && !empty($post_cat['post_category']) && is_array($post_cat['post_category'])) {
-//                    $post_cat = implode(",", $post_cat['post_category']);
-//                } else {
-//                    if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '')
-//                        $post_cat = geodir_get_post_meta($_REQUEST['pid'], 'post_category', true);
-//                }
 
                 $post_cat = geodir_get_cf_value($cf);
-
-
-                global $geodir_addon_list;
-                if (!empty($geodir_addon_list) && array_key_exists('geodir_payment_manager', $geodir_addon_list) && $geodir_addon_list['geodir_payment_manager'] == 'yes') {
-
-                    $catadd_limit = $wpdb->get_var(
-                        $wpdb->prepare(
-                            "SELECT cat_limit FROM " . GEODIR_PRICE_TABLE . " WHERE pid = %d",
-                            array($package_id)
-                        )
-                    );
-
-
-                } else {
-                    $catadd_limit = 0;
-                }
-
+                    
+				$category_limit = ! empty( $package ) && isset( $package->category_limit ) ? absint( $package->category_limit ) : 0;
+				$category_limit = (int) apply_filters( 'geodir_cfi_post_categories_limit', $category_limit, $post, $package );
 
                 if ($cat_display != '') {
 
                     $required_limit_msg = '';
-                    if ($catadd_limit > 0 && $cat_display != 'select' && $cat_display != 'radio') {
+                    if ($category_limit > 0 && $cat_display != 'select' && $cat_display != 'radio') {
 
-                        $required_limit_msg = __('Only select', 'geodirectory') . ' ' . $catadd_limit . __(' categories for this package.', 'geodirectory');
+                        $required_limit_msg = wp_sprintf( __('Only select %d categories for this package.', 'geodirectory'), $category_limit );
 
                     } else {
                         $required_limit_msg = $required_msg;
                     }
 
-                    echo '<input type="hidden" cat_limit="' . $catadd_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
+                    echo '<input type="hidden" cat_limit="' . $category_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
 					echo '<input type="hidden" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect') {
@@ -1527,7 +1475,7 @@ function geodir_cfi_categories($html,$cf){
 
                     }
 
-                    echo GeoDir_Admin_Taxonomies::taxonomy_walker($taxonomy, $catadd_limit = 0);
+                    echo GeoDir_Admin_Taxonomies::taxonomy_walker($taxonomy, $category_limit = 0);
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect')
                         echo '</select>';
@@ -1830,6 +1778,8 @@ function  geodir_cfi_files($html,$cf){
                 $file_limit = '1';
             }
         }
+
+		$file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
 
         $allowed_file_types = isset($extra_fields['gd_file_types']) ? maybe_unserialize($extra_fields['gd_file_types']) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico');
         $display_file_types = $allowed_file_types != '' ? '.' . implode(", .", $allowed_file_types) : '';

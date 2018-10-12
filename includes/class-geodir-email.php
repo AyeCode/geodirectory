@@ -185,7 +185,7 @@ class GeoDir_Email {
 			// TODO add some cases
 			default:
 				$active = geodir_get_option( 'email_' . $email_name );
-				$active = $active == 'yes' || $active == '1' ? true : false;
+				$active = $active === 'yes' || $active == '1' ? true : false;
 				break;
 		}
 
@@ -217,7 +217,9 @@ class GeoDir_Email {
 			$subject = GeoDir_Defaults::$method();
 		}
 
-		$subject = self::replace_variables( __( $subject, 'geodirectory' ), $email_name, $email_vars );
+		if ( $subject ) {
+			$subject = self::replace_variables( __( $subject, 'geodirectory' ), $email_name, $email_vars );
+		}
 
 		return apply_filters( 'geodir_email_subject', $subject, $email_name, $email_vars );
 	}
@@ -384,7 +386,9 @@ class GeoDir_Email {
 			$content = GeoDir_Defaults::$method();
 		}
 
-		$content = self::replace_variables( __( $content, 'geodirectory' ), $email_name, $email_vars );
+		if ( $content ) {
+			$content = self::replace_variables( __( $content, 'geodirectory' ), $email_name, $email_vars );
+		}
 
 		return apply_filters( 'geodir_email_content', $content, $email_name, $email_vars );
 	}
@@ -566,7 +570,7 @@ class GeoDir_Email {
 			// TODO add some cases
 			default:
 				$active = geodir_get_option( 'email_bcc_' . $email_name );
-				$active = $active == 'yes' || $active == '1' ? true : false;
+				$active = $active === 'yes' || $active == '1' ? true : false;
 				break;
 		}
 

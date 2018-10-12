@@ -333,6 +333,25 @@ function geodir_get_normal_country(){
 function create_location_slug( $location_string ) {
 	_deprecated_function( 'create_location_slug', '2.0.0', 'geodir_create_location_slug()' );
 }
+
+/**
+ * Returns package information as an objects.
+ *
+ * @since   1.0.0
+ * @package GeoDirectory
+ * @deprecated
+ *
+ * @param array $package_info Package info array.
+ * @param object|string $post The post object.
+ * @param string $post_type   The post type.
+ *
+ * @return object Returns filtered package info as an object.
+ */
+function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) {
+	_deprecated_function( __FUNCTION__, '2.0.0', 'geodir_get_post_package()' );
+
+	return geodir_get_post_package( $post, $post_type );
+}
 //
 /**
  * @deprecated

@@ -264,10 +264,8 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			global $post, $post_id;
 
 			$post_type = get_post_type();
+			$package_id = geodir_get_post_package_id( $post, $post_type );
 
-			$package_info = array();
-
-			$package_info = geodir_post_package_info( $package_info, $post, $post_type );
 			wp_nonce_field( plugin_basename( __FILE__ ), 'geodir_post_info_noncename' );
 			echo '<div id="geodir_wrapper">';
 			/**
@@ -277,9 +275,9 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			 * @see 'geodir_after_default_field_in_meta_box'
 			 */
 			do_action( 'geodir_before_default_field_in_meta_box' );
-			//geodir_get_custom_fields_html($package_info->pid,'default',$post_type);
+
 			// to display all fields in one information box
-			geodir_get_custom_fields_html( $package_info->pid, 'all', $post_type );
+			geodir_get_custom_fields_html( $package_id, 'all', $post_type );
 			/**
 			 * Called after the GD custom fields are output in the wp-admin area.
 			 *

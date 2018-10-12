@@ -853,7 +853,7 @@ class GeoDir_Admin_Dummy_Data {
 		                  'frontend_desc' => __('Note: List out any special offers (optional)', 'geodirectory'),
 		                  'frontend_title' => __('Special Offers', 'geodirectory'),
 		                  'htmlvar_name' => 'special_offers',
-		                  'default_value' => '0',
+		                  'default_value' => '',
 		                  'is_active' => '1',
 		                  'option_values' => '',
 		                  'is_default' => '0',
