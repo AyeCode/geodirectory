@@ -508,7 +508,7 @@ function geodir_cfi_textarea($html,$cf){
             </label><?php
 
 
-            if (is_array($extra_fields) && in_array('1', $extra_fields)) {
+            if ( apply_filters( 'geodir_custom_field_allow_html_editor', true, $cf ) ) {
 
                 $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);?>
 
