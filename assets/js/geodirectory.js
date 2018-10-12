@@ -1484,3 +1484,10 @@ function gd_manually_set_user_position($msg){
         }
     }
 }
+
+function gd_set_get_directions($lat,$lon){
+    if(jQuery('#gd_map_canvas_post_fromAddress').length){
+        jQuery('#gd_map_canvas_post_fromAddress').val($lat+","+$lon);
+        jQuery('.gd-map-get-directions').trigger('click');
+    }
+}

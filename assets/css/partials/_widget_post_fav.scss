@@ -1,0 +1,21 @@
+.gd-fav-info-wrap{
+
+  a{
+    vertical-align: top;
+    line-height: 19px;
+  }
+  &.gd-fav-hide-text{
+    a{
+      color: transparent;
+      font-size: 0;
+    }
+  }
+
+  &.gd-fav-hide-stars{
+    a{
+      .fa-heart{
+        display: none;
+      }
+    }
+  }
+}

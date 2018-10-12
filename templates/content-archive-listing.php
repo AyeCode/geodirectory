@@ -22,10 +22,10 @@
  */
 do_action('geodir_before_listing_listview');
 
-global $related_nearest, $related_parent_lat, $related_parent_lon;
+global $related_nearest, $related_parent_lat, $related_parent_lon, $gd_layout_class;
 
 ?>
-	<ul class="geodir-category-list-view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', '', 'listing'); ?>">
+	<ul class="geodir-category-list-view clearfix <?php echo apply_filters('geodir_listing_listview_ul_extra_class', $gd_layout_class , 'listing'); ?>">
 		<?php if (have_posts()) {
 
 			/**

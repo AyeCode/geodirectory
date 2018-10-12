@@ -464,9 +464,10 @@ class GeoDir_Query {
 			}
 
 			if ($support_location && $snear != '') {
-				
+
+				$post_title_where = $s != "" ? "{$wpdb->posts}.post_title LIKE \"$s\"" : "1=1";
 				$between = geodir_get_between_latlon($mylat,$mylon,$dist);
-				$where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
+				$where .= " AND ( ( $post_title_where $better_search_terms)
 			                    $content_where 
 								$terms_sql
 							)
@@ -529,6 +530,10 @@ class GeoDir_Query {
 		global $wp_query,$wpdb;
 //echo '####'.$where;exit;
 		// author saves/favs filter
+
+		$cpts = geodir_get_posttypes('array');
+		//echo '###';
+		//print_r( $cpt );
 		if(is_author() && !empty($wp_query->query['gd_favs']) ){
 
 			$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
@@ -555,6 +560,16 @@ class GeoDir_Query {
 					$where = str_replace("$wpdb->posts.post_type = 'post'",$gd_cpt_replace,$where);
 				}
 
+				$user_id = get_current_user_id();
+				$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
+
+				// check if restricted
+				$post_type = isset($wp_query->query['post_type']) ? $wp_query->query['post_type'] : 'gd_place';
+				$author_favorites_private = isset($cpts[$post_type]['author_favorites_private']) && $cpts[$post_type]['author_favorites_private'] ? true : false;
+				if($author_favorites_private && $author_id != $user_id){
+					$where .= " AND 1=2";
+				}
+
 			}
 		}elseif(is_author()){
 			$user_id = get_current_user_id();
@@ -562,6 +577,13 @@ class GeoDir_Query {
 			$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
 			if($author_id && $author_id == $user_id){
 				$where = str_replace("{$wpdb->posts}.post_status = 'publish'","{$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'draft' OR {$wpdb->posts}.post_status = 'pending'",$where);
+			}
+
+			// check if restricted
+			$post_type = isset($wp_query->query['post_type']) ? $wp_query->query['post_type'] : 'gd_place';
+			$author_posts_private = isset($cpts[$post_type]['author_posts_private']) && $cpts[$post_type]['author_posts_private'] ? true : false;
+			if($author_posts_private && $author_id != $user_id){
+				$where .= " AND 1=2";
 			}
 		}
 

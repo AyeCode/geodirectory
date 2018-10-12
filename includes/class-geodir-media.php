@@ -757,7 +757,6 @@ class GeoDir_Media {
 			$wp_upload_dir = wp_upload_dir();
 			$files_arr = array();
 			foreach( $files as $file ){
-				if($file->menu_order=="-1"){return;}
 				$is_approved = isset($file->is_approved) && $file->is_approved ? '' : '|0';
 				if($file->menu_order=="-1"){$is_approved = "|-1";}
 				$files_arr[] = $wp_upload_dir['baseurl'].$file->file."|".$file->ID."|".$file->title."|".$file->caption . $is_approved;

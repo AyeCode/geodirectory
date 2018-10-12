@@ -329,16 +329,14 @@ class GeoDir_Template_Loader {
         // reset the query count so the correct number of listings are output.
        // rewind_posts();
 
-        // reset the proper loop content
+        // reset the proper loop content if exists
         global $wp_query,$gd_temp_wp_query;
-        $wp_query->posts = $gd_temp_wp_query;
+        if(!empty($gd_temp_wp_query)){
+            $wp_query->posts = $gd_temp_wp_query;
+        }
 
         // get the archive template page content
-       // if(geodir_is_page('search')){
-            //$archive_page_id = geodir_search_page_id();
-       // }else{
-            $archive_page_id = geodir_archive_item_page_id($post_type);
-        //}
+        $archive_page_id = geodir_archive_item_page_id($post_type);
         $content = get_post_field('post_content', $archive_page_id  );
 
         // if the content is blank then just add the main loop
