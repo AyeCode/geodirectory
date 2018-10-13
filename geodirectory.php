@@ -462,3 +462,5 @@ function GeoDir() {
 }
 // Global for backwards compatibility.
 $GLOBALS['geodirectory'] = GeoDir();
+
+//print_r(geodir_get_posttypes('array'));

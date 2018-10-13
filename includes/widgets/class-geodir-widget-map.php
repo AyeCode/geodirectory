@@ -195,7 +195,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 					                                                                              value="<?php esc_attr_e( 'Get Directions', 'geodirectory' ); ?>" 
 					                                                                              aria-label="<?php esc_attr_e( 'Get Directions', 'geodirectory' ); ?>"
 					                                                                              class="gd-map-get-directions <?php echo $map_canvas; ?>_getdirection"
-					                                                                              id="directions"
+					                                                                              id="gd-get-directions"
 					                                                                              onclick="geodirFindRoute('<?php echo $map_canvas; ?>')"/>
 					</div>
 				</div>
@@ -442,6 +442,17 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'default'  => 'auto',
 				'advanced' => false
 			),
+			'post_settings'        => array(
+				'type'            => 'checkbox',
+				'title'           => __( 'Use post map zoom and type?', 'geodirectory' ),
+				'desc'            => __( 'This will use the zoom level and map type set in the post over the settings in the widget.', 'geodirectory' ),
+				'placeholder'     => '',
+				'desc_tip'        => true,
+				'value'           => '1',
+				'default'         => '1',
+				'advanced'        => true,
+				'element_require' => '[%map_type%]=="post"',
+			),
 			'post_type'        => array(
 				'type'            => 'select',
 				'title'           => __( 'Default Post Type:', 'geodirectory' ),
@@ -663,6 +674,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'height'           => '425px',
 			'maptype'          => 'ROADMAP',
 			'zoom'             => '0',
+			'post_settings'    => '1',
 			'post_type'        => 'gd_place',
 			'terms'            => array(),
 			'post_id'          => 0,
@@ -755,9 +767,17 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				if ( $map_args['default_map_type'] == 'post' && ! empty( $map_args['post_id'] ) ) {
 					$post_id   = $map_args['post_id'];
 					$post_type = get_post_type( $post_id );
+					if($map_args['post_settings']){
+						if(!empty($gd_post->mapzoom)){$map_args['zoom'] = absint($gd_post->mapzoom);}
+						if(!empty($gd_post->mapview)){$map_args['maptype'] = esc_attr($gd_post->mapview);}
+					}
 				} else if ( ( geodir_is_page( 'detail' ) || geodir_is_page( 'preview' ) ) && ! empty( $gd_post->ID ) ) {
 					$post_id   = $gd_post->ID;
 					$post_type = $gd_post->post_type != 'revision' ? $gd_post->post_type: get_post_type(wp_get_post_parent_id($gd_post->ID));
+					if($map_args['post_settings']){
+						if(!empty($gd_post->mapzoom)){$map_args['zoom'] = absint($gd_post->mapzoom);}
+						if(!empty($gd_post->mapview)){$map_args['maptype'] = esc_attr($gd_post->mapview);}
+					}
 				} else {
 					$post_id = - 1; // No results.
 				}
@@ -768,7 +788,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				$map_args['terms']          = array();
 				$map_args['marker_cluster'] = false;
 				if ( empty( $map_args['zoom'] ) ) {
-					$map_args['zoom'] = 7;
+					$map_args['zoom'] = 12;
 				}
 				break;
 		}
@@ -850,6 +870,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		);
 
 		$params = wp_parse_args( $map_args, $defaults );
+		//print_r($params );
 
 		$params['marker_cluster'] = false; // @todo Implement via marker cluster plugin.
 
@@ -966,6 +987,9 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		wp_enqueue_script( 'geodir-map-widget' );
 		wp_localize_script( 'geodir-map-widget', $map_options['map_canvas'], $map_options );
 
+
+//		print_r($params);
+//		print_r($map_options);echo '###';
 		?>
 		<!--START geodir-map-wrap-->
 		<div class="geodir-map-wrap geodir-<?php echo $map_type; ?>-map-wrap">

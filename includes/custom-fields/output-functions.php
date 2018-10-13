@@ -1410,9 +1410,7 @@ function geodir_cf_file($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if (!empty($gd_post->{$cf['htmlvar_name']})):
-
-            $files = explode(",", $gd_post->{$cf['htmlvar_name']});
+//        if (!empty($gd_post->{$cf['htmlvar_name']})):
 
             $files = GeoDir_Media::get_attachments_by_type($gd_post->ID,$html_var);
 
@@ -1463,12 +1461,13 @@ function geodir_cf_file($html,$location,$cf,$p='',$output=''){
                         $audio_file_types = array('audio/mpeg', 'audio/ogg', 'audio/mp4', 'audio/vnd.wav', 'audio/basic', 'audio/mid');
 
                         // If the uploaded file is image
-                        if (1==2 && in_array($uploaded_file_type, $image_file_types)) {
-                            $file_paths .= '<div class="geodir-custom-post-gallery" class="clearfix">';
-                            $file_paths .= '<a href="'.$url.'">';
+                        if (in_array($uploaded_file_type, $image_file_types)) {
+                            $file_paths .= '<div class="geodir-custom-field-file" class="clearfix">';
+                            $file_paths .= '<a href="'.$url.'" data-lity>';
                             $file_paths .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
+                            $file_paths .= geodir_get_image_tag($file);
                             $file_paths .= '</a>';
-                            $file_paths .= '<img src="'.$url.'"  />';
+                           // $file_paths .= '<img src="'.$url.'"  />';
                             $file_paths .= '</div>';
                         }elseif (1==2 && in_array($uploaded_file_type, $audio_file_types)) {// if audio
                             $ext_path = '_' . $html_var . '_';
@@ -1504,7 +1503,7 @@ function geodir_cf_file($html,$location,$cf,$p='',$output=''){
                 $html .= '</div>';
 
             endif;
-        endif;
+//        endif;
 
     }
 
