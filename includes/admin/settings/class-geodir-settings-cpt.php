@@ -170,9 +170,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				'disable_reviews' => '0',
 				'disable_favorites' => '0',
 				'disable_frontend_add' => '0',
-				// author
-				'author_posts_private' => '0',
-				'author_favorites_private' => '0',
 				// Page template
 				'page_details' => '0',
 				'page_archive' => '0',
@@ -296,47 +293,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 				array( 'type' => 'sectionend', 'id' => 'cpt_settings' ),
-
-
-				// author settings
-				array(
-					'title'    => __( 'Author page', 'geodirectory' ),
-					'type'     => 'title',
-					'desc'     => 'Settings for the author page url.',
-					'id'       => 'cpt_settings_author',
-					'desc_tip' => true,
-				),
-
-				array(
-					'name' => __( 'Authors posts', 'geodirectory' ),
-					'desc' => __( 'Select the visibility of the authors posts on the authors posts url.', 'geodirectory' ),
-					'id'   => 'author_posts_private',
-					'type' => 'select',
-					'options'  => array(
-						"0"   => __( 'Public', 'geodirectory' ),
-						"1" => __( 'Private', 'geodirectory' ),
-					),
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['author_posts_private']
-				),
-
-				array(
-					'name' => __( 'Authors favorites', 'geodirectory' ),
-					'desc' => __( 'Select the visibility of the authors favorites posts on the authors favorites url.', 'geodirectory' ),
-					'id'   => 'author_favorites_private',
-					'type' => 'select',
-					'options'  => array(
-						"0"   => __( 'Public', 'geodirectory' ),
-						"1" => __( 'Private', 'geodirectory' ),
-					),
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['author_favorites_private']
-				),
-
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_author' ),
-
 
 
 				array(
@@ -742,10 +698,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['disable_reviews'] = isset($raw['disable_reviews']) && $raw['disable_reviews'] ? absint($raw['disable_reviews']) : 0;
 			$output[$post_type]['disable_favorites'] = isset($raw['disable_favorites']) && $raw['disable_favorites'] ? absint($raw['disable_favorites']) : 0;
 			$output[$post_type]['disable_frontend_add'] = isset($raw['disable_frontend_add']) && $raw['disable_frontend_add'] ? absint($raw['disable_frontend_add']) : 0;
-
-			// author
-			$output[$post_type]['author_posts_private'] = isset($raw['author_posts_private']) && $raw['author_posts_private'] ? absint($raw['author_posts_private']) : 0;
-			$output[$post_type]['author_favorites_private'] = isset($raw['author_favorites_private']) && $raw['author_favorites_private'] ? absint($raw['author_favorites_private']) : 0;
 
 			// seo content
 			$output[$post_type]['seo']['title'] = isset($raw['title']) && $raw['title'] ? sanitize_text_field($raw['title']) : '';

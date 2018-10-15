@@ -105,12 +105,6 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
             $class = "gd-align-right";
         }
 
-        if($args['show']=='stars'){
-            $class .= ' gd-fav-hide-text ';
-        }elseif($args['show']=='text'){
-            $class .= ' gd-fav-hide-stars ';
-        }
-
         $before = '<div class="geodir_post_meta gd-fav-info-wrap '. $class .'" >';
         $after  = '</div>';
 

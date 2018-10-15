@@ -235,8 +235,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
         ob_start();
 
-	    //echo "<h1>bb</h1>";
-
         $this->output_html($widget_args, $args);
 
         return ob_get_clean();

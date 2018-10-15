@@ -56,26 +56,9 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 		$distance .= ' ' . geodir_get_option( 'search_distance_long' );
 
 		ob_start();
-
-	    if(isset($gd_post->latitude)) {
-
-		    if(geodir_is_page('single')){
-			    ?>
-			    <a href="#post_map" onclick="gd_set_get_directions('<?php echo esc_attr($gd_post->latitude);?>','<?php echo esc_attr($gd_post->longitude);?>');">
-			    <?php
-		    }
-		    ?>
-			    <span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road"
-
-			                                                                               aria-hidden="true"></i> <?php echo $distance; ?></span>
-
-		    <?php
-		    if(geodir_is_page('single')){
-			    ?>
-			    </a>
-			    <?php
-		    }
-	    }
+        ?>
+        <span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road" aria-hidden="true"></i> </span><?php echo $distance; ?>
+        <?php
         return ob_get_clean();
     }
 

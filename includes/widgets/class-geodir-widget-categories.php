@@ -499,17 +499,17 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					}
 					$cpt_row = '<div class="gd-cptcat-row gd-cptcat-' . $cpt . $row_class . ' '.$cpt_left_class.'">';
 
-//					if ($is_category && $cat_filter && $cpt == $current_posttype) {
-//						$term_info = get_term($current_term_id, $cat_taxonomy);
-//
-//						$term_icon_url = !empty($term_icons) && isset($term_icons[$term_info->term_id]) ? $term_icons[$term_info->term_id] : '';
-//						$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr($term_info->name) . ' icon" src="' . $term_icon_url . '" /> ' : '';
-//
-//						$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $term_info->count . '</span>' : '';
-//						if($args['title_tag'] !="hide") $cpt_row .= '<'.$args['title_tag'].' class="gd-cptcat-title">' . $term_icon_url . $term_info->name . $count . '</'.$args['title_tag'].'>';
-//					} else {
-//						if($args['title_tag'] !="hide") $cpt_row .= '<'.$args['title_tag'].' class="gd-cptcat-title">' . __($cpt_info['labels']['name'], 'geodirectory') . '</'.$args['title_tag'].'>';
-//					}
+					if ($is_category && $cat_filter && $cpt == $current_posttype) {
+						$term_info = get_term($current_term_id, $cat_taxonomy);
+
+						$term_icon_url = !empty($term_icons) && isset($term_icons[$term_info->term_id]) ? $term_icons[$term_info->term_id] : '';
+						$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr($term_info->name) . ' icon" src="' . $term_icon_url . '" /> ' : '';
+
+						$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $term_info->count . '</span>' : '';
+						if($args['title_tag'] !="hide") $cpt_row .= '<'.$args['title_tag'].' class="gd-cptcat-title">' . $term_icon_url . $term_info->name . $count . '</'.$args['title_tag'].'>';
+					} else {
+						if($args['title_tag'] !="hide") $cpt_row .= '<'.$args['title_tag'].' class="gd-cptcat-title">' . __($cpt_info['labels']['name'], 'geodirectory') . '</'.$args['title_tag'].'>';
+					}
 					foreach ($categories as $category) {
 						$term_icon = '';
 						$cat_color ='';
