@@ -233,17 +233,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					/* Get the text field */
 					var copyText = document.getElementById("sd-shortcode-output");
 
-					//un-disable the field
-					copyText.disabled = false;
-
 					/* Select the text field */
 					copyText.select();
 
 					/* Copy the text inside the text field */
 					document.execCommand("Copy");
-
-					//re-disable the field
-					copyText.disabled = true;
 
 					/* Alert the copied text */
 					alert("Copied the text: " + copyText.value);

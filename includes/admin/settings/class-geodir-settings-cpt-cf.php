@@ -1947,7 +1947,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'clabels' => $field->clabels,
 				'default_value' => $field->default_value,
 				'placeholder_value' => $field->placeholder_value,
-				'sort_order' => $field->sort_order,
+				//'sort_order' => $field->sort_order,
 				'is_active' => $field->is_active,
 				'is_default' => $field->is_default,
 				'is_required' => $field->is_required,
@@ -1978,7 +1978,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'%s', // clabels
 				'%s', // default_value
 				'%s', // placeholder_value
-				'%d', // sort_order
+				//'%d', // sort_order
 				'%d', // is_active
 				'%d', // is_default
 				'%d', // is_required
@@ -2015,7 +2015,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				// @todo, should we ALTER the field type here to see if we can improve it, ie VARCHAR(123)
 
 			}else{
-
 				// Insert the field settings.
 				$result = $wpdb->insert(
 					GEODIR_CUSTOM_FIELDS_TABLE,

@@ -182,13 +182,6 @@ function geodir_get_location_link($which_location = 'current') {
     } else {
         $location_terms = geodir_get_current_location_terms();
 
-        
-        
-        $location_terms = apply_filters('geodir_location_link_location_terms',$location_terms);
-
-        //print_r($location_terms);exit;
-        
-
         if (!empty($location_terms)) {
             if (get_option('permalink_structure') != '') {
                 $location_terms = implode("/", $location_terms);

@@ -30,23 +30,6 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 'description' => esc_html__('Shows the current posts from the main WP query according to the URL.  This is only used on the `GD Archive template` page.  It loops through each post and outputs the `GD Archive Item` template.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),
-            'arguments'     => array(
-                'layout'  => array(
-                    'title' => __('Layout:', 'geodirectory'),
-                    'desc' => __('How the listings should laid out by default.', 'geodirectory'),
-                    'type' => 'select',
-                    'options'   =>  array(
-                        "2"        =>  __('Grid View (Two Columns)', 'geodirectory'),
-                        "3"        =>  __('Grid View (Three Columns)', 'geodirectory'),
-                        "4"        =>  __('Grid View (Four Columns)', 'geodirectory'),
-                        "5"        =>  __('Grid View (Five Columns)', 'geodirectory'),
-                        "0"        =>  __('List view', 'geodirectory'),
-                    ),
-                    'default'  => 'h3',
-                    'desc_tip' => true,
-                    'advanced' => true
-                )
-            )
         );
 
 
@@ -67,10 +50,10 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
 
         ob_start();
         if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || (is_author() && !empty($wp_query->query['gd_favs'])) ){
-
-            $widget_args = wp_parse_args( $args, array(
+			$widget_args = wp_parse_args( $widget_args, array(
 				'layout' => ''
 			) );
+
 			$gd_layout_class = geodir_convert_listing_view_class( $widget_args['layout'] );
 
             // check if we have listings or if we are faking it

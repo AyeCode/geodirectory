@@ -644,7 +644,7 @@ class GeoDir_Admin_Install {
 			foreach($post_types as $post_type => $cpt){
 				// Table for storing place attribute - these are user defined
 				$tables .= " CREATE TABLE " . $plugin_prefix . $post_type . "_detail (
-						".implode (", \n",self::db_cpt_default_columns($cpt)).",
+						".implode (", \n",self::db_cpt_default_columns($cpt, $post_type)).",
 						".implode (", \n",self::db_cpt_default_keys(false))." 
 						) $collate; ";
 			}
@@ -1048,11 +1048,12 @@ class GeoDir_Admin_Install {
 	 * Get the Custom Post Type database default fields.
 	 *
 	 * @param bool $locationless Is the CPT locationless?
+	 * @param string $post_type The post type.
 	 * @since 2.0.0
 	 *
 	 * @return array The array of default fields.
 	 */
-	public static function db_cpt_default_columns($cpt = array()){
+	public static function db_cpt_default_columns($cpt = array(),$post_type = ''){
 
 		$columns = array();
 
@@ -1083,7 +1084,7 @@ class GeoDir_Admin_Install {
 		}
 
 
-		return apply_filters('geodir_db_cpt_default_columns',$columns,$cpt);
+		return apply_filters('geodir_db_cpt_default_columns',$columns,$cpt,$post_type);
 	}
 
 	/**

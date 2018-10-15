@@ -1,17 +1,3 @@
-v2.0.0.31
-Map widget now has option to use post map zoom and type set on add listing page - ADDED
-Options added to make authors post and favorites public or private - ADDED
-Distance to calculation will now link to the get directions link if show on the details page - ADDED
-Near searches with empty search query not returning results - FIXED
-TinyMCE editor sometimes not saving if used in visual mode - FIXED
-New custom fields can have the wrong sort order when added - FIXED
-Copy shortcode to clipboard button not working - FIXED
-File custom field can sometimes not show the saved files - FIXED
-Location search and then category search could direct to the wrong url - FIXED
-Beaver builder can break if GD listings widget used on page - FIXED
-Adding a new image and not saving can cause other images not to show - FIXED
-Changes for payment manager compatibility - ADDED
-
 v2.0.0.30
 Comments count sometimes only updated on edit not initial save - FIXED
 Tags sometimes not searched for - FIXED

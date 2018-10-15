@@ -1204,8 +1204,6 @@ class GeoDir_Admin_Import_Export {
 						$term_data       = $cat_info;
 						$term_id         = $result;
 						$taxonomy        = $cat_info['taxonomy'];
-						$cat_id_original = $cat_info['cat_id_original'];
-						$cat_language    = $cat_info['cat_language'];
 						$uploads         = wp_upload_dir();
 
 						do_action( 'geodir_category_imported', $term_id, $term_data );
@@ -1269,7 +1267,7 @@ class GeoDir_Admin_Import_Export {
 			"skipped"   => $skipped,
 			"invalid"   => $invalid,
 			"images"    => $images,
-			"ID"        => $cat_info['cat_id'],
+			"ID"        => isset($cat_info['cat_id']) ? $cat_info['cat_id'] : 0,
 		);
 	}
 
@@ -1304,7 +1302,7 @@ class GeoDir_Admin_Import_Export {
 		$cat_info_fixed['image'] 				= $cat_info_fixed['image'] != '' ? basename( $cat_info_fixed['image'] ) : '';
 		$cat_info_fixed['icon']  				= $cat_info_fixed['icon'] != '' ? basename( $cat_info_fixed['icon'] ) : '';
 
-		return apply_filter( 'geodir_import_category_validate_item', $cat_info_fixed, $cat_info );
+		return apply_filters( 'geodir_import_category_validate_item', $cat_info_fixed, $cat_info );
 	}
 	
 	/**
