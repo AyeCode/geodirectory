@@ -611,29 +611,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @return array $options.
      */
     public function get_sort_options($post_type = 'gd_place'){
-        $options = array(
-            "az"        =>  __('A-Z', 'geodirectory'),
-            "latest"        =>  __('Latest', 'geodirectory'),
-            "high_review"        =>  __('Most reviews', 'geodirectory'),
-            "high_rating"        =>  __('Highest rating', 'geodirectory'),
-            "random"        =>  __('Random', 'geodirectory'),
-			"distance_asc" =>  __('Distance to current post (details page only)', 'geodirectory'),
-        );
-
-        $sort_options = geodir_get_sort_options( $post_type );
-        if(!empty($sort_options)){
-            foreach($sort_options as $sort_option){
-                if(!empty($sort_option->sort_asc) && !empty($sort_option->asc_title)){
-                    $options[$sort_option->htmlvar_name."_asc"] = __($sort_option->asc_title,'geodirectory');
-                }
-                if(!empty($sort_option->sort_desc) && !empty($sort_option->desc_title)){
-                    $options[$sort_option->htmlvar_name."_desc"] = __($sort_option->desc_title,'geodirectory');
-                }
-            }
-        }
-        //print_r($sort_options);echo '###';
-
-        return $options;
+        return geodir_sort_by_options($post_type);
     }
 
     /**

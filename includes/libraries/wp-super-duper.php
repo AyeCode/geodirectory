@@ -73,8 +73,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				// seems ashame to add this for one icon but i love it :(
 //				wp_register_style( 'font-awesome', '//netdna.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css', array(), $this->version );
 //				wp_enqueue_style( 'font-awesome' );
-				wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.1.0/js/all.js', array('font-awesome-shim'), $this->version);
-				wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.1.0/js/v4-shims.js', array(), $this->version);
+				//wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.1.0/js/all.js', array('font-awesome-shim'), $this->version);
+				//wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.1.0/js/v4-shims.js', array(), $this->version);
 
 				//echo '###';
 				$sd_widget_scripts = true;
@@ -86,6 +86,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				//}
 
 			}
+
+			do_action( 'wp_super_duper_widget_init', $options, $this );
 
 		}
 
@@ -538,10 +540,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						});
 
 					});
-
-
-
+				
 				}
+				<?php do_action( 'wp_super_duper_widget_js', $this ); ?>
 			</script>
 			<?php
 			$output = ob_get_clean();
