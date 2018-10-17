@@ -136,7 +136,7 @@ function geodir_auto_save_poll(old_form_data) {
  */
 function geodir_auto_save_post() {
     var form_data = geodir_get_form_data();
-    form_data += "&action=geodir_auto_save_post";
+    form_data += "&action=geodir_auto_save_post&target=auto";
     jQuery.ajax({
         type: "POST",
         url: geodir_params.ajax_url,
@@ -162,7 +162,7 @@ function geodir_get_form_data() {
  * Save the post and redirect to where needed.
  */
 function geodir_save_post() {
-    var form_data = geodir_get_form_data();
+    var form_data = geodir_get_form_data() + '&target=submit';
     console.log(form_data);
     jQuery.ajax({
         type: "POST",
@@ -189,7 +189,7 @@ function geodir_save_post() {
  */
 function geodir_delete_revision() {
     var form_data = geodir_get_form_data();
-    form_data += "&action=geodir_delete_revision";
+    form_data += "&action=geodir_delete_revision&target=revision";
     jQuery.ajax({
         type: "POST",
         url: geodir_params.ajax_url,
