@@ -87,6 +87,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			}
 
+			do_action( 'wp_super_duper_widget_init', $options, $this );
+
 		}
 
         /**
@@ -538,10 +540,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						});
 
 					});
-
-
-
+				
 				}
+				<?php do_action( 'wp_super_duper_widget_js', $this ); ?>
 			</script>
 			<?php
 			$output = ob_get_clean();

@@ -1604,3 +1604,49 @@ function geodir_random_float($min = 0, $max = 1)
 {
 	return $min + mt_rand() / mt_getrandmax() * ($max - $min);
 }
+
+/**
+ * Get the post type sort by options array.
+ *
+ * @param string $post_type
+ *
+ * @return array
+ */
+function geodir_sort_by_options( $post_type = 'gd_place' ) {
+	// check for cache
+	$cache = wp_cache_get( "gd_sort_by_options_" . $post_type, 'gd_sort_by_options' );
+	if ( $cache ) {
+		return $cache;
+	}
+
+	$options = array(
+		"az" => __('A-Z', 'geodirectory'),
+		"latest" => __('Latest', 'geodirectory'),
+		"high_review" => __('Most reviews', 'geodirectory'),
+		"high_rating" => __('Highest rating', 'geodirectory'),
+		"random" => __('Random', 'geodirectory'),
+	);
+
+	if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+		$options['distance_asc'] = __('Distance to current post (details page only)', 'geodirectory');
+	}
+
+	if  ( $sort_options = geodir_get_sort_options( $post_type ) ) {
+		foreach( $sort_options as $sort_option ) {
+			if ( !empty( $sort_option->sort_asc ) && ! empty( $sort_option->asc_title ) ) {
+				$options[ $sort_option->htmlvar_name . "_asc" ] = __( $sort_option->asc_title, 'geodirectory' );
+			}
+
+			if ( ! empty( $sort_option->sort_desc ) && ! empty( $sort_option->desc_title ) ) {
+				$options[ $sort_option->htmlvar_name . "_desc" ] = __( $sort_option->desc_title, 'geodirectory' );
+			}
+		}
+	}
+
+	$options = apply_filters( 'geodir_sort_by_options', $options, $post_type );
+
+	// set cache
+	wp_cache_set( "gd_sort_by_options_" . $post_type, $options, 'gd_sort_by_options' );
+
+	return $options;
+}
