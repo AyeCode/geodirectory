@@ -633,11 +633,12 @@ class GeoDir_Post_Data {
 
 
 		do_action( 'geodir_before_add_listing_form', $listing_type, $post, $package );
+		$post_save_action = apply_filters( 'geodir_save_post_action', 'geodir_save_post', $listing_type, $post, $package );
 		?>
 		<form name="geodirectory-add-post" id="geodirectory-add-post"
 		      action="<?php echo get_page_link( $post->ID ); ?>" method="post"
 		      enctype="multipart/form-data">
-			<input type="hidden" name="action" value="geodir_save_post"/>
+			<input type="hidden" name="action" value="<?php echo esc_attr( $post_save_action ); ?>"/>
 			<input type="hidden" name="preview" value="<?php echo sanitize_text_field( $listing_type ); ?>"/>
 			<input type="hidden" name="post_type" value="<?php echo sanitize_text_field( $listing_type ); ?>"/>
 			<input type="hidden" name="post_parent" value="<?php echo sanitize_text_field( $post_parent ); ?>"/>
@@ -992,11 +993,21 @@ class GeoDir_Post_Data {
 		if ( isset( $post_data['post_parent'] ) && $post_data['post_parent'] ) {
 			$post_data['post_type'] = 'revision'; //  post type is not sent but we know if it has a parent then its a revision.
 			$post_data['post_name'] = $post_data['post_parent']."-autosave-v1";
-			return wp_update_post( $post_data );
 		} // its a new auto draft
 		else {
-			return wp_update_post( $post_data );
 		}
+
+		$post_data = apply_filters( 'geodir_auto_save_post_data', $post_data );
+
+		// Save the post.
+		$result = wp_update_post( $post_data, true );
+		
+		// get the message response.
+		if ( ! is_wp_error( $result ) ) {
+			do_action( 'geodir_ajax_post_auto_saved', $post_data, ! empty( $post_data['post_parent'] ) );
+		}
+
+		return apply_filters( 'geodir_auto_post_save_message', $result, $post_data, ! empty( $post_data['post_parent'] ) );
 	}
 
 

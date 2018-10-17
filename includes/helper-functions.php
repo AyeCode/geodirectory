@@ -1561,7 +1561,7 @@ function geodir_array_splice_assoc( $input, $offset, $length, $replacement ) {
  *
  * @return array
  */
-function geodir_category_options( $post_type = 'gd_place' ){
+function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ){
 	// check for cache
 	$cache = wp_cache_get( "gd_category_options_".$post_type, 'gd_category_options' );
 	if($cache){
@@ -1577,7 +1577,7 @@ function geodir_category_options( $post_type = 'gd_place' ){
 		$post_type = 'gd_place';
 	}
 
-	$terms = get_terms( array( 'taxonomy' => $post_type . 'category', 'orderby' => 'count', 'order' => 'DESC' ) );
+	$terms = get_terms( array( 'taxonomy' => $post_type . 'category', 'orderby' => 'count', 'order' => 'DESC', 'hide_empty' => $hide_empty ) );
 
 	if ( ! is_wp_error( $terms ) ) {
 		foreach ( $terms as $term ) {
