@@ -77,25 +77,30 @@ class GeoDir_Template_Loader {
     private static function get_template_loader_default_file() {
         global $wp_query;
         $default_file = '';
-        if ( geodir_is_singular() ) {
 
+        if(geodir_is_geodir_page()){
+            $default_file = ' '; // fake a return to trigger the defaults
+        }
+
+        if ( geodir_is_singular() ) {
             $single_template = geodir_get_option('details_page_template');
-            //echo '###'.$single_template.'###';
+
             if($single_template && locate_template( $single_template )){
                 $default_file = $single_template;
             }else{
 				$post_type = geodir_get_current_posttype();
                 $page_id = geodir_details_page_id($post_type);
                 if($page_id &&  $template = get_page_template_slug( $page_id )){
-                    if(is_page_template( $template )){
+                    // make sure the template exists before loading it, it might be from a old theme
+                    if(locate_template( $template )){
+                        $wp_query->is_page = 1;
                         $default_file = $template;
                     }
+
                 }else{
                     // check if we have a theme compat setting.
                     if($theme_template = GeoDir_Compatibility::theme_single_template()){
                         $default_file = $theme_template;
-                    }else{
-                         //$default_file = 'page.php'; //  fallback to page.php
                     }
                 }
             }
@@ -103,41 +108,88 @@ class GeoDir_Template_Loader {
 
             // setup the page content
             add_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
-        } elseif ( geodir_is_taxonomy() ) {// @todo we should make it use the "GD Archive template" page template.
-            $default_file = 'page.php'; // i think index.php works better here, more likely to have paging
-            //$default_file = 'index.php';
-            self::setup_archive_loop_as_page();
-        } elseif ( geodir_is_post_type_archive() ) {// @todo we should make it use the "GD Archive template" page template.
-            $default_file = 'page.php'; // i think index.php works better here, more likely to have paging
-            //$default_file = 'index.php';
-            self::setup_archive_loop_as_page();
-        } elseif ( geodir_is_page( 'author' ) && !empty($wp_query->query['gd_favs']) ) {
-            //$default_file = 'author.php';
-            $default_file = 'index.php';
-            self::setup_archive_loop_as_page();
-        } elseif ( geodir_is_page( 'home' ) ) {
-           // $default_file = 'home.php';
-        } elseif ( geodir_is_page( 'location' ) ) {
-            //$default_file = 'location.php';
-        } elseif ( geodir_is_page( 'search' ) ) {
-            $default_file = 'page.php';
-            // If no posts found on search it goes to 404 so we fake it.
-            //$wp_query->found_posts = 1;
-            $wp_query->is_404 = '';
-            $wp_query->is_page = 1;
-            $wp_query->is_archive = 1;
-            $wp_query->is_search = 1;
-//            echo '###';exit;
-            self::setup_archive_loop_as_page();
-        }  else {
-            $default_file = '';
+        } else{
+
+            $archive_template = geodir_get_option('archive_page_template');
+
+            if($archive_template && locate_template( $archive_template )){
+                $default_file = $archive_template;
+            }else{
+                $post_type = geodir_get_current_posttype();
+
+                if(geodir_is_page( 'search' ) ){
+                    $page_id = geodir_search_page_id();
+                }
+
+                if(!isset($page_id)){
+                    $page_id = geodir_archive_page_id($post_type);
+                }
+
+                if($page_id &&  $template = get_page_template_slug( $page_id )){
+                    // make sure the template exists before loading it, it might be from a old theme
+                    if(locate_template( $template )){
+                        $wp_query->is_page = 1;
+                        $default_file = $template;
+                    }
+                }
+            }
+
+            if(
+                geodir_is_taxonomy()
+                || geodir_is_post_type_archive()
+                ||( geodir_is_page( 'author' ) && !empty($wp_query->query['gd_favs']) )
+                || geodir_is_page( 'search' )
+            ){
+                self::setup_archive_loop_as_page();
+            }
+
+
+            // fake some stuff for search page
+            if ( geodir_is_page( 'search' ) ) {
+                // If no posts found on search it goes to 404 so we fake it.
+                //$wp_query->found_posts = 1;
+                $wp_query->is_404 = '';
+                $wp_query->is_page = 1;
+                $wp_query->is_archive = 1;
+                $wp_query->is_search = 1;
+            }
         }
 
-        //$default_file = 'geodirectory.php';
-
-      //  echo '###'.$default_file;
-
         return $default_file;
+    }
+
+    /**
+     * Get an array of filenames to search for a given template.
+     *
+     * @since  2.0.0
+     * @param  string $default_file The default file name.
+     * @return array $search_files.
+     */
+    private static function get_template_loader_files( $default_file ) {
+        $search_files = apply_filters( 'geodir_template_loader_files', array(), $default_file );
+
+        if(geodir_is_page('archive') || geodir_is_page('search')){
+            $search_files[] = 'geodirectory-archive.php';
+        }
+
+
+
+        if ( geodir_is_taxonomy() ) {
+            $term = get_queried_object();
+
+            $search_files[] = 'taxonomy-' . $term->taxonomy . '-' . $term->slug . '.php';
+            $search_files[] = geodir_get_theme_template_dir_name() . '/taxonomy-' . $term->taxonomy . '-' . $term->slug . '.php';
+            $search_files[] = 'taxonomy-' . $term->taxonomy . '.php';
+            $search_files[] = geodir_get_theme_template_dir_name() . '/taxonomy-' . $term->taxonomy . '.php';
+        }
+
+        $search_files[] = $default_file;
+        $search_files[] = geodir_get_theme_template_dir_name() . '/' . $default_file;
+
+        $search_files[] = 'geodirectory.php';
+        $search_files[] = 'page.php';
+
+        return array_unique( $search_files );
     }
 
 
@@ -282,36 +334,7 @@ class GeoDir_Template_Loader {
 
     }
 
-    /**
-     * Get an array of filenames to search for a given template.
-     *
-     * @since  2.0.0
-     * @param  string $default_file The default file name.
-     * @return array $search_files.
-     */
-    private static function get_template_loader_files( $default_file ) {
-        $search_files = apply_filters( 'geodir_template_loader_files', array(), $default_file );
 
-        if(geodir_is_page('archive') || geodir_is_page('search')){
-           $search_files[] = 'geodirectory-archive.php';
-        }
-
-        $search_files[] = 'geodirectory.php';
-
-        if ( geodir_is_taxonomy() ) {
-            $term = get_queried_object();
-
-            $search_files[] = 'taxonomy-' . $term->taxonomy . '-' . $term->slug . '.php';
-            $search_files[] = geodir_get_theme_template_dir_name() . '/taxonomy-' . $term->taxonomy . '-' . $term->slug . '.php';
-            $search_files[] = 'taxonomy-' . $term->taxonomy . '.php';
-            $search_files[] = geodir_get_theme_template_dir_name() . '/taxonomy-' . $term->taxonomy . '.php';
-        }
-
-        $search_files[] = $default_file;
-        $search_files[] = geodir_get_theme_template_dir_name() . '/' . $default_file;
-
-        return array_unique( $search_files );
-    }
 
 
     /**

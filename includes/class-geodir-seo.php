@@ -448,29 +448,38 @@ class GeoDir_SEO {
 	 */
 	public static function variables($gd_page = ''){
 
+		$vars = array();
 		// generic
-		$vars = array(
-			'%%title%%' => __('The current post title.','geodirectory'),
-			'%%sitename%%' => __('The site name from general settings: site title. ','geodirectory'),
-			'%%sitedesc%%' => __('The site description from general settings: tagline.','geodirectory'),
-			'%%excerpt%%' => __('The current post excerpt.','geodirectory'),
-			'%%sep%%' => __('The separator mostly used in meta titles.','geodirectory'),
-			'%%pt_single%%' => __('Post type singular name.','geodirectory'),
-			'%%pt_plural%%' => __('Post type plural name.','geodirectory'),
-			'%%category%%' => __('The current category name.','geodirectory'),
-			'%%id%%' => __('The current post id.','geodirectory'),
-			'%%location%%' => __('The full current location eg: United States, Pennsylvania, Philadelphia','geodirectory'),
-			'%%location_single%%' => __('The current viewing location type single name eg: Philadelphia','geodirectory'),
-			'%%in_location%%' => __('The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia','geodirectory'),
-			'%%in_location_single%%' => __('The current viewing location type single name prefixed with `in` eg: Philadelphia','geodirectory'),
-			'%%location_country%%' => __('The current viewing country eg: United States','geodirectory'),
-			'%%in_location_country%%' => __('The current viewing country prefixed with `in` eg: in United States','geodirectory'),
-			'%%location_region%%' => __('The current viewing region eg: Pennsylvania','geodirectory'),
-			'%%in_location_region%%' => __('The current viewing region prefixed with `in` eg: in Pennsylvania','geodirectory'),
-			'%%location_city%%' => __('The current viewing city eg: Philadelphia','geodirectory'),
-			'%%in_location_city%%' => __('The current viewing city prefixed with `in` eg: in Philadelphia','geodirectory'),
-//			'' => __('','geodirectory'),
-		);
+		if($gd_page != 'location_tags'){
+			$vars = array(
+				'%%title%%' => __('The current post title.','geodirectory'),
+				'%%sitename%%' => __('The site name from general settings: site title. ','geodirectory'),
+				'%%sitedesc%%' => __('The site description from general settings: tagline.','geodirectory'),
+				'%%excerpt%%' => __('The current post excerpt.','geodirectory'),
+				'%%sep%%' => __('The separator mostly used in meta titles.','geodirectory'),
+				'%%pt_single%%' => __('Post type singular name.','geodirectory'),
+				'%%pt_plural%%' => __('Post type plural name.','geodirectory'),
+				'%%category%%' => __('The current category name.','geodirectory'),
+				'%%id%%' => __('The current post id.','geodirectory'),
+			);
+		}
+
+
+
+		// location tags
+		if(!$gd_page || $gd_page = 'location_tags'){
+			$vars['%%location%%'] = __('The full current location eg: United States, Pennsylvania, Philadelphia','geodirectory');
+			$vars['%%location_single%%'] = __('The current viewing location type single name eg: Philadelphia','geodirectory');
+			$vars['%%in_location%%'] = __('The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia','geodirectory');
+			$vars['%%in_location_single%%'] = __('The current viewing location type single name prefixed with `in` eg: Philadelphia','geodirectory');
+			$vars['%%location_country%%'] = __('The current viewing country eg: United States','geodirectory');
+			$vars['%%in_location_country%%'] = __('The current viewing country prefixed with `in` eg: in United States','geodirectory');
+			$vars['%%location_region%%'] = __('The current viewing region eg: Pennsylvania','geodirectory');
+			$vars['%%in_location_region%%']= __('The current viewing region prefixed with `in` eg: in Pennsylvania','geodirectory');
+			$vars['%%location_city%%'] = __('The current viewing city eg: Philadelphia','geodirectory');
+			$vars['%%in_location_city%%'] = __('The current viewing city prefixed with `in` eg: in Philadelphia','geodirectory');
+		}
+
 
 
 		// search page only

@@ -66,6 +66,88 @@ class GeoDir_Post_Data {
 		// add schema
 		add_action('wp_head', array( __CLASS__, 'schema'), 10);
 
+		// wp_restore_post_revision
+		add_action('wp_restore_post_revision', array( __CLASS__, 'restore_post_revision'), 10,2);
+
+
+
+	}
+
+	/**
+	 * Restore the post revision, here we are just restoring the post meta table info.
+	 *
+	 * @param $post_id
+	 * @param $revision_id
+	 */
+	public static function restore_post_revision($post_id, $revision_id ){
+		global $wpdb,$plugin_prefix;
+		$post_type = get_post_type( $post_id );
+		if(in_array( $post_type, geodir_get_posttypes() )){
+
+			$table   = $plugin_prefix . sanitize_key( $post_type ) . "_detail";
+
+			// backup the main row first
+			$result = $wpdb->update(
+				$table,
+				array( 'post_id' => "-".$post_id ),
+				array( 'post_id' => $post_id ),
+				array( '%d' ),
+				array( '%d' )
+			);
+
+			// restore the revision meta
+			if($result){
+				$result = $wpdb->update(
+					$table,
+					array( 'post_id' => $post_id ),
+					array( 'post_id' => $revision_id ),
+					array( '%d' ),
+					array( '%d' )
+				);
+
+				// set the old info as the revision info so it is then deleted with the revision
+				if($result){
+					$result = $wpdb->update(
+						$table,
+						array( 'post_id' => $revision_id ),
+						array( 'post_id' => "-".$post_id ),
+						array( '%d' ),
+						array( '%d' )
+					);
+
+					if($result ){
+
+						// save the revisions media values
+						$temp_media = get_post_meta($post_id,"__".$revision_id,true);
+						// set post images
+						if ( isset( $temp_media['post_images'] ) ) {
+							$featured_image = self::save_files( $revision_id, $temp_media['post_images'], 'post_images', false);
+							if ( !empty($featured_image)  ) {
+								geodir_save_post_meta($post_id,'featured_image',$featured_image);
+							}
+						}
+						unset( $temp_media['post_images'] ); // unset the post_images as we save it in another table.
+
+						// process other attachments
+						$file_fields = GeoDir_Media::get_file_fields($post_type);
+						if(!empty($file_fields)){// we have file fields
+							foreach($file_fields as $key => $extensions){
+								if(isset($temp_media[$key])){ // its a attachment
+									self::save_files( $revision_id,$temp_media[$key],$key);
+								}
+							}
+						}
+
+						// If the post saved then do some house keeping.
+						if(!is_wp_error($result) && $user_id = get_current_user_id()){
+							self::remove_post_revisions($post_id,$user_id);
+						}
+					}
+				}
+
+
+			}
+		}
 
 	}
 
@@ -115,10 +197,12 @@ class GeoDir_Post_Data {
 	public static function save_post( $post_id, $post, $update ) {
 		global $wpdb, $plugin_prefix,$geodirectory;
 
-	//echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
+//	echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
 
 		// only fire if $post_temp is set
 		if ( $gd_post = self::$post_temp ) {
+
+//			echo '###';print_r($_REQUEST);echo '###';print_r(self::$post_temp);echo '###';print_r($post);exit;
 
 			$is_dummy = isset($gd_post['post_dummy']) && $gd_post['post_dummy'] && isset($_REQUEST['action']) && $_REQUEST['action']=='geodir_insert_dummy_data' ? true : false;
 
@@ -334,9 +418,6 @@ class GeoDir_Post_Data {
 				}
 			}
 
-
-			//$postarr['featured_image'] = $post['featured_image'];// @todo we need to find a way to set default cat on add listing
-
 			$format = array_fill( 0, count( $postarr ), '%s' );
 
 //			print_r($gd_post);print_r( $postarr );exit;
@@ -365,6 +446,9 @@ class GeoDir_Post_Data {
 
 		}
 
+		// clear the temp data so any further posts in the same request don't use it
+		self::$post_temp = null;
+
 	}
 
 	
@@ -390,17 +474,21 @@ class GeoDir_Post_Data {
      */
 	public static function save_files( $post_id = 0, $files = array(),$field = '', $dummy = false ) {
 
+		$revision = wp_is_post_revision( $post_id );
+		$main_post_id = $revision ? wp_get_post_parent_id($post_id)  : $post_id;
+
 		// check for changes, maybe we don't need to run the whole function if there are no changes
-		$current_files = GeoDir_Media::get_field_edit_string($post_id,$field);
+		$current_files = GeoDir_Media::get_field_edit_string($main_post_id,$field);
 //		echo $current_files.'###x'.$files;
 		if ( $current_files == $files ) {
 			return false;
 		}
 
 		// Re-assign revision images to parent
-		if(isset($_REQUEST['post_parent']) && $_REQUEST['post_parent'] && wp_is_post_revision( absint($_REQUEST['ID']) )){
-			$revision_id = absint($_REQUEST['ID']);
-			GeoDir_Media::revision_to_parent($post_id,$revision_id);
+		if($revision){
+			$revision_id = absint($post_id);
+			GeoDir_Media::revision_to_parent($main_post_id,$revision_id);
+			$post_id = $main_post_id;
 		}
 
 		$featured_image = '';
@@ -520,8 +608,22 @@ class GeoDir_Post_Data {
 			( isset( $data['post_type'] ) && in_array( $data['post_type'], geodir_get_posttypes() ) )
 			|| ( isset( $data['post_type'] ) && $data['post_type'] == 'revision'  && in_array( get_post_type( $data['post_parent'] ), geodir_get_posttypes() ) && (!isset(self::$post_temp) || empty(self::$post_temp)) )
 		) {
+			//if the post_category or tags_input are empty and not sent as a $_REQUEST we remove them so they don't blank values
+			if(empty($postarr['post_category']) && !isset($_REQUEST['post_category']) && !isset($_REQUEST['tax_input'])){unset($postarr['post_category']);}
+			if(empty($postarr['tags_input']) && !isset($_REQUEST['tags_input']) && !isset($_REQUEST['tax_input'])){unset($postarr['tags_input']);}
+
+			if(isset($_REQUEST['action']) && $_REQUEST['action']=='geodir_save_post' && empty($postarr['tax_input']) && empty($postarr['post_category']) && empty($postarr['tags_input'])){
+				unset($postarr['post_category']);
+				unset($postarr['tags_input']);
+			}
+
+
+			// assign the temp post data
 			self::$post_temp = $postarr;
 		}
+
+//		print_r($data);echo'###';print_r($postarr);
+//		echo '#########################################';
 
 		return $data;
 	}
@@ -633,12 +735,11 @@ class GeoDir_Post_Data {
 
 
 		do_action( 'geodir_before_add_listing_form', $listing_type, $post, $package );
-		$post_save_action = apply_filters( 'geodir_save_post_action', 'geodir_save_post', $listing_type, $post, $package );
 		?>
 		<form name="geodirectory-add-post" id="geodirectory-add-post"
 		      action="<?php echo get_page_link( $post->ID ); ?>" method="post"
 		      enctype="multipart/form-data">
-			<input type="hidden" name="action" value="<?php echo esc_attr( $post_save_action ); ?>"/>
+			<input type="hidden" name="action" value="geodir_save_post"/>
 			<input type="hidden" name="preview" value="<?php echo sanitize_text_field( $listing_type ); ?>"/>
 			<input type="hidden" name="post_type" value="<?php echo sanitize_text_field( $listing_type ); ?>"/>
 			<input type="hidden" name="post_parent" value="<?php echo sanitize_text_field( $post_parent ); ?>"/>
@@ -993,6 +1094,33 @@ class GeoDir_Post_Data {
 		if ( isset( $post_data['post_parent'] ) && $post_data['post_parent'] ) {
 			$post_data['post_type'] = 'revision'; //  post type is not sent but we know if it has a parent then its a revision.
 			$post_data['post_name'] = $post_data['post_parent']."-autosave-v1";
+
+
+			// save file temp info
+			$file_meta = array();
+			// set post images
+			if ( isset( $post_data['post_images'] ) ) {
+				$file_meta['post_images'] = $post_data['post_images'];
+			}
+
+//			// process attachments
+			$post_type = get_post_type( $post_data['post_parent'] );
+			$file_fields = GeoDir_Media::get_file_fields($post_type);
+
+			if(!empty($file_fields)){// we have file fields
+				foreach($file_fields as $key => $extensions){
+					if(isset($post_data[$key])){ // its a attachment
+						$file_meta[$key] = $post_data[$key];
+					}
+				}
+			}
+
+			if(!empty($file_meta)){
+				update_post_meta($post_data['ID'],'__'.$post_data['ID'],$file_meta);
+			}
+
+
+
 		} // its a new auto draft
 		else {
 		}
@@ -1033,6 +1161,16 @@ class GeoDir_Post_Data {
 
 		//print_r($_REQUEST);exit;
 
+
+		/**
+		 * Allow to override the ajax save action 
+		 */
+		$override = apply_filters('geodir_ajax_save_post_override', array(),$post_data);
+		if(!empty($override)){
+			do_action( 'geodir_ajax_post_saved', $post_data, ! empty( $post_data['post_parent'] ) );
+			return $override;
+		}
+
 		//if its a revision we need to swap the post ids.
 		if ( isset( $post_data['post_parent'] ) && $post_data['post_parent'] ) {
 			$post_data['ID'] = $post_data['post_parent'];
@@ -1048,32 +1186,7 @@ class GeoDir_Post_Data {
 			/*
 			 * Check if its a logged out user and if we have details to register the user
 			 */
-			if(!get_current_user_id()
-			   && geodir_get_option("post_logged_out")
-			   && get_option( 'users_can_register' )
-			   && isset($post_data['user_login'])
-			   && isset($post_data['user_email'])
-			   && $post_data['user_login']
-			   && $post_data['user_email']
-			   && is_email($post_data['user_email'])
-			){
-
-				$user_name = sanitize_user( $post_data['user_login'] );
-				$user_email = sanitize_email( $post_data['user_email']);
-				$user_id_from_username = username_exists( $user_name );
-				$user_id_from_email = username_exists( $user_name );
-
-				if($user_id_from_username && $user_id_from_email && $user_id_from_username == $user_id_from_email){ // user already exists
-					$post_data['post_author'] = $user_id_from_email;
-				}elseif($user_id_from_email){ // user exists from email
-					$post_data['post_author'] = $user_id_from_email;
-				}else{ // if username already exists but email does not then we change username
-					$user_name = geodir_generate_unique_username( $user_name );
-					$random_password = wp_generate_password( $length=12, $include_standard_special_chars=false );
-					$user_id = wp_create_user( $user_name, $random_password, $user_email );
-					$post_data['post_author'] = $user_id;
-				}
-			}
+			$post_data = self::check_logged_out_author($post_data);
 
 		}else{
 			$post_data['post_status'] = $post_status;
@@ -1095,6 +1208,41 @@ class GeoDir_Post_Data {
 
 		return $result;
 
+	}
+
+	/*
+	 * Check if its a logged out user and if we have details to register the user
+	 */
+	public static function check_logged_out_author($post_data){
+		
+		if(!get_current_user_id()
+		   && geodir_get_option("post_logged_out")
+		   && get_option( 'users_can_register' )
+		   && isset($post_data['user_login'])
+		   && isset($post_data['user_email'])
+		   && $post_data['user_login']
+		   && $post_data['user_email']
+		   && is_email($post_data['user_email'])
+		){
+
+			$user_name = sanitize_user( $post_data['user_login'] );
+			$user_email = sanitize_email( $post_data['user_email']);
+			$user_id_from_username = username_exists( $user_name );
+			$user_id_from_email = username_exists( $user_name );
+
+			if($user_id_from_username && $user_id_from_email && $user_id_from_username == $user_id_from_email){ // user already exists
+				$post_data['post_author'] = $user_id_from_email;
+			}elseif($user_id_from_email){ // user exists from email
+				$post_data['post_author'] = $user_id_from_email;
+			}else{ // if username already exists but email does not then we change username
+				$user_name = geodir_generate_unique_username( $user_name );
+				$random_password = wp_generate_password( $length=12, $include_standard_special_chars=false );
+				$user_id = wp_create_user( $user_name, $random_password, $user_email );
+				$post_data['post_author'] = $user_id;
+			}
+		}
+		
+		return $post_data;
 	}
 
     /**
@@ -1168,6 +1316,7 @@ class GeoDir_Post_Data {
 			foreach($posts as $post){
 				if($post->ID){
 					wp_delete_post( $post->ID, true);
+					delete_post_meta($post->post_parent,"__".$post->ID); // delete any temp stored media values from auto saves
 				}
 			}
 		}
