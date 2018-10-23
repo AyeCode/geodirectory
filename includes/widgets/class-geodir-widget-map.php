@@ -69,23 +69,23 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		<script type="text/javascript">
 			if (!window.gdWidgetMap) {
 				window.gdWidgetMap = true;
-				jQuery(document).ready(function () {
+				jQuery(function() {
 					geoDirMapSlide();
-					jQuery(window).resize(function () {
-						jQuery('.geodir_map_container.geodir-map-home-page').each(function () {
-							jQuery(this).find('.geodir-map-posttype-list').css({
-								'width': 'auto'
-							});
-							jQuery(this).find('.map-places-listing ul.place-list').css({
-								'margin-left': '0px'
-							});
-							geoDirMapPrepare(this);
+				});
+				jQuery(window).resize(function () {
+					jQuery('.geodir_map_container .geodir-post-type-filter-wrap').each(function () {
+						jQuery(this).find('.geodir-map-posttype-list').css({
+							'width': 'auto'
 						});
+						jQuery(this).find('ul.place-list').css({
+							'margin-left': '0px'
+						});
+						geoDirMapPrepare(this);
 					});
 				});
 				function geoDirMapPrepare($thisMap) {
 					var $objMpList = jQuery($thisMap).find('.geodir-map-posttype-list');
-					var $objPlList = jQuery($thisMap).find('.map-places-listing ul.place-list');
+					var $objPlList = jQuery($thisMap).find('ul.place-list');
 					var wArrL = parseFloat(jQuery($thisMap).find('.geodir-map-navigation .geodir-leftarrow').outerWidth(true));
 					var wArrR = parseFloat(jQuery($thisMap).find('.geodir-map-navigation .geodir-rightarrow').outerWidth(true));
 					var ptw1 = parseFloat($objMpList.outerWidth(true));
@@ -109,10 +109,10 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				}
 
 				function geoDirMapSlide() {
-					jQuery('.geodir_map_container.geodir-map-home-page').each(function () {
+					jQuery('.geodir_map_container .geodir-post-type-filter-wrap').each(function () {
 						var $thisMap = this;
 						geoDirMapPrepare($thisMap);
-						var $objPlList = jQuery($thisMap).find('.map-places-listing ul.place-list');
+						var $objPlList = jQuery($thisMap).find('ul.place-list');
 						jQuery($thisMap).find('.geodir-leftarrow a').click(function (e) {
 							e.preventDefault();
 							var cm = $objPlList.css('margin-left');
@@ -247,7 +247,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							       value="<?php echo absint( $map_options['child_collapse'] ); ?>"/>
 							<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="1"/>
 							<div class="geodir_toggle">
-								<?php echo GeoDir_Maps::get_categories_filter( array( $map_options['post_type'] . 'category' ), 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), true ); ?>
+								<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), true ); ?>
 								<script type="text/javascript">jQuery(function () {
 										geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');
 									});</script>
@@ -269,14 +269,14 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				?>
 				<!-- START post_type_filter -->
 				<div
-					class="map-places-listing  geodir-post-type-filter-wrap"" id="<?php echo $map_canvas; ?>_posttype_menu" style="max-width:<?php echo $map_width; ?>!important;">
+					class="map-places-listing  geodir-post-type-filter-wrap" id="<?php echo $map_canvas; ?>_posttype_menu" style="max-width:100%!important;">
 				<div class="geodir-map-posttype-list">
 					<ul class="clearfix place-list">
 						<?php
 						foreach ( $map_post_types as $cpt => $cpt_name ) {
-							$class = $map_options['post_type'] == $cpt ? 'class="gd-map-search-pt"' : '';
+							$class = $map_options['post_type'] == $cpt ? ' class="gd-map-search-pt"' : '';
 							?>
-							<li id="<?php echo $cpt . ' ' . $class; ?>><a href="
+							<li id="<?php echo $cpt; ?>"<?php echo $class; ?>><a href="
 							    javascript:void(0);" onclick="jQuery('#<?php echo $map_canvas; ?>_posttype').val('<?php echo $cpt; ?>');build_map_ajax_search_param('<?php echo $map_canvas; ?>', true)"><?php echo $cpt_name; ?></a></li>
 						<?php } ?>
 					</ul>
@@ -287,7 +287,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						<li class="geodir-rightarrow"><a href="#"><i class="fas fa-chevron-right" aria-hidden="true"></i></a>
 						</li>
 					</ul>
-				</div>
+				</div><input type="hidden" id="<?php echo $map_canvas; ?>_posttype" value="<?php echo $map_options['post_type']; ?>"/>
 				</div><!-- END post_type_filter -->
 				<?php
 			}
@@ -302,17 +302,26 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
      * @return array $map_post_types.
      */
 	public static function map_post_types() {
-		$map_post_types     = geodir_get_posttypes( 'options-plural' );
-		$exclude_post_types = geodir_get_option( 'exclude_post_type_on_map' );
-		if ( ! empty( $exclude_post_types ) && is_array( $exclude_post_types ) ) {
-			foreach ( $exclude_post_types as $post_type ) {
-				if ( ! empty( $map_post_types ) && isset( $map_post_types[ $post_type ] ) ) {
-					unset( $map_post_types[ $post_type ] );
+		$post_types = geodir_get_posttypes( 'options-plural' );
+
+		$map_post_types = array();
+		if ( ! empty( $post_types ) ) {
+			$exclude_post_types = geodir_get_option( 'exclude_post_type_on_map' );
+
+			foreach ( $post_types as $post_type => $name ) {
+				if ( ! empty( $exclude_post_types ) && is_array( $exclude_post_types ) && in_array( $post_type, $exclude_post_types ) ) {
+					continue;
 				}
+
+				if ( ! GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+					continue;
+				}
+
+				$map_post_types[ $post_type ] = $name;
 			}
 		}
 
-		return $map_post_types;
+		return apply_filters( 'geodir_map_post_types', $map_post_types );
 	}
 
     /**
@@ -579,7 +588,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'' => __( 'Auto', 'geodirectory' )
 		);
 
-		$post_types = geodir_get_posttypes( 'options-plural' );
+		$post_types = self::map_post_types();
 
 		if ( ! empty( $post_types ) ) {
 			$options = array_merge( $options, $post_types );

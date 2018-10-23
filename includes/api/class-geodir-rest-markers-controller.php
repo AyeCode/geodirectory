@@ -155,14 +155,18 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 
 		$response = array();
 
-		$items = $this->get_markers( $request );
-		
-		if ( ! empty( $items ) ) {
-			$response[ 'total' ] 		= count( $items );
-			$response[ 'baseurl' ] 		= $wp_upload_dir['baseurl'];
-			$response[ 'content_url' ] 	= trailingslashit( WP_CONTENT_URL );
-			$response[ 'icons' ] 		= $geodir_rest_cache_icons;
-			$response[ 'items' ] 		= $items;
+		if ( ! empty( $request['output'] ) && $request['output'] == 'terms' ) {
+			$response[ 'terms_filter' ] = $this->get_map_terms_filter( $request );
+		} else {
+			$items = $this->get_markers( $request );
+			
+			if ( ! empty( $items ) ) {
+				$response[ 'total' ] 		= count( $items );
+				$response[ 'baseurl' ] 		= $wp_upload_dir['baseurl'];
+				$response[ 'content_url' ] 	= trailingslashit( WP_CONTENT_URL );
+				$response[ 'icons' ] 		= $geodir_rest_cache_icons;
+				$response[ 'items' ] 		= $items;
+			}
 		}
 
 		return rest_ensure_response( $response );
@@ -451,5 +455,13 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 	 */
 	public function get_marker_item_permissions_check( $request ) {
 		return $this->show_in_rest();
+	}
+
+	public function get_map_terms_filter( $request ) {
+		ob_start();
+		echo GeoDir_Maps::get_categories_filter( $request['post_type'], 0, true, 0, $request['map_canvas'], absint( $request['child_collapse'] ), true );
+		$output = ob_get_clean();
+
+		return $output;
 	}
 }
