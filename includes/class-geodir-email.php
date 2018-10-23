@@ -681,7 +681,7 @@ class GeoDir_Email {
 			}
 		}
 
-		if ( $post_data['post_status'] == 'pending' ) {
+		if ( isset( $post_data['post_status'] ) && $post_data['post_status'] == 'pending' ) {
 			// Send email to admin
 			self::send_admin_pending_post_email( $post );
 
