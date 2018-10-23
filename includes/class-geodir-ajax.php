@@ -474,9 +474,9 @@ class GeoDir_AJAX {
 	public static function save_post(){
 		// security
 		check_ajax_referer( 'geodir-save-post', 'security' );
-
+		
 		$result = GeoDir_Post_Data::ajax_save_post( $_REQUEST );
-
+		
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{

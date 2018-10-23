@@ -88,8 +88,13 @@ function geodir_gmt_offset( $offeset = '', $formatted = true ) {
 	$seconds = iso8601_timezone_to_offset( $offset );
 
 	// DST (Daylight Savings Time) fixes
-	$timezone_name = timezone_name_from_abbr("", $seconds, 0) . "\n";
+	$timezone_name = timezone_name_from_abbr("", $seconds, 0);
+
+	// Workaround for bug #44780
+	if($timezone_name === false){ $timezone_name = timezone_name_from_abbr('', $seconds, 1); }
+
 	if($timezone_name){
+		$timezone_name = $timezone_name . "\n"; // yeah, who knows why this is needed?...
 		$dst_offset = geodir_utc_offset_dst( trim($timezone_name) );
 		if($dst_offset){
 			$dst_offset_in_seconds = $dst_offset * 3600;

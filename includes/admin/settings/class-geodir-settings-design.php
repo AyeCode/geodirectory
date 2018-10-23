@@ -227,8 +227,8 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 					array(
 						'type' => 'select',
 						'id' => 'details_page_template',
-						'name' => __('Page template file', 'geodirectory'),
-						'desc' => __('Select the page template to use for the details page output.', 'geodirectory'),
+						'name' => __('Page template file override', 'geodirectory'),
+						'desc' => __('Select the page template to use for the details page output, usually this is set in the page template settings but you can override it here if needed.', 'geodirectory'),
 						'class' => 'geodir-select',
 						'options' => $this->single_page_templates(),
 						'default' => '',
@@ -380,6 +380,18 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 
 
 					array('name' => __('Image Settings', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'design_settings'),
+
+					array(
+						'type' => 'select',
+						'id' => 'archive_page_template',
+						'name' => __('Page template file override', 'geodirectory'),
+						'desc' => __('Select the page template to use for the archive page output, usually this is set in the page template settings but you can override it here if needed.', 'geodirectory'),
+						'class' => 'geodir-select',
+						'options' => $this->single_page_templates(),
+						'default' => '',
+						'desc_tip' => true,
+						'advanced' => false,
+					),
 
 					array(
 						'name' => __('Listing default image', 'geodirectory'),

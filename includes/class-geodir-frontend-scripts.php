@@ -141,7 +141,12 @@ class GeoDir_Frontend_Scripts {
 						}
 					}
 
-					if (dist > 0 || (jQuery('select[name="sort_by"]').val() == 'nearest' || jQuery('select[name="sort_by"]', $form).val() == 'farthest') || (jQuery(".snear", $form).val() != '' && jQuery(".snear", $form).val() != '<?php echo $default_near_text;?>')) {
+					if (
+						dist > 0
+						|| (jQuery('select[name="sort_by"]').val() == 'nearest'
+						|| jQuery('select[name="sort_by"]', $form).val() == 'farthest')
+						|| (jQuery(".snear", $form).val() != '' && jQuery(".snear", $form).val() != '<?php echo $default_near_text;?>' && !jQuery('.geodir-location-search-type', $form).val() )
+					) {
 
 						// OSM can't handel post code with no space so we test for it and add one if needed
 						if(window.gdMaps === 'osm'){

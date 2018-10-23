@@ -1491,7 +1491,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field->clabels = isset( $input['clabels'] ) ? sanitize_text_field( $input['clabels'] ) : null;
 			$field->default_value = isset( $input['default_value'] ) ? sanitize_text_field( $input['default_value'] ) : '';
 			$field->placeholder_value = isset( $input['placeholder_value'] ) ? sanitize_text_field( $input['placeholder_value'] ) : '';
-			$field->sort_order = isset( $input['sort_order'] ) ? absint( $input['sort_order'] ) : self::default_sort_order();
+			$field->sort_order = isset( $input['sort_order'] ) ? intval( $input['sort_order'] ) : self::default_sort_order();
 			$field->is_active = isset( $input['is_active'] ) ? absint( $input['is_active'] ) : 0;
 			$field->is_default  = isset( $input['is_default'] ) ? absint( $input['is_default'] ) : 0;
 			$field->is_required = isset( $input['is_required'] ) ? absint( $input['is_required'] ) : 0;
@@ -1509,6 +1509,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field->validation_pattern = isset( $input['validation_pattern'] ) ? sanitize_text_field( $input['validation_pattern'] ) : '';//@todo
 			$field->validation_msg = isset( $input['validation_msg'] ) ? sanitize_text_field( $input['validation_msg'] ) : '';
 			$field->for_admin_use = isset( $input['for_admin_use'] ) ? absint( $input['for_admin_use'] ) : 0;
+			$field->add_column = !empty( $input['add_column'] ) ? 1 : 0;
 
 			// Set some default after sanitation
 			$field->data_type = self::sanitize_data_type($field);
@@ -1616,6 +1617,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					case 'url':
 					case 'file':
 					$value = 'TEXT';
+						break;
+					case 'datepicker':
+						$value = 'DATE';
 						break;
 					default:
 						$value = 'VARCHAR';
@@ -1907,7 +1911,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					$column_attr .= " NULL ";
 					break;
 				case 'categories':
-
 					break;
 				case 'text':
 					if(isset($field->data_type) && ($field->data_type == "FLOAT" || $field->data_type == "DECIMAL")){
@@ -1920,6 +1923,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					}
 					//print_r($extra_fields);print_r($field);exit;
 				break;
+				case 'int':
+				case 'INT':
+					$column_attr = "INT";
+					break;
+				case 'datepicker':
+					$column_attr = "DATE";
+					break;
 				case 'fieldset':
 					// Nothing happenes for fieldset
 					break;
@@ -1947,7 +1957,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'clabels' => $field->clabels,
 				'default_value' => $field->default_value,
 				'placeholder_value' => $field->placeholder_value,
-				//'sort_order' => $field->sort_order,
+				'sort_order' => $field->sort_order,
 				'is_active' => $field->is_active,
 				'is_default' => $field->is_default,
 				'is_required' => $field->is_required,
@@ -1978,7 +1988,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'%s', // clabels
 				'%s', // default_value
 				'%s', // placeholder_value
-				//'%d', // sort_order
+				'%d', // sort_order
 				'%d', // is_active
 				'%d', // is_default
 				'%d', // is_required
@@ -2030,7 +2040,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 				// check if its a default field that does not need a column added
 				$default_fields = self::get_default_field_htmlvars();
-				if(!in_array($field->htmlvar_name,$default_fields) && ! apply_filters( 'geodir_cfa_skip_column_add', $field->field_type == 'fieldset', $field ) ){
+				if( ( !in_array($field->htmlvar_name,$default_fields) && ! apply_filters( 'geodir_cfa_skip_column_add', $field->field_type == 'fieldset', $field ) ) || !empty($field->add_column) ){
 
 					// Add the new column to the details table.
 					$add_details_column = geodir_add_column_if_not_exist($plugin_prefix . $field->post_type . '_detail', $field->htmlvar_name, $column_attr);

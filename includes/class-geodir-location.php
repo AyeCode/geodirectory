@@ -238,8 +238,10 @@ class GeoDir_Location {
 			$gps = explode(",",$wp->query_vars['latlon']);
 			$latlon['lat'] = isset($gps[0]) ? filter_var($gps[0], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : '';
 			$latlon['lon'] = isset($gps[1]) ? filter_var($gps[1], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : '';
+		}elseif( !empty($_REQUEST['sgeo_lat']) && !empty($_REQUEST['sgeo_lon'])){
+			$latlon['lat'] = isset($_REQUEST['sgeo_lat']) ? filter_var($_REQUEST['sgeo_lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : '';
+			$latlon['lon'] = isset($_REQUEST['sgeo_lon']) ? filter_var($_REQUEST['sgeo_lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION) : '';
 		}
-
 		return $latlon;
 	}
 

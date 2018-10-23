@@ -209,7 +209,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'desc_tip' => true,
 					'advanced' => false,
 					'custom_attributes' => array(
-						'required' => 'required'
+						'required' => 'required',
+						'maxlength' => 17
 					),
 					'value'	   => $post_type_values['post_type']
 				),
@@ -222,7 +223,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'desc_tip' => true,
 					'advanced' => false,
 					'custom_attributes' => array(
-						'required' => 'required'
+						'required' => 'required',
+						'maxlength' => 20
 					),
 					'value'	   => $post_type_values['slug']
 				),

@@ -238,6 +238,7 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
         GeoDir_AJAX::init();
 	    GeoDir_Post_Data::init(); // post data
+	    //GeoDir_Post_Revision::init(); // post revisions @todo not implemented yet
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
 	    GeoDir_SEO::init();
 
@@ -462,3 +463,8 @@ function GeoDir() {
 }
 // Global for backwards compatibility.
 $GLOBALS['geodirectory'] = GeoDir();
+
+//add_action('wp_loaded','_my_wp_loaded');
+//function _my_wp_loaded(){
+//	wp_restore_post_revision( 164 );exit;
+//}

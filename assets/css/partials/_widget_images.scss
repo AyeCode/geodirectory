@@ -13,7 +13,8 @@
       text-align: center;
       //border: 1px solid #CCCCCC;
       overflow: hidden;
-      padding:0;
+      padding:0 !important;
+      margin: 0 !important;
       border-radius: 4px;
       min-width: 110px;
 
@@ -37,6 +38,12 @@
         transition: transform .5s;
         transition-timing-function: ease-in-out;
         height: auto;
+      }
+
+
+      a{
+        position: initial !important;
+        display: block;
       }
 
       a.geodir-lightbox-image{
@@ -100,6 +107,7 @@
         border: 1px solid #CCCCCC;
         overflow: hidden;
         padding:0;
+
 
       }
     }

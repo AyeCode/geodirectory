@@ -302,6 +302,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'gd_allowed_img_types'                         => ! empty( $allowed_img_types ) ? implode( ',', $allowed_img_types ) : '',
 		'txt_form_wait'                                => __( 'Wait...', 'geodirectory' ),
 		'txt_form_searching'                           => __( 'Searching...', 'geodirectory' ),
+		'txt_form_my_location'                           => __( 'My Location', 'geodirectory' ),
 		'rating_type'                                  => geodir_get_option( 'rating_type' ) ? geodir_get_option( 'rating_type' ) : 'font-awesome',
 		'reviewrating'                                 => defined( 'GEODIRREVIEWRATING_VERSION' ) ? 1 : '',
 		'multirating'                                  => defined( 'GEODIRREVIEWRATING_VERSION' ) && geodir_get_option( 'geodir_reviewrating_enable_rating' ) ? true : false,

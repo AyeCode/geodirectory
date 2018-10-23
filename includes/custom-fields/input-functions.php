@@ -866,7 +866,12 @@ function geodir_cfi_datepicker($html,$cf){
 
             jQuery(function () {
 
-                jQuery("#<?php echo $cf['name'];?>").datepicker({changeMonth: true, changeYear: true <?php
+                jQuery("#<?php echo $cf['name'];?>_show").datepicker({
+                    changeMonth: true,
+                    changeYear: true,
+                    dateFormat: "<?php echo $jquery_date_format;?>",
+                    altFormat: "yy-mm-dd",
+                    altField: "#<?php echo $cf['name'];?>"<?php
                     /**
                      * Used to add extra option to datepicker per custom field.
                      *
@@ -875,10 +880,11 @@ function geodir_cfi_datepicker($html,$cf){
                      */
                     echo apply_filters("gd_datepicker_extra_{$name}",'');?>});
 
-                jQuery("#<?php echo $name;?>").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
+               // jQuery("#<?php echo $name;?>_show").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
+                
 
-                <?php if(!empty($value)){?>
-                jQuery("#<?php echo $name;?>").datepicker("setDate", '<?php echo $value;?>');
+            <?php if(!empty($value)){?>
+                jQuery("#<?php echo $name;?>_show").datepicker("setDate", '<?php echo $value;?>');
                 <?php } ?>
 
             });
@@ -893,9 +899,10 @@ function geodir_cfi_datepicker($html,$cf){
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
 
-            <input field_type="<?php echo $cf['type'];?>" name="<?php echo $name;?>" id="<?php echo $name;?>"
+            <input field_type="<?php echo $cf['type'];?>" name="<?php echo $name;?>_show" id="<?php echo $name;?>_show"
                 <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
                    value="<?php echo esc_attr($value);?>" type="text" class="geodir_textfield"/>
+            <input type="hidden" name="<?php echo $name;?>" id="<?php echo $name;?>">
 
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
@@ -1042,7 +1049,8 @@ function geodir_cfi_address($html,$cf){
        $lat     = isset( $gd_post->latitude) ? $gd_post->latitude : '';
        $lng     = isset( $gd_post->longitude) ? $gd_post->longitude : '';
        $mapview = isset( $gd_post->mapview ) ? $gd_post->mapview : '';
-       $mapzoom = isset( $gd_post->mapzoom ) ? $gd_post->mapzoom : '';
+       $post_mapzoom = $mapzoom = isset( $gd_post->mapzoom ) ? $gd_post->mapzoom : '';
+
 
 
         $location = $geodirectory->location->get_default_location();
@@ -1123,7 +1131,7 @@ function geodir_cfi_address($html,$cf){
             </div>
         <?php } ?>
 
-        <?php if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
+        <?php  if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
 
             <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
                 <?php
@@ -1200,9 +1208,9 @@ function geodir_cfi_address($html,$cf){
             </div>
         <?php }?>
 
-        <?php if (isset($extra_fields['show_mapzoom']) && $extra_fields['show_mapzoom']) { ?>
-            <input type="hidden" value="<?php if (isset($mapzoom)) {
-                echo esc_attr($mapzoom);
+        <?php if (isset($post_mapzoom)) { ?>
+            <input type="hidden" value="<?php if (isset($post_mapzoom)) {
+                echo esc_attr($post_mapzoom);
             } ?>" name="<?php echo 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/>
         <?php }
 
@@ -1792,12 +1800,18 @@ function  geodir_cfi_files($html,$cf){
         $multiple = true; // allow multiple files upload
 
 
-
-        $revision_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->ID : '';
-        $post_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->post_parent : $gd_post->ID;
+        $revision_id = isset($post->post_parent) && $post->post_parent ? $post->ID : '';
+        $post_id = isset($post->post_parent) && $post->post_parent ? $post->post_parent : $post->ID;
 
         //$files = GeoDir_Media::get_post_images_edit_string($post_id,$revision_id,);
-        $files = GeoDir_Media::get_field_edit_string($post_id,$html_var,$revision_id);
+
+        // check for any auto save temp media values first
+        $temp_media = get_post_meta($post_id,"__".$revision_id,true);
+        if(!empty( $temp_media ) && isset( $temp_media[$html_var])){
+            $files = $temp_media[$html_var];
+        }else{
+            $files = GeoDir_Media::get_field_edit_string($post_id,$html_var,$revision_id);
+        }
 
         if(!empty($files)){
             $total_files = count(explode(',',$files));
@@ -1817,7 +1831,7 @@ function  geodir_cfi_files($html,$cf){
          * @param bool $show_image_input_box Set true to show. Set false to not show.
          * @param string $listing_type The custom post type slug.
          */
-        $show_image_input_box = apply_filters('geodir_file_uploader_on_add_listing', $show_image_input_box, $gd_post->post_type);
+        $show_image_input_box = apply_filters('geodir_file_uploader_on_add_listing', $show_image_input_box, $post->post_type);
 
 
 

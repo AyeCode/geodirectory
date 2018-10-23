@@ -939,6 +939,16 @@ class GeoDir_Admin_Taxonomies {
     public static function get_cat_top_description( $term_id ) {
         $top_description = get_term_meta( $term_id, 'ct_cat_top_desc', true );
 
+        if($top_description){
+            // location variable
+            $location_replace_vars = geodir_location_replace_vars();
+            foreach($location_replace_vars as $lkey=>$lval){
+                if ( strpos( $top_description, $lkey ) !== false ) {
+                    $top_description = str_replace( $lkey, $lval, $top_description );
+                }
+            }
+        }
+        
         return apply_filters( 'geodir_get_cat_top_description', $top_description, $term_id );
     }
 

@@ -463,10 +463,14 @@ class GeoDir_Query {
 				}
 			}
 
+			// fake near if we have GPS
+			if($snear == '' && $mylat && $mylon){$snear = ' ';}
+
 			if ($support_location && $snear != '') {
 				
 				$between = geodir_get_between_latlon($mylat,$mylon,$dist);
-				$where .= " AND ( ( $wpdb->posts.post_title LIKE \"$s\" $better_search_terms)
+				$post_title_where = $s != "" ? "{$wpdb->posts}.post_title LIKE \"$s\"" : "1=1";
+				$where .= " AND ( ($post_title_where $better_search_terms)
 			                    $content_where 
 								$terms_sql
 							)
