@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @class        GeoDir_Post_Data
  * @version        2.0.0
- * @package        GeoDIrectory/Classes/Data
+ * @package        GeoDirectory/Classes/Data
  * @category    Class
  * @author        AyeCode
  */
@@ -676,7 +676,7 @@ class GeoDir_Post_Data {
 				$post_id                    = absint( $revision->ID );
 				$post                       = $gd_post = geodir_get_post_info( $post_id );
 
-				$user_notes['has-revision'] = sprintf( __('Hey, we found some unsaved changes from earlier and are showing them below. If you would prefer to start again then please %sclick here%s to remove this revision.', 'plugin-domain'), "<a href='javascript:void(0)' onclick='geodir_delete_revision();'>", "</a>" );
+				$user_notes['has-revision'] = sprintf( __('Hey, we found some unsaved changes from earlier and are showing them below. If you would prefer to start again then please %sclick here%s to remove this revision.', 'geodirectory'), "<a href='javascript:void(0)' onclick='geodir_delete_revision();'>", "</a>" );
 
 			} // create a post revision
 			else {
@@ -701,7 +701,7 @@ class GeoDir_Post_Data {
 				$post        = $gd_post = geodir_get_post_info( $post_id );
 
 				if($post->post_modified_gmt!='0000-00-00 00:00:00'){
-					$user_notes['has-auto-draft'] = sprintf( __('Hey, we found a post you started earlier and are showing it below. If you would prefer to start again then please %sclick here%s to remove this revision.', 'plugin-domain'), "<a href='javascript:void(0)' onclick='geodir_delete_revision();'>", "</a>" );
+					$user_notes['has-auto-draft'] = sprintf( __('Hey, we found a post you started earlier and are showing it below. If you would prefer to start again then please %sclick here%s to remove this revision.', 'geodirectory'), "<a href='javascript:void(0)' onclick='geodir_delete_revision();'>", "</a>" );
 				}
 			} else {
 				// Create the auto draft
@@ -1023,7 +1023,7 @@ class GeoDir_Post_Data {
 	}
 
     /**
-     * Output the add lsiting user notes.
+     * Output the add listing user notes.
      *
      * @since 2.0.0
      *
@@ -1285,14 +1285,14 @@ class GeoDir_Post_Data {
 			// post published
 			if($post_data['post_status']=='publish'){
 				$link = get_permalink($post_data['ID']);
-				$message = sprintf( __('Post received, your listing is now live and can be viewed %shere%s.', 'plugin-domain'), "<a href='$link' >", "</a>" );
+				$message = sprintf( __('Post received, your listing is now live and can be viewed %shere%s.', 'geodirectory'), "<a href='$link' >", "</a>" );
 			}
 			// post needs review
 			else{
 				$post = new stdClass();
 				$post->ID = $post_data['ID'];
 				$preview_link = self::get_preview_link( $post );
-				$message = sprintf( __('Post received, your listing may need to be reviewed before going live, you can preview it %shere%s.', 'plugin-domain'), "<a href='$preview_link' >", "</a>" );
+				$message = sprintf( __('Post received, your listing may need to be reviewed before going live, you can preview it %shere%s.', 'geodirectory'), "<a href='$preview_link' >", "</a>" );
 			}
 		}
 

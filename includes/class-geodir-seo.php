@@ -392,9 +392,9 @@ class GeoDir_SEO {
 			}
 			if($search_near ){
 				if($search_term){
-					$search_near = " ,".sprintf( __('Near %s', 'plugin-domain'), $search_near );
+					$search_near = " ,".sprintf( __('Near %s', 'geodirectory'), $search_near );
 				}else{
-					$search_near = sprintf( __('Near %s', 'plugin-domain'), $search_near );
+					$search_near = sprintf( __('Near %s', 'geodirectory'), $search_near );
 				}
 			}
 

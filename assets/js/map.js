@@ -147,6 +147,10 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 	options = eval(map_canvas);
 	map_type = options.map_type;
 	post_type = options.post_type;
+	post_type_filter = jQuery('#' + map_canvas + '_posttype').val();
+	if (post_type_filter) {
+		post_type = post_type_filter;
+	}
 
     // post type
     query_string += 'post_type=' + post_type;
@@ -159,6 +163,10 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
     if(options.lat){ query_string += "&lat=" + options.lat; }
     if(options.lon){ query_string += "&lon=" + options.lon; }
     if(options.dist){ query_string += "&dist=" + options.dist; }
+
+	if (reload_cat_list) {
+		return geodir_map_post_type_terms(options, post_type, query_string);
+	}
 
 	search = jQuery('#' + map_canvas + '_search_string').val();
 
@@ -1267,4 +1275,40 @@ function geodir_map_directions_init(map_canvas) {
 			}, 1000);
 		}
 	}
+}
+
+function geodir_map_post_type_terms(options, post_type, query_string) {
+	var terms_query_url, map_canvas; 
+	terms_query_url = options.map_ajax_url;
+	map_canvas = options.map_canvas;
+
+	jQuery('#' + map_canvas + '_posttype_menu li').removeClass('gd-map-search-pt');
+	jQuery('#' + map_canvas + '_posttype_menu li#' + post_type).addClass('gd-map-search-pt');
+
+	query_string += "&output=terms";
+	query_string += "&map_canvas=" + map_canvas;
+	query_string += "&child_collapse=" + jQuery('#' + map_canvas + '_child_collapse').val();
+	
+	u = terms_query_url.indexOf('?') === -1 ? '?' : '&';
+	terms_query_url += u + query_string;
+
+	jQuery('#' + map_canvas + '_loading_div').show();
+	jQuery.ajax({
+		type: "GET",
+		url: terms_query_url,
+		success: function(data) {
+			jQuery('#' + map_canvas + '_loading_div').hide();
+			if (data && data.terms_filter) {
+				jQuery('#' + map_canvas + '_cat .geodir_toggle').html(data.terms_filter);
+				geodir_show_sub_cat_collapse_button();
+				build_map_ajax_search_param(map_canvas, false);
+			}
+			return false;
+		},
+		error: function(xhr, textStatus, errorThrown) {
+			jQuery('#' + map_canvas + '_loading_div').hide();
+			console.log(errorThrown);
+		}
+	});
+	return false;
 }

@@ -1,3 +1,6 @@
+v2.0.0.31
+Switching CPT on directory map not working - FIXED
+
 v2.0.0.30
 Comments count sometimes only updated on edit not initial save - FIXED
 Tags sometimes not searched for - FIXED

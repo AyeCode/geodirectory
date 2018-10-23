@@ -123,7 +123,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<input class="gd-recommended-buy-key" type="text" placeholder="<?php _e("Enter your licence key","geodirectory");?>"> <button class="button-primary gd-recommended-buy-button" ><?php _e("Install","geodirectory");?></button>
 			<br>
 			<?php
-			echo sprintf( __('%sFind your licence key here%s OR %sBuy one here%s', 'plugin-domain'), '<a href="https://wpgeodirectory.com/your-account/" target="_blank">','</a>','<a class="gd-recommended-buy-link" href="https://wpgeodirectory.com/downloads/category/addons/" target="_blank">','</a>' );
+			echo sprintf( __('%sFind your licence key here%s OR %sBuy one here%s', 'geodirectory'), '<a href="https://wpgeodirectory.com/your-account/" target="_blank">','</a>','<a class="gd-recommended-buy-link" href="https://wpgeodirectory.com/downloads/category/addons/" target="_blank">','</a>' );
 			?>
 		</span>
 	</div>

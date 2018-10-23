@@ -216,7 +216,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @since 2.0.0
 	 * @package GeoDirectory
 	 *
-	 * @param string $cat_taxonomy Name of the taxonomy e.g place_category.
+	 * @param string $post_type The post type e.g gd_place.
 	 * @param int $cat_parent Optional. Parent term ID to retrieve its child terms. Default 0.
 	 * @param bool $hide_empty Optional. Do you want to hide the terms that has no posts. Default true.
 	 * @param int $padding Optional. CSS padding value in pixels. e.g: 12 will be considers as 12px.
@@ -225,13 +225,13 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @param bool $is_home_map Optional. Is this a home page map? Default: false.
 	 * @return string|void
 	 */
-	public static function get_categories_filter( $cat_taxonomy, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $is_home_map = false ) {
+	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $is_home_map = false ) {
 		global $cat_count, $geodir_cat_icons;
 
-		$exclude_categories 	= geodir_get_option( 'exclude_cat_on_map', array() );
+		$taxonomy = $post_type . 'category';
 
-		$gd_cat_taxonomy = isset($cat_taxonomy[0]) ? $cat_taxonomy[0] : '';
-		$exclude_categories = !empty($exclude_categories[$gd_cat_taxonomy]) && is_array($exclude_categories[$gd_cat_taxonomy]) ? array_unique($exclude_categories[$gd_cat_taxonomy]) : array();
+		$exclude_categories = geodir_get_option( 'exclude_cat_on_map', array() );
+		$exclude_categories = !empty($exclude_categories[$taxonomy]) && is_array($exclude_categories[$taxonomy]) ? array_unique($exclude_categories[$taxonomy]) : array();
 
 		$exclude_cat_str = implode(',', $exclude_categories);
 
@@ -239,7 +239,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			$exclude_cat_str = '0';
 		}
 
-		$cat_terms = get_terms( array( 'taxonomy' => $cat_taxonomy, 'parent' => $cat_parent, 'exclude' => $exclude_cat_str, 'hide_empty ' => $hide_empty ) );
+		$cat_terms = get_terms( array( 'taxonomy' => array( $taxonomy ), 'parent' => $cat_parent, 'exclude' => $exclude_cat_str, 'hide_empty ' => $hide_empty ) );
 		
 		if ($hide_empty) {
 			$cat_terms = geodir_filter_empty_terms($cat_terms);
@@ -253,7 +253,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			$padding++;
 
 			if ($cat_parent == 0) {
-				$list_class = 'main_list';
+				$list_class = 'main_list geodir-map-terms';
 				$display = '';
 			} else {
 				$list_class = 'sub_list';
@@ -264,8 +264,6 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 			$geodir_cat_icons = geodir_get_term_icon();
 
-			$geodir_default_map_search_pt = (geodir_get_option('geodir_default_map_search_pt')) ? geodir_get_option('geodir_default_map_search_pt') :  'gd_place'; // @todo no setting found
-			$post_type = isset($_REQUEST['post_type']) ? $_REQUEST['post_type'] : (isset($_REQUEST['gd_posttype']) ? $_REQUEST['gd_posttype'] : $geodir_default_map_search_pt);
 			$untick_terms = geodir_get_option('geodir_home_map_untick' );
 			
 			foreach ( $cat_terms as $cat_term ) {
@@ -291,7 +289,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 				}
 
 				// get sub category by recursion
-				$out .= self::get_categories_filter( $cat_taxonomy, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $is_home_map );
+				$out .= self::get_categories_filter( $post_type, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $is_home_map );
 
 				$out .= '</li>';
 			}
