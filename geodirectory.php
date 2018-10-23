@@ -466,5 +466,5 @@ $GLOBALS['geodirectory'] = GeoDir();
 
 //add_action('wp_loaded','_my_wp_loaded');
 //function _my_wp_loaded(){
-//	wp_restore_post_revision( 164 );exit;
+//	GeoDir_Post_Data::remove_post_revisions(178,get_current_user_id());exit;
 //}

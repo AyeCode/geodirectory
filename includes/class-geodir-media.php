@@ -453,6 +453,7 @@ class GeoDir_Media {
 			return new WP_Error( 'image_insert', __( "No image_id, post_id or image url, image update failed.", "geodirectory" ) );
 		}
 
+		//echo $file_id.'zzz'.$order.'zzz'.$post_id.'zzz'.$file_url;
 		// if menu order is 0 then its featured and we need to set the post thumbnail
 		if($order === 0 && $field=='post_images' && !wp_is_post_revision( absint($post_id) )){
 			// Get the path to the upload directory.
