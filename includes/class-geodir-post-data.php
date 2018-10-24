@@ -129,9 +129,18 @@ class GeoDir_Post_Data {
 						print_r( $temp_media );
 						// set post images
 						if ( isset( $temp_media['post_images'] ) ) {//echo '###4.1';
-							$featured_image = self::save_files( $revision_id, $temp_media['post_images'], 'post_images');
-							if ( !empty($featured_image)  ) {//echo '###4.2'.$featured_image;
-								geodir_save_post_meta($post_id,'featured_image',$featured_image);
+							$current_files = GeoDir_Media::get_field_edit_string($post_id,'post_images');
+							// if post_images data is the same then we just copy the original feature image data
+							if($current_files==$temp_media['post_images']){
+								$old_featured_image = geodir_get_post_meta($revision_id,'featured_image');
+								if($old_featured_image){
+									geodir_save_post_meta($post_id,'featured_image',$old_featured_image);
+								}
+							}else{
+								$featured_image = self::save_files( $revision_id, $temp_media['post_images'], 'post_images');
+								if ( !empty($featured_image)  ) {//echo '###4.2'.$featured_image;
+									geodir_save_post_meta($post_id,'featured_image',$featured_image);
+								}
 							}
 						}
 						unset( $temp_media['post_images'] ); // unset the post_images as we save it in another table.
