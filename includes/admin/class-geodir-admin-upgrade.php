@@ -20,6 +20,15 @@ class GeoDir_Admin_Upgrade {
 	public static function init() {
 		add_action( 'geodir_update_200_settings_after', array( __CLASS__, 'update_200_set_permalink_structure' ), 10, 1 );
 
+		// Payment Manager
+		if ( self::needs_upgrade( 'payment_manager' ) ) {
+			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_pm_get_options' ), 9, 1 );
+
+			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_pm_create_default_options' ), 9 );
+			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_pm_create_tables' ), 9 );
+			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_pm_update_version' ), 9 );
+		}
+
 		// Custom post types
 		if ( self::needs_upgrade( 'custom_post_types' ) ) {
 			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_cp_get_options' ), 10, 1 );
@@ -74,6 +83,9 @@ class GeoDir_Admin_Upgrade {
 			break;
 			case 'location_manager':
 				$found = ! is_null( get_option( 'geodirlocation_db_version', null ) ) && ( is_null( get_option( 'geodir_location_db_version', null ) ) || ( get_option( 'geodir_location_db_version' ) && version_compare( get_option( 'geodir_location_db_version' ), '2.0.0.0', '<' ) ) );
+			break;
+			case 'payment_manager':
+				$found = ! is_null( get_option( 'geodir_payments_db_version', null ) ) && ( is_null( get_option( 'geodir_pricing_db_version', null ) ) || ( get_option( 'geodir_pricing_db_version' ) && version_compare( get_option( 'geodir_pricing_db_version' ), '2.5.0.0', '<' ) ) );
 			break;
 		}
 
@@ -643,12 +655,6 @@ class GeoDir_Admin_Upgrade {
 				$columns = array_keys( $fields );
 
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$post_type}category post_category varchar(254) DEFAULT NULL;" );
-				if ( in_array( 'post_location_id', $columns ) ) {
-					$wpdb->query( "ALTER TABLE `{$table}` DROP `post_location_id`" );
-				}
-				if ( in_array( 'post_locations', $columns ) ) {
-					$wpdb->query( "ALTER TABLE `{$table}` DROP `post_locations`" );
-				}
 				if ( in_array( 'is_featured', $columns ) ) {
 					// Converting the ENUM to TINYINT directly might give unexpected results. So we should start by converting column to a CHAR(1) and then to TINYINT(1).
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_featured featured char(1) NOT NULL DEFAULT '0';" );
@@ -677,6 +683,9 @@ class GeoDir_Admin_Upgrade {
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_recurring recurring TINYINT(1) DEFAULT '0';" );
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE recurring_dates event_dates TEXT NOT NULL;" );
 				}
+				if ( in_array( 'expire_date', $columns ) ) {
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE expire_date `expire_date` date DEFAULT NULL;" );
+				}
 
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX country(country)" );
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX region(region)" );
@@ -691,6 +700,15 @@ class GeoDir_Admin_Upgrade {
 						$default = $fields[ $column ]['Default'] !== '' && $fields[ $column ]['Default'] !== NULL ? " DEFAULT '" . $fields[ $column ]['Default'] . "'" : ( strtolower( $fields[ $column ]['Null'] ) == 'yes' ? ' DEFAULT NULL' : '' );
 
 						$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$column} `{$new_column}` {$data_type}{$null}{$default};" );
+					}
+				}
+
+				// Drop columns
+				$drop_columns = array( 'paid_amount', 'alive_days', 'paymentmethod', 'expire_notification', 'exp2', 'exp3', 'post_location_id', 'post_locations' );
+
+				foreach( $drop_columns as $drop_column ) {
+					if ( in_array( $drop_column, $columns ) ) {
+						$wpdb->query( "ALTER TABLE `{$table}` DROP `{$drop_column}`" );
 					}
 				}
 			}
@@ -974,6 +992,108 @@ class GeoDir_Admin_Upgrade {
 				}
 			}
 		}
+	}
+
+	// Payment Manager
+	public static function update_200_pm_get_options( $options = array() ) {
+		$merge_options = array(
+			'pm_listing_expiry' => get_option( 'geodir_listing_expiry' ),
+			'pm_listing_ex_status' => get_option( 'geodir_listing_ex_status' ),
+			'pm_paid_listing_status' => get_option( 'geodir_paid_listing_status' ),
+			'pm_free_package_renew' => get_option( 'geodir_payment_free_package_renew' ),
+			'pm_cart' => defined( 'WPINV_VERSION' ) ? 'invoicing' : '',
+			'email_user_renew_success' => '1',
+			'email_user_renew_success_subject' => get_option( 'geodir_post_renew_success_email_subject' ),
+			'email_user_renew_success_body' => get_option( 'geodir_post_renew_success_email_content' ),
+			'email_user_upgrade_success' => '1',
+			'email_user_upgrade_success_subject' => get_option( 'geodir_post_upgrade_success_email_subject' ),
+			'email_user_upgrade_success_body' => get_option( 'geodir_post_upgrade_success_email_content' ),
+			'email_user_pre_expiry_reminder' => get_option( 'geodir_listing_preexpiry_notice_disable' ),
+			'email_user_pre_expiry_reminder_subject' => get_option( 'geodir_renew_email_subject' ),
+			'email_user_pre_expiry_reminder_body' => get_option( 'geodir_renew_email_content' ),
+			'email_admin_renew_success' => '1',
+			'email_admin_renew_success_subject' => get_option( 'geodir_post_renew_success_email_subject_admin' ),
+			'email_admin_renew_success_body' => get_option( 'geodir_post_renew_success_email_content_admin' ),
+			'email_admin_upgrade_success' => '1',
+			'email_admin_upgrade_success_subject' => get_option( 'geodir_post_upgrade_success_email_subject_admin' ),
+			'email_admin_upgrade_success_body' => get_option( 'geodir_post_upgrade_success_email_content_admin' ),
+			'email_user_post_expire' => '1',
+			'email_user_post_downgrade' => '1',
+		);
+		$notice_days = array();
+		if ( get_option( 'geodir_listing_preexpiry_notice_days' ) !== false ) {
+			$notice_days[] = absint( get_option( 'geodir_listing_preexpiry_notice_days' ) );
+		}
+		if ( get_option( 'geodir_listing_preexpiry_notice_days2' ) !== false ) {
+			$notice_days[] = absint( get_option( 'geodir_listing_preexpiry_notice_days2' ) );
+		}
+		if ( get_option( 'geodir_listing_preexpiry_notice_days3' ) !== false ) {
+			$notice_days[] = absint( get_option( 'geodir_listing_preexpiry_notice_days3' ) );
+		}
+		$merge_options['email_user_pre_expiry_reminder_days'] = ! empty( $notice_days ) ? array_unique( $notice_days ) : '';
+
+		return array_merge( $options, $merge_options );
+	}
+
+	public static function update_200_pm_create_default_options() {
+		if ( ! ( defined( 'GEODIRPAYMENT_VERSION' ) && version_compare( GEODIRPAYMENT_VERSION, '2.5.0.0', '<=' ) ) ) {
+			$default_options = array(
+				'pm_listing_expiry' => '1',
+				'pm_listing_ex_status' => 'gd-expired',
+				'pm_paid_listing_status' => 'publish',
+				'pm_free_package_renew' => '0',
+				'email_user_renew_success' => '1',
+				'email_user_upgrade_success' => '1',
+				'email_admin_renew_success' => '1',
+				'email_admin_upgrade_success' => '1',
+				'email_user_post_expire' => '1',
+				'email_user_post_downgrade' => '1',
+			);
+
+			foreach ( $default_options as $key => $value ) {
+				geodir_update_option( $key, $value );
+			}
+		}
+	}
+
+	public static function update_200_pm_create_tables() {
+		global $wpdb, $plugin_prefix;
+
+		// Packages table
+		$packages_table = $plugin_prefix . 'price';
+
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `pid` `id` int(11) unsigned NOT NULL AUTO_INCREMENT;" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `title` `name` varchar(255) NOT NULL;" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `title_desc` `title` text NOT NULL;" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `amount` `amount` varchar(50) NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `days` `time_interval` int(11) unsigned NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `sub_units` `time_unit` varchar(1) NOT NULL DEFAULT 'M';" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `sub_active` `recurring` tinyint(1) NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `sub_units_num_times` `recurring_limit` int(11) unsigned NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `sub_num_trial_days` `trial_interval` int(11) unsigned NOT NULL DEFAULT '1';" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `sub_num_trial_units` `trial_unit` varchar(1) NOT NULL DEFAULT 'M';" );
+
+		$wpdb->query( "ALTER TABLE `{$packages_table}` ADD `trial` tinyint(1) NOT NULL DEFAULT '0' AFTER `recurring_limit`;" );
+		$wpdb->query( "ALTER TABLE `{$packages_table}` ADD `trial_amount` varchar(50) NOT NULL DEFAULT '0' AFTER `trial`;" );
+
+		// Drop columns
+		$drop_columns = array( 'enable_franchise', 'franchise_cost', 'franchise_limit' );
+
+		foreach( $drop_columns as $drop_column ) {
+			if ( in_array( $drop_column, $columns ) ) {
+				$wpdb->query( "ALTER TABLE `{$packages_table}` DROP `{$drop_column}`" );
+			}
+		}
+	}
+
+	public static function update_200_pm_update_version() {
+		$version = defined( 'GEODIR_PRICING_VERSION' ) && version_compare( GEODIR_PRICING_VERSION, '2.5.0.0', '>=' ) ? GEODIR_PRICING_VERSION : '2.5.0.0';
+
+		delete_option( 'geodir_pricing_version' );
+		add_option( 'geodir_pricing_version', $version );
+
+		delete_option( 'geodir_pricing_db_version' );
+		add_option( 'geodir_pricing_db_version', $version );
 	}
 
 	// Custom post types
