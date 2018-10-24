@@ -82,7 +82,7 @@ class GeoDir_Post_Data {
 	public static function restore_post_revision($post_id, $revision_id ){
 		global $wpdb,$plugin_prefix;
 		$post_type = get_post_type( $post_id );
-		if(in_array( $post_type, geodir_get_posttypes() )){ echo '###1';
+		if(in_array( $post_type, geodir_get_posttypes() )){ //echo '###1';
 
 			$table   = $plugin_prefix . sanitize_key( $post_type ) . "_detail";
 
@@ -96,7 +96,7 @@ class GeoDir_Post_Data {
 			);
 
 			// restore the revision meta
-			if($result){echo '###2';
+			if($result){//echo '###2';
 				$post_status = get_post_status($post_id );
 				$result = $wpdb->update(
 					$table,
@@ -113,7 +113,7 @@ class GeoDir_Post_Data {
 				);
 
 				// set the old info as the revision info so it is then deleted with the revision
-				if($result){echo '###3';
+				if($result){//echo '###3';
 					$result = $wpdb->update(
 						$table,
 						array( 'post_id' => $revision_id ),
@@ -122,15 +122,15 @@ class GeoDir_Post_Data {
 						array( '%d' )
 					);
 
-					if($result ){echo '###4';
+					if($result ){//echo '###4';
 
 						// save the revisions media values
 						$temp_media = get_post_meta($post_id,"__".$revision_id,true);
 						print_r( $temp_media );
 						// set post images
-						if ( isset( $temp_media['post_images'] ) ) {echo '###4.1';
+						if ( isset( $temp_media['post_images'] ) ) {//echo '###4.1';
 							$featured_image = self::save_files( $revision_id, $temp_media['post_images'], 'post_images');
-							if ( !empty($featured_image)  ) {echo '###4.2'.$featured_image;
+							if ( !empty($featured_image)  ) {//echo '###4.2'.$featured_image;
 								geodir_save_post_meta($post_id,'featured_image',$featured_image);
 							}
 						}
@@ -149,7 +149,7 @@ class GeoDir_Post_Data {
 						//echo '~~~';exit;
 
 						// If the post saved then do some house keeping.
-						if(!is_wp_error($result) && $user_id = get_current_user_id()){echo '###5';
+						if(!is_wp_error($result) && $user_id = get_current_user_id()){//echo '###5';
 							self::remove_post_revisions($post_id,$user_id);
 						}
 					}
@@ -158,7 +158,7 @@ class GeoDir_Post_Data {
 
 			}
 		}
-		echo '###6';exit;
+		//echo '###6';exit;
 	}
 
 	/**
