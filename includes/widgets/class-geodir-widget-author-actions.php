@@ -172,7 +172,10 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 				}
 				$status .= ")</strong>";
 
-				$html = '<span class="gd_user_action geodir-post-status">' . $status_icon . ' <font class="geodir-status-label">' . __('Status: ', 'geodirectory') . '</font>' . $status . '</span>';
+				$status = apply_filters('geodir_post_status_author_page',$status,$real_status,$post->ID);
+				$status_icon = apply_filters('geodir_post_status_icon_author_page',$status_icon,$real_status,$post->ID);
+
+				$html = '<span class="gd_user_action geodir-post-status">' . $status_icon . ' <span class="geodir-status-label">' . __('Status: ', 'geodirectory') . '</span>' . $status . '</span>';
 			}
 		}
 
