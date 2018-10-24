@@ -494,7 +494,11 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Listings' );
 		register_widget( 'GeoDir_Widget_Map' );
 
-		// Non Widgets
+        // Register Recently viewed widget.
+        register_widget('GeoDir_Widget_Recently_Viewed');
+
+
+        // Non Widgets
 		new GeoDir_Widget_Add_Listing();
 		new GeoDir_Widget_Single_Taxonomies();
 		new GeoDir_Widget_Single_Tabs();
