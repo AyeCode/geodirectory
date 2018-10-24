@@ -1,5 +1,9 @@
 v2.0.0.31
 Switching CPT on directory map not working - FIXED
+GD page template hierarchy not working with some themes and not following WP defaults - FIXED
+Added check for an fix for PHP bug #44780 for rendering timezone names wrong in +/-10 hours - FIXED
+Changed for payment manager addon - CHANGED
+Revisions can not be removed by user if an admin has started a revision of the same post - FIXED
 
 v2.0.0.30
 Comments count sometimes only updated on edit not initial save - FIXED
@@ -10,9 +14,6 @@ You can now use the category default image in the category widget - ADDED
 Leave comment link sometimes added to GD archive pages - FIXED
 Close comments on GD archive pages - CHANGED
 Categories widget/shortcode now uses max_count as the main limit and mac_count_child for sub cats - CHANGED
-GD page template hierarchy not working with some themes and not following WP defaults - FIXED
-Added check for an fix for PHP bug #44780 for rendering timezone names wrong in +/-10 hours - FIXED
-Changed for payment manager addon - CHANGED
 
 v2.0.0.29
 Custom fields order can be broken if saved-moved-saved - FIXED

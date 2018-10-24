@@ -82,7 +82,7 @@ class GeoDir_Post_Data {
 	public static function restore_post_revision($post_id, $revision_id ){
 		global $wpdb,$plugin_prefix;
 		$post_type = get_post_type( $post_id );
-		if(in_array( $post_type, geodir_get_posttypes() )){
+		if(in_array( $post_type, geodir_get_posttypes() )){ echo '###1';
 
 			$table   = $plugin_prefix . sanitize_key( $post_type ) . "_detail";
 
@@ -96,17 +96,24 @@ class GeoDir_Post_Data {
 			);
 
 			// restore the revision meta
-			if($result){
+			if($result){echo '###2';
+				$post_status = get_post_status($post_id );
 				$result = $wpdb->update(
 					$table,
-					array( 'post_id' => $post_id ),
+					array(
+						'post_id' => $post_id,
+						'post_status' => $post_status
+					),
 					array( 'post_id' => $revision_id ),
-					array( '%d' ),
+					array(
+						'%d',
+						'%s'
+					),
 					array( '%d' )
 				);
 
 				// set the old info as the revision info so it is then deleted with the revision
-				if($result){
+				if($result){echo '###3';
 					$result = $wpdb->update(
 						$table,
 						array( 'post_id' => $revision_id ),
@@ -115,14 +122,15 @@ class GeoDir_Post_Data {
 						array( '%d' )
 					);
 
-					if($result ){
+					if($result ){echo '###4';
 
 						// save the revisions media values
 						$temp_media = get_post_meta($post_id,"__".$revision_id,true);
+						print_r( $temp_media );
 						// set post images
-						if ( isset( $temp_media['post_images'] ) ) {
-							$featured_image = self::save_files( $revision_id, $temp_media['post_images'], 'post_images', false);
-							if ( !empty($featured_image)  ) {
+						if ( isset( $temp_media['post_images'] ) ) {echo '###4.1';
+							$featured_image = self::save_files( $revision_id, $temp_media['post_images'], 'post_images');
+							if ( !empty($featured_image)  ) {echo '###4.2'.$featured_image;
 								geodir_save_post_meta($post_id,'featured_image',$featured_image);
 							}
 						}
@@ -138,8 +146,10 @@ class GeoDir_Post_Data {
 							}
 						}
 
+						//echo '~~~';exit;
+
 						// If the post saved then do some house keeping.
-						if(!is_wp_error($result) && $user_id = get_current_user_id()){
+						if(!is_wp_error($result) && $user_id = get_current_user_id()){echo '###5';
 							self::remove_post_revisions($post_id,$user_id);
 						}
 					}
@@ -148,7 +158,7 @@ class GeoDir_Post_Data {
 
 			}
 		}
-
+		echo '###6';exit;
 	}
 
 	/**
@@ -474,6 +484,9 @@ class GeoDir_Post_Data {
      */
 	public static function save_files( $post_id = 0, $files = array(),$field = '', $dummy = false ) {
 
+		//if(defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE){echo 'autosave';}else{echo 'not-autosave';}exit;
+
+		$auto_save = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ? true : false;
 		$revision = wp_is_post_revision( $post_id );
 		$main_post_id = $revision ? wp_get_post_parent_id($post_id)  : $post_id;
 
@@ -484,8 +497,8 @@ class GeoDir_Post_Data {
 			return false;
 		}
 
-		// Re-assign revision images to parent
-		if($revision){
+		// Re-assign revision images to parent if main save
+		if($revision && !$auto_save){
 			$revision_id = absint($post_id);
 			GeoDir_Media::revision_to_parent($main_post_id,$revision_id);
 			$post_id = $main_post_id;
@@ -535,7 +548,7 @@ class GeoDir_Post_Data {
 				$file_id      = ! empty( $file_info[1] ) ? absint( $file_info[1] ) : '';
 				$file_title   = ! empty( $file_info[2] ) ? sanitize_text_field( $file_info[2] ) : '';
 				$file_caption = ! empty( $file_info[3] ) ? sanitize_text_field( $file_info[3] ) : '';
-				$approved      = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE  ? '-1' : 1; // we approve all files on save, not auto-save
+				$approved     = $auto_save ? '-1' : 1; // we approve all files on save, not auto-save
 
 
 				// check if we already have the file.
@@ -667,7 +680,7 @@ class GeoDir_Post_Data {
 			$post_id        = absint( $_REQUEST['pid'] );
 			$post           = $gd_post = geodir_get_post_info( $post_id );
 			$listing_type   = $post->post_type;
-			$post_revisions = wp_get_post_revisions( $post_id, array( 'check_enabled' => false ) );
+			$post_revisions = wp_get_post_revisions( $post_id, array( 'check_enabled' => false,'author' => $user_id ) );
 
 			// if we have a post revision
 			if ( ! empty( $post_revisions ) ) {
@@ -1083,11 +1096,15 @@ class GeoDir_Post_Data {
      * }
      * @return int|WP_Error
      */
-	public static function auto_save_post( $post_data ) {
+	public static function auto_save_post( $post_data, $doing_autosave = true ) {
 		
 		// set that we are doing an auto save
 		if ( ! defined( 'DOING_AUTOSAVE' ) ) {
-			define( 'DOING_AUTOSAVE', true );
+			if($doing_autosave){
+				define( 'DOING_AUTOSAVE', true );
+			}else{
+				define( 'DOING_AUTOSAVE', false );
+			}
 		}
 		
 		// its a post revision
@@ -1116,7 +1133,7 @@ class GeoDir_Post_Data {
 			}
 
 			if(!empty($file_meta)){
-				update_post_meta($post_data['ID'],'__'.$post_data['ID'],$file_meta);
+				update_post_meta($post_data['post_parent'],'__'.$post_data['ID'],$file_meta);
 			}
 
 
@@ -1344,9 +1361,12 @@ class GeoDir_Post_Data {
 	 * @return bool|void
 	 */
 	public static function delete_post( $id ) {
-		if ( ! current_user_can( 'delete_posts' ) || ! $id ) {
+
+		// check if user owns the post
+		if ( ! self::owner_check($id,get_current_user_id()) || ! $id ) {
 			return false;
 		}
+
 
 		global $wpdb, $plugin_prefix;
 
