@@ -37,6 +37,7 @@ do_action('geodir_before_listing_listview');
 		do_action('geodir_before_listing_post_listview');
 
 		foreach ( $widget_listings as $widget_listing ) {
+
 			geodir_setup_postdata( $widget_listing );
 
 			geodir_get_template_part('content', 'listing');

@@ -65,15 +65,18 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
             'advanced' => true
         );
 
-        $widget_args['post_display'] = array(
-            'title' => __('Post Display: ', 'geodirectory'),
-            'desc' => __('The option are use for post display option.', 'geodirectory'),
+        $widget_args['layout'] = array(
+            'title' => __('Layout:', 'geodirectory'),
+            'desc' => __('How the listings should laid out by default.', 'geodirectory'),
             'type' => 'select',
             'options'   =>  array(
-                'only_title' => __('Display only title','geodirectory'),
-                'title_with_image' => __('Display title with image','geodirectory'),
+                "gridview_onehalf"        =>  __('Grid View (Two Columns)', 'geodirectory'),
+                "gridview_onethird"        =>  __('Grid View (Three Columns)', 'geodirectory'),
+                "gridview_onefourth"        =>  __('Grid View (Four Columns)', 'geodirectory'),
+                "gridview_onefifth"        =>  __('Grid View (Five Columns)', 'geodirectory'),
+                "list"        =>  __('List view', 'geodirectory'),
             ),
-            'default'  => 'only_title',
+            'default'  => 'h3',
             'desc_tip' => true,
             'advanced' => true
         );
@@ -96,13 +99,14 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 
         $create_rv_nonce = wp_create_nonce('recently_viewed');
         $post_page_limit = !empty( $args['post_limit'] ) ? $args['post_limit'] : '5';
-        $post_display = !empty( $args['post_display'] ) ? $args['post_display'] : '5';
+        $layout = !empty( $args['layout'] ) ? $args['layout'] : 'list';
         ob_start();
         ?>
         <div class="geodir-recently-reviewed">
             <div class="recently-reviewed-content"></div>
             <div class="recently-reviewed-loader" style="display: none;text-align: center;"><i class="fas fa-sync fa-spin fa-2x"></i></div>
         </div>
+
         <script type="text/javascript">
             jQuery( document ).ready(function() {
 
@@ -113,17 +117,19 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
                     'action': 'gd_recently_viewed_action',
                     'viewed_post_id' : recently_viewed,
                     'list_per_page' :'<?php echo $post_page_limit; ?>' ,
-                    'post_display' : '<?php echo $post_display; ?>',
+                    'layout' : '<?php echo $layout; ?>',
                     '_wpnonce' : '<?php echo $create_rv_nonce; ?>'
                 };
 
                 jQuery.post(geodir_params.ajax_url, data, function(response) {
                     jQuery('.geodir-recently-reviewed .recently-reviewed-content').html(response);
                     jQuery('.recently-reviewed-loader').hide();
+                    init_read_more();
 
                 });
             });
         </script>
+
         <?php
         return ob_get_clean();
     }
@@ -135,46 +141,54 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
      */
     public function gd_recently_viewed_action_fn(){
 
+        global $gd_post, $post,$gd_layout_class, $geodir_is_widget_listing;
         ob_start();
-
-        ?><table class="gd-recently-viewed list-view"><tbody><?php
 
         if( !empty( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'],'recently_viewed')) {
 
-            $list_per_page = !empty( $_REQUEST['list_per_page'] ) ? $_REQUEST['list_per_page'] :'';
+            $list_per_page = !empty($_REQUEST['list_per_page']) ? $_REQUEST['list_per_page'] : '';
+            $layout = !empty( $_REQUEST['layout'] ) ? $_REQUEST['layout'] :'';
+            $post_ids = !empty($_REQUEST['viewed_post_id']) ? json_decode(stripslashes($_REQUEST['viewed_post_id'])) : '';
+            $post_ids = !empty($post_ids) ? array_reverse($post_ids) : '';
+            $post_ids = !empty($post_ids) ? array_slice($post_ids, 0, $list_per_page) : array();
+            $widget_listings = !empty( $post_ids ) ? array_map('intval', $post_ids) : '';
 
-            $post_display = !empty( $_REQUEST['post_display'] ) ? $_REQUEST['post_display'] :'only_title';
+            //geodir_get_template('content-widget-listing.php', array('widget_listings' => $post_ids));
 
-            $post_ids = !empty( $_REQUEST['viewed_post_id'] ) ? json_decode(stripslashes( $_REQUEST['viewed_post_id'] ) ): '';
-            $post_ids = !empty( $post_ids ) ? array_reverse( $post_ids ) :'';
-            $post_ids = !empty( $post_ids ) ? array_slice($post_ids,0,$list_per_page) : array();
+            $layout_class = 'geodir-listview';
 
-            if( !empty( $post_ids ) && is_array( $post_ids ) ) {
+            if( !empty( $layout ) && 'list' !== $layout ) {
+                $layout_class = ' geodir-gridview '.$layout;
+            }
 
-                foreach ( $post_ids as $postid ) { ?>
-                    <tr>
-                        <td>
-                            <h5 class="post-title"><a href="<?php echo get_the_permalink($postid); ?>"><?php echo get_the_title($postid); ?></a></h5>
-                            <?php if( !empty( $post_display ) && 'title_with_image' === $post_display ) {
-                                $post_thumbnail = wp_get_attachment_image_src(get_post_thumbnail_id($postid),'thumbnail');
-                                if( !empty( $post_thumbnail[0] ) && '' != $post_thumbnail[0] ) {
-                                ?>
-                                    <img src="<?php echo $post_thumbnail [0]; ?>" alt="<?php echo get_the_title($postid); ?>">
-                                 <?php
-                                }
-                             } ?>
-                        </td>
-                    </tr>
-                <?php } ?>
+            ?><ul class="geodir-category-list-view clearfix geodir-widget-posts <?php echo $layout_class; ?>"><?php
+                if( !empty( $widget_listings ) ) {
 
-            <?php } else { ?>
-                <tr>
-                    <td><?php _e('No recent view lists...','geodirectory' ); ?></td>
-                </tr>
-            <?php }
+                    do_action('geodir_before_listing_post_listview');
+
+                    foreach ( $widget_listings as $widget_listing ) {
+
+                        geodir_setup_postdata( $widget_listing )
+                        ?>
+                        <li <?php GeoDir_Post_Data::post_class(); ?> data-post-id="<?php echo esc_attr($widget_listing);?>">
+                            <?php
+                            $content = "[gd_archive_item_section type='open' position='left'][gd_post_images type='image' ajax_load='false' link_to='post' show_logo='true' ][gd_archive_item_section type='close' position='left'][gd_archive_item_section type='open' position='right'][gd_post_title tag='h2'][gd_author_actions author_page_only='1'][gd_post_distance][gd_post_rating alignment='left' ][gd_post_fav show='' alignment='right' ][gd_post_meta key='business_hours' location='listing'][gd_output_location location='listing'][gd_post_meta key='post_content' show='value-strip'][gd_archive_item_section type='close' position='right']";
+                            echo do_shortcode($content);
+                            ?>
+                        </li>
+                        <?php
+
+                    }
+                    do_action('geodir_after_listing_post_listview');
+
+                } else {
+
+                    geodir_no_listings_found();
+
+                }
+            ?></ul><?php
+
         }
-
-        ?></tbody></table><?php
 
         echo ob_get_clean();
 
