@@ -80,6 +80,7 @@ class GeoDir_Post_Data {
 	 * @param $revision_id
 	 */
 	public static function restore_post_revision($post_id, $revision_id ){
+
 		global $wpdb,$plugin_prefix;
 		$post_type = get_post_type( $post_id );
 		if(in_array( $post_type, geodir_get_posttypes() )){ //echo '###1';
@@ -126,19 +127,21 @@ class GeoDir_Post_Data {
 
 						// save the revisions media values
 						$temp_media = get_post_meta($post_id,"__".$revision_id,true);
-						print_r( $temp_media );
+						//print_r( $temp_media );
 						// set post images
 						if ( isset( $temp_media['post_images'] ) ) {//echo '###4.1';
 							$current_files = GeoDir_Media::get_field_edit_string($post_id,'post_images');
+							//echo "\n".$current_files." \n";
+							//echo $temp_media['post_images']." \n";
 							// if post_images data is the same then we just copy the original feature image data
-							if($current_files==$temp_media['post_images']){
+							if($current_files==$temp_media['post_images']){//echo '###4.2';
 								$old_featured_image = geodir_get_post_meta($revision_id,'featured_image');
-								if($old_featured_image){
+								if($old_featured_image){//echo '###4.3';
 									geodir_save_post_meta($post_id,'featured_image',$old_featured_image);
 								}
-							}else{
-								$featured_image = self::save_files( $revision_id, $temp_media['post_images'], 'post_images');
-								if ( !empty($featured_image)  ) {//echo '###4.2'.$featured_image;
+							}else{//echo '###4.3';
+								$featured_image = self::save_files( $revision_id, $temp_media['post_images'], 'post_images',false,false);
+								if ( !empty($featured_image)  ) {//echo '###4.4'.$featured_image;
 									geodir_save_post_meta($post_id,'featured_image',$featured_image);
 								}
 							}
@@ -150,7 +153,7 @@ class GeoDir_Post_Data {
 						if(!empty($file_fields)){// we have file fields
 							foreach($file_fields as $key => $extensions){
 								if(isset($temp_media[$key])){ // its a attachment
-									self::save_files( $revision_id,$temp_media[$key],$key);
+									self::save_files( $revision_id,$temp_media[$key],$key,false,false);
 								}
 							}
 						}
@@ -491,11 +494,13 @@ class GeoDir_Post_Data {
      * @param bool $dummy Optional. Dummy. Default false.
      * @return bool|null|string
      */
-	public static function save_files( $post_id = 0, $files = array(),$field = '', $dummy = false ) {
+	public static function save_files( $post_id = 0, $files = array(),$field = '', $dummy = false, $auto_save = '' ) {
 
 		//if(defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE){echo 'autosave';}else{echo 'not-autosave';}exit;
 
-		$auto_save = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ? true : false;
+		if($auto_save===''){
+			$auto_save = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ? true : false;
+		}
 		$revision = wp_is_post_revision( $post_id );
 		$main_post_id = $revision ? wp_get_post_parent_id($post_id)  : $post_id;
 
@@ -954,6 +959,8 @@ class GeoDir_Post_Data {
 			if($post_current_nonce && $post_current_nonce == wp_create_nonce('_gd_logged_out_post_author')){
 				$owner = true;
 			}
+		}elseif(current_user_can('delete_posts')){
+			$owner = true;
 		}elseif($author_id == $user_id){
 			$owner = true;
 		}
