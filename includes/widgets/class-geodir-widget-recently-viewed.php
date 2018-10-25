@@ -125,6 +125,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
                     jQuery('.geodir-recently-reviewed .recently-reviewed-content').html(response);
                     jQuery('.recently-reviewed-loader').hide();
                     init_read_more();
+                    geodir_init_lazy_load();
 
                 });
             });
@@ -153,40 +154,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
             $post_ids = !empty($post_ids) ? array_slice($post_ids, 0, $list_per_page) : array();
             $widget_listings = !empty( $post_ids ) ? array_map('intval', $post_ids) : '';
 
-            //geodir_get_template('content-widget-listing.php', array('widget_listings' => $post_ids));
-
-            $layout_class = 'geodir-listview';
-
-            if( !empty( $layout ) && 'list' !== $layout ) {
-                $layout_class = ' geodir-gridview '.$layout;
-            }
-
-            ?><ul class="geodir-category-list-view clearfix geodir-widget-posts <?php echo $layout_class; ?>"><?php
-                if( !empty( $widget_listings ) ) {
-
-                    do_action('geodir_before_listing_post_listview');
-
-                    foreach ( $widget_listings as $widget_listing ) {
-
-                        geodir_setup_postdata( $widget_listing )
-                        ?>
-                        <li <?php GeoDir_Post_Data::post_class(); ?> data-post-id="<?php echo esc_attr($widget_listing);?>">
-                            <?php
-                            $content = "[gd_archive_item_section type='open' position='left'][gd_post_images type='image' ajax_load='false' link_to='post' show_logo='true' ][gd_archive_item_section type='close' position='left'][gd_archive_item_section type='open' position='right'][gd_post_title tag='h2'][gd_author_actions author_page_only='1'][gd_post_distance][gd_post_rating alignment='left' ][gd_post_fav show='' alignment='right' ][gd_post_meta key='business_hours' location='listing'][gd_output_location location='listing'][gd_post_meta key='post_content' show='value-strip'][gd_archive_item_section type='close' position='right']";
-                            echo do_shortcode($content);
-                            ?>
-                        </li>
-                        <?php
-
-                    }
-                    do_action('geodir_after_listing_post_listview');
-
-                } else {
-
-                    geodir_no_listings_found();
-
-                }
-            ?></ul><?php
+            geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
 
         }
 
