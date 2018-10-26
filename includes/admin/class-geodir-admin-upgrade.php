@@ -67,6 +67,15 @@ class GeoDir_Admin_Upgrade {
 			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_event_update_version' ), 10 );
 		}
 
+		// Review Ratings
+		if ( self::needs_upgrade( 'review_rating' ) ) {
+			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_rr_get_options' ), 13, 1 );
+
+			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_rr_create_default_options' ), 13 );
+			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_rr_create_tables' ), 13 );
+			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_rr_update_version' ), 13 );
+		}
+
 		add_action( 'geodirectory_v2_updated', array( __CLASS__, 'v2_updated' ), 10 );
 	}
 
@@ -88,6 +97,9 @@ class GeoDir_Admin_Upgrade {
 			break;
 			case 'payment_manager':
 				$found = ! is_null( get_option( 'geodir_payments_db_version', null ) ) && ( is_null( get_option( 'geodir_pricing_db_version', null ) ) || ( get_option( 'geodir_pricing_db_version' ) && version_compare( get_option( 'geodir_pricing_db_version' ), '2.5.0.0', '<' ) ) );
+			break;
+			case 'review_rating':
+				$found = ! is_null( get_option( 'geodir_reviewratings_db_version', null ) ) && ( is_null( get_option( 'geodir_reviewrating_db_version', null ) ) || ( get_option( 'geodir_reviewrating_db_version' ) && version_compare( get_option( 'geodir_reviewrating_db_version' ), '2.0.0.0', '<' ) ) );
 			break;
 		}
 
@@ -747,7 +759,6 @@ class GeoDir_Admin_Upgrade {
 			DROP `rating_ip`,
 			CHANGE overall_rating rating float DEFAULT '0',
 			CHANGE comment_images attachments text DEFAULT '',
-			DROP `wasthis_review`,
 			DROP `status`,
 			DROP `post_status`,
 			DROP `post_date`,
@@ -758,6 +769,32 @@ class GeoDir_Admin_Upgrade {
 			CHANGE post_longitude longitude varchar(22) DEFAULT '',
 			DROP `comment_content`;" 
 		);
+
+		if ( self::needs_upgrade( 'review_rating' ) ) {
+			$columns = @$wpdb->get_results("DESC {$reviews_table}");
+
+			if ( empty( $columns ) ) {
+				continue;
+			}
+
+			$fields = array();
+			foreach ( $columns as $key => $column ) {
+				$fields[ $column->Field ] = (array) $column;
+			}
+			$columns = array_keys( $fields );
+
+			if ( ! in_array( 'wasthis_review', $columns ) ) {
+				$wpdb->query( "ALTER TABLE {$reviews_table} ADD `wasthis_review` int(11) NOT NULL;" );
+			}
+
+			if ( ! in_array( 'read_unread', $columns ) ) {
+				$wpdb->query( "ALTER TABLE {$reviews_table} ADD `read_unread` VARCHAR(50) NOT NULL;" );
+			}
+
+			if ( ! in_array( 'total_images', $columns ) ) {
+				$wpdb->query( "ALTER TABLE {$reviews_table} ADD `total_images` int(11) NOT NULL;" );
+			}
+		}
 
 		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE comment_id comment_id bigint(20) DEFAULT NULL, ADD UNIQUE (`comment_id`);" );
 	}
@@ -1123,8 +1160,8 @@ class GeoDir_Admin_Upgrade {
 		dbDelta( $schema );
 
 		// Change
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `pid` `id` int(11) unsigned NOT NULL AUTO_INCREMENT;" );
 		$wpdb->query( "ALTER TABLE `{$packages_table}` 
-			CHANGE `pid` `id` int(11) unsigned NOT NULL AUTO_INCREMENT, 
 			CHANGE `title` `name` varchar(255) NOT NULL, 
 			CHANGE `amount` `amount` varchar(50) NOT NULL DEFAULT '0', 
 			CHANGE `sub_units` `time_unit` varchar(1) NOT NULL DEFAULT 'M', 
@@ -1465,7 +1502,6 @@ class GeoDir_Admin_Upgrade {
 		$locations_table = $plugin_prefix . 'post_locations';
 
 		$wpdb->query( "ALTER TABLE `{$locations_table}` 
-			DROP `country_ISO2`, 
 			DROP `city_meta`, 
 			DROP `city_desc`, 
 			CHANGE city_latitude latitude varchar(22) NOT NULL, 
@@ -1687,6 +1723,58 @@ class GeoDir_Admin_Upgrade {
 		add_option( 'geodir_event_db_version', $version );
 	}
 
+	// Review Rating
+	public static function update_200_rr_get_options( $options = array() ) {
+		$merge_options = array(
+			'rr_enable_rating' => get_option( 'geodir_reviewrating_enable_rating' ),
+			'rr_enable_images' => get_option( 'geodir_reviewrating_enable_images' ),
+			'rr_enable_rate_comment' => get_option( 'geodir_reviewrating_enable_review' ),
+			'rr_enable_sorting' => get_option( 'geodir_reviewrating_enable_sorting' ),
+			'uninstall_geodir_review_rating_manager' => get_option( 'geodir_un_geodir_review_rating_manager' ),
+		);
+
+		return array_merge( $options, $merge_options );
+	}
+
+	public static function update_200_rr_create_default_options() {
+		if ( ! ( defined( 'GEODIRREVIEWRATING_VERSION' ) && version_compare( GEODIRREVIEWRATING_VERSION, '2.0.0.0', '<=' ) ) ) {
+			$default_options = array(
+				'rr_enable_rating' => '0',
+				'rr_enable_images' => '0',
+				'rr_enable_rate_comment' => '0',
+				'rr_enable_sorting' => '0',
+			);
+
+			foreach ( $default_options as $key => $value ) {
+				geodir_update_option( $key, $value );
+			}
+		}
+	}
+
+	public static function update_200_rr_create_tables() {
+		global $wpdb, $plugin_prefix;
+
+		$collate = '';
+		if ( $wpdb->has_cap( 'collation' ) ) {
+			$collate = $wpdb->get_charset_collate();
+		}
+
+		// Tables
+		$reviews_table = $plugin_prefix . 'post_review';
+		$rating_category_table = $plugin_prefix . 'rating_category';
+		$rating_style_table = $plugin_prefix . 'rating_style';
+	}
+
+	public static function update_200_rr_update_version() {
+		$version = defined( 'GEODIR_REVIEWRATING_VERSION' ) && version_compare( GEODIR_REVIEWRATING_VERSION, '2.0.0.0', '>=' ) ? GEODIR_REVIEWRATING_VERSION : '2.0.0.0';
+
+		delete_option( 'geodir_reviewrating_version' );
+		add_option( 'geodir_reviewrating_version', $version );
+
+		delete_option( 'geodir_reviewrating_db_version' );
+		add_option( 'geodir_reviewrating_db_version', $version );
+	}
+
 	public static function v2_updated() {
 		global $wpdb, $plugin_prefix;
 
@@ -1706,7 +1794,7 @@ class GeoDir_Admin_Upgrade {
 					}
 					$meta_value = implode( ",", $meta_value );
 
-					$wpdb->query( "UPDATE `{$package_meta_table}` SET `meta_value` = {$meta_value} WHERE meta_id = '" . $row->meta_id . "'" );
+					$wpdb->query( $wpdb->prepare( "UPDATE `{$package_meta_table}` SET `meta_value` = %s WHERE meta_id = %d", array( $meta_value, $row->meta_id ) ) );
 				}
 			}
 		}
