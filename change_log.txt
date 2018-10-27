@@ -1,9 +1,10 @@
-v2.0.0.31
+v2.0.0.32
 Switching CPT on directory map not working - FIXED
 GD page template hierarchy not working with some themes and not following WP defaults - FIXED
 Added check for an fix for PHP bug #44780 for rendering timezone names wrong in +/-10 hours - FIXED
 Changed for payment manager addon - CHANGED
 Revisions can not be removed by user if an admin has started a revision of the same post - FIXED
+Non-location cpt db table key error - FIXED
 
 v2.0.0.30
 Comments count sometimes only updated on edit not initial save - FIXED

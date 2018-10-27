@@ -681,6 +681,11 @@ class GeoDir_Email {
 			}
 		}
 
+		// is post status not set then get the real status
+		if(!isset( $post_data['post_status'] )){
+			$post_data['post_status'] = get_post_status($post_ID);
+		}
+
 		if ( isset( $post_data['post_status'] ) && $post_data['post_status'] == 'pending' ) {
 			// Send email to admin
 			self::send_admin_pending_post_email( $post );

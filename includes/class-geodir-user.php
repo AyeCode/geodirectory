@@ -318,7 +318,7 @@ class GeoDir_User {
 			return '';
 		}
 
-		$user_listing = geodir_user_post_listing_count( $user_id );
+		$user_listing = geodir_user_post_listing_count( $user_id, true );
 
 		$listing_links = array();
 

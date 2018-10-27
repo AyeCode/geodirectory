@@ -20,6 +20,15 @@ class GeoDir_Admin_Upgrade {
 	public static function init() {
 		add_action( 'geodir_update_200_settings_after', array( __CLASS__, 'update_200_set_permalink_structure' ), 10, 1 );
 
+		// Payment Manager
+		if ( self::needs_upgrade( 'payment_manager' ) ) {
+			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_pm_get_options' ), 9, 1 );
+
+			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_pm_create_default_options' ), 9 );
+			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_pm_create_tables' ), 9 );
+			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_pm_update_version' ), 9 );
+		}
+
 		// Custom post types
 		if ( self::needs_upgrade( 'custom_post_types' ) ) {
 			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_cp_get_options' ), 10, 1 );
@@ -57,6 +66,8 @@ class GeoDir_Admin_Upgrade {
 			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_event_create_tables' ), 10 );
 			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_event_update_version' ), 10 );
 		}
+
+		add_action( 'geodirectory_v2_updated', array( __CLASS__, 'v2_updated' ), 10 );
 	}
 
 	public static function needs_upgrade( $plugin ) {
@@ -74,6 +85,9 @@ class GeoDir_Admin_Upgrade {
 			break;
 			case 'location_manager':
 				$found = ! is_null( get_option( 'geodirlocation_db_version', null ) ) && ( is_null( get_option( 'geodir_location_db_version', null ) ) || ( get_option( 'geodir_location_db_version' ) && version_compare( get_option( 'geodir_location_db_version' ), '2.0.0.0', '<' ) ) );
+			break;
+			case 'payment_manager':
+				$found = ! is_null( get_option( 'geodir_payments_db_version', null ) ) && ( is_null( get_option( 'geodir_pricing_db_version', null ) ) || ( get_option( 'geodir_pricing_db_version' ) && version_compare( get_option( 'geodir_pricing_db_version' ), '2.5.0.0', '<' ) ) );
 			break;
 		}
 
@@ -445,22 +459,28 @@ class GeoDir_Admin_Upgrade {
 		// Custom fields
 		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
 
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE admin_desc frontend_desc text NULL DEFAULT NULL;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `placeholder_value` text NULL DEFAULT NULL AFTER `default_value`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_level` int(11) NOT NULL AFTER `sort_order`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`;" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` 
+			CHANGE admin_desc frontend_desc text NULL DEFAULT NULL, 
+			CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL, 
+			ADD `placeholder_value` text NULL DEFAULT NULL AFTER `default_value`, 
+			ADD `tab_level` int(11) NOT NULL AFTER `sort_order`, 
+			ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`;" 
+		);
 
 		$results = $wpdb->get_results( "SELECT * FROM `{$custom_fields_table}`" );
 
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_active` `is_active` CHAR(1) NOT NULL DEFAULT '1';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_active` `is_active` TINYINT(1) NOT NULL DEFAULT '1';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_default` `is_default` CHAR(1) NOT NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_default` `is_default` TINYINT(1) NOT NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_required` `is_required` CHAR(1) NOT NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `is_required` `is_required` TINYINT(1) NOT NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `for_admin_use` `for_admin_use` CHAR(1) NOT NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` CHANGE `for_admin_use` `for_admin_use` TINYINT(1) NOT NULL DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` 
+			CHANGE `is_active` `is_active` CHAR(1) NOT NULL DEFAULT '1', 
+			CHANGE `is_default` `is_default` CHAR(1) NOT NULL DEFAULT '0', 
+			CHANGE `is_required` `is_required` CHAR(1) NOT NULL DEFAULT '0', 
+			CHANGE `for_admin_use` `for_admin_use` CHAR(1) NOT NULL DEFAULT '0';" 
+		);
+		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` 
+			CHANGE `is_active` `is_active` TINYINT(1) NOT NULL DEFAULT '1', 
+			CHANGE `is_default` `is_default` TINYINT(1) NOT NULL DEFAULT '0', 
+			CHANGE `is_required` `is_required` TINYINT(1) NOT NULL DEFAULT '0', 
+			CHANGE `for_admin_use` `for_admin_use` TINYINT(1) NOT NULL DEFAULT '0';" 
+		);
 
 		foreach ( $results as $row ) {
 			if ( in_array( $row->htmlvar_name, array( 'geodir_contact', 'is_featured' ) ) ) {
@@ -542,10 +562,12 @@ class GeoDir_Admin_Upgrade {
 
 		$results = $wpdb->get_results( "SELECT * FROM `{$custom_sort_fields_table}`" );
 
-		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL;" );
-		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` ADD `tab_level` int(11) NOT NULL AFTER `sort_order`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`;" );
-		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` ADD sort varchar(5) DEFAULT 'asc';" );
+		$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` 
+			CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL, 
+			ADD `tab_level` int(11) NOT NULL AFTER `sort_order`, 
+			ADD `tab_parent` varchar(100) NOT NULL AFTER `sort_order`, 
+			ADD sort varchar(5) DEFAULT 'asc';" 
+		);
 
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $row ) {
@@ -643,39 +665,42 @@ class GeoDir_Admin_Upgrade {
 				$columns = array_keys( $fields );
 
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$post_type}category post_category varchar(254) DEFAULT NULL;" );
-				if ( in_array( 'post_location_id', $columns ) ) {
-					$wpdb->query( "ALTER TABLE `{$table}` DROP `post_location_id`" );
-				}
-				if ( in_array( 'post_locations', $columns ) ) {
-					$wpdb->query( "ALTER TABLE `{$table}` DROP `post_locations`" );
-				}
 				if ( in_array( 'is_featured', $columns ) ) {
 					// Converting the ENUM to TINYINT directly might give unexpected results. So we should start by converting column to a CHAR(1) and then to TINYINT(1).
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_featured featured char(1) NOT NULL DEFAULT '0';" );
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE featured featured tinyint(1) NOT NULL DEFAULT '0';" );
 				}
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE submit_ip `submit_ip` varchar(100) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_address `street` varchar(254) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_city `city` varchar(50) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_region `region` varchar(50) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_country `country` varchar(50) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_zip `zip` varchar(20) NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_latitude `latitude` varchar(22)  DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_longitude `longitude` varchar(22) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_mapview `mapview` varchar(15) DEFAULT NULL;" );
+				$wpdb->query( "ALTER TABLE `{$table}` 
+					CHANGE submit_ip `submit_ip` varchar(100) DEFAULT NULL, 
+					CHANGE post_address `street` varchar(254) DEFAULT NULL, 
+					CHANGE post_city `city` varchar(50) DEFAULT NULL, 
+					CHANGE post_region `region` varchar(50) DEFAULT NULL, 
+					CHANGE post_country `country` varchar(50) DEFAULT NULL, 
+					CHANGE post_zip `zip` varchar(20) NULL, 
+					CHANGE post_latitude `latitude` varchar(22)  DEFAULT NULL, 
+					CHANGE post_longitude `longitude` varchar(22) DEFAULT NULL, 
+					CHANGE post_mapview `mapview` varchar(15) DEFAULT NULL;" 
+				);
 				if ( in_array( 'post_mapzoom', $columns ) ) {
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE post_mapzoom `mapzoom` varchar(3) DEFAULT NULL;" );
 				}
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_contact `phone` varchar(254) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_email `email` varchar(254) DEFAULT NULL;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_website `website` text;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_twitter `twitter` text;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_facebook `facebook` text;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_video `video` text;" );
-				$wpdb->query( "ALTER TABLE `{$table}` CHANGE geodir_special_offers `special_offers` text;" );
+				$wpdb->query( "ALTER TABLE `{$table}` 
+					CHANGE geodir_contact `phone` varchar(254) DEFAULT NULL, 
+					CHANGE geodir_email `email` varchar(254) DEFAULT NULL, 
+					CHANGE geodir_website `website` text, 
+					CHANGE geodir_twitter `twitter` text, 
+					CHANGE geodir_facebook `facebook` text, 
+					CHANGE geodir_video `video` text, 
+					CHANGE geodir_special_offers `special_offers` text;" 
+				);
 				if ( $post_type == 'gd_event' ) {
-					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_recurring recurring TINYINT(1) DEFAULT '0';" );
-					$wpdb->query( "ALTER TABLE `{$table}` CHANGE recurring_dates event_dates TEXT NOT NULL;" );
+					$wpdb->query( "ALTER TABLE `{$table}` 
+						CHANGE is_recurring recurring TINYINT(1) DEFAULT '0', 
+						CHANGE recurring_dates event_dates TEXT NOT NULL;" 
+					);
+				}
+				if ( in_array( 'expire_date', $columns ) ) {
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE `expire_date` `expire_date` DATE DEFAULT NULL;" );
 				}
 
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX country(country)" );
@@ -693,6 +718,15 @@ class GeoDir_Admin_Upgrade {
 						$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$column} `{$new_column}` {$data_type}{$null}{$default};" );
 					}
 				}
+
+				// Drop columns
+				$drop_columns = array( 'paid_amount', 'alive_days', 'paymentmethod', 'expire_notification', 'exp2', 'exp3', 'post_location_id', 'post_locations' );
+
+				foreach( $drop_columns as $drop_column ) {
+					if ( in_array( $drop_column, $columns ) ) {
+						$wpdb->query( "ALTER TABLE `{$table}` DROP `{$drop_column}`" );
+					}
+				}
 			}
 		}
 
@@ -704,25 +738,28 @@ class GeoDir_Admin_Upgrade {
 		
 		$reviews_table = GEODIR_REVIEW_TABLE;
 		
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `id`;" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_id post_id bigint(20) DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `post_title`;" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_type post_type varchar(20) DEFAULT '';" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE user_id user_id bigint(20) DEFAULT '0';" );
+		$wpdb->query( "ALTER TABLE `{$reviews_table}` 
+			DROP `id`,
+			CHANGE post_id post_id bigint(20) DEFAULT '0',
+			DROP `post_title`,
+			CHANGE post_type post_type varchar(20) DEFAULT '',
+			CHANGE user_id user_id bigint(20) DEFAULT '0', 
+			DROP `rating_ip`,
+			CHANGE overall_rating rating float DEFAULT '0',
+			CHANGE comment_images attachments text DEFAULT '',
+			DROP `wasthis_review`,
+			DROP `status`,
+			DROP `post_status`,
+			DROP `post_date`,
+			CHANGE post_city city varchar(50) DEFAULT '',
+			CHANGE post_region region varchar(50) DEFAULT '',
+			CHANGE post_country country varchar(50) DEFAULT '',
+			CHANGE post_latitude latitude varchar(22) DEFAULT '',
+			CHANGE post_longitude longitude varchar(22) DEFAULT '',
+			DROP `comment_content`;" 
+		);
+
 		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE comment_id comment_id bigint(20) DEFAULT NULL, ADD UNIQUE (`comment_id`);" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `rating_ip`;" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE overall_rating rating float DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE comment_images attachments text DEFAULT '';" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `wasthis_review`;" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `status`;" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `post_status`;" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `post_date`;" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_city city varchar(50) DEFAULT '';" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_region region varchar(50) DEFAULT '';" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_country country varchar(50) DEFAULT '';" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_latitude latitude varchar(22) DEFAULT '';" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE post_longitude longitude varchar(22) DEFAULT '';" );
-		$wpdb->query( "ALTER TABLE `{$reviews_table}` DROP `comment_content`;" );
 	}
 
 	public static function update_200_attachments() {
@@ -730,13 +767,17 @@ class GeoDir_Admin_Upgrade {
 		
 		$attachments_table = GEODIR_ATTACHMENT_TABLE;
 
-		$wpdb->query( "ALTER TABLE `{$attachments_table}` DROP `content`;" );
-		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `is_featured` `featured` CHAR(1) NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `featured` `featured` TINYINT(1) NULL DEFAULT '0';" );
-		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `is_approved` `is_approved` CHAR(1) NULL DEFAULT '1';" );
-		$wpdb->query( "ALTER TABLE `{$attachments_table}` CHANGE `is_approved` `is_approved` TINYINT(1) NULL DEFAULT '1';" );
-		$wpdb->query( "ALTER TABLE `{$attachments_table}` ADD `date_gmt` datetime NULL default NULL AFTER `post_id`;" );
-		$wpdb->query( "ALTER TABLE `{$attachments_table}` ADD `type` varchar(254) NULL DEFAULT 'post_images';" );
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` 
+			DROP `content`, 
+			CHANGE `is_featured` `featured` CHAR(1) NULL DEFAULT '0',
+			CHANGE `is_approved` `is_approved` CHAR(1) NULL DEFAULT '1',
+			ADD `date_gmt` datetime NULL default NULL AFTER `post_id`,
+			ADD `type` varchar(254) NULL DEFAULT 'post_images';" 
+		);
+		$wpdb->query( "ALTER TABLE `{$attachments_table}` 
+			CHANGE `featured` `featured` TINYINT(1) NULL DEFAULT '0', 
+			CHANGE `is_approved` `is_approved` TINYINT(1) NULL DEFAULT '1';" 
+		);
 	}
 
 	private static function create_tables() {
@@ -976,6 +1017,265 @@ class GeoDir_Admin_Upgrade {
 		}
 	}
 
+	// Payment Manager
+	public static function update_200_pm_get_options( $options = array() ) {
+		$merge_options = array(
+			'pm_listing_expiry' => get_option( 'geodir_listing_expiry' ),
+			'pm_listing_ex_status' => get_option( 'geodir_listing_ex_status' ),
+			'pm_paid_listing_status' => get_option( 'geodir_paid_listing_status' ),
+			'pm_free_package_renew' => get_option( 'geodir_payment_free_package_renew' ),
+			'pm_cart' => defined( 'WPINV_VERSION' ) ? 'invoicing' : '',
+			'email_user_renew_success' => '1',
+			'email_user_renew_success_subject' => get_option( 'geodir_post_renew_success_email_subject' ),
+			'email_user_renew_success_body' => get_option( 'geodir_post_renew_success_email_content' ),
+			'email_user_upgrade_success' => '1',
+			'email_user_upgrade_success_subject' => get_option( 'geodir_post_upgrade_success_email_subject' ),
+			'email_user_upgrade_success_body' => get_option( 'geodir_post_upgrade_success_email_content' ),
+			'email_user_pre_expiry_reminder' => get_option( 'geodir_listing_preexpiry_notice_disable' ),
+			'email_user_pre_expiry_reminder_subject' => get_option( 'geodir_renew_email_subject' ),
+			'email_user_pre_expiry_reminder_body' => get_option( 'geodir_renew_email_content' ),
+			'email_admin_renew_success' => '1',
+			'email_admin_renew_success_subject' => get_option( 'geodir_post_renew_success_email_subject_admin' ),
+			'email_admin_renew_success_body' => get_option( 'geodir_post_renew_success_email_content_admin' ),
+			'email_admin_upgrade_success' => '1',
+			'email_admin_upgrade_success_subject' => get_option( 'geodir_post_upgrade_success_email_subject_admin' ),
+			'email_admin_upgrade_success_body' => get_option( 'geodir_post_upgrade_success_email_content_admin' ),
+			'email_user_post_expire' => '1',
+			'email_user_post_downgrade' => '1',
+		);
+		$notice_days = array();
+		if ( get_option( 'geodir_listing_preexpiry_notice_days' ) !== false ) {
+			$notice_days[] = absint( get_option( 'geodir_listing_preexpiry_notice_days' ) );
+		}
+		if ( get_option( 'geodir_listing_preexpiry_notice_days2' ) !== false ) {
+			$notice_days[] = absint( get_option( 'geodir_listing_preexpiry_notice_days2' ) );
+		}
+		if ( get_option( 'geodir_listing_preexpiry_notice_days3' ) !== false ) {
+			$notice_days[] = absint( get_option( 'geodir_listing_preexpiry_notice_days3' ) );
+		}
+		$merge_options['email_user_pre_expiry_reminder_days'] = ! empty( $notice_days ) ? array_unique( $notice_days ) : '';
+
+		return array_merge( $options, $merge_options );
+	}
+
+	public static function update_200_pm_create_default_options() {
+		if ( ! ( defined( 'GEODIRPAYMENT_VERSION' ) && version_compare( GEODIRPAYMENT_VERSION, '2.5.0.0', '<=' ) ) ) {
+			$default_options = array(
+				'pm_listing_expiry' => '1',
+				'pm_listing_ex_status' => 'gd-expired',
+				'pm_paid_listing_status' => 'publish',
+				'pm_free_package_renew' => '0',
+				'email_user_renew_success' => '1',
+				'email_user_upgrade_success' => '1',
+				'email_admin_renew_success' => '1',
+				'email_admin_upgrade_success' => '1',
+				'email_user_post_expire' => '1',
+				'email_user_post_downgrade' => '1',
+			);
+
+			foreach ( $default_options as $key => $value ) {
+				geodir_update_option( $key, $value );
+			}
+		}
+	}
+
+	public static function update_200_pm_create_tables() {
+		global $wpdb, $plugin_prefix;
+
+		$collate = '';
+		if ( $wpdb->has_cap( 'collation' ) ) {
+			$collate = $wpdb->get_charset_collate();
+		}
+
+		// Tables
+		$packages_table = $plugin_prefix . 'price';
+		$package_meta_table = $plugin_prefix . 'pricemeta';
+		$post_packages_table = $plugin_prefix . 'post_packages';
+		$invoice_table = $plugin_prefix . 'invoice';
+		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
+
+		// Package meta table
+		$schema = "CREATE TABLE {$package_meta_table} (
+		  `meta_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		  `package_id` int(11) unsigned NOT NULL DEFAULT '0',
+		  `meta_key` varchar(255) DEFAULT NULL,
+		  `meta_value` text,
+		  PRIMARY KEY (`meta_id`),
+		  KEY `package_id` (`package_id`),
+		  KEY `meta_key` (`meta_key`(191))
+		) $collate; ";
+
+		// Post package relationship table
+		$schema .= "CREATE TABLE {$post_packages_table} (
+		  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		  `post_id` int(11) unsigned NOT NULL DEFAULT '0',
+		  `package_id` int(11) unsigned NOT NULL DEFAULT '0',
+		  `cart` varchar(50) NOT NULL,
+		  `invoice_id` int(11) unsigned NOT NULL DEFAULT '0',
+		  `product_id` int(11) unsigned NOT NULL DEFAULT '0',
+		  `task` varchar(50) NOT NULL,
+		  `meta` text NOT NULL,
+		  `date` datetime NOT NULL,
+		  `status` varchar(20) NOT NULL,
+		  PRIMARY KEY (`id`)
+		) $collate; ";
+
+		dbDelta( $schema );
+
+		// Change
+		$wpdb->query( "ALTER TABLE `{$packages_table}` 
+			CHANGE `pid` `id` int(11) unsigned NOT NULL AUTO_INCREMENT, 
+			CHANGE `title` `name` varchar(255) NOT NULL, 
+			CHANGE `amount` `amount` varchar(50) NOT NULL DEFAULT '0', 
+			CHANGE `sub_units` `time_unit` varchar(1) NOT NULL DEFAULT 'M', 
+			CHANGE `sub_active` `recurring` tinyint(1) NOT NULL DEFAULT '0', 
+			CHANGE `sub_units_num_times` `recurring_limit` int(11) unsigned NOT NULL DEFAULT '0', 
+			CHANGE `sub_num_trial_days` `trial_interval` int(11) unsigned NOT NULL DEFAULT '1', 
+			CHANGE `sub_num_trial_units` `trial_unit` varchar(1) NOT NULL DEFAULT 'M', 
+			CHANGE `downgrade_pkg` `downgrade_pkg` int(11) unsigned NOT NULL DEFAULT '0', 
+			CHANGE `is_default` `is_default` tinyint(1) NOT NULL DEFAULT '0';" 
+		);
+		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `title_desc` `title` text NOT NULL;" );
+
+		// Add
+		$wpdb->query( "ALTER TABLE `{$packages_table}` 
+			ADD `time_interval` int(11) unsigned NOT NULL DEFAULT '1' AFTER `days`, 
+			ADD `description` text NOT NULL AFTER `title`, 
+			ADD `post_status` varchar(20) NOT NULL AFTER `status`, 
+			ADD `trial` tinyint(1) NOT NULL DEFAULT '0' AFTER `sub_units_num`;" 
+		);
+		$wpdb->query( "ALTER TABLE `{$packages_table}` 
+			ADD `fa_icon` varchar(50) NOT NULL AFTER `description`, 
+			ADD `trial_amount` varchar(50) NOT NULL DEFAULT '0' AFTER `trial_interval`;" 
+		);
+
+		// Update
+		$wpdb->query( "UPDATE `{$packages_table}` SET `time_interval` = days, time_unit = 'D', post_status= '" . get_option( 'geodir_paid_listing_status' ) . "' WHERE recurring != '1'" );
+		$wpdb->query( "UPDATE `{$packages_table}` SET `time_interval` = sub_units_num, post_status= '" . get_option( 'geodir_paid_listing_status' ) . "' WHERE recurring = '1'" );
+		$wpdb->query( "UPDATE `{$packages_table}` SET `trial` = '1' WHERE trial_interval > 0" );
+
+		// packages data
+		$results = $wpdb->get_results( "SELECT * FROM `{$packages_table}` ORDER BY id ASC" );
+		if ( ! empty( $results ) ) {
+			$metas = array( 'cat', 'is_featured', 'image_limit', 'cat_limit', 'recurring_pkg', 'google_analytics', 'use_desc_limit', 'desc_limit', 'use_tag_limit', 'tag_limit', 'has_upgrades', 'enable_franchise', 'franchise_cost', 'franchise_limit', 'disable_editor' );
+
+			foreach ( $results as $row ) {
+				$row = (array)$row;
+				$package_id = $row['id'];
+
+				$rows = array();
+				// exclude_field
+				$fields = $wpdb->get_col( "SELECT htmlvar_name FROM `{$custom_fields_table}` WHERE post_type = '" . $row['post_type'] . "' AND is_default != '1' AND htmlvar_name != '' AND htmlvar_name != 'post_images' AND NOT FIND_IN_SET( {$package_id}, packages )" );
+				$meta_value = ! empty( $fields ) ? implode( ",", $fields ) : '';
+				$rows[] = "( {$package_id}, 'exclude_field', '{$meta_value}' )";
+
+				foreach ( $metas as $key ) {
+					if ( isset( $row[ $key ] ) ) {
+						$meta_value = $row[ $key ];
+
+						if ( $key == 'cat' ) {
+							$meta_key = 'exclude_category';
+						} else if ( $key == 'cat_limit' ) {
+							$meta_key = 'category_limit';
+						} else if ( $key == 'recurring_pkg' ) {
+							$meta_key = 'no_recurring';
+						} else {
+							$meta_key = $key;
+						}
+
+						$rows[] = "( {$package_id}, '{$meta_key}', '{$meta_value}' )";
+					}
+				}
+
+				// invoicing_product_id
+				$args = array(
+					'post_type'      => 'wpi_item',
+					'posts_per_page' => 1,
+					'post_status'    => 'any',
+					'orderby'        => 'ID',
+					'order'          => 'ASC',
+					'meta_query'     => array( 
+						array(
+							'key'   => '_wpinv_type',
+							'value' => 'package',
+						),
+						array(
+							'key'   => '_wpinv_custom_id',
+							'value' => $package_id,
+						)
+					)
+				);
+				$posts = get_posts( $args );
+				if ( ! empty( $posts[0] ) ) {
+					$meta_value = $posts[0]->ID;
+					$rows[] = "({$package_id}, 'invoicing_product_id', '{$meta_value}')";
+				}
+
+				$wpdb->query( "INSERT INTO `{$package_meta_table}` (`package_id`, `meta_key`, `meta_value`) VALUES " . implode( ", ", $rows ) . ";" );
+			}
+		}
+
+		// invoice to post_packages data
+		$results = $wpdb->get_results( "SELECT * FROM `{$invoice_table}` ORDER BY id ASC" );
+		if ( ! empty( $results ) ) {
+			$geodir_package_product = array();
+			$geodir_package_exists = array();
+
+			foreach ( $results as $row ) {
+				if ( ! isset( $geodir_package_exists[ $row->package_id ] ) ) {
+					if ( $wpdb->get_var( "SELECT id FROM `{$packages_table}` WHERE id = '" . $row->package_id . "' LIMIT 1" ) ) {
+						$geodir_package_exists[ $row->package_id ] = true;
+					} else {
+						$geodir_package_exists[ $row->package_id ] = false;
+					}
+				}
+				if ( empty( $geodir_package_exists[ $row->package_id ] ) ) {
+					continue;
+				}
+
+				$invoice_post = $wpdb->get_row( "SELECT post_date, post_status FROM `{$wpdb->posts}` WHERE ID = '" . $row->invoice_id . "' LIMIT 1" );
+				if ( empty( $invoice_post ) ) {
+					continue;
+				}
+				if ( ! empty( $geodir_package_product[ $row->package_id ] ) ) {
+					$product_id = $geodir_package_product[ $row->package_id ];
+				} else {
+					$product_id = $wpdb->get_var( "SELECT meta_value FROM `{$package_meta_table}` WHERE package_id = '" . $row->package_id . "' AND meta_key = 'invoicing_product_id' ORDER BY meta_id ASC LIMIT 1" );
+					$geodir_package_product[ $row->package_id ] = $product_id;
+				}
+				$task = str_replace( '_listing', '', $row->invoice_type );
+				if ( $task == 'add' ) {
+					$task = 'new';
+				}
+				$meta = (array) maybe_unserialize( $row->invoice_data );
+				$meta['task'] = $task;
+				$data = array(
+					'id' => $row->id,
+					'post_id' => $row->post_id,
+					'package_id' => $row->package_id,
+					'cart' => 'invoicing',
+					'invoice_id' => $row->invoice_id,
+					'product_id' => $product_id,
+					'task' => $task,
+					'meta' => serialize( $meta ),
+					'date' => $invoice_post->post_date,
+					'status' => $invoice_post->post_status,
+				);
+				$wpdb->insert( $post_packages_table, $data, array( '%d', '%d', '%d', '%s', '%d', '%d', '%s', '%s', '%s', '%s' ) );
+			}
+		}
+	}
+
+	public static function update_200_pm_update_version() {
+		$version = defined( 'GEODIR_PRICING_VERSION' ) && version_compare( GEODIR_PRICING_VERSION, '2.5.0.0', '>=' ) ? GEODIR_PRICING_VERSION : '2.5.0.0';
+
+		delete_option( 'geodir_pricing_version' );
+		add_option( 'geodir_pricing_version', $version );
+
+		delete_option( 'geodir_pricing_db_version' );
+		add_option( 'geodir_pricing_db_version', $version );
+	}
+
 	// Custom post types
 	public static function update_200_cp_get_options( $options = array() ) {
 		$merge_options = array(
@@ -1164,12 +1464,14 @@ class GeoDir_Admin_Upgrade {
 		// Locations table
 		$locations_table = $plugin_prefix . 'post_locations';
 
-		$wpdb->query( "ALTER TABLE `{$locations_table}` DROP `country_ISO2`" );
-		$wpdb->query( "ALTER TABLE `{$locations_table}` DROP `city_meta`" );
-		$wpdb->query( "ALTER TABLE `{$locations_table}` DROP `city_desc`" );
-		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE city_latitude latitude varchar(22) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE city_longitude longitude varchar(22) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE is_default is_default CHAR(1) NOT NULL DEFAULT '0'" );
+		$wpdb->query( "ALTER TABLE `{$locations_table}` 
+			DROP `country_ISO2`, 
+			DROP `city_meta`, 
+			DROP `city_desc`, 
+			CHANGE city_latitude latitude varchar(22) NOT NULL, 
+			CHANGE city_longitude longitude varchar(22) NOT NULL, 
+			CHANGE is_default is_default CHAR(1) NOT NULL DEFAULT '0'" 
+		);
 		$wpdb->query( "ALTER TABLE `{$locations_table}` CHANGE is_default is_default TINYINT(1) NOT NULL DEFAULT '0'" );
 
 		// Neighbourhoods table
@@ -1180,14 +1482,16 @@ class GeoDir_Admin_Upgrade {
 		// Location seo table
 		$seo_table = $plugin_prefix . 'location_seo';
 
-		$wpdb->query( "ALTER TABLE `{$seo_table}` DROP `date_created`" );	
-		$wpdb->query( "ALTER TABLE `{$seo_table}` DROP `date_updated`" );
-		$wpdb->query( "ALTER TABLE `{$seo_table}` DROP `seo_title`" );
-		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_meta_title meta_title varchar(254) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_meta_desc meta_desc text NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_desc location_desc text NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_image image varchar(254) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$seo_table}` CHANGE seo_image_tagline image_tagline varchar(140) NOT NULL" );
+		$wpdb->query( "ALTER TABLE `{$seo_table}` 
+			DROP `date_created`, 
+			DROP `date_updated`, 
+			DROP `seo_title`, 
+			CHANGE seo_meta_title meta_title varchar(254) NOT NULL, 
+			CHANGE seo_meta_desc meta_desc text NOT NULL, 
+			CHANGE seo_desc location_desc text NOT NULL, 
+			CHANGE seo_image image varchar(254) NOT NULL, 
+			CHANGE seo_image_tagline image_tagline varchar(140) NOT NULL;" 
+		);
 	}
 
 	public static function update_200_lm_update_version() {
@@ -1248,21 +1552,23 @@ class GeoDir_Admin_Upgrade {
 		// Advance search fields table
 		$table = $plugin_prefix . 'custom_advance_search_fields';
 
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE site_htmlvar_name htmlvar_name varchar(255) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_site_name admin_title varchar(255) NULL DEFAULT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE front_search_title frontend_title varchar(255) NULL DEFAULT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_site_type field_type varchar(100) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE first_search_value range_start int(11) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE search_min_value range_min int(11) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE search_max_value range_max int(11) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE expand_custom_value range_expand int(11) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE searching_range_mode range_mode tinyint(1) NOT NULL DEFAULT '0'" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE search_diff_value range_step int(11) NOT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_input_type input_type varchar(100) NULL DEFAULT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_data_type data_type varchar(100) NULL DEFAULT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE first_search_text range_from_title varchar(255) NULL DEFAULT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE last_search_text range_to_title varchar(255) NULL DEFAULT NULL" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE field_desc description text NULL DEFAULT NULL" );
+		$wpdb->query( "ALTER TABLE `{$table}` 
+			CHANGE site_htmlvar_name htmlvar_name varchar(255) NOT NULL, 
+			CHANGE field_site_name admin_title varchar(255) NULL DEFAULT NULL, 
+			CHANGE front_search_title frontend_title varchar(255) NULL DEFAULT NULL, 
+			CHANGE field_site_type field_type varchar(100) NOT NULL, 
+			CHANGE first_search_value range_start int(11) NOT NULL, 
+			CHANGE search_min_value range_min int(11) NOT NULL, 
+			CHANGE search_max_value range_max int(11) NOT NULL, 
+			CHANGE expand_custom_value range_expand int(11) NOT NULL, 
+			CHANGE searching_range_mode range_mode tinyint(1) NOT NULL DEFAULT '0', 
+			CHANGE search_diff_value range_step int(11) NOT NULL, 
+			CHANGE field_input_type input_type varchar(100) NULL DEFAULT NULL, 
+			CHANGE field_data_type data_type varchar(100) NULL DEFAULT NULL, 
+			CHANGE first_search_text range_from_title varchar(255) NULL DEFAULT NULL, 
+			CHANGE last_search_text range_to_title varchar(255) NULL DEFAULT NULL, 
+			CHANGE field_desc description text NULL DEFAULT NULL;" 
+		);
 
 		// Update fields data
 		$results = $wpdb->get_results( "SELECT id, htmlvar_name, field_type, post_type FROM `{$table}`" );
@@ -1363,10 +1669,12 @@ class GeoDir_Admin_Upgrade {
 		// Event schedule table
 		$table = $plugin_prefix . 'event_schedule';
 
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE event_date start_date date NOT NULL DEFAULT '0000-00-00'" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE event_enddate end_date date NOT NULL DEFAULT '0000-00-00'" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE event_starttime start_time time NOT NULL DEFAULT '00:00:00'" );
-		$wpdb->query( "ALTER TABLE `{$table}` CHANGE event_endtime end_time time NOT NULL DEFAULT '00:00:00'" );
+		$wpdb->query( "ALTER TABLE `{$table}` 
+			CHANGE event_date start_date date NOT NULL DEFAULT '0000-00-00', 
+			CHANGE event_enddate end_date date NOT NULL DEFAULT '0000-00-00', 
+			CHANGE event_starttime start_time time NOT NULL DEFAULT '00:00:00', 
+			CHANGE event_endtime end_time time NOT NULL DEFAULT '00:00:00';" 
+		);
 	}
 
 	public static function update_200_event_update_version() {
@@ -1377,5 +1685,30 @@ class GeoDir_Admin_Upgrade {
 
 		delete_option( 'geodir_event_db_version' );
 		add_option( 'geodir_event_db_version', $version );
+	}
+
+	public static function v2_updated() {
+		global $wpdb, $plugin_prefix;
+
+		if ( get_option( 'geodir_pricing_version' ) && get_option( 'geodir_payments_db_version' ) ) {
+			$package_meta_table = $plugin_prefix . 'pricemeta';
+
+			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-2' WHERE htmlvar_name = 'package_id'" );
+			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-1' WHERE htmlvar_name = 'expire_date'" );
+
+			$results = $wpdb->get_results( "SELECT * FROM {$package_meta_table} WHERE meta_key = 'exclude_field' AND meta_value LIKE '%post_images%'" );
+			if ( ! empty( $results ) ) {
+				foreach ( $results as $row ) {
+					$meta_value = explode( ",", $row->meta_value );
+					$index = array_search( 'post_images', $meta_value );
+					if ( $index !== false ) {
+						unset( $meta_value[ $index ] );
+					}
+					$meta_value = implode( ",", $meta_value );
+
+					$wpdb->query( "UPDATE `{$package_meta_table}` SET `meta_value` = {$meta_value} WHERE meta_id = '" . $row->meta_id . "'" );
+				}
+			}
+		}
 	}
 }

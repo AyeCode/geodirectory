@@ -35,6 +35,18 @@
     &:active {
       color: #fff;
     }
+
+    &.gd-noti-button{
+      font-weight: bold;
+      background: #2fa3ff;
+      padding: 8px;
+      margin: 0px 0px;
+      text-align: right;
+      float: right;
+      border-radius: 5px;
+      text-decoration: none;
+      box-shadow: none !important;
+    }
   }
 
   // @todo we need to add different types here

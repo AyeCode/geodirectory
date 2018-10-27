@@ -638,14 +638,14 @@ class GeoDir_Admin_Install {
 			// Table for storing place attribute - these are user defined
 			$tables .= " CREATE TABLE " . $plugin_prefix . "gd_place_detail (
 						".implode (", \n",self::db_cpt_default_columns()).",
-						".implode (", \n",self::db_cpt_default_keys(false))." 
+						".implode (", \n",self::db_cpt_default_keys())." 
 						) $collate; ";
 		}else{
 			foreach($post_types as $post_type => $cpt){
 				// Table for storing place attribute - these are user defined
 				$tables .= " CREATE TABLE " . $plugin_prefix . $post_type . "_detail (
 						".implode (", \n",self::db_cpt_default_columns($cpt, $post_type)).",
-						".implode (", \n",self::db_cpt_default_keys(false))." 
+						".implode (", \n",self::db_cpt_default_keys($cpt, $post_type))." 
 						) $collate; ";
 			}
 
@@ -1047,7 +1047,7 @@ class GeoDir_Admin_Install {
 	/**
 	 * Get the Custom Post Type database default fields.
 	 *
-	 * @param bool $locationless Is the CPT locationless?
+	 * @param bool $cpt CPT parameters.
 	 * @param string $post_type The post type.
 	 * @since 2.0.0
 	 *
@@ -1090,12 +1090,13 @@ class GeoDir_Admin_Install {
 	/**
 	 * Get the Custom Post Type database default keys.
 	 *
-	 * @param bool $locationless Is the CPT locationless?
+	 * @param bool $cpt CPT parameters.
+	 * @param string $post_type The post type.
 	 * @since 2.0.0
 	 *
 	 * @return array The array of default fields.
 	 */
-	public static function db_cpt_default_keys($cpt = array()){
+	public static function db_cpt_default_keys($cpt = array(), $post_type = ''){
 
 		/*
 		 * Indexes have a maximum size of 767 bytes. Historically, we haven't need to be concerned about that.
@@ -1118,7 +1119,7 @@ class GeoDir_Admin_Install {
 		}
 
 
-		return apply_filters('geodir_db_cpt_default_keys',$keys,$cpt);
+		return apply_filters('geodir_db_cpt_default_keys',$keys,$cpt,$post_type);
 	}
 
     /**

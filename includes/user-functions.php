@@ -50,7 +50,7 @@ function geodir_get_user_favourites( $user_id = '' ) {
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @return array User listing count for each post type.
  */
-function geodir_user_post_listing_count($user_id = null)
+function geodir_user_post_listing_count($user_id = null,$unpublished = false)
 {
 	global $wpdb, $plugin_prefix, $current_user;
 	if(!$user_id){
@@ -60,12 +60,18 @@ function geodir_user_post_listing_count($user_id = null)
 	if(!$user_id){
 		return array();
 	}
+
+	$unpublished_sql = '';
+	if($unpublished){
+		$unpublished_sql = " OR post_status='pending' OR post_status='gd-closed' OR post_status='gd-expired' ";
+	}
 	
 	$all_postypes = geodir_get_posttypes();
 
 	$user_listing = array();
 	foreach ($all_postypes as $ptype) {
-		$total_posts = $wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE post_author=" . $user_id . " AND post_type='" . $ptype . "' AND ( post_status = 'publish' OR post_status = 'draft' OR post_status = 'private' )");
+
+		$total_posts = $wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE post_author=" . $user_id . " AND post_type='" . $ptype . "' AND ( post_status = 'publish' OR post_status = 'draft' OR post_status = 'private' $unpublished_sql )");
 
 		if ($total_posts > 0) {
 			$user_listing[$ptype] = $total_posts;
