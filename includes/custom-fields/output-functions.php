@@ -765,7 +765,7 @@ function geodir_cf_text($html,$location,$cf,$p='',$output=''){
         $html = apply_filters("geodir_custom_field_output_text_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
-    
+
 
     // If not html then we run the standard output.
     if(empty($html)){
@@ -1410,100 +1410,96 @@ function geodir_cf_file($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        if (!empty($gd_post->{$cf['htmlvar_name']})):
+        $files = GeoDir_Media::get_attachments_by_type($gd_post->ID,$html_var);
 
-            $files = explode(",", $gd_post->{$cf['htmlvar_name']});
+        //echo '####';
+        //print_r($files );
+        if (!empty($files)):
 
-            $files = GeoDir_Media::get_attachments_by_type($gd_post->ID,$html_var);
+            $extra_fields = !empty($cf['extra_fields']) ? stripslashes_deep(maybe_unserialize($cf['extra_fields'])) : NULL;
+            $allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
 
-            //echo '####';
-            //print_r($files );
-            if (!empty($files)):
+            $upload_dir = wp_upload_dir();
+            $upload_basedir = $upload_dir['basedir'];
+            $upload_baseurl = $upload_dir['baseurl'];
+            $file_paths = '';
+            foreach ($files as $file) {
 
-                $extra_fields = !empty($cf['extra_fields']) ? stripslashes_deep(maybe_unserialize($cf['extra_fields'])) : NULL;
-                $allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
-
-                $upload_dir = wp_upload_dir();
-                $upload_basedir = $upload_dir['basedir'];
-                $upload_baseurl = $upload_dir['baseurl'];
-                $file_paths = '';
-                foreach ($files as $file) {
-
-                    //print_r($file);
-                    $file_path = isset($file->file) ? $file->file : '';
-                    $title = isset($file->title) ? $file->title : '';
-                    $desc = isset($file->caption) ? $file->caption : '';
-                    $url = $upload_baseurl.$file_path;
+                //print_r($file);
+                $file_path = isset($file->file) ? $file->file : '';
+                $title = isset($file->title) ? $file->title : '';
+                $desc = isset($file->caption) ? $file->caption : '';
+                $url = $upload_baseurl.$file_path;
 //echo $file_path.'###'.$title.'###'.$desc;
 
-                    //continue;
+                //continue;
 
-                    //$file = !empty( $file ) ? geodir_file_relative_url( $file, true ) : '';
-                    
-                    if ( !empty( $file ) ) {
-                        $image_name_arr = explode('/', $url);
-                        $curr_img_dir = $image_name_arr[count($image_name_arr) - 2];
-                        $filename = end($image_name_arr);
-                        $img_name_arr = explode('.', $filename);
+                //$file = !empty( $file ) ? geodir_file_relative_url( $file, true ) : '';
 
-                        $arr_file_type = wp_check_filetype($filename);
-                        if (empty($arr_file_type['ext']) || empty($arr_file_type['type'])) {
-                            continue;
-                        }
+                if ( !empty( $file ) ) {
+                    $image_name_arr = explode('/', $url);
+                    $curr_img_dir = $image_name_arr[count($image_name_arr) - 2];
+                    $filename = end($image_name_arr);
+                    $img_name_arr = explode('.', $filename);
 
-                        $uploaded_file_type = $arr_file_type['type'];
-                        $uploaded_file_ext = $arr_file_type['ext'];
+                    $arr_file_type = wp_check_filetype($filename);
+                    if (empty($arr_file_type['ext']) || empty($arr_file_type['type'])) {
+                        continue;
+                    }
 
-                        if (!empty($allowed_file_types) && !in_array($uploaded_file_ext, $allowed_file_types)) {
-                            continue; // Invalid file type.
-                        }
+                    $uploaded_file_type = $arr_file_type['type'];
+                    $uploaded_file_ext = $arr_file_type['ext'];
 
-                        //$allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
-                        $image_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon');
-                        $audio_file_types = array('audio/mpeg', 'audio/ogg', 'audio/mp4', 'audio/vnd.wav', 'audio/basic', 'audio/mid');
+                    if (!empty($allowed_file_types) && !in_array($uploaded_file_ext, $allowed_file_types)) {
+                        continue; // Invalid file type.
+                    }
 
-                        // If the uploaded file is image
-                        if (1==2 && in_array($uploaded_file_type, $image_file_types)) {
-                            $file_paths .= '<div class="geodir-custom-post-gallery" class="clearfix">';
-                            $file_paths .= '<a href="'.$url.'">';
-                            $file_paths .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
-                            $file_paths .= '</a>';
-                            $file_paths .= '<img src="'.$url.'"  />';
-                            $file_paths .= '</div>';
-                        }elseif (1==2 && in_array($uploaded_file_type, $audio_file_types)) {// if audio
-                            $ext_path = '_' . $html_var . '_';
-                            $filename = explode($ext_path, $filename);
-                            $file_paths .= '<span class="gd-audio-name">'.$filename[count($filename) - 1].'</span>';
-                            $file_paths .= do_shortcode('[audio src="'.$url.'" ]');
-                        } else {
-                            $ext_path = '_' . $html_var . '_';
-                            $filename = explode($ext_path, $filename);
-                            $file_paths .= '<a class="gd-meta-file" href="' . $url . '" target="_blank" data-lity title="'.esc_attr($title).'">' . $filename[count($filename) - 1] . '</a>';
-                        }
+                    //$allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
+                    $image_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon');
+                    $audio_file_types = array('audio/mpeg', 'audio/ogg', 'audio/mp4', 'audio/vnd.wav', 'audio/basic', 'audio/mid');
+
+                    // If the uploaded file is image
+                    if (in_array($uploaded_file_type, $image_file_types)) {
+                        $file_paths .= '<div class="geodir-custom-field-file" class="clearfix">';
+                        $file_paths .= '<a href="'.$url.'" data-lity>';
+                        $file_paths .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
+                        $file_paths .= geodir_get_image_tag($file);
+                        $file_paths .= '</a>';
+                        // $file_paths .= '<img src="'.$url.'"  />';
+                        $file_paths .= '</div>';
+                    }elseif (1==2 && in_array($uploaded_file_type, $audio_file_types)) {// if audio
+                        $ext_path = '_' . $html_var . '_';
+                        $filename = explode($ext_path, $filename);
+                        $file_paths .= '<span class="gd-audio-name">'.$filename[count($filename) - 1].'</span>';
+                        $file_paths .= do_shortcode('[audio src="'.$url.'" ]');
+                    } else {
+                        $ext_path = '_' . $html_var . '_';
+                        $filename = explode($ext_path, $filename);
+                        $file_paths .= '<a class="gd-meta-file" href="' . $url . '" target="_blank" data-lity title="'.esc_attr($title).'">' . $filename[count($filename) - 1] . '</a>';
                     }
                 }
+            }
 
-                $field_icon = geodir_field_icon_proccess($cf);
-                $output = geodir_field_output_process($output);
-                if (strpos($field_icon, 'http') !== false) {
-                    $field_icon_af = '';
-                } elseif ($field_icon == '') {
-                    $field_icon_af = '';
-                } else {
-                    $field_icon_af = $field_icon;
-                    $field_icon = '';
-                }
+            $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
+            if (strpos($field_icon, 'http') !== false) {
+                $field_icon_af = '';
+            } elseif ($field_icon == '') {
+                $field_icon_af = '';
+            } else {
+                $field_icon_af = $field_icon;
+                $field_icon = '';
+            }
 
-                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
-                if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-file" style="' . $field_icon . '">' . $field_icon_af;
-                if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
-                if($output=='' || isset($output['icon']))$html .= '</span>';
-                if($output=='' || isset($output['value']))$html .= $file_paths;
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-file" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= $file_paths;
 
-                $html .= '</div>';
+            $html .= '</div>';
 
-            endif;
         endif;
 
     }
@@ -1610,7 +1606,7 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
             if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
-           // if($output=='' || isset($output['value']))$html .= wpautop($gd_post->{$cf['htmlvar_name']});
+            // if($output=='' || isset($output['value']))$html .= wpautop($gd_post->{$cf['htmlvar_name']});
             if($cf['htmlvar_name']=='post_content'){
                 if($output=='' || isset($output['value'])){
                     if(isset($output['strip'])){
@@ -2079,7 +2075,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 $field_icon_af = $field_icon;
                 $field_icon    = '';
             }
-            
+
             $address_items = array(
                 'street',
                 'neighbourhood',
@@ -2093,7 +2089,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 "geodir_cf_address_template",
                 "%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%"
             );
-            
+
             $address_fields = array();
 
             if ( isset($gd_post->street) ) {
@@ -2111,7 +2107,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ($show_country_in_address && isset( $gd_post->country ) && $gd_post->country ) {
                 $address_fields['country'] = '<span itemprop="addressCountry">' . __( $gd_post->country, 'geodirectory' ) . '</span>';
             }
-            
+
             /**
              * Filter the address fields array being displayed.
              *
@@ -2119,7 +2115,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
              * @param object $gd_post The current post object.
              * @param array $cf The custom field array details.
              * @param string $location The location to output the html.
-             * 
+             *
              * @since 1.6.21
              */
             $address_fields = apply_filters('geodir_custom_field_output_address_fields', $address_fields, $gd_post, $cf, $location);
@@ -2227,13 +2223,13 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
     if ( empty( $html ) ) {
         if ( ! empty( $gd_post->{$cf['htmlvar_name']} ) ) {
             $value = stripslashes_deep($gd_post->{$cf['htmlvar_name']});
-			$business_hours = geodir_get_business_hours( $value );
-			
-			if ( empty( $business_hours['days'] ) ) {
-				return $html;
-			}
-			$show_value = $business_hours['extra']['today_range'];
-			$offset = isset( $business_hours['extra']['offset'] ) ? $business_hours['extra']['offset'] : '';
+            $business_hours = geodir_get_business_hours( $value );
+
+            if ( empty( $business_hours['days'] ) ) {
+                return $html;
+            }
+            $show_value = $business_hours['extra']['today_range'];
+            $offset = isset( $business_hours['extra']['offset'] ) ? $business_hours['extra']['offset'] : '';
 
             if (!empty($show_value)) {
                 $field_icon = geodir_field_icon_proccess($cf);
@@ -2247,33 +2243,33 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                     $field_icon = '';
                 }
 
-				$extra_class = $location == 'owntab' ? ' gd-bh-expanded' : ' gd-bh-toggled';
-				if ( ! empty( $business_hours['extra']['has_closed'] ) ) {
-					$extra_class .= ' gd-bh-closed';
-				}
-				
+                $extra_class = $location == 'owntab' ? ' gd-bh-expanded' : ' gd-bh-toggled';
+                if ( ! empty( $business_hours['extra']['has_closed'] ) ) {
+                    $extra_class .= ' gd-bh-closed';
+                }
+
                 $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . '" style="clear:both;">';
-				$html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
+                $html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
                 $html .= '<span class="gd-bh-expand-range" data-offset="' . geodir_gmt_offset( $offset ) . '" data-offsetsec="' . geodir_gmt_offset( $offset, false ) . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range">' . $show_value . '</span>';
-				$html .= '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span></span>';
-				$html .= '<div class="gd-bh-open-hours">';
-				foreach ( $business_hours['days'] as $day => $slots ) {
-					$class = '';
-					if ( ! empty( $slots['closed'] ) ) {
-						$class .= 'gd-bh-days-closed ';
-					}
-					$html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d">' . $slots['day_short'] . '</div><div class="gd-bh-slots">';
-					foreach ( $slots['slots'] as $i => $slot ) {
-						$attrs = '';
-						if ( ! empty( $slot['time'] ) ) {
-							$attrs .= 'data-open="' . $slot['time'][0] . '"  data-close="' . $slot['time'][1] . '"';
-						}
-						$html .= '<div ' . $attrs . ' class="gd-bh-slot"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
-						$html .= '</div>';
-					}
-					$html .= '</div></div>';
-				}
-				$html .= '</div></div>';
+                $html .= '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span></span>';
+                $html .= '<div class="gd-bh-open-hours">';
+                foreach ( $business_hours['days'] as $day => $slots ) {
+                    $class = '';
+                    if ( ! empty( $slots['closed'] ) ) {
+                        $class .= 'gd-bh-days-closed ';
+                    }
+                    $html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d">' . $slots['day_short'] . '</div><div class="gd-bh-slots">';
+                    foreach ( $slots['slots'] as $i => $slot ) {
+                        $attrs = '';
+                        if ( ! empty( $slot['time'] ) ) {
+                            $attrs .= 'data-open="' . $slot['time'][0] . '"  data-close="' . $slot['time'][1] . '"';
+                        }
+                        $html .= '<div ' . $attrs . ' class="gd-bh-slot"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
+                        $html .= '</div>';
+                    }
+                    $html .= '</div></div>';
+                }
+                $html .= '</div></div>';
 
                 ###
 //                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';

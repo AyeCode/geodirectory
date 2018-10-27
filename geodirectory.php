@@ -11,7 +11,7 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.0.0.32
+ * Version: 2.0.0.33
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
@@ -60,7 +60,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.0.0.32';
+    public $version = '2.0.0.33';
     
     /**
      * GeoDirectory instance.
@@ -160,7 +160,7 @@ final class GeoDirectory {
 		
 		$this->define( 'GEODIR_REST_SLUG', 'geodir' );
 		$this->define( 'GEODIR_REST_API_VERSION', '2' );
-        
+
         // This will store the cached post custom fields per package for each page load so not to run for each listing.
         $geodir_post_custom_fields_cache = array();
     }
