@@ -81,6 +81,19 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
             'advanced' => true
         );
 
+        $get_posts = geodir_get_posttypes('options-plural');
+        $get_posts['all_post'] = 'All Posts';
+
+        $widget_args['post_type'] = array(
+            'title' => __('Default Post Type:', 'geodirectory'),
+            'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
+            'type' => 'select',
+            'options'   =>  $get_posts,
+            'default'  => 'all_post',
+            'desc_tip' => true,
+            'advanced' => true
+        );
+
         return $widget_args;
     }
 
@@ -100,6 +113,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
         $create_rv_nonce = wp_create_nonce('recently_viewed');
         $post_page_limit = !empty( $args['post_limit'] ) ? $args['post_limit'] : '5';
         $layout = !empty( $args['layout'] ) ? $args['layout'] : 'list';
+        $post_type = !empty( $args['post_type'] ) ? $args['post_type'] : 'all_post';
         ob_start();
         ?>
         <div class="geodir-recently-reviewed">
@@ -118,6 +132,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
                     'viewed_post_id' : recently_viewed,
                     'list_per_page' :'<?php echo $post_page_limit; ?>' ,
                     'layout' : '<?php echo $layout; ?>',
+                    'post_type':'<?php echo $post_type; ?>',
                     '_wpnonce' : '<?php echo $create_rv_nonce; ?>'
                 };
 
@@ -148,11 +163,38 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
         if( !empty( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'],'recently_viewed')) {
 
             $list_per_page = !empty($_REQUEST['list_per_page']) ? $_REQUEST['list_per_page'] : '';
-            $layout = !empty( $_REQUEST['layout'] ) ? $_REQUEST['layout'] :'';
+
+            $post_type = !empty($_REQUEST['post_type']) ? $_REQUEST['post_type'] : '';
+
+            $layout = empty( $_REQUEST['layout'] ) ? 'gridview_onehalf' : apply_filters( 'widget_layout', $_REQUEST['layout'] );
+
             $post_ids = !empty($_REQUEST['viewed_post_id']) ? json_decode(stripslashes($_REQUEST['viewed_post_id'])) : '';
-            $post_ids = !empty($post_ids) ? array_reverse($post_ids) : '';
-            $post_ids = !empty($post_ids) ? array_slice($post_ids, 0, $list_per_page) : array();
-            $widget_listings = !empty( $post_ids ) ? array_map('intval', $post_ids) : '';
+
+            $listings_ids = array();
+
+            if( !empty( $post_type ) && 'all_post' != $post_type ) {
+
+                if( !empty( $post_ids ) && $post_ids !='' ) {
+
+                    $listings_ids = $post_ids->$post_type;
+                }
+            } else{
+                if( !empty( $post_ids ) && $post_ids !='' ) {
+                    foreach ( $post_ids as $id_key => $id_val ) {
+                        if( !empty( $id_val ) && $id_val !='' ) {
+                            foreach ( $id_val as $key=> $value ) {
+                                $listings_ids[] = $value;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $listings_ids = !empty( $listings_ids ) ? array_reverse($listings_ids) : array();
+            $listings_ids = !empty($listings_ids) ? array_slice($listings_ids, 0, $list_per_page) : array();
+            $widget_listings = !empty( $listings_ids ) ? array_map('intval', $listings_ids) : '';
+
+            $gd_layout_class = geodir_convert_listing_view_class( $layout );
 
             geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
 
@@ -181,21 +223,55 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
             if( !empty( $get_post_type ) && in_array( $get_post_type,$gd_post_types )) {
                 ?>
                 <script type="text/javascript">
-                    jQuery( document ).ready(function() {
-                        var get_post_id = '<?php echo $get_post_id; ?>',
-                            items_arr = [],
-                            recently_viewed = localStorage.getItem("gd_recently_viewed");
-                        if( null != recently_viewed ) {
-                            items_arr = JSON.parse(localStorage.getItem('gd_recently_viewed'));
-                        }
-                        if( items_arr.length > 0 ) {
-                            if(jQuery.inArray(get_post_id, items_arr) === -1){
-                                items_arr.push(get_post_id);
+                    jQuery( document ).ready(function($) {
+
+                        function is_not_empty(obj) {
+                            for(var key in obj) {
+                                if(obj.hasOwnProperty(key))
+                                    return true;
                             }
-                        } else {
-                            items_arr.push(get_post_id);
+                            return false;
                         }
-                        localStorage.setItem('gd_recently_viewed', JSON.stringify(items_arr));
+
+                        //localStorage.removeItem("gd_recently_viewed");
+
+                        var post_id = '<?php echo $get_post_id; ?>',
+                            post_type = '<?php echo $get_post_type; ?>',
+                            reviewed_arr = {},
+                            recently_reviewed = JSON.parse(localStorage.getItem('gd_recently_viewed'));
+
+                        if( null != recently_reviewed ) {
+
+                            if(is_not_empty(recently_reviewed)) {
+
+                                if ( post_type in recently_reviewed ) {
+
+                                    var temp_post_arr = [];
+
+                                    if( recently_reviewed[post_type].length > 0 ) {
+                                        temp_post_arr = recently_reviewed[post_type];
+                                    }
+
+                                    if(jQuery.inArray(post_id, temp_post_arr) === -1) {
+                                        temp_post_arr.push(post_id);
+                                    }
+
+                                    recently_reviewed[post_type] = temp_post_arr;
+
+                                } else{
+                                    recently_reviewed[post_type] = [post_id];
+                                }
+
+                            } else{
+                                recently_reviewed[post_type] = [post_id];
+                            }
+
+                            localStorage.setItem("gd_recently_viewed", JSON.stringify(recently_reviewed));
+
+                        } else{
+                            reviewed_arr[post_type] = [post_id];
+                            localStorage.setItem("gd_recently_viewed", JSON.stringify(reviewed_arr));
+                        }
                     });
                 </script>
                 <?php
