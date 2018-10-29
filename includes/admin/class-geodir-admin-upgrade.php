@@ -1770,9 +1770,37 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		// Tables
-		$reviews_table = $plugin_prefix . 'post_review';
+		$reviews_table = GEODIR_REVIEW_TABLE;
 		$rating_category_table = $plugin_prefix . 'rating_category';
 		$rating_style_table = $plugin_prefix . 'rating_style';
+
+		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
+			include_once( ABSPATH . 'wp-admin/includes/image.php' );
+		}
+
+		$results = $wpdb->get_results( "SELECT post_id, comment_id, comment_images FROM {$reviews_table} WHERE comment_images != '' ORDER BY comment_id ASC LIMIT 1" );
+		if ( ! empty( $results ) ) {
+			foreach ( $results as $row ) {
+				$images = explode( ',', $row->comment_images );
+				if ( ! empty( $images ) ) {
+					$attachments = array();
+
+					foreach ( $images as $image_src ) {
+						$image_src = trim( $image_src );
+
+						if ( ! empty( $image_src ) ) {
+							$attachment = GeoDir_Media::insert_attachment( $row->post_id, 'comment_images', $image_src, '', '', '', 1, false, $row->comment_id );
+							if ( ! is_wp_error( $attachment ) && ! empty( $attachment['ID'] ) ) {
+								$attachments[] = $attachment['ID'];
+							}
+						}
+					}
+					$comment_images = ! empty( $attachments ) ? implode( ',', $attachments ) : '';
+
+					$wpdb->query( $wpdb->prepare( "UPDATE `{$reviews_table}` SET `attachments` = %s, total_images = %d WHERE comment_id = %d", array( $comment_images, count( $attachments ), $row->comment_id ) ) );
+				}
+			}
+		}
 	}
 
 	public static function update_200_rr_update_version() {
