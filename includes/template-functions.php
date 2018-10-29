@@ -92,6 +92,8 @@ function geodir_get_template_part( $slug, $name = '' ) {
     if ( $template ) {
         load_template( $template, false );
     }
+
+	return '';
 }
 
 /**

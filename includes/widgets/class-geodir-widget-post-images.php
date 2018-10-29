@@ -298,9 +298,9 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			<div class="<?php echo $main_wrapper_class;?>" >
 				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';}?>
 				<div id="<?php echo $slider_id; ?>" class="<?php echo $second_wrapper_class;?>" <?php
-				if($options['controlnav']==1){echo "data-controlnav='1'";}
-				if($options['animation']=='fade'){echo "data-animation='fade'";}
-				if($options['slideshow']){echo "data-slideshow='1'";}
+				if($options['controlnav']==1){echo " data-controlnav='1' ";}
+				if($options['animation']=='fade'){echo " data-animation='fade' ";}
+				if($options['slideshow']){echo " data-slideshow='1' ";}
 				?>>
 					<ul class="<?php echo esc_attr($ul_class );?> geodir-images clearfix"><?php
 						$image_count = 0;

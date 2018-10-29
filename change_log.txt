@@ -1,3 +1,20 @@
+v2.0.0.33
+Image slider fade effect not floating the images left - FIXED
+Map widget now has option to use post map zoom and type set on add listing page - ADDED
+Options added to make authors post and favorites public or private - ADDED
+Distance to calculation will now link to the get directions link if show on the details page - ADDED
+Near searches with empty search query not returning results - FIXED
+TinyMCE editor sometimes not saving if used in visual mode - FIXED
+New custom fields can have the wrong sort order when added - FIXED
+Copy shortcode to clipboard button not working - FIXED
+File custom field can sometimes not show the saved files - FIXED
+Location search and then category search could direct to the wrong url - FIXED
+Beaver builder can break if GD listings widget used on page - FIXED
+Adding a new image and not saving can cause other images not to show - FIXED
+Changes for payment manager compatibility - ADDED
+Details design setting using user email settings filter slug - FIXED
+Upgrade from v1->v2 could cause the add listing page to have tow add listing shortcodes - FIXED
+
 v2.0.0.32
 Switching CPT on directory map not working - FIXED
 GD page template hierarchy not working with some themes and not following WP defaults - FIXED

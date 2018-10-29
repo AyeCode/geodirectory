@@ -156,6 +156,7 @@ function geodir_auto_save_post() {
  * @returns {*}
  */
 function geodir_get_form_data() {
+    geodir_save_all_tinymce_editors();
     return jQuery("#geodirectory-add-post").serialize();
 }
 /**
@@ -582,4 +583,18 @@ var GeoDir_Business_Hours = {
 		result = prefix + '' +  result;
 		return result;
 	}
+};
+
+/**
+ * Save all the tinymce editors or if they are in HTML mode it will not save the last changes.
+ */
+function geodir_save_all_tinymce_editors() {
+    if (typeof tinymce !== 'undefined' && tinymce.editors.length > 0) {
+        for (var i = 0; i < tinymce.editors.length; i++) {
+            // you need to do what is needed here
+            // example: write the content back to the form foreach editor instance
+            tinymce.editors[i].save();
+        }
+    }
 }
+

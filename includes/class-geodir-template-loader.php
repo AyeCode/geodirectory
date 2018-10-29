@@ -338,7 +338,7 @@ class GeoDir_Template_Loader {
 
 
     /**
-     * Setup the GD Archive page content.
+     * Setup the GD Archive item page content.
      *
      * @since 2.0.0
 	 * @param string $post_type Post type.
@@ -346,25 +346,17 @@ class GeoDir_Template_Loader {
      */
     public static function archive_item_template_content($post_type = ''){
 
-        // remove our filter so we don't get stuck in a loop
-       // remove_filter( 'the_content', array( __CLASS__, 'setup_archive_item_page_content' ) );
 
-        // reset the query count so the correct number of listings are output.
-       // rewind_posts();
-
-        // reset the proper loop content
-        global $wp_query,$gd_temp_wp_query;
-        $wp_query->posts = $gd_temp_wp_query;
+//        global $wp_query,$gd_temp_wp_query; //@todo i don't think this is needed here, remove after a few version if not.
+//        if(!empty($gd_temp_wp_query)){
+//            $wp_query->posts = $gd_temp_wp_query;
+//        }
 
         // get the archive template page content
-       // if(geodir_is_page('search')){
-            //$archive_page_id = geodir_search_page_id();
-       // }else{
-            $archive_page_id = geodir_archive_item_page_id($post_type);
-        //}
+        $archive_page_id = geodir_archive_item_page_id($post_type);
         $content = get_post_field('post_content', $archive_page_id  );
 
-        // if the content is blank then just add the main loop
+        // if the content is blank then we grab the page defaults
         if($content==''){
             $content = GeoDir_Defaults::page_archive_item_content();
         }
@@ -372,11 +364,6 @@ class GeoDir_Template_Loader {
         // run the shortcodes on the content
         $content = do_shortcode($content);
 
-        // add our filter back, not sure we even need to add it back if we are only running it once.
-        //add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
-
-        // fake the has_posts() to false so it will not loop any more.
-        //$wp_query->current_post = $wp_query->post_count;
 
         return $content;
     }
