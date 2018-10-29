@@ -897,13 +897,23 @@ class GeoDir_Admin_Upgrade {
 
 		$page_location = geodir_get_option( 'page_location' );
 		if ( $page_location && ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT ID, post_content FROM {$wpdb->posts} WHERE ID = %d", array( (int)$page_location ) ) ) ) ) {
-			$post_content = $row->post_content . ' ' . GeoDir_Defaults::page_location_content();
-			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = %s WHERE ID = %d", array( trim( $post_content ), (int)$page_location ) ) );
+			$default_content = GeoDir_Defaults::page_location_content();
+			if (strpos($row->post_content, $default_content) !== false) {}
+			else{// only add the default content if it is not already there.
+				$post_content = $row->post_content . ' ' . $default_content;
+				$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = %s WHERE ID = %d", array( trim( $post_content ), (int)$page_location ) ) );
+			}
+
 		}
 		$page_add = geodir_get_option( 'page_add' );
 		if ( $page_add && ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT ID, post_content FROM {$wpdb->posts} WHERE ID = %d", array( (int)$page_add ) ) ) ) ) {
-			$post_content = $row->post_content . ' ' . GeoDir_Defaults::page_add_content();
-			$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = %s WHERE ID = %d", array( trim( $post_content ), (int)$page_add ) ) );
+			$default_content = GeoDir_Defaults::page_add_content();
+			if (strpos($row->post_content, $default_content) !== false) {}
+			else{// only add the default content if it is not already there.
+				$post_content = $row->post_content . ' ' . $default_content;
+				$wpdb->query( $wpdb->prepare( "UPDATE {$wpdb->posts} SET post_content = %s WHERE ID = %d", array( trim( $post_content ), (int)$page_add ) ) );
+			}
+
 		}
 
 		GeoDir_Admin_Install::create_pages();

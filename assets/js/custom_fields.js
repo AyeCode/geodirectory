@@ -221,7 +221,7 @@ function gd_save_custom_field(id) {
                 jQuery(document.body).trigger('geodir_on_save_custom_field', [{id: field_id, field: res}]);
 
                 // save order on save
-                gd_tabs_save_order('geodir_order_custom_sort_fields');
+                gd_tabs_save_order('geodir_order_custom_fields');
             }
 
             // int the new select2 boxes
@@ -479,7 +479,7 @@ function gd_delete_custom_field(id, nonce) {
                         } else {
                             jQuery('#setName_' + id).remove();
                             // save order on save
-                            gd_tabs_save_order('geodir_order_custom_sort_fields');
+                            gd_tabs_save_order('geodir_order_custom_fields');
                         }
                     });
             }

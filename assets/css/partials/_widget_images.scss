@@ -14,7 +14,7 @@
       //border: 1px solid #CCCCCC;
       overflow: hidden;
       padding:0 !important;
-      margin: 0 !important;
+      margin: 0; // don't important this as it breaks the fade effect
       border-radius: 4px;
       min-width: 110px;
 

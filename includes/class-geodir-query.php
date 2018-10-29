@@ -531,7 +531,9 @@ class GeoDir_Query {
      */
 	public function author_where($where){
 		global $wp_query,$wpdb;
-//echo '####'.$where;exit;
+
+		$cpts = geodir_get_posttypes('array');
+
 		// author saves/favs filter
 		if(is_author() && !empty($wp_query->query['gd_favs']) ){
 
@@ -559,6 +561,15 @@ class GeoDir_Query {
 					$where = str_replace("$wpdb->posts.post_type = 'post'",$gd_cpt_replace,$where);
 				}
 
+				$user_id = get_current_user_id();
+				$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
+				// check if restricted
+				$post_type = isset($wp_query->query['post_type']) ? $wp_query->query['post_type'] : 'gd_place';
+				$author_favorites_private = isset($cpts[$post_type]['author_favorites_private']) && $cpts[$post_type]['author_favorites_private'] ? true : false;
+				if($author_favorites_private && $author_id != $user_id){
+					$where .= " AND 1=2";
+				}
+
 			}
 		}elseif(is_author()){
 			$user_id = get_current_user_id();
@@ -567,6 +578,14 @@ class GeoDir_Query {
 			if($author_id && $author_id == $user_id){
 				$where = str_replace("{$wpdb->posts}.post_status = 'publish'","{$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'draft' OR {$wpdb->posts}.post_status = 'pending'",$where);
 			}
+
+			// check if restricted
+			$post_type = isset($wp_query->query['post_type']) ? $wp_query->query['post_type'] : 'gd_place';
+			$author_posts_private = isset($cpts[$post_type]['author_posts_private']) && $cpts[$post_type]['author_posts_private'] ? true : false;
+			if($author_posts_private && $author_id != $user_id){
+				$where .= " AND 1=2";
+			}
+
 		}
 
 		return $where;

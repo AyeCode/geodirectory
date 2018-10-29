@@ -210,7 +210,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 				));
 			}
 			elseif($current_section == 'details'){
-				$settings = apply_filters( 'geodir_user_email_settings', array(
+				$settings = apply_filters( 'geodir_details_settings', array(
 
 
 					array('name' => __('Details page', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'admin_design_details_settings'),
