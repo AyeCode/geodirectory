@@ -467,8 +467,8 @@ class GeoDir_Query {
 			if($snear == '' && $mylat && $mylon){$snear = ' ';}
 
 			if ($support_location && $snear != '') {
-				
-				$between = geodir_get_between_latlon($mylat,$mylon,$dist);
+				$radius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
+				//$between = geodir_get_between_latlon($mylat,$mylon,$dist);
 				$post_title_where = $s != "" ? "{$wpdb->posts}.post_title LIKE \"$s\"" : "1=1";
 				$where .= " AND ( ($post_title_where $better_search_terms)
 			                    $content_where 
@@ -477,12 +477,12 @@ class GeoDir_Query {
 						AND $wpdb->posts.post_type in ('{$post_types}')
 						AND ($wpdb->posts.post_status = 'publish')";
 
-				$where .= $wpdb->prepare(" AND latitude between %f and %f AND longitude between %f and %f ",$between['lat1'],$between['lat2'],$between['lon1'],$between['lon2']);
+				//$where .= $wpdb->prepare(" AND latitude between %f and %f AND longitude between %f and %f ",$between['lat1'],$between['lat2'],$between['lon1'],$between['lon2']);
+				$where .= $wpdb->prepare( " AND CONVERT( ( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ABS( {$mylat} ) - ABS( {$table}.latitude ) ) * PI() / 180 / 2 ), 2 ) + COS( ABS( {$mylat} ) * PI() / 180 ) * COS( ABS( {$table}.latitude ) * PI() / 180 ) * POWER( SIN( ( {$mylon} - {$table}.longitude ) * PI() / 180 / 2 ), 2 ) ) ) ), DECIMAL( 64, 4 ) ) <= %f", array( $dist ) );
 
 
 				if (isset($_REQUEST['sdistance']) && $_REQUEST['sdistance'] != 'all') {
-					$DistanceRadius = geodir_getDistanceRadius(geodir_get_option('search_distance_long'));
-					$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
+					$where .= " AND CONVERT((" . $radius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
 				}
 
 			} else {

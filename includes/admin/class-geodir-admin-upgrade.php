@@ -773,10 +773,6 @@ class GeoDir_Admin_Upgrade {
 		if ( self::needs_upgrade( 'review_rating' ) ) {
 			$columns = @$wpdb->get_results("DESC {$reviews_table}");
 
-			if ( empty( $columns ) ) {
-				continue;
-			}
-
 			$fields = array();
 			foreach ( $columns as $key => $column ) {
 				$fields[ $column->Field ] = (array) $column;
@@ -1771,33 +1767,64 @@ class GeoDir_Admin_Upgrade {
 
 		// Tables
 		$reviews_table = GEODIR_REVIEW_TABLE;
-		$rating_category_table = $plugin_prefix . 'rating_category';
 		$rating_style_table = $plugin_prefix . 'rating_style';
+		$attachments_table = GEODIR_ATTACHMENT_TABLE;
 
 		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
 			include_once( ABSPATH . 'wp-admin/includes/image.php' );
 		}
 
-		$results = $wpdb->get_results( "SELECT post_id, comment_id, comment_images FROM {$reviews_table} WHERE comment_images != '' ORDER BY comment_id ASC LIMIT 1" );
+		$results = $wpdb->get_results( "SELECT post_id, comment_id, attachments FROM {$reviews_table} WHERE attachments != '' ORDER BY comment_id ASC" );
 		if ( ! empty( $results ) ) {
+			$last_orders = array();
+
 			foreach ( $results as $row ) {
-				$images = explode( ',', $row->comment_images );
+				$images = explode( ',', $row->attachments );
 				if ( ! empty( $images ) ) {
+					if ( empty( $last_orders[ $row->post_id ] ) ) {
+						$last_order = (int) $wpdb->get_var( $wpdb->prepare( "SELECT MAX( menu_order ) FROM {$attachments_table} WHERE post_id = %d", array( $row->post_id ) ) );
+					} else {
+						$last_order = $last_orders[ $row->post_id ];
+					}
 					$attachments = array();
 
 					foreach ( $images as $image_src ) {
 						$image_src = trim( $image_src );
 
 						if ( ! empty( $image_src ) ) {
-							$attachment = GeoDir_Media::insert_attachment( $row->post_id, 'comment_images', $image_src, '', '', '', 1, false, $row->comment_id );
+							$last_order++;
+							$attachment = GeoDir_Media::insert_attachment( $row->post_id, 'comment_images', $image_src, '', '', $last_order, 1, false, $row->comment_id );
 							if ( ! is_wp_error( $attachment ) && ! empty( $attachment['ID'] ) ) {
 								$attachments[] = $attachment['ID'];
 							}
+							$last_orders[ $row->post_id ] = $last_order;
 						}
 					}
 					$comment_images = ! empty( $attachments ) ? implode( ',', $attachments ) : '';
 
 					$wpdb->query( $wpdb->prepare( "UPDATE `{$reviews_table}` SET `attachments` = %s, total_images = %d WHERE comment_id = %d", array( $comment_images, count( $attachments ), $row->comment_id ) ) );
+				}
+			}
+		}
+
+		// Rating style
+		$wpdb->query( "ALTER TABLE `{$rating_style_table}` 
+			ADD s_rating_icon varchar(100) NOT NULL AFTER `name`, 
+			ADD s_rating_type varchar(25) NOT NULL AFTER `name`, 
+			ADD star_color_off text NOT NULL AFTER `star_color`;" 
+		);
+
+		$results = $wpdb->get_results( "SELECT id, s_img_off FROM {$rating_style_table} WHERE s_img_off != '' ORDER BY id ASC" );
+		if ( ! empty( $results ) ) {
+			foreach ( $results as $i => $row ) {
+				$icon = $row->s_img_off;
+				if ( strpos( $icon, 'plugins/geodir_review_rating_manager/icons/stars.png' ) !== false ) {
+					$icon = GEODIRECTORY_PLUGIN_URL . '/assets/images/stars.png';
+				}
+				$attachment_id = self::update_200_generate_attachment_id( $icon );
+
+				if ( ! empty( $attachment_id ) && ! is_wp_error( $attachment_id ) ) {
+					$wpdb->query( $wpdb->prepare( "UPDATE `{$rating_style_table}` SET s_rating_type = 'image', `s_img_off` = %s, `star_color_off` = '#afafaf' WHERE id = %d", array( $attachment_id, $row->id ) ) );
 				}
 			}
 		}
