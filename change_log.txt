@@ -1,3 +1,6 @@
+v.2.0.0.34
+Search radius settings not filtering the results - FIXED
+
 v2.0.0.33
 Image slider fade effect not floating the images left - FIXED
 Map widget now has option to use post map zoom and type set on add listing page - ADDED
