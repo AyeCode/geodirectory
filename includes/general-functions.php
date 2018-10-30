@@ -615,30 +615,52 @@ function geodir_getDistanceRadius( $uom = 'km' ) {
 	return $earthMeanRadius;
 }
 
-function geodir_get_between_latlon($lat,$lon,$dist=''){
+function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
+	if ( $unit != 'km' && $unit != 'miles' ) {
+		$unit = geodir_get_option( 'search_distance_long', 'miles' );
+	}
 
-	if(!$dist){
-		if(get_query_var('dist')){
+	if ( ! $dist ) {
+		if ( get_query_var( 'dist' ) ) {
 			$dist = get_query_var('dist');
 		}else{
-			$dist = geodir_get_option('search_radius',5); // seems to work in miles
+			$dist = geodir_get_option( 'search_radius', 5 ); // seems to work in miles
+			$unit = geodir_get_option( 'search_distance_long', 'miles' );
 		}
 	}
 
-	// sanatize just in case
-	$lat = filter_var($lat, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-	$lon = filter_var($lon, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-	$dist = is_numeric($dist) && $dist > 0 ? $dist : 5;
-	
-	$lon1 = $lon - $dist / abs(cos(deg2rad($lat)) * 69);
-	$lon2 = $lon + $dist / abs(cos(deg2rad($lat)) * 69);
-	$lat1 = $lat - ($dist / 69);
-	$lat2 = $lat + ($dist / 69);
+	// Convert distance to miles
+	if ( $unit != 'miles' ) {
+		$dist = $dist * 0.6213711922;
+	}
 
-	$rlon1 = is_numeric(min($lon1, $lon2)) ? min($lon1, $lon2) : '';
-	$rlon2 = is_numeric(max($lon1, $lon2)) ? max($lon1, $lon2) : '';
-	$rlat1 = is_numeric(min($lat1, $lat2)) ? min($lat1, $lat2) : '';
-	$rlat2 = is_numeric(max($lat1, $lat2)) ? max($lat1, $lat2) : '';
+	// sanatize just in case
+	$lat = filter_var( $lat, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+	$lon = filter_var( $lon, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+	$dist = (float) $dist > 0 ? (float)$dist : 5;
+
+	$lat1 = $lat - ( $dist / 69 );
+	$lat2 = $lat + ( $dist / 69 );
+	$lon1 = $lon - ( $dist / abs( cos( deg2rad( $lat ) ) * 69 ) );
+	$lon2 = $lon + ( $dist / abs( cos( deg2rad( $lat ) ) * 69 ) );
+
+	$rlat1 = min( $lat1, $lat2 );
+	$rlat2 = max( $lat1, $lat2 );
+	$rlon1 = min( $lon1, $lon2 );
+	$rlon2 = max( $lon1, $lon2 );
+
+	if ( ! is_numeric( $rlat1 ) ) {
+		$rlat1 = '';
+	}
+	if ( ! is_numeric( $rlat2 ) ) {
+		$rlat2 = '';
+	}
+	if ( ! is_numeric( $rlon1 ) ) {
+		$rlon1 = '';
+	}
+	if ( ! is_numeric( $rlon2 ) ) {
+		$rlon2 = '';
+	}
 
 	return array(
 		'lat1' => $rlat1,

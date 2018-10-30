@@ -1563,7 +1563,7 @@ function geodir_array_splice_assoc( $input, $offset, $length, $replacement ) {
  */
 function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ){
 	// check for cache
-	$cache = wp_cache_get( "gd_category_options_".$post_type, 'gd_category_options' );
+	$cache = wp_cache_get( "gd_category_options_".$post_type.":".$hide_empty, 'gd_category_options' );
 	if($cache){
 		return $cache;
 	}
@@ -1586,7 +1586,7 @@ function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ){
 	}
 
 	// set cache
-	wp_cache_set( "gd_category_options_".$post_type, $options, 'gd_category_options' );
+	wp_cache_set( "gd_category_options_".$post_type.":".$hide_empty, $options, 'gd_category_options' );
 
 	return $options;
 }
