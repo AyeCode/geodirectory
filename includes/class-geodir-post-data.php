@@ -855,53 +855,6 @@ class GeoDir_Post_Data {
 			</noscript>
 			<input type="text" id="geodir_filled_by_spam_bot_top_form" name="geodir_filled_by_spam_bot" value="" aria-label="<?php esc_attr_e( 'Type 64 into this box', 'geodirectory' ); ?>"/>
 
-            <?php
-            if( !empty( $_REQUEST['cat'] ) && '' != $_REQUEST['cat'] ) {
-
-                $get_term = get_term_by('name',$_REQUEST['cat'],'gd_placecategory');
-                $term_id = !empty( $get_term->term_id ) ? $get_term->term_id: 0;
-
-                ?>
-                <script type="text/javascript">
-                    jQuery( document ).ready(function() {
-                        var get_cat_id = '<?php echo $term_id;?>',
-                            placecategory = [];
-
-                        jQuery.each(jQuery("select#gd_placecategory option:selected"), function(){
-                            placecategory.push(jQuery(this).val());
-                        });
-
-                        placecategory.push(get_cat_id);
-                        if( '' != get_cat_id ) {
-                            jQuery("select#gd_placecategory").val(placecategory).trigger('change');
-                        }
-                    });
-                </script>
-                <?php
-            }
-            if( !empty( $_REQUEST['location'] ) && $_REQUEST['geo_lat'] && $_REQUEST['geo_long'] ) {
-                ?>
-                 <script type="text/javascript">
-                    jQuery( document ).ready(function() {
-
-                        var gd_lat = '<?php echo $_REQUEST['geo_lat']; ?>',
-                            gd_long = '<?php echo $_REQUEST['geo_long']; ?>',
-                            get_field_lat = jQuery('input#address_latitude').val(),
-                            get_field_long = jQuery('input#address_longitude').val();
-
-                            if( '' == get_field_lat ) {
-                                jQuery('input#address_latitude').val(gd_lat);
-                            }
-
-                        if( '' == get_field_long ) {
-                            jQuery('input#address_longitude').val(gd_long);
-                        }
-
-                    });
-                 </script>
-                <?php
-            }
-            ?>
 			<!-- end captcha code -->
 
 			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both"
