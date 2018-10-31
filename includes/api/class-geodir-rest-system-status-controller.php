@@ -597,7 +597,6 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 			'api_keys',
 			'attachments',
 			'business_hours',
-			'countries',
 			'custom_fields',
 			'custom_sort_fields',
 			'post_review',
@@ -615,6 +614,11 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 		 * If we changed the tables above to include the prefix, then any filters against that table could break.
 		 */
 		$core_tables = array_map( array( $this, 'add_db_table_prefix' ), $core_tables );
+
+		/**
+		 * The countries tabel is not geodir_ prefixed.
+		 */
+		$core_tables[] = $wpdb->prefix.'countries';
 
 		/**
 		 * Organize GeoDirectory and non-GeoDirectory tables separately for display purposes later.

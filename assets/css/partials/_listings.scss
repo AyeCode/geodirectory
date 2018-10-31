@@ -7,7 +7,7 @@ body { // wrapping ina  body tag makes rules more specific
 
 		& > li {
 			margin: 0;
-			padding: 20px 0 0 0;
+			padding: 20px 0 0 0 !important;
 			clear: both;
 			font-size: 12px;
 			list-style: none !important;
@@ -163,6 +163,7 @@ body { // wrapping ina  body tag makes rules more specific
 				margin-bottom: 15px;
 				display: inline-block;
 				vertical-align: top;
+				clear: none;
 
 				.gd-list-item-left, .gd-list-item-right {
 					display: block;
