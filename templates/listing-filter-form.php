@@ -86,8 +86,11 @@ $form_class = apply_filters('geodir_search_form_class', $form_class);
     </div>
     <?php
     global $geodirectory;
+    $latlon = $geodirectory->location->get_latlon();
+    $slat = !empty($latlon['lat']) ? $latlon['lat'] : ''; // already escaped
+    $slon = !empty($latlon['lon']) ? $latlon['lon'] : ''; // already escaped
     ?>
-    <input name="sgeo_lat" class="sgeo_lat" type="hidden" value="<?php if(!empty($geodirectory->location->latitude)){echo sanitize_text_field($geodirectory->location->latitude);}?>"/>
-    <input name="sgeo_lon" class="sgeo_lon" type="hidden" value="<?php if(!empty($geodirectory->location->longitude)){echo sanitize_text_field($geodirectory->location->longitude);}?>"/>
+    <input name="sgeo_lat" class="sgeo_lat" type="hidden" value="<?php echo sanitize_text_field($slat);?>"/>
+    <input name="sgeo_lon" class="sgeo_lon" type="hidden" value="<?php echo sanitize_text_field($slon);?>"/>
     <?php do_action('geodir_search_hidden_fields');?>
 </form>

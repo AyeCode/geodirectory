@@ -1,5 +1,8 @@
-v.2.0.0.34
+v2.0.0.34
+Added extra checks for pre_get_posts filters that were breaking some beaver builder template queries - CHANGED
+Status tool check is countries table is geodir prefixed when it should not - FIXED
 Search radius settings not filtering the results - FIXED
+Search can set lat/lon when not needed - FIXED
 
 v2.0.0.33
 Image slider fade effect not floating the images left - FIXED
