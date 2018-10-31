@@ -153,6 +153,7 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 == Changelog ==
 
 = 2.0.0.0-rc =
+* Added add new listing link when search has no listings. - ADDED
 * Added Posttype option and store ids by posttype on Recently Reviewed Widget. - CHANGED
 * Added Recently Reviewed Widget. - ADDED
 * Updated from font-awesome v4 to v5 - CHANGED
