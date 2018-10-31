@@ -223,6 +223,7 @@ class GeoDir_Post_Data {
 
 		// only fire if $post_temp is set
 		if ( $gd_post = self::$post_temp ) {
+			$gd_post = apply_filters( 'geodir_save_post_temp_data', $gd_post, $post, $update );
 
 //			echo '###';print_r($_REQUEST);echo '###';print_r(self::$post_temp);echo '###';print_r($post);exit;
 
@@ -1679,14 +1680,16 @@ class GeoDir_Post_Data {
 		$schema['url'] = $c_url;
 		$schema['sameAs'] = $external_links;
 		$schema['image'] = $images;
-		$schema['address'] = array(
-			"@type" => "PostalAddress",
-			"streetAddress" => $gd_post->street,
-			"addressLocality" => $gd_post->city,
-			"addressRegion" => $gd_post->region,
-			"addressCountry" => $gd_post->country,
-			"postalCode" => $gd_post->zip
-		);
+		if ( isset( $gd_post->post_type ) && GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) ) {
+			$schema['address'] = array(
+				"@type" => "PostalAddress",
+				"streetAddress" => $gd_post->street,
+				"addressLocality" => $gd_post->city,
+				"addressRegion" => $gd_post->region,
+				"addressCountry" => $gd_post->country,
+				"postalCode" => $gd_post->zip
+			);
+		}
 		if(!empty($gd_post->business_hours)){
 			$business_hours = explode(",[",$gd_post->business_hours);
 			$business_hours = isset($business_hours[0]) ? $business_hours[0] : $business_hours;

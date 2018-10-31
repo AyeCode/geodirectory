@@ -517,10 +517,11 @@ function geodir_cfi_textarea($html,$cf){
                 </div><?php
 
             } else {
-
+				$attributes = apply_filters( 'geodir_cfi_textarea_attributes', array(), $cf );
+				$attributes = is_array( $attributes ) && ! empty( $attributes ) ? implode( ' ', $attributes ) : ''; 
                 ?><textarea field_type="<?php echo $cf['type'];?>" class="geodir_textarea" name="<?php echo $cf['name'];?>"
                 <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
-                            id="<?php echo $cf['name'];?>"><?php echo stripslashes($value);?></textarea><?php
+                            id="<?php echo $cf['name'];?>" <?php echo $attributes; ?>><?php echo stripslashes($value);?></textarea><?php
 
             }?>
 
@@ -1342,7 +1343,7 @@ function geodir_cfi_taxonomy($html,$cf){
 
                     }
 
-                    echo geodir_custom_taxonomy_walker($taxonomy, $category_limit = 0);
+                    echo geodir_custom_taxonomy_walker($taxonomy);
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect')
                         echo '</select>';
@@ -1483,7 +1484,7 @@ function geodir_cfi_categories($html,$cf){
 
                     }
 
-                    echo GeoDir_Admin_Taxonomies::taxonomy_walker($taxonomy, $category_limit = 0);
+                    echo GeoDir_Admin_Taxonomies::taxonomy_walker($taxonomy);
 
                     if ($cat_display == 'select' || $cat_display == 'multiselect')
                         echo '</select>';
