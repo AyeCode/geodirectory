@@ -13,7 +13,7 @@
  * @see     https://wpgeodirectory.com/docs/customizing-geodirectory-templates/
  * @author  AyeCode
  * @package GeoDirectory/Templates
- * @version 1.0.0
+ * @version 1.0.1
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
