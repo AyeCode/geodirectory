@@ -261,6 +261,7 @@ function geodir_is_page( $gdpage = '' ) {
 		$page_id = $wp_query->queried_object_id;
 	}
 
+	//echo 'xxxx'.$page_id;
 	switch ( $gdpage ):
 		case 'add-listing':
 
@@ -339,6 +340,10 @@ function geodir_is_page( $gdpage = '' ) {
 		case 'search':
 			if ( isset( $_REQUEST['geodir_search'] ) || ( is_page() && $page_id == geodir_search_page_id() ) ) {
 				return true;
+			}elseif(isset($wp->query_vars['pagename']) && $page = get_page_by_path( $wp->query_vars['pagename'] )  ){
+				if( isset($page->ID) && $page->ID==geodir_search_page_id()){
+					return true;
+				}
 			}
 			break;
 		default:

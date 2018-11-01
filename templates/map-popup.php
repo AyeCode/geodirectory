@@ -21,22 +21,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $gd_post;
-
 ?>
 <div class="gd-bubble" style="">
-    <div class="gd-bubble-inside">
-        <div class="geodir-bubble_desc">
+	<div class="gd-bubble-inside">
+		<div class="geodir-bubble_desc">
 			[gd_post_title tag='h4']
 			<div class="geodir-bubble_image">
 				[gd_post_images type="image" link_to="post" ajax_load="0" show_logo="true" ]
 			</div>
-			<div class="geodir-bubble-meta-side">
-				[gd_output_location location="mapbubble"]
-			</div>
-			<div class="geodir-bubble-meta-fade"></div>
-			<div class="geodir-bubble-meta-bottom">
+			<div class="geodir-bubble-meta-top">
 				[gd_post_rating alignment='left' ]
 				[gd_post_fav show='' alignment='right' ]
+			</div>
+			<div class="geodir-bubble-meta-side">
+				[gd_output_location location="mapbubble"]
 			</div>
 		</div>
 	</div>
