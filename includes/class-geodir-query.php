@@ -251,12 +251,9 @@ class GeoDir_Query {
 			if ( $support_location && ( $snear != '' || ( ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) ) ) ) {
 				$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
 				$unit = geodir_get_option( 'search_distance_long', 'miles' );
-				if($unit!='miles'){
-					$dist = $dist * 0.6213711922;
-				}
 
 				if (strpos($where, ' HAVING ') === false) {
-					$where .= $wpdb->prepare(" HAVING distance < %f ",$dist); 
+					$where .= $wpdb->prepare(" HAVING distance <= %f ",$dist); 
 				}
 			}
 		}
