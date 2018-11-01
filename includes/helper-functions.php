@@ -1650,3 +1650,48 @@ function geodir_sort_by_options( $post_type = 'gd_place' ) {
 
 	return $options;
 }
+
+/**
+ * Get the post type categories in tree level as an array of options.
+ *
+ * @param string $post_type
+ *
+ * @return array
+ */
+function geodir_category_tree_options( $post_type = 'gd_place', $parent = 0, $hide_empty = false, $all = false, $level = 0 ) {
+	// check for cache
+	$cache = wp_cache_get( "gd_category_options_".$post_type.":".$parent.":".$hide_empty.":".$all.":".$level, 'gd_category_tree_options' );
+	if($cache){
+		return $cache;
+	}
+
+	if ( $level == 0 && $all ) {
+		$options = array(
+			'0' => __( 'All', 'geodirectory' )
+		);
+	} else {
+		$options = array();
+	}
+
+	$terms = get_terms( array( 'taxonomy' => $post_type . 'category', 'parent' => $parent, 'hide_empty' => $hide_empty ) );
+
+	if ( ! is_wp_error( $terms ) ) {
+		foreach ( $terms as $term ) {
+			$prefix = $level > 0 ? str_repeat( '-', $level ) . ' ' : '';
+			$options[ $term->term_id ] = $prefix . geodir_utf8_ucfirst( $term->name );
+
+			$child_options = geodir_category_tree_options( $post_type, $term->term_id, $hide_empty, $all, ( $level + 1 ) );
+
+			if ( ! empty( $child_options ) ) {
+				foreach ( $child_options as $child_id => $child_name ) {
+					$options[ $child_id ] = $child_name;
+				}
+			}
+		}
+	}
+
+	// set cache
+	wp_cache_set( "gd_category_options_".$post_type.":".$parent.":".$hide_empty.":".$all.":".$level, $options, 'gd_category_tree_options' );
+
+	return $options;
+}

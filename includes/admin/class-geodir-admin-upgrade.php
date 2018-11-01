@@ -1200,7 +1200,7 @@ class GeoDir_Admin_Upgrade {
 		// packages data
 		$results = $wpdb->get_results( "SELECT * FROM `{$packages_table}` ORDER BY id ASC" );
 		if ( ! empty( $results ) ) {
-			$metas = array( 'cat', 'is_featured', 'image_limit', 'cat_limit', 'recurring_pkg', 'google_analytics', 'use_desc_limit', 'desc_limit', 'use_tag_limit', 'tag_limit', 'has_upgrades', 'enable_franchise', 'franchise_cost', 'franchise_limit', 'disable_editor' );
+			$metas = array( 'cat', 'is_featured', 'image_limit', 'cat_limit', 'recurring_pkg', 'google_analytics', 'use_desc_limit', 'desc_limit', 'tag_limit', 'has_upgrades', 'enable_franchise', 'franchise_cost', 'franchise_limit', 'disable_editor' );
 
 			foreach ( $results as $row ) {
 				$row = (array)$row;
@@ -1220,6 +1220,8 @@ class GeoDir_Admin_Upgrade {
 							$meta_key = 'exclude_category';
 						} else if ( $key == 'cat_limit' ) {
 							$meta_key = 'category_limit';
+						} else if ( $key == 'tag_limit' ) {
+							$meta_value = ! empty( $row[ 'use_tag_limit' ] ) ? $row[ 'use_tag_limit' ] : 0;
 						} else if ( $key == 'recurring_pkg' ) {
 							$meta_key = 'no_recurring';
 						} else {
