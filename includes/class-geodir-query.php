@@ -51,10 +51,20 @@ class GeoDir_Query {
 		$this->init_query_vars();
 	}
 
+	/**
+	 * Check if this is the main query and we should add our filters.
+	 *
+	 * @param $query
+	 *
+	 * @return bool
+	 */
 	public static function is_gd_main_query($query){
 		$is_main_query = false;
 
-		if(isset($query->query->gd_is_geodir_page) && $query->query->gd_is_geodir_page) {
+		if((isset($query->query->gd_is_geodir_page) || isset($query->query['gd_is_geodir_page']) ) && geodir_is_page('search') && !isset($_REQUEST['geodir_search'])){
+			// if its a search page with no queries then we don't add our filters
+			$is_main_query = false;
+		}elseif(isset($query->query->gd_is_geodir_page) && $query->query->gd_is_geodir_page) {
 			$is_main_query = true;
 		}elseif(isset($query->query['gd_is_geodir_page']) && $query->query['gd_is_geodir_page']) {
 			$is_main_query = true;
@@ -342,7 +352,7 @@ class GeoDir_Query {
 					if ( geodir_column_exist( $table, 'featured' ) ) {
 						$fields .= $wpdb->prepare( ", CASE WHEN " . $table . ".featured=%d THEN 1 ELSE 0 END AS gd_featured ", 1 );
 					}
-					$fields .= $wpdb->prepare( ", CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN ( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN ( " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s ) THEN 1 ELSE 0 END AS gd_content", array(
+					$fields .= $wpdb->prepare( ", CASE WHEN " . $wpdb->posts . ".post_title LIKE %s THEN 1 ELSE 0 END AS gd_exacttitle," . $gd_titlematch_part . " CASE WHEN ( " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s OR " . $wpdb->posts . ".post_title LIKE %s ) THEN 1 ELSE 0 END AS gd_titlematch, CASE WHEN ( " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s OR " . $wpdb->posts . ".post_content LIKE %s ) THEN 1 ELSE 0 END AS gd_content", array(
 						$s,
 						$s,
 						$s . '%',
@@ -350,6 +360,7 @@ class GeoDir_Query {
 						$s,
 						$s . ' %',
 						'% ' . $s . ' %',
+						'%>' . $s . '%',
 						'% ' . $s
 					) );
 				}
@@ -1110,9 +1121,7 @@ class GeoDir_Query {
 					|| $wp->query_vars['page_id'] == geodir_preview_page_id()
 					|| $wp->query_vars['page_id'] == geodir_success_page_id()
 					|| $wp->query_vars['page_id'] == geodir_location_page_id()
-					//|| $wp->query_vars['page_id'] == geodir_search_page_id()
-					|| $wp->query_vars['page_id'] == geodir_info_page_id()
-					|| $wp->query_vars['page_id'] == geodir_login_page_id()
+//					|| $wp->query_vars['page_id'] == geodir_search_page_id()
 				) {
 					$wp->query_vars['gd_is_geodir_page'] = true;
 				}
@@ -1126,6 +1135,7 @@ class GeoDir_Query {
 						|| $page->ID == geodir_preview_page_id()
 						|| $page->ID == geodir_success_page_id()
 						|| $page->ID == geodir_location_page_id()
+						|| $page->ID == geodir_search_page_id()
 					)
 				) {
 					$wp->query_vars['gd_is_geodir_page'] = true;
@@ -1163,7 +1173,6 @@ class GeoDir_Query {
 			if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $wp->query_vars['gd_favs'] )) {
 				$wp->query_vars['gd_is_geodir_page'] = true;
 			}
-
 
 			if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $_REQUEST['geodir_search'] ) ) {
 				$wp->query_vars['gd_is_geodir_page'] = true;

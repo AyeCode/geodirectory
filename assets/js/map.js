@@ -515,7 +515,7 @@ function geodir_fix_marker_pos(map_canvas_var) {
         org_height = mainH < org_height ? mainH : org_height;
         org_height -= (org_height * 0.10);
     }
-    jQuery('#' + map_canvas_var + ' .geodir-bubble_desc').attr('style', 'height:' + org_height + 'px !important');
+    //jQuery('#' + map_canvas_var + ' .geodir-bubble_desc').attr('style', 'height:' + org_height + 'px !important');
 }
 
 function openMarker(map_canvas, id) {

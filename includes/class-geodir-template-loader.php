@@ -50,7 +50,7 @@ class GeoDir_Template_Loader {
             return $template;
         }
 
-        if ( $default_file = self::get_template_loader_default_file() ) {
+        if ( $default_file = self::get_template_loader_default_file() ) {//echo '###'. $default_file;
             /**
              * Filter hook to choose which files to find before GeoDirectory does it's own logic.
              *
@@ -59,7 +59,7 @@ class GeoDir_Template_Loader {
              */
             $search_files = self::get_template_loader_files( $default_file );
             $template     = locate_template( $search_files );
-
+           // echo '###'. $template;
             if ( !$template ) {
                 $template = geodir_get_templates_dir() . '/' . $default_file;
             }
@@ -80,6 +80,10 @@ class GeoDir_Template_Loader {
 
         if(geodir_is_geodir_page()){
             $default_file = ' '; // fake a return to trigger the defaults
+
+            //echo '###xxx';
+        }else{
+            return '';
         }
 
         if ( geodir_is_singular() ) {
@@ -108,13 +112,32 @@ class GeoDir_Template_Loader {
 
             // setup the page content
             add_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
-        } else{
+        } elseif(geodir_is_page( 'location' )){
+            $page_id = geodir_location_page_id();
+            if($page_id &&  $template = get_page_template_slug( $page_id )){
+                // make sure the template exists before loading it, it might be from a old theme
+                if(locate_template( $template )){
+                    //$wp_query->is_page = 1; //@todo, is this needed? (depends on theme?)
+                    $default_file = $template;
+                }
+            }
+        } elseif(geodir_is_page( 'add-listing' )){
+            $page_id = geodir_add_listing_page_id();
+            if($page_id &&  $template = get_page_template_slug( $page_id )){
+                // make sure the template exists before loading it, it might be from a old theme
+                if(locate_template( $template )){
+                    //$wp_query->is_page = 1; //@todo, is this needed? (depends on theme?)
+                    $default_file = $template;
+                }
+            }
+        }else{
 
             $archive_template = geodir_get_option('archive_page_template');
 
             if($archive_template && locate_template( $archive_template )){
                 $default_file = $archive_template;
             }else{
+                $wp_query->is_page = 1; //@todo, is this needed? (depends on theme?)
                 $post_type = geodir_get_current_posttype();
 
                 if(geodir_is_page( 'search' ) ){
@@ -128,7 +151,7 @@ class GeoDir_Template_Loader {
                 if($page_id &&  $template = get_page_template_slug( $page_id )){
                     // make sure the template exists before loading it, it might be from a old theme
                     if(locate_template( $template )){
-                        $wp_query->is_page = 1;
+                        //$wp_query->is_page = 1; //@todo, is this needed? (depends on theme?)
                         $default_file = $template;
                     }
                 }
@@ -155,6 +178,8 @@ class GeoDir_Template_Loader {
             }
         }
 
+       // echo '###'.$default_file.'###';
+
         return $default_file;
     }
 
@@ -168,10 +193,8 @@ class GeoDir_Template_Loader {
     private static function get_template_loader_files( $default_file ) {
         $search_files = apply_filters( 'geodir_template_loader_files', array(), $default_file );
 
-        if(geodir_is_page('archive') || geodir_is_page('search')){
-            $search_files[] = 'geodirectory-archive.php';
-        }
 
+//echo '@@@'.$default_file.'@@@';
 
 
         if ( geodir_is_taxonomy() ) {
@@ -185,6 +208,11 @@ class GeoDir_Template_Loader {
 
         $search_files[] = $default_file;
         $search_files[] = geodir_get_theme_template_dir_name() . '/' . $default_file;
+
+        //echo '>>>';global $wp_query;print_r($wp_query);
+        if(geodir_is_page('archive') || geodir_is_page('search')){//echo '<<<';
+            $search_files[] = 'geodirectory-archive.php';
+        }
 
         $search_files[] = 'geodirectory.php';
         $search_files[] = 'page.php';

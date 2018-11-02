@@ -272,7 +272,7 @@ jQuery(document).ready(function($) {
         jQuery('#gd-tabs .geodir-tab-head').toggle();
     });
     
-    gd_infowindow = (typeof google !== 'undefined' && typeof google.maps !== 'undefined') ? new google.maps.InfoWindow() : null;
+    gd_infowindow = (typeof google !== 'undefined' && typeof google.maps !== 'undefined') ? new google.maps.InfoWindow({maxWidth: 200}) : null;
     
     // Chosen selects
     if (jQuery("select.chosen_select").length > 0) {
@@ -1490,4 +1490,4 @@ function gd_set_get_directions($lat,$lon){
         jQuery('#gd_map_canvas_post_fromAddress').val($lat+","+$lon);
         jQuery('.gd-map-get-directions').trigger('click');
     }
-} 
+}
