@@ -1,5 +1,6 @@
 v2.0.0.35
 Details about v1 to v2 conversion - ADDED
+Edit add listing page not loads with Beaver Builder - FIXED
 
 v2.0.0.34
 Added extra checks for pre_get_posts filters that were breaking some beaver builder template queries - CHANGED
