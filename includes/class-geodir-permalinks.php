@@ -135,7 +135,8 @@ class GeoDir_Permalinks {
 							if($url_segment == $maybe_slug ){continue;}
 
 							// check its not a term also
-							if(empty(get_term_by( 'slug', $url_segment, $post_type."category"))){
+							$is_term = get_term_by( 'slug', $url_segment, $post_type."category");
+							if(empty($is_term)){
 								$location_segments[] = $url_segment;
 							}
 						}
@@ -159,7 +160,8 @@ class GeoDir_Permalinks {
 							if($url_segment == $maybe_slug ){continue;}
 
 							// check its not a term also
-							if(empty(get_term_by( 'slug', $url_segment, $post_type."_tags"))){
+							$is_term = get_term_by( 'slug', $url_segment, $post_type."_tags");
+							if(empty($is_term)){
 								$location_segments[] = $url_segment;
 							}
 						}

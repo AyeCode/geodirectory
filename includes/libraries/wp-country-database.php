@@ -122,8 +122,10 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 			// empty table first
 			$this->empty_table();
 
+			$current_countries = $this->get_countries();
+
 			// make sure the table is empty
-			if(empty($this->get_countries())){
+			if(empty($current_countries)){
 				$countries = $this->get_latest_countries();
 				$table_keys = $this->table_keys();
 				$countries_sql = "INSERT INTO `" . $this->db_table . "` (`".implode("`,`",$table_keys)."`) VALUES ";
