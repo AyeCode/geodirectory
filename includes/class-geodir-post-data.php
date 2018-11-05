@@ -840,9 +840,8 @@ class GeoDir_Post_Data {
 			 */
 			do_action( 'geodir_after_main_form_fields' ); ?>
 
-
+			<?php if ( ! self::skip_spamblocker() ) { ?>
 			<!-- add captcha code -->
-
 			<script>
 				/*<!--<script>-->*/
 				document.write('<inp' + 'ut type="hidden" id="geodir_sp' + 'amblocker_top_form" name="geodir_sp' + 'amblocker" value="64"/>');
@@ -855,10 +854,8 @@ class GeoDir_Post_Data {
 				</div>
 			</noscript>
 			<input type="text" id="geodir_filled_by_spam_bot_top_form" name="geodir_filled_by_spam_bot" value="" aria-label="<?php esc_attr_e( 'Type 64 into this box', 'geodirectory' ); ?>"/>
-
-
 			<!-- end captcha code -->
-
+			<?php } ?>
 			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both"
 			     style="padding:2px;text-align:center;">
 				<input type="submit" value="<?php echo __( 'Submit Listing', 'geodirectory' ); ?>"
@@ -1833,6 +1830,14 @@ class GeoDir_Post_Data {
 		$classes = apply_filters( 'post_class', $classes, $class, $post->ID );
 
 		return array_unique( $classes );
+	}
+
+	public static function skip_spamblocker() {
+		if ( class_exists( 'FLBuilder' ) && isset( $_REQUEST['fl_builder'] ) ) {
+			return true; // Skip spam blocker in Beaver Builder page edit mode.
+		}
+
+		return false;
 	}
 
 }
