@@ -137,11 +137,12 @@ class GeoDir_Template_Loader {
             if($archive_template && locate_template( $archive_template )){
                 $default_file = $archive_template;
             }else{
-                $wp_query->is_page = 1; //@todo, is this needed? (depends on theme?)
                 $post_type = geodir_get_current_posttype();
+                //$wp_query->is_page = 1; //@todo, is this needed? (depends on theme?)
 
                 if(geodir_is_page( 'search' ) ){
                     $page_id = geodir_search_page_id();
+                   // $wp_query->is_page = 1; //@todo, is this needed? (depends on theme?)
                 }
 
                 if(!isset($page_id)){
@@ -229,7 +230,7 @@ class GeoDir_Template_Loader {
      */
     public static function setup_archive_page_content(){
 		global $post;
-
+        //echo '###1';exit;
 		// Backpup post.
 		$gd_backup_post = $post;
 		
@@ -292,11 +293,10 @@ class GeoDir_Template_Loader {
         global $gd_temp_wp_query;
 
         // Set our temp var with the main query posts.
-
-
         $gd_temp_wp_query = $wp_query->posts;
 
 
+        //print_r($gd_temp_wp_query ); echo '@@@';
         // Set the main query to our archive page template
         if(geodir_is_page('search')){
             $archive_page_id = geodir_search_page_id();
@@ -306,9 +306,11 @@ class GeoDir_Template_Loader {
         }
         $archive_page = get_post($archive_page_id);
         $wp_query->posts = array($archive_page);
+        //$wp_query->posts = array();
+        $wp_query->post = $archive_page;
 
 
-        // if no posts ar found then the page will not display so we fake it
+        // if no posts are found then the page will not display so we fake it
         if(empty($gd_temp_wp_query)){
             $wp_query->post_count = 1;
         }
