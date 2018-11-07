@@ -86,9 +86,12 @@
     z-index: 100;
     cursor: pointer;
     font-size: 20px;
-    color: #555;
+    color: #FFFFFF;
     text-shadow: 1px 1px 4px rgba(38, 38, 38, 1);
     transition: font-size 0.5s;
+    svg{
+        filter: drop-shadow(0 0 1px #969696);
+    }
 }
 
 #post_mapTab .triggermap,
@@ -118,6 +121,7 @@
 .body_fullscreen .stick_trigger_container{
     position: relative;
     z-index: 150000;
+    filter: drop-shadow(0 0 1px #969696);
 }
 
 .loading_div {
