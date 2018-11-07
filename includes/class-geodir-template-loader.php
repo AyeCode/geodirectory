@@ -293,6 +293,14 @@ class GeoDir_Template_Loader {
      */
     public static function setup_archive_loop_as_page(){
 
+
+        /*
+         * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
+         */
+        if(apply_filters('geodir_bypass_setup_archive_loop_as_page',false)){
+            return;
+        }
+
         // get the main query
         global $wp_query;
 
