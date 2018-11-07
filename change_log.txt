@@ -5,6 +5,7 @@ Countries table lib checking empty on non variable - FIXED
 Changes to loop widget for Beaver Builder themer layouts - CHANGED
 Themes calling the_content or the_excerpt outside the loop can cause no posts to show - FIXED
 Post Badge widget can now use %%input%% text and also has option to add link - ADDED
+Recent reviews widget now has option to set the minimum rating of reviews to show - ADDED
 
 v2.0.0.34
 Added extra checks for pre_get_posts filters that were breaking some beaver builder template queries - CHANGED

@@ -55,6 +55,14 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
                     'desc_tip' => true,
                     'advanced' => true
                 ),
+                'min_rating'  => array(
+	                'title' => __('Minimum rating of reviews:', 'geodirectory'),
+	                'desc' => __('This will only show reviews with a rating of this number or above.', 'geodirectory'),
+	                'type' => 'number',
+	                'default'  => '',
+	                'desc_tip' => true,
+	                'advanced' => true
+                ),
 			    'add_location_filter'  => array(
 				    'title' => __("Enable location filter", 'geodirectory'),
 				    'type' => 'checkbox',
@@ -90,6 +98,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
         $defaults = array(
             'title' => '',
             'count' => '5',
+            'min_rating' => 0,
 			'add_location_filter' => '',
 			'use_viewing_post_type' => ''
         );
@@ -150,7 +159,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
         $use_viewing_post_type = apply_filters( 'geodir_recent_reviews_widget_use_viewing_post_type', empty( $instance['use_viewing_post_type'] ) ? false : true, $instance, $this->id_base );
         $post_type = $use_viewing_post_type ? geodir_get_current_posttype() : '';
 
-        $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter);
+        $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter,$instance['min_rating']);
 
 		$content = '';
         if ( !empty( $comments_li ) ) {
@@ -187,13 +196,17 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 	 *
 	 * @return string Returns the recent reviews html.
 	 */
-	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false ) {
+	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0 ) {
 		global $wpdb, $tablecomments, $tableposts, $rating_table_name, $table_prefix;
 		$tablecomments = $wpdb->comments;
 		$tableposts    = $wpdb->posts;
 		$comments_echo  = '';
 		$join = "JOIN " . $wpdb->comments . " AS c ON c.comment_ID = r.comment_id JOIN " . $wpdb->posts . " AS p ON p.ID = c.comment_post_ID";
 		$where = "c.comment_parent = 0 AND c.comment_approved = 1 AND r.rating > 0 AND p.post_status = 'publish'";
+
+		if(absint($min_rating)){
+			$where .= $wpdb->prepare(" AND r.rating >= %d ",absint($min_rating));
+		}
 
 		if ( !empty( $post_type ) ) {
 			$where .= $wpdb->prepare( " AND p.post_type = %s", $post_type );
