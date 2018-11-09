@@ -88,6 +88,10 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 
 		//print_r($args);
 
+		if(is_preview()){
+			return;
+		}
+
 		$defaults = array(
 			'hide_edit'      => 0,
 			'hide_delete'      => 0,
