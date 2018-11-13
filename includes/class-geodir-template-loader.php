@@ -229,16 +229,21 @@ class GeoDir_Template_Loader {
      * @return string The filtered content.
      */
     public static function setup_archive_page_content(){
-		global $post;
+		global $post,$gd_done_archive_loop;
 
         // if its outside the loop then bail so we don't set the current_post number and cause has_posts() to return false.
         if(!in_the_loop()){
-            return;
+
+            if(current_filter()=='the_excerpt' && $gd_done_archive_loop){
+                // we might be inside a "the_excerpt" filter which might be outside the loop so we don't return.
+            }else{
+                return;
+            }
         }
 
 		// Backpup post.
 		$gd_backup_post = $post;
-		
+
         // remove our filter so we don't get stuck in a loop
         remove_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
         remove_filter( 'the_excerpt', array( __CLASS__, 'setup_archive_page_content' ) );
@@ -283,6 +288,11 @@ class GeoDir_Template_Loader {
 		if ( ! empty( $gd_backup_post ) ) {
 			$post = $gd_backup_post;
 		}
+
+
+        // set that the gd archive loop has run.
+        $gd_done_archive_loop = true;
+
         return $content;
     }
 
@@ -329,6 +339,10 @@ class GeoDir_Template_Loader {
         if(empty($gd_temp_wp_query)){
             $wp_query->post_count = 1;
         }
+
+        // we set a global so we can check if the gd archive loop has run
+        global $gd_done_archive_loop;
+        $gd_done_archive_loop = false;
 
         // add the filter to call our own loop for the archive page content.
         add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );

@@ -119,6 +119,12 @@ class GeoDir_Media {
 			echo 'x';
 		}
 
+		// if file exists it should have been moved if uploaded correctly so now we can remove it
+		if(!empty($status['file'])){
+			wp_delete_file( $status['file'] );
+		}
+
+
 		exit;
 	}
 
