@@ -21,7 +21,6 @@ class GeoDir_SEO {
 	public static $meta_title = '';
 	public static $meta_description = '';
 
-	public static $sep = '&#8211;';
 	public static $gd_page = '';
 	public static $doing_menu = false;
 
@@ -161,7 +160,6 @@ class GeoDir_SEO {
 	 * @return mixed|void
 	 */
 	public static function output_meta_title($title = '', $sep = ''){
-		if($sep){self::$sep = $sep;}
 		if(self::$meta_title){
 			$title = self::$meta_title;
 		}
@@ -293,7 +291,7 @@ class GeoDir_SEO {
 		$post_type = geodir_get_current_posttype();
 
 		if ( strpos( $string, '%%sep%%' ) !== false ) {
-			$string = str_replace( "%%sep%%", self::$sep, $string );
+			$string = str_replace( "%%sep%%", self::separator(), $string );
 		}
 
 		if ( strpos( $string, '%%title%%' ) !== false ) {
@@ -403,7 +401,7 @@ class GeoDir_SEO {
 
 		// page numbers
 		if ( strpos( $string, '%%page%%' ) !== false ) {
-			$page  = geodir_title_meta_page( self::$sep );
+			$page  = geodir_title_meta_page( self::separator() );
 			$string = str_replace( "%%page%%", $page, $string );
 		}
 		if ( strpos( $string, '%%pagenumber%%' ) !== false ) {
@@ -525,6 +523,24 @@ class GeoDir_SEO {
 		}
 		
 		return $output;
+	}
+
+	/**
+     * Document title separator.
+     *
+     * @since 2.0.0.35
+     *
+     * @return string $sep.
+     */
+	public static function separator() {
+		/**
+		 * Filters the separator for the document title.
+		 *
+		 * @since 2.0.0.35
+		 *
+		 * @param string $sep Document title separator. Default '-'.
+		 */
+		return apply_filters( 'document_title_separator', '-' );
 	}
 	
 }
