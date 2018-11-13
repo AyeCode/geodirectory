@@ -259,7 +259,7 @@ function geodir_validate_admin_submit(form) {
 function geodir_validate_submit(form) {
     var is_validate = true;
     jQuery(form).find(".required_field:visible").each(function() {
-        jQuery(this).find("[field_type]:visible, .chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field").each(function() {
+        jQuery(this).find("[field_type]:visible,.gd-recaptcha-hidden-response,.chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field").each(function() {
             // if (jQuery(this).is('.chosen_select, .geodir_location_add_listing_chosen')) {
             //     var chosen_ele = jQuery(this);
             //     jQuery('#' + jQuery(this).attr('id') + '_chzn').mouseleave(function () {
@@ -372,6 +372,20 @@ function geodir_validate_field(field) {
             } else {
                 if (field.value != '')
                     is_error = false;
+            }
+            break;
+        case 'recaptcha':
+
+            var recaptcha_ver = jQuery(field).val();
+
+            if( 'invisible' != recaptcha_ver ) {
+
+                is_error = jQuery('.g-recaptcha-response').val() ? false : true;
+
+            } else{
+
+                var test = jQuery('#recaptcha-token').val();
+                is_error = jQuery('#recaptcha-token').val() ? false : true;
             }
             break;
         default:
