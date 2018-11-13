@@ -8,6 +8,7 @@ Post Badge widget can now use %%input%% text and also has option to add link - A
 Recent reviews widget now has option to set the minimum rating of reviews to show - ADDED
 get_post_meta() can now get GD post fields if meta_key is prefixed with `geodir_` - ADDED
 Author action should not show on post preview page - FIXED
+Not way to change title separator for GD pages title - FIXED
 
 v2.0.0.34
 Added extra checks for pre_get_posts filters that were breaking some beaver builder template queries - CHANGED
