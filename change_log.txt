@@ -1,8 +1,13 @@
 v2.0.0.35
 Details about v1 to v2 conversion - ADDED
-Edit add listing page not loads with Beaver Builder - FIXED
+Edit add listing page not loading with Beaver Builder - FIXED
 Countries table lib checking empty on non variable - FIXED
 Changes to loop widget for Beaver Builder themer layouts - CHANGED
+Themes calling the_content or the_excerpt outside the loop can cause no posts to show - FIXED
+Post Badge widget can now use %%input%% text and also has option to add link - ADDED
+Recent reviews widget now has option to set the minimum rating of reviews to show - ADDED
+get_post_meta() can now get GD post fields if meta_key is prefixed with `geodir_` - ADDED
+Author action should not show on post preview page - FIXED
 
 v2.0.0.34
 Added extra checks for pre_get_posts filters that were breaking some beaver builder template queries - CHANGED

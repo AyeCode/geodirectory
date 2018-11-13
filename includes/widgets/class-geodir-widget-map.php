@@ -1011,7 +1011,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						<div class="top_banner_section_in clearfix">
 							<div class="<?php echo $map_canvas; ?>_TopLeft TopLeft"><span class="triggermap"
 							                                                              id="<?php echo $map_canvas; ?>_triggermap"><i
-										class="fas fa-arrows-alt" aria-hidden="true"></i></span></div>
+										class="fas fa-expand-arrows-alt" aria-hidden="true"></i></span></div>
 							<div class="<?php echo $map_canvas; ?>_TopRight TopRight"></div>
 							<div id="<?php echo $map_canvas; ?>_wrapper" class="main_map_wrapper"
 							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;">

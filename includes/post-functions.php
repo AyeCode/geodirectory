@@ -696,6 +696,7 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 		'condition' => '',
 		'search'    => 'is_equal',
 		'badge'     => '',
+		'link'     => '',
 		'bg_color'  => '#0073aa',
 		'txt_color' => '#ffffff',
 		'size'      => '',
@@ -725,9 +726,7 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 				}
 			}
 			if ( ! empty( $field ) ) {
-				if ( empty( $badge ) ) {
-					$badge = $field['frontend_title'];
-				}
+
 
 				// Check if there is a specific filter for key type.
 				if ( has_filter( 'geodir_output_badge_key_' . $field['field_type_key'] ) ) {
@@ -792,6 +791,19 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 				}
 			}
 			if ( $match_found ) {
+
+				// badge text
+				if ( empty( $badge ) ) {
+					$badge = $field['frontend_title'];
+				}elseif( !empty( $badge ) && $badge = str_replace("%%input%%",$match_value,$badge) ){
+					// will be replace in condition check
+				}
+
+				//link url
+				if( !empty( $args['link'] ) && $args['link'] = str_replace("%%input%%",$match_value,$args['link']) ){
+					// will be replace in condition check
+				}
+
 				if ( empty( $badge ) && $match_field == 'post_date' ) {
 					$badge = __( 'NEW', 'geodirectory' );
 				}
@@ -805,7 +817,9 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 				}
 
 				$output = '<div class="gd-badge-meta ' . trim( $class ) . '">';
-				$output .= '<div data-id="' . $find_post->ID . '" class="gd-badge" data-badge="' . $match_field . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . __( $badge, 'geodirectory' ) . '</div>';
+				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' >";}
+				$output .= '<div data-id="' . $find_post->ID . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . esc_html__( $badge, 'geodirectory' ) . '</div>';
+				if(!empty($args['link'])){$output .= "</a>";}
 				$output .= '</div>';
 			}
 		}

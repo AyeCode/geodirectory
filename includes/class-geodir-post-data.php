@@ -69,8 +69,42 @@ class GeoDir_Post_Data {
 		// wp_restore_post_revision
 		add_action('wp_restore_post_revision', array( __CLASS__, 'restore_post_revision'), 10,2);
 
+		// make GD post meta available through the standard get_post_meta() function if prefixed with `geodir_`
+		add_filter('get_post_metadata', array( __CLASS__,'dynamically_add_post_meta'), 10, 4);
 
 
+	}
+
+
+	/**
+	 * Make GD post meta available through the standard get_post_meta() function if prefixed with `geodir_`
+	 *
+	 * @param $metadata
+	 * @param $object_id
+	 * @param $meta_key
+	 * @param $single
+	 *
+	 * @return bool|mixed|null|string
+	 */
+	public static function dynamically_add_post_meta($metadata, $object_id, $meta_key, $single) {
+
+		if(strpos($meta_key, 'geodir_') === 0) { //strpos is faster and since we have to do it with every query we do the fast one first and the slower onw only if we ahve to
+			$meta_key = substr($meta_key, 7);
+			//use $wpdb to get the value
+			global $post,$gd_post;
+
+			// first check we have the info in the global (means no DB query)
+			if(!empty($gd_post->ID) && $gd_post->ID==$object_id && isset($gd_post->{$meta_key})){
+				$metadata = $gd_post->{$meta_key};//echo '###xxxx'.$meta_key;
+			}else{
+				$maybe_meta = geodir_get_post_meta($object_id, $meta_key, $single);
+				if(!empty($maybe_meta)){
+					$metadata = $maybe_meta;
+				}
+			}
+		}
+
+		return $metadata;
 	}
 
 	/**

@@ -55,6 +55,7 @@ class GeoDir_Compatibility {
 		Beaver Builder :: Fix font-awesome.
 		######################################################*/
 		add_filter('wp_print_scripts',array(__CLASS__,'beaver_builder'),100);
+		add_filter('geodir_bypass_setup_archive_loop_as_page', array(__CLASS__,'beaver_builder_loop_bypass'));
 
 		/*######################################################
 		WP Easy Updates :: Allow beta addons if set
@@ -74,6 +75,26 @@ class GeoDir_Compatibility {
 		// after_setup_theme checks
 		add_action( 'after_setup_theme', array(__CLASS__,'for_later_checks') );
 
+	}
+
+	/**
+	 * Stop the GD loop setup if beaver builder themer is overiding it.
+	 * 
+	 * @param $bypass
+	 *
+	 * @return bool
+	 */
+	public static function beaver_builder_loop_bypass($bypass){
+
+		if(class_exists('FLThemeBuilderLayoutData')){
+			$ids = FLThemeBuilderLayoutData::get_current_page_content_ids();
+
+			if(!empty($ids)){
+				$bypass = true;
+			}
+		}
+
+		return $bypass;
 	}
 
 	/**

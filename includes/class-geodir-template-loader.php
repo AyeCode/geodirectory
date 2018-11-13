@@ -230,12 +230,18 @@ class GeoDir_Template_Loader {
      */
     public static function setup_archive_page_content(){
 		global $post;
-        //echo '###1';exit;
+
+        // if its outside the loop then bail so we don't set the current_post number and cause has_posts() to return false.
+        if(!in_the_loop()){
+            return;
+        }
+
 		// Backpup post.
 		$gd_backup_post = $post;
 		
         // remove our filter so we don't get stuck in a loop
         remove_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
+        remove_filter( 'the_excerpt', array( __CLASS__, 'setup_archive_page_content' ) );
 
         // reset the query count so the correct number of listings are output.
         rewind_posts();
@@ -268,9 +274,10 @@ class GeoDir_Template_Loader {
 
         // add our filter back, not sure we even need to add it back if we are only running it once.
         add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
+        add_filter( 'the_excerpt', array( __CLASS__, 'setup_archive_page_content' ) );
 
         // fake the has_posts() to false so it will not loop any more.
-        $wp_query->current_post = $wp_query->post_count;
+        $wp_query->current_post  = $wp_query->post_count;
 
 		// Set original post.
 		if ( ! empty( $gd_backup_post ) ) {
@@ -285,6 +292,14 @@ class GeoDir_Template_Loader {
      * @since 2.0.0
      */
     public static function setup_archive_loop_as_page(){
+
+
+        /*
+         * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
+         */
+        if(apply_filters('geodir_bypass_setup_archive_loop_as_page',false)){
+            return;
+        }
 
         // get the main query
         global $wp_query;
