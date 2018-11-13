@@ -881,8 +881,7 @@ function geodir_cfi_datepicker($html,$cf){
                      */
                     echo apply_filters("gd_datepicker_extra_{$name}",'');?>});
 
-               // jQuery("#<?php echo $name;?>_show").datepicker("option", "dateFormat", '<?php echo $jquery_date_format;?>');
-                
+
 
             <?php if(!empty($value)){?>
                 jQuery("#<?php echo $name;?>_show").datepicker("setDate", '<?php echo $value;?>');

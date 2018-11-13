@@ -453,8 +453,9 @@ class GeoDir_Post_Data {
 
 
 			// set post images
+			$i_post_id = !empty($gd_post['revision_ID']) ? $gd_post['revision_ID'] : $post_id;
 			if ( isset( $gd_post['post_images'] ) ) {
-				$featured_image = self::save_files( $post_id, $gd_post['post_images'], 'post_images', $is_dummy);
+				$featured_image = self::save_files( $i_post_id, $gd_post['post_images'], 'post_images', $is_dummy);
 				//echo '###'.$featured_image;
 				if ( !empty($featured_image) && !wp_is_post_revision( absint($post_id) )  ) {
 					$postarr['featured_image'] = $featured_image;
@@ -469,7 +470,7 @@ class GeoDir_Post_Data {
 				foreach($file_fields as $key => $extensions){
 					if(isset($postarr[$key])){ // its a attachment
 						//$postarr[$key] = GeoDir_Media::update_file_attachment($post_id,$key,$postarr[$key]);
-						self::save_files( $post_id,$postarr[$key],$key);
+						self::save_files( $i_post_id,$postarr[$key],$key);
 						//unset( $postarr[$key]);
 					}
 				}
@@ -1238,6 +1239,7 @@ class GeoDir_Post_Data {
 
 		//if its a revision we need to swap the post ids.
 		if ( isset( $post_data['post_parent'] ) && $post_data['post_parent'] ) {
+			$post_data['revision_ID'] = $post_data['ID'];
 			$post_data['ID'] = $post_data['post_parent'];
 		}
 

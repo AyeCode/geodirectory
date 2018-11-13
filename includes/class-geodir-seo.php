@@ -462,10 +462,9 @@ class GeoDir_SEO {
 			);
 		}
 
-
-
+		
 		// location tags
-		if(!$gd_page || $gd_page = 'location_tags'){
+		if(!$gd_page || $gd_page == 'location_tags' || $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' || $gd_page == 'single' || $gd_page == 'location'){
 			$vars['%%location%%'] = __('The full current location eg: United States, Pennsylvania, Philadelphia','geodirectory');
 			$vars['%%location_single%%'] = __('The current viewing location type single name eg: Philadelphia','geodirectory');
 			$vars['%%in_location%%'] = __('The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia','geodirectory');
