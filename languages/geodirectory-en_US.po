@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.34\n"
+"Project-Id-Version: GeoDirectory 2.0.0.35\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-01 17:00+0000\n"
-"PO-Revision-Date: 2018-11-01 17:00+0000\n"
+"POT-Creation-Date: 2018-11-14 11:34+0000\n"
+"PO-Revision-Date: 2018-11-14 11:34+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -732,7 +732,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:779
 #: includes/admin/class-geodir-admin-dummy-data.php:787
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:391
-#: includes/class-geodir-post-data.php:804
+#: includes/class-geodir-post-data.php:839
 #: includes/widgets/class-geodir-widget-ninja-forms.php:203 language.php:37
 #: language.php:62 language.php:154 language.php:175
 msgid "Email"
@@ -799,7 +799,7 @@ msgid "Note: List out any special offers (optional)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:890
-#: includes/class-geodir-post-data.php:750
+#: includes/class-geodir-post-data.php:785
 msgid "Listing"
 msgstr ""
 
@@ -1837,7 +1837,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-taxonomies.php:514
 #: includes/admin/settings/class-geodir-settings-page.php:66
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:31
-#: includes/widgets/class-geodir-widget-post-badge.php:127
+#: includes/widgets/class-geodir-widget-post-badge.php:136
 #: includes/widgets/class-geodir-widget-post-fav.php:60
 #: includes/widgets/class-geodir-widget-post-images.php:138
 #: includes/widgets/class-geodir-widget-post-images.php:151
@@ -1921,7 +1921,7 @@ msgid "Create default GeoDirectory pages"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-tools.php:55
-#: includes/admin/views/html-notice-v2-update.php:14
+#: includes/admin/views/html-notice-v2-update.php:128
 msgid "Note:"
 msgstr ""
 
@@ -2798,7 +2798,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:280
 #: includes/widgets/class-geodir-widget-archive-item-section.php:51
-#: includes/widgets/class-geodir-widget-post-badge.php:128
+#: includes/widgets/class-geodir-widget-post-badge.php:137
 #: includes/widgets/class-geodir-widget-post-fav.php:61
 #: includes/widgets/class-geodir-widget-post-meta.php:87
 #: includes/widgets/class-geodir-widget-post-rating.php:61
@@ -2807,7 +2807,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:281
 #: includes/widgets/class-geodir-widget-archive-item-section.php:52
-#: includes/widgets/class-geodir-widget-post-badge.php:130
+#: includes/widgets/class-geodir-widget-post-badge.php:139
 #: includes/widgets/class-geodir-widget-post-fav.php:63
 #: includes/widgets/class-geodir-widget-post-meta.php:89
 #: includes/widgets/class-geodir-widget-post-rating.php:63
@@ -3693,7 +3693,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:348
 #: includes/admin/views/html-admin-page-status-report.php:576
-#: includes/class-geodir-post-data.php:798 language.php:35 language.php:153
+#: includes/class-geodir-post-data.php:833 language.php:35 language.php:153
 msgid "Name"
 msgstr ""
 
@@ -4676,6 +4676,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:749
+#: includes/admin/views/html-notice-v2-update.php:162
 msgid "Disabled"
 msgstr ""
 
@@ -4725,7 +4726,7 @@ msgid "The longitude of the default location."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:844
-#: includes/custom-fields/input-functions.php:1720
+#: includes/custom-fields/input-functions.php:1719
 msgid "Timezone"
 msgstr ""
 
@@ -5736,6 +5737,7 @@ msgid "The name of the current active theme."
 msgstr ""
 
 #: includes/admin/views/html-admin-page-status-report.php:581
+#: includes/admin/views/html-notice-v2-update.php:133
 msgid "Version"
 msgstr ""
 
@@ -6461,30 +6463,93 @@ msgstr ""
 msgid "Taking a while? Click here to run it now."
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:12
+#: includes/admin/views/html-notice-v2-update.php:125
 msgid "GeoDirectory v1 to v2 data conversion:"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:13
+#: includes/admin/views/html-notice-v2-update.php:126
 msgid ""
 "You need to run the v1 to v2 data conversion now to update your directory "
 "database to the latest version to restore your directory functionality."
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:14
+#: includes/admin/views/html-notice-v2-update.php:127
+msgid "Please check following requirements before v1 to v2 data conversion:"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:128
 msgid ""
 "This is a major update, so it is strongly recommended that you backup your "
 "database before start running v1 to v2 data conversion."
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:15
-msgid "Run GeoDirectory v1 to v2 data conversion"
+#: includes/admin/views/html-notice-v2-update.php:129
+msgid "Plugins  data found:"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:19
+#: includes/admin/views/html-notice-v2-update.php:134
+msgid "Required Version"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:135
+msgid "Plugin Name"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:136
+msgid "Plugin Directory"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:137
+msgid "Plugin Status"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:138
+msgid "Note"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:150
+msgid "Requires upgrade"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:154
+msgid "Active"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:158
+msgid "Update required"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:176
+msgid "Update and activate to convert plugin data."
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:178
+msgid "Active to convert plugin data."
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:189
+msgid ""
+"It is strongly recommended that you follow the update instructions before "
+"proceeding. Are you sure you wish to run the GeoDirectory v1 to v2 data "
+"conversion now?"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:190
+msgid "Please update the required plugins before proceeding."
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:191
+msgid "Let me proceed without updating (highly not recommended)"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:194
 msgid ""
 "It is strongly recommended that you backup your database before proceeding. "
 "Are you sure you wish to run the GeoDirectory v1 to v2 data conversion now?"
+msgstr ""
+
+#: includes/admin/views/html-notice-v2-update.php:198
+msgid "Run GeoDirectory v1 to v2 data conversion"
 msgstr ""
 
 #: includes/api/class-geodir-rest-authentication.php:164
@@ -7095,7 +7160,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2855
 #: includes/class-geodir-privacy-exporters.php:237
 #: includes/class-geodir-privacy-exporters.php:302
-#: includes/custom-fields/input-functions.php:1693
+#: includes/custom-fields/input-functions.php:1692
 #: includes/custom-fields/output-functions.php:86
 msgid "Yes"
 msgstr ""
@@ -7103,7 +7168,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2815
 #: includes/api/class-geodir-rest-posts-controller.php:2853
 #: includes/class-geodir-privacy-exporters.php:300
-#: includes/custom-fields/input-functions.php:1694
+#: includes/custom-fields/input-functions.php:1693
 #: includes/custom-fields/output-functions.php:88
 msgid "No"
 msgstr ""
@@ -7742,7 +7807,7 @@ msgid "Sunday"
 msgstr ""
 
 #: includes/business-hours-functions.php:496 includes/core-functions.php:344
-#: includes/custom-fields/input-functions.php:1713
+#: includes/custom-fields/input-functions.php:1712
 msgid "Closed"
 msgstr ""
 
@@ -7859,7 +7924,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:884
+#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:890
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -7898,7 +7963,7 @@ msgid "Your comment is awaiting moderation."
 msgstr ""
 
 #: includes/class-geodir-comments.php:557
-#: includes/widgets/class-geodir-widget-author-actions.php:124 language.php:158
+#: includes/widgets/class-geodir-widget-author-actions.php:128 language.php:158
 msgid "Edit"
 msgstr ""
 
@@ -7939,21 +8004,21 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:138
+#: includes/class-geodir-compatibility.php:159
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:140
+#: includes/class-geodir-compatibility.php:161
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "Settings unless disabled below."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:145
+#: includes/class-geodir-compatibility.php:166
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:146
+#: includes/class-geodir-compatibility.php:167
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
@@ -8322,57 +8387,57 @@ msgstr ""
 msgid "No category"
 msgstr ""
 
-#: includes/class-geodir-media.php:248
+#: includes/class-geodir-media.php:254
 msgid "No post_id or file url, file insert failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:368
+#: includes/class-geodir-media.php:374
 msgid "Failed to insert file info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:453
+#: includes/class-geodir-media.php:459
 msgid "No image_id, post_id or image url, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:517
+#: includes/class-geodir-media.php:523
 msgid "Failed to update image info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:619
+#: includes/class-geodir-media.php:625
 msgid "Invalid URL Provided."
 msgstr ""
 
-#: includes/class-geodir-media.php:625
+#: includes/class-geodir-media.php:631
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:872
+#: includes/class-geodir-media.php:878
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:884 includes/class-geodir-media.php:886
+#: includes/class-geodir-media.php:890 includes/class-geodir-media.php:892
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:907
+#: includes/class-geodir-media.php:913
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:925
+#: includes/class-geodir-media.php:931
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:278
+#: includes/class-geodir-permalinks.php:280
 msgid "<b>GeoDirectory permalink error</b> the following rule appears twice:"
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:279
+#: includes/class-geodir-permalinks.php:281
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:707
+#: includes/class-geodir-post-data.php:742
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -8380,7 +8445,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:732
+#: includes/class-geodir-post-data.php:767
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -8388,62 +8453,62 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:795
+#: includes/class-geodir-post-data.php:830
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:800
+#: includes/class-geodir-post-data.php:835
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:806
+#: includes/class-geodir-post-data.php:841
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:852
-#: includes/class-geodir-post-data.php:857
+#: includes/class-geodir-post-data.php:886
+#: includes/class-geodir-post-data.php:891
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:864
+#: includes/class-geodir-post-data.php:896
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:874
+#: includes/class-geodir-post-data.php:906
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:986
+#: includes/class-geodir-post-data.php:1018
 msgid "You do not own this post"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:994
+#: includes/class-geodir-post-data.php:1026
 msgid "Delete revision failed."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1307
+#: includes/class-geodir-post-data.php:1340
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1312
+#: includes/class-geodir-post-data.php:1345
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1322
+#: includes/class-geodir-post-data.php:1355
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1329
+#: includes/class-geodir-post-data.php:1362
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1433
+#: includes/class-geodir-post-data.php:1466
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -8849,121 +8914,121 @@ msgstr ""
 msgid "- Monitor the contact system for spam and abuse."
 msgstr ""
 
-#: includes/class-geodir-seo.php:395 includes/class-geodir-seo.php:397
+#: includes/class-geodir-seo.php:393 includes/class-geodir-seo.php:395
 #, php-format
 msgid "Near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:455
+#: includes/class-geodir-seo.php:453
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:456
+#: includes/class-geodir-seo.php:454
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:457
+#: includes/class-geodir-seo.php:455
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:458
+#: includes/class-geodir-seo.php:456
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:459
+#: includes/class-geodir-seo.php:457
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:460
+#: includes/class-geodir-seo.php:458
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:461
+#: includes/class-geodir-seo.php:459
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:462
+#: includes/class-geodir-seo.php:460
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:463
+#: includes/class-geodir-seo.php:461
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:471
+#: includes/class-geodir-seo.php:468
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:472
+#: includes/class-geodir-seo.php:469
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:473
+#: includes/class-geodir-seo.php:470
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:474
+#: includes/class-geodir-seo.php:471
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:475
+#: includes/class-geodir-seo.php:472
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:476
+#: includes/class-geodir-seo.php:473
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:477
+#: includes/class-geodir-seo.php:474
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:478
+#: includes/class-geodir-seo.php:475
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:479
+#: includes/class-geodir-seo.php:476
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:480
+#: includes/class-geodir-seo.php:477
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:487
+#: includes/class-geodir-seo.php:484
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:488
+#: includes/class-geodir-seo.php:485
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:493
+#: includes/class-geodir-seo.php:490
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:494
+#: includes/class-geodir-seo.php:491
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:495
+#: includes/class-geodir-seo.php:492
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:500
+#: includes/class-geodir-seo.php:497
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore"
 msgstr ""
 
-#: includes/class-geodir-seo.php:521
+#: includes/class-geodir-seo.php:518
 msgid "Click to copy"
 msgstr ""
 
-#: includes/class-geodir-template-loader.php:471
+#: includes/class-geodir-template-loader.php:502
 msgid ""
 "Sorry, this is a page template and can not be accessed from the frontend, it "
 "is used for building the layouts of GeoDirectory sections."
@@ -9217,12 +9282,12 @@ msgid "Leave a reply"
 msgstr ""
 
 #: includes/core-functions.php:339
-#: includes/widgets/class-geodir-widget-recent-reviews.php:241
+#: includes/widgets/class-geodir-widget-recent-reviews.php:254
 msgid "Read more"
 msgstr ""
 
 #: includes/core-functions.php:340
-#: includes/widgets/class-geodir-widget-recent-reviews.php:241
+#: includes/widgets/class-geodir-widget-recent-reviews.php:254
 msgid "about this listing"
 msgstr ""
 
@@ -9285,86 +9350,86 @@ msgstr ""
 msgid "Choose"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1100
+#: includes/custom-fields/input-functions.php:1099
 #: includes/widgets/class-geodir-widget-map.php:190
 msgid "My location"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1131
+#: includes/custom-fields/input-functions.php:1130
 #, php-format
 msgid "Please enter listing %s"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1198
+#: includes/custom-fields/input-functions.php:1197
 msgid "Default Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1199
+#: includes/custom-fields/input-functions.php:1198
 #: includes/widgets/class-geodir-widget-map.php:422
 msgid "Satellite Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1200
+#: includes/custom-fields/input-functions.php:1199
 #: includes/widgets/class-geodir-widget-map.php:423
 msgid "Hybrid Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1201
+#: includes/custom-fields/input-functions.php:1200
 #: includes/widgets/class-geodir-widget-map.php:424
 msgid "Terrain Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1208
+#: includes/custom-fields/input-functions.php:1207
 msgid "Please select listing map view to use"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1318
-#: includes/custom-fields/input-functions.php:1459
+#: includes/custom-fields/input-functions.php:1317
+#: includes/custom-fields/input-functions.php:1458
 #, php-format
 msgid "Only select %d categories for this package."
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1338
-#: includes/custom-fields/input-functions.php:1342
-#: includes/custom-fields/input-functions.php:1479
-#: includes/custom-fields/input-functions.php:1483
+#: includes/custom-fields/input-functions.php:1337
+#: includes/custom-fields/input-functions.php:1341
+#: includes/custom-fields/input-functions.php:1478
+#: includes/custom-fields/input-functions.php:1482
 #: includes/taxonomy-functions.php:282
 #: includes/widgets/class-geodir-widget-best-of.php:344
 msgid "Select Category"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1590
+#: includes/custom-fields/input-functions.php:1589
 msgid "Enter tags separated by a comma ,"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1607
+#: includes/custom-fields/input-functions.php:1606
 msgid "Popular tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1622
+#: includes/custom-fields/input-functions.php:1621
 msgid "Your tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1698
+#: includes/custom-fields/input-functions.php:1697
 msgid "Day"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1698
+#: includes/custom-fields/input-functions.php:1697
 msgid "Opening Hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1698
+#: includes/custom-fields/input-functions.php:1697
 msgid "Add"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1701
-#: includes/custom-fields/input-functions.php:1709
+#: includes/custom-fields/input-functions.php:1700
+#: includes/custom-fields/input-functions.php:1708
 #: includes/widgets/class-geodir-widget-archive-item-section.php:40
 msgid "Open"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1701
-#: includes/custom-fields/input-functions.php:1709
+#: includes/custom-fields/input-functions.php:1700
+#: includes/custom-fields/input-functions.php:1708
 msgid "Close"
 msgstr ""
 
@@ -9708,7 +9773,7 @@ msgstr ""
 msgid "in %s"
 msgstr ""
 
-#: includes/post-functions.php:796
+#: includes/post-functions.php:808
 msgid "NEW"
 msgstr ""
 
@@ -9931,23 +9996,23 @@ msgstr ""
 msgid "Show the action only on the author page."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-author-actions.php:128 language.php:159
+#: includes/widgets/class-geodir-widget-author-actions.php:132 language.php:159
 msgid "Delete"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-author-actions.php:165
+#: includes/widgets/class-geodir-widget-author-actions.php:169
 msgid "Published"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-author-actions.php:167
+#: includes/widgets/class-geodir-widget-author-actions.php:171
 msgid "Awaiting review"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-author-actions.php:170
+#: includes/widgets/class-geodir-widget-author-actions.php:174
 msgid "Not published"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-author-actions.php:178
+#: includes/widgets/class-geodir-widget-author-actions.php:182
 msgid "Status: "
 msgstr ""
 
@@ -10284,7 +10349,7 @@ msgstr ""
 msgid "GD > Loop"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-loop.php:85
+#: includes/widgets/class-geodir-widget-loop.php:95
 msgid "No listings found that match your selection."
 msgstr ""
 
@@ -10623,120 +10688,134 @@ msgid "Badge:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:83
-msgid "Badge text. Ex: FOR SALE. Leave blank to show field title as a badge."
+#, php-format
+msgid ""
+"Badge text. Ex: FOR SALE. Leave blank to show field title as a badge, or use "
+"%%input%% to use the input value of the field."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:91
-msgid "Badge background color:"
+msgid "Link url:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:92
-msgid "Color for the badge background."
+#, php-format
+msgid ""
+"Badge link url. You can use this to make the button link to something, "
+"%%input%% can be used here if a link."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:100
-msgid "Badge text color:"
+msgid "Badge background color:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:101
-msgid "Color for the badge text."
+msgid "Color for the badge background."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:109
-msgid "Badge size:"
+msgid "Badge text color:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:110
+msgid "Color for the badge text."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-badge.php:118
+msgid "Badge size:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-badge.php:119
 msgid "Size of the badge."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:112
+#: includes/widgets/class-geodir-widget-post-badge.php:121
 msgid "Small"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:113
+#: includes/widgets/class-geodir-widget-post-badge.php:122
 msgid "Normal"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:114
+#: includes/widgets/class-geodir-widget-post-badge.php:123
 msgid "Medium"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:115
+#: includes/widgets/class-geodir-widget-post-badge.php:124
 msgid "Large"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:116
+#: includes/widgets/class-geodir-widget-post-badge.php:125
 msgid "Extra Large"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:124
+#: includes/widgets/class-geodir-widget-post-badge.php:133
 #: includes/widgets/class-geodir-widget-post-fav.php:56
 #: includes/widgets/class-geodir-widget-post-meta.php:82
 #: includes/widgets/class-geodir-widget-post-rating.php:56
 msgid "Alignment:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:125
+#: includes/widgets/class-geodir-widget-post-badge.php:134
 #: includes/widgets/class-geodir-widget-post-fav.php:57
 #: includes/widgets/class-geodir-widget-post-meta.php:83
 #: includes/widgets/class-geodir-widget-post-rating.php:57
 msgid "How the item should be positioned on the page."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:129
+#: includes/widgets/class-geodir-widget-post-badge.php:138
 #: includes/widgets/class-geodir-widget-post-fav.php:62
 #: includes/widgets/class-geodir-widget-post-meta.php:88
 #: includes/widgets/class-geodir-widget-post-rating.php:62
 msgid "Center"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:161
+#: includes/widgets/class-geodir-widget-post-badge.php:170
 msgid "post id is missing"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:164
+#: includes/widgets/class-geodir-widget-post-badge.php:173
 #: includes/widgets/class-geodir-widget-post-meta.php:157
 msgid "invalid post type"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:167
+#: includes/widgets/class-geodir-widget-post-badge.php:176
 msgid "field key is missing"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:197
+#: includes/widgets/class-geodir-widget-post-badge.php:206
 msgid "post date"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:209
+#: includes/widgets/class-geodir-widget-post-badge.php:218
 msgid "is equal"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:210
+#: includes/widgets/class-geodir-widget-post-badge.php:219
 msgid "is not equal"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:211
+#: includes/widgets/class-geodir-widget-post-badge.php:220
 msgid "is greater than"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:212
+#: includes/widgets/class-geodir-widget-post-badge.php:221
 msgid "is less than"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:213
+#: includes/widgets/class-geodir-widget-post-badge.php:222
 msgid "is empty"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:214
+#: includes/widgets/class-geodir-widget-post-badge.php:223
 msgid "is not empty"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:215
+#: includes/widgets/class-geodir-widget-post-badge.php:224
 msgid "is contains"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:216
+#: includes/widgets/class-geodir-widget-post-badge.php:225
 msgid "is not contains"
 msgstr ""
 
@@ -10955,14 +11034,22 @@ msgid "Number of reviews to show."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-recent-reviews.php:59
-msgid "Enable location filter"
+msgid "Minimum rating of reviews:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-recent-reviews.php:60
+msgid "This will only show reviews with a rating of this number or above."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-recent-reviews.php:67
+msgid "Enable location filter"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-recent-reviews.php:75
 msgid "Filter reviews for current viewing post type"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recent-reviews.php:278
+#: includes/widgets/class-geodir-widget-recent-reviews.php:291
 msgid "reviewed"
 msgstr ""
 

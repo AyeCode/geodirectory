@@ -1,5 +1,5 @@
 v2.0.0.35
-Details about v1 to v2 conversion - ADDED
+v1 to v2 conversion instructions improved - UPDATED
 Edit add listing page not loading with Beaver Builder - FIXED
 Countries table lib checking empty on non variable - FIXED
 Changes to loop widget for Beaver Builder themer layouts - CHANGED

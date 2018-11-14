@@ -14,13 +14,17 @@ $plugins[] = array(
 	'directory' => 'geodirectory',
 	'name' => 'GeoDirectory',
 	'db_version' => get_option( 'geodirectory_db_version' ),
-	'status' => true
+	'status' => true,
+	'version'   => GeoDir()->version,
+	'min_version'   => GeoDir()->version,
 );
 if ( $db_version = get_option( 'geodiradvancesearch_db_version' ) ) {
 	$plugins[] = array(
 		'directory' => 'geodir_advance_search_filters',
 		'name' => 'GeoDirectory Advance Search Filters',
 		'db_version' => $db_version,
+		'min_version'   => '2.0.0.3-beta',
+		'version'   => $all_plugins[ 'geodir_advance_search_filters/geodir_advance_search_filters.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_advance_search_filters/geodir_advance_search_filters.php' )
 	);
 }
@@ -29,6 +33,8 @@ if ( isset( $all_plugins[ 'geodir_buddypress/geodir_buddypress.php' ] ) && $db_v
 		'directory' => 'geodir_buddypress',
 		'name' => 'GeoDirectory BuddyPress Integration',
 		'db_version' => $db_version,
+		'min_version'   => '2.0.0.0-beta',
+		'version'   => $all_plugins[ 'geodir_buddypress/geodir_buddypress.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_buddypress/geodir_buddypress.php' )
 	);
 }
@@ -37,6 +43,8 @@ if ( isset( $all_plugins[ 'geodir_custom_google_maps/geodir_custom_google_maps.p
 		'directory' => 'geodir_custom_google_maps',
 		'name' => 'GeoDirectory Custom Google Maps',
 		'db_version' => $db_version,
+		'min_version'   => '2.0.0.0-beta',
+		'version'   => $all_plugins[ 'geodir_custom_google_maps/geodir_custom_google_maps.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_custom_google_maps/geodir_custom_google_maps.php' )
 	);
 }
@@ -45,6 +53,8 @@ if ( $db_version = get_option( 'geodir_custom_posts_db_version' ) ) {
 		'directory' => 'geodir_custom_posts',
 		'name' => 'GeoDirectory Custom Post Types',
 		'db_version' => $db_version,
+		'min_version'   => '2.0.0.7',
+		'version'   => $all_plugins[ 'geodir_custom_posts/geodir_custom_posts.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_custom_posts/geodir_custom_posts.php' )
 	);
 }
@@ -53,14 +63,19 @@ if ( $db_version = get_option( 'geodirevents_db_version' ) ) {
 		'directory' => 'geodir_event_manager',
 		'name' => 'GeoDirectory Events',
 		'db_version' => $db_version,
+		'min_version'   => '2.0.0.2-rc',
+		'version'   => $all_plugins[ 'geodir_event_manager/geodir_event_manager.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_event_manager/geodir_event_manager.php' )
 	);
 }
-if ( $db_version = get_option( 'geodirlists_db_version' ) ) {
+// @todo not out yet
+if ( 1==2 && $db_version = get_option( 'geodirlists_db_version' ) ) {
 	$plugins[] = array(
 		'directory' => 'geodir_list_manager',
 		'name' => 'GeoDirectory Lists',
 		'db_version' => $db_version,
+		'min_version'   => '2.0.0.0-beta',
+		'version'   => $all_plugins[ 'geodir_list_manager/geodir_list_manager.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_list_manager/geodir_list_manager.php' )
 	);
 }
@@ -69,6 +84,8 @@ if ( $db_version = get_option( 'geodirlocation_db_version' ) ) {
 		'directory' => 'geodir_location_manager',
 		'name' => 'GeoDirectory Location Manager',
 		'db_version' => $db_version,
+		'min_version'   => '2.0.0.10',
+		'version'   => $all_plugins[ 'geodir_location_manager/geodir_location_manager.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_location_manager/geodir_location_manager.php' )
 	);
 }
@@ -77,6 +94,8 @@ if ( $db_version = get_option( 'geodir_payments_db_version' ) ) {
 		'directory' => 'geodir_payment_manager',
 		'name' => 'GeoDirectory Payment Manager',
 		'db_version' => $db_version,
+		'min_version'   => '2.5.0.3-beta',
+		'version'   => $all_plugins[ 'geodir_payment_manager/geodir_payment_manager.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_payment_manager/geodir_payment_manager.php' )
 	);
 }
@@ -85,6 +104,8 @@ if ( $db_version = get_option( 'geodir_reviewratings_db_version' ) ) {
 		'directory' => 'geodir_review_rating_manager',
 		'name' => 'GeoDirectory Review Rating Manager',
 		'db_version' => $db_version,
+		'min_version'   => '2.0.0.7',
+		'version'   => $all_plugins[ 'geodir_review_rating_manager/geodir_review_rating_manager.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_review_rating_manager/geodir_review_rating_manager.php' )
 	);
 }
@@ -93,6 +114,8 @@ if ( isset( $all_plugins[ 'geodir_social_importer/geodir_social_importer.php' ] 
 		'directory' => 'geodir_social_importer',
 		'name' => 'GeoDirectory Social Importer',
 		'db_version' => $db_version,
+		'min_version'   => '2.0.0.0-beta',
+		'version'   => $all_plugins[ 'geodir_social_importer/geodir_social_importer.php' ]['Version'],
 		'status' => is_plugin_active( 'geodir_social_importer/geodir_social_importer.php' )
 	);
 }
@@ -107,31 +130,78 @@ if ( isset( $all_plugins[ 'geodir_social_importer/geodir_social_importer.php' ] 
 	<table class="widefat striped">
 		<tbody>
 			<tr>
-				<td><b><?php _e( 'DB Version', 'geodirectory' ); ?></b></td>
+				<td><b><?php _e( 'Version', 'geodirectory' ); ?></b></td>
+				<td><b><?php _e( 'Required Version', 'geodirectory' ); ?></b></td>
 				<td><b><?php _e( 'Plugin Name', 'geodirectory' ); ?></b></td>
 				<td><b><?php _e( 'Plugin Directory', 'geodirectory' ); ?></b></td>
 				<td><b><?php _e( 'Plugin Status', 'geodirectory' ); ?></b>
 				<td><b><?php _e( 'Note', 'geodirectory' ); ?></b>
 			</tr>
-			<?php foreach ( $plugins as $plugin ) { ?>
+			<?php
+			$has_issues = false;
+			foreach ( $plugins as $plugin ) {
+
+				// version check
+				$ver_css = 'green';
+				$ver_icon = '';
+				if(isset($plugin['version']) && version_compare($plugin['version'],$plugin['min_version'],"<")){
+					$has_issues = true;
+					$ver_css = 'red';
+					$ver_icon = ' <i class="fas fa-exclamation-triangle" title="'.__("Requires upgrade","geodirectory").'"></i>';
+				}
+
+				// status check
+				$status_text = __( 'Active', 'geodirectory' );
+				$status_css = 'green';
+				if($ver_icon){
+					$has_issues = true;
+					$status_text = __( 'Update required', 'geodirectory' );
+					$status_css = 'red';
+				}elseif(! $plugin['status']){
+					$has_issues = true;
+					$status_text = __( 'Disabled', 'geodirectory' );
+					$status_css = 'red';
+				}
+
+				?>
 			<tr>
-				<td><?php echo $plugin['db_version']; ?></td>
+				<td style="color: <?php echo esc_attr($ver_css);?>;"><?php echo $plugin['version']; echo $ver_icon;?></td>
+				<td><?php echo isset($plugin['min_version']) ? $plugin['min_version']."+" : ''; ?></td>
 				<td><?php echo $plugin['name']; ?></td>
 				<td><?php echo $plugin['directory']; ?></td>
-				<td><?php echo $plugin['status'] ? __( 'Active', 'geodirectory' ) :  __( 'Disabled', 'geodirectory' ); ?></td>
+				<td style="color: <?php echo esc_attr($status_css);?>;"><?php echo esc_attr($status_text);?></td>
 				<td>
-				<?php if ( ! $plugin['status'] ) {
-					echo __( 'Plugin should be active to convert plugin data.', 'geodirectory' );
-				} ?>
+				<?php
+				if ($ver_icon && ! $plugin['status'] ) {
+					echo __( 'Update and activate to convert plugin data.', 'geodirectory' );
+				}elseif ( ! $plugin['status'] ) {
+					echo __( 'Active to convert plugin data.', 'geodirectory' );
+				}
+				?>
 				</td>
 			</tr>
 			<?php } ?>
 		</tbody>
 	</table>
-	<p class="submit"><a href="<?php echo esc_url( add_query_arg( 'do_update_geodirectory', 'true', admin_url( 'admin.php?page=gd-settings' ) ) ); ?>" class="gd-update-now button-primary"><?php _e( 'Run GeoDirectory v1 to v2 data conversion', 'geodirectory' ); ?></a></p>
+
+	<?php
+		if($has_issues){
+			$upgrade_message = __( 'It is strongly recommended that you follow the update instructions before proceeding. Are you sure you wish to run the GeoDirectory v1 to v2 data conversion now?', 'geodirectory' );
+			echo "<p><strong>".__( 'Please update the required plugins before proceeding.', 'geodirectory' )."</strong></p>";
+			echo "<p style='color: red'><input type='checkbox' id='gd-let-me-upgrade' /><strong>".__( 'Let me proceed without updating (highly not recommended)', 'geodirectory' )."</strong></p>";
+			$hide_upgrade_button = true;
+		}else{
+			$upgrade_message = __( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the GeoDirectory v1 to v2 data conversion now?', 'geodirectory' );
+			$hide_upgrade_button = false;
+		}
+	?>
+	<p <?php if($hide_upgrade_button){echo "style='display:none;'";}?> class="submit gd-let-me-upgrade-submit"><a href="<?php echo esc_url( add_query_arg( 'do_update_geodirectory', 'true', admin_url( 'admin.php?page=gd-settings' ) ) ); ?>" class="gd-update-now button-primary"><?php _e( 'Run GeoDirectory v1 to v2 data conversion', 'geodirectory' ); ?></a></p>
 </div>
 <script type="text/javascript">
 	jQuery( '.gd-update-now' ).click( 'click', function() {
-		return window.confirm( '<?php echo esc_js( __( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the GeoDirectory v1 to v2 data conversion now?', 'geodirectory' ) ); ?>' ); // jshint ignore:line
+		return window.confirm( '<?php echo esc_js( $upgrade_message ); ?>' ); // jshint ignore:line
+	});
+	jQuery( '#gd-let-me-upgrade' ).click( 'click', function() {
+		jQuery(".gd-let-me-upgrade-submit").toggle();
 	});
 </script>
