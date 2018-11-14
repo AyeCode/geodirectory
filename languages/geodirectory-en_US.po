@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.35\n"
+"Project-Id-Version: GeoDirectory 2.0.0.36\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-11-14 11:34+0000\n"
-"PO-Revision-Date: 2018-11-14 11:34+0000\n"
+"POT-Creation-Date: 2018-11-14 15:35+0000\n"
+"PO-Revision-Date: 2018-11-14 15:35+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -4188,9 +4188,9 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-design.php:461
 #: includes/widgets/class-geodir-widget-add-listing.php:164
 #: includes/widgets/class-geodir-widget-categories.php:247
-#: includes/widgets/class-geodir-widget-map.php:434
-#: includes/widgets/class-geodir-widget-map.php:445
-#: includes/widgets/class-geodir-widget-map.php:599
+#: includes/widgets/class-geodir-widget-map.php:435
+#: includes/widgets/class-geodir-widget-map.php:446
+#: includes/widgets/class-geodir-widget-map.php:600
 #: includes/widgets/class-geodir-widget-search.php:143
 msgid "Auto"
 msgstr ""
@@ -9365,17 +9365,17 @@ msgid "Default Map"
 msgstr ""
 
 #: includes/custom-fields/input-functions.php:1198
-#: includes/widgets/class-geodir-widget-map.php:422
+#: includes/widgets/class-geodir-widget-map.php:423
 msgid "Satellite Map"
 msgstr ""
 
 #: includes/custom-fields/input-functions.php:1199
-#: includes/widgets/class-geodir-widget-map.php:423
+#: includes/widgets/class-geodir-widget-map.php:424
 msgid "Hybrid Map"
 msgstr ""
 
 #: includes/custom-fields/input-functions.php:1200
-#: includes/widgets/class-geodir-widget-map.php:424
+#: includes/widgets/class-geodir-widget-map.php:425
 msgid "Terrain Map"
 msgstr ""
 
@@ -9903,7 +9903,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:52
 #: includes/widgets/class-geodir-widget-best-of.php:61
 #: includes/widgets/class-geodir-widget-listings.php:70
-#: includes/widgets/class-geodir-widget-map.php:467
+#: includes/widgets/class-geodir-widget-map.php:468
 #: includes/widgets/class-geodir-widget-search.php:57
 msgid "Default Post Type:"
 msgstr ""
@@ -10025,7 +10025,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-category-description.php:42
 #: includes/widgets/class-geodir-widget-dashboard.php:42
 #: includes/widgets/class-geodir-widget-listings.php:61
-#: includes/widgets/class-geodir-widget-map.php:392
+#: includes/widgets/class-geodir-widget-map.php:393
 #: includes/widgets/class-geodir-widget-post-meta.php:35
 #: includes/widgets/class-geodir-widget-recent-reviews.php:43
 msgid "Title:"
@@ -10036,7 +10036,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-category-description.php:43
 #: includes/widgets/class-geodir-widget-dashboard.php:43
 #: includes/widgets/class-geodir-widget-listings.php:62
-#: includes/widgets/class-geodir-widget-map.php:393
+#: includes/widgets/class-geodir-widget-map.php:394
 #: includes/widgets/class-geodir-widget-recent-reviews.php:44
 msgid "The widget title."
 msgstr ""
@@ -10222,7 +10222,7 @@ msgid "GD > Listings"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-listings.php:79
-#: includes/widgets/class-geodir-widget-map.php:477
+#: includes/widgets/class-geodir-widget-map.php:478
 msgid "Categories:"
 msgstr ""
 
@@ -10400,164 +10400,164 @@ msgstr ""
 msgid "Distance unit"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:400
+#: includes/widgets/class-geodir-widget-map.php:401
 msgid "Width:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:401
+#: includes/widgets/class-geodir-widget-map.php:402
 #, php-format
 msgid "This is the width of the map, you can use % or px here."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:409
+#: includes/widgets/class-geodir-widget-map.php:410
 msgid "Height:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:410
+#: includes/widgets/class-geodir-widget-map.php:411
 msgid "This is the height of the map, you can use %, px or vh here."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:418
+#: includes/widgets/class-geodir-widget-map.php:419
 msgid "Mapview:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:419
+#: includes/widgets/class-geodir-widget-map.php:420
 msgid "This is the type of map view that will be used by default."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:421
+#: includes/widgets/class-geodir-widget-map.php:422
 msgid "Road Map"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:432
+#: includes/widgets/class-geodir-widget-map.php:433
 msgid "Zoom level:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:433
+#: includes/widgets/class-geodir-widget-map.php:434
 msgid "This is the zoom level of the map, `auto` is recommended."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:442
+#: includes/widgets/class-geodir-widget-map.php:443
 msgid "Map type:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:443
+#: includes/widgets/class-geodir-widget-map.php:444
 msgid "Select map type."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:446
+#: includes/widgets/class-geodir-widget-map.php:447
 msgid "Directory Map"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:447
+#: includes/widgets/class-geodir-widget-map.php:448
 msgid "Archive Map"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:448
+#: includes/widgets/class-geodir-widget-map.php:449
 msgid "Post Map"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:456
+#: includes/widgets/class-geodir-widget-map.php:457
 msgid "Use post map zoom and type?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:457
+#: includes/widgets/class-geodir-widget-map.php:458
 msgid ""
 "This will use the zoom level and map type set in the post over the settings "
 "in the widget."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:468
+#: includes/widgets/class-geodir-widget-map.php:469
 msgid "The custom post types to show by default."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:478
+#: includes/widgets/class-geodir-widget-map.php:479
 msgid "Displays the posts on map for selected categories."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:488
+#: includes/widgets/class-geodir-widget-map.php:489
 msgid "Show all posts?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:489
+#: includes/widgets/class-geodir-widget-map.php:490
 msgid "This displays all posts on map from archive page."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:499
+#: includes/widgets/class-geodir-widget-map.php:500
 #: includes/widgets/class-geodir-widget-post-badge.php:43
 #: includes/widgets/class-geodir-widget-post-meta.php:45
 msgid "Post ID:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:500
+#: includes/widgets/class-geodir-widget-map.php:501
 msgid "Map post id."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:508
+#: includes/widgets/class-geodir-widget-map.php:509
 msgid "Enable search filter?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:509
+#: includes/widgets/class-geodir-widget-map.php:510
 msgid "This enables search filter on map."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:519
+#: includes/widgets/class-geodir-widget-map.php:520
 msgid "Enable post type filter?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:520
+#: includes/widgets/class-geodir-widget-map.php:521
 msgid "This enables post type filter on map."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:530
+#: includes/widgets/class-geodir-widget-map.php:531
 msgid "Enable category filter?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:531
+#: includes/widgets/class-geodir-widget-map.php:532
 msgid "This enables categories filter on map."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:541
+#: includes/widgets/class-geodir-widget-map.php:542
 msgid "Collapse sub categories?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:542
+#: includes/widgets/class-geodir-widget-map.php:543
 msgid ""
 "This will hide the sub-categories under the parent, requiring a click to "
 "show."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:552
+#: includes/widgets/class-geodir-widget-map.php:553
 msgid "Enable map directions?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:553
+#: includes/widgets/class-geodir-widget-map.php:554
 msgid "Displays post directions for single post map."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:563
+#: includes/widgets/class-geodir-widget-map.php:564
 msgid "Enable mouse scroll zoom?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:564
+#: includes/widgets/class-geodir-widget-map.php:565
 msgid "Lets the map be scrolled with the mouse scroll wheel."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:575
+#: includes/widgets/class-geodir-widget-map.php:576
 msgid "Enable marker cluster?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:576
+#: includes/widgets/class-geodir-widget-map.php:577
 msgid "This enables marker cluster on the map."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:1026 language.php:77
+#: includes/widgets/class-geodir-widget-map.php:1027 language.php:77
 msgid ""
 "<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your "
 "search criteria and try again.</p>"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:1028
+#: includes/widgets/class-geodir-widget-map.php:1029
 msgid "<h3>Google Map Not Loaded</h3><p>Sorry, unable to load Google Maps API."
 msgstr ""
 

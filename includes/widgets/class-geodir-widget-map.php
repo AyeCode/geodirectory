@@ -248,7 +248,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="1"/>
 							<div class="geodir_toggle">
 								<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), true ); ?>
-								<script type="text/javascript">jQuery(function () {
+								<script type="text/javascript">
+									jQuery(window).load(function() {
 										geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');
 									});</script>
 							</div>
