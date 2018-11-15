@@ -1,5 +1,8 @@
-v2.0.0.35
-Details about v1 to v2 conversion - ADDED
+v2.0.0.37
+Import csv shows invalid csv file error - FIXED
+
+v2.0.0.36
+v1 to v2 conversion instructions improved - UPDATED
 Edit add listing page not loading with Beaver Builder - FIXED
 Countries table lib checking empty on non variable - FIXED
 Changes to loop widget for Beaver Builder themer layouts - CHANGED
@@ -12,6 +15,7 @@ Attachments not updating from revision ID - FIXED
 Temp upload files not being deleted immediately - FIXED
 Some title and meta SEO %%tags%% not showing - FIXED
 No way to change title separator for GD pages title - FIXED
+Map child categories show/hide toggle not working - FIXED
 
 v2.0.0.34
 Added extra checks for pre_get_posts filters that were breaking some beaver builder template queries - CHANGED
