@@ -1,3 +1,6 @@
+v2.0.0.37
+Import csv shows invalid csv file error - FIXED
+
 v2.0.0.36
 v1 to v2 conversion instructions improved - UPDATED
 Edit add listing page not loading with Beaver Builder - FIXED
