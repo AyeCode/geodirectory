@@ -1,4 +1,6 @@
 v2.0.0.37
+If reviews not used in tabs then the #reviews anchor links no longer work - FIXED
+gd_listings related_to can still show the current listing  - FIXED
 Import csv shows invalid csv file error - FIXED
 
 v2.0.0.36

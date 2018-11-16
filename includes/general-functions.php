@@ -858,6 +858,11 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	$where = " AND ( " . $wpdb->posts . ".post_status = 'publish' " . $post_status . " ) AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
 
+	// not in
+	if(!empty($query_args['post__not_in'])){
+		$where .= $wpdb->prepare(" AND $wpdb->posts.ID != %d ",$query_args['post__not_in']);
+	}
+
 	/**
 	 * Filter widget listing where clause string part that is being used for query.
 	 *

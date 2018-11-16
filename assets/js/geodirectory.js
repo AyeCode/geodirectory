@@ -136,6 +136,11 @@ jQuery(function($) {
 	$('.geodir-sort-by[name="sort_by"], #geodir_my_favourites[name="geodir_my_favourites"], #geodir_my_listings[name="geodir_my_listings"], #geodir_add_listing[name="geodir_add_listing"]').on("change", function(e) {
         if ($(this).val()) window.location = $(this).val();
     });
+
+    // if we have the reviews input but no reviews id then we add it on the fly so /#reviews anchor links work
+    if(jQuery('.geodir-comments-area').length && !jQuery('#reviews').length){
+        jQuery('.geodir-comments-area').prepend('<span id="reviews"></span>');
+    }
 });
 
 
