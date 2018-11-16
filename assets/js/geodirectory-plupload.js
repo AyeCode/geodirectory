@@ -2,19 +2,19 @@ jQuery.fn.exists = function () {
     return jQuery(this).length > 0;
 }
 
-jQuery(document).ready(function ($) {
+jQuery(document).ready(function($) {
     if ($(".plupload-upload-uic").exists()) {
         var pconfig = false;
         var msgErr = '';
         var post_id = '';
         // set the post id
-        if(jQuery("#geodirectory-add-post input[name='ID']").length){
+        if (jQuery("#geodirectory-add-post input[name='ID']").length) {
             var post_id = jQuery("#geodirectory-add-post input[name='ID']").val(); // frontend
-        }else{
+        } else {
             post_id = jQuery("#post input[name='post_ID']").val(); // backend
         }
 
-        $(".plupload-upload-uic").each(function () {
+        $(".plupload-upload-uic").each(function() {
             var $this = $(this);
             var id1 = $this.attr("id");
             var imgId = id1.replace("plupload-upload-ui", "");
@@ -24,7 +24,9 @@ jQuery(document).ready(function ($) {
             pconfig = JSON.parse(geodir_plupload_params.base_plupload_config);
             pconfig["browse_button"] = imgId + pconfig["browse_button"];
             pconfig["container"] = imgId + pconfig["container"];
-            if(jQuery('#'+imgId + 'dropbox').length){ pconfig["drop_element"] = imgId + 'dropbox';} // only add drop area if there is one
+            if (jQuery('#' + imgId + 'dropbox').length) {
+                pconfig["drop_element"] = imgId + 'dropbox';
+            } // only add drop area if there is one
             pconfig["file_data_name"] = imgId + pconfig["file_data_name"];
             pconfig["multipart_params"]["imgid"] = imgId;
             pconfig["multipart_params"]["post_id"] = post_id;
@@ -34,26 +36,29 @@ jQuery(document).ready(function ($) {
                 pconfig["multi_selection"] = true;
             }
 
-			var allowed_exts = jQuery('#' + imgId + '_allowed_types').val();
-			allowed_exts = allowed_exts && allowed_exts != '' ? allowed_exts : '';
-			if (imgId == 'post_images' && typeof geodir_params.gd_allowed_img_types != 'undefined' && geodir_params.gd_allowed_img_types != '') {
-				allowed_exts = geodir_params.gd_allowed_img_types;
-			}
+            var allowed_exts = jQuery('#' + imgId + '_allowed_types').val();
+            allowed_exts = allowed_exts && allowed_exts != '' ? allowed_exts : '';
+            if (imgId == 'post_images' && typeof geodir_params.gd_allowed_img_types != 'undefined' && geodir_params.gd_allowed_img_types != '') {
+                allowed_exts = geodir_params.gd_allowed_img_types;
+            }
 
-			if (allowed_exts && allowed_exts != '') {
-				var txt_all_files = (typeof geodir_params.txt_all_files != 'undefined' && geodir_params.txt_all_files != '') ? geodir_params.txt_all_files : 'Allowed files';
-				pconfig['filters'] = [{'title':txt_all_files, 'extensions':allowed_exts}];
-			}
+            if (allowed_exts && allowed_exts != '') {
+                var txt_all_files = (typeof geodir_params.txt_all_files != 'undefined' && geodir_params.txt_all_files != '') ? geodir_params.txt_all_files : 'Allowed files';
+                pconfig['filters'] = [{
+                    'title': txt_all_files,
+                    'extensions': allowed_exts
+                }];
+            }
 
             var uploader = new plupload.Uploader(pconfig);
-            uploader.bind('Init', function (up) {
+            uploader.bind('Init', function(up) {
                 //alert(1);
             });
 
             uploader.bind('Init', function(up, params) {
                 if (uploader.features.dragdrop) {
                     var drop_id = imgId + 'dropbox';
-                    var target = jQuery('#'+drop_id);
+                    var target = jQuery('#' + drop_id);
 
                     target.on("dragenter", function(event) {
                         target.addClass("dragover");
@@ -71,7 +76,7 @@ jQuery(document).ready(function ($) {
 
             uploader.init();
 
-            uploader.bind('Error', function (up, files) {
+            uploader.bind('Error', function(up, files) {
                 if (files.code == -600) {
                     jQuery('#' + imgId + 'upload-error').addClass('upload-error');
 
@@ -91,12 +96,12 @@ jQuery(document).ready(function ($) {
                     } else {
                         msgErr = 'File type error. Allowed file types: %s';
                     }
-					if(imgId == 'post_images') {
-						var txtReplace = allowed_exts != '' ? "." + allowed_exts.replace(/,/g, ", .") : '*';
-						msgErr = msgErr.replace("%s", txtReplace);
-					} else {
-						msgErr = msgErr.replace("%s", jQuery("#" + imgId + "_allowed_types").attr('data-exts'));
-					}
+                    if (imgId == 'post_images') {
+                        var txtReplace = allowed_exts != '' ? "." + allowed_exts.replace(/,/g, ", .") : '*';
+                        msgErr = msgErr.replace("%s", txtReplace);
+                    } else {
+                        msgErr = msgErr.replace("%s", jQuery("#" + imgId + "_allowed_types").attr('data-exts'));
+                    }
 
                     jQuery('#' + imgId + 'upload-error').html(msgErr);
                 } else {
@@ -104,22 +109,18 @@ jQuery(document).ready(function ($) {
                     jQuery('#' + imgId + 'upload-error').html(files.message);
                 }
             });
-            //totalImg = jQuery("#" + imgId + "totImg").val();
-            //limitImg = jQuery("#" + imgId + "image_limit").val();
-
-            console.log();
 
             //a file was added in the queue
             //totalImg = geodir_plupload_params.totalImg;
             //limitImg = geodir_plupload_params.image_limit;
-            uploader.bind('FilesAdded', function (up, files) {
-                var totalImg = jQuery("#" + imgId + "totImg").val();
-                var limitImg = jQuery("#" + imgId + "image_limit").val();
+            uploader.bind('FilesAdded', function(up, files) {
+                var totalImg = parseInt(jQuery("#" + imgId + "totImg").val());
+                var limitImg = parseInt(jQuery("#" + imgId + "image_limit").val());
                 jQuery('#' + imgId + 'upload-error').html('');
                 jQuery('#' + imgId + 'upload-error').removeClass('upload-error');
 
-                if (limitImg && $this.hasClass("plupload-upload-uic-multiple") && jQuery("#" + imgId + "image_limit").val() > 0) {
-                    if (totalImg >= limitImg && parseInt(limitImg) > 0) {
+                if (limitImg && $this.hasClass("plupload-upload-uic-multiple") && limitImg > 0) {
+                    if (totalImg >= limitImg && limitImg > 0) {
                         while (up.files.length > 0) {
                             up.removeFile(up.files[0]);
                         } // remove images
@@ -137,7 +138,7 @@ jQuery(document).ready(function ($) {
                         return false;
                     }
 
-                    if (up.files.length > limitImg && parseInt(limitImg) > 0) {
+                    if (up.files.length > limitImg && limitImg > 0) {
                         while (up.files.length > 0) {
                             up.removeFile(up.files[0]);
                         } // remove images
@@ -155,7 +156,7 @@ jQuery(document).ready(function ($) {
                     }
                 }
 
-                $.each(files, function (i, file) {
+                $.each(files, function(i, file) {
                     $this.find('.filelist').append('<div class="file" id="' + file.id + '"><b>' + file.name + '</b> (<span>' + plupload.formatSize(0) + '</span>/' + plupload.formatSize(file.size) + ') ' + '<div class="fileprogress"></div></div>');
                 });
 
@@ -163,7 +164,7 @@ jQuery(document).ready(function ($) {
                 up.start();
             });
 
-            uploader.bind('UploadProgress', function (up, file) {
+            uploader.bind('UploadProgress', function(up, file) {
                 $('#' + file.id + " .fileprogress").width(file.percent + "%");
                 $('#' + file.id + " span").html(plupload.formatSize(parseInt(file.size * file.percent / 100)));
             });
@@ -171,12 +172,12 @@ jQuery(document).ready(function ($) {
             var timer;
             var i = 0;
             var indexes = new Array();
-            uploader.bind('FileUploaded', function (up, file, response) {
+            uploader.bind('FileUploaded', function(up, file, response) {
                 //up.removeFile(up.files[0]); // remove images
-                var totalImg = jQuery("#" + imgId + "totImg").val();
+                var totalImg = parseInt(jQuery("#" + imgId + "totImg").val());
                 indexes[i] = up;
                 clearInterval(timer);
-                timer = setTimeout(function () {
+                timer = setTimeout(function() {
                     //geodir_remove_file_index(indexes);
                 }, 1000);
                 i++;
@@ -194,11 +195,11 @@ jQuery(document).ready(function ($) {
                         v1 = response;
                     }
                     $("#" + imgId).val(v1);
-                    console.log(v1);
+                    //console.log(v1);
                 } else {
                     // single
                     $("#" + imgId).val(response + "");
-                    console.log(response);
+                    //console.log(response);
                 }
                 // show thumbs
                 plu_show_thumbs(imgId);
@@ -216,10 +217,9 @@ function geodir_remove_file_index(indexes) {
 }
 
 function plu_show_thumbs(imgId) {
-
-    var totalImg = jQuery("#" + imgId + "totImg").val();
-    var limitImg = jQuery("#" + imgId + "image_limit").val();
-    console.log("plu_show_thumbs");
+	//console.log("plu_show_thumbs");
+    var totalImg = parseInt(jQuery("#" + imgId + "totImg").val());
+    var limitImg = parseInt(jQuery("#" + imgId + "image_limit").val());
     var $ = jQuery;
     var thumbsC = $("#" + imgId + "plupload-thumbs");
     thumbsC.html("");
@@ -241,60 +241,66 @@ function plu_show_thumbs(imgId) {
             var image_id = img_arr[1];
             var image_title = img_arr[2];
             var image_caption = img_arr[3];
-            //console.log(img_arr);
 
             // fix undefined id
-            if(typeof image_id === "undefined"){
+            if (typeof image_id === "undefined") {
                 image_id = '';
             }
             // fix undefined title
-            if(typeof image_title === "undefined"){
+            if (typeof image_title === "undefined") {
                 image_title = '';
             }
             // fix undefined title
-            if(typeof image_caption === "undefined"){
+            if (typeof image_caption === "undefined") {
                 image_caption = '';
             }
 
             var file_ext = image_url.substring(images[i].lastIndexOf('.') + 1);
 
-            file_ext = file_ext.split('?').shift();// in case the image url has params
+            file_ext = file_ext.split('?').shift(); // in case the image url has params
             var fileNameIndex = image_url.lastIndexOf("/") + 1;
             var dotIndex = image_url.lastIndexOf('.');
-            if(dotIndex < fileNameIndex){continue;}
+            if (dotIndex < fileNameIndex) {
+                continue;
+            }
             var file_name = image_url.substr(fileNameIndex, dotIndex < fileNameIndex ? loc.length : dotIndex);
 
             var file_display = '';
             var file_display_class = '';
             if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico') {
-                file_display ='<img class="gd-file-info" data-id="'+image_id+'" data-title="'+image_title+'" data-caption="'+image_caption+'" data-src="' + image_url + '" src="' + image_url + '" alt=""  />';
-            }else{
+                file_display = '<img class="gd-file-info" data-id="' + image_id + '" data-title="' + image_title + '" data-caption="' + image_caption + '" data-src="' + image_url + '" src="' + image_url + '" alt=""  />';
+            } else {
                 var file_type_class = 'fa-file';
-                if (file_ext == 'pdf') {file_type_class = 'fa-file-pdf';}
-                else if(file_ext == 'zip' || file_ext == 'tar'){file_type_class = 'fa-file-archive';}
-                else if(file_ext == 'doc' || file_ext == 'odt'){file_type_class = 'fa-file-word';}
-                else if(file_ext == 'txt' || file_ext == 'text'){file_type_class = 'fa-file-text';}
-                else if(file_ext == 'csv' || file_ext == 'ods' || file_ext == 'ots'){file_type_class = 'fa-file-excel';}
-                else if(file_ext == 'avi' || file_ext == 'mp4' || file_ext == 'mov'){file_type_class = 'fa-file-video';}
+                if (file_ext == 'pdf') {
+                    file_type_class = 'fa-file-pdf';
+                } else if (file_ext == 'zip' || file_ext == 'tar') {
+                    file_type_class = 'fa-file-archive';
+                } else if (file_ext == 'doc' || file_ext == 'odt') {
+                    file_type_class = 'fa-file-word';
+                } else if (file_ext == 'txt' || file_ext == 'text') {
+                    file_type_class = 'fa-file-text';
+                } else if (file_ext == 'csv' || file_ext == 'ods' || file_ext == 'ots') {
+                    file_type_class = 'fa-file-excel';
+                } else if (file_ext == 'avi' || file_ext == 'mp4' || file_ext == 'mov') {
+                    file_type_class = 'fa-file-video';
+                }
                 file_display_class = 'file-thumb';
-                file_display ='<i title="'+file_name+'" class="fa '+file_type_class+' gd-file-info" data-id="'+image_id+'" data-title="'+image_title+'" data-caption="'+image_caption+'" data-src="' + image_url + '" aria-hidden="true"></i>';
+                file_display = '<i title="' + file_name + '" class="fa ' + file_type_class + ' gd-file-info" data-id="' + image_id + '" data-title="' + image_title + '" data-caption="' + image_caption + '" data-src="' + image_url + '" aria-hidden="true"></i>';
             }
 
-            var thumb = $('<div class="thumb '+file_display_class+'" id="thumb' + imgId + i + '">' +
+            var thumb = $('<div class="thumb ' + file_display_class + '" id="thumb' + imgId + i + '">' +
                 file_display +
-                '<div class="gd-thumb-actions">'+
-                '<span class="thumbeditlink" onclick="gd_edit_image_meta('+imgId+','+i+');"><i class="far fa-edit" aria-hidden="true"></i></span>' +
+                '<div class="gd-thumb-actions">' +
+                '<span class="thumbeditlink" onclick="gd_edit_image_meta(' + imgId + ',' + i + ');"><i class="far fa-edit" aria-hidden="true"></i></span>' +
                 '<span class="thumbremovelink" id="thumbremovelink' + imgId + i + '"><i class="fas fa-trash-alt" aria-hidden="true"></i></span>' +
-                '</div>'+
+                '</div>' +
                 '</div>');
 
             thumbsC.append(thumb);
 
-            thumb.find(".thumbremovelink").click(function () {
-
-                console.log("plu_show_thumbs-thumbremovelink");
-
-                if (jQuery('#' + imgId + 'plupload-upload-ui').hasClass("plupload-upload-uic-multiple")){
+            thumb.find(".thumbremovelink").click(function() {
+                //console.log("plu_show_thumbs-thumbremovelink");
+                if (jQuery('#' + imgId + 'plupload-upload-ui').hasClass("plupload-upload-uic-multiple")) {
                     totalImg--; // remove image from total
                     jQuery("#" + imgId + "totImg").val(totalImg);
                 }
@@ -311,43 +317,40 @@ function plu_show_thumbs(imgId) {
                     }
                 }
                 $("#" + imgId).val(kimages.join());
-                console.log("plu_show_thumbs-thumbremovelink-run");
+                //console.log("plu_show_thumbs-thumbremovelink-run");
                 plu_show_thumbs(imgId);
                 return false;
             });
         }
     }
 
-    if (images.length > 1) {console.log("plu_show_thumbs-sortable");
+    if (images.length > 1) {
+        //console.log("plu_show_thumbs-sortable");
         thumbsC.sortable({
-            update: function (event, ui) {
+            update: function(event, ui) {
                 var kimages = [];
-                thumbsC.find(".gd-file-info").each(function () {
-                    kimages[kimages.length] = $(this).data("src")+"|"+$(this).data("id")+"|"+$(this).data("title")+"|"+$(this).data("caption");
+                thumbsC.find(".gd-file-info").each(function() {
+                    kimages[kimages.length] = $(this).data("src") + "|" + $(this).data("id") + "|" + $(this).data("title") + "|" + $(this).data("caption");
                     $("#" + imgId).val(kimages.join());
                     plu_show_thumbs(imgId);
-                    console.log("plu_show_thumbs-sortable-run");
+                    //console.log("plu_show_thumbs-sortable-run");
                 });
             }
         });
         thumbsC.disableSelection();
     }
 
-
     // we need to run the basics here.
-    console.log("run basics");
+    //console.log("run basics");
 
     var kimages = [];
-    thumbsC.find(".gd-file-info").each(function () {
-        kimages[kimages.length] = $(this).data("src")+"|"+$(this).data("id")+"|"+$(this).data("title")+"|"+$(this).data("caption");
+    thumbsC.find(".gd-file-info").each(function() {
+        kimages[kimages.length] = $(this).data("src") + "|" + $(this).data("id") + "|" + $(this).data("title") + "|" + $(this).data("caption");
         $("#" + imgId).val(kimages.join());
     });
 }
 
-
-/*
- */
-function gd_edit_image_meta(input,order_id){
+function gd_edit_image_meta(input, order_id) {
     var imagesS = jQuery("#" + input.id).val();
     var images = imagesS.split(",");
     var img_arr = images[order_id].split("|");
@@ -355,16 +358,16 @@ function gd_edit_image_meta(input,order_id){
     var image_caption = img_arr[3];
     var html = '';
 
-    html  = html + "<div class='gd-modal-text'><label for=''>Title</label><input id='gd-image-meta-title' value='"+image_title+"'></div>"; // title value
-    html  = html + "<div class='gd-modal-text'><label for=''>Caption</label><input id='gd-image-meta-caption' value='"+image_caption+"'></div>"; // caption value
-    html  = html + "<div class='gd-modal-button'><button class='button button-primary button-large' onclick='gd_set_image_meta(\""+input.id+"\","+order_id+")'>Set</button></div>"; // caption value
+    html = html + "<div class='gd-modal-text'><label for=''>Title</label><input id='gd-image-meta-title' value='" + image_title + "'></div>"; // title value
+    html = html + "<div class='gd-modal-text'><label for=''>Caption</label><input id='gd-image-meta-caption' value='" + image_caption + "'></div>"; // caption value
+    html = html + "<div class='gd-modal-button'><button class='button button-primary button-large' onclick='gd_set_image_meta(\"" + input.id + "\"," + order_id + ")'>Set</button></div>"; // caption value
     jQuery('#gd-image-meta-input').html(html);
     lity('#gd-image-meta-input');
 
 }
 
-function gd_set_image_meta(input_id,order_id){
-//alert(order_id);
+function gd_set_image_meta(input_id, order_id) {
+    //alert(order_id);
     var imagesS = jQuery("#" + input_id).val();
     var images = imagesS.split(",");
     var img_arr = images[order_id].split("|");
@@ -372,7 +375,7 @@ function gd_set_image_meta(input_id,order_id){
     var image_id = img_arr[1];
     var image_title = jQuery('#gd-image-meta-title').val();
     var image_caption = jQuery('#gd-image-meta-caption').val();
-    images[order_id] = image_url+"|"+image_id+"|"+image_title+"|"+image_caption;
+    images[order_id] = image_url + "|" + image_id + "|" + image_title + "|" + image_caption;
     imagesS = images.join(",");
     jQuery("#" + input_id).val(imagesS);
     plu_show_thumbs(input_id);

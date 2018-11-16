@@ -1,3 +1,6 @@
+v2.0.0.38
+File upload limit issue - FIXED
+
 v2.0.0.37
 If reviews not used in tabs then the #reviews anchor links no longer work - FIXED
 gd_listings related_to can still show the current listing  - FIXED
