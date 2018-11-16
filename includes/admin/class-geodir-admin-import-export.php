@@ -337,7 +337,7 @@ class GeoDir_Admin_Import_Export {
 		$csv_file = isset( $_POST['_file'] ) ? $_POST['_file'] : null;
 
 		$uploads      = wp_upload_dir();
-		$uploads_dir  = $uploads['baseurl'];
+		$uploads_dir  = $uploads['basedir'];
 		$csv_file_arr = explode( '/', $csv_file );
 		$csv_filename = end( $csv_file_arr );
 		$target_path  = $uploads_dir . '/geodir_temp/' . $csv_filename;
