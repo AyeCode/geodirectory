@@ -2030,3 +2030,21 @@ function geodir_cpt_template_page($page,$post_type) {
 
 	return $page_id;
 }
+
+/**
+ * Check if we are in an empty archive.
+ */
+function geodir_is_empty_archive(){
+	if(geodir_is_page('archive') || geodir_is_page('post_type')) {
+		global $wp_query;
+
+		if(
+			$wp_query->post_count == 1
+			&& ( empty( $wp_query->posts ) || (isset($wp_query->post->post_type) && $wp_query->post->post_type=='page'))
+		){
+			return true;
+		}
+	}
+
+	return false;
+}

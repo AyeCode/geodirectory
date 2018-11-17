@@ -951,6 +951,15 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'advanced' => true
 				),
 
+				array(
+					'name' => __( 'Noindex empty archives?', 'geodirectory' ),
+					'desc' => __( 'If checked this will attempt to add `noindex` tags to empty GD archive pages.', 'geodirectory' ),
+					'id'   => 'noindex_archives',
+					'type' => 'checkbox',
+					'default'  => '0',
+					'advanced' => true
+				),
+
 				array( 'type' => 'sectionend', 'id' => 'general_options_add' ),
 
 				array(

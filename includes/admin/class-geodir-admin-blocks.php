@@ -99,4 +99,4 @@ class GeoDir_Admin_Blocks {
 	}
 }
 // init the class.
-GeoDir_Admin_Blocks::get_instance();
+//GeoDir_Admin_Blocks::get_instance();

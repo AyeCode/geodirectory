@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	class WP_Super_Duper extends WP_Widget {
 
 
-		public $version = "1.0.0.0-dev";
+		public $version = "1.0.0.1-beta";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -53,7 +53,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			if ( isset( $options['class_name'] ) ) {
 				// register widget
 				$this->class_name = $options['class_name'];
-				
+
 				// register shortcode
 				$this->register_shortcode();
 
@@ -539,7 +539,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						});
 
 					});
-				
+
 				}
 				<?php do_action( 'wp_super_duper_widget_js', $this ); ?>
 			</script>
@@ -958,11 +958,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 							return [
 
-								!!props.focus && el(blocks.BlockControls, {key: 'controls'},
+								el(wp.editor.BlockControls, {key: 'controls'},
 
 									<?php if($show_alignment){?>
 									el(
-										blocks.AlignmentToolbar,
+										wp.editor.AlignmentToolbar,
 										{
 											value: props.attributes.alignment,
 											onChange: function (alignment) {
@@ -974,7 +974,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 								),
 
-								!!props.focus && el(blocks.InspectorControls, {key: 'inspector'},
+								el(wp.editor.InspectorControls, {key: 'inspector'},
 
 									<?php
 
@@ -1327,7 +1327,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$after_widget = $args['after_widget'];
 				$after_widget = apply_filters( 'wp_super_duper_after_widget', $after_widget, $args, $instance, $this );
 				$after_widget = apply_filters( 'wp_super_duper_after_widget_' . $this->base_id, $after_widget, $args, $instance, $this );
-				
+
 				echo $before_widget;
 				echo $this->output_title($args, $instance);
 				echo $output;
