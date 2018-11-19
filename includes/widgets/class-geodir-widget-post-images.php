@@ -165,6 +165,16 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'value'  => '1',
 					'default'  => 0,
 					'advanced' => true
+				),
+				'image_size'  => array(
+					'title' => __('Image size:', 'geodirectory'),
+					'desc' => __('The WP image size as a text string.', 'geodirectory'),
+					'type' => 'select',
+					'options' => self:: get_image_sizes(),
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'advanced' => true
 				)
 			)
 		);
@@ -225,7 +235,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'show_title'=> '1',
 			'limit'     => '',
 			'link_to'     => '',
-			'image_size'     => '',
+			'image_size'     => 'medium',
 			'show_logo'     => 'false',
 		);
 
@@ -356,6 +366,28 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		}
 
 		return ob_get_clean();
+	}
+
+
+	/**
+	 * Get the available image sizes.
+	 * 
+	 * @return array
+	 */
+	public static function get_image_sizes(){
+		$image_sizes = array(''=>'default');
+		$available = get_intermediate_image_sizes();
+
+		if(!empty($available)){
+			foreach($available as $size){
+				$image_sizes[$size] = $size;
+			}
+		}
+
+		$image_sizes['full'] = 'full';
+
+
+		return $image_sizes;
 	}
 
 }

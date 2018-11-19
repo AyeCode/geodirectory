@@ -32,6 +32,20 @@ class GeoDir_SEO {
 	 */
 	public static function init() {
 		add_action( 'init',array(__CLASS__,'maybe_run') );
+
+		// maybe noindex empty archive pages
+		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
+	}
+
+	/**
+	 * If set to do so, add noindex tag to GD archive pages.
+	 */
+	public static function maybe_noindex_empty_archives(){
+		if( geodir_get_option('noindex_archives') && geodir_is_page('archive') || geodir_is_page('post_type') ){
+			if(geodir_is_empty_archive() ){
+				echo '<meta name="robots" content="noindex">';
+			}
+		}
 	}
 
 	public static function yoast_enabled(){

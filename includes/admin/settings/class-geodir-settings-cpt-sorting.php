@@ -648,12 +648,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 
 			if(is_wp_error( $exists ) ){
 				return new WP_Error( 'failed', $exists->get_error_message() );
-			}elseif( $exists && !$field->field_id ){
-				//return new WP_Error( 'failed', __( "Duplicate field detected, save failed.", "geodirectory" ) );
+			}elseif( $exists && $field->field_id==='' ){ // field id blank for dummy data and 0 for new
 				return ''; // return blank, probably dummy data being inserted.
+			}elseif($exists && $field->field_id===0){// its new
+				$exists = false;
 			}
-
-
 
 			// if this is set as the default blank all the others first just incase.
 			if($field->is_default){

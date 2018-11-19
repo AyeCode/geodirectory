@@ -50,59 +50,67 @@ class GeoDir_Admin_Dummy_Data {
 				// insert the category
 				$category_return = wp_insert_term( $category['name'], $post_type . 'category' );
 
-				// attach the meta data
-				if(isset($category_return['term_id']) ){
-					// schema
-					if(!empty($category['schema_type'])){
-						update_term_meta( $category_return['term_id'], 'ct_cat_schema' , $category['schema_type']);
+				if(is_wp_error($category_return)){
+					geodir_error_log($category_return->getMessage(), 'dummy_data', __FILE__, __LINE__ );
+				}else {
+
+
+					// attach the meta data
+					if ( isset( $category_return['term_id'] ) ) {
+						// schema
+						if ( ! empty( $category['schema_type'] ) ) {
+							update_term_meta( $category_return['term_id'], 'ct_cat_schema', $category['schema_type'] );
+						}
+
+						// font icon
+						if ( ! empty( $category['font_icon'] ) ) {
+							update_term_meta( $category_return['term_id'], 'ct_cat_font_icon', $category['font_icon'] );
+						}
+
+						// color
+						if ( ! empty( $category['color'] ) ) {
+							update_term_meta( $category_return['term_id'], 'ct_cat_color', $category['color'] );
+						}
 					}
 
-					// font icon
-					if(!empty($category['font_icon'])){
-						update_term_meta( $category_return['term_id'], 'ct_cat_font_icon' , $category['font_icon']);
+					// attach the icon
+					if ( ! empty( $category['icon'] ) && isset( $category_return['term_id'] ) ) {
+						$uploaded = (array) GeoDir_Media::get_external_media( $category['icon'] );
+
+
+						if ( ! empty( $uploaded['error'] ) ) {
+							continue;
+						}
+
+						if ( empty( $uploaded['file'] ) ) {
+							continue;
+						}
+
+						$wp_filetype = wp_check_filetype( basename( $uploaded['file'] ), null );
+
+						$attachment = array(
+							'guid'           => $uploads['baseurl'] . '/' . basename( $uploaded['file'] ),
+							'post_mime_type' => $wp_filetype['type'],
+							'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $uploaded['file'] ) ),
+							'post_content'   => '',
+							'post_status'    => 'inherit'
+						);
+						$attach_id  = wp_insert_attachment( $attachment, $uploaded['file'] );
+
+						// you must first include the image.php file
+						// for the function wp_generate_attachment_metadata() to work
+						require_once( ABSPATH . 'wp-admin/includes/image.php' );
+						$attach_data = wp_generate_attachment_metadata( $attach_id, $uploaded['file'] );
+						wp_update_attachment_metadata( $attach_id, $attach_data );
+
+						if ( isset( $attach_data['file'] ) ) {
+							update_term_meta( $category_return['term_id'], 'ct_cat_icon', array( 'id'  => $attach_id,
+							                                                                     'src' => $attach_data['file']
+							) );
+						}
+
+
 					}
-
-					// color
-					if(!empty($category['color'])){
-						update_term_meta( $category_return['term_id'], 'ct_cat_color' , $category['color']);
-					}
-				}
-
-				// attach the icon
-				if(!empty($category['icon']) && isset($category_return['term_id']) ){
-					$uploaded = (array) GeoDir_Media::get_external_media ( $category['icon'] );
-
-
-					if ( !empty( $uploaded['error'] ) ) {
-						continue;
-					}
-
-					if ( empty( $uploaded['file'] ) ) {
-						continue;
-					}
-
-					$wp_filetype = wp_check_filetype( basename( $uploaded['file'] ), null );
-
-					$attachment = array(
-						'guid'           => $uploads['baseurl'] . '/' . basename( $uploaded['file'] ),
-						'post_mime_type' => $wp_filetype['type'],
-						'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $uploaded['file'] ) ),
-						'post_content'   => '',
-						'post_status'    => 'inherit'
-					);
-					$attach_id  = wp_insert_attachment( $attachment, $uploaded['file'] );
-
-					// you must first include the image.php file
-					// for the function wp_generate_attachment_metadata() to work
-					require_once( ABSPATH . 'wp-admin/includes/image.php' );
-					$attach_data = wp_generate_attachment_metadata( $attach_id, $uploaded['file'] );
-					wp_update_attachment_metadata( $attach_id, $attach_data );
-
-					if(isset($attach_data['file'])){
-						update_term_meta( $category_return['term_id'], 'ct_cat_icon' , array( 'id' => $attach_id , 'src' => $attach_data['file'] ) );
-					}
-
-
 				}
 
 			}
