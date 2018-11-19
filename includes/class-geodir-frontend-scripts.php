@@ -341,6 +341,9 @@ class GeoDir_Frontend_Scripts {
 	 */
 	private static function register_script( $handle, $path, $deps = array( 'jquery' ), $version = GEODIRECTORY_VERSION, $in_footer = true ) {
 		self::$scripts[] = $handle;
+		if ( $handle == 'select2' && wp_script_is( 'select2', 'registered' ) ) {
+			wp_deregister_script( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
+		}
 		wp_register_script( $handle, $path, $deps, $version, $in_footer );
 	}
 
@@ -380,6 +383,9 @@ class GeoDir_Frontend_Scripts {
 	 */
 	private static function register_style( $handle, $path, $deps = array(), $version = GEODIRECTORY_VERSION, $media = 'all', $has_rtl = false ) {
 		self::$styles[] = $handle;
+		if ( $handle == 'select2' && wp_style_is( 'select2', 'registered' ) ) {
+			wp_deregister_style( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
+		}
 		wp_register_style( $handle, $path, $deps, $version, $media );
 
 		if ( $has_rtl ) {

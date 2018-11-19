@@ -38,6 +38,9 @@ class GeoDir_Admin_Assets {
 		$page = ! empty( $_GET['page'] ) ? $_GET['page'] : '';
 
 		// Register admin styles
+		if ( wp_style_is( 'select2', 'registered' ) ) {
+			wp_deregister_style( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
+		}
 		wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-admin-css', geodir_plugin_url() . '/assets/css/admin.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-jquery-ui-timepicker-css', geodir_plugin_url() . '/assets/css/jquery.ui.timepicker.css', array(), GEODIRECTORY_VERSION);
@@ -119,6 +122,9 @@ class GeoDir_Admin_Assets {
 		
 
 		// Register scripts
+		if ( wp_script_is( 'select2', 'registered' ) ) {
+			wp_deregister_script( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
+		}
 		wp_register_script('select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array( 'jquery' ), '4.0.5' );
 		wp_register_script('geodir-custom-fields-script', geodir_plugin_url() . '/assets/js/custom_fields'.$suffix.'.js', array('select2','jquery','jquery-ui-sortable'), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-g-overlappingmarker-script', geodir_plugin_url() . '/assets/jawj/oms'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
