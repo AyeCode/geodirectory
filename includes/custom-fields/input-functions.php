@@ -496,7 +496,8 @@ function geodir_cfi_textarea($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
-        $extra_fields = unserialize($cf['extra_fields']);
+        $extra_fields = maybe_unserialize($cf['extra_fields']);
+		$html_editor = ! empty( $extra_fields['advanced_editor'] );
         ?>
 
         <div id="<?php echo $cf['name'];?>_row"
@@ -508,7 +509,7 @@ function geodir_cfi_textarea($html,$cf){
             </label><?php
 
 
-            if ( apply_filters( 'geodir_custom_field_allow_html_editor', true, $cf ) ) {
+            if ( apply_filters( 'geodir_custom_field_allow_html_editor', $html_editor, $cf ) ) {
 
                 $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);?>
 

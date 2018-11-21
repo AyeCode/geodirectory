@@ -661,7 +661,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$post_type = isset($raw['new_post_type']) && $raw['new_post_type'] ? str_replace("-","_",sanitize_key($raw['new_post_type'])) : self::$post_type;
 			$name = isset($raw['name']) && $raw['name'] ? sanitize_text_field($raw['name']) : null;
 			$singular_name = isset($raw['singular_name']) && $raw['singular_name'] ? sanitize_text_field($raw['singular_name']) : null;
-			$slug = isset($raw['slug']) && $raw['slug'] ? str_replace("-","_",sanitize_key($raw['slug'])) : $post_type;
+			//$slug = isset($raw['slug']) && $raw['slug'] ? str_replace("-","_",sanitize_key($raw['slug'])) : $post_type;
+			$slug = isset($raw['slug']) && $raw['slug'] ? sanitize_key($raw['slug']) : $post_type;
 
 			if ( ! $post_type || !$name || !$slug || ! $singular_name ) {
 				return new WP_Error( 'invalid_post_type', __( 'Invalid or missing post type', 'geodirectory' ) );

@@ -76,6 +76,15 @@ class GeoDir_Admin_Upgrade {
 			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_rr_update_version' ), 13 );
 		}
 
+		// Claim Manager
+		if ( self::needs_upgrade( 'claim_manager' ) ) {
+			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_claim_get_options' ), 30, 1 );
+
+			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_claim_create_default_options' ), 30 );
+			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_claim_create_tables' ), 30 );
+			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_claim_update_version' ), 30 );
+		}
+
 		add_action( 'geodirectory_v2_updated', array( __CLASS__, 'v2_updated' ), 10 );
 	}
 
@@ -85,6 +94,9 @@ class GeoDir_Admin_Upgrade {
 		switch ( $plugin ) {
 			case 'advance_search':
 				$found = ! is_null( get_option( 'geodiradvancesearch_db_version', null ) ) && ( is_null( get_option( 'geodir_advance_search_db_version', null ) ) || ( get_option( 'geodir_advance_search_db_version' ) && version_compare( get_option( 'geodir_advance_search_db_version' ), '2.0.0.0', '<' ) ) );
+			break;
+			case 'claim_manager':
+				$found = ! is_null( get_option( 'geodirclaim_db_version', null ) ) && ( is_null( get_option( 'geodir_claim_db_version', null ) ) || ( get_option( 'geodir_claim_db_version' ) && version_compare( get_option( 'geodir_claim_db_version' ), '2.0.0.0', '<' ) ) );
 			break;
 			case 'custom_post_types':
 				$found = ! is_null( get_option( 'geodir_custom_posts_db_version', null ) ) && ( is_null( get_option( 'geodir_cp_db_version', null ) ) || ( get_option( 'geodir_cp_db_version' ) && version_compare( get_option( 'geodir_cp_db_version' ), '2.0.0.0', '<' ) ) );
@@ -1840,6 +1852,64 @@ class GeoDir_Admin_Upgrade {
 
 		delete_option( 'geodir_reviewrating_db_version' );
 		add_option( 'geodir_reviewrating_db_version', $version );
+	}
+
+	// Claim Manager
+	public static function update_200_claim_get_options( $options = array() ) {
+		$merge_options = array(
+			'claim_auto_approve' => get_option( 'geodir_reviewrating_enable_rating' ),
+			'claim_show_author_link' => get_option( 'geodir_reviewrating_enable_images' ),
+			'claim_force_upgrade' => get_option( 'geodir_claim_force_upgrade' ),
+			'uninstall_geodir_claim_listing' => get_option( 'geodir_un_geodir_claim_listing' ),
+		);
+
+		return array_merge( $options, $merge_options );
+	}
+
+	public static function update_200_claim_create_default_options() {
+		if ( ! ( defined( 'GEODIRCLAIM_TEXTDOMAIN' ) && version_compare( GEODIRCLAIM_TEXTDOMAIN, '2.0.0.0', '<=' ) ) ) {
+			$default_options = array(
+				'claim_auto_approve' => '0',
+				'claim_show_author_link' => '0',
+				'claim_force_upgrade' => '0',
+			);
+
+			foreach ( $default_options as $key => $value ) {
+				geodir_update_option( $key, $value );
+			}
+		}
+	}
+
+	public static function update_200_claim_create_tables() {
+		global $wpdb, $plugin_prefix;
+
+		$collate = '';
+		if ( $wpdb->has_cap( 'collation' ) ) {
+			$collate = $wpdb->get_charset_collate();
+		}
+
+		// Tables
+		$claim_table = $plugin_prefix . 'claim';
+		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
+
+		// Change
+		$wpdb->query( "ALTER TABLE `{$claim_table}` CHANGE `pid` `id` int(11) unsigned NOT NULL AUTO_INCREMENT;" );
+		$wpdb->query( "ALTER TABLE `{$claim_table}`  
+			CHANGE `list_id` `post_id` int(11) unsigned NOT NULL DEFAULT '0', 
+			CHANGE `org_authorid` `author_id` int(11) unsigned NOT NULL DEFAULT '0', 
+			CHANGE `claim_date` `claim_date` datetime NOT NULL,
+			ADD `meta` text NOT NULL;" 
+		);
+	}
+
+	public static function update_200_claim_update_version() {
+		$version = defined( 'GEODIR_CLAIM_VERSION' ) && version_compare( GEODIR_CLAIM_VERSION, '2.0.0.0', '>=' ) ? GEODIR_CLAIM_VERSION : '2.0.0.0';
+
+		delete_option( 'geodir_claim_version' );
+		add_option( 'geodir_claim_version', $version );
+
+		delete_option( 'geodir_claim_db_version' );
+		add_option( 'geodir_claim_db_version', $version );
 	}
 
 	public static function v2_updated() {

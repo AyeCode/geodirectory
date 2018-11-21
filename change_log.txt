@@ -1,4 +1,20 @@
+v2.0.0.38
+File upload limit issue - FIXED
+PHP allow_url_fopen = off may break import csv - FIXED
+Error checking if wp_insert_term fails during dummy data insertion - ADDED
+Unable to add duplicate sort items for asc/desc - FIXED
+gd_post_images widget now has option to set the specific image size - ADDED
+Option added to add `noindex` tags to empty GD archive pages - ADDED
+Post badge widget text can now accept HTML so for example font awesome icons can be used - ADDED
+CPT slug not allowing - dash - FIXED
+WP Super Duper lib updated to work with latest Gutenberg JS - FIXED
+Textarea custom field html editor setting not working - FIXED
+Map loads markers from non-requested CPT on multilingual site - FIXED
+Conflict with select2 basic version loaded via 3rd party plugins - FIXED
+
 v2.0.0.37
+If reviews not used in tabs then the #reviews anchor links no longer work - FIXED
+gd_listings related_to can still show the current listing  - FIXED
 Import csv shows invalid csv file error - FIXED
 
 v2.0.0.36
