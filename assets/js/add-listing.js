@@ -379,14 +379,11 @@ function geodir_validate_field(field) {
             var recaptcha_ver = jQuery(field).val();
 
             if( 'invisible' != recaptcha_ver ) {
-
                 is_error = jQuery('.g-recaptcha-response').val() ? false : true;
-
             } else{
-
-                var test = jQuery('#recaptcha-token').val();
-                is_error = jQuery('#recaptcha-token').val() ? false : true;
+                is_error = false;
             }
+
             break;
         default:
             if (field.value != '') {
