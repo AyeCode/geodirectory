@@ -11,6 +11,7 @@ WP Super Duper lib updated to work with latest Gutenberg JS - FIXED
 Textarea custom field html editor setting not working - FIXED
 Map loads markers from non-requested CPT on multilingual site - FIXED
 Conflict with select2 basic version loaded via 3rd party plugins - FIXED
+Hook added to validate frontend add listing - ADDED
 
 v2.0.0.37
 If reviews not used in tabs then the #reviews anchor links no longer work - FIXED
