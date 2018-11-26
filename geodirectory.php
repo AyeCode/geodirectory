@@ -316,6 +316,7 @@ final class GeoDirectory {
 
         $this->query = new GeoDir_Query();
 		$this->api   = new GeoDir_API();
+
     }
     
     /**
@@ -348,6 +349,10 @@ final class GeoDirectory {
 	    // taxonomies
 	    $taxonomies_class_name = apply_filters('geodir_class_taxonomies','GeoDir_Taxonomies');
 	    $this->taxonomies = new $taxonomies_class_name;
+
+	    // notifications
+	    $notifications_class_name = apply_filters('geodir_class_notifications','GeoDir_Notifications');
+	    $this->notifications = new $notifications_class_name;
 
         // Init action.
         do_action( 'geodirectory_init' );

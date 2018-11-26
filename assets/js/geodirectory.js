@@ -35,11 +35,15 @@ jQuery.fn.gdunveil = function(threshold, callback,extra1) {
 
     this.one("gdunveil", function() {
         var source = this.getAttribute(attrib);
+        var srcset = this.getAttribute("data-srcset");
         source = source || this.getAttribute("data-src");
         if (source) {
+            // set the srcset from the data-srcset
+            if(srcset){this.setAttribute("srcset", srcset );}
+            // set the src from data-src
             this.setAttribute("src", source);
+
             jQuery(this).removeClass('geodir-lazy-load');
-            //jQuery(this).css('background-image', 'url("' + source + '")');
             if (typeof callback === "function") callback.call(this);
         }
     });

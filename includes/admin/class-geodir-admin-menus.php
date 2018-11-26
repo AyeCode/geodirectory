@@ -41,11 +41,13 @@ class GeoDir_Admin_Menus {
 	 */
 	public function admin_menu() {
 		global $menu;
-		
+
 		// @todo we should change this to manage_geodirectory capability on install
 		if (current_user_can('manage_options')) $menu[] = array('', 'read', 'separator-geodirectory', '', 'wp-menu-separator geodirectory');
 
-		add_menu_page( __( 'Geodirectory Dashboard', 'geodirectory' ), __( 'GeoDirectory', 'geodirectory' ), 'manage_options', 'geodirectory', array( $this, 'dashboard_page' ), 'dashicons-admin-site', '55.1984' );
+		$menu_count = apply_filters('geodir_admin_menu_count',''); //@todo this seems to make some things not work like the claim listing view link, fix before using
+
+		add_menu_page( __( 'Geodirectory Dashboard', 'geodirectory' ), __( 'GeoDirectory', 'geodirectory' ) . $menu_count, 'manage_options', 'geodirectory', array( $this, 'dashboard_page' ), 'dashicons-admin-site', '55.1984' );
 		add_submenu_page( 'geodirectory', __( 'Geodirectory Dashboard', 'geodirectory' ), __( 'Dashboard', 'geodirectory' ), 'manage_options', 'geodirectory', array( $this, 'dashboard_page' ) );
 		
 

@@ -1,7 +1,6 @@
 .geodir-comments-area{
 
   color: #404040;
-  text-align: justify;
 
   &>.gd-rating-output{
     font-size: 30px;
@@ -17,6 +16,7 @@
     list-style: none;
     padding: 0;
     margin: 0;
+    text-align: justify;
 
     &>li{
       margin: 10px 0;

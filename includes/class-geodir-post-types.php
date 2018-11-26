@@ -31,7 +31,13 @@ class GeoDir_Post_types {
 		add_action( 'geodir_flush_rewrite_rules', array( __CLASS__, 'flush_rewrite_rules' ) );
 
 		// Prevent Gutenberg editing GD CPTs, we only allow editing of the template pages.
-		add_filter( 'gutenberg_can_edit_post_type', array( __CLASS__, 'disable_gutenberg'), 10, 2 );
+		if (version_compare($GLOBALS['wp_version'], '5.0-beta', '>')) {
+			// WP > 5 beta
+			add_filter( 'use_block_editor_for_post_type', array( __CLASS__, 'disable_gutenberg'), 101, 2 );
+		} else {
+			// WP < 5 beta
+			add_filter( 'gutenberg_can_edit_post_type', array( __CLASS__, 'disable_gutenberg'), 101, 2 );
+		}
 
 		add_action( 'geodir_post_type_saved', 'geodir_reorder_post_types', 999 );
 

@@ -23,7 +23,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	 public static function page_add_content(){
-		 return "[gd_add_listing]";
+		 return "[gd_notifications]\n[gd_add_listing]";
 	 }
 
 	/**
@@ -32,7 +32,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_search_content(){
-		return "[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
+		return "[gd_notifications]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
 	}
 
 	/**
@@ -41,7 +41,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_location_content(){
-		return "[gd_categories]\n[gd_map map_type='directory' width=100% height=300 search_filter=1 cat_filter=1]\n[gd_search]\n[gd_listings post_limit=10]";
+		return "[gd_notifications]\n[gd_categories]\n[gd_map map_type='directory' width=100% height=300 search_filter=1 cat_filter=1]\n[gd_search]\n[gd_listings post_limit=10]";
 	}
 
 	/**
@@ -50,7 +50,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_archive_content(){
-		return "[gd_category_description]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
+		return "[gd_notifications]\n[gd_category_description]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
 	}
 	/**
 	 * The content for the archive item page.
@@ -79,7 +79,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_details_content(){
-		return "[gd_single_closed_text]\n[gd_post_images type='slider' ajax_load='true' slideshow='true' show_title='true' animation='slide' controlnav='1' ]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]";
+		return "[gd_notifications]\n[gd_post_images type='slider' ajax_load='true' slideshow='true' show_title='true' animation='slide' controlnav='1' ]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]";
 	}
 
 

@@ -5,6 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * GeoDirectory Search widget.
+ * @deprecated 2.0.0.38 use GeoDir_Widget_Single_Notifications instead
  *
  * @since 1.0.0
  */
