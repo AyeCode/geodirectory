@@ -34,7 +34,9 @@ class GeoDir_Admin_Upgrade {
 			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_cp_get_options' ), 10, 1 );
 
 			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_cp_create_default_options' ), 10 );
+			add_action( 'geodir_update_200_custom_fields', array( __CLASS__, 'update_200_cp_custom_fields' ), 10 );
 			add_action( 'geodir_update_200_post_fields', array( __CLASS__, 'update_200_cp_post_fields' ), 10, 1 );
+			add_action( 'geodir_update_200_create_tables', array( __CLASS__, 'update_200_cp_create_tables' ), 10 );
 			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_cp_update_version' ), 10 );
 		}
 
@@ -690,6 +692,7 @@ class GeoDir_Admin_Upgrade {
 
 				$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$post_type}category post_category varchar(254) DEFAULT NULL;" );
 				if ( in_array( 'is_featured', $columns ) ) {
+					@$wpdb->query( "ALTER TABLE {$table} DROP INDEX is_featured" );
 					// Converting the ENUM to TINYINT directly might give unexpected results. So we should start by converting column to a CHAR(1) and then to TINYINT(1).
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE is_featured featured char(1) NOT NULL DEFAULT '0';" );
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE featured featured tinyint(1) NOT NULL DEFAULT '0';" );
@@ -730,7 +733,6 @@ class GeoDir_Admin_Upgrade {
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX country(country)" );
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX region(region)" );
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX city(city)" );
-				$wpdb->query( "ALTER TABLE {$table} DROP INDEX is_featured" );
 
 				foreach ( $columns as $key => $column ) {
 					if ( strpos( $column, 'geodir_' ) === 0 && ! in_array( $column, array( 'geodir_contact', 'geodir_email', 'geodir_website', 'geodir_twitter', 'geodir_facebook', 'geodir_video', 'geodir_special_offers' ) ) ) {
@@ -861,6 +863,9 @@ class GeoDir_Admin_Upgrade {
 	private static function insert_default_tabs() {
 		global $wpdb;
 
+		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
+		$tabs_layout_table = GEODIR_TABS_LAYOUT_TABLE;
+
 		$post_types = (array) geodir_get_option( 'post_types' );
 
 		if ( ! empty( $post_types ) ) {
@@ -887,6 +892,46 @@ class GeoDir_Admin_Upgrade {
 						'tab_key'       => $row->htmlvar_name,
 						'tab_content'   => '',
 						'sort_order'    => $row->sort_order,
+						'tab_level'     => '0',
+						'tab_parent'    => '0'
+					);
+
+					GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+				}
+			}
+		}
+
+		if ( self::needs_upgrade( 'custom_post_types' ) ) {
+			$results = $wpdb->get_results( "SELECT post_type, htmlvar_name, frontend_title, field_icon FROM `{$custom_fields_table}` WHERE field_type = 'link_posts' AND is_active = '1' ORDER BY id ASC" );	
+			if ( ! empty( $results ) ) {
+				$sort_order = (int) $wpdb->get_var( "SELECT MAX( sort_order ) FROM {$tabs_layout_table} LIMIT 1" );
+				foreach ( $results as $key => $row ) {
+					$sort_order++;
+					$field = array(
+						'post_type'     => $row->post_type,
+						'tab_layout'    => 'post',
+						'tab_type'      => 'meta',
+						'tab_name'      => __( $row->frontend_title, 'geodirectory' ),
+						'tab_icon'      => $row->field_icon,
+						'tab_key'       => $row->htmlvar_name,
+						'tab_content'   => '',
+						'sort_order'    => $sort_order,
+						'tab_level'     => '0',
+						'tab_parent'    => '0'
+					);
+					
+					GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+
+					$sort_order++;
+					$field = array(
+						'post_type'     => $row->htmlvar_name,
+						'tab_layout'    => 'post',
+						'tab_type'      => 'link_from',
+						'tab_name'      => $post_types[ $row->post_type ]['labels']['name'],
+						'tab_icon'      => $row->field_icon,
+						'tab_key'       => $post_types[ $row->post_type ]['has_archive'],
+						'tab_content'   => '[gd_linked_posts link_type="from" post_type="' . $row->post_type . '" sort_by="latest" title_tag="h3" layout="gridview_onehalf" post_limit="5"]',
+						'sort_order'    => $sort_order,
 						'tab_level'     => '0',
 						'tab_parent'    => '0'
 					);
@@ -1286,7 +1331,7 @@ class GeoDir_Admin_Upgrade {
 						$geodir_package_exists[ $row->package_id ] = false;
 					}
 				}
-				if ( empty( $geodir_package_exists[ $row->package_id ] ) ) {
+				if ( empty( $row->invoice_id ) || empty( $geodir_package_exists[ $row->package_id ] ) ) {
 					continue;
 				}
 
@@ -1355,9 +1400,132 @@ class GeoDir_Admin_Upgrade {
 		}
 	}
 
+	public static function update_200_cp_custom_fields() {
+		global $wpdb, $plugin_prefix;
+
+		// Tables
+		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
+		$packages_table = $plugin_prefix . 'price';
+
+		$post_types = (array) get_option( 'geodir_post_types' );
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type => $data ) {
+				if ( empty( $post_type ) ) {
+					continue;
+				}
+
+				if ( $post_type == 'gd_event' ) {
+					$data['link_business'] = 1;
+					$data['linkable_to'] = 'gd_place';
+				}
+
+				if ( ! empty( $data['link_business'] ) && ! empty( $data['linkable_to'] ) && ! empty( $post_types[ $data['linkable_to'] ] ) ) {
+					$linked_to_name = $post_types[ $data['linkable_to'] ]['labels']['singular_name'];
+
+					$packages = '';
+					if ( self::needs_upgrade( 'payment_manager' ) ) {
+						$results = $wpdb->get_col( $wpdb->prepare( "SELECT pid FROM {$packages_table} WHERE post_type = %s", $post_type ) );
+						if ( ! empty( $results ) ) {
+							$packages = implode( ',', $results );
+						}
+					}
+
+					$link_data = array(
+						'post_type' => $post_type,
+						'data_type' => 'TEXT', 
+						'field_type' => 'link_posts', 
+						'field_type_key' => $data['linkable_to'], 
+						'admin_title' => 'Link Posts: ' . $linked_to_name, 
+						'frontend_desc' => wp_sprintf( 'Select your %s to link with this %s.', $linked_to_name, $data['labels']['singular_name'] ), 
+						'frontend_title' => $linked_to_name, 
+						'htmlvar_name' => $data['linkable_to'], 
+						'sort_order' => '-1', 
+						'is_active' => '1', 
+						'show_in' => '[detail]',  
+						'packages' => $packages, 
+						'extra_fields' => serialize( array( 'max_posts' => 1, 'all_posts' => 0 ) ), 
+						'field_icon' => 'fas fa-link'
+					);
+
+					$wpdb->insert( $custom_fields_table, $link_data, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%s', '%s' ) );
+				}
+			}
+		}
+	}
+
 	public static function update_200_cp_post_fields( $post_types ) {
 		global $wpdb;
 
+	}
+
+	public static function update_200_cp_create_tables() {
+		global $wpdb, $plugin_prefix;
+
+		$collate = '';
+		if ( $wpdb->has_cap( 'collation' ) ) {
+			$collate = $wpdb->get_charset_collate();
+		}
+
+		// Tables
+		$cp_link_posts_table = $plugin_prefix . 'cp_link_posts';
+
+		// Link posts table
+		$schema = "CREATE TABLE {$cp_link_posts_table} (
+			post_type varchar(50) NOT NULL,
+			post_id int(11) NOT NULL DEFAULT 0,
+			linked_id int(11) NOT NULL DEFAULT 0,
+			linked_post_type varchar(50) NOT NULL,
+			PRIMARY KEY (post_id,linked_id),
+			KEY post_id (post_id)
+		) $collate;";
+		$wpdb->query( $schema );
+
+		$post_types = (array) geodir_get_option( 'post_types' );
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type => $data ) {
+				if ( empty( $post_type ) ) {
+					continue;
+				}
+
+				$table = $wpdb->prefix . 'geodir_' . $post_type . '_detail';
+
+				$results = @$wpdb->get_results("DESC {$table}");
+
+				if ( empty( $results ) ) {
+					continue;
+				}
+
+				$columns = array();
+				foreach ( $results as $key => $row ) {
+					$columns[] = $row->Field;
+				}
+
+				if ( ! in_array( 'link_business', $columns ) ) {
+					continue;
+				}
+
+				$results = $wpdb->get_results( "SELECT post_id, link_business FROM {$table} WHERE link_business > 0" );
+				if ( empty( $results ) ) {
+					continue;
+				}
+
+				foreach ( $results as $row ) {
+					$linked_post_type = get_post_type( (int) $row->link_business );
+
+					if ( $linked_post_type ) {
+						$link_data = array(
+							'post_type' => $post_type,
+							'post_id' => $row->post_id,
+							'linked_id' => (int) $row->link_business,
+							'linked_post_type' => $linked_post_type
+						);
+						$wpdb->insert( $cp_link_posts_table, $link_data, array( '%s', '%d', '%d', '%s' ) );
+					}
+				}
+			}
+		}
 	}
 
 	public static function update_200_cp_update_version() {
@@ -1918,8 +2086,8 @@ class GeoDir_Admin_Upgrade {
 		if ( get_option( 'geodir_pricing_version' ) && get_option( 'geodir_payments_db_version' ) ) {
 			$package_meta_table = $plugin_prefix . 'pricemeta';
 
-			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-2' WHERE htmlvar_name = 'package_id'" );
-			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-1' WHERE htmlvar_name = 'expire_date'" );
+			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-3' WHERE htmlvar_name = 'package_id'" );
+			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-2' WHERE htmlvar_name = 'expire_date'" );
 
 			$results = $wpdb->get_results( "SELECT * FROM {$package_meta_table} WHERE meta_key = 'exclude_field' AND meta_value LIKE '%post_images%'" );
 			if ( ! empty( $results ) ) {
@@ -1934,6 +2102,10 @@ class GeoDir_Admin_Upgrade {
 					$wpdb->query( $wpdb->prepare( "UPDATE `{$package_meta_table}` SET `meta_value` = %s WHERE meta_id = %d", array( $meta_value, $row->meta_id ) ) );
 				}
 			}
+		}
+
+		if ( get_option( 'geodir_cp_version' ) && get_option( 'geodir_cp_db_version' ) ) {
+			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-1' WHERE field_type = 'link_posts'" );
 		}
 	}
 }
