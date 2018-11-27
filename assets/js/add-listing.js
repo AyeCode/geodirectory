@@ -180,6 +180,9 @@ function geodir_save_post() {
                 return true;
             } else {
                 console.log('save failed');
+				if (typeof data == 'object' && data.success === false && data.data) {
+					alert(data.data);
+				}
                 return false;
             }
         }

@@ -1193,6 +1193,13 @@ class GeoDir_Post_Data {
 
 		$post_data = apply_filters( 'geodir_auto_save_post_data', $post_data );
 
+		// Pre validation
+		$validate = apply_filters( 'geodir_validate_auto_save_post_data', true, $post_data, ! empty( $post_data['post_parent'] ), $doing_autosave );
+
+		if ( is_wp_error( $validate ) ) {
+			return $validate;
+		}
+
 		// Save the post.
 		$result = wp_update_post( $post_data, true );
 		
@@ -1257,6 +1264,13 @@ class GeoDir_Post_Data {
 
 		}else{
 			$post_data['post_status'] = $post_status;
+		}
+
+		// Pre validation
+		$validate = apply_filters( 'geodir_validate_ajax_save_post_data', true, $post_data, ! empty( $post_data['post_parent'] ) );
+
+		if ( is_wp_error( $validate ) ) {
+			return $validate;
 		}
 
 		// Save the post.

@@ -1,3 +1,6 @@
+v2.0.0.39
+Hook added to validate frontend add listing - ADDED
+
 v2.0.0.38
 File upload limit issue - FIXED
 PHP allow_url_fopen = off may break import csv - FIXED
