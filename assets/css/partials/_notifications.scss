@@ -1,7 +1,8 @@
 .gd-notification{
+  position: relative;
   display: inline-block;
   text-align: left;
-  margin: 0;
+  margin: 3px 0;
   vertical-align: middle;
   background: #0074d9;
   color: #fff;
@@ -54,8 +55,29 @@
 
   }
 
+
+  // depreciated should not be used
   &.gd-warn{
     background: #fb887b;
+  }
+
+  &.gd-error{
+    background: #f44336;
+  }
+
+  &.gd-warning{
+    background: #ff9800;
+  }
+
+  &.gd-success{
+    background: #4CAF50;
+  }
+
+  .gd-notification-dismiss{
+    position: absolute;
+    top: 2px;
+    right: 4px;
+    cursor: pointer;
   }
 
   &.noti-white{

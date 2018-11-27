@@ -180,11 +180,11 @@ class GeoDir_Email {
 	 *
 	 * @return mixed|void
 	 */
-	public static function is_email_enabled( $email_name ) {
+	public static function is_email_enabled( $email_name, $default = '' ) {
 		switch ( $email_name ) {
 			// TODO add some cases
 			default:
-				$active = geodir_get_option( 'email_' . $email_name );
+				$active = geodir_get_option( 'email_' . $email_name , $default);
 				$active = $active === 'yes' || $active == '1' ? true : false;
 				break;
 		}

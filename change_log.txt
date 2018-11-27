@@ -1,3 +1,6 @@
+v2.0.0.39
+Hook added to validate frontend add listing - ADDED
+
 v2.0.0.38
 File upload limit issue - FIXED
 PHP allow_url_fopen = off may break import csv - FIXED
@@ -11,7 +14,9 @@ WP Super Duper lib updated to work with latest Gutenberg JS - FIXED
 Textarea custom field html editor setting not working - FIXED
 Map loads markers from non-requested CPT on multilingual site - FIXED
 Conflict with select2 basic version loaded via 3rd party plugins - FIXED
-Hook added to validate frontend add listing - ADDED
+First image of slider not loading srcset which can make it load the wrong size image - FIXED
+WP5.0 changed hook name which made GD post types not editable from backend - FIXED
+Shortcode [gd_single_closed_text] depreciated, use [gd_notifications] instead - CHANGED
 
 v2.0.0.37
 If reviews not used in tabs then the #reviews anchor links no longer work - FIXED

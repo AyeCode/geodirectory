@@ -398,13 +398,38 @@ function geodir_nocache_headers() {
  * @param $user_notes
  *
  * @return string
+ * @since 2.0.0.38 Added the ability for notifications t
  */
 function geodir_notification( $user_notes ) {
 	$notes = '';
 	foreach ( $user_notes as $key => $user_note ) {
-		$notes .= "<div class='gd-notification $key'>";
-		$notes .= $user_note;
-		$notes .= "</div>";
+
+		if(is_array($user_note)){
+
+			$type = !empty($user_note['type']) ? esc_attr($user_note['type']) : '';
+			$extra_class = !empty($user_note['extra_class']) ? esc_attr($user_note['extra_class']) : '';
+			$icon = !empty($user_note['icon']) ? "<i class='".esc_attr($user_note['extra_icon'])."'></i>" : '';
+			$note = !empty($user_note['note']) ? $user_note['note']  : '';
+			$dismissible = !empty($user_note['dismissible']) && $user_note['dismissible'] ? 'gd-is-dismissible'  : '';
+			if(!$icon && $type){
+				if($type=='error'){$icon = '<i class="fas fa-exclamation-circle"></i>';}
+				elseif($type=='warning'){$icon = '<i class="fas fa-exclamation-triangle"></i>';}
+				elseif($type=='success'){$icon = '<i class="fas fa-check-circle"></i>';}
+				elseif($type=='info'){$icon = '<i class="fas fa-info-circle"></i>';}
+			}
+
+			$notes .= "<div class='gd-notification gd-$type $extra_class $dismissible'>";
+			if($icon) {$notes .= $icon. " ";}
+			$notes .= $note;
+			if($dismissible){$notes .= '<i class="fas fa-times gd-notification-dismiss" onclick="jQuery(this).parent().fadeOut();" title="'.__('Dismiss','geodirectory').'"></i>';}
+			$notes .= "</div>";
+		}else{
+			$notes .= "<div class='gd-notification $key'>";
+			$notes .= $user_note;
+			$notes .= "</div>";
+		}
+
+
 	}
 
 	return $notes;
@@ -500,6 +525,7 @@ function goedir_register_widgets() {
 		new GeoDir_Widget_Single_Tabs();
 		new GeoDir_Widget_Single_Next_Prev();
 		new GeoDir_Widget_Single_Closed_Text();
+		new GeoDir_Widget_Notifications();
 		new GeoDir_Widget_Loop();
 		new GeoDir_Widget_Loop_Paging();
 		new GeoDir_Widget_Loop_Actions();

@@ -247,6 +247,7 @@ class GeoDir_AJAX {
 
 		$post_id = isset($_REQUEST['p']) ? absint($_REQUEST['p']) : url_to_postid( wp_get_referer() );
 		$form_id = isset($_REQUEST['extra']) ? absint($_REQUEST['extra']) : '';
+		
 		if(!$post_id || !$form_id){return 'no post id';}
 		global $post;
 		$post = get_post( $post_id );
@@ -265,7 +266,15 @@ class GeoDir_AJAX {
 		wp_head();
 		echo "<style>body { background: #fff;padding: 20px 50px;}</style>";
 		echo '</head><body>';
-		echo do_shortcode( "[ninja_form id=$form_id]" );
+
+		// allow other plugins to override the call
+		$override_html = apply_filters('geodir_ajax_ninja_forms_override','',$post_id,$form_id);
+		if(!empty($override_html)){
+			echo $override_html;
+		}else{
+			echo do_shortcode( "[ninja_form id=$form_id]" );
+		}
+
 		wp_footer();
 		echo '</body></html>';
 		wp_die();
