@@ -167,7 +167,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			$show_price = (isset($field_info->data_type) && ($field_info->data_type=='INT' || $field_info->data_type=='FLOAT')) ? 1 : 0;
 			?>
-			<p class="gdcf-price-extra-set" <?php if(!$show_price){ echo "style='display:none;'";}?>  data-gdat-display-switch-set="gdat-extra_is_price">
+			<p class="gdcf-price-extra-set" <?php if(!$show_price){ echo "style='display:none;'";}?>  data-gdat-display-switch-set="gdat-extra_is_price" data-setting="is_price">
 				<label for="is_price" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select if this field should be displayed as a price value.', 'geodirectory' ));
@@ -186,7 +186,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$value = esc_attr($cf['defaults']['extra_fields']['thousand_separator']);
 			}
 			?>
-			<p class="gd-advanced-setting gdat-extra_is_price">
+			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="thousand_separator">
 				<label for="thousand_separator" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' ));
@@ -211,7 +211,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$value = esc_attr($cf['defaults']['extra_fields']['decimal_separator']);
 			}
 			?>
-			<p class="gd-advanced-setting gdat-extra_is_price" >
+			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="decimal_separator">
 				<label for="decimal_separator" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select the decimal separator.', 'geodirectory' ));
@@ -232,7 +232,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$value = esc_attr($cf['defaults']['extra_fields']['decimal_display']);
 			}
 			?>
-			<p class="gd-advanced-setting gdat-extra_is_price" >
+			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="decimal_display">
 				<label for="decimal_display" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select how the decimal is displayed.', 'geodirectory' ));
@@ -253,7 +253,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$value = esc_attr($cf['defaults']['extra_fields']['currency_symbol']);
 			}
 			?>
-			<p class="gdat-extra_is_price">
+			<p class="gdat-extra_is_price" data-setting="currency_symbol">
 				<label for="currency_symbol" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select the currency symbol.', 'geodirectory' ));
@@ -271,7 +271,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$value = esc_attr($cf['defaults']['extra_fields']['currency_symbol_placement']);
 			}
 			?>
-			<p class="gd-advanced-setting gdat-extra_is_price" >
+			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="currency_symbol_placement">
 				<label for="currency_symbol_placement" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select the currency symbol placement.', 'geodirectory' ));
@@ -308,7 +308,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
 			$gd_file_types = !empty($extra_fields) && !empty($extra_fields['gd_file_types']) ? maybe_unserialize($extra_fields['gd_file_types']) : array('*');
 			?>
-			<p>
+			<p data-setting="gd_file_types">
 				<label for="gd_file_types" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select file types to allowed for file uploading. (Select multiple file types by holding down "Ctrl" key.)', 'geodirectory' ));
@@ -351,7 +351,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			$gd_file_limit = !empty($extra_fields) && !empty($extra_fields['file_limit']) ? maybe_unserialize($extra_fields['file_limit']) : '';
 
 			?>
-			<p>
+			<p data-setting="file_limit">
 				<label for="gd_file_limit" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select the number of files that can be uploaded, 0 = unlimited.', 'geodirectory' ));
@@ -383,7 +383,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$extra = unserialize($field_info->extra_fields);
 			}
 			?>
-			<p>
+			<p data-setting="date_format">
 				<label for="date_format" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select the date format.', 'geodirectory' ));
@@ -450,7 +450,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			$field_type = isset($field_info->field_type) ? $field_info->field_type : '';
 			?>
-			<p>
+			<p data-setting="option_values">
 				<label for="option_values" class="dd-setting-name">
 					<?php
 					$option_values_tool_top = __( 'Option Values should be separated by comma.', 'geodirectory' ).'<br/>';
@@ -488,7 +488,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			$extra_fields = !empty($field_info->extra_fields) ? maybe_unserialize($field_info->extra_fields) : NULL;
 			$multi_display_type = isset($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
 			?>
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="multi_display_type">
 				<label for="multi_display_type" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Show multiselect input as multiselect,checkbox or radio.', 'geodirectory' ));
@@ -537,7 +537,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			 */
 			do_action('geodir_address_extra_admin_fields', $address, $field_info); ?>
 
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="show_zip">
 				<label for="show_zip" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select if you want to show zip/post code field in address section.', 'geodirectory' ));
@@ -547,7 +547,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				</label>
 			</p>
 
-			<p  class="cf-zip-lable gd-advanced-setting"  <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {echo "style='display:none;'";}?> >
+			<p  class="cf-zip-lable gd-advanced-setting"  <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {echo "style='display:none;'";}?> data-setting="zip_lable">
 				<label for="zip_lable" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Enter zip/post code field label in address section.', 'geodirectory' ));
@@ -562,7 +562,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			<input type="hidden" name="extra[show_map]" value="1" />
 
 
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="map_lable">
 				<label for="map_lable" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Enter text for `set address on map` button in address section.', 'geodirectory' ));
@@ -574,7 +574,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				</label>
 			</p>
 
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="show_mapzoom">
 				<label for="show_mapzoom" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Do you want to use the user defined map zoom level from the add listing page?', 'geodirectory' ));
@@ -584,7 +584,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				</label>
 			</p>
 
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="show_mapview">
 				<label for="show_mapview" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select if you want to show `set default map` options in address section. ( Satellite Map, Hybrid Map, Terrain Map)', 'geodirectory' ));
@@ -595,7 +595,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			</p>
 
 
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="mapview_lable">
 				<label for="mapview_lable" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Enter mapview field label in address section.', 'geodirectory' ));
@@ -607,7 +607,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				</label>
 			</p>
 
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="show_latlng">
 				<label for="show_latlng" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'This will show/hide the longitude fields in the address section add listing form.', 'geodirectory' ));
@@ -647,7 +647,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				}
 
 				?>
-				<p class="gd-advanced-setting">
+				<p class="gd-advanced-setting" data-setting="cat_display_type">
 					<label for="cat_display_type" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'Show categories list as select, multiselect, checkbox or radio', 'geodirectory' ));
@@ -697,7 +697,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$value = esc_attr( $cf['defaults']['validation_pattern'] );
 			}
 			?>
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="validation_pattern">
 				<label for="validation_pattern" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'geodirectory' ));
@@ -713,7 +713,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$value = esc_attr( $cf['defaults']['validation_msg'] );
 			}
 			?>
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="validation_msg">
 				<label for="validation_msg" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Enter a extra validation message to show to the user if validation fails.', 'geodirectory' ));
@@ -743,7 +743,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			ob_start();
 			?>
-			<p class="gd-advanced-setting">
+			<p class="gd-advanced-setting" data-setting="advanced_editor">
 				<label for="advanced_editor" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select if you want to show the advanced editor on add listing page.', 'geodirectory' ));
@@ -789,7 +789,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$dt_value = $cf['defaults']['data_type'];
 			}
 			?>
-			<p class="dd-setting-name gd-advanced-setting">
+			<p class="dd-setting-name gd-advanced-setting" data-setting="data_type">
 				<label for="data_type">
                 <?php
 					echo geodir_help_tip(__( 'Select the data type for the field. This can affect things like search filtering.', 'geodirectory' ));
@@ -822,7 +822,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			?>
 
 			<p class="dd-setting-name decimal-point-wrapper"
-			    style="<?php echo ( $dt_value == 'FLOAT' ) ? '' : 'display:none' ?>">
+			    style="<?php echo ( $dt_value == 'FLOAT' ) ? '' : 'display:none' ?>" data-setting="decimal_point">
 				<label for="decimal_point">
 					<?php
 					echo geodir_help_tip(__( 'Decimal point to display after point.', 'geodirectory' ));

@@ -19,7 +19,7 @@
 //mjs-nestedSortable-no-nesting
 $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 'mjs-nestedSortable-no-nesting';
 ?>
-<li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>">
+<li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>" data-field_type="<?php echo esc_attr( $field->field_type ); ?>" data-field_type_key="<?php echo esc_attr( $field->field_type_key ); ?>">
 	<div class="dd-form">
 		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
 		<div class="dd-handle">
@@ -88,7 +88,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['admin_title'];
 				}
 				?>
-				<p class="dd-setting-name gd-advanced-setting">
+				<p class="dd-setting-name gd-advanced-setting" data-setting="admin_title">
 					<label for="gd-admin-title-<?php echo $field->id;?>">
 						<?php
 						echo geodir_help_tip( __( 'This is used as the field setting name here in the backend only.', 'geodirectory' ));
@@ -117,7 +117,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 			$value = $cf['defaults']['frontend_title'];
 			}
 			?>
-				<p>
+				<p data-setting="frontend_title">
 					<label for="frontend_title" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'This will be the label for the field input on the frontend.', 'geodirectory' ));
@@ -144,7 +144,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['frontend_desc'];
 				}
 				?>
-				<p>
+				<p data-setting="frontend_desc">
 					<label for="frontend_desc" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'This will be shown below the field on the add listing form.', 'geodirectory' ));
@@ -170,7 +170,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['htmlvar_name'];
 				}
 				?>
-				<p class="gd-advanced-setting">
+				<p class="gd-advanced-setting" data-setting="htmlvar_name">
 					<label for="htmlvar_name" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'This is a unique identifier used in the database and HTML, it MUST NOT contain spaces or special characters.', 'geodirectory' ));
@@ -201,7 +201,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['is_active'];
 				}
 				?>
-				<p <?php echo $field_display; ?>>
+				<p <?php echo $field_display; ?> data-setting="is_active">
 					<label for="is_active" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'If no is selected then the field will not be displayed anywhere.', 'geodirectory' ));
@@ -229,7 +229,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['for_admin_use'];
 				}
 				?>
-				<p class="gd-advanced-setting">
+				<p class="gd-advanced-setting" data-setting="for_admin_use">
 					<label for="for_admin_use" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'If yes is selected then only site admin can see and edit this field on the add listing page.', 'geodirectory' ));
@@ -257,7 +257,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['default_value'];
 				}
 				?>
-				<p class="gd-advanced-setting">
+				<p class="gd-advanced-setting" data-setting="default_value">
 					<label for="default_value" class="dd-setting-name">
 						<?php
 							if ( $field->field_type == 'checkbox' ) {
@@ -302,7 +302,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['placeholder_value'];
 				}
 				?>
-				<p class="gd-advanced-setting">
+				<p class="gd-advanced-setting" data-setting="placeholder_value">
 					<label for="placeholder_value" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'A placeholder value to use for text input fields.', 'geodirectory' ));
@@ -330,7 +330,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = esc_attr( $cf['defaults']['show_in'] );
 				}
 				?>
-				<p>
+				<p data-setting="show_in">
 					<label for="show_in" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'Select in what locations you want to display this field.', 'geodirectory' ));
@@ -421,7 +421,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['is_required'];
 				}
 				?>
-				<p class="">
+				<p class="" data-setting="is_required">
 					<label for="is_required" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'Select yes to set field as required.', 'geodirectory' ));
@@ -452,7 +452,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				?>
 				<p  class="cf-is-required-msg gd-advanced-setting" <?php if ( ( isset( $field->is_required ) && $field->is_required == '0' ) || ! isset( $field->is_required ) ) {
 					echo "style='display:none;'";
-				} ?>>
+				} ?> data-setting="required_msg">
 					<label for="required_msg" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'Enter text for the error message if the field is required and has not fulfilled the requirements.', 'geodirectory' ));
@@ -487,7 +487,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				}
 				?>
 				<h3 class="gd-advanced-setting"><?php echo __( 'Custom css', 'geodirectory' ); ?></h3>
-				<p class="gd-advanced-setting">
+				<p class="gd-advanced-setting" data-setting="field_icon">
 					<label for="field_icon" class="dd-setting-name">
 						<?php
 						echo geodir_help_tip( __( 'Upload icon using media and enter its url path, or enter font awesome class eg:"fas fa-home"', 'geodirectory' ));
@@ -514,7 +514,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['css_class'];
 				}
 				?>
-				<p class="gd-advanced-setting">
+				<p class="gd-advanced-setting" data-setting="css_class">
 					<label for="css_class" class="dd-setting-name">
 						<?php
 						$css_class_tool_tip = __( 'Enter custom css class for field custom style.', 'geodirectory' );
@@ -552,7 +552,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 
 				$hide_cat_sort = ( isset( $cf['defaults']['cat_sort'] ) && $cf['defaults']['cat_sort'] === false ) ? "style='display:none;'" : '';
 				?>
-				<h3 class="gd-advanced-setting"><?php
+				<h3 class="gd-advanced-setting" data-setting="cat_sort_heading"><?php
 					/**
 					 * Filter the section title.
 					 *
@@ -567,7 +567,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					echo apply_filters( 'geodir_advance_custom_fields_heading', __( 'Posts sort options', 'geodirectory' ), $field->field_type );
 
 					?></h3>
-				<p class="gd-advanced-setting" <?php echo $hide_cat_sort; ?>>
+				<p class="gd-advanced-setting" <?php echo $hide_cat_sort; ?> data-setting="cat_sort">
 					<label for="cat_sort" class="dd-setting-name">
 						<?php
 						$tool_tip = __( 'Lets you use this field as a sorting option, set from sorting options above.', 'geodirectory' );
@@ -645,7 +645,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 			<?php */?>
 
 
-			<p class="gd-tab-actions">
+			<p class="gd-tab-actions" data-setting="save_button">
 				<?php
 				$core_fields = array('post_title','post_content','post_tags','post_category','address','post_images');
 				if ( ! ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, $core_fields ) ) && apply_filters( 'geodir_cfa_can_delete_field', true, $field ) ) {

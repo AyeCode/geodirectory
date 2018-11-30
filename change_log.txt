@@ -1,6 +1,7 @@
 v2.0.0.39
 Hook added to validate frontend add listing - ADDED
 Link posts data not converted during v1 to v2 conversion - FIXED
+Map pinpoint not working - FIXED
 
 v2.0.0.38
 File upload limit issue - FIXED
