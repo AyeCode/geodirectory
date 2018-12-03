@@ -470,6 +470,14 @@ class GeoDir_Post_types {
 					$value = false;
 				}
 				break;
+			case 'featured':
+				$cf = geodir_get_field_infoby( 'htmlvar_name', 'featured', $post_type );
+				if ( ! empty( $cf ) && ! empty( $cf['is_active'] ) ) {
+					$value = true;
+				} else {
+					$value = false;
+				}
+				break;
 		}
 
 
