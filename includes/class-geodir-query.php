@@ -52,6 +52,29 @@ class GeoDir_Query {
 	}
 
 	/**
+	 * Get a seed value for the RAND() sort order that is set for 24 hours .
+	 *
+	 * This is used to seed the mySQL RAND($seed) function so paging can be used.
+	 *
+	 * @return int|mixed
+	 */
+	public static function get_rand_seed(){
+
+		$rand_seed = get_transient( 'geodir_rand_seed' );
+
+		// if we don't have a transient then set a new one
+		if(!$rand_seed){
+			$rand_seed = time(); // well thats never gona be the same
+			set_transient( 'geodir_rand_seed', $rand_seed, 24 * HOUR_IN_SECONDS );
+		}
+
+		// validate
+		$rand_seed = absint($rand_seed);
+
+		return apply_filters('geodir_rand_seed',$rand_seed);
+	}
+
+	/**
 	 * Check if this is the main query and we should add our filters.
 	 *
 	 * @param $query
@@ -864,8 +887,9 @@ class GeoDir_Query {
 				$order_by_parts[] = self::search_sort();
 				break;
 			case 'post_status_desc':
-			case 'random': // @todo, i think we should remove random, its a bad idea for so many reasons.
-				$order_by_parts[] = "rand()";
+			case 'random':
+				$rand_seed = self::get_rand_seed();
+				$order_by_parts[] = "rand($rand_seed)";
 				break;
 			case 'az':
 			case 'post_title_asc':

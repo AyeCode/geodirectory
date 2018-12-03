@@ -213,6 +213,7 @@ final class GeoDirectory {
 
 	    // libs
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-country-database.php' );
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-font-awesome-settings.php' );
 
 	    /**
          * Class autoloader.
