@@ -531,6 +531,7 @@ function goedir_register_widgets() {
 		new GeoDir_Widget_Loop_Actions();
 		new GeoDir_Widget_Archive_Item_Section();
 		new GeoDir_Widget_Post_Distance();
+		new GeoDir_Widget_Map_Pinpoint();
 
 		// 3rd party widgets
 		if ( class_exists( 'Ninja_Forms' ) ) {
