@@ -164,11 +164,12 @@ class GeoDir_Query {
 			add_filter( 'posts_join', array( $this, 'posts_join' ), 1, 2 );
 			add_filter( 'posts_fields', array( $this, 'posts_fields' ), 1, 2 );
 			add_filter( 'posts_where', array( $this, 'posts_where' ), 1, 2 );
-			add_filter( 'posts_where', array( $this, 'posts_having' ), 10000, 2 ); // make sure its the last WHERE param
 
 			//add_filter( 'posts_limits', array( $this, 'posts_limits' ),10,2 );
 			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ), 1, 2 );
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ), 1, 2 );
+
+			add_filter( 'posts_clauses', array( $this, 'posts_having' ), 99999, 2 ); // make sure its the last WHERE param and after GROUP BY if there
 
 			// setup search globals
 			global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA;
@@ -253,7 +254,7 @@ class GeoDir_Query {
 	 *
 	 * @return string
 	 */
-	public function posts_having($where, $query = array()){
+	public function posts_having( $clauses, $query = array() ) {
 
 		if(self::is_gd_main_query($query)) {
 			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear;
@@ -262,13 +263,22 @@ class GeoDir_Query {
 				$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
 				$unit = geodir_get_option( 'search_distance_long', 'miles' );
 
-				if (strpos($where, ' HAVING ') === false) {
-					$where .= $wpdb->prepare(" HAVING distance <= %f ",$dist); 
+				/* 
+				 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition. 
+				 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
+				 */
+				if ( strpos( $clauses['where'], ' HAVING ') === false && strpos( $clauses['groupby'], ' HAVING ') === false ) {
+					$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
+					if ( trim( $clauses['groupby'] ) != '' ) {
+						$clauses['groupby'] .= $having;
+					} else {
+						$clauses['where'] .= $having;
+					}
 				}
 			}
 		}
 
-		return $where;
+		return $clauses;
 	}
 
 
@@ -299,9 +309,9 @@ class GeoDir_Query {
 					$DistanceRadius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
 
 					if ( ! empty( $user_lat ) ) {
-						$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($user_lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($user_lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($user_lon - " . $table . ".longitude) * pi()/180 / 2), 2) )))as distance ";
+						$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($user_lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($user_lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($user_lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))) AS distance ";
 					} else {
-						$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) )))as distance ";
+						$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) ))) AS distance ";
 					}
 
 				}
