@@ -1,10 +1,26 @@
 <?php
+/**
+ * A class for adjusting font awesome settings on WordPress
+ *
+ * This class can be added to any plugin or theme and will add a settings screen to WordPress to control Font Awesome settings.
+ *
+ * @link https://github.com/AyeCode/wp-font-awesome-settings
+ *
+ * @internal This file should not be edited directly, it is best pulled in from composer.
+ * @version 1.0.0
+ */
+
+/**
+ * Bail if we are not in WP.
+ */
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
+/**
+ * Only add if the class does not already exist.
+ */
 if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
-
 
 	/**
 	 * A Class to be able to change settings for Font Awesome.
@@ -15,8 +31,6 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 	 */
 	class WP_Font_Awesome_Settings {
 
-
-
 		/**
 		 * Class version version.
 		 *
@@ -24,12 +38,24 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 */
 		public $version = '0.0.1-dev';
 
+		/**
+		 * Latest version of Font Awesome when published.
+		 *
+		 * @var string
+		 */
 		public $latest = "5.5.0";
 
+		/**
+		 * The title.
+		 *
+		 * @var string
+		 */
 		public $name = 'Font Awesome';
 
 		/**
-		 * Holds the values to be used in the fields callbacks
+		 * Holds the settings values.
+		 *
+		 * @var array
 		 */
 		private $settings;
 
@@ -38,10 +64,9 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @access private
 		 * @since  1.0.0
-		 * @var    WP_Font_Awesome_Settings The one true WP_Font_Awesome_Settings
+		 * @var    WP_Font_Awesome_Settings There can be only one!
 		 */
 		private static $instance = null;
-
 
 		/**
 		 * Main WP_Font_Awesome_Settings Instance.
@@ -69,52 +94,9 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			return self::$instance;
 		}
 
-		public function enqueue_style(){
-			// build url
-			$url = $this->get_url();
-
-			wp_deregister_style( 'font-awesome' ); // deregister in case its already there
-			wp_register_style( 'font-awesome', $url,array(), null  );
-			wp_enqueue_style( 'font-awesome' );
-
-			if($this->settings['shims']){
-				$url = $this->get_url(true);
-				wp_deregister_style( 'font-awesome-shims' ); // deregister in case its already there
-				wp_register_style( 'font-awesome-shims', $url, array(), null );
-				wp_enqueue_style( 'font-awesome-shims' );
-			}
-		}
-
-		public function enqueue_scripts(){
-			// build url
-			$url = $this->get_url();
-
-			wp_deregister_script( 'font-awesome' ); // deregister in case its already there
-			wp_register_script( 'font-awesome', $url,array(), null );
-			wp_enqueue_script( 'font-awesome' );
-
-			if($this->settings['shims']){
-				$url = $this->get_url(true);
-				wp_deregister_script( 'font-awesome-shims' ); // deregister in case its already there
-				wp_register_script( 'font-awesome-shims', $url, array(), null );
-				wp_enqueue_script( 'font-awesome-shims' );
-			}
-		}
-
-		public function get_url($shims = false){
-			$script = $shims ? 'v4-shims' : 'all';
-			$type = $this->settings['type'];
-			$version = $this->settings['version'];
-
-			$url = "https://use.fontawesome.com/releases/"; // CDN
-			$url .= $type=='css' ? 'css/' : 'js/'; // type
-			$url .= !empty($version) ? $version.'/' : $this->latest.'/'; // version
-			$url .= $type=='css' ? $script.'.css' : $script.'.js'; // type
-			$url .= "?wpfas=true"; // set our var so our version is not removed
-
-			return $url;
-		}
-
+		/**
+		 * Initiate the settings and add the required action hooks.
+		 */
 		public function init(){
 			$this->settings =$this->get_settings();
 
@@ -146,9 +128,79 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 
 		}
 
+		/**
+		 * Adds the Font Awesome styles.
+		 */
+		public function enqueue_style(){
+			// build url
+			$url = $this->get_url();
+
+			wp_deregister_style( 'font-awesome' ); // deregister in case its already there
+			wp_register_style( 'font-awesome', $url,array(), null  );
+			wp_enqueue_style( 'font-awesome' );
+
+			if($this->settings['shims']){
+				$url = $this->get_url(true);
+				wp_deregister_style( 'font-awesome-shims' ); // deregister in case its already there
+				wp_register_style( 'font-awesome-shims', $url, array(), null );
+				wp_enqueue_style( 'font-awesome-shims' );
+			}
+		}
+
+		/**
+		 * Adds the Font Awesome JS.
+		 */
+		public function enqueue_scripts(){
+			// build url
+			$url = $this->get_url();
+
+			wp_deregister_script( 'font-awesome' ); // deregister in case its already there
+			wp_register_script( 'font-awesome', $url,array(), null );
+			wp_enqueue_script( 'font-awesome' );
+
+			if($this->settings['shims']){
+				$url = $this->get_url(true);
+				wp_deregister_script( 'font-awesome-shims' ); // deregister in case its already there
+				wp_register_script( 'font-awesome-shims', $url, array(), null );
+				wp_enqueue_script( 'font-awesome-shims' );
+			}
+		}
+
+		/**
+		 * Get the url of the Font Awesome files.
+		 *
+		 * @param bool $shims If this is a shim file or not.
+		 *
+		 * @return string The url to the file.
+		 */
+		public function get_url($shims = false){
+			$script = $shims ? 'v4-shims' : 'all';
+			$type = $this->settings['type'];
+			$version = $this->settings['version'];
+
+			$url = "https://use.fontawesome.com/releases/"; // CDN
+			$url .= $type=='css' ? 'css/' : 'js/'; // type
+			$url .= !empty($version) ? $version.'/' : $this->latest.'/'; // version
+			$url .= $type=='css' ? $script.'.css' : $script.'.js'; // type
+			$url .= "?wpfas=true"; // set our var so our version is not removed
+
+			return $url;
+		}
+
+		/**
+		 * Try and remove any other versions of Font Awesome added by other plugins/themes.
+		 *
+		 * Uses the clean_url filter to try and remove any other Font Awesome files added, it can also add pseudo-elements flag for the JS version.
+		 *
+		 * @param $url
+		 * @param $original_url
+		 * @param $_context
+		 *
+		 * @return string The filtered url.
+		 */
 		public function remove_font_awesome($url, $original_url, $_context){
 
-			if ($_context=='display' &&  strstr( $url, "fontawesome" ) !== false || strstr( $url, "font-awesome" ) !== false ) {// it's a font-awesome-url
+			if ($_context=='display' &&  strstr( $url, "fontawesome" ) !== false || strstr( $url, "font-awesome" ) !== false ) {// it's a font-awesome-url (probably)
 
 				if(strstr( $url, "wpfas=true" ) !== false){
 					if($this->settings['type']=='JS'){
@@ -168,32 +220,47 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			return $url;
 		}
 
-
+		/**
+		 * Register the database settings with WordPress.
+		 */
 		public function register_settings() {
 			register_setting( 'wp-font-awesome-settings', 'wp-font-awesome-settings' );
 			register_setting( 'wp-font-awesome-settings', 'some_other_option' );
 			register_setting( 'wp-font-awesome-settings', 'option_etc' );
 		}
 
+		/**
+		 * Add the WordPress settings menu item.
+		 */
 		public function menu_item(){
 			add_options_page( $this->name, $this->name, 'manage_options', 'wp-font-awesome-settings', array($this,'settings_page') );
 		}
 
+		/**
+		 * Get the current Font Awesome output settings.
+		 *
+		 * @return array The array of settings.
+		 */
 		public function get_settings(){
 
 			$db_settings = get_option( 'wp-font-awesome-settings' );
 
 			$defaults = array(
-				'type'  => 'CSS',
+				'type'  => 'CSS', // type to use, CSS or JS
 				'version'  => '', // latest
 				'enqueue'  => '', // front and backend
-				'shims'  => '1', // default on for now, maybe change to off in 2020
-				'js-pseudo'  => '0',
-				'dequeue'  => '0',
+				'shims'  => '1', // default on for now, @todo maybe change to off in 2020
+				'js-pseudo'  => '0', // if the pseudo elements flag should be set (CPU intensive)
+				'dequeue'  => '0', // if we should try to remove other versions added by other plugins/themes
 			);
 
 			$settings = wp_parse_args($db_settings,$defaults);
 
+			/**
+			 * Filter the Font Awesome settings.
+			 *
+			 * @todo if we add this filer people might use it and then it defeates the purpose of this class :/
+			 */
 			return $this->settings = apply_filters('wp-font-awesome-settings',$settings,$db_settings,$defaults);
 		}
 
@@ -287,6 +354,10 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 
 
 	}
+
+	/**
+	 * Run the class if found.
+	 */
 	WP_Font_Awesome_Settings::instance();
 }
 
