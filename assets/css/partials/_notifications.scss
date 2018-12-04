@@ -1,3 +1,25 @@
+// this is kept outside deliberatly so it can be used in other areas
+.gd-noti-button{
+  font-weight: bold;
+  background: #2fa3ff;
+  padding: 8px;
+  margin: 0px 0px;
+  text-align: right;
+  float: right;
+  border-radius: 5px;
+  text-decoration: none;
+  box-shadow: none !important;
+  color: #fff;
+  i,svg.svg-inline--fa,a{
+    color: #fff;
+  }
+  &:hover{
+
+  }
+}
+
+
+// main notifications
 .gd-notification{
   position: relative;
   display: inline-block;

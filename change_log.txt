@@ -3,6 +3,8 @@ Hook added to validate frontend add listing - ADDED
 Link posts data not converted during v1 to v2 conversion - FIXED
 Map pinpoint not working - FIXED
 Near location search not showing results if query has GROUP BY clause - FIXED
+Map setting show all on archive pages not working on CPT pages - FIXED
+Random sort order now seeded for 24 hours so to improve query speed and allow paging to work - CHANGED
 
 v2.0.0.38
 File upload limit issue - FIXED

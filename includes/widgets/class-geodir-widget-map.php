@@ -757,13 +757,19 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							if ( ! empty( $wp_query->queried_object ) && ! empty( $wp_query->queried_object->term_id ) ) {
 								$map_args['terms'][] = $wp_query->queried_object->term_id;
 							} else {
-								if ( ! empty( $wp_query->posts ) ) {
-									foreach ( $wp_query->posts as $post ) {
-										$map_args['posts'][] = $post->ID;
+
+								if(geodir_is_page('pt')){
+									// if post type page and set to show all then don't add a posts param
+								}else{
+									if ( ! empty( $wp_query->posts ) ) {
+										foreach ( $wp_query->posts as $post ) {
+											$map_args['posts'][] = $post->ID;
+										}
+									} else {
+										$map_args['posts'] = array( '-1' ); // No results
 									}
-								} else {
-									$map_args['posts'] = array( '-1' ); // No results
 								}
+
 							}
 						}
 					}

@@ -71,8 +71,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				wp_add_inline_style( 'widgets', $this->widget_css() );
 
 				// seems ashame to add this for one icon but i love it :(
-				wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/js/all.js', array('font-awesome-shim'), $this->version);
-				wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.4.1/js/v4-shims.js', array(), $this->version);
+				//wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/js/all.js', array('font-awesome-shim'), $this->version);
+				//wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.4.1/js/v4-shims.js', array(), $this->version);
 
 				//echo '###';
 				$sd_widget_scripts = true;
