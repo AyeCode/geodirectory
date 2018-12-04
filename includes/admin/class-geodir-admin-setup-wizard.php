@@ -117,8 +117,8 @@ class GeoDir_Admin_Setup_Wizard {
 		wp_register_script('select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-admin-script', geodir_plugin_url() . '/assets/js/admin'.$suffix.'.js', array('jquery','jquery-ui-tooltip','thickbox'), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-lity', geodir_plugin_url() . '/assets/js/libraries/gd_lity'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
-		wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.5.0/js/all.js', array('font-awesome-shim'), GEODIRECTORY_VERSION);
-		wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.5.0/js/v4-shims.js', array(), GEODIRECTORY_VERSION);
+		wp_register_style('font-awesome', 'https://use.fontawesome.com/releases/v5.5.0/css/all.css', array('font-awesome-shim'), GEODIRECTORY_VERSION);
+		wp_register_style('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.5.0/css/v4-shims.css', array(), GEODIRECTORY_VERSION);
 		wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".GeoDir_Maps::active_map()."';", 'before' );
 		wp_add_inline_script( 'geodir-admin-script', "var ajaxurl = '".admin_url( 'admin-ajax.php' )."';", 'before' );
 
@@ -134,7 +134,6 @@ class GeoDir_Admin_Setup_Wizard {
 			'geodir-admin-script',
 			'jquery-ui-progressbar',
 			'geodir-lity',
-			'font-awesome'
 		);
 
 		// add maps if needed
@@ -158,6 +157,7 @@ class GeoDir_Admin_Setup_Wizard {
 		wp_enqueue_style('geodir-admin-css', geodir_plugin_url() . '/assets/css/admin.css', array(), GEODIRECTORY_VERSION);
 		wp_enqueue_style('geodir-jquery-ui-css', geodir_plugin_url() . '/assets/css/jquery-ui.css', array(), GEODIRECTORY_VERSION);
 		wp_enqueue_style('jquery-ui-core');
+		wp_enqueue_style('font-awesome');
 		wp_enqueue_style( 'geodir-setup-wizard', GEODIRECTORY_PLUGIN_URL . '/assets/css/setup-wizard.css', array( 'dashicons', 'install','thickbox' ), GEODIRECTORY_VERSION );
 		wp_enqueue_style( 'select2', GEODIRECTORY_PLUGIN_URL . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-leaflet-style', geodir_plugin_url() . '/assets/leaflet/leaflet.css', array(), GEODIRECTORY_VERSION);

@@ -35,6 +35,15 @@
 // icon hover swap
 .gd-icon-hover-swap{
   cursor: pointer;
+
+  .gd-show{
+    display: inline-block;
+  }
+
+  .gd-hide{
+    display: none;
+  }
+
   &:hover{
     .gd-show{
       display: none;
