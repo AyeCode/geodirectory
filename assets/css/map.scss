@@ -89,7 +89,7 @@
     color: #FFFFFF;
     text-shadow: 1px 1px 4px rgba(38, 38, 38, 1);
     transition: font-size 0.5s;
-    svg{
+    i,svg{
         filter: drop-shadow(0 0 1px #969696);
     }
 }
@@ -587,9 +587,11 @@ input[name="street"].ui-autocomplete-loading {
 .gd-osm-results .ui-menu-item:hover {
     background-color: #fafafa !important;
 }
+.gd-osm-results .ui-menu-item i,
 .gd-osm-results .ui-menu-item .svg-inline--fa {
     margin-right: 5px;
 }
+.gd-osm-results .ui-menu-item:hover i,
 .gd-osm-results .ui-menu-item:hover .svg-inline--fa {
     color: #3887be!important;
 }

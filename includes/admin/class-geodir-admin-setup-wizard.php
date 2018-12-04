@@ -117,8 +117,8 @@ class GeoDir_Admin_Setup_Wizard {
 		wp_register_script('select2', geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-admin-script', geodir_plugin_url() . '/assets/js/admin'.$suffix.'.js', array('jquery','jquery-ui-tooltip','thickbox'), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-lity', geodir_plugin_url() . '/assets/js/libraries/gd_lity'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
-		wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/js/all.js', array('font-awesome-shim'), GEODIRECTORY_VERSION);
-		wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.4.1/js/v4-shims.js', array(), GEODIRECTORY_VERSION);
+		wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.5.0/js/all.js', array('font-awesome-shim'), GEODIRECTORY_VERSION);
+		wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.5.0/js/v4-shims.js', array(), GEODIRECTORY_VERSION);
 		wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '".GeoDir_Maps::active_map()."';", 'before' );
 		wp_add_inline_script( 'geodir-admin-script', "var ajaxurl = '".admin_url( 'admin-ajax.php' )."';", 'before' );
 

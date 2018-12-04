@@ -301,12 +301,13 @@ Progress bar
 	text-align:center;
 	font-size: .8em;
 	color: #444;
-	width: 100%
-}
-.gd-progress-label .svg-inline--fa {
-	margin-left: 7px;
-	font-size: 14px;
-	margin-right: 5px;
+	width: 100%;
+
+    i, .svg-inline--fa {
+        margin-left: 7px;
+        font-size: 14px;
+        margin-right: 5px;
+    }
 }
 #gd_timer {
 	display: inline-block
@@ -418,6 +419,7 @@ div.update-nag{width: 95%;}
     color: #333!important;
 }
 .gd-locate-me .gd-locate-me-btn,
+.gd-locate-me .gd-locate-me-btn i,
 .gd-locate-me .gd-locate-me-btn svg.svg-inline--fa,
 .gd-locate-me .gd-locate-me-btn .fa-crosshairs{
     font-size: 110% !important;
@@ -936,6 +938,7 @@ table.gd_status_table th.run-tool {
 .geodirectory_page_gd-status .geodirectory > .updated {
 	border: 0;
 }
+.select2-selection_gd_custom i,
 .select2-selection_gd_custom .svg-inline--fa {
 	font-size: 110%;
 	margin-right: 3px;
@@ -1406,9 +1409,11 @@ input[name="street"].ui-autocomplete-loading {
 .gd-osm-results .ui-menu-item:hover {
     background-color: #fafafa !important;
 }
+.gd-osm-results .ui-menu-item i,
 .gd-osm-results .ui-menu-item .svg-inline--fa {
     margin-right: 5px;
 }
+.gd-osm-results .ui-menu-item:hover i,
 .gd-osm-results .ui-menu-item:hover .svg-inline--fa {
     color: #3887be!important;
 }
