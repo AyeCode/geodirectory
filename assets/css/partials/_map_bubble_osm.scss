@@ -10,7 +10,7 @@
 		min-width: 190px !important;
 		max-width: 250px !important;
 
-		svg{
+		i, svg{
 			position: relative;
 		}
 
@@ -102,7 +102,7 @@
 							width: 2em;
 							height: 2em;
 							display: inline-block;
-							svg{
+							i, svg{
 								visibility: visible;
 							}
 						}

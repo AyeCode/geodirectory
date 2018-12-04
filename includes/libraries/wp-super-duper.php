@@ -170,9 +170,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						<button class="button" onclick="sd_copy_to_clipboard()"><?php _e('Copy shortcode');?></button>
 					</div>
 				</div>
-
-
-
+				
 			</div>
 
 

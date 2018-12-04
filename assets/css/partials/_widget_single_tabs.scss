@@ -19,7 +19,7 @@
     position: relative;
     z-index: 1;
     border-bottom: 1px solid #e2e2e2;
-    svg{
+    i, svg{
       margin-right: 5px;
     }
 
@@ -70,7 +70,7 @@
       &>li{
         margin: 0;
         .gd-tab-list-title{
-          svg{margin-right: 6px}
+          i,svg{margin-right: 6px}
         }
       }
     }

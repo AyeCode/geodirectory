@@ -507,17 +507,7 @@ class GeoDir_Frontend_Scripts {
 				'src'     => geodir_plugin_url() . '/assets/js/libraries/gd_lity' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
-			),
-			'font-awesome' => array(
-				'src'     => 'https://use.fontawesome.com/releases/v5.4.1/js/all.js#asyncload',
-				'deps'    => array('font-awesome-shim'),
-				'version' => GEODIRECTORY_VERSION,
-			),
-			'font-awesome-shim' => array(
-				'src'     => 'https://use.fontawesome.com/releases/v5.4.1/js/v4-shims.js#asyncload',
-				'deps'    => array(),
-				'version' => GEODIRECTORY_VERSION,
-			),
+			)
 		);
 		foreach ( $register_scripts as $name => $props ) {
 			self::register_script( $name, $props['src'], $props['deps'], $props['version'] );
@@ -584,7 +574,6 @@ class GeoDir_Frontend_Scripts {
 		self::enqueue_style( 'select2' );
 		self::enqueue_style( 'geodir-core' );
 		// js
-		self::enqueue_script( 'font-awesome' );
 		self::enqueue_script( 'select2' );
 		self::enqueue_script( 'geodir-select2' );
 		self::enqueue_script( 'geodir' );

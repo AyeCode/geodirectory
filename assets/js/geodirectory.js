@@ -1271,7 +1271,7 @@ function gd_init_rating_input(){
      */
     jQuery(".gd-rating-input").each(function () {
 
-        $total = jQuery(this).find('.gd-rating-foreground > svg, .gd-rating-foreground > img').length;
+        $total = jQuery(this).find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
         $parent = this;
 
         console.log($total);
@@ -1280,13 +1280,13 @@ function gd_init_rating_input(){
         $value = jQuery(this).closest('.gd-rating-input').find('input').val();
         if($value > 0){
             jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground').width( $value / $total * 100 + '%');
-            jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text( jQuery(this).closest('.gd-rating-input').find('svg, img'+':eq('+ ($value - 1) +')').attr("title"));
+            jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text( jQuery(this).closest('.gd-rating-input').find('svg, img'+':eq('+ ($value - 1) +'), i'+':eq('+ ($value - 1) +')').attr("title"));
         }
 
         // loop all rating stars
-        jQuery(this).find('svg, img').each(function (index) {
+        jQuery(this).find('i,svg, img').each(function (index) {
             $original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();
-            $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > svg, .gd-rating-foreground > svg').length;
+            $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
             $original_percent = $original_rating / $total * 100;
             $rating_set = false;
 
@@ -1296,7 +1296,7 @@ function gd_init_rating_input(){
                     $rating = index + 1;
                     $rating_text = jQuery(this).attr("title");
                     $original_rating_text = jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text();
-                    $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > svg, .gd-rating-foreground > img').length;
+                    $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
                     if ($rating > $total) {
                         $rating = $rating - $total;
                     }

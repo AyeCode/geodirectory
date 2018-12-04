@@ -144,11 +144,6 @@ class GeoDir_Admin_Assets {
 		wp_register_script('geodir-leaflet-routing-script', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-lity', geodir_plugin_url() . '/assets/js/libraries/gd_lity'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-nestable-script', geodir_plugin_url() . '/assets/js/libraries/jquery.nestable'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
-		wp_register_script('font-awesome', 'https://use.fontawesome.com/releases/v5.4.1/js/all.js', array('font-awesome-shim'), GEODIRECTORY_VERSION);
-		wp_register_script('font-awesome-shim', 'https://use.fontawesome.com/releases/v5.4.1/js/v4-shims.js', array(), GEODIRECTORY_VERSION);
-
-		// this should be everywhere
-		wp_enqueue_script( 'font-awesome' );
 
 		if ( $page == 'geodirectory' ) {
 			wp_register_script( 'raphael', '//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js', array('jquery'), '2.1.0' );

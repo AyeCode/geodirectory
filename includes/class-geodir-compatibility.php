@@ -54,7 +54,6 @@ class GeoDir_Compatibility {
 		/*######################################################
 		Beaver Builder :: Fix font-awesome.
 		######################################################*/
-		add_filter('wp_print_scripts',array(__CLASS__,'beaver_builder'),100);
 		add_filter('geodir_bypass_setup_archive_loop_as_page', array(__CLASS__,'beaver_builder_loop_bypass'));
 
 		/*######################################################
@@ -143,12 +142,6 @@ class GeoDir_Compatibility {
 		}
 
 		return $api_params;
-	}
-
-	public static function beaver_builder(){
-		if(isset($_REQUEST['fl_builder'])){
-			wp_dequeue_script( 'font-awesome' );
-		}
 	}
 
 	public static function wpseo_disable($options){

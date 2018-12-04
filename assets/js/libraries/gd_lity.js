@@ -172,7 +172,7 @@
             iframeUrl = transferHash(hashUrl, iframeUrl);
         }
 
-        return '<div class="lity-iframe-container"><iframe onload="jQuery(\'.lity-iframe-container .svg-inline--fa\').remove();" frameborder="0" allowfullscreen src="' + iframeUrl + '"/><i class="fas fa-sync fa-spin fa-3x fa-fw"></i></div>';
+        return '<div class="lity-iframe-container"><iframe onload="jQuery(\'.lity-iframe-container .svg-inline--fa, .lity-iframe-container i\').remove();" frameborder="0" allowfullscreen src="' + iframeUrl + '"/><i class="fas fa-sync fa-spin fa-3x fa-fw"></i></div>';
     }
 
     function error(msg) {

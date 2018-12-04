@@ -73,9 +73,11 @@
 .gd-bh-item .gd-bh-closed {
 	padding: 9px 0;
 }
-.gd-bh-item .svg-inline--fa {
-	font-size: 110%;
-	cursor: pointer;
+.gd-bh-item {
+	i, .svg-inline--fa {
+		font-size: 110%;
+		cursor: pointer;
+	}
 }
 .gd-bh-item a {
 	text-decoration: none;
