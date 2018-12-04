@@ -5,6 +5,8 @@ Map pinpoint not working - FIXED
 Near location search not showing results if query has GROUP BY clause - FIXED
 Map setting show all on archive pages not working on CPT pages - FIXED
 Random sort order now seeded for 24 hours so to improve query speed and allow paging to work - CHANGED
+post_author option added in [gd_listings] to filter listings by author - ADDED
+[gd_output_location] shortcode not escaping square brackets - FIXED
 
 v2.0.0.38
 File upload limit issue - FIXED
