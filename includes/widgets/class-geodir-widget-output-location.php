@@ -42,7 +42,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
                     'title' => __('Location:', 'geodirectory'),
                     'desc' => __('The location type to output.', 'geodirectory'),
                     'type' => 'select',
-                    'options'   => GeoDir_Settings_Cpt_Cf::show_in_locations(),
+                    'options' => $this->show_in_locations(),
                     'desc_tip' => true,
                     'advanced' => false
                 )
@@ -89,5 +89,15 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 
     }
 
+	public function show_in_locations() {
+		$locations = GeoDir_Settings_Cpt_Cf::show_in_locations();
 
+		$show_in_locations = array();
+		foreach ( $locations as $value => $label ) {
+			$value = str_replace( array( '[', ']' ), '', $value );
+			$show_in_locations[ $value ] = $label;
+		}
+
+		return $show_in_locations;
+	}
 }

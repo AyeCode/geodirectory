@@ -98,6 +98,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'desc_tip' => true,
                 'advanced' => true
             ),
+            'post_author'  => array(
+                'title' => __('Filter by author:', 'geodirectory'),
+                'desc' => __('Filter by current_user, current_author or ID (default = unfiltered). current_user: Filters the listings by author id of the logged in user. current_author: Filters the listings by author id of current viewing post/listing. 11: Filters the listings by author id = 11. Leave blank to show posts from all authors.', 'geodirectory'),
+                'type' => 'text',
+                'default' => '',
+                'desc_tip' => true,
+                'advanced' => true
+            ),
             'sort_by'  => array(
                 'title' => __('Sort by:', 'geodirectory'),
                 'desc' => __('How the listings should be sorted.', 'geodirectory'),
@@ -215,6 +223,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'post_type' => '',
                   'category' => array(),
 				  'related_to' => '',
+				  'post_author' => '',
                   'category_title' => '',
                   'sort_by' => 'az',
                   'title_tag' => 'h3',
@@ -291,6 +300,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          * @param string $instance ['related_to'] Filter by related to categories/tags.
          */
         $related_to = empty( $instance['related_to'] ) ? '' : apply_filters( 'widget_related_to', $instance['related_to'], $instance, $this->id_base );
+		/**
+         * Filter the widget post_author param.
+         *
+         * @since 2.0.0
+         *
+         * @param string $instance ['post_author'] Filter by author.
+         */
+        $post_author = empty( $instance['post_author'] ) ? '' : apply_filters( 'widget_post_author', $instance['post_author'], $instance, $this->id_base );
         /**
          * Filter the widget listings limit.
          *
@@ -468,6 +485,27 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             'order_by'       => $list_sort,
 			'distance_to_post' => $distance_to_post,
         );
+		// Post_number needs to be a positive integer
+		if ( ! empty( $post_author ) ) {
+			// 'current' left for backwards compatibility
+			if ( $post_author == 'current' || $post_author == 'current_author' ) {
+				if ( ! empty( $post ) && $post->post_type != 'page' && isset( $post->post_author ) ) {
+					$query_args['post_author'] = $post->post_author;
+				} else {
+					$query_args['post_author'] = -1; // Don't show any listings.
+				}
+			} else if ( $post_author == 'current_user' ) {
+				if ( is_user_logged_in() && ( $current_user_id = get_current_user_id() ) ) {
+					$query_args['post_author'] = $current_user_id;
+				} else {
+					$query_args['post_author'] = -1; // If not logged in then don't show any listings.
+				}
+			} else if ( absint( $post_author ) > 0) {
+				$query_args['post_author'] = absint( $post_author );
+			} else {
+				$query_args['post_author'] = -1; // Don't show any listings.
+			}
+		}
 
         if ( $character_count ) {
             $query_args['excerpt_length'] = $character_count;
