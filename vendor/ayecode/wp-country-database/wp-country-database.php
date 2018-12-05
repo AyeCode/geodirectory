@@ -15,7 +15,7 @@ if ( ! class_exists( 'WP_Country_Database' ) ) {
 	class WP_Country_Database {
 
 
-		public $version = "1.0.0.0-dev";
+		public $version = "1.0.2";
 		public $db_version = "1.0.0";
 		public $db_version_current;
 		public $db_table;
