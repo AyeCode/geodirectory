@@ -12,12 +12,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * Should not be called direct but extended instead.
 	 *
 	 * Class WP_Super_Duper
-	 * @ver 0.0.1
+	 * @ver 1.0.2
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
 
-		public $version = "1.0.0.1-beta";
+		public $version = "1.0.2";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -89,11 +89,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 		}
 
-        /**
-         * Get widget settings.
-         *
-         * @since 2.0.0
-         */
+		/**
+		 * Get widget settings.
+		 *
+		 * @since 2.0.0
+		 */
 		public static function get_widget_settings(){
 			global $sd_widgets;
 //			print_r($_REQUEST);
@@ -130,14 +130,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			wp_die();
 		}
 
-        /**
-         * Insert button in shortcode.
-         *
-         * @since 2.0.0
-         *
-         * @param string $editor_id Optional. Shortcode editor id. Default null.
-         * @param string $insert_shortcode_function Optional. Insert shotcode function. Default null.
-         */
+		/**
+		 * Insert button in shortcode.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $editor_id Optional. Shortcode editor id. Default null.
+		 * @param string $insert_shortcode_function Optional. Insert shotcode function. Default null.
+		 */
 		public static function shortcode_insert_button($editor_id = '',$insert_shortcode_function=''){
 			global $sd_widgets,$shortcode_insert_button_once;
 			if($shortcode_insert_button_once){return;}
@@ -170,7 +170,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						<button class="button" onclick="sd_copy_to_clipboard()"><?php _e('Copy shortcode');?></button>
 					</div>
 				</div>
-				
+
 			</div>
 
 
@@ -196,15 +196,15 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			<script>
 
 				<?php
-					if(!empty($insert_shortcode_function)){
-						echo $insert_shortcode_function;
-					}else{
+				if(!empty($insert_shortcode_function)){
+					echo $insert_shortcode_function;
+				}else{
 
-                /**
-                 * Function for super duper insert shortcode.
-                 *
-                 * @since 2.0.0
-                 */
+				/**
+				 * Function for super duper insert shortcode.
+				 *
+				 * @since 2.0.0
+				 */
 				?>
 				function sd_insert_shortcode(){
 					$shortcode = jQuery('#sd-shortcode-output').val();
@@ -578,8 +578,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 		/**
 		 * Register the parent shortcode.
-         *
-         * @since 2.0.0
+		 *
+		 * @since 2.0.0
 		 */
 		public function register_shortcode() {
 			add_shortcode( $this->base_id, array( $this, 'shortcode_output' ) );
@@ -588,8 +588,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 		/**
 		 * Render the shortcode via ajax so we can return it to Gutenberg.
-         *
-         * @since 2.0.0
+		 *
+		 * @since 2.0.0
 		 */
 		public static function render_shortcode() {
 
@@ -733,24 +733,24 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			return $argument_values;
 		}
 
-        /**
-         * Set arguments in super duper.
-         *
-         * @since 2.0.0
-         *
-         * @return array Set arguments.
-         */
+		/**
+		 * Set arguments in super duper.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @return array Set arguments.
+		 */
 		public function set_arguments() {
 			return $this->arguments;
 		}
 
-        /**
-         * Get arguments in super duper.
-         *
-         * @since 2.0.0
-         *
-         * @return array Get arguments.
-         */
+		/**
+		 * Get arguments in super duper.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @return array Get arguments.
+		 */
 		public function get_arguments() {
 			if ( empty( $this->arguments ) ) {
 				$this->arguments =  $this->set_arguments();
@@ -1404,14 +1404,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 		}
 
-        /**
-         * Convert require element.
-         *
-         * @since 2.0.0
-         *
-         * @param string $input Input element.
-         * @return string $output
-         */
+		/**
+		 * Convert require element.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $input Input element.
+		 * @return string $output
+		 */
 		public function convert_element_require( $input ) {
 
 			$input = str_replace( "'", '"', $input );// we only want double quotes
@@ -1550,8 +1550,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					case "hidden":
 						?>
 						<input id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="hidden"
-							value="<?php echo esc_attr( $value ); ?>">
+						       name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="hidden"
+						       value="<?php echo esc_attr( $value ); ?>">
 						<?php
 						break;
 					default:

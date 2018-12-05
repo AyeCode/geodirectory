@@ -6,4 +6,5 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'WP_Super_Duper' => $vendorDir . '/ayecode/wp-super-duper/wp-super-duper.php',
 );
