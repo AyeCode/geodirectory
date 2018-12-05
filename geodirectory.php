@@ -211,9 +211,11 @@ final class GeoDirectory {
     private function includes() {
         global $pagenow, $geodir_options, $wp_version;
 
+	    // libs via composer
+	    require_once( GEODIRECTORY_PLUGIN_DIR . 'vendor/autoload.php' );
+
 	    // libs
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-country-database.php' );
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-font-awesome-settings.php' );
 
 	    /**
          * Class autoloader.

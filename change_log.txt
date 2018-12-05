@@ -1,3 +1,7 @@
+v2.0.0.40
+Font Awesome Setting class updated to check if url is CSS or JS - UPDATED
+Custom field icon output prefixing `fas` as a class which can break branding icons - FIXED
+
 v2.0.0.39
 Hook added to validate frontend add listing - ADDED
 Link posts data not converted during v1 to v2 conversion - FIXED
