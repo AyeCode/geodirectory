@@ -122,57 +122,6 @@
         ]
     },
     {
-        "name": "ayecode/wp-font-awesome-settings",
-        "version": "1.0.6",
-        "version_normalized": "1.0.6.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
-            "reference": "5db43a4a2a538fec7f4c43bb06fe41962afbf834"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/5db43a4a2a538fec7f4c43bb06fe41962afbf834",
-            "reference": "5db43a4a2a538fec7f4c43bb06fe41962afbf834",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "*",
-            "squizlabs/php_codesniffer": "^3.2",
-            "wp-coding-standards/wpcs": "*"
-        },
-        "time": "2018-12-05 12:38:06",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "wp-font-awesome-settings.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "Settings page for Font Awesome in WordPress",
-        "homepage": "https://github.com/AyeCode/wp-font-awesome-settings",
-        "keywords": [
-            "FontAwesome",
-            "font-awesome"
-        ]
-    },
-    {
         "name": "ayecode/wp-super-duper",
         "version": "1.0.2",
         "version_normalized": "1.0.2.0",
@@ -273,6 +222,57 @@
         "keywords": [
             "countries",
             "wordpress"
+        ]
+    },
+    {
+        "name": "ayecode/wp-font-awesome-settings",
+        "version": "1.0.7",
+        "version_normalized": "1.0.7.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
+            "reference": "f2e5dab5714282a3e5ec1ed2fb227efe9a743571"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/f2e5dab5714282a3e5ec1ed2fb227efe9a743571",
+            "reference": "f2e5dab5714282a3e5ec1ed2fb227efe9a743571",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "~1.0",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "*",
+            "squizlabs/php_codesniffer": "^3.2",
+            "wp-coding-standards/wpcs": "*"
+        },
+        "time": "2018-12-05 16:41:59",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "wp-font-awesome-settings.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "AyeCode Ltd",
+                "email": "contact@ayecode.io",
+                "homepage": "https://ayecode.io/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Settings page for Font Awesome in WordPress",
+        "homepage": "https://github.com/AyeCode/wp-font-awesome-settings",
+        "keywords": [
+            "FontAwesome",
+            "font-awesome"
         ]
     }
 ]
