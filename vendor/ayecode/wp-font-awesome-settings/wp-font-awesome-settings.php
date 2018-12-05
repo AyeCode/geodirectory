@@ -7,7 +7,7 @@
  * @link https://github.com/AyeCode/wp-font-awesome-settings
  *
  * @internal This file should not be edited directly but pulled from the github repo above.
- * @version 1.0.0
+ * @version 1.0.6
  */
 
 /**
@@ -36,7 +36,7 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '1.0.0';
+		public $version = '1.0.6';
 
 		/**
 		 * Latest version of Font Awesome when published.
@@ -200,7 +200,10 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 		 */
 		public function remove_font_awesome($url, $original_url, $_context){
 
-			if ($_context=='display' &&  strstr( $url, "fontawesome" ) !== false || strstr( $url, "font-awesome" ) !== false ) {// it's a font-awesome-url (probably)
+			if ($_context=='display'
+			    &&  ( strstr( $url, "fontawesome" ) !== false || strstr( $url, "font-awesome" ) !== false )
+			    &&  ( strstr( $url, ".js" ) !== false || strstr( $url, ".css" ) !== false )
+			) {// it's a font-awesome-url (probably)
 
 				if(strstr( $url, "wpfas=true" ) !== false){
 					if($this->settings['type']=='JS'){
@@ -350,6 +353,23 @@ if ( ! class_exists( 'WP_Font_Awesome_Settings' ) ) {
 			</div>
 
 			<?php
+		}
+
+		/**
+		 * Check a version number is valid and if so return it or else return an empty string.
+		 *
+		 * @param $version string The version number to check.
+		 *
+		 * @return string Either a valid version number or an empty string.
+		 */
+		public function validate_version_number($version){
+
+			if( version_compare( $version, '0.0.1', '>=' ) >= 0 ) {
+				// valid
+			} else {
+				$version = '';// not validated
+			}
+			return $version;
 		}
 
 
