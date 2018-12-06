@@ -211,11 +211,8 @@ final class GeoDirectory {
     private function includes() {
         global $pagenow, $geodir_options, $wp_version;
 
-	    // libs via composer
+	    // composer autoloader
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'vendor/autoload.php' );
-
-	    // libs
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-country-database.php' );
 
 	    /**
          * Class autoloader.
@@ -259,9 +256,6 @@ final class GeoDirectory {
 	    GeoDir_Comments::init();
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location-functions.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/business-hours-functions.php' );
-
-
-	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/libraries/wp-super-duper.php' );
 
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-maps.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
