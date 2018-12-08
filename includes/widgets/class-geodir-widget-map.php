@@ -756,6 +756,12 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							$map_args['terms'] = array();
 							if ( ! empty( $wp_query->queried_object ) && ! empty( $wp_query->queried_object->term_id ) ) {
 								$map_args['terms'][] = $wp_query->queried_object->term_id;
+							} else if ( ! empty( $_REQUEST['spost_category'] ) && geodir_is_page( 'search' ) ) { // Search by category
+								if ( is_array( $_REQUEST['spost_category'] ) ) {
+									$map_args['terms'] = array_map( 'absint', $_REQUEST['spost_category'] );
+								} else {
+									$map_args['terms'] = array( absint( $_REQUEST['spost_category'] ) );
+								}
 							} else {
 
 								if(geodir_is_page('pt')){
