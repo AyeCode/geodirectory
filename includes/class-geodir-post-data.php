@@ -421,10 +421,12 @@ class GeoDir_Post_Data {
 			}elseif ( isset( $gd_post['city'] ) ) {
 				$postarr['city'] = $gd_post['city'];
 			}else {
-				$default_location = $geodirectory->location->get_default_location();
-				$postarr['city'] = $default_location->city;
-				$postarr['region'] = $default_location->region;
-				$postarr['country'] = $default_location->country;
+				if ( ! $update ) {
+					$default_location = $geodirectory->location->get_default_location();
+					$postarr['city'] = $default_location->city;
+					$postarr['region'] = $default_location->region;
+					$postarr['country'] = $default_location->country;
+				}
 			}
 			if ( isset( $gd_post['region'] ) ) {
 				$postarr['region'] = $gd_post['region'];
