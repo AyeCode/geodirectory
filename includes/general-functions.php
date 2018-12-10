@@ -1046,7 +1046,7 @@ function geodir_function_widget_listings_where( $where ) {
 			$where .= " AND " . $wpdb->posts . ".post_author = " . (int) $query_args['post_author'];
 		}
 
-		if ( ! empty( $query_args['show_featured_only'] ) ) {
+		if ( ! empty( $query_args['show_featured_only'] ) && GeoDir_Post_types::supports( $post_type, 'featured' ) ) {
 			$where .= " AND " . $table . ".featured = '1'";
 		}
 

@@ -190,6 +190,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '0',
                 'advanced' => true
             ),
+            'hide_if_empty'  => array(
+                'title' => __("Hide widget if no posts?", 'geodirectory'),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '0',
+                'advanced' => true
+            ),
 
 //                'show_featured_only'    => '',
 //            'show_special_only'     => '',
