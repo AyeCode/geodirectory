@@ -7,6 +7,7 @@ gd_map shortcode not showing all post markers for category search when enabled a
 GD Listings widget option "Hide widget if not posts" not working - FIXED
 Add srcset to lightbox images to allow it to user larger images if available - ADDED
 Changes for reCaptcha addon integration - ADDED
+Recently viewed widget/block/shortcode added that shows the listings the user has recently viewed - ADDED
 
 v2.0.0.39
 Hook added to validate frontend add listing - ADDED

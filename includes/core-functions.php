@@ -518,6 +518,7 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Author_Actions' );
 		register_widget( 'GeoDir_Widget_Listings' );
 		register_widget( 'GeoDir_Widget_Map' );
+		register_widget( 'GeoDir_Widget_Recently_Viewed' );
 
 		// Non Widgets
 		new GeoDir_Widget_Add_Listing();
