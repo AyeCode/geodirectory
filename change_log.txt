@@ -1,9 +1,12 @@
 v2.0.0.40
 Font Awesome Setting class updated to check if url is CSS or JS - UPDATED
 Custom field icon output prefixing `fas` as a class which can break branding icons - FIXED
+CPT default image not being used as a fallback image - FIXED
 It saves default location to listing - FIXED
 gd_map shortcode not showing all post markers for category search when enabled all_posts=1 - FIXED
 GD Listings widget option "Hide widget if not posts" not working - FIXED
+Add srcset to lightbox images to allow it to user larger images if available - ADDED
+Changes for reCaptcha addon integration - ADDED
 
 v2.0.0.39
 Hook added to validate frontend add listing - ADDED

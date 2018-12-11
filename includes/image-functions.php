@@ -172,6 +172,8 @@ function geodir_get_images($post_id = 0, $limit = '',$logo = false)
 
             // no image code
 
+
+
             // cat image
             if(geodir_is_page('archive')){
                 if($term_id = get_queried_object_id()){
@@ -189,10 +191,24 @@ function geodir_get_images($post_id = 0, $limit = '',$logo = false)
             if(!empty($term_img)){
                 $default_img_id = $term_img['id'];
             }else{
-                $listing_default_image_id = geodir_get_option('listing_default_image');
-                if( $listing_default_image_id ){
-                    $default_img_id = $listing_default_image_id;
+
+                // check for CPT default image
+                $cpt = geodir_get_current_posttype();
+                if($cpt){
+                    $cpts = geodir_get_posttypes('array');
+                    if(!empty($cpts[$cpt]['default_image'])){
+                        $default_img_id = absint($cpts[$cpt]['default_image']);
+                    }
                 }
+
+                // lastly check for default listing image
+                if(!$default_img_id){
+                    $listing_default_image_id = geodir_get_option('listing_default_image');
+                    if( $listing_default_image_id ){
+                        $default_img_id = $listing_default_image_id;
+                    }
+                }
+
             }
 
             // default image

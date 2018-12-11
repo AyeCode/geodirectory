@@ -23,6 +23,19 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
             'block-keywords'=> "['tabs','details','geodir']",
+            'block-output'   => array( // the block visual output elements as an array
+                array(
+                    'element' => 'div',
+                    'title'   => __( 'Placeholder tabs', 'geodirectory' ),
+                    'class'   => '[%className%]',
+                    'style'   => '{background: "#eee",width: "100%", height: "250px", position:"relative"}',
+                    array(
+                        'element' => 'i',
+                        'if_class'   => '[%show_as_list%]=="1" ? "fas fa-align-justify gd-fadein-animation" : "fas fa-columns gd-fadein-animation"',
+                        'style'   => '{"text-align": "center", "vertical-align": "middle", "line-height": "250px", "height": "100%", width: "100%","font-size":"140px",color:"#aaa"}',
+                    ),
+                ),
+            ),
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_single_tabs', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Single Tabs','geodirectory'), // the name of the widget.

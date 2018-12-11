@@ -215,6 +215,9 @@
         //var desc = (instance.opener() && instance.opener().data('lity-desc')) || 'Image with no description';
         var title = (instance.opener() && instance.opener().find('img').attr('title')) || '';
         var desc = (instance.opener() && instance.opener().find('img').attr('alt')) || '';
+
+        // responsive
+        var srcset = (instance.opener() && instance.opener().find('img').attr('srcset')) || '';
         if(title || desc){
             caption = '<div class="lity-caption">';
             if(title){
@@ -225,7 +228,7 @@
             }
             caption = caption + '</div>';
         }
-        var img = $('<img src="' + target + '" alt="' + desc + '"/>'+caption+gallery_nav);//+gallery_nav;
+        var img = $('<img src="' + target + '" alt="' + desc + '" srcset="'+srcset+'"/>'+caption+gallery_nav);//+gallery_nav;
         var deferred = _deferred();
         var failed = function() {
             deferred.reject(error('Failed loading image'));

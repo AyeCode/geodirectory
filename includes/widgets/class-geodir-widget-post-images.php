@@ -24,15 +24,16 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'element' => 'div',
 					'title'   => __( 'Placeholder image', 'geodirectory' ),
 					'class'   => '[%className%]',
+					'element_require' => '[%type%]!="gallery"',
 					'style'   => '{background: "#eee",width: "100%", height: "450px", position:"relative"}',
 					array(
 						'element' => 'i',
 						'if_class'   => '[%animation%]=="fade" ? "far fa-image gd-fadein-animation" : "far fa-image gd-right-left-animation"',
-						'style'   => '{"text-align": "center", "vertical-align": "middle", "line-height": "450px", width: "100%","font-size":"140px",color:"#aaa"}',
+						'style'   => '{"text-align": "center", "vertical-align": "middle", "line-height": "450px", "height": "100%", width: "100%","font-size":"140px",color:"#aaa"}',
 					),
 					array(
 						'element' => 'p',
-						'element_require' => '[%show_title%]',
+						'element_require' => '[%show_title%] && [%type%]=="slider"',
 						'content' => __('This is a default picture title','geodirectory'),
 						'style'   => '{background: "#aaa","text-align": "left", "vertical-align": "middle","font-size":"14px",color:"#fff",position:"absolute","margin-top":"-30px",height:"30px","line-height":"30px",width:"100%","padding-left":"10px"}',
 					),
@@ -40,7 +41,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				// default nav
 				array(
 					'element' => 'div',
-					'element_require' => '[%controlnav%]=="1"',
+					'element_require' => '[%controlnav%]=="1" && [%type%]=="slider"',
 					'style'   => '{width: "100%","margin-top":"5px","text-align": "center"}',
 					array(
 						'element' => 'i',
@@ -53,7 +54,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				// thumbnail nav
 				array(
 					'element' => 'div',
-					'element_require' => '[%controlnav%]=="2"',
+					'element_require' => '[%controlnav%]=="2" || [%type%]=="gallery"',
 					'style'   => '{width: "100%","margin-top":"5px"}',
 					array(
 						'element' => 'i',
