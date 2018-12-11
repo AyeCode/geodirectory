@@ -110,6 +110,11 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 	 */
 	public function output($args = array(), $widget_args = array(),$content = ''){
 
+		// if block demo return empty to show placeholder text
+		if($this->is_block_content_call()){
+			return '';
+		}
+
 		$create_rv_nonce = wp_create_nonce('recently_viewed');
 		$post_page_limit = !empty( $args['post_limit'] ) ? $args['post_limit'] : '5';
 		$layout = !empty( $args['layout'] ) ? $args['layout'] : 'list';
