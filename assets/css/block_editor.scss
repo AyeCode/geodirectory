@@ -1,7 +1,9 @@
 @import "partials/keyframes";
 @import "partials/ratings";
+@import "partials/notifications";
 
 
+// animation
 .gd-fadein-animation{
   -webkit-animation: gd-fadein 1s linear forwards;
   animation: gd-fadein 1s linear forwards;
@@ -13,4 +15,21 @@
 }
 .geodir-hide {
     display: none;
+}
+
+
+// single taxonomy widget
+.geodir-tags{ float: right;}
+
+// prev/next widget
+.geodir-post_left{ float: left;}
+.geodir-post_right{ float: right;}
+
+// stop font awesome icons being italic
+.editor-styles-wrapper{
+  i{
+    &.far,&.fas,&.fab,&.fal{
+      font-style: inherit;
+    }
+  }
 }

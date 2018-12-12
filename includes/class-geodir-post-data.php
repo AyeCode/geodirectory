@@ -1237,6 +1237,14 @@ class GeoDir_Post_Data {
 		//print_r($_REQUEST);exit;
 
 
+		// Pre validation
+		$validate = apply_filters( 'geodir_validate_ajax_save_post_data', true, $post_data, ! empty( $post_data['post_parent'] ) );
+
+		if ( is_wp_error( $validate ) ) {
+			return $validate;
+		}
+
+
 		/**
 		 * Allow to override the ajax save action 
 		 */
@@ -1268,12 +1276,7 @@ class GeoDir_Post_Data {
 			$post_data['post_status'] = $post_status;
 		}
 
-		// Pre validation
-		$validate = apply_filters( 'geodir_validate_ajax_save_post_data', true, $post_data, ! empty( $post_data['post_parent'] ) );
 
-		if ( is_wp_error( $validate ) ) {
-			return $validate;
-		}
 
 		// Save the post.
 		$result = wp_update_post( $post_data, true);

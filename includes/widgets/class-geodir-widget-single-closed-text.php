@@ -50,6 +50,14 @@ class GeoDir_Widget_Single_Closed_Text extends WP_Super_Duper {
     public function output($args = array(), $widget_args = array(),$content = ''){
         global $post;
         ob_start();
+        if(current_user_can('administrator')){
+            // warning
+            $notifications['gd-single-closed-deprecated-warning'] = array(
+                'type'  =>  'warning',
+                'note'  =>  wp_sprintf( __( 'ADMIN NOTICE: The `gd_single_closed_text` shortcode has been deprecated and should be replaced with `gd_notifications` shortcode/block/widget.', 'geodirectory' ), 'warning' )
+            );
+            echo geodir_notification($notifications);
+        }
         if ( geodir_post_is_closed( $post ) ) {
             geodir_post_closed_text( $post );
         }

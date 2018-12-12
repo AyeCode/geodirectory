@@ -19,27 +19,6 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 			'block-icon'    => 'minus',
 			'block-category'=> 'common',
 			'block-keywords'=> "['directions','geo','geodir']",
-			'block-output'   => array( // the block visual output elements as an array
-				array(
-					'element' => 'h1',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h1"',
-					'content'   => __("Demo title h1","geodirectory"),
-				),
-				array(
-					'element' => 'h2',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h2"',
-					'content'   => __("Demo title h2","geodirectory"),
-				),
-				array(
-					'element' => 'h3',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h3"',
-					'content'   => __("Demo title h3","geodirectory"),
-				),
-
-			),
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_directions', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Directions','geodirectory'), // the name of the widget.
@@ -65,15 +44,24 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output($args = array(), $widget_args = array(),$content = ''){
-		global $gd_post;
+		global $gd_post,$geodirectory;
 		ob_start();
 
-		if(isset($gd_post->latitude) && $gd_post->latitude) {
+		$lat = !empty($gd_post->latitude) ? esc_attr($gd_post->latitude) : '';
+		$lon = !empty($gd_post->longitude) ? esc_attr($gd_post->longitude) : '';
+
+		if(geodir_is_block_demo() && !$lat && !$lon){
+			$default_location = $geodirectory->location->get_default_location();
+			$lat = $default_location->latitude;
+			$lon = $default_location->longitude;
+		}
+
+		if($lat && $lon) {
 			?>
 			<div class="geodir_post_meta  geodir_get_directions" style="clear:both;">
 				<span class="geodir_post_meta_icon geodir-i-address" style=""><i class="fas fa-location-arrow" aria-hidden="true"></i></span>
 				<span class="geodir_post_meta_title">
-					<a href="https://maps.google.com/?daddr=<?php echo esc_attr($gd_post->latitude);?>,<?php echo esc_attr($gd_post->longitude);?>"
+					<a href="https://maps.google.com/?daddr=<?php echo esc_attr($lat);?>,<?php echo esc_attr($lon);?>"
 					target="_blank"><?php esc_attr_e( 'Get Directions', 'geodirectory' ); ?></a>
 				</span>
 			</div>

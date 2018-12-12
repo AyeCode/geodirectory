@@ -194,6 +194,12 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
          */
         $taxonomies = apply_filters('geodir_details_taxonomies_output',$taxonomies,$post_type,$listing_label,geodir_ucwords($listing_label));
 
+        // Block demo content
+        if( geodir_is_block_demo() &&  empty($taxonomies) && $post_type == 'page'){
+            $taxonomies[$post_taxonomy] = "Category: <a href='#'>Demo</a>, <a href='#'>Example</a>";
+            $taxonomies[$post_type . '_tags'] = "Tags: <a href='#'>Demo</a>, <a href='#'>Example</a>";
+        }
+
         if (isset($taxonomies[$post_taxonomy])) {
             echo '<span class="geodir-category">' . $taxonomies[$post_taxonomy] . '</span>';
         }

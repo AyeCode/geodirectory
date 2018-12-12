@@ -181,7 +181,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			$output .= implode( ", ", $errors );
 		}
 
-		$output = geodir_get_post_badge( $post_id, $args );
+		$output .= geodir_get_post_badge( $post_id, $args );
 
 		return $output;
 	}
