@@ -1633,13 +1633,23 @@ function geodir_sort_by_options( $post_type = 'gd_place' ) {
 
 	if  ( $sort_options = geodir_get_sort_options( $post_type ) ) {
 		foreach( $sort_options as $sort_option ) {
-			if ( !empty( $sort_option->sort_asc ) && ! empty( $sort_option->asc_title ) ) {
-				$options[ $sort_option->htmlvar_name . "_asc" ] = __( $sort_option->asc_title, 'geodirectory' );
-			}
+			$sort_option = stripslashes_deep( $sort_option );
 
-			if ( ! empty( $sort_option->sort_desc ) && ! empty( $sort_option->desc_title ) ) {
-				$options[ $sort_option->htmlvar_name . "_desc" ] = __( $sort_option->desc_title, 'geodirectory' );
-			}
+            $label = __( $sort_option->frontend_title, 'geodirectory' );
+
+            if ( $sort_option->htmlvar_name == 'comment_count' ) {
+                $sort_option->htmlvar_name = 'rating_count';
+            }
+
+            if ( $sort_option->field_type == 'random' ) {
+                $options[ 'random' ] = $label;
+            } else {
+                if ( $sort_option->sort == 'asc' ) {
+                    $options[ $sort_option->htmlvar_name . '_asc' ] = $label;
+                } else if ( $sort_option->sort == 'desc' ) {
+                    $options[ $sort_option->htmlvar_name . '_desc' ] = $label;
+                }
+            }
 		}
 	}
 
