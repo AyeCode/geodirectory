@@ -119,6 +119,16 @@ if ( isset( $all_plugins[ 'geodir_social_importer/geodir_social_importer.php' ] 
 		'status' => is_plugin_active( 'geodir_social_importer/geodir_social_importer.php' )
 	);
 }
+if ( isset( $all_plugins[ 'geodir_franchise/geodir_franchise.php' ] ) && $db_version = $all_plugins[ 'geodir_franchise/geodir_franchise.php' ]['Version'] ) {
+	$plugins[] = array(
+		'directory' => 'geodir_franchise',
+		'name' => 'GeoDirectory Franchise Manager',
+		'db_version' => $db_version,
+		'min_version'   => '2.0.0.0-dev',
+		'version'   => $all_plugins[ 'geodir_franchise/geodir_franchise.php' ]['Version'],
+		'status' => is_plugin_active( 'geodir_franchise/geodir_franchise.php' )
+	);
+}
 
 ?>
 <div id="message" class="notice-warning notice notice-alt geodir-message geodir-v1-to-v2-notice">
