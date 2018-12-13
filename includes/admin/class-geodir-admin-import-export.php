@@ -1104,6 +1104,8 @@ class GeoDir_Admin_Import_Export {
 			$csv_row[] = 'cat_posttype';
 			$csv_row[] = 'cat_parent';
 			$csv_row[] = 'cat_schema';
+			$csv_row[] = 'cat_font_icon';
+			$csv_row[] = 'cat_color';
 			$csv_row[] = 'cat_description';
 			$csv_row[] = 'cat_top_description';
 			$csv_row[] = 'cat_image';
@@ -1128,6 +1130,8 @@ class GeoDir_Admin_Import_Export {
 				$csv_row[] = $post_type;
 				$csv_row[] = $cat_parent;
 				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_schema', true );
+				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_font_icon', true );
+				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_color', true );
 				$csv_row[] = $term->description;
 				$csv_row[] = get_term_meta( $term->term_id, 'ct_cat_top_desc', true );
 				$csv_row[] = $cat_image;
@@ -1216,6 +1220,15 @@ class GeoDir_Admin_Import_Export {
 							update_term_meta( $term_id, 'ct_cat_schema', $term_data['cat_schema'] );
 						}
 
+						// Category font awesome icon
+						if ( isset( $term_data['cat_font_icon'] ) ) {
+							update_term_meta( $term_id, 'ct_cat_font_icon', $term_data['cat_font_icon'] );
+						}
+
+						// Category color
+						if ( isset( $term_data['cat_color'] ) ) {
+							update_term_meta( $term_id, 'ct_cat_color', $term_data['cat_color'] );
+						}
 
 						$attachment = false;
 						if ( isset( $term_data['image'] ) && $term_data['image'] != '' ) {
@@ -1289,9 +1302,11 @@ class GeoDir_Admin_Import_Export {
 		$cat_info_fixed['term_id']             = isset( $cat_info['cat_id'] ) && $cat_info['cat_id'] ? absint( $cat_info['cat_id'] ) : '';
 		$cat_info_fixed['name']                = isset( $cat_info['cat_name'] ) && $cat_info['cat_name'] ? esc_attr( $cat_info['cat_name'] ) : '';
 		$cat_info_fixed['slug']                = isset( $cat_info['cat_slug'] ) && $cat_info['cat_slug'] ? esc_attr( $cat_info['cat_slug'] ) : '';
-		$cat_info_fixed['parent']              = isset( $cat_info['cat_parent'] ) && $cat_info['cat_parent'] ? absint( $cat_info['cat_parent'] ) : '';
+		$cat_info_fixed['parent']              = isset( $cat_info['cat_parent'] ) && $cat_info['cat_parent'] ? $cat_info['cat_parent'] : '';
 		$cat_info_fixed['description']         = isset( $cat_info['cat_description'] ) && $cat_info['cat_description'] ? esc_attr( $cat_info['cat_description'] ) : '';
 		$cat_info_fixed['cat_schema']          = isset( $cat_info['cat_schema'] ) && $cat_info['cat_schema'] ? esc_attr( $cat_info['cat_schema'] ) : '';
+		$cat_info_fixed['cat_font_icon']       = isset( $cat_info['cat_font_icon'] ) && $cat_info['cat_font_icon'] ? esc_attr( $cat_info['cat_font_icon'] ) : '';
+		$cat_info_fixed['cat_color']           = isset( $cat_info['cat_color'] ) && $cat_info['cat_color'] ? esc_attr( $cat_info['cat_color'] ) : '';
 		$cat_info_fixed['cat_top_description'] = isset( $cat_info['cat_top_description'] ) && $cat_info['cat_top_description'] ? esc_attr( $cat_info['cat_top_description'] ) : '';
 		$cat_info_fixed['image']               = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
 		$cat_info_fixed['icon']                = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
@@ -1301,6 +1316,18 @@ class GeoDir_Admin_Import_Export {
 		// temp image fix
 		$cat_info_fixed['image'] 				= $cat_info_fixed['image'] != '' ? basename( $cat_info_fixed['image'] ) : '';
 		$cat_info_fixed['icon']  				= $cat_info_fixed['icon'] != '' ? basename( $cat_info_fixed['icon'] ) : '';
+
+		if ( ! empty( $cat_info_fixed['parent'] ) ) {
+			$parent = 0;
+			if ( $term = get_term_by( 'id', $cat_info_fixed['parent'], $cat_info_fixed['taxonomy'] ) ) {
+				$parent = $term->term_id;
+			} else if ( $term = get_term_by( 'slug', $cat_info_fixed['parent'], $cat_info_fixed['taxonomy'] ) ) {
+				$parent = $term->term_id;
+			} else if ( $term = get_term_by( 'name', $cat_info_fixed['parent'], $cat_info_fixed['taxonomy'] ) ) {
+				$parent = $term->term_id;
+			}
+			$cat_info_fixed['parent'] = $parent;
+		}
 
 		return apply_filters( 'geodir_import_category_validate_item', $cat_info_fixed, $cat_info );
 	}
@@ -1435,11 +1462,6 @@ class GeoDir_Admin_Import_Export {
 		}
 
 		$term_id = isset( $term_data['term_id'] ) && ! empty( $term_data['term_id'] ) ? $term_data['term_id'] : 0;
-
-		$args                = array();
-		$args['description'] = isset( $term_data['description'] ) ? $term_data['description'] : '';
-		$args['slug']        = isset( $term_data['slug'] ) ? $term_data['slug'] : '';
-		$args['parent']      = isset( $term_data['parent'] ) ? (int) $term_data['parent'] : '';
 
 		if ( $term_id > 0 && $term_info = (array) get_term( $term_id, $taxonomy ) ) {
 			$term_data['term_id'] = $term_info['term_id'];

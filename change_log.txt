@@ -1,5 +1,6 @@
 v2.0.0.41
 GD Listings widget sorting not showing custom sorting options - FIXED
+Category import does not assign parent category - FIXED
 
 v2.0.0.40
 Font Awesome Setting class updated to check if url is CSS or JS - UPDATED
