@@ -87,6 +87,15 @@ class GeoDir_Admin_Upgrade {
 			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_claim_update_version' ), 30 );
 		}
 
+		// Franchise Manager
+		if ( self::needs_upgrade( 'franchise_manager' ) ) {
+			add_filter( 'geodir_update_200_get_options', array( __CLASS__, 'update_200_franchise_get_options' ), 40, 1 );
+
+			add_action( 'geodir_update_200_create_default_options', array( __CLASS__, 'update_200_franchise_create_default_options' ), 40 );
+			add_action( 'geodir_update_200_custom_fields', array( __CLASS__, 'update_200_franchise_custom_fields' ), 40 );
+			add_action( 'geodir_update_200_update_gd_version', array( __CLASS__, 'update_200_franchise_update_version' ), 40 );
+		}
+
 		add_action( 'geodirectory_v2_updated', array( __CLASS__, 'v2_updated' ), 10 );
 	}
 
@@ -105,6 +114,9 @@ class GeoDir_Admin_Upgrade {
 			break;
 			case 'event_manager':
 				$found = ! is_null( get_option( 'geodirevents_db_version', null ) ) && ( is_null( get_option( 'geodir_event_db_version', null ) ) || ( get_option( 'geodir_event_db_version' ) && version_compare( get_option( 'geodir_event_db_version' ), '2.0.0.0', '<' ) ) );
+			break;
+			case 'franchise_manager':
+				$found = ( is_null( get_option( 'geodir_franchise_db_version', null ) ) || ( get_option( 'geodir_franchise_db_version' ) && version_compare( get_option( 'geodir_franchise_db_version' ), '2.0.0.0', '<' ) ) ) && ! is_null( get_option( 'geodir_franchise_posttypes', null ) );
 			break;
 			case 'location_manager':
 				$found = ! is_null( get_option( 'geodirlocation_db_version', null ) ) && ( is_null( get_option( 'geodir_location_db_version', null ) ) || ( get_option( 'geodir_location_db_version' ) && version_compare( get_option( 'geodir_location_db_version' ), '2.0.0.0', '<' ) ) );
@@ -272,6 +284,10 @@ class GeoDir_Admin_Upgrade {
 
 				if ( self::needs_upgrade( 'custom_post_types' ) ) {
 					$data['disable_location'] = in_array( $post_type, (array) get_option( 'geodir_cpt_disable_location' ) );
+				}
+
+				if ( self::needs_upgrade( 'franchise_manager' ) ) {
+					$data['supports_franchise'] = in_array( $post_type, (array) get_option( 'geodir_franchise_posttypes' ) );
 				}
 
 				$data['seo'] = array(
@@ -729,6 +745,11 @@ class GeoDir_Admin_Upgrade {
 				if ( in_array( 'expire_date', $columns ) ) {
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE `expire_date` `expire_date` DATE DEFAULT NULL;" );
 				}
+				if ( in_array( 'franchise', $columns ) ) {
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE franchise franchise_of INT(11) UNSIGNED DEFAULT '0';" );
+					$wpdb->query( "ALTER TABLE `{$table}` ADD franchise TINYINT(1) UNSIGNED DEFAULT '0';" );
+					$wpdb->query( "ALTER TABLE `{$table}` ADD franchise_fields TEXT NULL;" );
+				}
 
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX country(country)" );
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX region(region)" );
@@ -902,7 +923,7 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		if ( self::needs_upgrade( 'custom_post_types' ) ) {
-			$results = $wpdb->get_results( "SELECT post_type, htmlvar_name, frontend_title, field_icon FROM `{$custom_fields_table}` WHERE field_type = 'link_posts' AND is_active = '1' ORDER BY id ASC" );	
+			$results = $wpdb->get_results( "SELECT post_type, htmlvar_name, frontend_title, field_icon FROM `{$custom_fields_table}` WHERE field_type = 'link_posts' AND is_active = '1' ORDER BY id ASC" );
 			if ( ! empty( $results ) ) {
 				$sort_order = (int) $wpdb->get_var( "SELECT MAX( sort_order ) FROM {$tabs_layout_table} LIMIT 1" );
 				foreach ( $results as $key => $row ) {
@@ -936,6 +957,30 @@ class GeoDir_Admin_Upgrade {
 						'tab_parent'    => '0'
 					);
 
+					GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+				}
+			}
+		}
+
+		if ( self::needs_upgrade( 'franchise_manager' ) ) {
+			$results = $wpdb->get_results( "SELECT post_type, field_icon FROM `{$custom_fields_table}` WHERE htmlvar_name = 'franchise' AND is_active = '1' ORDER BY id ASC" );
+			if ( ! empty( $results ) ) {
+				$sort_order = (int) $wpdb->get_var( "SELECT MAX( sort_order ) FROM {$tabs_layout_table} LIMIT 1" );
+				foreach ( $results as $key => $row ) {
+					$sort_order++;
+					$field = array(
+						'post_type'     => $row->post_type,
+						'tab_layout'    => 'post',
+						'tab_type'      => 'shortcode',
+						'tab_name'      => 'Franchises',
+						'tab_icon'      => $row->field_icon,
+						'tab_key'       => 'franchises',
+						'tab_content'   => '[gd_listings post_type="' . $row->post_type . '" sort_by="latest" title_tag="h3" layout="list" post_limit="5" franchise_of="auto"]',
+						'sort_order'    => $sort_order,
+						'tab_level'     => '0',
+						'tab_parent'    => '0'
+					);
+					
 					GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
 				}
 			}
@@ -1265,7 +1310,10 @@ class GeoDir_Admin_Upgrade {
 
 				$rows = array();
 				// exclude_field
-				$fields = $wpdb->get_col( "SELECT htmlvar_name FROM `{$custom_fields_table}` WHERE post_type = '" . $row['post_type'] . "' AND is_default != '1' AND htmlvar_name != '' AND htmlvar_name != 'post_images' AND NOT FIND_IN_SET( {$package_id}, packages )" );
+				$fields = $wpdb->get_col( "SELECT htmlvar_name FROM `{$custom_fields_table}` WHERE post_type = '" . $row['post_type'] . "' AND is_default != '1' AND htmlvar_name != '' AND htmlvar_name != 'post_images' AND htmlvar_name != 'franchise' AND NOT FIND_IN_SET( {$package_id}, packages )" );
+				if ( isset( $row['enable_franchise'] ) && empty( $row['enable_franchise'] ) ) {
+					$fields[] = 'franchise';
+				}
 				$meta_value = ! empty( $fields ) ? implode( ",", $fields ) : '';
 				$rows[] = "( {$package_id}, 'exclude_field', '{$meta_value}' )";
 
@@ -2035,7 +2083,7 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	public static function update_200_claim_create_default_options() {
-		if ( ! ( defined( 'GEODIRCLAIM_TEXTDOMAIN' ) && version_compare( GEODIRCLAIM_TEXTDOMAIN, '2.0.0.0', '<=' ) ) ) {
+		if ( ! ( defined( 'GEODIRCLAIM_VERSION' ) && version_compare( GEODIRCLAIM_VERSION, '2.0.0.0', '<=' ) ) ) {
 			$default_options = array(
 				'claim_auto_approve' => '0',
 				'claim_show_author_link' => '0',
@@ -2080,6 +2128,132 @@ class GeoDir_Admin_Upgrade {
 		add_option( 'geodir_claim_db_version', $version );
 	}
 
+	// Franchise Manager
+	public static function update_200_franchise_get_options( $options = array() ) {
+		$merge_options = array(
+			'franchise_show_main' => ! get_option( 'geodir_franchise_hide_main_all' ),
+			'franchise_show_viewing' => ! get_option( 'geodir_franchise_hide_viewing' ),
+			'email_user_franchise_approved' => 1,
+			'email_user_franchise_approved_subject' => get_option( 'geodir_franchise_client_email_subject_payment_franchises' ),
+			'email_user_franchise_approved_body' => get_option( 'geodir_franchise_client_email_message_payment_franchises' ),
+			'email_bcc_user_franchise_approved' => get_option( 'geodir_franchise_bcc_admin_payment_franchises' ),
+			'uninstall_geodir_franchise' => get_option( 'uninstall_geodir_franchise' ),
+		);
+
+		return array_merge( $options, $merge_options );
+	}
+
+	public static function update_200_franchise_create_default_options() {
+		if ( ! ( defined( 'GEODIR_FRANCHISE_VERSION' ) && version_compare( GEODIR_FRANCHISE_VERSION, '2.0.0.0', '<=' ) ) ) {
+			$default_options = array(
+				'franchise_show_main' => 1,
+				'franchise_show_viewing' => 1,
+				'email_user_franchise_approved' => 1,
+			);
+
+			foreach ( $default_options as $key => $value ) {
+				geodir_update_option( $key, $value );
+			}
+		}
+	}
+
+	public static function update_200_franchise_custom_fields() {
+		global $wpdb, $plugin_prefix;
+
+		// Tables
+		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
+		$packages_table = $plugin_prefix . 'price';
+
+		$post_types = (array) get_option( 'geodir_franchise_posttypes' );
+
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type ) {
+				if ( empty( $post_type ) ) {
+					continue;
+				}
+
+				$packages = '';
+				if ( self::needs_upgrade( 'payment_manager' ) ) {
+					$results = $wpdb->get_col( $wpdb->prepare( "SELECT pid FROM {$packages_table} WHERE post_type = %s", $post_type ) );
+					if ( ! empty( $results ) ) {
+						$packages = implode( ',', $results );
+					}
+				}
+
+				$fields = array(
+					array(
+						'post_type' => $post_type,
+						'data_type' => 'TINYINT', 
+						'field_type' => 'radio', 
+						'field_type_key' => 'franchise', 
+						'admin_title' => 'Has Franchise?', 
+						'frontend_desc' => 'Tick "Yes" if listing has franchises.', 
+						'frontend_title' => 'Has Franchise?', 
+						'htmlvar_name' => 'franchise', 
+						'sort_order' => '0',
+						'option_values' => 'Yes/1,No/0',
+						'clabels' => 'Has Franchise?',
+						'is_active' => '1',
+						'show_in' => '',  
+						'packages' => $packages, 
+						'for_admin_use' => '0',
+						'field_icon' => 'fas fa-sitemap'
+					),
+					array(
+						'post_type' => $post_type,
+						'data_type' => 'TEXT', 
+						'field_type' => 'multiselect', 
+						'field_type_key' => 'franchise_fields', 
+						'admin_title' => 'Lock franchise fields', 
+						'frontend_desc' => 'Select fields to lock from franchise edit.', 
+						'frontend_title' => 'Lock franchise fields', 
+						'htmlvar_name' => 'franchise_fields', 
+						'sort_order' => '0',
+						'option_values' => '',
+						'clabels' => 'Lock franchise fields',
+						'is_active' => '1', 
+						'show_in' => '',  
+						'packages' => $packages, 
+						'for_admin_use' => '0',
+						'field_icon' => 'fas fa-sitemap'
+					),
+					array(
+						'post_type' => $post_type,
+						'data_type' => 'INT', 
+						'field_type' => 'text', 
+						'field_type_key' => 'franchise_of', 
+						'admin_title' => 'Main Listing', 
+						'frontend_desc' => 'Enter main listing ID.', 
+						'frontend_title' => 'Main Listing', 
+						'htmlvar_name' => 'franchise_of', 
+						'sort_order' => '0',
+						'option_values' => '',
+						'clabels' => 'Main Listing',
+						'is_active' => '1', 
+						'show_in' => '[detail]',  
+						'packages' => $packages, 
+						'for_admin_use' => '1',
+						'field_icon' => 'fas fa-sitemap'
+					)
+				);
+
+				foreach ( $fields as $field ) {
+					$wpdb->insert( $custom_fields_table, $field, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s', '%d', '%s', '%s', '%d', '%s' ) );
+				}
+			}
+		}
+	}
+
+	public static function update_200_franchise_update_version() {
+		$version = defined( 'GEODIR_FRANCHISE_VERSION' ) && version_compare( GEODIR_FRANCHISE_VERSION, '2.0.0.0', '>=' ) ? GEODIR_FRANCHISE_VERSION : '2.0.0.0';
+
+		delete_option( 'geodir_franchise_version' );
+		add_option( 'geodir_franchise_version', $version );
+
+		delete_option( 'geodir_franchise_db_version' );
+		add_option( 'geodir_franchise_db_version', $version );
+	}
+
 	public static function v2_updated() {
 		global $wpdb, $plugin_prefix;
 
@@ -2106,6 +2280,59 @@ class GeoDir_Admin_Upgrade {
 
 		if ( get_option( 'geodir_cp_version' ) && get_option( 'geodir_cp_db_version' ) ) {
 			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-1' WHERE field_type = 'link_posts'" );
+		}
+
+		if ( get_option( 'geodir_franchise_version' ) && get_option( 'geodir_franchise_db_version' ) ) {
+			$post_types = get_option( 'geodir_franchise_posttypes' );
+
+			if ( ! empty( $post_types ) ) {
+				foreach ( $post_types as $post_type ) {
+					if ( ! empty( $post_type ) ) {
+						$table = $plugin_prefix . $post_type . '_detail';
+						$results = $wpdb->get_results( "SELECT p.ID FROM {$wpdb->posts} AS p LEFT JOIN {$wpdb->postmeta} AS pm ON pm.post_id = p.ID WHERE p.post_type = '{$post_type}' AND pm.meta_key = 'gd_is_franchise' AND pm.meta_value = '1'" );
+
+						if ( ! empty( $results ) ) {
+							foreach ( $results as $row ) {
+								$data = array();
+								$data['franchise'] = 1;
+								$locked_fields = get_post_meta( $row->ID, 'gd_franchise_lock', true );
+								if ( ! empty( $locked_fields ) ) {
+									$fields = array();
+									foreach ( $locked_fields as $locked_field ) {
+										if ( in_array( $locked_field, array( 'geodir_contact', 'is_featured' ) ) ) {
+											if ( $locked_field == 'geodir_contact' ) {
+												$locked_field = 'phone';
+											}
+											if ( $locked_field == 'is_featured' ) {
+												$locked_field = 'featured';
+											}
+										}
+										if ( strpos( $locked_field, 'geodir_' ) === 0 ) {
+											$locked_field = strtolower( substr( $locked_field, 7 ) );
+										}
+										if ( $locked_field == 'post' ) {
+											$locked_field = 'address';
+										} else if ( $locked_field == $post_type . 'category' ) {
+											$locked_field = 'post_category';
+										} else if ( $locked_field == 'post_desc' ) {
+											$locked_field = 'post_content';
+										} else if ( $locked_field == 'title' ) {
+											$locked_field = 'post_title';
+										}
+										$fields[] = $locked_field;
+									}
+									if ( ! empty( $fields ) ) {
+										$data['franchise_fields'] = implode( ',', $fields );
+									}
+								}
+								$wpdb->update( $table, $data, array( 'post_id' => $row->ID ) );
+							}
+						}
+					}
+				}
+			}
+
+			delete_option( 'geodir_franchise_posttypes' );
 		}
 	}
 }
