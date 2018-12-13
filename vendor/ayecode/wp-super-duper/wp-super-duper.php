@@ -14,12 +14,14 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * Class WP_Super_Duper
 	 * @since 1.0.3 is_block_content_call() method added.
 	 * @since 1.0.3 Placeholder text will be shown for widget that return no block content.
-	 * @ver 1.0.3
+	 * @since 1.0.4 is_elementor_widget_output() method added.
+	 * @since 1.0.4 is_elementor_preview() method added.
+	 * @ver 1.0.4
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
 
-		public $version = "1.0.3";
+		public $version = "1.0.4";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -813,6 +815,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		/**
 		 * Output the JS for building the dynamic Guntenberg block.
 		 *
+		 * @since 1.0.4 Added block_wrap property which will set the block wrapping output element ie: div, span, p or empty for no wrap.
 		 * @return mixed
 		 */
 		public function block() {
@@ -874,6 +877,15 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								echo "  default: false,";
 								echo "},";
 							}
+
+							// block wrap element
+							if(isset( $this->options['block-wrap'] ) ){ //@todo we should validate this?
+								echo "block_wrap: {";
+								echo "	type: 'string',";
+								echo "  default: '".esc_attr($this->options['block-wrap'])."',";
+								echo "},";
+							}
+
 
 							foreach ( $this->arguments as $key => $args ) {
 
@@ -1095,7 +1107,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						// The "save" property must be specified and must be a valid function.
 						save: function (props) {
 
-							console.log(props);
+							//console.log(props);
 
 
 							var attr = props.attributes;
@@ -1132,8 +1144,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 								}
 							}
 
-							console.log(content);
-							return el('div', {dangerouslySetInnerHTML: {__html: content}, className: align});
+							//console.log(content);
+							var block_wrap = 'div';
+							if(attr.hasOwnProperty("block_wrap")){
+								block_wrap = attr.block_wrap;
+							}
+							return el(block_wrap, {dangerouslySetInnerHTML: {__html: content}, className: align});
 
 						}
 					});
@@ -1317,7 +1333,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function widget( $args, $instance ) {
 			// outputs the content of the widget
-
+			//`echo '###';print_r($this);
 			// get the filtered values
 			$argument_values = $this->argument_values( $instance );
 			$argument_values = $this->string_to_bool( $argument_values );
@@ -1335,10 +1351,47 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$after_widget = apply_filters( 'wp_super_duper_after_widget_' . $this->base_id, $after_widget, $args, $instance, $this );
 
 				echo $before_widget;
+				// elementor strips the widget wrapping div so we check for and add it back if needed
+				if($this->is_elementor_widget_output()){
+					echo !empty($this->options['widget_ops']['classname']) ? "<span class='".esc_attr($this->options['widget_ops']['classname'])."'>" : '';
+				}
 				echo $this->output_title($args, $instance);
 				echo $output;
+				if($this->is_elementor_widget_output()){
+					echo !empty($this->options['widget_ops']['classname']) ? "</span>" : '';
+				}
 				echo $after_widget;
 			}
+		}
+
+		/**
+		 * Tests if the current output is inside a elementor container.
+		 *
+		 * @since 1.0.4
+		 * @return bool
+		 */
+		public function is_elementor_widget_output(){
+			$result = false;
+			if(defined( 'ELEMENTOR_VERSION' ) && isset($this->number) && $this->number=='REPLACE_TO_ID'){
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
+		 * Tests if the current output is inside a elementor preview.
+		 *
+		 * @since 1.0.4
+		 * @return bool
+		 */
+		public function is_elementor_preview(){
+			$result = false;
+			if(isset($_REQUEST['elementor-preview']) || ( is_admin() && isset($_REQUEST['action'])  && $_REQUEST['action']=='elementor')){
+				$result = true;
+			}
+
+			return $result;
 		}
 
 		/**

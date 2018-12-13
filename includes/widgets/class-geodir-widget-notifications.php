@@ -52,7 +52,7 @@ class GeoDir_Widget_Notifications extends WP_Super_Duper {
         $notifications = array();
 
         // check if we are testing the notifications
-        if( geodir_is_block_demo() || ( isset($_REQUEST['gd_notifications_test']) && current_user_can('administrator') )) {
+        if( $this->is_elementor_preview() || geodir_is_block_demo() || ( isset($_REQUEST['gd_notifications_test']) && current_user_can('administrator') )) {
             $notifications = self::test_notifications();
         }
 

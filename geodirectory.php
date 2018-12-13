@@ -240,6 +240,11 @@ final class GeoDirectory {
 	    GeoDir_Post_Data::init(); // post data
 	    //GeoDir_Post_Revision::init(); // post revisions @todo not implemented yet
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
+
+	    if( defined( 'ELEMENTOR_VERSION' ) ){
+		    new GeoDir_Elementor();
+	    }
+
 	    GeoDir_SEO::init();
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general-functions.php' );

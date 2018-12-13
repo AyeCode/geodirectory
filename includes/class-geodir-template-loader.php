@@ -493,7 +493,7 @@ class GeoDir_Template_Loader {
      */
     public static function disable_page_templates_frontend(){
         global $post;
-        if(isset($post->ID) && (
+        if(isset($post->ID) && !current_user_can('administrator') && (
                 $post->ID == geodir_get_option('page_details')
                 || $post->ID == geodir_get_option('page_archive')
                 || $post->ID == geodir_get_option('page_archive_item')

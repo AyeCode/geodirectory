@@ -25,18 +25,18 @@ function geodir_is_block_demo(){
        && isset($_POST['action'])
        && $_POST['action'] == 'super_duper_output_shortcode' 
        && wp_doing_ajax()
-       && $post_id == geodir_details_page_id()
+       && ( $post_id == geodir_details_page_id() || $post_id == geodir_archive_item_page_id() )
     ){
         return true;
     }elseif(
         isset($_POST['fl_builder_data']['fl_action'])
         && $_POST['fl_builder_data']['fl_action']=='save_settings'
         && isset($_POST['fl_builder_data']['post_id'])
-        && $_POST['fl_builder_data']['post_id'] == geodir_details_page_id()
+        && ( $_POST['fl_builder_data']['post_id'] == geodir_details_page_id() || $_POST['fl_builder_data']['post_id'] == geodir_archive_item_page_id() )
     ){
         return true;
     }elseif(
-        is_page(geodir_details_page_id())
+        is_page( geodir_details_page_id() ) ||  is_page( geodir_archive_item_page_id() )
     ) {
         return true;
     }else{

@@ -51,7 +51,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                     'type' => 'checkbox',
                     'desc_tip' => true,
                     'value'  => '1',
-                    'default'  => 0,
+                    'default'  => '',
                     'advanced' => true
                 ),
             )
