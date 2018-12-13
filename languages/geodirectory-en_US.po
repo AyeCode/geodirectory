@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.40\n"
+"Project-Id-Version: GeoDirectory 2.0.0.41\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-11 12:37+0000\n"
-"PO-Revision-Date: 2018-12-11 12:38+0000\n"
+"POT-Creation-Date: 2018-12-13 14:56+0000\n"
+"PO-Revision-Date: 2018-12-13 14:56+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -395,7 +395,7 @@ msgstr ""
 #: includes/admin/admin-functions.php:22
 #: includes/admin/class-geodir-admin-assets.php:96
 #: includes/admin/class-geodir-admin-menus.php:50
-#: includes/class-geodir-privacy.php:24 includes/core-functions.php:733
+#: includes/class-geodir-privacy.php:24 includes/core-functions.php:735
 msgid "GeoDirectory"
 msgstr ""
 
@@ -1079,8 +1079,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:225
 #: includes/admin/class-geodir-admin-import-export.php:312
-#: includes/admin/class-geodir-admin-import-export.php:1260
-#: includes/admin/class-geodir-admin-import-export.php:2063
+#: includes/admin/class-geodir-admin-import-export.php:1273
+#: includes/admin/class-geodir-admin-import-export.php:2085
 msgid "No data found in csv file."
 msgstr ""
 
@@ -1130,58 +1130,58 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:707
 #: includes/admin/class-geodir-admin-import-export.php:1016
-#: includes/admin/class-geodir-admin-import-export.php:1906
+#: includes/admin/class-geodir-admin-import-export.php:1928
 #: includes/admin/settings/class-geodir-settings-import-export.php:884
 msgid "No records to export."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:753
 #: includes/admin/class-geodir-admin-import-export.php:1058
-#: includes/admin/class-geodir-admin-import-export.php:1950
+#: includes/admin/class-geodir-admin-import-export.php:1972
 msgid ""
 "ERROR: Could not create csv file. This is usually due to inconsistent file "
 "permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1550
+#: includes/admin/class-geodir-admin-import-export.php:1572
 msgid "json file is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1552
+#: includes/admin/class-geodir-admin-import-export.php:1574
 msgid "json file is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1564
+#: includes/admin/class-geodir-admin-import-export.php:1586
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1981
+#: includes/admin/class-geodir-admin-import-export.php:2003
 #, php-format
 msgid "GD IMPORT REVIEW [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1989
+#: includes/admin/class-geodir-admin-import-export.php:2011
 msgid "data is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2002
+#: includes/admin/class-geodir-admin-import-export.php:2024
 msgid "invalid comment content."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2006
+#: includes/admin/class-geodir-admin-import-export.php:2028
 msgid "invalid comment post ID."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2010
+#: includes/admin/class-geodir-admin-import-export.php:2032
 msgid "invalid user details(user id or author name, author email)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2014
+#: includes/admin/class-geodir-admin-import-export.php:2036
 msgid "invalid rating."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2040
-#: includes/admin/class-geodir-admin-import-export.php:2057
+#: includes/admin/class-geodir-admin-import-export.php:2062
+#: includes/admin/class-geodir-admin-import-export.php:2079
 msgid "invalid data."
 msgstr ""
 
@@ -1354,7 +1354,7 @@ msgid "CPT Add Listing"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:193
-#: includes/core-functions.php:562
+#: includes/core-functions.php:564
 msgid "GD Pages"
 msgstr ""
 
@@ -1872,7 +1872,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:805
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:23
-#: includes/helper-functions.php:1572 includes/helper-functions.php:1670
+#: includes/helper-functions.php:1572 includes/helper-functions.php:1680
 #: includes/widgets/class-geodir-widget-categories.php:145
 #: includes/widgets/class-geodir-widget-categories.php:154
 #: includes/widgets/class-geodir-widget-categories.php:163
@@ -1924,7 +1924,7 @@ msgid "Create default GeoDirectory pages"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-tools.php:55
-#: includes/admin/views/html-notice-v2-update.php:128
+#: includes/admin/views/html-notice-v2-update.php:138
 msgid "Note:"
 msgstr ""
 
@@ -2046,39 +2046,39 @@ msgid "The pages that should be included/excluded."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:117
-#: includes/core-functions.php:564
+#: includes/core-functions.php:566
 msgid "Add Listing Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:118
-#: includes/core-functions.php:565
+#: includes/core-functions.php:567
 msgid "Author Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:119
-#: includes/core-functions.php:566
+#: includes/core-functions.php:568
 msgid "Listing Detail Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:120
-#: includes/core-functions.php:569
+#: includes/core-functions.php:571
 msgid "Location Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:121
-#: includes/core-functions.php:571
+#: includes/core-functions.php:573
 msgid "Post Type Archive"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:122
 #: includes/admin/settings/class-geodir-settings-general.php:264
 #: includes/api/class-geodir-rest-system-status-controller.php:837
-#: includes/core-functions.php:572
+#: includes/core-functions.php:574
 msgid "Search Page"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-widgets.php:123
-#: includes/core-functions.php:573
+#: includes/core-functions.php:575
 msgid "Taxonomies Page"
 msgstr ""
 
@@ -2800,7 +2800,7 @@ msgid "Currency symbol placement:"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:280
-#: includes/widgets/class-geodir-widget-archive-item-section.php:51
+#: includes/widgets/class-geodir-widget-archive-item-section.php:53
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:61
 #: includes/widgets/class-geodir-widget-post-badge.php:137
 #: includes/widgets/class-geodir-widget-post-fav.php:61
@@ -2810,7 +2810,7 @@ msgid "Left"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:281
-#: includes/widgets/class-geodir-widget-archive-item-section.php:52
+#: includes/widgets/class-geodir-widget-archive-item-section.php:54
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:63
 #: includes/widgets/class-geodir-widget-post-badge.php:139
 #: includes/widgets/class-geodir-widget-post-fav.php:63
@@ -4402,7 +4402,7 @@ msgid "Titles & Meta"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:53
-#: includes/core-functions.php:853 language.php:21
+#: includes/core-functions.php:855 language.php:21
 msgid "Search"
 msgstr ""
 
@@ -4682,7 +4682,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:749
-#: includes/admin/views/html-notice-v2-update.php:162
+#: includes/admin/views/html-notice-v2-update.php:172
 msgid "Disabled"
 msgstr ""
 
@@ -5752,8 +5752,8 @@ msgid "The name of the current active theme."
 msgstr ""
 
 #: includes/admin/views/html-admin-page-status-report.php:581
-#: includes/admin/views/html-notice-v2-update.php:133
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:303
+#: includes/admin/views/html-notice-v2-update.php:143
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:305
 msgid "Version"
 msgstr ""
 
@@ -6097,7 +6097,7 @@ msgid "Tab content:"
 msgstr ""
 
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:51
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:179
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:181
 msgid "Add Shortcode"
 msgstr ""
 
@@ -6480,92 +6480,92 @@ msgstr ""
 msgid "Taking a while? Click here to run it now."
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:125
+#: includes/admin/views/html-notice-v2-update.php:135
 msgid "GeoDirectory v1 to v2 data conversion:"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:126
+#: includes/admin/views/html-notice-v2-update.php:136
 msgid ""
 "You need to run the v1 to v2 data conversion now to update your directory "
 "database to the latest version to restore your directory functionality."
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:127
+#: includes/admin/views/html-notice-v2-update.php:137
 msgid "Please check following requirements before v1 to v2 data conversion:"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:128
+#: includes/admin/views/html-notice-v2-update.php:138
 msgid ""
 "This is a major update, so it is strongly recommended that you backup your "
 "database before start running v1 to v2 data conversion."
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:129
+#: includes/admin/views/html-notice-v2-update.php:139
 msgid "Plugins  data found:"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:134
+#: includes/admin/views/html-notice-v2-update.php:144
 msgid "Required Version"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:135
+#: includes/admin/views/html-notice-v2-update.php:145
 msgid "Plugin Name"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:136
+#: includes/admin/views/html-notice-v2-update.php:146
 msgid "Plugin Directory"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:137
+#: includes/admin/views/html-notice-v2-update.php:147
 msgid "Plugin Status"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:138
+#: includes/admin/views/html-notice-v2-update.php:148
 msgid "Note"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:150
+#: includes/admin/views/html-notice-v2-update.php:160
 msgid "Requires upgrade"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:154
+#: includes/admin/views/html-notice-v2-update.php:164
 msgid "Active"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:158
+#: includes/admin/views/html-notice-v2-update.php:168
 msgid "Update required"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:176
+#: includes/admin/views/html-notice-v2-update.php:186
 msgid "Update and activate to convert plugin data."
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:178
+#: includes/admin/views/html-notice-v2-update.php:188
 msgid "Active to convert plugin data."
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:189
+#: includes/admin/views/html-notice-v2-update.php:199
 msgid ""
 "It is strongly recommended that you follow the update instructions before "
 "proceeding. Are you sure you wish to run the GeoDirectory v1 to v2 data "
 "conversion now?"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:190
+#: includes/admin/views/html-notice-v2-update.php:200
 msgid "Please update the required plugins before proceeding."
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:191
+#: includes/admin/views/html-notice-v2-update.php:201
 msgid "Let me proceed without updating (highly not recommended)"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:194
+#: includes/admin/views/html-notice-v2-update.php:204
 msgid ""
 "It is strongly recommended that you backup your database before proceeding. "
 "Are you sure you wish to run the GeoDirectory v1 to v2 data conversion now?"
 msgstr ""
 
-#: includes/admin/views/html-notice-v2-update.php:198
+#: includes/admin/views/html-notice-v2-update.php:208
 msgid "Run GeoDirectory v1 to v2 data conversion"
 msgstr ""
 
@@ -9351,19 +9351,19 @@ msgstr ""
 msgid "You may lose changes if you navigate away now!"
 msgstr ""
 
-#: includes/core-functions.php:567
+#: includes/core-functions.php:569
 msgid "Listing Preview Page"
 msgstr ""
 
-#: includes/core-functions.php:568
+#: includes/core-functions.php:570
 msgid "Listing Success Page"
 msgstr ""
 
-#: includes/core-functions.php:570
+#: includes/core-functions.php:572
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1055 includes/core-functions.php:1066
+#: includes/core-functions.php:1057 includes/core-functions.php:1068
 msgid "Clear field"
 msgstr ""
 
@@ -9454,7 +9454,7 @@ msgstr ""
 
 #: includes/custom-fields/input-functions.php:1701
 #: includes/custom-fields/input-functions.php:1709
-#: includes/widgets/class-geodir-widget-archive-item-section.php:40
+#: includes/widgets/class-geodir-widget-archive-item-section.php:41
 msgid "Open"
 msgstr ""
 
@@ -9960,28 +9960,43 @@ msgstr ""
 msgid "User registration is disabled, please login to continue."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-archive-item-section.php:27
+#: includes/widgets/class-geodir-widget-archive-item-section.php:28
 msgid "GD > Archive Item Section"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-archive-item-section.php:36
+#: includes/widgets/class-geodir-widget-archive-item-section.php:37
 msgid "Type:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-archive-item-section.php:37
+#: includes/widgets/class-geodir-widget-archive-item-section.php:38
 msgid "This is the opening or closing section type."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-archive-item-section.php:41
+#: includes/widgets/class-geodir-widget-archive-item-section.php:42
 msgid "close"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-archive-item-section.php:47
+#: includes/widgets/class-geodir-widget-archive-item-section.php:49
 msgid "Position:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-archive-item-section.php:48
+#: includes/widgets/class-geodir-widget-archive-item-section.php:50
 msgid "This is position of the section type."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-archive-item-section.php:99
+msgid "closing"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-archive-item-section.php:99
+msgid "opening"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-archive-item-section.php:100
+#, php-format
+msgid ""
+"Archive Item Section: <b>%s : %s</b> <small>(requires %s section to work)</"
+"small>"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-author-actions.php:34
@@ -12975,64 +12990,64 @@ msgstr ""
 msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:275
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:277
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:292
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:294
 msgid "Type"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:296
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:298
 msgid "CSS (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:307
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:309
 #, php-format
 msgid "Latest - %s (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:331
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:336
 msgid "Enqueue"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:335
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:340
 msgid "Frontend + Backend (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:337
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:342
 msgid "Frontend"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:339
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:344
 msgid "Backend"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:346
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:351
 msgid "Enable v4 shims compatibility"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:351
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:356
 msgid ""
 "This enables v4 classes to work with v5, sort of like a band-aid until "
 "everyone has updated everything to v5."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:357
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:362
 msgid "Enable JS pseudo elements (not recommended)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:364
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:369
 msgid ""
 "Used only with the JS version, this will make pseudo-elements work but can "
 "be CPU intensive on some sites."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:369
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:374
 msgid "Dequeue"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:375
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:380
 msgid ""
 "This will try to dequeue any other Font Awesome versions loaded by other "
 "sources if they are added with `font-awesome` or `fontawesome` in the name."
@@ -13107,18 +13122,18 @@ msgstr ""
 msgid "Api Key:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:156
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:158
 msgid "Select shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:171
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:173
 msgid "Insert shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:172
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:174
 msgid "Copy shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:949
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:961
 msgid "Placeholder for: "
 msgstr ""
