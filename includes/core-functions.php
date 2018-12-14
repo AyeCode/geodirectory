@@ -519,14 +519,16 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Listings' );
 		register_widget( 'GeoDir_Widget_Map' );
 		register_widget( 'GeoDir_Widget_Recently_Viewed' );
+		register_widget( 'GeoDir_Widget_Single_Tabs' );
+		register_widget( 'GeoDir_Widget_Notifications' );
 
 		// Non Widgets
 		new GeoDir_Widget_Add_Listing();
 		new GeoDir_Widget_Single_Taxonomies();
-		new GeoDir_Widget_Single_Tabs();
+		//new GeoDir_Widget_Single_Tabs();
 		new GeoDir_Widget_Single_Next_Prev();
 		new GeoDir_Widget_Single_Closed_Text();
-		new GeoDir_Widget_Notifications();
+		//new GeoDir_Widget_Notifications();
 		new GeoDir_Widget_Loop();
 		new GeoDir_Widget_Loop_Paging();
 		new GeoDir_Widget_Loop_Actions();

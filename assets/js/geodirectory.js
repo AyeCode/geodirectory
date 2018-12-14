@@ -268,12 +268,9 @@ jQuery(document).ready(function($) {
 
     // ini read more
     init_read_more();
-
+    
     // init any sliders
-    jQuery('.geodir-slider').each(function(i, obj) {
-        // init the sliders
-        geodir_init_slider(obj.id);
-    });
+    geodir_init_flexslider();
 
 
     //toggle detail page tabs mobile menu
@@ -337,6 +334,15 @@ jQuery(document).ready(function($) {
 
 
 });
+
+// init any sliders
+function geodir_init_flexslider(){
+
+    jQuery('.geodir-slider').each(function(i, obj) {
+        // init the sliders
+        geodir_init_slider(obj.id);
+    });
+}
 
 
 jQuery(window).load(function() {

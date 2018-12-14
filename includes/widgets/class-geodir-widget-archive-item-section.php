@@ -20,7 +20,8 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-wrap'    => '', // the element to wrap the block output in. , ie: div, span or empty for no wrap
+            'block-category'=> 'layout',
             'block-keywords'=> "['archive','section','geodir']",
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_archive_item_section', // this us used as the widget id and the shortcode id.
@@ -40,6 +41,7 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
                         "open" => __('Open', 'geodirectory'),
                         "close" => __('close', 'geodirectory'),
                     ),
+                    'default'  => 'open',
                     'desc_tip' => true,
                     'advanced' => false
                 ),
@@ -51,6 +53,7 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
                         "left" => __('Left', 'geodirectory'),
                         "right" => __('Right', 'geodirectory'),
                     ),
+                    'default'  => 'left',
                     'desc_tip' => true,
                     'advanced' => false
                 ),
@@ -72,17 +75,29 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
         $defaults = array(
-            'type' => '',
-            'position' => '',
+            'type' => 'open',
+            'position' => 'left',
         );
+//        print_r($args);
         $args = wp_parse_args( $args, $defaults );
         $output = '';
+
+//        print_r($args);
         if(isset($args['type']) && $args['type']=='open'){
             $class = !empty($args['class']) ? esc_attr($args['class']) : '';
             $position = isset($args['position']) && $args['position']=='left' ? 'left' : 'right';
             $output = '<div class="gd-list-item-'.$position.' '.$class.'">';
         }elseif(isset($args['type']) && $args['type']=='close'){
             $output = "</div>";
+        }
+
+        // if block demo return empty to show placeholder text
+        if($this->is_block_content_call()){
+            $output = '';
+            $type = !empty($args['type']) ? esc_attr($args['type']) : '';
+            $position = isset($args['position']) && $args['position']=='left' ? 'left' : 'right';
+            $section_type = $type=='open' ? __('closing','geodirectory') : __('opening','geodirectory');
+            $output = '<div style="background:#0185ba33;padding: 10px;">'.sprintf( __('Archive Item Section: <b>%s : %s</b> <small>(requires %s section to work)</small>', 'geodirectory'),strtoupper($type),strtoupper($position),$section_type).'</div>';
         }
 
         return $output;

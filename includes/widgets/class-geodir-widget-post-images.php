@@ -366,6 +366,23 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			<?php
 		}
 
+
+		// make it work with elementor preview
+		if($this->is_elementor_preview()){
+			?>
+			<script type="text/javascript">
+				(function(){
+					init_read_more();
+					geodir_init_lazy_load();
+					geodir_refresh_business_hours();
+					// init any sliders
+					geodir_init_flexslider();
+				}());
+			</script>
+			<?php
+		}
+
+
 		return ob_get_clean();
 	}
 
