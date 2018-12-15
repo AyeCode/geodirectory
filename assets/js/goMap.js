@@ -26,6 +26,8 @@
         console.log('Maps API Not Loaded :(');
         jQuery('body').addClass('gd-no-gmaps');
     }
+    console.log(window.gdSetMap);
+    console.log(gdMaps);
 
     var geocoder = window.gdMaps == 'google' ? new google.maps.Geocoder() : {};
 

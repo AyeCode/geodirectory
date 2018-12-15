@@ -21,8 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class GeoDir_Maps {
 
 	public function __construct() {
-		add_action( 'wp_footer', array( __CLASS__, 'footer_script' ), 10 );
-		add_action( 'admin_footer', array( __CLASS__, 'footer_script' ), 10 );
+
+
 	}
 
 	/**
@@ -117,11 +117,12 @@ class GeoDir_Maps {
 	 * @package GeoDirectory
 	 */
 	public static function footer_script() {
-		if ( in_array( self::active_map(), array( 'auto', 'google' ) ) && wp_script_is( 'geodirectory-googlemap-script', 'done') ) {
+		$osm_extra = '';
+		if ( in_array( self::active_map(), array( 'auto', 'google' ) ) ) {
 			$plugin_url = geodir_plugin_url();
+			ob_start();
 ?>
-<script type="text/javascript">
-if (!(window.google && typeof google.maps !== 'undefined')) {
+if (1==1 && !(window.google && typeof google.maps !== 'undefined')) {
 	var css = document.createElement("link");css.setAttribute("rel","stylesheet");css.setAttribute("type","text/css");css.setAttribute("media","all");css.setAttribute("id","geodirectory-leaflet-style-css");css.setAttribute("href","<?php echo $plugin_url; ?>/assets/leaflet/leaflet.css?ver=<?php echo GEODIRECTORY_VERSION; ?>");
 	document.getElementsByTagName("head")[0].appendChild(css);
 	var css = document.createElement("link");css.setAttribute("rel","stylesheet");css.setAttribute("type","text/css");css.setAttribute("media","all");css.setAttribute("id","geodirectory-leaflet-routing-style");css.setAttribute("href","<?php echo $plugin_url; ?>/assets/leaflet/routing/leaflet-routing-machine.css?ver=<?php echo GEODIRECTORY_VERSION; ?>");
@@ -131,9 +132,10 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	document.write('<' + 'script id="geodirectory-leaflet-routing-script" src="<?php echo $plugin_url; ?>/assets/leaflet/routing/leaflet-routing-machine.min.js?ver=<?php echo GEODIRECTORY_VERSION; ?>" type="text/javascript"><' + '/script>');
 	document.write('<' + 'script id="geodirectory-o-overlappingmarker-script" src="<?php echo $plugin_url; ?>/assets/jawj/oms-leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION; ?>" type="text/javascript"><' + '/script>');
 }
-</script>
 <?php
+			$osm_extra = ob_get_clean();
 		}
+		return $osm_extra;
 	}
 
 	/**

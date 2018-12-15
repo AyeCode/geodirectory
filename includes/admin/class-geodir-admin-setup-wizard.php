@@ -108,7 +108,7 @@ class GeoDir_Admin_Setup_Wizard {
 		 */
 		$map_extra = apply_filters('geodir_googlemap_script_extra', '');
 
-		wp_register_script('geodir-goMap-script', geodir_plugin_url() . '/assets/js/goMap'.$suffix.'.js', array(), GEODIRECTORY_VERSION,true);
+		wp_register_script('geodir-goMap', geodir_plugin_url() . '/assets/js/goMap'.$suffix.'.js', array(), GEODIRECTORY_VERSION,true);
 		wp_register_script('geodir-google-maps', 'https://maps.google.com/maps/api/js?' . $map_lang . $map_key . $map_extra , array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-g-overlappingmarker-script', geodir_plugin_url() . '/assets/jawj/oms'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
 		wp_register_script('geodir-o-overlappingmarker-script', geodir_plugin_url() . '/assets/jawj/oms-leaflet'.$suffix.'.js', array(), GEODIRECTORY_VERSION);
@@ -145,7 +145,10 @@ class GeoDir_Admin_Setup_Wizard {
 			$required_scripts[] = 'geodir-leaflet-geo-script';
 			$required_scripts[] = 'geodir-o-overlappingmarker-script';
 		}
-		$required_scripts[] = 'geodir-goMap-script';
+
+		$osm_extra = GeoDir_Maps::footer_script();
+		wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".GeoDir_Maps::active_map()."';".$osm_extra, 'before' );
+		$required_scripts[] = 'geodir-goMap';
 
 
 
