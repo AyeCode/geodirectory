@@ -412,14 +412,14 @@ class GeoDir_Comments {
 
 			return $comment_template;
 		}
-		if ( in_array( $post->post_type, $post_types ) ) { // assuming there is a post type called business
+		if ( in_array( get_post_type( $post->ID ), $post_types ) ) { // assuming there is a post type called business
 
 			// if we already loaded the template don't load it again
 			if($gd_is_comment_template_set){
 				return geodir_plugin_path() . '/index.php'; // a blank template to remove default if called more than once.
 			}
 
-			if ( geodir_cpt_has_rating_disabled( $post->post_type ) ) {
+			if ( geodir_cpt_has_rating_disabled( get_post_type( $post->ID ) ) ) {
 				return $comment_template;
 			}
 
