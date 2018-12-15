@@ -7,6 +7,8 @@ Category import does not assign parent category - FIXED
 Full screen map not working properly - FIXED
 Archive item section block not working as its being wrapped in a div - FIXED
 Some changes for Elementor page builder compatibility added - ADDED
+Added editor styles to help Gutenberg Blocks UI - ADDED
+Newly added Blocks have checkbox values ticked by default even if not set to do so - FIXED
 
 v2.0.0.40
 Font Awesome Setting class updated to check if url is CSS or JS - UPDATED
