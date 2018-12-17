@@ -88,7 +88,7 @@ jQuery(function($) {
             $(':input.geodir-select-tags').filter(':not(.enhanced)').each(function() {
                 var select2_args = $.extend({
                     tags: true,
-                    selectOnClose: true,
+                    selectOnClose: false, /* selectOnClose: true conflicts with allowClear:true */
                     tokenSeparators: [','],
                     minimumResultsForSearch: 10,
                     allowClear: $(this).data('allow_clear') ? true : false,

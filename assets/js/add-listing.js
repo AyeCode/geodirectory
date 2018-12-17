@@ -105,6 +105,24 @@ jQuery(function($) {
             gdGeoLocateMe(this, 'add-listing');
         });
     }
+	/**
+	 * Save the post on preview link click.
+	 */
+	jQuery(".geodir_preview_button").click(function() {
+		geodir_auto_save_post();
+		$form = jQuery("#geodirectory-add-post");
+		return geodir_validate_submit($form);
+	});
+	/**
+	 * Save the post via ajax.
+	 */
+	jQuery("#geodirectory-add-post").submit(function(e) {
+		$valid = geodir_validate_submit(this);
+		if ($valid) {
+			$result = geodir_save_post();
+		}
+		e.preventDefault(); // avoid to execute the actual submit of the form.
+	});
 });
 /**
  * Prevent navigation away if there are unsaved changes.
@@ -211,24 +229,6 @@ function geodir_delete_revision() {
         }
     });
 }
-/**
- * Save the post on preview link click.
- */
-jQuery(".geodir_preview_button").click(function() {
-    geodir_auto_save_post();
-    $form = jQuery("#geodirectory-add-post");
-    return geodir_validate_submit($form);
-});
-/**
- * Save the post via ajax.
- */
-jQuery("#geodirectory-add-post").submit(function(e) {
-    $valid = geodir_validate_submit(this);
-    if ($valid) {
-        $result = geodir_save_post();
-    }
-    e.preventDefault(); // avoid to execute the actual submit of the form.
-});
 /**
  * Validate all required fields before submit.
  *
