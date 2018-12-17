@@ -5,6 +5,7 @@ Newly added Blocks have checkbox values ticked by default even if not set to do 
 OSM sometimes not loading automatically in countries where Google is blocked - FIXED
 Cannot un-select all tags in add listing form - FIXED
 User avatar overlaps some text in dashboard recent reviews widget - FIXED
+Save custom field generates incorrect field key if not inserted - FIXED
 
 v2.0.0.41
 GD Listings widget sorting not showing custom sorting options - FIXED
