@@ -617,7 +617,8 @@ class GeoDir_Frontend_Scripts {
 			self::enqueue_script('geodir-o-overlappingmarker');
 		}
 		if($geodir_map_name!='none'){
-			wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".GeoDir_Maps::active_map()."';", 'before' );
+			$osm_extra = GeoDir_Maps::footer_script();
+			wp_add_inline_script( 'geodir-goMap', "window.gdSetMap = window.gdSetMap || '".GeoDir_Maps::active_map()."';".$osm_extra, 'before' );
 			wp_enqueue_script( 'geodir-goMap' );
 		}
 
