@@ -175,7 +175,7 @@
 
             var myOptions = {
                 center: this.centerLatLng,
-                zoom: opts.zoom,
+                zoom: parseInt(opts.zoom),
                 minZoom: opts.minZoom ? opts.minZoom : 1,
                 maxZoom: opts.maxZoom > 18 ? 18 : opts.maxZoom,
                 zoomControl: true,
@@ -848,7 +848,7 @@
                 scaleControl: opts.scaleControl,
                 scrollwheel: opts.scrollwheel,
                 fullscreenControl: opts.fullscreenControl,
-                zoom: opts.zoom,
+                zoom: parseInt(opts.zoom),
                 minZoom: parseInt(opts.minZoom),
                 maxZoom: parseInt(opts.maxZoom)
             };

@@ -1514,7 +1514,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			// Set some default after sanitation
 			$field->data_type = self::sanitize_data_type($field);
 			if(!$field->admin_title){$field->admin_title = $field->frontend_title;}
-			if(!$field->htmlvar_name){$field->htmlvar_name =str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['frontend_title'] ) );} // we use original input so the special chars are no converted already
+			//if(!$field->htmlvar_name){$field->htmlvar_name =str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['frontend_title'] ) );} // we use original input so the special chars are no converted already
+			if ( empty( $field->htmlvar_name ) ) {
+				$htmlvar_name = sanitize_key( str_replace( array( '-', ' ', '"', "'" ), array( '_', '_', '', '' ), $input['frontend_title'] ) );
+				if ( str_replace( '_', '', $htmlvar_name ) != '' ) {
+					$field->htmlvar_name = substr( $htmlvar_name, 0, 50 );
+				} else {
+					$field->htmlvar_name = time();
+				}
+			}
 
 			return apply_filters( 'geodir_cpt_cf_sanatize_custom_field', $field, $input );
 

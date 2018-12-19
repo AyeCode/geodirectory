@@ -1346,6 +1346,10 @@ table.gd_status_table th.run-tool {
 	position: relative;
 	box-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.06);
 }
+#geodir_dashboard_recent_reviews .geodir_reviewer_content .geodir_reviewer_image {
+    float: left;
+    margin: 0 10px 0 -65px;
+}
 #geodir_dashboard_recent_reviews #gd-review-list .avatar {
 	position: absolute;
 	top: 12px;
