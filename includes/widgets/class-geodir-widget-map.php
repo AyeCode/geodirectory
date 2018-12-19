@@ -968,6 +968,9 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
      * @param array $params map arguments array.
      */
 	public static function display_map( $params ) {
+
+	//	echo '###';
+		//print_r( $params );
 		global $gd_maps_canvas;
 		if ( empty( $gd_maps_canvas ) ) {
 			$gd_maps_canvas = array();

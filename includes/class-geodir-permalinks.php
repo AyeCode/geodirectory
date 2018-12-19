@@ -117,9 +117,24 @@ class GeoDir_Permalinks {
 	public function _404_rescue(){
 		if(is_404() && geodir_get_option("enable_404_rescue",1)){
 			global $wp_query,$wp;
+
 			$post_type = isset($wp_query->query_vars['post_type']) ? $wp_query->query_vars['post_type'] : '';
+			$url_segments = explode("/",$wp->request);
+
+			// if no post type query var then double check if its maybe a GD CPT but not registering as a query var
+			if(!$post_type && !empty($url_segments)){
+				$post_type_slug = $url_segments[0];
+				$gd_cpts = geodir_get_posttypes('array');
+				if(!empty($gd_cpts)){
+					foreach($gd_cpts as $cpt => $cpt_options){
+						if(isset($cpt_options['rewrite']['slug']) && $cpt_options['rewrite']['slug']==$post_type_slug){
+							$post_type = $cpt;break;
+						}
+					}
+				}
+			}
+			
 			if (in_array($post_type, geodir_get_posttypes())) {
-				$url_segments = explode("/",$wp->request);
 
 				$maybe_slug = end($url_segments);
 

@@ -95,6 +95,15 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'desc_tip' => true,
 				'advanced' => true
 			),
+			'new_window'  => array(
+				'title' => __('Open link in new window:', 'geodirectory'),
+				'desc' => __('This will open the link in a new window.', 'geodirectory'),
+				'type' => 'checkbox',
+				'desc_tip' => true,
+				'value'  => '1',
+				'default'  => 0,
+				'advanced' => true
+			),
 			'bg_color'  => array(
 				'type' => 'color',
 				'title' => __('Badge background color:', 'geodirectory'),
@@ -140,7 +149,16 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				),
 				'desc_tip' => true,
 				'advanced' => true
-			)
+			),
+			'class'  => array(
+				'type' => 'text',
+				'title' => __('Extra class:', 'geodirectory'),
+				'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'geodirectory'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => true,
+			),
 		);
 
 		return $arguments;

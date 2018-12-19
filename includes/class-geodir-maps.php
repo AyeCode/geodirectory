@@ -122,7 +122,7 @@ class GeoDir_Maps {
 			$plugin_url = geodir_plugin_url();
 			ob_start();
 ?>
-if (1==1 && !(window.google && typeof google.maps !== 'undefined')) {
+if (!(window.google && typeof google.maps !== 'undefined')) {
 	var css = document.createElement("link");css.setAttribute("rel","stylesheet");css.setAttribute("type","text/css");css.setAttribute("media","all");css.setAttribute("id","geodirectory-leaflet-style-css");css.setAttribute("href","<?php echo $plugin_url; ?>/assets/leaflet/leaflet.css?ver=<?php echo GEODIRECTORY_VERSION; ?>");
 	document.getElementsByTagName("head")[0].appendChild(css);
 	var css = document.createElement("link");css.setAttribute("rel","stylesheet");css.setAttribute("type","text/css");css.setAttribute("media","all");css.setAttribute("id","geodirectory-leaflet-routing-style");css.setAttribute("href","<?php echo $plugin_url; ?>/assets/leaflet/routing/leaflet-routing-machine.css?ver=<?php echo GEODIRECTORY_VERSION; ?>");
@@ -133,6 +133,7 @@ if (1==1 && !(window.google && typeof google.maps !== 'undefined')) {
 	document.write('<' + 'script id="geodirectory-o-overlappingmarker-script" src="<?php echo $plugin_url; ?>/assets/jawj/oms-leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION; ?>" type="text/javascript"><' + '/script>');
 }
 <?php
+			//do_action('geodir_maps_extra_script');
 			$osm_extra = ob_get_clean();
 		}
 		return $osm_extra;
