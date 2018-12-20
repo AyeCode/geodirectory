@@ -1754,7 +1754,7 @@ class GeoDir_Post_Data {
 			$schema['openingHours'] = $business_hours;
 		}
 
-		if($gd_post->latitude && $gd_post->longitude) {
+		if ( ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
 			$schema['geo'] = array(
 				"@type" => "GeoCoordinates",
 				"latitude" => $gd_post->latitude,
