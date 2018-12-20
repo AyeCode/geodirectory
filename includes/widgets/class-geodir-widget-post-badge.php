@@ -150,7 +150,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'desc_tip' => true,
 				'advanced' => true
 			),
-			'class'  => array(
+			'css_class'  => array(
 				'type' => 'text',
 				'title' => __('Extra class:', 'geodirectory'),
 				'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'geodirectory'),
