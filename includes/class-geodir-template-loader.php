@@ -194,10 +194,6 @@ class GeoDir_Template_Loader {
     private static function get_template_loader_files( $default_file ) {
         $search_files = apply_filters( 'geodir_template_loader_files', array(), $default_file );
 
-
-//echo '@@@'.$default_file.'@@@';
-
-
         if ( geodir_is_taxonomy() ) {
             $term = get_queried_object();
 
@@ -210,9 +206,14 @@ class GeoDir_Template_Loader {
         $search_files[] = $default_file;
         $search_files[] = geodir_get_theme_template_dir_name() . '/' . $default_file;
 
-        //echo '>>>';global $wp_query;print_r($wp_query);
-        if(geodir_is_page('archive') || geodir_is_page('search')){//echo '<<<';
+        // check for archive template
+        if(geodir_is_page('archive') || geodir_is_page('search')){
             $search_files[] = 'geodirectory-archive.php';
+        }
+
+        // check for single template
+        if(geodir_is_page('single')){
+            $search_files[] = 'geodirectory-single.php';
         }
 
         $search_files[] = 'geodirectory.php';
