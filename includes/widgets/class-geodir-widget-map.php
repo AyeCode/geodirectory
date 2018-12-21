@@ -570,7 +570,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'advanced'        => true,
 			)
 		);
-		if ( defined( 'GDCLUSTER_VERSION' ) ) { // @todo we can move this in marker cluster plugin.
+		if ( defined( 'GEODIR_MARKERCLUSTER_VERSION' ) ) {
 			$arguments['marker_cluster'] = array(
 				'type'            => 'checkbox',
 				'title'           => __( 'Enable marker cluster?', 'geodirectory' ),
@@ -578,7 +578,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'placeholder'     => '',
 				'desc_tip'        => true,
 				'value'           => '1',
-				'default'         => '0',
+				'default'         => '1',
 				'advanced'        => true,
 				'element_require' => '[%map_type%]!="post"',
 			);
@@ -694,7 +694,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'cat_filter'       => true,
 			'child_collapse'   => false,
 			'map_directions'   => true,
-			'marker_cluster'   => false,
+//			'marker_cluster'   => false,
 			'country'          => '',
 			'region'           => '',
 			'city'             => '',
@@ -888,12 +888,12 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'posts'          => '',
 			'sticky'         => false,
 			'map_directions' => false,
-			'marker_cluster' => false,
+//			'marker_cluster' => false,
 		);
 
 		$params = wp_parse_args( $map_args, $defaults );
 
-		$params['marker_cluster'] = false; // @todo Implement via marker cluster plugin.
+		//$params['marker_cluster'] = false; // @todo Implement via marker cluster plugin.
 
 		// map type
 		if ( ! in_array( $params['map_type'], array( 'auto', 'directory', 'archive', 'post' ) ) ) {

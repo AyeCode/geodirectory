@@ -7,9 +7,10 @@ Cannot un-select all tags in add listing form - FIXED
 User avatar overlaps some text in dashboard recent reviews widget - FIXED
 Save custom field generates incorrect field key if not inserted - FIXED
 On page refresh detail page map not loading if map tab is active - FIXED
-404 rescue function sometimes not picking up a post_type from query vers - FIXED
+404 rescue function sometimes not picking up a post_type from query vars - FIXED
 Added geodirectory-single.php as option to override single template - ADDED
 Post badge now has option to open link in new window and input or class wrapper - ADDED
+Changes for Marker Cluster addon v2 - ADDED
 
 v2.0.0.41
 GD Listings widget sorting not showing custom sorting options - FIXED

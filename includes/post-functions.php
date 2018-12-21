@@ -702,7 +702,7 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 		'txt_color' => '#ffffff',
 		'size'      => '',
 		'alignment' => '',
-		'class' => '',
+		'css_class' => '',
 	);
 	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
@@ -817,8 +817,8 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 				if ( ! empty( $args['alignment'] ) ) {
 					$class .= ' align' . $args['alignment'];
 				}
-				if ( ! empty( $args['class'] ) ) {
-					$class .= ' ' . esc_attr($args['class']);
+				if ( ! empty( $args['css_class'] ) ) {
+					$class .= ' ' . esc_attr($args['css_class']);
 				}
 
 				// new window

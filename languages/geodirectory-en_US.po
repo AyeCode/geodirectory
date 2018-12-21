@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.41\n"
+"Project-Id-Version: GeoDirectory 2.0.0.42\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-13 14:56+0000\n"
-"PO-Revision-Date: 2018-12-13 14:56+0000\n"
+"POT-Creation-Date: 2018-12-20 15:50+0000\n"
+"PO-Revision-Date: 2018-12-20 15:50+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -422,13 +422,13 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:244
 #: includes/admin/class-geodir-admin-addons.php:286
-#: includes/admin/class-geodir-admin-setup-wizard.php:735
+#: includes/admin/class-geodir-admin-setup-wizard.php:738
 msgid "Installed"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:247
 #: includes/admin/class-geodir-admin-addons.php:287
-#: includes/admin/class-geodir-admin-setup-wizard.php:850
+#: includes/admin/class-geodir-admin-setup-wizard.php:853
 #: includes/admin/views/html-admin-page-addons.php:123
 msgid "Install"
 msgstr ""
@@ -444,7 +444,7 @@ msgid "Buy now"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-addons.php:288
-#: includes/admin/class-geodir-admin-setup-wizard.php:736
+#: includes/admin/class-geodir-admin-setup-wizard.php:739
 msgid "Installing"
 msgstr ""
 
@@ -572,12 +572,12 @@ msgstr ""
 msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:212
-#: includes/class-geodir-frontend-scripts.php:718
+#: includes/admin/class-geodir-admin-assets.php:213
+#: includes/class-geodir-frontend-scripts.php:719
 msgid "Allowed Files"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-assets.php:267
+#: includes/admin/class-geodir-admin-assets.php:268
 msgid "Are you sure you want to delete this log?"
 msgstr ""
 
@@ -646,9 +646,9 @@ msgid "Data Type"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:424
-#: includes/admin/class-geodir-admin-setup-wizard.php:496
-#: includes/admin/class-geodir-admin-setup-wizard.php:556
-#: includes/admin/class-geodir-admin-setup-wizard.php:616
+#: includes/admin/class-geodir-admin-setup-wizard.php:499
+#: includes/admin/class-geodir-admin-setup-wizard.php:559
+#: includes/admin/class-geodir-admin-setup-wizard.php:619
 #: includes/admin/diagnostic-functions.php:42
 msgid "Action"
 msgstr ""
@@ -1671,95 +1671,95 @@ msgstr ""
 msgid "Ready!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:291
+#: includes/admin/class-geodir-admin-setup-wizard.php:294
 msgid ""
 "Thank you for choosing GeoDirectory to power your online directory! This "
 "quick setup wizard will help you configure the basic settings. <strong>It’s "
 "completely optional and shouldn’t take longer than five minutes.</strong>"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:321
+#: includes/admin/class-geodir-admin-setup-wizard.php:324
 msgid ""
 "This is a requirement to use Google Maps. If you would prefer to use the "
 "Open Street Maps API, set the Maps API to OSM."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:335
-#: includes/admin/class-geodir-admin-setup-wizard.php:407
-#: includes/admin/class-geodir-admin-setup-wizard.php:689
-#: includes/admin/class-geodir-admin-setup-wizard.php:851
+#: includes/admin/class-geodir-admin-setup-wizard.php:338
+#: includes/admin/class-geodir-admin-setup-wizard.php:410
+#: includes/admin/class-geodir-admin-setup-wizard.php:692
+#: includes/admin/class-geodir-admin-setup-wizard.php:854
 msgid "Continue"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:378
+#: includes/admin/class-geodir-admin-setup-wizard.php:381
 msgid ""
 "Drag the map or the marker to set the city/town you wish to use as the "
 "default location."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:395
+#: includes/admin/class-geodir-admin-setup-wizard.php:398
 #: includes/admin/settings/class-geodir-settings-general.php:90
 msgid "Are you sure? This can break current listings."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:495
+#: includes/admin/class-geodir-admin-setup-wizard.php:498
 msgid "Select the theme top sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:517
-#: includes/admin/class-geodir-admin-setup-wizard.php:521
-#: includes/admin/class-geodir-admin-setup-wizard.php:578
-#: includes/admin/class-geodir-admin-setup-wizard.php:582
+#: includes/admin/class-geodir-admin-setup-wizard.php:520
+#: includes/admin/class-geodir-admin-setup-wizard.php:524
+#: includes/admin/class-geodir-admin-setup-wizard.php:581
+#: includes/admin/class-geodir-admin-setup-wizard.php:585
 msgid "sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:525
-#: includes/admin/class-geodir-admin-setup-wizard.php:586
+#: includes/admin/class-geodir-admin-setup-wizard.php:528
+#: includes/admin/class-geodir-admin-setup-wizard.php:589
 msgid "sidebar page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:537
-#: includes/admin/class-geodir-admin-setup-wizard.php:598
-#: includes/admin/class-geodir-admin-setup-wizard.php:643
-#: includes/admin/class-geodir-admin-setup-wizard.php:668
+#: includes/admin/class-geodir-admin-setup-wizard.php:540
+#: includes/admin/class-geodir-admin-setup-wizard.php:601
+#: includes/admin/class-geodir-admin-setup-wizard.php:646
+#: includes/admin/class-geodir-admin-setup-wizard.php:671
 msgid "( Auto detected )"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:545
-#: includes/admin/class-geodir-admin-setup-wizard.php:606
+#: includes/admin/class-geodir-admin-setup-wizard.php:548
+#: includes/admin/class-geodir-admin-setup-wizard.php:609
 msgid "Insert widgets"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:555
+#: includes/admin/class-geodir-admin-setup-wizard.php:558
 msgid "Select the theme sidebar"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:615
+#: includes/admin/class-geodir-admin-setup-wizard.php:618
 msgid "Select the theme main menu"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:668
+#: includes/admin/class-geodir-admin-setup-wizard.php:671
 msgid "Create new menu in:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:683
+#: includes/admin/class-geodir-admin-setup-wizard.php:686
 msgid "Insert menu items"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:720
+#: includes/admin/class-geodir-admin-setup-wizard.php:723
 msgid "Recommend Plugins"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:722
+#: includes/admin/class-geodir-admin-setup-wizard.php:725
 msgid ""
 "Below are a few recommend plugins that will help you with your directory."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:765
+#: includes/admin/class-geodir-admin-setup-wizard.php:768
 msgid "Tick to install"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:885
+#: includes/admin/class-geodir-admin-setup-wizard.php:888
 #: includes/admin/settings/class-geodir-settings-general.php:1010
 #, php-format
 msgid ""
@@ -1768,11 +1768,11 @@ msgid ""
 "more%2$s."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:893
+#: includes/admin/class-geodir-admin-setup-wizard.php:896
 msgid "Thank you for using GeoDirectory! :)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-setup-wizard.php:905
+#: includes/admin/class-geodir-admin-setup-wizard.php:908
 msgid "Learn more"
 msgstr ""
 
@@ -1839,7 +1839,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-page.php:66
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:31
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:60
-#: includes/widgets/class-geodir-widget-post-badge.php:136
+#: includes/widgets/class-geodir-widget-post-badge.php:145
 #: includes/widgets/class-geodir-widget-post-fav.php:60
 #: includes/widgets/class-geodir-widget-post-images.php:139
 #: includes/widgets/class-geodir-widget-post-images.php:152
@@ -2802,7 +2802,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:280
 #: includes/widgets/class-geodir-widget-archive-item-section.php:53
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:61
-#: includes/widgets/class-geodir-widget-post-badge.php:137
+#: includes/widgets/class-geodir-widget-post-badge.php:146
 #: includes/widgets/class-geodir-widget-post-fav.php:61
 #: includes/widgets/class-geodir-widget-post-meta.php:87
 #: includes/widgets/class-geodir-widget-post-rating.php:61
@@ -2812,7 +2812,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:281
 #: includes/widgets/class-geodir-widget-archive-item-section.php:54
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:63
-#: includes/widgets/class-geodir-widget-post-badge.php:139
+#: includes/widgets/class-geodir-widget-post-badge.php:148
 #: includes/widgets/class-geodir-widget-post-fav.php:63
 #: includes/widgets/class-geodir-widget-post-meta.php:89
 #: includes/widgets/class-geodir-widget-post-rating.php:63
@@ -3405,13 +3405,13 @@ msgstr ""
 msgid "No tab items have been added yet."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1668
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1770
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1676
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1778
 msgid "Invalid field."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1801
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1804
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1809
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1812
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:804
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:807
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:702
@@ -3419,45 +3419,45 @@ msgstr ""
 msgid "Failed to sort tab items."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1845
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1853
 #, php-format
 msgid "%s field already exists, it can not be used twice."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1847
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1855
 msgid ""
 "Field key name MUST be unique, duplicate field detected, please fix and re-"
 "save."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1903
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1911
 msgid "Column change failed, you may have too many columns."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2022
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2030
 msgid "Field update failed.x"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2036
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2044
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:712
 msgid "Field create failed."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2048
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2056
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "does not match with field data type."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2104
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2112
 msgid "Details page sidebar"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2106
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2114
 msgid "Listings page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2108
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2116
 msgid "Map bubble"
 msgstr ""
 
@@ -5753,7 +5753,7 @@ msgstr ""
 
 #: includes/admin/views/html-admin-page-status-report.php:581
 #: includes/admin/views/html-notice-v2-update.php:143
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:305
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:316
 msgid "Version"
 msgstr ""
 
@@ -6097,7 +6097,7 @@ msgid "Tab content:"
 msgstr ""
 
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:51
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:181
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:172
 msgid "Add Shortcode"
 msgstr ""
 
@@ -8346,61 +8346,61 @@ msgstr ""
 msgid "Location detection not supported in browser"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:692
+#: includes/class-geodir-frontend-scripts.php:693
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:693
+#: includes/class-geodir-frontend-scripts.php:694
 #: includes/core-functions.php:320
 msgid "No matches found"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:694
+#: includes/class-geodir-frontend-scripts.php:695
 #: includes/core-functions.php:321
 msgid "Loading failed"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:695
+#: includes/class-geodir-frontend-scripts.php:696
 #: includes/core-functions.php:322
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:696
+#: includes/class-geodir-frontend-scripts.php:697
 #: includes/core-functions.php:323
 msgid "Please enter %item% or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:697
+#: includes/class-geodir-frontend-scripts.php:698
 #: includes/core-functions.php:324
 msgid "Please delete 1 character"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:698
+#: includes/class-geodir-frontend-scripts.php:699
 #: includes/core-functions.php:325
 msgid "Please delete %item% characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:699
+#: includes/class-geodir-frontend-scripts.php:700
 #: includes/core-functions.php:326
 msgid "You can only select 1 item"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:700
+#: includes/class-geodir-frontend-scripts.php:701
 #: includes/core-functions.php:327
 msgid "You can only select %item% items"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:701
+#: includes/class-geodir-frontend-scripts.php:702
 #: includes/core-functions.php:328
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:702
+#: includes/class-geodir-frontend-scripts.php:703
 #: includes/core-functions.php:329
 msgid "Searching&hellip;"
 msgstr ""
 
-#: includes/class-geodir-maps.php:302
+#: includes/class-geodir-maps.php:305
 msgid "No category"
 msgstr ""
 
@@ -8457,11 +8457,11 @@ msgstr ""
 msgid "This %s appears to have closed down and may be removed soon."
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:280
+#: includes/class-geodir-permalinks.php:295
 msgid "<b>GeoDirectory permalink error</b> the following rule appears twice:"
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:281
+#: includes/class-geodir-permalinks.php:296
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
@@ -9057,7 +9057,7 @@ msgstr ""
 msgid "Click to copy"
 msgstr ""
 
-#: includes/class-geodir-template-loader.php:502
+#: includes/class-geodir-template-loader.php:503
 msgid ""
 "Sorry, this is a page template and can not be accessed from the frontend, it "
 "is used for building the layouts of GeoDirectory sections."
@@ -9791,7 +9791,7 @@ msgstr ""
 msgid "in %s"
 msgstr ""
 
-#: includes/post-functions.php:808
+#: includes/post-functions.php:810
 msgid "NEW"
 msgstr ""
 
@@ -10433,7 +10433,7 @@ msgid "Icon"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:56
-#: includes/widgets/class-geodir-widget-post-badge.php:133
+#: includes/widgets/class-geodir-widget-post-badge.php:142
 #: includes/widgets/class-geodir-widget-post-fav.php:56
 #: includes/widgets/class-geodir-widget-post-meta.php:82
 #: includes/widgets/class-geodir-widget-post-rating.php:56
@@ -10441,7 +10441,7 @@ msgid "Alignment:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:57
-#: includes/widgets/class-geodir-widget-post-badge.php:134
+#: includes/widgets/class-geodir-widget-post-badge.php:143
 #: includes/widgets/class-geodir-widget-post-fav.php:57
 #: includes/widgets/class-geodir-widget-post-meta.php:83
 #: includes/widgets/class-geodir-widget-post-rating.php:57
@@ -10449,7 +10449,7 @@ msgid "How the item should be positioned on the page."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:62
-#: includes/widgets/class-geodir-widget-post-badge.php:138
+#: includes/widgets/class-geodir-widget-post-badge.php:147
 #: includes/widgets/class-geodir-widget-post-fav.php:62
 #: includes/widgets/class-geodir-widget-post-meta.php:88
 #: includes/widgets/class-geodir-widget-post-rating.php:62
@@ -10671,13 +10671,13 @@ msgstr ""
 msgid "This enables marker cluster on the map."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:1039 language.php:77
+#: includes/widgets/class-geodir-widget-map.php:1042 language.php:77
 msgid ""
 "<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your "
 "search criteria and try again.</p>"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:1041
+#: includes/widgets/class-geodir-widget-map.php:1044
 msgid "<h3>Google Map Not Loaded</h3><p>Sorry, unable to load Google Maps API."
 msgstr ""
 
@@ -10838,96 +10838,112 @@ msgid ""
 "%%input%% can be used here if a link."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:100
-msgid "Badge background color:"
+#: includes/widgets/class-geodir-widget-post-badge.php:99
+msgid "Open link in new window:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:101
-msgid "Color for the badge background."
+#: includes/widgets/class-geodir-widget-post-badge.php:100
+msgid "This will open the link in a new window."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:109
-msgid "Badge text color:"
+msgid "Badge background color:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:110
-msgid "Color for the badge text."
+msgid "Color for the badge background."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:118
-msgid "Badge size:"
+msgid "Badge text color:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:119
+msgid "Color for the badge text."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-badge.php:127
+msgid "Badge size:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-badge.php:128
 msgid "Size of the badge."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:121
+#: includes/widgets/class-geodir-widget-post-badge.php:130
 msgid "Small"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:122
+#: includes/widgets/class-geodir-widget-post-badge.php:131
 msgid "Normal"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:123
+#: includes/widgets/class-geodir-widget-post-badge.php:132
 msgid "Medium"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:124
+#: includes/widgets/class-geodir-widget-post-badge.php:133
 msgid "Large"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:125
+#: includes/widgets/class-geodir-widget-post-badge.php:134
 msgid "Extra Large"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:170
+#: includes/widgets/class-geodir-widget-post-badge.php:155
+msgid "Extra class:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-badge.php:156
+msgid "Give the wrapper an extra class so you can style things as you want."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-post-badge.php:188
 msgid "post id is missing"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:173
+#: includes/widgets/class-geodir-widget-post-badge.php:191
 #: includes/widgets/class-geodir-widget-post-meta.php:157
 msgid "invalid post type"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:176
+#: includes/widgets/class-geodir-widget-post-badge.php:194
 msgid "field key is missing"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:206
+#: includes/widgets/class-geodir-widget-post-badge.php:224
 msgid "post date"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:218
+#: includes/widgets/class-geodir-widget-post-badge.php:236
 msgid "is equal"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:219
+#: includes/widgets/class-geodir-widget-post-badge.php:237
 msgid "is not equal"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:220
+#: includes/widgets/class-geodir-widget-post-badge.php:238
 msgid "is greater than"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:221
+#: includes/widgets/class-geodir-widget-post-badge.php:239
 msgid "is less than"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:222
+#: includes/widgets/class-geodir-widget-post-badge.php:240
 msgid "is empty"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:223
+#: includes/widgets/class-geodir-widget-post-badge.php:241
 msgid "is not empty"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:224
+#: includes/widgets/class-geodir-widget-post-badge.php:242
 msgid "is contains"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:225
+#: includes/widgets/class-geodir-widget-post-badge.php:243
 msgid "is not contains"
 msgstr ""
 
@@ -12990,64 +13006,64 @@ msgstr ""
 msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:277
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:288
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:294
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:305
 msgid "Type"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:298
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:309
 msgid "CSS (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:309
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:320
 #, php-format
 msgid "Latest - %s (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:336
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:348
 msgid "Enqueue"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:340
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:352
 msgid "Frontend + Backend (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:342
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:354
 msgid "Frontend"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:344
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:356
 msgid "Backend"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:351
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:363
 msgid "Enable v4 shims compatibility"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:356
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:368
 msgid ""
 "This enables v4 classes to work with v5, sort of like a band-aid until "
 "everyone has updated everything to v5."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:362
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:374
 msgid "Enable JS pseudo elements (not recommended)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:369
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:381
 msgid ""
 "Used only with the JS version, this will make pseudo-elements work but can "
 "be CPU intensive on some sites."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:374
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:386
 msgid "Dequeue"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:380
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:392
 msgid ""
 "This will try to dequeue any other Font Awesome versions loaded by other "
 "sources if they are added with `font-awesome` or `fontawesome` in the name."
@@ -13122,18 +13138,18 @@ msgstr ""
 msgid "Api Key:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:158
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:141
 msgid "Select shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:173
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:157
 msgid "Insert shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:174
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:159
 msgid "Copy shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:961
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:940
 msgid "Placeholder for: "
 msgstr ""

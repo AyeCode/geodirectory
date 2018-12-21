@@ -168,6 +168,43 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 		return geodir_map_post_type_terms(options, post_type, query_string);
 	}
 
+
+    // MC
+    var map_info = '';
+    if (jQuery.goMap.map && options.marker_cluster_server) { // map loaded so we know the bounds
+        bounds = jQuery.goMap.map.getBounds();
+        gd_zl = jQuery.goMap.map.getZoom();
+
+        if(bounds){
+            if (window.gdMaps == 'osm') {
+                gd_lat_ne = bounds.getNorthEast().lat;
+                gd_lon_ne = bounds.getNorthEast().lng;
+                gd_lat_sw = bounds.getSouthWest().lat;
+                gd_lon_sw = bounds.getSouthWest().lng;
+            } else {
+                gd_lat_ne = bounds.getNorthEast().lat();
+                gd_lon_ne = bounds.getNorthEast().lng();
+                gd_lat_sw = bounds.getSouthWest().lat();
+                gd_lon_sw = bounds.getSouthWest().lng();
+            }
+            map_info = "&zl=" + gd_zl + "&lat_ne=" + gd_lat_ne + "&lon_ne=" + gd_lon_ne + "&lat_sw=" + gd_lat_sw + "&lon_sw=" + gd_lon_sw;
+        }
+
+    } else if (options.marker_cluster_server && !options.autozoom) { // map not loaded and auto zoom not set
+        gd_zl = options.zoom;
+        gd_map_h = jQuery('#' + map_canvas).height();
+        gd_map_w = jQuery('#' + map_canvas).width();
+        map_info = "&zl=" + gd_zl + "&gd_map_h=" + gd_map_h + "&gd_map_w=" + gd_map_w;
+    } else if (options.marker_cluster_server && options.autozoom) { // map not loaded and auto zoom set
+        gd_zl = options.zoom;
+        gd_map_h = jQuery('#' + map_canvas).height();
+        gd_map_w = jQuery('#' + map_canvas).width();
+        map_info = "&zl=" + gd_zl + "&gd_map_h=" + gd_map_h + "&gd_map_w=" + gd_map_w;
+    }
+
+    query_string += map_info;
+    // /MC
+
 	search = jQuery('#' + map_canvas + '_search_string').val();
 
 
