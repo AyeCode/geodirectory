@@ -200,7 +200,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 			<h2 class="title"><?php _e('GeoDirectory Taxonomies'); ?></h2>
 			<p><?php
 				/* translators: %s: placeholder that must come at the start of the URL */
-				printf( __( 'If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/attractions/</code>. Tags can not be blank, category slug can only be blank if the GD permalinks are using more than one tag.','geodirectory' ),  home_url()  . '/' .  $base_slug  ); ?></p>
+				printf( __( 'If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/attractions/</code>. Tags and category can not be blank.','geodirectory' ),  home_url()  . '/' .  $base_slug  ); ?></p>
 
 			<table class="form-table">
 				<tr>
@@ -352,16 +352,19 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 					// check category base
 					if(jQuery('#geodirectory_category_base').val()==''){
 
+						
+						alert("<?php _e('GeoDirectory category base can not be blank, please check and try again.','geodirectory'); ?>");
+						$return = false;
 
-						if($permalink_structure==''){
-							$return = false;
-						}else if($permalink_structure.split("/").length-1 < 3){
-							$return = false;
-						}
-
-						if(!$return){
-							alert("<?php _e('GeoDirectory category base can only be blank if the GeoDirectory permalinks use more than one tag, please check and try again.','geodirectory'); ?>");
-						}
+//						if($permalink_structure==''){
+//							$return = false;
+//						}else if($permalink_structure.split("/").length-1 < 3){
+//							$return = false;
+//						}
+//
+//						if(!$return){
+//							alert("<?php //_e('GeoDirectory category base can only be blank if the GeoDirectory permalinks use more than one tag, please check and try again.','geodirectory'); ?>//");
+//						}
 					}
 
 					return $return;

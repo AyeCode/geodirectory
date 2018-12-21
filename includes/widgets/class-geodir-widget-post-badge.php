@@ -49,7 +49,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			),
 			'key'  => array(
 				'type' => 'select',
-				'title' => __('Feild Key:', 'geodirectory'),
+				'title' => __('Field Key:', 'geodirectory'),
 				'desc' => __('This is the custom field key.', 'geodirectory'),
 				'placeholder' => '',
 				'options' => $this->get_custom_field_keys(),

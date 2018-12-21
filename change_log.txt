@@ -1,3 +1,8 @@
+v2.0.0.43
+Post badge and is_empty check not working in some cases - FIXED
+Post badge post_class now also adds class with condition - ADDED
+Permalinks category base now required to keep permalinks to WordPress standards and avoid conflicts - CHANGED
+
 v2.0.0.42
 Selecting detail custom page template shows comment box twice - FIXED
 Added editor styles to help Gutenberg Blocks UI - ADDED
