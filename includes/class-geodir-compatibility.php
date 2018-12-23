@@ -74,6 +74,53 @@ class GeoDir_Compatibility {
 		// after_setup_theme checks
 		add_action( 'after_setup_theme', array(__CLASS__,'for_later_checks') );
 
+		/*######################################################
+		Astra (theme) :: Fix page layouts.
+		######################################################*/
+		add_filter( 'astra_page_layout', array( __CLASS__, 'astra_page_layout' ) );
+		add_filter( 'astra_get_content_layout', array( __CLASS__, 'astra_get_content_layout' ) );
+
+
+	}
+
+	/**
+	 * Get the Astra page content setting for archives.
+	 *
+	 * @param $layout
+	 *
+	 * @return mixed
+	 */
+	public static function astra_get_content_layout($layout){
+		global $wp_query;
+		$page_id = isset($wp_query->post->ID) ? $wp_query->post->ID : '';
+		if($page_id && geodir_archive_page_id()==$page_id){
+			$page_layout = get_post_meta($page_id,'site-content-layout',true);
+			if($page_layout!=''){
+				$layout = $page_layout;
+			}
+		}
+
+		return $layout;
+	}
+
+	/**
+	 * Get the Astra page sidebar setting for archives.
+	 *
+	 * @param $layout
+	 *
+	 * @return mixed
+	 */
+	public static function astra_page_layout($layout){
+		global $wp_query;
+		$page_id = isset($wp_query->post->ID) ? $wp_query->post->ID : '';
+		if($page_id && geodir_archive_page_id()==$page_id){
+			$page_layout = get_post_meta($page_id,'site-sidebar-layout',true);
+			if($page_layout!=''){
+				$layout = $page_layout;
+			}
+		}
+
+		return $layout;
 	}
 
 	/**

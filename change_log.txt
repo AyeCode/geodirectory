@@ -1,3 +1,6 @@
+v2.0.0.44
+Astra theme archive page layout compatibility - ADDED
+
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED
 Post badge post_class now also adds class with condition - ADDED
