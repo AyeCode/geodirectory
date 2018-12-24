@@ -164,6 +164,7 @@ body { // wrapping ina  body tag makes rules more specific
 				display: inline-block;
 				vertical-align: top;
 				clear: none;
+				float: none;
 
 				.gd-list-item-left, .gd-list-item-right {
 					display: block;

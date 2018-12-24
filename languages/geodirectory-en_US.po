@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.42\n"
+"Project-Id-Version: GeoDirectory 2.0.0.43\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-12-20 15:50+0000\n"
-"PO-Revision-Date: 2018-12-20 15:50+0000\n"
+"POT-Creation-Date: 2018-12-21 19:10+0000\n"
+"PO-Revision-Date: 2018-12-21 19:10+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1465,9 +1465,8 @@ msgstr ""
 msgid ""
 "If you like, you may enter custom structures for your category and tag URLs "
 "here. For example, using <code>topics</code> as your category base would "
-"make your category links like <code>%s/topics/attractions/</code>. Tags can "
-"not be blank, category slug can only be blank if the GD permalinks are using "
-"more than one tag."
+"make your category links like <code>%s/topics/attractions/</code>. Tags and "
+"category can not be blank."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-permalink-settings.php:207
@@ -1488,10 +1487,9 @@ msgstr ""
 msgid "GeoDirectory tag base can not be blank, please check and try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-permalink-settings.php:363
+#: includes/admin/class-geodir-admin-permalink-settings.php:356
 msgid ""
-"GeoDirectory category base can only be blank if the GeoDirectory permalinks "
-"use more than one tag, please check and try again."
+"GeoDirectory category base can not be blank, please check and try again."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:81
@@ -9791,7 +9789,7 @@ msgstr ""
 msgid "in %s"
 msgstr ""
 
-#: includes/post-functions.php:810
+#: includes/post-functions.php:812
 msgid "NEW"
 msgstr ""
 
@@ -10790,7 +10788,7 @@ msgid "Leave blank to use current post id."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:52
-msgid "Feild Key:"
+msgid "Field Key:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-badge.php:53

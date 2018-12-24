@@ -760,11 +760,13 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 				if ( $until_time >= $now_time ) {
 					$match_found = true;
 				}
-			} elseif ( $match_field == 'featured' ) {
-				if ( ! empty( $find_post->{$match_field} ) ) {
-					$match_found = true;
-				}
-			} else {
+			}
+//			elseif ( $match_field == 'featured' ) {
+//				if ( ! empty( $find_post->{$match_field} ) ) {
+//					$match_found = true;
+//				}
+//			}
+			else {
 				switch ( $args['condition'] ) {
 					case 'is_equal':
 						$match_found = (bool) ( $search != '' && $match_value == $search );
@@ -779,7 +781,7 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 						$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value < $search );
 						break;
 					case 'is_empty':
-						$match_found = (bool) ( $match_value === '' || $match_value === false && $match_value === '0' || is_null( $match_value ) );
+						$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
 						break;
 					case 'is_not_empty':
 						$match_found = (bool) ( $match_value !== '' && $match_value !== false && $match_value !== '0' && ! is_null( $match_value ) );
@@ -830,7 +832,7 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 				$output = '<div class="gd-badge-meta ' . trim( $class ) . '">';
 				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window>";}
 				// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
-				$output .= '<div data-id="' . $find_post->ID . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . __( $badge, 'geodirectory' ) . '</div>';
+				$output .= '<div data-id="' . $find_post->ID . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . __( $badge, 'geodirectory' ) . '</div>';
 				if(!empty($args['link'])){$output .= "</a>";}
 				$output .= '</div>';
 			}

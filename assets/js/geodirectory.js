@@ -123,10 +123,12 @@ jQuery(function($) {
 		geodir_fix_marker_pos(data.canvas);
 	});
 	$('.gd-badge-meta .gd-badge').each(function(){
-		var badge = $(this).data('badge');
+        var badge = $(this).data('badge');
+        var badge_condition = $(this).data('badge-condition');
 		if (badge && $(this).closest('.post-' + $(this).data('id')).length) {
-			badge = 'geodir-badge-' + badge;
-			$(this).closest('.post-' + $(this).data('id')).removeClass(badge).addClass(badge);
+            badge_class = 'geodir-badge-' + badge; // name
+            badge_class += ' geodir-badge-' + badge + '-'+ badge_condition; // name and condition
+			$(this).closest('.post-' + $(this).data('id')).removeClass(badge_class).addClass(badge_class);
 		}
 	});
 

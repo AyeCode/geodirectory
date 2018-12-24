@@ -56,7 +56,20 @@ class GeoDir_Permalinks {
 
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
-//		add_action('init', array( $this, 'temp_check_rules'),10000000000);
+		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
+	}
+
+	// @todo remove after testing
+	public function temp_check_rules($rules){
+
+		if(is_admin()){return;}
+		global $wp_rewrite;
+		//print_r( $wp_rewrite );
+		print_r(get_option( 'rewrite_rules' ));
+
+		echo '###';exit;
+
+		return $rules;
 	}
 
 	public function maybe_404(){
@@ -254,19 +267,6 @@ class GeoDir_Permalinks {
 		}
 
 		return $term;
-	}
-
-	// @todo remove after testing
-	public function temp_check_rules($rules){
-
-		if(is_admin()){return;}
-		global $wp_rewrite;
-		print_r( $wp_rewrite );
-		//print_r(get_option( 'rewrite_rules' ));
-
-		echo '###';exit;
-
-		return $rules;
 	}
 
 	public function insert_rewrite_rules(){
