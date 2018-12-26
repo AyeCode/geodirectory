@@ -79,8 +79,7 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_filter( 'astra_page_layout', array( __CLASS__, 'astra_page_layout' ) );
 		add_filter( 'astra_get_content_layout', array( __CLASS__, 'astra_get_content_layout' ) );
-
-
+		add_action( 'wp', array( __CLASS__, 'astra_wp' ), 20, 1 );
 	}
 
 	/**
@@ -121,6 +120,43 @@ class GeoDir_Compatibility {
 		}
 
 		return $layout;
+	}
+
+	/**
+	 * Astra theme setup page title.
+	 *
+	 * @param $wp
+	 *
+	 * @return mixed
+	 */
+	public static function astra_wp( $wp = array() ) {
+		global $wp_query;
+
+		if ( function_exists( 'astra_the_title' ) ) {
+			$post_id = ! empty( $wp_query->queried_object ) && isset( $wp_query->queried_object->ID ) ? $wp_query->queried_object->ID : '';
+
+			if ( $post_id && geodir_search_page_id() == $post_id ) {
+				// Override Search Page Title.
+				$title = get_post_meta( $post_id, 'site-post-title', true );
+
+				if ( 'disabled' === $title ) {
+					add_filter( 'astra_the_title_enabled', '__return_false', 99 );
+				} else {
+					add_filter( 'astra_the_search_page_title', array( __CLASS__, 'astra_the_search_page_title' ), 20, 1 );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Astra theme filter the search page title.
+	 *
+	 * @param $title
+	 *
+	 * @return string
+	 */
+	public static function astra_the_search_page_title( $title = '' ) {
+		return get_the_title();
 	}
 
 	/**
