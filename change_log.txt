@@ -1,5 +1,6 @@
 v2.0.0.44
 Astra theme archive page layout compatibility - ADDED
+Astra theme GD search page meta title setting not working - FIXED
 
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED
