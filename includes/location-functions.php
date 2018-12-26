@@ -157,7 +157,7 @@ function geodir_get_current_location_terms($location_array_from = null, $gd_post
 	 * @param string $gd_post_type WP post type.
 	 */
 	$location_array = apply_filters( 'geodir_current_location_terms', $location_array, $location_array_from, $gd_post_type );
-
+//    print_r( $location_array );exit;
     return $location_array;
 
 }
