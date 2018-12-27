@@ -478,6 +478,14 @@ class GeoDir_Post_types {
 					$value = false;
 				}
 				break;
+			case 'special_offers':
+				$cf = geodir_get_field_infoby( 'htmlvar_name', 'special_offers', $post_type );
+				if ( ! empty( $cf ) && ! empty( $cf['is_active'] ) ) {
+					$value = true;
+				} else {
+					$value = false;
+				}
+				break;
 		}
 
 

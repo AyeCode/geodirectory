@@ -1050,7 +1050,8 @@ function geodir_function_widget_listings_where( $where ) {
 			$where .= " AND " . $table . ".featured = '1'";
 		}
 
-		if ( ! empty( $query_args['show_special_only'] ) ) {
+		// Special offers
+		if ( ! empty( $query_args['show_special_only'] ) && GeoDir_Post_types::supports( $post_type, 'special_offers' ) ) {
 			$where .= " AND ( " . $table . ".special_offers != '' AND " . $table . ".special_offers IS NOT NULL )";
 		}
 
