@@ -166,6 +166,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '0',
                 'advanced' => true
             ),
+            'show_special_only'  => array(
+                'title' => __("Only show listings with special offers?", 'geodirectory'),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '0',
+                'advanced' => true
+            ),
             'with_pics_only'  => array(
                 'title' => __("Only show listings with pictures?", 'geodirectory'),
                 'type' => 'checkbox',

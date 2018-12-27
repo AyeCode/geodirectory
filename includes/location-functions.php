@@ -286,8 +286,6 @@ add_filter('geodir_replace_location_variables', 'geodir_replace_location_variabl
 function geodir_location_replace_vars($location_array = array(), $sep = NULL, $gd_page = ''){
 
     global $wp;
-    
-    $location_manager = defined('GEODIRLOCATION_VERSION') ? true : false;
 
     if (empty($location_array)) {
         $location_array = geodir_get_current_location_terms('query_vars');
@@ -304,7 +302,7 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
         $location_name = $location;
 
         if (!empty($location_name)) {
-            if ($location_manager) {
+            if ( function_exists( 'get_actual_location_name' ) ) {
                 $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
                 $location_name = get_actual_location_name($location_type, $location, true);
             } else {
@@ -323,7 +321,7 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
             if (!empty($location_names[$type])) {
                 $location_single = $location_names[$type];
             } else {
-                if ($location_manager) {
+                if ( function_exists( 'get_actual_location_name' ) ) {
                     $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
                     $location_single = get_actual_location_name($location_type, $location, true);
                 } else {
@@ -344,7 +342,7 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
             if (!empty($location_names[$type])) {
                 $location_name = $location_names[$type];
             } else {
-                if ($location_manager) {
+                if ( function_exists( 'get_actual_location_name' ) ) {
                     $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
                     $location_name = get_actual_location_name($location_type, $location, true);
                 } else {

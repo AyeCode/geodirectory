@@ -590,7 +590,7 @@ jQuery(document).ready(function() {
         jQuery('#respond .comment-form-comment label').html(geodir_params.gd_cmt_btn_review_text);
     });
     
-    jQuery('#commentform .gd_rating, #commentform .gd-fa-rating').each(function() {
+    jQuery('#commentform .gd-rating-input-wrap').each(function() {
         var rat_obj = this;
         var $frm_obj = jQuery(rat_obj).closest('#commentform');
         
@@ -1300,11 +1300,14 @@ function gd_init_rating_input(){
 
             jQuery(this).hover(
                 function () {
-                    $percent = 0;
+                    $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
+					$original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();
+					$original_percent = $original_rating / $total * 100;
+					$original_rating_text = jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text();
+					
+					$percent = 0;
                     $rating = index + 1;
                     $rating_text = jQuery(this).attr("title");
-                    $original_rating_text = jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text();
-                    $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
                     if ($rating > $total) {
                         $rating = $rating - $total;
                     }
