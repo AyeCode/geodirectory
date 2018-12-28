@@ -126,7 +126,11 @@ class GeoDir_Admin_Addons {
 		elseif ( ! empty( $section ) ) {
 			if ( false === ( $section_data = get_transient( 'gd_addons_section_' . $section_id ) ) ) { //@todo restore after testing
 			//if ( 1==1) {
-				$raw_section = wp_safe_remote_get( esc_url_raw( add_query_arg( array( 'category' => $section_id, 'number' => 100),$api_url) ), array( 'user-agent' => 'GeoDirectory Addons Page','timeout'     => 15, ) );
+
+				$query_args = array( 'category' => $section_id, 'number' => 100);
+				$query_args = apply_filters('wpeu_edd_api_query_args',$query_args,$api_url,$section_id);
+
+				$raw_section = wp_safe_remote_get( esc_url_raw( add_query_arg($query_args ,$api_url) ), array( 'user-agent' => 'GeoDirectory Addons Page','timeout'     => 15, ) );
 
 				if ( ! is_wp_error( $raw_section ) ) {
 					$section_data = json_decode( wp_remote_retrieve_body( $raw_section ) );
@@ -211,6 +215,9 @@ class GeoDir_Admin_Addons {
 	public static function output_button( $addon ) {
 		$current_tab     = empty( $_GET['tab'] ) ? 'addons' : sanitize_title( $_GET['tab'] );
 		$button_text = __('Free','geodirectory');
+		$licensing = false;
+		$license = '';
+		$slug = '';
 		$url = isset($addon->info->link) ? $addon->info->link : '';
 		$class = 'button-primary';
 		$installed = false;
@@ -218,15 +225,19 @@ class GeoDir_Admin_Addons {
 
 		if($current_tab == 'addons' && isset($addon->info->id) && $addon->info->id){
 			$installed = self::is_plugin_installed($addon->info->id);
+			$licensing = isset($addon->licensing->enabled) && $addon->licensing->enabled ? true : false;
+			$license  = isset($addon->licensing->license) && $addon->licensing->license ? $addon->licensing->license : '';
 			if(defined('WP_EASY_UPDATES_ACTIVE')){
 				include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
 				$installed = self::is_plugin_installed($addon->info->id);
 				$slug = $addon->info->slug;
+				if(!empty($addon->licensing->edd_slug)){$slug = $addon->licensing->edd_slug;}
 				$nonce = wp_create_nonce( 'updates' );
 				$onclick = " onclick='gd_recommended_buy_popup(this,\"$slug\",\"$nonce\",\"".$addon->info->id."\");return false;' ";
 			}
 		}elseif($current_tab == 'themes' && isset($addon->info->id) && $addon->info->id) {
 			$installed = self::is_theme_installed($addon);
+			$license  = isset($addon->licensing->license) && $addon->licensing->license ? $addon->licensing->license : '';
 		}elseif($current_tab == 'recommended_plugins' && isset($addon->info->slug) && $addon->info->slug){
 			include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
 			$status = install_plugin_install_status(array("slug"=>$addon->info->slug,"version"=>""));
@@ -253,6 +264,8 @@ class GeoDir_Admin_Addons {
 				$price = reset($prices);
 				if($price!='0.00'){
 					$price_text = sprintf( __('From: $%d', 'geodirectory'), $price);
+				}else{
+					$price_text = __('Free', 'geodirectory');
 				}
 			}else{
 				$price_text = sprintf( __('From: $%d', 'geodirectory'), $addon->pricing);
@@ -283,6 +296,8 @@ class GeoDir_Admin_Addons {
 
 		?>
 		<a
+			data-licence="<?php echo esc_attr($license);?>"
+			data-licensing="<?php echo $licensing ? 1 : 0;?>"
 			data-text-installed="<?php _e('Installed','geodirectory');?>"
 			data-text-install="<?php _e('Install','geodirectory');?>"
 			data-text-installing="<?php _e('Installing','geodirectory');?>"

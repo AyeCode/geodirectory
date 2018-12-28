@@ -988,25 +988,36 @@ function gd_recommended_buy_popup($this,$slug,$nonce,$item_id){
     $title = jQuery($this).parent().parent().find(".gd-product-title h3").html();
     jQuery('#gd-recommended-buy .gd-recommended-buy-title').html($title);
     jQuery('#gd-recommended-buy .gd-recommended-buy-link').attr("href",$url);
-    $lightbox = lity('#gd-recommended-buy');
+    $licenced = jQuery($this).data("licensing");
+    $single_licence = jQuery($this).data("licence");
 
-    jQuery(".gd-recommended-buy-button").unbind('click').click(function(){
-        $licence =  jQuery(".gd-recommended-buy-key").val();
-        if($licence==''){
-            alert("Please enter a key");
-        }else{
-            jQuery(".gd-recommended-buy-key").val('');
-            $lightbox.close();
-            gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,$licence);
-        }
-    });
+    if($licenced && !$single_licence){
+        $lightbox = lity('#gd-recommended-buy');
+
+        jQuery(".gd-recommended-buy-button").unbind('click').click(function(){
+            $licence =  jQuery(".gd-recommended-buy-key").val();
+            if($licenced && $licence==''){
+                alert("Please enter a key");
+            }else{
+                jQuery(".gd-recommended-buy-key").val('');
+                $lightbox.close();
+                gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,$licence);
+            }
+        });
+    }else if($single_licence){
+        // exup_silent_activate_licence_key(pluginName,key,exupNonce)
+        gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,$single_licence);
+    }else{
+        gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,'free');
+    }
+
 }
 
 function gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,$licence){
 
     // @todo remove once out of beta
-    alert("This feature is not yet implemented in the beta");
-    return false;
+    //alert("This feature is not yet implemented in the beta");
+    //return false;
 
     var data = {
         'action':           'install-plugin',
@@ -1014,8 +1025,15 @@ function gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,$licenc
         'slug':              $slug,
         'update_url':        "https://wpgeodirectory.com",
         'item_id':           $item_id,
-        'license':           $licence
+        'wpeu_activate':     true
+        //'license':           $licence
     };
+
+    if($licence && $licence!='free'){
+        data.license = $licence;
+    }else if($licence=='free'){
+        data.free_download = '1';
+    }
 
     jQuery.ajax({
         type: "POST",
@@ -1042,6 +1060,7 @@ function gd_recommended_addon_install_plugin($this,$slug,$nonce,$item_id,$licenc
             }else{
                 jQuery($this).html(jQuery($this).data("text-error"));
                 alert('something went wrong');
+
             }
         }
     });

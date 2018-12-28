@@ -829,8 +829,14 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 					$new_window = ' target="_blank" ';
 				}
 
+				// check if its exteranl it should be no follow
+				$rel = '';
+				if(!empty($args['link'])){
+					$rel = strpos($args['link'], get_site_url()) !== false ? '' : 'rel="nofollow"';
+				}
+
 				$output = '<div class="gd-badge-meta ' . trim( $class ) . '">';
-				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window>";}
+				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
 				// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
 				$output .= '<div data-id="' . $find_post->ID . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . __( $badge, 'geodirectory' ) . '</div>';
 				if(!empty($args['link'])){$output .= "</a>";}

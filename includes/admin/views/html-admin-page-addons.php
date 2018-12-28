@@ -50,9 +50,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		}else{
 			$installed_plugins = get_plugins();
-			if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) : ?>
+			if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) : 
+				
+//				print_r($addons);
+				?>
 				<ul class="gd-products"><?php foreach ( $addons as $addon ) :
-						if(388371==$addon->info->id){continue;}// don't show GD Dashbaord
+						if(388371==$addon->info->id || 65079==$addon->info->id){continue;}// don't show GD Dashbaord or AffiliateWP Integration (moved to WPI)
 						?><li class="gd-product">
 								<div class="gd-product-title">
 									<h3><?php
