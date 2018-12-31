@@ -1859,6 +1859,8 @@ class GeoDir_Admin_Upgrade {
 					$htmlvar_name = 'featured';
 				} else if ( $htmlvar_name == 'fieldset' && $row->field_type == 'fieldset' ) {
 					$htmlvar_name = 'fieldset_' . $row->id; // Fix duplicate htmlvar name
+				} else if ( $htmlvar_name == 'event' ) {
+					$htmlvar_name = 'event_dates';
 				}
 
 				if ( $row->field_type == 'taxonomy' ) {
