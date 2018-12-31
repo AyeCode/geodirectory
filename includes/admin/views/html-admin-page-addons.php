@@ -53,9 +53,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 			if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) : 
 				
 //				print_r($addons);
+
+//			echo '###'.geodir_file_relative_url( 'http://localhost/wp-content/uploads/2018/12/restaurants19-2-150x150.jpg' );exit;
 				?>
 				<ul class="gd-products"><?php foreach ( $addons as $addon ) :
-						if(388371==$addon->info->id || 65079==$addon->info->id){continue;}// don't show GD Dashbaord or AffiliateWP Integration (moved to WPI)
+						if(388371==$addon->info->id || 65079==$addon->info->id){continue;}// don't show GD Dashbaord
 						?><li class="gd-product">
 								<div class="gd-product-title">
 									<h3><?php

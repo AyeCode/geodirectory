@@ -125,7 +125,7 @@ class GeoDir_Admin_Addons {
 		}
 		elseif ( ! empty( $section ) ) {
 			if ( false === ( $section_data = get_transient( 'gd_addons_section_' . $section_id ) ) ) { //@todo restore after testing
-			//if ( 1==1) {
+//			if ( 1==1) {
 
 				$query_args = array( 'category' => $section_id, 'number' => 100);
 				$query_args = apply_filters('wpeu_edd_api_query_args',$query_args,$api_url,$section_id);
@@ -156,20 +156,67 @@ class GeoDir_Admin_Addons {
 	 *
 	 * @return bool
 	 */
-	public static function is_plugin_installed( $id ){
+	public static function is_plugin_installed( $id, $addon = '' ){
 		$all_plugins = get_plugins();
 
-		foreach($all_plugins as $plugin ){
-			if(!isset($plugin['Update ID'])){
-				return false;
-			}else{
-				if($id == $plugin['Update ID']){
-					return true;
+		//print_r($all_plugins);exit;
+
+		$installed = false;
+
+		foreach($all_plugins as $p_slug => $plugin ){
+
+			if( isset($plugin['Update ID']) && $id == $plugin['Update ID']){
+				$installed = true;
+			}elseif(!empty($addon)){
+
+			}
+
+		}
+
+		return $installed;
+	}
+
+	public static function install_plugin_install_status($addon){
+
+		// Default to a "new" plugin
+		$status = 'install';
+		$url = isset($addon->info->link) ? $addon->info->link : false;
+		$file = false;
+		$version = '';
+
+
+		// url
+
+
+		$slug = isset($addon->info->slug) ? $addon->info->slug : '';
+		if(!empty($addon->licensing->edd_slug)){$slug = $addon->licensing->edd_slug;}
+		$id = !empty($addon->info->id) ? absint($addon->info->id) : '';
+		$version = isset($addon->licensing->version) ? $addon->licensing->version : '';
+
+		// check if we are looking for beta versions
+		if(geodir_get_option('admin_enable_beta') && !empty($addon->licensing->beta_version)){
+			$version = $addon->licensing->beta_version;
+		}
+
+		// get the slug
+
+		$all_plugins = get_plugins();
+		foreach($all_plugins as $p_slug => $plugin ){
+
+			if( $id && isset($plugin['Update ID']) && $id == $plugin['Update ID']){
+				$status = 'installed';
+				$file = $p_slug;break;
+			}elseif(!empty($addon->licensing->edd_slug)){
+				if (strpos($p_slug, $addon->licensing->edd_slug.'/') === 0) {
+					$status = 'installed';
+					$file = $p_slug;break;
 				}
 			}
 		}
 
-		return false;
+
+
+		return compact( 'status', 'url', 'version', 'file' );
 	}
 
 	/**
@@ -214,99 +261,159 @@ class GeoDir_Admin_Addons {
 	 */
 	public static function output_button( $addon ) {
 		$current_tab     = empty( $_GET['tab'] ) ? 'addons' : sanitize_title( $_GET['tab'] );
-		$button_text = __('Free','geodirectory');
-		$licensing = false;
-		$license = '';
-		$slug = '';
-		$url = isset($addon->info->link) ? $addon->info->link : '';
-		$class = 'button-primary';
-		$installed = false;
-		$onclick = '';
+//		$button_text = __('Free','geodirectory');
+//		$licensing = false;
+//		$installed = false;
+//		$price = '';
+//		$license = '';
+//		$slug = '';
+//		$url = isset($addon->info->link) ? $addon->info->link : '';
+//		$class = 'button-primary';
+//		$install_status = 'get';
+//		$onclick = '';
+
+		$button_args = array(
+			'type' => $current_tab,
+			'id' => isset($addon->info->id) ? absint($addon->info->id) : '',
+			'button_text' => __('Free','geodirectory'),
+			'price_text' => __('Free','geodirectory'),
+			'link' => isset($addon->info->link) ? $addon->info->link : '', // link to product
+			'url' => isset($addon->info->link) ? $addon->info->link : '', // button url
+			'class' => 'button-primary',
+			'install_status' => 'get',
+			'installed' => false,
+			'price' => '',
+			'licensing' => isset($addon->licensing->enabled) && $addon->licensing->enabled ? true : false,
+			'license' => isset($addon->licensing->license) && $addon->licensing->license ? $addon->licensing->license : '',
+			'onclick' => '',
+			'slug' => isset($addon->info->slug) ? $addon->info->slug : '',
+			'active' => false,
+			'file' => ''
+		);
 
 		if($current_tab == 'addons' && isset($addon->info->id) && $addon->info->id){
-			$installed = self::is_plugin_installed($addon->info->id);
-			$licensing = isset($addon->licensing->enabled) && $addon->licensing->enabled ? true : false;
-			$license  = isset($addon->licensing->license) && $addon->licensing->license ? $addon->licensing->license : '';
-			if(defined('WP_EASY_UPDATES_ACTIVE')){
-				include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
-				$installed = self::is_plugin_installed($addon->info->id);
-				$slug = $addon->info->slug;
-				if(!empty($addon->licensing->edd_slug)){$slug = $addon->licensing->edd_slug;}
-				$nonce = wp_create_nonce( 'updates' );
-				$onclick = " onclick='gd_recommended_buy_popup(this,\"$slug\",\"$nonce\",\"".$addon->info->id."\");return false;' ";
-			}
+			include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
+			if(!empty($addon->licensing->edd_slug)){$button_args['slug'] = $addon->licensing->edd_slug;}
+			$status = self::install_plugin_install_status($addon);
+			$button_args['file'] = isset($status['file']) ? $status['file'] : '';
+			if(isset($status['status'])){$button_args['install_status'] = $status['status'];}
+
+
+//			if(defined('WP_EASY_UPDATES_ACTIVE')){
+//				include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
+//				$installed = self::is_plugin_installed($addon->info->id);
+//
+//				$nonce = wp_create_nonce( 'updates' );
+////				$onclick = " onclick='gd_recommended_buy_popup(this,\"$slug\",\"$nonce\",\"".$addon->info->id."\");return false;' ";
+//				$button_args['onclick'] = " onclick='gd_recommended_buy_popup(this,\"$slug\",\"$nonce\",\"".$addon->info->id."\");return false;' ";
+//
+//			}
 		}elseif($current_tab == 'themes' && isset($addon->info->id) && $addon->info->id) {
-			$installed = self::is_theme_installed($addon);
-			$license  = isset($addon->licensing->license) && $addon->licensing->license ? $addon->licensing->license : '';
+			$button_args['installed'] = self::is_theme_installed($addon);
 		}elseif($current_tab == 'recommended_plugins' && isset($addon->info->slug) && $addon->info->slug){
 			include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
-			$status = install_plugin_install_status(array("slug"=>$addon->info->slug,"version"=>""));
-			$installed = isset($status['status']) && $status['status']=='install' ? false : true;
-			$slug = $addon->info->slug;
+			$status = install_plugin_install_status(array("slug"=>$button_args['slug'],"version"=>""));
+			$button_args['install_status'] = isset($status['status']) ? $status['status'] : 'install';
+			$button_args['file'] = isset($status['file']) ? $status['file'] : '';
 			$nonce = wp_create_nonce( 'updates' );
-			$onclick = " onclick='gd_recommended_install_plugin(this,\"$slug\",\"$nonce\");return false;' ";
+//			$onclick = " onclick='gd_recommended_install_plugin(this,\"$slug\",\"$nonce\");return false;' ";
+//			$button_args['onclick'] = " onclick='gd_recommended_install_plugin(this,\"".$button_args['slug']."\",\"$nonce\");return false;' ";
 
 		}
 
 
 //		print_r($addon);
 
-		if( $installed ){
-			$button_text = __('Installed','geodirectory');
-			$class = ' button-secondary disabled';
-		}else{
-			$button_text = __('Install','geodirectory');
-		}
-
+		// set price
 		if(isset($addon->pricing) && !empty($addon->pricing)){
 			if(is_object($addon->pricing)){
 				$prices = (Array)$addon->pricing;
-				$price = reset($prices);
-				if($price!='0.00'){
-					$price_text = sprintf( __('From: $%d', 'geodirectory'), $price);
-				}else{
-					$price_text = __('Free', 'geodirectory');
-				}
-			}else{
-				$price_text = sprintf( __('From: $%d', 'geodirectory'), $addon->pricing);
+				$button_args['price'] = reset($prices);
+			}elseif(isset($addon->pricing)){
+				$button_args['price'] = $addon->pricing;
 			}
+		}
 
-			if( !$installed ){
-				if(!defined('WP_EASY_UPDATES_ACTIVE')){
-					$button_text = __('Buy now','geodirectory');
-				}
+		// set price text
+		if( $button_args['price'] && $button_args['price'] != '0.00' ){
+			$button_args['price_text'] = sprintf( __('From: $%d', 'geodirectory'), $button_args['price']);
+		}
+
+
+		// set if installed
+		if(in_array($button_args['install_status'], array('installed','latest_installed','update_available','newer_installed'))){
+			$button_args['installed'] = true;
+		}
+
+		// set if active
+		if($button_args['installed'] && $button_args['file']){
+			if($button_args['type'] != 'theme'){
+				$button_args['active'] = is_plugin_active($button_args['file']);
+			}else{
+				//@todo we need a way to check if theme is active
+			}
+		}
+
+		// set button text and class
+		if($button_args['active']){
+			$button_args['button_text'] = __('Active','geodirectory');
+			$button_args['class'] = ' button-secondary disabled ';
+		}elseif($button_args['installed']){
+			$button_args['button_text'] = __('Activate','geodirectory');
+
+			if($button_args['type'] != 'theme'){
+				$button_args['url'] = wp_nonce_url(admin_url('plugins.php?action=activate&plugin='.$button_args['file']), 'activate-plugin_' . $button_args['file']);
 			}
 
 		}else{
-			$price_text = __('Free', 'geodirectory');
+			if($button_args['type'] == 'recommended_plugins'){
+				$button_args['button_text'] = __('Install','geodirectory');
+				$button_args['onclick'] = " onclick='gd_recommended_install_plugin(this,\"".$button_args['slug']."\",\"".wp_create_nonce( 'updates' )."\");return false;' ";
+			}else{
+				$button_args['button_text'] = __('Get it','geodirectory');
+			}
 		}
 
-		//$price_text = 'From: $123';
+		
+		// filter the button arguments
+		$button_args = apply_filters('edd_api_button_args',$button_args);
 
-		if(!$installed && isset($price_text)){
+
+
+
+		// set price text
+		if(isset($button_args['price_text'])){
 			?>
 			<a
 				target="_blank"
 				class="addons-price-text"
-				href="<?php echo esc_url( $url ); ?>">
-				<?php echo esc_html( $price_text ); ?>
+				href="<?php echo esc_url( $button_args['link'] ); ?>">
+				<?php echo esc_html( $button_args['price_text'] ); ?>
 			</a>
 			<?php
 		}
 
+
+		$target = '';
+		if ( ! empty( $button_args['url'] ) ) {
+			$target = strpos($button_args['url'], get_site_url()) !== false ? '' : ' target="_blank" ';
+		}
+
 		?>
 		<a
-			data-licence="<?php echo esc_attr($license);?>"
-			data-licensing="<?php echo $licensing ? 1 : 0;?>"
+			data-licence="<?php echo esc_attr($button_args['license']);?>"
+			data-licensing="<?php echo $button_args['licensing'] ? 1 : 0;?>"
+			data-text-activate="<?php _e('Activate','geodirectory');?>"
+			data-text-deactivate="<?php _e('Deactivate','geodirectory');?>"
 			data-text-installed="<?php _e('Installed','geodirectory');?>"
 			data-text-install="<?php _e('Install','geodirectory');?>"
 			data-text-installing="<?php _e('Installing','geodirectory');?>"
 			data-text-error="<?php _e('Error','geodirectory');?>"
-			<?php echo $onclick;?>
-			target="_blank"
-			class="addons-button  <?php echo esc_attr( $class ); ?>"
-			href="<?php echo esc_url( $url ); ?>">
-			<?php echo esc_html( $button_text ); ?>
+			<?php echo $button_args['onclick'];?>
+			<?php echo $target;?>
+			class="addons-button  <?php echo esc_attr( $button_args['class'] ); ?>"
+			href="<?php echo esc_url( $button_args['url'] ); ?>">
+			<?php echo esc_html( $button_args['button_text'] ); ?>
 		</a>
 		<?php
 

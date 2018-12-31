@@ -91,6 +91,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'type' => 'select',
                 'options'   =>  array(
                     '' => __('No filter', 'geodirectory'),
+                    'default_category' => __('Default Category only', 'geodirectory'),
                     'category' => __('Categories', 'geodirectory'),
 					'tags' => __('Tags', 'geodirectory')
                 ),
@@ -149,6 +150,15 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '5',
                 'desc_tip' => true,
                 'advanced' => true
+            ),
+            'post_ids'  => array(
+	            'title' => __('Posts IDs:', 'geodirectory'),
+	            'desc' => __('Enter a comma separated list of post ids (1,2,3) to limit the listing to these posts only, or a negative list (-1,-2,-3) to exclude those post IDs (negative and positive IDs can not be mixed) ', 'geodirectory'),
+	            'type' => 'text',
+	            'default'  => '',
+	            'placeholder' => '1,2,3',
+	            'desc_tip' => true,
+	            'advanced' => true
             ),
             'add_location_filter'  => array(
                 'title' => __("Enable location filter?", 'geodirectory'),
@@ -245,6 +255,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'title_tag' => 'h3',
                   'list_order' => '',
                   'post_limit' => '5',
+                  'post_ids' => '',
                   'layout' => 'gridview_onehalf',
                   'listing_width' => '',
                   'add_location_filter' => '1',
@@ -332,6 +343,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          * @param string $instance ['post_number'] Number of listings to display.
          */
         $post_number = empty( $instance['post_limit'] ) ? '5' : apply_filters( 'widget_post_number', $instance['post_limit'] );
+	    /**
+	     * Filter the widget listings post ids.
+	     *
+	     * @since 1.0.0
+	     *
+	     * @param string $instance ['post_ids'] Post ids to include or exclude.
+	     */
+	    $post_ids = empty( $instance['post_ids'] ) ? '' : apply_filters( 'widget_post_ids', $instance['post_ids'] );
         /**
          * Filter widget's "layout" type.
          *
@@ -382,7 +401,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 $category  = array(); // old post type category will not work for current changed post type
             }
         }
-		if ( ( $related_to == 'category' || $related_to == 'tags' ) && ! empty( $gd_post->ID ) ) {
+		if ( ( $related_to == 'default_category' || $related_to == 'category' || $related_to == 'tags' ) && ! empty( $gd_post->ID ) ) {
 			if ( $post_type != $gd_post->post_type ) {
 				$post_type = $gd_post->post_type;
 				$category = array();
@@ -555,7 +574,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             $query_args['tax_query'] = array( $tax_query );
         }
 
-		if ( ( $related_to == 'category' || $related_to == 'tags' ) && ! empty( $gd_post->ID ) ) {
+		if ( ( $related_to == 'default_category' || $related_to == 'category' || $related_to == 'tags' ) && ! empty( $gd_post->ID ) ) {
 			$terms = array();
 			$term_field = 'id';
 			$term_taxonomy = $post_type . 'category'; 
@@ -565,6 +584,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				$term_taxonomy = $post_type . '_tags'; 
 				$term_field = 'name';
 				$terms = explode( ',', trim( $gd_post->post_tags, ',' ) );
+			}elseif($related_to == 'default_category' && !empty($gd_post->default_category)){
+				$terms = absint($gd_post->default_category);
 			}
 			$query_args['post__not_in'] = $gd_post->ID;
 
@@ -576,6 +597,30 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				)
 			);
 		}
+	    
+	    // $post_ids, include or exclude post ids
+	    if(!empty($post_ids)){
+		    $post__not_in = array();
+		    $post__in = array();
+		    $post_ids = explode(",",$post_ids);
+		    foreach ($post_ids as $pid){
+			    $tmp_id = trim($pid);
+			    if(abs($tmp_id) != $tmp_id){
+				    $post__not_in[] = absint($tmp_id);
+			    }else{
+				    $post__in[] = absint($tmp_id);
+			    }
+		    }
+
+		    if(!empty($post__in)){
+			    $query_args['post__in'] = implode(",",$post__in);
+		    }elseif(!empty($post__not_in)){
+			    if(!empty($query_args['post__not_in'])){
+				    $post__not_in[] = $query_args['post__not_in'];
+			    }
+			    $query_args['post__not_in'] = implode(",",$post__not_in);
+		    }
+	    }
 
         global $gd_layout_class, $geodir_is_widget_listing;
 

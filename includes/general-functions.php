@@ -858,9 +858,15 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	$where = " AND ( " . $wpdb->posts . ".post_status = 'publish' " . $post_status . " ) AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
 
-	// not in
-	if(!empty($query_args['post__not_in'])){
-		$where .= $wpdb->prepare(" AND $wpdb->posts.ID != %d ",$query_args['post__not_in']);
+	// in / not in
+	if ( !empty($query_args['post__in'])) {
+		if(!is_array($query_args['post__in'])){$query_args['post__in'] = explode(",",$query_args['post__in']);}// convert to array if not an array
+		$post__in = implode(',', array_map( 'absint', $query_args['post__in']));
+		$where .= " AND {$wpdb->posts}.ID IN ($post__in)";
+	} elseif ( !empty($query_args['post__not_in']) ) {
+		if(!is_array($query_args['post__not_in'])){$query_args['post__not_in'] = explode(",",$query_args['post__not_in']);}// convert to array if not an array
+		$post__not_in = implode(',',  array_map( 'absint', $query_args['post__not_in'] ));
+		$where .= " AND {$wpdb->posts}.ID NOT IN ($post__not_in)";
 	}
 
 	/**

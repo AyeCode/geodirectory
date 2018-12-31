@@ -470,6 +470,7 @@ class GeoDir_Admin_Upgrade {
 		foreach ( $term_meta_options as $option ) {
 			$explode = explode( '_', $option->option_name );
 			$index = count( $explode ) - 1;
+
 			
 			if ( !empty( $explode[ $index ] ) ) {
 				$term_id = $explode[ $index ];
@@ -479,10 +480,9 @@ class GeoDir_Admin_Upgrade {
 				if ( !empty( $value ) && is_array( $value ) ) {
 					foreach ( $value as $meta_key => $meta_value ) {
 						if ( $meta_key == 'ct_cat_icon' || $meta_key == 'ct_cat_default_img' ) {
-							if ( empty( $meta_value['src'] ) ) {
+							if ( empty( $meta_value['src'] ) || substr( $meta_value['src'], 0, 4 ) != "http" ) {
 								continue;
 							}
-							
 							$meta_value['src'] = geodir_file_relative_url( $meta_value['src'] );
 						}
 

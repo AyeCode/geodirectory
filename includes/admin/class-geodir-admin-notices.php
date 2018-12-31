@@ -32,7 +32,7 @@ class GeoDir_Admin_Notices {
 		'install'             => 'install_notice',
 		'update'              => 'update_notice',
 		'theme_support'       => 'theme_check_notice',
-		'beta'                => 'beta_notice',
+		//'beta'                => 'beta_notice',
 	);
 
 	/**

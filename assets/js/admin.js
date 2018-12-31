@@ -967,13 +967,20 @@ function gd_recommended_install_plugin($this,$slug,$nonce){
             // }
             console.log(data);
             if(data.success){
-                jQuery($this).html(jQuery($this).data("text-installed")).removeClass('button-primary').addClass('button-secondary');
 
-                //gd_wizard_check_plugins();
-                //gd_wizard_install_plugins($nonce);
+                // old way
+                // jQuery($this).html(jQuery($this).data("text-installed")).removeClass('button-primary').addClass('button-secondary');
+                // if(data.data.activateUrl){
+                //     gd_recommended_activate_plugin($this,data.data.activateUrl,$slug);
+                // }
+
+                // new way
                 if(data.data.activateUrl){
-                    gd_recommended_activate_plugin($this,data.data.activateUrl,$slug);
+                    jQuery($this).html(jQuery($this).data("text-activate")).removeAttr('target').removeAttr('onclick').attr('href',data.data.activateUrl).attr("disabled", false);
+                }else{
+                    jQuery($this).html(jQuery($this).data("text-installed")).removeClass('button-primary').addClass('button-secondary');
                 }
+
             }else{
                 jQuery($this).html(jQuery($this).data("text-error"));
                 alert('something went wrong');

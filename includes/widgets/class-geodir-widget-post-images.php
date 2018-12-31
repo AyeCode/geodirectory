@@ -349,13 +349,13 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 						?></ul>
 				</div>
 				<?php if ($options['type']=='slider' && $image_count > 1 && $options['controlnav'] == 2 ) { ?>
-					<div id="<?php echo $slider_id; ?>_carousel" class="geodir_flexslider">
+					<div id="<?php echo $slider_id; ?>_carousel" class="geodir_flexslider geodir_flexslider_carousel">
 						<ul class="geodir-slides clearfix"><?php
 							foreach($post_images as $image){
 								echo "<li>";
 								$img_tag = geodir_get_image_tag($image,'thumbnail');
 								$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
-								$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
+								//$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
 								echo $img_tag;
 								echo "</li>";
 							}

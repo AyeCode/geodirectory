@@ -95,39 +95,51 @@
 }
 
 /* Hide the slides before the JS is loaded. Avoids image jumping */
-.geodir_flexslider .geodir-slides {
+.geodir_flexslider {
 
-  li {
-
-    position: relative;
-
-    img {
-      max-width: 100%;
-      display: block;
-      margin: 0 auto;
-      box-shadow: none !important;
-      // height: max-content;
-    }
-
-    .flex-caption {
-      width: 100%;
-      padding: 2%;
-      left: 0;
-      bottom: 0;
-      background: rgba(0, 0, 0, .5);
-      color: #fff;
-      text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
-      font-size: 14px;
-      line-height: 18px;
-      position: absolute;
-      margin: 0;
-    }
-
-    > img, > p {
-      border-radius: 4px;
+  &.geodir_flexslider_carousel{
+    .geodir-slides{
+      li{
+        img{
+          height:auto;
+        }
+      }
     }
   }
+  .geodir-slides {
 
+    li {
+
+      position: relative;
+
+      img {
+        max-width: 100%;
+        display: block;
+        margin: 0 auto;
+        box-shadow: none !important;
+        // height: max-content;
+      }
+
+      .flex-caption {
+        width: 100%;
+        padding: 2%;
+        left: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, .5);
+        color: #fff;
+        text-shadow: 0 -1px 0 rgba(0, 0, 0, .3);
+        font-size: 14px;
+        line-height: 18px;
+        position: absolute;
+        margin: 0;
+      }
+
+      > img, > p {
+        border-radius: 4px;
+      }
+    }
+
+  }
 }
 
 .geodir-pauseplay span {

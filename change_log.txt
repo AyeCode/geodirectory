@@ -4,6 +4,9 @@ Astra theme GD search page meta title setting not working - FIXED
 Load default template if page is 404 - FIXED
 GD Listings widget special offers option is missing - FIXED
 Post badge external urls are now nofollow - CHANGED
+Slider carousel images now use thumbnail size for consistency - CHANGED
+GD listings widget now has option to filter by default_category only - ADDED
+GD listings widget now has option to filter post IDs - ADDED
 
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED
