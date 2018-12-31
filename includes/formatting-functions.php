@@ -374,3 +374,83 @@ function geodir_timezone_offset() {
 		return floatval( get_option( 'gmt_offset', 0 ) ) * HOUR_IN_SECONDS;
 	}
 }
+
+/**
+ * Filters content and keeps only allowable HTML elements.
+ *
+ * This function makes sure that only the allowed HTML element names, attribute
+ * names and attribute values plus only sane HTML entities will occur in
+ * $string. You have to remove any slashes from PHP's magic quotes before you
+ * call this function.
+ *
+ * The default allowed protocols are 'http', 'https', 'ftp', 'mailto', 'news',
+ * 'irc', 'gopher', 'nntp', 'feed', 'telnet, 'mms', 'rtsp' and 'svn'. This
+ * covers all common link protocols, except for 'javascript' which should not
+ * be allowed for untrusted users.
+ *
+ * @since 2.0.0
+ *
+ * @param string $str               Content to filter through kses
+ * @param array  $allowed_html      List of allowed HTML elements. Default NULL.
+ * @return string Filtered content with only allowed HTML elements
+ */
+function geodir_sanitize_html_field( $str, $allowed_html = NULL ) {
+	if ( $str === '' ) {
+		return $str;
+	}
+
+	if ( ! is_array( $allowed_html ) ) {
+		$allowed_html = wp_kses_allowed_html( 'post' );
+	}
+
+	$filtered = trim( wp_unslash( $str ) );
+	$filtered = wp_kses( $filtered, $allowed_html );
+
+	/**
+	 * Filter a sanitized html field string.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $filtered The sanitized string.
+	 * @param string $str   The string prior to being sanitized.
+	 * @param string $allowed_html List of allowed HTML elements.
+	 */
+	return apply_filters( 'geodir_sanitize_html_field', $filtered, $str, $allowed_html );
+}
+
+/**
+ * Sanitizes a multiline string from user input or from the database.
+ *
+ * The function is like sanitize_text_field(), but preserves
+ * new lines (\n) and other whitespace, which are legitimate
+ * input in textarea elements.
+ *
+ * @see sanitize_text_field()
+ *
+ * @since 2.0.0
+ *
+ * @param string $str String to sanitize.
+ * @return string Sanitized string.
+ */
+function geodir_sanitize_textarea_field( $str ) {
+	if ( $str === '' ) {
+		return $str;
+	}
+
+	$filtered = trim( wp_unslash( $str ) );
+	if ( function_exists( 'sanitize_textarea_field' ) ) {
+		$filtered = sanitize_textarea_field( $filtered );
+	} else {
+		$filtered = sanitize_text_field( $filtered );
+	}
+
+	/**
+	 * Filter a sanitized multiline string.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string $filtered The sanitized string.
+	 * @param string $string   The string prior to being sanitized.
+	 */
+	return apply_filters( 'geodir_sanitize_textarea_field', $filtered, $str );
+}
