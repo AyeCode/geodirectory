@@ -1489,7 +1489,18 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field->htmlvar_name = isset( $input['htmlvar_name'] ) ? str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['htmlvar_name'] ) ) : null;
 			$field->frontend_desc = isset( $input['frontend_desc'] ) ? sanitize_text_field( $input['frontend_desc'] ) : '';
 			$field->clabels = isset( $input['clabels'] ) ? sanitize_text_field( $input['clabels'] ) : null;
-			$field->default_value = isset( $input['default_value'] ) ? sanitize_text_field( $input['default_value'] ) : '';
+			// default_value
+			$default_value = isset( $input['default_value'] ) ? $input['default_value'] : '';
+			if ( $default_value !== '' ) {
+				if ( $field->field_type == 'html' ) {
+					$default_value = geodir_sanitize_html_field( $default_value );
+				} else if ( $field->field_type == 'textarea' ) {
+					$default_value = geodir_sanitize_textarea_field( $default_value );
+				} else {
+					$default_value = sanitize_text_field( $default_value );
+				}
+			}
+			$field->default_value = $default_value;
 			$field->placeholder_value = isset( $input['placeholder_value'] ) ? sanitize_text_field( $input['placeholder_value'] ) : '';
 			$field->sort_order = isset( $input['sort_order'] ) ? intval( $input['sort_order'] ) : self::default_sort_order();
 			$field->is_active = isset( $input['is_active'] ) ? absint( $input['is_active'] ) : 0;

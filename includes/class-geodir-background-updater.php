@@ -15,23 +15,25 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-if ( ! class_exists( 'WP_Async_Request', false ) ) {
-	include_once( dirname( __FILE__ ) . '/libraries/wp-async-request.php' );
-}
-
-if ( ! class_exists( 'WP_Background_Process', false ) ) {
-	include_once( dirname( __FILE__ ) . '/libraries/wp-background-process.php' );
+if ( ! class_exists( 'GeoDir_Background_Process', false ) ) {
+	include_once dirname( __FILE__ ) . '/abstracts/class-geodir-background-process.php';
 }
 
 /**
  * GeoDir_Background_Updater Class.
  */
-class GeoDir_Background_Updater extends WP_Background_Process {
+class GeoDir_Background_Updater extends GeoDir_Background_Process {
 
 	/**
-	 * @var string
+	 * Initiate new background process.
 	 */
-	protected $action = 'gd_updater';
+	public function __construct() {
+		// Uses unique prefix per blog so each blog has separate queue.
+		$this->prefix = 'wp_' . get_current_blog_id();
+		$this->action = 'geodir_updater';
+
+		parent::__construct();
+	}
 
 	/**
 	 * Dispatch updater.
@@ -132,5 +134,14 @@ class GeoDir_Background_Updater extends WP_Background_Process {
 		geodir_error_log( 'Data update complete' );
 		GeoDir_Admin_Install::update_db_version();
 		parent::complete();
+	}
+
+	/**
+	 * See if the batch limit has been exceeded.
+	 *
+	 * @return bool
+	 */
+	public function is_memory_exceeded() {
+		return $this->memory_exceeded();
 	}
 }

@@ -378,7 +378,7 @@ class GeoDir_Admin_Upgrade {
 			'listing_default_image' => self::update_200_generate_attachment_id( get_option( 'geodir_listing_no_img' ) ),
 			'rating_color' => $rating_color,
 			'rating_color_off' => '#afafaf',
-			'rating_type' => get_option( 'geodir_reviewrating_enable_font_awesome' ) ? 'font-awesome' : 'image',
+			'rating_type' => 'font-awesome',
 			'rating_icon' => 'fas fa-star',
 			'rating_image' => self::update_200_generate_attachment_id( get_option( 'geodir_default_rating_star_icon' ) ),
 			'default_location_city' => $default_location['city'],
@@ -745,6 +745,11 @@ class GeoDir_Admin_Upgrade {
 				if ( in_array( 'expire_date', $columns ) ) {
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE `expire_date` `expire_date` DATE DEFAULT NULL;" );
 				}
+				if ( in_array( 'claimed', $columns ) ) {
+					// Converting the ENUM to TINYINT directly might give unexpected results. So we should start by converting column to a CHAR(1) and then to INT(11).
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE claimed claimed char(1) NOT NULL DEFAULT '0';" );
+					$wpdb->query( "ALTER TABLE `{$table}` CHANGE claimed claimed int(11) DEFAULT '0';" );
+				}
 				if ( in_array( 'franchise', $columns ) ) {
 					$wpdb->query( "ALTER TABLE `{$table}` CHANGE franchise franchise_of INT(11) UNSIGNED DEFAULT '0';" );
 					$wpdb->query( "ALTER TABLE `{$table}` ADD franchise TINYINT(1) UNSIGNED DEFAULT '0';" );
@@ -755,24 +760,32 @@ class GeoDir_Admin_Upgrade {
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX region(region)" );
 				$wpdb->query( "ALTER TABLE {$table} ADD INDEX city(city)" );
 
+				$change_columns = array();
 				foreach ( $columns as $key => $column ) {
 					if ( strpos( $column, 'geodir_' ) === 0 && ! in_array( $column, array( 'geodir_contact', 'geodir_email', 'geodir_website', 'geodir_twitter', 'geodir_facebook', 'geodir_video', 'geodir_special_offers' ) ) ) {
 						$new_column = strtolower( substr( $fields[ $column ]['Field'], 7 ) );
 						$data_type = $fields[ $column ]['Type'];
 						$null = strtolower( $fields[ $column ]['Null'] ) == 'no' ? ' NOT NULL' : '';
-						$default = $fields[ $column ]['Default'] !== '' && $fields[ $column ]['Default'] !== NULL ? " DEFAULT '" . $fields[ $column ]['Default'] . "'" : ( strtolower( $fields[ $column ]['Null'] ) == 'yes' ? ' DEFAULT NULL' : '' );
+						$default = $fields[ $column ]['Default'] !== '' && $fields[ $column ]['Default'] !== NULL ? " DEFAULT '" . addslashes( $fields[ $column ]['Default'] ) . "'" : ( strtolower( $fields[ $column ]['Null'] ) == 'yes' ? ' DEFAULT NULL' : '' );
 
-						$wpdb->query( "ALTER TABLE `{$table}` CHANGE {$column} `{$new_column}` {$data_type}{$null}{$default};" );
+						$change_columns[] = "CHANGE {$column} `{$new_column}` {$data_type}{$null}{$default}";
 					}
+				}
+				if ( ! empty( $change_columns ) ) {
+					$wpdb->query( "ALTER TABLE `{$table}` " . implode( ", ", $change_columns ) );
 				}
 
 				// Drop columns
-				$drop_columns = array( 'paid_amount', 'alive_days', 'paymentmethod', 'expire_notification', 'exp2', 'exp3', 'post_location_id', 'post_locations' );
+				$drop_columns = array( 'marker_json', 'paid_amount', 'alive_days', 'paymentmethod', 'expire_notification', 'exp2', 'exp3', 'post_location_id', 'post_locations' );
 
+				$query_drop_columns = array();
 				foreach( $drop_columns as $drop_column ) {
 					if ( in_array( $drop_column, $columns ) ) {
-						$wpdb->query( "ALTER TABLE `{$table}` DROP `{$drop_column}`" );
+						$query_drop_columns[] = "DROP `{$drop_column}`";
 					}
+				}
+				if ( ! empty( $query_drop_columns ) ) {
+					$wpdb->query( "ALTER TABLE `{$table}` " . implode( ", ", $query_drop_columns ) );
 				}
 			}
 		}
@@ -1859,6 +1872,8 @@ class GeoDir_Admin_Upgrade {
 					$htmlvar_name = 'featured';
 				} else if ( $htmlvar_name == 'fieldset' && $row->field_type == 'fieldset' ) {
 					$htmlvar_name = 'fieldset_' . $row->id; // Fix duplicate htmlvar name
+				} else if ( $htmlvar_name == 'event' ) {
+					$htmlvar_name = 'event_dates';
 				}
 
 				if ( $row->field_type == 'taxonomy' ) {

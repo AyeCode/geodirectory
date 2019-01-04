@@ -954,10 +954,12 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
  * @param string $fields Fields SQL.
+ * @param string $table Table name.
+ * @param string $post_type Post type.
  *
  * @return string Modified fields SQL.
  */
-function geodir_function_widget_listings_fields( $fields ) {
+function geodir_function_widget_listings_fields( $fields, $table, $post_type ) {
 	global $wpdb, $plugin_prefix, $gd_query_args_widgets, $gd_post;
 
 	$query_args = $gd_query_args_widgets;
@@ -966,9 +968,6 @@ function geodir_function_widget_listings_fields( $fields ) {
 	}
 
 	if ( ! empty( $query_args['distance_to_post'] ) && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
-		$post_type = $gd_post->post_type != 'revision' ? $gd_post->post_type : get_post_type( wp_get_post_parent_id( $gd_post->ID ) );
-		$table     = $plugin_prefix . $post_type . '_detail';
-
 		$radius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
 
 		$fields .= ", ( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ABS( {$gd_post->latitude} ) - ABS( {$table}.latitude ) ) * PI() / 180 / 2 ), 2 ) + COS( ABS( {$gd_post->latitude} ) * PI() / 180 ) * COS( ABS( {$table}.latitude ) * PI() / 180 ) * POWER( SIN( ( {$gd_post->longitude} - {$table}.longitude ) * PI() / 180 / 2 ), 2 ) ) ) ) AS distance";
@@ -977,7 +976,7 @@ function geodir_function_widget_listings_fields( $fields ) {
 	return $fields;
 }
 
-add_filter( 'geodir_filter_widget_listings_fields', 'geodir_function_widget_listings_fields' );
+add_filter( 'geodir_filter_widget_listings_fields', 'geodir_function_widget_listings_fields', 10, 3 );
 
 
 /**
