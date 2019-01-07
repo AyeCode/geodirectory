@@ -1705,3 +1705,20 @@ function geodir_category_tree_options( $post_type = 'gd_place', $parent = 0, $hi
 
 	return $options;
 }
+
+
+/**
+ * Get raw meta value, so not to pass through post meta filter.
+ * 
+ * @param $object_id
+ * @param $meta_key
+ *
+ * @return null|string
+ */
+function geodir_get_post_meta_raw($object_id, $meta_key){
+	global $wpdb;
+
+	$value = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d AND  meta_key = %s ",$object_id,$meta_key)  );
+
+	return $value;
+}

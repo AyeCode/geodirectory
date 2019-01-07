@@ -407,6 +407,12 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				$category = array();
 			}
 		}
+
+	    // check its a GD post type, if not then bail
+	    if(!geodir_is_gd_post_type($post_type)){
+		    return '';
+	    }
+
         // replace widget title dynamically
         $posttype_plural_label   = __( get_post_type_plural_label( $post_type ), 'geodirectory' );
         $posttype_singular_label = __( get_post_type_singular_label( $post_type ), 'geodirectory' );

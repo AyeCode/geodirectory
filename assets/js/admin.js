@@ -1088,7 +1088,9 @@ function gd_recommended_activate_plugin($this,$url,$slug){
 // Some settings validation
 
 
-
+function gd_set_button_installing($this){
+    jQuery($this).html('<i class="fas fa-sync fa-spin" ></i> ' + jQuery($this).data("text-installing")).attr("disabled", true);
+}
 
 function gd_settings_validation(){
     jQuery("#mainform").submit(function(e){

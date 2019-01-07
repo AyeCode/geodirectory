@@ -554,7 +554,7 @@ class GeoDir_Media {
 			$file_type = wp_check_filetype(basename( parse_url( $url, PHP_URL_PATH ) ));
 
 			// Set an array containing a list of acceptable formats
-			if ( ! empty( $file_type['ext'] ) && ! empty( $file_type['type'] ) && ( in_array( '*', $allowed_file_types ) || in_array( $file_type['type'], $allowed_file_types ) || in_array( $file_type['ext'], $allowed_file_types ) ) ) {
+			if ( ! empty( $file_type['ext'] ) && ! empty( $file_type['type'] ) && ( in_array( '*', $allowed_file_types ) || in_array( $file_type['type'], $allowed_file_types ) || in_array( strtolower ( $file_type['ext'] ), $allowed_file_types ) ) ) {
 			} else {
 				return false;
 			}

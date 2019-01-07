@@ -80,6 +80,63 @@ class GeoDir_Compatibility {
 		add_filter( 'astra_page_layout', array( __CLASS__, 'astra_page_layout' ) );
 		add_filter( 'astra_get_content_layout', array( __CLASS__, 'astra_get_content_layout' ) );
 		add_action( 'wp', array( __CLASS__, 'astra_wp' ), 20, 1 );
+
+
+		/*######################################################
+		Divi (theme) :: maps api
+		######################################################*/
+		add_filter( 'et_pb_enqueue_google_maps_script', '__return_false' );
+
+
+		// general
+		add_filter('get_post_metadata', array( __CLASS__,'dynamically_add_post_meta'), 10, 4);
+
+
+	}
+
+
+	public static function dynamically_add_post_meta($metadata, $object_id, $meta_key, $single) {
+
+
+		// divi checks
+		if(function_exists('et_setup_theme') && geodir_is_geodir_page()){
+
+			$divi_archive_metas = array(
+				'_et_builder_version',
+				'_thumbnail_id',
+				'_et_pb_custom_css',
+				'_et_pb_ab_current_shortcode',
+				'_et_pb_enable_shortcode_tracking',
+				'_et_pb_ab_subjects',
+				'_et_pb_built_for_post_type',
+				'_et_pb_old_content',
+				'_et_pb_show_page_creation',
+				'_et_pb_use_builder',
+				'site-content-layout',
+				'site-sidebar-layout',
+				'_sd_featured_area',
+				'_wp_page_template',
+			);
+
+			if(geodir_is_page('archive') && geodir_get_post_meta_raw(geodir_archive_page_id(), '_et_pb_use_builder')=='on'){//_et_pb_use_builder
+				if(in_array($meta_key,$divi_archive_metas)){
+					$metadata = geodir_get_post_meta_raw(geodir_archive_page_id(), $meta_key);
+				}
+			}elseif(geodir_is_page('single') && geodir_get_post_meta_raw(geodir_details_page_id(), '_et_pb_use_builder')=='on'){
+				if(in_array($meta_key,$divi_archive_metas)){
+					$metadata = geodir_get_post_meta_raw(geodir_details_page_id(), $meta_key);
+				}
+			}
+//			elseif(geodir_is_page('search') && geodir_get_post_meta_raw(geodir_search_page_id(), '_et_pb_use_builder')=='on'){
+//				if(in_array($meta_key,$divi_archive_metas)){
+//					$metadata = geodir_get_post_meta_raw(geodir_search_page_id(), $meta_key);
+//				}
+//			}
+
+		}
+
+
+		return $metadata;
 	}
 
 	/**

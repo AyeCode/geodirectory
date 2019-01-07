@@ -47,6 +47,12 @@ class GeoDir_Admin {
 		// show WPEU install instruction on the add plugin page.
 		add_action( 'admin_notices', array( $this,'wpeu_notice') );
 
+		// clear extrnsion transients if activating/deactivating
+		if(isset($_REQUEST['exup_action']) && ($_REQUEST['exup_action']=='activate_membership_key'|| $_REQUEST['exup_action']=='deactivate_membership_key' )){
+			delete_transient( 'gd_addons_section_addons' );
+			delete_transient( 'gd_addons_section_themes' );
+		}
+
 
 	}
 

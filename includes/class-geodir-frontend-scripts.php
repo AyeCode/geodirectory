@@ -45,6 +45,7 @@ class GeoDir_Frontend_Scripts {
 		add_action( 'wp_print_footer_scripts', array( __CLASS__, 'localize_printed_scripts' ), 5 );
 
 		// locations scripts
+		if(!isset($_REQUEST['et_fb']))
 		add_action('wp_footer', array( __CLASS__, 'js_location_functions' )); //@todo this script needs overhalled
 
 		// fix script conflicts, eg flexslider being added twice

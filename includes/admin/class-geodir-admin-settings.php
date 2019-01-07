@@ -718,12 +718,23 @@ class GeoDir_Admin_Settings {
 						<td class="forminp">
 							<?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'geodirectory' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?> <?php echo $description; ?>
 
-							<?php if($args['selected']){?>
+							<?php if($args['selected']){ ?>
 							<a href="<?php echo get_edit_post_link( $args['selected'] ); ?>" class="button gd-page-setting-edit"><?php _e('Edit Page','geodirectory');?></a>
 
-								<?php if(empty($value['is_template_page'])){?>
+								<?php if(empty($value['is_template_page'])){ ?>
 								<a href="<?php echo get_permalink($args['selected']);?>" class="button gd-page-setting-view"><?php _e('View Page','geodirectory');?></a>
-							<?php }}?>
+							<?php }
+							}
+							
+							if(!empty($value['default_content'])){
+								?>
+								<a href="#gd_default_content_<?php echo esc_attr($value['id'])?>" data-lity class="button gd-page-setting-view"><?php _e('View Default Content','geodirectory');?></a>
+								<div id="gd_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;" class="lity-hide gd-notification ">
+									<textarea style="min-width: 50vw;min-height: 50vh;"><?php echo $value['default_content'];?></textarea>
+								</div>
+								<?php
+							}
+							?>
 
 						</td>
 					</tr><?php

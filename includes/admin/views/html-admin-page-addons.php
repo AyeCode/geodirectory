@@ -122,13 +122,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	<div id="gd-wpeu-required-activation" class="lity-hide "><span class="gd-notification "><?php printf( __("The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='%s'>activate</a> it now.","geodirectory"),wp_nonce_url(admin_url('plugins.php?action=activate&plugin=wp-easy-updates/external-updates.php'), 'activate-plugin_wp-easy-updates/external-updates.php'));?></span></div>
 	<div id="gd-wpeu-required-for-external" class="lity-hide "><span class="gd-notification "><?php printf(  __("The plugin <a href='https://wpeasyupdates.com/' target='_blank'>WP Easy Updates</a> is required to check for and update some installed plugins/themes, please <a href='%s' onclick='window.open(\"https://wpeasyupdates.com/wp-easy-updates.zip\", \"_blank\");' >download</a> and install it now.","geodirectory"),admin_url("plugin-install.php?tab=upload&wpeu-install=true"));?></span></div>
-	<div id="gd-recommended-buy" class="lity-hide ">
+	<div id="wpeu-licence-popup" class="lity-hide ">
 		<span class="gd-notification noti-white">
-			<h3 class="gd-recommended-buy-title"><?php _e("Licence key","geodirectory");?></h3>
-			<input class="gd-recommended-buy-key" type="text" placeholder="<?php _e("Enter your licence key","geodirectory");?>"> <button class="button-primary gd-recommended-buy-button" ><?php _e("Install","geodirectory");?></button>
+			<h3 class="wpeu-licence-title"><?php _e("Licence key","geodirectory");?></h3>
+			<input class="wpeu-licence-key" type="text" placeholder="<?php _e("Enter your licence key","geodirectory");?>"> <button class="button-primary wpeu-licence-popup-button" ><?php _e("Install","geodirectory");?></button>
 			<br>
 			<?php
-			echo sprintf( __('%sFind your licence key here%s OR %sBuy one here%s', 'geodirectory'), '<a href="https://wpgeodirectory.com/your-account/" target="_blank">','</a>','<a class="gd-recommended-buy-link" href="https://wpgeodirectory.com/downloads/category/addons/" target="_blank">','</a>' );
+			echo sprintf( __('%sFind your licence key here%s OR %sBuy one here%s', 'geodirectory'), '<a href="https://wpgeodirectory.com/your-account/" target="_blank">','</a>','<a class="wpeu-licence-link" href="https://wpgeodirectory.com/downloads/category/addons/" target="_blank">','</a>' );
 			?>
 		</span>
 	</div>
