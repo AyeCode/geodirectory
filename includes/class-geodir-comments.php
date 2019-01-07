@@ -75,22 +75,16 @@ class GeoDir_Comments {
 		if ( ! $post_type ) {
 			$post_type = get_post_type( $post_id );
 		}
+
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
+			return;
+		}
 		$detail_table         = $plugin_prefix . $post_type . '_detail';
 		$post_newrating       = geodir_get_post_rating( $post_id, 1 );
-		$post_newrating_count = geodir_get_review_count_total( $post_id, 1 );
+		$post_newrating_count = (int) geodir_get_review_count_total( $post_id, 1 );
 
-		if ( $wpdb->get_var( "SHOW TABLES LIKE '" . $detail_table . "'" ) == $detail_table ) {
+		$wpdb->update( $detail_table, array( 'overall_rating' => $post_newrating, 'rating_count' => $post_newrating_count ), array( 'post_id' => $post_id ), array( '%f', '%d' ), array( '%d' ) );
 
-			$wpdb->query(
-				$wpdb->prepare(
-					"UPDATE " . $detail_table . " SET
-						overall_rating = %f,
-						rating_count = %f
-						where post_id = %d",
-					array( $post_newrating, $post_newrating_count, $post_id )
-				)
-			);
-		}
 		/**
 		 * Called after Updating post overall rating and rating count.
 		 *
@@ -306,11 +300,11 @@ class GeoDir_Comments {
 					$user_ID,
 					$comment_info->comment_ID,
 					$rating,
-					$gd_post->city,
-					$gd_post->region,
-					$gd_post->country,
-					$gd_post->latitude,
-					$gd_post->longitude
+					( isset( $gd_post->city ) ? $gd_post->city : '' ),
+					( isset( $gd_post->region ) ? $gd_post->region : '' ),
+					( isset( $gd_post->country ) ? $gd_post->country : '' ),
+					( isset( $gd_post->latitude ) ? $gd_post->latitude : '' ),
+					( isset( $gd_post->longitude ) ? $gd_post->longitude : '' ),
 				)
 			);
 

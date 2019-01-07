@@ -9,6 +9,7 @@ GD listings widget now has option to filter by default_category only - ADDED
 GD listings widget now has option to filter post IDs - ADDED
 HTML custom field stripping html tags from default value - FIXED
 GD Listings widget not working across CPT with sort by to nearest option - FIXED
+Review count not reflecting on listing page - FIXED
 
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED
