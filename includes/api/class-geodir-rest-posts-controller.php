@@ -2519,7 +2519,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 					if ( has_filter( 'geodir_rest_post_custom_fields_schema' ) ) {
 						$args = apply_filters( 'geodir_rest_post_custom_fields_schema', $args, $this->post_type, $field, $custom_fields, $package_id, $default );
 						if ( empty( $args ) ) {
-							continue;
+							$continue = true;
 						}
 					} else {
 						$continue = true;
