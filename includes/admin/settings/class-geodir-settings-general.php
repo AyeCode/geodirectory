@@ -251,6 +251,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type'     => 'single_select_page',
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
+					'default_content' => GeoDir_Defaults::page_location_content(),
 				),
 				array(
 					'name'     => __( 'Add listing page', 'geodirectory' ),
@@ -259,6 +260,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type'     => 'single_select_page',
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
+					'default_content' => GeoDir_Defaults::page_add_content(),
 				),
 				array(
 					'name'     => __( 'Search Page', 'geodirectory' ),
@@ -267,6 +269,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type'     => 'single_select_page',
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
+					'default_content' => GeoDir_Defaults::page_search_content(),
 				),
 				array(
 					'name'     => __( 'Terms and Conditions page', 'geodirectory' ),
@@ -275,6 +278,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type'     => 'single_select_page',
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
+					'default_content' => __('ENTER YOUR SITE TERMS AND CONDITIONS HERE','geodirectory')
 				),
 				array( 'type' => 'sectionend', 'id' => 'page_options' ),
 
@@ -294,6 +298,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'is_template_page'     => true,
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
+					'default_content' => GeoDir_Defaults::page_details_content(),
 				),
 				array(
 					'name'     => __( 'Archive page', 'geodirectory' ),
@@ -303,6 +308,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'is_template_page'     => true,
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
+					'default_content' => GeoDir_Defaults::page_archive_content(),
 				),
 				array(
 					'name'     => __( 'Archive item page', 'geodirectory' ),
@@ -312,6 +318,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'is_template_page'     => true,
 					'class'      => 'geodir-select',
 					'desc_tip' => true,
+					'default_content' => GeoDir_Defaults::page_archive_item_content(),
 				),
 
 

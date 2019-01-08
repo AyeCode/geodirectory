@@ -245,6 +245,10 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		 */
 		$options = wp_parse_args( $options, $defaults );
 
+		if($this->is_preview()){
+			$options['ajax_load'] = false;
+		}
+
 		if($options['type']=='image'){
 			$options['limit'] = 1;
 		}
@@ -367,16 +371,18 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		}
 
 
-		// make it work with elementor preview
-		if($this->is_elementor_preview()){
+		// make it work with builder preview
+		if($this->is_preview()){
 			?>
 			<script type="text/javascript">
 				(function(){
-					init_read_more();
-					geodir_init_lazy_load();
-					geodir_refresh_business_hours();
-					// init any sliders
-					geodir_init_flexslider();
+					if (typeof init_read_more == 'function') {
+						init_read_more();
+						geodir_init_lazy_load();
+						geodir_refresh_business_hours();
+						// init any sliders
+						geodir_init_flexslider();
+					}
 				}());
 			</script>
 			<?php

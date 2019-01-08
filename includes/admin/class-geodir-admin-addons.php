@@ -220,7 +220,7 @@ class GeoDir_Admin_Addons {
 	}
 
 	/**
-	 * Check if a plugin is installed (only works if WPEU is installed and active)
+	 * Check if a theme is installed.
 	 *
 	 * @param $id
 	 *
@@ -229,25 +229,85 @@ class GeoDir_Admin_Addons {
 	public static function is_theme_installed( $addon ){
 		$all_themes = wp_get_themes();
 
+		$slug = isset($addon->info->slug) ? $addon->info->slug : '';
+		if(!empty($addon->licensing->edd_slug)){$slug = $addon->licensing->edd_slug;}
+
+
+		foreach($all_themes as $key => $theme ){
+			if($slug == $key){
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Check if a theme is active.
+	 *
+	 * @param $addon
+	 *
+	 * @return bool
+	 */
+	public static function is_theme_active( $addon ){
+		$theme = wp_get_theme();
+
 		//manuall checks
 		if($addon->info->title =="Whoop!"){
 			$addon->info->title = "Whoop";
 		}
 
-		foreach($all_themes as $theme ){
-//			print_r($theme);
-//			echo '####'.$addon->info->title;
-			if($addon->info->title == $theme->get( 'Name' )){
-				return true;
-			}
+
+		if($addon->info->title == $theme->get( 'Name' )){
+			return true;
 		}
-
-
-		//print_r($all_themes);
-
 
 		return false;
 	}
+
+	/**
+	 * Get theme activation url.
+	 *
+	 * @param $addon
+	 *
+	 * @return bool
+	 */
+	public static function get_theme_activation_url( $addon ){
+		$themes = wp_prepare_themes_for_js();
+
+		//manuall checks
+		if($addon->info->title =="Whoop!"){
+			$addon->info->title = "Whoop";
+		}
+
+
+		foreach($themes as $theme){
+			if($addon->info->title == $theme['name']){
+				return $theme['actions']['activate'];
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Get theme install url.
+	 *
+	 * @param $addon
+	 *
+	 * @return bool
+	 */
+	public static function get_theme_install_url( $slug ){
+
+		$install_url = add_query_arg( array(
+			'action' => 'install-theme',
+			'theme'  => urlencode( $slug ),
+		), admin_url( 'update.php' ) );
+		$install_url = wp_nonce_url( $install_url, 'install-theme_' . $slug );
+
+		return $install_url;
+	}
+
 
 
 
@@ -272,9 +332,12 @@ class GeoDir_Admin_Addons {
 //		$install_status = 'get';
 //		$onclick = '';
 
+		$wp_org_themes = array('supreme-directory','directory-starter');
+
 		$button_args = array(
 			'type' => $current_tab,
 			'id' => isset($addon->info->id) ? absint($addon->info->id) : '',
+			'title' => isset($addon->info->title) ? $addon->info->title : '',
 			'button_text' => __('Free','geodirectory'),
 			'price_text' => __('Free','geodirectory'),
 			'link' => isset($addon->info->link) ? $addon->info->link : '', // link to product
@@ -288,7 +351,8 @@ class GeoDir_Admin_Addons {
 			'onclick' => '',
 			'slug' => isset($addon->info->slug) ? $addon->info->slug : '',
 			'active' => false,
-			'file' => ''
+			'file' => '',
+			'update_url' => '',
 		);
 
 		if($current_tab == 'addons' && isset($addon->info->id) && $addon->info->id){
@@ -297,32 +361,19 @@ class GeoDir_Admin_Addons {
 			$status = self::install_plugin_install_status($addon);
 			$button_args['file'] = isset($status['file']) ? $status['file'] : '';
 			if(isset($status['status'])){$button_args['install_status'] = $status['status'];}
-
-
-//			if(defined('WP_EASY_UPDATES_ACTIVE')){
-//				include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
-//				$installed = self::is_plugin_installed($addon->info->id);
-//
-//				$nonce = wp_create_nonce( 'updates' );
-////				$onclick = " onclick='gd_recommended_buy_popup(this,\"$slug\",\"$nonce\",\"".$addon->info->id."\");return false;' ";
-//				$button_args['onclick'] = " onclick='gd_recommended_buy_popup(this,\"$slug\",\"$nonce\",\"".$addon->info->id."\");return false;' ";
-//
-//			}
+			$button_args['update_url'] = "https://wpgeodirectory.com";
 		}elseif($current_tab == 'themes' && isset($addon->info->id) && $addon->info->id) {
+			if(!empty($addon->licensing->edd_slug)){$button_args['slug'] = $addon->licensing->edd_slug;}
 			$button_args['installed'] = self::is_theme_installed($addon);
+			if(!in_array($button_args['slug'],$wp_org_themes)){
+				$button_args['update_url'] = "https://wpgeodirectory.com";
+			}
 		}elseif($current_tab == 'recommended_plugins' && isset($addon->info->slug) && $addon->info->slug){
 			include_once( ABSPATH . 'wp-admin/includes/plugin-install.php' ); //for plugins_api..
 			$status = install_plugin_install_status(array("slug"=>$button_args['slug'],"version"=>""));
 			$button_args['install_status'] = isset($status['status']) ? $status['status'] : 'install';
 			$button_args['file'] = isset($status['file']) ? $status['file'] : '';
-			$nonce = wp_create_nonce( 'updates' );
-//			$onclick = " onclick='gd_recommended_install_plugin(this,\"$slug\",\"$nonce\");return false;' ";
-//			$button_args['onclick'] = " onclick='gd_recommended_install_plugin(this,\"".$button_args['slug']."\",\"$nonce\");return false;' ";
-
 		}
-
-
-//		print_r($addon);
 
 		// set price
 		if(isset($addon->pricing) && !empty($addon->pricing)){
@@ -345,12 +396,13 @@ class GeoDir_Admin_Addons {
 			$button_args['installed'] = true;
 		}
 
+//		print_r($button_args);
 		// set if active
-		if($button_args['installed'] && $button_args['file']){
-			if($button_args['type'] != 'theme'){
+		if($button_args['installed'] && ($button_args['file'] || $button_args['type'] == 'themes')){
+			if($button_args['type'] != 'themes'){
 				$button_args['active'] = is_plugin_active($button_args['file']);
 			}else{
-				//@todo we need a way to check if theme is active
+				$button_args['active'] = self::is_theme_active($addon);
 			}
 		}
 
@@ -361,16 +413,33 @@ class GeoDir_Admin_Addons {
 		}elseif($button_args['installed']){
 			$button_args['button_text'] = __('Activate','geodirectory');
 
-			if($button_args['type'] != 'theme'){
-				$button_args['url'] = wp_nonce_url(admin_url('plugins.php?action=activate&plugin='.$button_args['file']), 'activate-plugin_' . $button_args['file']);
+			if($button_args['type'] != 'themes'){
+				if ( current_user_can( 'manage_options' ) ) {
+					$button_args['url'] = wp_nonce_url(admin_url('plugins.php?action=activate&plugin='.$button_args['file']), 'activate-plugin_' . $button_args['file']);
+				}else{
+					$button_args['url'] = '#';
+				}
+			}else{
+				if ( current_user_can( 'switch_themes' ) ) {
+					$button_args['url'] = self::get_theme_activation_url($addon);
+				}else{
+					$button_args['url'] = '#';
+				}
 			}
 
 		}else{
 			if($button_args['type'] == 'recommended_plugins'){
 				$button_args['button_text'] = __('Install','geodirectory');
-				$button_args['onclick'] = " onclick='gd_recommended_install_plugin(this,\"".$button_args['slug']."\",\"".wp_create_nonce( 'updates' )."\");return false;' ";
+				$button_args['onclick'] = 'gd_recommended_install_plugin(this,"'.$button_args['slug'].'","'.wp_create_nonce( 'updates' ).'");return false;';
 			}else{
 				$button_args['button_text'] = __('Get it','geodirectory');
+
+				if($button_args['type'] == 'themes' && in_array($button_args['slug'],$wp_org_themes) ){
+					$button_args['button_text'] = __('Install','geodirectory');
+					$button_args['url'] = self::get_theme_install_url($button_args['slug']);
+					$button_args['onclick'] = 'gd_set_button_installing(this);';
+				}
+
 			}
 		}
 
@@ -403,13 +472,17 @@ class GeoDir_Admin_Addons {
 		<a
 			data-licence="<?php echo esc_attr($button_args['license']);?>"
 			data-licensing="<?php echo $button_args['licensing'] ? 1 : 0;?>"
+			data-title="<?php echo esc_attr($button_args['title']);?>"
+			data-type="<?php echo esc_attr($button_args['type']);?>"
+			data-text-error-message="<?php _e('Something went wrong!','geodirectory');?>"
 			data-text-activate="<?php _e('Activate','geodirectory');?>"
+			data-text-activating="<?php _e('Activating','geodirectory');?>"
 			data-text-deactivate="<?php _e('Deactivate','geodirectory');?>"
 			data-text-installed="<?php _e('Installed','geodirectory');?>"
 			data-text-install="<?php _e('Install','geodirectory');?>"
 			data-text-installing="<?php _e('Installing','geodirectory');?>"
 			data-text-error="<?php _e('Error','geodirectory');?>"
-			<?php echo $button_args['onclick'];?>
+			<?php if(!empty($button_args['onclick'])){echo " onclick='".$button_args['onclick']."' ";}?>
 			<?php echo $target;?>
 			class="addons-button  <?php echo esc_attr( $button_args['class'] ); ?>"
 			href="<?php echo esc_url( $button_args['url'] ); ?>">

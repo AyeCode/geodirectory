@@ -298,6 +298,7 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
             $title = !empty($a_url['label']) ? $a_url['label'] : $cf['frontend_title'];
             if(!empty($cf['default_value'])){$title = $cf['default_value'];}
             $title = $title != '' ? __(stripslashes($title), 'geodirectory') : '';
+            $post_id =  isset($gd_post->ID) ? $gd_post->ID : 0;
 
 
 
@@ -318,7 +319,7 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
              * @param string $website Website URL.
              * @param int $gd_post->ID Post ID.
              */
-            if($output=='' || isset($output['value']))$html .= '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $gd_post->ID) . '</strong></a>';
+            if($output=='' || isset($output['value']))$html .= '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $post_id) . '</strong></a>';
 
             $html .= '</div>';
 

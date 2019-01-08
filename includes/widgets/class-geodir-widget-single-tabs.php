@@ -313,7 +313,13 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             $geodir_tab_layout_settings = $tabs = $wpdb->get_results($wpdb->prepare("SELECT * FROM ".GEODIR_TABS_LAYOUT_TABLE." WHERE post_type=%s ORDER BY sort_order ASC",$post_type));
         }
 
-        return $tabs;
+        /**
+         * Get the tabs output settings.
+         *
+         * @param array $tabs The array of stdClass settings for the tabs output.
+         * @param string $post_type The post type.
+         */
+        return apply_filters('geodir_tab_settings',$tabs,$post_type);
     }
     
 }
