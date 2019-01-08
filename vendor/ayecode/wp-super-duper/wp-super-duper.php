@@ -125,7 +125,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @since 1.0.0
 		 *
 		 * @param string $editor_id Optional. Shortcode editor id. Default null.
-		 * @param string $insert_shortcode_function Optional. Insert shotcode function. Default null.
+		 * @param string $insert_shortcode_function Optional. Insert shortcode function. Default null.
 		 */
 		public static function shortcode_insert_button( $editor_id = '', $insert_shortcode_function = '' ) {
 			global $sd_widgets, $shortcode_insert_button_once;
@@ -423,6 +423,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					var multiSelects = {};
 					var multiSelectsRemove = [];
 
+					/* Trigger show/hide before add/remove shortcode attribute */	
+					try {
+						sd_show_hide(jQuery("form#" + $id));
+					} catch(err){}
+
 					$output = "[" + $id;
 
 					$form_data = jQuery("#" + $id).serializeArray();
@@ -455,7 +460,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						});
 
 						$ms_arr = [];
-						// add multiselets back
+						// add multiselects back
 						jQuery.each(multiSelects, function (index, value) {
 							$ms_arr[$ms_arr.length] = {"name": "[][" + index + "]", "value": value};
 						});
@@ -465,8 +470,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 					if ($form_data) {
 						$form_data.forEach(function (element) {
+							// Don't assign value if not required.
+							$element = jQuery("#" + $id).find('[name="' + element.name + '"]').closest('.sd-argument');
 
-							if (element.value) {
+							if (element.value && ! $element.hasClass('sd-require-hide')) {
 								$field_name = element.name.substr(element.name.indexOf("][") + 2);
 								$field_name = $field_name.replace("]", "");
 								$output = $output + " " + $field_name + '="' + element.value + '"';
@@ -530,7 +537,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				/**
-				 * Check a form to see what items shoudl be shown or hidden.
+				 * Check a form to see what items should be shown or hidden.
 				 */
 				function sd_show_hide(form) {
 					console.log('show/hide');
@@ -636,7 +643,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						}
 					});
 
-					// inint on widget updated
+					// init on widget updated
 					jQuery(document).on('widget-updated', function (e, widget) {
 						console.log('widget updated');
 

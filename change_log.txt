@@ -12,6 +12,7 @@ GD Listings widget not working across CPT with sort by to nearest option - FIXED
 Review count not reflecting on listing page - FIXED
 Added option in GD page settings to view default content - ADDED
 Image name with upper case file extensions (JPG) not importing - FIXED
+Don't assign attribute to super duper shortcode if not required - CHANGED
 
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED
