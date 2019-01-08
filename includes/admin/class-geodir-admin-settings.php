@@ -90,8 +90,6 @@ class GeoDir_Admin_Settings {
 
 		// Clear any unwanted data and flush rules
 		delete_transient( 'geodir_cache_excluded_uris' );
-		//WC()->query->init_query_vars();
-		///WC()->query->add_endpoints();
 		wp_schedule_single_event( time(), 'geodir_flush_rewrite_rules' );
 
 		do_action( 'geodir_settings_saved' );

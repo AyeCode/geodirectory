@@ -129,6 +129,7 @@
         }
         input[type=checkbox],input[type=radio]{
           width: auto;
+          max-width: 16px;
           display: block;
           margin: 3px;
         }

@@ -54,6 +54,46 @@ class GeoDir_Admin {
 		}
 
 
+		// disable GD pages from being able to be selected for some settings
+		add_filter( 'wp_dropdown_pages',array( $this, 'dropdown_pages_disable' ), 10,3 );
+
+	}
+
+	/**
+	 * Disable some GD pages for some WP page settings.
+	 *
+	 * @param $output
+	 * @param $r
+	 * @param $pages
+	 *
+	 * @return mixed
+	 */
+	public function dropdown_pages_disable($output, $r, $pages){
+
+		$disable_for = array('page_on_front','page_for_posts');
+		$name = isset($r['name']) ? $r['name'] : '';
+		if($output && $name && in_array($name,$disable_for)){
+
+			$pages = array();
+			$pages[] = geodir_location_page_id(); // location
+			$pages[] = geodir_search_page_id(); // search
+			$pages[] = geodir_archive_page_id(); // archive
+			$pages[] = geodir_archive_item_page_id(); // archive item
+			$pages[] = geodir_details_page_id(); // details
+			$pages[] = geodir_add_listing_page_id(); // add listing
+
+			$pages = array_filter($pages); // remove any empty ids
+
+			if(!empty($pages)){
+				foreach($pages as $id){
+					if($id){
+						$output = str_replace(' value="'.$id.'">', ' value="'.$id.'" disabled >',$output);
+					}
+				}
+			}
+		}
+
+		return $output;
 	}
 
 	/**
