@@ -253,7 +253,13 @@ class GeoDir_Post_Data {
 	public static function save_post( $post_id, $post, $update ) {
 		global $wpdb, $plugin_prefix,$geodirectory;
 
-//	echo '###';print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
+//		global $rran;
+////		echo '###'.$post_id;print_r($_REQUEST);print_r(self::$post_temp);print_r($post);echo '###########################################';
+////		if($rran){
+////			echo '###'.$post_id;print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
+////
+////		}
+//		$rran++;
 
 		// only fire if $post_temp is set
 		if ( $gd_post = self::$post_temp ) {
@@ -507,7 +513,11 @@ class GeoDir_Post_Data {
 		}
 
 		// clear the temp data so any further posts in the same request don't use it
-		self::$post_temp = null;
+		if(isset($post->post_type) && $post->post_type=='revision' && isset($post->post_status) && $post->post_status=='inherit'){
+			// we might be saving a revision AND THEN saving the main post so don't clear the temp data yet.
+		}else{
+			self::$post_temp = null;
+		}
 
 	}
 

@@ -15,6 +15,8 @@ Image name with upper case file extensions (JPG) not importing - FIXED
 Checkbox and radio admin setting in FireFox are 100% width - FIXED
 Some GD pages removed from WP page settings so not to be able to break things - CHANGED
 Textarea field output renders detail page tabs - FIXED
+CURL call replaced with wp_remote_get() - CHANGED
+WP_POST_REVISIONS can cause backend new posts to not save custom fields - FIXED
 
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED
