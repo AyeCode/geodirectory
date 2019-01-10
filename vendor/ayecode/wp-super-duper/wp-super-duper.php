@@ -17,12 +17,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * @since 1.0.4 is_elementor_widget_output() method added.
 	 * @since 1.0.4 is_elementor_preview() method added.
 	 * @since 1.0.5 Block checkbox options are set as true by default even when set as false - FIXED
-	 * @ver 1.0.5
+	 * @since 1.0.6 Some refactoring for page builders - CHANGED
+	 * @ver 1.0.6
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
 
-		public $version = "1.0.5";
+		public $version = "1.0.6";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -1533,6 +1534,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
 		/**
+		 * Tests if the current output is inside a Beaver builer preview.
+		 *
+		 * @since 1.0.6
+		 * @return bool
+		 */
+		public function is_beaver_preview() {
+			$result = false;
+			if ( isset( $_REQUEST['fl_builder'] ) ) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
 		 * General function to check if we are in a preview situation.
 		 *
 		 * @since 1.0.6
@@ -1544,8 +1560,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$preview = true;
 			}elseif($this->is_elementor_preview()){
 				$preview = true;
+			}elseif($this->is_beaver_preview()){
+				$preview = true;
 			}
-			
+
 			return $preview;
 		}
 

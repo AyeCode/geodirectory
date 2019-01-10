@@ -17,6 +17,7 @@ Some GD pages removed from WP page settings so not to be able to break things - 
 Textarea field output renders detail page tabs - FIXED
 CURL call replaced with wp_remote_get() - CHANGED
 WP_POST_REVISIONS can cause backend new posts to not save custom fields - FIXED
+Changes for custom maps OSM layer api key - CHANGED
 
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED

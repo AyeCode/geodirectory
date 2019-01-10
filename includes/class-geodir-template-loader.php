@@ -46,7 +46,7 @@ class GeoDir_Template_Loader {
      * @return string
      */
     public static function template_loader( $template ) { //return $template;
-        if ( is_embed() || is_404()) {
+        if ( is_embed() || (is_404() && !isset($_REQUEST['geodir_search']))) {
             return $template;
         }
 

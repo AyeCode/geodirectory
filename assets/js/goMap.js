@@ -187,12 +187,14 @@
                 defaultBaseLayer: typeof opts.osmBaseLayer !== 'undefined' && opts.osmBaseLayer ? opts.osmBaseLayer : null,
                 defaultOverlays: typeof opts.osmOverlays !== 'undefined' && opts.osmOverlays ? opts.osmOverlays : [],
             };
-
-            console.log(myOptions);
-
+            
             if (myOptions.defaultBaseLayer) {
                 try {
                     baseLayer = L.tileLayer.provider(myOptions.defaultBaseLayer);
+                    var apikey = typeof opts.osmApiKey !== 'undefined' && opts.osmApiKey ? opts.osmApiKey : '';
+                    if(apikey){
+                        baseLayer._url += "?apikey=5e8a41b90fc240c09f61eb6bbbfb8395";
+                    }
                     customMap = true;
                 } catch(e) {
                     console.log(e);

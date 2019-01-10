@@ -143,7 +143,8 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             echo geodir_notification( array('login_msg'=>$params['login_msg']) );
             if ( $params['show_login'] ) {
                 echo "<br />";
-                wp_login_form();
+//                wp_login_form();
+                echo GeoDir_User::login_link();
             }
         } elseif(!$user_id && !get_option( 'users_can_register' )){
             echo geodir_notification( array('add_listing_error'=>__('User registration is disabled, please login to continue.','geodirectory')) );
