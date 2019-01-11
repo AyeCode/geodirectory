@@ -372,7 +372,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 
 		// make it work with builder preview
-		if($this->is_preview()){
+		if($this->is_elementor_preview()){
 			?>
 			<script type="text/javascript">
 				(function(){

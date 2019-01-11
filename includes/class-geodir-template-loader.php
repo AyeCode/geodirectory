@@ -365,12 +365,6 @@ class GeoDir_Template_Loader {
 
         if(in_the_loop()) {
 
-            // get the main query
-            global $wp_query;
-
-            //print_r($wp_query);
-
-
             // get the archive template page content
             $post_type = geodir_get_current_posttype();
 			$page_id = geodir_details_page_id($post_type);
@@ -381,9 +375,13 @@ class GeoDir_Template_Loader {
                 $content = GeoDir_Defaults::page_details_content();
             }
 
-            //$content = wpautop($content);// add double line breaks
             // run the shortcodes on the content
             $content = do_shortcode( $content );
+
+            // run block content if its available
+            if(function_exists('do_blocks')){
+                $content = do_blocks( $content );
+            }
         }
 
         // add our filter back
