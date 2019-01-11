@@ -18,6 +18,7 @@ Textarea field output renders detail page tabs - FIXED
 CURL call replaced with wp_remote_get() - CHANGED
 WP_POST_REVISIONS can cause backend new posts to not save custom fields - FIXED
 Changes for custom maps OSM layer api key - CHANGED
+SiteOrigin page builder compatibility changes - ADDED
 
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED

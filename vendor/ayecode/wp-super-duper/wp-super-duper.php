@@ -22,7 +22,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-
 		public $version = "1.0.6";
 		public $block_code;
 		public $options;
@@ -37,8 +36,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public function __construct( $options ) {
 			global $sd_widgets;
 
-			$sd_widgets[ $options['base_id'] ] = array( 'name'       => $options['name'],
-			                                            'class_name' => $options['class_name']
+			$sd_widgets[ $options['base_id'] ] = array(
+				'name'       => $options['name'],
+				'class_name' => $options['class_name']
 			);
 			$this->base_id                     = $options['base_id'];
 			// lets filter the options before we do anything
@@ -76,7 +76,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 				// add shortcode insert button once
 				add_action( 'media_buttons', array( $this, 'shortcode_insert_button' ) );
-				if($this->is_preview()) {
+				if ( $this->is_preview() ) {
 					add_action( 'wp_footer', array( $this, 'shortcode_insert_button_script' ) );
 				}
 				add_action( 'wp_ajax_super_duper_get_widget_settings', array( __CLASS__, 'get_widget_settings' ) );
@@ -158,7 +158,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					<textarea id='sd-shortcode-output' disabled></textarea>
 					<div id='sd-shortcode-output-actions'>
 						<button class="button"
-						        onclick="sd_insert_shortcode(<?php if(!empty($editor_id)){echo "'".$editor_id."'";}?>)"><?php _e( 'Insert shortcode' ); ?></button>
+						        onclick="sd_insert_shortcode(<?php if ( ! empty( $editor_id ) ) {
+							        echo "'" . $editor_id . "'";
+						        } ?>)"><?php _e( 'Insert shortcode' ); ?></button>
 						<button class="button"
 						        onclick="sd_copy_to_clipboard()"><?php _e( 'Copy shortcode' ); ?></button>
 					</div>
@@ -176,18 +178,117 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			   title="<?php _e( 'Add Shortcode' ); ?>"><?php echo $button_string; ?></a>
 
 			<?php
-			self::shortcode_insert_button_script($editor_id, $insert_shortcode_function);
+			self::shortcode_insert_button_script( $editor_id, $insert_shortcode_function );
 			$shortcode_insert_button_once = true;
+		}
+
+		/**
+		 * Makes SD work with the siteOrigin page builder.
+		 *
+		 * @since 1.0.6
+		 * @return mixed
+		 */
+		public static function siteorigin_js() {
+			ob_start();
+			?>
+			<script>
+				/**
+				 * Check a form to see what items shoudl be shown or hidden.
+				 */
+				function sd_so_show_hide(form) {
+					jQuery(form).find(".sd-argument").each(function () {
+
+						var $element_require = jQuery(this).data('element_require');
+
+						if ($element_require) {
+
+							$element_require = $element_require.replace("&#039;", "'"); // replace single quotes
+							$element_require = $element_require.replace("&quot;", '"'); // replace double quotes
+
+							if (eval($element_require)) {
+								jQuery(this).removeClass('sd-require-hide');
+							} else {
+								jQuery(this).addClass('sd-require-hide');
+							}
+						}
+					});
+				}
+
+				/**
+				 * Toggle advanced settings visibility.
+				 */
+				function sd_so_toggle_advanced($this) {
+					var form = jQuery($this).parents('form,.form,.so-content');
+					form.find('.sd-advanced-setting').toggleClass('sd-adv-show');
+					return false;// prevent form submit
+				}
+
+				/**
+				 * Initialise a individual widget.
+				 */
+				function sd_so_init_widget($this, $selector) {
+					if (!$selector) {
+						$selector = 'form';
+					}
+					// only run once.
+					if (jQuery($this).data('sd-widget-enabled')) {
+						return;
+					} else {
+						jQuery($this).data('sd-widget-enabled', true);
+					}
+
+					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" class="button button-primary right sd-advanced-button" onclick="sd_so_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
+					var form = jQuery($this).parents('' + $selector + '');
+
+					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
+						jQuery(form).append($button);
+					}
+
+					// show hide on form change
+					jQuery(form).change(function () {
+						sd_so_show_hide(form);
+					});
+
+					// show hide on load
+					sd_so_show_hide(form);
+				}
+
+				jQuery(function () {
+					jQuery(document).on('open_dialog', function (w, e) {
+						setTimeout(function () {
+							if (jQuery('.so-panels-dialog-wrapper:visible .so-content.panel-dialog .sd-show-advanced').length) {
+								console.log('exists');
+								if (jQuery('.so-panels-dialog-wrapper:visible .so-content.panel-dialog .sd-show-advanced').val() == '1') {
+									console.log('true');
+									sd_so_init_widget('.so-panels-dialog-wrapper:visible .so-content.panel-dialog .sd-show-advanced', 'div');
+								}
+							}
+						}, 200);
+					});
+				});
+			</script>
+			<?php
+			$output = ob_get_clean();
+
+			/*
+			 * We only add the <script> tags for code highlighting, so we strip them from the output.
+			 */
+
+			return str_replace( array(
+				'<script>',
+				'</script>'
+			), '', $output );
 		}
 
 		/**
 		 * Output the JS and CSS for the shortcode insert button.
 		 *
 		 * @since 1.0.6
+		 *
 		 * @param string $editor_id
 		 * @param string $insert_shortcode_function
 		 */
-		public static function shortcode_insert_button_script($editor_id = '', $insert_shortcode_function = ''){
+		public static function shortcode_insert_button_script( $editor_id = '', $insert_shortcode_function = '' ) {
 			?>
 			<style>
 				.sd-shortcode-left-wrap {
@@ -199,13 +300,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					float: none;
 				}
 
-				.sd-shortcode-left-wrap .widefat{
+				.sd-shortcode-left-wrap .widefat {
 					border-spacing: 0;
 					width: 100%;
 					clear: both;
 					margin: 0;
 					border: 1px solid #ddd;
-					box-shadow: inset 0 1px 2px rgba(0,0,0,.07);
+					box-shadow: inset 0 1px 2px rgba(0, 0, 0, .07);
 					background-color: #fff;
 					color: #32373c;
 					outline: 0;
@@ -213,7 +314,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					padding: 3px 5px;
 				}
 
-				.sd-shortcode-left-wrap input[type=checkbox].widefat{
+				.sd-shortcode-left-wrap input[type=checkbox].widefat {
 					border: 1px solid #b4b9be;
 					background: #fff;
 					color: #555;
@@ -225,13 +326,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					margin: -4px 4px 0 0;
 					margin-top: 0;
 					outline: 0;
-					padding: 0!important;
+					padding: 0 !important;
 					text-align: center;
 					vertical-align: middle;
 					width: 16px;
 					min-width: 16px;
 					-webkit-appearance: none;
-					box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+					box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
 					transition: .05s border-color ease-in-out;
 				}
 
@@ -249,10 +350,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					-moz-osx-font-smoothing: grayscale;
 				}
 
-
-
 				#sd-shortcode-output-actions button,
-				.sd-advanced-button{
+				.sd-advanced-button {
 					color: #555;
 					border-color: #ccc;
 					background: #f7f7f7;
@@ -273,7 +372,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					white-space: nowrap;
 					box-sizing: border-box;
 				}
-				button.sd-advanced-button{
+
+				button.sd-advanced-button {
 					background: #0073aa;
 					border-color: #006799;
 					box-shadow: inset 0 2px 0 #006799;
@@ -291,11 +391,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					width: 35%;
 				}
 
-				#sd-shortcode-output{
-					background: rgba(255,255,255,.5);
-					border-color: rgba(222,222,222,.75);
-					box-shadow: inset 0 1px 2px rgba(0,0,0,.04);
-					color: rgba(51,51,51,.5);
+				#sd-shortcode-output {
+					background: rgba(255, 255, 255, .5);
+					border-color: rgba(222, 222, 222, .75);
+					box-shadow: inset 0 1px 2px rgba(0, 0, 0, .04);
+					color: rgba(51, 51, 51, .5);
 					overflow: auto;
 					padding: 2px 6px;
 					line-height: 1.4;
@@ -307,6 +407,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					width: 100%;
 				}
 			</style>
+			<?php
+			if ( class_exists( 'SiteOrigin_Panels' ) ) {
+				echo "<script>" . self::siteorigin_js() . "</script>";
+			}
+			?>
 			<script>
 				<?php
 				if(! empty( $insert_shortcode_function )){
@@ -323,8 +428,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$shortcode = jQuery('#sd-shortcode-output').val();
 					if ($shortcode) {
 
-						if(!$editor_id){
-							$editor_id = "<?php if(isset($_REQUEST['et_fb'])){echo "#main_content_content_vb_tiny_mce";}else{ echo "#wp-content-editor-container textarea";} ?>";
+						if (!$editor_id) {
+							$editor_id = "<?php if ( isset( $_REQUEST['et_fb'] ) ) {
+								echo "#main_content_content_vb_tiny_mce";
+							} else {
+								echo "#wp-content-editor-container textarea";
+							} ?>";
 						}
 
 						if (tinyMCE && tinyMCE.activeEditor && jQuery($editor_id).attr("aria-hidden") == "true") {
@@ -339,7 +448,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 							// set Divi react input value
 							var input = document.getElementById("main_content_content_vb_tiny_mce");
-							if(input){
+							if (input) {
 								sd_setNativeValue(input, textareaValue);
 							}
 
@@ -351,7 +460,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				function sd_setNativeValue(element, value) {
 					let lastValue = element.value;
 					element.value = value;
-					let event = new Event("input", { target: element, bubbles: true });
+					let event = new Event("input", {target: element, bubbles: true});
 					// React 15
 					event.simulated = true;
 					// React 16
@@ -391,7 +500,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						};
 
 						if (typeof ajaxurl === 'undefined') {
-							var ajaxurl = "<?php echo admin_url('admin-ajax.php');?>";
+							var ajaxurl = "<?php echo admin_url( 'admin-ajax.php' );?>";
 						}
 
 						jQuery.post(ajaxurl, data, function (response) {
@@ -408,7 +517,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							sd_build_shortcode($short_code);
 
 							// resize the window to fit
-							setTimeout(function(){
+							setTimeout(function () {
 								jQuery('#TB_ajaxContent').css('width', 'auto').css('height', '75vh');
 							}, 200);
 
@@ -478,7 +587,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$output = $output + "]";
 					jQuery('#sd-shortcode-output').html($output);
 				}
+
 			</script>
+
 			<?php
 		}
 
@@ -510,6 +621,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			/*
 			 * We only add the <script> tags for code highlighting, so we strip them from the output.
 			 */
+
 			return str_replace( array(
 				'<style>',
 				'</style>'
@@ -578,7 +690,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						jQuery($this).data('sd-widget-enabled', true);
 					}
 
-					var $button = '<button title="<?php _e('Advanced Settings');?>" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
+					var $button = '<button title="<?php _e( 'Advanced Settings' );?>" class="button button-primary right sd-advanced-button" onclick="sd_toggle_advanced(this);return false;"><i class="fas fa-sliders-h" aria-hidden="true"></i></button>';
 					var form = jQuery($this).parents('' + $selector + '');
 
 					if (jQuery($this).val() == '1' && jQuery(form).find('.sd-advanced-button').length == 0) {
@@ -678,6 +790,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			/*
 			 * We only add the <script> tags for code highlighting, so we strip them from the output.
 			 */
+
 			return str_replace( array(
 				'<script>',
 				'</script>'
@@ -810,8 +923,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			// if preview show a placeholder if empty
-			if($this->is_preview() && $output==''){
-				$output = $this->preview_placeholder_text("[{".$this->base_id."}]");
+			if ( $this->is_preview() && $output == '' ) {
+				$output = $this->preview_placeholder_text( "[{" . $this->base_id . "}]" );
 			}
 
 			return $output;
@@ -824,9 +937,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 *
 		 * @return string
 		 */
-		public function preview_placeholder_text($name = ''){
-			return 	"<div style='background:#0185ba33;padding: 10px;'>".sprintf( __('Placeholder for: %s'), $name )."</div>";
-
+		public function preview_placeholder_text( $name = '' ) {
+			return "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" . sprintf( __( 'Placeholder for: %s' ), $name ) . "</div>";
 		}
 
 		/**
@@ -926,6 +1038,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function register_block() {
 			wp_add_inline_script( 'wp-blocks', $this->block() );
+			if ( class_exists( 'SiteOrigin_Panels' ) ) {
+
+				wp_add_inline_script( 'wp-blocks', $this->siteorigin_js() );
+
+			}
 		}
 
 		/**
@@ -1100,7 +1217,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 										// if the content is empty then we place some placeholder text
 										if (env == '') {
-											env = "<div style='background:#0185ba33;padding: 10px;'>" + "<?php _e( 'Placeholder for: ' );?>" + props.name + "</div>";
+											env = "<div style='background:#0185ba33;padding: 10px;border: 4px #ccc dashed;'>" + "<?php _e( 'Placeholder for: ' );?>" + props.name + "</div>";
 										}
 
 										props.setAttributes({content: env});
@@ -1483,8 +1600,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					echo ! empty( $this->options['widget_ops']['classname'] ) ? "</span>" : '';
 				}
 				echo $after_widget;
-			}elseif($this->is_preview() && $output==''){// if preview show a placeholder if empty
-				$output = $this->preview_placeholder_text("{{".$this->base_id."}}");
+			} elseif ( $this->is_preview() && $output == '' ) {// if preview show a placeholder if empty
+				$output = $this->preview_placeholder_text( "{{" . $this->base_id . "}}" );
+				echo $output;
 			}
 		}
 
@@ -1526,7 +1644,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 */
 		public function is_divi_preview() {
 			$result = false;
-			if ( isset( $_REQUEST['et_fb'] ) || isset($_REQUEST['et_pb_preview']) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) ) {
+			if ( isset( $_REQUEST['et_fb'] ) || isset( $_REQUEST['et_pb_preview'] ) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) ) {
 				$result = true;
 			}
 
@@ -1534,7 +1652,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
 		/**
-		 * Tests if the current output is inside a Beaver builer preview.
+		 * Tests if the current output is inside a Beaver builder preview.
 		 *
 		 * @since 1.0.6
 		 * @return bool
@@ -1549,18 +1667,35 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		}
 
 		/**
+		 * Tests if the current output is inside a siteorigin builder preview.
+		 *
+		 * @since 1.0.6
+		 * @return bool
+		 */
+		public function is_siteorigin_preview() {
+			$result = false;
+			if ( !empty( $_REQUEST['siteorigin_panels_live_editor'] )) {
+				$result = true;
+			}
+
+			return $result;
+		}
+
+		/**
 		 * General function to check if we are in a preview situation.
 		 *
 		 * @since 1.0.6
 		 * @return bool
 		 */
-		public function is_preview(){
+		public function is_preview() {
 			$preview = false;
-			if($this->is_divi_preview()){
+			if ( $this->is_divi_preview() ) {
 				$preview = true;
-			}elseif($this->is_elementor_preview()){
+			} elseif ( $this->is_elementor_preview() ) {
 				$preview = true;
-			}elseif($this->is_beaver_preview()){
+			} elseif ( $this->is_beaver_preview() ) {
+				$preview = true;
+			} elseif ( $this->is_siteorigin_preview() ) {
 				$preview = true;
 			}
 
