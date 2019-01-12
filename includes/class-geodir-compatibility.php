@@ -52,9 +52,14 @@ class GeoDir_Compatibility {
 		add_filter('primer_the_page_title',array(__CLASS__,'primer_title'));
 
 		/*######################################################
-		Beaver Builder :: Fix font-awesome.
+		Beaver Builder :: Fix Page templates.
 		######################################################*/
 		add_filter('geodir_bypass_setup_archive_loop_as_page', array(__CLASS__,'beaver_builder_loop_bypass'));
+
+		/*######################################################
+		Elementor :: Fix Page templates.
+		######################################################*/
+		add_filter('geodir_bypass_setup_archive_loop_as_page', array(__CLASS__,'elementor_loop_bypass'));
 
 		/*######################################################
 		WP Easy Updates :: Allow beta addons if set
@@ -93,7 +98,33 @@ class GeoDir_Compatibility {
 
 	}
 
+	/**
+	 * Stop the GD loop setup if elementor is overriding it.
+	 *
+	 * @param $bypass
+	 *
+	 * @return bool
+	 */
+	public static function elementor_loop_bypass($bypass){
+		if(defined('ELEMENTOR_PRO_VERSION') && GeoDir_Elementor::is_template_override()){
+			$bypass = true;
+		}
 
+		return $bypass;
+	}
+
+	/**
+	 * Dynamically add post meta to some GD pages from their page templates.
+	 *
+	 * This helps trick page builders into using the page tempalte settings.
+	 * 
+	 * @param $metadata
+	 * @param $object_id
+	 * @param $meta_key
+	 * @param $single
+	 *
+	 * @return null|string
+	 */
 	public static function dynamically_add_post_meta($metadata, $object_id, $meta_key, $single) {
 
 
