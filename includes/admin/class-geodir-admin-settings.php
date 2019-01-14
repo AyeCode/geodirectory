@@ -481,8 +481,13 @@ class GeoDir_Admin_Settings {
 								>
 								<?php
 									foreach ( $value['options'] as $key => $val ) {
-										?>
-										<option value="<?php echo esc_attr( $key ); ?>" <?php
+										if(stripos(strrev($key), strrev('optgroup-open')) === 0){
+											echo '<optgroup label="'.esc_attr( $val ).'">';
+										}elseif(stripos(strrev($key), strrev('optgroup-close')) === 0){
+											echo '</optgroup>';
+										}else{
+											?>
+											<option value="<?php echo esc_attr( $key ); ?>" <?php
 
 											if ( is_array( $option_value ) ) {
 												selected( in_array( $key, $option_value ), true );
@@ -490,8 +495,9 @@ class GeoDir_Admin_Settings {
 												selected( $option_value, $key );
 											}
 
-										?>><?php echo $val ?></option>
-										<?php
+											?>><?php echo $val ?></option>
+											<?php
+										}
 									}
 								?>
 							</select> <?php echo $description; ?>

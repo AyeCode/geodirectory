@@ -367,7 +367,9 @@
 }
 
 .geodir-map-navigation ul {
-    margin: 0px;
+    margin: 0 !important;
+    padding: 0 !important;
+    line-height: unset !important;
 }
 
 .geodir-map-navigation ul li {

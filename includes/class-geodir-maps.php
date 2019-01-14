@@ -228,26 +228,62 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @param bool $is_home_map Optional. Is this a home page map? Default: false.
 	 * @return string|void
 	 */
-	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $is_home_map = false ) {
+	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $terms = '' ) {
 		global $cat_count, $geodir_cat_icons;
 
 		$taxonomy = $post_type . 'category';
 
 		$exclude_categories = geodir_get_option( 'exclude_cat_on_map', array() );
+		//$exclude_categories = array(70);
 		$exclude_categories = !empty($exclude_categories[$taxonomy]) && is_array($exclude_categories[$taxonomy]) ? array_unique($exclude_categories[$taxonomy]) : array();
-
+		$exclude_categories[$taxonomy] = "70";
 		$exclude_cat_str = implode(',', $exclude_categories);
+		$is_home_map = true;
+		// terms include/exclude
+		$include = array();
+		$exclude = array();
 
-		if ($exclude_cat_str == '') {
-			$exclude_cat_str = '0';
+		if($terms!== false && $terms !== true && $terms != ''){
+			$terms_array = explode(",",$terms);
+			foreach($terms_array as $term_id){
+				$tmp_id = trim($term_id);
+				if(abs($tmp_id) != $tmp_id){
+					$exclude[] = absint($tmp_id);
+				}else{
+					$include[] = absint($tmp_id);
+				}
+			}
 		}
 
-		$cat_terms = get_terms( array( 'taxonomy' => array( $taxonomy ), 'parent' => $cat_parent, 'exclude' => $exclude_cat_str, 'hide_empty ' => $hide_empty ) );
+//		if ($exclude_cat_str == '') {
+//			$exclude_cat_str = '0';
+//		}
+
+		$term_args = array(
+			'taxonomy' => array( $taxonomy ),
+			'parent' => $cat_parent,
+		    //'exclude' => $exclude_cat_str,
+			'hide_empty ' => $hide_empty
+		);
+
+		if(!empty($include)){
+			$term_args['include'] = $include;
+		}
+
+		if(!empty($exclude)){
+			$term_args['exclude'] = $exclude;
+		}
+
+		//echo '###';print_r($term_args );
+
+		$cat_terms = get_terms( $term_args );
+
+
 		
 		if ($hide_empty) {
 			$cat_terms = geodir_filter_empty_terms($cat_terms);
 		}
-
+		//print_r($cat_terms);
 		$main_list_class = '';
 		//If there are terms, start displaying
 		if ( count( $cat_terms ) > 0 ) {
@@ -272,7 +308,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			foreach ( $cat_terms as $cat_term ) {
 				$icon = !empty( $geodir_cat_icons ) && isset( $geodir_cat_icons[ $cat_term->term_id ] ) ? $geodir_cat_icons[ $cat_term->term_id ] : '';
 
-				if ( ! in_array( $cat_term->term_id, $exclude_categories ) ) {
+				if ( ! in_array( $cat_term->term_id, $exclude ) ) {
 					//Secret sauce.  Function calls itself to display child elements, if any
 					$checked = 'checked="checked"';
 
@@ -292,7 +328,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 				}
 
 				// get sub category by recursion
-				$out .= self::get_categories_filter( $post_type, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $is_home_map );
+				$out .= self::get_categories_filter( $post_type, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $terms );
 
 				$out .= '</li>';
 			}
