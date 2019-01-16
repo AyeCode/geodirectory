@@ -253,13 +253,8 @@ class GeoDir_Post_Data {
 	public static function save_post( $post_id, $post, $update ) {
 		global $wpdb, $plugin_prefix,$geodirectory;
 
-//		global $rran;
-////		echo '###'.$post_id;print_r($_REQUEST);print_r(self::$post_temp);print_r($post);echo '###########################################';
-////		if($rran){
-////			echo '###'.$post_id;print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
-////
-////		}
-//		$rran++;
+//	echo '###'.$post_id;print_r($_REQUEST);print_r(self::$post_temp);print_r($post);exit;
+
 
 		// only fire if $post_temp is set
 		if ( $gd_post = self::$post_temp ) {
@@ -291,6 +286,12 @@ class GeoDir_Post_Data {
 
 				if ( isset( $gd_post[ $cf->htmlvar_name ] ) ) {
 					$gd_post_value = $gd_post[ $cf->htmlvar_name ];
+
+					// check for empty numbers and set to NULL so a default 0 or 0.00 is not set
+					if(isset($cf->data_type) && ( $cf->data_type=='DECIMAL' || $cf->data_type=='INT') && $gd_post_value === ''){
+						$gd_post_value = NULL;
+					}
+
 					$gd_post_value = apply_filters("geodir_custom_field_value_{$cf->field_type}", $gd_post_value, $gd_post, $cf, $post_id, $post, $update);
 					if ( is_array( $gd_post_value ) ) {
 						$gd_post_value = ! empty( $gd_post_value ) ? implode( ',', $gd_post_value ) : '';

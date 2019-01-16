@@ -19,6 +19,10 @@ CURL call replaced with wp_remote_get() - CHANGED
 WP_POST_REVISIONS can cause backend new posts to not save custom fields - FIXED
 Changes for custom maps OSM layer api key - CHANGED
 SiteOrigin page builder compatibility changes - ADDED
+Decimal and Int custom fields can be given a zero (0) value when submitted empty - FIXED
+Elementor pro archive templates not fully working with post archive element - FIXED
+Term icon cache not cleared when installing dummy data - FIXED
+Map module refactored to allow category includes and excludes via category IDs - CHANGED
 
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED

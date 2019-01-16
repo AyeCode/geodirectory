@@ -208,15 +208,20 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 	search = jQuery('#' + map_canvas + '_search_string').val();
 
 
+
+    // Terms
+    var terms_filters = false;
+
 	jQuery('[name="' + map_canvas + '_cat[]"]:checked').each(function() {
+        terms_filters = true;
 		if (jQuery(this).val()) {
-			query_string += '&term[]=' + jQuery(this).val();
+            query_string += '&term[]=' + jQuery(this).val();
 		}
 	});
 
 	// Terms
 	terms = options.terms;
-	if (terms) {
+	if (!terms_filters && terms) {
 		if ( typeof terms == 'object' || typeof terms == 'array' ) {
 		} else {
 			terms = terms.split(',');
@@ -1327,6 +1332,11 @@ function geodir_map_post_type_terms(options, post_type, query_string) {
 	query_string += "&output=terms";
 	query_string += "&map_canvas=" + map_canvas;
 	query_string += "&child_collapse=" + jQuery('#' + map_canvas + '_child_collapse').val();
+
+    terms = options.terms;
+    if(terms){
+        query_string += "&terms=" + terms;
+    }
 	
 	u = terms_query_url.indexOf('?') === -1 ? '?' : '&';
 	terms_query_url += u + query_string;

@@ -49,4 +49,42 @@ class GeoDir_Elementor {
 		}
 	}
 
+	/**
+	 * Check if a GD archive override is in place.
+	 * 
+	 * @param string $template
+	 *
+	 * @return bool
+	 */
+	public static function is_template_override($template=''){
+		$result = false;
+		$type = '';
+		$post_type = '';
+
+		// set post_type
+		if(geodir_is_page('post_type') || geodir_is_page('archive')){
+			$post_type = geodir_get_current_posttype();
+
+			if(geodir_is_page('post_type')){
+				$type = $post_type."_archive";
+			}elseif($tax = get_query_var('taxonomy')){
+				$type = $tax;
+			}
+		}
+
+		if($type && $conditions = get_option('elementor_pro_theme_builder_conditions')){
+			if(!empty($conditions['archive'])){
+				foreach($conditions['archive'] as $archive_conditions){
+					foreach ($archive_conditions as $archive_condition)
+					if(stripos(strrev($archive_condition), strrev($type)) === 0){
+						$result = true;break 2;
+					}
+				}
+			}
+		}
+
+		return $result;
+	}
+
+
 }

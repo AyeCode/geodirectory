@@ -8,9 +8,11 @@
     min-width: 150px;
     .geodir_toggle{
       ul{
-        list-style: none ;
-        margin: 0;
-        padding: 0;
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        list-style-type: none !important;
+        line-height: unset !important;
       }
     }
 
@@ -22,5 +24,38 @@
       margin: 0;
     }
 
+  }
+
+  .geodir-map-posttype-list{
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    width: 100%;
+    word-wrap: normal;
+    position: relative;
+    li{
+      margin-left: 0;
+    }
+  }
+
+  .geodir_map_container{
+    .map-places-listing{
+      ul.place-list{
+        list-style: none !important;
+        margin: 0 !important;
+        padding: 0 25px  !important;
+        list-style-type: none !important;
+        line-height: unset !important;
+
+        &> li{
+          display: inline-block;
+          float: none;
+
+          &:first-child{
+            padding-left: 0;
+          }
+        }
+      }
+    }
   }
 }
