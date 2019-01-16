@@ -36,6 +36,9 @@ class GeoDir_SEO {
 		// maybe noindex empty archive pages
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
         add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
+		if ( ! is_admin() ) {
+			add_filter( 'page_link', array( __CLASS__, 'page_link' ), 10, 3 );
+		}
 	}
 
 	/**
@@ -662,6 +665,30 @@ class GeoDir_SEO {
 
         return $crumbs;
     }
+
+	/**
+	 * Filter link for GD Archive pages.
+	 *
+	 * @param string $link    The page's permalink.
+	 * @param int    $post_id The ID of the page.
+	 * @param bool   $sample  Is it a sample permalink.
+	 *
+	 * @return string
+	 */
+	public static function page_link( $link, $page_id, $sample ) {
+		global $wp_query;
+
+		if ( ! empty( $wp_query->post ) && isset( $wp_query->post->ID ) && geodir_is_geodir_page_id( $page_id ) ) {
+			$query_object_id = $wp_query->post->ID;
+		}else{
+			$query_object_id = get_queried_object_id();
+		}
+
+		if ( $query_object_id == $page_id && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) ) {
+			$link = '#';
+		}
+		return $link;
+	}
 	
 }
 
