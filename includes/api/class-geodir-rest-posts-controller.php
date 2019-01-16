@@ -2475,39 +2475,9 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     break;
                 case 'textarea':
 					if ( $name == 'post_content' ) {
-						if ( post_type_supports( $this->post_type, 'editor' ) ) {
-							$name 					= 'content';
-							$args['type']			= 'string';
-							/*
-							$args['arg_options'] 	= array(
-								'sanitize_callback' => null, // Note: sanitization implemented in self::prepare_item_for_database()
-								'validate_callback' => null, // Note: validation implemented in self::prepare_item_for_database()
-							);
-							$args['properties']  	= array(
-								'raw' => array(
-									'description' => __( 'Content for the object, as it exists in the database.' ),
-									'type'        => 'string',
-									'context'     => array( 'edit' ),
-								),
-								'rendered' => array(
-									'description' => __( 'HTML content for the object, transformed for display.' ),
-									'type'        => 'string',
-									'context'     => array( 'view', 'edit' ),
-									'readonly'    => true,
-								),
-								'protected'       => array(
-									'description' => __( 'Whether the content is protected with a password.' ),
-									'type'        => 'boolean',
-									'context'     => array( 'view', 'edit' ),
-									'readonly'    => true,
-								),
-							);*/
-						} else {
-							$continue = true;
-						}
-					} else {
-						$args['type']   = 'string';
+						$name 		= 'content';
 					}
+					$args['type']   = 'string';
                     break;
                 case 'time':
                     $args['type']   = 'string';
@@ -2749,7 +2719,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			$has_password_filter = true;
 		}
 
-		if (  empty( $schema['properties']['content'] ) ) {
+		if (  ! empty( $schema['properties']['content'] ) ) {
 			$data['content'] = array(
 				'raw'       => $gd_post->post_content,
 				/** This filter is documented in wp-includes/post-template.php */

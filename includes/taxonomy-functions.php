@@ -670,7 +670,12 @@ function geodir_term_recount( $terms, $taxonomy, $post_type, $callback = true, $
 
 	// Standard callback.
 	if ( $callback ) {
-		_update_post_term_count( $terms, $taxonomy );
+		$id_parent_terms = $terms;
+		if ( ! $terms_are_term_taxonomy_ids ) {
+			// We passed in an array of TERMS in format id=>parent.
+			$id_parent_terms = array_filter( (array) array_keys( $terms ) );
+		}
+		_update_post_term_count( $id_parent_terms, $taxonomy );
 	}
 
 	$exclude_term_ids = array();
