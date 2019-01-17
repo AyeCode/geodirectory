@@ -236,7 +236,7 @@ class GeoDir_User {
 		$user_favourite                    = self::get_post_type_fav_counts( $user_id );
 
 		if ( ! empty( $show_favorite_link_user_dashboard ) && ! empty( $user_favourite ) ) {
-			$favourite_links = '';
+			$favourite_links = $output_type == 'select' ? '' : array();
 			$post_types      = geodir_get_posttypes( 'object' );
 
 			$author_link = get_author_posts_url( $user_id );
@@ -267,6 +267,8 @@ class GeoDir_User {
 						$favourite_links .= '<option ' . $selected . ' value="' . $post_type_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 					} elseif ( $output_type == 'link' ) {
 						$favourite_links[] = '<a href="' . $post_type_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</a>';
+					}elseif($output_type == 'array'){
+						$favourite_links[$key] = array('url' => $post_type_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
 					}
 
 
@@ -274,7 +276,6 @@ class GeoDir_User {
 			}
 
 			if ( $favourite_links != '' ) {
-				$user = get_user_by( 'ID', $user_id );
 				if ( $output_type == 'select' ) {
 					?>
 					<li>
@@ -293,6 +294,8 @@ class GeoDir_User {
 						echo implode( " | ", $favourite_links );
 					}
 
+				}elseif($output_type == 'array'){
+					return $favourite_links;
 				}
 			}
 		}
@@ -352,6 +355,8 @@ class GeoDir_User {
 					$listing_links[] = '<option ' . $selected . ' value="' . $listing_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 				} elseif ( $output_type == 'link' ) {
 					$listing_links[] = '<a href="' . $listing_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</a>';
+				}elseif($output_type == 'array'){
+					$listing_links[] = array('url' => $listing_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
 				}
 			}
 		}
@@ -376,6 +381,8 @@ class GeoDir_User {
 					echo implode( " | ", $listing_links );
 				}
 
+			}elseif($output_type == 'array'){
+				return $listing_links;
 			}
 		}
 
@@ -388,11 +395,11 @@ class GeoDir_User {
      * @since 2.0.0
      *
      */
-	public static function show_add_listings() {
+	public static function show_add_listings($output = 'select') {
 
 		$post_types = geodir_get_posttypes( 'object' );
 
-		$addlisting_links = '';
+		$addlisting_links = $output=='array' ? array() : '';
 		foreach ( $post_types as $key => $postobj ) {
 			
 			if ( ! isset( $postobj->disable_frontend_add ) || $postobj->disable_frontend_add == '0' ) {
@@ -417,14 +424,21 @@ class GeoDir_User {
 					$add_link = apply_filters( 'geodir_dashboard_link_add_listing', $add_link, $key, get_current_user_id() );
 					$name     = apply_filters( 'geodir_dashboard_label_add_listing', $name, $key, get_current_user_id() );
 
-					$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
+					if($output == 'array'){
+						$addlisting_links[] = array('url' => $add_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
+					}else{
+						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
+					}
 
 				}
 			}
 
 		}
 
-		if ( $addlisting_links != '' ) { ?>
+		if($output == 'array'){
+			return $addlisting_links;
+		}
+		elseif ( $addlisting_links != '' ) { ?>
 
 			<li><select id="geodir_add_listing" class="geodir-select" 
 			            option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false"

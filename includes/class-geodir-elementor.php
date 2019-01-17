@@ -59,7 +59,7 @@ class GeoDir_Elementor {
 	public static function is_template_override($template=''){
 		$result = false;
 		$type = '';
-		$post_type = '';
+		$page_type = '';
 
 		// set post_type
 		if(geodir_is_page('post_type') || geodir_is_page('archive')){
@@ -70,15 +70,26 @@ class GeoDir_Elementor {
 			}elseif($tax = get_query_var('taxonomy')){
 				$type = $tax;
 			}
+			$page_type = 'archive';
+		}elseif(geodir_is_page('single')){
+			$type = geodir_get_current_posttype();
+			$page_type = 'single';
 		}
 
 		if($type && $conditions = get_option('elementor_pro_theme_builder_conditions')){
-			if(!empty($conditions['archive'])){
+			if($page_type=='archive' && !empty($conditions['archive'])){
 				foreach($conditions['archive'] as $archive_conditions){
 					foreach ($archive_conditions as $archive_condition)
 					if(stripos(strrev($archive_condition), strrev($type)) === 0){
 						$result = true;break 2;
 					}
+				}
+			}elseif($page_type=='single' && !empty($conditions['single'])){
+				foreach($conditions['single'] as $archive_conditions){
+					foreach ($archive_conditions as $archive_condition)
+						if(stripos(strrev($archive_condition), strrev($type)) === 0){
+							$result = true;break 2;
+						}
 				}
 			}
 		}

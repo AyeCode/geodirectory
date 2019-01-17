@@ -67,7 +67,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                 'advanced' => true
             ),
             'show_login'  => array(
-                'title' => __("Show the login box if required.", 'geodirectory'),
+                'title' => __("Show the login links if required.", 'geodirectory'),
                 'type' => 'checkbox',
                 'desc_tip' => true,
                 'value'  => '1',
@@ -97,6 +97,10 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
      * @return mixed|string|void
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
+
+        if(self::is_preview()){
+            return '';
+        }
 
         ob_start();
         $default_post_type = geodir_add_listing_default_post_type();

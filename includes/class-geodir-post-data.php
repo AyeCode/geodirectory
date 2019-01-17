@@ -1202,6 +1202,10 @@ class GeoDir_Post_Data {
 
 		} // its a new auto draft
 		else {
+			/*
+			 * Check if its a logged out user and if we have details to register the user
+			 */
+			$post_data = self::check_logged_out_author($post_data);
 		}
 
 		$post_data = apply_filters( 'geodir_auto_save_post_data', $post_data );

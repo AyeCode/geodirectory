@@ -225,17 +225,17 @@
     },
     {
         "name": "ayecode/wp-super-duper",
-        "version": "1.0.6",
-        "version_normalized": "1.0.6.0",
+        "version": "1.0.7",
+        "version_normalized": "1.0.7.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "9e156bb1446e518291139d0f8a628eb65b1dcb5f"
+            "reference": "ea5a387cafffb54c87612b4d122fce4199cdf05f"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/9e156bb1446e518291139d0f8a628eb65b1dcb5f",
-            "reference": "9e156bb1446e518291139d0f8a628eb65b1dcb5f",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/ea5a387cafffb54c87612b4d122fce4199cdf05f",
+            "reference": "ea5a387cafffb54c87612b4d122fce4199cdf05f",
             "shasum": ""
         },
         "require": {
@@ -247,7 +247,7 @@
             "squizlabs/php_codesniffer": "^3.2",
             "wp-coding-standards/wpcs": "*"
         },
-        "time": "2019-01-11 12:03:56",
+        "time": "2019-01-16 17:08:32",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -267,7 +267,7 @@
                 "role": "Developer"
             }
         ],
-        "description": "Lets you create a widget, block and showrtcode all from the one file .",
+        "description": "Lets you create a widget, block and shortcode all from the one file .",
         "homepage": "https://github.com/AyeCode/wp-super-duper",
         "keywords": [
             "super duper",

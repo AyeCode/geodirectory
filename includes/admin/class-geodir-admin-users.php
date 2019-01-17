@@ -67,7 +67,7 @@ class GeoDir_Admin_Users {
 	 */
 	public function get_user_listings($user_id){
 		$output = '';
-		$user_listing = geodir_user_post_listing_count( $user_id );
+		$user_listing = geodir_user_post_listing_count( $user_id, true );
 		if(empty($user_listing)){
 			$output .= __('No listings','goedirectory');
 		}else{
