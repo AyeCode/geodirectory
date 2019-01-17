@@ -232,7 +232,7 @@ class GeoDir_Template_Loader {
     public static function setup_archive_page_content(){
 		global $post,$gd_done_archive_loop;
 
-        // if its outside the loop then bail so we don't set the current_post number and cause has_posts() to return false.
+        // if its outside the loop then bail so we don't set the current_post number and cause have_posts() to return false.
         if(!in_the_loop()){
 
             if(current_filter()=='the_excerpt' && $gd_done_archive_loop){
@@ -277,6 +277,11 @@ class GeoDir_Template_Loader {
         //$content = wpautop($content);// add double line breaks
         // run the shortcodes on the content
         $content = do_shortcode($content);
+
+        // run block content if its available
+        if(function_exists('do_blocks')){
+            $content = do_blocks( $content );
+        }
 
         // add our filter back, not sure we even need to add it back if we are only running it once.
         add_filter( 'the_content', array( __CLASS__, 'setup_archive_page_content' ) );
@@ -360,6 +365,13 @@ class GeoDir_Template_Loader {
      */
     public static function setup_singular_page($content){
 
+        /*
+         * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
+         */
+        if(apply_filters('geodir_bypass_setup_singular_page',false)){
+            return $content;
+        }
+        
         // remove our filter so we don't get stuck in a loop
         remove_filter( 'the_content', array( __CLASS__, 'setup_singular_page' ) );
 
@@ -422,6 +434,11 @@ class GeoDir_Template_Loader {
         // run the shortcodes on the content
         $content = do_shortcode($content);
 
+        // run block content if its available
+        if(function_exists('do_blocks')){
+            $content = do_blocks( $content );
+        }
+
 
         return $content;
     }
@@ -478,6 +495,11 @@ class GeoDir_Template_Loader {
 		if ( ! empty( $content ) ) {
 			// run the shortcodes on the content
 			$content = do_shortcode( $content );
+
+            // run block content if its available
+            if(function_exists('do_blocks')){
+                $content = do_blocks( $content );
+            }
 		}
 
 		return $content;

@@ -23,6 +23,8 @@ define('SEARCH', __('Search', 'geodirectory'));
 
 /* ---- Add Listing ---- */
 
+define('ADD_LISTING_TEXT', __('Add Listing', 'geodirectory'));
+define('MY_LISTINGS_TEXT', __('My Listings', 'geodirectory'));
 define('LOGINORREGISTER', __("Login or Register", 'geodirectory'));
 define('IAM_TEXT', __("I am", 'geodirectory'));
 define('EXISTING_USER_TEXT', __("Existing User", 'geodirectory'));

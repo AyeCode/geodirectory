@@ -521,11 +521,12 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Recently_Viewed' );
 		register_widget( 'GeoDir_Widget_Single_Tabs' );
 		register_widget( 'GeoDir_Widget_Notifications' );
+		register_widget( 'GeoDir_Widget_Add_Listing' );
+		register_widget( 'GeoDir_Widget_Add_Listing' );
+
 
 		// Non Widgets
-		new GeoDir_Widget_Add_Listing();
 		new GeoDir_Widget_Single_Taxonomies();
-		//new GeoDir_Widget_Single_Tabs();
 		new GeoDir_Widget_Single_Next_Prev();
 		new GeoDir_Widget_Single_Closed_Text();
 		//new GeoDir_Widget_Notifications();

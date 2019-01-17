@@ -26,6 +26,9 @@ Map module refactored to allow category includes and excludes via category IDs -
 GD tool "Term counts" not updating term counts - FIXED
 REST API listing response does not contains content field - FIXED
 GD Archive page links to blank page - FIXED
+the7 theme Search page not working due to the_content filter and current_post var - FIXED
+Pricing Manager can cause no post author for posting while logged out - FIXED
+GD Extension screen now fully enabled, with our WP Easy Updates, any addon or theme can be installed with just your membership key - ADDED
 
 v2.0.0.43
 Post badge and is_empty check not working in some cases - FIXED

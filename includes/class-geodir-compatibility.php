@@ -60,6 +60,7 @@ class GeoDir_Compatibility {
 		Elementor :: Fix Page templates.
 		######################################################*/
 		add_filter('geodir_bypass_setup_archive_loop_as_page', array(__CLASS__,'elementor_loop_bypass'));
+		add_filter('geodir_bypass_setup_singular_page', array(__CLASS__,'elementor_loop_bypass'));
 
 		/*######################################################
 		WP Easy Updates :: Allow beta addons if set
@@ -91,7 +92,12 @@ class GeoDir_Compatibility {
 		Divi (theme) :: maps api
 		######################################################*/
 		add_filter( 'et_pb_enqueue_google_maps_script', '__return_false' );
-		
+
+		/*######################################################
+		The7 (theme) :: rewind the posts, the_excerpt function call seems to set the current_post number and cause have_posts() to return false.
+		######################################################*/
+		add_action('presscore_body_top','rewind_posts');
+
 		// general
 		add_filter('get_post_metadata', array( __CLASS__,'dynamically_add_post_meta'), 10, 4);
 
