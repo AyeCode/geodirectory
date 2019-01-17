@@ -358,29 +358,39 @@ class GeoDir_Admin_Tools {
 
 		// Advance search filter fields table @todo this should be in the advanced search addon
 		if ( defined( 'GEODIR_ADVANCE_SEARCH_TABLE' ) ) {
-			$sql  = "SELECT field_site_name, front_search_title, first_search_text, last_search_text, field_desc FROM " . GEODIR_ADVANCE_SEARCH_TABLE;
+			$sql  = "SELECT frontend_title, admin_title, description, range_from_title, range_to_title, extra_fields FROM " . GEODIR_ADVANCE_SEARCH_TABLE;
 			$rows = $wpdb->get_results( $sql );
 
 			if ( ! empty( $rows ) ) {
 				foreach ( $rows as $row ) {
-					if ( ! empty( $row->field_site_name ) ) {
-						$translation_texts[] = stripslashes_deep( $row->field_site_name );
+					if ( ! empty( $row->frontend_title ) ) {
+						$translation_texts[] = stripslashes_deep( $row->frontend_title );
 					}
 
-					if ( ! empty( $row->front_search_title ) ) {
-						$translation_texts[] = stripslashes_deep( $row->front_search_title );
+					if ( ! empty( $row->admin_title ) ) {
+						$translation_texts[] = stripslashes_deep( $row->admin_title );
 					}
 
-					if ( ! empty( $row->first_search_text ) ) {
-						$translation_texts[] = stripslashes_deep( $row->first_search_text );
+					if ( ! empty( $row->description ) ) {
+						$translation_texts[] = stripslashes_deep( $row->description );
 					}
 
-					if ( ! empty( $row->last_search_text ) ) {
-						$translation_texts[] = stripslashes_deep( $row->last_search_text );
+					if ( ! empty( $row->range_from_title ) ) {
+						$translation_texts[] = stripslashes_deep( $row->range_from_title );
 					}
 
-					if ( ! empty( $row->field_desc ) ) {
-						$translation_texts[] = stripslashes_deep( $row->field_desc );
+					if ( ! empty( $row->range_to_title ) ) {
+						$translation_texts[] = stripslashes_deep( $row->range_to_title );
+					}
+
+					if ( ! empty( $row->extra_fields ) && ( $extra_fields = maybe_unserialize( $row->extra_fields ) ) ) {
+						if ( ! empty( $extra_fields['asc_title'] ) ) {
+							$translation_texts[] = stripslashes_deep( $extra_fields['asc_title'] );
+						}
+
+						if ( ! empty( $extra_fields['desc_title'] ) ) {
+							$translation_texts[] = stripslashes_deep( $extra_fields['desc_title'] );
+						}
 					}
 				}
 			}
