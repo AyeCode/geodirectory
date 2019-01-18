@@ -442,7 +442,12 @@ function geodir_get_listing_author( $listing_id = '' ) {
  * @return bool
  */
 function geodir_lisiting_belong_to_user( $listing_id, $user_id ) {
+	if ( empty( $listing_id ) || empty( $user_id ) ) {
+		return false;
+	}
+
 	$listing_author_id = geodir_get_listing_author( $listing_id );
+
 	if ( $listing_author_id == $user_id ) {
 		return true;
 	} else {

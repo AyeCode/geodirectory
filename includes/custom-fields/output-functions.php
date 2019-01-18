@@ -1610,10 +1610,15 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
             // if($output=='' || isset($output['value']))$html .= wpautop($gd_post->{$cf['htmlvar_name']});
             if($cf['htmlvar_name']!='post_content'){
                 if($output=='' || isset($output['value'])){
-                    if(isset($output['strip'])){
-                        $html .=  wp_strip_all_tags( wpautop(do_shortcode(stripslashes($gd_post->{$cf['htmlvar_name']}))) );
+                    $value = stripslashes( $gd_post->{$cf['htmlvar_name']} );
+					if(isset($output['strip'])){
+                        $html .=  wp_strip_all_tags( wpautop( do_shortcode( $value ) ) );
                     }else{
-                        $html .= wpautop(do_shortcode(stripslashes($gd_post->{$cf['htmlvar_name']})));
+						if ( $cf['htmlvar_name'] == 'video' ) { // Video embed.
+							global $wp_embed;
+							$value = $wp_embed->autoembed( $value );
+						}
+						$html .= wpautop( do_shortcode( $value ) );
                     }
                 }
             }else{
