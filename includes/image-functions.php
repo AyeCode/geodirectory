@@ -137,17 +137,17 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
  * @param int|string $limit Optional. Number of images.
  * @return array|bool Returns images as an array. Each item is an object.
  */
-function geodir_get_images($post_id = 0, $limit = '',$logo = false)
+function geodir_get_images($post_id = 0, $limit = '',$logo = false, $revision_id = '')
 {   global $gd_post;
 
-    $post_images = GeoDir_Media::get_post_images($post_id,$limit);
+    $post_images = GeoDir_Media::get_post_images($post_id,$limit,$revision_id);
 
 //   print_r( $post_images );
     if(!empty($post_images)){
 
         // wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id );
         if($logo){
-            $logo_image = GeoDir_Media::get_attachments_by_type($post_id,'logo',1);
+            $logo_image = GeoDir_Media::get_attachments_by_type($post_id,'logo',1,$revision_id);
             if($logo_image){
                 $post_images = $logo_image + $post_images;
             }

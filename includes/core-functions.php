@@ -522,7 +522,6 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Single_Tabs' );
 		register_widget( 'GeoDir_Widget_Notifications' );
 		register_widget( 'GeoDir_Widget_Add_Listing' );
-		register_widget( 'GeoDir_Widget_Add_Listing' );
 
 
 		// Non Widgets
