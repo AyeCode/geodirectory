@@ -931,12 +931,10 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'posts'          => '',
 			'sticky'         => false,
 			'map_directions' => false,
-//			'marker_cluster' => false,
 		);
 
 		$params = wp_parse_args( $map_args, $defaults );
 
-		//$params['marker_cluster'] = false; // @todo Implement via marker cluster plugin.
 
 		// map type
 		if ( ! in_array( $params['map_type'], array( 'auto', 'directory', 'archive', 'post' ) ) ) {

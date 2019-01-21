@@ -669,7 +669,7 @@ function geodir_cfi_multiselect($html,$cf){
                         option-ajaxchosen="false">
                     <?php
                     } else {
-                        echo '<ul class="gd_multi_choice">';
+                        echo '<ul class="gd_multi_choice gd-ios-scrollbars">';
                     }
 
                     $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);

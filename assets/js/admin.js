@@ -289,7 +289,7 @@ jQuery(document).ready(function() {
                 if( typeof ptype !== "undefined") {
                     jQuery('<tr class="gd-tool-results tool-' + diagnose + '" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"></span><div class="geodir_diagnostic_result-' + diagnose + '"></div></td></tr>').insertAfter(jQuery('#' + diagnose +'_'+ ptype));
                 } else {
-                    jQuery('<tr class="gd-tool-results tool-' + diagnose + '" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"><i class="fa fa-spinner fa-spin"></i></span><div class="geodir_diagnostic_result-' + diagnose + '"></div></td></tr>').insertAfter(jQuery(this).parents('tr'));
+                    jQuery('<tr class="gd-tool-results tool-' + diagnose + '" ><td colspan="3"><span class="gd-tool-results-remove" onclick="jQuery(this).closest(\'tr\').remove();"><i class="fas fa-spinner fa-spin"></i></span><div class="geodir_diagnostic_result-' + diagnose + '"></div></td></tr>').insertAfter(jQuery(this).parents('tr'));
                 }
                 var result_container = jQuery('.geodir_diagnostic_result-' + diagnose);
             }
@@ -340,7 +340,7 @@ function gd_process_diagnose_step(step, ptype, diagnose, result_container) {
                     jQuery('#' + diagnose + '_sub_table').find('.gd-tool-results').remove();
 
                 } else {
-                    jQuery('.tool-' + diagnose + ' .gd-tool-results-remove').html('<i class="fa fa-times"></i>');
+                    jQuery('.tool-' + diagnose + ' .gd-tool-results-remove').html('<i class="fas fa-times"></i>');
                     result_container.html(data);
                 }
                 geodir_enable_fix_buttons(); //enable new fix buttons
@@ -853,7 +853,7 @@ function geodirSelect2TemplateSelection($el, data, main) {
 			}
 		}
 		rEl = '<span class="select2-selection_gd_custom">';
-          rEl += '<i class="fa ' + $option.data('fa-icon') + '"' + style + '></i> ';
+          rEl += '<i class="' + $option.data('fa-icon') + '"' + style + '></i> ';
 		  rEl += data.text;
         rEl += '</span>';
         return jQuery(rEl);

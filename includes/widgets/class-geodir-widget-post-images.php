@@ -222,9 +222,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 * @param $options
 	 */
 	public function output_images($options){
-		global $post,$gd_slider_outputs;
+		global $post,$gd_slider_outputs,$gd_post;
 		ob_start();
-
 
 		// options
 		$defaults = array(
@@ -253,8 +252,9 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$options['limit'] = 1;
 		}
 
+		$revision_id = is_preview() && !empty($gd_post->ID) ? absint($gd_post->ID) : '';
 
-		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo']);
+		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id);
 
 
 		// make it just a image if only one
