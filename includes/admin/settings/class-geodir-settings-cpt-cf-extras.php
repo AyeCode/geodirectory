@@ -77,6 +77,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			// Date picker date format
 			add_filter('geodir_cfa_extra_fields_datepicker',array( $this,'date_format'),10,4);
+			add_filter('geodir_cfa_extra_fields_datepicker',array( $this,'date_range'),10,4);
 
 			// file type input
 			add_filter('geodir_cfa_extra_fields_file',array( $this,'file_types'),10,4);
@@ -417,6 +418,47 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 						}
 						?>
 					</select>
+				</label>
+			</p>
+			<?php
+
+			$output .= ob_get_clean();
+			return $output;
+		}
+
+		/**
+		 * Datepicker date range.
+		 *
+		 * @since 2.0.0.46
+		 *
+		 * @param string $output Datepicker html output.
+		 * @param string $result_str Results string.
+		 * @param array $cf Datepicker custom fields values.
+		 * @param object $field_info Datepicker fields information.
+		 * @return string $output.
+		 */
+		public static function date_range($output,$result_str,$cf,$field_info){
+			ob_start();
+			$extra = array();
+			if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
+				$extra = unserialize($field_info->extra_fields);
+			}
+
+			$value = '';
+			if (isset($field_info->extra_fields->date_range)) {
+				$value = esc_attr($field_info->extra_fields->date_range);
+			}elseif(isset($cf['defaults']['extra_fields']['date_range']) && $cf['defaults']['extra_fields']['date_range']){
+				$value = esc_attr($cf['defaults']['extra_fields']['date_range']);
+			}
+
+			?>
+			<p data-setting="date_range">
+				<label for="date_range" class="dd-setting-name">
+					<?php
+					echo geodir_help_tip( __( 'Set the date range, eg: 1920:2020 or for current dates: c-100:c+5', 'geodirectory' ));
+					_e('Date Range', 'geodirectory');
+					?>
+					<input type="text" name="extra[date_range]" id="date_range" value="<?php echo $value;?>">
 				</label>
 			</p>
 			<?php

@@ -684,7 +684,7 @@ class GeoDir_SEO {
 			$query_object_id = get_queried_object_id();
 		}
 
-		if ( $query_object_id == $page_id && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) ) {
+		if ( $query_object_id == $page_id && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) ) ) {
 			$link = '#';
 		}
 		return $link;

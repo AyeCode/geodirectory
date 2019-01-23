@@ -1063,7 +1063,8 @@ function parse_marker_jason_osm(json, map_canvas_var) {
         }
     } else {
         document.getElementById(map_canvas_var + '_map_nofound').style.display = 'block';
-        var mapcenter = new L.latLng(options.latitude, options.longitude);
+        console.log(options);
+        var mapcenter = new L.latLng(options.default_lat, options.default_lng);
         list_markers(json, map_canvas_var);
         if (options.enable_marker_cluster_no_reposition) {} //dont reposition after load
         else {

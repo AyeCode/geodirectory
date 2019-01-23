@@ -874,6 +874,11 @@ function geodir_cfi_datepicker($html,$cf){
                     dateFormat: "<?php echo $jquery_date_format;?>",
                     altFormat: "yy-mm-dd",
                     altField: "#<?php echo $cf['name'];?>"<?php
+
+                    // check for default value date range
+                    if(!empty($extra_fields['date_range'])){
+                       echo  ',yearRange: "'.esc_attr($extra_fields['date_range']).'"';
+                    }
                     /**
                      * Used to add extra option to datepicker per custom field.
                      *
