@@ -664,9 +664,11 @@ class GeoDir_Media {
 	 *
 	 * @return bool|false|int
 	 */
-	public static function delete_attachment($id, $post_id){
+	public static function delete_attachment($id, $post_id = '', $attachment = ''){
 		global $wpdb;
-		$attachment = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE id = %d AND post_id = %d", $id, $post_id));
+		if(empty($attachment)){
+			$attachment = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE id = %d AND post_id = %d", $id, $post_id));
+		}
 
 		// check we have an attachment
 		if(!$attachment){return false;}
@@ -675,7 +677,22 @@ class GeoDir_Media {
 		if(isset($attachment->file) && $attachment->file){
 			$wp_upload_dir = wp_upload_dir();
 			$file_path = $wp_upload_dir['basedir'] . $attachment->file;
-			@wp_delete_file( $file_path );
+			@wp_delete_file( $file_path ); // delete main image
+
+			if(!empty($attachment->metadata)){
+				$metadata = maybe_unserialize($attachment->metadata);
+				// delete other sizes
+				if(!empty($metadata['sizes'])){
+					$img_url_basename = wp_basename($file_path);
+					foreach($metadata['sizes'] as $size){
+						if(!empty($size['file'])){
+							$file_path = str_replace($img_url_basename, wp_basename($size['file']), $wp_upload_dir['basedir'] . $attachment->file);
+							@wp_delete_file( $file_path ); // delete image size
+						}
+					}
+				}
+			}
+
 		}
 
 		// remove from DB
@@ -807,7 +824,6 @@ class GeoDir_Media {
 	public static function delete_file($files){
 
 		if(!empty($files)){
-			$wp_upload_dir = wp_upload_dir();
 			foreach($files as $file){
 				if(isset($file->file) && $file->file){
 					// check if its a post thumbnail also
@@ -815,8 +831,7 @@ class GeoDir_Media {
 						$post_thumbnail_id = get_post_thumbnail_id( $file->post_id );
 						wp_delete_attachment( $post_thumbnail_id, true);
 					}else{
-						$file_path = $wp_upload_dir['basedir'] . $file->file;
-						@wp_delete_file( $file_path );
+						self::delete_attachment($file->ID,$file->post_id, $file);
 					}
 				}
 			}

@@ -132,7 +132,7 @@ class GeoDir_Admin_Settings {
 	 *
 	 * Handles the display of the main geodirectory settings page in admin.
 	 */
-	public static function output() {
+	public static function output($tab = '') {
 		global $current_section, $current_tab;
 
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
@@ -149,7 +149,13 @@ class GeoDir_Admin_Settings {
 		self::get_settings_pages();
 
 		// Get current tab/section
-		$current_tab     = empty( $_GET['tab'] ) ? 'general' : sanitize_title( $_GET['tab'] );
+		if($tab){
+			$current_tab = sanitize_title( $tab);
+
+		}else{
+			$current_tab = empty( $_GET['tab'] ) ? 'general' : sanitize_title( $_GET['tab'] );
+
+		}
 		$current_section = empty( $_REQUEST['section'] ) ? '' : sanitize_title( $_REQUEST['section'] );
 
 		// Save settings if data has been posted
@@ -168,6 +174,8 @@ class GeoDir_Admin_Settings {
 
 		// Get tabs for the settings page
 		$tabs = apply_filters( 'geodir_settings_tabs_array', array() );
+		
+//		print_r($tabs);exit;
 
 		include( dirname( __FILE__ ) . '/views/html-admin-settings.php' );
 	}

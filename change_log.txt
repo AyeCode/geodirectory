@@ -7,6 +7,10 @@ Force iOS style scroll bars on multiselect form inputs so they are noticeable on
 Some settings for selecting font awesome icons are not showing all icons - FIXED
 Font awesome settings icons updated to 5.6.3 - UPDATED
 Added missing custom notice view file - FIXED
+Date range options added to date custom field - ADDED
+Date of birth added as a predefined field - ADDED
+delete_attachment() not deleting all image sizes - FIXED
+Clear search near not clearing GPS info if on search page - FIXED
 
 v2.0.0.44
 Astra theme archive page layout compatibility - ADDED

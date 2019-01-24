@@ -1052,7 +1052,7 @@ add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
  * Adds a icon to the search near input.
  */
 function geodir_search_near_label() {
-	echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
+	echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');jQuery(\'.sgeo_lat,.sgeo_lon\').val(\'\');">';
 	echo '<i class="fas fa-map-marker-alt gd-show"></i>';
 	echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
 	echo '</span>';

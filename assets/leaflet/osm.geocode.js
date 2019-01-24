@@ -406,9 +406,14 @@ function gd_osm_parse_item(item) {
             formated = item.display_name
         }
     }
-    
-    item.display_address = formated;
-    
+
+    if(address && address.house_number && address.road){
+        item.display_address = address.house_number +' '+address.road;
+    }else{
+        item.display_address = formated;
+    }
+
+
     return item;
 }
 
@@ -454,8 +459,11 @@ function geocodePositionOSM(latLon, address, countrycodes, updateMap, callback) 
             if (type == 'search' && data.length) {
                 data = data[0];
             }
+            console.log(data );
             data = gd_osm_parse_item(data);
-            
+            console.log(data );
+
+
             if (typeof callback === 'function') {
                 callback(data);
             } else {

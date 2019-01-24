@@ -1148,6 +1148,36 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
+			$custom_fields['dob'] = array( // The key value should be unique and not contain any spaces.
+				'field_type'  => 'datepicker',
+				'class'       => 'gd-dob',
+				'icon'        => 'fas fa-birthday-cake',
+				'name'        => __( 'Date of birth', 'geodirectory' ),
+				'description' => __( 'Adds a date input for users to enter their date of birth.', 'geodirectory' ),
+				'defaults'    => array(
+					'data_type'          => 'DATE',
+					'admin_title'        => __( 'Date of birth', 'geodirectory' ),
+					'frontend_title'     => __( 'Date of birth', 'geodirectory' ),
+					'frontend_desc'      => __( 'Enter your date of birth.', 'geodirectory' ),
+					'htmlvar_name'       => 'dob',
+					'is_active'          => true,
+					'for_admin_use'      => false,
+					'default_value'      => '',
+					'show_in'            => '[detail]',
+					'is_required'        => false,
+					'validation_pattern' => '',
+					'validation_msg'     => '',
+					'required_msg'       => '',
+					'field_icon'         => 'fas fa-birthday-cake',
+					'css_class'          => '',
+					'cat_sort'           => true,
+					'cat_filter'         => true,
+					'extra_fields'       => array(
+						'date_range'        => 'c-100:c+0'
+					)
+				)
+			);
+
 			// Featured
 			$custom_fields['featured'] = array(
                'field_type'  => 'checkbox',

@@ -90,11 +90,21 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			//print_r( $_POST );
 			//echo $current_section;
 			$settings = $this->get_settings( $current_section );
-			//print_r($cpt );
-			//exit;
+//			print_r($cpt );
+//			exit;
 			if(is_wp_error( $cpt) ){
 				$cpt->get_error_message(); exit;
 			}
+
+			/**
+			 * Bypass the normal GD post save action.
+			 *
+			 * This is used when we are using the settings screens for a non GD listing CPT.
+			 */
+			if(apply_filters('geodir_post_type_save_bypass', false,$cpt,$current_section)){
+				return;
+			}
+			
 			$post_types = geodir_get_option('post_types', array());
 			if ( empty( $post_types ) ) {
 				$post_types = $cpt;
@@ -127,6 +137,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 			$post_types = geodir_get_option('post_types', array());
 			$post_type_option = ! empty( $post_types[ $post_type ] ) && is_array( $post_types[ $post_type ] ) ? $post_types[ $post_type ] : array();
+
+			$post_type_option = apply_filters('geodir_cpt_settings_cpt_options',$post_type_option,$post_type);
+
 			$post_type_labels = ! empty( $post_type_option['labels'] ) && is_array( $post_type_option['labels'] ) ? $post_type_option['labels'] : array();
 
 			$post_type_values = $post_type_option;
