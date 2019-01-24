@@ -98,10 +98,46 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_action('presscore_body_top','rewind_posts');
 
-		// general
+		/*######################################################
+		BuddyPress
+		######################################################*/
+		if(class_exists('BuddyPress')){
+			add_action('admin_init',array( __CLASS__, 'buddypress_notices' ));
+		}
+
+		/*######################################################
+		GENERAL
+		######################################################*/
 		add_filter('get_post_metadata', array( __CLASS__,'dynamically_add_post_meta'), 10, 4);
 
 
+	}
+
+	/**
+	 * Adds warning notices if BuddyPress is active and has issues.
+	 */
+	public static function buddypress_notices(){
+		if(is_admin()){
+
+			// maybe add search slug warning.
+			$search_page_id = geodir_search_page_id();
+			$search_slug = get_post_field( 'post_name', $search_page_id );
+			if(GeoDir_Admin_Notices::has_notice( 'buddypress_search_slug_error') ){
+				if($search_slug != 'search'){
+					GeoDir_Admin_Notices::remove_notice('buddypress_search_slug_error');
+				}
+			}else{
+				if($search_slug == 'search'){
+					GeoDir_Admin_Notices::add_custom_notice(
+						'buddypress_search_slug_error',
+						sprintf(
+							__( '<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not work until you update the GD search page slug to something different. <a href="%s">Edit page</a>', 'geodirectory' ),
+							get_edit_post_link( $search_page_id )
+						)
+					);
+				}
+			}
+		}
 	}
 
 	/**
