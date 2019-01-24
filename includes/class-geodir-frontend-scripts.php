@@ -535,7 +535,7 @@ class GeoDir_Frontend_Scripts {
 				'has_rtl' => false,
 			),
 			'geodir-rtl' => array(
-				'src'     => geodir_plugin_url() . '/assets/css/rtl-frontend.css',
+				'src'     => geodir_plugin_url() . '/assets/css/frontend.css',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 				'has_rtl' => true,
