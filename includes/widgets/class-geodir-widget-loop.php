@@ -66,7 +66,13 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
         global $wp_query, $gd_layout_class;
 
         ob_start();
-        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || (is_author() && !empty($wp_query->query['gd_favs'])) ){
+        if(
+            geodir_is_post_type_archive()
+           ||  geodir_is_taxonomy()
+           ||  geodir_is_page('search')
+           || (is_author() && !empty($wp_query->query['gd_favs'])
+           || apply_filters('geodir_loop_active',false))
+        ){
             $widget_args = wp_parse_args( $args, array(
                 'layout' => ''
             ) );
@@ -90,6 +96,10 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 }
 
                 geodir_get_template_part('content', 'archive-listing');
+
+                // set loop as done @todo this needs testing
+                global $wp_query;
+                $wp_query->current_post = $wp_query->post_count;
             }
         }else{
             _e("No listings found that match your selection.","geodirectory");

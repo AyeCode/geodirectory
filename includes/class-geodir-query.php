@@ -1278,8 +1278,8 @@ class GeoDir_Query {
      * @since 2.0.0
 	 */
 	public function get_errors() {
-		if ( ! empty( $_GET['gd_error'] ) && ( $error = sanitize_text_field( $_GET['gd_error'] ) ) && ! wc_has_notice( $error, 'error' ) ) {
-			wc_add_notice( $error, 'error' );
+		if ( ! empty( $_GET['gd_error'] ) && ( $error = sanitize_text_field( $_GET['gd_error'] ) ) ) {
+			//@todo add some error notice
 		}
 	}
 

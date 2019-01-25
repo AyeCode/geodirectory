@@ -12,6 +12,7 @@ Date of birth added as a predefined field - ADDED
 delete_attachment() not deleting all image sizes - FIXED
 Clear search near not clearing GPS info if on search page - FIXED
 RTL style file not found - FIXED
+Added warning notice if buddypress is active and hijacking search slug - ADDED
 
 v2.0.0.44
 Astra theme archive page layout compatibility - ADDED
