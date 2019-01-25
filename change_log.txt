@@ -13,6 +13,8 @@ delete_attachment() not deleting all image sizes - FIXED
 Clear search near not clearing GPS info if on search page - FIXED
 RTL style file not found - FIXED
 Added warning notice if buddypress is active and hijacking search slug - ADDED
+File upload input sometimes not getting correct post ID on add listing form - FIXED
+Internal changes to post_badge function to enable it to be used by other addons - CHANGED
 
 v2.0.0.44
 Astra theme archive page layout compatibility - ADDED

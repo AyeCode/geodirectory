@@ -408,7 +408,7 @@ function geodir_notification( $user_notes ) {
 
 			$type = !empty($user_note['type']) ? esc_attr($user_note['type']) : '';
 			$extra_class = !empty($user_note['extra_class']) ? esc_attr($user_note['extra_class']) : '';
-			$icon = !empty($user_note['icon']) ? "<i class='".esc_attr($user_note['extra_icon'])."'></i>" : '';
+			$icon = !empty($user_note['icon']) ? "<i class='".esc_attr($user_note['icon'])."'></i>" : '';
 			$note = !empty($user_note['note']) ? $user_note['note']  : '';
 			$dismissible = !empty($user_note['dismissible']) && $user_note['dismissible'] ? 'gd-is-dismissible'  : '';
 			if(!$icon && $type){
