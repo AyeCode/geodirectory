@@ -344,7 +344,7 @@ class GeoDir_Query {
 				if ( geodir_is_page( 'search' ) && $s && trim( $s ) != '' ) {
 					$keywords = explode( " ", $s );
 
-					if ( is_array( $keywords ) && $klimit = geodir_get_option( 'geodir_search_word_limit' ) ) {
+					if ( is_array( $keywords ) && ( $klimit = (int) geodir_get_option( 'search_word_limit' ) ) ) {
 						foreach ( $keywords as $kkey => $kword ) {
 							if ( geodir_utf8_strlen( $kword ) <= $klimit ) {
 								unset( $keywords[ $kkey ] );
@@ -474,7 +474,7 @@ class GeoDir_Query {
 
 				if ( $s != '' ) {
 					$keywords = explode( " ", $s );
-					if ( is_array( $keywords ) && $klimit = geodir_get_option( 'geodir_search_word_limit' ) ) {
+					if ( is_array( $keywords ) && ( $klimit = (int) geodir_get_option( 'search_word_limit' ) ) ) {
 						foreach ( $keywords as $kkey => $kword ) {
 							if ( geodir_utf8_strlen( $kword ) <= $klimit ) {
 								unset( $keywords[ $kkey ] );
@@ -967,7 +967,7 @@ class GeoDir_Query {
 		global $s;
 		if (is_search() && isset($_REQUEST['geodir_search']) && $s && trim($s) != '') {
 			$keywords = explode(" ", $s);
-			if(is_array($keywords) && $klimit = get_option('geodir_search_word_limit')){
+			if(is_array($keywords) && ($klimit = (int) get_option('search_word_limit'))){
 				foreach($keywords as $kkey=>$kword){
 					if(geodir_utf8_strlen($kword)<=$klimit){
 						unset($keywords[$kkey]);
