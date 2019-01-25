@@ -638,7 +638,8 @@ class GeoDir_Permalinks {
 				$cpt_permalink_arr = apply_filters( 'geodir_post_permalink_structure_params', $cpt_permalink_arr, $cpt, $post_type );
 
 				// add the post single permalinks
-				$regex      = '^' . $post_type['rewrite']['slug'] . '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
+				$regex_part = '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
+				$regex      = '^' . $post_type['rewrite']['slug'] . $regex_part;
 				$redirect   = 'index.php?';
 				$match      = 1;
 				$query_vars = array();
@@ -658,6 +659,9 @@ class GeoDir_Permalinks {
 
 				$after = $gd_permalink_structure == "/%postname%/" ? 'bottom' : 'top';
 				$this->add_rewrite_rule( $regex, $redirect, $after );
+
+				// Translate slug
+				do_action( 'geodir_permalinks_post_rewrite_rule', $cpt, $post_type, $this, $regex_part, $redirect, $after );
 			}
 		}
 	}
