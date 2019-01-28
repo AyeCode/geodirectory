@@ -391,6 +391,9 @@ class GeoDir_Permalinks {
 				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type,'top');
 				$this->add_rewrite_rule("^".$wp_rewrite->author_base."/([^/]+)/$saves_slug/$cpt_slug/page/?([0-9]{1,})/?$",'index.php?author_name=$matches[1]&gd_favs=1&post_type='.$post_type.'&paged=$matches[2]','top');
 
+				// Translate slug
+				do_action( 'geodir_permalinks_author_rewrite_rule', $post_type, $cpt, $this, $cpt_slug, $saves_slug, $saves_slug_arr );
+
 				$saves_slug_arr[$saves_slug] = $saves_slug;
 			}
 		}
