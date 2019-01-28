@@ -708,13 +708,16 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 		'size'      => '',
 		'alignment' => '',
 		'css_class' => '',
+		'onclick'   => '',
+		'icon_class'=> '',
+		'extra_attributes'=> '' // 'data-save-list-id=123 data-other-post-id=321'
 	);
 	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
 	$match_field = $args['key'];
 	$find_post   = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 
-	if ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) {
+	if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
 		$badge = $args['badge'];
 
 		// Check if there is a specific filter for field.
@@ -722,7 +725,7 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 			$output = apply_filters( 'geodir_output_badge_field_key_' . $match_field, $output, $find_post, $args );
 		}
 
-		if ( $match_field !== 'post_date' ) {
+		if ($match_field && $match_field !== 'post_date' ) {
 			$fields = geodir_post_custom_fields( '', 'all', $post_type, 'none' );
 
 			$field = array();
@@ -753,52 +756,50 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 		if ( empty( $output ) ) {
 			$search = $args['search'];
 
-			$match_value = esc_attr( trim( $find_post->{$match_field} ) ); // escape user input
-			$match_found = false;
+			$match_value = isset($find_post->{$match_field}) ? esc_attr( trim( $find_post->{$match_field} ) ) : ''; // escape user input
+			$match_found = $match_field === '' ? true : false;
 
-			if ( $match_field == 'post_date' ) {
-				if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
-					$search = '+' . $search;
+			if(!$match_found ){
+				if ( $match_field == 'post_date' ) {
+					if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
+						$search = '+' . $search;
+					}
+					$until_time = strtotime( get_the_time( 'Y-m-d' ) . ' ' . $search . ' days' );
+					$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
+					if ( $until_time >= $now_time ) {
+						$match_found = true;
+					}
 				}
-				$until_time = strtotime( get_the_time( 'Y-m-d' ) . ' ' . $search . ' days' );
-				$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
-				if ( $until_time >= $now_time ) {
-					$match_found = true;
-				}
-			}
-//			elseif ( $match_field == 'featured' ) {
-//				if ( ! empty( $find_post->{$match_field} ) ) {
-//					$match_found = true;
-//				}
-//			}
-			else {
-				switch ( $args['condition'] ) {
-					case 'is_equal':
-						$match_found = (bool) ( $search != '' && $match_value == $search );
-						break;
-					case 'is_not_equal':
-						$match_found = (bool) ( $search != '' && $match_value == $search );
-						break;
-					case 'is_greater_than':
-						$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value > $search );
-						break;
-					case 'is_less_than':
-						$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value < $search );
-						break;
-					case 'is_empty':
-						$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
-						break;
-					case 'is_not_empty':
-						$match_found = (bool) ( $match_value !== '' && $match_value !== false && $match_value !== '0' && ! is_null( $match_value ) );
-						break;
-					case 'is_contains':
-						$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) !== false );
-						break;
-					case 'is_not_contains':
-						$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) === false );
-						break;
+				else {
+					switch ( $args['condition'] ) {
+						case 'is_equal':
+							$match_found = (bool) ( $search != '' && $match_value == $search );
+							break;
+						case 'is_not_equal':
+							$match_found = (bool) ( $search != '' && $match_value == $search );
+							break;
+						case 'is_greater_than':
+							$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value > $search );
+							break;
+						case 'is_less_than':
+							$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value < $search );
+							break;
+						case 'is_empty':
+							$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
+							break;
+						case 'is_not_empty':
+							$match_found = (bool) ( $match_value !== '' && $match_value !== false && $match_value !== '0' && ! is_null( $match_value ) );
+							break;
+						case 'is_contains':
+							$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) !== false );
+							break;
+						case 'is_not_contains':
+							$match_found = (bool) ( $search != '' && stripos( $match_value, $search ) === false );
+							break;
+					}
 				}
 			}
+
 			if ( $match_found ) {
 
 				// badge text
@@ -840,10 +841,29 @@ function geodir_get_post_badge( $post_id, $args = array() ) {
 					$rel = strpos($args['link'], get_site_url()) !== false ? '' : 'rel="nofollow"';
 				}
 
-				$output = '<div class="gd-badge-meta ' . trim( $class ) . '">';
+				// onclick
+				$onclick = '';
+				if(!empty($args['onclick'])){
+					$onclick = 'onclick="'.esc_attr($args['onclick']).'"';
+				}
+
+				// fontawesom icon
+				$icon = '';
+				if(!empty($args['icon_class'])){
+					$icon = '<i class="'.esc_attr($args['icon_class']).'" ></i>';
+				}
+
+				// data-attributes
+				$extra_attributes = '';
+				if(!empty($args['extra_attributes'])){
+					$extra_attributes = esc_attr( $args['extra_attributes'] );
+					$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
+				}
+				
+				$output = '<div class="gd-badge-meta ' . trim( $class ) . '" '.$onclick.' '.$extra_attributes.'>';
 				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
 				// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
-				$output .= '<div data-id="' . $find_post->ID . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . __( $badge, 'geodirectory' ) . '</div>';
+				$output .= '<div data-id="' . $find_post->ID . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . $icon . __( $badge, 'geodirectory' ) . '</div>';
 				if(!empty($args['link'])){$output .= "</a>";}
 				$output .= '</div>';
 			}

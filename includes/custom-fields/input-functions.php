@@ -1806,8 +1806,8 @@ function  geodir_cfi_files($html,$cf){
         $multiple = true; // allow multiple files upload
 
 
-        $revision_id = isset($post->post_parent) && $post->post_parent ? $post->ID : '';
-        $post_id = isset($post->post_parent) && $post->post_parent ? $post->post_parent : $post->ID;
+        $revision_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->ID : '';
+        $post_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->post_parent : $gd_post->ID;
 
         //$files = GeoDir_Media::get_post_images_edit_string($post_id,$revision_id,);
 
