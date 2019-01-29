@@ -492,5 +492,39 @@ class GeoDir_Post_types {
 		return $value;
 	}
 
+	/**
+	 * Get the post type rewrite slug.
+	 *
+	 * @param string $post_type The post type being checked.
+	 * @param object $post_type_obj   The post type object.
+	 * @return string The post type slug.
+	 */
+	public static function get_rewrite_slug( $post_type, $post_type_obj = NULL ) {
+		if ( empty( $post_type_obj ) || ! is_object( $post_type_obj ) ) {
+			$post_type_obj = geodir_post_type_object( $post_type );
+		}
+
+		$slug = '';
+		if ( empty( $post_type_obj ) ) {
+			return $slug;
+		}
+
+		if ( ! empty( $post_type_obj->rewrite ) ) {
+			if ( is_array( $post_type_obj->rewrite ) && ! empty( $post_type_obj->rewrite['slug'] ) ) {
+				$slug = trim( $post_type_obj->rewrite['slug'], '/' );
+			} else if ( is_object( $post_type_obj->rewrite ) && ! empty( $post_type_obj->rewrite->slug ) ) {
+				$slug = trim( $post_type_obj->rewrite->slug, '/' );
+			}
+		} else {
+			if ( ! empty( $post_type_obj->has_archive ) ) {
+				$slug = $post_type_obj->has_archive;
+			} else if ( ! empty( $post_type_obj->name ) ) {
+				$slug = $post_type_obj->name;
+			}
+		}
+
+		return $slug;
+	}
+
 }
 GeoDir_Post_types::init();

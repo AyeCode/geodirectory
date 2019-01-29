@@ -781,3 +781,16 @@ function geodir_reorder_post_types() {
 
 	geodir_update_option( 'post_types', $save_post_types );
 }
+
+/**
+ * Get the post type rewrite slug.
+ *
+ * @param string $post_type The post type being checked.
+ * @param object $post_type_obj   The post type object.
+ * @return string The post type slug.
+ */
+function geodir_cpt_permalink_rewrite_slug( $post_type, $post_type_obj = NULL ) {
+	$slug = GeoDir_Post_types::get_rewrite_slug( $post_type, $post_type_obj );
+
+	return apply_filters( 'geodir_cpt_permalink_rewrite_slug', $slug, $post_type, $post_type_obj );
+}

@@ -333,7 +333,8 @@ class GeoDir_User {
 		foreach ( $post_types as $key => $postobj ) {
 			if ( array_key_exists( $key, $user_listing ) ) {
 				$name         = $postobj->labels->name;
-				$listing_link = trailingslashit($author_link).$postobj->rewrite->slug."/";
+				$cpt_slug     = geodir_cpt_permalink_rewrite_slug( $key, $postobj );
+				$listing_link = trailingslashit($author_link) . $cpt_slug . "/";
 
 
 				$selected = '';
