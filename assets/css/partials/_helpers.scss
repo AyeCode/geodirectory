@@ -2,6 +2,15 @@
   display: none;
 }
 
+.gd-disabled{
+  background: #b5b5b5;
+  color: #f1f1f1;
+  &:hover{
+    background: #b5b5b5;
+    color: #f1f1f1;
+  }
+}
+
 .gd-align-left{
   float: left;
 }
@@ -14,6 +23,12 @@
   text-align: center;
 }
 
+.gd-pointer{
+  cursor: pointer;
+  i,span,div{
+    cursor: pointer;
+  }
+}
 
 // IOS style scroll bars
 .gd-ios-scrollbars::-webkit-scrollbar
@@ -30,6 +45,7 @@
 .gd-ios-scrollbars::-webkit-scrollbar-thumb
 {
   background: rgba(128, 128, 128, 0.5);
+  border-radius: 2px;
 }
 
 // icon hover swap

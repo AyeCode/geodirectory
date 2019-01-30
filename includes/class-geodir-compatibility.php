@@ -114,6 +114,35 @@ class GeoDir_Compatibility {
 	}
 
 	/**
+	 * Fix details page title, primer theme breaks it.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function for_later_checks(){
+		/*######################################################
+		Boss. (BuddyBoss)
+		######################################################*/
+		if(class_exists('BuddyBoss_Theme')){
+			add_action( 'wp_enqueue_scripts', array(__CLASS__,'buddyboss'), 100 );
+			add_filter( 'body_class', array(__CLASS__,'buddyboss_body_class') );
+		}
+
+		/*######################################################
+		Genesis theme (Corporate Pro)
+		######################################################*/
+		if(function_exists('corporate_body_classes')){
+			add_filter( 'body_class', array(__CLASS__,'genesis_corporate_pro_body_class') );
+		}
+
+		/*######################################################
+		X (theme) :: Not setting our meta info via normal hook
+		######################################################*/
+		if(!is_admin() && function_exists('x_get_view')){
+			add_action('wp_title', array('GeoDir_SEO','set_meta'),9);
+		}
+	}
+
+	/**
 	 * Adds warning notices if BuddyPress is active and has issues.
 	 */
 	public static function buddypress_notices(){
@@ -428,27 +457,7 @@ class GeoDir_Compatibility {
 		return isset($themes[$theme]) ? $themes[$theme] : '';
 	}
 
-	/**
-	 * Fix details page title, primer theme breaks it.
-     *
-     * @since 2.0.0
-	 */
-	public static function for_later_checks(){
-		/*######################################################
-		Boss. (BuddyBoss)
-		######################################################*/
-		if(class_exists('BuddyBoss_Theme')){
-			add_action( 'wp_enqueue_scripts', array(__CLASS__,'buddyboss'), 100 );
-			add_filter( 'body_class', array(__CLASS__,'buddyboss_body_class') );
-		}
 
-		/*######################################################
-		Genesis theme (Corporate Pro)
-		######################################################*/
-		if(function_exists('corporate_body_classes')){
-			add_filter( 'body_class', array(__CLASS__,'genesis_corporate_pro_body_class') );
-		}
-	}
 
 	/**
 	 * Fix some layut issues with genesis coroporate pro theme.

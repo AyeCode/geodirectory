@@ -129,7 +129,7 @@ jQuery(function($) {
  */
 var geodir_changes_made = false;
 window.onbeforeunload = function() {
-    return geodir_changes_made ? geodir_params.txt_lose_changes : null; // @todo make translatable
+    return geodir_changes_made ? geodir_params.txt_lose_changes : null;
 };
 /**
  * Poll the form looking for changes every 10 seconds, if we detect a change then auto save
@@ -158,7 +158,7 @@ function geodir_auto_save_post() {
     jQuery.ajax({
         type: "POST",
         url: geodir_params.ajax_url,
-        data: form_data, // serializes the form's elements.
+        data: form_data,
         success: function(data) {
             if (data.success) {
                 console.log('auto saved');
@@ -183,10 +183,14 @@ function geodir_get_form_data() {
 function geodir_save_post() {
     var form_data = geodir_get_form_data() + '&target=submit';
     console.log(form_data);
+    $button_text = jQuery('#geodir-add-listing-submit button').html();
     jQuery.ajax({
         type: "POST",
         url: geodir_params.ajax_url,
         data: form_data, // serializes the form's elements.
+        beforeSend: function() {
+            jQuery('#geodir-add-listing-submit button').html('<i class="fas fa-circle-notch fa-spin"></i> ' + $button_text).addClass('gd-disabled').prop('disabled', true);
+        },
         success: function(data) {
             if (data.success) {
                 console.log('saved');
@@ -197,12 +201,18 @@ function geodir_save_post() {
                 jQuery(window).scrollTop(jQuery('.gd-notification').offset().top - 100); // scroll to new notification
                 return true;
             } else {
+                jQuery('#geodir-add-listing-submit button').html($button_text).removeClass('gd-disabled').prop('disabled', false);
                 console.log('save failed');
 				if (typeof data == 'object' && data.success === false && data.data) {
 					alert(data.data);
 				}
                 return false;
             }
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            jQuery('#geodir-add-listing-submit button').html($button_text).removeClass('gd-disabled').prop('disabled', false);
+            alert(geodir_params.rating_error_msg);
+            console.log(textStatus);
         }
     });
 }
@@ -263,19 +273,11 @@ function geodir_validate_submit(form) {
     var is_validate = true;
     jQuery(form).find(".required_field:visible").each(function() {
         jQuery(this).find("[field_type]:visible, .chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field, .g-recaptcha-response").each(function() {
-            // if (jQuery(this).is('.chosen_select, .geodir_location_add_listing_chosen')) {
-            //     var chosen_ele = jQuery(this);
-            //     jQuery('#' + jQuery(this).attr('id') + '_chzn').mouseleave(function () {
-            //         geodir_validate_field(chosen_ele);
-            //     });
-            // }
             if (!geodir_validate_field(this)) {
                 is_validate = false;
-                //console.log(false);
             } else {
                 //console.log(true);
             }
-            // console.log(this);
         });
     });
     if (is_validate) {

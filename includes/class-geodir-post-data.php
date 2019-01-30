@@ -906,8 +906,9 @@ class GeoDir_Post_Data {
 			<?php } ?>
 			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both"
 			     style="padding:2px;text-align:center;">
-				<input type="submit" value="<?php echo __( 'Submit Listing', 'geodirectory' ); ?>"
-				       class="geodir_button" <?php echo $submit_button; ?>/>
+				<button type="submit" class="geodir_button">
+					<?php _e( 'Submit Listing', 'geodirectory' ); ?>
+				</button>
 
 				<?php
 				/*
@@ -1547,7 +1548,7 @@ class GeoDir_Post_Data {
 		remove_filter( 'posts_results', array( __CLASS__, 'set_post_to_publish' ), 10 );
 
 		if ( empty( $posts ) ) {
-			return;
+			return $posts;
 		}
 		//$posts[0]->post_status = 'publish';
 

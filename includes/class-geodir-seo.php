@@ -60,9 +60,6 @@ class GeoDir_SEO {
 
 	public static function maybe_run(){
 
-///if(self::yoast_enabled()){echo '###1';}else{echo '###0';}
-		//print_r($geodir_options);
-
 		// bail if we have a SEO plugin installed.
 		if(
 			self::yoast_enabled() // don't run if active and not set to be disabled
@@ -86,7 +83,7 @@ class GeoDir_SEO {
 
 		// setup vars
 		add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
-
+		
 		// meta description
 		if(defined( 'WPSEO_VERSION')){
 			add_filter('wpseo_metadesc', array(__CLASS__,'get_description'), 10, 1);
