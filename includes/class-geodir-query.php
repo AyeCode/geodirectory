@@ -473,11 +473,24 @@ class GeoDir_Query {
 				}
 
 				if ( $s != '' ) {
-					$keywords = explode( " ", $s );
-					if ( is_array( $keywords ) && ( $klimit = (int) geodir_get_option( 'search_word_limit' ) ) ) {
-						foreach ( $keywords as $kkey => $kword ) {
-							if ( geodir_utf8_strlen( $kword ) <= $klimit ) {
-								unset( $keywords[ $kkey ] );
+					$exact_search = false;
+					if ( strpos( $s, '"' ) !== false && ( $exact_s = stripslashes( $s ) ) ) {
+						$exact_keyword = trim( $exact_s, '"' );
+						if (  '"' . $exact_keyword . '"' == $exact_s ) {
+							$exact_search = true;
+							$s = $exact_keyword;
+						}
+					}
+
+					if ( $exact_search ) {
+						$keywords = array( $s );
+					} else {
+						$keywords = explode( " ", $s );
+						if ( is_array( $keywords ) && ( $klimit = (int) geodir_get_option( 'search_word_limit' ) ) ) {
+							foreach ( $keywords as $kkey => $kword ) {
+								if ( geodir_utf8_strlen( $kword ) <= $klimit ) {
+									unset( $keywords[ $kkey ] );
+								}
 							}
 						}
 					}
