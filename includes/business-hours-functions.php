@@ -483,7 +483,8 @@ function geodir_get_business_hours( $value = '' ) {
 	} else {
 		$data = $value;
 	}
-	
+
+	$hours = array();
 	if ( ! empty( $data['hours'] ) || ! empty( $data['offset'] ) ) {
 		$days = geodir_get_weekdays(true);
 		$day_nos = array_flip( geodir_day_short_names() );
@@ -569,7 +570,6 @@ function geodir_get_business_hours( $value = '' ) {
 		$date_format = date_i18n( $date_format, $timestamp );
 		$time_format = date_i18n( $time_format, $timestamp );
 
-		$hours = array();
 		$hours['days'] = $day_slots;
 		$hours['extra'] = array(
 			'has_open' => $has_open,
