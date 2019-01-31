@@ -187,6 +187,14 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			'status'         => 'post_status',
 		);
 
+		// add location terms
+		global $geodirectory;
+		$location_terms = $geodirectory->location->allowed_query_variables();
+		foreach($location_terms as $location_term){
+			$parameter_mappings[$location_term] = $location_term;
+		}
+
+
 		/*
 		 * For each known parameter which is both registered and present in the request,
 		 * set the parameter's value on the query $args.
@@ -290,8 +298,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			}
 		}
 
+		global $wp_query;
+
 		$posts_query  = new WP_Query();
 		$query_result = $posts_query->query( $query_args );
+//echo '###'.$posts_query->request;
+//		print_r($wp_query);exit;
 
 		// Allow access to all password protected posts if the context is edit.
 		if ( 'edit' === $request['context'] ) {

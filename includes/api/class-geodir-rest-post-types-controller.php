@@ -73,7 +73,7 @@ class GeoDir_REST_Post_Types_Controller extends WP_REST_Post_Types_Controller {
 	 */
 	public function get_items( $request ) {
 		$data = array();
-        
+
 		foreach ( get_post_types( array(), 'object' ) as $obj ) {
             if ( ! in_array( $obj->name, $this->gd_post_types ) || empty( $obj->show_in_rest ) || ( 'edit' === $request['context'] && ! current_user_can( $obj->cap->edit_posts ) ) ) {
 				continue;

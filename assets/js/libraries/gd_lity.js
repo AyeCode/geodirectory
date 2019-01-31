@@ -41,7 +41,7 @@
             facebookvideo: facebookvideoHandler,
             iframe: iframeHandler
         },
-        template: '<div class="lity" role="dialog" aria-label="Dialog Window (Press escape to close)" tabindex="-1"><div class="lity-wrap" data-lity-close role="document"><div class="lity-loader" aria-hidden="true">Loading...</div><div class="lity-container"><div class="lity-content"></div><button class="lity-close" type="button" aria-label="Close (Press escape to close)" data-lity-close>&times;</button></div></div></div>'
+        template: '<div class="lity" role="dialog" aria-label="Dialog Window (Press escape to close)" tabindex="-1"><div class="lity-wrap" data-lity-close role="document"><div class="lity-loader" aria-hidden="true"><i class="fas fa-circle-notch fa-spin"></i></div><div class="lity-container"><div class="lity-content"></div><button class="lity-close" type="button" aria-label="Close (Press escape to close)" data-lity-close>&times;</button></div></div></div>'
     };
 
     var _imageRegexp = /(^data:image\/)|(\.(png|jpe?g|gif|svg|webp|bmp|ico|tiff?)(\?\S*)?$)/i;
@@ -255,6 +255,11 @@
 
     function inlineHandler(target, instance) {
         var el, placeholder, hasHideClass;
+
+        // check for loader
+        if(target==='loading'){
+            return 'loading';
+        }
 
         try {
             el = $(target);
@@ -637,35 +642,43 @@
         ;
 
         function ready(result) {
-            content = $(result)
-                .css('max-height', winHeight() + 'px')
-            ;
 
-            element
-                .find('.lity-loader')
-                .each(function() {
-                    var loader = $(this);
+            // check if we are just loading the loader
+            if(result==='loading'){
+                result = ".lity-loader";
+                content = $(result);
+                isReady = true;
+            }else{
+                content = $(result)
+                    .css('max-height', winHeight() + 'px')
+                ;
 
-                    transitionEnd(loader)
-                        .always(function() {
-                            loader.remove();
-                        })
-                    ;
-                })
-            ;
+                element
+                    .find('.lity-loader')
+                    .each(function() {
+                        var loader = $(this);
 
-            element
-                .removeClass('lity-loading')
-                .find('.lity-content')
-                .empty()
-                .append(content)
-            ;
+                        transitionEnd(loader)
+                            .always(function() {
+                                loader.remove();
+                            })
+                        ;
+                    })
+                ;
 
-            isReady = true;
+                element
+                    .removeClass('lity-loading')
+                    .find('.lity-content')
+                    .empty()
+                    .append(content)
+                ;
 
-            content
-                .trigger('lity:ready', [self])
-            ;
+                isReady = true;
+
+                content
+                    .trigger('lity:ready', [self])
+                ;
+            }
         }
     }
 
