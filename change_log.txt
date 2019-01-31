@@ -1,3 +1,6 @@
+v2.0.0.46
+Some custom fields should store is_default = 0 during v1 to v2 conversion - FIXED
+
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED
 Video not rendering from video link - FIXED

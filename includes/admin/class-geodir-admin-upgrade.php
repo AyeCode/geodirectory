@@ -596,6 +596,11 @@ class GeoDir_Admin_Upgrade {
 			$row->is_required = (int) $row->is_required;
 			$row->for_admin_use = (int) $row->for_admin_use;
 
+			// Fix is_default issue
+			if ( in_array( $row->htmlvar_name, array( 'timing', 'contact', 'phone', 'email', 'website', 'twitter', 'facebook', 'video', 'special_offers' ) ) ) {
+				$row->is_default = 0;
+			}
+
 			$wpdb->update( $custom_fields_table, (array) $row, array( 'id' => $row->id ) );
 		}
 
