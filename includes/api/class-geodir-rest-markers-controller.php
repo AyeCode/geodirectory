@@ -380,7 +380,15 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 			$terms_where = array();
 			foreach ( $request['term'] as $term_id ) {
 				if ( ! empty( $term_id ) ) {
-					$terms_where[] = $wpdb->prepare( "FIND_IN_SET( %d, pd.post_category )", array( $term_id ) );
+					$term = get_term( $term_id );
+					if ( is_wp_error( $term ) || empty( $term ) ) {
+						continue;
+					}
+					if ( $term->taxonomy == $request['post_type'] . 'category' ) {
+						$terms_where[] = $wpdb->prepare( "FIND_IN_SET( %d, pd.post_category )", array( $term_id ) );
+					} else if ( $term->taxonomy == $request['post_type'] . '_tags' ) {
+						$terms_where[] = $wpdb->prepare( "FIND_IN_SET( %s, pd.post_tags )", array( $term->name ) );
+					}
 				}
 			}
 			if ( ! empty( $terms_where ) ) {
