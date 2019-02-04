@@ -230,7 +230,7 @@ class GeoDir_Template_Loader {
      * @return string The filtered content.
      */
     public static function setup_archive_page_content(){
-		global $post,$gd_done_archive_loop;
+		global $wp_query, $post,$gd_done_archive_loop;
 
         // if its outside the loop then bail so we don't set the current_post number and cause have_posts() to return false.
         if(!in_the_loop()){
@@ -250,7 +250,9 @@ class GeoDir_Template_Loader {
         remove_filter( 'the_excerpt', array( __CLASS__, 'setup_archive_page_content' ) );
 
         // reset the query count so the correct number of listings are output.
-        rewind_posts();
+        if ( ! empty( $wp_query->posts ) ) {
+			rewind_posts();
+		}
 
         // reset the proper loop content
         global $wp_query,$gd_temp_wp_query;
