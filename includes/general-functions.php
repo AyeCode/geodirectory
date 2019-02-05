@@ -2054,3 +2054,41 @@ function geodir_is_empty_archive(){
 
 	return false;
 }
+
+/**
+ * Localizes the jQuery UI timepicker.
+ *
+ * @since 2.0.0.0
+ *
+ * @global WP_Locale $wp_locale The WordPress date and time locale object.
+ */
+function geodir_localize_jquery_ui_timepicker() {
+	global $wp_locale;
+
+	if ( ! wp_script_is( 'geodir-jquery-ui-timepicker', 'enqueued' ) ) {
+		return;
+	}
+
+	$timepicker_defaults = wp_json_encode( array(
+		'timeOnlyTitle' => __( 'Choose Time', 'geodirectory' ),
+		'timeText' => __( 'Time', 'geodirectory' ),
+		'hourText' => __( 'Hour', 'geodirectory' ),
+		'minuteText' => __( 'Minute', 'geodirectory' ),
+		'secondText' => __( 'Second', 'geodirectory' ),
+		'millisecText' => __( 'Millisecond', 'geodirectory' ),
+		'microsecText' => __( 'Microsecond', 'geodirectory' ),
+		'timezoneText' => __( 'Time Zone', 'geodirectory' ),
+		'currentText' => __( 'Now', 'geodirectory' ),
+		'closeText' => __( 'Done', 'geodirectory' ),
+		'amNames' => array( __( 'AM' ), 'A' ),
+		'pmNames' => array( __( 'PM' ), 'P' ),
+		'isRTL' => (bool) $wp_locale->is_rtl(),
+	) );
+
+	$timepicker_defaults = apply_filters( 'geodir_localize_jquery_ui_timepicker_defaults', $timepicker_defaults );
+	if ( empty( $timepicker_defaults ) ) {
+		return;
+	}
+	
+	wp_add_inline_script( 'geodir-jquery-ui-timepicker', "jQuery(document).ready(function(jQuery){jQuery.timepicker.setDefaults({$timepicker_defaults});});" );
+}

@@ -167,7 +167,11 @@ class GeoDir_Admin_Status {
 
 		// Check .org for updates.
 		if ( is_object( $api ) && ! is_wp_error( $api ) ) {
-			$update_theme_version = $api->version;
+			if ( isset( $api->version ) ) {
+				$update_theme_version = $api->version;
+			} else if ( isset( $api->stable_version ) ) {
+				$update_theme_version = $api->stable_version;
+			}
 
 		// Check GeoDirectory Theme Version.
 		} elseif ( strstr( $theme->{'Author URI'}, 'geodirectory' ) ) {

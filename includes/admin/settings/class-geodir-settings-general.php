@@ -1171,7 +1171,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'sk' => __('SLOVAK', 'geodirectory'),
 			'sl' => __('SLOVENIAN', 'geodirectory'),
 			'sr' => __('SERBIAN', 'geodirectory'),
-			'sv' => __('	SWEDISH', 'geodirectory'),
+			'sv' => __('SWEDISH', 'geodirectory'),
 			'tl' => __('TAGALOG', 'geodirectory'),
 			'ta' => __('TAMIL', 'geodirectory'),
 			'te' => __('TELUGU', 'geodirectory'),
