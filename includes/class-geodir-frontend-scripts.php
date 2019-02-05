@@ -50,6 +50,8 @@ class GeoDir_Frontend_Scripts {
 
 		// fix script conflicts, eg flexslider being added twice
 		add_action( 'wp_enqueue_scripts', array( __CLASS__, 'fix_script_conflicts'), 100 );
+		// Localize jQuery Timepicker
+		add_action( 'wp_enqueue_scripts', 'geodir_localize_jquery_ui_timepicker', 1001 );
 
 		// allow async tags
 		add_filter('clean_url', array( __CLASS__, 'js_async'), 11, 1);
