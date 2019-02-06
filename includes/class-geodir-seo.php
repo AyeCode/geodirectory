@@ -394,6 +394,7 @@ class GeoDir_SEO {
 			if ( isset( $_REQUEST['s'] ) ) {
 				$search_term = esc_attr( $_REQUEST['s'] );
 				$search_term = str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
+				$search_term = trim( stripslashes( $search_term ) );
 			}
 			$string = str_replace( "%%search_term%%", $search_term, $string );
 		}
