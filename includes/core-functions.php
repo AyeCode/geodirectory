@@ -353,7 +353,9 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'autosave'                                     => apply_filters('geodir_autosave',10000),// 10000 = 10 seconds, set to 0 to disable
 		'search_users_nonce'                           => wp_create_nonce( 'search-users' ),
 		'google_api_key'                               => GeoDir_Maps::google_api_key(),
-		'mapLanguage'                                  => GeoDir_Maps::map_language()
+		'mapLanguage'                                  => GeoDir_Maps::map_language(),
+		'confirm_set_location'                         => addslashes( __( 'Would you like to manually set your location?', 'geodirectory' ) ),
+		'confirm_lbl_error'                            => addslashes( __( 'ERROR:', 'geodirectory' ) )
 	);
 
 	/**

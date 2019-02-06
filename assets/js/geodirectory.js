@@ -1383,7 +1383,7 @@ function gd_user_position_fail(err) {
  * @param $msg
  */
 function gd_manually_set_user_position($msg){
-    if(window.confirm("ERROR: "+$msg+ "\nWould you like to manually set your location?")){
+    if(window.confirm(geodir_params.confirm_lbl_error + " "+$msg+ "\n" + geodir_params.confirm_set_location)){
 
         var $prefix = "geodir_manual_location_";
 

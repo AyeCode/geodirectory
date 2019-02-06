@@ -1224,7 +1224,7 @@ function gdMyGeoPositionError(err) {
 }
 
 function gd_manually_set_user_position_old($msg,$successFunction){
-    if(window.confirm("ERROR: "+$msg+ "\nWould you like to manually set your location?")){
+    if(window.confirm(geodir_params.confirm_lbl_error + " "+$msg+ "\n" + geodir_params.confirm_set_location)){
 
         jQuery.post(geodir_params.ajax_url, {
             action: 'geodir_manual_map',
