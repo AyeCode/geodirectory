@@ -799,7 +799,7 @@ function geodirFindRoute(map_canvas) {
             
             L.Routing.errorControl(control).addTo(jQuery.goMap.map);
             
-            jQuery('.leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="detail_page_map_canvas_mylocation" class="gd-map-mylocation"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
+            jQuery('#' + map_canvas + ' .leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="' + map_canvas + '_mylocation" class="gd-map-mylocation"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
         } catch(e) {
             console.log(e.message);
         }
