@@ -459,6 +459,11 @@ class GeoDir_Media {
 			return new WP_Error( 'image_insert', __( "No image_id, post_id or image url, image update failed.", "geodirectory" ) );
 		}
 
+		// check the post has not already been deleted
+		if(get_post_status ( $post_id )===false){
+			return '';
+		}
+
 		//echo $file_id.'zzz'.$order.'zzz'.$post_id.'zzz'.$file_url;
 		// if menu order is 0 then its featured and we need to set the post thumbnail
 		if($order === 0 && $field=='post_images' && !wp_is_post_revision( absint($post_id) )){
@@ -559,7 +564,7 @@ class GeoDir_Media {
 				return false;
 			}
 
-			// Set the file name tot he title if it exists
+			// Set the file name to the title if it exists
 			$_file_name = !empty($file_name) ? $file_name.".".$file_type['ext'] : basename( $url );
 
 			// Array based on $_FILE as seen in PHP file uploads

@@ -85,6 +85,9 @@ class GeoDir_Comments {
 
 		$wpdb->update( $detail_table, array( 'overall_rating' => $post_newrating, 'rating_count' => $post_newrating_count ), array( 'post_id' => $post_id ), array( '%f', '%d' ), array( '%d' ) );
 
+		// delete post rating cache
+		wp_cache_delete( "gd_post_review_count_total_".$post_id);
+
 		/**
 		 * Called after Updating post overall rating and rating count.
 		 *
@@ -150,6 +153,9 @@ class GeoDir_Comments {
 				array( $comment_id )
 			)
 		);
+
+		// clear cache
+		wp_cache_delete( "gd_comment_rating_".$comment_id );
 	}
 
 	/**
@@ -191,6 +197,9 @@ class GeoDir_Comments {
 						$comment_id
 					) 
 				);
+
+				// clear cache
+				wp_cache_delete( "gd_comment_rating_".$comment_id );
 
 				$wpdb->query( $sqlqry );
 
@@ -241,6 +250,9 @@ class GeoDir_Comments {
 						$comment_id
 					) 
 				);
+
+				// clear cache
+				wp_cache_delete( "gd_comment_rating_".$comment_id );
 
 				$wpdb->query( $sqlqry );
 

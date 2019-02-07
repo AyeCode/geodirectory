@@ -158,6 +158,10 @@ body { // wrapping ina  body tag makes rules more specific
 		// grid view
 		&.geodir-gridview {
 
+			.geodir-fav-text, .gd-list-rating-text{
+				display: none;
+			}
+
 			& > li {
 				width: auto;
 				margin-bottom: 15px;
@@ -206,6 +210,12 @@ body { // wrapping ina  body tag makes rules more specific
 			}
 
 			&.gridview_onefifth {
+
+				// hide hours one onefith
+				.gd-bh-today-range{
+					display: none;
+				}
+
 				& > li {
 					width: 18%;
 					margin-left: 2.5%;

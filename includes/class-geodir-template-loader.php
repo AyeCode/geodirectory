@@ -122,6 +122,10 @@ class GeoDir_Template_Loader {
                 }
             }
         } elseif(geodir_is_page( 'add-listing' )){
+
+            // the add listing page should never be cached
+            geodir_nocache_headers();
+
             $page_id = geodir_add_listing_page_id();
             if($page_id &&  $template = get_page_template_slug( $page_id )){
                 // make sure the template exists before loading it, it might be from a old theme

@@ -37,9 +37,14 @@ class GeoDir_Location {
 		if(empty($data)){
 			//$this->set_current();
 			add_action( 'wp', array( $this, 'set_current' ), 0 );
+			add_action( 'geodir_settings_save_general', array( $this, 'clear_cache' ));
 
 		}
 
+	}
+
+	public function clear_cache(){
+		wp_cache_delete("geodir_get_default_location");
 	}
 
 	public function set_current(){
