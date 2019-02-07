@@ -3,6 +3,7 @@ Some custom fields should store is_default = 0 during v1 to v2 conversion - FIXE
 Map markers not loading on tags page when show all posts enabled - FIXED
 _x() does not translates string - FIXED
 ​Unable to translate some strings - FIXED
+​Review star not showing in OSM map popup - FIXED​
 
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED
