@@ -593,7 +593,7 @@ function geodir_cfi_select($html,$cf){
                     } else {
                         $option_label = isset($option_row['label']) ? $option_row['label'] : '';
                         $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                        $selected = $option_value == stripslashes($value) ? 'selected="selected"' : '';
+                        $selected = selected($option_value,stripslashes($value), false);
 
                         $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
                     }
@@ -660,7 +660,7 @@ function geodir_cfi_multiselect($html,$cf){
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
                 <?php if ($cf['is_required']) echo '<span>*</span>'; ?>
             </label>
-            <input type="hidden" name="gd_field_<?php echo $cf['name']; ?>" value="1"/>
+            <input type="hidden" name="<?php echo $cf['name']; ?>" value=""/>
             <?php if ($multi_display == 'select') { ?>
             <div class="geodir_multiselect_list">
                 <select field_type="<?php echo $cf['type']; ?>" name="<?php echo $cf['name']; ?>[]" id="<?php echo $cf['name']; ?>"

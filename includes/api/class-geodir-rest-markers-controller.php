@@ -199,7 +199,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		
 		if ( ! empty( $request['post'] ) && is_array( $request['post'] ) && count( $request['post'] ) == 1 ) {
 			$where = $wpdb->prepare( "pd.post_id IS NOT NULL AND ( p.post_type = %s OR p.post_type = %s )", array( $request['post_type'],'revision' ) );
-			$where .= " AND p.post_status IN('publish', 'pending', 'draft', 'gd-closed','inherit')";
+			$where .= " AND p.post_status IN('publish', 'pending', 'draft', 'gd-closed','inherit','auto-draft')";
 		} else {
 			$where = $wpdb->prepare( "pd.post_id IS NOT NULL AND p.post_type = %s", array( $request['post_type'] ) );
 			$where .= " AND p.post_status = 'publish'";
@@ -227,7 +227,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		
 		$sql = "SELECT {$fields} FROM {$wpdb->posts} AS p {$join} {$where} {$group_by} {$order_by} {$limit}";
 
-		//echo $sql;
+//		echo $sql;
 		
 		$sql = apply_filters( 'geodir_rest_markers_query', $sql, $request );
 		

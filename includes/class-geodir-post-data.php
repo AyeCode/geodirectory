@@ -500,6 +500,10 @@ class GeoDir_Post_Data {
 					array( 'post_id' => $post_id ),
 					$format
 				);
+				
+				// clear the post cache 
+				wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
+				
 			} else { // insert
 				$wpdb->insert(
 					$table,

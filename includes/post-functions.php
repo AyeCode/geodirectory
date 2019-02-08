@@ -128,6 +128,8 @@ function geodir_save_post_meta( $post_id, $postmeta = '', $meta_value = '' ) {
 			);
 		}
 
+		// clear the post cache
+		wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
 
 	} else {
 		return false;
@@ -155,6 +157,9 @@ function geodir_delete_post_meta( $post_id, $postmeta ) {
 	$post_type = get_post_type( $post_id );
 
 	$table = $plugin_prefix . $post_type . '_detail';
+
+	// clear the post cache
+	wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
 
 	if ( is_array( $postmeta ) && ! empty( $postmeta ) && $post_id ) {
 		$post_meta_set_query = '';
@@ -255,7 +260,7 @@ function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
 		//if ( $wpdb->get_var( "SHOW COLUMNS FROM " . $table . " WHERE field = '" . $meta_key . "'" ) != '' ) {
 		$meta_value = $wpdb->get_var( $wpdb->prepare( "SELECT `" . $meta_key . "` from " . $table . " where post_id = %d", array( $post_id ) ) );
 
-		if ( $meta_value && $meta_value !== '' ) {
+		if ( ($meta_value || $meta_value==='0') && $meta_value !== '' ) {
 			$meta_value = maybe_serialize( $meta_value );
 		}else{
 			$meta_value = false;
@@ -388,8 +393,7 @@ function geodir_favourite_html( $user_id, $post_id ) {
 			class="geodir-removetofav-icon" href="javascript:void(0);"
 			onclick="javascript:gd_fav_save(<?php echo $post_id; ?>);"
 			title="<?php echo $remove_favourite_text; ?>"><i
-				class="<?php echo $unfavourite_icon; ?>"></i> <?php echo $unfavourite_text; ?>
-        </a>   </span><?php
+				class="<?php echo $unfavourite_icon; ?>"></i> <span class="geodir-fav-text"><?php echo $unfavourite_text; ?></span></a>   </span><?php
 
 	} else {
 
@@ -403,7 +407,7 @@ function geodir_favourite_html( $user_id, $post_id ) {
 		                                                                             href="javascript:void(0);"
 		                                                                             onclick="<?php echo $script_text; ?>"
 		                                                                             title="<?php echo $add_favourite_text; ?>"><i
-				class="<?php echo $favourite_icon; ?>"></i> <?php echo $favourite_text; ?></a></span>
+				class="<?php echo $favourite_icon; ?>"></i> <span class="geodir-fav-text"><?php echo $favourite_text; ?></span></a></span>
 	<?php }
 }
 

@@ -2,8 +2,16 @@ v2.0.0.46
 Some custom fields should store is_default = 0 during v1 to v2 conversion - FIXED
 Map markers not loading on tags page when show all posts enabled - FIXED
 _x() does not translates string - FIXED
+​Unable to translate business hours timepicker texts - FIXED​
 ​Unable to translate some strings - FIXED
 ​Review star not showing in OSM map popup - FIXED​
+Post preview not showing map correctly if status is `auto-draft` - FIXED
+Added no cache headers to the add listing page - ADDED
+Added check to the save images function that the post exists first - ADDED
+Comment cache not being cleared on add/edit/update - FIXED
+Selects and radio inputs not showing as selected for zero (0) values - FIXED
+Multi-select not fully deselecting for empty values - FIXED
+Set some pages to use the page template metadata for better theme compatibility - CHANGED
 
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED
