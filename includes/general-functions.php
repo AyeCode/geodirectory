@@ -252,12 +252,16 @@ function geodir_get_weeks() {
  * @return bool If valid returns true. Otherwise false.
  */
 function geodir_is_page( $gdpage = '' ) {
-
 	global $wp_query, $post, $wp;
+
+	if ( empty( $wp_query ) ) {
+		return false;
+	}
+	
 	//if(!is_admin()):
 	$page_id = '';// get_query_var( 'page_id' ) ? get_query_var( 'page_id' ) : '';
 
-	if ( empty( $page_id ) && $wp_query->is_page && $wp_query->queried_object_id ) {
+	if ( empty( $page_id ) && isset( $wp_query->is_page ) && $wp_query->is_page && isset( $wp_query->queried_object_id ) && $wp_query->queried_object_id ) {
 		$page_id = $wp_query->queried_object_id;
 	}
 

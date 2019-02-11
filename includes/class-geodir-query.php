@@ -166,9 +166,9 @@ class GeoDir_Query {
 			add_filter( 'posts_fields', array( $this, 'posts_fields' ),10,2 );
 			add_filter( 'posts_join', array( $this, 'posts_join' ),10,2 );
 			add_filter( 'posts_where', array( $this, 'posts_where' ),10,2);
-			add_filter( 'posts_where', array( $this, 'author_where' ) );
+			add_filter( 'posts_where', array( $this, 'author_where' ),10,2 );
 			//add_filter( 'posts_where', array( $this, 'posts_having' ), 10000, 2 ); // make sure its the last WHERE param
-			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ) );
+			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ),10,2 );
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ),10,2 );
 
 		}elseif(geodir_is_page('search')){

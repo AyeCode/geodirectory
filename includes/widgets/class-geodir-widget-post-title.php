@@ -94,7 +94,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 
 		?>
 		<<?php echo esc_attr($args['tag']);?> class="geodir-entry-title">
-			<a href="<?php the_permalink(); ?>" title="<?php echo wp_sprintf( 'View: %s', stripslashes( the_title_attribute( array( 'echo' => false ) ) ) ); ?>"><?php echo stripslashes( get_the_title() ); ?></a>
+			<a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), stripslashes( the_title_attribute( array( 'echo' => false ) ) ) ) ); ?>"><?php echo stripslashes( get_the_title() ); ?></a>
 		</<?php echo esc_attr($args['tag']);?>>
 		<?php
 
