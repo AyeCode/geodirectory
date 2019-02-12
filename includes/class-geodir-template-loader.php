@@ -246,6 +246,11 @@ class GeoDir_Template_Loader {
             }
         }
 
+		/* Fix SEOPress conflict */
+		if ( ! ( ! empty( $post ) && ! empty( $post->post_type ) && $post->post_type == 'page' ) ) {
+			return;
+		}
+
 		// Backpup post.
 		$gd_backup_post = $post;
 
