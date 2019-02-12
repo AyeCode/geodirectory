@@ -12,6 +12,7 @@ Comment cache not being cleared on add/edit/update - FIXED
 Selects and radio inputs not showing as selected for zero (0) values - FIXED
 Multi-select not fully deselecting for empty values - FIXED
 Set some pages to use the page template metadata for better theme compatibility - CHANGED
+Search conflicts with SEOPress plugin - FIXED
 
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED
