@@ -180,6 +180,9 @@
     transition: all .25s ease-in-out;
     -moz-transition: all .25s ease-in-out;
     -webkit-transition: all .25s ease-in-out;
+    @media(max-width:1060px) {
+      opacity: 1;
+    }
     span {
       font-size: 14px;
       display: block;
@@ -199,6 +202,9 @@
     transition: all .25s ease-in-out;
     -moz-transition: all .25s ease-in-out;
     -webkit-transition: all .25s ease-in-out;
+    @media(max-width:1060px) {
+      opacity: 1;
+    }
     span {
       background: #cccccc94;
       border-radius: 20px;
@@ -213,7 +219,7 @@
     }
   }
 
-  &:hover{
+  &:hover {
     .lity-caption,.lity-nav {
       opacity: 1;
       transition: all .25s ease-in-out;

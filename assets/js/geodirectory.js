@@ -833,14 +833,14 @@ function gd_fav_save(post_id) {
                         .removeClass('geodir-removetofav-icon')
                         .addClass('geodir-addtofav-icon')
                         .attr("title", geodir_params.text_add_fav)
-                        .html('<i class="'+geodir_params.icon_fav+'"></i>'+' '+geodir_params.text_fav);
+                        .html('<i class="'+geodir_params.icon_fav+'"></i> <span class="geodir-fav-text">'+' '+geodir_params.text_fav + '</span>');
 
                 }else{
                     jQuery('.favorite_property_' + post_id+' a')
                         .removeClass('geodir-addtofav-icon')
                         .addClass('geodir-removetofav-icon')
                         .attr("title", geodir_params.text_remove_fav)
-                        .html('<i class="'+geodir_params.icon_unfav+'"></i>'+' '+geodir_params.text_unfav);
+                        .html('<i class="'+geodir_params.icon_unfav+'"></i> <span class="geodir-fav-text">'+' '+geodir_params.text_unfav + '</span>');
 
                 }
             }else{

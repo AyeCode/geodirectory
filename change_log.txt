@@ -13,6 +13,9 @@ Selects and radio inputs not showing as selected for zero (0) values - FIXED
 Multi-select not fully deselecting for empty values - FIXED
 Set some pages to use the page template metadata for better theme compatibility - CHANGED
 Search conflicts with SEOPress plugin - FIXED
+Image lightbox nav and caption should always be visible on mobile devices - FIXED
+Disabling Yoast in GD settings can disable description on homepage - FIXED
+Changing layout of [gd_loop] is not reflected instantly to the admin - FIXED
 
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED
