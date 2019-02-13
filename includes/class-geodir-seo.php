@@ -54,7 +54,8 @@ class GeoDir_SEO {
 
 	public static function yoast_enabled(){
 		global $geodir_options;
-		return defined( 'WPSEO_VERSION')  && ( !isset($geodir_options['wpseo_disable']) || ( isset($geodir_options['wpseo_disable']) && $geodir_options['wpseo_disable']=='0' ) )   ? true : false;
+		return defined( 'WPSEO_VERSION')
+		       && ( !isset($geodir_options['wpseo_disable'] ) || ( isset($geodir_options['wpseo_disable']) && $geodir_options['wpseo_disable']=='0' ) )   ? true : false;
 		//return ( defined( 'WPSEO_VERSION')  )  ? true : false;
 	}
 
@@ -69,6 +70,9 @@ class GeoDir_SEO {
 			return;
 		}
 
+//		if(self::yoast_enabled()){echo 'enabled';}else{echo 'disabled';}
+
+//echo '###';exit;
 		// set a global so we don't change the menu items titles
 		add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
 		add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
@@ -196,7 +200,13 @@ class GeoDir_SEO {
 	 * @since 2.0.0
 	 */
 	public static function get_description($description=''){
-		$description = self::$meta_description;
+		$meta_description = self::$meta_description;
+
+		if(!empty($meta_description )){
+			$description = $meta_description;
+		}
+
+		// escape
 		if(!empty($description)){
 			$description = esc_attr($description);
 		}
@@ -207,7 +217,7 @@ class GeoDir_SEO {
 		 *
 		 * @param string $description Meta description.
 		 */
-		return apply_filters( 'geodir_seo_meta_description', $description);
+		return apply_filters( 'geodir_seo_meta_description', $description,$meta_description);
 	}
 
 	/**
@@ -278,6 +288,7 @@ class GeoDir_SEO {
 			self::$meta_title = !empty($gd_settings['seo_add_listing_meta_title']) ? $gd_settings['seo_add_listing_meta_title'] : GeoDir_Defaults::seo_add_listing_meta_title();
 			self::$meta_description = !empty($gd_settings['seo_add_listing_meta_description']) ? $gd_settings['seo_add_listing_meta_description'] : GeoDir_Defaults::seo_add_listing_meta_description();
 		}
+
 
 		if(self::$title){self::$title = self::replace_variable(self::$title,self::$gd_page);}
 		if(self::$meta_title){self::$meta_title = self::replace_variable(self::$meta_title,self::$gd_page);}

@@ -25,6 +25,22 @@ class GeoDir_Template_Loader {
         // disable GD page templates on frontend
         add_action( "wp", array(__CLASS__,'disable_page_templates_frontend') );
 
+
+        add_action( 'post_updated', array(__CLASS__,'set_clear_list_view_storage'), 10, 3 );
+
+    }
+
+    /**
+     * If saving a page that contains the [gd_loop] shortcode then we set a flag to blank the localStorage for the admin so they see the change instantly.
+     * 
+     * @param $post_ID
+     * @param $post_after
+     * @param $post_before
+     */
+    public static function set_clear_list_view_storage($post_ID, $post_after, $post_before){
+        if($post_after->post_type=='page' && has_shortcode( $post_after->post_content, 'gd_loop' ) ){
+            geodir_update_option('clear_list_view_storage',true);
+        }
     }
 
 
