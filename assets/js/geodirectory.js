@@ -723,12 +723,47 @@ function geodir_load_search_form(stype, el) {
             geodir_search_wait(1);
         },
         success: function(data, textStatus, xhr) {
-            // replace whole form
-            jQuery(el).closest('.geodir-search-container').html(data);
+			var $container = jQuery(el).closest('.geodir-search-container');
+			if (jQuery('select.search_by_post', $container).length && jQuery('.gd-search-input-wrapper.gd-search-field-near', $container).length) {
+				var before = jQuery('.gd-search-input-wrapper.gd-search-field-near', $container).is(':visible');
+				var nearH = jQuery('.gd-search-input-wrapper.gd-search-field-near').prop('outerHTML');
+
+				if (jQuery('input[name="sgeo_lat"]', $container).length && jQuery('input[name="sgeo_lon"]', $container).length) {
+					var latH = jQuery('input[name="sgeo_lat"]', $container).prop('outerHTML');
+					var lngH = jQuery('input[name="sgeo_lon"]', $container).prop('outerHTML');
+				}
+				if (jQuery('input.geodir-location-search-type', $container).length) {
+					var typeH = jQuery('input.geodir-location-search-type', $container).prop('outerHTML');
+				}
+			}
+
+			// replace whole form
+			$container.html(data);
+
+			if (typeof nearH != 'undefined') {
+				var after = jQuery('.gd-search-input-wrapper.gd-search-field-near', $container).is(':visible');
+				jQuery('.gd-search-input-wrapper.gd-search-field-near', $container).replaceWith(nearH);
+				var $near = jQuery('.gd-search-input-wrapper.gd-search-field-near', $container);
+				if (before && !after) {
+					$near.hide();
+					jQuery('input[name="snear"]', $near).hide();
+				} else if (!before && after) {
+					$near.show();
+					jQuery('input[name="snear"]', $near).show();
+				}
+
+				if (typeof latH != 'undefined' && typeof lngH != 'undefined') {
+					jQuery('input[name="sgeo_lat"]', $container).replaceWith(latH);
+					jQuery('input[name="sgeo_lon"]', $container).replaceWith(lngH);
+				}
+				if (typeof typeH != 'undefined') {
+					jQuery('input.geodir-location-search-type', $container).replaceWith(typeH);
+				}
+			}
 
             geodir_setup_search_form();
             // trigger a custom event wen setting up the search form so we can hook to it from addons
-            jQuery("body").trigger("geodir_setup_search_form");
+            jQuery("body").trigger("geodir_setup_search_form", $container.find('fome[name="geodir-listing-search"]'));
 
             geodir_search_wait(0);
         },
@@ -1203,11 +1238,8 @@ function gd_init_rating_input(){
      * @info This is shared in both post.js and admin.js any changes shoudl be made to both.
      */
     jQuery(".gd-rating-input").each(function () {
-
         $total = jQuery(this).find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
         $parent = this;
-
-        console.log($total);
 
         // set the current star value and text
         $value = jQuery(this).closest('.gd-rating-input').find('input').val();

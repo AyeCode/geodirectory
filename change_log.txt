@@ -16,6 +16,7 @@ Search conflicts with SEOPress plugin - FIXED
 Image lightbox nav and caption should always be visible on mobile devices - FIXED
 Disabling Yoast in GD settings can disable description on homepage - FIXED
 Changing layout of [gd_loop] is not reflected instantly to the admin - FIXED
+Switching CPT in search form looses searched location - FIXED
 
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED
