@@ -17,6 +17,7 @@ Image lightbox nav and caption should always be visible on mobile devices - FIXE
 Disabling Yoast in GD settings can disable description on homepage - FIXED
 Changing layout of [gd_loop] is not reflected instantly to the admin - FIXED
 Switching CPT in search form looses searched location - FIXED
+Google Map bubble not working after Google round infoWindow update - FIXED
 
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED

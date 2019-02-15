@@ -185,6 +185,7 @@ final class GeoDirectory {
          */
         $locale = apply_filters( 'plugin_locale', $locale, 'geodirectory' );
 
+		unload_textdomain( 'geodirectory' );
         load_textdomain( 'geodirectory', WP_LANG_DIR . '/' . 'geodirectory' . '/' . 'geodirectory' . '-' . $locale . '.mo' );
         load_plugin_textdomain( 'geodirectory', FALSE, basename( dirname( GEODIRECTORY_PLUGIN_FILE ) ) . '/languages/' );
     }
