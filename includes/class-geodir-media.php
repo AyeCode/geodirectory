@@ -374,6 +374,10 @@ class GeoDir_Media {
 			return new WP_Error( 'file_insert', __( "Failed to insert file info to DB.", "geodirectory" ) );
 		}
 
+		// Clear the post attachment cache
+		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::' . $other_id;
+		wp_cache_delete( $cache_key, 'gd_attachments_by_type' );
+
 		$file_info['ID'] = $wpdb->insert_id;
 
 		// return the file info
@@ -528,6 +532,9 @@ class GeoDir_Media {
 			return new WP_Error( 'image_insert', __( "Failed to update image info to DB.", "geodirectory" ) );
 		}
 
+		// Clear the post attachment cache
+		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $field . ':::' . $other_id;
+		wp_cache_delete( $cache_key, 'gd_attachments_by_type' );
 
 		// return the file path
 		return $wpdb->get_row($wpdb->prepare("SELECT * FROM ".GEODIR_ATTACHMENT_TABLE." WHERE ID = %d",$file_id),ARRAY_A);
@@ -719,7 +726,8 @@ class GeoDir_Media {
 		global $wpdb;
 
 		// check for cache
-		$cache = wp_cache_get( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id.$other_id, 'gd_attachments_by_type' );
+		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $type . ':' . $limit . ':' . $revision_id . ':' . $other_id;
+		$cache = wp_cache_get( $cache_key, 'gd_attachments_by_type' );
 		if($cache !== false){
 			return $cache;
 		}
@@ -745,13 +753,13 @@ class GeoDir_Media {
 			if($limit){$sql_args[] = $limit;}
 			$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id IN (%d,%d) $other_id_sql ORDER BY menu_order $limit_sql",$sql_args));
 			// set cache
-			wp_cache_set( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id.$other_id, $results, 'gd_attachments_by_type' );
+			wp_cache_set( $cache_key, $results, 'gd_attachments_by_type' );
 			return $results;
 		}else{
 			if($limit){$sql_args[] = $limit;}
 			$results = $wpdb->get_results($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type = %s AND post_id = %d $other_id_sql ORDER BY menu_order $limit_sql",$sql_args));
 			// set cache
-			wp_cache_set( "gd_attachments_by_type".$post_id.$type.$limit.$revision_id.$other_id, $results, 'gd_attachments_by_type' );
+			wp_cache_set( $cache_key, $results, 'gd_attachments_by_type' );
 			return $results;
 		}
 	}
