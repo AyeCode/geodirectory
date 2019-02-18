@@ -131,3 +131,36 @@
 		}
 	}
 }
+
+.main_map_wrapper {
+	.gm-style {
+		.gm-style-iw {
+			min-height: 249px !important;
+		}
+		.gm-style-iw-d {
+			max-width: 232px !important;
+		}
+		.geodir-bubble_desc {
+			width: inherit !important;
+			position: relative;
+		}
+		.geodir-bubble_image {
+			min-height: 37px !important;
+		}
+		.geodir-bubble-meta-side {
+			.geodir_post_meta {
+				padding-left: 0 !important;
+				padding-right: 0 !important;
+			}
+		}
+		.geodir-addtofav-icon {
+			text-align: center;
+			>i {
+				margin-right: 0;
+			}
+			>svg {
+				margin-right: 0;
+			}
+		}
+	}
+}

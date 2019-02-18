@@ -188,17 +188,17 @@ jQuery(document).ready(function($) {
                     totalImg++;
                     jQuery("#" + imgId + "totImg").val(totalImg);
                     // multiple
-                    var v1 = $.trim($("#" + imgId).val());
+                    var v1 = $.trim($("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val());
                     if (v1) {
                         v1 = v1 + "," + response;
                     } else {
                         v1 = response;
                     }
-                    $("#" + imgId).val(v1);
+                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(v1);
                     //console.log(v1);
                 } else {
                     // single
-                    $("#" + imgId).val(response + "");
+                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(response + "");
                     //console.log(response);
                 }
                 // show thumbs
@@ -224,7 +224,7 @@ function plu_show_thumbs(imgId) {
     var thumbsC = $("#" + imgId + "plupload-thumbs");
     thumbsC.html("");
     // get urls
-    var imagesS = $("#" + imgId).val();
+    var imagesS = $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val();
 
     var txtRemove = 'Remove';
     if (typeof geodir_params.action_remove != 'undefined' && geodir_params.action_remove != '') {
@@ -309,14 +309,14 @@ function plu_show_thumbs(imgId) {
                 var ki = $(this).attr("id").replace("thumbremovelink" + imgId, "");
                 ki = parseInt(ki);
                 var kimages = [];
-                imagesS = $("#" + imgId).val();
+                imagesS = $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val();
                 images = imagesS.split(",");
                 for (var j = 0; j < images.length; j++) {
                     if (j != ki) {
                         kimages[kimages.length] = images[j];
                     }
                 }
-                $("#" + imgId).val(kimages.join());
+                $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join());
                 //console.log("plu_show_thumbs-thumbremovelink-run");
                 plu_show_thumbs(imgId);
                 return false;
@@ -331,7 +331,7 @@ function plu_show_thumbs(imgId) {
                 var kimages = [];
                 thumbsC.find(".gd-file-info").each(function() {
                     kimages[kimages.length] = $(this).data("src") + "|" + $(this).data("id") + "|" + $(this).data("title") + "|" + $(this).data("caption");
-                    $("#" + imgId).val(kimages.join());
+                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join());
                     plu_show_thumbs(imgId);
                     //console.log("plu_show_thumbs-sortable-run");
                 });
@@ -346,12 +346,12 @@ function plu_show_thumbs(imgId) {
     var kimages = [];
     thumbsC.find(".gd-file-info").each(function() {
         kimages[kimages.length] = $(this).data("src") + "|" + $(this).data("id") + "|" + $(this).data("title") + "|" + $(this).data("caption");
-        $("#" + imgId).val(kimages.join());
+        $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join());
     });
 }
 
 function gd_edit_image_meta(input, order_id) {
-    var imagesS = jQuery("#" + input.id).val();
+    var imagesS = jQuery("#" + input.id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val();
     var images = imagesS.split(",");
     var img_arr = images[order_id].split("|");
     var image_title = img_arr[2];
@@ -368,7 +368,7 @@ function gd_edit_image_meta(input, order_id) {
 
 function gd_set_image_meta(input_id, order_id) {
     //alert(order_id);
-    var imagesS = jQuery("#" + input_id).val();
+    var imagesS = jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val();
     var images = imagesS.split(",");
     var img_arr = images[order_id].split("|");
     var image_url = img_arr[0];
@@ -377,7 +377,7 @@ function gd_set_image_meta(input_id, order_id) {
     var image_caption = jQuery('#gd-image-meta-caption').val();
     images[order_id] = image_url + "|" + image_id + "|" + image_title + "|" + image_caption;
     imagesS = images.join(",");
-    jQuery("#" + input_id).val(imagesS);
+    jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val(imagesS);
     plu_show_thumbs(input_id);
     jQuery('[data-lity-close]', window.parent.document).trigger('click');
 }

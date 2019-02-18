@@ -180,7 +180,9 @@ class GeoDir_Post_Data {
 								}
 							}
 						}
-						unset( $temp_media['post_images'] ); // unset the post_images as we save it in another table.
+						if ( isset( $temp_media['post_images'] ) ) {
+                            unset( $temp_media['post_images'] ); // unset the post_images as we save it in another table.
+                        }
 
 						// process other attachments
 						$file_fields = GeoDir_Media::get_file_fields($post_type);

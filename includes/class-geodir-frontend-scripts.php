@@ -120,7 +120,7 @@ class GeoDir_Frontend_Scripts {
 			var dist = 0;
 			var Sgeocoder = (typeof google!=='undefined' && typeof google.maps!=='undefined') ? new google.maps.Geocoder() : {};
 
-			function geodir_setup_submit_search() {
+			function geodir_setup_submit_search($form) {
 				jQuery('.geodir_submit_search').unbind('click');// unbind any other click events
 				jQuery('.geodir_submit_search').click(function(e) {
 
@@ -172,8 +172,8 @@ class GeoDir_Frontend_Scripts {
 			jQuery(document).ready(function() {
 				geodir_setup_submit_search();
 				//setup advanced search form on form ajax load
-				jQuery("body").on("geodir_setup_search_form", function(){
-					geodir_setup_submit_search();
+				jQuery("body").on("geodir_setup_search_form", function($form){
+					geodir_setup_submit_search($form);
 				});
 			});
 
