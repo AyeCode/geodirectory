@@ -45,7 +45,7 @@ class GeoDir_SEO {
 	 * If set to do so, add noindex tag to GD archive pages.
 	 */
 	public static function maybe_noindex_empty_archives(){
-		if( geodir_get_option('noindex_archives') && geodir_is_page('archive') || geodir_is_page('post_type') ){
+		if( geodir_get_option('noindex_archives') && ( geodir_is_page('archive') || geodir_is_page('post_type') ) ){
 			if(geodir_is_empty_archive() ){
 				echo '<meta name="robots" content="noindex">';
 			}
