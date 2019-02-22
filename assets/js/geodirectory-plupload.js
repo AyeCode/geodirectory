@@ -351,16 +351,16 @@ function plu_show_thumbs(imgId) {
 }
 
 function gd_edit_image_meta(input, order_id) {
-    var imagesS = jQuery("#" + input.id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val();
+    var imagesS = jQuery("#" + input.id, jQuery('#' + input.id + 'plupload-upload-ui').parent()).val();
     var images = imagesS.split(",");
     var img_arr = images[order_id].split("|");
     var image_title = img_arr[2];
     var image_caption = img_arr[3];
     var html = '';
 
-    html = html + "<div class='gd-modal-text'><label for=''>Title</label><input id='gd-image-meta-title' value='" + image_title + "'></div>"; // title value
-    html = html + "<div class='gd-modal-text'><label for=''>Caption</label><input id='gd-image-meta-caption' value='" + image_caption + "'></div>"; // caption value
-    html = html + "<div class='gd-modal-button'><button class='button button-primary button-large' onclick='gd_set_image_meta(\"" + input.id + "\"," + order_id + ")'>Set</button></div>"; // caption value
+    html = html + "<div class='gd-modal-text'><label for='gd-image-meta-title'>" + geodir_params.label_title + "</label><input id='gd-image-meta-title' value='" + image_title + "'></div>"; // title value
+    html = html + "<div class='gd-modal-text'><label for='gd-image-meta-caption'>" + geodir_params.label_caption + "</label><input id='gd-image-meta-caption' value='" + image_caption + "'></div>"; // caption value
+    html = html + "<div class='gd-modal-button'><button class='button button-primary button-large' onclick='gd_set_image_meta(\"" + input.id + "\"," + order_id + ")'>" + geodir_params.button_set + "</button></div>"; // caption value
     jQuery('#gd-image-meta-input').html(html);
     lity('#gd-image-meta-input');
 

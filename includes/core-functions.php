@@ -355,7 +355,10 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'google_api_key'                               => GeoDir_Maps::google_api_key(),
 		'mapLanguage'                                  => GeoDir_Maps::map_language(),
 		'confirm_set_location'                         => addslashes( __( 'Would you like to manually set your location?', 'geodirectory' ) ),
-		'confirm_lbl_error'                            => addslashes( __( 'ERROR:', 'geodirectory' ) )
+		'confirm_lbl_error'                            => addslashes( __( 'ERROR:', 'geodirectory' ) ),
+		'label_title'                                  => __( 'Title', 'geodirectory' ),
+		'label_caption'                                => __( 'Caption', 'geodirectory' ),
+		'button_set'                                   => __( 'Set', 'geodirectory' )
 	);
 
 	/**
