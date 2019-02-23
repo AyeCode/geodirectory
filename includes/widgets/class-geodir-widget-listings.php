@@ -14,7 +14,6 @@
  */
 class GeoDir_Widget_Listings extends WP_Super_Duper {
 
-	public $view_all_link;
 	public $post_title_tag;
 
     /**
@@ -217,6 +216,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '0',
                 'advanced' => true
             ),
+			'view_all_link'  => array(
+                'title' => __( 'Show view all link?', 'geodirectory' ),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '1',
+                'advanced' => true
+            ),
 
 //                'show_featured_only'    => '',
 //            'show_special_only'     => '',
@@ -266,7 +273,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'with_pics_only' => '',
                   'with_videos_only' => '',
                   'use_viewing_post_type' => '',
-                  'hide_if_empty' => ''
+                  'hide_if_empty' => '',
+				  'view_all_link' => '1'
             )
         );
 
@@ -295,9 +303,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      */
     public function output_html( $args = '', $instance = '' ) {
         global $gd_post, $post;
-
-
-//        print_r($instance);
 
         // prints the widget
         extract( $args, EXTR_SKIP );
@@ -392,6 +397,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          * @param string $instance ['title_tag'] Listing title tag.
          */
         $title_tag            = empty( $instance['title_tag'] ) ? 'h3' : apply_filters( 'widget_title_tag', $instance['title_tag'] );
+
+        $view_all_link = ! empty( $instance['view_all_link'] ) ? true : false;
+
         $use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
 
         // set post type to current viewing post type
@@ -649,11 +657,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             return;
         }
 
-		if ( ! empty( $viewall_url ) && isset($args['before_widget']) ) {
-			$this->view_all_link = '<a href="' . esc_url( $viewall_url ) .'" class="geodir-viewall">' . __( 'View all', 'geodirectory' ) . '</a>';
-			add_filter( 'widget_title', array( $this, 'title_filter' ), 10, 3 );
-		}
-
 		// Filter post title tag.
 		$this->post_title_tag = $title_tag;
 		add_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 4 );
@@ -682,6 +685,41 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$geodir_is_widget_listing = true;
 
 			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+
+			if ( $view_all_link && $viewall_url ) {
+				/**
+				 * Filter view all url.
+				 *
+				 * @since 2.0.0
+				 *
+				 * @param string $viewall_url View all url.
+				 * @param array $query_args WP_Query args.
+				 * @param array $instance Widget settings.
+			     * @param array $args Widget arguments.
+				 * @param object $this The GeoDir_Widget_Post_Title object.
+				 */
+				$viewall_url = apply_filters( 'geodir_widget_gd_listings_view_all_url', $viewall_url, $query_args, $instance, $args, $this );
+
+				if ( $viewall_url ) {
+					$view_all_link = '<a href="' . esc_url( $viewall_url ) .'" class="geodir-all-link">' . __( 'View all', 'geodirectory' ) . '</a>';
+
+					/**
+					 * Filter view all link content.
+					 *
+					 * @since 2.0.0
+					 *
+					 * @param string $view_all_link View all listings link content.
+					 * @param string $viewall_url View all url.
+					 * @param array $query_args WP_Query args.
+					 * @param array $instance Widget settings.
+					 * @param array $args Widget arguments.
+					 * @param object $this The GeoDir_Widget_Post_Title object.
+					 */
+					$view_all_link = apply_filters( 'geodir_widget_gd_listings_view_all_link', $view_all_link, $viewall_url, $query_args, $instance, $args, $this );
+
+					echo '<div class="geodir-widget-bottom">' . $view_all_link . '</div>';
+				}
+			}
 
 			$geodir_is_widget_listing = false;
 
@@ -724,28 +762,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      */
     public function get_sort_options($post_type = 'gd_place'){
         return geodir_sort_by_options($post_type);
-    }
-
-    /**
-     * Title filter.
-     *
-     * @since 2.0.0
-     *
-     * @param string $title Optional. Title. Default null.
-     * @param string $instance Optional. Instance. Default null.
-     * @param string $id_base Optional. Base ID. Default null.
-     * @return string $title
-     */
-	public function title_filter( $title = '', $instance ='', $id_base = '' ) {
-
-		$view_all_link = apply_filters( 'geodir_widget_view_all_link', $this->view_all_link, $instance, $id_base );
-
-        if ( ! empty( $view_all_link ) && $title) {
-            $title = $title . $view_all_link;
-        }
-
-        remove_filter( 'widget_title', array( $this, 'title_filter' ), 10 );
-        return $title;
     }
 
 	/**
