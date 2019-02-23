@@ -92,10 +92,22 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		 */
 		$args = wp_parse_args( $args, $defaults );
 
+		/**
+         * Filter listing title tag.
+         *
+         * @since 2.0.0
+         *
+         * @param string $args['tag'] Title tag.
+		 * @param array $args Widget settings.
+         * @param array $widget_args Widget arguments.
+		 * @param object $this The GeoDir_Widget_Post_Title object.
+         */
+        $title_tag = empty( $args['tag'] ) ? 'h2' : apply_filters( 'geodir_widget_gd_post_title_tag', $args['tag'], $args, $widget_args, $this );
+
 		?>
-		<<?php echo esc_attr($args['tag']);?> class="geodir-entry-title">
+		<<?php echo esc_attr($title_tag);?> class="geodir-entry-title">
 			<a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), stripslashes( the_title_attribute( array( 'echo' => false ) ) ) ) ); ?>"><?php echo stripslashes( get_the_title() ); ?></a>
-		</<?php echo esc_attr($args['tag']);?>>
+		</<?php echo esc_attr($title_tag);?>>
 		<?php
 
 		return ob_get_clean();

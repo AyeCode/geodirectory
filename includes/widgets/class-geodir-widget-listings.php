@@ -15,6 +15,7 @@
 class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 	public $view_all_link;
+	public $post_title_tag;
 
     /**
      * Register the popular posts widget.
@@ -653,6 +654,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			add_filter( 'widget_title', array( $this, 'title_filter' ), 10, 3 );
 		}
 
+		// Filter post title tag.
+		$this->post_title_tag = $title_tag;
+		add_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 4 );
+
 		$gd_layout_class = geodir_convert_listing_view_class( $layout );
         ?>
         <div class="geodir_locations geodir_location_listing">
@@ -692,6 +697,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             ?>
         </div>
         <?php
+
+		remove_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 2 );
     }
 
 
@@ -741,8 +748,22 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         return $title;
     }
 
+	/**
+     * Post title tag filter.
+     *
+     * @since 2.0.0
+     *
+     * @param string $tag Optional. Title tag.
+     * @param array $instance Widget settings.
+     * @param array $rags Optional. Widget arguments.
+	 * @param object $widget Widget object.
+     * @return string $title
+     */
+	public function filter_post_title_tag( $tag, $instance = array(), $rags = array(), $widget = array() ) {
+		if ( ! empty( $this->post_title_tag ) ) {
+			$tag = $this->post_title_tag;
+		}
 
-
-
-
+		return $tag;
+	}
 }

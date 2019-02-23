@@ -24,6 +24,7 @@ Newspaper theme not setting page titles from correct hook - FIXED
 Error "json file is not valid" during import settings - FIXED
 Using value VARCHAR in post request may break custom field save - FIXED
 Noindex on empty archive pages not working on page with one post - FIXED
+gd_listings shortcode parameter title_tag is not working - FIXED
 
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED
