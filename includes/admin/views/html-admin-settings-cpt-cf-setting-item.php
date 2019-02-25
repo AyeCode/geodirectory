@@ -62,6 +62,10 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				} elseif ( isset( $cf['defaults']['data_type'] ) && $cf['defaults']['data_type'] ) {
 					$value = $cf['defaults']['data_type'];
 				}
+				// Some servers fail if a POST value is VARCHAR so we change it.
+				if ( $value == 'VARCHAR' ) {
+					$value = 'XVARCHAR';
+				}
 				?>
 				<input type="hidden" name="data_type" id="data_type" value="<?php echo $value; ?>"/>
 				<?php

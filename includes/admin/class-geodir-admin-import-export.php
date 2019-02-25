@@ -1610,12 +1610,14 @@ class GeoDir_Admin_Import_Export {
 				'GeoDir_Admin_Import_Export',
 				'allow_json_mime'
 			) ); // make it recognise json files
+			add_filter( 'wp_check_filetype_and_ext', array(
+				'GeoDir_Admin_Import_Export',
+				'set_filetype_and_ext'
+			), 10, 4 ); // set file type & extension, it may returns any of from text/plain & application/json.
 			$wp_filetype = wp_check_filetype_and_ext( $target_path, $json_filename );
-
 
 			if ( ! empty( $wp_filetype ) && isset( $wp_filetype['ext'] ) && geodir_strtolower( $wp_filetype['ext'] ) == 'json' ) {
 				$json['error'] = null;
-
 
 				$file_contents = $wp_filesystem->get_contents( $target_path );
 
@@ -2094,5 +2096,30 @@ class GeoDir_Admin_Import_Export {
 			"images"    => $images,
 			"ID"        => 0,
 		);
+	}
+
+	/**
+	 * Set the file type of the given file.
+	 *
+	 * @param array  $wp_check_filetype_and_ext File data array containing 'ext', 'type', and
+	 *                                          'proper_filename' keys.
+	 * @param string $file                      Full path to the file.
+	 * @param string $filename                  The name of the file (may differ from $file due to
+	 *                                          $file being in a tmp directory).
+	 * @param array  $mimes                     Key is the file extension with value as the mime type.
+	 * @return array Filtered file type data.
+	 */
+	public static function set_filetype_and_ext( $data, $file, $filename, $mimes ) {
+		$wp_filetype = wp_check_filetype( $filename, $mimes );
+
+		if ( empty( $wp_filetype['type'] ) ) {
+			return $data;
+		}
+
+		$ext = $wp_filetype['ext'];
+		$type = $wp_filetype['type'];
+		$proper_filename = $data['proper_filename'];
+
+		return compact( 'ext', 'type', 'proper_filename' );
 	}
 }

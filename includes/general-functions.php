@@ -2049,10 +2049,11 @@ function geodir_is_empty_archive(){
 	if(geodir_is_page('archive') || geodir_is_page('post_type')) {
 		global $wp_query;
 
-		if(
+		/*if(
 			$wp_query->post_count == 1
 			&& ( empty( $wp_query->posts ) || (isset($wp_query->post->post_type) && $wp_query->post->post_type=='page'))
-		){
+		){*/ // Does not validate for one result.
+		if ( empty( $wp_query->found_posts ) ) {
 			return true;
 		}
 	}
