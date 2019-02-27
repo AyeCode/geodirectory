@@ -30,7 +30,19 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
             'block-keywords'=> "['listings','posts','geo']",
-
+            'block-output'   => array( // the block visual output elements as an array
+	            array(
+		            'element' => 'div',
+		            'title'   => __( 'Placeholder for listings', 'geodirectory' ),
+		            'class'   => '[%className%]',
+		            'style'   => '{background: "#eee",width: "100%", height: "450px", position:"relative"}',
+		            array(
+			            'element' => 'i',
+			            'if_class'   => '[%animation%]=="fade" ? "far fa-image gd-fadein-animation" : "fas fa-bars gd-right-left-animation"',
+			            'style'   => '{"text-align": "center", "vertical-align": "middle", "line-height": "450px", "height": "100%", width: "100%","font-size":"140px",color:"#aaa"}',
+		            ),
+	            ),
+            ),
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_listings', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Listings','geodirectory'), // the name of the widget.

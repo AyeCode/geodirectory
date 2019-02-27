@@ -530,17 +530,18 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Add_Listing' );
 
 
-		// Non Widgets
-		new GeoDir_Widget_Single_Taxonomies();
-		new GeoDir_Widget_Single_Next_Prev();
+		// Template widgets
+		register_widget( 'GeoDir_Widget_Loop' );
+		register_widget( 'GeoDir_Widget_Loop_Paging' );
+		register_widget( 'GeoDir_Widget_Loop_Actions' );
+		register_widget( 'GeoDir_Widget_Archive_Item_Section' );
+		register_widget( 'GeoDir_Widget_Single_Taxonomies' );
+		register_widget( 'GeoDir_Widget_Single_Next_Prev' );
+		register_widget( 'GeoDir_Widget_Post_Distance' );
+		register_widget( 'GeoDir_Widget_Map_Pinpoint' );
+
+		// Depreciated
 		new GeoDir_Widget_Single_Closed_Text();
-		//new GeoDir_Widget_Notifications();
-		new GeoDir_Widget_Loop();
-		new GeoDir_Widget_Loop_Paging();
-		new GeoDir_Widget_Loop_Actions();
-		new GeoDir_Widget_Archive_Item_Section();
-		new GeoDir_Widget_Post_Distance();
-		new GeoDir_Widget_Map_Pinpoint();
 
 		// 3rd party widgets
 		if ( class_exists( 'Ninja_Forms' ) ) {
