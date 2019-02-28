@@ -475,23 +475,36 @@ function geodir_is_geodir_page() {
 function geodir_is_geodir_page_id($id) {
 	global $geodirectory;
 	if(!empty($geodirectory->settings['page_add']) && $geodirectory->settings['page_add'] == $id ){
-		return true;
+		$is_geodir_page = true;
 	}elseif(!empty($geodirectory->settings['page_location']) && $geodirectory->settings['page_location'] == $id ){
-		return true;
+		$is_geodir_page = true;
 	}elseif(!empty($geodirectory->settings['page_search']) && $geodirectory->settings['page_search'] == $id ){
-		return true;
+		$is_geodir_page = true;
 	}elseif(!empty($geodirectory->settings['page_terms_conditions']) && $geodirectory->settings['page_terms_conditions'] == $id ){
-		return true;
+		$is_geodir_page = true;
 	}elseif(!empty($geodirectory->settings['page_details']) && $geodirectory->settings['page_details'] == $id ){
-		return true;
+		$is_geodir_page = true;
 	}elseif(!empty($geodirectory->settings['page_archive']) && $geodirectory->settings['page_archive'] == $id ){
-		return true;
+		$is_geodir_page = true;
 	}elseif(!empty($geodirectory->settings['page_archive_item']) && $geodirectory->settings['page_archive_item'] == $id ){
-		return true;
+		$is_geodir_page = true;
 	}elseif( geodir_is_cpt_template_page( $id ) ){
-		return true;
+		$is_geodir_page = true;
+	}else{
+		$is_geodir_page = false;
 	}
-	return false;
+
+	/**
+	 * Filter to check whether a page id is a GD page or not.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param bool $is_geodir_page If the page is GD page returns true. Otherwise false..
+	 * @param int $id The page ID.
+	 */
+	$is_geodir_page = apply_filters( 'geodir_is_geodir_page_id', $is_geodir_page, $id );
+
+	return $is_geodir_page;
 }
 
 if ( ! function_exists( 'geodir_get_imagesize' ) ) {
