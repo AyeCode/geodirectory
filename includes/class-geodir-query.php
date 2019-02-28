@@ -1239,6 +1239,8 @@ class GeoDir_Query {
 	public function parse_request() {
 		global $wp;
 
+		if(isset( $_REQUEST['fl_builder'] )){return;} // fix for BB not working on search page
+
 		self::set_is_geodir_page( $wp );
 
 		// Map query vars to their keys, or get them if endpoints are not supported
