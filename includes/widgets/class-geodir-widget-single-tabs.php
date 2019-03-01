@@ -120,19 +120,26 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                     if($tab->tab_level>0){continue;}
                     if(empty($tabs_content[$tab->id."tab"])){continue;}
 
+					// tab icon
+					$icon = trim( $tab->tab_icon );
+					if ( geodir_is_fa_icon( $icon ) ) {
+						$tab_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
+					} elseif ( strpos( $icon, 'fa-' ) === 0 ) {
+						$tab_icon = '<i class="fas ' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
+					} else {
+						$tab_icon = '';
+					}
+
                     $tab_class = $count==0 ? 'geodir-tab-active' :'';
                     $data_status = '';//$count==0 ? 'data-status="enable"' : '';
                     echo '<dt></dt> <!-- added to comply with validation -->';
                     echo '<dd class="'.$tab_class .'">';
                     echo '<a data-tab="#'.esc_attr($tab->tab_key).'" data-status="enable">';
-                    if($tab->tab_icon){
-                        echo '<i class="fas '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
-                    }
+                    echo $tab_icon;
                     echo stripslashes(esc_attr__($tab->tab_name,'geodirectory')).'</a>';
                     echo '</dd>';
                     $count++;
                 }
-
 
                 echo '</dl>';
             }

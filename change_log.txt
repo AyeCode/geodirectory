@@ -28,6 +28,7 @@ gd_listings shortcode parameter title_tag is not working - FIXED
 gd_listings shortcode new parameter view_all_link added - ADDED
 Font awesome settings icons updated to 5.7.2 - UPDATED
 Beaver Builder not working on search page - FIXED
+Option added in textarea fields to allow embed media urls - ADDED
 
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED

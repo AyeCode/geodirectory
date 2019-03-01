@@ -379,6 +379,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 				echo '<ul>';
 				foreach ( $cfs as $id => $cf ) {
 					$cf = stripslashes_deep( (array)$cf );
+					// tab icon
+					$icon = ! empty( $cf['tab_icon'] ) ? $cf['tab_icon'] : '';
+
+					// Set the field icon
+					if ( geodir_is_fa_icon( $icon ) ) {
+						$tab_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
+					} elseif ( geodir_is_icon_url( $icon ) ) {
+						$tab_icon = '<b style="background-image: url("' . $icon . '")"></b>';
+					} else {
+						$tab_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
+					}
 					?>
 					<li>
 						<a id="gd-<?php echo esc_attr($cf['tab_key']); ?>"
@@ -391,11 +402,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 						   data-tab_key="<?php echo esc_attr($cf['tab_key']); ?>"
 						   data-tab_content="<?php echo esc_attr($cf['tab_content']); ?>"
 						   onclick="gd_tabs_add_tab(this);return false;">
-
-							<i class="fas <?php echo esc_attr($cf['tab_icon']); ?>" aria-hidden="true"></i>
+							<?php echo $tab_icon; ?>
 							<?php echo esc_attr($cf['tab_name']); ?>
-
-							<!--							<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help" title="--><?php //_e( 'This adds a section separator with a title.', 'geodirectory' );?><!--"></span>-->
 						</a>
 					</li>
 					<?php
@@ -600,6 +608,19 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 				$tab->id = '';
 			}
 			$tab = stripslashes_deep( $tab );
+
+			// tab icon
+			$icon = ! empty( $tab->tab_icon ) ? $tab->tab_icon : '';
+
+			// Set the field icon
+			if ( geodir_is_fa_icon( $icon ) ) {
+				$tab_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
+			} elseif ( geodir_is_icon_url( $icon ) ) {
+				$tab_icon = '<b style="background-image: url("' . $icon . '")"></b>';
+			} else {
+				$tab_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
+			}
+
 			include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-tab-item.php' );
 			return ob_get_clean();
 		}
