@@ -1589,9 +1589,10 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
     if(empty($html)){
 
         if (!empty($gd_post->{$cf['htmlvar_name']})) {
-
+			$extra_fields = isset( $cf['extra_fields'] ) && $cf['extra_fields'] != '' ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
+			$embed = ! empty( $extra_fields['embed'] ) || $cf['htmlvar_name'] == 'video' ? true : false;
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -1601,42 +1602,36 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
                 $field_icon = '';
             }
 
-
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
-            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
-            if($output=='' || isset($output['icon']))$html .= '</span>';
-            // if($output=='' || isset($output['value']))$html .= wpautop($gd_post->{$cf['htmlvar_name']});
-            if($cf['htmlvar_name']!='post_content'){
-                if($output=='' || isset($output['value'])){
-                    $value = stripslashes( $gd_post->{$cf['htmlvar_name']} );
-					if(isset($output['strip'])){
+            if ( $output == '' || isset( $output['icon'] ) ) $html .= '<span class="geodir_post_meta_icon geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
+            if ( $output == '' || isset( $output['label'] ) ) $html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if ( $output == '' || isset( $output['icon'] ) ) $html .= '</span>';
+
+            if ( $output == '' || isset( $output['value'] ) ) {
+				$value = stripslashes( $gd_post->{$cf['htmlvar_name']} );
+
+				if ( $cf['htmlvar_name'] != 'post_content' ) {
+					if ( isset( $output['strip'] ) ) {
                         $html .=  wp_strip_all_tags( wpautop( do_shortcode( $value ) ) );
-                    }else{
-						if ( $cf['htmlvar_name'] == 'video' ) { // Video embed.
+                    } else {
+						if ( $embed ) { // Embed media.
 							global $wp_embed;
 							$value = $wp_embed->autoembed( $value );
 						}
 						$html .= wpautop( do_shortcode( $value ) );
                     }
-                }
-            }else{
-                if($output=='' || isset($output['value'])){
-                    if(isset($output['strip'])){
-                        $html .=  wp_strip_all_tags( apply_filters('the_content',stripslashes($gd_post->{$cf['htmlvar_name']})));
-                    }else{
-                        $html .= apply_filters('the_content',stripslashes($gd_post->{$cf['htmlvar_name']}));
+				} else { // Post content
+					if ( isset($output['strip'] ) ) {
+                        $html .= wp_strip_all_tags( apply_filters( 'the_content', $value ) );
+                    } else {
+                        $html .= apply_filters( 'the_content', $value );
                     }
-                }
-            }
-            //$html .= wp_oembed_get($gd_post->{$cf['htmlvar_name']});
-
+				}
+			}
 
             $html .= '</div>';
-
         }
-
     }
 
     return $html;

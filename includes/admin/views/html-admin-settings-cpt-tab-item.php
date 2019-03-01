@@ -2,9 +2,7 @@
 	<div class="dd-form">
 		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
 		<div class="dd-handle">
-			<?php if ( geodir_is_fa_icon( $tab->tab_icon ) ) { ?>
-			<i class="fas <?php echo esc_attr($tab->tab_icon);?>" aria-hidden="true"></i>
-			<?php } ?>
+			<?php echo $tab_icon; ?>
 			<?php echo esc_attr($tab->tab_name);?>
 			<span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php echo esc_attr($tab->tab_key). ' ('.esc_attr($tab->tab_type).')';?></span>
 		</div>

@@ -58,6 +58,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			// add wysiwyg option to textareas
 			add_filter( 'geodir_cfa_extra_fields_textarea', array( $this, 'advanced_editor' ), 10, 4 );
 
+			// add embed option to html & textareas
+			add_filter( 'geodir_cfa_extra_fields_html', array( $this, 'embed_input' ), 10, 4 );
+			add_filter( 'geodir_cfa_extra_fields_textarea', array( $this, 'embed_input' ), 10, 4 );
+
 			// validation pattern
 			add_filter( 'geodir_cfa_validation_pattern_text', array( $this, 'validation_pattern' ), 10, 4 );
 
@@ -881,6 +885,51 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			<?php
 
 			$output = ob_get_clean();
+
+			return $output;
+		}
+
+		/**
+         * Input to enable embed option for videos, images, tweets, audio, and other content.
+         *
+         * @since 2.0.0
+         *
+         * @param string $output Html output.
+         * @param string $result_str Results string.
+         * @param array $cf Custom fields values.
+         * @param object $field_info Extra fields information.
+         * @return string $output.
+         */
+		public static function embed_input( $output, $result_str, $cf, $field_info ) {
+			ob_start();
+			if ( ! empty( $field_info->htmlvar_name ) && $field_info->htmlvar_name == 'video' ) {
+				?>
+				<input type="hidden" name="extra[embed]" value="1" />
+				<?php
+			} else {
+				?>
+				<p class="gd-advanced-setting" data-setting="embed">
+					<label for="embed" class="dd-setting-name">
+						<?php
+						echo geodir_help_tip( __( 'Tick to allow embed videos, images, tweets, audio, and other content.', 'geodirectory' ));
+						_e( 'Embed Media URLs:', 'geodirectory' );
+						$extra = ! empty( $field_info->extra_fields ) ? maybe_unserialize( $field_info->extra_fields ) : array();
+
+						if ( is_array( $extra ) && isset( $extra['embed'] ) ) {
+							$value = absint( $extra['embed'] );
+						} elseif ( isset( $cf['defaults']['embed'] ) && $cf['defaults']['embed'] ) {
+							$value = absint( $cf['defaults']['embed'] );
+						} else {
+							$value = 0;
+						}
+						?>
+						<input type="hidden" name="extra[embed]" value="0" />
+						<input type="checkbox" name="extra[embed]" value="1" <?php checked( $value, 1, true );?> />
+					</label>
+				</p>
+				<?php
+			}
+			$output .= ob_get_clean();
 
 			return $output;
 		}
