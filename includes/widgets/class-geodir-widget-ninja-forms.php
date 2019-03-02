@@ -142,6 +142,17 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
             $show = true;
         }
 
+		/**
+		 * Filters whether show or not widget output.
+		 *
+		 * @since 2.0.46
+		 *
+		 * @param bool $show Whether to show or not widget output.
+		 * @param object $post The post object.
+		 * @param array $args Widget arguments.
+		 * @param object $this Widget object.
+		 */
+		$show = apply_filters( 'geodir_show_ninja_form_widget', $show, $post, $args, $this );
 
         if($show){
             if($args['output']=='button'){
