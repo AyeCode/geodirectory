@@ -559,7 +559,7 @@ class GeoDir_Permalinks {
 			/*
 			 * Add post name if needed. (%postname%)
 			 */
-			if (strpos($permalink, '%postname%') !== false) {
+			if (!$leavename && strpos($permalink, '%postname%') !== false) {
 				$permalink = str_replace('%postname%',$gd_post->post_name,$permalink);
 			}
 
