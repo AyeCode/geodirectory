@@ -207,13 +207,18 @@ class GeoDir_Compatibility {
 	public static function dynamically_add_post_meta( $metadata, $object_id, $meta_key, $single ) {
 
 		// An array or meta keys we don't want to be used by the template pages
+		// @todo switch back to an inclusive array, exclusive can add to many queries
 		$restricted_meta_keys = array(
 			'',
 		);
 
-		if ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) ) {
-			if ( $metadata == '' && ! in_array( $meta_key, $restricted_meta_keys ) ) {
+		if ( $meta_key && $meta_key[0]== "_" && geodir_is_page( 'single' )) {
+			if ( $object_id && $metadata == '' && ! in_array( $meta_key, $restricted_meta_keys ) && $object_id == get_queried_object_id() ) {
 				$metadata = geodir_get_post_meta_raw( geodir_details_page_id(), $meta_key );
+			}
+		}elseif($meta_key && $meta_key[0]== "_" && geodir_is_page( 'archive' ) ){
+			if ( $object_id && $metadata == '' && ! in_array( $meta_key, $restricted_meta_keys ) && $object_id == get_queried_object_id() ) {
+				$metadata = geodir_get_post_meta_raw( geodir_archive_page_id(), $meta_key );
 			}
 		}
 
