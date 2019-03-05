@@ -72,7 +72,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
         global $preview, $post,$gd_post;
-
+        if(!isset($post->ID)){return '';}
         // options
         $defaults = array(
             'show_as_list' => '0', // 0 =  all

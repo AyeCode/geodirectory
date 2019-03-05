@@ -1,7 +1,8 @@
 v2.0.0.47
-Edit post permalink button missing so permalink can't be edited - FIXED
+Edit post permalink button missing so not able to edit single permalink - FIXED
 Radio button and text overlap on add listing page - FIXED
 Twitter feed custom field no longer working - FIXED
+Latest compatibility settings caused issue with some builders - FIXED
 
 v2.0.0.46
 Some custom fields should store is_default = 0 during v1 to v2 conversion - FIXED

@@ -208,18 +208,93 @@ class GeoDir_Compatibility {
 
 		// An array or meta keys we don't want to be used by the template pages
 		// @todo switch back to an inclusive array, exclusive can add to many queries
-		$restricted_meta_keys = array(
-			'',
+//		$restricted_meta_keys = array(
+//			'',
+//		);
+//
+//		if ( $meta_key && $meta_key[0]== "_" && geodir_is_page( 'single' )) {
+//			if ( $object_id && $metadata == '' && ! in_array( $meta_key, $restricted_meta_keys ) && $object_id == get_queried_object_id() ) {
+//				$metadata = geodir_get_post_meta_raw( geodir_details_page_id(), $meta_key );
+//			}
+//		}elseif($meta_key && $meta_key[0]== "_" && geodir_is_page( 'archive' ) ){
+//			if ( $object_id && $metadata == '' && ! in_array( $meta_key, $restricted_meta_keys ) && $object_id == get_queried_object_id() ) {
+//				$metadata = geodir_get_post_meta_raw( geodir_archive_page_id(), $meta_key );
+//			}
+//		}
+
+		// new way
+
+		// Standard WP fields
+		$wp_keys = array(
+			'_wp_page_template',
+//			'_thumbnail_id',
 		);
 
-		if ( $meta_key && $meta_key[0]== "_" && geodir_is_page( 'single' )) {
-			if ( $object_id && $metadata == '' && ! in_array( $meta_key, $restricted_meta_keys ) && $object_id == get_queried_object_id() ) {
-				$metadata = geodir_get_post_meta_raw( geodir_details_page_id(), $meta_key );
+		// Generic keys
+		$gen_keys = array(
+			'primer_layout', // primer theme layout
+		);
+
+		// FusionBuilder (Avada theme), we need to add these on the fly
+		if(class_exists( 'FusionBuilder' )){
+
+			if(substr( $meta_key, 0, 5 ) === "pyre_" || substr( $meta_key, 0, 4 ) === "sbg_"){
+				$gen_keys[] = $meta_key;
 			}
-		}elseif($meta_key && $meta_key[0]== "_" && geodir_is_page( 'archive' ) ){
-			if ( $object_id && $metadata == '' && ! in_array( $meta_key, $restricted_meta_keys ) && $object_id == get_queried_object_id() ) {
-				$metadata = geodir_get_post_meta_raw( geodir_archive_page_id(), $meta_key );
+		}
+
+
+
+		// Beaver builder :: it does not seem to need any changes
+
+		if(
+			$meta_key
+			&& ($meta_key[0]== "_" || in_array($meta_key,$gen_keys))
+			&& $object_id
+			&& $object_id == get_queried_object_id()
+			&& (geodir_is_page( 'single' ) || geodir_is_page( 'archive' ))
+		){
+			$template_page_id = geodir_is_page( 'single' ) ? geodir_details_page_id() : geodir_archive_page_id();
+
+			// WP
+			if(in_array($meta_key,$wp_keys)){
+				$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
 			}
+
+			// generic keys
+			if(in_array($meta_key,$gen_keys)){
+				$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+			}
+
+			// Elementor
+			if(function_exists( '_is_elementor_installed' ) && geodir_get_post_meta_raw( $template_page_id, '_elementor_edit_mode')=='builder'){
+				if(substr( $meta_key, 0, 11 ) === "_elementor_"){
+					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+				}
+			}
+
+			// DIVI (elegant themes)
+			if(function_exists('et_pb_is_pagebuilder_used') && et_pb_is_pagebuilder_used($template_page_id)){
+				if(substr( $meta_key, 0, 4 ) === "_et_"){
+					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+				}
+			}
+
+			// Beaver Builder
+			if(class_exists( 'FLBuilderLoader' ) && geodir_get_post_meta_raw( $template_page_id, '_fl_builder_enabled') ){
+				if(substr( $meta_key, 0, 4 ) === "_fl_"){
+					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+				}
+			}
+
+			// WPBakery page builder
+//			if(class_exists( 'FLBuilderLoader' ) && geodir_get_post_meta_raw( $template_page_id, '_fl_builder_enabled') ){
+//				if(substr( $meta_key, 0, 4 ) === "_vc_"){
+//					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+//				}
+//			}
+
+
 		}
 
 		return $metadata;

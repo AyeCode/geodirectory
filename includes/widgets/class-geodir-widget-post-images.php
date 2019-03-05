@@ -223,6 +223,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 */
 	public function output_images($options){
 		global $post,$gd_slider_outputs,$gd_post;
+		if(!isset($post->ID)){return '';}
 		ob_start();
 
 		// options
