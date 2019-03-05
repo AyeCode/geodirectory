@@ -1,5 +1,6 @@
 v2.0.0.47
 Edit post permalink button missing so permalink can't be edited - FIXED
+Radio button and text overlap on add listing page - FIXED
 Twitter feed custom field no longer working - FIXED
 
 v2.0.0.46
