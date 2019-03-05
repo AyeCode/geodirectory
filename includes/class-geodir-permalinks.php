@@ -549,6 +549,11 @@ class GeoDir_Permalinks {
 
 	/**
 	 * Register GD rewrite rules.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string       $post_type_name Post type.
+	 * @param WP_Post_Type $args      Arguments used to register the post type.
 	 */
 	public function post_rewrite_rules( $post_type_name, $args ) {
 		/**
