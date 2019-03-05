@@ -2022,6 +2022,9 @@ SIDEBAR STYLES
   width: auto;
   margin-right: 10px;
 }
+.geodir_form_row input[type=radio].gd-checkbox {
+  margin: 4px 4px 0;
+}
 
 .gd-bh-items .gd-tz-item td {
   padding-left: 10px;
@@ -3695,10 +3698,6 @@ add listings page
   float: left;
   width: 30%;
   font-size: 14px;
-}
-
-.geodir_form_row input[type=radio].gd-checkbox {
-  margin: 4px 4px 0;
 }
 
 .geodir_form_row .geodir_textfield,
