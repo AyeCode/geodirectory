@@ -1,5 +1,6 @@
 v2.0.0.47
 Edit post permalink button missing so permalink can't be edited - FIXED
+Radio button and text overlap on add listing page - FIXED
 
 v2.0.0.46
 Some custom fields should store is_default = 0 during v1 to v2 conversion - FIXED
@@ -32,7 +33,6 @@ gd_listings shortcode new parameter view_all_link added - ADDED
 Font awesome settings icons updated to 5.7.2 - UPDATED
 Beaver Builder not working on search page - FIXED
 Option added in textarea fields to allow embed media urls - ADDED
-Radio button and text overlap on add listing page - FIXED
 
 v2.0.0.45
 Listing without author assigned always shows author actions widget - FIXED
