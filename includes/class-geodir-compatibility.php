@@ -294,6 +294,13 @@ class GeoDir_Compatibility {
 //				}
 //			}
 
+			// Customify theme
+			if(function_exists('Customify') ){
+				if(substr( $meta_key, 0, 11 ) === "_customify_"){
+					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+				}
+			}
+
 
 		}
 

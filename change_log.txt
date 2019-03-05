@@ -1,3 +1,6 @@
+v2.0.0.48
+Customify theme compatibility settings added - ADDED
+
 v2.0.0.47
 Edit post permalink button missing so not able to edit single permalink - FIXED
 Radio button and text overlap on add listing page - FIXED
