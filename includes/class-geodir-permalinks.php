@@ -558,6 +558,18 @@ class GeoDir_Permalinks {
 		 */
 		global $wp_rewrite;
 
+		if ( $args->_builtin ) {
+			return;
+		}
+
+		if ( false === $args->rewrite ) {
+			return;
+		}
+		$post_types_array = geodir_get_posttypes();
+		if ( ! in_array( $post_type_name, $post_types_array, true ) ) {
+			return;
+		}
+
 		$gd_permalink_structure = geodir_get_permalink_structure();
 
 		$rewrite_args = $args->rewrite;
@@ -570,7 +582,6 @@ class GeoDir_Permalinks {
 		$rewrite_args['walk_dirs'] = false;
 
 		$post_types = geodir_get_posttypes( 'array' );
-
 		if ( ! empty( $post_types ) ) {
 			if ( empty( $gd_permalink_structure ) ) {
 				$gd_permalink_structure = '/%postname%/';
@@ -615,7 +626,6 @@ class GeoDir_Permalinks {
 				$after = $gd_permalink_structure == "/%postname%/" ? 'bottom' : 'top';
 
 				$this->add_rewrite_rule( $regex, $redirect, $after );
-
 				// Translate slug
 				do_action( 'geodir_permalinks_post_rewrite_rule', $cpt, $post_type, $this, $regex_part, $redirect, $after );
 			}
