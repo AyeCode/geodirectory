@@ -28,7 +28,7 @@ class GeoDir_Permalinks {
 		add_action('init', array( $this, 'rewrite_tags'), 10, 0);
 
 		// post (single) rewrite rules
-		add_action('init', array( $this, 'post_rewrite_rules'), 10, 0);
+		add_action('registered_post_type', array( $this, 'post_rewrite_rules'), 10, 2);
 
 		// location page rewrite rules
 		add_action('init', array( $this, 'location_rewrite_rules'), 11,0);
@@ -423,17 +423,10 @@ class GeoDir_Permalinks {
 	 * @param bool $sample Is this a sample post?.
 	 * @return string The post link.
 	 */
-	public function post_url($post_link, $post_obj, $leavename, $sample)
-	{
-		//echo '###'.$post_link."<br />".$sample." \n" ;
-		//print_r($post_obj);
-
+	public function post_url($post_link, $post_obj, $leavename, $sample) {
 
 		global $wpdb, $wp_query, $plugin_prefix, $post, $comment_post_cache, $gd_permalink_cache,$gd_post;
-
-		//print_r($gd_post);
 		$correct_post = true;
-
 		if (isset($post_obj->post_status) && ( $post_obj->post_status == 'auto-draft' || $post_obj->post_status == 'draft' || $post_obj->post_status == 'pending') ) {
 			return $post_link; // if draft then return default url.
 		} elseif (isset($post_obj->ID) && isset($gd_post->ID) && $post_obj->ID == $gd_post->ID) {
@@ -445,23 +438,12 @@ class GeoDir_Permalinks {
 		// Only modify if its a GD post type.
 		if (in_array($post_obj->post_type, geodir_get_posttypes())) {
 
-
-			/*
-			 * Available permalink tags:
-			 * %country% , %region% , %city% , %category% , %postname% , %post_id%
-			 */
-
-			// Check if a pretty permalink is required
-			$permalink_structure = apply_filters( 'geodir_post_permalink_structure', geodir_get_permalink_structure(), $post_obj->post_type );
-			if (strpos($permalink_structure, '%postname%') === false || empty($permalink_structure)) {
-				return $post_link;
-			}
-
 			// backup the original post data first so we can restore it later
 			if(!$correct_post){
 				$orig_post = $gd_post;
 				$gd_post = geodir_get_post_info($post_obj->ID);
 			}
+			$pt_object = get_post_type_object( $post_obj->post_type );
 
 			if ( empty( $gd_post ) ) {
 				return $post_link;
@@ -474,71 +456,54 @@ class GeoDir_Permalinks {
 					$gd_post = $gd_post;
 				}
 			}
-
 			if($gd_post->post_type == 'revision'){
 				$gd_post->post_type = get_post_type(wp_get_post_parent_id($gd_post->ID));
 			}
 
-			/*
+			/**
 			 * Get the site url. ( without any location filters )
 			 */
 			if (function_exists('geodir_location_geo_home_link')) {
 				remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
 			}
 
-			$permalink = trailingslashit( home_url() );
-
 			if (function_exists('geodir_location_geo_home_link')) {
 				add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
 			}
 
+			$post_link = str_replace( '%' . $post_obj->post_type . '_slug%', $pt_object->rewrite['slug'], $post_link );
 
-
-			/*
-			 * Add the CPT slug.
-			 */
-			$post_types = geodir_get_posttypes('array');
-			$cpt_slug = $post_types[$gd_post->post_type]['rewrite']['slug'];
-
-			$cpt_slug = apply_filters( 'geodir_post_permalink_structure_cpt_slug', $cpt_slug, $gd_post, $post_link );
-
-			$permalink .= $cpt_slug.$permalink_structure;
-
-
-			/*
+			/**
 			 * Add Country if needed. (%country%)
 			 */
-			if (strpos($permalink, '%country%') !== false) {
+			if (strpos($post_link, '%country%') !== false) {
 				$locations = $this->get_post_location_slugs($gd_post);
 				if(isset($locations->country_slug) && $locations->country_slug){
-					$permalink = str_replace('%country%',$locations->country_slug,$permalink);
+					$post_link = str_replace('%country%',$locations->country_slug,$post_link);
 				}
 			}
-
-			/*
+			/**
 			 * Add Region if needed. (%region%)
 			 */
-			if (strpos($permalink, '%region%') !== false) {
+			if (strpos($post_link, '%region%') !== false) {
 				$locations = isset($locations) ? $locations : $this->get_post_location_slugs($gd_post);
 				if(isset($locations->region_slug) && $locations->region_slug){
-					$permalink = str_replace('%region%',$locations->region_slug,$permalink);
+					$post_link = str_replace('%region%',$locations->region_slug,$post_link);
 				}
 			}
-
-			/*
+			/**
 			 * Add City if needed. (%city%)
 			 */
-			if (strpos($permalink, '%city%') !== false) {
+			if (strpos($post_link, '%city%') !== false) {
 				$locations = isset($locations) ? $locations : $this->get_post_location_slugs($gd_post);
 				if(isset($locations->city_slug) && $locations->city_slug){
-					$permalink = str_replace('%city%',$locations->city_slug,$permalink);
+					$post_link = str_replace('%city%',$locations->city_slug,$post_link);
 				}
 			}
-
-			/*
+			/**
 			 * Add Category if needed. (%category%)
 			 */
-			if (strpos($permalink, '%category%') !== false) {
+			if (strpos($post_link, '%category%') !== false) {
 				if(is_admin() && isset($_POST['default_category']) && $_POST['default_category']){
 					$term = get_term_by('id', absint($_POST['default_category']), $gd_post->post_type."category");
 				}elseif(isset($gd_post->default_category) && $gd_post->default_category){
@@ -550,52 +515,19 @@ class GeoDir_Permalinks {
 						$term = get_term_by('id', $cat_id, $gd_post->post_type."category");
 					}
 				}
-
 				if(!empty($term) && $term->slug){
-					$permalink = str_replace('%category%',$term->slug,$permalink);
+					$post_link = str_replace('%category%',$term->slug,$post_link);
+				}
+				/*
+				 * Add post ID if needed. (%post_id%)
+				 */
+				if (strpos($post_link, '%post_id%') !== false) {
+					$post_link = str_replace('%post_id%',$gd_post->ID,$post_link);
 				}
 			}
 
-			/*
-			 * Add post name if needed. (%postname%)
-			 */
-			if (strpos($permalink, '%postname%') !== false) {
-				$permalink = str_replace('%postname%',$gd_post->post_name,$permalink);
-			}
 
-			/*
-			 * Add post ID if needed. (%post_id%)
-			 */
-			if (strpos($permalink, '%post_id%') !== false) {
-				$permalink = str_replace('%post_id%',$gd_post->ID,$permalink);
-			}
-
-			//echo $permalink;
-			$post_link = $permalink;
-
-			// @todo we will com back to cache
-//			if (isset($comment_post_cache[$gd_post->ID])) {
-//				$gd_post = $comment_post_cache[$gd_post->ID];
-//			}
-//			if (isset($gd_permalink_cache[$gd_post->ID]) && $gd_permalink_cache[$gd_post->ID] && !$sample) {
-//				$post_id = $gd_post->ID;
-//				if (isset($orig_post)) {
-//					$gd_post = $orig_post;
-//				}
-//				return $gd_permalink_cache[$post_id];
-//			}
-
-
-
-			// temp cache the permalink
-			if (!$sample && (!isset($_REQUEST['geodir_ajax']) || (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] != 'add_listing'))) {
-				$gd_permalink_cache[$gd_post->ID] = $post_link;
-			}
 		}
-		if (isset($orig_post)) {
-			$gd_post = $orig_post;
-		}
-
 		return $post_link;
 	}
 
@@ -618,8 +550,24 @@ class GeoDir_Permalinks {
 	/**
 	 * Register GD rewrite rules.
 	 */
-	public function post_rewrite_rules() {
+	public function post_rewrite_rules( $post_type_name, $args ) {
+		/**
+		 * WP_Rewrite.
+		 *
+		 * @var WP_Rewrite $wp_rewrite
+		 */
+		global $wp_rewrite;
+
 		$gd_permalink_structure = geodir_get_permalink_structure();
+
+		$rewrite_args = $args->rewrite;
+		if ( ! is_array( $rewrite_args ) ) {
+			$rewrite_args = array(
+				'with_front' => $args->rewrite,
+			);
+		}
+
+		$rewrite_args['walk_dirs'] = false;
 
 		$post_types = geodir_get_posttypes( 'array' );
 
@@ -627,6 +575,10 @@ class GeoDir_Permalinks {
 			if ( empty( $gd_permalink_structure ) ) {
 				$gd_permalink_structure = '/%postname%/';
 			}
+
+			$permalink = '%' . $post_type_name . '_slug%' . $gd_permalink_structure;
+			$permalink = str_replace( '%postname%', '%' . $post_type_name . '%', $permalink );
+
 			$permalink_arr = explode( "/", trim( $gd_permalink_structure, "/" ) );
 
 			foreach ( $post_types as $cpt => $post_type ) {
@@ -661,15 +613,16 @@ class GeoDir_Permalinks {
 				}
 
 				$after = $gd_permalink_structure == "/%postname%/" ? 'bottom' : 'top';
+
 				$this->add_rewrite_rule( $regex, $redirect, $after );
 
 				// Translate slug
 				do_action( 'geodir_permalinks_post_rewrite_rule', $cpt, $post_type, $this, $regex_part, $redirect, $after );
 			}
+
+			add_permastruct( $post_type_name, $permalink, $rewrite_args );
 		}
 	}
-
-
 
 
 	/**
