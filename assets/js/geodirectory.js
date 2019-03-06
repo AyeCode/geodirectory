@@ -1034,7 +1034,7 @@ function gd_delete_post($post_id){
             success: function(data) {
 
                 if(data.success){
-                    location.reload(); // @todo we need to find a better way to do this.
+                    lity( "<div class='geodir-ajax-content lity-show'>"+ data.data +"</div>" );
                 }else{
                     alert(data.data);
                 }
