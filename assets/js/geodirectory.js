@@ -1059,7 +1059,14 @@ function gd_delete_post($post_id){
             timeout: 20000,
             success: function(data) {
                 if(data.success && data.data){
-                    window.location.replace(data.data);
+                    if( '' != data.data.msg || undefined != data.data.msg ) {
+                        lity( data.data.msg );
+                    }
+                    if( '' != data.data.url || undefined != data.data.url ){
+                        window.setTimeout(function(){
+                            window.location.replace( data.data.url );
+                        }, 2000);
+                    }
                 }else{
                     alert(data.data);
                 }

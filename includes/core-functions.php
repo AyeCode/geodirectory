@@ -1231,22 +1231,3 @@ function geodir_output_auth_footer() {
 }
 
 add_action( 'geodir_auth_page_footer', 'geodir_output_auth_footer', 10 );
-
-/**
- * Output Listing Deleted warning.
- */
-function gd_listing_deleted_notifications(){
-
-	$action = !empty( $_GET['gdaction'] ) ? sanitize_text_field( $_GET['gdaction'] ) : '';
-	if( 'delete' !== $action )
-		return;
-
-	// warning for listing deleted successfully
-	$notifications['gd-listing-deleted-warning'] = array(
-		'type'  =>  'success',
-		'note'  =>  wp_sprintf( __( 'Listing deleted successfully', 'geodirectory' ), 'success' )
-	);
-	echo geodir_notification($notifications);
-}
-add_action('geodir_before_search_form', 'gd_listing_deleted_notifications');
-
