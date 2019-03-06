@@ -140,11 +140,7 @@ jQuery(function($) {
 
 	// fix accessibility issues
 	$('.geodir-sort-by[name="sort_by"], #geodir_my_favourites[name="geodir_my_favourites"], #geodir_my_listings[name="geodir_my_listings"], #geodir_add_listing[name="geodir_add_listing"]').on("change", function(e) {
-        var sort_by_url = $(this).val();
-        if(sort_by_url.indexOf("gdaction") > -1) {
-            sort_by_url = geodir_remove_querystring( sort_by_url, 'gdaction' );
-        }
-        if ($(this).val()) window.location = sort_by_url;
+        if ($(this).val()) window.location = $(this).val();
     });
 
     // if we have the reviews input but no reviews id then we add it on the fly so /#reviews anchor links work
@@ -152,30 +148,6 @@ jQuery(function($) {
         jQuery('.geodir-comments-area').prepend('<span id="reviews"></span>');
     }
 });
-
-function geodir_remove_querystring(url, parameter) {
-    //prefer to use l.search if you have a location/link object
-    var urlparts= url.split('?');   
-    if (urlparts.length>=2) {
-
-        var prefix= encodeURIComponent(parameter)+'=';
-        var pars= urlparts[1].split(/[&;]/g);
-
-        //reverse iteration as may be destructive
-        for (var i= pars.length; i-- > 0;) {    
-            //idiom for string.startsWith
-            if (pars[i].lastIndexOf(prefix, 0) !== -1) {  
-                pars.splice(i, 1);
-            }
-        }
-
-        url= urlparts[0]+'?'+pars.join('&');
-        return url;
-    } else {
-        return url;
-    }
-}
-
 
 
 /* Placeholders.js v3.0.2  fixes placeholder support for older browsers */
