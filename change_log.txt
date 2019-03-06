@@ -1,5 +1,6 @@
 v2.0.0.48
 Customify theme compatibility settings added - ADDED
+Ninja Forms conflicts backend on add/edit pages - FIXED
 
 v2.0.0.47
 Edit post permalink button missing so not able to edit single permalink - FIXED

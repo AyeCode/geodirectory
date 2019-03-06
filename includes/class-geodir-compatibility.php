@@ -197,6 +197,8 @@ class GeoDir_Compatibility {
 	 *
 	 * This helps trick page builders into using the page template settings.
 	 *
+	 * @global WP_Query $wp_query Global WP_Query instance.
+	 *
 	 * @param $metadata
 	 * @param $object_id
 	 * @param $meta_key
@@ -205,7 +207,7 @@ class GeoDir_Compatibility {
 	 * @return null|string
 	 */
 	public static function dynamically_add_post_meta( $metadata, $object_id, $meta_key, $single ) {
-
+		global $wp_query;
 		// An array or meta keys we don't want to be used by the template pages
 		// @todo switch back to an inclusive array, exclusive can add to many queries
 //		$restricted_meta_keys = array(
@@ -251,6 +253,7 @@ class GeoDir_Compatibility {
 			$meta_key
 			&& ($meta_key[0]== "_" || in_array($meta_key,$gen_keys))
 			&& $object_id
+			&& ! empty( $wp_query )
 			&& $object_id == get_queried_object_id()
 			&& (geodir_is_page( 'single' ) || geodir_is_page( 'archive' ))
 		){
