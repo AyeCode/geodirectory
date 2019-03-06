@@ -1020,7 +1020,6 @@ function gd_delete_post($post_id){
     var message = geodir_params.my_place_listing_del;
 
     if (confirm(message)) {
-        console.log('Hello Naveen');
         jQuery.ajax({
             url: geodir_params.ajax_url,
             type: 'POST',
