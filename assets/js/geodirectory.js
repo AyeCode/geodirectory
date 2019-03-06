@@ -141,7 +141,7 @@ jQuery(function($) {
 	// fix accessibility issues
 	$('.geodir-sort-by[name="sort_by"], #geodir_my_favourites[name="geodir_my_favourites"], #geodir_my_listings[name="geodir_my_listings"], #geodir_add_listing[name="geodir_add_listing"]').on("change", function(e) {
         var sort_by_url = $(this).val();
-        if(window.location.href.indexOf("gdaction") > -1) {
+        if(sort_by_url.indexOf("gdaction") > -1) {
             sort_by_url = geodir_remove_querystring( sort_by_url, 'gdaction' );
         }
         if ($(this).val()) window.location = sort_by_url;
