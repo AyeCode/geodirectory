@@ -1237,7 +1237,7 @@ add_action( 'geodir_auth_page_footer', 'geodir_output_auth_footer', 10 );
  */
 function gd_listing_deleted_notifications(){
 
-	$action = !empty( $_GET['action'] ) ? sanitize_text_field( $_GET['action'] ) : '';
+	$action = !empty( $_GET['gdaction'] ) ? sanitize_text_field( $_GET['gdaction'] ) : '';
 	if( 'delete' !== $action )
 		return;
 

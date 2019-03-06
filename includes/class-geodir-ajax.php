@@ -398,7 +398,7 @@ class GeoDir_AJAX {
 		}else{
 			$result = GeoDir_User::delete_post( $post_id );
 			$author_id = get_post_field( 'post_author', $post_id );
-			$author_url = geodir_author_url( $author_id, array( 'action' => 'delete' ) );
+			$author_url = geodir_author_url( $author_id, array( 'gdaction' => 'delete' ) );
 			if(is_wp_error( $result ) ){
 				wp_send_json_error( $result->get_error_message() );
 			}else{
