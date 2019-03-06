@@ -352,20 +352,20 @@ function geodir_post_package_info( $package_info, $post = '', $post_type = '' ) 
 
 	return geodir_get_post_package( $post, $post_type );
 }
-//
+
 /**
  * @deprecated
  */
 function geodir_is_reviews_show(){
     _deprecated_function( 'geodir_is_reviews_show', '2.0.0' );
 }
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
+
+/**
+ * @deprecated
+ */
+function geodir_get_video(){
+    _deprecated_function( 'geodir_get_video', '2.0.0' );
+}
 //
 ///**
 // * @deprecated

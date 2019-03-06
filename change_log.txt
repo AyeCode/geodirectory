@@ -1,8 +1,16 @@
+v2.0.0.49
+Front end author actions - After delete, page is 404 - FIXED
+
 v2.0.0.48
-Customify theme compatibility settings added - ADDED
+Customify theme page layout compatibility settings added - ADDED
 Ninja Forms conflicts backend on add/edit pages - FIXED
 Listings + Location pages shows extra comma in meta title - FIXED
-Front end author actions - After delete, page is 404 - FIXED
+Beaver builder + Ninja forms can cause issues with compatibility settings - FIXED
+Astra theme page layout compatibility settings added - ADDED
+Newspaper theme page layout compatibility settings added - ADDED
+Enfold theme page layout compatibility settings added - ADDED
+Kleo theme page layout compatibility settings added - ADDED
+Genesis theme page layout compatibility settings added - ADDED
 
 v2.0.0.47
 Edit post permalink button missing so not able to edit single permalink - FIXED

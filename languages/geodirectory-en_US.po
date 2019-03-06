@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.47\n"
+"Project-Id-Version: GeoDirectory 2.0.0.48\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-05 19:09+0000\n"
-"PO-Revision-Date: 2019-03-05 19:09+0000\n"
+"POT-Creation-Date: 2019-03-06 14:12+0000\n"
+"PO-Revision-Date: 2019-03-06 14:12+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -8277,21 +8277,21 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:456
+#: includes/class-geodir-compatibility.php:515
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:458
+#: includes/class-geodir-compatibility.php:517
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "Settings unless disabled below."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:463
+#: includes/class-geodir-compatibility.php:522
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:464
+#: includes/class-geodir-compatibility.php:523
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
@@ -10190,8 +10190,8 @@ msgstr ""
 msgid "Select Country"
 msgstr ""
 
-#: includes/location-functions.php:391 includes/location-functions.php:393
-#: includes/location-functions.php:399
+#: includes/location-functions.php:394 includes/location-functions.php:396
+#: includes/location-functions.php:402
 #, php-format
 msgctxt "in location"
 msgid "in %s"

@@ -207,24 +207,12 @@ class GeoDir_Compatibility {
 	 * @return null|string
 	 */
 	public static function dynamically_add_post_meta( $metadata, $object_id, $meta_key, $single ) {
-		global $wp_query;
-		// An array or meta keys we don't want to be used by the template pages
-		// @todo switch back to an inclusive array, exclusive can add to many queries
-//		$restricted_meta_keys = array(
-//			'',
-//		);
-//
-//		if ( $meta_key && $meta_key[0]== "_" && geodir_is_page( 'single' )) {
-//			if ( $object_id && $metadata == '' && ! in_array( $meta_key, $restricted_meta_keys ) && $object_id == get_queried_object_id() ) {
-//				$metadata = geodir_get_post_meta_raw( geodir_details_page_id(), $meta_key );
-//			}
-//		}elseif($meta_key && $meta_key[0]== "_" && geodir_is_page( 'archive' ) ){
-//			if ( $object_id && $metadata == '' && ! in_array( $meta_key, $restricted_meta_keys ) && $object_id == get_queried_object_id() ) {
-//				$metadata = geodir_get_post_meta_raw( geodir_archive_page_id(), $meta_key );
-//			}
-//		}
+		global $wp_query; // this is needed to make sure get_queried_object_id() if defined.
 
-		// new way
+		// bail if in admin
+		if ( is_admin() ) {
+			return $metadata;
+		}
 
 		// Standard WP fields
 		$wp_keys = array(
@@ -238,72 +226,133 @@ class GeoDir_Compatibility {
 		);
 
 		// FusionBuilder (Avada theme), we need to add these on the fly
-		if(class_exists( 'FusionBuilder' )){
-
-			if(substr( $meta_key, 0, 5 ) === "pyre_" || substr( $meta_key, 0, 4 ) === "sbg_"){
+		if ( class_exists( 'FusionBuilder' ) ) {
+			if ( substr( $meta_key, 0, 5 ) === "pyre_" || substr( $meta_key, 0, 4 ) === "sbg_" ) {
 				$gen_keys[] = $meta_key;
 			}
 		}
 
+		// Astra theme
+		if ( defined('ASTRA_THEME_VERSION') ) {
+			$gen_keys[] = 'ast-main-header-display';
+			$gen_keys[] = 'footer-sml-layout';
+			$gen_keys[] = 'site-post-title';
+			$gen_keys[] = 'site-sidebar-layout';
+			$gen_keys[] = 'site-content-layout';
+			$gen_keys[] = 'ast-featured-img';
+		}
 
+		// Newspaper theme
+		if ( defined('TD_THEME_VERSION') ) {
+			if ( substr( $meta_key, 0, 3 ) === "td_") {
+				$gen_keys[] = $meta_key;
+			}
+		}
+
+		// Enfold theme
+		if ( function_exists( 'avia_get_option' ) ) {
+			if ( substr( $meta_key, 0, 6 ) === "_avia_" ) {
+				$gen_keys[] = $meta_key;
+			}
+			$gen_keys[] = 'header_transparency';
+			$gen_keys[] = 'header_title_bar';
+			$gen_keys[] = 'footer';
+			$gen_keys[] = 'sidebar';
+			$gen_keys[] = 'layout';
+		}
+
+		// Sky theme
+		if ( function_exists( 'vh_setup' ) ) {
+			if ( substr( $meta_key, 0, 4 ) === "sbg_" ) {
+				$gen_keys[] = $meta_key;
+			}
+			$gen_keys[] = 'layouts';
+		}
 
 		// Beaver builder :: it does not seem to need any changes
 
-		if(
+		if (
 			$meta_key
-			&& ($meta_key[0]== "_" || in_array($meta_key,$gen_keys))
+			&& ( $meta_key[0] == "_" || in_array( $meta_key, $gen_keys ) )
 			&& $object_id
 			&& ! empty( $wp_query )
 			&& $object_id == get_queried_object_id()
-			&& (geodir_is_page( 'single' ) || geodir_is_page( 'archive' ))
-		){
+			&& ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) )
+		) {
+
 			$template_page_id = geodir_is_page( 'single' ) ? geodir_details_page_id() : geodir_archive_page_id();
 
+			// if we got this far then we might as well load all the page post meta
+			global $gd_compat_post_meta;
+			if ( ! is_array( $gd_compat_post_meta ) ) {
+				$gd_compat_post_meta = get_post_meta( $template_page_id );
+				if ( ! empty( $gd_compat_post_meta ) ) {
+					foreach($gd_compat_post_meta as $key=>$val){
+						$gd_compat_post_meta[$key] = array_map("maybe_unserialize",$val);
+					}
+				} else {
+					$gd_compat_post_meta = array();
+				}
+			}
+
 			// WP
-			if(in_array($meta_key,$wp_keys)){
-				$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+			if ( in_array( $meta_key, $wp_keys ) ) {
+				$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
 			}
 
 			// generic keys
-			if(in_array($meta_key,$gen_keys)){
-				$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+			if ( in_array( $meta_key, $gen_keys ) ) {
+				$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
 			}
 
 			// Elementor
-			if(function_exists( '_is_elementor_installed' ) && geodir_get_post_meta_raw( $template_page_id, '_elementor_edit_mode')=='builder'){
-				if(substr( $meta_key, 0, 11 ) === "_elementor_"){
-					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+			if ( function_exists( '_is_elementor_installed' ) && ( isset( $gd_compat_post_meta['_elementor_edit_mode'] ) && $gd_compat_post_meta['_elementor_edit_mode'] == 'builder' ) ) {
+				if ( substr( $meta_key, 0, 11 ) === "_elementor_" ) {
+					$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
 				}
 			}
 
 			// DIVI (elegant themes)
-			if(function_exists('et_pb_is_pagebuilder_used') && et_pb_is_pagebuilder_used($template_page_id)){
-				if(substr( $meta_key, 0, 4 ) === "_et_"){
-					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+			if ( function_exists( 'et_pb_is_pagebuilder_used' ) && et_pb_is_pagebuilder_used( $template_page_id ) ) {
+				if ( substr( $meta_key, 0, 4 ) === "_et_" ) {
+					$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
 				}
 			}
 
 			// Beaver Builder
-			if(class_exists( 'FLBuilderLoader' ) && geodir_get_post_meta_raw( $template_page_id, '_fl_builder_enabled') ){
-				if(substr( $meta_key, 0, 4 ) === "_fl_"){
-					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+			if ( class_exists( 'FLBuilderLoader' ) && ( isset( $gd_compat_post_meta['_fl_builder_enabled'] ) && $gd_compat_post_meta['_fl_builder_enabled'] ) ) {
+				if ( substr( $meta_key, 0, 4 ) === "_fl_" ) {
+					$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
 				}
 			}
 
 			// WPBakery page builder
 //			if(class_exists( 'FLBuilderLoader' ) && geodir_get_post_meta_raw( $template_page_id, '_fl_builder_enabled') ){
 //				if(substr( $meta_key, 0, 4 ) === "_vc_"){
-//					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+//			$metadata = isset($gd_compat_post_meta[$meta_key]) ? $gd_compat_post_meta[$meta_key] : '';
 //				}
 //			}
 
 			// Customify theme
-			if(function_exists('Customify') ){
-				if(substr( $meta_key, 0, 11 ) === "_customify_"){
-					$metadata = geodir_get_post_meta_raw( $template_page_id, $meta_key );
+			if ( function_exists( 'Customify' ) ) {
+				if ( substr( $meta_key, 0, 11 ) === "_customify_" ) {
+					$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
 				}
 			}
 
+			// Kleo theme
+			if ( function_exists( 'kleo_setup' ) ) {
+				if ( substr( $meta_key, 0, 6 ) === "_kleo_" ) {
+					$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
+				}
+			}
+
+			// Genesis theme
+			if ( function_exists( 'genesis_constants' ) ) {
+				if ( substr( $meta_key, 0, 9 ) === "_genesis_" ) {
+					$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
+				}
+			}
 
 		}
 
