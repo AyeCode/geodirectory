@@ -1020,7 +1020,7 @@ function gd_delete_post($post_id){
     var message = geodir_params.my_place_listing_del;
 
     if (confirm(message)) {
-
+        console.log('Hello Naveen');
         jQuery.ajax({
             url: geodir_params.ajax_url,
             type: 'POST',
@@ -1032,9 +1032,8 @@ function gd_delete_post($post_id){
             },
             timeout: 20000,
             success: function(data) {
-
-                if(data.success){
-                    location.reload(); // @todo we need to find a better way to do this.
+                if(data.success && data.data){
+                    window.location.replace(data.data);
                 }else{
                     alert(data.data);
                 }
