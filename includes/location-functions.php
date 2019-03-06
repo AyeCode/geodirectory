@@ -348,7 +348,10 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
                 }
             }
 
-            $full_location[] = $location_name;
+            $location_name = trim( $location_name );
+			if ( $location_name != '' ) {
+				$full_location[] = $location_name;
+			}
         }
 
         if (!empty($full_location)) {
