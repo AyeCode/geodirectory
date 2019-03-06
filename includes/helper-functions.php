@@ -229,6 +229,31 @@ function geodir_info_url($args=array()){
     return $info_url;
 }
 
+
+/**
+ * Returns Listing Author Url
+ *
+ *
+ * @param  int $post_id Post ID
+ * @package Geodirectory
+ * @since 2.0.0.48
+ *
+ * @return string Info Author page url.
+ */
+function geodir_author_url( $author_id, $args ){
+	$author_url = get_author_posts_url( $author_id );
+	$post_types = geodir_get_posttypes( 'object' );
+	if( !empty( $post_types ) ) {
+		foreach ( $post_types as $key => $postobj ) {
+			$author_url = trailingslashit( $author_url )
+			              . $postobj->rewrite->slug
+			              . "/";
+		}
+	}
+	$author_url = geodir_getlink( $author_url, $args );
+	return $author_url;
+}
+
 /**
  * Converts string to title case.
  *
