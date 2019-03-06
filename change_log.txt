@@ -1,5 +1,7 @@
 v2.0.0.48
 Customify theme compatibility settings added - ADDED
+Ninja Forms conflicts backend on add/edit pages - FIXED
+Listings + Location pages shows extra comma in meta title - FIXED
 
 v2.0.0.47
 Edit post permalink button missing so not able to edit single permalink - FIXED
