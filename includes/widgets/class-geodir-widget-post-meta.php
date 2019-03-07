@@ -165,8 +165,9 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			$post_type = 'gd_place';
 		}
 
-		if(geodir_is_gd_post_type($post_type)){ //echo '###2';
-			$fields = geodir_post_custom_fields('',  'all', $post_type , 'none');
+		if ( geodir_is_gd_post_type( $post_type ) ) {
+			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
+			$fields = geodir_post_custom_fields( $package_id,  'all', $post_type , 'none' );
 
 			if(!empty($fields)){
 				$field = array();
