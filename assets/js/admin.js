@@ -190,15 +190,13 @@ jQuery(document).ready(function() {
         jQuery('#geodir_add_location_url').closest('td').find('input').not(jQuery('#geodir_add_location_url')).prop('disabled', true);
     }
 
-    jQuery('#submit').click(function() {
-        if (jQuery('input[name="ct_cat_icon[src]"]').hasClass('ct_cat_icon[src]')) {
-            if (jQuery('input[name="ct_cat_icon[src]"]').val() == '') {
-                jQuery('input[name="ct_cat_icon[src]"]').closest('tr').addClass('form-invalid');
-                return false;
-            } else {
-                jQuery('input[name="ct_cat_icon[src]"]').closest('tr').removeClass('form-invalid');
-                jQuery('input[name="ct_cat_icon[src]"]').closest('div').removeClass('form-invalid');
-            }
+    jQuery('.edit-tag-actions .button-primary').click(function() {
+        if (jQuery('input[name="ct_cat_icon[src]"]').val() == '') {
+            jQuery('input[name="ct_cat_icon[src]"]').closest('tr').addClass('form-invalid');
+            return false;
+        } else {
+            jQuery('input[name="ct_cat_icon[src]"]').closest('tr').removeClass('form-invalid');
+            jQuery('input[name="ct_cat_icon[src]"]').closest('div').removeClass('form-invalid');
         }
     });
 
@@ -1191,33 +1189,33 @@ function geodir_admin_init_rating_input(){
      * @info This is shared in both post.js and admin.js any changes shoudl be made to both.
      */
     jQuery(".gd-rating-input").each(function () {
-
         $total = jQuery(this).find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
         $parent = this;
-
-        console.log($total);
 
         // set the current star value and text
         $value = jQuery(this).closest('.gd-rating-input').find('input').val();
         if($value > 0){
             jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground').width( $value / $total * 100 + '%');
-            jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text( jQuery(this).closest('.gd-rating-input').find('svg'+':eq('+ ($value - 1) +'), img'+':eq('+ ($value - 1) +'), i'+':eq('+ ($value - 1) +')').attr("title"));
+            jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text( jQuery(this).closest('.gd-rating-input').find('svg, img'+':eq('+ ($value - 1) +'), i'+':eq('+ ($value - 1) +')').attr("title"));
         }
 
         // loop all rating stars
-        jQuery(this).find('svg, img').each(function (index) {
+        jQuery(this).find('i,svg, img').each(function (index) {
             $original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();
-            $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > svg, .gd-rating-foreground > svg').length;
+            $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
             $original_percent = $original_rating / $total * 100;
             $rating_set = false;
 
             jQuery(this).hover(
                 function () {
+                    $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
+                    $original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();
+                    $original_percent = $original_rating / $total * 100;
+                    $original_rating_text = jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text();
+
                     $percent = 0;
                     $rating = index + 1;
                     $rating_text = jQuery(this).attr("title");
-                    $original_rating_text = jQuery(this).closest('.gd-rating-input').find('.gd-rating-text').text();
-                    $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > svg, .gd-rating-foreground > img').length;
                     if ($rating > $total) {
                         $rating = $rating - $total;
                     }

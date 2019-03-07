@@ -105,6 +105,8 @@ class GeoDir_Compatibility {
 			add_action( 'admin_init', array( __CLASS__, 'buddypress_notices' ) );
 		}
 
+
+
 		/*######################################################
 		GENERAL
 		######################################################*/
@@ -147,6 +149,23 @@ class GeoDir_Compatibility {
 		     )
 		) {
 			add_action( 'wp_title', array( 'GeoDir_SEO', 'set_meta' ), 9 );
+		}
+
+		/*######################################################
+		SEOPress (breaks search page)
+		######################################################*/
+		if(function_exists('seopress_activation')){
+			add_action( 'wp_head', array( __CLASS__, 'seopress' ), 0 );
+		}
+	}
+
+	/**
+	 * SEOPress breaks the search page when nothing is searched, so we remove some filters in that case.
+	 */
+	public static function seopress(){
+		if(geodir_is_page( 'search' )){
+			remove_action( 'wp_head', 'seopress_social_fb_desc_hook', 1 );
+			remove_action( 'wp_head', 'seopress_social_twitter_desc_hook', 1 );
 		}
 	}
 
