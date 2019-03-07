@@ -1,6 +1,8 @@
 v2.0.0.49
 Front end author actions - After delete, page is 404 - FIXED
 No map icon validation on edit cat - FIXED
+Rating input not working from admin area edit comment screen - FIXED
+Change for SEOPress caused Beaver builder issues on search page - FIXED
 
 v2.0.0.48
 Customify theme page layout compatibility settings added - ADDED

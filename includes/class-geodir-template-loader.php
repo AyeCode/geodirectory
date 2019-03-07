@@ -96,8 +96,6 @@ class GeoDir_Template_Loader {
 
         if(geodir_is_geodir_page()){
             $default_file = ' '; // fake a return to trigger the defaults
-
-            //echo '###xxx';
         }else{
             return '';
         }
@@ -249,7 +247,7 @@ class GeoDir_Template_Loader {
      * @since 2.0.0
      * @return string The filtered content.
      */
-    public static function setup_archive_page_content(){
+    public static function setup_archive_page_content($content){
 		global $wp_query, $post,$gd_done_archive_loop;
 
         // if its outside the loop then bail so we don't set the current_post number and cause have_posts() to return false.
@@ -258,14 +256,9 @@ class GeoDir_Template_Loader {
             if(current_filter()=='the_excerpt' && $gd_done_archive_loop){
                 // we might be inside a "the_excerpt" filter which might be outside the loop so we don't return.
             }else{
-                return;
+                return;//$content;
             }
         }
-
-		/* Fix SEOPress conflict */
-		if ( ! ( ! empty( $post ) && ! empty( $post->post_type ) && $post->post_type == 'page' ) ) {
-			return;
-		}
 
 		// Backpup post.
 		$gd_backup_post = $post;
