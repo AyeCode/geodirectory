@@ -127,7 +127,7 @@ function geodir_post_type_options( $plural_name = false, $translated = false ) {
 function geodir_is_gd_post_type( $post_type ) {
     global $gd_is_post_type;
     
-    if ( empty( $post_type ) ) {
+    if ( empty( $post_type ) || is_array($post_type) ) {
         return false;
     }
     
