@@ -28,7 +28,25 @@ class GeoDir_Template_Loader {
 
         add_action( 'post_updated', array(__CLASS__,'set_clear_list_view_storage'), 10, 3 );
 
+        // set search as post_type archive
+//        add_action( "pre_handle_404", array(__CLASS__,'set_search_as_archive'),0);
+
+
     }
+
+    // @todo we might need to adjust some query vars for beaver themer search page if the add our hooks.
+//    public static function set_search_as_archive(){//echo 'xxx';exit;
+//        global $wp_query;
+//        if(!empty($wp_query)){
+//
+////            print_r( $wp_query->query_vars );
+//
+////            $wp_query->is_search = 0;
+//            $wp_query->post_type = 'gd_place';
+//            $wp_query->set('post_type', 'gd_place');
+//            $wp_query->is_post_type_archive = 1;//echo '###x';exit;
+//        }
+//    }
 
     /**
      * If saving a page that contains the [gd_loop] shortcode then we set a flag to blank the localStorage for the admin so they see the change instantly.
@@ -248,6 +266,13 @@ class GeoDir_Template_Loader {
      * @return string The filtered content.
      */
     public static function setup_archive_page_content($content){
+
+        // @todo this is Kiran's solution, lets keep an eye out and report any situations where this does not work out.
+        global $post,$wp_query;
+        if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
+            return $content;
+        }
+
 		global $wp_query, $post,$gd_done_archive_loop;
 
         // if its outside the loop then bail so we don't set the current_post number and cause have_posts() to return false.
@@ -329,7 +354,6 @@ class GeoDir_Template_Loader {
      */
     public static function setup_archive_loop_as_page(){
 
-
         /*
          * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
          */
@@ -384,6 +408,12 @@ class GeoDir_Template_Loader {
      * @since 2.0.0
      */
     public static function setup_singular_page($content){
+
+        // @todo this is Kiran's solution, lets keep an eye out and report any situations where this does not work out.
+        global $post,$wp_query;
+        if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
+            return $content;
+        }
 
         /*
          * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
