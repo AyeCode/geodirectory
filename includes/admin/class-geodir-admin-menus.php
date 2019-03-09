@@ -34,6 +34,48 @@ class GeoDir_Admin_Menus {
 
 		// Add endpoints custom URLs in Appearance > Menus > Pages.
 		add_action( 'admin_head-nav-menus.php', array( $this, 'add_nav_menu_meta_boxes' ) );
+		
+		// Filters
+		add_filter( 'add_menu_classes', array($this, 'bubble_count_number'));
+	}
+
+
+	/**
+	 * Show the pending posst counts on the CPT admin menu item.
+	 *
+	 * @since 2.0.0.49
+	 * @param $menu
+	 *
+	 * @return mixed
+	 */
+	public function bubble_count_number( $menu )
+	{
+
+		$cpts = geodir_get_posttypes();
+		$counts = array();
+		if(!empty($cpts )){
+			foreach($cpts as $cpt){
+				$post_counts = wp_count_posts($cpt, 'readable'); // let WP handel the caching
+				$counts[$cpt] = isset($post_counts->pending) ? absint($post_counts->pending) : 0;
+			}
+		}
+
+		if(!empty($counts) && !empty($menu)){
+			foreach($menu as $menu_key => $menu_data){
+				// check its probably a GD post type
+				if(substr( $menu_data[2], 0, 22 ) === "edit.php?post_type=gd_"){
+					$parts = explode("=",$menu_data[2]);
+					if(!empty($parts[1]) && !empty($counts[$parts[1]])){
+						$count = $counts[$parts[1]];
+						if(in_array($parts[1],$cpts)){
+							$menu[$menu_key][0] .= " <span class='awaiting-mod  count-$count'><span class='pending-count'>" . number_format_i18n($count) . '</span></span>';
+						}
+					}
+				}
+			}
+		}
+
+		return $menu;
 	}
 
 	/**
