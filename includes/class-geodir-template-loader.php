@@ -258,6 +258,53 @@ class GeoDir_Template_Loader {
         return array_unique( $search_files );
     }
 
+    public static function is_archive_page_id($id){
+        global $geodirectory;
+        $page_archive_id = isset($geodirectory->settings['page_archive']) ? $geodirectory->settings['page_archive'] : 0;
+        $result = false;
+        if($id==$page_archive_id){// default page check
+            $result = true;
+        }elseif(geodir_is_cpt_template_page( $id )){ // could be a CPT specific page
+            $result = true;
+        }
+
+        return $result;
+    }
+
+    public static function is_archive_page_content(){
+        global $post,$wp_query,$geodirectory;
+        $result = false;
+        $queried_object = get_queried_object();
+
+        if(!empty($post) && $post->post_type=='page' && ! empty( $wp_query ) && !empty($queried_object)){
+            if(!empty($queried_object->term_id)){// term
+                $result = self::is_archive_page_id($post->ID);
+            }elseif(!empty($queried_object->has_archive)){// CPT
+                $result = self::is_archive_page_id($post->ID);
+            }elseif(!empty($queried_object->ID) && $queried_object->ID==geodir_search_page_id()){ // search
+                $result = true;
+            }
+        }
+
+//        $queried_object = get_queried_object();
+//
+//        print_r($queried_object );
+//        echo '###'.get_queried_object_id();
+//        print_r($post);
+//
+//        if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
+//
+//            $queried_object = get_queried_object();
+//
+//            print_r($queried_object );
+//            echo '###'.get_queried_object_id();
+//            print_r($post);
+////            return $content;
+//        }
+
+        return $result;
+    }
+
 
     /**
      * Setup the GD Archive page content.
@@ -267,11 +314,14 @@ class GeoDir_Template_Loader {
      */
     public static function setup_archive_page_content($content){
 
-        // @todo this is Kiran's solution, lets keep an eye out and report any situations where this does not work out.
-        global $post,$wp_query;
-        if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
+
+        // if we are not filtering the archive page content then bail.
+        if(!self::is_archive_page_content()){
             return $content;
         }
+
+//        echo '###1';
+
 
 		global $wp_query, $post,$gd_done_archive_loop;
 

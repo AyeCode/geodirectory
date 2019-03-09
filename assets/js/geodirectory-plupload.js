@@ -231,6 +231,8 @@ function plu_show_thumbs(imgId) {
         txtRemove = geodir_params.action_remove;
     }
 
+    if(!imagesS){return;}
+
     var images = imagesS.split(",");
 
     for (var i = 0; i < images.length; i++) {

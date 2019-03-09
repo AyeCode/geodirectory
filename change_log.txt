@@ -5,6 +5,10 @@ Rating input not working from admin area edit comment screen - FIXED
 Change for SEOPress caused Beaver builder issues on search page - FIXED
 Post meta widget shows excluded fields from package - FIELD
 Beaver Builder :: Added warning message to template pages to say best to use Beaver Themer - ADDED
+If reviews disabled comment counts can be wrong for standard comments - FIXED
+If reviews are disabled the standard comments form can sometimes show twice - FIXED
+Themify ultra theme has JS conflict on admin add listing page - FIXED
+Details page now adds the default id as a body class - ADDED
 
 v2.0.0.48
 Customify theme page layout compatibility settings added - ADDED
