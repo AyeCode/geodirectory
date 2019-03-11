@@ -400,7 +400,7 @@ class GeoDir_User {
 
 		$post_types = geodir_get_posttypes( 'object' );
 
-		$addlisting_links = $output!=='select' ? array() : '';
+		$addlisting_links = $output=='array' ? array() : '';
 		foreach ( $post_types as $key => $postobj ) {
 			
 			if ( ! isset( $postobj->disable_frontend_add ) || $postobj->disable_frontend_add == '0' ) {
@@ -425,8 +425,8 @@ class GeoDir_User {
 					$add_link = apply_filters( 'geodir_dashboard_link_add_listing', $add_link, $key, get_current_user_id() );
 					$name     = apply_filters( 'geodir_dashboard_label_add_listing', $name, $key, get_current_user_id() );
 
-					if( $output === $key ){
-						$addlisting_links[ $key ] = array('url' => $add_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
+					if($output == 'array'){
+						$addlisting_links[$key] = array('url' => $add_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
 					}else{
 						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 					}
@@ -436,8 +436,8 @@ class GeoDir_User {
 
 		}
 
-		if( is_array( $addlisting_links ) && !empty( $addlisting_links[ $key ] ) ){
-			return $addlisting_links[ $key ];
+		if($output == 'array'){
+			return $addlisting_links;
 		}
 		elseif ( $addlisting_links != '' ) { ?>
 
