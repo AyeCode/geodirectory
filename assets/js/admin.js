@@ -122,7 +122,7 @@ jQuery(window).load(function() {
 		}
 	}
 
-    jQuery('.geodirectory .forminp, .large-text').focus(function() {
+    jQuery('.geodirectory .forminp .large-text').focus(function() {
         var placeholder = jQuery(this).attr('placeholder');
         var current_val = jQuery(this).val();
         if( '' == current_val ){
