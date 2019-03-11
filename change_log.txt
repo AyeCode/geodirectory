@@ -10,6 +10,7 @@ If reviews are disabled the standard comments form can sometimes show twice - FI
 Themify ultra theme has JS conflict on admin add listing page - FIXED
 Details page now adds the default id as a body class - ADDED
 Pending posts count numbers will now show next to the CPT admin menu item - ADDED
+Email settings subject and body placeholder text - ADDED
 
 v2.0.0.48
 Customify theme page layout compatibility settings added - ADDED
