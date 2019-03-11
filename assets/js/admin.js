@@ -122,6 +122,12 @@ jQuery(window).load(function() {
 		}
 	}
 
+    jQuery('.gd-email-subject, .gd-email-body').focus(function() {
+        var placeholder = jQuery(this).attr('data-placeholder');
+        jQuery(this).attr('placeholder', placeholder );
+    }).blur(function() {
+        jQuery(this).attr('placeholder', '' );
+    });
 });
 
 function geodir_handle_uninstall_option($el) {
