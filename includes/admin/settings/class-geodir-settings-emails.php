@@ -123,7 +123,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'placeholder' => '',
 						'custom_desc' => __('Available template tags:', 'geodirectory') . ' ' . $this->user_pending_post_email_tags(),
 						'custom_attributes' => array(
-							'data-placeholder' => GeoDir_Defaults::email_user_pending_post_subject()
+							'data-placeholder' => GeoDir_Defaults::email_user_pending_post_body()
 						)
 					),
 
