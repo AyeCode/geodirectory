@@ -156,8 +156,10 @@ $pages            = $system_status->get_pages();
 		<?php endif;
 		if ( $wpdb->use_mysqli ) {
 			$ver = mysqli_get_server_info( $wpdb->dbh );
-		} else {
+		} elseif(function_exists('mysql_get_server_info')) {
 			$ver = mysql_get_server_info();
+		}else{
+			$ver = '';
 		}
 		if ( ! empty( $wpdb->is_mysql ) && ! stristr( $ver, 'MariaDB' ) ) : ?>
 			<tr>

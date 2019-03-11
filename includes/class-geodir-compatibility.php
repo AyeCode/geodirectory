@@ -55,6 +55,9 @@ class GeoDir_Compatibility {
 		Beaver Builder :: Fix Page templates.
 		######################################################*/
 		add_filter( 'geodir_bypass_setup_archive_loop_as_page', array( __CLASS__, 'beaver_builder_loop_bypass' ) );
+		if(class_exists( 'FLBuilderLoader' )){
+			add_action('wp_footer', array( __CLASS__, 'beaver_builder_template_warning' ) );
+		}
 
 		/*######################################################
 		Elementor :: Fix Page templates.
@@ -113,6 +116,41 @@ class GeoDir_Compatibility {
 		add_filter( 'get_post_metadata', array( __CLASS__, 'dynamically_add_post_meta' ), 10, 4 );
 
 
+	}
+
+	/**
+	 * Adds a warning message if a user tries to use BB on a template page.
+	 */
+	public static function beaver_builder_template_warning(){
+		// check if we are in builder
+		if(!is_admin() && isset($_REQUEST['fl_builder']) && $id = get_the_ID() ){
+			if(geodir_is_geodir_page_id($id)){
+				global $geodirectory;
+				$is_geodir_page_template = false;
+				if(!empty($geodirectory->settings['page_search']) && $geodirectory->settings['page_search'] == $id ){
+					$is_geodir_page_template = true;
+				}elseif(!empty($geodirectory->settings['page_details']) && $geodirectory->settings['page_details'] == $id ){
+					$is_geodir_page_template = true;
+				}elseif(!empty($geodirectory->settings['page_archive']) && $geodirectory->settings['page_archive'] == $id ){
+					$is_geodir_page_template = true;
+				}elseif(!empty($geodirectory->settings['page_archive_item']) && $geodirectory->settings['page_archive_item'] == $id ){
+					$is_geodir_page_template = true;
+				}elseif( geodir_is_cpt_template_page( $id ) ){
+					$is_geodir_page_template = true;
+				}
+				if($is_geodir_page_template ){
+					$warning_message = sprintf(
+						__('GeoDirectory template pages work much better with %sBeaver Themer%s :: %sLearn more%s', 'geodirectory'),
+						'<a href="https://www.wpbeaverbuilder.com/beaver-themer/" target="_blank">', //@todo add affiliate code to beaver themer link
+						' <i class="fas fa-external-link-alt"></i></a>',
+						'<a href="https://wpgeodirectory.com/docs-v2/integrations/builders/#bb-themer" target="_blank">',
+						' <i class="fas fa-external-link-alt"></i></a>'
+					);
+					$warning_html = '<div class="gd-notification gd-warning  "><i class="fas fa-exclamation-triangle"></i> '.$warning_message.'</div>';
+					echo "<script>jQuery(function() {beaver_builder_template_warning = lity('<div class=\"lity-show\">$warning_html <a href=\"#\" onclick=\"beaver_builder_template_warning.close();\">Close</a></div>');});</script>";
+				}
+			}
+		}
 	}
 
 	/**
@@ -287,8 +325,6 @@ class GeoDir_Compatibility {
 			}
 			$gen_keys[] = 'layouts';
 		}
-
-		// Beaver builder :: it does not seem to need any changes
 
 		if (
 			$meta_key

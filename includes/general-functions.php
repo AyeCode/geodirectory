@@ -762,7 +762,7 @@ function geodir_max_upload_size() {
  * @return array Modified Body CSS classes.
  */
 function geodir_custom_posts_body_class( $classes ) {
-	global $wpdb, $wp;
+	global $wpdb, $wp,$gd_post;
 	$post_types = geodir_get_posttypes( 'object' );
 	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
 		$classes[] = 'geodir_custom_posts';
@@ -782,6 +782,12 @@ function geodir_custom_posts_body_class( $classes ) {
 
 		if(isset($post_types->{$post_type}) && isset($post_types->{$post_type}->disable_location) && $post_types->{$post_type}->disable_location){
 			$classes[] = 'geodir-archive-locationless';
+		}
+	}
+
+	if(geodir_is_page( 'single' ) ){
+		if(!empty($gd_post->default_category)){
+			$classes[] = 'geodir-post-cat-'.absint($gd_post->default_category);
 		}
 	}
 

@@ -380,8 +380,8 @@ class GeoDir_Comments {
 	public static function review_count_exclude_replies( $count, $post_id ) {
 		if ( ! is_admin() || strpos( $_SERVER['REQUEST_URI'], 'admin-ajax.php' ) ) {
 			$post_types = geodir_get_posttypes();
-
-			if ( in_array( get_post_type( $post_id ), $post_types ) && ! geodir_cpt_has_rating_disabled( (int) $post_id ) ) {
+			$post_type = get_post_type( $post_id );
+			if ( in_array( $post_type , $post_types ) && ! geodir_cpt_has_rating_disabled( $post_type) ) {
 				$review_count = self::get_post_review_count_total( $post_id );
 
 				return $review_count;
@@ -426,6 +426,7 @@ class GeoDir_Comments {
 			}
 
 			if ( geodir_cpt_has_rating_disabled( get_post_type( $post->ID ) ) ) {
+				$gd_is_comment_template_set = true;
 				return $comment_template;
 			}
 
