@@ -122,6 +122,20 @@ jQuery(window).load(function() {
 		}
 	}
 
+    jQuery('.geodirectory .forminp .large-text').focus(function() {
+        var placeholder = jQuery(this).attr('placeholder');
+        var current_val = jQuery(this).val();
+        if( '' == current_val ){
+            jQuery(this).val( placeholder );
+        }
+    }).blur(function() {
+        var placeholder = jQuery(this).attr('placeholder');
+        var current_val = jQuery(this).val();
+        if( current_val == placeholder ){
+            jQuery(this).val('');
+        }
+    });
+
 });
 
 function geodir_handle_uninstall_option($el) {
