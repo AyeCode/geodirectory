@@ -1,11 +1,11 @@
 <?php
 
 /**
- * GeoDir_Widget_Detail_Meta class.
+ * GeoDir_Widget_Post_Content class.
  *
  * @since 2.0.0
  */
-class GeoDir_Widget_Post_Description extends WP_Super_Duper {
+class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 
 
 	public $arguments;
@@ -16,15 +16,15 @@ class GeoDir_Widget_Post_Description extends WP_Super_Duper {
 
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
-			'block-icon'    => 'location-alt',
+			'block-icon'    => 'menu',
 			'block-category'=> 'common',
-			'block-keywords'=> "['geo','geodirectory','geodir']",
+			'block-keywords'=> "['geo','description','content']",
 			'class_name'    => __CLASS__,
-			'base_id'       => 'gd_post_description', // this us used as the widget id and the shortcode id.
-			'name'          => __('GD > Post Description','geodirectory'), // the name of the widget.
+			'base_id'       => 'gd_post_content', // this us used as the widget id and the shortcode id.
+			'name'          => __('GD > Post Content','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-description-container', // widget class
-				'description' => esc_html__('This shows a post description text.','geodirectory'), // widget description
+				'classname'   => 'geodir-post-content-container', // widget class
+				'description' => esc_html__('This shows a post content text. You can show text from any textarea field.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,
 				'gd_wgt_showhide' => 'show_on',
@@ -41,7 +41,6 @@ class GeoDir_Widget_Post_Description extends WP_Super_Duper {
 					'advanced' => true
 				),
 				'id'  => array(
-					'name' => 'id',
 					'title' => __('Post ID:', 'geodirectory'),
 					'desc' => __('Leave blank to use current post id.', 'geodirectory'),
 					'type' => 'number',
@@ -55,32 +54,57 @@ class GeoDir_Widget_Post_Description extends WP_Super_Duper {
 					'title' => __('Key:', 'geodirectory'),
 					'desc' => __('This is the custom field key.', 'geodirectory'),
 					'type' => 'select',
-					'placeholder' => 'website',
+					'placeholder' => 'post_content',
 					'options'   => $this->get_custom_field_keys(),
 					'desc_tip' => true,
-					'default'  => '',
+					'default'  => 'post_content',
 					'advanced' => false
 				),
 				'show'  => array(
-					'name' => 'show',
 					'title' => __('Show:', 'geodirectory'),
 					'desc' => __('What part of the post meta to show.', 'geodirectory'),
 					'type' => 'select',
 					'options'   =>  array(
-						"" => __('icon + label + value', 'geodirectory'),
+						"" => __('value (strip_tags)', 'geodirectory'),
+						"icon-label-value" => __('icon + label + value', 'geodirectory'),
 						"icon-value" => __('icon + value', 'geodirectory'),
 						"label-value" => __('label + value', 'geodirectory'),
 						"label" => __('label', 'geodirectory'),
 						"value" => __('value', 'geodirectory'),
-						"value-strip" => __('value (strip_tags)', 'geodirectory'),
 					),
+					'default'  => '',
 					'desc_tip' => true,
 					'advanced' => false
 				),
+				'limit'  => array(
+					'title' => __('Word limit:', 'geodirectory'),
+					'desc' => __('How many words to limit the text to. (will auto strip tags)', 'geodirectory'),
+					'type' => 'number',
+					'placeholder'  => '20',
+					'desc_tip' => true,
+					'advanced' => false
+				),
+				'max_height'  => array(
+					'title' => __('Max height:', 'geodirectory'),
+					'desc' => __('Height in (px) This can be used to set a consistent height of the text with the read more button then linking to the full text.', 'geodirectory'),
+					'type' => 'number',
+					'default'  => '',
+					'placeholder' => '120',
+					'desc_tip' => true,
+					'advanced' => true
+				),
+				'read_more'  => array(
+					'title' => __("Read more link:", 'geodirectory'),
+					'desc' => __('Show the read more link at the end of the text. enter `0` to not show link.', 'geodirectory'),
+					'type' => 'text',
+					'desc_tip' => true,
+					'value'  => '',
+					'placeholder' => __("Read more...", 'geodirectory'),
+					'advanced' => true
+				),
 				'alignment'  => array(
-					'name' => 'alignment',
-					'title' => __('Alignment:', 'geodirectory'),
-					'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
+					'title' => __('Text Align:', 'geodirectory'),
+					'desc' => __('How the text should be aligned.', 'geodirectory'),
 					'type' => 'select',
 					'options'   =>  array(
 						"" => __('None', 'geodirectory'),
@@ -90,6 +114,15 @@ class GeoDir_Widget_Post_Description extends WP_Super_Duper {
 					),
 					'desc_tip' => true,
 					'advanced' => false
+				),
+				'strip_tags'  => array(
+					'title' => __("Strip tags:", 'geodirectory'),
+					'desc' => __('Strip tags from content.', 'geodirectory'),
+					'type' => 'checkbox',
+					'desc_tip' => true,
+					'value'  => '1',
+					'default'  => '0',
+					'advanced' => true
 				),
 			)
 		);
@@ -129,8 +162,12 @@ class GeoDir_Widget_Post_Description extends WP_Super_Duper {
 		$output = '';
 		$args = shortcode_atts( array(
 			'id'    => $post->ID,
-			'key'    => '', // the meta key : email
+			'key'   => 'post_content',
 			'show'    => '', // title,value (default blank, all)
+			'strip_tags' => '',
+			'max_height' => '',
+			'read_more' => '',
+			'limit'    => '', // the word limit number (default: 20)
 			'alignment'    => '', // left,right,center
 			'location'  => 'none',
 		), $args, 'gd_post_meta' );
@@ -156,7 +193,9 @@ class GeoDir_Widget_Post_Description extends WP_Super_Duper {
 		}
 
 		if(geodir_is_gd_post_type($post_type)){ //echo '###2';
-			$fields = geodir_post_custom_fields('',  'all', $post_type , 'none');
+
+			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
+			$fields = geodir_post_custom_fields($package_id ,  'all', $post_type);
 
 			if(!empty($fields)){
 				$field = array();
@@ -165,19 +204,48 @@ class GeoDir_Widget_Post_Description extends WP_Super_Duper {
 						$field = $field_info;
 					}
 				}
-				if(!empty($field)){
+				if(!empty($field)){ // the field is allowed to be shown
 					$field = stripslashes_deep( $field );
-					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
-					if($args['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
-					if($args['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
-					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
+					if($args['alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
+					if($args['alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
+					if($args['alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
 
-					if($field['name']=='post_content'){
-						//$output = wp_strip_all_tags($output);
+					// set to value if empty
+					if(empty($args['show'])){
+						$args['show'] = 'value';
 					}
 
-				}else{
-					//$output = __('Key does not exist','geodirectory');
+					// set max_height
+					if(!empty($args['max_height'])){
+						$args['show'] .= '-fade::'.absint($args['max_height']);
+					}
+
+					// maybe force strip tags
+					if(!empty($args['show']) && !empty($args['strip_tags'])){
+						$args['show'] .= "-strip";
+					}
+
+					if(!empty($args['max_height']) || !empty($args['limit'])){
+						// maybe show read_more
+						if(!empty($args['read_more'])){
+							$args['show'] .= "-more::".$args['read_more'];
+						}elseif(empty($args['read_more']) && $args['read_more']!=='0'){
+							$args['show'] .= "-more";
+						}
+					}
+
+
+					// set the limit
+					if(!empty($args['limit'])){
+						$args['show'] .= "-limit::".absint($args['limit']);
+					}
+
+//					$output = $args['show'];
+//					print_r($args);
+
+					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
+
+
 				}
 			}
 		}
@@ -187,7 +255,7 @@ class GeoDir_Widget_Post_Description extends WP_Super_Duper {
 	}
 
 	/**
-	 * Gets an array of custom field keys.
+	 * Gets an array of custom field keys for textareas.
 	 *
 	 * @return array
 	 */
@@ -197,13 +265,15 @@ class GeoDir_Widget_Post_Description extends WP_Super_Duper {
 		$keys[] = __('Select Key','geodirectory');
 		if(!empty($fields)){
 			foreach($fields as $field){
-				$keys[$field['htmlvar_name']] = $field['htmlvar_name'];
+				if(isset($field['field_type']) && $field['field_type']=='textarea'){
+					$keys[$field['htmlvar_name']] = $field['htmlvar_name'];
+				}
 			}
 		}
 
 		return $keys;
 
 	}
-	
+
 }
 

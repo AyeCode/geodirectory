@@ -118,9 +118,9 @@ body { // wrapping ina  body tag makes rules more specific
 					}
 				}
 
-				.geodir-field-post_content {
+				.geodir-field-post_content,
+				.geodir-post-content-container{
 					text-align: justify;
-					max-height: 120px;
 					position: relative;
 					overflow: hidden;
 					clear: both;
@@ -129,8 +129,8 @@ body { // wrapping ina  body tag makes rules more specific
 						padding: 0;
 					}
 
-					.gd-read-more {
-						display: none;
+
+					.gd-read-more-fade {
 						position: absolute;
 						bottom: 0;
 						left: 0;
@@ -139,6 +139,17 @@ body { // wrapping ina  body tag makes rules more specific
 						margin: 0;
 						padding: 30px 0 0 0;
 						background-image: linear-gradient(to bottom, transparent, #FFF);
+					}
+
+				}
+
+				.geodir-post-meta-container{
+					.geodir-field-post_content{
+						max-height: 120px;
+
+						.gd-read-more-fade {
+							display: none;
+						}
 					}
 				}
 

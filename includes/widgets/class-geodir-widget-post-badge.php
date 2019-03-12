@@ -80,7 +80,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			'badge'  => array(
 				'type' => 'text',
 				'title' => __('Badge:', 'geodirectory'),
-				'desc' => __('Badge text. Ex: FOR SALE. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field.', 'geodirectory'),
+				'desc' => __('Badge text. Ex: FOR SALE. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field or %%post_url%% for the post url.', 'geodirectory'),
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,
@@ -89,7 +89,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			'link'  => array(
 				'type' => 'text',
 				'title' => __('Link url:', 'geodirectory'),
-				'desc' => __('Badge link url. You can use this to make the button link to something, %%input%% can be used here if a link.', 'geodirectory'),
+				'desc' => __('Badge link url. You can use this to make the button link to something, %%input%% can be used here if a link or %%post_url%% for the post url.', 'geodirectory'),
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,

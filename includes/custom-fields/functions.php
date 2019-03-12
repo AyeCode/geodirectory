@@ -392,6 +392,19 @@ function geodir_field_output_process($output){
 
     if(!empty($output) && !is_array($output)){
         $output = array_flip(explode("-",$output)); // for speed
+
+        // check for values
+        if(!empty($output)){
+            foreach($output as $key=>$val){
+                $parts = explode("::",$key);
+                if(!empty($parts[1])){
+                    unset($output[$key]);
+                    $output[$parts[0]] = $parts[1];
+                }else{
+                    $output[$key] = '';
+                }
+            }
+        }
     }
     return $output;
 }

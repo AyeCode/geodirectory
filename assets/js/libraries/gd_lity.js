@@ -189,18 +189,32 @@
         var gallery_nav = '';
         if(has_next || has_prev){
             gallery_nav = '<div class="lity-nav">';
-            if(has_prev){gallery_nav = gallery_nav + '<span class="lity-nav-left"><i class="fa fa-arrow-left" aria-hidden="true"></i></span>';}
-            if(has_next){gallery_nav = gallery_nav + '<span class="lity-nav-right"><i class="fa fa-arrow-right" aria-hidden="true"></i></span>';}
+            if(has_prev){gallery_nav = gallery_nav + '<span class="lity-nav-left"><i class="fas fa-chevron-left" aria-hidden="true"></i></span>';}
+            if(has_next){gallery_nav = gallery_nav + '<span class="lity-nav-right"><i class="fas fa-chevron-right" aria-hidden="true"></i></span>';}
             gallery_nav = gallery_nav + '</div>';
 
             var initGallery = function() {
                 if(has_next){
+                    // add keybaord support
+                    jQuery('.lity-opened').keydown(function(e) {
+                        if (e.which == 39) {
+                            instance.close(); // close the original
+                            instance.opener().parent().next('li').find('a').trigger( "click" ); // open the next one
+                        }
+                    });
                     jQuery( ".lity-nav-right" ).click(function() {
                         instance.close(); // close the original
                         instance.opener().parent().next('li').find('a').trigger( "click" ); // open the next one
                     });
                 }
                 if(has_prev){
+                    // add keybaord support
+                    jQuery('.lity-opened').keydown(function(e) {
+                        if (e.which == 37) {
+                            instance.close(); // close the original
+                            instance.opener().parent().prev('li').find('a').trigger( "click" ); // open the next one
+                        }
+                    });
                     jQuery( ".lity-nav-left" ).click(function() {
                         instance.close(); // close the original
                         instance.opener().parent().prev('li').find('a').trigger( "click" ); // open the next one
@@ -614,6 +628,9 @@
                     deferred.resolve();
                 })
             ;
+
+            // remove gallery eventsZ
+            jQuery('.lity-opened').unbind("keydown");
 
             return deferred.promise();
         };

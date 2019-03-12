@@ -1000,6 +1000,13 @@ class GeoDir_Query {
 				$orderby = "( gd_titlematch * 2  + gd_exacttitle * 10 + gd_content * 1.5) DESC";
 			}
 
+//			$orderby_parts = array(); // PART => FACTOR
+//			$orderby_parts['gd_titlematch'] = '2';
+//			$orderby_parts['gd_exacttitle'] = '2';
+//			$orderby_parts['gd_content'] = '2';
+//			$orderby_parts['gd_titlematch'] = '2';
+//			$orderby_parts['gd_titlematch'] = '2';
+
 		}
 
 		return $orderby;

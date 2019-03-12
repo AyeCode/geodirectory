@@ -220,11 +220,14 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			<?php
 		}
 
+		if ( ! empty( $map_options['post_type_filter'] ) ) {
+			$map_post_types = self::map_post_types( true );
+		}
+
 		if ( ! empty( $map_options['cat_filter'] ) || ! empty( $map_options['search_filter'] ) ) {
-			$exclude_post_types = array();
-			$cpts_on_map        = count( geodir_get_posttypes( 'array' ) ) - count( $exclude_post_types );
 			$cat_filter_class   = '';
 			if ( ! empty( $map_options['post_type_filter'] ) ) {
+				$cpts_on_map        = $map_post_types;
 				$cat_filter_class = $cpts_on_map > 1 ? ' gd-map-cat-ptypes' : ' gd-map-cat-floor';
 			}
 			?>
@@ -268,7 +271,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		}
 
 		if ( ! empty( $map_options['post_type_filter'] ) ) {
-			$map_post_types = self::map_post_types();
 			if ( ! empty( $map_post_types ) && count( array_keys( $map_post_types ) ) > 1 ) {
 				?>
 				<!-- START post_type_filter -->
@@ -306,20 +308,29 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	}
 
 	/**
-	 *Get Map post types.
+	 * Get Map post types.
 	 *
 	 * @since 2.0.0
 	 *
+	 * @param bool $hide_empty Hide CPT if it has no published posts.
+	 *
 	 * @return array $map_post_types.
 	 */
-	public static function map_post_types() {
+	public static function map_post_types($hide_empty = false) {
 		$post_types = geodir_get_posttypes( 'options-plural' );
-
 		$map_post_types = array();
 		if ( ! empty( $post_types ) ) {
 			$exclude_post_types = geodir_get_option( 'exclude_post_type_on_map' );
 
 			foreach ( $post_types as $post_type => $name ) {
+
+				if($hide_empty){
+					$post_counts = wp_count_posts($post_type, 'readable'); // let WP handel the caching
+					if(isset($post_counts->publish) && $post_counts->publish==0){
+						continue;
+					}
+				}
+
 				if ( ! empty( $exclude_post_types ) && is_array( $exclude_post_types ) && in_array( $post_type, $exclude_post_types ) ) {
 					continue;
 				}

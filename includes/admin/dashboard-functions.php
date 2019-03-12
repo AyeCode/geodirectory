@@ -2,7 +2,6 @@
 add_filter( 'geodir_dashboard_get_stats', 'geodir_dashboard_listings_stats', 1, 3 ); 			// 1. Listings
 add_filter( 'geodir_dashboard_get_stats', 'geodir_dashboard_reviews_stats', 2, 3 ); 			// 2. Reviews
 // @todo implement via related plugin
-//add_filter( 'geodir_dashboard_get_stats', 'geodir_dashboard_claimed_listings_stats', 3, 3 ); 	// 3. Claimed Listings
 //add_filter( 'geodir_dashboard_get_stats', 'geodir_dashboard_paid_listings_stats', 4, 3 ); 		// 4. Paid Listings
 //add_filter( 'geodir_dashboard_get_stats', 'geodir_dashboard_revenues_stats', 5, 3 ); 			// 5. Revenues
 add_filter( 'geodir_dashboard_get_stats', 'geodir_dashboard_users_stats', 6, 3 ); 				// 6. Users
@@ -497,41 +496,6 @@ function geodir_dashboard_query_users_count( $statuses = array(), $where = '' ) 
 	return apply_filters( 'geodir_dashboard_query_users_count', $count, $statuses, $where );
 }
 
-
-/**
- * Dashboard claimed listings stats.
- *
- * @since 2.0.0
- *
- * @todo integrate via addons
- *
- * @param array $stats stats.
- * @param string $type Type.
- * @param string $period Period.
- * @return array $stats.
- */
-function geodir_dashboard_claimed_listings_stats( $stats, $type, $period ) {
-	$stat_key = 'claimed_listings';
-	$stat_label = __( 'Claimed Listings', 'geodirectory' );
-
-	$stats['stats'][ $stat_key ] = array(
-		'icon' => 'fas fa-briefcase',
-		'label' => $stat_label,
-		'value' => 0
-	);
-
-	$stats['chart_params']['ykeys'][] = $stat_key;
-	$stats['chart_params']['labels'][] = $stat_label;
-
-	if ( ! empty( $stats['chart_params']['data'] ) ) {
-		foreach ( $stats['chart_params']['data'] as $key => $data ) {
-			$stats['chart_params']['data'][$key][ $stat_key ] = 0;
-		}
-	}
-
-	return $stats;
-}
-
 /**
  * Dashboard paid listings stats.
  *
@@ -617,15 +581,7 @@ function geodir_dashboard_get_pending_stats() {
 		'total' => 0,
 		'url' => admin_url( 'edit-comments.php?comment_type=comment&comment_status=moderated' ),
 	);
-	// @todo implement via claim listng addon
-	/*
-	$stats['claim_listings'] = array(
-		'icon' => 'fas fa-exclamation-circle',
-		'label' => __( 'Pending Claimed', 'geodirectory' ),
-		'total' => 0,
-		'url' => '',
-	);
-	*/
+	
 	
 	
 	$item_stats = geodir_dashboard_post_types_stats( 'all', 'all', array( 'pending' ) );
@@ -657,17 +613,7 @@ function geodir_dashboard_get_pending_stats() {
 		$stats['reviews']['items'] = $items;
 		$stats['reviews']['total'] = $item_stats['total'];
 	}
-	
-	// @todo implement via claim listng addon
-	/*
-	$items = array();
-	$items[] = array(
-		'icon' => 'fas fa-map-marker-alt',
-		'label' => 'Places',
-		'total' => 0
-	);
-	$stats['claim_listings']['items'] = $items;
-	*/
+
 	
 	return apply_filters( 'geodir_dashboard_get_pending_stats', $stats );
 }

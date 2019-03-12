@@ -41,7 +41,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_location_content(){
-		return "[gd_notifications]\n[gd_categories]\n[gd_map map_type='directory' width=100% height=300 search_filter=1 cat_filter=1]\n[gd_search]\n[gd_listings post_limit=10]";
+		return "[gd_notifications]\n[gd_categories]\n[gd_map map_type='directory' width=100% height=300 search_filter=1 cat_filter=1 post_type_filter=1]\n[gd_search]\n[gd_listings post_limit=10]";
 	}
 
 	/**
@@ -69,7 +69,7 @@ class GeoDir_Defaults {
 [gd_post_fav show='' alignment='right' ]
 [gd_post_meta key='business_hours' location='listing']
 [gd_output_location location='listing']
-[gd_post_meta key='post_content' show='value-strip']
+[gd_post_content key='post_content' limit='60' max_height='120']
 [gd_archive_item_section type='close' position='right']";
 	}
 

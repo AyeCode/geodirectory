@@ -12,6 +12,13 @@ Details page now adds the default id as a body class - ADDED
 Pending posts count numbers will now show next to the CPT admin menu item - ADDED
 Email settings subject and body placeholder text - ADDED
 No listings found message should contain add listing link - ADDED
+Email settings subject and body placeholder text now editable - ADDED
+Post Badge widget can now use %%post_url%% replacement param - ADDED
+Map widget will now hide CPT if it has no published posts - CHANGED
+Light-box gallery now supports keyboard arrow navigation - ADDED
+Post Badge block not showing color selected in some browsers - FIXED
+New Widget added `gd_post_content` that allows to show text from textareas - ADDED
+GD Archive Item default content changed to use new gd_post_content widget - CHANGED
 
 
 v2.0.0.48
