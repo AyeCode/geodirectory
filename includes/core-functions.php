@@ -518,6 +518,8 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Post_Rating' );
 		register_widget( 'GeoDir_Widget_Post_Fav' );
 		register_widget( 'GeoDir_Widget_Post_Directions' );
+		register_widget( 'GeoDir_Widget_Post_Content' );
+
 
 		// Widgets
 		register_widget( 'GeoDir_Widget_Output_location' );

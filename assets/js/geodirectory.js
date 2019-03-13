@@ -969,8 +969,8 @@ function geodir_refresh_business_hour($this) {
 function init_read_more(){
     var $el, $ps, $up, totalHeight;
 
-    jQuery('.geodir-category-list-view  .geodir-field-post_content').each(function() {
-        jQuery(this).addClass('gd-read-more-wrap').wrapInner( "<p></p>").append('<p class="gd-read-more"><a href="#" class="gd-read-more-button">'+geodir_params.txt_read_more+'</a></p>');
+    jQuery('.geodir-category-list-view  .geodir-post-meta-container .geodir-field-post_content').each(function() {
+        jQuery(this).addClass('gd-read-more-wrap').wrapInner( "<p></p>").append('<p class="gd-read-more-fade"><a href="#" class="gd-read-more-button">'+geodir_params.txt_read_more+'</a></p>');
     });
 
     // Make the read more visable if the text needs it
@@ -978,7 +978,7 @@ function init_read_more(){
         var height = jQuery( this ).height();
         var maxHeight = parseInt(jQuery( this ).css('max-height'),10);
         if(height >= maxHeight){
-            jQuery( this ).find('.gd-read-more').show();
+            jQuery( this ).find('.gd-read-more-fade').show();
         }
     });
 
@@ -990,7 +990,7 @@ function init_read_more(){
         $el = jQuery(this);
         $p  = $el.parent();
         $up = $p.parent();
-        $ps = $up.find("p:not('.gd-read-more')");
+        $ps = $up.find("p:not('.gd-read-more-fade')");
 
         // measure how tall inside should be by adding together heights of all inside paragraphs (except read-more paragraph)
         $ps.each(function() {
@@ -1034,9 +1034,9 @@ function gd_delete_post($post_id){
             success: function(data) {
 
                 if(data.success){
-                    lity( "<div class='geodir-ajax-content lity-show'>"+ data.data +"</div>" );
+                    lity('<div class="gd-notification gd-success"><i class="fas fa-check-circle"></i> '+ data.data +'</div>');
                 }else{
-                    alert(data.data);
+                    lity('<div class="gd-notification gd-error"><i class="fas fa-exclamation-circle"></i> '+ data.data +'</div>');
                 }
             }
         });

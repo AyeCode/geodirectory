@@ -166,7 +166,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 					<td>
 						<code><?php echo esc_html( home_url() ).'/%cpt_slug%'; ?></code>
 						<input name="geodirectory_permalink_structure" id="geodir_permalink_structure" type="text"
-						       value="<?php echo esc_attr( $this->permalinks ? trailingslashit( $this->permalinks) : '' ); ?>"
+						       value="<?php echo esc_attr( $this->permalinks ?  $this->permalinks : '' ); ?>"
 						       class="regular-text code">
 						<br /><br />
 						<div class="gd-available-structure-tags hide-if-no-js">
@@ -336,7 +336,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 
 					// check permalinks contain post name or post id
 					if($permalink_structure != ''){
-						if(!$permalink_structure.includes("/%postname%/") && !$permalink_structure.includes("/%post_id%/")){
+						if(!$permalink_structure.includes("/%postname%") && !$permalink_structure.includes("/%post_id%")){
 							alert("<?php _e('GeoDirectory permalinks must contain either `%postname%` or `%post_id%`, please check and try again.','geodirectory'); ?>");
 							$return = false;
 						}

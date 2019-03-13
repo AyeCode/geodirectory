@@ -426,7 +426,7 @@ class GeoDir_User {
 					$name     = apply_filters( 'geodir_dashboard_label_add_listing', $name, $key, get_current_user_id() );
 
 					if($output == 'array'){
-						$addlisting_links[] = array('url' => $add_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
+						$addlisting_links[$key] = array('url' => $add_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
 					}else{
 						$addlisting_links .= '<option ' . $selected . ' value="' . $add_link . '">' . __( geodir_utf8_ucfirst( $name ), 'geodirectory' ) . '</option>';
 					}

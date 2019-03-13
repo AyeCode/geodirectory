@@ -1602,7 +1602,10 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
                 $field_icon = '';
             }
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+            $max_height = !empty($output['fade']) ? absint($output['fade'])."px" : '';
+            $max_height_style = $max_height ? " style='max-height:$max_height;overflow:hidden;' " : '';
+
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" '.$max_height_style.'>';
 
             if ( $output == '' || isset( $output['icon'] ) ) $html .= '<span class="geodir_post_meta_icon geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
             if ( $output == '' || isset( $output['label'] ) ) $html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
@@ -1611,23 +1614,51 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
             if ( $output == '' || isset( $output['value'] ) ) {
 				$value = stripslashes( $gd_post->{$cf['htmlvar_name']} );
 
-				if ( $cf['htmlvar_name'] != 'post_content' ) {
+                $content = '';
+                if ( $cf['htmlvar_name'] != 'post_content' ) {
 					if ( isset( $output['strip'] ) ) {
-                        $html .=  wp_strip_all_tags( wpautop( do_shortcode( $value ) ) );
+                        $content =  wp_strip_all_tags( wpautop( do_shortcode( $value ) ) );
                     } else {
 						if ( $embed ) { // Embed media.
 							global $wp_embed;
 							$value = $wp_embed->autoembed( $value );
 						}
-						$html .= wpautop( do_shortcode( $value ) );
+                        $content = wpautop( do_shortcode( $value ) );
                     }
 				} else { // Post content
 					if ( isset($output['strip'] ) ) {
-                        $html .= wp_strip_all_tags( apply_filters( 'the_content', $value ) );
+                        $content = wp_strip_all_tags( apply_filters( 'the_content', $value ) );
                     } else {
-                        $html .= apply_filters( 'the_content', $value );
+                        $content = apply_filters( 'the_content', $value );
                     }
 				}
+
+                if($content){
+
+                    // set a limit if it exists
+                    if(!empty($output['limit'])){
+                        $limit = absint($output['limit']);
+                        $content = wp_trim_words( $content, $limit, '' );
+                    }
+
+                    $html .= $content;
+
+//                    print_r( $output );echo '###';
+
+                    // add read more
+                    if(isset( $output['more'] )){
+                        $post_id = isset($gd_post->id) ? absint($gd_post->id) : 0;
+                        $more_text = empty( $output['more'] ) ? __("Read more...","geodirectory") : __($output['more'],"geodirectory");
+                        $link =  get_permalink($post_id);
+                        $link = $link."#".$cf['htmlvar_name'];// set the hash value
+                        $link_class = !empty($output['fade']) ? 'gd-read-more-fade' : '';
+                        $html .= " <a href='$link' class='gd-read-more  $link_class'>".esc_attr($more_text)."</a>";
+                    }
+
+
+                }
+
+
 			}
 
             $html .= '</div>';

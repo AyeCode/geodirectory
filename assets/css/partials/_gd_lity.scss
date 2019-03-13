@@ -207,12 +207,22 @@
     }
     span {
       background: #cccccc94;
-      border-radius: 20px;
-      padding: 0px 7px;
+      border-radius: 50%;
       color: #0000008c;
-      font-size: 20px;
       cursor: pointer;
       float: left;
+      font-size: 1.5em;
+      width: 1.5em;
+      height: 1.5em;
+      text-align: center;
+      display: inline-block;
+      i{
+        line-height: 1.5em;
+        vertical-align: middle;
+      }
+      svg{
+        height: 100%;
+      }
     }
     .lity-nav-right {
       float: right;

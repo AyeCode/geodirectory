@@ -34,7 +34,7 @@ class GeoDir_Admin_Menus {
 
 		// Add endpoints custom URLs in Appearance > Menus > Pages.
 		add_action( 'admin_head-nav-menus.php', array( $this, 'add_nav_menu_meta_boxes' ) );
-		
+
 		// Filters
 		add_filter( 'add_menu_classes', array($this, 'bubble_count_number'));
 	}
@@ -68,7 +68,7 @@ class GeoDir_Admin_Menus {
 					if(!empty($parts[1]) && !empty($counts[$parts[1]])){
 						$count = $counts[$parts[1]];
 						if(in_array($parts[1],$cpts)){
-							$menu[$menu_key][0] .= " <span class='awaiting-mod  count-$count'><span class='pending-count'>" . number_format_i18n($count) . '</span></span>';
+							$menu[$menu_key][0] .= " <span class='awaiting-mod  count-$count' title='".__("Posts pending review","geodirectory")."'><span class='pending-count'>" . number_format_i18n($count) . '</span></span>';
 						}
 					}
 				}

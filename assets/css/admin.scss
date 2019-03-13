@@ -840,6 +840,21 @@ tr.gd-row-color-picker td > .wp-picker-container {
 }
 .geodirectory nav.gd-nav-tab-wrapper {
     margin: 1.5em 0 1em;
+    .awaiting-mod, .update-plugins {
+        display: inline-block;
+        vertical-align: text-bottom;
+        margin: 1px 0 0 2px;
+        padding: 0 5px;
+        min-width: 7px;
+        height: 17px;
+        border-radius: 11px;
+        background-color: #ca4a1f;
+        color: #fff;
+        font-size: 9px;
+        line-height: 17px;
+        text-align: center;
+        z-index: 26;
+    }
 }
 .geodirectory-message {
     position: relative;
