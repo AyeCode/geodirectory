@@ -20,6 +20,8 @@ Post Badge block not showing color selected in some browsers - FIXED
 New Widget added `gd_post_content` that allows to show text from textareas - ADDED
 GD Archive Item default content changed to use new gd_post_content widget - CHANGED
 GD custom permalinks without trailing slash will not save - FIXED
+File custom fields data not converted properly during v1 to v2 conversion - FIXED
+Genesis theme GD search page is broken - FIXED
 
 
 v2.0.0.48
