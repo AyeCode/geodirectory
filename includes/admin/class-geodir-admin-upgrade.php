@@ -2354,5 +2354,116 @@ class GeoDir_Admin_Upgrade {
 
 			delete_option( 'geodir_franchise_posttypes' );
 		}
+
+		// Convert file fields data.
+		self::convert_file_fields();
+	}
+
+	public static function convert_file_fields() {
+		global $wpdb;
+
+		$post_types = geodir_get_posttypes();
+
+		foreach ( $post_types as $post_type ) {
+			$file_fields = $wpdb->get_results( $wpdb->prepare( "SELECT htmlvar_name FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE post_type = %s AND field_type = %s AND htmlvar_name != %s ORDER BY id ASC", array( $post_type, 'file', 'post_images' ) ) );
+			if ( empty( $file_fields ) ) {
+				continue;
+			}
+
+			$htmlvar_names = array();
+			$fields = 'pd.post_id, p.post_author, p.post_date_gmt';
+			$where = array();
+			foreach ( $file_fields as $field ) {
+				if ( ! empty( $field->htmlvar_name ) ) {
+					$htmlvar_names[] = $field->htmlvar_name;
+					$fields .= ', pd.' . $field->htmlvar_name;
+					$where[] = "pd.{$field->htmlvar_name} != ''";
+				}
+			}
+
+			if ( empty( $htmlvar_names ) ) {
+				continue;
+			}
+
+			$table = geodir_db_cpt_table( $post_type );
+
+			$results = $wpdb->get_results( "SELECT {$fields} FROM `{$table}` AS pd LEFT JOIN `{$wpdb->posts}` AS p ON p.ID = pd.post_id WHERE " . implode( " OR ", $where ) . " ORDER BY pd.post_id ASC" );
+
+			if ( empty( $results ) ) {
+				continue;
+			}
+
+			foreach ( $results as $row ) {
+				$save_fields = array();
+
+				foreach ( $htmlvar_names as $htmlvar_name ) {
+					$save_field = array();
+
+					if ( ! empty( $row->{$htmlvar_name} ) && strpos( $row->{$htmlvar_name}, "|" ) === false && ( $items = explode( ",", trim( $row->{$htmlvar_name} ) ) ) ) {
+						$order = 0;
+
+						foreach ( $items as $item_url ) {
+							$item_url = trim( $item_url );
+
+							if ( ! empty( $item_url ) ) {
+								$order++;
+								$relative_url = geodir_file_relative_url( $item_url );
+								$full_relative_url = geodir_file_relative_url( $item_url, true );
+								$filetype = wp_check_filetype( $full_relative_url );
+
+								$insert_data = array(
+									'post_id' => $row->post_id,
+									'date_gmt' => $row->post_date_gmt,
+									'user_id' => $row->post_author,
+									'title' => '',
+									'caption' => '',
+									'file' => ( $relative_url != '' && strpos( "/", $relative_url ) !== 0 ? "/" . $relative_url : $relative_url ),
+									'mime_type' => ( ! empty( $filetype ) && ! empty( $filetype['type'] ) ? $filetype['type'] : '' ),
+									'menu_order' => ( $order - 1 ),
+									'featured' => 0,
+									'is_approved' => 1,
+									'metadata' => '',
+									'type' => $htmlvar_name,
+									'other_id' => 0
+								);
+
+								$result = $wpdb->insert(
+									GEODIR_ATTACHMENT_TABLE,
+									$insert_data,
+									array(
+										'%d',
+										'%s',
+										'%d',
+										'%s',
+										'%s',
+										'%s',
+										'%s',
+										'%d',
+										'%d',
+										'%d',
+										'%s',
+										'%s',
+										'%d'
+									)
+								);
+								$insert_id = $result && ! empty( $wpdb->insert_id ) ? $wpdb->insert_id : 0;
+
+								if ( $insert_id ) {
+									$save_field[] = $full_relative_url . '|' . $insert_id . '||';
+								}
+							}
+						}
+					}
+
+					if ( ! empty( $save_field ) ) {
+						$save_fields[ $htmlvar_name ] = implode( ",", $save_field );
+					}
+				}
+
+				if ( ! empty( $save_fields ) ) {
+					$wpdb->update( $table, $save_fields, array( 'post_id' => $row->post_id ) );
+				}
+			}
+		}
 	}
 }

@@ -533,7 +533,7 @@ class GeoDir_Compatibility {
 
 	public static function genesis_content_archive( $val ) {
 
-		if ( geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) ) {
+		if ( geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'search' ) ) {
 			$val = 'excerpts';
 		}
 
