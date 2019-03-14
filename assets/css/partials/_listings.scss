@@ -169,9 +169,10 @@ body { // wrapping ina  body tag makes rules more specific
 		// grid view
 		&.geodir-gridview {
 
-			.geodir-fav-text, .gd-list-rating-text{
-				display: none;
-			}
+			//@todo do we maybe want o use not-in() to keep it as it was?
+			//.geodir-fav-text, .gd-list-rating-text{
+			//	display: none;
+			//}
 
 			& > li {
 				width: auto;
@@ -192,6 +193,24 @@ body { // wrapping ina  body tag makes rules more specific
 			}
 
 			&.gridview_onehalf {
+
+				// hide classes
+				.gd-lv-2{
+					display: none;
+				}
+				.gd-lv-s-2{
+					//post meta
+					.geodir_post_meta_icon{
+						.geodir_post_meta_title{
+							display: none;
+						}
+					}
+					// post review, post fav
+					.geodir-fav-text, .gd-list-rating-text,.gd-bh-today-range,.gd-secondary{
+						display: none;
+					}
+				}
+
 				& > li {
 					width: 48%;
 				}
@@ -201,6 +220,24 @@ body { // wrapping ina  body tag makes rules more specific
 			}
 
 			&.gridview_onethird {
+
+				// hide classes
+				.gd-lv-2,.gd-lv-3{
+					display: none;
+				}
+				.gd-lv-s-2,.gd-lv-s-3{
+					//post meta
+					.geodir_post_meta_icon{
+						.geodir_post_meta_title{
+							display: none;
+						}
+					}
+					// post review, post fav
+					.geodir-fav-text, .gd-list-rating-text,.gd-bh-today-range,.gd-secondary{
+						display: none;
+					}
+				}
+
 				& > li {
 					width: 32%;
 					margin-left: 2%;
@@ -211,6 +248,24 @@ body { // wrapping ina  body tag makes rules more specific
 			}
 
 			&.gridview_onefourth {
+
+				// hide classes
+				.gd-lv-2,.gd-lv-3,.gd-lv-4{
+					display: none;
+				}
+				.gd-lv-s-2,.gd-lv-s-3,.gd-lv-s-4{
+					//post meta
+					.geodir_post_meta_icon{
+						.geodir_post_meta_title{
+							display: none;
+						}
+					}
+					// post review, post fav
+					.geodir-fav-text, .gd-list-rating-text,.gd-bh-today-range,.gd-secondary{
+						display: none;
+					}
+				}
+
 				& > li {
 					width: 23%;
 					margin-left: 2.66%;
@@ -221,6 +276,23 @@ body { // wrapping ina  body tag makes rules more specific
 			}
 
 			&.gridview_onefifth {
+
+				// hide classes
+				.gd-lv-2,.gd-lv-3,.gd-lv-4,.gd-lv-5{
+					display: none;
+				}
+				.gd-lv-s-2,.gd-lv-s-3,.gd-lv-s-4,.gd-lv-s-5{
+					//post meta
+					.geodir_post_meta_icon{
+						.geodir_post_meta_title{
+							display: none;
+						}
+					}
+					// post review, post fav
+					.geodir-fav-text, .gd-list-rating-text,.gd-bh-today-range,.gd-secondary{
+						display: none;
+					}
+				}
 
 				// hide hours one onefith
 				.gd-bh-today-range{

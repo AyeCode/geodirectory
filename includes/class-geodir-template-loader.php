@@ -568,8 +568,10 @@ class GeoDir_Template_Loader {
      * @return bool $metadata.
      */
     public static function filter_thumbnail_id($metadata, $object_id, $meta_key, $single){
+        global $wp_query;
 
-        if($meta_key=='_thumbnail_id'){
+        // try to fire only for the current post.
+        if($meta_key=='_thumbnail_id' &&  ! empty( $wp_query ) && $object_id == get_queried_object_id() ){
             $metadata = false;
         }
 
