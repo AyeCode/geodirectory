@@ -100,6 +100,9 @@ class GeoDir_Compatibility {
 		The7 (theme) :: rewind the posts, the_excerpt function call seems to set the current_post number and cause have_posts() to return false.
 		######################################################*/
 		add_action( 'presscore_body_top', 'rewind_posts' );
+		if(isset($_REQUEST['geodir_search'])){
+			remove_filter('the_content','wpautop'); // for some reason this is added to the content on search.
+		}
 
 		/*######################################################
 		BuddyPress

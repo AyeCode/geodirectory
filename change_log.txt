@@ -25,6 +25,7 @@ Genesis theme GD search page is broken - FIXED
 Disable details page featured image setting can affect other post featured images on the details page - FIXED
 Some post widgets now include options to hide primary and secondary info per list view - ADDED
 Archive item page default content updated to work with hide content per list view - CHANGED
+Cornerstone builder now supported - ADDED
 
 
 v2.0.0.48

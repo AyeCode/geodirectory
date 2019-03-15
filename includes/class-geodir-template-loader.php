@@ -16,6 +16,11 @@ class GeoDir_Template_Loader {
      * @since 2.0.0
      */
     public static function init() {
+
+//        global $wp_filter;
+//        print_r($wp_filter['the_content']);exit;
+
+
         // filter the templates
         add_filter( 'template_include', array( __CLASS__, 'template_loader' ) );
 
@@ -271,12 +276,17 @@ class GeoDir_Template_Loader {
         return $result;
     }
 
+    /**
+     * Check if we are dealing with archive page onctent.
+     * 
+     * @return bool
+     */
     public static function is_archive_page_content(){
         global $post,$wp_query,$geodirectory;
         $result = false;
         $queried_object = get_queried_object();
 
-        if(!empty($post) && $post->post_type=='page' && ! empty( $wp_query ) && !empty($queried_object)){
+        if( ( (!empty($post) && $post->post_type=='page') || isset($_REQUEST['geodir_search']) ) && ! empty( $wp_query ) && !empty($queried_object)){
             if(!empty($queried_object->term_id)){// term
                 $result = self::is_archive_page_id($post->ID);
             }elseif(!empty($queried_object->has_archive)){// CPT
@@ -285,22 +295,6 @@ class GeoDir_Template_Loader {
                 $result = true;
             }
         }
-
-//        $queried_object = get_queried_object();
-//
-//        print_r($queried_object );
-//        echo '###'.get_queried_object_id();
-//        print_r($post);
-//
-//        if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
-//
-//            $queried_object = get_queried_object();
-//
-//            print_r($queried_object );
-//            echo '###'.get_queried_object_id();
-//            print_r($post);
-////            return $content;
-//        }
 
         return $result;
     }
@@ -319,9 +313,6 @@ class GeoDir_Template_Loader {
         if(!self::is_archive_page_content()){
             return $content;
         }
-
-//        echo '###1';
-
 
 		global $wp_query, $post,$gd_done_archive_loop;
 

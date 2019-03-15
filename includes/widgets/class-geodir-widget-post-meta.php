@@ -162,7 +162,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		$args['location'] = !empty($args['location']) ? $args['location'] : 'none';
 		$output = '';
 		$args = shortcode_atts( array(
-			'id'    => $gd_post->ID,
+			'id'    => isset($gd_post->ID) ? $gd_post->ID : 0,
 			'key'    => '', // the meta key : email
 			'show'    => '', // title,value (default blank, all)
 			'list_hide'    => '',
@@ -171,7 +171,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'alignment'    => '', // left,right,center
 			'location'  => 'none',
 		), $args, 'gd_post_meta' );
-		$args['id'] = !empty($args['id']) ? $args['id'] : $gd_post->ID;
+		$args['id'] = !empty($args['id']) ? $args['id'] : isset($gd_post->ID) ? $gd_post->ID : 0;
 
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
 
@@ -180,7 +180,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		// error checks
 		$errors = array();
 		if(empty($args['key'])){$errors[] = __('key is missing','geodirectory');}
-		if(empty($args['id'])){$errors[] = __('id is missing','geodirectory');}
+//		if(empty($args['id'])){$errors[] = __('id is missing','geodirectory');}
 		if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
 
 		if(!empty($errors)){
