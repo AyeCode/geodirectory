@@ -4,6 +4,7 @@
  * GeoDir_Widget_Detail_Meta class.
  *
  * @since 2.0.0
+ * @since 2.0.0.49 Added list_hide and list_hide_secondary options for more flexible designs.
  */
 class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
@@ -41,7 +42,6 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'advanced' => true
 				),
 				'id'  => array(
-					'name' => 'id',
 					'title' => __('Post ID:', 'geodirectory'),
 					'desc' => __('Leave blank to use current post id.', 'geodirectory'),
 					'type' => 'number',
@@ -51,7 +51,6 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'advanced' => false
 				),
 				'key'  => array(
-					'name' => 'key',
 					'title' => __('Key:', 'geodirectory'),
 					'desc' => __('This is the custom field key.', 'geodirectory'),
 					'type' => 'select',
@@ -62,7 +61,6 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'advanced' => false
 				),
 				'show'  => array(
-					'name' => 'show',
 					'title' => __('Show:', 'geodirectory'),
 					'desc' => __('What part of the post meta to show.', 'geodirectory'),
 					'type' => 'select',
@@ -78,7 +76,6 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'advanced' => false
 				),
 				'alignment'  => array(
-					'name' => 'alignment',
 					'title' => __('Alignment:', 'geodirectory'),
 					'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
 					'type' => 'select',
@@ -91,16 +88,43 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
-//				'location'  => array(
-//					'name' => 'location',
-//					'title' => __('Location key:', 'geodirectory'),
-//					'desc' => __('Meta values can be filtered to show differently in some location types.', 'geodirectory'),
-//					'type' => 'text',
-//					'placeholder' => 'mapbubble',
-//					'desc_tip' => true,
-//					'default'  => '',
-//					'advanced' => false
-//				),
+				'list_hide'  => array(
+					'title' => __('Hide item on view:', 'geodirectory'),
+					'desc' => __('You can set at what view the item will become hidden.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"2" => __('Grid view 2', 'geodirectory'),
+						"3" => __('Grid view 3', 'geodirectory'),
+						"4" => __('Grid view 4', 'geodirectory'),
+						"5" => __('Grid view 5', 'geodirectory'),
+					),
+					'desc_tip' => true,
+					'advanced' => true
+				),
+				'list_hide_secondary'  => array(
+					'title' => __('Hide secondary info on view', 'geodirectory'),
+					'desc' => __('You can set at what view the secondary info such as label will become hidden.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"2" => __('Grid view 2', 'geodirectory'),
+						"3" => __('Grid view 3', 'geodirectory'),
+						"4" => __('Grid view 4', 'geodirectory'),
+						"5" => __('Grid view 5', 'geodirectory'),
+					),
+					'desc_tip' => true,
+					'advanced' => true
+				),
+				'css_class'  => array(
+					'type' => 'text',
+					'title' => __('Extra class:', 'geodirectory'),
+					'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'geodirectory'),
+					'placeholder' => '',
+					'default' => '',
+					'desc_tip' => true,
+					'advanced' => true,
+				),
 			)
 		);
 
@@ -132,19 +156,22 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		 */
 		extract($args, EXTR_SKIP);
 
-		global $post;
+		global $post,$gd_post;
 
 		$original_id = isset($args['id']) ? $args['id'] : '';
 		$args['location'] = !empty($args['location']) ? $args['location'] : 'none';
 		$output = '';
 		$args = shortcode_atts( array(
-			'id'    => $post->ID,
+			'id'    => $gd_post->ID,
 			'key'    => '', // the meta key : email
 			'show'    => '', // title,value (default blank, all)
+			'list_hide'    => '',
+			'list_hide_secondary'    => '',
+			'css_class' => '',
 			'alignment'    => '', // left,right,center
 			'location'  => 'none',
 		), $args, 'gd_post_meta' );
-		$args['id'] = !empty($args['id']) ? $args['id'] : $post->ID;
+		$args['id'] = !empty($args['id']) ? $args['id'] : $gd_post->ID;
 
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
 
@@ -178,9 +205,29 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 				}
 				if(!empty($field)){
 					$field = stripslashes_deep( $field );
+
+					// apply standard css
+					if(!empty($args['css_class'])){
+						$field['css_class'] .=" ".$args['css_class']." ";
+					}
+
+					// set alignment class
 					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
 					if($args['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
 					if($args['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
+
+					// set list_hide class
+					if($args['list_hide']=='2'){$field['css_class'] .= " gd-lv-2 ";}
+					if($args['list_hide']=='3'){$field['css_class'] .= " gd-lv-3 ";}
+					if($args['list_hide']=='4'){$field['css_class'] .= " gd-lv-4 ";}
+					if($args['list_hide']=='5'){$field['css_class'] .= " gd-lv-5 ";}
+
+					// set list_hide_secondary class
+					if($args['list_hide_secondary']=='2'){$field['css_class'] .= " gd-lv-s-2 ";}
+					if($args['list_hide_secondary']=='3'){$field['css_class'] .= " gd-lv-s-3 ";}
+					if($args['list_hide_secondary']=='4'){$field['css_class'] .= " gd-lv-s-4 ";}
+					if($args['list_hide_secondary']=='5'){$field['css_class'] .= " gd-lv-s-5 ";}
+
 					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
 
 					if($field['name']=='post_content'){

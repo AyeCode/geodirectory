@@ -1003,6 +1003,7 @@ class GeoDir_Admin_Settings {
 								<?php echo implode( ' ', $custom_attributes ); ?>
 								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
 								>
+								<option value=""><?php _e("Select icon","geodirectory");?></option>
 								<?php
 								foreach ( $value['options'] as $key => $val ) {
 									?>

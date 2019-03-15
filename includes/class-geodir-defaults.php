@@ -65,9 +65,9 @@ class GeoDir_Defaults {
 [gd_post_title tag='h2']
 [gd_author_actions author_page_only='1']
 [gd_post_distance]
-[gd_post_rating alignment='left' ]
-[gd_post_fav show='' alignment='right' ]
-[gd_post_meta key='business_hours' location='listing']
+[gd_post_rating alignment='left' list_hide_secondary='2']
+[gd_post_fav show='' alignment='right' list_hide_secondary='2']
+[gd_post_meta key='business_hours' location='listing' list_hide_secondary='2']
 [gd_output_location location='listing']
 [gd_post_content key='post_content' limit='60' max_height='120']
 [gd_archive_item_section type='close' position='right']";

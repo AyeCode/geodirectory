@@ -2275,7 +2275,7 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                     $field_icon = '';
                 }
 
-                $extra_class = $location == 'owntab' ? ' gd-bh-expanded' : ' gd-bh-toggled';
+                $extra_class = $location == 'owntab' || strpos($cf['css_class'], 'gd-bh-expanded') !== false ? ' gd-bh-expanded' : ' gd-bh-toggled';
                 if ( ! empty( $business_hours['extra']['has_closed'] ) ) {
                     $extra_class .= ' gd-bh-closed';
                 }

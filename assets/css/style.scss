@@ -23,6 +23,7 @@ $media-phone-small: 400px;
 @import "partials/widget_loop_actions";
 @import "partials/widget_post_fav";
 @import "partials/widget_post_meta";
+@import "partials/widget_post_badge";
 @import "partials/maps";
 
 
@@ -2080,6 +2081,17 @@ body > span[style*='top: -999px']{display: none;}
 .gd-bh-toggled .gd-bh-open-hours {
 	display: none;
 }
+.geodir-gridview{
+
+    .gd-bh-expanded .gd-bh-open-hours {
+        position: absolute;
+        background: #fff;
+        z-index: 1;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+}
+
 .gd-bh-expand {
     i, .svg-inline--fa {
         font-weight: bold;
@@ -2138,63 +2150,7 @@ body > span[style*='top: -999px']{display: none;}
 .gd-wgt-cpt-ajax .gd-cptcat-row:last-child .gd-cptcat-li:last-child {
 	border-bottom: 0;
 }
-/* BADGE STYLE START */
-.geodir-post-badge{
-	display: inline-block;
-}
-.gd-badge-meta {
-	display: inline-block;
-	margin-left: .2em;
-	margin-right: .2em;
-    a{
-        .gd-badge{
-            cursor: pointer;
-        }
-    }
-}
-.gd-badge {
-  display: inline;
-  text-align: center;
-  white-space: nowrap;
-  vertical-align: baseline;
-  cursor: default;
-  font-size: 12px;
-  border-radius: .25em;
-  padding: .28em .56em .26em;
-  font-weight: 600;
-  line-height: 1.25em;
-  background-color: #337ab7;
-  color: #fff
-}
-.geodir-post-badge:empty,
-.gd-badge-meta:empty,
-.gd-badge:empty {
-  display: none;
-}
-.gd-badge-small .gd-badge {
-	font-size: 75%;
-	padding: .28em .55em .36em;
-}
-.gd-badge-medium .gd-badge {
-	font-size: 125%;
-	padding: .27em .575em .3em;
-}
-.gd-badge-large .gd-badge {
-	font-size: 150%;
-	padding: .27em .575em .3em;
-	font-weight: 500;
-}
-.gd-badge-extra-large .gd-badge {
-	font-size: 175%;
-	padding: .27em .55em .3em;
-	font-weight: 500;
-}
-.gd-badge {
-    i,.svg-inline--fa {
-        margin-right: .4em;
-    }
-}
-/* BADGE STYLE END */
+
 
 /* WEB ACCESSIBILITY START */
 .sr-only {

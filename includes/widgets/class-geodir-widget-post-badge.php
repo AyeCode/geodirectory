@@ -77,6 +77,15 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'advanced' => false,
 				'element_require' => '[%condition%]!="is_empty" && [%condition%]!="is_not_empty"'
 			),
+			'icon_class'  => array(
+				'type' => 'text',
+				'title' => __('Icon class:', 'geodirectory'),
+				'desc' => __('You can show a font-awesome icon here by entering the icon class.', 'geodirectory'),
+				'placeholder' => 'fas fa-award',
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => true
+			),
 			'badge'  => array(
 				'type' => 'text',
 				'title' => __('Badge:', 'geodirectory'),
@@ -150,6 +159,34 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'desc_tip' => true,
 				'advanced' => true
 			),
+			'list_hide'  => array(
+				'title' => __('Hide item on view:', 'geodirectory'),
+				'desc' => __('You can set at what view the item will become hidden.', 'geodirectory'),
+				'type' => 'select',
+				'options'   =>  array(
+					"" => __('None', 'geodirectory'),
+					"2" => __('Grid view 2', 'geodirectory'),
+					"3" => __('Grid view 3', 'geodirectory'),
+					"4" => __('Grid view 4', 'geodirectory'),
+					"5" => __('Grid view 5', 'geodirectory'),
+				),
+				'desc_tip' => true,
+				'advanced' => true
+			),
+			'list_hide_secondary'  => array(
+				'title' => __('Hide secondary info on view', 'geodirectory'),
+				'desc' => __('You can set at what view the secondary info such as label will become hidden.', 'geodirectory'),
+				'type' => 'select',
+				'options'   =>  array(
+					"" => __('None', 'geodirectory'),
+					"2" => __('Grid view 2', 'geodirectory'),
+					"3" => __('Grid view 3', 'geodirectory'),
+					"4" => __('Grid view 4', 'geodirectory'),
+					"5" => __('Grid view 5', 'geodirectory'),
+				),
+				'desc_tip' => true,
+				'advanced' => true
+			),
 			'css_class'  => array(
 				'type' => 'text',
 				'title' => __('Extra class:', 'geodirectory'),
@@ -198,6 +235,18 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		if ( ! empty( $errors ) ){
 			$output .= implode( ", ", $errors );
 		}
+
+		// set list_hide class
+		if($args['list_hide']=='2'){$args['css_class'] .= " gd-lv-2 ";}
+		if($args['list_hide']=='3'){$args['css_class'] .= " gd-lv-3 ";}
+		if($args['list_hide']=='4'){$args['css_class'] .= " gd-lv-4 ";}
+		if($args['list_hide']=='5'){$args['css_class'] .= " gd-lv-5 ";}
+
+		// set list_hide_secondary class
+		if($args['list_hide_secondary']=='2'){$args['css_class'] .= " gd-lv-s-2 ";}
+		if($args['list_hide_secondary']=='3'){$args['css_class'] .= " gd-lv-s-3 ";}
+		if($args['list_hide_secondary']=='4'){$args['css_class'] .= " gd-lv-s-4 ";}
+		if($args['list_hide_secondary']=='5'){$args['css_class'] .= " gd-lv-s-5 ";}
 
 		$output .= geodir_get_post_badge( $post_id, $args );
 

@@ -11,6 +11,7 @@
  * GeoDir_Widget_Post_Rating class.
  *
  * @since 2.0.0
+ * @since 2.0.0.49 Added list_hide and list_hide_secondary options for more flexible designs.
  */
 class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 
@@ -65,6 +66,34 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
                     'desc_tip' => true,
                     'advanced' => false
                 ),
+                'list_hide'  => array(
+                    'title' => __('Hide item on view:', 'geodirectory'),
+                    'desc' => __('You can set at what view the item will become hidden.', 'geodirectory'),
+                    'type' => 'select',
+                    'options'   =>  array(
+                        "" => __('None', 'geodirectory'),
+                        "2" => __('Grid view 2', 'geodirectory'),
+                        "3" => __('Grid view 3', 'geodirectory'),
+                        "4" => __('Grid view 4', 'geodirectory'),
+                        "5" => __('Grid view 5', 'geodirectory'),
+                    ),
+                    'desc_tip' => true,
+                    'advanced' => true
+                ),
+                'list_hide_secondary'  => array(
+                    'title' => __('Hide secondary info on view', 'geodirectory'),
+                    'desc' => __('You can set at what view the secondary info such as label will become hidden.', 'geodirectory'),
+                    'type' => 'select',
+                    'options'   =>  array(
+                        "" => __('None', 'geodirectory'),
+                        "2" => __('Grid view 2', 'geodirectory'),
+                        "3" => __('Grid view 3', 'geodirectory'),
+                        "4" => __('Grid view 4', 'geodirectory'),
+                        "5" => __('Grid view 5', 'geodirectory'),
+                    ),
+                    'desc_tip' => true,
+                    'advanced' => true
+                )
             )
 
         );
@@ -88,6 +117,8 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         $defaults = array(
             'show'      => '', // stars, text
             'alignment'      => '', // left, center, right
+            'list_hide'    => '',
+            'list_hide_secondary'    => '',
         );
 
         /**
@@ -97,6 +128,8 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 
         $class = '';
         $main = '';
+
+        // Set alignment class
         if($args['alignment']=='left'){
             $class = "gd-align-left";
         }elseif($args['alignment']=='center'){
@@ -104,6 +137,18 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         }elseif($args['alignment']=='right'){
             $class = "gd-align-right";
         }
+
+        // set list_hide class
+        if($args['list_hide']=='2'){$class .= " gd-lv-2 ";}
+        if($args['list_hide']=='3'){$class .= " gd-lv-3 ";}
+        if($args['list_hide']=='4'){$class .= " gd-lv-4 ";}
+        if($args['list_hide']=='5'){$class .= " gd-lv-5 ";}
+
+        // set list_hide_secondary class
+        if($args['list_hide_secondary']=='2'){$class .= " gd-lv-s-2 ";}
+        if($args['list_hide_secondary']=='3'){$class .= " gd-lv-s-3 ";}
+        if($args['list_hide_secondary']=='4'){$class .= " gd-lv-s-4 ";}
+        if($args['list_hide_secondary']=='5'){$class .= " gd-lv-s-5 ";}
 
         $before = '<div class="geodir_post_meta gd-rating-info-wrap '. $class .'" >';
         $after  = '</div>';
