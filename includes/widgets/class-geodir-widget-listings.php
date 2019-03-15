@@ -462,37 +462,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             $title .= ' ' . __( get_post_type_plural_label( $post_type ), 'geodirectory' );
         }
 
-        $location_url = array();
-        $city         = get_query_var( 'gd_city' );
-        if ( ! empty( $city ) ) {
-            $country = get_query_var( 'gd_country' );
-            $region  = get_query_var( 'gd_region' );
-
-            $geodir_show_location_url = geodir_get_option( 'geodir_show_location_url' );
-
-            if ( $geodir_show_location_url == 'all' ) {
-                if ( $country != '' ) {
-                    $location_url[] = $country;
-                }
-
-                if ( $region != '' ) {
-                    $location_url[] = $region;
-                }
-            } else if ( $geodir_show_location_url == 'country_city' ) {
-                if ( $country != '' ) {
-                    $location_url[] = $country;
-                }
-            } else if ( $geodir_show_location_url == 'region_city' ) {
-                if ( $region != '' ) {
-                    $location_url[] = $region;
-                }
-            }
-
-            $location_url[] = $city;
-        }
-
         $location_allowed = GeoDir_Post_types::supports( $post_type, 'location' );
-        $location_url  = implode( '/', $location_url );
 
         if ( $location_allowed && $add_location_filter && ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) && geodir_is_page( 'location' ) ) {
             $viewall_url = add_query_arg( array(
@@ -508,11 +478,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 $viewall_url = add_query_arg( array( 's' . $post_type . 'category' => $category ), $viewall_url );
             }
         } else {
-            if ( get_option( 'permalink_structure' ) ) {
-                $viewall_url = get_post_type_archive_link( $post_type );
-            } else {
-                $viewall_url = get_post_type_archive_link( $post_type );
-            }
+            $viewall_url = get_post_type_archive_link( $post_type );
 
             if ( ! empty( $category ) && $category[0] != '0' ) {
                 global $geodir_add_location_url;
@@ -698,7 +664,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
 
-			if ( $view_all_link && $viewall_url ) {
+			if ( ! empty( $widget_listings ) && $view_all_link && $viewall_url ) {
 				/**
 				 * Filter view all url.
 				 *
@@ -708,7 +674,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				 * @param array $query_args WP_Query args.
 				 * @param array $instance Widget settings.
 			     * @param array $args Widget arguments.
-				 * @param object $this The GeoDir_Widget_Post_Title object.
+				 * @param object $this The GeoDir_Widget_Listings object.
 				 */
 				$viewall_url = apply_filters( 'geodir_widget_gd_listings_view_all_url', $viewall_url, $query_args, $instance, $args, $this );
 
@@ -725,7 +691,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 					 * @param array $query_args WP_Query args.
 					 * @param array $instance Widget settings.
 					 * @param array $args Widget arguments.
-					 * @param object $this The GeoDir_Widget_Post_Title object.
+					 * @param object $this The GeoDir_Widget_Listings object.
 					 */
 					$view_all_link = apply_filters( 'geodir_widget_gd_listings_view_all_link', $view_all_link, $viewall_url, $query_args, $instance, $args, $this );
 
