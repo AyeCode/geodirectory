@@ -519,6 +519,7 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Post_Fav' );
 		register_widget( 'GeoDir_Widget_Post_Directions' );
 		register_widget( 'GeoDir_Widget_Post_Content' );
+		register_widget( 'GeoDir_Widget_Post_Address' );
 
 
 		// Widgets

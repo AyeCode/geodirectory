@@ -20,11 +20,12 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * @since 1.0.6 Some refactoring for page builders - CHANGED
 	 * @since 1.0.7 Some refactoring for page builders - CHANGED
 	 * @since 1.0.8 Some refactoring for page builders ( cornerstone builder now supported ) - CHANGED
-	 * @ver 1.0.8
+	 * @since 1.0.9 Numbers saving as strings and not numbers which can cause block render issues on refresh - FIXED
+	 * @ver 1.0.9
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.8";
+		public $version = "1.0.9";
 		public $block_code;
 		public $options;
 		public $base_id;
@@ -1103,6 +1104,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * Output the JS for building the dynamic Guntenberg block.
 		 *
 		 * @since 1.0.4 Added block_wrap property which will set the block wrapping output element ie: div, span, p or empty for no wrap.
+		 * @since 1.0.9 Save numbers as numbers and not strings.
 		 * @return mixed
 		 */
 		public function block() {
@@ -1310,6 +1312,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'color'  );
 									if ( in_array( $args['type'], $text_type ) ) {
 										$type = 'TextControl';
+										// Save numbers as numbers and not strings
+										if( $args['type'] == 'number' ){
+											$onchange = "props.setAttributes({ $key: Number($key) } )";
+										}
 									}
 //									elseif ( $args['type'] == 'color' ) { //@todo ColorPicker labels are not shown yet, we may have to add our own https://github.com/WordPress/gutenberg/issues/14378
 //										$type = 'ColorPicker';

@@ -171,8 +171,11 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'alignment'    => '', // left,right,center
 			'location'  => 'none',
 		), $args, 'gd_post_meta' );
-		$args['id'] = !empty($args['id']) ? $args['id'] : isset($gd_post->ID) ? $gd_post->ID : 0;
 
+		if(empty($args['id'])){
+			$args['id'] =  isset($gd_post->ID) ? $gd_post->ID : 0;
+		}
+		
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
 
 

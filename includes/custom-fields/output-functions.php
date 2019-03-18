@@ -2033,66 +2033,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
     if(empty($html)){
 
         global $preview;
-        $html_var = $cf['htmlvar_name'] . '_address';
-
-        if ($cf['extra_fields']) {
-
-            $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
-
-            $addition_fields = '';
-
-            if (!empty($extra_fields)) {
-
-                $show_city_in_address = false;
-                if (isset($extra_fields['show_city']) && $extra_fields['show_city']) {
-                    $show_city_in_address = true;
-                }
-                /**
-                 * Filter "show city in address" value.
-                 *
-                 * @since 1.0.0
-                 */
-                $show_city_in_address = apply_filters('geodir_show_city_in_address', $show_city_in_address);
-
-
-                $show_region_in_address = false;
-                if (isset($extra_fields['show_region']) && $extra_fields['show_region']) {
-                    $show_region_in_address = true;
-                }
-                /**
-                 * Filter "show region in address" value.
-                 *
-                 * @since 1.6.6
-                 */
-                $show_region_in_address = apply_filters('geodir_show_region_in_address', $show_region_in_address);
-
-                $show_country_in_address = false;
-                if (isset($extra_fields['show_country']) && $extra_fields['show_country']) {
-                    $show_country_in_address = true;
-                }
-                /**
-                 * Filter "show country in address" value.
-                 *
-                 * @since 1.6.6
-                 */
-                $show_country_in_address = apply_filters('geodir_show_country_in_address', $show_country_in_address);
-
-                $show_zip_in_address = false;
-                if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) {
-                    $show_zip_in_address = true;
-                }
-                /**
-                 * Filter "show zip in address" value.
-                 *
-                 * @since 1.6.6
-                 */
-                $show_zip_in_address = apply_filters('geodir_show_zip_in_address', $show_zip_in_address);
-
-
-            }
-
-        }
-
+        
         //print_r($gd_post);
 
         if ($gd_post->street) {
@@ -2115,11 +2056,15 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 'region',
                 'zip',
                 'country',
+                'latitude',
+                'longitude'
             );
+
+            $address_template = !empty($cf['address_template']) ? $cf['address_template'] : '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%';
 
             $address_template = apply_filters(
                 "geodir_cf_address_template",
-                "%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%"
+                $address_template
             );
 
             $address_fields = array();
@@ -2127,17 +2072,23 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ( isset($gd_post->street) ) {
                 $address_fields['street'] = '<span itemprop="streetAddress">' . $gd_post->street . '</span>';
             }
-            if ($show_city_in_address && isset( $gd_post->city ) && $gd_post->city ) {
+            if ( isset( $gd_post->city ) && $gd_post->city ) {
                 $address_fields['city'] = '<span itemprop="addressLocality">' . $gd_post->city. '</span>';
             }
-            if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
+            if ( isset( $gd_post->region ) && $gd_post->region ) {
                 $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
             }
-            if ($show_zip_in_address && isset( $gd_post->zip ) && $gd_post->zip ) {
+            if ( isset( $gd_post->zip ) && $gd_post->zip ) {
                 $address_fields['zip'] = '<span itemprop="postalCode">' . $gd_post->zip . '</span>';
             }
-            if ($show_country_in_address && isset( $gd_post->country ) && $gd_post->country ) {
+            if ( isset( $gd_post->country ) && $gd_post->country ) {
                 $address_fields['country'] = '<span itemprop="addressCountry">' . __( $gd_post->country, 'geodirectory' ) . '</span>';
+            }
+            if ( isset( $gd_post->latitude ) && $gd_post->latitude ) {
+                $address_fields['latitude'] = '<span itemprop="addressLatitude">' . $gd_post->latitude . '</span>';
+            }
+            if ( isset( $gd_post->longitude ) && $gd_post->longitude ) {
+                $address_fields['longitude'] = '<span itemprop="addressLongitude">' . $gd_post->longitude . '</span>';
             }
 
             /**
@@ -2161,7 +2112,14 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 // value with line break
                 $value_br = isset($address_fields[$type]) ? $address_fields[$type]."<br>" : '';
                 $address_template = str_replace('%%'.$type.'_br%%', $value_br ,$address_template);
+
+                // value with coman and then line break
+                $value_br = isset($address_fields[$type]) ? $address_fields[$type].",<br>" : '';
+                $address_template = str_replace('%%'.$type.'_brc%%', $value_br ,$address_template);
             }
+
+            // add line breaks
+            $address_template = str_replace('%%br%%', "<br>" ,$address_template);
 
             $address_fields = $address_template;
 
