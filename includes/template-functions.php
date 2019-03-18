@@ -888,3 +888,35 @@ function geodir_get_cpt_page_id( $page, $post_type = '' ) {
 
 	return $page_id;
 }
+
+function geodir_widget_listings_pagination( $position, $post_count, $post_number, $pageno = 1 ) {
+	global $wp_query;
+
+	$backup_wp_query = $wp_query;
+
+	$max_num_pages = ceil( $post_count / $post_number );
+
+	set_query_var( 'paged', $pageno );
+	$wp_query->max_num_pages = $max_num_pages;
+	$wp_query->is_paged = true;
+
+	add_filter( 'geodir_pagination_args', 'geodir_widget_listings_pagination_args', 999999, 1 );
+
+	ob_start();
+
+	echo do_shortcode( '[gd_loop_paging]' );
+
+	$pagination = ob_get_clean();
+
+	echo $pagination;
+
+	remove_filter( 'geodir_pagination_args', 'geodir_widget_listings_pagination_args', 999999, 1 );
+
+	$wp_query = $backup_wp_query;
+}
+
+function geodir_widget_listings_pagination_args( $pagination_args ) {
+	$pagination_args['base'] = '#';
+
+	return $pagination_args;
+}
