@@ -286,7 +286,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'with_videos_only' => '',
                   'use_viewing_post_type' => '',
                   'hide_if_empty' => '',
-				  'view_all_link' => '1'
+				  'view_all_link' => '1',
+				  'with_pagination' => '1',
+				  'top_pagination' => '1', // @todo set '0'
+				  'bottom_pagination' => '1',
             )
         );
 
@@ -414,6 +417,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
         $use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
 
+		$shortcode_atts = ! empty( $instance['shortcode_atts'] ) ? $instance['shortcode_atts'] : array();
+		$top_pagination = ! empty( $instance['with_pagination'] ) && ! empty( $instance['top_pagination'] ) ? true : false;
+		$bottom_pagination = ! empty( $instance['with_pagination'] ) && ! empty( $instance['bottom_pagination'] ) ? true : false;
+		$pageno = ! empty( $instance['pageno'] ) ? absint( $instance['pageno'] ) : 1;
+		if ( $pageno < 1 ) {
+			$pageno = 1;
+		}
+
         // set post type to current viewing post type
         if ( $use_viewing_post_type ) {
             $current_post_type = geodir_get_current_posttype();
@@ -512,6 +523,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             'post_type'      => $post_type,
             'order_by'       => $list_sort,
 			'distance_to_post' => $distance_to_post,
+			'pageno'         => $pageno
         );
 		// Post_number needs to be a positive integer
 		if ( ! empty( $post_author ) ) {
@@ -629,11 +641,12 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 //	    print_r($args );
 //	    print_r($query_args );
 
-        $widget_listings = geodir_get_widget_listings( $query_args );
+		$widget_listings = geodir_get_widget_listings( $query_args );
 
         if ( $hide_if_empty && empty( $widget_listings ) ) {
             return;
         }
+		$post_count = geodir_get_widget_listings( $query_args, true );
 
 		// Filter post title tag.
 		$this->post_title_tag = $title_tag;
@@ -662,7 +675,15 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			}
 			$geodir_is_widget_listing = true;
 
+			if ( ! empty( $widget_listings ) && $top_pagination ) {
+				geodir_widget_listings_pagination( 'top', $post_count, $post_number, $pageno );
+			}
+
 			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+
+			if ( ! empty( $widget_listings ) && $bottom_pagination ) {
+				geodir_widget_listings_pagination( 'bottom', $post_count, $post_number, $pageno );
+			}
 
 			if ( ! empty( $widget_listings ) && $view_all_link && $viewall_url ) {
 				/**
@@ -712,6 +733,29 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			}
             ?>
         </div>
+		<?php global $gd_listings_script; if ( ! $gd_listings_script ) { $gd_listings_script = true; // @todo move to js file once finished ?>
+		<script type="text/javascript">
+		jQuery(function($){
+			if ($('.geodir-listings .geodir-loop-paging-container').length) {
+				$('.geodir-listings .geodir-loop-paging-container').each(function(){
+					var $container = $(this);
+
+					if ($('.page-numbers .page-numbers', $container).length) {
+						var num = 0;
+						$('.page-numbers .page-numbers', $container).each(function(){
+							num++;
+							if ($(this).hasClass('current')) {
+								$(this).addClass('geodir-go-page');
+							}
+							$(this).attr('href', 'javascript:void(0)');
+							$(this).attr('data-geodir-pagenum', num);
+						});
+					}
+				});
+			}
+		})
+		</script>
+	<?php } ?>
         <?php
 
 		remove_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 2 );
