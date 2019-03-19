@@ -1,5 +1,159 @@
 [
     {
+        "name": "ayecode/wp-country-database",
+        "version": "1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/AyeCode/wp-country-database.git",
+            "reference": "4e8116fd74e135562051a2b03e8ce4cf99b058d0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/AyeCode/wp-country-database/zipball/4e8116fd74e135562051a2b03e8ce4cf99b058d0",
+            "reference": "4e8116fd74e135562051a2b03e8ce4cf99b058d0",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "~1.0",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "*",
+            "squizlabs/php_codesniffer": "^3.2",
+            "wp-coding-standards/wpcs": "*"
+        },
+        "time": "2018-12-05T14:18:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "wp-country-database.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "AyeCode Ltd",
+                "email": "contact@ayecode.io",
+                "homepage": "https://ayecode.io/",
+                "role": "Developer"
+            }
+        ],
+        "description": "A WordPress class that stores and retrieves world country information.",
+        "homepage": "https://github.com/AyeCode/wp-country-database",
+        "keywords": [
+            "countries",
+            "wordpress"
+        ]
+    },
+    {
+        "name": "ayecode/wp-font-awesome-settings",
+        "version": "1.0.10",
+        "version_normalized": "1.0.10.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
+            "reference": "5e0c70d3081a14785f0911ba134c7068857db8d9"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/5e0c70d3081a14785f0911ba134c7068857db8d9",
+            "reference": "5e0c70d3081a14785f0911ba134c7068857db8d9",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "~1.0",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "*",
+            "squizlabs/php_codesniffer": "^3.2",
+            "wp-coding-standards/wpcs": "*"
+        },
+        "time": "2018-12-14T12:33:09+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "wp-font-awesome-settings.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "AyeCode Ltd",
+                "email": "contact@ayecode.io",
+                "homepage": "https://ayecode.io/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Settings page for Font Awesome in WordPress",
+        "homepage": "https://github.com/AyeCode/wp-font-awesome-settings",
+        "keywords": [
+            "FontAwesome",
+            "font-awesome"
+        ]
+    },
+    {
+        "name": "ayecode/wp-super-duper",
+        "version": "1.0.9",
+        "version_normalized": "1.0.9.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/AyeCode/wp-super-duper.git",
+            "reference": "86cd360491dc9ecccb595121f4d175bedd804ffc"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/86cd360491dc9ecccb595121f4d175bedd804ffc",
+            "reference": "86cd360491dc9ecccb595121f4d175bedd804ffc",
+            "shasum": ""
+        },
+        "require": {
+            "composer/installers": "~1.0",
+            "php": ">=5.3.0"
+        },
+        "require-dev": {
+            "dealerdirect/phpcodesniffer-composer-installer": "*",
+            "squizlabs/php_codesniffer": "^3.2",
+            "wp-coding-standards/wpcs": "*"
+        },
+        "time": "2019-03-18T16:44:42+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "wp-super-duper.php"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-3.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "AyeCode Ltd",
+                "email": "contact@ayecode.io",
+                "homepage": "https://ayecode.io/",
+                "role": "Developer"
+            }
+        ],
+        "description": "Lets you create a widget, block and shortcode all from the one file .",
+        "homepage": "https://github.com/AyeCode/wp-super-duper",
+        "keywords": [
+            "super duper",
+            "wordpress",
+            "wp"
+        ]
+    },
+    {
         "name": "composer/installers",
         "version": "v1.6.0",
         "version_normalized": "1.6.0.0",
@@ -25,7 +179,7 @@
             "composer/composer": "1.0.*@dev",
             "phpunit/phpunit": "^4.8.36"
         },
-        "time": "2018-08-27 06:10:37",
+        "time": "2018-08-27T06:10:37+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Composer\\Installers\\Plugin",
@@ -119,160 +273,6 @@
             "yawik",
             "zend",
             "zikula"
-        ]
-    },
-    {
-        "name": "ayecode/wp-country-database",
-        "version": "1.0.2",
-        "version_normalized": "1.0.2.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-country-database.git",
-            "reference": "4e8116fd74e135562051a2b03e8ce4cf99b058d0"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-country-database/zipball/4e8116fd74e135562051a2b03e8ce4cf99b058d0",
-            "reference": "4e8116fd74e135562051a2b03e8ce4cf99b058d0",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "*",
-            "squizlabs/php_codesniffer": "^3.2",
-            "wp-coding-standards/wpcs": "*"
-        },
-        "time": "2018-12-05 14:18:05",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "wp-country-database.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "A WordPress class that stores and retrieves world country information.",
-        "homepage": "https://github.com/AyeCode/wp-country-database",
-        "keywords": [
-            "countries",
-            "wordpress"
-        ]
-    },
-    {
-        "name": "ayecode/wp-font-awesome-settings",
-        "version": "1.0.10",
-        "version_normalized": "1.0.10.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-font-awesome-settings.git",
-            "reference": "5e0c70d3081a14785f0911ba134c7068857db8d9"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-font-awesome-settings/zipball/5e0c70d3081a14785f0911ba134c7068857db8d9",
-            "reference": "5e0c70d3081a14785f0911ba134c7068857db8d9",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "*",
-            "squizlabs/php_codesniffer": "^3.2",
-            "wp-coding-standards/wpcs": "*"
-        },
-        "time": "2018-12-14 12:33:09",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "files": [
-                "wp-font-awesome-settings.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "Settings page for Font Awesome in WordPress",
-        "homepage": "https://github.com/AyeCode/wp-font-awesome-settings",
-        "keywords": [
-            "FontAwesome",
-            "font-awesome"
-        ]
-    },
-    {
-        "name": "ayecode/wp-super-duper",
-        "version": "1.0.8",
-        "version_normalized": "1.0.8.0",
-        "source": {
-            "type": "git",
-            "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "ff0858393e0898a0eab95c383ed759f88b74e020"
-        },
-        "dist": {
-            "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/ff0858393e0898a0eab95c383ed759f88b74e020",
-            "reference": "ff0858393e0898a0eab95c383ed759f88b74e020",
-            "shasum": ""
-        },
-        "require": {
-            "composer/installers": "~1.0",
-            "php": ">=5.3.0"
-        },
-        "require-dev": {
-            "dealerdirect/phpcodesniffer-composer-installer": "*",
-            "squizlabs/php_codesniffer": "^3.2",
-            "wp-coding-standards/wpcs": "*"
-        },
-        "time": "2019-03-15 18:50:07",
-        "type": "library",
-        "installation-source": "dist",
-        "autoload": {
-            "classmap": [
-                "wp-super-duper.php"
-            ]
-        },
-        "notification-url": "https://packagist.org/downloads/",
-        "license": [
-            "GPL-3.0-or-later"
-        ],
-        "authors": [
-            {
-                "name": "AyeCode Ltd",
-                "email": "contact@ayecode.io",
-                "homepage": "https://ayecode.io/",
-                "role": "Developer"
-            }
-        ],
-        "description": "Lets you create a widget, block and shortcode all from the one file .",
-        "homepage": "https://github.com/AyeCode/wp-super-duper",
-        "keywords": [
-            "super duper",
-            "wordpress",
-            "wp"
         ]
     }
 ]

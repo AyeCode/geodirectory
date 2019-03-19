@@ -26,7 +26,7 @@ Disable details page featured image setting can affect other post featured image
 Some post widgets now include options to hide primary and secondary info per list view - ADDED
 Archive item page default content updated to work with hide content per list view - CHANGED
 Cornerstone builder now supported - ADDED
-
+New Widget added `gd_post_address` that allows you to output the address formatted as you want it - ADDED
 
 v2.0.0.48
 Customify theme page layout compatibility settings added - ADDED

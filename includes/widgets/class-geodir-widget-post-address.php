@@ -1,11 +1,11 @@
 <?php
 
 /**
- * GeoDir_Widget_Post_Content class.
+ * GeoDir_Widget_Post_Address class.
  *
  * @since 2.0.0
  */
-class GeoDir_Widget_Post_Content extends WP_Super_Duper {
+class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 
 
 	public $arguments;
@@ -16,15 +16,15 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
-			'block-icon'    => 'menu',
+			'block-icon'    => 'admin-home',
 			'block-category'=> 'common',
-			'block-keywords'=> "['geo','description','content']",
+			'block-keywords'=> "['geo','address','location']",
 			'class_name'    => __CLASS__,
-			'base_id'       => 'gd_post_content', // this us used as the widget id and the shortcode id.
-			'name'          => __('GD > Post Content','geodirectory'), // the name of the widget.
+			'base_id'       => 'gd_post_address', // this us used as the widget id and the shortcode id.
+			'name'          => __('GD > Post Address','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-content-container', // widget class
-				'description' => esc_html__('This shows a post content text. You can show text from any textarea field.','geodirectory'), // widget description
+				'classname'   => 'geodir-post-address-container', // widget class
+				'description' => esc_html__('This shows the post address formatted as required.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,
 				'gd_wgt_showhide' => 'show_on',
@@ -49,23 +49,11 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 					'default'  => '',
 					'advanced' => false
 				),
-				'key'  => array(
-					'name' => 'key',
-					'title' => __('Key:', 'geodirectory'),
-					'desc' => __('This is the custom field key.', 'geodirectory'),
-					'type' => 'select',
-					'placeholder' => 'post_content',
-					'options'   => $this->get_custom_field_keys(),
-					'desc_tip' => true,
-					'default'  => 'post_content',
-					'advanced' => false
-				),
 				'show'  => array(
 					'title' => __('Show:', 'geodirectory'),
 					'desc' => __('What part of the post meta to show.', 'geodirectory'),
 					'type' => 'select',
 					'options'   =>  array(
-						"" => __('value (strip_tags)', 'geodirectory'),
 						"icon-label-value" => __('icon + label + value', 'geodirectory'),
 						"icon-value" => __('icon + value', 'geodirectory'),
 						"label-value" => __('label + value', 'geodirectory'),
@@ -76,31 +64,14 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
-				'limit'  => array(
-					'title' => __('Word limit:', 'geodirectory'),
-					'desc' => __('How many words to limit the text to. (will auto strip tags)', 'geodirectory'),
-					'type' => 'number',
-					'placeholder'  => '20',
+				'address_template'  => array(
+					'title' => __('Address template:', 'geodirectory'),
+					'desc' => sprintf( __('Enter the address tags as required, adding _br or _brc to the tag adds a line break or comment and line break after it. Available tags: %s', 'geodirectory'),'%%street%% %%neighbourhood%% %%city%% %%region%% %%country%% %%zip%% %%latitude%% %%longitude%% %%br%'),
+					'type' => 'text',
+					'placeholder' => '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%',
+					'default'  => '',
 					'desc_tip' => true,
 					'advanced' => false
-				),
-				'max_height'  => array(
-					'title' => __('Max height:', 'geodirectory'),
-					'desc' => __('Height in (px) This can be used to set a consistent height of the text with the read more button then linking to the full text.', 'geodirectory'),
-					'type' => 'number',
-					'default'  => '',
-					'placeholder' => '120',
-					'desc_tip' => true,
-					'advanced' => true
-				),
-				'read_more'  => array(
-					'title' => __("Read more link:", 'geodirectory'),
-					'desc' => __('Show the read more link at the end of the text. enter `0` to not show link.', 'geodirectory'),
-					'type' => 'text',
-					'desc_tip' => true,
-					'value'  => '',
-					'placeholder' => __("Read more...", 'geodirectory'),
-					'advanced' => true
 				),
 				'alignment'  => array(
 					'title' => __('Text Align:', 'geodirectory'),
@@ -115,13 +86,32 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
-				'strip_tags'  => array(
-					'title' => __("Strip tags:", 'geodirectory'),
-					'desc' => __('Strip tags from content.', 'geodirectory'),
-					'type' => 'checkbox',
+				'list_hide'  => array(
+					'title' => __('Hide item on view:', 'geodirectory'),
+					'desc' => __('You can set at what view the item will become hidden.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"2" => __('Grid view 2', 'geodirectory'),
+						"3" => __('Grid view 3', 'geodirectory'),
+						"4" => __('Grid view 4', 'geodirectory'),
+						"5" => __('Grid view 5', 'geodirectory'),
+					),
 					'desc_tip' => true,
-					'value'  => '1',
-					'default'  => '0',
+					'advanced' => true
+				),
+				'list_hide_secondary'  => array(
+					'title' => __('Hide secondary info on view', 'geodirectory'),
+					'desc' => __('You can set at what view the secondary info such as label will become hidden.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"2" => __('Grid view 2', 'geodirectory'),
+						"3" => __('Grid view 3', 'geodirectory'),
+						"4" => __('Grid view 4', 'geodirectory'),
+						"5" => __('Grid view 5', 'geodirectory'),
+					),
+					'desc_tip' => true,
 					'advanced' => true
 				),
 			)
@@ -162,13 +152,12 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 		$output = '';
 		$args = shortcode_atts( array(
 			'id'    => isset($gd_post->ID) ? $gd_post->ID : 0,
-			'key'   => 'post_content',
-			'show'    => '', // title,value (default blank, all)
-			'strip_tags' => '',
-			'max_height' => '',
-			'read_more' => '',
-			'limit'    => '', // the word limit number (default: 20)
+			'key'   => 'address',
+			'show'    => 'icon-label-value', // title,value (default blank, all)
 			'alignment'    => '', // left,right,center
+			'list_hide'    => '',
+			'list_hide_secondary'    => '',
+			'address_template' => '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%',
 			'location'  => 'none',
 		), $args, 'gd_post_meta' );
 		if(empty($args['id'])){
@@ -176,7 +165,6 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 		}
 
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
-
 
 		// print_r($args);
 		// error checks
@@ -194,7 +182,7 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 			$post_type = 'gd_place';
 		}
 
-		if(geodir_is_gd_post_type($post_type)){ //echo '###2';
+		if(geodir_is_gd_post_type($post_type)){
 
 			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
 			$fields = geodir_post_custom_fields($package_id ,  'all', $post_type);
@@ -208,45 +196,33 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 				}
 				if(!empty($field)){ // the field is allowed to be shown
 					$field = stripslashes_deep( $field );
+
+					// set alignment class
 					if($args['alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
 					if($args['alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
 					if($args['alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
 
+					// set list_hide class
+					if($args['list_hide']=='2'){$field['css_class'] .= " gd-lv-2 ";}
+					if($args['list_hide']=='3'){$field['css_class'] .= " gd-lv-3 ";}
+					if($args['list_hide']=='4'){$field['css_class'] .= " gd-lv-4 ";}
+					if($args['list_hide']=='5'){$field['css_class'] .= " gd-lv-5 ";}
+
+					// set list_hide_secondary class
+					if($args['list_hide_secondary']=='2'){$field['css_class'] .= " gd-lv-s-2 ";}
+					if($args['list_hide_secondary']=='3'){$field['css_class'] .= " gd-lv-s-3 ";}
+					if($args['list_hide_secondary']=='4'){$field['css_class'] .= " gd-lv-s-4 ";}
+					if($args['list_hide_secondary']=='5'){$field['css_class'] .= " gd-lv-s-5 ";}
+
+
 					// set to value if empty
 					if(empty($args['show'])){
-						$args['show'] = 'value';
+						$args['show'] = 'icon-label-value';
 					}
 
-					// set max_height
-					if(!empty($args['max_height'])){
-						$args['show'] .= '-fade::'.absint($args['max_height']);
-					}
-
-					// maybe force strip tags
-					if(!empty($args['show']) && !empty($args['strip_tags'])){
-						$args['show'] .= "-strip";
-					}
-
-					if(!empty($args['max_height']) || !empty($args['limit'])){
-						// maybe show read_more
-						if(!empty($args['read_more'])){
-							$args['show'] .= "-more::".$args['read_more'];
-						}elseif(empty($args['read_more']) && $args['read_more']!=='0'){
-							$args['show'] .= "-more";
-						}
-					}
-
-
-					// set the limit
-					if(!empty($args['limit'])){
-						$args['show'] .= "-limit::".absint($args['limit']);
-					}
-
-//					$output = $args['show'];
-//					print_r($args);
+					$field['address_template'] = $args['address_template'];;
 
 					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
-
 
 				}
 			}
