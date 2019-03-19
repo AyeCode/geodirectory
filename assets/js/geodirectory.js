@@ -1468,3 +1468,61 @@ function gd_set_get_directions($lat,$lon){
         jQuery('.gd-map-get-directions').trigger('click');
     }
 }
+
+function geodir_widget_listings_pagination(id, params) {
+    var $container, pagenum;
+    $container = jQuery('#' + id);
+
+    jQuery('.geodir-loop-paging-container', $container).each(function() {
+        var $paging = jQuery(this);
+        if (!$paging.hasClass('geodir-paging-setup')) {
+            if (jQuery('.page-numbers .page-numbers', $paging).length) {
+                jQuery('.page-numbers a.page-numbers', $paging).each(function() {
+                    href = jQuery(this).attr('href');
+                    hrefs = href.split("#");
+                    if (hrefs.length >= 1) {
+                        jQuery(this).attr('data-geodir-pagenum', hrefs[1]);
+                    }
+                    jQuery(this).attr('href', 'javascript:void(0)');
+                });
+            }
+            $paging.addClass('geodir-paging-setup');
+        }
+    });
+
+    jQuery("a.page-numbers", $container).on("click", function(e) {
+        pagenum = parseInt(jQuery(this).data('geodir-pagenum'));
+        if (!pagenum > 0) {
+            return;
+        }
+        $widget = $container.closest('.geodir-listings');
+        $listings = jQuery('.geodir-widget-posts', $container);
+
+        params['pageno'] = pagenum;
+
+        $widget.addClass('geodir-listings-loading');
+
+        jQuery.ajax({
+            type: "POST",
+            url: geodir_params.ajax_url,
+            data: params,
+            success: function(res) {
+                if (res.success && res.data) {
+                    if (res.data.content) {
+                        $widget.html(res.data.content);
+
+                        init_read_more();
+                        geodir_init_lazy_load();
+                        geodir_refresh_business_hours();
+                    }
+                }
+                $widget.removeClass('geodir-listings-loading');
+            },
+            fail: function(data) {
+                $widget.removeClass('geodir-listings-loading');
+            }
+        });
+
+        e.preventDefault();
+    });
+}

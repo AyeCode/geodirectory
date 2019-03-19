@@ -423,3 +423,25 @@ body { // wrapping ina  body tag makes rules more specific
 .gd-pinpoint-info-wrap {
 	clear:both;
 }
+
+/* widget pagination */
+.geodir-ajax-listings-loader {
+	display: none;
+}
+
+.geodir-wgt-pagination {
+	position: relative;
+}
+
+.geodir-listings-loading {
+	.geodir-ajax-listings-loader {
+		display: block !important;
+		position: absolute;
+		left: 49%;
+		top: 40%;
+	}
+
+	.geodir-widget-posts {
+		opacity: .5;
+	}
+}
