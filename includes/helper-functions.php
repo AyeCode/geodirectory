@@ -1269,11 +1269,24 @@ function geodir_file_relative_url( $url, $full_path = false ) {
     
     $match_content_url = strpos( $content_url, 'https://' ) === 0 ? str_replace( 'https://', '', $content_url ) : str_replace( 'http://', '', $content_url );
     $match_url = strpos( $url, 'https://' ) === 0 ? str_replace( 'https://', '', $url ) : str_replace( 'http://', '', $url );
+
+	// www.
+	$www = '';
+	if ( strpos( $match_upload_baseurl, 'www.' ) === 0 ) {
+		$www = 'www.';
+		$match_upload_baseurl = str_replace( 'www.', '', $match_upload_baseurl );
+	}
+	if ( strpos( $match_content_url, 'www.' ) === 0 ) {
+		$match_content_url = str_replace( 'www.', '', $match_content_url );
+	}
+	if ( strpos( $match_url, 'www.' ) === 0 ) {
+		$match_url = str_replace( 'www.', '', $match_url );
+	}
         
     if ( $full_path ) {
         if ( strpos( $relative_url, 'http://' ) === 0 || strpos( $relative_url, 'https://' ) === 0 ) {
             if ( strpos( $match_url, $match_upload_baseurl ) === 0 || strpos( $match_url, $match_content_url ) === 0 ) {
-                $relative_url = $https . $match_url;
+                $relative_url = $https . $www . $match_url;
             }
         } else {
             if ( is_file( $content_dir . '/' . $match_url ) && file_exists( $content_dir . '/' . $match_url ) ) { // url contains content url
