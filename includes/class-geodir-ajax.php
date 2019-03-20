@@ -60,6 +60,7 @@ class GeoDir_AJAX {
 			'save_tabs_order' => false,
 			'delete_tab' => false,
 			'manual_map' => true,
+			'widget_listings' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -1031,5 +1032,19 @@ class GeoDir_AJAX {
 		}
 
 		return $results;
-	}	
+	}
+	
+	/**
+	 * GD Listings widget ajax pagination.
+     *
+     * @since 2.0.0
+	 */
+	public static function widget_listings(){
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		$widget_listings = new GeoDir_Widget_Listings();
+		$widget_listings->ajax_listings( $_POST );
+
+		wp_die();
+	}
 }

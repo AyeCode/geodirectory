@@ -27,6 +27,9 @@ Some post widgets now include options to hide primary and secondary info per lis
 Archive item page default content updated to work with hide content per list view - CHANGED
 Cornerstone builder now supported - ADDED
 New Widget added `gd_post_address` that allows you to output the address formatted as you want it - ADDED
+Ajax pagination added in GD Listings widget/shortcode - ADDED
+Import export posts change non-standard post status - CHANGED
+geodir_file_relative_url() should check for www. - FIXED
 
 v2.0.0.48
 Customify theme page layout compatibility settings added - ADDED

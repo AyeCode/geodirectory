@@ -236,15 +236,47 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '1',
                 'advanced' => true
             ),
+            'with_pagination'  => array(
+                'title' => __( "Show pagination?", 'geodirectory' ),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '0',
+                'advanced' => true
+            ),
+            'top_pagination'  => array(
+                'title' => __( "Show pagination on top of the listings?", 'geodirectory' ),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '0',
+                'advanced' => true,
+				'element_require' => 'jQuery(form).find(\'[data-argument=with_pagination]\').find(\'input\').is(\':checked\')',
+            ),
+            'bottom_pagination'  => array(
+                'title' => __( "Show pagination at bottom of the listings?", 'geodirectory' ),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '1',
+                'advanced' => true,
+				'element_require' => 'jQuery(form).find(\'[data-argument=with_pagination]\').find(\'input\').is(\':checked\')',
+            ),
+            'pagination_info'  => array(
+                'title' => __( "Show advance pagination info?", 'geodirectory' ),
+                'desc' => '',
+                'type' => 'select',
+                'options' =>  array(
+                    "" => __( 'Never display', 'geodirectory' ),
+                    "before" => __( 'Before pagination', 'geodirectory' ),
+                    "after" => __( 'After pagination', 'geodirectory' ),
+                ),
+                'default'  => '',
+                'desc_tip' => false,
+                'advanced' => true,
+				'element_require' => 'jQuery(form).find(\'[data-argument=with_pagination]\').find(\'input\').is(\':checked\')',
+            )
 
-//                'show_featured_only'    => '',
-//            'show_special_only'     => '',
-//            'with_pics_only'        => '',
-//            'with_videos_only'      => '',
-//            'with_pagination'       => '1',
-//            'top_pagination'        => '0',
-//            'bottom_pagination'     => '1',
-//            'without_no_results'    => 0,
 //            'tags'                  => '',
 //            'show_favorites_only'   => '',
 //            'favorites_by_user'     => '',
@@ -255,16 +287,15 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
     /**
      * The Super block output function.
      *
-     * @param array $args
+     * @param array $instance Settings for the current widget instance.
      * @param array $widget_args
      * @param string $content
      *
      * @return mixed|string|void
      */
-    public function output($args = array(), $widget_args = array(),$content = ''){
-
-
-        $args = wp_parse_args((array)$args,
+    public function output( $instance = array(), $widget_args = array(), $content = '' ) {
+        $instance = wp_parse_args(
+			(array)$instance,
             array('title' => '',
                   'post_type' => '',
                   'category' => array(),
@@ -287,15 +318,16 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'use_viewing_post_type' => '',
                   'hide_if_empty' => '',
 				  'view_all_link' => '1',
-				  'with_pagination' => '1',
-				  'top_pagination' => '1', // @todo set '0'
+				  'with_pagination' => '0',
+				  'top_pagination' => '0',
 				  'bottom_pagination' => '1',
+				  'pagination_info' => ''
             )
         );
 
         ob_start();
 
-        $this->output_html($widget_args, $args);
+        $this->output_html( $widget_args, $instance );
 
         return ob_get_clean();
     }
@@ -317,7 +349,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @param array|string $instance           The settings for the particular instance of the widget.
      */
     public function output_html( $args = '', $instance = '' ) {
-        global $gd_post, $post;
+        global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings;
 
         // prints the widget
         extract( $args, EXTR_SKIP );
@@ -420,6 +452,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$shortcode_atts = ! empty( $instance['shortcode_atts'] ) ? $instance['shortcode_atts'] : array();
 		$top_pagination = ! empty( $instance['with_pagination'] ) && ! empty( $instance['top_pagination'] ) ? true : false;
 		$bottom_pagination = ! empty( $instance['with_pagination'] ) && ! empty( $instance['bottom_pagination'] ) ? true : false;
+		$pagination_info = ! empty( $instance['with_pagination'] ) && ! empty( $instance['pagination_info'] ) ? $instance['pagination_info'] : '';
 		$pageno = ! empty( $instance['pageno'] ) ? absint( $instance['pageno'] ) : 1;
 		if ( $pageno < 1 ) {
 			$pageno = 1;
@@ -510,7 +543,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             $viewall_url = '';
         }
 
-		$distance_to_post = $list_sort == 'distance_asc' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) && geodir_is_page( 'detail' ) ? true : false;
+		$distance_to_post = $list_sort == 'distance_asc' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) && ( geodir_is_page( 'detail' ) || ! empty( $instance['set_post'] ) ) ? true : false;
 		
 		if ( $list_sort == 'distance_asc' && ! $distance_to_post ) {
 			$list_sort = geodir_get_posts_default_sort( $post_type );
@@ -638,23 +671,37 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	    $query_args['region'] = isset($instance['region']) ? $instance['region'] : '';
 	    $query_args['city'] = isset($instance['city']) ? $instance['city'] : '';
 
-//	    print_r($args );
-//	    print_r($query_args );
+		$post_count = geodir_get_widget_listings( $query_args, true );
 
-		$widget_listings = geodir_get_widget_listings( $query_args );
-
-        if ( $hide_if_empty && empty( $widget_listings ) ) {
+        if ( $hide_if_empty && empty( $post_count ) ) {
             return;
         }
-		$post_count = geodir_get_widget_listings( $query_args, true );
+
+		$widget_listings = geodir_get_widget_listings( $query_args );
 
 		// Filter post title tag.
 		$this->post_title_tag = $title_tag;
 		add_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 4 );
 
 		$gd_layout_class = geodir_convert_listing_view_class( $layout );
+
+		$class = $top_pagination || $bottom_pagination ? ' geodir-wgt-pagination' : '';
+		if ( $top_pagination ) {
+			$class .= ' geodir-wgt-pagination-top';
+		}
+		if ( $bottom_pagination ) {
+			$class .= ' geodir-wgt-pagination-bottom';
+		}
+		$backup_posts_per_page = $posts_per_page;
+		$backup_paged = $paged;
+		$backup_gd_advanced_pagination = $gd_advanced_pagination;
+		
+		$posts_per_page = $post_number;
+		$paged = $pageno;
+		$gd_advanced_pagination = $pagination_info;
+		$unique_id = 'geodir_' . uniqid();
         ?>
-        <div class="geodir_locations geodir_location_listing">
+        <div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; ?>">
             <?php
             if ( ! isset( $character_count ) ) {
                 /**
@@ -676,13 +723,17 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$geodir_is_widget_listing = true;
 
 			if ( ! empty( $widget_listings ) && $top_pagination ) {
-				geodir_widget_listings_pagination( 'top', $post_count, $post_number, $pageno );
+				self::get_pagination( 'top', $post_count, $post_number, $pageno );
 			}
 
 			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
 
-			if ( ! empty( $widget_listings ) && $bottom_pagination ) {
-				geodir_widget_listings_pagination( 'bottom', $post_count, $post_number, $pageno );
+			if ( ! empty( $widget_listings ) && ( $bottom_pagination || $top_pagination ) ) {
+				echo '<div class="geodir-ajax-listings-loader" style="display:none"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';
+
+				if ( $bottom_pagination ) {
+					self::get_pagination( 'bottom', $post_count, $post_number, $pageno );
+				}
 			}
 
 			if ( ! empty( $widget_listings ) && $view_all_link && $viewall_url ) {
@@ -733,30 +784,46 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			}
             ?>
         </div>
-		<?php global $gd_listings_script; if ( ! $gd_listings_script ) { $gd_listings_script = true; // @todo move to js file once finished ?>
-		<script type="text/javascript">
-		jQuery(function($){
-			if ($('.geodir-listings .geodir-loop-paging-container').length) {
-				$('.geodir-listings .geodir-loop-paging-container').each(function(){
-					var $container = $(this);
-
-					if ($('.page-numbers .page-numbers', $container).length) {
-						var num = 0;
-						$('.page-numbers .page-numbers', $container).each(function(){
-							num++;
-							if ($(this).hasClass('current')) {
-								$(this).addClass('geodir-go-page');
-							}
-							$(this).attr('href', 'javascript:void(0)');
-							$(this).attr('data-geodir-pagenum', num);
-						});
-					}
-				});
+		<?php 
+		if ( ! empty( $widget_listings ) && ( $top_pagination || $bottom_pagination ) ) {
+			$params = array_merge( $instance, $query_args );
+			$params['set_query_vars'] = $wp->query_vars;
+			if ( ! empty( $gd_post ) && ( geodir_is_page( 'detail' ) || ! empty( $instance['set_post'] ) ) ) {
+				$params['set_post'] = $gd_post->ID;
 			}
-		})
-		</script>
-	<?php } ?>
-        <?php
+
+			if ( ! empty( $_REQUEST['sgeo_lat'] ) && ! empty( $_REQUEST['sgeo_lon'] ) ) {
+				$params['sgeo_lat'] = isset( $_REQUEST['sgeo_lat'] ) ? filter_var( $_REQUEST['sgeo_lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
+				$params['sgeo_lon'] = isset( $_REQUEST['sgeo_lon'] ) ? filter_var( $_REQUEST['sgeo_lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
+			}
+
+			foreach ( $params as $key => $value ) {
+				if ( is_scalar( $value ) && ( $value === true || $value === false ) ) {
+					$value = (int) $value;
+				}
+				$params[ $key ] = $value;
+			}
+
+			$params = apply_filters( 'geodir_widget_listings_pagination_set_params', $params, $instance, $this->id_base );
+			?>
+			<script type="text/javascript">
+				/* <![CDATA[ */
+				try {
+					var params = <?php echo json_encode( $params ); ?>;
+					params['action'] = 'geodir_widget_listings';
+					params['widget_args'] = <?php echo json_encode( $args ); ?>;
+					params['security'] = geodir_params.basic_nonce;
+					geodir_widget_listings_pagination('<?php echo $unique_id; ?>', params);
+				} catch (err) {
+					console.log(err.message);
+				}
+				/* ]]> */
+			</script>
+		<?php }
+
+		$posts_per_page = $backup_posts_per_page;
+		$paged = $backup_paged;
+		$gd_advanced_pagination = $backup_gd_advanced_pagination;
 
 		remove_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 2 );
     }
@@ -803,5 +870,79 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		}
 
 		return $tag;
+	}
+
+	public function ajax_listings( $data = array() ) {
+		global $wp, $geodirectory, $post, $gd_post, $geodir_ajax_gd_listings;
+
+		$geodir_ajax_gd_listings = true;
+
+		$data = apply_filters( 'geodir_widget_listings_ajax_listings', $data );
+		
+		if ( ! empty( $data['set_post'] ) ) {
+			$post = get_post( absint( $data['set_post'] ) );
+			$gd_post = geodir_get_post_info( absint( $data['set_post'] ) );
+		}
+
+		if ( ! empty( $data['set_query_vars'] ) ) {
+			$wp->query_vars = $data['set_query_vars'];
+
+			$geodirectory->location->set_current();
+		}
+
+		ob_start();
+
+		do_action( 'geodir_widget_ajax_listings_before', $data );
+
+		if ( isset( $data['widget_args'] ) ) {
+			$widget_args = (array)$data['widget_args'];
+			unset( $data['widget_args'] );
+		} else {
+			$widget_args = array();
+		}
+
+		echo $this->output( $data, $widget_args );
+
+		do_action( 'geodir_widget_ajax_listings_after', $data );
+
+		$output = ob_get_clean();
+
+		$geodir_ajax_gd_listings = false;
+
+		wp_send_json_success( array( 'content' => trim( $output ) ) );
+	}
+
+	public static function get_pagination( $position, $post_count, $post_number, $pageno = 1 ) {
+		global $wp_query;
+
+		$backup_wp_query = $wp_query;
+
+		$max_num_pages = ceil( $post_count / $post_number );
+
+		set_query_var( 'paged', $pageno );
+		$wp_query->max_num_pages = $max_num_pages;
+		$wp_query->found_posts = $post_count;
+		$wp_query->is_paged = true;
+
+		add_filter( 'geodir_pagination_args', array( __CLASS__, 'filter_pagination_args' ), 999999, 1 );
+
+		ob_start();
+
+		echo do_shortcode( '[gd_loop_paging]' );
+
+		$pagination = ob_get_clean();
+
+		echo $pagination;
+
+		remove_filter( 'geodir_pagination_args', array( __CLASS__, 'filter_pagination_args' ), 999999, 1 );
+
+		$wp_query = $backup_wp_query;
+	}
+
+	public static function filter_pagination_args( $pagination_args ) {
+		$pagination_args['base'] = '%_%';
+		$pagination_args['format'] = '#%#%#';
+
+		return $pagination_args;
 	}
 }

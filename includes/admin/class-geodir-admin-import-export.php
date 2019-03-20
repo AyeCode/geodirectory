@@ -468,6 +468,19 @@ class GeoDir_Admin_Import_Export {
 			$post_info = esc_attr__('Address city, region or country missing','geodirectory');
 		}
 
+		if ( isset( $post_info['post_status'] ) ) {
+			// Set post status publish for published status
+			if ( $post_info['post_status'] == 'published' ) {
+				$post_info['post_status'] = 'publish';
+			}
+
+			$statuses = geodir_get_post_statuses();
+			// Set post status pending for non-standard status
+			if ( ! ( ! empty( $statuses ) && isset( $statuses[ $post_info['post_status'] ] ) ) ) {
+				$post_info['post_status'] = 'pending';
+			}
+		}
+
 		return apply_filters( 'geodir_import_validate_post', $post_info, $row );
 	}
 
