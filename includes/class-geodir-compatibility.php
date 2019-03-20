@@ -113,6 +113,7 @@ class GeoDir_Compatibility {
 
 
 
+
 		/*######################################################
 		GENERAL
 		######################################################*/
@@ -198,8 +199,30 @@ class GeoDir_Compatibility {
 		if(function_exists('seopress_activation')){
 			add_action( 'wp_head', array( __CLASS__, 'seopress' ), 0 );
 		}
+
+		/*######################################################
+		Enfold
+		######################################################*/
+		if ( function_exists('avia_lang_setup') ) {
+			add_filter( 'avf_preview_window_css_files', array( __CLASS__, 'enfold_preview_styles' ) );
+		}
 	}
 
+	/**
+	 * Add some basic styles to the editor preview.
+	 * 
+	 * @param $css
+	 *
+	 * @return mixed
+	 */
+	public static function enfold_preview_styles($css){
+		
+		// add our preview styles
+		$css[geodir_plugin_url() . '/assets/css/block_editor.css'] = 1;
+		
+		return $css;
+	}
+	
 	/**
 	 * SEOPress breaks the search page when nothing is searched, so we remove some filters in that case.
 	 */

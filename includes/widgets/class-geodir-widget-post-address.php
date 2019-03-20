@@ -66,7 +66,7 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 				),
 				'address_template'  => array(
 					'title' => __('Address template:', 'geodirectory'),
-					'desc' => sprintf( __('Enter the address tags as required, adding _br or _brc to the tag adds a line break or comment and line break after it. Available tags: %s', 'geodirectory'),'%%street%% %%neighbourhood%% %%city%% %%region%% %%country%% %%zip%% %%latitude%% %%longitude%% %%br%'),
+					'desc' => sprintf( __('Enter the address tags as required, adding _br or _brc to the tag adds a line break or comma and line break after it. Available tags: %s', 'geodirectory'),'%%street%% %%neighbourhood%% %%city%% %%region%% %%country%% %%zip%% %%latitude%% %%longitude%% %%br%'),
 					'type' => 'text',
 					'placeholder' => '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%',
 					'default'  => '',

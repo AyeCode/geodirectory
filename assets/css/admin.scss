@@ -239,6 +239,10 @@ Tooltips
     float: none;
 }
 
+#TB_ajaxContent .gd-help-tip{
+    margin: 0;
+}
+
 .ui-widget-content {
     &.gd-ui-tooltip {
         background: #333 !important;

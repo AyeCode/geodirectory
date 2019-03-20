@@ -30,6 +30,8 @@ New Widget added `gd_post_address` that allows you to output the address formatt
 Ajax pagination added in GD Listings widget/shortcode - ADDED
 Import export posts change non-standard post status - CHANGED
 geodir_file_relative_url() should check for www. - FIXED
+Shortcode inserter button now shows in more places in builders - ADDED
+Avia builder for Enfold theme now supported - ADDED
 
 v2.0.0.48
 Customify theme page layout compatibility settings added - ADDED
