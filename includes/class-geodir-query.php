@@ -195,7 +195,7 @@ class GeoDir_Query {
 			add_filter( 'posts_clauses', array( $this, 'posts_having' ), 99999, 2 ); // make sure its the last WHERE param and after GROUP BY if there
 
 			// setup search globals
-			global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA;
+			global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA, $gd_exact_search;
 
 			if (isset($_REQUEST['scat']) && $_REQUEST['scat'] == 'all') $_REQUEST['scat'] = '';
 			//if(isset($_REQUEST['s']) && $_REQUEST['s'] == '+') $_REQUEST['s'] = '';
@@ -227,6 +227,17 @@ class GeoDir_Query {
 
 			if (isset($_REQUEST['s'])) {
 				$s = trim(esc_attr(wp_strip_all_tags(get_search_query())));
+			}
+
+			// Exact search with quotes
+			$gd_exact_search = false;
+			if ( $s != '' ) {
+				$search_keyword = trim( wp_specialchars_decode( stripslashes( $s ), ENT_QUOTES ), '"' );
+				$match_keyword = wp_specialchars_decode( stripslashes( $s ), ENT_QUOTES );
+
+				if ( strpos( $match_keyword, '"' ) !== false && ( '"' . $search_keyword . '"' == $match_keyword ) ) {
+					$gd_exact_search = true;
+				}
 			}
 
 			if ($snear == 'NEAR ME') {
@@ -320,7 +331,7 @@ class GeoDir_Query {
 		if(self::is_gd_main_query($query)) {
 
 			if ( ! ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) ) {
-				global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear;
+				global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear, $gd_exact_search;
 				$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 
 				$table = geodir_db_cpt_table( $geodir_post_type );
@@ -342,43 +353,46 @@ class GeoDir_Query {
 
 				global $s;// = get_search_query();
 				if ( geodir_is_page( 'search' ) && $s && trim( $s ) != '' ) {
-					$keywords = explode( " ", $s );
+					$gd_titlematch_part = "";
 
-					if ( is_array( $keywords ) && ( $klimit = (int) geodir_get_option( 'search_word_limit' ) ) ) {
-						foreach ( $keywords as $kkey => $kword ) {
-							if ( geodir_utf8_strlen( $kword ) <= $klimit ) {
-								unset( $keywords[ $kkey ] );
-							}
-						}
-					}
+					if ( ! $gd_exact_search ) {
+						$keywords = explode( " ", $s );
 
-
-					if ( count( $keywords ) > 1 ) {
-						$parts = array(
-							'AND' => 'gd_alltitlematch_part',
-							'OR'  => 'gd_titlematch_part'
-						);
-						$gd_titlematch_part = "";
-						foreach ( $parts as $key => $part ) {
-							$gd_titlematch_part .= " CASE WHEN ";
-							$count = 0;
-							foreach ( $keywords as $keyword ) {
-								$keyword = trim( $keyword );
-								$keyword = wp_specialchars_decode( $keyword, ENT_QUOTES );
-								$count ++;
-								if ( $count < count( $keywords ) ) {
-									// $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' " . $key . " ";
-									$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title LIKE '" . $keyword . "' OR " . $wpdb->posts . ".post_title LIKE '" . $keyword . "%%' OR " . $wpdb->posts . ".post_title LIKE '%% " . $keyword . "%%' ) " . $key . " ";
-								} else {
-									//$gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' ";
-									$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title LIKE '" . $keyword . "' OR " . $wpdb->posts . ".post_title LIKE '" . $keyword . "%%' OR " . $wpdb->posts . ".post_title LIKE '%% " . $keyword . "%%' ) ";
+						if ( is_array( $keywords ) && ( $klimit = (int) geodir_get_option( 'search_word_limit' ) ) ) {
+							foreach ( $keywords as $kkey => $kword ) {
+								if ( geodir_utf8_strlen( $kword ) <= $klimit ) {
+									unset( $keywords[ $kkey ] );
 								}
 							}
-							$gd_titlematch_part .= "THEN 1 ELSE 0 END AS " . $part . ",";
 						}
-					} else {
-						$gd_titlematch_part = "";
+
+
+						if ( count( $keywords ) > 1 ) {
+							$parts = array(
+								'AND' => 'gd_alltitlematch_part',
+								'OR'  => 'gd_titlematch_part'
+							);
+							$gd_titlematch_part = "";
+							foreach ( $parts as $key => $part ) {
+								$gd_titlematch_part .= " CASE WHEN ";
+								$count = 0;
+								foreach ( $keywords as $keyword ) {
+									$keyword = trim( $keyword );
+									$keyword = wp_specialchars_decode( $keyword, ENT_QUOTES );
+									$count ++;
+									if ( $count < count( $keywords ) ) {
+										// $gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' " . $key . " ";
+										$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title LIKE '" . $keyword . "' OR " . $wpdb->posts . ".post_title LIKE '" . $keyword . "%%' OR " . $wpdb->posts . ".post_title LIKE '%% " . $keyword . "%%' ) " . $key . " ";
+									} else {
+										//$gd_titlematch_part .= $wpdb->posts . ".post_title LIKE '%%" . $keyword . "%%' ";
+										$gd_titlematch_part .= "( " . $wpdb->posts . ".post_title LIKE '" . $keyword . "' OR " . $wpdb->posts . ".post_title LIKE '" . $keyword . "%%' OR " . $wpdb->posts . ".post_title LIKE '%% " . $keyword . "%%' ) ";
+									}
+								}
+								$gd_titlematch_part .= "THEN 1 ELSE 0 END AS " . $part . ",";
+							}
+						}
 					}
+
 					$s = stripslashes_deep( $s );
 					$s = wp_specialchars_decode( $s, ENT_QUOTES );
 
@@ -463,6 +477,18 @@ class GeoDir_Query {
 				$s   = wp_specialchars_decode( $s, ENT_QUOTES );
 				$s_A = wp_specialchars_decode( $s_A, ENT_QUOTES );
 
+				// Exact search with quotes
+				$gd_exact_search = false;
+				if ( $s != '' ) {
+					$search_keyword = trim( wp_specialchars_decode( stripslashes( $s ), ENT_QUOTES ), '"' );
+					$match_keyword = wp_specialchars_decode( stripslashes( $s ), ENT_QUOTES );
+
+					if ( strpos( $match_keyword, '"' ) !== false && ( '"' . $search_keyword . '"' == $match_keyword ) ) {
+						$gd_exact_search = true;
+						$s = $search_keyword;
+					}
+				}
+
 				$where               = '';
 				$better_search_terms = '';
 				$terms_sql           = '';
@@ -473,16 +499,7 @@ class GeoDir_Query {
 				}
 
 				if ( $s != '' ) {
-					$exact_search = false;
-					if ( strpos( $s, '"' ) !== false && ( $exact_s = stripslashes( $s ) ) ) {
-						$exact_keyword = trim( $exact_s, '"' );
-						if (  '"' . $exact_keyword . '"' == $exact_s ) {
-							$exact_search = true;
-							$s = $exact_keyword;
-						}
-					}
-
-					if ( $exact_search ) {
+					if ( $gd_exact_search ) {
 						$keywords = array( $s );
 					} else {
 						$keywords = explode( " ", $s );
@@ -498,7 +515,7 @@ class GeoDir_Query {
 					if ( ! empty( $keywords ) ) {
 						foreach ( $keywords as $keyword ) {
 							$keyword = trim( $keyword );
-							$keyword = wp_specialchars_decode( $keyword, ENT_QUOTES );
+							$keyword = stripslashes( wp_specialchars_decode( $keyword, ENT_QUOTES ) );
 							if ( $keyword != '' ) {
 								/**
 								 * Filter the search query keywords SQL.
@@ -977,24 +994,24 @@ class GeoDir_Query {
 	}
 
 	public static function search_sort($orderby = ''){
-		global $s;
-		if (is_search() && isset($_REQUEST['geodir_search']) && $s && trim($s) != '') {
-			$keywords = explode(" ", $s);
-			if(is_array($keywords) && ($klimit = (int) get_option('search_word_limit'))){
-				foreach($keywords as $kkey=>$kword){
-					if(geodir_utf8_strlen($kword)<=$klimit){
-						unset($keywords[$kkey]);
+		global $s, $gd_exact_search;
+
+		if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
+			if ( $gd_exact_search ) {
+				$keywords = array( $s );
+			} else {
+				$keywords = explode( " ", $s );
+
+				if ( is_array( $keywords ) && ( $klimit = (int) get_option( 'search_word_limit' ) ) ) {
+					foreach ( $keywords as $kkey => $kword ){
+						if ( geodir_utf8_strlen( $kword ) <= $klimit ) {
+							unset( $keywords[ $kkey ] );
+						}
 					}
 				}
 			}
-//
-//			if (count($keywords) > 1) {
-//				$orderby = "( gd_titlematch * 2 + gd_featured * 5 + gd_exacttitle * 10 + gd_alltitlematch_part * 100 + gd_titlematch_part * 50 + gd_content * 1.5) DESC";
-//			} else {
-//				$orderby = "( gd_titlematch * 2 + gd_featured * 5 + gd_exacttitle * 10 + gd_content * 1.5) DESC";
-//			}
 
-			if (count($keywords) > 1) {
+			if ( count( $keywords ) > 1 ) {
 				$orderby = "( gd_titlematch * 2  + gd_exacttitle * 10 + gd_alltitlematch_part * 100 + gd_titlematch_part * 50 + gd_content * 1.5) DESC";
 			} else {
 				$orderby = "( gd_titlematch * 2  + gd_exacttitle * 10 + gd_content * 1.5) DESC";
