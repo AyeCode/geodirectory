@@ -485,8 +485,10 @@ class GeoDir_Query {
 
 					if ( strpos( $match_keyword, '"' ) !== false && ( '"' . $search_keyword . '"' == $match_keyword ) ) {
 						$gd_exact_search = true;
-						$s = $search_keyword;
 					}
+
+					// remove quotes after checking if its an exact search, this is VERY IMPORTANT
+					$s = $search_keyword;
 				}
 
 				$where               = '';
@@ -529,10 +531,9 @@ class GeoDir_Query {
 								 */
 								$better_search_terms .= apply_filters( "geodir_search_better_search_terms", ' OR ( ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '" OR ' . $wpdb->posts . '.post_title LIKE "' . $keyword . '%" OR ' . $wpdb->posts . '.post_title LIKE "% ' . $keyword . '%" )', $keywords, $keyword );
 
-								// tags
-								$terms_sql .= $wpdb->prepare( " OR FIND_IN_SET( %s , " . $table . ".post_tags ) ", $keyword );
 							}
 						}
+
 					}
 				}
 
@@ -556,15 +557,21 @@ class GeoDir_Query {
 					 * @param string $content_where The query values, default: `" OR ($wpdb->posts.post_content LIKE \"$s\" OR $wpdb->posts.post_content LIKE \"$s%\" OR $wpdb->posts.post_content LIKE \"% $s%\" OR $wpdb->posts.post_content LIKE \"%>$s%\" OR $wpdb->posts.post_content LIKE \"%\n$s%\") ") "`.
 					 */
 					$content_where = apply_filters( "geodir_search_content_where", " OR ($wpdb->posts.post_content LIKE \"$s\" OR $wpdb->posts.post_content LIKE \"$s%\" OR $wpdb->posts.post_content LIKE \"% $s%\" OR $wpdb->posts.post_content LIKE \"%>$s%\" OR $wpdb->posts.post_content LIKE \"%\n$s%\") " );
-					/**
-					 * Filter the search query term values.
-					 *
-					 * @since 1.5.0
-					 * @package GeoDirectory
-					 *
-					 * @param string $terms_where The separator, default: `" AND ($wpdb->terms.name LIKE \"$s\" OR $wpdb->terms.name LIKE \"$s%\" OR $wpdb->terms.name LIKE \"% $s%\" OR $wpdb->terms.name IN ($s_A)) "`.
-					 */
-					$terms_where = apply_filters( "geodir_search_terms_where", " AND ($wpdb->terms.name LIKE \"$s\" OR $wpdb->terms.name LIKE \"$s%\" OR $wpdb->terms.name LIKE \"% $s%\" OR $wpdb->terms.name IN ($s_A)) " );
+
+					if ( $gd_exact_search ) {
+						/**
+						 * Filter the search query term values.
+						 *
+						 * @since 1.5.0
+						 * @package GeoDirectory
+						 *
+						 * @param string $terms_where The separator, default: `" AND ($wpdb->terms.name LIKE \"$s\" OR $wpdb->terms.name LIKE \"$s%\" OR $wpdb->terms.name LIKE \"% $s%\" OR $wpdb->terms.name IN ($s_A)) "`.
+						 */
+						$terms_where = apply_filters( "geodir_search_terms_where", " AND ($wpdb->terms.name LIKE \"$s\" ) " );
+					}else{
+						// @see above
+						$terms_where = apply_filters( "geodir_search_terms_where", " AND ($wpdb->terms.name LIKE \"$s\" OR $wpdb->terms.name LIKE \"$s%\" OR $wpdb->terms.name LIKE \"% $s%\" OR $wpdb->terms.name IN ($s_A)) " );
+					}
 				}
 
 				if ( geodir_is_page( 'search' ) && isset( $_REQUEST['spost_category'] ) && ( ( is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'][0] ) ) || ( ! is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'] ) ) ) ) {
@@ -573,7 +580,7 @@ class GeoDir_Query {
 
 					if ( $s != '' ) {
 						// get term sql
-						$term_sql = "SELECT $wpdb->term_taxonomy.term_id 
+						$term_sql = "SELECT $wpdb->term_taxonomy.term_id,$wpdb->terms.name,$wpdb->term_taxonomy.taxonomy
 						FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
 						WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id 
 						AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id 
@@ -583,16 +590,12 @@ class GeoDir_Query {
 
 						$term_results = $wpdb->get_results( $term_sql );
 
-						$term_ids = array();
-
 						if ( ! empty( $term_results ) ) {
-							foreach ( $term_results as $term_id ) {
-								$term_ids[] = $term_id;
-							}
-							if ( ! empty ( $term_ids ) ) {
-
-								foreach ( $term_ids as $term ) {
-									$terms_sql .= " OR FIND_IN_SET( $term->term_id , " . $table . ".post_category ) ";
+							foreach ( $term_results as $term ) {
+								if($term->taxonomy==$post_types."category"){
+									$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %d , " . $table . ".post_category ) ",$term->term_id);
+								}else{
+									$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %s, " . $table . ".post_tags ) ",$term->name );
 								}
 							}
 						}
