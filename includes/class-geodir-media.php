@@ -554,11 +554,25 @@ class GeoDir_Media {
 		// Gives us access to the download_url() and wp_handle_sideload() functions
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 
-		// URL to the external image.
-		$timeout_seconds = 5;
+		$upload_dir = wp_upload_dir();
+
+		// Prevent SSL certificate related issues.
+		$temp_file = '';
+		if ( ! empty( $upload_dir ) && strpos( $url, $upload_dir['baseurl'] . '/geodir_temp/' ) === 0 ) {
+			$temp_url = str_replace( $upload_dir['baseurl'] . '/geodir_temp/', $upload_dir['basedir'] . '/geodir_temp/', $url );
+
+			if ( file_exists( $temp_url ) ) {
+				$temp_file = $temp_url;
+			}
+		}
 
 		// Download file to temp dir
-		$temp_file = self::download_url( $url, $timeout_seconds );
+		if ( ! $temp_file ) {
+			// URL to the external image.
+			$timeout_seconds = 5;
+
+			$temp_file = self::download_url( $url, $timeout_seconds );
+		}
 
 		if ( ! is_wp_error( $temp_file ) ) {
 
