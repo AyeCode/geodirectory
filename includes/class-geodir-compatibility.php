@@ -574,7 +574,7 @@ class GeoDir_Compatibility {
 	 */
 	public static function wp_easy_updates( $api_params, $_src ) {
 
-		if ( geodir_get_option( 'admin_enable_beta' ) && strpos( $_src, 'wpgeodirectory.com' ) !== false ) {
+		if ( geodir_get_option( 'admin_enable_beta', 1 ) && strpos( $_src, 'wpgeodirectory.com' ) !== false ) {
 			if ( ! empty( $api_params['update_array'] ) ) {
 				foreach ( $api_params['update_array'] as $key => $val ) {
 					$api_params['update_array'][ $key ]['beta'] = true;
