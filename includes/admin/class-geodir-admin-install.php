@@ -44,6 +44,34 @@ class GeoDir_Admin_Install {
 		add_filter( 'wpmu_drop_tables', array( __CLASS__, 'wpmu_drop_tables' ) );
 		add_filter( 'cron_schedules', array( __CLASS__, 'cron_schedules' ) );
 		//add_action( 'geodir_plugin_background_installer', array( __CLASS__, 'background_installer' ), 10, 2 );
+
+		add_filter('upgrader_package_options',array( __CLASS__, 'maybe_downgrade_v1'));
+	}
+
+	/**
+	 * Used to allow downgrade if a user installs v2 but is not ready to convert yet.
+	 *
+	 * @param $options
+	 *
+	 * @return mixed
+	 */
+	public static function maybe_downgrade_v1($options){
+
+		if(
+			!empty($_REQUEST['geodir_downgrade'])
+			&& !empty($options['package'])
+			&& strpos( $options['package'], "https://downloads.wordpress.org/plugin/geodirectory." ) === 0
+//			&& strpos( $options['package'], "https://downloads.wordpress.org/plugin/advanced-cron-manager." ) === 0 //@todo remove after testing
+			&& version_compare( get_option( 'geodirectory_db_version' ), '2.0.0.0', '<' )
+		){
+
+//			print_r($options);exit;
+			$options['package'] = "https://downloads.wordpress.org/plugin/geodirectory.1.6.38.zip";
+//			$options['package'] = "https://downloads.wordpress.org/plugin/advanced-cron-manager.2.2.2.zip"; //@todo remove after testing
+			$options['abort_if_destination_exists'] = false;
+		}
+
+		return $options;
 	}
 
 	/**

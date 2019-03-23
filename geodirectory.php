@@ -266,10 +266,6 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-maps.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
         //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
-
-	    if(defined( 'GUTENBERG_DEVELOPMENT_MODE' )){
-		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/block-types.php' );
-	    }
 		
 		/**
 		 * REST API.

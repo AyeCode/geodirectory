@@ -68,8 +68,8 @@ if ( $db_version = get_option( 'geodirevents_db_version' ) ) {
 		'status' => is_plugin_active( 'geodir_event_manager/geodir_event_manager.php' )
 	);
 }
-// @todo not out yet
-if ( 1==2 && $db_version = get_option( 'geodirlists_db_version' ) ) {
+
+if ( $db_version = get_option( 'geodirlists_db_version' ) ) {
 	$plugins[] = array(
 		'directory' => 'geodir_list_manager',
 		'name' => 'GeoDirectory Lists',
@@ -130,7 +130,42 @@ if ( isset( $all_plugins[ 'geodir_franchise/geodir_franchise.php' ] ) && $db_ver
 	);
 }
 
+
+$action = 'install-plugin';
+$slug = 'geodirectory';
+//$slug = 'advanced-cron-manager'; //@todo remove after testing
+$install_url = wp_nonce_url(
+	add_query_arg(
+		array(
+			'action' => $action,
+			'plugin' => $slug,
+			'geodir_downgrade' => 1
+		),
+		admin_url( 'update.php' )
+	),
+	$action.'_'.$slug
+);
 ?>
+<div class="notice notice-error" style="text-align: center">
+	<h1 style="font-size: 40px;font-weight: bold;text-align: center;">
+		<?php
+		_e("GeoDirectory v2 Upgrade","geodirectory");
+		?>
+	</h1>
+	<h2 style="font-size: 22px;font-weight: bold;text-align: center;color: red;">
+		<?php
+		_e("Immediate attention required","geodirectory");
+		?>
+	</h2>
+	<p><strong><?php echo sprintf(__("This is a major update and may require some manual work such as adding widgets to sidebars to recreate your current layout. %sLearn more.%s","geodirectory"),"<a href='https://wpgeodirectory.com/docs-v2/geodirectory/installation/#convert' target='_blank'>","</a>");?></strong></p>
+	<p><?php _e("Not ready? no problem","geodirectory");?><br><strong><a onclick="return confirm('<?php _e("This will downgrade GeoDirectory to the latest version 1","geodirectory");?>');" class="button button-primary" href="<?php echo $install_url;?>" target="_parent"><i class="fas fa-undo-alt"></i> <?php _e("Downgrade to latest v1","geodirectory");?></a></strong></p>
+	<p><strong><?php _e("OR","geodirectory");?></strong></p>
+	<p>
+		<strong><?php _e("Continue upgrade below","geodirectory");?></strong><br />
+		<strong style="font-size: 30px;"><i class="fas fa-arrow-down"></i></strong>
+	</p>
+</div>
+
 <div id="message" class="notice-warning notice notice-alt geodir-message geodir-v1-to-v2-notice">
 	<h2><?php _e( 'GeoDirectory v1 to v2 data conversion:', 'geodirectory' ); ?></h2>
 	<h3><?php _e( 'You need to run the v1 to v2 data conversion now to update your directory database to the latest version to restore your directory functionality.', 'geodirectory' ); ?></h3>
