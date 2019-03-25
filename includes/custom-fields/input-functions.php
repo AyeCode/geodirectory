@@ -1689,6 +1689,8 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		} else {
 			$hours = geodir_bh_default_values(); // Default value
 		}
+
+		$time_format = geodir_bh_input_time_format();
 		ob_start();
 		?>
 		<script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':'<?php echo $gmt_offset; ?>'});});</script>
@@ -1703,15 +1705,36 @@ function geodir_cfi_business_hours( $html, $cf ) {
 							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
 						</thead>
 						<tbody>
-							<tr style="display:none!important"><td colspan="3" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" data-field="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>"> - <input type="text" data-field="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span></div></td></tr>
+							<tr style="display:none!important"><td colspan="3" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" readonly> - <input type="text" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" readonly><input id="GD_UNIQUE_ID_oa" type="hidden" data-field="open"><input type="hidden" id="GD_UNIQUE_ID_ca" data-field="close"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span></div></td></tr>
 							<?php foreach ( $weekdays as $day_no => $day ) { ?>
 							<tr class="gd-bh-item">
 								<td class="gd-bh-day"><?php echo $day; ?></td>
 								<td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>]">
-									<?php if ( ! empty( $hours[ $day_no ] ) ) { $slots = $hours[ $day_no ]; ?>
-										<?php foreach ( $slots as $slot ) { $open = ! empty( $slot['opens'] ) ? $slot['opens'] : ''; $close = ! empty( $slot['closes'] ) ? $slot['closes'] : ''; ?>
+									<?php 
+										if ( ! empty( $hours[ $day_no ] ) ) {
+											$slots = $hours[ $day_no ];
+
+											foreach ( $slots as $slot ) {
+												$open = $close = $open_display = $close_display = $open_His = $close_His = '';
+
+												$unique_id = uniqid( rand() );
+
+												if ( ! empty( $slot['opens'] ) ) {
+													$open = $slot['opens'];
+													$open_time = strtotime( $open );
+													$open_display = date_i18n( $time_format, $open_time );
+													$open_His = date_i18n( 'H:i:s', $open_time );
+												}
+
+												if ( ! empty( $slot['closes'] ) ) {
+													$close = $slot['closes'];
+													$close_time = strtotime( $close );
+													$close_display = date_i18n( $time_format, $close_time );
+													$close_His = date_i18n( 'H:i:s', $close_time );
+												}
+										?>
 										<div class="gd-bh-hours">
-											<input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]" data-field="open" data-bh="time" value="<?php echo $open; ?>" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>"> - <input type="text" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]" data-field="close" data-bh="time" value="<?php echo $close; ?>" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span>
+											<input type="text" id="<?php echo $unique_id; ?>_o" data-field-alt="open" data-bh="time" value="<?php echo esc_attr( $open_display ); ?>" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" data-time="<?php echo $open_His; ?>" readonly> - <input type="text" id="<?php echo $unique_id; ?>_c" data-field-alt="close" data-bh="time" value="<?php echo esc_attr( $close_display ); ?>" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" data-time="<?php echo $close_His; ?>" readonly><input type="hidden" id="<?php echo $unique_id; ?>_oa" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]" data-field="open" value="<?php echo esc_attr( $open ); ?>"><input type="hidden" id="<?php echo $unique_id; ?>_ca" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]" data-field="close" value="<?php echo esc_attr( $close ); ?>"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span>
 										</div>
 										<?php } ?>
 									<?php } else { ?>

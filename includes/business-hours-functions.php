@@ -730,3 +730,23 @@ function geodir_sanitize_business_hours_value( $value, $custom_field, $post_id, 
 	return $value;
 }
 add_filter( 'geodir_custom_field_value_business_hours', 'geodir_sanitize_business_hours_value', 10, 5 );
+
+/**
+ * Business hours time format for input field.
+ *
+ * @since 2.0.0
+ *
+ * @param bool $jqueryui If true returns in jQuery UI format. Default False.
+ * @return string Time format.
+ */
+function geodir_bh_input_time_format( $jqueryui = false ) {
+	$time_format = geodir_time_format();
+
+	$time_format = apply_filters( 'geodir_business_hours_input_time_format', $time_format );
+
+	if ( $jqueryui ) {
+		$time_format = geodir_date_format_php_to_jqueryui( $time_format );
+	}
+
+	return $time_format;
+}
