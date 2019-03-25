@@ -650,6 +650,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 				'tab_content'   => $tab->tab_content,
 			);
 
+			// Check if tab already exists with post_type, tab_type, tab_name & tab_key combine.
+			if ( ! $tab_id && $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM {$table} WHERE post_type = %s AND tab_type = %s AND tab_name LIKE %s AND tab_key = %s LIMIT 1", array( $postarr['post_type'], $postarr['tab_type'], $postarr['tab_name'], $postarr['tab_key'] ) ) ) > 0 ) {
+				return new WP_Error( 'failed', wp_sprintf( __( 'Tab "%s" already exists!', 'geodirectory' ), $postarr['tab_name'] ) );
+			}
+
 			if(isset($tab->sort_order)){
 				$postarr['sort_order'] = $tab->sort_order;
 			}
