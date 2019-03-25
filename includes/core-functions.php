@@ -358,7 +358,8 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'confirm_lbl_error'                            => addslashes( __( 'ERROR:', 'geodirectory' ) ),
 		'label_title'                                  => __( 'Title', 'geodirectory' ),
 		'label_caption'                                => __( 'Caption', 'geodirectory' ),
-		'button_set'                                   => __( 'Set', 'geodirectory' )
+		'button_set'                                   => __( 'Set', 'geodirectory' ),
+		'BH_altTimeFormat'                             => geodir_bh_input_time_format( true ),
 	);
 
 	/**

@@ -452,7 +452,10 @@ var GeoDir_Business_Hours = {
     addSlot: function($el) {
         var sample = this.sample;
         var $item = $el.closest('.gd-bh-item');
+		var uniqueid = Math.floor( Math.random() * 100000000000 ).toString();
+	  
         jQuery('.gd-bh-closed', $item).remove();
+		sample = sample.replace(/GD_UNIQUE_ID/g, uniqueid);
         sample = sample.replace('data-field="open"', 'data-field="open" name="' + jQuery('.gd-bh-time', $item).data('field') + '[open][]"');
         sample = sample.replace('data-field="close"', 'data-field="close" name="' + jQuery('.gd-bh-time', $item).data('field') + '[close][]"');
         jQuery('.gd-bh-time', $item).append(sample);
@@ -532,13 +535,38 @@ var GeoDir_Business_Hours = {
     },
     timepickers: function() {
         jQuery(this.$wrap).find('[data-bh="time"]').each(function() {
-            var $el = jQuery(this);
+            var $el = jQuery(this), altField, time, hour = minute = second = "";
             if (!$el.hasClass('hasDatepicker')) {
-                $el.timepicker({
-                    timeFormat: 'HH:mm',
+				time = $el.data('time');
+				if (time && (times = time.split(':'))) {
+					if (times.length == 3) {
+						hour = times[0];
+						minute = times[1];
+						second = times[2];
+					}
+				}
+				$el.timepicker({
+                    timeFormat: geodir_params.BH_altTimeFormat,
                     showPeriod: true,
                     showLeadingZero: true,
                     showPeriod: true,
+					altField: '#' + $el.prop('id') + 'a',
+					altTimeFormat: 'HH:mm',
+					hour: hour,
+					minute: minute,
+					second: second,
+					onSelect: function(datetime, inst) {
+						uniqueid = jQuery(this).prop('id');
+						if (uniqueid) {
+							jQuery('#' + uniqueid + 'a').trigger('change');
+						}
+					},
+					onClose : function(datetime, inst) {
+						uniqueid = jQuery(this).prop('id');
+						if (uniqueid) {
+							jQuery('#' + uniqueid + 'a').trigger('change');
+						}
+					}
                 });
             }
         });

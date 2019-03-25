@@ -36,6 +36,7 @@ Prevent SSL certificate related issues during image upload - FIXED
 Improved tag search and exact search using quotes for "multiple words" - CHANGED
 Some standard post meta added to GD post meta widget like, post_author, post_date and post_date_modified - ADDED
 v1 to v2 conversion now gives the option to downgrade back to v1 if customer is not ready yet - ADDED
+Allow business hours input format to use WP time format settings - CHANGED
 
 v2.0.0.48
 Customify theme page layout compatibility settings added - ADDED
