@@ -266,10 +266,6 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-maps.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
         //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
-
-	    if(defined( 'GUTENBERG_DEVELOPMENT_MODE' )){
-		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/block-types.php' );
-	    }
 		
 		/**
 		 * REST API.
@@ -471,34 +467,3 @@ function GeoDir() {
 }
 // Global for backwards compatibility.
 $GLOBALS['geodirectory'] = GeoDir();
-//
-//
-//add_action('et_builder_ready','init_my_et');
-//function init_my_et(){
-//	add_filter( 'et_builder_module_fields_et_pb_code', 'divi_add_SD_insert_button'  );
-//
-//}
-//add_filter( 'et_builder_get_parent_modules', 'divi_add_SD_insert_button'  );
-//
-//
-//
-//
-//function divi_add_SD_insert_button( $fields ){
-//
-////	echo '###';print_r($fields);exit;
-//
-//	if(isset($fields['et_pb_code'])){
-//		if(empty($fields['et_pb_code']->fields_unprocessed['raw_content']['has_sd_button'])){
-//			ob_start();
-//			WP_Super_Duper::shortcode_insert_button('.et-fb-codemirror textarea','');
-//			$html = ob_get_clean();
-//			$fields['et_pb_code']->fields_unprocessed['raw_content']['description'] .= $html;
-//			$fields['et_pb_code']->fields_unprocessed['raw_content']['has_sd_button'] = true;
-//		}
-//
-//	}
-//
-//	//$fields['raw_content']['label'] =  'xxx';
-//
-//	return $fields;
-//}

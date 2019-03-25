@@ -42,10 +42,7 @@ class GeoDir_Admin {
 
 		// hide the plugin install button on setup wizard plugin more info iframe
 		add_action("admin_print_footer_scripts-plugin-install.php",array($this,'hide_plugin_install'));
-
-
-		// show WPEU install instruction on the add plugin page.
-		add_action( 'admin_notices', array( $this,'wpeu_notice') );
+		
 
 		// clear extrnsion transients if activating/deactivating
 		if(isset($_REQUEST['exup_action']) && ($_REQUEST['exup_action']=='activate_membership_key'|| $_REQUEST['exup_action']=='deactivate_membership_key' )){
@@ -94,25 +91,6 @@ class GeoDir_Admin {
 		}
 
 		return $output;
-	}
-
-	/**
-	 * Show WP Easy Updates install instruction on the install plugin page.
-	 */
-	public function wpeu_notice() {
-		if ( isset($_REQUEST['wpeu-install']) && !defined( 'WP_EASY_UPDATES_ACTIVE' ) ) {
-			?>
-			<div class="notice notice-info is-dismissible">
-				<p>
-					<strong>
-						<?php
-						echo sprintf( __( 'Please upload the WP Easy Updates plugin and activate it.  ( if your download did not start automatically %sclick here%s )', 'geodirectory' ), '<a href="https://wpeasyupdates.com/wp-easy-updates.zip" target="_blank" title="Download WP Easy Updates">', '</a>' );
-						?>
-					</strong>
-				</p>
-			</div>
-			<?php
-		}
 	}
 
 

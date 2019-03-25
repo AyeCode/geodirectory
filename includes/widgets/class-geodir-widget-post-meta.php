@@ -199,6 +199,11 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
 			$fields = geodir_post_custom_fields( $package_id,  'all', $post_type , 'none' );
 
+			$fields = $fields + self::get_standard_fields();
+
+//			echo '###';
+//			print_r( $fields );
+
 			if(!empty($fields)){
 				$field = array();
 				foreach($fields as $field_info){
@@ -240,6 +245,8 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 				}else{
 					//$output = __('Key does not exist','geodirectory');
 				}
+			}else{
+
 			}
 		}
 
@@ -262,8 +269,68 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			}
 		}
 
+
+
+		// add some general types:
+		$keys['post_date'] = 'post_date';
+		$keys['post_modified'] = 'post_modified';
+		$keys['post_author'] = 'post_author';
+
+//		print_r($keys);exit;
 		return $keys;
 
+	}
+
+
+	/**
+	 * Get some standard post fields info.
+	 *
+	 * @return array
+	 */
+	public function get_standard_fields(){
+		$fields = array();
+
+
+		$fields['post_date'] = array(
+			'name'          =>  'post_modified',
+			'htmlvar_name'  =>  'post_modified',
+			'frontend_title'              =>  __('Modified','geodirectory'),
+			'type'              =>  'datepicker',
+			'field_icon'              =>  'fas fa-calendar-alt',
+			'field_type_key'              =>  '',
+			'css_class'              =>  '',
+			'extra_fields'              =>  '',
+		);
+
+		$fields['post_modified'] = array(
+			'name'          =>  'post_date',
+			'htmlvar_name'  =>  'post_date',
+			'frontend_title'              =>  __('Published','geodirectory'),
+			'type'              =>  'datepicker',
+			'field_icon'              =>  'fas fa-calendar-alt',
+			'field_type_key'              =>  '',
+			'css_class'              =>  '',
+			'extra_fields'              =>  '',
+		);
+
+		$fields['post_date_gmt'] = array(
+			'name'          =>  'post_author',
+			'htmlvar_name'  =>  'post_author',
+			'frontend_title'              =>  __('Author','geodirectory'),
+			'type'              =>  'author',
+			'field_icon'              =>  'fas fa-user',
+			'field_type_key'              =>  '',
+			'css_class'              =>  '',
+			'extra_fields'              =>  '',
+		);
+
+
+		/**
+		 * Filter the post meta standard fields info.
+		 *
+		 * @since 2.0.0.49
+		 */
+		return apply_filters('geodir_post_meta_standard_fields',$fields);
 	}
 	
 }

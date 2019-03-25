@@ -185,6 +185,9 @@ class GeoDir_Admin_Notices {
 				if ( $updater->is_updating() || ! empty( $_GET['do_update_geodirectory'] ) ) {
 					include( 'views/html-notice-updating.php' );
 				} else {
+					// gd lightbox
+					wp_enqueue_script( 'geodir-lity' );
+					wp_enqueue_style('geodir-admin-css');
 					include( 'views/html-notice-v2-update.php' );
 				}
 			} else {

@@ -226,6 +226,17 @@
     }
     .lity-nav-right {
       float: right;
+      i,svg{
+        position: absolute;
+        right: 9px;
+      }
+    }
+    .lity-nav-left {
+      float: left;
+      i,svg{
+        position: absolute;
+        left: 9px;
+      }
     }
   }
 

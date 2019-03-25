@@ -56,9 +56,7 @@ class GeoDir_Admin_Blocks {
      * @access private
      */
 	private function includes() {
-
-		//require_once( plugin_dir_path( __FILE__ ) . 'inc/block-types.php' );
-		require_once( dirname( __FILE__ ) . '/block-types.php' );
+		
 	}
 
 	/**

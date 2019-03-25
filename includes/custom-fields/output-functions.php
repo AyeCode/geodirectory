@@ -2277,3 +2277,113 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
     return $html;
 }
 add_filter('geodir_custom_field_output_business_hours','geodir_cf_business_hours',10,4);
+
+/**
+ * Get the html output for the custom field: author
+ *
+ * @param string $html The html to be filtered.
+ * @param string $location The location to output the html.
+ * @param array $cf The custom field array details.
+ * @param string $output The output string that tells us what to output.
+ * @since 2.0.0 $output param added.
+ * @since 1.6.6
+ *
+ * @return string The html to output for the custom field.
+ */
+function geodir_cf_author($html,$location,$cf,$p='',$output=''){
+
+    // check we have the post value
+    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
+    else{ global $gd_post;}
+
+    // Block demo content
+    if( geodir_is_block_demo() ){
+        $gd_post->{$cf['htmlvar_name']} = 'https://example.com/author/admin/';
+    }
+
+    if(!is_array($cf) && $cf!=''){
+        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
+        if(!$cf){return NULL;}
+    }
+
+    $html_var = $cf['htmlvar_name'];
+
+    // Check if there is a location specific filter.
+    if(has_filter("geodir_custom_field_output_url_loc_{$location}")){
+        /**
+         * Filter the url html by location.
+         *
+         * @param string $html The html to filter.
+         * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 1.6.6
+         */
+        $html = apply_filters("geodir_custom_field_output_url_loc_{$location}",$html,$cf,$output);
+    }
+
+    // Check if there is a custom field specific filter.
+    if(has_filter("geodir_custom_field_output_url_var_{$html_var}")){
+        /**
+         * Filter the url html by individual custom field.
+         *
+         * @param string $html The html to filter.
+         * @param string $location The location to output the html.
+         * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 1.6.6
+         */
+        $html = apply_filters("geodir_custom_field_output_url_var_{$html_var}",$html,$location,$cf,$output);
+    }
+
+    // Check if there is a custom field key specific filter.
+    if(has_filter("geodir_custom_field_output_url_key_{$cf['field_type_key']}")){
+        /**
+         * Filter the url html by field type key.
+         *
+         * @param string $html The html to filter.
+         * @param string $location The location to output the html.
+         * @param array $cf The custom field array.
+         * @param string $output The output string that tells us what to output.
+         * @since 1.6.6
+         */
+        $html = apply_filters("geodir_custom_field_output_url_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
+    }
+
+    // If not html then we run the standard output.
+    if(empty($html)){
+
+        if ($gd_post->{$cf['htmlvar_name']}):
+
+            $field_icon = geodir_field_icon_proccess($cf);
+            $output = geodir_field_output_process($output);
+            if (strpos($field_icon, 'http') !== false) {
+                $field_icon_af = '';
+            } else {
+                $field_icon_af = $field_icon;
+                $field_icon = '';
+            }
+
+            $author_id = isset($gd_post->post_author) ? absint($gd_post->post_author) : '0';
+            $author_name = get_the_author_meta( 'user_nicename' , $author_id);
+            $author_url = get_author_posts_url( $author_id, $author_name );
+            $author_link = '<a href="'.$author_url.'" >'. $author_name.'</a>';
+
+            if ( isset( $output['strip'] ) ) {
+                $author_link = wp_strip_all_tags( $author_link );
+            }
+
+
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+
+            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-address" style="' . $field_icon . '">' . $field_icon_af;
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['icon']))$html .= '</span>';
+            if($output=='' || isset($output['value']))$html .= stripslashes( $author_link );
+
+        endif;
+
+    }
+
+    return $html;
+}
+add_filter('geodir_custom_field_output_author','geodir_cf_author',10,5);

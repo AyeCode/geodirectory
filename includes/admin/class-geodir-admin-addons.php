@@ -194,7 +194,7 @@ class GeoDir_Admin_Addons {
 		$version = isset($addon->licensing->version) ? $addon->licensing->version : '';
 
 		// check if we are looking for beta versions
-		if(geodir_get_option('admin_enable_beta') && !empty($addon->licensing->beta_version)){
+		if(geodir_get_option('admin_enable_beta', 1) && !empty($addon->licensing->beta_version)){
 			$version = $addon->licensing->beta_version;
 		}
 
