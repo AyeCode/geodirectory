@@ -742,11 +742,11 @@ add_filter( 'geodir_custom_field_value_business_hours', 'geodir_sanitize_busines
 function geodir_bh_input_time_format( $jqueryui = false ) {
 	$time_format = geodir_time_format();
 
+	$time_format = apply_filters( 'geodir_business_hours_input_time_format', $time_format );
+
 	if ( $jqueryui ) {
-		$value = geodir_date_format_php_to_jqueryui( $time_format );
-	} else {
-		$value = $time_format;
+		$time_format = geodir_date_format_php_to_jqueryui( $time_format );
 	}
 
-	return apply_filters( 'geodir_business_hours_input_time_format', $value, $time_format, $jqueryui );
+	return $time_format;
 }
