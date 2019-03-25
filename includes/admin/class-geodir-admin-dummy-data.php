@@ -51,7 +51,7 @@ class GeoDir_Admin_Dummy_Data {
 				$category_return = wp_insert_term( $category['name'], $post_type . 'category' );
 
 				if(is_wp_error($category_return)){
-					geodir_error_log($category_return->getMessage(), 'dummy_data', __FILE__, __LINE__ );
+					geodir_error_log($category_return->get_error_message(), 'dummy_data', __FILE__, __LINE__ );
 				}else {
 
 
