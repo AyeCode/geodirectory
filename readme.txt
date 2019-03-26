@@ -1,13 +1,13 @@
 === GeoDirectory - Business Directory Plugin ===
-Contributors: stiofansisland, paoltaia, ayecode
+Contributors: stiofansisland, paoltaia, ayecode, Ismiaini
 Donate link: https://wpgeodirectory.com
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
-Tags:  directory plugin, business directory, listings, classifieds, real estate
+Tags:  directory plugin, business directory, listings, classifieds, real estate, address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory widget, geodirectory, googlemap, googlemaps, google maps, list, lists, member directory, members directories, members directory, microformat, microformats, multisite, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin, city directory
 Requires at least: 4.5
 Requires PHP: 5.3
 Tested up to: 5.1
-Stable tag: 2.0.0.48
+Stable tag: 2.0.0.49
 
 
 Create a location-based business directory with our plugin, 100% compatible with any theme and page builders. In a few clicks you could be the next Yelp or Tripadvisor.
@@ -87,7 +87,7 @@ Get timely and friendly support for both Core Plugin and add-ons at our official
 
 = Minimum Requirements =
 
-* WordPress 3.5 or greater
+* WordPress 4.5 or greater
 * PHP version 5.3 or greater
 * MySQL version 5.0 or greater
 
@@ -125,17 +125,10 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 
 == Changelog ==
 
-= 2.0.0.0-rc =
-* Updated from font-awesome v4 to v5 - CHANGED
-* Rest api route & endpoints for fields - ADDED
-* priceRange custom field added and schema output added - ADDED
-* Font Awesome & Popup maker raises Uncaught Error - FIXED
-* DB translate texts tool added - ADDED
-* Show author own posts on author page if draft or pending - CHANGED
-* defer and  async tags added to all GD JS - CHANGED
-* iframe api generation broken (by Google iframe restrictions) changed to new window popup - FIXED
-* WP Session removed - CHANGED
-* Remove GeoDirectory data on uninstall if set to do so - ADDED
-* WP_Country_Database Class implemented to replace own country DB table - CHANGED
+= 2.0.0.49 =
+[GeoDirectory changelog for version 2.0.0.49](http://wpgeodirectory.com/change-logs/#v2.0.0.49).
 
 == Upgrade Notice ==
+
+= 2.0.0.48 =
+NOTICE: GDv2 is a major update that will require some manual steps to restore some directory functionality when updating from GDv1.
