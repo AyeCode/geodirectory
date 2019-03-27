@@ -2032,9 +2032,57 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
-        global $preview;
-        
-        //print_r($gd_post);
+        $show_city_in_address = true;
+        $show_region_in_address = true;
+        $show_country_in_address = true;
+        $show_zip_in_address = true;
+
+        if (!empty($cf['extra_fields'])) {
+            $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
+            $addition_fields = '';
+            if (!empty($extra_fields)) {
+                $show_city_in_address = false;
+                if (isset($extra_fields['show_city']) && $extra_fields['show_city']) {
+                    $show_city_in_address = true;
+                }
+                /**
+                 * Filter "show city in address" value.
+                 *
+                 * @since 1.0.0
+                 */
+                $show_city_in_address = apply_filters('geodir_show_city_in_address', $show_city_in_address);
+                $show_region_in_address = false;
+                if (isset($extra_fields['show_region']) && $extra_fields['show_region']) {
+                    $show_region_in_address = true;
+                }
+                /**
+                 * Filter "show region in address" value.
+                 *
+                 * @since 1.6.6
+                 */
+                $show_region_in_address = apply_filters('geodir_show_region_in_address', $show_region_in_address);
+                $show_country_in_address = false;
+                if (isset($extra_fields['show_country']) && $extra_fields['show_country']) {
+                    $show_country_in_address = true;
+                }
+                /**
+                 * Filter "show country in address" value.
+                 *
+                 * @since 1.6.6
+                 */
+                $show_country_in_address = apply_filters('geodir_show_country_in_address', $show_country_in_address);
+                $show_zip_in_address = false;
+                if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) {
+                    $show_zip_in_address = true;
+                }
+                /**
+                 * Filter "show zip in address" value.
+                 *
+                 * @since 1.6.6
+                 */
+                $show_zip_in_address = apply_filters('geodir_show_zip_in_address', $show_zip_in_address);
+            }
+        }
 
         if ($gd_post->street) {
 
@@ -2072,16 +2120,16 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ( isset($gd_post->street) ) {
                 $address_fields['street'] = '<span itemprop="streetAddress">' . $gd_post->street . '</span>';
             }
-            if ( isset( $gd_post->city ) && $gd_post->city ) {
+            if ( $show_city_in_address && isset( $gd_post->city ) && $gd_post->city ) {
                 $address_fields['city'] = '<span itemprop="addressLocality">' . $gd_post->city. '</span>';
             }
-            if ( isset( $gd_post->region ) && $gd_post->region ) {
+            if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
                 $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
             }
-            if ( isset( $gd_post->zip ) && $gd_post->zip ) {
+            if ( $show_zip_in_address && isset( $gd_post->zip ) && $gd_post->zip ) {
                 $address_fields['zip'] = '<span itemprop="postalCode">' . $gd_post->zip . '</span>';
             }
-            if ( isset( $gd_post->country ) && $gd_post->country ) {
+            if ($show_country_in_address && isset( $gd_post->country ) && $gd_post->country ) {
                 $address_fields['country'] = '<span itemprop="addressCountry">' . __( $gd_post->country, 'geodirectory' ) . '</span>';
             }
             if ( isset( $gd_post->latitude ) && $gd_post->latitude ) {

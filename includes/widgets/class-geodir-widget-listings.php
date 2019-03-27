@@ -251,7 +251,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'value'  => '1',
                 'default'  => '0',
                 'advanced' => true,
-				'element_require' => 'jQuery(form).find(\'[data-argument=with_pagination]\').find(\'input\').is(\':checked\')',
+				'element_require' => '[%with_pagination%]=="1"',
             ),
             'bottom_pagination'  => array(
                 'title' => __( "Show pagination at bottom of the listings?", 'geodirectory' ),
@@ -260,7 +260,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'value'  => '1',
                 'default'  => '1',
                 'advanced' => true,
-				'element_require' => 'jQuery(form).find(\'[data-argument=with_pagination]\').find(\'input\').is(\':checked\')',
+				'element_require' => '[%with_pagination%]=="1"',
             ),
             'pagination_info'  => array(
                 'title' => __( "Show advance pagination info?", 'geodirectory' ),
@@ -274,7 +274,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '',
                 'desc_tip' => false,
                 'advanced' => true,
-				'element_require' => 'jQuery(form).find(\'[data-argument=with_pagination]\').find(\'input\').is(\':checked\')',
+				'element_require' => '[%with_pagination%]=="1"',
             )
 
 //            'tags'                  => '',
@@ -487,6 +487,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
         $categories = $category;
 		$category_taxonomy = $post_type . 'category';
+	    $category = explode(",",$category);// convert to array
 		$category = apply_filters( 'geodir_filter_query_var_categories', $category, $post_type );
 
         if ( isset( $instance['character_count'] ) ) {
