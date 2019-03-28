@@ -496,10 +496,13 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	public static function update_200_custom_fields() {
-		global $wpdb;
+		global $wpdb, $plugin_prefix;
+
+		$post_types = (array) get_option( 'geodir_post_types' );
 
 		// Custom fields
 		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
+		$packages_table = $plugin_prefix . 'price';
 
 		$wpdb->query( "ALTER TABLE `{$custom_fields_table}` 
 			CHANGE admin_desc frontend_desc text NULL DEFAULT NULL, 
@@ -602,6 +605,45 @@ class GeoDir_Admin_Upgrade {
 			}
 
 			$wpdb->update( $custom_fields_table, (array) $row, array( 'id' => $row->id ) );
+		}
+
+		// Create pre-defined custom fields
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $post_type => $data ) {
+				if ( empty( $post_type ) ) {
+					continue;
+				}
+
+				$packages = '';
+				if ( self::needs_upgrade( 'payment_manager' ) ) {
+					$results = $wpdb->get_col( $wpdb->prepare( "SELECT pid FROM {$packages_table} WHERE post_type = %s", $post_type ) );
+					if ( ! empty( $results ) ) {
+						$packages = implode( ',', $results );
+					}
+				}
+
+				$field_data = array(
+					'post_type' => $post_type,
+					'data_type' => 'TINYINT', 
+					'field_type' => 'checkbox', 
+					'field_type_key' => 'featured', 
+					'admin_title' => 'Featured', 
+					'frontend_desc' => 'Mark listing as a featured.', 
+					'frontend_title' => 'Is Featured?', 
+					'htmlvar_name' => 'featured', 
+					'default_value' => '',
+					'sort_order' => '20', //
+					'is_active' => '1', 
+					'show_in' => '[detail]', 
+					'for_admin_use' => '1', 
+					'packages' => $packages, 
+					'cat_sort' => '1', 
+					'extra_fields' => '', 
+					'field_icon' => 'fas fa-certificate'
+				);
+
+				$wpdb->insert( $custom_fields_table, $field_data, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%s', '%d', '%s', '%s' ) );
+			}
 		}
 
 		// Sorting fields
