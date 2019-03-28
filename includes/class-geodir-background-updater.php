@@ -110,16 +110,23 @@ class GeoDir_Background_Updater extends GeoDir_Background_Process {
 	 */
 	protected function task( $callback ) {
 		geodir_maybe_define( 'GD_UPDATING', true );
-
+		$result = false;
 		if ( is_callable( $callback ) ) {
 			geodir_error_log( sprintf( 'Running %s callback', $callback ) );
-			call_user_func( $callback );
-			geodir_error_log( sprintf( 'Finished %s callback', $callback ) );
+			$result = call_user_func( $callback );
+
+			if ( $result ) {
+				geodir_error_log( sprintf( 'Callback needs to run again: %s', $callback ) );
+			} else {
+				geodir_error_log( sprintf( 'Finished %s callback', $callback ) );
+			}
+
+
 		} else {
 			geodir_error_log( sprintf( 'Could not find %s callback', $callback ) );
 		}
 
-		return false;
+		return $result ? $callback : false;
 	}
 
 	/**
