@@ -49,12 +49,19 @@ We have been wholly focused on directory tools for WordPress since 2011. That's 
 * Business Enquiry through Ninja Forms integration.
 * Search by zip code or location name using the default search widget. Easily filter listings by proximity, rating, reviews or date. Search by user location using the Advanced Search premium add-on.
 * List millions of businesses, thanks to our optimized database structure.
-* Compatible with virtually any theme and the most popular page builers.
+* Compatible with virtually any theme, Gutenberg and the most popular page builders.
 * Multilingual site? GeoDirectory is 100% WPML compatible.
 * GeoDirectory is fully compatible with WordPress Multisite.
-* CSV import, export, re-import fror listings, categories and reviews. Easily transfer millions of listings across instances. Edit data offline: live listings automagically update on re-import.
+* CSV import, export, re-import fror listings, categories and reviews. Easily transfer millions of listings across instances. Edit data offline: live listings automagically update on re-import - heavily improved in V2.
 * Improved Google Analytics widget for listings owners.
 * Titles and metas settings page for better SEO optimization.
+* NEW - Extended Business Hours for listings
+* NEW - Tab builder, to design the tabs of your listings as you wish by drag and drop
+* NEW - Badge System, for "featured" listings, "new" listings, or to add whatever badge you want to your listings from any custom field.
+* NEW - Rating Styles using Font Awesome icons.
+* NEW - Custom Email Templates
+* NEW - Guest Add Listing
+* NEW - Improved SEO permalinks settings.
 
 = Premium Addons =
 
