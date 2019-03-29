@@ -112,14 +112,13 @@ class GeoDir_Compatibility {
 		}
 
 
-
-
 		/*######################################################
 		GENERAL
 		######################################################*/
 		add_filter( 'get_post_metadata', array( __CLASS__, 'dynamically_add_post_meta' ), 10, 4 );
 
-
+		// Set custom hook for theme compatibility
+		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ) );
 	}
 
 	/**
@@ -798,6 +797,39 @@ class GeoDir_Compatibility {
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Setup theme compatibility hooks.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function template_redirect() {
+		// Set Avada theme title bar
+		if ( class_exists( 'FusionBuilder' ) && geodir_is_geodir_page() ) {
+			add_action( 'avada_override_current_page_title_bar', array( __CLASS__, 'avada_override_current_page_title_bar' ), 10, 1 );
+		}
+	}
+
+	/**
+	 * Set Avada theme title bar.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param int $post_id Current post id.
+	 */
+	public static function avada_override_current_page_title_bar( $post_id ) {
+		$page_title_bar_contents = avada_get_page_title_bar_contents( $post_id );
+		$page_title              = get_post_meta( $post_id, 'pyre_page_title', true );
+
+		// Which TO to check for.
+		$page_title_option = Avada()->settings->get( 'page_title_bar' );
+
+		if ( 'hide' !== $page_title_option ) {
+			$title = GeoDir_SEO::set_meta();
+
+			avada_page_title_bar( $title, $page_title_bar_contents[1], $page_title_bar_contents[2] );
+		}
 	}
 
 }

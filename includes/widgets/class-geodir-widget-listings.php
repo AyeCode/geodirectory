@@ -487,7 +487,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
         $categories = $category;
 		$category_taxonomy = $post_type . 'category';
-	    $category = explode(",",$category);// convert to array
+	    $category = is_array( $category ) ? $category : explode( ",", $category ); // convert to array
 		$category = apply_filters( 'geodir_filter_query_var_categories', $category, $post_type );
 
         if ( isset( $instance['character_count'] ) ) {
