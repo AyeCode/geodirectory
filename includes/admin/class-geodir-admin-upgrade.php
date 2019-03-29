@@ -634,7 +634,7 @@ class GeoDir_Admin_Upgrade {
 					'default_value' => '',
 					'sort_order' => '20', //
 					'is_active' => '1', 
-					'show_in' => '[detail]', 
+					'show_in' => '',
 					'for_admin_use' => '1', 
 					'packages' => $packages, 
 					'cat_sort' => '1', 

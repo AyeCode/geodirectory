@@ -64,6 +64,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			// validation pattern
 			add_filter( 'geodir_cfa_validation_pattern_text', array( $this, 'validation_pattern' ), 10, 4 );
+			add_filter( 'geodir_cfa_validation_pattern_phone', array( $this, 'validation_pattern' ), 10, 4 );
+			add_filter( 'geodir_cfa_validation_pattern_email', array( $this, 'validation_pattern' ), 10, 4 );
+			add_filter( 'geodir_cfa_validation_pattern_url', array( $this, 'validation_pattern' ), 10, 4 );
 
 			// category display type
 			add_filter( 'geodir_cfa_extra_fields_categories', array( $this, 'category_input_type' ), 10, 4 );

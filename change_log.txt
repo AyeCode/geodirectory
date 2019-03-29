@@ -1,5 +1,12 @@
 v2.0.0.50
 "Clear version numbers" tool should clear countries db version - ADDED
+GD Listings block advanced settings breaks due to paging settings - FIXED
+GD Listings view all link not working if multiple categories set - FIXED
+Ninja Forms send message changed to show all fields (current forms should change message to include {all_fields_table} ) - CHANGED
+Post meta address not using the custom field settings to hide address parts - FIXED
+Post badge not replacing %%post_url%% correctly  - FIXED
+Required message not editable until custom field saved - FIXED
+Validation pattern extended to phone,email and url type fields - ADDED
 
 v2.0.0.49
 Front end author actions - After delete, page is 404 - FIXED

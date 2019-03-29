@@ -811,16 +811,19 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				// badge text
 				if ( empty( $badge ) ) {
 					$badge = $field['frontend_title'];
-				}elseif( !empty( $badge ) && $badge = str_replace("%%input%%",$match_value,$badge) ){
+				}
+				if( !empty( $badge ) && $badge = str_replace("%%input%%",$match_value,$badge) ){
 					// will be replace in condition check
-				}elseif( !empty( $badge ) && $post_id && $badge = str_replace("%%post_url%%",get_permalink($post_id),$badge) ){
+				}
+				if( !empty( $badge ) && $post_id && $badge = str_replace("%%post_url%%",get_permalink($post_id),$badge) ){
 					// will be replace in condition check
 				}
 
-				//link url
+				//link url, replave vars
 				if( !empty( $args['link'] ) && $args['link'] = str_replace("%%input%%",$match_value,$args['link']) ){
 					// will be replace in condition check
-				}elseif( !empty( $args['link'] ) && $post_id && $args['link'] = str_replace("%%post_url%%",get_permalink($post_id),$args['link']) ){
+				}
+				if( !empty( $args['link'] ) && $post_id && $args['link'] = str_replace("%%post_url%%",get_permalink($post_id),$args['link']) ){
 					// will be replace in condition check
 				}
 

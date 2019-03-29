@@ -900,7 +900,7 @@ function geodir_ninja_forms_contact_template(){
         "tag": "",
         "to": "{GD:listing_email}",
         "email_subject": "New contact form: {wp:site_title}",
-        "email_message": "<p>{field:message}<\/p><p>-{field:name} ( {field:email} )<\/p>",
+        "email_message": "<p>{all_fields_table}<\/p><p>-{field:name} ( {field:email} )<\/p>",
         "from_name": "",
         "from_address": "",
         "reply_to": "{field:email}",

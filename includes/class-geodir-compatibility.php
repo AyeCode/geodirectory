@@ -647,7 +647,7 @@ class GeoDir_Compatibility {
 		$themes = array();
 
 		if ( get_theme_support( 'geodirectory' ) ) {
-			$themes[ $theme ] = 'geodirectory.php';
+			//$themes[ $theme ] = 'geodirectory.php';
 		} else {
 			$themes = array(
 				'twentyseventeen' => 'single.php',

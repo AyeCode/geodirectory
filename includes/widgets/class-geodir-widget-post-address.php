@@ -220,7 +220,10 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 						$args['show'] = 'icon-label-value';
 					}
 
-					$field['address_template'] = $args['address_template'];;
+					$field['address_template'] = $args['address_template'];
+
+					// unset the extra fields
+					unset($field['extra_fields']);
 
 					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
 

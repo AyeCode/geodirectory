@@ -248,14 +248,27 @@ function gd_show_hide(id) {
 
 function gd_show_hide_radio(id, sh, cl) {
 
-    setTimeout(function () {
-        gd_toggle_switch_display();
-    }, 100);
+    // setTimeout(function () {
+    //     gd_toggle_switch_display();
+    // }, 100);
     // if(sh=='hide'){
     //     jQuery( id ).closest( '.widefat' ).find('.'+cl).hide('fast');
     // }else{
     //     jQuery( id ).closest( '.widefat' ).find('.'+cl).show('fast');
     // }
+
+
+    setTimeout(function () {
+        $show = jQuery( id ).is(":checked");
+        console.log( $show );
+
+        if($show ){console.log( 'checked' );
+            jQuery( id ).closest('.dd-setting').find( '.'+cl ).show('fast');
+        }else{console.log( 'unchecked' );
+            jQuery( id ).closest('.dd-setting').find( '.'+cl ).hide('fast');
+        }
+
+    }, 100);
 
 }
 
