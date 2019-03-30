@@ -808,8 +808,9 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 			if ( $match_found ) {
 
+
 				// badge text
-				if ( empty( $badge ) ) {
+				if ( empty( $badge ) && empty($args['icon_class']) ) {
 					$badge = $field['frontend_title'];
 				}
 				if( !empty( $badge ) && $badge = str_replace("%%input%%",$match_value,$badge) ){
@@ -878,12 +879,16 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				// Maybe translate badge
 				$badge = __( $badge, 'geodirectory' );
 
+				// title
+				$title = $badge ? $badge : '';
+				if(!$title){$title = isset($field['frontend_title']) ? $field['frontend_title'] : '';}
+
 				// set badge text as secondary if icon is set.
 				if( $icon ){
 					$badge = " <span class='gd-secondary'>$badge</span>";
 				}
 
-				$output = '<div class="gd-badge-meta ' . trim( $class ) . '" '.$onclick.' '.$extra_attributes.'>';
+				$output = '<div class="gd-badge-meta ' . trim( $class ) . '" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
 				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
 				$post_id = isset($find_post->ID) ? absint($find_post->ID) : '';
 				// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
