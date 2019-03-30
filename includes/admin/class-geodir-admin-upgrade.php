@@ -251,8 +251,12 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	public static function update_200_get_options() {
-		$v1_post_types = get_option( 'geodir_post_types' );
-		$v2_post_types = array();
+		// Post types
+		$v1_post_types = self::v1_post_types();
+		$v2_post_types = geodir_get_option( 'post_types' );
+		if ( ! is_array( $v2_post_types ) || empty( $v2_post_types ) ) {
+			$v2_post_types = array();
+		}
 		if ( ! empty( $v1_post_types ) ) {
 			foreach( $v1_post_types as $post_type => $data ) {
 				if ( ! empty( $data['labels'] ) ) {
@@ -300,6 +304,18 @@ class GeoDir_Admin_Upgrade {
 			}
 		}
 
+		// Taxonomies
+		$v1_taxonomies = self::v1_taxonomies();
+		$v2_taxonomies = geodir_get_option( 'taxonomies' );
+		if ( ! is_array( $v2_taxonomies ) || empty( $v2_taxonomies ) ) {
+			$v2_taxonomies = array();
+		}
+		if ( ! empty( $v1_taxonomies ) ) {
+			foreach( $v1_taxonomies as $taxonomy => $data ) {
+				$v2_taxonomies[ $taxonomy ] = $data;
+			}
+		}
+
 		$default_location = wp_parse_args( (array) get_option( 'geodir_default_location' ), array(
 			'country' => '',
 			'region' => '',
@@ -315,7 +331,7 @@ class GeoDir_Admin_Upgrade {
 
 		// Core options
 		$options = array(
-			'taxonomies' => get_option( 'geodir_taxonomies' ),
+			'taxonomies' => $v2_taxonomies,
 			'post_types' => $v2_post_types,
 			'page_add' => get_option( 'geodir_add_listing_page' ),
 			'page_location' => get_option( 'geodir_location_page' ),
@@ -498,7 +514,7 @@ class GeoDir_Admin_Upgrade {
 	public static function update_200_custom_fields() {
 		global $wpdb, $plugin_prefix;
 
-		$post_types = (array) get_option( 'geodir_post_types' );
+		$post_types = self::v2_post_types( true );
 
 		// Custom fields
 		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
@@ -609,7 +625,7 @@ class GeoDir_Admin_Upgrade {
 
 		// Create pre-defined custom fields
 		if ( ! empty( $post_types ) ) {
-			foreach ( $post_types as $post_type => $data ) {
+			foreach ( $post_types as $key => $post_type ) {
 				if ( empty( $post_type ) ) {
 					continue;
 				}
@@ -622,6 +638,7 @@ class GeoDir_Admin_Upgrade {
 					}
 				}
 
+				// Featured
 				$field_data = array(
 					'post_type' => $post_type,
 					'data_type' => 'TINYINT', 
@@ -632,7 +649,7 @@ class GeoDir_Admin_Upgrade {
 					'frontend_title' => 'Is Featured?', 
 					'htmlvar_name' => 'featured', 
 					'default_value' => '',
-					'sort_order' => '20', //
+					'sort_order' => '20',
 					'is_active' => '1', 
 					'show_in' => '',
 					'for_admin_use' => '1', 
@@ -643,6 +660,30 @@ class GeoDir_Admin_Upgrade {
 				);
 
 				$wpdb->insert( $custom_fields_table, $field_data, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%s', '%d', '%s', '%s' ) );
+
+				// Claimed
+				if ( self::needs_upgrade( 'claim_manager' ) ) {
+					$field_data = array(
+						'post_type' => $post_type,
+						'data_type' => 'TINYINT', 
+						'field_type' => 'checkbox', 
+						'field_type_key' => 'claimed', 
+						'admin_title' => 'Is Claimed?', 
+						'frontend_desc' => 'Mark listing as a claimed.', 
+						'frontend_title' => 'Business Owner/Associate?', 
+						'htmlvar_name' => 'claimed', 
+						'default_value' => '',
+						'sort_order' => '21',
+						'is_active' => '1', 
+						'show_in' => '',
+						'packages' => $packages, 
+						'cat_sort' => '1', 
+						'extra_fields' => '', 
+						'field_icon' => 'fas fa-user-check'
+					);
+
+					$wpdb->insert( $custom_fields_table, $field_data, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%s', '%s' ) );
+				}
 			}
 		}
 
@@ -735,7 +776,7 @@ class GeoDir_Admin_Upgrade {
 	public static function update_200_post_fields() {
 		global $wpdb;
 
-		$post_types = geodir_get_posttypes(); 
+		$post_types = self::v2_post_types( true );
 
 		if ( ! empty( $post_types ) ) {
 			foreach ( $post_types as $key => $post_type ) {
@@ -748,7 +789,7 @@ class GeoDir_Admin_Upgrade {
 				}
 
 				$fields = array();
-				foreach ( $columns as $key => $column ) {
+				foreach ( $columns as $column_key => $column ) {
 					$fields[ $column->Field ] = (array) $column;
 				}
 				$columns = array_keys( $fields );
@@ -921,10 +962,10 @@ class GeoDir_Admin_Upgrade {
 	}
 
 	private static function insert_default_fields() {
-		$post_types = (array) geodir_get_option( 'post_types' );
+		$post_types = self::v2_post_types( true );
 
 		if ( ! empty( $post_types ) ) {
-			foreach ( $post_types as $post_type => $data ) {
+			foreach ( $post_types as $key => $post_type ) {
 				if ( empty( $post_type ) ) {
 					continue;
 				}
@@ -947,7 +988,7 @@ class GeoDir_Admin_Upgrade {
 		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
 		$tabs_layout_table = GEODIR_TABS_LAYOUT_TABLE;
 
-		$post_types = (array) geodir_get_option( 'post_types' );
+		$post_types = self::v2_post_types();
 
 		if ( ! empty( $post_types ) ) {
 			foreach ( $post_types as $post_type => $data ) {
@@ -1177,10 +1218,10 @@ class GeoDir_Admin_Upgrade {
 	public static function update_200_sort_fields_sort_order() {
 		global $wpdb;
 
-		$post_types = (array) geodir_get_option( 'post_types' );
+		$post_types = self::v2_post_types( true );
 
 		if ( ! empty( $post_types ) ) {
-			foreach ( $post_types as $post_type => $data ) {
+			foreach ( $post_types as $k => $post_type ) {
 				if ( empty( $post_type ) ) {
 					continue;
 				}
@@ -1201,10 +1242,10 @@ class GeoDir_Admin_Upgrade {
 	public static function update_200_post_tabs_sort_order() {
 		global $wpdb;
 
-		$post_types = (array) geodir_get_option( 'post_types' );
+		$post_types = self::v2_post_types( true );
 
 		if ( ! empty( $post_types ) ) {
-			foreach ( $post_types as $post_type => $data ) {
+			foreach ( $post_types as $key => $post_type ) {
 				if ( empty( $post_type ) ) {
 					continue;
 				}
@@ -1515,7 +1556,7 @@ class GeoDir_Admin_Upgrade {
 		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
 		$packages_table = $plugin_prefix . 'price';
 
-		$post_types = (array) get_option( 'geodir_post_types' );
+		$post_types = self::v1_post_types();
 
 		if ( ! empty( $post_types ) ) {
 			foreach ( $post_types as $post_type => $data ) {
@@ -1589,10 +1630,10 @@ class GeoDir_Admin_Upgrade {
 		) $collate;";
 		$wpdb->query( $schema );
 
-		$post_types = (array) geodir_get_option( 'post_types' );
+		$post_types = self::v2_post_types( true );
 
 		if ( ! empty( $post_types ) ) {
-			foreach ( $post_types as $post_type => $data ) {
+			foreach ( $post_types as $key => $post_type ) {
 				if ( empty( $post_type ) ) {
 					continue;
 				}
@@ -2404,9 +2445,9 @@ class GeoDir_Admin_Upgrade {
 	public static function convert_file_fields() {
 		global $wpdb;
 
-		$post_types = geodir_get_posttypes();
+		$post_types = self::v2_post_types( true );
 
-		foreach ( $post_types as $post_type ) {
+		foreach ( $post_types as $key => $post_type ) {
 			$file_fields = $wpdb->get_results( $wpdb->prepare( "SELECT htmlvar_name FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE post_type = %s AND field_type = %s AND htmlvar_name != %s ORDER BY id ASC", array( $post_type, 'file', 'post_images' ) ) );
 			if ( empty( $file_fields ) ) {
 				continue;
@@ -2507,5 +2548,71 @@ class GeoDir_Admin_Upgrade {
 				}
 			}
 		}
+	}
+
+	public static function v1_post_types() {
+		$post_types = array();
+
+		// Post types from v1 option
+		$v1_post_types = get_option( 'geodir_post_types' );
+		if ( ! empty( $v1_post_types ) ) {
+			foreach ( $v1_post_types as $post_type => $data ) {
+				if ( ! empty( $post_type ) ) {
+					$post_types[ $post_type ] = $data;
+				}
+			}
+		}
+
+		// Post types from v2 option
+		$v2_post_types = geodir_get_option( 'post_types' );
+		if ( ! empty( $v2_post_types ) ) {
+			foreach ( $v2_post_types as $post_type => $data ) {
+				if ( ! empty( $post_type ) && empty( $post_types[ $post_type ] ) ) {
+					$post_types[ $post_type ] = $data;
+				}
+			}
+		}
+
+		return $post_types;
+	}
+
+	public static function v1_taxonomies() {
+		$taxonomies = array();
+
+		// Taxonomies from v1 option
+		$v1_taxonomies = get_option( 'geodir_taxonomies' );
+		if ( ! empty( $v1_taxonomies ) ) {
+			foreach ( $v1_taxonomies as $taxonomy => $data ) {
+				if ( ! empty( $taxonomy ) ) {
+					$taxonomies[ $taxonomy ] = $data;
+				}
+			}
+		}
+
+		// Taxonomies from v2 option
+		$v2_taxonomies = geodir_get_option( 'taxonomies' );
+		if ( ! empty( $v2_taxonomies ) ) {
+			foreach ( $v2_taxonomies as $taxonomy => $data ) {
+				if ( ! empty( $taxonomy ) && empty( $taxonomies[ $taxonomy ] ) ) {
+					$taxonomies[ $taxonomy ] = $data;
+				}
+			}
+		}
+
+		return $taxonomies;
+	}
+
+	public static function v2_post_types( $names = false ) {
+		$post_types = geodir_get_option( 'post_types' );
+
+		if ( empty( $post_types ) ) {
+			return array();
+		}
+
+		if ( $names ) {
+			$post_types = array_keys( $post_types );
+		}
+
+		return $post_types;
 	}
 }

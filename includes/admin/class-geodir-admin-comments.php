@@ -22,9 +22,11 @@ class GeoDir_Admin_Comments {
 	 * Initiate the admin comments class.
 	 */
 	public static function init() {
-		add_filter( 'comment_row_actions', array(__CLASS__,'add_meta_row'), 11, 1 );
+		if ( get_option( 'geodirectory_version' ) ) {
+			add_filter( 'comment_row_actions', array(__CLASS__,'add_meta_row'), 11, 1 );
 
-		add_action( 'add_meta_boxes_comment', array(__CLASS__,'add_meta_box') );
+			add_action( 'add_meta_boxes_comment', array(__CLASS__,'add_meta_box') );
+		}
 	}
 
 	/**

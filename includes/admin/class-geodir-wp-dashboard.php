@@ -29,7 +29,7 @@ class GeoDir_WP_Dashboard {
      */
 	public function __construct() {
 		// Only hook in admin parts if the user has admin access
-		if ( current_user_can( 'manage_options' )  ) {
+		if ( current_user_can( 'manage_options' ) && get_option( 'geodirectory_version' ) ) {
 			add_action( 'wp_dashboard_setup', array( $this, 'init' ) );
 		}
 	}
