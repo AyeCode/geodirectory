@@ -82,14 +82,13 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		);
 
 		$get_posts = geodir_get_posttypes('options-plural');
-		$get_posts['all_post'] = 'All Posts';
 
 		$widget_args['post_type'] = array(
-			'title' => __('Default Post Type:', 'geodirectory'),
-			'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
+			'title' => __('Post Type:', 'geodirectory'),
+			'desc' => __('The custom post types to show. Only used when there are multiple CPTs.', 'geodirectory'),
 			'type' => 'select',
 			'options'   =>  $get_posts,
-			'default'  => 'all_post',
+			'default'  => '',
 			'desc_tip' => true,
 			'advanced' => true
 		);
@@ -115,7 +114,6 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			return '';
 		}
 
-		$create_rv_nonce = wp_create_nonce('recently_viewed');
 		$post_page_limit = !empty( $args['post_limit'] ) ? $args['post_limit'] : '5';
 		$layout = !empty( $args['layout'] ) ? $args['layout'] : 'list';
 		$post_type = !empty( $args['post_type'] ) ? $args['post_type'] : 'all_post';
@@ -137,8 +135,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 					'viewed_post_id' : recently_viewed,
 					'list_per_page' :'<?php echo $post_page_limit; ?>' ,
 					'layout' : '<?php echo $layout; ?>',
-					'post_type':'<?php echo $post_type; ?>',
-					'_wpnonce' : '<?php echo $create_rv_nonce; ?>'
+					'post_type':'<?php echo $post_type; ?>'
 				};
 
 				jQuery.post(geodir_params.ajax_url, data, function(response) {
@@ -166,49 +163,50 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		global $gd_post, $post,$gd_layout_class, $geodir_is_widget_listing;
 		ob_start();
 
-		if( !empty( $_REQUEST['_wpnonce'] ) && wp_verify_nonce( $_REQUEST['_wpnonce'],'recently_viewed')) {
 
-			$list_per_page = !empty($_REQUEST['list_per_page']) ? absint($_REQUEST['list_per_page']) : '';
+		$list_per_page = !empty($_REQUEST['list_per_page']) ? absint($_REQUEST['list_per_page']) : '';
 
-			$post_type = !empty($_REQUEST['post_type']) ? sanitize_key( $_REQUEST['post_type'] ) : '';
+		$post_type = !empty($_REQUEST['post_type']) ? sanitize_key( $_REQUEST['post_type'] ) : '';
 
-			$all_postypes = geodir_get_posttypes();
-			if (!in_array($post_type, $all_postypes)){
-				$post_type = '';
+		$all_postypes = geodir_get_posttypes();
+		if (!in_array($post_type, $all_postypes)){
+			$post_type = 'gd_place';
+		}
+
+		$layout = empty( $_REQUEST['layout'] ) ? 'gridview_onehalf' : apply_filters( 'widget_layout', geodir_convert_listing_view_class($_REQUEST['layout']) );
+
+		$post_ids = !empty($_REQUEST['viewed_post_id']) ? json_decode(stripslashes($_REQUEST['viewed_post_id']), true) : '';
+
+		$listings_ids = array();
+
+		if( !empty( $post_type ) ) {
+
+			if( !empty( $post_ids ) && $post_ids !='' && !empty($post_ids[$post_type]) ) {
+
+				$listings_ids = $post_ids[$post_type];
 			}
+		}
 
-			$layout = empty( $_REQUEST['layout'] ) ? 'gridview_onehalf' : apply_filters( 'widget_layout', geodir_convert_listing_view_class($_REQUEST['layout']) );
+		$listings_ids = !empty( $listings_ids ) ? array_reverse($listings_ids) : array();
+		$listings_ids = !empty($listings_ids) ? array_slice($listings_ids, 0, $list_per_page) : array();
+		$widget_listings = array();
+		if(!empty($listings_ids)){
 
-			$post_ids = !empty($_REQUEST['viewed_post_id']) ? json_decode(stripslashes($_REQUEST['viewed_post_id'])) : '';
-
-			$listings_ids = array();
-
-			if( !empty( $post_type ) && 'all_post' != $post_type ) {
-
-				if( !empty( $post_ids ) && $post_ids !='' ) {
-
-					$listings_ids = $post_ids->$post_type;
-				}
-			} else{
-				if( !empty( $post_ids ) && $post_ids !='' ) {
-					foreach ( $post_ids as $id_key => $id_val ) {
-						if( !empty( $id_val ) && $id_val !='' ) {
-							foreach ( $id_val as $key=> $value ) {
-								$listings_ids[] = absint($value);
-							}
-						}
-					}
+			foreach($listings_ids as $post_id){
+				$post_id = absint($post_id);
+				$listing = geodir_get_post_info($post_id);
+				if(!empty($listing) && isset($listing->ID)){
+					$widget_listings[] = $listing;
 				}
 			}
+		}
 
-			$listings_ids = !empty( $listings_ids ) ? array_reverse($listings_ids) : array();
-			$listings_ids = !empty($listings_ids) ? array_slice($listings_ids, 0, $list_per_page) : array();
-			$widget_listings = !empty( $listings_ids ) ? $listings_ids : '';
-
+		if(!empty($widget_listings)){
 			$gd_layout_class = $layout;
 
 			geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
-
+		}else{
+			_e("Your recently viewed listings will show here.","geodirectory");
 		}
 
 		echo ob_get_clean();
