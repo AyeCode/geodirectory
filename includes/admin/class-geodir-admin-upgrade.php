@@ -197,9 +197,17 @@ class GeoDir_Admin_Upgrade {
 		self::insert_default_tabs();
 		self::create_pages();
 
-		GeoDir_Post_types::register_post_status();
+		if ( ! self::is_done( 'register_post_status' ) ) {
+			GeoDir_Post_types::register_post_status();
 
-		GeoDir_Admin_Install::create_uncategorized_categories();
+			self::update_log( 'register_post_status' );
+		}
+
+		if ( ! self::is_done( 'create_uncategorized_categories' ) ) {
+			GeoDir_Admin_Install::create_uncategorized_categories();
+
+			self::update_log( 'create_uncategorized_categories' );
+		}
 		
 		self::create_cron_jobs();
 
@@ -524,13 +532,13 @@ class GeoDir_Admin_Upgrade {
 	public static function update_200_custom_fields() {
 		global $wpdb, $plugin_prefix;
 
+		$post_types = self::v2_post_types( true );
+
+		// Custom fields
+		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
+		$packages_table = $plugin_prefix . 'price';
+
 		if ( ! self::is_done( 'update_200_custom_fields' ) ) {
-			$post_types = self::v2_post_types( true );
-
-			// Custom fields
-			$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
-			$packages_table = $plugin_prefix . 'price';
-
 			$wpdb->query( "ALTER TABLE `{$custom_fields_table}` 
 				CHANGE admin_desc frontend_desc text NULL DEFAULT NULL, 
 				CHANGE site_title frontend_title varchar(255) NULL DEFAULT NULL, 
@@ -634,73 +642,83 @@ class GeoDir_Admin_Upgrade {
 				$wpdb->update( $custom_fields_table, (array) $row, array( 'id' => $row->id ) );
 			}
 
-			// Create pre-defined custom fields
-			if ( ! empty( $post_types ) ) {
-				foreach ( $post_types as $key => $post_type ) {
-					if ( empty( $post_type ) ) {
-						continue;
-					}
+			self::update_log( 'update_200_custom_fields' );
+		}
 
-					$packages = '';
-					if ( self::needs_upgrade( 'payment_manager' ) ) {
-						$results = $wpdb->get_col( $wpdb->prepare( "SELECT pid FROM {$packages_table} WHERE post_type = %s", $post_type ) );
-						if ( ! empty( $results ) ) {
-							$packages = implode( ',', $results );
-						}
-					}
+		// Create pre-defined custom fields
+		if ( ! empty( $post_types ) ) {
+			foreach ( $post_types as $key => $post_type ) {
+				if ( empty( $post_type ) ) {
+					continue;
+				}
 
-					// Featured
+				if ( self::is_done( 'update_200_custom_fields_predefined_' . $post_type ) ) {
+					continue;
+				}
+				
+				$packages = '';
+				if ( self::needs_upgrade( 'payment_manager' ) ) {
+					$results = $wpdb->get_col( $wpdb->prepare( "SELECT pid FROM {$packages_table} WHERE post_type = %s", $post_type ) );
+					if ( ! empty( $results ) ) {
+						$packages = implode( ',', $results );
+					}
+				}
+
+				// Featured
+				$field_data = array(
+					'post_type' => $post_type,
+					'data_type' => 'TINYINT', 
+					'field_type' => 'checkbox', 
+					'field_type_key' => 'featured', 
+					'admin_title' => 'Featured', 
+					'frontend_desc' => 'Mark listing as a featured.', 
+					'frontend_title' => 'Is Featured?', 
+					'htmlvar_name' => 'featured', 
+					'default_value' => '',
+					'sort_order' => '20',
+					'is_active' => '1', 
+					'show_in' => '',
+					'for_admin_use' => '1', 
+					'packages' => $packages, 
+					'cat_sort' => '1', 
+					'extra_fields' => '', 
+					'field_icon' => 'fas fa-certificate'
+				);
+
+				$wpdb->insert( $custom_fields_table, $field_data, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%s', '%d', '%s', '%s' ) );
+
+				// Claimed
+				if ( self::needs_upgrade( 'claim_manager' ) ) {
 					$field_data = array(
 						'post_type' => $post_type,
 						'data_type' => 'TINYINT', 
 						'field_type' => 'checkbox', 
-						'field_type_key' => 'featured', 
-						'admin_title' => 'Featured', 
-						'frontend_desc' => 'Mark listing as a featured.', 
-						'frontend_title' => 'Is Featured?', 
-						'htmlvar_name' => 'featured', 
+						'field_type_key' => 'claimed', 
+						'admin_title' => 'Is Claimed?', 
+						'frontend_desc' => 'Mark listing as a claimed.', 
+						'frontend_title' => 'Business Owner/Associate?', 
+						'htmlvar_name' => 'claimed', 
 						'default_value' => '',
-						'sort_order' => '20',
+						'sort_order' => '21',
 						'is_active' => '1', 
 						'show_in' => '',
-						'for_admin_use' => '1', 
 						'packages' => $packages, 
 						'cat_sort' => '1', 
 						'extra_fields' => '', 
-						'field_icon' => 'fas fa-certificate'
+						'field_icon' => 'fas fa-user-check'
 					);
 
-					$wpdb->insert( $custom_fields_table, $field_data, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%d', '%s', '%d', '%s', '%s' ) );
-
-					// Claimed
-					if ( self::needs_upgrade( 'claim_manager' ) ) {
-						$field_data = array(
-							'post_type' => $post_type,
-							'data_type' => 'TINYINT', 
-							'field_type' => 'checkbox', 
-							'field_type_key' => 'claimed', 
-							'admin_title' => 'Is Claimed?', 
-							'frontend_desc' => 'Mark listing as a claimed.', 
-							'frontend_title' => 'Business Owner/Associate?', 
-							'htmlvar_name' => 'claimed', 
-							'default_value' => '',
-							'sort_order' => '21',
-							'is_active' => '1', 
-							'show_in' => '',
-							'packages' => $packages, 
-							'cat_sort' => '1', 
-							'extra_fields' => '', 
-							'field_icon' => 'fas fa-user-check'
-						);
-
-						$wpdb->insert( $custom_fields_table, $field_data, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%s', '%s' ) );
-					}
+					$wpdb->insert( $custom_fields_table, $field_data, array( '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%s', '%s' ) );
 				}
+
+				self::update_log( 'update_200_custom_fields_predefined_' . $post_type );
 			}
+		}
 
-			// Sorting fields
-			$custom_sort_fields_table = GEODIR_CUSTOM_SORT_FIELDS_TABLE;
+		// Sorting fields
+		$custom_sort_fields_table = GEODIR_CUSTOM_SORT_FIELDS_TABLE;
 
+		if ( ! self::is_done( 'update_200_custom_fields_fields_table' ) ) {
 			$results = $wpdb->get_results( "SELECT * FROM `{$custom_sort_fields_table}`" );
 
 			$wpdb->query( "ALTER TABLE `{$custom_sort_fields_table}` 
@@ -781,7 +799,7 @@ class GeoDir_Admin_Upgrade {
 				self::update_200_sort_fields_sort_order();
 			}
 
-			self::update_log( 'update_200_custom_fields' );
+			self::update_log( 'update_200_custom_fields_fields_table' );
 		}
 
 		do_action( 'geodir_update_200_custom_fields' );
@@ -792,8 +810,12 @@ class GeoDir_Admin_Upgrade {
 
 		$post_types = self::v2_post_types( true );
 
-		if ( ! empty( $post_types ) && ! self::is_done( 'update_200_post_fields' ) ) {
+		if ( ! empty( $post_types ) ) {
 			foreach ( $post_types as $key => $post_type ) {
+				if ( self::is_done( 'update_200_post_fields_' . $post_type ) ) {
+					continue;
+				}
+
 				$table = $wpdb->prefix . 'geodir_' . $post_type . '_detail';
 				
 				$columns = @$wpdb->get_results("DESC {$table}");
@@ -889,9 +911,9 @@ class GeoDir_Admin_Upgrade {
 				if ( ! empty( $query_drop_columns ) ) {
 					$wpdb->query( "ALTER TABLE `{$table}` " . implode( ", ", $query_drop_columns ) );
 				}
-			}
 
-			self::update_log( 'update_200_post_fields' );
+				self::update_log( 'update_200_post_fields_' . $post_type );
+			}
 		}
 
 		do_action( 'geodir_update_200_post_fields', $post_types );
@@ -899,7 +921,11 @@ class GeoDir_Admin_Upgrade {
 
 	public static function update_200_reviews() {
 		global $wpdb;
-		
+
+		if ( self::is_done( 'update_200_reviews' ) ) {
+			return;
+		}
+
 		$reviews_table = GEODIR_REVIEW_TABLE;
 		
 		$wpdb->query( "ALTER TABLE `{$reviews_table}` 
@@ -945,10 +971,16 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		$wpdb->query( "ALTER TABLE `{$reviews_table}` CHANGE comment_id comment_id bigint(20) DEFAULT NULL, ADD UNIQUE (`comment_id`);" );
+
+		self::update_log( 'update_200_reviews' );
 	}
 
 	public static function update_200_attachments() {
 		global $wpdb;
+		
+		if ( self::is_done( 'update_200_attachments' ) ) {
+			return;
+		}
 		
 		$attachments_table = GEODIR_ATTACHMENT_TABLE;
 
@@ -959,10 +991,13 @@ class GeoDir_Admin_Upgrade {
 			ADD `date_gmt` datetime NULL default NULL AFTER `post_id`,
 			ADD `type` varchar(254) NULL DEFAULT 'post_images';" 
 		);
+
 		$wpdb->query( "ALTER TABLE `{$attachments_table}` 
 			CHANGE `featured` `featured` TINYINT(1) NULL DEFAULT '0', 
 			CHANGE `is_approved` `is_approved` TINYINT(1) NULL DEFAULT '1';" 
 		);
+
+		self::update_log( 'update_200_attachments' );
 	}
 
 	private static function create_tables() {
@@ -972,7 +1007,11 @@ class GeoDir_Admin_Upgrade {
 
 		require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
-		dbDelta( GeoDir_Admin_Install::get_schema() );
+		if ( ! self::is_done( 'create_tables' ) ) {
+			dbDelta( GeoDir_Admin_Install::get_schema() );
+
+			self::update_log( 'create_tables' );
+		}
 
 		do_action( 'geodir_update_200_create_tables' );
 	}
@@ -986,6 +1025,10 @@ class GeoDir_Admin_Upgrade {
 					continue;
 				}
 
+				if ( self::is_done( 'insert_default_fields_' . $post_type ) ) {
+					continue;
+				}
+
 				add_filter( 'geodir_before_default_custom_fields_saved', array( __CLASS__, 'filter_custom_fields_saved' ), 100, 1 );
 
 				GeoDir_Admin_Install::insert_default_fields( $post_type );
@@ -994,6 +1037,8 @@ class GeoDir_Admin_Upgrade {
 
 				// update custom fields sort order
 				self::update_200_fields_sort_order( $post_type );
+
+				self::update_log( 'insert_default_fields_' . $post_type );
 			}
 		}
 	}
@@ -1012,95 +1057,109 @@ class GeoDir_Admin_Upgrade {
 					continue;
 				}
 
+				if ( self::is_done( 'insert_default_tabs_' . $post_type ) ) {
+					continue;
+				}
+
 				GeoDir_Admin_Install::insert_default_tabs( $post_type );
+
+				self::update_log( 'insert_default_tabs_' . $post_type );
 			}
 		}
 
 		// merge tabs from custom fields
-		$results = $wpdb->get_results( "SELECT post_type, htmlvar_name, frontend_title, field_icon, sort_order FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE show_in LIKE '%[owntab]%' AND is_active = '1'" );
-		if ( ! empty( $results ) ) {
-			foreach ( $results as $key => $row ) {
-				if ( $row->htmlvar_name && ! in_array( $row->htmlvar_name, array( 'post_content', 'post_images' ) ) ) {
-					$field = array(
-						'post_type'     => $row->post_type,
-						'tab_layout'    => 'post',
-						'tab_type'      => 'meta',
-						'tab_name'      => __( $row->frontend_title, 'geodirectory' ),
-						'tab_icon'      => ( geodir_is_fa_icon( $row->field_icon ) ? $row->field_icon : '' ),
-						'tab_key'       => $row->htmlvar_name,
-						'tab_content'   => '',
-						'sort_order'    => $row->sort_order,
-						'tab_level'     => '0',
-						'tab_parent'    => '0'
-					);
+		if ( ! self::is_done( 'insert_default_tabs_owntab_data' ) ) {
+			$results = $wpdb->get_results( "SELECT post_type, htmlvar_name, frontend_title, field_icon, sort_order FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE show_in LIKE '%[owntab]%' AND is_active = '1'" );
+			if ( ! empty( $results ) ) {
+				foreach ( $results as $key => $row ) {
+					if ( $row->htmlvar_name && ! in_array( $row->htmlvar_name, array( 'post_content', 'post_images' ) ) ) {
+						$field = array(
+							'post_type'     => $row->post_type,
+							'tab_layout'    => 'post',
+							'tab_type'      => 'meta',
+							'tab_name'      => __( $row->frontend_title, 'geodirectory' ),
+							'tab_icon'      => ( geodir_is_fa_icon( $row->field_icon ) ? $row->field_icon : '' ),
+							'tab_key'       => $row->htmlvar_name,
+							'tab_content'   => '',
+							'sort_order'    => $row->sort_order,
+							'tab_level'     => '0',
+							'tab_parent'    => '0'
+						);
 
-					GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+						GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+					}
 				}
 			}
+
+			self::update_log( 'insert_default_tabs_owntab_data' );
 		}
 
-		if ( self::needs_upgrade( 'custom_post_types' ) ) {
-			$results = $wpdb->get_results( "SELECT post_type, htmlvar_name, frontend_title, field_icon FROM `{$custom_fields_table}` WHERE field_type = 'link_posts' AND is_active = '1' ORDER BY id ASC" );
-			if ( ! empty( $results ) ) {
-				$sort_order = (int) $wpdb->get_var( "SELECT MAX( sort_order ) FROM {$tabs_layout_table} LIMIT 1" );
-				foreach ( $results as $key => $row ) {
-					$sort_order++;
-					$field = array(
-						'post_type'     => $row->post_type,
-						'tab_layout'    => 'post',
-						'tab_type'      => 'meta',
-						'tab_name'      => __( $row->frontend_title, 'geodirectory' ),
-						'tab_icon'      => $row->field_icon,
-						'tab_key'       => $row->htmlvar_name,
-						'tab_content'   => '',
-						'sort_order'    => $sort_order,
-						'tab_level'     => '0',
-						'tab_parent'    => '0'
-					);
-					
-					GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+		if ( ! self::is_done( 'insert_default_tabs_plugins_data' ) ) {
+			if ( self::needs_upgrade( 'custom_post_types' ) ) {
+				$results = $wpdb->get_results( "SELECT post_type, htmlvar_name, frontend_title, field_icon FROM `{$custom_fields_table}` WHERE field_type = 'link_posts' AND is_active = '1' ORDER BY id ASC" );
+				if ( ! empty( $results ) ) {
+					$sort_order = (int) $wpdb->get_var( "SELECT MAX( sort_order ) FROM {$tabs_layout_table} LIMIT 1" );
+					foreach ( $results as $key => $row ) {
+						$sort_order++;
+						$field = array(
+							'post_type'     => $row->post_type,
+							'tab_layout'    => 'post',
+							'tab_type'      => 'meta',
+							'tab_name'      => __( $row->frontend_title, 'geodirectory' ),
+							'tab_icon'      => $row->field_icon,
+							'tab_key'       => $row->htmlvar_name,
+							'tab_content'   => '',
+							'sort_order'    => $sort_order,
+							'tab_level'     => '0',
+							'tab_parent'    => '0'
+						);
+						
+						GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
 
-					$sort_order++;
-					$field = array(
-						'post_type'     => $row->htmlvar_name,
-						'tab_layout'    => 'post',
-						'tab_type'      => 'link_from',
-						'tab_name'      => $post_types[ $row->post_type ]['labels']['name'],
-						'tab_icon'      => $row->field_icon,
-						'tab_key'       => $post_types[ $row->post_type ]['has_archive'],
-						'tab_content'   => '[gd_linked_posts link_type="from" post_type="' . $row->post_type . '" sort_by="latest" title_tag="h3" layout="gridview_onehalf" post_limit="5"]',
-						'sort_order'    => $sort_order,
-						'tab_level'     => '0',
-						'tab_parent'    => '0'
-					);
+						$sort_order++;
+						$field = array(
+							'post_type'     => $row->htmlvar_name,
+							'tab_layout'    => 'post',
+							'tab_type'      => 'link_from',
+							'tab_name'      => $post_types[ $row->post_type ]['labels']['name'],
+							'tab_icon'      => $row->field_icon,
+							'tab_key'       => $post_types[ $row->post_type ]['has_archive'],
+							'tab_content'   => '[gd_linked_posts link_type="from" post_type="' . $row->post_type . '" sort_by="latest" title_tag="h3" layout="gridview_onehalf" post_limit="5"]',
+							'sort_order'    => $sort_order,
+							'tab_level'     => '0',
+							'tab_parent'    => '0'
+						);
 
-					GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+						GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+					}
 				}
 			}
-		}
 
-		if ( self::needs_upgrade( 'franchise_manager' ) ) {
-			$results = $wpdb->get_results( "SELECT post_type, field_icon FROM `{$custom_fields_table}` WHERE htmlvar_name = 'franchise' AND is_active = '1' ORDER BY id ASC" );
-			if ( ! empty( $results ) ) {
-				$sort_order = (int) $wpdb->get_var( "SELECT MAX( sort_order ) FROM {$tabs_layout_table} LIMIT 1" );
-				foreach ( $results as $key => $row ) {
-					$sort_order++;
-					$field = array(
-						'post_type'     => $row->post_type,
-						'tab_layout'    => 'post',
-						'tab_type'      => 'shortcode',
-						'tab_name'      => 'Franchises',
-						'tab_icon'      => $row->field_icon,
-						'tab_key'       => 'franchises',
-						'tab_content'   => '[gd_listings post_type="' . $row->post_type . '" sort_by="latest" title_tag="h3" layout="list" post_limit="5" franchise_of="auto"]',
-						'sort_order'    => $sort_order,
-						'tab_level'     => '0',
-						'tab_parent'    => '0'
-					);
-					
-					GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+			if ( self::needs_upgrade( 'franchise_manager' ) ) {
+				$results = $wpdb->get_results( "SELECT post_type, field_icon FROM `{$custom_fields_table}` WHERE htmlvar_name = 'franchise' AND is_active = '1' ORDER BY id ASC" );
+				if ( ! empty( $results ) ) {
+					$sort_order = (int) $wpdb->get_var( "SELECT MAX( sort_order ) FROM {$tabs_layout_table} LIMIT 1" );
+					foreach ( $results as $key => $row ) {
+						$sort_order++;
+						$field = array(
+							'post_type'     => $row->post_type,
+							'tab_layout'    => 'post',
+							'tab_type'      => 'shortcode',
+							'tab_name'      => 'Franchises',
+							'tab_icon'      => $row->field_icon,
+							'tab_key'       => 'franchises',
+							'tab_content'   => '[gd_listings post_type="' . $row->post_type . '" sort_by="latest" title_tag="h3" layout="list" post_limit="5" franchise_of="auto"]',
+							'sort_order'    => $sort_order,
+							'tab_level'     => '0',
+							'tab_parent'    => '0'
+						);
+						
+						GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+					}
 				}
 			}
+
+			self::update_log( 'insert_default_tabs_plugins_data' );
 		}
 
 		// update detail tabs sort order
@@ -1109,6 +1168,10 @@ class GeoDir_Admin_Upgrade {
 
 	private static function create_pages() {
 		global $wpdb;
+		
+		if ( self::is_done( 'create_pages' ) ) {
+			return;
+		}
 
 		$page_location = geodir_get_option( 'page_location' );
 		if ( $page_location && ( $row = $wpdb->get_row( $wpdb->prepare( "SELECT ID, post_content FROM {$wpdb->posts} WHERE ID = %d", array( (int)$page_location ) ) ) ) ) {
@@ -1132,6 +1195,8 @@ class GeoDir_Admin_Upgrade {
 		}
 
 		GeoDir_Admin_Install::create_pages();
+
+		self::update_log( 'create_pages' );
 	}
 
 	/**
@@ -1141,8 +1206,14 @@ class GeoDir_Admin_Upgrade {
 	 */
 	private static function create_cron_jobs() {
 		//@todo add crons here
+		if ( self::is_done( 'create_cron_jobs' ) ) {
+			return;
+		}
+
 		wp_clear_scheduled_hook( 'geodirectory_tracker_send_event' );
 		wp_schedule_event( time(), apply_filters( 'geodirectory_tracker_event_recurrence', 'daily' ), 'geodirectory_tracker_send_event' );
+
+		self::update_log( 'create_cron_jobs' );
 	}
 
 	/**
@@ -1356,180 +1427,192 @@ class GeoDir_Admin_Upgrade {
 		$invoice_table = $plugin_prefix . 'invoice';
 		$custom_fields_table = GEODIR_CUSTOM_FIELDS_TABLE;
 
-		// Package meta table
-		$schema = "CREATE TABLE {$package_meta_table} (
-		  `meta_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-		  `package_id` int(11) unsigned NOT NULL DEFAULT '0',
-		  `meta_key` varchar(255) DEFAULT NULL,
-		  `meta_value` text,
-		  PRIMARY KEY (`meta_id`),
-		  KEY `package_id` (`package_id`),
-		  KEY `meta_key` (`meta_key`(191))
-		) $collate; ";
+		if ( ! self::is_done( 'update_200_pm_create_tables' ) ) {
+			// Package meta table
+			$schema = "CREATE TABLE {$package_meta_table} (
+			  `meta_id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			  `package_id` int(11) unsigned NOT NULL DEFAULT '0',
+			  `meta_key` varchar(255) DEFAULT NULL,
+			  `meta_value` text,
+			  PRIMARY KEY (`meta_id`),
+			  KEY `package_id` (`package_id`),
+			  KEY `meta_key` (`meta_key`(191))
+			) $collate; ";
 
-		// Post package relationship table
-		$schema .= "CREATE TABLE {$post_packages_table} (
-		  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-		  `post_id` int(11) unsigned NOT NULL DEFAULT '0',
-		  `package_id` int(11) unsigned NOT NULL DEFAULT '0',
-		  `cart` varchar(50) NOT NULL,
-		  `invoice_id` int(11) unsigned NOT NULL DEFAULT '0',
-		  `product_id` int(11) unsigned NOT NULL DEFAULT '0',
-		  `task` varchar(50) NOT NULL,
-		  `meta` text NOT NULL,
-		  `date` datetime NOT NULL,
-		  `status` varchar(20) NOT NULL,
-		  PRIMARY KEY (`id`)
-		) $collate; ";
+			// Post package relationship table
+			$schema .= "CREATE TABLE {$post_packages_table} (
+			  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+			  `post_id` int(11) unsigned NOT NULL DEFAULT '0',
+			  `package_id` int(11) unsigned NOT NULL DEFAULT '0',
+			  `cart` varchar(50) NOT NULL,
+			  `invoice_id` int(11) unsigned NOT NULL DEFAULT '0',
+			  `product_id` int(11) unsigned NOT NULL DEFAULT '0',
+			  `task` varchar(50) NOT NULL,
+			  `meta` text NOT NULL,
+			  `date` datetime NOT NULL,
+			  `status` varchar(20) NOT NULL,
+			  PRIMARY KEY (`id`)
+			) $collate; ";
 
-		dbDelta( $schema );
+			dbDelta( $schema );
 
-		// Change
-		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `pid` `id` int(11) unsigned NOT NULL AUTO_INCREMENT;" );
-		$wpdb->query( "ALTER TABLE `{$packages_table}` 
-			CHANGE `title` `name` varchar(255) NOT NULL, 
-			CHANGE `amount` `amount` varchar(50) NOT NULL DEFAULT '0', 
-			CHANGE `sub_units` `time_unit` varchar(1) NOT NULL DEFAULT 'M', 
-			CHANGE `sub_active` `recurring` tinyint(1) NOT NULL DEFAULT '0', 
-			CHANGE `sub_units_num_times` `recurring_limit` int(11) unsigned NOT NULL DEFAULT '0', 
-			CHANGE `sub_num_trial_days` `trial_interval` int(11) unsigned NOT NULL DEFAULT '1', 
-			CHANGE `sub_num_trial_units` `trial_unit` varchar(1) NOT NULL DEFAULT 'M', 
-			CHANGE `downgrade_pkg` `downgrade_pkg` int(11) unsigned NOT NULL DEFAULT '0', 
-			CHANGE `is_default` `is_default` tinyint(1) NOT NULL DEFAULT '0';" 
-		);
-		$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `title_desc` `title` text NOT NULL;" );
+			// Change
+			$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `pid` `id` int(11) unsigned NOT NULL AUTO_INCREMENT;" );
+			$wpdb->query( "ALTER TABLE `{$packages_table}` 
+				CHANGE `title` `name` varchar(255) NOT NULL, 
+				CHANGE `amount` `amount` varchar(50) NOT NULL DEFAULT '0', 
+				CHANGE `sub_units` `time_unit` varchar(1) NOT NULL DEFAULT 'M', 
+				CHANGE `sub_active` `recurring` tinyint(1) NOT NULL DEFAULT '0', 
+				CHANGE `sub_units_num_times` `recurring_limit` int(11) unsigned NOT NULL DEFAULT '0', 
+				CHANGE `sub_num_trial_days` `trial_interval` int(11) unsigned NOT NULL DEFAULT '1', 
+				CHANGE `sub_num_trial_units` `trial_unit` varchar(1) NOT NULL DEFAULT 'M', 
+				CHANGE `downgrade_pkg` `downgrade_pkg` int(11) unsigned NOT NULL DEFAULT '0', 
+				CHANGE `is_default` `is_default` tinyint(1) NOT NULL DEFAULT '0';" 
+			);
+			$wpdb->query( "ALTER TABLE `{$packages_table}` CHANGE `title_desc` `title` text NOT NULL;" );
 
-		// Add
-		$wpdb->query( "ALTER TABLE `{$packages_table}` 
-			ADD `time_interval` int(11) unsigned NOT NULL DEFAULT '1' AFTER `days`, 
-			ADD `description` text NOT NULL AFTER `title`, 
-			ADD `post_status` varchar(20) NOT NULL AFTER `status`, 
-			ADD `trial` tinyint(1) NOT NULL DEFAULT '0' AFTER `sub_units_num`;" 
-		);
-		$wpdb->query( "ALTER TABLE `{$packages_table}` 
-			ADD `fa_icon` varchar(50) NOT NULL AFTER `description`, 
-			ADD `trial_amount` varchar(50) NOT NULL DEFAULT '0' AFTER `trial_interval`;" 
-		);
+			// Add
+			$wpdb->query( "ALTER TABLE `{$packages_table}` 
+				ADD `time_interval` int(11) unsigned NOT NULL DEFAULT '1' AFTER `days`, 
+				ADD `description` text NOT NULL AFTER `title`, 
+				ADD `post_status` varchar(20) NOT NULL AFTER `status`, 
+				ADD `trial` tinyint(1) NOT NULL DEFAULT '0' AFTER `sub_units_num`;" 
+			);
+			$wpdb->query( "ALTER TABLE `{$packages_table}` 
+				ADD `fa_icon` varchar(50) NOT NULL AFTER `description`, 
+				ADD `trial_amount` varchar(50) NOT NULL DEFAULT '0' AFTER `trial_interval`;" 
+			);
 
-		// Update
-		$wpdb->query( "UPDATE `{$packages_table}` SET `time_interval` = days, time_unit = 'D', post_status= '" . get_option( 'geodir_paid_listing_status' ) . "' WHERE recurring != '1'" );
-		$wpdb->query( "UPDATE `{$packages_table}` SET `time_interval` = sub_units_num, post_status= '" . get_option( 'geodir_paid_listing_status' ) . "' WHERE recurring = '1'" );
-		$wpdb->query( "UPDATE `{$packages_table}` SET `trial` = '1' WHERE trial_interval > 0" );
+			// Update
+			$wpdb->query( "UPDATE `{$packages_table}` SET `time_interval` = days, time_unit = 'D', post_status= '" . get_option( 'geodir_paid_listing_status' ) . "' WHERE recurring != '1'" );
+			$wpdb->query( "UPDATE `{$packages_table}` SET `time_interval` = sub_units_num, post_status= '" . get_option( 'geodir_paid_listing_status' ) . "' WHERE recurring = '1'" );
+			$wpdb->query( "UPDATE `{$packages_table}` SET `trial` = '1' WHERE trial_interval > 0" );
+
+			self::update_log( 'update_200_pm_create_tables' );
+		}
 
 		// packages data
-		$results = $wpdb->get_results( "SELECT * FROM `{$packages_table}` ORDER BY id ASC" );
-		if ( ! empty( $results ) ) {
-			$metas = array( 'cat', 'is_featured', 'image_limit', 'cat_limit', 'recurring_pkg', 'google_analytics', 'use_desc_limit', 'desc_limit', 'tag_limit', 'has_upgrades', 'enable_franchise', 'franchise_cost', 'franchise_limit', 'disable_editor' );
+		if ( ! self::is_done( 'update_200_pm_create_tables_packages_data' ) ) {
+			$results = $wpdb->get_results( "SELECT * FROM `{$packages_table}` ORDER BY id ASC" );
+			if ( ! empty( $results ) ) {
+				$metas = array( 'cat', 'is_featured', 'image_limit', 'cat_limit', 'recurring_pkg', 'google_analytics', 'use_desc_limit', 'desc_limit', 'tag_limit', 'has_upgrades', 'enable_franchise', 'franchise_cost', 'franchise_limit', 'disable_editor' );
 
-			foreach ( $results as $row ) {
-				$row = (array)$row;
-				$package_id = $row['id'];
+				foreach ( $results as $row ) {
+					$row = (array)$row;
+					$package_id = $row['id'];
 
-				$rows = array();
-				// exclude_field
-				$fields = $wpdb->get_col( "SELECT htmlvar_name FROM `{$custom_fields_table}` WHERE post_type = '" . $row['post_type'] . "' AND is_default != '1' AND htmlvar_name != '' AND htmlvar_name != 'post_images' AND htmlvar_name != 'franchise' AND NOT FIND_IN_SET( {$package_id}, packages )" );
-				if ( isset( $row['enable_franchise'] ) && empty( $row['enable_franchise'] ) ) {
-					$fields[] = 'franchise';
-				}
-				$meta_value = ! empty( $fields ) ? implode( ",", $fields ) : '';
-				$rows[] = "( {$package_id}, 'exclude_field', '{$meta_value}' )";
-
-				foreach ( $metas as $key ) {
-					if ( isset( $row[ $key ] ) ) {
-						$meta_value = $row[ $key ];
-
-						if ( $key == 'cat' ) {
-							$meta_key = 'exclude_category';
-						} else if ( $key == 'cat_limit' ) {
-							$meta_key = 'category_limit';
-						} else if ( $key == 'tag_limit' ) {
-							$meta_value = ! empty( $row[ 'use_tag_limit' ] ) ? $row[ 'use_tag_limit' ] : 0;
-						} else if ( $key == 'recurring_pkg' ) {
-							$meta_key = 'no_recurring';
-						} else {
-							$meta_key = $key;
-						}
-
-						$rows[] = "( {$package_id}, '{$meta_key}', '{$meta_value}' )";
+					$rows = array();
+					// exclude_field
+					$fields = $wpdb->get_col( "SELECT htmlvar_name FROM `{$custom_fields_table}` WHERE post_type = '" . $row['post_type'] . "' AND is_default != '1' AND htmlvar_name != '' AND htmlvar_name != 'post_images' AND htmlvar_name != 'franchise' AND NOT FIND_IN_SET( {$package_id}, packages )" );
+					if ( isset( $row['enable_franchise'] ) && empty( $row['enable_franchise'] ) ) {
+						$fields[] = 'franchise';
 					}
-				}
+					$meta_value = ! empty( $fields ) ? implode( ",", $fields ) : '';
+					$rows[] = "( {$package_id}, 'exclude_field', '{$meta_value}' )";
 
-				// invoicing_product_id
-				$args = array(
-					'post_type'      => 'wpi_item',
-					'posts_per_page' => 1,
-					'post_status'    => 'any',
-					'orderby'        => 'ID',
-					'order'          => 'ASC',
-					'meta_query'     => array( 
-						array(
-							'key'   => '_wpinv_type',
-							'value' => 'package',
-						),
-						array(
-							'key'   => '_wpinv_custom_id',
-							'value' => $package_id,
+					foreach ( $metas as $key ) {
+						if ( isset( $row[ $key ] ) ) {
+							$meta_value = $row[ $key ];
+
+							if ( $key == 'cat' ) {
+								$meta_key = 'exclude_category';
+							} else if ( $key == 'cat_limit' ) {
+								$meta_key = 'category_limit';
+							} else if ( $key == 'tag_limit' ) {
+								$meta_value = ! empty( $row[ 'use_tag_limit' ] ) ? $row[ 'use_tag_limit' ] : 0;
+							} else if ( $key == 'recurring_pkg' ) {
+								$meta_key = 'no_recurring';
+							} else {
+								$meta_key = $key;
+							}
+
+							$rows[] = "( {$package_id}, '{$meta_key}', '{$meta_value}' )";
+						}
+					}
+
+					// invoicing_product_id
+					$args = array(
+						'post_type'      => 'wpi_item',
+						'posts_per_page' => 1,
+						'post_status'    => 'any',
+						'orderby'        => 'ID',
+						'order'          => 'ASC',
+						'meta_query'     => array( 
+							array(
+								'key'   => '_wpinv_type',
+								'value' => 'package',
+							),
+							array(
+								'key'   => '_wpinv_custom_id',
+								'value' => $package_id,
+							)
 						)
-					)
-				);
-				$posts = get_posts( $args );
-				if ( ! empty( $posts[0] ) ) {
-					$meta_value = $posts[0]->ID;
-					$rows[] = "({$package_id}, 'invoicing_product_id', '{$meta_value}')";
-				}
+					);
+					$posts = get_posts( $args );
+					if ( ! empty( $posts[0] ) ) {
+						$meta_value = $posts[0]->ID;
+						$rows[] = "({$package_id}, 'invoicing_product_id', '{$meta_value}')";
+					}
 
-				$wpdb->query( "INSERT INTO `{$package_meta_table}` (`package_id`, `meta_key`, `meta_value`) VALUES " . implode( ", ", $rows ) . ";" );
+					$wpdb->query( "INSERT INTO `{$package_meta_table}` (`package_id`, `meta_key`, `meta_value`) VALUES " . implode( ", ", $rows ) . ";" );
+				}
 			}
+
+			self::update_log( 'update_200_pm_create_tables_packages_data' );
 		}
 
 		// invoice to post_packages data
-		$results = $wpdb->get_results( "SELECT * FROM `{$invoice_table}` ORDER BY id ASC" );
-		if ( ! empty( $results ) ) {
-			$geodir_package_product = array();
-			$geodir_package_exists = array();
+		if ( ! self::is_done( 'update_200_pm_create_tables_invoices_data' ) ) {
+			$results = $wpdb->get_results( "SELECT * FROM `{$invoice_table}` ORDER BY id ASC" );
+			if ( ! empty( $results ) ) {
+				$geodir_package_product = array();
+				$geodir_package_exists = array();
 
-			foreach ( $results as $row ) {
-				if ( ! isset( $geodir_package_exists[ $row->package_id ] ) ) {
-					if ( $wpdb->get_var( "SELECT id FROM `{$packages_table}` WHERE id = '" . $row->package_id . "' LIMIT 1" ) ) {
-						$geodir_package_exists[ $row->package_id ] = true;
-					} else {
-						$geodir_package_exists[ $row->package_id ] = false;
+				foreach ( $results as $row ) {
+					if ( ! isset( $geodir_package_exists[ $row->package_id ] ) ) {
+						if ( $wpdb->get_var( "SELECT id FROM `{$packages_table}` WHERE id = '" . $row->package_id . "' LIMIT 1" ) ) {
+							$geodir_package_exists[ $row->package_id ] = true;
+						} else {
+							$geodir_package_exists[ $row->package_id ] = false;
+						}
 					}
-				}
-				if ( empty( $row->invoice_id ) || empty( $geodir_package_exists[ $row->package_id ] ) ) {
-					continue;
-				}
+					if ( empty( $row->invoice_id ) || empty( $geodir_package_exists[ $row->package_id ] ) ) {
+						continue;
+					}
 
-				$invoice_post = $wpdb->get_row( "SELECT post_date, post_status FROM `{$wpdb->posts}` WHERE ID = '" . $row->invoice_id . "' LIMIT 1" );
-				if ( empty( $invoice_post ) ) {
-					continue;
+					$invoice_post = $wpdb->get_row( "SELECT post_date, post_status FROM `{$wpdb->posts}` WHERE ID = '" . $row->invoice_id . "' LIMIT 1" );
+					if ( empty( $invoice_post ) ) {
+						continue;
+					}
+					if ( ! empty( $geodir_package_product[ $row->package_id ] ) ) {
+						$product_id = $geodir_package_product[ $row->package_id ];
+					} else {
+						$product_id = $wpdb->get_var( "SELECT meta_value FROM `{$package_meta_table}` WHERE package_id = '" . $row->package_id . "' AND meta_key = 'invoicing_product_id' ORDER BY meta_id ASC LIMIT 1" );
+						$geodir_package_product[ $row->package_id ] = $product_id;
+					}
+					$task = str_replace( '_listing', '', $row->invoice_type );
+					if ( $task == 'add' ) {
+						$task = 'new';
+					}
+					$meta = (array) maybe_unserialize( $row->invoice_data );
+					$meta['task'] = $task;
+					$data = array(
+						'id' => $row->id,
+						'post_id' => $row->post_id,
+						'package_id' => $row->package_id,
+						'cart' => 'invoicing',
+						'invoice_id' => $row->invoice_id,
+						'product_id' => $product_id,
+						'task' => $task,
+						'meta' => serialize( $meta ),
+						'date' => $invoice_post->post_date,
+						'status' => $invoice_post->post_status,
+					);
+					$wpdb->insert( $post_packages_table, $data, array( '%d', '%d', '%d', '%s', '%d', '%d', '%s', '%s', '%s', '%s' ) );
 				}
-				if ( ! empty( $geodir_package_product[ $row->package_id ] ) ) {
-					$product_id = $geodir_package_product[ $row->package_id ];
-				} else {
-					$product_id = $wpdb->get_var( "SELECT meta_value FROM `{$package_meta_table}` WHERE package_id = '" . $row->package_id . "' AND meta_key = 'invoicing_product_id' ORDER BY meta_id ASC LIMIT 1" );
-					$geodir_package_product[ $row->package_id ] = $product_id;
-				}
-				$task = str_replace( '_listing', '', $row->invoice_type );
-				if ( $task == 'add' ) {
-					$task = 'new';
-				}
-				$meta = (array) maybe_unserialize( $row->invoice_data );
-				$meta['task'] = $task;
-				$data = array(
-					'id' => $row->id,
-					'post_id' => $row->post_id,
-					'package_id' => $row->package_id,
-					'cart' => 'invoicing',
-					'invoice_id' => $row->invoice_id,
-					'product_id' => $product_id,
-					'task' => $task,
-					'meta' => serialize( $meta ),
-					'date' => $invoice_post->post_date,
-					'status' => $invoice_post->post_status,
-				);
-				$wpdb->insert( $post_packages_table, $data, array( '%d', '%d', '%d', '%s', '%d', '%d', '%s', '%s', '%s', '%s' ) );
 			}
+
+			self::update_log( 'update_200_pm_create_tables_invoices_data' );
 		}
 	}
 
@@ -1641,22 +1724,30 @@ class GeoDir_Admin_Upgrade {
 		// Tables
 		$cp_link_posts_table = $plugin_prefix . 'cp_link_posts';
 
-		// Link posts table
-		$schema = "CREATE TABLE {$cp_link_posts_table} (
-			post_type varchar(50) NOT NULL,
-			post_id int(11) NOT NULL DEFAULT 0,
-			linked_id int(11) NOT NULL DEFAULT 0,
-			linked_post_type varchar(50) NOT NULL,
-			PRIMARY KEY (post_id,linked_id),
-			KEY post_id (post_id)
-		) $collate;";
-		$wpdb->query( $schema );
+		if ( ! self::is_done( 'update_200_cp_create_tables' ) ) {
+			// Link posts table
+			$schema = "CREATE TABLE {$cp_link_posts_table} (
+				post_type varchar(50) NOT NULL,
+				post_id int(11) NOT NULL DEFAULT 0,
+				linked_id int(11) NOT NULL DEFAULT 0,
+				linked_post_type varchar(50) NOT NULL,
+				PRIMARY KEY (post_id,linked_id),
+				KEY post_id (post_id)
+			) $collate;";
+			$wpdb->query( $schema );
+
+			self::update_log( 'update_200_cp_create_tables' );
+		}
 
 		$post_types = self::v2_post_types( true );
 
 		if ( ! empty( $post_types ) ) {
 			foreach ( $post_types as $key => $post_type ) {
 				if ( empty( $post_type ) ) {
+					continue;
+				}
+
+				if ( self::is_done( 'update_200_cp_link_posts_data_' . $post_type ) ) {
 					continue;
 				}
 
@@ -1695,6 +1786,8 @@ class GeoDir_Admin_Upgrade {
 						$wpdb->insert( $cp_link_posts_table, $link_data, array( '%s', '%d', '%d', '%s' ) );
 					}
 				}
+
+				self::update_log( 'update_200_cp_link_posts_data_' . $post_type );
 			}
 		}
 	}
@@ -1864,6 +1957,10 @@ class GeoDir_Admin_Upgrade {
 
 	public static function update_200_lm_create_tables() {
 		global $wpdb, $plugin_prefix;
+		
+		if ( self::is_done( 'update_200_lm_create_tables' ) ) {
+			return;
+		}
 
 		// Locations table
 		$locations_table = $plugin_prefix . 'post_locations';
@@ -1895,6 +1992,8 @@ class GeoDir_Admin_Upgrade {
 			CHANGE seo_image image varchar(254) NOT NULL, 
 			CHANGE seo_image_tagline image_tagline varchar(140) NOT NULL;" 
 		);
+
+		self::update_log( 'update_200_lm_create_tables' );
 	}
 
 	public static function update_200_lm_update_version() {
@@ -2077,6 +2176,10 @@ class GeoDir_Admin_Upgrade {
 	public static function update_200_event_create_tables() {
 		global $wpdb, $plugin_prefix;
 		
+		if ( self::is_done( 'update_200_event_create_tables' ) ) {
+			return;
+		}
+		
 		// Event schedule table
 		$table = $plugin_prefix . 'event_schedule';
 
@@ -2086,6 +2189,8 @@ class GeoDir_Admin_Upgrade {
 			CHANGE event_starttime start_time time NOT NULL DEFAULT '00:00:00', 
 			CHANGE event_endtime end_time time NOT NULL DEFAULT '00:00:00';" 
 		);
+
+		self::update_log( 'update_200_event_create_tables' );
 	}
 
 	public static function update_200_event_update_version() {
@@ -2128,6 +2233,10 @@ class GeoDir_Admin_Upgrade {
 
 	public static function update_200_rr_create_tables() {
 		global $wpdb, $plugin_prefix;
+		
+		if ( self::is_done( 'update_200_rr_create_tables' ) ) {
+			return;
+		}
 
 		$collate = '';
 		if ( $wpdb->has_cap( 'collation' ) ) {
@@ -2197,6 +2306,8 @@ class GeoDir_Admin_Upgrade {
 				}
 			}
 		}
+
+		self::update_log( 'update_200_rr_create_tables' );
 	}
 
 	public static function update_200_rr_update_version() {
@@ -2237,6 +2348,10 @@ class GeoDir_Admin_Upgrade {
 
 	public static function update_200_claim_create_tables() {
 		global $wpdb, $plugin_prefix;
+		
+		if ( self::is_done( 'update_200_claim_create_tables' ) ) {
+			return;
+		}
 
 		$collate = '';
 		if ( $wpdb->has_cap( 'collation' ) ) {
@@ -2255,6 +2370,8 @@ class GeoDir_Admin_Upgrade {
 			CHANGE `claim_date` `claim_date` datetime NOT NULL,
 			ADD `meta` text NOT NULL;" 
 		);
+
+		self::update_log( 'update_200_claim_create_tables' );
 	}
 
 	public static function update_200_claim_update_version() {
@@ -2402,7 +2519,7 @@ class GeoDir_Admin_Upgrade {
 	public static function v2_updated() {
 		global $wpdb, $plugin_prefix;
 
-		if ( get_option( 'geodir_pricing_version' ) && get_option( 'geodir_payments_db_version' ) ) {
+		if ( ! self::is_done( 'v2_updated_pricemeta_fix_post_images' ) && get_option( 'geodir_pricing_version' ) && get_option( 'geodir_payments_db_version' ) ) {
 			$package_meta_table = $plugin_prefix . 'pricemeta';
 
 			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-3' WHERE htmlvar_name = 'package_id'" );
@@ -2421,10 +2538,12 @@ class GeoDir_Admin_Upgrade {
 					$wpdb->query( $wpdb->prepare( "UPDATE `{$package_meta_table}` SET `meta_value` = %s WHERE meta_id = %d", array( $meta_value, $row->meta_id ) ) );
 				}
 			}
-		}
 
-		if ( get_option( 'geodir_cp_version' ) && get_option( 'geodir_cp_db_version' ) ) {
-			$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-1' WHERE field_type = 'link_posts'" );
+			if ( get_option( 'geodir_cp_version' ) && get_option( 'geodir_cp_db_version' ) ) {
+				$wpdb->query( "UPDATE `" . GEODIR_CUSTOM_FIELDS_TABLE . "` SET `sort_order` = '-1' WHERE field_type = 'link_posts'" );
+			}
+
+			self::update_log( 'v2_updated_pricemeta_fix_post_images' );
 		}
 
 		if ( get_option( 'geodir_franchise_version' ) && get_option( 'geodir_franchise_db_version' ) ) {
@@ -2432,7 +2551,7 @@ class GeoDir_Admin_Upgrade {
 
 			if ( ! empty( $post_types ) ) {
 				foreach ( $post_types as $post_type ) {
-					if ( ! empty( $post_type ) ) {
+					if ( ! empty( $post_type ) && ! self::is_done( 'v2_updated_franchise_data_' . $post_type ) ) {
 						$table = $plugin_prefix . $post_type . '_detail';
 						$results = $wpdb->get_results( "SELECT p.ID FROM {$wpdb->posts} AS p LEFT JOIN {$wpdb->postmeta} AS pm ON pm.post_id = p.ID WHERE p.post_type = '{$post_type}' AND pm.meta_key = 'gd_is_franchise' AND pm.meta_value = '1'" );
 
@@ -2473,6 +2592,8 @@ class GeoDir_Admin_Upgrade {
 								$wpdb->update( $table, $data, array( 'post_id' => $row->ID ) );
 							}
 						}
+
+						self::update_log( 'v2_updated_franchise_data_' . $post_type );
 					}
 				}
 			}
@@ -2490,6 +2611,10 @@ class GeoDir_Admin_Upgrade {
 		$post_types = self::v2_post_types( true );
 
 		foreach ( $post_types as $key => $post_type ) {
+			if ( self::is_done( 'v2_updated_convert_file_fields_' . $post_type ) ) {
+				continue;
+			}
+	
 			$file_fields = $wpdb->get_results( $wpdb->prepare( "SELECT htmlvar_name FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE post_type = %s AND field_type = %s AND htmlvar_name != %s ORDER BY id ASC", array( $post_type, 'file', 'post_images' ) ) );
 			if ( empty( $file_fields ) ) {
 				continue;
@@ -2589,6 +2714,8 @@ class GeoDir_Admin_Upgrade {
 					$wpdb->update( $table, $save_fields, array( 'post_id' => $row->post_id ) );
 				}
 			}
+
+			self::update_log( 'v2_updated_convert_file_fields_' . $post_type );
 		}
 	}
 
@@ -2666,7 +2793,7 @@ class GeoDir_Admin_Upgrade {
 		$log = get_option( 'geodir_v2_upgrade' );
 
 		if ( is_array( $log ) && ! empty( $log[ $task ] ) ) {
-			geodir_error_log( 'ALEADY DONE', $task, __FILE__, __LINE__ );
+			geodir_error_log( $task, 'Skip', __FILE__, __LINE__ );
 			return true;
 		}
 
