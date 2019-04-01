@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.49\n"
+"Project-Id-Version: GeoDirectory 2.0.0.50\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-03-26 10:24+0000\n"
-"PO-Revision-Date: 2019-03-26 10:24+0000\n"
+"POT-Creation-Date: 2019-04-01 19:30+0100\n"
+"PO-Revision-Date: 2019-04-01 19:30+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -616,7 +616,7 @@ msgstr ""
 msgid "Copied to clipboard!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-comments.php:38
+#: includes/admin/class-geodir-admin-comments.php:40
 msgid "Comment Rating"
 msgstr ""
 
@@ -1597,7 +1597,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:306
 #: includes/admin/views/html-keys-edit.php:34
-#: includes/class-geodir-ajax.php:978 includes/user-functions.php:206
+#: includes/class-geodir-ajax.php:996 includes/user-functions.php:206
 #, php-format
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
@@ -2182,7 +2182,7 @@ msgstr ""
 msgid "There was an error calling this tool. There is no callback present."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-tools.php:154
+#: includes/admin/class-geodir-admin-tools.php:155
 msgid ""
 "Version numbers cleared. Install/upgrade functions will run on next page "
 "load."
@@ -2912,85 +2912,85 @@ msgstr ""
 msgid "Enable the REST API"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:178
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:181
 msgid "Select if this field should be displayed as a price value."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:179
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:182
 msgid "Display as price"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:197
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:200
 msgid "Select the thousand separator."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:198
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:201
 msgid "Thousand separator"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:200
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:226
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:203
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:229
 msgid ", (comma)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:201
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:204
 msgid "\\ (slash)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:202
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:225
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:205
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:228
 msgid ". (period)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:203
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:206
 msgid " (space)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:204
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:207
 msgid "(none)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:222
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:225
 msgid "Select the decimal separator."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:223
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:226
 msgid "Decimal separator:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:243
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:246
 msgid "Select how the decimal is displayed."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:244
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:247
 msgid "Decimal display:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:246
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:249
 msgid "If used (not .00)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:247
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:250
 msgid "Always (.00)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:264
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:267
 msgid "Select the currency symbol."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:265
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:268
 msgid "Currency symbol:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:282
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:285
 msgid "Select the currency symbol placement."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:283
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:286
 msgid "Currency symbol placement:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:285
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:288
 #: includes/widgets/class-geodir-widget-archive-item-section.php:53
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:61
 #: includes/widgets/class-geodir-widget-post-address.php:82
@@ -3002,7 +3002,7 @@ msgstr ""
 msgid "Left"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:286
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:289
 #: includes/widgets/class-geodir-widget-archive-item-section.php:54
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:63
 #: includes/widgets/class-geodir-widget-post-address.php:84
@@ -3014,235 +3014,235 @@ msgstr ""
 msgid "Right"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:319
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:322
 msgid ""
 "Select file types to allowed for file uploading. (Select multiple file types "
 "by holding down \"Ctrl\" key.)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:320
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:323
 msgid "Allowed file types"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:322
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:325
 msgid "All types"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:324
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:327
 #, php-format
 msgid "%s formats"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:362
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:365
 msgid "Select the number of files that can be uploaded, 0 = unlimited."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:363
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:366
 msgid "File upload limit"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:394
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:397
 msgid "Select the date format."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:395
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:398
 msgid "Date Format"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:462
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:465
 msgid "Set the date range, eg: 1920:2020 or for current dates: c-100:c+5"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:463
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:466
 msgid "Date Range"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:502
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:505
 msgid "Option Values should be separated by comma."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:503
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:506
 msgid ""
 "If using for a \"tick filter\" place a / and then either a 1 for true or 0 "
 "for false"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:504
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:507
 msgid "eg: \"No Dogs Allowed/0,Dogs Allowed/1\" (Select only, not multiselect)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:506
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:507
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:509
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:510
 msgid ""
 "- If using OPTGROUP tag to grouping options, use \"{optgroup}OPTGROUP-LABEL|"
 "OPTION-1,OPTION-2{/optgroup}\""
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:510
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:513
 msgid "Option Values:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:540
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:543
 msgid "Show multiselect input as multiselect,checkbox or radio."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:541
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:544
 msgid "Multiselect display type"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:543
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:704
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:877
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:546
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:707
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:880
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:398
 #: includes/custom-fields/input-functions.php:668
 msgid "Select"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:544
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:710
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:547
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:713
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:370
 msgid "Checkbox"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:545
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:713
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:548
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:716
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:384
 msgid "Radio"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:589
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:592
 msgid "Select if you want to show zip/post code field in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:590
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:593
 msgid "Display zip/post code"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:599
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:602
 msgid "Enter zip/post code field label in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:600
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:603
 msgid "Zip/Post code label"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:614
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:617
 msgid "Enter text for `set address on map` button in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:615
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:618
 msgid "Map button label"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:626
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:629
 msgid ""
 "Do you want to use the user defined map zoom level from the add listing page?"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:627
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:630
 msgid "Use user zoom level"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:636
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:639
 msgid ""
 "Select if you want to show `set default map` options in address section. "
 "( Satellite Map, Hybrid Map, Terrain Map)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:637
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:640
 msgid "Display map view"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:647
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:650
 msgid "Enter mapview field label in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:648
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:651
 msgid "Map view label"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:659
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:662
 msgid ""
 "This will show/hide the longitude fields in the address section add listing "
 "form."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:660
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:663
 msgid "Show latitude and longitude"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:699
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:702
 msgid "Show categories list as select, multiselect, checkbox or radio"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:700
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:703
 msgid "Category display type"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:707
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:710
 msgid "Multiselect"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:749
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:752
 msgid "Enter regex expression for HTML5 pattern validation."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:750
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:753
 msgid "Validation Pattern:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:765
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:768
 msgid ""
 "Enter a extra validation message to show to the user if validation fails."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:766
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:769
 msgid "Validation Message:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:795
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:798
 msgid "Select if you want to show the advanced editor on add listing page."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:796
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:799
 msgid "Show advanced editor :"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:841
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:844
 msgid ""
 "Select the data type for the field. This can affect things like search "
 "filtering."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:842
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:845
 msgid "Field Data Type :"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:848
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:851
 msgid "CHARACTER"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:852
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:855
 msgid "NUMBER"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:856
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:859
 msgid "DECIMAL"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:874
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:877
 msgid "Decimal point to display after point."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:875
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:878
 msgid "Select decimal point :"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:914
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:917
 msgid "Tick to allow embed videos, images, tweets, audio, and other content."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:915
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:918
 msgid "Embed Media URLs:"
 msgstr ""
 
@@ -3630,13 +3630,13 @@ msgstr ""
 msgid "No tab items have been added yet."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1717
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1819
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1725
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1827
 msgid "Invalid field."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1850
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1853
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1858
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1861
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:804
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:807
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:728
@@ -3644,45 +3644,45 @@ msgstr ""
 msgid "Failed to sort tab items."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1894
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1902
 #, php-format
 msgid "%s field already exists, it can not be used twice."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1896
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1904
 msgid ""
 "Field key name MUST be unique, duplicate field detected, please fix and re-"
 "save."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1952
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1960
 msgid "Column change failed, you may have too many columns."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2071
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2079
 msgid "Field update failed.x"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2085
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2093
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:712
 msgid "Field create failed."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2097
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2105
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "does not match with field data type."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2153
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2161
 msgid "Details page sidebar"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2155
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2163
 msgid "Listings page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2157
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2165
 msgid "Map bubble"
 msgstr ""
 
@@ -6394,6 +6394,7 @@ msgstr ""
 #: includes/admin/views/html-admin-settings-import-export-listings.php:152
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:145
 #: includes/widgets/class-geodir-widget-categories.php:67
+#: includes/widgets/class-geodir-widget-recently-viewed.php:87
 msgid "Post Type:"
 msgstr ""
 
@@ -6610,7 +6611,7 @@ msgid "Generate API key"
 msgstr ""
 
 #: includes/admin/views/html-keys-edit.php:110
-#: includes/class-geodir-ajax.php:914
+#: includes/class-geodir-ajax.php:932
 msgid "Revoke key"
 msgstr ""
 
@@ -8144,8 +8145,8 @@ msgstr ""
 msgid "No tab_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:166 includes/class-geodir-ajax.php:782
-#: includes/class-geodir-ajax.php:815
+#: includes/class-geodir-ajax.php:166 includes/class-geodir-ajax.php:800
+#: includes/class-geodir-ajax.php:833
 msgid "No tabs provided."
 msgstr ""
 
@@ -8165,23 +8166,23 @@ msgstr ""
 msgid "Action failed."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:848
+#: includes/class-geodir-ajax.php:866
 msgid "Description is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:851
+#: includes/class-geodir-ajax.php:869
 msgid "User is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:854
+#: includes/class-geodir-ajax.php:872
 msgid "Permissions is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:883
+#: includes/class-geodir-ajax.php:901
 msgid "API Key updated successfully."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:913
+#: includes/class-geodir-ajax.php:931
 msgid ""
 "API Key generated successfully. Make sure to copy your new keys now as the "
 "secret key will be hidden once you leave this page."
@@ -8322,14 +8323,14 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:147
+#: includes/class-geodir-compatibility.php:146
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:254
+#: includes/class-geodir-compatibility.php:253
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -8337,21 +8338,21 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:596
+#: includes/class-geodir-compatibility.php:598
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:598
+#: includes/class-geodir-compatibility.php:600
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "Settings unless disabled below."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:603
+#: includes/class-geodir-compatibility.php:605
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:604
+#: includes/class-geodir-compatibility.php:606
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
@@ -9875,7 +9876,7 @@ msgstr ""
 msgid "Read more..."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2243
+#: includes/custom-fields/output-functions.php:2291
 msgid "Expand opening hours"
 msgstr ""
 
@@ -10263,7 +10264,7 @@ msgctxt "in location"
 msgid "in %s"
 msgstr ""
 
-#: includes/post-functions.php:828
+#: includes/post-functions.php:832
 msgid "NEW"
 msgstr ""
 
@@ -10395,7 +10396,6 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:61
 #: includes/widgets/class-geodir-widget-listings.php:82
 #: includes/widgets/class-geodir-widget-map.php:490
-#: includes/widgets/class-geodir-widget-recently-viewed.php:88
 #: includes/widgets/class-geodir-widget-search.php:57
 msgid "Default Post Type:"
 msgstr ""
@@ -10405,7 +10405,6 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:62
 #: includes/widgets/class-geodir-widget-categories.php:68
 #: includes/widgets/class-geodir-widget-listings.php:83
-#: includes/widgets/class-geodir-widget-recently-viewed.php:89
 #: includes/widgets/class-geodir-widget-search.php:58
 msgid ""
 "The custom post types to show by default. Only used when there are multiple "
@@ -10615,7 +10614,7 @@ msgid "Best of %s"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:500
-#: includes/widgets/class-geodir-widget-listings.php:754
+#: includes/widgets/class-geodir-widget-listings.php:755
 msgid "View all"
 msgstr ""
 
@@ -10928,11 +10927,11 @@ msgstr ""
 msgid "After pagination"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:516
+#: includes/widgets/class-geodir-widget-listings.php:517
 msgid "Near:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:516
+#: includes/widgets/class-geodir-widget-listings.php:517
 msgid "Me"
 msgstr ""
 
@@ -11580,7 +11579,7 @@ msgstr ""
 msgid "invalid post type"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-address.php:243
+#: includes/widgets/class-geodir-widget-post-address.php:246
 #: includes/widgets/class-geodir-widget-post-content.php:267
 #: includes/widgets/class-geodir-widget-post-meta.php:265
 msgid "Select Key"
@@ -12050,6 +12049,14 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-recently-viewed.php:61
 msgid "The number of posts to show by default. (max 50)"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-recently-viewed.php:88
+msgid "The custom post types to show. Only used when there are multiple CPTs."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-recently-viewed.php:209
+msgid "Your recently viewed listings will show here."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-search.php:30

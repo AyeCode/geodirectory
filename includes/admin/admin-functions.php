@@ -314,21 +314,21 @@ function geodir_create_page( $slug, $option, $page_title = '', $page_content = '
 function geodir_admin_upgrade_notice() {
 	$result = get_transient( 'geodir_admin_upgrade_notice' );
 	if ( ! empty( $result ) ) {
-		return $result;
-	}
-
-	// readme contents
-	$args = array(
-		'timeout'     => 15,
-		'redirection' => 5
-	);
-	$url  = "http://plugins.svn.wordpress.org/geodirectory/trunk/readme.txt";
-	$data = wp_remote_get( $url, $args );
-
-	if ( ! is_wp_error( $data ) && $data['response']['code'] == 200 ) {
-		$result = $data['body'];
-		set_transient( 'geodir_admin_upgrade_notice', $result, HOUR_IN_SECONDS );
 		geodir_in_plugin_upgrade_message( $result );
+	}else{
+		// readme contents
+		$args = array(
+			'timeout'     => 15,
+			'redirection' => 5
+		);
+		$url  = "http://plugins.svn.wordpress.org/geodirectory/trunk/readme.txt";
+		$data = wp_remote_get( $url, $args );
+
+		if ( ! is_wp_error( $data ) && $data['response']['code'] == 200 ) {
+			$result = $data['body'];
+			set_transient( 'geodir_admin_upgrade_notice', $result, HOUR_IN_SECONDS );
+			geodir_in_plugin_upgrade_message( $result );
+		}
 	}
 }
 

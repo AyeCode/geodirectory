@@ -629,7 +629,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					echo geodir_help_tip( __( 'Do you want to use the user defined map zoom level from the add listing page?', 'geodirectory' ));
 					_e('Use user zoom level', 'geodirectory'); ?>
 					<input type="hidden" name="extra[show_mapzoom]" value="0" />
-					<input type="checkbox" name="extra[show_mapzoom]" value="1" <?php checked( $address['show_mapzoom'], 1, true );?> />
+					<input type="checkbox" name="extra[show_mapzoom]" value="1" <?php if(isset($address['show_mapzoom'])){checked( $address['show_mapzoom'], 1, true );}?> />
 				</label>
 			</p>
 
