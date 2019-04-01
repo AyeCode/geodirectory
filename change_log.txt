@@ -9,6 +9,7 @@ Required message not editable until custom field saved - FIXED
 Validation pattern extended to phone,email and url type fields - ADDED
 Avada theme not using GD titles - FIXED
 Recently viewed widget not checking for deleted post IDs - FIXED
+Child fields disappears after saving fieldset - FIXED
 
 v2.0.0.49
 Front end author actions - After delete, page is 404 - FIXED

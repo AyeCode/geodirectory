@@ -729,8 +729,26 @@ class GeoDir_AJAX {
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
+			$field = GeoDir_Settings_Cpt_Cf::get_item( $result );
+			$childs = GeoDir_Settings_Cpt_Cf::get_childs( $result );
+
 			$cfs = new GeoDir_Settings_Cpt_Cf();
-			echo $cfs->output_custom_field_setting_item($result);
+			$output = $cfs->output_custom_field_setting_item( $result, $field );
+
+			// Child fields
+			if ( ! empty( $childs ) ) {
+				$output = str_replace( "</li>", "", $output );
+
+				$output .= "<ul>";
+				foreach ( $childs as $key => $child ) {
+					$output .= $cfs::output_custom_field_setting_item( $child->id, $child );
+				}
+				$output .= "</ul>";
+
+				$output .= "</li>";
+			}
+
+			echo $output;
 		}
 		wp_die();
 	}
