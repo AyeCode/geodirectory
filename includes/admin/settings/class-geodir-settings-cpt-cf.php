@@ -1511,6 +1511,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			// sanatize
 			$field->field_id = isset( $input['field_id'] ) ? absint( $input['field_id'] ) : '';
+
+			$field_item = ! empty( $field->field_id ) ? self::get_item( $field->field_id ) : NULL;
+
 			$field->post_type = isset( $input['post_type'] ) ? sanitize_text_field( $input['post_type'] ) : null;
 			$field->admin_title = isset( $input['admin_title'] ) ? sanitize_text_field( $input['admin_title'] ) : null;
 			$field->frontend_title = isset( $input['frontend_title'] ) ? sanitize_text_field( $input['frontend_title'] ) : null;
@@ -1555,7 +1558,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			// Set some default after sanitation
 			$field->data_type = self::sanitize_data_type($field);
 			if(!$field->admin_title){$field->admin_title = $field->frontend_title;}
-			//if(!$field->htmlvar_name){$field->htmlvar_name =str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['frontend_title'] ) );} // we use original input so the special chars are no converted already
+			//if(!$field->htmlvar_name){$field->htmlvar_name =str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['frontend_title'] ) );} // Don't change fieldset htmlvar_name(key) on edit
+			if ( empty( $field->htmlvar_name ) && $field->field_type == 'fieldset' && ! empty( $field_item ) ) {
+				$field->htmlvar_name = $field_item->htmlvar_name;
+			}
+
+			// we use original input so the special chars are no converted already
 			if ( empty( $field->htmlvar_name ) ) {
 				$htmlvar_name = sanitize_key( str_replace( array( '-', ' ', '"', "'" ), array( '_', '_', '', '' ), $input['frontend_title'] ) );
 				if ( str_replace( '_', '', $htmlvar_name ) != '' ) {
@@ -2168,7 +2176,32 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			 */
 			return apply_filters( 'geodir_show_in_locations', $show_in_locations, $field, $field_type );
 		}
-		
+
+		/**
+		 * Get the field object.
+		 *
+		 * @param int $id Field id. default 0.
+		 *
+		 * @return object Field object.
+		 */
+		public static function get_item( $id = 0 ) {
+			global $wpdb;
+
+			return $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE id = %d LIMIT 1", array( $id ) ) );
+		}
+
+		/**
+		 * Get the child fields.
+		 *
+		 * @param int $parent Parent field id. default 0.
+		 *
+		 * @return object Field object.
+		 */
+		public static function get_childs( $parent = 0 ) {
+			global $wpdb;
+
+			return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE tab_parent = %d ORDER BY sort_order ASC, tab_level ASC", array( $parent ) ) );
+		}
 	}
 
 endif;
