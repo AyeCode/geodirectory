@@ -548,7 +548,7 @@ function goedir_register_widgets() {
 		new GeoDir_Widget_Single_Closed_Text();
 
 		// 3rd party widgets
-		if ( class_exists( 'Ninja_Forms' ) ) {
+		if ( class_exists( 'Ninja_Forms' ) && class_exists( 'NF_Abstracts_MergeTags' ) ) {
 			register_widget( 'GeoDir_Widget_Ninja_Forms' );
 		}
 	}
