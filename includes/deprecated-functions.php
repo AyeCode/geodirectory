@@ -378,13 +378,13 @@ function geodir_is_wpml() {
 	return false;
 }
 
-//
-///**
-// * @deprecated
-// */
-//function (){
-//    _deprecated_function( '', '2.0.0' );
-//}
+
+/**
+ * @deprecated
+ */
+function geodir_count_reviews_by_terms($force_update = false, $post_ID = 0 ){
+    _deprecated_function( __FUNCTION__, '2.0.0' );
+}
 //
 ///**
 // * @deprecated

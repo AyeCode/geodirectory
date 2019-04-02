@@ -288,23 +288,6 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
         $terms = get_terms($category_taxonomy[0], $term_args);
 
-//        $term_reviews = geodir_count_reviews_by_terms();
-//        $a_terms = array();
-//        foreach ($terms as $term) {
-//
-//
-//            if ($term->count > 0) {
-//                if (isset($term_reviews[$term->term_id])) {
-//                    $term->review_count = $term_reviews[$term->term_id];
-//                } else {
-//                    $term->review_count = '0';
-//                }
-//
-//                $a_terms[] = $term;
-//            }
-//
-//        }
-
 	    $a_terms = $terms;
 
 

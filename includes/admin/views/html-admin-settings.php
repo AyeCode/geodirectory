@@ -17,6 +17,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					if(isset($_REQUEST['page']) && $_REQUEST['page']== $cpt.'-settings'){
 						echo '<a href="' . admin_url( 'edit.php?post_type=' . $cpt . '&page='.$cpt.'-settings&tab=' . $name ) . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
 					}else{
+						$label = isset($label['label']) ? $label['label'] : $label;
 						echo '<a href="' . admin_url( 'admin.php?page=gd-settings&tab=' . $name ) . '" class="nav-tab ' . ( $current_tab == $name ? 'nav-tab-active' : '' ) . '">' . $label . '</a>';
 					}
 				}

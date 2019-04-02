@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.51\n"
+"Project-Id-Version: GeoDirectory 2.0.0.52\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-02 10:37+0100\n"
-"PO-Revision-Date: 2019-04-02 10:38+0100\n"
+"POT-Creation-Date: 2019-04-02 12:59+0100\n"
+"PO-Revision-Date: 2019-04-02 12:59+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -6585,7 +6585,7 @@ msgstr ""
 msgid "Download Settings"
 msgstr ""
 
-#: includes/admin/views/html-admin-settings.php:37
+#: includes/admin/views/html-admin-settings.php:38
 #: includes/admin/views/html-keys-edit.php:109
 msgid "Save changes"
 msgstr ""
@@ -9037,7 +9037,7 @@ msgctxt "URL slug"
 msgid "places"
 msgstr ""
 
-#: includes/class-geodir-post-types.php:391 includes/post-functions.php:548
+#: includes/class-geodir-post-types.php:391 includes/post-functions.php:550
 msgctxt "Listing status"
 msgid "Closed down"
 msgstr ""
@@ -9823,7 +9823,7 @@ msgstr ""
 #: includes/custom-fields/input-functions.php:1484
 #: includes/custom-fields/input-functions.php:1488
 #: includes/taxonomy-functions.php:282
-#: includes/widgets/class-geodir-widget-best-of.php:344
+#: includes/widgets/class-geodir-widget-best-of.php:327
 msgid "Select Category"
 msgstr ""
 
@@ -10264,7 +10264,7 @@ msgctxt "in location"
 msgid "in %s"
 msgstr ""
 
-#: includes/post-functions.php:832
+#: includes/post-functions.php:834
 msgid "NEW"
 msgstr ""
 
@@ -10608,12 +10608,12 @@ msgid "Use current viewing post type?"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:201
-#: includes/widgets/class-geodir-widget-best-of.php:500
+#: includes/widgets/class-geodir-widget-best-of.php:483
 #, php-format
 msgid "Best of %s"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-best-of.php:500
+#: includes/widgets/class-geodir-widget-best-of.php:483
 #: includes/widgets/class-geodir-widget-listings.php:755
 msgid "View all"
 msgstr ""
