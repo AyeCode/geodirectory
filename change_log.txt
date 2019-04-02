@@ -1,7 +1,8 @@
 = 2.0.0.52 =
-* Redeclare function error after update - FIXED
+* Added some deprecated functions to prevent redeclare function error after update - FIXED
+* Bumped PHP min version to 5.6 (new WP standard) - INFO
 
-v2.0.0.51
+= v2.0.0.51 =
 * First release of v2 on wp.org - INFO
 
 v2.0.0.50
