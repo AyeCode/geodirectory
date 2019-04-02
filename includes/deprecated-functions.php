@@ -380,11 +380,20 @@ function geodir_is_wpml() {
 
 
 /**
- * @deprecated
+ * @deprecated 2.0.0
  */
 function geodir_count_reviews_by_terms($force_update = false, $post_ID = 0 ){
     _deprecated_function( __FUNCTION__, '2.0.0' );
 }
+
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_wpml_is_post_type_translated($post_type ){
+    _deprecated_function( __FUNCTION__, '2.0.0' );
+}
+
+
 //
 ///**
 // * @deprecated

@@ -1,3 +1,7 @@
+= 2.0.0.53 =
+* Post author meta info missing closing wrapper div - FIXED
+* Meta excerpt not being trimmed, now trimmed to default excerpt length of 55 words - FIXED
+
 = 2.0.0.52 =
 * Added some deprecated functions to prevent redeclare function error after update - FIXED
 * Bumped PHP min version to 5.6 (new WP standard) - INFO

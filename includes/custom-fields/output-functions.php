@@ -2428,6 +2428,8 @@ function geodir_cf_author($html,$location,$cf,$p='',$output=''){
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $author_link );
 
+            $html .= '</div>';
+
         endif;
 
     }

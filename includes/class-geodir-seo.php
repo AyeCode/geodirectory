@@ -333,9 +333,15 @@ class GeoDir_SEO {
 		}
 
 		if ( strpos( $string, '%%excerpt%%' ) !== false ) {
-			$post_content = !empty($post->post_content) ? strip_tags( wp_trim_excerpt($post->post_content) ) : '';
+			$excerpt_length = apply_filters( 'excerpt_length', 55 );
+			$post_content = !empty($post->post_excerpt) ? strip_tags( $post->post_excerpt ) : '';
+			if(!$post_content){
+				$post_content = !empty($post->post_content) ? strip_tags( wp_trim_words($post->post_content, $excerpt_length,'') ) : '';
+			}
 			$string = str_replace( "%%excerpt%%",$post_content , $string );
 		}
+
+
 
 		if ( strpos( $string, '%%id%%' ) !== false ) {
 			$string = str_replace( "%%id%%", absint($post->ID), $string );
