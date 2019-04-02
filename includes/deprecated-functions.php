@@ -366,6 +366,18 @@ function geodir_is_reviews_show(){
 function geodir_get_video(){
     _deprecated_function( 'geodir_get_video', '2.0.0' );
 }
+
+/**
+ * Check wpml active or not.
+ * 
+ * @deprecated 2.0.0
+ */
+function geodir_is_wpml() {
+	_deprecated_function( __FUNCTION__, '2.0.0' );
+
+	return false;
+}
+
 //
 ///**
 // * @deprecated
