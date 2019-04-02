@@ -1443,6 +1443,15 @@ input[name="street"].ui-autocomplete-loading {
     font-weight: 700;
 }
 
+.gd_plugin_upgrade_notice{
+    background: #ca1111;
+    color: #fff;
+    padding: 10px;
+    a{
+        color: #fff;
+    }
+}
+
 /********************************************************
 Media Queries
 ********************************************************/
