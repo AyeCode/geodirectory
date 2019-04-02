@@ -223,6 +223,7 @@ function geodir_delete_post_meta( $post_id, $postmeta ) {
  * @todo single variable not yet implemented.
  * @return bool|mixed|null|string Will be an array if $single is false. Will be value of meta data field if $single is true.
  */
+if ( ! function_exists( 'geodir_get_post_meta' ) ) {
 function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
 	if ( ! $post_id ) {
 		return false;
@@ -280,6 +281,7 @@ function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
 	 * @param bool $single Optional. Whether to return a single value. Default false.
 	 */
 	return apply_filters( 'geodir_get_post_meta', $meta_value, $post_id, $meta_key, $single );
+}
 }
 
 /**

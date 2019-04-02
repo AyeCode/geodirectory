@@ -1,3 +1,6 @@
+= 2.0.0.52 =
+* Redeclare function error after update - FIXED
+
 v2.0.0.51
 * First release of v2 on wp.org - INFO
 
