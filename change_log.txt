@@ -1,3 +1,6 @@
+v2.0.0.51
+* First release of v2 on wp.org - INFO
+
 v2.0.0.50
 "Clear version numbers" tool should clear countries db version - ADDED
 GD Listings block advanced settings breaks due to paging settings - FIXED

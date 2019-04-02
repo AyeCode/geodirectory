@@ -3,7 +3,7 @@
  * This is the main GeoDirectory plugin file, here we declare and call the important stuff
  *
  * @package     GeoDirectory
- * @copyright   2016 AyeCode Ltd
+ * @copyright   2019 AyeCode Ltd
  * @license     GPL-2.0+
  * @since       1.0.0
  *
@@ -11,14 +11,13 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.0.0.50
+ * Version: 2.0.0.51
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
  * Domain Path: /languages
  * Requires at least: 4.5
- * Tested up to: 5.2
- * Update URL: https://github.com/AyeCode/geodirectory/
+ * Tested up to: 5.1
  */
 
 
@@ -36,7 +35,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.0.0.50';
+    public $version = '2.0.0.51';
     
     /**
      * GeoDirectory instance.
