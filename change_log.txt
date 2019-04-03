@@ -1,3 +1,6 @@
+= 2.0.0.54 =
+* Ninja Form looses post id and shows incorrect post title - FIXED
+
 = 2.0.0.53 =
 * Post author meta info missing closing wrapper div - FIXED
 * Meta excerpt not being trimmed, now trimmed to default excerpt length of 55 words - FIXED
