@@ -134,6 +134,9 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 
 __WARNING: GDv2 is a major update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always it is recommended to try this on a staging site first. [Learn more](https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/)__
 
+= 2.0.0.54 =
+[GeoDirectory changelog for version 2.0.0.54](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.54).
+
 = 2.0.0.53 =
 [GeoDirectory changelog for version 2.0.0.53](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.53).
 
