@@ -243,17 +243,24 @@ class GeoDir_AJAX {
      * @return string
      */
 	public static function ninja_forms(){
-
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
 		$post_id = isset($_REQUEST['p']) ? absint($_REQUEST['p']) : url_to_postid( wp_get_referer() );
 		$form_id = isset($_REQUEST['extra']) ? absint($_REQUEST['extra']) : '';
 		
-		if(!$post_id || !$form_id){return 'no post id';}
+		if ( ! $post_id || ! $form_id ) {
+			return 'no post id';
+		}
+
 		global $post;
-		$post = get_post( $post_id );
+		$the_post = get_post( $post_id );
+		$post = $the_post;
+
 		// fake the post_id for ninja forms
-		add_filter( 'url_to_postid', function ($url){global $post;return add_query_arg( 'p', $post->ID, $url );});
+		add_filter( 'url_to_postid', function ( $url ) {
+			global $post;
+			return add_query_arg( 'p', $post->ID, $url );
+		});
 
 		/*
 		 * We only need the form and its basic CSS/JS so we hack away all lots of others stuff in a naughty way.
@@ -267,6 +274,11 @@ class GeoDir_AJAX {
 		wp_head();
 		echo "<style>body { background: #fff;padding: 20px 50px;}</style>";
 		echo '</head><body>';
+
+		// Set post back.
+		if ( $post->ID != $the_post->ID ) {
+			$post = $the_post;
+		}
 
 		// allow other plugins to override the call
 		$override_html = apply_filters('geodir_ajax_ninja_forms_override','',$post_id,$form_id);
