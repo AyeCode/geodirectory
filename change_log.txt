@@ -1,5 +1,8 @@
 = 2.0.0.54 =
 * Ninja Form looses post id and shows incorrect post title - FIXED
+* Added some more deprecated functions to prevent undefined function errors - ADDED
+* Update warning text added to readme change log section - ADDED
+* Changed .hidden class to .gd-hidden to prevent conflicts - CHANGED
 
 = 2.0.0.53 =
 * Post author meta info missing closing wrapper div - FIXED

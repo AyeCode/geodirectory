@@ -199,7 +199,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 					                                                                              onclick="geodirFindRoute('<?php echo $map_canvas; ?>')"/>
 					</div>
 				</div>
-				<div id='directions-options' class="hidden">
+				<div id='directions-options' class="gd-hidden">
 					<select id="travel-mode" onchange="geodirFindRoute('<?php echo $map_canvas; ?>')"
 					        aria-label="<?php esc_attr_e( 'Travel mode', 'geodirectory' ); ?>">
 						<option value="driving"><?php _e( 'Driving', 'geodirectory' ); ?></option>

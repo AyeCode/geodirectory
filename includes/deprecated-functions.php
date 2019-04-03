@@ -393,6 +393,13 @@ function geodir_wpml_is_post_type_translated($post_type ){
     _deprecated_function( __FUNCTION__, '2.0.0' );
 }
 
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_user_signup(){
+    _deprecated_function( __FUNCTION__, '2.0.0' );
+}
+
 
 //
 ///**
