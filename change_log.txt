@@ -1,3 +1,6 @@
+= 2.0.0.55 =
+* "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED
+
 = 2.0.0.54 =
 * Ninja Form looses post id and shows incorrect post title - FIXED
 * Added some more deprecated functions to prevent undefined function errors - ADDED

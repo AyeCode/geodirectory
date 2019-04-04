@@ -351,6 +351,20 @@ class GeoDir_Compatibility {
 			$gen_keys[] = 'layouts';
 		}
 
+		// Elvyre - Retina Ready Wordpress Theme
+		if ( function_exists( 'pi_elv_include_scripts' ) ) {
+			$gen_keys[] = 'pg_sidebar';
+			$gen_keys[] = 'portfolio_style';
+			$gen_keys[] = 'portfolio_taxonomies';
+			$gen_keys[] = 'pg_hide_title';
+			$gen_keys[] = 'page_description';
+			$gen_keys[] = 'title_style';
+			$gen_keys[] = 'title_color';
+			$gen_keys[] = 'title_image';
+			$gen_keys[] = 'additional_title_image';
+			$gen_keys[] = 'parallax';
+		}
+
 		if (
 			$meta_key
 			&& ( $meta_key[0] == "_" || in_array( $meta_key, $gen_keys ) )
