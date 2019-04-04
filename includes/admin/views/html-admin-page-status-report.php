@@ -29,7 +29,7 @@ $pages            = $system_status->get_pages();
 	<div id="debug-report">
 		<textarea readonly="readonly"></textarea>
 		<p class="submit"><button id="copy-for-support" class="button-primary" href="#" data-tip="<?php esc_attr_e( 'Copied!', 'geodirectory' ); ?>"><?php _e( 'Select all & copy for support', 'geodirectory' ); ?></button></p>
-		<p class="copy-error hidden"><?php _e( 'Copying to clipboard failed. Please press Ctrl/Cmd+C to copy.', 'geodirectory' ); ?></p>
+		<p class="copy-error gd-hidden"><?php _e( 'Copying to clipboard failed. Please press Ctrl/Cmd+C to copy.', 'geodirectory' ); ?></p>
 	</div>
 </div>
 <table class="gd_status_table widefat" cellspacing="0" id="status">

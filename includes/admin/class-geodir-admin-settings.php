@@ -366,7 +366,7 @@ class GeoDir_Admin_Settings {
 							$show_img = wp_get_attachment_image($option_value, $image_size);
 						}
 					}else{
-						$remove_class = 'hidden';
+						$remove_class = 'gd-hidden';
 						$show_img = '<img src="'.admin_url( 'images/media-button-image.gif' ).'" />';
 					}
 

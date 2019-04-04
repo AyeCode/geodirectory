@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.53\n"
+"Project-Id-Version: GeoDirectory 2.0.0.54\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-02 20:47+0100\n"
-"PO-Revision-Date: 2019-04-02 20:47+0100\n"
+"POT-Creation-Date: 2019-04-03 15:48+0100\n"
+"PO-Revision-Date: 2019-04-03 15:48+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1597,7 +1597,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:306
 #: includes/admin/views/html-keys-edit.php:34
-#: includes/class-geodir-ajax.php:996 includes/user-functions.php:206
+#: includes/class-geodir-ajax.php:1008 includes/user-functions.php:206
 #, php-format
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
@@ -6611,7 +6611,7 @@ msgid "Generate API key"
 msgstr ""
 
 #: includes/admin/views/html-keys-edit.php:110
-#: includes/class-geodir-ajax.php:932
+#: includes/class-geodir-ajax.php:944
 msgid "Revoke key"
 msgstr ""
 
@@ -8145,8 +8145,8 @@ msgstr ""
 msgid "No tab_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:166 includes/class-geodir-ajax.php:800
-#: includes/class-geodir-ajax.php:833
+#: includes/class-geodir-ajax.php:166 includes/class-geodir-ajax.php:812
+#: includes/class-geodir-ajax.php:845
 msgid "No tabs provided."
 msgstr ""
 
@@ -8154,35 +8154,35 @@ msgstr ""
 msgid "No tab_type provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:399
+#: includes/class-geodir-ajax.php:411
 msgid "No post_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:406
+#: includes/class-geodir-ajax.php:418
 msgid "You have successfully deleted the Listing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:523 includes/class-geodir-ajax.php:526
+#: includes/class-geodir-ajax.php:535 includes/class-geodir-ajax.php:538
 msgid "Action failed."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:866
+#: includes/class-geodir-ajax.php:878
 msgid "Description is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:869
+#: includes/class-geodir-ajax.php:881
 msgid "User is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:872
+#: includes/class-geodir-ajax.php:884
 msgid "Permissions is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:901
+#: includes/class-geodir-ajax.php:913
 msgid "API Key updated successfully."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:931
+#: includes/class-geodir-ajax.php:943
 msgid ""
 "API Key generated successfully. Make sure to copy your new keys now as the "
 "secret key will be hidden once you leave this page."
