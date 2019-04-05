@@ -400,6 +400,17 @@ function geodir_user_signup(){
     _deprecated_function( __FUNCTION__, '2.0.0' );
 }
 
+if ( defined( 'GEODIRREVIEWRATING_VERSION' ) ) {
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_get_commentoverall( $comment_id = 0 ) {
+    _deprecated_function( __FUNCTION__, '2.0.0', 'GeoDir_Comments::get_comment_rating()' );
+
+	return false;
+}
+}
+
 
 //
 ///**

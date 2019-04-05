@@ -1,5 +1,6 @@
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED
+* OpenStreetMap map icon position not relative to zoom level - FIXED
 
 = 2.0.0.54 =
 * Ninja Form looses post id and shows incorrect post title - FIXED
