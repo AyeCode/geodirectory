@@ -587,7 +587,7 @@ class GeoDir_Admin_Upgrade {
 							$cat_display_type = $extra_fields;
 						}
 					} else {
-						$cat_display_type = 'select';
+						$cat_display_type = 'multiselect';
 					}
 					$row->extra_fields = maybe_serialize( array( 'cat_display_type' => $cat_display_type ) );
 				}
