@@ -400,6 +400,48 @@ function geodir_user_signup(){
     _deprecated_function( __FUNCTION__, '2.0.0' );
 }
 
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_load_textdomain(){
+    _deprecated_function( __FUNCTION__, '2.0.0' );
+}
+
+/**
+ * @deprecated 2.0.0
+ */
+if(!class_exists('Geodir_Session')){
+    class Geodir_Session {
+        public function get( $key ) {
+            return '';
+        }
+        public function set( $key, $value ) {
+            return '';
+        }
+
+        public function un_set( $key ) {
+            return '';
+        }
+    }
+    global $gd_session;
+    $gd_session = new Geodir_Session();
+}
+
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_update_options($options, $dummy = false){
+    _deprecated_function( __FUNCTION__, '2.0.0' );
+}
+
+/**
+ * @deprecated 2.0.0
+ */
+function geodir_resave_settings($settings = array()){
+    _deprecated_function( __FUNCTION__, '2.0.0' );
+}
+
+
 if ( defined( 'GEODIRREVIEWRATING_VERSION' ) ) {
 /**
  * @deprecated 2.0.0

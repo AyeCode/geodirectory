@@ -1,6 +1,11 @@
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED
+* Geodir_Session class called in other addons can cause issues on frontend before upgrade - FIXED
+* Transparent image multiratings not displaying right on less than full score - FIXED
+* Post badge now has item specific classes - ADDED
+* added some badge classes for extra features - ADDED
 * OpenStreetMap map icon position not relative to zoom level - FIXED
+* Conversion script can set categories to select instead of multiselect - FIXED
 
 = 2.0.0.54 =
 * Ninja Form looses post id and shows incorrect post title - FIXED
