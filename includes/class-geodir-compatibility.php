@@ -74,6 +74,7 @@ class GeoDir_Compatibility {
 		Genesis (theme) :: Fix archive pages excerpt.
 		######################################################*/
 		add_filter( 'genesis_pre_get_option_content_archive', array( __CLASS__, 'genesis_content_archive' ) );
+		add_filter( 'genesis_entry_title_wrap', array( __CLASS__, 'genesis_entry_title_wrap' ) );
 
 		/*######################################################
 		Kleo (theme) :: Fix page titles.
@@ -577,6 +578,21 @@ class GeoDir_Compatibility {
 		}
 
 		return $val;
+	}
+
+	/**
+	 * Make the GD archive pages use H1 tags for the title.
+	 * 
+	 * @param $wrap
+	 *
+	 * @return string
+	 */
+	public static function genesis_entry_title_wrap($wrap){
+		if ( geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'search' ) ) {
+			$wrap = 'h1';
+		}
+
+		return $wrap;
 	}
 
 	/**
