@@ -582,7 +582,7 @@ class GeoDir_Compatibility {
 
 	/**
 	 * Make the GD archive pages use H1 tags for the title.
-	 * 
+	 *
 	 * @param $wrap
 	 *
 	 * @return string
@@ -627,7 +627,7 @@ class GeoDir_Compatibility {
 				array(
 					'title' => __( 'Yoast SEO detected', 'geodirectory' ),
 					'type'  => 'title',
-					'desc'  => geodir_notification( array( 'yoast_detected' => __( 'The Yoast SEO plugin has been detected and will take over the GeoDirectory Settings unless disabled below.', 'geodirectory' ) ) ),
+					'desc'  => geodir_notification( array( 'yoast_detected' => __( 'The Yoast SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta info)', 'geodirectory' ) ) ),
 					'id'    => 'yoast_detected',
 					//'desc_tip' => true,
 				),

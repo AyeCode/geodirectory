@@ -67,12 +67,24 @@ class GeoDir_SEO {
 		    || class_exists( 'All_in_One_SEO_Pack' )  // don't run if active
 		    || is_admin()  // no need to run in wp-admin
 		){
+
+			// even if disabled we still need to replace title vars
+			if(!is_admin()){
+				// set a global so we don't change the menu items titles
+				add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
+				add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
+//
+//				// page title
+				add_filter('the_title',array(__CLASS__,'output_title'),10,2);
+				add_filter('get_the_archive_title',array(__CLASS__,'output_title'),10);
+//
+//				// setup vars
+				add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
+			}
 			return;
 		}
 
-//		if(self::yoast_enabled()){echo 'enabled';}else{echo 'disabled';}
 
-//echo '###';exit;
 		// set a global so we don't change the menu items titles
 		add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
 		add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
@@ -337,6 +349,7 @@ class GeoDir_SEO {
 			$post_content = !empty($post->post_excerpt) ? strip_tags( $post->post_excerpt ) : '';
 			if(!$post_content){
 				$post_content = !empty($post->post_content) ? strip_tags( wp_trim_words($post->post_content, $excerpt_length,'') ) : '';
+
 			}
 			$string = str_replace( "%%excerpt%%",$post_content , $string );
 		}
