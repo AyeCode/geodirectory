@@ -10,6 +10,59 @@
       cursor: pointer;
     }
   }
+
+  // shadow
+  &.gd-badge-shadow{
+    box-shadow: 0 5px 18px 0 rgba(0,0,0,0.3) !important;
+  }
+
+  // replicate featured
+  &.gd-ab-left{
+    position: absolute;
+    z-index: 1;
+    top: 2px;
+    left: 2px;
+    margin: 0;
+  }
+  &.gd-ab-left-angle{
+    position: absolute;
+    z-index: 1;
+    top: 13px;
+    left: -15px;
+    margin: 0;
+    transform: rotate(-45deg);
+    transform-origin: bottom;
+    width: 100px;
+    text-align: center;
+    .gd-badge{
+      display: block;
+    }
+  }
+
+  &.gd-ab-right{
+    position: absolute;
+    z-index: 1;
+    top: 2px;
+    right: 2px;
+    margin: 0;
+  }
+
+  &.gd-ab-right-angle{
+    position: absolute;
+    z-index: 1;
+    top: 13px;
+    right: -15px;
+    margin: 0;
+    transform: rotate(45deg);
+    transform-origin: bottom;
+    width: 100px;
+    text-align: center;
+    .gd-badge{
+      display: block;
+    }
+
+  }
+
 }
 .gd-badge {
   display: inline;

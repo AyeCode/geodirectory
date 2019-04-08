@@ -46,8 +46,10 @@ body { // wrapping ina  body tag makes rules more specific
 				display: inline-block;
 				width: 30%;
 				//margin-right: 3%;
-				padding-right: 3%;
+				//padding-right: 3%;
 				float: left;
+				position: relative;
+				overflow: hidden;
 
 				.geodir-post-img {
 					box-sizing: border-box;
@@ -95,6 +97,9 @@ body { // wrapping ina  body tag makes rules more specific
 				vertical-align: top;
 				width: 67%;
 				float: left;
+				position: relative;
+				overflow: hidden;
+				padding-left: 3%;
 
 				.geodir-post-info {
 					font-size: 12px;

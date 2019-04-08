@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.54\n"
+"Project-Id-Version: GeoDirectory 2.0.0.55\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-03 15:48+0100\n"
-"PO-Revision-Date: 2019-04-03 15:48+0100\n"
+"POT-Creation-Date: 2019-04-05 19:50+0100\n"
+"PO-Revision-Date: 2019-04-05 19:51+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -2018,9 +2018,9 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-address.php:81
 #: includes/widgets/class-geodir-widget-post-address.php:94
 #: includes/widgets/class-geodir-widget-post-address.php:108
-#: includes/widgets/class-geodir-widget-post-badge.php:154
-#: includes/widgets/class-geodir-widget-post-badge.php:167
-#: includes/widgets/class-geodir-widget-post-badge.php:181
+#: includes/widgets/class-geodir-widget-post-badge.php:155
+#: includes/widgets/class-geodir-widget-post-badge.php:168
+#: includes/widgets/class-geodir-widget-post-badge.php:182
 #: includes/widgets/class-geodir-widget-post-content.php:110
 #: includes/widgets/class-geodir-widget-post-fav.php:61
 #: includes/widgets/class-geodir-widget-post-fav.php:74
@@ -2994,7 +2994,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-archive-item-section.php:53
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:61
 #: includes/widgets/class-geodir-widget-post-address.php:82
-#: includes/widgets/class-geodir-widget-post-badge.php:155
+#: includes/widgets/class-geodir-widget-post-badge.php:156
 #: includes/widgets/class-geodir-widget-post-content.php:111
 #: includes/widgets/class-geodir-widget-post-fav.php:62
 #: includes/widgets/class-geodir-widget-post-meta.php:84
@@ -3006,7 +3006,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-archive-item-section.php:54
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:63
 #: includes/widgets/class-geodir-widget-post-address.php:84
-#: includes/widgets/class-geodir-widget-post-badge.php:157
+#: includes/widgets/class-geodir-widget-post-badge.php:158
 #: includes/widgets/class-geodir-widget-post-content.php:113
 #: includes/widgets/class-geodir-widget-post-fav.php:64
 #: includes/widgets/class-geodir-widget-post-meta.php:86
@@ -8338,29 +8338,29 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:598
+#: includes/class-geodir-compatibility.php:612
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:600
+#: includes/class-geodir-compatibility.php:614
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "Settings unless disabled below."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:605
+#: includes/class-geodir-compatibility.php:619
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:606
+#: includes/class-geodir-compatibility.php:620
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:93
+#: includes/class-geodir-defaults.php:94
 msgid "[[#site_name#]] Your listing has been submitted for approval"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:103
+#: includes/class-geodir-defaults.php:104
 msgid ""
 "Dear [#client_name#],\n"
 "\n"
@@ -8372,11 +8372,11 @@ msgid ""
 "Thank you for your contribution."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:120
+#: includes/class-geodir-defaults.php:121
 msgid "[[#site_name#]] Listing Published Successfully"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:130
+#: includes/class-geodir-defaults.php:131
 msgid ""
 "Dear [#client_name#],\n"
 "\n"
@@ -8388,14 +8388,14 @@ msgid ""
 "Thank you for your contribution."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:147
+#: includes/class-geodir-defaults.php:148
 msgid ""
 "[[#site_name#]] A new comment has been submitted on your listing "
 "[#listing_title#]"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:157
-#: includes/class-geodir-defaults.php:192
+#: includes/class-geodir-defaults.php:158
+#: includes/class-geodir-defaults.php:193
 msgid ""
 "Dear [#client_name#],\n"
 "\n"
@@ -8414,17 +8414,17 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:182
+#: includes/class-geodir-defaults.php:183
 msgid ""
 "[[#site_name#]] A comment on your listing [#listing_title#] has been approved"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:217
+#: includes/class-geodir-defaults.php:218
 msgid ""
 "[[#site_name#]] Your comment on listing [#listing_title#] has been approved"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:227
+#: includes/class-geodir-defaults.php:228
 msgid ""
 "Dear [#comment_author#],\n"
 "\n"
@@ -8435,11 +8435,11 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:244
+#: includes/class-geodir-defaults.php:245
 msgid "[[#site_name#]] A new listing has been submitted for review"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:254
+#: includes/class-geodir-defaults.php:255
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -8450,11 +8450,11 @@ msgid ""
 "[#site_name_url#]"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:269
+#: includes/class-geodir-defaults.php:270
 msgid "[[#site_name#]] Listing edited by Author"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:279
+#: includes/class-geodir-defaults.php:280
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -8469,11 +8469,11 @@ msgid ""
 "This email is just for your information."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:299
+#: includes/class-geodir-defaults.php:300
 msgid "[[#site_name#]] A new comment is waiting for your approval"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:309
+#: includes/class-geodir-defaults.php:310
 msgid ""
 "Dear Admin,\n"
 "\n"
@@ -8496,114 +8496,114 @@ msgid ""
 "Thank You."
 msgstr ""
 
-#: includes/class-geodir-defaults.php:354
+#: includes/class-geodir-defaults.php:355
 #, php-format
 msgid "All %%pt_plural%% %%in_location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:363
+#: includes/class-geodir-defaults.php:364
 #, php-format
 msgid "%%pt_plural%% %%in_location%% %%page%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:372
+#: includes/class-geodir-defaults.php:373
 #, php-format
 msgid "%%pt_plural%% %%in_location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:381
+#: includes/class-geodir-defaults.php:382
 #, php-format
 msgid "All %%category%% %%in_location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:390
+#: includes/class-geodir-defaults.php:391
 #, php-format
 msgid "%%category%% %%in_location%% %%page%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:399
+#: includes/class-geodir-defaults.php:400
 #, php-format
 msgid "Posts related to Category: %%category%% %%in_location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:408
+#: includes/class-geodir-defaults.php:409
 #, php-format
 msgid "Tag: %%tag%% %%in_location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:417
+#: includes/class-geodir-defaults.php:418
 #, php-format
 msgid "%%tag%% %%in_location%% %%page%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:426
+#: includes/class-geodir-defaults.php:427
 #, php-format
 msgid "Posts related to Tag: %%tag%% %%in_location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:435
+#: includes/class-geodir-defaults.php:436
 #, php-format
 msgid "%%title%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:444
+#: includes/class-geodir-defaults.php:445
 #, php-format
 msgid "%%title%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:453
+#: includes/class-geodir-defaults.php:454
 #, php-format
 msgid "%%excerpt%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:462
+#: includes/class-geodir-defaults.php:463
 #, php-format
 msgid "%%location_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:471
+#: includes/class-geodir-defaults.php:472
 #, php-format
 msgid "%%title%% %%location%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:480
+#: includes/class-geodir-defaults.php:481
 #, php-format
 msgid "%%location%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:489
+#: includes/class-geodir-defaults.php:490
 #, php-format
 msgid "Search results for: %%search_term%% %%search_near%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:498
+#: includes/class-geodir-defaults.php:499
 #, php-format
 msgid ""
 "%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep"
 "%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:507
+#: includes/class-geodir-defaults.php:508
 #, php-format
 msgid "%%pt_plural%% search results for %%search_term%%, Near %%search_near%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:516
+#: includes/class-geodir-defaults.php:517
 #, php-format
 msgid "Add %%pt_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:525
+#: includes/class-geodir-defaults.php:526
 #, php-format
 msgid "Edit %%pt_single%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:534
+#: includes/class-geodir-defaults.php:535
 #, php-format
 msgid "Add %%pt_single%% %%sep%% %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-defaults.php:543
+#: includes/class-geodir-defaults.php:544
 #, php-format
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
@@ -11025,7 +11025,7 @@ msgid "Icon"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:56
-#: includes/widgets/class-geodir-widget-post-badge.php:151
+#: includes/widgets/class-geodir-widget-post-badge.php:152
 #: includes/widgets/class-geodir-widget-post-fav.php:57
 #: includes/widgets/class-geodir-widget-post-meta.php:79
 #: includes/widgets/class-geodir-widget-post-rating.php:57
@@ -11033,7 +11033,7 @@ msgid "Alignment:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:57
-#: includes/widgets/class-geodir-widget-post-badge.php:152
+#: includes/widgets/class-geodir-widget-post-badge.php:153
 #: includes/widgets/class-geodir-widget-post-fav.php:58
 #: includes/widgets/class-geodir-widget-post-meta.php:80
 #: includes/widgets/class-geodir-widget-post-rating.php:58
@@ -11042,7 +11042,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:62
 #: includes/widgets/class-geodir-widget-post-address.php:83
-#: includes/widgets/class-geodir-widget-post-badge.php:156
+#: includes/widgets/class-geodir-widget-post-badge.php:157
 #: includes/widgets/class-geodir-widget-post-content.php:112
 #: includes/widgets/class-geodir-widget-post-fav.php:63
 #: includes/widgets/class-geodir-widget-post-meta.php:85
@@ -11210,7 +11210,7 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:544
 #: includes/widgets/class-geodir-widget-post-address.php:44
-#: includes/widgets/class-geodir-widget-post-badge.php:43
+#: includes/widgets/class-geodir-widget-post-badge.php:44
 #: includes/widgets/class-geodir-widget-post-content.php:44
 #: includes/widgets/class-geodir-widget-post-meta.php:45
 msgid "Post ID:"
@@ -11419,7 +11419,7 @@ msgid "Extra main title if needed."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:45
-#: includes/widgets/class-geodir-widget-post-badge.php:44
+#: includes/widgets/class-geodir-widget-post-badge.php:45
 #: includes/widgets/class-geodir-widget-post-content.php:45
 #: includes/widgets/class-geodir-widget-post-meta.php:46
 msgid "Leave blank to use current post id."
@@ -11477,7 +11477,7 @@ msgid "How the text should be aligned."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:90
-#: includes/widgets/class-geodir-widget-post-badge.php:163
+#: includes/widgets/class-geodir-widget-post-badge.php:164
 #: includes/widgets/class-geodir-widget-post-fav.php:70
 #: includes/widgets/class-geodir-widget-post-meta.php:92
 #: includes/widgets/class-geodir-widget-post-rating.php:70
@@ -11485,7 +11485,7 @@ msgid "Hide item on view:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:91
-#: includes/widgets/class-geodir-widget-post-badge.php:164
+#: includes/widgets/class-geodir-widget-post-badge.php:165
 #: includes/widgets/class-geodir-widget-post-fav.php:71
 #: includes/widgets/class-geodir-widget-post-meta.php:93
 #: includes/widgets/class-geodir-widget-post-rating.php:71
@@ -11494,8 +11494,8 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:95
 #: includes/widgets/class-geodir-widget-post-address.php:109
-#: includes/widgets/class-geodir-widget-post-badge.php:168
-#: includes/widgets/class-geodir-widget-post-badge.php:182
+#: includes/widgets/class-geodir-widget-post-badge.php:169
+#: includes/widgets/class-geodir-widget-post-badge.php:183
 #: includes/widgets/class-geodir-widget-post-fav.php:75
 #: includes/widgets/class-geodir-widget-post-fav.php:89
 #: includes/widgets/class-geodir-widget-post-meta.php:97
@@ -11507,8 +11507,8 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:96
 #: includes/widgets/class-geodir-widget-post-address.php:110
-#: includes/widgets/class-geodir-widget-post-badge.php:169
-#: includes/widgets/class-geodir-widget-post-badge.php:183
+#: includes/widgets/class-geodir-widget-post-badge.php:170
+#: includes/widgets/class-geodir-widget-post-badge.php:184
 #: includes/widgets/class-geodir-widget-post-fav.php:76
 #: includes/widgets/class-geodir-widget-post-fav.php:90
 #: includes/widgets/class-geodir-widget-post-meta.php:98
@@ -11520,8 +11520,8 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:97
 #: includes/widgets/class-geodir-widget-post-address.php:111
-#: includes/widgets/class-geodir-widget-post-badge.php:170
-#: includes/widgets/class-geodir-widget-post-badge.php:184
+#: includes/widgets/class-geodir-widget-post-badge.php:171
+#: includes/widgets/class-geodir-widget-post-badge.php:185
 #: includes/widgets/class-geodir-widget-post-fav.php:77
 #: includes/widgets/class-geodir-widget-post-fav.php:91
 #: includes/widgets/class-geodir-widget-post-meta.php:99
@@ -11533,8 +11533,8 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:98
 #: includes/widgets/class-geodir-widget-post-address.php:112
-#: includes/widgets/class-geodir-widget-post-badge.php:171
-#: includes/widgets/class-geodir-widget-post-badge.php:185
+#: includes/widgets/class-geodir-widget-post-badge.php:172
+#: includes/widgets/class-geodir-widget-post-badge.php:186
 #: includes/widgets/class-geodir-widget-post-fav.php:78
 #: includes/widgets/class-geodir-widget-post-fav.php:92
 #: includes/widgets/class-geodir-widget-post-meta.php:100
@@ -11545,7 +11545,7 @@ msgid "Grid view 5"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:104
-#: includes/widgets/class-geodir-widget-post-badge.php:177
+#: includes/widgets/class-geodir-widget-post-badge.php:178
 #: includes/widgets/class-geodir-widget-post-fav.php:84
 #: includes/widgets/class-geodir-widget-post-meta.php:106
 #: includes/widgets/class-geodir-widget-post-rating.php:84
@@ -11553,7 +11553,7 @@ msgid "Hide secondary info on view"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:105
-#: includes/widgets/class-geodir-widget-post-badge.php:178
+#: includes/widgets/class-geodir-widget-post-badge.php:179
 #: includes/widgets/class-geodir-widget-post-fav.php:85
 #: includes/widgets/class-geodir-widget-post-meta.php:107
 #: includes/widgets/class-geodir-widget-post-rating.php:85
@@ -11573,7 +11573,7 @@ msgid "id is missing"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-address.php:174
-#: includes/widgets/class-geodir-widget-post-badge.php:228
+#: includes/widgets/class-geodir-widget-post-badge.php:229
 #: includes/widgets/class-geodir-widget-post-content.php:186
 #: includes/widgets/class-geodir-widget-post-meta.php:187
 msgid "invalid post type"
@@ -11589,51 +11589,51 @@ msgstr ""
 msgid "GD > Post Badge"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:27
+#: includes/widgets/class-geodir-widget-post-badge.php:28
 msgid "Displays the post badge."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:52
+#: includes/widgets/class-geodir-widget-post-badge.php:53
 msgid "Field Key:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:53
+#: includes/widgets/class-geodir-widget-post-badge.php:54
 #: includes/widgets/class-geodir-widget-post-content.php:55
 #: includes/widgets/class-geodir-widget-post-meta.php:55
 msgid "This is the custom field key."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:62
+#: includes/widgets/class-geodir-widget-post-badge.php:63
 msgid "Field condition:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:63
+#: includes/widgets/class-geodir-widget-post-badge.php:64
 msgid "Select the custom field condition."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:72
+#: includes/widgets/class-geodir-widget-post-badge.php:73
 msgid "Value to match:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:73
+#: includes/widgets/class-geodir-widget-post-badge.php:74
 msgid ""
 "Match this text with field value to display post badge. For post date enter "
 "value like +7 or -7."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:82
+#: includes/widgets/class-geodir-widget-post-badge.php:83
 msgid "Icon class:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:83
+#: includes/widgets/class-geodir-widget-post-badge.php:84
 msgid "You can show a font-awesome icon here by entering the icon class."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:91
+#: includes/widgets/class-geodir-widget-post-badge.php:92
 msgid "Badge:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:92
+#: includes/widgets/class-geodir-widget-post-badge.php:93
 #, php-format
 msgid ""
 "Badge text. Ex: FOR SALE. Leave blank to show field title as a badge, or use "
@@ -11641,120 +11641,120 @@ msgid ""
 "url."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:100
+#: includes/widgets/class-geodir-widget-post-badge.php:101
 msgid "Link url:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:101
+#: includes/widgets/class-geodir-widget-post-badge.php:102
 #, php-format
 msgid ""
 "Badge link url. You can use this to make the button link to something, "
 "%%input%% can be used here if a link or %%post_url%% for the post url."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:108
+#: includes/widgets/class-geodir-widget-post-badge.php:109
 msgid "Open link in new window:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:109
+#: includes/widgets/class-geodir-widget-post-badge.php:110
 msgid "This will open the link in a new window."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:118
+#: includes/widgets/class-geodir-widget-post-badge.php:119
 msgid "Badge background color:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:119
+#: includes/widgets/class-geodir-widget-post-badge.php:120
 msgid "Color for the badge background."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:127
+#: includes/widgets/class-geodir-widget-post-badge.php:128
 msgid "Badge text color:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:128
+#: includes/widgets/class-geodir-widget-post-badge.php:129
 msgid "Color for the badge text."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:136
+#: includes/widgets/class-geodir-widget-post-badge.php:137
 msgid "Badge size:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:137
+#: includes/widgets/class-geodir-widget-post-badge.php:138
 msgid "Size of the badge."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:139
+#: includes/widgets/class-geodir-widget-post-badge.php:140
 msgid "Small"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:140
+#: includes/widgets/class-geodir-widget-post-badge.php:141
 msgid "Normal"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:141
+#: includes/widgets/class-geodir-widget-post-badge.php:142
 msgid "Medium"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:142
+#: includes/widgets/class-geodir-widget-post-badge.php:143
 msgid "Large"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:143
+#: includes/widgets/class-geodir-widget-post-badge.php:144
 msgid "Extra Large"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:192
+#: includes/widgets/class-geodir-widget-post-badge.php:193
 #: includes/widgets/class-geodir-widget-post-meta.php:121
 msgid "Extra class:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:193
+#: includes/widgets/class-geodir-widget-post-badge.php:194
 #: includes/widgets/class-geodir-widget-post-meta.php:122
 msgid "Give the wrapper an extra class so you can style things as you want."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:225
+#: includes/widgets/class-geodir-widget-post-badge.php:226
 msgid "post id is missing"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:231
+#: includes/widgets/class-geodir-widget-post-badge.php:232
 msgid "field key is missing"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:273
+#: includes/widgets/class-geodir-widget-post-badge.php:274
 msgid "post date"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:285
+#: includes/widgets/class-geodir-widget-post-badge.php:286
 msgid "is equal"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:286
+#: includes/widgets/class-geodir-widget-post-badge.php:287
 msgid "is not equal"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:287
+#: includes/widgets/class-geodir-widget-post-badge.php:288
 msgid "is greater than"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:288
+#: includes/widgets/class-geodir-widget-post-badge.php:289
 msgid "is less than"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:289
+#: includes/widgets/class-geodir-widget-post-badge.php:290
 msgid "is empty"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:290
+#: includes/widgets/class-geodir-widget-post-badge.php:291
 msgid "is not empty"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:291
+#: includes/widgets/class-geodir-widget-post-badge.php:292
 msgid "is contains"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-badge.php:292
+#: includes/widgets/class-geodir-widget-post-badge.php:293
 msgid "is not contains"
 msgstr ""
 

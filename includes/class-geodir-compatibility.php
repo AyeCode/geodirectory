@@ -74,6 +74,7 @@ class GeoDir_Compatibility {
 		Genesis (theme) :: Fix archive pages excerpt.
 		######################################################*/
 		add_filter( 'genesis_pre_get_option_content_archive', array( __CLASS__, 'genesis_content_archive' ) );
+		add_filter( 'genesis_entry_title_wrap', array( __CLASS__, 'genesis_entry_title_wrap' ) );
 
 		/*######################################################
 		Kleo (theme) :: Fix page titles.
@@ -580,6 +581,21 @@ class GeoDir_Compatibility {
 	}
 
 	/**
+	 * Make the GD archive pages use H1 tags for the title.
+	 *
+	 * @param $wrap
+	 *
+	 * @return string
+	 */
+	public static function genesis_entry_title_wrap($wrap){
+		if ( geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'search' ) ) {
+			$wrap = 'h1';
+		}
+
+		return $wrap;
+	}
+
+	/**
 	 * @param $api_params
 	 * @param $_src
 	 *
@@ -611,7 +627,7 @@ class GeoDir_Compatibility {
 				array(
 					'title' => __( 'Yoast SEO detected', 'geodirectory' ),
 					'type'  => 'title',
-					'desc'  => geodir_notification( array( 'yoast_detected' => __( 'The Yoast SEO plugin has been detected and will take over the GeoDirectory Settings unless disabled below.', 'geodirectory' ) ) ),
+					'desc'  => geodir_notification( array( 'yoast_detected' => __( 'The Yoast SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta info)', 'geodirectory' ) ) ),
 					'id'    => 'yoast_detected',
 					//'desc_tip' => true,
 				),

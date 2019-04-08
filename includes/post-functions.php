@@ -890,7 +890,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$badge = " <span class='gd-secondary'>$badge</span>";
 				}
 
-				$output = '<div class="gd-badge-meta ' . trim( $class ) . '" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
+				$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
 				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
 				$post_id = isset($find_post->ID) ? absint($find_post->ID) : '';
 				// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.

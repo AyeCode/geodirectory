@@ -44,6 +44,9 @@
 // New styles
 
 body {
+  .geodir-search-container{
+    z-index: 1; // give the container a higher z-index so autocompetes can be over map if below
+  }
   .geodir-listing-search.gd-search-bar-style{
     .geodir-loc-bar {
       position: relative;
