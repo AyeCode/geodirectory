@@ -386,6 +386,13 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 					array('name' => __('Email BCC options', 'geodirectory'), 'type' => 'title', 'desc' => '', 'id' => 'email_settings_bcc'),
 					array(
+						'name' => __('Listing pending approval', 'geodirectory'),
+						'desc' => __('This will send a BCC email to the site admin on listing submitted for approval.', 'geodirectory'),
+						'id' => 'email_bcc_user_pending_post',
+						'type' => 'checkbox',
+						'default' => 0,
+					),
+					array(
 						'name' => __('Listing published', 'geodirectory'),
 						'desc' => __('This will send a BCC email to the site admin on listing published.', 'geodirectory'),
 						'id' => 'email_bcc_user_publish_post',
