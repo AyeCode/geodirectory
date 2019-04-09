@@ -1,6 +1,8 @@
 = 2.0.0.56 =
 * Genesis theme not using h1 tags for archive page titles - FIXED
 * GD SEO titles should still be used even if Yoast is installed - CHANGED
+* Update jQuery FlexSlider to v2.0.2 - CHANGED
+* BCC option missing for emails of the listing submitted for pending review - FIXED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED
