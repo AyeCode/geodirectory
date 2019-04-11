@@ -15,6 +15,14 @@
 
   .geodir-slider-loading{
     max-height: 400px;
+    ul.geodir-images{
+      li{
+        display: none;
+        &:first-child{
+          display: block;
+        }
+      }
+    }
   }
 
   .geodir-image-wrapper{
@@ -236,9 +244,9 @@ ul.geodir-direction-nav {
   text-shadow: 1px 1px 0 rgba(255,255,255,0.3);
   line-height: 40px;
 
-  &:hover{
+  &:hover,&:visited,&:hover:visited,&:focus,&:active{
     box-shadow: none !important;
-    color: #FFF;
+    color: #FFF !important;
   }
 
 }

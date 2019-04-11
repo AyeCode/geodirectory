@@ -282,16 +282,6 @@ jQuery(document).ready(function($) {
     
     gd_infowindow = (typeof google !== 'undefined' && typeof google.maps !== 'undefined') ? new google.maps.InfoWindow({maxWidth: 200}) : null;
     
-    // Chosen selects
-    if (jQuery("select.chosen_select").length > 0) {
-        jQuery("select.chosen_select").chosen({
-            no_results_text: "Sorry, nothing found!"
-        });
-        jQuery("select.chosen_select_nostd").chosen({
-            allow_single_deselect: 'true'
-        });
-    }
-    
     jQuery('.gd-cats-display-checkbox input[type="checkbox"]').click(function() {
         var isChecked = jQuery(this).is(':checked');
         if (!isChecked) {
@@ -547,18 +537,23 @@ jQuery(document).ready(function() {
         };
         var duration = 500;
         var tigger_sticky = jQuery(this);
-        tigger_sticky.hide();
-        jQuery('div.stickymap').toggle(effect, options, duration, function() {
-            tigger_sticky.show();
-        });
+        // tigger_sticky.hide();
+        // jQuery('div.stickymap').toggle(effect, options, duration, function() {
+        //     tigger_sticky.show();
+        // });
+
+        jQuery('body').toggleClass('stickymap_hide');
+
         if (tigger_sticky.hasClass("triggeroff_sticky")) {
             tigger_sticky.removeClass('triggeroff_sticky');
             tigger_sticky.addClass('triggeron_sticky');
-            setCookie('geodir_stickystatus', 'shide', 1);
+            // setCookie('geodir_stickystatus', 'shide', 1);
+            if(geodir_is_localstorage()){localStorage.setItem("gd_sticky_map",'shide');}
         } else {
             tigger_sticky.removeClass('triggeron_sticky');
             tigger_sticky.addClass('triggeroff_sticky');
-            setCookie('geodir_stickystatus', 'sshow', 1);
+            // setCookie('geodir_stickystatus', 'sshow', 1);
+            if(geodir_is_localstorage()){localStorage.setItem("gd_sticky_map",'sshow');}
         }
     });
 

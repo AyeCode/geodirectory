@@ -4,6 +4,11 @@
 * Update jQuery FlexSlider to v2.0.2 - CHANGED
 * BCC option missing for emails of the listing submitted for pending review - FIXED
 * Frontend delete listing should refresh page on success - CHANGED
+* Post Address widget alignment argument changed to mean float positioning - CHANGED
+* Post meta and post address now have alignment and text-alignment arguments - ADDED
+* Post images widget thumbnail size now forces that size instead of responsive - CHANGED
+* Removed some leftover JS for removed chosen select - FIXED
+* Map sticky option added now using font awesome icon and local-storage for settings - ADDED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED

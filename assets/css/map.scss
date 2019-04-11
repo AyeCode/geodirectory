@@ -198,21 +198,38 @@
 }
 
 .trigger_sticky {
-    margin-top: -16px;
-    float: right;
-    padding: 8px 13px;
     z-index: 9999999;
     cursor: pointer;
     display: none;
+    margin-top: -31px;
+    padding: 5px 6px;
+    background: #fff;
+    box-shadow: black;
+    border: 1px solid #6f6f6f;
+    border-right: 0;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    color: #6f6f6f;
 }
 
-.triggeroff_sticky {
-    background: url(../images/minus-white-icon.png) no-repeat;
+
+.stickymap_hide{
+
+    .trigger_sticky{
+        .fa-angle-right{
+            display: none;
+        }
+    }
+
+    .stickymap{
+        margin-right: -1500px;
+    }
 }
 
-.triggeron_sticky {
-    background: url(../images/plus-white-icon.png) no-repeat;
+.stickymap{
+    transition: margin-right 1s ease-in-out;
 }
+
 
 .nofound_fullscreen {
     position: fixed !important;
@@ -245,7 +262,7 @@
 }
 
 .top_banner_section {
-    margin-bottom: 25px;
+   // margin-bottom: 25px; // this needs to be more specific
 }
 
 .top_banner_section_in {

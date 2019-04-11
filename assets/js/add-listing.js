@@ -247,7 +247,7 @@ function geodir_delete_revision() {
 function geodir_validate_admin_submit(form) {
     var is_validate = true;
     jQuery(form).find(".required_field:visible").each(function() {
-        jQuery(this).find("[field_type]:visible, .chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field").each(function() {
+        jQuery(this).find("[field_type]:visible, .geodir_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field").each(function() {
             if (!geodir_validate_field(this)) {
                 is_validate = false;
             }
@@ -272,7 +272,7 @@ function geodir_validate_admin_submit(form) {
 function geodir_validate_submit(form) {
     var is_validate = true;
     jQuery(form).find(".required_field:visible").each(function() {
-        jQuery(this).find("[field_type]:visible, .chosen_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field, .g-recaptcha-response").each(function() {
+        jQuery(this).find("[field_type]:visible, .geodir_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field, .g-recaptcha-response").each(function() {
             if (!geodir_validate_field(this)) {
                 is_validate = false;
             } else {

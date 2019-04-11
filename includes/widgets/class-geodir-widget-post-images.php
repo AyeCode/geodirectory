@@ -155,7 +155,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					),
 					'default'  => '',
 					'desc_tip' => true,
-					//'element_require' => '[%type%]=="slider"',
 					'advanced' => true
 				),
 				'show_logo'  => array(
@@ -172,6 +171,15 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc' => __('The WP image size as a text string.', 'geodirectory'),
 					'type' => 'select',
 					'options' => self:: get_image_sizes(),
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'advanced' => true
+				),
+				'limit'  => array(
+					'title' => __('Image limit:', 'geodirectory'),
+					'desc' => __('Limit the number of images shown.', 'geodirectory'),
+					'type' => 'number',
 					'desc_tip' => true,
 					'value'  => '',
 					'default'  => '',
@@ -231,7 +239,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'type'      => 'image', // image, slider, gallery
 			'ajax_load' => '1',
 			'animation' => 'fade', // fade or slide
-			'slideshow' => 'true', // auto start
+			'slideshow' => '', // auto start
 			'controlnav'=> '2', // 0 = none, 1 =  standard, 2 = thumbnails
 			'show_title'=> '1',
 			'limit'     => '',
@@ -269,6 +277,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$second_wrapper_class = "geodir-image-wrapper";
 			$ul_class = "geodir-post-image";
 			$image_size = isset($options['image_size']) && $options['image_size'] ? $options['image_size'] : 'medium_large';
+			$main_wrapper_class .= " geodir-image-sizes-".$image_size;
 
 
 
@@ -322,10 +331,14 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 						$image_count = 0;
 						foreach($post_images as $image){
 							echo "<li>";
-							//print_r($image);
+
 							$img_tag = geodir_get_image_tag($image,$image_size );
 							$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
-							$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
+
+							// only set different sizes if not thumbnail
+							if($image_size!='thumbnail'){
+								$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
+							}
 
 
 							// image link

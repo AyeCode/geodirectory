@@ -117,6 +117,13 @@
       }
     }
   }
+
+  // keep thumbnails square
+  &.geodir-image-sizes-thumbnail{
+    ul.geodir-images li img{
+      position: inherit;
+    }
+  }
 }
 
 

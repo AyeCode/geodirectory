@@ -368,7 +368,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				var gdMapCanvas = '<?php echo $map_canvas; ?>';
 				build_map_ajax_search_param(gdMapCanvas, false);
 				<?php if ( ! empty( $map_options['sticky'] ) ) { ?>
-				map_sticky(gdMapCanvas);
+				geodir_map_sticky(gdMapCanvas);
 				<?php } ?>
 				<?php if ( ! empty( $map_options['map_directions'] ) ) { ?>
 				geodir_map_directions_init(gdMapCanvas);
@@ -607,6 +607,16 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'type'        => 'checkbox',
 			'title'       => __( 'Enable mouse scroll zoom?', 'geodirectory' ),
 			'desc'        => __( 'Lets the map be scrolled with the mouse scroll wheel.', 'geodirectory' ),
+			'placeholder' => '',
+			'desc_tip'    => true,
+			'value'       => '1',
+			'default'     => '0',
+			'advanced'    => true,
+		);
+		$arguments['sticky']      = array(
+			'type'        => 'checkbox',
+			'title'       => __( 'Enable sticky map?', 'geodirectory' ),
+			'desc'        => __( 'When in the sidebar this will attempt to make it stick when scrolling on desktop.', 'geodirectory' ),
 			'placeholder' => '',
 			'desc_tip'    => true,
 			'value'       => '1',
@@ -1051,6 +1061,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		);
 		$map_options = wp_parse_args( $params, $defaults );
 
+//		$map_options['sticky'] = 1;
+
 		$map_type   = $map_options['map_type'];
 		$map_canvas = $map_options['map_canvas'];
 		$width      = $map_options['width'];
@@ -1069,7 +1081,10 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			<div id="catcher_<?php echo $map_canvas; ?>"></div>
 			<!--START stick_trigger_container-->
 			<div class="stick_trigger_container">
-				<div class="trigger_sticky triggeroff_sticky"></div>
+				<div class="trigger_sticky triggeroff_sticky">
+					<i class="fas fa-map-marked-alt"></i>
+					<i class="fas fa-angle-right"></i>
+				</div>
 				<!--end of stick trigger container-->
 				<div class="top_banner_section geodir_map_container <?php echo $map_canvas; ?>"
 				     id="sticky_map_<?php echo $map_canvas; ?>"

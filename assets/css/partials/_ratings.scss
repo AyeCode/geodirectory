@@ -25,7 +25,7 @@
   }
 
   .gd-rating-wrap{
-    display: inline;
+    display: inline-grid; // this or inline-flex seems to work best with all themes
     max-width: max-content;
     overflow: hidden;
     position: relative;
