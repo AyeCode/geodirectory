@@ -407,15 +407,22 @@ class GeoDir_AJAX {
 
 		$post_id = isset($_POST['post_id']) && $_POST['post_id'] ? absint($_POST['post_id']) : 0;
 
+		$data = array();
 		if(!$post_id){
-			wp_send_json_error( __("No post_id provided.","geodirectory") );
+			$data['message'] = __( "No post_id provided.", "geodirectory" );
+			wp_send_json_error( $data );
 		}else{
+			$post_type = get_post_type( $post_id );
+
 			$result = GeoDir_User::delete_post( $post_id );
 
 			if(is_wp_error( $result ) ){
-				wp_send_json_error( $result->get_error_message() );
+				$data['message'] = $result->get_error_message();
+				wp_send_json_error( $data );
 			}else{
-			    wp_send_json_success( __( 'You have successfully deleted the Listing.', 'geodirectory' ) );
+			    $data['message'] = __( 'You have successfully deleted the Listing.', 'geodirectory' );
+				$data['redirect_to'] = get_post_type_archive_link( $post_type );
+				wp_send_json_success( $data );
 			}
 		}
 

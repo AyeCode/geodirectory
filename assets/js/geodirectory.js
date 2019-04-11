@@ -1034,9 +1034,15 @@ function gd_delete_post($post_id){
             success: function(data) {
 
                 if(data.success){
-                    lity('<div class="gd-notification gd-success"><i class="fas fa-check-circle"></i> '+ data.data +'</div>');
+                    lity('<div class="gd-notification gd-success"><i class="fas fa-check-circle"></i> '+ data.data.message +'</div>');
+					jQuery('.post-' + $post_id + '[data-post-id="' + $post_id + '"]').fadeOut();
+					if (data.data.redirect_to && jQuery('body').hasClass('single') && jQuery('body').hasClass('postid-' + $post_id)) {
+						setTimeout(function() {
+							window.location = data.data.redirect_to;
+						}, 3000);
+					}
                 }else{
-                    lity('<div class="gd-notification gd-error"><i class="fas fa-exclamation-circle"></i> '+ data.data +'</div>');
+                    lity('<div class="gd-notification gd-error"><i class="fas fa-exclamation-circle"></i> '+ data.data.message +'</div>');
                 }
             }
         });
