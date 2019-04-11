@@ -362,11 +362,22 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 */
 	public static function custom_script( $map_options ) {
 		$map_canvas = $map_options['map_canvas'];
+//		print_r($map_options);exit;
+//		if($params['map_type']=='post' && $params['static']){
+//			self::display_map( $params );
+//		}else{}
 		?>
 		<script type="text/javascript">
 			jQuery(function ($) {
 				var gdMapCanvas = '<?php echo $map_canvas; ?>';
-				build_map_ajax_search_param(gdMapCanvas, false);
+				<?php
+				if($map_options['map_type']=='post' && $map_options['static']){
+					echo 'geodir_build_static_map(gdMapCanvas);';
+				}else{
+					echo 'build_map_ajax_search_param(gdMapCanvas, false);';
+				}
+				?>
+				//build_map_ajax_search_param(gdMapCanvas, false);
 				<?php if ( ! empty( $map_options['sticky'] ) ) { ?>
 				geodir_map_sticky(gdMapCanvas);
 				<?php } ?>
@@ -617,6 +628,16 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'type'        => 'checkbox',
 			'title'       => __( 'Enable sticky map?', 'geodirectory' ),
 			'desc'        => __( 'When in the sidebar this will attempt to make it stick when scrolling on desktop.', 'geodirectory' ),
+			'placeholder' => '',
+			'desc_tip'    => true,
+			'value'       => '1',
+			'default'     => '0',
+			'advanced'    => true,
+		);
+		$arguments['static']      = array(
+			'type'        => 'checkbox',
+			'title'       => __( 'Enable static map?', 'geodirectory' ),
+			'desc'        => __( 'FOR POST MAP ONLY When enabled this will try to load a static map image.', 'geodirectory' ),
 			'placeholder' => '',
 			'desc_tip'    => true,
 			'value'       => '1',
@@ -951,6 +972,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'terms'          => '',
 			'posts'          => '',
 			'sticky'         => false,
+			'static'         => false,
 			'map_directions' => false,
 		);
 
@@ -1013,6 +1035,26 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 
 		$params = apply_filters( 'geodir_map_params', $params, $map_args );
 
+//		print_r( $params );exit;
+		//$params['static'] = true;
+
+		// add post lat/lon if static post map
+		if($params['map_type']=='post' && $params['static']){
+			global $gd_post;
+//			print_r( $gd_post );exit;
+			if(!empty($gd_post->latitude) && !empty($gd_post->longitude)){
+				$params['latitude'] = filter_var( $gd_post->latitude, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+				$params['longitude'] = filter_var( $gd_post->longitude, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+			}
+
+			// set icon url
+			if(!empty($gd_post->default_category)){
+				$params['icon_url'] = geodir_get_cat_icon( $gd_post->default_category, true, true );
+			}
+
+
+		}
+
 		ob_start();
 
 		self::display_map( $params );
@@ -1020,6 +1062,10 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$content = ob_get_clean();
 
 		return $content;
+	}
+
+	public static function display_static_map( $params ){
+
 	}
 
 	/**

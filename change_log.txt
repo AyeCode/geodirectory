@@ -9,6 +9,7 @@
 * Post images widget thumbnail size now forces that size instead of responsive - CHANGED
 * Removed some leftover JS for removed chosen select - FIXED
 * Map sticky option added now using font awesome icon and local-storage for settings - ADDED
+* Google static map option added for single post map - ADDED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED
