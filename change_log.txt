@@ -15,6 +15,7 @@
 * Google static map option added for single post map - ADDED
 * Some text custom field types not applying validation pattern - FIXED
 * Post images now uses image cover by default and gives option to change to x,y or none - CHANGED/ADDED
+* Post images limit_show param added, this can be used to hide some images in gallery output but still load them via lightbox - ADDED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED

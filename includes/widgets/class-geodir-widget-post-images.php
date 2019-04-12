@@ -178,7 +178,16 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				),
 				'limit'  => array(
 					'title' => __('Image limit:', 'geodirectory'),
-					'desc' => __('Limit the number of images shown.', 'geodirectory'),
+					'desc' => __('Limit the number of images returned.', 'geodirectory'),
+					'type' => 'number',
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'advanced' => true
+				),
+				'limit_show'  => array(
+					'title' => __('Show limit:', 'geodirectory'),
+					'desc' => __('Limit the number of images shown. This can be used to output 1-2 images in a gallery and if linked to lightbox it can ajax load more images when in lightbox.', 'geodirectory'),
 					'type' => 'number',
 					'desc_tip' => true,
 					'value'  => '',
@@ -258,6 +267,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'controlnav'=> '2', // 0 = none, 1 =  standard, 2 = thumbnails
 			'show_title'=> '1',
 			'limit'     => '',
+			'limit_show'     => '',
 			'link_to'     => '',
 			'image_size'     => 'medium',
 			'show_logo'     => 'false',
@@ -353,7 +363,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					<ul class="<?php echo esc_attr($ul_class );?> geodir-images clearfix"><?php
 						$image_count = 0;
 						foreach($post_images as $image){
-							echo "<li>";
+							$limit_show = !empty($options['limit_show']) && $image_count >= $options['limit_show'] ? "style='display:none;'" : '';
+							echo "<li $limit_show >";
 
 							$img_tag = geodir_get_image_tag($image,$image_size );
 							$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
