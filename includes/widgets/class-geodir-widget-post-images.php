@@ -184,6 +184,21 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'value'  => '',
 					'default'  => '',
 					'advanced' => true
+				),
+				'cover'  => array(
+					'title' => __('Image cover type:', 'geodirectory'),
+					'desc' => __('This is how the image should cover the image viewport.', 'geodirectory'),
+					'type' => 'select',
+					'options' => array(
+						'' => __("Default (cover both)","geodirectory"),
+						'x' => __("Width cover","geodirectory"),
+						'y' => __("height cover","geodirectory"),
+						'n' => __("No cover (contain)","geodirectory"),
+					),
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'advanced' => true
 				)
 			)
 		);
@@ -246,6 +261,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'link_to'     => '',
 			'image_size'     => 'medium',
 			'show_logo'     => 'false',
+			'cover'   => '' // image cover type
 		);
 
 		/**
@@ -317,6 +333,13 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				$link = '';
 				$link_tag_open = "<a href='%s' class='geodir-lightbox-image' data-lity>";
 				$link_tag_close = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
+			}
+
+			// image_cover
+			if(!empty($options['cover'])){
+				if($options['cover']=='x'){$main_wrapper_class .= " gd-image-cover-x ";}
+				if($options['cover']=='y'){$main_wrapper_class .= " gd-image-cover-y ";}
+				if($options['cover']=='n'){$main_wrapper_class .= " gd-image-cover-n ";}
 			}
 
 			?>
