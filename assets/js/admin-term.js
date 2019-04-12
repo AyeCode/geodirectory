@@ -30,6 +30,8 @@ jQuery(function($) {
             jQuery('#addtag .gd-term-form-field checkbox').prop('checked', false);
             jQuery('#addtag .gd-term-form-field select option').removeAttr('selected');
             jQuery("#addtag .gd-term-form-field iframe").contents().find("body").html('');
+            jQuery("#addtag .gd-term-form-field .select2-hidden-accessible").val(null).trigger("change");
+            jQuery( "#addtag .gd-term-form-field .wp-color-result" ).css( 'background-color', '' );
             return;
         }
     });
