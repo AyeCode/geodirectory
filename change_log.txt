@@ -4,6 +4,7 @@
 * Update jQuery FlexSlider to v2.0.2 - CHANGED
 * BCC option missing for emails of the listing submitted for pending review - FIXED
 * Frontend delete listing should refresh page on success - CHANGED
+* Link is broken in phone badge - FIXED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED
