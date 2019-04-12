@@ -1675,7 +1675,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		$weekdays = geodir_get_weekdays();
 		$hours = array();
 		$display = 'none';
-		$gmt_offset = geodir_gmt_offset();
+		$gmt_offset = geodir_utc_offset();
 		if ( ! empty( $value ) ) {
 			$display = '';
 			$value = stripslashes_deep( $value );
