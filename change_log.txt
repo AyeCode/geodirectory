@@ -6,6 +6,7 @@
 * Frontend delete listing should refresh page on success - CHANGED
 * Link is broken in phone badge - FIXED
 * Business hours default offset should not use DST (Daylight Savings Time) in add listing - FIXED
+* Category FA icon and color not cleared on save - FIXED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED
