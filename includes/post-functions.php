@@ -890,6 +890,21 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$badge = " <span class='gd-secondary'>$badge</span>";
 				}
 
+				// phone & email link
+				if ( ! empty( $field ) && ! empty( $field['field_type'] ) && ! empty( $args['link'] ) && strpos( $args['link'], 'http' ) !== 0 ) {
+					if ( $field['field_type'] == 'phone' ) {
+						$rel = 'rel="nofollow"';
+						if ( strpos( $args['link'], 'tel:' ) !== 0 ) {
+							$args['link'] = 'tel:' . preg_replace( '/[^0-9+]/', '', $args['link'] );
+						}
+					} elseif ( $field['field_type'] == 'email' ) {
+						$rel = 'rel="nofollow"';
+						if ( strpos( $args['link'], 'mailto:' ) !== 0 ) {
+							$args['link'] = 'mailto:' . $args['link'];
+						}
+					}
+				}
+
 				$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
 				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
 				$post_id = isset($find_post->ID) ? absint($find_post->ID) : '';

@@ -61,7 +61,42 @@ function geodir_day_short_names() {
 }
 
 /**
- * Get UTC Offset.
+ * Get UTC Offset without DST (Daylight Savings Time).
+ *
+ * @since 2.0.0
+ *
+ * @param bool $formatted Format the offset.
+ * @param string $offeset Default offset.
+ * @return string Formatted offset.
+ */
+function geodir_utc_offset( $offeset = '', $formatted = true ) {
+	$offset = $offeset || $offeset == '0' ? $offeset : geodir_get_option( 'default_location_timezone' );
+	if ( $offset == '' ) {
+		return geodir_wp_gmt_offset( $formatted );
+	} else {
+		$offset = preg_replace( '/\s+/', '', $offset );
+	}
+
+	if ( strpos( strtoupper( $offset ), 'UTC' ) === 0 || strpos( strtoupper( $offset ), 'GMT' ) === 0 ) {
+		$offset = substr( $offset, 3, strlen( $offset ) -3 );
+	}
+	if ( strpos( $offset, '+' ) !== 0 && strpos( $offset, '-' ) !== 0 ) {
+		$offset = $offset > 0 ? '+' . $offset : '-' . $offset;
+	}
+
+	$seconds = iso8601_timezone_to_offset( $offset );
+
+	if ( ! $formatted ) {
+		return $seconds;
+	}
+
+	$formatted_offset = geodir_seconds_to_hhmm( $seconds );
+
+	return $formatted_offset;
+}
+
+/**
+ * Get UTC Offset with DST (Daylight Savings Time).
  *
  * @since 2.0.0
  *
