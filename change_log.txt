@@ -6,6 +6,7 @@
 * Frontend delete listing should refresh page on success - CHANGED
 * Link is broken in phone badge - FIXED
 * Business hours default offset should not use DST (Daylight Savings Time) in add listing - FIXED
+* Category FA icon and color not cleared on save - FIXED
 * Post Address widget alignment argument changed to mean float positioning - CHANGED
 * Post meta and post address now have alignment and text-alignment arguments - ADDED
 * Post images widget thumbnail size now forces that size instead of responsive - CHANGED
