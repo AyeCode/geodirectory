@@ -641,7 +641,15 @@ class GeoDir_Permalinks {
 				$cpt_permalink_arr = apply_filters( 'geodir_post_permalink_structure_params', $cpt_permalink_arr, $cpt, $post_type );
 
 				// add the post single permalinks
-				$regex_part = '/' . implode( "", array_fill( 0, count( $cpt_permalink_arr ), '([^/]*)/' ) ) . '?';
+				$regex_part = '/';
+				foreach ( $cpt_permalink_arr as $rkey => $rvalue ) {
+					if ( $rvalue == "%post_id%" ) {
+						$regex_part .= '([0-9]+)/';
+					} else {
+						$regex_part .= '([^/]*)/';
+					}
+				}
+				$regex_part .= '?';
 				$regex      = '^' . $post_type['rewrite']['slug'] . $regex_part;
 				$redirect   = 'index.php?';
 				$match      = 1;
