@@ -1,14 +1,7 @@
 gd_infowindow = window.gdMaps == 'google' ? new google.maps.InfoWindow() : null;
 
 jQuery(window).load(function() {
-    // Chosen selects
-    if (jQuery("select.chosen_select").length > 0) {
-        jQuery("select.chosen_select").chosen();
-        jQuery("select.chosen_select_nostd").chosen({
-            allow_single_deselect: 'true'
-        });
-    }
-
+    
     // tooltips
     gd_init_tooltips();
 

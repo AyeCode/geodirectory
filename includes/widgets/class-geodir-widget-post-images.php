@@ -155,7 +155,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					),
 					'default'  => '',
 					'desc_tip' => true,
-					//'element_require' => '[%type%]=="slider"',
 					'advanced' => true
 				),
 				'show_logo'  => array(
@@ -172,6 +171,39 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc' => __('The WP image size as a text string.', 'geodirectory'),
 					'type' => 'select',
 					'options' => self:: get_image_sizes(),
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'advanced' => true
+				),
+				'limit'  => array(
+					'title' => __('Image limit:', 'geodirectory'),
+					'desc' => __('Limit the number of images returned.', 'geodirectory'),
+					'type' => 'number',
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'advanced' => true
+				),
+				'limit_show'  => array(
+					'title' => __('Show limit:', 'geodirectory'),
+					'desc' => __('Limit the number of images shown. This can be used to output 1-2 images in a gallery and if linked to lightbox it can ajax load more images when in lightbox.', 'geodirectory'),
+					'type' => 'number',
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'advanced' => true
+				),
+				'cover'  => array(
+					'title' => __('Image cover type:', 'geodirectory'),
+					'desc' => __('This is how the image should cover the image viewport.', 'geodirectory'),
+					'type' => 'select',
+					'options' => array(
+						'' => __("Default (cover both)","geodirectory"),
+						'x' => __("Width cover","geodirectory"),
+						'y' => __("height cover","geodirectory"),
+						'n' => __("No cover (contain)","geodirectory"),
+					),
 					'desc_tip' => true,
 					'value'  => '',
 					'default'  => '',
@@ -231,13 +263,15 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'type'      => 'image', // image, slider, gallery
 			'ajax_load' => '1',
 			'animation' => 'fade', // fade or slide
-			'slideshow' => 'true', // auto start
+			'slideshow' => '', // auto start
 			'controlnav'=> '2', // 0 = none, 1 =  standard, 2 = thumbnails
 			'show_title'=> '1',
 			'limit'     => '',
+			'limit_show'     => '',
 			'link_to'     => '',
 			'image_size'     => 'medium',
 			'show_logo'     => 'false',
+			'cover'   => '' // image cover type
 		);
 
 		/**
@@ -269,6 +303,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$second_wrapper_class = "geodir-image-wrapper";
 			$ul_class = "geodir-post-image";
 			$image_size = isset($options['image_size']) && $options['image_size'] ? $options['image_size'] : 'medium_large';
+			$main_wrapper_class .= " geodir-image-sizes-".$image_size;
 
 
 
@@ -310,6 +345,13 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				$link_tag_close = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
 			}
 
+			// image_cover
+			if(!empty($options['cover'])){
+				if($options['cover']=='x'){$main_wrapper_class .= " gd-image-cover-x ";}
+				if($options['cover']=='y'){$main_wrapper_class .= " gd-image-cover-y ";}
+				if($options['cover']=='n'){$main_wrapper_class .= " gd-image-cover-n ";}
+			}
+
 			?>
 			<div class="<?php echo $main_wrapper_class;?>" >
 				<?php if($options['type']=='slider'){ echo '<div class="geodir_flex-loader"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';}?>
@@ -321,11 +363,16 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					<ul class="<?php echo esc_attr($ul_class );?> geodir-images clearfix"><?php
 						$image_count = 0;
 						foreach($post_images as $image){
-							echo "<li>";
-							//print_r($image);
+							$limit_show = !empty($options['limit_show']) && $image_count >= $options['limit_show'] ? "style='display:none;'" : '';
+							echo "<li $limit_show >";
+
 							$img_tag = geodir_get_image_tag($image,$image_size );
 							$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
-							$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
+
+							// only set different sizes if not thumbnail
+							if($image_size!='thumbnail'){
+								$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
+							}
 
 
 							// image link

@@ -74,6 +74,20 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 					'advanced' => false
 				),
 				'alignment'  => array(
+					'title' => __('Alignment:', 'geodirectory'),
+					'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"block" => __('Block', 'geodirectory'),
+						"left" => __('Left', 'geodirectory'),
+						"center" => __('Center', 'geodirectory'),
+						"right" => __('Right', 'geodirectory'),
+					),
+					'desc_tip' => true,
+					'advanced' => false
+				),
+				'text-alignment'  => array(
 					'title' => __('Text Align:', 'geodirectory'),
 					'desc' => __('How the text should be aligned.', 'geodirectory'),
 					'type' => 'select',
@@ -155,6 +169,7 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 			'key'   => 'address',
 			'show'    => 'icon-label-value', // title,value (default blank, all)
 			'alignment'    => '', // left,right,center
+			'text-alignment'    => '', // left,right,center
 			'list_hide'    => '',
 			'list_hide_secondary'    => '',
 			'address_template' => '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%',
@@ -197,10 +212,16 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 				if(!empty($field)){ // the field is allowed to be shown
 					$field = stripslashes_deep( $field );
 
+					// set text alignment class
+					if($args['text-alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
+					if($args['text-alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
+					if($args['text-alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
+
 					// set alignment class
-					if($args['alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
-					if($args['alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
-					if($args['alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
+					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
+					if($args['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
+					if($args['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
+					if($args['alignment']=='block'){$field['css_class'] .= " gd-d-block gd-clear-both ";}
 
 					// set list_hide class
 					if($args['list_hide']=='2'){$field['css_class'] .= " gd-lv-2 ";}

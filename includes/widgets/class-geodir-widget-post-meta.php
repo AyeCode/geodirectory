@@ -81,6 +81,20 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'type' => 'select',
 					'options'   =>  array(
 						"" => __('None', 'geodirectory'),
+						"block" => __('Block', 'geodirectory'),
+						"left" => __('Left', 'geodirectory'),
+						"center" => __('Center', 'geodirectory'),
+						"right" => __('Right', 'geodirectory'),
+					),
+					'desc_tip' => true,
+					'advanced' => false
+				),
+				'text-alignment'  => array(
+					'title' => __('Text Align:', 'geodirectory'),
+					'desc' => __('How the text should be aligned.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
 						"left" => __('Left', 'geodirectory'),
 						"center" => __('Center', 'geodirectory'),
 						"right" => __('Right', 'geodirectory'),
@@ -169,6 +183,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'list_hide_secondary'    => '',
 			'css_class' => '',
 			'alignment'    => '', // left,right,center
+			'text-alignment'    => '', // left,right,center
 			'location'  => 'none',
 		), $args, 'gd_post_meta' );
 
@@ -219,10 +234,16 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 						$field['css_class'] .=" ".$args['css_class']." ";
 					}
 
+					// set text alignment class
+					if($args['text-alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
+					if($args['text-alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
+					if($args['text-alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
+
 					// set alignment class
 					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
 					if($args['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
 					if($args['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
+					if($args['alignment']=='block'){$field['css_class'] .= " gd-d-block gd-clear-both ";}
 
 					// set list_hide class
 					if($args['list_hide']=='2'){$field['css_class'] .= " gd-lv-2 ";}

@@ -164,7 +164,18 @@ function geodir_cfi_email($html,$cf){
 
         if ($value == $cf['default']) {
             $value = '';
-        }?>
+        }
+
+        //validation
+        if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
+            $validation = ' pattern="'.$cf['validation_pattern'].'" ';
+        }else{$validation='';}
+
+        // validation message
+        if(isset($cf['validation_msg']) && $cf['validation_msg']){
+            $validation_msg = 'title="'.$cf['validation_msg'].'"';
+        }else{$validation_msg='';}
+        ?>
 
         <div id="<?php echo $cf['name'];?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
@@ -175,7 +186,7 @@ function geodir_cfi_email($html,$cf){
             </label>
             <input field_type="<?php echo $cf['type'];?>" name="<?php  echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
                    <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
-                   value="<?php echo esc_attr(stripslashes($value));?>" type="email" class="geodir_textfield"/>
+                   value="<?php echo esc_attr(stripslashes($value));?>" type="email" class="geodir_textfield" <?php echo $validation;echo $validation_msg;?> />
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
                 <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
@@ -225,7 +236,18 @@ function geodir_cfi_phone($html,$cf){
 
         if ($value == $cf['default']) {
             $value = '';
-        }?>
+        }
+
+        //validation
+        if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
+            $validation = ' pattern="'.$cf['validation_pattern'].'" ';
+        }else{$validation='';}
+
+        // validation message
+        if(isset($cf['validation_msg']) && $cf['validation_msg']){
+            $validation_msg = 'title="'.$cf['validation_msg'].'"';
+        }else{$validation_msg='';}
+        ?>
 
         <div id="<?php echo $cf['name'];?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
@@ -236,7 +258,7 @@ function geodir_cfi_phone($html,$cf){
             </label>
             <input field_type="<?php echo $cf['type'];?>" name="<?php  echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
                 <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
-                   value="<?php echo esc_attr(stripslashes($value));?>" type="tel" class="geodir_textfield"/>
+                   value="<?php echo esc_attr(stripslashes($value));?>" type="tel" class="geodir_textfield" <?php echo $validation;echo $validation_msg;?> />
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
                 <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
@@ -286,7 +308,17 @@ function geodir_cfi_url($html,$cf){
 
         if ($value == $cf['default']) {
             $value = '';
-        }?>
+        }
+        //validation
+        if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
+            $validation = ' pattern="'.$cf['validation_pattern'].'" ';
+        }else{$validation='';}
+
+        // validation message
+        if(isset($cf['validation_msg']) && $cf['validation_msg']){
+            $validation_msg = $cf['validation_msg'];
+        }else{$validation_msg = __('Please enter a valid URL including http://', 'geodirectory');}
+        ?>
 
         <div id="<?php echo $cf['name'];?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
@@ -298,8 +330,9 @@ function geodir_cfi_url($html,$cf){
             <input field_type="<?php echo $cf['type'];?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
                 <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
                    value="<?php echo esc_attr(stripslashes($value));?>" type="url" class="geodir_textfield"
-                   oninvalid="setCustomValidity('<?php _e('Please enter a valid URL including http://', 'geodirectory'); ?>')"
+                   oninvalid="setCustomValidity('<?php echo esc_attr($validation_msg); ?>')"
                    onchange="try{setCustomValidity('')}catch(e){}"
+                <?php echo $validation;echo $validation_msg;?>
             />
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>

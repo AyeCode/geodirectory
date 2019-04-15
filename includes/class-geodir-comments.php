@@ -649,7 +649,8 @@ class GeoDir_Comments {
 	public static function rating_html( $rating, $type = 'output', $overrides = array() ) {
 
         $defaults = array(
-            'rating_icon' => esc_attr( geodir_get_option( 'rating_icon', 'fas fa-star' ) ),
+	        'rating_icon' => esc_attr( geodir_get_option( 'rating_icon', 'fas fa-star' ) ),
+	        'rating_icon_fw' => esc_attr( geodir_get_option( 'rating_icon_fw' ) ),
             'rating_color' => esc_attr( geodir_get_option( 'rating_color' ) ),
             'rating_color_off' => esc_attr( geodir_get_option( 'rating_color_off' ) ),
             'rating_label' => '',
@@ -676,7 +677,11 @@ class GeoDir_Comments {
 		}
 
         $type = $args['type'];
-        $rating_icon  = $args['rating_icon'] . " fa-fw";
+        $rating_icon  = $args['rating_icon'];
+
+		if($args['rating_icon_fw']){
+			$rating_icon .= " fa-fw";
+		}
 
 		$rating_color = $args['rating_color'];
 		if ( $rating_color == '#ff9900' ) {

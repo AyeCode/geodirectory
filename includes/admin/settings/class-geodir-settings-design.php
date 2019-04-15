@@ -139,6 +139,16 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 					),
 
 					array(
+						'id'   => 'rating_icon_fw',
+						'name' => __( 'FA fixed width', 'geodirectory' ),
+						'desc' => __( 'This can add more spacing between font awesome icons if they are tight.', 'geodirectory' ),
+						'type' => 'checkbox',
+						'default'  => '1',
+						'desc_tip' => true,
+						'advanced' => true,
+					),
+
+					array(
 						'name' => __('Rating transparent image', 'geodirectory'),
 						'desc' => __('Used only if the transparent image option is set, this image will be used to select ratings.', 'geodirectory'),
 						'id' => 'rating_image',
