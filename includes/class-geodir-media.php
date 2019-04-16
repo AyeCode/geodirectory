@@ -163,6 +163,10 @@ class GeoDir_Media {
 	 * @return array $metadata.
 	 */
 	public static function create_image_sizes( $file ){
+		if ( ! function_exists( 'wp_read_image_metadata' ) ) {
+			include_once( ABSPATH . 'wp-admin/includes/image.php' );
+		}
+
 		$metadata = array();
 		$imagesize = getimagesize( $file );
 		$metadata['width'] = $imagesize[0];
