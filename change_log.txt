@@ -17,6 +17,7 @@
 * Post images now uses image cover by default and gives option to change to x,y or none - CHANGED/ADDED
 * Post images limit_show param added, this can be used to hide some images in gallery output but still load them via lightbox - ADDED
 * Permalink issue with %post_id% rewrite tag - FIXED
+* CPT + neighborhood urls shows 404 page not found - FIXED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED

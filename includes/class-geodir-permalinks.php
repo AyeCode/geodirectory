@@ -324,14 +324,17 @@ class GeoDir_Permalinks {
 				}
 			}
 		}
+
+		$count = ( 10 * count( explode( "/", str_replace( array( '([^/]+)','([^/]*)' ), '', $regex ) ) ) ) - 
+		         ( substr_count( $regex, '([^/]+)' ) + substr_count( $regex,'([^/]*)' ) ) + 
+				 ( $static_sections * 11 ) + 
+				 ( substr( $regex, -3 ) == '/?$' ? 1 : 0 ); // High priority to "^places/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?$" than "^places/([^/]*)/([^/]*)/([^/]*)/([^/]*)/?" to fix cpt + neighbourhood urls
+	
 		$this->rewrite_rules[$regex] = array(
 			'regex'     => $regex,
 			'redirect'  => $redirect,
 			'after'     => $after,
-			'count'     =>
-				(10 * count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ) )
-				- (substr_count($regex,'([^/]+)') + substr_count($regex,'([^/]*)'))
-			+ ($static_sections * 11)
+			'count'     => $count
 			//'count'     => (10 * count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ) ) - (substr_count($regex,'([^/]+)') + substr_count($regex,'([^/]*)'))//count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
 			//'count'     => count( explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex)) ),
 			//'countx'     => explode("/", str_replace(array('([^/]+)','([^/]*)'),'',$regex))
