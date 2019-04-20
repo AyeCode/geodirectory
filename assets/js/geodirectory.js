@@ -1481,9 +1481,8 @@ function geodir_widget_listings_pagination(id, params) {
                 jQuery('.page-numbers a.page-numbers', $paging).each(function() {
                     href = jQuery(this).attr('href');
                     hrefs = href.split("#");
-                    if (hrefs.length >= 1) {
-                        jQuery(this).attr('data-geodir-pagenum', hrefs[1]);
-                    }
+                    page = (hrefs.length > 1 && parseInt(hrefs[1]) > 0 ? parseInt(hrefs[1]) : (parseInt(jQuery(this).text()) > 0 ? parseInt(jQuery(this).text()) : 1));
+					jQuery(this).attr('data-geodir-pagenum', page);
                     jQuery(this).attr('href', 'javascript:void(0)');
                 });
             }

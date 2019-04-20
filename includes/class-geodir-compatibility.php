@@ -188,6 +188,8 @@ class GeoDir_Compatibility {
 		     (
 			     function_exists( 'x_get_view' )
 			     || defined( 'TD_THEME_VERSION' )
+				 || function_exists( 'pi_elv_include_scripts' )
+				 || ( ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) )
 		     )
 		) {
 			add_action( 'wp_title', array( 'GeoDir_SEO', 'set_meta' ), 9 );
@@ -290,7 +292,7 @@ class GeoDir_Compatibility {
 	 * @return null|string
 	 */
 	public static function dynamically_add_post_meta( $metadata, $object_id, $meta_key, $single ) {
-		global $wp_query; // this is needed to make sure get_queried_object_id() if defined.
+		global $wp_query, $post; // this is needed to make sure get_queried_object_id() if defined.
 
 		// bail if in admin
 		if ( is_admin() ) {
@@ -352,18 +354,34 @@ class GeoDir_Compatibility {
 			$gen_keys[] = 'layouts';
 		}
 
+		$backup_post = NULL;
+
 		// Elvyre - Retina Ready Wordpress Theme
 		if ( function_exists( 'pi_elv_include_scripts' ) ) {
-			$gen_keys[] = 'pg_sidebar';
-			$gen_keys[] = 'portfolio_style';
-			$gen_keys[] = 'portfolio_taxonomies';
-			$gen_keys[] = 'pg_hide_title';
-			$gen_keys[] = 'page_description';
-			$gen_keys[] = 'title_style';
-			$gen_keys[] = 'title_color';
-			$gen_keys[] = 'title_image';
-			$gen_keys[] = 'additional_title_image';
-			$gen_keys[] = 'parallax';
+			if ( strpos( $meta_key, 'pg_' ) === 0 ) {
+				$elvyre_keys = array( 'pg_sidebar', 'pg_portfolio_style', 'pg_portfolio_taxonomies', 'pg_hide_title', 'pg_page_description', 'pg_title_style', 'pg_title_color', 'pg_title_image', 'pg_additional_title_image', 'pg_parallax' );
+
+				$gen_keys = array_merge( $gen_keys, $elvyre_keys );
+
+				// Archive page set page post.
+				if ( in_array( $meta_key, $elvyre_keys ) && ! empty( $wp_query ) && ! empty( $wp_query->post->post_type ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) && $wp_query->post->post_type == 'page' && ( geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'search' ) ) ) {
+					$post = $wp_query->post;
+					$backup_post = $post;
+				}
+			}
+		}
+
+		// Betheme by Muffin group
+		if ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) {
+			if ( strpos( $meta_key, 'mfn-post-' ) === 0 ) {
+				$gen_keys[] = $meta_key;
+
+				// Archive page set page post.
+				if ( ! empty( $wp_query ) && ! empty( $wp_query->post->post_type ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) && $wp_query->post->post_type == 'page' && ( geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'search' ) ) ) {
+					$post = $wp_query->post;
+					$backup_post = $post;
+				}
+			}
 		}
 
 		if (
@@ -449,6 +467,10 @@ class GeoDir_Compatibility {
 				}
 			}
 
+		}
+
+		if ( $backup_post !== NULL ) {
+			$post = $backup_post;
 		}
 
 		return $metadata;
