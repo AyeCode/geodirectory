@@ -1617,13 +1617,13 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
                 $content = '';
                 if ( $cf['htmlvar_name'] != 'post_content' ) {
 					if ( isset( $output['strip'] ) ) {
-                        $content =  wp_strip_all_tags( wpautop( do_shortcode( $value ) ) );
+                        $content =  wp_strip_all_tags( do_shortcode( wpautop( $value ) ) );
                     } else {
 						if ( $embed ) { // Embed media.
 							global $wp_embed;
 							$value = $wp_embed->autoembed( $value );
 						}
-                        $content = wpautop( do_shortcode( $value ) );
+                        $content = do_shortcode( wpautop( $value ) );
                     }
 				} else { // Post content
 					if ( isset($output['strip'] ) ) {
