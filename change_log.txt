@@ -26,6 +26,7 @@
 * Add listing widget now has param to set the container it will repalce after submit - ADDED
 * Divi builder shortcodes not rendered via some ajax calls - FIXED
 * Elementor theme template not working correctly on GD search archive - FIXED
+* HTML field script contend can be broken due to wpautop running after do_shortcode - FIXED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED
