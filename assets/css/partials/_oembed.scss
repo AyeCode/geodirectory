@@ -1,0 +1,28 @@
+.geodir_post_meta{
+  iframe{
+    max-width: 100%;
+    height: auto;
+    min-height: 170px;
+  }
+}
+
+.geodir-embed-container {
+  position: relative;
+  padding-bottom: 56.25%;
+  margin-bottom: 10px;
+  overflow: hidden;
+  max-width: 100%;
+  height: auto;
+  &:first-child{
+    padding-top: 20px;
+  }
+
+  iframe, object, embed, .fb-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+}
+

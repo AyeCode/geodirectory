@@ -157,7 +157,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 if ( $args['show_as_list'] ) {
                     $tab_icon = '';
                     if($tab->tab_icon){
-                        $tab_icon = '<i class="fas '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
+                        $tab_icon = '<i class=" '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
                     }
                     $tab_title = '<span class="gd-tab-list-title" ><a href="#' . esc_attr($tab->tab_key) . '">' . $tab_icon . esc_attr__( $tab->tab_name, 'geodirectory' ) . '</a></span><hr />';
 
@@ -225,7 +225,8 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         ob_start();
         // main content
         if(!empty($tab->tab_content)){ // override content
-            echo do_shortcode(stripslashes( $tab->tab_content ));
+            $content = geodir_replace_variables(stripslashes( $tab->tab_content ));
+            echo do_shortcode( $content );
         }elseif($tab->tab_type=='meta'){ // meta info
             echo do_shortcode('[gd_post_meta key="'.$tab->tab_key.'" show="value"]');
         }elseif($tab->tab_type=='standard'){ // meta info

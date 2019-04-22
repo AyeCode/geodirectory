@@ -61,6 +61,7 @@ class GeoDir_AJAX {
 			'delete_tab' => false,
 			'manual_map' => true,
 			'widget_listings' => true,
+			'recently_viewed_listings' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -144,6 +145,61 @@ class GeoDir_AJAX {
 				wp_send_json_success();
 			}
 		}
+
+		wp_die();
+	}
+
+	public static function recently_viewed_listings(){
+		global $gd_post, $post,$gd_layout_class, $geodir_is_widget_listing;
+		ob_start();
+
+
+		$list_per_page = !empty($_REQUEST['list_per_page']) ? absint($_REQUEST['list_per_page']) : '';
+
+		$post_type = !empty($_REQUEST['post_type']) ? sanitize_key( $_REQUEST['post_type'] ) : '';
+
+		$all_postypes = geodir_get_posttypes();
+		if (!in_array($post_type, $all_postypes)){
+			$post_type = 'gd_place';
+		}
+
+		$layout = empty( $_REQUEST['layout'] ) ? 'gridview_onehalf' : apply_filters( 'widget_layout', geodir_convert_listing_view_class($_REQUEST['layout']) );
+
+		$post_ids = !empty($_REQUEST['viewed_post_id']) ? json_decode(stripslashes($_REQUEST['viewed_post_id']), true) : '';
+
+		$listings_ids = array();
+
+		if( !empty( $post_type ) ) {
+
+			if( !empty( $post_ids ) && $post_ids !='' && !empty($post_ids[$post_type]) ) {
+
+				$listings_ids = $post_ids[$post_type];
+			}
+		}
+
+		$listings_ids = !empty( $listings_ids ) ? array_reverse($listings_ids) : array();
+		$listings_ids = !empty($listings_ids) ? array_slice($listings_ids, 0, $list_per_page) : array();
+		$widget_listings = array();
+		if(!empty($listings_ids)){
+
+			foreach($listings_ids as $post_id){
+				$post_id = absint($post_id);
+				$listing = geodir_get_post_info($post_id);
+				if(!empty($listing) && isset($listing->ID)){
+					$widget_listings[] = $listing;
+				}
+			}
+		}
+
+		if(!empty($widget_listings)){
+			$gd_layout_class = $layout;
+
+			geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
+		}else{
+			_e("Your recently viewed listings will show here.","geodirectory");
+		}
+
+		echo ob_get_clean();
 
 		wp_die();
 	}

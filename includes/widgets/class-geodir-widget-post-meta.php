@@ -89,7 +89,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
-				'text-alignment'  => array(
+				'text_alignment'  => array(
 					'title' => __('Text Align:', 'geodirectory'),
 					'desc' => __('How the text should be aligned.', 'geodirectory'),
 					'type' => 'select',
@@ -183,7 +183,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'list_hide_secondary'    => '',
 			'css_class' => '',
 			'alignment'    => '', // left,right,center
-			'text-alignment'    => '', // left,right,center
+			'text_alignment'    => '', // left,right,center
 			'location'  => 'none',
 		), $args, 'gd_post_meta' );
 
@@ -235,9 +235,9 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					}
 
 					// set text alignment class
-					if($args['text-alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
-					if($args['text-alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
-					if($args['text-alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
+					if($args['text_alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
+					if($args['text_alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
+					if($args['text_alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
 
 					// set alignment class
 					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}

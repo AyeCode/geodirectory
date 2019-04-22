@@ -888,3 +888,18 @@ function geodir_get_cpt_page_id( $page, $post_type = '' ) {
 
 	return $page_id;
 }
+
+/**
+ * Adds a responsive embed wrapper around oEmbed content
+ *
+ * @param  string $html The oEmbed markup
+ * @param  string $url  The URL being embedded
+ * @param  array  $attr An array of attributes
+ * @return string       Updated embed markup
+ */
+function geodir_responsive_embeds($html, $url, $attr) {
+//	echo $url;
+//	print_r($attr);exit;
+	return $html !== '' ? '<div class="geodir-embed-container">' . $html . '</div>' : '';
+}
+add_filter('embed_oembed_html', 'geodir_responsive_embeds', 10, 3);

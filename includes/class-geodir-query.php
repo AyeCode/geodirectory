@@ -178,7 +178,7 @@ class GeoDir_Query {
 			$q->is_archive = true;
 			//$q->is_post_type_archive = true;
 			$q->is_paged = true;
-			$q->in_the_loop = true;
+//			$q->in_the_loop = true; // this breaks elementor template 
 
 
 			//$q->set('is_page',false);

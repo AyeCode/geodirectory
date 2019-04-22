@@ -53,12 +53,24 @@ class GeoDir_Admin_Menus {
 
 		$cpts = geodir_get_posttypes();
 		$counts = array();
-		if(!empty($cpts )){
-			foreach($cpts as $cpt){
-				$post_counts = wp_count_posts($cpt, 'readable'); // let WP handel the caching
-				$counts[$cpt] = isset($post_counts->pending) ? absint($post_counts->pending) : 0;
+
+		// check cache
+		$cache = wp_cache_get("geodir_post_counts");
+		if($cache !== false){
+			// we have cache so no need to count again
+		}else{
+			if(!empty($cpts )){
+				foreach($cpts as $cpt){
+					$post_counts = wp_count_posts($cpt, 'readable'); // let WP handel the caching
+					$counts[$cpt] = isset($post_counts->pending) ? absint($post_counts->pending) : 0;
+				}
 			}
+
+			// set cache
+			wp_cache_set("geodir_post_counts" ,$counts);
 		}
+
+
 
 		if(!empty($counts) && !empty($menu)){
 			foreach($menu as $menu_key => $menu_data){
