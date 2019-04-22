@@ -730,7 +730,7 @@ class GeoDir_Post_Data {
 	 * @global object $post_images Image objects of current post if available.
 	 * @todo make the form work in sections with fieldsets, all collapsed apart from the one ur on.
 	 */
-	public static function add_listing_form() {
+	public static function add_listing_form($params = array()) {
 
 		global $cat_display, $post_cat, $current_user, $gd_post;
 		$page_id       = get_the_ID();
@@ -834,6 +834,10 @@ class GeoDir_Post_Data {
 				<input type="hidden" name="add_listing_page_id" value="<?php echo $page_id; ?>"/>
 			<?php }
 			if ( isset( $_REQUEST['pid'] ) && $_REQUEST['pid'] != '' ) { ?>
+			<?php }
+			
+			if(!empty($params['container'])){?>
+				<input type="hidden" id="gd-add-listing-replace-container" value="<?php echo sanitize_text_field( $params['container'] ); ?>"/>
 			<?php }
 
 			do_action( 'geodir_add_listing_form_start', $listing_type, $post, $package );

@@ -90,7 +90,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			'badge'  => array(
 				'type' => 'text',
 				'title' => __('Badge:', 'geodirectory'),
-				'desc' => __('Badge text. Ex: FOR SALE. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field or %%post_url%% for the post url.', 'geodirectory'),
+				'desc' => __('Badge text. Ex: FOR SALE. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field or %%post_url%% for the post url, or the field key for any other info %%email%%.', 'geodirectory'),
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,

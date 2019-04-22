@@ -20,6 +20,12 @@
 * CPT + neighborhood urls shows 404 page not found - FIXED
 * "Betheme" theme compatibility for gd pages - ADDED
 * On some themes link of page 1 of GD Listing pagination not working - FIXED
+* CPT tabs shortcode section can now accept post variables like [my_custom_shortcode id="%%facebook_id%%" ] - ADDED
+* Post badge widget can now use any custom field in the badge text - ADDED
+* CSS changes to try and better embed videos responsively - CHANGED
+* Add listing widget now has param to set the container it will repalce after submit - ADDED
+* Divi builder shortcodes not rendered via some ajax calls - FIXED
+* Elementor theme template not working correctly on GD search archive - FIXED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED

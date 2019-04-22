@@ -74,6 +74,9 @@ class GeoDir_Elementor {
 		}elseif(geodir_is_page('single')){
 			$type = geodir_get_current_posttype();
 			$page_type = 'single';
+		}elseif(geodir_is_page('search')){
+			$type = 'search';
+			$page_type = 'archive';
 		}
 
 		if($type && $conditions = get_option('elementor_pro_theme_builder_conditions')){

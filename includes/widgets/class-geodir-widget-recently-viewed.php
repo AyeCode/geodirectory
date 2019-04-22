@@ -30,8 +30,6 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		parent::__construct( $options );
 
 		add_action('wp_footer', array( $this, 'geodir_recently_viewed_posts' ));
-		add_action('wp_ajax_gd_recently_viewed_action', array( $this, 'gd_recently_viewed_action_fn' ));
-		add_action('wp_ajax_nopriv_gd_recently_viewed_action', array( $this, 'gd_recently_viewed_action_fn' ));
 
 	}
 
@@ -108,10 +106,16 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 	 * @return mixed|string
 	 */
 	public function output($args = array(), $widget_args = array(),$content = ''){
-
+		global $geodir_recently_viewed_count;
 		// if block demo return empty to show placeholder text
 		if($this->is_block_content_call()){
 			return '';
+		}
+
+		if(empty($geodir_recently_viewed_count)){
+			$geodir_recently_viewed_count = 1;
+		}else{
+			$geodir_recently_viewed_count++;
 		}
 
 		$post_page_limit = !empty( $args['post_limit'] ) ? $args['post_limit'] : '5';
@@ -120,7 +124,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		ob_start();
 		?>
 		<div class="geodir-recently-reviewed">
-			<div class="recently-reviewed-content"></div>
+			<div class="recently-reviewed-content recently-reviewed-content-<?php echo absint($geodir_recently_viewed_count); ?>"></div>
 			<div class="recently-reviewed-loader" style="display: none;text-align: center;"><i class="fas fa-sync fa-spin fa-2x"></i></div>
 		</div>
 
@@ -131,7 +135,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 
 				var recently_viewed = localStorage.getItem("gd_recently_viewed");
 				var data = {
-					'action': 'gd_recently_viewed_action',
+					'action': 'geodir_recently_viewed_listings',
 					'viewed_post_id' : recently_viewed,
 					'list_per_page' :'<?php echo $post_page_limit; ?>' ,
 					'layout' : '<?php echo $layout; ?>',
@@ -139,11 +143,13 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 				};
 
 				jQuery.post(geodir_params.ajax_url, data, function(response) {
-					jQuery('.geodir-recently-reviewed .recently-reviewed-content').html(response);
+					jQuery('.geodir-recently-reviewed .recently-reviewed-content-<?php echo absint($geodir_recently_viewed_count); ?>').html(response);
 					jQuery('.recently-reviewed-loader').hide();
 					init_read_more();
 					geodir_init_lazy_load();
 					geodir_refresh_business_hours();
+					// init any sliders
+					geodir_init_flexslider();
 
 				});
 			});
@@ -151,67 +157,6 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 
 		<?php
 		return ob_get_clean();
-	}
-
-	/**
-	 * Get recently reviewed listing html.
-	 *
-	 * @since 2.0.0
-	 */
-	public function gd_recently_viewed_action_fn(){
-
-		global $gd_post, $post,$gd_layout_class, $geodir_is_widget_listing;
-		ob_start();
-
-
-		$list_per_page = !empty($_REQUEST['list_per_page']) ? absint($_REQUEST['list_per_page']) : '';
-
-		$post_type = !empty($_REQUEST['post_type']) ? sanitize_key( $_REQUEST['post_type'] ) : '';
-
-		$all_postypes = geodir_get_posttypes();
-		if (!in_array($post_type, $all_postypes)){
-			$post_type = 'gd_place';
-		}
-
-		$layout = empty( $_REQUEST['layout'] ) ? 'gridview_onehalf' : apply_filters( 'widget_layout', geodir_convert_listing_view_class($_REQUEST['layout']) );
-
-		$post_ids = !empty($_REQUEST['viewed_post_id']) ? json_decode(stripslashes($_REQUEST['viewed_post_id']), true) : '';
-
-		$listings_ids = array();
-
-		if( !empty( $post_type ) ) {
-
-			if( !empty( $post_ids ) && $post_ids !='' && !empty($post_ids[$post_type]) ) {
-
-				$listings_ids = $post_ids[$post_type];
-			}
-		}
-
-		$listings_ids = !empty( $listings_ids ) ? array_reverse($listings_ids) : array();
-		$listings_ids = !empty($listings_ids) ? array_slice($listings_ids, 0, $list_per_page) : array();
-		$widget_listings = array();
-		if(!empty($listings_ids)){
-
-			foreach($listings_ids as $post_id){
-				$post_id = absint($post_id);
-				$listing = geodir_get_post_info($post_id);
-				if(!empty($listing) && isset($listing->ID)){
-					$widget_listings[] = $listing;
-				}
-			}
-		}
-
-		if(!empty($widget_listings)){
-			$gd_layout_class = $layout;
-
-			geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
-		}else{
-			_e("Your recently viewed listings will show here.","geodirectory");
-		}
-
-		echo ob_get_clean();
-
-		wp_die();
 	}
 
 	/**

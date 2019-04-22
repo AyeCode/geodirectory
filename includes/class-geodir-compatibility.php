@@ -96,6 +96,7 @@ class GeoDir_Compatibility {
 		Divi (theme) :: maps api
 		######################################################*/
 		add_filter( 'et_pb_enqueue_google_maps_script', '__return_false' );
+		add_filter( 'et_builder_load_actions', array( __CLASS__,'divi_builder_ajax_load_actions') );
 
 		/*######################################################
 		The7 (theme) :: rewind the posts, the_excerpt function call seems to set the current_post number and cause have_posts() to return false.
@@ -120,6 +121,21 @@ class GeoDir_Compatibility {
 
 		// Set custom hook for theme compatibility
 		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ) );
+	}
+
+	/**
+	 * Make sure divi actions fire on some of our ajax calls so builder shortcodes are rendered.
+	 * 
+	 * @param $actions
+	 *
+	 * @return array
+	 */
+	public static function divi_builder_ajax_load_actions( $actions ) {
+		$actions[] = 'geodir_recently_viewed_listings';
+		$actions[] = 'geodir_widget_listings';
+		$actions[] = 'geodir_bestof';
+
+		return $actions;
 	}
 
 	/**
@@ -649,7 +665,7 @@ class GeoDir_Compatibility {
 				array(
 					'title' => __( 'Yoast SEO detected', 'geodirectory' ),
 					'type'  => 'title',
-					'desc'  => geodir_notification( array( 'yoast_detected' => __( 'The Yoast SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta info)', 'geodirectory' ) ) ),
+					'desc'  => geodir_notification( array( 'yoast_detected' => __( 'The Yoast SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta)', 'geodirectory' ) ) ),
 					'id'    => 'yoast_detected',
 					//'desc_tip' => true,
 				),

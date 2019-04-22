@@ -82,6 +82,14 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                 'desc_tip' => true,
                 'advanced' => true
             ),
+            'container'  => array(
+                'title' => __('Replace container', 'geodirectory'),
+                'desc' => __('When submitted the response message will replace the add listing page content, you can set a different container to replace here, eg: .page-content', 'geodirectory'),
+                'type' => 'text',
+                'placeholder'  => __( '.page-content', 'geodirectory' ),
+                'desc_tip' => true,
+                'advanced' => true
+            ),
         );
     }
 
@@ -110,6 +118,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             'listing_type'  => $default_post_type,
             'login_msg'     => __( 'You must login to post.', 'geodirectory' ),
             'show_login'    => true,
+            'container'    => '',
         );
 
         $params = wp_parse_args( $args,$defaults);
@@ -152,7 +161,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         } elseif(!$user_id && !get_option( 'users_can_register' )){
             echo geodir_notification( array('add_listing_error'=>__('User registration is disabled, please login to continue.','geodirectory')) );
         }else {
-            GeoDir_Post_Data::add_listing_form();
+            GeoDir_Post_Data::add_listing_form($params);
         }
 
         return ob_get_clean();

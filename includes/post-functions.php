@@ -834,6 +834,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$badge = __( 'NEW', 'geodirectory' );
 				}
 
+				// replace other post variables
+				if(!empty($badge)){
+					$badge = geodir_replace_variables($badge);
+				}
+
 				$class = '';
 				if ( ! empty( $args['size'] ) ) {
 					$class .= ' gd-badge-' . sanitize_title( $args['size'] );
@@ -1034,4 +1039,40 @@ function geodir_get_post_package( $post = '', $post_type = '' ) {
 	);
 
 	return (object)apply_filters( 'geodir_get_post_package', (object)$package, $post, $post_type );
+}
+
+/**
+ * A list of fields that should not be auto replaced.
+ *
+ * @return array
+ */
+function geodir_get_no_replace_fields(){
+	return array(
+		'post_password',
+		'submit_ip'
+	);
+}
+
+/**
+ * Replace custom variables in text.
+ * 
+ * @param $text
+ * @param string $post_id
+ *
+ * @return mixed
+ */
+function geodir_replace_variables($text,$post_id = ''){
+	global $gd_post;
+
+	// only run if we have a GD post and the start of a var
+	if(!empty($gd_post->ID) && strpos( $text, '%%' ) !== false){
+		$non_replace = geodir_get_no_replace_fields();
+		foreach($gd_post as $key => $val){
+			if(!in_array($key,$non_replace)){
+				$text = str_replace('%%'.$key.'%%',$val,$text);
+			}
+		}
+	}
+	
+	return $text;
 }

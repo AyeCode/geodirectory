@@ -87,7 +87,7 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
-				'text-alignment'  => array(
+				'text_alignment'  => array(
 					'title' => __('Text Align:', 'geodirectory'),
 					'desc' => __('How the text should be aligned.', 'geodirectory'),
 					'type' => 'select',
@@ -169,7 +169,7 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 			'key'   => 'address',
 			'show'    => 'icon-label-value', // title,value (default blank, all)
 			'alignment'    => '', // left,right,center
-			'text-alignment'    => '', // left,right,center
+			'text_alignment'    => '', // left,right,center
 			'list_hide'    => '',
 			'list_hide_secondary'    => '',
 			'address_template' => '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%',
@@ -213,9 +213,9 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 					$field = stripslashes_deep( $field );
 
 					// set text alignment class
-					if($args['text-alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
-					if($args['text-alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
-					if($args['text-alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
+					if($args['text_alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
+					if($args['text_alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
+					if($args['text_alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
 
 					// set alignment class
 					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
