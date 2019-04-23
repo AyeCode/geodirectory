@@ -1095,10 +1095,10 @@ function geodir_function_widget_listings_where( $where ) {
 			$where .= " AND ( " . $table . ".video != '' AND " . $table . ".video IS NOT NULL )";
 		}
 
-		if ( ! empty( $query_args['show_favorites_only'] ) ) {
+		if ( ! empty( $query_args['favorites_by_user'] ) ) {
 			$user_favorites = '-1';
 
-			if ( ! empty( $query_args['favorites_by_user'] ) ) {
+			if ( (int) $query_args['favorites_by_user'] > 0 ) {
 				$user_favorites = geodir_get_user_favourites( (int) $query_args['favorites_by_user'] );
 				$user_favorites = ! empty( $user_favorites ) && is_array( $user_favorites ) ? implode( "','", $user_favorites ) : '-1';
 			}
