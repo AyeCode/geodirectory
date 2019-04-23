@@ -22,8 +22,14 @@ class GeoDir_Defaults {
 	 *
 	 * @return string
 	 */
-	 public static function page_add_content(){
-		 return "[gd_notifications]\n[gd_add_listing]";
+	 public static function page_add_content($no_filter = false){
+		 $content = "[gd_notifications]\n[gd_add_listing]";
+
+		 if($no_filter){
+			 return $content;
+		 }else{
+			 return apply_filters("geodir_default_page_add_content",$content);
+		 }
 	 }
 
 	/**
@@ -31,8 +37,14 @@ class GeoDir_Defaults {
 	 *
 	 * @return string
 	 */
-	public static function page_search_content(){
-		return "[gd_notifications]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
+	public static function page_search_content($no_filter = false){
+		$content = "[gd_notifications]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
+
+		if($no_filter){
+			return $content;
+		}else{
+			return apply_filters("geodir_default_page_search_content",$content);
+		}
 	}
 
 	/**
@@ -40,8 +52,14 @@ class GeoDir_Defaults {
 	 *
 	 * @return string
 	 */
-	public static function page_location_content(){
-		return "[gd_notifications]\n[gd_categories]\n[gd_map map_type='directory' width=100% height=300 search_filter=1 cat_filter=1 post_type_filter=1]\n[gd_search]\n[gd_listings post_limit=10]";
+	public static function page_location_content($no_filter = false){
+		$content = "[gd_notifications]\n[gd_categories]\n[gd_map map_type='directory' width=100% height=300 search_filter=1 cat_filter=1 post_type_filter=1]\n[gd_search]\n[gd_listings post_limit=10]";
+
+		if($no_filter){
+			return $content;
+		}else{
+			return apply_filters("geodir_default_page_location_content",$content);
+		}
 	}
 
 	/**
@@ -49,16 +67,22 @@ class GeoDir_Defaults {
 	 *
 	 * @return string
 	 */
-	public static function page_archive_content(){
-		return "[gd_notifications]\n[gd_category_description]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
+	public static function page_archive_content($no_filter = false){
+		$content = "[gd_notifications]\n[gd_category_description]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=1]\n[gd_loop_paging]";
+
+		if($no_filter){
+			return $content;
+		}else{
+			return apply_filters("geodir_default_page_archive_content",$content);
+		}
 	}
 	/**
 	 * The content for the archive item page.
 	 *
 	 * @return string
 	 */
-	public static function page_archive_item_content(){
-		return "[gd_archive_item_section type='open' position='left']
+	public static function page_archive_item_content($no_filter = false){
+		$content = "[gd_archive_item_section type='open' position='left']
 [gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-left-angle gd-badge-shadow']
 [gd_post_images type='image' ajax_load='true' link_to='post' show_logo='true']
 [gd_archive_item_section type='close' position='left']
@@ -72,6 +96,12 @@ class GeoDir_Defaults {
 [gd_output_location location='listing']
 [gd_post_content key='post_content' limit='60' max_height='120']
 [gd_archive_item_section type='close' position='right']";
+
+		if($no_filter){
+			return $content;
+		}else{
+			return apply_filters("geodir_default_page_archive_item_content",$content);
+		}
 	}
 
 	/**
@@ -79,8 +109,14 @@ class GeoDir_Defaults {
 	 *
 	 * @return string
 	 */
-	public static function page_details_content(){
-		return "[gd_notifications]\n[gd_post_images type='slider' ajax_load='true' slideshow='true' show_title='true' animation='slide' controlnav='1' ]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]";
+	public static function page_details_content($no_filter = false){
+		$content = "[gd_notifications]\n[gd_post_images type='slider' ajax_load='true' slideshow='true' show_title='true' animation='slide' controlnav='1' ]\n[gd_single_taxonomies]\n[gd_single_tabs]\n[gd_single_next_prev]";
+	
+		if($no_filter){
+			return $content;
+		}else{
+			return apply_filters("geodir_default_page_details_content",$content);
+		}
 	}
 
 

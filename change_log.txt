@@ -28,6 +28,7 @@
 * Elementor theme template not working correctly on GD search archive - FIXED
 * HTML field script contend can be broken due to wpautop running after do_shortcode - FIXED
 * GD Listings allows to filter listings by tags, favorited by user - ADDED
+* Page default content can now be filtered so to be changed by theme or plugins - ADDED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED

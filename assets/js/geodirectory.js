@@ -1013,7 +1013,6 @@ function init_read_more(){
 
 function gd_delete_post($post_id){
     var message = geodir_params.my_place_listing_del;
-
     if (confirm(message)) {
 
         jQuery.ajax({

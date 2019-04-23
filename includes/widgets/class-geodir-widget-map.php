@@ -1051,8 +1051,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			if(!empty($gd_post->default_category)){
 				$params['icon_url'] = geodir_get_cat_icon( $gd_post->default_category, true, true );
 			}
-
-
 		}
 
 		ob_start();
@@ -1062,10 +1060,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$content = ob_get_clean();
 
 		return $content;
-	}
-
-	public static function display_static_map( $params ){
-
 	}
 
 	/**
@@ -1108,6 +1102,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$map_options = wp_parse_args( $params, $defaults );
 
 //		$map_options['sticky'] = 1;
+
+		$map_options['map_canvas'] = isset($gd_maps_canvas[ $map_options['map_canvas'] ]) ?  $map_options['map_canvas']  . count($gd_maps_canvas) : $map_options['map_canvas'];
 
 		$map_type   = $map_options['map_type'];
 		$map_canvas = $map_options['map_canvas'];
