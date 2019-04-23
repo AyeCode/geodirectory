@@ -111,6 +111,15 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'desc_tip' => true,
                 'advanced' => true
             ),
+            'tags'  => array(
+                'title' => __('Filter by tags:', 'geodirectory'),
+                'desc' => __('Insert separate tags with commas to filter listings by tags.', 'geodirectory'),
+                'type' => 'text',
+                'default' => '',
+	            'placeholder' => __('garden,dinner,pizza', 'geodirectory'),
+                'desc_tip' => true,
+                'advanced' => true
+            ),
             'post_author'  => array(
                 'title' => __('Filter by author:', 'geodirectory'),
                 'desc' => __('Filter by current_user, current_author or ID (default = unfiltered). current_user: Filters the listings by author id of the logged in user. current_author: Filters the listings by author id of current viewing post/listing. 11: Filters the listings by author id = 11. Leave blank to show posts from all authors.', 'geodirectory'),
@@ -212,6 +221,23 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '0',
                 'advanced' => true
             ),
+            'show_favorites_only'  => array(
+                'title' => __("Show favorited by user?", 'geodirectory'),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '0',
+                'advanced' => true
+            ),
+            'favorites_by_user'  => array(
+                'title' => __('Favorited by user:', 'geodirectory'),
+                'desc' => __('Display listings favorited by current_user, current_author or ID (default = unfiltered). current_user: Display listings favorited by author id of the logged in user. current_author: Display listings favorited by author id of current viewing post/listing. 11: Display listings favorited author id = 11. Leave blank to show listings favorited by logged user.', 'geodirectory'),
+                'type' => 'text',
+                'default' => '',
+                'desc_tip' => true,
+                'advanced' => true,
+				'element_require' => '[%show_favorites_only%]=="1"',
+            ),
             'use_viewing_post_type'  => array(
                 'title' => __("Use current viewing post type?", 'geodirectory'),
                 'type' => 'checkbox',
@@ -276,10 +302,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'advanced' => true,
 				'element_require' => '[%with_pagination%]=="1"',
             )
-
-//            'tags'                  => '',
-//            'show_favorites_only'   => '',
-//            'favorites_by_user'     => '',
         );
     }
 
@@ -300,6 +322,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'post_type' => '',
                   'category' => array(),
 				  'related_to' => '',
+				  'tags' => '',
 				  'post_author' => '',
                   'category_title' => '',
                   'sort_by' => 'az',
@@ -315,6 +338,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'show_special_only' => '',
                   'with_pics_only' => '',
                   'with_videos_only' => '',
+                  'show_favorites_only' => '',
+                  'favorites_by_user' => '',
                   'use_viewing_post_type' => '',
                   'hide_if_empty' => '',
 				  'view_all_link' => '1',
@@ -381,6 +406,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          */
         $related_to = empty( $instance['related_to'] ) ? '' : apply_filters( 'widget_related_to', $instance['related_to'], $instance, $this->id_base );
 		/**
+         * Filter the widget tags param.
+         *
+         * @since 2.0.0
+         *
+         * @param string $instance ['tags'] Filter by tags.
+         */
+        $tags = empty( $instance['tags'] ) ? '' : apply_filters( 'widget_tags', $instance['tags'], $instance, $this->id_base );
+		/**
          * Filter the widget post_author param.
          *
          * @since 2.0.0
@@ -436,7 +469,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          * @param string $instance ['list_sort'] Listing sort by type.
          */
         $list_sort             = empty( $instance['sort_by'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['sort_by'] );
-        /**
+		/**
          * Filter widget's "title_tag" type.
          *
          * @since 1.6.26
@@ -444,6 +477,22 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          * @param string $instance ['title_tag'] Listing title tag.
          */
         $title_tag            = empty( $instance['title_tag'] ) ? 'h3' : apply_filters( 'widget_title_tag', $instance['title_tag'] );
+		/**
+         * Filter widget's "show_favorites_only" type.
+         *
+         * @since 1.6.26
+         *
+         * @param string $instance ['show_favorites_only'] Listing show favorites only.
+         */
+        $show_favorites_only = empty( $instance['show_favorites_only'] ) ? '' : apply_filters( 'widget_show_favorites_only', absint( $instance['show_favorites_only'] ), $instance, $this->id_base );
+		/**
+         * Filter the widget favorites_by_user param.
+         *
+         * @since 2.0.0
+         *
+         * @param string $instance ['favorites_by_user'] Filter favorites by user.
+         */
+        $favorites_by_user = empty( $instance['favorites_by_user'] ) || empty( $show_favorites_only ) ? '' : apply_filters( 'widget_favorites_by_user', $instance['favorites_by_user'], $instance, $this->id_base );
 
         $view_all_link = ! empty( $instance['view_all_link'] ) ? true : false;
 
@@ -559,6 +608,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			'distance_to_post' => $distance_to_post,
 			'pageno'         => $pageno
         );
+
 		// Post_number needs to be a positive integer
 		if ( ! empty( $post_author ) ) {
 			// 'current' left for backwards compatibility
@@ -578,6 +628,32 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				$query_args['post_author'] = absint( $post_author );
 			} else {
 				$query_args['post_author'] = -1; // Don't show any listings.
+			}
+		}
+
+		// Posts favorited by user.
+		if ( ! empty( $show_favorites_only ) ) {
+			if ( empty( $favorites_by_user ) ) {
+				$favorites_by_user = 'current_user';
+			}
+
+			// 'current' left for backwards compatibility
+			if ( $favorites_by_user == 'current' || $favorites_by_user == 'current_author' ) {
+				if ( ! empty( $post ) && $post->post_type != 'page' && isset( $post->post_author ) ) {
+					$query_args['favorites_by_user'] = $post->post_author;
+				} else {
+					$query_args['favorites_by_user'] = -1; // Don't show any listings.
+				}
+			} else if ( $favorites_by_user == 'current_user' ) {
+				if ( is_user_logged_in() && ( $current_user_id = get_current_user_id() ) ) {
+					$query_args['favorites_by_user'] = $current_user_id;
+				} else {
+					$query_args['favorites_by_user'] = -1; // If not logged in then don't show any listings.
+				}
+			} else if ( absint( $favorites_by_user ) > 0) {
+				$query_args['favorites_by_user'] = absint( $favorites_by_user );
+			} else {
+				$query_args['favorites_by_user'] = -1; // Don't show any listings.
 			}
 		}
 
@@ -635,6 +711,33 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 					'terms'    => $terms
 				)
 			);
+		}
+
+		// Clean tags
+		if ( ! empty( $tags ) ) {
+			if ( ! is_array( $tags ) ) {
+				$comma = _x( ',', 'tag delimiter' );
+
+				if ( ',' !== $comma ) {
+					$tags = str_replace( $comma, ',', $tags );
+				}
+				$tags = explode(',', trim( $tags, " \n\t\r\0\x0B," ) );
+				$tags = array_map( 'trim', $tags );
+			}
+
+			if ( ! empty( $tags ) ) {
+				$tag_query = array(
+					'taxonomy' => $post_type . '_tags',
+					'field' => 'name',
+					'terms' => $tags
+				);
+
+				if ( ! empty( $query_args['tax_query'] ) ) {
+					$query_args['tax_query'][] = $tag_query;
+				} else {
+					$query_args['tax_query'] = array( $tag_query );
+				}
+			}
 		}
 	    
 	    // $post_ids, include or exclude post ids
