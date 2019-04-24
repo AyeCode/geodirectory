@@ -1146,7 +1146,7 @@ class GeoDir_Admin_Dummy_Data {
 			);
 		}
 
-		return apply_filters('geodir_dummy_widgets',$widgets);
+		return apply_filters('geodir_dummy_widgets',$widgets, $type);
 	}
 
 	/**

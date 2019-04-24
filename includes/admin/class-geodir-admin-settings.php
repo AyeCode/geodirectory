@@ -739,10 +739,33 @@ class GeoDir_Admin_Settings {
 							}
 							
 							if(!empty($value['default_content'])){
+
+								$raw_default_content = '';
+								$default_method = $value['id'].'_content';
+
+								// check if the default content has been filtered
+								if(method_exists('GeoDir_Defaults', $default_method) && GeoDir_Defaults::$default_method(true) != $value['default_content']){
+									$raw_default_content = GeoDir_Defaults::$default_method(true);
+								}
 								?>
 								<a href="#gd_default_content_<?php echo esc_attr($value['id'])?>" data-lity class="button gd-page-setting-view"><?php _e('View Default Content','geodirectory');?></a>
 								<div id="gd_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;" class="lity-hide gd-notification ">
-									<textarea style="min-width: 50vw;min-height: 50vh;"><?php echo $value['default_content'];?></textarea>
+									<?php
+									$height = "50";
+									if($raw_default_content){
+										echo geodir_notification( array('gd-warn'=>__('Default content has been modified by a plugin or theme.','geodirectory')) );
+										$height = "25";
+									}
+									?>
+									<textarea style="min-width: 50vw;min-height: <?php echo $height;?>vh; display:block;"><?php echo $value['default_content'];?></textarea>
+									<?php
+									if($raw_default_content){
+										echo geodir_notification( array('gd-info'=>__('Original content below.','geodirectory')) );
+										?>
+										<textarea style="min-width: 50vw;min-height: <?php echo $height;?>vh;display:block;"><?php echo $raw_default_content;?></textarea>
+
+									<?php }
+									?>
 								</div>
 								<?php
 							}
