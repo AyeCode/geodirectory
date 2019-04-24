@@ -593,6 +593,10 @@ class GeoDir_SEO {
 
         $location_manager     = class_exists('GeoDir_Location_Manager') ? true : false;
         $neighbourhood_active = $location_manager && geodir_get_option( 'lm_enable_neighbourhoods' ) ? true : false;
+	    
+	if( !$location_manager ){
+	    return $crumbs;
+	}
 
         $gd_post_type   = geodir_get_current_posttype();
         $location_terms = geodir_get_current_location_terms( 'query_vars', $gd_post_type );
