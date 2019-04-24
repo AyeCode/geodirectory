@@ -637,7 +637,7 @@ add_action( 'template_redirect', 'geodir_template_redirect' );
  */
 function geodir_list_view_select( $post_type ) {
 	?>
-	<script type="text/javascript">
+	<script type="text/javascript">/* <![CDATA[ */
 		<?php
 		/**
 		 * If the user saves gd_loop shortcode then we blank the localStorage setting for them so they can see the change instantly.
@@ -720,7 +720,7 @@ function geodir_list_view_select( $post_type ) {
 				});
 			}, 100); // set the on change action after the select has been set to the value
 		});
-	</script>
+	/* ]]> */</script>
 	<div class="geodir-list-view-select">
 		<select name="gd_list_view" id="gd_list_view" class="geodir-select" style="min-width:140px;border-radius:4px;"
 		        aria-label="<?php esc_attr_e( 'Layout', 'geodirectory' ) ?>">
