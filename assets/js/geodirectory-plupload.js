@@ -1,4 +1,4 @@
-jQuery.fn.exists = function () {
+jQuery.fn.exists = function() {
     return jQuery(this).length > 0;
 }
 
@@ -234,7 +234,7 @@ function geodir_remove_file_index(indexes) {
 }
 
 function plu_show_thumbs(imgId) {
-	//console.log("plu_show_thumbs");
+    //console.log("plu_show_thumbs");
     var totalImg = parseInt(jQuery("#" + imgId + "totImg").val());
     var limitImg = parseInt(jQuery("#" + imgId + "image_limit").val());
     var $ = jQuery;
@@ -248,9 +248,9 @@ function plu_show_thumbs(imgId) {
         txtRemove = geodir_params.action_remove;
     }
 
-    if(!imagesS){return;}
+    if (!imagesS) { return; }
 
-    var images = imagesS.split(",");
+    var images = imagesS.split("::");
 
     for (var i = 0; i < images.length; i++) {
         if (images[i] && images[i] != 'null') {
@@ -343,13 +343,13 @@ function plu_show_thumbs(imgId) {
                 ki = parseInt(ki);
                 var kimages = [];
                 imagesS = $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val();
-                images = imagesS.split(",");
+                images = imagesS.split("::");
                 for (var j = 0; j < images.length; j++) {
                     if (j != ki) {
                         kimages[kimages.length] = images[j];
                     }
                 }
-                $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join());
+                $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join("::"));
                 //console.log("plu_show_thumbs-thumbremovelink-run");
                 plu_show_thumbs(imgId);
                 return false;
@@ -364,7 +364,7 @@ function plu_show_thumbs(imgId) {
                 var kimages = [];
                 thumbsC.find(".gd-file-info").each(function() {
                     kimages[kimages.length] = $(this).data("src") + "|" + $(this).data("id") + "|" + $(this).data("title") + "|" + $(this).data("caption");
-                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join());
+                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join("::"));
                     plu_show_thumbs(imgId);
                     //console.log("plu_show_thumbs-sortable-run");
                 });
@@ -379,13 +379,13 @@ function plu_show_thumbs(imgId) {
     var kimages = [];
     thumbsC.find(".gd-file-info").each(function() {
         kimages[kimages.length] = $(this).data("src") + "|" + $(this).data("id") + "|" + $(this).data("title") + "|" + $(this).data("caption");
-        $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join());
+        $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join("::"));
     });
 }
 
 function gd_edit_image_meta(input, order_id) {
     var imagesS = jQuery("#" + input.id, jQuery('#' + input.id + 'plupload-upload-ui').parent()).val();
-    var images = imagesS.split(",");
+    var images = imagesS.split("::");
     var img_arr = images[order_id].split("|");
     var image_title = img_arr[2];
     var image_caption = img_arr[3];
@@ -402,14 +402,14 @@ function gd_edit_image_meta(input, order_id) {
 function gd_set_image_meta(input_id, order_id) {
     //alert(order_id);
     var imagesS = jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val();
-    var images = imagesS.split(",");
+    var images = imagesS.split("::");
     var img_arr = images[order_id].split("|");
     var image_url = img_arr[0];
     var image_id = img_arr[1];
     var image_title = geodir_esc_entities(jQuery('#gd-image-meta-title').val());
     var image_caption = geodir_esc_entities(jQuery('#gd-image-meta-caption').val());
     images[order_id] = image_url + "|" + image_id + "|" + image_title + "|" + image_caption;
-    imagesS = images.join(",");
+    imagesS = images.join("::");
     jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val(imagesS);
     plu_show_thumbs(input_id);
     jQuery('[data-lity-close]', window.parent.document).trigger('click');

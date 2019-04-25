@@ -31,6 +31,7 @@
 * Page default content can now be filtered so to be changed by theme or plugins - ADDED
 * Improve UX for title and caption on images - ADDED
 * Comma in Title (or description) of image caption wipes content after comma - FIXED
+* WooCommerce PayPal Checkout Gateway conflict breaks with map marker popup - FIXED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED

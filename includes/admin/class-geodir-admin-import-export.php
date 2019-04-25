@@ -439,7 +439,7 @@ class GeoDir_Admin_Import_Export {
 
 		// check if we have post images to upload
 		if ( isset( $post_info['post_images'] ) && $post_info['post_images'] ) {
-			$images = explode( ",", $post_info['post_images'] );
+			$images = explode( "::", $post_info['post_images'] );
 			$i      = 0;
 			if ( ! empty( $images ) ) {
 				foreach ( $images as $image ) {
