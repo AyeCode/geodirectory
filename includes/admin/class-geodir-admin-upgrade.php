@@ -2257,7 +2257,7 @@ class GeoDir_Admin_Upgrade {
 			$last_orders = array();
 
 			foreach ( $results as $row ) {
-				$images = explode( ',', $row->attachments );
+				$images = explode( '::', $row->attachments );
 				if ( ! empty( $images ) ) {
 					if ( empty( $last_orders[ $row->post_id ] ) ) {
 						$last_order = (int) $wpdb->get_var( $wpdb->prepare( "SELECT MAX( menu_order ) FROM {$attachments_table} WHERE post_id = %d", array( $row->post_id ) ) );
@@ -2528,12 +2528,12 @@ class GeoDir_Admin_Upgrade {
 			$results = $wpdb->get_results( "SELECT * FROM {$package_meta_table} WHERE meta_key = 'exclude_field' AND meta_value LIKE '%post_images%'" );
 			if ( ! empty( $results ) ) {
 				foreach ( $results as $row ) {
-					$meta_value = explode( ",", $row->meta_value );
+					$meta_value = explode( "::", $row->meta_value );
 					$index = array_search( 'post_images', $meta_value );
 					if ( $index !== false ) {
 						unset( $meta_value[ $index ] );
 					}
-					$meta_value = implode( ",", $meta_value );
+					$meta_value = implode( "::", $meta_value );
 
 					$wpdb->query( $wpdb->prepare( "UPDATE `{$package_meta_table}` SET `meta_value` = %s WHERE meta_id = %d", array( $meta_value, $row->meta_id ) ) );
 				}
@@ -2649,7 +2649,7 @@ class GeoDir_Admin_Upgrade {
 				foreach ( $htmlvar_names as $htmlvar_name ) {
 					$save_field = array();
 
-					if ( ! empty( $row->{$htmlvar_name} ) && strpos( $row->{$htmlvar_name}, "|" ) === false && ( $items = explode( ",", trim( $row->{$htmlvar_name} ) ) ) ) {
+					if ( ! empty( $row->{$htmlvar_name} ) && strpos( $row->{$htmlvar_name}, "|" ) === false && ( $items = explode( "::", trim( $row->{$htmlvar_name} ) ) ) ) {
 						$order = 0;
 
 						foreach ( $items as $item_url ) {

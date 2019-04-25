@@ -1876,7 +1876,7 @@ function  geodir_cfi_files($html,$cf){
         }
 
         if(!empty($files)){
-            $total_files = count(explode(',',$files));
+            $total_files = count(explode('::',$files));
         }else{
             $total_files = 0;
         }

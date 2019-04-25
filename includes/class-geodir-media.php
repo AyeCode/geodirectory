@@ -816,7 +816,7 @@ class GeoDir_Media {
 				if($file->menu_order=="-1"){$is_approved = "|-1";}
 				$files_arr[] = $wp_upload_dir['baseurl'].$file->file."|".$file->ID."|".$file->title."|".$file->caption . $is_approved;
 			}
-			return implode(",",$files_arr);
+			return implode("::",$files_arr);
 		}else{
 			return '';
 		}

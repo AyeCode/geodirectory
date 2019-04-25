@@ -591,7 +591,7 @@ class GeoDir_Post_Data {
 
 			// convert to array if not already an array
 			if ( ! is_array( $files ) ) {
-				$files = explode( ",", $files );
+				$files = explode( "::", $files );
 			}
 
 			$file_ids = array();
@@ -652,7 +652,7 @@ class GeoDir_Post_Data {
 
 			// Check if there are any missing file ids we need to delete
 			if ( ! empty( $current_files ) && ! empty( $files ) && ! empty( $file_ids ) ) {
-				$current_files_arr = explode( ",", $current_files );
+				$current_files_arr = explode( "::", $current_files );
 
 				foreach ( $current_files_arr as $current_file ) {
 					$current_file_arr = explode( "|", $current_file );
