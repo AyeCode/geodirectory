@@ -182,23 +182,22 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             echo '</div>';
 
             if ( ! $args['show_as_list']) { ?>
-                <script>
-                    if (window.location.hash && window.location.hash.indexOf('&') === -1 && jQuery(window.location.hash + 'Tab').length) {
-                        hashVal = window.location.hash;
-                    } else {
-                        hashVal = jQuery('dl.geodir-tab-head dd.geodir-tab-active').find('a').attr('data-tab');
-                    }
-                    jQuery('dl.geodir-tab-head dd').each(function () {
-                        //Get all tabs
-                        var tabs = jQuery(this).children('dd');
-                        var tab = '';
-                        tab = jQuery(this).find('a').attr('data-tab');
-                        if (hashVal != tab) {
-                            jQuery(tab + 'Tab').hide();
-                        }
-
-                    });
-                </script>
+                <script type="text/javascript">/* <![CDATA[ */
+					if (window.location.hash && window.location.hash.indexOf('&') === -1 && jQuery(window.location.hash + 'Tab').length) {
+						hashVal = window.location.hash;
+					} else {
+						hashVal = jQuery('dl.geodir-tab-head dd.geodir-tab-active').find('a').attr('data-tab');
+					}
+					jQuery('dl.geodir-tab-head dd').each(function() {
+						//Get all tabs
+						var tabs = jQuery(this).children('dd');
+						var tab = '';
+						tab = jQuery(this).find('a').attr('data-tab');
+						if (hashVal != tab) {
+							jQuery(tab + 'Tab').hide();
+						}
+					});
+                /* ]]> */</script>
                 <?php
             }
         }
