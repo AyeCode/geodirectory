@@ -280,7 +280,7 @@ function plu_show_thumbs(imgId) {
             image_title   = geodir_esc_entities(image_title);
             image_caption = geodir_esc_entities(image_caption);
 
-            var file_ext = image_url.substring(images[i].lastIndexOf('.') + 1);
+            var file_ext = image_url.substring(image_url.lastIndexOf('.') + 1);
 
             file_ext = file_ext.split('?').shift(); // in case the image url has params
             var fileNameIndex = image_url.lastIndexOf("/") + 1;
