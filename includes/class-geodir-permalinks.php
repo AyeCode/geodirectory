@@ -183,9 +183,13 @@ class GeoDir_Permalinks {
 						}
 
 					}elseif($is_tag = get_term_by( 'slug', $maybe_slug, $post_type."_tags")){
+						$tag_slug = geodir_get_option( 'permalink_tag_base', 'tags' );
 
 						foreach($url_segments as $url_segment){
-							if($url_segment == $maybe_slug ){continue;}
+							 // Old url contains /tags/, so remove /tags/ as well from url.
+							if ( $url_segment == $maybe_slug || $url_segment == $tag_slug ) {
+								continue;
+							}
 
 							// check its not a term also
 							$is_term = get_term_by( 'slug', $url_segment, $post_type."_tags");
