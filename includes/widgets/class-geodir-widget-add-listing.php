@@ -139,8 +139,17 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         }
 
         // check if CPT is disabled add listing
-        if ( !geodir_add_listing_check_post_type( $params['listing_type'] ) ) {
-            return __( 'Adding listings is disabled for this post type..', 'geodirectory' );
+        if ( ! geodir_add_listing_check_post_type( $params['listing_type'] ) ) {
+            $message = __( 'Adding listings is disabled for this post type.', 'geodirectory' );
+			/**
+			 * Filter the message for post type add listing disabled.
+			 *
+			 * @since 2.0.0.56
+			 *
+			 * @param string $message Message for add listing disabled.
+			 * @param string $listing_type The post type.
+			 */
+			return apply_filters( 'geodir_add_listing_disabled_message', $message, $params['listing_type'] );
         }
 
         foreach ( $params as $key => $value ) {
