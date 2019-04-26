@@ -208,6 +208,23 @@ jQuery(document).ready(function($) {
     }
 });
 
+function geodir_esc_entities(str){
+    var entityMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+        '/': '&#x2F;',
+        '`': '&#x60;',
+        '=': '&#x3D;'
+      };
+
+    return String(str).replace(/[&<>"'`=\/]/g, function(s) {
+        return entityMap[s];
+    });
+}
+
 function geodir_remove_file_index(indexes) {
     for (var i = 0; i < indexes.length; i++) {
         if (indexes[i].files.length > 0) {
@@ -243,6 +260,8 @@ function plu_show_thumbs(imgId) {
             var image_id = img_arr[1];
             var image_title = img_arr[2];
             var image_caption = img_arr[3];
+            var image_title_html = '';
+            var image_caption_html = ''; 
 
             // fix undefined id
             if (typeof image_id === "undefined") {
@@ -257,7 +276,11 @@ function plu_show_thumbs(imgId) {
                 image_caption = '';
             }
 
-            var file_ext = image_url.substring(images[i].lastIndexOf('.') + 1);
+            //Esc title and caption
+            image_title   = geodir_esc_entities(image_title);
+            image_caption = geodir_esc_entities(image_caption);
+
+            var file_ext = image_url.substring(image_url.lastIndexOf('.') + 1);
 
             file_ext = file_ext.split('?').shift(); // in case the image url has params
             var fileNameIndex = image_url.lastIndexOf("/") + 1;
@@ -271,6 +294,12 @@ function plu_show_thumbs(imgId) {
             var file_display_class = '';
             if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico') {
                 file_display = '<img class="gd-file-info" data-id="' + image_id + '" data-title="' + image_title + '" data-caption="' + image_caption + '" data-src="' + image_url + '" src="' + image_url + '" alt=""  />';
+                if(!!image_title.trim()){
+                    image_title_html = '<span class="gd-title-preview">' + image_title + '</span>';
+                }
+                if(!!image_caption.trim()){
+                    image_caption_html = '<span class="gd-caption-preview">' + image_caption + '</span>';
+                }
             } else {
                 var file_type_class = 'fa-file';
                 if (file_ext == 'pdf') {
@@ -291,7 +320,9 @@ function plu_show_thumbs(imgId) {
             }
 
             var thumb = $('<div class="thumb ' + file_display_class + '" id="thumb' + imgId + i + '">' +
+                image_title_html +
                 file_display +
+                image_caption_html +
                 '<div class="gd-thumb-actions">' +
                 '<span class="thumbeditlink" onclick="gd_edit_image_meta(' + imgId + ',' + i + ');"><i class="far fa-edit" aria-hidden="true"></i></span>' +
                 '<span class="thumbremovelink" id="thumbremovelink' + imgId + i + '"><i class="fas fa-trash-alt" aria-hidden="true"></i></span>' +
@@ -375,8 +406,8 @@ function gd_set_image_meta(input_id, order_id) {
     var img_arr = images[order_id].split("|");
     var image_url = img_arr[0];
     var image_id = img_arr[1];
-    var image_title = jQuery('#gd-image-meta-title').val();
-    var image_caption = jQuery('#gd-image-meta-caption').val();
+    var image_title = geodir_esc_entities(jQuery('#gd-image-meta-title').val());
+    var image_caption = geodir_esc_entities(jQuery('#gd-image-meta-caption').val());
     images[order_id] = image_url + "|" + image_id + "|" + image_title + "|" + image_caption;
     imagesS = images.join("::");
     jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val(imagesS);
