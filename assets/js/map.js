@@ -475,7 +475,10 @@ function list_markers(json, map_canvas_var) {
 				icon = icons[marker['i']];
 				if (icon['i']) {
 					icon_url = icon['i'];
-					marker['icon'] = icon_url.indexOf("plugins/") === 0 || icon_url.indexOf("plugins/") > 0 ? content_url + icon_url : baseurl + '/' + icon_url;
+					if ( ! ( icon_url.indexOf("http://") === 0 || icon_url.indexOf("https://") === 0 ) ) {
+						icon_url = icon_url.indexOf("plugins/") === 0 || icon_url.indexOf("plugins/") > 0 ? content_url + icon_url : baseurl + '/' + icon_url
+					}
+					marker['icon'] = icon_url;
 					marker['w'] = icon['w'];
 					marker['h'] = icon['h'];
 				}
