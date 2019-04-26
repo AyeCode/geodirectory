@@ -588,109 +588,37 @@ class GeoDir_SEO {
 		return apply_filters( 'document_title_separator', '-' );
 	}
 
+	/**
+	 * Filter Yoast breadcrumbs to add cat to details page.
+	 *
+	 * @param $crumbs
+	 *
+	 * @return mixed
+	 */
     public static function breadcrumb_links($crumbs){
-        $breadcrumb = array();
 
-        $location_manager     = class_exists('GeoDir_Location_Manager') ? true : false;
-        $neighbourhood_active = $location_manager && geodir_get_option( 'lm_enable_neighbourhoods' ) ? true : false;
+	    // maybe add category link to single page
+        if ( geodir_is_page( 'detail' )) {
+	        global $wp_query;
+	        $breadcrumb = array();
+	        $post_type   = geodir_get_current_posttype();
+	        $category = !empty($wp_query->query_vars[$post_type."category"]) ? $wp_query->query_vars[$post_type."category"] : '';
+	        if($category){
+		        $term  = get_term_by( 'slug', $category, $post_type."category");
+		        if(!empty($term)){
+			        $breadcrumb[]['term'] = $term;
+		        }
+	        }
 
-        $gd_post_type   = geodir_get_current_posttype();
-        $location_terms = geodir_get_current_location_terms( 'query_vars', $gd_post_type );
+	        $offset = apply_filters('wpseo_breadcrumb_links_offset', 2, $breadcrumb, $crumbs);
+	        $length = apply_filters('wpseo_breadcrumb_links_length', 0, $breadcrumb, $crumbs);
 
-        remove_filter( 'post_type_archive_link', 'geodir_get_posttype_link' );
-
-        $location_link = get_post_type_archive_link( $gd_post_type );
-
-        add_filter( 'post_type_archive_link', 'geodir_get_posttype_link', 10, 2 );
-        $location_link = trailingslashit($location_link);
-
-        if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
-            $geodir_show_location_url = geodir_get_option( 'geodir_show_location_url' );
-
-            if ( $geodir_show_location_url == 'country_city' ) {
-                if ( isset( $location_terms['region'] ) && ! $location_manager ) {
-                    unset( $location_terms['region'] );
-                }
-            } else if ( $geodir_show_location_url == 'region_city' ) {
-                if ( isset( $location_terms['country'] ) && ! $location_manager ) {
-                    unset( $location_terms['country'] );
-                }
-            } else {
-                if ( isset( $location_terms['country'] ) && ! $location_manager ) {
-                    unset( $location_terms['country'] );
-                }
-                if ( isset( $location_terms['region'] ) && ! $location_manager ) {
-                    unset( $location_terms['region'] );
-                }
-            }
-
-            if ( ! empty( $location_terms ) ) {
-                $geodir_get_locations = function_exists( 'get_actual_location_name' ) ? true : false;
-
-                foreach ( $location_terms as $key => $location_term ) {
-                    if ( $location_term != '' ) {
-
-                        $gd_location_link_text = preg_replace( '/-(\d+)$/', '', $location_term );
-                        $gd_location_link_text = preg_replace( '/[_-]/', ' ', $gd_location_link_text );
-                        $gd_location_link_text = geodir_utf8_ucfirst( $gd_location_link_text );
-
-                        $location_term_actual_country = $location_term_actual_region = $location_term_actual_city = $location_term_actual_neighbourhood = '';
-
-                        if ( $geodir_get_locations ) {
-                            if ( $key == 'country' ) {
-                                $location_term_actual_country = get_actual_location_name( 'country', $location_term, true );
-                            } else if ( $key == 'region' ) {
-                                $location_term_actual_region = get_actual_location_name( 'region', $location_term, true );
-                            } else if ( $key == 'city' ) {
-                                $location_term_actual_city = get_actual_location_name( 'city', $location_term, true );
-                            } else if ( $key == 'neighbourhood' ) {
-                                $location_term_actual_neighbourhood = get_actual_location_name( 'neighbourhood', $location_term, true );
-                            }
-                        }
-
-                        if ( $key == 'country' && ! ( isset( $location_terms['region'] ) && $location_terms['region'] != '' ) && ! ( isset( $location_terms['city'] ) && $location_terms['city'] != '' ) ) {
-
-                            $gd_location_link_text = $location_term_actual_country != '' ? $location_term_actual_country : $gd_location_link_text;
-
-                        } else if ( $key == 'region' && ! ( isset( $location_terms['city'] ) && $location_terms['city'] != '' ) ) {
-
-                            $gd_location_link_text = $location_term_actual_region != '' ? $location_term_actual_region : $gd_location_link_text;
-
-                        } else if ( $key == 'city' && empty( $location_terms['neighbourhood'] ) ) {
-
-                            $gd_location_link_text = $location_term_actual_city != '' ? $location_term_actual_city : $gd_location_link_text;
-
-                        } else if ( $key == 'neighbourhood' && $neighbourhood_active ) {
-
-                            $gd_location_link_text = $location_term_actual_neighbourhood != '' ? $location_term_actual_neighbourhood : $gd_location_link_text;
-
-                        } else {
-
-                        }
-
-                        if ( get_option( 'permalink_structure' ) != '' ) {
-                            $location_link .= $location_term . '/';
-                        } else {
-                            $location_link .= "&$key=" . $location_term;
-                        }
-
-                        $breadcrumb[] = array(
-                            'text' => $gd_location_link_text,
-                            'url' => $location_link,
-                        );
-                    }
-                }
-
-                $offset = apply_filters('wpseo_breadcrumb_links_offset', 2, $breadcrumb, $crumbs);
-                $length = apply_filters('wpseo_breadcrumb_links_length', 0, $breadcrumb, $crumbs);
-
-                if(is_array($breadcrumb) && count($breadcrumb) > 0 ){
-                    array_splice( $crumbs, $offset, $length, $breadcrumb );
-                }
-            }
+	        if(!empty($breadcrumb) && count($breadcrumb) > 0 ){
+		        array_splice( $crumbs, $offset, $length, $breadcrumb );
+	        }
 
         }
-
+	    
         return $crumbs;
     }
 

@@ -459,13 +459,14 @@ jQuery(window).load(function() {
     });
     
     jQuery('dl.geodir-tab-head dd.geodir-tab-active').trigger('click');
-
-
+    
     // Show the tab if an anchor link is clicked
     jQuery('a[href*=\\#]').on('click', function (event) {
         if(this.pathname === window.location.pathname){
             if(jQuery(this.hash+'Tab').length){
                 activateTab(jQuery('a[data-tab="' + this.hash + '"]').parent());
+            }else if(this.hash=='#respond' && jQuery('#reviewsTab').length){
+                activateTab(jQuery('a[data-tab="#reviews"]').parent());
             }
         }
     });

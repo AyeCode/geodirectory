@@ -74,22 +74,16 @@ function geodir_get_image_src($image, $size = 'medium'){
  * @return string $html Image tag.
  */
 function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
-    //function geodir_get_image_tag( $id, $alt, $title, $align, $size = 'medium' ) {
-
-    //list( $img_src, $width, $height ) = image_downsize($id, $size);
 
     $meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
-
     $img_src = geodir_get_image_src($image, $size);
-
-    //print_r($meta);exit;
     $width = isset($meta['width']) ? $meta['width'] : '';
     $height = isset($meta['height']) ? $meta['height'] : '';
     $hwstring = image_hwstring($width, $height);
 
     $id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
-    $title = isset( $image->title ) && $image->title ? 'title="' . esc_attr( $image->title ) . '" ' : '';
-    $alt = isset( $image->caption ) && $image->caption ? $image->caption : 'image-'.$id;
+    $title = isset( $image->title ) && $image->title ? 'title="' .  esc_attr( wp_strip_all_tags( $image->title ) ) . '" ' : '';
+    $alt = isset( $image->caption ) && $image->caption ? esc_attr( wp_strip_all_tags($image->caption ) ) : 'image-'.$id;
     $class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id;
 
     /**
@@ -137,10 +131,15 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
  * @param int|string $limit Optional. Number of images.
  * @return array|bool Returns images as an array. Each item is an object.
  */
-function geodir_get_images($post_id = 0, $limit = '',$logo = false, $revision_id = '')
+function geodir_get_images($post_id = 0, $limit = '',$logo = false, $revision_id = '',$types = array())
 {   global $gd_post;
+    
+    if(!empty($types)){
+        $post_images = GeoDir_Media::get_attachments_by_type($post_id,$types,$limit,$revision_id);
+    }else{
+        $post_images = GeoDir_Media::get_post_images($post_id,$limit,$revision_id);
+    }
 
-    $post_images = GeoDir_Media::get_post_images($post_id,$limit,$revision_id);
 
 //   print_r( $post_images );
     if(!empty($post_images)){
@@ -171,9 +170,7 @@ function geodir_get_images($post_id = 0, $limit = '',$logo = false, $revision_id
             $default_img_id = '';
 
             // no image code
-
-
-
+            
             // cat image
             if(geodir_is_page('archive')){
                 if($term_id = get_queried_object_id()){
