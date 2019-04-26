@@ -158,12 +158,22 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'advanced' => true
 				),
 				'show_logo'  => array(
-					'title' => __('Show logo:', 'geodirectory'),
-					'desc' => __('Show the listing logo first if uploaded.', 'geodirectory'),
+					'title' => __('Show logo (depreciated):', 'geodirectory'),
+					'desc' => __('(depreciated, use `types` below) Show the listing logo first if uploaded.', 'geodirectory'),
 					'type' => 'checkbox',
 					'desc_tip' => true,
 					'value'  => '1',
 					'default'  => 0,
+					'advanced' => true
+				),
+				'types'  => array(
+					'title' => __('Image types:', 'geodirectory'),
+					'desc' => __('Comma separated list of image types to show. Defaults to: post_images', 'geodirectory'),
+					'type' => 'text',
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'placeholder'  => 'post_images,logo',
 					'advanced' => true
 				),
 				'image_size'  => array(
@@ -271,7 +281,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'link_to'     => '',
 			'image_size'     => 'medium',
 			'show_logo'     => 'false',
-			'cover'   => '' // image cover type
+			'cover'   => '', // image cover type
+			'types'   => '', // types to show, post_images,comment_images,logo
 		);
 
 		/**
@@ -289,7 +300,14 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 		$revision_id = is_preview() && !empty($gd_post->ID) ? absint($gd_post->ID) : '';
 
-		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id);
+		// types
+		if(!empty($options['types'])){
+			$options['types'] = explode(",",$options['types']);
+		}
+
+//		$options['types'] = array("logo","comment_images","post_images"); // @todo remove this line after testing
+
+		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types']);
 
 
 		// make it just a image if only one
@@ -373,7 +391,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 							if($image_size!='thumbnail'){
 								$img_tag =  wp_image_add_srcset_and_sizes( $img_tag, $meta , 0 );
 							}
-
 
 							// image link
 							if($options['link_to']=='lightbox'){

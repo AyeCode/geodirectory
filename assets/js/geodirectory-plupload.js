@@ -14,6 +14,7 @@ jQuery(document).ready(function($) {
             post_id = jQuery("#post input[name='post_ID']").val(); // backend
         }
 
+
         $(".plupload-upload-uic").each(function() {
             var $this = $(this);
             var id1 = $this.attr("id");
@@ -190,7 +191,7 @@ jQuery(document).ready(function($) {
                     // multiple
                     var v1 = $.trim($("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val());
                     if (v1) {
-                        v1 = v1 + "," + response;
+                        v1 = v1 + "::" + response;
                     } else {
                         v1 = response;
                     }

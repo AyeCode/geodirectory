@@ -46,7 +46,8 @@
 					<label for="gd-tab-content-<?php echo $tab->id;?>">
 						<?php _e('Tab content:','geodirectory');
 						if($tab->tab_type=='shortcode'){
-							echo ' <a href="#TB_inline?width=100%&height=550&inlineId=super-duper-content" class="thickbox button super-duper-content-open" title="'. __('Add Shortcode','geodirectory').'"><i class="fas fa-cubes" aria-hidden="true"></i></a>';
+							echo WP_Super_Duper::shortcode_button("'gd-tab-content-".$tab->id."'");
+//							echo ' <a href="#TB_inline?width=100%&height=550&inlineId=super-duper-content" class="thickbox button super-duper-content-open" title="'. __('Add Shortcode','geodirectory').'"><i class="fas fa-cubes" aria-hidden="true"></i></a>';
 						}
 						?><br>
 						<textarea name="tab_content" id="gd-tab-content-<?php echo $tab->id;?>" placeholder="<?php _e('Add shortcode here.','geodirectory');?>"><?php echo stripslashes($tab->tab_content);?></textarea>
