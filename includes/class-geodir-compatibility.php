@@ -224,6 +224,12 @@ class GeoDir_Compatibility {
 		if ( function_exists('avia_lang_setup') ) {
 			add_filter( 'avf_preview_window_css_files', array( __CLASS__, 'enfold_preview_styles' ) );
 		}
+
+		// Flatsome theme breaks search page.
+		if ( isset( $_REQUEST['geodir_search'] ) && function_exists( 'flatsome_contentfix' ) && has_filter( 'the_content', 'flatsome_contentfix' ) ) {
+			remove_filter( 'the_content', 'flatsome_contentfix' );
+			add_filter( 'the_content', 'flatsome_contentfix', 11 );
+		}
 	}
 
 	/**
