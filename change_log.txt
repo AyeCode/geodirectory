@@ -37,6 +37,7 @@
 * Changes for Yoast breadcrumbs to include categories in details page - CHANGED
 * Post images widget can now output different types of images like icon and comment_images - CHANGED
 * Issue in rescue old tags url to prevent 404 error - FIXED
+* Search page is broken when Flatsome theme active - FIXED
 
 = 2.0.0.55 =
 * "Elvyre - Retina Ready Wordpress Theme" layout compatibility for detail & archive pages - ADDED
