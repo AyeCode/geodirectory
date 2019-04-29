@@ -477,13 +477,15 @@ function geodir_geoplugin_data( $ip = '' ) {
     $geoplugin_data = array();
 
     // check transient cache
-    $cache = get_transient( 'geodir_ip_location_'.$ip );
+    $cache = false;// get_transient( 'geodir_ip_location_'.$ip );
     if($cache === false){
 
         $url = 'http://www.geoplugin.net/php.gp?ip=' . $ip;
-        $response = file_get_contents( $url );
-        if ( ! empty( $response ) ) {
-            $geoplugin_data = maybe_unserialize( $response );
+        if(ini_get('allow_url_fopen')){
+            $response = file_get_contents( $url );
+            if ( ! empty( $response ) ) {
+                $geoplugin_data = maybe_unserialize( $response );
+            }
         }
     }else{
         $geoplugin_data = $cache;

@@ -321,7 +321,7 @@ jQuery(document).ready(function($) {
 
 
     // init the rating inputs, delay needed for font awesome to load
-    setTimeout(function(){gd_init_rating_input();}, 100);
+    setTimeout(function(){gd_init_rating_input();}, 250);
 
 
 

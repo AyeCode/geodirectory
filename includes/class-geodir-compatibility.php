@@ -528,7 +528,7 @@ class GeoDir_Compatibility {
 	public static function astra_page_layout( $layout ) {
 		global $wp_query;
 		$page_id = isset( $wp_query->post->ID ) ? $wp_query->post->ID : '';
-		if ( $page_id && geodir_archive_page_id() == $page_id ) {
+		if ( $page_id && (geodir_archive_page_id() == $page_id || geodir_search_page_id() == $page_id )) {
 			$page_layout = get_post_meta( $page_id, 'site-sidebar-layout', true );
 			if ( $page_layout != '' ) {
 				$layout = $page_layout;
