@@ -535,6 +535,10 @@ function geodir_date_format_php_to_jqueryui( $php_format ) {
 		}
 	}
 
+	if ( $escaping ) {
+		$jqueryui_format .= "'";
+	}
+
 	return $jqueryui_format;
 }
 

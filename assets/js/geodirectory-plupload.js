@@ -284,6 +284,9 @@ function plu_show_thumbs(imgId) {
             var file_ext = image_url.substring(image_url.lastIndexOf('.') + 1);
 
             file_ext = file_ext.split('?').shift(); // in case the image url has params
+			if (file_ext) {
+				file_ext = file_ext.toLowerCase();
+			}
             var fileNameIndex = image_url.lastIndexOf("/") + 1;
             var dotIndex = image_url.lastIndexOf('.');
             if (dotIndex < fileNameIndex) {
