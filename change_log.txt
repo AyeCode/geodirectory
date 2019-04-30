@@ -1,3 +1,6 @@
+= 2.0.0.57 =
+* Image extension with uppercase not showing in backend - FIXED
+
 = 2.0.0.56 =
 * Genesis theme not using h1 tags for archive page titles - FIXED
 * GD SEO titles should still be used even if Yoast is installed - CHANGED
