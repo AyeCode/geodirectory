@@ -330,7 +330,7 @@ jQuery(document).ready(function($) {
 // init any sliders
 function geodir_init_flexslider(){
 
-    jQuery('.geodir-slider').each(function(i, obj) {
+    jQuery('.geodir-slider.geodir-slider-loading').each(function(i, obj) {
         // init the sliders
         geodir_init_slider(obj.id);
     });

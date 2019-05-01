@@ -91,6 +91,16 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			'advanced' => true
 		);
 
+		$widget_args['enqueue_slider']  = array(
+			'title' => __('Enqueue Slider Script:', 'geodirectory'),
+			'desc' => __('This is only needed if your archive items are using a image slider.', 'geodirectory'),
+			'type' => 'checkbox',
+			'desc_tip' => true,
+			'value'  => '1',
+			'default'  => 0,
+			'advanced' => true
+		);
+
 		return $widget_args;
 	}
 
@@ -121,7 +131,14 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		$post_page_limit = !empty( $args['post_limit'] ) ? $args['post_limit'] : '5';
 		$layout = !empty( $args['layout'] ) ? $args['layout'] : 'list';
 		$post_type = !empty( $args['post_type'] ) ? $args['post_type'] : 'all_post';
+		$enqueue_slider = !empty( $args['enqueue_slider'] ) ? true : false;
+
 		ob_start();
+
+		if($enqueue_slider ){
+			// enqueue flexslider JS
+			GeoDir_Frontend_Scripts::enqueue_script( 'jquery-flexslider' );
+		}
 		?>
 		<div class="geodir-recently-reviewed">
 			<div class="recently-reviewed-content recently-reviewed-content-<?php echo absint($geodir_recently_viewed_count); ?>"></div>
