@@ -1,5 +1,7 @@
 = 2.0.0.57 =
 * Image extension with uppercase not showing in backend - FIXED
+* Recently viewed widget can break single page slider in some cases - FIXED
+* Recently viewed widget setting added to load slider script if archive item has slider - ADDED
 
 = 2.0.0.56 =
 * Genesis theme not using h1 tags for archive page titles - FIXED
