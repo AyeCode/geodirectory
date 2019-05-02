@@ -338,7 +338,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			}
 
 			// Set the slider ID
-			$slider_id = "geodir_images_".$post->ID;
+			$slider_id = wp_doing_ajax() ? "geodir_images_ajax_".$post->ID : "geodir_images_".$post->ID;
 			if(!is_array($gd_slider_outputs)){
 				$gd_slider_outputs = array();
 			}

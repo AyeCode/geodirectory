@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.56\n"
+"Project-Id-Version: GeoDirectory 2.0.0.57\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-04-29 11:17+0100\n"
-"PO-Revision-Date: 2019-04-29 11:17+0100\n"
+"POT-Creation-Date: 2019-05-01 12:44+0100\n"
+"PO-Revision-Date: 2019-05-01 12:44+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -2083,7 +2083,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:805
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:23
-#: includes/helper-functions.php:1585 includes/helper-functions.php:1693
+#: includes/helper-functions.php:1589 includes/helper-functions.php:1697
 #: includes/widgets/class-geodir-widget-categories.php:145
 #: includes/widgets/class-geodir-widget-categories.php:154
 #: includes/widgets/class-geodir-widget-categories.php:163
@@ -8123,37 +8123,37 @@ msgid "Limit results to taxonomies associated with a specific post type."
 msgstr ""
 
 #: includes/business-hours-functions.php:30 includes/general-functions.php:213
-#: includes/helper-functions.php:555
+#: includes/helper-functions.php:559
 msgid "Monday"
 msgstr ""
 
 #: includes/business-hours-functions.php:31 includes/general-functions.php:214
-#: includes/helper-functions.php:556
+#: includes/helper-functions.php:560
 msgid "Tuesday"
 msgstr ""
 
 #: includes/business-hours-functions.php:32 includes/general-functions.php:215
-#: includes/helper-functions.php:557
+#: includes/helper-functions.php:561
 msgid "Wednesday"
 msgstr ""
 
 #: includes/business-hours-functions.php:33 includes/general-functions.php:216
-#: includes/helper-functions.php:558
+#: includes/helper-functions.php:562
 msgid "Thursday"
 msgstr ""
 
 #: includes/business-hours-functions.php:34 includes/general-functions.php:217
-#: includes/helper-functions.php:559
+#: includes/helper-functions.php:563
 msgid "Friday"
 msgstr ""
 
 #: includes/business-hours-functions.php:35 includes/general-functions.php:218
-#: includes/helper-functions.php:560
+#: includes/helper-functions.php:564
 msgid "Saturday"
 msgstr ""
 
 #: includes/business-hours-functions.php:36 includes/general-functions.php:212
-#: includes/helper-functions.php:554
+#: includes/helper-functions.php:558
 msgid "Sunday"
 msgstr ""
 
@@ -9983,11 +9983,11 @@ msgstr ""
 msgid "Done"
 msgstr ""
 
-#: includes/general-functions.php:2108 includes/helper-functions.php:611
+#: includes/general-functions.php:2108 includes/helper-functions.php:615
 msgid "AM"
 msgstr ""
 
-#: includes/general-functions.php:2109 includes/helper-functions.php:612
+#: includes/general-functions.php:2109 includes/helper-functions.php:616
 msgid "PM"
 msgstr ""
 
@@ -10081,207 +10081,207 @@ msgstr ""
 msgid "%1$s must be between %2$d (inclusive) and %3$d (inclusive)"
 msgstr ""
 
-#: includes/helper-functions.php:563
+#: includes/helper-functions.php:567
 msgid "January"
 msgstr ""
 
-#: includes/helper-functions.php:564
+#: includes/helper-functions.php:568
 msgid "February"
 msgstr ""
 
-#: includes/helper-functions.php:565
+#: includes/helper-functions.php:569
 msgid "March"
 msgstr ""
 
-#: includes/helper-functions.php:566
+#: includes/helper-functions.php:570
 msgid "April"
 msgstr ""
 
-#: includes/helper-functions.php:567
+#: includes/helper-functions.php:571
 msgid "May"
 msgstr ""
 
-#: includes/helper-functions.php:568
+#: includes/helper-functions.php:572
 msgid "June"
 msgstr ""
 
-#: includes/helper-functions.php:569
+#: includes/helper-functions.php:573
 msgid "July"
 msgstr ""
 
-#: includes/helper-functions.php:570
+#: includes/helper-functions.php:574
 msgid "August"
 msgstr ""
 
-#: includes/helper-functions.php:571
+#: includes/helper-functions.php:575
 msgid "September"
 msgstr ""
 
-#: includes/helper-functions.php:572
+#: includes/helper-functions.php:576
 msgid "October"
 msgstr ""
 
-#: includes/helper-functions.php:573
+#: includes/helper-functions.php:577
 msgid "November"
 msgstr ""
 
-#: includes/helper-functions.php:574
+#: includes/helper-functions.php:578
 msgid "December"
 msgstr ""
 
-#: includes/helper-functions.php:577
+#: includes/helper-functions.php:581
 msgctxt "January abbreviation"
 msgid "Jan"
 msgstr ""
 
-#: includes/helper-functions.php:578
+#: includes/helper-functions.php:582
 msgctxt "February abbreviation"
 msgid "Feb"
 msgstr ""
 
-#: includes/helper-functions.php:579
+#: includes/helper-functions.php:583
 msgctxt "March abbreviation"
 msgid "Mar"
 msgstr ""
 
-#: includes/helper-functions.php:580
+#: includes/helper-functions.php:584
 msgctxt "April abbreviation"
 msgid "Apr"
 msgstr ""
 
-#: includes/helper-functions.php:581
+#: includes/helper-functions.php:585
 msgctxt "May abbreviation"
 msgid "May"
 msgstr ""
 
-#: includes/helper-functions.php:582
+#: includes/helper-functions.php:586
 msgctxt "June abbreviation"
 msgid "Jun"
 msgstr ""
 
-#: includes/helper-functions.php:583
+#: includes/helper-functions.php:587
 msgctxt "July abbreviation"
 msgid "Jul"
 msgstr ""
 
-#: includes/helper-functions.php:584
+#: includes/helper-functions.php:588
 msgctxt "August abbreviation"
 msgid "Aug"
 msgstr ""
 
-#: includes/helper-functions.php:585
+#: includes/helper-functions.php:589
 msgctxt "September abbreviation"
 msgid "Sep"
 msgstr ""
 
-#: includes/helper-functions.php:586
+#: includes/helper-functions.php:590
 msgctxt "October abbreviation"
 msgid "Oct"
 msgstr ""
 
-#: includes/helper-functions.php:587
+#: includes/helper-functions.php:591
 msgctxt "November abbreviation"
 msgid "Nov"
 msgstr ""
 
-#: includes/helper-functions.php:588
+#: includes/helper-functions.php:592
 msgctxt "December abbreviation"
 msgid "Dec"
 msgstr ""
 
-#: includes/helper-functions.php:591
+#: includes/helper-functions.php:595
 msgid "Sun"
 msgstr ""
 
-#: includes/helper-functions.php:592
+#: includes/helper-functions.php:596
 msgid "Mon"
 msgstr ""
 
-#: includes/helper-functions.php:593
+#: includes/helper-functions.php:597
 msgid "Tue"
 msgstr ""
 
-#: includes/helper-functions.php:594
+#: includes/helper-functions.php:598
 msgid "Wed"
 msgstr ""
 
-#: includes/helper-functions.php:595
+#: includes/helper-functions.php:599
 msgid "Thu"
 msgstr ""
 
-#: includes/helper-functions.php:596
+#: includes/helper-functions.php:600
 msgid "Fri"
 msgstr ""
 
-#: includes/helper-functions.php:597
+#: includes/helper-functions.php:601
 msgid "Sat"
 msgstr ""
 
-#: includes/helper-functions.php:600
+#: includes/helper-functions.php:604
 msgctxt "Sunday initial"
 msgid "S"
 msgstr ""
 
-#: includes/helper-functions.php:601
+#: includes/helper-functions.php:605
 msgctxt "Monday initial"
 msgid "M"
 msgstr ""
 
-#: includes/helper-functions.php:602
+#: includes/helper-functions.php:606
 msgctxt "Tuesday initial"
 msgid "T"
 msgstr ""
 
-#: includes/helper-functions.php:603
+#: includes/helper-functions.php:607
 msgctxt "Wednesday initial"
 msgid "W"
 msgstr ""
 
-#: includes/helper-functions.php:604
+#: includes/helper-functions.php:608
 msgctxt "Thursday initial"
 msgid "T"
 msgstr ""
 
-#: includes/helper-functions.php:605
+#: includes/helper-functions.php:609
 msgctxt "Friday initial"
 msgid "F"
 msgstr ""
 
-#: includes/helper-functions.php:606
+#: includes/helper-functions.php:610
 msgctxt "Saturday initial"
 msgid "S"
 msgstr ""
 
-#: includes/helper-functions.php:609
+#: includes/helper-functions.php:613
 msgid "am"
 msgstr ""
 
-#: includes/helper-functions.php:610
+#: includes/helper-functions.php:614
 msgid "pm"
 msgstr ""
 
-#: includes/helper-functions.php:1636
+#: includes/helper-functions.php:1640
 #: includes/widgets/class-geodir-widget-categories.php:135
 msgid "A-Z"
 msgstr ""
 
-#: includes/helper-functions.php:1637
+#: includes/helper-functions.php:1641
 msgid "Latest"
 msgstr ""
 
-#: includes/helper-functions.php:1638
+#: includes/helper-functions.php:1642
 msgid "Most reviews"
 msgstr ""
 
-#: includes/helper-functions.php:1639
+#: includes/helper-functions.php:1643
 msgid "Highest rating"
 msgstr ""
 
-#: includes/helper-functions.php:1640
+#: includes/helper-functions.php:1644
 msgid "Random"
 msgstr ""
 
-#: includes/helper-functions.php:1644
+#: includes/helper-functions.php:1648
 msgid "Distance to current post (details page only)"
 msgstr ""
 
@@ -12225,6 +12225,14 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-recently-viewed.php:86
 msgid "The custom post types to show. Only used when there are multiple CPTs."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-recently-viewed.php:95
+msgid "Enqueue Slider Script:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-recently-viewed.php:96
+msgid "This is only needed if your archive items are using a image slider."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-search.php:30
