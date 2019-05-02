@@ -44,9 +44,18 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-		global $gd_post;
-		if ( ! isset( $gd_post->distance ) ) {
+		global $post, $gd_post;
+
+		if ( empty( $gd_post ) ) {
 			return;
+		}
+
+		if ( ! isset( $gd_post->distance ) ) {
+			if ( ! empty( $post ) && ! empty( $gd_post->ID ) && $post->ID == $gd_post->ID && isset( $post->distance ) ) {
+				$gd_post->distance = $post->distance;
+			} else {
+				return;
+			}
 		}
 
 		$distance = round( (float) $gd_post->distance, 2 );
@@ -57,20 +66,16 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 
 		ob_start();
 
-		if(isset($gd_post->latitude)) {
-
-			if(geodir_is_page('single')){
+		if ( isset( $gd_post->latitude ) ) {
+			if ( geodir_is_page( 'single' ) ) {
 				?>
 				<a href="#post_map" onclick="gd_set_get_directions('<?php echo esc_attr($gd_post->latitude);?>','<?php echo esc_attr($gd_post->longitude);?>');">
 				<?php
 			}
 			?>
-			<span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road"
-
-			                                                                  aria-hidden="true"></i> <?php echo $distance; ?></span>
-
-			<?php
-			if(geodir_is_page('single')){
+			<span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road" aria-hidden="true"></i> <?php echo $distance; ?></span>
+			<?php 
+			if ( geodir_is_page( 'single' ) ) { 
 				?>
 				</a>
 				<?php

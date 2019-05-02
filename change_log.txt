@@ -1,3 +1,6 @@
+= 2.0.0.58 =
+* Sometimes distance value not showing on search page - FIXED
+
 = 2.0.0.57 =
 * Image extension with uppercase not showing in backend - FIXED
 * Recently viewed widget can break single page slider in some cases - FIXED
