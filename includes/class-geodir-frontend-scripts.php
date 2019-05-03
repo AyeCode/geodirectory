@@ -217,8 +217,9 @@ class GeoDir_Frontend_Scripts {
 						 */
 						$near_add2 = apply_filters('geodir_search_near_addition', '');
 						?>
+						var search_address = address<?php echo ( $near_add ? '+", ' . $near_add . '"' : '' ) . $near_add2; ?>;
 						if (window.gdMaps === 'google') {
-							Sgeocoder.geocode({'address': address<?php echo ($near_add ? '+", ' . $near_add . '"' : '') . $near_add2;?>},
+							Sgeocoder.geocode({'address': search_address},
 								function (results, status) {
 									if (status == google.maps.GeocoderStatus.OK) {
 										updateSearchPosition(results[0].geometry.location, $form);
@@ -227,7 +228,7 @@ class GeoDir_Frontend_Scripts {
 									}
 								});
 						} else if (window.gdMaps === 'osm') {
-							geocodePositionOSM(false, address, false, false,
+							geocodePositionOSM(false, search_address, false, false,
 								function(geo) {
 									if (typeof geo !== 'undefined' && geo.lat && geo.lon) {
 										updateSearchPosition(geo, $form);
