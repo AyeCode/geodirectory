@@ -563,7 +563,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'geodir_search' => 1,
                 'stype' => $post_type,
                 's' => '',
-                'snear' => __( 'Near:', 'geodiradvancesearch' ) . ' ' . __( 'Me', 'geodiradvancesearch' ),
+                'snear' => __( 'Near:', 'geodirectory' ) . ' ' . __( 'Me', 'geodirectory' ),
                 'sgeo_lat' => $user_lat,
                 'sgeo_lon' => $user_lon
             ), geodir_search_page_base_url() );

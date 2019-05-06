@@ -1135,7 +1135,7 @@ function geodir_cfi_address($html,$cf){
             <?php } ?>
                 <input autocomplete="off" type="text" field_type="<?php echo $type;?>" name="<?php echo 'street';?>" id="<?php echo $prefix . 'street';?>" class="geodir_textfield<?php echo $locate_me_class;?>" value="<?php echo esc_attr(stripslashes($street)); ?>" <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?> />
                 <?php if ($locate_me) { ?>
-                <span class="gd-locate-me-btn gd-input-group-addon" title="<?php esc_attr_e('My location', 'geodirlocation'); ?>"><i class="fas fa-crosshairs fa-fw" aria-hidden="true"></i></span>
+                <span class="gd-locate-me-btn gd-input-group-addon" title="<?php esc_attr_e('My location', 'geodirectory'); ?>"><i class="fas fa-crosshairs fa-fw" aria-hidden="true"></i></span>
             </div>
             <?php } ?>
             <span class="geodir_message_note"><?php _e($frontend_desc, 'geodirectory');?></span>
