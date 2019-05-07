@@ -119,7 +119,8 @@ class GeoDir_REST_System_Status_Tools_Controller extends GeoDir_REST_Controller 
 	 */
 	public function get_items( $request ) {
 		$tools = array();
-		foreach ( $this->get_tools() as $id => $tool ) {
+		$tools_controller = new GeoDir_Admin_Tools();
+		foreach ( $tools_controller->get_tools() as $id => $tool ) {
 			$tools[] = $this->prepare_response_for_collection( $this->prepare_item_for_response( array(
 				'id'          => $id,
 				'name'        => $tool['name'],
@@ -139,7 +140,8 @@ class GeoDir_REST_System_Status_Tools_Controller extends GeoDir_REST_Controller 
 	 * @return WP_Error|WP_REST_Response
 	 */
 	public function get_item( $request ) {
-		$tools = $this->get_tools();
+		$tools_controller = new GeoDir_Admin_Tools();
+		$tools = $tools_controller->get_tools();
 		if ( empty( $tools[ $request['id'] ] ) ) {
 			return new WP_Error( 'geodir_rest_system_status_tool_invalid_id', __( 'Invalid tool ID.', 'geodirectory' ), array( 'status' => 404 ) );
 		}
@@ -158,7 +160,8 @@ class GeoDir_REST_System_Status_Tools_Controller extends GeoDir_REST_Controller 
 	 * @return WP_Error|WP_REST_Response
 	 */
 	public function update_item( $request ) {
-		$tools = $this->get_tools();
+		$tools_controller = new GeoDir_Admin_Tools();
+		$tools = $tools_controller->get_tools();
 		if ( empty( $tools[ $request['id'] ] ) ) {
 			return new WP_Error( 'geodir_rest_system_status_tool_invalid_id', __( 'Invalid tool ID.', 'geodirectory' ), array( 'status' => 404 ) );
 		}
