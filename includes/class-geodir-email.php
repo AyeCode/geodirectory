@@ -239,7 +239,7 @@ class GeoDir_Email {
 		$site_url        = home_url();
 		$blogname        = geodir_get_blogname();
 		$email_from_anme = self::get_mail_from_name();
-		$login_url       = geodir_login_url();
+		$login_url       = geodir_login_url( false ); // 'false' to prevent adding redirect_to to login url.
 		$timestamp       = current_time( 'timestamp' );
 		$date            = date_i18n( get_option( 'date_format' ), $timestamp );
 		$time            = date_i18n( get_option( 'time_format' ), $timestamp );
@@ -273,6 +273,7 @@ class GeoDir_Email {
 			$replace_array['[#post_id#]']          = $post_id;
 			$replace_array['[#post_status#]']      = $gd_post->post_status;
 			$replace_array['[#post_date#]']        = $gd_post->post_date;
+			$replace_array['[#posted_date#]']      = $gd_post->post_date;
 			$replace_array['[#post_author_ID#]']   = $gd_post->post_author;
 			$replace_array['[#post_author_name#]'] = $post_author_name;
 			$replace_array['[#client_name#]']      = $post_author_name;

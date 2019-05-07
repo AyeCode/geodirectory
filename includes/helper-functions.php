@@ -179,13 +179,13 @@ function geodir_terms_and_conditions_page_id(){
  * @package Geodirectory
  * @since 1.5.3
  * @return int|null Return the page ID if present or null if not.
+ *                  'false' to prevent adding redirect_to to login url.
  */
-function geodir_login_url($redirect = ''){
-	//( defined( 'REST_REQUEST' ) && REST_REQUEST )
-	if(empty($redirect)){
-		if( defined( 'REST_REQUEST' ) && REST_REQUEST ){
+function geodir_login_url( $redirect = '' ) {
+	if ( empty( $redirect ) && $redirect !== false ) {
+		if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 			$redirect = wp_get_referer();
-		}else{
+		} else {
 			$redirect = geodir_curPageURL();
 		}
 	}
