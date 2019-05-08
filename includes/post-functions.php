@@ -723,6 +723,10 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
 	$match_field = $args['key'];
+	if ( $match_field == 'address' ) {
+		$match_field = 'street';
+	}
+
 	$find_post   = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 
 	if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
@@ -739,6 +743,9 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$field = array();
 			foreach ( $fields as $field_info ) {
 				if ( $match_field == $field_info['htmlvar_name'] ) {
+					$field = $field_info;
+					break;
+				} elseif( $match_field == 'street' && 'address' == $field_info['htmlvar_name'] ) {
 					$field = $field_info;
 					break;
 				}
@@ -784,7 +791,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 							$match_found = (bool) ( $search != '' && $match_value == $search );
 							break;
 						case 'is_not_equal':
-							$match_found = (bool) ( $search != '' && $match_value == $search );
+							$match_found = (bool) ( $search != '' && $match_value != $search );
 							break;
 						case 'is_greater_than':
 							$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value > $search );
