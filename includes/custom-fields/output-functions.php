@@ -1294,9 +1294,10 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
                 $field_icon = '';
             }
 
+            $is_elementor_preview = class_exists( 'GeoDir_Elementor' ) && GeoDir_Elementor::is_elementor_view() ? true : false; // Check if elementor preview
             $email = $gd_post->{$cf['htmlvar_name']} ;
             $value = '';
-            if(!empty($email) && ($email!='testing@example.com') && ($e_split = explode('@',$email)) && !defined( 'REST_REQUEST' )){
+            if ( ! empty( $email ) && ( $email != 'testing@example.com' ) && ( $e_split = explode( '@', $email ) ) && ! defined( 'REST_REQUEST' ) && ! $is_elementor_preview ){
                 /**
                  * Filter email custom field name output.
                  *
@@ -1306,11 +1307,11 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
                  * @param array $cf Custom field variables array.
                  */
                 $email_name = apply_filters('geodir_email_field_name_output',$email,$cf);
-                $value .=  "<script>document.write('<a href=\"mailto:'+'$e_split[0]' + '@' + '$e_split[1]'+'\">$email_name</a>')</script>";
-            }elseif(defined( 'REST_REQUEST' ) && REST_REQUEST){
-                $value .=  "<a href='mailto:$email'>$email</a>";
-            }else{
-                $value .=  $email;
+                $value .= "<script>document.write('<a href=\"mailto:'+'$e_split[0]' + '@' + '$e_split[1]'+'\">$email_name</a>')</script>";
+            } elseif ( ! empty( $email ) && ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || $is_elementor_preview ) ) {
+                $value .= "<a href='mailto:$email'>$email</a>";
+            } else {
+                $value .= $email;
             }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
