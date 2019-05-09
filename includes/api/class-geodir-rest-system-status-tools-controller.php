@@ -174,7 +174,7 @@ class GeoDir_REST_System_Status_Tools_Controller extends GeoDir_REST_Controller 
 		   'description' => $tool['desc'],
 		);
 
-		$execute_return = $this->execute_tool( $request['id'] );
+		$execute_return = $tools_controller->execute_tool( $request['id'] );
 		$tool = array_merge( $tool, $execute_return );
 
 		$request->set_param( 'context', 'edit' );
