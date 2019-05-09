@@ -120,6 +120,17 @@
     }
   }
 
+  .geodir-carousel{
+    padding: 0;
+    margin: 0;
+    ul.geodir-images li{
+      border-radius: 0;
+      img{
+        border-radius: 0;
+      }
+    }
+  }
+
   // keep thumbnails square
   &.geodir-image-sizes-thumbnail{
     ul.geodir-images li img{

@@ -115,7 +115,7 @@ function geodir_get_address_by_lat_lan($lat, $lng)
  * @package GeoDirectory
  * @global object $wp WordPress object.
  *
- * @param string $location_array_from Place to look for location array. Default: 'session'. @depreciated
+ * @param string $location_array_from Place to look for location array. Default: 'session'. @deprecated
  * @param string $gd_post_type The post type.
  * @return array The location term array.
  */

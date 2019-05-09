@@ -134,7 +134,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
             $class = "gd-align-right";
         }
 
-        if($args['show']=='stars'){ //@todo stars here is depreciated.
+        if($args['show']=='stars'){ //@todo stars here is deprecated.
             $class .= ' gd-fav-hide-text ';
         }elseif($args['show']=='icon'){
             $class .= ' gd-fav-hide-text ';

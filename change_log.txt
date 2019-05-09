@@ -4,6 +4,11 @@
 * Badge not working for address field - FIXED
 * Display email not working in elementor preview - FIXED
 * Categories widget looses location on CPT switch - FIXED
+* New non single use predefined custom fields should have ability to change field key - FIXED
+* Post images widget can now be used as a carousel by setting the limit_show value when used as a slider - ADDED
+* Sample CSV file updated to show new image format separator :: instead of , - FIXED
+* Class geodir-featured added to body class if post is featured - ADDED
+* Under certain settings configurations a user without editor privileges can set post status to revision - SECURITY
 
 = 2.0.0.57 =
 * Image extension with uppercase not showing in backend - FIXED
@@ -298,7 +303,7 @@ Map loads markers from non-requested CPT on multilingual site - FIXED
 Conflict with select2 basic version loaded via 3rd party plugins - FIXED
 First image of slider not loading srcset which can make it load the wrong size image - FIXED
 WP5.0 changed hook name which made GD post types not editable from backend - FIXED
-Shortcode [gd_single_closed_text] depreciated, use [gd_notifications] instead - CHANGED
+Shortcode [gd_single_closed_text] deprecated, use [gd_notifications] instead - CHANGED
 
 v2.0.0.37
 If reviews not used in tabs then the #reviews anchor links no longer work - FIXED

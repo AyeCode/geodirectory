@@ -40,8 +40,8 @@ define('EMAIL_TEXT', __('Email', 'geodirectory'));
 
 define('LISTING_DETAILS_TEXT', __('Enter Listing Details', 'geodirectory'));
 
-define('PLACE_TITLE_TEXT', __('Listing Title', 'geodirectory')); // depreciated @since 1.6.3
-define('PLACE_DESC_TEXT', __('Listing Description', 'geodirectory'));// depreciated @since 1.6.3
+define('PLACE_TITLE_TEXT', __('Listing Title', 'geodirectory')); // deprecated @since 1.6.3
+define('PLACE_DESC_TEXT', __('Listing Description', 'geodirectory'));// deprecated @since 1.6.3
 
 define('LISTING_ADDRESS_TEXT', __('Listing Address:', 'geodirectory'));
 define('PLACE_ADDRESS', __('Address:', 'geodirectory'));

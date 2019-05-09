@@ -11,7 +11,7 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.0.0.57
+ * Version: 2.0.0.58
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
@@ -35,8 +35,8 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.0.0.57';
-    
+    public $version = '2.0.0.58';
+
     /**
      * GeoDirectory instance.
      *
@@ -45,7 +45,7 @@ final class GeoDirectory {
      * @var    GeoDirectory The one true GeoDirectory
      */
     private static $instance = null;
-    
+
     /**
      * The settings instance variable
      *
@@ -58,7 +58,7 @@ final class GeoDirectory {
 	public $location;
 
 	public $permalinks;
-    
+
     /**
      * Main GeoDirectory Instance.
      *
@@ -73,7 +73,7 @@ final class GeoDirectory {
         if ( ! isset( self::$instance ) && ! ( self::$instance instanceof GeoDirectory ) ) {
             self::$instance = new GeoDirectory;
             self::$instance->setup_constants();
-            
+
             add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
 
             if ( version_compare( PHP_VERSION, '5.3', '<' ) ) {
@@ -83,16 +83,19 @@ final class GeoDirectory {
             }
 
             self::$instance->includes();
-            self::$instance->init_hooks();
 
-	        
+	        self::$instance->init_hooks();
+
+
 
             do_action( 'geodirectory_loaded' );
         }
-        
+
         return self::$instance;
     }
-    
+
+	
+
     /**
      * Setup plugin constants.
      *
@@ -102,23 +105,23 @@ final class GeoDirectory {
      */
     private function setup_constants() {
         global $wpdb, $plugin_prefix, $geodir_post_custom_fields_cache;
-        
+
 		$upload_dir = wp_upload_dir( null, false );
         $plugin_prefix = $wpdb->prefix . 'geodir_';
-        
+
         if ( $this->is_request( 'test' ) ) {
             $plugin_path = dirname( __FILE__ );
         } else {
             $plugin_path = plugin_dir_path( __FILE__ );
         }
-        
+
         $this->define( 'GEODIRECTORY_VERSION', $this->version );
         $this->define( 'GEODIRECTORY_PLUGIN_FILE', __FILE__ );
         $this->define( 'GEODIRECTORY_PLUGIN_DIR', $plugin_path );
         $this->define( 'GEODIRECTORY_PLUGIN_URL', untrailingslashit( plugins_url( '/', __FILE__ ) ) );
         $this->define( 'GEODIRECTORY_PLUGIN_BASENAME', plugin_basename( __FILE__ ) );
         $this->define( 'GEODIRECTORY_TEXTDOMAIN', 'geodirectory' );
-        
+
         // Database tables
 		$this->define( 'GEODIR_API_KEYS_TABLE', $plugin_prefix . 'api_keys' ); // rest api keys table
         $this->define( 'GEODIR_ATTACHMENT_TABLE', $plugin_prefix . 'attachments' ); // attachments table
@@ -127,19 +130,19 @@ final class GeoDirectory {
         $this->define( 'GEODIR_CUSTOM_SORT_FIELDS_TABLE', $plugin_prefix . 'custom_sort_fields' ); // custom sort fields table
         $this->define( 'GEODIR_REVIEW_TABLE', $plugin_prefix . 'post_review' ); // post review table
 		$this->define( 'GEODIR_BUSINESS_HOURS_TABLE', $plugin_prefix . 'business_hours' ); // business hours table
-		
+
 		$this->define( 'GEODIR_ROUNDING_PRECISION', 4 );
-        
+
         // Do not store any revisions (except the one autosave per post).
         $this->define( 'WP_POST_REVISIONS', 0 );
-		
+
 		$this->define( 'GEODIR_REST_SLUG', 'geodir' );
 		$this->define( 'GEODIR_REST_API_VERSION', '2' );
 
         // This will store the cached post custom fields per package for each page load so not to run for each listing.
         $geodir_post_custom_fields_cache = array();
     }
-    
+
     /**
      * Loads the plugin language files
      *
@@ -149,9 +152,9 @@ final class GeoDirectory {
      */
     public function load_textdomain() {
         global $wp_version;
-        
+
         $locale = $wp_version >= 4.7 ? get_user_locale() : get_locale();
-        
+
         /**
          * Filter the plugin locale.
          *
@@ -164,7 +167,7 @@ final class GeoDirectory {
         load_textdomain( 'geodirectory', WP_LANG_DIR . '/' . 'geodirectory' . '/' . 'geodirectory' . '-' . $locale . '.mo' );
         load_plugin_textdomain( 'geodirectory', FALSE, basename( dirname( GEODIRECTORY_PLUGIN_FILE ) ) . '/languages/' );
     }
-    
+
     /**
      * Show a warning to sites running PHP < 5.3
      *
@@ -176,7 +179,7 @@ final class GeoDirectory {
     public static function php_version_notice() {
         echo '<div class="error"><p>' . __( 'Your version of PHP is below the minimum version of PHP required by GeoDirectory. Please contact your host and request that your version be upgraded to 5.3 or later.', 'geodirectory' ) . '</p></div>';
     }
-    
+
     /**
      * Include required files.
      *
@@ -203,11 +206,11 @@ final class GeoDirectory {
 	    $this->settings = $geodir_options = geodir_get_settings();
 
         include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-post-types.php' ); // Registers post types
-	    
+
         if ( !defined( 'GEODIR_LATITUDE_ERROR_MSG' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'language.php' ); // Define language constants.
         }
-	    
+
 	    GeoDir_Email::init();// set up the email class
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/helper-functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/validation-functions.php' );
@@ -241,7 +244,7 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-maps.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
         //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
-		
+
 		/**
 		 * REST API.
 		 */
@@ -276,9 +279,9 @@ final class GeoDirectory {
 	        if( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow || ( defined('DOING_AJAX') && DOING_AJAX && $_REQUEST['action']=='inline-save')) {
 		        GeoDir_Admin_Post_View::init();
 	        }
-	        
+
         }
-	    
+
         if ( $this->is_request( 'frontend' ) ) {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
         }
@@ -292,7 +295,7 @@ final class GeoDirectory {
 		$this->api   = new GeoDir_API();
 
     }
-    
+
     /**
      * Hook into actions and filters.
      * @since  2.3
@@ -304,7 +307,7 @@ final class GeoDirectory {
 	public function init_location(){
 
 	}
-    
+
     /**
      * Init GeoDirectory when WordPress Initialises.
      */
@@ -331,7 +334,7 @@ final class GeoDirectory {
         // Init action.
         do_action( 'geodirectory_init' );
     }
-    
+
     /**
      * Define constant if not already set.
      *
@@ -343,7 +346,7 @@ final class GeoDirectory {
             define( $name, $value );
         }
     }
-    
+
     /**
      * Request type.
      *
@@ -371,10 +374,10 @@ final class GeoDirectory {
                 return defined( 'GD_TESTING_MODE' );
                 break;
         }
-        
+
         return null;
     }
-	
+
 	/**
 	 * Check the active theme.
 	 *
@@ -385,7 +388,7 @@ final class GeoDirectory {
 	private function is_active_theme( $theme ) {
 		return get_template() === $theme;
 	}
-	
+
 	/**
 	 * Get the plugin url.
 	 *

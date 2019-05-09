@@ -20,6 +20,8 @@ class GeoDir_AJAX {
 	 * Hook in ajax handlers.
 	 */
 	public static function init() {
+		add_action( 'init', array( __CLASS__, 'define_ajax' ), 0 );
+		add_action( 'template_redirect', array( __CLASS__, 'do_gd_ajax' ), 0 );
 		self::add_ajax_events();
 	}
 	
@@ -62,6 +64,8 @@ class GeoDir_AJAX {
 			'manual_map' => true,
 			'widget_listings' => true,
 			'recently_viewed_listings' => true,
+			'embed_widget' => true,
+			'embed_script' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -71,9 +75,73 @@ class GeoDir_AJAX {
 				add_action( 'wp_ajax_nopriv_geodir_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 
 				// GeoDir AJAX can be used for frontend ajax requests.
-				add_action( 'geodir_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
+				add_action( 'gd_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	public static function embed_script(){
+		$html = GeoDir_External_Embed::get_embed_script();
+		if($html ){
+			echo $html;
+		}
+		exit;
+	}
+
+	public static function embed_widget(){
+		$html = GeoDir_External_Embed::get_embed_widget();
+		if($html ){
+			echo $html;
+		}
+		exit;
+	}
+
+	/**
+	 * Set GD AJAX constant and headers.
+	 */
+	public static function define_ajax() {
+		if ( ! empty( $_GET['gd-ajax'] ) ) {
+			if(!defined('DOING_AJAX'))define( 'DOING_AJAX', true );
+			if(!defined('GD_DOING_AJAX'))define( 'GD_DOING_AJAX', true );
+			if ( ! WP_DEBUG || ( WP_DEBUG && ! WP_DEBUG_DISPLAY ) ) {
+				@ini_set( 'display_errors', 0 ); // Turn off display_errors during AJAX events to prevent malformed JSON.
+			}
+			$GLOBALS['wpdb']->hide_errors();
+		}
+	}
+
+	/**
+	 * Check for WC Ajax request and fire action.
+	 */
+	public static function do_gd_ajax() {
+		global $wp_query;
+
+		if ( ! empty( $_GET['gd-ajax'] ) ) {
+			$wp_query->set( 'gd-ajax', sanitize_text_field( wp_unslash( $_GET['gd-ajax'] ) ) );
+		}
+
+		$action = $wp_query->get( 'gd-ajax' );
+
+		if ( $action ) {
+			self::gd_ajax_headers();
+			$action = sanitize_text_field( $action );
+			do_action( 'gd_ajax_' . $action );
+			wp_die();
+		}
+	}
+
+	/**
+	 * Send headers for GD Ajax Requests.
+	 *
+	 * @since 2.0.0.58
+	 */
+	private static function gd_ajax_headers() {
+		send_origin_headers();
+		@header( 'Content-Type: text/html; charset=' . get_option( 'blog_charset' ) );
+		@header( 'X-Robots-Tag: noindex' );
+		send_nosniff_header();
+		nocache_headers();
+		status_header( 200 );
 	}
 
     /**
