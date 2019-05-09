@@ -1,6 +1,8 @@
 = 2.0.0.58 =
 * Sometimes distance value not showing on search page - FIXED
 * Search with zip returns wrong address with OpenStreetMap - FIXED
+* Badge not working for address field - FIXED
+* Display email not working in elementor preview - FIXED
 
 = 2.0.0.57 =
 * Image extension with uppercase not showing in backend - FIXED

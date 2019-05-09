@@ -100,5 +100,19 @@ class GeoDir_Elementor {
 		return $result;
 	}
 
+	/**
+	 * Check the current output is inside a elementor preview.
+	 *
+	 * @since 2.0.58
+	 * @return bool
+	 */
+	public static function is_elementor_view() {
+		$result = false;
+		if ( isset( $_REQUEST['elementor-preview'] ) || ( is_admin() && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor' ) || ( isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'elementor_ajax' ) ) {
+			$result = true;
+		}
+
+		return $result;
+	}
 
 }
