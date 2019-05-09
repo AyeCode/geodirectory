@@ -536,7 +536,7 @@ function geodir_rest_url($rest_base = '', $query_args = array() ) {
 		$url = add_query_arg( $query_args, $url );
 	}
 
-	return apply_filters( 'geodir_rest_url', $url, $query_args );
+	return apply_filters( 'geodir_rest_url', $url, $query_args, $namespace, $rest_base );
 }
 
 /**
