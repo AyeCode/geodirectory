@@ -121,6 +121,7 @@ class GeoDir_API {
 	 * @since 2.0.0
 	 */
 	private function rest_api_includes() {
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/admin-functions.php' );
 		include_once( dirname( __FILE__ ) . '/geodir-rest-functions.php' );
 
 		// Authentication.
