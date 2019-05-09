@@ -440,6 +440,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 		$via_ajax = ! empty($params['via_ajax']) && wp_doing_ajax() ? $params['via_ajax'] : false;
 		$ajax_cpt = ! empty($params['ajax_cpt']) && $via_ajax ? $params['ajax_cpt'] : '';
+		$set_location = false;
 		if ( $via_ajax ) {
 			if ( ! empty( $params['ajax_is_listing'] ) ) {
 				$is_listing = true;
@@ -456,11 +457,22 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			if ( ! empty( $params['ajax_current_term_id'] ) ) {
 				$current_term_id = $params['ajax_current_term_id'];
 			}
+			if ( ! empty( $params['ajax_set_location'] ) ) {
+				$set_location = maybe_unserialize( stripslashes( $params['ajax_set_location'] ) );
+
+				if ( ! ( is_object( $set_location ) && GeoDir_Post_types::supports( $ajax_cpt, 'location' ) ) ) {
+					$set_location = false;
+				}
+			}
 		}
 
 		$output = '';
 		if (!empty($post_types)) {
-			$cpt_options = array();//array('<option value="post">' . wp_sprintf( __( '%s Categories', 'geodirectory' ), 'Post' ) . '</option>');
+			global $geodirectory;
+			// Backup
+			$backup_geodirectory = $geodirectory;
+
+			$cpt_options = array();
 			$cpt_list = '';
 			foreach ($post_types as $cpt => $cpt_info) {
 				if ($ajax_cpt && $ajax_cpt !== $cpt) {
@@ -470,6 +482,10 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 				// if ajaxed then only show the first one
 				if($cpt_ajax && $cpt_list != ''){ continue;}
+
+				if ( $via_ajax && $set_location ) {
+					$geodirectory->location = $set_location;
+				}
 
 				$parent_category = ($is_category && $cat_filter && $cpt == $current_posttype) ? $current_term_id : 0;
 				$cat_taxonomy = $cpt . 'category';
@@ -559,6 +575,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 			}
 			if ( !$via_ajax && $cpt_ajax && ! empty( $cpt_options ) ) {
+				global $geodirectory;
 				$post_type = is_array( $args['post_type'] ) ? implode( ',', $args['post_type'] ) : (! empty($args['post_type']) ? $args['post_type'] : '0');
 				$output .= '<div class="gd-cptcats-select"><div class="gd-wgt-params">';
 				$output .= '<input type="hidden" name="post_type" value="' . $post_type . '">';
@@ -577,6 +594,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$output .= '<input type="hidden" name="ajax_is_category" value="' . $is_category . '">';
 				$output .= '<input type="hidden" name="ajax_post_ID" value="' . $post_ID . '">';
 				$output .= '<input type="hidden" name="ajax_current_term_id" value="' . $current_term_id . '">';
+				if ( ! empty( $geodirectory->location ) ) {
+					$output .= '<input type="hidden" name="ajax_set_location" value="' . esc_attr( maybe_serialize( $geodirectory->location ) ) . '">';
+				}
 				$output .= '</div><select class="geodir-cat-list-tax geodir-select">' . implode( '', $cpt_options ) . '</select>';
 				$output .= '</div><div class="gd-cptcat-rows">';
 			}
@@ -584,6 +604,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			if ( !$via_ajax && $cpt_ajax && ! empty( $cpt_options ) ) {
 				$output .= '</div>';
 			}
+
+			// Set back
+			$geodirectory = $backup_geodirectory;
 		}
 
 		$gd_use_query_vars = $old_gd_use_query_vars;

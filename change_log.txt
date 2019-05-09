@@ -3,6 +3,7 @@
 * Search with zip returns wrong address with OpenStreetMap - FIXED
 * Badge not working for address field - FIXED
 * Display email not working in elementor preview - FIXED
+* Categories widget looses location on CPT switch - FIXED
 
 = 2.0.0.57 =
 * Image extension with uppercase not showing in backend - FIXED
@@ -34,7 +35,7 @@
 * CPT tabs shortcode section can now accept post variables like [my_custom_shortcode id="%%facebook_id%%" ] - ADDED
 * Post badge widget can now use any custom field in the badge text - ADDED
 * CSS changes to try and better embed videos responsively - CHANGED
-* Add listing widget now has param to set the container it will repalce after submit - ADDED
+* Add listing widget now has param to set the container it will replace after submit - ADDED
 * Divi builder shortcodes not rendered via some ajax calls - FIXED
 * Elementor theme template not working correctly on GD search archive - FIXED
 * HTML field script contend can be broken due to wpautop running after do_shortcode - FIXED
