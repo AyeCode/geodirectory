@@ -841,8 +841,8 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                     $country    = !empty( $location->country ) ? $location->country : '';
                     $region     = !empty( $location->region ) ? $location->region : '';
                     $city       = !empty( $location->city ) ? $location->city : '';
-                    $latitude   = !empty( $location->city_latitude ) ? $location->city_latitude : '';
-                    $longitude  = !empty( $location->city_longitude ) ? $location->city_longitude : '';
+                    $latitude   = !empty( $location->latitude ) ? $location->latitude : '';
+                    $longitude  = !empty( $location->longitude ) ? $location->longitude : '';
                     
                     $schema[ $prefix . $name ]    = $args;
                     
