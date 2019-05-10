@@ -183,7 +183,11 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						       title="<?php _e( 'Must not contain spaces or special characters', 'geodirectory' ); ?>"
 						       value="<?php if ( $value ) {
 							       echo preg_replace( '/geodir_/', '', $value, 1 );
-						       } ?>" <?php if ( ! empty( $value ) && $value != 'geodir_' ) { echo 'readonly="readonly"'; } ?> />
+						       } ?>" <?php
+						if(isset($field->id) && substr( $field->id, 0, 4 ) === "new-" && empty($field->single_use)){} // New non single use predefined fields should have ability to change html_var
+						elseif ( ! empty( $value ) && $value != 'geodir_' ) { echo 'readonly="readonly"'; }
+
+						?> />
 					</label>
 				</p>
 				<?php

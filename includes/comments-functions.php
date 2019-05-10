@@ -65,7 +65,7 @@ function geodir_comments_number( $post = 0 ) {
  *
  * @since 1.0.0
  * @since 1.6.16 Changes for disable review stars for certain post type.
- * @since 2.0.0 $small depreciated.
+ * @since 2.0.0 $small deprecated.
  * @package GeoDirectory
  *
  * @param float $rating The post average rating.

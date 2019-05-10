@@ -1183,6 +1183,14 @@ function geodir_init_slider($id){
         asNavFor: "#"+$id,
         rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
     }), jQuery("#"+$id).flexslider({
+
+
+        // enable carousel if settings are right
+        itemWidth: jQuery("#"+$id).attr("data-limit_show") ? 210 : "", // needed to be considered a carousel
+        itemMargin: jQuery("#"+$id).attr("data-limit_show") ? 3 : "",
+        minItems: jQuery("#"+$id).attr("data-limit_show") ? 1 : "",
+        maxItems: jQuery("#"+$id).attr("data-limit_show") ? jQuery("#"+$id).attr("data-limit_show") : "",
+
         animation: jQuery("#"+$id).attr("data-animation")=='fade' ? "fade" : "slide",
         selector: ".geodir-slides > li",
         namespace: "geodir-",
@@ -1207,23 +1215,33 @@ function geodir_init_slider($id){
             });
 
 
-            // Ajaxify the slider if needed.
-            next = slider.slides.eq(slider.currentSlide + 1);
-            // fix the srcset
-            if(real_srcset = jQuery(next).find('img').attr("data-srcset")){
-                jQuery(next).find('img').attr("srcset",real_srcset);
+            // Ajax load the slides that are visible
+            var $visible = slider.visible ? slider.visible : 1;
+
+            // Load current slides
+            var i = 0;
+            for (; i < $visible ; ) {
+                slide = slider.slides.eq( i );
+                geodir_ajax_load_slider(slide);
+                i++;
             }
-            // fix the src
-            if(real_src = jQuery(next).find('img').attr("data-src")){
-                jQuery(next).find('img').attr("src",real_src);
-            }
+
+
+            console.log(slider);
+
         },
         before: function(slider){
-            // Ajaxify the slider if needed.
-            animatingTo = slider.slides.eq(slider.animatingTo);
-            next_next = slider.slides.eq(slider.currentSlide + 2);
-            geodir_ajax_load_slider(next_next);// load the next-next slide via ajax so its always loaded early
-            geodir_ajax_load_slider(animatingTo); // double check the current slide is loaded (in-case user goes backwards)
+            // Ajax load the slides that are visible
+            var $visible = slider.visible ? slider.visible : 1;
+
+            // Load current slides
+            var i = slider.animatingTo * $visible - 1;
+            var $visible_next = i + $visible + 1;
+            for (; i < $visible_next ; ) {
+                slide = slider.slides.eq( i );
+                geodir_ajax_load_slider(slide);
+                i++;
+            }
         },
         rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
     });

@@ -283,13 +283,13 @@ function geodir_is_page( $gdpage = '' ) {
 				return true;
 			}
 			break;
-		case 'listing-success':// @depreciated
+		case 'listing-success':// @deprecated
 			if ( is_page() && $page_id === geodir_success_page_id() ) {
 				return true;
 			}
 			break;
 		case 'single':
-		case 'detail': // @depreciated
+		case 'detail': // @deprecated
 			$post_type = get_query_var( 'post_type' );
 			if ( is_array( $post_type ) ) {
 				$post_type = reset( $post_type );
@@ -299,7 +299,7 @@ function geodir_is_page( $gdpage = '' ) {
 			}
 			break;
 		case 'post_type':
-		case 'pt': // @depreciated
+		case 'pt': // @deprecated
 			$post_type = get_query_var( 'post_type' );
 			if ( is_array( $post_type ) ) {
 				$post_type = reset( $post_type );
@@ -310,7 +310,7 @@ function geodir_is_page( $gdpage = '' ) {
 
 			break;
 		case 'archive':
-		case 'listing':// @depreciated
+		case 'listing':// @deprecated
 			if ( is_tax() && geodir_get_taxonomy_posttype() ) {
 				global $current_term, $taxonomy, $term;
 
@@ -788,6 +788,9 @@ function geodir_custom_posts_body_class( $classes ) {
 	if(geodir_is_page( 'single' ) ){
 		if(!empty($gd_post->default_category)){
 			$classes[] = 'geodir-post-cat-'.absint($gd_post->default_category);
+		}
+		if(!empty($gd_post->featured)){
+			$classes[] = 'geodir-featured';
 		}
 	}
 
