@@ -1022,11 +1022,22 @@ class GeoDir_Post_Data {
 	 * @return string $notes
 	 */
 	public static function output_user_notes( $user_notes ) {
+		/**
+		 * Filters the add listing user notes.
+		 *
+		 * @since 2.0.0.59
+		 *
+		 * @param array $user_notes An array of user notes.
+		 */
+		$user_notes = apply_filters( 'geodir_post_output_user_notes', $user_notes );
+
 		$notes = '';
-		foreach ( $user_notes as $key => $user_note ) {
-			$notes .= "<div class='gd-notification $key'>";
-			$notes .= $user_note;
-			$notes .= "</div>";
+		if ( ! empty( $user_notes ) ) {
+			foreach ( $user_notes as $key => $user_note ) {
+				$notes .= "<div class='gd-notification $key'>";
+				$notes .= $user_note;
+				$notes .= "</div>";
+			}
 		}
 
 		return $notes;
@@ -1267,7 +1278,7 @@ class GeoDir_Post_Data {
 		}
 
 		$author_id = get_post_field( 'post_author', $post_id );
-
+		$post_type = '';
 		// if we have a parent_id then we must do extra checks
 		if ( $parent_id ) {
 			// make sure the parent id is for the post id.
