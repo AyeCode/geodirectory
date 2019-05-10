@@ -886,44 +886,45 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			if ( isset( $reset_gd_post ) ) {
 				$gd_post = $reset_gd_post;
 			}
-            ?>
+			if ( ! empty( $widget_listings ) && ( $top_pagination || $bottom_pagination ) ) {
+				$params = array_merge( $instance, $query_args );
+				$params['set_query_vars'] = $wp->query_vars;
+				if ( ! empty( $gd_post ) && ( geodir_is_page( 'detail' ) || ! empty( $instance['set_post'] ) ) ) {
+					$params['set_post'] = $gd_post->ID;
+				}
+
+				if ( ! empty( $_REQUEST['sgeo_lat'] ) && ! empty( $_REQUEST['sgeo_lon'] ) ) {
+					$params['sgeo_lat'] = isset( $_REQUEST['sgeo_lat'] ) ? filter_var( $_REQUEST['sgeo_lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
+					$params['sgeo_lon'] = isset( $_REQUEST['sgeo_lon'] ) ? filter_var( $_REQUEST['sgeo_lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
+				}
+
+				foreach ( $params as $key => $value ) {
+					if ( is_scalar( $value ) && ( $value === true || $value === false ) ) {
+						$value = (int) $value;
+					}
+					$params[ $key ] = $value;
+				}
+
+				$params = apply_filters( 'geodir_widget_listings_pagination_set_params', $params, $instance, $this->id_base );
+				?>
+				<script type="text/javascript">
+					/* <![CDATA[ */
+					try {
+						var params = <?php echo json_encode( $params ); ?>;
+						params['action'] = 'geodir_widget_listings';
+						params['widget_args'] = <?php echo json_encode( $args ); ?>;
+						params['security'] = geodir_params.basic_nonce;
+						geodir_widget_listings_pagination('<?php echo $unique_id; ?>', params);
+					} catch (err) {
+						console.log(err.message);
+					}
+					/* ]]> */
+				</script>
+			<?php 
+		}
+		?>
         </div>
 		<?php 
-		if ( ! empty( $widget_listings ) && ( $top_pagination || $bottom_pagination ) ) {
-			$params = array_merge( $instance, $query_args );
-			$params['set_query_vars'] = $wp->query_vars;
-			if ( ! empty( $gd_post ) && ( geodir_is_page( 'detail' ) || ! empty( $instance['set_post'] ) ) ) {
-				$params['set_post'] = $gd_post->ID;
-			}
-
-			if ( ! empty( $_REQUEST['sgeo_lat'] ) && ! empty( $_REQUEST['sgeo_lon'] ) ) {
-				$params['sgeo_lat'] = isset( $_REQUEST['sgeo_lat'] ) ? filter_var( $_REQUEST['sgeo_lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
-				$params['sgeo_lon'] = isset( $_REQUEST['sgeo_lon'] ) ? filter_var( $_REQUEST['sgeo_lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
-			}
-
-			foreach ( $params as $key => $value ) {
-				if ( is_scalar( $value ) && ( $value === true || $value === false ) ) {
-					$value = (int) $value;
-				}
-				$params[ $key ] = $value;
-			}
-
-			$params = apply_filters( 'geodir_widget_listings_pagination_set_params', $params, $instance, $this->id_base );
-			?>
-			<script type="text/javascript">
-				/* <![CDATA[ */
-				try {
-					var params = <?php echo json_encode( $params ); ?>;
-					params['action'] = 'geodir_widget_listings';
-					params['widget_args'] = <?php echo json_encode( $args ); ?>;
-					params['security'] = geodir_params.basic_nonce;
-					geodir_widget_listings_pagination('<?php echo $unique_id; ?>', params);
-				} catch (err) {
-					console.log(err.message);
-				}
-				/* ]]> */
-			</script>
-		<?php }
 
 		$posts_per_page = $backup_posts_per_page;
 		$paged = $backup_paged;

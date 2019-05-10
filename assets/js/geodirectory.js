@@ -1527,7 +1527,7 @@ function geodir_widget_listings_pagination(id, params) {
             success: function(res) {
                 if (res.success && res.data) {
                     if (res.data.content) {
-                        $widget.html(res.data.content);
+                        $widget.find('.geodir_locations.geodir-wgt-pagination').replaceWith(res.data.content);
 
                         init_read_more();
                         geodir_init_lazy_load();
