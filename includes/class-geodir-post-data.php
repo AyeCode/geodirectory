@@ -427,6 +427,10 @@ class GeoDir_Post_Data {
 					if ( is_array( $gd_post_value ) ) {
 						$gd_post_value = ! empty( $gd_post_value ) ? implode( ',', $gd_post_value ) : '';
 					}
+					if ( ! empty( $gd_post_value ) ) {
+						$gd_post_value = stripslashes_deep( $gd_post_value ); // stripslahses
+					}
+					
 					$postarr[ $cf->htmlvar_name ] = $gd_post_value;
 				}
 
@@ -552,34 +556,34 @@ class GeoDir_Post_Data {
 
 			// Save location info
 			if ( isset( $gd_post['street'] ) ) {
-				$postarr['street'] = $gd_post['street'];
+				$postarr['street'] = stripslashes( $gd_post['street'] );
 			}
 			if ( ! isset( $gd_post['city'] ) && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'inline-save' ) {
 				// if inline save then don't adjust the location info
 			} elseif ( isset( $gd_post['city'] ) ) {
-				$postarr['city'] = $gd_post['city'];
+				$postarr['city'] = stripslashes( $gd_post['city'] );
 			} else {
 				if ( ! $update ) {
 					$default_location   = $geodirectory->location->get_default_location();
-					$postarr['city']    = $default_location->city;
-					$postarr['region']  = $default_location->region;
-					$postarr['country'] = $default_location->country;
+					$postarr['city']    = stripslashes( $default_location->city );
+					$postarr['region']  = stripslashes( $default_location->region );
+					$postarr['country'] = stripslashes( $default_location->country );
 				}
 			}
 			if ( isset( $gd_post['region'] ) ) {
-				$postarr['region'] = $gd_post['region'];
+				$postarr['region'] = stripslashes( $gd_post['region'] );
 			}
 			if ( isset( $gd_post['country'] ) ) {
-				$postarr['country'] = $gd_post['country'];
+				$postarr['country'] = stripslashes( $gd_post['country'] );
 			}
 			if ( isset( $gd_post['zip'] ) ) {
-				$postarr['zip'] = $gd_post['zip'];
+				$postarr['zip'] = stripslashes( $gd_post['zip'] );
 			}
 			if ( isset( $gd_post['latitude'] ) ) {
-				$postarr['latitude'] = $gd_post['latitude'];
+				$postarr['latitude'] = stripslashes( $gd_post['latitude'] );
 			}
 			if ( isset( $gd_post['longitude'] ) ) {
-				$postarr['longitude'] = $gd_post['longitude'];
+				$postarr['longitude'] = stripslashes( $gd_post['longitude'] );
 			}
 			if ( isset( $gd_post['mapview'] ) ) {
 				$postarr['mapview'] = $gd_post['mapview'];
