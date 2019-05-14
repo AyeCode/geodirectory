@@ -2,6 +2,7 @@
 * GD Listings widget title not working with pagination - FIXED
 * Some fields are not stripping slashes - FIXED
 * Include post date in exported files - ADDED
+* "Unicon" theme compatibility for gd pages - ADDED
 
 = 2.0.0.58 =
 * Sometimes distance value not showing on search page - FIXED

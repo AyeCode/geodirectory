@@ -406,6 +406,17 @@ class GeoDir_Compatibility {
 			}
 		}
 
+		// Unicon
+		if ( function_exists( 'minti_register_required_plugins' ) && strpos( $meta_key, 'minti_' ) === 0 ) {
+			$gen_keys[] = $meta_key;
+
+			// Archive page set page post.
+			if ( ! empty( $wp_query ) && ! empty( $wp_query->post->post_type ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) && $wp_query->post->post_type == 'page' && ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'search' ) ) ) {
+				$post = $wp_query->post;
+				$backup_post = $post;
+			}
+		}
+
 		if (
 			$meta_key
 			&& ( $meta_key[0] == "_" || in_array( $meta_key, $gen_keys ) )
