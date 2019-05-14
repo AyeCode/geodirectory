@@ -1,6 +1,7 @@
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED
 * Some fields are not stripping slashes - FIXED
+* Include post date in exported files - ADDED
 
 = 2.0.0.58 =
 * Sometimes distance value not showing on search page - FIXED
