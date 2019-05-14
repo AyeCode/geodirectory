@@ -188,6 +188,7 @@ class GeoDir_Post_Data {
 						// If the post saved then do some house keeping.
 						if ( ! is_wp_error( $result ) && $user_id = get_current_user_id() ) {
 							self::remove_post_revisions( $post_id, $user_id );
+							GeoDir_Comments::update_post_rating( $post_id, $post_type);
 						}
 					}
 				}
@@ -698,6 +699,8 @@ class GeoDir_Post_Data {
 
 			// assign the temp post data
 			self::$post_temp = $postarr;
+		}else{
+			self::$post_temp = null;
 		}
 
 		return $data;

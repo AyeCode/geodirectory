@@ -240,7 +240,7 @@ class GeoDir_Query {
 				}
 			}
 
-			if ($snear == 'NEAR ME') {
+			if ($snear == 'NEAR ME' && ini_get('allow_url_fopen') ) {
 				$ip = $_SERVER['REMOTE_ADDR'];
 				$addr_details = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip));
 				$mylat = stripslashes(geodir_utf8_ucfirst($addr_details[geoplugin_latitude]));

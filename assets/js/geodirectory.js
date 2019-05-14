@@ -1152,11 +1152,11 @@ function gd_init_comment_reply_link(){
 function geodir_ajax_load_slider(slide){
     // fix the srcset
     if(real_srcset = jQuery(slide).find('img').attr("data-srcset")){
-        jQuery(slide).find('img').attr("srcset",real_srcset);
+        if(!jQuery(slide).find('img').attr("srcset")) jQuery(slide).find('img').attr("srcset",real_srcset);
     }
     // fix the src
     if(real_src = jQuery(slide).find('img').attr("data-src")){
-        jQuery(slide).find('img').attr("src",real_src);
+        if(!jQuery(slide).find('img').attr("srcset"))  jQuery(slide).find('img').attr("src",real_src);
     }
 }
 
@@ -1224,23 +1224,31 @@ function geodir_init_slider($id){
                 slide = slider.slides.eq( i );
                 geodir_ajax_load_slider(slide);
                 i++;
+                // load next slide also
+                slide_next = slider.slides.eq( i );
+                geodir_ajax_load_slider( slide_next );
             }
-
-
-            console.log(slider);
-
         },
         before: function(slider){
+            console.log('slide');
+            console.log(slider);
             // Ajax load the slides that are visible
             var $visible = slider.visible ? slider.visible : 1;
+
+            if(isNaN($visible)){ $visible = 1;}
 
             // Load current slides
             var i = slider.animatingTo * $visible - 1;
             var $visible_next = i + $visible + 1;
+
+
             for (; i < $visible_next ; ) {
                 slide = slider.slides.eq( i );
                 geodir_ajax_load_slider(slide);
                 i++;
+                // load next slide also
+                slide_next = slider.slides.eq( i );
+                geodir_ajax_load_slider( slide_next );
             }
         },
         rtl: 1 == parseInt(geodir_params.is_rtl) ? !0 : !1
