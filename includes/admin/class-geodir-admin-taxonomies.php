@@ -717,7 +717,7 @@ class GeoDir_Admin_Taxonomies {
 
         $search_terms = explode(",", $search_terms);
 
-        $cat_terms = get_terms($cat_taxonomy, array('parent' => $cat_parent, 'hide_empty' => $hide_empty, 'exclude' => $exclude_cats));
+        $cat_terms = get_terms(array('taxonomy' => $cat_taxonomy,'parent' => $cat_parent, 'hide_empty' => $hide_empty, 'exclude' => $exclude_cats));
 
         $display = '';
         $onchange = '';

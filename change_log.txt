@@ -3,6 +3,10 @@
 * Some fields are not stripping slashes - FIXED
 * Include post date in exported files - ADDED
 * "Unicon" theme compatibility for gd pages - ADDED
+* Post Address widget now supports %%post_title%% - ADDED
+* Sometimes when post revision is restored comment counts are reset to zero - FIXED
+* $post_temp data is set to null for non GD posts to prevent issues when both inserted in same POST request - CHANGED
+* Slider visible number sometimes not returning number which can cause ajax loading to break - FIXED
 
 = 2.0.0.58 =
 * Sometimes distance value not showing on search page - FIXED

@@ -2099,6 +2099,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             }
 
             $address_items = array(
+                'post_title',
                 'street',
                 'neighbourhood',
                 'city',
@@ -2113,11 +2114,16 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
 
             $address_template = apply_filters(
                 "geodir_cf_address_template",
-                $address_template
+                $address_template,
+                $cf,
+                $location
             );
 
             $address_fields = array();
 
+            if ( isset($gd_post->post_title) ) {
+                $address_fields['post_title'] = '<span itemprop="placeName">' . $gd_post->post_title . '</span>';
+            }
             if ( isset($gd_post->street) ) {
                 $address_fields['street'] = '<span itemprop="streetAddress">' . $gd_post->street . '</span>';
             }
