@@ -886,6 +886,7 @@ class GeoDir_Admin_Import_Export {
 		$columns[] = "{$wpdb->posts}.post_status";
 		$columns[] = "{$wpdb->posts}.post_author";
 		$columns[] = "{$wpdb->posts}.post_type";
+		$columns[] = "{$wpdb->posts}.post_date";
 
 		// set the table fields
 		$cpt_exclude_columns = array(
