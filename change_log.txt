@@ -1,6 +1,7 @@
 = 2.0.0.58 =
 * Sometimes distance value not showing on search page - FIXED
 * Search with zip returns wrong address with OpenStreetMap - FIXED
+* Include post date in exported files - ADDED
 
 = 2.0.0.57 =
 * Image extension with uppercase not showing in backend - FIXED
