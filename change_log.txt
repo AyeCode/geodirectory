@@ -6,6 +6,7 @@
 = 2.0.0.58 =
 * Sometimes distance value not showing on search page - FIXED
 * Search with zip returns wrong address with OpenStreetMap - FIXED
+<<<<<<< HEAD
 * Badge not working for address field - FIXED
 * Display email not working in elementor preview - FIXED
 * Categories widget looses location on CPT switch - FIXED
@@ -14,6 +15,9 @@
 * Sample CSV file updated to show new image format separator :: instead of , - FIXED
 * Class geodir-featured added to body class if post is featured - ADDED
 * Under certain settings configurations a user without editor privileges can set post status to revision - SECURITY
+=======
+* Include post date in exported files - ADDED
+>>>>>>> 98d9e6db0c8c29427d67320be23365d57cd73aa3
 
 = 2.0.0.57 =
 * Image extension with uppercase not showing in backend - FIXED
