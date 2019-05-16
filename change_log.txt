@@ -8,6 +8,7 @@
 * $post_temp data is set to null for non GD posts to prevent issues when both inserted in same POST request - CHANGED
 * Slider visible number sometimes not returning number which can cause ajax loading to break - FIXED
 * Post images gallery has empty whitespace on the right in mobile - FIXED
+* Business hours default offset should not account for DST - FIXED
 
 = 2.0.0.58 =
 * Sometimes distance value not showing on search page - FIXED
