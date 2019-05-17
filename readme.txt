@@ -7,7 +7,7 @@ Tags:  directory plugin, business directory, listings, classifieds, real estate,
 Requires at least: 4.5
 Requires PHP: 5.6
 Tested up to: 5.2
-Stable tag: 2.0.0.58
+Stable tag: 2.0.0.59
 
 
 Create a location-based business directory with our plugin, 100% compatible with any theme and page builders. In a few clicks you could be the next Yelp or Tripadvisor.
@@ -63,6 +63,11 @@ We have been wholly focused on directory tools for WordPress since 2011. That's 
 * NEW - Guest Add Listing
 * NEW - Improved SEO permalinks settings.
 
+= Free Addons =
+
+* [WPML Multilingual](https://wpgeodirectory.com/downloads/wpml-multilingual/ "Adds WPML compatibility") - Adds WPML compatibility.
+* [Google Analytics](https://wpgeodirectory.com/downloads/google-analytics/ "Add frontend Analytics for your users to view") - Allows your users to view their own page analytics.
+
 = Premium Addons =
 
 Premium [Addons](http://wpgeodirectory.com/addons/ "Premium addons for GeoDirectory") are provided to extend GeoDirectory and make it a money making global directory toolkit.
@@ -80,6 +85,7 @@ Premium [Addons](http://wpgeodirectory.com/addons/ "Premium addons for GeoDirect
 * [Custom Google Maps](http://wpgeodirectory.com/downloads/custom-google-maps/ "Customize your maps look and feel") - Modify the look and feel of all Google Maps widgets via an intuitive user interface, with color pickers and simple-to-use options.
 * [Social Importer](http://wpgeodirectory.com/downloads/social-importer/ "Import 1 listing at a time from Facebook, Yelp and Trip Advisor!") -  Import pages and events from Facebook and listings from Yelp and Trip Advisor. 1 listing at a time, no bulk scraping.
 * [GD reCAPTCHA](http://wpgeodirectory.com/downloads/gd-recaptcha/ "Stop spammers!") - Banish spam by adding the No CAPTCHA reCAPTCHA widget to any GeoDirectory form.
+* [Embeds]( https://wpgeodirectory.com/downloads/embeds/ "GeoDirectory Embeds") - NEW: Let users embed their listing info with current ratings on their site, styled the way they want.
 
 
 = Go Pro - Become a member! =
@@ -95,7 +101,7 @@ Get timely and friendly support for both Core Plugin and add-ons at our official
 = Minimum Requirements =
 
 * WordPress 4.5 or greater
-* PHP version 5.3 or greater
+* PHP version 5.6 or greater
 * MySQL version 5.0 or greater
 
 = Automatic installation =
@@ -133,6 +139,9 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 == Changelog ==
 
 __WARNING: GDv2 is a major update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always it is recommended to try this on a staging site first. [Learn more](https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/)__
+
+= 2.0.0.59 =
+[GeoDirectory changelog for version 2.0.0.59](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.59).
 
 = 2.0.0.58 =
 [GeoDirectory changelog for version 2.0.0.58](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.58).

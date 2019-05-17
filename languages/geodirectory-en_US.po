@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.58\n"
+"Project-Id-Version: GeoDirectory 2.0.0.59\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-05-09 16:24+0100\n"
-"PO-Revision-Date: 2019-05-09 16:24+0100\n"
+"POT-Creation-Date: 2019-05-16 16:20+0100\n"
+"PO-Revision-Date: 2019-05-16 16:20+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -768,7 +768,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:790
 #: includes/admin/class-geodir-admin-dummy-data.php:798
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:391
-#: includes/class-geodir-post-data.php:855
+#: includes/class-geodir-post-data.php:862
 #: includes/widgets/class-geodir-widget-ninja-forms.php:214 language.php:39
 #: language.php:64 language.php:156 language.php:177
 msgid "Email"
@@ -835,7 +835,7 @@ msgid "Note: List out any special offers (optional)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:901
-#: includes/class-geodir-post-data.php:795
+#: includes/class-geodir-post-data.php:802
 msgid "Listing"
 msgstr ""
 
@@ -1115,8 +1115,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:225
 #: includes/admin/class-geodir-admin-import-export.php:312
-#: includes/admin/class-geodir-admin-import-export.php:1286
-#: includes/admin/class-geodir-admin-import-export.php:2100
+#: includes/admin/class-geodir-admin-import-export.php:1287
+#: includes/admin/class-geodir-admin-import-export.php:2101
 msgid "No data found in csv file."
 msgstr ""
 
@@ -1165,59 +1165,59 @@ msgid "Not enough GPS info for address."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:720
-#: includes/admin/class-geodir-admin-import-export.php:1029
-#: includes/admin/class-geodir-admin-import-export.php:1943
+#: includes/admin/class-geodir-admin-import-export.php:1030
+#: includes/admin/class-geodir-admin-import-export.php:1944
 #: includes/admin/settings/class-geodir-settings-import-export.php:884
 msgid "No records to export."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:766
-#: includes/admin/class-geodir-admin-import-export.php:1071
-#: includes/admin/class-geodir-admin-import-export.php:1987
+#: includes/admin/class-geodir-admin-import-export.php:1072
+#: includes/admin/class-geodir-admin-import-export.php:1988
 msgid ""
 "ERROR: Could not create csv file. This is usually due to inconsistent file "
 "permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1585
+#: includes/admin/class-geodir-admin-import-export.php:1586
 msgid "json file is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1587
+#: includes/admin/class-geodir-admin-import-export.php:1588
 msgid "json file is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1599
+#: includes/admin/class-geodir-admin-import-export.php:1600
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2018
+#: includes/admin/class-geodir-admin-import-export.php:2019
 #, php-format
 msgid "GD IMPORT REVIEW [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2026
+#: includes/admin/class-geodir-admin-import-export.php:2027
 msgid "data is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2039
+#: includes/admin/class-geodir-admin-import-export.php:2040
 msgid "invalid comment content."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2043
+#: includes/admin/class-geodir-admin-import-export.php:2044
 msgid "invalid comment post ID."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2047
+#: includes/admin/class-geodir-admin-import-export.php:2048
 msgid "invalid user details(user id or author name, author email)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2051
+#: includes/admin/class-geodir-admin-import-export.php:2052
 msgid "invalid rating."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2077
-#: includes/admin/class-geodir-admin-import-export.php:2094
+#: includes/admin/class-geodir-admin-import-export.php:2078
+#: includes/admin/class-geodir-admin-import-export.php:2095
 msgid "invalid data."
 msgstr ""
 
@@ -3952,7 +3952,7 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:361
 #: includes/admin/views/html-admin-page-status-report.php:578
-#: includes/class-geodir-post-data.php:848 language.php:37 language.php:155
+#: includes/class-geodir-post-data.php:855 language.php:37 language.php:155
 msgid "Name"
 msgstr ""
 
@@ -4991,7 +4991,6 @@ msgid "The longitude of the default location."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:851
-#: includes/custom-fields/input-functions.php:1783
 msgid "Timezone"
 msgstr ""
 
@@ -7481,7 +7480,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2837
 #: includes/class-geodir-privacy-exporters.php:237
 #: includes/class-geodir-privacy-exporters.php:302
-#: includes/custom-fields/input-functions.php:1735
+#: includes/custom-fields/input-functions.php:1736
 #: includes/custom-fields/output-functions.php:86
 msgid "Yes"
 msgstr ""
@@ -7489,7 +7488,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2797
 #: includes/api/class-geodir-rest-posts-controller.php:2835
 #: includes/class-geodir-privacy-exporters.php:300
-#: includes/custom-fields/input-functions.php:1736
+#: includes/custom-fields/input-functions.php:1737
 #: includes/custom-fields/output-functions.php:88
 msgid "No"
 msgstr ""
@@ -8157,16 +8156,16 @@ msgstr ""
 msgid "Sunday"
 msgstr ""
 
-#: includes/business-hours-functions.php:532 includes/core-functions.php:344
-#: includes/custom-fields/input-functions.php:1776
+#: includes/business-hours-functions.php:574 includes/core-functions.php:344
+#: includes/custom-fields/input-functions.php:1777
 msgid "Closed"
 msgstr ""
 
-#: includes/business-hours-functions.php:533 includes/core-functions.php:341
+#: includes/business-hours-functions.php:575 includes/core-functions.php:341
 msgid "Open now"
 msgstr ""
 
-#: includes/business-hours-functions.php:534 includes/core-functions.php:342
+#: includes/business-hours-functions.php:576 includes/core-functions.php:342
 msgid "Closed now"
 msgstr ""
 
@@ -8379,22 +8378,22 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:672
+#: includes/class-geodir-compatibility.php:683
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:674
+#: includes/class-geodir-compatibility.php:685
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:679
+#: includes/class-geodir-compatibility.php:690
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:680
+#: includes/class-geodir-compatibility.php:691
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
@@ -8825,7 +8824,7 @@ msgstr ""
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:753
+#: includes/class-geodir-post-data.php:760
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -8833,7 +8832,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:777
+#: includes/class-geodir-post-data.php:784
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -8841,67 +8840,67 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:845
+#: includes/class-geodir-post-data.php:852
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:851
+#: includes/class-geodir-post-data.php:858
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:858
+#: includes/class-geodir-post-data.php:865
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:903
-#: includes/class-geodir-post-data.php:909
+#: includes/class-geodir-post-data.php:910
+#: includes/class-geodir-post-data.php:916
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:915
+#: includes/class-geodir-post-data.php:922
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:925
+#: includes/class-geodir-post-data.php:932
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1087
+#: includes/class-geodir-post-data.php:1105
 msgid "You do not own this post"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1092
+#: includes/class-geodir-post-data.php:1110
 msgid "Delete revision failed."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1181
-#: includes/class-geodir-post-data.php:1372
+#: includes/class-geodir-post-data.php:1199
+#: includes/class-geodir-post-data.php:1390
 msgid "You don not have the privileges to perform this action."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1458
+#: includes/class-geodir-post-data.php:1476
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1462
+#: includes/class-geodir-post-data.php:1480
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1471
+#: includes/class-geodir-post-data.php:1489
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1477
+#: includes/class-geodir-post-data.php:1495
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1564
+#: includes/class-geodir-post-data.php:1582
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -9886,27 +9885,33 @@ msgstr ""
 msgid "Your tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1740
+#: includes/custom-fields/input-functions.php:1741
 msgid "Day"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1740
+#: includes/custom-fields/input-functions.php:1741
 msgid "Opening Hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1740
+#: includes/custom-fields/input-functions.php:1741
 msgid "Add"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1743
-#: includes/custom-fields/input-functions.php:1772
+#: includes/custom-fields/input-functions.php:1744
+#: includes/custom-fields/input-functions.php:1773
 #: includes/widgets/class-geodir-widget-archive-item-section.php:41
 msgid "Open"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1743
-#: includes/custom-fields/input-functions.php:1772
+#: includes/custom-fields/input-functions.php:1744
+#: includes/custom-fields/input-functions.php:1773
 msgid "Close"
+msgstr ""
+
+#: includes/custom-fields/input-functions.php:1784
+msgid ""
+"Timezone offset from UTC (not including daylight savings time This is set "
+"automatically when address is set)"
 msgstr ""
 
 #: includes/custom-fields/output-filter-functions.php:40
@@ -9923,7 +9928,7 @@ msgstr ""
 msgid "Read more..."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2292
+#: includes/custom-fields/output-functions.php:2298
 msgid "Expand opening hours"
 msgstr ""
 

@@ -218,6 +218,48 @@ function geodir_wp_gmt_offset( $formatted = true ) {
 }
 
 /**
+ * Get WP default UTC Offset (without daylight savings considered).
+ *
+ * @since 2.0.0
+ *
+ * @param bool $formatted Format the offset.
+ * @return string Formatted offset.
+ */
+function geodir_timezone_default_utc_offset( $timezone = '' ) {
+
+	$timezone = get_option('timezone_string');
+	$manual_offset = get_option( 'gmt_offset' );
+	$manual = false;
+	if ( ! $timezone && $manual_offset) {
+		$manual = true;
+	}elseif(! $timezone){
+		$timezone = 'Europe/Berlin';
+	}
+
+	if( $manual ){
+		$offset_h = $manual_offset;
+	}else{
+		// Set UTC as default time zone.
+		date_default_timezone_set( 'UTC' );
+		$utc = new DateTime();
+		// Calculate offset.
+		$gmt_offset_s = timezone_offset_get( new DateTimeZone("Europe/London"), $utc ); // seconds
+		$current   = timezone_open( $timezone );
+		$offset_s  = timezone_offset_get( $current, $utc ); // seconds
+		$offset_s = $offset_s - $gmt_offset_s; // remove DST
+		$offset_h  = $offset_s / ( 60 * 60 ); // hours
+	}
+
+	// Prepend “+” when positive
+	$offset_h  = (string) $offset_h;
+	if ( strpos( $offset_h, '-' ) === FALSE ) {
+		$offset_h = '+' . $offset_h; // prepend +
+	}
+
+	return $offset_h;
+}
+
+/**
  * Get the default value for business hour.
  *
  * @since 2.0.0
