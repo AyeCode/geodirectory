@@ -45,6 +45,8 @@ jQuery.fn.gdunveil = function(threshold, callback,extra1) {
 
             jQuery(this).removeClass('geodir-lazy-load');
             if (typeof callback === "function") callback.call(this);
+
+            jQuery(this).trigger("gdlazyLoaded");
         }
     });
 
@@ -79,7 +81,11 @@ jQuery.fn.gdunveil = function(threshold, callback,extra1) {
 
 function geodir_init_lazy_load(){
     // load for GD images
-    jQuery(".geodir-lazy-load").gdunveil(100,function() {this.style.opacity = 1;},'#geodir_content');
+    var _opacity = 1;
+    if ('objectFit' in document.documentElement.style === false) {
+        _opacity = 0;
+    }
+    jQuery(".geodir-lazy-load").gdunveil(100,function() {this.style.opacity = _opacity;},'#geodir_content');
 
     // fire when the image tab is clicked on details page
     jQuery('#gd-tabs').click(function() {
@@ -92,6 +98,43 @@ function geodir_init_lazy_load(){
     });
 }
 
+//Pollyfill Object Fit in browsers that don't support it
+if ('objectFit' in document.documentElement.style === false) {
+
+    var gd_object_fit_fix = function( _img ) {
+
+        //Image, its url and its parent li
+        var _li = jQuery( _img ).parents( 'li' ),
+            _url = jQuery( _img ).data('src')
+
+        //Abort if url is unset
+        if (!_url) {
+            return;
+        }
+
+        //Hide the image and use it as the parent's bg
+        jQuery( _img ).css({
+            opacity: 0
+        })
+        _li.css({
+            backgroundImage: 'url(' + _url + ')',
+            backgroundSize: 'cover',
+            borderRadius: '4px',
+            backgroundPosition: 'center center',
+        })
+    }
+
+    //Fix after document loads
+    jQuery(document).ready(
+        function(){
+            jQuery('.geodir-image-container ul.geodir-images li img').each( function(){
+                gd_object_fit_fix( this )
+                jQuery( this ).on( 'gdlazyLoaded', gd_object_fit_fix)
+            } )
+        }
+    );
+
+}
 
 jQuery(function($) {
     // start lazy load if it's turned on
