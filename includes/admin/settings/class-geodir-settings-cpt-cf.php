@@ -1889,7 +1889,20 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field = self::sanatize_custom_field($field);
 
 			//print_r($field);exit;
-			
+
+			//Ensure that field key/html var does not match standard wordpress columns
+			$wp_post_cols = $wpdb->get_col( "SHOW COLUMNS FROM `{$wpdb->posts}`" );
+			if( is_array( $wp_post_cols )){
+
+				//Ignore gd default fields
+				unset($wp_post_cols['post_title']);
+				unset($wp_post_cols['post_content']);
+
+				if(in_array( $field->htmlvar_name, $wp_post_cols )){
+					return new WP_Error( 'failed', __( "Field key name MUST NOT match a standard WordPress field, please use another key and re-save.", "geodirectory" ) );
+				}
+			}
+
 			// Check field exists.
 			$exists = self::field_exists($field);
 
