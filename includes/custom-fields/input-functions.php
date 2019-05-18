@@ -1077,6 +1077,9 @@ function geodir_cfi_address($html,$cf){
         $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
         $prefix = $name . '_';
 
+        // steet2
+        if(!isset($extra_fields['street2_lable'])){$extra_fields['street2_lable'] = '';}
+
         ($frontend_title != '') ? $address_title = $frontend_title : $address_title = geodir_ucwords($prefix . ' street');
         ($extra_fields['street2_lable'] != '') ? $street2_title = $extra_fields['street2_lable'] : $zip_title = geodir_ucwords($prefix . ' street2');
         ($extra_fields['zip_lable'] != '') ? $zip_title = $extra_fields['zip_lable'] : $zip_title = geodir_ucwords($prefix . ' zip/post code ');
