@@ -85,7 +85,7 @@ Premium [Addons](http://wpgeodirectory.com/addons/ "Premium addons for GeoDirect
 * [Custom Google Maps](http://wpgeodirectory.com/downloads/custom-google-maps/ "Customize your maps look and feel") - Modify the look and feel of all Google Maps widgets via an intuitive user interface, with color pickers and simple-to-use options.
 * [Social Importer](http://wpgeodirectory.com/downloads/social-importer/ "Import 1 listing at a time from Facebook, Yelp and Trip Advisor!") -  Import pages and events from Facebook and listings from Yelp and Trip Advisor. 1 listing at a time, no bulk scraping.
 * [GD reCAPTCHA](http://wpgeodirectory.com/downloads/gd-recaptcha/ "Stop spammers!") - Banish spam by adding the No CAPTCHA reCAPTCHA widget to any GeoDirectory form.
-* [Embeds]( https://wpgeodirectory.com/downloads/embeds/ "GeoDirectory Embeds") - NEW: Let users embed their listing info with current ratings on their site, styled the way they want.
+* [Embeddable Ratings Badge]( https://wpgeodirectory.com/downloads/embeddable-ratings-badge/ "Embeddable Ratings Badge") - NEW: Let users embed their listing info with current ratings on their site, styled the way they want.
 
 
 = Go Pro - Become a member! =

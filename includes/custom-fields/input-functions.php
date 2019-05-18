@@ -1078,13 +1078,15 @@ function geodir_cfi_address($html,$cf){
         $prefix = $name . '_';
 
         ($frontend_title != '') ? $address_title = $frontend_title : $address_title = geodir_ucwords($prefix . ' street');
+        ($extra_fields['street2_lable'] != '') ? $street2_title = $extra_fields['street2_lable'] : $zip_title = geodir_ucwords($prefix . ' street2');
         ($extra_fields['zip_lable'] != '') ? $zip_title = $extra_fields['zip_lable'] : $zip_title = geodir_ucwords($prefix . ' zip/post code ');
         ($extra_fields['map_lable'] != '') ? $map_title = $extra_fields['map_lable'] : $map_title = geodir_ucwords('set address on map');
         ($extra_fields['mapview_lable'] != '') ? $mapview_title = $extra_fields['mapview_lable'] : $mapview_title = geodir_ucwords($prefix . ' mapview');
 
 
        $street  = $gd_post->street;
-       $zip     = isset( $gd_post->zip ) ? $gd_post->zip : '';
+        $street2     = isset( $gd_post->street2 ) ? $gd_post->street2 : '';
+        $zip     = isset( $gd_post->zip ) ? $gd_post->zip : '';
        $lat     = isset( $gd_post->latitude) ? $gd_post->latitude : '';
        $lng     = isset( $gd_post->longitude) ? $gd_post->longitude : '';
        $mapview = isset( $gd_post->mapview ) ? $gd_post->mapview : '';
@@ -1147,6 +1149,21 @@ function geodir_cfi_address($html,$cf){
         </div>
         
         <?php
+
+        if (isset($extra_fields['show_street2']) && $extra_fields['show_street2']) { ?>
+            <div id="geodir_<?php echo $prefix . 'street2'; ?>_row"
+                 class="geodir_form_row clearfix gd-fieldset-details">
+                <label for="<?php echo esc_attr( $prefix . 'street2' ); ?>">
+                    <?php _e($street2_title, 'geodirectory'); ?>
+                </label>
+                <input type="text" field_type="<?php echo $type; ?>" name="<?php echo 'street2'; ?>"
+                       id="<?php echo $prefix . 'street2'; ?>" class="geodir_textfield autofill"
+                       value="<?php echo esc_attr(stripslashes($street2)); ?>"/>
+                <span class="geodir_message_note"><?php echo sprintf( __('Please enter listing %s', 'geodirectory'), __($street2_title, 'geodirectory') );?></span>
+            </div>
+        <?php
+        }
+
         /**
          * Called after the address input on the add listings.
          *

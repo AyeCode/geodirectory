@@ -1106,6 +1106,7 @@ class GeoDir_Admin_Install {
 		// Location fields
 		if(!isset($cpt['disable_location']) || !$cpt['disable_location']){
 			$columns['street'] = "street VARCHAR( 254 ) NULL";
+			$columns['street2'] = "street2 VARCHAR( 254 ) NULL";
 			$columns['city'] = "city VARCHAR( 50 ) NULL";
 			$columns['region'] = "region VARCHAR( 50 ) NULL";
 			$columns['country'] = "country VARCHAR( 50 ) NULL";

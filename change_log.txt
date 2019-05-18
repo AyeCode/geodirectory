@@ -1,6 +1,7 @@
 = 2.0.0.60 =
 * Polifill for CSS object-fit in browsers that don't support it - Added
 * Prevent saving custom fields found in array of standard fields - ADDED
+* Optional Address line 2 field added, can be enabled under address field - ADDED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED

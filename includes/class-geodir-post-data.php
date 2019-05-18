@@ -559,6 +559,9 @@ class GeoDir_Post_Data {
 			if ( isset( $gd_post['street'] ) ) {
 				$postarr['street'] = stripslashes( $gd_post['street'] );
 			}
+			if ( isset( $gd_post['street2'] ) ) {
+				$postarr['street2'] = stripslashes( $gd_post['street2'] );
+			}
 			if ( ! isset( $gd_post['city'] ) && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'inline-save' ) {
 				// if inline save then don't adjust the location info
 			} elseif ( isset( $gd_post['city'] ) ) {
