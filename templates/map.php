@@ -94,6 +94,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     var <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT = <?php echo ($mapzoom) ? $mapzoom : 12;?>;
     var minZoomLevel = <?php echo ($is_map_restrict) ? 5 : 0; ?>;
     var oldstr_address;
+    var oldstr_address2;
     var oldstr_zip;
     var strictBounds;
     var doingGeocode = false;
@@ -116,6 +117,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         console.log(responses);//keep this for debugging
         if (responses && responses.length > 0) {
             var getAddress = '';
+            var getAddress2 = '';
             var getZip = '';
             var getCity = '';
             var getState = '';
@@ -163,10 +165,17 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                         if (addr.types[0] == 'locality') {
                             locality = addr;
                         }
+                        if (addr.types[0] == 'premise') {
+                            premise = addr;alert(4);
+                        }
+                        if (addr.types[0] == 'establishment') {
+                            establishment = addr;alert(5);
+                        }
                     }
-
                 }
             });
+
+
 
             
             for (var i = 0; i < responses[0].address_components.length; i++) {
@@ -261,8 +270,14 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             // if establishment then grab second arr
             if (getAddress == 'none' && typeof(establishment.long_name) !== 'undefined' && typeof(address_array[1]) !== 'undefined') {
                 getAddress = address_array[1];
+                getAddress2 = address_array[0];
             } else {
                 getAddress = address_array[0];
+            }
+
+            // address2
+            if(premise.long_name && premise.long_name != getAddress){
+                getAddress2 = premise.long_name;
             }
 
             if (getAddress == '') {
@@ -416,7 +431,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 setTimeout(function(){jQuery('#address_street,#address_zip').val('');}, 100);
             }
             <?php } ?>
-            updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry);
+            updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2);
         } else {
             updateMarkerAddress('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
         }
@@ -451,7 +466,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         jQuery('#<?php echo $prefix.'latitude';?>').val(markerlatLng.lat).trigger('change');
         jQuery('#<?php echo $prefix.'longitude';?>').val(markerlatLng.lng).trigger('change');
     }
-    function updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry) {
+    function updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2) {
         var set_map_val_in_fields = '<?php echo addslashes_gpc($auto_change_map_fields);?>';
         <?php ob_start();?>
         var old_country = jQuery("#<?php echo $prefix.'country';?>").val();
@@ -462,6 +477,12 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         }
         if (getAddress) {
             oldstr_address = getAddress;
+        }
+        if (user_address == false || jQuery('#<?php echo $prefix.'street2';?>').val() == '') {
+            jQuery("#<?php echo $prefix.'street2';?>").val(getAddress2);
+        }
+        if (getAddress2) {
+            oldstr_address2 = getAddress2;
         }
 
         jQuery("#<?php echo $prefix.'zip';?>").val(getZip);
@@ -646,11 +667,26 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             }                
         }, 100);
     }
+
+    function gd_get_street2($response){
+        var $street2 = '';
+
+        if($response.address.building){
+            $street2 = $response.address.building;
+        }else if($response.address.department_store){
+            $street2 = $response.address.department_store;
+        }else if($response.address.hotel){
+            $street2 = $response.address.hotel;
+        }
+
+        return $street2;
+    }
     
     function geocodeResponseOSM(response, updateMap) {
         console.log(response);
         if (response.display_address) {
             var getAddress = response.display_address;
+            var getAddress2 = gd_get_street2(response);
             var getZip = response.postcode;
             var getCity = response.city;
             var getState = response.state;
@@ -681,7 +717,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 geocodePositionOSM(baseMarker.getLatLng());
             }
             <?php } ?>
-            updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry);
+            updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry,getAddress2);
         } else {
             alert('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
         }
@@ -806,7 +842,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 
             <?php if ($is_map_restrict) { ?>
             var CITY_ADDRESS = '<?php echo addslashes_gpc($city).', '.addslashes_gpc($region).', '.addslashes_gpc($country);?>';
-            geocodePositionOSM('', CITY_ADDRESS);
             <?php } ?>
             // Limit the zoom level
             $.goMap.map.on('zoom', function(e) {

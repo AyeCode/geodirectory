@@ -574,9 +574,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$address = stripslashes_deep(unserialize($field_info->extra_fields));
 			}
 
-			$radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);
-			?>
-			<?php
 			/**
 			 * Called on the add custom fields settings page before the address field is output.
 			 *
@@ -584,7 +581,40 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			 * @param array $address The address settings array.
 			 * @param object $field_info Extra fields info.
 			 */
-			do_action('geodir_address_extra_admin_fields', $address, $field_info); ?>
+			do_action('geodir_address_extra_admin_fields', $address, $field_info);
+
+
+			// setup address line 2 if not set
+			if(!isset($address['show_street2'])){
+				$address['show_street2'] = 0;
+			}
+			if(!isset($address['street2_lable'])){
+				$address['street2_lable'] = __('Address line 2 (optional)', 'geodirectory');
+			}
+
+			?>
+
+			<p class="gd-advanced-setting" data-setting="show_street2">
+				<label for="show_zip" class="dd-setting-name">
+					<?php
+					echo geodir_help_tip( __( 'Select if you want to show address line 2 field in address section.', 'geodirectory' ));
+					_e('Display Address line 2', 'geodirectory'); ?>
+					<input type="hidden" name="extra[show_street2]" value="0" />
+					<input type="checkbox" name="extra[show_street2]" value="1" <?php checked( $address['show_street2'], 1, true );?> onclick="gd_show_hide_radio(this,'show','cf-street2-lable');" />
+				</label>
+			</p>
+
+			<p  class="cf-street2-lable gd-advanced-setting"  <?php if ((isset($address['show_street2']) && !$address['show_street2']) || !isset($address['show_street2'])) {echo "style='display:none;'";}?> data-setting="street2_lable">
+				<label for="street2_lable" class="dd-setting-name">
+					<?php
+					echo geodir_help_tip( __( 'Enter Address line 2 field label in address section.', 'geodirectory' ));
+					_e('Address line 2 label', 'geodirectory'); ?>
+					<input type="text" name="extra[street2_lable]" id="street2_lable"
+					       value="<?php if (isset($address['street2_lable'])) {
+						       echo esc_attr($address['street2_lable']);
+					       }?>"/>
+				</label>
+			</p>
 
 			<p class="gd-advanced-setting" data-setting="show_zip">
 				<label for="show_zip" class="dd-setting-name">
