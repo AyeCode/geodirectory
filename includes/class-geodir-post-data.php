@@ -746,6 +746,15 @@ class GeoDir_Post_Data {
 			global $post;
 
 			$post_id        = absint( $_REQUEST['pid'] );
+
+			// check if user has privileges to edit the post
+			$maybe_parent = wp_get_post_parent_id( $post_id  );
+			$parent_id = $maybe_parent ? absint( $maybe_parent ) : '';
+			if ( ! self::can_edit( $post_id, get_current_user_id(), $parent_id ) ) {
+				echo self::output_user_notes( array( 'gd-error' => __( 'You do not have permission to edit this post.', 'geodirectory' ) ) );
+				return;
+			}
+
 			$post           = $gd_post = geodir_get_post_info( $post_id );
 			$listing_type   = $post->post_type;
 			$post_revisions = wp_get_post_revisions( $post_id, array(
@@ -1289,6 +1298,7 @@ class GeoDir_Post_Data {
 
 		$author_id = get_post_field( 'post_author', $post_id );
 		$post_type = '';
+
 		// if we have a parent_id then we must do extra checks
 		if ( $parent_id ) {
 			// make sure the parent id is for the post id.
@@ -1296,6 +1306,8 @@ class GeoDir_Post_Data {
 				// something is not right, bail.
 				return false;
 			}
+			// set the author and post type from parent
+			$author_id = get_post_field( 'post_author', $parent_id );
 			$post_type = get_post_type( $parent_id );
 		}
 
