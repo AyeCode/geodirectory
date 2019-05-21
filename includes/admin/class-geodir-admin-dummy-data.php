@@ -1215,7 +1215,6 @@ class GeoDir_Admin_Dummy_Data {
 			}
 
 			$current_menu_items = wp_get_nav_menu_items( $menu_id );
-//			print_r($current_menu_items);exit;
 			$current_menu_titles = array();
 			// get a list of current slugs so we don't add things twice.
 			if(!empty($current_menu_items)){
@@ -1229,30 +1228,18 @@ class GeoDir_Admin_Dummy_Data {
 			$gd_menus = new GeoDir_Admin_Menus();
 
 			$gd_menu_items = $gd_menus->get_endpoints();
-			//print_r($gd_menu_items);
 
 			if(!empty($gd_menu_items)){
 				foreach($gd_menu_items as $menu_item_type){
 					if(!empty($menu_item_type)){
 
-//						print_r($menu_item_type);
-
-
 						$menu_item_type = array_map('wp_setup_nav_menu_item', $menu_item_type);
-//						echo '###';
-//						print_r($menu_item_type);
-						//echo '##############';
 
 						foreach($menu_item_type as $menu_item){
-
-//							print_r($current_menu_titles);//exit;
-
-//							echo '###'.$menu_item->title.'###';
 
 							if(!empty($current_menu_titles) && (in_array($menu_item->title,$current_menu_titles) || in_array(str_replace(" page",'',$menu_item->title),$current_menu_titles))){
 								$items_exist++; continue 2;
 							}
-//							print_r($menu_item);
 
 							// setup standard menu stuff
 							$menu_item->{'menu-item-object-id'} = $menu_item->object_id;
@@ -1265,8 +1252,6 @@ class GeoDir_Admin_Dummy_Data {
 								$menu_item->{'menu-item-title'} = $menu_item->title;
 							}
 //
-//							echo '###';
-//							print_r($menu_item);
 							// insert the menu item
 							wp_update_nav_menu_item($menu_id, 0, $menu_item);
 							$items_added++;
@@ -1274,12 +1259,6 @@ class GeoDir_Admin_Dummy_Data {
 					}
 				}
 			}
-
-//			$menu_exists = wp_get_nav_menu_object( $menu_id );
-//			print_r( $menu_exists );
-//			$menu_exists = wp_get_nav_menu_items( $menu_id );
-//			print_r( $menu_exists );
-
 
 		}elseif($menu_location){
 
@@ -1300,9 +1279,7 @@ class GeoDir_Admin_Dummy_Data {
 					return self::setup_menu($menu_id);
 				}
 
-				//echo '##'.$menu_id.'##';
 			}else{
-				//print_r($menu_exists);
 				return new WP_Error( 'gd-wizard-setup-menu', __( "Menu already exists.", "geodirectory" ) );
 			}
 		}
@@ -1316,8 +1293,5 @@ class GeoDir_Admin_Dummy_Data {
 			return __( 'Something went wrong, you can manually add items in Appearance > Menus' , 'geodirectory' );
 		}
 
-
-//		return "yeah!";
-		print_r($_REQUEST);exit;
 	}
 }

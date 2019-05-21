@@ -1645,7 +1645,7 @@ function geodir_cfi_tags($html,$cf){
             </label>
             <input type="hidden" name="gd_field_<?php echo $cf['name']; ?>" value="1"/>
             <div class="geodir_multiselect_list">
-                <select field_type="<?php echo $cf['type']; ?>" name="tax_input[<?php echo $post_type."_tags"; ?>][]" id="<?php echo $cf['name']; ?>"
+                <select field_type="<?php echo $cf['type']; ?>" name="tax_input[<?php echo wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"; ?>][]" id="<?php echo $cf['name']; ?>"
                         multiple="multiple" class="geodir_textfield textfield geodir-select-tags"
                         data-placeholder="<?php _e('Enter tags separated by a comma ,', 'geodirectory'); ?>"
                         >
