@@ -73,6 +73,11 @@
     //.bestof-tabs-as-dropdown .geodir-bestof-cat-list {
     //    display: none;
     //}
+    .geodir_post_meta{
+        iframe{
+            height: auto;
+        }
+    }
 }
 
 @media only screen and (max-width: 480px) {
