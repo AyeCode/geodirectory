@@ -764,7 +764,7 @@ function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_i
 		'is_active'           => '1',
 		'for_admin_use'       => false,
 		'default_value'       => '',
-		'show_in' 	          => '[listing]',
+		'show_in' 	          => '[detail],[listing]',
 		'is_required'         => false,
 		'option_values'       => '',
 		'validation_pattern'  => '',
