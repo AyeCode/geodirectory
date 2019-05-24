@@ -327,6 +327,16 @@ class GeoDir_Admin_Dummy_Data {
 					 * @package GeoDirectory
 					 */
 					include_once( 'dummy-data/property_rent.php' );
+				}  elseif ( $key == 'classifieds' ) {
+					add_filter( 'geodir_extra_custom_fields', 'geodir_extra_custom_fields_' . $key, 10, 3 );
+
+					/**
+					 * Contains dummy property for classifieds.
+					 *
+					 * @since 2.0.0.59
+					 * @package GeoDirectory
+					 */
+					include_once( 'dummy-data/classifieds.php' );
 				} else {
 					do_action( 'geodir_dummy_data_include_file', $post_type, $data_type, $val, $item_index );
 				}
@@ -751,6 +761,13 @@ class GeoDir_Admin_Dummy_Data {
 				'count' => 10
 			)
 		);
+
+		if( $post_type == 'gd_place' ){
+				$data['classifieds'] = array(
+					'name'  => __( 'Classifieds', 'geodirectory' ),
+					'count' => 21
+				);
+		}
 
 		return apply_filters( 'geodir_dummy_data_types', $data, $post_type );
 	}
