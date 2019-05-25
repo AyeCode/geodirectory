@@ -140,8 +140,14 @@ class GeoDir_Permalinks {
 				$gd_cpts = geodir_get_posttypes('array');
 				if(!empty($gd_cpts)){
 					foreach($gd_cpts as $cpt => $cpt_options){
-						if(isset($cpt_options['rewrite']['slug']) && $cpt_options['rewrite']['slug']==$post_type_slug){
-							$post_type = $cpt;break;
+						if ( ! empty( $cpt_options['rewrite']['slug'] ) && $post_type_slug ) {
+							if ( $cpt_options['rewrite']['slug'] == $post_type_slug ) {
+								$post_type = $cpt;
+								break;
+							} elseif ( urlencode( geodir_cpt_permalink_rewrite_slug( $cpt ) ) == $post_type_slug ) { // Match translated slug
+								$post_type = $cpt;
+								break;
+							}
 						}
 					}
 				}
