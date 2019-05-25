@@ -424,7 +424,7 @@ class GeoDir_Compatibility {
 			if ( ( in_array( $meta_key, $kingstudio_keys ) || empty( $meta_key ) ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 				if ( geodir_is_page( 'detail' ) ) {
 					$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
-				} else if ( geodir_is_page( 'post_type' ) ) {
+				} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
 					$template_page_id = geodir_archive_page_id( get_post_type( $object_id ) );
 				} else if ( geodir_is_page( 'search' ) ) {
 					$template_page_id = geodir_search_page_id();
