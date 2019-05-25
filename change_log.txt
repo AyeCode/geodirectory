@@ -4,6 +4,7 @@
 * Optional Address line 2 field added, can be enabled under address field - ADDED
 * Classifieds dummy content - ADDED
 * "Kingstudio" theme compatibility for gd pages sidebar - ADDED
+* Translation for "May" month abbreviation shows incorrect date - FIXED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED

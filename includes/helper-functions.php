@@ -555,71 +555,73 @@ function geodir_maybe_untranslate_date( $date ) {
 
 	$names = array(
 		// The Weekdays
-		'Sunday' => __( 'Sunday' ),
-		'Monday' => __( 'Monday' ),
-		'Tuesday' => __( 'Tuesday' ),
-		'Wednesday' => __( 'Wednesday' ),
-		'Thursday' => __( 'Thursday' ),
-		'Friday' => __( 'Friday' ),
-		'Saturday' => __( 'Saturday' ),
+		array( 'Sunday' => __( 'Sunday' ) ),
+		array( 'Monday' => __( 'Monday' ) ),
+		array( 'Tuesday' => __( 'Tuesday' ) ),
+		array( 'Wednesday' => __( 'Wednesday' ) ),
+		array( 'Thursday' => __( 'Thursday' ) ),
+		array( 'Friday' => __( 'Friday' ) ),
+		array( 'Saturday' => __( 'Saturday' ) ),
 
 		// The Months
-		'January' => __( 'January' ),
-		'February' => __( 'February' ),
-		'March' => __( 'March' ),
-		'April' => __( 'April' ),
-		'May' => __( 'May' ),
-		'June' => __( 'June' ),
-		'July' => __( 'July' ),
-		'August' => __( 'August' ),
-		'September' => __( 'September' ),
-		'October' => __( 'October' ),
-		'November' => __( 'November' ),
-		'December' => __( 'December' ),
+		array( 'January' => __( 'January' ) ),
+		array( 'February' => __( 'February' ) ),
+		array( 'March' => __( 'March' ) ),
+		array( 'April' => __( 'April' ) ),
+		array( 'May' => __( 'May' ) ),
+		array( 'June' => __( 'June' ) ),
+		array( 'July' => __( 'July' ) ),
+		array( 'August' => __( 'August' ) ),
+		array( 'September' => __( 'September' ) ),
+		array( 'October' => __( 'October' ) ),
+		array( 'November' => __( 'November' ) ),
+		array( 'December' => __( 'December' ) ),
 
 		// Abbreviations for each month.
-		'Jan' => _x( 'Jan', 'January abbreviation' ),
-		'Feb' => _x( 'Feb', 'February abbreviation' ),
-		'Mar' => _x( 'Mar', 'March abbreviation' ),
-		'Apr' => _x( 'Apr', 'April abbreviation' ),
-		'May' => _x( 'May', 'May abbreviation' ),
-		'Jun' => _x( 'Jun', 'June abbreviation' ),
-		'Jul' => _x( 'Jul', 'July abbreviation' ),
-		'Aug' => _x( 'Aug', 'August abbreviation' ),
-		'Sep' => _x( 'Sep', 'September abbreviation' ),
-		'Oct' => _x( 'Oct', 'October abbreviation' ),
-		'Nov' => _x( 'Nov', 'November abbreviation' ),
-		'Dec' => _x( 'Dec', 'December abbreviation' ),
+		array( 'Jan' => _x( 'Jan', 'January abbreviation' ) ),
+		array( 'Feb' => _x( 'Feb', 'February abbreviation' ) ),
+		array( 'Mar' => _x( 'Mar', 'March abbreviation' ) ),
+		array( 'Apr' => _x( 'Apr', 'April abbreviation' ) ),
+		array( 'May' => _x( 'May', 'May abbreviation' ) ),
+		array( 'Jun' => _x( 'Jun', 'June abbreviation' ) ),
+		array( 'Jul' => _x( 'Jul', 'July abbreviation' ) ),
+		array( 'Aug' => _x( 'Aug', 'August abbreviation' ) ),
+		array( 'Sep' => _x( 'Sep', 'September abbreviation' ) ),
+		array( 'Oct' => _x( 'Oct', 'October abbreviation' ) ),
+		array( 'Nov' => _x( 'Nov', 'November abbreviation' ) ),
+		array( 'Dec' => _x( 'Dec', 'December abbreviation' ) ),
 
 		// Abbreviations for each day.
-		'Sun' => __( 'Sun' ),
-		'Mon' => __( 'Mon' ),
-		'Tue' => __( 'Tue' ),
-		'Wed' => __( 'Wed' ),
-		'Thu' => __( 'Thu' ),
-		'Fri' => __( 'Fri' ),
-		'Sat' => __( 'Sat' ),
+		array( 'Sun' => __( 'Sun' ) ),
+		array( 'Mon' => __( 'Mon' ) ),
+		array( 'Tue' => __( 'Tue' ) ),
+		array( 'Wed' => __( 'Wed' ) ),
+		array( 'Thu' => __( 'Thu' ) ),
+		array( 'Fri' => __( 'Fri' ) ),
+		array( 'Sat' => __( 'Sat' ) ),
 
 		// The first letter of each day.
-		'S' => _x( 'S', 'Sunday initial' ),
-		'M' => _x( 'M', 'Monday initial' ),
-		'T' => _x( 'T', 'Tuesday initial' ),
-		'W' => _x( 'W', 'Wednesday initial' ),
-		'T' => _x( 'T', 'Thursday initial' ),
-		'F' => _x( 'F', 'Friday initial' ),
-		'S' => _x( 'S', 'Saturday initial' ),
+		array( 'S' => _x( 'S', 'Sunday initial' ) ),
+		array( 'M' => _x( 'M', 'Monday initial' ) ),
+		array( 'T' => _x( 'T', 'Tuesday initial' ) ),
+		array( 'W' => _x( 'W', 'Wednesday initial' ) ),
+		array( 'T' => _x( 'T', 'Thursday initial' ) ),
+		array( 'F' => _x( 'F', 'Friday initial' ) ),
+		array( 'S' => _x( 'S', 'Saturday initial' ) ),
 
 		// The Meridiems
-		'am' => __( 'am' ),
-		'pm' => __( 'pm' ),
-		'AM' => __( 'AM' ),
-		'PM' => __( 'PM' )
+		array( 'am' => __( 'am' ) ),
+		array( 'pm' => __( 'pm' ) ),
+		array( 'AM' => __( 'AM' ) ),
+		array( 'PM' => __( 'PM' ) )
 	);
 
-	foreach ( $names as $name => $translation ) {
-		if ( $translation && trim( $translation ) != '' ) {
-			$date_formated = preg_replace( "/([^\\\])" . $name . "/", "\\1" . backslashit( $name ), $date_formated );
-			$date_formated = preg_replace( "/([^\\\])" . $translation . "/", "\\1" . backslashit( $name ), $date_formated );
+	foreach ( $names as $key => $translations ) {
+		foreach ( $translations as $name => $translation ) {
+			if ( $translation && trim( $translation ) != '' ) {
+				$date_formated = preg_replace( "/([^\\\])" . $name . "/", "\\1" . backslashit( $name ), $date_formated );
+				$date_formated = preg_replace( "/([^\\\])" . $translation . "/", "\\1" . backslashit( $name ), $date_formated );
+			}
 		}
 	}
 
