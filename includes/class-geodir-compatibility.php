@@ -417,6 +417,27 @@ class GeoDir_Compatibility {
 			}
 		}
 
+		// Kingstudio
+		if ( function_exists( 'kingstudio_ninzio_global_variables' ) ) {
+			$kingstudio_keys = array( 'blank', 'one_page', 'rev_slider', 'sidebar', 'sidebar_pos', 'rh_content', 'rh_text_color', 'breadcrumbs_text_color', 'rh_back_color', 'rh_back_img', 'rh_back_img_repeat', 'rh_back_img_position', 'rh_back_img_attachment', 'rh_back_img_size', 'parallax' );
+
+			if ( ( in_array( $meta_key, $kingstudio_keys ) || empty( $meta_key ) ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
+				if ( geodir_is_page( 'detail' ) ) {
+					$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
+				} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+					$template_page_id = geodir_archive_page_id( get_post_type( $object_id ) );
+				} else if ( geodir_is_page( 'search' ) ) {
+					$template_page_id = geodir_search_page_id();
+				} else {
+					$template_page_id = 0;
+				}
+
+				if ( ! empty( $template_page_id ) ) {
+					return empty( $meta_key ) ? get_post_custom( $template_page_id ) : get_post_meta( $template_page_id, $meta_key, $single );
+				}
+			}
+		}
+
 		if (
 			$meta_key
 			&& ( $meta_key[0] == "_" || in_array( $meta_key, $gen_keys ) )

@@ -909,7 +909,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				?>
 				<script type="text/javascript">
 					/* <![CDATA[ */
-					try {
+					jQuery(function() {try {
 						var params = <?php echo json_encode( $params ); ?>;
 						params['action'] = 'geodir_widget_listings';
 						params['widget_args'] = <?php echo json_encode( $args ); ?>;
@@ -917,7 +917,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 						geodir_widget_listings_pagination('<?php echo $unique_id; ?>', params);
 					} catch (err) {
 						console.log(err.message);
-					}
+					}});
 					/* ]]> */
 				</script>
 			<?php 
