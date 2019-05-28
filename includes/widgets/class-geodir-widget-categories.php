@@ -352,7 +352,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			)
 		);
 
-		$sort_by = isset($args['sort_by']) && in_array($args['sort_by'], array('az', 'count')) ? $args['sort_by'] : 'count';
+		$sort_by = isset($args['sort_by']) && in_array($args['sort_by'], array('az', 'count')) ? sanitize_text_field( $args['sort_by'] ) : 'count';
 		$cpt_filter = empty($args['no_cpt_filter']) ? true : false;
 		$cat_filter = empty($args['no_cat_filter']) ? true : false;
 		$cpt_ajax = ! empty( $args['cpt_ajax'] ) ? true : false;
@@ -420,6 +420,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		$max_count = $max_count > 0 ? (int)$max_count : 0;
 		$max_count_child = $max_count_child > 0 ? (int)$max_count_child : 0;
 		$max_level = strip_tags($args['max_level']);
+		if ( $max_level != 'all' ) {
+			$max_level = 0;
+		}
 		$hide_count = !empty($args['hide_count']) ? true : false;
 		$hide_icon = !empty($args['hide_icon']) ? true : false;
 		$use_image = !empty($args['use_image']) ? true : false;
@@ -438,8 +441,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			$order = 'ASC';
 		}
 
-		$via_ajax = ! empty($params['via_ajax']) && wp_doing_ajax() ? $params['via_ajax'] : false;
-		$ajax_cpt = ! empty($params['ajax_cpt']) && $via_ajax ? $params['ajax_cpt'] : '';
+		$via_ajax = ! empty($params['via_ajax']) && wp_doing_ajax() ? true : false;
+		$ajax_cpt = ! empty($params['ajax_cpt']) && $via_ajax ? sanitize_text_field( $params['ajax_cpt'] ) : '';
 		$set_location = false;
 		if ( $via_ajax ) {
 			if ( ! empty( $params['ajax_is_listing'] ) ) {
@@ -452,13 +455,13 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$is_category = true;
 			}
 			if ( ! empty( $params['ajax_post_ID'] ) ) {
-				$post_ID = $params['ajax_post_ID'];
+				$post_ID = absint( $params['ajax_post_ID'] );
 			}
 			if ( ! empty( $params['ajax_current_term_id'] ) ) {
-				$current_term_id = $params['ajax_current_term_id'];
+				$current_term_id = absint( $params['ajax_current_term_id'] );
 			}
 			if ( ! empty( $params['ajax_set_location'] ) ) {
-				$set_location = maybe_unserialize( stripslashes( $params['ajax_set_location'] ) );
+				$set_location = maybe_unserialize( sanitize_text_field( stripslashes( $params['ajax_set_location'] ) ) );
 
 				if ( ! ( is_object( $set_location ) && GeoDir_Post_types::supports( $ajax_cpt, 'location' ) ) ) {
 					$set_location = false;
@@ -578,7 +581,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				global $geodirectory;
 				$post_type = is_array( $args['post_type'] ) ? implode( ',', $args['post_type'] ) : (! empty($args['post_type']) ? $args['post_type'] : '0');
 				$output .= '<div class="gd-cptcats-select"><div class="gd-wgt-params">';
-				$output .= '<input type="hidden" name="post_type" value="' . $post_type . '">';
+				$output .= '<input type="hidden" name="post_type" value="' . esc_attr( $post_type ) . '">';
 				$output .= '<input type="hidden" name="cpt_ajax" value="' . $cpt_ajax . '">';
 				$output .= '<input type="hidden" name="hide_empty" value="' . $hide_empty . '">';
 				$output .= '<input type="hidden" name="hide_count" value="' . $hide_count . '">';
@@ -587,8 +590,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$output .= '<input type="hidden" name="sort_by" value="' . $sort_by . '">';
 				$output .= '<input type="hidden" name="max_level" value="' . $max_level . '">';
 				$output .= '<input type="hidden" name="max_count" value="' . $max_count . '">';
-				$output .= '<input type="hidden" name="no_cpt_filter" value="' . $args['no_cpt_filter'] . '">';
-				$output .= '<input type="hidden" name="no_cat_filter" value="' . $args['no_cat_filter'] . '">';
+				$output .= '<input type="hidden" name="no_cpt_filter" value="' . absint( $args['no_cpt_filter'] ) . '">';
+				$output .= '<input type="hidden" name="no_cat_filter" value="' . absint( $args['no_cat_filter'] ) . '">';
 				$output .= '<input type="hidden" name="ajax_is_listing" value="' . $is_listing . '">';
 				$output .= '<input type="hidden" name="ajax_is_detail" value="' . $is_detail . '">';
 				$output .= '<input type="hidden" name="ajax_is_category" value="' . $is_category . '">';
