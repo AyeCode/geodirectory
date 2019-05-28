@@ -451,18 +451,36 @@ function geodir_location_slug_check($slug)
 }
 add_filter('geodir_location_slug_check', 'geodir_location_slug_check');
 
+
+/**
+ * Get location info via from IP.
+ *
+ * @since 2.0.0.60 Changed to new site for IP information.
+ * @param string $ip
+ *
+ * @return mixed|void
+ */
 function geodir_geo_by_ip( $ip = '' ) {
 	$geo = array();
 
-	$geoplugin_data = geodir_geoplugin_data( $ip );
-	if ( ! empty( $geoplugin_data ) && ! empty( $geoplugin_data['geoplugin_latitude'] ) && ! empty( $geoplugin_data['geoplugin_longitude'] ) ) {
-		$geo['latitude'] = $geoplugin_data['geoplugin_latitude'];
-		$geo['longitude'] = $geoplugin_data['geoplugin_longitude'];
-	}
+    $data = geodir_ip_api_data( $ip );
+    if ( ! empty( $data ) && ! empty( $data['lat'] ) && ! empty( $data['lon'] ) ) {
+        $geo['latitude'] = $data['lat'];
+        $geo['longitude'] = $data['lon'];
+    }
 
 	return apply_filters( 'geodir_geo_by_ip', $geo, $ip );
 }
 
+
+/**
+ * Get location data from ip via geoplugin.net
+ *
+ * @deprecated 2.0.0.60
+ * @param string $ip
+ *
+ * @return array|mixed|null|void
+ */
 function geodir_geoplugin_data( $ip = '' ) {
 	global $wp_version;
 
@@ -477,7 +495,7 @@ function geodir_geoplugin_data( $ip = '' ) {
     $geoplugin_data = array();
 
     // check transient cache
-    $cache = false;// get_transient( 'geodir_ip_location_'.$ip );
+    $cache = get_transient( 'geodir_ip_location_'.$ip );
     if($cache === false){
 
         $url = 'http://www.geoplugin.net/php.gp?ip=' . $ip;
@@ -496,4 +514,46 @@ function geodir_geoplugin_data( $ip = '' ) {
     set_transient( 'geodir_ip_location_'.$ip, $geoplugin_data, 24 * HOUR_IN_SECONDS ); // cache ip location for 24 hours
 
 	return $geoplugin_data;
+}
+
+/**
+ * Get location data from ip via geoplugin.net.
+ *
+ * @param string $ip
+ * @since 2.0.0.60
+ * @return array|bool|mixed|null|object|void
+ */
+function geodir_ip_api_data( $ip = '' ) {
+    global $wp_version;
+
+    if ( empty( $ip ) ) {
+        $ip = geodir_get_ip();
+    }
+
+    if ( empty( $ip ) ) {
+        return NULL;
+    }
+
+    $data = array();
+
+    // check transient cache
+    $cache = get_transient( 'geodir_ip_location_'.$ip );
+    if($cache === false){
+
+        $url = 'http://ip-api.com/json/' . $ip;
+        $response = wp_remote_get($url);
+
+        if ( is_array( $response ) && wp_remote_retrieve_response_code( $response ) == '200' ) {
+            $data = json_decode(wp_remote_retrieve_body( $response ),true);
+        }
+
+    }else{
+        $data = $cache;
+    }
+
+    $data  = apply_filters( 'geodir_ip_api_data', $data, $ip );
+
+    set_transient( 'geodir_ip_location_'.$ip, $data, 24 * HOUR_IN_SECONDS ); // cache ip location for 24 hours
+
+    return $data;
 }

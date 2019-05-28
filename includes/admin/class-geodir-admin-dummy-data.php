@@ -759,15 +759,12 @@ class GeoDir_Admin_Dummy_Data {
 			'property_rent'   => array(
 				'name'  => __( 'Property for rent', 'geodirectory' ),
 				'count' => 10
+			),
+			'classifieds'   => array(
+				'name'  => __( 'Classifieds', 'geodirectory' ),
+				'count' => 21
 			)
 		);
-
-		if( $post_type == 'gd_place' ){
-				$data['classifieds'] = array(
-					'name'  => __( 'Classifieds', 'geodirectory' ),
-					'count' => 21
-				);
-		}
 
 		return apply_filters( 'geodir_dummy_data_types', $data, $post_type );
 	}
