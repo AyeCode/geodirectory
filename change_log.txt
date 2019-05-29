@@ -6,6 +6,8 @@
 * "Kingstudio" theme compatibility for gd pages sidebar - ADDED
 * Translation for "May" month abbreviation shows incorrect date - FIXED
 * 404 rescue setting not working for translated CPT slug - FIXED
+* Changed external API for IP to location to a more reliable one - CHANGED
+* WP Country Database lib updated to 1.0.3 - CHANGED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED

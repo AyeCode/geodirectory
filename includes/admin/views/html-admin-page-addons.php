@@ -24,15 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</nav>
 
 		<?php
-
-		if($current_tab =='themes'){
-			echo geodir_notification(
-				array(
-					'gd-warn'=>__('Most themes here are not compatible with GDv2 yet.','geodirectory')." ". sprintf( __( 'Directory Starter and Supreme Directory v2 versions can be found here: <a href="%s">GeoDirectory Themes</a>', 'geodirectory' ), 'https://wpgeodirectory.com/downloads/category/themes/' )
-				) );
-		}
-
-
+		
 		if($current_tab == 'membership'){
 
 			?>
