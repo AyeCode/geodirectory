@@ -80,6 +80,7 @@ class GeoDir_Template_Loader {
      * geodirectory templates.
      *
      * @since 2.0.0
+	 * @since 2.0.60 Customizr Pro theme does not locates the GD templates so use default template.
      *
      * @param mixed $template
      * @return string
@@ -97,11 +98,15 @@ class GeoDir_Template_Loader {
              * @var array
              */
             $search_files = self::get_template_loader_files( $default_file );
-            $template     = locate_template( $search_files );
-           // echo '###'. $template;
-            if ( !$template ) {
-                $template = geodir_get_templates_dir() . '/' . $default_file;
+            $gd_template = locate_template( $search_files );
+
+            if ( !$gd_template && $default_file && $default_file !== ' ' ) {
+                $gd_template = geodir_get_templates_dir() . '/' . $default_file;
             }
+
+			if ( $gd_template ) {
+				$template = $gd_template;
+			}
         }
 
         return $template;
