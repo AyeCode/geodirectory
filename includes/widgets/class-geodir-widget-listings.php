@@ -1021,9 +1021,20 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		global $wp_query;
 
 		$backup_wp_query = $wp_query;
+		if ( isset( $wp_query->paged ) ) {
+			$backup_paged = $wp_query->paged;
+		}
+		if ( isset( $wp_query->max_num_pages ) ) {
+			$backup_max_num_pages = $wp_query->max_num_pages;
+		}
+		if ( isset( $wp_query->found_posts ) ) {
+			$backup_found_posts = $wp_query->found_posts;
+		}
+		if ( isset( $wp_query->is_paged ) ) {
+			$backup_is_paged = $wp_query->is_paged;
+		}
 
 		$max_num_pages = ceil( $post_count / $post_number );
-
 		set_query_var( 'paged', $pageno );
 		$wp_query->max_num_pages = $max_num_pages;
 		$wp_query->found_posts = $post_count;
@@ -1042,6 +1053,18 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		remove_filter( 'geodir_pagination_args', array( __CLASS__, 'filter_pagination_args' ), 999999, 1 );
 
 		$wp_query = $backup_wp_query;
+		if ( isset( $backup_paged ) ) {
+			set_query_var( 'paged', $backup_paged );
+		}
+		if ( isset( $backup_max_num_pages ) ) {
+			$wp_query->max_num_pages = $backup_max_num_pages;
+		}
+		if ( isset( $backup_found_posts ) ) {
+			$wp_query->found_posts = $backup_found_posts;
+		}
+		if ( isset( $backup_is_paged ) ) {
+			$wp_query->is_paged = $backup_is_paged;
+		}
 	}
 
 	public static function filter_pagination_args( $pagination_args ) {
