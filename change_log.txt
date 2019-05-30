@@ -10,6 +10,7 @@
 * WP Country Database lib updated to 1.0.3 - CHANGED
 * Customizr Pro theme does not locates the GD templates - FIXED
 * Genesis theme pagination conflicts with GD Listings pagination on mobile devices - FIXED
+* It allows to reset the custom field value of the select box - ADDED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED

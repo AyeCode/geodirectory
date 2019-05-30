@@ -636,7 +636,7 @@ function geodir_cfi_select($html,$cf){
             <select field_type="<?php echo $cf['type'];?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
                     class="geodir_textfield textfield_x geodir-select"
                     data-placeholder="<?php echo __('Choose', 'geodirectory') . ' ' . $frontend_title . '&hellip;';?>"
-                    option-ajaxchosen="false"><?php echo $select_options;?></select>
+                    option-ajaxchosen="false" data-allow_clear="true"><?php echo $select_options;?></select>
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
                 <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
@@ -699,7 +699,7 @@ function geodir_cfi_multiselect($html,$cf){
                 <select field_type="<?php echo $cf['type']; ?>" name="<?php echo $cf['name']; ?>[]" id="<?php echo $cf['name']; ?>"
                         multiple="multiple" class="geodir_textfield textfield_x geodir-select"
                         data-placeholder="<?php _e('Select', 'geodirectory'); ?>"
-                        option-ajaxchosen="false">
+                        option-ajaxchosen="false" data-allow_clear="true">
                     <?php
                     } else {
                         echo '<ul class="gd_multi_choice gd-ios-scrollbars">';
