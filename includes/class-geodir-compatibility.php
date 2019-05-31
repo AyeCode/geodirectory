@@ -407,13 +407,21 @@ class GeoDir_Compatibility {
 		}
 
 		// Unicon
-		if ( function_exists( 'minti_register_required_plugins' ) && strpos( $meta_key, 'minti_' ) === 0 ) {
-			$gen_keys[] = $meta_key;
+		if ( function_exists( 'minti_register_required_plugins' ) ) {
+			if ( ( strpos( $meta_key, 'minti_' ) === 0 || empty( $meta_key ) ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
+				if ( geodir_is_page( 'detail' ) ) {
+					$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
+				} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+					$template_page_id = geodir_archive_page_id( get_post_type( $object_id ) );
+				} else if ( geodir_is_page( 'search' ) ) {
+					$template_page_id = geodir_search_page_id();
+				} else {
+					$template_page_id = 0;
+				}
 
-			// Archive page set page post.
-			if ( ! empty( $wp_query ) && ! empty( $wp_query->post->post_type ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) && $wp_query->post->post_type == 'page' && ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'search' ) ) ) {
-				$post = $wp_query->post;
-				$backup_post = $post;
+				if ( ! empty( $template_page_id ) ) {
+					return empty( $meta_key ) ? get_post_custom( $template_page_id ) : get_post_meta( $template_page_id, $meta_key, $single );
+				}
 			}
 		}
 
