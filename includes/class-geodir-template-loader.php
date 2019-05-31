@@ -512,15 +512,15 @@ class GeoDir_Template_Loader {
      */
     public static function archive_item_template_content($post_type = ''){
 
-
-//        global $wp_query,$gd_temp_wp_query; //@todo i don't think this is needed here, remove after a few version if not.
-//        if(!empty($gd_temp_wp_query)){
-//            $wp_query->posts = $gd_temp_wp_query;
-//        }
-
         // get the archive template page content
         $archive_page_id = geodir_archive_item_page_id($post_type);
         $content = get_post_field('post_content', $archive_page_id  );
+
+        // maybe bypass content
+        $bypass_content = apply_filters('geodir_bypass_archive_item_template_content','',$content,$archive_page_id);
+        if($bypass_content){
+            return $bypass_content;
+        }
 
         // if the content is blank then we grab the page defaults
         if($content==''){

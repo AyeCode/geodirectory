@@ -598,7 +598,7 @@ class GeoDir_SEO {
     public static function breadcrumb_links($crumbs){
 
 	    // maybe add category link to single page
-        if ( geodir_is_page( 'detail' )) {
+        if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
 	        global $wp_query;
 	        $breadcrumb = array();
 	        $post_type   = geodir_get_current_posttype();

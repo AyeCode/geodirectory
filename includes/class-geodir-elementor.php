@@ -36,8 +36,28 @@ class GeoDir_Elementor {
 
 		// add any extra scripts
 		add_action('wp_enqueue_scripts', array( $this, 'enqueue_scripts' ),11);
+		add_filter('geodir_bypass_archive_item_template_content',array( $this, 'archive_item_template_content'),10,3);
 
 	}
+
+	/**
+	 * Allow to filter the archive itme template content if being edited by elementor.
+	 *
+	 * @param $content
+	 * @param $original_content
+	 * @param $page_id
+	 *
+	 * @return mixed
+	 */
+	public function archive_item_template_content($content,$original_content,$page_id){
+
+		if(!$original_content && $page_id && self::is_elementor($page_id)){
+			$original_content = $content = \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $page_id );
+		}
+
+		return $original_content;
+	}
+
 
 	public function is_elementor_preview(){
 		return isset($_REQUEST['elementor-preview']) ? true : false;
@@ -47,6 +67,15 @@ class GeoDir_Elementor {
 		if($this->is_elementor_preview()){
 			GeoDir_Frontend_Scripts::enqueue_script( 'jquery-flexslider' );
 		}
+	}
+
+	/**
+	 * Check if a page is being edited by elementor.
+	 *
+	 * @return bool
+	 */
+	public function is_elementor($post_id){
+		return \Elementor\Plugin::$instance->db->is_built_with_elementor($post_id);
 	}
 
 	/**
