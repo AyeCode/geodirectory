@@ -406,22 +406,22 @@ class GeoDir_Compatibility {
 			}
 		}
 
-		// Unicon
-		if ( function_exists( 'minti_register_required_plugins' ) ) {
-			if ( ( strpos( $meta_key, 'minti_' ) === 0 || empty( $meta_key ) ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
-				if ( geodir_is_page( 'detail' ) ) {
-					$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
-				} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
-					$template_page_id = geodir_archive_page_id( get_post_type( $object_id ) );
-				} else if ( geodir_is_page( 'search' ) ) {
-					$template_page_id = geodir_search_page_id();
-				} else {
-					$template_page_id = 0;
-				}
+		// Unicon / GeneratePress
+		if ( ( ( function_exists( 'minti_register_required_plugins' ) && ( strpos( $meta_key, 'minti_' ) === 0 || empty( $meta_key ) ) ) || 
+			   ( defined( 'GENERATE_VERSION' ) && ( strpos( $meta_key, '_generate-' ) === 0 || empty( $meta_key ) ) ) 
+			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
+			if ( geodir_is_page( 'detail' ) ) {
+				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
+			} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+				$template_page_id = geodir_archive_page_id( get_post_type( $object_id ) );
+			} else if ( geodir_is_page( 'search' ) ) {
+				$template_page_id = geodir_search_page_id();
+			} else {
+				$template_page_id = 0;
+			}
 
-				if ( ! empty( $template_page_id ) ) {
-					return empty( $meta_key ) ? get_post_custom( $template_page_id ) : get_post_meta( $template_page_id, $meta_key, $single );
-				}
+			if ( ! empty( $template_page_id ) ) {
+				return empty( $meta_key ) ? get_post_custom( $template_page_id ) : get_post_meta( $template_page_id, $meta_key, $single );
 			}
 		}
 
@@ -926,6 +926,13 @@ class GeoDir_Compatibility {
 		if ( class_exists( 'FusionBuilder' ) && geodir_is_geodir_page() ) {
 			add_action( 'avada_override_current_page_title_bar', array( __CLASS__, 'avada_override_current_page_title_bar' ), 10, 1 );
 		}
+
+		// GeneratePress theme compatibility
+		if ( defined( 'GENERATE_VERSION' ) ) {
+			add_filter( 'generate_sidebar_layout', array( __CLASS__, 'generate_sidebar_layout' ), 10, 1 );
+			add_filter( 'generate_footer_widgets', array( __CLASS__, 'generate_footer_widgets' ), 10, 1 );
+			add_filter( 'generate_show_title', array( __CLASS__, 'generate_show_title' ), 10, 1 );
+		}
 	}
 
 	/**
@@ -948,5 +955,86 @@ class GeoDir_Compatibility {
 			avada_page_title_bar( $title, $page_title_bar_contents[1], $page_title_bar_contents[2] );
 		}
 	}
+	
+	/**
+	 * Filter GeneratePress theme page layout.
+	 *
+	 * @since 2.0.0.60
+	 *
+	 * @param string $layout Page layout.
+	 * @return string Filtered page layout.
+	 */
+	public static function generate_sidebar_layout( $layout ) {
+		if ( geodir_is_page( 'detail' ) ) {
+			$template_page_id = geodir_details_page_id( geodir_get_current_posttype() );
+		} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$template_page_id = geodir_archive_page_id( geodir_get_current_posttype() );
+		} else if ( geodir_is_page( 'search' ) ) {
+			$template_page_id = geodir_search_page_id();
+		} else {
+			$template_page_id = 0;
+		}
 
+		if ( ! empty( $template_page_id ) ) {
+			$layout = get_post_meta( $template_page_id, '_generate-sidebar-layout-meta', true );
+		}
+
+		return $layout;
+	}
+
+	/**
+	 * Filter GeneratePress theme page footer widget sections.
+	 *
+	 * @since 2.0.0.60
+	 *
+	 * @param int $widgets The no. of widget sections to display on page footer.
+	 * @return int Filtered no. of widget sections to display.
+	 */
+	public static function generate_footer_widgets( $widgets ) {
+		if ( geodir_is_page( 'detail' ) ) {
+			$template_page_id = geodir_details_page_id( geodir_get_current_posttype() );
+		} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$template_page_id = geodir_archive_page_id( geodir_get_current_posttype() );
+		} else if ( geodir_is_page( 'search' ) ) {
+			$template_page_id = geodir_search_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$widgets = get_post_meta( $template_page_id, '_generate-footer-widget-meta', true );
+		}
+
+		return $widgets;
+	}
+
+	/**
+	 * Filter GeneratePress theme page headline.
+	 *
+	 * @since 2.0.0.60
+	 *
+	 * @param string $title The page title.
+	 * @return string|bool Filtered title visibility.
+	 */
+	public static function generate_show_title( $title ) {
+		if ( geodir_is_page( 'detail' ) ) {
+			$template_page_id = geodir_details_page_id( geodir_get_current_posttype() );
+		} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$template_page_id = geodir_archive_page_id( geodir_get_current_posttype() );
+		} else if ( geodir_is_page( 'search' ) ) {
+			$template_page_id = geodir_search_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$disable_title = get_post_meta( $template_page_id, '_generate-disable-headline', true );
+
+			if ( $disable_title ) {
+				$title = false;
+			}
+		}
+
+		return $title;
+	}
 }
