@@ -932,6 +932,7 @@ class GeoDir_Compatibility {
 			add_filter( 'generate_sidebar_layout', array( __CLASS__, 'generate_sidebar_layout' ), 10, 1 );
 			add_filter( 'generate_footer_widgets', array( __CLASS__, 'generate_footer_widgets' ), 10, 1 );
 			add_filter( 'generate_show_title', array( __CLASS__, 'generate_show_title' ), 10, 1 );
+			add_filter( 'generate_blog_columns', array( __CLASS__, 'generate_blog_columns' ), 10, 1 );
 		}
 	}
 
@@ -1036,5 +1037,21 @@ class GeoDir_Compatibility {
 		}
 
 		return $title;
+	}
+
+	/**
+	 * Filter GeneratePress theme blog page columns.
+	 *
+	 * @since 2.0.0.60
+	 *
+	 * @param int|bool $columns The page columns.
+	 * @return string|bool Filtered page columns.
+	 */
+	public static function generate_blog_columns( $columns ) {
+		if ( geodir_is_geodir_page() ) {
+			$columns = false;
+		}
+
+		return $columns;
 	}
 }
