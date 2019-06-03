@@ -261,6 +261,10 @@ function geodir_convert_listing_view_class( $columns = '' ) {
 	$class = '';
 
 	switch ( $columns ) {
+		case '1':
+		case 'gridview_one':
+			$class = 'gridview_one';
+			break;
 		case '2':
 		case 'gridview_onehalf':
 			$class = 'gridview_onehalf';
@@ -277,7 +281,8 @@ function geodir_convert_listing_view_class( $columns = '' ) {
 		case 'gridview_onefifth':
 			$class = 'gridview_onefifth';
 			break;
-		case '1':
+		case '0':
+		case 'list':
 		default:
 			$class = '';
 			break;
@@ -653,26 +658,29 @@ function geodir_list_view_select( $post_type ) {
 				return;
 			}
 			var listSel = $list.parents().find('.geodir-loop-container .geodir-category-list-view');
-			if (val != 1) {
+			if (val != 0) {
 				jQuery(listSel).addClass('geodir-gridview');
 				jQuery(listSel).removeClass('geodir-listview');
 			} else {
 				jQuery(listSel).addClass('geodir-listview');
 			}
 
-			if (val == 1) {
-				jQuery(listSel).removeClass('geodir-gridview gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
-			} else if (val == 2) {
-				jQuery(listSel).removeClass('gridview_onethird gridview_onefourth gridview_onefifth');
+			if (val == 0) {
+				jQuery(listSel).removeClass('geodir-gridview gridview_one gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
+			} else if (val == 1) {
+				jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefourth gridview_onefifth');
+				jQuery(listSel).addClass('gridview_one');
+			}else if (val == 2) {
+				jQuery(listSel).removeClass('gridview_one gridview_onethird gridview_onefourth gridview_onefifth');
 				jQuery(listSel).addClass('gridview_onehalf');
 			} else if (val == 3) {
-				jQuery(listSel).removeClass('gridview_onehalf gridview_onefourth gridview_onefifth');
+				jQuery(listSel).removeClass('gridview_one gridview_onehalf gridview_onefourth gridview_onefifth');
 				jQuery(listSel).addClass('gridview_onethird');
 			} else if (val == 4) {
-				jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefifth');
+				jQuery(listSel).removeClass('gridview_one gridview_onehalf gridview_onethird gridview_onefifth');
 				jQuery(listSel).addClass('gridview_onefourth');
 			} else if (val == 5) {
-				jQuery(listSel).removeClass('gridview_onehalf gridview_onethird gridview_onefourth');
+				jQuery(listSel).removeClass('gridview_one gridview_onehalf gridview_onethird gridview_onefourth');
 				jQuery(listSel).addClass('gridview_onefifth');
 			}
 
@@ -705,8 +713,10 @@ function geodir_list_view_select( $post_type ) {
 						gd_list_view = 3;
 					} else if ($ul.hasClass('gridview_onehalf')) {
 						gd_list_view = 2;
-					} else {
+					} else if ($ul.hasClass('gridview_one')) {
 						gd_list_view = 1;
+					} else {
+						gd_list_view = 0;
 					}
 				}
 				jQuery('#gd_list_view[name="gd_list_view"]').val(gd_list_view).trigger('change');
@@ -724,16 +734,15 @@ function geodir_list_view_select( $post_type ) {
 	<div class="geodir-list-view-select">
 		<select name="gd_list_view" id="gd_list_view" class="geodir-select" style="min-width:140px;border-radius:4px;"
 		        aria-label="<?php esc_attr_e( 'Layout', 'geodirectory' ) ?>">
-			<option
-				value="1"><?php _e( 'View: List', 'geodirectory' ); ?></option>
-			<option
-				value="2"><?php _e( 'View: Grid 2', 'geodirectory' ); ?></option>
-			<option
-				value="3"><?php _e( 'View: Grid 3', 'geodirectory' ); ?></option>
-			<option
-				value="4"><?php _e( 'View: Grid 4', 'geodirectory' ); ?></option>
-			<option
-				value="5"><?php _e( 'View: Grid 5', 'geodirectory' ); ?></option>
+			<?php
+			$layouts = geodir_get_layout_options(true);
+			if(!empty($layouts )){
+				foreach($layouts  as $key => $layout){
+					$layout_name = $key ? sprintf(__( 'View: Grid %d', 'geodirectory' ),$key) : __( 'View: List', 'geodirectory' );
+					echo '<option value="'.absint($key).'">'.esc_attr($layout).'</option>';
+				}
+			}
+			?>
 		</select>
 	</div>
 	<?php

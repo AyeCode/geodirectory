@@ -27,6 +27,9 @@ class GeoDir_Admin_Install {
 			'geodir_update_200_merge_data',
 			'geodir_update_200_db_version',
 		),
+		'2.0.0.60' => array(
+			'geodir_upgrade_20060',
+		)
 	);
 
 	/** @var object Background update class */

@@ -15,6 +15,11 @@
 * Yoast breadcrumbs not showing category on GD category pages - FIXED
 * Post Address widget sometimes not showing the neighbourhood - FIXED
 * GeneratePress theme page layout compatibility - ADDED
+* Removed "other emails" settings section which is no longer in use - REMOVED
+* Grid view 1 added to Listing and Loop widget - ADDED
+* Layout=1 in loop widget is now used for grid view 1 and layout=0 is used for list view (upgrade rectifies default content) - BREAKING CHANGE
+* Font Awesome Pro now supported - ADDED
+* Font Awesome Kits now supported - ADDED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED
