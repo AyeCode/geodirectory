@@ -14,6 +14,7 @@
 * Elementor content not used for archive item template - FIXED
 * Yoast breadcrumbs not showing category on GD category pages - FIXED
 * Post Address widget sometimes not showing the neighbourhood - FIXED
+* GeneratePress theme page layout compatibility - ADDED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED
