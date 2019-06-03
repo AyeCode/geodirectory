@@ -2145,6 +2145,12 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ( isset( $gd_post->longitude ) && $gd_post->longitude ) {
                 $address_fields['longitude'] = '<span itemprop="addressLongitude">' . $gd_post->longitude . '</span>';
             }
+            
+            // trick LM to add hoods if
+            if (strpos($address_template, '%%neighbourhood') !== false) {
+                $cf['extra_fields']['show_neighbourhood'] = true;
+            }
+
 
             /**
              * Filter the address fields array being displayed.

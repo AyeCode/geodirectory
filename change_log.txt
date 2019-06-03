@@ -11,6 +11,9 @@
 * Customizr Pro theme does not locates the GD templates - FIXED
 * Genesis theme pagination conflicts with GD Listings pagination on mobile devices - FIXED
 * It allows to reset the custom field value of the select box - ADDED
+* Elementor content not used for archive item template - FIXED
+* Yoast breadcrumbs not showing category on GD category pages - FIXED
+* Post Address widget sometimes not showing the neighbourhood - FIXED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED
