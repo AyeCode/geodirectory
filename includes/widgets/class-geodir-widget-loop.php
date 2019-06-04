@@ -35,13 +35,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                     'title' => __('Layout:', 'geodirectory'),
                     'desc' => __('How the listings should laid out by default.', 'geodirectory'),
                     'type' => 'select',
-                    'options'   =>  array(
-                        "2"        =>  __('Grid View (Two Columns)', 'geodirectory'),
-                        "3"        =>  __('Grid View (Three Columns)', 'geodirectory'),
-                        "4"        =>  __('Grid View (Four Columns)', 'geodirectory'),
-                        "5"        =>  __('Grid View (Five Columns)', 'geodirectory'),
-                        "0"        =>  __('List view', 'geodirectory'),
-                    ),
+                    'options'   =>  geodir_get_layout_options(),
                     'default'  => 'h3',
                     'desc_tip' => true,
                     'advanced' => true

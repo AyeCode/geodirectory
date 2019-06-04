@@ -2148,7 +2148,13 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             
             // trick LM to add hoods if
             if (strpos($address_template, '%%neighbourhood') !== false) {
-                $cf['extra_fields']['show_neighbourhood'] = true;
+                if(!empty($cf['extra_fields'])){
+                  $extras = maybe_unserialize($cf['extra_fields']);
+                    $extras['show_neighbourhood'] = true;
+                    $cf['extra_fields'] = maybe_serialize($extras);
+                }else{
+                    $cf['extra_fields']['show_neighbourhood'] = true;
+                }
             }
 
 

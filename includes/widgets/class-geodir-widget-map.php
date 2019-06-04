@@ -432,7 +432,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$arguments['width']            = array(
 			'type'        => 'text',
 			'title'       => __( 'Width:', 'geodirectory' ),
-			'desc'        => __( 'This is the width of the map, you can use % or px here.', 'geodirectory' ),
+			'desc'        => __( 'This is the width of the map, you can use % or px here. (static map requires px value)', 'geodirectory' ),
 			'placeholder' => '100%',
 			'desc_tip'    => true,
 			'default'     => '100%',
@@ -441,7 +441,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$arguments['height']           = array(
 			'type'        => 'text',
 			'title'       => __( 'Height:', 'geodirectory' ),
-			'desc'        => __( 'This is the height of the map, you can use %, px or vh here.', 'geodirectory' ),
+			'desc'        => __( 'This is the height of the map, you can use %, px or vh here. (static map requires px value)', 'geodirectory' ),
 			'placeholder' => '425px',
 			'desc_tip'    => true,
 			'default'     => '425px',

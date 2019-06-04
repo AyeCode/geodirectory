@@ -2120,3 +2120,30 @@ function geodir_localize_jquery_ui_timepicker() {
 	
 	wp_add_inline_script( 'geodir-jquery-ui-timepicker', "jQuery(document).ready(function(jQuery){jQuery.timepicker.setDefaults({$timepicker_defaults});});" );
 }
+
+/**
+ * Get the listing layout view options.
+ *
+ * @since 2.0.0.60
+ * @return mixed|void
+ */
+/**
+ * Get the listing layout view options.
+ *
+ * @since 2.0.0.60
+ * @param bool $frontend If the call is for frontend user select.
+ *
+ * @return mixed|void
+ */
+function geodir_get_layout_options($frontend = false){
+	$layouts = array(
+		"1"        =>  $frontend ? __( 'View: Grid 1', 'geodirectory') : __('Grid View (One Column)', 'geodirectory'),
+		"2"        =>  $frontend ? __( 'View: Grid 2', 'geodirectory' ) : __('Grid View (Two Columns)', 'geodirectory'),
+		"3"        =>  $frontend ? __( 'View: Grid 3', 'geodirectory' ) : __('Grid View (Three Columns)', 'geodirectory'),
+		"4"        =>  $frontend ? __( 'View: Grid 4', 'geodirectory' ) : __('Grid View (Four Columns)', 'geodirectory'),
+		"5"        =>  $frontend ? __( 'View: Grid 5', 'geodirectory' ) : __('Grid View (Five Columns)', 'geodirectory'),
+		"0"        =>  $frontend ? __( 'View: List', 'geodirectory') : __('List view', 'geodirectory'),
+	);
+
+	return apply_filters('geodir_layout_options',$layouts,$frontend);
+}

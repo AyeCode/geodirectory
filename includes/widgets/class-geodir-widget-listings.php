@@ -153,13 +153,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'title' => __('Layout:', 'geodirectory'),
                 'desc' => __('How the listings should laid out by default.', 'geodirectory'),
                 'type' => 'select',
-                'options'   =>  array(
-                    "gridview_onehalf"        =>  __('Grid View (Two Columns)', 'geodirectory'),
-                    "gridview_onethird"        =>  __('Grid View (Three Columns)', 'geodirectory'),
-                    "gridview_onefourth"        =>  __('Grid View (Four Columns)', 'geodirectory'),
-                    "gridview_onefifth"        =>  __('Grid View (Five Columns)', 'geodirectory'),
-                    "list"        =>  __('List view', 'geodirectory'),
-                ),
+                'options'   =>  geodir_get_layout_options(),
                 'default'  => 'h3',
                 'desc_tip' => true,
                 'advanced' => true
