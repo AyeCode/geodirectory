@@ -20,6 +20,7 @@
 * Layout=1 in loop widget is now used for grid view 1 and layout=0 is used for list view (upgrade rectifies default content) - BREAKING CHANGE
 * Font Awesome Pro now supported - ADDED
 * Font Awesome Kits now supported - ADDED
+* Import listings post_date should supports d/m/Y date format - CHANGED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED

@@ -417,6 +417,11 @@ class GeoDir_Admin_Import_Export {
 			return  esc_attr__('Title missing','geodirectory');
 		}
 
+		// Connvert date in mysql format
+		if ( ! empty( $post_info['post_date'] ) && strpos( $post_info['post_date'], '/' ) !== false ) {
+			$post_info['post_date'] = geodir_date( $post_info['post_date'], 'Y-m-d H:i:s' );
+		}
+
 		// change post_category to an array()
 		if ( isset( $post_info['post_category'] ) ) {
 			if ( empty( $post_info['post_category'] ) ) {
