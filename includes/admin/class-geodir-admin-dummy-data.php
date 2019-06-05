@@ -47,13 +47,21 @@ class GeoDir_Admin_Dummy_Data {
 				// If term exists just continue to the next one
 				if ( term_exists( $category['name'], $post_type . 'category' ) ) { continue; }
 
+				$args = array();
+				// add parent id if present
+				if(!empty($category['parent-name'])){
+					$parent = get_term_by( 'name', $category['parent-name'], $post_type . 'category');
+					if(!empty($parent->term_id)){
+						$args['parent'] = absint($parent->term_id);
+					}
+				}
+
 				// insert the category
-				$category_return = wp_insert_term( $category['name'], $post_type . 'category' );
+				$category_return = wp_insert_term( $category['name'], $post_type . 'category',$args );
 
 				if(is_wp_error($category_return)){
 					geodir_error_log($category_return->get_error_message(), 'dummy_data', __FILE__, __LINE__ );
 				}else {
-
 
 					// attach the meta data
 					if ( isset( $category_return['term_id'] ) ) {
@@ -762,7 +770,7 @@ class GeoDir_Admin_Dummy_Data {
 			),
 			'classifieds'   => array(
 				'name'  => __( 'Classifieds', 'geodirectory' ),
-				'count' => 21
+				'count' => 20
 			)
 		);
 

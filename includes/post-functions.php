@@ -817,6 +817,15 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 			if ( $match_found ) {
 
+				// check for price format
+				if(isset($field['data_type']) && ($field['data_type']=='INT' || $field['data_type']=='FLOAT') && isset($field['extra_fields']) && $field['extra_fields']){
+					$extra_fields = stripslashes_deep(maybe_unserialize($field['extra_fields']));
+					if(isset($extra_fields['is_price']) && $extra_fields['is_price']){
+						if(ceil($match_value) > 0){
+							$match_value = geodir_currency_format_number($match_value,$field);
+						}
+					}
+				}
 
 				// badge text
 				if ( empty( $badge ) && empty($args['icon_class']) ) {
@@ -867,6 +876,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				$rel = '';
 				if(!empty($args['link'])){
 					$rel = strpos($args['link'], get_site_url()) !== false ? '' : 'rel="nofollow"';
+				}
+
+				// allow gd-lity class to enable lity lightbox on link
+				if(!empty($args['link']) && !empty($args['css_class']) &&  strpos($args['css_class'], 'gd-lity') !== false){
+					$rel .= ' data-lity ';
 				}
 
 				// onclick
