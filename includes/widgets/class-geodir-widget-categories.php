@@ -549,7 +549,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 								}
 							}
 
-							$term_icon     = $cat_font_icon ? '<i class="fas ' . $cat_font_icon . '" aria-hidden="true"></i>' : $term_icon_url;
+							$term_icon     = $cat_font_icon ? '<i class="' . $cat_font_icon . '" aria-hidden="true"></i>' : $term_icon_url;
 						}
 
 

@@ -53,7 +53,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_location_content($no_filter = false){
-		$content = "[gd_notifications]\n[gd_categories]\n[gd_map map_type='directory' width=100% height=300 search_filter=1 cat_filter=1 post_type_filter=1]\n[gd_search]\n[gd_listings post_limit=10]";
+		$content = "[gd_notifications]\n[gd_categories]\n[gd_map map_type='directory' width=100% height=300 search_filter=1 cat_filter=1 post_type_filter=1]\n[gd_search]\n[gd_listings post_limit=10 add_location_filter='1']";
 
 		if($no_filter){
 			return $content;
@@ -83,11 +83,17 @@ class GeoDir_Defaults {
 	 */
 	public static function page_archive_item_content($no_filter = false){
 		$content = "[gd_archive_item_section type='open' position='left']
-[gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-left-angle gd-badge-shadow']
+[gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-top-left-angle gd-badge-shadow']
 [gd_post_images type='image' ajax_load='true' link_to='post' show_logo='true']
 [gd_archive_item_section type='close' position='left']
 [gd_archive_item_section type='open' position='right']
 [gd_post_title tag='h2']
+[gd_post_badge key='post_date' condition='is_less_than' search='+30' icon_class='fas fa-certificate' badge='New' bg_color='#ff0000' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='featured' condition='is_not_empty' icon_class='fas fa-certificate' badge='Featured' bg_color='#ffb100' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='claimed' condition='is_not_empty' search='+30' icon_class='fas fa-user-check fa-fw' badge='Verified' bg_color='#23c526' txt_color='#ffffff' alignment='left' list_hide_secondary='3']
+[gd_post_badge key='facebook' condition='is_not_empty' icon_class='fab fa-facebook-f fa-fw' link='%%input%%' new_window='1' bg_color='#2b4be8' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='twitter' condition='is_not_empty' icon_class='fab fa-twitter fa-fw' link='%%input%%' new_window='1' bg_color='#2bb8e8' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='website' condition='is_not_empty' icon_class='fas fa-link fa-fw' link='%%input%%' new_window='1' bg_color='#85a9b5' txt_color='#ffffff' alignment='left']
 [gd_author_actions author_page_only='1']
 [gd_post_distance]
 [gd_post_rating alignment='left' list_hide_secondary='2']
