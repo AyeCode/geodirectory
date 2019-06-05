@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.60\n"
+"Project-Id-Version: GeoDirectory 2.0.0.61\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-06-05 16:08+0100\n"
-"PO-Revision-Date: 2019-06-05 16:08+0100\n"
+"POT-Creation-Date: 2019-06-05 17:23+0100\n"
+"PO-Revision-Date: 2019-06-05 17:23+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -9205,7 +9205,7 @@ msgstr ""
 
 #: includes/class-geodir-post-types.php:233
 #: includes/class-geodir-post-types.php:290
-#: includes/widgets/class-geodir-widget-categories.php:484
+#: includes/widgets/class-geodir-widget-categories.php:481
 #, php-format
 msgid "%s Categories"
 msgstr ""
