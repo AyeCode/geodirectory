@@ -54,6 +54,8 @@ class GeoDir_Admin {
 		// disable GD pages from being able to be selected for some settings
 		add_filter( 'wp_dropdown_pages',array( $this, 'dropdown_pages_disable' ), 10,3 );
 
+		// Deactivate legacy plugins
+		$this->deactivate_plugin();
 	}
 
 	/**
@@ -362,5 +364,23 @@ class GeoDir_Admin {
 		}
 
 		return $footer_text;
+	}
+
+	/**
+	 * Attempt to deactivate the legacy plugins.
+	 *
+	 * @since  2.0.0.62
+	 */
+	public function deactivate_plugin() {
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+		if ( ! function_exists( 'deactivate_plugins' ) ) {
+			return;
+		}
+
+		// Deactivate GD Dashboard plugin.
+		if ( function_exists( 'GD_Dashboard_init' ) && is_plugin_active( 'geodir_dashboard/geodir_dashboard.php' ) ) {
+			deactivate_plugins( 'geodir_dashboard/geodir_dashboard.php' );
+		}
 	}
 }
