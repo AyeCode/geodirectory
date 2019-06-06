@@ -1,16 +1,17 @@
-= 2.0.0.60 =
+= 2.0.0.61 =
 * Polifill for CSS object-fit in browsers that don't support it - Added
 * Prevent saving custom fields found in array of standard fields - ADDED
 * Optional Address line 2 field added, can be enabled under address field - ADDED
 * Classifieds dummy content - ADDED
 * "Kingstudio" theme compatibility for gd pages sidebar - ADDED
+* Frontend edit post screen now shows restricted message if not allowed to edit - ADDED
 * Translation for "May" month abbreviation shows incorrect date - FIXED
 * 404 rescue setting not working for translated CPT slug - FIXED
 * Changed external API for IP to location to a more reliable one - CHANGED
 * WP Country Database lib updated to 1.0.3 - CHANGED
 * Customizr Pro theme does not locates the GD templates - FIXED
 * Genesis theme pagination conflicts with GD Listings pagination on mobile devices - FIXED
-* It allows to reset the custom field value of the select box - ADDED
+* Allow to reset the custom field value of the select box - ADDED
 * Elementor content not used for archive item template - FIXED
 * Yoast breadcrumbs not showing category on GD category pages - FIXED
 * Post Address widget sometimes not showing the neighbourhood - FIXED
@@ -23,6 +24,8 @@
 * Import listings post_date should supports d/m/Y date format - CHANGED
 * Post Badge widget can now open links in lightbox if class "gd-lity" is used - ADDED
 * Post Badge widget price fields used will now be price formatted - CHANGED
+* Category font awesome icons have extra fas class on output which can break brands - FIXED
+* Category widget not respecting max_level param - FIXED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED

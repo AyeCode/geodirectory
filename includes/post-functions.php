@@ -860,7 +860,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$class .= ' gd-badge-' . sanitize_title( $args['size'] );
 				}
 				if ( ! empty( $args['alignment'] ) ) {
-					$class .= ' align' . $args['alignment'];
+					$class .= ' gd-badge-align' . sanitize_title($args['alignment']);
 				}
 				if ( ! empty( $args['css_class'] ) ) {
 					$class .= ' ' . esc_attr($args['css_class']);

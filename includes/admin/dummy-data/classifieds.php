@@ -318,14 +318,14 @@ $dummy_posts[] = array(
 
 $dummy_posts[] = array(
 	"post_type"     => $post_type,
-	"post_title"    => __( 'Slumber 1000', 'geodirectory' ),
+	"post_title"    => __( 'Slumber 5000', 'geodirectory' ),
 	"post_images"   => array(
-		"$dummy_image_url/images/bed5.jpg",
-		"$dummy_image_url/images/bed6.jpg",
-		"$dummy_image_url/images/bed1.jpg",
 		"$dummy_image_url/images/bed2.jpg",
 		"$dummy_image_url/images/bed3.jpg",
 		"$dummy_image_url/images/bed4.jpg",
+		"$dummy_image_url/images/bed5.jpg",
+		"$dummy_image_url/images/bed6.jpg",
+		"$dummy_image_url/images/bed1.jpg",
 	),
 	"post_category" => array( __( 'Furniture', 'geodirectory' ), __( 'Beds', 'geodirectory' ) ),
 	"post_tags"     => array( 'bed' ),
@@ -478,6 +478,7 @@ $dummy_posts[] = array(
 		"$dummy_image_url/images/tv3.jpg",
 		"$dummy_image_url/images/tv4.jpg",
 		"$dummy_image_url/images/tv5.jpg",
+		"$dummy_image_url/images/tv6.jpg",
 	),
 	"post_category"     => array( __( 'Electronics', 'geodirectory' ),__( 'Televisions', 'geodirectory' ) ),
 	"post_tags"         => array( 'TV','55"' ),
@@ -497,11 +498,12 @@ $dummy_posts[] = array(
 	"post_type"         => $post_type,
 	"post_title"        => "Samsung 65 inch OLED",
 	"post_images"       => array(
-		"$dummy_image_url/images/tv5.jpg",
+		"$dummy_image_url/images/tv6.jpg",
 		"$dummy_image_url/images/tv1.jpg",
 		"$dummy_image_url/images/tv2.jpg",
 		"$dummy_image_url/images/tv3.jpg",
 		"$dummy_image_url/images/tv4.jpg",
+		"$dummy_image_url/images/tv5.jpg",
 	),
 	"post_category"     => array( __( 'Electronics', 'geodirectory' ),__( 'Televisions', 'geodirectory' ) ),
 	"post_tags"         => array( 'TV','65"' ),
@@ -521,11 +523,12 @@ $dummy_posts[] = array(
 	"post_type"         => $post_type,
 	"post_title"        => "LG 85 inch LCD",
 	"post_images"       => array(
-		"$dummy_image_url/images/tv4.jpg",
 		"$dummy_image_url/images/tv5.jpg",
+		"$dummy_image_url/images/tv6.jpg",
 		"$dummy_image_url/images/tv1.jpg",
 		"$dummy_image_url/images/tv2.jpg",
 		"$dummy_image_url/images/tv3.jpg",
+		"$dummy_image_url/images/tv4.jpg",
 	),
 	"post_category"     => array( __( 'Electronics', 'geodirectory' ),__( 'Televisions', 'geodirectory' ) ),
 	"post_tags"         => array( 'TV','85"' ),
@@ -545,11 +548,12 @@ $dummy_posts[] = array(
 	"post_type"         => $post_type,
 	"post_title"        => "LG 42 inch LCD",
 	"post_images"       => array(
-		"$dummy_image_url/images/tv3.jpg",
 		"$dummy_image_url/images/tv4.jpg",
 		"$dummy_image_url/images/tv5.jpg",
+		"$dummy_image_url/images/tv6.jpg",
 		"$dummy_image_url/images/tv1.jpg",
 		"$dummy_image_url/images/tv2.jpg",
+		"$dummy_image_url/images/tv3.jpg",
 	),
 	"post_category"     => array( __( 'Electronics', 'geodirectory' ),__( 'Televisions', 'geodirectory' ) ),
 	"post_tags"         => array( 'TV','42"' ),
@@ -572,6 +576,7 @@ $dummy_posts[] = array(
 		"$dummy_image_url/images/tv3.jpg",
 		"$dummy_image_url/images/tv4.jpg",
 		"$dummy_image_url/images/tv5.jpg",
+		"$dummy_image_url/images/tv6.jpg",
 		"$dummy_image_url/images/tv1.jpg",
 		"$dummy_image_url/images/tv2.jpg",
 	),
@@ -597,6 +602,7 @@ $dummy_posts[] = array(
 		"$dummy_image_url/images/tv3.jpg",
 		"$dummy_image_url/images/tv4.jpg",
 		"$dummy_image_url/images/tv5.jpg",
+		"$dummy_image_url/images/tv6.jpg",
 		"$dummy_image_url/images/tv1.jpg",
 	),
 	"post_category"     => array( __( 'Electronics', 'geodirectory' ),__( 'Televisions', 'geodirectory' ) ),
@@ -648,11 +654,7 @@ function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_i
 	foreach ( $fields as $key => $field ) {
 
 		if ( in_array( $field['htmlvar_name'], $allowed_fields ) ) {
-			if($field['htmlvar_name']=='video'){
-				$fields[ $key ]['show_in'] .= '[listing]';
-			}else{
-				$fields[ $key ]['show_in'] .= '[detail],[listing]';
-			}
+			$fields[ $key ]['show_in'] .= '[detail]';
 			$fields[ $key ]['show_on_pkg'] = $package;
 		} else {
 			unset( $fields[ $key ] );// remove fields we don't need
@@ -674,7 +676,7 @@ function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_i
 		'for_admin_use'      => false,
 		'default_value'      => '',
 		'option_values'      => '',
-		'show_in'            => '[detail],[listing]',
+		'show_in'            => '[detail]',
 		'is_required'        => false,
 		'validation_pattern' => addslashes_gpc( '\d+(\.\d{2})?' ), // add slashes required
 		'validation_msg'     => 'Please enter number and decimal only e.g: 100.50',
@@ -710,10 +712,10 @@ function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_i
 		'default_value'  => 'used',
 		'is_required'    => '1',
 		'required_msg'   => '',
-		'show_in'        => '[detail],[listing]',
+		'show_in'        => '[detail]',
 		'show_on_pkg'    => $package,
 		'option_values'  => 'Select Status/,New,Good,Fair,Poor',
-		'field_icon'     => 'fas fa-home',
+		'field_icon'     => 'fas fa-search',
 		'css_class'      => '',
 		'cat_sort'       => 1,
 		'cat_filter'     => 1,
@@ -736,7 +738,7 @@ function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_i
 		'default_value'  => '',
 		'is_required'    => '',
 		'required_msg'   => '',
-		'show_in'        => '[detail],[listing]',
+		'show_in'        => '[detail]',
 		'show_on_pkg'    => $package,
 		'option_values'  => 'Select Brand/,Samsung,LG,Huawei,Apple,Silentnight,Sleepeezee,Slumberland,Fender,Gibson,Yamaha',
 		'field_icon'     => 'fas fa-box',
@@ -761,7 +763,7 @@ function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_i
 		'default_value'  => '',
 		'is_required'    => '',
 		'required_msg'   => '',
-		'show_in'        => '[detail],[listing]',
+		'show_in'        => '[detail]',
 		'show_on_pkg'    => $package,
 		'field_icon'     => 'fas fa-box-open',
 		'css_class'      => '',
@@ -786,7 +788,7 @@ function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_i
 		'default_value'  => '',
 		'is_required'    => '1',
 		'required_msg'   => '',
-		'show_in'        => '[detail],[listing]',
+		'show_in'        => '[detail]',
 		'show_on_pkg'    => $package,
 		'option_values'  => 'Select Status/,Private,Trade',
 		'field_icon'     => 'fas fa-user',
@@ -824,3 +826,30 @@ function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_i
 
 	return $fields;
 }
+
+// Dummy page templates
+$dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' position='left']
+[gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-top-left-angle gd-badge-shadow']
+[gd_post_badge key='video' condition='is_not_empty' icon_class='fas fa-video' badge='Video' link='%%input%%' bg_color='#0073aa' txt_color='#ffffff' list_hide_secondary='2' css_class='gd-badge-shadow gd-ab-top-right gd-lity']
+[gd_post_badge key='price' condition='is_not_empty'  badge='%%input%%' bg_color='#f70c0c' txt_color='#ffffff' css_class='gd-ab-bottom-right']
+[gd_post_badge key='seller_type' condition='is_equal' search='Trade' icon_class='fas fa-user-tie' badge='Trade' bg_color='#46c40d' txt_color='#ffffff' list_hide='5' list_hide_secondary='3' css_class='gd-ab-bottom-left']
+[gd_post_badge key='seller_type' condition='is_equal' search='Private' icon_class='fas fa-user' badge='Private' bg_color='#00bf9f' txt_color='#ffffff' list_hide='5' list_hide_secondary='3' css_class='gd-ab-bottom-left']
+[gd_post_images type='image' ajax_load='true' link_to='post' show_logo='true']
+[gd_archive_item_section type='close' position='left']
+[gd_archive_item_section type='open' position='right']
+[gd_post_title tag='h2']
+[gd_post_badge key='brand' condition='is_not_empty' badge='%%input%%' bg_color='#1664b1' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='model' condition='is_not_empty' badge='%%input%%' bg_color='#4c95de' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='condition' condition='is_equal' search='New' badge='Condition: %%input%%' bg_color='#19be00' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='condition' condition='is_equal' search='Good' badge='Condition: %%input%%' bg_color='#d9d702' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='condition' condition='is_equal' search='Fair' badge='Condition: %%input%%' bg_color='#df8d00' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='condition' condition='is_equal' search='Poor' badge='Condition: %%input%%' bg_color='#c93a0d' txt_color='#ffffff' alignment='left']
+[gd_post_badge key='payment_types' condition='is_contains' search='PayPal' icon_class='fab fa-paypal' badge='Accepts PayPal' bg_color='#0076c1' txt_color='#ffffff' alignment='left' list_hide_secondary='3']
+[gd_author_actions author_page_only='1']
+[gd_post_distance]
+[gd_post_rating alignment='left' list_hide_secondary='2']
+[gd_post_fav show='' alignment='right' list_hide_secondary='2']
+[gd_post_meta key='business_hours' location='listing' list_hide_secondary='2']
+[gd_output_location location='listing']
+[gd_post_content key='post_content' limit='60' max_height='120']
+[gd_archive_item_section type='close' position='right']";

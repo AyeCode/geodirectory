@@ -419,10 +419,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		$all_childs = $max_count_child == 'all' ? true : false;
 		$max_count = $max_count > 0 ? (int)$max_count : 0;
 		$max_count_child = $max_count_child > 0 ? (int)$max_count_child : 0;
-		$max_level = strip_tags($args['max_level']);
-		if ( $max_level != 'all' ) {
-			$max_level = 0;
-		}
+		$max_level = $args['max_level']=='all' ? 0 : strval(absint($args['max_level']));
 		$hide_count = !empty($args['hide_count']) ? true : false;
 		$hide_icon = !empty($args['hide_icon']) ? true : false;
 		$use_image = !empty($args['use_image']) ? true : false;

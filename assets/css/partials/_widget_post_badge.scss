@@ -5,6 +5,17 @@
   display: inline-block;
   margin-left: .2em;
   margin-right: .2em;
+
+  &.gd-badge-alignleft {
+    float: left;
+    margin: 5px 5px 5px 0
+  }
+
+  &.gd-badge-alignright {
+    float: right;
+    margin: 5px 0 5px 5px
+  }
+
   a{
     .gd-badge{
       cursor: pointer;
