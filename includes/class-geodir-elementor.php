@@ -53,6 +53,8 @@ class GeoDir_Elementor {
 
 		if(!$original_content && $page_id && self::is_elementor($page_id)){
 			$original_content = $content = \Elementor\Plugin::$instance->frontend->get_builder_content_for_display( $page_id );
+		} else {
+			$original_content = $content;
 		}
 
 		return $original_content;
