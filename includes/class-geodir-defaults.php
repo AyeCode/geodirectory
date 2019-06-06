@@ -38,7 +38,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_search_content($no_filter = false){
-		$content = "[gd_notifications]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=0]\n[gd_loop_paging]";
+		$content = "[gd_notifications]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=2]\n[gd_loop_paging]";
 
 		if($no_filter){
 			return $content;
@@ -68,7 +68,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	public static function page_archive_content($no_filter = false){
-		$content = "[gd_notifications]\n[gd_category_description]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=0]\n[gd_loop_paging]";
+		$content = "[gd_notifications]\n[gd_category_description]\n[gd_search]\n[gd_loop_actions]\n[gd_loop layout=2]\n[gd_loop_paging]";
 
 		if($no_filter){
 			return $content;

@@ -1,5 +1,8 @@
 = 2.0.0.62 =
 * GD Archive pages not rendering shortcodes when Elementor is active - FIXED
+* Ratings in listing view should be on its own line if placed after a gd_post_badge - CHANGED
+* Location filter enabled on location page default content gd_listings - CHANGED
+* Default view for archive page on install changed to Grid view 2 - CHANGED
 
 = 2.0.0.61 =
 * Polifill for CSS object-fit in browsers that don't support it - Added
