@@ -160,6 +160,10 @@ body { // wrapping ina  body tag makes rules more specific
 
 			}
 
+			.gd-badge-meta + .geodir-post-rating{
+				clear:both;
+			}
+
 			h2,h3 {
 				margin: 0;
 				padding: 0;
