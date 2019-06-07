@@ -1,3 +1,6 @@
+= 2.0.0.63 =
+* Image import for old posts can set the wrong image url for the featured image - FIXED
+
 = 2.0.0.62 =
 * GD Archive pages not rendering shortcodes when Elementor is active - FIXED
 * Ratings in listing view should be on its own line if placed after a gd_post_badge - CHANGED

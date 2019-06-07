@@ -16,6 +16,8 @@
 class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
 
     public $arguments;
+
+    public $post_rating = '';
     /**
      * Sets up the widgets name etc
      */
@@ -150,8 +152,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         if($args['list_hide_secondary']=='4'){$class .= " gd-lv-s-4 ";}
         if($args['list_hide_secondary']=='5'){$class .= " gd-lv-s-5 ";}
 
-        $before = '<div class="geodir_post_meta gd-rating-info-wrap '. $class .'" >';
-        $after  = '</div>';
+
 
         if($args['show']=='stars'){
             $main .= $this->get_rating_stars();
@@ -161,6 +162,16 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
             $main .= $this->get_rating_stars();
             $main .= $this->get_rating_text();
         }
+
+        $post_rating = $this->post_rating;
+        if($post_rating===0){
+            $class .= " geodir-post-rating-value-0";
+        }elseif($post_rating){
+            $class .= " geodir-post-rating-value-".absint($post_rating);
+        }
+
+        $before = '<div class="geodir_post_meta gd-rating-info-wrap '. $class .'" data-rating="'.round($post_rating, 1).'">';
+        $after  = '</div>';
 
         return $before . $main . $after;
 
@@ -189,6 +200,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
                }else{
                    $post_rating = geodir_get_post_rating( $post->ID );
                }
+               $this->post_rating = $post_rating;
                echo geodir_get_rating_stars( $post_rating, $post->ID );
            }
            ?>
@@ -205,15 +217,10 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
      * @return string rating text html.
      */
     public function get_rating_text(){
-        global $post,$gd_post;
+        global $gd_post;
         ob_start();
         ?>
         <span class="gd-list-rating-text">
-            <?php
-            //if ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
-                //echo '<i class="fas fa-comments" aria-hidden="true"></i>';
-            //}
-            ?>
             <a href="<?php comments_link(); ?>" class="gd-list-rating-link">
                 <?php geodir_comments_number( $gd_post ); ?>
             </a>
