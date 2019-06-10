@@ -273,7 +273,7 @@ class GeoDir_Media {
 			$allowed_file_types = isset($allowed_file_types[$type]) ? $allowed_file_types[$type] : array( 'jpg','jpe','jpeg','gif','png','bmp','ico');
 
 			if($order === 0 && $type=='post_images'){
-				$attachment_id = media_sideload_image($url, $post_id, $title, 'id');
+				$attachment_id = media_sideload_image($url, $post_id, $title, 'id'); // uses the post date for the upload time /2009/12/image.jpg
 				// return error object if its an error
 				if (!$attachment_id || is_wp_error( $attachment_id ) ) {
 					return $attachment_id;
@@ -283,7 +283,7 @@ class GeoDir_Media {
 				$file_type = wp_check_filetype(basename($url));
 				$upload_dir = wp_upload_dir();
 				$file = array(
-					'file'  => $upload_dir['path'].'/'.basename($metadata['file']),
+					'file'  => trailingslashit( $upload_dir['basedir'] ).$metadata['file'],
 					'type'  => $file_type['type']
 				);
 				
