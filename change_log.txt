@@ -1,6 +1,7 @@
 = 2.0.0.63 =
 * Image import for old posts can set the wrong image url for the featured image - FIXED
 * Sort by images is not working - FIXED
+* Custom Sidebars plugin compatibility - ADDED
 
 = 2.0.0.62 =
 * GD Archive pages not rendering shortcodes when Elementor is active - FIXED

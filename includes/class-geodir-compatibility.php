@@ -407,8 +407,9 @@ class GeoDir_Compatibility {
 		}
 
 		// Unicon / GeneratePress
-		if ( ( ( function_exists( 'minti_register_required_plugins' ) && ( strpos( $meta_key, 'minti_' ) === 0 || empty( $meta_key ) ) ) || 
-			   ( defined( 'GENERATE_VERSION' ) && ( strpos( $meta_key, '_generate-' ) === 0 || empty( $meta_key ) ) ) 
+		if ( ( ( function_exists( 'minti_register_required_plugins' ) && ( strpos( $meta_key, 'minti_' ) === 0 || empty( $meta_key ) ) ) 
+			 || ( defined( 'GENERATE_VERSION' ) && ( strpos( $meta_key, '_generate-' ) === 0 || empty( $meta_key ) ) ) 
+			 || ( function_exists( 'inc_sidebars_init' ) && ( strpos( $meta_key, '_cs_replacements' ) === 0 || empty( $meta_key ) ) ) // custom sidebars plugin
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -418,6 +419,10 @@ class GeoDir_Compatibility {
 				$template_page_id = geodir_search_page_id();
 			} else {
 				$template_page_id = 0;
+			}
+
+			if ( $meta_key == '_cs_replacements' ) {
+				$single = false;
 			}
 
 			if ( ! empty( $template_page_id ) ) {
