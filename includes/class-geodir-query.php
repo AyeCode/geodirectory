@@ -1067,6 +1067,10 @@ class GeoDir_Query {
 
 						$orderby = "$wpdb->posts." . $sort_by . " " . $order . ", ".$table . ".overall_rating " . $order;
 						break;
+					// sort by featured image
+					case 'post_images':
+						$orderby = $table . ".featured_image " . $order;
+						break;
 
 					case 'distance':
 						$orderby = $sort_by . " " . $order;
