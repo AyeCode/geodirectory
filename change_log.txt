@@ -4,6 +4,7 @@
 * Custom Sidebars plugin compatibility - ADDED
 * Support added for image/webp type image upload - ADDED
 * GD Pages shows blank content when page not setup with Divi page builder - FIXED
+* Not able to setup GD search page with Divi page builder - FIXED
 
 = 2.0.0.62 =
 * GD Archive pages not rendering shortcodes when Elementor is active - FIXED

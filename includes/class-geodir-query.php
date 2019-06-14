@@ -172,7 +172,10 @@ class GeoDir_Query {
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ),10,2 );
 
 		}elseif(geodir_is_page('search')){
-			$q->is_page = false;
+			// Divi page builder breaks editor.
+			if ( ! ( function_exists( 'et_divi_is_boxed_layout' ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) ) {
+				$q->is_page = false;
+			}
 			$q->is_singular = false;
 			$q->is_search = true;
 			$q->is_archive = true;
