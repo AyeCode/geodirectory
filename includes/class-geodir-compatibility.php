@@ -410,6 +410,7 @@ class GeoDir_Compatibility {
 		if ( ( ( function_exists( 'minti_register_required_plugins' ) && ( strpos( $meta_key, 'minti_' ) === 0 || empty( $meta_key ) ) ) 
 			 || ( defined( 'GENERATE_VERSION' ) && ( strpos( $meta_key, '_generate-' ) === 0 || empty( $meta_key ) ) ) 
 			 || ( function_exists( 'inc_sidebars_init' ) && ( strpos( $meta_key, '_cs_replacements' ) === 0 || empty( $meta_key ) ) ) // custom sidebars plugin
+			 || ( function_exists( 'et_divi_is_boxed_layout' ) && ( strpos( $meta_key, '_et_' ) === 0 || empty( $meta_key ) ) ) // Divi
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -939,6 +940,11 @@ class GeoDir_Compatibility {
 			add_filter( 'generate_show_title', array( __CLASS__, 'generate_show_title' ), 10, 1 );
 			add_filter( 'generate_blog_columns', array( __CLASS__, 'generate_blog_columns' ), 10, 1 );
 		}
+
+		// Divi theme compatibility
+		if ( function_exists( 'et_divi_is_boxed_layout' ) && geodir_is_geodir_page() ) {
+			add_filter( 'et_first_image_use_custom_content', array( __CLASS__, 'divi_et_first_image_use_custom_content' ), 999, 3 );
+		}
 	}
 
 	/**
@@ -1058,5 +1064,23 @@ class GeoDir_Compatibility {
 		}
 
 		return $columns;
+	}
+
+	/**
+	 * Skip use of custom content for first image on GD page templates.
+	 *
+	 * @since 2.0.0.63
+	 *
+	 * @param string|bool $custom.
+	 * @param string $content.
+	 * @param object $post.
+	 * @return string|bool.
+	 */
+	public static function divi_et_first_image_use_custom_content( $custom, $content, $post ) {
+		if ( $custom === false ) {
+			$custom = $content;
+		}
+
+		return $custom;
 	}
 }
