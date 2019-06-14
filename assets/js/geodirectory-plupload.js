@@ -391,8 +391,8 @@ function gd_edit_image_meta(input, order_id) {
     var imagesS = jQuery("#" + input.id, jQuery('#' + input.id + 'plupload-upload-ui').parent()).val();
     var images = imagesS.split("::");
     var img_arr = images[order_id].split("|");
-    var image_title = img_arr[2];
-    var image_caption = img_arr[3];
+    var image_title = geodir_esc_entities(img_arr[2]);
+    var image_caption = geodir_esc_entities(img_arr[3]);
     var html = '';
 
     html = html + "<div class='gd-modal-text'><label for='gd-image-meta-title'>" + geodir_params.label_title + "</label><input id='gd-image-meta-title' value='" + image_title + "'></div>"; // title value
