@@ -410,7 +410,7 @@ class GeoDir_Compatibility {
 		if ( ( ( function_exists( 'minti_register_required_plugins' ) && ( strpos( $meta_key, 'minti_' ) === 0 || empty( $meta_key ) ) ) 
 			 || ( defined( 'GENERATE_VERSION' ) && ( strpos( $meta_key, '_generate-' ) === 0 || empty( $meta_key ) ) ) 
 			 || ( function_exists( 'inc_sidebars_init' ) && ( strpos( $meta_key, '_cs_replacements' ) === 0 || empty( $meta_key ) ) ) // custom sidebars plugin
-			 || ( function_exists( 'et_divi_is_boxed_layout' ) && ( strpos( $meta_key, '_et_' ) === 0 || empty( $meta_key ) ) ) // Divi
+			 || ( function_exists( 'et_divi_load_scripts_styles' ) && ( strpos( $meta_key, '_et_' ) === 0 || empty( $meta_key ) ) ) // Divi
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -942,7 +942,7 @@ class GeoDir_Compatibility {
 		}
 
 		// Divi theme compatibility
-		if ( function_exists( 'et_divi_is_boxed_layout' ) && geodir_is_geodir_page() ) {
+		if ( function_exists( 'et_divi_load_scripts_styles' ) && geodir_is_geodir_page() ) {
 			add_filter( 'et_first_image_use_custom_content', array( __CLASS__, 'divi_et_first_image_use_custom_content' ), 999, 3 );
 		}
 	}

@@ -173,7 +173,7 @@ class GeoDir_Query {
 
 		}elseif(geodir_is_page('search')){
 			// Divi page builder breaks editor.
-			if ( ! ( function_exists( 'et_divi_is_boxed_layout' ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) ) {
+			if ( ! ( function_exists( 'et_divi_load_scripts_styles' ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) ) {
 				$q->is_page = false;
 			}
 			$q->is_singular = false;
