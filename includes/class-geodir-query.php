@@ -1008,7 +1008,7 @@ class GeoDir_Query {
 			} else {
 				$keywords = explode( " ", $s );
 
-				if ( is_array( $keywords ) && ( $klimit = (int) get_option( 'search_word_limit' ) ) ) {
+				if ( is_array( $keywords ) && ( $klimit = (int) geodir_get_option( 'search_word_limit' ) ) ) {
 					foreach ( $keywords as $kkey => $kword ){
 						if ( geodir_utf8_strlen( $kword ) <= $klimit ) {
 							unset( $keywords[ $kkey ] );
