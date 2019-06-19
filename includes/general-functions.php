@@ -141,8 +141,8 @@ function geodir_get_addlisting_link( $post_type = '' ) {
 	if ( post_type_exists( $post_type ) && $check_pkg ) {
 
 		$add_listing_link = get_page_link( geodir_add_listing_page_id() );
-
-		return esc_url( add_query_arg( array( 'listing_type' => $post_type ), $add_listing_link ) );
+		$add_listing_link =  apply_filters( 'extend_addlisting_link', add_query_arg( array( 'listing_type' => $post_type ), $add_listing_link ) );
+		return esc_url($add_listing_link);
 	} else {
 		return get_bloginfo( 'url' );
 	}
