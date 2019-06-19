@@ -249,8 +249,10 @@ class GeoDir_Template_Loader {
             $search_files[] = geodir_get_theme_template_dir_name() . '/taxonomy-' . $term->taxonomy . '.php';
         }
 
-        $search_files[] = $default_file;
-        $search_files[] = geodir_get_theme_template_dir_name() . '/' . $default_file;
+	    if ( !empty($default_file) && $default_file !== ' ' ) {
+		    $search_files[] = $default_file;
+		    $search_files[] = geodir_get_theme_template_dir_name() . '/' . $default_file;
+	    }
 
         // check for archive template
         if(geodir_is_page('archive') || geodir_is_page('search')){
