@@ -6,6 +6,7 @@
 * GD Pages shows blank content when page not setup with Divi page builder - FIXED
 * Not able to setup GD search page with Divi page builder - FIXED
 * Individual word search limit shows unexpected results - FIXED
+* MightyMag theme compatibility for GD pages - ADDED
 
 = 2.0.0.62 =
 * GD Archive pages not rendering shortcodes when Elementor is active - FIXED

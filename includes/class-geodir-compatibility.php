@@ -199,13 +199,15 @@ class GeoDir_Compatibility {
 		::
 		X
 		Newspaper
+		MightyMag
 		######################################################*/
 		if ( ! is_admin() &&
 		     (
 			     function_exists( 'x_get_view' )
 			     || defined( 'TD_THEME_VERSION' )
 				 || function_exists( 'pi_elv_include_scripts' )
-				 || ( ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) )
+				 || ( ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) ) 
+				 || function_exists( 'mgm_setup' )
 		     )
 		) {
 			add_action( 'wp_title', array( 'GeoDir_SEO', 'set_meta' ), 9 );
