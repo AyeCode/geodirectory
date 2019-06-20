@@ -1593,3 +1593,14 @@ function geodir_widget_listings_pagination(id, params) {
         e.preventDefault();
     });
 }
+
+/**
+ * Post reviews readmore
+ */
+jQuery(document).ready(function() {
+    jQuery('.geodir-review-text-excerpt .comment-excerpt').click(function( e ) {
+        e.preventDefault()
+        var excerpt  = jQuery(this).parent().addClass('gd-hide');
+        var content  = jQuery(excerpt).parent().find('.geodir-review-text-content').removeClass('gd-hide');
+    })
+});
