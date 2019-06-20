@@ -113,8 +113,8 @@ class GeoDir_Widget_Post_Reviews extends WP_Super_Duper {
         if ( !empty( $comments_li ) ) {
 			ob_start();
 			?>
-			<div class="geodir_post_reviews_section">
-				<ul class="geodir_post_reviews"><?php echo $comments_li; ?></ul>
+			<div class="geodir_post_reviews_section geodir_recent_reviews_section">
+				<ul class="geodir_post_reviews geodir_recent_reviews"><?php echo $comments_li; ?></ul>
 			</div>
 			<?php
 			$content = ob_get_clean();
@@ -186,7 +186,7 @@ class GeoDir_Widget_Post_Reviews extends WP_Super_Duper {
 			}
 
 			//Output the comment
-			$comments_echo .= '<li class="clearfix"><span class="geodir-review-content">';
+			$comments_echo .= '<li class="clearfix"><span class="geodir_reviewer_content">';
 
 			//Maybe link to the comment author's website
 			if(! empty( $comment_author_url ) ) {
@@ -196,7 +196,7 @@ class GeoDir_Widget_Post_Reviews extends WP_Super_Duper {
 			//Add commentors avatar to comment
 			if ( function_exists( 'get_avatar' ) ) {
 				$comments_echo .= sprintf(
-					'<span class="li%s geodir-review-avatar">%s</span>',
+					'<span class="li%s geodir_reviewer_image">%s</span>',
 					$comment_id,
 					get_avatar( $comment_author_email, $avatar_size )
 				);
@@ -216,7 +216,7 @@ class GeoDir_Widget_Post_Reviews extends WP_Super_Duper {
 
 			//Date
 			$comments_echo .= sprintf( 
-				'<div><span class="date" title="%s"><i class="far fa-calendar-alt"></i> %s</span></div>',
+				'<span class="date geodir-alignright gd-pointer" title="%s"><i class="far fa-calendar-alt"></i> %s</span>',
 				$comment->comment_date,
                 sprintf( _x( '%s ago', '%s = human-readable time difference', 'geodirectory' ), human_time_diff( strtotime( $comment->comment_date ), current_time( 'timestamp' ) ) )
             );
