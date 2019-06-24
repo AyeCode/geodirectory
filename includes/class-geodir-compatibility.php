@@ -225,6 +225,7 @@ class GeoDir_Compatibility {
 		######################################################*/
 		if ( function_exists('avia_lang_setup') ) {
 			add_filter( 'avf_preview_window_css_files', array( __CLASS__, 'enfold_preview_styles' ) );
+			add_filter( 'avf_title_args', array( __CLASS__, 'enfold_avf_title_args' ), 10, 2 );
 		}
 
 		// Flatsome theme breaks search page.
@@ -363,6 +364,7 @@ class GeoDir_Compatibility {
 			if ( substr( $meta_key, 0, 6 ) === "_avia_" ) {
 				$gen_keys[] = $meta_key;
 			}
+			$gen_keys[] = 'header';
 			$gen_keys[] = 'header_transparency';
 			$gen_keys[] = 'header_title_bar';
 			$gen_keys[] = 'footer';
@@ -785,7 +787,7 @@ class GeoDir_Compatibility {
 
 
 	/**
-	 * Fix some layut issues with genesis coroporate pro theme.
+	 * Fix some layout issues with genesis corporate pro theme.
 	 *
 	 * @param $classes
 	 *
@@ -1084,5 +1086,25 @@ class GeoDir_Compatibility {
 		}
 
 		return $custom;
+	}
+
+	/**
+	 * Fix the page title args on Enfold theme.
+	 *
+	 * @since 2.0.0.63
+	 *
+	 * @param array $args The title arguments.
+	 * @param int $id The ID.
+	 *
+	 * @return array Filtered title arguments.
+	 */
+	public static function enfold_avf_title_args( $args, $id ) {
+		$title = GeoDir_SEO::set_meta();
+
+		if ( $title ) {
+			$args['title'] = $title;
+		}
+	
+		return $args;
 	}
 }
