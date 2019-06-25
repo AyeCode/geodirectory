@@ -117,6 +117,16 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'element_require' => '[%type%]=="slider"',
 					'advanced' => true
 				),
+				'show_caption'  => array(
+					'title' 	=> __('Show caption:', 'geodirectory'),
+					'desc' 		=> __('Show the captions on the image. Requires you to enable titles.', 'geodirectory'),
+					'type' 		=> 'checkbox',
+					'desc_tip' 	=> true,
+					'value'  	=> '0',
+					'default'   => 0,
+					'element_require' => '[%show_title%] && [%type%]=="slider"',
+					'advanced' 	=> true
+				),
 				'animation'  => array(
 					'title' => __('Animation:', 'geodirectory'),
 					'desc' => __('Slide or fade transition.', 'geodirectory'),
@@ -285,6 +295,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'slideshow' => '', // auto start
 			'controlnav'=> '2', // 0 = none, 1 =  standard, 2 = thumbnails
 			'show_title'=> '1',
+			'show_caption' => '0',
 			'limit'     => '',
 			'limit_show'     => '',
 			'link_to'     => '',
@@ -424,7 +435,24 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 
 							if($options['type']=='slider' && $options['show_title'] && !empty($image->title)){
-								echo '<p class="flex-caption">'.$image->title.'</p>';
+								
+								$flex_caption = $image->title;
+
+								//Maybe add a caption to the title
+								
+								/**
+        						 * Filters whether or not the caption should be displayed.
+        						 *
+        						 * @since   2.0.0.63
+        						 * @package GeoDirectory
+        						 */
+        						$show_caption = apply_filters( 'geodir_post_images_show_caption', $options['show_caption'] );
+
+								if( $show_caption && !empty( $image->caption ) ) {
+									$flex_caption .= "<br><small>{$image->caption}</small>";
+								}
+
+								echo '<p class="flex-caption">'.$flex_caption.'</p>';
 							}
 							echo "</li>";
 							$image_count++;
