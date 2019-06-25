@@ -121,6 +121,22 @@ class GeoDir_Compatibility {
 
 		// Set custom hook for theme compatibility
 		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ) );
+		
+		// Avada (theme)
+		if ( ! is_admin() ) {
+			add_filter( 'avada_has_sidebar', array( __CLASS__, 'avada_has_sidebar' ), 100, 3 );
+			add_filter( 'avada_has_double_sidebars', array( __CLASS__, 'avada_has_double_sidebars' ), 100, 3 );
+			add_filter( 'avada_setting_get_posts_global_sidebar', array( __CLASS__, 'avada_global_sidebar' ), 100, 1 );
+			add_filter( 'avada_setting_get_posts_sidebar', array( __CLASS__, 'avada_sidebar' ), 100, 1 );
+			add_filter( 'avada_setting_get_posts_sidebar_2', array( __CLASS__, 'avada_sidebar_2' ), 100, 1 );
+			add_filter( 'avada_setting_get_blog_archive_sidebar', array( __CLASS__, 'avada_sidebar' ), 100, 1 );
+			add_filter( 'avada_setting_get_blog_archive_sidebar_2', array( __CLASS__, 'avada_sidebar_2' ), 100, 1 );
+			add_filter( 'avada_setting_get_blog_sidebar_position', array( __CLASS__, 'avada_sidebar_position' ), 100, 1 );
+			add_filter( 'avada_setting_get_search_sidebar', array( __CLASS__, 'avada_sidebar' ), 100, 1 );
+			add_filter( 'avada_setting_get_search_sidebar_2', array( __CLASS__, 'avada_sidebar_2' ), 100, 1 );
+			add_filter( 'avada_setting_get_search_sidebar_position', array( __CLASS__, 'avada_sidebar_position' ), 100, 1 );
+			add_filter( 'avada_setting_get_sidebar_sticky', array( __CLASS__, 'avada_sidebar_sticky' ), 100, 1 );
+		}
 	}
 
 	/**
@@ -933,8 +949,15 @@ class GeoDir_Compatibility {
 	 */
 	public static function template_redirect() {
 		// Set Avada theme title bar
-		if ( class_exists( 'FusionBuilder' ) && geodir_is_geodir_page() ) {
-			add_action( 'avada_override_current_page_title_bar', array( __CLASS__, 'avada_override_current_page_title_bar' ), 10, 1 );
+		if ( geodir_is_geodir_page() ) {
+			if ( class_exists( 'FusionBuilder' ) ) {
+				add_action( 'avada_override_current_page_title_bar', array( __CLASS__, 'avada_override_current_page_title_bar' ), 10, 1 );
+			}
+
+			// Avada (theme)
+			if ( class_exists( 'Avada' ) ) {
+				add_filter( 'body_class', array( __CLASS__, 'avada_body_class' ), 999, 1 );
+			}
 		}
 
 		// GeneratePress theme compatibility
@@ -1106,5 +1129,204 @@ class GeoDir_Compatibility {
 		}
 	
 		return $args;
+	}
+	
+	public static function avada_page_id() {
+		global $gd_post;
+
+		$page_id = 0;
+
+		if ( ! geodir_is_geodir_page() ) {
+			return $page_id;
+		}
+
+		global $gd_post;
+
+		$post_type = ! empty( $gd_post ) && ! empty( $gd_post->ID ) ? get_post_type( $gd_post->ID ) : '';
+
+		if ( geodir_is_page( 'detail' ) ) {
+			$page_id = geodir_details_page_id( $post_type );
+		} else if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$page_id = geodir_archive_page_id( $post_type );
+		} else if ( geodir_is_page( 'search' ) ) {
+			$page_id = geodir_search_page_id();
+		}
+
+		return $page_id;
+	}
+
+	public static function avada_has_sidebar( $has_sidebar, $body_classes, $class ) {
+		if ( geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
+			$has_sidebar = in_array( 'has-sidebar', $body_classes ) ? true : false;
+		}
+
+		return $has_sidebar;
+	}
+
+	public static function avada_has_double_sidebars( $double_sidebars, $body_classes, $class ) {
+		if ( geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
+			$double_sidebars = in_array( 'double-sidebars', $body_classes ) ? true : false;
+		}
+
+		return $double_sidebars;
+	}
+
+	public static function avada_body_classes() {
+		$classes = array();
+
+		$page_id = (int) self::avada_page_id();
+
+		if ( empty( $page_id ) ) {
+			return $classes;
+		}
+
+		$c_page_id = $page_id;
+		$sidebar_1 = self::avada_sidebar_context( $c_page_id, 1 );
+		$sidebar_2 = self::avada_sidebar_context( $c_page_id, 2 );
+
+		$page_bg_layout = get_post_meta( $c_page_id, 'pyre_page_bg_layout', true );
+		if ( ( 'Boxed' === Avada()->settings->get( 'layout' ) && ( ! $page_bg_layout || 'default' === $page_bg_layout ) ) || 'boxed' === $page_bg_layout ) {
+			$classes[] = 'layout-boxed-mode';
+			$classes[] = 'layout-boxed-mode-' . Avada()->settings->get( 'scroll_offset' );
+		} else {
+			$classes[] = 'layout-wide-mode';
+		}
+
+		if ( is_array( $sidebar_1 ) && ! empty( $sidebar_1 ) && ( $sidebar_1[0] || '0' == $sidebar_1[0] ) && ! is_page_template( '100-width.php' ) && ! is_page_template( 'blank.php' ) ) {
+			$classes[] = 'has-sidebar';
+		}
+
+		if ( is_array( $sidebar_1 ) && $sidebar_1[0] && is_array( $sidebar_2 ) && $sidebar_2[0] && ! is_page_template( '100-width.php' ) && ! is_page_template( 'blank.php' ) ) {
+			$classes[] = 'double-sidebars';
+		}
+
+		if ( is_page_template( 'side-navigation.php' ) && 0 !== get_queried_object_id() ) {
+			$classes[] = 'has-sidebar';
+
+			if ( is_array( $sidebar_2 ) && $sidebar_2[0] ) {
+				$classes[] = 'double-sidebars';
+			}
+		}
+
+		if ( is_archive() || is_search() ) {
+			if ( 'None' !== $sidebar_1 && ( ( is_array( $sidebar_1 ) && $sidebar_1[0] !== '' ) || ( ! is_array( $sidebar_1 ) && $sidebar_1 !== '' ) ) ) {
+				$classes[] = 'has-sidebar';
+			}
+			if ( 'None' !== $sidebar_1 && 'None' !== $sidebar_2 && ( ( is_array( $sidebar_1 ) && $sidebar_1[0] !== '' ) || ( ! is_array( $sidebar_1 ) && $sidebar_1 !== '' ) ) && ( ( is_array( $sidebar_2 ) && $sidebar_2[0] !== '' ) || ( ! is_array( $sidebar_2 ) && $sidebar_2 !== '' ) ) ) {
+				$classes[] = 'double-sidebars';
+			}
+		}
+
+		if ( 'no' !== get_post_meta( $c_page_id, 'pyre_display_header', true ) ) {
+			if ( 'Left' === Avada()->settings->get( 'header_position' ) || 'Right' === Avada()->settings->get( 'header_position' ) ) {
+				$classes[] = 'side-header';
+			} else {
+				$classes[] = 'fusion-top-header';
+			}
+			if ( 'Left' === Avada()->settings->get( 'header_position' ) ) {
+				$classes[] = 'side-header-left';
+			} elseif ( 'Right' === Avada()->settings->get( 'header_position' ) ) {
+				$classes[] = 'side-header-right';
+			}
+			$classes[] = 'menu-text-align-' . strtolower( Avada()->settings->get( 'menu_text_align' ) );
+		}
+
+		return array_unique( $classes );
+	}
+
+	public static function avada_sidebar_context( $c_page_id, $sidebar = 1 ) {
+		$sidebar_1 = get_post_meta( $c_page_id, 'sbg_selected_sidebar_replacement', true );
+		$sidebar_2 = get_post_meta( $c_page_id, 'sbg_selected_sidebar_2_replacement', true );
+
+		if ( Avada()->settings->get( 'pages_global_sidebar' ) ) {
+			$sidebar_1 = ( 'None' !== Avada()->settings->get( 'pages_sidebar' ) ) ? array( Avada()->settings->get( 'pages_sidebar' ) ) : '';
+			$sidebar_2 = ( 'None' !== Avada()->settings->get( 'pages_sidebar_2' ) ) ? array( Avada()->settings->get( 'pages_sidebar_2' ) ) : '';
+		} else {
+			if ( isset( $sidebar_1[0] ) && 'default_sidebar' === $sidebar_1[0] ) {
+				$sidebar_1 = array( ( 'None' !== Avada()->settings->get( 'pages_sidebar' ) ) ? Avada()->settings->get( 'pages_sidebar' ) : '' );
+			}
+
+			if ( isset( $sidebar_2[0] ) && 'default_sidebar' === $sidebar_2[0] ) {
+				$sidebar_2 = array( ( 'None' !== Avada()->settings->get( 'pages_sidebar_2' ) ) ? Avada()->settings->get( 'pages_sidebar_2' ) : '' );
+			}
+		}
+
+		if ( 1 == $sidebar ) {
+			return $sidebar_1;
+		} elseif ( 2 == $sidebar ) {
+			return $sidebar_2;
+		}
+	}
+
+	public static function avada_body_class( $classes ) {
+		$body_classes = self::avada_body_classes();
+		
+		if ( ! empty( $body_classes ) && ! empty( $classes ) ) {
+			$new_classes = array();
+			$check_classes = array( 'layout-boxed-mode', 'layout-wide-mode', 'has-sidebar', 'double-sidebars', 'fusion-top-header', 'side-header-left', 'side-header-right' );
+
+			foreach ( $classes as $class ) {
+				if ( in_array( $class, $check_classes ) || strpos( $class, 'layout-boxed-mode-' ) === 0 || strpos( $class, 'menu-text-align-' ) === 0 ) {
+					continue;
+				}
+				$new_classes[] = $class;
+			}
+
+			$classes = array_merge( $new_classes, $body_classes );
+		}
+
+		return $classes;
+	}
+
+	public static function avada_global_sidebar( $value ) {
+		return Avada()->settings->get( 'pages_global_sidebar' );
+	}
+
+	public static function avada_sidebar( $value ) {
+		if ( $page_id = (int) self::avada_page_id() ) {
+			$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_replacement', true );
+
+			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+			if ( ! empty( $meta ) ) {
+				$value = $meta;
+			}
+		}
+		return $value;
+	}
+
+	public static function avada_sidebar_2( $value ) {
+		if ( $page_id = (int) self::avada_page_id() ) {
+			$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_2_replacement', true );
+
+			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+			if ( ! empty( $meta ) ) {
+				$value = $meta;
+			}
+		}
+		return $value;
+	}
+
+	public static function avada_sidebar_position( $value ) {
+		if ( $page_id = (int) self::avada_page_id() ) {
+			$meta = get_post_meta( $page_id, 'pyre_sidebar_position', true );
+
+			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+			if ( ! empty( $meta ) ) {
+				$value = $meta;
+			}
+		}
+		return $value;
+	}
+
+	public static function avada_sidebar_sticky( $value ) {
+		if ( $page_id = (int) self::avada_page_id() ) {
+			$meta = get_post_meta( $page_id, 'pyre_sidebar_sticky', true );
+
+			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+			if ( ! empty( $meta ) ) {
+				$value = $meta;
+			}
+		}
+		return $value;
 	}
 }

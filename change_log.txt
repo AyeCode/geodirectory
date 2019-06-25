@@ -10,6 +10,7 @@
 * Sticky map not working with OpenStreetMap - FIXED
 * Add listing tags not showing popular tags at top of the list - FIXED
 * Enfold theme shows wrong title for GeoDirectory pages - FIXED
+* Avada theme compatibility for GD page sidebars - FIXED
 
 = 2.0.0.62 =
 * GD Archive pages not rendering shortcodes when Elementor is active - FIXED
