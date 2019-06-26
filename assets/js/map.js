@@ -720,7 +720,7 @@ function geodir_map_sticky(map_options) {
         }
         
         jQuery(window).scroll(function() {
-            jQuery("#" + optionsname + "").goMap();
+            jQuery("#" + optionsname + "").goMap(map_options);
             
             // get the bounds of the map
             if (window.gdMaps == 'osm') {

@@ -56,6 +56,9 @@ class GeoDir_Media {
 			case 'image/gif':
 				$image = true;
 				break;
+			case 'image/webp':
+				$image = true;
+				break;
 			default:
 				$image = false;
 				break;
@@ -270,7 +273,7 @@ class GeoDir_Media {
 				$post_type = get_post_type(wp_get_post_parent_id($post_id));
 			}
 			$allowed_file_types = self::get_file_fields($post_type);
-			$allowed_file_types = isset($allowed_file_types[$type]) ? $allowed_file_types[$type] : array( 'jpg','jpe','jpeg','gif','png','bmp','ico');
+			$allowed_file_types = isset($allowed_file_types[$type]) ? $allowed_file_types[$type] : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
 
 			if($order === 0 && $type=='post_images'){
 				$attachment_id = media_sideload_image($url, $post_id, $title, 'id'); // uses the post date for the upload time /2009/12/image.jpg
@@ -554,7 +557,7 @@ class GeoDir_Media {
 	 *
 	 * @return array|bool|mixed
 	 */
-	public static function get_external_media( $url, $file_name = '', $allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png') ) {
+	public static function get_external_media( $url, $file_name = '', $allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp') ) {
 		// Gives us access to the download_url() and wp_handle_sideload() functions
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 

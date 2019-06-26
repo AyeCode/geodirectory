@@ -242,7 +242,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 	 *
 	 * @param string $allowed_img_types The image type extensions array.
 	 */
-	$allowed_img_types = apply_filters( 'geodir_allowed_post_image_exts', array( 'jpg', 'jpeg', 'jpe', 'gif', 'png' ) );
+	$allowed_img_types = apply_filters( 'geodir_allowed_post_image_exts', array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp' ) );
 
 	$default_marker_icon   = GeoDir_Maps::default_marker_icon( true );
 	$default_marker_size   = GeoDir_Maps::get_marker_size( $default_marker_icon, array( 'w' => 20, 'h' => 34 ) );

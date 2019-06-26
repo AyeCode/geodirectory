@@ -172,7 +172,10 @@ class GeoDir_Query {
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ),10,2 );
 
 		}elseif(geodir_is_page('search')){
-			$q->is_page = false;
+			// Divi page builder breaks editor.
+			if ( ! ( function_exists( 'et_divi_load_scripts_styles' ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) ) {
+				$q->is_page = false;
+			}
 			$q->is_singular = false;
 			$q->is_search = true;
 			$q->is_archive = true;
@@ -1005,7 +1008,7 @@ class GeoDir_Query {
 			} else {
 				$keywords = explode( " ", $s );
 
-				if ( is_array( $keywords ) && ( $klimit = (int) get_option( 'search_word_limit' ) ) ) {
+				if ( is_array( $keywords ) && ( $klimit = (int) geodir_get_option( 'search_word_limit' ) ) ) {
 					foreach ( $keywords as $kkey => $kword ){
 						if ( geodir_utf8_strlen( $kword ) <= $klimit ) {
 							unset( $keywords[ $kkey ] );
@@ -1066,6 +1069,10 @@ class GeoDir_Query {
 					case 'comment_count':
 
 						$orderby = "$wpdb->posts." . $sort_by . " " . $order . ", ".$table . ".overall_rating " . $order;
+						break;
+					// sort by featured image
+					case 'post_images':
+						$orderby = $table . ".featured_image " . $order;
 						break;
 
 					case 'distance':
