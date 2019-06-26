@@ -296,7 +296,7 @@ function plu_show_thumbs(imgId) {
 
             var file_display = '';
             var file_display_class = '';
-            if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico') {
+            if (file_ext == 'jpg' || file_ext == 'jpe' || file_ext == 'jpeg' || file_ext == 'png' || file_ext == 'gif' || file_ext == 'bmp' || file_ext == 'ico' || file_ext == 'webp') {
                 file_display = '<img class="gd-file-info" data-id="' + image_id + '" data-title="' + image_title + '" data-caption="' + image_caption + '" data-src="' + image_url + '" src="' + image_url + '" alt=""  />';
                 if(!!image_title.trim()){
                     image_title_html = '<span class="gd-title-preview">' + image_title + '</span>';

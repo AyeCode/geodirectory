@@ -1326,7 +1326,7 @@ function geodir_is_image_file( $url ) {
     if ( !empty( $url ) ) {
         $filetype = wp_check_filetype( $url );
         
-        if ( !empty( $filetype['ext'] ) && in_array( $filetype['ext'], array( 'jpg', 'jpeg', 'jpe',  'gif',  'png',  'bmp',   'tif',  'tiff', 'ico' ) ) ) {
+        if ( !empty( $filetype['ext'] ) && in_array( $filetype['ext'], array( 'jpg', 'jpeg', 'jpe',  'gif',  'png',  'bmp',   'tif',  'tiff', 'ico', 'webp' ) ) ) {
             return true;
         }
     }

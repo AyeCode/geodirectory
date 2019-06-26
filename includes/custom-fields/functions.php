@@ -549,6 +549,7 @@ function geodir_custom_upload_mimes($existing_mimes = array())
     $existing_mimes['xla|xls|xlt|xlw'] = 'application/vnd.ms-excel';
     $existing_mimes['docx'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     $existing_mimes['xlsx'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+	$existing_mimes['webp'] = 'image/webp';
     return $existing_mimes;
 }
 

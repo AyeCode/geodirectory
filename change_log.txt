@@ -1,6 +1,18 @@
 = 2.0.0.63 =
 * Image import for old posts can set the wrong image url for the featured image - FIXED
 * Apostrophe in title or caption wipes out the rest of the title/caption - FIXED
+* Sort by images is not working - FIXED
+* Custom Sidebars plugin compatibility - ADDED
+* Support added for image/webp type image upload - ADDED
+* GD Pages shows blank content when page not setup with Divi page builder - FIXED
+* Not able to setup GD search page with Divi page builder - FIXED
+* Individual word search limit shows unexpected results - FIXED
+* MightyMag theme compatibility for GD pages - ADDED
+* Sticky map not working with OpenStreetMap - FIXED
+* Add listing tags not showing popular tags at top of the list - FIXED
+* Enfold theme shows wrong title for GeoDirectory pages - FIXED
+* Avada theme compatibility for GD page sidebars - FIXED
+* Unable to save empty post tags - FIXED
 
 = 2.0.0.62 =
 * GD Archive pages not rendering shortcodes when Elementor is active - FIXED
