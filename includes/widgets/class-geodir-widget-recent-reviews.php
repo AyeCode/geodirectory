@@ -234,8 +234,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		$where = apply_filters( 'geodir_recent_reviews_query_where', $where, $post_type, $add_location_filter );
 
 		$where = ! empty( $where ) ? "WHERE {$where}" : "";
-
-		$request = "SELECT c.comment_ID, c.comment_author, c.comment_author_email, c.comment_content, c.comment_date, r.rating, r.user_id, r.post_id, r.post_type FROM " . GEODIR_REVIEW_TABLE . " AS r {$join} {$where} ORDER BY c.comment_date DESC, c.comment_ID DESC LIMIT 5";
+		$count = $wpdb->prepare( "%d", $no_comments );
+		$request = "SELECT c.comment_ID, c.comment_author, c.comment_author_email, c.comment_content, c.comment_date, r.rating, r.user_id, r.post_id, r.post_type FROM " . GEODIR_REVIEW_TABLE . " AS r {$join} {$where} ORDER BY c.comment_date DESC, c.comment_ID DESC LIMIT $count";
 
 		$comments = $wpdb->get_results( $request );
 
@@ -274,7 +274,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 
 				$comments_echo .= "<span class=\"li" . $comment_id . " geodir_reviewer_image\">";
 				if ( function_exists( 'get_avatar' ) ) {
-					$avatar_size = apply_filters( 'geodir_comment_avatar_size', 44 );
+					$avatar_size = apply_filters( 'geodir_comment_avatar_size', $g_size );
 					$comments_echo .= get_avatar( $comment, $avatar_size, '', $comment_id . ' comment avatar' );
 				}
 
