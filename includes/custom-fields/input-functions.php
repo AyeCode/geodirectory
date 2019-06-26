@@ -1578,17 +1578,16 @@ add_filter('geodir_custom_field_input_categories','geodir_cfi_categories',10,2);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cfi_tags($html,$cf){
-
+function geodir_cfi_tags( $html, $cf ) {
     // we use the standard WP tags UI in backend
-    if(is_admin()){
+    if ( is_admin() ) {
         return '';
     }
 
     $html_var = $cf['htmlvar_name'];
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_input_tags_{$html_var}")){
+    if ( has_filter("geodir_custom_field_input_tags_{$html_var}" ) ) {
         /**
          * Filter the multiselect html by individual custom field.
          *
@@ -1596,44 +1595,40 @@ function geodir_cfi_tags($html,$cf){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_input_tags_{$html_var}",$html,$cf);
+        $html = apply_filters( "geodir_custom_field_input_tags_{$html_var}", $html, $cf );
     }
 
     // If no html then we run the standard output.
-    if(empty($html)) {
-
+    if ( empty( $html ) ) {
         ob_start(); // Start  buffering;
-        //print_r($cf);
-        $value = geodir_get_cf_value($cf);
 
-//        echo '###'.$value;
-//        print_r($cf);
+        $value = geodir_get_cf_value( $cf );
 
-        $cf['option_values'] = "tag1,tag2";//array("tag1","tag2");
+        $cf['option_values'] = "tag1,tag2";
 
-        $post_type = isset($_REQUEST['listing_type']) ? geodir_clean_slug($_REQUEST['listing_type']) : '';
+        $post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
         $term_array = array();
-        if($post_type){
-            $terms = get_terms(array(
-                'taxonomy' => $post_type."_tags",
-                'hide_empty' => false,
-                'orderby'   => 'count',
-                'number'    => 10
-            ));
 
-           // print_r($terms);
-            if(!empty($terms)){
-                foreach($terms as $term){
+		if ( $post_type ) {
+            $terms = get_terms( array(
+                'taxonomy' => $post_type . "_tags",
+                'hide_empty' => false,
+                'orderby' => 'count',
+				'order' => 'DESC',
+                'number' => 10
+            ) );
+
+
+            if ( ! empty( $terms ) ) {
+                foreach( $terms as $term ) {
                     $term_array[] = $term->name;
                 }
             }
 
-            if(!empty($term_array)){
-                $cf['option_values'] = implode(",",$term_array);
+            if ( ! empty( $term_array ) ) {
+                $cf['option_values'] = implode( ",", $term_array );
             }
         }
-
-
 
         ?>
         <div id="<?php echo $cf['name']; ?>_row"
@@ -1877,7 +1872,7 @@ function  geodir_cfi_files($html,$cf){
 
 		$file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
 
-        $allowed_file_types = isset($extra_fields['gd_file_types']) ? maybe_unserialize($extra_fields['gd_file_types']) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico');
+        $allowed_file_types = isset($extra_fields['gd_file_types']) ? maybe_unserialize($extra_fields['gd_file_types']) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
         $display_file_types = $allowed_file_types != '' ? '.' . implode(", .", $allowed_file_types) : '';
         if(!empty($allowed_file_types)){$allowed_file_types = implode(",",$allowed_file_types);}
 
