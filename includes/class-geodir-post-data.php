@@ -553,6 +553,11 @@ class GeoDir_Post_Data {
 				$tags = array_filter( array_unique( $tags ) );
 				// we need tags as a string
 				$postarr['post_tags'] = implode( ",", $tags );
+			} else {
+				// Save empty tags
+				if ( ( isset( $gd_post['post_tags' ] ) || isset( $gd_post['tax_input'][ $post_type . '_tags' ] ) ) && empty( $gd_post['post_tags' ] ) && empty( $gd_post['tax_input'][ $post_type . '_tags' ] ) ) {
+					$postarr['post_tags'] = '';
+				}
 			}
 
 			// Save location info
