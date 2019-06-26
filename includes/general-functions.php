@@ -1358,6 +1358,7 @@ function geodir_allowed_mime_types() {
 				'png'  => 'image/png',
 				'bmp'  => 'image/bmp',
 				'ico'  => 'image/x-icon',
+				'webp' => 'image/webp',
 			),
 			'Video'       => array( // Video formats.
 				'asf'  => 'video/x-ms-asf',
