@@ -436,7 +436,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 							if($options['type']=='slider' && $options['show_title'] && !empty($image->title)){
 								
-								$flex_caption = $image->title;
+								$flex_caption = esc_attr( $image->title );
 
 								//Maybe add a caption to the title
 								
@@ -449,10 +449,10 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
         						$show_caption = apply_filters( 'geodir_post_images_show_caption', $options['show_caption'] );
 
 								if( $show_caption && !empty( $image->caption ) ) {
-									$flex_caption .= "<br><small>{$image->caption}</small>";
+									$flex_caption .= "<small>".esc_attr( $image->caption )."</small>";
 								}
 
-								echo '<p class="flex-caption">'.$flex_caption.'</p>';
+								echo '<p class="flex-caption gd-flex-caption">'.$flex_caption.'</p>';
 							}
 							echo "</li>";
 							$image_count++;

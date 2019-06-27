@@ -704,9 +704,10 @@ class GeoDir_Post_Data {
 				unset( $postarr['tags_input'] );
 			}
 
-
 			// assign the temp post data
 			self::$post_temp = $postarr;
+		}elseif(!empty( self::$post_temp ) && $data['post_type'] == 'revision' && isset($data['post_parent']) && $data['post_parent']== self::$post_temp['ID']){
+			// we might be saving a post revision at the same time so we don't blank the post_temp here
 		}else{
 			self::$post_temp = null;
 		}

@@ -9,7 +9,7 @@ jQuery(document).ready(function($) {
         var post_id = '';
         // set the post id
         if (jQuery("#geodirectory-add-post input[name='ID']").length) {
-            var post_id = jQuery("#geodirectory-add-post input[name='ID']").val(); // frontend
+            post_id = jQuery("#geodirectory-add-post input[name='ID']").val(); // frontend
         } else {
             post_id = jQuery("#post input[name='post_ID']").val(); // backend
         }

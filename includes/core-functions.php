@@ -541,6 +541,7 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Archive_Item_Section' );
 		register_widget( 'GeoDir_Widget_Single_Taxonomies' );
 		register_widget( 'GeoDir_Widget_Single_Next_Prev' );
+		register_widget( 'GeoDir_Widget_Single_Reviews' );
 		register_widget( 'GeoDir_Widget_Post_Distance' );
 		register_widget( 'GeoDir_Widget_Map_Pinpoint' );
 

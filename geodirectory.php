@@ -331,6 +331,13 @@ final class GeoDirectory {
 	    $notifications_class_name = apply_filters('geodir_class_notifications','GeoDir_Notifications');
 	    $this->notifications = new $notifications_class_name;
 
+	    // GD hints
+	    if(geodir_get_option('enable_hints',1)){
+		    if(current_user_can('administrator')) {
+			    new GeoDir_Hints();
+		    }
+	    }
+
         // Init action.
         do_action( 'geodirectory_init' );
     }
