@@ -137,8 +137,14 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc'     => __( 'Disable advanced toggle, show advanced settings at all times (not recommended).', 'geodirectory' ),
 					'id'       => 'admin_disable_advanced',
 					'type'     => 'checkbox',
-					//'desc_tip' => true,
-					//'advanced' => true
+				),
+
+				array(
+					'name'     => __( 'Enable admin hints', 'geodirectory' ),
+					'desc'     => __( 'This will enable admin hint notifications throughout the site to help new GD users find their way around, this will only be visible to admins.', 'geodirectory' ),
+					'id'       => 'enable_hints',
+					'type'     => 'checkbox',
+					'default'  => '1',
 				),
 
 				array(
@@ -147,8 +153,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'enable_404_rescue',
 					'type'     => 'checkbox',
 					'default'  => '1',
-					//'desc_tip' => true,
-					//'advanced' => true
 				),
 
 				array(
@@ -157,8 +161,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'admin_enable_beta',
 					'type'     => 'checkbox',
 					'default'  => '1',
-					//'desc_tip' => true,
-					//'advanced' => true
 				),
 
 

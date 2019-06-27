@@ -16,6 +16,8 @@
 * Avada theme compatibility for GD page sidebars - FIXED
 * Unable to save empty post tags - FIXED
 * Map post types slider not working in mobile devices - FIXED
+* GD > Single Reviews widget added that can show the comment/reviews section on the details page - ADDED
+* New GeoDir_Hints class introduced which will show setup hints to admins throughout the site - ADDED
 
 = 2.0.0.62 =
 * GD Archive pages not rendering shortcodes when Elementor is active - FIXED

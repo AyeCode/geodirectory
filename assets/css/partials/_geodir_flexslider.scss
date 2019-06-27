@@ -142,6 +142,13 @@
         margin: 0;
       }
 
+      .gd-flex-caption{
+        small{
+          display: block;
+        }
+      }
+
+
       > img, > p {
         border-radius: 4px;
       }
