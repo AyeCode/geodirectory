@@ -1,5 +1,8 @@
 = 2.0.0.63 =
 * Image import for old posts can set the wrong image url for the featured image - FIXED
+* Ability to add captions to the images slider - ADDED
+* Recent reviews widget does not display the correct number of reviews - FIXED
+* Apostrophe in title or caption wipes out the rest of the title/caption - FIXED
 * Sort by images is not working - FIXED
 * Custom Sidebars plugin compatibility - ADDED
 * Support added for image/webp type image upload - ADDED
