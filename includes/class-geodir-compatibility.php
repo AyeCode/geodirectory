@@ -57,6 +57,7 @@ class GeoDir_Compatibility {
 		add_filter( 'geodir_bypass_setup_archive_loop_as_page', array( __CLASS__, 'beaver_builder_loop_bypass' ) );
 		if(class_exists( 'FLBuilderLoader' )){
 			add_action('wp_footer', array( __CLASS__, 'beaver_builder_template_warning' ) );
+			add_filter( 'geodir_bypass_archive_item_template_content', array( __CLASS__, 'beaver_archive_item_template_content' ), 10, 3 );
 		}
 
 		/*######################################################
@@ -1328,5 +1329,39 @@ class GeoDir_Compatibility {
 			}
 		}
 		return $value;
+	}
+
+	/**
+	 * Beaver Builder render archive item layout.
+	 *
+	 * @since 2.0.0.64
+	 *
+	 * @param string $content The page layout content.
+	 * @param string $original_content The page layout original content.
+	 * @param int $page_id The page id.
+	 * @return string Filtered page layout content.
+	 */
+	public static function beaver_archive_item_template_content( $content, $original_content, $page_id ) {
+		$enabled = FLBuilderModel::is_builder_enabled( $page_id );
+
+		if ( $enabled ) {
+			$rendering = $page_id === FLBuilder::$post_rendering;
+			$do_render = apply_filters( 'fl_builder_do_render_content', true, $page_id );
+
+			if ( ! $rendering && $do_render ) {
+				// Set the post rendering ID.
+				FLBuilder::$post_rendering = $page_id;
+
+				// Render the content.
+				ob_start();
+				FLBuilder::render_content_by_id( $page_id );
+				$content = ob_get_clean();
+
+				// Clear the post rendering ID.
+				FLBuilder::$post_rendering = null;
+			}
+		}
+
+		return $content;
 	}
 }
