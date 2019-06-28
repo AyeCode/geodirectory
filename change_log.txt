@@ -1,3 +1,6 @@
+= 2.0.0.64 = 
+* Beaver Builder content does not work for archive item template - FIXED
+
 = 2.0.0.63 =
 * Image import for old posts can set the wrong image url for the featured image - FIXED
 * Ability to add captions to the images slider - ADDED
