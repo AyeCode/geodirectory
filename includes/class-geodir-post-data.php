@@ -1371,9 +1371,14 @@ class GeoDir_Post_Data {
 				$post_data['post_author'] = $user_id_from_email;
 			} else { // register new user
 				$user_name       = geodir_generate_unique_username( $user_name );
+				if ( empty( $user_name ) ) {
+					$user_name = $user_email; // Use email as username
+				}
+
 				$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
 				$user_id         = wp_create_user( $user_name, $random_password, $user_email );
-				if ( $user_id ) {
+
+				if ( $user_id && ! is_wp_error( $user_id ) ) {
 					$post_data['post_author'] = $user_id;
 					update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
 					do_action( 'register_new_user', $user_id ); // fire the new ser registration action so the standard notifications are sent.
