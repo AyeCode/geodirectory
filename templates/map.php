@@ -271,7 +271,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if (getAddress == 'none' && typeof(establishment.long_name) !== 'undefined' && typeof(address_array[1]) !== 'undefined') {
                 getAddress = address_array[1];
                 getAddress2 = address_array[0];
-            } else {
+            } else if(getAddress == 'none' ) {/* added to fix street number for RU locations */
                 getAddress = address_array[0];
             }
 

@@ -1,5 +1,6 @@
 = 2.0.0.64 = 
 * Beaver Builder content does not work for archive item template - FIXED
+* Autocomplete search result selection looses street number for some locations - FIXED
 
 = 2.0.0.63 =
 * Image import for old posts can set the wrong image url for the featured image - FIXED
