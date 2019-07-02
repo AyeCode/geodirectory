@@ -92,7 +92,7 @@ function geodir_get_countries()
  */
 function geodir_get_address_by_lat_lan($lat, $lng)
 {
-    $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng). GeoDir_Maps::google_api_key(true) ;
+    $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng). GeoDir_Maps::google_geocode_api_key(true) ;
 
     $response = wp_remote_get($url);
     if ( is_wp_error( $response ) ) {
