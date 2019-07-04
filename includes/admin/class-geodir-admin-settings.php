@@ -999,6 +999,38 @@ class GeoDir_Admin_Settings {
 					</tr><?php
 					break;
 
+				case 'geocode_key' :
+					add_thickbox();// add the thickbox js/css
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
+					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+					<th scope="row" class="titledesc">
+						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+						<?php echo $tooltip_html; ?>
+					</th>
+					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+						<input
+							name="<?php echo esc_attr( $value['id'] ); ?>"
+							id="<?php echo esc_attr( $value['id'] ); ?>"
+							type="<?php echo esc_attr( $value['type'] ); ?>"
+							style="<?php echo esc_attr( $value['css'] ); ?>"
+							value="<?php echo esc_attr( $option_value ); ?>"
+							class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
+							placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+							<?php echo implode( ' ', $custom_attributes ); ?>
+						/>
+						<?php $gm_api_url = 'https://console.developers.google.com/henhouse/?pb=["hh-1","geocoding_backend",null,[],"https://developers.google.com",null,["geocoding_backend","timezone_backend"],null]';?>
+						<a id="gd-geocode-api-key" onclick='window.open("<?php echo wp_slash($gm_api_url);?>", "newwindow", "width=600, height=400"); return false;' href='<?php echo $gm_api_url;?>' class="button-primary" name="<?php _e('Generate Geocoding API Key - ( MUST be logged in to your Google account )','geodirectory');?>" ><?php _e('Generate Geocoding API Key','geodirectory');?></a>
+						<a href="https://console.developers.google.com/flows/enableapi?apiid=geocoding_backend,timezone_backend&amp;keyType=CLIENT_SIDE&amp;reusekey=true" target="_blank"><?php _e('or get one here','geodirectory');?></a>
+						<br />
+						<?php echo $description; ?>
+					</td>
+					</tr><?php
+					break;
+
 				// Select boxes
 				case 'font-awesome' :
 					// include the font-awesome data

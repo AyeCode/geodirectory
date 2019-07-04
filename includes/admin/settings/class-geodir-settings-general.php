@@ -979,6 +979,8 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				self::get_google_maps_api_key_setting(),
+	
+				self::get_google_geocode_api_key_setting(),
 
 				self::get_maps_api_setting(),
 
@@ -1093,6 +1095,26 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'default'  => '',
 			'desc_tip' => true,
 			//'advanced' => true
+		);
+	}
+
+	/**
+     * Get Google Geocoding API key settings.
+     *
+     * @since 2.0.0.64
+     *
+     * @return array Google Geocoding api key settings.
+     */
+	public static function get_google_geocode_api_key_setting(){
+		return array(
+			'type' => 'geocode_key',
+			'id' => 'google_geocode_api_key',
+			'name' => __( 'Google Geocoding API Key', 'geodirectory' ),
+			'desc' => __( 'If above Google MAPs API key is restricted by HTTP referrers then it requires to use separate API key for Geocoding & Timezone services.', 'geodirectory' ),
+			'default'  => '',
+			'placeholder' => geodir_get_option( 'google_maps_api_key' ),
+			'desc_tip' => true,
+			'advanced' => true
 		);
 	}
 

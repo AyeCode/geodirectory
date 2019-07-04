@@ -210,7 +210,36 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		 *
 		 * @param string $key Google maps api key.
 		 */
-		return apply_filters( 'geodir_google_api_key', $key );
+		return apply_filters( 'geodir_google_api_key', $key, $query );
+	}
+
+	/**
+	 * Returns the Google Geocoding API key.
+	 *
+	 * @since   2.0.0.64
+	 * @param bool $query If this is for a query and if so add the key=.
+	 * @package GeoDirectory
+	 * @return string Returns the Geocoding api key.
+	 */
+	public static function google_geocode_api_key( $query = false ) {
+		$key = geodir_get_option( 'google_geocode_api_key' );
+
+		if ( empty( $key ) ) {
+			$key = self::google_api_key();
+		}
+
+		if ( $key && $query ) {
+			$key = "&key=" . $key;
+		}
+
+		/**
+		 * Filter Google Geocoding API key.
+		 *
+		 * @since 2.0.0.64
+		 *
+		 * @param string $key Google Geocoding API key.
+		 */
+		return apply_filters( 'geodir_google_geocode_api_key', $key, $query );
 	}
 
 	/**
