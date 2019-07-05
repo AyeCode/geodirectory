@@ -102,7 +102,7 @@ function geodir_init_lazy_load(){
 function geodir_object_fit_fix( _img ) {
 
     //Image, its url and its parent li
-    var _li = jQuery( _img ).parents( 'li' ),
+    var _li = jQuery( _img ).closest( 'li' ),
         _url = jQuery( _img ).data('src')
 
     //Abort if url is unset
