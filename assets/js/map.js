@@ -277,6 +277,18 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 		}
 	}
 
+	// Tags
+	var tags = options.tags;
+	if (tags) {
+		if ( typeof tags == 'object' || typeof tags == 'array' ) {
+		} else {
+			tags = tags.split(',');
+		}
+		if (tags.length > 0) {
+			query_string += '&tag[]=' + tags.join("&tag[]=");
+		}
+	}
+
 	// Posts
 	posts = options.posts;
 	if (posts) {

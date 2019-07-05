@@ -91,6 +91,15 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 			),
 		);
 
+		$query_params['tag']   = array(
+			'type'              => 'array',
+			'default'           => array(),
+			'description'       => __( 'Limit results to specific tags.' ),
+			'items'             => array(
+				'type'          => 'string',
+			),
+		);
+
 		$query_params['post']   = array(
 			'type'              => 'array',
 			'default'           => array(),
@@ -362,6 +371,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
      *      @type string $search Search.
      *      @type array $post Post array.
      *      @type array $term Term array.
+     *      @type array $tag Tag array.
      * }
      * @return string $where
      */
@@ -393,6 +403,19 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 			}
 			if ( ! empty( $terms_where ) ) {
 				$where .= " AND ( " . implode( " OR ", $terms_where ) . " )";
+			}
+		}
+
+		// Tags
+		if ( ! empty( $request['tag'] ) && is_array( $request['tag'] ) ) {
+			$tags_where = array();
+			foreach ( $request['tag'] as $tag ) {
+				if ( ! empty( $tag ) ) {
+					$tags_where[] = $wpdb->prepare( "FIND_IN_SET( %s, pd.post_tags )", array( $tag ) );
+				}
+			}
+			if ( ! empty( $tags_where ) ) {
+				$where .= " AND ( " . implode( " OR ", $tags_where ) . " )";
 			}
 		}
 

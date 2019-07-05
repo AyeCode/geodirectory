@@ -362,10 +362,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 */
 	public static function custom_script( $map_options ) {
 		$map_canvas = $map_options['map_canvas'];
-//		print_r($map_options);exit;
-//		if($params['map_type']=='post' && $params['static']){
-//			self::display_map( $params );
-//		}else{}
+
 		?>
 		<script type="text/javascript">
 			jQuery(function ($) {
@@ -377,7 +374,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 					echo 'build_map_ajax_search_param(gdMapCanvas, false);';
 				}
 				?>
-				//build_map_ajax_search_param(gdMapCanvas, false);
 				<?php if ( ! empty( $map_options['sticky'] ) ) { ?>
 				geodir_map_sticky(gdMapCanvas);
 				<?php } ?>
@@ -538,7 +534,17 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 //			);
 		}
 
-
+		$arguments['tags']  = array(
+			'type' => 'text',
+			'title' => __( 'Filter by tags:', 'geodirectory' ),
+			'desc' => __( 'Insert separate tags with commas to filter listings by tags.', 'geodirectory' ),
+			'default' => '',
+			'placeholder' => __( 'garden,dinner,pizza', 'geodirectory' ),
+			'desc_tip' => true,
+			'advanced' => true,
+			'element_require' => '[%map_type%]!="post"',
+		);
+			
 		$arguments['all_posts']        = array(
 			'type'            => 'checkbox',
 			'title'           => __( 'Show all posts?', 'geodirectory' ),
@@ -725,6 +731,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'post_settings'  => '1',
 			'post_type'      => $post->post_type,
 			'terms'          => array(), // can be string or array
+			'tags'           => array(), // can be string or array
 			'posts'          => array(),
 			'marker_cluster' => false,
 			'map_directions' => true,
@@ -753,9 +760,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $gd_post, $wp_query;
 
-
-//		print_r( $args );exit;
-
 		$defaults = array(
 			'map_type'         => 'auto',
 			'width'            => '100%',
@@ -764,6 +768,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'zoom'             => '0',
 			'post_type'        => 'gd_place',
 			'terms'            => array(), // can be string or array
+			'tags'             => array(), // can be string or array
 			'post_id'          => 0,
 			'all_posts'        => false,
 			'search_filter'    => false,
@@ -821,6 +826,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							 */
 							$map_args['posts'] = 'geodir-loop-container';
 							$map_args['terms'] = array();
+							$map_args['tags'] = array();
 //							if ( ! empty( $wp_query->posts ) ) {
 //								foreach ( $wp_query->posts as $post ) {
 //									$map_args['posts'][] = $post->ID;
@@ -831,8 +837,14 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						if ( ! empty( $wp_query ) && $wp_query->is_main_query() ) {
 							$map_args['posts'] = array();
 							$map_args['terms'] = array();
+							$map_args['tags'] = array();
 							if ( ! empty( $wp_query->queried_object ) && ! empty( $wp_query->queried_object->term_id ) ) {
-								$map_args['terms'][] = $wp_query->queried_object->term_id;
+								$queried_object = $wp_query->queried_object;
+								if ( ! empty( $queried_object->taxonomy ) && ! empty( $queried_object->name ) && geodir_taxonomy_type( $queried_object->taxonomy ) == 'tag' ) {
+									$map_args['tags'][] = $queried_object->name; // Tag
+								} else {
+									$map_args['terms'][] = $queried_object->term_id; // Category
+								}
 							} else if ( ! empty( $_REQUEST['spost_category'] ) && geodir_is_page( 'search' ) ) { // Search by category
 								if ( is_array( $_REQUEST['spost_category'] ) ) {
 									$map_args['terms'] = array_map( 'absint', $_REQUEST['spost_category'] );
@@ -857,7 +869,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						}
 					}
 				} else {
-					if ( empty( $map_args['terms'] ) ) {
+					if ( empty( $map_args['terms'] ) && empty( $map_args['tags'] ) ) {
 						$map_args['posts'] = array( '-1' ); // No results
 					}
 				}
@@ -893,6 +905,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 
 				// Default for post map
 				$map_args['terms']          = array();
+				$map_args['tags']           = array();
 				$map_args['marker_cluster'] = false;
 				if ( empty( $map_args['zoom'] ) ) {
 					$map_args['zoom'] = 12;
@@ -901,7 +914,9 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		}
 
 		if ( empty( $post_type ) ) {
-			$post_type = 'gd_place'; // @todo implement multiple for CPT
+			$post_types = self::map_post_types();
+			$post_types = ! empty( $post_types ) ? array_keys( $post_types ) : array( 'gd_place' );
+			$post_type = $post_types[0]; // @todo implement multiple for CPT
 		}
 		$map_args['post_type'] = $post_type;
 
@@ -917,7 +932,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		if ( $map_args['map_type'] == 'archive' ) {
 		} else {
 			$map_args['all_posts'] = false;
-			//$map_args['terms']     = array();
 		}
 
 		// post map
@@ -927,7 +941,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$map_args['post_id']        = 0;
 		}
 
-		//print_r($map_args);
 		// location
 		$current_location          = GeoDir()->location;
 		$map_args['country']       = ! empty( $current_location->country_slug ) ? $current_location->country_slug : $map_args['country'];
@@ -941,9 +954,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				$map_args['dist'] = get_query_var( 'dist' );
 			}
 		}
-
-//		print_r($map_args);
-
 
 		return self::render_map( $map_args );
 	}
@@ -970,6 +980,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'autozoom'       => true,
 			'post_type'      => 'gd_place',
 			'terms'          => '',
+			'tags'           => '',
 			'posts'          => '',
 			'sticky'         => false,
 			'static'         => false,
@@ -1028,6 +1039,15 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		if ( is_array( $params['terms'] ) ) {
 			$params['terms'] = ! empty( $params['terms'] ) ? implode( ',', $params['terms'] ) : '';
 		}
+
+		// tags
+		if ( ! empty( $params['tags'] ) && ! is_array( $params['tags'] ) ) {
+			$params['tags'] = explode( ',', $params['tags'] );
+			$params['tags'] = array_map( 'trim', $params['tags'] );					
+		}
+		if ( is_array( $params['tags'] ) ) {
+			$params['tags'] = ! empty( $params['tags'] ) ? implode( ',', array_unique( array_filter( $params['tags'] ) ) ) : '';
+		}
 		// posts
 		if ( is_array( $params['posts'] ) ) {
 			$params['posts'] = ! empty( $params['posts'] ) ? implode( ',', $params['posts'] ) : '';
@@ -1035,13 +1055,10 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 
 		$params = apply_filters( 'geodir_map_params', $params, $map_args );
 
-//		print_r( $params );exit;
-		//$params['static'] = true;
-
 		// add post lat/lon if static post map
 		if($params['map_type']=='post' && $params['static']){
 			global $gd_post;
-//			print_r( $gd_post );exit;
+
 			if(!empty($gd_post->latitude) && !empty($gd_post->longitude)){
 				$params['latitude'] = filter_var( $gd_post->latitude, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 				$params['longitude'] = filter_var( $gd_post->longitude, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
@@ -1070,9 +1087,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 * @param array $params map arguments array.
 	 */
 	public static function display_map( $params ) {
-
-		//	echo '###';
-		//print_r( $params );
 		global $gd_maps_canvas;
 		if ( empty( $gd_maps_canvas ) ) {
 			$gd_maps_canvas = array();
