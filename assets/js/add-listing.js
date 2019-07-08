@@ -272,10 +272,14 @@ function geodir_validate_admin_submit(form) {
  */
 function geodir_validate_submit(form) {
     var is_validate = true;
+    var $field = false;
     jQuery(form).find(".required_field:visible").each(function() {
         jQuery(this).find("[field_type]:visible, .geodir_select, .geodir_location_add_listing_chosen, .editor, .event_recurring_dates, .geodir-custom-file-upload, .gd_image_required_field, .g-recaptcha-response").each(function() {
             if (!geodir_validate_field(this)) {
                 is_validate = false;
+                if (!$field) {
+                    $field = jQuery(this);
+                }
             } else {
                 //console.log(true);
             }
@@ -284,7 +288,19 @@ function geodir_validate_submit(form) {
     if (is_validate) {
         return true;
     } else {
-        jQuery(window).scrollTop(jQuery(".geodir_message_error:visible:first").closest('.required_field').offset().top);
+        var $el = jQuery(".geodir_message_error:visible:first").closest('.required_field');
+        var $offset = false;
+        if ($el && $el.length) {
+            $offset = $el.offset();
+        } else if ($field) {
+            $offset = $field.offset();
+        }
+        if ($offset && typeof $offset != 'undefined') {
+            var $top = $offset.top;
+            if ($top != 'undefined') {
+                jQuery(window).scrollTop($top);
+            }
+        }
         return false;
     }
 }

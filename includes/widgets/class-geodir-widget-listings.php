@@ -758,7 +758,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		    }
 	    }
 
-        global $gd_layout_class, $geodir_is_widget_listing;
+        global $geodir_widget_cpt, $gd_layout_class, $geodir_is_widget_listing;
 
 		/*
 		 * Filter widget listings query args.
@@ -794,6 +794,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$backup_paged = $paged;
 		$backup_gd_advanced_pagination = $gd_advanced_pagination;
 		
+		$geodir_widget_cpt = $post_type;
 		$posts_per_page = $post_number;
 		$paged = $pageno;
 		$gd_advanced_pagination = $pagination_info;
@@ -920,6 +921,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         </div>
 		<?php 
 
+		$geodir_widget_cpt = false;
 		$posts_per_page = $backup_posts_per_page;
 		$paged = $backup_paged;
 		$gd_advanced_pagination = $backup_gd_advanced_pagination;

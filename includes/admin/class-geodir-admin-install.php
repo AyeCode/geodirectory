@@ -29,6 +29,9 @@ class GeoDir_Admin_Install {
 		),
 		'2.0.0.60' => array(
 			'geodir_upgrade_20060',
+		),
+		'2.0.0.64' => array(
+			'geodir_upgrade_20064',
 		)
 	);
 
