@@ -7,6 +7,7 @@
 * GD Map allows to filter listings by tags - ADDED
 * Change country name "Russian Federation" to "Russia" - CHANGED
 * Missing required field error may results in JavaScript error - FIXED
+* Link in no posts found message redirects to wrong add listing post type page - FIXED
 
 = 2.0.0.63 =
 * Image import for old posts can set the wrong image url for the featured image - FIXED
