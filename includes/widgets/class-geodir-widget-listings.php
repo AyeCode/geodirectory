@@ -438,7 +438,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          *
          * @param string $instance ['layout'] Widget layout type.
          */
-        $layout = empty( $instance['layout'] ) ? 'gridview_onehalf' : apply_filters( 'widget_layout', $instance['layout'] );
+        $layout = !isset( $instance['layout'] )  ? 'gridview_onehalf' : apply_filters( 'widget_layout', $instance['layout'] );
         /**
          * Filter widget's "add_location_filter" value.
          *

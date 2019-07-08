@@ -451,7 +451,7 @@ function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 2
  * @return string[]
  */
 function geodir_get_core_supported_themes() {
-	return array( 'directory-starter', 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
+	return array( 'whoop','supreme-directory','directory-starter', 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
 }
 
 function geodir_setup_timezone_api( $prefix ) {

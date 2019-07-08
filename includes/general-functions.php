@@ -2148,3 +2148,58 @@ function geodir_get_layout_options($frontend = false){
 
 	return apply_filters('geodir_layout_options',$layouts,$frontend);
 }
+
+
+/**
+ * If hints are active and shouled be shown.
+ * 
+ * @return bool
+ */
+function geodir_show_hints(){
+	$show = false;
+	if(geodir_get_option('enable_hints',1)){
+		if(current_user_can('administrator')) {
+			$show = true;
+		}
+	}
+
+	return $show;
+}
+
+function geodir_output_hint($hints, $docs_url = '',$video_url = '',$feedback_id = ''){
+	$html = geodir_format_hints($hints, $docs_url,$video_url,$feedback_id);
+	$notifications = array();
+	$notifications[$feedback_id] = array(
+		'type'  =>  'info',
+		'note'  =>  $html,
+		'dismissible'  =>  true
+	);
+	return geodir_notification( $notifications );
+}
+
+function geodir_format_hints($hints, $docs_url = '',$video_url = '',$feedback_id = ''){
+	$text = '';
+
+	if(is_array($hints)){
+		$text .= "<ul class='gd-hints-list' style='margin: 0;padding: 0 2em;'>";
+		foreach($hints as $hint){
+			$text .= "<li>".$hint."</li>";
+		}
+		$text .= "</ul>";
+	}else{
+		$text .= $hints;
+	}
+
+	$feedback_url = $feedback_id ? "https://wpgeodirectory.com/support/forum/geodirectory-core-plugin-forum/general-discussion/?feedback=$feedback_id#new-post" : "https://wpgeodirectory.com/support/forum/geodirectory-core-plugin-forum/general-discussion/#new-post";
+
+	if($text){
+		$help_links = array();
+		$help_links[] = "<a href='".admin_url( 'admin.php?page=gd-settings&tab=general&section=developer#enable_hints' )."'>".__("Disable hints","geodirectory")."</a>";
+		$docs_url ? $help_links[] = "<i class=\"fas fa-book\"></i> <a href='$docs_url' target='_blank'>".__("Documentation","geodirectory")."</a>" : '';
+		$video_url ? $help_links[] = "<i class=\"fas fa-video\"></i> <a href='$video_url' target='_blank' data-lity>".__("Video","geodirectory")."</a>" : '';
+		$feedback_id ? $help_links[] = "<i class=\"fas fa-comment\"></i> <a href='$feedback_url' target='_blank'>".__("Feedback","geodirectory")."</a>" : '';
+		$text = "<b>".__("Admin Hints:","geodirectory")."</b> " . implode(" | ",$help_links) . $text;
+	}
+
+	return $text;
+}
