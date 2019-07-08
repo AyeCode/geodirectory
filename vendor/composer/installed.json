@@ -1,8 +1,8 @@
 [
     {
         "name": "ayecode/wp-country-database",
-        "version": "1.0.3",
-        "version_normalized": "1.0.3.0",
+        "version": "1.0.4",
+        "version_normalized": "1.0.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-country-database.git",

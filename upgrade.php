@@ -121,3 +121,52 @@ function geodir_upgrade_20060() {
 		}
 	}
 }
+
+/**
+ * Change country name Russian Federation to Russia.
+ */
+function geodir_upgrade_20064() {
+	global $wpdb;
+
+	$post_types = geodir_get_posttypes();
+
+	$search_country = 'Russian Federation';
+	$replace_country = 'Russia';
+	$search_country_slug = 'russian-federation';
+	$replace_country_slug = 'russia';
+
+	// Default Country
+	$default_country = geodir_get_option( 'default_location_country' );
+	if ( $default_country == $search_country ) {
+		geodir_update_option( 'default_location_country', $replace_country );
+	}
+
+	// Details
+	if ( ! empty( $post_types ) ) {
+		foreach ( $post_types as $post_type ) {
+			$table = geodir_db_cpt_table( $post_type );
+
+			if ( ! GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+				continue;
+			}
+
+			$wpdb->query( $wpdb->prepare( "UPDATE {$table} SET country = %s WHERE country LIKE %s", array( $replace_country, $search_country ) ) );
+		}
+	}
+
+	// Reviews
+	$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET country = %s WHERE country LIKE %s", array( $replace_country, $search_country ) ) );
+	
+	if ( class_exists( 'GeoDir_Location' ) ) {
+		// Locations
+		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATIONS_TABLE . " SET country = %s WHERE country LIKE %s", array( $replace_country, $search_country ) ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATIONS_TABLE . " SET country_slug = %s WHERE country_slug LIKE %s", array( $replace_country_slug, $search_country_slug ) ) );
+
+		// Location SEO
+		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATION_SEO_TABLE . " SET country_slug = %s WHERE country_slug LIKE %s", array( $replace_country_slug, $search_country_slug ) ) );
+		
+		// Location Term Meta
+		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATION_TERM_META . " SET country_slug = %s WHERE country_slug LIKE %s", array( $replace_country_slug, $search_country_slug ) ) );
+		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATION_TERM_META . " SET location_name = %s WHERE location_name LIKE %s", array( $replace_country_slug, $search_country_slug ) ) );
+	}
+}
