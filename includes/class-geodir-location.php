@@ -69,6 +69,27 @@ class GeoDir_Location {
 		// is_default
 		$location->is_default = 1;
 		
+		
+		// set search values
+		if(isset($_REQUEST['geodir_search']) && $_REQUEST['geodir_search'] && geodir_is_page('search')){
+			$location->city = '';
+			$location->region = '';
+			$location->country = '';
+			$location->latitude = '';
+			$location->longitude = '';
+			$location->city_slug = '';
+			$location->region_slug = '';
+			$location->country_slug = '';
+			$location->id = 0;
+			$location->type = 'search';
+			$location->is_default = 0;
+
+			// set GPS
+			$latlon = $this->get_latlon();
+			if(!empty($latlon['lat'])){$location->latitude = $latlon['lat'];}
+			if(!empty($latlon['lon'])){$location->longitude = $latlon['lon'];}
+		}
+		
 
 		/**
 		 * Filter the default location.
@@ -260,6 +281,16 @@ class GeoDir_Location {
 	 */
 	public function allowed_query_variables(){
 		return array('country','region','city');
+	}
+
+	public function is_type_gps(){
+		$gps_type = false;
+
+		if($this->type && in_array($this->type,array('gps','me','search')) && !empty($this->get_latlon())){
+			$gps_type = true;echo '###1';
+		}
+echo '###2'.$this->type ;
+		return $gps_type;
 	}
 
 }

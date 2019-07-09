@@ -6,12 +6,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-country-database.git",
-            "reference": "4ece4d18c3a403bb45c3464260da4a274df35155"
+            "reference": "c23ae6061fe373525ecd069a5069e376ed9b8178"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-country-database/zipball/4ece4d18c3a403bb45c3464260da4a274df35155",
-            "reference": "4ece4d18c3a403bb45c3464260da4a274df35155",
+            "url": "https://api.github.com/repos/AyeCode/wp-country-database/zipball/c23ae6061fe373525ecd069a5069e376ed9b8178",
+            "reference": "c23ae6061fe373525ecd069a5069e376ed9b8178",
             "shasum": ""
         },
         "require": {
@@ -103,17 +103,17 @@
     },
     {
         "name": "ayecode/wp-super-duper",
-        "version": "1.0.12",
-        "version_normalized": "1.0.12.0",
+        "version": "1.0.13",
+        "version_normalized": "1.0.13.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-super-duper.git",
-            "reference": "faf185c07962ae05beadc228b7d5103b82203139"
+            "reference": "b46555d297ae33fae11782d446feda80c2989cf3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/faf185c07962ae05beadc228b7d5103b82203139",
-            "reference": "faf185c07962ae05beadc228b7d5103b82203139",
+            "url": "https://api.github.com/repos/AyeCode/wp-super-duper/zipball/b46555d297ae33fae11782d446feda80c2989cf3",
+            "reference": "b46555d297ae33fae11782d446feda80c2989cf3",
             "shasum": ""
         },
         "require": {
@@ -125,7 +125,7 @@
             "squizlabs/php_codesniffer": "^3.2",
             "wp-coding-standards/wpcs": "*"
         },
-        "time": "2019-04-09T11:56:13+00:00",
+        "time": "2019-07-08T18:17:13+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

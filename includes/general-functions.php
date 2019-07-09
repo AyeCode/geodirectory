@@ -849,7 +849,7 @@ function geodir_widget_listings_get_order( $query_args ) {
  * @return mixed Result object.
  */
 function geodir_get_widget_listings( $query_args = array(), $count_only = false ) {
-	global $wpdb, $plugin_prefix, $table_prefix;
+	global $wpdb, $plugin_prefix, $table_prefix,$geodirectory;
 	$GLOBALS['gd_query_args_widgets'] = $query_args;
 	$gd_query_args_widgets            = $query_args;
 
@@ -917,12 +917,35 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	 */
 	$groupby = apply_filters( 'geodir_filter_widget_listings_groupby', $groupby, $post_type );
 
+
 	if ( $count_only ) {
 		$sql  = "SELECT COUNT(DISTINCT " . $wpdb->posts . ".ID) AS total FROM " . $wpdb->posts . "
 			" . $join . "
 			" . $where;
 		$rows = (int) $wpdb->get_var( $sql );
 	} else {
+
+		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
+		$support_location = $post_type  && GeoDir_Post_types::supports( $post_type , 'location' );
+		if ( $support_location && $latlon = $geodirectory->location->get_latlon() && ! empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' )  ) {
+			$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
+			$unit = geodir_get_option( 'search_distance_long', 'miles' );
+
+			/*
+			 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
+			 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
+			 */
+			if ( strpos( $where, ' HAVING ') === false && strpos( $groupby, ' HAVING ') === false &&  strpos( $fields, 'AS distance')) {
+				$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
+				if ( trim( $groupby ) != '' ) {
+					$groupby .= $having;
+				} else {
+					$where .= $having;
+				}
+			}
+		}
+		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
+
 		$orderby = geodir_widget_listings_get_order( $query_args );
 		/**
 		 * Filter widget listing orderby clause string part that is being used for query.
@@ -962,6 +985,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 			" . $groupby . "
 			" . $orderby . "
 			" . $limit;
+//		echo '###'.$sql;
 		$rows = $wpdb->get_results( $sql );
 	}
 
