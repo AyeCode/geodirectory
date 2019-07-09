@@ -644,12 +644,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                     jQuery.post(geodir_params.ajax_url, data, function (response) {
                         container.html(response);
                         jQuery(widgetBox).find('.geodir_category_list_view li .geodir-post-img .geodir_thumbnail img').css('display', 'block');
-
-                        // start lazy load if it's turned on
-                        if(geodir_params.lazy_load==1){
-                            geodir_init_lazy_load();
-                        }
-
+	                    geodir_init_lazy_load();
                     });
                 })
             });

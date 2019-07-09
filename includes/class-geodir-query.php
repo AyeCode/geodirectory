@@ -198,7 +198,7 @@ class GeoDir_Query {
 			add_filter( 'posts_clauses', array( $this, 'posts_having' ), 99999, 2 ); // make sure its the last WHERE param and after GROUP BY if there
 
 			// setup search globals
-			global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $mylat, $mylon, $s, $snear, $s, $s_A, $s_SA, $gd_exact_search;
+			global $wp_query, $wpdb, $geodir_post_type, $table, $dist, $s, $snear, $s, $s_A, $s_SA, $gd_exact_search;
 
 			if (isset($_REQUEST['scat']) && $_REQUEST['scat'] == 'all') $_REQUEST['scat'] = '';
 			//if(isset($_REQUEST['s']) && $_REQUEST['s'] == '+') $_REQUEST['s'] = '';
@@ -211,18 +211,7 @@ class GeoDir_Query {
 			} else {
 				$dist = 25000;
 			} //  Distance
-
-			if (isset($_REQUEST['sgeo_lat'])) {
-				$mylat = (float)esc_attr($_REQUEST['sgeo_lat']);
-			} //else {
-//				$mylat = (float)geodir_get_current_city_lat();
-//			} //  Latitude
-
-			if (isset($_REQUEST['sgeo_lon'])) {
-				$mylon = (float)esc_attr($_REQUEST['sgeo_lon']);
-			} //else {
-//				$mylon = (float)geodir_get_current_city_lng();
-//			} //  Distance
+			
 
 			if (isset($_REQUEST['snear'])) {
 				$snear = trim(esc_attr($_REQUEST['snear']));
@@ -241,13 +230,6 @@ class GeoDir_Query {
 				if ( strpos( $match_keyword, '"' ) !== false && ( '"' . $search_keyword . '"' == $match_keyword ) ) {
 					$gd_exact_search = true;
 				}
-			}
-
-			if ($snear == 'NEAR ME' && ini_get('allow_url_fopen') ) {
-				$ip = $_SERVER['REMOTE_ADDR'];
-				$addr_details = unserialize(file_get_contents('http://www.geoplugin.net/php.gp?ip=' . $ip));
-				$mylat = stripslashes(geodir_utf8_ucfirst($addr_details[geoplugin_latitude]));
-				$mylon = stripslashes(geodir_utf8_ucfirst($addr_details[geoplugin_longitude]));
 			}
 
 			if (strstr($s, ',')) {
@@ -294,9 +276,9 @@ class GeoDir_Query {
 	public function posts_having( $clauses, $query = array() ) {
 
 		if(self::is_gd_main_query($query)) {
-			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear;
+			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $snear,$geodirectory;
 			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
-			if ( $support_location && ( $snear != '' || ( ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) ) ) ) {
+			if ( $support_location && ( $snear != '' || $latlon = $geodirectory->location->get_latlon() ) ) {
 				$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
 				$unit = geodir_get_option( 'search_distance_long', 'miles' );
 
@@ -334,23 +316,19 @@ class GeoDir_Query {
 		if(self::is_gd_main_query($query)) {
 
 			if ( ! ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) ) {
-				global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $mylat, $mylon, $snear, $gd_exact_search;
+				global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $snear, $gd_exact_search,$geodirectory;
 				$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 
 				$table = geodir_db_cpt_table( $geodir_post_type );
 
 				$fields .= ", " . $table . ".* ";
 
-
-				if ( $support_location && ( $snear != '' || ( ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) ) ) ) {
+				if ( $support_location && $latlon = $geodirectory->location->get_latlon()) {
 					$DistanceRadius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
+					$lat = $latlon['lat'];
+					$lon = $latlon['lon'];
 
-					if ( ! empty( $user_lat ) ) {
-						$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($user_lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($user_lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($user_lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))) AS distance ";
-					} else {
-						$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) ))) AS distance ";
-					}
-
+					$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))) AS distance ";
 				}
 
 
@@ -450,17 +428,15 @@ class GeoDir_Query {
 	 */
 	public function posts_where($where, $query = array()){
 		if(self::is_gd_main_query($query)) {
-			global $wpdb, $geodir_post_type, $wp_query;
-			//echo '###'.$where;
+			global $wpdb, $geodir_post_type, $wp_query,$geodirectory;
 
 			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 			$table            = geodir_db_cpt_table( $geodir_post_type );
 
-			//$where .= $wpdb->prepare(" AND $wpdb->posts.post_type = %s AND $wpdb->posts.post_status = 'publish' ",$geodir_post_type);
 			$where .= $wpdb->prepare( " AND $wpdb->posts.post_type = %s ", $geodir_post_type );
 
 			if ( geodir_is_page( 'search' ) ) {
-				global $wpdb, $geodir_post_type, $plugin_prefix, $dist, $mylat, $mylon, $snear, $s, $s_A, $s_SA, $search_term;
+				global $wpdb, $geodir_post_type, $plugin_prefix, $dist, $snear, $s, $s_A, $s_SA, $search_term;
 
 
 				$search_term           = 'OR';
@@ -605,14 +581,17 @@ class GeoDir_Query {
 					}
 				}
 
+				$latlon = $geodirectory->location->get_latlon();
 				// fake near if we have GPS
-				if ( $snear == '' && $mylat && $mylon ) {
+				if ( $snear == '' && $latlon) {
 					$snear = ' ';
 				}
 
-				if ( $support_location && $snear != '' ) {
+				if ( $support_location && $snear != '' && $latlon) {
 
-					$between          = geodir_get_between_latlon( $mylat, $mylon, $dist );
+					$lat = $latlon['lat'];
+					$lon = $latlon['lon'];
+					$between          = geodir_get_between_latlon( $lat, $lon, $dist );
 					$post_title_where = $s != "" ? "{$wpdb->posts}.post_title LIKE \"$s\"" : "1=1";
 					$where .= " AND ( ($post_title_where $better_search_terms)
 			                    $content_where 
@@ -628,7 +607,7 @@ class GeoDir_Query {
 
 					if ( isset( $_REQUEST['sdistance'] ) && $_REQUEST['sdistance'] != 'all' ) {
 						$DistanceRadius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
-						$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($mylat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($mylat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($mylon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
+						$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
 					}
 
 				} else {

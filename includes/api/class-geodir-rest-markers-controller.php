@@ -201,6 +201,15 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		$detail_table = $plugin_prefix . $request['post_type'] . '_detail';
 		
 		$fields = "p.ID, p.post_title, pd.default_category, pd.latitude, pd.longitude";
+
+		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ) {
+			$DistanceRadius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
+			$lat = filter_var($request['lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+			$lon = filter_var($request['lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
+
+			$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($lat) - ABS(pd.latitude)) * pi()/180 / 2), 2) +COS(ABS($lat) * pi()/180) * COS( ABS(pd.latitude) * pi()/180) *POWER(SIN(($lon - pd.longitude) * pi()/180 / 2), 2) ))) AS distance ";
+		}
+
 		$fields = apply_filters( 'geodir_rest_markers_query_fields', $fields, $request );
 		
 		$join = "LEFT JOIN {$detail_table} AS pd ON pd.post_id = p.ID";
@@ -233,6 +242,28 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		if ( $limit ) {
 			$limit = "LIMIT {$limit}";
 		}
+
+
+		
+		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
+		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ) {
+			$dist = $request['dist'] ? (float) $request['dist'] : geodir_get_option( 'search_radius', 5 );
+
+			/*
+			 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
+			 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
+			 */
+			if ( strpos( $where, ' HAVING ' ) === false && strpos( $group_by, ' HAVING ' ) === false && strpos( $fields, 'AS distance' ) ) {
+				$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
+				if ( trim( $group_by ) != '' ) {
+					$group_by .= $having;
+				} else {
+					$where .= $having;
+				}
+			}
+		}
+		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
+		
 		
 		$sql = "SELECT {$fields} FROM {$wpdb->posts} AS p {$join} {$where} {$group_by} {$order_by} {$limit}";
 
