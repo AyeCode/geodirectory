@@ -223,7 +223,7 @@ class GeoDir_Compatibility {
 			     function_exists( 'x_get_view' )
 			     || defined( 'TD_THEME_VERSION' )
 				 || function_exists( 'pi_elv_include_scripts' )
-				 || ( ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) ) 
+				 || ( ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) )
 				 || function_exists( 'mgm_setup' )
 		     )
 		) {

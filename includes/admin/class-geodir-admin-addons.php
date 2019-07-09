@@ -332,7 +332,7 @@ class GeoDir_Admin_Addons {
 //		$install_status = 'get';
 //		$onclick = '';
 
-		$wp_org_themes = array('supreme-directory','directory-starter');
+		$wp_org_themes = array('supreme-directory','directory-starter','whoop');
 
 		$button_args = array(
 			'type' => $current_tab,
