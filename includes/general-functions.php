@@ -638,6 +638,7 @@ function geodir_getDistanceRadius( $uom = 'km' ) {
 }
 
 function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
+	global $wp;
 	if ( $unit != 'km' && $unit != 'miles' ) {
 		$unit = geodir_get_option( 'search_distance_long', 'miles' );
 	}
@@ -645,6 +646,8 @@ function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
 	if ( ! $dist ) {
 		if ( get_query_var( 'dist' ) ) {
 			$dist = get_query_var('dist');
+		}elseif(wp_doing_ajax() && !empty($wp->query_vars['dist'])){
+			$dist = (float)$wp->query_vars['dist'];
 		}else{
 			$dist = geodir_get_option( 'search_radius', 5 ); // seems to work in miles
 			$unit = geodir_get_option( 'search_distance_long', 'miles' );
@@ -809,11 +812,11 @@ add_filter( 'body_class', 'geodir_custom_posts_body_class' ); // let's add a cla
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
- * @param array $query_args The query array.
+ * @param array $deprecated The query array.
  *
  * @return string Orderby SQL.
  */
-function geodir_widget_listings_get_order( $query_args ) {
+function geodir_widget_listings_get_order( $deprecated = '') {
 	global $wpdb, $plugin_prefix, $gd_query_args_widgets;
 
 	$query_args = $gd_query_args_widgets;
@@ -827,7 +830,6 @@ function geodir_widget_listings_get_order( $query_args ) {
 
 	$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
 
-//	echo '###'.$orderby.'###';
 	return $orderby;
 }
 
@@ -849,12 +851,22 @@ function geodir_widget_listings_get_order( $query_args ) {
  * @return mixed Result object.
  */
 function geodir_get_widget_listings( $query_args = array(), $count_only = false ) {
-	global $wpdb, $plugin_prefix, $table_prefix,$geodirectory;
-	$GLOBALS['gd_query_args_widgets'] = $query_args;
-	$gd_query_args_widgets            = $query_args;
+	global $wp,$wpdb, $plugin_prefix, $table_prefix,$geodirectory;
 
 	$post_type = empty( $query_args['post_type'] ) ? 'gd_place' : $query_args['post_type'];
 	$table     = $plugin_prefix . $post_type . '_detail';
+
+	// check if this is a GPS filtered query
+	$support_location = $post_type  && GeoDir_Post_types::supports( $post_type , 'location' );
+	if ( $support_location && $latlon = $geodirectory->location->get_latlon() && ! empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' )  ) {
+		// set the order_by
+		$query_args['is_gps_query'] = true;
+		$query_args['order_by'] = 'distance_asc';
+	}
+
+	$GLOBALS['gd_query_args_widgets'] = $query_args;
+	$gd_query_args_widgets            = $query_args;
+
 
 	$fields = $wpdb->posts . ".*, " . $table . ".*";
 	/**
@@ -926,10 +938,11 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	} else {
 
 		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
-		$support_location = $post_type  && GeoDir_Post_types::supports( $post_type , 'location' );
-		if ( $support_location && $latlon = $geodirectory->location->get_latlon() && ! empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' )  ) {
+		if ( !empty($query_args['is_gps_query']) ) {
 			$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
-			$unit = geodir_get_option( 'search_distance_long', 'miles' );
+			if(wp_doing_ajax() && !empty($wp->query_vars['dist']) ){
+				$dist = (float)$wp->query_vars['dist'];
+			}
 
 			/*
 			 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
@@ -946,7 +959,8 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		}
 		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
 
-		$orderby = geodir_widget_listings_get_order( $query_args );
+		$orderby = geodir_widget_listings_get_order(); // query args passed as global
+
 		/**
 		 * Filter widget listing orderby clause string part that is being used for query.
 		 *
@@ -985,7 +999,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 			" . $groupby . "
 			" . $orderby . "
 			" . $limit;
-//		echo '###'.$sql;
+//		echo '###'.$sql;exit;
 		$rows = $wpdb->get_results( $sql );
 	}
 
