@@ -390,6 +390,11 @@ class GeoDir_Post_Data {
 	public static function save_post( $post_id, $post, $update ) {
 		global $wpdb, $plugin_prefix, $geodirectory;
 
+		// Non GD post
+		if ( ! empty( $post->post_type ) && $post->post_type != 'revision' && ! geodir_is_gd_post_type( $post->post_type ) ) {
+			return;
+		}
+
 		// only fire if $post_temp is set
 		if ( $gd_post = self::$post_temp ) {
 			$gd_post = apply_filters( 'geodir_save_post_temp_data', $gd_post, $post, $update );
@@ -685,6 +690,11 @@ class GeoDir_Post_Data {
 	 * @return array
 	 */
 	public static function wp_insert_post_data( $data, $postarr ) {
+
+		// Non GD post
+		if ( ! empty( $data['post_type'] ) && $data['post_type'] != 'revision' && ! geodir_is_gd_post_type( $data['post_type'] ) ) {
+			return $data;
+		}
 
 		// check its a GD CPT first
 		if (
