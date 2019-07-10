@@ -7,12 +7,14 @@ Tags:  directory plugin, business directory, listings, classifieds, real estate,
 Requires at least: 4.5
 Requires PHP: 5.6
 Tested up to: 5.2
-Stable tag: 2.0.0.63
+Stable tag: 2.0.0.64
 
 
 Create a location-based business directory with our plugin, 100% compatible with any theme and page builders. In a few clicks you could be the next Yelp or Tripadvisor.
 
 == Description ==
+
+[Addons](https://wpgeodirectory.com/downloads/category/addons/) | [Themes](https://wpgeodirectory.com/downloads/category/themes/) | [Demos](https://wpgeo.directory/) | [Docs](https://wpgeodirectory.com/docs-v2/) | [Showcase](https://wpgeodirectory.com/category/showcase/)
 
 Turn any WordPress theme into a lightning-fast global business directory. Now 100% compatible with Gutenberg and also the most popular page builders such as Elementor, Beaver Builder, Divi, SiteOrigin Page Builder and more! Includes extensive new set of shortcodes, Gutenberg Blocks and Widgets. 
 
@@ -82,10 +84,14 @@ Premium [Addons](http://wpgeodirectory.com/addons/ "Premium addons for GeoDirect
 * [Claim Listing Manger](http://wpgeodirectory.com/downloads/claim-manager/ "Allows users to claim their business") - Allow business owners to fine-tune their listings, add images, link to events and show an 'owner-verified' badge on the listing. Now with force upgrade/paid option.
 * [Marker Cluster](http://wpgeodirectory.com/downloads/marker-cluster/ "To avoid overcrowded maps") - Avoid cluttered maps by using numbered markers at high zoom levels. Now with super fast server-side clustering!
 * [Duplicate alert](http://wpgeodirectory.com/downloads/ajax-duplicate-alert/ "Listing already exists?") - Alert users when they add a listing with the same title as another.
-* [Custom Google Maps](http://wpgeodirectory.com/downloads/custom-google-maps/ "Customize your maps look and feel") - Modify the look and feel of all Google Maps widgets via an intuitive user interface, with color pickers and simple-to-use options.
+* [Custom Map Styles](http://wpgeodirectory.com/downloads/custom-google-maps/ "Customize your maps look and feel") - Modify the look and feel of all Maps widgets via an intuitive user interface, with color pickers and simple-to-use options.
 * [Social Importer](http://wpgeodirectory.com/downloads/social-importer/ "Import 1 listing at a time from Facebook, Yelp and Trip Advisor!") -  Import pages and events from Facebook and listings from Yelp and Trip Advisor. 1 listing at a time, no bulk scraping.
 * [GD reCAPTCHA](http://wpgeodirectory.com/downloads/gd-recaptcha/ "Stop spammers!") - Banish spam by adding the No CAPTCHA reCAPTCHA widget to any GeoDirectory form.
+* [Franchise Manager]( https://wpgeodirectory.com/downloads/franchise-manager/ "Franchise Manager") - Allows users to submit listings for chains of businesses or franchises faster and smarter.
+* [List Manager]( https://wpgeodirectory.com/downloads/list-manager/ "List Manager") - Allows users to create their own personal lists of listings or events and make them public to other users.
+* [WP All Import]( https://wpgeodirectory.com/downloads/wp-all-import/ "WP All Import") - NEW: Use the power of WP All Import to import your listings from anywhere with this add-on that integrates Wp All Import with GeoDirectory
 * [Embeddable Ratings Badge]( https://wpgeodirectory.com/downloads/embeddable-ratings-badge/ "Embeddable Ratings Badge") - NEW: Let users embed their listing info with current ratings on their site, styled the way they want.
+* [Compare Listings]( https://wpgeodirectory.com/downloads/compare-listings/ "Compare Listings") - NEW: Let your users compare listings side by side and compare vital info about the listings.
 
 
 = Go Pro - Become a member! =
@@ -139,6 +145,9 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 == Changelog ==
 
 __WARNING: GDv2 is a major update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always it is recommended to try this on a staging site first. [Learn more](https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/)__
+
+= 2.0.0.64 =
+[GeoDirectory changelog for version 2.0.0.64](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.64).
 
 = 2.0.0.63 =
 [GeoDirectory changelog for version 2.0.0.63](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.63).

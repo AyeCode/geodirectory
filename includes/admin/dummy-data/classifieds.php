@@ -638,29 +638,7 @@ foreach ( $dummy_posts as $key => $args ) {
 
 function geodir_extra_custom_fields_classifieds( $fields, $post_type, $package_id ) {
 	$package = $package_id != '' ? array( $package_id ) : '';
-
-	// show on all packages if none set
-	if(!$package_id && function_exists('geodir_pricing_get_packages')){
-		$packages = geodir_pricing_get_packages( array( 'post_type' => $post_type ) );
-		if(!empty($packages)){
-			$package = array();
-			foreach($packages as $pkg){
-				$package[] = $pkg->id;
-			}
-		}
-	}
-
-	$allowed_fields = array( 'email', 'phone', 'video' );
-	foreach ( $fields as $key => $field ) {
-
-		if ( in_array( $field['htmlvar_name'], $allowed_fields ) ) {
-			$fields[ $key ]['show_in'] .= '[detail]';
-			$fields[ $key ]['show_on_pkg'] = $package;
-		} else {
-			unset( $fields[ $key ] );// remove fields we don't need
-		}
-	}
-
+	
 	// price
 	$fields[] = array(
 		'post_type'          => $post_type,
