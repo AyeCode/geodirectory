@@ -10,6 +10,7 @@
 * Link in no posts found message redirects to wrong add listing post type page - FIXED
 * Listings widget list view not setting as widget checks for empty value - FIXED
 * Changes for location queries for GPS position - CHANGED
+* Post SMTP plugin conflicts with GD post save - FIXED
 
 = 2.0.0.63 =
 * Image import for old posts can set the wrong image url for the featured image - FIXED
