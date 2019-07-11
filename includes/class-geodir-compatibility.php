@@ -123,8 +123,8 @@ class GeoDir_Compatibility {
 		// Set custom hook for theme compatibility
 		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ) );
 		
-		// Avada (theme)
 		if ( ! is_admin() ) {
+			// Avada (theme)
 			add_filter( 'avada_has_sidebar', array( __CLASS__, 'avada_has_sidebar' ), 100, 3 );
 			add_filter( 'avada_has_double_sidebars', array( __CLASS__, 'avada_has_double_sidebars' ), 100, 3 );
 			add_filter( 'avada_setting_get_posts_global_sidebar', array( __CLASS__, 'avada_global_sidebar' ), 100, 1 );
@@ -432,6 +432,7 @@ class GeoDir_Compatibility {
 			 || ( defined( 'GENERATE_VERSION' ) && ( strpos( $meta_key, '_generate-' ) === 0 || empty( $meta_key ) ) ) 
 			 || ( function_exists( 'inc_sidebars_init' ) && ( strpos( $meta_key, '_cs_replacements' ) === 0 || empty( $meta_key ) ) ) // custom sidebars plugin
 			 || ( function_exists( 'et_divi_load_scripts_styles' ) && ( strpos( $meta_key, '_et_' ) === 0 || empty( $meta_key ) ) ) // Divi
+			 || ( function_exists( 'tie_admin_bar' ) && ( strpos( $meta_key, 'tie_' ) === 0 || in_array( $meta_key, array( 'post_color', 'post_background', 'post_background_full' ) ) || empty( $meta_key ) ) ) // Jarida
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -973,6 +974,11 @@ class GeoDir_Compatibility {
 		if ( function_exists( 'et_divi_load_scripts_styles' ) && geodir_is_geodir_page() ) {
 			add_filter( 'et_first_image_use_custom_content', array( __CLASS__, 'divi_et_first_image_use_custom_content' ), 999, 3 );
 		}
+
+		// Jarida (theme)
+		if ( function_exists( 'tie_admin_bar' ) ) {
+			add_filter( 'option_tie_options', array( __CLASS__, 'option_tie_options' ), 20, 3 );
+		}
 	}
 
 	/**
@@ -1363,5 +1369,30 @@ class GeoDir_Compatibility {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Jarida theme filter sidebar option value for GD archive page.
+	 *
+	 * @since 2.0.0.64
+	 *
+	 * @param bool|mixed $value Option value.
+	 * @param string $option Option name.
+	 * @return mixed Filtered option value.
+	 */
+	public static function option_tie_options( $value, $option ) {
+		if ( ! geodir_is_geodir_page() ) {
+			return $value;
+		}
+
+		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = (int) self::avada_page_id() ) ) {
+			$sidebar_archive = get_post_meta( $page_id, 'tie_sidebar_post', true );
+			$value['sidebar_archive'] = is_array( $sidebar_archive ) ? $sidebar_archive[0] : $sidebar_archive;
+
+			$sidebar_narrow_archive = get_post_meta( $page_id, 'tie_sidebar_narrow_post', true );
+			$value['sidebar_narrow_archive'] = is_array( $sidebar_narrow_archive ) ? $sidebar_narrow_archive[0] : $sidebar_narrow_archive;
+		}
+
+		return $value;
 	}
 }
