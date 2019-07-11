@@ -978,6 +978,7 @@ class GeoDir_Compatibility {
 		// Jarida (theme)
 		if ( function_exists( 'tie_admin_bar' ) ) {
 			add_filter( 'option_tie_options', array( __CLASS__, 'option_tie_options' ), 20, 3 );
+			add_filter( 'wp_super_duper_before_widget', array( __CLASS__, 'jarida_super_duper_before_widget' ), 0, 4 );
 		}
 	}
 
@@ -1394,5 +1395,27 @@ class GeoDir_Compatibility {
 		}
 
 		return $value;
+	}
+
+	/**
+	 * Jarida theme before widget content.
+	 *
+	 * Jarida theme widget appends & prepends div tags even empty widget title.
+	 * This cause extra div tag to widget content rendered via super duper.
+	 *
+	 * @since 2.0.0.64
+	 *
+	 * @param string $before_widget HTML content to prepend to each widget.
+	 * @param array $args Widget arguments.
+	 * @param array $instance Widget parameters.
+	 * @param object $super_duper Super Duper widget class.
+	 * @return string Filter the content prepend to widget.
+	 */
+	public static function jarida_super_duper_before_widget( $before_widget, $args, $instance, $super_duper ) {
+		if ( empty( $instance['title'] ) && ! empty( $args['after_widget'] ) && $args['after_widget'] == '</div></div><!-- .widget /-->' ) {
+			$before_widget .= '<div class="widget-container">';
+		}
+
+		return $before_widget;
 	}
 }
