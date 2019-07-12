@@ -1,5 +1,6 @@
 = 2.0.0.65 =
 * Jarida theme compatibility for GD page sidebars - FIXED
+* Business hours timepicker translation not working on first load - FIXED
 
 = 2.0.0.64 = 
 * Beaver Builder content does not work for archive item template - FIXED

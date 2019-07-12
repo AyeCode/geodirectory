@@ -453,10 +453,12 @@ var GeoDir_Business_Hours = {
             $this.onAddSlot();
             e.preventDefault();
         });
-        if (jQuery('.gd-bh-hours').length) {
-            $this.onAddSlot();
-        }
-        $this.onChangeValue();
+		setTimeout(function() {
+			if (jQuery('.gd-bh-hours').length) {
+				$this.onAddSlot();
+			}
+			$this.onChangeValue();
+		}, 100);
     },
     onChangeValue: function() {
         var $this;
