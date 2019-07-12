@@ -1825,21 +1825,16 @@ add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hou
  *
  * @return string The html to output for the custom field.
  */
-function  geodir_cfi_files($html,$cf){
-
-    //return '#######';
-
+function geodir_cfi_files( $html, $cf ) {
     $html_var = $cf['htmlvar_name'];
 
     // we use the standard WP tags UI in backend
-    if(is_admin() && $html_var == 'post_images'){
+    if ( is_admin() && $html_var == 'post_images' ) {
         return '';
     }
 
-
-
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_input_files_{$html_var}")){
+    if ( has_filter("geodir_custom_field_input_files_{$html_var}" ) ) {
         /**
          * Filter the multiselect html by individual custom field.
          *
@@ -1847,65 +1842,62 @@ function  geodir_cfi_files($html,$cf){
          * @param array $cf The custom field array.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_input_files_{$html_var}",$html,$cf);
+        $html = apply_filters("geodir_custom_field_input_files_{$html_var}", $html, $cf );
     }
 
     // If no html then we run the standard output.
-    if(empty($html)) {
-        global $gd_post,$post;
+    if ( empty( $html ) ) {
+        global $gd_post, $post;
 
-        ob_start(); // Start  buffering;
+		if ( empty( $gd_post ) && ! empty( $post ) ) {
+            $gd_post = geodir_get_post_info( $post->ID );
+        }
 
-        //print_r($cf);exit;
+        ob_start(); // Start buffering;
 
-        $extra_fields = maybe_unserialize($cf['extra_fields']);
-        $file_limit = !empty($extra_fields) && !empty($extra_fields['file_limit']) ? maybe_unserialize($extra_fields['file_limit']) : '';
-//echo $html_var.'###';
-        if($file_limit===''){
-            if($html_var=='post_images'){
+        $extra_fields = maybe_unserialize( $cf['extra_fields'] );
+        $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? maybe_unserialize( $extra_fields['file_limit'] ) : '';
+
+        if ( $file_limit === '' ) {
+            if ( $html_var == 'post_images' ) {
                 $file_limit = '0';
-            }else{
+            } else {
                 $file_limit = '1';
             }
         }
 
 		$file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
 
-        $allowed_file_types = isset($extra_fields['gd_file_types']) ? maybe_unserialize($extra_fields['gd_file_types']) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
-        $display_file_types = $allowed_file_types != '' ? '.' . implode(", .", $allowed_file_types) : '';
-        if(!empty($allowed_file_types)){$allowed_file_types = implode(",",$allowed_file_types);}
-
+        $allowed_file_types = isset( $extra_fields['gd_file_types'] ) ? maybe_unserialize( $extra_fields['gd_file_types'] ) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
+        $display_file_types = $allowed_file_types != '' ? '.' . implode( ", .", $allowed_file_types ) : '';
+        if ( ! empty( $allowed_file_types ) ) {
+			$allowed_file_types = implode( ",", $allowed_file_types );
+		}
 
         // adjust values here
-        $id = $cf['htmlvar_name'];//"post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
+        $id = $cf['htmlvar_name']; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
 
         $multiple = true; // allow multiple files upload
 
-
-        $revision_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->ID : '';
-        $post_id = isset($gd_post->post_parent) && $gd_post->post_parent ? $gd_post->post_parent : $gd_post->ID;
-
-        //$files = GeoDir_Media::get_post_images_edit_string($post_id,$revision_id,);
+        $revision_id = isset( $gd_post->post_parent ) && $gd_post->post_parent ? $gd_post->ID : '';
+        $post_id = isset( $gd_post->post_parent ) && $gd_post->post_parent ? $gd_post->post_parent : $gd_post->ID;
 
         // check for any auto save temp media values first
-        $temp_media = get_post_meta($post_id,"__".$revision_id,true);
-        if(!empty( $temp_media ) && isset( $temp_media[$html_var])){
-            $files = $temp_media[$html_var];
-        }else{
-            $files = GeoDir_Media::get_field_edit_string($post_id,$html_var,$revision_id);
+        $temp_media = get_post_meta( $post_id, "__" . $revision_id, true );
+        if ( ! empty( $temp_media ) && isset( $temp_media[ $html_var ] ) ) {
+            $files = $temp_media[ $html_var ];
+        } else {
+            $files = GeoDir_Media::get_field_edit_string( $post_id, $html_var, $revision_id );
         }
 
-        if(!empty($files)){
-            $total_files = count(explode('::',$files));
-        }else{
+        if ( ! empty( $files ) ) {
+            $total_files = count( explode( '::', $files ) );
+        } else {
             $total_files = 0;
         }
 
-
-//        echo $html_var.'###'.$files;
-
         $image_limit = $file_limit;
-        $show_image_input_box = true;//($image_limit != '0');
+        $show_image_input_box = true;
         /**
          * Filter to be able to show/hide the image upload section of the add listing form.
          *
@@ -1913,11 +1905,9 @@ function  geodir_cfi_files($html,$cf){
          * @param bool $show_image_input_box Set true to show. Set false to not show.
          * @param string $listing_type The custom post type slug.
          */
-        $show_image_input_box = apply_filters('geodir_file_uploader_on_add_listing', $show_image_input_box, $post->post_type);
+        $show_image_input_box = apply_filters( 'geodir_file_uploader_on_add_listing', $show_image_input_box, $cf['post_type'] );
 
-
-
-        if ($show_image_input_box) {
+        if ( $show_image_input_box ) {
             add_thickbox();  
             ?>
 
