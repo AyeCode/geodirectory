@@ -979,6 +979,7 @@ class GeoDir_Compatibility {
 		if ( function_exists( 'tie_admin_bar' ) ) {
 			add_filter( 'option_tie_options', array( __CLASS__, 'option_tie_options' ), 20, 3 );
 			add_filter( 'wp_super_duper_before_widget', array( __CLASS__, 'jarida_super_duper_before_widget' ), 0, 4 );
+			add_filter( 'body_class', array( __CLASS__, 'jarida_body_class' ) );
 		}
 	}
 
@@ -1387,11 +1388,20 @@ class GeoDir_Compatibility {
 		}
 
 		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = (int) self::avada_page_id() ) ) {
-			$sidebar_archive = get_post_meta( $page_id, 'tie_sidebar_post', true );
-			$value['sidebar_archive'] = is_array( $sidebar_archive ) ? $sidebar_archive[0] : $sidebar_archive;
+			$sidebar_pos = get_post_meta( $page_id, 'tie_sidebar_pos', true );
+			$value['sidebar_pos'] = is_array( $sidebar_pos ) ? $sidebar_pos[0] : $sidebar_pos;
 
-			$sidebar_narrow_archive = get_post_meta( $page_id, 'tie_sidebar_narrow_post', true );
-			$value['sidebar_narrow_archive'] = is_array( $sidebar_narrow_archive ) ? $sidebar_narrow_archive[0] : $sidebar_narrow_archive;
+			if ( $value['sidebar_pos'] == 'default' ) {
+			} elseif ( $value['sidebar_pos'] == 'full' ) {
+				$value['sidebar_archive'] = 'none';
+				$value['sidebar_narrow_archive'] = 'none';
+			} else {
+				$sidebar_archive = get_post_meta( $page_id, 'tie_sidebar_post', true );
+				$value['sidebar_archive'] = is_array( $sidebar_archive ) ? $sidebar_archive[0] : $sidebar_archive;
+
+				$sidebar_narrow_archive = get_post_meta( $page_id, 'tie_sidebar_narrow_post', true );
+				$value['sidebar_narrow_archive'] = is_array( $sidebar_narrow_archive ) ? $sidebar_narrow_archive[0] : $sidebar_narrow_archive;
+			}
 		}
 
 		return $value;
@@ -1417,5 +1427,18 @@ class GeoDir_Compatibility {
 		}
 
 		return $before_widget;
+	}
+
+	public static function jarida_body_class( $classes ) {
+		if ( geodir_is_geodir_page() && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = (int) self::avada_page_id() ) ) {
+			$sidebar_pos = get_post_meta( $page_id, 'tie_sidebar_pos', true );
+			$sidebar_pos = is_array( $sidebar_pos ) ? $sidebar_pos[0] : $sidebar_pos;
+
+			if ( $sidebar_pos == 'full' ) {
+				$classes[] = 'gd-jarida-full';
+			}
+		}
+
+		return $classes;
 	}
 }
