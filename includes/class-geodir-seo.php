@@ -120,8 +120,12 @@ class GeoDir_SEO {
 	 * @return string $menu
 	 */
 	public static function set_menu_global($menu,$args){
-		if(null == $menu){
-			self::$doing_menu = true;
+		if ( null === $menu ) {
+			if ( empty( $args->menu ) && ! empty( $args->theme_location ) && ( $locations = get_nav_menu_locations() ) && ! isset( $locations[ $args->theme_location ] ) ) {
+				// Don't set $doing_menu for incorrect menu.
+			} else {
+				self::$doing_menu = true;
+			}
 		}
 
 		return $menu;
