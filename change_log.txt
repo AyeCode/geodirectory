@@ -1,3 +1,9 @@
+= 2.0.0.65 =
+* Jarida theme compatibility for GD page sidebars - FIXED
+* Business hours timepicker translation not working on first load - FIXED
+* GeneratePress theme not showing correct SEO meta on detail page - FIXED
+* Listimia theme shows default page title for GD archive pages - FIXED
+
 = 2.0.0.64 = 
 * Beaver Builder content does not work for archive item template - FIXED
 * Autocomplete search result selection looses street number for some locations - FIXED

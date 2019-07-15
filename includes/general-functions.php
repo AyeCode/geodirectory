@@ -2157,7 +2157,7 @@ function geodir_localize_jquery_ui_timepicker() {
 		return;
 	}
 	
-	wp_add_inline_script( 'geodir-jquery-ui-timepicker', "jQuery(document).ready(function(jQuery){jQuery.timepicker.setDefaults({$timepicker_defaults});});" );
+	wp_add_inline_script( 'geodir-jquery-ui-timepicker', 'jQuery(function($){$.timepicker.setDefaults(' . $timepicker_defaults . ');});' );
 }
 
 /**

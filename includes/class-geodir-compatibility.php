@@ -123,8 +123,8 @@ class GeoDir_Compatibility {
 		// Set custom hook for theme compatibility
 		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ) );
 		
-		// Avada (theme)
 		if ( ! is_admin() ) {
+			// Avada (theme)
 			add_filter( 'avada_has_sidebar', array( __CLASS__, 'avada_has_sidebar' ), 100, 3 );
 			add_filter( 'avada_has_double_sidebars', array( __CLASS__, 'avada_has_double_sidebars' ), 100, 3 );
 			add_filter( 'avada_setting_get_posts_global_sidebar', array( __CLASS__, 'avada_global_sidebar' ), 100, 1 );
@@ -432,6 +432,7 @@ class GeoDir_Compatibility {
 			 || ( defined( 'GENERATE_VERSION' ) && ( strpos( $meta_key, '_generate-' ) === 0 || empty( $meta_key ) ) ) 
 			 || ( function_exists( 'inc_sidebars_init' ) && ( strpos( $meta_key, '_cs_replacements' ) === 0 || empty( $meta_key ) ) ) // custom sidebars plugin
 			 || ( function_exists( 'et_divi_load_scripts_styles' ) && ( strpos( $meta_key, '_et_' ) === 0 || empty( $meta_key ) ) ) // Divi
+			 || ( function_exists( 'tie_admin_bar' ) && ( strpos( $meta_key, 'tie_' ) === 0 || in_array( $meta_key, array( 'post_color', 'post_background', 'post_background_full' ) ) || empty( $meta_key ) ) ) // Jarida
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -448,7 +449,36 @@ class GeoDir_Compatibility {
 			}
 
 			if ( ! empty( $template_page_id ) ) {
-				return empty( $meta_key ) ? get_post_custom( $template_page_id ) : get_post_meta( $template_page_id, $meta_key, $single );
+				if ( empty( $meta_key ) ) {
+					// Don't overwrite Yoast SEO meta for the individual post.
+					$reserve_post_meta = defined( 'WPSEO_VERSION' ) && ! geodir_get_option( 'wpseo_disable' ) && geodir_is_page( 'detail' ) ? true : false;
+
+					if ( $reserve_post_meta ) {
+						global $gd_post_metadata;
+						if ( $gd_post_metadata ) {
+							return null;
+						} else {
+							$gd_post_metadata = true;
+							$reserve_meta = get_post_meta( $object_id, '', $single );
+							$gd_post_metadata = false;
+						}
+					}
+
+					$metadata = get_post_custom( $template_page_id );
+
+					if ( $reserve_post_meta ) {
+						if ( ! empty( $reserve_meta ) ) {
+							foreach ( $reserve_meta as $key => $meta ) {
+								if ( strpos( $key, '_yoast_wpseo_' ) === 0 ) {
+									$metadata[ $key ] = $meta;
+								}
+							}
+						}
+					}
+				} else {
+					$metadata = get_post_meta( $template_page_id, $meta_key, $single );
+				}
+				return $metadata;
 			}
 		}
 
@@ -973,6 +1003,13 @@ class GeoDir_Compatibility {
 		if ( function_exists( 'et_divi_load_scripts_styles' ) && geodir_is_geodir_page() ) {
 			add_filter( 'et_first_image_use_custom_content', array( __CLASS__, 'divi_et_first_image_use_custom_content' ), 999, 3 );
 		}
+
+		// Jarida (theme)
+		if ( function_exists( 'tie_admin_bar' ) ) {
+			add_filter( 'option_tie_options', array( __CLASS__, 'option_tie_options' ), 20, 3 );
+			add_filter( 'wp_super_duper_before_widget', array( __CLASS__, 'jarida_super_duper_before_widget' ), 0, 4 );
+			add_filter( 'body_class', array( __CLASS__, 'jarida_body_class' ) );
+		}
 	}
 
 	/**
@@ -1363,5 +1400,74 @@ class GeoDir_Compatibility {
 		}
 
 		return $content;
+	}
+
+	/**
+	 * Jarida theme filter sidebar option value for GD archive page.
+	 *
+	 * @since 2.0.0.64
+	 *
+	 * @param bool|mixed $value Option value.
+	 * @param string $option Option name.
+	 * @return mixed Filtered option value.
+	 */
+	public static function option_tie_options( $value, $option ) {
+		if ( ! geodir_is_geodir_page() ) {
+			return $value;
+		}
+
+		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = (int) self::avada_page_id() ) ) {
+			$sidebar_pos = get_post_meta( $page_id, 'tie_sidebar_pos', true );
+			$value['sidebar_pos'] = is_array( $sidebar_pos ) ? $sidebar_pos[0] : $sidebar_pos;
+
+			if ( $value['sidebar_pos'] == 'default' ) {
+			} elseif ( $value['sidebar_pos'] == 'full' ) {
+				$value['sidebar_archive'] = 'none';
+				$value['sidebar_narrow_archive'] = 'none';
+			} else {
+				$sidebar_archive = get_post_meta( $page_id, 'tie_sidebar_post', true );
+				$value['sidebar_archive'] = is_array( $sidebar_archive ) ? $sidebar_archive[0] : $sidebar_archive;
+
+				$sidebar_narrow_archive = get_post_meta( $page_id, 'tie_sidebar_narrow_post', true );
+				$value['sidebar_narrow_archive'] = is_array( $sidebar_narrow_archive ) ? $sidebar_narrow_archive[0] : $sidebar_narrow_archive;
+			}
+		}
+
+		return $value;
+	}
+
+	/**
+	 * Jarida theme before widget content.
+	 *
+	 * Jarida theme widget appends & prepends div tags even empty widget title.
+	 * This cause extra div tag to widget content rendered via super duper.
+	 *
+	 * @since 2.0.0.64
+	 *
+	 * @param string $before_widget HTML content to prepend to each widget.
+	 * @param array $args Widget arguments.
+	 * @param array $instance Widget parameters.
+	 * @param object $super_duper Super Duper widget class.
+	 * @return string Filter the content prepend to widget.
+	 */
+	public static function jarida_super_duper_before_widget( $before_widget, $args, $instance, $super_duper ) {
+		if ( empty( $instance['title'] ) && ! empty( $args['after_widget'] ) && $args['after_widget'] == '</div></div><!-- .widget /-->' ) {
+			$before_widget .= '<div class="widget-container">';
+		}
+
+		return $before_widget;
+	}
+
+	public static function jarida_body_class( $classes ) {
+		if ( geodir_is_geodir_page() && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = (int) self::avada_page_id() ) ) {
+			$sidebar_pos = get_post_meta( $page_id, 'tie_sidebar_pos', true );
+			$sidebar_pos = is_array( $sidebar_pos ) ? $sidebar_pos[0] : $sidebar_pos;
+
+			if ( $sidebar_pos == 'full' ) {
+				$classes[] = 'gd-jarida-full';
+			}
+		}
+
+		return $classes;
 	}
 }

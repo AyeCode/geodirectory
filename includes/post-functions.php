@@ -485,7 +485,18 @@ function geodir_listing_belong_to_current_user( $listing_id = '', $exclude_admin
 		}
 	}
 
-	return geodir_lisiting_belong_to_user( $listing_id, $current_user->ID );
+	$belong_to_user = geodir_lisiting_belong_to_user( $listing_id, $current_user->ID );
+
+	/**
+	 * Filter whether a listing belongs to current user or not.
+	 *
+	 * @since 2.0.0.65
+	 *
+	 * @param bool $belong_to_user True if a listing belongs to current user or False.
+	 * @param int|string $listing_id The post ID.
+	 * @param bool $exclude_admin If True it excludes admin from the check.
+	 */
+	return apply_filters( 'geodir_listing_belong_to_current_user', $belong_to_user, $listing_id, $exclude_admin );
 }
 
 /**
