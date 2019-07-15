@@ -131,64 +131,57 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
  * @param int|string $limit Optional. Number of images.
  * @return array|bool Returns images as an array. Each item is an object.
  */
-function geodir_get_images($post_id = 0, $limit = '',$logo = false, $revision_id = '',$types = array())
-{   global $gd_post;
-    
-    if(!empty($types)){
-        $post_images = GeoDir_Media::get_attachments_by_type($post_id,$types,$limit,$revision_id);
-    }else{
-        $post_images = GeoDir_Media::get_post_images($post_id,$limit,$revision_id);
+function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_id = '', $types = array() ){
+    global $gd_post;
+
+    $post_images = array();
+
+	if ( ! empty( $types ) ) {
+		$types = geodir_post_has_image_types( $types, $post_id, $revision_id );
+		if ( ! empty( $types ) ) {
+			$post_images = GeoDir_Media::get_attachments_by_type( $post_id, $types, $limit, $revision_id );
+		}
+    } else {
+        $post_images = GeoDir_Media::get_post_images( $post_id, $limit, $revision_id );
     }
 
-
-//   print_r( $post_images );
-    if(!empty($post_images)){
-
+    if ( ! empty( $post_images ) ) {
         // wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id );
-        if($logo){
-            $logo_image = GeoDir_Media::get_attachments_by_type($post_id,'logo',1,$revision_id);
-            if($logo_image){
+        if ( $logo && geodir_post_has_image_types( 'logo', $post_id, $revision_id ) ) {
+            $logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1, $revision_id );
+            if ( $logo_image ) {
                 $post_images = $logo_image + $post_images;
             }
         }
-
-    }else{
-
-
-
+    } else {
         $logo_image = false;
-        if(isset($gd_post->ID) && $gd_post->ID==$post_id && isset($gd_post->logo)) {
-            if ( $logo ) {
-                $logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
-                if ( $logo_image ) {
-                    $post_images = $logo_image;
-                }
-            }
+        if ( isset( $gd_post->ID ) && $gd_post->ID == $post_id && isset( $gd_post->logo ) && $logo && geodir_post_has_image_types( 'logo', $post_id, $revision_id ) ) {
+			$logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
+			if ( $logo_image ) {
+				$post_images = $logo_image;
+			}
         }
 
-        if(!$logo_image){
+        if ( ! $logo_image ) {
             $default_img_id = '';
 
-            // no image code
-            
             // cat image
-            if(geodir_is_page('archive')){
-                if($term_id = get_queried_object_id()){
-                    $term_img = get_term_meta( $term_id, 'ct_cat_default_img', true);
+            if ( geodir_is_page('archive' ) ) {
+                if ( $term_id = get_queried_object_id() ) {
+                    $term_img = get_term_meta( $term_id, 'ct_cat_default_img', true );
                 }
             }
 
-            if(empty($term_img)){
-                $default_term_id = geodir_get_post_meta($post_id,'default_category');
-                if($default_term_id){
-                    $term_img = get_term_meta( $default_term_id, 'ct_cat_default_img', true);
+            if ( empty( $term_img ) ) {
+                $default_term_id = geodir_get_post_meta( $post_id, 'default_category' );
+                if ( $default_term_id ) {
+                    $term_img = get_term_meta( $default_term_id, 'ct_cat_default_img', true );
                 }
             }
 
-            if(!empty($term_img)){
+            if ( ! empty( $term_img ) ) {
                 $default_img_id = $term_img['id'];
-            }else{
-
+            } else {
                 // check for CPT default image
                 $cpt = geodir_get_current_posttype();
                 if($cpt){
@@ -273,4 +266,44 @@ function geodir_is_icon_url( $icon ) {
 		}
 	}
 	return apply_filters( 'geodir_is_icon_url', $return, $icon  );
+}
+
+/**
+ * Validate post image types.
+ *
+ * $since 2.0.0.65
+ *
+ * @param array $types Array of image types. Ex: logo, comment_images, post_images.
+ * @param int $post_id Post ID.
+ * @param int $revision_id Post revision ID. Default 0.
+ * @return array Array of valid image types.
+ */
+function geodir_post_has_image_types( $types = array(), $post_id, $revision_id = 0 ) {
+	if ( ! empty( $types ) ) {
+		if ( is_scalar( $types ) ) {
+			$image_types = array_map( 'trim', explode( ",", $types ) );
+		} else {
+			$image_types = $types;
+		}
+		$image_types = array_filter( array_unique( $image_types ) );
+
+		if ( ! empty( $image_types ) ) {
+			$post_type = get_post_type( $post_id );
+			$package_id = geodir_get_post_package_id( $post_id, $post_type );
+
+			$valid_types = array();
+			foreach ( $image_types as $type ) {
+				if ( in_array( $type, array( 'post_images', 'comment_images' ) ) ) {
+					$valid_types[] = $type;
+				} elseif ( geodir_check_field_visibility( $package_id, $type, $post_type ) ) {
+					$valid_types[] = $type;
+				}
+			}
+			$image_types = $valid_types;
+		}
+	} else {
+		$image_types = array();
+	}
+
+	return apply_filters( 'geodir_post_has_image_types', $image_types, $types, $post_id, $revision_id  );
 }
