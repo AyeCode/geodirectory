@@ -449,7 +449,36 @@ class GeoDir_Compatibility {
 			}
 
 			if ( ! empty( $template_page_id ) ) {
-				return empty( $meta_key ) ? get_post_custom( $template_page_id ) : get_post_meta( $template_page_id, $meta_key, $single );
+				if ( empty( $meta_key ) ) {
+					// Don't overwrite Yoast SEO meta for the individual post.
+					$reserve_post_meta = defined( 'WPSEO_VERSION' ) && ! geodir_get_option( 'wpseo_disable' ) && geodir_is_page( 'detail' ) ? true : false;
+
+					if ( $reserve_post_meta ) {
+						global $gd_post_metadata;
+						if ( $gd_post_metadata ) {
+							return null;
+						} else {
+							$gd_post_metadata = true;
+							$reserve_meta = get_post_meta( $object_id, '', $single );
+							$gd_post_metadata = false;
+						}
+					}
+
+					$metadata = get_post_custom( $template_page_id );
+
+					if ( $reserve_post_meta ) {
+						if ( ! empty( $reserve_meta ) ) {
+							foreach ( $reserve_meta as $key => $meta ) {
+								if ( strpos( $key, '_yoast_wpseo_' ) === 0 ) {
+									$metadata[ $key ] = $meta;
+								}
+							}
+						}
+					}
+				} else {
+					$metadata = get_post_meta( $template_page_id, $meta_key, $single );
+				}
+				return $metadata;
 			}
 		}
 
