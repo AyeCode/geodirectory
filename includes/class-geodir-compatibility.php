@@ -989,6 +989,13 @@ class GeoDir_Compatibility {
 			if ( class_exists( 'Avada' ) ) {
 				add_filter( 'body_class', array( __CLASS__, 'avada_body_class' ), 999, 1 );
 			}
+
+			// Custom sidebars
+			if ( function_exists( 'inc_sidebars_init' ) ) {
+				if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
+					add_filter( 'cs_replace_sidebars', array( __CLASS__, 'cs_replace_sidebars' ), 20, 2 );
+				}
+			}
 		}
 
 		// GeneratePress theme compatibility
@@ -1469,5 +1476,48 @@ class GeoDir_Compatibility {
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Custom sidebars filter post type for GD Archive pages.
+	 *
+	 * @since 2.0.0.65
+	 */
+	public static function cs_replace_post_type( $post_type, $type ) {
+		$post_type = geodir_get_current_posttype();
+
+		return $post_type;
+	}
+
+	/**
+	 * Filter the replaced custom sidebars.
+	 *
+	 * @since 2.0.0.65
+	 *
+	 * @param array $replacements List of the final/replaced sidebars.
+	 * @param array $options Custom Sidebars settings.
+	 */
+	public static function cs_replace_sidebars( $replacements, $options ) {
+		$page_id = (int) self::avada_page_id();
+
+		if ( empty( $page_id ) ) {
+			return $replacements;
+		}
+
+		$sidebars = CustomSidebars::get_options( 'modifiable' );
+
+		// Check if replacements are defined in the post metadata.
+		$reps = get_post_meta( $page_id, '_cs_replacements', true );
+		foreach ( $sidebars as $sb_id ) {
+			if ( is_array( $reps ) && ! empty( $reps[ $sb_id ] ) ) {
+				$replacements[ $sb_id ] = array(
+					$reps[ $sb_id ],
+					'particular',
+					-1,
+				);
+			}
+		}
+
+		return $replacements;
 	}
 }
