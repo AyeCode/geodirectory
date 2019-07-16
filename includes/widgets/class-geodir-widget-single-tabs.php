@@ -216,7 +216,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                          * @param string $tab_title      The html for the tab title.
                          * @param array $tab             The array of values including title text.
                          */
-                        echo apply_filters( 'geodir_tab_list_title', $tab_title, $tab );
+                        echo apply_filters( 'geodir_tab_list_title', $tab_title, (object)$tab );
                     }
                     echo '<div id="geodir-tab-content-'.esc_attr($tab['tab_key']).'" class="hash-offset"></div>';
 
