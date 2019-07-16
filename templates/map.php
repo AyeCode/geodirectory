@@ -433,7 +433,15 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             <?php } ?>
             updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2);
         } else {
-            updateMarkerAddress('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
+            <?php 
+            /**
+             * Fires to add javascript variable to use in google map.
+             *
+             * @since 1.0.0
+             */
+            do_action( 'geodir_add_listing_geocode_response_fail' );
+            ?>
+			updateMarkerAddress('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
         }
     }
     function centerMap(latlng) {
@@ -619,6 +627,14 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     var nAddress = address.toLowerCase().lastIndexOf(searchZip.toLowerCase());
                     address = address.slice(0, nAddress) + address.slice(nAddress).replace(new RegExp(searchZip, 'i'), "");
                 }
+				<?php 
+				/**
+				 * Fires before set geocode position.
+				 *
+				 * @since 1.0.0
+				 */
+				do_action('geodir_add_listing_codeaddress_before_geocode');
+				?>
                 geocodePositionOSM('', address, ISO2, true);
             }
         } else {
@@ -719,7 +735,15 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             <?php } ?>
             updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry,getAddress2);
         } else {
-            alert('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
+            <?php 
+            /**
+             * Fires to add javascript variable to use in google map.
+             *
+             * @since 1.0.0
+             */
+            do_action( 'geodir_add_listing_geocode_response_fail' );
+            ?>
+			alert('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
         }
     }
 
