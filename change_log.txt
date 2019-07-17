@@ -5,7 +5,7 @@
 * Listimia theme shows default page title for GD archive pages - FIXED
 * Widget shows logo image even it disabled via package - FIXED
 * GD Single Tabs, widget now has option to output head and body separately - ADDED
-* Categiry default image not working when categiry imported via csv - FIXED
+* Category default image not working when category imported via csv - FIXED
 
 = 2.0.0.64 = 
 * Beaver Builder content does not work for archive item template - FIXED
