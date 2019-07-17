@@ -106,11 +106,11 @@ function geodir_is_singular( $post_types = array() ) {
  * @return bool True for custom taxonomy archive pages, false for built-in taxonomies.
  */
 function geodir_is_taxonomy( $taxonomies = array() ) {
-	if ( empty( $taxonomis ) ) {
-		$taxonomis = geodir_get_taxonomies( '', true );
+	if ( empty( $taxonomies ) ) {
+		$taxonomies = geodir_get_taxonomies( '', true );
 	}
 
-	return is_tax( $taxonomis );
+	return is_tax( $taxonomies );
 }
 
 /**
