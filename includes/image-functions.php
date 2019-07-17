@@ -164,6 +164,7 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 
         if ( ! $logo_image ) {
             $default_img_id = '';
+			$term_img = 0;
 
             // cat image
             if ( geodir_is_page('archive' ) ) {
@@ -181,32 +182,51 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 
             if ( ! empty( $term_img ) ) {
                 $default_img_id = $term_img['id'];
+
+				if ( $default_img_id == 'image' && ! empty( $term_img['src'] ) ) {
+					$image_src = geodir_file_relative_url( $term_img['src'], false );
+					$post_images = array();
+                    $image = new stdClass();
+                    $image->ID = 0;
+                    $image->post_id = $post_id;
+                    $image->user_id = 0;
+                    $image->title = __( 'Placeholder image', 'geodirectory' );
+                    $image->caption = '';
+                    $image->file = '/' . ltrim( $image_src, '/\\' );
+                    $image->mime_type = '';
+                    $image->menu_order = 0;
+                    $image->featured= 0;
+                    $image->is_approved = 1;
+                    $image->metadata = '';
+                    $image->type = 'post_images';
+                    $post_images[] = $image;
+
+					return $post_images;
+				}
             } else {
                 // check for CPT default image
                 $cpt = geodir_get_current_posttype();
-                if($cpt){
+                if ( $cpt ) {
                     $cpts = geodir_get_posttypes('array');
-                    if(!empty($cpts[$cpt]['default_image'])){
-                        $default_img_id = absint($cpts[$cpt]['default_image']);
+                    if ( ! empty( $cpts[$cpt]['default_image'] ) ) {
+                        $default_img_id = absint( $cpts[$cpt]['default_image'] );
                     }
                 }
 
                 // lastly check for default listing image
-                if(!$default_img_id){
-                    $listing_default_image_id = geodir_get_option('listing_default_image');
-                    if( $listing_default_image_id ){
+                if ( ! $default_img_id ) {
+                    $listing_default_image_id = geodir_get_option( 'listing_default_image' );
+                    if ( $listing_default_image_id ) {
                         $default_img_id = $listing_default_image_id;
                     }
                 }
-
             }
 
             // default image
-            if($default_img_id){
-                $default_image_post = get_post($default_img_id);
+            if ( $default_img_id ) {
+                $default_image_post = get_post( $default_img_id );
 
-                if($default_image_post){
-                    
+                if ( $default_image_post ) {
                     $wp_upload_dir = wp_upload_dir();
 
                     $post_images = array();
@@ -214,21 +234,19 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
                     $image->ID = 0;
                     $image->post_id = $default_image_post->ID;
                     $image->user_id = 0;
-                    $image->title = !empty($default_image_post->post_title) ? $default_image_post->post_title : __('Placeholder image','geodirectory');
+                    $image->title = !empty($default_image_post->post_title) ? $default_image_post->post_title : __( 'Placeholder image', 'geodirectory' );
                     $image->caption = !empty($default_image_post->post_excerpt) ? $default_image_post->post_excerpt : '';
-                    $image->file = str_replace($wp_upload_dir['basedir'],'', get_attached_file( $default_img_id));
+                    $image->file = str_replace( $wp_upload_dir['basedir'], '', get_attached_file( $default_img_id ) );
                     $image->mime_type = $default_image_post->post_mime_type;
                     $image->menu_order = 0;
-                    $image->featured= 0;
-                    $image->is_approved= 1;
+                    $image->featured = 0;
+                    $image->is_approved = 1;
                     $image->metadata= wp_get_attachment_metadata( $default_img_id );
                     $image->type = 'post_images';
-                    $post_images[] =  $image;
+                    $post_images[] = $image;
                 }
-
             }
         }
-
     }
 
     return $post_images;
