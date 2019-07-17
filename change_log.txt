@@ -4,6 +4,7 @@
 * GeneratePress theme not showing correct SEO meta on detail page - FIXED
 * Listimia theme shows default page title for GD archive pages - FIXED
 * Widget shows logo image even it disabled via package - FIXED
+* GD Single Tabs, widget now has option to output head and body separately - ADDED
 
 = 2.0.0.64 = 
 * Beaver Builder content does not work for archive item template - FIXED

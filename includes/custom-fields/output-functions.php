@@ -2033,6 +2033,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
+        $show_street2_in_address = true;
         $show_city_in_address = true;
         $show_region_in_address = true;
         $show_country_in_address = true;
@@ -2042,6 +2043,16 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
             $addition_fields = '';
             if (!empty($extra_fields)) {
+                $show_street2_in_address = false;
+                if (isset($extra_fields['show_street2']) && $extra_fields['show_street2']) {
+                    $show_street2_in_address = true;
+                }
+                /**
+                 * Filter "show city in address" value.
+                 *
+                 * @since 1.0.0
+                 */
+                $show_street2_in_address = apply_filters('geodir_show_street2_in_address', $show_street2_in_address);
                 $show_city_in_address = false;
                 if (isset($extra_fields['show_city']) && $extra_fields['show_city']) {
                     $show_city_in_address = true;
@@ -2101,6 +2112,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             $address_items = array(
                 'post_title',
                 'street',
+                'street2',
                 'neighbourhood',
                 'city',
                 'region',
@@ -2110,7 +2122,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 'longitude'
             );
 
-            $address_template = !empty($cf['address_template']) ? $cf['address_template'] : '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%';
+            $address_template = !empty($cf['address_template']) ? $cf['address_template'] : '%%street_br%% %%street2_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%';
 
             $address_template = apply_filters(
                 "geodir_cf_address_template",
@@ -2127,8 +2139,14 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ( isset($gd_post->street) ) {
                 $address_fields['street'] = '<span itemprop="streetAddress">' . $gd_post->street . '</span>';
             }
+            if ( $show_street2_in_address && isset( $gd_post->street2 ) && $gd_post->street2 ) {
+                $address_fields['street2'] = '<span itemprop="streetAddress2">' . $gd_post->street2. '</span>';
+            }
             if ( $show_city_in_address && isset( $gd_post->city ) && $gd_post->city ) {
                 $address_fields['city'] = '<span itemprop="addressLocality">' . $gd_post->city. '</span>';
+            }
+            if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
+                $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
             }
             if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
                 $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';

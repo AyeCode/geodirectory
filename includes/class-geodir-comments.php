@@ -188,7 +188,7 @@ class GeoDir_Comments {
 		$rating 	= absint($_REQUEST['geodir_overallrating']);
 
 		if ( isset( $comment_info->comment_parent ) && (int) $comment_info->comment_parent == 0 ) {
-			if ( isset( $old_rating ) ) {
+			if ( !empty( $old_rating ) ) {
 				$sqlqry = $wpdb->prepare( "UPDATE " . GEODIR_REVIEW_TABLE . " SET
 					rating = %f 
 					WHERE comment_id = %d ", 
@@ -205,6 +205,9 @@ class GeoDir_Comments {
 
 				// update rating
 				self::update_post_rating( $post_id, $post_type );
+			}elseif(!empty($_REQUEST['geodir_overallrating'])){
+				// create new rating if not exists
+				self::save_rating($comment_id);
 			}
 		}
 	}

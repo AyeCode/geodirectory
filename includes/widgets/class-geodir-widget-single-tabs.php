@@ -54,6 +54,20 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                     'default'  => '',
                     'advanced' => true
                 ),
+                'output'  => array(
+                    'title' => __('Output Type:', 'geodirectory'),
+                    'desc' => __('What parts should be output.', 'geodirectory'),
+                    'type' => 'select',
+                    'options'   =>  array(
+                        "" => __('Default', 'geodirectory'),
+                        "head" => __('Head only', 'geodirectory'),
+                        "body" => __('Body only', 'geodirectory'),
+                        "json" => __('JSON Array (developer option)', 'geodirectory'),
+                    ),
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => true
+                )
             )
         );
 
@@ -71,12 +85,12 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
      * @return mixed|string|void
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
-        global $preview, $post,$gd_post;
+        global $preview, $post,$gd_post,$gd_single_tabs_array;
         if(!isset($post->ID)){return '';}
         // options
         $defaults = array(
             'show_as_list' => '0', // 0 =  all
-            //'title_tag' => 'h4',
+            'output' => '',
         );
 
         /**
@@ -85,30 +99,65 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         $args = wp_parse_args( $args, $defaults );
 
 
+        // check if we have been here before
+        $tabs_array = !empty($gd_single_tabs_array) ? $gd_single_tabs_array : array();
 
-        ob_start();
+
         $post_type = $post->post_type;
-        $tabs = self::get_tab_settings($post_type);
+
+        if(empty($tabs_array)){
+            // get the tabs head
+            $tabs = self::get_tab_settings($post_type);
+
+            // get the tab contents first so we can decide to output the tab head
+            $tabs_content = array();
+            foreach($tabs as $tab){
+                $tabs_content[$tab->id."tab"] = self::tab_content($tab);
+            }
+
+            // setup the array
+            if(!empty($tabs)){
+                foreach($tabs as $tab) {
+                    if ( $tab->tab_level > 0 ) {
+                        continue;
+                    }
+                    if ( empty( $tabs_content[ $tab->id . "tab" ] ) ) {
+                        continue;
+                    }
+
+                    $tab->tab_content_rendered = $tabs_content[$tab->id."tab"];
+                    $tabs_array[] = (array) $tab;
+                }
+            }
+
+            $gd_single_tabs_array = $tabs_array;
+        }
 
 //       print_r( $tabs);
 
-        // get the tab contents first so we can decide to output the tab head
-        $tabs_content = array();
-        foreach($tabs as $tab){
-            $tabs_content[$tab->id."tab"] = self::tab_content($tab);
+
+
+
+
+
+        // output JSON
+        if($args['output']=='json'){
+            return json_encode( $tabs_array );
         }
 
-//        print_r( $tabs_content);
 
-        if(!empty($tabs)){
+        // output start
+        ob_start();
+
+
+        if(!empty($tabs_array)){
             echo '<div class="geodir-tabs" id="gd-tabs">';
 
             // tabs head
-            if(!$args['show_as_list']){
+            if(!$args['show_as_list'] && $args['output']!='body' || ($args['show_as_list'] && $args['output']=='head') ){
 
                 ?>
                 <div id="geodir-tab-mobile-menu">
-<!--                    <i class="fas fa-bars" aria-hidden="true"></i>-->
                     <span class="geodir-mobile-active-tab"></span>
                     <i class="fas fa-sort-down" aria-hidden="true"></i>
                 </div>
@@ -116,12 +165,10 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 echo '<dl class="geodir-tab-head">';
 
                 $count = 0;
-                foreach($tabs as $tab){
-                    if($tab->tab_level>0){continue;}
-                    if(empty($tabs_content[$tab->id."tab"])){continue;}
+                foreach($tabs_array as $tab){
 
 					// tab icon
-					$icon = trim( $tab->tab_icon );
+					$icon = trim( $tab['tab_icon'] );
 					if ( geodir_is_fa_icon( $icon ) ) {
 						$tab_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
 					} elseif ( strpos( $icon, 'fa-' ) === 0 ) {
@@ -134,9 +181,10 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                     $data_status = '';//$count==0 ? 'data-status="enable"' : '';
                     echo '<dt></dt> <!-- added to comply with validation -->';
                     echo '<dd class="'.$tab_class .'">';
-                    echo '<a data-tab="#'.esc_attr($tab->tab_key).'" data-status="enable">';
+                    $href = $args['show_as_list']? ' href="#'.esc_attr($tab['tab_key']).'" ' : '';
+                    echo '<a data-tab="#'.esc_attr($tab['tab_key']).'" data-status="enable" '. $href .'>';
                     echo $tab_icon;
-                    echo stripslashes(esc_attr__($tab->tab_name,'geodirectory')).'</a>';
+                    echo stripslashes(esc_attr__($tab['tab_name'],'geodirectory')).'</a>';
                     echo '</dd>';
                     $count++;
                 }
@@ -144,40 +192,41 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 echo '</dl>';
             }
 
-            // tabs content
-            $list_class =  $args['show_as_list'] ? 'geodir-tabs-as-list' : '';
-            echo '<ul class="geodir-tabs-content geodir-entry-content '.$list_class.'">';
-            foreach($tabs as $tab){
-                if($tab->tab_level>0){continue;}
-                if(empty($tabs_content[$tab->id."tab"])){continue;}
+            if( $args['output']!='head'){
+                // tabs content
+                $list_class =  $args['show_as_list'] ? 'geodir-tabs-as-list' : '';
+                echo '<ul class="geodir-tabs-content geodir-entry-content '.$list_class.'">';
+                foreach($tabs_array as $tab){
 
-                $add_tab = $args['show_as_list'] ? '' : 'Tab';
-                echo '<li id="'.esc_attr($tab->tab_key).$add_tab.'" >';
-                echo "<span id='".esc_attr($tab->tab_key)."'></span>";
-                if ( $args['show_as_list'] ) {
-                    $tab_icon = '';
-                    if($tab->tab_icon){
-                        $tab_icon = '<i class=" '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
+                    $add_tab = $args['show_as_list'] ? '' : 'Tab';
+                    echo '<li id="'.esc_attr($tab['tab_key']).$add_tab.'" >';
+                    echo "<span id='".esc_attr($tab['tab_key'])."'></span>";
+                    if ( $args['show_as_list'] ) {
+                        $tab_icon = '';
+                        if($tab['tab_icon']){
+                            $tab_icon = '<i class=" '.esc_attr($tab['tab_icon']).'" aria-hidden="true"></i>';
+                        }
+                        $tab_title = '<span class="gd-tab-list-title" ><a href="#' . esc_attr($tab['tab_key']) . '">' . $tab_icon . esc_attr__( $tab['tab_name'], 'geodirectory' ) . '</a></span><hr />';
+
+                        /**
+                         * Filter the tab list title html.
+                         *
+                         * @since 1.6.1
+                         *
+                         * @param string $tab_title      The html for the tab title.
+                         * @param array $tab             The array of values including title text.
+                         */
+                        echo apply_filters( 'geodir_tab_list_title', $tab_title, (object)$tab );
                     }
-                    $tab_title = '<span class="gd-tab-list-title" ><a href="#' . esc_attr($tab->tab_key) . '">' . $tab_icon . esc_attr__( $tab->tab_name, 'geodirectory' ) . '</a></span><hr />';
+                    echo '<div id="geodir-tab-content-'.esc_attr($tab['tab_key']).'" class="hash-offset"></div>';
 
-                    /**
-                     * Filter the tab list title html.
-                     *
-                     * @since 1.6.1
-                     *
-                     * @param string $tab_title      The html for the tab title.
-                     * @param array $tab             The array of values including title text.
-                     */
-                    echo apply_filters( 'geodir_tab_list_title', $tab_title, $tab );
+                    echo $tab['tab_content_rendered'];
+
+                    echo '</li>';
                 }
-                echo '<div id="geodir-tab-content-'.esc_attr($tab->tab_key).'" class="hash-offset"></div>';
-
-                echo $tabs_content[$tab->id."tab"];
-
-                echo '</li>';
+                echo '</ul>';
             }
-            echo '</ul>';
+
 
             echo '</div>';
 
@@ -201,11 +250,6 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 <?php
             }
         }
-
-        // echo "<hr style='clear:both;'>";
-
-
-        // $this->detail_page_tabs();
 
         return ob_get_clean();
     }
