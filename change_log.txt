@@ -6,6 +6,7 @@
 * Widget shows logo image even it disabled via package - FIXED
 * GD Single Tabs, widget now has option to output head and body separately - ADDED
 * Category default image not working when category imported via csv - FIXED
+* Jupiter theme GD page sidebars not working - FIXED
 
 = 2.0.0.64 = 
 * Beaver Builder content does not work for archive item template - FIXED
