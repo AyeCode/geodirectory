@@ -270,17 +270,18 @@ class GeoDir_Template_Loader {
         return array_unique( $search_files );
     }
 
-    public static function is_archive_page_id($id){
+    public static function is_archive_page_id( $id ) {
         global $geodirectory;
-        $page_archive_id = isset($geodirectory->settings['page_archive']) ? $geodirectory->settings['page_archive'] : 0;
-        $result = false;
-        if($id==$page_archive_id){// default page check
+        $page_archive_id = isset( $geodirectory->settings['page_archive'] ) ? $geodirectory->settings['page_archive'] : 0;
+
+		$result = false;
+        if ( $id == $page_archive_id ) { // default page check
             $result = true;
-        }elseif(geodir_is_cpt_template_page( $id )){ // could be a CPT specific page
+        } elseif( geodir_is_cpt_template_page( $id ) ) { // could be a CPT specific page
             $result = true;
         }
 
-        return $result;
+        return apply_filters( 'geodir_is_archive_page_id', $result, $id );
     }
 
     /**

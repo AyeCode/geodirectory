@@ -2034,6 +2034,8 @@ function geodir_is_cpt_template_page( $id ) {
 		}
 	}
 
+	$return = apply_filters( 'geodir_is_cpt_template_page', $return, $id );
+
 	wp_cache_set( 'geodir_check_cpt_template_page:' . $id, $return, 'geodir_cpt_template_page' );
 
 	return $return;
@@ -2066,6 +2068,9 @@ function geodir_cpt_template_pages() {
 			}
 		}
 	}
+
+	$page_ids = apply_filters( 'geodir_cpt_template_pages', $page_ids );
+
 
 	if ( ! empty( $page_ids ) ) {
 		$page_ids = array_unique( $page_ids );
