@@ -757,6 +757,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             maptype: 'ROADMAP', // Map type - HYBRID, ROADMAP, SATELLITE, TERRAIN
             streetViewControl: true,
             <?php if(geodir_get_option('geodir_add_listing_mouse_scroll')) { echo 'scrollwheel: false,';}?>
+			<?php do_action( 'geodir_template_render_map_js_params' ); ?>
         });
 
         if (window.gdMaps) {
