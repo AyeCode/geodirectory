@@ -1297,7 +1297,7 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
             $is_elementor_preview = class_exists( 'GeoDir_Elementor' ) && GeoDir_Elementor::is_elementor_view() ? true : false; // Check if elementor preview
             $email = $gd_post->{$cf['htmlvar_name']} ;
             $value = '';
-            if ( ! empty( $email ) && ( $email != 'testing@example.com' ) && ( $e_split = explode( '@', $email ) ) && ! defined( 'REST_REQUEST' ) && ! $is_elementor_preview ){
+            if ( ! empty( $email ) && ( $email != 'testing@example.com' ) && ( $e_split = explode( '@', $email ) ) && ! defined( 'REST_REQUEST' ) && ! $is_elementor_preview && ! wp_doing_ajax() ) {
                 /**
                  * Filter email custom field name output.
                  *
@@ -1306,10 +1306,19 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
                  * @param string $email The email string being output.
                  * @param array $cf Custom field variables array.
                  */
-                $email_name = apply_filters('geodir_email_field_name_output',$email,$cf);
+                $email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
                 $value .= "<script>document.write('<a href=\"mailto:'+'$e_split[0]' + '@' + '$e_split[1]'+'\">$email_name</a>')</script>";
-            } elseif ( ! empty( $email ) && ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || $is_elementor_preview ) ) {
-                $value .= "<a href='mailto:$email'>$email</a>";
+            } elseif ( ! empty( $email ) && ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || $is_elementor_preview || wp_doing_ajax() ) ) {
+                /**
+                 * Filter email custom field name output.
+                 *
+                 * @since 1.5.3
+                 *
+                 * @param string $email The email string being output.
+                 * @param array $cf Custom field variables array.
+                 */
+                $email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
+				$value .= "<a href='mailto:$email'>$email_name</a>";
             } else {
                 $value .= $email;
             }

@@ -1255,9 +1255,20 @@ class GeoDir_Admin_Import_Export {
 
 							if ( empty( $cat_image ) || ( ! empty( $cat_image ) && basename( $cat_image ) != $term_data['image'] ) ) {
 								$attachment = true;
+								$image_id = 'image';
+								$image_url = trim( $uploads['subdir'] . '/' . $term_data['image'], '/\\' );
+
+								if ( strpos( $term_data['cat_image'], 'http://' ) === 0 || strpos( $term_data['cat_image'], 'https://' ) === 0 ) {
+									$attachment_id = self::generate_attachment_id( $term_data['cat_image'] );
+									if ( $attachment_id && ( $attachment_url = wp_get_attachment_url( $attachment_id ) ) ) {
+										$image_id = $attachment_id;
+										$image_url = geodir_file_relative_url( $attachment_url );
+									}
+								}
+
 								update_term_meta( $term_id, 'ct_cat_default_img', array(
-									'id'  => 'image',
-									'src' => trim( $uploads['subdir'] . '/' . $term_data['image'], '/\\' )
+									'id'  => $image_id,
+									'src' => $image_url
 								) );
 							}
 						}
@@ -1267,9 +1278,20 @@ class GeoDir_Admin_Import_Export {
 
 							if ( empty( $cat_icon ) || ( ! empty( $cat_icon ) && basename( $cat_icon ) != $term_data['icon'] ) ) {
 								$attachment = true;
+								$image_id = 'icon';
+								$image_url = trim( $uploads['subdir'] . '/' . $term_data['icon'], '/\\' );
+
+								if ( strpos( $term_data['cat_icon'], 'http://' ) === 0 || strpos( $term_data['cat_icon'], 'https://' ) === 0 ) {
+									$attachment_id = self::generate_attachment_id( $term_data['cat_icon'] );
+									if ( $attachment_id && ( $attachment_url = wp_get_attachment_url( $attachment_id ) ) ) {
+										$image_id = $attachment_id;
+										$image_url = geodir_file_relative_url( $attachment_url );
+									}
+								}
+
 								update_term_meta( $term_id, 'ct_cat_icon', array(
-									'id'  => 'icon',
-									'src' => trim( $uploads['subdir'] . '/' . $term_data['icon'], '/\\' )
+									'id'  => $image_id,
+									'src' => $image_url
 								) );
 							}
 						}
@@ -1327,14 +1349,14 @@ class GeoDir_Admin_Import_Export {
 		$cat_info_fixed['cat_font_icon']       = isset( $cat_info['cat_font_icon'] ) && $cat_info['cat_font_icon'] ? esc_attr( $cat_info['cat_font_icon'] ) : '';
 		$cat_info_fixed['cat_color']           = isset( $cat_info['cat_color'] ) && $cat_info['cat_color'] ? esc_attr( $cat_info['cat_color'] ) : '';
 		$cat_info_fixed['cat_top_description'] = isset( $cat_info['cat_top_description'] ) && $cat_info['cat_top_description'] ? esc_attr( $cat_info['cat_top_description'] ) : '';
-		$cat_info_fixed['image']               = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
-		$cat_info_fixed['icon']                = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
+		$cat_info_fixed['cat_image']           = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
+		$cat_info_fixed['cat_icon']            = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
 
 		// validate @todo validate the info
 
 		// temp image fix
-		$cat_info_fixed['image'] 				= $cat_info_fixed['image'] != '' ? basename( $cat_info_fixed['image'] ) : '';
-		$cat_info_fixed['icon']  				= $cat_info_fixed['icon'] != '' ? basename( $cat_info_fixed['icon'] ) : '';
+		$cat_info_fixed['image'] 				= $cat_info_fixed['cat_image'] != '' ? basename( $cat_info_fixed['cat_image'] ) : '';
+		$cat_info_fixed['icon']  				= $cat_info_fixed['cat_icon'] != '' ? basename( $cat_info_fixed['cat_icon'] ) : '';
 
 		if ( ! empty( $cat_info_fixed['parent'] ) ) {
 			$parent = 0;
@@ -2140,5 +2162,26 @@ class GeoDir_Admin_Import_Export {
 		$proper_filename = $data['proper_filename'];
 
 		return compact( 'ext', 'type', 'proper_filename' );
+	}
+	
+	public static function generate_attachment_id( $image_url ) {
+		if ( empty( $image_url ) ) {
+			return '';
+		}
+
+		$image_url = str_replace( 'geodirectory-assets/', 'assets/', $image_url );
+		$image_url = str_replace( 'geodirectory-functions/map-functions/icons', 'assets/images', $image_url );
+
+		$upload = GeoDir_Media::upload_image_from_url( $image_url );
+
+		if ( ! empty( $upload ) && ! is_wp_error( $upload ) && ! empty( $upload['file'] ) ) {
+			$attachment_id = GeoDir_Media::set_uploaded_image_as_attachment( $upload );
+
+			if ( ! empty( $attachment_id ) && ! is_wp_error( $attachment_id ) ) {
+				return $attachment_id;
+			}
+		}
+
+		return false;
 	}
 }

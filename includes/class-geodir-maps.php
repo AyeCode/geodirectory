@@ -133,7 +133,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	document.write('<' + 'script id="geodirectory-o-overlappingmarker-script" src="<?php echo $plugin_url; ?>/assets/jawj/oms-leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION; ?>" type="text/javascript"><' + '/script>');
 }
 <?php
-			//do_action('geodir_maps_extra_script');
+			do_action( 'geodir_maps_extra_script' );
 			$osm_extra = ob_get_clean();
 		}
 		return $osm_extra;

@@ -439,6 +439,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'inc_sidebars_init' ) && ( strpos( $meta_key, '_cs_replacements' ) === 0 || empty( $meta_key ) ) ) // custom sidebars plugin
 			 || ( function_exists( 'et_divi_load_scripts_styles' ) && ( strpos( $meta_key, '_et_' ) === 0 || empty( $meta_key ) ) ) // Divi
 			 || ( function_exists( 'tie_admin_bar' ) && ( strpos( $meta_key, 'tie_' ) === 0 || in_array( $meta_key, array( 'post_color', 'post_background', 'post_background_full' ) ) || empty( $meta_key ) ) ) // Jarida
+			 || ( function_exists( 'mk_build_main_wrapper' ) && ( empty( $meta_key ) || strpos( $meta_key, '_widget_' ) === 0 || in_array( $meta_key, array( '_layout', '_template', '_padding', 'page_preloader', '_introduce_align', '_custom_page_title', '_page_introduce_subtitle', '_disable_breadcrumb', 'menu_location', '_sidebar' ) ) ) ) // Jupiter
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -1032,6 +1033,10 @@ class GeoDir_Compatibility {
 					add_filter( 'cs_replace_sidebars', array( __CLASS__, 'cs_replace_sidebars' ), 20, 2 );
 				}
 			}
+
+			if ( function_exists( 'mk_build_main_wrapper' ) ) {
+				add_filter( 'get_header', array( __CLASS__, 'jupiter_mk_build_init' ), 20, 1 );
+			}
 		}
 
 		// GeneratePress theme compatibility
@@ -1212,7 +1217,7 @@ class GeoDir_Compatibility {
 		return $args;
 	}
 
-	public static function avada_page_id() {
+	public static function gd_page_id() {
 		global $gd_post;
 
 		$page_id = 0;
@@ -1255,7 +1260,7 @@ class GeoDir_Compatibility {
 	public static function avada_body_classes() {
 		$classes = array();
 
-		$page_id = (int) self::avada_page_id();
+		$page_id = (int) self::gd_page_id();
 
 		if ( empty( $page_id ) ) {
 			return $classes;
@@ -1364,7 +1369,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_sidebar( $value ) {
-		if ( $page_id = (int) self::avada_page_id() ) {
+		if ( $page_id = (int) self::gd_page_id() ) {
 			$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_replacement', true );
 
 			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
@@ -1376,7 +1381,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_sidebar_2( $value ) {
-		if ( $page_id = (int) self::avada_page_id() ) {
+		if ( $page_id = (int) self::gd_page_id() ) {
 			$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_2_replacement', true );
 
 			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
@@ -1388,7 +1393,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_sidebar_position( $value ) {
-		if ( $page_id = (int) self::avada_page_id() ) {
+		if ( $page_id = (int) self::gd_page_id() ) {
 			$meta = get_post_meta( $page_id, 'pyre_sidebar_position', true );
 
 			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
@@ -1400,7 +1405,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_sidebar_sticky( $value ) {
-		if ( $page_id = (int) self::avada_page_id() ) {
+		if ( $page_id = (int) self::gd_page_id() ) {
 			$meta = get_post_meta( $page_id, 'pyre_sidebar_sticky', true );
 
 			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
@@ -1459,7 +1464,7 @@ class GeoDir_Compatibility {
 			return $value;
 		}
 
-		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = (int) self::avada_page_id() ) ) {
+		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = (int) self::gd_page_id() ) ) {
 			$sidebar_pos = get_post_meta( $page_id, 'tie_sidebar_pos', true );
 			$value['sidebar_pos'] = is_array( $sidebar_pos ) ? $sidebar_pos[0] : $sidebar_pos;
 
@@ -1502,7 +1507,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function jarida_body_class( $classes ) {
-		if ( geodir_is_geodir_page() && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = (int) self::avada_page_id() ) ) {
+		if ( geodir_is_geodir_page() && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) && ( $page_id = (int) self::gd_page_id() ) ) {
 			$sidebar_pos = get_post_meta( $page_id, 'tie_sidebar_pos', true );
 			$sidebar_pos = is_array( $sidebar_pos ) ? $sidebar_pos[0] : $sidebar_pos;
 
@@ -1534,7 +1539,7 @@ class GeoDir_Compatibility {
 	 * @param array $options Custom Sidebars settings.
 	 */
 	public static function cs_replace_sidebars( $replacements, $options ) {
-		$page_id = (int) self::avada_page_id();
+		$page_id = (int) self::gd_page_id();
 
 		if ( empty( $page_id ) ) {
 			return $replacements;
@@ -1555,5 +1560,17 @@ class GeoDir_Compatibility {
 		}
 
 		return $replacements;
+	}
+
+	public static function jupiter_mk_build_init( $name ) {
+		$page_id = self::gd_page_id();
+
+		if ( empty( $page_id ) ) {
+			return;
+		}
+
+		// Layout
+		$layout = get_post_meta( $page_id, '_layout', true );
+		$_REQUEST['layout'] = $layout;
 	}
 }
