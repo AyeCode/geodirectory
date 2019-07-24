@@ -59,11 +59,19 @@ class GeoDir_SEO {
 		//return ( defined( 'WPSEO_VERSION')  )  ? true : false;
 	}
 
+	public static function rank_math_enabled(){
+		global $geodir_options;
+		return defined( 'RANK_MATH_VERSION')
+		       && ( !isset($geodir_options['rank_math_disable'] ) || ( isset($geodir_options['rank_math_disable']) && $geodir_options['rank_math_disable']=='0' ) )   ? true : false;
+	}
+
+
 	public static function maybe_run(){
 
 		// bail if we have a SEO plugin installed.
 		if(
 			self::yoast_enabled() // don't run if active and not set to be disabled
+				|| self::rank_math_enabled() // don't run if active and not set to be disabled
 		    || class_exists( 'All_in_One_SEO_Pack' )  // don't run if active
 		    || is_admin()  // no need to run in wp-admin
 		){
@@ -99,10 +107,12 @@ class GeoDir_SEO {
 
 		// setup vars
 		add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
-		
+
 		// meta description
 		if(defined( 'WPSEO_VERSION')){
 			add_filter('wpseo_metadesc', array(__CLASS__,'get_description'), 10, 1);
+		}elseif( defined( 'RANK_MATH_VERSION') ){
+			add_filter('rank_math/frontend/description', array(__CLASS__,'get_description'), 10, 1);
 		}else{
 			add_action('wp_head', array(__CLASS__,'output_description'));
 		}
@@ -309,7 +319,7 @@ class GeoDir_SEO {
 		if(self::$title){self::$title = self::replace_variable(self::$title,self::$gd_page);}
 		if(self::$meta_title){self::$meta_title = self::replace_variable(self::$meta_title,self::$gd_page);}
 		if(self::$meta_description){self::$meta_description = self::replace_variable(self::$meta_description,self::$gd_page);}
-		
+
 		return self::$title;
 	}
 
@@ -489,7 +499,7 @@ class GeoDir_SEO {
 	 * Returns an array of allowed variables and their descriptions.
      *
      * @since 2.0.0
-	 * 
+	 *
 	 * @param string $gd_page Optional. Geo directory page. Default null.
 	 *
 	 * @return array $vars.
@@ -512,7 +522,7 @@ class GeoDir_SEO {
 			);
 		}
 
-		
+
 		// location tags
 		if(!$gd_page || $gd_page == 'location_tags' || $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' || $gd_page == 'single' || $gd_page == 'location'){
 			$vars['%%location%%'] = __('The full current location eg: United States, Pennsylvania, Philadelphia','geodirectory');
@@ -570,7 +580,7 @@ class GeoDir_SEO {
 			$output .= '</ul>';
 
 		}
-		
+
 		return $output;
 	}
 
@@ -602,6 +612,7 @@ class GeoDir_SEO {
     public static function breadcrumb_links($crumbs){
 
 	    // maybe add category link to single page
+
         if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
 	        global $wp_query;
 	        $breadcrumb = array();
@@ -622,7 +633,7 @@ class GeoDir_SEO {
 	        }
 
         }
-	    
+
         return $crumbs;
     }
 
@@ -649,7 +660,7 @@ class GeoDir_SEO {
 		}
 		return $link;
 	}
-	
+
 }
 
 

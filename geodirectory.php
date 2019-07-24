@@ -94,7 +94,7 @@ final class GeoDirectory {
         return self::$instance;
     }
 
-	
+
 
     /**
      * Setup plugin constants.
