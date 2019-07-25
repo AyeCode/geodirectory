@@ -113,6 +113,7 @@ class GeoDir_SEO {
 			add_filter('wpseo_metadesc', array(__CLASS__,'get_description'), 10, 1);
 		}elseif( defined( 'RANK_MATH_VERSION') ){
 			add_filter('rank_math/frontend/description', array(__CLASS__,'get_description'), 10, 1);
+			add_filter('rank_math/frontend/title', array(__CLASS__,'get_title'), 10, 1);
 		}else{
 			add_action('wp_head', array(__CLASS__,'output_description'));
 		}
@@ -244,6 +245,30 @@ class GeoDir_SEO {
 		 * @param string $description Meta description.
 		 */
 		return apply_filters( 'geodir_seo_meta_description', $description,$meta_description);
+	}
+
+	/**
+	 * Get a page meta title.
+	 *
+	 * @since 2.0.0
+	 */
+	public static function get_title( $title = '' ){
+		$meta_title= self::$meta_title;
+
+		if ( !empty( $meta_title ) ) {
+			$title = $meta_title;
+		}
+
+		// escape
+		if ( !empty( $title ) ) {
+			$title = esc_attr( $title );
+		}
+		/**
+		 * Filter SEO meta title.
+		 *
+		 * @param string $title Meta title.
+		 */
+		return apply_filters( 'geodir_seo_meta_title', $title, $meta_title);
 	}
 
 	/**
