@@ -369,13 +369,6 @@ class GeoDir_Compatibility {
 			$gen_keys[] = 'ast-featured-img';
 		}
 
-		// Newspaper theme
-		if ( defined('TD_THEME_VERSION') ) {
-			if ( substr( $meta_key, 0, 3 ) === "td_") {
-				$gen_keys[] = $meta_key;
-			}
-		}
-
 		// Enfold theme
 		if ( function_exists( 'avia_get_option' ) ) {
 			if ( substr( $meta_key, 0, 6 ) === "_avia_" ) {
@@ -434,6 +427,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'et_divi_load_scripts_styles' ) && ( strpos( $meta_key, '_et_' ) === 0 || empty( $meta_key ) ) ) // Divi
 			 || ( function_exists( 'tie_admin_bar' ) && ( strpos( $meta_key, 'tie_' ) === 0 || in_array( $meta_key, array( 'post_color', 'post_background', 'post_background_full' ) ) || empty( $meta_key ) ) ) // Jarida
 			 || ( function_exists( 'mk_build_main_wrapper' ) && ( empty( $meta_key ) || strpos( $meta_key, '_widget_' ) === 0 || in_array( $meta_key, array( '_layout', '_template', '_padding', 'page_preloader', '_introduce_align', '_custom_page_title', '_page_introduce_subtitle', '_disable_breadcrumb', 'menu_location', '_sidebar' ) ) ) ) // Jupiter
+			 || ( defined( 'TD_THEME_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, 'td_' ) === 0 ) ) // Newspaper
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -477,7 +471,10 @@ class GeoDir_Compatibility {
 						}
 					}
 				} else {
-					$metadata = get_post_meta( $template_page_id, $meta_key, $single );
+					$metadata = get_post_meta( $template_page_id, $meta_key );
+					if ( $single && is_array( $metadata ) && empty( $metadata ) ) {
+						$metadata = '';
+					}						
 				}
 				return $metadata;
 			}

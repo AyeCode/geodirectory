@@ -8,6 +8,7 @@
 * Category default image not working when category imported via csv - FIXED
 * Jupiter theme GD page sidebars not working - FIXED
 * AJAX listings pagination not working is email allowed to show on listings - FIXED
+* Newspaper theme sidebar position not working on GD pages - FIXED
 
 = 2.0.0.64 = 
 * Beaver Builder content does not work for archive item template - FIXED
