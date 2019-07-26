@@ -1400,6 +1400,8 @@ class GeoDir_Compatibility {
 
 				// Render the content.
 				ob_start();
+				// Enqueue styles and scripts for this post.
+				FLBuilder::enqueue_layout_styles_scripts_by_id( $page_id );
 				FLBuilder::render_content_by_id( $page_id );
 				$content = ob_get_clean();
 
