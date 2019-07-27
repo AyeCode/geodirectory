@@ -283,7 +283,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 * @param $options
 	 */
 	public function output_images($options){
-		global $post,$gd_slider_outputs,$gd_post;
+		global $post, $gd_post;
 		if(!isset($post->ID)){return '';}
 		ob_start();
 
@@ -362,16 +362,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			}
 
 			// Set the slider ID
-			$slider_id = wp_doing_ajax() ? "geodir_images_ajax_".$post->ID : "geodir_images_".$post->ID;
-			if(!is_array($gd_slider_outputs)){
-				$gd_slider_outputs = array();
-			}
-			if(isset($gd_slider_outputs[$post->ID])){
-				$gd_slider_outputs[$post->ID]++;
-				$slider_id .= "_".$gd_slider_outputs[$post->ID];
-			}else{
-				$gd_slider_outputs[$post->ID] = 1;
-			}
+			$slider_id = wp_doing_ajax() ? "geodir_images_ajax" : "geodir_images";
+			$slider_id .= '_' . uniqid() . '_' . $post->ID; // Generate unique slider id.
 
 			// image link
 			$link = '';

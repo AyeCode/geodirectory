@@ -430,10 +430,11 @@ class GeoDir_API {
 			foreach ( $location_vars as $location_var ) {
 				if ( !empty($wp_query->query_vars[$location_var] ) ) {
 					$method_name = "get_{$location_var}_name_from_slug";
-					$var_name    = $location_var == 'neighbourhood' ? get_query_var( $location_var ) : $geodirectory->location->$method_name( $wp_query->query_vars[$location_var]  );
-					if ( $var_name ) {
-						$where .= $wpdb->prepare( " AND " . $table . "." . $location_var . " = %s ", $var_name );
+					$value = $location_var == 'neighbourhood' ? get_query_var( $location_var ) : $geodirectory->location->$method_name( $wp_query->query_vars[$location_var]  );
+					if ( empty( $value ) ) {
+						$value = $wp_query->query_vars[$location_var];
 					}
+					$where .= $wpdb->prepare( " AND " . $table . "." . $location_var . " = %s ", $value );
 				}
 			}
 		}

@@ -1101,6 +1101,7 @@ function geodir_replace_variables($text,$post_id = ''){
 		$non_replace = geodir_get_no_replace_fields();
 		foreach($gd_post as $key => $val){
 			if(!in_array($key,$non_replace)){
+				$val = apply_filters( 'geodir_replace_variables_' . $key, $val, $text );
 				$text = str_replace('%%'.$key.'%%',$val,$text);
 			}
 		}
