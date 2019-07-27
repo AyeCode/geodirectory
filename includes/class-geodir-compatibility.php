@@ -28,6 +28,12 @@ class GeoDir_Compatibility {
 		add_filter( 'geodir_seo_options', array( __CLASS__, 'wpseo_disable' ), 10 );
 
 		/*######################################################
+		Rank Math SEO
+		######################################################*/
+		// add setting to be able to disable Rank Math on GD pages
+		add_filter( 'geodir_seo_options', array( __CLASS__, 'rank_math_disable' ), 10 );
+
+		/*######################################################
 		Disqus (comments system) :: If Disqus plugin is active, do some fixes to show on blogs but no on GD post types
 		######################################################*/
 		if ( function_exists( 'dsq_can_replace' ) ) {
@@ -122,7 +128,7 @@ class GeoDir_Compatibility {
 
 		// Set custom hook for theme compatibility
 		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ) );
-		
+
 		if ( ! is_admin() ) {
 			// Avada (theme)
 			add_filter( 'avada_has_sidebar', array( __CLASS__, 'avada_has_sidebar' ), 100, 3 );
@@ -142,7 +148,7 @@ class GeoDir_Compatibility {
 
 	/**
 	 * Make sure divi actions fire on some of our ajax calls so builder shortcodes are rendered.
-	 * 
+	 *
 	 * @param $actions
 	 *
 	 * @return array
@@ -254,19 +260,19 @@ class GeoDir_Compatibility {
 
 	/**
 	 * Add some basic styles to the editor preview.
-	 * 
+	 *
 	 * @param $css
 	 *
 	 * @return mixed
 	 */
 	public static function enfold_preview_styles($css){
-		
+
 		// add our preview styles
 		$css[geodir_plugin_url() . '/assets/css/block_editor.css'] = 1;
-		
+
 		return $css;
 	}
-	
+
 	/**
 	 * SEOPress breaks the search page when nothing is searched, so we remove some filters in that case.
 	 */
@@ -421,8 +427,8 @@ class GeoDir_Compatibility {
 		}
 
 		// Unicon / GeneratePress
-		if ( ( ( function_exists( 'minti_register_required_plugins' ) && ( strpos( $meta_key, 'minti_' ) === 0 || empty( $meta_key ) ) ) 
-			 || ( defined( 'GENERATE_VERSION' ) && ( strpos( $meta_key, '_generate-' ) === 0 || empty( $meta_key ) ) ) 
+		if ( ( ( function_exists( 'minti_register_required_plugins' ) && ( strpos( $meta_key, 'minti_' ) === 0 || empty( $meta_key ) ) )
+			 || ( defined( 'GENERATE_VERSION' ) && ( strpos( $meta_key, '_generate-' ) === 0 || empty( $meta_key ) ) )
 			 || ( function_exists( 'inc_sidebars_init' ) && ( strpos( $meta_key, '_cs_replacements' ) === 0 || empty( $meta_key ) ) ) // custom sidebars plugin
 			 || ( function_exists( 'et_divi_load_scripts_styles' ) && ( strpos( $meta_key, '_et_' ) === 0 || empty( $meta_key ) ) ) // Divi
 			 || ( function_exists( 'tie_admin_bar' ) && ( strpos( $meta_key, 'tie_' ) === 0 || in_array( $meta_key, array( 'post_color', 'post_background', 'post_background_full' ) ) || empty( $meta_key ) ) ) // Jarida
@@ -447,6 +453,9 @@ class GeoDir_Compatibility {
 				if ( empty( $meta_key ) ) {
 					// Don't overwrite Yoast SEO meta for the individual post.
 					$reserve_post_meta = defined( 'WPSEO_VERSION' ) && ! geodir_get_option( 'wpseo_disable' ) && geodir_is_page( 'detail' ) ? true : false;
+
+					// Don't overwrite Rank Math SEO meta for the individual post.
+					$reserve_post_meta = defined( 'RANK_MATH_VERSION' ) && ! geodir_get_option( 'rank_math_disable' ) && geodir_is_page( 'detail' ) ? true : false;
 
 					if ( $reserve_post_meta ) {
 						global $gd_post_metadata;
@@ -759,6 +768,34 @@ class GeoDir_Compatibility {
 		return $api_params;
 	}
 
+	public static function rank_math_disable( $options ) {
+
+		if ( defined( 'RANK_MATH_VERSION' ) ) {
+			$new_options = array(
+				array(
+					'title' => __( 'Rank Math SEO detected', 'geodirectory' ),
+					'type'  => 'title',
+					'desc'  => geodir_notification( array( 'rank_math_detected' => __( 'The Rank Math SEO plugin has been detected and will take over the GeoDirectory meta Settings unless disabled below. (titles from here will still be used, but not meta)', 'geodirectory' ) ) ),
+					'id'    => 'rank_math_detected',
+					//'desc_tip' => true,
+				),
+				array(
+					'name'    => __( 'Disable Rank Math', 'geodirectory' ),
+					'desc'    => __( 'Disable overwrite by Rank Math titles & metas on GD pages?', 'geodirectory' ),
+					'id'      => 'rank_math_disable',
+					'type'    => 'checkbox',
+					'default' => '0',
+				),
+				array( 'type' => 'sectionend', 'id' => 'rank_math_detected' )
+			);
+
+			array_splice( $options, 1, 0, $new_options ); // splice in at position 1
+		}
+
+
+		return $options;
+	}
+
 	public static function wpseo_disable( $options ) {
 
 		if ( defined( 'WPSEO_VERSION' ) ) {
@@ -883,7 +920,6 @@ class GeoDir_Compatibility {
 	 */
 	public static function wpseo_taxonomy_meta( $value, $option = '' ) {
 		global $wp_query;
-
 		if ( ! empty( $value ) && ( is_category() || is_tax() ) ) {
 			$term = $wp_query->get_queried_object();
 
@@ -1041,7 +1077,7 @@ class GeoDir_Compatibility {
 			avada_page_title_bar( $title, $page_title_bar_contents[1], $page_title_bar_contents[2] );
 		}
 	}
-	
+
 	/**
 	 * Filter GeneratePress theme page layout.
 	 *
@@ -1174,10 +1210,10 @@ class GeoDir_Compatibility {
 		if ( $title ) {
 			$args['title'] = $title;
 		}
-	
+
 		return $args;
 	}
-	
+
 	public static function gd_page_id() {
 		global $gd_post;
 
@@ -1307,7 +1343,7 @@ class GeoDir_Compatibility {
 
 	public static function avada_body_class( $classes ) {
 		$body_classes = self::avada_body_classes();
-		
+
 		if ( ! empty( $body_classes ) && ! empty( $classes ) ) {
 			$new_classes = array();
 			$check_classes = array( 'layout-boxed-mode', 'layout-wide-mode', 'has-sidebar', 'double-sidebars', 'fusion-top-header', 'side-header-left', 'side-header-right' );
