@@ -285,6 +285,32 @@ function geodir_get_post_meta( $post_id, $meta_key, $single = false ) {
 }
 
 /**
+ * Checks if a given post has a given custom meta.
+ *
+ * @since 2.0.0.65
+ * @package GeoDirectory
+ * @global object $post Current post object.
+ *
+ * @param string $meta_key The meta key to check.
+ * @param int $post_id Optional. Defaults to current post. The post whose meta should be checked.
+ *
+ * @return bool True if the key exists and has a non-empty value. False otherwise.
+ */
+if ( ! function_exists( 'geodir_has_post_meta' ) ) {
+	function geodir_has_post_meta( $meta_key, $post_id = null ) {
+		global $post;
+
+		//Use the current post's id if none is provided
+		if( is_null( $post_id ) ) {
+			$post_id = $post->ID;
+		}
+
+		return !empty( geodir_get_post_meta( $post_id, $meta_key, true ) );
+
+	}
+}
+
+/**
  * Default post status for new posts.
  *
  * @since 1.0.0
