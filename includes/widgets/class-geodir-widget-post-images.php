@@ -328,6 +328,21 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 //		$options['types'] = array("logo","comment_images","post_images"); // @todo remove this line after testing
 
+		// check for URL screenshots
+//		if(!empty($options['types'])){
+//			foreach($options['types'] as $key => $val){
+//				if(stripos(strrev($val), "tohsneercs_") === 0){
+//					$field = str_replace("_screenshot","",$val);
+//					if(isset($gd_post->{$field}) && esc_url($gd_post->{$field})){
+//						echo '###'.$key;
+//					}else{
+//						unset($options['types'][$key]); // unset if an invalid screenshot type
+//					}
+//				}
+//			}
+//		}
+
+
 		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types']);
 
 

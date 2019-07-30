@@ -47,16 +47,16 @@
   }
 
   a{
-    color: #fff;
+    color: #fff !important;
     text-decoration: underline;
     &:visited {
-      color: #fff;
+      color: #fff !important;
     }
     &:hover {
-      color: #ccc;
+      color: #ccc !important;
     }
     &:active {
-      color: #fff;
+      color: #fff !important;
     }
 
     &.gd-noti-button{
@@ -104,15 +104,15 @@
 
   &.noti-white{
     background: white;
-    color: #555;
+    color: #555 !important;
     a{
-      color: #555;
+      color: #555 !important;
       text-decoration: underline;
       &:visited {
-        color: #555;
+        color: #555 !important;
       }
       &:hover {
-        color: #ccc;
+        color: #ccc !important;
       }
       &:active {
         color: #555;
