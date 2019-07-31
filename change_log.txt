@@ -10,6 +10,8 @@
 * AJAX listings pagination not working is email allowed to show on listings - FIXED
 * Newspaper theme sidebar position not working on GD pages - FIXED
 * Duplicate image slider id breaks ajax image slider - FIXED
+* Helper function to check if a given listing has a custom field - ADDED
+* Rank Math SEO plugin compatibility settings - ADDED
 
 = 2.0.0.64 = 
 * Beaver Builder content does not work for archive item template - FIXED
