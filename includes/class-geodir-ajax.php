@@ -66,6 +66,7 @@ class GeoDir_AJAX {
 			'recently_viewed_listings' => true,
 			'embed_widget' => true,
 			'embed_script' => true,
+			'timezone_data' => true
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -1205,6 +1206,30 @@ class GeoDir_AJAX {
 
 		$widget_listings = new GeoDir_Widget_Listings();
 		$widget_listings->ajax_listings( $_POST );
+
+		wp_die();
+	}
+
+	/**
+	 * Get timezone data for latitude & longitude.
+     *
+     * @since 2.0.0.66
+	 */
+	public static function timezone_data(){
+		// security
+		//check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		$latitude = isset( $_POST['lat'] ) ? sanitize_text_field( $_POST['lat'] ) : '';
+		$longitude = isset( $_POST['lon'] ) ? sanitize_text_field( $_POST['lon'] ) : '';
+		$timestamp = isset( $_POST['ts'] ) ? absint( $_POST['ts'] ) : 0;
+
+		$data = geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 );
+		
+		if ( is_wp_error( $data ) ) {
+			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
+		} else {
+			wp_send_json_success( $data );
+		}
 
 		wp_die();
 	}
