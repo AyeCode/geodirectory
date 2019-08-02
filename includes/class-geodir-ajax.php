@@ -1217,7 +1217,7 @@ class GeoDir_AJAX {
 	 */
 	public static function timezone_data(){
 		// security
-		//check_ajax_referer( 'geodir_basic_nonce', 'security' );
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
 		$latitude = isset( $_POST['lat'] ) ? sanitize_text_field( $_POST['lat'] ) : '';
 		$longitude = isset( $_POST['lon'] ) ? sanitize_text_field( $_POST['lon'] ) : '';

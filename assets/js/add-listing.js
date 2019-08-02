@@ -614,7 +614,6 @@ var GeoDir_Business_Hours = {
 					ts: (Math.round((new Date().getTime()) / 1000)).toString()
 				}
 			}).done(function(res) {
-				console.log(res);
 				if (res && typeof res == 'object') {
 					if (res.success) {
 						data = res.data;
@@ -659,4 +658,3 @@ function geodir_save_all_tinymce_editors() {
         }
     }
 }
-

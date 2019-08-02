@@ -1126,23 +1126,33 @@ function geodir_fill_timezone(prefix) {
 	lat = lat ? lat.trim() : '';
 	lng = lng ? lng.trim() : '';
 	if (lat && lng) {
-		var url = 'https://maps.googleapis.com/maps/api/timezone/json';
-		url += '?location=' + lat + ',' + lng;
-		url += '&timestamp=' + (Math.round((new Date().getTime())/1000)).toString();
-		url += '&key=' + geodir_params.google_api_key;
 		jQuery.ajax({
-		   url:url,
-		}).done(function(response){
-		   if (response && typeof response == 'object') {
-			   if (typeof response.rawOffset != 'undefined') {
-				   offset = response.rawOffset;
-				   offset = geodir_seconds_to_hm(offset);
-				   jQuery('[name="' + prefix + 'timezone"]', $form).val(offset);
-			   }
-			   if (response.errorMessage) {
-				   console.log(response.errorMessage);
-			   }
-		   }
+			url: geodir_params.ajax_url,
+			type: 'POST',
+			dataType: 'json',
+			data: {
+				action: 'geodir_timezone_data',
+				security: geodir_params.basic_nonce,
+				lat: lat,
+				lon: lng,
+				ts: (Math.round((new Date().getTime()) / 1000)).toString()
+			}
+		}).done(function(res) {
+			if (res && typeof res == 'object') {
+				if (res.success) {
+					data = res.data;
+					if (typeof data.rawOffset != 'undefined') {
+						offset = data.rawOffset;
+						offset = geodir_seconds_to_hm(offset);
+						jQuery('[name="' + prefix + 'timezone"]', $form).val(offset);
+					}
+				} else if (res.data) {
+					data = res.data;
+					if (data.error) {
+						console.log(data.error);
+					}
+				}
+			}
 		});
 	}
 }

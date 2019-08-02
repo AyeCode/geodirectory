@@ -612,7 +612,7 @@ function geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 )
 			$error = __( 'There is an error in timezone data request.', 'geodirectory' );
 		}
 
-		$data = new WP_Error( 'gd-timezone-api', wp_sprintf( __( 'Timezone Service: %s' ), $error ) );
+		$data = new WP_Error( 'gd-timezone-api', wp_sprintf( __( 'Google Timezone API: %s' ), $error ) );
 	}
 
 	return apply_filters( 'geodir_get_timezone_by_lat_lon', $data, $latitude, $longitude, $timestamp );
