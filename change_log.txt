@@ -1,3 +1,6 @@
+= 2.0.0.66 =
+* Timezone API requests exposes the API key - FIXED
+
 = 2.0.0.65 =
 * Jarida theme compatibility for GD page sidebars - FIXED
 * Business hours timepicker translation not working on first load - FIXED
