@@ -557,3 +557,63 @@ function geodir_ip_api_data( $ip = '' ) {
 
     return $data;
 }
+
+/**
+ * Get timezone data from via timezone api service.
+ *
+ * @since 2.0.0.66
+ *
+ * @param string $latitude Latitude
+ * @param string $longitude Longitude
+ * @param int $timestamp Timestamp
+ * @return array|WP_Error
+ */
+function geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 ) {
+	global $wp_version;
+
+	$data = array();
+	$error = '';
+
+	if ( ! empty( $latitude ) && ! empty( $longitude ) ) {
+		$api_url = 'https://maps.googleapis.com/maps/api/timezone/json';
+		$api_url .= '?key=' . GeoDir_Maps::google_geocode_api_key();
+		$api_url .= '&timestamp=' . ( absint( $timestamp ) > 0 ? absint( $timestamp ) : current_time( 'timestamp' ) );
+		$api_url .= '&location=' . $latitude . ',' . $longitude;
+
+		$args = array(
+			'timeout'     => 5,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'user-agent'  => 'WordPress/' . $wp_version . '; ' . home_url(),
+			'blocking'    => true,
+			'decompress'  => true,
+			'sslverify'   => false,
+		);
+
+		$response = wp_remote_get( $api_url , $args );
+
+		if ( ! is_wp_error( $response ) ) {
+			$body = (array) json_decode( wp_remote_retrieve_body( $response ) );
+
+			if ( ! empty( $body ) && $body['status'] == 'OK' ) {
+				$data = $body;
+			} elseif ( ! empty( $body ) && ! empty( $body['errorMessage'] ) ) {
+				$error = __( $body['errorMessage'], 'geodirectory' );
+			}
+		} else {
+			if ( current_user_can( 'manage_options' ) ) {
+				$error = __( $response->get_error_message(), 'geodirectory' );
+			}
+		}
+	}
+
+	if ( empty( $data ) ) {
+		if ( empty( $error ) ) {
+			$error = __( 'There is an error in timezone data request.', 'geodirectory' );
+		}
+
+		$data = new WP_Error( 'gd-timezone-api', wp_sprintf( __( 'Google Timezone API: %s' ), $error ) );
+	}
+
+	return apply_filters( 'geodir_get_timezone_by_lat_lon', $data, $latitude, $longitude, $timestamp );
+}
