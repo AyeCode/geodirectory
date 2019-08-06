@@ -360,6 +360,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'label_caption'                                => __( 'Caption', 'geodirectory' ),
 		'button_set'                                   => __( 'Set', 'geodirectory' ),
 		'BH_altTimeFormat'                             => geodir_bh_input_time_format( true ),
+		'basic_nonce'                                  => wp_create_nonce( 'geodir_basic_nonce' ),
 	);
 
 	/**

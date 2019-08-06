@@ -308,7 +308,7 @@ class GeoDir_Admin_Taxonomies {
             <?php echo $this->render_cat_default_img(); ?>
         </div>
         <?php do_action( 'geodir_add_category_after_cat_default_img', $taxonomy ); ?>
-        <div class="form-field term-ct_cat_icon-wrap gd-term-form-field form-required">
+        <div class="form-field term-ct_cat_icon-wrap gd-term-form-field">
             <label for="ct_cat_icon"><?php _e( 'Map Icon', 'geodirectory' ); ?></label>
             <?php echo $this->render_cat_icon(); ?>
         </div>
@@ -368,7 +368,7 @@ class GeoDir_Admin_Taxonomies {
             <td><?php echo $this->render_cat_default_img( $cat_default_img ); ?></td>
         </tr>
         <?php do_action( 'geodir_edit_category_after_cat_default_img', $term, $taxonomy ); ?>
-        <tr class="form-field term-ct_cat_icon-wrap gd-term-form-field form-required">
+        <tr class="form-field term-ct_cat_icon-wrap gd-term-form-field">
             <th scope="row"><label for="ct_cat_icon"><?php _e( 'Map Icon', 'geodirectory' ); ?></label></th>
             <td><?php echo $this->render_cat_icon( $cat_icon ); ?></td>
         </tr>
@@ -444,11 +444,11 @@ class GeoDir_Admin_Taxonomies {
             <div class="gd-upload-fields">
                 <input type="hidden" id="<?php echo $id; ?>[id]" name="<?php echo $name; ?>[id]" value="<?php echo $img_id; ?>" />
                 <input type="hidden" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" />
-                <button type="button" class="gd_upload_image_button button"><?php _e( 'Upload Image', 'geodirectory' ); ?></button>
+                <button type="button" class="gd_upload_image_button button"><?php _e( 'Select Image', 'geodirectory' ); ?></button>
                 <button type="button" class="gd_remove_image_button button"><?php _e( 'Remove Image', 'geodirectory' ); ?></button>
             </div>
         </div>
-        <p class="description clear"><?php _e( 'Choose a default image for the listing within this category.', 'geodirectory' ); ?></p>
+        <p class="description clear"><?php _e( 'Select a default image for the listing within this category.', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
@@ -478,12 +478,12 @@ class GeoDir_Admin_Taxonomies {
             <div class="gd-upload-display thumbnail"><div class="centered"><img src="<?php echo $show_img; ?>" /></div></div>
             <div class="gd-upload-fields">
                 <input type="hidden" id="<?php echo $id; ?>[id]" name="<?php echo $name; ?>[id]" value="<?php echo $img_id; ?>" />
-                <input type="text" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" required style="position:absolute;left:-500px;width:50px;" />
-                <button type="button" class="gd_upload_image_button button"><?php _e( 'Upload Icon', 'geodirectory' ); ?></button>
+                <input type="text" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" style="position:absolute;left:-500px;width:50px;" />
+                <button type="button" class="gd_upload_image_button button"><?php _e( 'Select Icon', 'geodirectory' ); ?></button>
                 <button type="button" class="gd_remove_image_button button"><?php _e( 'Remove Icon', 'geodirectory' ); ?></button>
             </div>
         </div>
-        <p class="description clear"><?php _e( 'Choose a category icon', 'geodirectory' ); ?></p>
+        <p class="description clear"><?php _e( 'Select a map icon, or pick a FontAwesome icon and color below to have one auto-generated. (if this field is empty)', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
@@ -521,7 +521,7 @@ class GeoDir_Admin_Taxonomies {
             }
             ?>
         </select>
-        <p class="description clear"><?php _e( 'Choose a category icon', 'geodirectory' ); ?></p>
+        <p class="description clear"><?php _e( 'Select a category icon', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
@@ -619,10 +619,35 @@ class GeoDir_Admin_Taxonomies {
             
             if ( !empty( $cat_icon['src'] ) ) {
                 $cat_icon['src'] = geodir_file_relative_url( $cat_icon['src'] );
+            } elseif(!empty($_POST['ct_cat_font_icon'])) {
+                $background = !empty($_POST['ct_cat_color']) ? ltrim (sanitize_hex_color($_POST['ct_cat_color']),'#') : 'ef5646';
+                $fa_icon_parts = explode(" ",$_POST['ct_cat_font_icon']);
+                $fa_icon = !empty($fa_icon_parts[1]) ? sanitize_html_class($fa_icon_parts[1]) : 'fa-star-solid';
+                $icon_url = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/icon-stack?";
+                $icon_url .= "icon=".$fa_icon;
+                $icon_url .= "&size=50";
+                $icon_url .= "&color=fff";
+                $icon_url .= "&on=fa-map-marker";
+                $icon_url .= "&hoffset=0";
+                $icon_url .= "&voffset=-4";
+               // $icon_url .= "&iconSize=20"; //goes off center if you set a size
+                $icon_url .= "&oncolor=".$background;
+
+                $image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon,array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp'),array('ext'=>'png','type'=>'image/png') );
+
+                if(!empty($image['url'])){
+                    $attachment_id = GeoDir_Media::set_uploaded_image_as_attachment($image);
+                    if( $attachment_id ){
+                        $cat_icon['id'] = $attachment_id;
+                        $cat_icon['src'] = geodir_file_relative_url( $image['url'] );
+
+                    }
+                }
+
             } else {
                 $cat_icon = array();
             }
-            
+
             update_term_meta( $term_id, 'ct_cat_icon', $cat_icon );
         }
 
@@ -633,7 +658,7 @@ class GeoDir_Admin_Taxonomies {
 
         // Category color.
         if ( isset( $_POST['ct_cat_color'] ) ) {
-            update_term_meta( $term_id, 'ct_cat_color', sanitize_text_field( $_POST['ct_cat_color'] ) );
+            update_term_meta( $term_id, 'ct_cat_color', sanitize_hex_color( $_POST['ct_cat_color'] ) );
         }
         
         // Category schema.

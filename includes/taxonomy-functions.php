@@ -748,3 +748,39 @@ function geodir_term_recount( $terms, $taxonomy, $post_type, $callback = true, $
 
 	delete_transient( 'geodir_term_counts' );
 }
+
+/**
+ * Get the all the child terms.
+ *
+ * @since 2.0.0.66
+ *
+ * @param int $child_of Parent term to get child terms.
+ * @param string $taxonomy Taxonomy.
+ * @param array $terms Array of terms. Default Empty.
+ * @return array Array fo child terms.
+ */
+function geodir_get_term_children( $child_of, $taxonomy, $terms = array() ) {
+	global $wpdb;
+
+	if ( empty( $terms ) && $child_of > 0 ) {
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = %s AND tt.term_id = %d", array( $taxonomy, $child_of ) ) );
+		if ( ! empty( $row ) ) {
+			$terms[ $row->term_id ] = $row;
+		}
+	}
+
+	$query = $wpdb->prepare( "SELECT t.*, tt.* FROM wp_terms AS t INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = %s AND tt.parent = %d", array( $taxonomy, $child_of ) );
+	$results = $wpdb->get_results( $query );
+
+	if ( ! empty( $results ) ) {
+		foreach ( $results as $i => $row ) {
+			$terms[ $row->term_id ] = $row;
+
+			if ( ! empty( $row->parent ) ) {
+				$terms = geodir_get_term_children( $row->term_id, $taxonomy, $terms );
+			}
+		}
+	}
+
+	return $terms;
+}

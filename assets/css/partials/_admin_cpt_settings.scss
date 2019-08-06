@@ -138,6 +138,13 @@
     }
 
   }
+ 
+  .dd-type-shortcode {
+    textarea[name="tab_content"] {
+	  margin: 0px 10px;
+	  width: calc(100% - 20px);
+	}
+  }
 }
 
 .side-sortables {
