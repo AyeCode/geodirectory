@@ -31,7 +31,7 @@ class GeoDir_Admin_Setup_Wizard {
 	public function __construct() {
 		if ( apply_filters( 'geodir_enable_setup_wizard', true ) && current_user_can( 'manage_options' ) ) {
 			add_action( 'admin_menu', array( $this, 'admin_menus' ) );
-			add_action( 'admin_init', array( $this, 'setup_wizard' ) );
+			add_action( 'current_screen', array( $this, 'setup_wizard' ) );
 
 			// add default content action
 			add_action( 'geodir_wizard_content_dummy_data', array( __CLASS__, 'content_dummy_data' ) );
@@ -340,7 +340,7 @@ public function setup_wizard_header() {
 				$settings[] = GeoDir_Settings_General::get_map_language_setting();
 				$api_arr    = GeoDir_Settings_General::get_google_maps_api_key_setting();
 				// change the tooltip description/
-				$api_arr['desc'] = __( 'This is a requirement to use Google Maps. If you would prefer to use the Open Street Maps API, set the Maps API to OSM.', 'geodirectory' );
+				$api_arr['desc'] = __( 'This is a requirement to use Google Maps. If you would prefer to use the Open Street Maps API then leave this blank.', 'geodirectory' );
 
 				$settings[] = $api_arr;
 
