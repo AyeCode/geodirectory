@@ -1,5 +1,6 @@
 = 2.0.0.66 =
 * Timezone API requests exposes the API key - FIXED
+* Custom price field does not shows currency symbol for decimal data type - FIXED
 
 = 2.0.0.65 =
 * Jarida theme compatibility for GD page sidebars - FIXED
