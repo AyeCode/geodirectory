@@ -181,7 +181,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					echo geodir_help_tip( __( 'Select if this field should be displayed as a price value.', 'geodirectory' ));
 					_e('Display as price', 'geodirectory'); ?>
 					<input type="hidden" name="extra[is_price]" value="0" />
-					<input type="checkbox" name="extra[is_price]" value="1" <?php checked( $value, 1, true );?> onclick="gd_show_hide_radio(this,'show','gdcf-price-extra');" />
+					<input type="checkbox" name="extra[is_price]" value="1" <?php checked( $value, 1, true );?> onclick="gd_show_hide_radio(this,'show','gdat-extra_is_price');" />
 				</label>
 			</p>
 

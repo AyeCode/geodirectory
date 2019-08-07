@@ -787,11 +787,14 @@ function geodir_cf_text($html,$location,$cf,$p='',$output=''){
             }
 
             $value = $gd_post->{$cf['htmlvar_name']};
-            if(isset($cf['data_type']) && ($cf['data_type']=='INT' || $cf['data_type']=='FLOAT') && isset($cf['extra_fields']) && $cf['extra_fields']){
-                $extra_fields = stripslashes_deep(maybe_unserialize($cf['extra_fields']));
-                if(isset($extra_fields['is_price']) && $extra_fields['is_price']){
-                    if(!ceil($value) > 0){return '';}// dont output blank prices
-                    $value = geodir_currency_format_number($value,$cf);
+            if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'INT' || $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) && isset( $cf['extra_fields'] ) && $cf['extra_fields'] ) {
+                $extra_fields = stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) );
+
+                if ( ! empty( $extra_fields ) && isset( $extra_fields['is_price'] ) && $extra_fields['is_price'] ) {
+                    if ( ! ceil( $value ) > 0 ) {
+						return '';// dont output blank prices
+					}
+                    $value = geodir_currency_format_number( $value, $cf );
                 }
             }
 
