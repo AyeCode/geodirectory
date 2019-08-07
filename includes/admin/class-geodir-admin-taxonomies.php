@@ -727,6 +727,7 @@ class GeoDir_Admin_Taxonomies {
      * Taxonomy walker.
      *
      * @since 2.0.0
+     * @since 2.0.0.66 Auto check/select option for a single category.
      *
      * @param string $cat_taxonomy Category taxonomy.
      * @param int $cat_parent Optional. Category parent ID. Default 0.
@@ -734,21 +735,20 @@ class GeoDir_Admin_Taxonomies {
      * @param int $pading Optional. Pading value . Default 0.
      * @return string Taxonomy walker html.
      */
-    public static function taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = false, $pading = 0)
-    {
+    public static function taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty = false, $pading = 0 ) {
         global $cat_display, $post_cat, $exclude_cats;
 
-        $search_terms = trim($post_cat, ",");
+        $search_terms = trim( $post_cat, "," );
+        $search_terms = explode( ",", $search_terms );
 
-        $search_terms = explode(",", $search_terms);
-
-        $cat_terms = get_terms(array('taxonomy' => $cat_taxonomy,'parent' => $cat_parent, 'hide_empty' => $hide_empty, 'exclude' => $exclude_cats));
+        $cat_terms = get_terms( array( 'taxonomy' => $cat_taxonomy, 'parent' => $cat_parent, 'hide_empty' => $hide_empty, 'exclude' => $exclude_cats ) );
 
         $display = '';
         $onchange = '';
         $term_check = '';
         $main_list_class = '';
         $out = '';
+
         //If there are terms, start displaying
         if (count($cat_terms) > 0) {
             //Displaying as a list
@@ -771,18 +771,28 @@ class GeoDir_Admin_Taxonomies {
                 $out = '<div class="' . $list_class . ' gd-cat-row-' . $cat_parent . '" style="margin-left:' . $p . 'px;' . $display . ';">';
             }
 
-            foreach ($cat_terms as $cat_term) {
-
+            foreach ( $cat_terms as $cat_term ) {
                 $checked = '';
+				$sub_out = '';
+				$no_child = false;
 
-                if (in_array($cat_term->term_id, $search_terms)) {
-                    if ($cat_display == 'select' || $cat_display == 'multiselect')
+				if ( absint( $cat_parent ) == 0 && count( $cat_terms ) == 1 ) {
+					// Call recurson to print sub cats
+					$sub_out = self::taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $pading );
+
+					if ( trim( $sub_out ) == '' ) {
+						$no_child = true; // Set category selected when only one category.
+					}
+				}
+
+				if ( in_array( $cat_term->term_id, $search_terms ) || $no_child ) {
+                    if ( $cat_display == 'select' || $cat_display == 'multiselect' )
                         $checked = 'selected="selected"';
                     else
                         $checked = 'checked="checked"';
                 }
 
-                $child_dash = $p > 0 ? str_repeat("-", $p/20).' ' : '';
+                $child_dash = $p > 0 ? str_repeat( "-", $p / 20 ) . ' ' : '';
 
                 if ($cat_display == 'radio')
                     $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="tax_input['.$cat_term->taxonomy .'][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" data-cradio="default_category">' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
@@ -794,12 +804,15 @@ class GeoDir_Admin_Taxonomies {
                     $out .= '<span style="display:block" ' . $class . '><input style="display:inline-block" type="checkbox" field_type="checkbox" name="tax_input['.$cat_term->taxonomy .'][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" data-ccheckbox="default_category">' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '<span class="gd-make-default-term" style="display:none" title="' . esc_attr( wp_sprintf( __( 'Make %s default category', 'geodirectory' ), geodir_utf8_ucfirst($cat_term->name) ) ) . '">' . __( 'Make default', 'geodirectory' ). '</span><span class="gd-is-default-term" style="display:none">' . __( 'Default', 'geodirectory' ). '</span></span>';
                 }
 
-                // Call recurson to print sub cats
-                $out .= self::taxonomy_walker($cat_taxonomy, $cat_term->term_id, $hide_empty, $pading);
+                if ( ! ( absint( $cat_parent ) == 0 && count( $cat_terms ) == 1 ) ) {
+					// Call recurson to print sub cats
+					$sub_out = self::taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $pading );
+				}
 
+				$out .= $sub_out;
             }
 
-            if ($cat_display == 'checkbox' || $cat_display == 'radio')
+            if ( $cat_display == 'checkbox' || $cat_display == 'radio' )
                 $out .= '</div>';
 
             return $out;
