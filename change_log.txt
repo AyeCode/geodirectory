@@ -1,5 +1,9 @@
 = 2.0.0.66 =
 * Timezone API requests exposes the API key - FIXED
+* Setup wizard moved to later hook so is_block_editor() method can be used - FIXED
+* Category map icon no longer required when adding a category - CHANGED
+* Category map icon will be auto-generated if empty and Font Awesome icon is set - ADDED
+* Default map marker updated to new icon - CHANGED
 * Custom price field does not shows currency symbol for decimal data type - FIXED
 
 = 2.0.0.65 =

@@ -557,7 +557,7 @@ class GeoDir_Media {
 	 *
 	 * @return array|bool|mixed
 	 */
-	public static function get_external_media( $url, $file_name = '', $allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp') ) {
+	public static function get_external_media( $url, $file_name = '', $allowed_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp'),$dangerously_set_filetype = array() ) {
 		// Gives us access to the download_url() and wp_handle_sideload() functions
 		require_once( ABSPATH . 'wp-admin/includes/file.php' );
 
@@ -584,8 +584,8 @@ class GeoDir_Media {
 		if ( ! is_wp_error( $temp_file ) ) {
 
 			// make sure its an image
-			$file_type = wp_check_filetype(basename( parse_url( $url, PHP_URL_PATH ) ));
-
+			$file_type = !empty($dangerously_set_filetype) ? $dangerously_set_filetype : wp_check_filetype(basename( parse_url( $url, PHP_URL_PATH ) ));
+			
 			// Set an array containing a list of acceptable formats
 			if ( ! empty( $file_type['ext'] ) && ! empty( $file_type['type'] ) && ( in_array( '*', $allowed_file_types ) || in_array( $file_type['type'], $allowed_file_types ) || in_array( strtolower ( $file_type['ext'] ), $allowed_file_types ) ) ) {
 			} else {

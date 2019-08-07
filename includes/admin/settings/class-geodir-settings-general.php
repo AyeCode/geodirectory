@@ -1094,6 +1094,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'type' => 'map_key',
 			'default'  => '',
 			'desc_tip' => true,
+			'placeholder' => __( 'Leave this blank to use Open Street Maps (OSM)', 'geodirectory' )
 			//'advanced' => true
 		);
 	}

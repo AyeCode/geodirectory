@@ -197,16 +197,6 @@ jQuery(document).ready(function() {
         jQuery('#geodir_add_location_url').closest('td').find('input').not(jQuery('#geodir_add_location_url')).prop('disabled', true);
     }
 
-    jQuery('.edit-tag-actions .button-primary').click(function() {
-        if (jQuery('input[name="ct_cat_icon[src]"]').val() == '') {
-            jQuery('input[name="ct_cat_icon[src]"]').closest('tr').addClass('form-invalid');
-            return false;
-        } else {
-            jQuery('input[name="ct_cat_icon[src]"]').closest('tr').removeClass('form-invalid');
-            jQuery('input[name="ct_cat_icon[src]"]').closest('div').removeClass('form-invalid');
-        }
-    });
-
     function location_validation(fields) {
         var error = false;
 
