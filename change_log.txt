@@ -8,6 +8,7 @@
 * Custom price field does not shows currency symbol for decimal data type - FIXED
 * Category should be auto selected/checked for a single category - CHANGED
 * Output location fieldset's with child elements will only be output if child elements have content - CHANGED
+* Import post not showing error for non GD post type - FIXED
 
 = 2.0.0.65 =
 * Jarida theme compatibility for GD page sidebars - FIXED
