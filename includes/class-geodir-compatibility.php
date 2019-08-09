@@ -1428,6 +1428,10 @@ class GeoDir_Compatibility {
 
 		if ( $enabled ) {
 			$rendering = $page_id === FLBuilder::$post_rendering;
+
+			// Allow the builder's render_content filter to run again.
+			add_filter( 'fl_builder_do_render_content', '__return_true', 11 );
+
 			$do_render = apply_filters( 'fl_builder_do_render_content', true, $page_id );
 
 			if ( ! $rendering && $do_render ) {
@@ -1444,6 +1448,8 @@ class GeoDir_Compatibility {
 				// Clear the post rendering ID.
 				FLBuilder::$post_rendering = null;
 			}
+
+			remove_filter( 'fl_builder_do_render_content', '__return_true', 11 );
 		}
 
 		return $content;
