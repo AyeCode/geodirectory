@@ -402,19 +402,22 @@ class GeoDir_Admin_Import_Export {
 	 * @return array
 	 */
 	public static function validate_post( $row ) {
-
 		$post_info = $row;
-		// validate post_type
-		if(isset($post_info['post_type']) && $post_info['post_type']){
-			$post_type = esc_attr($post_info['post_type']);
-		}else{
-			return esc_attr__('Post type missing','geodirectory');
-		}
 
+		// Validate post_type
+		if ( ! empty( $post_info['post_type'] ) ) {
+			$post_type = esc_attr( $post_info['post_type'] );
+
+			if ( ! geodir_is_gd_post_type( $post_type ) ) {
+				return esc_attr( wp_sprintf( __( 'Invalid post type - %s', 'geodirectory' ), $post_type ) );
+			}
+		} else {
+			return esc_attr__( 'Post type missing', 'geodirectory' );
+		}
 
 		// validate title
 		if ( isset( $post_info['post_title'] ) && empty($post_info['post_title']) ) {
-			return  esc_attr__('Title missing','geodirectory');
+			return esc_attr__('Title missing','geodirectory');
 		}
 
 		// Connvert date in mysql format

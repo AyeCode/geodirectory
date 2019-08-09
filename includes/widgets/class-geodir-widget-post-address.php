@@ -181,15 +181,18 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
 
-		// print_r($args);
 		// error checks
 		$errors = array();
 		if(empty($args['key'])){$errors[] = __('key is missing','geodirectory');}
 		if(empty($args['id'])){$errors[] = __('id is missing','geodirectory');}
 		if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
 
-		if(!empty($errors)){
-			$output .= implode(", ",$errors);
+		if ( ! empty( $errors ) ) {
+			$output .= implode( ", ", $errors );
+		}
+
+		if ( class_exists( 'FLBuilder' ) && isset( $_REQUEST['fl_builder'] ) ) {
+			$output = ''; // Show placehoder on beaver builder preview.
 		}
 
 		// check if its demo content
