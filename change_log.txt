@@ -10,6 +10,7 @@
 * Output location fieldset's with child elements will only be output if child elements have content - CHANGED
 * Import post not showing error for non GD post type - FIXED
 * Beaver themer layout not working with GD widgets - FIXED
+* Directory map not showing child categories for empty parent category - FIXED
 
 = 2.0.0.65 =
 * Jarida theme compatibility for GD page sidebars - FIXED
