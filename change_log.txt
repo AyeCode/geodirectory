@@ -12,6 +12,7 @@
 * Beaver themer layout not working with GD widgets - FIXED
 * Directory map not showing child categories for empty parent category - FIXED
 * If Google maps is disabled then use OpenStreetMap API to get GPS data during import - ADDED
+* Genesis theme listing detail page shows incorrect meta title - FIXED
 
 = 2.0.0.65 =
 * Jarida theme compatibility for GD page sidebars - FIXED

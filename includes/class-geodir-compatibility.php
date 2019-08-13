@@ -230,7 +230,8 @@ class GeoDir_Compatibility {
 			     || defined( 'TD_THEME_VERSION' )
 				 || function_exists( 'pi_elv_include_scripts' )
 				 || ( ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) )
-				 || function_exists( 'mgm_setup' )
+				 || function_exists( 'mgm_setup' ) 
+				 || function_exists( 'genesis_theme_support' ) 
 		     )
 		) {
 			add_action( 'wp_title', array( 'GeoDir_SEO', 'set_meta' ), 9 );
@@ -434,6 +435,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'tie_admin_bar' ) && ( strpos( $meta_key, 'tie_' ) === 0 || in_array( $meta_key, array( 'post_color', 'post_background', 'post_background_full' ) ) || empty( $meta_key ) ) ) // Jarida
 			 || ( function_exists( 'mk_build_main_wrapper' ) && ( empty( $meta_key ) || strpos( $meta_key, '_widget_' ) === 0 || in_array( $meta_key, array( '_layout', '_template', '_padding', 'page_preloader', '_introduce_align', '_custom_page_title', '_page_introduce_subtitle', '_disable_breadcrumb', 'menu_location', '_sidebar' ) ) ) ) // Jupiter
 			 || ( defined( 'TD_THEME_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, 'td_' ) === 0 ) ) // Newspaper
+			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -582,13 +584,6 @@ class GeoDir_Compatibility {
 			// Kleo theme
 			if ( function_exists( 'kleo_setup' ) ) {
 				if ( substr( $meta_key, 0, 6 ) === "_kleo_" ) {
-					$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
-				}
-			}
-
-			// Genesis theme
-			if ( function_exists( 'genesis_constants' ) ) {
-				if ( substr( $meta_key, 0, 9 ) === "_genesis_" ) {
 					$metadata = isset( $gd_compat_post_meta[ $meta_key ] ) ? $gd_compat_post_meta[ $meta_key ] : '';
 				}
 			}
