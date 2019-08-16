@@ -14,6 +14,7 @@
 * If Google maps is disabled then use OpenStreetMap API to get GPS data during import - ADDED
 * Genesis theme listing detail page shows incorrect meta title - FIXED
 * [gd_post_meta] shortcode location parameter is not working - FIXED
+* Going away from edit listing page always shows popup warning about unsaved changes - FIXED
 
 = 2.0.0.65 =
 * Jarida theme compatibility for GD page sidebars - FIXED
