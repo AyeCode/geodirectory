@@ -15,6 +15,7 @@
 * Genesis theme listing detail page shows incorrect meta title - FIXED
 * [gd_post_meta] shortcode location parameter is not working - FIXED
 * Going away from edit listing page always shows popup warning about unsaved changes - FIXED
+* The7 theme compatibility for GD pages - FIXED
 
 = 2.0.0.65 =
 * Jarida theme compatibility for GD page sidebars - FIXED

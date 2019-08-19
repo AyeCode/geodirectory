@@ -436,6 +436,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'mk_build_main_wrapper' ) && ( empty( $meta_key ) || strpos( $meta_key, '_widget_' ) === 0 || in_array( $meta_key, array( '_layout', '_template', '_padding', 'page_preloader', '_introduce_align', '_custom_page_title', '_page_introduce_subtitle', '_disable_breadcrumb', 'menu_location', '_sidebar' ) ) ) ) // Jupiter
 			 || ( defined( 'TD_THEME_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, 'td_' ) === 0 ) ) // Newspaper
 			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
+			 || ( class_exists( 'The7_Aoutoloader' ) && ( strpos( $meta_key, '_dt_' ) === 0 || empty( $meta_key ) ) ) // The7
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -1029,6 +1030,14 @@ class GeoDir_Compatibility {
 			if ( function_exists( 'mk_build_main_wrapper' ) ) {
 				add_filter( 'get_header', array( __CLASS__, 'jupiter_mk_build_init' ), 20, 1 );
 			}
+
+			// The7 theme set template page id for GD pages.
+			if ( class_exists( 'The7_Aoutoloader' ) ) {
+				if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
+					add_filter( 'the7_archive_page_template_id', array( __CLASS__, 'the7_archive_page_template_id' ), 20, 1 );
+					add_filter( 'presscore_get_page_title', array( __CLASS__, 'presscore_get_page_title' ), 20, 1 );
+				}
+			}
 		}
 
 		// GeneratePress theme compatibility
@@ -1572,5 +1581,37 @@ class GeoDir_Compatibility {
 		// Layout
 		$layout = get_post_meta( $page_id, '_layout', true );
 		$_REQUEST['layout'] = $layout;
+	}
+
+	/**
+	 * The7 theme filter GD archive page template ID.
+	 *
+	 * @since 2.0.0.66
+	 *
+	 * @param int $page_id The page ID.
+	 * @return int The page ID.
+	 */
+	public static function the7_archive_page_template_id( $page_id ) {
+		$page_id = self::gd_page_id();
+
+		return $page_id;
+	}
+
+	/**
+	 * The7 theme filter GD page title.
+	 *
+	 * @since 2.0.0.66
+	 *
+	 * @param string $page_title The page title.
+	 * @return string The page title.
+	 */
+	public static function presscore_get_page_title( $page_title ) {
+		$title = GeoDir_SEO::set_meta();
+
+		if ( $title ) {
+			$page_title = $title;
+		}
+
+		return $page_title;
 	}
 }
