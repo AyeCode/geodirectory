@@ -425,14 +425,25 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 					if ( is_wp_error( $term ) || empty( $term ) ) {
 						continue;
 					}
-					if ( $term->taxonomy == $request['post_type'] . 'category' ) {
+					if ( $term->taxonomy == $request['post_type'] . 'category' && (int) $term_id > 0 ) {
 						$terms_where[] = $wpdb->prepare( "FIND_IN_SET( %d, pd.post_category )", array( $term_id ) );
+
+						// Include child for parent term.
+						$children = geodir_get_term_children( $term_id, $term->taxonomy );
+						if ( ! empty( $children ) ) {
+							foreach ( $children as $id => $child_term ) {
+								if ( ! empty( $child_term->count ) ) {
+									$terms_where[] = $wpdb->prepare( "FIND_IN_SET( %d, pd.post_category )", array( $child_term->term_id ) );
+								}
+							}
+						}
 					} else if ( $term->taxonomy == $request['post_type'] . '_tags' ) {
 						$terms_where[] = $wpdb->prepare( "FIND_IN_SET( %s, pd.post_tags )", array( $term->name ) );
 					}
 				}
 			}
 			if ( ! empty( $terms_where ) ) {
+				$terms_where = array_unique( $terms_where );
 				$where .= " AND ( " . implode( " OR ", $terms_where ) . " )";
 			}
 		}
@@ -523,7 +534,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 
 	public function get_map_terms_filter( $request ) {
 		ob_start();
-		echo GeoDir_Maps::get_categories_filter( $request['post_type'], 0, true, 0, $request['map_canvas'], absint( $request['child_collapse'] ), $request['terms'] );
+		echo GeoDir_Maps::get_categories_filter( $request['post_type'], 0, true, 0, $request['map_canvas'], absint( $request['child_collapse'] ), $request['terms'], true );
 		$output = ob_get_clean();
 
 		return $output;

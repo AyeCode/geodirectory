@@ -254,10 +254,11 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @param int $padding Optional. CSS padding value in pixels. e.g: 12 will be considers as 12px.
 	 * @param string $map_canvas Unique canvas name for your map.
 	 * @param bool $child_collapse Do you want to collapse child terms by default?.
-	 * @param bool $is_home_map Optional. Is this a home page map? Default: false.
+	 * @param string $terms Optional. Terms.
+	 * @param bool $hierarchical Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default false.
 	 * @return string|void
 	 */
-	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $terms = '' ) {
+	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $terms = '', $hierarchical = false ) {
 		global $cat_count, $geodir_cat_icons;
 
 		$taxonomy = $post_type . 'category';
@@ -284,10 +285,6 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			}
 		}
 
-//		if ($exclude_cat_str == '') {
-//			$exclude_cat_str = '0';
-//		}
-
 		$term_args = array(
 			'taxonomy' => array( $taxonomy ),
 			'parent' => $cat_parent,
@@ -303,16 +300,12 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			$term_args['exclude'] = $exclude;
 		}
 
-		//echo '###';print_r($term_args );
-
 		$cat_terms = get_terms( $term_args );
-
-
 		
-		if ($hide_empty) {
+		if ($hide_empty && ! $hierarchical) {
 			$cat_terms = geodir_filter_empty_terms($cat_terms);
 		}
-		//print_r($cat_terms);
+
 		$main_list_class = '';
 		//If there are terms, start displaying
 		if ( count( $cat_terms ) > 0 ) {

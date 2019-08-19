@@ -253,7 +253,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							       value="<?php echo absint( $map_options['child_collapse'] ); ?>"/>
 							<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="1"/>
 							<div class="geodir_toggle">
-								<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), $map_options['terms'] ); ?>
+								<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), $map_options['terms'], true ); ?>
 								<script type="text/javascript">
 									jQuery(window).load(function () {
 										geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');

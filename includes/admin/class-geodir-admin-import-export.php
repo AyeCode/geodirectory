@@ -463,17 +463,19 @@ class GeoDir_Admin_Import_Export {
 			}
 		}
 
-		// fill in the GPS info from address if missing
-		if ( ( isset( $post_info['latitude'] ) && empty( $post_info['latitude'] ) ) || ( isset( $post_info['longitude'] ) && empty( $post_info['longitude'] ) ) ) {
-			$post_info = self::get_post_gps_from_address( $post_info );
-					// fill in the address if ONLY the GPS is provided
-		}elseif(
-			( isset( $post_info['city'] ) && empty( $post_info['city'] ) ) ||
-			( isset( $post_info['region'] ) && empty( $post_info['region'] ) ) ||
-			( isset( $post_info['country'] ) && empty( $post_info['country'] ) )
-		){
-			//$post_info = self::get_post_address_from_gps($post_info);
-			$post_info = esc_attr__('Address city, region or country missing','geodirectory');
+		if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+			// Fill in the GPS info from address if missing
+			if ( ( isset( $post_info['latitude'] ) && empty( $post_info['latitude'] ) ) || ( isset( $post_info['longitude'] ) && empty( $post_info['longitude'] ) ) ) {
+				$post_info = self::get_post_gps_from_address( $post_info );
+				// Fill in the address if ONLY the GPS is provided
+			} elseif (
+				( isset( $post_info['city'] ) && empty( $post_info['city'] ) ) ||
+				( isset( $post_info['region'] ) && empty( $post_info['region'] ) ) ||
+				( isset( $post_info['country'] ) && empty( $post_info['country'] ) )
+			) {
+				//$post_info = self::get_post_address_from_gps($post_info);
+				$post_info = esc_attr__( 'Address city, region or country missing', 'geodirectory' );
+			}
 		}
 
 		if ( isset( $post_info['post_status'] ) ) {
@@ -500,76 +502,30 @@ class GeoDir_Admin_Import_Export {
 	 * @return array|bool
 	 */
 	public static function get_post_gps_from_address( $post_info ) {
+		$api = GeoDir_Maps::active_map();
 
-		// @todo if users require a higher limit we should look at https://locationiq.org/
-		// @todo we should add OSM geocoder here is not using Gmaps.
+		$api = apply_filters( 'geodir_post_gps_from_address_api', $api );
 
-		$address = array();
-		$api_url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-		$api_key = GeoDir_Maps::google_geocode_api_key();
-
-
-		// if we don't have either the street or zip then we can't get an accurate address
-		if( ( isset( $post_info['street'] ) && $post_info['street'] ) || ( isset( $post_info['zip'] ) && $post_info['zip'] ) ){}
-		else{return esc_attr__('Not enough location info for address.','geodirectory');}
-
-		// check we have an address
-		if( isset( $post_info['street'] ) && $post_info['street'] ){ $address[] = $post_info['street'];  }
-		if( isset( $post_info['city'] ) && $post_info['city'] ){ $address[] = $post_info['city'];  }
-		if( isset( $post_info['region'] ) && $post_info['region'] ){ $address[] = $post_info['region'];  }
-		if( isset( $post_info['country'] ) && $post_info['country'] ){ $address[] = $post_info['country'];  }
-		if( isset( $post_info['zip'] ) && $post_info['zip'] ){ $address[] = $post_info['zip'];  }
-
-		// we must have at least 4 address items
-		if( count($address) < 4 ){return false;}
-
-		$request_url = $api_url.implode(",",$address);
-
-		// add the api key if we have it, it helps with limits
-		if($api_key){
-			$request_url .= "&key=".$api_key;
+		if ( $api == 'google' || $api == 'auto' ) {
+			$gps = geodir_google_get_gps_from_address( $post_info, true );
+		} elseif ( $api == 'osm' ) {
+			$gps = geodir_osm_get_gps_from_address( $post_info, true );
+		} else {
+			$gps = apply_filters( 'geodir_gps_from_address_custom_api_gps', array(), $api );
 		}
 
-		global $wp_version;
-		$args = array(
-			'timeout'     => 5,
-			'redirection' => 5,
-			'httpversion' => '1.0',
-			'user-agent'  => 'WordPress/' . $wp_version . '; ' . home_url(),
-			'blocking'    => true,
-			'decompress'  => true,
-			'sslverify'   => false,
-		);
-		$response = wp_remote_get( $request_url , $args );
-
-		// Check for errors
-		if ( is_wp_error( $response ) ) {
-			return esc_attr__('Failed to reach Google geocode server.','geodirectory');
-		}
-
-		$body = wp_remote_retrieve_body( $response );
-		$json = json_decode( $body, true );
-
-		if(isset($json['status']) && $json['status']=='OK'){
-
-			if( isset( $json['results'][0]['geometry']['location']['lat'] ) && $json['results'][0]['geometry']['location']['lat'] ){
-				$post_info['latitude'] = $json['results'][0]['geometry']['location']['lat'];
-				$post_info['longitude'] = $json['results'][0]['geometry']['location']['lng'];
-			}else{
-				return esc_attr__('Listing has no GPS info, failed to geocode GPS info.','geodirectory');
+		if ( is_array( $gps ) && ! empty( $gps['latitude'] ) && ! empty( $gps['longitude'] ) ) {
+			$post_info['latitude'] = $gps['latitude'];
+			$post_info['longitude'] = $gps['longitude'];
+		} else {
+			if ( is_wp_error( $gps ) ) {
+				return $gps->get_error_message();
+			} else {
+				return esc_attr__( 'Fail to retrieve GPS data from a address using API.', 'geodirectory' );
 			}
-
-		}else{
-			if(isset($json['status'])){
-					return sprintf( esc_attr__('Google geocode failed: %s', 'geodirectory'),  esc_attr($json['status']) );
-
-			}else{
-				return esc_attr__('Failed to reach Google geocode server.','geodirectory');
-			}
-
 		}
 
-		return $post_info;
+		return apply_filters( 'geodir_get_post_gps_from_address', $post_info, $gps, $api );
 	}
 
 	/**

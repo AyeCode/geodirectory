@@ -130,6 +130,14 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => true
 				),
+				'location' => array(
+                    'title' => __( 'Output Location:', 'geodirectory' ),
+                    'desc' => __( 'The location type to output.', 'geodirectory' ),
+                    'type' => 'select',
+                    'options' => $this->show_in_locations(),
+                    'desc_tip' => true,
+                    'advanced' => false
+                ),
 				'css_class'  => array(
 					'type' => 'text',
 					'title' => __('Extra class:', 'geodirectory'),
@@ -353,6 +361,24 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		 */
 		return apply_filters('geodir_post_meta_standard_fields',$fields);
 	}
-	
+
+	/**
+	 * Get the field output locations.
+	 *
+	 * @since 2.0.0.66
+	 *
+	 * @return array Output locations.
+	 */
+	public function show_in_locations() {
+		$locations = GeoDir_Settings_Cpt_Cf::show_in_locations();
+
+		$show_in_locations = array( '' => __( 'Auto', 'geodirectory' ) );
+		foreach ( $locations as $value => $label ) {
+			$value = str_replace( array( '[', ']' ), '', $value );
+			$show_in_locations[ $value ] = $label;
+		}
+
+		return $show_in_locations;
+	}
 }
 
