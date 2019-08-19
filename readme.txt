@@ -7,7 +7,7 @@ Tags:  directory plugin, business directory, listings, classifieds, real estate,
 Requires at least: 4.5
 Requires PHP: 5.6
 Tested up to: 5.2
-Stable tag: 2.0.0.65
+Stable tag: 2.0.0.66
 
 
 Create a location-based business directory with our plugin, 100% compatible with any theme and page builders. In a few clicks you could be the next Yelp or Tripadvisor.
@@ -145,6 +145,9 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 == Changelog ==
 
 __WARNING: GDv2 is a major update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always it is recommended to try this on a staging site first. [Learn more](https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/)__
+
+= 2.0.0.66 =
+[GeoDirectory changelog for version 2.0.0.66](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.66).
 
 = 2.0.0.65 =
 [GeoDirectory changelog for version 2.0.0.65](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.65).

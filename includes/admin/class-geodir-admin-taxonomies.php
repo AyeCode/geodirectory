@@ -622,12 +622,12 @@ class GeoDir_Admin_Taxonomies {
             } elseif(!empty($_POST['ct_cat_font_icon'])) {
                 $background = !empty($_POST['ct_cat_color']) ? ltrim (sanitize_hex_color($_POST['ct_cat_color']),'#') : 'ef5646';
                 $fa_icon_parts = explode(" ",$_POST['ct_cat_font_icon']);
-                $fa_icon = !empty($fa_icon_parts[1]) ? sanitize_html_class($fa_icon_parts[1]) : 'fa-star-solid';
+                $fa_icon = !empty($fa_icon_parts[1]) ? sanitize_html_class($fa_icon_parts[0])." ".sanitize_html_class($fa_icon_parts[1]) : 'fas fa-star';
                 $icon_url = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/icon-stack?";
                 $icon_url .= "icon=".$fa_icon;
                 $icon_url .= "&size=50";
                 $icon_url .= "&color=fff";
-                $icon_url .= "&on=fa-map-marker";
+                $icon_url .= "&on=fas fa-map-marker";
                 $icon_url .= "&hoffset=0";
                 $icon_url .= "&voffset=-4";
                // $icon_url .= "&iconSize=20"; //goes off center if you set a size
@@ -667,6 +667,14 @@ class GeoDir_Admin_Taxonomies {
         }
         
         do_action( 'geodir_term_save_category_fields', $term_id, $tt_id, $taxonomy );
+    }
+
+    public function get_fixed_icon_slug($slug){
+        $fixed_slugs = array(
+
+        );
+
+        return $slug;
     }
 
     /**

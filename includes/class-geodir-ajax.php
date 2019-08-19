@@ -740,6 +740,9 @@ class GeoDir_AJAX {
 			wp_die( -1 );
 		}
 
+		//Suspend cache additions
+		wp_suspend_cache_addition(true);
+		
 		$result = GeoDir_Admin_Dummy_Data::create_dummy_posts( $_REQUEST );
 
 		if(is_wp_error( $result ) ){
