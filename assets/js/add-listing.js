@@ -6,7 +6,9 @@
  */
 jQuery(function($) {
     // Start polling the form for auto saves
-    geodir_auto_save_poll(geodir_get_form_data());
+    setTimeout(function() {
+		geodir_auto_save_poll(geodir_get_form_data());
+	}, 1);
     /// check validation on blur
     jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").delay( 2000 ).blur(function() {
         // give some time inc ase another script is filling data
