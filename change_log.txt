@@ -1,3 +1,6 @@
+= 2.0.0.67 =
+* Fail to save feature image for new listing when post revision is enabled - FIXED
+
 = 2.0.0.66 =
 * GD post favourites widget issue for icon option - FIXED
 * Timezone API requests exposes the API key - FIXED
