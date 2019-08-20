@@ -93,8 +93,9 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 'desc' => __('How the link to open the lightbox is displayed.', 'geodirectory'),
                 'type' => 'select',
                 'options'   =>  array(
-                    'button'      => __('Button','geodirectory'),
-                    'link'      => __("Link",'geodirectory'),
+                    'button'      => __('Button (lightbox)','geodirectory'),
+                    'link'      => __("Link (lightbox)",'geodirectory'),
+                    'form'      => __("Form",'geodirectory'),
                 ),
                 'default'  => 'button',
                 'desc_tip' => true,
@@ -157,6 +158,9 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
         if($show){
             if($args['output']=='button'){
                 $output = '<button class="btn btn-default geodir-ninja-forms-link" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\','.absint($post_id).','.absint($args['form_id']).'); return false;">'.esc_attr($args['text']).'</button>';
+            }elseif($args['output']=='form'){
+                $output = do_shortcode("[ninja_form id=".absint($args['form_id'])."]");
+                //$output = '<a class="geodir-ninja-forms-link" href="#" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\','.absint($post_id).','.absint($args['form_id']).'); return false;">'.esc_attr($args['text']).'</a>';
             }else{
                 $output = '<a class="geodir-ninja-forms-link" href="#" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\','.absint($post_id).','.absint($args['form_id']).'); return false;">'.esc_attr($args['text']).'</a>';
             }
