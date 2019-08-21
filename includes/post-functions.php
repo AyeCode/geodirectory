@@ -852,6 +852,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				}
 			}
 
+			/**
+			 * @since 2.0.0.67
+			 */
+			$match_found = apply_filters( 'geodir_post_badge_check_match_found', $match_found, $args, $find_post );
+
 			if ( $match_found ) {
 				// check for price format
 				if ( isset( $field['data_type'] ) && ( $field['data_type'] == 'INT' || $field['data_type'] == 'FLOAT' || $field['data_type'] == 'DECIMAL' ) && isset( $field['extra_fields'] ) && $field['extra_fields'] ) {
@@ -1135,3 +1140,62 @@ function geodir_replace_variables($text,$post_id = ''){
 	
 	return $text;
 }
+
+/**
+ * Filter post badge match value.
+ * 
+ * @since 2.0.0.67
+ * 
+ * @param bool $match_found Ture if match found else False.
+ * @param array $args Badge arguments.
+ * @param object $gd_post The GD post object.
+ * @return bool
+ */
+function geodir_post_badge_filter_match_found( $match_found, $args, $gd_post ) {
+	$match_field = $args['key'];
+
+	if ( $match_field == 'post_category' || $match_field == 'post_tags' ) {
+		$search = $args['search'];
+		if ( $search !== '' ) {
+			$search = array_map( 'trim', explode( ',', stripslashes( $search ) ) );
+			$search = array_filter( array_unique( $search ) );
+		}
+
+		$value = isset( $gd_post->{$match_field} ) ? $gd_post->{$match_field} : '';
+		if ( $value !== '' ) {
+			$value = array_map( 'trim', explode( ',', stripslashes( $value ) ) );
+			$value = array_filter( array_unique( $value ) );
+		}
+
+		if ( $args['condition'] == 'is_contains' ) {
+			$match_found = false;
+
+			if ( ! empty( $search ) && ! empty( $value ) ) {
+				foreach ( $search as $_search ) {
+					if ( in_array( $_search, $value ) ) {
+						$match_found = true; // Contains any value
+						break;
+					}
+				}
+			}
+		} elseif ( $args['condition'] == 'is_not_contains' ) {
+			$match_found = false;
+
+			if ( ! empty( $search ) && ! empty( $value ) ) {
+				$matches = 0;
+				foreach ( $search as $_search ) {
+					if ( ! in_array( $_search, $value ) ) {
+						$matches++; // Not contains all value
+					}
+				}
+
+				if ( $matches == count( $search ) ) {
+					$match_found = true;
+				}
+			}
+		}
+	}
+
+	return $match_found;
+}
+add_filter( 'geodir_post_badge_check_match_found', 'geodir_post_badge_filter_match_found', 10, 3 );

@@ -644,7 +644,7 @@ class GeoDir_Email {
 	}
 
 	/**
-	 * Send some email son post save.
+	 * Send some email on post save.
      *
      * @since 2.0.0
 	 *
@@ -665,34 +665,40 @@ class GeoDir_Email {
 		}
 
 		$post_ID = $post_data['ID'];
-		$post    = geodir_get_post_info( $post_ID );
-		if ( empty( $post ) ) {
+		if ( wp_is_post_revision( $post_ID ) ) {
+			$post_ID = wp_get_post_parent_id( $post_ID );
+		}
+
+		$gd_post = geodir_get_post_info( $post_ID );
+
+		if ( empty( $gd_post ) ) {
 			return;
 		}
+
 		if ( $update ) {
 			$user_id = (int) get_current_user_id();
 
-			if ( $user_id > 0 && ! empty( $post->post_author ) && $user_id == $post->post_author && ! is_super_admin() && empty( $gd_notified_edited[ $post_ID ] ) && self::is_email_enabled( 'admin_post_edit' ) ) {
+			if ( $user_id > 0 && ! empty( $gd_post->post_author ) && $user_id == $gd_post->post_author && ! is_super_admin() && empty( $gd_notified_edited[ $post_ID ] ) && self::is_email_enabled( 'admin_post_edit' ) ) {
 				if ( empty( $gd_notified_edited ) ) {
 					$gd_notified_edited = array();
 				}
 				$gd_notified_edited[ $post_ID ] = true;
 
-				self::send_admin_post_edit_email( $post );
+				self::send_admin_post_edit_email( $gd_post );
 			}
 		}
 
 		// is post status not set then get the real status
-		if(!isset( $post_data['post_status'] )){
-			$post_data['post_status'] = get_post_status($post_ID);
+		if ( ! isset( $post_data['post_status'] ) ) {
+			$post_data['post_status'] = get_post_status( $post_ID );
 		}
 
 		if ( isset( $post_data['post_status'] ) && $post_data['post_status'] == 'pending' ) {
 			// Send email to admin
-			self::send_admin_pending_post_email( $post );
+			self::send_admin_pending_post_email( $gd_post );
 
 			// Send email to user
-			self::send_user_pending_post_email( $post );
+			self::send_user_pending_post_email( $gd_post );
 		}
 	}
 
