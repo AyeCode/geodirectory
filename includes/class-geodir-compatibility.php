@@ -32,6 +32,7 @@ class GeoDir_Compatibility {
 		######################################################*/
 		// add setting to be able to disable Rank Math on GD pages
 		add_filter( 'geodir_seo_options', array( __CLASS__, 'rank_math_disable' ), 10 );
+		add_filter( 'rank_math/sitemap/urlimages', array( __CLASS__, 'rank_math_add_images_to_sitemap' ), 10, 2 );
 
 		/*######################################################
 		Disqus (comments system) :: If Disqus plugin is active, do some fixes to show on blogs but no on GD post types
@@ -790,6 +791,28 @@ class GeoDir_Compatibility {
 
 
 		return $options;
+	}
+
+	public static function rank_math_add_images_to_sitemap( $images, $id ){
+
+		$post_type = get_post_type( $id );
+
+		if(! geodir_is_gd_post_type( $post_type ) ) {
+			return $images;
+		}
+
+		$geodir_images = geodir_get_images( $id );
+
+		if( is_array( $geodir_images ) ) {
+			foreach( $geodir_images as $geodir_image ) {
+				$images[] = array(
+					'src'   => geodir_get_image_src( $geodir_image, 'original' ),
+					'title' => $geodir_image->title,
+				);
+			}
+		}
+
+		return $images;
 	}
 
 	public static function wpseo_disable( $options ) {
