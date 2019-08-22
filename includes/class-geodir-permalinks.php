@@ -102,19 +102,20 @@ class GeoDir_Permalinks {
 			}
 
 			// check category
-			if(!$should_404 && isset($wp_query->query_vars[$post_type."category"]) && $wp_query->query_vars[$post_type."category"] && isset($gd_post->default_category) && $gd_post->default_category){
+			if ( ! $should_404 && isset( $wp_query->query_vars[$post_type."category"] ) && $wp_query->query_vars[ $post_type . "category" ] && isset( $gd_post->default_category ) && $gd_post->default_category ) {
+				$is_cat = get_term_by( 'slug', $wp_query->query_vars[ $post_type . "category" ], $post_type . "category" );
 
-				$is_cat = get_term_by( 'slug', $wp_query->query_vars[$post_type."category"], $post_type."category");
-//				print_r($is_cat);echo $wp_query->query_vars[$post_type."category"].'####';exit;
+				/**
+				 * @since 2.0.0.67
+				 */
+				$is_cat = apply_filters( 'geodir_post_url_filter_term', $is_cat, $gd_post, (int) $gd_post->default_category );
 
-				if(!$is_cat || ( isset($is_cat->term_id) && $is_cat->term_id!=$gd_post->default_category)){
+				if ( ! $is_cat || ( isset( $is_cat->term_id ) && $is_cat->term_id != $gd_post->default_category ) ) {
 					$should_404 = true;
 				}
 			}
 
-
-			
-			if($should_404){
+			if ( $should_404 ) {
 				$wp_query->set_404();
 				status_header(404);
 			}
@@ -564,8 +565,12 @@ class GeoDir_Permalinks {
 					}
 				}
 
-				if(!empty($term) && $term->slug){
-					$permalink = str_replace('%category%',$term->slug,$permalink);
+				if ( ! empty( $term ) && $term->slug ) {
+					/**
+					 * @since 2.0.0.67
+					 */
+					$term = apply_filters( 'geodir_post_url_filter_term', $term, $gd_post );
+					$permalink = str_replace( '%category%', $term->slug, $permalink );
 				}
 			}
 
