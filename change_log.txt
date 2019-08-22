@@ -22,6 +22,7 @@
 * Going away from edit listing page always shows popup warning about unsaved changes - FIXED
 * The7 theme compatibility for GD pages - FIXED
 * Ninja forms widget now has option to output the form direct, can be used in sidebar or in tab - ADDED
+* Include post images in Rank Math sitemap - ADDED
 
 = 2.0.0.65 =
 * Jarida theme compatibility for GD page sidebars - FIXED
