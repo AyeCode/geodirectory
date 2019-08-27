@@ -490,11 +490,26 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$parent_category = ($is_category && $cat_filter && $cpt == $current_posttype) ? $current_term_id : 0;
 				$cat_taxonomy = $cpt . 'category';
 				$skip_childs = false;
+
+				$category_args = array(
+					'orderby'    => $orderby, 
+					'order'      => $order, 
+					'hide_empty' => $hide_empty, 
+					'number'     => $max_count,
+				);
+
+				/**
+				 * Filters the category arguments passed to get_terms when fetching categories for GD Categories widget
+				 */
+				$category_args = apply_filters( 'geodir_gd_category_widget_category_args', $category_args, $cat_taxonomy );
+
 				if ($cat_filter && $cpt == $current_posttype && $is_detail && $post_ID) {
-					$skip_childs = true;
-					$categories = get_terms($cat_taxonomy, array('orderby' => $orderby, 'order' => $order, 'hide_empty' => $hide_empty, 'object_ids' => $post_ID, 'number' => $max_count));
+					$skip_childs   = true;
+					$category_args['object_ids'] = $post_ID;
+					$categories    = get_terms($cat_taxonomy, $category_args);
 				} else {
-					$categories = get_terms($cat_taxonomy, array('orderby' => $orderby, 'order' => $order, 'hide_empty' => $hide_empty, 'parent' => $parent_category, 'number' => $max_count));
+					$category_args['parent'] = $parent_category;
+					$categories = get_terms($cat_taxonomy, $category_args);
 				}
 
 				if ($hide_empty) {

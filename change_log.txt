@@ -2,6 +2,7 @@
 * Fail to save feature image for new listing when post revision is enabled - FIXED
 * Post link not working in email sent to admin on post edit - FIXED
 * Post badge does not supports category and tags - FIXED
+* Filter GD Categories widget get terms args - ADDED
 
 = 2.0.0.66 =
 * GD post favourites widget issue for icon option - FIXED
