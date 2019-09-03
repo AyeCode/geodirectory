@@ -622,18 +622,29 @@ class GeoDir_Query {
 				}
 			}
 
-
 			// add our own location query vars
 			global $geodirectory;
 			if ( $support_location ) {
 				// only query known location variables
 				$location_vars = $geodirectory->location->allowed_query_variables();
-				foreach ( $location_vars as $location_var ) {
-					if ( get_query_var( $location_var ) ) {
-						$method_name = "get_{$location_var}_name_from_slug";
-						$var_name    = $location_var == 'neighbourhood' ? get_query_var( $location_var ) : $geodirectory->location->$method_name( get_query_var( $location_var ) );
-						if ( $var_name ) {
-							$where .= $wpdb->prepare( " AND " . $table . "." . $location_var . " = %s ", $var_name );
+
+				/**
+				 * Filter by location terms like country, region, city.
+				 *
+				 * @since 2.0.0.67
+				 */
+				$location_where = apply_filters( 'geodir_search_posts_location_where', '', $geodir_post_type, $location_vars );
+
+				if ( ! empty( $location_where ) ) {
+					$where .= $location_where;
+				} else {
+					foreach ( $location_vars as $location_var ) {
+						if ( get_query_var( $location_var ) ) {
+							$method_name = "get_{$location_var}_name_from_slug";
+							$var_name    = $location_var == 'neighbourhood' ? get_query_var( $location_var ) : $geodirectory->location->$method_name( get_query_var( $location_var ) );
+							if ( $var_name ) {
+								$where .= $wpdb->prepare( " AND " . $table . "." . $location_var . " = %s ", $var_name );
+							}
 						}
 					}
 				}

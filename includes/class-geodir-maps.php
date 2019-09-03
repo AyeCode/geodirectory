@@ -300,6 +300,26 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			$term_args['exclude'] = $exclude;
 		}
 
+		/**
+		 * Filter terms order by field.
+		 *
+		 * @since 2.0.0.67
+		 */
+		$orderby = apply_filters( 'geodir_map_categories_orderby', '', $post_type, $cat_parent, $hierarchical );
+		if ( ! empty( $orderby ) ) {
+			$term_args['orderby'] = $orderby;
+		}
+
+		/**
+		 * Filter terms in ascending or descending order.
+		 *
+		 * @since 2.0.0.67
+		 */
+		$order = apply_filters( 'geodir_map_categories_order', '', $post_type, $cat_parent, $hierarchical );
+		if ( ! empty( $order ) ) {
+			$term_args['order'] = $order;
+		}
+
 		$cat_terms = get_terms( $term_args );
 		
 		if ($hide_empty && ! $hierarchical) {

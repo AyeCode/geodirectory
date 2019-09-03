@@ -717,8 +717,8 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 								jQuery(el).find('input[type="submit"]').prop('disabled', false);
 
 								if (typeof data == 'object') {
-									if (typeof data.error != 'undefined' && data.error) {
-										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.error);
+									if (typeof data.success != 'undefined' && data.success == false) {
+										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.data);
 										window.clearInterval(timer_posts);
 									} else {
 										if (getTotal) {
@@ -785,8 +785,8 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 								jQuery(el).find('input[type="submit"]').prop('disabled', false);
 
 								if (typeof data == 'object') {
-									if (typeof data.error != 'undefined' && data.error) {
-										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.error);
+									if (typeof data.success != 'undefined' && data.success == false) {
+										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.data);
 										window.clearInterval(timer_cats);
 									} else {
 										if (pages < page || pages == page) {
