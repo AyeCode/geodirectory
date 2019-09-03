@@ -4,6 +4,7 @@
 * Post badge does not supports category and tags - FIXED
 * Option added in gd_categories widget/shortcode to CPT title - ADDED
 * Rank Math SEO option overwrites Yoast SEO option - FIXED
+* Filter GD Categories widget get terms args - ADDED
 
 = 2.0.0.66 =
 * GD post favourites widget issue for icon option - FIXED
