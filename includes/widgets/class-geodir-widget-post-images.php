@@ -186,6 +186,16 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'placeholder'  => 'post_images,logo',
 					'advanced' => true
 				),
+				'fallback_types'  => array(
+					'title' => __('Fallback types:', 'geodirectory'),
+					'desc' => __('Comma separated list of fallback types to show (only one will be shown). Defaults to: logo,cat_default,cpt_default,listing_default', 'geodirectory'),
+					'type' => 'text',
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'placeholder'  => 'logo,cat_default,cpt_default,listing_default',
+					'advanced' => true
+				),
 				'image_size'  => array(
 					'title' => __('Image size:', 'geodirectory'),
 					'desc' => __('The WP image size as a text string.', 'geodirectory'),
@@ -303,6 +313,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'show_logo'     => 'false',
 			'cover'   => '', // image cover type
 			'types'   => '', // types to show, post_images,comment_images,logo
+			'fallback_types'   => 'logo,cat_default,cpt_default,listing_default,website_screenshot', //logo,cat_default,cpt_default,listing_default
 			'css_class' => '',
 		);
 
@@ -325,26 +336,20 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		if(!empty($options['types'])){
 			$options['types'] = explode(",",$options['types']);
 		}
+		
+		// fallback types
+		if(!empty($options['fallback_types'])){
+			$options['fallback_types'] = explode(",",$options['fallback_types']);
+		}elseif($options['fallback_types']=='0'){
+			$options['fallback_types'] = array();
+		}else{
+			$options['fallback_types'] = array('logo','cat_default','cpt_default','listing_default');
+		}
 
 //		$options['types'] = array("logo","comment_images","post_images"); // @todo remove this line after testing
 
-		// check for URL screenshots
-//		if(!empty($options['types'])){
-//			foreach($options['types'] as $key => $val){
-//				if(stripos(strrev($val), "tohsneercs_") === 0){
-//					$field = str_replace("_screenshot","",$val);
-//					if(isset($gd_post->{$field}) && esc_url($gd_post->{$field})){
-//						echo '###'.$key;
-//					}else{
-//						unset($options['types'][$key]); // unset if an invalid screenshot type
-//					}
-//				}
-//			}
-//		}
 
-
-		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types']);
-
+		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types'],$options['fallback_types']);
 
 		// make it just a image if only one
 		if($options['type']=='slider' && count($post_images) == 1 && $options['limit_show']){
