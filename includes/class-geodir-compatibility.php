@@ -459,7 +459,7 @@ class GeoDir_Compatibility {
 					$reserve_post_meta = defined( 'WPSEO_VERSION' ) && ! geodir_get_option( 'wpseo_disable' ) && geodir_is_page( 'detail' ) ? true : false;
 
 					// Don't overwrite Rank Math SEO meta for the individual post.
-					$reserve_post_meta = defined( 'RANK_MATH_VERSION' ) && ! geodir_get_option( 'rank_math_disable' ) && geodir_is_page( 'detail' ) ? true : false;
+					$reserve_post_meta = defined( 'RANK_MATH_VERSION' ) && ! geodir_get_option( 'rank_math_disable' ) && geodir_is_page( 'detail' ) ? true : $reserve_post_meta;
 
 					if ( $reserve_post_meta ) {
 						global $gd_post_metadata;
