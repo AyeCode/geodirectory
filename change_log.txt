@@ -2,6 +2,8 @@
 * Fail to save feature image for new listing when post revision is enabled - FIXED
 * Post link not working in email sent to admin on post edit - FIXED
 * Post badge does not supports category and tags - FIXED
+* Option added in gd_categories widget/shortcode to CPT title - ADDED
+* Rank Math SEO option overwrites Yoast SEO option - FIXED
 
 = 2.0.0.66 =
 * GD post favourites widget issue for icon option - FIXED

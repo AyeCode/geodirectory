@@ -619,7 +619,10 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         if (!window.gdMaps) { // No Google Map Loaded
             return;
         }
-
+		if (address && address != '') {
+			// Replace one or more commas in a row.
+			address = address.replace(/,+/g,',');
+		}
         if ( window.gdMaps == 'osm' ) {
             if (address != '') {
                 if (zip != '') {
