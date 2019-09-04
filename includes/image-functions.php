@@ -56,7 +56,11 @@ function geodir_get_image_src($image, $size = 'medium'){
     // no sizes just return full size
     if(!$img_src){
         if(isset($image->file)){
-            $img_src = $upload_dir['baseurl'].$image->file;
+	        if(substr( $image->file, 0, 4 ) === "http"){
+		        $img_src = esc_url_raw( $image->file );
+	        }else{
+		        $img_src = $upload_dir['baseurl'].$image->file;
+	        }
         }
     }
 
@@ -117,6 +121,19 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
     return apply_filters( 'geodir_get_image_tag', $html, $id, $alt, $title, $align, $size );
 }
 
+function geodir_get_field_screenshot($field,$sizes = array('w'=>825,'h'=>430)){
+	global $gd_post;
+	$url = '';
+	$width = isset($sizes['w']) ? absint($sizes['w']) : 825;
+	$height = isset($sizes['h']) ? absint($sizes['h']) : 430;
+
+	if(isset($gd_post->{$field}) && esc_url($gd_post->{$field})){
+		$url = "https://wordpress.com/mshots/v1/".esc_url($gd_post->{$field})."?w=$width&h=$height";
+	}
+	
+	return $url;
+}
+
 
 /**
  * Gets the post images.
@@ -131,15 +148,80 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
  * @param int|string $limit Optional. Number of images.
  * @return array|bool Returns images as an array. Each item is an object.
  */
-function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_id = '', $types = array() ){
+function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_id = '', $types = array() , $fallback_types = array('logo','cat_default','cpt_default','listing_default',',website_screenshot') ){
     global $gd_post;
 
     $post_images = array();
 
 	if ( ! empty( $types ) ) {
+		$original_types = $types;
+
+		// check for URL screenshots
+		$has_screenshots = false;
+		if(!empty($types)){
+			foreach($types as $key => $val){
+				if(stripos(strrev($val), "tohsneercs_") === 0){
+					$field = str_replace("_screenshot","",$val);
+					if(isset($gd_post->{$field}) && esc_url($gd_post->{$field})){
+						$has_screenshots = true;
+					}else{
+						unset($types[$key]); // unset if an invalid screenshot type
+					}
+				}
+			}
+		}
+
+
+		
 		$types = geodir_post_has_image_types( $types, $post_id, $revision_id );
 		if ( ! empty( $types ) ) {
-			$post_images = GeoDir_Media::get_attachments_by_type( $post_id, $types, $limit, $revision_id );
+			if($has_screenshots){
+
+				foreach($types as $type){
+
+					if($limit && count($post_images) >= $limit ){
+						break;
+					}
+
+					$new_images = array();
+					if(stripos(strrev($type), "tohsneercs_") === 0){
+						$field = str_replace("_screenshot","",$type);
+						if(isset($gd_post->{$field}) && esc_url($gd_post->{$field})){
+							$image_src = geodir_get_field_screenshot($field);
+							if($image_src){
+								$image = new stdClass();
+								$image->ID = 0;
+								$image->post_id = $post_id;
+								$image->user_id = 0;
+								$image->title = sprintf( __('%s screenshot', 'geodirectory'), esc_attr($field) );
+								$image->caption = '';
+								$image->file = ltrim( $image_src, '/\\' );
+								$image->mime_type = '';
+								$image->menu_order = 0;
+								$image->featured= 0;
+								$image->is_approved = 1;
+								$image->metadata = '';
+								$image->type = esc_attr($field).'_screenshot';
+								$new_images[] = $image;
+							}
+						}
+					}else{
+						$new_images = GeoDir_Media::get_attachments_by_type( $post_id, $type, $limit, $revision_id );
+					}
+
+					if(!empty($new_images)){
+						foreach($new_images as $new_image){
+							if($limit && count($post_images) >= $limit ){
+								break;
+							}
+							array_push($post_images, $new_image);
+						}
+					}
+				}
+
+			}else{
+				$post_images = GeoDir_Media::get_attachments_by_type( $post_id, $types, $limit, $revision_id );
+			}
 		}
     } else {
         $post_images = GeoDir_Media::get_post_images( $post_id, $limit, $revision_id );
@@ -153,100 +235,131 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
                 $post_images = $logo_image + $post_images;
             }
         }
-    } else {
-        $logo_image = false;
-        if ( isset( $gd_post->ID ) && $gd_post->ID == $post_id && isset( $gd_post->logo ) && $logo && geodir_post_has_image_types( 'logo', $post_id, $revision_id ) ) {
-			$logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
-			if ( $logo_image ) {
-				$post_images = $logo_image;
-			}
-        }
+    } elseif(!empty($fallback_types)) {
 
-        if ( ! $logo_image ) {
-            $default_img_id = '';
-			$term_img = 0;
+	    $fallback_image = new stdClass();
 
-            // cat image
-            if ( geodir_is_page('archive' ) ) {
-                if ( $term_id = get_queried_object_id() ) {
-                    $term_img = get_term_meta( $term_id, 'ct_cat_default_img', true );
-                }
-            }
+	    // fallback images
+	    foreach($fallback_types as $fallback_type){
+		    $default_img_id = 0;
+		    //logo
+		    if($fallback_type == 'logo' && isset( $gd_post->logo ) && $gd_post->logo){
+			    $logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
+			    if ( $logo_image ) {
+				    $post_images = $logo_image;
+				    break;
+			    }
+		    }elseif($fallback_type == 'cat_default'){
+			    $term_img = 0;
+			    // cat image
+			    if ( geodir_is_page('archive' ) ) {
+				    if ( $term_id = get_queried_object_id() ) {
+					    $term_img = get_term_meta( $term_id, 'ct_cat_default_img', true );
+				    }
+			    }
 
-            if ( empty( $term_img ) ) {
-                $default_term_id = geodir_get_post_meta( $post_id, 'default_category' );
-                if ( $default_term_id ) {
-                    $term_img = get_term_meta( $default_term_id, 'ct_cat_default_img', true );
-                }
-            }
+			    if ( empty( $term_img ) ) {
+				    $default_term_id = geodir_get_post_meta( $post_id, 'default_category' );
+				    if ( $default_term_id ) {
+					    $term_img = get_term_meta( $default_term_id, 'ct_cat_default_img', true );
+				    }
+			    }
 
-            if ( ! empty( $term_img ) ) {
-                $default_img_id = $term_img['id'];
+			    if ( ! empty( $term_img ) ) {
+				    $default_img_id = $term_img['id'];
 
-				if ( $default_img_id == 'image' && ! empty( $term_img['src'] ) ) {
-					$image_src = geodir_file_relative_url( $term_img['src'], false );
-					$post_images = array();
-                    $image = new stdClass();
-                    $image->ID = 0;
-                    $image->post_id = $post_id;
-                    $image->user_id = 0;
-                    $image->title = __( 'Placeholder image', 'geodirectory' );
-                    $image->caption = '';
-                    $image->file = '/' . ltrim( $image_src, '/\\' );
-                    $image->mime_type = '';
-                    $image->menu_order = 0;
-                    $image->featured= 0;
-                    $image->is_approved = 1;
-                    $image->metadata = '';
-                    $image->type = 'post_images';
-                    $post_images[] = $image;
+				    if ( $default_img_id == 'image' && ! empty( $term_img['src'] ) ) {
+					    $image_src = geodir_file_relative_url( $term_img['src'], false );
+					    $post_images = array();
+					    $image = new stdClass();
+					    $image->ID = 0;
+					    $image->post_id = $post_id;
+					    $image->user_id = 0;
+					    $image->title = __( 'Placeholder image', 'geodirectory' );
+					    $image->caption = '';
+					    $image->file = '/' . ltrim( $image_src, '/\\' );
+					    $image->mime_type = '';
+					    $image->menu_order = 0;
+					    $image->featured= 0;
+					    $image->is_approved = 1;
+					    $image->metadata = '';
+					    $image->type = 'post_images';
+					    $post_images[] = $image;
+					    break;
+				    }
+			    }
 
-					return $post_images;
+		    }elseif($fallback_type == 'cpt_default'){
+				// check for CPT default image
+			    $cpt = geodir_get_current_posttype();
+			    if ( $cpt ) {
+				    $cpts = geodir_get_posttypes('array');
+				    if ( ! empty( $cpts[$cpt]['default_image'] ) ) {
+					    $default_img_id = absint( $cpts[$cpt]['default_image'] );
+				    }
+			    }
+		    }elseif($fallback_type == 'listing_default'){
+			    $listing_default_image_id = geodir_get_option( 'listing_default_image' );
+			    if ( $listing_default_image_id ) {
+				    $default_img_id = absint($listing_default_image_id);
+			    }
+		    }elseif(is_int($fallback_type)){
+			    $default_img_id = absint($fallback_type);
+		    }elseif(stripos(strrev($fallback_type), "tohsneercs_") === 0){ // screenshots
+
+			    $field = str_replace("_screenshot","",$fallback_type);
+				if(isset($gd_post->{$field}) && esc_url($gd_post->{$field})){
+					$image_src = geodir_get_field_screenshot($field);
+					if($image_src){
+						$image = new stdClass();
+						$image->ID = 0;
+						$image->post_id = $post_id;
+						$image->user_id = 0;
+						$image->title = __( 'Placeholder image', 'geodirectory' );
+						$image->caption = '';
+						$image->file = ltrim( $image_src, '/\\' );
+						$image->mime_type = '';
+						$image->menu_order = 0;
+						$image->featured= 0;
+						$image->is_approved = 1;
+						$image->metadata = '';
+						$image->type = esc_attr($field).'_screenshot';
+						$post_images[] = $image;
+						break;
+					}
 				}
-            } else {
-                // check for CPT default image
-                $cpt = geodir_get_current_posttype();
-                if ( $cpt ) {
-                    $cpts = geodir_get_posttypes('array');
-                    if ( ! empty( $cpts[$cpt]['default_image'] ) ) {
-                        $default_img_id = absint( $cpts[$cpt]['default_image'] );
-                    }
-                }
+		    }
 
-                // lastly check for default listing image
-                if ( ! $default_img_id ) {
-                    $listing_default_image_id = geodir_get_option( 'listing_default_image' );
-                    if ( $listing_default_image_id ) {
-                        $default_img_id = $listing_default_image_id;
-                    }
-                }
-            }
 
-            // default image
-            if ( $default_img_id ) {
-                $default_image_post = get_post( $default_img_id );
 
-                if ( $default_image_post ) {
-                    $wp_upload_dir = wp_upload_dir();
+		    // default image
+		    if ( $default_img_id ) {
+			    $default_image_post = get_post( $default_img_id );
 
-                    $post_images = array();
-                    $image = new stdClass();
-                    $image->ID = 0;
-                    $image->post_id = $default_image_post->ID;
-                    $image->user_id = 0;
-                    $image->title = !empty($default_image_post->post_title) ? $default_image_post->post_title : __( 'Placeholder image', 'geodirectory' );
-                    $image->caption = !empty($default_image_post->post_excerpt) ? $default_image_post->post_excerpt : '';
-                    $image->file = str_replace( $wp_upload_dir['basedir'], '', get_attached_file( $default_img_id ) );
-                    $image->mime_type = $default_image_post->post_mime_type;
-                    $image->menu_order = 0;
-                    $image->featured = 0;
-                    $image->is_approved = 1;
-                    $image->metadata= wp_get_attachment_metadata( $default_img_id );
-                    $image->type = 'post_images';
-                    $post_images[] = $image;
-                }
-            }
-        }
+			    if ( $default_image_post ) {
+				    $wp_upload_dir = wp_upload_dir();
+
+				    $post_images = array();
+				    $image = new stdClass();
+				    $image->ID = 0;
+				    $image->post_id = $default_image_post->ID;
+				    $image->user_id = 0;
+				    $image->title = !empty($default_image_post->post_title) ? $default_image_post->post_title : __( 'Placeholder image', 'geodirectory' );
+				    $image->caption = !empty($default_image_post->post_excerpt) ? $default_image_post->post_excerpt : '';
+				    $image->file = str_replace( $wp_upload_dir['basedir'], '', get_attached_file( $default_img_id ) );
+				    $image->mime_type = $default_image_post->post_mime_type;
+				    $image->menu_order = 0;
+				    $image->featured = 0;
+				    $image->is_approved = 1;
+				    $image->metadata= wp_get_attachment_metadata( $default_img_id );
+				    $image->type = 'post_images';
+				    $post_images[] = $image;
+				    break;
+			    }
+		    }
+
+	    }
+
     }
 
     return $post_images;
@@ -313,7 +426,9 @@ function geodir_post_has_image_types( $types = array(), $post_id, $revision_id =
 			foreach ( $image_types as $type ) {
 				if ( in_array( $type, array( 'post_images', 'comment_images' ) ) ) {
 					$valid_types[] = $type;
-				} elseif ( geodir_check_field_visibility( $package_id, $type, $post_type ) ) {
+				} elseif(stripos(strrev($type), "tohsneercs_") === 0){
+					$valid_types[] = $type;
+				}elseif ( geodir_check_field_visibility( $package_id, $type, $post_type ) ) {
 					$valid_types[] = $type;
 				}
 			}
