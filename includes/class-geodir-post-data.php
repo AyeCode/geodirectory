@@ -446,10 +446,10 @@ class GeoDir_Post_Data {
 			$postarr['post_id']     = $post_id;
 			$postarr['post_status'] = $post->post_status;
 			if ( isset( $gd_post['featured'] ) ) {
-				$postarr['featured'] = $gd_post['featured'];
+				$postarr['featured'] = sanitize_text_field( $gd_post['featured'] );
 			}
 			if ( ! $update ) {
-				$postarr['submit_ip'] = $_SERVER['REMOTE_ADDR'];
+				$postarr['submit_ip'] = sanitize_text_field( $_SERVER['REMOTE_ADDR'] );
 			}
 
 			// unset the post content as we don't save it here
@@ -567,15 +567,15 @@ class GeoDir_Post_Data {
 
 			// Save location info
 			if ( isset( $gd_post['street'] ) ) {
-				$postarr['street'] = stripslashes( $gd_post['street'] );
+				$postarr['street'] = sanitize_text_field( stripslashes( $gd_post['street'] ) );
 			}
 			if ( isset( $gd_post['street2'] ) ) {
-				$postarr['street2'] = stripslashes( $gd_post['street2'] );
+				$postarr['street2'] = sanitize_text_field( stripslashes( $gd_post['street2'] ) );
 			}
 			if ( ! isset( $gd_post['city'] ) && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'inline-save' ) {
 				// if inline save then don't adjust the location info
 			} elseif ( isset( $gd_post['city'] ) ) {
-				$postarr['city'] = stripslashes( $gd_post['city'] );
+				$postarr['city'] = sanitize_text_field( stripslashes( $gd_post['city'] ) );
 			} else {
 				if ( ! $update ) {
 					$default_location   = $geodirectory->location->get_default_location();
@@ -585,25 +585,25 @@ class GeoDir_Post_Data {
 				}
 			}
 			if ( isset( $gd_post['region'] ) ) {
-				$postarr['region'] = stripslashes( $gd_post['region'] );
+				$postarr['region'] = sanitize_text_field( stripslashes( $gd_post['region'] ) );
 			}
 			if ( isset( $gd_post['country'] ) ) {
-				$postarr['country'] = stripslashes( $gd_post['country'] );
+				$postarr['country'] = sanitize_text_field( stripslashes( $gd_post['country'] ) );
 			}
 			if ( isset( $gd_post['zip'] ) ) {
-				$postarr['zip'] = stripslashes( $gd_post['zip'] );
+				$postarr['zip'] = sanitize_text_field( stripslashes( $gd_post['zip'] ) );
 			}
 			if ( isset( $gd_post['latitude'] ) ) {
-				$postarr['latitude'] = stripslashes( $gd_post['latitude'] );
+				$postarr['latitude'] = sanitize_text_field( stripslashes( $gd_post['latitude'] ) );
 			}
 			if ( isset( $gd_post['longitude'] ) ) {
-				$postarr['longitude'] = stripslashes( $gd_post['longitude'] );
+				$postarr['longitude'] = sanitize_text_field( stripslashes( $gd_post['longitude'] ) );
 			}
 			if ( isset( $gd_post['mapview'] ) ) {
-				$postarr['mapview'] = $gd_post['mapview'];
+				$postarr['mapview'] = sanitize_text_field( $gd_post['mapview'] );
 			}
 			if ( isset( $gd_post['mapzoom'] ) ) {
-				$postarr['mapzoom'] = $gd_post['mapzoom'];
+				$postarr['mapzoom'] = sanitize_text_field( $gd_post['mapzoom'] );
 			}
 			if ( isset( $gd_post['post_dummy'] ) ) {
 				$postarr['post_dummy'] = $gd_post['post_dummy'];
@@ -656,7 +656,6 @@ class GeoDir_Post_Data {
 
 			// re-hook this function
 			add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 3 );
-
 		}
 
 		// clear the temp data so any further posts in the same request don't use it
