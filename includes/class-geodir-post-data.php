@@ -1978,7 +1978,7 @@ class GeoDir_Post_Data {
 		}
 
 		$classes[] = 'post-' . $post->ID;
-		if ( ! is_admin() ) {
+		if ( ! is_admin() || wp_doing_ajax() ) {
 			$classes[] = $post->post_type;
 		}
 		$classes[] = 'type-' . $post->post_type;
@@ -1997,7 +1997,7 @@ class GeoDir_Post_Data {
 		if ( is_sticky( $post->ID ) ) {
 			if ( is_home() && ! is_paged() ) {
 				$classes[] = 'sticky';
-			} elseif ( is_admin() ) {
+			} elseif ( is_admin() && ! wp_doing_ajax() ) {
 				$classes[] = 'status-sticky';
 			}
 		}
