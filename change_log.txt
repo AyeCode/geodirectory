@@ -8,6 +8,9 @@
 * Rank Math plugin sitemap image count wrong for GD listings - FIXED
 * Post Images widget now has `fallback_types` that can be set - ADDED
 * Post Images widget can now generate screenshots of url fields by appending `_screenshot` eg: website_screenshot - ADDED
+* Delete subsite removes data from main site on multisite network - FIXED
+* CPT type post class not set to ajax listings - FIXED
+* Custom field accepets script tags - FIXED
 
 = 2.0.0.66 =
 * GD post favourites widget issue for icon option - FIXED

@@ -1199,3 +1199,60 @@ function geodir_post_badge_filter_match_found( $match_found, $args, $gd_post ) {
 	return $match_found;
 }
 add_filter( 'geodir_post_badge_check_match_found', 'geodir_post_badge_filter_match_found', 10, 3 );
+
+/**
+ * Sanitize text value.
+ *
+ * @since 2.0.0.67
+ *
+ * @param string $value Business hours value.
+ * @param string $custom_field Custom field.
+ * @param int $post_id Post id.
+ * @param object $post Post.
+ * @param string $update Update.
+ * @return string $value Sanitize business hours.
+ */
+function geodir_validate_custom_field_value_text( $value, $custom_field, $post_id, $post, $update ) {
+	if ( $value != '' ) {
+		if ( is_array( $value ) ) {
+			$value = array_map( 'geodir_clean', $value );
+		} else {
+			$value = is_scalar( $value ) ? geodir_clean( stripslashes( $value ) ) : $value;
+		}
+	}
+	return $value;
+}
+add_filter( 'geodir_custom_field_value_checkbox', 'geodir_validate_custom_field_value_text', 10, 5 );
+add_filter( 'geodir_custom_field_value_datepicker', 'geodir_validate_custom_field_value_text', 10, 5 );
+add_filter( 'geodir_custom_field_value_email', 'geodir_validate_custom_field_value_text', 10, 5 );
+add_filter( 'geodir_custom_field_value_multiselect', 'geodir_validate_custom_field_value_text', 10, 5 );
+add_filter( 'geodir_custom_field_value_phone', 'geodir_validate_custom_field_value_text', 10, 5 );
+add_filter( 'geodir_custom_field_value_radio', 'geodir_validate_custom_field_value_text', 10, 5 );
+add_filter( 'geodir_custom_field_value_select', 'geodir_validate_custom_field_value_text', 10, 5 );
+add_filter( 'geodir_custom_field_value_text', 'geodir_validate_custom_field_value_text', 10, 5 );
+add_filter( 'geodir_custom_field_value_url', 'geodir_validate_custom_field_value_text', 10, 5 );
+
+/**
+ * Sanitize textarea/html value.
+ *
+ * @since 2.0.0.67
+ *
+ * @param string $value Business hours value.
+ * @param string $custom_field Custom field.
+ * @param int $post_id Post id.
+ * @param object $post Post.
+ * @param string $update Update.
+ * @return string $value Sanitize business hours.
+ */
+function geodir_validate_custom_field_value_textarea( $value, $custom_field, $post_id, $post, $update ) {
+	if ( $value != '' ) {
+		if ( is_array( $value ) ) {
+			$value = array_map( 'geodir_sanitize_html_field', $value );
+		} else {
+			$value = is_scalar( $value ) ? geodir_sanitize_html_field( $value ) : $value;
+		}
+	}
+	return $value;
+}
+add_filter( 'geodir_custom_field_value_html', 'geodir_validate_custom_field_value_textarea', 10, 5 );
+add_filter( 'geodir_custom_field_value_textarea', 'geodir_validate_custom_field_value_textarea', 10, 5 );

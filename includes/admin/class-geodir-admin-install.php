@@ -883,21 +883,24 @@ class GeoDir_Admin_Install {
 	 * @return array GeoDir tables.
 	 */
 	public static function get_tables() {
-		global $wpdb, $plugin_prefix;
+		global $wpdb;
+
+		$db_prefix = $wpdb->prefix;
+		$gd_prefix = 'geodir_';
 
 		$tables = array();
-		$tables[] = GEODIR_API_KEYS_TABLE;
-		$tables[] = GEODIR_ATTACHMENT_TABLE;
-		$tables[] = GEODIR_BUSINESS_HOURS_TABLE;
-		$tables[] = GEODIR_CUSTOM_FIELDS_TABLE;
-		$tables[] = GEODIR_CUSTOM_SORT_FIELDS_TABLE;
-		$tables[] = GEODIR_REVIEW_TABLE;
-		$tables[] = GEODIR_TABS_LAYOUT_TABLE;
+		$tables["{$gd_prefix}api_keys"] = "{$db_prefix}{$gd_prefix}api_keys";
+		$tables["{$gd_prefix}attachments"] = "{$db_prefix}{$gd_prefix}attachments";
+		$tables["{$gd_prefix}business_hours"] = "{$db_prefix}{$gd_prefix}business_hours";
+		$tables["{$gd_prefix}custom_fields"] = "{$db_prefix}{$gd_prefix}custom_fields";
+		$tables["{$gd_prefix}custom_sort_fields"] = "{$db_prefix}{$gd_prefix}custom_sort_fields";
+		$tables["{$gd_prefix}post_review"] = "{$db_prefix}{$gd_prefix}post_review";
+		$tables["{$gd_prefix}tabs_layout"] = "{$db_prefix}{$gd_prefix}tabs_layout";
 
 		$post_types = array_keys( (array) geodir_get_option( 'post_types' ) );
 		if ( ! empty( $post_types ) ) {
 			foreach ( $post_types as $post_type ) {
-				$tables[] = "{$plugin_prefix}{$post_type}_detail";
+				$tables["{$gd_prefix}{$post_type}_detail"] = "{$db_prefix}{$gd_prefix}{$post_type}_detail";
 			}
 		}
 
@@ -923,7 +926,7 @@ class GeoDir_Admin_Install {
 
 		$tables = self::get_tables();
 
-		foreach ( $tables as $table ) {
+		foreach ( $tables as $key => $table ) {
 			$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
 		}
 	}
