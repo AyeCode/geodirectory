@@ -476,6 +476,7 @@ var GeoDir_Business_Hours = {
 		var uniqueid = Math.floor( Math.random() * 100000000000 ).toString();
 	  
         jQuery('.gd-bh-closed', $item).remove();
+		$item.removeClass('gd-bh-item-closed');
 		sample = sample.replace(/GD_UNIQUE_ID/g, uniqueid);
         sample = sample.replace('data-field="open"', 'data-field="open" name="' + jQuery('.gd-bh-time', $item).data('field') + '[open][]"');
         sample = sample.replace('data-field="close"', 'data-field="close" name="' + jQuery('.gd-bh-time', $item).data('field') + '[close][]"');
@@ -485,7 +486,8 @@ var GeoDir_Business_Hours = {
         var $item = $el.closest('.gd-bh-time');
         $el.closest('.gd-bh-hours').remove();
         if (jQuery('.gd-bh-hours', $item).length < 1) {
-            $item.html('<div class="gd-bh-closed">' + geodir_params.txt_closed + '</div>');
+            $item.closest('.gd-bh-item').addClass('gd-bh-item-closed');
+			$item.html('<div class="gd-bh-closed">' + geodir_params.txt_closed + '</div>');
         }
     },
     onAddSlot: function() {
@@ -531,7 +533,7 @@ var GeoDir_Business_Hours = {
                         h = o;
                         h += '-';
                         if (!c) {
-                            c = '23:59';
+                            c = '00:00';
                         }
                         h += c;
                         ha.push(h);

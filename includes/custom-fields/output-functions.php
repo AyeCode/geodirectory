@@ -2349,7 +2349,11 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                     foreach ( $slots['slots'] as $i => $slot ) {
                         $attrs = '';
                         if ( ! empty( $slot['time'] ) ) {
-                            $attrs .= 'data-open="' . $slot['time'][0] . '"  data-close="' . $slot['time'][1] . '"';
+							$attrs .= 'data-open="' . $slot['time'][0] . '"  data-close="' . $slot['time'][1] . '"';
+							// Next day close
+							if ( (int)$slot['time'][0] == (int)$slot['time'][1] || (int)$slot['time'][1] < (int)$slot['time'][0] ) {
+								$attrs .= ' data-next-day="1"';
+							}
                         }
                         $html .= '<div ' . $attrs . ' class="gd-bh-slot"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
                         $html .= '</div>';

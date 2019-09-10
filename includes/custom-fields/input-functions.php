@@ -1752,13 +1752,14 @@ function geodir_cfi_business_hours( $html, $cf ) {
 				<div class="gd-bh-items" style="display:<?php echo $display; ?>">
 					<table class="form-table widefat fixed">
 						<thead>
-							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
+							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours"><?php _e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
 						</thead>
 						<tbody>
-							<tr style="display:none!important"><td colspan="3" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" readonly> - <input type="text" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" readonly><input id="GD_UNIQUE_ID_oa" type="hidden" data-field="open"><input type="hidden" id="GD_UNIQUE_ID_ca" data-field="close"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span></div></td></tr>
+							<tr style="display:none!important"><td colspan="4" class="gd-bh-blank"><div class="gd-bh-hours"><input type="text" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" readonly> - <input type="text" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" readonly><input id="GD_UNIQUE_ID_oa" type="hidden" data-field="open"><input type="hidden" id="GD_UNIQUE_ID_ca" data-field="close"> <span class="gd-bh-remove"><i class="fas fa-minus-circle" aria-hidden="true"></i></span></div></td></tr>
 							<?php foreach ( $weekdays as $day_no => $day ) { ?>
-							<tr class="gd-bh-item">
+							<tr class="gd-bh-item<?php echo ( empty( $hours[ $day_no ] ) ? ' gd-bh-item-closed' : '' ); ?>">
 								<td class="gd-bh-day"><?php echo $day; ?></td>
+								<td class="gd-bh-24hours"><input type="checkbox" value="1"></td>
 								<td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>]">
 									<?php 
 										if ( ! empty( $hours[ $day_no ] ) ) {
@@ -1795,7 +1796,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 							</tr>
 							<?php } ?>
 							<tr class="gd-tz-item">
-								<td colspan="3"><label form="<?php echo $htmlvar_name; ?>_f_timezone"><?php _e( 'Timezone offset from UTC (not including daylight savings time This is set automatically when address is set)', 'geodirectory' ); ?></label> 
+								<td colspan="4"><label form="<?php echo $htmlvar_name; ?>_f_timezone"><?php _e( 'Timezone offset from UTC (not including daylight savings time This is set automatically when address is set)', 'geodirectory' ); ?></label> 
                                     <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( geodir_timezone_default_utc_offset() ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN">
                                 </td>
                             </tr>

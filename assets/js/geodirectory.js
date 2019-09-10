@@ -931,7 +931,7 @@ function geodir_refresh_business_hours() {
 }
 
 function geodir_refresh_business_hour($this) {
-	var d, $d, hours, day, mins, time, hasOpen = false, hasClosed = false, isOpen, o, c, label, times = [], opens = [];
+	var d, $d, hours, day, mins, time, hasOpen = false, hasClosed = false, isOpen, o, c, nd, label, times = [], opens = [];
 	d = new Date(), utc = d.getTime() + (d.getTimezoneOffset() * 60000), d = new Date(utc + (parseInt(jQuery('.gd-bh-expand-range', $this).data('offsetsec')) * 1000));
 	date = d.getFullYear() + '-' + (("0" + (d.getMonth())).slice(-2)) + '-' + (("0" + (d.getDate())).slice(-2)) + 'T' + (("0" + (d.getHours())).slice(-2)) + ':' + (("0" + (d.getMinutes())).slice(-2)) + ':' + (("0" + (d.getSeconds())).slice(-2));
 	jQuery('.gd-bh-expand-range', $this).attr('data-date', date);
@@ -949,9 +949,9 @@ function geodir_refresh_business_hour($this) {
 		if ($d.data('closed') != '1') {
 			$d.find('.gd-bh-slot').each(function() {
 				isOpen = false;
-				o = jQuery(this).data('open'), c = jQuery(this).data('close');
+				o = jQuery(this).data('open'), c = jQuery(this).data('close'), nd = parseInt(jQuery(this).data('next-day'));
 				if (o != 'undefined' && c != 'undefined' && o !== '' && c !== '') {
-					if (parseInt(o) <= time && time <= parseInt(c)) {
+					if (parseInt(o) <= time && (time <= parseInt(c) || nd == 1)) {
 						isOpen = true;
 					}
 				}
