@@ -24,14 +24,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</nav>
 
 		<?php
-		
-		if($current_tab == 'membership'){
 
+		if($current_tab == 'membership'){
 			?>
 
 			<div class="gd-membership-tab-conatiner">
+				<div class="membership-content">
+				<!--
 				<h2>With our GeoDirectory Membership you get access to all our products!</h2>
-				<p><a class="button button-primary" href="https://wpgeodirectory.com/downloads/membership/">View Memberships</a></p>
+				<p><a class="button button-primary" href="https://wpgeodirectory.com/downloads/membership/">View Memberships</a></p> -->
 				<?php if(defined('WP_EASY_UPDATES_ACTIVE')){?>
 
 
@@ -42,8 +43,85 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$wpeu_admin = new External_Updates_Admin('wpgeodirectory.com','2');
 						echo $wpeu_admin->render_licence_actions('wpgeodirectory.com', 'membership',array(66235,111330,111327));
 						?>
+						<a  href="https://wpgeodirectory.com/downloads/membership/">Dont Have a membership Key?</a>
 					</p>
-				<?php }?>
+				<?php }else{ ?>
+				<p class="easy-update">	If you already have a membership Key please install <a href="https://wpgeodirectory.com/wp-easy-updates/" target="_blank">WP Easy Update </a></p>
+			<?php	}?>
+
+				<div class="membership-cta-contet">
+					<div class="main-cta">
+							<h2>Membership benefit Includes:</h2>
+							<div class="feature-list">
+								<ul>
+										<li><span class="dashicons dashicons-yes-alt"></span> Location Manager</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Advanced Search Add-on</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Custom Post Types</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Pricing Manager</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Events</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Buddypress Integration</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Claim Listings</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Marker Cluster</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> MultiRatings and Reviews</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> GD reCAPTCHA</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Social Importer</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Franchise Manager</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Custom Map Styles</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Ajax Duplicate Alert</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> List Manager</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> WP All Import</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Embeddable Ratings Badge</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Compare Listings</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Directory Converter</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> WPML Multilingual</li>
+										<li><span class="dashicons dashicons-yes-alt"></span> Google Analytics</li>
+								</ul>
+							</div>
+							<div class="feature-cta">
+								<h3>Membership <br>Starts from</h3>
+								<h4>$99</h4>
+								<a href="https://wpgeodirectory.com/downloads/membership/" target="_blank">Buy Membership</a>
+							</div>
+
+					</div>
+					<div class="member-testimonials">
+						<h3>Testimonials</h3>
+						<div class="testimonial-content">
+							<div class="t-image">
+								<?php
+									echo '<img src="' . plugins_url( 'images/t-image2.png', dirname(__FILE__) ) . '" > ';
+								?>
+							</div>
+							<div class="t-content">
+								<p>
+									I'm becoming more impressed with  @wpGeoDirectory
+ as v2 evolves. It's a pretty awesome WordPress directory plugin.
+								</p>
+								<p><strong>Vanessa Harris</strong> Product  @Google, formerly at  @Microsoft</p>
+							</div>
+						</div>
+
+						<div class="testimonial-content">
+							<div class="t-image">
+								<?php
+									echo '<img src="' . plugins_url( 'images/t-image1.png', dirname(__FILE__) ) . '" > ';
+								?>
+							</div>
+							<div class="t-content">
+								<p>
+									Switched from Joomla to WordPress and installed Geodirectory V2 to create a multi location directory and events site. Support has been absolutely brilliant with very quick response times, solving almost every issue I ran into (most of the time just me getting used to the new environment) in a matter of minutes but also a few other, more serious issues, in less than a day. I would definitely recommend Geodirectory to anyone who plans on creating a directory. It’s easy to use as it uses the new Gutenberg blocks and custom fields to create and layout your pages and comes with lots of great add-ons for a very reasonable price. Keep up the good work! I’m hooked on WordPress and Geodirectory V2. That’s a fact.
+								</p>
+								<p><strong>gdweb (@gdweb)</strong> Graphic Design and Web Design Studio in Phuket</p>
+							</div>
+						</div>
+					</div>
+					<div class="member-footer">
+						<a class="footer-btn" href="https://wpgeodirectory.com/downloads/membership/" target="_blank">Buy Membership</a>
+						<a class="footer-link" href="post-new.php?post_type=gd_place">Create your First Listing</a>
+					</div>
+				</div>
+
+			</div>
 			</div>
 
 			<?php
@@ -51,8 +129,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		}else{
 			$installed_plugins = get_plugins();
-			if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) : 
-				
+			if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) :
+
 //				print_r($addons);
 
 //			echo '###'.geodir_file_relative_url( 'http://localhost/wp-content/uploads/2018/12/restaurants19-2-150x150.jpg' );exit;
