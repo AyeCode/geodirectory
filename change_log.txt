@@ -12,6 +12,7 @@
 * CPT type post class not set to ajax listings - FIXED
 * Custom field accepets script tags - FIXED
 * Business hours option added to show next day closing - FIXED
+* Netwrok subsite shows countries table does not exist error - FIXED
 
 = 2.0.0.66 =
 * GD post favourites widget issue for icon option - FIXED
