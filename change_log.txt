@@ -11,6 +11,7 @@
 * Delete subsite removes data from main site on multisite network - FIXED
 * CPT type post class not set to ajax listings - FIXED
 * Custom field accepets script tags - FIXED
+* Business hours option added to show next day closing - FIXED
 
 = 2.0.0.66 =
 * GD post favourites widget issue for icon option - FIXED

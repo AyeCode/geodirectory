@@ -2348,14 +2348,15 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                     $html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d">' . $slots['day_short'] . '</div><div class="gd-bh-slots">';
                     foreach ( $slots['slots'] as $i => $slot ) {
                         $attrs = '';
+						$class = '';
                         if ( ! empty( $slot['time'] ) ) {
 							$attrs .= 'data-open="' . $slot['time'][0] . '"  data-close="' . $slot['time'][1] . '"';
 							// Next day close
 							if ( (int)$slot['time'][0] == (int)$slot['time'][1] || (int)$slot['time'][1] < (int)$slot['time'][0] ) {
-								$attrs .= ' data-next-day="1"';
+								$class .= ' gd-bh-next-day';
 							}
                         }
-                        $html .= '<div ' . $attrs . ' class="gd-bh-slot"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
+                        $html .= '<div ' . $attrs . ' class="gd-bh-slot' . $class . '"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
                         $html .= '</div>';
                     }
                     $html .= '</div></div>';
