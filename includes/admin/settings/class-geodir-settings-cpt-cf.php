@@ -1520,7 +1520,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field->field_type = isset( $input['field_type'] ) ? sanitize_text_field( $input['field_type'] ) : null;
 			$field->field_type_key = isset( $input['field_type_key'] ) ? sanitize_text_field( $input['field_type_key'] ) : $field->field_type;
 			$field->htmlvar_name = isset( $input['htmlvar_name'] ) ? str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['htmlvar_name'] ) ) : null;
-			$field->frontend_desc = isset( $input['frontend_desc'] ) ? sanitize_text_field( $input['frontend_desc'] ) : '';
+			$field->frontend_desc = isset( $input['frontend_desc'] ) ? stripslashes( wp_filter_kses( $input['frontend_desc'] ) ) : '';
 			$field->clabels = isset( $input['clabels'] ) ? sanitize_text_field( $input['clabels'] ) : null;
 			// default_value
 			$default_value = isset( $input['default_value'] ) ? $input['default_value'] : '';
