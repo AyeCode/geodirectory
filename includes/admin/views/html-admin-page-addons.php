@@ -51,41 +51,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<div class="membership-cta-contet">
 					<div class="main-cta">
-							<h2>Membership benefit Includes:</h2>
+							<h2><?php echo __("Membership benefit Includes:","userswp"); ?></h2>
 							<div class="feature-list">
 								<ul>
-										<li><span class="dashicons dashicons-yes-alt"></span> Location Manager</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Advanced Search Add-on</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Custom Post Types</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Pricing Manager</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Events</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Buddypress Integration</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Claim Listings</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Marker Cluster</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> MultiRatings and Reviews</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> GD reCAPTCHA</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Social Importer</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Franchise Manager</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Custom Map Styles</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Ajax Duplicate Alert</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> List Manager</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> WP All Import</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Embeddable Ratings Badge</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Compare Listings</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Directory Converter</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> WPML Multilingual</li>
-										<li><span class="dashicons dashicons-yes-alt"></span> Google Analytics</li>
+
+									<?php
+									$addon_obj = new WPInv_Admin_Addons();
+									if ($addons = $addon_obj->get_section_data( 'addons' ) ) {
+										foreach ( $addons as $addon ) {
+											echo '<li><i class="far fa-check-circle fa-sm"></i> '.esc_html( $addon->info->title ).'</li>';
+										}
+									}
+									?>
 								</ul>
 							</div>
 							<div class="feature-cta">
-								<h3>Membership <br>Starts from</h3>
-								<h4>$99</h4>
-								<a href="https://wpgeodirectory.com/downloads/membership/" target="_blank">Buy Membership</a>
+								<h3><?php echo __("Membership ","userswp"); ?> <br><?php echo __("Starts from","userswp"); ?></h3>
+								<h4><?php echo __("$99","userswp"); ?></h4>
+								<a href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","userswp"); ?></a>
 							</div>
 
 					</div>
+
+
 					<div class="member-testimonials">
-						<h3>Testimonials</h3>
+						<h3><?php echo __("Testimonials","userswp"); ?></h3>
 						<div class="testimonial-content">
 							<div class="t-image">
 								<?php
@@ -93,11 +83,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 								?>
 							</div>
 							<div class="t-content">
-								<p>
-									I'm becoming more impressed with  @wpGeoDirectory
- as v2 evolves. It's a pretty awesome WordPress directory plugin.
+								<p><?php echo __("I'm becoming more impressed with  @wpGeoDirectory
+as v2 evolves. It's a pretty awesome WordPress directory plugin.","userswp"); ?>
+
 								</p>
-								<p><strong>Vanessa Harris</strong> Product  @Google, formerly at  @Microsoft</p>
+								<p><strong><?php echo __("Vanessa Harris","userswp"); ?></strong> <?php echo __("Product  @Google, formerly at  @Microsoft","userswp"); ?></p>
 							</div>
 						</div>
 
@@ -108,16 +98,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 								?>
 							</div>
 							<div class="t-content">
-								<p>
-									Switched from Joomla to WordPress and installed Geodirectory V2 to create a multi location directory and events site. Support has been absolutely brilliant with very quick response times, solving almost every issue I ran into (most of the time just me getting used to the new environment) in a matter of minutes but also a few other, more serious issues, in less than a day. I would definitely recommend Geodirectory to anyone who plans on creating a directory. It’s easy to use as it uses the new Gutenberg blocks and custom fields to create and layout your pages and comes with lots of great add-ons for a very reasonable price. Keep up the good work! I’m hooked on WordPress and Geodirectory V2. That’s a fact.
+								<p><?php echo __("Switched from Joomla to WordPress and installed Geodirectory V2 to create a multi location directory and events site. Support has been absolutely brilliant with very quick response times, solving almost every issue I ran into (most of the time just me getting used to the new environment) in a matter of minutes but also a few other, more serious issues, in less than a day. I would definitely recommend Geodirectory to anyone who plans on creating a directory. It’s easy to use as it uses the new Gutenberg blocks and custom fields to create and layout your pages and comes with lots of great add-ons for a very reasonable price. Keep up the good work! I’m hooked on WordPress and Geodirectory V2. That’s a fact.","userswp"); ?>
+
 								</p>
-								<p><strong>gdweb (@gdweb)</strong> Graphic Design and Web Design Studio in Phuket</p>
+								<p><strong><?php echo __("gdweb (@gdweb)","userswp"); ?></strong> <?php echo __("Graphic Design and Web Design Studio in Phuket","userswp"); ?></p>
 							</div>
 						</div>
 					</div>
+
 					<div class="member-footer">
-						<a class="footer-btn" href="https://wpgeodirectory.com/downloads/membership/" target="_blank">Buy Membership</a>
-						<a class="footer-link" href="post-new.php?post_type=gd_place">Create your First Listing</a>
+						<a class="footer-btn" href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","userswp"); ?></a>
+						<a class="footer-link" href="post-new.php?post_type=gd_place"><?php echo __("Create your First Listing","userswp"); ?></a>
 					</div>
 				</div>
 
