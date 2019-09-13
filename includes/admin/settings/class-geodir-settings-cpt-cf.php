@@ -1210,6 +1210,35 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
                )
 			);
 
+			// distanceto
+			$custom_fields['distanceto'] = array(
+				'field_type'  => 'text',
+				'class'       => 'gd-distance-to',
+				'icon'        => 'fas fa-road',
+				'name'        => __( 'Distance To', 'geodirectory' ),
+				'description' => __( 'Adds a input for GPS coordinates that will then output the place distance to that point.', 'geodirectory' ),
+				'defaults'    => array(
+					'data_type'          => 'VARCHAR',
+					'admin_title'        => 'Distance To',
+					'frontend_title'     => 'Distance To',
+					'frontend_desc'      => 'Enter GPS coordinates like `53.347302,-6.258953`',
+					'htmlvar_name'       => 'distanceto',
+					'is_active'          => true,
+					'for_admin_use'      => false,
+					'default_value'      => '',
+					'show_in'            => '[detail]',
+					'is_required'        => false,
+					'validation_pattern' => '(-?\d{1,3}\.\d+),(-?\d{1,3}\.\d+)',
+					'validation_msg'     => 'Please enter valid GPS coordinates.',
+					'required_msg'       => '',
+					'field_icon'         => 'fas fa-road',
+					'css_class'          => 'gd-distance-to',
+					'cat_sort'           => false,
+					'cat_filter'         => false,
+	                'single_use'         => true
+				)
+			);
+
 			/**
 			 * @see `geodir_custom_fields`
 			 */
