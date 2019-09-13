@@ -14,6 +14,7 @@
 * Business hours option added to show next day closing - FIXED
 * Netwrok subsite shows countries table does not exist error - FIXED
 * Added a new pre-defined field "Distance To" - ADDED
+* Enfold theme builder color section not working on GD template - FIXED
 
 = 2.0.0.66 =
 * GD post favourites widget issue for icon option - FIXED

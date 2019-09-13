@@ -379,7 +379,7 @@ class GeoDir_Compatibility {
 
 		// Enfold theme
 		if ( function_exists( 'avia_get_option' ) ) {
-			if ( substr( $meta_key, 0, 6 ) === "_avia_" ) {
+			if ( strpos( $meta_key, '_avia_' ) === 0 || strpos( $meta_key, '_aviaLayout' ) === 0 ) {
 				$gen_keys[] = $meta_key;
 			}
 			$gen_keys[] = 'header';
