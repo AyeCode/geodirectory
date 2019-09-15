@@ -17,7 +17,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
     public function __construct() {
         $this->namespace = GEODIR_REST_SLUG . '/v' . GEODIR_REST_API_VERSION;
 		$this->rest_base = 'markers';
-		
+
 		add_filter( 'geodir_rest_markers_query_where', array( $this, 'set_query_where' ), 10, 2 );
     }
 
@@ -53,7 +53,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 			)
 		) );
     }
-	
+
 	/**
 	 * Checks if a given request has access to read and manage markers.
 	 *
@@ -65,7 +65,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 	public function get_item_permissions_check( $request ) {
 		return $this->show_in_rest();
 	}
-	
+
 	/**
 	 * Retrieves the query params for markers collections.
 	 *
@@ -136,7 +136,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
     public function show_in_rest() {
         return apply_filters( 'geodir_rest_markers_show_in_rest', true, $this );
     }
-	
+
 	/**
 	 * Retrieves the makers.
 	 *
@@ -154,7 +154,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		if ( ! $this->show_in_rest() ) {
 			return new WP_Error( 'rest_invalid_access', __( 'Cannot view markers.' ) );
 		}
-		
+
 		if ( ! ( ! empty( $request['post_type'] ) && geodir_is_gd_post_type( $request['post_type'] ) ) ) {
 			return new WP_Error( 'rest_invalid_param', __( 'Enter a valid GD post type for post_type parameter.' ) );
 		}
@@ -168,7 +168,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 			$response[ 'terms_filter' ] = $this->get_map_terms_filter( $request );
 		} else {
 			$items = $this->get_markers( $request );
-			
+
 			if ( ! empty( $items ) ) {
 				$response[ 'total' ] 		= count( $items );
 				$response[ 'baseurl' ] 		= $wp_upload_dir['baseurl'];
@@ -199,7 +199,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 
 		$items = array();
 		$detail_table = $plugin_prefix . $request['post_type'] . '_detail';
-		
+
 		$fields = "p.ID, p.post_title, pd.default_category, pd.latitude, pd.longitude";
 
 		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ) {
@@ -211,10 +211,10 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		}
 
 		$fields = apply_filters( 'geodir_rest_markers_query_fields', $fields, $request );
-		
+
 		$join = "LEFT JOIN {$detail_table} AS pd ON pd.post_id = p.ID";
 		$join = apply_filters( 'geodir_rest_markers_query_join', $join, $request );
-		
+
 		if ( ! empty( $request['post'] ) && is_array( $request['post'] ) && count( $request['post'] ) == 1 ) {
 			$where = $wpdb->prepare( "pd.post_id IS NOT NULL AND ( p.post_type = %s OR p.post_type = %s )", array( $request['post_type'],'revision' ) );
 			$where .= " AND p.post_status IN('publish', 'pending', 'draft', 'gd-closed','inherit','auto-draft')";
@@ -227,24 +227,28 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		if ( $where ) {
 			$where = "WHERE {$where}";
 		}
-		
+
 		$group_by = apply_filters( 'geodir_rest_markers_query_group_by', "", $request );
 		if ( $group_by ) {
 			$group_by = "GROUP BY {$group_by}";
 		}
-		
+
 		$order_by = apply_filters( 'geodir_rest_markers_query_order_by', "", $request );
 		if ( $order_by ) {
 			$order_by = "ORDER BY {$order_by}";
 		}
-		
+
 		$limit = apply_filters( 'geodir_rest_markers_query_limit', "", $request );
 		if ( $limit ) {
 			$limit = "LIMIT {$limit}";
-		}
+		} else if ($request['per_page']) {
+      $limit = "LIMIT {$request['per_page']}";
+    }
 
 
-		
+
+
+
 		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
 		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ) {
 			$dist = $request['dist'] ? (float) $request['dist'] : geodir_get_option( 'search_radius', 5 );
@@ -263,16 +267,16 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 			}
 		}
 		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
-		
-		
+
+
 		$sql = "SELECT {$fields} FROM {$wpdb->posts} AS p {$join} {$where} {$group_by} {$order_by} {$limit}";
 
 //		echo $sql;
-		
+
 		$sql = apply_filters( 'geodir_rest_markers_query', $sql, $request );
-		
+
 		$results = $wpdb->get_results( $sql );
-		
+
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $item ) {
 				if ( ! empty( $item->latitude ) && ! empty( $item->longitude ) ) {
@@ -283,7 +287,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 
 		return apply_filters( 'geodir_rest_get_markers', $items, $request );
     }
-	
+
 	/*
 	icons
 	array(
@@ -299,7 +303,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		'm' => 145,						marker id / post id
 		'lt' => '12.9773088',			latitude
 		'ln' => '77.57075069999996',	longitude
-		't' => 'Longwood Gardens',		post title	
+		't' => 'Longwood Gardens',		post title
 		'i' => '34'						icon id
 	);
 	*/
@@ -319,7 +323,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		}
 
 		$default_category = ! empty( $item->default_category ) ? $item->default_category : '';
-		
+
 		$post_title = $item->post_title;
 		// @todo need to check for special chars
 		/*
@@ -334,14 +338,14 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		$response['lt'] = $item->latitude;
 		$response['ln'] = $item->longitude;
 		$response['t'] 	= $post_title;
-		
+
 		$icon_id = ! empty( $default_category ) ? $default_category : 'd'; // d = default
-		
+
 		if ( empty( $geodir_rest_cache_icons[ $icon_id ] ) ) {
 			$icon_url 		= '';
 			$icon_width 	= 36;
 			$icon_height 	= 45;
-			
+
 			if ( ! empty( $geodir_rest_cache_marker ) && ! empty( $geodir_rest_cache_marker[ $default_category ]['i'] ) ) {
 				$icon_url 	= $geodir_rest_cache_marker[ $default_category ]['i'];
 			} else {
@@ -355,7 +359,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 					$geodir_rest_cache_marker[ $default_category ]['i'] = $icon_url;
 				}
 			}
-			
+
 			if ( ! empty( $icon_url ) ) {
 				if ( ! empty( $geodir_rest_cache_marker ) && ! empty( $geodir_rest_cache_marker[ $icon_url ]['w'] ) ) {
 					$icon_width 	= $geodir_rest_cache_marker[ $icon_url ]['w'];
@@ -371,7 +375,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 					$geodir_rest_cache_marker[ $icon_url ]['h'] = $icon_height;
 				}
 			}
-			
+
 			$geodir_rest_cache_icons[ $icon_id ] = array(
 				'i' => $icon_url,
 				'w' => $icon_width,
@@ -470,7 +474,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		if(!empty($request['city'])){ $city = $geodirectory->location->get_city_name_from_slug($request['city']); $where .= $wpdb->prepare(" AND pd.city = %s ",$city);}
 		if(!empty($request['neighbourhood'])){ $neighbourhood = sanitize_title($request['neighbourhood']);
 			$where .= $wpdb->prepare(" AND pd.neighbourhood = %s ",$neighbourhood);}
-		
+
 		// limited to area
 		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ){
 			$lat = filter_var($request['lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
@@ -498,7 +502,7 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 	 * @return array|WP_Error Array on success, or WP_Error object on failure.
 	 */
 	public function get_marker_item( $request ) {
-		$id = ! empty( $request['id'] ) ? (int)$request['id'] : 0; 
+		$id = ! empty( $request['id'] ) ? (int)$request['id'] : 0;
 
 		$response		  = array();
 		$response['html'] = $id > 0 ? $this->marker_content( $id ) : '';
