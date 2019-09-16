@@ -482,24 +482,26 @@ class GeoDir_User {
         }
     }
 
-	public static function login_link($redirect = ''){
-		$title = esc_attr__('Login','geodirectory');
-		if($redirect==''){
-			$redirect = geodir_curPageURL();
-		}
-		$link = wp_login_url( $redirect );
-		$output = "<div class='gd-login-links'>";
-		$output .= '<a class="login-link" href="'.esc_url_raw($link).'" title="'.$title.'">'.$title.'</a>';
+	public static function login_link( $redirect = '' ) {
+		$login_title = esc_attr__( 'Login', 'geodirectory' );
 
-		if ( get_option( 'users_can_register' ) ){
-			$register_title = esc_attr__('Register','geodirectory');
+		if ( $redirect == '' ) {
+			$redirect = urlencode( geodir_curPageURL() );
+		}
+		$login_link = wp_login_url( $redirect );
+
+		$output = "<div class='gd-login-links'>";
+		$output .= '<a class="login-link" href="' . esc_url( $login_link ) . '" title="' . $login_title . '">' . $login_title . '</a>';
+
+		if ( get_option( 'users_can_register' ) ) {
+			$register_title = esc_attr__( 'Register', 'geodirectory' );
 			$register_link = wp_registration_url();
-			$output .= ' | <a class="register-link" href="'.esc_url_raw($register_link).'" title="'.$register_title.'">'.$register_title.'</a>';
+			$output .= ' | <a class="register-link" href="' . esc_url( $register_link ) . '" title="' . $register_title . '">' . $register_title . '</a>';
 		}
 
 		$output .= "</div>";
 
-		return apply_filters('geodir_login_link',$output,$title,$link,$redirect);
+		return apply_filters( 'geodir_login_link', $output, $login_title, $login_link, $redirect );
 	}
 
 }
