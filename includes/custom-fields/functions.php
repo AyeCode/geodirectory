@@ -761,14 +761,13 @@ function geodir_string_to_options($input = '', $translated = false)
                 if ($translated && $label != '') {
                     $label = __($label, 'geodirectory');
                 }
-                $label = geodir_utf8_ucfirst($label);
                 $value = trim($input_str[1]);
             } else {
                 $value = $input_str;
                 if ($translated && $input_str != '') {
                     $input_str = __($input_str, 'geodirectory');
                 }
-                $label = geodir_utf8_ucfirst($input_str);
+                $label = $input_str;
             }
 
             if ($label != '') {
@@ -816,7 +815,6 @@ function geodir_string_values_to_options($option_values = '', $translated = fals
                         if ($translated && $optgroup_label != '') {
                             $optgroup_label = __($optgroup_label, 'geodirectory');
                         }
-                        $optgroup_label = geodir_utf8_ucfirst($optgroup_label);
                         $optgroup_str = $optgroup_str_arr[1];
                     }
 
