@@ -313,7 +313,6 @@ function geodir_validate_submit(form) {
  * @returns {boolean}
  */
 function geodir_validate_field(field) {
-    // console.log(field);
     var is_error = true;
     switch (jQuery(field).attr('field_type')) {
         case 'radio':
@@ -456,11 +455,19 @@ var GeoDir_Business_Hours = {
             e.preventDefault();
         });
 		setTimeout(function() {
+			if (jQuery('.gd-bh-has24').length) {
+				jQuery('.gd-bh-has24').each(function(e) {
+					$this.handle24Hours(jQuery(this).closest('.gd-bh-item'));
+				});
+			}
 			if (jQuery('.gd-bh-hours').length) {
 				$this.onAddSlot();
 			}
 			$this.onChangeValue();
 		}, 100);
+		jQuery('.gd-bh-items .gd-bh-24hours [type="checkbox"]').on('click', function(e) {
+            $this.onChange24Hours(jQuery(this));
+        });
     },
     onChangeValue: function() {
         var $this;
@@ -476,6 +483,7 @@ var GeoDir_Business_Hours = {
 		var uniqueid = Math.floor( Math.random() * 100000000000 ).toString();
 	  
         jQuery('.gd-bh-closed', $item).remove();
+		$item.removeClass('gd-bh-item-closed');
 		sample = sample.replace(/GD_UNIQUE_ID/g, uniqueid);
         sample = sample.replace('data-field="open"', 'data-field="open" name="' + jQuery('.gd-bh-time', $item).data('field') + '[open][]"');
         sample = sample.replace('data-field="close"', 'data-field="close" name="' + jQuery('.gd-bh-time', $item).data('field') + '[close][]"');
@@ -485,7 +493,8 @@ var GeoDir_Business_Hours = {
         var $item = $el.closest('.gd-bh-time');
         $el.closest('.gd-bh-hours').remove();
         if (jQuery('.gd-bh-hours', $item).length < 1) {
-            $item.html('<div class="gd-bh-closed">' + geodir_params.txt_closed + '</div>');
+            $item.closest('.gd-bh-item').addClass('gd-bh-item-closed');
+			$item.html('<div class="gd-bh-closed">' + geodir_params.txt_closed + '</div>');
         }
     },
     onAddSlot: function() {
@@ -531,7 +540,7 @@ var GeoDir_Business_Hours = {
                         h = o;
                         h += '-';
                         if (!c) {
-                            c = '23:59';
+                            c = '00:00';
                         }
                         h += c;
                         ha.push(h);
@@ -555,9 +564,11 @@ var GeoDir_Business_Hours = {
         return v;
     },
     timepickers: function() {
-        jQuery(this.$wrap).find('[data-bh="time"]').each(function() {
-            var $el = jQuery(this), altField, time, hour = minute = second = "";
+        var $this = this;
+		jQuery(this.$wrap).find('[data-bh="time"]').each(function() {
+            var $el = jQuery(this), altField, time, hour = minute = second = "", $item;
             if (!$el.hasClass('hasDatepicker')) {
+				$item = $el.closest('.gd-bh-item');
 				time = $el.data('time');
 				if (time && (times = time.split(':'))) {
 					if (times.length == 3) {
@@ -579,12 +590,14 @@ var GeoDir_Business_Hours = {
 					onSelect: function(datetime, inst) {
 						uniqueid = jQuery(this).prop('id');
 						if (uniqueid) {
+							$this.handle24Hours($item);
 							jQuery('#' + uniqueid + 'a').trigger('change');
 						}
 					},
 					onClose : function(datetime, inst) {
 						uniqueid = jQuery(this).prop('id');
 						if (uniqueid) {
+							$this.handle24Hours($item);
 							jQuery('#' + uniqueid + 'a').trigger('change');
 						}
 					}
@@ -633,6 +646,36 @@ var GeoDir_Business_Hours = {
 				}
 				window.gdTzApi = false;
 			});
+		}
+	},
+	onChange24Hours: function($el) {
+		$item = $el.closest('.gd-bh-item');
+		$hours = jQuery('.gd-bh-hours:first', $item);
+		if ($el.is(':checked')) {
+			$12am = $el.closest('.gd-bh-items').data('12am').trim();
+			$item.addClass('gd-bh-item-24hours');
+			jQuery('[data-field-alt="open"]', $hours).val($12am);
+			jQuery('[data-field-alt="close"]', $hours).val($12am);
+			jQuery('[data-field="open"]', $hours).val('00:00');
+			jQuery('[data-field="close"]', $hours).val('00:00');
+			jQuery('[data-field="open"]', $hours).trigger('change');
+        }
+	},
+	handle24Hours: function($item) {
+		var o, c, has24 = false;
+		jQuery('.gd-bh-hours', $item).each(function() {
+			o = jQuery('[data-field="open"]', jQuery(this)).val().trim();
+			c = jQuery('[data-field="close"]', jQuery(this)).val().trim();
+			if (o == '00:00' && o == c) {
+				has24 = true;
+			}
+		});
+		if (has24) {
+			jQuery('.gd-bh-24hours input[type="checkbox"]', $item).prop('checked', 'checked');
+			$item.addClass('gd-bh-item-24hours');
+		} else {
+			jQuery('.gd-bh-24hours input[type="checkbox"]', $item).prop('checked', false);
+			$item.removeClass('gd-bh-item-24hours');
 		}
 	},
 	secondsToHM: function(value) {

@@ -53,9 +53,20 @@
 	width: 90px;
 	padding-left: 10px;
 }
+.gd-bh-items .gd-bh-24hours {
+	text-align: center;
+	width: 100px;
+}
+.gd-bh-item-24hours .gd-bh-hours input[type="text"] {
+	opacity: 0.67;
+}
+.gd-bh-open-hours .gd-bh-days-prevday.gd-bh-days-open {
+	font-weight: bold;
+}
 .gd-bh-items .gd-bh-act {
 	width: 25px;
 	text-align: center;
+	padding-top: 13px;
 }
 .gd-bh-item span.gd-bh-add:hover,
 .gd-bh-item span.gd-bh-remove:hover {
@@ -72,6 +83,9 @@
 }
 .gd-bh-item .gd-bh-closed {
 	padding: 9px 0;
+}
+.gd-bh-item.gd-bh-item-closed input[type="checkbox"] {
+	display: none !important;
 }
 .gd-bh-item {
 	i, .svg-inline--fa {

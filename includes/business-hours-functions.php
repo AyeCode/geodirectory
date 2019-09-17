@@ -312,7 +312,7 @@ function geodir_array_to_schema( $schema_input ) {
 			if ( ! empty( $slot['opens'] ) ) {
 				$hour = $slot['opens'];
 				$hour .= '-';
-				$hour .= ! empty( $slot['closes'] ) ? $slot['closes'] : '23:59';
+				$hour .= ! empty( $slot['closes'] ) ? $slot['closes'] : '00:00';
 				$hours[] = $hour;
 			}
 		}
@@ -532,10 +532,10 @@ function geodir_parse_hours_range( $hours_str ) {
 	$return = array();
 	if ( ! empty( $hours_arr[0] ) ) {
 		$opens = trim( $hours_arr[0] );
-		$closes = ! empty( $hours_arr[1] ) ? trim( $hours_arr[1] ) : '23:59';
-		if ( strpos( $closes, '00:00' ) === 0 ) {
-			$closes = '23:59';
-		}
+		$closes = ! empty( $hours_arr[1] ) ? trim( $hours_arr[1] ) : '00:00';
+		//if ( strpos( $closes, '00:00' ) === 0 ) {
+			//$closes = '23:59';
+		//}
 		$return[] = $opens;
 		$return[] = $closes;
 	}
@@ -574,6 +574,7 @@ function geodir_get_business_hours( $value = '' ) {
 		$closed_label = __( 'Closed', 'geodirectory');
 		$open_now_label = __( 'Open now', 'geodirectory');
 		$closed_now_label = __( 'Closed now', 'geodirectory');
+		$open_24hours_label = __( 'Open 24 hours', 'geodirectory');
 
 		$has_open = 0;
 		$has_closed = 0;
@@ -593,7 +594,7 @@ function geodir_get_business_hours( $value = '' ) {
 						continue;
 					}
 					$opens = $slot['opens'];
-					$closes = ! empty( $slot['closes'] ) ? $slot['closes'] : '23:59';
+					$closes = ! empty( $slot['closes'] ) ? $slot['closes'] : '00:00';
 					$opens_time = strtotime( $opens );
 					$closes_time = strtotime( date_i18n( 'H:i:59', strtotime( $closes ) ) );
 					
@@ -603,7 +604,11 @@ function geodir_get_business_hours( $value = '' ) {
 					} else {
 						$is_open = 0;
 					}
-					$range = date_i18n( $time_format, $opens_time ) . ' - ' . date_i18n( $time_format, $closes_time );
+					if ( $opens == '00:00' && $opens == $closes ) {
+						$range = $open_24hours_label;
+					} else {
+						$range = date_i18n( $time_format, $opens_time ) . ' - ' . date_i18n( $time_format, $closes_time );
+					}
 					$day_range[] = $range;
 
 					$ranges[] = array( 

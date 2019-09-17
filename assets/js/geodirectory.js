@@ -931,9 +931,10 @@ function geodir_refresh_business_hours() {
 }
 
 function geodir_refresh_business_hour($this) {
-	var d, $d, hours, day, mins, time, hasOpen = false, hasClosed = false, isOpen, o, c, label, times = [], opens = [];
+	var d, $d, hours, day, mins, time, hasOpen = false, hasPrevOpen = false, hasClosed = false, isOpen, o, c, nd, label, times = [], opens = [], prevtimes = [], prevopens = [];
 	d = new Date(), utc = d.getTime() + (d.getTimezoneOffset() * 60000), d = new Date(utc + (parseInt(jQuery('.gd-bh-expand-range', $this).data('offsetsec')) * 1000));
-	date = d.getFullYear() + '-' + (("0" + (d.getMonth())).slice(-2)) + '-' + (("0" + (d.getDate())).slice(-2)) + 'T' + (("0" + (d.getHours())).slice(-2)) + ':' + (("0" + (d.getMinutes())).slice(-2)) + ':' + (("0" + (d.getSeconds())).slice(-2));
+	date = d.getFullYear() + '-' + (("0" + (d.getMonth()+1)).slice(-2)) + '-' + (("0" + (d.getDate())).slice(-2)) + 'T' + (("0" + (d.getHours())).slice(-2)) + ':' + (("0" + (d.getMinutes())).slice(-2)) + ':' + (("0" + (d.getSeconds())).slice(-2));
+	console.log(date + jQuery('.gd-bh-expand-range', $this).data('offset'));
 	jQuery('.gd-bh-expand-range', $this).attr('data-date', date);
 	hours = d.getHours(), mins = d.getMinutes(), day = d.getDay();
 	if (day < 1) {
@@ -942,27 +943,69 @@ function geodir_refresh_business_hour($this) {
 	time = ("0" + hours).slice(-2) + ("0" + mins).slice(-2);
 	$this.attr('data-t', time);
 	$d = $this.find('[data-day="' + parseInt(day) + '"]');
-	if ($d.length) {
+
+	// close on next day
+	prevD = day > 1 ? day - 1 : 7;
+	if ($this.find('[data-day="' + prevD + '"] .gd-bh-next-day').length) {
+		$pd = $this.find('[data-day="' + prevD + '"]');
 		$this.removeClass('gd-bh-open gd-bh-close');
 		$this.find('div').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today');
+		$pd.addClass('gd-bh-days-prevday');
+		$pd.find('.gd-bh-slot').each(function() {
+			isOpen = false;
+			o = jQuery(this).data('open'), c = jQuery(this).data('close');
+			if (o != 'undefined' && c != 'undefined' && o !== '' && c !== '') {
+				if (time <= parseInt(c)) {
+					isOpen = true;
+				}
+			}
+			if (isOpen) {
+				hasPrevOpen = true;
+				jQuery(this).addClass('gd-bh-slot-open');
+				prevopens.push($pd.find('.gd-bh-days-d').text() + " " + jQuery(this).find('.gd-bh-slot-r').html());
+			} else {
+				jQuery(this).addClass('gd-bh-slot-close');
+			}
+			prevtimes.push($pd.find('.gd-bh-days-d').text() + " " + jQuery(this).find('.gd-bh-slot-r').html());
+		});
+		if (hasPrevOpen) {
+			prevtimes = prevopens;
+			$pd.addClass('gd-bh-days-open');
+		} else {
+			$pd.addClass('gd-bh-days-close');
+		}
+		jQuery('.gd-bh-today-range', $this).html(prevtimes.join(', '));
+	}
+	if ($d.length) {
+		dayname = '';
+		if (hasPrevOpen) {
+			times = prevtimes;
+			opens = prevopens;
+			dayname = $d.find('.gd-bh-days-d').text() + " ";
+		} else {	
+			$this.removeClass('gd-bh-open gd-bh-close');
+			$this.find('div').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today');
+		}
 		$d.addClass('gd-bh-days-today');
 		if ($d.data('closed') != '1') {
 			$d.find('.gd-bh-slot').each(function() {
 				isOpen = false;
-				o = jQuery(this).data('open'), c = jQuery(this).data('close');
+				o = jQuery(this).data('open'), c = jQuery(this).data('close'), nd = jQuery(this).hasClass('gd-bh-next-day');
 				if (o != 'undefined' && c != 'undefined' && o !== '' && c !== '') {
-					if (parseInt(o) <= time && time <= parseInt(c)) {
+					if (parseInt(o) <= time && (time <= parseInt(c) || nd)) {
 						isOpen = true;
 					}
 				}
 				if (isOpen) {
 					hasOpen = true;
 					jQuery(this).addClass('gd-bh-slot-open');
-					opens.push(jQuery(this).find('.gd-bh-slot-r').html());
+					opens.push(dayname + jQuery(this).find('.gd-bh-slot-r').html());
 				} else {
 					jQuery(this).addClass('gd-bh-slot-close');
 				}
-				times.push(jQuery(this).find('.gd-bh-slot-r').html());
+				if ((hasPrevOpen && hasOpen) || ! hasPrevOpen) {
+					times.push(dayname + jQuery(this).find('.gd-bh-slot-r').html());
+				}
 			});
 		} else {
 			hasClosed = true;
@@ -973,9 +1016,12 @@ function geodir_refresh_business_hour($this) {
 		} else {
 			$d.addClass('gd-bh-days-close');
 		}
+		if (times) {
+			times = jQuery.unique(times);
+		}
 		jQuery('.gd-bh-today-range', $this).html(times.join(', '));
 	}
-	if (hasOpen) {
+	if (hasOpen || hasPrevOpen) {
 		label = geodir_params.txt_open_now;
 		$this.addClass('gd-bh-open');
 	} else {
