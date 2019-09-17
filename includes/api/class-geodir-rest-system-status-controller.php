@@ -618,7 +618,8 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 		/**
 		 * The countries tabel is not geodir_ prefixed.
 		 */
-		$core_tables[] = $wpdb->prefix.'countries';
+		$prefix = isset( $wpdb->base_prefix ) ? $wpdb->base_prefix : $wpdb->prefix;
+		$core_tables[] = $prefix . 'countries';
 
 		/**
 		 * Organize GeoDirectory and non-GeoDirectory tables separately for display purposes later.

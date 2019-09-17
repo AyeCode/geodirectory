@@ -11,6 +11,11 @@
 * Delete subsite removes data from main site on multisite network - FIXED
 * CPT type post class not set to ajax listings - FIXED
 * Custom field accepets script tags - FIXED
+* Business hours option added to show next day closing - FIXED
+* Netwrok subsite shows countries table does not exist error - FIXED
+* Added a new pre-defined field "Distance To" - ADDED
+* Enfold theme builder color section not working on GD template - FIXED
+* Custom field option values always shows option uppercase first - FIXED
 
 = 2.0.0.66 =
 * GD post favourites widget issue for icon option - FIXED

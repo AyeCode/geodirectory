@@ -302,8 +302,6 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		$posts_query  = new WP_Query();
 		$query_result = $posts_query->query( $query_args );
-//echo '###'.$posts_query->request;
-//		print_r($wp_query);exit;
 
 		// Allow access to all password protected posts if the context is edit.
 		if ( 'edit' === $request['context'] ) {
