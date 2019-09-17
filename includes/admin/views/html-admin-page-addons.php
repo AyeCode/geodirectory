@@ -56,7 +56,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 								<ul>
 
 									<?php
-									$addon_obj = new WPInv_Admin_Addons();
+									$addon_obj = new GeoDir_Admin_Addons();
 									if ($addons = $addon_obj->get_section_data( 'addons' ) ) {
 										foreach ( $addons as $addon ) {
 											echo '<li><i class="far fa-check-circle fa-sm"></i> '.esc_html( $addon->info->title ).'</li>';
