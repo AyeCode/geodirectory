@@ -24,14 +24,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</nav>
 
 		<?php
-		
-		if($current_tab == 'membership'){
 
+		if($current_tab == 'membership'){
 			?>
 
 			<div class="gd-membership-tab-conatiner">
+				<div class="membership-content">
+				<!--
 				<h2>With our GeoDirectory Membership you get access to all our products!</h2>
-				<p><a class="button button-primary" href="https://wpgeodirectory.com/downloads/membership/">View Memberships</a></p>
+				<p><a class="button button-primary" href="https://wpgeodirectory.com/downloads/membership/">View Memberships</a></p> -->
 				<?php if(defined('WP_EASY_UPDATES_ACTIVE')){?>
 
 
@@ -42,8 +43,76 @@ if ( ! defined( 'ABSPATH' ) ) {
 						$wpeu_admin = new External_Updates_Admin('wpgeodirectory.com','2');
 						echo $wpeu_admin->render_licence_actions('wpgeodirectory.com', 'membership',array(66235,111330,111327));
 						?>
+						<a  href="https://wpgeodirectory.com/downloads/membership/">Dont Have a membership Key?</a>
 					</p>
-				<?php }?>
+				<?php }else{ ?>
+				<p class="easy-update">	If you already have a membership Key please install <a href="https://wpgeodirectory.com/wp-easy-updates/" target="_blank">WP Easy Update </a></p>
+			<?php	}?>
+
+				<div class="membership-cta-contet">
+					<div class="main-cta">
+							<h2><?php echo __("Membership benefit Includes:","userswp"); ?></h2>
+							<div class="feature-list">
+								<ul>
+
+									<?php
+									$addon_obj = new GeoDir_Admin_Addons();
+									if ($addons = $addon_obj->get_section_data( 'addons' ) ) {
+										foreach ( $addons as $addon ) {
+											echo '<li><i class="far fa-check-circle fa-sm"></i> '.esc_html( $addon->info->title ).'</li>';
+										}
+									}
+									?>
+								</ul>
+							</div>
+							<div class="feature-cta">
+								<h3><?php echo __("Membership ","userswp"); ?> <br><?php echo __("Starts from","userswp"); ?></h3>
+								<h4><?php echo __("$99","userswp"); ?></h4>
+								<a href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","userswp"); ?></a>
+							</div>
+
+					</div>
+
+
+					<div class="member-testimonials">
+						<h3><?php echo __("Testimonials","userswp"); ?></h3>
+						<div class="testimonial-content">
+							<div class="t-image">
+								<?php
+									echo '<img src="' . plugins_url( 'images/t-image2.png', dirname(__FILE__) ) . '" > ';
+								?>
+							</div>
+							<div class="t-content">
+								<p><?php echo __("I'm becoming more impressed with  @wpGeoDirectory
+as v2 evolves. It's a pretty awesome WordPress directory plugin.","userswp"); ?>
+
+								</p>
+								<p><strong><?php echo __("Vanessa Harris","userswp"); ?></strong> <?php echo __("Product  @Google, formerly at  @Microsoft","userswp"); ?></p>
+							</div>
+						</div>
+
+						<div class="testimonial-content">
+							<div class="t-image">
+								<?php
+									echo '<img src="' . plugins_url( 'images/t-image1.png', dirname(__FILE__) ) . '" > ';
+								?>
+							</div>
+							<div class="t-content">
+								<p><?php echo __("Switched from Joomla to WordPress and installed Geodirectory V2 to create a multi location directory and events site. Support has been absolutely brilliant with very quick response times, solving almost every issue I ran into (most of the time just me getting used to the new environment) in a matter of minutes but also a few other, more serious issues, in less than a day. I would definitely recommend Geodirectory to anyone who plans on creating a directory. It’s easy to use as it uses the new Gutenberg blocks and custom fields to create and layout your pages and comes with lots of great add-ons for a very reasonable price. Keep up the good work! I’m hooked on WordPress and Geodirectory V2. That’s a fact.","userswp"); ?>
+
+								</p>
+								<p><strong><?php echo __("gdweb (@gdweb)","userswp"); ?></strong> <?php echo __("Graphic Design and Web Design Studio in Phuket","userswp"); ?></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="member-footer">
+						<a class="footer-btn" href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","userswp"); ?></a>
+						<a class="footer-link" href="post-new.php?post_type=gd_place"><?php echo __("Create your First Listing","userswp"); ?></a>
+					</div>
+				</div>
+
+			</div>
 			</div>
 
 			<?php
@@ -51,8 +120,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		}else{
 			$installed_plugins = get_plugins();
-			if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) : 
-				
+			if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) :
+
 //				print_r($addons);
 
 //			echo '###'.geodir_file_relative_url( 'http://localhost/wp-content/uploads/2018/12/restaurants19-2-150x150.jpg' );exit;
