@@ -306,8 +306,8 @@ function geodir_cfi_url($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
-        if ($value == $cf['default']) {
-            $value = '';
+        if(empty($value) &&  $cf['default'] ) {
+            $value = $cf['default'];
         }
         //validation
         if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
