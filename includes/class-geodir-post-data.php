@@ -1275,7 +1275,8 @@ class GeoDir_Post_Data {
 		$post_data = apply_filters( 'geodir_auto_save_post_data', $post_data );
 
 		// Pre validation
-		$validate = apply_filters( 'geodir_validate_auto_save_post_data', true, $post_data, ! empty( $post_data['post_parent'] ), $doing_autosave );
+		$validate = ! empty( $post_data['geodir_auto_save_post_error'] ) && is_wp_error( $post_data['geodir_auto_save_post_error'] ) ? $post_data['geodir_auto_save_post_error'] : true;
+		$validate = apply_filters( 'geodir_validate_auto_save_post_data', $validate, $post_data, ! empty( $post_data['post_parent'] ), $doing_autosave );
 
 		if ( is_wp_error( $validate ) ) {
 			return $validate;
@@ -1358,7 +1359,6 @@ class GeoDir_Post_Data {
 	 * Check if its a logged out user and if we have details to register the user
 	 */
 	public static function check_logged_out_author( $post_data ) {
-
 		if ( ! get_current_user_id()
 		     && geodir_get_option( "post_logged_out" )
 		     && get_option( 'users_can_register' )
@@ -1366,32 +1366,47 @@ class GeoDir_Post_Data {
 		     && isset( $post_data['user_email'] )
 		     && $post_data['user_login']
 		     && $post_data['user_email']
-		     && is_email( $post_data['user_email'] )
 		) {
+			$user_name = preg_replace( '/\s+/', '', sanitize_user( $post_data['user_login'], true ) );
+			$user_email = sanitize_email( $post_data['user_email'] );
 
-			$user_name             = sanitize_user( $post_data['user_login'] );
-			$user_email            = sanitize_email( $post_data['user_email'] );
-			$user_id_from_username = username_exists( $user_name );
-			$user_id_from_email    = username_exists( $user_name );
+			$error = '';
+			if ( strlen( $user_name ) < 3 ) {
+				$error = new WP_Error( 'geodir_invalid_username', __( 'User name must have atleast 3 characters.', 'geodirectory' ) );
+			} elseif ( ! is_email( $user_email ) ) {
+				$error = new WP_Error( 'geodir_invalid_user_email', __( 'Invalid user email address.', 'geodirectory' ) );
+			} else {
+				$user_id_from_username = username_exists( $user_name );
+				$user_id_from_email = email_exists( $user_email );
 
-			if ( $user_id_from_username && $user_id_from_email && $user_id_from_username == $user_id_from_email ) { // user already exists
-				$post_data['post_author'] = $user_id_from_email;
-			} elseif ( $user_id_from_email ) { // user exists from email
-				$post_data['post_author'] = $user_id_from_email;
-			} else { // register new user
-				$user_name       = geodir_generate_unique_username( $user_name );
-				if ( empty( $user_name ) ) {
-					$user_name = $user_email; // Use email as username
+				if ( $user_id_from_username && $user_id_from_email && $user_id_from_username == $user_id_from_email ) { // user already exists
+					$post_data['post_author'] = $user_id_from_email;
+				} elseif ( $user_id_from_email ) { // user exists from email
+					$post_data['post_author'] = $user_id_from_email;
+				} else { // register new user
+					$user_name = geodir_generate_unique_username( $user_name );
+					if ( empty( $user_name ) ) {
+						$user_name = $user_email; // Use email as username
+					}
+
+					$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
+					$user_id = wp_create_user( $user_name, $random_password, $user_email );
+
+					if ( is_wp_error( $user_id ) ) {
+						$error = $user_id;
+					} elseif ( $user_id ) {
+						$post_data['post_author'] = $user_id;
+						update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
+						do_action( 'register_new_user', $user_id ); // fire the new ser registration action so the standard notifications are sent.
+					} else {
+						$error = new WP_Error( 'geodir_register_new_user', __( 'Something wrong! Fail to register a new user.', 'geodirectory' ) );
+					}
 				}
+			}
 
-				$random_password = wp_generate_password( $length = 12, $include_standard_special_chars = false );
-				$user_id         = wp_create_user( $user_name, $random_password, $user_email );
-
-				if ( $user_id && ! is_wp_error( $user_id ) ) {
-					$post_data['post_author'] = $user_id;
-					update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
-					do_action( 'register_new_user', $user_id ); // fire the new ser registration action so the standard notifications are sent.
-				}
+			// Set error
+			if ( ! empty( $error ) ) {
+				$post_data['geodir_auto_save_post_error'] = $error;
 			}
 		}
 
@@ -1426,7 +1441,8 @@ class GeoDir_Post_Data {
 		}
 
 		// Pre validation
-		$validate = apply_filters( 'geodir_validate_ajax_save_post_data', true, $post_data, ! empty( $post_data['post_parent'] ) );
+		$validate = ! empty( $post_data['geodir_auto_save_post_error'] ) && is_wp_error( $post_data['geodir_auto_save_post_error'] ) ? $post_data['geodir_auto_save_post_error'] : true;
+		$validate = apply_filters( 'geodir_validate_ajax_save_post_data', $validate, $post_data, ! empty( $post_data['post_parent'] ) );
 
 		if ( is_wp_error( $validate ) ) {
 			return $validate;
@@ -1462,6 +1478,11 @@ class GeoDir_Post_Data {
 
 		} else {
 			$post_data['post_status'] = $post_status;
+		}
+
+		// Error
+		if ( ! empty( $post_data['geodir_auto_save_post_error'] ) && is_wp_error( $post_data['geodir_auto_save_post_error'] ) ) {
+			return $post_data['geodir_auto_save_post_error'];
 		}
 
 		// Save the post.

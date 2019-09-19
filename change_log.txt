@@ -1,3 +1,6 @@
+= 2.0.0.68 =
+* Validate register user during add listing from frontend - FIXED
+
 = 2.0.0.67 =
 * Fail to save feature image for new listing when post revision is enabled - FIXED
 * Post link not working in email sent to admin on post edit - FIXED
