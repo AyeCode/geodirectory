@@ -162,9 +162,9 @@ function geodir_cfi_email($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
-        if ($value == $cf['default']) {
-            $value = '';
-        }
+	    if(empty($value) &&  $cf['default'] ) {
+		    $value = $cf['default'];
+	    }
 
         //validation
         if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
@@ -234,9 +234,9 @@ function geodir_cfi_phone($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
-        if ($value == $cf['default']) {
-            $value = '';
-        }
+	    if(empty($value) &&  $cf['default'] ) {
+		    $value = $cf['default'];
+	    }
 
         //validation
         if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
@@ -527,6 +527,9 @@ function geodir_cfi_textarea($html,$cf){
 
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
+	    if(empty($value) &&  $cf['default'] ) {
+		    $value = $cf['default'];
+	    }
 
         $extra_fields = maybe_unserialize($cf['extra_fields']);
 		$html_editor = ! empty( $extra_fields['advanced_editor'] );
@@ -604,7 +607,9 @@ function geodir_cfi_select($html,$cf){
 
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
-
+	    if(empty($value) &&  $cf['default'] ) {
+		    $value = $cf['default'];
+	    }
         ?>
         <div id="<?php echo $cf['name'];?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix gd-fieldset-details">
@@ -681,7 +686,9 @@ function geodir_cfi_multiselect($html,$cf){
 
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
-
+	    if(empty($value) &&  isset( $cf['default'] ) & !empty( $cf['default'] ) ) {
+		    $value = explode(',',  $cf['default'] );
+	    }
         $extra_fields = !empty($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : NULL;
 		$multi_display = !empty($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
         ?>
@@ -802,6 +809,9 @@ function geodir_cfi_html($html,$cf){
 
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
+	    if(empty($value) &&  $cf['default'] ) {
+		    $value = $cf['default'];
+	    }
         ?>
 
         <div id="<?php echo $cf['name']; ?>_row"
@@ -865,6 +875,9 @@ function geodir_cfi_datepicker($html,$cf){
 
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
+	    if(empty($value) &&  $cf['default'] ) {
+		    $value = $cf['default'];
+	    }
 
         $extra_fields = unserialize($cf['extra_fields']);
         $name = $cf['name'];
@@ -992,6 +1005,10 @@ function geodir_cfi_time($html,$cf){
 
         if ($value != '')
             $value = date('H:i', strtotime($value));
+
+	    if(empty($value) &&  $cf['default'] ) {
+		    $value = $cf['default'];
+	    }
         ?>
         <script type="text/javascript">
             jQuery(document).ready(function () {
