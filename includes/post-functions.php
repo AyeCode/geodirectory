@@ -357,7 +357,7 @@ function geodir_favourite_html( $user_id, $post_id ) {
 	 * @since 1.0.0
 	 * @package GeoDirectory
 	 */
-	$add_favourite_text = apply_filters( 'geodir_add_favourite_text', ADD_FAVOURITE_TEXT );
+	$add_favourite_text = apply_filters( 'geodir_add_favourite_text', __( 'Add to Favorites', 'geodirectory' ) );
 
 	/**
 	 * Filter to modify "Favourite" text
@@ -367,7 +367,7 @@ function geodir_favourite_html( $user_id, $post_id ) {
 	 * @since 1.0.0
 	 * @package GeoDirectory
 	 */
-	$favourite_text = apply_filters( 'geodir_favourite_text', FAVOURITE_TEXT );
+	$favourite_text = apply_filters( 'geodir_favourite_text', __( 'Favorite', 'geodirectory' ) );
 
 	/**
 	 * Filter to modify "Unfavorite" text
@@ -377,7 +377,7 @@ function geodir_favourite_html( $user_id, $post_id ) {
 	 * @since 1.0.0
 	 * @package GeoDirectory
 	 */
-	$remove_favourite_text = apply_filters( 'geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT );
+	$remove_favourite_text = apply_filters( 'geodir_remove_favourite_text', __( 'Remove from Favorites', 'geodirectory' ) );
 
 	/**
 	 * Filter to modify "Remove from Favorites" text
@@ -387,7 +387,7 @@ function geodir_favourite_html( $user_id, $post_id ) {
 	 * @since 1.0.0
 	 * @package GeoDirectory
 	 */
-	$unfavourite_text = apply_filters( 'geodir_unfavourite_text', UNFAVOURITE_TEXT );
+	$unfavourite_text = apply_filters( 'geodir_unfavourite_text', __( 'Unfavorite', 'geodirectory' ) );
 
 	/**
 	 * Filter to modify "fas fa-heart" icon

@@ -898,7 +898,7 @@ if (is_admin())
             <div id="<?php echo $prefix . 'map'; ?>" style="float:right;height:300px;position:relative;" class="form_row clearfix"></div>
             <div id="<?php echo $prefix; ?>loading_div" style="height:300px"></div>
             <div id="<?php echo $prefix; ?>advmap_counter"></div>
-            <div id="<?php echo $prefix; ?>advmap_nofound"><?php echo MAP_NO_RESULTS; ?></div>
+            <div id="<?php echo $prefix; ?>advmap_nofound"><?php _e('<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your search criteria and try again.</p>', 'geodirectory'); ?></div>
             <div id="<?php echo $prefix;?>advmap_notloaded" class="advmap_notloaded"><?php _e('<h3>Map Not Loaded</h3><p>Sorry, unable to load Maps API.', 'geodirectory'); ?></div>
         </div>
         <!-- new map end -->

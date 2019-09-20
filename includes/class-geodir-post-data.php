@@ -903,10 +903,22 @@ class GeoDir_Post_Data {
 			 * @since 1.0.0
 			 */
 			do_action( 'geodir_before_detail_fields' );
+
+			/**
+			 * Filter details fieldset title.
+			 *
+			 * @since 2.0.0.68
+			 *
+			 * @param string $listing_type Listing type.
+			 * @param object $post Post object.
+			 * @param object $package Package object.
+			 */
+			$details_header = apply_filters( 'geodir_add_listing_details_header', __( 'Enter Listing Details', 'geodirectory' ), $listing_type, $post, $package );
+			if ( $details_header != '' ) {
 			?>
-			<h5 id="geodir_fieldset_details" class="geodir-fieldset-row"
-			    gd-fieldset="details"><?php echo LISTING_DETAILS_TEXT; ?></h5>
+			<h5 id="geodir_fieldset_details" class="geodir-fieldset-row" gd-fieldset="details"><?php echo $details_header; ?></h5>
 			<?php
+			}
 			/**
 			 * Called at the top of the add listing page form for frontend.
 			 *
