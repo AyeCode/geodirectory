@@ -681,10 +681,10 @@ class GeoDir_Frontend_Scripts {
 						'gd_modal' => (int)geodir_get_option('geodir_disable_gb_modal'),
 						'is_rtl' => is_rtl() ? 1 : 0, // fix rtl issue
 						'basic_nonce' => wp_create_nonce( 'geodir_basic_nonce'),// fix rtl issue
-						'text_add_fav'      => apply_filters('geodir_add_favourite_text', ADD_FAVOURITE_TEXT),
-						'text_fav'          => apply_filters('geodir_favourite_text', FAVOURITE_TEXT),
-						'text_remove_fav'   => apply_filters('geodir_remove_favourite_text', REMOVE_FAVOURITE_TEXT),
-						'text_unfav'        => apply_filters('geodir_unfavourite_text', UNFAVOURITE_TEXT),
+						'text_add_fav'      => apply_filters('geodir_add_favourite_text', __( 'Add to Favorites', 'geodirectory' )),
+						'text_fav'          => apply_filters('geodir_favourite_text', __('Favorite', 'geodirectory' ) ),
+						'text_remove_fav'   => apply_filters('geodir_remove_favourite_text', __( 'Remove from Favorites', 'geodirectory' )),
+						'text_unfav'        => apply_filters('geodir_unfavourite_text', __( 'Unfavorite', 'geodirectory' )),
 						'icon_fav'          => apply_filters('geodir_favourite_icon', 'fas fa-heart'),
 						'icon_unfav'        => apply_filters('geodir_unfavourite_icon', 'fas fa-heart'),
 					) + geodir_params()

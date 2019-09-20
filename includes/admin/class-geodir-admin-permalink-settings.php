@@ -66,18 +66,18 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 			$structures = array(
 				__( 'Default', 'geodirectory' )     => array(
 					'value' => '',
-					'example' => esc_html( home_url() ).'/'. esc_html( $base_slug ).'/sample-place/'
+					'example' => esc_html( home_url( '/' ) ) . esc_html( $base_slug ).'/sample-place/'
 				),
 				__( 'Full location', 'geodirectory' )     => array(
 					'value' => '/%country%/%region%/%city%/%postname%/',
-					'example' => esc_html( home_url() ) . '/' . trailingslashit( $base_slug ) .
+					'example' => esc_html( home_url( '/' ) ) . trailingslashit( $base_slug ) .
 					             trailingslashit( $default_location->country_slug ).
 					             trailingslashit( $default_location->region_slug ).
 					             trailingslashit( $default_location->city_slug ) . 'sample-place/'
 				),
 				__( 'Full location with category', 'geodirectory' )     => array(
 					'value' => '/%country%/%region%/%city%/%category%/%postname%/',
-					'example' => esc_html( home_url() ) . '/' . trailingslashit( $base_slug ) .
+					'example' => esc_html( home_url( '/' ) ) . trailingslashit( $base_slug ) .
 					             trailingslashit( $default_location->country_slug ).
 					             trailingslashit( $default_location->region_slug ).
 					             trailingslashit( $default_location->city_slug ) .
@@ -140,7 +140,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 					<td>
 						<?php if( $label == __( 'Default', 'geodirectory' ) ) {?>
 							<code class="default-example">
-								<?php echo esc_html( home_url() ); ?>/?gd_place=sample-place
+								<?php echo esc_html( home_url( '/' ) ); ?>?gd_place=sample-place
 							</code>
 							<code class="non-default-example">
 								<?php echo $structure['example']; ?>
@@ -164,7 +164,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 						</label>
 					</th>
 					<td>
-						<code><?php echo esc_html( home_url() ).'/%cpt_slug%'; ?></code>
+						<code><?php echo esc_html( home_url( '/' ) ) . '%cpt_slug%'; ?></code>
 						<input name="geodirectory_permalink_structure" id="geodir_permalink_structure" type="text"
 						       value="<?php echo esc_attr( $this->permalinks ?  $this->permalinks : '' ); ?>"
 						       class="regular-text code">
@@ -200,7 +200,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 			<h2 class="title"><?php _e('GeoDirectory Taxonomies'); ?></h2>
 			<p><?php
 				/* translators: %s: placeholder that must come at the start of the URL */
-				printf( __( 'If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/attractions/</code>. Tags and category can not be blank.','geodirectory' ),  home_url()  . '/' .  $base_slug  ); ?></p>
+				printf( __( 'If you like, you may enter custom structures for your category and tag URLs here. For example, using <code>topics</code> as your category base would make your category links like <code>%s/topics/attractions/</code>. Tags and category can not be blank.','geodirectory' ),  home_url( '/' ) .  $base_slug  ); ?></p>
 
 			<table class="form-table">
 				<tr>

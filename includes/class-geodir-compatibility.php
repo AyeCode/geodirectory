@@ -438,6 +438,7 @@ class GeoDir_Compatibility {
 			 || ( defined( 'TD_THEME_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, 'td_' ) === 0 ) ) // Newspaper
 			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
 			 || ( class_exists( 'The7_Aoutoloader' ) && ( strpos( $meta_key, '_dt_' ) === 0 || empty( $meta_key ) ) ) // The7
+			 || ( function_exists( 'avia_get_option' ) && ( ! empty( $meta_key ) && in_array( $meta_key, $gen_keys ) ) ) // Enfold
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -1061,6 +1062,15 @@ class GeoDir_Compatibility {
 					add_filter( 'presscore_get_page_title', array( __CLASS__, 'presscore_get_page_title' ), 20, 1 );
 				}
 			}
+
+			if ( function_exists( 'avia_get_option' ) ) {
+				add_filter( 'avf_header_setting_filter', array( __CLASS__, 'avf_header_setting_filter' ), 20, 1 );
+
+				if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
+					add_filter( 'avia_layout_filter', array( __CLASS__, 'avia_layout_filter' ), 20, 2 );
+					add_filter( 'avf_custom_sidebar', array( __CLASS__, 'avf_custom_sidebar' ), 20, 1 );
+				}
+			}
 		}
 
 		// GeneratePress theme compatibility
@@ -1636,5 +1646,79 @@ class GeoDir_Compatibility {
 		}
 
 		return $page_title;
+	}
+
+	/**
+	 * Filter Enfold theme GD page header settings.
+	 *
+	 * @since 2.0.0.68
+	 *
+	 * @param array $header The header settings.
+	 * @return array The header settings.
+	 */
+	public static function avf_header_setting_filter( $header ) {
+		if ( $page_id = (int) self::gd_page_id() ) {
+			$header['header_title_bar'] = get_post_meta( $page_id, 'header_title_bar', true );
+		}
+
+		return $header;
+	}
+
+	/**
+	 * Filter Enfold theme GD archive & search page layout.
+	 *
+	 * @since 2.0.0.68
+	 *
+	 * @param string $layout The page layout.
+	 * @param int $post_id The post ID.
+	 * @return string The page layout.
+	 */
+	public static function avia_layout_filter( $layout, $post_id ) {
+		global $avia_config;
+
+		if ( geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
+			if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+				$template_page_id = geodir_archive_page_id( get_post_type( $post_id ) );
+			} else if ( geodir_is_page( 'search' ) ) {
+				$template_page_id = geodir_search_page_id();
+			} else {
+				$template_page_id = 0;
+			}
+
+			if ( ! empty( $template_page_id ) ) {
+				$_layout = get_post_meta( $template_page_id, 'layout', true );
+
+				if ( ! empty( $_layout ) ) {
+					$layout['current'] = $avia_config['layout'][$_layout];
+					$layout['current']['main'] = $_layout;
+				}
+			}
+		}
+
+		return $layout;
+	}
+
+	/**
+	 * Filter Enfold theme GD archive & search page sidebar.
+	 *
+	 * @since 2.0.0.68
+	 *
+	 * @param string $custom_sidebar The page sidebar.
+	 * @return string The page sidebar.
+	 */
+	public static function avf_custom_sidebar( $custom_sidebar ) {
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$template_page_id = geodir_archive_page_id( geodir_get_current_posttype() );
+		} else if ( geodir_is_page( 'search' ) ) {
+			$template_page_id = geodir_search_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$custom_sidebar = get_post_meta( $template_page_id, 'sidebar', true );
+		}
+
+		return $custom_sidebar;
 	}
 }

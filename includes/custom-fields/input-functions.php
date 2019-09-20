@@ -1206,7 +1206,7 @@ function geodir_cfi_address($html,$cf){
                     $lng = '';
                 }
                 ?>
-                <span class="geodir_message_note"><?php echo stripslashes(GET_MAP_MSG); ?></span>
+                <span class="geodir_message_note"><?php echo stripslashes( __( 'Click on "Set Address on Map" and then you can also drag pinpoint to locate the correct address', 'geodirectory' ) ); ?></span>
             </div>
             <?php
             /* show lat lng */
@@ -1214,7 +1214,7 @@ function geodir_cfi_address($html,$cf){
             <div id="geodir_<?php echo $prefix . 'latitude'; ?>_row"
                  class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details" <?php echo $style_latlng; ?>>
                 <label for="<?php echo esc_attr( $prefix . 'latitude' ); ?>">
-                    <?php echo PLACE_ADDRESS_LAT; ?>
+                    <?php _e( 'Address Latitude', 'geodirectory' ); ?>
                     <?php if ($is_required) echo '<span>*</span>'; ?>
                 </label>
                 <input type="number" field_type="<?php echo $type; ?>" name="<?php echo 'latitude'; ?>"
@@ -1223,7 +1223,7 @@ function geodir_cfi_address($html,$cf){
                        min="-90" max="90" step="any" lang='EN'
 
                 />
-                <span class="geodir_message_note"><?php echo GET_LATITUDE_MSG; ?></span>
+                <span class="geodir_message_note"><?php _e( 'Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory' ); ?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
                 <?php } ?>
@@ -1232,7 +1232,7 @@ function geodir_cfi_address($html,$cf){
             <div id="geodir_<?php echo $prefix . 'longitude'; ?>_row"
                  class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details" <?php echo $style_latlng; ?>>
                 <label for="<?php echo esc_attr( $prefix . 'longitude' ); ?>">
-                    <?php echo PLACE_ADDRESS_LNG; ?>
+                    <?php _e( 'Address Longitude', 'geodirectory' ); ?>
                     <?php if ($is_required) echo '<span>*</span>'; ?>
                 </label>
                 <input type="number" field_type="<?php echo $type; ?>" name="<?php echo 'longitude'; ?>"
@@ -1240,7 +1240,7 @@ function geodir_cfi_address($html,$cf){
                        value="<?php echo esc_attr(stripslashes($lng)); ?>" size="25"
                        min="-180" max="180" step="any" lang='EN'
                 />
-                <span class="geodir_message_note"><?php echo GET_LOGNGITUDE_MSG; ?></span>
+                <span class="geodir_message_note"><?php _e( 'Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>', 'geodirectory' ); ?></span>
                 <?php if ($is_required) { ?>
                     <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
                 <?php } ?>
