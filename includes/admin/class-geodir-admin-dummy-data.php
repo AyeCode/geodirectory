@@ -208,18 +208,25 @@ class GeoDir_Admin_Dummy_Data {
 			$dummy_post_longitude = geodir_random_float( geodir_random_float( $city_bound_lng2, $city_bound_lng1 ), geodir_random_float( $city_bound_lng1, $city_bound_lng2 ) );
 		}
 
-		$load_map = geodir_get_option( 'maps_api' );
+		$api = GeoDir_Maps::active_map();
+		/**
+		 * Filter the API used for Geocode service.
+		 *
+		 * @since 2.0.0.68
+		 *
+		 * @param string $api The API used for Geocode service.
+		 */
+		$api = apply_filters( 'geodir_post_address_from_gps_api', $api );
 
-		if ( $load_map == 'osm' ) {
+		if ( $api == 'osm' ) {
 			$post_address = geodir_get_osm_address_by_lat_lan( $dummy_post_latitude, $dummy_post_longitude );
 		} else {
 			$post_address = geodir_get_address_by_lat_lan( $dummy_post_latitude, $dummy_post_longitude );
 		}
 
-		//print_r($post_address);echo $dummy_post_latitude.'####'.$dummy_post_longitude;
 		$postal_code = '';
 		if ( ! empty( $post_address ) ) {
-			if ( $load_map == 'osm' ) {
+			if ( $api == 'osm' ) {
 				$address     = ! empty( $post_address->formatted_address ) ? $post_address->formatted_address : '';
 				$postal_code = ! empty( $post_address->address->postcode ) ? $post_address->address->postcode : '';
 			} else {
@@ -391,32 +398,29 @@ class GeoDir_Admin_Dummy_Data {
 
 			return true;
 
-		}else{ // if index is not 0 then we are starting on posts.
+		} else { // if index is not 0 then we are starting on posts.
+			$post_index = $item_index - 1; // arrays start with 0
 
-			$post_index = $item_index-1; // arrays start with 0
-			
-			if(!empty($dummy_posts) && isset($dummy_posts[$post_index]) ){
-				$post_info = self::add_dummy_address($dummy_posts[$post_index]);
-
-				//print_r($post_info);
+			if ( ! empty( $dummy_posts ) && isset( $dummy_posts[ $post_index ] ) ) {
+				$post_info = $dummy_posts[ $post_index ];
+				if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+					$post_info = self::add_dummy_address( $post_info );
+				}
 
 				// Set the status to publish
-				if(isset($post_info['post_dummy']) && $post_info['post_dummy'] && !isset($post_info['post_status'])){
+				if ( isset( $post_info['post_dummy'] ) && $post_info['post_dummy'] && ! isset( $post_info['post_status'] ) ) {
 					$post_info['post_status'] = 'publish';
 				}
 
-				wp_insert_post($post_info, true); // we hook into the save_post hook
+				wp_insert_post( $post_info, true ); // we hook into the save_post hook
 			}
 		}
-
 
 		// delete image cache on last entry
 		if ( $total_count == $item_index ) {
 			delete_transient( 'cached_dummy_images' );
 			flush_rewrite_rules();
 		}
-
-
 	}
 
 	/**
