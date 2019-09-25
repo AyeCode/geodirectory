@@ -873,15 +873,13 @@ function geodir_click_search($this) {
     }, 100);
 }
 
-
 function gd_fav_save(post_id) {
     var ajax_action;
-    if (jQuery('.favorite_property_' + post_id +' a').hasClass('geodir-removetofav-icon')) {
+    if (jQuery('.favorite_property_' + post_id + ' a').hasClass('geodir-removetofav-icon')) {
         ajax_action = 'remove';
     } else {
         ajax_action = 'add';
     }
-
     jQuery.ajax({
         url: geodir_params.ajax_url,
         type: 'GET',
@@ -897,28 +895,24 @@ function gd_fav_save(post_id) {
             alert(geodir_params.loading_listing_error_favorite);
         },
         success: function(data) {
-
-            if(data.success){
-
-                if(ajax_action=='remove'){
-                    jQuery('.favorite_property_' + post_id+' a')
+            if (data.success) {
+                var action_text = (data.data && data.data.action_text) ? data.data.action_text : '';
+                if (ajax_action == 'remove') {
+                    jQuery('.favorite_property_' + post_id + ' a')
                         .removeClass('geodir-removetofav-icon')
                         .addClass('geodir-addtofav-icon')
                         .attr("title", geodir_params.text_add_fav)
-                        .html('<i class="'+geodir_params.icon_fav+'"></i> <span class="geodir-fav-text">'+' '+geodir_params.text_fav + '</span>');
-
-                }else{
-                    jQuery('.favorite_property_' + post_id+' a')
+                        .html('<i class="' + geodir_params.icon_fav + '"></i> <span class="geodir-fav-text">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>');
+                } else {
+                    jQuery('.favorite_property_' + post_id + ' a')
                         .removeClass('geodir-addtofav-icon')
                         .addClass('geodir-removetofav-icon')
                         .attr("title", geodir_params.text_remove_fav)
-                        .html('<i class="'+geodir_params.icon_unfav+'"></i> <span class="geodir-fav-text">'+' '+geodir_params.text_unfav + '</span>');
-
+                        .html('<i class="' + geodir_params.icon_unfav + '"></i> <span class="geodir-fav-text">' + ' ' + ( action_text ? action_text : geodir_params.text_unfav ) + '</span>');
                 }
-            }else{
+            } else {
                 alert(geodir_params.loading_listing_error_favorite);
             }
-            //jQuery('.favorite_property_' + post_id).html(html);
         }
     });
     return false;
