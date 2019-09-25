@@ -1311,8 +1311,6 @@ function geodir_init_slider($id){
             }
         },
         before: function(slider){
-            console.log('slide');
-            console.log(slider);
             // Ajax load the slides that are visible
             var $visible = slider.visible ? slider.visible : 1;
 
