@@ -516,14 +516,9 @@ function geodir_cf_time($html,$location,$cf,$p='',$output=''){
     }
 
     // If not html then we run the standard output.
-    if(empty($html)){
-
-        if ($gd_post->{$cf['htmlvar_name']}):
-
-            $value = '';
-            if ($gd_post->{$cf['htmlvar_name']} != '')
-                //$value = date('h:i',strtotime($gd_post->{$cf['htmlvar_name']}));
-                $value = date(get_option('time_format'), strtotime($gd_post->{$cf['htmlvar_name']}));
+    if ( empty( $html ) ) {
+        if ( $gd_post->{$html_var} ) {
+            $value = date_i18n( get_option('time_format'), strtotime( $gd_post->{$html_var} ) );
 
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
@@ -544,9 +539,7 @@ function geodir_cf_time($html,$location,$cf,$p='',$output=''){
             if($output=='' || isset($output['value']))$html .= $value;
 
             $html .= '</div>';
-
-        endif;
-
+        }
     }
 
     return $html;
@@ -629,37 +622,18 @@ function geodir_cf_datepicker($html,$location,$cf,$p='',$output=''){
     }
 
     // If not html then we run the standard output.
-    if(empty($html)){
-
-        if ($gd_post->{$cf['htmlvar_name']}):
-
+    if ( empty( $html ) ) {
+        if ( ! empty( $gd_post->{$html_var} ) && $gd_post->{$html_var} != '0000-00-00' ) {
             $date_format = geodir_date_format();
-            if ($cf['extra_fields'] != '') {
-                $date_format = stripslashes_deep(unserialize($cf['extra_fields']));
-                $date_format = $date_format['date_format'];
-            }
-            // check if we need to change the format or not
-            $date_format_len = strlen(str_replace(' ', '', $date_format));
-            if($date_format_len>5){// if greater then 4 then it's the old style format.
 
-                $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
-                $replace = array('d','j','l','m','n','F','Y');//PHP date format
-
-                $date_format = str_replace($search, $replace, $date_format);
-
-                $post_htmlvar_value = ($date_format == 'd/m/Y' || $date_format == 'j/n/Y' ) ? str_replace('/', '-', $gd_post->{$cf['htmlvar_name']}) : $gd_post->{$cf['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
-            }else{
-                $post_htmlvar_value = $gd_post->{$cf['htmlvar_name']};
+            if ( $cf['extra_fields'] != '' ) {
+                $_date_format = stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) );
+                if ( ! empty( $_date_format['date_format'] ) ) {
+                   $date_format = $_date_format['date_format'];
+               }
             }
 
-            if ($gd_post->{$cf['htmlvar_name']} != '' && $gd_post->{$cf['htmlvar_name']}!="0000-00-00") {
-                $date_format_from = $preview ? $date_format : 'Y-m-d';
-                $value = geodir_date($post_htmlvar_value, $date_format, $date_format_from); // save as sql format Y-m-d
-                //$post_htmlvar_value = strpos($post_htmlvar_value, '/') !== false ? str_replace('/', '-', $post_htmlvar_value) : $post_htmlvar_value;
-                //$value = date_i18n($date_format, strtotime($post_htmlvar_value));
-            }else{
-                return '';
-            }
+            $value = date_i18n( $date_format, strtotime( $gd_post->{$html_var} ) );
 
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
@@ -672,8 +646,6 @@ function geodir_cf_datepicker($html,$location,$cf,$p='',$output=''){
                 $field_icon = '';
             }
 
-
-
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-datepicker" style="' . $field_icon . '">' . $field_icon_af;
@@ -682,9 +654,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p='',$output=''){
             if($output=='' || isset($output['value']))$html .= $value;
 
             $html .= '</div>';
-
-        endif;
-
+        }
     }
 
     return $html;

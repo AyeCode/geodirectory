@@ -1205,14 +1205,15 @@ add_filter( 'geodir_post_badge_check_match_found', 'geodir_post_badge_filter_mat
  *
  * @since 2.0.0.67
  *
- * @param string $value Business hours value.
- * @param string $custom_field Custom field.
+ * @param string $value Field value.
+ * @param object $gd_post GeoDirectory post object.
+ * @param object $custom_field Custom field.
  * @param int $post_id Post id.
  * @param object $post Post.
  * @param string $update Update.
  * @return string $value Sanitize business hours.
  */
-function geodir_validate_custom_field_value_text( $value, $custom_field, $post_id, $post, $update ) {
+function geodir_validate_custom_field_value_text( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
 	if ( $value != '' ) {
 		if ( is_array( $value ) ) {
 			$value = array_map( 'geodir_clean', $value );
@@ -1222,37 +1223,95 @@ function geodir_validate_custom_field_value_text( $value, $custom_field, $post_i
 	}
 	return $value;
 }
-add_filter( 'geodir_custom_field_value_checkbox', 'geodir_validate_custom_field_value_text', 10, 5 );
-add_filter( 'geodir_custom_field_value_datepicker', 'geodir_validate_custom_field_value_text', 10, 5 );
-add_filter( 'geodir_custom_field_value_email', 'geodir_validate_custom_field_value_text', 10, 5 );
-add_filter( 'geodir_custom_field_value_multiselect', 'geodir_validate_custom_field_value_text', 10, 5 );
-add_filter( 'geodir_custom_field_value_phone', 'geodir_validate_custom_field_value_text', 10, 5 );
-add_filter( 'geodir_custom_field_value_radio', 'geodir_validate_custom_field_value_text', 10, 5 );
-add_filter( 'geodir_custom_field_value_select', 'geodir_validate_custom_field_value_text', 10, 5 );
-add_filter( 'geodir_custom_field_value_text', 'geodir_validate_custom_field_value_text', 10, 5 );
-add_filter( 'geodir_custom_field_value_url', 'geodir_validate_custom_field_value_text', 10, 5 );
+add_filter( 'geodir_custom_field_value_checkbox', 'geodir_validate_custom_field_value_text', 10, 6 );
+add_filter( 'geodir_custom_field_value_datepicker', 'geodir_validate_custom_field_value_text', 10, 6 );
+add_filter( 'geodir_custom_field_value_email', 'geodir_validate_custom_field_value_text', 10, 6 );
+add_filter( 'geodir_custom_field_value_multiselect', 'geodir_validate_custom_field_value_text', 10, 6 );
+add_filter( 'geodir_custom_field_value_phone', 'geodir_validate_custom_field_value_text', 10, 6 );
+add_filter( 'geodir_custom_field_value_radio', 'geodir_validate_custom_field_value_text', 10, 6 );
+add_filter( 'geodir_custom_field_value_select', 'geodir_validate_custom_field_value_text', 10, 6 );
+add_filter( 'geodir_custom_field_value_text', 'geodir_validate_custom_field_value_text', 10, 6 );
+add_filter( 'geodir_custom_field_value_url', 'geodir_validate_custom_field_value_text', 10, 6 );
 
 /**
  * Sanitize textarea/html value.
  *
  * @since 2.0.0.67
  *
- * @param string $value Business hours value.
- * @param string $custom_field Custom field.
+ * @param string $value Field value.
+ * @param object $gd_post GeoDirectory post object.
+ * @param object $custom_field Custom field.
  * @param int $post_id Post id.
  * @param object $post Post.
  * @param string $update Update.
  * @return string $value Sanitize business hours.
  */
-function geodir_validate_custom_field_value_textarea( $value, $custom_field, $post_id, $post, $update ) {
+function geodir_validate_custom_field_value_textarea( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
 	if ( $value != '' ) {
-		if ( is_array( $value ) ) {
-			$value = array_map( 'geodir_sanitize_html_field', $value );
+		$html = false;
+		// Post content & video contains html/embed code.
+		if ( $custom_field->field_type == 'html' || $custom_field->htmlvar_name == 'post_content' || $custom_field->htmlvar_name == 'video' ) {
+			$html = true;
 		} else {
-			$value = is_scalar( $value ) ? geodir_sanitize_html_field( $value ) : $value;
+			// Check if textarea field has html/embed enabled.
+			$extra_fields = ! empty( $custom_field->extra_fields ) ? stripslashes_deep( maybe_unserialize( $custom_field->extra_fields ) ) : NULL;
+			if ( is_array( $extra_fields ) && ( ! empty( $extra_fields['advanced_editor'] ) || ! empty( $extra_fields['embed'] ) )  ) {
+				$html = true;
+			}
+		}
+
+		if ( $html ) {
+			$allowed_html = wp_kses_allowed_html( 'post' );
+
+			if ( is_array( $allowed_html ) ) {
+				// <iframe>
+				if ( ! isset( $allowed_html['iframe'] ) ) {
+					$allowed_html['iframe']     = array(
+						'class'        => true,
+						'id'           => true,
+						'src'          => true,
+						'width'        => true,
+						'height'       => true,
+						'frameborder'  => true,
+						'marginwidth'  => true,
+						'marginheight' => true,
+						'scrolling'    => true,
+						'style'        => true,
+						'title'        => true,
+						'data-*'       => true,
+					);
+				}
+			}
+
+			/**
+			 * Filters the HTML that is allowed for a given field.
+			 *
+			 * @since 2.0.0.68
+			 *
+			 * @param array[]|string $allowed_html Allowed html tags.
+			 * @param object $custom_field Custom field.
+			 * @param string $value Field value.
+			 * @param object $gd_post GeoDirectory post object.
+			 * @param string $context_type Context name.
+			 */
+			$allowed_html = apply_filters( 'geodir_custom_field_kses_allowed_html', $allowed_html, $custom_field, $value, $gd_post );
+
+			if ( is_array( $value ) ) {
+				$value = array_map( function( $value ) use ( $allowed_html ) {
+					return geodir_sanitize_html_field( $value, $allowed_html );
+				}, $value );
+			} else {
+				$value = is_scalar( $value ) ? geodir_sanitize_html_field( $value, $allowed_html ) : $value;
+			}
+		} else {
+			if ( is_array( $value ) ) {
+				$value = array_map( 'geodir_sanitize_textarea_field', $value );
+			} else {
+				$value = is_scalar( $value ) ? geodir_sanitize_textarea_field( $value ) : $value;
+			}
 		}
 	}
 	return $value;
 }
-add_filter( 'geodir_custom_field_value_html', 'geodir_validate_custom_field_value_textarea', 10, 5 );
-add_filter( 'geodir_custom_field_value_textarea', 'geodir_validate_custom_field_value_textarea', 10, 5 );
+add_filter( 'geodir_custom_field_value_html', 'geodir_validate_custom_field_value_textarea', 10, 6 );
+add_filter( 'geodir_custom_field_value_textarea', 'geodir_validate_custom_field_value_textarea', 10, 6 );

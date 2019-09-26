@@ -646,28 +646,36 @@ class GeoDir_AJAX {
      *
      * @since 2.0.0
 	 */
-	public static function user_add_fav(){
+	public static function user_add_fav() {
 		// security
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
 		$user_id = get_current_user_id();
-		$post_id = absint($_REQUEST['pid']);
-		$type_action = isset($_REQUEST['type_action']) && $_REQUEST['type_action']=='add' ? 'add' : 'remove';
+		$post_id = absint( $_REQUEST['pid'] );
+		$type_action = isset( $_REQUEST['type_action'] ) && $_REQUEST['type_action'] == 'add' ? 'add' : 'remove';
 
-		if($user_id && $post_id ){
-			if($type_action=='add'){
-				$result = GeoDir_User::add_fav($post_id,$user_id);
-			}else{
-				$result = GeoDir_User::remove_fav($post_id,$user_id);
+		if ( $user_id && $post_id ) {
+			$data = array();
+
+			if ( $type_action == 'add' ) {
+				$result = GeoDir_User::add_fav( $post_id, $user_id );
+				if ( $result ) {
+					$data['action_text'] = apply_filters( 'geodir_favourite_text', __( 'Unfavorite', 'geodirectory' ) );
+				}
+			} else {
+				$result = GeoDir_User::remove_fav( $post_id, $user_id );
+				if ( $result ) {
+					$data['action_text'] = apply_filters( 'geodir_unfavourite_text', __( 'Favorite', 'geodirectory' ) );
+				}
 			}
 
-			if($result){
-				wp_send_json_success();
-			}else{
-				wp_send_json_error( __('Action failed.'));
+			if ( $result ){
+				wp_send_json_success( $data );
+			} else {
+				wp_send_json_error( __( 'Action failed.', 'geodirectory' ) );
 			}
-		}else{
-			wp_send_json_error( __('Action failed.'));
+		} else {
+			wp_send_json_error( __( 'Action failed.', 'geodirectory' ) );
 		}
 		wp_die();
 	}
