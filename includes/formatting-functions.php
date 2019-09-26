@@ -405,6 +405,7 @@ function geodir_sanitize_html_field( $str, $allowed_html = NULL ) {
 
 	$filtered = trim( wp_unslash( $str ) );
 	$filtered = wp_kses( $filtered, $allowed_html );
+	$filtered = balanceTags( $filtered ); // Balances tags
 
 	/**
 	 * Filter a sanitized html field string.
