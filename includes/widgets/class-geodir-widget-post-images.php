@@ -74,7 +74,15 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				'description' => esc_html__('This shows a GD post image.','geodirectory'), // widget description
 				'geodirectory' => true,
 			),
-			'arguments'     => array(
+			'arguments' => array(
+				'title'=> array(
+					'type' => 'text',
+					'title' => __( 'Title:', 'geodirectory' ),
+					'desc' => __( 'The widget title.', 'geodirectory' ),
+					'default' => '',
+					'desc_tip' => true,
+					'advanced' => false
+				),
 				'type'  => array(
 					'title' => __('Output Type:', 'geodirectory'),
 					'desc' => __('How the images should be displayed.', 'geodirectory'),
@@ -299,6 +307,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 		// options
 		$defaults = array(
+			'title'     => '', // widget title
 			'type'      => 'image', // image, slider, gallery
 			'ajax_load' => '1',
 			'animation' => 'fade', // fade or slide
