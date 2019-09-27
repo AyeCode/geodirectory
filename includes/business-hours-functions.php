@@ -175,8 +175,9 @@ function geodir_seconds_to_hhmm( $seconds ) {
  * @return string            Offset in hours, prepended by +/-
  */
 function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin' ) {
+	$original_timezone = date_default_timezone_get();
 	// Set UTC as default time zone.
-	date_default_timezone_set( 'UTC' );
+	date_default_timezone_set( 'UTC' ); // @codingStandardsIgnoreEnd
 	$utc = new DateTime();
 	// Calculate offset.
 	$current   = timezone_open( $time_zone );
@@ -187,6 +188,7 @@ function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin' ) {
 	if ( strpos( $offset_h, '-' ) === FALSE ) {
 		$offset_h = '+' . $offset_h; // prepend +
 	}
+	date_default_timezone_set( $original_timezone ); // @codingStandardsIgnoreEnd
 	return $offset_h;
 }
 
@@ -239,8 +241,9 @@ function geodir_timezone_default_utc_offset( $timezone = '' ) {
 	if( $manual ){
 		$offset_h = $manual_offset;
 	}else{
+		$original_timezone = date_default_timezone_get();
 		// Set UTC as default time zone.
-		date_default_timezone_set( 'UTC' );
+		date_default_timezone_set( 'UTC' ); // @codingStandardsIgnoreEnd
 		$utc = new DateTime();
 		// Calculate offset.
 		$gmt_offset_s = timezone_offset_get( new DateTimeZone("Europe/London"), $utc ); // seconds
@@ -248,6 +251,7 @@ function geodir_timezone_default_utc_offset( $timezone = '' ) {
 		$offset_s  = timezone_offset_get( $current, $utc ); // seconds
 		$offset_s = $offset_s - $gmt_offset_s; // remove DST
 		$offset_h  = $offset_s / ( 60 * 60 ); // hours
+		date_default_timezone_set( $original_timezone ); // @codingStandardsIgnoreEnd
 	}
 
 	// Prepend “+” when positive
