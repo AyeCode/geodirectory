@@ -762,16 +762,14 @@ function geodir_term_recount( $terms, $taxonomy, $post_type, $callback = true, $
 function geodir_get_term_children( $child_of, $taxonomy, $terms = array() ) {
 	global $wpdb;
 
-	$table_prefix = $wpdb->prefix;
-
 	if ( empty( $terms ) && $child_of > 0 ) {
-		$row = $wpdb->get_row( $wpdb->prepare( "SELECT t.*, tt.* FROM ". $table_prefix ."terms AS t INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = %s AND tt.term_id = %d", array( $taxonomy, $child_of ) ) );
+		$row = $wpdb->get_row( $wpdb->prepare( "SELECT t.*, tt.* FROM {$wpdb->terms} AS t INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = %s AND tt.term_id = %d", array( $taxonomy, $child_of ) ) );
 		if ( ! empty( $row ) ) {
 			$terms[ $row->term_id ] = $row;
 		}
 	}
 
-	$query = $wpdb->prepare( "SELECT t.*, tt.* FROM ". $table_prefix ."terms AS t INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = %s AND tt.parent = %d", array( $taxonomy, $child_of ) );
+	$query = $wpdb->prepare( "SELECT t.*, tt.* FROM {$wpdb->terms} AS t INNER JOIN {$wpdb->term_taxonomy} AS tt ON t.term_id = tt.term_id WHERE tt.taxonomy = %s AND tt.parent = %d", array( $taxonomy, $child_of ) );
 	$results = $wpdb->get_results( $query );
 
 	if ( ! empty( $results ) ) {
