@@ -1724,7 +1724,8 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		$weekdays = geodir_get_weekdays();
 		$hours = array();
 		$display = 'none';
-        $gmt_offset = esc_attr( geodir_timezone_default_utc_offset() );
+		$timezone_string = trim( get_option('timezone_string') );
+		$gmt_offset = esc_attr( geodir_utc_offset_dst( $timezone_string ) );
 
         if ( ! empty( $value ) ) {
 			$display = '';
@@ -1797,7 +1798,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 							<?php } ?>
 							<tr class="gd-tz-item">
 								<td colspan="4"><label form="<?php echo $htmlvar_name; ?>_f_timezone"><?php _e( 'Timezone offset from UTC (not including daylight savings time This is set automatically when address is set)', 'geodirectory' ); ?></label> 
-                                    <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( geodir_timezone_default_utc_offset() ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN">
+                                    <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( geodir_utc_offset_dst( $timezone_string ) ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN">
                                 </td>
                             </tr>
 						</tbody>

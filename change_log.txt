@@ -3,6 +3,7 @@
 * Enfold theme default layout & sidebar settings is not working - FIXED
 * WPML translation not working for strings defined via variable - FIXED
 * Custom field date shows un-translated date - FIXED
+* Option added to set post images widget title - ADDED
 
 = 2.0.0.67 =
 * Fail to save feature image for new listing when post revision is enabled - FIXED
