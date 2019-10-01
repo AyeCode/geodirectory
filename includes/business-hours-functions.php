@@ -179,6 +179,9 @@ function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin' ) {
 	// Set UTC as default time zone.
 	date_default_timezone_set( 'UTC' ); // @codingStandardsIgnoreEnd
 	$utc = new DateTime();
+	if ( empty( $time_zone ) ) {
+		$time_zone = 'UTC';
+	}
 	// Calculate offset.
 	$current   = timezone_open( $time_zone );
 	$offset_s  = timezone_offset_get( $current, $utc ); // seconds
