@@ -533,8 +533,9 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 	}
 
 	public function get_map_terms_filter( $request ) {
+		$tick_terms = ! empty( $request['tick_terms'] ) ? $request['tick_terms'] : '';
 		ob_start();
-		echo GeoDir_Maps::get_categories_filter( $request['post_type'], 0, true, 0, $request['map_canvas'], absint( $request['child_collapse'] ), $request['terms'], true );
+		echo GeoDir_Maps::get_categories_filter( $request['post_type'], 0, true, 0, $request['map_canvas'], absint( $request['child_collapse'] ), $request['terms'], true, $tick_terms );
 		$output = ob_get_clean();
 
 		return $output;

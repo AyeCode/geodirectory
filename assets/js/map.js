@@ -1364,7 +1364,7 @@ function geodir_map_directions_init(map_canvas) {
 }
 
 function geodir_map_post_type_terms(options, post_type, query_string) {
-	var terms_query_url, map_canvas; 
+	var terms_query_url, map_canvas, tick_terms; 
 	terms_query_url = options.map_ajax_url;
 	map_canvas = options.map_canvas;
 
@@ -1375,11 +1375,15 @@ function geodir_map_post_type_terms(options, post_type, query_string) {
 	query_string += "&map_canvas=" + map_canvas;
 	query_string += "&child_collapse=" + jQuery('#' + map_canvas + '_child_collapse').val();
 
-    terms = options.terms;
-    if(terms){
-        query_string += "&terms=" + terms;
-    }
-	
+	terms = options.terms;
+	if(terms){
+		query_string += "&terms=" + terms;
+	}
+	tick_terms = options.tick_terms;
+	if(tick_terms){
+		query_string += "&tick_terms=" + tick_terms;
+	}
+
 	u = terms_query_url.indexOf('?') === -1 ? '?' : '&';
 	terms_query_url += u + query_string;
 

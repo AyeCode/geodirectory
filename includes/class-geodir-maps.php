@@ -256,9 +256,10 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @param bool $child_collapse Do you want to collapse child terms by default?.
 	 * @param string $terms Optional. Terms.
 	 * @param bool $hierarchical Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default false.
+	 * @param string $tick_terms Tick/untick terms. Optional.
 	 * @return string|void
 	 */
-	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $terms = '', $hierarchical = false ) {
+	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $terms = '', $hierarchical = false, $tick_terms = '' ) {
 		global $cat_count, $geodir_cat_icons;
 
 		$taxonomy = $post_type . 'category';
@@ -268,22 +269,61 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		$exclude_categories = !empty($exclude_categories[$taxonomy]) && is_array($exclude_categories[$taxonomy]) ? array_unique($exclude_categories[$taxonomy]) : array();
 		$exclude_categories[$taxonomy] = "70";
 		$exclude_cat_str = implode(',', $exclude_categories);
-		$is_home_map = true;
 		// terms include/exclude
 		$include = array();
 		$exclude = array();
 
-		if($terms!== false && $terms !== true && $terms != ''){
-			$terms_array = explode(",",$terms);
-			foreach($terms_array as $term_id){
-				$tmp_id = trim($term_id);
-				if(abs($tmp_id) != $tmp_id){
-					$exclude[] = absint($tmp_id);
-				}else{
-					$include[] = absint($tmp_id);
+		if ( $terms !== false && $terms !== true && $terms != '' ) {
+			$terms_array = explode( ",", $terms );
+			foreach( $terms_array as $term_id ) {
+				$tmp_id = trim( $term_id );
+				if ( $tmp_id == '' ) {
+					continue;
+				}
+				if ( abs( $tmp_id ) != $tmp_id ) {
+					$exclude[] = absint( $tmp_id );
+				} else {
+					$include[] = absint( $tmp_id );
 				}
 			}
 		}
+
+		$_tick_terms = array();
+		$_untick_terms = array();
+		// Tick/untick terms
+		if ( ! empty( $tick_terms ) ) {
+			$tick_terms_arr = explode( ',', $tick_terms );
+			foreach( $tick_terms_arr as $term_id ) {
+				$tmp_id = trim( $term_id );
+				if ( $tmp_id == '' ) {
+					continue;
+				}
+
+				if ( geodir_term_post_type( absint( $tmp_id ) ) != $post_type ) {
+					continue; // Bail for other CPT
+				}
+
+				if ( abs( $tmp_id ) != $tmp_id ) {
+					$_untick_terms[] = absint( $tmp_id );
+				} else {
+					$_tick_terms[] = absint( $tmp_id );
+				}
+			}
+		}
+
+		/**
+		 * Untick categories on the map.
+		 *
+		 * @since 2.0.0.68
+		 */
+		$_tick_terms = apply_filters( 'geodir_map_categories_tick_terms', $_tick_terms, $post_type, $cat_parent );
+
+		/**
+		 * Tick categories on the map.
+		 *
+		 * @since 2.0.0.68
+		 */
+		$_untick_terms = apply_filters( 'geodir_map_categories_untick_terms', $_untick_terms, $post_type, $cat_parent );
 
 		$term_args = array(
 			'taxonomy' => array( $taxonomy ),
@@ -345,22 +385,36 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 			$geodir_cat_icons = geodir_get_term_icon();
 
-			$untick_terms = geodir_get_option('geodir_home_map_untick' );
-			
 			foreach ( $cat_terms as $cat_term ) {
 				$icon = !empty( $geodir_cat_icons ) && isset( $geodir_cat_icons[ $cat_term->term_id ] ) ? $geodir_cat_icons[ $cat_term->term_id ] : '';
 
 				if ( ! in_array( $cat_term->term_id, $exclude ) ) {
 					//Secret sauce.  Function calls itself to display child elements, if any
-					$checked = 'checked="checked"';
-
-					// Untick the category by default on home map
-					if ( $is_home_map && ! empty( $untick_terms ) ) {
-						$term_id = apply_filters( 'geodir_map_categories_term_id', $cat_term->term_id, $post_type );
-						if ( ! empty( $untick_terms ) && in_array( $post_type . '_' . $term_id, $untick_terms ) ) {
-							$checked = '';
+					$checked = true;
+					if ( empty( $_tick_terms ) && empty( $_untick_terms ) ) {
+						// Tick all
+					} elseif ( ! empty( $_tick_terms ) && empty( $_untick_terms ) ) {
+						if ( ! in_array( $cat_term->term_id, $_tick_terms ) ) {
+							$checked = false; // Untick
+						}
+					} elseif ( empty( $_tick_terms ) && ! empty( $_untick_terms ) ) {
+						if ( in_array( $cat_term->term_id, $_untick_terms ) ) {
+							$checked = false; // Untick
+						}
+					} else {
+						if ( ! in_array( $cat_term->term_id, $_tick_terms ) || in_array( $cat_term->term_id, $_untick_terms ) ) {
+							$checked = false; // Untick
 						}
 					}
+
+					/**
+					 * Tick category on the map.
+					 *
+					 * @since 2.0.0.68
+					 */
+					$checked = apply_filters( 'geodir_map_categories_tick_term', $checked, $cat_term->term_id );
+
+					$checked = $checked !== false ? 'checked="checked"' : '';
 
 					$term_check = '<input type="checkbox" ' . $checked . ' id="' .$map_canvas.'_tick_cat_'. $cat_term->term_id . '" class="group_selector ' . $main_list_class . '"';
 					$term_check .= ' name="' . $map_canvas . '_cat[]" ';
@@ -370,7 +424,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 				}
 
 				// get sub category by recursion
-				$out .= self::get_categories_filter( $post_type, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $terms );
+				$out .= self::get_categories_filter( $post_type, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $terms, false, $tick_terms );
 
 				$out .= '</li>';
 			}
