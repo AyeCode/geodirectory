@@ -1215,7 +1215,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$output = $this->preview_placeholder_text( "[{" . $this->base_id . "}]" );
 			}
 
-			return $output;
+			return apply_filters( 'wp_super_duper_widget_output', $output, $args, $shortcode_args, $this );
 		}
 
 		/**
@@ -1880,6 +1880,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$argument_values = $this->string_to_bool( $argument_values );
 			$output          = $this->output( $argument_values, $args );
 
+			ob_start();
 			if ( $output ) {
 				// Before widget
 				$before_widget = $args['before_widget'];
@@ -1906,6 +1907,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$output = $this->preview_placeholder_text( "{{" . $this->base_id . "}}" );
 				echo $output;
 			}
+			$output = ob_get_clean();
+			
+			$output = apply_filters( 'wp_super_duper_widget_output', $output, $instance, $args, $this );
+
+			echo $output;
 		}
 
 		/**
