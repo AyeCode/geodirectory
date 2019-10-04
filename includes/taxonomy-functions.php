@@ -784,3 +784,33 @@ function geodir_get_term_children( $child_of, $taxonomy, $terms = array() ) {
 
 	return $terms;
 }
+
+/**
+ * Get the term post type.
+ *
+ * @since 2.0.0.68
+ *
+ * @param int $term_id The term id.
+ * @return null|string Post type.
+ */
+function geodir_term_post_type( $term_id ) {
+	$post_type = wp_cache_get( 'geodir_term_post_type:' . $term_id, 'geodir_term_post_type' );
+
+	if ( $post_type !== false ) {
+		return $post_type;
+	}
+
+	$post_type = '';
+	$term = get_term( $term_id );
+	if ( ! empty( $term ) && ! is_wp_error( $term ) ) {
+		$taxonomy = get_taxonomy( $term->taxonomy );
+
+		if ( ! empty( $taxonomy ) && ! is_wp_error( $taxonomy ) && ! empty( $taxonomy->object_type ) ) {
+			$post_type = $taxonomy->object_type[0];
+		}
+	}
+
+	wp_cache_set( 'geodir_term_post_type:' . $term_id, $post_type, 'geodir_term_post_type' );
+
+	return $post_type;
+}

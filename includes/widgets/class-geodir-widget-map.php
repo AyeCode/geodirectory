@@ -253,7 +253,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 							       value="<?php echo absint( $map_options['child_collapse'] ); ?>"/>
 							<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="1"/>
 							<div class="geodir_toggle">
-								<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), $map_options['terms'], true ); ?>
+								<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), $map_options['terms'], true, $map_options['tick_terms'] ); ?>
 								<script type="text/javascript">
 									jQuery(window).load(function () {
 										geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');
@@ -507,7 +507,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 
 		// its best to show a text input for not until Gutneberg can support dynamic selects
 		//@todo it would be preferable to use <optgroup> here but Gutenberg does not support it yet: https://github.com/WordPress/gutenberg/issues/8426
-		$post_types = geodir_get_posttypes();
+		//$post_types = geodir_get_posttypes();
 		//if(count($post_types)>1){
 		if(1==1){
 			$arguments['terms']            = array(
@@ -518,6 +518,16 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'desc_tip'        => true,
 				'advanced'        => false,
 				'placeholder'     => "1,2,3 (default: empty)",
+				'element_require' => '([%map_type%]=="directory" || [%map_type%]=="archive")',
+			);
+			$arguments['tick_terms'] = array(
+				'type'            => 'text',
+				'title'           => __( 'Tick/Untick Categories on Map:', 'geodirectory' ),
+				'desc'            => __( 'Enter a comma separated list of category ids (2,3) to tick by default these categories only, or a negative list (2,3) to untick those categories by default on the map. Leave blank to tick all categories by default.', 'geodirectory' ),
+				'default'         => '',
+				'desc_tip'        => true,
+				'advanced'        => false,
+				'placeholder'     => "2,3 (default: empty)",
 				'element_require' => '([%map_type%]=="directory" || [%map_type%]=="archive")',
 			);
 		}else{
@@ -731,6 +741,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'post_settings'  => '1',
 			'post_type'      => $post->post_type,
 			'terms'          => array(), // can be string or array
+			'tick_terms'     => '',
 			'tags'           => array(), // can be string or array
 			'posts'          => array(),
 			'marker_cluster' => false,
@@ -768,6 +779,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'zoom'             => '0',
 			'post_type'        => 'gd_place',
 			'terms'            => array(), // can be string or array
+			'tick_terms'       => '',
 			'tags'             => array(), // can be string or array
 			'post_id'          => 0,
 			'all_posts'        => false,
@@ -980,6 +992,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'autozoom'       => true,
 			'post_type'      => 'gd_place',
 			'terms'          => '',
+			'tick_terms'     => '',
 			'tags'           => '',
 			'posts'          => '',
 			'sticky'         => false,
@@ -1040,10 +1053,15 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$params['terms'] = ! empty( $params['terms'] ) ? implode( ',', $params['terms'] ) : '';
 		}
 
+		// tick/untick terms
+		if ( is_array( $params['tick_terms'] ) ) {
+			$params['tick_terms'] = ! empty( $params['tick_terms'] ) ? implode( ',', $params['tick_terms'] ) : '';
+		}
+
 		// tags
 		if ( ! empty( $params['tags'] ) && ! is_array( $params['tags'] ) ) {
 			$params['tags'] = explode( ',', $params['tags'] );
-			$params['tags'] = array_map( 'trim', $params['tags'] );					
+			$params['tags'] = array_map( 'trim', $params['tags'] );
 		}
 		if ( is_array( $params['tags'] ) ) {
 			$params['tags'] = ! empty( $params['tags'] ) ? implode( ',', array_unique( array_filter( $params['tags'] ) ) ) : '';

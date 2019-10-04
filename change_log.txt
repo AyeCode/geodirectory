@@ -4,6 +4,8 @@
 * WPML translation not working for strings defined via variable - FIXED
 * Custom field date shows un-translated date - FIXED
 * Option added to set post images widget title - ADDED
+* Option added in map widget/shortcode to tick/untick categories on the map - ADDED
+* Exclude GD template pages from Yoast XML page sitemap - ADDED
 
 = 2.0.0.67 =
 * Fail to save feature image for new listing when post revision is enabled - FIXED

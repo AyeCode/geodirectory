@@ -36,6 +36,7 @@ class GeoDir_SEO {
 		// maybe noindex empty archive pages
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
         add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
+		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( __CLASS__, 'wpseo_exclude_from_sitemap_by_post_ids' ), 20, 1 );
 		if ( ! is_admin() ) {
 			add_filter( 'page_link', array( __CLASS__, 'page_link' ), 10, 3 );
 		}
@@ -684,6 +685,58 @@ class GeoDir_SEO {
 			$link = '#';
 		}
 		return $link;
+	}
+
+	/**
+	 * Allow extending and modifying the posts to exclude from Yoast XML sitemap.
+	 *
+	 * @since 2.0.0.68
+	 *
+	 * @param array $posts_to_exclude The posts to exclude.
+	 * @return array The posts to exclude.
+	 */
+	public static function wpseo_exclude_from_sitemap_by_post_ids( $excluded_posts_ids ) {
+		if ( ! is_array( $excluded_posts_ids ) ) {
+			$excluded_posts_ids = array();
+		}
+
+		$gd_excluded_posts_ids = self::get_noindex_page_ids();
+		if ( ! empty( $gd_excluded_posts_ids ) && is_array( $gd_excluded_posts_ids ) ) {
+			$excluded_posts_ids = empty( $excluded_posts_ids ) ? $gd_excluded_posts_ids : array_merge( $excluded_posts_ids, $gd_excluded_posts_ids );
+		}
+
+		return $excluded_posts_ids;
+	}
+	
+	/**
+	 * Get nonindex page ids.
+	 *
+	 * @since 2.0.0.68
+	 *
+	 * @return array Array of page ids.
+	 */
+	public static function get_noindex_page_ids() {
+		$page_ids = wp_cache_get( 'geodir_noindex_page_ids', 'geodir_noindex_page_ids' );
+
+		if ( $page_ids !== false ) {
+			return $page_ids;
+		}
+
+		$page_ids = array();
+		$page_ids[] = geodir_get_page_id( 'details', '', false );
+		$page_ids[] = geodir_get_page_id( 'archive', '', false );
+		$page_ids[] = geodir_get_page_id( 'archive_item', '', false );
+
+		$_page_ids = geodir_cpt_template_pages();
+		if ( ! empty( $_page_ids ) && is_array( $_page_ids ) ) {
+			$page_ids = array_merge( $page_ids, $_page_ids );
+		}
+
+		$page_ids = apply_filters( 'geodir_get_noindex_page_ids', $page_ids );
+
+		wp_cache_set( 'geodir_noindex_page_ids', $page_ids, 'geodir_noindex_page_ids' );
+
+		return $page_ids;
 	}
 
 }
