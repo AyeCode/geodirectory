@@ -25,6 +25,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 * @since 1.0.11 Some refactoring for page builders - CHANGED
 	 * @since 1.0.12 A checkbox default value can make a argument true even when unchecked - FIXED
 	 * @since 1.0.13 Block values can break JS if contains a comma - FIXED
+	 * @since 1.0.14 Use of additional css class in block editor breaks the block - FIXED
 	 * @ver 1.0.13
 	 */
 	class WP_Super_Duper extends WP_Widget {
@@ -1420,6 +1421,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						$show_advanced = $this->block_show_advanced();
 
 						$show_alignment = false;
+						// align feature
+						/*echo "supports: {";
+						echo "	align: true,";
+						echo "  html: false";
+						echo "},";*/
 
 						if ( ! empty( $this->arguments ) ) {
 							echo "attributes : {";
@@ -1476,6 +1482,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							}
 
 							echo "content : {type : 'string',default: 'Please select the attributes in the block settings'},";
+							echo "className: { type: 'string', default: '' },";
 
 							echo "},";
 
