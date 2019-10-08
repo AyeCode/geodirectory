@@ -33,6 +33,7 @@ class GeoDir_Compatibility {
 		// add setting to be able to disable Rank Math on GD pages
 		add_filter( 'geodir_seo_options', array( __CLASS__, 'rank_math_disable' ), 10 );
 		add_filter( 'rank_math/sitemap/urlimages', array( __CLASS__, 'rank_math_add_images_to_sitemap' ), 10, 2 );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'enqueue_rank_math_disable' ), 20 );
 
 		/*######################################################
 		Disqus (comments system) :: If Disqus plugin is active, do some fixes to show on blogs but no on GD post types
@@ -792,6 +793,124 @@ class GeoDir_Compatibility {
 
 
 		return $options;
+	}
+
+	/**
+	 * This method enqueues the code required to make Rank Math recognize our fields
+	 */
+	public static function enqueue_rank_math_disable() {
+		if ( defined( 'RANK_MATH_VERSION' ) ) {
+			$script = self::get_rank_math_script();
+			wp_add_inline_script( 'geodir-add-listing', $script );
+		}
+	}
+
+	/**
+	 * Returns Rank Math compat code
+	 */
+	public static function get_rank_math_script() {
+		ob_start();
+		?>
+	<script>
+		/**
+		* Rank Math SEO Integration
+		*/
+	   ; (function ($) {
+
+		   /**
+			* RankMath integration class
+			*/
+		   var RankMathIntegration = function () {
+			   this.init()
+			   this.hooks()
+		   }
+	   
+		   /**
+			* Init the plugin
+			*/
+		   RankMathIntegration.prototype.init = function () {
+			   this.pluginName = 'geodirectory'
+		   }
+	   
+		   /**
+			* Hook into Rank Math App eco-system
+			*/
+		   RankMathIntegration.prototype.hooks = function () {
+			   var self = this
+	   
+			   RankMathApp.registerPlugin(this.pluginName)
+			   wp.hooks.addFilter('rank_math_content', this.pluginName, $.proxy(this.filterContent, this))
+			   window.setInterval(function () {
+				   RankMathApp.reloadPlugin(self.pluginName)
+			   }, 2000);
+		   }
+	   
+		   /**
+			* Gather ge specific field data for analysis
+			*
+			* @return {String}
+			*/
+		   RankMathIntegration.prototype.getContent = function () {
+			   var content = ''
+	   
+			   //Add images
+			   $('.plupload-thumbs img').each(function () {
+				   var img = $(this).clone()
+				   img.attr('alt', img.data('title'))
+				   content += '<p>' + img[0].outerHTML + '.</p>'
+			   })
+	   
+			   //Add textarea fields
+			   $('.gd-fieldset-details textarea').each(function () {
+				   var val = $(this).val()
+				   if (val.length) {
+					   content += '<p>' + val + '</p>'
+				   }
+			   })
+	   
+			   //Finally, input fields
+			   $('input.geodir_textfield').each(function () {
+				   var val = $(this).val()
+				   var label = $(this).closest('.gd-fieldset-details').find('label').text() + ' - ' + val
+	   
+				   if ('url' == $(this).attr('type') && val.length) {
+					   label = '<a href="' + val + '">' + label + '</a>'
+				   }
+	   
+				   if (val.length) {
+					   content += '<p>' + label + '.</p>'
+				   }
+			   })
+
+			return content
+	   
+		   }
+	   
+	   
+		   /**
+			* Filters rankmat content
+			*
+			* @param {String} content System content.
+			*
+			* @return {String} Our plugin content concatenated
+			*/
+		   RankMathIntegration.prototype.filterContent = function (content) {
+			   return content + this.getContent()
+		   }
+	   
+	   
+		   /**
+			* Start Analysing our Fields.
+			*/
+		   $(document).on('ready', function () {
+			   new RankMathIntegration()
+		   })
+	   
+	   })(jQuery)
+	</script>
+	   <?php
+			$output = ob_get_clean();
+			return str_replace( array( '<script>', '</script>' ), '', $output );
 	}
 
 	public static function rank_math_add_images_to_sitemap( $images, $id ){
