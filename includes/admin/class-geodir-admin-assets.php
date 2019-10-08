@@ -156,10 +156,6 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_script( 'geodir-admin-dashboard' );
 		}
 
-		if ( defined( 'RANK_MATH_VERSION' ) ) {
-			wp_enqueue_script('geodir-rank-math', geodir_plugin_url() . '/assets/js/rank-math'.$suffix.'.js', array('jquery','rank-math-post-metabox'), GEODIRECTORY_VERSION, true);
-		}
-
 		
 		// load rating scripts on comments pages
 		if($screen_id=='comment'){
