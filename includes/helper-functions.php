@@ -1741,3 +1741,35 @@ function geodir_get_post_meta_raw($object_id, $meta_key){
 
 	return $value;
 }
+
+/**
+ * Set a cookie - wrapper for setcookie using WP constants.
+ *
+ * @since 2.0.0.68
+ *
+ * @param string $name   Name of the cookie being set.
+ * @param string $value  Value of the cookie.
+ * @param integer $expire Expiry of the cookie.
+ * @param bool $secure Whether the cookie should be served only over https.
+ * @param bool $httponly Whether the cookie is only accessible over HTTP, not scripting languages like JavaScript.
+ */
+function geodir_setcookie( $name, $value, $expire = 0, $secure = false, $httponly = false ) {
+	if ( ! headers_sent() ) {
+		setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure, apply_filters( 'geodir_cookie_httponly', $httponly, $name, $value, $expire, $secure ) );
+		$_COOKIE[ $name ] = $value;
+	} elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		geodir_error_log( "{$name} cookie cannot be set - headers already sent by {$file} on line {$line}" ); // @codingStandardsIgnoreLine
+	}
+}
+
+/**
+ * Get a cookie.
+ *
+ * @since 2.0.0.68
+ *
+ * @param  string $name Name of the cookie being set.
+ * @return string Value of the cookie.
+ */
+function geodir_getcookie( $name ) {
+	return ! empty( $_COOKIE ) && isset( $_COOKIE[ $name ] ) ? $_COOKIE[ $name ] : '';
+}
