@@ -161,11 +161,11 @@ class GeoDir_Admin_Import_Export {
 		$max_execution_time = ini_get( 'max_execution_time' );
 		$memory_limit       = ini_get( 'memory_limit' );
 
-		if ( ! $max_input_time || $max_input_time < 3000 ) {
+		if ( $max_input_time !== 0 && $max_input_time != -1 && ( ! $max_input_time || $max_input_time < 3000 ) ) {
 			ini_set( 'max_input_time', 3000 );
 		}
 
-		if ( ! $max_execution_time || $max_execution_time < 3000 ) {
+		if ( $max_execution_time !== 0 && ( ! $max_execution_time || $max_execution_time < 3000 ) ) {
 			ini_set( 'max_execution_time', 3000 );
 		}
 
@@ -276,10 +276,15 @@ class GeoDir_Admin_Import_Export {
 
 
 				if ( is_array($post_info) ) {
+					/**
+					 * @since 2.0.0.68
+					 */
+					do_action( 'geodir_import_post_before', $post_info );
+
+					$result = false;
 
 					// Update
-					if ( isset( $post_info['ID'] ) && $post_info['ID'] ) {
-
+					if ( ! empty( $post_info['ID'] ) ) {
 						$result = wp_update_post( $post_info, true ); // we hook into the save_post hook
 						if ( $result ) {
 							$updated ++;
@@ -298,6 +303,11 @@ class GeoDir_Admin_Import_Export {
 							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($result->get_error_message()) );
 						}
 					}
+					
+					/**
+					 * @since 2.0.0.68
+					 */
+					do_action( 'geodir_import_post_after', $post_info, $result );
 
 				} else {
 					$invalid ++;
@@ -870,7 +880,7 @@ class GeoDir_Admin_Import_Export {
 		if ( ! empty( $all_objects ) ) {
 			foreach ( $all_objects as $column_schema ) {
 				if ( ! in_array( $column_schema->Field, $cpt_exclude_columns ) ) {
-					$columns[] = $column_schema->Field;
+					$columns[] = "`" . $column_schema->Field . "`";
 				}
 			}
 		}
