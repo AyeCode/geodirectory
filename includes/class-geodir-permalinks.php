@@ -130,7 +130,7 @@ class GeoDir_Permalinks {
 	 */
 	public function _404_rescue(){
 		if(is_404() && geodir_get_option("enable_404_rescue",1)){
-			global $wp_query,$wp;
+			global $wp_query,$wp, $geodirectory;
 
 			$post_type = isset($wp_query->query_vars['post_type']) ? $wp_query->query_vars['post_type'] : '';
 			$url_segments = explode("/",$wp->request);
@@ -155,7 +155,12 @@ class GeoDir_Permalinks {
 			}
 			
 			if (in_array($post_type, geodir_get_posttypes())) {
-
+				$has_location = false;
+				if ( ! empty( $geodirectory->location ) && ( $location = $geodirectory->location ) ) {
+					if ( ! empty( $location->country_slug ) || ! empty( $location->region_slug ) || ! empty( $location->city_slug ) || ! empty( $location->neighbourhood_slug ) ) {
+						$has_location = true;
+					}
+				}
 				$maybe_slug = end($url_segments);
 
 				if( $maybe_slug ){
@@ -176,8 +181,8 @@ class GeoDir_Permalinks {
 							}
 						}
 
-						if(!empty($location_segments)){
-							$location_string = implode("/",$location_segments);
+						if ( ! empty( $location_segments ) && ! $has_location ) {
+							$location_string = implode( "/", $location_segments );
 						}
 
 						$term_link = get_term_link( $maybe_slug, $post_type."category" );
@@ -205,8 +210,8 @@ class GeoDir_Permalinks {
 							}
 						}
 
-						if(!empty($location_segments)){
-							$location_string = implode("/",$location_segments);
+						if ( ! empty( $location_segments ) && ! $has_location ) {
+							$location_string = implode( "/", $location_segments );
 						}
 
 						$term_link = get_term_link( $maybe_slug, $post_type."_tags" );
@@ -220,7 +225,6 @@ class GeoDir_Permalinks {
 					}elseif($is_post = get_page_by_path($maybe_slug,OBJECT,$post_type)){
 						$redirect = get_permalink($is_post->ID);
 					}
-
 
 					// redirect if needed and if its not to the same url
 					if($redirect && $redirect != geodir_curPageURL()){
