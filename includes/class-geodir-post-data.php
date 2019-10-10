@@ -66,6 +66,8 @@ class GeoDir_Post_Data {
 		// make GD post meta available through the standard get_post_meta() function if prefixed with `geodir_`
 		add_filter( 'get_post_metadata', array( __CLASS__, 'dynamically_add_post_meta' ), 10, 4 );
 
+		// Init
+		add_action( 'init', array( __CLASS__, 'setup_guest_cookie' ), 1 );
 	}
 
 
@@ -1016,7 +1018,7 @@ class GeoDir_Post_Data {
 			$posts_array = get_posts( $args );
 		} else {
 			// if its a logged out user the add current nonce as post meta
-			$current_nonce = wp_create_nonce( '_gd_logged_out_post_author' );
+			$current_nonce = geodir_getcookie( '_gd_logged_out_post_author' );
 			$args          = array(
 				'posts_per_page'   => - 1,
 				'orderby'          => 'date',
@@ -1050,7 +1052,7 @@ class GeoDir_Post_Data {
 		$post = get_default_post_to_edit( $post_type, true );
 
 		// if its a logged out user the add current nonce as post meta
-		if ( $post->post_author == 0 && ( $current_nonce = wp_create_nonce( '_gd_logged_out_post_author' ) ) ) {
+		if ( $post->post_author == 0 && ( $current_nonce = geodir_getcookie( '_gd_logged_out_post_author' ) ) ) {
 			update_post_meta( $post->ID, '_gd_logged_out_post_author', $current_nonce );
 		}
 
@@ -1171,7 +1173,7 @@ class GeoDir_Post_Data {
 
 		if ( ! $user_id ) {// check if the current nonce owns the post with no author
 			$post_current_nonce = get_post_meta( $post_id, '_gd_logged_out_post_author', true );
-			if ( $post_current_nonce && $post_current_nonce == wp_create_nonce( '_gd_logged_out_post_author' ) ) {
+			if ( $post_current_nonce && $post_current_nonce == geodir_getcookie( '_gd_logged_out_post_author' ) ) {
 				$owner = true;
 			}
 		} elseif ( $author_id == $user_id ) {
@@ -1359,7 +1361,7 @@ class GeoDir_Post_Data {
 			$owner = true;
 		} elseif ( ! $user_id ) {// check if the current nonce owns the post with no author
 			$post_current_nonce = get_post_meta( $post_id, '_gd_logged_out_post_author', true );
-			if ( $post_current_nonce && $post_current_nonce == wp_create_nonce( '_gd_logged_out_post_author' ) ) {
+			if ( $post_current_nonce && $post_current_nonce == geodir_getcookie( '_gd_logged_out_post_author' ) ) {
 				$owner = true;
 			}
 		}
@@ -2048,6 +2050,27 @@ class GeoDir_Post_Data {
 		$classes = apply_filters( 'post_class', $classes, $class, $post->ID );
 
 		return array_unique( $classes );
+	}
+
+	/**
+	 * Setup guest cookie.
+	 *
+	 * @since 2.0.0.68
+	 *
+	 * @param string[] $classes An array of post class names.
+	 * @param string[] $class An array of additional class names added to the post.
+	 * @param int $post_id The post ID.
+	 */
+	public static function setup_guest_cookie() {
+		if ( ! get_current_user_id() ) {
+			$nonce = geodir_getcookie( '_gd_logged_out_post_author' );
+
+			if ( empty( $nonce ) ) {
+				$nonce = substr( wp_hash( time(), 'nonce' ), -12, 10 );
+				geodir_setcookie( '_gd_logged_out_post_author', $nonce );
+				$nonce = geodir_getcookie( '_gd_logged_out_post_author' );
+			}
+		}
 	}
 
 }

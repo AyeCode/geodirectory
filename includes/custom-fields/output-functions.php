@@ -1454,7 +1454,7 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
                         $file_paths .= geodir_get_image_tag( $file );
                         $file_paths .= '</a>';
                         $file_paths .= '</div>';
-                    } elseif ( 1==2 && in_array( $uploaded_file_type, $audio_file_types ) ) {// if audio
+                    } elseif ( in_array( $uploaded_file_type, $audio_file_types ) ) {// if audio
                         $ext_path = '_' . $html_var . '_';
                         $filename = explode( $ext_path, $filename );
                         $file_paths .= '<span class="gd-audio-name">' . $_filename . '</span>';

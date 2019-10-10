@@ -7,6 +7,7 @@
 * Option added in map widget/shortcode to tick/untick categories on the map - ADDED
 * Exclude GD template pages from Yoast XML page sitemap - ADDED
 * Rank Math SEO not detecting GD fields - FIXED
+* Add listing by logged out user not working in incognito mode - FIXED
 
 = 2.0.0.67 =
 * Fail to save feature image for new listing when post revision is enabled - FIXED
