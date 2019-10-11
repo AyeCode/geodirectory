@@ -9,6 +9,7 @@
 * Rank Math SEO not detecting GD fields - FIXED
 * Add listing by logged out user not working in incognito mode - FIXED
 * Rescue category redirect url adds location twice - FIXED
+* %%in_location_single%% is not working on detail page meta title - FIXED
 
 = 2.0.0.67 =
 * Fail to save feature image for new listing when post revision is enabled - FIXED
