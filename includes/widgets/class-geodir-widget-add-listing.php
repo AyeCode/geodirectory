@@ -105,6 +105,14 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
      * @return mixed|string|void
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
+        // Some theme renders add listing shortcode in search page results.
+        /**
+         * @since 2.0.0.68
+         */
+        $output = apply_filters( 'geodir_pre_add_listing_shortcode_output', NULL, $args, $widget_args, $content );
+        if ( $output !== NULL ) {
+            return $output;
+        }
 
         if(self::is_preview()){
             return '';
