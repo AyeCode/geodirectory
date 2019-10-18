@@ -293,41 +293,29 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
     $location_terms['gd_region'] = !empty($wp->query_vars['region']) ? $wp->query_vars['region'] : '';
     $location_terms['gd_country'] = !empty($wp->query_vars['country']) ? $wp->query_vars['country'] : '';
 
-    $location_names = array();
-    foreach ($location_terms as $type => $location) {
-        $location_name = $location;
-
-        if (!empty($location_name)) {
-            if ( function_exists( 'get_actual_location_name' ) ) {
-                $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
-                $location_name = get_actual_location_name($location_type, $location, true);
-            } else {
-                $location_name = preg_replace( '/-(\d+)$/', '', $location_name);
-                $location_name = preg_replace( '/[_-]/', ' ', $location_name );
-                $location_name = __(geodir_ucwords($location_name), 'geodirectory');
-            }
-        }
-
-        $location_names[$type] = $location_name;
-    }
-
     $location_single = '';
-    foreach ($location_terms as $type => $location) {
-        if (!empty($location)) {
-            if (!empty($location_names[$type])) {
-                $location_single = $location_names[$type];
+    $location_names = array();
+    foreach ( $location_terms as $type => $location ) {
+        $location_type = strpos( $type, 'gd_' ) === 0 ? substr( $type, 3 ) : $type;
+        if ( $location == '' && isset( $location_array[ $location_type ] ) ) {
+            $location = $location_array[ $location_type ];
+        };
+
+        if ( ! empty( $location ) ) {
+            if ( function_exists( 'get_actual_location_name' ) ) {
+                $location = get_actual_location_name( $location_type, $location, true );
             } else {
-                if ( function_exists( 'get_actual_location_name' ) ) {
-                    $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
-                    $location_single = get_actual_location_name($location_type, $location, true);
-                } else {
-                    $location_name = preg_replace( '/-(\d+)$/', '', $location);
-                    $location_name = preg_replace( '/[_-]/', ' ', $location_name );
-                    $location_single = __(geodir_ucwords($location_name), 'geodirectory');
-                }
+                $location = preg_replace( '/-(\d+)$/', '', $location);
+                $location = preg_replace( '/[_-]/', ' ', $location );
+                $location = __( geodir_ucwords( $location ), 'geodirectory' );
             }
-            break;
         }
+
+        if ( empty( $location_single ) ) {
+            $location_single = $location;
+        }
+
+        $location_names[ $type ] = $location;
     }
 
     $full_location = array();
