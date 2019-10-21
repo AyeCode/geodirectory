@@ -146,10 +146,6 @@ function geodir_build_static_map(map_canvas){
     var height_raw = options.height;
     var height = height_raw.replace(/\D/g,'');
 
-
-    // console.log(options );
-    // alert(height);
-
     var img_url = "https://maps.googleapis.com/maps/api/staticmap?"
         +"size=" +width+"x"+height
         +"&maptype=" +options.maptype
@@ -185,7 +181,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
         geodir_no_map_api(map_canvas);
         return false;
     }
-	var $container, options, map_type, post_type, query_string = '', search;
+	var $container, options, map_type, post_type, query_string = '', search, custom_loop;
 
 	$container = jQuery('#sticky_map_' + map_canvas).closest('.stick_trigger_container');
 	options = eval(map_canvas);
@@ -253,8 +249,6 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 
 	search = jQuery('#' + map_canvas + '_search_string').val();
 
-
-
     // Terms
     var terms_filters = false;
 
@@ -285,14 +279,28 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 			tags = tags.split(',');
 		}
 		if (tags.length > 0) {
-			query_string += '&tag[]=' + tags.join("&tag[]=");
+			custom_loop = tags[0] && tags[0].indexOf(".") === 0 || tags[0].indexOf("#") === 0 ? tags[0] : false; // css class or id.
+			if (custom_loop && jQuery(custom_loop + ' .geodir-category-list-view').length) {
+				// custom loop from listings widget on non gd pages.
+				var loopIds = jQuery(custom_loop + ' .geodir-category-list-view')
+					.find("li.type-" + post_type) //Find the spans
+					.map(function() { return jQuery(this).data("post-id") }) //Project Ids
+					.get(); //ToArray
+
+				if((typeof loopIds == 'object' || typeof loopIds == 'array') && loopIds.length > 0){
+					query_string += '&post[]=' + loopIds.join("&post[]=");
+				}else{
+					query_string += '&post[]=-1';
+				}
+			} else {
+				query_string += '&tag[]=' + tags.join("&tag[]=");
+			}
 		}
 	}
 
 	// Posts
 	posts = options.posts;
 	if (posts) {
-
         // archive pages
         if(posts == 'geodir-loop-container'){
             var idarray = jQuery(".geodir-loop-container")
@@ -305,7 +313,6 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
             }else{
                 posts = '-1';
             }
-            console.log(idarray);
         }
 
 		if ( typeof posts == 'object' || typeof posts == 'array' ) {
@@ -552,7 +559,6 @@ function create_marker(item, map_canvas) {
         // Adding a click event to the marker
         google.maps.event.addListener(marker, 'spider_click', function() { // 'click' => normal, 'spider_click' => Overlapping Marker Spiderfier
             var marker_url = map_options.map_ajax_url;
-            console.log(map_options);
             is_zooming = true;
             jQuery("#" + map_canvas).goMap();
             var preview_query_str = '';
@@ -1104,7 +1110,6 @@ function parse_marker_jason_osm(json, map_canvas_var) {
         }
     } else {
         document.getElementById(map_canvas_var + '_map_nofound').style.display = 'block';
-        console.log(options);
         var mapcenter = new L.latLng(options.default_lat, options.default_lng);
         list_markers(json, map_canvas_var);
         if (options.enable_marker_cluster_no_reposition) {} //dont reposition after load
