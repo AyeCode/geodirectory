@@ -272,6 +272,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			}
 		}
 		$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
+		$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
 
 		return apply_filters( 'geodir_badge_field_keys', $keys );
 	}
