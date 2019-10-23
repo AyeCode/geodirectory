@@ -948,14 +948,13 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
 				}
 
-//				echo $badge.'###';exit;
-
-				// Maybe translate badge
-				$badge = __( $badge, 'geodirectory' );
+				$badge = ! empty( $badge ) ? __( wp_specialchars_decode( $badge, ENT_QUOTES ), 'geodirectory' ) : '';
 
 				// title
-				$title = $badge ? $badge : '';
-				if(!$title){$title = isset($field['frontend_title']) ? $field['frontend_title'] : '';}
+				$title = $badge ? $badge : ( ! empty( $field['frontend_title'] ) ? __( $field['frontend_title'], 'geodirectory' ) : '' );
+				if ( ! empty( $title ) ) {
+					$title = sanitize_text_field( stripslashes( $title ) );
+				}
 
 				// set badge text as secondary if icon is set.
 				if( $icon ){
