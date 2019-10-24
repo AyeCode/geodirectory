@@ -234,6 +234,7 @@ class GeoDir_Compatibility {
 				 || ( ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) )
 				 || function_exists( 'mgm_setup' ) 
 				 || function_exists( 'genesis_theme_support' ) 
+				 || function_exists( 'ffmp_setup' ) // ffmp theme
 		     )
 		) {
 			add_action( 'wp_title', array( 'GeoDir_SEO', 'set_meta' ), 9 );
