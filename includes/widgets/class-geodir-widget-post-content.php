@@ -187,16 +187,11 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 			$output .= implode( ", ", $errors );
 		}
 
-		if ( class_exists( 'FLBuilder' ) && isset( $_REQUEST['fl_builder'] ) ) {
-			$output = ''; // Show placehoder on beaver builder preview.
+		if ( $this->is_preview()) {
+			$output = ''; // Show placeholder on builder preview.
 		}
 
-		// check if its demo content
-		if($post_type == 'page' && !empty($args['id']) && geodir_is_block_demo()){
-			$post_type = 'gd_place';
-		}
-
-		if(geodir_is_gd_post_type($post_type)){ //echo '###2';
+		if(geodir_is_gd_post_type($post_type)){
 
 			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
 			$fields = geodir_post_custom_fields($package_id ,  'all', $post_type);

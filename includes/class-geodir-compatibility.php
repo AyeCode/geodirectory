@@ -145,6 +145,42 @@ class GeoDir_Compatibility {
 			add_filter( 'avada_setting_get_search_sidebar_2', array( __CLASS__, 'avada_sidebar_2' ), 100, 1 );
 			add_filter( 'avada_setting_get_search_sidebar_position', array( __CLASS__, 'avada_sidebar_position' ), 100, 1 );
 			add_filter( 'avada_setting_get_sidebar_sticky', array( __CLASS__, 'avada_sidebar_sticky' ), 100, 1 );
+
+			// Fusion Builder (Avada)
+			if ( defined( 'FUSION_BUILDER_VERSION' ) ) {
+				// GD Listings
+				add_filter( 'geodir_before_template_part',array( __CLASS__, 'avada_get_temp_globals' ), 10);
+				add_filter( 'geodir_after_template_part',array( __CLASS__, 'avada_set_temp_globals' ), 10);
+				// GD Loop
+				add_filter( 'geodir_before_get_template_part',array( __CLASS__, 'avada_get_temp_globals' ), 10);
+				add_filter( 'geodir_after_get_template_part',array( __CLASS__, 'avada_set_temp_globals' ), 10);
+			}
+		}
+	}
+
+	/**
+	 * Set temp globals before looping listings template so we can reset them to proper values after looping.
+	 *
+	 * @param $template_name
+	 */
+	public static function avada_get_temp_globals($template_name){
+		if($template_name == 'content-widget-listing.php' || basename($template_name) == 'content-archive-listing.php'){
+			global $columns, $global_column_array, $fb_temp_columns, $fb_temp_global_column_array;
+			$fb_temp_columns =  $columns;
+			$fb_temp_global_column_array = $global_column_array;
+		}
+	}
+
+	/**
+	 * Reset globals after looping listings template so we can reset them to proper values after looping.
+	 *
+	 * @param $template_name
+	 */
+	public static function avada_set_temp_globals($template_name){
+		if($template_name == 'content-widget-listing.php' || basename($template_name) == 'content-archive-listing.php'){
+			global $columns, $global_column_array, $fb_temp_columns, $fb_temp_global_column_array;
+			$columns = $fb_temp_columns;
+			$global_column_array = $fb_temp_global_column_array;
 		}
 	}
 

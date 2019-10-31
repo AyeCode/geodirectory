@@ -13,7 +13,8 @@
 * Map widget/shortcode doesn't show filtered listings on non GD pages - FIXED
 * Post badge add support for post modified date - ADDED
 * ffmp theme shows incorrect titles on GD pages - FIXED
-* Ninja contact form not sends email to listing owner - FIXED
+* Ninja contact form sometimes not finding the post id and email fails - FIXED
+* Better integration with Fusion builder, all items now also fusion items - ADDED
 
 = 2.0.0.67 =
 * Fail to save feature image for new listing when post revision is enabled - FIXED

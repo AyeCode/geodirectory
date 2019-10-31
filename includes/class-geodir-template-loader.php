@@ -621,7 +621,8 @@ class GeoDir_Template_Loader {
                 || $post->ID == geodir_get_option('page_archive_item')
 				|| geodir_is_cpt_template_page( $post->ID )
             )){
-            wp_die( __( 'Sorry, this is a page template and can not be accessed from the frontend, it is used for building the layouts of GeoDirectory sections.','geodirectory' ) );
+            wp_redirect(home_url(), 301);
+            exit;
         }
     }
 }

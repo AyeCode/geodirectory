@@ -94,7 +94,12 @@ function geodir_get_template_part( $slug, $name = '' ) {
 	$template = apply_filters( 'geodir_get_template_part', $template, $slug, $name );
 
 	if ( $template ) {
+
+		do_action( 'geodir_before_get_template_part', $template, $slug, $name);
+
 		load_template( $template, false );
+
+		do_action( 'geodir_after_get_template_part', $template, $slug, $name);
 	}
 
 	return '';
