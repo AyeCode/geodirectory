@@ -547,7 +547,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$arguments['tags']  = array(
 			'type' => 'text',
 			'title' => __( 'Filter by tags:', 'geodirectory' ),
-			'desc' => __( 'Insert separate tags with commas to filter listings by tags.', 'geodirectory' ),
+			'desc' => __( 'Insert separate tags with commas to filter listings by tags. On non GD pages use css .geodir-listings or id(ex: #gd_listings-2) of the listings widget/shortcode to show markers on map.', 'geodirectory' ),
 			'default' => '',
 			'placeholder' => __( 'garden,dinner,pizza', 'geodirectory' ),
 			'desc_tip' => true,

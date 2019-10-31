@@ -774,7 +774,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$output = apply_filters( 'geodir_output_badge_field_key_' . $match_field, $output, $find_post, $args );
 		}
 
-		if ($match_field && $match_field !== 'post_date' ) {
+		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' ) {
 			$fields = geodir_post_custom_fields( '', 'all', $post_type, 'none' );
 
 			$field = array();
@@ -787,9 +787,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					break;
 				}
 			}
+
 			if ( ! empty( $field ) ) {
-
-
 				// Check if there is a specific filter for key type.
 				if ( has_filter( 'geodir_output_badge_key_' . $field['field_type_key'] ) ) {
 					$output = apply_filters( 'geodir_output_badge_key_' . $field['field_type_key'], $output, $find_post, $args, $field );
@@ -811,12 +810,13 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$match_value = isset($find_post->{$match_field}) ? esc_attr( trim( $find_post->{$match_field} ) ) : ''; // escape user input
 			$match_found = $match_field === '' ? true : false;
 
-			if(!$match_found ){
-				if ( $match_field == 'post_date' ) {
+			if ( ! $match_found ) {
+				if ( ( $match_field == 'post_date' || $match_field == 'post_modified' ) && ( empty( $args['condition'] ) || $args['condition'] == 'is_greater_than' || $args['condition'] == 'is_less_than' ) ) {
 					if ( strpos( $search, '+' ) === false && strpos( $search, '-' ) === false ) {
 						$search = '+' . $search;
 					}
-					$until_time = strtotime( get_the_time( 'Y-m-d' ) . ' ' . $search . ' days' );
+					$the_time = $match_field == 'post_modified' ? get_the_modified_date( 'Y-m-d', $find_post ) : get_the_time( 'Y-m-d', $find_post );
+					$until_time = strtotime( $the_time . ' ' . $search . ' days' );
 					$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
 					if ( $until_time >= $now_time ) {
 						$match_found = true;
@@ -888,8 +888,12 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					// will be replace in condition check
 				}
 
-				if ( empty( $badge ) && $match_field == 'post_date' ) {
-					$badge = __( 'NEW', 'geodirectory' );
+				if ( empty( $badge ) ) {
+					if ( empty( $badge ) && $match_field == 'post_date' ) {
+						$badge = __( 'NEW', 'geodirectory' );
+					} elseif ( empty( $badge ) && $match_field == 'post_modified' ) {
+						$badge = __( 'UPDATED', 'geodirectory' );
+					}
 				}
 
 				// replace other post variables
@@ -944,14 +948,13 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
 				}
 
-//				echo $badge.'###';exit;
-
-				// Maybe translate badge
-				$badge = __( $badge, 'geodirectory' );
+				$badge = ! empty( $badge ) ? __( wp_specialchars_decode( $badge, ENT_QUOTES ), 'geodirectory' ) : '';
 
 				// title
-				$title = $badge ? $badge : '';
-				if(!$title){$title = isset($field['frontend_title']) ? $field['frontend_title'] : '';}
+				$title = $badge ? $badge : ( ! empty( $field['frontend_title'] ) ? __( $field['frontend_title'], 'geodirectory' ) : '' );
+				if ( ! empty( $title ) ) {
+					$title = sanitize_text_field( stripslashes( $title ) );
+				}
 
 				// set badge text as secondary if icon is set.
 				if( $icon ){
@@ -972,6 +975,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						}
 					}
 				}
+
+				/**
+				 * @since 2.0.0.68
+				 */
+				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $args, $find_post );
 
 				$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
 				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
