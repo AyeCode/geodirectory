@@ -565,14 +565,14 @@ class GeoDir_Comments {
 
 					<div class="comment-links">
 						<?php edit_comment_link( __( 'Edit', 'geodirectory' ), '<span class="edit-link">', '</span>' ); ?>
-						<span class="reply">
+						<div class="reply">
 							<?php comment_reply_link( array_merge( $args, array(
 								'reply_text' => __( 'Reply', 'geodirectory' ),
 								'after'      => ' <span>&darr;</span>',
 								'depth'      => $depth,
 								'max_depth'  => $args['max_depth']
 							) ) ); ?>
-						</span>
+						</div>
 					</div>
 
 					<!-- .reply -->
