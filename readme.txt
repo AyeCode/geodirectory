@@ -1,13 +1,13 @@
 === GeoDirectory - Business Directory Plugin ===
 Contributors: stiofansisland, paoltaia, ayecode, Ismiaini
-Donate link: https://wpgeodirectory.com
+Donate link: https://www.ko-fi.com/stiofan
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
 Tags:  directory plugin, business directory, listings, classifieds, real estate, address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory widget, geodirectory, googlemap, googlemaps, google maps, list, lists, member directory, members directories, members directory, microformat, microformats, multisite, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin, city directory
 Requires at least: 4.5
 Requires PHP: 5.6
-Tested up to: 5.2
-Stable tag: 2.0.0.67
+Tested up to: 5.3
+Stable tag: 2.0.0.68
 
 
 Create a location-based business directory with our plugin, 100% compatible with any theme and page builders. In a few clicks you could be the next Yelp or Tripadvisor.
@@ -145,6 +145,9 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 == Changelog ==
 
 __WARNING: GDv2 is a major update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always it is recommended to try this on a staging site first. [Learn more](https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/)__
+
+= 2.0.0.68 =
+[GeoDirectory changelog for version 2.0.0.68](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.68).
 
 = 2.0.0.67 =
 [GeoDirectory changelog for version 2.0.0.67](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.67).

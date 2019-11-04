@@ -27,8 +27,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
-            'block-icon'    => 'admin-site',
+            'block-icon'    => 'fas fa-th-list',
             'block-category'=> 'widgets',
+	        'block-supports'=> array(
+		        'customClassName'   => false
+	        ),
             'block-keywords'=> "['listings','posts','geo']",
             'block-output'   => array( // the block visual output elements as an array
 	            array(
@@ -73,7 +76,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'title' => __('Title:', 'geodirectory'),
                 'desc' => __('The widget title.', 'geodirectory'),
                 'type' => 'text',
-                //'placeholder' => __( 'My Dashboard', 'geodirectory' ),
                 'default'  => '',
                 'desc_tip' => true,
                 'advanced' => false
@@ -85,7 +87,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'options'   =>  geodir_get_posttypes('options-plural'),
                 'default'  => 'gd_place',
                 'desc_tip' => true,
-                'advanced' => true
+                'advanced' => false,
+                'group'     => __("Filters","geodirectory")
             ),
             'category'  => array(
                 'title' => __('Categories:', 'geodirectory'),
@@ -95,7 +98,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'options'   =>  $this->get_categories(),
                 'default'  => '',
                 'desc_tip' => true,
-                'advanced' => true
+                'advanced' => false,
+                'group'     => __("Filters","geodirectory")
             ),
             'related_to'  => array(
                 'title' => __('Filter listings related to:', 'geodirectory'),
@@ -109,7 +113,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 ),
                 'default'  => '',
                 'desc_tip' => true,
-                'advanced' => true
+                'advanced' => true,
+                'group'     => __("Filters","geodirectory")
             ),
             'tags'  => array(
                 'title' => __('Filter by tags:', 'geodirectory'),
@@ -118,7 +123,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default' => '',
 	            'placeholder' => __('garden,dinner,pizza', 'geodirectory'),
                 'desc_tip' => true,
-                'advanced' => true
+                'advanced' => true,
+                'group'     => __("Filters","geodirectory")
             ),
             'post_author'  => array(
                 'title' => __('Filter by author:', 'geodirectory'),
@@ -126,7 +132,100 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'type' => 'text',
                 'default' => '',
                 'desc_tip' => true,
-                'advanced' => true
+                'advanced' => true,
+                'group'     => __("Filters","geodirectory")
+            ),
+            'post_limit'  => array(
+	            'title' => __('Posts to show:', 'geodirectory'),
+	            'desc' => __('The number of posts to show by default.', 'geodirectory'),
+	            'type' => 'number',
+	            'default'  => '5',
+	            'desc_tip' => true,
+	            'advanced' => false,
+	            'group'     => __("Filters","geodirectory")
+            ),
+            'post_ids'  => array(
+	            'title' => __('Posts IDs:', 'geodirectory'),
+	            'desc' => __('Enter a comma separated list of post ids (1,2,3) to limit the listing to these posts only, or a negative list (-1,-2,-3) to exclude those post IDs (negative and positive IDs can not be mixed) ', 'geodirectory'),
+	            'type' => 'text',
+	            'default'  => '',
+	            'placeholder' => '1,2,3',
+	            'desc_tip' => true,
+	            'advanced' => true,
+	            'group'     => __("Filters","geodirectory")
+            ),
+            'add_location_filter'  => array(
+	            'title' => __("Enable location filter?", 'geodirectory'),
+	            'type' => 'checkbox',
+	            'desc_tip' => true,
+	            'value'  => '1',
+	            'default'  => '1',
+	            'advanced' => true,
+	            'group'     => __("Filters","geodirectory")
+            ),
+            'show_featured_only'  => array(
+	            'title' => __("Show featured only?", 'geodirectory'),
+	            'type' => 'checkbox',
+	            'desc_tip' => true,
+	            'value'  => '1',
+	            'default'  => '0',
+	            'advanced' => true,
+	            'group'     => __("Filters","geodirectory")
+            ),
+            'show_special_only'  => array(
+	            'title' => __("Only show listings with special offers?", 'geodirectory'),
+	            'type' => 'checkbox',
+	            'desc_tip' => true,
+	            'value'  => '1',
+	            'default'  => '0',
+	            'advanced' => true,
+	            'group'     => __("Filters","geodirectory")
+            ),
+            'with_pics_only'  => array(
+	            'title' => __("Only show listings with pictures?", 'geodirectory'),
+	            'type' => 'checkbox',
+	            'desc_tip' => true,
+	            'value'  => '1',
+	            'default'  => '0',
+	            'advanced' => true,
+	            'group'     => __("Filters","geodirectory")
+            ),
+            'with_videos_only'  => array(
+	            'title' => __("Only show listings with videos?", 'geodirectory'),
+	            'type' => 'checkbox',
+	            'desc_tip' => true,
+	            'value'  => '1',
+	            'default'  => '0',
+	            'advanced' => true,
+	            'group'     => __("Filters","geodirectory")
+            ),
+            'show_favorites_only'  => array(
+	            'title' => __("Show favorited by user?", 'geodirectory'),
+	            'type' => 'checkbox',
+	            'desc_tip' => true,
+	            'value'  => '1',
+	            'default'  => '0',
+	            'advanced' => true,
+	            'group'     => __("Filters","geodirectory")
+            ),
+            'favorites_by_user'  => array(
+	            'title' => __('Favorited by user:', 'geodirectory'),
+	            'desc' => __('Display listings favorited by current_user, current_author or ID (default = unfiltered). current_user: Display listings favorited by author id of the logged in user. current_author: Display listings favorited by author id of current viewing post/listing. 11: Display listings favorited author id = 11. Leave blank to show listings favorited by logged user.', 'geodirectory'),
+	            'type' => 'text',
+	            'default' => '',
+	            'desc_tip' => true,
+	            'advanced' => true,
+	            'element_require' => '[%show_favorites_only%]=="1"',
+	            'group'     => __("Filters","geodirectory")
+            ),
+            'use_viewing_post_type'  => array(
+	            'title' => __("Use current viewing post type?", 'geodirectory'),
+	            'type' => 'checkbox',
+	            'desc_tip' => true,
+	            'value'  => '1',
+	            'default'  => '0',
+	            'advanced' => true,
+	            'group'     => __("Filters","geodirectory")
             ),
             'sort_by'  => array(
                 'title' => __('Sort by:', 'geodirectory'),
@@ -135,7 +234,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'options'   =>  $this->get_sort_options(),
                 'default'  => '',
                 'desc_tip' => true,
-                'advanced' => true
+                'advanced' => false,
+                'group'     => __("Sorting","geodirectory")
             ),
             'title_tag'  => array(
                 'title' => __('Title tag:', 'geodirectory'),
@@ -147,7 +247,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 ),
                 'default'  => 'h3',
                 'desc_tip' => true,
-                'advanced' => true
+                'advanced' => false,
+                'group'     => __("Design","geodirectory")
             ),
             'layout'  => array(
                 'title' => __('Layout:', 'geodirectory'),
@@ -156,97 +257,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'options'   =>  geodir_get_layout_options(),
                 'default'  => 'h3',
                 'desc_tip' => true,
-                'advanced' => true
-            ),
-            'post_limit'  => array(
-                'title' => __('Posts to show:', 'geodirectory'),
-                'desc' => __('The number of posts to show by default.', 'geodirectory'),
-                'type' => 'number',
-                'default'  => '5',
-                'desc_tip' => true,
-                'advanced' => true
-            ),
-            'post_ids'  => array(
-	            'title' => __('Posts IDs:', 'geodirectory'),
-	            'desc' => __('Enter a comma separated list of post ids (1,2,3) to limit the listing to these posts only, or a negative list (-1,-2,-3) to exclude those post IDs (negative and positive IDs can not be mixed) ', 'geodirectory'),
-	            'type' => 'text',
-	            'default'  => '',
-	            'placeholder' => '1,2,3',
-	            'desc_tip' => true,
-	            'advanced' => true
-            ),
-            'add_location_filter'  => array(
-                'title' => __("Enable location filter?", 'geodirectory'),
-                'type' => 'checkbox',
-                'desc_tip' => true,
-                'value'  => '1',
-                'default'  => '1',
-                'advanced' => true
-            ),
-            'show_featured_only'  => array(
-                'title' => __("Show featured only?", 'geodirectory'),
-                'type' => 'checkbox',
-                'desc_tip' => true,
-                'value'  => '1',
-                'default'  => '0',
-                'advanced' => true
-            ),
-            'show_special_only'  => array(
-                'title' => __("Only show listings with special offers?", 'geodirectory'),
-                'type' => 'checkbox',
-                'desc_tip' => true,
-                'value'  => '1',
-                'default'  => '0',
-                'advanced' => true
-            ),
-            'with_pics_only'  => array(
-                'title' => __("Only show listings with pictures?", 'geodirectory'),
-                'type' => 'checkbox',
-                'desc_tip' => true,
-                'value'  => '1',
-                'default'  => '0',
-                'advanced' => true
-            ),
-            'with_videos_only'  => array(
-                'title' => __("Only show listings with videos?", 'geodirectory'),
-                'type' => 'checkbox',
-                'desc_tip' => true,
-                'value'  => '1',
-                'default'  => '0',
-                'advanced' => true
-            ),
-            'show_favorites_only'  => array(
-                'title' => __("Show favorited by user?", 'geodirectory'),
-                'type' => 'checkbox',
-                'desc_tip' => true,
-                'value'  => '1',
-                'default'  => '0',
-                'advanced' => true
-            ),
-            'favorites_by_user'  => array(
-                'title' => __('Favorited by user:', 'geodirectory'),
-                'desc' => __('Display listings favorited by current_user, current_author or ID (default = unfiltered). current_user: Display listings favorited by author id of the logged in user. current_author: Display listings favorited by author id of current viewing post/listing. 11: Display listings favorited author id = 11. Leave blank to show listings favorited by logged user.', 'geodirectory'),
-                'type' => 'text',
-                'default' => '',
-                'desc_tip' => true,
-                'advanced' => true,
-				'element_require' => '[%show_favorites_only%]=="1"',
-            ),
-            'use_viewing_post_type'  => array(
-                'title' => __("Use current viewing post type?", 'geodirectory'),
-                'type' => 'checkbox',
-                'desc_tip' => true,
-                'value'  => '1',
-                'default'  => '0',
-                'advanced' => true
-            ),
-            'hide_if_empty'  => array(
-                'title' => __("Hide widget if no posts?", 'geodirectory'),
-                'type' => 'checkbox',
-                'desc_tip' => true,
-                'value'  => '1',
-                'default'  => '0',
-                'advanced' => true
+                'advanced' => false,
+	            'group'     => __("Design","geodirectory")
             ),
 			'view_all_link'  => array(
                 'title' => __( 'Show view all link?', 'geodirectory' ),
@@ -254,7 +266,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'desc_tip' => true,
                 'value'  => '1',
                 'default'  => '1',
-                'advanced' => true
+                'advanced' => false,
+                'group'     => __("Design","geodirectory")
             ),
             'with_pagination'  => array(
                 'title' => __( "Show pagination?", 'geodirectory' ),
@@ -262,7 +275,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'desc_tip' => true,
                 'value'  => '1',
                 'default'  => '0',
-                'advanced' => true
+                'advanced' => true,
+                'group'     => __("Design","geodirectory")
             ),
             'top_pagination'  => array(
                 'title' => __( "Show pagination on top of the listings?", 'geodirectory' ),
@@ -272,6 +286,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '0',
                 'advanced' => true,
 				'element_require' => '[%with_pagination%]=="1"',
+                'group'     => __("Design","geodirectory")
             ),
             'bottom_pagination'  => array(
                 'title' => __( "Show pagination at bottom of the listings?", 'geodirectory' ),
@@ -281,6 +296,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '1',
                 'advanced' => true,
 				'element_require' => '[%with_pagination%]=="1"',
+                'group'     => __("Design","geodirectory")
             ),
             'pagination_info'  => array(
                 'title' => __( "Show advance pagination info?", 'geodirectory' ),
@@ -295,7 +311,17 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'desc_tip' => false,
                 'advanced' => true,
 				'element_require' => '[%with_pagination%]=="1"',
-            )
+                'group'     => __("Design","geodirectory")
+            ),
+            'hide_if_empty'  => array(
+	            'title' => __("Hide widget if no posts?", 'geodirectory'),
+	            'type' => 'checkbox',
+	            'desc_tip' => true,
+	            'value'  => '1',
+	            'default'  => '0',
+	            'advanced' => false,
+	            'group'     => __("Design","geodirectory")
+            ),
         );
     }
 

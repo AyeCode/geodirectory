@@ -491,12 +491,12 @@ class GeoDir_User {
 		$login_link = wp_login_url( $redirect );
 
 		$output = "<div class='gd-login-links'>";
-		$output .= '<a class="login-link" href="' . esc_url( $login_link ) . '" title="' . $login_title . '">' . $login_title . '</a>';
+		$output .= '<a class="login-link uwp-login-link" href="' . esc_url( $login_link ) . '" title="' . $login_title . '">' . $login_title . '</a>';
 
 		if ( get_option( 'users_can_register' ) ) {
 			$register_title = esc_attr__( 'Register', 'geodirectory' );
 			$register_link = wp_registration_url();
-			$output .= ' | <a class="register-link" href="' . esc_url( $register_link ) . '" title="' . $register_title . '">' . $register_title . '</a>';
+			$output .= ' | <a class="register-link uwp-register-link" href="' . esc_url( $register_link ) . '" title="' . $register_title . '">' . $register_title . '</a>';
 		}
 
 		$output .= "</div>";

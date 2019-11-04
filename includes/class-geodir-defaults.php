@@ -23,7 +23,7 @@ class GeoDir_Defaults {
 	 * @return string
 	 */
 	 public static function page_add_content($no_filter = false){
-		 $content = "[gd_notifications]\n[gd_add_listing]";
+		 $content = "[gd_notifications]\n[gd_add_listing show_login=1]";
 
 		 if($no_filter){
 			 return $content;
