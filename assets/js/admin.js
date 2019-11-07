@@ -150,19 +150,27 @@ function geodir_handle_uninstall_option($el) {
 
 /**
  * Init the tooltips
+ *
+ * @since 2.0.0.69 Added check for bootstrap tooltips.
  */
 function gd_init_tooltips(){
 
     // we create, then destroy then create so we can ajax load and then call this function with impunity.
-    jQuery('.gd-help-tip').tooltip().tooltip('destroy').tooltip({
-             content: function () {
+    var $tooltips = jQuery('.gd-help-tip').tooltip();
+    var $method = 'dispose';
+    if ( typeof $tooltips['destroy'] === 'function') {
+        $method = 'destroy';
+    }
+
+    $tooltips.tooltip($method).tooltip({
+        content: function () {
             return jQuery(this).prop('title');
         },
         tooltipClass: 'gd-ui-tooltip',
         position: {
             my: 'center top',
             at: 'center bottom+10',
-            collision: 'flipfit',
+            collision: 'flipfit'
         },
         show: null,
         close: function (event, ui) {
@@ -179,6 +187,7 @@ function gd_init_tooltips(){
                 });
         }
     });
+
 }
 
 /* Check Uncheck All Related Options Start*/
