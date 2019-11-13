@@ -512,17 +512,7 @@ class GeoDir_Admin_Import_Export {
 	 * @return array|bool
 	 */
 	public static function get_post_gps_from_address( $post_info ) {
-		$api = GeoDir_Maps::active_map();
-
-		$api = apply_filters( 'geodir_post_gps_from_address_api', $api );
-
-		if ( $api == 'google' || $api == 'auto' ) {
-			$gps = geodir_google_get_gps_from_address( $post_info, true );
-		} elseif ( $api == 'osm' ) {
-			$gps = geodir_osm_get_gps_from_address( $post_info, true );
-		} else {
-			$gps = apply_filters( 'geodir_gps_from_address_custom_api_gps', array(), $api );
-		}
+		$gps = geodir_get_gps_from_address( $post_info, true );
 
 		if ( is_array( $gps ) && ! empty( $gps['latitude'] ) && ! empty( $gps['longitude'] ) ) {
 			$post_info['latitude'] = $gps['latitude'];

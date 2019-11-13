@@ -157,10 +157,13 @@ function gd_init_tooltips(){
 
     // we create, then destroy then create so we can ajax load and then call this function with impunity.
     var $tooltips = jQuery('.gd-help-tip').tooltip();
-    var $method = 'dispose';
-    if ( typeof $tooltips['destroy'] === 'function') {
-        $method = 'destroy';
-    }
+
+    /**
+     * 'dispose' used in Bootstrap Tooltip v4 and newer
+     * 'destroy' used in Bootstrap Tooltip v3 and older
+     * 'destroy' used in jQuery UI Tooltip
+     */
+    var $method = geodir_tooltip_version() >= 4 ? 'dispose' : 'destroy';
 
     $tooltips.tooltip($method).tooltip({
         content: function () {
@@ -1260,4 +1263,15 @@ function geodir_admin_init_rating_input(){
         });
 
     });
+}
+
+/**
+ * Get Bootstrap tooltip version.
+ */
+function geodir_tooltip_version() {
+    var ttv = 0;
+    if (typeof jQuery.fn === 'object' && typeof jQuery.fn.tooltip === 'function' && typeof jQuery.fn.tooltip.Constructor === 'function' && typeof jQuery.fn.tooltip.Constructor.VERSION != 'undefined') {
+        ttv = parseFloat(jQuery.fn.tooltip.Constructor.VERSION);
+    }
+    return ttv;
 }
