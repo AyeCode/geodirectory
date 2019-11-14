@@ -525,7 +525,7 @@ class GeoDir_Admin_Import_Export {
 			}
 		}
 
-		return apply_filters( 'geodir_get_post_gps_from_address', $post_info, $gps, $api );
+		return apply_filters( 'geodir_get_post_gps_from_address', $post_info, $gps );
 	}
 
 	/**
