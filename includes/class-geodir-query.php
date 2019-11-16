@@ -825,33 +825,29 @@ class GeoDir_Query {
 	public static function sort_by_children( $orderby, $sort_by, $geodir_post_type, $wp_query = array() ) {
 		global $wpdb;
 
-		$sort_array = explode('_', $sort_by);
-
-		$sort_by_count = count($sort_array);
-
+		$sort_array = explode( '_', $sort_by );
+		$sort_by_count = count( $sort_array );
 		$order = $sort_array[$sort_by_count - 1];
+		$htmlvar_name = str_replace( '_' . $order, '', $sort_by );
 
-		$htmlvar_name = str_replace('_' . $order, '', $sort_by);
-
-		if($htmlvar_name && $order) {
-
-
+		if ( $htmlvar_name && $order ) {
 			$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND sort = %s AND post_type = %s", $htmlvar_name, $order, $geodir_post_type ) );
-
 
 			if ( $parent_id ) {
 				$children = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND tab_parent = %d ORDER BY sort_order ASC", $geodir_post_type, $parent_id ) );
-				//print_r($children);exit;
 
 				if ( $children ) {
-					//print_r($children);exit;
 					foreach ( $children as $child ) {
-						$child_sort_by = $child->htmlvar_name . "_" . $child->sort;
-						$child_sort    = self::sort_by_sql( $child_sort_by, $geodir_post_type, $wp_query );
-						if ( $child_sort ) {
-							$orderby .= " ," . $child_sort;
+						if ( $child->field_type == 'random' ) {
+							$child_sort_by = 'random';
+						} else {
+							$child_sort_by = $child->htmlvar_name . "_" . $child->sort;
 						}
-						//$orderby .= " ," . self::sort_by_sql($child_sort_by,$geodir_post_type);
+						$child_sort = self::sort_by_sql( $child_sort_by, $geodir_post_type, $wp_query );
+
+						if ( $child_sort ) {
+							$orderby .= ", " . $child_sort;
+						}
 					}
 				}
 			}
