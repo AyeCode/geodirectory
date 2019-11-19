@@ -277,7 +277,7 @@ class GeoDir_Email {
 			$replace_array['[#post_author_ID#]']   = $gd_post->post_author;
 			$replace_array['[#post_author_name#]'] = $post_author_name;
 			$replace_array['[#client_name#]']      = $post_author_name;
-			$replace_array['[#listing_title#]']    = get_the_title( $post_id );
+			$replace_array['[#listing_title#]']    = $gd_post->post_title;
 			$replace_array['[#listing_url#]']      = get_permalink( $post_id );
 			$replace_array['[#listing_link#]']     = '<a href="' . esc_url( $replace_array['[#listing_url#]'] ) . '">' . $replace_array['[#listing_title#]'] . '</a>';
 		}

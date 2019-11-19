@@ -1,3 +1,6 @@
+= 2.0.0.70 =
+* Decode special character in email title #989
+
 = 2.0.0.69 =
 * Fixed some W3 validation issues - FIXED
 * Admin tooltips can break image upload buttons - FIXED
