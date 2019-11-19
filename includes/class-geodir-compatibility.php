@@ -69,6 +69,14 @@ class GeoDir_Compatibility {
 		}
 
 		/*######################################################
+		Beaver Themer
+		######################################################*/
+		if ( class_exists( 'FLThemeBuilderLoader' ) ) {
+			add_filter( 'geodir_page_options', array( __CLASS__, 'fl_theme_builder_page_options' ), 100, 1 );
+			add_filter( 'fl_theme_builder_current_page_layouts', array( __CLASS__, 'fl_theme_builder_current_page_layouts' ), 1, 1 );
+		}
+
+		/*######################################################
 		Elementor :: Fix Page templates.
 		######################################################*/
 		add_filter( 'geodir_bypass_setup_archive_loop_as_page', array( __CLASS__, 'elementor_loop_bypass' ) );
@@ -1876,5 +1884,96 @@ class GeoDir_Compatibility {
 		}
 
 		return $custom_sidebar;
+	}
+
+	/**
+	 * Add option to select Beaver Themer search page.
+	 *
+	 * @since 2.0.0.70
+	 *
+	 * @param array $options The page options.
+	 * @return array The page options.
+	 */
+	public static function fl_theme_builder_page_options( $options ) {
+		global $wpdb;
+
+		$layouts = array( 
+			'0' => __( 'Select Themer Layout', 'geodirectory' ) 
+		);
+
+		$results = $wpdb->get_results( "SELECT p.ID, p.post_title FROM {$wpdb->postmeta} as pm INNER JOIN {$wpdb->posts} as p ON pm.post_id = p.ID WHERE pm.meta_key = '_fl_theme_builder_preview_location' AND p.post_type = 'fl-theme-layout' AND p.post_status = 'publish' AND pm.meta_value LIKE '%archive:post%' ORDER BY `p`.`post_title` ASC" );
+		if ( ! empty( $results ) ) {
+			foreach ( $results as $key => $row ) {
+				$layouts[ $row->ID ] = $row->post_title . '( ' . $row->ID . ' )';
+			}
+		}
+
+		$options[] = array(
+			'title' => __( 'Beaver Builder Settings', 'geodirectory' ),
+			'type'  => 'title',
+			'desc'  => 'Beaver Builder template settings.',
+			'id'    => 'fl_theme_builder_settings',
+			'desc_tip' => true,
+		);
+		$options[] = array(
+			'name' => __( 'Search Page Themer Layout', 'geodirectory' ),
+			'desc' => __( 'To use themer layout for GD search page, create a layout with blank location under Beaver Builder > Themer Layouts > Add New > Archive Layout.', 'geodirectory' ),
+			'id' => 'fl_theme_builder_search_layout',
+			'default' => '0',
+			'type' => 'select',
+			'class' => 'geodir-select',
+			'options' => $layouts,
+			'desc_tip' => true,
+		);
+		$options[] = array( 
+			'type' => 'sectionend', 
+			'id' => 'fl_theme_builder_settings' 
+		);
+
+		return $options;
+	}
+
+	/**
+	 * Filter Beaver Themer layouts.
+	 *
+	 * @since 2.0.0.70
+	 *
+	 * @param array $layouts The themer layouts.
+	 * @return array The themer layouts.
+	 */
+	public static function fl_theme_builder_current_page_layouts( $layouts = array() ) {
+		if ( geodir_is_page( 'search' ) ) {
+			$layout_id = absint( geodir_get_option( 'fl_theme_builder_search_layout' ) );
+			$layout_id = apply_filters( 'geodir_fl_theme_builder_search_layout_id', $layout_id, $layouts );
+			if ( $layout_id && get_post_status( $layout_id ) != 'publish' ) {
+				$layout_id = 0;
+			}
+
+			if ( ! empty( $layouts ) ) {
+				foreach ( $layouts as $type => $posts ) {
+					foreach ( $posts as $key => $post ) {
+						if ( ! empty( $post['id'] ) && absint( $post['id'] ) == $layout_id ) {
+							continue;
+						}
+
+						if ( ! empty( $post['locations'] ) && is_array( $post['locations'] ) && in_array( 'general:search', $post['locations'] ) ) {
+							unset( $layouts[ $type ][ $key ] );
+						}
+					}
+				}
+			}
+
+			if ( ! empty( $layout_id ) ) {
+				$layouts[ 'archive' ][0] = array(
+					'id' => $layout_id,
+					'locations' => array( 'general:search' ),
+					'type' => 'archive',
+					'hook' => '',
+					'order' => 0
+				);
+			}
+		}
+
+		return $layouts;
 	}
 }
