@@ -256,6 +256,17 @@ class GeoDir_Media {
 	public static function insert_attachment($post_id,$type = 'file',$url,$title = '', $caption = '', $order = '', $is_approved = 1,$is_placeholder = false,$other_id = ''){
 		global $wpdb;
 
+		// Load media functions
+		if ( ! function_exists( 'wp_handle_upload' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/file.php';
+		}
+		if ( ! function_exists( 'media_sideload_image' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/media.php';
+		}
+		if ( ! function_exists( 'wp_generate_attachment_metadata' ) ) {
+			require_once ABSPATH . 'wp-admin/includes/image.php';
+		}
+
 		// check we have what we need
 		if(!$post_id || !$url){
 			return new WP_Error( 'file_insert', __( "No post_id or file url, file insert failed.", "geodirectory" ) );
