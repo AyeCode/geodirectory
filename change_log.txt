@@ -1,6 +1,8 @@
 = 2.0.0.70 =
 * REST API allow search posts by GPS, IP and near address - ADDED
 * GD Search Themer Layout overwrites the WordPress search page - FIXED
+* Decode special character in email title - FIXED
+* Limit embed wrap to videos - CHANGED
 
 = 2.0.0.69 =
 * Fixed some W3 validation issues - FIXED

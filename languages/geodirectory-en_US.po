@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.69\n"
+"Project-Id-Version: GeoDirectory 2.0.0.70\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-11 17:00+0000\n"
-"PO-Revision-Date: 2019-11-11 17:00+0000\n"
+"POT-Creation-Date: 2019-11-20 11:32+0000\n"
+"PO-Revision-Date: 2019-11-20 11:32+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -483,7 +483,7 @@ msgstr ""
 msgid "Setup forms such as contact or booking forms for your listings."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-addons.php:527
+#: includes/admin/class-geodir-admin-addons.php:526
 msgid ""
 "Allow frontend user login and registration as well as have slick profile "
 "pages."
@@ -1131,8 +1131,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:225
 #: includes/admin/class-geodir-admin-import-export.php:322
-#: includes/admin/class-geodir-admin-import-export.php:1283
-#: includes/admin/class-geodir-admin-import-export.php:2097
+#: includes/admin/class-geodir-admin-import-export.php:1273
+#: includes/admin/class-geodir-admin-import-export.php:2087
 msgid "No data found in csv file."
 msgstr ""
 
@@ -1160,80 +1160,81 @@ msgstr ""
 msgid "Address city, region or country missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:534
+#: includes/admin/class-geodir-admin-import-export.php:524
+#: includes/location-functions.php:639
 msgid "Fail to retrieve GPS data from a address using API."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:558
+#: includes/admin/class-geodir-admin-import-export.php:548
 msgid "Not enough GPS info for address."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:581
-#: includes/admin/class-geodir-admin-import-export.php:599
-#: includes/location-functions.php:702 includes/location-functions.php:727
+#: includes/admin/class-geodir-admin-import-export.php:571
+#: includes/admin/class-geodir-admin-import-export.php:589
+#: includes/location-functions.php:742 includes/location-functions.php:767
 msgid "Failed to reach Google geocode server."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:596
-#: includes/location-functions.php:725
+#: includes/admin/class-geodir-admin-import-export.php:586
+#: includes/location-functions.php:765
 #, php-format
 msgid "Google geocode failed: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:694
-#: includes/admin/class-geodir-admin-import-export.php:1004
-#: includes/admin/class-geodir-admin-import-export.php:1940
+#: includes/admin/class-geodir-admin-import-export.php:684
+#: includes/admin/class-geodir-admin-import-export.php:994
+#: includes/admin/class-geodir-admin-import-export.php:1930
 #: includes/admin/settings/class-geodir-settings-import-export.php:884
 msgid "No records to export."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:740
-#: includes/admin/class-geodir-admin-import-export.php:1046
-#: includes/admin/class-geodir-admin-import-export.php:1984
+#: includes/admin/class-geodir-admin-import-export.php:730
+#: includes/admin/class-geodir-admin-import-export.php:1036
+#: includes/admin/class-geodir-admin-import-export.php:1974
 msgid ""
 "ERROR: Could not create csv file. This is usually due to inconsistent file "
 "permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1582
+#: includes/admin/class-geodir-admin-import-export.php:1572
 msgid "json file is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1584
+#: includes/admin/class-geodir-admin-import-export.php:1574
 msgid "json file is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1596
+#: includes/admin/class-geodir-admin-import-export.php:1586
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2015
+#: includes/admin/class-geodir-admin-import-export.php:2005
 #, php-format
 msgid "GD IMPORT REVIEW [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2023
+#: includes/admin/class-geodir-admin-import-export.php:2013
 msgid "data is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2036
+#: includes/admin/class-geodir-admin-import-export.php:2026
 msgid "invalid comment content."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2040
+#: includes/admin/class-geodir-admin-import-export.php:2030
 msgid "invalid comment post ID."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2044
+#: includes/admin/class-geodir-admin-import-export.php:2034
 msgid "invalid user details(user id or author name, author email)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2048
+#: includes/admin/class-geodir-admin-import-export.php:2038
 msgid "invalid rating."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2074
-#: includes/admin/class-geodir-admin-import-export.php:2091
+#: includes/admin/class-geodir-admin-import-export.php:2064
+#: includes/admin/class-geodir-admin-import-export.php:2081
 msgid "invalid data."
 msgstr ""
 
@@ -8645,7 +8646,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:978
+#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:989
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -8726,14 +8727,14 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:224
+#: includes/class-geodir-compatibility.php:232
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:344
+#: includes/class-geodir-compatibility.php:352
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -8741,42 +8742,60 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:812
+#: includes/class-geodir-compatibility.php:820
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:814
+#: includes/class-geodir-compatibility.php:822
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:819
+#: includes/class-geodir-compatibility.php:827
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:820
+#: includes/class-geodir-compatibility.php:828
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:980
+#: includes/class-geodir-compatibility.php:988
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:982
+#: includes/class-geodir-compatibility.php:990
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:987
+#: includes/class-geodir-compatibility.php:995
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:988
+#: includes/class-geodir-compatibility.php:996
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
+msgstr ""
+
+#: includes/class-geodir-compatibility.php:1901
+msgid "Select Themer Layout"
+msgstr ""
+
+#: includes/class-geodir-compatibility.php:1912
+msgid "Beaver Builder Settings"
+msgstr ""
+
+#: includes/class-geodir-compatibility.php:1919
+msgid "Search Page Themer Layout"
+msgstr ""
+
+#: includes/class-geodir-compatibility.php:1920
+msgid ""
+"To use themer layout for GD search page, create a layout with blank location "
+"under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
 #: includes/class-geodir-defaults.php:136
@@ -9223,45 +9242,45 @@ msgstr ""
 msgid "No category"
 msgstr ""
 
-#: includes/class-geodir-media.php:261
+#: includes/class-geodir-media.php:272
 msgid "No post_id or file url, file insert failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:381
+#: includes/class-geodir-media.php:392
 msgid "Failed to insert file info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:470
+#: includes/class-geodir-media.php:481
 msgid "No image_id, post_id or image url, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:539
+#: includes/class-geodir-media.php:550
 msgid "Failed to update image info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:658
+#: includes/class-geodir-media.php:669
 msgid "Invalid URL Provided."
 msgstr ""
 
-#: includes/class-geodir-media.php:664
+#: includes/class-geodir-media.php:675
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:966
+#: includes/class-geodir-media.php:977
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:978 includes/class-geodir-media.php:980
+#: includes/class-geodir-media.php:989 includes/class-geodir-media.php:991
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1001
+#: includes/class-geodir-media.php:1012
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:1019
+#: includes/class-geodir-media.php:1030
 msgid "Zero size file downloaded."
 msgstr ""
 
@@ -10899,30 +10918,30 @@ msgstr ""
 msgid "Google Timezone API: %s"
 msgstr ""
 
-#: includes/location-functions.php:623 includes/location-functions.php:754
+#: includes/location-functions.php:663 includes/location-functions.php:794
 msgid "Address must be non-empty."
 msgstr ""
 
-#: includes/location-functions.php:658 includes/location-functions.php:668
-#: includes/location-functions.php:791 includes/location-functions.php:806
+#: includes/location-functions.php:698 includes/location-functions.php:708
+#: includes/location-functions.php:831 includes/location-functions.php:846
 msgid "Not enough location info for address."
 msgstr ""
 
-#: includes/location-functions.php:718
+#: includes/location-functions.php:758
 msgid "Listing has no GPS info, failed to geocode GPS info."
 msgstr ""
 
-#: includes/location-functions.php:838
+#: includes/location-functions.php:878
 msgid "Failed to reach OpenStreetMap Nominatim server."
 msgstr ""
 
-#: includes/location-functions.php:856
+#: includes/location-functions.php:896
 msgid ""
 "Listing has no GPS info, failed to retrieve GPS info from OpenStreetMap "
 "Nominatim server."
 msgstr ""
 
-#: includes/location-functions.php:863
+#: includes/location-functions.php:903
 msgid "Failed to retrieve GPS info from OpenStreetMap Nominatim server."
 msgstr ""
 
