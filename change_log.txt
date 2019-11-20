@@ -1,5 +1,6 @@
 = 2.0.0.70 =
-* Decode special character in email title #989
+* Decode special character in email title - FIXED
+* Parent container check for Gutenberg Embeds - FIXED
 
 = 2.0.0.69 =
 * Fixed some W3 validation issues - FIXED
