@@ -912,9 +912,8 @@ function geodir_get_cpt_page_id( $page, $post_type = '' ) {
  * @return string       Updated embed markup
  */
 function geodir_responsive_embeds($html, $url, $attr) {
-
 	if ( geodir_is_geodir_page() ) {
-		$html !== '' ? '<div class="geodir-embed-container">' . $html . '</div>' : '';
+		$html = ( $html !== '' ) ? '<div class="geodir-embed-container">' . $html . '</div>' : '';
 	}
 	return $html;
 }
