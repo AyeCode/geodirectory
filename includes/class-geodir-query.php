@@ -797,9 +797,9 @@ class GeoDir_Query {
 
 			$table = geodir_db_cpt_table( $geodir_post_type );
 
-			$orderby = self::sort_by_sql( $sort_by, $geodir_post_type );
+			$orderby = self::sort_by_sql( $sort_by, $geodir_post_type, $query );
 
-			$orderby = self::sort_by_children( $orderby, $sort_by, $geodir_post_type );
+			$orderby = self::sort_by_children( $orderby, $sort_by, $geodir_post_type, $query );
 
 //		echo '###'.$orderby;exit;
 			/**
@@ -822,36 +822,32 @@ class GeoDir_Query {
 		return $orderby;
 	}
 
-	public static function sort_by_children($orderby,$sort_by, $geodir_post_type){
+	public static function sort_by_children( $orderby, $sort_by, $geodir_post_type, $wp_query = array() ) {
 		global $wpdb;
 
-		$sort_array = explode('_', $sort_by);
-
-		$sort_by_count = count($sort_array);
-
+		$sort_array = explode( '_', $sort_by );
+		$sort_by_count = count( $sort_array );
 		$order = $sort_array[$sort_by_count - 1];
+		$htmlvar_name = str_replace( '_' . $order, '', $sort_by );
 
-		$htmlvar_name = str_replace('_' . $order, '', $sort_by);
-
-		if($htmlvar_name && $order) {
-
-
+		if ( $htmlvar_name && $order ) {
 			$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND sort = %s AND post_type = %s", $htmlvar_name, $order, $geodir_post_type ) );
-
 
 			if ( $parent_id ) {
 				$children = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND tab_parent = %d ORDER BY sort_order ASC", $geodir_post_type, $parent_id ) );
-				//print_r($children);exit;
 
 				if ( $children ) {
-					//print_r($children);exit;
 					foreach ( $children as $child ) {
-						$child_sort_by = $child->htmlvar_name . "_" . $child->sort;
-						$child_sort    = self::sort_by_sql( $child_sort_by, $geodir_post_type );
-						if ( $child_sort ) {
-							$orderby .= " ," . $child_sort;
+						if ( $child->field_type == 'random' ) {
+							$child_sort_by = 'random';
+						} else {
+							$child_sort_by = $child->htmlvar_name . "_" . $child->sort;
 						}
-						//$orderby .= " ," . self::sort_by_sql($child_sort_by,$geodir_post_type);
+						$child_sort = self::sort_by_sql( $child_sort_by, $geodir_post_type, $wp_query );
+
+						if ( $child_sort ) {
+							$orderby .= ", " . $child_sort;
+						}
 					}
 				}
 			}
@@ -867,27 +863,31 @@ class GeoDir_Query {
      *
      * @param string $sort_by Optional. Sort by. Default title_asc.
      * @param string $post_type Optional. Post type. Default gd_place.
+     * @global object $wp_query WordPress query object.
      *
      * @global object $wpdb WordPress Database object.
      *
      * @return string
      */
-	public static function sort_by_sql($sort_by = 'post_title_asc',$post_type = "gd_place"){
+	public static function sort_by_sql( $sort_by = 'post_title_asc', $post_type = "gd_place", $wp_query = array() ) {
 		global $wpdb;
-
-		//echo '###'.$sort_by;
 
 		$orderby = '';
 		$table = geodir_db_cpt_table($post_type);
 		$order_by_parts = array();
 
 		switch ($sort_by):
+			case 'distance':
 			case 'distance_asc':
-				$order_by_parts[] = "distance";
-				$order_by_parts[] = self::search_sort();
+				$order_by_parts[] = "distance ASC";
+				$order_by_parts[] = self::search_sort( '', $sort_by, $wp_query );
+				break;
+			case 'distance_desc':
+				$order_by_parts[] = "distance DESC";
+				$order_by_parts[] = self::search_sort( '', $sort_by, $wp_query );
 				break;
 			case 'search_best':
-				$order_by_parts[] = self::search_sort();
+				$order_by_parts[] = self::search_sort( '', $sort_by, $wp_query );
 				break;
 			case 'post_status_desc':
 			case 'random':
@@ -966,10 +966,10 @@ class GeoDir_Query {
 		return $orderby;
 	}
 
-	public static function search_sort($orderby = ''){
+	public static function search_sort( $orderby = '', $sort_by = '', $wp_query = array() ) {
 		global $s, $gd_exact_search;
 
-		if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
+		if ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' && ( ! empty( $wp_query ) && self::is_gd_main_query( $wp_query ) ) ) {
 			if ( $gd_exact_search ) {
 				$keywords = array( $s );
 			} else {

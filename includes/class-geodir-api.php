@@ -452,7 +452,10 @@ class GeoDir_API {
 		$table = geodir_db_cpt_table( $post_type );
 		$sort_by = $wp_query->query_vars['orderby'];
 
-		$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
+		$sort_by = apply_filters( 'geodir_rest_posts_order_sort_by_key', $sort_by, $orderby, $post_type, $wp_query );
+
+		$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type, $wp_query );
+		$orderby = GeoDir_Query::sort_by_children( $orderby, $sort_by, $post_type, $wp_query );
 
 		return apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $wp_query );
 	}

@@ -607,6 +607,46 @@ function geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 )
 }
 
 /**
+ * Get the GPS from a post address.
+ *
+ * @param $address
+ *
+ * @return WP_Error|array|bool
+ */
+function geodir_get_gps_from_address( $address = array(), $wp_error = false ) {
+	$api = GeoDir_Maps::active_map();
+
+	$api = apply_filters( 'geodir_post_gps_from_address_api', $api );
+
+	if ( $api == 'google' || $api == 'auto' ) {
+		$_gps = geodir_google_get_gps_from_address( $address, $wp_error );
+	} elseif ( $api == 'osm' ) {
+		$_gps = geodir_osm_get_gps_from_address( $address, $wp_error );
+	} else {
+		$_gps = apply_filters( 'geodir_gps_from_address_custom_api_gps', array(), $api );
+	}
+
+	$gps = array();
+
+	if ( is_array( $_gps ) && ! empty( $_gps['latitude'] ) && ! empty( $_gps['longitude'] ) ) {
+		$gps['latitude'] = $_gps['latitude'];
+		$gps['longitude'] = $_gps['longitude'];
+	} else {
+		if ( $wp_error ) {
+			if ( is_wp_error( $_gps ) ) {
+				return $_gps;
+			} else {
+				return new WP_Error( 'geodir-gps-from-address', esc_attr__( 'Fail to retrieve GPS data from a address using API.', 'geodirectory' ) );
+			}
+		} else {
+			return NULL;
+		}
+	}
+
+	return apply_filters( 'geodir_get_gps_from_address', $gps, $address, $api );
+}
+
+/**
  * Get GPS info for the address using Google Geocode API.
  *
  * @since 2.0.0.66
