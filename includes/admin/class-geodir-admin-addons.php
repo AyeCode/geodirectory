@@ -518,7 +518,6 @@ class GeoDir_Admin_Addons {
 				'slug'   => 'ninja-forms',
 				'name'   => 'Ninja Forms',
 				'desc'   => __('Setup forms such as contact or booking forms for your listings.','geodirectory'),
-				'thumbnail' => "https://ps.w.org/ninja-forms/assets/banner-772x250.png"
 			),
 			'userswp' => array(
 				'url'   => 'https://wordpress.org/plugins/userswp/',

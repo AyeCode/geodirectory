@@ -912,8 +912,11 @@ function geodir_get_cpt_page_id( $page, $post_type = '' ) {
  * @return string       Updated embed markup
  */
 function geodir_responsive_embeds($html, $url, $attr) {
-//	echo $url;
-//	print_r($attr);exit;
-	return $html !== '' ? '<div class="geodir-embed-container">' . $html . '</div>' : '';
+
+	if ( false !== strpos( $url, "://www.youtube.com") || false !== strpos( $url, "://youtube.com") || false !== strpos( $url, "://youtu.be" ) ) {
+		$html = '<div class="geodir-embed-container">' . $html . '</div>';
+	}
+
+	return $html;
 }
 add_filter('embed_oembed_html', 'geodir_responsive_embeds', 10, 3);

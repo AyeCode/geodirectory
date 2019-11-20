@@ -143,7 +143,7 @@ as v2 evolves. It's a pretty awesome WordPress directory plugin.","userswp"); ?>
 									<?php endif;
 
 									if(isset($addon->info->link) && substr( $addon->info->link, 0, 21 ) === "https://wordpress.org"){
-										echo '<a href="'.admin_url('/plugin-install.php?gd_wizard_recommend=true&amp;tab=plugin-information&amp;plugin='.$addon->info->slug).')" data-lity="">';
+										echo '<a href="'.admin_url('/plugin-install.php?gd_wizard_recommend=true&amp;tab=plugin-information&amp;plugin='.$addon->info->slug).'" data-lity="">';
 										echo '<span class="gd-product-info">'.__('More info','geodirectory').'</span>';
 										echo '</a>';
 									}elseif(isset($addon->info->link) && substr( $addon->info->link, 0, 26 ) === "https://wpgeodirectory.com"){
