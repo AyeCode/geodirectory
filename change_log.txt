@@ -1,3 +1,6 @@
+= 2.1.0.0 =
+* AyeCode UI starting to be added to GeoDirectory - STARTED
+
 = 2.0.0.70 =
 * REST API allow search posts by GPS, IP and near address - ADDED
 * GD Search Themer Layout overwrites the WordPress search page - FIXED
