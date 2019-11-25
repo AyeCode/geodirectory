@@ -174,7 +174,7 @@ class GeoDir_SEO {
 
 		if($id && isset($wp_query->post->ID) && geodir_is_geodir_page_id($id)){
 			$query_object_id = $wp_query->post->ID;
-		}else{
+		} elseif( !is_null($wp_query) ) {
 			$query_object_id = get_queried_object_id();
 		}
 
@@ -677,7 +677,7 @@ class GeoDir_SEO {
 
 		if ( ! empty( $wp_query->post ) && isset( $wp_query->post->ID ) && geodir_is_geodir_page_id( $page_id ) ) {
 			$query_object_id = $wp_query->post->ID;
-		}else{
+		} elseif( !is_null($wp_query) ) {
 			$query_object_id = get_queried_object_id();
 		}
 
