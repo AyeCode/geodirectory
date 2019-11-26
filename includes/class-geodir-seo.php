@@ -171,7 +171,7 @@ class GeoDir_SEO {
 	public static function output_title($title = '', $id = 0){
 		global $wp_query;
 		// in some themes the object id is missing so we fix it
-
+		$query_object_id = '';
 		if($id && isset($wp_query->post->ID) && geodir_is_geodir_page_id($id)){
 			$query_object_id = $wp_query->post->ID;
 		} elseif( !is_null($wp_query) ) {
@@ -674,7 +674,7 @@ class GeoDir_SEO {
 	 */
 	public static function page_link( $link, $page_id, $sample ) {
 		global $wp_query;
-
+		$query_object_id = '';
 		if ( ! empty( $wp_query->post ) && isset( $wp_query->post->ID ) && geodir_is_geodir_page_id( $page_id ) ) {
 			$query_object_id = $wp_query->post->ID;
 		} elseif( !is_null($wp_query) ) {
