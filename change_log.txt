@@ -1,3 +1,8 @@
+= 2.0.0.71 =
+* REST API rating stars & images upload not working - ADDED
+* Elementor archive title element not rendering correct title on GD pages - FIXED
+* Not able to setup GD search page with recent Divi page builder - FIXED
+
 = 2.0.0.70 =
 * REST API allow search posts by GPS, IP and near address - ADDED
 * GD Search Themer Layout overwrites the WordPress search page - FIXED

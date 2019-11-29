@@ -83,7 +83,7 @@ class GeoDir_Post_Data {
 	 */
 	public static function dynamically_add_post_meta( $metadata, $object_id, $meta_key, $single ) {
 
-		if ( strpos( $meta_key, 'geodir_' ) === 0 ) { //strpos is faster and since we have to do it with every query we do the fast one first and the slower onw only if we ahve to
+		if ( strpos( $meta_key, 'geodir_' ) === 0 ) { //strpos is faster and since we have to do it with every query we do the fast one first and the slower now only if we have to
 			$meta_key = substr( $meta_key, 7 );
 			//use $wpdb to get the value
 			global $post, $gd_post;
@@ -436,7 +436,7 @@ class GeoDir_Post_Data {
 						$gd_post_value = ! empty( $gd_post_value ) ? implode( ',', $gd_post_value ) : '';
 					}
 					if ( ! empty( $gd_post_value ) ) {
-						$gd_post_value = stripslashes_deep( $gd_post_value ); // stripslahses
+						$gd_post_value = stripslashes_deep( $gd_post_value ); // stripslashes
 					}
 					
 					$postarr[ $cf->htmlvar_name ] = $gd_post_value;
@@ -1381,6 +1381,7 @@ class GeoDir_Post_Data {
 		     && $post_data['user_login']
 		     && $post_data['user_email']
 		) {
+			$prev_post_author = isset( $post_data['post_author'] ) ? $post_data['post_author'] : 0;
 			$user_name = preg_replace( '/\s+/', '', sanitize_user( $post_data['user_login'], true ) );
 			$user_email = sanitize_email( $post_data['user_email'] );
 
@@ -1411,7 +1412,7 @@ class GeoDir_Post_Data {
 					} elseif ( $user_id ) {
 						$post_data['post_author'] = $user_id;
 						update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
-						do_action( 'register_new_user', $user_id ); // fire the new ser registration action so the standard notifications are sent.
+						do_action( 'register_new_user', $user_id ); // fire the new set registration action so the standard notifications are sent.
 					} else {
 						$error = new WP_Error( 'geodir_register_new_user', __( 'Something wrong! Fail to register a new user.', 'geodirectory' ) );
 					}
@@ -1421,6 +1422,17 @@ class GeoDir_Post_Data {
 			// Set error
 			if ( ! empty( $error ) ) {
 				$post_data['geodir_auto_save_post_error'] = $error;
+			} else {
+				/**
+				 * Fires when user id assigned to post data for guest user.
+				 *
+				 * @sinc 2.0.0.71
+				 *
+				 * @param int $post_data['post_author'] The post author.
+				 * @param array $post_data The post data.
+				 * @param int $prev_post_author The previous post author.
+				 */
+				do_action( 'geodir_assign_logged_out_post_author', $post_data['post_author'], $post_data, $prev_post_author );
 			}
 		}
 
