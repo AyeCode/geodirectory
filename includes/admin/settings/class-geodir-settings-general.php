@@ -163,7 +163,20 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'default'  => '1',
 				),
 
-
+				// @todo to be move to own design section
+				array(
+					'id' => 'design_style',
+					'name' => __('Default Design Style', 'geodirectory'),
+					'desc' => __('The default design style to use.', 'geodirectory'),
+					'type' => 'select',
+					'options' => array(
+						'bootstrap' =>  __('Bootstrap', 'geodirectory'),
+						'' =>  __('Legacy (non-bootstrap)', 'geodirectory'),
+					),
+					'class' => 'uwp-select',
+					'desc_tip' => true,
+					'default' => 'bootstrap',
+				),
 
 
 				array( 'type' => 'sectionend', 'id' => 'developer_options' ),

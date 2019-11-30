@@ -26,7 +26,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
             'base_id'       => 'gd_loop', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Loop','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-loop-container', // widget class
+                'classname'   => 'geodir-loop-container bsui', // widget class
                 'description' => esc_html__('Shows the current posts from the main WP query according to the URL.  This is only used on the `GD Archive template` page.  It loops through each post and outputs the `GD Archive Item` template.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),
@@ -89,7 +89,10 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                     $wp_query->posts = $gd_temp_wp_query;
                 }
 
-                geodir_get_template_part('content', 'archive-listing');
+                $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
+                $template = $design_style ? $design_style."/" : "";
+
+                geodir_get_template_part($template.'content', 'archive-listing');
 
                 // set loop as done @todo this needs testing
                 global $wp_query;

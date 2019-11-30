@@ -50,7 +50,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             'base_id'       => 'gd_listings', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Listings','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-listings', // widget class
+                'classname'   => 'geodir-listings bsui', // widget class
                 'description' => esc_html__('Shows the GD listings filtered by your choices.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
@@ -350,7 +350,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'list_order' => '',
                   'post_limit' => '5',
                   'post_ids' => '',
-                  'layout' => 'gridview_onehalf',
+                  'layout' => '2',
                   'listing_width' => '',
                   'add_location_filter' => '1',
                   'character_count' => '20',
@@ -464,7 +464,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          *
          * @param string $instance ['layout'] Widget layout type.
          */
-        $layout = !isset( $instance['layout'] )  ? 'gridview_onehalf' : apply_filters( 'widget_layout', $instance['layout'] );
+        $layout = !isset( $instance['layout'] )  ? geodir_grid_view_class(0) : apply_filters( 'widget_layout', $instance['layout'] );
         /**
          * Filter widget's "add_location_filter" value.
          *
@@ -853,7 +853,15 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				self::get_pagination( 'top', $post_count, $post_number, $pageno );
 			}
 
-			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+
+            $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
+            $template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
+
+            echo geodir_get_template_html( $template, array(
+	            'widget_listings' => $widget_listings
+            ) );
+
+//			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
 
 			if ( ! empty( $widget_listings ) && ( $bottom_pagination || $top_pagination ) ) {
 				echo '<div class="geodir-ajax-listings-loader" style="display:none"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';

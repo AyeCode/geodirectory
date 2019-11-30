@@ -2246,3 +2246,15 @@ function geodir_format_hints($hints, $docs_url = '',$video_url = '',$feedback_id
 
 	return $text;
 }
+
+/**
+ * Get the design style for the site.
+ *
+ * This determines what template files are used.
+ *
+ * @since 2.1.0
+ * @return mixed
+ */
+function geodir_design_style(){
+	return geodir_get_option("design_style",'bootstrap');
+}

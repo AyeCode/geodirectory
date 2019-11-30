@@ -569,42 +569,48 @@ class GeoDir_Frontend_Scripts {
 	public static function load_scripts() {
 		global $post;
 
+		$design_style = geodir_design_style();
+
 		// register scripts/styles
 		self::register_scripts();
 		self::register_styles();
 
-		// global enqueues
-		// css
-		self::enqueue_style( 'select2' );
-		self::enqueue_style( 'geodir-core' );
-		// js
-		self::enqueue_script( 'select2' );
-		self::enqueue_script( 'geodir-select2' );
-		self::enqueue_script( 'geodir' );
-		self::enqueue_script( 'geodir_lity' );
+		if($design_style){
 
 
-		//rtl
-		if(is_rtl()){
-			self::enqueue_style( 'geodir-rtl' );
+			// global enqueues
+			// css
+			self::enqueue_style( 'select2' );
+			self::enqueue_style( 'geodir-core' );
+			// js
+			self::enqueue_script( 'select2' );
+			self::enqueue_script( 'geodir-select2' );
+			self::enqueue_script( 'geodir' );
+			self::enqueue_script( 'geodir_lity' );
+
+
+			//rtl
+			if(is_rtl()){
+				self::enqueue_style( 'geodir-rtl' );
+			}
+
+
+			// add-listing
+			if(geodir_is_page('add-listing')){
+				self::enqueue_script( 'geodir-plupload' );
+				self::enqueue_script( 'geodir-add-listing' );
+				self::enqueue_script( 'geodir-jquery-ui-timepicker' );
+
+				wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
+
+			}
+
+			// details page
+			if(geodir_is_page('single')){
+				//self::enqueue_script( 'jquery-flexslider' ); // moved to widget
+			}
+
 		}
-
-
-		// add-listing
-		if(geodir_is_page('add-listing')){
-			self::enqueue_script( 'geodir-plupload' );
-			self::enqueue_script( 'geodir-add-listing' );
-			self::enqueue_script( 'geodir-jquery-ui-timepicker' );
-
-			wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
-
-		}
-
-		// details page
-		if(geodir_is_page('single')){
-			//self::enqueue_script( 'jquery-flexslider' ); // moved to widget
-		}
-
 
 		// Maps
 		$geodir_map_name = GeoDir_Maps::active_map();
