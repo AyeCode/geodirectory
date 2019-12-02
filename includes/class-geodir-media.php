@@ -708,40 +708,70 @@ class GeoDir_Media {
 	 *
 	 * @return bool|false|int
 	 */
-	public static function delete_attachment($id, $post_id = '', $attachment = ''){
+	public static function delete_attachment( $id, $post_id = '', $attachment = '' ) {
 		global $wpdb;
-		if(empty($attachment)){
-			$attachment = $wpdb->get_row($wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE id = %d AND post_id = %d", $id, $post_id));
+
+		if ( empty( $attachment ) ) {
+			$attachment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE id = %d AND post_id = %d", $id, $post_id ) );
 		}
 
 		// check we have an attachment
-		if(!$attachment){return false;}
+		if ( empty( $attachment ) ) {
+			return false;
+		}
 
 		// unlink the image
-		if(isset($attachment->file) && $attachment->file){
-			$wp_upload_dir = wp_upload_dir();
-			$file_path = $wp_upload_dir['basedir'] . $attachment->file;
-			@wp_delete_file( $file_path ); // delete main image
+		if ( isset( $attachment->file ) && ! empty( $attachment->file ) ) {
+			/**
+			 * Filters whether a post attachment file deletion should take place.
+			 *
+			 * @since 2.0.0.71
+			 *
+			 * @param bool $delete Whether to go forward with deletion.
+			 * @param int $id The attachment id.
+			 * @param int $post_id Post ID.
+			 * @param object $attachment Post attachment.
+			 */
+			$check = apply_filters( 'geodir_pre_delete_attachment_file', null, $id, $post_id, $attachment );
 
-			if(!empty($attachment->metadata)){
-				$metadata = maybe_unserialize($attachment->metadata);
-				// delete other sizes
-				if(!empty($metadata['sizes'])){
-					$img_url_basename = wp_basename($file_path);
-					foreach($metadata['sizes'] as $size){
-						if(!empty($size['file'])){
-							$file_path = str_replace($img_url_basename, wp_basename($size['file']), $wp_upload_dir['basedir'] . $attachment->file);
-							@wp_delete_file( $file_path ); // delete image size
+			if ( null === $check ) {
+				$wp_upload_dir = wp_upload_dir();
+				$file_path = $wp_upload_dir['basedir'] . $attachment->file;
+				@wp_delete_file( $file_path ); // delete main image
+
+				if ( ! empty( $attachment->metadata ) ) {
+					$metadata = maybe_unserialize( $attachment->metadata );
+					// delete other sizes
+					if ( ! empty( $metadata['sizes'] ) ) {
+						$img_url_basename = wp_basename( $file_path );
+
+						foreach ( $metadata['sizes'] as $size ) {
+							if ( ! empty( $size['file'] ) ) {
+								$file_path = str_replace( $img_url_basename, wp_basename( $size['file'] ), $wp_upload_dir['basedir'] . $attachment->file );
+								@wp_delete_file( $file_path ); // delete image size
+							}
 						}
 					}
 				}
 			}
-
 		}
 
 		// remove from DB
-		$result = $wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE id = %d AND post_id = %d", $id, $post_id));
-		return $result;
+		/**
+		 * Filters whether a post attachment deletion from DB should take place.
+		 *
+		 * @since 2.0.0.71
+		 *
+		 * @param bool $delete Whether to go forward with deletion.
+		 * @param int $id The attachment id.
+		 * @param int $post_id Post ID.
+		 * @param object $attachment Post attachment.
+		 */
+		$check = apply_filters( 'geodir_pre_delete_attachment_record', null, $id, $post_id, $attachment );
+		if ( null === $check ) {
+			return $wpdb->query( $wpdb->prepare( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE id = %d AND post_id = %d", $id, $post_id ) );
+		}
+		return false;
 	}
 
 	/**
