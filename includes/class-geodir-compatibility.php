@@ -361,13 +361,21 @@ class GeoDir_Compatibility {
 	/**
 	 * Stop the GD loop setup if elementor is overriding it.
 	 *
+	 * @global int $gd_skip_the_content
+	 *
 	 * @param $bypass
 	 *
 	 * @return bool
 	 */
 	public static function elementor_loop_bypass( $bypass ) {
+		global $gd_skip_the_content;
+
 		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && GeoDir_Elementor::is_template_override() ) {
 			$bypass = true;
+		}
+
+		if ( ! $bypass && $gd_skip_the_content ) {
+			$bypass = true; // Prevent looping on some themes/plugins.
 		}
 
 		return $bypass;
@@ -535,7 +543,7 @@ class GeoDir_Compatibility {
 					$metadata = get_post_meta( $template_page_id, $meta_key );
 					if ( $single && is_array( $metadata ) && empty( $metadata ) ) {
 						$metadata = '';
-					}						
+					}
 				}
 				return $metadata;
 			}
@@ -730,11 +738,14 @@ class GeoDir_Compatibility {
 	/**
 	 * Stop the GD loop setup if beaver builder themer is overiding it.
 	 *
+	 * @global int $gd_skip_the_content
+	 *
 	 * @param $bypass
 	 *
 	 * @return bool
 	 */
 	public static function beaver_builder_loop_bypass( $bypass ) {
+		global $gd_skip_the_content;
 
 		if ( class_exists( 'FLThemeBuilderLayoutData' ) ) {
 			$ids = FLThemeBuilderLayoutData::get_current_page_content_ids();
@@ -742,6 +753,10 @@ class GeoDir_Compatibility {
 			if ( ! empty( $ids ) ) {
 				$bypass = true;
 			}
+		}
+
+		if ( ! $bypass && $gd_skip_the_content ) {
+			$bypass = true; // Prevent looping on some themes/plugins.
 		}
 
 		return $bypass;

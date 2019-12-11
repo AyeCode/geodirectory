@@ -5,6 +5,7 @@
 * JS variable conflict with Rank Math plugin - FIXED
 * Listing details shows wrong sidebar on Avada FusionBuilder - FIXED
 * Map marker popup not working for non-logged users when WPEngine cache is enabled - FIXED
+* Post content shortcode looping when Newspaper theme & tagDiv addons active - FIXED
 
 = 2.0.0.70 =
 * REST API allow search posts by GPS, IP and near address - ADDED
