@@ -1,4 +1,4 @@
-= 2.0.0.71 =
+= 2.0.0.72 =
 * REST API rating stars & images upload not working - ADDED
 * Elementor archive title element not rendering correct title on GD pages - FIXED
 * Not able to setup GD search page with recent Divi page builder - FIXED
