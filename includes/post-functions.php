@@ -981,12 +981,18 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				 */
 				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $args, $find_post );
 
+				$post_id = isset( $find_post->ID ) ? absint( $find_post->ID ) : '';
+				$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
+
 				$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
-				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
-				$post_id = isset($find_post->ID) ? absint($find_post->ID) : '';
+				if ( ! empty( $link ) ) {
+					$output .= "<a href='" . $link . "' $new_window $rel>";
+				}
 				// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
 				$output .= '<div data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . $icon . $badge . '</div>';
-				if(!empty($args['link'])){$output .= "</a>";}
+				if ( ! empty( $link ) ) {
+					$output .= "</a>";
+				}
 				$output .= '</div>';
 			}
 		}

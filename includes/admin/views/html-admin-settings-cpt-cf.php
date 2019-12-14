@@ -1,7 +1,7 @@
 <div id="container_general" class="clearfix">
 
 	<input type="hidden" name="gd_new_field_nonce" id="gd_new_field_nonce" value="<?php echo wp_create_nonce( 'gd_new_field_nonce' );?>"/>
-	<input type="hidden" name="listing_type" id="new_post_type" value="<?php echo self::$post_type;?>"/>
+	<input type="hidden" name="listing_type" id="gd_new_post_type" value="<?php echo self::$post_type;?>"/>
 	<input type="hidden" name="manage_field_type" class="manage_field_type" value="<?php echo self::$sub_tab; ?>" />
 
 	<div class="general-form-builder-frame">

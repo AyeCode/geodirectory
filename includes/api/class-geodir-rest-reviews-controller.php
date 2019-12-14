@@ -786,12 +786,17 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 		$review = $this->get_review( $comment->comment_ID );
 		if ( ! empty( $review ) ) {
 			$data['post_type'] = $review->post_type;
-			$data['rating'] = (float) $review->rating;
 			$data['country'] = $review->country;
 			$data['region'] = $review->region;
 			$data['city'] = $review->city;
 			$data['latitude'] = $review->latitude;
 			$data['longitude'] = $review->longitude;
+			$data['rating'] = array(
+				'id' => 'overall',
+				'label' => __( 'Overall', 'geodirectory' ),
+				'rating' => (float) $review->rating,
+				'html' => GeoDir_Comments::rating_html( (float) $review->rating )
+			);
 		}
 	
 		$schema = $this->get_item_schema();

@@ -111,6 +111,7 @@ class GeoDir_API {
 		// Init REST API routes.
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 100 );
 		add_action( 'rest_api_init', array( $this, 'register_rest_query' ), 101 );
+		add_action( 'rest_insert_comment', array( __CLASS__, 'rest_insert_comment' ), 1, 3 );
 
 		add_action( 'pre_get_posts', array( __CLASS__, 'rest_posts_request' ), 10, 2 );
 	}
@@ -474,4 +475,34 @@ class GeoDir_API {
 		return $limits;
 	}
 
+	/**
+	 * Save review is submitted via the REST API.
+	 *
+	 * @since 2.0.0.71
+	 *
+	 * @param WP_Comment      $comment  Inserted or updated comment object.
+	 * @param WP_REST_Request $request  Request object.
+	 * @param bool            $creating True when creating a comment, false
+	 *                                  when updating.
+	 */
+	public static function rest_insert_comment( $comment, $request, $creating ) {
+		global $user_ID;
+
+		if ( empty( $comment->comment_post_ID ) ) {
+			return;
+		}
+
+		if ( ! geodir_is_gd_post_type( get_post_type( (int) $comment->comment_post_ID ) ) ) {
+			return;
+		}
+
+		if ( isset( $request['rating'] ) ) {
+			$_REQUEST['geodir_overallrating'] = absint( $request['rating'] );
+
+			$backup_user_ID = $user_ID;
+			$user_ID = $comment->user_id;
+			GeoDir_Comments::save_rating( $comment->comment_ID );
+			$user_ID = $backup_user_ID;
+		}
+	}
 }

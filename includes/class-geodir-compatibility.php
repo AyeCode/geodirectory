@@ -361,13 +361,21 @@ class GeoDir_Compatibility {
 	/**
 	 * Stop the GD loop setup if elementor is overriding it.
 	 *
+	 * @global int $gd_skip_the_content
+	 *
 	 * @param $bypass
 	 *
 	 * @return bool
 	 */
 	public static function elementor_loop_bypass( $bypass ) {
+		global $gd_skip_the_content;
+
 		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && GeoDir_Elementor::is_template_override() ) {
 			$bypass = true;
+		}
+
+		if ( ! $bypass && $gd_skip_the_content ) {
+			$bypass = true; // Prevent looping on some themes/plugins.
 		}
 
 		return $bypass;
@@ -485,6 +493,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
 			 || ( class_exists( 'The7_Aoutoloader' ) && ( strpos( $meta_key, '_dt_' ) === 0 || empty( $meta_key ) ) ) // The7
 			 || ( function_exists( 'avia_get_option' ) && ( ! empty( $meta_key ) && in_array( $meta_key, $gen_keys ) ) ) // Enfold
+			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) ) // Avada + FusionBuilder
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -534,7 +543,7 @@ class GeoDir_Compatibility {
 					$metadata = get_post_meta( $template_page_id, $meta_key );
 					if ( $single && is_array( $metadata ) && empty( $metadata ) ) {
 						$metadata = '';
-					}						
+					}
 				}
 				return $metadata;
 			}
@@ -729,11 +738,14 @@ class GeoDir_Compatibility {
 	/**
 	 * Stop the GD loop setup if beaver builder themer is overiding it.
 	 *
+	 * @global int $gd_skip_the_content
+	 *
 	 * @param $bypass
 	 *
 	 * @return bool
 	 */
 	public static function beaver_builder_loop_bypass( $bypass ) {
+		global $gd_skip_the_content;
 
 		if ( class_exists( 'FLThemeBuilderLayoutData' ) ) {
 			$ids = FLThemeBuilderLayoutData::get_current_page_content_ids();
@@ -741,6 +753,10 @@ class GeoDir_Compatibility {
 			if ( ! empty( $ids ) ) {
 				$bypass = true;
 			}
+		}
+
+		if ( ! $bypass && $gd_skip_the_content ) {
+			$bypass = true; // Prevent looping on some themes/plugins.
 		}
 
 		return $bypass;

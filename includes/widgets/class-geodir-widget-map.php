@@ -1197,17 +1197,37 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	}
 
 	public static function wp_rest_nonce() {
-		// Fix Cookie nonce is invalid issue with WooCommerce PayPal Checkout Gateway plugin. See #482327.
-		$set_filter = false;
-		if ( class_exists( 'WooCommerce' ) && ! is_user_logged_in() && is_object( WC()->session ) && has_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) ) ) {
-			$set_filter = true;
-			remove_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) );
+		global $wpi_session;
+
+		$set_wc_filter = false;
+		$set_wpi_filter = false;
+
+		/**
+		  * When a user is logged out, prevent a unique nonce by using the customer/session ID on every refresh.
+		  * Fix nonce authentication issue on WPEngine cache with logged out users.
+		  */
+		if ( ! is_user_logged_in() ) {
+			// WooCommerce
+			if ( class_exists( 'WooCommerce' ) && is_object( WC()->session ) && has_filter( 'nonce_user_logged_out', array( WC()->session, 'nonce_user_logged_out' ) ) ) {
+				$set_wc_filter = remove_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) );
+			}
+
+			// Invoicing
+			if ( class_exists( 'WPInv_Plugin' ) && is_object( $wpi_session ) && has_filter( 'nonce_user_logged_out', array( $wpi_session, 'nonce_user_logged_out' ) ) ) {
+				$set_wpi_filter = remove_filter( 'nonce_user_logged_out', array( $wpi_session,  'nonce_user_logged_out' ) );
+			}
 		}
 
 		$nonce = wp_create_nonce( 'wp_rest' );
 
-		if ( $set_filter ) {
+		// Set WooCommerce filter back
+		if ( $set_wc_filter ) {
 			add_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) );
+		}
+
+		// Set Invoicing filter back
+		if ( $set_wpi_filter ) {
+			add_filter( 'nonce_user_logged_out', array( $wpi_session,  'nonce_user_logged_out' ) );
 		}
 
 		return $nonce;
