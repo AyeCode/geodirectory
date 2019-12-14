@@ -20,8 +20,9 @@ class AUI_Component_Button {
 	 */
 	public static function get($args = array()){
 		$defaults = array(
-			'type'       => 'a',
+			'type'       => 'a', // a, button, badge
 			'href'       => '#',
+			'new_window' => false,
 			'class'      => 'btn btn-primary',
 			'id'         => '',
 			'title'      => '',
@@ -33,6 +34,7 @@ class AUI_Component_Button {
 			'new_line_after' => true,
 			'no_wrap'    => true,
 			'onclick'    => '',
+			'style'  => '',
 		);
 
 		/**
@@ -45,7 +47,10 @@ class AUI_Component_Button {
 
 			// open/type
 			if($type=='a'){
-				$output .= '<a href="' . $args['href'] . '"';
+				$new_window = !empty($args['new_window']) ? ' target="_blank" ' : '';
+				$output .= '<a href="' . $args['href'] . '"'.$new_window;
+			}elseif($type=='badge'){
+				$output .= '<span ';
 			}else{
 				$output .= '<button type="' . $type . '" ';
 			}
@@ -73,7 +78,7 @@ class AUI_Component_Button {
 			// class
 			$class = !empty($args['class']) ? $args['class'] : '';
 			$output .= AUI_Component_Helper::class_attr($class);
-			
+
 			// data-attributes
 			$output .= AUI_Component_Helper::data_attributes($args);
 
@@ -83,6 +88,11 @@ class AUI_Component_Button {
 			// onclick, we don't escape this
 			if(!empty($args['onclick'])){
 				$output .= ' onclick="'.$args['onclick'].'" ';
+			}
+
+			// style, we don't escape this
+			if(!empty($args['style'])){
+				$output .= ' style="'.$args['style'].'" ';
 			}
 
 			// close opening tag
@@ -95,19 +105,21 @@ class AUI_Component_Button {
 				$output .= "<span class='hover-content'>".AUI_Component_Helper::icon($args['hover_icon'],$args['hover_content']).$args['hover_content']."</span>";
 				$hover_content = true;
 			}
-			
+
 			// content
 			if($hover_content){$output .= "<span class='hover-content-original'>";}
 			if(!empty($args['content']) || !empty($args['icon'])){
 				$output .= AUI_Component_Helper::icon($args['icon'],$args['content']).$args['content'];
 			}
 			if($hover_content){$output .= "</span>";}
-					
+
 
 
 			// close
 			if($type=='a'){
 				$output .= '</a>';
+			}elseif($type=='badge'){
+				$output .= '</span>';
 			}else{
 				$output .= '</button>';
 			}

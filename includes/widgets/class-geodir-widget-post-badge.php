@@ -16,8 +16,12 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 
 		$options = array(
 			'textdomain'     => GEODIRECTORY_TEXTDOMAIN,
-			'block-icon'     => 'location-alt',
-			'block-category' => 'common',
+			'block-icon'     => 'fas fa-certificate',
+			'block-wrap'    => '', // the element to wrap the block output in. , ie: div, span or empty for no wrap
+			'block-supports'=> array(
+				'customClassName'   => false
+			),
+			'block-category' => 'widgets',
 			'block-keywords' => "['badge','geodir','geodirectory']",
 			'class_name'     => __CLASS__,
 			'base_id'        => 'gd_post_badge',												// this us used as the widget id and the shortcode id.
@@ -85,7 +89,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'placeholder' => 'fas fa-award',
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","geodirectory")
 			),
 			'badge'  => array(
 				'type' => 'text',
@@ -94,7 +98,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => false
+				'advanced' => false,
 			),
 			'link'  => array(
 				'type' => 'text',
@@ -103,7 +107,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Click Action","geodirectory")
 			),
 			'new_window'  => array(
 				'title' => __('Open link in new window:', 'geodirectory'),
@@ -112,7 +116,61 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'desc_tip' => true,
 				'value'  => '1',
 				'default'  => 0,
-				'advanced' => true
+				'group'     => __("Click Action","geodirectory")
+			),
+			'popover_title'  => array(
+				'type' => 'text',
+				'title' => __('Popover title:', 'geodirectory'),
+				'desc' => __('Reveals some title text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'geodirectory'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Click Action","geodirectory")
+			),
+			'popover_text'  => array(
+				'type' => 'text',
+				'title' => __('Popover text:', 'geodirectory'),
+				'desc' => __('Reveals some text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'geodirectory'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Click Action","geodirectory")
+			),
+			'cta'  => array(
+				'type' => 'text',
+				'title' => __('Click through action:', 'geodirectory'),
+				'desc' => __('This will attempt to send a Google Analytics custom event when clicked. By default this will use the field key, you can add your own such as `phone sidebar` or enter zero `0` to disable tracking.', 'geodirectory'),
+				'placeholder' => 'phone',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Click Action","geodirectory")
+			),
+			'tooltip_text'  => array(
+				'type' => 'text',
+				'title' => __('Tooltip text:', 'geodirectory'),
+				'desc' => __('Reveals some text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%. (this can NOT be used with popover text)', 'geodirectory'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Hover Action","geodirectory")
+			),
+			'hover_content'  => array(
+				'type' => 'text',
+				'title' => __('Hover content:', 'geodirectory'),
+				'desc' => __('Change the button text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'geodirectory'),
+				'placeholder' => '',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Hover Action","geodirectory")
+			),
+			'hover_icon'  => array(
+				'type' => 'text',
+				'title' => __('Hover icon:', 'geodirectory'),
+				'desc' => __('Change the button icon on hover. You can show a font-awesome icon here by entering the icon class.', 'geodirectory'),
+				'placeholder' => 'fas fa-bacon',
+				'default' => '',
+				'desc_tip' => true,
+				'group'     => __("Hover Action","geodirectory")
 			),
 			'bg_color'  => array(
 				'type' => 'color',
@@ -121,7 +179,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'placeholder' => '',
 				'default' => '#0073aa',
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","geodirectory")
 			),
 			'txt_color'  => array(
 				'type' => 'color',
@@ -130,22 +188,24 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'placeholder' => '',
 				'desc_tip' => true,
 				'default'  => '#ffffff',
-				'advanced' => true
+				'group'     => __("Design","geodirectory")
 			),
 			'size'  => array(
 				'type' => 'select',
 				'title' => __('Badge size:', 'geodirectory'),
 				'desc' => __('Size of the badge.', 'geodirectory'),
 				'options' =>  array(
-					"small" => __('Small', 'geodirectory'),
-					 "" => __('Normal', 'geodirectory'),
-					"medium" => __('Medium', 'geodirectory'),
-					"large" => __('Large', 'geodirectory'),
-					"extra-large" => __('Extra Large', 'geodirectory'),
+					"" => __('h6', 'geodirectory'),
+					"h5" => __('h5', 'geodirectory'),
+					"h4" => __('h4', 'geodirectory'),
+					"h3" => __('h3', 'geodirectory'),
+					"h2" => __('h2', 'geodirectory'),
+					"h1" => __('h1', 'geodirectory'),
+
 				),
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","geodirectory")
 			),
 			'alignment'  => array(
 				'type' => 'select',
@@ -158,7 +218,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 					"right" => __('Right', 'geodirectory'),
 				),
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","geodirectory")
 			),
 			'list_hide'  => array(
 				'title' => __('Hide item on view:', 'geodirectory'),
@@ -172,7 +232,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 					"5" => __('Grid view 5', 'geodirectory'),
 				),
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","geodirectory")
 			),
 			'list_hide_secondary'  => array(
 				'title' => __('Hide secondary info on view', 'geodirectory'),
@@ -186,7 +246,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 					"5" => __('Grid view 5', 'geodirectory'),
 				),
 				'desc_tip' => true,
-				'advanced' => true
+				'group'     => __("Design","geodirectory")
 			),
 			'css_class'  => array(
 				'type' => 'text',
@@ -195,7 +255,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'placeholder' => '',
 				'default' => '',
 				'desc_tip' => true,
-				'advanced' => true,
+				'group'     => __("Design","geodirectory")
 			),
 		);
 
@@ -248,6 +308,34 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		if($args['list_hide_secondary']=='3'){$args['css_class'] .= " gd-lv-s-3 ";}
 		if($args['list_hide_secondary']=='4'){$args['css_class'] .= " gd-lv-s-4 ";}
 		if($args['list_hide_secondary']=='5'){$args['css_class'] .= " gd-lv-s-5 ";}
+
+		$design_style = geodir_design_style();
+		if(!empty($args['size'])){
+			switch ($args['size']) {
+				case 'small':
+					$args['size'] = $design_style ? '' : 'small';
+                    break;
+				case 'medium':
+					$args['size'] = $design_style ? 'h4' : 'medium';
+					break;
+				case 'large':
+					$args['size'] = $design_style ? 'h2' : 'large';
+					break;
+				case 'extra-large':
+					$args['size'] = $design_style ? 'h1' : 'extra-large';
+					break;
+				case 'h6': $args['size'] = 'h6';break;
+				case 'h5': $args['size'] = 'h5';break;
+				case 'h4': $args['size'] = 'h4';break;
+				case 'h3': $args['size'] = 'h3';break;
+				case 'h2': $args['size'] = 'h2';break;
+				case 'h1': $args['size'] = 'h1';break;
+				default:
+					$args['size'] = '';
+
+			}
+
+		}
 
 		$output .= geodir_get_post_badge( $post_id, $args );
 

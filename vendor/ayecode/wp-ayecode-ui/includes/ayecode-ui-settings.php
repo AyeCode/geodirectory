@@ -385,6 +385,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				 */
 				function aui_init_tooltips(){
 					jQuery('[data-toggle="tooltip"]').tooltip();
+					jQuery('[data-toggle="popover"]').popover();
+					jQuery('[data-toggle="popover-html"]').popover({
+						html: true
+					});
 				}
 
 				// run on window loaded
@@ -477,7 +481,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				$script = $this->inline_script();
 				wp_add_inline_script( 'bootstrap-dummy', $script  );
 			}
-			
+
 		}
 
 		/**
@@ -524,13 +528,14 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 		/**
 		 * Get a list of themes and their default JS settings.
-		 * 
+		 *
 		 * @return array
 		 */
 		public function theme_js_settings(){
 			return array(
 				'ayetheme' => 'popper',
 				'listimia' => 'required',
+				'avada'    => 'required',
 			);
 		}
 
@@ -546,7 +551,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			// maybe set defaults (if no settings set)
 			if(empty($db_settings)){
-				$active_theme = get_template(); // active parent theme.
+				$active_theme = strtolower( get_template() ); // active parent theme.
 				$theme_js_settings = self::theme_js_settings();
 				if(isset($theme_js_settings[$active_theme])){
 					$js_default = $theme_js_settings[$active_theme];
@@ -857,7 +862,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				'.badge-secondary' => array('b'),
 				'.alert-secondary' => array('b','o'),
 				'.btn-link.btn-secondary' => array('c'),
-				);
+			);
 
 			$important_selectors = array(
 				'.bg-secondary' => array('b','f'),

@@ -209,9 +209,6 @@ function geodir_no_listings_found() {
  *
  */
 function geodir_loop_paging($args = array()) {
-//	$design_style = geodir_design_style();
-//	$template = $design_style ? $design_style."/loop/pagination.php" : "loop/pagination.php";
-//	geodir_get_template( $template );
 
 global $wp_query;
 
@@ -310,84 +307,17 @@ if ( $wp_query->max_num_pages <= 1 ) {
 		$args['after_paging'] = $pagination_info;
 	}
 
-
-
 	$design_style = geodir_design_style();
 	$template = $design_style ? $design_style."/loop/pagination.php" : "loop/pagination.php";
 	geodir_get_template( $template, array(
 		'args' => $args
 	) );
-	
-	
 
 	if (function_exists('geodir_location_geo_home_link')) {
 		add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
 	}
-	
-
-	
-}
-
-
-function gd_get_bootstrap_pagination( $args = array() ) {
-	global $wp_query;
-
-	$total = !isset($args['total']) ? $wp_query->max_num_pages : absint($args['total']);
-	$navigation = '';
-
-	// Don't print empty markup if there's only one page.
-	if ( $total > 1 ) {
-
-		$args = wp_parse_args( $args, array(
-			'mid_size'           => 2,
-			'prev_text'          => '<i class="fas fa-chevron-left"></i>',
-			'next_text'          => '<i class="fas fa-chevron-right"></i>',
-			'screen_reader_text' => __( 'Posts navigation' ),
-			'before_page_number' => '',
-			'after_page_number'  => '',
-			'type' => 'array',
-			'total' => $total,
-		) );
-
-		// Set up paginated links.
-		$links = paginate_links( $args );
-
-		// make the output bootstrap ready
-		$links_html = "<ul class='pagination m-0 p-0'>";
-		if(!empty($links)){
-			foreach($links as $link){
-				$active = strpos($link, 'current') !== false ? 'active' : '';
-				$links_html .= "<li class='page-item $active'>";
-				$links_html .= str_replace("page-numbers","page-link",$link);
-				$links_html .= "</li>";
-			}
-		}
-		$links_html .= "</ul>";
-
-		if ( $links ) {
-			$navigation .= '<section class="px-0 py-2 w-100">';
-			$navigation .= _navigation_markup($links_html, 'aui-pagination', $args['screen_reader_text'] );
-			$navigation .= '</section>';
-		}
-
-		$navigation = str_replace( "screen-reader-text", "screen-reader-text sr-only", $navigation );
-		$navigation = str_replace( "nav-links", "aui-nav-links", $navigation );
-	}
-
-	if($navigation){
-		if(!empty($args['before_paging'])){
-			$navigation = $args['before_paging'].$navigation;
-		}
-
-		if(!empty($args['after_paging'])){
-			$navigation = $navigation.$args['after_paging'];
-		}
-	}
-
-	return $navigation;
 
 }
-
 
 /**
  * Display loop actions such as sort order and listing view type.

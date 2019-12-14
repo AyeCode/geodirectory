@@ -15,6 +15,8 @@ if ( $wp_query->max_num_pages <= 1 ) {
 	return;
 }
 
-echo gd_get_bootstrap_pagination($args);
-//echo AUI::pagination($args);
+/**
+ * Call AyeCode UI Pagination component.
+ */
+echo aui()->pagination($args);
 ?>

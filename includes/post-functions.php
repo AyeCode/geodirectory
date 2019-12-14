@@ -741,6 +741,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		return $output;
 	}
 
+	$design_style = geodir_design_style();
+
 	$defaults = array(
 		'key'       => '',
 		'condition' => '',
@@ -755,6 +757,12 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		'css_class' => '',
 		'onclick'   => '',
 		'icon_class'=> '',
+		'popover_title'=> '',
+		'popover_text'=> '',
+		'cta'=> '', // click through action
+		'tooltip_text'  => '',
+		'hover_content'  => '',
+		'hover_icon'  => '',
 		'extra_attributes'=> '' // 'data-save-list-id=123 data-other-post-id=321'
 	);
 	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
@@ -880,7 +888,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					// will be replace in condition check
 				}
 
-				//link url, replave vars
+				//link url, replace vars
 				if( !empty( $args['link'] ) && $args['link'] = str_replace("%%input%%",$match_value,$args['link']) ){
 					// will be replace in condition check
 				}
@@ -900,14 +908,29 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				if(!empty($badge)){
 					$badge = geodir_replace_variables($badge);
 				}
+				if(!empty($args['popover_title'])){
+					$args['popover_title'] = geodir_replace_variables($args['popover_title']);
+				}
+				if(!empty($args['popover_text'])){
+					$args['popover_text'] = geodir_replace_variables($args['popover_text']);
+				}
+				if(!empty($args['tooltip_text'])){
+					$args['tooltip_text'] = geodir_replace_variables($args['tooltip_text']);
+				}
+				if(!empty($args['hover_content'])){
+					$args['hover_content'] = geodir_replace_variables($args['hover_content']);
+				}
 
 				$class = '';
-				if ( ! empty( $args['size'] ) ) {
-					$class .= ' gd-badge-' . sanitize_title( $args['size'] );
+				if(!$design_style){
+					if ( ! empty( $args['size'] ) ) {
+						$class .= ' gd-badge-' . sanitize_title( $args['size'] );
+					}
+					if ( ! empty( $args['alignment'] ) ) {
+						$class .= ' gd-badge-align' . sanitize_title($args['alignment']);
+					}	
 				}
-				if ( ! empty( $args['alignment'] ) ) {
-					$class .= ' gd-badge-align' . sanitize_title($args['alignment']);
-				}
+				
 				if ( ! empty( $args['css_class'] ) ) {
 					$class .= ' ' . esc_attr($args['css_class']);
 				}
@@ -918,7 +941,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$new_window = ' target="_blank" ';
 				}
 
-				// check if its exteranl it should be no follow
+				// check if its external it should be no follow
 				$rel = '';
 				if(!empty($args['link'])){
 					$rel = strpos($args['link'], get_site_url()) !== false ? '' : 'rel="nofollow"';
@@ -981,13 +1004,103 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				 */
 				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $args, $find_post );
 
-				$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
-				if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
-				$post_id = isset($find_post->ID) ? absint($find_post->ID) : '';
-				// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
-				$output .= '<div data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . $icon . $badge . '</div>';
-				if(!empty($args['link'])){$output .= "</a>";}
-				$output .= '</div>';
+				
+				if($design_style){
+//					print_r( $args );
+					$btn_args = array(
+//						'class'     => 'btn btn-primary  btn-sm px-1 py-0 font-weight-bold gd-badgex',
+						'class'     => 'badge badge-primary font-weight-boldx align-middle gd-badge',
+						'content' => $badge,
+						'style' => 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';color:' . sanitize_hex_color( $args['txt_color'] ) . ';',
+						'data-badge'    => esc_attr($match_field),
+						'data-badge-condition'  => esc_attr($args['condition']),
+					);
+
+					// onclick
+					if(!empty($args['onclick'])){
+						$btn_args['onclick'] = esc_attr($args['onclick']);
+					}
+
+					// CTA
+					if( $args['cta'] != '0' ){
+						$action = $args['cta'] == '' ? esc_attr($args['key']) : esc_attr($args['cta']);
+						$cta = " if(typeof ga == 'function' && !jQuery(this).hasClass('gd-event-tracked')) { ga('send', 'event', {eventCategory: 'CTA',eventAction: '$action',transport: 'beacon' });jQuery(this).addClass('gd-event-tracked');} ";
+						if(!empty($btn_args['onclick'])){
+							$btn_args['onclick'] .= $cta;
+						}else{
+							$btn_args['onclick'] = $cta;
+						}
+					}
+
+					// popover / tooltip
+					$pop_link = false;
+					if(!empty($args['popover_title']) || !empty($args['popover_text'])){
+						$btn_args['type'] = "button";
+						$btn_args['data-toggle'] = "popover-html";
+						$btn_args['data-placement'] = "top";
+						$pop_link = true;
+						if(!empty($args['popover_title'])){
+							$btn_args['title'] = !empty($args['link']) && $args['link']!='#'  ? "<a href='".esc_url($args['link'])."' $new_window $rel>".$args['popover_title']."</a>" : $args['popover_title'];
+						}
+						if(!empty($args['popover_text'])){
+							$btn_args['data-content'] = !empty($args['link']) && $args['link']!='#'  ? "<a href='".esc_url($args['link'])."' $new_window $rel>".$args['popover_text']."</a>" : $args['popover_text'];
+						}
+					}elseif(!empty($args['tooltip_text'])){
+						$btn_args['data-toggle'] = "tooltip";
+						$btn_args['data-placement'] = "top";
+						$btn_args['title'] = esc_attr($args['tooltip_text']);
+					}
+
+					// hover content
+					if(!empty($args['hover_content'])){
+						$btn_args['hover_content'] = $args['hover_content'];
+					}
+					if(!empty($args['hover_icon'])){
+						$btn_args['hover_icon'] = $args['hover_icon'];
+					}
+
+					// style
+					$btn_args['style'] = '';
+					if(!empty($args['bg_color'])){
+						$btn_args['style'] .= 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';border-color:' . sanitize_hex_color( $args['bg_color'] ).';';
+					}
+					if(!empty($args['txt_color'])){
+						$btn_args['style'] .= 'color:' . sanitize_hex_color( $args['txt_color'] ) . ';';
+					}
+
+					if(!empty($args['link']) && $args['link']!='#' && !$pop_link){
+						$btn_args['href'] = $args['link'];
+					}
+
+					if(!empty($args['link']) && $new_window){
+						$btn_args['new_window'] = true;
+					}
+					if(!empty($args['icon_class'])) { $btn_args['icon'] = $args['icon_class'];}
+
+					$output = '<span class="bsui gd-badge-meta">';
+					if(!empty($args['size'])){$output .= '<span class="'.esc_attr($args['size']).'">';}
+					$output .= aui()->badge( $btn_args );
+					if(!empty($args['size'])){$output .= '</span>';}
+					$output .= '</span>';
+
+
+
+//					$output .= '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
+//					if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
+//					$post_id = isset($find_post->ID) ? absint($find_post->ID) : '';
+//					// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
+//					$output .= '<div data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . $icon . $badge . '</div>';
+//					if(!empty($args['link'])){$output .= "</a>";}
+//					$output .= '</div>';
+				}else{
+					$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
+					if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
+					$post_id = isset($find_post->ID) ? absint($find_post->ID) : '';
+					// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
+					$output .= '<div data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . $icon . $badge . '</div>';
+					if(!empty($args['link'])){$output .= "</a>";}
+					$output .= '</div>';
+				}
 			}
 		}
 	}

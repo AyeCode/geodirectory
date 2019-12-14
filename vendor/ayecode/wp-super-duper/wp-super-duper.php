@@ -1667,7 +1667,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							}
 
 							// block wrap element
-							if ( isset( $this->options['block-wrap'] ) ) { //@todo we should validate this?
+							if ( !empty( $this->options['block-wrap'] ) ) { //@todo we should validate this?
 								echo "block_wrap: {";
 								echo "	type: 'string',";
 								echo "  default: '" . esc_attr( $this->options['block-wrap'] ) . "',";
@@ -1763,11 +1763,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 							return [
 
-								el(wp.editor.BlockControls, {key: 'controls'},
+								el(wp.blockEditor.BlockControls, {key: 'controls'},
 
 									<?php if($show_alignment){?>
 									el(
-										wp.editor.AlignmentToolbar,
+										wp.blockEditor.AlignmentToolbar,
 										{
 											value: props.attributes.alignment,
 											onChange: function (alignment) {
@@ -1779,7 +1779,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 								),
 
-								el(wp.editor.InspectorControls, {key: 'inspector'},
+								el(wp.blockEditor.InspectorControls, {key: 'inspector'},
 
 									<?php
 
