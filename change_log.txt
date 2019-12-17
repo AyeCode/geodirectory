@@ -1,4 +1,4 @@
-= 2.0.0.71 =
+= 2.0.0.72 =
 * REST API rating stars & images upload not working - ADDED
 * Elementor archive title element not rendering correct title on GD pages - FIXED
 * Not able to setup GD search page with recent Divi page builder - FIXED
@@ -6,6 +6,7 @@
 * Listing details shows wrong sidebar on Avada FusionBuilder - FIXED
 * Map marker popup not working for non-logged users when WPEngine cache is enabled - FIXED
 * Post content shortcode looping when Newspaper theme & tagDiv addons active - FIXED
+* Ninja Forms bug can cause PHP warnings to show in API response which can break some maps functionality - TEMP FIX ADDED
 
 = 2.0.0.70 =
 * REST API allow search posts by GPS, IP and near address - ADDED

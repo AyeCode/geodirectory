@@ -53,6 +53,7 @@ class GeoDir_Compatibility {
 		Ninja Forms :: Add our own form tags.
 		######################################################*/
 		add_action( 'ninja_forms_loaded', array( __CLASS__, 'ninja_forms' ) );
+		add_action( 'init',array( __CLASS__, 'ninja_forms_api_fix' ),5);
 
 		/*######################################################
 		Primer (theme) :: Fix single page title.
@@ -163,6 +164,18 @@ class GeoDir_Compatibility {
 				add_filter( 'geodir_before_get_template_part',array( __CLASS__, 'avada_get_temp_globals' ), 10);
 				add_filter( 'geodir_after_get_template_part',array( __CLASS__, 'avada_set_temp_globals' ), 10);
 			}
+		}
+	}
+
+	/**
+	 * Fix Ninja Forms bug that creates PHP warnings in the REST API result if a array item is used.
+	 *
+	 * @todo remove once fixed in NF: https://wordpress.org/support/topic/breaks-any-rest-api-request-using-array-items/
+	 */
+	public static function ninja_forms_api_fix(){
+
+		if(function_exists('Ninja_Forms') && strpos($_SERVER[ 'REQUEST_URI' ], '/wp-json/') !== false){
+			remove_action('init',array(Ninja_Forms()->merge_tags[ 'other' ],'init'));
 		}
 	}
 
