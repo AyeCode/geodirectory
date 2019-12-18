@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.72\n"
+"Project-Id-Version: GeoDirectory 2.0.0.73\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-12-14 14:06+0000\n"
-"PO-Revision-Date: 2019-12-14 14:06+0000\n"
+"POT-Creation-Date: 2019-12-18 14:26+0530\n"
+"PO-Revision-Date: 2019-12-18 14:26+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: geodirectory.php:180
@@ -237,7 +237,6 @@ msgstr ""
 #: includes/admin/class-geodir-admin-install.php:315
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:514
 #: includes/api/class-geodir-rest-posts-controller.php:2248
-#: vendor/ayecode/wp-super-duper/map.php:69
 msgid "Map"
 msgstr ""
 
@@ -8671,6 +8670,49 @@ msgstr ""
 msgid "Username is required."
 msgstr ""
 
+#: includes/class-geodir-classifieds.php:36
+msgid "Classifieds/Real-Estate Sold Settings"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:38
+msgid ""
+"Add a sold functionality which would include the following listing statuses "
+"like sold, under offer, sale agreed etc."
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:43
+msgid "Enable \"Sold\" Feature?"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:44
+msgid ""
+"Tick to enable sold functionality for this post type. <span style=\"color:"
+"red;\">(WARNING: disabling sold feature for the post type will move all "
+"existing posts to draft.)</span>"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:59
+msgid "Enable \"Under Offer\" Feature?"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:60
+msgid ""
+"Tick to enable \"under offer\" functionality for this post type. <span style="
+"\"color:red;\">(WARNING: disabling \"under offer\" feature for the post type "
+"will move all existing posts to draft.)</span>"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:75
+msgid "Enable \"Sale Agreed\" Feature?"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:76
+msgid ""
+"Tick to enable \"sale agreed\" functionality for this post type. <span style="
+"\"color:red;\">(WARNING: disabling \"sale agreed\" feature for the post type "
+"will move all existing posts to draft.)</span>"
+msgstr ""
+
 #: includes/class-geodir-comments.php:517
 msgid "Pingback:"
 msgstr ""
@@ -9416,7 +9458,6 @@ msgid "Places"
 msgstr ""
 
 #: includes/class-geodir-post-types.php:126
-#: vendor/ayecode/wp-super-duper/map.php:84
 msgid "Place"
 msgstr ""
 
@@ -10350,7 +10391,6 @@ msgstr ""
 
 #: includes/custom-fields/input-functions.php:1258
 #: includes/widgets/class-geodir-widget-map.php:452
-#: vendor/ayecode/wp-super-duper/map.php:158
 msgid "Satellite Map"
 msgstr ""
 
@@ -11789,7 +11829,6 @@ msgid "Placeholder map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:37
-#: vendor/ayecode/wp-super-duper/hello-world.php:26
 msgid "Placeholder"
 msgstr ""
 
@@ -11837,8 +11876,6 @@ msgid "Distance unit"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:430
-#: vendor/ayecode/wp-super-duper/map.php:105
-#: vendor/ayecode/wp-super-duper/map.php:134
 msgid "Width:"
 msgstr ""
 
@@ -11850,8 +11887,6 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:439
-#: vendor/ayecode/wp-super-duper/map.php:119
-#: vendor/ayecode/wp-super-duper/map.php:144
 msgid "Height:"
 msgstr ""
 
@@ -11862,27 +11897,22 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:448
-#: vendor/ayecode/wp-super-duper/map.php:154
 msgid "Mapview:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:449
-#: vendor/ayecode/wp-super-duper/map.php:155
 msgid "This is the type of map view that will be used by default."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:451
-#: vendor/ayecode/wp-super-duper/map.php:157
 msgid "Road Map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:462
-#: vendor/ayecode/wp-super-duper/map.php:168
 msgid "Zoom level:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:463
-#: vendor/ayecode/wp-super-duper/map.php:169
 msgid "This is the zoom level of the map, `auto` is recommended."
 msgstr ""
 
@@ -12167,7 +12197,6 @@ msgid "This can be used to output many custom fields in one location."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-output-location.php:42
-#: vendor/ayecode/wp-super-duper/map.php:96
 msgid "Location:"
 msgstr ""
 
@@ -14840,92 +14869,6 @@ msgstr ""
 msgid ""
 "This will try to dequeue any other Font Awesome versions loaded by other "
 "sources if they are added with `font-awesome` or `fontawesome` in the name."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:36
-msgid "Hello World"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:41
-#: vendor/ayecode/wp-super-duper/map.php:74
-msgid ""
-"This is an example that will take a text parameter and output it after "
-"`Hello:`."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:47
-msgid "Text after hello:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:49
-msgid "This is the text that will appear after `Hello:`."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:119
-msgid "Another input:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:120
-msgid "This is an input added via filter."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:25
-msgid ""
-"A Google API key is required to use this block, we recommend installing our "
-"plugin which makes it easy and sets it globally, or you can set a key in the "
-"block settings sidebar: "
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:31
-msgid "API KEY for Google Maps"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:48
-msgid "Placeholderx"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:61
-msgid "Click here, Settings are in the block settings sidebar"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:79
-msgid "Map Type:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:80
-msgid "Select the map type to use."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:83
-msgid "Static Image"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:97
-msgid "Enter the location to show on the map, place, city, zip code or GPS."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:106
-msgid ""
-"This is the width of the map, for static maps you can only use px values."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:120
-msgid ""
-"This is the height of the map, for static maps you can only use px values."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:135
-#, php-format
-msgid "This is the width of the map, you can use % or px here."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:145
-#: vendor/ayecode/wp-super-duper/map.php:179
-msgid "This is the height of the map, you can use %, px or vh here."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:178
-msgid "Api Key:"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:251
