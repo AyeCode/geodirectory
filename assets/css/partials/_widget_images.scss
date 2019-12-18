@@ -183,6 +183,9 @@
 .geodir-category-list-view{
   .geodir-image-container {
     ul.geodir-images {
+      li.geodir-active-slide{
+        z-index: 1 !important;
+      }
       &.geodir-gallery{
         li {
             display: none;
@@ -192,7 +195,6 @@
           }
         }
       }
-
     }
   }
 }
