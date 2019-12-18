@@ -1208,12 +1208,12 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		  */
 		if ( ! is_user_logged_in() ) {
 			// WooCommerce
-			if ( class_exists( 'WooCommerce' ) && is_object( WC()->session ) && has_filter( 'nonce_user_logged_out', array( WC()->session, 'nonce_user_logged_out' ) ) ) {
+			if ( class_exists( 'WooCommerce' ) && is_object( WC()->session ) && ! WC()->session->has_session() && has_filter( 'nonce_user_logged_out', array( WC()->session, 'nonce_user_logged_out' ) ) ) {
 				$set_wc_filter = remove_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) );
 			}
 
 			// Invoicing
-			if ( class_exists( 'WPInv_Plugin' ) && is_object( $wpi_session ) && has_filter( 'nonce_user_logged_out', array( $wpi_session, 'nonce_user_logged_out' ) ) ) {
+			if ( class_exists( 'WPInv_Plugin' ) && is_object( $wpi_session ) && ! $wpi_session->has_session() && has_filter( 'nonce_user_logged_out', array( $wpi_session, 'nonce_user_logged_out' ) ) ) {
 				$set_wpi_filter = remove_filter( 'nonce_user_logged_out', array( $wpi_session,  'nonce_user_logged_out' ) );
 			}
 		}
