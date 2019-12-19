@@ -172,12 +172,31 @@ class GeoDir_Compatibility {
 	 *
 	 * @todo remove once fixed in NF: https://wordpress.org/support/topic/breaks-any-rest-api-request-using-array-items/
 	 */
-	public static function ninja_forms_api_fix(){
+	public static function ninja_forms_api_fix() {
+		global $wp_version;
 
-		if(function_exists('Ninja_Forms') && strpos($_SERVER[ 'REQUEST_URI' ], '/wp-json/') !== false){
-			remove_action('init',array(Ninja_Forms()->merge_tags[ 'other' ],'init'));
+		if ( function_exists( 'Ninja_Forms' ) && version_compare( $wp_version, '5.3.1', '>=' ) && version_compare( Ninja_Forms::VERSION, '3.4.22', '<=' ) ) {
+			remove_action( 'init', array( Ninja_Forms()->merge_tags[ 'other' ], 'init' ) );
+			add_action( 'init', array( __CLASS__, 'nf_mergetags_other_init' ) );
 		}
 	}
+
+	public static function nf_mergetags_other_init() {
+        if ( is_admin() ) {
+            if( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) return;
+            $url_query = parse_url( wp_get_referer(), PHP_URL_QUERY );
+            parse_str( $url_query, $variables );
+        } else {
+            $variables = $_GET;
+        }
+
+        if( ! is_array( $variables ) ) return;
+
+        foreach( $variables as $key => $value ){
+            $value = wp_kses_post_deep( $value );
+            Ninja_Forms()->merge_tags[ 'other' ]->set_merge_tags( $key, $value );
+        }
+    }
 
 	/**
 	 * Set temp globals before looping listings template so we can reset them to proper values after looping.

@@ -1124,7 +1124,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'fullscreenControl'        => false,
 			'maxZoom'                  => 21,
 			'token'                    => '68f48005e256696074e1da9bf9f67f06',
-			'_wpnonce'                 => self::wp_rest_nonce(),
+			'_wpnonce'                 => geodir_create_nonce( 'wp_rest' ),
 			'navigationControlOptions' => array(
 				'position' => 'TOP_LEFT',
 				'style'    => 'ZOOM_PAN'
@@ -1194,42 +1194,5 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			</div><!--END stick_trigger_container-->
 		</div><!--END geodir-map-wrap-->
 		<?php
-	}
-
-	public static function wp_rest_nonce() {
-		global $wpi_session;
-
-		$set_wc_filter = false;
-		$set_wpi_filter = false;
-
-		/**
-		  * When a user is logged out, prevent a unique nonce by using the customer/session ID on every refresh.
-		  * Fix nonce authentication issue on WPEngine cache with logged out users.
-		  */
-		if ( ! is_user_logged_in() ) {
-			// WooCommerce
-			if ( class_exists( 'WooCommerce' ) && is_object( WC()->session ) && ! WC()->session->has_session() && has_filter( 'nonce_user_logged_out', array( WC()->session, 'nonce_user_logged_out' ) ) ) {
-				$set_wc_filter = remove_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) );
-			}
-
-			// Invoicing
-			if ( class_exists( 'WPInv_Plugin' ) && is_object( $wpi_session ) && ! $wpi_session->has_session() && has_filter( 'nonce_user_logged_out', array( $wpi_session, 'nonce_user_logged_out' ) ) ) {
-				$set_wpi_filter = remove_filter( 'nonce_user_logged_out', array( $wpi_session,  'nonce_user_logged_out' ) );
-			}
-		}
-
-		$nonce = wp_create_nonce( 'wp_rest' );
-
-		// Set WooCommerce filter back
-		if ( $set_wc_filter ) {
-			add_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) );
-		}
-
-		// Set Invoicing filter back
-		if ( $set_wpi_filter ) {
-			add_filter( 'nonce_user_logged_out', array( $wpi_session,  'nonce_user_logged_out' ) );
-		}
-
-		return $nonce;
 	}
 }
