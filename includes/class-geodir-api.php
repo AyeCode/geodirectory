@@ -30,6 +30,11 @@ class GeoDir_API {
 		// Handle geodir-api endpoint requests.
 		add_action( 'parse_request', array( $this, 'handle_api_requests' ), 0 );
 
+		// Handle markers endpoint nonce.
+		add_action( 'geodir_create_nonce_before', array( __CLASS__, 'rest_nonce_set_hook' ), 10 );
+		add_action( 'geodir_create_nonce_after', array( __CLASS__, 'rest_nonce_hook_unset' ), 10, 2 );
+		add_filter( 'rest_authentication_errors', array( __CLASS__, 'rest_cookie_check_errors' ), 999, 1 );
+
 		// WP REST API.
 		$this->rest_api_init();
 	}
@@ -504,5 +509,60 @@ class GeoDir_API {
 			GeoDir_Comments::save_rating( $comment->comment_ID );
 			$user_ID = $backup_user_ID;
 		}
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.74
+	 *
+	 */
+	public static function rest_nonce_set_hook( $action ) {
+		global $geodir_rest_nonce_hook;
+
+		if ( $action == 'wp_rest' && ! is_user_logged_in() ) {
+			add_action( 'nonce_user_logged_out', array( __CLASS__, 'rest_nonce_user_logged_out' ), 9999, 2 );
+			$geodir_rest_nonce_hook = true;
+		}
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.74
+	 *
+	 */
+	public static function rest_nonce_hook_unset( $action, $nonce ) {
+		global $geodir_rest_nonce_hook;
+
+		if ( $geodir_rest_nonce_hook && ( $priority = has_action( 'nonce_user_logged_out', array( __CLASS__, 'rest_nonce_user_logged_out' ) ) ) ) {
+			remove_action( 'nonce_user_logged_out', array( __CLASS__, 'rest_nonce_user_logged_out' ), $priority, 2 );
+			$geodir_rest_nonce_hook = false;
+		}
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.74
+	 *
+	 */
+	public static function rest_nonce_user_logged_out( $uid, $action ) {
+		if ( $uid === 0 || $action != 'wp_rest' ) {
+			return $uid;
+		}
+
+		return geodir_nonce_token( $action );
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.74
+	 *
+	 */
+	public static function rest_cookie_check_errors( $errors ) {
+		if ( $errors !== true && ! empty( $_REQUEST['_wpnonce'] ) &&  ! empty( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], '/wp-json/geodir/' ) !== false && strpos( $_SERVER['REQUEST_URI'], '/markers/' ) !== false && is_wp_error( $errors ) && $errors->get_error_code() == 'rest_cookie_invalid_nonce' ) {
+			if ( ( ! is_user_logged_in() && geodir_create_nonce( 'wp_rest' ) == sanitize_text_field( $_REQUEST['_wpnonce'] ) ) || is_user_logged_in() ) {
+				return true;
+			}
+		}
+		return $errors;
 	}
 }

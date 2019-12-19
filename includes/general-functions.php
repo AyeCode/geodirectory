@@ -2280,3 +2280,26 @@ function geodir_format_hints($hints, $docs_url = '',$video_url = '',$feedback_id
 
 	return $text;
 }
+
+/**
+ * @since 2.0.0.74
+ */
+function geodir_create_nonce( $action = -1 ) {
+	do_action( 'geodir_create_nonce_before', $action );
+
+	$nonce = wp_create_nonce( $action );
+
+	do_action( 'geodir_create_nonce_after', $action, $nonce );
+
+	return apply_filters( 'geodir_create_nonce', $nonce, $action );
+}
+
+/**
+ * @since 2.0.0.74
+ */
+function geodir_nonce_token( $action = -1, $uid = 0 ) {
+	$token = wp_get_session_token();
+	$i = wp_nonce_tick();
+
+	return substr( wp_hash( $i . '|' . $action . '|' . $uid . '|' . $token, 'nonce' ), -12, 10 );
+}
