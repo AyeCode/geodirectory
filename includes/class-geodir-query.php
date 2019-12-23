@@ -975,7 +975,7 @@ class GeoDir_Query {
 				if ( $default_sort == '' && $sort_by == $default_sort ) {
 					$order_by_parts[] = "{$wpdb->posts}.post_date desc";
 				 }else {
-					$order_by_parts[] = self::custom_sort( $orderby, $sort_by, $table );
+					$order_by_parts[] = self::custom_sort( $orderby, $sort_by, $table, $post_type, $wp_query );
 				}
 				break;
 		}
@@ -1024,9 +1024,11 @@ class GeoDir_Query {
 	 * @param string $orderby The orderby query string.
 	 * @param string $sort_by Sortby query string.
 	 * @param string $table Listing table name.
+	 * @param string $post_type Post type.
+	 * @param object $wp_query WP_Query object.
 	 * @return string Modified orderby query.
 	 */
-	public static function  custom_sort( $orderby, $sort_by, $table ) {
+	public static function  custom_sort( $orderby, $sort_by, $table, $post_type = '', $wp_query = array() ) {
 		global $wpdb;
 
 		if ( $sort_by != '' && ( ! is_search() || ( isset( $_REQUEST['s'] ) && isset( $_REQUEST['snear'] ) && $_REQUEST['snear'] == '' && ( $_REQUEST['s'] == '' ||  $_REQUEST['s'] == ' ') ) ) ) {
@@ -1080,17 +1082,45 @@ class GeoDir_Query {
 						}
 						break;
 					default:
-						if ( self::column_exist( $table, $sort_by ) ) {
-							$orderby = $table . "." . $sort_by . " " . $order;
-						} else {
-							$orderby = "{$wpdb->posts}.post_date desc";
+						/**
+						 * Filters custom key sort.
+						 *
+						 * @since 2.0.0.74
+						 *
+						 * @param string $_orderby Custom key default orderby query string. Default NULL.
+						 * @param string $sort_by Sortby query string.
+						 * @param string $order Sortby order.
+						 * @param string $orderby The orderby query string.
+						 * @param string $table Listing table name.
+						 * @param string $post_type Post type.
+						 * @param object $wp_query WP_Query object.
+						 */
+						$orderby = apply_filters( 'geodir_custom_key_orderby', '', $sort_by, $order, $orderby, $table, $post_type, $wp_query );
+
+						if ( empty( $orderby ) ) {
+							if ( self::column_exist( $table, $sort_by ) ) {
+								$orderby = $table . "." . $sort_by . " " . $order;
+							} else {
+								$orderby = "{$wpdb->posts}.post_date desc";
+							}
 						}
 						break;
 				}
 			}
 		}
 
-		return $orderby;
+		/**
+		 * Filters custom orderby.
+		 *
+		 * @since 2.0.0.74
+		 *
+		 * @param string $orderby The orderby query string.
+		 * @param string $sort_by Sortby query string.
+		 * @param string $table Listing table name.
+		 * @param string $post_type Post type.
+		 * @param object $wp_query WP_Query object.
+		 */
+		return apply_filters( 'geodir_orderby_custom_sort', $orderby, $sort_by, $table, $post_type, $wp_query );
 	}
 
 	/**
