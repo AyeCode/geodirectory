@@ -829,6 +829,7 @@ function geodir_widget_listings_get_order( $deprecated = '') {
 	$sort_by = ! empty( $query_args['order_by'] ) ? $query_args['order_by'] : '';
 
 	$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
+	$orderby = GeoDir_Query::sort_by_children( $orderby, $sort_by, $post_type );
 
 	return $orderby;
 }
