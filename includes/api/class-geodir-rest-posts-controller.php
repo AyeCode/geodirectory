@@ -2169,7 +2169,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             $args['title']          = $title;
             $args['description']    = !empty( $description ) ? $description : $title;
             $args['required']       = (bool)$required;
-            $args['default']        = $default;
+            if ( $name == 'package_id' ) {
+                $default = (int) $package_id > 0 ? (int) $package_id : (int) geodir_get_post_package_id( array(), $this->post_type );
+            }
+            if ( (bool)$required || $default !== '' ) {
+                $args['default']    = $default;
+            }
             
             $continue = false;
             

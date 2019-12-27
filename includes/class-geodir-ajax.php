@@ -145,45 +145,44 @@ class GeoDir_AJAX {
 		status_header( 200 );
 	}
 
-    /**
-     * Manual map
-     *
-     * @since 2.0.0
-     */
-	function manual_map(){
-		$prefix = isset($_POST['trigger']) ? esc_attr($_POST['trigger']): 'geodir_manual_location_';
-//		$prefix = 'geodir_manual_location_';
-		echo "<style>
-		.lity-show #".$prefix."set_address_button,
-		.lity-show .TopLeft,
-		.lity-show .TopRight,
-		.lity-show .BottomRight,
-		.lity-show .BottomLeft{
-		display: none;
-		}
-		
-		.lity-show .geodir_map_container{
-		margin-top: 0 !important;
-		}
-		
-		</style>";
+	/**
+	 * Manual map
+	 *
+	 * @since 2.0.0
+	 */
+	public static function manual_map() {
+		global $geodirectory, $mapzoom;
 
-		// try and center the map as close to the user as possible.
-		$ip = $_SERVER['REMOTE_ADDR'];
-		if($ip){
-			global $mapzoom;
-			$addr_details = geodir_geo_by_ip();
-			$mylat = $addr_details['latitude'];
-			$mylon = $addr_details['longitude'];
-			if($mylat){$lat = $mylat; $lng = $mylon; $mapzoom = 8;}// pass to the map as the starting position
+		$prefix = isset( $_POST['trigger'] ) ? esc_attr( $_POST['trigger'] ) : 'geodir_manual_location_';
+
+		$map_title = __( "Select Your Location", 'geodirectory' );
+		$location = $geodirectory->location->get_default_location();
+		$country = isset( $location->country ) ? $location->country : '';
+		$region = isset( $location->region ) ? $location->region : '';
+		$city = isset( $location->city ) ? $location->city : '';
+		$lat = isset( $location->latitude ) ? $location->latitude : '';
+		$lng = isset( $location->longitude ) ? $location->longitude : '';
+		$mapzoom = 8;
+
+		// Try and center the map as close to the user as possible.
+		if ( $ip = geodir_get_ip() ) {
+			$geo = geodir_geo_by_ip( $ip );
+
+			if ( ! empty( $geo ) && ! empty( $geo['latitude'] ) && ! empty( $geo['longitude'] ) ) {
+				$lat = $geo['latitude'];
+				$lng = $geo['longitude'];
+			}
 		}
 
-		add_filter('geodir_add_listing_map_restrict','__return_false');
-		include_once(GEODIRECTORY_PLUGIN_DIR . 'templates/map.php');
+		add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
+
+		echo "<style>.lity-show #" . $prefix . "set_address_button,.lity-show .TopLeft,.lity-show .TopRight,.lity-show .BottomRight,.lity-show .BottomLeft{display:none}.lity-show .geodir_map_container{margin-top:0 !important}</style>";
+
+		include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
 		?>
-		<input type="hidden" id="<?php echo $prefix.'latitude';?>">
-		<input type="hidden" id="<?php echo $prefix.'longitude';?>">
-		<button style="float: right;margin: 10px 0 0 0;" onclick="if(jQuery('#<?php echo $prefix.'latitude';?>').val()==''){alert('<?php _e('Please drag the marker or the map to set the position.','geodirectory');?>');}else{jQuery(window).triggerHandler('<?php echo $prefix;?>', [jQuery('#<?php echo $prefix.'latitude';?>').val(), jQuery('#<?php echo $prefix.'longitude';?>').val()]);}"><?php _e('Set my location','geodirectory');?></button>
+		<input type="hidden" id="<?php echo $prefix . 'latitude'; ?>">
+		<input type="hidden" id="<?php echo $prefix . 'longitude'; ?>">
+		<button style="float: right;margin: 10px 0 0 0;" onclick="if(jQuery('#<?php echo $prefix . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo $prefix; ?>', [jQuery('#<?php echo $prefix . 'latitude'; ?>').val(), jQuery('#<?php echo $prefix . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
 		<?php
 		wp_die();
 	}
