@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.70\n"
+"Project-Id-Version: GeoDirectory 2.0.0.74\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-20 11:32+0000\n"
-"PO-Revision-Date: 2019-11-20 11:32+0000\n"
+"POT-Creation-Date: 2019-12-18 14:26+0530\n"
+"PO-Revision-Date: 2019-12-19 18:50+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.2.1\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: geodirectory.php:180
@@ -53,7 +53,7 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:86
 #: includes/api/class-geodir-rest-posts-controller.php:86
-#: includes/api/class-geodir-rest-reviews-controller.php:1353
+#: includes/api/class-geodir-rest-reviews-controller.php:1369
 msgid "The password for the post if it is password protected."
 msgstr ""
 
@@ -81,14 +81,14 @@ msgstr ""
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:171
 #: includes/abstracts/abstract-geodir-rest-terms-controller.php:470
 #: includes/api/class-geodir-rest-posts-controller.php:1993
-#: includes/api/class-geodir-rest-reviews-controller.php:1262
+#: includes/api/class-geodir-rest-reviews-controller.php:1278
 msgid "Ensure result set excludes specific IDs."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:180
 #: includes/abstracts/abstract-geodir-rest-terms-controller.php:479
 #: includes/api/class-geodir-rest-posts-controller.php:1984
-#: includes/api/class-geodir-rest-reviews-controller.php:1271
+#: includes/api/class-geodir-rest-reviews-controller.php:1287
 msgid "Limit result set to specific IDs."
 msgstr ""
 
@@ -99,7 +99,7 @@ msgstr ""
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:196
 #: includes/abstracts/abstract-geodir-rest-terms-controller.php:489
 #: includes/api/class-geodir-rest-posts-controller.php:2002
-#: includes/api/class-geodir-rest-reviews-controller.php:1280
+#: includes/api/class-geodir-rest-reviews-controller.php:1296
 msgid "Offset the result set by a specific number of items."
 msgstr ""
 
@@ -107,14 +107,14 @@ msgstr ""
 #: includes/abstracts/abstract-geodir-rest-terms-controller.php:495
 #: includes/api/class-geodir-rest-fields-controller.php:729
 #: includes/api/class-geodir-rest-posts-controller.php:2030
-#: includes/api/class-geodir-rest-reviews-controller.php:1285
+#: includes/api/class-geodir-rest-reviews-controller.php:1301
 msgid "Order sort attribute ascending or descending."
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:208
 #: includes/api/class-geodir-rest-fields-controller.php:736
 #: includes/api/class-geodir-rest-posts-controller.php:2037
-#: includes/api/class-geodir-rest-reviews-controller.php:1295
+#: includes/api/class-geodir-rest-reviews-controller.php:1311
 msgid "Sort collection by object attribute."
 msgstr ""
 
@@ -165,8 +165,8 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:595
 #: includes/api/class-geodir-rest-posts-controller.php:382
-#: includes/api/class-geodir-rest-reviews-controller.php:324
-#: includes/api/class-geodir-rest-reviews-controller.php:685
+#: includes/api/class-geodir-rest-reviews-controller.php:326
+#: includes/api/class-geodir-rest-reviews-controller.php:687
 msgid "Invalid post ID."
 msgstr ""
 
@@ -237,7 +237,6 @@ msgstr ""
 #: includes/admin/class-geodir-admin-install.php:315
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:514
 #: includes/api/class-geodir-rest-posts-controller.php:2248
-#: vendor/ayecode/wp-super-duper/map.php:69
 msgid "Map"
 msgstr ""
 
@@ -309,7 +308,7 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:997
 #: includes/api/class-geodir-rest-posts-controller.php:2380
-#: includes/api/class-geodir-rest-reviews-controller.php:1126
+#: includes/api/class-geodir-rest-reviews-controller.php:1135
 msgid "Content for the object, as it exists in the database."
 msgstr ""
 
@@ -830,7 +829,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:914
 #: includes/admin/class-geodir-admin-dummy-data.php:922
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:739
-#: includes/general-functions.php:2242
+#: includes/general-functions.php:2276
 msgid "Video"
 msgstr ""
 
@@ -1759,7 +1758,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:1174
 #: includes/admin/views/html-notice-v2-update.php:183
-#: includes/general-functions.php:2241
+#: includes/general-functions.php:2275
 msgid "Documentation"
 msgstr ""
 
@@ -3005,7 +3004,7 @@ msgstr ""
 #: includes/admin/dummy-data/property_sale.php:504
 #: includes/admin/dummy-data/property_sale.php:512
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:363
-#: includes/general-functions.php:2146 language.php:53
+#: includes/general-functions.php:2180 language.php:53
 msgid "Time"
 msgstr ""
 
@@ -7305,7 +7304,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:93
 #: includes/api/class-geodir-rest-posts-controller.php:1546
 #: includes/api/class-geodir-rest-reviews-controller.php:68
-#: includes/api/class-geodir-rest-reviews-controller.php:1068
+#: includes/api/class-geodir-rest-reviews-controller.php:1077
 msgid "Unique identifier for the object."
 msgstr ""
 
@@ -7746,12 +7745,12 @@ msgid "The ID for the author of the object."
 msgstr ""
 
 #: includes/api/class-geodir-rest-posts-controller.php:1733
-#: includes/api/class-geodir-rest-reviews-controller.php:1139
+#: includes/api/class-geodir-rest-reviews-controller.php:1148
 msgid "The date the object was published, in the site's timezone."
 msgstr ""
 
 #: includes/api/class-geodir-rest-posts-controller.php:1740
-#: includes/api/class-geodir-rest-reviews-controller.php:1145
+#: includes/api/class-geodir-rest-reviews-controller.php:1154
 msgid "The date the object was published, as GMT."
 msgstr ""
 
@@ -7768,7 +7767,7 @@ msgid "The ID of the featured media for the object."
 msgstr ""
 
 #: includes/api/class-geodir-rest-posts-controller.php:1821
-#: includes/api/class-geodir-rest-reviews-controller.php:1151
+#: includes/api/class-geodir-rest-reviews-controller.php:1160
 msgid "URL to the object."
 msgstr ""
 
@@ -7797,7 +7796,7 @@ msgid "A password to protect access to the content and excerpt."
 msgstr ""
 
 #: includes/api/class-geodir-rest-posts-controller.php:1872
-#: includes/api/class-geodir-rest-reviews-controller.php:1158
+#: includes/api/class-geodir-rest-reviews-controller.php:1167
 msgid "The ID for the parent of the object."
 msgstr ""
 
@@ -7847,8 +7846,8 @@ msgid ""
 msgstr ""
 
 #: includes/api/class-geodir-rest-reviews-controller.php:109
-#: includes/api/class-geodir-rest-reviews-controller.php:356
-#: includes/api/class-geodir-rest-reviews-controller.php:459
+#: includes/api/class-geodir-rest-reviews-controller.php:358
+#: includes/api/class-geodir-rest-reviews-controller.php:461
 msgid "Sorry, you are not allowed to read the post for this comment."
 msgstr ""
 
@@ -7857,7 +7856,7 @@ msgid "Sorry, you are not allowed to read comments without a post."
 msgstr ""
 
 #: includes/api/class-geodir-rest-reviews-controller.php:117
-#: includes/api/class-geodir-rest-reviews-controller.php:346
+#: includes/api/class-geodir-rest-reviews-controller.php:348
 msgid "Sorry, you are not allowed to edit comments."
 msgstr ""
 
@@ -7866,186 +7865,194 @@ msgstr ""
 msgid "Query parameter not permitted: %s"
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:310
+#: includes/api/class-geodir-rest-reviews-controller.php:312
 msgid "Invalid comment ID."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:352
+#: includes/api/class-geodir-rest-reviews-controller.php:354
 msgid "Sorry, you are not allowed to read this comment."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:393
-#: includes/api/class-geodir-rest-reviews-controller.php:410
+#: includes/api/class-geodir-rest-reviews-controller.php:395
+#: includes/api/class-geodir-rest-reviews-controller.php:412
 msgid "Sorry, you must be logged in to comment."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:418
-#: includes/api/class-geodir-rest-reviews-controller.php:427
-#: includes/api/class-geodir-rest-reviews-controller.php:436
+#: includes/api/class-geodir-rest-reviews-controller.php:420
+#: includes/api/class-geodir-rest-reviews-controller.php:429
+#: includes/api/class-geodir-rest-reviews-controller.php:438
 #, php-format
 msgid "Sorry, you are not allowed to edit '%s' for comments."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:442
-#: includes/api/class-geodir-rest-reviews-controller.php:447
+#: includes/api/class-geodir-rest-reviews-controller.php:444
+#: includes/api/class-geodir-rest-reviews-controller.php:449
 msgid "Sorry, you are not allowed to create this comment without a post."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:451
-#: includes/api/class-geodir-rest-reviews-controller.php:455
+#: includes/api/class-geodir-rest-reviews-controller.php:453
+#: includes/api/class-geodir-rest-reviews-controller.php:457
 msgid "Sorry, you are not allowed to create a comment on this post."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:463
+#: includes/api/class-geodir-rest-reviews-controller.php:465
 msgid "Sorry, comments are closed for this item."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:479
+#: includes/api/class-geodir-rest-reviews-controller.php:481
 msgid "Cannot create existing comment."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:484
+#: includes/api/class-geodir-rest-reviews-controller.php:486
 msgid "Cannot create a comment with that type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:499
-#: includes/api/class-geodir-rest-reviews-controller.php:702
+#: includes/api/class-geodir-rest-reviews-controller.php:501
+#: includes/api/class-geodir-rest-reviews-controller.php:704
 msgid "Invalid comment content."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:525
+#: includes/api/class-geodir-rest-reviews-controller.php:527
 msgid "Creating a comment requires valid author name and email values."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:544
-#: includes/api/class-geodir-rest-reviews-controller.php:710
+#: includes/api/class-geodir-rest-reviews-controller.php:546
+#: includes/api/class-geodir-rest-reviews-controller.php:712
 msgid "Comment field exceeds maximum length allowed."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:584
+#: includes/api/class-geodir-rest-reviews-controller.php:586
 msgid "Creating comment failed."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:650
+#: includes/api/class-geodir-rest-reviews-controller.php:652
 msgid "Sorry, you are not allowed to edit this comment."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:673
+#: includes/api/class-geodir-rest-reviews-controller.php:675
 msgid "Sorry, you are not allowed to change the comment type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:694
+#: includes/api/class-geodir-rest-reviews-controller.php:696
 msgid "Updating comment status failed."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:716
+#: includes/api/class-geodir-rest-reviews-controller.php:718
 msgid "Updating comment failed."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:997
+#: includes/api/class-geodir-rest-reviews-controller.php:796
+msgid "Overall"
+msgstr ""
+
+#: includes/api/class-geodir-rest-reviews-controller.php:1006
 msgid "Invalid comment author ID."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1074
+#: includes/api/class-geodir-rest-reviews-controller.php:1083
 msgid "The ID of the user object, if author was a user."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1079
+#: includes/api/class-geodir-rest-reviews-controller.php:1088
 msgid "Email address for the object author."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1089
+#: includes/api/class-geodir-rest-reviews-controller.php:1098
 msgid "IP address for the object author."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1095
+#: includes/api/class-geodir-rest-reviews-controller.php:1104
 msgid "Display name for the object author."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1103
+#: includes/api/class-geodir-rest-reviews-controller.php:1112
 msgid "URL for the object author."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1109
+#: includes/api/class-geodir-rest-reviews-controller.php:1118
 msgid "User agent for the object author."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1117
+#: includes/api/class-geodir-rest-reviews-controller.php:1126
 msgid "The content for the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1131
+#: includes/api/class-geodir-rest-reviews-controller.php:1140
 msgid "HTML content for the object, transformed for display."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1164
+#: includes/api/class-geodir-rest-reviews-controller.php:1173
 msgid "The ID of the associated post object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1170
+#: includes/api/class-geodir-rest-reviews-controller.php:1179
 msgid "State of the object."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1178
+#: includes/api/class-geodir-rest-reviews-controller.php:1187
 msgid "Type of Comment for the object."
 msgstr ""
 
 #: includes/api/class-geodir-rest-reviews-controller.php:1193
+msgid "Overall main rating stars."
+msgstr ""
+
+#: includes/api/class-geodir-rest-reviews-controller.php:1207
 #, php-format
 msgid "Avatar URL with image size of %d pixels."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1201
+#: includes/api/class-geodir-rest-reviews-controller.php:1215
 msgid "Avatar URLs for the object author."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1227
+#: includes/api/class-geodir-rest-reviews-controller.php:1243
 msgid ""
 "Limit response to comments published after a given ISO8601 compliant date."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1233
+#: includes/api/class-geodir-rest-reviews-controller.php:1249
 msgid ""
 "Limit result set to comments assigned to specific user IDs. Requires "
 "authorization."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1241
+#: includes/api/class-geodir-rest-reviews-controller.php:1257
 msgid ""
 "Ensure result set excludes comments assigned to specific user IDs. Requires "
 "authorization."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1250
+#: includes/api/class-geodir-rest-reviews-controller.php:1266
 msgid ""
 "Limit result set to that from a specific author email. Requires "
 "authorization."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1256
+#: includes/api/class-geodir-rest-reviews-controller.php:1272
 msgid ""
 "Limit response to comments published before a given ISO8601 compliant date."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1311
+#: includes/api/class-geodir-rest-reviews-controller.php:1327
 msgid "Limit result set to comments of specific parent IDs."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1320
+#: includes/api/class-geodir-rest-reviews-controller.php:1336
 msgid "Ensure result set excludes specific parent IDs."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1329
+#: includes/api/class-geodir-rest-reviews-controller.php:1345
 msgid "Limit result set to comments assigned to specific post IDs."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1338
+#: includes/api/class-geodir-rest-reviews-controller.php:1354
 msgid ""
 "Limit result set to comments assigned a specific status. Requires "
 "authorization."
 msgstr ""
 
-#: includes/api/class-geodir-rest-reviews-controller.php:1346
+#: includes/api/class-geodir-rest-reviews-controller.php:1362
 msgid ""
 "Limit result set to comments assigned a specific type. Requires "
 "authorization."
@@ -8646,7 +8653,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:989
+#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:1019
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -8661,6 +8668,49 @@ msgstr ""
 
 #: includes/class-geodir-auth.php:421
 msgid "Username is required."
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:36
+msgid "Classifieds/Real-Estate Sold Settings"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:38
+msgid ""
+"Add a sold functionality which would include the following listing statuses "
+"like sold, under offer, sale agreed etc."
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:43
+msgid "Enable \"Sold\" Feature?"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:44
+msgid ""
+"Tick to enable sold functionality for this post type. <span style=\"color:"
+"red;\">(WARNING: disabling sold feature for the post type will move all "
+"existing posts to draft.)</span>"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:59
+msgid "Enable \"Under Offer\" Feature?"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:60
+msgid ""
+"Tick to enable \"under offer\" functionality for this post type. <span style="
+"\"color:red;\">(WARNING: disabling \"under offer\" feature for the post type "
+"will move all existing posts to draft.)</span>"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:75
+msgid "Enable \"Sale Agreed\" Feature?"
+msgstr ""
+
+#: includes/class-geodir-classifieds.php:76
+msgid ""
+"Tick to enable \"sale agreed\" functionality for this post type. <span style="
+"\"color:red;\">(WARNING: disabling \"sale agreed\" feature for the post type "
+"will move all existing posts to draft.)</span>"
 msgstr ""
 
 #: includes/class-geodir-comments.php:517
@@ -8727,14 +8777,14 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:232
+#: includes/class-geodir-compatibility.php:245
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:352
+#: includes/class-geodir-compatibility.php:365
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -8742,57 +8792,57 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:820
+#: includes/class-geodir-compatibility.php:849
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:822
+#: includes/class-geodir-compatibility.php:851
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:827
+#: includes/class-geodir-compatibility.php:856
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:828
+#: includes/class-geodir-compatibility.php:857
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:988
+#: includes/class-geodir-compatibility.php:1017
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:990
+#: includes/class-geodir-compatibility.php:1019
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:995
+#: includes/class-geodir-compatibility.php:1024
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:996
+#: includes/class-geodir-compatibility.php:1025
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1901
+#: includes/class-geodir-compatibility.php:1930
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1912
+#: includes/class-geodir-compatibility.php:1941
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1919
+#: includes/class-geodir-compatibility.php:1948
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1920
+#: includes/class-geodir-compatibility.php:1949
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
@@ -9266,21 +9316,21 @@ msgstr ""
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:977
+#: includes/class-geodir-media.php:1007
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:989 includes/class-geodir-media.php:991
+#: includes/class-geodir-media.php:1019 includes/class-geodir-media.php:1021
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1012
+#: includes/class-geodir-media.php:1042
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:1030
+#: includes/class-geodir-media.php:1060
 msgid "Zero size file downloaded."
 msgstr ""
 
@@ -9361,45 +9411,45 @@ msgid "Delete revision failed."
 msgstr ""
 
 #: includes/class-geodir-post-data.php:1240
-#: includes/class-geodir-post-data.php:1454
+#: includes/class-geodir-post-data.php:1466
 msgid "You don not have the privileges to perform this action."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1389
+#: includes/class-geodir-post-data.php:1390
 msgid "User name must have atleast 3 characters."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1391
+#: includes/class-geodir-post-data.php:1392
 msgid "Invalid user email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1416
+#: includes/class-geodir-post-data.php:1417
 msgid "Something wrong! Fail to register a new user."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1546
+#: includes/class-geodir-post-data.php:1558
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1550
+#: includes/class-geodir-post-data.php:1562
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1559
+#: includes/class-geodir-post-data.php:1571
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1565
+#: includes/class-geodir-post-data.php:1577
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1652
+#: includes/class-geodir-post-data.php:1664
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -9408,7 +9458,6 @@ msgid "Places"
 msgstr ""
 
 #: includes/class-geodir-post-types.php:126
-#: vendor/ayecode/wp-super-duper/map.php:84
 msgid "Place"
 msgstr ""
 
@@ -10342,7 +10391,6 @@ msgstr ""
 
 #: includes/custom-fields/input-functions.php:1258
 #: includes/widgets/class-geodir-widget-map.php:452
-#: vendor/ayecode/wp-super-duper/map.php:158
 msgid "Satellite Map"
 msgstr ""
 
@@ -10445,12 +10493,12 @@ msgstr ""
 msgid "Some demo text."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:1633
+#: includes/custom-fields/output-functions.php:1642
 #: includes/widgets/class-geodir-widget-post-content.php:102
 msgid "Read more..."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2309
+#: includes/custom-fields/output-functions.php:2312
 msgid "Expand opening hours"
 msgstr ""
 
@@ -10458,7 +10506,7 @@ msgstr ""
 msgid "First"
 msgstr ""
 
-#: includes/general-functions.php:232 includes/general-functions.php:2149
+#: includes/general-functions.php:232 includes/general-functions.php:2183
 msgid "Second"
 msgstr ""
 
@@ -10478,113 +10526,113 @@ msgstr ""
 msgid "Given image size is not valid"
 msgstr ""
 
-#: includes/general-functions.php:1844
+#: includes/general-functions.php:1878
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: includes/general-functions.php:2145
+#: includes/general-functions.php:2179
 msgid "Choose Time"
 msgstr ""
 
-#: includes/general-functions.php:2147
+#: includes/general-functions.php:2181
 msgid "Hour"
 msgstr ""
 
-#: includes/general-functions.php:2148
+#: includes/general-functions.php:2182
 msgid "Minute"
 msgstr ""
 
-#: includes/general-functions.php:2150
+#: includes/general-functions.php:2184
 msgid "Millisecond"
 msgstr ""
 
-#: includes/general-functions.php:2151
+#: includes/general-functions.php:2185
 msgid "Microsecond"
 msgstr ""
 
-#: includes/general-functions.php:2152
+#: includes/general-functions.php:2186
 msgid "Time Zone"
 msgstr ""
 
-#: includes/general-functions.php:2153
+#: includes/general-functions.php:2187
 msgid "Now"
 msgstr ""
 
-#: includes/general-functions.php:2154
+#: includes/general-functions.php:2188
 msgid "Done"
 msgstr ""
 
-#: includes/general-functions.php:2155 includes/helper-functions.php:615
+#: includes/general-functions.php:2189 includes/helper-functions.php:615
 msgid "AM"
 msgstr ""
 
-#: includes/general-functions.php:2156 includes/helper-functions.php:616
+#: includes/general-functions.php:2190 includes/helper-functions.php:616
 msgid "PM"
 msgstr ""
 
-#: includes/general-functions.php:2184
+#: includes/general-functions.php:2218
 msgid "View: Grid 1"
 msgstr ""
 
-#: includes/general-functions.php:2184
+#: includes/general-functions.php:2218
 msgid "Grid View (One Column)"
 msgstr ""
 
-#: includes/general-functions.php:2185
+#: includes/general-functions.php:2219
 msgid "View: Grid 2"
 msgstr ""
 
-#: includes/general-functions.php:2185
+#: includes/general-functions.php:2219
 #: includes/widgets/class-geodir-widget-recently-viewed.php:71
 msgid "Grid View (Two Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2186
+#: includes/general-functions.php:2220
 msgid "View: Grid 3"
 msgstr ""
 
-#: includes/general-functions.php:2186
+#: includes/general-functions.php:2220
 #: includes/widgets/class-geodir-widget-recently-viewed.php:72
 msgid "Grid View (Three Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2187
+#: includes/general-functions.php:2221
 msgid "View: Grid 4"
 msgstr ""
 
-#: includes/general-functions.php:2187
+#: includes/general-functions.php:2221
 #: includes/widgets/class-geodir-widget-recently-viewed.php:73
 msgid "Grid View (Four Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2188
+#: includes/general-functions.php:2222
 msgid "View: Grid 5"
 msgstr ""
 
-#: includes/general-functions.php:2188
+#: includes/general-functions.php:2222
 #: includes/widgets/class-geodir-widget-recently-viewed.php:74
 msgid "Grid View (Five Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2189 includes/template-functions.php:746
+#: includes/general-functions.php:2223 includes/template-functions.php:746
 msgid "View: List"
 msgstr ""
 
-#: includes/general-functions.php:2189
+#: includes/general-functions.php:2223
 #: includes/widgets/class-geodir-widget-recently-viewed.php:75
 msgid "List view"
 msgstr ""
 
-#: includes/general-functions.php:2240
+#: includes/general-functions.php:2274
 msgid "Disable hints"
 msgstr ""
 
-#: includes/general-functions.php:2243
+#: includes/general-functions.php:2277
 msgid "Feedback"
 msgstr ""
 
-#: includes/general-functions.php:2244
+#: includes/general-functions.php:2278
 msgid "Admin Hints:"
 msgstr ""
 
@@ -11781,7 +11829,6 @@ msgid "Placeholder map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:37
-#: vendor/ayecode/wp-super-duper/hello-world.php:26
 msgid "Placeholder"
 msgstr ""
 
@@ -11829,8 +11876,6 @@ msgid "Distance unit"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:430
-#: vendor/ayecode/wp-super-duper/map.php:105
-#: vendor/ayecode/wp-super-duper/map.php:134
 msgid "Width:"
 msgstr ""
 
@@ -11842,8 +11887,6 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:439
-#: vendor/ayecode/wp-super-duper/map.php:119
-#: vendor/ayecode/wp-super-duper/map.php:144
 msgid "Height:"
 msgstr ""
 
@@ -11854,27 +11897,22 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:448
-#: vendor/ayecode/wp-super-duper/map.php:154
 msgid "Mapview:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:449
-#: vendor/ayecode/wp-super-duper/map.php:155
 msgid "This is the type of map view that will be used by default."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:451
-#: vendor/ayecode/wp-super-duper/map.php:157
 msgid "Road Map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:462
-#: vendor/ayecode/wp-super-duper/map.php:168
 msgid "Zoom level:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:463
-#: vendor/ayecode/wp-super-duper/map.php:169
 msgid "This is the zoom level of the map, `auto` is recommended."
 msgstr ""
 
@@ -12159,7 +12197,6 @@ msgid "This can be used to output many custom fields in one location."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-output-location.php:42
-#: vendor/ayecode/wp-super-duper/map.php:96
 msgid "Location:"
 msgstr ""
 
@@ -14832,92 +14869,6 @@ msgstr ""
 msgid ""
 "This will try to dequeue any other Font Awesome versions loaded by other "
 "sources if they are added with `font-awesome` or `fontawesome` in the name."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:36
-msgid "Hello World"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:41
-#: vendor/ayecode/wp-super-duper/map.php:74
-msgid ""
-"This is an example that will take a text parameter and output it after "
-"`Hello:`."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:47
-msgid "Text after hello:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:49
-msgid "This is the text that will appear after `Hello:`."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:119
-msgid "Another input:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:120
-msgid "This is an input added via filter."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:25
-msgid ""
-"A Google API key is required to use this block, we recommend installing our "
-"plugin which makes it easy and sets it globally, or you can set a key in the "
-"block settings sidebar: "
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:31
-msgid "API KEY for Google Maps"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:48
-msgid "Placeholderx"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:61
-msgid "Click here, Settings are in the block settings sidebar"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:79
-msgid "Map Type:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:80
-msgid "Select the map type to use."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:83
-msgid "Static Image"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:97
-msgid "Enter the location to show on the map, place, city, zip code or GPS."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:106
-msgid ""
-"This is the width of the map, for static maps you can only use px values."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:120
-msgid ""
-"This is the height of the map, for static maps you can only use px values."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:135
-#, php-format
-msgid "This is the width of the map, you can use % or px here."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:145
-#: vendor/ayecode/wp-super-duper/map.php:179
-msgid "This is the height of the map, you can use %, px or vh here."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:178
-msgid "Api Key:"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:251

@@ -53,6 +53,7 @@ class GeoDir_Compatibility {
 		Ninja Forms :: Add our own form tags.
 		######################################################*/
 		add_action( 'ninja_forms_loaded', array( __CLASS__, 'ninja_forms' ) );
+		add_action( 'init',array( __CLASS__, 'ninja_forms_api_fix' ),5);
 
 		/*######################################################
 		Primer (theme) :: Fix single page title.
@@ -165,6 +166,37 @@ class GeoDir_Compatibility {
 			}
 		}
 	}
+
+	/**
+	 * Fix Ninja Forms bug that creates PHP warnings in the REST API result if a array item is used.
+	 *
+	 * @todo remove once fixed in NF: https://wordpress.org/support/topic/breaks-any-rest-api-request-using-array-items/
+	 */
+	public static function ninja_forms_api_fix() {
+		global $wp_version;
+
+		if ( function_exists( 'Ninja_Forms' ) && version_compare( $wp_version, '5.3.1', '>=' ) && version_compare( Ninja_Forms::VERSION, '3.4.22', '<=' ) ) {
+			remove_action( 'init', array( Ninja_Forms()->merge_tags[ 'other' ], 'init' ) );
+			add_action( 'init', array( __CLASS__, 'nf_mergetags_other_init' ) );
+		}
+	}
+
+	public static function nf_mergetags_other_init() {
+        if ( is_admin() ) {
+            if( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) return;
+            $url_query = parse_url( wp_get_referer(), PHP_URL_QUERY );
+            parse_str( $url_query, $variables );
+        } else {
+            $variables = $_GET;
+        }
+
+        if( ! is_array( $variables ) ) return;
+
+        foreach( $variables as $key => $value ){
+            $value = wp_kses_post_deep( $value );
+            Ninja_Forms()->merge_tags[ 'other' ]->set_merge_tags( $key, $value );
+        }
+    }
 
 	/**
 	 * Set temp globals before looping listings template so we can reset them to proper values after looping.
@@ -361,13 +393,21 @@ class GeoDir_Compatibility {
 	/**
 	 * Stop the GD loop setup if elementor is overriding it.
 	 *
+	 * @global int $gd_skip_the_content
+	 *
 	 * @param $bypass
 	 *
 	 * @return bool
 	 */
 	public static function elementor_loop_bypass( $bypass ) {
+		global $gd_skip_the_content;
+
 		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && GeoDir_Elementor::is_template_override() ) {
 			$bypass = true;
+		}
+
+		if ( ! $bypass && $gd_skip_the_content ) {
+			$bypass = true; // Prevent looping on some themes/plugins.
 		}
 
 		return $bypass;
@@ -485,6 +525,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
 			 || ( class_exists( 'The7_Aoutoloader' ) && ( strpos( $meta_key, '_dt_' ) === 0 || empty( $meta_key ) ) ) // The7
 			 || ( function_exists( 'avia_get_option' ) && ( ! empty( $meta_key ) && in_array( $meta_key, $gen_keys ) ) ) // Enfold
+			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) ) // Avada + FusionBuilder
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -534,7 +575,7 @@ class GeoDir_Compatibility {
 					$metadata = get_post_meta( $template_page_id, $meta_key );
 					if ( $single && is_array( $metadata ) && empty( $metadata ) ) {
 						$metadata = '';
-					}						
+					}
 				}
 				return $metadata;
 			}
@@ -729,11 +770,14 @@ class GeoDir_Compatibility {
 	/**
 	 * Stop the GD loop setup if beaver builder themer is overiding it.
 	 *
+	 * @global int $gd_skip_the_content
+	 *
 	 * @param $bypass
 	 *
 	 * @return bool
 	 */
 	public static function beaver_builder_loop_bypass( $bypass ) {
+		global $gd_skip_the_content;
 
 		if ( class_exists( 'FLThemeBuilderLayoutData' ) ) {
 			$ids = FLThemeBuilderLayoutData::get_current_page_content_ids();
@@ -741,6 +785,10 @@ class GeoDir_Compatibility {
 			if ( ! empty( $ids ) ) {
 				$bypass = true;
 			}
+		}
+
+		if ( ! $bypass && $gd_skip_the_content ) {
+			$bypass = true; // Prevent looping on some themes/plugins.
 		}
 
 		return $bypass;

@@ -25,7 +25,7 @@ jQuery(document).ready(function () {
         var type = jQuery(this).data("field-type");
         var type_key = jQuery(this).data("field-type-key");
         var custom_type = jQuery(this).data("field-custom-type");
-        var post_type = jQuery('#new_post_type').val();
+        var post_type = jQuery('#gd_new_post_type').val();
         var id = 'new' + jQuery(".field_row_main ul.core li:last").index();
         var manage_field_type = jQuery(".manage_field_type").val();
         var gd_nonce = jQuery("#gd_new_field_nonce").val();
@@ -559,7 +559,7 @@ function gd_tabs_add_tab($this){
     }
 
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
-    var $post_type = jQuery("#new_post_type").val();
+    var $post_type = jQuery("#gd_new_post_type").val();
     var $tab_layout = jQuery($this).data('tab_layout');
     var $tab_type = jQuery($this).data('tab_type');
     var $tab_name = jQuery($this).data('tab_name');
@@ -631,7 +631,7 @@ function gd_tabs_delete_tab($this){
     var $li = jQuery($form).closest("li");
     console.log($form.serialize());
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
-    var $post_type = jQuery("#new_post_type").val();
+    var $post_type = jQuery("#gd_new_post_type").val();
     var $tab_id = jQuery($form).find("input[name=id]").val();
 
     if(!$tab_id){

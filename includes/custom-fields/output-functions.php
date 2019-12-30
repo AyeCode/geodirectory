@@ -1496,6 +1496,8 @@ add_filter( 'geodir_custom_field_output_file','geodir_cf_file', 10, 5 );
 /**
  * Get the html output for the custom field: textarea
  *
+ * @global int $gd_skip_the_content
+ *
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
  * @param array $cf The custom field array details.
@@ -1505,26 +1507,32 @@ add_filter( 'geodir_custom_field_output_file','geodir_cf_file', 10, 5 );
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
+function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
+    global $gd_skip_the_content;
 
-    // check we have the post value
-    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
-    else{ global $gd_post;}
-
-    if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
-        if(!$cf){return NULL;}
+    // Check we have the post value
+    if ( is_numeric( $p ) ) {
+        $gd_post = geodir_get_post_info( $p );
+    } else{
+        global $gd_post;
     }
 
-    // Block demo content
-    if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus metus, rutrum in nunc eu, vestibulum iaculis lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean tristique arcu et eros convallis elementum. Maecenas sit amet quam eu velit euismod viverra. Etiam magna augue, mollis id nisi sit amet, eleifend sagittis tortor. Suspendisse vitae dignissim arcu, ac elementum eros. Mauris hendrerit at massa ut pellentesque.';
+    if ( ! is_array( $cf ) && $cf != '' ){
+        $cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
+        if ( ! $cf ) {
+            return NULL;
+        }
     }
 
     $html_var = $cf['htmlvar_name'];
 
+    // Block demo content
+    if ( geodir_is_block_demo() ) {
+        $gd_post->{$html_var} = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus metus, rutrum in nunc eu, vestibulum iaculis lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean tristique arcu et eros convallis elementum. Maecenas sit amet quam eu velit euismod viverra. Etiam magna augue, mollis id nisi sit amet, eleifend sagittis tortor. Suspendisse vitae dignissim arcu, ac elementum eros. Mauris hendrerit at massa ut pellentesque.';
+    }
+
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_textarea_loc_{$location}")){
+    if ( has_filter( "geodir_custom_field_output_textarea_loc_{$location}" ) ) {
         /**
          * Filter the textarea html by location.
          *
@@ -1534,11 +1542,11 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
          * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_loc_{$location}",$html,$cf,$output);
+        $html = apply_filters( "geodir_custom_field_output_textarea_loc_{$location}", $html, $cf, $output );
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_textarea_var_{$html_var}")){
+    if ( has_filter( "geodir_custom_field_output_textarea_var_{$html_var}" ) ) {
         /**
          * Filter the textarea html by individual custom field.
          *
@@ -1549,11 +1557,11 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
          * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_var_{$html_var}",$html,$location,$cf,$output);
+        $html = apply_filters( "geodir_custom_field_output_textarea_var_{$html_var}", $html, $location, $cf, $output );
     }
 
     // Check if there is a custom field key specific filter.
-    if(has_filter("geodir_custom_field_output_textarea_key_{$cf['field_type_key']}")){
+    if ( has_filter( "geodir_custom_field_output_textarea_key_{$cf['field_type_key']}" ) ) {
         /**
          * Filter the textarea html by field type key.
          *
@@ -1564,84 +1572,81 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
          * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
+        $html = apply_filters( "geodir_custom_field_output_textarea_key_{$cf['field_type_key']}", $html, $location, $cf, $output );
     }
 
     // If not html then we run the standard output.
-    if(empty($html)){
-
-        if (!empty($gd_post->{$cf['htmlvar_name']})) {
-			$extra_fields = isset( $cf['extra_fields'] ) && $cf['extra_fields'] != '' ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
-            $field_icon = geodir_field_icon_proccess($cf);
-            $output = geodir_field_output_process($output);
-			$embed = ! empty( $extra_fields['embed'] ) || $cf['htmlvar_name'] == 'video' ? true : false;
-            if (strpos($field_icon, 'http') !== false) {
+    if ( empty( $html ) ) {
+        if ( ! empty( $gd_post->{$html_var} ) ) {
+            $extra_fields = ! empty( $cf['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
+            $field_icon = geodir_field_icon_proccess( $cf );
+            $output = geodir_field_output_process( $output );
+            $embed = ! empty( $extra_fields['embed'] ) || $html_var == 'video' ? true : false;
+            if ( strpos( $field_icon, 'http' ) !== false ) {
                 $field_icon_af = '';
-            } elseif ($field_icon == '') {
+            } elseif ( $field_icon == '' ) {
                 $field_icon_af = '';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
             }
 
-            $max_height = !empty($output['fade']) ? absint($output['fade'])."px" : '';
+            $max_height = ! empty( $output['fade'] ) ? absint( $output['fade'] )."px" : '';
             $max_height_style = $max_height ? " style='max-height:$max_height;overflow:hidden;' " : '';
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" '.$max_height_style.'>';
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $html_var . '" ' . $max_height_style . '>';
 
             if ( $output == '' || isset( $output['icon'] ) ) $html .= '<span class="geodir_post_meta_icon geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
-            if ( $output == '' || isset( $output['label'] ) ) $html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if ( $output == '' || isset( $output['label'] ) ) $html .= trim( $cf['frontend_title'] ) != '' ? '<span class="geodir_post_meta_title" >'.__( $cf['frontend_title'], 'geodirectory' ) . ': '.'</span>' : '';
             if ( $output == '' || isset( $output['icon'] ) ) $html .= '</span>';
 
             if ( $output == '' || isset( $output['value'] ) ) {
-				$value = stripslashes( $gd_post->{$cf['htmlvar_name']} );
+                $value = stripslashes( $gd_post->{$html_var} );
 
+                $gd_skip_the_content = true; // Set global variable to prevent looping on some themes/plugins.
                 $content = '';
-                if ( $cf['htmlvar_name'] != 'post_content' ) {
-					if ( isset( $output['strip'] ) ) {
+                if ( $html_var != 'post_content' ) {
+                    if ( isset( $output['strip'] ) ) {
                         $content =  wp_strip_all_tags( do_shortcode( wpautop( $value ) ) );
                     } else {
-						if ( $embed ) { // Embed media.
-							global $wp_embed;
-							$value = $wp_embed->autoembed( $value );
-						}
+                        if ( $embed ) {
+                            // Embed media.
+                            global $wp_embed;
+                            $value = $wp_embed->autoembed( $value );
+                        }
                         $content = do_shortcode( wpautop( $value ) );
                     }
-				} else { // Post content
-					if ( isset($output['strip'] ) ) {
+                } else {
+                    // Post content
+                    if ( isset( $output['strip'] ) ) {
                         $content = wp_strip_all_tags( apply_filters( 'the_content', $value ) );
                     } else {
                         $content = apply_filters( 'the_content', $value );
                     }
-				}
+                }
 
-                if($content){
+                $gd_skip_the_content = false;
 
-                    // set a limit if it exists
-                    if(!empty($output['limit'])){
-                        $limit = absint($output['limit']);
+                if ( $content ) {
+                    // Set a limit if it exists
+                    if ( ! empty( $output['limit'] ) ) {
+                        $limit = absint( $output['limit'] );
                         $content = wp_trim_words( $content, $limit, '' );
                     }
 
                     $html .= $content;
 
-//                    print_r( $output );echo '###';
-
                     // add read more
-                    if(isset( $output['more'] )){
-                        $post_id = isset($gd_post->id) ? absint($gd_post->id) : 0;
-                        $more_text = empty( $output['more'] ) ? __("Read more...","geodirectory") : __($output['more'],"geodirectory");
-                        $link =  get_permalink($post_id);
-                        $link = $link."#".$cf['htmlvar_name'];// set the hash value
-                        $link_class = !empty($output['fade']) ? 'gd-read-more-fade' : '';
-                        $html .= " <a href='$link' class='gd-read-more  $link_class'>".esc_attr($more_text)."</a>";
+                    if ( isset( $output['more'] ) ) {
+                        $post_id = isset( $gd_post->id ) ? absint( $gd_post->id ) : 0;
+                        $more_text = empty( $output['more'] ) ? __( "Read more...", "geodirectory" ) : __( $output['more'], "geodirectory" );
+                        $link =  get_permalink( $post_id );
+                        $link = $link . "#" . $html_var; // Set the hash value
+                        $link_class = ! empty( $output['fade'] ) ? 'gd-read-more-fade' : '';
+                        $html .= " <a href='$link' class='gd-read-more  $link_class'>" . esc_attr( $more_text ) . "</a>";
                     }
-
-
                 }
-
-
-			}
+            }
 
             $html .= '</div>';
         }
@@ -1650,8 +1655,6 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
     return $html;
 }
 add_filter('geodir_custom_field_output_textarea','geodir_cf_textarea',10,5);
-
-
 
 /**
  * Get the html output for the custom field: html

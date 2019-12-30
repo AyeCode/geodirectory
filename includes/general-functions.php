@@ -867,7 +867,6 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$GLOBALS['gd_query_args_widgets'] = $query_args;
 	$gd_query_args_widgets            = $query_args;
 
-
 	$fields = $wpdb->posts . ".*, " . $table . ".*";
 	/**
 	 * Filter widget listing fields string part that is being used for query.
@@ -897,13 +896,17 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$where = " AND ( " . $wpdb->posts . ".post_status = 'publish' " . $post_status . " ) AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
 
 	// in / not in
-	if ( !empty($query_args['post__in'])) {
-		if(!is_array($query_args['post__in'])){$query_args['post__in'] = explode(",",$query_args['post__in']);}// convert to array if not an array
-		$post__in = implode(',', array_map( 'absint', $query_args['post__in']));
+	if ( ! empty( $query_args['post__in'] ) ) {
+		if ( ! is_array( $query_args['post__in'] ) ) {
+			$query_args['post__in'] = explode( ",", $query_args['post__in'] ); // convert to array if not an array
+		}
+		$post__in = implode( ',', array_map( 'absint', $query_args['post__in'] ) );
 		$where .= " AND {$wpdb->posts}.ID IN ($post__in)";
-	} elseif ( !empty($query_args['post__not_in']) ) {
-		if(!is_array($query_args['post__not_in'])){$query_args['post__not_in'] = explode(",",$query_args['post__not_in']);}// convert to array if not an array
-		$post__not_in = implode(',',  array_map( 'absint', $query_args['post__not_in'] ));
+	} elseif ( ! empty( $query_args['post__not_in'] ) ) {
+		if ( ! is_array( $query_args['post__not_in'] ) ) {
+			$query_args['post__not_in'] = explode( ",",$query_args['post__not_in'] ); // convert to array if not an array
+		}
+		$post__not_in = implode( ',',  array_map( 'absint', $query_args['post__not_in'] ) );
 		$where .= " AND {$wpdb->posts}.ID NOT IN ($post__not_in)";
 	}
 
@@ -929,14 +932,35 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	 */
 	$groupby = apply_filters( 'geodir_filter_widget_listings_groupby', $groupby, $post_type );
 
-
 	if ( $count_only ) {
-		$sql  = "SELECT COUNT(DISTINCT " . $wpdb->posts . ".ID) AS total FROM " . $wpdb->posts . "
+		$fields = "COUNT(DISTINCT " . $wpdb->posts . ".ID) AS total";
+		/**
+		 * Filter widget listing fields string part that is being used to count results.
+		 *
+		 * @since 2.0.0.71
+		 *
+		 * @param string $fields Fields string.
+		 * @param string $table Table name.
+		 * @param string $post_type Post type.
+		 */
+		$fields = apply_filters( 'geodir_filter_widget_listings_count_fields', $fields, $table, $post_type );
+
+		$sql  = "SELECT " . $fields . " FROM " . $wpdb->posts . "
 			" . $join . "
 			" . $where;
+
+		/**
+		 * Filters the listings count SQL query before sending.
+		 *
+		 * @since 2.0.0.71
+		 *
+		 * @param string $sql The SQL query.
+		 * @param string $post_type The post type.
+		 */
+		$sql = apply_filters( 'geodir_filter_widget_listings_count_sql', $sql, $post_type );
+
 		$rows = (int) $wpdb->get_var( $sql );
 	} else {
-
 		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
 		if ( !empty($query_args['is_gps_query']) ) {
 			$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
@@ -999,7 +1023,17 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 			" . $groupby . "
 			" . $orderby . "
 			" . $limit;
-//		echo '###'.$sql;exit;
+
+		/**
+		 * Filters the listings SQL query before sending.
+		 *
+		 * @since 2.0.0.71
+		 *
+		 * @param string $sql The SQL query.
+		 * @param string $post_type The post type.
+		 */
+		$sql = apply_filters( 'geodir_filter_widget_listings_sql', $sql, $post_type );
+
 		$rows = $wpdb->get_results( $sql );
 	}
 
@@ -2245,4 +2279,27 @@ function geodir_format_hints($hints, $docs_url = '',$video_url = '',$feedback_id
 	}
 
 	return $text;
+}
+
+/**
+ * @since 2.0.0.74
+ */
+function geodir_create_nonce( $action = -1 ) {
+	do_action( 'geodir_create_nonce_before', $action );
+
+	$nonce = wp_create_nonce( $action );
+
+	do_action( 'geodir_create_nonce_after', $action, $nonce );
+
+	return apply_filters( 'geodir_create_nonce', $nonce, $action );
+}
+
+/**
+ * @since 2.0.0.74
+ */
+function geodir_nonce_token( $action = -1, $uid = 0 ) {
+	$token = wp_get_session_token();
+	$i = wp_nonce_tick();
+
+	return substr( wp_hash( $i . '|' . $action . '|' . $uid . '|' . $token, 'nonce' ), -12, 10 );
 }

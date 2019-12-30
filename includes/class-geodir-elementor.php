@@ -28,16 +28,10 @@ class GeoDir_Elementor {
 	 * @since 2.0.0
 	 */
 	public function __construct() {
-		// Add query vars
-		//add_filter( 'query_vars', array( $this, 'add_query_vars' ), 0 );
-
-		// enqueue flexslider JS
-		
-
 		// add any extra scripts
 		add_action('wp_enqueue_scripts', array( $this, 'enqueue_scripts' ),11);
 		add_filter('geodir_bypass_archive_item_template_content',array( $this, 'archive_item_template_content'),10,3);
-
+		add_filter( 'elementor/utils/get_the_archive_title', array( __CLASS__, 'get_page_title' ), 10, 1 );
 	}
 
 	/**
@@ -146,4 +140,20 @@ class GeoDir_Elementor {
 		return $result;
 	}
 
+	/**
+	 * Filter the archive title element.
+	 *
+	 * @since 2.0.0.71
+	 * @param string $page_title The page title.
+	 * @return string Filtered page title.
+	 */
+	public static function get_page_title( $page_title ) {
+		$title = GeoDir_SEO::set_meta();
+
+		if ( $title ) {
+			$page_title = $title;
+		}
+
+		return $page_title;
+	}
 }

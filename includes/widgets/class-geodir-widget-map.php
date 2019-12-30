@@ -1124,7 +1124,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'fullscreenControl'        => false,
 			'maxZoom'                  => 21,
 			'token'                    => '68f48005e256696074e1da9bf9f67f06',
-			'_wpnonce'                 => self::wp_rest_nonce(),
+			'_wpnonce'                 => geodir_create_nonce( 'wp_rest' ),
 			'navigationControlOptions' => array(
 				'position' => 'TOP_LEFT',
 				'style'    => 'ZOOM_PAN'
@@ -1194,22 +1194,5 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			</div><!--END stick_trigger_container-->
 		</div><!--END geodir-map-wrap-->
 		<?php
-	}
-
-	public static function wp_rest_nonce() {
-		// Fix Cookie nonce is invalid issue with WooCommerce PayPal Checkout Gateway plugin. See #482327.
-		$set_filter = false;
-		if ( class_exists( 'WooCommerce' ) && ! is_user_logged_in() && is_object( WC()->session ) && has_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) ) ) {
-			$set_filter = true;
-			remove_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) );
-		}
-
-		$nonce = wp_create_nonce( 'wp_rest' );
-
-		if ( $set_filter ) {
-			add_filter( 'nonce_user_logged_out', array( WC()->session,  'nonce_user_logged_out' ) );
-		}
-
-		return $nonce;
 	}
 }

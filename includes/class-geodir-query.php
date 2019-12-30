@@ -173,7 +173,7 @@ class GeoDir_Query {
 
 		}elseif(geodir_is_page('search')){
 			// Divi page builder breaks editor.
-			if ( ! ( function_exists( 'et_divi_load_scripts_styles' ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) ) {
+			if ( ! ( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) ) {
 				$q->is_page = false;
 			}
 			$q->is_singular = false;
@@ -830,13 +830,15 @@ class GeoDir_Query {
 		$order = $sort_array[$sort_by_count - 1];
 		$htmlvar_name = str_replace( '_' . $order, '', $sort_by );
 
-		if ( $htmlvar_name && $order ) {
+		if ( ! empty( $orderby ) && $htmlvar_name && $order ) {
 			$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND sort = %s AND post_type = %s", $htmlvar_name, $order, $geodir_post_type ) );
 
 			if ( $parent_id ) {
 				$children = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND tab_parent = %d ORDER BY sort_order ASC", $geodir_post_type, $parent_id ) );
 
 				if ( $children ) {
+					$orderby_parts = array();
+
 					foreach ( $children as $child ) {
 						if ( $child->field_type == 'random' ) {
 							$child_sort_by = 'random';
@@ -845,9 +847,17 @@ class GeoDir_Query {
 						}
 						$child_sort = self::sort_by_sql( $child_sort_by, $geodir_post_type, $wp_query );
 
-						if ( $child_sort ) {
-							$orderby .= ", " . $child_sort;
+						if ( ! empty( $child_sort ) ) {
+							$orderby_parts[] = $child_sort;
 						}
+					}
+
+					if ( ! empty( $orderby_parts ) ) {
+						if ( ! empty( $orderby ) ) {
+							$orderby .= ", ";
+						}
+
+						$orderby .= implode( ", ", array_filter( $orderby_parts ) );
 					}
 				}
 			}
@@ -873,10 +883,10 @@ class GeoDir_Query {
 		global $wpdb;
 
 		$orderby = '';
-		$table = geodir_db_cpt_table($post_type);
+		$table = geodir_db_cpt_table( $post_type );
 		$order_by_parts = array();
 
-		switch ($sort_by):
+		switch ( $sort_by ) {
 			case 'distance':
 			case 'distance_asc':
 				$order_by_parts[] = "distance ASC";
@@ -926,42 +936,53 @@ class GeoDir_Query {
 				if ( $sort_by == 'high_rating' ) {
 					$sort_by = 'rating_desc';
 				}
+
 				$rating_order = $sort_by == 'rating_asc' ? "ASC" : "DESC";
-				$use_bayesian = apply_filters('geodir_use_bayesian',true,$table);
+				$use_bayesian = apply_filters( 'geodir_use_bayesian', true, $table );
 				$avg_rating = 0;
-				if($use_bayesian){
+
+				if ( $use_bayesian ) {
 					$avg_num_votes = get_transient( 'gd_avg_num_votes_'.$table );
-					if(!$avg_num_votes){
-						$avg_num_votes = $wpdb->get_var("SELECT SUM(rating_count) FROM $table");
-						if($avg_num_votes){
-							$avg_rating = get_transient( 'gd_avg_rating_'.$table );
-							if(!$avg_rating){
-								$avg_rating = $wpdb->get_var("SELECT SUM(overall_rating) FROM $table")/$avg_num_votes;
+
+					if ( ! $avg_num_votes ) {
+						$avg_num_votes = $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table}" );
+
+						if ( $avg_num_votes ) {
+							$avg_rating = get_transient( 'gd_avg_rating_' . $table );
+
+							if ( ! $avg_rating ) {
+								$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table}") / $avg_num_votes;
 							}
+
 							set_transient( 'gd_avg_num_votes_'.$table, $avg_num_votes, 12 * HOUR_IN_SECONDS );
 							set_transient( 'gd_avg_rating_'.$table, $avg_rating , 12 * HOUR_IN_SECONDS );
 						}
 					}
-					if(!$avg_num_votes){ $avg_num_votes = 0;}
-					$order_by_parts[] = " (( $avg_num_votes * $avg_rating ) + (" . $table . ".rating_count * " . $table . ".overall_rating ))  / ( $avg_num_votes + " . $table . ".rating_count )  $rating_order";
+
+					if ( ! $avg_num_votes ) {
+						$avg_num_votes = 0;
+					}
+
+					$order_by_parts[] = " ( ( $avg_num_votes * $avg_rating ) + ( " . $table . ".rating_count * " . $table . ".overall_rating ) )  / ( $avg_num_votes + " . $table . ".rating_count ) $rating_order";
 				}else{
 					$order_by_parts[] = $table . ".overall_rating $rating_order";
 					$order_by_parts[] = $table . ".rating_count $rating_order";
 				}
 				break;
 			default:
-//				echo $sort_by.'###'.$default_sort;
 				$default_sort = geodir_get_posts_default_sort( $post_type );
-				if($default_sort == '' && $sort_by == $default_sort){
-					$order_by_parts[] = "$wpdb->posts.post_date desc";
-				}else{
-					$order_by_parts[] = self::custom_sort($orderby, $sort_by, $table);
+
+				if ( $default_sort == '' && $sort_by == $default_sort ) {
+					$order_by_parts[] = "{$wpdb->posts}.post_date desc";
+				 }else {
+					$order_by_parts[] = self::custom_sort( $orderby, $sort_by, $table );
 				}
 				break;
-		endswitch;
+		}
 
-
-		$orderby = implode(", ",array_filter($order_by_parts));
+		if ( ! empty( $order_by_parts ) ) {
+			$orderby = implode( ", ", array_filter( $order_by_parts ) );
+		}
 
 		return $orderby;
 	}
@@ -989,14 +1010,6 @@ class GeoDir_Query {
 			} else {
 				$orderby = "( gd_titlematch * 2  + gd_exacttitle * 10 + gd_content * 1.5) DESC";
 			}
-
-//			$orderby_parts = array(); // PART => FACTOR
-//			$orderby_parts['gd_titlematch'] = '2';
-//			$orderby_parts['gd_exacttitle'] = '2';
-//			$orderby_parts['gd_content'] = '2';
-//			$orderby_parts['gd_titlematch'] = '2';
-//			$orderby_parts['gd_titlematch'] = '2';
-
 		}
 
 		return $orderby;
@@ -1013,85 +1026,68 @@ class GeoDir_Query {
 	 * @param string $table Listing table name.
 	 * @return string Modified orderby query.
 	 */
-	public static function  custom_sort($orderby, $sort_by, $table)
-	{
-
+	public static function  custom_sort( $orderby, $sort_by, $table ) {
 		global $wpdb;
 
-		if ($sort_by != '' && (!is_search() || ( isset($_REQUEST['s']) && isset($_REQUEST['snear']) && $_REQUEST['snear']=='' && ( $_REQUEST['s']=='' ||  $_REQUEST['s']==' ') ) )) {
+		if ( $sort_by != '' && ( ! is_search() || ( isset( $_REQUEST['s'] ) && isset( $_REQUEST['snear'] ) && $_REQUEST['snear'] == '' && ( $_REQUEST['s'] == '' ||  $_REQUEST['s'] == ' ') ) ) ) {
+			$sort_array = explode( '_', $sort_by );
+			$sort_by_count = count( $sort_array );
+			$order = $sort_array[ $sort_by_count - 1 ];
 
-			$sort_array = explode('_', $sort_by);
+			if ( $sort_by_count > 1 && ( $order == 'asc' || $order == 'desc' ) ) {
+				$sort_by = str_replace( '_' . $order, '', $sort_by );
 
-			$sort_by_count = count($sort_array);
-
-			$order = $sort_array[$sort_by_count - 1];
-
-			if ($sort_by_count > 1 && ($order == 'asc' || $order == 'desc')) {
-
-				$sort_by = str_replace('_' . $order, '', $sort_by);
-
-				switch ($sort_by):
-
+				switch ( $sort_by ) {
 					case 'post_date':
 					case 'comment_count':
-
-						$orderby = "$wpdb->posts." . $sort_by . " " . $order . ", ".$table . ".overall_rating " . $order;
+						$orderby = "{$wpdb->posts}." . $sort_by . " " . $order . ", ".$table . ".overall_rating " . $order;
 						break;
-					// sort by featured image
 					case 'post_images':
 						$orderby = $table . ".featured_image " . $order;
 						break;
-
 					case 'distance':
 						$orderby = $sort_by . " " . $order;
 						break;
-
-
-					// sort by rating
 					case 'overall_rating':
-
-						$use_bayesian = apply_filters('gd_use_bayesian',true,$table);
+						$use_bayesian = apply_filters( 'gd_use_bayesian', true, $table );
 						$avg_rating = 0;
-						if($use_bayesian){
-							$avg_num_votes = get_transient( 'gd_avg_num_votes_'.$table );
-							if(!$avg_num_votes){
-								$avg_num_votes = $wpdb->get_var("SELECT SUM(rating_count) FROM $table");
-								if($avg_num_votes){
 
-									$avg_rating = get_transient( 'gd_avg_rating_'.$table );
-									if(!$avg_rating){
-										$avg_rating = $wpdb->get_var("SELECT SUM(overall_rating) FROM $table")/$avg_num_votes;
+						if ( $use_bayesian ) {
+							$avg_num_votes = get_transient( 'gd_avg_num_votes_' . $table );
+
+							if ( ! $avg_num_votes ) {
+								$avg_num_votes = $wpdb->get_var( "SELECT SUM( rating_count ) FROM {$table}" );
+
+								if ( $avg_num_votes ) {
+									$avg_rating = get_transient( 'gd_avg_rating_' . $table );
+
+									if ( ! $avg_rating ) {
+										$avg_rating = $wpdb->get_var( "SELECT SUM( overall_rating ) FROM {$table}" ) / $avg_num_votes;
 									}
-									set_transient( 'gd_avg_num_votes_'.$table, $avg_num_votes, 12 * HOUR_IN_SECONDS );
-									set_transient( 'gd_avg_rating_'.$table, $avg_rating , 12 * HOUR_IN_SECONDS );
+
+									set_transient( 'gd_avg_num_votes_' . $table, $avg_num_votes, 12 * HOUR_IN_SECONDS );
+									set_transient( 'gd_avg_rating_' . $table, $avg_rating , 12 * HOUR_IN_SECONDS );
 								}
 							}
 
-							if(!$avg_num_votes){ $avg_num_votes = 0;}
+							if ( ! $avg_num_votes ) {
+								$avg_num_votes = 0;
+							}
 
-							$orderby = " (( $avg_num_votes * $avg_rating ) + (" . $table . ".rating_count * " . $table . ".overall_rating ))  / ( $avg_num_votes + " . $table . ".rating_count )  $order";
-
-							//$orderby = " ( " . $table . ".rating_count * " . $table . ".overall_rating ) + (" . $table . ".rating_count * " . $table . ".overall_rating )   / ( " . $table . ".rating_count + " . $table . ".rating_count )  $order , "; // seems to work mostly with no extra overheads
-						}else{
+							$orderby = " ( ( $avg_num_votes * $avg_rating ) + ( " . $table . ".rating_count * " . $table . ".overall_rating ) )  / ( $avg_num_votes + " . $table . ".rating_count ) $order";
+						} else {
 							$orderby = " " . $table . "." . $sort_by . "  " . $order . ", " . $table . ".rating_count " . $order;
 						}
-
 						break;
-
-
 					default:
-						if (self::column_exist($table, $sort_by)) {
-//							echo '###'.$table . "." . $sort_by . " " . $order;exit;
+						if ( self::column_exist( $table, $sort_by ) ) {
 							$orderby = $table . "." . $sort_by . " " . $order;
-						}else{
-							$orderby = "$wpdb->posts.post_date desc";
+						} else {
+							$orderby = "{$wpdb->posts}.post_date desc";
 						}
 						break;
-
-				endswitch;
-
+				}
 			}
-
 		}
 
 		return $orderby;
@@ -1108,21 +1104,21 @@ class GeoDir_Query {
 	 * @param string $column The column name.
 	 * @return bool If column exists returns true. Otherwise false.
 	 */
-	public static function column_exist($db, $column)
-	{
+	public static function column_exist( $db, $column ) {
 		global $wpdb;
+
 		$exists = false;
-		$columns = $wpdb->get_col("show columns from $db");
-		foreach ($columns as $c) {
-			if ($c == $column) {
+		$columns = $wpdb->get_col( "SHOW COLUMNS FROM {$db}" );
+
+		foreach ( $columns as $c ) {
+			if ( $c == $column ) {
 				$exists = true;
 				break;
 			}
 		}
+
 		return $exists;
 	}
-
-
 
 	/**
 	 * Remove the query.
@@ -1132,8 +1128,6 @@ class GeoDir_Query {
 	public function remove_product_query() {
 		remove_action( 'pre_get_posts', array( $this, 'pre_get_posts' ) );
 	}
-
-
 
 	/**
 	 * Sets a key and value in $wp object if the current page is a geodir page.
