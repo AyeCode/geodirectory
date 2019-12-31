@@ -105,18 +105,20 @@ class GeoDir_Post_Data {
 	/**
 	 * Restore the post revision, here we are just restoring the post meta table info.
 	 *
+	 * @global int|null $geodir_post_author Post author.
+	 *
 	 * @param $post_id
 	 * @param $revision_id
 	 */
 	public static function restore_post_revision( $post_id, $revision_id ) {
+		global $wpdb, $geodir_post_author;
 
-		global $wpdb, $plugin_prefix;
 		$post_type = get_post_type( $post_id );
-		if ( in_array( $post_type, geodir_get_posttypes() ) ) { //echo '###1';
 
-			$table = $plugin_prefix . sanitize_key( $post_type ) . "_detail";
+		if ( geodir_is_gd_post_type( $post_type ) ) {
+			$table = geodir_db_cpt_table( $post_type );
 
-			// backup the main row first
+			// Backup the main row first
 			$result = $wpdb->update(
 				$table,
 				array( 'post_id' => "-" . $post_id ),
@@ -125,7 +127,7 @@ class GeoDir_Post_Data {
 				array( '%d' )
 			);
 
-			// restore the revision meta
+			// Restore the revision meta
 			if ( $result ) {
 				$post_status = get_post_status( $post_id );
 				$result      = $wpdb->update(
@@ -142,7 +144,7 @@ class GeoDir_Post_Data {
 					array( '%d' )
 				);
 
-				// set the old info as the revision info so it is then deleted with the revision
+				// Set the old info as the revision info so it is then deleted with the revision
 				if ( $result ) {
 					$result = $wpdb->update(
 						$table,
@@ -153,42 +155,58 @@ class GeoDir_Post_Data {
 					);
 
 					if ( $result ) {
-						// save the revisions media values
+						// Save the revisions media values
 						$temp_media = get_post_meta( $post_id, "__" . $revision_id, true );
 
-						// set post images
+						// Set post images
 						if ( isset( $temp_media['post_images'] ) ) {
 							$current_files = GeoDir_Media::get_field_edit_string( $post_id, 'post_images' );
 
-							// if post_images data is the same then we just copy the original feature image data
+							// If post_images data is the same then we just copy the original feature image data
 							if ( $current_files == $temp_media['post_images'] ) {
 								$old_featured_image = geodir_get_post_meta( $revision_id, 'featured_image' );
+
 								if ( $old_featured_image ) {
 									geodir_save_post_meta( $post_id, 'featured_image', $old_featured_image );
 								}
 							} else {
 								$featured_image = self::save_files( $revision_id, $temp_media['post_images'], 'post_images', false, false );
+
 								if ( ! empty( $featured_image ) ) {
 									geodir_save_post_meta( $post_id, 'featured_image', $featured_image );
 								}
 							}
 						}
+
 						if ( isset( $temp_media['post_images'] ) ) {
-							unset( $temp_media['post_images'] ); // unset the post_images as we save it in another table.
+							unset( $temp_media['post_images'] ); // Unset the post_images as we save it in another table.
 						}
 
-						// process other attachments
+						// Process other attachments
 						$file_fields = GeoDir_Media::get_file_fields( $post_type );
-						if ( ! empty( $file_fields ) ) {// we have file fields
+						if ( ! empty( $file_fields ) ) { // We have file fields
 							foreach ( $file_fields as $key => $extensions ) {
-								if ( isset( $temp_media[ $key ] ) ) { // its a attachment
+								if ( isset( $temp_media[ $key ] ) ) { // Its a attachment
 									self::save_files( $revision_id, $temp_media[ $key ], $key, false, false );
 								}
 							}
 						}
 
+						if ( is_wp_error( $result ) ) {
+							return;
+						}
+
 						// If the post saved then do some house keeping.
-						if ( ! is_wp_error( $result ) && $user_id = get_current_user_id() ) {
+						$user_id = get_current_user_id();
+						if ( $geodir_post_author && $geodir_post_author != $user_id && ( $geodir_post_author == geodir_get_listing_author( $revision_id ) ) ) {
+							if ( $user_id ) {
+								$user_id .= ',' . $geodir_post_author;
+							} else {
+								$user_id = $geodir_post_author;
+							}
+						}
+
+						if ( $user_id ) {
 							self::remove_post_revisions( $post_id, $user_id );
 							GeoDir_Comments::update_post_rating( $post_id, $post_type);
 						}
@@ -196,7 +214,6 @@ class GeoDir_Post_Data {
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -333,7 +350,7 @@ class GeoDir_Post_Data {
 	 * @since 2.0.0
 	 *
 	 * @param int $post_id Post id.
-	 * @param int $user_id User id.
+	 * @param int|string $user_id User id.
 	 */
 	public static function remove_post_revisions( $post_id, $user_id ) {
 		$posts = wp_get_post_revisions( $post_id, array( 'check_enabled' => false, 'author' => $user_id ) );
@@ -1599,36 +1616,37 @@ class GeoDir_Post_Data {
 	 *
 	 * @since 2.0.0
 	 *
+	 * @global int|null $geodir_post_author Post author.
+	 *
 	 * @param int $id Post id.
 	 *
 	 * @return bool|void
 	 */
 	public static function delete_post( $id ) {
+		global $wpdb, $plugin_prefix, $geodir_post_author;
 
-		// check if user owns the post
-		if ( ! self::owner_check( $id, get_current_user_id() ) || ! $id ) {
+		if ( empty( $id ) ) {
 			return false;
 		}
 
+		// Check if user owns the post
+		if ( ! ( self::owner_check( $id, get_current_user_id() ) || ( ! empty( $geodir_post_author ) && self::owner_check( $id, $geodir_post_author ) ) ) ) {
+			return false;
+		}
 
-		global $wpdb, $plugin_prefix;
-
-		// check for multisite deletions
-		if ( strpos( $plugin_prefix, $wpdb->prefix ) !== false ) {
-		} else {
+		// Check for multisite deletions
+		if ( strpos( $plugin_prefix, $wpdb->prefix ) === false ) {
 			return false;
 		}
 
 		$post_type = get_post_type( $id );
 
-		// check for revisions
+		// Check for revisions
 		if ( $post_type == 'revision' ) {
 			$post_type = get_post_type( wp_get_post_parent_id( $id ) );
 		}
 
-		$all_postypes = geodir_get_posttypes();
-
-		if ( ! in_array( $post_type, $all_postypes ) ) {
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
 			return false;
 		}
 
