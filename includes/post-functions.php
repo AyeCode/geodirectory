@@ -869,6 +869,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 				}
 
+				if ( $match_field == 'post_date' || $match_field == 'post_modified' ) {
+					$date_format = apply_filters( 'geodir_badge_date_value', 'Y-m-d H:i:s' );
+					$match_value = date( $date_format, strtotime( $match_value ) );
+				}
+
 				// badge text
 				if ( empty( $badge ) && empty($args['icon_class']) ) {
 					$badge = $field['frontend_title'];
