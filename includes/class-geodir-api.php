@@ -456,7 +456,7 @@ class GeoDir_API {
 		$geodir_post_type = $post_type;
 
 		$table = geodir_db_cpt_table( $post_type );
-		$sort_by = $wp_query->query_vars['orderby'];
+		$sort_by = ! empty( $wp_query ) && ! empty( $wp_query->query_vars['orderby'] ) ? $wp_query->query_vars['orderby'] : '';
 
 		$sort_by = apply_filters( 'geodir_rest_posts_order_sort_by_key', $sort_by, $orderby, $post_type, $wp_query );
 

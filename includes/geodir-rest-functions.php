@@ -297,6 +297,7 @@ function geodir_rest_data_type_to_field_type( $data_type ) {
         case 'tinyint':
         case 'integer':
             $type = 'integer';
+            break;
         case 'date':
         case 'time':
         case 'text':

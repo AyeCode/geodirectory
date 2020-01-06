@@ -253,7 +253,7 @@ class GeoDir_Media {
 	 *
 	 * @return array|WP_Error
 	 */
-	public static function insert_attachment($post_id,$type = 'file',$url,$title = '', $caption = '', $order = '', $is_approved = 1,$is_placeholder = false,$other_id = ''){
+	public static function insert_attachment( $post_id, $type = 'file', $url, $title = '', $caption = '', $order = '', $is_approved = 1, $is_placeholder = false, $other_id = '' ) {
 		global $wpdb;
 
 		// Load media functions
@@ -267,68 +267,68 @@ class GeoDir_Media {
 			require_once ABSPATH . 'wp-admin/includes/image.php';
 		}
 
-		// check we have what we need
-		if(!$post_id || !$url){
+		// Check we have what we need
+		if ( ! $post_id || ! $url ) {
 			return new WP_Error( 'file_insert', __( "No post_id or file url, file insert failed.", "geodirectory" ) );
 		}
-		$metadata = '';
-		if($is_placeholder){ // if a placeholder image, such as a image name that will be uploaded manually to the upload dir
-			$upload_dir = wp_upload_dir();
-			$file = $upload_dir['subdir'].'/'.basename($url);
-			$file_type_arr = wp_check_filetype( basename($url));
-			$file_type = $file_type_arr['type'];
-		}else{
-			$post_type = get_post_type($post_id);
-			// check for revisions
-			if($post_type == 'revision'){
-				$post_type = get_post_type(wp_get_post_parent_id($post_id));
-			}
-			$allowed_file_types = self::get_file_fields($post_type);
-			$allowed_file_types = isset($allowed_file_types[$type]) ? $allowed_file_types[$type] : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
 
-			if($order === 0 && $type=='post_images'){
-				$attachment_id = media_sideload_image($url, $post_id, $title, 'id'); // uses the post date for the upload time /2009/12/image.jpg
-				// return error object if its an error
-				if (!$attachment_id || is_wp_error( $attachment_id ) ) {
+		$metadata = '';
+		if ( $is_placeholder ) { // If a placeholder image, such as a image name that will be uploaded manually to the upload dir
+			$upload_dir = wp_upload_dir();
+			$file = $upload_dir['subdir'] . '/' . basename( $url );
+			$file_type_arr = wp_check_filetype( basename( $url ) );
+			$file_type = $file_type_arr['type'];
+		} else {
+			$post_type = get_post_type( $post_id );
+			// Check for revisions
+			if ( $post_type == 'revision' ) {
+				$post_type = get_post_type( wp_get_post_parent_id( $post_id ) );
+			}
+			$allowed_file_types = self::get_file_fields( $post_type );
+			$allowed_file_types = isset( $allowed_file_types[ $type ] ) ? $allowed_file_types[ $type ] : array( 'jpg', 'jpe', 'jpeg', 'gif', 'png', 'bmp', 'ico', 'webp' );
+
+			if ( $order === 0 && $type == 'post_images' ) {
+				$attachment_id = media_sideload_image( $url, $post_id, $title, 'id' ); // Uses the post date for the upload time /2009/12/image.jpg
+
+				// Return error object if its an error
+				if ( ! $attachment_id || is_wp_error( $attachment_id ) ) {
 					return $attachment_id;
 				}
 
 				$metadata = wp_get_attachment_metadata( $attachment_id );
-				$file_type = wp_check_filetype(basename($url));
+				$file_type = wp_check_filetype( basename( $url ) );
 				$upload_dir = wp_upload_dir();
 				$file = array(
-					'file'  => trailingslashit( $upload_dir['basedir'] ).$metadata['file'],
+					'file'  => trailingslashit( $upload_dir['basedir'] ) . $metadata['file'],
 					'type'  => $file_type['type']
 				);
-				
-				// only set the featured image if its approved
-				if($is_approved && !wp_is_post_revision( absint($post_id) ) ){
-					set_post_thumbnail($post_id, $attachment_id);
+
+				// Only set the featured image if its approved
+				if ( $is_approved && ! wp_is_post_revision( absint( $post_id ) ) ) {
+					set_post_thumbnail( $post_id, $attachment_id );
 				}
-			}else{
-				// move the temp image to the uploads directory
-				$file = self::get_external_media( $url, $title ,$allowed_file_types);
+			} else {
+				// Move the temp image to the uploads directory
+				$file = self::get_external_media( $url, $title, $allowed_file_types );
 			}
 
-			// return error object if its an error
-			if ( is_wp_error($file  ) ) {
+			// Return error object if its an error
+			if ( is_wp_error( $file ) ) {
 				return $file;
 			}
 
-
-			if(isset($file['type']) && $file['type']){
-				if(self::is_image($file['type'])){
-					// create the different image sizes and get the image meta data
-					$metadata = self::create_image_sizes( $file['file'] );
-				}elseif(in_array( $file['type'], wp_get_audio_extensions() )){// audio
-					$metadata =  wp_read_audio_metadata($file['file']);
-				}elseif(in_array( $file['type'], wp_get_video_extensions() )){// audio
-					$metadata =  wp_read_video_metadata($file['file']);
+			if ( isset( $file['type'] ) && $file['type'] ) {
+				if ( self::is_image( $file['type'] ) ) {
+					$metadata = self::create_image_sizes( $file['file'] ); // Image
+				} elseif ( in_array( $file['type'], wp_get_audio_extensions() ) ) {
+					$metadata =  wp_read_audio_metadata( $file['file'] ); // Audio
+				} elseif ( in_array( $file['type'], wp_get_video_extensions() ) ) {
+					$metadata =  wp_read_video_metadata( $file['file'] ); // Video
 				}
 			}
 
-			// if image meta fail then return error object
-			if ( is_wp_error($metadata ) ) {
+			// If image meta fail then return error object
+			if ( is_wp_error( $metadata ) ) {
 				return $metadata;
 			}
 
@@ -339,11 +339,11 @@ class GeoDir_Media {
 			 *
 			 * @since 2.0.0
 			 */
-			$file = apply_filters('geodir_insert_attachment_file',$file,$post_id);
+			$file = apply_filters( 'geodir_insert_attachment_file', $file, $post_id );
 
-			// pre slash the file path
-			if(!empty($file['file'])){
-				$file['file'] =  strrev ( trailingslashit( strrev ( _wp_relative_upload_path($file['file']) ) ) );
+			// Pre slash the file path
+			if ( ! empty( $file['file'] ) ) {
+				$file['file'] =  strrev( trailingslashit( strrev ( _wp_relative_upload_path( $file['file'] ) ) ) );
 			}
 
 			$file_type = $file['type'];
@@ -352,8 +352,8 @@ class GeoDir_Media {
 
 		$file_info = array(
 			'post_id' => $post_id,
-			'date_gmt'    => gmdate('Y-m-d H:i:s'),
-			'user_id'   => get_current_user_id(),
+			'date_gmt' => gmdate( 'Y-m-d H:i:s' ),
+			'user_id' => get_current_user_id(),
 			'title' => $title,
 			'caption' => $caption,
 			'file' => $file,
@@ -361,12 +361,12 @@ class GeoDir_Media {
 			'menu_order' => $order,
 			'featured' => $order === 0 ? 1 : 0,
 			'is_approved' => $is_approved,
-			'metadata' => maybe_serialize($metadata),
-			'type'  => $type,
+			'metadata' => maybe_serialize( $metadata ),
+			'type' => $type,
 			'other_id' => $other_id
 		);
-		
-		// insert into the DB
+
+		// Insert into the DB
 		$result = $wpdb->insert(
 			GEODIR_ATTACHMENT_TABLE,
 			$file_info,
@@ -387,7 +387,7 @@ class GeoDir_Media {
 			)
 		);
 
-		// if DB save failed then return error object
+		// If DB save failed then return error object
 		if ( $result === false ) {
 			return new WP_Error( 'file_insert', __( "Failed to insert file info to DB.", "geodirectory" ) );
 		}
@@ -398,9 +398,13 @@ class GeoDir_Media {
 
 		$file_info['ID'] = $wpdb->insert_id;
 
-		// return the file info
-		return $file_info;
+		/**
+		 * @since 2.0.0.75
+		 */
+		do_action( 'geodir_insert_attachment', $wpdb->insert_id, $file_info, $order );
 
+		// Return the file info
+		return $file_info;
 	}
 
     /**
@@ -473,29 +477,28 @@ class GeoDir_Media {
      *
      * @return array|null|object|void|WP_Error
      */
-	public static function update_attachment($file_id, $post_id,$field,$file_url,$file_title = '', $file_caption = '', $order = '',$is_approved = '1',$other_id = ''){
+	public static function update_attachment( $file_id, $post_id, $field, $file_url, $file_title = '', $file_caption = '', $order = '', $is_approved = '1', $other_id = '' ) {
 		global $wpdb;
 
-		// check we have what we need
-		if(!$file_id || !$post_id || !$file_url){
+		// Check we have what we need
+		if ( ! $file_id || ! $post_id || ! $file_url ) {
 			return new WP_Error( 'image_insert', __( "No image_id, post_id or image url, image update failed.", "geodirectory" ) );
 		}
 
-		// check the post has not already been deleted
-		if(get_post_status ( $post_id )===false){
+		// Check the post has not already been deleted
+		if ( get_post_status ( $post_id ) === false ) {
 			return '';
 		}
 
-		//echo $file_id.'zzz'.$order.'zzz'.$post_id.'zzz'.$file_url;
-		// if menu order is 0 then its featured and we need to set the post thumbnail
-		if($order === 0 && $field=='post_images' && !wp_is_post_revision( absint($post_id) )){
+		// If menu order is 0 then its featured and we need to set the post thumbnail
+		if ( $order === 0 && $field == 'post_images' && ! wp_is_post_revision( absint( $post_id ) ) ) {
 			// Get the path to the upload directory.
 			$wp_upload_dir = wp_upload_dir();
-			$filename = $wp_upload_dir['basedir'] . $wpdb->get_var($wpdb->prepare("SELECT file FROM ".GEODIR_ATTACHMENT_TABLE." WHERE ID = %d",$file_id));
-			$featured_img_url = get_the_post_thumbnail_url($post_id,'full');
-			//echo $featured_img_url.'###'.$file_url;exit;
-			if($featured_img_url != $file_url){
-				$file = wp_check_filetype(basename($file_url));
+			$filename = $wp_upload_dir['basedir'] . $wpdb->get_var( $wpdb->prepare( "SELECT file FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE ID = %d", $file_id ) );
+			$featured_img_url = get_the_post_thumbnail_url( $post_id, 'full' );
+
+			if ( $featured_img_url != $file_url ) {
+				$file = wp_check_filetype( basename( $file_url ) );
 				$attachment = array(
 					'guid'           => $file_url,
 					'post_mime_type' => $file['type'],
@@ -509,9 +512,9 @@ class GeoDir_Media {
 				require_once( ABSPATH . 'wp-admin/includes/image.php' );
 
 				// Generate the metadata for the attachment, and update the database record.
-				$attach_data = wp_generate_attachment_metadata( $attachment_id , $filename );
+				$attach_data = wp_generate_attachment_metadata( $attachment_id, $filename );
 				wp_update_attachment_metadata( $attachment_id , $attach_data );
-				set_post_thumbnail($post_id, $attachment_id);
+				set_post_thumbnail( $post_id, $attachment_id );
 			}
 		}
 
@@ -519,7 +522,7 @@ class GeoDir_Media {
 			'title' => $file_title,
 			'caption' => $file_caption,
 			'menu_order' => $order,
-			'featured' => $order === 0 && $field=='post_images' ? 1 : 0,
+			'featured' => $order === 0 && $field == 'post_images' ? 1 : 0,
 			'is_approved' => $is_approved,
 		);
 
@@ -531,7 +534,7 @@ class GeoDir_Media {
 			'%d'
 		);
 
-		if($other_id){
+		if ( $other_id ) {
 			$data['other_id'] = $other_id;
 			$format[] = '%d';
 		}
@@ -540,12 +543,11 @@ class GeoDir_Media {
 		$result = $wpdb->update(
 			GEODIR_ATTACHMENT_TABLE,
 			$data,
-			array('ID' => $file_id),
+			array( 'ID' => $file_id ),
 			$format
 		);
 
-
-		// if DB save failed then return error object
+		// If DB save failed then return error object
 		if ( $result === false ) {
 			return new WP_Error( 'image_insert', __( "Failed to update image info to DB.", "geodirectory" ) );
 		}
@@ -554,9 +556,22 @@ class GeoDir_Media {
 		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $field . ':::' . $other_id;
 		wp_cache_delete( $cache_key, 'gd_attachments_by_type' );
 
-		// return the file path
-		return $wpdb->get_row($wpdb->prepare("SELECT * FROM ".GEODIR_ATTACHMENT_TABLE." WHERE ID = %d",$file_id),ARRAY_A);
+		// Attachment info.
+		$attachment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE ID = %d", $file_id ), ARRAY_A );
 
+		/**
+		 * @since 2.0.0.75
+		 */
+		do_action( 'geodir_update_attachment', $file_id, $attachment, $order );
+
+		if ( $result ) {
+			/**
+			 * @since 2.0.0.75
+			 */
+			do_action( 'geodir_updated_attachment', $file_id, $attachment, $order );
+		}
+
+		return $attachment;
 	}
 
 	/**
@@ -756,7 +771,9 @@ class GeoDir_Media {
 			}
 		}
 
-		// remove from DB
+		$result = false;
+
+		// Remove from DB
 		/**
 		 * Filters whether a post attachment deletion from DB should take place.
 		 *
@@ -769,9 +786,21 @@ class GeoDir_Media {
 		 */
 		$check = apply_filters( 'geodir_pre_delete_attachment_record', null, $id, $post_id, $attachment );
 		if ( null === $check ) {
-			return $wpdb->query( $wpdb->prepare( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE id = %d AND post_id = %d", $id, $post_id ) );
+			/**
+			 * @since 2.0.0.75
+			 */
+			do_action( 'geodir_delete_attachment', $id, $attachment );
+
+			$result = $wpdb->query( $wpdb->prepare( "DELETE FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE id = %d AND post_id = %d", $id, $post_id ) );
+
+			if ( $result ) {
+				/**
+				 * @since 2.0.0.75
+				 */
+				do_action( 'geodir_deleted_attachment', $id, $attachment );
+			}
 		}
-		return false;
+		return $result;
 	}
 
 	/**

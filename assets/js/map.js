@@ -132,9 +132,9 @@ function initMap(map_options) {
 }
 
 function geodir_build_static_map(map_canvas){
-    if (!window.gdMaps) {
-        geodir_no_map_api(map_canvas);
-        return false;
+    if (window.gdMaps != 'google') {
+        build_map_ajax_search_param(map_canvas, false);
+        return;
     }
     options = eval(map_canvas);
 

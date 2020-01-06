@@ -168,6 +168,10 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 			$response[ 'terms_filter' ] = $this->get_map_terms_filter( $request );
 		} else {
 			$items = $this->get_markers( $request );
+
+			if ( is_wp_error( $items ) ) {
+				return $items;
+			}
 			
 			if ( ! empty( $items ) ) {
 				$response[ 'total' ] 		= count( $items );
@@ -195,24 +199,32 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
      * @return array $items.
      */
 	public function get_markers( $request ) {
-        global $wpdb, $plugin_prefix;
+		global $wpdb;
 
-		$items = array();
-		$detail_table = $plugin_prefix . $request['post_type'] . '_detail';
-		
+		// Filter by latitude/longitude.
+		$latitude = '';
+		$longitude = '';
+		if ( ! empty( $request['lat'] ) || ! empty( $request['lon'] ) ) {
+			$latitude = ! empty( $request['lat'] ) && geodir_is_valid_lat( $request['lat'] ) ? filter_var( $request['lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
+			$longitude = ! empty( $request['lon'] ) && geodir_is_valid_lon( $request['lon'] ) ? filter_var( $request['lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION ) : '';
+
+			if ( empty( $latitude ) || empty( $longitude ) ) {
+				return new WP_Error( 'rest_invalid_param', __( 'Invalid latitude/longitude.' ) );
+			}
+		}
+
+		$table = geodir_db_cpt_table( $request['post_type'] );
+
 		$fields = "p.ID, p.post_title, pd.default_category, pd.latitude, pd.longitude";
 
-		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ) {
-			$DistanceRadius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
-			$lat = filter_var($request['lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-			$lon = filter_var($request['lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-
-			$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($lat) - ABS(pd.latitude)) * pi()/180 / 2), 2) +COS(ABS($lat) * pi()/180) * COS( ABS(pd.latitude) * pi()/180) *POWER(SIN(($lon - pd.longitude) * pi()/180 / 2), 2) ))) AS distance ";
+		if ( $latitude && $longitude ) {
+			$radius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
+			$fields .= ", ( {$radius} * 2 * ASIN( SQRT( POWER( SIN( ( ABS( {$latitude} ) - ABS( pd.latitude ) ) * PI() / 180 / 2 ), 2 ) + COS( ABS( {$latitude} ) * PI() / 180 ) * COS( ABS( pd.latitude ) * PI() / 180 ) * POWER( SIN( ( {$longitude} - pd.longitude ) * PI() / 180 / 2 ), 2 ) ) ) ) AS distance ";
 		}
 
 		$fields = apply_filters( 'geodir_rest_markers_query_fields', $fields, $request );
-		
-		$join = "LEFT JOIN {$detail_table} AS pd ON pd.post_id = p.ID";
+
+		$join = "LEFT JOIN {$table} AS pd ON pd.post_id = p.ID";
 		$join = apply_filters( 'geodir_rest_markers_query_join', $join, $request );
 		
 		if ( ! empty( $request['post'] ) && is_array( $request['post'] ) && count( $request['post'] ) == 1 ) {
@@ -227,34 +239,32 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		if ( $where ) {
 			$where = "WHERE {$where}";
 		}
-		
+
 		$group_by = apply_filters( 'geodir_rest_markers_query_group_by', "", $request );
 		if ( $group_by ) {
 			$group_by = "GROUP BY {$group_by}";
 		}
-		
+
 		$order_by = apply_filters( 'geodir_rest_markers_query_order_by', "", $request );
 		if ( $order_by ) {
 			$order_by = "ORDER BY {$order_by}";
 		}
-		
+
 		$limit = apply_filters( 'geodir_rest_markers_query_limit', "", $request );
 		if ( $limit ) {
 			$limit = "LIMIT {$limit}";
 		}
 
-
-		
-		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
-		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ) {
-			$dist = $request['dist'] ? (float) $request['dist'] : geodir_get_option( 'search_radius', 5 );
+		// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
+		if ( $latitude && $longitude ) {
+			$distance = ! empty( $request['dist'] ) ? (float) $request['dist'] : geodir_get_option( 'search_radius', 5 );
 
 			/*
 			 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
 			 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
 			 */
 			if ( strpos( $where, ' HAVING ' ) === false && strpos( $group_by, ' HAVING ' ) === false && strpos( $fields, 'AS distance' ) ) {
-				$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
+				$having = $wpdb->prepare( " HAVING distance <= %f ", $distance );
 				if ( trim( $group_by ) != '' ) {
 					$group_by .= $having;
 				} else {
@@ -262,17 +272,15 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 				}
 			}
 		}
-		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
-		
-		
+		// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
+
 		$sql = "SELECT {$fields} FROM {$wpdb->posts} AS p {$join} {$where} {$group_by} {$order_by} {$limit}";
 
-//		echo $sql;
-		
-		$sql = apply_filters( 'geodir_rest_markers_query', $sql, $request );
-		
+		$sql = apply_filters( 'geodir_rest_markers_query', trim( $sql ), $request );
+
 		$results = $wpdb->get_results( $sql );
-		
+
+		$items = array();
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $item ) {
 				if ( ! empty( $item->latitude ) && ! empty( $item->longitude ) ) {
@@ -282,8 +290,8 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		}
 
 		return apply_filters( 'geodir_rest_get_markers', $items, $request );
-    }
-	
+	}
+
 	/*
 	icons
 	array(
@@ -464,26 +472,35 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		// locations
 		global $geodirectory;
 
-		//print_r($geodirectory);
-		if(!empty($request['country'])){ $country = $geodirectory->location->get_country_name_from_slug($request['country']); $where .= $wpdb->prepare(" AND pd.country = %s ",$country);}
-		if(!empty($request['region'])){ $region = $geodirectory->location->get_region_name_from_slug($request['region']); $where .= $wpdb->prepare(" AND pd.region = %s ",$region);}
-		if(!empty($request['city'])){ $city = $geodirectory->location->get_city_name_from_slug($request['city']); $where .= $wpdb->prepare(" AND pd.city = %s ",$city);}
-		if(!empty($request['neighbourhood'])){ $neighbourhood = sanitize_title($request['neighbourhood']);
-			$where .= $wpdb->prepare(" AND pd.neighbourhood = %s ",$neighbourhood);}
-		
-		// limited to area
-		if(!empty($request['lat']) && geodir_is_valid_lat($request['lat']) && !empty($request['lon']) && geodir_is_valid_lon($request['lon']) ){
-			$lat = filter_var($request['lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-			$lon = filter_var($request['lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION);
-			if($request['dist']){
-				$between = geodir_get_between_latlon($lat,$lon,$request['dist']);
-			}else{
-				$between = geodir_get_between_latlon($lat,$lon);
-			}
-			$where .= $wpdb->prepare(" AND pd.latitude between %f AND %f ",$between['lat1'],$between['lat2']);
-			$where .= $wpdb->prepare(" AND pd.longitude between %f AND %f ",$between['lon1'],$between['lon2']);
+		if ( ! empty( $request['country'] ) ) {
+			$country = $geodirectory->location->get_country_name_from_slug( $request['country'] );
+			$where .= $wpdb->prepare( " AND pd.country = %s ", $country );
+		}
+		if ( ! empty( $request['region'] ) ) {
+			$region = $geodirectory->location->get_region_name_from_slug( $request['region'] );
+			$where .= $wpdb->prepare( " AND pd.region = %s ", $region );
+		}
+		if ( ! empty( $request['city'] ) ) {
+			$city = $geodirectory->location->get_city_name_from_slug( $request['city'] );
+			$where .= $wpdb->prepare( " AND pd.city = %s ", $city );
+		}
+		if ( ! empty( $request['neighbourhood'] ) ) {
+			$neighbourhood = sanitize_title( $request['neighbourhood'] );
+			$where .= $wpdb->prepare( " AND pd.neighbourhood = %s ", $neighbourhood );
+		}
 
-//			echo '###'.$where;
+		// Limited to area
+		if ( ! empty( $request['lat'] ) && ! empty( $request['lon'] ) ) {
+			$latitude = filter_var( $request['lat'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+			$longitude = filter_var( $request['lon'], FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+
+			if ( ! empty( $request['dist'] ) ) {
+				$between = geodir_get_between_latlon( $latitude, $longitude, $request['dist'] );
+			} else {
+				$between = geodir_get_between_latlon( $latitude, $longitude );
+			}
+			$where .= $wpdb->prepare( " AND pd.latitude BETWEEN %f AND %f", $between['lat1'], $between['lat2'] );
+			$where .= $wpdb->prepare( " AND pd.longitude BETWEEN %f AND %f", $between['lon1'], $between['lon2'] );
 		}
 
 		return $where;

@@ -822,19 +822,24 @@ class GeoDir_Query {
 		return $orderby;
 	}
 
-	public static function sort_by_children( $orderby, $sort_by, $geodir_post_type, $wp_query = array() ) {
+	public static function sort_by_children( $orderby, $sort_by, $post_type, $wp_query = array(), $parent = 0 ) {
 		global $wpdb;
 
-		$sort_array = explode( '_', $sort_by );
-		$sort_by_count = count( $sort_array );
-		$order = $sort_array[$sort_by_count - 1];
-		$htmlvar_name = str_replace( '_' . $order, '', $sort_by );
+		if ( substr( strtolower( $sort_by ) , -5 ) == '_desc' ) {
+			$order = 'desc';
+			$htmlvar_name = substr( $sort_by , 0, strlen( $sort_by ) - 5 );
+		} else if ( substr( strtolower( $sort_by ) , -4 ) == '_asc' ) {
+			$order = 'asc';
+			$htmlvar_name = substr( $sort_by , 0, strlen( $sort_by ) - 4 );
+		} else {
+			$htmlvar_name = '';
+		}
 
-		if ( ! empty( $orderby ) && $htmlvar_name && $order ) {
-			$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND sort = %s AND post_type = %s", $htmlvar_name, $order, $geodir_post_type ) );
+		if ( ! empty( $orderby ) && $htmlvar_name ) {
+			$parent_id = $wpdb->get_var( $wpdb->prepare( "SELECT id FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND sort = %s AND post_type = %s AND tab_parent = %d", $htmlvar_name, $order, $post_type, $parent ) );
 
 			if ( $parent_id ) {
-				$children = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND tab_parent = %d ORDER BY sort_order ASC", $geodir_post_type, $parent_id ) );
+				$children = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND tab_parent = %d ORDER BY sort_order ASC", $post_type, $parent_id ) );
 
 				if ( $children ) {
 					$orderby_parts = array();
@@ -845,7 +850,7 @@ class GeoDir_Query {
 						} else {
 							$child_sort_by = $child->htmlvar_name . "_" . $child->sort;
 						}
-						$child_sort = self::sort_by_sql( $child_sort_by, $geodir_post_type, $wp_query );
+						$child_sort = self::sort_by_sql( $child_sort_by, $post_type, $wp_query );
 
 						if ( ! empty( $child_sort ) ) {
 							$orderby_parts[] = $child_sort;
@@ -975,7 +980,7 @@ class GeoDir_Query {
 				if ( $default_sort == '' && $sort_by == $default_sort ) {
 					$order_by_parts[] = "{$wpdb->posts}.post_date desc";
 				 }else {
-					$order_by_parts[] = self::custom_sort( $orderby, $sort_by, $table );
+					$order_by_parts[] = self::custom_sort( $orderby, $sort_by, $table, $post_type, $wp_query );
 				}
 				break;
 		}
@@ -1024,18 +1029,26 @@ class GeoDir_Query {
 	 * @param string $orderby The orderby query string.
 	 * @param string $sort_by Sortby query string.
 	 * @param string $table Listing table name.
+	 * @param string $post_type Post type.
+	 * @param object $wp_query WP_Query object.
 	 * @return string Modified orderby query.
 	 */
-	public static function  custom_sort( $orderby, $sort_by, $table ) {
+	public static function  custom_sort( $orderby, $sort_by, $table, $post_type = '', $wp_query = array() ) {
 		global $wpdb;
 
 		if ( $sort_by != '' && ( ! is_search() || ( isset( $_REQUEST['s'] ) && isset( $_REQUEST['snear'] ) && $_REQUEST['snear'] == '' && ( $_REQUEST['s'] == '' ||  $_REQUEST['s'] == ' ') ) ) ) {
-			$sort_array = explode( '_', $sort_by );
-			$sort_by_count = count( $sort_array );
-			$order = $sort_array[ $sort_by_count - 1 ];
+			if ( substr( strtolower( $sort_by ) , -5 ) == '_desc' ) {
+				$order = 'desc';
+				$sort_key = substr( $sort_by , 0, strlen( $sort_by ) - 5 );
+			} else if ( substr( strtolower( $sort_by ) , -4 ) == '_asc' ) {
+				$order = 'asc';
+				$sort_key = substr( $sort_by , 0, strlen( $sort_by ) - 4 );
+			} else {
+				$sort_key = '';
+			}
 
-			if ( $sort_by_count > 1 && ( $order == 'asc' || $order == 'desc' ) ) {
-				$sort_by = str_replace( '_' . $order, '', $sort_by );
+			if ( $sort_key ) {
+				$sort_by = $sort_key;
 
 				switch ( $sort_by ) {
 					case 'post_date':
@@ -1080,17 +1093,45 @@ class GeoDir_Query {
 						}
 						break;
 					default:
-						if ( self::column_exist( $table, $sort_by ) ) {
-							$orderby = $table . "." . $sort_by . " " . $order;
-						} else {
-							$orderby = "{$wpdb->posts}.post_date desc";
+						/**
+						 * Filters custom key sort.
+						 *
+						 * @since 2.0.0.74
+						 *
+						 * @param string $_orderby Custom key default orderby query string. Default NULL.
+						 * @param string $sort_by Sortby query string.
+						 * @param string $order Sortby order.
+						 * @param string $orderby The orderby query string.
+						 * @param string $table Listing table name.
+						 * @param string $post_type Post type.
+						 * @param object $wp_query WP_Query object.
+						 */
+						$orderby = apply_filters( 'geodir_custom_key_orderby', '', $sort_by, $order, $orderby, $table, $post_type, $wp_query );
+
+						if ( empty( $orderby ) ) {
+							if ( self::column_exist( $table, $sort_by ) ) {
+								$orderby = $table . "." . $sort_by . " " . $order;
+							} else {
+								$orderby = "{$wpdb->posts}.post_date desc";
+							}
 						}
 						break;
 				}
 			}
 		}
 
-		return $orderby;
+		/**
+		 * Filters custom orderby.
+		 *
+		 * @since 2.0.0.74
+		 *
+		 * @param string $orderby The orderby query string.
+		 * @param string $sort_by Sortby query string.
+		 * @param string $table Listing table name.
+		 * @param string $post_type Post type.
+		 * @param object $wp_query WP_Query object.
+		 */
+		return apply_filters( 'geodir_orderby_custom_sort', $orderby, $sort_by, $table, $post_type, $wp_query );
 	}
 
 	/**
