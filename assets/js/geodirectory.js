@@ -122,6 +122,18 @@ function geodir_object_fit_fix( _img ) {
     })
 }
 
+function geodir_load_badge_class(){
+    jQuery('.gd-badge-meta .gd-badge').each(function(){
+        var badge = jQuery(this).data('badge');
+        var badge_condition = jQuery(this).data('badge-condition');
+        if (badge && jQuery(this).closest('.post-' + jQuery(this).data('id')).length) {
+            badge_class = 'geodir-badge-' + badge; // name
+            badge_class += ' geodir-badge-' + badge + '-'+ badge_condition; // name and condition
+            jQuery(this).closest('.post-' + jQuery(this).data('id')).removeClass(badge_class).addClass(badge_class);
+        }
+    });
+}
+
 
 jQuery(function($) {
     // start lazy load if it's turned on
@@ -163,15 +175,9 @@ jQuery(function($) {
 		}
 		geodir_fix_marker_pos(data.canvas);
 	});
-	$('.gd-badge-meta .gd-badge').each(function(){
-        var badge = $(this).data('badge');
-        var badge_condition = $(this).data('badge-condition');
-		if (badge && $(this).closest('.post-' + $(this).data('id')).length) {
-            badge_class = 'geodir-badge-' + badge; // name
-            badge_class += ' geodir-badge-' + badge + '-'+ badge_condition; // name and condition
-			$(this).closest('.post-' + $(this).data('id')).removeClass(badge_class).addClass(badge_class);
-		}
-	});
+
+	// add badge related class
+    geodir_load_badge_class();
 
     // init reply link text changed
     gd_init_comment_reply_link();
@@ -1619,6 +1625,7 @@ function geodir_widget_listings_pagination(id, params) {
                         init_read_more();
                         geodir_init_lazy_load();
                         geodir_refresh_business_hours();
+                        geodir_load_badge_class();
                     }
                 }
                 $widget.removeClass('geodir-listings-loading');

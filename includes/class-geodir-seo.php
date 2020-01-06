@@ -498,6 +498,10 @@ class GeoDir_SEO {
 			$pagetotal = geodir_title_meta_pagetotal();
 			$string     = str_replace( "%%pagetotal%%", $pagetotal, $string );
 		}
+		if ( strpos( $string, '%%postcount%%' ) !== false ) {
+			$postcount = geodir_title_meta_postcount();
+			$string     = str_replace( "%%postcount%%", $postcount, $string );
+		}
 
 
 		// CPT vars
@@ -575,6 +579,7 @@ class GeoDir_SEO {
 		if($gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive'){
 			$vars['%%page%%'] = __('Current page number eg: page 2 of 4','geodirectory');
 			$vars['%%pagetotal%%'] = __('Total pages eg: 101','geodirectory');
+			$vars['%%postcount%%'] = __('Total post found eg: 10','geodirectory');
 			$vars['%%pagenumber%%'] = __('Current page number eg: 99','geodirectory');
 		}
 

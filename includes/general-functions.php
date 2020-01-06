@@ -1580,6 +1580,8 @@ add_filter( 'geodir_seo_meta_description_pre', 'geodir_filter_title_variables', 
  * %%userid%%                    Replaced with the post/page author's userid
  * %%page%%                        Replaced with the current page number (i.e. page 2 of 4)
  * %%pagetotal%%                Replaced with the current page total
+ * %%postcount%%                Replaced with the current post found
+ *
  * %%pagenumber%%                Replaced with the current page number
  *
  * @since   1.5.7
@@ -1793,6 +1795,10 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 		$pagetotal = geodir_title_meta_pagetotal();
 		$title     = str_replace( "%%pagetotal%%", $pagetotal, $title );
 	}
+	if ( strpos( $title, '%%postcount%%' ) !== false ) {
+		$postcount = geodir_title_meta_postcount();
+		$title     = str_replace( "%%postcount%%", $postcount, $title );
+	}
 
 	$title = wptexturize( $title );
 	$title = convert_chars( $title );
@@ -1921,6 +1927,25 @@ function geodir_title_meta_pagetotal() {
 }
 
 /**
+ * Retrieve the total post found for use as replacement string.
+ *
+ * @since   1.6.0
+ * @package GeoDirectory
+ *
+ * @return string|null The total post found.
+ */
+function geodir_title_meta_postcount() {
+	$replacement = null;
+
+	$postcount = geodir_title_meta_pagenumbering( 'postcount' );
+	if ( isset( $postcount ) && $postcount > 0 ) {
+		$replacement = (string) $postcount;
+	}
+
+	return $replacement;
+}
+
+/**
  * Determine the page numbering of the current post/page/cpt.
  *
  * @param string $request 'nr'|'max' - whether to return the page number or the max number of pages.
@@ -1939,6 +1964,7 @@ function geodir_title_meta_pagenumbering( $request = 'nr' ) {
 	$page_number   = null;
 
 	$max_num_pages = 1;
+	$found_posts = 0;
 
 	if ( ! is_singular() ) {
 		$page_number = get_query_var( 'paged' );
@@ -1949,6 +1975,7 @@ function geodir_title_meta_pagenumbering( $request = 'nr' ) {
 		if ( isset( $wp_query->max_num_pages ) && ( $wp_query->max_num_pages != '' && $wp_query->max_num_pages != 0 ) ) {
 			$max_num_pages = $wp_query->max_num_pages;
 		}
+
 	} else {
 		$page_number = get_query_var( 'page' );
 		if ( $page_number === 0 || $page_number === '' ) {
@@ -1960,6 +1987,10 @@ function geodir_title_meta_pagenumbering( $request = 'nr' ) {
 		}
 	}
 
+	if ( isset( $wp_query->found_posts ) && ( $wp_query->found_posts != '' && $wp_query->found_posts != 0 ) ) {
+		$found_posts = $wp_query->found_posts;
+	}
+
 	$return = null;
 
 	switch ( $request ) {
@@ -1968,6 +1999,9 @@ function geodir_title_meta_pagenumbering( $request = 'nr' ) {
 			break;
 		case 'max':
 			$return = $max_num_pages;
+			break;
+		case 'postcount':
+			$return = $found_posts;
 			break;
 	}
 
