@@ -75,6 +75,13 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
+				'no_wrap'  => array(
+					'title' => __('No Wrap:', 'geodirectory'),
+					'desc' => __('Remove wrapping div.', 'geodirectory'),
+					'type' => 'checkbox',
+					'default'  => '0',
+					'element_require' => '[%show%]=="value-strip"',
+				),
 				'alignment'  => array(
 					'title' => __('Alignment:', 'geodirectory'),
 					'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
@@ -193,10 +200,16 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'alignment'    => '', // left,right,center
 			'text_alignment'    => '', // left,right,center
 			'location'  => 'none',
+			'no_wrap'  => '',
 		), $args, 'gd_post_meta' );
 
 		if(empty($args['id'])){
 			$args['id'] =  isset($gd_post->ID) ? $gd_post->ID : 0;
+		}
+
+		// maybe no wrap
+		if($args['show']=='value-strip'){
+			$args['no_wrap'] = true;
 		}
 		
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
