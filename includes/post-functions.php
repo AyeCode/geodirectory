@@ -767,6 +767,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	$find_post   = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 
 	if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
+		$field = array();
 		$badge = $args['badge'];
 
 		// Check if there is a specific filter for field.
@@ -777,7 +778,6 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' ) {
 			$fields = geodir_post_custom_fields( '', 'all', $post_type, 'none' );
 
-			$field = array();
 			foreach ( $fields as $field_info ) {
 				if ( $match_field == $field_info['htmlvar_name'] ) {
 					$field = $field_info;
@@ -868,6 +868,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						}
 					}
 				}
+
+				/**
+				 * @since 2.0.0.75
+				 */
+				$match_value = apply_filters( 'geodir_post_badge_match_value', $match_value, $match_field, $args, $find_post, $field );
 
 				// badge text
 				if ( empty( $badge ) && empty($args['icon_class']) ) {

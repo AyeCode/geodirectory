@@ -134,3 +134,29 @@ function geodir_predefined_custom_field_output_distanceto( $html, $location, $cf
 	return $html;
 }
 add_filter( 'geodir_custom_field_output_text_key_distanceto', 'geodir_predefined_custom_field_output_distanceto', 10, 4 );
+
+/**
+ * Filter post badge match value.
+ *
+ * @since 2.0.0.75
+ *
+ * @param string $match_value Match value.
+ * @param string $match_field Match field.
+ * @param array $args The badge parameters.
+ * @param array $find_post Post object.
+ * @param array $field The custom field array.
+ * @return string Filtered value.
+ */
+function geodir_post_badge_match_value( $match_value, $match_field, $args, $find_post, $field ) {
+	if ( $match_field && in_array( $match_field, array( 'post_date', 'post_modified', 'post_date_gmt', 'post_modified_gmt' ) ) ) {
+		$date_format = geodir_date_time_format();
+		$date_format = apply_filters( 'geodir_post_badge_date_time_format', $date_format, $match_field, $args, $find_post, $field );
+
+		if ( $date_format ) {
+			$match_value = ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ? date_i18n( $date_format, strtotime( $match_value ) ) : '';
+		}
+	}
+
+	return $match_value;
+}
+add_filter( 'geodir_post_badge_match_value', 'geodir_post_badge_match_value', 10, 5 );

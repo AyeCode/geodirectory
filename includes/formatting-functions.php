@@ -198,10 +198,16 @@ function geodir_time_format() {
  *
  * @since 2.0.0
  *
+ * @param string|bool $sep Separator. Default null.
  * @return string
  */
-function geodir_date_time_format() {
-	$date_time_format = geodir_date_format() . ' ' . geodir_time_format();
+function geodir_date_time_format( $sep = null ) {
+	if ( $sep === null || $sep === false ) {
+		$sep = ' ';
+	}
+
+	$date_time_format = geodir_date_format() . $sep . geodir_time_format();
+
 	return apply_filters( 'geodir_date_time_format', $date_time_format, $sep );
 }
 

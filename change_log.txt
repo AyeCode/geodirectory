@@ -1,6 +1,7 @@
 = 2.0.0.75 =
 * Longitude validation fails to validate longitude with minus sign - FIXED
 * Static map loads Google Map API even OSM API is enabled - FIXED
+* Show formatted post date & post modified date in a badge - ADDED
 
 = 2.0.0.74 =
 * Ninja Forms bug can cause PHP warnings on search page - TEMP FIX ADDED
