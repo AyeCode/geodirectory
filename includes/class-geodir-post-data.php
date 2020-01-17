@@ -1728,10 +1728,13 @@ class GeoDir_Post_Data {
 			return $posts;
 		}
 
-		// check id post has no author and if the current user owns it
+		$user_id = get_current_user_id();
+
+		// Check id post has no author and if the current user owns it
 		if (
-			( ! get_current_user_id() && self::owner_check( $posts[0]->ID, 0 ) )
-			|| ( ! isset( $_REQUEST['preview_nonce'] ) && get_current_user_id() && self::owner_check( $posts[0]->ID, get_current_user_id() ) )
+			( ! $user_id && self::owner_check( $posts[0]->ID, 0 ) )
+			|| ( ! isset( $_REQUEST['preview_nonce'] ) && $user_id && self::owner_check( $posts[0]->ID, $user_id ) )
+			|| ( isset( $_GET['preview_id'] ) && isset( $_GET['preview_nonce'] ) && wp_verify_nonce( sanitize_text_field( $_GET['preview_nonce'] ), 'post_preview_' . (int) $_GET['preview_id'] ) )
 		) {
 			$posts[0]->post_status = 'publish';
 
@@ -1739,7 +1742,6 @@ class GeoDir_Post_Data {
 			add_filter( 'comments_open', '__return_false' );
 			add_filter( 'pings_open', '__return_false' );
 		}
-
 
 		return $posts;
 	}
