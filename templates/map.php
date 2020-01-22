@@ -606,6 +606,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             // incase there are any null values
             address =  address.replace(",null,", ",");
         }
+        if (address) {
+            address =  address.replace(",null,", ",");
+        }
         <?php $codeAddress = ob_get_clean();
         /**
          * Filter the address variable
@@ -619,10 +622,11 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         if (!window.gdMaps) { // No Google Map Loaded
             return;
         }
-		if (address && address != '') {
-			// Replace one or more commas in a row.
-			address = address.replace(/,+/g,',');
-		}
+        if (address && address != '') {
+            // Replace one or more commas in a row.
+            address = address.replace(/,+/g,',');
+            address = address.replace(/(^,)|(,$)/g, "");
+        }
         if ( window.gdMaps == 'osm' ) {
             if (address != '') {
                 if (zip != '') {
@@ -646,6 +650,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     console.log(status);
                     jQuery("#<?php echo $prefix.'map';?>").goMap();
                     if (status == google.maps.GeocoderStatus.OK) {
+                        console.log(results[0]);
                         baseMarker.setPosition(results[0].geometry.location);
                         jQuery.goMap.map.setCenter(results[0].geometry.location);
                         updateMarkerPosition(baseMarker.getPosition());

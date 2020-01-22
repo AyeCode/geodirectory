@@ -267,6 +267,11 @@ class GeoDir_Template_Loader {
         $search_files[] = 'geodirectory.php';
         $search_files[] = 'page.php';
 
+        // Some themes like Twenty Twenty does not contain optional file page.php.
+        if ( ( empty( $default_file ) || $default_file === ' ' ) && isset( $_REQUEST['geodir_search'] ) && is_search() && ! get_query_template( 'page' ) && get_index_template() ) {
+            $search_files[] = 'index.php';
+        }
+
         return array_unique( $search_files );
     }
 

@@ -13,20 +13,19 @@
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
  * @param int|string $post_id Optional. The post ID.
  *
  * @return object|bool Returns full post details as an object. If no details returns false.
  */
 function geodir_get_post_info( $post_id = '' ) {
-	// check for cache
+	// Check for cache
 	$cache = wp_cache_get( "gd_post_" . $post_id, 'gd_post' );
 	if ( $cache ) {
 		return $cache;
 	}
 
-	global $wpdb, $plugin_prefix, $post, $post_info, $preview;
+	global $wpdb, $post, $post_info, $preview;
 
 	if ( $post_id == '' && ! empty( $post ) ) {
 		$post_id = $post->ID;
@@ -38,18 +37,16 @@ function geodir_get_post_info( $post_id = '' ) {
 		$post_type = get_post_type( wp_get_post_parent_id( $post_id ) );
 	}
 
-	// check if preview
+	// Check if preview
 	if ( $preview && $post->ID == $post_id ) {
 		$post_id = GeoDir_Post_Data::get_post_preview_id( $post_id );
 	}
 
-	$all_postypes = geodir_get_posttypes();
-
-	if ( ! in_array( $post_type, $all_postypes ) ) {
+	if ( ! geodir_is_gd_post_type( $post_type ) ) {
 		return new stdClass();
 	}
 
-	$table = $plugin_prefix . $post_type . '_detail';
+	$table = geodir_db_cpt_table( $post_type );
 
 	/**
 	 * Apply Filter to change Post info
@@ -59,26 +56,23 @@ function geodir_get_post_info( $post_id = '' ) {
 	 * @since 1.0.0
 	 * @package GeoDirectory
 	 */
-	$query = apply_filters( 'geodir_post_info_query', $wpdb->prepare( "SELECT p.*,pd.* FROM " . $wpdb->posts . " p," . $table . " pd
-			  WHERE p.ID = pd.post_id
-			  AND pd.post_id = %d", $post_id ) );
+	$query = apply_filters( 'geodir_post_info_query', $wpdb->prepare( "SELECT p.*,pd.* FROM " . $wpdb->posts . " p," . $table . " pd WHERE p.ID = pd.post_id AND pd.post_id = %d", $post_id ) );
 
 	$post_detail = $wpdb->get_row( $query );
 
-	// check for distance setting
+	// Check for distance setting
 	if ( ! empty( $post_detail ) && ! empty( $post->distance ) ) {
 		$post_detail->distance = $post->distance;
 	}
 
-	$return = ( ! empty( $post_detail ) ) ? $post_info = $post_detail : $post_info = false;
+	$return = ! empty( $post_detail ) ? $post_info = $post_detail : $post_info = false;
 
-	// set cache
+	// Set cache
 	if ( ! empty( $post_detail ) ) {
 		wp_cache_set( "gd_post_" . $post_id, $post_detail, 'gd_post' );
 	}
 
 	return $return;
-
 }
 
 /**
@@ -767,6 +761,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	$find_post   = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 
 	if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
+		$field = array();
 		$badge = $args['badge'];
 
 		// Check if there is a specific filter for field.
@@ -777,7 +772,6 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' ) {
 			$fields = geodir_post_custom_fields( '', 'all', $post_type, 'none' );
 
-			$field = array();
 			foreach ( $fields as $field_info ) {
 				if ( $match_field == $field_info['htmlvar_name'] ) {
 					$field = $field_info;
@@ -868,6 +862,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						}
 					}
 				}
+
+				/**
+				 * @since 2.0.0.75
+				 */
+				$match_value = apply_filters( 'geodir_post_badge_match_value', $match_value, $match_field, $args, $find_post, $field );
 
 				// badge text
 				if ( empty( $badge ) && empty($args['icon_class']) ) {
