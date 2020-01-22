@@ -551,7 +551,7 @@ class GeoDir_Admin_Taxonomies {
             class="gd-color-picker"
             placeholder="<?php  ?>"
             data-default-color=""/>
-        <p class="description"><?php _e( 'Select the schema to use for this category', 'geodirectory' ); ?></p>
+        <p class="description"><?php _e( 'Select the color to use for this category', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
