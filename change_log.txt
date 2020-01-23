@@ -6,6 +6,7 @@
 * Post preview is not working for listing with status pending - FIXED
 * Ninja Forms deprecated version with GeoDirectory shows blank page on site - FIXED
 * Dynamic Content widget added for output of dynamic html or shortcodes - ADDED
+* OceanWP theme shows incorrect titles on GD archive pages - FIXED
 
 = 2.0.0.74 =
 * Ninja Forms bug can cause PHP warnings on search page - TEMP FIX ADDED

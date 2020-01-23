@@ -1304,6 +1304,13 @@ class GeoDir_Compatibility {
 			add_filter( 'wp_super_duper_before_widget', array( __CLASS__, 'jarida_super_duper_before_widget' ), 0, 4 );
 			add_filter( 'body_class', array( __CLASS__, 'jarida_body_class' ) );
 		}
+
+		// OceanWP theme
+		if ( class_exists( 'OCEANWP_Theme_Class' ) ) {
+			if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
+				add_filter( 'ocean_title', array( __CLASS__, 'ocean_title' ), 20, 1 );
+			}
+		}
 	}
 
 	/**
@@ -2023,5 +2030,23 @@ class GeoDir_Compatibility {
 		}
 
 		return $layouts;
+	}
+
+	/**
+	 * OceanWP theme filter GD page title.
+	 *
+	 * @since 2.0.0.75
+	 *
+	 * @param string $title The page title.
+	 * @return string The page title.
+	 */
+	public static function ocean_title( $title ) {
+		$_title = GeoDir_SEO::set_meta();
+
+		if ( $_title ) {
+			$title = $_title;
+		}
+
+		return $title;
 	}
 }

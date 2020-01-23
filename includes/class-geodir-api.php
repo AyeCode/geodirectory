@@ -558,9 +558,18 @@ class GeoDir_API {
 	 *
 	 */
 	public static function rest_cookie_check_errors( $errors ) {
-		if ( $errors !== true && ! empty( $_REQUEST['_wpnonce'] ) &&  ! empty( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], '/wp-json/geodir/' ) !== false && strpos( $_SERVER['REQUEST_URI'], '/markers/' ) !== false && is_wp_error( $errors ) && $errors->get_error_code() == 'rest_cookie_invalid_nonce' ) {
-			if ( ( ! is_user_logged_in() && geodir_create_nonce( 'wp_rest' ) == sanitize_text_field( $_REQUEST['_wpnonce'] ) ) || is_user_logged_in() ) {
+		if ( is_wp_error( $errors ) && ! empty( $_REQUEST['_wpnonce'] ) &&  ! empty( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], '/wp-json/geodir/' ) !== false && strpos( $_SERVER['REQUEST_URI'], '/markers/' ) !== false && is_wp_error( $errors ) && $errors->get_error_code() == 'rest_cookie_invalid_nonce' ) {
+			if ( is_user_logged_in() ) { // Logged in user
 				return true;
+			} elseif ( geodir_create_nonce( 'wp_rest' ) == sanitize_text_field( $_REQUEST['_wpnonce'] ) ) {
+				return true;
+			} else {
+				$parse_referer = wp_parse_url( wp_get_referer() ); // Http referer
+				$parse_home = wp_parse_url( home_url( '/' ) ); // Home url
+
+				if ( ! empty( $parse_referer['host'] ) && ! empty( $parse_home['host'] ) && strtolower( $parse_referer['host'] ) == strtolower( $parse_home['host'] ) ) {
+					return true;
+				}
 			}
 		}
 		return $errors;
