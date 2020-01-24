@@ -8,6 +8,7 @@
 * Dynamic Content widget added for output of dynamic html or shortcodes - ADDED
 * OceanWP theme shows incorrect titles on GD archive pages - FIXED
 * Sometimes pagination & feed not working on category pages - FIXED
+* Search with apostrophe on mac iOS device shows empty results - FIXED
 
 = 2.0.0.74 =
 * Ninja Forms bug can cause PHP warnings on search page - TEMP FIX ADDED

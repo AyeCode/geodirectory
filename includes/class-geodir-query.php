@@ -217,8 +217,12 @@ class GeoDir_Query {
 				$snear = trim(esc_attr($_REQUEST['snear']));
 			}
 
-			if (isset($_REQUEST['s'])) {
-				$s = trim(esc_attr(wp_strip_all_tags(get_search_query())));
+			if ( isset( $_REQUEST['s'] ) ) {
+				$s = get_search_query();
+				if ( $s != '' ) {
+					$s = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $s ); // apple suck
+				}
+				$s = trim( esc_attr( wp_strip_all_tags( $s ) ) );
 			}
 
 			// Exact search with quotes
