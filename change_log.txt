@@ -5,6 +5,7 @@
 * Twenty Twenty theme show 404 when no results found on search page - FIXED
 * Post preview is not working for listing with status pending - FIXED
 * Ninja Forms deprecated version with GeoDirectory shows blank page on site - FIXED
+* archive map show all posts param not working- FIXED
 
 = 2.0.0.74 =
 * Ninja Forms bug can cause PHP warnings on search page - TEMP FIX ADDED
