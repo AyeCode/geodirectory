@@ -865,7 +865,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 								}
 							} else {
 
-								if ( geodir_is_page( 'pt' ) ) {
+								if ( geodir_is_page( 'pt' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'author' ) || geodir_is_page( 'search' ) ) {
 									// if post type page and set to show all then don't add a posts param
 								} else {
 									if ( ! empty( $wp_query->posts ) ) {
@@ -965,8 +965,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			if ( get_query_var( 'near' ) ) {
 				$map_args['dist'] = get_query_var( 'dist' );
 			}
-		}
-
+		}		
 		return self::render_map( $map_args );
 	}
 
