@@ -1748,22 +1748,45 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	 */
 	$title = apply_filters( 'geodir_replace_location_variables', $title, $location_array, $gd_page, $sep );
 
+	$search_term = '';
+	if ( isset( $_REQUEST['s'] ) ) {
+		$search_term = esc_attr( $_REQUEST['s'] );
+		$search_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_term ); // apple suck
+		$search_term = trim( stripslashes( $search_term ) );
+	}
+
+	// %%search_term%%
 	if ( strpos( $title, '%%search_term%%' ) !== false ) {
-		$search_term = '';
-		if ( isset( $_REQUEST['s'] ) ) {
-			$search_term = esc_attr( $_REQUEST['s'] );
-			$search_term = str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
-			$search_term = trim( stripslashes( $search_term ) );
-		}
 		$title = str_replace( "%%search_term%%", $search_term, $title );
 	}
 
-	if ( strpos( $title, '%%search_near%%' ) !== false ) {
-		$search_term = '';
-		if ( isset( $_REQUEST['snear'] ) ) {
-			$search_term = esc_attr( $_REQUEST['snear'] );
+	// %%for_search_term%%
+	if ( strpos( $title, '%%for_search_term%%' ) !== false ) {
+		$for_search_term = $search_term != '' ? wp_sprintf( __( 'for %s', 'geodirectory' ), $search_term ) : '';
+	
+		$title = str_replace( "%%for_search_term%%", $for_search_term, $title );
+	}
+
+	$search_near_term = '';
+	$search_near = '';
+	if ( isset( $_REQUEST['snear'] ) ) {
+		$search_near_term = esc_attr( $_REQUEST['snear'] );
+		$search_near_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_near_term ); // apple suck
+		$search_near_term = trim( stripslashes( $search_near_term ) );
+
+		if ( $search_near_term != '' ) {
+			$search_near = wp_sprintf( __( 'near %s', 'geodirectory' ), $search_near_term );
 		}
-		$title = str_replace( "%%search_near%%", $search_term, $title );
+	}
+
+	// %%search_near_term%%
+	if ( strpos( $title, '%%search_near_term%%' ) !== false ) {
+		$title = str_replace( "%%search_near_term%%", $search_near_term, $title );
+	}
+
+	// %%search_near%%
+	if ( strpos( $title, '%%search_near%%' ) !== false ) {
+		$title = str_replace( "%%search_near%%", $search_near, $title );
 	}
 
 	if ( strpos( $title, '%%name%%' ) !== false ) {
