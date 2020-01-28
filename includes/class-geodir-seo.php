@@ -168,21 +168,21 @@ class GeoDir_SEO {
 	 *
 	 * @return string $title.
 	 */
-	public static function output_title($title = '', $id = 0){
+	public static function output_title( $title = '', $id = 0 ) {
 		global $wp_query;
-		// in some themes the object id is missing so we fix it
+
+		// In some themes the object id is missing so we fix it
 		$query_object_id = '';
-		if($id && isset($wp_query->post->ID) && geodir_is_geodir_page_id($id)){
+
+		if ( $id && isset( $wp_query->post->ID ) && geodir_is_geodir_page_id( $id ) ) {
 			$query_object_id = $wp_query->post->ID;
-		} elseif( !is_null($wp_query) ) {
+		} elseif ( ! is_null( $wp_query ) ) {
 			$query_object_id = get_queried_object_id();
 		}
 
-
-//		echo $query_object_id.'###'.$id.self::$title;
-		if(self::$title && empty($id)  && !self::$doing_menu ){
+		if ( self::$title && empty( $id ) && ! self::$doing_menu ) {
 			$title = self::$title;
-		}elseif(self::$title && !empty($id) && $query_object_id == $id && !self::$doing_menu ){
+		} elseif ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu ) {
 			$title = self::$title;
 			/**
 			 * Filter page title to replace variables.
@@ -190,7 +190,12 @@ class GeoDir_SEO {
 			 * @param string $title The page title including variables.
 			 * @param string $id The page id.
 			 */
-			$title = apply_filters('geodir_seo_title', __($title, 'geodirectory'), $title, $id);
+			$title = apply_filters( 'geodir_seo_title', __( $title, 'geodirectory' ), $title, $id );
+		}
+
+		// Strip duplicate whitespace.
+		if ( $title != '' ) {
+			$title = normalize_whitespace( $title );
 		}
 
 		return $title;
@@ -206,8 +211,8 @@ class GeoDir_SEO {
 	 *
 	 * @return mixed|void
 	 */
-	public static function output_meta_title($title = '', $sep = ''){
-		if(self::$meta_title){
+	public static function output_meta_title( $title = '', $sep = '' ) {
+		if ( self::$meta_title ) {
 			$title = self::$meta_title;
 		}
 
@@ -219,7 +224,14 @@ class GeoDir_SEO {
 		 * @param string $gd_page The GeoDirectory page type if any.
 		 * @param string $sep The title separator symbol.
 		 */
-		return apply_filters('geodir_seo_meta_title', __($title, 'geodirectory'), self::$gd_page, $sep);
+		$title = apply_filters( 'geodir_seo_meta_title', __( $title, 'geodirectory' ), self::$gd_page, $sep );
+
+		// Strip duplicate whitespace.
+		if ( $title != '' ) {
+			$title = normalize_whitespace( $title );
+		}
+
+		return $title;
 	}
 
 	/**
@@ -227,17 +239,18 @@ class GeoDir_SEO {
 	 *
 	 * @since 2.0.0
 	 */
-	public static function get_description($description=''){
+	public static function get_description( $description = '' ) {
 		$meta_description = self::$meta_description;
 
-		if(!empty($meta_description )){
+		if ( ! empty( $meta_description ) ) {
 			$description = $meta_description;
 		}
 
 		// escape
-		if(!empty($description)){
-			$description = esc_attr($description);
+		if ( ! empty( $description ) ) {
+			$description = esc_attr( $description );
 		}
+
 		/**
 		 * Filter SEO meta description.
 		 *
@@ -245,7 +258,14 @@ class GeoDir_SEO {
 		 *
 		 * @param string $description Meta description.
 		 */
-		return apply_filters( 'geodir_seo_meta_description', $description,$meta_description);
+		$description = apply_filters( 'geodir_seo_meta_description', $description, $meta_description );
+
+		// Strip duplicate whitespace.
+		if ( $description != '' ) {
+			$description = normalize_whitespace( $description );
+		}
+
+		return $description;
 	}
 
 	/**
@@ -253,10 +273,10 @@ class GeoDir_SEO {
 	 *
 	 * @since 2.0.0
 	 */
-	public static function get_title( $title = '' ){
+	public static function get_title( $title = '' ) {
 		$meta_title= self::$meta_title;
 
-		if ( !empty( $meta_title ) ) {
+		if ( ! empty( $meta_title ) ) {
 			$title = $meta_title;
 		}
 
@@ -269,7 +289,14 @@ class GeoDir_SEO {
 		 *
 		 * @param string $title Meta title.
 		 */
-		return apply_filters( 'geodir_seo_meta_title', $title, $meta_title);
+		$title = apply_filters( 'geodir_seo_meta_title', $title, $meta_title );
+
+		// Strip duplicate whitespace.
+		if ( $title != '' ) {
+			$title = normalize_whitespace( $title );
+		}
+
+		return $title;
 	}
 
 	/**
@@ -362,9 +389,8 @@ class GeoDir_SEO {
 	 *
 	 * @return string $string.
 	 */
-	public static function replace_variable($string = '',$gd_page = ''){
-		global $post,$gd_post;
-		// global variables
+	public static function replace_variable( $string = '', $gd_page = '' ) {
+		global $post, $gd_post;
 
 		$post_type = geodir_get_current_posttype();
 
@@ -459,29 +485,44 @@ class GeoDir_SEO {
 		}
 
 		// search
+		$search_term = '';
+		if ( isset( $_REQUEST['s'] ) ) {
+			$search_term = esc_attr( $_REQUEST['s'] );
+			$search_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_term ); // apple suck
+			$search_term = trim( stripslashes( $search_term ) );
+		}
+
+		// %%search_term%%
 		if ( strpos( $string, '%%search_term%%' ) !== false ) {
-			$search_term = '';
-			if ( isset( $_REQUEST['s'] ) ) {
-				$search_term = esc_attr( $_REQUEST['s'] );
-				$search_term = str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
-				$search_term = trim( stripslashes( $search_term ) );
-			}
 			$string = str_replace( "%%search_term%%", $search_term, $string );
 		}
 
-		if ( strpos( $string, '%%search_near%%' ) !== false ) {
-			$search_near = '';
-			if ( isset( $_REQUEST['snear'] ) ) {
-				$search_near = esc_attr( $_REQUEST['snear'] );
-			}
-			if($search_near ){
-				if($search_term){
-					$search_near = ", ".sprintf( __('Near %s', 'geodirectory'), $search_near );
-				}else{
-					$search_near = sprintf( __('Near %s', 'geodirectory'), $search_near );
-				}
-			}
+		// %%for_search_term%%
+		if ( strpos( $string, '%%for_search_term%%' ) !== false ) {
+			$for_search_term = $search_term != '' ? wp_sprintf( __( 'for %s', 'geodirectory' ), $search_term ) : '';
+		
+			$string = str_replace( "%%for_search_term%%", $for_search_term, $string );
+		}
 
+		$search_near_term = '';
+		$search_near = '';
+		if ( isset( $_REQUEST['snear'] ) ) {
+			$search_near_term = esc_attr( $_REQUEST['snear'] );
+			$search_near_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_near_term ); // apple suck
+			$search_near_term = trim( stripslashes( $search_near_term ) );
+
+			if ( $search_near_term != '' ) {
+				$search_near = wp_sprintf( __( 'near %s', 'geodirectory' ), $search_near_term );
+			}
+		}
+
+		// %%search_near_term%%
+		if ( strpos( $string, '%%search_near_term%%' ) !== false ) {
+			$string = str_replace( "%%search_near_term%%", $search_near_term, $string );
+		}
+
+		// %%search_near%%
+		if ( strpos( $string, '%%search_near%%' ) !== false ) {
 			$string = str_replace( "%%search_near%%", $search_near, $string );
 		}
 
@@ -567,12 +608,12 @@ class GeoDir_SEO {
 			$vars['%%in_location_city%%'] = __('The current viewing city prefixed with `in` eg: in Philadelphia','geodirectory');
 		}
 
-
-
 		// search page only
-		if($gd_page == 'search' ){
-			$vars['%%search_term%%'] = __('The currently used search for term.','geodirectory');
-			$vars['%%search_near%%'] = __('The currently used search near term.','geodirectory');
+		if ( $gd_page == 'search' ) {
+			$vars['%%search_term%%'] = __('The currently used search for term.', 'geodirectory' );
+			$vars['%%for_search_term%%'] = __('The currently used search for term with `for`. Ex: for dinner.', 'geodirectory' );
+			$vars['%%search_near%%'] = __('The currently used search near term with `near`. Ex: near Philadelphia.', 'geodirectory' );
+			$vars['%%search_near_term%%'] = __('The currently used search near term.', 'geodirectory' );
 		}
 
 		// paging
