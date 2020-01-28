@@ -538,7 +538,7 @@ Thank You.","geodirectory"
 	 * @return string
 	 */
 	public static function seo_search_meta_title(){
-		return __("%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep%% %%sitename%%","geodirectory");
+		return __("%%pt_plural%% search results for %%search_term%% %%search_near%% %%sep%% %%sitename%%","geodirectory");
 	}
 
 	/**
@@ -547,7 +547,7 @@ Thank You.","geodirectory"
 	 * @return string
 	 */
 	public static function seo_search_meta_description(){
-		return __("%%pt_plural%% search results for %%search_term%%, Near %%search_near%%","geodirectory");
+		return __("%%pt_plural%% search results for %%search_term%% %%search_near%%","geodirectory");
 	}
 
 	/**

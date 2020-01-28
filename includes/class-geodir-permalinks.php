@@ -54,6 +54,9 @@ class GeoDir_Permalinks {
 		// try and recover from 404 if GD CPT detected
 		add_action('wp',array($this,'_404_rescue'));
 
+		// Arrange rewrite rules to fix paged, feed permalinks on category pages.
+		add_filter( 'rewrite_rules_array', array( __CLASS__, 'arrange_rewrite_rules' ), 999, 1 );
+
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
 		//add_action('init', array( $this, 'temp_check_rules'),10000000000);
@@ -781,7 +784,125 @@ class GeoDir_Permalinks {
 
 	}
 
+	/**
+	 * Arrange rewrite rules to work feed on categories pages.
+	 *
+	 * @since 2.0.0.75
+	 *
+	 * @global WP_Rewrite $wp_rewrite
+	 *
+	 * @param array $rules Array of rewrite rules.
+	 * @return array Rewrite rules array.
+	 */
+	public static function arrange_rewrite_rules( $rules ) {
+		global $wp_rewrite;
 
+		$post_types = geodir_get_posttypes( 'names' );
+
+		$post_type_slugs = array();
+		$_post_type_slugs = array();
+		$taxonomy_rules_top = array();
+		$taxonomy_rules = array();
+		$pt_rules_top = array();
+		$pt_rules = array();
+
+		// Get post type slugs
+		foreach ( $rules as $regex => $query ) {
+			foreach ( $post_types as $post_type ) {
+				if ( empty( $post_type_slugs[ $post_type ] ) ) {
+					$post_type_slugs[ $post_type ] = array();
+				}
+
+				if ( strpos( $query, 'index.php?post_type=' . $post_type . '&paged=' ) === 0 ) {
+					$_regex = explode( '/', $regex );
+					$post_type_slugs[ $post_type ][] = $_regex[0];
+					$_post_type_slugs[] = $_regex[0];
+				}
+			}
+		}
+
+		$_rules = $rules;
+		foreach ( $rules as $_regex => $_query ) {
+			foreach ( $_post_type_slugs as $slug ) {
+				if ( isset( $_rules[ $_regex ] ) && ( strpos( $_regex, '^' . $slug . '/' ) === 0 || strpos( $_regex, $slug . '/' ) === 0 ) && ( strpos( $_query, '?attachment=' ) !== false || strpos( $_query, '&attachment=' ) !== false || strpos( $_query, '&tb=1' ) !== false || strpos( $_query, '&embed=true' ) !== false || strpos( $_query, '&geodir-api=' ) !== false ) ) {
+					unset( $_rules[ $_regex ] );
+				}
+			}
+		}
+		$rules = $_rules;
+
+		foreach ( $rules as $regex => $query ) {
+			foreach ( $post_types as $post_type ) {
+				if ( strpos( $query, 'index.php?' . $post_type . 'category=' ) === 0 || strpos( $query, 'index.php?' . $post_type . '_tags=' ) === 0 || strpos( $query, 'index.php?post_type=' . $post_type . '&' . $post_type . 'category=' ) === 0 || strpos( $query, 'index.php?post_type=' . $post_type . '&' . $post_type . '_tags=' ) === 0 ) {
+					if ( strpos( $query, '&feed=' ) !== false || strpos( $query, '&paged=' ) !== false ) {
+						$taxonomy_rules_top[ $regex ] = $query;
+					} else {
+						$taxonomy_rules[ $regex ] = $query;
+					}
+					unset( $_rules[ $regex ] );
+				} elseif ( strpos( $query, '&feed=' ) !== false || strpos( $query, '&paged=' ) !== false || strpos( $query, '&cpage=' ) !== false ) {
+					if ( strpos( $query, '?' . $post_type . '=' ) !== false ) {
+						$pt_rules_top[ $regex ] = $query;
+						unset( $_rules[ $regex ] );
+					} elseif ( ! empty( $post_type_slugs[ $post_type ] ) ) {
+						$pt_slugs = array_unique( $post_type_slugs[ $post_type ] );
+
+						foreach ( $pt_slugs as $slug ) {
+							if ( $slug && strpos( $regex, $slug . '/[' ) === 0 ) {
+								$pt_rules[ $regex ] = $query;
+								unset( $_rules[ $regex ] );
+							}
+						}
+					}
+				}
+			}
+		}
+
+		// Set links with paged, feed at top
+		if ( ! empty( $taxonomy_rules_top ) || ! empty( $taxonomy_rules ) || ! empty( $pt_rules_top ) || ! empty( $pt_rules ) ) {
+			$new_rules = array();
+
+			$rules_added = false;
+			foreach ( $_rules as $_regex => $_query ) {
+				if ( ! $rules_added ) {
+					foreach ( $_post_type_slugs as $slug ) {
+						if ( ! $rules_added && strpos( $_regex, '^' . $slug . '/(' ) === 0 ) {
+							$rules_added = true;
+
+							if ( ! empty( $taxonomy_rules_top ) ) {
+								foreach ( $taxonomy_rules_top as $regex => $query ) {
+									$new_rules[ $regex ] = $query;
+								}
+							}
+
+							if ( ! empty( $taxonomy_rules ) ) {
+								foreach ( $taxonomy_rules as $regex => $query ) {
+									$new_rules[ $regex ] = $query;
+								}
+							}
+
+							if ( ! empty( $pt_rules_top ) ) {
+								foreach ( $pt_rules_top as $regex => $query ) {
+									$new_rules[ $regex ] = $query;
+								}
+							}
+
+							if ( ! empty( $pt_rules ) ) {
+								foreach ( $pt_rules as $regex => $query ) {
+									$new_rules[ $regex ] = $query;
+								}
+							}
+						}
+					}
+				}
+				$new_rules[ $_regex ] = $_query;
+			}
+
+			$rules = $new_rules;
+		}
+
+		return $rules;
+	}
 }
 
 
