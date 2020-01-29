@@ -82,7 +82,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				'title'       => __( 'Text:', 'geodirectory' ),
 				'desc' => __('Use %%input%% to use the input value of the field or %%post_url%% for the post url, or the field key for any other info %%email%%.', 'geodirectory'),
 				'type'        => 'textarea',
-				'placeholder' => __( '', 'geodirectory' ),
+				'placeholder' => '', // __( '', 'geodirectory' ), @todo any reason to use empty?
 				'default'     => '',
 				'desc_tip'    => true,
 				'advanced'    => false
