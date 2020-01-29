@@ -26,6 +26,7 @@ class GeoDir_Compatibility {
 		add_filter( 'option_wpseo_taxonomy_meta', array( __CLASS__, 'wpseo_taxonomy_meta' ), 10, 2 );
 		// add setting to be able to disable yoast on GD pages
 		add_filter( 'geodir_seo_options', array( __CLASS__, 'wpseo_disable' ), 10 );
+		add_filter( 'rank_math/opengraph/url', array( __CLASS__, 'rank_math_location_url_callback' ), 10 );
 
 		/*######################################################
 		Rank Math SEO
@@ -1004,6 +1005,18 @@ class GeoDir_Compatibility {
 	   <?php
 			$output = ob_get_clean();
 			return str_replace( array( '<script>', '</script>' ), '', $output );
+	}
+
+	/**
+	 * Function to fix location page og:url with rank math.
+	 */
+	public static function rank_math_location_url_callback( $url ) {
+		// Maybe modify $example in some way.
+		$path_location_url = geodir_get_location_link('current');
+		if( geodir_is_page( 'location' ) ){
+			$url = $path_location_url;
+		}	
+		return $url;
 	}
 
 	public static function rank_math_add_images_to_sitemap( $images, $id ){
