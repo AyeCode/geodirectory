@@ -444,20 +444,20 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		 * @param object $field_info Datepicker fields information.
 		 * @return string $output.
 		 */
-		public static function date_range($output,$result_str,$cf,$field_info){
-			ob_start();
-			$extra = array();
-			if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
-				$extra = unserialize($field_info->extra_fields);
+		public static function date_range( $output, $result_str, $cf, $field_info ) {
+			$extra_fields = array();
+			if ( ! empty( $field_info->extra_fields ) ) {
+				$extra_fields = is_array( $field_info->extra_fields ) ? $field_info->extra_fields : maybe_unserialize( $field_info->extra_fields );
 			}
 
 			$value = '';
-			if (isset($field_info->extra_fields->date_range)) {
-				$value = esc_attr($field_info->extra_fields->date_range);
-			}elseif(isset($cf['defaults']['extra_fields']['date_range']) && $cf['defaults']['extra_fields']['date_range']){
-				$value = esc_attr($cf['defaults']['extra_fields']['date_range']);
+			if ( isset( $extra_fields['date_range'] ) ) {
+				$value = esc_attr( $extra_fields['date_range'] );
+			} elseif ( isset( $cf['defaults']['extra_fields']['date_range'] ) && $cf['defaults']['extra_fields']['date_range'] ) {
+				$value = esc_attr( $cf['defaults']['extra_fields']['date_range'] );
 			}
 
+			ob_start();
 			?>
 			<p data-setting="date_range">
 				<label for="date_range" class="dd-setting-name">
@@ -469,11 +469,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				</label>
 			</p>
 			<?php
-
 			$output .= ob_get_clean();
+
 			return $output;
 		}
-
 
         /**
          * Multiple input option values.

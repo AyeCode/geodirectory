@@ -486,7 +486,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'advanced' => true,
 					'value'	   => $post_type_values['description']
 				),
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_description' ),
 
 				array(
 					'title'    => __( 'SEO Overrides', 'geodirectory' ),
@@ -528,7 +528,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 				// Page template
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_page' ),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
 
 				array(
 					'title'    => __( 'Template Page Settings', 'geodirectory' ),
@@ -588,7 +588,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_page' ),
 
 
 			) );

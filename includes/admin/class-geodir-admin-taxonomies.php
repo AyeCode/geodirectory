@@ -551,7 +551,7 @@ class GeoDir_Admin_Taxonomies {
             class="gd-color-picker"
             placeholder="<?php  ?>"
             data-default-color=""/>
-        <p class="description"><?php _e( 'Select the schema to use for this category', 'geodirectory' ); ?></p>
+        <p class="description"><?php _e( 'Select the color to use for this category', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
@@ -600,7 +600,7 @@ class GeoDir_Admin_Taxonomies {
             update_term_meta( $term_id, 'ct_cat_top_desc', $_POST['ct_cat_top_desc'] );
         }
         
-        // Categoty listing default image.
+        // Category listing default image.
         if ( isset( $_POST['ct_cat_default_img'] ) ) {
             $cat_default_img = $_POST['ct_cat_default_img'];
             
@@ -613,7 +613,7 @@ class GeoDir_Admin_Taxonomies {
             update_term_meta( $term_id, 'ct_cat_default_img', $cat_default_img );
         }
         
-        // Categoty icon.
+        // Category icon.
         if ( isset( $_POST['ct_cat_icon'] ) ) {
             $cat_icon = $_POST['ct_cat_icon'];
             
@@ -740,10 +740,10 @@ class GeoDir_Admin_Taxonomies {
      * @param string $cat_taxonomy Category taxonomy.
      * @param int $cat_parent Optional. Category parent ID. Default 0.
      * @param bool $hide_empty Optional. Taxonomy hide empty. Default false.
-     * @param int $pading Optional. Pading value . Default 0.
+     * @param int $padding Optional. Padding value . Default 0.
      * @return string Taxonomy walker html.
      */
-    public static function taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty = false, $pading = 0 ) {
+    public static function taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty = false, $padding = 0 ) {
         global $cat_display, $post_cat, $exclude_cats;
 
         $search_terms = trim( $post_cat, "," );
@@ -760,8 +760,8 @@ class GeoDir_Admin_Taxonomies {
         //If there are terms, start displaying
         if (count($cat_terms) > 0) {
             //Displaying as a list
-            $p = $pading * 20;
-            $pading++;
+            $p = $padding * 20;
+            $padding++;
 
 
             if ((!geodir_is_page('listing')) || (is_search() && $_REQUEST['search_taxonomy'] == '')) {
@@ -785,8 +785,8 @@ class GeoDir_Admin_Taxonomies {
 				$no_child = false;
 
 				if ( absint( $cat_parent ) == 0 && count( $cat_terms ) == 1 ) {
-					// Call recurson to print sub cats
-					$sub_out = self::taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $pading );
+					// Call recursion to print sub cats
+					$sub_out = self::taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $padding );
 
 					if ( trim( $sub_out ) == '' ) {
 						$no_child = true; // Set category selected when only one category.
@@ -813,8 +813,8 @@ class GeoDir_Admin_Taxonomies {
                 }
 
                 if ( ! ( absint( $cat_parent ) == 0 && count( $cat_terms ) == 1 ) ) {
-					// Call recurson to print sub cats
-					$sub_out = self::taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $pading );
+					// Call recursion to print sub cats
+					$sub_out = self::taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $padding );
 				}
 
 				$out .= $sub_out;
