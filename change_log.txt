@@ -1,3 +1,6 @@
+= 2.0.0.76 =
+* File field shows required field error twice - FIXED
+
 = 2.0.0.75 =
 * Longitude validation fails to validate longitude with minus sign - FIXED
 * Static map loads Google Map API even OSM API is enabled - FIXED
