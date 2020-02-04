@@ -1119,7 +1119,7 @@ class GeoDir_Admin_Install {
 			$columns['city'] = "city VARCHAR( 50 ) NULL";
 			$columns['region'] = "region VARCHAR( 50 ) NULL";
 			$columns['country'] = "country VARCHAR( 50 ) NULL";
-			$columns['zip'] = "zip VARCHAR( 20 ) NULL";
+			$columns['zip'] = "zip VARCHAR( 50 ) NULL";
 			$columns['latitude'] = "latitude VARCHAR( 22 ) NULL";
 			$columns['longitude'] = "longitude VARCHAR( 22 ) NULL";
 			$columns['mapview'] = "mapview VARCHAR( 15 ) NULL";

@@ -843,7 +843,7 @@ class GeoDir_Admin_Upgrade {
 					CHANGE post_city `city` varchar(50) DEFAULT NULL, 
 					CHANGE post_region `region` varchar(50) DEFAULT NULL, 
 					CHANGE post_country `country` varchar(50) DEFAULT NULL, 
-					CHANGE post_zip `zip` varchar(20) NULL, 
+					CHANGE post_zip `zip` varchar(50) NULL, 
 					CHANGE post_latitude `latitude` varchar(22)  DEFAULT NULL, 
 					CHANGE post_longitude `longitude` varchar(22) DEFAULT NULL, 
 					CHANGE post_mapview `mapview` varchar(15) DEFAULT NULL;" 
