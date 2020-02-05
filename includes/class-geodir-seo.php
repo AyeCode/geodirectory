@@ -314,64 +314,84 @@ class GeoDir_SEO {
      *
      * @since 2.0.0
 	 */
-	public static function set_meta(){
+	public static function set_meta() {
 		$gd_settings = geodir_get_settings();
-		//print_r( $gd_settings );
-		if(geodir_is_page( 'pt' )){self::$gd_page = 'pt';
-			$post_type       = geodir_get_current_posttype();
-			$post_type_info  = get_post_type_object( $post_type );
-			if(isset($post_type_info->seo['title']) && !empty($post_type_info->seo['title'])){
+
+		if ( geodir_is_page( 'pt' ) ) {
+			self::$gd_page = 'pt';
+			$post_type = geodir_get_current_posttype();
+			$post_type_info = get_post_type_object( $post_type );
+
+			if ( isset( $post_type_info->seo['title'] ) && ! empty( $post_type_info->seo['title'] ) ) {
 				self::$title = $post_type_info->seo['title'];
-			}else{
-				self::$title = !empty($gd_settings['seo_cpt_title']) ? $gd_settings['seo_cpt_title'] : GeoDir_Defaults::seo_cpt_title();
+			} else {
+				self::$title = ! empty( $gd_settings['seo_cpt_title'] ) ? $gd_settings['seo_cpt_title'] : GeoDir_Defaults::seo_cpt_title();
 			}
-			if(isset($post_type_info->seo['meta_title']) && !empty($post_type_info->seo['meta_title'])){
+
+			if ( isset( $post_type_info->seo['meta_title'] ) && ! empty( $post_type_info->seo['meta_title'] ) ) {
 				self::$meta_title = $post_type_info->seo['meta_title'];
-			}else{
-				self::$meta_title = !empty($gd_settings['seo_cpt_meta_title']) ? $gd_settings['seo_cpt_meta_title'] : GeoDir_Defaults::seo_cpt_meta_title();
+			} else {
+				self::$meta_title = ! empty( $gd_settings['seo_cpt_meta_title'] ) ? $gd_settings['seo_cpt_meta_title'] : GeoDir_Defaults::seo_cpt_meta_title();
 			}
-			if(isset($post_type_info->seo['meta_description']) && !empty($post_type_info->seo['meta_description'])){
+
+			if ( isset( $post_type_info->seo['meta_description'] ) && ! empty( $post_type_info->seo['meta_description'] ) ) {
 				self::$meta_description = $post_type_info->seo['meta_description'];
-			}else{
-				self::$meta_description = !empty($gd_settings['seo_cpt_meta_description']) ? $gd_settings['seo_cpt_meta_description'] : GeoDir_Defaults::seo_cpt_meta_description();
+			} else {
+				self::$meta_description = ! empty( $gd_settings['seo_cpt_meta_description'] ) ? $gd_settings['seo_cpt_meta_description'] : GeoDir_Defaults::seo_cpt_meta_description();
 			}
-		}elseif(geodir_is_page( 'archive' )){self::$gd_page = 'archive';
+		} elseif ( geodir_is_page( 'archive' ) ) {
+			self::$gd_page = 'archive';
 			$queried_object = get_queried_object();
-			if(isset($queried_object->taxonomy) && geodir_taxonomy_type($queried_object->taxonomy) == 'category' && geodir_is_gd_taxonomy($queried_object->taxonomy)){
-				self::$title = !empty($gd_settings['seo_cat_archive_title']) ? $gd_settings['seo_cat_archive_title'] : GeoDir_Defaults::seo_cat_archive_title();
-				self::$meta_title = !empty($gd_settings['seo_cat_archive_meta_title']) ? $gd_settings['seo_cat_archive_meta_title'] : GeoDir_Defaults::seo_cat_archive_meta_title();
-				self::$meta_description = !empty($gd_settings['seo_cat_archive_meta_description']) ? $gd_settings['seo_cat_archive_meta_description'] : GeoDir_Defaults::seo_cat_archive_meta_description();
-			}elseif(isset($queried_object->taxonomy) && geodir_taxonomy_type($queried_object->taxonomy) == 'tag' && geodir_is_gd_taxonomy($queried_object->taxonomy)){
-				self::$title = !empty($gd_settings['seo_tag_archive_title']) ? $gd_settings['seo_tag_archive_title'] : GeoDir_Defaults::seo_tag_archive_title();
-				self::$meta_title = !empty($gd_settings['seo_tag_archive_meta_title']) ? $gd_settings['seo_tag_archive_meta_title'] : GeoDir_Defaults::seo_tag_archive_meta_title();
-				self::$meta_description = !empty($gd_settings['seo_tag_archive_meta_description']) ? $gd_settings['seo_tag_archive_meta_description'] : GeoDir_Defaults::seo_tag_archive_meta_description();
+
+			if ( isset( $queried_object->taxonomy ) && geodir_taxonomy_type( $queried_object->taxonomy ) == 'category' && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
+				self::$title = ! empty( $gd_settings['seo_cat_archive_title'] ) ? $gd_settings['seo_cat_archive_title'] : GeoDir_Defaults::seo_cat_archive_title();
+				self::$meta_title = ! empty( $gd_settings['seo_cat_archive_meta_title'] ) ? $gd_settings['seo_cat_archive_meta_title'] : GeoDir_Defaults::seo_cat_archive_meta_title();
+				self::$meta_description = ! empty( $gd_settings['seo_cat_archive_meta_description'] ) ? $gd_settings['seo_cat_archive_meta_description'] : GeoDir_Defaults::seo_cat_archive_meta_description();
+			} elseif ( isset($queried_object->taxonomy ) && geodir_taxonomy_type( $queried_object->taxonomy ) == 'tag' && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
+				self::$title = ! empty( $gd_settings['seo_tag_archive_title'] ) ? $gd_settings['seo_tag_archive_title'] : GeoDir_Defaults::seo_tag_archive_title();
+				self::$meta_title = ! empty( $gd_settings['seo_tag_archive_meta_title'] ) ? $gd_settings['seo_tag_archive_meta_title'] : GeoDir_Defaults::seo_tag_archive_meta_title();
+				self::$meta_description = ! empty( $gd_settings['seo_tag_archive_meta_description'] ) ? $gd_settings['seo_tag_archive_meta_description'] : GeoDir_Defaults::seo_tag_archive_meta_description();
 			}
-		}elseif(geodir_is_page( 'single' )){self::$gd_page = 'single';
-			self::$title = !empty($gd_settings['seo_single_title']) ? $gd_settings['seo_single_title'] : GeoDir_Defaults::seo_single_title();
-			self::$meta_title = !empty($gd_settings['seo_single_meta_title']) ? $gd_settings['seo_single_meta_title'] : GeoDir_Defaults::seo_single_meta_title();
-			self::$meta_description = !empty($gd_settings['seo_single_meta_description']) ? $gd_settings['seo_single_meta_description'] : GeoDir_Defaults::seo_single_meta_description();
-		}elseif(geodir_is_page( 'location' )){self::$gd_page = 'location';
-			self::$title = !empty($gd_settings['seo_location_title']) ? $gd_settings['seo_location_title'] : GeoDir_Defaults::seo_location_title();
-			self::$meta_title = !empty($gd_settings['seo_location_meta_title']) ? $gd_settings['seo_location_meta_title'] : GeoDir_Defaults::seo_location_meta_title();
-			self::$meta_description = !empty($gd_settings['seo_location_meta_description']) ? $gd_settings['seo_location_meta_description'] : GeoDir_Defaults::seo_location_meta_description();
-		}elseif(geodir_is_page( 'search' )){self::$gd_page = 'search';
-			self::$title = !empty($gd_settings['seo_search_title']) ? $gd_settings['seo_search_title'] : GeoDir_Defaults::seo_search_title();
-			self::$meta_title = !empty($gd_settings['seo_search_meta_title']) ? $gd_settings['seo_search_meta_title'] : GeoDir_Defaults::seo_search_meta_title();
-			self::$meta_description = !empty($gd_settings['seo_search_meta_description']) ? $gd_settings['seo_search_meta_description'] : GeoDir_Defaults::seo_search_meta_description();
-		}elseif(geodir_is_page( 'add-listing' )){self::$gd_page = 'add-listing';
-			if(!empty($_REQUEST['pid'])){
-				self::$title = !empty($gd_settings['seo_add_listing_title_edit']) ? $gd_settings['seo_add_listing_title_edit'] : GeoDir_Defaults::seo_add_listing_title_edit();
-			}else{
-				self::$title = !empty($gd_settings['seo_add_listing_title']) ? $gd_settings['seo_add_listing_title'] : GeoDir_Defaults::seo_add_listing_title();
+		} elseif ( geodir_is_page( 'single' ) ) {
+			self::$gd_page = 'single';
+
+			self::$title = ! empty( $gd_settings['seo_single_title'] ) ? $gd_settings['seo_single_title'] : GeoDir_Defaults::seo_single_title();
+			self::$meta_title = ! empty( $gd_settings['seo_single_meta_title'] ) ? $gd_settings['seo_single_meta_title'] : GeoDir_Defaults::seo_single_meta_title();
+			self::$meta_description = ! empty( $gd_settings['seo_single_meta_description'] ) ? $gd_settings['seo_single_meta_description'] : GeoDir_Defaults::seo_single_meta_description();
+		} elseif ( geodir_is_page( 'location' ) ) {
+			self::$gd_page = 'location';
+
+			self::$title = ! empty( $gd_settings['seo_location_title'] ) ? $gd_settings['seo_location_title'] : GeoDir_Defaults::seo_location_title();
+			self::$meta_title = ! empty( $gd_settings['seo_location_meta_title'] ) ? $gd_settings['seo_location_meta_title'] : GeoDir_Defaults::seo_location_meta_title();
+			self::$meta_description = ! empty( $gd_settings['seo_location_meta_description'] ) ? $gd_settings['seo_location_meta_description'] : GeoDir_Defaults::seo_location_meta_description();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			self::$gd_page = 'search';
+
+			self::$title = ! empty( $gd_settings['seo_search_title'] ) ? $gd_settings['seo_search_title'] : GeoDir_Defaults::seo_search_title();
+			self::$meta_title = ! empty( $gd_settings['seo_search_meta_title'] ) ? $gd_settings['seo_search_meta_title'] : GeoDir_Defaults::seo_search_meta_title();
+			self::$meta_description = ! empty( $gd_settings['seo_search_meta_description'] ) ? $gd_settings['seo_search_meta_description'] : GeoDir_Defaults::seo_search_meta_description();
+		} elseif ( geodir_is_page( 'add-listing' ) ) {
+			self::$gd_page = 'add-listing';
+
+			if ( ! empty( $_REQUEST['pid'] ) ) {
+				self::$title = ! empty( $gd_settings['seo_add_listing_title_edit'] ) ? $gd_settings['seo_add_listing_title_edit'] : GeoDir_Defaults::seo_add_listing_title_edit();
+			} else {
+				self::$title = ! empty( $gd_settings['seo_add_listing_title'] ) ? $gd_settings['seo_add_listing_title'] : GeoDir_Defaults::seo_add_listing_title();
 			}
-			self::$meta_title = !empty($gd_settings['seo_add_listing_meta_title']) ? $gd_settings['seo_add_listing_meta_title'] : GeoDir_Defaults::seo_add_listing_meta_title();
-			self::$meta_description = !empty($gd_settings['seo_add_listing_meta_description']) ? $gd_settings['seo_add_listing_meta_description'] : GeoDir_Defaults::seo_add_listing_meta_description();
+
+			self::$meta_title = ! empty( $gd_settings['seo_add_listing_meta_title'] ) ? $gd_settings['seo_add_listing_meta_title'] : GeoDir_Defaults::seo_add_listing_meta_title();
+			self::$meta_description = ! empty( $gd_settings['seo_add_listing_meta_description'] ) ? $gd_settings['seo_add_listing_meta_description'] : GeoDir_Defaults::seo_add_listing_meta_description();
 		}
 
-
-		if(self::$title){self::$title = self::replace_variable(self::$title,self::$gd_page);}
-		if(self::$meta_title){self::$meta_title = self::replace_variable(self::$meta_title,self::$gd_page);}
-		if(self::$meta_description){self::$meta_description = self::replace_variable(self::$meta_description,self::$gd_page);}
+		if ( self::$title ) {
+			self::$title = self::replace_variable( self::$title, self::$gd_page );
+		}
+		if ( self::$meta_title ) {
+			self::$meta_title = self::replace_variable( self::$meta_title, self::$gd_page );
+		}
+		if ( self::$meta_description ) {
+			self::$meta_description = self::replace_variable( self::$meta_description, self::$gd_page );
+		}
 
 		return self::$title;
 	}
@@ -393,6 +413,16 @@ class GeoDir_SEO {
 		global $post, $gd_post;
 
 		$post_type = geodir_get_current_posttype();
+
+		/**
+		 * Filter pre meta title.
+		 *
+		 * @since 2.0.0.76
+		 *
+		 * @param string $string Meta string.
+		 * @param string $gd_page GeoDirectory page.
+		 */
+		$string = apply_filters( 'geodir_seo_pre_replace_variable', $string, $gd_page );
 
 		if ( strpos( $string, '%%sep%%' ) !== false ) {
 			$string = str_replace( "%%sep%%", self::separator(), $string );
@@ -786,5 +816,3 @@ class GeoDir_SEO {
 	}
 
 }
-
-
