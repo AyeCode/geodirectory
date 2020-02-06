@@ -1,5 +1,6 @@
 = 2.0.0.76 =
 * File field shows required field error twice - FIXED
+* GD Listings widgets should show pending listings on author page - CHANGED
 
 = 2.0.0.75 =
 * Longitude validation fails to validate longitude with minus sign - FIXED
