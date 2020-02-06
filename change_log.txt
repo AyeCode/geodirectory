@@ -1,4 +1,5 @@
 = 2.0.0.76 =
+* Location page og:url for rank math - FIXED
 * File field shows required field error twice - FIXED
 * GD Listings widgets should show pending listings on author page - CHANGED
 
