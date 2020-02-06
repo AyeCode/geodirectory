@@ -176,7 +176,7 @@ class GeoDir_Compatibility {
 	public static function ninja_forms_api_fix() {
 		global $wp_version;
 
-		if ( function_exists( 'Ninja_Forms' ) && version_compare( $wp_version, '5.3.1', '>=' ) && ! defined( 'NF_PLUGIN_VERSION' ) && version_compare( Ninja_Forms::VERSION, '3.4.22', '<=' ) ) {
+		if ( function_exists( 'Ninja_Forms' ) && version_compare( $wp_version, '5.3.1', '>=' ) && ! defined( 'NF_PLUGIN_VERSION' ) && version_compare( Ninja_Forms::VERSION, '3.4.22.1', '<=' ) ) {
 			remove_action( 'init', array( Ninja_Forms()->merge_tags[ 'other' ], 'init' ) );
 			add_action( 'init', array( __CLASS__, 'nf_mergetags_other_init' ) );
 		}
@@ -1012,10 +1012,9 @@ class GeoDir_Compatibility {
 	 */
 	public static function rank_math_location_url_callback( $url ) {
 		// Maybe modify $example in some way.
-		$path_location_url = geodir_get_location_link('current');
-		if( geodir_is_page( 'location' ) ){
-			$url = $path_location_url;
-		}	
+		if ( geodir_is_page( 'location' ) ) {
+			$url = geodir_get_location_link( 'current' );
+		}
 		return $url;
 	}
 
