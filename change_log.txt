@@ -2,6 +2,7 @@
 * Location page og:url for rank math - FIXED
 * File field shows required field error twice - FIXED
 * GD Listings widgets should show pending listings on author page - CHANGED
+* Ninja Forms recent update breaks maps & API requests - FIXED
 
 = 2.0.0.75 =
 * Longitude validation fails to validate longitude with minus sign - FIXED

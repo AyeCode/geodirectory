@@ -7,7 +7,7 @@ Tags:  directory plugin, business directory, listings, classifieds, real estate,
 Requires at least: 4.5
 Requires PHP: 5.6
 Tested up to: 5.3.2
-Stable tag: 2.0.0.75
+Stable tag: 2.0.0.76
 
 
 Create a location-based business directory with our plugin, 100% compatible with any theme and page builders. In a few clicks you could be the next Yelp or Tripadvisor.
@@ -54,7 +54,7 @@ We have been wholly focused on directory tools for WordPress since 2011. That's 
 * Compatible with virtually any theme, Gutenberg and the most popular page builders.
 * Multilingual site? GeoDirectory is 100% WPML compatible.
 * GeoDirectory is fully compatible with WordPress Multisite.
-* CSV import, export, re-import fror listings, categories and reviews. Easily transfer millions of listings across instances. Edit data offline: live listings automagically update on re-import - heavily improved in V2.
+* CSV import, export, re-import for listings, categories and reviews. Easily transfer millions of listings across instances. Edit data offline: live listings automagically update on re-import - heavily improved in V2.
 * Improved Google Analytics widget for listings owners.
 * Titles and metas settings page for better SEO optimization.
 * NEW - Extended Business Hours for listings
@@ -145,6 +145,15 @@ GeoDirectory comes with some dummy data you can use to see how listings look. Yo
 == Changelog ==
 
 __WARNING: GDv2 is a major update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always it is recommended to try this on a staging site first. [Learn more](https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/)__
+
+= 2.0.0.76 =
+[GeoDirectory changelog for version 2.0.0.73](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.76).
+
+= 2.0.0.75 =
+[GeoDirectory changelog for version 2.0.0.73](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.75).
+
+= 2.0.0.74 =
+[GeoDirectory changelog for version 2.0.0.73](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.74).
 
 = 2.0.0.73 =
 [GeoDirectory changelog for version 2.0.0.73](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.73).
