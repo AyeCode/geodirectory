@@ -1923,12 +1923,7 @@ function geodir_cfi_files( $html, $cf ) {
                     } ?>
                 </label>
                 <span class="geodir_message_note gd_images_desc"><?php esc_attr_e( $cf['desc'], 'geodirectory' ); ?></span>
-
-                <?php if ( $cf['is_required'] ) { ?>
-                    <span class="geodir_message_error"><?php _e( $cf['required_msg'], 'geodirectory' ); ?></span>
-                <?php }
-
-
+                <?php
                 // params for file upload
                 $is_required = $cf['is_required'];
 
@@ -1944,7 +1939,7 @@ function geodir_cfi_files( $html, $cf ) {
                     'multiple'            => $multiple,
                 ) );
 
-                if ($cf['is_required']) { ?>
+                if ( $is_required ) { ?>
                     <span class="geodir_message_error"><?php esc_attr_e($cf['required_msg'], 'geodirectory'); ?></span>
                 <?php } ?>
             </div>

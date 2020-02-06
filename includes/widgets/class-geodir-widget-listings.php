@@ -619,14 +619,15 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$list_sort = geodir_get_posts_default_sort( $post_type );
 		}
 
-        $query_args = array(
+         $query_args = array(
             'posts_per_page' => $post_number,
             'is_geodir_loop' => true,
             'gd_location'    => $add_location_filter ? true : false,
             'post_type'      => $post_type,
             'order_by'       => $list_sort,
-			'distance_to_post' => $distance_to_post,
-			'pageno'         => $pageno
+            'distance_to_post' => $distance_to_post,
+            'pageno'         => $pageno,
+            'is_gd_author'   => ! empty( $instance['is_gd_author'] ) || geodir_is_page( 'author' )
         );
 
 		// Post_number needs to be a positive integer
