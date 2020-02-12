@@ -1,3 +1,6 @@
+= 2.0.0.77 =
+* Avada v6.2 theme compatibility - FIXED
+
 = 2.0.0.76 =
 * Location page og:url for rank math - FIXED
 * File field shows required field error twice - FIXED
