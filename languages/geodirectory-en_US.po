@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.76\n"
+"Project-Id-Version: GeoDirectory 2.0.0.77\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-06 17:39+0530\n"
-"PO-Revision-Date: 2020-02-06 17:40+0530\n"
+"POT-Creation-Date: 2020-02-12 18:58+0530\n"
+"PO-Revision-Date: 2020-02-12 18:58+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -2122,7 +2122,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-taxonomies.php:851
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:23
-#: includes/helper-functions.php:1591 includes/helper-functions.php:1699
+#: includes/helper-functions.php:1593 includes/helper-functions.php:1701
 #: includes/widgets/class-geodir-widget-categories.php:154
 #: includes/widgets/class-geodir-widget-categories.php:163
 #: includes/widgets/class-geodir-widget-categories.php:172
@@ -8788,14 +8788,14 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:265
+#: includes/class-geodir-compatibility.php:272
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:385
+#: includes/class-geodir-compatibility.php:392
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -8803,57 +8803,57 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:869
+#: includes/class-geodir-compatibility.php:876
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:871
+#: includes/class-geodir-compatibility.php:878
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:876
+#: includes/class-geodir-compatibility.php:883
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:877
+#: includes/class-geodir-compatibility.php:884
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1048
+#: includes/class-geodir-compatibility.php:1055
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1050
+#: includes/class-geodir-compatibility.php:1057
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1055
+#: includes/class-geodir-compatibility.php:1062
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1056
+#: includes/class-geodir-compatibility.php:1063
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1968
+#: includes/class-geodir-compatibility.php:2033
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1979
+#: includes/class-geodir-compatibility.php:2044
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1986
+#: includes/class-geodir-compatibility.php:2051
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1987
+#: includes/class-geodir-compatibility.php:2052
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
@@ -10933,28 +10933,28 @@ msgstr ""
 msgid "pm"
 msgstr ""
 
-#: includes/helper-functions.php:1642
+#: includes/helper-functions.php:1644
 #: includes/widgets/class-geodir-widget-categories.php:144
 msgid "A-Z"
 msgstr ""
 
-#: includes/helper-functions.php:1643
+#: includes/helper-functions.php:1645
 msgid "Latest"
 msgstr ""
 
-#: includes/helper-functions.php:1644
+#: includes/helper-functions.php:1646
 msgid "Most reviews"
 msgstr ""
 
-#: includes/helper-functions.php:1645
+#: includes/helper-functions.php:1647
 msgid "Highest rating"
 msgstr ""
 
-#: includes/helper-functions.php:1646
+#: includes/helper-functions.php:1648
 msgid "Random"
 msgstr ""
 
-#: includes/helper-functions.php:1650
+#: includes/helper-functions.php:1652
 msgid "Distance to current post (details page only)"
 msgstr ""
 

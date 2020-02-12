@@ -141,8 +141,15 @@ class GeoDir_Compatibility {
 		// Set custom hook for theme compatibility
 		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ) );
 
+		// Avada theme
+		add_filter( 'avada_hide_page_options', array( __CLASS__, 'avada_hide_page_options' ), 100, 1 );
+		add_filter( 'fusion-page-id', array( __CLASS__, 'avada_fusion_page_id' ), 100, 1 );
+		add_filter( 'avada_sidebar_context', array( __CLASS__, 'avada_62_sidebar_context' ), 11, 4 );
+		add_filter( 'fusion_should_get_page_option', array( __CLASS__, 'fusion_should_get_page_option' ), 999, 1 );
+		add_filter( 'is_hundred_percent_template', array( __CLASS__, 'fusion_is_hundred_percent_template' ), 20, 2 );
+		add_filter( 'fusion_is_hundred_percent_template', array( __CLASS__, 'fusion_is_hundred_percent_template' ), 20, 2 );
+
 		if ( ! is_admin() ) {
-			// Avada (theme)
 			add_filter( 'avada_has_sidebar', array( __CLASS__, 'avada_has_sidebar' ), 100, 3 );
 			add_filter( 'avada_has_double_sidebars', array( __CLASS__, 'avada_has_double_sidebars' ), 100, 3 );
 			add_filter( 'avada_setting_get_posts_global_sidebar', array( __CLASS__, 'avada_global_sidebar' ), 100, 1 );
@@ -526,7 +533,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
 			 || ( class_exists( 'The7_Aoutoloader' ) && ( strpos( $meta_key, '_dt_' ) === 0 || empty( $meta_key ) ) ) // The7
 			 || ( function_exists( 'avia_get_option' ) && ( ! empty( $meta_key ) && in_array( $meta_key, $gen_keys ) ) ) // Enfold
-			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) ) // Avada + FusionBuilder
+			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) || in_array( $meta_key, array( 'pages_sidebar', 'pages_sidebar_2', 'default_sidebar_pos' ) ) ) // Avada + FusionBuilder
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -1259,13 +1266,16 @@ class GeoDir_Compatibility {
 	public static function template_redirect() {
 		// Set Avada theme title bar
 		if ( geodir_is_geodir_page() ) {
+			// FusionBuilder
 			if ( class_exists( 'FusionBuilder' ) ) {
 				add_action( 'avada_override_current_page_title_bar', array( __CLASS__, 'avada_override_current_page_title_bar' ), 10, 1 );
 			}
 
 			// Avada (theme)
 			if ( class_exists( 'Avada' ) ) {
-				add_filter( 'body_class', array( __CLASS__, 'avada_body_class' ), 999, 1 );
+				if ( ! self::has_avada_62() ) {
+					add_filter( 'body_class', array( __CLASS__, 'avada_body_class' ), 999, 1 );
+				}
 			}
 
 			// Custom sidebars
@@ -1333,16 +1343,31 @@ class GeoDir_Compatibility {
 	 * @param int $post_id Current post id.
 	 */
 	public static function avada_override_current_page_title_bar( $post_id ) {
-		$page_title_bar_contents = avada_get_page_title_bar_contents( $post_id );
-		$page_title              = get_post_meta( $post_id, 'pyre_page_title', true );
+		// Avada 6.2
+		if ( self::has_avada_62() ) {
+			$post_id = $post_id ? $post_id : Avada()->fusion_library->get_page_id();
 
-		// Which TO to check for.
-		$page_title_option = Avada()->settings->get( 'page_title_bar' );
+			if ( 'hide' !== fusion_get_option( 'page_title_bar' ) ) {
+				$page_title_bar_contents = Fusion_Helper::fusion_get_page_title_bar_contents( $post_id );
+				$title = GeoDir_SEO::set_meta();
 
-		if ( 'hide' !== $page_title_option ) {
-			$title = GeoDir_SEO::set_meta();
+				avada_page_title_bar( $title, $page_title_bar_contents[1], $page_title_bar_contents[2] );
+			}
 
-			avada_page_title_bar( $title, $page_title_bar_contents[1], $page_title_bar_contents[2] );
+			do_action( 'avada_after_page_title_bar' );
+		} else {
+			$page_title_bar_contents = avada_get_page_title_bar_contents( $post_id );
+
+			$page_title = get_post_meta( $post_id, 'pyre_page_title', true );
+
+			// Which TO to check for.
+			$page_title_option = Avada()->settings->get( 'page_title_bar' );
+
+			if ( 'hide' !== $page_title_option ) {
+				$title = GeoDir_SEO::set_meta();
+
+				avada_page_title_bar( $title, $page_title_bar_contents[1], $page_title_bar_contents[2] );
+			}
 		}
 	}
 
@@ -1507,7 +1532,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_has_sidebar( $has_sidebar, $body_classes, $class ) {
-		if ( geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
+		if ( ! self::has_avada_62() && geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
 			$has_sidebar = in_array( 'has-sidebar', $body_classes ) ? true : false;
 		}
 
@@ -1515,7 +1540,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_has_double_sidebars( $double_sidebars, $body_classes, $class ) {
-		if ( geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
+		if ( ! self::has_avada_62() && geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
 			$double_sidebars = in_array( 'double-sidebars', $body_classes ) ? true : false;
 		}
 
@@ -1635,11 +1660,28 @@ class GeoDir_Compatibility {
 
 	public static function avada_sidebar( $value ) {
 		if ( $page_id = (int) self::gd_page_id() ) {
-			$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_replacement', true );
+			if ( self::has_avada_62() ) {
+				$page_template = get_post_meta( $page_id, '_wp_page_template', true );
 
-			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
-			if ( ! empty( $meta ) ) {
-				$value = $meta;
+				if ( $page_template == '100-width.php' || $page_template == 'blank.php' ) {
+					$value = 'None';
+				} else {
+					$value = fusion_get_option( 'pages_sidebar', false, $page_id );
+
+					if ( ! is_array( $value ) && $value == 'default_sidebar' ) {
+						$sidebars_option_names = avada_get_sidebar_post_meta_option_names( 'page' );
+						$value = Avada()->settings->get( $sidebars_option_names[0] );
+					}
+				}
+
+				$value = $value != 'None' ? $value : '';
+			} else {
+				$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_replacement', true );
+
+				$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+				if ( ! empty( $meta ) ) {
+					$value = $meta;
+				}
 			}
 		}
 		return $value;
@@ -1647,11 +1689,28 @@ class GeoDir_Compatibility {
 
 	public static function avada_sidebar_2( $value ) {
 		if ( $page_id = (int) self::gd_page_id() ) {
-			$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_2_replacement', true );
+			if ( self::has_avada_62() ) {
+				$page_template = get_post_meta( $page_id, '_wp_page_template', true );
 
-			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
-			if ( ! empty( $meta ) ) {
-				$value = $meta;
+				if ( $page_template == '100-width.php' || $page_template == 'blank.php' ) {
+					$value = 'None';
+				} else {
+					$value = fusion_get_option( 'pages_sidebar_2', false, $page_id );
+
+					if ( ! is_array( $value ) && $value == 'default_sidebar' ) {
+						$sidebars_option_names = avada_get_sidebar_post_meta_option_names( 'page' );
+						$value = Avada()->settings->get( $sidebars_option_names[1] );
+					}
+				}
+
+				$value = $value != 'None' ? $value : '';
+			} else {
+				$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_2_replacement', true );
+
+				$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+				if ( ! empty( $meta ) ) {
+					$value = $meta;
+				}
 			}
 		}
 		return $value;
@@ -1659,11 +1718,14 @@ class GeoDir_Compatibility {
 
 	public static function avada_sidebar_position( $value ) {
 		if ( $page_id = (int) self::gd_page_id() ) {
-			$meta = get_post_meta( $page_id, 'pyre_sidebar_position', true );
+			if ( self::has_avada_62() ) {
+			} else {
+				$meta = get_post_meta( $page_id, 'pyre_sidebar_position', true );
 
-			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
-			if ( ! empty( $meta ) ) {
-				$value = $meta;
+				$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+				if ( ! empty( $meta ) ) {
+					$value = $meta;
+				}
 			}
 		}
 		return $value;
@@ -1671,11 +1733,14 @@ class GeoDir_Compatibility {
 
 	public static function avada_sidebar_sticky( $value ) {
 		if ( $page_id = (int) self::gd_page_id() ) {
-			$meta = get_post_meta( $page_id, 'pyre_sidebar_sticky', true );
+			if ( self::has_avada_62() ) {
+			} else {
+				$meta = get_post_meta( $page_id, 'pyre_sidebar_sticky', true );
 
-			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
-			if ( ! empty( $meta ) ) {
-				$value = $meta;
+				$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+				if ( ! empty( $meta ) ) {
+					$value = $meta;
+				}
 			}
 		}
 		return $value;
@@ -2060,5 +2125,105 @@ class GeoDir_Compatibility {
 		}
 
 		return $title;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function avada_hide_page_options( $hide_options = array() ) {
+		$post_types = geodir_get_posttypes();
+
+		foreach ( $post_types as $post_type ) {
+			$hide_options[] = $post_type;
+		}
+
+		return $hide_options;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function avada_62_sidebar_context( $sidebar_type, $page_id, $sidebar, $global ) {
+		if ( absint( $page_id ) > 0 && geodir_is_geodir_page_id( absint( $page_id ) ) ) {
+			$page_template = get_post_meta( $page_id, '_wp_page_template', true );
+
+			if ( $page_template == '100-width.php' || $page_template == 'blank.php' ) {
+				$sidebar_type = 'None';
+			}
+		}
+
+		return $sidebar_type;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function avada_fusion_page_id( $page_id ) {
+		if ( ! empty( $page_id ) && absint( $page_id ) > 0 && strpos( $page_id, '-archive' ) === false ) {
+			$post_type = get_post_type( $page_id );
+
+			if ( $post_type && geodir_is_gd_post_type( $post_type ) ) {
+				$page_id = geodir_details_page_id( $post_type );
+			}
+		} elseif ( $_page_id = (int) self::gd_page_id() ) {
+			$page_id = $_page_id;
+		}
+
+		return $page_id;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function has_avada_62() {
+		if ( defined( 'AVADA_VERSION' ) && version_compare( AVADA_VERSION, '6.2', '>=' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function fusion_should_get_page_option( $page_option ) {
+		if ( ! $page_option && geodir_is_geodir_page() ) {
+			$page_option = true;
+		}
+
+		return $page_option;
+	}
+
+	/**
+	 * Checks is the current page is a 100% width page.
+	 *
+	 * @since 2.0.0.77
+	 *
+	 * @param bool          $value The value from the filter.
+	 * @param integer|false $page_id A custom page ID.
+	 * @return bool
+	 */
+	public static function fusion_is_hundred_percent_template( $value = false, $page_id = false ) {
+		if ( $value ) {
+			return $value;
+		}
+
+		$page_id = (int) self::gd_page_id();
+		if ( empty( $page_id ) ) {
+			return $value;
+		}
+
+		$page_template = get_post_meta( $page_id, '_wp_page_template', true );
+
+		if ( $page_template == '100-width.php' || $page_template == 'blank.php' ) {
+			return true;
+		}
+
+		return false;
 	}
 }
