@@ -40,10 +40,11 @@ class GeoDir_Privacy_Exporters {
 				}
 
 				$data_to_export[] = array(
-					'group_id'    => 'geodirectory-post-' . $post_type,
-					'group_label' => wp_sprintf( __( 'GeoDirectory: %s', 'geodirectory' ), get_post_type_plural_label( $post_type, false, true ) ),
-					'item_id'     => 'post-' . $post_ID,
-					'data'        => self::get_post_personal_data( $gd_post ),
+					'group_id'          => 'geodirectory-post-' . $post_type,
+					'group_label'       => wp_sprintf( __( 'GeoDirectory: %s', 'geodirectory' ), get_post_type_plural_label( $post_type, false, true ) ),
+					'group_description' => wp_sprintf( __( 'User&#8217;s %s data for GeoDirectory.', 'geodirectory' ), get_post_type_plural_label( $post_type, false, true ) ),
+					'item_id'           => 'post-' . $post_ID,
+					'data'              => self::get_post_personal_data( $gd_post ),
 				);
 			}
 			$done = 10 > count( $posts );
@@ -476,10 +477,11 @@ class GeoDir_Privacy_Exporters {
 				}
 
 				$data_to_export[] = array(
-					'group_id'    => 'geodirectory-post-favorites',
-					'group_label' => __( 'GeoDirectory: Favorite Listings', 'geodirectory' ),
-					'item_id'     => 'gd-favorite-' . $gd_post->ID,
-					'data'        => array(
+					'group_id'          => 'geodirectory-post-favorites',
+					'group_label'       => __( 'GeoDirectory: Favorite Listings', 'geodirectory' ),
+					'group_description' => __( 'User&#8217;s favorite listings data for GeoDirectory.', 'geodirectory' ),
+					'item_id'           => 'gd-favorite-' . $gd_post->ID,
+					'data'              => array(
 						array(
 							'name'  => __( 'Post ID', 'geodirectory' ),
 							'value' => $gd_post->ID,
