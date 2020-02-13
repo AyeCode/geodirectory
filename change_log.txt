@@ -1,3 +1,6 @@
+= 2.0.0.78 =
+* OceanWP theme & Elementor plugin compatibility - FIXED
+
 = 2.0.0.77 =
 * Avada v6.2 theme compatibility - FIXED
 

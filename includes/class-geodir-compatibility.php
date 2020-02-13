@@ -534,6 +534,7 @@ class GeoDir_Compatibility {
 			 || ( class_exists( 'The7_Aoutoloader' ) && ( strpos( $meta_key, '_dt_' ) === 0 || empty( $meta_key ) ) ) // The7
 			 || ( function_exists( 'avia_get_option' ) && ( ! empty( $meta_key ) && in_array( $meta_key, $gen_keys ) ) ) // Enfold
 			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) || in_array( $meta_key, array( 'pages_sidebar', 'pages_sidebar_2', 'default_sidebar_pos' ) ) ) // Avada + FusionBuilder
+			 || ( class_exists( 'OCEANWP_Theme_Class' ) && ( empty( $meta_key ) || strpos( $meta_key, 'ocean_' ) === 0 || strpos( $meta_key, 'menu_item_' ) === 0 || strpos( $meta_key, '_menu_item_' ) === 0 ) ) // OceanWP
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -1330,7 +1331,17 @@ class GeoDir_Compatibility {
 		// OceanWP theme
 		if ( class_exists( 'OCEANWP_Theme_Class' ) ) {
 			if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
+				add_filter( 'ocean_post_id', array( __CLASS__, 'ocean_post_id' ), 20, 1 );
 				add_filter( 'ocean_title', array( __CLASS__, 'ocean_title' ), 20, 1 );
+				add_filter( 'ocean_post_subheading', array( __CLASS__, 'ocean_post_subheading' ), 20, 1 );
+			}
+		}
+
+		// Elementor
+		if ( defined( 'ELEMENTOR_VERSION' ) ) {
+			if ( version_compare( ELEMENTOR_VERSION, '2.9.0', '>=' ) && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) ) {
+				// Page template
+				add_filter( 'template_include', array( __CLASS__, 'elementor_template_include' ), 12, 1 );
 			}
 		}
 	}
@@ -2110,6 +2121,22 @@ class GeoDir_Compatibility {
 	}
 
 	/**
+	 * OceanWP theme filter GD post ID.
+	 *
+	 * @since 2.0.0.78
+	 *
+	 * @param int $post_id The post ID.
+	 * @return int The post ID.
+	 */
+	public static function ocean_post_id( $post_id ) {
+		if ( empty( $post_id ) && ( $_page_id = (int) self::gd_page_id() ) ) {
+			$post_id = $_page_id;
+		}
+
+		return $post_id;
+	}
+
+	/**
 	 * OceanWP theme filter GD page title.
 	 *
 	 * @since 2.0.0.75
@@ -2125,6 +2152,20 @@ class GeoDir_Compatibility {
 		}
 
 		return $title;
+	}
+
+	/**
+	 * OceanWP theme filter GD page subheading.
+	 *
+	 * @since 2.0.0.78
+	 *
+	 * @param string $subheading The page subheading.
+	 * @return string The page subheading.
+	 */
+	public static function ocean_post_subheading( $subheading ) {
+		$subheading = '';
+
+		return $subheading;
 	}
 
 	/**
@@ -2225,5 +2266,34 @@ class GeoDir_Compatibility {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Load elementor template on GD archive pages.
+	 *
+	 * @since 2.0.0.78
+	 *
+	 * @param mixed $template The path of the template to include.
+	 * @return string The template path.
+	 */
+	public static function elementor_template_include( $template ) {
+		if ( $page_id = (int) self::gd_page_id() ) {
+			$elementor_plugin = \Elementor\Plugin::$instance;
+			$document = $elementor_plugin->documents->get_doc_for_frontend( $page_id );
+
+			if ( ! empty( $document ) ) {
+				/**
+				 * @var \Elementor\Modules\PageTemplates\Module $page_templates_module
+				 */
+				$page_templates_module = $elementor_plugin->modules_manager->get_modules( 'page-templates' );
+				$template_path = $page_templates_module->get_template_path( $document->get_meta( '_wp_page_template' ) );
+
+				if ( $template_path ) {
+					$template = $template_path;
+				}
+			}
+		}
+
+		return $template;
 	}
 }
