@@ -183,10 +183,12 @@ class GeoDir_Compatibility {
 	public static function ninja_forms_api_fix() {
 		global $wp_version;
 
-		if ( function_exists( 'Ninja_Forms' ) && version_compare( $wp_version, '5.3.1', '>=' ) && ! defined( 'NF_PLUGIN_VERSION' ) && version_compare( Ninja_Forms::VERSION, '3.4.22.1', '<=' ) ) {
+		// @todo, NF suck, remove this when then eventually fix their stuff
+
+//		if ( function_exists( 'Ninja_Forms' ) && version_compare( $wp_version, '5.3.1', '>=' ) && ! defined( 'NF_PLUGIN_VERSION' ) && version_compare( Ninja_Forms::VERSION, '3.4.22.1', '<=' ) ) {
 			remove_action( 'init', array( Ninja_Forms()->merge_tags[ 'other' ], 'init' ) );
 			add_action( 'init', array( __CLASS__, 'nf_mergetags_other_init' ) );
-		}
+//		}
 	}
 
 	public static function nf_mergetags_other_init() {
