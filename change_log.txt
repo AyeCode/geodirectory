@@ -1,5 +1,7 @@
-= 2.0.0.78 =
+= 2.0.0.79 =
 * OceanWP theme & Elementor plugin compatibility - FIXED
+* Ninja Forms still have not fixed their bug, we have added a more permanent fix until they fix it - FIXED
+* Recipe schema option added - ADDED
 
 = 2.0.0.77 =
 * Avada v6.2 theme compatibility - FIXED

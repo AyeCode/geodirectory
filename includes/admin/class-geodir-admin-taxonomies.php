@@ -943,6 +943,7 @@ class GeoDir_Admin_Taxonomies {
             'Plumber' => 'Plumber',
             'ProfessionalService' => 'ProfessionalService',
             'RealEstateAgent' => 'RealEstateAgent',
+            'Recipe' => 'Recipe',
             'Residence' => 'Residence',
             'Restaurant' => 'Restaurant',
             'RoofingContractor' => 'RoofingContractor',
