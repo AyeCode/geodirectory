@@ -572,8 +572,17 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						$term_link = get_term_link( $category, $category->taxonomy );
 						/** Filter documented in includes/general_functions.php **/
 						$term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );
-						$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $category->count . '</span>' : '';
+                        $count= $category->count;
+                        $args = array(
+                          'child_of' => $category->term_id,
+                        );
+                        $tax_terms = get_terms( $category->taxonomy, $args );
+                        foreach ($tax_terms as $tax_term) {
 
+                            $count += $tax_term->count;
+
+                        }
+                        $count = !$hide_count ? ' <span class="gd-cptcat-count">' . $count . '</span>' : '';
 
 						$cpt_row .= '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';
 
