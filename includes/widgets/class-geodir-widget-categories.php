@@ -577,8 +577,10 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						        'child_of' => $category->term_id
                         );
 						$tax_terms = get_terms( $category->taxonomy, $args );
-						foreach ($tax_terms as $tax_term) {
-						    $count += $tax_term->count;
+						if( !empty( $tax_terms )){
+						    foreach ($tax_terms as $tax_term) {
+						        $count += $tax_term->count;
+						    }
 						}
 						$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $count . '</span>' : '';
 
