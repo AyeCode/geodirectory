@@ -897,19 +897,21 @@ function geodir_cfi_datepicker($html,$cf){
 
         ?>
         <script type="text/javascript">
-
-            jQuery(function () {
-
+            jQuery(function() {
                 jQuery("#<?php echo $cf['name'];?>_show").datepicker({
                     changeMonth: true,
                     changeYear: true,
                     dateFormat: "<?php echo $jquery_date_format;?>",
                     altFormat: "yy-mm-dd",
-                    altField: "#<?php echo $cf['name'];?>"<?php
-
-                    // check for default value date range
-                    if(!empty($extra_fields['date_range'])){
-                       echo  ',yearRange: "'.esc_attr($extra_fields['date_range']).'"';
+                    altField: "#<?php echo $cf['name'];?>",
+                    onClose: function(dateText, inst) {
+                        if(dateText == '') {
+                            jQuery(inst.settings["altField"]).val('');
+                        }
+                    }<?php
+                    // Check for default value date range
+                    if ( ! empty( $extra_fields['date_range'] ) ) {
+                       echo ',yearRange: "' . esc_attr( $extra_fields['date_range'] ) . '"';
                     }
                     /**
                      * Used to add extra option to datepicker per custom field.
@@ -917,16 +919,17 @@ function geodir_cfi_datepicker($html,$cf){
                      * @since 1.5.7
                      * @param string $name The custom field name.
                      */
-                    echo apply_filters("gd_datepicker_extra_{$name}",'');?>});
-
-
-
-            <?php if(!empty($value)){?>
+                    echo apply_filters( "gd_datepicker_extra_{$name}", '' ); ?>
+                });
+                <?php if ( ! empty( $value ) ) { ?>
                 jQuery("#<?php echo $name;?>_show").datepicker("setDate", '<?php echo $value;?>');
                 <?php } ?>
-
+                jQuery("input#<?php echo $name;?>_show").on('change', function(e) {
+                    if (!jQuery(this).val()) {
+                        jQuery("input#<?php echo $cf['name'];?>").val('');
+                    }
+                });
             });
-
         </script>
         <div id="<?php echo $name;?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
