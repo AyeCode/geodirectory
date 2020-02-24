@@ -1,6 +1,7 @@
 = 2.0.0.80 =
 * Unable to save empty value for date field - FIXED
 * Porto theme compatibility - FIXED
+* Export post edit date value in CSV - ADDED
 
 = 2.0.0.79 =
 * OceanWP theme & Elementor plugin compatibility - FIXED
