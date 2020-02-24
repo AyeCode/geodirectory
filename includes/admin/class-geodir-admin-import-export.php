@@ -435,6 +435,10 @@ class GeoDir_Admin_Import_Export {
 			$post_info['post_date'] = geodir_date( $post_info['post_date'], 'Y-m-d H:i:s' );
 		}
 
+		if ( ! empty( $post_info['post_modified'] ) && strpos( $post_info['post_modified'], '/' ) !== false ) {
+			$post_info['post_modified'] = geodir_date( $post_info['post_modified'], 'Y-m-d H:i:s' );
+		}
+
 		// change post_category to an array()
 		if ( isset( $post_info['post_category'] ) ) {
 			if ( empty( $post_info['post_category'] ) ) {
@@ -851,6 +855,7 @@ class GeoDir_Admin_Import_Export {
 		$columns[] = "{$wpdb->posts}.post_author";
 		$columns[] = "{$wpdb->posts}.post_type";
 		$columns[] = "{$wpdb->posts}.post_date";
+		$columns[] = "{$wpdb->posts}.post_modified";
 
 		// set the table fields
 		$cpt_exclude_columns = array(
