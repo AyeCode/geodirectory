@@ -1,5 +1,6 @@
 = 2.0.0.80 =
 * Unable to save empty value for date field - FIXED
+* Porto theme compatibility - FIXED
 
 = 2.0.0.79 =
 * OceanWP theme & Elementor plugin compatibility - FIXED

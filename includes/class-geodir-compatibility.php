@@ -538,6 +538,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'avia_get_option' ) && ( ! empty( $meta_key ) && in_array( $meta_key, $gen_keys ) ) ) // Enfold
 			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) || in_array( $meta_key, array( 'pages_sidebar', 'pages_sidebar_2', 'default_sidebar_pos' ) ) ) // Avada + FusionBuilder
 			 || ( class_exists( 'OCEANWP_Theme_Class' ) && ( empty( $meta_key ) || strpos( $meta_key, 'ocean_' ) === 0 || strpos( $meta_key, 'menu_item_' ) === 0 || strpos( $meta_key, '_menu_item_' ) === 0 ) ) // OceanWP
+			 || ( defined( 'PORTO_VERSION' ) ) // Porto
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -1308,6 +1309,12 @@ class GeoDir_Compatibility {
 					add_filter( 'avia_layout_filter', array( __CLASS__, 'avia_layout_filter' ), 20, 2 );
 					add_filter( 'avf_custom_sidebar', array( __CLASS__, 'avf_custom_sidebar' ), 20, 1 );
 				}
+			}
+
+			// Porto (theme)
+			if ( defined( 'PORTO_VERSION' ) ) {
+				add_filter( 'porto_meta_use_default', array( __CLASS__, 'porto_meta_use_default' ), 99, 1 );
+				add_filter( 'porto_meta_layout', array( __CLASS__, 'porto_meta_layout' ), 99, 1 );
 			}
 		}
 
@@ -2298,5 +2305,107 @@ class GeoDir_Compatibility {
 		}
 
 		return $template;
+	}
+
+	/**
+	 * Filter Porto theme layout default option.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 * @param bool $default Use default layout option or not.
+	 * @return bool Default option.
+	 */
+	public static function porto_meta_use_default( $default ) {
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+			if ( ! empty( $term ) && isset( $term->taxonomy ) && isset( $term->term_id ) ) {
+				$value = get_metadata( $term->taxonomy, $term->term_id, 'default', true );
+
+				if ( 'default' == $value ) {
+					return $default;
+				}
+			}
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$value = get_post_meta( $template_page_id, 'default', true );
+
+			$default = ( 'default' != $value ) ? true : false;
+		}
+
+		return $default;
+	}
+
+	/**
+	 * Filter Porto theme layout options.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 * @param array $layout Use layout options.
+	 * @return array Layout options.
+	 */
+	public static function porto_meta_layout( $layout ) {
+		global $porto_settings;
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+			if ( ! empty( $term ) && isset( $term->taxonomy ) && isset( $term->term_id ) ) {
+				$value = get_metadata( $term->taxonomy, $term->term_id, 'default', true );
+
+				if ( 'default' == $value ) {
+					return $layout;
+				}
+			}
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$value    = get_post_meta( $template_page_id, 'layout', true );
+			$sidebar  = get_post_meta( $template_page_id, 'sidebar', true );
+			$sidebar2 = get_post_meta( $template_page_id, 'sidebar2', true );
+
+			if ( empty( $sidebar2 ) ) {
+				$sidebar2 = empty( $porto_settings['sidebar2'] ) ? 'secondary-sidebar' : $porto_settings['sidebar2'];
+			}
+
+			if ( ! in_array( $value, porto_options_sidebars() ) ) {
+				$sidebar  = '';
+				$sidebar2 = '';
+			} elseif ( ! in_array( $value, porto_options_both_sidebars() ) ) {
+				$sidebar2 = '';
+			}
+
+			$have_sidebar_menu = porto_have_sidebar_menu();
+			if ( 'both-sidebar' == $value || 'wide-both-sidebar' == $value ) {
+				if ( ! ( ( $sidebar && is_active_sidebar( $sidebar ) ) || $have_sidebar_menu ) ) {
+					$value   = str_replace( 'both-sidebar', 'right-sidebar', $value );
+					$sidebar = $sidebar2;
+				}
+				if ( ! ( ( $sidebar2 && is_active_sidebar( $sidebar2 ) ) || $have_sidebar_menu ) ) {
+					$value = str_replace( 'both-sidebar', 'left-sidebar', $value );
+				}
+			}
+			if ( ( 'left-sidebar' == $value || 'right-sidebar' == $value ) && ! ( ( $sidebar && is_active_sidebar( $sidebar ) ) || $have_sidebar_menu ) ) {
+				$value = 'fullwidth';
+			}
+			if ( ( 'wide-left-sidebar' == $value || 'wide-right-sidebar' == $value ) && ! ( ( $sidebar && is_active_sidebar( $sidebar ) ) || $have_sidebar_menu ) ) {
+				$value = 'widewidth';
+			}
+
+			$layout = array( $value, $sidebar, $sidebar2 );
+		}
+
+		return $layout;
 	}
 }
