@@ -2054,7 +2054,7 @@ class GeoDir_Compatibility {
 			'0' => __( 'Select Themer Layout', 'geodirectory' ) 
 		);
 
-		$results = $wpdb->get_results( "SELECT p.ID, p.post_title FROM {$wpdb->postmeta} as pm INNER JOIN {$wpdb->posts} as p ON pm.post_id = p.ID WHERE pm.meta_key = '_fl_theme_builder_preview_location' AND p.post_type = 'fl-theme-layout' AND p.post_status = 'publish' AND pm.meta_value LIKE '%archive:post%' ORDER BY `p`.`post_title` ASC" );
+		$results = $wpdb->get_results( "SELECT p.ID, p.post_title FROM {$wpdb->postmeta} as pm INNER JOIN {$wpdb->posts} as p ON pm.post_id = p.ID WHERE p.post_type = 'fl-theme-layout' AND p.post_status = 'publish' AND pm.meta_key = '_fl_theme_builder_locations' AND ( pm.meta_value LIKE 'a:0:{}' OR pm.meta_value = '' ) ORDER BY `p`.`post_title` ASC" );
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $key => $row ) {
 				$layouts[ $row->ID ] = $row->post_title . '( ' . $row->ID . ' )';
