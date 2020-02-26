@@ -57,7 +57,7 @@ class GeoDir_Admin {
 		// Deactivate legacy plugins
 		$this->deactivate_plugin();
 	}
-
+	
 	/**
 	 * Disable some GD pages for some WP page settings.
 	 *
@@ -184,14 +184,10 @@ class GeoDir_Admin {
 		include_once( dirname( __FILE__ ) . '/admin-functions.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-settings.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-comments.php' );
-//		include_once( dirname( __FILE__ ) . '/class--admin-post-types.php' );
-//		include_once( dirname( __FILE__ ) . '/class-wc-admin-taxonomies.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-menus.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-notices.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-assets.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-api-keys.php' );
-//		include_once( dirname( __FILE__ ) . '/class-wc-admin-webhooks.php' );
-//		include_once( dirname( __FILE__ ) . '/class-wc-admin-pointers.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-blocks.php' );
 
 		// Help Tabs
@@ -217,6 +213,21 @@ class GeoDir_Admin {
 		global $pagenow;
 		if($pagenow=='users.php'){
 			new GeoDir_Admin_Users();
+		}
+
+		// AyeCode Connect notice
+		if ( is_admin() ){
+			// set the strings so they can be translated
+			$strings = array(
+				'connect_title' => __("GeoDirectory - an AyeCode product!","geodirectory"),
+				'connect_external'  => __( "Please confirm you wish to connect your site?","geodirectory" ),
+				'connect'           => sprintf( __( "<strong>Have a license?</strong> Forget about entering license keys or downloading zip files, connect your site for instant access. %slearn more%s","geodirectory" ),"<a href='https://ayecode.io/introducing-ayecode-connect/' target='_blank'>","</a>" ),
+				'connect_button'    => __("Connect Site","geodirectory"),
+				'connecting_button'    => __("Connecting...","geodirectory"),
+				'error_localhost'   => __( "This service will only work with a live domain, not a localhost.","geodirectory" ),
+				'error'             => __( "Something went wrong, please refresh and try again.","geodirectory" ),
+			);
+			new AyeCode_Connect_Helper($strings,array('gd-addons'));
 		}
 	}
 

@@ -498,6 +498,7 @@ class GeoDir_Admin_Addons {
 	 * Handles output of the addons page in admin.
 	 */
 	public static function output() {
+		add_thickbox();
 		$tabs            = self::get_tabs();
 		$sections        = self::get_sections();
 		$theme           = wp_get_theme();
