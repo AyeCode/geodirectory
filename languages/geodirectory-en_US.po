@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.79\n"
+"Project-Id-Version: GeoDirectory 2.0.0.80\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-02-15 13:44+0000\n"
-"PO-Revision-Date: 2020-02-15 13:44+0000\n"
+"POT-Creation-Date: 2020-02-27 19:00+0530\n"
+"PO-Revision-Date: 2020-02-27 19:00+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.2.4\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: geodirectory.php:180
@@ -237,13 +237,12 @@ msgstr ""
 #: includes/admin/class-geodir-admin-install.php:315
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:514
 #: includes/api/class-geodir-rest-posts-controller.php:2253
-#: vendor/ayecode/wp-super-duper/map.php:69
 msgid "Map"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:900
 #: includes/api/class-geodir-rest-posts-controller.php:2254
-#: includes/custom-fields/input-functions.php:1209 language.php:90
+#: includes/custom-fields/input-functions.php:1212 language.php:90
 msgid ""
 "Click on \"Set Address on Map\" and then you can also drag pinpoint to "
 "locate the correct address"
@@ -251,13 +250,13 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:907
 #: includes/api/class-geodir-rest-posts-controller.php:2266
-#: includes/custom-fields/input-functions.php:1217 language.php:46
+#: includes/custom-fields/input-functions.php:1220 language.php:46
 msgid "Address Latitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:908
 #: includes/api/class-geodir-rest-posts-controller.php:2267
-#: includes/custom-fields/input-functions.php:1226 language.php:91
+#: includes/custom-fields/input-functions.php:1229 language.php:91
 msgid ""
 "Please enter latitude for google map perfection. eg. : "
 "<b>39.955823048131286</b>"
@@ -265,13 +264,13 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:917
 #: includes/api/class-geodir-rest-posts-controller.php:2281
-#: includes/custom-fields/input-functions.php:1235 language.php:47
+#: includes/custom-fields/input-functions.php:1238 language.php:47
 msgid "Address Longitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:918
 #: includes/api/class-geodir-rest-posts-controller.php:2282
-#: includes/custom-fields/input-functions.php:1243 language.php:92
+#: includes/custom-fields/input-functions.php:1246 language.php:92
 msgid ""
 "Please enter longitude for google map perfection. eg. : "
 "<b>-75.14408111572266</b>"
@@ -479,11 +478,11 @@ msgstr ""
 msgid "Error"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-addons.php:520
+#: includes/admin/class-geodir-admin-addons.php:521
 msgid "Setup forms such as contact or booking forms for your listings."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-addons.php:526
+#: includes/admin/class-geodir-admin-addons.php:527
 msgid ""
 "Allow frontend user login and registration as well as have slick profile "
 "pages."
@@ -1131,8 +1130,8 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-import-export.php:225
 #: includes/admin/class-geodir-admin-import-export.php:322
-#: includes/admin/class-geodir-admin-import-export.php:1273
-#: includes/admin/class-geodir-admin-import-export.php:2087
+#: includes/admin/class-geodir-admin-import-export.php:1278
+#: includes/admin/class-geodir-admin-import-export.php:2092
 msgid "No data found in csv file."
 msgstr ""
 
@@ -1156,85 +1155,85 @@ msgstr ""
 msgid "Title missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:487
+#: includes/admin/class-geodir-admin-import-export.php:491
 msgid "Address city, region or country missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:524
+#: includes/admin/class-geodir-admin-import-export.php:528
 #: includes/location-functions.php:639
 msgid "Fail to retrieve GPS data from a address using API."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:548
+#: includes/admin/class-geodir-admin-import-export.php:552
 msgid "Not enough GPS info for address."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:571
-#: includes/admin/class-geodir-admin-import-export.php:589
+#: includes/admin/class-geodir-admin-import-export.php:575
+#: includes/admin/class-geodir-admin-import-export.php:593
 #: includes/location-functions.php:742 includes/location-functions.php:767
 msgid "Failed to reach Google geocode server."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:586
+#: includes/admin/class-geodir-admin-import-export.php:590
 #: includes/location-functions.php:765
 #, php-format
 msgid "Google geocode failed: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:684
-#: includes/admin/class-geodir-admin-import-export.php:994
-#: includes/admin/class-geodir-admin-import-export.php:1930
+#: includes/admin/class-geodir-admin-import-export.php:688
+#: includes/admin/class-geodir-admin-import-export.php:999
+#: includes/admin/class-geodir-admin-import-export.php:1935
 #: includes/admin/settings/class-geodir-settings-import-export.php:884
 msgid "No records to export."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:730
-#: includes/admin/class-geodir-admin-import-export.php:1036
-#: includes/admin/class-geodir-admin-import-export.php:1974
+#: includes/admin/class-geodir-admin-import-export.php:734
+#: includes/admin/class-geodir-admin-import-export.php:1041
+#: includes/admin/class-geodir-admin-import-export.php:1979
 msgid ""
 "ERROR: Could not create csv file. This is usually due to inconsistent file "
 "permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1572
+#: includes/admin/class-geodir-admin-import-export.php:1577
 msgid "json file is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1574
+#: includes/admin/class-geodir-admin-import-export.php:1579
 msgid "json file is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1586
+#: includes/admin/class-geodir-admin-import-export.php:1591
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2005
+#: includes/admin/class-geodir-admin-import-export.php:2010
 #, php-format
 msgid "GD IMPORT REVIEW [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2013
+#: includes/admin/class-geodir-admin-import-export.php:2018
 msgid "data is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2026
+#: includes/admin/class-geodir-admin-import-export.php:2031
 msgid "invalid comment content."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2030
+#: includes/admin/class-geodir-admin-import-export.php:2035
 msgid "invalid comment post ID."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2034
+#: includes/admin/class-geodir-admin-import-export.php:2039
 msgid "invalid user details(user id or author name, author email)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2038
+#: includes/admin/class-geodir-admin-import-export.php:2043
 msgid "invalid rating."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2064
-#: includes/admin/class-geodir-admin-import-export.php:2081
+#: includes/admin/class-geodir-admin-import-export.php:2069
+#: includes/admin/class-geodir-admin-import-export.php:2086
 msgid "invalid data."
 msgstr ""
 
@@ -2425,18 +2424,55 @@ msgid ""
 "Used to design the %s details page but should never be linked to directly."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:359
+#: includes/admin/class-geodir-admin.php:222
+msgid "GeoDirectory - an AyeCode product!"
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:223
+#: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:41
+msgid "Please confirm you wish to connect your site?"
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:224
+#: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:42
+#, php-format
+msgid ""
+"<strong>Have a license?</strong> Forget about entering license keys or "
+"downloading zip files, connect your site for instant access. %slearn more%s"
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:225
+#: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:43
+msgid "Connect Site"
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:226
+#: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:44
+msgid "Connecting..."
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:227
+#: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:45
+msgid "This service will only work with a live domain, not a localhost."
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:228
+#: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:46
+msgid "Something went wrong, please refresh and try again."
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:370
 #, php-format
 msgid ""
 "If you like <strong>GeoDirectory</strong> please leave us a %s rating. A "
 "huge thanks in advance!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:359
+#: includes/admin/class-geodir-admin.php:370
 msgid "Thanks :)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:362
+#: includes/admin/class-geodir-admin.php:373
 msgid "Thank you for using GeoDirectory!"
 msgstr ""
 
@@ -7832,7 +7868,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2840
 #: includes/class-geodir-privacy-exporters.php:238
 #: includes/class-geodir-privacy-exporters.php:303
-#: includes/custom-fields/input-functions.php:1751
+#: includes/custom-fields/input-functions.php:1754
 #: includes/custom-fields/output-functions.php:86
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:182
 msgid "Yes"
@@ -7841,7 +7877,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2800
 #: includes/api/class-geodir-rest-posts-controller.php:2838
 #: includes/class-geodir-privacy-exporters.php:301
-#: includes/custom-fields/input-functions.php:1752
+#: includes/custom-fields/input-functions.php:1755
 #: includes/custom-fields/output-functions.php:88
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:182
 msgid "No"
@@ -8519,7 +8555,7 @@ msgid "Sunday"
 msgstr ""
 
 #: includes/business-hours-functions.php:581 includes/core-functions.php:344
-#: includes/custom-fields/input-functions.php:1793
+#: includes/custom-fields/input-functions.php:1796
 msgid "Closed"
 msgstr ""
 
@@ -8532,7 +8568,7 @@ msgid "Closed now"
 msgstr ""
 
 #: includes/business-hours-functions.php:584
-#: includes/custom-fields/input-functions.php:1756
+#: includes/custom-fields/input-functions.php:1759
 msgid "Open 24 hours"
 msgstr ""
 
@@ -8804,57 +8840,57 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:880
+#: includes/class-geodir-compatibility.php:882
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:882
+#: includes/class-geodir-compatibility.php:884
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:887
+#: includes/class-geodir-compatibility.php:889
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:888
+#: includes/class-geodir-compatibility.php:890
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1059
+#: includes/class-geodir-compatibility.php:1061
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1061
+#: includes/class-geodir-compatibility.php:1063
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1066
+#: includes/class-geodir-compatibility.php:1068
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1067
+#: includes/class-geodir-compatibility.php:1069
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2047
+#: includes/class-geodir-compatibility.php:2080
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2058
+#: includes/class-geodir-compatibility.php:2091
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2065
+#: includes/class-geodir-compatibility.php:2098
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2066
+#: includes/class-geodir-compatibility.php:2099
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
@@ -9470,7 +9506,6 @@ msgid "Places"
 msgstr ""
 
 #: includes/class-geodir-post-types.php:126
-#: vendor/ayecode/wp-super-duper/map.php:84
 msgid "Place"
 msgstr ""
 
@@ -10413,92 +10448,91 @@ msgstr ""
 msgid "Choose"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1144
+#: includes/custom-fields/input-functions.php:1147
 #: includes/widgets/class-geodir-widget-map.php:190
 msgid "My location"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1164
-#: includes/custom-fields/input-functions.php:1190
+#: includes/custom-fields/input-functions.php:1167
+#: includes/custom-fields/input-functions.php:1193
 #, php-format
 msgid "Please enter listing %s"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1257
+#: includes/custom-fields/input-functions.php:1260
 msgid "Default Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1258
+#: includes/custom-fields/input-functions.php:1261
 #: includes/widgets/class-geodir-widget-map.php:452
-#: vendor/ayecode/wp-super-duper/map.php:158
 msgid "Satellite Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1259
+#: includes/custom-fields/input-functions.php:1262
 #: includes/widgets/class-geodir-widget-map.php:453
 msgid "Hybrid Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1260
+#: includes/custom-fields/input-functions.php:1263
 #: includes/widgets/class-geodir-widget-map.php:454
 msgid "Terrain Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1267
+#: includes/custom-fields/input-functions.php:1270
 msgid "Please select listing map view to use"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1377
-#: includes/custom-fields/input-functions.php:1518
+#: includes/custom-fields/input-functions.php:1380
+#: includes/custom-fields/input-functions.php:1521
 #, php-format
 msgid "Only select %d categories for this package."
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1397
-#: includes/custom-fields/input-functions.php:1401
-#: includes/custom-fields/input-functions.php:1538
-#: includes/custom-fields/input-functions.php:1542
+#: includes/custom-fields/input-functions.php:1400
+#: includes/custom-fields/input-functions.php:1404
+#: includes/custom-fields/input-functions.php:1541
+#: includes/custom-fields/input-functions.php:1545
 #: includes/taxonomy-functions.php:282
 #: includes/widgets/class-geodir-widget-best-of.php:327
 msgid "Select Category"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1644
+#: includes/custom-fields/input-functions.php:1647
 msgid "Enter tags separated by a comma ,"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1661
+#: includes/custom-fields/input-functions.php:1664
 msgid "Popular tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1676
+#: includes/custom-fields/input-functions.php:1679
 msgid "Your tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1756
+#: includes/custom-fields/input-functions.php:1759
 msgid "Day"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1756
+#: includes/custom-fields/input-functions.php:1759
 msgid "Opening Hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1756
+#: includes/custom-fields/input-functions.php:1759
 msgid "Add"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1759
-#: includes/custom-fields/input-functions.php:1789
+#: includes/custom-fields/input-functions.php:1762
+#: includes/custom-fields/input-functions.php:1792
 #: includes/widgets/class-geodir-widget-archive-item-section.php:41
 msgid "Open"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1759
-#: includes/custom-fields/input-functions.php:1789
+#: includes/custom-fields/input-functions.php:1762
+#: includes/custom-fields/input-functions.php:1792
 msgid "Close"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1800
+#: includes/custom-fields/input-functions.php:1803
 msgid ""
 "Timezone offset from UTC (not including daylight savings time This is set "
 "automatically when address is set)"
@@ -12008,7 +12042,6 @@ msgid "Placeholder map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:37
-#: vendor/ayecode/wp-super-duper/hello-world.php:26
 msgid "Placeholder"
 msgstr ""
 
@@ -12056,8 +12089,6 @@ msgid "Distance unit"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:430
-#: vendor/ayecode/wp-super-duper/map.php:105
-#: vendor/ayecode/wp-super-duper/map.php:134
 msgid "Width:"
 msgstr ""
 
@@ -12069,8 +12100,6 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:439
-#: vendor/ayecode/wp-super-duper/map.php:119
-#: vendor/ayecode/wp-super-duper/map.php:144
 msgid "Height:"
 msgstr ""
 
@@ -12081,27 +12110,22 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:448
-#: vendor/ayecode/wp-super-duper/map.php:154
 msgid "Mapview:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:449
-#: vendor/ayecode/wp-super-duper/map.php:155
 msgid "This is the type of map view that will be used by default."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:451
-#: vendor/ayecode/wp-super-duper/map.php:157
 msgid "Road Map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:462
-#: vendor/ayecode/wp-super-duper/map.php:168
 msgid "Zoom level:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:463
-#: vendor/ayecode/wp-super-duper/map.php:169
 msgid "This is the zoom level of the map, `auto` is recommended."
 msgstr ""
 
@@ -12374,7 +12398,6 @@ msgid "This can be used to output many custom fields in one location."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-output-location.php:42
-#: vendor/ayecode/wp-super-duper/map.php:96
 msgid "Location:"
 msgstr ""
 
@@ -14900,6 +14923,10 @@ msgstr ""
 msgid "You must be <a href=\"%s\">logged in</a> to post a comment."
 msgstr ""
 
+#: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:40
+msgid "Thanks for choosing an AyeCode Product!"
+msgstr ""
+
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:304
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
@@ -14983,92 +15010,6 @@ msgstr ""
 msgid ""
 "This will try to dequeue any other Font Awesome versions loaded by other "
 "sources if they are added with `font-awesome` or `fontawesome` in the name."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:36
-msgid "Hello World"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:41
-#: vendor/ayecode/wp-super-duper/map.php:74
-msgid ""
-"This is an example that will take a text parameter and output it after "
-"`Hello:`."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:47
-msgid "Text after hello:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:49
-msgid "This is the text that will appear after `Hello:`."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:119
-msgid "Another input:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:120
-msgid "This is an input added via filter."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:25
-msgid ""
-"A Google API key is required to use this block, we recommend installing our "
-"plugin which makes it easy and sets it globally, or you can set a key in the "
-"block settings sidebar: "
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:31
-msgid "API KEY for Google Maps"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:48
-msgid "Placeholderx"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:61
-msgid "Click here, Settings are in the block settings sidebar"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:79
-msgid "Map Type:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:80
-msgid "Select the map type to use."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:83
-msgid "Static Image"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:97
-msgid "Enter the location to show on the map, place, city, zip code or GPS."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:106
-msgid ""
-"This is the width of the map, for static maps you can only use px values."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:120
-msgid ""
-"This is the height of the map, for static maps you can only use px values."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:135
-#, php-format
-msgid "This is the width of the map, you can use % or px here."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:145
-#: vendor/ayecode/wp-super-duper/map.php:179
-msgid "This is the height of the map, you can use %, px or vh here."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:178
-msgid "Api Key:"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:233
