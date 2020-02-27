@@ -533,7 +533,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'tie_admin_bar' ) && ( strpos( $meta_key, 'tie_' ) === 0 || in_array( $meta_key, array( 'post_color', 'post_background', 'post_background_full' ) ) || empty( $meta_key ) ) ) // Jarida
 			 || ( function_exists( 'mk_build_main_wrapper' ) && ( empty( $meta_key ) || strpos( $meta_key, '_widget_' ) === 0 || in_array( $meta_key, array( '_layout', '_template', '_padding', 'page_preloader', '_introduce_align', '_custom_page_title', '_page_introduce_subtitle', '_disable_breadcrumb', 'menu_location', '_sidebar' ) ) ) ) // Jupiter
 			 || ( defined( 'TD_THEME_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, 'td_' ) === 0 ) ) // Newspaper
-			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
+			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || strpos( $meta_key, '_gsm_' ) === 0 || strpos( $meta_key, '_ss_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
 			 || ( class_exists( 'The7_Aoutoloader' ) && ( strpos( $meta_key, '_dt_' ) === 0 || empty( $meta_key ) ) ) // The7
 			 || ( function_exists( 'avia_get_option' ) && ( ! empty( $meta_key ) && in_array( $meta_key, $gen_keys ) ) ) // Enfold
 			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) || in_array( $meta_key, array( 'pages_sidebar', 'pages_sidebar_2', 'default_sidebar_pos' ) ) ) // Avada + FusionBuilder
@@ -1315,6 +1315,21 @@ class GeoDir_Compatibility {
 			if ( defined( 'PORTO_VERSION' ) ) {
 				add_filter( 'porto_meta_use_default', array( __CLASS__, 'porto_meta_use_default' ), 99, 1 );
 				add_filter( 'porto_meta_layout', array( __CLASS__, 'porto_meta_layout' ), 99, 1 );
+			}
+
+			// Genesis (theme)
+			if ( function_exists( 'genesis_theme_support' ) ) {
+				add_filter( 'genesis_site_layout', array( __CLASS__, 'genesis_site_layout' ), 20, 1 );
+
+				// Genesis Simple Menus
+				if ( function_exists( 'genesis_simple_menus' ) ) {
+					add_filter( 'theme_mod_nav_menu_locations', array( __CLASS__, 'genesis_simple_menus_set_menu_locations' ), 20, 1 );
+				}
+
+				// Genesis Simple Sidebars
+				if ( function_exists( 'genesis_simple_sidebars' ) ) {
+					add_filter( 'sidebars_widgets', array( __CLASS__, 'genesis_simple_sidebars_set_sidebars_widgets' ), 20, 1 );
+				}
 			}
 		}
 
@@ -2318,8 +2333,9 @@ class GeoDir_Compatibility {
 	public static function porto_meta_use_default( $default ) {
 		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
 			$term = get_queried_object();
-			if ( ! empty( $term ) && isset( $term->taxonomy ) && isset( $term->term_id ) ) {
-				$value = get_metadata( $term->taxonomy, $term->term_id, 'default', true );
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$value = get_term_meta( $term->term_id, 'default', true );
 
 				if ( 'default' == $value ) {
 					return $default;
@@ -2355,8 +2371,9 @@ class GeoDir_Compatibility {
 
 		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
 			$term = get_queried_object();
-			if ( ! empty( $term ) && isset( $term->taxonomy ) && isset( $term->term_id ) ) {
-				$value = get_metadata( $term->taxonomy, $term->term_id, 'default', true );
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$value = get_term_meta( $term->term_id, 'default', true );
 
 				if ( 'default' == $value ) {
 					return $layout;
@@ -2407,5 +2424,175 @@ class GeoDir_Compatibility {
 		}
 
 		return $layout;
+	}
+
+	/**
+	 * Filter the Genesis layout.
+	 *
+	 * @since  2.0.0.80
+	 *
+	 * @param  string $layout Layout.
+	 * @return string
+	 */
+	public static function genesis_site_layout( $layout ) {
+		global $gd_post;
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$term_layout = $term ? get_term_meta( $term->term_id, 'layout', true ) : '';
+				$site_layout = $term_layout ? $term_layout : genesis_get_option( 'site_layout' );
+				$type = array( 'archive', $term->taxonomy, $term->term_id );
+
+				// Use default layout as a fallback, if necessary.
+				if ( genesis_get_layout( $site_layout, $type ) ) {
+					return $site_layout;
+				}
+			}
+
+			$post_type = ! empty( $gd_post ) && ! empty( $gd_post->ID ) ? get_post_type( $gd_post->ID ) : '';
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+			$post_type = geodir_get_current_posttype();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$_layout = get_post_meta( $template_page_id, '_genesis_layout', true );
+			$site_layout = $_layout ? $_layout : genesis_get_option( 'site_layout' );
+			$type = array( 'archive', 'post-type-archive-' . $post_type );
+
+			// Use default layout as a fallback, if necessary.
+			if ( genesis_get_layout( $site_layout, $type ) ) {
+				$layout = $site_layout;
+			}
+		}
+
+		return $layout;
+	}
+
+	/**
+	 * Filter the Genesis simple menus menu locations.
+	 *
+	 * @since  2.0.0.80
+	 *
+	 * @param  array $mods Menu locations theme mods.
+	 * @return array
+	 */
+	public static function genesis_simple_menus_set_menu_locations( $mods ) {
+		$primary = NULL;
+		$secondary = NULL;
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$_primary = get_term_meta( $term->term_id, '_gsm_primary', true );
+				if ( ! empty( $_primary ) ) {
+					$primary = $_primary;
+				}
+
+				$_secondary = get_term_meta( $term->term_id, '_gsm_menu', true );
+				if ( ! empty( $_secondary ) ) {
+					$secondary = $_secondary;
+				}
+			}
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			if ( $primary === NULL ) {
+				$primary = get_post_meta( $template_page_id, '_gsm_primary', true );
+			}
+
+			if ( $secondary === NULL ) {
+				$secondary = get_post_meta( $template_page_id, '_gsm_menu', true );
+			}
+		}
+
+		if ( $primary || $secondary ) {
+			if ( ! is_array( $mods ) ) {
+				$mods = array();
+			}
+
+			if ( ! empty( $primary ) ) {
+				$mods['primary'] = (int) $primary;
+			}
+
+			if ( ! empty( $secondary ) ) {
+				$mods['secondary'] = (int) $secondary;
+			}
+		}
+
+		return $mods;
+	}
+
+	/**
+	 * Filter the Genesis simple sidebars widgets in each widget area.
+	 *
+	 * @since  2.0.0.80
+	 *
+	 * @param  array $widgets Widgets.
+	 * @return array
+	 */
+	public static function genesis_simple_sidebars_set_sidebars_widgets( $widgets ) {
+		if ( is_admin() ) {
+			return $widgets;
+		}
+
+		$sidebars = array();
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$sidebars = array(
+					'sidebar'=> get_term_meta( $term->term_id, '_ss_sidebar', true ),
+					'sidebar-alt' => get_term_meta( $term->term_id, '_ss_sidebar_alt', true ),
+					'header-right' => get_term_meta( $term->term_id, '_ss_header', true )
+				);
+			}
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			if ( empty( $sidebars['sidebar'] ) ) {
+				$sidebars['sidebar'] = get_post_meta( $template_page_id, '_ss_sidebar', true );
+			}
+			if ( empty( $sidebars['sidebar-alt'] ) ) {
+				$sidebars['sidebar-alt'] = get_post_meta( $template_page_id, '_ss_sidebar_alt', true );
+			}
+			if ( empty( $sidebars['header-right'] ) ) {
+				$sidebars['header-right'] = get_post_meta( $template_page_id, '_ss_header', true );
+			}
+		}
+
+		if ( ! empty( $sidebars ) ) {
+			foreach ( $sidebars as $old_sidebar => $new_sidebar ) {
+				if ( ! is_registered_sidebar( $old_sidebar ) ) {
+					continue;
+				}
+
+				if ( $new_sidebar && ! empty( $widgets[ $new_sidebar ] ) ) {
+					$widgets[ $old_sidebar ] = $widgets[ $new_sidebar ];
+				}
+			}
+		}
+
+		return $widgets;
 	}
 }
