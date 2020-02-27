@@ -539,6 +539,7 @@ class GeoDir_Compatibility {
 			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) || in_array( $meta_key, array( 'pages_sidebar', 'pages_sidebar_2', 'default_sidebar_pos' ) ) ) // Avada + FusionBuilder
 			 || ( class_exists( 'OCEANWP_Theme_Class' ) && ( empty( $meta_key ) || strpos( $meta_key, 'ocean_' ) === 0 || strpos( $meta_key, 'menu_item_' ) === 0 || strpos( $meta_key, '_menu_item_' ) === 0 ) ) // OceanWP
 			 || ( defined( 'PORTO_VERSION' ) ) // Porto
+			 || ( function_exists( 'wpbf_theme_setup' ) && ( empty( $meta_key ) || strpos( $meta_key, 'wpbf_' ) === 0 ) ) // Page Builder Framework
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -1367,6 +1368,16 @@ class GeoDir_Compatibility {
 			if ( version_compare( ELEMENTOR_VERSION, '2.9.0', '>=' ) && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) ) {
 				// Page template
 				add_filter( 'template_include', array( __CLASS__, 'elementor_template_include' ), 12, 1 );
+			}
+		}
+
+		// Page Builder Framework theme
+		if ( function_exists( 'wpbf_theme_setup' ) ) {
+			add_filter( 'wpbf_sidebar_layout', array( __CLASS__, 'wpbf_sidebar_layout' ), 20, 1 );
+			add_filter( 'wpbf_inner_content', array( __CLASS__, 'wpbf_inner_content' ), 20, 1 );
+
+			if ( geodir_is_page( 'search' ) ) {
+				add_filter( 'body_class', array( __CLASS__, 'wpbf_body_class' ), 20, 1 );
 			}
 		}
 	}
@@ -2594,5 +2605,135 @@ class GeoDir_Compatibility {
 		}
 
 		return $widgets;
+	}
+
+	/**
+	 * Filter Page Builder Framework theme page layout.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 * @param string $layout Page layout.
+	 * @return string Filtered page layout.
+	 */
+	public static function wpbf_sidebar_layout( $layout ) {
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$sidebar_position = get_post_meta( $template_page_id, 'wpbf_sidebar_position', true );
+			$archive_sidebar_global = get_theme_mod( 'archive_sidebar_layout', 'global' );
+
+			$sidebar = 'global' !== $archive_sidebar_global ? $archive_sidebar_global : $layout;
+			$layout = $sidebar_position && 'global' !== $sidebar_position ? $sidebar_position : $sidebar;
+		}
+
+		return $layout;
+	}
+
+	/**
+	 * Filter Page Builder Framework content.
+	 *
+	 * @since 2.0.0.80
+	 */
+	public static function wpbf_inner_content( $inner_content ) {
+		global $gd_post;
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$post_type = ! empty( $gd_post ) && ! empty( $gd_post->ID ) ? get_post_type( $gd_post->ID ) : '';
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$post_type = geodir_get_current_posttype();
+
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$options = get_post_meta( $template_page_id, 'wpbf_options', true );
+
+			// Check if template is set to full width.
+			$fullwidth = $options ? in_array( 'full-width', $options ) : false;
+			if ( $fullwidth ) {
+				return false;
+			}
+
+			// Check if template is set to contained.
+			$contained = $options ? in_array( 'contained', $options ) : false;
+
+			// Check if Premium Add-On is active and template is not set to contained.
+			if ( wpbf_is_premium() && ! $contained ) {
+				$wpbf_settings = get_option( 'wpbf_settings' );
+
+				// Get array of post types that are set to full width under Appearance > Theme Settings > Global Templat Settings.
+				$fullwidth_global = isset( $wpbf_settings['wpbf_fullwidth_global'] ) ? $wpbf_settings['wpbf_fullwidth_global'] : array();
+
+				// If current post type has been set to full-width globally, set $inner_content to false.
+				$inner_content = $fullwidth_global && in_array( $post_type, $fullwidth_global ) ? false : $inner_content;
+			}
+		}
+
+		return $inner_content;
+	}
+
+	/**
+	 * Body classes.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 * @param array $classes The body classes.
+	 * @return array The updated body classes.
+	 */
+	public static function wpbf_body_class( $classes ) {
+		if ( $template_page_id = (int) self::gd_page_id() ) {
+			if ( in_array( 'wpbf-no-sidebar', $classes ) ) {
+				$_classes = implode( '::::', $classes );
+				$_classes = str_replace( '::::wpbf-no-sidebar', '', $_classes );
+				$classes = explode( '::::', $_classes );
+			}
+
+			if ( ! self::is_page_template( 'page-sidebar.php' ) ) {
+				$classes[] = 'wpbf-no-sidebar';
+			}
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Determines whether currently in a page template.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 *
+	 * @param string|array $template The specific template name or array of templates to match.
+	 * @return bool True on success, false on failure.
+	 */
+	public static function is_page_template( $template = '' ) {
+		$page_template = get_page_template_slug( get_queried_object_id() );
+
+		if ( empty( $template ) ) {
+			return (bool) $page_template;
+		}
+
+		if ( $template == $page_template ) {
+			return true;
+		}
+
+		if ( is_array( $template ) ) {
+			if ( ( in_array( 'default', $template, true ) && ! $page_template )
+				|| in_array( $page_template, $template, true )
+			) {
+				return true;
+			}
+		}
+
+		return ( 'default' === $template && ! $page_template );
 	}
 }
