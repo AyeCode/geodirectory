@@ -4,6 +4,7 @@
 * Export post edit date value in CSV - ADDED
 * AyeCode Connect notice now shows on extensions pages - ADDED
 * Genesis theme simple menus & simple sidebars compatibility - ADDED
+* Page Builder Framework theme compatibility - ADDED
 
 = 2.0.0.79 =
 * OceanWP theme & Elementor plugin compatibility - FIXED
