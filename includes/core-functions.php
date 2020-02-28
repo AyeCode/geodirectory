@@ -310,6 +310,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'osmStart'                                     => __( 'Start', 'geodirectory' ),
 		'osmVia'                                       => __( 'Via {viaNumber}', 'geodirectory' ),
 		'osmEnd'                                       => __( 'Enter Your Location', 'geodirectory' ),
+		'osmPressEnter'                                => __( 'Press Enter key to search', 'geodirectory' ),
 		'geoMyLocation'                                => __( 'My Location', 'geodirectory' ),
 		'geoErrUNKNOWN_ERROR'                          => addslashes( __( 'Unable to find your location', 'geodirectory' ) ),
 		'geoErrPERMISSION_DENINED'                     => addslashes( __( 'Permission denied in finding your location', 'geodirectory' ) ),
