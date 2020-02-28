@@ -1,6 +1,7 @@
 = 2.0.0.81 =
 * Remove title/meta variables that non-related to location page - CHANGED
 * Translation missing in OSM map routing search input description - FIXED
+* Style issues on iphone - FIXED
 
 = 2.0.0.80 =
 * Unable to save empty value for date field - FIXED

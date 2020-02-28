@@ -27,7 +27,10 @@
       height: 45px;
       border-radius: 2px;
       padding: 0;
-
+      display: -webkit-box;
+      display: -moz-box;
+      display: -ms-flexbox;
+      display: -webkit-flex;
       &.gd-cptcat-li-sub-container{
         background: none;
         height: auto;
