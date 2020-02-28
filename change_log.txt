@@ -1,5 +1,6 @@
 = 2.0.0.81 =
 * Remove title/meta variables that non-related to location page - CHANGED
+* Style issues on iphone - FIXED
 
 = 2.0.0.80 =
 * Unable to save empty value for date field - FIXED
