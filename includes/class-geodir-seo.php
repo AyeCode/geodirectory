@@ -605,60 +605,59 @@ class GeoDir_SEO {
 	 *
 	 * @return array $vars.
 	 */
-	public static function variables($gd_page = ''){
-
+	public static function variables( $gd_page = '' ) {
 		$vars = array();
-		// generic
-		if($gd_page != 'location_tags'){
-			$vars = array(
-				'%%title%%' => __('The current post title.','geodirectory'),
-				'%%sitename%%' => __('The site name from general settings: site title. ','geodirectory'),
-				'%%sitedesc%%' => __('The site description from general settings: tagline.','geodirectory'),
-				'%%excerpt%%' => __('The current post excerpt.','geodirectory'),
-				'%%sep%%' => __('The separator mostly used in meta titles.','geodirectory'),
-				'%%pt_single%%' => __('Post type singular name.','geodirectory'),
-				'%%pt_plural%%' => __('Post type plural name.','geodirectory'),
-				'%%category%%' => __('The current category name.','geodirectory'),
-				'%%id%%' => __('The current post id.','geodirectory'),
-			);
+
+		// Generic
+		if ( $gd_page != 'location_tags' ) {
+			$vars['%%title%%'] = __( 'The current post title.', 'geodirectory' );
+			$vars['%%sitename%%'] = __( 'The site name from general settings: site title. ', 'geodirectory' );
+			$vars['%%sitedesc%%'] = __( 'The site description from general settings: tagline.', 'geodirectory' );
+			$vars['%%sep%%'] = __( 'The separator mostly used in meta titles.', 'geodirectory' );
 		}
 
-
-		// location tags
-		if(!$gd_page || $gd_page == 'location_tags' || $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' || $gd_page == 'single' || $gd_page == 'location'){
-			$vars['%%location%%'] = __('The full current location eg: United States, Pennsylvania, Philadelphia','geodirectory');
-			$vars['%%location_single%%'] = __('The current viewing location type single name eg: Philadelphia','geodirectory');
-			$vars['%%in_location%%'] = __('The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia','geodirectory');
-			$vars['%%in_location_single%%'] = __('The current viewing location type single name prefixed with `in` eg: Philadelphia','geodirectory');
-			$vars['%%location_country%%'] = __('The current viewing country eg: United States','geodirectory');
-			$vars['%%in_location_country%%'] = __('The current viewing country prefixed with `in` eg: in United States','geodirectory');
-			$vars['%%location_region%%'] = __('The current viewing region eg: Pennsylvania','geodirectory');
-			$vars['%%in_location_region%%']= __('The current viewing region prefixed with `in` eg: in Pennsylvania','geodirectory');
-			$vars['%%location_city%%'] = __('The current viewing city eg: Philadelphia','geodirectory');
-			$vars['%%in_location_city%%'] = __('The current viewing city prefixed with `in` eg: in Philadelphia','geodirectory');
+		if ( $gd_page != 'location_tags' && $gd_page != 'location' ) {
+			$vars['%%excerpt%%'] = __( 'The current post excerpt.', 'geodirectory' );
+			$vars['%%pt_single%%'] = __( 'Post type singular name.', 'geodirectory' );
+			$vars['%%pt_plural%%'] = __( 'Post type plural name.', 'geodirectory' );
+			$vars['%%category%%'] = __( 'The current category name.', 'geodirectory' );
+			$vars['%%id%%'] = __( 'The current post id.', 'geodirectory' );
 		}
 
-		// search page only
+		// Location tags
+		if ( ! $gd_page || $gd_page == 'location_tags' || $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' || $gd_page == 'single' || $gd_page == 'location' ) {
+			$vars['%%location%%'] = __( 'The full current location eg: United States, Pennsylvania, Philadelphia', 'geodirectory' );
+			$vars['%%location_single%%'] = __( 'The current viewing location type single name eg: Philadelphia', 'geodirectory' );
+			$vars['%%in_location%%'] = __( 'The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia', 'geodirectory' );
+			$vars['%%in_location_single%%'] = __( 'The current viewing location type single name prefixed with `in` eg: Philadelphia', 'geodirectory' );
+			$vars['%%location_country%%'] = __( 'The current viewing country eg: United States', 'geodirectory' );
+			$vars['%%in_location_country%%'] = __( 'The current viewing country prefixed with `in` eg: in United States', 'geodirectory' );
+			$vars['%%location_region%%'] = __( 'The current viewing region eg: Pennsylvania', 'geodirectory' );
+			$vars['%%in_location_region%%']= __( 'The current viewing region prefixed with `in` eg: in Pennsylvania', 'geodirectory' );
+			$vars['%%location_city%%'] = __( 'The current viewing city eg: Philadelphia', 'geodirectory' );
+			$vars['%%in_location_city%%'] = __( 'The current viewing city prefixed with `in` eg: in Philadelphia', 'geodirectory' );
+		}
+
+		// Search page only
 		if ( $gd_page == 'search' ) {
-			$vars['%%search_term%%'] = __('The currently used search for term.', 'geodirectory' );
-			$vars['%%for_search_term%%'] = __('The currently used search for term with `for`. Ex: for dinner.', 'geodirectory' );
-			$vars['%%search_near%%'] = __('The currently used search near term with `near`. Ex: near Philadelphia.', 'geodirectory' );
-			$vars['%%search_near_term%%'] = __('The currently used search near term.', 'geodirectory' );
+			$vars['%%search_term%%'] = __( 'The currently used search for term.', 'geodirectory' );
+			$vars['%%for_search_term%%'] = __( 'The currently used search for term with `for`. Ex: for dinner.', 'geodirectory' );
+			$vars['%%search_near%%'] = __( 'The currently used search near term with `near`. Ex: near Philadelphia.', 'geodirectory' );
+			$vars['%%search_near_term%%'] = __( 'The currently used search near term.', 'geodirectory' );
 		}
 
-		// paging
-		if($gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive'){
-			$vars['%%page%%'] = __('Current page number eg: page 2 of 4','geodirectory');
-			$vars['%%pagetotal%%'] = __('Total pages eg: 101','geodirectory');
-			$vars['%%postcount%%'] = __('Total post found eg: 10','geodirectory');
-			$vars['%%pagenumber%%'] = __('Current page number eg: 99','geodirectory');
+		// Paging
+		if ( $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' ) {
+			$vars['%%page%%'] = __( 'Current page number eg: page 2 of 4', 'geodirectory' );
+			$vars['%%pagetotal%%'] = __( 'Total pages eg: 101', 'geodirectory' );
+			$vars['%%postcount%%'] = __( 'Total post found eg: 10', 'geodirectory' );
+			$vars['%%pagenumber%%'] = __( 'Current page number eg: 99', 'geodirectory' );
 		}
 
-		// single page
-		if($gd_page == 'single' ){
-			$vars['%%_FIELD-KEY%%'] = __('Show any custom field by using its field key prefixed with an _underscore','geodirectory');
+		// Single page
+		if ( $gd_page == 'single' ) {
+			$vars['%%_FIELD-KEY%%'] = __( 'Show any custom field by using its field key prefixed with an _underscore', 'geodirectory' );
 		}
-
 
 		return apply_filters( 'geodir_seo_variables', $vars, $gd_page );
 	}
