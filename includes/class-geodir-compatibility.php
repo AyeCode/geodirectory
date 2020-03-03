@@ -116,6 +116,7 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_filter( 'et_pb_enqueue_google_maps_script', '__return_false' );
 		add_filter( 'et_builder_load_actions', array( __CLASS__,'divi_builder_ajax_load_actions') );
+		add_filter( 'et_theme_builder_template_settings_options', array( __CLASS__, 'et_theme_builder_template_settings_options' ), 20, 1 );
 
 		/*######################################################
 		The7 (theme) :: rewind the posts, the_excerpt function call seems to set the current_post number and cause have_posts() to return false.
@@ -419,6 +420,10 @@ class GeoDir_Compatibility {
 
 		if ( ! $bypass && $gd_skip_the_content ) {
 			$bypass = true; // Prevent looping on some themes/plugins.
+		}
+
+		if ( ! $bypass && function_exists( 'et_theme_builder_get_template_layouts' ) && et_theme_builder_get_template_layouts() ) {
+			$bypass = true;
 		}
 
 		return $bypass;
@@ -2735,5 +2740,41 @@ class GeoDir_Compatibility {
 		}
 
 		return ( 'default' === $template && ! $page_template );
+	}
+
+	/**
+	 * Filters available template settings options.
+	 *
+	 * @since 2.0.0.81
+	 *
+	 * @param array
+	 */
+	public static function et_theme_builder_template_settings_options( $options ) {
+		if ( ! empty( $options['other'] ) ) {
+			$options['other']['settings'][] = array(
+				'id'       => 'gd_search',
+				'label'    => et_core_intentionally_unescaped( __( 'GD Search Results', 'geodirectory' ), 'react_jsx' ),
+				'priority' => 0,
+				'validate' => array( __CLASS__, 'et_theme_builder_template_setting_validate_gd_search' ),
+			);
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Validate GD search.
+	 *
+	 * @since 2.0.0.81
+	 *
+	 * @param string $type
+	 * @param string $subtype
+	 * @param integer $id
+	 * @param string[] $setting
+	 *
+	 * @return bool
+	 */
+	public static function et_theme_builder_template_setting_validate_gd_search( $type, $subtype, $id, $setting ) {
+		return geodir_is_page( 'search' );
 	}
 }
