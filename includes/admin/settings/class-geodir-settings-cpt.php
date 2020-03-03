@@ -671,6 +671,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output = array();
 
 			$post_types = geodir_get_option( 'post_types', array() );
+			$raw = stripslashes_deep( $raw );
 			$post_type = isset($raw['new_post_type']) && $raw['new_post_type'] ? str_replace("-","_",sanitize_key($raw['new_post_type'])) : self::$post_type;
 			$name = isset($raw['name']) && $raw['name'] ? sanitize_text_field($raw['name']) : null;
 			$singular_name = isset($raw['singular_name']) && $raw['singular_name'] ? sanitize_text_field($raw['singular_name']) : null;
