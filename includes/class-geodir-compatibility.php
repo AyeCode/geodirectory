@@ -19,6 +19,7 @@ class GeoDir_Compatibility {
 	 * @since 2.0.0
 	 */
 	public static function init() {
+		add_action( 'plugins_loaded', array( __CLASS__, 'plugins_loaded' ) );
 
 		/*######################################################
 		Yoast (WP SEO)
@@ -172,6 +173,25 @@ class GeoDir_Compatibility {
 				// GD Loop
 				add_filter( 'geodir_before_get_template_part',array( __CLASS__, 'avada_get_temp_globals' ), 10);
 				add_filter( 'geodir_after_get_template_part',array( __CLASS__, 'avada_set_temp_globals' ), 10);
+			}
+		}
+	}
+
+	/**
+	 * Setup functions on plugins loaded. 
+	 *
+	 * @since 2.0.0.81
+	 */
+	public static function plugins_loaded() {
+		// Simple Page Sidebars plugin add sidebar supports.
+		if ( class_exists( 'Simple_Page_Sidebars' ) ) {
+			$post_types = geodir_get_posttypes();
+
+			add_post_type_support( 'page', 'simple-page-sidebars' );
+			if ( ! empty( $post_types ) ) {
+				foreach ( $post_types as $post_type ) {
+					add_post_type_support( $post_type, 'simple-page-sidebars' );
+				}
 			}
 		}
 	}
@@ -422,9 +442,9 @@ class GeoDir_Compatibility {
 			$bypass = true; // Prevent looping on some themes/plugins.
 		}
 
-		if ( ! $bypass && function_exists( 'et_theme_builder_get_template_layouts' ) && et_theme_builder_get_template_layouts() ) {
-			$bypass = true;
-		}
+		//if ( ! $bypass && function_exists( 'et_theme_builder_get_template_layouts' ) && et_theme_builder_get_template_layouts() ) {
+			//$bypass = true;
+		//}
 
 		return $bypass;
 	}
@@ -515,6 +535,11 @@ class GeoDir_Compatibility {
 					$backup_post = $post;
 				}
 			}
+		}
+
+		// Simple Page Sidebars plugin.
+		if ( class_exists( 'Simple_Page_Sidebars' ) ) {
+			$gen_keys[] = '_sidebar_name';
 		}
 
 		// Betheme by Muffin group
@@ -1350,6 +1375,10 @@ class GeoDir_Compatibility {
 		// Divi theme compatibility
 		if ( function_exists( 'et_divi_load_scripts_styles' ) && geodir_is_geodir_page() ) {
 			add_filter( 'et_first_image_use_custom_content', array( __CLASS__, 'divi_et_first_image_use_custom_content' ), 999, 3 );
+
+			if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
+				add_filter( 'body_class', array( __CLASS__, 'divi_et_body_class' ), 11, 1 );
+			}
 		}
 
 		// Jarida (theme)
@@ -1537,6 +1566,45 @@ class GeoDir_Compatibility {
 		}
 
 		return $custom;
+	}
+
+	/**
+	 * Divi theem filter body classes.
+	 *
+	 * @since 2.0.0.81
+	 *
+	 * @param array $classes The body classes.
+	 * @return array The updated body classes.
+	 */
+	public static function divi_et_body_class( $classes ) {
+		if ( $template_page_id = (int) self::gd_page_id() ) {
+			$_classes = implode( '::::', $classes );
+			$_classes = str_replace( array( '::::et_left_sidebar', '::::et_right_sidebar', '::::et_no_sidebar', '::::et_full_width_page' ), '', $_classes );
+			$classes = explode( '::::', $_classes );
+
+			$page_layout = '';
+			$default_sidebar_class = et_get_option( 'divi_sidebar' );
+			$is_builder_active = 'on' === get_post_meta( $template_page_id, '_et_pb_use_builder', true ) || et_core_is_fb_enabled();
+			$is_blank_page_tpl = self::is_page_template( 'page-template-blank.php' );
+
+			if ( ! $default_sidebar_class ) {
+				$default_sidebar_class = is_rtl() ? 'et_left_sidebar' : 'et_right_sidebar';
+			}
+
+			if ( ! ( $page_layout = get_post_meta( $template_page_id, '_et_pb_page_layout', true ) ) && ! $is_builder_active ) { // check for the falsy value not for boolean `false`
+				// Set post meta layout which will work for all third party plugins.
+				$page_layout = $default_sidebar_class;
+			} elseif ( $is_builder_active && ( $is_blank_page_tpl || ! $page_layout || is_page() ) ) {
+				$page_layout = 'et_no_sidebar';
+			}
+
+			if ( $page_layout ) {
+				// Add the page layout class.
+				$classes[] = $page_layout;
+			}
+		}
+
+		return $classes;
 	}
 
 	/**
