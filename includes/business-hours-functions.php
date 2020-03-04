@@ -391,7 +391,7 @@ function geodir_schema_to_array( $schema ) {
 	if ( ! empty( $schema_array[1] ) ) {
 		$gmt_offset = str_replace(' ', '', $schema_array[1]);
 		$gmt_offset = str_replace(array('"UTC":"', '"', '[', ']'), '', $schema_array[1]);
-		$return['offset'] = ( ! empty( $gmt_offset ) ? $gmt_offset : geodir_gmt_offset() );
+		$return['offset'] = ( $gmt_offset == "0" || ! empty( $gmt_offset ) ? $gmt_offset : geodir_gmt_offset() );
 	}
 	
 	return $return;
