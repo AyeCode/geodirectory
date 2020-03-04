@@ -749,7 +749,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		'css_class' => '',
 		'onclick'   => '',
 		'icon_class'=> '',
-		'extra_attributes'=> '' // 'data-save-list-id=123 data-other-post-id=321'
+		'extra_attributes'=> '', // 'data-save-list-id=123 data-other-post-id=321'
+		'tag'       => ''
 	);
 	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
@@ -800,6 +801,12 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		// If not then we run the standard output.
 		if ( empty( $output ) ) {
 			$search = $args['search'];
+
+			$is_date = ( ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) || in_array( $match_field, array( 'post_date', 'post_modified' ) ) ? true : false;
+			/**
+			 * @since 2.0.0.81
+			 */
+			$is_date = apply_filters( 'geodir_post_badge_is_date', $is_date, $match_field, $field, $args, $find_post );
 
 			$match_value = isset($find_post->{$match_field}) ? esc_attr( trim( $find_post->{$match_field} ) ) : ''; // escape user input
 			$match_found = $match_field === '' ? true : false;
@@ -863,6 +870,10 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 				}
 
+				if ( $is_date && ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ) {
+					$args['datetime'] = mysql2date( 'c', $match_value, false );
+				}
+
 				/**
 				 * @since 2.0.0.75
 				 */
@@ -879,7 +890,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					// will be replace in condition check
 				}
 
-				//link url, replave vars
+				//link url, replace vars
 				if( !empty( $args['link'] ) && $args['link'] = str_replace("%%input%%",$match_value,$args['link']) ){
 					// will be replace in condition check
 				}
@@ -917,7 +928,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$new_window = ' target="_blank" ';
 				}
 
-				// check if its exteranl it should be no follow
+				// check if its external it should be no follow
 				$rel = '';
 				if(!empty($args['link'])){
 					$rel = strpos($args['link'], get_site_url()) !== false ? '' : 'rel="nofollow"';
@@ -934,7 +945,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$onclick = 'onclick="'.esc_attr($args['onclick']).'"';
 				}
 
-				// fontawesom icon
+				// FontAwesome icon
 				$icon = '';
 				if(!empty($args['icon_class'])){
 					$icon = '<i class="'.esc_attr($args['icon_class']).'" ></i>';
@@ -953,6 +964,12 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				$title = $badge ? $badge : ( ! empty( $field['frontend_title'] ) ? __( $field['frontend_title'], 'geodirectory' ) : '' );
 				if ( ! empty( $title ) ) {
 					$title = sanitize_text_field( stripslashes( $title ) );
+				}
+
+				// Inner tag attributes
+				$inner_attributes = '';
+				if ( ! empty( $args['datetime'] ) ) {
+					$inner_attributes .= 'datetime="' . esc_attr( $args['datetime'] ) . '"';
 				}
 
 				// set badge text as secondary if icon is set.
@@ -982,13 +999,19 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 				$post_id = isset( $find_post->ID ) ? absint( $find_post->ID ) : '';
 				$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
+				// Element tag
+				if ( empty( $args['tag'] ) && $is_date ) {
+					$tag = 'time';
+				} else {
+					$tag = 'div';
+				}
 
 				$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
 				if ( ! empty( $link ) ) {
 					$output .= "<a href='" . $link . "' $new_window $rel>";
 				}
 				// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
-				$output .= '<div data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . $icon . $badge . '</div>';
+				$output .= '<' . $tag . ' data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';" ' . $inner_attributes . '>' . $icon . $badge . '</' . $tag . '>';
 				if ( ! empty( $link ) ) {
 					$output .= "</a>";
 				}
@@ -1159,7 +1182,7 @@ function geodir_replace_variables($text,$post_id = ''){
  * 
  * @since 2.0.0.67
  * 
- * @param bool $match_found Ture if match found else False.
+ * @param bool $match_found True if match found else False.
  * @param array $args Badge arguments.
  * @param object $gd_post The GD post object.
  * @return bool

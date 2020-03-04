@@ -517,6 +517,11 @@ jQuery(window).load(function() {
             }
         }
     });
+
+    // Set times to time ago
+    if(jQuery('.gd-timeago').length){
+        geodir_time_ago('.gd-timeago');
+    }
 });
 
 
@@ -1637,4 +1642,115 @@ function geodir_widget_listings_pagination(id, params) {
 
         e.preventDefault();
     });
+}
+
+/**
+ * A function to convert a time value to a "ago" time text.
+ *
+ * @param selector string The .class selector
+ */
+function geodir_time_ago(selector) {
+    var templates = {
+        prefix_ago: "",
+        suffix_ago: " ago",
+        prefix_after: "",
+        suffix_after: "after ",
+        seconds: "less than a minute",
+        minute: "about a minute",
+        minutes: "%d minutes",
+        hour: "about an hour",
+        hours: "about %d hours",
+        day: "a day",
+        days: "%d days",
+        month: "about a month",
+        months: "%d months",
+        year: "about a year",
+        years: "%d years"
+    };
+    for (var i in templates) {
+        var _t = templates[i];
+        if (geodir_params.time_ago && typeof geodir_params.time_ago[i] != 'undefined') {
+            templates[i] = geodir_params.time_ago[i];
+        }
+    }
+
+    var template = function(t, n) {
+        return templates[t] && templates[t].replace(/%d/i, Math.abs(Math.round(n)));
+    };
+
+    var timer = function(time) {
+        var _time, _time_now;
+        if (!time) {
+            return null;
+        }
+        time = time.replace(/\.\d+/, ""); // remove milliseconds
+        time = time.replace(/-/, "/").replace(/-/, "/");
+        time = time.replace(/T/, " ").replace(/Z/, " UTC");
+        time = time.replace(/([\+\-]\d\d)\:?(\d\d)/, " $1$2"); // -04:00 -> -0400
+        time = new Date(time * 1000 || time);
+
+        var future = false;
+        var now = new Date();
+        _time = time.getTime();
+        if (isNaN(_time)) {
+            return null;
+        }
+        _time_now = now.getTime();
+        var seconds = ((_time_now - _time) * 0.001);
+        if (seconds < 0) {
+            future = true;
+            seconds = seconds * (-1);
+        }
+        var minutes = seconds / 60;
+        var hours = minutes / 60;
+        var days = hours / 24;
+        var years = days / 365;
+
+        if (future) {
+            prefix = templates.prefix_after;
+            suffix = templates.suffix_after;
+        } else {
+            prefix = templates.prefix_ago;
+            suffix = templates.suffix_ago;
+        }
+
+        return prefix + (
+            seconds < 45 && template('seconds', seconds) ||
+            seconds < 90 && template('minute', 1) ||
+            minutes < 45 && template('minutes', minutes) ||
+            minutes < 90 && template('hour', 1) ||
+            hours < 24 && template('hours', hours) ||
+            hours < 42 && template('day', 1) ||
+            days < 30 && template('days', days) ||
+            days < 45 && template('month', 1) ||
+            days < 365 && template('months', days / 30) ||
+            years < 1.5 && template('year', 1) ||
+            template('years', years)
+        ) + suffix;
+    };
+
+    jQuery(selector).each(function() {
+        var $this = jQuery(this),
+            $_this, datetime = '',
+            _datetime;
+        if ($this.attr('datetime')) {
+            $_this = $this;
+            datetime = $this.attr('datetime').trim();
+        } else if ($this.find('[datetime]').length && $this.find('[datetime]:first').attr('datetime')) {
+            $_this = $this.find('[datetime]:first');
+            datetime = $_this.attr('datetime').trim();
+        } else if ($this.attr('title')) {
+            $_this = $this;
+            datetime = $this.attr('title').trim();
+        }
+        if ($_this && datetime) {
+            _datetime = timer(datetime);
+            if (_datetime) {
+                _datetime = '<i class="far fa-clock"></i> ' + _datetime;
+                $_this.html(_datetime);
+            }
+        }
+    });
+    // Update time every minute
+    setTimeout(geodir_time_ago, 60000);
 }

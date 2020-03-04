@@ -667,7 +667,15 @@ function animate_marker(map_canvas, id) {
     try {
         if (window.gdMaps == 'google') {
             if (jQuery.goMap.mapId.data(id) != null) {
-                jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+                var anim = geodir_params.markerAnimation;
+                if ( anim == 'drop' || anim == 'DROP' ) {
+                    _anim = google.maps.Animation.DROP;
+                } else if ( anim == 'null' || anim == 'none' || anim == null || anim == '' ) {
+                    _anim = null;
+                } else {
+                    _anim = google.maps.Animation.BOUNCE;
+                }
+                jQuery.goMap.mapId.data(id).setAnimation(_anim);
             }
         } else if(window.gdMaps == 'osm') {
             jQuery.goMap.gdlayers.eachLayer(function(marker) {

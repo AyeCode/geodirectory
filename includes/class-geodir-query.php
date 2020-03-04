@@ -171,18 +171,18 @@ class GeoDir_Query {
 			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ),10,2 );
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ),10,2 );
 
-		}elseif(geodir_is_page('search')){
+		} elseif ( geodir_is_page( 'search' ) ) {
 			// Divi page builder breaks editor.
-			if ( ! ( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) ) {
+			if ( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) {
+			} else {
 				$q->is_page = false;
+				$q->is_singular = false;
 			}
-			$q->is_singular = false;
 			$q->is_search = true;
 			$q->is_archive = true;
 			//$q->is_post_type_archive = true;
 			$q->is_paged = true;
 //			$q->in_the_loop = true; // this breaks elementor template 
-
 
 			//$q->set('is_page',false);
 			//$q->set('is_search',true);
