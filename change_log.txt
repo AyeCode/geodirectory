@@ -5,6 +5,7 @@
 * Show video file in HTML5 media format - ADDED
 * Divi theme builder template compatibility - FIXED
 * Filter added to customize Google map marker animation - ADDED
+* Near search not clearing GPS when only core is active - FIXED
 
 = 2.0.0.80 =
 * Unable to save empty value for date field - FIXED
