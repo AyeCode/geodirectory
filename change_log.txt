@@ -1,5 +1,5 @@
 = 2.0.0.81 =
-* Remove title/meta variables that non-related to location page - CHANGED
+* Remove title/meta variables not related to location page - CHANGED
 * Translation missing in OSM map routing search input description - FIXED
 * Style issues on iphone - FIXED
 * Show video file in HTML5 media format - ADDED
