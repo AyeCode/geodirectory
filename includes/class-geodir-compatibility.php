@@ -1775,7 +1775,8 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_global_sidebar( $value ) {
-		return Avada()->settings->get( 'pages_global_sidebar' );
+		$sidebars_option_names = avada_get_sidebar_post_meta_option_names( 'post' );
+		return Avada()->settings->get( $sidebars_option_names[0] );
 	}
 
 	public static function avada_sidebar( $value ) {
