@@ -1,3 +1,6 @@
+= 2.0.0.82 =
+Avada theme blog global sidebar issue - FIXED
+
 = 2.0.0.81 =
 * Remove title/meta variables not related to location page - CHANGED
 * Translation missing in OSM map routing search input description - FIXED
