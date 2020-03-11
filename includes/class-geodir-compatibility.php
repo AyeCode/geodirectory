@@ -154,7 +154,6 @@ class GeoDir_Compatibility {
 		if ( ! is_admin() ) {
 			add_filter( 'avada_has_sidebar', array( __CLASS__, 'avada_has_sidebar' ), 100, 3 );
 			add_filter( 'avada_has_double_sidebars', array( __CLASS__, 'avada_has_double_sidebars' ), 100, 3 );
-			add_filter( 'avada_setting_get_posts_global_sidebar', array( __CLASS__, 'avada_global_sidebar' ), 100, 1 );
 			add_filter( 'avada_setting_get_posts_sidebar', array( __CLASS__, 'avada_sidebar' ), 100, 1 );
 			add_filter( 'avada_setting_get_posts_sidebar_2', array( __CLASS__, 'avada_sidebar_2' ), 100, 1 );
 			add_filter( 'avada_setting_get_blog_archive_sidebar', array( __CLASS__, 'avada_sidebar' ), 100, 1 );
@@ -1772,11 +1771,6 @@ class GeoDir_Compatibility {
 		}
 
 		return $classes;
-	}
-
-	public static function avada_global_sidebar( $value ) {
-		$sidebars_option_names = avada_get_sidebar_post_meta_option_names( 'post' );
-		return Avada()->settings->get( $sidebars_option_names[0] );
 	}
 
 	public static function avada_sidebar( $value ) {
