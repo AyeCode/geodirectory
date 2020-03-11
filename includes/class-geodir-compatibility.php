@@ -570,6 +570,7 @@ class GeoDir_Compatibility {
 			 || ( class_exists( 'OCEANWP_Theme_Class' ) && ( empty( $meta_key ) || strpos( $meta_key, 'ocean_' ) === 0 || strpos( $meta_key, 'menu_item_' ) === 0 || strpos( $meta_key, '_menu_item_' ) === 0 ) ) // OceanWP
 			 || ( defined( 'PORTO_VERSION' ) ) // Porto
 			 || ( function_exists( 'wpbf_theme_setup' ) && ( empty( $meta_key ) || strpos( $meta_key, 'wpbf_' ) === 0 ) ) // Page Builder Framework
+			 || ( function_exists( 'generateblocks_do_activate' ) && strpos( $meta_key, '_generateblocks_' ) === 0 ) // GenerateBlocks plugin
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -1414,6 +1415,19 @@ class GeoDir_Compatibility {
 				add_filter( 'body_class', array( __CLASS__, 'wpbf_body_class' ), 20, 1 );
 			}
 		}
+
+		// GenerateBlocks plugin
+		if ( function_exists( 'generateblocks_do_activate' ) && geodir_is_geodir_page() && ( geodir_is_page( 'detail' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'search' ) ) ) {
+			global $geodir_gb_enqueue_css;
+
+			$geodir_gb_enqueue_css = GenerateBlocks_Enqueue_CSS::get_instance();
+
+			remove_action( 'wp_enqueue_scripts', array( $geodir_gb_enqueue_css, 'enqueue_dynamic_css' ) );
+			remove_action( 'wp_head', array( $geodir_gb_enqueue_css, 'print_inline_css' ) );
+
+			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'generateblocks_enqueue_dynamic_css' ) );
+			add_action( 'wp_head', array( __CLASS__, 'generateblocks_print_inline_css' ) );
+		}
 	}
 
 	/**
@@ -1548,6 +1562,73 @@ class GeoDir_Compatibility {
 		}
 
 		return $columns;
+	}
+
+	/**
+	 * Print GenerateBlocks enqueue dynamic CSS for GD pages.
+	 *
+	 * @since 2.0.0.82
+	 *
+	 * @param object $geodir_gb_enqueue_css GenerateBlocks enqueue object.
+	 */
+	public static function generateblocks_enqueue_dynamic_css() {
+		global $geodir_gb_enqueue_css;
+
+		$page_id = self::gd_page_id();
+
+		if ( ! $page_id ) {
+			return;
+		}
+
+		$css_version = get_post_meta( $page_id, '_generateblocks_dynamic_css_version', true );
+
+		if ( empty( $css_version ) ) {
+			return;
+		}
+
+		if ( empty( $geodir_gb_enqueue_css ) ) {
+			$geodir_gb_enqueue_css = GenerateBlocks_Enqueue_CSS::get_instance();
+		}
+
+		if ( 'file' == $geodir_gb_enqueue_css->mode() ) {
+			wp_enqueue_style( 'generateblocks', esc_url( $geodir_gb_enqueue_css->file( 'uri' ) ), array(), null );
+		}
+	}
+
+	/**
+	 * Print GenerateBlocks inline CSS for GD pages.
+	 *
+	 * @since 2.0.0.82
+	 *
+	 * @global object $post The post object.
+	 * @param object $geodir_gb_enqueue_css GenerateBlocks enqueue object.
+	 */
+	public static function generateblocks_print_inline_css() {
+		global $post, $geodir_gb_enqueue_css;
+
+		$page_id = self::gd_page_id();
+
+		$the_post = $post;
+
+		// Backup post;
+		$post = get_post( $page_id );
+
+		if ( empty( $geodir_gb_enqueue_css ) ) {
+			$geodir_gb_enqueue_css = GenerateBlocks_Enqueue_CSS::get_instance();
+		}
+
+		if ( 'inline' === $geodir_gb_enqueue_css->mode() || ! wp_style_is( 'generateblocks', 'enqueued' ) ) {
+			$css = generateblocks_get_frontend_block_css();
+
+			if ( ! empty( $css ) ) {
+				printf(
+					'<style id="generateblocks-css">%s</style>',
+					wp_strip_all_tags( $css )
+				);
+			}
+		}
+
+		$post = $the_post;
 	}
 
 	/**
