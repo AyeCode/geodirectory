@@ -557,29 +557,37 @@ class GeoDir_Query {
 					}
 				}
 
+				$_post_category = array();
 				if ( geodir_is_page( 'search' ) && isset( $_REQUEST['spost_category'] ) && ( ( is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'][0] ) ) || ( ! is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'] ) ) ) ) {
-					$term_results = array();
-				} else {
+					if ( is_array( $_REQUEST['spost_category'] ) ) {
+						$_post_category = array_map( 'absint', $_REQUEST['spost_category'] );
+					} else {
+						$_post_category = array( absint( $_REQUEST['spost_category'] ) );
+					}
+				}
 
-					if ( $s != '' ) {
-						// get term sql
-						$term_sql = "SELECT $wpdb->term_taxonomy.term_id,$wpdb->terms.name,$wpdb->term_taxonomy.taxonomy
-						FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
-						WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id 
-						AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id 
-						AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} ) 
-						$terms_where 
-						GROUP BY $wpdb->term_taxonomy.term_id";
+				if ( $s != '' ) {
+					// get term sql
+					$term_sql = "SELECT $wpdb->term_taxonomy.term_id,$wpdb->terms.name,$wpdb->term_taxonomy.taxonomy
+					FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
+					WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id 
+					AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id 
+					AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} ) 
+					$terms_where 
+					GROUP BY $wpdb->term_taxonomy.term_id";
 
-						$term_results = $wpdb->get_results( $term_sql );
+					$term_results = $wpdb->get_results( $term_sql );
 
-						if ( ! empty( $term_results ) ) {
-							foreach ( $term_results as $term ) {
-								if($term->taxonomy==$post_types."category"){
-									$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %d , " . $table . ".post_category ) ",$term->term_id);
-								}else{
-									$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %s, " . $table . ".post_tags ) ",$term->name );
-								}
+					if ( ! empty( $term_results ) ) {
+						foreach ( $term_results as $term ) {
+							if ( ! empty( $_post_category ) && in_array( $term->term_id, $_post_category ) ) {
+								continue;
+							}
+
+							if ( $term->taxonomy == $post_types . "category" ) {
+								$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %d , " . $table . ".post_category ) ", $term->term_id );
+							} else {
+								$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %s, " . $table . ".post_tags ) ", $term->name );
 							}
 						}
 					}
