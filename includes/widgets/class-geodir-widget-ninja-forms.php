@@ -207,7 +207,7 @@ class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags
         parent::__construct();
 
         /* Translatable display name for the group. */
-        $this->title = __( '<span class="dashicons-before dashicons-admin-site"> GeoDirectory</span>', 'ninja-forms' );
+        $this->title = __( '<span class="dashicons-before dashicons-admin-site"> GeoDirectory</span>', 'geodirectory' );
 
         /* Individual tag registration. */
         $this->merge_tags = array(

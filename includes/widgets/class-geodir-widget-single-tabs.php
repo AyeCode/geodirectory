@@ -319,7 +319,8 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 ob_start();
 
                 if ( ! empty( $child_tab->tab_content ) ) { // override content
-                    echo stripslashes( $child_tab->tab_content );
+                    $_content = geodir_replace_variables( stripslashes( $child_tab->tab_content ));
+                    echo do_shortcode( $_content );
                 } elseif ( $child_tab->tab_type == 'meta' ) { // meta info
                     echo do_shortcode( '[gd_post_meta key="' . $child_tab->tab_key . '"]' );
                 } elseif ( $child_tab->tab_type == 'fieldset' ) { // meta info
