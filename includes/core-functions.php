@@ -355,6 +355,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'search_users_nonce'                           => wp_create_nonce( 'search-users' ),
 		'google_api_key'                               => GeoDir_Maps::google_api_key(),
 		'mapLanguage'                                  => GeoDir_Maps::map_language(),
+		'markerAnimation'                              => apply_filters( 'geodir_map_marker_animation', 'bounce' ), // bounce, drop or none
 		'confirm_set_location'                         => addslashes( __( 'Would you like to manually set your location?', 'geodirectory' ) ),
 		'confirm_lbl_error'                            => addslashes( __( 'ERROR:', 'geodirectory' ) ),
 		'label_title'                                  => __( 'Title', 'geodirectory' ),
@@ -362,6 +363,23 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'button_set'                                   => __( 'Set', 'geodirectory' ),
 		'BH_altTimeFormat'                             => geodir_bh_input_time_format( true ),
 		'basic_nonce'                                  => wp_create_nonce( 'geodir_basic_nonce' ),
+		'time_ago'                                     => array(
+			'prefix_ago' => '',
+			'suffix_ago' => ' ' . _x( 'ago', 'time ago', 'geodirectory' ),
+			'prefix_after' => _x( 'after', 'time ago', 'geodirectory' ) . ' ',
+			'suffix_after' => '',
+			'seconds' => _x( 'less than a minute', 'time ago', 'geodirectory' ),
+			'minute' => _x( 'about a minute', 'time ago', 'geodirectory' ),
+			'minutes' => _x( '%d minutes', 'time ago', 'geodirectory' ),
+			'hour' => _x( 'about an hour', 'time ago', 'geodirectory' ),
+			'hours' => _x( 'about %d hours', 'time ago', 'geodirectory' ),
+			'day' => _x( 'a day', 'time ago', 'geodirectory' ),
+			'days' => _x( '%d days', 'time ago', 'geodirectory' ),
+			'month' => _x( 'about a month', 'time ago', 'geodirectory' ),
+			'months' => _x( '%d months', 'time ago', 'geodirectory' ),
+			'year' => _x( 'about a year', 'time ago', 'geodirectory' ),
+			'years' => _x( '%d years', 'time ago', 'geodirectory' ),
+		),
 	);
 
 	/**

@@ -167,6 +167,14 @@ class GeoDir_Frontend_Scripts {
 						jQuery($form).submit();
 					}
 				});
+				// Clear near search GPS for core
+				if (!jQuery('input.geodir-location-search-type').length && jQuery('[name="snear"]').length){
+					jQuery('[name="snear"]').unbind('keyup');
+					jQuery('[name="snear"]').on('keyup', function($){
+						jQuery('.sgeo_lat').val('');
+						jQuery('.sgeo_lon').val('');
+					});
+				}
 			}
 
 			jQuery(document).ready(function() {

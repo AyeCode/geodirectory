@@ -1,6 +1,17 @@
+= 2.0.0.82 =
+* Added GenerateBlocks plugin compatibility - ADDED
+* Search with category and tag keyword combination not showing correct results - FIXED
+* Avada theme blog global sidebar issue - FIXED
+
 = 2.0.0.81 =
-* Remove title/meta variables that non-related to location page - CHANGED
+* Remove title/meta variables not related to location page - CHANGED
 * Translation missing in OSM map routing search input description - FIXED
+* Style issues on iphone - FIXED
+* Show video file in HTML5 media format - ADDED
+* Divi theme builder template compatibility - FIXED
+* Filter added to customize Google map marker animation - ADDED
+* Near search not clearing GPS when only core is active - FIXED
+* Show "time ago" for post date - ADDED
 
 = 2.0.0.80 =
 * Unable to save empty value for date field - FIXED
@@ -38,6 +49,7 @@
 * Search page meta title shows duplicate "Near" string - FIXED
 * archive map show all posts param not working- FIXED
 * Fix class name typo for geodir-dashboard class - FIXED
+* GD search page is not loading with Divi page builder - FIXED
 
 = 2.0.0.74 =
 * Ninja Forms bug can cause PHP warnings on search page - TEMP FIX ADDED

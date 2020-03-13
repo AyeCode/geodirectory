@@ -1413,6 +1413,7 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
                 $title = isset( $file->title ) && $file->title != '' ? strip_tags( stripslashes( $file->title ) ) : '';
                 $desc = isset( $file->caption ) ? $file->caption : '';
                 $url = $upload_baseurl . $file_path;
+                $outout_item = '';
 
                 if ( ! empty( $file ) ) {
                     $image_name_arr = explode( '/', $url );
@@ -1426,15 +1427,19 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
                     }
 
                     $uploaded_file_type = $arr_file_type['type'];
-                    $uploaded_file_ext = $arr_file_type['ext'];
+                    $file_ext = $arr_file_type['ext'];
 
-                    if ( ! empty( $allowed_file_types ) && ! in_array( $uploaded_file_ext, $allowed_file_types ) ) {
+                    if ( ! empty( $allowed_file_types ) && ! in_array( $file_ext, $allowed_file_types ) ) {
                         continue; // Invalid file type.
                     }
 
                     $ext_path = '_' . $html_var . '_';
-                    $_filename = explode( $ext_path, $filename );
-                    $_filename = $_filename[count( $_filename ) - 1];
+                    if ( $title ) {
+                        $_filename = $title;
+                    } else {
+                        $_filename = explode( $ext_path, $filename );
+                        $_filename = $_filename[count( $_filename ) - 1];
+                    }
                     /**
                      * @since 2.0.0.67
                      */
@@ -1447,23 +1452,39 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
                     $audio_file_types = array( 'audio/mpeg', 'audio/ogg', 'audio/mp4', 'audio/vnd.wav', 'audio/basic', 'audio/mid' );
 
                     // If the uploaded file is image
-                    if ( in_array( $uploaded_file_type, $image_file_types ) ) {
-                        $file_paths .= '<div class="geodir-custom-field-file" class="clearfix">';
-                        $file_paths .= '<a href="' . $url . '" data-lity>';
-                        $file_paths .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
-                        $file_paths .= geodir_get_image_tag( $file );
-                        $file_paths .= '</a>';
-                        $file_paths .= '</div>';
-                    } elseif ( in_array( $uploaded_file_type, $audio_file_types ) ) {// if audio
-                        $ext_path = '_' . $html_var . '_';
-                        $filename = explode( $ext_path, $filename );
-                        $file_paths .= '<span class="gd-audio-name">' . $_filename . '</span>';
-                        $file_paths .= do_shortcode( '[audio src="' . $url . '" ]' );
+                    $file_type = 'unknown';
+                    if ( in_array( $uploaded_file_type, $image_file_types ) ) { // Image
+                        $file_type = 'image';
+                        $outout_item .= '<span class="geodir-cf-file-name clearfix"><i aria-hidden="true" class="fa fa-file-image"></i> ' . $_filename . '</span>';
+                        $outout_item .= '<a href="' . $url . '" data-lity>';
+                        $outout_item .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
+                        $outout_item .= geodir_get_image_tag( $file );
+                        $outout_item .= '</a>';
+                    } elseif ( in_array( $uploaded_file_type, $audio_file_types ) || in_array( $file_ext, wp_get_audio_extensions() ) ) { // Audio
+                        $file_type = 'audio';
+                        $outout_item .= '<span class="geodir-cf-file-name clearfix"><i aria-hidden="true" class="fa fa-file-audio"></i> ' . $_filename . '</span>';
+                        $outout_item .= do_shortcode( '[audio src="' . $url . '" ]' );
+                    } elseif ( in_array( $file_ext, wp_get_video_extensions() ) ) { // Video
+                        $file_type = 'video';
+                        $outout_item .= '<span class="geodir-cf-file-name clearfix"><i aria-hidden="true" class="fa fa-file-video"></i> ' . $_filename . '</span>';
+                        $outout_item .= do_shortcode( wp_embed_handler_video( array(), array(), $url, array() ) );
                     } else {
-                        $ext_path = '_' . $html_var . '_';
-                        $filename = explode( $ext_path, $filename );
-                        $file_paths .= '<a class="gd-meta-file" href="' . $url . '" target="_blank" data-lity title="' . esc_attr( $title ) . '">' . $_filename . '</a>';
+                        $outout_item .= '<a class="gd-meta-file" href="' . $url . '" target="_blank" data-lity title="' . esc_attr( $title ) . '"><i aria-hidden="true" class="fa fa-file"></i> ' . $_filename . '</a>';
                     }
+                    $outout_item = '<div class="geodir-custom-field-file clearfix geodir-cf-file-' . $file_ext . ' geodir-cf-type-' . $file_type . '"> ' . $outout_item . '</div>';
+
+                     /**
+                     * Filter the file output html.
+                     *
+                     * @since 2.0.0.81
+                     *
+                     * @param string $outout_item The file html outout.
+                     * @param object $file The file object.
+                     * @param string $location The location to output the html.
+                     * @param array $cf The custom field array.
+                     * @param string $output The output string that tells us what to output.
+                     */
+                    $file_paths .= apply_filters( 'geodir_cf_file_output_item', $outout_item, $file, $location, $cf, $output );
                 }
             }
 

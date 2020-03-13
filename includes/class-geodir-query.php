@@ -171,18 +171,18 @@ class GeoDir_Query {
 			add_filter( 'posts_groupby', array( $this, 'posts_groupby' ),10,2 );
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ),10,2 );
 
-		}elseif(geodir_is_page('search')){
+		} elseif ( geodir_is_page( 'search' ) ) {
 			// Divi page builder breaks editor.
-			if ( ! ( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) ) {
+			if ( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) {
+			} else {
 				$q->is_page = false;
+				$q->is_singular = false;
 			}
-			$q->is_singular = false;
 			$q->is_search = true;
 			$q->is_archive = true;
 			//$q->is_post_type_archive = true;
 			$q->is_paged = true;
 //			$q->in_the_loop = true; // this breaks elementor template 
-
 
 			//$q->set('is_page',false);
 			//$q->set('is_search',true);
@@ -557,29 +557,37 @@ class GeoDir_Query {
 					}
 				}
 
+				$_post_category = array();
 				if ( geodir_is_page( 'search' ) && isset( $_REQUEST['spost_category'] ) && ( ( is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'][0] ) ) || ( ! is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'] ) ) ) ) {
-					$term_results = array();
-				} else {
+					if ( is_array( $_REQUEST['spost_category'] ) ) {
+						$_post_category = array_map( 'absint', $_REQUEST['spost_category'] );
+					} else {
+						$_post_category = array( absint( $_REQUEST['spost_category'] ) );
+					}
+				}
 
-					if ( $s != '' ) {
-						// get term sql
-						$term_sql = "SELECT $wpdb->term_taxonomy.term_id,$wpdb->terms.name,$wpdb->term_taxonomy.taxonomy
-						FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
-						WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id 
-						AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id 
-						AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} ) 
-						$terms_where 
-						GROUP BY $wpdb->term_taxonomy.term_id";
+				if ( $s != '' ) {
+					// get term sql
+					$term_sql = "SELECT $wpdb->term_taxonomy.term_id,$wpdb->terms.name,$wpdb->term_taxonomy.taxonomy
+					FROM $wpdb->term_taxonomy,  $wpdb->terms, $wpdb->term_relationships 
+					WHERE $wpdb->term_taxonomy.term_id =  $wpdb->terms.term_id 
+					AND $wpdb->term_relationships.term_taxonomy_id =  $wpdb->term_taxonomy.term_taxonomy_id 
+					AND $wpdb->term_taxonomy.taxonomy in ( {$taxonomies} ) 
+					$terms_where 
+					GROUP BY $wpdb->term_taxonomy.term_id";
 
-						$term_results = $wpdb->get_results( $term_sql );
+					$term_results = $wpdb->get_results( $term_sql );
 
-						if ( ! empty( $term_results ) ) {
-							foreach ( $term_results as $term ) {
-								if($term->taxonomy==$post_types."category"){
-									$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %d , " . $table . ".post_category ) ",$term->term_id);
-								}else{
-									$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %s, " . $table . ".post_tags ) ",$term->name );
-								}
+					if ( ! empty( $term_results ) ) {
+						foreach ( $term_results as $term ) {
+							if ( ! empty( $_post_category ) && in_array( $term->term_id, $_post_category ) ) {
+								continue;
+							}
+
+							if ( $term->taxonomy == $post_types . "category" ) {
+								$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %d , " . $table . ".post_category ) ", $term->term_id );
+							} else {
+								$terms_sql .= $wpdb->prepare(" OR FIND_IN_SET( %s, " . $table . ".post_tags ) ", $term->name );
 							}
 						}
 					}

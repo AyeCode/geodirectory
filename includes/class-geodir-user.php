@@ -486,7 +486,7 @@ class GeoDir_User {
 		$login_title = esc_attr__( 'Login', 'geodirectory' );
 
 		if ( $redirect == '' ) {
-			$redirect = urlencode( geodir_curPageURL() );
+			$redirect = geodir_curPageURL();
 		}
 		$login_link = wp_login_url( $redirect );
 

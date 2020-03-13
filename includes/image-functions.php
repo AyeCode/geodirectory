@@ -243,13 +243,13 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 	    foreach($fallback_types as $fallback_type){
 		    $default_img_id = 0;
 		    //logo
-		    if($fallback_type == 'logo' && isset( $gd_post->logo ) && $gd_post->logo){
-			    $logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
-			    if ( $logo_image ) {
-				    $post_images = $logo_image;
-				    break;
-			    }
-		    }elseif($fallback_type == 'cat_default'){
+			if ( $fallback_type == 'logo' && isset( $gd_post->logo ) && $gd_post->logo && geodir_post_has_image_types( 'logo', $post_id ) ) {
+				$logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
+				if ( $logo_image ) {
+					$post_images = $logo_image;
+					break;
+				}
+			}elseif($fallback_type == 'cat_default'){
 			    $term_img = 0;
 			    // cat image
 			    if ( geodir_is_page('archive' ) ) {
