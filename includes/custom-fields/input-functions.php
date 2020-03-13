@@ -695,9 +695,10 @@ function geodir_cfi_multiselect($html,$cf){
             <input type="hidden" name="<?php echo $cf['name']; ?>" value=""/>
             <?php if ($multi_display == 'select') { ?>
             <div class="geodir_multiselect_list">
+                <?php $placeholder = ( !empty($cf['placeholder_value']) ) ? esc_html__( $cf['placeholder_value'], 'geodirectory'): __('Select Category', 'geodirectory'); ?> 
                 <select field_type="<?php echo $cf['type']; ?>" name="<?php echo $cf['name']; ?>[]" id="<?php echo $cf['name']; ?>"
                         multiple="multiple" class="geodir_textfield textfield_x geodir-select"
-                        data-placeholder="<?php _e('Select', 'geodirectory'); ?>"
+                        data-placeholder="<?php echo $placeholder; ?>"
                         option-ajaxchosen="false" data-allow_clear="true">
                     <?php
                     } else {
@@ -1395,9 +1396,10 @@ function geodir_cfi_taxonomy($html,$cf){
 						} else {
 							$default_field = 'data-cselect="default_category"';
 						}
-
+                        
+                        $placeholder = ( !empty($cf['placeholder_value']) ) ? esc_html__( $cf['placeholder_value'], 'geodirectory'): __('Select Category', 'geodirectory');
                         //echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[' . $taxonomy . '][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
-                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '" ' . $default_field . '>';
+                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . $placeholder . '" ' . $default_field . '>';
 
 
                         if ($cat_display == 'select')
@@ -1538,8 +1540,8 @@ function geodir_cfi_categories($html,$cf){
 						}
 
                        // echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
-                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '" ' . $default_field . ' aria-label="' . esc_attr__('Select Category', 'geodirectory') . '">';
-
+                        $placeholder = ( !empty($cf['placeholder_value']) ) ? esc_html__( $cf['placeholder_value'], 'geodirectory'): __('Select Category', 'geodirectory');
+                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . $placeholder . '" ' . $default_field . ' aria-label="' . esc_attr__('Select Category', 'geodirectory') . '">';
 
                         if ($cat_display == 'select')
                             echo '<option value="">' . __('Select Category', 'geodirectory') . '</option>';
@@ -1644,10 +1646,9 @@ function geodir_cfi_tags( $html, $cf ) {
             <div class="geodir_multiselect_list">
                 <select field_type="<?php echo $cf['type']; ?>" name="tax_input[<?php echo wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"; ?>][]" id="<?php echo $cf['name']; ?>"
                         multiple="multiple" class="geodir_textfield textfield geodir-select-tags"
-                        data-placeholder="<?php _e('Enter tags separated by a comma ,', 'geodirectory'); ?>"
+                        data-placeholder="<?php if( !empty($cf['placeholder_value']) ){  echo esc_html__( $cf['placeholder_value'], 'geodirectory'); } else{ _e('Enter tags separated by a comma ,', 'geodirectory'); } ?>"
                         >
                     <?php
-
                     // current tags
                     $current_tags_arr = geodir_string_values_to_options($value, true);
 
