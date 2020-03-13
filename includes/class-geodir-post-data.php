@@ -650,27 +650,39 @@ class GeoDir_Post_Data {
 				}
 			}
 
-			$format = array_fill( 0, count( $postarr ), '%s' );
+			// Copy post_title to _search_title.
+			if ( isset( $postarr['post_title'] ) ) {
+				$postarr['_search_title'] = geodir_sanitize_keyword( $postarr['post_title'], $post_type );
+			}
 
 			$postarr = apply_filters( 'geodir_save_post_data', $postarr, $gd_post, $post, $update );
 
-			if ( $update ) {// update
-				$wpdb->update(
+			$format = array_fill( 0, count( $postarr ), '%s' );
+
+			if ( $update ) { // Update in the database.
+				$result = $wpdb->update(
 					$table,
 					$postarr,
 					array( 'post_id' => $post_id ),
 					$format
 				);
 
-				// clear the post cache
-				wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
+				if ( false === $result && ! empty( $wpdb->last_error ) ) {
+					geodir_error_log( wp_sprintf( __( 'Could not update post in the database. %s', 'geodirectory' ), $wpdb->last_error ) );
+				}
 
-			} else { // insert
-				$wpdb->insert(
+				// Clear the post cache
+				wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
+			} else { // Insert in the database.
+				$result = $wpdb->insert(
 					$table,
 					$postarr,
 					$format
 				);
+
+				if ( false === $result && ! empty( $wpdb->last_error ) ) {
+					geodir_error_log( wp_sprintf( __( 'Could not insert post into the database. %s', 'geodirectory' ), $wpdb->last_error ) );
+				}
 			}
 
 			// re-hook this function
@@ -683,7 +695,6 @@ class GeoDir_Post_Data {
 		} else {
 			self::$post_temp = null;
 		}
-
 	}
 
 	/**

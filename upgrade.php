@@ -170,3 +170,15 @@ function geodir_upgrade_20064() {
 		$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_LOCATION_TERM_META . " SET location_name = %s WHERE location_name LIKE %s", array( $replace_country_slug, $search_country_slug ) ) );
 	}
 }
+
+/**
+ * Update for 2.0.0.82
+ *
+ * @since 2.0.0.82
+ *
+ * @return void
+ */
+function geodir_upgrade_20082() {
+	// Generate title keywords.
+	geodir_generate_title_keywords();
+}
