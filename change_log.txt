@@ -3,6 +3,7 @@
 * Search with category and tag keyword combination not showing correct results - FIXED
 * Avada theme blog global sidebar issue - FIXED
 * Yoast SEO Premium prominent words breaks internal linking feature - FIXED
+* Listing detail child tab not rendering shortcode - FIXED
 
 = 2.0.0.81 =
 * Remove title/meta variables not related to location page - CHANGED
