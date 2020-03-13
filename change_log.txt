@@ -2,6 +2,7 @@
 * Added GenerateBlocks plugin compatibility - ADDED
 * Search with category and tag keyword combination not showing correct results - FIXED
 * Avada theme blog global sidebar issue - FIXED
+* Placeholder for select custom fields is not working - FIXED
 
 = 2.0.0.81 =
 * Remove title/meta variables not related to location page - CHANGED
