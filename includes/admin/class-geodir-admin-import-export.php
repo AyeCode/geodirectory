@@ -861,6 +861,7 @@ class GeoDir_Admin_Import_Export {
 		$cpt_exclude_columns = array(
 			'post_id',
 			'post_title',
+			'_search_title',
 			'post_status',
 			'submit_ip',
 			'overall_rating',
