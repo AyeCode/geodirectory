@@ -34,7 +34,7 @@ class GeoDir_Widget_Map_Pinpoint extends WP_Super_Duper {
 			'name'          => __( 'GD > Map Pinpoint', 'geodirectory' ),
 			'widget_ops'    => array(
 				'classname'   => 'geodir-map-pinpoint',
-				'description' => esc_html__( 'Shows the distance do the current post.', 'geodirectory' ),
+				'description' => esc_html__( 'Shows a link that will open the map marker window on the map.', 'geodirectory' ),
 				'geodirectory' => true,
 			),
 			'arguments'     => array(

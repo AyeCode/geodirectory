@@ -42,7 +42,6 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'title' => __('Title:', 'geodirectory'),
                     'desc' => __('The widget title.', 'geodirectory'),
                     'type' => 'text',
-//                    'placeholder' => 'Leave blank to use current post id.',
                     'default'  => '',
                     'desc_tip' => true,
                     'advanced' => false
@@ -54,7 +53,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'options'   =>  $this->post_type_options(),
                     'default'  => '0',
                     'desc_tip' => true,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Filters","geodirectory")
                 ),
 				'cpt_title'  => array(
                     'title' => __( 'Show CPT title:', 'geodirectory' ),
@@ -63,7 +63,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => 0,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Design","geodirectory")
                 ),
                 'title_tag'  => array(
 	                'title' => __('Title tag:', 'geodirectory'),
@@ -79,7 +80,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	                ),
 	                'default'  => 'h4',
 	                'desc_tip' => true,
-	                'advanced' => true
+	                'advanced' => false,
+	                'group'     => __("Design","geodirectory")
                 ),
 				'cpt_ajax'  => array(
                     'title' => __('Add CPT ajax select:', 'geodirectory'),
@@ -88,7 +90,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => 0,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Filters","geodirectory")
                 ),
                 'hide_empty'  => array(
                     'title' => __('Hide empty:', 'geodirectory'),
@@ -97,7 +100,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => 0,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Filters","geodirectory")
                 ),
                 'hide_count'  => array(
                     'title' => __('Hide count:', 'geodirectory'),
@@ -106,7 +110,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => 0,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Design","geodirectory")
                 ),
                 'hide_icon'  => array(
                     'title' => __('Hide icon:', 'geodirectory'),
@@ -115,7 +120,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => 0,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Design","geodirectory")
                 ),
                 'use_image'  => array(
 	                'title' => __('Use category image:', 'geodirectory'),
@@ -124,7 +130,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	                'desc_tip' => true,
 	                'value'  => '1',
 	                'default'  => 0,
-	                'advanced' => true
+	                'advanced' => false,
+	                'group'     => __("Design","geodirectory")
                 ),
                 'cpt_left'  => array(
                     'title' => __('Show single column:', 'geodirectory'),
@@ -133,7 +140,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => 0,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Design","geodirectory")
                 ),
                 'sort_by'  => array(
                     'title' => __('Sort by:', 'geodirectory'),
@@ -145,7 +153,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     ),
                     'default'  => 'count',
                     'desc_tip' => true,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Sorting","geodirectory")
                 ),
                 'max_level'  => array(
                     'title' => __('Max sub-cat depth:', 'geodirectory'),
@@ -154,7 +163,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'options'   =>  array_merge(array('all' => __('All', 'geodirectory')), range(0, 10)),
                     'default'  => '1',
                     'desc_tip' => true,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Filters","geodirectory")
                 ),
                 'max_count'  => array(
                     'title' => __('Max cats to show:', 'geodirectory'),
@@ -163,7 +173,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'options'   =>  array_merge(array('all' => __('All', 'geodirectory')), range(0, 10) ),
                     'default'  => 'all',
                     'desc_tip' => true,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Filters","geodirectory")
                 ),
                 'max_count_child'  => array(
 	                'title' => __('Max sub-cat to show:', 'geodirectory'),
@@ -172,7 +183,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	                'options'   =>  array_merge(array('all' => __('All', 'geodirectory')), range(0, 10) ),
 	                'default'  => 'all',
 	                'desc_tip' => true,
-	                'advanced' => true
+	                'advanced' => false,
+	                'group'     => __("Filters","geodirectory")
                 ),
                 'no_cpt_filter'  => array(
                     'title' => __("Do not filter for current viewing post type", 'geodirectory'),
@@ -180,7 +192,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => 0,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Filters","geodirectory")
                 ),
                 'no_cat_filter'  => array(
                     'title' => __("Tick to show all the categories. Leave unticked to show only child categories of current viewing category.", 'geodirectory'),
@@ -188,7 +201,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => 0,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Filters","geodirectory")
                 ),
 
             )

@@ -58,7 +58,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                     'advanced' => true
                 ),
 			    'tab_layout'  => array(
-				    'title' => __('Default Post Type:', 'geodirectory'),
+				    'title' => __('Tabs layout:', 'geodirectory'),
 				    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
 				    'type' => 'select',
 				    'options'   =>  array(

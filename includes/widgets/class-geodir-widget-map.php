@@ -523,7 +523,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$arguments['tick_terms'] = array(
 				'type'            => 'text',
 				'title'           => __( 'Tick/Untick Categories on Map:', 'geodirectory' ),
-				'desc'            => __( 'Enter a comma separated list of category ids (2,3) to tick by default these categories only, or a negative list (2,3) to untick those categories by default on the map. Leave blank to tick all categories by default.', 'geodirectory' ),
+				'desc'            => __( 'Enter a comma separated list of category ids (2,3) to tick by default these categories only, or a negative list (-2,-3) to untick those categories by default on the map. Leave blank to tick all categories by default.', 'geodirectory' ),
 				'default'         => '',
 				'desc_tip'        => true,
 				'advanced'        => false,
