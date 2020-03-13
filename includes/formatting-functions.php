@@ -461,3 +461,123 @@ function geodir_sanitize_textarea_field( $str ) {
 	 */
 	return apply_filters( 'geodir_sanitize_textarea_field', $filtered, $str );
 }
+
+/**
+ * Sanitizes a keyword.
+ *
+ * @since 2.0.0.82
+ *
+ * @param string $keyword Keyword to sanitize.
+ * @param string $extra Extra parameter. Default empty.
+ * @return string Sanitized keyword.
+ */
+function geodir_sanitize_keyword( $keyword, $extra = '' ) {
+	$raw_keyword = $keyword;
+
+	$keyword = trim( $keyword );
+	if ( ! $keyword ) {
+		return $keyword;
+	}
+
+	// Converts a number of HTML entities into their special characters.
+	$keyword = stripslashes( wp_specialchars_decode( $keyword, ENT_QUOTES ) );
+
+	// Converts all accent characters to ASCII characters.
+	$keyword = remove_accents( $keyword );
+
+	// Properly strip all HTML tags including script and style.
+	$keyword = wp_strip_all_tags( $keyword );
+
+	$replacements = geodir_keyword_replacements();
+	if ( ! empty( $replacements ) ) {
+		$keyword = str_replace( array_keys( $replacements ), array_values( $replacements ), $keyword );
+	}
+
+	// Converts string to lower case.
+	$keyword = geodir_strtolower( $keyword );
+
+	// Normalize EOL characters and strip duplicate whitespace.
+	$keyword = normalize_whitespace( $keyword );
+
+	/**
+	 * Filter sanitized keyword.
+	 *
+	 * @since 2.0.0.82
+	 *
+	 * @param string $keyword Keyword to sanitize.
+	 * @param string $raw_keyword Original keyword to sanitize.
+	 * @param string $extra Extra parameter.
+	 */
+	return apply_filters( 'geodir_sanitize_keyword', $keyword, $raw_keyword, $extra );
+}
+
+/**
+ * Characters replacements for keyword sanitization.
+ *
+ * @since 2.0.0.82
+ *
+ * @return array Characters replacements.
+ */
+function geodir_keyword_replacements() {
+	//^*=;:
+	$replacements = array(
+		'‘'       => '',
+		'’'       => '',
+		"'"       => '',
+		'"'       => '',
+		'”'       => '',
+		'“'       => '',
+		'„'       => '',
+		'´'       => '',
+		'`'       => '',
+		'!'       => '',
+		'?'       => '',
+		'|'       => '',
+		'&#038;'  => '',
+		'&#8217;' => '',
+		'&amp;'   => ' ',
+		'&shy;'   => ' ',
+		'&nbsp;'  => ' ',
+		'@'       => ' ',
+		'€'       => ' ',
+		'®'       => ' ',
+		'©'       => ' ',
+		'™'       => ' ',
+		'×'       => ' ',
+		'~'       => ' ',
+		'…'       => ' ',
+		'-'       => ' ',
+		'–'       => ' ',
+		'—'       => ' ',
+		'('       => ' ',
+		')'       => ' ',
+		'{'       => ' ',
+		'}'       => ' ',
+		'['       => ' ',
+		']'       => ' ',
+		'+'       => ' ',
+		","       => ' ',
+		"^"       => ' ',
+		"="       => ' ',
+		//'&'       => ' ',
+		//'#'       => ' ',
+		//'$'       => ' ',
+		//'%'       => ' ',
+		//'%'       => '*',
+		//';'       => '',
+		//':'       => '',
+		//'/'       => '',
+		//'\\'      => '',
+		//'<'       => '',
+		//'>'       => '',
+	);
+
+	/**
+	 * Filter characters replacements for keyword sanitization.
+	 *
+	 * @since 2.0.0.82
+	 *
+	 * @param array $replacements Characters replacements.
+	 */
+	return apply_filters( 'geodir_keyword_replacements', $replacements );
+}

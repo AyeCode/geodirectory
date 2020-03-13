@@ -61,6 +61,11 @@ class GeoDir_Admin_Tools {
 				'button'  => __( 'Run', 'geodirectory' ),
 				'desc'    => __( 'This tool will recount the listing terms.', 'geodirectory' ),
 			),
+			'generate_keywords' => array(
+				'name'    => __( 'Generate Keywords', 'geodirectory' ),
+				'button'  => __( 'Run', 'geodirectory' ),
+				'desc'    => __( 'Generate keywords from post title to enhance searching.', 'geodirectory' ),
+			),
 			'export_db_texts' => array(
 				'name'    => __( 'DB text translation', 'geodirectory' ),
 				'button'  => __( 'Run', 'geodirectory' ),
@@ -104,6 +109,15 @@ class GeoDir_Admin_Tools {
 					geodir_term_recount( $tags, get_taxonomy( $post_type . '_tags' ), $post_type, true, false );
 				}
 				$message = __( 'Terms successfully recounted', 'geodirectory' );
+				break;
+			case 'generate_keywords' :
+				$generated = (int) geodir_generate_title_keywords();
+				
+				if ( $generated > 0 ) {
+					$message = wp_sprintf( _n( '%d keyword generated.', '%d keywords generated.', $generated, 'geodirectory' ), $generated );
+				} else {
+					$message = __( 'No keyword generated.', 'geodirectory' );
+				}
 				break;
 			case 'install_pages' :
 				GeoDir_Admin_Install::create_pages();

@@ -743,7 +743,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc' => __('This is useful if your directory is limited to one location such as: New York or Australia (this setting should be blank if using default country, regions etc with multilocation addon as it will automatically add them)', 'geodirectory'),
 					'id' => 'search_near_addition',
 					'type' => 'text',
-					'placeholder' => __('New York','goedirectory'),
+					'placeholder' => __('New York','geodirectory'),
 					'default'  => '',
 					'desc_tip' => true,
 					'advanced' => true
