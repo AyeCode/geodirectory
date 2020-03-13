@@ -906,17 +906,21 @@ function geodir_get_cpt_page_id( $page, $post_type = '' ) {
 /**
  * Adds a responsive embed wrapper around oEmbed content
  *
- * @param  string $html The oEmbed markup
- * @param  string $url  The URL being embedded
- * @param  array  $attr An array of attributes
+ * @param string $html The oEmbed markup.
+ * @param string $url  The URL being embedded. Default empty.
+ * @param array  $attr An array of attributes. Default empty.
+ * @param int    $post_ID Post ID. Default 0.
  * @return string       Updated embed markup
  */
-function geodir_responsive_embeds($html, $url, $attr) {
+function geodir_responsive_embeds( $html, $url = '', $attr = array(), $post_ID = 0 ) {
+	if ( empty( $url ) ) {
+		return $html;
+	}
 
-	if ( false !== strpos( $url, "://www.youtube.com") || false !== strpos( $url, "://youtube.com") || false !== strpos( $url, "://youtu.be" ) ) {
+	if ( false !== strpos( $url, "://www.youtube.com" ) || false !== strpos( $url, "://youtube.com" ) || false !== strpos( $url, "://youtu.be" ) ) {
 		$html = '<div class="geodir-embed-container">' . $html . '</div>';
 	}
 
 	return $html;
 }
-add_filter('embed_oembed_html', 'geodir_responsive_embeds', 10, 3);
+add_filter( 'embed_oembed_html', 'geodir_responsive_embeds', 10, 4 );

@@ -27,6 +27,7 @@ class GeoDir_Compatibility {
 		add_filter( 'option_wpseo_taxonomy_meta', array( __CLASS__, 'wpseo_taxonomy_meta' ), 10, 2 );
 		// add setting to be able to disable yoast on GD pages
 		add_filter( 'geodir_seo_options', array( __CLASS__, 'wpseo_disable' ), 10 );
+		add_filter( 'Yoast\WP\SEO\prominent_words_post_types', array( __CLASS__, 'wpseo_prominent_words_post_types' ), 20, 1 );
 		add_filter( 'rank_math/opengraph/url', array( __CLASS__, 'rank_math_location_url_callback' ), 10 );
 
 		/*######################################################
@@ -1109,6 +1110,28 @@ class GeoDir_Compatibility {
 
 
 		return $options;
+	}
+
+	/**
+	 * Yoast SEO Premium prominent words accessible post types.
+	 *
+	 * @since 12.9.0
+	 *
+	 * @param array $post_types The accessible post types.
+	 * @return array Filtered post types.
+	 */
+	public static function wpseo_prominent_words_post_types( $post_types ) {
+		if ( ! empty( $post_types ) ) {
+			$_post_types = $post_types;
+
+			foreach( $_post_types as $_post_type => $name ) {
+				if ( geodir_is_gd_post_type( $_post_type ) ) {
+					unset( $post_types[ $_post_type ] );
+				}
+			}
+		}
+
+		return $post_types;
 	}
 
 	/**
