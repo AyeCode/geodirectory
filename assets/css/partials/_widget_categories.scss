@@ -85,7 +85,8 @@
             display: block;
             margin: auto;
             margin-top: 25%;
-            &.attachment-thumbnail{
+            &.attachment-thumbnail,&.attachment-medium{
+              object-fit: cover;
               height: 100%;
               margin-top: 0;
               border-radius: 2px;
