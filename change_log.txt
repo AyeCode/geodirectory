@@ -2,6 +2,7 @@
 * Added GenerateBlocks plugin compatibility - ADDED
 * Search with category and tag keyword combination not showing correct results - FIXED
 * Avada theme blog global sidebar issue - FIXED
+* Placeholder for select custom fields is not working - FIXED
 * Yoast SEO Premium prominent words breaks internal linking feature - FIXED
 * Listing detail child tab not rendering shortcode - FIXED
 * Improve search functionality - CHANGED
