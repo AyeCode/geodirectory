@@ -51,7 +51,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 			'arguments'     => array(
 				'tag'  => array(
 					'title' => __('Output Type:', 'geodirectory'),
-					'desc' => __('How the images should be displayed.', 'geodirectory'),
+					'desc' => __('Set the HTML tag for the title.', 'geodirectory'),
 					'type' => 'select',
 					'options'   =>  array(
 						"h2" => "h2",
