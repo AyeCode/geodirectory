@@ -8,6 +8,7 @@
 * Improve search functionality - CHANGED
 * Business hours parsing wrong TZ when GMT offset is set to 0 - FIXED
 * File limit not working for custom field field - FIXED
+* Add field visibility check for email in ninja form widget - FIXED
 
 = 2.0.0.81 =
 * Remove title/meta variables not related to location page - CHANGED
