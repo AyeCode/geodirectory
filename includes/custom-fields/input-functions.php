@@ -1860,17 +1860,8 @@ function geodir_cfi_files( $html, $cf ) {
         ob_start(); // Start buffering;
 
         $extra_fields = maybe_unserialize( $cf['extra_fields'] );
-        $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? maybe_unserialize( $extra_fields['file_limit'] ) : '';
-
-        if ( $file_limit === '' ) {
-            if ( $html_var == 'post_images' ) {
-                $file_limit = '0';
-            } else {
-                $file_limit = '1';
-            }
-        }
-
-		$file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
+        $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? absint( $extra_fields['file_limit'] ) : 0;
+        $file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
 
         $allowed_file_types = isset( $extra_fields['gd_file_types'] ) ? maybe_unserialize( $extra_fields['gd_file_types'] ) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
         $display_file_types = $allowed_file_types != '' ? '.' . implode( ", .", $allowed_file_types ) : '';
@@ -1880,8 +1871,6 @@ function geodir_cfi_files( $html, $cf ) {
 
         // adjust values here
         $id = $cf['htmlvar_name']; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
-
-        $multiple = true; // allow multiple files upload
 
         $revision_id = isset( $gd_post->post_parent ) && $gd_post->post_parent ? $gd_post->ID : '';
         $post_id = isset( $gd_post->post_parent ) && $gd_post->post_parent ? $gd_post->post_parent : $gd_post->ID;
@@ -1900,7 +1889,8 @@ function geodir_cfi_files( $html, $cf ) {
             $total_files = 0;
         }
 
-        $image_limit = $file_limit;
+        $image_limit = absint( $file_limit );
+        $multiple = $image_limit == 1 ? false : true; // Allow multiple files upload
         $show_image_input_box = true;
         /**
          * Filter to be able to show/hide the image upload section of the add listing form.
