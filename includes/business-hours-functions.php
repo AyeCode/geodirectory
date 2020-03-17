@@ -310,7 +310,7 @@ function geodir_array_to_schema( $schema_input ) {
 	}
 
 	$days = geodir_day_short_names();
-	$offset = ! empty( $schema_input['offset'] ) ? $schema_input['offset'] : geodir_gmt_offset();
+	$offset = ! empty( $schema_input['offset'] ) || ( isset( $schema_input['offset'] ) && $schema_input['offset'] === '0' ) ? $schema_input['offset'] : geodir_gmt_offset();
 	$periods = array();
 
 	foreach ( $schema_hours as $day_no => $slots ) {
@@ -391,6 +391,9 @@ function geodir_schema_to_array( $schema ) {
 	if ( ! empty( $schema_array[1] ) ) {
 		$gmt_offset = str_replace(' ', '', $schema_array[1]);
 		$gmt_offset = str_replace(array('"UTC":"', '"', '[', ']'), '', $schema_array[1]);
+		if ( $gmt_offset === '0' ) {
+			$gmt_offset = '+0';
+		}
 		$return['offset'] = ( ! empty( $gmt_offset ) ? $gmt_offset : geodir_gmt_offset() );
 	}
 	
