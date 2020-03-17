@@ -362,7 +362,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			<p data-setting="file_limit">
 				<label for="gd_file_limit" class="dd-setting-name">
 					<?php
-					echo geodir_help_tip( __( 'Select the number of files that can be uploaded, 0 = unlimited.', 'geodirectory' ));
+					echo geodir_help_tip( __( 'Select the number of files that can be uploaded, empty = unlimited.', 'geodirectory' ));
 					_e('File upload limit', 'geodirectory'); ?>
 					<input type="number" name="extra[file_limit]" id="gd_file_limit" value="<?php echo esc_attr($gd_file_limit);?>">
 				</label>

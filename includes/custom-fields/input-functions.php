@@ -1865,7 +1865,7 @@ function geodir_cfi_files( $html, $cf ) {
         $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? maybe_unserialize( $extra_fields['file_limit'] ) : '';
 
         if ( $file_limit === '' ) {
-            if ( $html_var == 'post_images' ) {
+            if ( 'post_images' === $html_var  || 'upload_file' === $html_var ) {
                 $file_limit = '0';
             } else {
                 $file_limit = '1';
