@@ -340,36 +340,38 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
+		/**
+		 * File limit input.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $output
+		 * @param string $result_str
+		 * @param array $cf
+		 * @param object $field_info
+		 * @return string $output.
+		 */
+		public static function file_limit( $output, $result_str, $cf, $field_info ) {
+			$extra_fields = ! empty( $field_info->extra_fields ) ? maybe_unserialize( $field_info->extra_fields ) : '';
+			if ( strpos( $result_str, 'new-' ) === 0 && ! ( ! empty( $extra_fields ) && isset( $extra_fields['file_limit'] ) ) ) {
+				$gd_file_limit = 1;
+			} else {
+				$gd_file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? absint( $extra_fields['file_limit'] ) : 0;
+			}
 
-        /**
-         * File limit input.
-         *
-         * @since 2.0.0
-         *
-         * @param string $output
-         * @param string $result_str
-         * @param array $cf
-         * @param object $field_info
-         * @return string $output.
-         */
-		public static function file_limit($output,$result_str,$cf,$field_info){
 			ob_start();
-
-			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
-			$gd_file_limit = !empty($extra_fields) && !empty($extra_fields['file_limit']) ? maybe_unserialize($extra_fields['file_limit']) : '';
-
 			?>
 			<p data-setting="file_limit">
 				<label for="gd_file_limit" class="dd-setting-name">
 					<?php
-					echo geodir_help_tip( __( 'Select the number of files that can be uploaded, 0 = unlimited.', 'geodirectory' ));
-					_e('File upload limit', 'geodirectory'); ?>
-					<input type="number" name="extra[file_limit]" id="gd_file_limit" value="<?php echo esc_attr($gd_file_limit);?>">
+					echo geodir_help_tip( __( 'Select the number of files that can be uploaded, Leave blank or 0 to allow unlimited files.', 'geodirectory' ) );
+					_e( 'File upload limit', 'geodirectory' ); ?>
+					<input type="number" name="extra[file_limit]" id="gd_file_limit" value="<?php echo $gd_file_limit; ?>" step="1" min="0">
 				</label>
 			</p>
 			<?php
-
 			$output .= ob_get_clean();
+
 			return $output;
 		}
 
