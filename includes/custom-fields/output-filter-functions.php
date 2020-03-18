@@ -34,10 +34,20 @@ function geodir_predefined_custom_field_output_twitter_feed($html,$location,$cf)
 			$field_icon = '';
 		}
 
+		// Database value.
+		if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+			return $gd_post->{$cf['htmlvar_name']};
+		}
+
+		$value = '<a class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/'.$gd_post->{$cf['htmlvar_name']}.'">' . wp_sprintf( __( 'Tweets by %s', 'geodirectory' ), $gd_post->{$cf['htmlvar_name']} ) . '</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
+
+		// Stripped value.
+		if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+			return $value;
+		}
 
 		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" style="clear:both;">';
-
-		$html .= '<a class="twitter-timeline" data-height="600" data-dnt="true" href="https://twitter.com/'.$gd_post->{$cf['htmlvar_name']}.'">' . wp_sprintf( __( 'Tweets by %s', 'geodirectory' ), $gd_post->{$cf['htmlvar_name']} ) . '</a> <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>';
+		$html .= $value;
 		$html .= '</div>';
 
 	endif;
@@ -108,6 +118,14 @@ function geodir_predefined_custom_field_output_distanceto( $html, $location, $cf
 		} else {
 			$field_icon_af = $field_icon;
 			$field_icon    = '';
+		}
+
+		if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+			// Database value.
+			return $value;
+		} elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+			// Stripped value.
+			return $_distance;
 		}
 
 		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $htmlvar_name . '">';
