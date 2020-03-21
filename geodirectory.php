@@ -221,7 +221,7 @@ final class GeoDirectory {
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
 
 	    if( defined( 'ELEMENTOR_VERSION' ) ){
-		    new GeoDir_Elementor();
+		    GeoDir_Elementor::init();
 	    }
 
 	    GeoDir_SEO::init();
