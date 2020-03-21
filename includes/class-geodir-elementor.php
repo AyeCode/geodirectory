@@ -347,7 +347,6 @@ class GeoDir_Elementor {
 					$new_image_url = esc_url_raw( "https://wordpress.com/mshots/v1/$image_url_src?w=$width&amp;h=$height" );
 					$html          = str_replace( $image_src, $new_image_url, $html );
 				} elseif ( isset( $image_sizes[ $image_size ] ) ) {
-					echo '###3';
 					$width         = ! empty( $image_sizes[ $image_size ]['width'] ) ? absint( $image_sizes[ $image_size ]['width'] ) : 1024;
 					$height        = ! empty( $image_sizes[ $image_size ]['height'] ) ? absint( $image_sizes[ $image_size ]['height'] ) : $width;
 					$new_image_url = "https://wordpress.com/mshots/v1/$image_url_src?w=$width&amp;h=$height";
