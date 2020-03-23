@@ -604,21 +604,21 @@ function geodir_cfi_select($html,$cf){
 
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
-
+		$frontend_title = __($cf['frontend_title'], 'geodirectory');
+		$placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : '';
         ?>
         <div id="<?php echo $cf['name'];?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
+                <?php echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <?php
             $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
             $select_options = '';
             if (!empty($option_values_arr)) {
-                foreach ($option_values_arr as $option_row) {
-                    if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
+                foreach ($option_values_arr as $key => $option_row) {
+					if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
                         $option_label = isset($option_row['label']) ? $option_row['label'] : '';
 
                         $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
@@ -629,12 +629,20 @@ function geodir_cfi_select($html,$cf){
 
                         $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
                     }
+
+					if ( $key == 0 && empty( $option_row['optgroup'] ) && ! empty( $option_label ) && isset( $option_row['value'] ) && $option_row['value'] === '' ) {
+						$placeholder = $option_label;
+					}
                 }
             }
+
+			if ( empty( $placeholder ) ) {
+				$placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), $frontend_title );
+			}
             ?>
             <select field_type="<?php echo $cf['type'];?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
                     class="geodir_textfield textfield_x geodir-select"
-                    data-placeholder="<?php echo __('Choose', 'geodirectory') . ' ' . $frontend_title . '&hellip;';?>"
+                    data-placeholder="<?php echo esc_attr( $placeholder ); ?>"
                     option-ajaxchosen="false" data-allow_clear="true"><?php echo $select_options;?></select>
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
