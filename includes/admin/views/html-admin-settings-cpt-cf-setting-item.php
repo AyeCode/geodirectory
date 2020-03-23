@@ -295,6 +295,53 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				<?php
 			}
 
+			// db_default, this only shows on first add
+			if(isset($field->id) && !is_numeric($field->id)) {
+				do_action( "geodir_cfa_before_db_default_{$field->field_type}", $cf, $field );
+
+				if ( has_filter( "geodir_cfa_db_default_{$field->field_type}" ) ) {
+
+					echo apply_filters( "geodir_cfa_db_default_{$field->field_type}", '', $field->id, $cf, $field );
+
+				} else {
+					$value = '';
+					if ( isset( $field->db_default ) ) {
+						$value = esc_attr( $field->db_default );
+					} elseif ( isset( $cf['defaults']['db_default'] ) && $cf['defaults']['db_default'] ) {
+						$value = $cf['defaults']['db_default'];
+					}
+					?>
+					<p class="gd-advanced-setting" data-setting="db_default">
+						<label for="db_default" class="dd-setting-name">
+							<?php
+							if ( $field->field_type == 'checkbox' ) {
+								echo geodir_help_tip( __( 'Should the value be set by default in the database?', 'geodirectory' ) );
+							} else if ( $field->field_type == 'email' ) {
+								echo geodir_help_tip( __( 'A default database value for the field, usually blank.', 'geodirectory' ) );
+							} else {
+								echo geodir_help_tip( __( 'A default database value for the field, usually blank.', 'geodirectory' ) );
+							}
+							_e( 'Database Default value', 'geodirectory' ); ?>
+							<?php if ( $field->field_type == 'checkbox' ) { ?>
+								<select name="db_default" id="db_default">
+									<option value=""><?php _e( 'Unchecked', 'geodirectory' ); ?></option>
+									<option
+										value="1" <?php selected( true, (int) $value === 1 ); ?>><?php _e( 'Checked', 'geodirectory' ); ?></option>
+								</select>
+							<?php } else if ( $field->field_type == 'email' ) { ?>
+								<input type="email" name="db_default"
+								       placeholder="<?php _e( 'info@mysite.com', 'geodirectory' ); ?>"
+								       id="db_default" value="<?php echo esc_attr( $value ); ?>"/><br/>
+							<?php } else { ?>
+								<input type="text" name="db_default" id="db_default"
+								       value="<?php echo esc_attr( $value ); ?>"/><br/>
+							<?php } ?>
+						</label>
+					</p>
+					<?php
+				}
+			}
+
 			// placeholder_value
 			do_action( "geodir_cfa_before_placeholder_value_{$field->field_type}", $cf, $field);
 

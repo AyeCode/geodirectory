@@ -1564,6 +1564,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				}
 			}
 			$field->default_value = $default_value;
+			$field->db_default = isset( $input['db_default'] ) ? sanitize_text_field( esc_attr( $input['db_default'] ) ) : '';
 			$field->placeholder_value = isset( $input['placeholder_value'] ) ? sanitize_text_field( esc_attr( $input['placeholder_value'] ) ) : '';
 			$field->sort_order = isset( $input['sort_order'] ) ? intval( $input['sort_order'] ) : self::default_sort_order();
 			$field->is_active = isset( $input['is_active'] ) ? absint( $input['is_active'] ) : 0;
@@ -1970,9 +1971,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 //					break;
 				case 'checkbox':
 					$column_attr .= "( 1 ) NULL ";
-//					if ((int)$field->default_value === 1) {
-//						$column_attr .= " DEFAULT '1'";
-//					}
+					if (isset($field->db_default) && (int)$field->db_default === 1) {
+						$column_attr .= " DEFAULT '1'";
+					}
 					break;
 				case 'multiselect':
 				case 'select':
@@ -2006,9 +2007,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					}
 
 					$column_attr .= "( $op_size ) NULL ";
-//					if ($field->default_value != '') {
-//						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->default_value);
-//					}
+					if ($field->db_default != '') {
+						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
+					}
 
 					// Update the field size to new max
 					if($exists) {
@@ -2036,7 +2037,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					}else{
 						$column_attr .= "( 254 ) NULL ";
 					}
-					//print_r($extra_fields);print_r($field);exit;
+
+					if ($field->db_default != '') {
+						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
+					}
+					
 				break;
 				case 'int':
 				case 'INT':

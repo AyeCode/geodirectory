@@ -10,6 +10,10 @@
 * File limit not working for custom field field - FIXED
 * Add field visibility check for email in ninja form widget - FIXED
 * Allow to show field raw value with gd_post_meta - CHANGED
+* Elementor dynamic content support - ADDED
+* Advanced DB Default option added for when adding new custom field - ADDED
+* Changes for scheme Event Status - CHANGED
+* Image function can add wrong sizes to image tag - FIXED
 
 = 2.0.0.81 =
 * Remove title/meta variables not related to location page - CHANGED
