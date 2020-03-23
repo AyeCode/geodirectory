@@ -1239,6 +1239,37 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
+			// Temporarily Closed
+			$custom_fields['temp_closed'] = array(
+				'field_type'  => 'checkbox',
+				'class'       => 'gd-checkbox',
+				'icon'        => 'fas fa-exclamation-circle',
+				'name'        => __( 'Temporarily Closed', 'geodirectory' ),
+				'description' => __( 'Mark listing as temporarily closed, this will set business hours as closed and show a message in the notifications section.', 'geodirectory' ),
+				'single_use'         => 'temp_closed',
+				'defaults'    => array(
+					'data_type'          => 'TINYINT',
+					'admin_title'        => __( 'Temporarily Closed', 'geodirectory' ),
+					'frontend_title'     => __( 'Temporarily Closed', 'geodirectory' ),
+					'frontend_desc'      => __( 'If your business is temporarily closed select this to let customers and search engines know.', 'geodirectory' ),
+					'htmlvar_name'       => 'temp_closed',
+					'is_active'          => true,
+					'for_admin_use'      => true,
+					'default_value'      => '0',
+					'show_in'            => '[detail],[listing],[mapbubble]',
+					'is_required'        => false,
+					'option_values'      => '',
+					'validation_pattern' => '',
+					'validation_msg'     => '',
+					'required_msg'       => '',
+					'field_icon'         => 'fas fa-exclamation-circle',
+					'css_class'          => '',
+					'cat_sort'           => true,
+					'cat_filter'         => true,
+					'single_use'         => true
+				)
+			);
+
 			/**
 			 * @see `geodir_custom_fields`
 			 */
@@ -2041,7 +2072,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					if ($field->db_default != '') {
 						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
 					}
-					
+
 				break;
 				case 'int':
 				case 'INT':

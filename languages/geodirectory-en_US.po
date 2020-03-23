@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.82\n"
+"Project-Id-Version: GeoDirectory 2.0.0.83\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-03-21 10:45+0000\n"
-"PO-Revision-Date: 2020-03-21 10:46+0000\n"
+"POT-Creation-Date: 2020-03-23 14:33+0000\n"
+"PO-Revision-Date: 2020-03-23 14:34+0000\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -243,7 +243,7 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:900
 #: includes/api/class-geodir-rest-posts-controller.php:2254
-#: includes/custom-fields/input-functions.php:1214 language.php:90
+#: includes/custom-fields/input-functions.php:1222 language.php:90
 msgid ""
 "Click on \"Set Address on Map\" and then you can also drag pinpoint to "
 "locate the correct address"
@@ -251,13 +251,13 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:907
 #: includes/api/class-geodir-rest-posts-controller.php:2266
-#: includes/custom-fields/input-functions.php:1222 language.php:46
+#: includes/custom-fields/input-functions.php:1230 language.php:46
 msgid "Address Latitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:908
 #: includes/api/class-geodir-rest-posts-controller.php:2267
-#: includes/custom-fields/input-functions.php:1231 language.php:91
+#: includes/custom-fields/input-functions.php:1239 language.php:91
 msgid ""
 "Please enter latitude for google map perfection. eg. : "
 "<b>39.955823048131286</b>"
@@ -265,13 +265,13 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:917
 #: includes/api/class-geodir-rest-posts-controller.php:2281
-#: includes/custom-fields/input-functions.php:1240 language.php:47
+#: includes/custom-fields/input-functions.php:1248 language.php:47
 msgid "Address Longitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:918
 #: includes/api/class-geodir-rest-posts-controller.php:2282
-#: includes/custom-fields/input-functions.php:1248 language.php:92
+#: includes/custom-fields/input-functions.php:1256 language.php:92
 msgid ""
 "Please enter longitude for google map perfection. eg. : "
 "<b>-75.14408111572266</b>"
@@ -2132,7 +2132,7 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-taxonomies.php:875
+#: includes/admin/class-geodir-admin-taxonomies.php:876
 msgid "Default (LocalBusiness)"
 msgstr ""
 
@@ -3929,30 +3929,49 @@ msgid ""
 "that point."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1257
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1247
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1252
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1253
+#: includes/business-hours-functions.php:702
+msgid "Temporarily Closed"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1248
+msgid ""
+"Mark listing as temporarily closed, this will set business hours as closed "
+"and show a message in the notifications section."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1254
+msgid ""
+"If your business is temporarily closed select this to let customers and "
+"search engines know."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1288
 #, php-format
 msgid "List of fields that will appear on add new %s listing form"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1269
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1300
 #, php-format
 msgid ""
 "Click to expand and view field related settings. You may drag and drop to "
 "arrange fields order on add %s listing form too."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1301
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1332
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:259
 msgid "No tab items have been added yet."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1756
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1858
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1787
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1889
 msgid "Invalid field."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1889
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1892
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1920
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1923
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:804
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:807
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:728
@@ -3960,51 +3979,51 @@ msgstr ""
 msgid "Failed to sort tab items."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1949
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1980
 msgid ""
 "Field key name MUST NOT match a standard WordPress field, please use another "
 "key and re-save."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1961
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1992
 #, php-format
 msgid "%s field already exists, it can not be used twice."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1963
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:1994
 msgid ""
 "Field key name MUST be unique, duplicate field detected, please fix and re-"
 "save."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2019
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2050
 msgid "Column change failed, you may have too many columns."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2142
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2173
 msgid "Field update failed.x"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2156
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2187
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:712
 msgid "Field create failed."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2168
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2199
 msgid ""
 "Column creation failed, you may have too many columns or the default value "
 "does not match with field data type."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2224
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2255
 msgid "Details page sidebar"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2226
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2257
 msgid "Listings page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2228
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:2259
 msgid "Map bubble"
 msgstr ""
 
@@ -7912,7 +7931,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2840
 #: includes/class-geodir-privacy-exporters.php:238
 #: includes/class-geodir-privacy-exporters.php:303
-#: includes/custom-fields/input-functions.php:1753
+#: includes/custom-fields/input-functions.php:1761
 #: includes/custom-fields/output-functions.php:86
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:182
 msgid "Yes"
@@ -7921,7 +7940,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2800
 #: includes/api/class-geodir-rest-posts-controller.php:2838
 #: includes/class-geodir-privacy-exporters.php:301
-#: includes/custom-fields/input-functions.php:1754
+#: includes/custom-fields/input-functions.php:1762
 #: includes/custom-fields/output-functions.php:88
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:182
 msgid "No"
@@ -8599,7 +8618,7 @@ msgid "Sunday"
 msgstr ""
 
 #: includes/business-hours-functions.php:584 includes/core-functions.php:345
-#: includes/custom-fields/input-functions.php:1795
+#: includes/custom-fields/input-functions.php:1803
 msgid "Closed"
 msgstr ""
 
@@ -8612,7 +8631,7 @@ msgid "Closed now"
 msgstr ""
 
 #: includes/business-hours-functions.php:587
-#: includes/custom-fields/input-functions.php:1758
+#: includes/custom-fields/input-functions.php:1766
 msgid "Open 24 hours"
 msgstr ""
 
@@ -9430,15 +9449,21 @@ msgstr ""
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-notifications.php:56
+#: includes/class-geodir-notifications.php:58
+#: includes/class-geodir-notifications.php:69
 #: includes/template-functions.php:813
 msgid "business"
 msgstr ""
 
-#: includes/class-geodir-notifications.php:61
+#: includes/class-geodir-notifications.php:63
 #: templates/view/post-closed-text.php:19
 #, php-format
 msgid "This %s appears to have closed down and may be removed soon."
+msgstr ""
+
+#: includes/class-geodir-notifications.php:75
+#, php-format
+msgid "This %s is temporarily closed."
 msgstr ""
 
 #: includes/class-geodir-permalinks.php:313
@@ -10577,101 +10602,98 @@ msgstr ""
 msgid "Please enter a valid URL including http://"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:637
-msgid "Choose"
-msgstr ""
-
-#: includes/custom-fields/input-functions.php:686
+#: includes/custom-fields/input-functions.php:640
+#: includes/custom-fields/input-functions.php:694
 #, php-format
 msgid "Select %s&hellip;"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1149
+#: includes/custom-fields/input-functions.php:1157
 #: includes/widgets/class-geodir-widget-map.php:190
 msgid "My location"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1169
-#: includes/custom-fields/input-functions.php:1195
+#: includes/custom-fields/input-functions.php:1177
+#: includes/custom-fields/input-functions.php:1203
 #, php-format
 msgid "Please enter listing %s"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1262
+#: includes/custom-fields/input-functions.php:1270
 msgid "Default Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1263
+#: includes/custom-fields/input-functions.php:1271
 #: includes/widgets/class-geodir-widget-map.php:452
 #: vendor/ayecode/wp-super-duper/map.php:158
 msgid "Satellite Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1264
+#: includes/custom-fields/input-functions.php:1272
 #: includes/widgets/class-geodir-widget-map.php:453
 msgid "Hybrid Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1265
+#: includes/custom-fields/input-functions.php:1273
 #: includes/widgets/class-geodir-widget-map.php:454
 msgid "Terrain Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1272
+#: includes/custom-fields/input-functions.php:1280
 msgid "Please select listing map view to use"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1332
-#: includes/custom-fields/input-functions.php:1404
-#: includes/custom-fields/input-functions.php:1474
-#: includes/custom-fields/input-functions.php:1544
+#: includes/custom-fields/input-functions.php:1340
+#: includes/custom-fields/input-functions.php:1412
+#: includes/custom-fields/input-functions.php:1482
+#: includes/custom-fields/input-functions.php:1552
 #: includes/taxonomy-functions.php:282
 #: includes/widgets/class-geodir-widget-best-of.php:327
 msgid "Select Category"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1382
-#: includes/custom-fields/input-functions.php:1522
+#: includes/custom-fields/input-functions.php:1390
+#: includes/custom-fields/input-functions.php:1530
 #, php-format
 msgid "Only select %d categories for this package."
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1608
+#: includes/custom-fields/input-functions.php:1616
 msgid "Enter tags separated by a comma ,"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1663
+#: includes/custom-fields/input-functions.php:1671
 msgid "Popular tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1678
+#: includes/custom-fields/input-functions.php:1686
 msgid "Your tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1758
+#: includes/custom-fields/input-functions.php:1766
 msgid "Day"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1758
+#: includes/custom-fields/input-functions.php:1766
 msgid "Opening Hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1758
+#: includes/custom-fields/input-functions.php:1766
 msgid "Add"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1761
-#: includes/custom-fields/input-functions.php:1791
+#: includes/custom-fields/input-functions.php:1769
+#: includes/custom-fields/input-functions.php:1799
 #: includes/widgets/class-geodir-widget-archive-item-section.php:41
 msgid "Open"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1761
-#: includes/custom-fields/input-functions.php:1791
+#: includes/custom-fields/input-functions.php:1769
+#: includes/custom-fields/input-functions.php:1799
 msgid "Close"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1802
+#: includes/custom-fields/input-functions.php:1810
 msgid ""
 "Timezone offset from UTC (not including daylight savings time This is set "
 "automatically when address is set)"
