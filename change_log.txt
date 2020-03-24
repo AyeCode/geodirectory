@@ -1,3 +1,8 @@
+= 2.0.0.83 =
+* 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
+* New temp_closed pre defined field for setting listing as temporarily closed - ADDED
+* Set business hours as closed and show business closed message on details page if temp_closed is set - ADDED
+
 = 2.0.0.82 =
 * Added GenerateBlocks plugin compatibility - ADDED
 * Search with category and tag keyword combination not showing correct results - FIXED
@@ -8,6 +13,12 @@
 * Improve search functionality - CHANGED
 * Business hours parsing wrong TZ when GMT offset is set to 0 - FIXED
 * File limit not working for custom field field - FIXED
+* Add field visibility check for email in ninja form widget - FIXED
+* Allow to show field raw value with gd_post_meta - CHANGED
+* Elementor dynamic content support - ADDED
+* Advanced DB Default option added for when adding new custom field - ADDED
+* Changes for scheme Event Status - CHANGED
+* Image function can add wrong sizes to image tag - FIXED
 
 = 2.0.0.81 =
 * Remove title/meta variables not related to location page - CHANGED
