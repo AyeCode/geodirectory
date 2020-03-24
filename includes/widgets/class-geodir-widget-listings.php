@@ -732,7 +732,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 					'terms'    => $terms
 				)
 			);
-		}elseif($distance_to_post){
+		}else{
 			$query_args['post__not_in'] = $gd_post->ID;
 		}
 
