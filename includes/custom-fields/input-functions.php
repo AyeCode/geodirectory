@@ -876,15 +876,10 @@ function geodir_cfi_datepicker($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
-        $extra_fields = unserialize($cf['extra_fields']);
-        $name = $cf['name'];
-
-        if ($extra_fields['date_format'] == '')
-            $extra_fields['date_format'] = 'yy-mm-dd';
-
-        $date_format = $extra_fields['date_format'];
-        $jquery_date_format  = $date_format;
-
+		$name = $cf['name'];
+        $extra_fields = ! empty( $cf['extra_fields'] ) ? maybe_unserialize( $cf['extra_fields'] ) : NULL;
+        $date_format = ! empty( $extra_fields['date_format'] ) ? $extra_fields['date_format'] : 'yy-mm-dd';
+        $jquery_date_format = $date_format;
 
         // check if we need to change the format or not
         $date_format_len = strlen(str_replace(' ', '', $date_format));
