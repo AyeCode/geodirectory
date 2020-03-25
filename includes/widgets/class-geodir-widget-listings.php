@@ -731,10 +731,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 					'field'    => $term_field,
 					'terms'    => $terms
 				)
-			);
-		}else{
-			$query_args['post__not_in'] = $gd_post->ID;
-		}
+            );
+        } elseif( !empty( $gd_post->ID ) && geodir_is_page( 'detail' ) && empty( $instance['franchise_of'] )){ 
+            $query_args['post__not_in'] = $gd_post->ID;
+        }
 
 		// Clean tags
 		if ( ! empty( $tags ) ) {
