@@ -1,3 +1,6 @@
+= 2.0.0.84 =
+* GD title is not working on beaver themer archive template - FIXED 
+
 = 2.0.0.83 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
 * New temp_closed pre defined field for setting listing as temporarily closed - ADDED
