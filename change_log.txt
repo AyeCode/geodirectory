@@ -1,5 +1,6 @@
 = 2.0.0.84 =
-* GD title is not working on beaver themer archive template - FIXED 
+* GD title is not working on beaver themer archive template - FIXED
+* Font awesome settings icons updated to 5.13.0- UPDATED
 
 = 2.0.0.83 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
