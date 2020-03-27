@@ -1239,6 +1239,37 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
+			// Temporarily Closed
+			$custom_fields['temp_closed'] = array(
+				'field_type'  => 'checkbox',
+				'class'       => 'gd-checkbox',
+				'icon'        => 'fas fa-exclamation-circle',
+				'name'        => __( 'Temporarily Closed', 'geodirectory' ),
+				'description' => __( 'Mark listing as temporarily closed, this will set business hours as closed and show a message in the notifications section.', 'geodirectory' ),
+				'single_use'         => 'temp_closed',
+				'defaults'    => array(
+					'data_type'          => 'TINYINT',
+					'admin_title'        => __( 'Temporarily Closed', 'geodirectory' ),
+					'frontend_title'     => __( 'Temporarily Closed', 'geodirectory' ),
+					'frontend_desc'      => __( 'If your business is temporarily closed select this to let customers and search engines know.', 'geodirectory' ),
+					'htmlvar_name'       => 'temp_closed',
+					'is_active'          => true,
+					'for_admin_use'      => true,
+					'default_value'      => '0',
+					'show_in'            => '[detail],[listing],[mapbubble]',
+					'is_required'        => false,
+					'option_values'      => '',
+					'validation_pattern' => '',
+					'validation_msg'     => '',
+					'required_msg'       => '',
+					'field_icon'         => 'fas fa-exclamation-circle',
+					'css_class'          => '',
+					'cat_sort'           => true,
+					'cat_filter'         => true,
+					'single_use'         => true
+				)
+			);
+
 			/**
 			 * @see `geodir_custom_fields`
 			 */
@@ -1564,6 +1595,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				}
 			}
 			$field->default_value = $default_value;
+			$field->db_default = isset( $input['db_default'] ) ? sanitize_text_field( esc_attr( $input['db_default'] ) ) : '';
 			$field->placeholder_value = isset( $input['placeholder_value'] ) ? sanitize_text_field( esc_attr( $input['placeholder_value'] ) ) : '';
 			$field->sort_order = isset( $input['sort_order'] ) ? intval( $input['sort_order'] ) : self::default_sort_order();
 			$field->is_active = isset( $input['is_active'] ) ? absint( $input['is_active'] ) : 0;
@@ -1970,9 +2002,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 //					break;
 				case 'checkbox':
 					$column_attr .= "( 1 ) NULL ";
-//					if ((int)$field->default_value === 1) {
-//						$column_attr .= " DEFAULT '1'";
-//					}
+					if (isset($field->db_default) && (int)$field->db_default === 1) {
+						$column_attr .= " DEFAULT '1'";
+					}
 					break;
 				case 'multiselect':
 				case 'select':
@@ -2006,9 +2038,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					}
 
 					$column_attr .= "( $op_size ) NULL ";
-//					if ($field->default_value != '') {
-//						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->default_value);
-//					}
+					if ($field->db_default != '') {
+						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
+					}
 
 					// Update the field size to new max
 					if($exists) {
@@ -2036,7 +2068,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					}else{
 						$column_attr .= "( 254 ) NULL ";
 					}
-					//print_r($extra_fields);print_r($field);exit;
+
+					if ($field->db_default != '') {
+						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
+					}
+
 				break;
 				case 'int':
 				case 'INT':

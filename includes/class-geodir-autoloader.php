@@ -82,14 +82,14 @@ class GeoDir_Autoloader {
         $file  = $this->get_file_name_from_class( $class );
         $path  = '';
 
-        if ( strpos( $class, 'geodir_shortcode_' ) === 0 ) {
-            $path = $this->include_path . 'shortcodes/';
-        } elseif ( strpos( $class, 'geodir_admin' ) === 0 ) {
+        if ( strpos( $class, 'geodir_admin' ) === 0 ) {
             $path = $this->include_path . 'admin/';
         }elseif ( strpos( $class, 'geodir_widget' ) === 0 ) {
             $path = $this->include_path . 'widgets/';
         }elseif ( strpos( $class, 'geodir_settings' ) === 0 ) {
             $path = $this->include_path . 'admin/settings/';
+        }elseif ( strpos( $class, 'geodir_elementor' ) === 0 ) {
+            $path = $this->include_path . 'elementor/';
         }
         
         if ( empty( $path ) || ! $this->load_file( $path . $file ) ) {

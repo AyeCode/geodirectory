@@ -71,6 +71,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 						"label" => __('label', 'geodirectory'),
 						"value" => __('value', 'geodirectory'),
 						"value-strip" => __('value (strip_tags)', 'geodirectory'),
+						"value-raw" => __('value (saved in database)', 'geodirectory'),
 					),
 					'desc_tip' => true,
 					'advanced' => false
@@ -80,7 +81,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc' => __('Remove wrapping div.', 'geodirectory'),
 					'type' => 'checkbox',
 					'default'  => '0',
-					'element_require' => '[%show%]=="value-strip"',
+					'element_require' => '[%show%]=="value-strip" || [%show%]=="value-raw"',
 				),
 				'alignment'  => array(
 					'title' => __('Alignment:', 'geodirectory'),
@@ -279,6 +280,11 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					if($args['list_hide_secondary']=='5'){$field['css_class'] .= " gd-lv-s-5 ";}
 
 					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
+
+					// Return clean striped value.
+					if ( $args['show'] == 'value-strip' && $output != '' ) {
+						$output = wp_strip_all_tags( $output );
+					}
 
 					if($field['name']=='post_content'){
 						//$output = wp_strip_all_tags($output);

@@ -136,7 +136,8 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
         $show = false;
         $post_id = isset($post->ID) ? $post->ID : '';
         if($args['post_contact']=='1'){
-            if(isset($post->post_type) && in_array($post->post_type, geodir_get_posttypes()) && isset($gd_post->email) && $gd_post->email) {
+            $package_id = ! empty( $gd_post->package_id ) ? $gd_post->package_id : '';
+            if(isset($post->post_type) && in_array($post->post_type, geodir_get_posttypes()) && isset($gd_post->email) && $gd_post->email && geodir_check_field_visibility( $package_id, 'email', $post->post_type ) ) {
                 $show = true;
             }
         }else{
