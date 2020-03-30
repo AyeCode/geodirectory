@@ -70,9 +70,24 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 					$value = do_shortcode("[gd_post_meta key='$key' show='$show' no_wrap='1']");
 				}
 				
+			}elseif($key=='latitude,longitude' && !empty($gd_post->latitude) && !empty($gd_post->longitude) ){
+				$value = (float)$gd_post->latitude.",".$gd_post->longitude;
+			}elseif($key=='address' && !empty($gd_post->city) ){
+				$value = do_shortcode("[gd_post_meta key='$key' show='$show' no_wrap='1']");
+			}elseif($key=='address_raw' && !empty($gd_post->city) ){
+				$address_parts = array();
+				if(!empty($gd_post->street)){$address_parts[] = esc_attr($gd_post->street);}
+				if(!empty($gd_post->street2)){$address_parts[] = esc_attr($gd_post->street2);}
+				if(!empty($gd_post->city)){$address_parts[] = esc_attr($gd_post->city);}
+				if(!empty($gd_post->region)){$address_parts[] = esc_attr($gd_post->region);}
+				if(!empty($gd_post->country)){$address_parts[] = esc_attr($gd_post->country);}
+				if(!empty($gd_post->zip)){$address_parts[] = esc_attr($gd_post->zip);}
+
+				if(!empty($address_parts)){
+					$value = implode(", ",$address_parts);
+				}
 			}
 
-//			echo  $value ;
 			echo wp_kses_post( $value );
 		}
 	}
@@ -95,8 +110,8 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 			[
 				'label' => __( 'Key', 'elementor-pro' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
-//				'groups' => GeoDir_Elementor::get_control_options( $this->get_supported_fields() ),
-				'options' => $this->get_custom_field_options(),
+				'groups' => $this->get_custom_field_group_options(),
+//				'options' => $this->get_custom_field_options(),
 			]
 		);
 
@@ -120,30 +135,59 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 	}
 
 	/**
-	 * Gets an array of custom field keys.
+	 * Get and group the key options.
 	 *
 	 * @return array
 	 */
-	public function get_custom_field_options(){
+	public function get_custom_field_group_options(){
+		$groups = array();
 
+		// Fields
 		$fields = geodir_post_custom_fields('', 'all', 'all' ,'none');
-
 		$keys = array();
-		$keys[] = __('Select Key','geodirectory');
+//		$keys[] = __('Select Key','geodirectory');
 		if(!empty($fields)){
 			foreach($fields as $field){
 				$keys[$field['htmlvar_name']] = $field['htmlvar_name'];
 			}
 		}
-		
-		// add some general types:
-		$keys['post_date'] = 'post_date';
-		$keys['post_modified'] = 'post_modified';
-		$keys['post_author'] = 'post_author';
 
-		return $keys;
+		$groups[] = array(
+			'label' => __("Custom Fields","geodirectory"),
+			'options'   => $keys
+		);
 
+		// Raw values
+		$raw_keys = array();
+		$raw_keys['_search_title'] = '_search_title';
+		$raw_keys['overall_rating'] = 'overall_rating';
+		$raw_keys['rating_count'] = 'rating_count';
+		$raw_keys['post_date'] = 'post_date';
+		$raw_keys['post_modified'] = 'post_modified';
+		$raw_keys['post_author'] = 'post_author';
+		$raw_keys['default_category'] = 'default_category';
+		$raw_keys['address_raw'] = 'address_raw';
+		$raw_keys['street'] = 'street';
+		$raw_keys['street2'] = 'street2';
+		$raw_keys['neighbourhood'] = 'neighbourhood';
+		$raw_keys['city'] = 'city';
+		$raw_keys['region'] = 'region';
+		$raw_keys['country'] = 'country';
+		$raw_keys['zip'] = 'zip';
+		$raw_keys['latitude'] = 'latitude';
+		$raw_keys['longitude'] = 'longitude';
+		$raw_keys['latitude,longitude'] = 'latitude,longitude';
+		$raw_keys['mapzoom'] = 'mapzoom';
+
+		$groups[] = array(
+			'label' => __("Raw Values","geodirectory"),
+			'options'   => $raw_keys
+		);
+
+
+		return $groups;
 	}
+
 
 	/**
 	 * Get what fields are supported for this tag type.

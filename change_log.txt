@@ -1,3 +1,9 @@
+= 2.0.0.84 =
+* Elementor number dynamic tags support added - ADDED
+* Elementor dynamic content, added some more hidden raw fields - ADDED
+* Elementor rating widget support added - ADDED
+* Elementor dynamic color tag support added - ADDED
+
 = 2.0.0.83 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
 * New temp_closed pre defined field for setting listing as temporarily closed - ADDED
