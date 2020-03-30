@@ -684,6 +684,54 @@ function geodir_get_business_hours( $value = '' ) {
 }
 
 /**
+ * Set the business hours as closed if the temp_closed field is used and set.
+ *
+ * @since 2.0.0.83
+ */
+function geodir_filter_business_hours_if_temp_closed($hours){
+	global $gd_post;
+
+	if(!empty($gd_post->temp_closed) && !empty($hours['days'])){
+		foreach($hours['days'] as $key=>$val){
+			$hours['days'][$key]['closed'] = 1;
+			$hours['days'][$key]['open'] = 0;
+			$hours['days'][$key]['slots'] = array(); // blank timings
+
+			$hours['days'][$key]['slots'][] = array(
+				'slot' => NULL,
+				'range' => __( 'Temporarily Closed', 'geodirectory'),
+				'open' => 0,
+				'time' => array(),
+				'minutes' => array()
+			);
+		}
+	}
+
+	return $hours;
+}
+add_filter('geodir_get_business_hours','geodir_filter_business_hours_if_temp_closed');
+
+/**
+ * Set the business hours as closed if the temp_closed field is used and set.
+ *
+ * @since 2.0.0.83
+ * @param $schema
+ * @param $gd_post
+ *
+ * @return mixed
+ */
+function geodir_filter_schema_business_hours_if_temp_closed($schema){
+	global $gd_post;
+
+	if(!empty($gd_post->temp_closed) && !empty($gd_post->business_hours)){
+		$schema['openingHours'] = array();
+	}
+
+	return $schema;
+}
+add_filter('geodir_details_schema','geodir_filter_schema_business_hours_if_temp_closed');
+
+/**
  * Converts hhmm to business hour minutes.
  *
  * @since 2.0.0

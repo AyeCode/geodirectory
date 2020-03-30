@@ -575,7 +575,7 @@ class GeoDir_Admin_Taxonomies {
         
         ob_start();
         ?>
-        <select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" class="postform">
+        <select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" class="postform geodir-select">
             <?php foreach ( $schemas as $value => $label ) { ?>
             <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $cat_schema == $value, true ); ?>><?php echo $label; ?></option>
             <?php } ?>
@@ -871,102 +871,9 @@ class GeoDir_Admin_Taxonomies {
      * @return mixed|void
      */
     public static function get_schemas(){
-        $schemas = array(
-            '' => __( 'Default (LocalBusiness)', 'geodirectory' ),
-            'AccountingService' => 'AccountingService',
-            'Attorney' => 'Attorney',
-            'AutoBodyShop' => 'AutoBodyShop',
-            'AutoDealer' => 'AutoDealer',
-            'AutoPartsStore' => 'AutoPartsStore',
-            'AutoRental' => 'AutoRental',
-            'AutoRepair' => 'AutoRepair',
-            'AutoWash' => 'AutoWash',
-            'Bakery' => 'Bakery',
-            'BarOrPub' => 'BarOrPub',
-            'BeautySalon' => 'BeautySalon',
-            'BedAndBreakfast' => 'BedAndBreakfast',
-            'BikeStore' => 'BikeStore',
-            'BookStore' => 'BookStore',
-            'CafeOrCoffeeShop' => 'CafeOrCoffeeShop',
-            'Campground' => 'Campground',
-            'ChildCare' => 'ChildCare',
-            'ClothingStore' => 'ClothingStore',
-            'ComputerStore' => 'ComputerStore',
-            'DaySpa' => 'DaySpa',
-            'Dentist' => 'Dentist',
-            'DryCleaningOrLaundry' => 'DryCleaningOrLaundry',
-            'Electrician' => 'Electrician',
-            'ElectronicsStore' => 'ElectronicsStore',
-            'EmergencyService' => 'EmergencyService',
-            'EntertainmentBusiness' => 'EntertainmentBusiness',
-            'Event' => 'Event',
-            'EventVenue' => 'EventVenue',
-            'ExerciseGym' => 'ExerciseGym',
-            'FinancialService' => 'FinancialService',
-            'Florist' => 'Florist',
-            'FoodEstablishment' => 'FoodEstablishment',
-            'FurnitureStore' => 'FurnitureStore',
-            'GardenStore' => 'GardenStore',
-            'GeneralContractor' => 'GeneralContractor',
-            'GolfCourse' => 'GolfCourse',
-            'HairSalon' => 'HairSalon',
-            'HardwareStore' => 'HardwareStore',
-            'HealthAndBeautyBusiness' => 'HealthAndBeautyBusiness',
-            'HobbyShop' => 'HobbyShop',
-            'HomeAndConstructionBusiness' => 'HomeAndConstructionBusiness',
-            'HomeGoodsStore' => 'HomeGoodsStore',
-            'Hospital' => 'Hospital',
-            'Hostel' => 'Hostel',
-            'Hotel' => 'Hotel',
-            'HousePainter' => 'HousePainter',
-            'HVACBusiness' => 'HVACBusiness',
-            'InsuranceAgency' => 'InsuranceAgency',
-            'JewelryStore' => 'JewelryStore',
-            'LiquorStore' => 'LiquorStore',
-            'Locksmith' => 'Locksmith',
-            'LodgingBusiness' => 'LodgingBusiness',
-            'MedicalClinic' => 'MedicalClinic',
-            'MensClothingStore' => 'MensClothingStore',
-            'MobilePhoneStore' => 'MobilePhoneStore',
-            'Motel' => 'Motel',
-            'MotorcycleDealer' => 'MotorcycleDealer',
-            'MotorcycleRepair' => 'MotorcycleRepair',
-            'MovingCompany' => 'MovingCompany',
-            'MusicStore' => 'MusicStore',
-            'NailSalon' => 'NailSalon',
-            'NightClub' => 'NightClub',
-            'Notary' => 'Notary',
-            'OfficeEquipmentStore' => 'OfficeEquipmentStore',
-            'Optician' => 'Optician',
-            'PetStore' => 'PetStore',
-            'Physician' => 'Physician',
-            'Plumber' => 'Plumber',
-            'ProfessionalService' => 'ProfessionalService',
-            'RealEstateAgent' => 'RealEstateAgent',
-            'Recipe' => 'Recipe',
-            'Residence' => 'Residence',
-            'Restaurant' => 'Restaurant',
-            'RoofingContractor' => 'RoofingContractor',
-            'RVPark' => 'RVPark',
-            'School' => 'School',
-            'SelfStorage' => 'SelfStorage',
-            'ShoeStore' => 'ShoeStore',
-            'SkiResort' => 'SkiResort',
-            'SportingGoodsStore' => 'SportingGoodsStore',
-            'SportsClub' => 'SportsClub',
-            'Store' => 'Store',
-            'TattooParlor' => 'TattooParlor',
-            'Taxi' => 'Taxi',
-            'TennisComplex' => 'TennisComplex',
-            'TireShop' => 'TireShop',
-            'TouristAttraction' => 'TouristAttraction',
-            'ToyStore' => 'ToyStore',
-            'TravelAgency' => 'TravelAgency',
-            //'VacationRentals' => 'VacationRentals', // Not recognised by google yet
-            'VeterinaryCare' => 'VeterinaryCare',
-            'WholesaleStore' => 'WholesaleStore',
-            'Winery' => 'Winery'
-        );
+        include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/data_schemas.php' );
+        $raw_schemas = geodir_data_schemas();
+        $schemas = array_merge(array('' => __( 'Default (LocalBusiness)', 'geodirectory' )), $raw_schemas);
 
         /*
 		 * Allows you to add/filter the cat schema types.

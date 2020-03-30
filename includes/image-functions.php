@@ -81,8 +81,14 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
 
     $meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
     $img_src = geodir_get_image_src($image, $size);
-    $width = isset($meta['width']) ? $meta['width'] : '';
-    $height = isset($meta['height']) ? $meta['height'] : '';
+	$width = '';
+	$height = '';
+	if($size){
+		$width = isset($meta['sizes'][$size]['width']) ? $meta['sizes'][$size]['width'] : '';
+		$height = isset($meta['sizes'][$size]['height']) ? $meta['sizes'][$size]['height'] : '';
+	}
+    if(!$width){$width = isset($meta['width']) ? $meta['width'] : '';}
+	if(!$height){$height = isset($meta['height']) ? $meta['height'] : '';}
     $hwstring = image_hwstring($width, $height);
 
     $id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
