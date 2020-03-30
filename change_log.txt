@@ -4,6 +4,14 @@
 * Elementor rating widget support added - ADDED
 * Elementor dynamic color tag support added - ADDED
 
+= 2.0.0.84 =
+* Listing Widget – Exclude Current Post - FIXED
+* GD title is not working on beaver themer archive template - FIXED
+* Font awesome settings icons updated to 5.13.0- UPDATED
+* Add body class on archive pages for empty results - ADDED
+* Fix add listing shortcode validation on status report - FIXED
+* Detail tabs not working on small screens - FIXED
+
 = 2.0.0.83 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
 * New temp_closed pre defined field for setting listing as temporarily closed - ADDED
