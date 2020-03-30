@@ -4,6 +4,7 @@
 * Font awesome settings icons updated to 5.13.0- UPDATED
 * Add body class on archive pages for empty results - ADDED
 * Fix add listing shortcode validation on status report - FIXED
+* Detail tabs not working on small screens - FIXED
 
 = 2.0.0.83 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
