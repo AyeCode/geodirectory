@@ -78,6 +78,7 @@ class GeoDir_Compatibility {
 		if ( class_exists( 'FLThemeBuilderLoader' ) ) {
 			add_filter( 'geodir_page_options', array( __CLASS__, 'fl_theme_builder_page_options' ), 100, 1 );
 			add_filter( 'fl_theme_builder_current_page_layouts', array( __CLASS__, 'fl_theme_builder_current_page_layouts' ), 1, 1 );
+			add_filter( 'fl_theme_builder_page_archive_get_title', array( __CLASS__, 'fl_theme_builder_page_archive_get_title' ), 1, 1 );
 		}
 
 		/*######################################################
@@ -2326,6 +2327,31 @@ class GeoDir_Compatibility {
 		}
 
 		return $layouts;
+	}
+
+	/**
+	 * Filter the archive page title.
+	 *
+	 * @since 2.0.0.84
+	 *
+	 * @param string $title The archive page title.
+	 * @return array The archive page title.
+	 */
+	public static function fl_theme_builder_page_archive_get_title( $title ) {
+		if ( ! geodir_is_geodir_page() ) {
+			return $title;
+		}
+
+		// Don't overwrite Yoast SEO or Rank Math SEO.
+		if ( GeoDir_SEO::yoast_enabled() || GeoDir_SEO::rank_math_enabled() ) {
+			return $title;
+		}
+
+		if ( $_title = GeoDir_SEO::set_meta() ) {
+			$title = $_title;
+		}
+
+		return $title;
 	}
 
 	/**

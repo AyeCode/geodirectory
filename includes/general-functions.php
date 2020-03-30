@@ -759,13 +759,14 @@ function geodir_max_upload_size() {
  * @since   1.5.6 Add geodir-page class to body for all gd pages.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global object $wp_query WordPress Query object.
  *
  * @param array $classes Body CSS classes.
  *
  * @return array Modified Body CSS classes.
  */
 function geodir_custom_posts_body_class( $classes ) {
-	global $wpdb, $wp,$gd_post;
+	global $wpdb, $wp, $wp_query, $gd_post;
 	$post_types = geodir_get_posttypes( 'object' );
 	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
 		$classes[] = 'geodir_custom_posts';
@@ -785,6 +786,11 @@ function geodir_custom_posts_body_class( $classes ) {
 
 		if(isset($post_types->{$post_type}) && isset($post_types->{$post_type}->disable_location) && $post_types->{$post_type}->disable_location){
 			$classes[] = 'geodir-archive-locationless';
+		}
+
+		// No results.
+		if ( ! empty( $wp_query ) && empty( $wp_query->found_posts ) ) {
+			$classes[] = 'geodir-no-results';
 		}
 	}
 
