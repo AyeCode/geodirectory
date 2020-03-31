@@ -794,15 +794,19 @@ function geodir_custom_posts_body_class( $classes ) {
 		}
 	}
 
-	if(geodir_is_page( 'single' ) ){
-		if(!empty($gd_post->default_category)){
-			$classes[] = 'geodir-post-cat-'.absint($gd_post->default_category);
+	if ( geodir_is_page( 'single' ) ) { // Single page
+		if ( ! empty( $gd_post->default_category ) ) {
+			$classes[] = 'geodir-post-cat-'.absint( $gd_post->default_category );
 		}
-		if(!empty($gd_post->featured)){
+		if ( ! empty( $gd_post->featured ) ){
 			$classes[] = 'geodir-featured';
 		}
+		$classes[] = 'geodir-page-single';
+	} elseif ( geodir_is_page( 'add-listing' ) ) { // Add listing page
+		$classes[] = 'geodir-page-add';
+	} elseif ( geodir_is_page( 'location' ) ) { // Location page
+		$classes[] = 'geodir-page-location';
 	}
-
 
 	return $classes;
 }
