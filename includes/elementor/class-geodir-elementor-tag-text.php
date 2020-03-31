@@ -86,10 +86,68 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 				if(!empty($address_parts)){
 					$value = implode(", ",$address_parts);
 				}
+			}elseif(substr( $key, 0, 9 ) === "category_"){
+				$value = $this->get_category_meta($key,$show);
 			}
 
 			echo wp_kses_post( $value );
 		}
+	}
+
+	/**
+	 * Get the category meta.
+	 *
+	 * @param $key
+	 * @param $show
+	 *
+	 * @return mixed|string|void
+	 */
+	public function get_category_meta($key,$show){
+		global $gd_post;
+		$value = '';
+		$term_id = '';
+		if( geodir_is_page('archive') ){
+			$current_category = get_queried_object();
+			$term_id = isset($current_category->term_id) ?  absint($current_category->term_id) : '';
+		}elseif(geodir_is_page('single')){
+			$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
+		}
+
+
+		if($term_id) {
+
+			if($key == 'category_top_description'){
+				$cat_desc = do_shortcode("[gd_category_description]");
+				$value = $cat_desc;
+			}elseif($key == 'category_icon'){
+				$value = get_term_meta( $term_id, 'ct_cat_font_icon', true );
+				if($show =='value'){
+					$value = "<i class='".esc_attr($value)."'></i>";
+				}
+			}elseif($key == 'category_map_icon'){
+				$value = esc_url_raw( geodir_get_term_icon( $term_id ) );
+				if($show =='value'){
+					$value = "<img src='".esc_attr($value)."' />";
+				}
+			}elseif($key == 'category_color'){
+				$value = get_term_meta( $term_id, 'ct_cat_color', true );
+			}elseif($key == 'category_schema'){
+				$value = get_term_meta( $term_id, 'ct_cat_schema', true );
+			}elseif($key == 'category_image'){
+				$value = esc_url_raw( geodir_get_cat_image( $term_id, true ) );
+				if($show =='value'){
+					$value = "<img src='".esc_attr($value)."' />";
+				}
+			}
+		}
+		
+		if($value && ( $show =='value-raw' ||   $show == 'value-strip') ){
+			$value = wp_strip_all_tags($value);
+		}
+
+
+
+		return $value;
 	}
 
 	/**
@@ -182,6 +240,19 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 		$groups[] = array(
 			'label' => __("Raw Values","geodirectory"),
 			'options'   => $raw_keys
+		);
+
+		// category keys
+		$cat_keys = array();
+		$cat_keys['category_top_description'] = 'category_top_description';
+		$cat_keys['category_icon'] = 'category_icon';
+		$cat_keys['category_map_icon'] = 'category_map_icon';
+		$cat_keys['category_color'] = 'category_color';
+		$cat_keys['category_image'] = 'category_image';
+		$cat_keys['category_schema'] = 'category_schema';
+		$groups[] = array(
+			'label' => __("Category meta","geodirectory"),
+			'options'   => $cat_keys
 		);
 
 

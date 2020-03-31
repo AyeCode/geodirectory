@@ -33,7 +33,7 @@ class GeoDir_Elementor {
 		add_action( 'wp_ajax_elementor_ajax', array( __CLASS__, 'maybe_hijack_ajax' ), 8 );
 
 		// add templates
-		add_action( 'option_elementor_remote_info_library', array( __CLASS__, 'add_gd_templates' ), 10, 2 ); //@todo removed until ready
+		//add_action( 'option_elementor_remote_info_library', array( __CLASS__, 'add_gd_templates' ), 10, 2 ); //@todo removed until ready
 
 		// Dynamic content
 		add_action( 'elementor/dynamic_tags/register_tags', array( __CLASS__, 'register_dynamic_content_tags' ) );
@@ -120,59 +120,438 @@ class GeoDir_Elementor {
 	 */
 	public static function maybe_add_image_caption( $html, $widget ) {
 
-		$type = $widget->get_name();
-		if ( 'image' === $type ) {
-			$settings = $widget->get_settings();
+		if(geodir_is_page('single')){
+			$type = $widget->get_name();
+			if ($type  === 'image'  ) {
+				$settings = $widget->get_settings();
 
-			if ( ! empty( $settings['__dynamic__']['image'] ) && strpos( $settings['__dynamic__']['image'], 'name="gd-image"' ) !== false && ! empty( $settings['caption_source'] ) && $settings['caption_source'] == 'attachment' ) {
-				preg_match( '~alt[ ]*=[ ]*["\'](.*?)["\']~is', $html, $match );
-				if ( ! empty( $match[1] ) ) {
-					$html = str_replace( '></figcaption>', '>' . esc_attr( $match[1] ) . '</figcaption>', $html );
+				if ( ! empty( $settings['__dynamic__']['image'] ) && strpos( $settings['__dynamic__']['image'], 'name="gd-image"' ) !== false && ! empty( $settings['caption_source'] ) && $settings['caption_source'] == 'attachment' ) {
+					preg_match( '~alt[ ]*=[ ]*["\'](.*?)["\']~is', $html, $match );
+					if ( ! empty( $match[1] ) ) {
+						$html = str_replace( '></figcaption>', '>' . esc_attr( $match[1] ) . '</figcaption>', $html );
+					}
 				}
-			}
-		} elseif ( 'image-gallery' === $type ) {
-			$settings = $widget->get_settings();
+			} elseif ( 'image-gallery' === $type ) {
+				$settings = $widget->get_settings();
 
-			if ( ! empty( $settings['__dynamic__']['wp_gallery'] ) && strpos( $settings['__dynamic__']['wp_gallery'], 'name="gd-gallery"' ) !== false ) {
-				preg_match( '~settings[ ]*=[ ]*["\'](.*?)["\']~is', $settings['__dynamic__']['wp_gallery'], $match );
-				if ( ! empty( $match[1] ) ) {
-					$gallery_settings = json_decode( urldecode( $match[1] ) );
-					if ( ! empty( $gallery_settings->key ) ) {
-						global $gd_post;
-						$key = esc_attr( $gallery_settings->key );
+				if ( ! empty( $settings['__dynamic__']['wp_gallery'] ) && strpos( $settings['__dynamic__']['wp_gallery'], 'name="gd-gallery"' ) !== false ) {
+					preg_match( '~settings[ ]*=[ ]*["\'](.*?)["\']~is', $settings['__dynamic__']['wp_gallery'], $match );
+					if ( ! empty( $match[1] ) ) {
+						$gallery_settings = json_decode( urldecode( $match[1] ) );
+						if ( ! empty( $gallery_settings->key ) ) {
+							global $gd_post;
+							$key = esc_attr( $gallery_settings->key );
 
-						$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
+							$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
 
-						if ( ! empty( $post_images ) ) {
-							// render gallery
-							$attr = array(
-								'columns'       => $settings['gallery_columns'],
-								'link'          => $settings['gallery_link'],
-								'size'          => $settings['thumbnail_size'],
-								'open_lightbox' => $settings['open_lightbox'],
-							);
+							if ( ! empty( $post_images ) ) {
+								// render gallery
+								$attr = array(
+									'columns'       => $settings['gallery_columns'],
+									'link'          => $settings['gallery_link'],
+									'size'          => $settings['thumbnail_size'],
+									'open_lightbox' => $settings['open_lightbox'],
+								);
 
-							$open_lightbox = isset( $settings['open_lightbox'] ) ? $settings['open_lightbox'] : false;
+								$open_lightbox = isset( $settings['open_lightbox'] ) ? $settings['open_lightbox'] : false;
 
-							$image_html = self::render_gallery( $attr, $post_images, $widget, $open_lightbox );
-							if ( ! empty( $image_html ) ) {
-								$html = '<div class="elementor-image-gallery">';
-								$html .= $image_html;
-								$html .= '</div>';
+								$image_html = self::render_gallery( $attr, $post_images, $widget, $open_lightbox );
+								if ( ! empty( $image_html ) ) {
+									$html = '<div class="elementor-image-gallery">';
+									$html .= $image_html;
+									$html .= '</div>';
+
+								}
 
 							}
-
 						}
 					}
 				}
-			}
 
+			}elseif($type  === 'gallery'){
+				$settings = $widget->get_settings();
+				$gallery_type = isset($settings['gallery_type']) ? $settings['gallery_type'] : '';
+				$is_gd_gallery = false;
+				if ( $gallery_type == 'single' && ! empty( $settings['__dynamic__']['gallery'] ) && strpos( $settings['__dynamic__']['gallery'], 'name="gd-gallery"' ) !== false ) {
+					$is_gd_gallery = true;
+
+				}elseif( $gallery_type == 'multiple' && !empty($settings['galleries'])){
+
+					foreach($settings['galleries'] as $gallery){
+
+						if(! empty( $gallery['__dynamic__']['multiple_gallery'] ) && strpos( $gallery['__dynamic__']['multiple_gallery'], 'name="gd-gallery"' ) !== false ){
+							$is_gd_gallery = true;
+						}
+					}
+				}
+
+				if($is_gd_gallery){
+					$html = self::render_pro_gallery( $widget,$settings );
+				}
+
+			}elseif($type  === 'image-carousel'){
+				$settings = $widget->get_settings();
+				$is_gd_gallery = false;
+				if ( ! empty( $settings['__dynamic__']['carousel'] ) && strpos( $settings['__dynamic__']['carousel'], 'name="gd-gallery"' ) !== false ) {
+					$is_gd_gallery = true;
+				}
+				if($is_gd_gallery){
+					$html = self::render_pro_carousel( $widget,$settings );
+				}
+
+			}
 		}
+
 
 		return $html;
 	}
 
 	/**
+	 * Render Elementor Pro carousel.
+	 *
+	 * @param $widget
+	 * @param $settings
+	 *
+	 * @return string
+	 */
+	public static function render_pro_carousel($widget,$settings){
+		global $gd_post;
+		ob_start();
+
+		$key = self::get_gallery_key($settings['__dynamic__']['carousel']);
+		$settings['slides'] = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
+		$slides_count = count( $settings['slides'] );
+		$link_to = !empty($settings['link_to']) && $settings['link_to']!='none' ? esc_attr($settings['link_to']) : '';
+		$caption_type = !empty($settings['caption_type']) ? esc_attr($settings['caption_type']) : '';
+		if(!empty($settings['slides'])){
+			?>
+			<div class="elementor-image-carousel-wrapper swiper-container" dir="ltr">
+				<div class="elementor-image-carousel swiper-wrapper">
+						<?php
+						$widget->slide_prints_count = 0;
+							foreach($settings['slides'] as $slide){
+								$widget->slide_prints_count++;
+								$image_src = geodir_get_image_src( $slide, $settings['thumbnail_size'] );
+
+
+
+								?>
+								<div class="swiper-slide">
+									<?php
+									if($link_to){
+										if($link_to=='file'){
+											$image_src_full = geodir_get_image_src( $slide, 'full' );
+											echo '<a data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="'.$widget->get_id().'" data-elementor-lightbox-title="'.esc_attr($slide->title).'" data-elementor-lightbox-description="'.esc_attr($slide->caption).'" href="'.$image_src_full .'">';
+										}else{
+											$href = isset($settings['link']['url']) ? esc_url_raw($settings['link']['url']) :'';
+											$link = '<a href="'.$href .'" ';
+											if(isset($settings['link']['nofollow']) && $settings['link']['nofollow']=='on'){
+												$link .= ' target="_blank" ';
+											}
+											if(isset($settings['link']['is_external']) && $settings['link']['is_external']=='on'){
+												$link .= ' rel="nofollow" ';
+											}
+											$link .= ' >';
+											echo $link;
+										}
+									}
+									?>
+									<figure class="swiper-slide-inner">
+										<img class="swiper-slide-image"
+										     src="<?php echo esc_url_raw($image_src);?>"
+										     alt=""/>
+										<?php
+										if($caption_type == 'title' || $caption_type=='caption'){
+											$caption = $slide->{$caption_type};
+											if($caption){
+												echo '<figcaption class="elementor-image-carousel-caption">'.esc_attr($caption).'</figcaption>';
+											}
+										}
+
+										?>
+									</figure>
+									<?php
+									if($link_to){
+										echo "</a>";
+									}
+									?>
+								</div>
+								<?php
+
+							}
+						?>
+					</div>
+					<?php if ( 1 < $slides_count ) : ?>
+						<?php if ( !empty($settings['navigation']) && $settings['navigation']!='none') : ?>
+							<div class="swiper-pagination"></div>
+						<?php endif; ?>
+						<?php if ( !empty($settings['navigation']) && ( $settings['navigation']=='both' || $settings['navigation']=='arrows')) : ?>
+							<div class="elementor-swiper-button elementor-swiper-button-prev">
+								<i class="eicon-chevron-left" aria-hidden="true"></i>
+								<span class="elementor-screen-only"><?php _e( 'Previous', 'elementor-pro' ); ?></span>
+							</div>
+							<div class="elementor-swiper-button elementor-swiper-button-next">
+								<i class="eicon-chevron-right" aria-hidden="true"></i>
+								<span class="elementor-screen-only"><?php _e( 'Next', 'elementor-pro' ); ?></span>
+							</div>
+						<?php endif; ?>
+					<?php endif; ?>
+			</div>
+			<?php
+		}
+
+
+		return ob_get_clean();
+
+	}
+
+	/**
+	 * Get the image field key from gallery info.
+	 *
+	 * @param $gallery
+	 *
+	 * @return string|void
+	 */
+	public static function get_gallery_key($gallery){
+		$key = '';
+
+		preg_match( '~settings[ ]*=[ ]*["\'](.*?)["\']~is', $gallery, $match );
+		if ( ! empty( $match[1] ) ) {
+			$gallery_settings = json_decode( urldecode( $match[1] ) );
+			if ( ! empty( $gallery_settings->key ) ) {
+				$key = esc_attr( $gallery_settings->key );
+			}
+		}
+
+		return $key;
+
+	}
+
+	/**
+	 * Elementor pro gallery element re-render.
+	 *
+	 * @param $widget
+	 * @param $settings
+	 *
+	 * @return string
+	 */
+	public static function render_pro_gallery($widget,$settings){
+		global $gd_post;
+		$is_multiple = 'multiple' === $settings['gallery_type'] && ! empty( $settings['galleries'] );
+
+		$is_single = 'single' === $settings['gallery_type'] && ! empty( $settings['gallery'] );
+
+		$has_description = ! empty( $settings['overlay_description'] );
+
+		$has_title = ! empty( $settings['overlay_title'] );
+
+		$has_animation = ! empty( $settings['image_hover_animation'] ) || ! empty( $settings['content_hover_animation'] ) || ! empty( $settings['background_overlay_hover_animation'] );
+
+		$gallery_item_tag = ! empty( $settings['link_to'] ) ? 'a' : 'div';
+
+		$galleries = [];
+
+		ob_start();
+
+		if ( $is_multiple ) {
+			$widget->add_render_attribute( 'titles-container', 'class', 'elementor-gallery__titles-container' );
+
+			if ( $settings['pointer'] ) {
+				$widget->add_render_attribute( 'titles-container', 'class', 'e--pointer-' . $settings['pointer'] );
+
+				foreach ( $settings as $key => $value ) {
+					if ( 0 === strpos( $key, 'animation' ) && $value ) {
+						$widget->add_render_attribute( 'titles-container', 'class', 'e--animation-' . $value );
+						break;
+					}
+				}
+			} ?>
+			<div <?php echo $widget->get_render_attribute_string( 'titles-container' ); ?>>
+				<?php if ( $settings['show_all_galleries'] ) { ?>
+					<a data-gallery-index="all" class="elementor-item elementor-gallery-title"><?php echo $settings['show_all_galleries_label']; ?></a>
+				<?php } ?>
+
+				<?php foreach ( $settings['galleries'] as $index => $gallery ) :
+					if ( ! $gallery['__dynamic__'] ) {
+						continue;
+					}
+					$key = self::get_gallery_key($gallery['__dynamic__']['multiple_gallery']);
+					$galleries[] = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
+					?>
+					<a data-gallery-index="<?php echo $index; ?>" class="elementor-item elementor-gallery-title"><?php echo $gallery['gallery_title']; ?></a>
+					<?php
+				endforeach; ?>
+			</div>
+			<?php
+		} elseif ( $is_single ) {
+			$key = self::get_gallery_key($settings['__dynamic__']['gallery']);
+			$galleries[0] = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
+		} elseif ( \ElementorPro\Plugin::elementor()->editor->is_edit_mode() ) { ?>
+			<i class="elementor-widget-empty-icon eicon-gallery-justified"></i>
+		<?php }
+
+		$widget->add_render_attribute( 'gallery_container', 'class', 'elementor-gallery__container' );
+
+		if ( $has_title || $has_description ) {
+			$widget->add_render_attribute( 'gallery_item_content', 'class', 'elementor-gallery-item__content' );
+
+			if ( $has_title ) {
+				$widget->add_render_attribute( 'gallery_item_title', 'class', 'elementor-gallery-item__title' );
+			}
+
+			if ( $has_description ) {
+				$widget->add_render_attribute( 'gallery_item_description', 'class', 'elementor-gallery-item__description' );
+			}
+		}
+
+		$widget->add_render_attribute( 'gallery_item_background_overlay', [ 'class' => 'elementor-gallery-item__overlay' ] );
+
+		$gallery_items = [];
+		$all_items = [];
+		$thumbnail_size = $settings['thumbnail_image_size'];
+		foreach ( $galleries as $gallery_index => $gallery ) {
+			foreach ( $gallery as $index => $item ) {
+//				if ( in_array( $item['id'], array_keys( $gallery_items ), true ) ) {
+//					$gallery_items[ $item['id'] ][] = $gallery_index;
+//				} else {
+//					$gallery_items[ $item['id'] ] = [ $gallery_index ];
+//				}
+
+//				$gallery_items[] = $item;
+				$gallery_items[$item->ID] = $gallery_index;
+				$all_items[$item->ID] = $item;
+
+			}
+		}
+
+//		echo '###';print_r($gallery_items);exit;
+
+		if ( 'random' === $settings['order_by'] ) {
+			$shuffled_items = [];
+			$keys = array_keys( $gallery_items );
+			shuffle( $keys );
+			foreach ( $keys as $key ) {
+				$shuffled_items[ $key ] = $gallery_items[ $key ];
+			}
+			$gallery_items = $shuffled_items;
+		}
+
+		if ( ! empty( $galleries ) ) { ?>
+		<div <?php echo $widget->get_render_attribute_string( 'gallery_container' ); ?>>
+			<?php
+			foreach ( $gallery_items as $id => $tags ) :
+				$tags = array($tags);
+				$item = $all_items[$id];
+				$unique_index = $id; //$gallery_index . '_' . $index;
+				$img_src      = geodir_get_image_src( $item, $thumbnail_size );
+//				$img_src      = geodir_get_image_src( $item, 'full' );
+				if ( ! $img_src ) {
+					continue;
+				}
+
+				$image_meta = isset( $item->metadata ) ? maybe_unserialize( $item->metadata ) : '';
+
+//				print_r($image_meta);
+
+				$attributes = array(
+					'data-elementor-lightbox-description' => $item->caption,
+//					'title' => $item->title,
+//					'alt' => $item->caption,
+					'data-elementor-lightbox-title' => $item->title,
+				);
+
+//				$image_data = [
+//					'alt' => get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ),
+//					'caption' => $attachment->post_excerpt,
+//					'description' => $attachment->post_content,
+//					'title' => $attachment->post_title,
+//				];
+
+//				$attachment = get_post( $id );
+				$image_data = [
+					'alt' => $item->caption,
+					'media' => geodir_get_image_src( $item, 'full' ),
+					'src' => $img_src,
+					'width' => !empty($image_meta['sizes'][$thumbnail_size]['width']) ? $image_meta['sizes'][$thumbnail_size]['width'] : $image_meta['width'],
+					'height' => !empty($image_meta['sizes'][$thumbnail_size]['height']) ? $image_meta['sizes'][$thumbnail_size]['height'] : $image_meta['height'],
+					'caption' => $item->caption,
+					'description' => $item->caption,
+					'title' => $item->title,
+				];
+
+				$widget->add_render_attribute( 'gallery_item_' . $unique_index, [
+					'class' => [
+						'e-gallery-item',
+						'elementor-gallery-item',
+					],
+				] );
+
+				if ( $has_animation ) {
+					$widget->add_render_attribute( 'gallery_item_' . $unique_index, [ 'class' => 'elementor-animated-content' ] );
+				}
+
+				if ( $is_multiple ) {
+					$widget->add_render_attribute( 'gallery_item_' . $unique_index, [ 'data-e-gallery-tags' => implode( ',', $tags ) ] );
+				}
+
+				if ( 'a' === $gallery_item_tag ) {
+					if ( 'file' === $settings['link_to'] ) {
+						$href = $image_data['media'];
+
+						$widget->add_render_attribute( 'gallery_item_' . $unique_index, [
+							'href' => $href,
+						] );
+
+//						$widget->add_lightbox_data_attributes( 'gallery_item_' . $unique_index, null, 'yes', 'all-' . $widget->get_id() );
+						$widget->add_render_attribute( 'gallery_item_' . $unique_index, $attributes, null );
+					} elseif ( 'custom' === $settings['link_to'] ) {
+						$widget->add_link_attributes( 'gallery_item_' . $unique_index, $settings['url'] );
+					}
+				}
+
+				$widget->add_render_attribute( 'gallery_item_image_' . $unique_index,
+					[
+						'class' => [
+							'e-gallery-image',
+							'elementor-gallery-item__image',
+						],
+						'data-thumbnail' => $image_data['src'],
+						'data-width' => $image_data['width'],
+						'data-height' => $image_data['height'],
+						'alt' => $image_data['alt'],
+					]
+				);?>
+				<<?php echo $gallery_item_tag; ?> <?php echo $widget->get_render_attribute_string( 'gallery_item_' . $unique_index ); ?>>
+				<div <?php echo $widget->get_render_attribute_string( 'gallery_item_image_' . $unique_index ); ?> ></div>
+				<?php if ( ! empty( $settings['overlay_background'] ) ) : ?>
+				<div <?php echo $widget->get_render_attribute_string( 'gallery_item_background_overlay' ); ?>></div>
+			<?php endif; ?>
+				<?php if ( $has_title || $has_description ) : ?>
+				<div <?php echo $widget->get_render_attribute_string( 'gallery_item_content' ); ?>>
+					<?php if ( $has_title ) :
+						$title = $image_data[ $settings['overlay_title'] ];
+						if ( ! empty( $title ) ) : ?>
+							<div <?php echo $widget->get_render_attribute_string( 'gallery_item_title' ); ?>><?php echo $title; ?></div>
+						<?php endif;
+					endif;
+					if ( $has_description ) :
+						$description = $image_data[ $settings['overlay_description'] ];
+						if ( ! empty( $description ) ) :?>
+							<div <?php echo $widget->get_render_attribute_string( 'gallery_item_description' ); ?>><?php echo $description; ?></div>
+						<?php endif;
+					endif; ?>
+				</div>
+			<?php endif; ?>
+				</<?php echo $gallery_item_tag; ?>>
+			<?php endforeach;
+			//endforeach; ?>
+			</div>
+		<?php }
+
+		return ob_get_clean();
+	}
+
+		/**
 	 * Render the WP Gallery with our own images.
 	 *
 	 * @param $attr

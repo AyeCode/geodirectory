@@ -60,8 +60,16 @@ Class GeoDir_Elementor_Tag_Color extends \Elementor\Core\DynamicTags\Tag {
 		$value = '';
 		$key = $this->get_settings( 'key' );
 		if ( !empty( $key ) ) {
-			if(!empty($gd_post->default_category)){
-				$term_id = absint($gd_post->default_category);
+
+			$term_id = '';
+			if( geodir_is_page('archive') ){
+				$current_category = get_queried_object();
+				$term_id = isset($current_category->term_id) ?  absint($current_category->term_id) : '';
+			}elseif(geodir_is_page('single')){
+				$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
+			}
+
+			if($term_id){
 				$cat_color = get_term_meta( $term_id, 'ct_cat_color', true );
 				if($cat_color){
 					$value = $cat_color;

@@ -12,6 +12,12 @@ use ElementorPro\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
 
+/**
+ * Props to this plugin  https://wordpress.org/plugins/ele-custom-skin/
+ *
+ * Class GeoDir_Elementor_Skin_Posts
+ * @package ElementorPro\Modules\Posts\Skins
+ */
 class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 
 	private $template_cache=[];

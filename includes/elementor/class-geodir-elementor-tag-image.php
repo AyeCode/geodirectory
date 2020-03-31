@@ -91,7 +91,9 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 			'url' => '',
 		];
 
-		if ( ! empty( $key ) && !empty($gd_post->ID)) {
+		if(substr( $key, 0, 9 ) === "category_"){
+			$image_data = $this->get_category_meta($key);
+		}elseif ( ! empty( $key ) && !empty($gd_post->ID)) {
 
 			$cf = geodir_get_field_infoby('htmlvar_name', $key, $gd_post->post_type);
 			$field_type = !empty($cf['field_type']) ? esc_attr($cf['field_type']) : '';
@@ -131,6 +133,60 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 	}
 
 	/**
+	 * Get the category meta.
+	 *
+	 * @param $key
+	 * @param $show
+	 *
+	 * @return mixed|string|void
+	 */
+	public function get_category_meta($key){
+		global $gd_post;
+		$image_data = [
+			'id' => null,
+			'url' => '',
+		];
+
+		$term_id = '';
+		if( geodir_is_page('archive') ){
+			$current_category = get_queried_object();
+			$term_id = isset($current_category->term_id) ?  absint($current_category->term_id) : '';
+		}elseif(geodir_is_page('single')){
+			$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
+		}
+
+		if($term_id) {
+
+			if($key == 'category_map_icon'){
+//				$value = esc_url_raw( geodir_get_term_icon( $term_id ) );
+
+				$cat_img = get_term_meta( $term_id, 'ct_cat_icon', true );
+				if(!empty($cat_img)){
+					$value = esc_url_raw( geodir_get_cat_icon( $term_id, true ) );
+					$image_data = [
+						'id' => $cat_img['id'],
+						'url' => $value,
+					];
+				}
+
+			}elseif($key == 'category_image'){
+				$cat_img = get_term_meta( $term_id, 'ct_cat_default_img', true );
+				if(!empty($cat_img)){
+					$value = esc_url_raw( geodir_get_cat_image( $term_id, true ) );
+					$image_data = [
+						'id' => $cat_img['id'],
+						'url' => $value,
+					];
+				}
+			}
+		}
+
+
+
+		return $image_data;
+	}
+
+	/**
 	 * Set the settings key key.
 	 * @return string
 	 */
@@ -148,8 +204,7 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 			[
 				'label' => __( 'Key', 'elementor-pro' ),
 				'type' => \Elementor\Controls_Manager::SELECT,
-//				'groups' => GeoDir_Elementor::get_control_options( $this->get_supported_fields() ),
-				'options' => $this->get_custom_field_options(),
+				'groups' => $this->get_custom_field_group_options(),
 			]
 		);
 
@@ -163,15 +218,14 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 	}
 
 	/**
-	 * Gets an array of custom field keys.
+	 * Get and group the key options.
 	 *
 	 * @return array
 	 */
-	public function get_custom_field_options(){
+	public function get_custom_field_group_options(){
+		$groups = array();
 
 		$fields = geodir_post_custom_fields('', 'all', 'all' ,'none');
-
-//		print_r($fields);exit;
 
 		$supported_fields = $this->get_supported_fields();
 		// remove unneeded types
@@ -180,19 +234,31 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 				unset($fields[$key]);
 			}
 		}
-
-
 		$keys = array();
-		$keys[] = __('Select Key','geodirectory');
+//		$keys[] = __('Select Key','geodirectory');
 		if(!empty($fields)){
 			foreach($fields as $field){
 				$keys[$field['htmlvar_name']] = $field['htmlvar_name'];
 			}
 		}
 
-		return $keys;
+		$groups[] = array(
+			'label' => __("Custom Fields","geodirectory"),
+			'options'   => $keys
+		);
 
+		// category keys
+		$cat_keys = array();
+		$cat_keys['category_map_icon'] = 'category_map_icon';
+		$cat_keys['category_image'] = 'category_image';
+		$groups[] = array(
+			'label' => __("Category meta","geodirectory"),
+			'options'   => $cat_keys
+		);
+
+		return $groups;
 	}
+
 
 	/**
 	 * Get what fields are supported for this tag type.
