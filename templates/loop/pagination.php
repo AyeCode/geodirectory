@@ -52,7 +52,7 @@ if ( $wp_query->max_num_pages <= 1 ) {
 		}
 
 		$numposts = $wp_query->found_posts;
-		$max_page = ceil($numposts / $posts_per_page);
+		$max_page = $posts_per_page ? ceil($numposts / $posts_per_page) : 1;
 		if (empty($paged)) {
 			$paged = 1;
 		}

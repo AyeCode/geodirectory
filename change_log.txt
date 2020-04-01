@@ -13,6 +13,7 @@
 * Elementor pro gallery widget support added - ADDED
 * Elementor pro image carousel widget support added - ADDED
 * Elementor pro theme builder types added for greater control - ADDED
+* Save to favorites now has custom color and icon options - ADDED
 
 = 2.0.0.83 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
