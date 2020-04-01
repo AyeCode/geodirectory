@@ -49,6 +49,64 @@ class GeoDir_Elementor {
 			'maybe_add_image_caption'
 		), 10, 2 );
 
+
+		/*
+		 * Elementor Pro features below here
+		 */
+		if(defined( 'ELEMENTOR_PRO_VERSION' )){
+			// doc template types
+			add_action( 'elementor/documents/register', array( __CLASS__, 'register_template_types' ) );
+
+			// register template conditions
+			add_action( 'elementor/theme/register_conditions', array( __CLASS__, 'register_template_conditions' ) );
+
+			// register skins
+			add_action('elementor/widgets/widgets_registered',array( __CLASS__,'add_archive_item_skins'));
+		}
+
+
+	}
+
+	public static function add_archive_item_skins(){
+
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/elementor/class-geodir-elementor-skin-custom.php' );
+
+	}
+
+	/**
+	 * Register our own template conditions.
+	 *
+	 * @param Conditions_Manager $conditions_manager
+	 */
+	public static function register_template_conditions( $conditions_manager ) {
+		// Single conditions
+		$conditions_single = new GeoDir_Elementor_Template_Conditions_Single();
+		$conditions_manager->get_condition( 'general' )->register_sub_condition( $conditions_single );
+
+		// Archive Conditions
+		$conditions_archive = new GeoDir_Elementor_Template_Conditions_Archive();
+		$conditions_manager->get_condition( 'general' )->register_sub_condition( $conditions_archive );
+
+		// Archive item, show message that no Conditions are needed.
+		$conditions_archive_item = new GeoDir_Elementor_Template_Conditions_Archive_item();
+		$conditions_manager->get_condition( 'general' )->register_sub_condition( $conditions_archive_item );
+	}
+
+	/**
+	 * Register our single and archive template types.
+	 *
+	 * @param $documents_manager
+	 */
+	public static function register_template_types($documents_manager){
+		$docs_types = [
+			'geodirectory' => 'GeoDir_Elementor_Template_Single',
+			'geodirectory-archive' => 'GeoDir_Elementor_Template_Archive',
+			'geodirectory-archive-item' => 'GeoDir_Elementor_Template_Archive_Item',
+		];
+
+		foreach ( $docs_types as $type => $class_name ) {
+			$documents_manager->register_document_type( $type, $class_name );
+		}
 	}
 
 
@@ -62,59 +120,438 @@ class GeoDir_Elementor {
 	 */
 	public static function maybe_add_image_caption( $html, $widget ) {
 
-		$type = $widget->get_name();
-		if ( 'image' === $type ) {
-			$settings = $widget->get_settings();
+		if(geodir_is_page('single')){
+			$type = $widget->get_name();
+			if ($type  === 'image'  ) {
+				$settings = $widget->get_settings();
 
-			if ( ! empty( $settings['__dynamic__']['image'] ) && strpos( $settings['__dynamic__']['image'], 'name="gd-image"' ) !== false && ! empty( $settings['caption_source'] ) && $settings['caption_source'] == 'attachment' ) {
-				preg_match( '~alt[ ]*=[ ]*["\'](.*?)["\']~is', $html, $match );
-				if ( ! empty( $match[1] ) ) {
-					$html = str_replace( '></figcaption>', '>' . esc_attr( $match[1] ) . '</figcaption>', $html );
+				if ( ! empty( $settings['__dynamic__']['image'] ) && strpos( $settings['__dynamic__']['image'], 'name="gd-image"' ) !== false && ! empty( $settings['caption_source'] ) && $settings['caption_source'] == 'attachment' ) {
+					preg_match( '~alt[ ]*=[ ]*["\'](.*?)["\']~is', $html, $match );
+					if ( ! empty( $match[1] ) ) {
+						$html = str_replace( '></figcaption>', '>' . esc_attr( $match[1] ) . '</figcaption>', $html );
+					}
 				}
-			}
-		} elseif ( 'image-gallery' === $type ) {
-			$settings = $widget->get_settings();
+			} elseif ( 'image-gallery' === $type ) {
+				$settings = $widget->get_settings();
 
-			if ( ! empty( $settings['__dynamic__']['wp_gallery'] ) && strpos( $settings['__dynamic__']['wp_gallery'], 'name="gd-gallery"' ) !== false ) {
-				preg_match( '~settings[ ]*=[ ]*["\'](.*?)["\']~is', $settings['__dynamic__']['wp_gallery'], $match );
-				if ( ! empty( $match[1] ) ) {
-					$gallery_settings = json_decode( urldecode( $match[1] ) );
-					if ( ! empty( $gallery_settings->key ) ) {
-						global $gd_post;
-						$key = esc_attr( $gallery_settings->key );
+				if ( ! empty( $settings['__dynamic__']['wp_gallery'] ) && strpos( $settings['__dynamic__']['wp_gallery'], 'name="gd-gallery"' ) !== false ) {
+					preg_match( '~settings[ ]*=[ ]*["\'](.*?)["\']~is', $settings['__dynamic__']['wp_gallery'], $match );
+					if ( ! empty( $match[1] ) ) {
+						$gallery_settings = json_decode( urldecode( $match[1] ) );
+						if ( ! empty( $gallery_settings->key ) ) {
+							global $gd_post;
+							$key = esc_attr( $gallery_settings->key );
 
-						$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
+							$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
 
-						if ( ! empty( $post_images ) ) {
-							// render gallery
-							$attr = array(
-								'columns'       => $settings['gallery_columns'],
-								'link'          => $settings['gallery_link'],
-								'size'          => $settings['thumbnail_size'],
-								'open_lightbox' => $settings['open_lightbox'],
-							);
+							if ( ! empty( $post_images ) ) {
+								// render gallery
+								$attr = array(
+									'columns'       => $settings['gallery_columns'],
+									'link'          => $settings['gallery_link'],
+									'size'          => $settings['thumbnail_size'],
+									'open_lightbox' => $settings['open_lightbox'],
+								);
 
-							$open_lightbox = isset( $settings['open_lightbox'] ) ? $settings['open_lightbox'] : false;
+								$open_lightbox = isset( $settings['open_lightbox'] ) ? $settings['open_lightbox'] : false;
 
-							$image_html = self::render_gallery( $attr, $post_images, $widget, $open_lightbox );
-							if ( ! empty( $image_html ) ) {
-								$html = '<div class="elementor-image-gallery">';
-								$html .= $image_html;
-								$html .= '</div>';
+								$image_html = self::render_gallery( $attr, $post_images, $widget, $open_lightbox );
+								if ( ! empty( $image_html ) ) {
+									$html = '<div class="elementor-image-gallery">';
+									$html .= $image_html;
+									$html .= '</div>';
+
+								}
 
 							}
-
 						}
 					}
 				}
-			}
 
+			}elseif($type  === 'gallery'){
+				$settings = $widget->get_settings();
+				$gallery_type = isset($settings['gallery_type']) ? $settings['gallery_type'] : '';
+				$is_gd_gallery = false;
+				if ( $gallery_type == 'single' && ! empty( $settings['__dynamic__']['gallery'] ) && strpos( $settings['__dynamic__']['gallery'], 'name="gd-gallery"' ) !== false ) {
+					$is_gd_gallery = true;
+
+				}elseif( $gallery_type == 'multiple' && !empty($settings['galleries'])){
+
+					foreach($settings['galleries'] as $gallery){
+
+						if(! empty( $gallery['__dynamic__']['multiple_gallery'] ) && strpos( $gallery['__dynamic__']['multiple_gallery'], 'name="gd-gallery"' ) !== false ){
+							$is_gd_gallery = true;
+						}
+					}
+				}
+
+				if($is_gd_gallery){
+					$html = self::render_pro_gallery( $widget,$settings );
+				}
+
+			}elseif($type  === 'image-carousel'){
+				$settings = $widget->get_settings();
+				$is_gd_gallery = false;
+				if ( ! empty( $settings['__dynamic__']['carousel'] ) && strpos( $settings['__dynamic__']['carousel'], 'name="gd-gallery"' ) !== false ) {
+					$is_gd_gallery = true;
+				}
+				if($is_gd_gallery){
+					$html = self::render_pro_carousel( $widget,$settings );
+				}
+
+			}
 		}
+
 
 		return $html;
 	}
 
 	/**
+	 * Render Elementor Pro carousel.
+	 *
+	 * @param $widget
+	 * @param $settings
+	 *
+	 * @return string
+	 */
+	public static function render_pro_carousel($widget,$settings){
+		global $gd_post;
+		ob_start();
+
+		$key = self::get_gallery_key($settings['__dynamic__']['carousel']);
+		$settings['slides'] = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
+		$slides_count = count( $settings['slides'] );
+		$link_to = !empty($settings['link_to']) && $settings['link_to']!='none' ? esc_attr($settings['link_to']) : '';
+		$caption_type = !empty($settings['caption_type']) ? esc_attr($settings['caption_type']) : '';
+		if(!empty($settings['slides'])){
+			?>
+			<div class="elementor-image-carousel-wrapper swiper-container" dir="ltr">
+				<div class="elementor-image-carousel swiper-wrapper">
+						<?php
+						$widget->slide_prints_count = 0;
+							foreach($settings['slides'] as $slide){
+								$widget->slide_prints_count++;
+								$image_src = geodir_get_image_src( $slide, $settings['thumbnail_size'] );
+
+
+
+								?>
+								<div class="swiper-slide">
+									<?php
+									if($link_to){
+										if($link_to=='file'){
+											$image_src_full = geodir_get_image_src( $slide, 'full' );
+											echo '<a data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="'.$widget->get_id().'" data-elementor-lightbox-title="'.esc_attr($slide->title).'" data-elementor-lightbox-description="'.esc_attr($slide->caption).'" href="'.$image_src_full .'">';
+										}else{
+											$href = isset($settings['link']['url']) ? esc_url_raw($settings['link']['url']) :'';
+											$link = '<a href="'.$href .'" ';
+											if(isset($settings['link']['nofollow']) && $settings['link']['nofollow']=='on'){
+												$link .= ' target="_blank" ';
+											}
+											if(isset($settings['link']['is_external']) && $settings['link']['is_external']=='on'){
+												$link .= ' rel="nofollow" ';
+											}
+											$link .= ' >';
+											echo $link;
+										}
+									}
+									?>
+									<figure class="swiper-slide-inner">
+										<img class="swiper-slide-image"
+										     src="<?php echo esc_url_raw($image_src);?>"
+										     alt=""/>
+										<?php
+										if($caption_type == 'title' || $caption_type=='caption'){
+											$caption = $slide->{$caption_type};
+											if($caption){
+												echo '<figcaption class="elementor-image-carousel-caption">'.esc_attr($caption).'</figcaption>';
+											}
+										}
+
+										?>
+									</figure>
+									<?php
+									if($link_to){
+										echo "</a>";
+									}
+									?>
+								</div>
+								<?php
+
+							}
+						?>
+					</div>
+					<?php if ( 1 < $slides_count ) : ?>
+						<?php if ( !empty($settings['navigation']) && $settings['navigation']!='none') : ?>
+							<div class="swiper-pagination"></div>
+						<?php endif; ?>
+						<?php if ( !empty($settings['navigation']) && ( $settings['navigation']=='both' || $settings['navigation']=='arrows')) : ?>
+							<div class="elementor-swiper-button elementor-swiper-button-prev">
+								<i class="eicon-chevron-left" aria-hidden="true"></i>
+								<span class="elementor-screen-only"><?php _e( 'Previous', 'elementor-pro' ); ?></span>
+							</div>
+							<div class="elementor-swiper-button elementor-swiper-button-next">
+								<i class="eicon-chevron-right" aria-hidden="true"></i>
+								<span class="elementor-screen-only"><?php _e( 'Next', 'elementor-pro' ); ?></span>
+							</div>
+						<?php endif; ?>
+					<?php endif; ?>
+			</div>
+			<?php
+		}
+
+
+		return ob_get_clean();
+
+	}
+
+	/**
+	 * Get the image field key from gallery info.
+	 *
+	 * @param $gallery
+	 *
+	 * @return string|void
+	 */
+	public static function get_gallery_key($gallery){
+		$key = '';
+
+		preg_match( '~settings[ ]*=[ ]*["\'](.*?)["\']~is', $gallery, $match );
+		if ( ! empty( $match[1] ) ) {
+			$gallery_settings = json_decode( urldecode( $match[1] ) );
+			if ( ! empty( $gallery_settings->key ) ) {
+				$key = esc_attr( $gallery_settings->key );
+			}
+		}
+
+		return $key;
+
+	}
+
+	/**
+	 * Elementor pro gallery element re-render.
+	 *
+	 * @param $widget
+	 * @param $settings
+	 *
+	 * @return string
+	 */
+	public static function render_pro_gallery($widget,$settings){
+		global $gd_post;
+		$is_multiple = 'multiple' === $settings['gallery_type'] && ! empty( $settings['galleries'] );
+
+		$is_single = 'single' === $settings['gallery_type'] && ! empty( $settings['gallery'] );
+
+		$has_description = ! empty( $settings['overlay_description'] );
+
+		$has_title = ! empty( $settings['overlay_title'] );
+
+		$has_animation = ! empty( $settings['image_hover_animation'] ) || ! empty( $settings['content_hover_animation'] ) || ! empty( $settings['background_overlay_hover_animation'] );
+
+		$gallery_item_tag = ! empty( $settings['link_to'] ) ? 'a' : 'div';
+
+		$galleries = [];
+
+		ob_start();
+
+		if ( $is_multiple ) {
+			$widget->add_render_attribute( 'titles-container', 'class', 'elementor-gallery__titles-container' );
+
+			if ( $settings['pointer'] ) {
+				$widget->add_render_attribute( 'titles-container', 'class', 'e--pointer-' . $settings['pointer'] );
+
+				foreach ( $settings as $key => $value ) {
+					if ( 0 === strpos( $key, 'animation' ) && $value ) {
+						$widget->add_render_attribute( 'titles-container', 'class', 'e--animation-' . $value );
+						break;
+					}
+				}
+			} ?>
+			<div <?php echo $widget->get_render_attribute_string( 'titles-container' ); ?>>
+				<?php if ( $settings['show_all_galleries'] ) { ?>
+					<a data-gallery-index="all" class="elementor-item elementor-gallery-title"><?php echo $settings['show_all_galleries_label']; ?></a>
+				<?php } ?>
+
+				<?php foreach ( $settings['galleries'] as $index => $gallery ) :
+					if ( ! $gallery['__dynamic__'] ) {
+						continue;
+					}
+					$key = self::get_gallery_key($gallery['__dynamic__']['multiple_gallery']);
+					$galleries[] = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
+					?>
+					<a data-gallery-index="<?php echo $index; ?>" class="elementor-item elementor-gallery-title"><?php echo $gallery['gallery_title']; ?></a>
+					<?php
+				endforeach; ?>
+			</div>
+			<?php
+		} elseif ( $is_single ) {
+			$key = self::get_gallery_key($settings['__dynamic__']['gallery']);
+			$galleries[0] = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key );
+		} elseif ( \ElementorPro\Plugin::elementor()->editor->is_edit_mode() ) { ?>
+			<i class="elementor-widget-empty-icon eicon-gallery-justified"></i>
+		<?php }
+
+		$widget->add_render_attribute( 'gallery_container', 'class', 'elementor-gallery__container' );
+
+		if ( $has_title || $has_description ) {
+			$widget->add_render_attribute( 'gallery_item_content', 'class', 'elementor-gallery-item__content' );
+
+			if ( $has_title ) {
+				$widget->add_render_attribute( 'gallery_item_title', 'class', 'elementor-gallery-item__title' );
+			}
+
+			if ( $has_description ) {
+				$widget->add_render_attribute( 'gallery_item_description', 'class', 'elementor-gallery-item__description' );
+			}
+		}
+
+		$widget->add_render_attribute( 'gallery_item_background_overlay', [ 'class' => 'elementor-gallery-item__overlay' ] );
+
+		$gallery_items = [];
+		$all_items = [];
+		$thumbnail_size = $settings['thumbnail_image_size'];
+		foreach ( $galleries as $gallery_index => $gallery ) {
+			foreach ( $gallery as $index => $item ) {
+//				if ( in_array( $item['id'], array_keys( $gallery_items ), true ) ) {
+//					$gallery_items[ $item['id'] ][] = $gallery_index;
+//				} else {
+//					$gallery_items[ $item['id'] ] = [ $gallery_index ];
+//				}
+
+//				$gallery_items[] = $item;
+				$gallery_items[$item->ID] = $gallery_index;
+				$all_items[$item->ID] = $item;
+
+			}
+		}
+
+//		echo '###';print_r($gallery_items);exit;
+
+		if ( 'random' === $settings['order_by'] ) {
+			$shuffled_items = [];
+			$keys = array_keys( $gallery_items );
+			shuffle( $keys );
+			foreach ( $keys as $key ) {
+				$shuffled_items[ $key ] = $gallery_items[ $key ];
+			}
+			$gallery_items = $shuffled_items;
+		}
+
+		if ( ! empty( $galleries ) ) { ?>
+		<div <?php echo $widget->get_render_attribute_string( 'gallery_container' ); ?>>
+			<?php
+			foreach ( $gallery_items as $id => $tags ) :
+				$tags = array($tags);
+				$item = $all_items[$id];
+				$unique_index = $id; //$gallery_index . '_' . $index;
+				$img_src      = geodir_get_image_src( $item, $thumbnail_size );
+//				$img_src      = geodir_get_image_src( $item, 'full' );
+				if ( ! $img_src ) {
+					continue;
+				}
+
+				$image_meta = isset( $item->metadata ) ? maybe_unserialize( $item->metadata ) : '';
+
+//				print_r($image_meta);
+
+				$attributes = array(
+					'data-elementor-lightbox-description' => $item->caption,
+//					'title' => $item->title,
+//					'alt' => $item->caption,
+					'data-elementor-lightbox-title' => $item->title,
+				);
+
+//				$image_data = [
+//					'alt' => get_post_meta( $attachment->ID, '_wp_attachment_image_alt', true ),
+//					'caption' => $attachment->post_excerpt,
+//					'description' => $attachment->post_content,
+//					'title' => $attachment->post_title,
+//				];
+
+//				$attachment = get_post( $id );
+				$image_data = [
+					'alt' => $item->caption,
+					'media' => geodir_get_image_src( $item, 'full' ),
+					'src' => $img_src,
+					'width' => !empty($image_meta['sizes'][$thumbnail_size]['width']) ? $image_meta['sizes'][$thumbnail_size]['width'] : $image_meta['width'],
+					'height' => !empty($image_meta['sizes'][$thumbnail_size]['height']) ? $image_meta['sizes'][$thumbnail_size]['height'] : $image_meta['height'],
+					'caption' => $item->caption,
+					'description' => $item->caption,
+					'title' => $item->title,
+				];
+
+				$widget->add_render_attribute( 'gallery_item_' . $unique_index, [
+					'class' => [
+						'e-gallery-item',
+						'elementor-gallery-item',
+					],
+				] );
+
+				if ( $has_animation ) {
+					$widget->add_render_attribute( 'gallery_item_' . $unique_index, [ 'class' => 'elementor-animated-content' ] );
+				}
+
+				if ( $is_multiple ) {
+					$widget->add_render_attribute( 'gallery_item_' . $unique_index, [ 'data-e-gallery-tags' => implode( ',', $tags ) ] );
+				}
+
+				if ( 'a' === $gallery_item_tag ) {
+					if ( 'file' === $settings['link_to'] ) {
+						$href = $image_data['media'];
+
+						$widget->add_render_attribute( 'gallery_item_' . $unique_index, [
+							'href' => $href,
+						] );
+
+//						$widget->add_lightbox_data_attributes( 'gallery_item_' . $unique_index, null, 'yes', 'all-' . $widget->get_id() );
+						$widget->add_render_attribute( 'gallery_item_' . $unique_index, $attributes, null );
+					} elseif ( 'custom' === $settings['link_to'] ) {
+						$widget->add_link_attributes( 'gallery_item_' . $unique_index, $settings['url'] );
+					}
+				}
+
+				$widget->add_render_attribute( 'gallery_item_image_' . $unique_index,
+					[
+						'class' => [
+							'e-gallery-image',
+							'elementor-gallery-item__image',
+						],
+						'data-thumbnail' => $image_data['src'],
+						'data-width' => $image_data['width'],
+						'data-height' => $image_data['height'],
+						'alt' => $image_data['alt'],
+					]
+				);?>
+				<<?php echo $gallery_item_tag; ?> <?php echo $widget->get_render_attribute_string( 'gallery_item_' . $unique_index ); ?>>
+				<div <?php echo $widget->get_render_attribute_string( 'gallery_item_image_' . $unique_index ); ?> ></div>
+				<?php if ( ! empty( $settings['overlay_background'] ) ) : ?>
+				<div <?php echo $widget->get_render_attribute_string( 'gallery_item_background_overlay' ); ?>></div>
+			<?php endif; ?>
+				<?php if ( $has_title || $has_description ) : ?>
+				<div <?php echo $widget->get_render_attribute_string( 'gallery_item_content' ); ?>>
+					<?php if ( $has_title ) :
+						$title = $image_data[ $settings['overlay_title'] ];
+						if ( ! empty( $title ) ) : ?>
+							<div <?php echo $widget->get_render_attribute_string( 'gallery_item_title' ); ?>><?php echo $title; ?></div>
+						<?php endif;
+					endif;
+					if ( $has_description ) :
+						$description = $image_data[ $settings['overlay_description'] ];
+						if ( ! empty( $description ) ) :?>
+							<div <?php echo $widget->get_render_attribute_string( 'gallery_item_description' ); ?>><?php echo $description; ?></div>
+						<?php endif;
+					endif; ?>
+				</div>
+			<?php endif; ?>
+				</<?php echo $gallery_item_tag; ?>>
+			<?php endforeach;
+			//endforeach; ?>
+			</div>
+		<?php }
+
+		return ob_get_clean();
+	}
+
+		/**
 	 * Render the WP Gallery with our own images.
 	 *
 	 * @param $attr
@@ -375,6 +812,8 @@ class GeoDir_Elementor {
 			'GeoDir_Elementor_Tag_URL',
 			'GeoDir_Elementor_Tag_Image',
 			'GeoDir_Elementor_Tag_Gallery',
+			'GeoDir_Elementor_Tag_Number',
+			'GeoDir_Elementor_Tag_Color',
 		);
 
 		// Finally register the tag
@@ -395,18 +834,31 @@ class GeoDir_Elementor {
 	 */
 	public static function add_gd_templates( $value, $option ) {
 
-		// add our own template
+//		print_r($value);exit;
+		// add our own templates
 		if ( ! empty( $value['templates'] ) ) {
+
 			$default_templates = $value['templates'];
 			$templates         = array();
 
-			// Realestate
+			// Add block categories
+			if(!empty($value['types_data']['block']['categories'])){
+				$value['types_data']['block']['categories'][] = "directory archive";
+				$value['types_data']['block']['categories'][] = "directory single";
+			}
+
+//			// Add categories
+//			if(!empty($value['categories'])){
+//				$value['categories'] = str_replace('"product archive"','"product archive","directory archive"',$value['categories']);
+//			}
+
+			// Real-estate
 			$templates[] = array(
-				'id'                => 'ayecode-123',
+				'id'                => 'ayecode-realestate-homepage-001',
 				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Homepage &#8211; Real-estate",
 				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
 				'tmpl_created'      => '1477388340',
-				'1477388340'        => 'AyeCode',
+				'author'            => 'AyeCode',
 				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
 				'type'              => 'page',
 				'subtype'           => 'page',
@@ -418,9 +870,45 @@ class GeoDir_Elementor {
 				'has_page_settings' => '0',
 			);
 
+			// Archive blocks
+			$templates[] = array(
+				'id'                => 'ayecode-block-archive-001',
+				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Directory Archive",
+				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
+				'tmpl_created'      => '1477388340',
+				'author'            => 'AyeCode',
+				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
+				'type'              => 'block',
+				'subtype'           => 'directory archive',
+				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
+				'menu_order'        => '3',
+				'popularity_index'  => '4',
+				'trend_index'       => '4',
+				'is_pro'            => '0',
+				'has_page_settings' => '0',
+			);
+
+			// Single blocks
+			$templates[] = array(
+				'id'                => 'ayecode-block-single-001',
+				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Directory Single",
+				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
+				'tmpl_created'      => '1477388340',
+				'author'            => 'AyeCode',
+				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
+				'type'              => 'block',
+				'subtype'           => 'directory single',
+				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
+				'menu_order'        => '3',
+				'popularity_index'  => '4',
+				'trend_index'       => '4',
+				'is_pro'            => '0',
+				'has_page_settings' => '0',
+			);
+
 			$value['templates'] = $templates + $default_templates;
 		}
-
+//		print_r($value);exit;
 		return $value;
 	}
 
@@ -451,22 +939,32 @@ class GeoDir_Elementor {
 		if ( ! current_user_can( 'manage_options' ) ) {
 			wp_die( - 1 );
 		}
+		$data = array();
+		$base_url = "https://wpgeodirectory.com/dummy/elementor/";
+		$key_parts = explode("-",$key);
+		$route = $key_parts[1]."/";
+		unset($key_parts[0]);
+		unset($key_parts[1]);
+		$route .= implode("-",$key_parts).".json";
 
-		$page    = self::json1();
-		$content = self::template_response( $page, $key );
-		wp_send_json_success( $content );
+		if($route){
+			$url = $base_url.$route;
+			$response = wp_remote_get($url);
+
+			if ( is_array( $response ) && wp_remote_retrieve_response_code( $response ) == '200' ) {
+				$data = json_decode(wp_remote_retrieve_body( $response ),true);
+			}
+		}
+
+
+		if(!empty($data)){
+			$content = self::template_response( $data, $key );
+			wp_send_json_success( $content );
+		}else{
+			wp_send_json_error(__('Could not retrieve template.','geodirectory'));
+		}
 		exit;
 
-	}
-
-	/**
-	 * A temp template.
-	 * @todo we should move this to a API or maybe a CDN
-	 *
-	 * @return mixed
-	 */
-	public static function json1() {
-		return json_decode( '{"version":"0.4","title":"home-minimal","type":"page","content":[{"id":"6d6d7e2a","settings":{"content_width":{"unit":"px","size":1000,"sizes":[]},"background_background":"classic","background_video_link":"https:\/\/wpinstapress.com\/geodirectorydemo\/wp-content\/uploads\/2020\/01\/video.mp4","background_overlay_color":"#1A2142","background_overlay_opacity":{"unit":"px","size":0.65000000000000002220446049250313080847263336181640625,"sizes":[]},"padding":{"unit":"%","top":"14","right":"0","bottom":"9","left":"0","isLinked":false},"background_image":{"id":214,"url":"https:\/\/ppldb.com\/realestate-elemntor\/wp-content\/uploads\/sites\/61\/2020\/01\/architecture-sky-sun-skyline-photography-town-496377-pxhere.com_-1.jpg"},"background_position":"center center","background_repeat":"no-repeat","background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"7771780a","settings":{"_column_size":100,"_inline_size":null,"animation":"fadeInUp","animation_duration":"fast","background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"4e2b3849","settings":{"title":"Find Your Perfect Home","align":"center","title_color":"#000000","typography_typography":"custom","typography_font_family":"Poppins","typography_font_size":{"unit":"px","size":42,"sizes":[]},"typography_font_size_tablet":{"unit":"px","size":30,"sizes":[]},"typography_font_size_mobile":{"unit":"px","size":20,"sizes":[]},"typography_font_weight":"700","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"heading","elType":"widget"},{"id":"3f2a8bce","settings":{"shortcode":"[gd_search]","custom_css":".geodir-loc-bar .geodir-loc-bar-in {\n    border-radius: 3px;\n    border: none;\n    background: rgba(0, 0, 0, 0.8);\n}\n.geodir-loc-bar {\n    border: none;\n}","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"shortcode","elType":"widget"}],"isInner":false,"elType":"column"}],"isInner":false,"elType":"section"},{"id":"43cfdd68","settings":{"background_color":"#FFFFFF","padding":{"unit":"%","top":"0","right":"0","bottom":"0","left":"0","isLinked":false},"content_width":{"unit":"px","size":1000,"sizes":[]},"structure":"20","background_image":{"id":"201","url":"https:\/\/ppldb.com\/realestate-elemntor\/wp-content\/uploads\/sites\/61\/2020\/01\/buildings-near-body-of-water-at-night-1519088-1-1.jpg"},"background_position":"center center","background_attachment":"fixed","background_motion_fx_motion_fx_scrolling":"yes","background_motion_fx_translateY_speed":{"unit":"px","size":8.5,"sizes":[]},"margin":{"unit":"px","top":"-81","right":0,"bottom":"0","left":0,"isLinked":false},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"51bee1de","settings":{"_column_size":50,"_inline_size":null,"content_position":"center","align":"flex-start","background_background":"classic","background_color":"#55970C","border_radius":{"unit":"px","top":"5","right":"5","bottom":"5","left":"5","isLinked":true},"margin":{"unit":"px","top":"10","right":"10","bottom":"10","left":"10","isLinked":true},"padding":{"unit":"px","top":"30","right":"30","bottom":"30","left":"30","isLinked":true},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"64d99f04","settings":{"image":{"id":"199","url":"https:\/\/ppldb.com\/realestate-elemntor\/wp-content\/uploads\/sites\/61\/2020\/01\/001-searching-1.png"},"title_text":" Looking for the new home?","description_text":"\n10 new offers every day. 350 offers on site, trusted by a community of thousands of users.","position":"left","image_size":{"unit":"%","size":19,"sizes":[]},"title_bottom_space":{"unit":"px","size":0,"sizes":[]},"title_color":"#FFFFFF","description_color":"#FFFFFF","description_typography_typography":"custom","description_typography_line_height":{"unit":"em","size":1.600000000000000088817841970012523233890533447265625,"sizes":[]},"_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"image-box","elType":"widget"}],"isInner":false,"elType":"column"},{"id":"1d7c9e8d","settings":{"_column_size":50,"_inline_size":null,"content_position":"center","align":"flex-start","background_background":"classic","background_color":"#55970C","border_radius":{"unit":"px","top":"5","right":"5","bottom":"5","left":"5","isLinked":true},"margin":{"unit":"px","top":"10","right":"10","bottom":"10","left":"10","isLinked":true},"padding":{"unit":"px","top":"30","right":"30","bottom":"30","left":"30","isLinked":true},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"5d03db16","settings":{"image":{"id":"200","url":"https:\/\/ppldb.com\/realestate-elemntor\/wp-content\/uploads\/sites\/61\/2020\/01\/002-house-1.png"},"title_text":" Want to sell your home?","description_text":"\n10 new offers every day. 350 offers on site, trusted by a community of thousands of users.","position":"left","image_size":{"unit":"%","size":19,"sizes":[]},"title_bottom_space":{"unit":"px","size":0,"sizes":[]},"title_color":"#FFFFFF","description_color":"#FFFFFF","description_typography_typography":"custom","description_typography_line_height":{"unit":"em","size":1.600000000000000088817841970012523233890533447265625,"sizes":[]},"_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"image-box","elType":"widget"}],"isInner":false,"elType":"column"}],"isInner":false,"elType":"section"},{"id":"74c85c87","settings":{"content_width":{"unit":"px","size":1280,"sizes":[]},"background_color":"#060A20","padding":{"unit":"%","top":"5","right":"0","bottom":"5","left":"0","isLinked":false},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"700a3db3","settings":{"_column_size":100,"_inline_size":null,"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"24a4ea09","settings":{"layout":"full_width","background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"674035eb","settings":{"_column_size":100,"_inline_size":null,"space_between_widgets":10,"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"592edb20","settings":{"title":"Why Choose Us","align":"center","title_color":"#000000","typography_typography":"custom","typography_font_family":"Poppins","typography_font_size":{"unit":"px","size":31,"sizes":[]},"typography_font_size_tablet":{"unit":"px","size":30,"sizes":[]},"typography_font_size_mobile":{"unit":"px","size":20,"sizes":[]},"typography_font_weight":"700","align_mobile":"center","typography_text_transform":"uppercase","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"heading","elType":"widget"},{"id":"215218db","settings":{"title":"FIND A PROPERTY","align":"center","title_color":"#7A7A7A","typography_typography":"custom","typography_font_family":"Poppins","typography_font_size":{"unit":"px","size":19,"sizes":[]},"typography_font_size_tablet":{"unit":"px","size":30,"sizes":[]},"typography_font_size_mobile":{"unit":"px","size":20,"sizes":[]},"typography_font_weight":"700","align_mobile":"center","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"heading","elType":"widget"},{"id":"5f114d9b","settings":{"width":{"unit":"%","size":20,"sizes":[]},"align":"center","text":"Divider","color":"#7A7A7A","weight":{"unit":"px","size":2,"sizes":[]},"align_mobile":"center","icon":{"value":"fas fa-star","library":"fa-solid"},"_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"divider","elType":"widget"}],"isInner":true,"elType":"column"}],"isInner":true,"elType":"section"},{"id":"e0b221","settings":{"structure":"30","margin":{"unit":"px","top":"30","right":0,"bottom":"0","left":0,"isLinked":false},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"56ca5e77","settings":{"_column_size":33,"_inline_size":null,"space_between_widgets":10,"background_hover_color":"#55970C","border_radius":{"unit":"px","top":"5","right":"5","bottom":"5","left":"5","isLinked":true},"padding":{"unit":"px","top":"25","right":"25","bottom":"25","left":"25","isLinked":true},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"3335d3f7","settings":{"image":{"id":215,"url":"https:\/\/ppldb.com\/realestate-elemntor\/wp-content\/uploads\/sites\/61\/2020\/01\/001-contract-1-1.png"},"title_text":"TRUSTED BY THOUSANDS","description_text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.","image_size":{"unit":"%","size":20,"sizes":[]},"title_bottom_space":{"unit":"px","size":0,"sizes":[]},"title_color":"#000000","title_typography_typography":"custom","title_typography_font_family":"Poppins","title_typography_font_size":{"unit":"px","size":21,"sizes":[]},"description_color":"#000000","description_typography_typography":"custom","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"image-box","elType":"widget"}],"isInner":true,"elType":"column"},{"id":"1dafe160","settings":{"_column_size":33,"_inline_size":null,"space_between_widgets":10,"background_color":"#55970C","background_hover_color":"#55970C","border_radius":{"unit":"px","top":"5","right":"5","bottom":"5","left":"5","isLinked":true},"padding":{"unit":"px","top":"25","right":"25","bottom":"25","left":"25","isLinked":true},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"6008bb8a","settings":{"image":{"id":216,"url":"https:\/\/ppldb.com\/realestate-elemntor\/wp-content\/uploads\/sites\/61\/2020\/01\/003-property-1-1.png"},"title_text":"WIDE RANGE OF PROPERTIES","description_text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.","image_size":{"unit":"%","size":20,"sizes":[]},"title_bottom_space":{"unit":"px","size":0,"sizes":[]},"title_color":"#000000","title_typography_typography":"custom","title_typography_font_family":"Poppins","title_typography_font_size":{"unit":"px","size":21,"sizes":[]},"description_color":"#000000","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"image-box","elType":"widget"}],"isInner":true,"elType":"column"},{"id":"1067e6bc","settings":{"_column_size":33,"_inline_size":null,"space_between_widgets":10,"background_hover_color":"#55970C","border_radius":{"unit":"px","top":"5","right":"5","bottom":"5","left":"5","isLinked":true},"padding":{"unit":"px","top":"25","right":"25","bottom":"25","left":"25","isLinked":true},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"5b107432","settings":{"image":{"id":217,"url":"https:\/\/ppldb.com\/realestate-elemntor\/wp-content\/uploads\/sites\/61\/2020\/01\/002-estate-agent-1-1.png"},"title_text":"FINANCING MADE EASY","description_text":"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.","image_size":{"unit":"%","size":20,"sizes":[]},"title_bottom_space":{"unit":"px","size":0,"sizes":[]},"title_color":"#000000","title_typography_typography":"custom","title_typography_font_family":"Poppins","title_typography_font_size":{"unit":"px","size":21,"sizes":[]},"description_color":"#000000","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"image-box","elType":"widget"}],"isInner":true,"elType":"column"}],"isInner":true,"elType":"section"}],"isInner":false,"elType":"column"}],"isInner":false,"elType":"section"},{"id":"3efd1a2a","settings":{"background_background":"classic","background_color":"rgba(236, 236, 236, 0.92)","padding":{"unit":"%","top":"05","right":"0","bottom":"5","left":"0","isLinked":false},"content_width":{"unit":"px","size":1280,"sizes":[]},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"c2f03e1","settings":{"_column_size":100,"_inline_size":null,"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"e26bbf5","settings":{"layout":"full_width","background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"5a445ca9","settings":{"_column_size":100,"_inline_size":null,"space_between_widgets":10,"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"4f4ab858","settings":{"title":"FEATURE PROPERTIES","align":"center","title_color":"#55970C","typography_typography":"custom","typography_font_family":"Poppins","typography_font_size":{"unit":"px","size":31,"sizes":[]},"typography_font_size_tablet":{"unit":"px","size":30,"sizes":[]},"typography_font_size_mobile":{"unit":"px","size":20,"sizes":[]},"typography_font_weight":"700","align_mobile":"center","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"heading","elType":"widget"},{"id":"268a9453","settings":{"title":"FIND A PROPERTY","align":"center","title_color":"#626262","typography_typography":"custom","typography_font_family":"Poppins","typography_font_size":{"unit":"px","size":19,"sizes":[]},"typography_font_size_tablet":{"unit":"px","size":30,"sizes":[]},"typography_font_size_mobile":{"unit":"px","size":20,"sizes":[]},"typography_font_weight":"700","align_mobile":"center","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"heading","elType":"widget"},{"id":"7f6e2b4a","settings":{"width":{"unit":"%","size":20,"sizes":[]},"align":"center","text":"Divider","color":"#7A7A7A","weight":{"unit":"px","size":2,"sizes":[]},"align_mobile":"center","icon":{"value":"fas fa-star","library":"fa-solid"},"_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"divider","elType":"widget"}],"isInner":true,"elType":"column"}],"isInner":true,"elType":"section"},{"id":"2c82ffba","settings":{"animation":"fadeIn","layout":"full_width","padding":{"unit":"px","top":"15","right":"0","bottom":"0","left":"0","isLinked":false},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"5d0887e3","settings":{"_column_size":100,"_inline_size":null,"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"283f7fce","settings":{"shortcode":"[gd_listings post_type=\"gd_place\" related_to=\"default_category\" sort_by=\"distance_asc\" layout=\"4\" post_limit=\"4\" category=\"0\"]\n","_element_id":"feature-listing","_css_classes":"feature-listing","custom_css":"#feature-listing .geodir-post-content-container {\n    display: none;\n}\n#feature-listing ul.geodir-category-list-view.geodir-gridview>li {\n    background: #fff;\n    padding: 0px !important;\n    border: 1px solid #ccc;\n    border-radius: 5px;\n}\n#feature-listing ul.geodir-category-list-view.geodir-gridview>li:hover {\n   \n    box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.3);\n    \n}\n#feature-listing .gd-badge-meta.gd-badge-alignleft {\ndisplay: none;\n}\n#feature-listing .gd-list-item-right {\n    padding: 20px;\n}\n#feature-listing .geodir-entry-title {\n    font-size: 18px;\n}\n#feature-listing .geodir-post-fav {\n    position: absolute;\n    top: -18px;\n    font-size: 30px !important;\n    right: 30px;\n}\n\n#feature-listing .geodir-output-location {\n    font-size: 14px;\n}\n\n","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"shortcode","elType":"widget"},{"id":"116dabb4","settings":{"text":"View More","align":"center","align_mobile":"center","typography_typography":"custom","typography_font_family":"Poppins","button_text_color":"#55970C","background_color":"rgba(255, 255, 255, 0)","border_border":"solid","border_width":{"unit":"px","top":"2","right":"2","bottom":"2","left":"2","isLinked":true},"border_radius":{"unit":"px","top":"3","right":"3","bottom":"3","left":"3","isLinked":true},"selected_icon":{"value":"","library":""},"_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"button","elType":"widget"}],"isInner":true,"elType":"column"}],"isInner":true,"elType":"section"}],"isInner":false,"elType":"column"}],"isInner":false,"elType":"section"},{"id":"33e9228c","settings":{"content_width":{"unit":"px","size":1280,"sizes":[]},"background_background":"classic","background_color":"#000000","padding":{"unit":"%","top":"5","right":"0","bottom":"5","left":"0","isLinked":false},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"4d5f3ea8","settings":{"_column_size":100,"_inline_size":null,"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"5c28337a","settings":{"title":"Become a Real Estate Agent","align":"center","title_color":"#FFFFFF","typography_typography":"custom","typography_font_family":"Poppins","typography_font_size":{"unit":"px","size":31,"sizes":[]},"typography_font_size_tablet":{"unit":"px","size":30,"sizes":[]},"typography_font_size_mobile":{"unit":"px","size":20,"sizes":[]},"typography_font_weight":"700","align_mobile":"center","typography_text_transform":"uppercase","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"heading","elType":"widget"},{"id":"745ed044","settings":{"text":"Be an Agent","align":"center","align_mobile":"center","size":"xl","typography_typography":"custom","typography_font_family":"Poppins","button_text_color":"#FFFFFF","background_color":"rgba(255, 255, 255, 0)","border_border":"solid","border_width":{"unit":"px","top":"2","right":"2","bottom":"2","left":"2","isLinked":true},"border_color":"#FFFFFF","border_radius":{"unit":"px","top":"3","right":"3","bottom":"3","left":"3","isLinked":true},"selected_icon":{"value":"","library":""},"_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"button","elType":"widget"}],"isInner":false,"elType":"column"}],"isInner":false,"elType":"section"},{"id":"5bf0b5ee","settings":{"content_width":{"unit":"px","size":1280,"sizes":[]},"background_background":"classic","background_color":"#FFFFFF","padding":{"unit":"%","top":"8","right":"0","bottom":"8","left":"0","isLinked":false},"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"f821b77","settings":{"_column_size":100,"_inline_size":null,"animation":"fadeInUp","animation_duration":"fast","background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"20073faf","settings":{"layout":"full_width","background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"5efa92ae","settings":{"_column_size":100,"_inline_size":null,"space_between_widgets":10,"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"47c23eae","settings":{"title":"Feature Events","align":"center","title_color":"#55970C","typography_typography":"custom","typography_font_family":"Poppins","typography_font_size":{"unit":"px","size":31,"sizes":[]},"typography_font_size_tablet":{"unit":"px","size":30,"sizes":[]},"typography_font_size_mobile":{"unit":"px","size":20,"sizes":[]},"typography_font_weight":"700","align_mobile":"center","typography_text_transform":"uppercase","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"heading","elType":"widget"},{"id":"471e4ac2","settings":{"title":"FIND A PROPERTY","align":"center","title_color":"#626262","typography_typography":"custom","typography_font_family":"Poppins","typography_font_size":{"unit":"px","size":19,"sizes":[]},"typography_font_size_tablet":{"unit":"px","size":30,"sizes":[]},"typography_font_size_mobile":{"unit":"px","size":20,"sizes":[]},"typography_font_weight":"700","align_mobile":"center","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"heading","elType":"widget"},{"id":"2cf7f9e3","settings":{"width":{"unit":"%","size":20,"sizes":[]},"align":"center","text":"Divider","color":"#7A7A7A","weight":{"unit":"px","size":2,"sizes":[]},"align_mobile":"center","icon":{"value":"fas fa-star","library":"fa-solid"},"_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"divider","elType":"widget"}],"isInner":true,"elType":"column"}],"isInner":true,"elType":"section"},{"id":"16c1b2a8","settings":{"layout":"full_width","padding":{"unit":"px","top":"50","right":"0","bottom":"0","left":"0","isLinked":false},"animation":"fadeInUp","animation_duration":"fast","background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"7d91ca1f","settings":{"_column_size":100,"_inline_size":null,"space_between_widgets":10,"background_image":{"url":"","id":""},"background_image_tablet":{"url":"","id":""},"background_image_mobile":{"url":"","id":""},"background_video_fallback":{"url":"","id":""},"background_slideshow_gallery":[],"background_hover_image":{"url":"","id":""},"background_hover_image_tablet":{"url":"","id":""},"background_hover_image_mobile":{"url":"","id":""},"background_hover_video_fallback":{"url":"","id":""},"background_hover_slideshow_gallery":[],"background_overlay_image":{"url":"","id":""},"background_overlay_image_tablet":{"url":"","id":""},"background_overlay_image_mobile":{"url":"","id":""},"background_overlay_video_fallback":{"url":"","id":""},"background_overlay_slideshow_gallery":[],"background_overlay_hover_image":{"url":"","id":""},"background_overlay_hover_image_tablet":{"url":"","id":""},"background_overlay_hover_image_mobile":{"url":"","id":""},"background_overlay_hover_video_fallback":{"url":"","id":""},"background_overlay_hover_slideshow_gallery":[]},"elements":[{"id":"154b525f","settings":{"_skin":"cards","classic_posts_per_page":3,"classic_meta_separator":"\/\/\/","classic_read_more_text":"Read More \u00bb","cards_posts_per_page":3,"cards_meta_separator":"\u2022","cards_read_more_text":"Read More \u00bb","full_content_meta_separator":"\/\/\/","posts_post_type":"post","pagination_page_limit":"5","pagination_prev_label":"&laquo; Previous","pagination_next_label":"Next &raquo;","_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"posts","elType":"widget"}],"isInner":true,"elType":"column"}],"isInner":true,"elType":"section"},{"id":"2136af55","settings":{"text":"View More","align":"center","align_mobile":"center","typography_typography":"custom","typography_font_family":"Poppins","button_text_color":"#55970C","background_color":"rgba(255, 255, 255, 0)","border_border":"solid","border_width":{"unit":"px","top":"2","right":"2","bottom":"2","left":"2","isLinked":true},"border_radius":{"unit":"px","top":"3","right":"3","bottom":"3","left":"3","isLinked":true},"_margin":{"unit":"px","top":"33","right":"0","bottom":"0","left":"0","isLinked":false},"selected_icon":{"value":"","library":""},"_background_image":{"url":"","id":""},"_background_image_tablet":{"url":"","id":""},"_background_image_mobile":{"url":"","id":""},"_background_video_fallback":{"url":"","id":""},"_background_slideshow_gallery":[],"_background_hover_image":{"url":"","id":""},"_background_hover_image_tablet":{"url":"","id":""},"_background_hover_image_mobile":{"url":"","id":""},"_background_hover_video_fallback":{"url":"","id":""},"_background_hover_slideshow_gallery":[]},"elements":[],"isInner":false,"widgetType":"button","elType":"widget"}],"isInner":false,"elType":"column"}],"isInner":false,"elType":"section"}]}', true );
 	}
 
 	/**
@@ -493,7 +991,7 @@ class GeoDir_Elementor {
 	}
 
 	/**
-	 * Allow to filter the archive itme template content if being edited by elementor.
+	 * Allow to filter the archive item template content if being edited by elementor.
 	 *
 	 * @param $content
 	 * @param $original_content
@@ -555,7 +1053,9 @@ class GeoDir_Elementor {
 		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
 			$post_type = geodir_get_current_posttype();
 
-			if ( geodir_is_page( 'post_type' ) ) {
+			if( geodir_is_page( 'author' ) ){
+				$type = 'author';
+			}elseif ( geodir_is_page( 'post_type' ) ) {
 				$type = $post_type . "_archive";
 			} elseif ( $tax = get_query_var( 'taxonomy' ) ) {
 				$type = $tax;
@@ -573,7 +1073,7 @@ class GeoDir_Elementor {
 			if ( $page_type == 'archive' && ! empty( $conditions['archive'] ) ) {
 				foreach ( $conditions['archive'] as $archive_conditions ) {
 					foreach ( $archive_conditions as $archive_condition ) {
-						if ( stripos( strrev( $archive_condition ), strrev( $type ) ) === 0 ) {
+						if ( $archive_condition == 'include/geodirectory_archive' || stripos( strrev( $archive_condition ), strrev( $type ) ) === 0 ) {
 							$result = true;
 							break 2;
 						}

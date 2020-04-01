@@ -169,7 +169,7 @@ class GeoDir_SEO {
 	 * @return string $title.
 	 */
 	public static function output_title( $title = '', $id = 0 ) {
-		global $wp_query;
+		global $wp_query,$gdecs_render_loop;
 
 		// In some themes the object id is missing so we fix it
 		$query_object_id = '';
@@ -182,7 +182,7 @@ class GeoDir_SEO {
 
 		if ( self::$title && empty( $id ) && ! self::$doing_menu ) {
 			$title = self::$title;
-		} elseif ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu ) {
+		} elseif ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu && !$gdecs_render_loop) {
 			$title = self::$title;
 			/**
 			 * Filter page title to replace variables.

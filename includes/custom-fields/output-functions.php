@@ -2242,11 +2242,6 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 $field_icon    = '';
             }
 
-            // Database value.
-            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                return stripslashes( $gd_post->street );
-            }
-
             $address_items = array(
                 'post_title',
                 'street',
@@ -2346,9 +2341,16 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
 
             $address_fields = $address_template;
 
+            // Database value.
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                $address_fields = str_replace("<br>","",$address_fields);
+                return stripslashes( wp_strip_all_tags($address_fields) );
+            }
+
             // Stripped value.
             if ( ! empty( $output ) && isset( $output['strip'] ) ) {
-                return stripslashes( $address_fields );
+                $address_fields = str_replace("<br>",",",$address_fields);
+                return stripslashes( wp_strip_all_tags($address_fields) );
             }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" itemscope itemtype="http://schema.org/PostalAddress">';

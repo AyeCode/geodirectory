@@ -5,6 +5,14 @@
 * Add body class on add listing, location & archive pages for empty results - ADDED
 * Fix add listing shortcode validation on status report - FIXED
 * Detail tabs not working on small screens - FIXED
+* Elementor number dynamic tags support added - ADDED
+* Elementor dynamic content, added some more hidden raw fields - ADDED
+* Elementor rating widget support added - ADDED
+* Elementor gallery widget support added - ADDED
+* Elementor dynamic color tag support added - ADDED
+* Elementor pro gallery widget support added - ADDED
+* Elementor pro image carousel widget support added - ADDED
+* Elementor pro theme builder types added for greater control - ADDED
 
 = 2.0.0.83 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
