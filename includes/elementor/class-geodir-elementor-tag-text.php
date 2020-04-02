@@ -56,7 +56,7 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 	 */
 	public function render() {
 
-		global $gd_post;
+		global $gd_post,$post;
 
 		$value = '';
 		$key = $this->get_settings( 'key' );
@@ -67,7 +67,19 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 				if($show == 'value-raw'){
 					$value = $gd_post->{$key};
 				}else{
-					$value = do_shortcode("[gd_post_meta key='$key' show='$show' no_wrap='1']");
+					if($key=='default_category'){
+						$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
+						$term = get_term_by( 'id', $term_id, $post->post_type."category");
+						if($show == 'value'){
+							$term_url = get_term_link( $term_id, $post->post_type."category" );
+							$value = '<a href="'.$term_url.'" >'.esc_attr($term->name).'</a>';
+						}elseif($show=='value-strip'){
+							$value = esc_attr($term->name);
+						}
+
+					}else{
+						$value = do_shortcode("[gd_post_meta key='$key' show='$show' no_wrap='1']");
+					}
 				}
 				
 			}elseif($key=='latitude,longitude' && !empty($gd_post->latitude) && !empty($gd_post->longitude) ){

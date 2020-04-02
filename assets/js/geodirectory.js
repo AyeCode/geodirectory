@@ -920,7 +920,7 @@ function gd_fav_save(post_id) {
                             .attr("title", geodir_params.text_add_fav)
                             .html('<i '+$style+' class="' + $icon + '"></i> <span class="geodir-fav-text">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>');
                     });
-                    
+
                 } else {
 
                     jQuery('.favorite_property_' + post_id + ' a').each(function( index ) {
@@ -1438,6 +1438,18 @@ function geodir_animate_markers(){
         }, function () {
             stop_marker_animation('listing_map_canvas', String(jQuery(this).data("post-id")));
         });
+
+        // maybe elementor animate
+        if(jQuery('body.archive .elementor-widget-archive-posts').length){
+            var ePosts = jQuery("body.archive .elementor-widget-archive-posts .elementor-posts").children(".elementor-post");
+            ePosts.hover(function () {
+                $post_id = jQuery(this).attr('id').replace("post-","");
+                animate_marker('listing_map_canvas', String($post_id));
+            }, function () {
+                $post_id = jQuery(this).attr('id').replace("post-","");
+                stop_marker_animation('listing_map_canvas', String($post_id));
+            });
+        }
     } else {
         window.animate_marker = function () {
         };

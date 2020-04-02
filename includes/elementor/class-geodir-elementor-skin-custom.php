@@ -54,7 +54,7 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 			'skin_template',
 			[
 				'label' => __( 'Select a default template', 'geodirectory' ),
-        'description' => '<div style="text-align:center;"><a target="_blank" style="text-align: center;font-style: normal;" href="' . esc_url( admin_url( '/edit.php?post_type=elementor_library&tabs_group=theme&elementor_library_type=loop' ) ) .
+        'description' => '<div style="text-align:center;"><a target="_blank" style="text-align: center;font-style: normal;" href="' . esc_url( admin_url( '/edit.php?post_type=elementor_library&tabs_group&elementor_library_type=geodirectory-archive-item' ) ) .
                           '" class="elementor-button elementor-button-default elementor-repeater-add">' .
                           __( 'Create/edit a Loop Template', 'geodirectory' ) . '</a></div>',
 				'type' => Controls_Manager::SELECT2,
