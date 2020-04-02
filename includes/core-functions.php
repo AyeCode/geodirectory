@@ -964,7 +964,8 @@ function geodir_search_form_search_input() {
 	?>
 	<div class='gd-search-input-wrapper gd-search-field-search'>
 		<?php 	do_action('geodir_before_search_for_input');?>
-		<input class="search_text gd_search_text" name="s"
+		<label class="visuallyhidden" for="s"><?php esc_html_e($default_search_for_text,'geodirectory') ?>:</label>
+		<input class="search_text gd_search_text" id="s" name="s"
 		       value="<?php if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
 			       $search_term = esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
 			       echo str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
@@ -1043,7 +1044,8 @@ function geodir_search_form_near_input() {
 	echo "<div class='gd-search-input-wrapper gd-search-field-near $near_class' $near_input_extra>";
 	do_action('geodir_before_search_near_input');
 	?>
-	<input name="snear" class="snear" type="text" value="<?php echo $near; ?>"
+	<label class="visuallyhidden" for="snear"><?php esc_html_e($default_near_text,'geodirectory') ?>:</label>
+	<input id="snear" name="snear" class="snear" type="text" value="<?php echo $near; ?>"
 	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>
 	       onClick="this.select();"
 	       placeholder="<?php esc_html_e($default_near_text,'geodirectory') ?>"
