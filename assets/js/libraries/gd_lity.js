@@ -180,12 +180,9 @@
     }
 
     function imageHandler(target, instance) {
-
         // Generate Gallery
         var has_next = instance.opener().parent().next('li').find('a').length;
-        console.log(has_next);
         var has_prev = instance.opener().parent().prev('li').find('a').length;
-        console.log(has_prev);
         var gallery_nav = '';
         if(has_next || has_prev){
             gallery_nav = '<div class="lity-nav">';
@@ -232,6 +229,9 @@
 
         // responsive
         var srcset = (instance.opener() && instance.opener().find('img').attr('srcset')) || '';
+		if (!srcset && instance.opener() && instance.opener().find('img').data('srcset')) {
+			srcset = instance.opener().find('img').attr('data-srcset');
+		}
         if(title || desc){
             caption = '<div class="lity-caption">';
             if(title){
