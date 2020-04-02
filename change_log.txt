@@ -16,6 +16,7 @@
 * Lity lightbox image slideshow shows different image size for some slides - FIXED
 * Option added to disable comments for post type - ADDED
 * Save to favorites now has custom color and icon options - ADDED
+* A couple of simple Elementor templates added for testing - ADDED
 
 = 2.0.0.83 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
