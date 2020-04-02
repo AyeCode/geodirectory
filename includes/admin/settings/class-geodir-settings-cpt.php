@@ -281,6 +281,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 				array(
+					'name' => __( 'Disable comments', 'geodirectory' ),
+					'desc' => __( 'Disable comments for all posts for this post type.', 'geodirectory' ),
+					'id' => 'disable_comments',
+					'type' => 'checkbox',
+					'std' => '0',
+					'advanced' => true,
+					'value' => ( isset( $post_type_values['disable_comments'] ) ? $post_type_values['disable_comments'] : 0 )
+				),
+
+				array(
 					'name' => __( 'Disable ratings', 'geodirectory' ),
 					'desc' => __( 'Disable review stars without disabling comments.', 'geodirectory' ),
 					'id'   => 'disable_reviews',
@@ -751,6 +761,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['listing_order'] = isset($raw['order']) && $raw['order'] ? absint($raw['order']) : 0;
 
 			// disable features
+			$output[$post_type]['disable_comments'] = isset($raw['disable_comments']) && $raw['disable_comments'] ? absint($raw['disable_comments']) : 0;
 			$output[$post_type]['disable_reviews'] = isset($raw['disable_reviews']) && $raw['disable_reviews'] ? absint($raw['disable_reviews']) : 0;
 			$output[$post_type]['disable_favorites'] = isset($raw['disable_favorites']) && $raw['disable_favorites'] ? absint($raw['disable_favorites']) : 0;
 			$output[$post_type]['disable_frontend_add'] = isset($raw['disable_frontend_add']) && $raw['disable_frontend_add'] ? absint($raw['disable_frontend_add']) : 0;
