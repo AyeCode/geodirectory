@@ -26,7 +26,7 @@ class GeoDir_Comments {
 		add_filter( 'get_comments_number', array(__CLASS__, 'review_count_exclude_replies'), 10, 2 );
 
 		// set if listing has comments open
-		add_filter( 'comments_open', array(__CLASS__,'comments_open'), 10, 2 ); // @todo we maybe don't need this with the new preview system?
+		add_filter( 'comments_open', array(__CLASS__,'comments_open'), 20, 2 ); // @todo we maybe don't need this with the new preview system?
 
 		// comment actions
 		add_action( 'comment_post', array(__CLASS__,'save_rating') );
@@ -365,6 +365,16 @@ class GeoDir_Comments {
 				$open = false;
 			}
 		}
+
+		// Check & disable comments for post type.
+		if ( $open && $post_id ) {
+			$post_type = get_post_type( $post_id );
+
+			if ( geodir_is_gd_post_type( $post_type ) && ! GeoDir_Post_types::supports( $post_type, 'comments' ) ) {
+				$open = false;
+			}
+		}
+
 		return $open;
 	}
 

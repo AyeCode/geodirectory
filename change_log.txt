@@ -14,6 +14,7 @@
 * Elementor pro image carousel widget support added - ADDED
 * Elementor pro theme builder types added for greater control - ADDED
 * Lity lightbox image slideshow shows different image size for some slides - FIXED
+* Option added to disable comments for post type - ADDED
 
 = 2.0.0.83 =
 * 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
