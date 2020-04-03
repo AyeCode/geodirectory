@@ -52,7 +52,7 @@ class GeoDir_Elementor_Template_Archive_Item extends \ElementorPro\Modules\Theme
 	protected function get_remote_library_config() {
 		$config = parent::get_remote_library_config();
 
-		$config['category'] = 'directory single';
+		$config['category'] = 'directory archive item';
 
 		return $config;
 	}

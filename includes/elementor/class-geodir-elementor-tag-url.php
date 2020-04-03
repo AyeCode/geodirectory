@@ -55,29 +55,37 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 	 */
 	public function render() {
 
-		global $gd_post;
+		global $gd_post,$post;
 
 		$value = '';
 		$key = $this->get_settings( 'key' );
 		$fallback = $this->get_settings( 'fallback_url' );
 		if ( !empty( $key ) ) {
 			if(isset($gd_post->{$key})){
-				$cf = geodir_get_field_infoby('htmlvar_name', $key, $gd_post->post_type);
-				$field_type = !empty($cf['field_type']) ? esc_attr($cf['field_type']) : '';
-				$field_value = $gd_post->{$key};
-				// maybe add special url types
-				if($field_type == 'phone'){
-					$value .= "tel:";
-				}elseif($field_type == 'email'){
-					$value .= "mailto:";
-				}elseif($field_type == 'file'){
-					$parts = explode("|",$field_value);
-					if(!empty($parts[0])){
-						$field_value = $parts[0];
+
+				if($key == 'post_category'){
+					$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
+					$term_url = get_term_link( $term_id, $post->post_type."category" );
+					$value = $term_url ? esc_url_raw($term_url) : '';
+				}else{
+					$cf = geodir_get_field_infoby('htmlvar_name', $key, $gd_post->post_type);
+					$field_type = !empty($cf['field_type']) ? esc_attr($cf['field_type']) : '';
+					$field_value = $gd_post->{$key};
+					// maybe add special url types
+					if($field_type == 'phone'){
+						$value .= "tel:";
+					}elseif($field_type == 'email'){
+						$value .= "mailto:";
+					}elseif($field_type == 'file'){
+						$parts = explode("|",$field_value);
+						if(!empty($parts[0])){
+							$field_value = $parts[0];
+						}
 					}
+					$value = esc_url_raw($value . $field_value);
 				}
 
-				$value = esc_url_raw($value . $field_value);
+
 			}elseif($key == 'post_images'){
 				$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key, 1 );
 				if(!empty($post_images)){
@@ -85,6 +93,13 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 					$img_src = geodir_get_image_src($image, '');
 					$value = esc_url_raw($img_src);
 				}
+			}elseif($key == 'post_url'){
+				$value = get_permalink( $gd_post->ID );
+			}elseif($key == 'map_directions_url'){
+				$lat = !empty($gd_post->latitude) ? esc_attr($gd_post->latitude) : '';
+				$lon = !empty($gd_post->longitude) ? esc_attr($gd_post->longitude) : '';
+				$url = "https://maps.google.com/?daddr=".esc_attr($lat).",".esc_attr($lon);
+				$value = esc_url_raw($url);
 			}
 
 			// set fallback
@@ -147,11 +162,17 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 
 		$keys = array();
 		$keys[] = __('Select Key','geodirectory');
+		$keys['post_url'] = 'post_url';
+		$keys['post_category'] = 'post_category';
+		$keys['map_directions_url'] = 'map_directions_url';
+
 		if(!empty($fields)){
 			foreach($fields as $field){
 				$keys[$field['htmlvar_name']] = $field['htmlvar_name'];
 			}
 		}
+
+
 
 		return $keys;
 

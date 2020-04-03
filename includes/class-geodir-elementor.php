@@ -33,7 +33,7 @@ class GeoDir_Elementor {
 		add_action( 'wp_ajax_elementor_ajax', array( __CLASS__, 'maybe_hijack_ajax' ), 8 );
 
 		// add templates
-		//add_action( 'option_elementor_remote_info_library', array( __CLASS__, 'add_gd_templates' ), 10, 2 ); //@todo removed until ready
+		add_action( 'option_elementor_remote_info_library', array( __CLASS__, 'add_gd_templates' ), 10, 2 ); //@todo removed until ready
 
 		// Dynamic content
 		add_action( 'elementor/dynamic_tags/register_tags', array( __CLASS__, 'register_dynamic_content_tags' ) );
@@ -843,6 +843,7 @@ class GeoDir_Elementor {
 
 			// Add block categories
 			if(!empty($value['types_data']['block']['categories'])){
+				$value['types_data']['block']['categories'][] = "directory archive item";
 				$value['types_data']['block']['categories'][] = "directory archive";
 				$value['types_data']['block']['categories'][] = "directory single";
 			}
@@ -853,34 +854,34 @@ class GeoDir_Elementor {
 //			}
 
 			// Real-estate
-			$templates[] = array(
-				'id'                => 'ayecode-realestate-homepage-001',
-				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Homepage &#8211; Real-estate",
-				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
-				'tmpl_created'      => '1477388340',
-				'author'            => 'AyeCode',
-				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
-				'type'              => 'page',
-				'subtype'           => 'page',
-				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
-				'menu_order'        => '3',
-				'popularity_index'  => '4',
-				'trend_index'       => '4',
-				'is_pro'            => '0',
-				'has_page_settings' => '0',
-			);
+//			$templates[] = array(
+//				'id'                => 'ayecode-realestate-homepage-001',
+//				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Homepage &#8211; Real-estate",
+//				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
+//				'tmpl_created'      => '1477388340',
+//				'author'            => 'AyeCode',
+//				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
+//				'type'              => 'page',
+//				'subtype'           => 'page',
+//				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
+//				'menu_order'        => '3',
+//				'popularity_index'  => '4',
+//				'trend_index'       => '4',
+//				'is_pro'            => '0',
+//				'has_page_settings' => '0',
+//			);
 
 			// Archive blocks
 			$templates[] = array(
-				'id'                => 'ayecode-block-archive-001',
+				'id'                => 'ayecode-general-block-archive-001',
 				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Directory Archive",
-				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
+				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/block-archive-001.png',
 				'tmpl_created'      => '1477388340',
 				'author'            => 'AyeCode',
-				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
+				'url'               => 'https://wpgeo.directory/elementor-digital-marketing-agency/properties/',
 				'type'              => 'block',
 				'subtype'           => 'directory archive',
-				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
+				'tags'              => '["Directory","GeoDirectory","AyeCode","Realestate"]',
 				'menu_order'        => '3',
 				'popularity_index'  => '4',
 				'trend_index'       => '4',
@@ -888,23 +889,60 @@ class GeoDir_Elementor {
 				'has_page_settings' => '0',
 			);
 
-			// Single blocks
+			// Archive item blocks
 			$templates[] = array(
-				'id'                => 'ayecode-block-single-001',
-				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Directory Single",
-				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
+				'id'                => 'ayecode-realestate-block-archive-item-001',
+				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Realestate Archive Item",
+				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/block-archive-item-001.png',
 				'tmpl_created'      => '1477388340',
 				'author'            => 'AyeCode',
-				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
+				'url'               => 'https://wpgeo.directory/elementor-digital-marketing-agency/properties/',
 				'type'              => 'block',
-				'subtype'           => 'directory single',
+				'subtype'           => 'directory archive item',
+				'tags'              => '["Directory","GeoDirectory","AyeCode","Realestate"]',
+				'menu_order'        => '3',
+				'popularity_index'  => '4',
+				'trend_index'       => '4',
+				'is_pro'            => '0',
+				'has_page_settings' => '1',
+			);
+
+			$templates[] = array(
+				'id'                => 'ayecode-general-block-archive-item-001',
+				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> General Archive Item",
+				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/general/block-archive-item-001.png',
+				'tmpl_created'      => '1477388340',
+				'author'            => 'AyeCode',
+				'url'               => 'https://wpgeo.directory/elementor-digital-marketing-agency/places/',
+				'type'              => 'block',
+				'subtype'           => 'directory archive item',
 				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
 				'menu_order'        => '3',
 				'popularity_index'  => '4',
 				'trend_index'       => '4',
 				'is_pro'            => '0',
-				'has_page_settings' => '0',
+				'has_page_settings' => '1',
 			);
+
+			// Single blocks
+//			$templates[] = array(
+//				'id'                => 'ayecode-block-single-001',
+//				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Directory Single",
+//				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
+//				'tmpl_created'      => '1477388340',
+//				'author'            => 'AyeCode',
+//				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
+//				'type'              => 'block',
+//				'subtype'           => 'directory single',
+//				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
+//				'menu_order'        => '3',
+//				'popularity_index'  => '4',
+//				'trend_index'       => '4',
+//				'is_pro'            => '0',
+//				'has_page_settings' => '0',
+//			);
+
+
 
 			$value['templates'] = $templates + $default_templates;
 		}

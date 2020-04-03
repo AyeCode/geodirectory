@@ -909,17 +909,32 @@ function gd_fav_save(post_id) {
             if (data.success) {
                 var action_text = (data.data && data.data.action_text) ? data.data.action_text : '';
                 if (ajax_action == 'remove') {
-                    jQuery('.favorite_property_' + post_id + ' a')
-                        .removeClass('geodir-removetofav-icon')
-                        .addClass('geodir-addtofav-icon')
-                        .attr("title", geodir_params.text_add_fav)
-                        .html('<i class="' + geodir_params.icon_fav + '"></i> <span class="geodir-fav-text">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>');
+                    jQuery('.favorite_property_' + post_id + ' a').each(function( index ) {
+                        $color_value = jQuery( this ).data("color-off");
+                        $icon_value = jQuery( this ).data("icon");
+                        $style =  $color_value ? "style='color:"+$color_value+"'" : "";
+                        $icon = $icon_value ? $icon_value : geodir_params.icon_fav;
+                        jQuery( this )
+                            .removeClass('geodir-removetofav-icon')
+                            .addClass('geodir-addtofav-icon')
+                            .attr("title", geodir_params.text_add_fav)
+                            .html('<i '+$style+' class="' + $icon + '"></i> <span class="geodir-fav-text">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>');
+                    });
+
                 } else {
-                    jQuery('.favorite_property_' + post_id + ' a')
-                        .removeClass('geodir-addtofav-icon')
-                        .addClass('geodir-removetofav-icon')
-                        .attr("title", geodir_params.text_remove_fav)
-                        .html('<i class="' + geodir_params.icon_unfav + '"></i> <span class="geodir-fav-text">' + ' ' + ( action_text ? action_text : geodir_params.text_unfav ) + '</span>');
+
+                    jQuery('.favorite_property_' + post_id + ' a').each(function( index ) {
+                        $color_value = jQuery( this ).data("color-on");
+                        $icon_value = jQuery( this ).data("icon");
+                        $style =  $color_value ? "style='color:"+$color_value+"'" : "";
+                        $icon = $icon_value ? $icon_value : geodir_params.icon_fav;
+                        jQuery( this )
+                            .removeClass('geodir-addtofav-icon')
+                            .addClass('geodir-removetofav-icon')
+                            .attr("title", geodir_params.text_remove_fav)
+                            .html('<i '+$style+' class="' + $icon + '"></i> <span class="geodir-fav-text">' + ' ' + ( action_text ? action_text : geodir_params.text_unfav ) + '</span>');
+                    });
+
                 }
             } else {
                 alert(geodir_params.loading_listing_error_favorite);
@@ -1423,6 +1438,18 @@ function geodir_animate_markers(){
         }, function () {
             stop_marker_animation('listing_map_canvas', String(jQuery(this).data("post-id")));
         });
+
+        // maybe elementor animate
+        if(jQuery('body.archive .elementor-widget-archive-posts').length){
+            var ePosts = jQuery("body.archive .elementor-widget-archive-posts .elementor-posts").children(".elementor-post");
+            ePosts.hover(function () {
+                $post_id = jQuery(this).attr('id').replace("post-","");
+                animate_marker('listing_map_canvas', String($post_id));
+            }, function () {
+                $post_id = jQuery(this).attr('id').replace("post-","");
+                stop_marker_animation('listing_map_canvas', String($post_id));
+            });
+        }
     } else {
         window.animate_marker = function () {
         };

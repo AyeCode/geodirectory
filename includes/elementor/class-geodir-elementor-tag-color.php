@@ -62,11 +62,11 @@ Class GeoDir_Elementor_Tag_Color extends \Elementor\Core\DynamicTags\Tag {
 		if ( !empty( $key ) ) {
 
 			$term_id = '';
-			if( geodir_is_page('archive') ){
+			if(geodir_is_page('single') || $key == 'post_category_color' ){
+				$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
+			}elseif( geodir_is_page('archive') || $key == 'category_color' ){
 				$current_category = get_queried_object();
 				$term_id = isset($current_category->term_id) ?  absint($current_category->term_id) : '';
-			}elseif(geodir_is_page('single')){
-				$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
 			}
 
 			if($term_id){
@@ -112,6 +112,7 @@ Class GeoDir_Elementor_Tag_Color extends \Elementor\Core\DynamicTags\Tag {
 
 		$keys = array();
 		$keys[] = __('Select Key','geodirectory');
+		$keys['post_category_color'] = 'post_category_color';
 		$keys['category_color'] = 'category_color';
 
 
