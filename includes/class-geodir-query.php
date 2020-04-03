@@ -1308,6 +1308,11 @@ class GeoDir_Query {
 				$post_type_array = geodir_get_posttypes();
 				if ( in_array( $requested_post_type, $post_type_array ) ) {
 					$wp->query_vars['gd_is_geodir_page'] = true;
+
+					// Set embed
+					if ( empty( $wp->query_vars[ 'embed' ] ) && ! empty( $wp->query_vars[ $requested_post_type ] ) && ! empty( $wp->request ) && strpos( $wp->request, '/' . $wp->query_vars[ $requested_post_type ] . '/embed' ) > 0 ) {
+						$wp->query_vars[ 'embed' ] = true;
+					}
 				}
 			}
 
