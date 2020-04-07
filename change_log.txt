@@ -1,3 +1,8 @@
+= 2.0.0.85 =
+* Embed post not working for GD listing - FIXED
+* Add address fields in post meta keys list - ADDED
+* [gd_cpt_meta] widget/shortcode added to show cpt meta title, meta description, description, image etc - ADDED
+
 = 2.0.0.84 =
 * Listing Widget – Exclude Current Post - FIXED
 * GD title is not working on beaver themer archive template - FIXED
