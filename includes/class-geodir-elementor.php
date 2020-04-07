@@ -33,7 +33,7 @@ class GeoDir_Elementor {
 		add_action( 'wp_ajax_elementor_ajax', array( __CLASS__, 'maybe_hijack_ajax' ), 8 );
 
 		// add templates
-		add_action( 'option_elementor_remote_info_library', array( __CLASS__, 'add_gd_templates' ), 10, 2 ); //@todo removed until ready
+		add_action( 'option_elementor_remote_info_library', array( __CLASS__, 'add_gd_templates' ), 10, 2 );
 
 		// Dynamic content
 		add_action( 'elementor/dynamic_tags/register_tags', array( __CLASS__, 'register_dynamic_content_tags' ) );
@@ -49,7 +49,6 @@ class GeoDir_Elementor {
 			'maybe_add_image_caption'
 		), 10, 2 );
 
-
 		/*
 		 * Elementor Pro features below here
 		 */
@@ -62,9 +61,24 @@ class GeoDir_Elementor {
 
 			// register skins
 			add_action('elementor/widgets/widgets_registered',array( __CLASS__,'add_archive_item_skins'));
+
+			add_action( 'elementor_pro/init', array( __CLASS__,'register_pro_form_actions'));
+
 		}
 
 
+	}
+
+
+	/**
+	 * Register the form action for emailing the listing email.
+	 */
+	public static function register_pro_form_actions(){
+		// Instantiate the action class
+		$contact_action = new GeoDir_Elementor_Form_Contact();
+
+		// Register the action with form widget
+		\ElementorPro\Plugin::instance()->modules_manager->get_modules( 'forms' )->add_form_action( $contact_action->get_name(), $contact_action );
 	}
 
 	public static function add_archive_item_skins(){
@@ -119,6 +133,8 @@ class GeoDir_Elementor {
 	 * @return mixed
 	 */
 	public static function maybe_add_image_caption( $html, $widget ) {
+
+//		echo '###'.$widget->get_type();print_r($widget);
 
 		if(geodir_is_page('single')){
 			$type = $widget->get_name();
@@ -814,6 +830,7 @@ class GeoDir_Elementor {
 			'GeoDir_Elementor_Tag_Gallery',
 			'GeoDir_Elementor_Tag_Number',
 			'GeoDir_Elementor_Tag_Color',
+			'GeoDir_Elementor_Tag_CSS_Class',
 		);
 
 		// Finally register the tag
@@ -848,103 +865,20 @@ class GeoDir_Elementor {
 				$value['types_data']['block']['categories'][] = "directory single";
 			}
 
-//			// Add categories
-//			if(!empty($value['categories'])){
-//				$value['categories'] = str_replace('"product archive"','"product archive","directory archive"',$value['categories']);
-//			}
-
-			// Real-estate
-//			$templates[] = array(
-//				'id'                => 'ayecode-realestate-homepage-001',
-//				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Homepage &#8211; Real-estate",
-//				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
-//				'tmpl_created'      => '1477388340',
-//				'author'            => 'AyeCode',
-//				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
-//				'type'              => 'page',
-//				'subtype'           => 'page',
-//				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
-//				'menu_order'        => '3',
-//				'popularity_index'  => '4',
-//				'trend_index'       => '4',
-//				'is_pro'            => '0',
-//				'has_page_settings' => '0',
-//			);
-
-			// Archive blocks
-			$templates[] = array(
-				'id'                => 'ayecode-general-block-archive-001',
-				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Directory Archive",
-				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/block-archive-001.png',
-				'tmpl_created'      => '1477388340',
-				'author'            => 'AyeCode',
-				'url'               => 'https://wpgeo.directory/elementor-digital-marketing-agency/properties/',
-				'type'              => 'block',
-				'subtype'           => 'directory archive',
-				'tags'              => '["Directory","GeoDirectory","AyeCode","Realestate"]',
-				'menu_order'        => '3',
-				'popularity_index'  => '4',
-				'trend_index'       => '4',
-				'is_pro'            => '0',
-				'has_page_settings' => '0',
-			);
-
-			// Archive item blocks
-			$templates[] = array(
-				'id'                => 'ayecode-realestate-block-archive-item-001',
-				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Realestate Archive Item",
-				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/block-archive-item-001.png',
-				'tmpl_created'      => '1477388340',
-				'author'            => 'AyeCode',
-				'url'               => 'https://wpgeo.directory/elementor-digital-marketing-agency/properties/',
-				'type'              => 'block',
-				'subtype'           => 'directory archive item',
-				'tags'              => '["Directory","GeoDirectory","AyeCode","Realestate"]',
-				'menu_order'        => '3',
-				'popularity_index'  => '4',
-				'trend_index'       => '4',
-				'is_pro'            => '0',
-				'has_page_settings' => '1',
-			);
-
-			$templates[] = array(
-				'id'                => 'ayecode-general-block-archive-item-001',
-				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> General Archive Item",
-				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/general/block-archive-item-001.png',
-				'tmpl_created'      => '1477388340',
-				'author'            => 'AyeCode',
-				'url'               => 'https://wpgeo.directory/elementor-digital-marketing-agency/places/',
-				'type'              => 'block',
-				'subtype'           => 'directory archive item',
-				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
-				'menu_order'        => '3',
-				'popularity_index'  => '4',
-				'trend_index'       => '4',
-				'is_pro'            => '0',
-				'has_page_settings' => '1',
-			);
-
-			// Single blocks
-//			$templates[] = array(
-//				'id'                => 'ayecode-block-single-001',
-//				'title'             => "<i class=\"fas fa-globe-americas\" style='color:#ff8333 !important'></i> Directory Single",
-//				'thumbnail'         => 'https://wpgeodirectory.com/dummy/elementor/realestate/preview.png',
-//				'tmpl_created'      => '1477388340',
-//				'author'            => 'AyeCode',
-//				'url'               => 'https://ppldb.com/realestate-elemntor/home-version-3/',
-//				'type'              => 'block',
-//				'subtype'           => 'directory single',
-//				'tags'              => '["Directory","GeoDirectory","AyeCode"]',
-//				'menu_order'        => '3',
-//				'popularity_index'  => '4',
-//				'trend_index'       => '4',
-//				'is_pro'            => '0',
-//				'has_page_settings' => '0',
-//			);
+			// Add popup categories
+			if(!empty($value['types_data']['popup']['categories'])){
+				$value['types_data']['popup']['categories'][] = "directory";
+			}
 
 
+			// Get remote templates
+			$templates = self::get_remote_templates();
 
-			$value['templates'] = $templates + $default_templates;
+			if(!empty($templates)){
+				$value['templates'] = $templates + $default_templates;
+			}
+
+
 		}
 //		print_r($value);exit;
 		return $value;
@@ -956,14 +890,45 @@ class GeoDir_Elementor {
 	public static function maybe_hijack_ajax() {
 		if ( ! empty( $_POST['actions'] ) ) {
 			$actions = json_decode( stripslashes( $_POST['actions'] ), true );
+
 			if ( ! empty( $actions ) ) {
 				foreach ( $actions as $key => $action ) {
 					if ( ! empty( $action['action'] ) && $action['action'] == 'get_template_data' && substr( $key, 0, 8 ) === "ayecode-" ) {
 						self::handle_template_ajax_request( $key );
+					}elseif( ! empty( $action['action'] ) && $action['action'] == 'get_library_data' && !empty($action['data']['sync']) ){
+						// delete template cache if set to refresh
+						delete_transient( 'geodir_elementor_templates' );
 					}
 				}
 			}
 		}
+	}
+
+	/**
+	 * Get latest templates via API call.
+	 *
+	 * @return array|mixed
+	 */
+	public static function get_remote_templates(){
+
+		// Cache
+		$cache = get_transient( 'geodir_elementor_templates' );
+		if ( false !== $cache ) {
+			return $cache;
+		}
+
+		$data = array();
+		$url = "https://wpgeodirectory.com/dummy/elementor/";
+
+		$response = wp_remote_get($url);
+
+		if ( is_array( $response ) && wp_remote_retrieve_response_code( $response ) == '200' ) {
+			$data = json_decode(wp_remote_retrieve_body( $response ),true);
+		}
+
+		set_transient( 'geodir_elementor_templates',$data, 24 * HOUR_IN_SECONDS );
+
+		return $data;
 	}
 
 	/**

@@ -554,7 +554,7 @@ class GeoDir_Template_Loader {
      * @since 2.0.0
      */
     public static function disable_theme_featured_output(){
-        if(geodir_is_singular() && geodir_get_option('details_disable_featured',true) ){
+        if(geodir_is_singular() && geodir_get_option('details_disable_featured',false) ){
             add_filter( "get_post_metadata", array(__CLASS__,'filter_thumbnail_id'), 10, 4 );
         }
     }

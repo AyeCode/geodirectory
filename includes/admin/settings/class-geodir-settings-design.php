@@ -230,7 +230,7 @@ if ( ! class_exists( 'GeoDir_Settings_Design', false ) ) :
 						'desc' => __( 'This will try to disable the theme featured image output, this can be useful if you are seeing double images on the details page.', 'geodirectory' ),
 						'id'   => 'details_disable_featured',
 						'type' => 'checkbox',
-						'default'  => '1',
+						'default'  => '0',
 						'advanced' => false
 					),
 

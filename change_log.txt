@@ -1,3 +1,8 @@
+= 2.0.0.85 =
+* Elementor pro form widget now supports "GD Email Listing" action - ADDED
+* Elementor CSS Class display options to be able to hide content dependent on field values - ADDED
+* Elementor templates now updated via API call - CHANGED
+
 = 2.0.0.84 =
 * Listing Widget – Exclude Current Post - FIXED
 * GD title is not working on beaver themer archive template - FIXED
