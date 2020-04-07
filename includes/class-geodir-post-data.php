@@ -68,8 +68,10 @@ class GeoDir_Post_Data {
 
 		// Init
 		add_action( 'init', array( __CLASS__, 'setup_guest_cookie' ), 1 );
-	}
 
+		// Set embed post thumbnail.
+		add_filter( 'embed_thumbnail_id', array( __CLASS__, 'embed_thumbnail_id' ), 20, 1 );
+	}
 
 	/**
 	 * Make GD post meta available through the standard get_post_meta() function if prefixed with `geodir_`
@@ -2116,4 +2118,24 @@ class GeoDir_Post_Data {
 		}
 	}
 
+	/**
+	 * Set the thumbnail image ID for use in the embed template.
+	 *
+	 * @since 2.0.0.85
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 * @global WP_Post $post The post object.
+	 *
+	 * @param int $thumbnail_id Attachment ID.
+	 * @return int Attachment ID.
+	 */
+	public static function embed_thumbnail_id( $thumbnail_id ) {
+		global $wpdb, $post;
+
+		if ( ! empty( $post ) && geodir_is_gd_post_type( $post->post_type ) ) {
+			$thumbnail_id = (int) $wpdb->get_var( $wpdb->prepare( "SELECT meta_value FROM `{$wpdb->postmeta}` WHERE meta_key = '_thumbnail_id' AND post_id = %d ORDER BY meta_id ASC LIMIT 1", $post->ID ) );
+		}
+
+		return $thumbnail_id;
+	}
 }

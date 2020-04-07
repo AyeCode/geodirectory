@@ -1,4 +1,9 @@
 = 2.0.0.85 =
+* Embed post not working for GD listing - FIXED
+* Add address fields in post meta keys list - ADDED
+* [gd_cpt_meta] widget/shortcode added to show cpt meta title, meta description, description, image etc - ADDED
+
+= 2.0.0.85 =
 * Elementor pro form widget now supports "GD Email Listing" action - ADDED
 * Elementor CSS Class display options to be able to hide content dependent on field values - ADDED
 * Elementor templates now updated via API call - CHANGED
