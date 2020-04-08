@@ -530,6 +530,7 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Category_Description' );
 		register_widget( 'GeoDir_Widget_Dashboard' );
 		register_widget( 'GeoDir_Widget_Recent_Reviews' );
+		register_widget( 'GeoDir_Widget_CPT_Meta' );
 
 		// post widgets
 		register_widget( 'GeoDir_Widget_Post_Badge' );

@@ -175,15 +175,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => true
 				),
-				'show_logo'  => array(
-					'title' => __('Show logo (deprecated):', 'geodirectory'),
-					'desc' => __('(deprecated, use `types` below) Show the listing logo first if uploaded.', 'geodirectory'),
-					'type' => 'checkbox',
-					'desc_tip' => true,
-					'value'  => '1',
-					'default'  => 0,
-					'advanced' => true
-				),
 				'types'  => array(
 					'title' => __('Image types:', 'geodirectory'),
 					'desc' => __('Comma separated list of image types to show. Defaults to: post_images', 'geodirectory'),
@@ -258,13 +249,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				)
 			)
 		);
-
-		// maybe show logo options
-//		global $wpdb;
-//		if($wpdb->get_var("SELECT id FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE htmlvar_name='logo' LIMIT 1")){
-//
-//		}
-
 
 		parent::__construct( $options );
 	}
@@ -525,21 +509,20 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 * 
 	 * @return array
 	 */
-	public static function get_image_sizes(){
-		$image_sizes = array(''=>'default');
+	public static function get_image_sizes() {
+		$image_sizes = array( '' => 'default' );
+
 		$available = get_intermediate_image_sizes();
 
-		if(!empty($available)){
-			foreach($available as $size){
-				$image_sizes[$size] = $size;
+		if ( ! empty( $available ) ) {
+			foreach( $available as $size ) {
+				$image_sizes[ $size ] = $size;
 			}
 		}
 
 		$image_sizes['full'] = 'full';
 
-
 		return $image_sizes;
 	}
 
 }
-
