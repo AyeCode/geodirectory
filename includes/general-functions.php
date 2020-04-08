@@ -276,6 +276,11 @@ function geodir_is_page( $gdpage = '' ) {
 			}
 
 			break;
+		case 'edit-listing':
+			if ( ! empty( $_REQUEST['pid'] ) && geodir_is_gd_post_type( get_post_type( absint( $_REQUEST['pid'] ) ) ) && geodir_is_page( 'add-listing' ) ) {
+				return true;
+			}
+			break;
 		case 'preview':
 			if ( ( is_page() && $page_id === geodir_preview_page_id() ) && isset( $_REQUEST['listing_type'] )
 			     && in_array( $_REQUEST['listing_type'], geodir_get_posttypes() )
@@ -804,6 +809,22 @@ function geodir_custom_posts_body_class( $classes ) {
 		$classes[] = 'geodir-page-single';
 	} elseif ( geodir_is_page( 'add-listing' ) ) { // Add listing page
 		$classes[] = 'geodir-page-add';
+
+		$post_type = ! empty( $_REQUEST['listing_type'] ) ? sanitize_text_field( $_REQUEST['listing_type'] ) : '';
+
+		// Edit listing page
+		if ( geodir_is_page( 'edit-listing' ) ) {
+			$classes[] = 'geodir-page-edit';
+
+			if ( ! empty( $_REQUEST['pid'] ) && ( $_post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) ) {
+				$post_type = $_post_type;
+			}
+		}
+
+		// Add/edit post type
+		if ( $post_type ) {
+			$classes[] = 'geodir-form-' . $post_type;
+		}
 	} elseif ( geodir_is_page( 'location' ) ) { // Location page
 		$classes[] = 'geodir-page-location';
 	}
