@@ -4,6 +4,9 @@
 * [gd_cpt_meta] widget/shortcode added to show cpt meta title, meta description, description, image etc - ADDED
 * Check edit listing page & add body class for add/edit listing page - ADDED
 * Show image caption and title based on setting - FIXED
+* Elementor pro form widget now supports "GD Email Listing" action - ADDED
+* Elementor CSS Class display options to be able to hide content dependent on field values - ADDED
+* Elementor templates now updated via API call - CHANGED
 
 = 2.0.0.85 =
 * Elementor pro form widget now supports "GD Email Listing" action - ADDED
