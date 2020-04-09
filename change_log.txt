@@ -1,3 +1,6 @@
+= 2.0.0.86 =
+* Allow show / hide categories in GD > Categories widget - ADDED
+
 = 2.0.0.85 =
 * Embed post not working for GD listing - FIXED
 * Add address fields in post meta keys list - ADDED
