@@ -437,26 +437,25 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 							echo $link_tag_open ? sprintf($link_tag_open,esc_url($link)) : '';
 							echo $img_tag;
 							echo $link_tag_close;
-
-
+							$flex_caption = '';
 							if($options['type']=='slider' && $options['show_title'] && !empty($image->title)){
-								
+
 								$flex_caption = esc_attr( $image->title );
+							}
+							//Maybe add a caption to the title
+							
+							/**
+							 * Filters whether or not the caption should be displayed.
+							 *
+							 * @since   2.0.0.63
+							 * @package GeoDirectory
+							 */
+							$show_caption = apply_filters( 'geodir_post_images_show_caption', $options['show_caption'] );
 
-								//Maybe add a caption to the title
-								
-								/**
-        						 * Filters whether or not the caption should be displayed.
-        						 *
-        						 * @since   2.0.0.63
-        						 * @package GeoDirectory
-        						 */
-        						$show_caption = apply_filters( 'geodir_post_images_show_caption', $options['show_caption'] );
-
-								if( $show_caption && !empty( $image->caption ) ) {
-									$flex_caption .= "<small>".esc_attr( $image->caption )."</small>";
-								}
-
+							if( $show_caption && !empty( $image->caption ) ) {
+								$flex_caption .= "<small>".esc_attr( $image->caption )."</small>";
+							}
+							if( !empty( $flex_caption ) ){
 								echo '<p class="flex-caption gd-flex-caption">'.$flex_caption.'</p>';
 							}
 							echo "</li>";

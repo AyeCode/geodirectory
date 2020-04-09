@@ -199,9 +199,9 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 $list_class =  $args['show_as_list'] ? 'geodir-tabs-as-list' : '';
                 echo '<ul class="geodir-tabs-content geodir-entry-content ' . $list_class . '">';
                 foreach( $tabs_array as $tab ) {
-                    $add_tab = $args['show_as_list'] ? '' : 'Tab';
+                    $add_tab = $args['show_as_list'] ? 'List' : 'Tab';
                     echo '<li id="' . esc_attr( $tab['tab_key'] ) . $add_tab . '" >';
-                    echo "<span id='" . esc_attr( $tab['tab_key'] ) . "'></span>";
+                    echo "<span id='" . esc_attr( $tab['tab_key'] ) . "' class='geodir-tabs-anchor'></span>";
                     if ( $args['show_as_list'] ) {
                         $tab_icon = '';
 
