@@ -1377,3 +1377,253 @@ function geodir_validate_custom_field_value_textarea( $value, $gd_post, $custom_
 }
 add_filter( 'geodir_custom_field_value_html', 'geodir_validate_custom_field_value_textarea', 10, 6 );
 add_filter( 'geodir_custom_field_value_textarea', 'geodir_validate_custom_field_value_textarea', 10, 6 );
+
+/**
+ * Get the post meta advance custom fields.
+ *
+ * @since 2.0.0.86
+ *
+ * $param string $post_type The post type. 
+ * @return array Standard fields.
+ */
+function geodir_post_meta_advance_fields( $post_type = 'gd_place' ) {
+	$fields = array();
+
+	// Standard fields
+	$standard_fields = geodir_post_meta_standard_fields( $post_type );
+	if ( ! empty( $standard_fields ) ) {
+		$fields = $standard_fields;
+	}
+
+	// Address fields
+	$address_fields = geodir_post_meta_address_fields( $post_type );
+	if ( ! empty( $address_fields ) ) {
+		$fields = ! empty( $fields ) ? array_merge( $fields, $address_fields ) : $address_fields;
+	}
+
+	/**
+	 * Filter the post meta advance fields.
+	 *
+	 * @since 2.0.0.86
+	 */
+	return apply_filters( 'geodir_post_meta_advance_fields', $fields, $post_type );
+}
+
+/**
+ * Get the post meta standard fields.
+ *
+ * @since 2.0.0.86
+ *
+ * $param string $post_type The post type. 
+ * @return array Standard fields.
+ */
+function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
+	$fields = array();
+
+	$fields['overall_rating'] = array(
+		'type' => 'custom',
+		'name' => 'overall_rating',
+		'htmlvar_name' => 'overall_rating',
+		'frontend_title' => __( 'Overall Rating', 'geodirectory' ),
+		'field_icon' => 'fas fa-star',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['rating_count'] = array(
+		'type' => 'custom',
+		'name' => 'rating_count',
+		'htmlvar_name' => 'rating_count',
+		'frontend_title' => __( 'Rating Count', 'geodirectory' ),
+		'field_icon' => 'fas fa-comments',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['post_date'] = array(
+		'name' => 'post_date',
+		'htmlvar_name' => 'post_date',
+		'frontend_title' => __('Published','geodirectory'),
+		'type' => 'datepicker',
+		'field_icon' => 'fas fa-calendar-alt',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => array( 'date_format' => geodir_date_format() ),
+	);
+
+	$fields['post_date_gmt'] = array(
+		'name' => 'post_date_gmt',
+		'htmlvar_name' => 'post_date_gmt',
+		'frontend_title' => __('Published','geodirectory'),
+		'type' => 'datepicker',
+		'field_icon' => 'fas fa-calendar-alt',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => array( 'date_format' => geodir_date_format() ),
+	);
+
+	$fields['post_modified'] = array(
+		'name' => 'post_modified',
+		'htmlvar_name' => 'post_modified',
+		'frontend_title' => __('Modified','geodirectory'),
+		'type' => 'datepicker',
+		'field_icon' => 'fas fa-calendar-alt',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => array( 'date_format' => geodir_date_format() ),
+	);
+
+	$fields['post_modified_gmt'] = array(
+		'name' => 'post_modified_gmt',
+		'htmlvar_name' => 'post_modified_gmt',
+		'frontend_title' => __('Modified','geodirectory'),
+		'type' => 'datepicker',
+		'field_icon' => 'fas fa-calendar-alt',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => array( 'date_format' => geodir_date_format() ),
+	);
+
+	$fields['post_author'] = array(
+		'name' => 'post_author',
+		'htmlvar_name' => 'post_author',
+		'frontend_title' => __('Author','geodirectory'),
+		'type' => 'author',
+		'field_icon' => 'fas fa-user',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => '',
+	);
+
+	/**
+	 * Filter the post meta standard fields info.
+	 *
+	 * @since 2.0.0.49
+	 */
+	return apply_filters( 'geodir_post_meta_standard_fields', $fields, $post_type );
+}
+
+/**
+ * Get the post meta address fields.
+ *
+ * @since 2.0.0.86
+ *
+ * $param string $post_type The post type. 
+ * @return array Address fields.
+ */
+function geodir_post_meta_address_fields( $post_type = 'gd_place' ) {
+	if ( empty( $post_type ) ) {
+		$post_type = 'gd_place';
+	} elseif( ! GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+		return array();
+	}
+
+	$field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type );
+	$extra_fields = ! empty( $field['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $field['extra_fields'] ) ) : NULL;
+	$field_icon = ! empty( $field['field_icon'] ) ? $field['field_icon'] : 'fas fa-map-marker-alt';
+
+	$fields = array();
+
+	$fields['street'] = array(
+		'type' => 'custom',
+		'name' => 'street',
+		'htmlvar_name' => 'street',
+		'frontend_title' => ( ! empty( $field['frontend_title'] ) ? __( $field['frontend_title'], 'geodirectory' ) : __( 'Address', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['street2'] = array(
+		'type' => 'custom',
+		'name' => 'street2',
+		'htmlvar_name' => 'street2',
+		'frontend_title' => __( 'Address line 2', 'geodirectory' ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['city'] = array(
+		'type' => 'custom',
+		'name' => 'city',
+		'htmlvar_name' => 'city',
+		'frontend_title' => ( ! empty( $extra_fields['city_lable'] ) ? __( $extra_fields['city_lable'], 'geodirectory' ) : __( 'City', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['region'] = array(
+		'type' => 'custom',
+		'name' => 'region',
+		'htmlvar_name' => 'region',
+		'frontend_title' => ( ! empty( $extra_fields['region_lable'] ) ? __( $extra_fields['region_lable'], 'geodirectory' ) : __( 'Region', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['country'] = array(
+		'type' => 'custom',
+		'name' => 'country',
+		'htmlvar_name' => 'country',
+		'frontend_title' => ( ! empty( $extra_fields['country_lable'] ) ? __( $extra_fields['country_lable'], 'geodirectory' ) : __( 'Country', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['zip'] = array(
+		'type' => 'custom',
+		'name' => 'zip',
+		'htmlvar_name' => 'zip',
+		'frontend_title' => ( ! empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['latitude'] = array(
+		'type' => 'custom',
+		'name' => 'latitude',
+		'htmlvar_name' => 'latitude',
+		'frontend_title' => __( 'Latitude', 'geodirectory' ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['longitude'] = array(
+		'type' => 'custom',
+		'name' => 'longitude',
+		'htmlvar_name' => 'longitude',
+		'frontend_title' => __( 'Longitude', 'geodirectory' ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['map_directions'] = array(
+		'type' => 'custom',
+		'name' => 'map_directions',
+		'htmlvar_name' => 'map_directions',
+		'frontend_title' => __( 'Map Directions', 'geodirectory' ),
+		'field_icon' => 'fas fa-directions',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	return apply_filters( 'geodir_post_meta_address_fields', $fields, $post_type );
+}
