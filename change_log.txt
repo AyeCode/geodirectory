@@ -1,6 +1,7 @@
 = 2.0.0.86 =
 * Allow show / hide categories in GD > Categories widget - ADDED
 * Incorrect validation message attribute on url type custom fields - FIXED
+* GD > Listings widget can now use Elementor Pro Archive item template - ADDED
 
 = 2.0.0.85 =
 * Embed post not working for GD listing - FIXED
