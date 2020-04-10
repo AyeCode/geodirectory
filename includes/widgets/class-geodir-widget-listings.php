@@ -335,8 +335,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			    'options' =>  self::get_elementor_pro_skins(),
 			    'default'  => '',
 			    'desc_tip' => false,
-			    'advanced' => true,
-//			    'element_require' => '',
+			    'advanced' => false,
 			    'group'     => __("Design","geodirectory")
 		    );
 

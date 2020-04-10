@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.86\n"
+"Project-Id-Version: GeoDirectory 2.0.0.87\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-10 14:27+0100\n"
-"PO-Revision-Date: 2020-04-10 14:27+0100\n"
+"POT-Creation-Date: 2020-04-10 14:34+0100\n"
+"PO-Revision-Date: 2020-04-10 14:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -4535,9 +4535,9 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-listings.php:299
 #: includes/widgets/class-geodir-widget-listings.php:314
 #: includes/widgets/class-geodir-widget-listings.php:323
-#: includes/widgets/class-geodir-widget-listings.php:340
-#: includes/widgets/class-geodir-widget-listings.php:350
-#: includes/widgets/class-geodir-widget-listings.php:359
+#: includes/widgets/class-geodir-widget-listings.php:339
+#: includes/widgets/class-geodir-widget-listings.php:349
+#: includes/widgets/class-geodir-widget-listings.php:358
 msgid "Design"
 msgstr ""
 
@@ -12034,7 +12034,7 @@ msgid "Best of %s"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:483
-#: includes/widgets/class-geodir-widget-listings.php:980
+#: includes/widgets/class-geodir-widget-listings.php:979
 msgid "View all"
 msgstr ""
 
@@ -12634,31 +12634,31 @@ msgstr ""
 msgid "Elementor Skin"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:344
+#: includes/widgets/class-geodir-widget-listings.php:343
 msgid "Skin column gap"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:345
+#: includes/widgets/class-geodir-widget-listings.php:344
 msgid "The px value for the column gap."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:353
+#: includes/widgets/class-geodir-widget-listings.php:352
 msgid "Skin row gap"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:354
+#: includes/widgets/class-geodir-widget-listings.php:353
 msgid "The px value for the row gap."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:662
+#: includes/widgets/class-geodir-widget-listings.php:661
 msgid "Near:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:662
+#: includes/widgets/class-geodir-widget-listings.php:661
 msgid "Me"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:818
+#: includes/widgets/class-geodir-widget-listings.php:817
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
