@@ -316,7 +316,7 @@ function geodir_cfi_url($html,$cf){
 
         // validation message
         if(isset($cf['validation_msg']) && $cf['validation_msg']){
-            $validation_msg = $cf['validation_msg'];
+            $validation_msg = __( $cf['validation_msg'], 'geodirectory' );
         }else{$validation_msg = __('Please enter a valid URL including http://', 'geodirectory');}
         ?>
 
@@ -332,7 +332,7 @@ function geodir_cfi_url($html,$cf){
                    value="<?php echo esc_attr(stripslashes($value));?>" type="url" class="geodir_textfield"
                    oninvalid="setCustomValidity('<?php echo esc_attr($validation_msg); ?>')"
                    onchange="try{setCustomValidity('')}catch(e){}"
-                <?php echo $validation;echo $validation_msg;?>
+                <?php echo $validation;?>
             />
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
