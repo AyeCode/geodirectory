@@ -1,3 +1,6 @@
+= 2.0.0.88 =
+* Show category images in category field in add listing form - ADDED
+
 = 2.0.0.87 =
 * Allow show / hide categories in GD > Categories widget - ADDED
 * Incorrect validation message attribute on url type custom fields - FIXED
