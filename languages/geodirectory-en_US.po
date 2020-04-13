@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.85\n"
+"Project-Id-Version: GeoDirectory 2.0.0.87\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-08 17:51+0100\n"
-"PO-Revision-Date: 2020-04-08 17:51+0100\n"
+"POT-Creation-Date: 2020-04-10 14:34+0100\n"
+"PO-Revision-Date: 2020-04-10 14:35+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -186,7 +186,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-settings.php:832
 #: includes/admin/settings/class-geodir-settings-general.php:810
 #: includes/api/class-geodir-rest-posts-controller.php:2198
-#: includes/widgets/class-geodir-widget-post-meta.php:481
+#: includes/post-functions.php:1577
 msgid "Country"
 msgstr ""
 
@@ -199,7 +199,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1056
 #: includes/admin/settings/class-geodir-settings-general.php:800
 #: includes/api/class-geodir-rest-posts-controller.php:2212
-#: includes/widgets/class-geodir-widget-post-meta.php:470
+#: includes/post-functions.php:1566
 msgid "Region"
 msgstr ""
 
@@ -212,7 +212,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1055
 #: includes/admin/settings/class-geodir-settings-general.php:790
 #: includes/api/class-geodir-rest-posts-controller.php:2226
-#: includes/widgets/class-geodir-widget-post-meta.php:459
+#: includes/post-functions.php:1555
 msgid "City"
 msgstr ""
 
@@ -233,7 +233,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1058
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
-#: includes/widgets/class-geodir-widget-post-meta.php:492
+#: includes/post-functions.php:1588
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -923,7 +923,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1041
 #: includes/admin/class-geodir-admin-dummy-data.php:1043
 #: includes/admin/class-geodir-admin-dummy-data.php:1053
-#: includes/widgets/class-geodir-widget-post-meta.php:437
+#: includes/post-functions.php:1533
 msgid "Address"
 msgstr ""
 
@@ -2133,9 +2133,9 @@ msgstr ""
 #: includes/admin/class-geodir-admin-taxonomies.php:851
 #: includes/admin/views/html-admin-settings-import-export-reviews.php:23
 #: includes/helper-functions.php:1602 includes/helper-functions.php:1702
-#: includes/widgets/class-geodir-widget-categories.php:163
 #: includes/widgets/class-geodir-widget-categories.php:173
 #: includes/widgets/class-geodir-widget-categories.php:183
+#: includes/widgets/class-geodir-widget-categories.php:193
 #: includes/widgets/class-geodir-widget-map-pinpoint.php:47
 #: includes/widgets/class-geodir-widget-post-fav.php:48
 #: includes/widgets/class-geodir-widget-post-rating.php:50
@@ -4052,7 +4052,7 @@ msgid "Map bubble"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:46
-#: includes/widgets/class-geodir-widget-categories.php:157
+#: includes/widgets/class-geodir-widget-categories.php:167
 #: includes/widgets/class-geodir-widget-listings.php:238
 msgid "Sorting"
 msgstr ""
@@ -4167,7 +4167,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt.php:46
 #: includes/admin/settings/class-geodir-settings-general.php:30
 #: includes/admin/settings/class-geodir-settings-general.php:49
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1566
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1594
 msgid "General"
 msgstr ""
 
@@ -4523,10 +4523,10 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-design.php:28
 #: includes/widgets/class-geodir-widget-categories.php:67
 #: includes/widgets/class-geodir-widget-categories.php:84
-#: includes/widgets/class-geodir-widget-categories.php:114
 #: includes/widgets/class-geodir-widget-categories.php:124
 #: includes/widgets/class-geodir-widget-categories.php:134
 #: includes/widgets/class-geodir-widget-categories.php:144
+#: includes/widgets/class-geodir-widget-categories.php:154
 #: includes/widgets/class-geodir-widget-listings.php:251
 #: includes/widgets/class-geodir-widget-listings.php:261
 #: includes/widgets/class-geodir-widget-listings.php:270
@@ -4535,6 +4535,9 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-listings.php:299
 #: includes/widgets/class-geodir-widget-listings.php:314
 #: includes/widgets/class-geodir-widget-listings.php:323
+#: includes/widgets/class-geodir-widget-listings.php:339
+#: includes/widgets/class-geodir-widget-listings.php:349
+#: includes/widgets/class-geodir-widget-listings.php:358
 msgid "Design"
 msgstr ""
 
@@ -4813,11 +4816,11 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-design.php:471
 #: includes/widgets/class-geodir-widget-add-listing.php:194
-#: includes/widgets/class-geodir-widget-categories.php:271
+#: includes/widgets/class-geodir-widget-categories.php:282
 #: includes/widgets/class-geodir-widget-map.php:464
 #: includes/widgets/class-geodir-widget-map.php:475
 #: includes/widgets/class-geodir-widget-map.php:691
-#: includes/widgets/class-geodir-widget-post-meta.php:404
+#: includes/widgets/class-geodir-widget-post-meta.php:339
 #: includes/widgets/class-geodir-widget-search.php:143
 msgid "Auto"
 msgstr ""
@@ -7969,7 +7972,7 @@ msgstr ""
 #: includes/class-geodir-privacy-exporters.php:303
 #: includes/custom-fields/input-functions.php:1756
 #: includes/custom-fields/output-functions.php:86
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:182
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:200
 msgid "Yes"
 msgstr ""
 
@@ -7978,7 +7981,7 @@ msgstr ""
 #: includes/class-geodir-privacy-exporters.php:301
 #: includes/custom-fields/input-functions.php:1757
 #: includes/custom-fields/output-functions.php:88
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:182
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:200
 msgid "No"
 msgstr ""
 
@@ -9279,8 +9282,7 @@ msgstr ""
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1070
-#: includes/widgets/class-geodir-widget-post-meta.php:372
+#: includes/class-geodir-email.php:1070 includes/post-functions.php:1492
 msgid "Author"
 msgstr ""
 
@@ -9750,8 +9752,8 @@ msgstr ""
 
 #: includes/class-geodir-post-types.php:233
 #: includes/class-geodir-post-types.php:290
-#: includes/widgets/class-geodir-widget-categories.php:506
-#: includes/widgets/class-geodir-widget-categories.php:559
+#: includes/widgets/class-geodir-widget-categories.php:546
+#: includes/widgets/class-geodir-widget-categories.php:609
 #, php-format
 msgid "%s Categories"
 msgstr ""
@@ -10765,6 +10767,10 @@ msgstr ""
 msgid "View on Google map"
 msgstr ""
 
+#: includes/custom-fields/output-filter-functions.php:347
+msgid "View on Map"
+msgstr ""
+
 #: includes/custom-fields/output-functions.php:737
 msgid "Some demo text."
 msgstr ""
@@ -10941,7 +10947,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-url.php:164
 #: includes/widgets/class-geodir-widget-post-address.php:270
 #: includes/widgets/class-geodir-widget-post-content.php:264
-#: includes/widgets/class-geodir-widget-post-meta.php:313
+#: includes/widgets/class-geodir-widget-post-meta.php:310
 msgid "Select Key"
 msgstr ""
 
@@ -11554,7 +11560,7 @@ msgid "pm"
 msgstr ""
 
 #: includes/helper-functions.php:1645
-#: includes/widgets/class-geodir-widget-categories.php:152
+#: includes/widgets/class-geodir-widget-categories.php:162
 msgid "A-Z"
 msgstr ""
 
@@ -11647,6 +11653,39 @@ msgstr ""
 
 #: includes/post-functions.php:931
 msgid "UPDATED"
+msgstr ""
+
+#: includes/post-functions.php:1427
+msgid "Overall Rating"
+msgstr ""
+
+#: includes/post-functions.php:1438
+msgid "Rating Count"
+msgstr ""
+
+#: includes/post-functions.php:1448 includes/post-functions.php:1459
+#: includes/widgets/class-geodir-widget-author-actions.php:164
+msgid "Published"
+msgstr ""
+
+#: includes/post-functions.php:1470 includes/post-functions.php:1481
+msgid "Modified"
+msgstr ""
+
+#: includes/post-functions.php:1544
+msgid "Address line 2"
+msgstr ""
+
+#: includes/post-functions.php:1599
+msgid "Latitude"
+msgstr ""
+
+#: includes/post-functions.php:1610
+msgid "Longitude"
+msgstr ""
+
+#: includes/post-functions.php:1621
+msgid "Map Directions"
 msgstr ""
 
 #: includes/post-types-functions.php:439
@@ -11896,11 +11935,6 @@ msgstr ""
 msgid "Delete"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-author-actions.php:164
-#: includes/widgets/class-geodir-widget-post-meta.php:361
-msgid "Published"
-msgstr ""
-
 #: includes/widgets/class-geodir-widget-author-actions.php:166
 msgid "Awaiting review"
 msgstr ""
@@ -12000,7 +12034,7 @@ msgid "Best of %s"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:483
-#: includes/widgets/class-geodir-widget-listings.php:882
+#: includes/widgets/class-geodir-widget-listings.php:979
 msgid "View all"
 msgstr ""
 
@@ -12015,11 +12049,12 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-categories.php:57
 #: includes/widgets/class-geodir-widget-categories.php:94
 #: includes/widgets/class-geodir-widget-categories.php:104
-#: includes/widgets/class-geodir-widget-categories.php:167
+#: includes/widgets/class-geodir-widget-categories.php:114
 #: includes/widgets/class-geodir-widget-categories.php:177
 #: includes/widgets/class-geodir-widget-categories.php:187
-#: includes/widgets/class-geodir-widget-categories.php:196
-#: includes/widgets/class-geodir-widget-categories.php:205
+#: includes/widgets/class-geodir-widget-categories.php:197
+#: includes/widgets/class-geodir-widget-categories.php:206
+#: includes/widgets/class-geodir-widget-categories.php:215
 #: includes/widgets/class-geodir-widget-listings.php:91
 #: includes/widgets/class-geodir-widget-listings.php:102
 #: includes/widgets/class-geodir-widget-listings.php:117
@@ -12063,94 +12098,104 @@ msgstr ""
 msgid "Add CPT list as a dropdown."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:97
-msgid "Hide empty:"
+#: includes/widgets/class-geodir-widget-categories.php:98
+msgid "Include/exclude categories:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:98
-msgid "This will hide categories that do not have any listings."
+#: includes/widgets/class-geodir-widget-categories.php:99
+msgid ""
+"Enter a comma separated list of category ids (21,8,43) to show the these "
+"categories, or a negative list (-21,-8,-43) to exclude these categories."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:107
-msgid "Hide count:"
+msgid "Hide empty:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:108
-msgid "This will show the number of listings in the categories."
+msgid "This will hide categories that do not have any listings."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:117
-msgid "Hide icon:"
+msgid "Hide count:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:118
-msgid "This will hide the category icons from the list."
+msgid "This will show the number of listings in the categories."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:127
-msgid "Use category image:"
+msgid "Hide icon:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:128
-msgid "This will use the category default image instead of the icons."
+msgid "This will hide the category icons from the list."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:137
-msgid "Show single column:"
+msgid "Use category image:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:138
-msgid "This will show list in single column."
+msgid "This will use the category default image instead of the icons."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:147
+msgid "Show single column:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-categories.php:148
+msgid "This will show list in single column."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-categories.php:157
 #: includes/widgets/class-geodir-widget-listings.php:231
 msgid "Sort by:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:148
+#: includes/widgets/class-geodir-widget-categories.php:158
 msgid "Sort categories by."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:151
+#: includes/widgets/class-geodir-widget-categories.php:161
 msgid "Count"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:160
+#: includes/widgets/class-geodir-widget-categories.php:170
 msgid "Max sub-cat depth:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:161
+#: includes/widgets/class-geodir-widget-categories.php:171
 msgid "The maximum number of sub category levels to show."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:170
+#: includes/widgets/class-geodir-widget-categories.php:180
 msgid "Max cats to show:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:171
+#: includes/widgets/class-geodir-widget-categories.php:181
 msgid "The maximum number of categories to show."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:180
+#: includes/widgets/class-geodir-widget-categories.php:190
 msgid "Max sub-cat to show:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:181
+#: includes/widgets/class-geodir-widget-categories.php:191
 msgid "The maximum number of sub categories to show."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:190
+#: includes/widgets/class-geodir-widget-categories.php:200
 msgid "Do not filter for current viewing post type"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:199
+#: includes/widgets/class-geodir-widget-categories.php:209
 msgid ""
 "Tick to show all the categories. Leave unticked to show only child "
 "categories of current viewing category."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:296
+#: includes/widgets/class-geodir-widget-categories.php:307
 msgid "No categories found"
 msgstr ""
 
@@ -12585,15 +12630,35 @@ msgstr ""
 msgid "Hide widget if no posts?"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:586
+#: includes/widgets/class-geodir-widget-listings.php:332
+msgid "Elementor Skin"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:343
+msgid "Skin column gap"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:344
+msgid "The px value for the column gap."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:352
+msgid "Skin row gap"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:353
+msgid "The px value for the row gap."
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-listings.php:661
 msgid "Near:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:586
+#: includes/widgets/class-geodir-widget-listings.php:661
 msgid "Me"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:742
+#: includes/widgets/class-geodir-widget-listings.php:817
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
@@ -13544,22 +13609,6 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-meta.php:142
 msgid "Output Location:"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-post-meta.php:350
-msgid "Modified"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-post-meta.php:448
-msgid "Address line 2"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-post-meta.php:503
-msgid "Latitude"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-post-meta.php:514
-msgid "Longitude"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-rating.php:34
@@ -15701,28 +15750,28 @@ msgstr ""
 msgid "Api Key:"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:233
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:251
 msgid "Select shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:252
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:270
 msgid "Insert shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:255
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:273
 msgid "Copy shortcode"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:459
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1112
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:477
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1137
 msgid "Advanced Settings"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1365
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1392
 #, php-format
 msgid "Placeholder for: %s"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1752
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1785
 msgid "Placeholder for: "
 msgstr ""

@@ -71,7 +71,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      */
     public function set_arguments(){
 
-        return array(
+        $arguments = array(
             'title'  => array(
                 'title' => __('Title:', 'geodirectory'),
                 'desc' => __('The widget title.', 'geodirectory'),
@@ -323,7 +323,64 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	            'group'     => __("Design","geodirectory")
             ),
         );
+
+	    /*
+		 * Elementor Pro features below here
+		 */
+	    if(defined( 'ELEMENTOR_PRO_VERSION' )){
+		    $arguments['skin_id'] = array(
+			    'title' => __( "Elementor Skin", 'geodirectory' ),
+			    'desc' => '',
+			    'type' => 'select',
+			    'options' =>  self::get_elementor_pro_skins(),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+
+		    $arguments['skin_column_gap'] = array(
+			    'title' => __('Skin column gap', 'geodirectory'),
+			    'desc' => __('The px value for the column gap.', 'geodirectory'),
+			    'type' => 'number',
+			    'default'  => '30',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+		    $arguments['skin_row_gap'] = array(
+			    'title' => __('Skin row gap', 'geodirectory'),
+			    'desc' => __('The px value for the row gap.', 'geodirectory'),
+			    'type' => 'number',
+			    'default'  => '35',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+	    }
+	    
+	    return $arguments;
     }
+
+	//@todo add caching here and in skin template class
+	public static function get_elementor_pro_skins(){
+		global $wpdb;
+		$templates = $wpdb->get_results(
+			"SELECT $wpdb->term_relationships.object_id as ID, $wpdb->posts.post_title as post_title FROM $wpdb->term_relationships
+						INNER JOIN $wpdb->term_taxonomy ON
+							$wpdb->term_relationships.term_taxonomy_id=$wpdb->term_taxonomy.term_taxonomy_id
+						INNER JOIN $wpdb->terms ON 
+							$wpdb->term_taxonomy.term_id=$wpdb->terms.term_id AND $wpdb->terms.slug='geodirectory-archive-item'
+						INNER JOIN $wpdb->posts ON
+							$wpdb->term_relationships.object_id=$wpdb->posts.ID
+          WHERE  $wpdb->posts.post_status='publish'"
+		);
+		$options = [ 0 => 'Select a template' ];
+		foreach ( $templates as $template ) {
+			$options[ $template->ID ] = $template->post_title;
+		}
+		return $options;
+	}
 
 
     /**
@@ -366,7 +423,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				  'with_pagination' => '0',
 				  'top_pagination' => '0',
 				  'bottom_pagination' => '1',
-				  'pagination_info' => ''
+				  'pagination_info' => '',
+	            // elementor settings
+	              'skin_id' => '',
+	              'skin_column_gap' => '',
+	              'skin_row_gap' => '',
             )
         );
 
@@ -394,6 +455,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @param array|string $instance           The settings for the particular instance of the widget.
      */
     public function output_html( $args = '', $instance = '' ) {
+//	    print_r($args);
+//	    echo '###';
+//	    print_r($instance);
         global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings;
 
         // prints the widget
@@ -514,7 +578,18 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          */
         $favorites_by_user = empty( $instance['favorites_by_user'] ) || empty( $show_favorites_only ) ? '' : apply_filters( 'widget_favorites_by_user', $instance['favorites_by_user'], $instance, $this->id_base );
 
-        $view_all_link = ! empty( $instance['view_all_link'] ) ? true : false;
+
+	    /**
+	     * Filter the widget skin_id param.
+	     *
+	     * @since 2.0.0.86
+	     *
+	     * @param string $instance ['skin_id'] Filter skin_id.
+	     */
+	    $skin_id = empty( $instance['skin_id'] ) ? '' : apply_filters( 'widget_skin_id', $instance['skin_id'], $instance, $this->id_base );
+
+
+	    $view_all_link = ! empty( $instance['view_all_link'] ) ? true : false;
 
         $use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
 
@@ -828,8 +903,23 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$paged = $pageno;
 		$gd_advanced_pagination = $pagination_info;
 		$unique_id = 'geodir_' . uniqid();
+
+	    // elementor
+	    $skin_active = false;
+	    $elementor_wrapper_class = '';
+	    if(defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id){
+		    if(get_post_status ( $skin_id )=='publish'){
+			    $skin_active = true;
+		    }
+		    if($skin_active){
+			    $columns = isset($layout) ? absint($layout) : 1;
+			    if($columns == '0'){$columns = 6;}// we have no 6 row option to lets use list view
+			    $elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-'.$columns.' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
+		    }
+	    }
+
         ?>
-        <div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; ?>">
+        <div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; echo $elementor_wrapper_class; ?>">
             <?php
             if ( ! isset( $character_count ) ) {
                 /**
@@ -854,7 +944,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				self::get_pagination( 'top', $post_count, $post_number, $pageno );
 			}
 
-			geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+		    if($skin_active){
+			    $column_gap = !empty($instance['skin_column_gap']) ? absint($instance['skin_column_gap']) : '';
+			    $row_gap = !empty($instance['skin_row_gap']) ? absint($instance['skin_row_gap']) : '';
+			    geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
+		    }else{
+			    geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+		    }
+
 
 			if ( ! empty( $widget_listings ) && ( $bottom_pagination || $top_pagination ) ) {
 				echo '<div class="geodir-ajax-listings-loader" style="display:none"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';
