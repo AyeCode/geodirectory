@@ -136,7 +136,8 @@ Class GeoDir_Elementor_Tag_Gallery extends Elementor\Core\DynamicTags\Data_Tag {
 			}
 		}
 
-
+		$keys['comment_images'] = 'comment_images';
+		
 		return $keys;
 
 	}

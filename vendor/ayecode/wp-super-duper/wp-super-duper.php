@@ -13,11 +13,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 *
 	 * Class WP_Super_Duper
 	 * @since 1.0.16 change log moved to file change-log.txt - CHANGED
-	 * @ver 1.0.18
+	 * @ver 1.0.19
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.18";
+		public $version = "1.0.19";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1823,16 +1823,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 									if ( $show_advanced ) {
 									?>
-									el(
-										wp.components.ToggleControl,
-										{
-											label: 'Show Advanced Settings?',
-											checked: props.attributes.show_advanced,
-											onChange: function (show_advanced) {
-												props.setAttributes({show_advanced: !props.attributes.show_advanced})
+									el('div', {
+										style: {'padding-left': '16px','padding-right': '16px'}
+									},
+										el(
+											wp.components.ToggleControl,
+											{
+												label: 'Show Advanced Settings?',
+												checked: props.attributes.show_advanced,
+												onChange: function (show_advanced) {
+													props.setAttributes({show_advanced: !props.attributes.show_advanced})
+												}
 											}
-										}
-									),
+										)
+									)
+									,
 									<?php
 
 									}
@@ -1867,12 +1872,19 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 									}
 									}else {
+									?>
+									el(wp.components.PanelBody, {
+											title: '<?php esc_attr_e( "Settings" ); ?>',
+											initialOpen: true
+										},
+										<?php
 										foreach ( $this->arguments as $key => $args ) {
 											$this->build_block_arguments( $key, $args );
 										}
+										?>
+									),
+									<?php
 									}
-
-
 
 									}
 									?>

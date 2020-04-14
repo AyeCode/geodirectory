@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.87\n"
+"Project-Id-Version: GeoDirectory 2.0.0.88\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-10 14:34+0100\n"
-"PO-Revision-Date: 2020-04-10 14:35+0100\n"
+"POT-Creation-Date: 2020-04-14 13:02+0100\n"
+"PO-Revision-Date: 2020-04-14 13:02+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -863,6 +863,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:971
 #: includes/admin/class-geodir-admin-dummy-data.php:983
+#: includes/admin/dummy-data/car_sales.php:94
 #: includes/admin/dummy-data/classifieds.php:88
 #: includes/admin/dummy-data/property_rent.php:65
 #: includes/admin/dummy-data/property_sale.php:65
@@ -1355,6 +1356,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-api.php:43
 #: includes/admin/settings/class-geodir-settings-import-export.php:47
 #: includes/admin/views/html-admin-page-status-report.php:327
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1877
 msgid "Settings"
 msgstr ""
 
@@ -2880,6 +2882,27 @@ msgstr ""
 msgid "Load custom fields in to file for translation: ok"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:18
+msgid "SUVs"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:24
+msgid "Trucks"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:28
+#: includes/admin/dummy-data/car_sales.php:35
+#: includes/admin/dummy-data/car_sales.php:139
+#: includes/admin/dummy-data/car_sales.php:163
+#: includes/admin/dummy-data/car_sales.php:187
+#: includes/admin/dummy-data/car_sales.php:211
+#: includes/admin/dummy-data/car_sales.php:235
+#: includes/admin/dummy-data/car_sales.php:489
+#: includes/admin/dummy-data/car_sales.php:514
+#: includes/admin/dummy-data/car_sales.php:539
+#: includes/admin/dummy-data/car_sales.php:564
+#: includes/admin/dummy-data/car_sales.php:589
+#: includes/admin/dummy-data/car_sales.php:614
 #: includes/admin/dummy-data/classifieds.php:18
 #: includes/admin/dummy-data/classifieds.php:28
 #: includes/admin/dummy-data/classifieds.php:35
@@ -2897,6 +2920,65 @@ msgstr ""
 msgid "Electronics"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:31
+msgid "Crossovers"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:39
+msgid "Sedans"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:45
+msgid "Coupes"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:52
+msgid "Convertibles"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:58
+msgid "Luxury"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:64
+msgid "Sports Cars"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:82
+#: includes/admin/dummy-data/classifieds.php:76
+#: includes/admin/dummy-data/property_rent.php:53
+#: includes/admin/dummy-data/property_sale.php:53
+#: includes/admin/dummy-data/standard_places.php:95
+msgid "Newest"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:106
+#: includes/admin/dummy-data/classifieds.php:100
+#: includes/admin/dummy-data/property_rent.php:76
+#: includes/admin/dummy-data/property_sale.php:76
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:799
+msgid "Price"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:118
+#: includes/admin/dummy-data/classifieds.php:112
+#: includes/admin/dummy-data/property_rent.php:87
+#: includes/admin/dummy-data/property_sale.php:87
+#: includes/admin/dummy-data/standard_places.php:119
+#: includes/admin/settings/class-geodir-settings-cpt-sorting.php:359
+msgid "Rating"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:131
+#: includes/admin/dummy-data/classifieds.php:125
+msgid "Samsung S10+"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:139
+#: includes/admin/dummy-data/car_sales.php:163
+#: includes/admin/dummy-data/car_sales.php:187
+#: includes/admin/dummy-data/car_sales.php:211
+#: includes/admin/dummy-data/car_sales.php:235
 #: includes/admin/dummy-data/classifieds.php:24
 #: includes/admin/dummy-data/classifieds.php:133
 #: includes/admin/dummy-data/classifieds.php:157
@@ -2906,6 +2988,109 @@ msgstr ""
 msgid "Mobile Phones"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:252
+#: includes/admin/dummy-data/classifieds.php:246
+msgid "King Sized bed"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:261
+#: includes/admin/dummy-data/car_sales.php:286
+#: includes/admin/dummy-data/car_sales.php:311
+#: includes/admin/dummy-data/car_sales.php:336
+#: includes/admin/dummy-data/classifieds.php:52
+#: includes/admin/dummy-data/classifieds.php:255
+#: includes/admin/dummy-data/classifieds.php:280
+#: includes/admin/dummy-data/classifieds.php:305
+#: includes/admin/dummy-data/classifieds.php:330
+msgid "Furniture"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:261
+#: includes/admin/dummy-data/car_sales.php:286
+#: includes/admin/dummy-data/car_sales.php:311
+#: includes/admin/dummy-data/car_sales.php:336
+#: includes/admin/dummy-data/classifieds.php:58
+#: includes/admin/dummy-data/classifieds.php:255
+#: includes/admin/dummy-data/classifieds.php:280
+#: includes/admin/dummy-data/classifieds.php:305
+#: includes/admin/dummy-data/classifieds.php:330
+msgid "Beds"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:277
+#: includes/admin/dummy-data/classifieds.php:271
+msgid "Sleepeezee double bed"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:302
+#: includes/admin/dummy-data/classifieds.php:296
+msgid "Slumber 1000"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:327
+#: includes/admin/dummy-data/classifieds.php:321
+msgid "Slumber 5000"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:353
+#: includes/admin/dummy-data/classifieds.php:347
+msgid "Gibson Worn Bourbon"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:362
+#: includes/admin/dummy-data/car_sales.php:387
+#: includes/admin/dummy-data/car_sales.php:412
+#: includes/admin/dummy-data/car_sales.php:437
+#: includes/admin/dummy-data/car_sales.php:462
+#: includes/admin/dummy-data/classifieds.php:39
+#: includes/admin/dummy-data/classifieds.php:356
+#: includes/admin/dummy-data/classifieds.php:381
+#: includes/admin/dummy-data/classifieds.php:406
+#: includes/admin/dummy-data/classifieds.php:431
+#: includes/admin/dummy-data/classifieds.php:456
+msgid "Instruments"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:362
+#: includes/admin/dummy-data/car_sales.php:387
+#: includes/admin/dummy-data/car_sales.php:412
+#: includes/admin/dummy-data/car_sales.php:437
+#: includes/admin/dummy-data/car_sales.php:462
+#: includes/admin/dummy-data/classifieds.php:45
+#: includes/admin/dummy-data/classifieds.php:356
+#: includes/admin/dummy-data/classifieds.php:381
+#: includes/admin/dummy-data/classifieds.php:406
+#: includes/admin/dummy-data/classifieds.php:431
+#: includes/admin/dummy-data/classifieds.php:456
+msgid "Guitars"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:378
+#: includes/admin/dummy-data/classifieds.php:372
+msgid "Gibson 2018 Mojave Burst"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:403
+#: includes/admin/dummy-data/classifieds.php:397
+msgid "Fender Jazzmaster"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:428
+#: includes/admin/dummy-data/classifieds.php:422
+msgid "Fender Stratocaster"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:453
+#: includes/admin/dummy-data/classifieds.php:447
+msgid "Yamaha Pacifica 612V"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:489
+#: includes/admin/dummy-data/car_sales.php:514
+#: includes/admin/dummy-data/car_sales.php:539
+#: includes/admin/dummy-data/car_sales.php:564
+#: includes/admin/dummy-data/car_sales.php:589
+#: includes/admin/dummy-data/car_sales.php:614
 #: includes/admin/dummy-data/classifieds.php:31
 #: includes/admin/dummy-data/classifieds.php:483
 #: includes/admin/dummy-data/classifieds.php:508
@@ -2916,102 +3101,9 @@ msgstr ""
 msgid "Televisions"
 msgstr ""
 
-#: includes/admin/dummy-data/classifieds.php:39
-#: includes/admin/dummy-data/classifieds.php:356
-#: includes/admin/dummy-data/classifieds.php:381
-#: includes/admin/dummy-data/classifieds.php:406
-#: includes/admin/dummy-data/classifieds.php:431
-#: includes/admin/dummy-data/classifieds.php:456
-msgid "Instruments"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:45
-#: includes/admin/dummy-data/classifieds.php:356
-#: includes/admin/dummy-data/classifieds.php:381
-#: includes/admin/dummy-data/classifieds.php:406
-#: includes/admin/dummy-data/classifieds.php:431
-#: includes/admin/dummy-data/classifieds.php:456
-msgid "Guitars"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:52
-#: includes/admin/dummy-data/classifieds.php:255
-#: includes/admin/dummy-data/classifieds.php:280
-#: includes/admin/dummy-data/classifieds.php:305
-#: includes/admin/dummy-data/classifieds.php:330
-msgid "Furniture"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:58
-#: includes/admin/dummy-data/classifieds.php:255
-#: includes/admin/dummy-data/classifieds.php:280
-#: includes/admin/dummy-data/classifieds.php:305
-#: includes/admin/dummy-data/classifieds.php:330
-msgid "Beds"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:76
-#: includes/admin/dummy-data/property_rent.php:53
-#: includes/admin/dummy-data/property_sale.php:53
-#: includes/admin/dummy-data/standard_places.php:95
-msgid "Newest"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:100
-#: includes/admin/dummy-data/property_rent.php:76
-#: includes/admin/dummy-data/property_sale.php:76
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:799
-msgid "Price"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:112
-#: includes/admin/dummy-data/property_rent.php:87
-#: includes/admin/dummy-data/property_sale.php:87
-#: includes/admin/dummy-data/standard_places.php:119
-#: includes/admin/settings/class-geodir-settings-cpt-sorting.php:359
-msgid "Rating"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:125
-msgid "Samsung S10+"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:246
-msgid "King Sized bed"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:271
-msgid "Sleepeezee double bed"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:296
-msgid "Slumber 1000"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:321
-msgid "Slumber 5000"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:347
-msgid "Gibson Worn Bourbon"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:372
-msgid "Gibson 2018 Mojave Burst"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:397
-msgid "Fender Jazzmaster"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:422
-msgid "Fender Stratocaster"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:447
-msgid "Yamaha Pacifica 612V"
-msgstr ""
-
+#: includes/admin/dummy-data/car_sales.php:692
+#: includes/admin/dummy-data/car_sales.php:694
+#: includes/admin/dummy-data/car_sales.php:706
 #: includes/admin/dummy-data/classifieds.php:686
 #: includes/admin/dummy-data/classifieds.php:688
 #: includes/admin/dummy-data/classifieds.php:700
@@ -3019,45 +3111,61 @@ msgstr ""
 msgid "Condition"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:693
 #: includes/admin/dummy-data/classifieds.php:687
 msgid "Condition."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:718
+#: includes/admin/dummy-data/car_sales.php:720
+#: includes/admin/dummy-data/car_sales.php:732
 #: includes/admin/dummy-data/classifieds.php:712
 #: includes/admin/dummy-data/classifieds.php:714
 #: includes/admin/dummy-data/classifieds.php:726
 msgid "Brand"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:719
 #: includes/admin/dummy-data/classifieds.php:713
 msgid "Please select the brand."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:743
+#: includes/admin/dummy-data/car_sales.php:745
+#: includes/admin/dummy-data/car_sales.php:756
 #: includes/admin/dummy-data/classifieds.php:737
 #: includes/admin/dummy-data/classifieds.php:739
 #: includes/admin/dummy-data/classifieds.php:750
 msgid "Model"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:744
 #: includes/admin/dummy-data/classifieds.php:738
 msgid "Please select the model."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:768
+#: includes/admin/dummy-data/car_sales.php:770
+#: includes/admin/dummy-data/car_sales.php:782
 #: includes/admin/dummy-data/classifieds.php:762
 #: includes/admin/dummy-data/classifieds.php:764
 #: includes/admin/dummy-data/classifieds.php:776
 msgid "Seller Type"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:769
 #: includes/admin/dummy-data/classifieds.php:763
 msgid "Please select if you are a private or trade seller."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:790
+#: includes/admin/dummy-data/car_sales.php:791
 #: includes/admin/dummy-data/classifieds.php:784
 #: includes/admin/dummy-data/classifieds.php:785
 msgid "Payment Types"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:792
 #: includes/admin/dummy-data/classifieds.php:786
 msgid "Select the accepted payment types."
 msgstr ""
