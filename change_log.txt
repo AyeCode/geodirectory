@@ -1,6 +1,7 @@
 = 2.0.0.88 =
 * Comment images can now be used in Elementor Pro galleries - ADDED
 * Post Images widget can show logo if not specifically set not to - FIXED
+* og:title and og:description issue on gd archive - FIXED
 
 = 2.0.0.87 =
 * Allow show / hide categories in GD > Categories widget - ADDED

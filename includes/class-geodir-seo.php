@@ -89,6 +89,7 @@ class GeoDir_SEO {
 //
 //				// setup vars
 				add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
+				add_filter('wpseo_frontend_page_type_simple_page_id', array( __CLASS__ , 'wpseo_frontend_page_type_simple_page_id_callback'));
 			}
 			return;
 		}
@@ -120,7 +121,20 @@ class GeoDir_SEO {
 		}
 	}
 
-
+	/**
+	 * Function to return archive page template id on gd archive pages. 
+	 * 
+	 * @param int $gd_page_id 
+	 * 
+	 * @return int $gd_page_id archive page template id.
+	 */
+	function wpseo_frontend_page_type_simple_page_id_callback( $gd_page_id ){
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$post_type = geodir_get_current_posttype();
+			$gd_page_id = geodir_get_page_id( 'archive', $post_type );
+		}
+		return $gd_page_id;
+	}
 
 	/**
 	 * Set the global var when a menu is being output.
