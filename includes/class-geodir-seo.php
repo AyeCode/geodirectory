@@ -128,7 +128,7 @@ class GeoDir_SEO {
 	 * 
 	 * @return int $gd_page_id archive page template id.
 	 */
-	function wpseo_frontend_page_type_simple_page_id_callback( $gd_page_id ){
+	public function wpseo_frontend_page_type_simple_page_id_callback( $gd_page_id ){
 		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
 			$post_type = geodir_get_current_posttype();
 			$gd_page_id = geodir_get_page_id( 'archive', $post_type );
