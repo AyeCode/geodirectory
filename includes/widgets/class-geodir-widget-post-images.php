@@ -182,7 +182,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'value'  => '',
 					'default'  => '',
-					'placeholder'  => 'post_images,logo',
+					'placeholder'  => 'post_images,logo,comment_images,website_screenshot',
 					'advanced' => true
 				),
 				'fallback_types'  => array(
@@ -303,7 +303,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'limit_show'     => '',
 			'link_to'     => '',
 			'image_size'     => 'medium',
-			'show_logo'     => 'false',
+			'show_logo'     => '0',
 			'cover'   => '', // image cover type
 			'types'   => '', // types to show, post_images,comment_images,logo
 			'fallback_types'   => 'logo,cat_default,cpt_default,listing_default,website_screenshot', //logo,cat_default,cpt_default,listing_default
