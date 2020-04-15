@@ -895,7 +895,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						}
 					}
 				}
-				if( !empty( $field['field_type'] ) &&  'file' === $field['field_type'] ){
+				if( !empty( $field['field_type'] ) &&  'file' === $field['field_type'] && !empty( $match_value ) ){
 					$file_data_value = explode( '|', $match_value );
 					$match_value = isset( $file_data_value[0] )? $file_data_value[0]: $match_value;
 				}
