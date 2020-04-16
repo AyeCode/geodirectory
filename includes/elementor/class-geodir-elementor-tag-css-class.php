@@ -168,7 +168,7 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 			}
 
 			if($match_found){
-				echo "elementor-hidden";
+				echo "elementor-hidden gd-dont-render";
 			}
 
 		}

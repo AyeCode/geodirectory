@@ -166,12 +166,36 @@ add_filter( 'geodir_custom_field_output_text_key_distanceto', 'geodir_predefined
  * @return string Filtered value.
  */
 function geodir_post_badge_match_value( $match_value, $match_field, $args, $find_post, $field ) {
-	if ( $match_field && in_array( $match_field, array( 'post_date', 'post_modified', 'post_date_gmt', 'post_modified_gmt' ) ) ) {
-		$date_format = geodir_date_time_format();
-		$date_format = apply_filters( 'geodir_post_badge_date_time_format', $date_format, $match_field, $args, $find_post, $field );
+	if ( $match_field ) {
+		if ( in_array( $match_field, array( 'post_date', 'post_modified', 'post_date_gmt', 'post_modified_gmt' ) ) ) {
+			$date_format = geodir_date_time_format();
+			$date_format = apply_filters( 'geodir_post_badge_date_time_format', $date_format, $match_field, $args, $find_post, $field );
 
-		if ( $date_format ) {
-			$match_value = ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ? date_i18n( $date_format, strtotime( $match_value ) ) : '';
+			if ( $date_format ) {
+				$match_value = ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ? date_i18n( $date_format, strtotime( $match_value ) ) : '';
+			}
+		}
+
+		// File
+		if ( ! empty( $field['type'] ) && $field['type'] == 'file' && ! empty( $args['badge'] ) && strpos( $args['badge'], '%%input%%' ) !== false ) {
+			$attachments = GeoDir_Media::get_attachments_by_type( $find_post->ID, $match_field );
+
+			if ( ! empty( $attachments ) ) {
+				$upload_dir = wp_upload_dir();
+				$upload_baseurl = $upload_dir['baseurl'];
+				
+				$attachment_urls = array();
+
+				foreach ( $attachments as $attachment ) {
+					if ( ! empty( $attachment->file ) ) {
+						$attachment_urls[] = str_replace( array( '%%input%%', '&lt;', '&gt;' ), array( $upload_baseurl . $attachment->file, '<', '>' ), $args['badge'] );
+					}
+				}
+
+				if ( ! empty( $attachment_urls ) ) {
+					$match_value = implode( " ", $attachment_urls );
+				}
+			}
 		}
 	}
 

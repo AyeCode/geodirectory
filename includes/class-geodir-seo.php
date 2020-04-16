@@ -40,6 +40,8 @@ class GeoDir_SEO {
 		if ( ! is_admin() ) {
 			add_filter( 'page_link', array( __CLASS__, 'page_link' ), 10, 3 );
 		}
+
+		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ), 9999 );
 	}
 
 	/**
@@ -109,14 +111,15 @@ class GeoDir_SEO {
 		// setup vars
 		add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
 
-		// meta description
-		if(defined( 'WPSEO_VERSION')){
-			add_filter('wpseo_metadesc', array(__CLASS__,'get_description'), 10, 1);
-		}elseif( defined( 'RANK_MATH_VERSION') ){
-			add_filter('rank_math/frontend/description', array(__CLASS__,'get_description'), 10, 1);
-			add_filter('rank_math/frontend/title', array(__CLASS__,'get_title'), 10, 1);
-		}else{
-			add_action('wp_head', array(__CLASS__,'output_description'));
+		// Meta title & meta description
+		if ( defined( 'WPSEO_VERSION' ) ) {
+			add_filter( 'wpseo_title', array( __CLASS__, 'get_title' ), 10, 1 );
+			add_filter( 'wpseo_metadesc', array( __CLASS__, 'get_description' ), 10, 1 );
+		} elseif ( defined( 'RANK_MATH_VERSION' ) ) {
+			add_filter( 'rank_math/frontend/description', array( __CLASS__,'get_description' ), 10, 1 );
+			add_filter( 'rank_math/frontend/title', array( __CLASS__, 'get_title' ), 10, 1 );
+		} else {
+			add_action( 'wp_head', array( __CLASS__, 'output_description' ) );
 		}
 	}
 
@@ -812,6 +815,83 @@ class GeoDir_SEO {
 		wp_cache_set( 'geodir_noindex_page_ids', $page_ids, 'geodir_noindex_page_ids' );
 
 		return $page_ids;
+	}
+
+	/**
+	 * Setup Yoast SEO opengraph meta.
+	 *
+	 * @since 2.0.0.89
+	 *
+	 * @return void.
+	 */
+	public static function template_redirect() {
+		if ( defined( 'WPSEO_VERSION' ) ) {
+			// OpenGraph
+			add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_setup_meta' ), 0 );
+			add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_unset_meta' ), 99 );
+
+			// Twitter
+			if ( WPSEO_Options::get( 'twitter' ) === true ) {
+				add_action( 'wpseo_head', array( __CLASS__, 'wpseo_head_setup_meta' ), 39 );
+				add_action( 'wpseo_head', array( __CLASS__, 'wpseo_head_unset_meta' ), 41 );
+			}
+		}
+	}
+
+	/**
+	 * Set Yoast SEO opengraph meta.
+	 *
+	 * @since 2.0.0.89
+	 *
+	 * @global bool|int $gd_has_filter_thumbnail_id Check whether filter set or not.
+	 *
+	 * @return void.
+	 */
+	public static function wpseo_head_setup_meta() {
+		global $gd_has_filter_thumbnail_id;
+
+		add_filter( 'wpseo_frontend_page_type_simple_page_id', array( __CLASS__ , 'wpseo_frontend_page_type_simple_page_id' ), 10, 1 );
+
+		if ( geodir_is_page( 'single' ) && ( $gd_has_filter_thumbnail_id = has_filter( 'get_post_metadata', array( 'GeoDir_Template_Loader', 'filter_thumbnail_id' ) ) ) ) {
+			remove_filter( 'get_post_metadata', array( 'GeoDir_Template_Loader', 'filter_thumbnail_id' ), 10, 4 );
+		}
+	}
+
+	/**
+	 * Unset Yoast SEO opengraph meta.
+	 *
+	 * @since 2.0.0.89
+	 *
+	 * @global bool|int $gd_has_filter_thumbnail_id Check whether filter set or not.
+	 *
+	 * @return void.
+	 */
+	public static function wpseo_head_unset_meta() {
+		global $gd_has_filter_thumbnail_id;
+
+		remove_filter( 'wpseo_frontend_page_type_simple_page_id', array( __CLASS__ , 'wpseo_frontend_page_type_simple_page_id' ), 10, 1 );
+
+		if ( geodir_is_page( 'single' ) && $gd_has_filter_thumbnail_id && ! has_filter( 'get_post_metadata', array( 'GeoDir_Template_Loader', 'filter_thumbnail_id' ) ) ) {
+			add_filter( 'get_post_metadata', array( 'GeoDir_Template_Loader', 'filter_thumbnail_id' ), 10, 4 );
+
+			$gd_has_filter_thumbnail_id = false;
+		}
+	}
+
+	/**
+	 * Filter Yoast SEO simple page id.
+	 *
+	 * @since 2.0.0.89
+	 *
+	 * @param int $page_id The page id.
+	 * @return int Filtered page id.
+	 */
+	public static function wpseo_frontend_page_type_simple_page_id( $page_id ) {
+		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) || geodir_is_page( 'single' ) ) && ! is_tax() && ( $_page_id = (int) GeoDir_Compatibility::gd_page_id() ) ) {
+			$page_id = $_page_id;
+		}
+
+		return $page_id;
 	}
 
 }

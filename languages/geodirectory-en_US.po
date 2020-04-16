@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.87\n"
+"Project-Id-Version: GeoDirectory 2.0.0.89\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-10 14:34+0100\n"
-"PO-Revision-Date: 2020-04-10 14:35+0100\n"
+"POT-Creation-Date: 2020-04-16 16:45+0100\n"
+"PO-Revision-Date: 2020-04-16 16:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -186,7 +186,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-settings.php:832
 #: includes/admin/settings/class-geodir-settings-general.php:810
 #: includes/api/class-geodir-rest-posts-controller.php:2198
-#: includes/post-functions.php:1577
+#: includes/post-functions.php:1582
 msgid "Country"
 msgstr ""
 
@@ -199,7 +199,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1056
 #: includes/admin/settings/class-geodir-settings-general.php:800
 #: includes/api/class-geodir-rest-posts-controller.php:2212
-#: includes/post-functions.php:1566
+#: includes/post-functions.php:1571
 msgid "Region"
 msgstr ""
 
@@ -212,7 +212,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1055
 #: includes/admin/settings/class-geodir-settings-general.php:790
 #: includes/api/class-geodir-rest-posts-controller.php:2226
-#: includes/post-functions.php:1555
+#: includes/post-functions.php:1560
 msgid "City"
 msgstr ""
 
@@ -233,7 +233,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1058
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
-#: includes/post-functions.php:1588
+#: includes/post-functions.php:1593
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -863,6 +863,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:971
 #: includes/admin/class-geodir-admin-dummy-data.php:983
+#: includes/admin/dummy-data/car_sales.php:94
 #: includes/admin/dummy-data/classifieds.php:88
 #: includes/admin/dummy-data/property_rent.php:65
 #: includes/admin/dummy-data/property_sale.php:65
@@ -923,7 +924,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1041
 #: includes/admin/class-geodir-admin-dummy-data.php:1043
 #: includes/admin/class-geodir-admin-dummy-data.php:1053
-#: includes/post-functions.php:1533
+#: includes/post-functions.php:1538
 msgid "Address"
 msgstr ""
 
@@ -1355,6 +1356,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-api.php:43
 #: includes/admin/settings/class-geodir-settings-import-export.php:47
 #: includes/admin/views/html-admin-page-status-report.php:327
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1877
 msgid "Settings"
 msgstr ""
 
@@ -2880,6 +2882,27 @@ msgstr ""
 msgid "Load custom fields in to file for translation: ok"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:18
+msgid "SUVs"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:24
+msgid "Trucks"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:28
+#: includes/admin/dummy-data/car_sales.php:35
+#: includes/admin/dummy-data/car_sales.php:139
+#: includes/admin/dummy-data/car_sales.php:163
+#: includes/admin/dummy-data/car_sales.php:187
+#: includes/admin/dummy-data/car_sales.php:211
+#: includes/admin/dummy-data/car_sales.php:235
+#: includes/admin/dummy-data/car_sales.php:489
+#: includes/admin/dummy-data/car_sales.php:514
+#: includes/admin/dummy-data/car_sales.php:539
+#: includes/admin/dummy-data/car_sales.php:564
+#: includes/admin/dummy-data/car_sales.php:589
+#: includes/admin/dummy-data/car_sales.php:614
 #: includes/admin/dummy-data/classifieds.php:18
 #: includes/admin/dummy-data/classifieds.php:28
 #: includes/admin/dummy-data/classifieds.php:35
@@ -2897,6 +2920,65 @@ msgstr ""
 msgid "Electronics"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:31
+msgid "Crossovers"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:39
+msgid "Sedans"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:45
+msgid "Coupes"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:52
+msgid "Convertibles"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:58
+msgid "Luxury"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:64
+msgid "Sports Cars"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:82
+#: includes/admin/dummy-data/classifieds.php:76
+#: includes/admin/dummy-data/property_rent.php:53
+#: includes/admin/dummy-data/property_sale.php:53
+#: includes/admin/dummy-data/standard_places.php:95
+msgid "Newest"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:106
+#: includes/admin/dummy-data/classifieds.php:100
+#: includes/admin/dummy-data/property_rent.php:76
+#: includes/admin/dummy-data/property_sale.php:76
+#: includes/admin/settings/class-geodir-settings-cpt-cf.php:799
+msgid "Price"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:118
+#: includes/admin/dummy-data/classifieds.php:112
+#: includes/admin/dummy-data/property_rent.php:87
+#: includes/admin/dummy-data/property_sale.php:87
+#: includes/admin/dummy-data/standard_places.php:119
+#: includes/admin/settings/class-geodir-settings-cpt-sorting.php:359
+msgid "Rating"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:131
+#: includes/admin/dummy-data/classifieds.php:125
+msgid "Samsung S10+"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:139
+#: includes/admin/dummy-data/car_sales.php:163
+#: includes/admin/dummy-data/car_sales.php:187
+#: includes/admin/dummy-data/car_sales.php:211
+#: includes/admin/dummy-data/car_sales.php:235
 #: includes/admin/dummy-data/classifieds.php:24
 #: includes/admin/dummy-data/classifieds.php:133
 #: includes/admin/dummy-data/classifieds.php:157
@@ -2906,6 +2988,109 @@ msgstr ""
 msgid "Mobile Phones"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:252
+#: includes/admin/dummy-data/classifieds.php:246
+msgid "King Sized bed"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:261
+#: includes/admin/dummy-data/car_sales.php:286
+#: includes/admin/dummy-data/car_sales.php:311
+#: includes/admin/dummy-data/car_sales.php:336
+#: includes/admin/dummy-data/classifieds.php:52
+#: includes/admin/dummy-data/classifieds.php:255
+#: includes/admin/dummy-data/classifieds.php:280
+#: includes/admin/dummy-data/classifieds.php:305
+#: includes/admin/dummy-data/classifieds.php:330
+msgid "Furniture"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:261
+#: includes/admin/dummy-data/car_sales.php:286
+#: includes/admin/dummy-data/car_sales.php:311
+#: includes/admin/dummy-data/car_sales.php:336
+#: includes/admin/dummy-data/classifieds.php:58
+#: includes/admin/dummy-data/classifieds.php:255
+#: includes/admin/dummy-data/classifieds.php:280
+#: includes/admin/dummy-data/classifieds.php:305
+#: includes/admin/dummy-data/classifieds.php:330
+msgid "Beds"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:277
+#: includes/admin/dummy-data/classifieds.php:271
+msgid "Sleepeezee double bed"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:302
+#: includes/admin/dummy-data/classifieds.php:296
+msgid "Slumber 1000"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:327
+#: includes/admin/dummy-data/classifieds.php:321
+msgid "Slumber 5000"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:353
+#: includes/admin/dummy-data/classifieds.php:347
+msgid "Gibson Worn Bourbon"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:362
+#: includes/admin/dummy-data/car_sales.php:387
+#: includes/admin/dummy-data/car_sales.php:412
+#: includes/admin/dummy-data/car_sales.php:437
+#: includes/admin/dummy-data/car_sales.php:462
+#: includes/admin/dummy-data/classifieds.php:39
+#: includes/admin/dummy-data/classifieds.php:356
+#: includes/admin/dummy-data/classifieds.php:381
+#: includes/admin/dummy-data/classifieds.php:406
+#: includes/admin/dummy-data/classifieds.php:431
+#: includes/admin/dummy-data/classifieds.php:456
+msgid "Instruments"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:362
+#: includes/admin/dummy-data/car_sales.php:387
+#: includes/admin/dummy-data/car_sales.php:412
+#: includes/admin/dummy-data/car_sales.php:437
+#: includes/admin/dummy-data/car_sales.php:462
+#: includes/admin/dummy-data/classifieds.php:45
+#: includes/admin/dummy-data/classifieds.php:356
+#: includes/admin/dummy-data/classifieds.php:381
+#: includes/admin/dummy-data/classifieds.php:406
+#: includes/admin/dummy-data/classifieds.php:431
+#: includes/admin/dummy-data/classifieds.php:456
+msgid "Guitars"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:378
+#: includes/admin/dummy-data/classifieds.php:372
+msgid "Gibson 2018 Mojave Burst"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:403
+#: includes/admin/dummy-data/classifieds.php:397
+msgid "Fender Jazzmaster"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:428
+#: includes/admin/dummy-data/classifieds.php:422
+msgid "Fender Stratocaster"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:453
+#: includes/admin/dummy-data/classifieds.php:447
+msgid "Yamaha Pacifica 612V"
+msgstr ""
+
+#: includes/admin/dummy-data/car_sales.php:489
+#: includes/admin/dummy-data/car_sales.php:514
+#: includes/admin/dummy-data/car_sales.php:539
+#: includes/admin/dummy-data/car_sales.php:564
+#: includes/admin/dummy-data/car_sales.php:589
+#: includes/admin/dummy-data/car_sales.php:614
 #: includes/admin/dummy-data/classifieds.php:31
 #: includes/admin/dummy-data/classifieds.php:483
 #: includes/admin/dummy-data/classifieds.php:508
@@ -2916,102 +3101,9 @@ msgstr ""
 msgid "Televisions"
 msgstr ""
 
-#: includes/admin/dummy-data/classifieds.php:39
-#: includes/admin/dummy-data/classifieds.php:356
-#: includes/admin/dummy-data/classifieds.php:381
-#: includes/admin/dummy-data/classifieds.php:406
-#: includes/admin/dummy-data/classifieds.php:431
-#: includes/admin/dummy-data/classifieds.php:456
-msgid "Instruments"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:45
-#: includes/admin/dummy-data/classifieds.php:356
-#: includes/admin/dummy-data/classifieds.php:381
-#: includes/admin/dummy-data/classifieds.php:406
-#: includes/admin/dummy-data/classifieds.php:431
-#: includes/admin/dummy-data/classifieds.php:456
-msgid "Guitars"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:52
-#: includes/admin/dummy-data/classifieds.php:255
-#: includes/admin/dummy-data/classifieds.php:280
-#: includes/admin/dummy-data/classifieds.php:305
-#: includes/admin/dummy-data/classifieds.php:330
-msgid "Furniture"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:58
-#: includes/admin/dummy-data/classifieds.php:255
-#: includes/admin/dummy-data/classifieds.php:280
-#: includes/admin/dummy-data/classifieds.php:305
-#: includes/admin/dummy-data/classifieds.php:330
-msgid "Beds"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:76
-#: includes/admin/dummy-data/property_rent.php:53
-#: includes/admin/dummy-data/property_sale.php:53
-#: includes/admin/dummy-data/standard_places.php:95
-msgid "Newest"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:100
-#: includes/admin/dummy-data/property_rent.php:76
-#: includes/admin/dummy-data/property_sale.php:76
-#: includes/admin/settings/class-geodir-settings-cpt-cf.php:799
-msgid "Price"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:112
-#: includes/admin/dummy-data/property_rent.php:87
-#: includes/admin/dummy-data/property_sale.php:87
-#: includes/admin/dummy-data/standard_places.php:119
-#: includes/admin/settings/class-geodir-settings-cpt-sorting.php:359
-msgid "Rating"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:125
-msgid "Samsung S10+"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:246
-msgid "King Sized bed"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:271
-msgid "Sleepeezee double bed"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:296
-msgid "Slumber 1000"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:321
-msgid "Slumber 5000"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:347
-msgid "Gibson Worn Bourbon"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:372
-msgid "Gibson 2018 Mojave Burst"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:397
-msgid "Fender Jazzmaster"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:422
-msgid "Fender Stratocaster"
-msgstr ""
-
-#: includes/admin/dummy-data/classifieds.php:447
-msgid "Yamaha Pacifica 612V"
-msgstr ""
-
+#: includes/admin/dummy-data/car_sales.php:692
+#: includes/admin/dummy-data/car_sales.php:694
+#: includes/admin/dummy-data/car_sales.php:706
 #: includes/admin/dummy-data/classifieds.php:686
 #: includes/admin/dummy-data/classifieds.php:688
 #: includes/admin/dummy-data/classifieds.php:700
@@ -3019,45 +3111,61 @@ msgstr ""
 msgid "Condition"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:693
 #: includes/admin/dummy-data/classifieds.php:687
 msgid "Condition."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:718
+#: includes/admin/dummy-data/car_sales.php:720
+#: includes/admin/dummy-data/car_sales.php:732
 #: includes/admin/dummy-data/classifieds.php:712
 #: includes/admin/dummy-data/classifieds.php:714
 #: includes/admin/dummy-data/classifieds.php:726
 msgid "Brand"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:719
 #: includes/admin/dummy-data/classifieds.php:713
 msgid "Please select the brand."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:743
+#: includes/admin/dummy-data/car_sales.php:745
+#: includes/admin/dummy-data/car_sales.php:756
 #: includes/admin/dummy-data/classifieds.php:737
 #: includes/admin/dummy-data/classifieds.php:739
 #: includes/admin/dummy-data/classifieds.php:750
 msgid "Model"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:744
 #: includes/admin/dummy-data/classifieds.php:738
 msgid "Please select the model."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:768
+#: includes/admin/dummy-data/car_sales.php:770
+#: includes/admin/dummy-data/car_sales.php:782
 #: includes/admin/dummy-data/classifieds.php:762
 #: includes/admin/dummy-data/classifieds.php:764
 #: includes/admin/dummy-data/classifieds.php:776
 msgid "Seller Type"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:769
 #: includes/admin/dummy-data/classifieds.php:763
 msgid "Please select if you are a private or trade seller."
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:790
+#: includes/admin/dummy-data/car_sales.php:791
 #: includes/admin/dummy-data/classifieds.php:784
 #: includes/admin/dummy-data/classifieds.php:785
 msgid "Payment Types"
 msgstr ""
 
+#: includes/admin/dummy-data/car_sales.php:792
 #: includes/admin/dummy-data/classifieds.php:786
 msgid "Select the accepted payment types."
 msgstr ""
@@ -9255,17 +9363,17 @@ msgstr ""
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:307 includes/core-functions.php:349
+#: includes/class-geodir-elementor.php:342 includes/core-functions.php:349
 #: includes/widgets/class-geodir-widget-single-next-prev.php:53
 msgid "Previous"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:311 includes/core-functions.php:350
+#: includes/class-geodir-elementor.php:346 includes/core-functions.php:350
 #: includes/widgets/class-geodir-widget-single-next-prev.php:54
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:967
+#: includes/class-geodir-elementor.php:1002
 msgid "Could not retrieve template."
 msgstr ""
 
@@ -9282,7 +9390,7 @@ msgstr ""
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1070 includes/post-functions.php:1492
+#: includes/class-geodir-email.php:1070 includes/post-functions.php:1497
 msgid "Author"
 msgstr ""
 
@@ -10056,134 +10164,134 @@ msgstr ""
 msgid "- Monitor the contact system for spam and abuse."
 msgstr ""
 
-#: includes/class-geodir-seo.php:532 includes/general-functions.php:1813
+#: includes/class-geodir-seo.php:535 includes/general-functions.php:1813
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:545 includes/general-functions.php:1826
+#: includes/class-geodir-seo.php:548 includes/general-functions.php:1826
 #, php-format
 msgid "near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:613
+#: includes/class-geodir-seo.php:616
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:614
+#: includes/class-geodir-seo.php:617
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:615
+#: includes/class-geodir-seo.php:618
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:616
+#: includes/class-geodir-seo.php:619
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:620
+#: includes/class-geodir-seo.php:623
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:621
+#: includes/class-geodir-seo.php:624
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:622
+#: includes/class-geodir-seo.php:625
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:623
+#: includes/class-geodir-seo.php:626
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:624
+#: includes/class-geodir-seo.php:627
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:629
+#: includes/class-geodir-seo.php:632
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:630
+#: includes/class-geodir-seo.php:633
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:631
+#: includes/class-geodir-seo.php:634
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:632
+#: includes/class-geodir-seo.php:635
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:633
+#: includes/class-geodir-seo.php:636
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:634
+#: includes/class-geodir-seo.php:637
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:635
+#: includes/class-geodir-seo.php:638
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:636
+#: includes/class-geodir-seo.php:639
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:637
+#: includes/class-geodir-seo.php:640
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:638
+#: includes/class-geodir-seo.php:641
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:643
+#: includes/class-geodir-seo.php:646
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:644
+#: includes/class-geodir-seo.php:647
 msgid "The currently used search for term with `for`. Ex: for dinner."
 msgstr ""
 
-#: includes/class-geodir-seo.php:645
+#: includes/class-geodir-seo.php:648
 msgid "The currently used search near term with `near`. Ex: near Philadelphia."
 msgstr ""
 
-#: includes/class-geodir-seo.php:646
+#: includes/class-geodir-seo.php:649
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:651
+#: includes/class-geodir-seo.php:654
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:652
+#: includes/class-geodir-seo.php:655
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:653
+#: includes/class-geodir-seo.php:656
 msgid "Total post found eg: 10"
 msgstr ""
 
-#: includes/class-geodir-seo.php:654
+#: includes/class-geodir-seo.php:657
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:659
+#: includes/class-geodir-seo.php:662
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore"
 msgstr ""
 
-#: includes/class-geodir-seo.php:679
+#: includes/class-geodir-seo.php:682
 msgid "Click to copy"
 msgstr ""
 
@@ -10767,7 +10875,7 @@ msgstr ""
 msgid "View on Google map"
 msgstr ""
 
-#: includes/custom-fields/output-filter-functions.php:347
+#: includes/custom-fields/output-filter-functions.php:371
 msgid "View on Map"
 msgstr ""
 
@@ -10935,7 +11043,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:251
 #: includes/elementor/class-geodir-elementor-tag-gallery.php:106
 #: includes/elementor/class-geodir-elementor-tag-image.php:205
-#: includes/elementor/class-geodir-elementor-tag-number.php:88
+#: includes/elementor/class-geodir-elementor-tag-number.php:93
 #: includes/elementor/class-geodir-elementor-tag-text.php:181
 #: includes/elementor/class-geodir-elementor-tag-url.php:130
 msgid "Key"
@@ -10943,7 +11051,7 @@ msgstr ""
 
 #: includes/elementor/class-geodir-elementor-tag-color.php:114
 #: includes/elementor/class-geodir-elementor-tag-gallery.php:132
-#: includes/elementor/class-geodir-elementor-tag-number.php:109
+#: includes/elementor/class-geodir-elementor-tag-number.php:114
 #: includes/elementor/class-geodir-elementor-tag-url.php:164
 #: includes/widgets/class-geodir-widget-post-address.php:270
 #: includes/widgets/class-geodir-widget-post-content.php:264
@@ -11647,44 +11755,44 @@ msgstr ""
 msgid "Failed to retrieve GPS info from OpenStreetMap Nominatim server."
 msgstr ""
 
-#: includes/post-functions.php:929
+#: includes/post-functions.php:934
 msgid "NEW"
 msgstr ""
 
-#: includes/post-functions.php:931
+#: includes/post-functions.php:936
 msgid "UPDATED"
 msgstr ""
 
-#: includes/post-functions.php:1427
+#: includes/post-functions.php:1432
 msgid "Overall Rating"
 msgstr ""
 
-#: includes/post-functions.php:1438
+#: includes/post-functions.php:1443
 msgid "Rating Count"
 msgstr ""
 
-#: includes/post-functions.php:1448 includes/post-functions.php:1459
+#: includes/post-functions.php:1453 includes/post-functions.php:1464
 #: includes/widgets/class-geodir-widget-author-actions.php:164
 msgid "Published"
 msgstr ""
 
-#: includes/post-functions.php:1470 includes/post-functions.php:1481
+#: includes/post-functions.php:1475 includes/post-functions.php:1486
 msgid "Modified"
 msgstr ""
 
-#: includes/post-functions.php:1544
+#: includes/post-functions.php:1549
 msgid "Address line 2"
 msgstr ""
 
-#: includes/post-functions.php:1599
+#: includes/post-functions.php:1604
 msgid "Latitude"
 msgstr ""
 
-#: includes/post-functions.php:1610
+#: includes/post-functions.php:1615
 msgid "Longitude"
 msgstr ""
 
-#: includes/post-functions.php:1621
+#: includes/post-functions.php:1626
 msgid "Map Directions"
 msgstr ""
 
