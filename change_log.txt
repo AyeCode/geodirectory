@@ -1,5 +1,6 @@
 = 2.0.0.89 =
 * Badge shortcode for file field %%input%% return file array - FIXED
+* Yoast SEO OpenGraph meta not working on GD pages - FIXED
 
 = 2.0.0.88 =
 * Comment images can now be used in Elementor Pro galleries - ADDED

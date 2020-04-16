@@ -895,10 +895,6 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						}
 					}
 				}
-				if( !empty( $field['field_type'] ) &&  'file' === $field['field_type'] && !empty( $match_value ) ){
-					$file_data_value = explode( '|', $match_value );
-					$match_value = isset( $file_data_value[0] )? $file_data_value[0]: $match_value;
-				}
 
 				if ( $is_date && ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ) {
 					$args['datetime'] = mysql2date( 'c', $match_value, false );
@@ -908,6 +904,11 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				 * @since 2.0.0.75
 				 */
 				$match_value = apply_filters( 'geodir_post_badge_match_value', $match_value, $match_field, $args, $find_post, $field );
+
+				// File
+				if ( ! empty( $badge ) &&  ! empty( $match_value ) && ! empty( $field['type'] ) && $field['type'] == 'file' ) {
+					$badge = $match_value;
+				}
 
 				// badge text
 				if ( empty( $badge ) && empty($args['icon_class']) ) {
@@ -1025,7 +1026,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				/**
 				 * @since 2.0.0.68
 				 */
-				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $args, $find_post );
+				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $match_value, $match_field, $args, $find_post, $field );
 
 				$post_id = isset( $find_post->ID ) ? absint( $find_post->ID ) : '';
 				$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
