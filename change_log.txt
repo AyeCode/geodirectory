@@ -1,3 +1,9 @@
+= 2.0.0.89 =
+* Elementor Pro Utils class moved which can cause errors in older vers of Elementor - FIXED
+* Elementor Icon List items can be hidden when empty by adding fallback of #hide - ADDED
+* Elementor Star Rating needs to be rounded to one decimal place - FIXED
+* Elementor CSS hide conditions now remove content instead of just hiding with CSS - CHANGED
+
 = 2.0.0.88 =
 * Comment images can now be used in Elementor Pro galleries - ADDED
 * Post Images widget can show logo if not specifically set not to - FIXED
