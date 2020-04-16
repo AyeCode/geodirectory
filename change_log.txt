@@ -1,4 +1,8 @@
 = 2.0.0.89 =
+* Badge shortcode for file field %%input%% return file array - FIXED
+* Yoast SEO OpenGraph meta not working on GD pages - FIXED
+
+= 2.0.0.89 =
 * Elementor Pro Utils class moved which can cause errors in older vers of Elementor - FIXED
 * Elementor Icon List items can be hidden when empty by adding fallback of #hide - ADDED
 * Elementor Star Rating needs to be rounded to one decimal place - FIXED
