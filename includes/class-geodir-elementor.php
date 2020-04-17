@@ -49,6 +49,10 @@ class GeoDir_Elementor {
 			'maybe_add_image_caption'
 		), 10, 2 );
 
+
+		add_filter('elementor/frontend/section/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
+		add_filter('elementor/frontend/widget/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
+
 		/*
 		 * Elementor Pro features below here
 		 */
@@ -67,6 +71,34 @@ class GeoDir_Elementor {
 		}
 
 
+	}
+
+	/**
+	 * Don't render elements if set not to do so.
+	 *
+	 * @param $should_render
+	 * @param $section
+	 *
+	 * @return bool
+	 */
+	public static function maybe_hide_elements($should_render, $section){
+		
+		$dynamic_settings = $section->get_parsed_dynamic_settings();
+
+		$class = '';
+		if(isset($dynamic_settings['_css_classes'])){
+			$class = $dynamic_settings['_css_classes'];
+		}elseif(isset($dynamic_settings['css_classes'])){
+			$class = $dynamic_settings['css_classes'];
+		}
+
+		// remove if set to do so via class
+		if( $class == 'elementor-hidden gd-dont-render' ){
+			$should_render = false;
+		}
+
+
+		return $should_render;
 	}
 
 
@@ -134,9 +166,8 @@ class GeoDir_Elementor {
 	 */
 	public static function maybe_add_image_caption( $html, $widget ) {
 
-//		echo '###'.$widget->get_type();print_r($widget);
-
-		if(geodir_is_page('single')){
+//		echo '###'.$widget->get_name();
+		if(geodir_is_page('single')){ // maybe we add archive also?
 			$type = $widget->get_name();
 			if ($type  === 'image'  ) {
 				$settings = $widget->get_settings();
@@ -215,6 +246,10 @@ class GeoDir_Elementor {
 					$html = self::render_pro_carousel( $widget,$settings );
 				}
 
+			}elseif($type  === 'icon-list'){
+				// remove icon list items that have fallback link of #hide
+				$html = preg_replace('/<li class="elementor-icon-list-item" >([\n\r\s]+)<a href="#hide">(.*?)<\/li>/ms', '', $html);
+				$html = preg_replace('/<li class="elementor-icon-list-item" >([\n\r\s]+)<span class="elementor-icon-list-icon">([\n\r\s]+)<i aria-hidden="true" class="[a-z0-9 .\-]+"><\/i>([\n\r\s]+)<\/span>([\n\r\s]+)<span class="elementor-icon-list-text">#hide<\/span>([\n\r\s]+)<\/li>/', '', $html);
 			}
 		}
 

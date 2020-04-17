@@ -41,7 +41,7 @@ class GeoDir_Elementor_Form_Contact extends \ElementorPro\Modules\Forms\Classes\
 			'email_content'   => '[all-fields]',
 			'email_from_name' => get_bloginfo( 'name' ),
 			'email_from'      => get_bloginfo( 'admin_email' ),
-			'email_reply_to'  => 'noreplay@' . \ElementorPro\Core\Utils::get_site_domain(),
+			'email_reply_to'  => 'noreplay@' . $this->get_site_domain(),
 			'email_to_cc'     => '',
 			'email_to_bcc'    => '',
 		];
@@ -66,10 +66,10 @@ class GeoDir_Elementor_Form_Contact extends \ElementorPro\Modules\Forms\Classes\
 				$email_reply_to = get_bloginfo( 'admin_email' );
 				break;
 			case 'no-reply' :
-				$email_reply_to = 'noreplay@' . \ElementorPro\Core\Utils::get_site_domain();
+				$email_reply_to = 'noreplay@' . $this->get_site_domain();
 				break;
 			default:
-				$email_reply_to = 'noreplay@' . \ElementorPro\Core\Utils::get_site_domain();
+				$email_reply_to = 'noreplay@' . $this->get_site_domain();
 		}
 
 
@@ -118,7 +118,7 @@ class GeoDir_Elementor_Form_Contact extends \ElementorPro\Modules\Forms\Classes\
 					case 'remote_ip':
 						$field_data = [
 							'title' => __( 'Remote IP', 'geodirectory' ),
-							'value' => \ElementorPro\Core\Utils::get_client_ip(),
+							'value' => $this->get_client_ip(),
 						];
 						$email_meta .= $this->field_formatted( $field_data ) . $line_break;
 						break;
@@ -324,7 +324,7 @@ class GeoDir_Elementor_Form_Contact extends \ElementorPro\Modules\Forms\Classes\
 			]
 		);
 
-		$site_domain = \ElementorPro\Core\Utils::get_site_domain();
+		$site_domain = $this->get_site_domain();
 
 		$widget->add_control(
 			'geodir_email_from',
@@ -476,5 +476,30 @@ class GeoDir_Elementor_Form_Contact extends \ElementorPro\Modules\Forms\Classes\
 			unset( $element[ $base_id ] );
 		}
 
+	}
+
+	public function get_site_domain() {
+		return str_ireplace( 'www.', '', parse_url( home_url(), PHP_URL_HOST ) );
+	}
+
+	public function get_client_ip() {
+		$server_ip_keys = [
+			'HTTP_CLIENT_IP',
+			'HTTP_X_FORWARDED_FOR',
+			'HTTP_X_FORWARDED',
+			'HTTP_X_CLUSTER_CLIENT_IP',
+			'HTTP_FORWARDED_FOR',
+			'HTTP_FORWARDED',
+			'REMOTE_ADDR',
+		];
+
+		foreach ( $server_ip_keys as $key ) {
+			if ( isset( $_SERVER[ $key ] ) && filter_var( $_SERVER[ $key ], FILTER_VALIDATE_IP ) ) {
+				return $_SERVER[ $key ];
+			}
+		}
+
+		// Fallback local ip.
+		return '127.0.0.1';
 	}
 }

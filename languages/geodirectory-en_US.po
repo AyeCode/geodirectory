@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.88\n"
+"Project-Id-Version: GeoDirectory 2.0.0.89\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-14 13:02+0100\n"
-"PO-Revision-Date: 2020-04-14 13:02+0100\n"
+"POT-Creation-Date: 2020-04-16 16:45+0100\n"
+"PO-Revision-Date: 2020-04-16 16:45+0100\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -186,7 +186,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-settings.php:832
 #: includes/admin/settings/class-geodir-settings-general.php:810
 #: includes/api/class-geodir-rest-posts-controller.php:2198
-#: includes/post-functions.php:1577
+#: includes/post-functions.php:1582
 msgid "Country"
 msgstr ""
 
@@ -199,7 +199,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1056
 #: includes/admin/settings/class-geodir-settings-general.php:800
 #: includes/api/class-geodir-rest-posts-controller.php:2212
-#: includes/post-functions.php:1566
+#: includes/post-functions.php:1571
 msgid "Region"
 msgstr ""
 
@@ -212,7 +212,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1055
 #: includes/admin/settings/class-geodir-settings-general.php:790
 #: includes/api/class-geodir-rest-posts-controller.php:2226
-#: includes/post-functions.php:1555
+#: includes/post-functions.php:1560
 msgid "City"
 msgstr ""
 
@@ -233,7 +233,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1058
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
-#: includes/post-functions.php:1588
+#: includes/post-functions.php:1593
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -924,7 +924,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1041
 #: includes/admin/class-geodir-admin-dummy-data.php:1043
 #: includes/admin/class-geodir-admin-dummy-data.php:1053
-#: includes/post-functions.php:1533
+#: includes/post-functions.php:1538
 msgid "Address"
 msgstr ""
 
@@ -9363,17 +9363,17 @@ msgstr ""
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:307 includes/core-functions.php:349
+#: includes/class-geodir-elementor.php:342 includes/core-functions.php:349
 #: includes/widgets/class-geodir-widget-single-next-prev.php:53
 msgid "Previous"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:311 includes/core-functions.php:350
+#: includes/class-geodir-elementor.php:346 includes/core-functions.php:350
 #: includes/widgets/class-geodir-widget-single-next-prev.php:54
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:967
+#: includes/class-geodir-elementor.php:1002
 msgid "Could not retrieve template."
 msgstr ""
 
@@ -9390,7 +9390,7 @@ msgstr ""
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1070 includes/post-functions.php:1492
+#: includes/class-geodir-email.php:1070 includes/post-functions.php:1497
 msgid "Author"
 msgstr ""
 
@@ -10164,134 +10164,134 @@ msgstr ""
 msgid "- Monitor the contact system for spam and abuse."
 msgstr ""
 
-#: includes/class-geodir-seo.php:532 includes/general-functions.php:1813
+#: includes/class-geodir-seo.php:535 includes/general-functions.php:1813
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:545 includes/general-functions.php:1826
+#: includes/class-geodir-seo.php:548 includes/general-functions.php:1826
 #, php-format
 msgid "near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:613
+#: includes/class-geodir-seo.php:616
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:614
+#: includes/class-geodir-seo.php:617
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:615
+#: includes/class-geodir-seo.php:618
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:616
+#: includes/class-geodir-seo.php:619
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:620
+#: includes/class-geodir-seo.php:623
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:621
+#: includes/class-geodir-seo.php:624
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:622
+#: includes/class-geodir-seo.php:625
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:623
+#: includes/class-geodir-seo.php:626
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:624
+#: includes/class-geodir-seo.php:627
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:629
+#: includes/class-geodir-seo.php:632
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:630
+#: includes/class-geodir-seo.php:633
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:631
+#: includes/class-geodir-seo.php:634
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:632
+#: includes/class-geodir-seo.php:635
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:633
+#: includes/class-geodir-seo.php:636
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:634
+#: includes/class-geodir-seo.php:637
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:635
+#: includes/class-geodir-seo.php:638
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:636
+#: includes/class-geodir-seo.php:639
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:637
+#: includes/class-geodir-seo.php:640
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:638
+#: includes/class-geodir-seo.php:641
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:643
+#: includes/class-geodir-seo.php:646
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:644
+#: includes/class-geodir-seo.php:647
 msgid "The currently used search for term with `for`. Ex: for dinner."
 msgstr ""
 
-#: includes/class-geodir-seo.php:645
+#: includes/class-geodir-seo.php:648
 msgid "The currently used search near term with `near`. Ex: near Philadelphia."
 msgstr ""
 
-#: includes/class-geodir-seo.php:646
+#: includes/class-geodir-seo.php:649
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:651
+#: includes/class-geodir-seo.php:654
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:652
+#: includes/class-geodir-seo.php:655
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:653
+#: includes/class-geodir-seo.php:656
 msgid "Total post found eg: 10"
 msgstr ""
 
-#: includes/class-geodir-seo.php:654
+#: includes/class-geodir-seo.php:657
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:659
+#: includes/class-geodir-seo.php:662
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore"
 msgstr ""
 
-#: includes/class-geodir-seo.php:679
+#: includes/class-geodir-seo.php:682
 msgid "Click to copy"
 msgstr ""
 
@@ -10875,7 +10875,7 @@ msgstr ""
 msgid "View on Google map"
 msgstr ""
 
-#: includes/custom-fields/output-filter-functions.php:347
+#: includes/custom-fields/output-filter-functions.php:371
 msgid "View on Map"
 msgstr ""
 
@@ -11043,7 +11043,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:251
 #: includes/elementor/class-geodir-elementor-tag-gallery.php:106
 #: includes/elementor/class-geodir-elementor-tag-image.php:205
-#: includes/elementor/class-geodir-elementor-tag-number.php:88
+#: includes/elementor/class-geodir-elementor-tag-number.php:93
 #: includes/elementor/class-geodir-elementor-tag-text.php:181
 #: includes/elementor/class-geodir-elementor-tag-url.php:130
 msgid "Key"
@@ -11051,7 +11051,7 @@ msgstr ""
 
 #: includes/elementor/class-geodir-elementor-tag-color.php:114
 #: includes/elementor/class-geodir-elementor-tag-gallery.php:132
-#: includes/elementor/class-geodir-elementor-tag-number.php:109
+#: includes/elementor/class-geodir-elementor-tag-number.php:114
 #: includes/elementor/class-geodir-elementor-tag-url.php:164
 #: includes/widgets/class-geodir-widget-post-address.php:270
 #: includes/widgets/class-geodir-widget-post-content.php:264
@@ -11755,44 +11755,44 @@ msgstr ""
 msgid "Failed to retrieve GPS info from OpenStreetMap Nominatim server."
 msgstr ""
 
-#: includes/post-functions.php:929
+#: includes/post-functions.php:934
 msgid "NEW"
 msgstr ""
 
-#: includes/post-functions.php:931
+#: includes/post-functions.php:936
 msgid "UPDATED"
 msgstr ""
 
-#: includes/post-functions.php:1427
+#: includes/post-functions.php:1432
 msgid "Overall Rating"
 msgstr ""
 
-#: includes/post-functions.php:1438
+#: includes/post-functions.php:1443
 msgid "Rating Count"
 msgstr ""
 
-#: includes/post-functions.php:1448 includes/post-functions.php:1459
+#: includes/post-functions.php:1453 includes/post-functions.php:1464
 #: includes/widgets/class-geodir-widget-author-actions.php:164
 msgid "Published"
 msgstr ""
 
-#: includes/post-functions.php:1470 includes/post-functions.php:1481
+#: includes/post-functions.php:1475 includes/post-functions.php:1486
 msgid "Modified"
 msgstr ""
 
-#: includes/post-functions.php:1544
+#: includes/post-functions.php:1549
 msgid "Address line 2"
 msgstr ""
 
-#: includes/post-functions.php:1599
+#: includes/post-functions.php:1604
 msgid "Latitude"
 msgstr ""
 
-#: includes/post-functions.php:1610
+#: includes/post-functions.php:1615
 msgid "Longitude"
 msgstr ""
 
-#: includes/post-functions.php:1621
+#: includes/post-functions.php:1626
 msgid "Map Directions"
 msgstr ""
 

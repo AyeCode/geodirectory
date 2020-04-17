@@ -64,6 +64,11 @@ Class GeoDir_Elementor_Tag_Number extends \Elementor\Core\DynamicTags\Tag {
 			if(isset($gd_post->{$key})){
 				$value = $gd_post->{$key};
 			}
+			
+			// star rating needs one digit numbers
+			if($value && $key=='overall_rating'){
+				$value = round($value, 1);
+			}
 
 			echo wp_kses_post( $value );
 		}
