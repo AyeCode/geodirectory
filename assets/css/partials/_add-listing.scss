@@ -157,6 +157,31 @@
 .gd-make-default-term:hover {
 	text-decoration: none;
 }
+/* Style for checkbox icon start */
+.gd-parent-cats-list > span{
+    margin-bottom: 10px;
+}
+
+.gd-parent-cats-list .gd-cat-icon{
+    margin: 5px 10px;
+    border-radius: 5px;
+    padding: 3px 5px;
+    color: #fff;
+    width: 50px;
+    height: 50px;
+    display: inline-block;
+    text-align: center;
+    line-height: 50px;
+    font-size: 25px;
+    vertical-align: middle;
+}
+
+.gd-parent-cats-list img {
+    max-width: 30px;
+    max-height: 30px;
+}
+/* Style for checkbox icon end */
+
 .gd-term-handle .gd-term-checked .gd-make-default-term,
 .gd-term-handle .gd-term-checked.gd-default-term .gd-is-default-term {
 	display: inline-block !important;

@@ -778,6 +778,8 @@ class GeoDir_Admin_Taxonomies {
                 $p = 0;
                 $out = '<div class="' . $list_class . ' gd-cat-row-' . $cat_parent . '" style="margin-left:' . $p . 'px;' . $display . ';">';
             }
+            $hide_icon = apply_filters( 'term_icon_visibility', false );
+            $term_icons = !$hide_icon ? geodir_get_term_icon() : array();
 
             foreach ( $cat_terms as $cat_term ) {
                 $checked = '';
@@ -801,15 +803,32 @@ class GeoDir_Admin_Taxonomies {
                 }
 
                 $child_dash = $p > 0 ? str_repeat( "-", $p / 20 ) . ' ' : '';
+                $term_icon = '';
+
+                if(!$hide_icon) {
+                    $term_icon_url = ! empty( $term_icons ) && isset( $term_icons[ $cat_term->term_id ] ) ? $term_icons[ $cat_term->term_id ] : '';
+                    $term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr( $cat_term->name ) . ' icon" src="' . $term_icon_url . '" /> ' : '';
+                    $cat_font_icon = get_term_meta( $cat_term->term_id, 'ct_cat_font_icon', true );
+                    $cat_color = get_term_meta( $cat_term->term_id, 'ct_cat_color', true );
+                    $cat_color = $cat_color ? $cat_color : '#ababab';
+                    // use_image
+                    $term_image = get_term_meta( $cat_term->term_id, 'ct_cat_default_img', true );
+                    if(!empty($term_image['id'])){
+                        $cat_font_icon = false;
+                        $term_icon_url = wp_get_attachment_image($term_image['id'],'medium');
+                    }
+                    $term_icon     = $cat_font_icon ? '<i class="fas ' . $cat_font_icon . '" aria-hidden="true"></i>' : $term_icon_url;
+                    $term_icon     = '<span class="gd-cat-icon" style="background: '.$cat_color.';">' . $term_icon . '</span>';
+                }
 
                 if ($cat_display == 'radio')
-                    $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="tax_input['.$cat_term->taxonomy .'][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" data-cradio="default_category">' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
+                $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="tax_input['.$cat_term->taxonomy .'][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" data-cradio="default_category">'. $term_icon . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
                 elseif ($cat_display == 'select' || $cat_display == 'multiselect')
                     $out .= '<option ' . $main_list_class . ' style="margin-left:' . $p . 'px;" alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' >' . $term_check . $child_dash . geodir_utf8_ucfirst($cat_term->name) . '</option>';
 
                 else {
 					$class = $checked ? 'class="gd-term-checked"' : '';
-                    $out .= '<span style="display:block" ' . $class . '><input style="display:inline-block" type="checkbox" field_type="checkbox" name="tax_input['.$cat_term->taxonomy .'][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" data-ccheckbox="default_category">' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '<span class="gd-make-default-term" style="display:none" title="' . esc_attr( wp_sprintf( __( 'Make %s default category', 'geodirectory' ), geodir_utf8_ucfirst($cat_term->name) ) ) . '">' . __( 'Make default', 'geodirectory' ). '</span><span class="gd-is-default-term" style="display:none">' . __( 'Default', 'geodirectory' ). '</span></span>';
+                    $out .= '<span style="display:block" ' . $class . '><input style="display:inline-block" type="checkbox" field_type="checkbox" name="tax_input['.$cat_term->taxonomy .'][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" data-ccheckbox="default_category">' . $term_icon . $term_check . geodir_utf8_ucfirst($cat_term->name) . '<span class="gd-make-default-term" style="display:none" title="' . esc_attr( wp_sprintf( __( 'Make %s default category', 'geodirectory' ), geodir_utf8_ucfirst($cat_term->name) ) ) . '">' . __( 'Make default', 'geodirectory' ). '</span><span class="gd-is-default-term" style="display:none">' . __( 'Default', 'geodirectory' ). '</span></span>';
                 }
 
                 if ( ! ( absint( $cat_parent ) == 0 && count( $cat_terms ) == 1 ) ) {
