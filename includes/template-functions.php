@@ -88,6 +88,11 @@ function geodir_get_template_part( $slug, $name = '' ) {
 	// If template file doesn't exist, look in yourtheme/slug.php and yourtheme/geodirectory/slug.php
 	if ( ! $template ) {
 		$template = locate_template( array( "{$slug}.php", geodir_get_theme_template_dir_name() . "/{$slug}.php" ) );
+
+		// If template file doesn't exist, look in /geodirectory/templates/slug.php
+		if ( ! $template && file_exists( geodir_get_templates_dir() . "/{$slug}.php" ) ) {
+			$template = geodir_get_templates_dir() . "/{$slug}.php";
+		}
 	}
 
 	// Allow 3rd party plugins to filter template file from their plugin.
