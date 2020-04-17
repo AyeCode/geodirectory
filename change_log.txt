@@ -1,3 +1,6 @@
+= 2.0.0.90 =
+Customize map popup template for the post type - ADDED
+
 = 2.0.0.89 =
 * Badge shortcode for file field %%input%% return file array - FIXED
 * Yoast SEO OpenGraph meta not working on GD pages - FIXED
