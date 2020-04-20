@@ -2,6 +2,7 @@
 * Customize map popup template for the post type - ADDED
 * Detail page tabs & dropdown is not working on mobile device - FIXED
 * GD > Listings widget elementor skin select not working - FIXED
+* Use default location offset as a business hours default offset - CHANGED
 
 = 2.0.0.89 =
 * Badge shortcode for file field %%input%% return file array - FIXED

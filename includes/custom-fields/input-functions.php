@@ -1729,10 +1729,16 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		$weekdays = geodir_get_weekdays();
 		$hours = array();
 		$display = 'none';
-		$timezone_string = trim( get_option('timezone_string') );
-		$gmt_offset = esc_attr( geodir_utc_offset_dst( $timezone_string ) );
+		$location_timezone = trim( geodir_get_option( 'default_location_timezone' ) );
+		if ( $location_timezone != '' ) {
+			$timezone_string = geodir_utc_offset( $location_timezone ); // Default location timezone.
+		} else {
+			$timezone_string = trim( get_option('timezone_string') ); // WordPress default timezone.
+		}
+		$default_offset = esc_attr( geodir_utc_offset_dst( $timezone_string, true ) );
+		$gmt_offset = $default_offset;
 
-        if ( ! empty( $value ) ) {
+		if ( ! empty( $value ) ) {
 			$display = '';
 			$value = stripslashes_deep( $value );
 			$periods = geodir_schema_to_array( $value );
@@ -1803,7 +1809,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 							<?php } ?>
 							<tr class="gd-tz-item">
 								<td colspan="4"><label form="<?php echo $htmlvar_name; ?>_f_timezone"><?php _e( 'Timezone offset from UTC (not including daylight savings time This is set automatically when address is set)', 'geodirectory' ); ?></label> 
-                                    <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( geodir_utc_offset_dst( $timezone_string ) ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN">
+                                    <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( $default_offset ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN">
                                 </td>
                             </tr>
 						</tbody>
