@@ -46,7 +46,6 @@ if($styles){
 		 * @see 'geodir_after_listing_post_listview'
 		 */
 		do_action('geodir_before_listing_post_listview');
-		$template = 340;
 		$classes = 'elementor-post elementor-grid-item';
 		foreach ( $widget_listings as $widget_listing ) {
 //			elementor-post elementor-grid-item post-160 gd_place type-gd_place status-publish has-post-thumbnail hentry gd_place_tags-house gd_place_tags-logde gd_placecategory-houses
@@ -55,7 +54,7 @@ if($styles){
 			<?php
 			geodir_setup_postdata( $widget_listing );
 
-			$return = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template );
+			$return = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $skin_id );
 
 			echo $return;
 			?>

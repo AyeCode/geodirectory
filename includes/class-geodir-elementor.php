@@ -49,6 +49,9 @@ class GeoDir_Elementor {
 			'maybe_add_image_caption'
 		), 10, 2 );
 
+		// clear cache
+		add_action( 'save_post',  array( __CLASS__,'clear_cache'));
+
 
 		add_filter('elementor/frontend/section/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
 		add_filter('elementor/frontend/widget/should_render', array( __CLASS__, 'maybe_hide_elements' ), 10, 2 );
@@ -74,6 +77,14 @@ class GeoDir_Elementor {
 	}
 
 	/**
+	 * Clear any caches we use on post save hook.
+	 */
+	public static function clear_cache(){
+		// clear the skin query cache
+		wp_cache_delete("geodir_elementor_pro_skins");
+	}
+
+	/**
 	 * Don't render elements if set not to do so.
 	 *
 	 * @param $should_render
@@ -82,7 +93,7 @@ class GeoDir_Elementor {
 	 * @return bool
 	 */
 	public static function maybe_hide_elements($should_render, $section){
-		
+
 		$dynamic_settings = $section->get_parsed_dynamic_settings();
 
 		$class = '';
