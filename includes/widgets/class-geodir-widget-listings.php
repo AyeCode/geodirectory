@@ -365,6 +365,12 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	//@todo add caching here and in skin template class
 	public static function get_elementor_pro_skins(){
 		global $wpdb;
+
+		$cache = wp_cache_get("geodir_elementor_pro_skins");
+		if($cache !== false){
+			return $cache;
+		}
+		
 		$templates = $wpdb->get_results(
 			"SELECT $wpdb->term_relationships.object_id as ID, $wpdb->posts.post_title as post_title FROM $wpdb->term_relationships
 						INNER JOIN $wpdb->term_taxonomy ON
@@ -379,6 +385,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		foreach ( $templates as $template ) {
 			$options[ $template->ID ] = $template->post_title;
 		}
+		
+		wp_cache_set("geodir_elementor_pro_skins",$options);
+			
 		return $options;
 	}
 
@@ -947,7 +956,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		    if($skin_active){
 			    $column_gap = !empty($instance['skin_column_gap']) ? absint($instance['skin_column_gap']) : '';
 			    $row_gap = !empty($instance['skin_row_gap']) ? absint($instance['skin_row_gap']) : '';
-			    geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
+			    geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
 		    }else{
 			    geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
 		    }
