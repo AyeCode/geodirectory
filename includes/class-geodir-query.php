@@ -46,6 +46,7 @@ class GeoDir_Query {
 
 			//add_action( 'wp', array( $this, 'remove_product_query' ) );
 			//add_action( 'wp', array( $this, 'remove_ordering_args' ) );
+			add_filter( 'pre_handle_404', array( __CLASS__, 'pre_handle_404' ), 20, 2 );
 		}
 
 		$this->init_query_vars();
@@ -1545,5 +1546,26 @@ class GeoDir_Query {
 		return $orderby;
 	}
 
+	/**
+	 * Filters whether to short-circuit default header status to fix 404 status
+	 * header when no results found on GD search page.
+	 *
+	 * Returning a non-false value from the filter will short-circuit the handling
+	 * and return early.
+	 *
+	 * @since 2.0.0.90
+	 *
+	 * @param bool     $preempt  Whether to short-circuit default header status handling. Default false.
+	 * @param WP_Query $wp_query WordPress Query object.
+	 * @return bool
+	 */
+	public static function pre_handle_404( $preempt, $wp_query ) {
+		if ( ! is_admin() && ! empty( $wp_query ) && is_object( $wp_query ) && $wp_query->is_main_query() && geodir_is_page( 'search' ) ) {
+			// Don't 404 for search queries.
+			status_header( 200 );
+			return;
+		}
 
+		return $preempt;
+	}
 }

@@ -172,9 +172,10 @@ function geodir_seconds_to_hhmm( $seconds ) {
  * Prints a string showing current time zone offset to UTC, considering daylight savings time.
  * @link                     http://php.net/manual/en/timezones.php
  * @param  string $time_zone Time zone name
+ * @param  bool   $formatted Format the offset. Converts +1.5 to +1:30.
  * @return string            Offset in hours, prepended by +/-
  */
-function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin' ) {
+function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin', $formatted = false ) {
 	$original_timezone = date_default_timezone_get();
 	// Set UTC as default time zone.
 	date_default_timezone_set( 'UTC' ); // @codingStandardsIgnoreEnd
@@ -185,13 +186,20 @@ function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin' ) {
 	// Calculate offset.
 	$current   = timezone_open( $time_zone );
 	$offset_s  = timezone_offset_get( $current, $utc ); // seconds
-	$offset_h  = $offset_s / ( 60 * 60 ); // hours
-	// Prepend “+” when positive
-	$offset_h  = (string) $offset_h;
-	if ( strpos( $offset_h, '-' ) === FALSE ) {
-		$offset_h = '+' . $offset_h; // prepend +
+
+	if ( $formatted ) {
+		$offset_h = geodir_seconds_to_hhmm( $offset_s ); // Converts +1.5 to +1:30.
+	} else {
+		$offset_h  = $offset_s / ( 60 * 60 ); // hours
+		// Prepend “+” when positive
+		$offset_h  = (string) $offset_h;
+		if ( strpos( $offset_h, '-' ) === FALSE ) {
+			$offset_h = '+' . $offset_h; // prepend +
+		}
 	}
+
 	date_default_timezone_set( $original_timezone ); // @codingStandardsIgnoreEnd
+
 	return $offset_h;
 }
 
