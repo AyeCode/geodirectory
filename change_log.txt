@@ -3,6 +3,7 @@
 * Detail page tabs & dropdown is not working on mobile device - FIXED
 * GD > Listings widget elementor skin select not working - FIXED
 * Use default location offset as a business hours default offset - CHANGED
+* Response header shows 404 status when on results found on GD search page - FIXED
 
 = 2.0.0.89 =
 * Badge shortcode for file field %%input%% return file array - FIXED
