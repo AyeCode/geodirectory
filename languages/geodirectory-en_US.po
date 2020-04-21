@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.89\n"
+"Project-Id-Version: GeoDirectory 2.0.0.90\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-16 16:45+0100\n"
-"PO-Revision-Date: 2020-04-16 16:45+0100\n"
+"POT-Creation-Date: 2020-04-21 19:30+0530\n"
+"PO-Revision-Date: 2020-04-21 19:30+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Poedit-Basepath: ..\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Poedit-SourceCharset: UTF-8\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"X-Generator: Poedit 2.0.6\n"
 "X-Poedit-SearchPath-0: .\n"
 
 #: geodirectory.php:180
@@ -241,7 +241,6 @@ msgstr ""
 #: includes/admin/class-geodir-admin-install.php:318
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:514
 #: includes/api/class-geodir-rest-posts-controller.php:2253
-#: vendor/ayecode/wp-super-duper/map.php:69
 msgid "Map"
 msgstr ""
 
@@ -4064,7 +4063,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1247
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1252
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:1253
-#: includes/business-hours-functions.php:702
+#: includes/business-hours-functions.php:710
 msgid "Temporarily Closed"
 msgstr ""
 
@@ -8078,7 +8077,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2840
 #: includes/class-geodir-privacy-exporters.php:238
 #: includes/class-geodir-privacy-exporters.php:303
-#: includes/custom-fields/input-functions.php:1756
+#: includes/custom-fields/input-functions.php:1762
 #: includes/custom-fields/output-functions.php:86
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:200
 msgid "Yes"
@@ -8087,7 +8086,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2800
 #: includes/api/class-geodir-rest-posts-controller.php:2838
 #: includes/class-geodir-privacy-exporters.php:301
-#: includes/custom-fields/input-functions.php:1757
+#: includes/custom-fields/input-functions.php:1763
 #: includes/custom-fields/output-functions.php:88
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:200
 msgid "No"
@@ -8764,21 +8763,21 @@ msgstr ""
 msgid "Sunday"
 msgstr ""
 
-#: includes/business-hours-functions.php:584 includes/core-functions.php:345
-#: includes/custom-fields/input-functions.php:1798
+#: includes/business-hours-functions.php:592 includes/core-functions.php:345
+#: includes/custom-fields/input-functions.php:1804
 msgid "Closed"
 msgstr ""
 
-#: includes/business-hours-functions.php:585 includes/core-functions.php:342
+#: includes/business-hours-functions.php:593 includes/core-functions.php:342
 msgid "Open now"
 msgstr ""
 
-#: includes/business-hours-functions.php:586 includes/core-functions.php:343
+#: includes/business-hours-functions.php:594 includes/core-functions.php:343
 msgid "Closed now"
 msgstr ""
 
-#: includes/business-hours-functions.php:587
-#: includes/custom-fields/input-functions.php:1761
+#: includes/business-hours-functions.php:595
+#: includes/custom-fields/input-functions.php:1767
 msgid "Open 24 hours"
 msgstr ""
 
@@ -9363,17 +9362,17 @@ msgstr ""
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:342 includes/core-functions.php:349
+#: includes/class-geodir-elementor.php:353 includes/core-functions.php:349
 #: includes/widgets/class-geodir-widget-single-next-prev.php:53
 msgid "Previous"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:346 includes/core-functions.php:350
+#: includes/class-geodir-elementor.php:357 includes/core-functions.php:350
 #: includes/widgets/class-geodir-widget-single-next-prev.php:54
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:1002
+#: includes/class-geodir-elementor.php:1013
 msgid "Could not retrieve template."
 msgstr ""
 
@@ -9612,7 +9611,7 @@ msgstr ""
 
 #: includes/class-geodir-notifications.php:58
 #: includes/class-geodir-notifications.php:69
-#: includes/template-functions.php:813
+#: includes/template-functions.php:818
 msgid "business"
 msgstr ""
 
@@ -9750,7 +9749,6 @@ msgid "Places"
 msgstr ""
 
 #: includes/class-geodir-post-types.php:126
-#: vendor/ayecode/wp-super-duper/map.php:84
 msgid "Place"
 msgstr ""
 
@@ -10776,7 +10774,6 @@ msgstr ""
 
 #: includes/custom-fields/input-functions.php:1266
 #: includes/widgets/class-geodir-widget-map.php:452
-#: vendor/ayecode/wp-super-duper/map.php:158
 msgid "Satellite Map"
 msgstr ""
 
@@ -10821,30 +10818,30 @@ msgstr ""
 msgid "Your tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1761
+#: includes/custom-fields/input-functions.php:1767
 msgid "Day"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1761
+#: includes/custom-fields/input-functions.php:1767
 msgid "Opening Hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1761
+#: includes/custom-fields/input-functions.php:1767
 msgid "Add"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1764
-#: includes/custom-fields/input-functions.php:1794
+#: includes/custom-fields/input-functions.php:1770
+#: includes/custom-fields/input-functions.php:1800
 #: includes/widgets/class-geodir-widget-archive-item-section.php:41
 msgid "Open"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1764
-#: includes/custom-fields/input-functions.php:1794
+#: includes/custom-fields/input-functions.php:1770
+#: includes/custom-fields/input-functions.php:1800
 msgid "Close"
 msgstr ""
 
-#: includes/custom-fields/input-functions.php:1805
+#: includes/custom-fields/input-functions.php:1811
 msgid ""
 "Timezone offset from UTC (not including daylight savings time This is set "
 "automatically when address is set)"
@@ -11006,7 +11003,7 @@ msgid "GD Email Listing"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-skin-custom.php:34
-#: includes/elementor/class-geodir-elementor-skin-custom.php:375
+#: includes/elementor/class-geodir-elementor-skin-custom.php:384
 #: includes/elementor/class-geodir-elementor-template-archive-item.php:74
 msgid "GD Archive Item"
 msgstr ""
@@ -11023,15 +11020,15 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:200
+#: includes/elementor/class-geodir-elementor-skin-custom.php:209
 msgid "Please select a default template! "
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:268
+#: includes/elementor/class-geodir-elementor-skin-custom.php:277
 msgid "Page"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:291
+#: includes/elementor/class-geodir-elementor-skin-custom.php:300
 msgid "Pagination"
 msgstr ""
 
@@ -11377,7 +11374,7 @@ msgstr ""
 msgid "Grid View (Five Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2329 includes/template-functions.php:746
+#: includes/general-functions.php:2329 includes/template-functions.php:751
 msgid "View: List"
 msgstr ""
 
@@ -11854,34 +11851,34 @@ msgstr ""
 msgid "Sort By"
 msgstr ""
 
-#: includes/template-functions.php:126
+#: includes/template-functions.php:131
 #, php-format
 msgid "%s does not exist."
 msgstr ""
 
-#: includes/template-functions.php:237
+#: includes/template-functions.php:242
 msgid "No favorite listings found which match your selection."
 msgstr ""
 
-#: includes/template-functions.php:239
+#: includes/template-functions.php:244
 msgid "No listings found which match your selection."
 msgstr ""
 
-#: includes/template-functions.php:313
+#: includes/template-functions.php:318
 #, php-format
 msgid "Search results: &ldquo;%s&rdquo;"
 msgstr ""
 
-#: includes/template-functions.php:316
+#: includes/template-functions.php:321
 #, php-format
 msgid "&nbsp;&ndash; Page %s"
 msgstr ""
 
-#: includes/template-functions.php:741
+#: includes/template-functions.php:746
 msgid "Layout"
 msgstr ""
 
-#: includes/template-functions.php:746
+#: includes/template-functions.php:751
 #, php-format
 msgid "View: Grid %d"
 msgstr ""
@@ -12142,7 +12139,7 @@ msgid "Best of %s"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-best-of.php:483
-#: includes/widgets/class-geodir-widget-listings.php:979
+#: includes/widgets/class-geodir-widget-listings.php:988
 msgid "View all"
 msgstr ""
 
@@ -12758,15 +12755,15 @@ msgstr ""
 msgid "The px value for the row gap."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:661
+#: includes/widgets/class-geodir-widget-listings.php:670
 msgid "Near:"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:661
+#: includes/widgets/class-geodir-widget-listings.php:670
 msgid "Me"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-listings.php:817
+#: includes/widgets/class-geodir-widget-listings.php:826
 msgctxt "tag delimiter"
 msgid ","
 msgstr ""
@@ -12868,7 +12865,6 @@ msgid "Placeholder map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:37
-#: vendor/ayecode/wp-super-duper/hello-world.php:26
 msgid "Placeholder"
 msgstr ""
 
@@ -12916,8 +12912,6 @@ msgid "Distance unit"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:430
-#: vendor/ayecode/wp-super-duper/map.php:105
-#: vendor/ayecode/wp-super-duper/map.php:134
 msgid "Width:"
 msgstr ""
 
@@ -12929,8 +12923,6 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:439
-#: vendor/ayecode/wp-super-duper/map.php:119
-#: vendor/ayecode/wp-super-duper/map.php:144
 msgid "Height:"
 msgstr ""
 
@@ -12941,27 +12933,22 @@ msgid ""
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:448
-#: vendor/ayecode/wp-super-duper/map.php:154
 msgid "Mapview:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:449
-#: vendor/ayecode/wp-super-duper/map.php:155
 msgid "This is the type of map view that will be used by default."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:451
-#: vendor/ayecode/wp-super-duper/map.php:157
 msgid "Road Map"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:462
-#: vendor/ayecode/wp-super-duper/map.php:168
 msgid "Zoom level:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-map.php:463
-#: vendor/ayecode/wp-super-duper/map.php:169
 msgid "This is the zoom level of the map, `auto` is recommended."
 msgstr ""
 
@@ -13234,7 +13221,6 @@ msgid "This can be used to output many custom fields in one location."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-output-location.php:42
-#: vendor/ayecode/wp-super-duper/map.php:96
 msgid "Location:"
 msgstr ""
 
@@ -15770,92 +15756,6 @@ msgstr ""
 msgid ""
 "This will try to dequeue any other Font Awesome versions loaded by other "
 "sources if they are added with `font-awesome` or `fontawesome` in the name."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:36
-msgid "Hello World"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:41
-#: vendor/ayecode/wp-super-duper/map.php:74
-msgid ""
-"This is an example that will take a text parameter and output it after "
-"`Hello:`."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:47
-msgid "Text after hello:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:49
-msgid "This is the text that will appear after `Hello:`."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:119
-msgid "Another input:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/hello-world.php:120
-msgid "This is an input added via filter."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:25
-msgid ""
-"A Google API key is required to use this block, we recommend installing our "
-"plugin which makes it easy and sets it globally, or you can set a key in the "
-"block settings sidebar: "
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:31
-msgid "API KEY for Google Maps"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:48
-msgid "Placeholderx"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:61
-msgid "Click here, Settings are in the block settings sidebar"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:79
-msgid "Map Type:"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:80
-msgid "Select the map type to use."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:83
-msgid "Static Image"
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:97
-msgid "Enter the location to show on the map, place, city, zip code or GPS."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:106
-msgid ""
-"This is the width of the map, for static maps you can only use px values."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:120
-msgid ""
-"This is the height of the map, for static maps you can only use px values."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:135
-#, php-format
-msgid "This is the width of the map, you can use % or px here."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:145
-#: vendor/ayecode/wp-super-duper/map.php:179
-msgid "This is the height of the map, you can use %, px or vh here."
-msgstr ""
-
-#: vendor/ayecode/wp-super-duper/map.php:178
-msgid "Api Key:"
 msgstr ""
 
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:251
