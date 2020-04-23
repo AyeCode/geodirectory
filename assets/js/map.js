@@ -308,6 +308,14 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
                 .map(function() { return jQuery(this).data("post-id") }) //Project Ids
                 .get(); //ToArray
 
+            // check if elementor loop
+            if(!idarray.length && jQuery('.elementor-posts-container').length){
+                idarray = jQuery(".geodir-loop-container")
+                    .find(".elementor-post ") //Find the spans
+                    .map(function() { return jQuery(this).attr('id').replace("post-",""); }) //Project Ids
+                    .get(); //ToArray
+            }
+
             if(idarray){
                 posts = idarray;
             }else{
