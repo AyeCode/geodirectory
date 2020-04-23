@@ -797,7 +797,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		}
 
 		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' ) {
-			$fields = geodir_post_custom_fields( '', 'all', $post_type, 'none' );
+			$package_id = geodir_get_post_package_id( $post_id, $post_type );
+			$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
 			foreach ( $fields as $field_info ) {
 				if ( $match_field == $field_info['htmlvar_name'] ) {
