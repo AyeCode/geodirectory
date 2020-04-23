@@ -1,5 +1,6 @@
 = 2.0.0.91 =
 * Category font awesome icons have extra fas class on output which break few icons – FIXED
+* Translation of screen_id break GD dashboard functionality - FIXED
 
 = 2.0.0.90 =
 * Customize map popup template for the post type - ADDED
