@@ -84,6 +84,10 @@ class GeoDir_SEO {
 				// set a global so we don't change the menu items titles
 				add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
 				add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
+				// YOOtheme renders own menuwalker.
+				if ( class_exists( 'YOOtheme\\Theme' ) ) {
+					add_filter( 'wp_nav_menu_items',array( __CLASS__, 'unset_menu_global' ), 999, 1 );
+				}
 //
 //				// page title
 				add_filter('the_title',array(__CLASS__,'output_title'),10,2);
@@ -99,6 +103,10 @@ class GeoDir_SEO {
 		// set a global so we don't change the menu items titles
 		add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
 		add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
+		// YOOtheme renders own menuwalker.
+		if ( class_exists( 'YOOtheme\\Theme' ) ) {
+			add_filter( 'wp_nav_menu_items',array( __CLASS__, 'unset_menu_global' ), 999, 1 );
+		}
 
 		// meta title
 		add_filter('wp_title', array(__CLASS__,'output_meta_title'),1000,2);
