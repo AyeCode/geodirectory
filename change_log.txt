@@ -2,6 +2,7 @@
 * Category font awesome icons have extra fas class on output which break few icons – FIXED
 * Post badge widget shows excluded fields from package - FIELD
 * GD Archive map with elementor loop might not filter markers if map is before loop - FIXED
+* Translation of screen_id break GD dashboard functionality - FIXED
 
 = 2.0.0.90 =
 * Customize map popup template for the post type - ADDED
