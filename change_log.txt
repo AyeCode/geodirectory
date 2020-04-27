@@ -4,6 +4,7 @@
 * GD Archive map with elementor loop might not filter markers if map is before loop - FIXED
 * Translation of screen_id break GD dashboard functionality - FIXED
 * YOOtheme shows incorrect title on GD pages - FIXED
+* Badge label shows option value instead of option label for select type field - FIXED
 
 = 2.0.0.90 =
 * Customize map popup template for the post type - ADDED

@@ -901,6 +901,36 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$args['datetime'] = mysql2date( 'c', $match_value, false );
 				}
 
+				// Option value
+				if ( ! empty( $field['option_values'] ) ) {
+					$option_values = geodir_string_values_to_options( stripslashes_deep( $field['option_values'] ), true );
+
+					if ( ! empty( $option_values ) ) {
+						if ( ! empty( $field['field_type'] ) && $field['field_type'] == 'multiselect' ) {
+							$values = explode( ',', trim( $match_value, ', ' ) );
+
+							if ( is_array( $values ) ) {
+								$values = array_map( 'trim', $values );
+							}
+
+							$_match_value = array();
+							foreach ( $option_values as $option_value ) {
+								if ( isset( $option_value['value'] ) && in_array( $option_value['value'], $values ) ) {
+									$_match_value[] = $option_value['label'];
+								}
+							}
+
+							$match_value = ! empty( $_match_value ) ? implode( ', ', $_match_value ) : '';
+						} else {
+							foreach ( $option_values as $option_value ) {
+								if ( isset( $option_value['value'] ) && $option_value['value'] == $match_value ) {
+									$match_value = $option_value['label'];
+								}
+							}
+						}
+					}
+				}
+
 				/**
 				 * @since 2.0.0.75
 				 */
