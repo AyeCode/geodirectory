@@ -360,19 +360,30 @@ class GeoDir_Comments {
 	 * @return bool True if allowed otherwise False.
 	 */
 	public static function comments_open( $open, $post_id ) {
-		if ( $open && $post_id && geodir_is_page( 'detail' ) ) {
+		if ( empty( $post_id ) ) {
+			return $open;
+		}
+
+		if ( $open && geodir_is_page( 'detail' ) ) {
 			if ( in_array( get_post_status( $post_id ), array( 'draft', 'pending', 'auto-draft', 'trash' ) ) ) {
 				$open = false;
 			}
 		}
 
-		// Check & disable comments for post type.
-		if ( $open && $post_id ) {
-			$post_type = get_post_type( $post_id );
+		$post_type = get_post_type( $post_id );
 
-			if ( geodir_is_gd_post_type( $post_type ) && ! GeoDir_Post_types::supports( $post_type, 'comments' ) ) {
-				$open = false;
-			}
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
+			return $open;
+		}
+
+		// Check & disable comments for post type.
+		if ( $open && ! GeoDir_Post_types::supports( $post_type, 'comments' ) ) {
+			$open = false;
+		}
+
+		// Check single review.
+		if ( $open && ! self::can_submit_post_review( $post_id ) ) {
+			$open = false;
 		}
 
 		return $open;
@@ -948,4 +959,89 @@ class GeoDir_Comments {
 		}
 	}
 
+	/**
+	 * Check whether user allowed to submit review or not.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @param int $post_id The post ID.
+	 * @param int $user_id The user ID. Default 0.
+	 * @param string|null $author_email The author email. Default null.
+	 * @return bool True if allowed or false.
+	 */
+	public static function can_submit_post_review( $post_id, $user_id = 0, $author_email = '' ) {
+		$can_review = true;
+
+		if ( ! current_user_can( 'manage_options' ) && GeoDir_Post_types::supports( get_post_type( $post_id ), 'single_review' ) ) {
+			$count_reviews = self::count_user_post_reviews( $post_id, $user_id, $author_email );
+
+			if ( $count_reviews > 0 ) {
+				$can_review = false;
+			}
+		}
+
+		return apply_filters( 'geodir_can_submit_post_review', $can_review, $post_id, $user_id, $author_email );
+	}
+
+	/**
+	 * Count reviews per post submitted by the user.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @global $wpdb WordPress database object.
+	 *
+	 * @param int $post_id The post ID.
+	 * @param int $user_id The user ID. Default 0.
+	 * @param string|null $author_email The author email. Default null.
+	 * @return int Reviews count.
+	 */
+	public static function count_user_post_reviews( $post_id, $user_id = 0, $author_email = '' ) {
+		global $wpdb;
+
+		$count = 0;
+
+		if ( empty( $post_id ) ) {
+			return $count;
+		}
+
+		if ( empty( $user_id ) ) {
+			if ( empty( $author_email ) ) {
+				$user_id = (int) get_current_user_id(); 
+
+				if ( empty( $user_id ) ) {
+					$commenter = wp_get_current_commenter();
+
+					if ( ! empty( $commenter ) && is_array( $commenter ) && ! empty( $commenter['comment_author_email'] ) ) {
+						$author_email = $commenter['comment_author_email'];
+					}
+				}
+			}
+		}
+
+		if ( empty( $user_id ) && empty( $author_email ) ) {
+			return $count = 0;
+		}
+
+		$where = "AND cmt.comment_approved = '1'";
+
+		if ( ! geodir_cpt_has_rating_disabled( get_post_type( $post_id ) ) ) {
+			$where .= " AND r.rating > 0";
+		}
+
+		if ( ! empty( $user_id ) ) {
+			$where .= " AND cmt.user_id = " . (int) $user_id;
+		}
+
+		if ( ! empty( $author_email ) ) {
+			$where .= " AND cmt.comment_author_email = '" . $author_email . "'";
+		}
+
+		$sql = $wpdb->prepare( "SELECT COUNT(*) FROM " . GEODIR_REVIEW_TABLE . " AS r JOIN {$wpdb->comments} AS cmt ON cmt.comment_ID = r.comment_id WHERE r.post_id = %d {$where}", array( $post_id ) );
+
+		$sql = apply_filters( 'geodir_count_user_post_reviews_sql', $sql, $post_id, $user_id, $author_email );
+
+		$count = (int) $wpdb->get_var( $sql );
+
+		return apply_filters( 'geodir_count_user_post_reviews', $count, $post_id, $user_id, $author_email );
+	}
 }

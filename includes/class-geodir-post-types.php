@@ -497,6 +497,13 @@ class GeoDir_Post_types {
 					$value = true;
 				}
 				break;
+			case 'single_review':
+				if ( isset( $post_types[ $post_type ] ) && ! empty( $post_types[ $post_type ][ 'single_review' ] ) ) {
+					$value = true;
+				}else{
+					$value = false;
+				}
+				break;
 		}
 
 

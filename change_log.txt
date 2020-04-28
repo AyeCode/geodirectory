@@ -5,6 +5,7 @@
 * Translation of screen_id break GD dashboard functionality - FIXED
 * YOOtheme shows incorrect title on GD pages - FIXED
 * Badge label shows option value instead of option label for select type field - FIXED
+* Option added to restrict user to submit one review per post - ADDED
 
 = 2.0.0.90 =
 * Customize map popup template for the post type - ADDED
