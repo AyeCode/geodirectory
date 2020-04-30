@@ -538,12 +538,12 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 					'context'     => array( 'view' ),
 				),
                 'field_type'      => array(
-					'description' => __( 'Field type. Eg: text, url select, multiselect, radio, checkbox etc', 'geodirectory' ),
+					'description' => __( 'Field type. Eg: text, url, select, multiselect, radio, checkbox, etc', 'geodirectory' ),
 					'type'        => 'string',
 					'context'     => array( 'view' ),
 				),
                 'field_type_key'  => array(
-					'description' => __( 'Field type key. Eg: text, url select, multiselect, radio, checkbox etc', 'geodirectory' ),
+					'description' => __( 'Field type key. Eg: text, url, select, multiselect, radio, checkbox, etc', 'geodirectory' ),
 					'type'        => 'string',
 					'context'     => array( 'view' ),
 				),
