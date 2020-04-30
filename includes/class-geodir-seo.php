@@ -88,6 +88,12 @@ class GeoDir_SEO {
 				if ( class_exists( 'YOOtheme\\Theme' ) ) {
 					add_filter( 'wp_nav_menu_items',array( __CLASS__, 'unset_menu_global' ), 999, 1 );
 				}
+
+				if ( self::has_yoast_14() ) {
+					add_filter( 'wpseo_opengraph_url', array( __CLASS__, 'wpseo_opengraph_url' ), 20, 2 );
+					add_filter( 'wpseo_canonical', array( __CLASS__, 'wpseo_canonical' ), 20, 2 );
+					add_filter( 'wpseo_adjacent_rel_url', array( __CLASS__, 'wpseo_adjacent_rel_url' ), 20, 3 );
+				}
 //
 //				// page title
 				add_filter('the_title',array(__CLASS__,'output_title'),10,2);
@@ -120,7 +126,18 @@ class GeoDir_SEO {
 		add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
 
 		// Meta title & meta description
-		if ( defined( 'WPSEO_VERSION' ) ) {
+		if ( self::has_yoast() ) {
+			// Yoast SEO v14.x
+			if ( self::has_yoast_14() ) {
+				add_action( 'wpseo_head', array( __CLASS__, 'set_meta' ), -99999 );
+
+				add_filter( 'wpseo_opengraph_title', array( __CLASS__, 'get_title' ), 10, 1 );
+				add_filter( 'wpseo_opengraph_desc', array( __CLASS__, 'get_description' ), 10, 1 );
+				add_filter( 'wpseo_opengraph_url', array( __CLASS__, 'wpseo_opengraph_url' ), 20, 2 );
+				add_filter( 'wpseo_canonical', array( __CLASS__, 'wpseo_canonical' ), 20, 2 );
+				add_filter( 'wpseo_adjacent_rel_url', array( __CLASS__, 'wpseo_adjacent_rel_url' ), 20, 3 );
+			}
+
 			add_filter( 'wpseo_title', array( __CLASS__, 'get_title' ), 10, 1 );
 			add_filter( 'wpseo_metadesc', array( __CLASS__, 'get_description' ), 10, 1 );
 		} elseif ( defined( 'RANK_MATH_VERSION' ) ) {
@@ -833,10 +850,12 @@ class GeoDir_SEO {
 	 * @return void.
 	 */
 	public static function template_redirect() {
-		if ( defined( 'WPSEO_VERSION' ) ) {
+		if ( self::has_yoast() ) {
 			// OpenGraph
-			add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_setup_meta' ), 0 );
-			add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_unset_meta' ), 99 );
+			if ( ! self::has_yoast_14() ) {
+				add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_setup_meta' ), 0 );
+				add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_unset_meta' ), 99 );
+			}
 
 			// Twitter
 			if ( WPSEO_Options::get( 'twitter' ) === true ) {
@@ -902,4 +921,159 @@ class GeoDir_SEO {
 		return $page_id;
 	}
 
+	/**
+	 * Check Yoast SEO is installed or not.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @return bool True if Yoast SEO is installed else false.
+	 */
+	public static function has_yoast() {
+		return defined( 'WPSEO_VERSION' );
+	}
+
+	/**
+	 * Check Yoast SEO v14.x installed or not.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @return bool True if Yoast SEO v14.x is installed else false.
+	 */
+	public static function has_yoast_14() {
+		return ( self::has_yoast() && version_compare( WPSEO_VERSION, '14.0', '>=' ) );
+	}
+
+	/**
+	 * Filter Yoast SEO generated open graph URL.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @param string $canonical The URL.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Filtered URL.
+	 */
+	public static function wpseo_opengraph_url( $canonical, $presentation ) {
+		if ( $canonicals = self::get_canonicals() ) {
+			if ( ! empty( $canonicals['canonical'] ) ) {
+				$canonical = $canonicals['canonical'];
+			}
+		}
+
+		return $canonical;
+	}
+
+	/**
+	 * Filter Yoast SEO generated canonical URL.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @param string $canonical The URL.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Filtered URL.
+	 */
+	public static function wpseo_canonical( $canonical, $presentation ) {
+		if ( $canonicals = self::get_canonicals() ) {
+			if ( ! empty( $canonicals['canonical_paged'] ) ) {
+				$canonical = $canonicals['canonical_paged'];
+			}
+		}
+
+		return $canonical;
+	}
+
+	/**
+	 * Filter the rel next/prev URL.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @param string $rel The next/prev URL.
+	 * @param string $type next or prev.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Filtered next/prev URL.
+	 */
+	public static function wpseo_adjacent_rel_url( $rel, $type, $presentation ) {
+		if ( $rel && $type && ( $canonicals = self::get_canonicals() ) ) {
+			if ( ! empty( $canonicals['canonical_' . $type ] ) ) {
+				$rel = $canonicals['canonical_' . $type ];
+			}
+		}
+
+		return $rel;
+	}
+
+	/**
+	 * Get paged & non paged canonical URLs for GD post type & archive pages.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @return array|NULL Array of URLs.
+	 */
+	public static function get_canonicals() {
+		global $wp_rewrite;
+
+		if ( ! geodir_is_geodir_page() ) {
+			return NULL;
+		}
+
+		$canonicals = array();
+		$canonical = '';
+
+		if ( geodir_is_page( 'pt' ) ) {
+			$post_type = geodir_get_current_posttype();
+
+			$canonical = get_post_type_archive_link( $post_type );
+		} elseif ( geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->taxonomy ) ) {
+				$term_link = get_term_link( $term, $term->taxonomy );
+
+				if ( ! is_wp_error( $term_link ) ) {
+					$canonical = $term_link;
+				}
+			}
+		}
+
+		if ( $canonical ) {
+			$canonical_paged = $canonical;
+			$canonical_next = $canonical;
+			$canonical_prev = $canonical;
+
+			$paged = (int) get_query_var( 'paged' );
+			if ( $paged < 1 ) {
+				$paged = 1;
+			}
+
+			if ( ! $wp_rewrite->using_permalinks() ) {
+				if ( $paged > 1 ) {
+					$canonical_paged = add_query_arg( 'paged', $paged, $canonical );
+
+					if ( $paged > 2 ) {
+						$canonical_prev = add_query_arg( 'paged', ( $paged - 1 ), $canonical );
+					}
+				}
+
+				$canonical_next = add_query_arg( 'paged', ( $paged + 1 ), $canonical );
+			} else {
+				if ( $paged > 1 ) {
+					$canonical_paged = user_trailingslashit( trailingslashit( $canonical ) . trailingslashit( $wp_rewrite->pagination_base ) . $paged );
+
+					if ( $paged > 2 ) {
+						$canonical_prev = user_trailingslashit( trailingslashit( $canonical ) . trailingslashit( $wp_rewrite->pagination_base ) . ( $paged - 1 ) );
+					}
+				}
+
+				$canonical_next = user_trailingslashit( trailingslashit( $canonical ) . trailingslashit( $wp_rewrite->pagination_base ) . ( $paged + 1 ) );
+			}
+
+			$canonicals = array(
+				'canonical' => $canonical,
+				'canonical_paged' => $canonical_paged,
+				'canonical_next' => $canonical_next,
+				'canonical_prev' => $canonical_prev
+			);
+		}
+
+		return apply_filters( 'geodir_get_canonicals', $canonicals );
+	}
 }
