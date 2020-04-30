@@ -525,7 +525,7 @@ class GeoDir_Admin_Import_Export {
 			if ( is_wp_error( $gps ) ) {
 				return $gps->get_error_message();
 			} else {
-				return esc_attr__( 'Fail to retrieve GPS data from a address using API.', 'geodirectory' );
+				return esc_attr__( 'Failed to retrieve GPS data from a address using API.', 'geodirectory' );
 			}
 		}
 
