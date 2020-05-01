@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.91\n"
+"Project-Id-Version: GeoDirectory 2.0.0.92\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-04-30 22:07+0530\n"
-"PO-Revision-Date: 2020-04-30 22:07+0530\n"
+"POT-Creation-Date: 2020-05-01 22:16+0530\n"
+"PO-Revision-Date: 2020-05-01 22:16+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -238,7 +238,7 @@ msgid "Zip/Post Code"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:899
-#: includes/admin/class-geodir-admin-install.php:318
+#: includes/admin/class-geodir-admin-install.php:321
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:514
 #: includes/api/class-geodir-rest-posts-controller.php:2253
 msgid "Map"
@@ -1245,16 +1245,16 @@ msgstr ""
 msgid "invalid data."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:292
+#: includes/admin/class-geodir-admin-install.php:295
 msgid "Profile"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:305
+#: includes/admin/class-geodir-admin-install.php:308
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:523
 msgid "Photos"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:331
+#: includes/admin/class-geodir-admin-install.php:334
 #: includes/admin/dashboard-functions.php:278
 #: includes/admin/diagnostic-functions.php:562
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:505
@@ -1265,90 +1265,90 @@ msgstr ""
 msgid "Reviews"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:433
+#: includes/admin/class-geodir-admin-install.php:436
 msgid "Monthly"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:459
+#: includes/admin/class-geodir-admin-install.php:462
 msgctxt "Page slug"
 msgid "add-listing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:460
+#: includes/admin/class-geodir-admin-install.php:463
 msgctxt "Page title"
 msgid "Add Listing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:464
+#: includes/admin/class-geodir-admin-install.php:467
 msgctxt "Page slug"
 msgid "search"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:465
+#: includes/admin/class-geodir-admin-install.php:468
 msgctxt "Page title"
 msgid "Search page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:469
+#: includes/admin/class-geodir-admin-install.php:472
 msgctxt "Page slug"
 msgid "terms-and-conditions"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:470
+#: includes/admin/class-geodir-admin-install.php:473
 msgctxt "Page title"
 msgid "Terms and Conditions"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:471
+#: includes/admin/class-geodir-admin-install.php:474
 #: includes/admin/settings/class-geodir-settings-general.php:283
 msgid "ENTER YOUR SITE TERMS AND CONDITIONS HERE"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:474
+#: includes/admin/class-geodir-admin-install.php:477
 msgctxt "Page slug"
 msgid "location"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:475
+#: includes/admin/class-geodir-admin-install.php:478
 msgctxt "Page title"
 msgid "Location"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:479
+#: includes/admin/class-geodir-admin-install.php:482
 msgctxt "Page slug"
 msgid "gd-archive"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:480
+#: includes/admin/class-geodir-admin-install.php:483
 msgctxt "Page title"
 msgid "GD Archive"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:484
+#: includes/admin/class-geodir-admin-install.php:487
 msgctxt "Page slug"
 msgid "gd-archive-item"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:485
+#: includes/admin/class-geodir-admin-install.php:488
 msgctxt "Page title"
 msgid "GD Archive Item"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:489
+#: includes/admin/class-geodir-admin-install.php:492
 msgctxt "Page slug"
 msgid "gd-details"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:490
+#: includes/admin/class-geodir-admin-install.php:493
 msgctxt "Page title"
 msgid "GD Details"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:855
+#: includes/admin/class-geodir-admin-install.php:858
 msgid "View GeoDirectory settings"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:855
+#: includes/admin/class-geodir-admin-install.php:858
 #: includes/admin/class-geodir-admin-menus.php:129
 #: includes/admin/class-geodir-admin-menus.php:138
 #: includes/admin/settings/class-geodir-settings-api.php:43
@@ -1358,38 +1358,38 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:871
+#: includes/admin/class-geodir-admin-install.php:874
 msgid "View GeoDirectory documentation"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:871
+#: includes/admin/class-geodir-admin-install.php:874
 msgid "Docs"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:872
+#: includes/admin/class-geodir-admin-install.php:875
 msgid "Visit GeoDirectory support"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:872
+#: includes/admin/class-geodir-admin-install.php:875
 msgid "Support"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:873
+#: includes/admin/class-geodir-admin-install.php:876
 msgid "View translations"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:873
+#: includes/admin/class-geodir-admin-install.php:876
 msgid "Translations"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:1055
+#: includes/admin/class-geodir-admin-install.php:1058
 #, php-format
 msgid ""
 "%1$s could not be installed (%2$s). <a href=\"%3$s\">Please install it "
 "manually by clicking here.</a>"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-install.php:1081
+#: includes/admin/class-geodir-admin-install.php:1084
 #, php-format
 msgid ""
 "%1$s was installed but could not be activated. <a href=\"%2$s\">Please "
@@ -9634,11 +9634,11 @@ msgstr ""
 msgid "This %s is temporarily closed."
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:313
+#: includes/class-geodir-permalinks.php:316
 msgid "<b>GeoDirectory permalink error</b> the following rule appears twice:"
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:314
+#: includes/class-geodir-permalinks.php:317
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
@@ -10170,134 +10170,134 @@ msgstr ""
 msgid "- Monitor the contact system for spam and abuse."
 msgstr ""
 
-#: includes/class-geodir-seo.php:560 includes/general-functions.php:1813
+#: includes/class-geodir-seo.php:558 includes/general-functions.php:1813
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:573 includes/general-functions.php:1826
+#: includes/class-geodir-seo.php:571 includes/general-functions.php:1826
 #, php-format
 msgid "near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:641
+#: includes/class-geodir-seo.php:639
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:642
+#: includes/class-geodir-seo.php:640
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:643
+#: includes/class-geodir-seo.php:641
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:644
+#: includes/class-geodir-seo.php:642
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:648
+#: includes/class-geodir-seo.php:646
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:649
+#: includes/class-geodir-seo.php:647
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:650
+#: includes/class-geodir-seo.php:648
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:651
+#: includes/class-geodir-seo.php:649
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:652
+#: includes/class-geodir-seo.php:650
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:657
+#: includes/class-geodir-seo.php:655
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:658
+#: includes/class-geodir-seo.php:656
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:659
+#: includes/class-geodir-seo.php:657
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:660
+#: includes/class-geodir-seo.php:658
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:661
+#: includes/class-geodir-seo.php:659
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:662
+#: includes/class-geodir-seo.php:660
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:663
+#: includes/class-geodir-seo.php:661
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:664
+#: includes/class-geodir-seo.php:662
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:665
+#: includes/class-geodir-seo.php:663
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:666
+#: includes/class-geodir-seo.php:664
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:671
+#: includes/class-geodir-seo.php:669
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:672
+#: includes/class-geodir-seo.php:670
 msgid "The currently used search for term with `for`. Ex: for dinner."
 msgstr ""
 
-#: includes/class-geodir-seo.php:673
+#: includes/class-geodir-seo.php:671
 msgid "The currently used search near term with `near`. Ex: near Philadelphia."
 msgstr ""
 
-#: includes/class-geodir-seo.php:674
+#: includes/class-geodir-seo.php:672
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:679
+#: includes/class-geodir-seo.php:677
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:680
+#: includes/class-geodir-seo.php:678
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:681
+#: includes/class-geodir-seo.php:679
 msgid "Total post found eg: 10"
 msgstr ""
 
-#: includes/class-geodir-seo.php:682
+#: includes/class-geodir-seo.php:680
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:687
+#: includes/class-geodir-seo.php:685
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore"
 msgstr ""
 
-#: includes/class-geodir-seo.php:707
+#: includes/class-geodir-seo.php:705
 msgid "Click to copy"
 msgstr ""
 

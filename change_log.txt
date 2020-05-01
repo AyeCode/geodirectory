@@ -1,6 +1,8 @@
 = 2.0.0.92 =
 * Static map sometimes not resizing on mobile view - FIXED
 * Fix recent review filter by location - FIXED
+* Rank Math sitemap shows 404 error after each GeoDirectory plugin update - FIXED
+* Yoast SEO v14.4 compatibility changes - FIXED
 
 = 2.0.0.91 =
 * Category font awesome icons have extra fas class on output which break few icons – FIXED

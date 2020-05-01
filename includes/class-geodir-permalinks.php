@@ -45,6 +45,9 @@ class GeoDir_Permalinks {
 		// search page rewrite rules
 		add_action('init', array( $this, 'insert_rewrite_rules'), 20,0);
 
+		// flush rewrite rules
+		add_action( 'init', array( __CLASS__, 'flush_rewrite_rules' ), 99 );
+
 		// make child cat not contain parent cat url
 		add_filter('term_link', array($this,'term_url_no_parent'), 9, 3);
 
@@ -843,6 +846,21 @@ class GeoDir_Permalinks {
 
 		return $rules;
 	}
+
+	/**
+	 * Check & flush rewrite rules.
+	 *
+	 * @since 2.0.0.92
+	 *
+	 * @return void
+	 */
+	public static function flush_rewrite_rules() {
+		// Rank Math flush rewrite rules to generate sitemaps.
+		if ( class_exists( 'RankMath\\Helper' ) ) {
+			if ( ! wp_doing_ajax() && ! wp_doing_cron() && get_option( 'geodir_rank_math_flush_rewrite' ) ) {
+				flush_rewrite_rules();
+				delete_option( 'geodir_rank_math_flush_rewrite' );
+			}
+		}
+	}
 }
-
-
