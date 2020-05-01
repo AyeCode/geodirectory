@@ -55,6 +55,9 @@ class GeoDir_Admin_Install {
 		//add_action( 'geodir_plugin_background_installer', array( __CLASS__, 'background_installer' ), 10, 2 );
 
 		add_filter('upgrader_package_options',array( __CLASS__, 'maybe_downgrade_v1'));
+
+		// schedule rewrite rules
+		add_action( 'geodirectory_installed', array( __CLASS__, 'schedule_rewrite_rules' ), 99 );
 	}
 
 	/**
@@ -1183,6 +1186,20 @@ class GeoDir_Admin_Install {
 		if (get_option( 'geodirectory_version' ) && version_compare(get_option( 'geodirectory_version' ), '2.0.0.13-beta', '<=')) {
 			global $wpdb;
 			$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
+		}
+	}
+
+	/**
+	 * Check & schedule flush rewrite rules.
+	 *
+	 * @since 2.0.0.92
+	 *
+	 * @return void
+	 */
+	public static function schedule_rewrite_rules() {
+		// Rank Math schedule flush rewrite rules.
+		if ( class_exists( 'RankMath\\Helper' ) ) {
+			update_option( 'geodir_rank_math_flush_rewrite', 1 );
 		}
 	}
 }
