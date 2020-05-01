@@ -1,3 +1,6 @@
+= 2.0.0.92 =
+* Static map sometimes not resizing on mobile view - FIXED
+
 = 2.0.0.91 =
 * Category font awesome icons have extra fas class on output which break few icons – FIXED
 * Post badge widget shows excluded fields from package - FIELD

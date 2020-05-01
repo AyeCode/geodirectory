@@ -2,8 +2,10 @@
     .stick_trigger_container .geodir_map_container,
     .stick_trigger_container .geodir_map_container .map_background .main_map_wrapper,
     .stick_trigger_container .geodir_map_container .map_background .main_map_wrapper .geodir_marker_cluster,
+    .stick_trigger_container .geodir_map_container .map_background .main_map_wrapper .geodir-map-canvas,
     .stick_trigger_container .geodir_map_container .map_background .main_map_wrapper .loading_div {
         width: 100% !important;
+
     }
 
     .geodir_category_list_view li span.geodir-rating {
