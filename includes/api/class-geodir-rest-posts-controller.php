@@ -2577,7 +2577,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				$image->metadata = maybe_unserialize( $image->metadata );
 			}
 			$featured_image['id'] = $image->ID;
-			$featured_image['title'] = $image->title;
+			$featured_image['title'] = stripslashes_deep( $image->title );
 			$featured_image['src'] = geodir_get_image_src( $image, 'original' );
 			$featured_image['thumbnail'] = geodir_get_image_src( $image, 'thumbnail' );
 			$featured_image['width'] = ! empty( $image->metadata ) && isset( $image->metadata['width'] ) ? $image->metadata['width'] : '';
@@ -2602,7 +2602,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			foreach ( $post_images as $image ) {
 				$row = array();
 				$row['id'] = $image->ID;
-				$row['title'] = $image->title;
+				$row['title'] = stripslashes_deep( $image->title );
 				$row['src'] = geodir_get_image_src( $image, 'original' );
 				$row['thumbnail'] = geodir_get_image_src( $image, 'thumbnail' );
 				$row['featured'] = (bool) $image->featured;

@@ -354,8 +354,8 @@ class GeoDir_Media {
 			'post_id' => $post_id,
 			'date_gmt' => gmdate( 'Y-m-d H:i:s' ),
 			'user_id' => get_current_user_id(),
-			'title' => $title,
-			'caption' => $caption,
+			'title' => stripslashes_deep( $title ),
+			'caption' => stripslashes_deep( $caption ),
 			'file' => $file,
 			'mime_type' => $file_type,
 			'menu_order' => $order,
@@ -443,8 +443,8 @@ class GeoDir_Media {
 			$result = $wpdb->update(
 				GEODIR_ATTACHMENT_TABLE,
 				array(
-					'title' => $image_title,
-					'caption' => $image_caption,
+					'title' => stripslashes_deep( $image_title ),
+					'caption' => stripslashes_deep( $image_caption ),
 				),
 				array('ID' => $image_id,'type'=>$type,'post_id'=>$post_id),
 				array(
@@ -502,8 +502,8 @@ class GeoDir_Media {
 				$attachment = array(
 					'guid'           => $file_url,
 					'post_mime_type' => $file['type'],
-					'post_title'     => $file_title,
-					'post_content'   => $file_caption,
+					'post_title'     => stripslashes_deep( $file_title ),
+					'post_content'   => stripslashes_deep( $file_caption ),
 					'post_status'    => 'inherit'
 				);
 				$attachment_id = wp_insert_attachment( $attachment, $filename, $post_id );
@@ -519,8 +519,8 @@ class GeoDir_Media {
 		}
 
 		$data = array(
-			'title' => $file_title,
-			'caption' => $file_caption,
+			'title' => stripslashes_deep( $file_title ),
+			'caption' => stripslashes_deep( $file_caption ),
 			'menu_order' => $order,
 			'featured' => $order === 0 && $field == 'post_images' ? 1 : 0,
 			'is_approved' => $is_approved,
@@ -1132,8 +1132,8 @@ class GeoDir_Media {
 			'post_mime_type' => $info['type'],
 			'guid'           => $upload['url'],
 			'post_parent'    => $id,
-			'post_title'     => $title ? $title : basename( $upload['file'] ),
-			'post_content'   => $content,
+			'post_title'     => $title ? stripslashes_deep( $title ) : stripslashes_deep( basename( $upload['file'] ) ),
+			'post_content'   => stripslashes_deep( $content ),
 		);
 
 		$attachment_id = wp_insert_attachment( $attachment, $upload['file'], $id );
