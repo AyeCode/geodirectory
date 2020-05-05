@@ -1443,10 +1443,10 @@ function geodir_animate_markers(){
         if(jQuery('body.archive .elementor-widget-archive-posts').length){
             var ePosts = jQuery("body.archive .elementor-widget-archive-posts .elementor-posts").children(".elementor-post");
             ePosts.hover(function () {
-                $post_id = jQuery(this).attr('id').replace("post-","");
+                $post_id = jQuery(this).attr('class').match(/post-\d+/)[0].replace("post-","");
                 animate_marker('listing_map_canvas', String($post_id));
             }, function () {
-                $post_id = jQuery(this).attr('id').replace("post-","");
+                $post_id = jQuery(this).attr('class').match(/post-\d+/)[0].replace("post-","");
                 stop_marker_animation('listing_map_canvas', String($post_id));
             });
         }

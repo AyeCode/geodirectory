@@ -303,7 +303,7 @@ class GeoDir_Elementor {
 									if($link_to){
 										if($link_to=='file'){
 											$image_src_full = geodir_get_image_src( $slide, 'full' );
-											echo '<a data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="'.$widget->get_id().'" data-elementor-lightbox-title="'.esc_attr($slide->title).'" data-elementor-lightbox-description="'.esc_attr($slide->caption).'" href="'.$image_src_full .'">';
+											echo '<a data-elementor-open-lightbox="yes" data-elementor-lightbox-slideshow="'.$widget->get_id().'" data-elementor-lightbox-title="'.esc_attr( stripslashes_deep( $slide->title ) ).'" data-elementor-lightbox-description="'.esc_attr( stripslashes_deep( $slide->caption ) ).'" href="'.$image_src_full .'">';
 										}else{
 											$href = isset($settings['link']['url']) ? esc_url_raw($settings['link']['url']) :'';
 											$link = '<a href="'.$href .'" ';
@@ -516,10 +516,10 @@ class GeoDir_Elementor {
 //				print_r($image_meta);
 
 				$attributes = array(
-					'data-elementor-lightbox-description' => $item->caption,
+					'data-elementor-lightbox-description' => stripslashes_deep( $item->caption ),
 //					'title' => $item->title,
 //					'alt' => $item->caption,
-					'data-elementor-lightbox-title' => $item->title,
+					'data-elementor-lightbox-title' => stripslashes_deep( $item->title ),
 				);
 
 //				$image_data = [
@@ -531,14 +531,14 @@ class GeoDir_Elementor {
 
 //				$attachment = get_post( $id );
 				$image_data = [
-					'alt' => $item->caption,
+					'alt' => stripslashes_deep( $item->caption ),
 					'media' => geodir_get_image_src( $item, 'full' ),
 					'src' => $img_src,
 					'width' => !empty($image_meta['sizes'][$thumbnail_size]['width']) ? $image_meta['sizes'][$thumbnail_size]['width'] : $image_meta['width'],
 					'height' => !empty($image_meta['sizes'][$thumbnail_size]['height']) ? $image_meta['sizes'][$thumbnail_size]['height'] : $image_meta['height'],
-					'caption' => $item->caption,
-					'description' => $item->caption,
-					'title' => $item->title,
+					'caption' =>stripslashes_deep(  $item->caption ),
+					'description' => stripslashes_deep( $item->caption ),
+					'title' => stripslashes_deep( $item->title ),
 				];
 
 				$widget->add_render_attribute( 'gallery_item_' . $unique_index, [
@@ -746,12 +746,12 @@ class GeoDir_Elementor {
 			$image_output = $widget->add_lightbox_data_to_image_link( $image_output, null );
 
 			if ( $open_lightbox ) {
-				$img_title = isset( $attachment->title ) ? esc_attr( $attachment->title ) : '';
+				$img_title = isset( $attachment->title ) ? esc_attr( stripslashes_deep( $attachment->title ) ) : '';
 				$widget->add_render_attribute( 'link', 'data-elementor-lightbox-title', $img_title );
 
 
 				$img_desc = isset( $attachment->caption ) ? esc_attr( $attachment->caption ) : '';
-				$widget->add_render_attribute( 'link', 'data-elementor-lightbox-description', $img_desc );
+				$widget->add_render_attribute( 'link', 'data-elementor-lightbox-description', stripslashes_deep( $img_desc ) );
 
 				$image_output = $widget->add_lightbox_data_to_image_link( $image_output, null );
 			}
@@ -773,7 +773,7 @@ class GeoDir_Elementor {
 			if ( $captiontag && trim( $attachment->caption ) ) {
 				$output .= "
 				<{$captiontag} class='wp-caption-text gallery-caption' id='$selector-$id'>
-				" . wptexturize( $attachment->caption ) . "
+				" . wptexturize( stripslashes_deep( $attachment->caption ) ) . "
 				</{$captiontag}>";
 			}
 
@@ -825,12 +825,12 @@ class GeoDir_Elementor {
 
 				// title
 				if ( ! empty( $image->title ) ) {
-					$html = str_replace( 'title=""', 'title="' . esc_attr( $image->title ) . '"', $html );
+					$html = str_replace( 'title=""', 'title="' . esc_attr( stripslashes_deep( $image->title ) ) . '"', $html );
 				}
 
 				// Alt text
 				if ( ! empty( $settings['caption_source'] ) && $settings['caption_source'] == 'attachment' && ! empty( $image->caption ) ) {
-					$html = str_replace( 'alt=""', 'alt="' . esc_attr( $image->caption ) . '"', $html );
+					$html = str_replace( 'alt=""', 'alt="' . esc_attr( stripslashes_deep( $image->caption ) ) . '"', $html );
 				}
 			}
 
