@@ -1,3 +1,6 @@
+= 2.0.0.93 =
+* Elementor archive items not always given an ID so sometime map is not limited to current listings - FIXED
+
 = 2.0.0.92 =
 * Static map sometimes not resizing on mobile view - FIXED
 * Fix recent review filter by location - FIXED

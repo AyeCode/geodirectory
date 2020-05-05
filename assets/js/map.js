@@ -310,9 +310,10 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 
             // check if elementor loop
             if(!idarray.length && jQuery('.elementor-posts-container').length){
-                idarray = jQuery(".geodir-loop-container")
+                $containerClass = jQuery('.geodir-loop-container').length ? jQuery(".geodir-loop-container") : jQuery(".elementor-posts-container");
+                idarray = $containerClass
                     .find(".elementor-post ") //Find the spans
-                    .map(function() { return jQuery(this).attr('id').replace("post-",""); }) //Project Ids
+                    .map(function() { return jQuery(this).attr('class').match(/post-\d+/)[0].replace("post-",""); }) //Project Ids
                     .get(); //ToArray
             }
 
