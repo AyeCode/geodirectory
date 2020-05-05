@@ -1077,7 +1077,7 @@ class GeoDir_Compatibility {
 			foreach( $geodir_images as $geodir_image ) {
 				$images[] = array(
 					'src'   => geodir_get_image_src( $geodir_image, 'original' ),
-					'title' => $geodir_image->title,
+					'title' => stripslashes_deep( $geodir_image->title ),
 				);
 			}
 		}

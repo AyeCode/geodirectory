@@ -241,7 +241,7 @@ class GeoDir_Post_Data {
 		// check for changes, maybe we don't need to run the whole function if there are no changes
 		$current_files = GeoDir_Media::get_field_edit_string( $main_post_id, $field );
 
-		if ( $current_files == $files ) {
+		if ( stripslashes_deep( $current_files ) == stripslashes_deep( $files ) ) {
 			return false;
 		}
 
@@ -275,7 +275,6 @@ class GeoDir_Post_Data {
 
 			$file_ids = array();
 
-
 			foreach ( $files as $order => $file_string ) {
 				$file_info = array();
 				// check if the string contains more info
@@ -296,7 +295,6 @@ class GeoDir_Post_Data {
 				$file_title   = ! empty( $file_info[2] ) ? sanitize_text_field( $file_info[2] ) : '';
 				$file_caption = ! empty( $file_info[3] ) ? sanitize_text_field( $file_info[3] ) : '';
 				$approved     = $auto_save ? '-1' : 1; // we approve all files on save, not auto-save
-
 
 				// check if we already have the file.
 				if ( $file_url && $file_id ) { // we already have the image so just update the title, caption and order id
@@ -1889,8 +1887,8 @@ class GeoDir_Post_Data {
 					"url"                  => $upload_dir['baseurl'] . $img->file,
 					"datePublished"        => $post->post_date,
 					//@todo we need to add a date field to the attachment table
-					"caption"              => $img->caption,
-					"name"                 => $img->title,
+					"caption"              => stripslashes_deep( $img->caption ),
+					"name"                 => stripslashes_deep( $img->title ),
 					"representativeOfPage" => true,
 					"thumbnail"            => geodir_get_image_src( $img, 'medium' ),
 				);

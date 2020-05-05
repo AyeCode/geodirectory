@@ -1511,8 +1511,8 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
 
             foreach ( $files as $file ) {
                 $file_path = isset( $file->file ) ? $file->file : '';
-                $title = isset( $file->title ) && $file->title != '' ? strip_tags( stripslashes( $file->title ) ) : '';
-                $desc = isset( $file->caption ) ? $file->caption : '';
+                $title = isset( $file->title ) && $file->title != '' ? strip_tags( stripslashes_deep( $file->title ) ) : '';
+                $desc = isset( $file->caption ) ? stripslashes_deep( $file->caption ) : '';
                 $url = $upload_baseurl . $file_path;
                 $outout_item = '';
 

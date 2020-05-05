@@ -348,25 +348,19 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 					echo '<br /><small>(' . __( 'You can upload unlimited images with this package', 'geodirectory' ) . ')</small>';
 				} ?>
 			</h5>
-
-
 			<?php
-
-
 			$curImages = GeoDir_Media::get_field_edit_string($post_id,'post_images');
-
 
 			// adjust values here
 			$id = "post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
 
-			$svalue = $curImages; // this will be initial value of the above form field. Image urls.
+			$svalue = stripslashes_deep( $curImages ); // this will be initial value of the above form field. Image urls.
 
 			$multiple = true; // allow multiple files upload
 			?>
-
 			<div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox"
 			     style="border:1px solid #999999;padding:5px;text-align:center;">
-				<input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>"/>
+				<input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo esc_attr( $svalue ); ?>"/>
 
 				<div
 					class="plupload-upload-uic hide-if-no-js <?php if ( $multiple ): ?>plupload-upload-uic-multiple<?php endif; ?>"
