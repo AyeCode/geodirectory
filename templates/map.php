@@ -480,9 +480,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         var old_country = jQuery("#<?php echo $prefix.'country';?>").val();
         var old_region = jQuery("#<?php echo $prefix.'region';?>").val();
         
-        if (user_address == false || jQuery('#<?php echo $prefix.'street';?>').val() == '') {
-            jQuery("#<?php echo $prefix.'street';?>").val(getAddress).trigger("blur");
-        }
         if (getAddress) {
             oldstr_address = getAddress;
         }
