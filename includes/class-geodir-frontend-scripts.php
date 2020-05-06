@@ -599,7 +599,7 @@ class GeoDir_Frontend_Scripts {
 
 
 		// add-listing
-		if(geodir_is_page('add-listing')){
+		if(geodir_is_page('add-listing') && !isset($_REQUEST['ct_builder'])){
 			self::enqueue_script( 'geodir-plupload' );
 			self::enqueue_script( 'geodir-add-listing' );
 			self::enqueue_script( 'geodir-jquery-ui-timepicker' );
