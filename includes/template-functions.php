@@ -613,7 +613,7 @@ function geodir_template_redirect() {
 
 	if ( is_page() ) {
 
-		if ( ! isset( $_REQUEST['listing_type'] ) && geodir_is_page( 'add-listing' ) ) {
+		if ( ! isset( $_REQUEST['listing_type'] ) && geodir_is_page( 'add-listing' ) && !isset($_REQUEST['action']) ) {
 			if ( ! empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
 			} else {
 				$post_type = geodir_add_listing_default_post_type();
