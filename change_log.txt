@@ -3,6 +3,7 @@
 * Image title & caption with apostrophes shows slash after saved - FIXED
 * Elementor social icons phone number displays even when empty - FIXED
 * Oxygen page builder can't edit the add listing page because of redirect - FIXED
+* Add GD variables to the Yoast extra replacements - ADDED
 
 = 2.0.0.92 =
 * Static map sometimes not resizing on mobile view - FIXED

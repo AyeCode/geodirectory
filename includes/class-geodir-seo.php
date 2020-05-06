@@ -93,6 +93,8 @@ class GeoDir_SEO {
 					add_filter( 'wpseo_opengraph_url', array( __CLASS__, 'wpseo_opengraph_url' ), 20, 2 );
 					add_filter( 'wpseo_canonical', array( __CLASS__, 'wpseo_canonical' ), 20, 2 );
 					add_filter( 'wpseo_adjacent_rel_url', array( __CLASS__, 'wpseo_adjacent_rel_url' ), 20, 3 );
+
+					add_action( 'wpseo_register_extra_replacements', array( __CLASS__, 'wpseo_register_extra_replacements' ), 20 );
 				}
 
 				// page title
@@ -939,6 +941,61 @@ class GeoDir_SEO {
 	 */
 	public static function has_yoast_14() {
 		return ( self::has_yoast() && version_compare( WPSEO_VERSION, '14.0', '>=' ) );
+	}
+
+	/**
+	 * Register GD variables for Yoast SEO extra replacements.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @return void
+	 */
+	public static function wpseo_register_extra_replacements() {
+		$pages = array( 'location', 'search', 'post_type', 'archive', 'add-listing', 'single' );
+
+		$variables = array();
+		foreach ( $pages as $page ) {
+			$_variables = GeoDir_SEO::variables( $page );
+
+			if ( ! empty( $_variables ) ) {
+				foreach ( $_variables as $var => $help ) {
+					if ( empty( $variables[ $var ] ) ) {
+						$variables[ $var ] = $help;
+					}
+				}
+			}
+		}
+
+		$replacer = new WPSEO_Replace_Vars();
+
+		foreach ( $variables as $var => $help ) {
+			if ( is_string( $var ) && $var !== '' ) {
+				$var = trim( $var, '%' );
+
+				if ( ! empty( $var ) ) {
+					$var = '_gd_' . $var; // Add prefix to prevent conflict with Yoast default vars.
+
+					if ( ! method_exists( $replacer, 'retrieve_' . $var ) ) {
+						wpseo_register_var_replacement( $var, array( __CLASS__, 'wpseo_replacement' ), 'advanced', $help );
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Register GD variables for Yoast SEO extra replacements.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @param string $var Variable name.
+	 * @param array $args Variable args.
+	 * @return string Variable value.
+	 */
+	public static function wpseo_replacement( $var, $args ) {
+		$var = strpos( $var, '_gd_' ) === 0 ? substr( $var, 4 ) : $var;
+
+		return self::replace_variable( '%%' . $var . '%%', self::$gd_page );
 	}
 
 	/**
