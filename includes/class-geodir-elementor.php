@@ -178,7 +178,7 @@ class GeoDir_Elementor {
 	public static function maybe_add_image_caption( $html, $widget ) {
 
 //		echo '###'.$widget->get_name();
-		if(geodir_is_page('single')){ // maybe we add archive also?
+		if( geodir_is_page('single') || geodir_is_page('archive') ){
 			$type = $widget->get_name();
 			if ($type  === 'image'  ) {
 				$settings = $widget->get_settings();
