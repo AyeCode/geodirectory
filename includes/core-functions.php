@@ -566,6 +566,7 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Single_Reviews' );
 		register_widget( 'GeoDir_Widget_Post_Distance' );
 		register_widget( 'GeoDir_Widget_Map_Pinpoint' );
+		register_widget( 'GeoDir_Widget_Page_Title' );
 
 		// Depreciated
 		new GeoDir_Widget_Single_Closed_Text();
