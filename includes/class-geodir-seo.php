@@ -90,9 +90,14 @@ class GeoDir_SEO {
 				}
 
 				if ( self::has_yoast_14() ) {
+					add_filter( 'wpseo_title', array( __CLASS__, 'wpseo_title' ), 20, 2 );
+					add_filter( 'wpseo_metadesc', array( __CLASS__, 'wpseo_metadesc' ), 20, 2 );
+
 					add_filter( 'wpseo_opengraph_url', array( __CLASS__, 'wpseo_opengraph_url' ), 20, 2 );
 					add_filter( 'wpseo_canonical', array( __CLASS__, 'wpseo_canonical' ), 20, 2 );
 					add_filter( 'wpseo_adjacent_rel_url', array( __CLASS__, 'wpseo_adjacent_rel_url' ), 20, 3 );
+
+					add_action( 'wpseo_register_extra_replacements', array( __CLASS__, 'wpseo_register_extra_replacements' ), 20 );
 				}
 
 				// page title
@@ -939,6 +944,135 @@ class GeoDir_SEO {
 	 */
 	public static function has_yoast_14() {
 		return ( self::has_yoast() && version_compare( WPSEO_VERSION, '14.0', '>=' ) );
+	}
+
+	/**
+	 * Register GD variables for Yoast SEO extra replacements.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @return void
+	 */
+	public static function wpseo_register_extra_replacements() {
+		$pages = array( 'location', 'search', 'post_type', 'archive', 'add-listing', 'single' );
+
+		$variables = array();
+		foreach ( $pages as $page ) {
+			$_variables = GeoDir_SEO::variables( $page );
+
+			if ( ! empty( $_variables ) ) {
+				foreach ( $_variables as $var => $help ) {
+					if ( empty( $variables[ $var ] ) ) {
+						$variables[ $var ] = $help;
+					}
+				}
+			}
+		}
+
+		$replacer = new WPSEO_Replace_Vars();
+
+		foreach ( $variables as $var => $help ) {
+			if ( is_string( $var ) && $var !== '' ) {
+				$var = trim( $var, '%' );
+
+				if ( ! empty( $var ) ) {
+					$var = '_gd_' . $var; // Add prefix to prevent conflict with Yoast default vars.
+
+					if ( ! method_exists( $replacer, 'retrieve_' . $var ) ) {
+						wpseo_register_var_replacement( $var, array( __CLASS__, 'wpseo_replacement' ), 'advanced', $help );
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Register GD variables for Yoast SEO extra replacements.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @param string $var Variable name.
+	 * @param array $args Variable args.
+	 * @return string Variable value.
+	 */
+	public static function wpseo_replacement( $var, $args ) {
+		$var = strpos( $var, '_gd_' ) === 0 ? substr( $var, 4 ) : $var;
+
+		return self::replace_variable( '%%' . $var . '%%', self::$gd_page );
+	}
+
+	/**
+	 * Filter Yoast SEO meta title.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @param string $title Meta title.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Meta title.
+	 */
+	public static function wpseo_title( $title, $presentation = array() ) {
+		if ( ! empty( $title ) || ! geodir_is_geodir_page() ) {
+			return $title;
+		}
+
+		if ( geodir_is_page( 'archive' ) ) {
+			$queried_object = get_queried_object();
+
+			if (  ! empty( $queried_object->term_id ) && ! empty( $queried_object->taxonomy ) && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
+				if ( $_title = WPSEO_Taxonomy_Meta::get_term_meta( $queried_object->term_id, $queried_object->taxonomy, 'title' ) ) {
+					$title = $_title;
+				} elseif ( $_title = WPSEO_Options::get( 'title-tax-' . $queried_object->taxonomy ) ) {
+					$title = $_title;
+				}
+
+				if ( strpos( $title, '%%' ) !== false ) {
+					$title = wpseo_replace_vars( $title, $queried_object );
+				}
+
+				if ( strpos( $title, '%%' ) !== false ) {
+					$title = self::replace_variable( $title, 'archive' );
+				}
+			}
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Filter Yoast SEO meta description.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @param string $meta_description Meta description.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Meta description.
+	 */
+	public static function wpseo_metadesc( $meta_description, $presentation = array() ) {
+		if ( ! empty( $meta_description ) || ! geodir_is_geodir_page() ) {
+			return $meta_description;
+		}
+
+		if ( geodir_is_page( 'archive' ) ) {
+			$queried_object = get_queried_object();
+
+			if (  ! empty( $queried_object->term_id ) && ! empty( $queried_object->taxonomy ) && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
+				if ( $_meta_description = WPSEO_Taxonomy_Meta::get_term_meta( $queried_object->term_id, $queried_object->taxonomy, 'desc' ) ) {
+					$meta_description = $_meta_description;
+				} elseif ( $_meta_description = WPSEO_Options::get( 'metadesc-tax-' . $queried_object->taxonomy ) ) {
+					$meta_description = $_meta_description;
+				}
+			}
+
+			if ( strpos( $meta_description, '%%' ) !== false ) {
+				$meta_description = wpseo_replace_vars( $meta_description, $queried_object );
+			}
+
+			if ( strpos( $meta_description, '%%' ) !== false ) {
+				$meta_description = self::replace_variable( $meta_description, 'archive' );
+			}
+		}
+
+		return $meta_description;
 	}
 
 	/**
