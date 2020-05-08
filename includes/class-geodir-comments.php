@@ -1010,9 +1010,10 @@ class GeoDir_Comments {
 
 				if ( empty( $user_id ) ) {
 					$commenter = wp_get_current_commenter();
-
 					if ( ! empty( $commenter ) && is_array( $commenter ) && ! empty( $commenter['comment_author_email'] ) ) {
 						$author_email = $commenter['comment_author_email'];
+					} else{
+						$author_email = ( !empty( $_POST['email'] )) ? sanitize_email( $_POST['email'] ) : '';
 					}
 				}
 			}
