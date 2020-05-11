@@ -1386,6 +1386,9 @@ class GeoDir_Compatibility {
 					add_filter( 'sidebars_widgets', array( __CLASS__, 'genesis_simple_sidebars_set_sidebars_widgets' ), 20, 1 );
 				}
 			}
+
+			// Fix Divi builder GD pages header
+			self::et_builder_divi_fix_stylesheet();
 		}
 
 		// GeneratePress theme compatibility
@@ -1709,6 +1712,31 @@ class GeoDir_Compatibility {
 		}
 
 		return $classes;
+	}
+
+	/**
+	 * Fix page header on GD Pages + Divi Page Builder.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @return void.
+	 */
+	public static function et_builder_divi_fix_stylesheet() {
+		if ( ! function_exists( 'et_builder_is_custom_post_type_archive' ) ) {
+			return;
+		}
+
+		if ( ! et_builder_is_custom_post_type_archive() && ( ! et_builder_post_is_of_custom_post_type( get_the_ID() ) || ! et_pb_is_pagebuilder_used( get_the_ID() ) ) ) {
+			return;
+		}
+
+		remove_action( 'wp_enqueue_scripts', 'et_divi_replace_stylesheet', 99999998 );
+
+		add_action( 'wp_head', function() {
+			$custom_css = '@media only screen and (min-width:1350px){.et_pb_pagebuilder_layout.geodir-page.et-db #et-boc .et-l.et-l--header .et_pb_section{padding:0;}}.et_pb_pagebuilder_layout.geodir-page #et-main-area #main-content .entry-content .et-l > .et_pb_section{position: relative;z-index:1;}';
+
+			echo '<style type="text/css" id="geodir-et-custom-css">' . $custom_css . '</style>';
+		}, 100 );
 	}
 
 	/**

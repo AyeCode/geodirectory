@@ -899,7 +899,6 @@ class GeoDir_Post_Data {
 
 			do_action( 'geodir_add_listing_form_start', $listing_type, $post, $package );
 
-
 			/*
 			 * Add the register fields if no user_id
 			 */
@@ -908,14 +907,14 @@ class GeoDir_Post_Data {
 				<h5 id="geodir_fieldset_details" class="geodir-fieldset-row"
 				    gd-fieldset="user_details"><?php _e( "Your Details", "geodirectory" ); ?></h5>
 
-				<div id="post_title_row" class="required_field geodir_form_row clearfix gd-fieldset-details">
+				<div id="user_login_row" class="required_field geodir_form_row clearfix gd-fieldset-details">
 					<label><?php _e( "Name", "geodirectory" ); ?> <span>*</span></label>
 					<input field_type="text" name="user_login" id="user_login" value="" type="text"
 					       class="geodir_textfield">
 					<span class="geodir_message_note"><?php _e( "Enter your name.", "geodirectory" ); ?></span>
 					<span class="geodir_message_error"></span>
 				</div>
-				<div id="post_title_row" class="required_field geodir_form_row clearfix gd-fieldset-details">
+				<div id="user_email_row" class="required_field geodir_form_row clearfix gd-fieldset-details">
 					<label><?php _e( "Email", "geodirectory" ); ?> <span>*</span></label>
 					<input field_type="text" name="user_email" id="user_email" value="" type="text"
 					       class="geodir_textfield">

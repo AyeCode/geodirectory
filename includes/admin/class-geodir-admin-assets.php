@@ -186,7 +186,7 @@ class GeoDir_Admin_Assets {
 			$load_gomap_script = apply_filters( 'geodir_load_gomap_script', false );
 			// only load maps when needed
 			if(
-			( $screen_id == 'geodirectory_page_gd-settings' && isset($_REQUEST['section']) && ($_REQUEST['section']=='location' || $_REQUEST['section']=='dummy_data') ) ||
+			( strpos( $screen_id, '_page_gd-settings' ) > 0 && isset($_REQUEST['section']) && ($_REQUEST['section']=='location' || $_REQUEST['section']=='dummy_data') ) ||
 			( isset($screen->base) && $screen->base=='post' && isset($screen->post_type) &&  substr( $screen->post_type, 0, 3 ) === "gd_" ) ||
 			$load_gomap_script
 			){
