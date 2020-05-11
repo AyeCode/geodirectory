@@ -616,7 +616,7 @@ function geodir_get_business_hours( $value = '' ) {
 					$opens_time = strtotime( $opens );
 					$closes_time = strtotime( date_i18n( 'H:i:59', strtotime( $closes ) ) );
 					
-					if ( $is_today && $opens_time <= $time_int && $time_int <= $closes_time ) {
+					if ( $is_today && (($opens_time <= $time_int && $time_int <= $closes_time) || ($opens == '00:00' && $opens == $closes)) ) {
 						$is_open = 1;
 						$has_open = 1;
 					} else {
