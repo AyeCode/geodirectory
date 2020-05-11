@@ -8,6 +8,7 @@
 * [gd_page_title] shortcode/widget added to show page title on GD pages - ADDED
 * Fix for one comment restriction for cookie not enable case - FIXED
 * GD pages with Divi builder breaks header - FIXED
+* Translated GD screen id may break admin pages UI - FIXED
 
 = 2.0.0.92 =
 * Static map sometimes not resizing on mobile view - FIXED
