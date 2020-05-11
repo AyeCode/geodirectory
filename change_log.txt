@@ -5,6 +5,7 @@
 * Oxygen page builder can't edit the add listing page because of redirect - FIXED
 * Add GD variables to the Yoast extra replacements - ADDED
 * Elementor icon list fallback value #hide not working on archive pages - ADDED
+* Fix for one comment restriction for cookie not enable case - FIXED
 
 = 2.0.0.92 =
 * Static map sometimes not resizing on mobile view - FIXED
