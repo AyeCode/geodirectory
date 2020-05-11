@@ -7,6 +7,7 @@
 * Elementor icon list fallback value #hide not working on archive pages - ADDED
 * [gd_page_title] shortcode/widget added to show page title on GD pages - ADDED
 * Fix for one comment restriction for cookie not enable case - FIXED
+* GD pages with Divi builder breaks header - FIXED
 
 = 2.0.0.92 =
 * Static map sometimes not resizing on mobile view - FIXED
