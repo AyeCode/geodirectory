@@ -358,6 +358,11 @@ function plu_show_thumbs(imgId) {
                 plu_show_thumbs(imgId);
                 return false;
             });
+
+            // Delete images if limit exceeds
+            if (limitImg > 0 && !(limitImg > i)) {
+                thumb.find(".thumbremovelink").trigger('click');
+            }
         }
     }
 
