@@ -93,7 +93,7 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
 
     $id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
     $title = isset( $image->title ) && $image->title ? 'title="' . esc_attr( wp_strip_all_tags( stripslashes_deep( $image->title ) ) ) . '" ' : '';
-    $alt = isset( $image->caption ) && $image->caption ? esc_attr( wp_strip_all_tags( stripslashes_deep( $image->caption ) ) ) : 'image-'.$id;
+    $alt = isset( $image->caption ) && $image->caption ? esc_attr( wp_strip_all_tags( stripslashes_deep( $image->caption ) ) ) : '';
     $class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id;
 
     /**
