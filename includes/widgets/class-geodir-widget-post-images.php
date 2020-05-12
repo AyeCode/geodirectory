@@ -339,9 +339,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$options['fallback_types'] = array('logo','cat_default','cpt_default','listing_default');
 		}
 
-//		$options['types'] = array("logo","comment_images","post_images"); // @todo remove this line after testing
-
-
 		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types'],$options['fallback_types']);
 
 		// make it just a image if only one
