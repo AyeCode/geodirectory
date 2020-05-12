@@ -186,7 +186,6 @@ function geodir_rest_check_manager_permissions( $object, $context = 'read' ) {
 	);
 
 	$permission = current_user_can( $objects[ $object ] );
-	$permission = true; // @todo remove this after testing done.
 
 	return apply_filters( 'geodir_rest_check_permissions', $permission, $context, 0, $object );
 }
