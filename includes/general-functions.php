@@ -779,6 +779,10 @@ function geodir_custom_posts_body_class( $classes ) {
 
 	if ( geodir_is_geodir_page() ) {
 		$classes[] = 'geodir-page';
+
+		// Add post type to class.
+		$_post_type = geodir_get_current_posttype();
+		$classes[] = 'geodir-page-cpt-' . $_post_type;
 	}
 
 	if ( geodir_is_page( 'search' ) ) {
