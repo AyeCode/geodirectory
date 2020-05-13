@@ -3,6 +3,7 @@
 * Switching package shows all images instead of package image limit - FIXED
 * Able to set default zoom level on add listing page map - ADDED
 * City, region names with Greek characters causes issue in meta title - FIXED
+* AyeCode Connect plugin added in recommend plugins list - ADDED
 
 = 2.0.0.93 =
 * Elementor archive items not always given an ID so sometime map is not limited to current listings - FIXED
