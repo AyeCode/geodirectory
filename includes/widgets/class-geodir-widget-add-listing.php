@@ -90,6 +90,20 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                 'desc_tip' => true,
                 'advanced' => true
             ),
+            'mapzoom' => array(
+                'type'        => 'select',
+                'title'       => __( 'Map Zoom level:', 'geodirectory' ),
+                'desc'        => __( 'This is the zoom level of the map, `auto` is recommended.', 'geodirectory' ),
+                'options'     => array_merge( array( '0' => __( 'Auto', 'geodirectory' ) ), range( 1, 19 ) ),
+                'placeholder' => '',
+                'desc_tip'    => true,
+                'default'     => '0',
+                'advanced'    => true
+            ),
+
+
+
+
         );
     }
 
@@ -126,7 +140,8 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             'listing_type'  => $default_post_type,
             'login_msg'     => __( 'You must login to post.', 'geodirectory' ),
             'show_login'    => true,
-            'container'    => '',
+            'container'     => '',
+            'mapzoom'       => '0',
         );
 
         $params = wp_parse_args( $args,$defaults);
@@ -138,6 +153,18 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         if(!isset($args['login_msg']) || $args['login_msg']==''){
             $params['login_msg'] = $defaults['login_msg'];
         }
+
+        if( isset( $params['mapzoom'] ) || ! empty( $params['mapzoom'] ) ){
+            
+            $mapzoomvalue = absint( $params['mapzoom'] );
+
+            // Checks the zoom value between 1 and 18.
+            if(  ( 1 <= $mapzoomvalue ) && ( $mapzoomvalue <= 19 ) ){
+                global $mapzoom;
+                $mapzoom = $mapzoomvalue;
+            }
+        }
+
 
         if ( !empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
             $params['pid'] = absint( $_REQUEST['pid'] );

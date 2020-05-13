@@ -1,6 +1,7 @@
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED
 * Switching package shows all images instead of package image limit - FIXED
+* Able to set default zoom level on add listing page map - ADDED
 
 = 2.0.0.93 =
 * Elementor archive items not always given an ID so sometime map is not limited to current listings - FIXED
