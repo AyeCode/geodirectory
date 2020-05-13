@@ -100,10 +100,6 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                 'default'     => '0',
                 'advanced'    => true
             ),
-
-
-
-
         );
     }
 
@@ -153,18 +149,6 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         if(!isset($args['login_msg']) || $args['login_msg']==''){
             $params['login_msg'] = $defaults['login_msg'];
         }
-
-        if( isset( $params['mapzoom'] ) || ! empty( $params['mapzoom'] ) ){
-            
-            $mapzoomvalue = absint( $params['mapzoom'] );
-
-            // Checks the zoom value between 1 and 18.
-            if(  ( 1 <= $mapzoomvalue ) && ( $mapzoomvalue <= 19 ) ){
-                global $mapzoom;
-                $mapzoom = $mapzoomvalue;
-            }
-        }
-
 
         if ( !empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
             $params['pid'] = absint( $_REQUEST['pid'] );

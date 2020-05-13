@@ -1040,13 +1040,16 @@ add_filter('geodir_custom_field_input_time','geodir_cfi_time',10,2);
 /**
  * Get the html input for the custom field: address
  *
+ * @global null|int $mapzoom Map zoom level.
+ *
  * @param string $html The html to be filtered.
  * @param array $cf The custom field array details.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cfi_address($html,$cf){
+function geodir_cfi_address( $html, $cf ) {
+    global $mapzoom;
 
     $html_var = $cf['htmlvar_name'];
 
@@ -1093,16 +1096,38 @@ function geodir_cfi_address($html,$cf){
         ($extra_fields['map_lable'] != '') ? $map_title = $extra_fields['map_lable'] : $map_title = geodir_ucwords('set address on map');
         ($extra_fields['mapview_lable'] != '') ? $mapview_title = $extra_fields['mapview_lable'] : $mapview_title = geodir_ucwords($prefix . ' mapview');
 
-
-       $street  = $gd_post->street;
-        $street2     = isset( $gd_post->street2 ) ? $gd_post->street2 : '';
+        $street  = $gd_post->street;
+        $street2 = isset( $gd_post->street2 ) ? $gd_post->street2 : '';
         $zip     = isset( $gd_post->zip ) ? $gd_post->zip : '';
-       $lat     = isset( $gd_post->latitude) ? $gd_post->latitude : '';
-       $lng     = isset( $gd_post->longitude) ? $gd_post->longitude : '';
-       $mapview = isset( $gd_post->mapview ) ? $gd_post->mapview : '';
-       $post_mapzoom = $mapzoom = isset( $gd_post->mapzoom ) ? $gd_post->mapzoom : '';
+        $lat     = isset( $gd_post->latitude) ? $gd_post->latitude : '';
+        $lng     = isset( $gd_post->longitude) ? $gd_post->longitude : '';
+        $mapview = isset( $gd_post->mapview ) ? $gd_post->mapview : '';
+        $post_mapzoom = isset( $gd_post->mapzoom ) ? $gd_post->mapzoom : '';
 
+        // Map zoom
+        if ( ! empty( $post_mapzoom ) ) {
+            $_mapzoom = absint( $post_mapzoom );
+        } elseif ( ! empty( $_REQUEST['mapzoom'] ) ) {
+            $_mapzoom = absint( $_REQUEST['mapzoom'] );
+        } else {
+            $_mapzoom = 0;
+        }
 
+        if ( ! empty( $_mapzoom ) && $_mapzoom > 0 && $_mapzoom < 21 ) {
+            $mapzoom = $_mapzoom;
+        } else {
+            $mapzoom = 12; // Default zoom
+        }geodir_error_log( $mapzoom, 'mapzoom', __FILE__, __LINE__ );
+
+        /**
+         * Filter add listing page map zoom.
+         *
+         * @since 2.0.0.94
+         *
+         * @param int $mapzoom Map zoom level.
+         * @param object $gd_post The GeoDirectory post object.
+         */
+        $mapzoom = apply_filters( 'geodir_add_listing_page_map_zoom', $mapzoom, $gd_post );
 
         $location = $geodirectory->location->get_default_location();
         if (empty($city)) $city = isset($location->city) ? $location->city : '';
