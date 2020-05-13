@@ -946,13 +946,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$map_args['all_posts'] = false;
 		}
 
-		// post map
-		if ( $map_args['map_type'] == 'post' ) {
-		} else {
-			$map_args['map_directions'] = false;
-			$map_args['post_id']        = 0;
-		}
-
 		// location
 		$current_location          = GeoDir()->location;
 		$map_args['country']       = ! empty( $current_location->country_slug ) ? $current_location->country_slug : $map_args['country'];
@@ -965,7 +958,19 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			if ( get_query_var( 'near' ) ) {
 				$map_args['dist'] = get_query_var( 'dist' );
 			}
-		}		
+		}
+
+		// post map
+		if ( $map_args['map_type'] == 'post' ) {
+			$map_args['country']       = '';
+			$map_args['region']        = '';
+			$map_args['city']          = '';
+			$map_args['neighbourhood'] = '';
+		} else {
+			$map_args['map_directions'] = false;
+			$map_args['post_id']        = 0;
+		}
+
 		return self::render_map( $map_args );
 	}
 
