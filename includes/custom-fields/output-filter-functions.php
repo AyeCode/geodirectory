@@ -273,6 +273,11 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
                 return $value;
             }
 
+	        // round rating
+	        if($value && $htmlvar_name == 'overall_rating' ){
+		        $value = round($value, 1);
+	        }
+
             if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'INT' || $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) && isset( $cf['extra_fields'] ) && $cf['extra_fields'] ) {
                 $extra_fields = stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) );
 
@@ -309,8 +314,6 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
     }
 
     return $html;
-
-	return $html;
 }
 add_filter( 'geodir_custom_field_output_custom', 'geodir_cf_custom', 10, 5 );
 
