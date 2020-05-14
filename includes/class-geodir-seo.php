@@ -619,6 +619,12 @@ class GeoDir_SEO {
 				foreach($matches as $cf){
 					$field_name = str_replace(array("%%_","%%"),"",$cf);
 					$cf_value = isset($gd_post->{$field_name}) ? $gd_post->{$field_name} : '';//geodir_get_post_meta($post->ID,$field_name,true);
+
+					// round rating
+					if($cf_value && $field_name == 'overall_rating'){
+						$cf_value = round($cf_value, 1);
+					}
+
 					$string     = str_replace( "%%_{$field_name}%%", $cf_value, $string );
 				}
 			}

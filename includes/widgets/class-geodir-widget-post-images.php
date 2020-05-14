@@ -175,6 +175,22 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => true
 				),
+				'link_screenshot_to'  => array(
+					'title' => __('Link screenshots to:', 'geodirectory'),
+					'desc' => __('Link screenshot images to where.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"post" => __('Post', 'geodirectory'),
+						"lightbox" => __('Lightbox image', 'geodirectory'),
+						"lightbox_url" => __('Lightbox iframe URL', 'geodirectory'),
+						"url" => __('URL (new window)', 'geodirectory'),
+						"url_same" => __('URL (same window)', 'geodirectory'),
+					),
+					'default'  => '',
+					'desc_tip' => true,
+					'advanced' => true
+				),
 				'types'  => array(
 					'title' => __('Image types:', 'geodirectory'),
 					'desc' => __('Comma separated list of image types to show. Defaults to: post_images', 'geodirectory'),
