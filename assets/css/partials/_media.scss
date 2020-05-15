@@ -64,6 +64,10 @@
             height: auto;
         }
     }
+
+    .gd-rating-outer-wrap .gd-rating-input{
+        display: block;
+    }
 }
 
 @media only screen and (max-width: 480px) {

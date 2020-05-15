@@ -6,6 +6,8 @@
 * AyeCode Connect plugin added in recommend plugins list - ADDED
 * GD > Post meta for overall_rating is now rounded to one decimal place (raw value still available) - CHANGED
 * Titles and meta value for overall_rating is now rounded to one decimal place - CHANGED
+* GD > Post Images, when using screenshots from custom fields, screenshots can now link to different URL value - ADDED
+* Iphone ratings sometimes not able to set rating if text size of rating makes the rating jump between lines when changed - FIXED
 
 = 2.0.0.93 =
 * Elementor archive items not always given an ID so sometime map is not limited to current listings - FIXED

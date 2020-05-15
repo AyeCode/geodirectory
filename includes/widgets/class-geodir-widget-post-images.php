@@ -318,6 +318,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'limit'     => '',
 			'limit_show'     => '',
 			'link_to'     => '',
+			'link_screenshot_to'     => '',
 			'image_size'     => 'medium',
 			'show_logo'     => '0',
 			'cover'   => '', // image cover type
@@ -356,6 +357,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		}
 
 		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types'],$options['fallback_types']);
+
+//		print_r($post_images );
 
 		// make it just a image if only one
 		if($options['type']=='slider' && count($post_images) == 1 && $options['limit_show']){
@@ -424,6 +427,12 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					<ul class="<?php echo esc_attr($ul_class );?> geodir-images clearfix"><?php
 						$image_count = 0;
 						foreach($post_images as $image){
+
+							// reset temp tags
+							$link_tag_open_ss = '';
+							$link_tag_close_ss = '';
+
+
 							$limit_show = !empty($options['limit_show']) && $image_count >= $options['limit_show'] ? "style='display:none;'" : '';
 							echo "<li $limit_show >";
 
@@ -440,6 +449,32 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 								$link = geodir_get_image_src($image, 'large');
 							}
 
+							// check if screenshot link is different
+							if($options['link_screenshot_to']!='' && $options['link_screenshot_to']!=$options['link_to'] && !$image->ID && stripos(strrev($image->type), "tohsneercs_") === 0){
+								if($options['link_screenshot_to']=='post'){
+									$link = get_the_permalink($post->ID);
+									$link_tag_open_ss = "<a href='%s'>";
+									$link_tag_close_ss = "</a>";
+								}elseif($options['link_screenshot_to']=='lightbox'){
+									$link = geodir_get_image_src($image, 'large');
+									$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image' data-lity>";
+									$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
+								}elseif($options['link_screenshot_to']=='lightbox_url'){
+									$field_key = str_replace("_screenshot","",$image->type);
+									$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
+									$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image' data-lity>";
+									$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
+								}elseif($options['link_screenshot_to']=='url' || $options['link_screenshot_to']=='url_same'){
+									$field_key = str_replace("_screenshot","",$image->type);
+									$target = $options['link_screenshot_to']=='url' ? "target='_blank'" : '';
+									$link_icon = $options['link_screenshot_to']=='url' ? "fas fa-external-link-alt" : 'fas fa-link';
+									$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
+									$link_tag_open_ss = "<a href='%s' $target class='geodir-lightbox-image' rel='nofollow noopener noreferrer'>";
+									$link_tag_close_ss = "<i class=\"$link_icon\" aria-hidden=\"true\"></i></a>";
+								}
+
+							}
+
 							// ajaxify images
 							if($options['type']=='slider' && $options['ajax_load'] && $image_count){
 								$img_tag = geodir_image_tag_ajaxify($img_tag,$options['type']!='slider');
@@ -447,9 +482,18 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 								$img_tag = geodir_image_tag_ajaxify($img_tag);
 							}
 							// output image
-							echo $link_tag_open ? sprintf($link_tag_open,esc_url($link)) : '';
+							if($link_tag_open_ss){
+								echo $link_tag_open_ss ? sprintf($link_tag_open_ss,esc_url($link)) : '';
+							}else{
+								echo $link_tag_open ? sprintf($link_tag_open,esc_url($link)) : '';
+							}
 							echo $img_tag;
-							echo $link_tag_close;
+							if($link_tag_close_ss){
+								echo $link_tag_close_ss;
+							}else{
+								echo $link_tag_close;
+							}
+
 							$flex_caption = '';
 							if($options['type']=='slider' && $options['show_title'] && !empty($image->title)){
 
