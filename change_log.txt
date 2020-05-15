@@ -4,7 +4,8 @@
 * Able to set default zoom level on add listing page map - ADDED
 * City, region names with Greek characters causes issue in meta title - FIXED
 * AyeCode Connect plugin added in recommend plugins list - ADDED
-* GD > Post meta for overall_rating is now rounded to once decimal place (raw value still available) - CHANGED
+* GD > Post meta for overall_rating is now rounded to one decimal place (raw value still available) - CHANGED
+* Titles and meta value for overall_rating is now rounded to one decimal place - CHANGED
 
 = 2.0.0.93 =
 * Elementor archive items not always given an ID so sometime map is not limited to current listings - FIXED
