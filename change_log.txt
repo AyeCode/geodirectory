@@ -8,6 +8,7 @@
 * Titles and meta value for overall_rating is now rounded to one decimal place - CHANGED
 * GD > Post Images, when using screenshots from custom fields, screenshots can now link to different URL value - ADDED
 * Iphone ratings sometimes not able to set rating if text size of rating makes the rating jump between lines when changed - FIXED
+* select2 dropdown style conflict after Yoast 14.1 - FIXED
 
 = 2.0.0.93 =
 * Elementor archive items not always given an ID so sometime map is not limited to current listings - FIXED

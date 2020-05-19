@@ -25,8 +25,21 @@ class GeoDir_Admin_Assets {
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'fix_script_conflicts' ), 99 );
+
 		// Localize jQuery Timepicker
 		add_action( 'admin_enqueue_scripts', 'geodir_localize_jquery_ui_timepicker', 1001 );
+	}
+
+	/**
+	 * Fix style/script conflict from thired party plugins/themes.
+	 */
+	public function fix_script_conflicts(){
+		// Fix select2 style conflict after Yoast 14.1.
+		if ( wp_script_is( 'geodir-admin-script', 'enqueued' ) && wp_style_is( 'yoast-seo-select2', 'enqueued' ) && wp_style_is( 'yoast-seo-monorepo', 'enqueued' ) ) {
+			wp_deregister_style( 'yoast-seo-select2' );
+			wp_deregister_style( 'yoast-seo-monorepo' );
+		}
 	}
 
 	/**
@@ -74,7 +87,6 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_style( 'geodir-pluplodar-css');
 			wp_enqueue_style( 'geodir-rtl-style');
-
 		}
 
 		if ( $page == 'geodirectory' ) {
