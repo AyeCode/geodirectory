@@ -24,7 +24,7 @@ class AUI {
 	 *
 	 * @var string $ver The current version number.
 	 */
-	public static $ver = '0.1.4';
+	public static $ver = '0.1.5';
 
 	/**
 	 * There can be only one.
@@ -67,14 +67,14 @@ class AUI {
 		}
 	}
 
-	public static function render( $items = array() ) {
+	public function render( $items = array() ) {
 		$output = '';
 
 		if ( ! empty( $items ) ) {
 			foreach ( $items as $args ) {
 				$render = isset( $args['render'] ) ? $args['render'] : '';
 				if ( $render && method_exists( __CLASS__, $render ) ) {
-					$output .= self::$render( $args );
+					$output .= $this->$render( $args );
 				}
 			}
 		}
@@ -145,7 +145,7 @@ class AUI {
 	 */
 	public function badge( $args = array() ) {
 		$defaults = array(
-			'class' => 'badge badge-primary',
+			'class' => 'badge badge-primary align-middle',
 		);
 
 		// maybe set type

@@ -778,7 +778,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		'onclick'   => '',
 		'icon_class'=> '',
 		'extra_attributes'=> '', // 'data-save-list-id=123 data-other-post-id=321'
-		'tag'       => ''
+		'tag'       => '',
 		'popover_title'=> '',
 		'popover_text'=> '',
 		'cta'=> '', // click through action
