@@ -23,10 +23,23 @@ class GeoDir_Admin_Assets {
 	 * Hook in tabs.
 	 */
 	public function __construct() {
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ), 99 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'admin_disable_yoast_styles' )  , 99 );
+
 		// Localize jQuery Timepicker
 		add_action( 'admin_enqueue_scripts', 'geodir_localize_jquery_ui_timepicker', 1001 );
+	}
+
+	/**
+	 * Disenque Yoast styles.
+	 */
+	public function admin_disable_yoast_styles(){
+		// Fix select2 style conflict after Yoast 14.1.
+		if ( wp_script_is( 'geodir-admin-script', 'enqueued' ) && wp_style_is( 'yoast-seo-select2', 'enqueued' ) && wp_style_is( 'yoast-seo-monorepo', 'enqueued' ) ) {
+			wp_deregister_style( 'yoast-seo-select2' );
+			wp_deregister_style( 'yoast-seo-monorepo' );
+		}
 	}
 
 	/**
