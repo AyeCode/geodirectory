@@ -167,6 +167,14 @@ class GeoDir_Frontend_Scripts {
 						jQuery($form).submit();
 					}
 				});
+				// Clear near search GPS for core
+				if (!jQuery('input.geodir-location-search-type').length && jQuery('[name="snear"]').length){
+					jQuery('[name="snear"]').unbind('keyup');
+					jQuery('[name="snear"]').on('keyup', function($){
+						jQuery('.sgeo_lat').val('');
+						jQuery('.sgeo_lon').val('');
+					});
+				}
 			}
 
 			jQuery(document).ready(function() {
@@ -595,11 +603,11 @@ class GeoDir_Frontend_Scripts {
 			}
 
 
-			// add-listing
-			if(geodir_is_page('add-listing')){
-				self::enqueue_script( 'geodir-plupload' );
-				self::enqueue_script( 'geodir-add-listing' );
-				self::enqueue_script( 'geodir-jquery-ui-timepicker' );
+		// add-listing
+		if(geodir_is_page('add-listing') && !isset($_REQUEST['ct_builder'])){
+			self::enqueue_script( 'geodir-plupload' );
+			self::enqueue_script( 'geodir-add-listing' );
+			self::enqueue_script( 'geodir-jquery-ui-timepicker' );
 
 				wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
 

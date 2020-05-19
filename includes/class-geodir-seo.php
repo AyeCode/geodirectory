@@ -40,6 +40,8 @@ class GeoDir_SEO {
 		if ( ! is_admin() ) {
 			add_filter( 'page_link', array( __CLASS__, 'page_link' ), 10, 3 );
 		}
+
+		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ), 9999 );
 	}
 
 	/**
@@ -82,21 +84,39 @@ class GeoDir_SEO {
 				// set a global so we don't change the menu items titles
 				add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
 				add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
-//
-//				// page title
+				// YOOtheme renders own menuwalker.
+				if ( class_exists( 'YOOtheme\\Theme' ) ) {
+					add_filter( 'wp_nav_menu_items',array( __CLASS__, 'unset_menu_global' ), 999, 1 );
+				}
+
+				if ( self::has_yoast_14() ) {
+					add_filter( 'wpseo_title', array( __CLASS__, 'wpseo_title' ), 20, 2 );
+					add_filter( 'wpseo_metadesc', array( __CLASS__, 'wpseo_metadesc' ), 20, 2 );
+
+					add_filter( 'wpseo_opengraph_url', array( __CLASS__, 'wpseo_opengraph_url' ), 20, 2 );
+					add_filter( 'wpseo_canonical', array( __CLASS__, 'wpseo_canonical' ), 20, 2 );
+					add_filter( 'wpseo_adjacent_rel_url', array( __CLASS__, 'wpseo_adjacent_rel_url' ), 20, 3 );
+
+					add_action( 'wpseo_register_extra_replacements', array( __CLASS__, 'wpseo_register_extra_replacements' ), 20 );
+				}
+
+				// page title
 				add_filter('the_title',array(__CLASS__,'output_title'),10,2);
 				add_filter('get_the_archive_title',array(__CLASS__,'output_title'),10);
-//
-//				// setup vars
+
+				// setup vars
 				add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
 			}
 			return;
 		}
 
-
 		// set a global so we don't change the menu items titles
 		add_filter('pre_wp_nav_menu',array(__CLASS__,'set_menu_global'),10,2);
 		add_filter('wp_nav_menu',array(__CLASS__,'unset_menu_global'));
+		// YOOtheme renders own menuwalker.
+		if ( class_exists( 'YOOtheme\\Theme' ) ) {
+			add_filter( 'wp_nav_menu_items',array( __CLASS__, 'unset_menu_global' ), 999, 1 );
+		}
 
 		// meta title
 		add_filter('wp_title', array(__CLASS__,'output_meta_title'),1000,2);
@@ -109,14 +129,25 @@ class GeoDir_SEO {
 		// setup vars
 		add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
 
-		// meta description
-		if(defined( 'WPSEO_VERSION')){
-			add_filter('wpseo_metadesc', array(__CLASS__,'get_description'), 10, 1);
-		}elseif( defined( 'RANK_MATH_VERSION') ){
-			add_filter('rank_math/frontend/description', array(__CLASS__,'get_description'), 10, 1);
-			add_filter('rank_math/frontend/title', array(__CLASS__,'get_title'), 10, 1);
-		}else{
-			add_action('wp_head', array(__CLASS__,'output_description'));
+		// Meta title & meta description
+		if ( self::has_yoast() ) {
+			// Yoast SEO v14.x
+			if ( self::has_yoast_14() ) {
+				add_filter( 'wpseo_opengraph_title', array( __CLASS__, 'get_title' ), 10, 1 );
+				add_filter( 'wpseo_opengraph_desc', array( __CLASS__, 'get_description' ), 10, 1 );
+				add_filter( 'wpseo_opengraph_url', array( __CLASS__, 'wpseo_opengraph_url' ), 20, 2 );
+				add_filter( 'wpseo_add_opengraph_additional_images', array( __CLASS__, 'wpseo_opengraph_image' ), 20, 1 );
+				add_filter( 'wpseo_canonical', array( __CLASS__, 'wpseo_canonical' ), 20, 2 );
+				add_filter( 'wpseo_adjacent_rel_url', array( __CLASS__, 'wpseo_adjacent_rel_url' ), 20, 3 );
+			}
+
+			add_filter( 'wpseo_title', array( __CLASS__, 'get_title' ), 10, 1 );
+			add_filter( 'wpseo_metadesc', array( __CLASS__, 'get_description' ), 10, 1 );
+		} elseif ( defined( 'RANK_MATH_VERSION' ) ) {
+			add_filter( 'rank_math/frontend/description', array( __CLASS__,'get_description' ), 10, 1 );
+			add_filter( 'rank_math/frontend/title', array( __CLASS__, 'get_title' ), 10, 1 );
+		} else {
+			add_action( 'wp_head', array( __CLASS__, 'output_description' ) );
 		}
 	}
 
@@ -168,21 +199,21 @@ class GeoDir_SEO {
 	 *
 	 * @return string $title.
 	 */
-	public static function output_title($title = '', $id = 0){
-		global $wp_query;
-		// in some themes the object id is missing so we fix it
+	public static function output_title( $title = '', $id = 0 ) {
+		global $wp_query,$gdecs_render_loop;
 
-		if($id && isset($wp_query->post->ID) && geodir_is_geodir_page_id($id)){
+		// In some themes the object id is missing so we fix it
+		$query_object_id = '';
+
+		if ( $id && isset( $wp_query->post->ID ) && geodir_is_geodir_page_id( $id ) ) {
 			$query_object_id = $wp_query->post->ID;
-		}else{
+		} elseif ( ! is_null( $wp_query ) ) {
 			$query_object_id = get_queried_object_id();
 		}
 
-
-//		echo $query_object_id.'###'.$id.self::$title;
-		if(self::$title && empty($id)  && !self::$doing_menu ){
+		if ( self::$title && empty( $id ) && ! self::$doing_menu ) {
 			$title = self::$title;
-		}elseif(self::$title && !empty($id) && $query_object_id == $id && !self::$doing_menu ){
+		} elseif ( self::$title && ! empty( $id ) && $query_object_id == $id && ! self::$doing_menu && !$gdecs_render_loop) {
 			$title = self::$title;
 			/**
 			 * Filter page title to replace variables.
@@ -190,7 +221,12 @@ class GeoDir_SEO {
 			 * @param string $title The page title including variables.
 			 * @param string $id The page id.
 			 */
-			$title = apply_filters('geodir_seo_title', __($title, 'geodirectory'), $title, $id);
+			$title = apply_filters( 'geodir_seo_title', __( $title, 'geodirectory' ), $title, $id );
+		}
+
+		// Strip duplicate whitespace.
+		if ( $title != '' ) {
+			$title = normalize_whitespace( $title );
 		}
 
 		return $title;
@@ -206,8 +242,8 @@ class GeoDir_SEO {
 	 *
 	 * @return mixed|void
 	 */
-	public static function output_meta_title($title = '', $sep = ''){
-		if(self::$meta_title){
+	public static function output_meta_title( $title = '', $sep = '' ) {
+		if ( self::$meta_title ) {
 			$title = self::$meta_title;
 		}
 
@@ -219,7 +255,14 @@ class GeoDir_SEO {
 		 * @param string $gd_page The GeoDirectory page type if any.
 		 * @param string $sep The title separator symbol.
 		 */
-		return apply_filters('geodir_seo_meta_title', __($title, 'geodirectory'), self::$gd_page, $sep);
+		$title = apply_filters( 'geodir_seo_meta_title', __( $title, 'geodirectory' ), self::$gd_page, $sep );
+
+		// Strip duplicate whitespace.
+		if ( $title != '' ) {
+			$title = normalize_whitespace( $title );
+		}
+
+		return $title;
 	}
 
 	/**
@@ -227,17 +270,18 @@ class GeoDir_SEO {
 	 *
 	 * @since 2.0.0
 	 */
-	public static function get_description($description=''){
+	public static function get_description( $description = '' ) {
 		$meta_description = self::$meta_description;
 
-		if(!empty($meta_description )){
+		if ( ! empty( $meta_description ) ) {
 			$description = $meta_description;
 		}
 
 		// escape
-		if(!empty($description)){
-			$description = esc_attr($description);
+		if ( ! empty( $description ) ) {
+			$description = esc_attr( $description );
 		}
+
 		/**
 		 * Filter SEO meta description.
 		 *
@@ -245,7 +289,14 @@ class GeoDir_SEO {
 		 *
 		 * @param string $description Meta description.
 		 */
-		return apply_filters( 'geodir_seo_meta_description', $description,$meta_description);
+		$description = apply_filters( 'geodir_seo_meta_description', $description, $meta_description );
+
+		// Strip duplicate whitespace.
+		if ( $description != '' ) {
+			$description = normalize_whitespace( $description );
+		}
+
+		return $description;
 	}
 
 	/**
@@ -253,10 +304,10 @@ class GeoDir_SEO {
 	 *
 	 * @since 2.0.0
 	 */
-	public static function get_title( $title = '' ){
+	public static function get_title( $title = '' ) {
 		$meta_title= self::$meta_title;
 
-		if ( !empty( $meta_title ) ) {
+		if ( ! empty( $meta_title ) ) {
 			$title = $meta_title;
 		}
 
@@ -269,7 +320,14 @@ class GeoDir_SEO {
 		 *
 		 * @param string $title Meta title.
 		 */
-		return apply_filters( 'geodir_seo_meta_title', $title, $meta_title);
+		$title = apply_filters( 'geodir_seo_meta_title', $title, $meta_title );
+
+		// Strip duplicate whitespace.
+		if ( $title != '' ) {
+			$title = normalize_whitespace( $title );
+		}
+
+		return $title;
 	}
 
 	/**
@@ -287,64 +345,84 @@ class GeoDir_SEO {
      *
      * @since 2.0.0
 	 */
-	public static function set_meta(){
+	public static function set_meta() {
 		$gd_settings = geodir_get_settings();
-		//print_r( $gd_settings );
-		if(geodir_is_page( 'pt' )){self::$gd_page = 'pt';
-			$post_type       = geodir_get_current_posttype();
-			$post_type_info  = get_post_type_object( $post_type );
-			if(isset($post_type_info->seo['title']) && !empty($post_type_info->seo['title'])){
+
+		if ( geodir_is_page( 'pt' ) ) {
+			self::$gd_page = 'pt';
+			$post_type = geodir_get_current_posttype();
+			$post_type_info = get_post_type_object( $post_type );
+
+			if ( isset( $post_type_info->seo['title'] ) && ! empty( $post_type_info->seo['title'] ) ) {
 				self::$title = $post_type_info->seo['title'];
-			}else{
-				self::$title = !empty($gd_settings['seo_cpt_title']) ? $gd_settings['seo_cpt_title'] : GeoDir_Defaults::seo_cpt_title();
+			} else {
+				self::$title = ! empty( $gd_settings['seo_cpt_title'] ) ? $gd_settings['seo_cpt_title'] : GeoDir_Defaults::seo_cpt_title();
 			}
-			if(isset($post_type_info->seo['meta_title']) && !empty($post_type_info->seo['meta_title'])){
+
+			if ( isset( $post_type_info->seo['meta_title'] ) && ! empty( $post_type_info->seo['meta_title'] ) ) {
 				self::$meta_title = $post_type_info->seo['meta_title'];
-			}else{
-				self::$meta_title = !empty($gd_settings['seo_cpt_meta_title']) ? $gd_settings['seo_cpt_meta_title'] : GeoDir_Defaults::seo_cpt_meta_title();
+			} else {
+				self::$meta_title = ! empty( $gd_settings['seo_cpt_meta_title'] ) ? $gd_settings['seo_cpt_meta_title'] : GeoDir_Defaults::seo_cpt_meta_title();
 			}
-			if(isset($post_type_info->seo['meta_description']) && !empty($post_type_info->seo['meta_description'])){
+
+			if ( isset( $post_type_info->seo['meta_description'] ) && ! empty( $post_type_info->seo['meta_description'] ) ) {
 				self::$meta_description = $post_type_info->seo['meta_description'];
-			}else{
-				self::$meta_description = !empty($gd_settings['seo_cpt_meta_description']) ? $gd_settings['seo_cpt_meta_description'] : GeoDir_Defaults::seo_cpt_meta_description();
+			} else {
+				self::$meta_description = ! empty( $gd_settings['seo_cpt_meta_description'] ) ? $gd_settings['seo_cpt_meta_description'] : GeoDir_Defaults::seo_cpt_meta_description();
 			}
-		}elseif(geodir_is_page( 'archive' )){self::$gd_page = 'archive';
+		} elseif ( geodir_is_page( 'archive' ) ) {
+			self::$gd_page = 'archive';
 			$queried_object = get_queried_object();
-			if(isset($queried_object->taxonomy) && geodir_taxonomy_type($queried_object->taxonomy) == 'category' && geodir_is_gd_taxonomy($queried_object->taxonomy)){
-				self::$title = !empty($gd_settings['seo_cat_archive_title']) ? $gd_settings['seo_cat_archive_title'] : GeoDir_Defaults::seo_cat_archive_title();
-				self::$meta_title = !empty($gd_settings['seo_cat_archive_meta_title']) ? $gd_settings['seo_cat_archive_meta_title'] : GeoDir_Defaults::seo_cat_archive_meta_title();
-				self::$meta_description = !empty($gd_settings['seo_cat_archive_meta_description']) ? $gd_settings['seo_cat_archive_meta_description'] : GeoDir_Defaults::seo_cat_archive_meta_description();
-			}elseif(isset($queried_object->taxonomy) && geodir_taxonomy_type($queried_object->taxonomy) == 'tag' && geodir_is_gd_taxonomy($queried_object->taxonomy)){
-				self::$title = !empty($gd_settings['seo_tag_archive_title']) ? $gd_settings['seo_tag_archive_title'] : GeoDir_Defaults::seo_tag_archive_title();
-				self::$meta_title = !empty($gd_settings['seo_tag_archive_meta_title']) ? $gd_settings['seo_tag_archive_meta_title'] : GeoDir_Defaults::seo_tag_archive_meta_title();
-				self::$meta_description = !empty($gd_settings['seo_tag_archive_meta_description']) ? $gd_settings['seo_tag_archive_meta_description'] : GeoDir_Defaults::seo_tag_archive_meta_description();
+
+			if ( isset( $queried_object->taxonomy ) && geodir_taxonomy_type( $queried_object->taxonomy ) == 'category' && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
+				self::$title = ! empty( $gd_settings['seo_cat_archive_title'] ) ? $gd_settings['seo_cat_archive_title'] : GeoDir_Defaults::seo_cat_archive_title();
+				self::$meta_title = ! empty( $gd_settings['seo_cat_archive_meta_title'] ) ? $gd_settings['seo_cat_archive_meta_title'] : GeoDir_Defaults::seo_cat_archive_meta_title();
+				self::$meta_description = ! empty( $gd_settings['seo_cat_archive_meta_description'] ) ? $gd_settings['seo_cat_archive_meta_description'] : GeoDir_Defaults::seo_cat_archive_meta_description();
+			} elseif ( isset($queried_object->taxonomy ) && geodir_taxonomy_type( $queried_object->taxonomy ) == 'tag' && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
+				self::$title = ! empty( $gd_settings['seo_tag_archive_title'] ) ? $gd_settings['seo_tag_archive_title'] : GeoDir_Defaults::seo_tag_archive_title();
+				self::$meta_title = ! empty( $gd_settings['seo_tag_archive_meta_title'] ) ? $gd_settings['seo_tag_archive_meta_title'] : GeoDir_Defaults::seo_tag_archive_meta_title();
+				self::$meta_description = ! empty( $gd_settings['seo_tag_archive_meta_description'] ) ? $gd_settings['seo_tag_archive_meta_description'] : GeoDir_Defaults::seo_tag_archive_meta_description();
 			}
-		}elseif(geodir_is_page( 'single' )){self::$gd_page = 'single';
-			self::$title = !empty($gd_settings['seo_single_title']) ? $gd_settings['seo_single_title'] : GeoDir_Defaults::seo_single_title();
-			self::$meta_title = !empty($gd_settings['seo_single_meta_title']) ? $gd_settings['seo_single_meta_title'] : GeoDir_Defaults::seo_single_meta_title();
-			self::$meta_description = !empty($gd_settings['seo_single_meta_description']) ? $gd_settings['seo_single_meta_description'] : GeoDir_Defaults::seo_single_meta_description();
-		}elseif(geodir_is_page( 'location' )){self::$gd_page = 'location';
-			self::$title = !empty($gd_settings['seo_location_title']) ? $gd_settings['seo_location_title'] : GeoDir_Defaults::seo_location_title();
-			self::$meta_title = !empty($gd_settings['seo_location_meta_title']) ? $gd_settings['seo_location_meta_title'] : GeoDir_Defaults::seo_location_meta_title();
-			self::$meta_description = !empty($gd_settings['seo_location_meta_description']) ? $gd_settings['seo_location_meta_description'] : GeoDir_Defaults::seo_location_meta_description();
-		}elseif(geodir_is_page( 'search' )){self::$gd_page = 'search';
-			self::$title = !empty($gd_settings['seo_search_title']) ? $gd_settings['seo_search_title'] : GeoDir_Defaults::seo_search_title();
-			self::$meta_title = !empty($gd_settings['seo_search_meta_title']) ? $gd_settings['seo_search_meta_title'] : GeoDir_Defaults::seo_search_meta_title();
-			self::$meta_description = !empty($gd_settings['seo_search_meta_description']) ? $gd_settings['seo_search_meta_description'] : GeoDir_Defaults::seo_search_meta_description();
-		}elseif(geodir_is_page( 'add-listing' )){self::$gd_page = 'add-listing';
-			if(!empty($_REQUEST['pid'])){
-				self::$title = !empty($gd_settings['seo_add_listing_title_edit']) ? $gd_settings['seo_add_listing_title_edit'] : GeoDir_Defaults::seo_add_listing_title_edit();
-			}else{
-				self::$title = !empty($gd_settings['seo_add_listing_title']) ? $gd_settings['seo_add_listing_title'] : GeoDir_Defaults::seo_add_listing_title();
+		} elseif ( geodir_is_page( 'single' ) ) {
+			self::$gd_page = 'single';
+
+			self::$title = ! empty( $gd_settings['seo_single_title'] ) ? $gd_settings['seo_single_title'] : GeoDir_Defaults::seo_single_title();
+			self::$meta_title = ! empty( $gd_settings['seo_single_meta_title'] ) ? $gd_settings['seo_single_meta_title'] : GeoDir_Defaults::seo_single_meta_title();
+			self::$meta_description = ! empty( $gd_settings['seo_single_meta_description'] ) ? $gd_settings['seo_single_meta_description'] : GeoDir_Defaults::seo_single_meta_description();
+		} elseif ( geodir_is_page( 'location' ) ) {
+			self::$gd_page = 'location';
+
+			self::$title = ! empty( $gd_settings['seo_location_title'] ) ? $gd_settings['seo_location_title'] : GeoDir_Defaults::seo_location_title();
+			self::$meta_title = ! empty( $gd_settings['seo_location_meta_title'] ) ? $gd_settings['seo_location_meta_title'] : GeoDir_Defaults::seo_location_meta_title();
+			self::$meta_description = ! empty( $gd_settings['seo_location_meta_description'] ) ? $gd_settings['seo_location_meta_description'] : GeoDir_Defaults::seo_location_meta_description();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			self::$gd_page = 'search';
+
+			self::$title = ! empty( $gd_settings['seo_search_title'] ) ? $gd_settings['seo_search_title'] : GeoDir_Defaults::seo_search_title();
+			self::$meta_title = ! empty( $gd_settings['seo_search_meta_title'] ) ? $gd_settings['seo_search_meta_title'] : GeoDir_Defaults::seo_search_meta_title();
+			self::$meta_description = ! empty( $gd_settings['seo_search_meta_description'] ) ? $gd_settings['seo_search_meta_description'] : GeoDir_Defaults::seo_search_meta_description();
+		} elseif ( geodir_is_page( 'add-listing' ) ) {
+			self::$gd_page = 'add-listing';
+
+			if ( ! empty( $_REQUEST['pid'] ) ) {
+				self::$title = ! empty( $gd_settings['seo_add_listing_title_edit'] ) ? $gd_settings['seo_add_listing_title_edit'] : GeoDir_Defaults::seo_add_listing_title_edit();
+			} else {
+				self::$title = ! empty( $gd_settings['seo_add_listing_title'] ) ? $gd_settings['seo_add_listing_title'] : GeoDir_Defaults::seo_add_listing_title();
 			}
-			self::$meta_title = !empty($gd_settings['seo_add_listing_meta_title']) ? $gd_settings['seo_add_listing_meta_title'] : GeoDir_Defaults::seo_add_listing_meta_title();
-			self::$meta_description = !empty($gd_settings['seo_add_listing_meta_description']) ? $gd_settings['seo_add_listing_meta_description'] : GeoDir_Defaults::seo_add_listing_meta_description();
+
+			self::$meta_title = ! empty( $gd_settings['seo_add_listing_meta_title'] ) ? $gd_settings['seo_add_listing_meta_title'] : GeoDir_Defaults::seo_add_listing_meta_title();
+			self::$meta_description = ! empty( $gd_settings['seo_add_listing_meta_description'] ) ? $gd_settings['seo_add_listing_meta_description'] : GeoDir_Defaults::seo_add_listing_meta_description();
 		}
 
-
-		if(self::$title){self::$title = self::replace_variable(self::$title,self::$gd_page);}
-		if(self::$meta_title){self::$meta_title = self::replace_variable(self::$meta_title,self::$gd_page);}
-		if(self::$meta_description){self::$meta_description = self::replace_variable(self::$meta_description,self::$gd_page);}
+		if ( self::$title ) {
+			self::$title = self::replace_variable( self::$title, self::$gd_page );
+		}
+		if ( self::$meta_title ) {
+			self::$meta_title = self::replace_variable( self::$meta_title, self::$gd_page );
+		}
+		if ( self::$meta_description ) {
+			self::$meta_description = self::replace_variable( self::$meta_description, self::$gd_page );
+		}
 
 		return self::$title;
 	}
@@ -362,11 +440,20 @@ class GeoDir_SEO {
 	 *
 	 * @return string $string.
 	 */
-	public static function replace_variable($string = '',$gd_page = ''){
-		global $post,$gd_post;
-		// global variables
+	public static function replace_variable( $string = '', $gd_page = '' ) {
+		global $post, $gd_post;
 
 		$post_type = geodir_get_current_posttype();
+
+		/**
+		 * Filter pre meta title.
+		 *
+		 * @since 2.0.0.76
+		 *
+		 * @param string $string Meta string.
+		 * @param string $gd_page GeoDirectory page.
+		 */
+		$string = apply_filters( 'geodir_seo_pre_replace_variable', $string, $gd_page );
 
 		if ( strpos( $string, '%%sep%%' ) !== false ) {
 			$string = str_replace( "%%sep%%", self::separator(), $string );
@@ -459,29 +546,44 @@ class GeoDir_SEO {
 		}
 
 		// search
+		$search_term = '';
+		if ( isset( $_REQUEST['s'] ) ) {
+			$search_term = esc_attr( $_REQUEST['s'] );
+			$search_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_term ); // apple suck
+			$search_term = trim( stripslashes( $search_term ) );
+		}
+
+		// %%search_term%%
 		if ( strpos( $string, '%%search_term%%' ) !== false ) {
-			$search_term = '';
-			if ( isset( $_REQUEST['s'] ) ) {
-				$search_term = esc_attr( $_REQUEST['s'] );
-				$search_term = str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
-				$search_term = trim( stripslashes( $search_term ) );
-			}
 			$string = str_replace( "%%search_term%%", $search_term, $string );
 		}
 
-		if ( strpos( $string, '%%search_near%%' ) !== false ) {
-			$search_near = '';
-			if ( isset( $_REQUEST['snear'] ) ) {
-				$search_near = esc_attr( $_REQUEST['snear'] );
-			}
-			if($search_near ){
-				if($search_term){
-					$search_near = ", ".sprintf( __('Near %s', 'geodirectory'), $search_near );
-				}else{
-					$search_near = sprintf( __('Near %s', 'geodirectory'), $search_near );
-				}
-			}
+		// %%for_search_term%%
+		if ( strpos( $string, '%%for_search_term%%' ) !== false ) {
+			$for_search_term = $search_term != '' ? wp_sprintf( __( 'for %s', 'geodirectory' ), $search_term ) : '';
+		
+			$string = str_replace( "%%for_search_term%%", $for_search_term, $string );
+		}
 
+		$search_near_term = '';
+		$search_near = '';
+		if ( isset( $_REQUEST['snear'] ) ) {
+			$search_near_term = esc_attr( $_REQUEST['snear'] );
+			$search_near_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_near_term ); // apple suck
+			$search_near_term = trim( stripslashes( $search_near_term ) );
+
+			if ( $search_near_term != '' ) {
+				$search_near = wp_sprintf( __( 'near %s', 'geodirectory' ), $search_near_term );
+			}
+		}
+
+		// %%search_near_term%%
+		if ( strpos( $string, '%%search_near_term%%' ) !== false ) {
+			$string = str_replace( "%%search_near_term%%", $search_near_term, $string );
+		}
+
+		// %%search_near%%
+		if ( strpos( $string, '%%search_near%%' ) !== false ) {
 			$string = str_replace( "%%search_near%%", $search_near, $string );
 		}
 
@@ -498,6 +600,10 @@ class GeoDir_SEO {
 			$pagetotal = geodir_title_meta_pagetotal();
 			$string     = str_replace( "%%pagetotal%%", $pagetotal, $string );
 		}
+		if ( strpos( $string, '%%postcount%%' ) !== false ) {
+			$postcount = geodir_title_meta_postcount();
+			$string     = str_replace( "%%postcount%%", $postcount, $string );
+		}
 
 
 		// CPT vars
@@ -513,6 +619,12 @@ class GeoDir_SEO {
 				foreach($matches as $cf){
 					$field_name = str_replace(array("%%_","%%"),"",$cf);
 					$cf_value = isset($gd_post->{$field_name}) ? $gd_post->{$field_name} : '';//geodir_get_post_meta($post->ID,$field_name,true);
+
+					// round rating
+					if($cf_value && $field_name == 'overall_rating'){
+						$cf_value = round($cf_value, 1);
+					}
+
 					$string     = str_replace( "%%_{$field_name}%%", $cf_value, $string );
 				}
 			}
@@ -530,59 +642,59 @@ class GeoDir_SEO {
 	 *
 	 * @return array $vars.
 	 */
-	public static function variables($gd_page = ''){
-
+	public static function variables( $gd_page = '' ) {
 		$vars = array();
-		// generic
-		if($gd_page != 'location_tags'){
-			$vars = array(
-				'%%title%%' => __('The current post title.','geodirectory'),
-				'%%sitename%%' => __('The site name from general settings: site title. ','geodirectory'),
-				'%%sitedesc%%' => __('The site description from general settings: tagline.','geodirectory'),
-				'%%excerpt%%' => __('The current post excerpt.','geodirectory'),
-				'%%sep%%' => __('The separator mostly used in meta titles.','geodirectory'),
-				'%%pt_single%%' => __('Post type singular name.','geodirectory'),
-				'%%pt_plural%%' => __('Post type plural name.','geodirectory'),
-				'%%category%%' => __('The current category name.','geodirectory'),
-				'%%id%%' => __('The current post id.','geodirectory'),
-			);
+
+		// Generic
+		if ( $gd_page != 'location_tags' ) {
+			$vars['%%title%%'] = __( 'The current post title.', 'geodirectory' );
+			$vars['%%sitename%%'] = __( 'The site name from general settings: site title. ', 'geodirectory' );
+			$vars['%%sitedesc%%'] = __( 'The site description from general settings: tagline.', 'geodirectory' );
+			$vars['%%sep%%'] = __( 'The separator mostly used in meta titles.', 'geodirectory' );
 		}
 
-
-		// location tags
-		if(!$gd_page || $gd_page == 'location_tags' || $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' || $gd_page == 'single' || $gd_page == 'location'){
-			$vars['%%location%%'] = __('The full current location eg: United States, Pennsylvania, Philadelphia','geodirectory');
-			$vars['%%location_single%%'] = __('The current viewing location type single name eg: Philadelphia','geodirectory');
-			$vars['%%in_location%%'] = __('The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia','geodirectory');
-			$vars['%%in_location_single%%'] = __('The current viewing location type single name prefixed with `in` eg: Philadelphia','geodirectory');
-			$vars['%%location_country%%'] = __('The current viewing country eg: United States','geodirectory');
-			$vars['%%in_location_country%%'] = __('The current viewing country prefixed with `in` eg: in United States','geodirectory');
-			$vars['%%location_region%%'] = __('The current viewing region eg: Pennsylvania','geodirectory');
-			$vars['%%in_location_region%%']= __('The current viewing region prefixed with `in` eg: in Pennsylvania','geodirectory');
-			$vars['%%location_city%%'] = __('The current viewing city eg: Philadelphia','geodirectory');
-			$vars['%%in_location_city%%'] = __('The current viewing city prefixed with `in` eg: in Philadelphia','geodirectory');
+		if ( $gd_page != 'location_tags' && $gd_page != 'location' ) {
+			$vars['%%excerpt%%'] = __( 'The current post excerpt.', 'geodirectory' );
+			$vars['%%pt_single%%'] = __( 'Post type singular name.', 'geodirectory' );
+			$vars['%%pt_plural%%'] = __( 'Post type plural name.', 'geodirectory' );
+			$vars['%%category%%'] = __( 'The current category name.', 'geodirectory' );
+			$vars['%%id%%'] = __( 'The current post id.', 'geodirectory' );
 		}
 
-
-
-		// search page only
-		if($gd_page == 'search' ){
-			$vars['%%search_term%%'] = __('The currently used search for term.','geodirectory');
-			$vars['%%search_near%%'] = __('The currently used search near term.','geodirectory');
+		// Location tags
+		if ( ! $gd_page || $gd_page == 'location_tags' || $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' || $gd_page == 'single' || $gd_page == 'location' ) {
+			$vars['%%location%%'] = __( 'The full current location eg: United States, Pennsylvania, Philadelphia', 'geodirectory' );
+			$vars['%%location_single%%'] = __( 'The current viewing location type single name eg: Philadelphia', 'geodirectory' );
+			$vars['%%in_location%%'] = __( 'The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia', 'geodirectory' );
+			$vars['%%in_location_single%%'] = __( 'The current viewing location type single name prefixed with `in` eg: Philadelphia', 'geodirectory' );
+			$vars['%%location_country%%'] = __( 'The current viewing country eg: United States', 'geodirectory' );
+			$vars['%%in_location_country%%'] = __( 'The current viewing country prefixed with `in` eg: in United States', 'geodirectory' );
+			$vars['%%location_region%%'] = __( 'The current viewing region eg: Pennsylvania', 'geodirectory' );
+			$vars['%%in_location_region%%']= __( 'The current viewing region prefixed with `in` eg: in Pennsylvania', 'geodirectory' );
+			$vars['%%location_city%%'] = __( 'The current viewing city eg: Philadelphia', 'geodirectory' );
+			$vars['%%in_location_city%%'] = __( 'The current viewing city prefixed with `in` eg: in Philadelphia', 'geodirectory' );
 		}
 
-		// paging
-		if($gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive'){
-			$vars['%%page%%'] = __('Current page number eg: page 2 of 4','geodirectory');
-			$vars['%%pagetotal%%'] = __('Total pages eg: 101','geodirectory');
-			$vars['%%pagenumber%%'] = __('Current page number eg: 99','geodirectory');
+		// Search page only
+		if ( $gd_page == 'search' ) {
+			$vars['%%search_term%%'] = __( 'The currently used search for term.', 'geodirectory' );
+			$vars['%%for_search_term%%'] = __( 'The currently used search for term with `for`. Ex: for dinner.', 'geodirectory' );
+			$vars['%%search_near%%'] = __( 'The currently used search near term with `near`. Ex: near Philadelphia.', 'geodirectory' );
+			$vars['%%search_near_term%%'] = __( 'The currently used search near term.', 'geodirectory' );
 		}
 
-		// single page
-		if($gd_page == 'single' ){
-			$vars['%%_FIELD-KEY%%'] = __('Show any custom field by using its field key prefixed with an _underscore','geodirectory');
+		// Paging
+		if ( $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' ) {
+			$vars['%%page%%'] = __( 'Current page number eg: page 2 of 4', 'geodirectory' );
+			$vars['%%pagetotal%%'] = __( 'Total pages eg: 101', 'geodirectory' );
+			$vars['%%postcount%%'] = __( 'Total post found eg: 10', 'geodirectory' );
+			$vars['%%pagenumber%%'] = __( 'Current page number eg: 99', 'geodirectory' );
 		}
 
+		// Single page
+		if ( $gd_page == 'single' ) {
+			$vars['%%_FIELD-KEY%%'] = __( 'Show any custom field by using its field key prefixed with an _underscore', 'geodirectory' );
+		}
 
 		return apply_filters( 'geodir_seo_variables', $vars, $gd_page );
 	}
@@ -674,10 +786,10 @@ class GeoDir_SEO {
 	 */
 	public static function page_link( $link, $page_id, $sample ) {
 		global $wp_query;
-
+		$query_object_id = '';
 		if ( ! empty( $wp_query->post ) && isset( $wp_query->post->ID ) && geodir_is_geodir_page_id( $page_id ) ) {
 			$query_object_id = $wp_query->post->ID;
-		}else{
+		} elseif( !is_null($wp_query) ) {
 			$query_object_id = get_queried_object_id();
 		}
 
@@ -739,6 +851,393 @@ class GeoDir_SEO {
 		return $page_ids;
 	}
 
+	/**
+	 * Setup Yoast SEO opengraph meta.
+	 *
+	 * @since 2.0.0.89
+	 *
+	 * @return void.
+	 */
+	public static function template_redirect() {
+		if ( self::has_yoast() ) {
+			// OpenGraph
+			if ( ! self::has_yoast_14() ) {
+				add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_setup_meta' ), 0 );
+				add_action( 'wpseo_opengraph', array( __CLASS__, 'wpseo_head_unset_meta' ), 99 );
+
+				// Twitter
+				if ( WPSEO_Options::get( 'twitter' ) === true ) {
+					add_action( 'wpseo_head', array( __CLASS__, 'wpseo_head_setup_meta' ), 39 );
+					add_action( 'wpseo_head', array( __CLASS__, 'wpseo_head_unset_meta' ), 41 );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Set Yoast SEO opengraph meta.
+	 *
+	 * @since 2.0.0.89
+	 *
+	 * @global bool|int $gd_has_filter_thumbnail_id Check whether filter set or not.
+	 *
+	 * @return void.
+	 */
+	public static function wpseo_head_setup_meta() {
+		global $gd_has_filter_thumbnail_id;
+
+		add_filter( 'wpseo_frontend_page_type_simple_page_id', array( __CLASS__ , 'wpseo_frontend_page_type_simple_page_id' ), 10, 1 );
+
+		if ( geodir_is_page( 'single' ) && ( $gd_has_filter_thumbnail_id = has_filter( 'get_post_metadata', array( 'GeoDir_Template_Loader', 'filter_thumbnail_id' ) ) ) ) {
+			remove_filter( 'get_post_metadata', array( 'GeoDir_Template_Loader', 'filter_thumbnail_id' ), 10, 4 );
+		}
+	}
+
+	/**
+	 * Unset Yoast SEO opengraph meta.
+	 *
+	 * @since 2.0.0.89
+	 *
+	 * @global bool|int $gd_has_filter_thumbnail_id Check whether filter set or not.
+	 *
+	 * @return void.
+	 */
+	public static function wpseo_head_unset_meta() {
+		global $gd_has_filter_thumbnail_id;
+
+		remove_filter( 'wpseo_frontend_page_type_simple_page_id', array( __CLASS__ , 'wpseo_frontend_page_type_simple_page_id' ), 10, 1 );
+
+		if ( geodir_is_page( 'single' ) && $gd_has_filter_thumbnail_id && ! has_filter( 'get_post_metadata', array( 'GeoDir_Template_Loader', 'filter_thumbnail_id' ) ) ) {
+			add_filter( 'get_post_metadata', array( 'GeoDir_Template_Loader', 'filter_thumbnail_id' ), 10, 4 );
+
+			$gd_has_filter_thumbnail_id = false;
+		}
+	}
+
+	/**
+	 * Filter Yoast SEO simple page id.
+	 *
+	 * @since 2.0.0.89
+	 *
+	 * @param int $page_id The page id.
+	 * @return int Filtered page id.
+	 */
+	public static function wpseo_frontend_page_type_simple_page_id( $page_id ) {
+		if ( ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) || geodir_is_page( 'single' ) ) && ! is_tax() && ( $_page_id = (int) GeoDir_Compatibility::gd_page_id() ) ) {
+			$page_id = $_page_id;
+		}
+
+		return $page_id;
+	}
+
+	/**
+	 * Check Yoast SEO is installed or not.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @return bool True if Yoast SEO is installed else false.
+	 */
+	public static function has_yoast() {
+		return defined( 'WPSEO_VERSION' );
+	}
+
+	/**
+	 * Check Yoast SEO v14.x installed or not.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @return bool True if Yoast SEO v14.x is installed else false.
+	 */
+	public static function has_yoast_14() {
+		return ( self::has_yoast() && version_compare( WPSEO_VERSION, '14.0', '>=' ) );
+	}
+
+	/**
+	 * Register GD variables for Yoast SEO extra replacements.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @return void
+	 */
+	public static function wpseo_register_extra_replacements() {
+		$pages = array( 'location', 'search', 'post_type', 'archive', 'add-listing', 'single' );
+
+		$variables = array();
+		foreach ( $pages as $page ) {
+			$_variables = GeoDir_SEO::variables( $page );
+
+			if ( ! empty( $_variables ) ) {
+				foreach ( $_variables as $var => $help ) {
+					if ( empty( $variables[ $var ] ) ) {
+						$variables[ $var ] = $help;
+					}
+				}
+			}
+		}
+
+		$replacer = new WPSEO_Replace_Vars();
+
+		foreach ( $variables as $var => $help ) {
+			if ( is_string( $var ) && $var !== '' ) {
+				$var = trim( $var, '%' );
+
+				if ( ! empty( $var ) ) {
+					$var = '_gd_' . $var; // Add prefix to prevent conflict with Yoast default vars.
+
+					if ( ! method_exists( $replacer, 'retrieve_' . $var ) ) {
+						wpseo_register_var_replacement( $var, array( __CLASS__, 'wpseo_replacement' ), 'advanced', $help );
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Register GD variables for Yoast SEO extra replacements.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @param string $var Variable name.
+	 * @param array $args Variable args.
+	 * @return string Variable value.
+	 */
+	public static function wpseo_replacement( $var, $args ) {
+		$var = strpos( $var, '_gd_' ) === 0 ? substr( $var, 4 ) : $var;
+
+		return self::replace_variable( '%%' . $var . '%%', self::$gd_page );
+	}
+
+	/**
+	 * Filter Yoast SEO meta title.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @param string $title Meta title.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Meta title.
+	 */
+	public static function wpseo_title( $title, $presentation = array() ) {
+		if ( ! empty( $title ) || ! geodir_is_geodir_page() ) {
+			return $title;
+		}
+
+		if ( geodir_is_page( 'archive' ) ) {
+			$queried_object = get_queried_object();
+
+			if (  ! empty( $queried_object->term_id ) && ! empty( $queried_object->taxonomy ) && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
+				if ( $_title = WPSEO_Taxonomy_Meta::get_term_meta( $queried_object->term_id, $queried_object->taxonomy, 'title' ) ) {
+					$title = $_title;
+				} elseif ( $_title = WPSEO_Options::get( 'title-tax-' . $queried_object->taxonomy ) ) {
+					$title = $_title;
+				}
+
+				if ( strpos( $title, '%%' ) !== false ) {
+					$title = wpseo_replace_vars( $title, $queried_object );
+				}
+
+				if ( strpos( $title, '%%' ) !== false ) {
+					$title = self::replace_variable( $title, 'archive' );
+				}
+			}
+		}
+
+		return $title;
+	}
+
+	/**
+	 * Filter Yoast SEO meta description.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @param string $meta_description Meta description.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Meta description.
+	 */
+	public static function wpseo_metadesc( $meta_description, $presentation = array() ) {
+		if ( ! empty( $meta_description ) || ! geodir_is_geodir_page() ) {
+			return $meta_description;
+		}
+
+		if ( geodir_is_page( 'archive' ) ) {
+			$queried_object = get_queried_object();
+
+			if (  ! empty( $queried_object->term_id ) && ! empty( $queried_object->taxonomy ) && geodir_is_gd_taxonomy( $queried_object->taxonomy ) ) {
+				if ( $_meta_description = WPSEO_Taxonomy_Meta::get_term_meta( $queried_object->term_id, $queried_object->taxonomy, 'desc' ) ) {
+					$meta_description = $_meta_description;
+				} elseif ( $_meta_description = WPSEO_Options::get( 'metadesc-tax-' . $queried_object->taxonomy ) ) {
+					$meta_description = $_meta_description;
+				}
+			}
+
+			if ( strpos( $meta_description, '%%' ) !== false ) {
+				$meta_description = wpseo_replace_vars( $meta_description, $queried_object );
+			}
+
+			if ( strpos( $meta_description, '%%' ) !== false ) {
+				$meta_description = self::replace_variable( $meta_description, 'archive' );
+			}
+		}
+
+		return $meta_description;
+	}
+
+	/**
+	 * Filter Yoast SEO generated open graph URL.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @param string $canonical The URL.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Filtered URL.
+	 */
+	public static function wpseo_opengraph_url( $canonical, $presentation ) {
+		if ( $canonicals = self::get_canonicals() ) {
+			if ( ! empty( $canonicals['canonical'] ) ) {
+				$canonical = $canonicals['canonical'];
+			}
+		}
+
+		return $canonical;
+	}
+
+	public static function wpseo_opengraph_image( $image_container ) {
+		if ( ! geodir_is_geodir_page() ) {
+			return;
+		}
+
+		if ( $image_container->has_images() ) {
+			return;
+		}
+
+		if ( geodir_is_page( 'post_type' ) ) {
+			$post_type = geodir_get_current_posttype();
+
+			if ( $post_type && ( $post_type_obj = geodir_post_type_object( $post_type ) ) ) {
+				if ( ! empty( $post_type_obj->default_image ) ) {
+					$image_container->add_image_by_id( $post_type_obj->default_image );
+				}
+			}
+		} elseif ( geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term->term_id ) && ( $image = get_term_meta( $term->term_id, 'ct_cat_default_img', true ) ) ) {
+				$image_container->add_image_by_id( $image );
+			}
+		}
+	}
+
+	/**
+	 * Filter Yoast SEO generated canonical URL.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @param string $canonical The URL.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Filtered URL.
+	 */
+	public static function wpseo_canonical( $canonical, $presentation ) {
+		if ( $canonicals = self::get_canonicals() ) {
+			if ( ! empty( $canonicals['canonical_paged'] ) ) {
+				$canonical = $canonicals['canonical_paged'];
+			}
+		}
+
+		return $canonical;
+	}
+
+	/**
+	 * Filter the rel next/prev URL.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @param string $rel The next/prev URL.
+	 * @param string $type next or prev.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return string Filtered next/prev URL.
+	 */
+	public static function wpseo_adjacent_rel_url( $rel, $type, $presentation ) {
+		if ( $rel && $type && ( $canonicals = self::get_canonicals() ) ) {
+			if ( ! empty( $canonicals['canonical_' . $type ] ) ) {
+				$rel = $canonicals['canonical_' . $type ];
+			}
+		}
+
+		return $rel;
+	}
+
+	/**
+	 * Get paged & non paged canonical URLs for GD post type & archive pages.
+	 *
+	 * @since 2.0.0.91
+	 *
+	 * @return array|NULL Array of URLs.
+	 */
+	public static function get_canonicals() {
+		global $wp_rewrite;
+
+		if ( ! geodir_is_geodir_page() ) {
+			return NULL;
+		}
+
+		$canonicals = array();
+		$canonical = '';
+
+		if ( geodir_is_page( 'pt' ) ) {
+			$post_type = geodir_get_current_posttype();
+
+			$canonical = get_post_type_archive_link( $post_type );
+		} elseif ( geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->taxonomy ) ) {
+				$term_link = get_term_link( $term, $term->taxonomy );
+
+				if ( ! is_wp_error( $term_link ) ) {
+					$canonical = $term_link;
+				}
+			}
+		}
+
+		if ( $canonical ) {
+			$canonical_paged = $canonical;
+			$canonical_next = $canonical;
+			$canonical_prev = $canonical;
+
+			$paged = (int) get_query_var( 'paged' );
+			if ( $paged < 1 ) {
+				$paged = 1;
+			}
+
+			if ( ! $wp_rewrite->using_permalinks() ) {
+				if ( $paged > 1 ) {
+					$canonical_paged = add_query_arg( 'paged', $paged, $canonical );
+
+					if ( $paged > 2 ) {
+						$canonical_prev = add_query_arg( 'paged', ( $paged - 1 ), $canonical );
+					}
+				}
+
+				$canonical_next = add_query_arg( 'paged', ( $paged + 1 ), $canonical );
+			} else {
+				if ( $paged > 1 ) {
+					$canonical_paged = user_trailingslashit( trailingslashit( $canonical ) . trailingslashit( $wp_rewrite->pagination_base ) . $paged );
+
+					if ( $paged > 2 ) {
+						$canonical_prev = user_trailingslashit( trailingslashit( $canonical ) . trailingslashit( $wp_rewrite->pagination_base ) . ( $paged - 1 ) );
+					}
+				}
+
+				$canonical_next = user_trailingslashit( trailingslashit( $canonical ) . trailingslashit( $wp_rewrite->pagination_base ) . ( $paged + 1 ) );
+			}
+
+			$canonicals = array(
+				'canonical' => $canonical,
+				'canonical_paged' => $canonical_paged,
+				'canonical_next' => $canonical_next,
+				'canonical_prev' => $canonical_prev
+			);
+		}
+
+		return apply_filters( 'geodir_get_canonicals', $canonicals );
+	}
 }
-
-

@@ -47,19 +47,39 @@ class GeoDir_Notifications {
 	 * @return mixed
 	 */
 	public function post_closed(){
-		global $post;
+		global $post,$gd_post;
 
-		if(geodir_is_page('single') && geodir_post_is_closed( $post )){
-			if ( ! empty( $post ) && ! empty( $post->post_type ) ) {
-				$cpt_name = geodir_strtolower( geodir_post_type_singular_name( $post->post_type ) );
-			} else {
-				$cpt_name = __( 'business', 'geodirectory' );
+		if(geodir_is_page('single')){
+
+			if(geodir_post_is_closed( $post )){
+				if ( ! empty( $post ) && ! empty( $post->post_type ) ) {
+					$cpt_name = geodir_strtolower( geodir_post_type_singular_name( $post->post_type ) );
+				} else {
+					$cpt_name = __( 'business', 'geodirectory' );
+				}
+
+				$this->add('post_is_closed',array(
+					'type' => 'warning',
+					'note' => wp_sprintf( __( 'This %s appears to have closed down and may be removed soon.', 'geodirectory' ), $cpt_name )
+				));
+			}elseif(!empty($gd_post->temp_closed)){
+				if ( ! empty( $post ) && ! empty( $post->post_type ) ) {
+					$cpt_name = geodir_strtolower( geodir_post_type_singular_name( $post->post_type ) );
+				} else {
+					$cpt_name = __( 'business', 'geodirectory' );
+				}
+
+				// custom field message
+				$cf = geodir_get_field_infoby('htmlvar_name', 'temp_closed', $post->post_type);
+
+				$closed_message = !empty($cf['placeholder_value']) ? esc_attr($cf['placeholder_value']) : __( 'This %s is temporarily closed.', 'geodirectory' );
+
+				$this->add('post_is_temp_closed',array(
+					'type' => 'warning',
+					'note' => wp_sprintf( $closed_message, $cpt_name )
+				));
 			}
 
-			$this->add('post_is_closed',array(
-				'type' => 'warning',
-				'note' => wp_sprintf( __( 'This %s appears to have closed down and may be removed soon.', 'geodirectory' ), $cpt_name )
-			));
 			
 		}
 

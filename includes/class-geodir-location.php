@@ -56,9 +56,9 @@ class GeoDir_Location {
 		$location->longitude = geodir_get_option('default_location_longitude');
 
 		// slugs
-		$location->city_slug = sanitize_title($location->city);
-		$location->region_slug = sanitize_title($location->region);
-		$location->country_slug = sanitize_title($location->country);
+		$location->city_slug = urldecode( sanitize_title( $location->city ) );
+		$location->region_slug = urldecode( sanitize_title( $location->region ) );
+		$location->country_slug = urldecode( sanitize_title( $location->country ) );
 
 		// id
 		$location->id = 0;

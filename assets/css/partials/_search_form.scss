@@ -116,6 +116,7 @@ body {
               line-height: 27px;
               &+input{
                 padding-left: 24px !important;
+                line-height: 1;
                 &.search_text{
                   padding-left: 26px !important;
                 }

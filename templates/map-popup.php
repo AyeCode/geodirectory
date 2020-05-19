@@ -27,7 +27,7 @@ global $gd_post;
 		<div class="geodir-bubble_desc">
 			[gd_post_title tag='h4']
 			<div class="geodir-bubble_image">
-				[gd_post_images type="image" link_to="post" ajax_load="0" show_logo="true" ]
+				[gd_post_images type="image" link_to="post" ajax_load="0" types="logo,post_images" ]
 			</div>
 			<div class="geodir-bubble-meta-top">
 				[gd_post_rating alignment='left' ]

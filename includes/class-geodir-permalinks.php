@@ -45,6 +45,9 @@ class GeoDir_Permalinks {
 		// search page rewrite rules
 		add_action('init', array( $this, 'insert_rewrite_rules'), 20,0);
 
+		// flush rewrite rules
+		add_action( 'init', array( __CLASS__, 'flush_rewrite_rules' ), 99 );
+
 		// make child cat not contain parent cat url
 		add_filter('term_link', array($this,'term_url_no_parent'), 9, 3);
 
@@ -53,6 +56,9 @@ class GeoDir_Permalinks {
 
 		// try and recover from 404 if GD CPT detected
 		add_action('wp',array($this,'_404_rescue'));
+
+		// Arrange rewrite rules to fix paged, feed permalinks on category pages.
+		add_filter( 'rewrite_rules_array', array( __CLASS__, 'arrange_rewrite_rules' ), 999, 1 );
 
 		//add_action( 'registered_post_type', array( __CLASS__, 'register_post_type_rules' ), 10, 2 );
 
@@ -432,7 +438,6 @@ class GeoDir_Permalinks {
 	 *
 	 * @package GeoDirectory
 	 * @global object $wpdb WordPress Database object.
-	 * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 * @global object $wp_query WordPress Query object.
 	 * @global object $post WordPress Post object.
 	 * @param string $post_link The post link.
@@ -441,29 +446,21 @@ class GeoDir_Permalinks {
 	 * @param bool $sample Is this a sample post?.
 	 * @return string The post link.
 	 */
-	public function post_url($post_link, $post_obj, $leavename, $sample)
-	{
-		//echo '###'.$post_link."<br />".$sample." \n" ;
-		//print_r($post_obj);
+	public function post_url( $post_link, $post_obj, $leavename, $sample ) {
+		global $wpdb, $wp_query, $post, $gd_post, $comment_post_cache, $gd_permalink_cache;
 
-
-		global $wpdb, $wp_query, $plugin_prefix, $post, $comment_post_cache, $gd_permalink_cache,$gd_post;
-
-		//print_r($gd_post);
 		$correct_post = true;
 
-		if (isset($post_obj->post_status) && ( $post_obj->post_status == 'auto-draft' || $post_obj->post_status == 'draft' || $post_obj->post_status == 'pending') ) {
-			return $post_link; // if draft then return default url.
-		} elseif (isset($post_obj->ID) && isset($gd_post->ID) && $post_obj->ID == $gd_post->ID) {
-			// check its the correct post.
+		if ( isset( $post_obj->post_status ) && in_array( $post_obj->post_status, array( 'draft', 'pending', 'auto-draft', 'future' ) ) ) {
+			return $post_link; // If draft or post name is empty then return default url.
+		} elseif ( isset( $post_obj->ID ) && isset( $gd_post->ID ) && $post_obj->ID == $gd_post->ID ) {
+			// Check its the correct post.
 		} else {
 			$correct_post = false;
 		}
 
 		// Only modify if its a GD post type.
-		if (in_array($post_obj->post_type, geodir_get_posttypes())) {
-
-
+		if ( geodir_is_gd_post_type( $post_obj->post_type ) ) {
 			/*
 			 * Available permalink tags:
 			 * %country% , %region% , %city% , %category% , %postname% , %post_id%
@@ -471,101 +468,103 @@ class GeoDir_Permalinks {
 
 			// Check if a pretty permalink is required
 			$permalink_structure = apply_filters( 'geodir_post_permalink_structure', geodir_get_permalink_structure(), $post_obj->post_type );
-			if (strpos($permalink_structure, '%postname%') === false || empty($permalink_structure)) {
+			if ( strpos( $permalink_structure, '%postname%' ) === false || empty( $permalink_structure ) ) {
 				return $post_link;
 			}
 
-			// backup the original post data first so we can restore it later
-			if(!$correct_post){
+			// Backup the original post data first so we can restore it later
+			if ( ! $correct_post ) {
 				$orig_post = $gd_post;
-				$gd_post = geodir_get_post_info($post_obj->ID);
+				$gd_post = geodir_get_post_info( $post_obj->ID );
 			}
 
 			if ( empty( $gd_post ) ) {
 				return $post_link;
 			}
 
-			// if we don't the GD post info then get it.
-			if(!isset($gd_post->default_category)){
-				$gd_post = geodir_get_post_info($gd_post->ID);
-				if(!empty($gd_post)){
+			// If we don't the GD post info then get it.
+			if ( ! isset( $gd_post->default_category ) ) {
+				$gd_post = geodir_get_post_info( $gd_post->ID );
+
+				if ( ! empty( $gd_post ) ) {
 					$gd_post = $gd_post;
 				}
 			}
 
-			if($gd_post->post_type == 'revision'){
-				$gd_post->post_type = get_post_type(wp_get_post_parent_id($gd_post->ID));
+			if ( $gd_post->post_type == 'revision' ) {
+				$gd_post->post_type = get_post_type( wp_get_post_parent_id( $gd_post->ID ) );
 			}
 
 			/*
 			 * Get the site url. ( without any location filters )
 			 */
-			if (function_exists('geodir_location_geo_home_link')) {
-				remove_filter('home_url', 'geodir_location_geo_home_link', 100000);
+			if ( function_exists( 'geodir_location_geo_home_link' ) ) {
+				remove_filter( 'home_url', 'geodir_location_geo_home_link', 100000 );
 			}
 
 			$permalink = trailingslashit( home_url() );
 
-			if (function_exists('geodir_location_geo_home_link')) {
-				add_filter('home_url', 'geodir_location_geo_home_link', 100000, 2);
+			if ( function_exists( 'geodir_location_geo_home_link' ) ) {
+				add_filter( 'home_url', 'geodir_location_geo_home_link', 100000, 2 );
 			}
-
-
 
 			/*
 			 * Add the CPT slug.
 			 */
-			$post_types = geodir_get_posttypes('array');
-			$cpt_slug = $post_types[$gd_post->post_type]['rewrite']['slug'];
+			$post_types = geodir_get_posttypes( 'array' );
+			$cpt_slug = $post_types[ $gd_post->post_type ]['rewrite']['slug'];
 
 			$cpt_slug = apply_filters( 'geodir_post_permalink_structure_cpt_slug', $cpt_slug, $gd_post, $post_link );
 
-			$permalink .= $cpt_slug.$permalink_structure;
-
+			$permalink .= $cpt_slug . $permalink_structure;
 
 			/*
 			 * Add Country if needed. (%country%)
 			 */
-			if (strpos($permalink, '%country%') !== false) {
-				$locations = $this->get_post_location_slugs($gd_post);
-				if(isset($locations->country_slug) && $locations->country_slug){
-					$permalink = str_replace('%country%',$locations->country_slug,$permalink);
+			if ( strpos( $permalink, '%country%' ) !== false ) {
+				$locations = $this->get_post_location_slugs( $gd_post );
+
+				if ( isset( $locations->country_slug ) && $locations->country_slug ) {
+					$permalink = str_replace( '%country%', $locations->country_slug, $permalink );
 				}
 			}
 
 			/*
 			 * Add Region if needed. (%region%)
 			 */
-			if (strpos($permalink, '%region%') !== false) {
-				$locations = isset($locations) ? $locations : $this->get_post_location_slugs($gd_post);
-				if(isset($locations->region_slug) && $locations->region_slug){
-					$permalink = str_replace('%region%',$locations->region_slug,$permalink);
+			if ( strpos( $permalink, '%region%' ) !== false ) {
+				$locations = isset( $locations ) ? $locations : $this->get_post_location_slugs( $gd_post );
+
+				if ( isset( $locations->region_slug ) && $locations->region_slug ) {
+					$permalink = str_replace( '%region%', $locations->region_slug, $permalink );
 				}
 			}
 
 			/*
 			 * Add City if needed. (%city%)
 			 */
-			if (strpos($permalink, '%city%') !== false) {
-				$locations = isset($locations) ? $locations : $this->get_post_location_slugs($gd_post);
-				if(isset($locations->city_slug) && $locations->city_slug){
-					$permalink = str_replace('%city%',$locations->city_slug,$permalink);
+			if ( strpos( $permalink, '%city%' ) !== false ) {
+				$locations = isset( $locations ) ? $locations : $this->get_post_location_slugs( $gd_post );
+
+				if ( isset( $locations->city_slug ) && $locations->city_slug ) {
+					$permalink = str_replace( '%city%', $locations->city_slug, $permalink );
 				}
 			}
 
 			/*
 			 * Add Category if needed. (%category%)
 			 */
-			if (strpos($permalink, '%category%') !== false) {
-				if(is_admin() && isset($_POST['default_category']) && $_POST['default_category']){
-					$term = get_term_by('id', absint($_POST['default_category']), $gd_post->post_type."category");
-				}elseif(isset($gd_post->default_category) && $gd_post->default_category){
-					$term = get_term_by('id', absint($gd_post->default_category), $gd_post->post_type."category");
-				}elseif(isset($gd_post->post_category) && $gd_post->post_category){
-					$cat_id = explode(",", trim($gd_post->post_category, ","));
-					$cat_id = !empty($cat_id) ? absint($cat_id [0]) : 0;
-					if($cat_id){
-						$term = get_term_by('id', $cat_id, $gd_post->post_type."category");
+			if ( strpos( $permalink, '%category%' ) !== false ) {
+				if ( is_admin() && isset( $_POST['default_category'] ) && $_POST['default_category'] ) {
+					$term = get_term_by( 'id', absint( $_POST['default_category'] ), $gd_post->post_type . "category" );
+				} elseif ( isset( $gd_post->default_category ) && $gd_post->default_category ) {
+					$term = get_term_by( 'id', absint( $gd_post->default_category ), $gd_post->post_type . "category" );
+				} elseif ( isset( $gd_post->post_category ) && $gd_post->post_category ) {
+					$cat_id = explode( ",", trim( $gd_post->post_category, "," ) );
+					$cat_id = ! empty( $cat_id ) ? absint( $cat_id[0] ) : 0;
+
+					if ( $cat_id ) {
+						$term = get_term_by( 'id', $cat_id, $gd_post->post_type . "category" );
 					}
 				}
 
@@ -581,18 +580,17 @@ class GeoDir_Permalinks {
 			/*
 			 * Add post name if needed. (%postname%)
 			 */
-			if (!$leavename && strpos($permalink, '%postname%') !== false) {
-				$permalink = str_replace('%postname%',$gd_post->post_name,$permalink);
+			if ( ! $leavename && strpos( $permalink, '%postname%' ) !== false ) {
+				$permalink = str_replace( '%postname%', $gd_post->post_name, $permalink );
 			}
 
 			/*
 			 * Add post ID if needed. (%post_id%)
 			 */
-			if (strpos($permalink, '%post_id%') !== false) {
-				$permalink = str_replace('%post_id%',$gd_post->ID,$permalink);
+			if ( strpos( $permalink, '%post_id%' ) !== false ) {
+				$permalink = str_replace( '%post_id%', $gd_post->ID, $permalink );
 			}
 
-			//echo $permalink;
 			$post_link = $permalink;
 
 			// @todo we will com back to cache
@@ -607,14 +605,12 @@ class GeoDir_Permalinks {
 //				return $gd_permalink_cache[$post_id];
 //			}
 
-
-
-			// temp cache the permalink
-			if (!$sample && (!isset($_REQUEST['geodir_ajax']) || (isset($_REQUEST['geodir_ajax']) && $_REQUEST['geodir_ajax'] != 'add_listing'))) {
-				$gd_permalink_cache[$gd_post->ID] = $post_link;
+			// Temp cache the permalink
+			if ( ! $sample && ( ! isset( $_REQUEST['geodir_ajax'] ) || ( isset( $_REQUEST['geodir_ajax'] ) && $_REQUEST['geodir_ajax'] != 'add_listing' ) ) ) {
+				$gd_permalink_cache[ $gd_post->ID ] = $post_link;
 			}
 		}
-		if (isset($orig_post)) {
+		if ( isset( $orig_post ) ) {
 			$gd_post = $orig_post;
 		}
 
@@ -791,7 +787,80 @@ class GeoDir_Permalinks {
 
 	}
 
+	/**
+	 * Arrange rewrite rules to work feed on categories pages.
+	 *
+	 * @since 2.0.0.75
+	 *
+	 * @global WP_Rewrite $wp_rewrite
+	 *
+	 * @param array $rules Array of rewrite rules.
+	 * @return array Rewrite rules array.
+	 */
+	public static function arrange_rewrite_rules( $rules ) {
+		global $wp_rewrite;
 
+		$post_types = geodir_get_posttypes( 'names' );
+
+		$post_type_slugs = array();
+
+		// Get post type slugs
+		foreach ( $rules as $regex => $query ) {
+			if ( strpos( $query, 'index.php?post_type=' ) !== 0 ) {
+				continue;
+			}
+
+			foreach ( $post_types as $post_type ) {
+				if ( strpos( $query, 'index.php?post_type=' . $post_type . '&' ) === 0 ) {
+					$_regex = explode( '/', $regex );
+					$slug = ! empty( $_regex[0] ) ? str_replace( '^', '', $_regex[0] ) : '';
+
+					if ( ! empty( $slug ) && ! in_array( $slug, $post_type_slugs ) ) {
+						$post_type_slugs[] = $_regex[0];
+					}
+				}
+			}
+		}
+
+		if ( empty( $post_type_slugs ) ) {
+			return $rules;
+		}
+
+		$post_type_slugs = array_unique( $post_type_slugs );
+
+		$_rules = $rules;
+		foreach ( $rules as $regex => $query ) {
+			if ( isset( $_rules[ $regex ] ) && strpos( $query, '&geodir-api=' ) !== false ) {
+				unset( $_rules[ $regex ] );
+				continue;
+			}
+
+			foreach ( $post_type_slugs as $key => $slug ) {
+				if ( isset( $_rules[ $regex ] ) && ( strpos( $regex, '^' . $slug . '/' ) === 0 || strpos( $regex, $slug . '/' ) === 0 ) && ( strpos( $query, '?attachment=' ) !== false || strpos( $query, '&attachment=' ) !== false || strpos( $query, '&tb=1' ) !== false || strpos( $query, '&embed=true' ) !== false ) ) {
+					unset( $_rules[ $regex ] );
+				}
+			}
+		}
+
+		$rules = $_rules;
+
+		return $rules;
+	}
+
+	/**
+	 * Check & flush rewrite rules.
+	 *
+	 * @since 2.0.0.92
+	 *
+	 * @return void
+	 */
+	public static function flush_rewrite_rules() {
+		// Rank Math flush rewrite rules to generate sitemaps.
+		if ( class_exists( 'RankMath\\Helper' ) ) {
+			if ( ! wp_doing_ajax() && ! wp_doing_cron() && get_option( 'geodir_rank_math_flush_rewrite' ) ) {
+				flush_rewrite_rules();
+				delete_option( 'geodir_rank_math_flush_rewrite' );
+			}
+		}
+	}
 }
-
-

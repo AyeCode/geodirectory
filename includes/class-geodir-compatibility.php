@@ -19,6 +19,7 @@ class GeoDir_Compatibility {
 	 * @since 2.0.0
 	 */
 	public static function init() {
+		add_action( 'plugins_loaded', array( __CLASS__, 'plugins_loaded' ) );
 
 		/*######################################################
 		Yoast (WP SEO)
@@ -26,6 +27,8 @@ class GeoDir_Compatibility {
 		add_filter( 'option_wpseo_taxonomy_meta', array( __CLASS__, 'wpseo_taxonomy_meta' ), 10, 2 );
 		// add setting to be able to disable yoast on GD pages
 		add_filter( 'geodir_seo_options', array( __CLASS__, 'wpseo_disable' ), 10 );
+		add_filter( 'Yoast\WP\SEO\prominent_words_post_types', array( __CLASS__, 'wpseo_prominent_words_post_types' ), 20, 1 );
+		add_filter( 'rank_math/opengraph/url', array( __CLASS__, 'rank_math_location_url_callback' ), 10 );
 
 		/*######################################################
 		Rank Math SEO
@@ -53,6 +56,7 @@ class GeoDir_Compatibility {
 		Ninja Forms :: Add our own form tags.
 		######################################################*/
 		add_action( 'ninja_forms_loaded', array( __CLASS__, 'ninja_forms' ) );
+		add_action( 'init',array( __CLASS__, 'ninja_forms_api_fix' ),5);
 
 		/*######################################################
 		Primer (theme) :: Fix single page title.
@@ -74,6 +78,7 @@ class GeoDir_Compatibility {
 		if ( class_exists( 'FLThemeBuilderLoader' ) ) {
 			add_filter( 'geodir_page_options', array( __CLASS__, 'fl_theme_builder_page_options' ), 100, 1 );
 			add_filter( 'fl_theme_builder_current_page_layouts', array( __CLASS__, 'fl_theme_builder_current_page_layouts' ), 1, 1 );
+			add_filter( 'fl_theme_builder_page_archive_get_title', array( __CLASS__, 'fl_theme_builder_page_archive_get_title' ), 1, 1 );
 		}
 
 		/*######################################################
@@ -114,6 +119,7 @@ class GeoDir_Compatibility {
 		######################################################*/
 		add_filter( 'et_pb_enqueue_google_maps_script', '__return_false' );
 		add_filter( 'et_builder_load_actions', array( __CLASS__,'divi_builder_ajax_load_actions') );
+		add_filter( 'et_theme_builder_template_settings_options', array( __CLASS__, 'et_theme_builder_template_settings_options' ), 20, 1 );
 
 		/*######################################################
 		The7 (theme) :: rewind the posts, the_excerpt function call seems to set the current_post number and cause have_posts() to return false.
@@ -139,11 +145,17 @@ class GeoDir_Compatibility {
 		// Set custom hook for theme compatibility
 		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ) );
 
+		// Avada theme
+		add_filter( 'avada_hide_page_options', array( __CLASS__, 'avada_hide_page_options' ), 100, 1 );
+		add_filter( 'fusion-page-id', array( __CLASS__, 'avada_fusion_page_id' ), 100, 1 );
+		add_filter( 'avada_sidebar_context', array( __CLASS__, 'avada_62_sidebar_context' ), 11, 4 );
+		add_filter( 'fusion_should_get_page_option', array( __CLASS__, 'fusion_should_get_page_option' ), 999, 1 );
+		add_filter( 'is_hundred_percent_template', array( __CLASS__, 'fusion_is_hundred_percent_template' ), 20, 2 );
+		add_filter( 'fusion_is_hundred_percent_template', array( __CLASS__, 'fusion_is_hundred_percent_template' ), 20, 2 );
+
 		if ( ! is_admin() ) {
-			// Avada (theme)
 			add_filter( 'avada_has_sidebar', array( __CLASS__, 'avada_has_sidebar' ), 100, 3 );
 			add_filter( 'avada_has_double_sidebars', array( __CLASS__, 'avada_has_double_sidebars' ), 100, 3 );
-			add_filter( 'avada_setting_get_posts_global_sidebar', array( __CLASS__, 'avada_global_sidebar' ), 100, 1 );
 			add_filter( 'avada_setting_get_posts_sidebar', array( __CLASS__, 'avada_sidebar' ), 100, 1 );
 			add_filter( 'avada_setting_get_posts_sidebar_2', array( __CLASS__, 'avada_sidebar_2' ), 100, 1 );
 			add_filter( 'avada_setting_get_blog_archive_sidebar', array( __CLASS__, 'avada_sidebar' ), 100, 1 );
@@ -165,6 +177,59 @@ class GeoDir_Compatibility {
 			}
 		}
 	}
+
+	/**
+	 * Setup functions on plugins loaded. 
+	 *
+	 * @since 2.0.0.81
+	 */
+	public static function plugins_loaded() {
+		// Simple Page Sidebars plugin add sidebar supports.
+		if ( class_exists( 'Simple_Page_Sidebars' ) ) {
+			$post_types = geodir_get_posttypes();
+
+			add_post_type_support( 'page', 'simple-page-sidebars' );
+			if ( ! empty( $post_types ) ) {
+				foreach ( $post_types as $post_type ) {
+					add_post_type_support( $post_type, 'simple-page-sidebars' );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Fix Ninja Forms bug that creates PHP warnings in the REST API result if a array item is used.
+	 *
+	 * @todo remove once fixed in NF: https://wordpress.org/support/topic/breaks-any-rest-api-request-using-array-items/
+	 */
+	public static function ninja_forms_api_fix() {
+		global $wp_version;
+
+		// @todo, NF suck, remove this when then eventually fix their stuff
+
+//		if ( function_exists( 'Ninja_Forms' ) && version_compare( $wp_version, '5.3.1', '>=' ) && ! defined( 'NF_PLUGIN_VERSION' ) && version_compare( Ninja_Forms::VERSION, '3.4.22.1', '<=' ) ) {
+		if ( function_exists( 'Ninja_Forms' ) ) {
+			remove_action( 'init', array( Ninja_Forms()->merge_tags[ 'other' ], 'init' ) );
+			add_action( 'init', array( __CLASS__, 'nf_mergetags_other_init' ) );
+		}
+	}
+
+	public static function nf_mergetags_other_init() {
+        if ( is_admin() ) {
+            if( ! defined( 'DOING_AJAX' ) || ! DOING_AJAX ) return;
+            $url_query = parse_url( wp_get_referer(), PHP_URL_QUERY );
+            parse_str( $url_query, $variables );
+        } else {
+            $variables = $_GET;
+        }
+
+        if( ! is_array( $variables ) ) return;
+
+        foreach( $variables as $key => $value ){
+            $value = wp_kses_post_deep( $value );
+            Ninja_Forms()->merge_tags[ 'other' ]->set_merge_tags( $key, $value );
+        }
+    }
 
 	/**
 	 * Set temp globals before looping listings template so we can reset them to proper values after looping.
@@ -361,14 +426,26 @@ class GeoDir_Compatibility {
 	/**
 	 * Stop the GD loop setup if elementor is overriding it.
 	 *
+	 * @global int $gd_skip_the_content
+	 *
 	 * @param $bypass
 	 *
 	 * @return bool
 	 */
 	public static function elementor_loop_bypass( $bypass ) {
+		global $gd_skip_the_content;
+
 		if ( defined( 'ELEMENTOR_PRO_VERSION' ) && GeoDir_Elementor::is_template_override() ) {
 			$bypass = true;
 		}
+
+		if ( ! $bypass && $gd_skip_the_content ) {
+			$bypass = true; // Prevent looping on some themes/plugins.
+		}
+
+		//if ( ! $bypass && function_exists( 'et_theme_builder_get_template_layouts' ) && et_theme_builder_get_template_layouts() ) {
+			//$bypass = true;
+		//}
 
 		return $bypass;
 	}
@@ -461,6 +538,11 @@ class GeoDir_Compatibility {
 			}
 		}
 
+		// Simple Page Sidebars plugin.
+		if ( class_exists( 'Simple_Page_Sidebars' ) ) {
+			$gen_keys[] = '_sidebar_name';
+		}
+
 		// Betheme by Muffin group
 		if ( function_exists( 'mfn_body_classes' ) && function_exists( 'mfn_ID' ) ) {
 			if ( strpos( $meta_key, 'mfn-post-' ) === 0 ) {
@@ -482,9 +564,14 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'tie_admin_bar' ) && ( strpos( $meta_key, 'tie_' ) === 0 || in_array( $meta_key, array( 'post_color', 'post_background', 'post_background_full' ) ) || empty( $meta_key ) ) ) // Jarida
 			 || ( function_exists( 'mk_build_main_wrapper' ) && ( empty( $meta_key ) || strpos( $meta_key, '_widget_' ) === 0 || in_array( $meta_key, array( '_layout', '_template', '_padding', 'page_preloader', '_introduce_align', '_custom_page_title', '_page_introduce_subtitle', '_disable_breadcrumb', 'menu_location', '_sidebar' ) ) ) ) // Jupiter
 			 || ( defined( 'TD_THEME_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, 'td_' ) === 0 ) ) // Newspaper
-			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
+			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || strpos( $meta_key, '_gsm_' ) === 0 || strpos( $meta_key, '_ss_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
 			 || ( class_exists( 'The7_Aoutoloader' ) && ( strpos( $meta_key, '_dt_' ) === 0 || empty( $meta_key ) ) ) // The7
 			 || ( function_exists( 'avia_get_option' ) && ( ! empty( $meta_key ) && in_array( $meta_key, $gen_keys ) ) ) // Enfold
+			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) || in_array( $meta_key, array( 'pages_sidebar', 'pages_sidebar_2', 'default_sidebar_pos' ) ) ) // Avada + FusionBuilder
+			 || ( class_exists( 'OCEANWP_Theme_Class' ) && ( empty( $meta_key ) || strpos( $meta_key, 'ocean_' ) === 0 || strpos( $meta_key, 'menu_item_' ) === 0 || strpos( $meta_key, '_menu_item_' ) === 0 ) ) // OceanWP
+			 || ( defined( 'PORTO_VERSION' ) ) // Porto
+			 || ( function_exists( 'wpbf_theme_setup' ) && ( empty( $meta_key ) || strpos( $meta_key, 'wpbf_' ) === 0 ) ) // Page Builder Framework
+			 || ( function_exists( 'generateblocks_do_activate' ) && strpos( $meta_key, '_generateblocks_' ) === 0 ) // GenerateBlocks plugin
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -534,7 +621,7 @@ class GeoDir_Compatibility {
 					$metadata = get_post_meta( $template_page_id, $meta_key );
 					if ( $single && is_array( $metadata ) && empty( $metadata ) ) {
 						$metadata = '';
-					}						
+					}
 				}
 				return $metadata;
 			}
@@ -729,11 +816,14 @@ class GeoDir_Compatibility {
 	/**
 	 * Stop the GD loop setup if beaver builder themer is overiding it.
 	 *
+	 * @global int $gd_skip_the_content
+	 *
 	 * @param $bypass
 	 *
 	 * @return bool
 	 */
 	public static function beaver_builder_loop_bypass( $bypass ) {
+		global $gd_skip_the_content;
 
 		if ( class_exists( 'FLThemeBuilderLayoutData' ) ) {
 			$ids = FLThemeBuilderLayoutData::get_current_page_content_ids();
@@ -741,6 +831,10 @@ class GeoDir_Compatibility {
 			if ( ! empty( $ids ) ) {
 				$bypass = true;
 			}
+		}
+
+		if ( ! $bypass && $gd_skip_the_content ) {
+			$bypass = true; // Prevent looping on some themes/plugins.
 		}
 
 		return $bypass;
@@ -958,6 +1052,17 @@ class GeoDir_Compatibility {
 			return str_replace( array( '<script>', '</script>' ), '', $output );
 	}
 
+	/**
+	 * Function to fix location page og:url with rank math.
+	 */
+	public static function rank_math_location_url_callback( $url ) {
+		// Maybe modify $example in some way.
+		if ( geodir_is_page( 'location' ) ) {
+			$url = geodir_get_location_link( 'current' );
+		}
+		return $url;
+	}
+
 	public static function rank_math_add_images_to_sitemap( $images, $id ){
 
 		$post_type = get_post_type( $id );
@@ -972,7 +1077,7 @@ class GeoDir_Compatibility {
 			foreach( $geodir_images as $geodir_image ) {
 				$images[] = array(
 					'src'   => geodir_get_image_src( $geodir_image, 'original' ),
-					'title' => $geodir_image->title,
+					'title' => stripslashes_deep( $geodir_image->title ),
 				);
 			}
 		}
@@ -1006,6 +1111,28 @@ class GeoDir_Compatibility {
 
 
 		return $options;
+	}
+
+	/**
+	 * Yoast SEO Premium prominent words accessible post types.
+	 *
+	 * @since 12.9.0
+	 *
+	 * @param array $post_types The accessible post types.
+	 * @return array Filtered post types.
+	 */
+	public static function wpseo_prominent_words_post_types( $post_types ) {
+		if ( ! empty( $post_types ) ) {
+			$_post_types = $post_types;
+
+			foreach( $_post_types as $_post_type => $name ) {
+				if ( geodir_is_gd_post_type( $_post_type ) ) {
+					unset( $post_types[ $_post_type ] );
+				}
+			}
+		}
+
+		return $post_types;
 	}
 
 	/**
@@ -1199,13 +1326,16 @@ class GeoDir_Compatibility {
 	public static function template_redirect() {
 		// Set Avada theme title bar
 		if ( geodir_is_geodir_page() ) {
+			// FusionBuilder
 			if ( class_exists( 'FusionBuilder' ) ) {
 				add_action( 'avada_override_current_page_title_bar', array( __CLASS__, 'avada_override_current_page_title_bar' ), 10, 1 );
 			}
 
 			// Avada (theme)
 			if ( class_exists( 'Avada' ) ) {
-				add_filter( 'body_class', array( __CLASS__, 'avada_body_class' ), 999, 1 );
+				if ( ! self::has_avada_62() ) {
+					add_filter( 'body_class', array( __CLASS__, 'avada_body_class' ), 999, 1 );
+				}
 			}
 
 			// Custom sidebars
@@ -1235,6 +1365,30 @@ class GeoDir_Compatibility {
 					add_filter( 'avf_custom_sidebar', array( __CLASS__, 'avf_custom_sidebar' ), 20, 1 );
 				}
 			}
+
+			// Porto (theme)
+			if ( defined( 'PORTO_VERSION' ) ) {
+				add_filter( 'porto_meta_use_default', array( __CLASS__, 'porto_meta_use_default' ), 99, 1 );
+				add_filter( 'porto_meta_layout', array( __CLASS__, 'porto_meta_layout' ), 99, 1 );
+			}
+
+			// Genesis (theme)
+			if ( function_exists( 'genesis_theme_support' ) ) {
+				add_filter( 'genesis_site_layout', array( __CLASS__, 'genesis_site_layout' ), 20, 1 );
+
+				// Genesis Simple Menus
+				if ( function_exists( 'genesis_simple_menus' ) ) {
+					add_filter( 'theme_mod_nav_menu_locations', array( __CLASS__, 'genesis_simple_menus_set_menu_locations' ), 20, 1 );
+				}
+
+				// Genesis Simple Sidebars
+				if ( function_exists( 'genesis_simple_sidebars' ) ) {
+					add_filter( 'sidebars_widgets', array( __CLASS__, 'genesis_simple_sidebars_set_sidebars_widgets' ), 20, 1 );
+				}
+			}
+
+			// Fix Divi builder GD pages header
+			self::et_builder_divi_fix_stylesheet();
 		}
 
 		// GeneratePress theme compatibility
@@ -1248,6 +1402,10 @@ class GeoDir_Compatibility {
 		// Divi theme compatibility
 		if ( function_exists( 'et_divi_load_scripts_styles' ) && geodir_is_geodir_page() ) {
 			add_filter( 'et_first_image_use_custom_content', array( __CLASS__, 'divi_et_first_image_use_custom_content' ), 999, 3 );
+
+			if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
+				add_filter( 'body_class', array( __CLASS__, 'divi_et_body_class' ), 11, 1 );
+			}
 		}
 
 		// Jarida (theme)
@@ -1255,6 +1413,46 @@ class GeoDir_Compatibility {
 			add_filter( 'option_tie_options', array( __CLASS__, 'option_tie_options' ), 20, 3 );
 			add_filter( 'wp_super_duper_before_widget', array( __CLASS__, 'jarida_super_duper_before_widget' ), 0, 4 );
 			add_filter( 'body_class', array( __CLASS__, 'jarida_body_class' ) );
+		}
+
+		// OceanWP theme
+		if ( class_exists( 'OCEANWP_Theme_Class' ) ) {
+			if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
+				add_filter( 'ocean_post_id', array( __CLASS__, 'ocean_post_id' ), 20, 1 );
+				add_filter( 'ocean_title', array( __CLASS__, 'ocean_title' ), 20, 1 );
+				add_filter( 'ocean_post_subheading', array( __CLASS__, 'ocean_post_subheading' ), 20, 1 );
+			}
+		}
+
+		// Elementor
+		if ( defined( 'ELEMENTOR_VERSION' ) ) {
+			if ( version_compare( ELEMENTOR_VERSION, '2.9.0', '>=' ) && ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) ) {
+				// Page template
+				add_filter( 'template_include', array( __CLASS__, 'elementor_template_include' ), 12, 1 );
+			}
+		}
+
+		// Page Builder Framework theme
+		if ( function_exists( 'wpbf_theme_setup' ) ) {
+			add_filter( 'wpbf_sidebar_layout', array( __CLASS__, 'wpbf_sidebar_layout' ), 20, 1 );
+			add_filter( 'wpbf_inner_content', array( __CLASS__, 'wpbf_inner_content' ), 20, 1 );
+
+			if ( geodir_is_page( 'search' ) ) {
+				add_filter( 'body_class', array( __CLASS__, 'wpbf_body_class' ), 20, 1 );
+			}
+		}
+
+		// GenerateBlocks plugin
+		if ( function_exists( 'generateblocks_do_activate' ) && geodir_is_geodir_page() && ( geodir_is_page( 'detail' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'post_type' ) || geodir_is_page( 'search' ) ) ) {
+			global $geodir_gb_enqueue_css;
+
+			$geodir_gb_enqueue_css = GenerateBlocks_Enqueue_CSS::get_instance();
+
+			remove_action( 'wp_enqueue_scripts', array( $geodir_gb_enqueue_css, 'enqueue_dynamic_css' ) );
+			remove_action( 'wp_head', array( $geodir_gb_enqueue_css, 'print_inline_css' ) );
+
+			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'generateblocks_enqueue_dynamic_css' ) );
+			add_action( 'wp_head', array( __CLASS__, 'generateblocks_print_inline_css' ) );
 		}
 	}
 
@@ -1266,16 +1464,31 @@ class GeoDir_Compatibility {
 	 * @param int $post_id Current post id.
 	 */
 	public static function avada_override_current_page_title_bar( $post_id ) {
-		$page_title_bar_contents = avada_get_page_title_bar_contents( $post_id );
-		$page_title              = get_post_meta( $post_id, 'pyre_page_title', true );
+		// Avada 6.2
+		if ( self::has_avada_62() ) {
+			$post_id = $post_id ? $post_id : Avada()->fusion_library->get_page_id();
 
-		// Which TO to check for.
-		$page_title_option = Avada()->settings->get( 'page_title_bar' );
+			if ( 'hide' !== fusion_get_option( 'page_title_bar' ) ) {
+				$page_title_bar_contents = Fusion_Helper::fusion_get_page_title_bar_contents( $post_id );
+				$title = GeoDir_SEO::set_meta();
 
-		if ( 'hide' !== $page_title_option ) {
-			$title = GeoDir_SEO::set_meta();
+				avada_page_title_bar( $title, $page_title_bar_contents[1], $page_title_bar_contents[2] );
+			}
 
-			avada_page_title_bar( $title, $page_title_bar_contents[1], $page_title_bar_contents[2] );
+			do_action( 'avada_after_page_title_bar' );
+		} else {
+			$page_title_bar_contents = avada_get_page_title_bar_contents( $post_id );
+
+			$page_title = get_post_meta( $post_id, 'pyre_page_title', true );
+
+			// Which TO to check for.
+			$page_title_option = Avada()->settings->get( 'page_title_bar' );
+
+			if ( 'hide' !== $page_title_option ) {
+				$title = GeoDir_SEO::set_meta();
+
+				avada_page_title_bar( $title, $page_title_bar_contents[1], $page_title_bar_contents[2] );
+			}
 		}
 	}
 
@@ -1378,6 +1591,73 @@ class GeoDir_Compatibility {
 	}
 
 	/**
+	 * Print GenerateBlocks enqueue dynamic CSS for GD pages.
+	 *
+	 * @since 2.0.0.82
+	 *
+	 * @param object $geodir_gb_enqueue_css GenerateBlocks enqueue object.
+	 */
+	public static function generateblocks_enqueue_dynamic_css() {
+		global $geodir_gb_enqueue_css;
+
+		$page_id = self::gd_page_id();
+
+		if ( ! $page_id ) {
+			return;
+		}
+
+		$css_version = get_post_meta( $page_id, '_generateblocks_dynamic_css_version', true );
+
+		if ( empty( $css_version ) ) {
+			return;
+		}
+
+		if ( empty( $geodir_gb_enqueue_css ) ) {
+			$geodir_gb_enqueue_css = GenerateBlocks_Enqueue_CSS::get_instance();
+		}
+
+		if ( 'file' == $geodir_gb_enqueue_css->mode() ) {
+			wp_enqueue_style( 'generateblocks', esc_url( $geodir_gb_enqueue_css->file( 'uri' ) ), array(), null );
+		}
+	}
+
+	/**
+	 * Print GenerateBlocks inline CSS for GD pages.
+	 *
+	 * @since 2.0.0.82
+	 *
+	 * @global object $post The post object.
+	 * @param object $geodir_gb_enqueue_css GenerateBlocks enqueue object.
+	 */
+	public static function generateblocks_print_inline_css() {
+		global $post, $geodir_gb_enqueue_css;
+
+		$page_id = self::gd_page_id();
+
+		$the_post = $post;
+
+		// Backup post;
+		$post = get_post( $page_id );
+
+		if ( empty( $geodir_gb_enqueue_css ) ) {
+			$geodir_gb_enqueue_css = GenerateBlocks_Enqueue_CSS::get_instance();
+		}
+
+		if ( 'inline' === $geodir_gb_enqueue_css->mode() || ! wp_style_is( 'generateblocks', 'enqueued' ) ) {
+			$css = generateblocks_get_frontend_block_css();
+
+			if ( ! empty( $css ) ) {
+				printf(
+					'<style id="generateblocks-css">%s</style>',
+					wp_strip_all_tags( $css )
+				);
+			}
+		}
+
+		$post = $the_post;
+	}
+
+	/**
 	 * Skip use of custom content for first image on GD page templates.
 	 *
 	 * @since 2.0.0.63
@@ -1393,6 +1673,70 @@ class GeoDir_Compatibility {
 		}
 
 		return $custom;
+	}
+
+	/**
+	 * Divi theem filter body classes.
+	 *
+	 * @since 2.0.0.81
+	 *
+	 * @param array $classes The body classes.
+	 * @return array The updated body classes.
+	 */
+	public static function divi_et_body_class( $classes ) {
+		if ( $template_page_id = (int) self::gd_page_id() ) {
+			$_classes = implode( '::::', $classes );
+			$_classes = str_replace( array( '::::et_left_sidebar', '::::et_right_sidebar', '::::et_no_sidebar', '::::et_full_width_page' ), '', $_classes );
+			$classes = explode( '::::', $_classes );
+
+			$page_layout = '';
+			$default_sidebar_class = et_get_option( 'divi_sidebar' );
+			$is_builder_active = 'on' === get_post_meta( $template_page_id, '_et_pb_use_builder', true ) || et_core_is_fb_enabled();
+			$is_blank_page_tpl = self::is_page_template( 'page-template-blank.php' );
+
+			if ( ! $default_sidebar_class ) {
+				$default_sidebar_class = is_rtl() ? 'et_left_sidebar' : 'et_right_sidebar';
+			}
+
+			if ( ! ( $page_layout = get_post_meta( $template_page_id, '_et_pb_page_layout', true ) ) && ! $is_builder_active ) { // check for the falsy value not for boolean `false`
+				// Set post meta layout which will work for all third party plugins.
+				$page_layout = $default_sidebar_class;
+			} elseif ( $is_builder_active && ( $is_blank_page_tpl || ! $page_layout || is_page() ) ) {
+				$page_layout = 'et_no_sidebar';
+			}
+
+			if ( $page_layout ) {
+				// Add the page layout class.
+				$classes[] = $page_layout;
+			}
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Fix page header on GD Pages + Divi Page Builder.
+	 *
+	 * @since 2.0.0.93
+	 *
+	 * @return void.
+	 */
+	public static function et_builder_divi_fix_stylesheet() {
+		if ( ! function_exists( 'et_builder_is_custom_post_type_archive' ) ) {
+			return;
+		}
+
+		if ( ! et_builder_is_custom_post_type_archive() && ( ! et_builder_post_is_of_custom_post_type( get_the_ID() ) || ! et_pb_is_pagebuilder_used( get_the_ID() ) ) ) {
+			return;
+		}
+
+		remove_action( 'wp_enqueue_scripts', 'et_divi_replace_stylesheet', 99999998 );
+
+		add_action( 'wp_head', function() {
+			$custom_css = '@media only screen and (min-width:1350px){.et_pb_pagebuilder_layout.geodir-page.et-db #et-boc .et-l.et-l--header .et_pb_section{padding:0;}}.et_pb_pagebuilder_layout.geodir-page #et-main-area #main-content .entry-content .et-l > .et_pb_section{position: relative;z-index:1;}';
+
+			echo '<style type="text/css" id="geodir-et-custom-css">' . $custom_css . '</style>';
+		}, 100 );
 	}
 
 	/**
@@ -1440,7 +1784,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_has_sidebar( $has_sidebar, $body_classes, $class ) {
-		if ( geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
+		if ( ! self::has_avada_62() && geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
 			$has_sidebar = in_array( 'has-sidebar', $body_classes ) ? true : false;
 		}
 
@@ -1448,7 +1792,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_has_double_sidebars( $double_sidebars, $body_classes, $class ) {
-		if ( geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
+		if ( ! self::has_avada_62() && geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
 			$double_sidebars = in_array( 'double-sidebars', $body_classes ) ? true : false;
 		}
 
@@ -1562,17 +1906,30 @@ class GeoDir_Compatibility {
 		return $classes;
 	}
 
-	public static function avada_global_sidebar( $value ) {
-		return Avada()->settings->get( 'pages_global_sidebar' );
-	}
-
 	public static function avada_sidebar( $value ) {
 		if ( $page_id = (int) self::gd_page_id() ) {
-			$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_replacement', true );
+			if ( self::has_avada_62() ) {
+				$page_template = get_post_meta( $page_id, '_wp_page_template', true );
 
-			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
-			if ( ! empty( $meta ) ) {
-				$value = $meta;
+				if ( $page_template == '100-width.php' || $page_template == 'blank.php' ) {
+					$value = 'None';
+				} else {
+					$value = fusion_get_option( 'pages_sidebar', false, $page_id );
+
+					if ( ! is_array( $value ) && $value == 'default_sidebar' ) {
+						$sidebars_option_names = avada_get_sidebar_post_meta_option_names( 'page' );
+						$value = Avada()->settings->get( $sidebars_option_names[0] );
+					}
+				}
+
+				$value = $value != 'None' ? $value : '';
+			} else {
+				$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_replacement', true );
+
+				$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+				if ( ! empty( $meta ) ) {
+					$value = $meta;
+				}
 			}
 		}
 		return $value;
@@ -1580,11 +1937,28 @@ class GeoDir_Compatibility {
 
 	public static function avada_sidebar_2( $value ) {
 		if ( $page_id = (int) self::gd_page_id() ) {
-			$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_2_replacement', true );
+			if ( self::has_avada_62() ) {
+				$page_template = get_post_meta( $page_id, '_wp_page_template', true );
 
-			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
-			if ( ! empty( $meta ) ) {
-				$value = $meta;
+				if ( $page_template == '100-width.php' || $page_template == 'blank.php' ) {
+					$value = 'None';
+				} else {
+					$value = fusion_get_option( 'pages_sidebar_2', false, $page_id );
+
+					if ( ! is_array( $value ) && $value == 'default_sidebar' ) {
+						$sidebars_option_names = avada_get_sidebar_post_meta_option_names( 'page' );
+						$value = Avada()->settings->get( $sidebars_option_names[1] );
+					}
+				}
+
+				$value = $value != 'None' ? $value : '';
+			} else {
+				$meta = get_post_meta( $page_id, 'sbg_selected_sidebar_2_replacement', true );
+
+				$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+				if ( ! empty( $meta ) ) {
+					$value = $meta;
+				}
 			}
 		}
 		return $value;
@@ -1592,11 +1966,14 @@ class GeoDir_Compatibility {
 
 	public static function avada_sidebar_position( $value ) {
 		if ( $page_id = (int) self::gd_page_id() ) {
-			$meta = get_post_meta( $page_id, 'pyre_sidebar_position', true );
+			if ( self::has_avada_62() ) {
+			} else {
+				$meta = get_post_meta( $page_id, 'pyre_sidebar_position', true );
 
-			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
-			if ( ! empty( $meta ) ) {
-				$value = $meta;
+				$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+				if ( ! empty( $meta ) ) {
+					$value = $meta;
+				}
 			}
 		}
 		return $value;
@@ -1604,11 +1981,14 @@ class GeoDir_Compatibility {
 
 	public static function avada_sidebar_sticky( $value ) {
 		if ( $page_id = (int) self::gd_page_id() ) {
-			$meta = get_post_meta( $page_id, 'pyre_sidebar_sticky', true );
+			if ( self::has_avada_62() ) {
+			} else {
+				$meta = get_post_meta( $page_id, 'pyre_sidebar_sticky', true );
 
-			$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
-			if ( ! empty( $meta ) ) {
-				$value = $meta;
+				$meta = ! empty( $meta ) && is_array( $meta ) ? $meta[0] : $meta;
+				if ( ! empty( $meta ) ) {
+					$value = $meta;
+				}
 			}
 		}
 		return $value;
@@ -1901,7 +2281,7 @@ class GeoDir_Compatibility {
 			'0' => __( 'Select Themer Layout', 'geodirectory' ) 
 		);
 
-		$results = $wpdb->get_results( "SELECT p.ID, p.post_title FROM {$wpdb->postmeta} as pm INNER JOIN {$wpdb->posts} as p ON pm.post_id = p.ID WHERE pm.meta_key = '_fl_theme_builder_preview_location' AND p.post_type = 'fl-theme-layout' AND p.post_status = 'publish' AND pm.meta_value LIKE '%archive:post%' ORDER BY `p`.`post_title` ASC" );
+		$results = $wpdb->get_results( "SELECT p.ID, p.post_title FROM {$wpdb->postmeta} as pm INNER JOIN {$wpdb->posts} as p ON pm.post_id = p.ID WHERE p.post_type = 'fl-theme-layout' AND p.post_status = 'publish' AND pm.meta_key = '_fl_theme_builder_locations' AND ( pm.meta_value LIKE 'a:0:{}' OR pm.meta_value = '' ) ORDER BY `p`.`post_title` ASC" );
 		if ( ! empty( $results ) ) {
 			foreach ( $results as $key => $row ) {
 				$layouts[ $row->ID ] = $row->post_title . '( ' . $row->ID . ' )';
@@ -1975,5 +2355,647 @@ class GeoDir_Compatibility {
 		}
 
 		return $layouts;
+	}
+
+	/**
+	 * Filter the archive page title.
+	 *
+	 * @since 2.0.0.84
+	 *
+	 * @param string $title The archive page title.
+	 * @return array The archive page title.
+	 */
+	public static function fl_theme_builder_page_archive_get_title( $title ) {
+		if ( ! geodir_is_geodir_page() ) {
+			return $title;
+		}
+
+		// Don't overwrite Yoast SEO or Rank Math SEO.
+		if ( GeoDir_SEO::yoast_enabled() || GeoDir_SEO::rank_math_enabled() ) {
+			return $title;
+		}
+
+		if ( $_title = GeoDir_SEO::set_meta() ) {
+			$title = $_title;
+		}
+
+		return $title;
+	}
+
+	/**
+	 * OceanWP theme filter GD post ID.
+	 *
+	 * @since 2.0.0.78
+	 *
+	 * @param int $post_id The post ID.
+	 * @return int The post ID.
+	 */
+	public static function ocean_post_id( $post_id ) {
+		if ( empty( $post_id ) && ( $_page_id = (int) self::gd_page_id() ) ) {
+			$post_id = $_page_id;
+		}
+
+		return $post_id;
+	}
+
+	/**
+	 * OceanWP theme filter GD page title.
+	 *
+	 * @since 2.0.0.75
+	 *
+	 * @param string $title The page title.
+	 * @return string The page title.
+	 */
+	public static function ocean_title( $title ) {
+		$_title = GeoDir_SEO::set_meta();
+
+		if ( $_title ) {
+			$title = $_title;
+		}
+
+		return $title;
+	}
+
+	/**
+	 * OceanWP theme filter GD page subheading.
+	 *
+	 * @since 2.0.0.78
+	 *
+	 * @param string $subheading The page subheading.
+	 * @return string The page subheading.
+	 */
+	public static function ocean_post_subheading( $subheading ) {
+		$subheading = '';
+
+		return $subheading;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function avada_hide_page_options( $hide_options = array() ) {
+		$post_types = geodir_get_posttypes();
+
+		foreach ( $post_types as $post_type ) {
+			$hide_options[] = $post_type;
+		}
+
+		return $hide_options;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function avada_62_sidebar_context( $sidebar_type, $page_id, $sidebar, $global ) {
+		if ( absint( $page_id ) > 0 && geodir_is_geodir_page_id( absint( $page_id ) ) ) {
+			$page_template = get_post_meta( $page_id, '_wp_page_template', true );
+
+			if ( $page_template == '100-width.php' || $page_template == 'blank.php' ) {
+				$sidebar_type = 'None';
+			}
+		}
+
+		return $sidebar_type;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function avada_fusion_page_id( $page_id ) {
+		if ( ! empty( $page_id ) && absint( $page_id ) > 0 && strpos( $page_id, '-archive' ) === false ) {
+			$post_type = get_post_type( $page_id );
+
+			if ( $post_type && geodir_is_gd_post_type( $post_type ) ) {
+				$page_id = geodir_details_page_id( $post_type );
+			}
+		} elseif ( $_page_id = (int) self::gd_page_id() ) {
+			$page_id = $_page_id;
+		}
+
+		return $page_id;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function has_avada_62() {
+		if ( defined( 'AVADA_VERSION' ) && version_compare( AVADA_VERSION, '6.2', '>=' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.77
+	 */
+	public static function fusion_should_get_page_option( $page_option ) {
+		if ( ! $page_option && geodir_is_geodir_page() ) {
+			$page_option = true;
+		}
+
+		return $page_option;
+	}
+
+	/**
+	 * Checks is the current page is a 100% width page.
+	 *
+	 * @since 2.0.0.77
+	 *
+	 * @param bool          $value The value from the filter.
+	 * @param integer|false $page_id A custom page ID.
+	 * @return bool
+	 */
+	public static function fusion_is_hundred_percent_template( $value = false, $page_id = false ) {
+		if ( $value ) {
+			return $value;
+		}
+
+		$page_id = (int) self::gd_page_id();
+		if ( empty( $page_id ) ) {
+			return $value;
+		}
+
+		$page_template = get_post_meta( $page_id, '_wp_page_template', true );
+
+		if ( $page_template == '100-width.php' || $page_template == 'blank.php' ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
+	 * Load elementor template on GD archive pages.
+	 *
+	 * @since 2.0.0.78
+	 *
+	 * @param mixed $template The path of the template to include.
+	 * @return string The template path.
+	 */
+	public static function elementor_template_include( $template ) {
+		if ( $page_id = (int) self::gd_page_id() ) {
+			$elementor_plugin = \Elementor\Plugin::$instance;
+			$document = $elementor_plugin->documents->get_doc_for_frontend( $page_id );
+
+			if ( ! empty( $document ) ) {
+				/**
+				 * @var \Elementor\Modules\PageTemplates\Module $page_templates_module
+				 */
+				$page_templates_module = $elementor_plugin->modules_manager->get_modules( 'page-templates' );
+				$template_path = $page_templates_module->get_template_path( $document->get_meta( '_wp_page_template' ) );
+
+				if ( $template_path ) {
+					$template = $template_path;
+				}
+			}
+		}
+
+		return $template;
+	}
+
+	/**
+	 * Filter Porto theme layout default option.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 * @param bool $default Use default layout option or not.
+	 * @return bool Default option.
+	 */
+	public static function porto_meta_use_default( $default ) {
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$value = get_term_meta( $term->term_id, 'default', true );
+
+				if ( 'default' == $value ) {
+					return $default;
+				}
+			}
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$value = get_post_meta( $template_page_id, 'default', true );
+
+			$default = ( 'default' != $value ) ? true : false;
+		}
+
+		return $default;
+	}
+
+	/**
+	 * Filter Porto theme layout options.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 * @param array $layout Use layout options.
+	 * @return array Layout options.
+	 */
+	public static function porto_meta_layout( $layout ) {
+		global $porto_settings;
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$value = get_term_meta( $term->term_id, 'default', true );
+
+				if ( 'default' == $value ) {
+					return $layout;
+				}
+			}
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$value    = get_post_meta( $template_page_id, 'layout', true );
+			$sidebar  = get_post_meta( $template_page_id, 'sidebar', true );
+			$sidebar2 = get_post_meta( $template_page_id, 'sidebar2', true );
+
+			if ( empty( $sidebar2 ) ) {
+				$sidebar2 = empty( $porto_settings['sidebar2'] ) ? 'secondary-sidebar' : $porto_settings['sidebar2'];
+			}
+
+			if ( ! in_array( $value, porto_options_sidebars() ) ) {
+				$sidebar  = '';
+				$sidebar2 = '';
+			} elseif ( ! in_array( $value, porto_options_both_sidebars() ) ) {
+				$sidebar2 = '';
+			}
+
+			$have_sidebar_menu = porto_have_sidebar_menu();
+			if ( 'both-sidebar' == $value || 'wide-both-sidebar' == $value ) {
+				if ( ! ( ( $sidebar && is_active_sidebar( $sidebar ) ) || $have_sidebar_menu ) ) {
+					$value   = str_replace( 'both-sidebar', 'right-sidebar', $value );
+					$sidebar = $sidebar2;
+				}
+				if ( ! ( ( $sidebar2 && is_active_sidebar( $sidebar2 ) ) || $have_sidebar_menu ) ) {
+					$value = str_replace( 'both-sidebar', 'left-sidebar', $value );
+				}
+			}
+			if ( ( 'left-sidebar' == $value || 'right-sidebar' == $value ) && ! ( ( $sidebar && is_active_sidebar( $sidebar ) ) || $have_sidebar_menu ) ) {
+				$value = 'fullwidth';
+			}
+			if ( ( 'wide-left-sidebar' == $value || 'wide-right-sidebar' == $value ) && ! ( ( $sidebar && is_active_sidebar( $sidebar ) ) || $have_sidebar_menu ) ) {
+				$value = 'widewidth';
+			}
+
+			$layout = array( $value, $sidebar, $sidebar2 );
+		}
+
+		return $layout;
+	}
+
+	/**
+	 * Filter the Genesis layout.
+	 *
+	 * @since  2.0.0.80
+	 *
+	 * @param  string $layout Layout.
+	 * @return string
+	 */
+	public static function genesis_site_layout( $layout ) {
+		global $gd_post;
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$term_layout = $term ? get_term_meta( $term->term_id, 'layout', true ) : '';
+				$site_layout = $term_layout ? $term_layout : genesis_get_option( 'site_layout' );
+				$type = array( 'archive', $term->taxonomy, $term->term_id );
+
+				// Use default layout as a fallback, if necessary.
+				if ( genesis_get_layout( $site_layout, $type ) ) {
+					return $site_layout;
+				}
+			}
+
+			$post_type = ! empty( $gd_post ) && ! empty( $gd_post->ID ) ? get_post_type( $gd_post->ID ) : '';
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+			$post_type = geodir_get_current_posttype();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$_layout = get_post_meta( $template_page_id, '_genesis_layout', true );
+			$site_layout = $_layout ? $_layout : genesis_get_option( 'site_layout' );
+			$type = array( 'archive', 'post-type-archive-' . $post_type );
+
+			// Use default layout as a fallback, if necessary.
+			if ( genesis_get_layout( $site_layout, $type ) ) {
+				$layout = $site_layout;
+			}
+		}
+
+		return $layout;
+	}
+
+	/**
+	 * Filter the Genesis simple menus menu locations.
+	 *
+	 * @since  2.0.0.80
+	 *
+	 * @param  array $mods Menu locations theme mods.
+	 * @return array
+	 */
+	public static function genesis_simple_menus_set_menu_locations( $mods ) {
+		$primary = NULL;
+		$secondary = NULL;
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$_primary = get_term_meta( $term->term_id, '_gsm_primary', true );
+				if ( ! empty( $_primary ) ) {
+					$primary = $_primary;
+				}
+
+				$_secondary = get_term_meta( $term->term_id, '_gsm_menu', true );
+				if ( ! empty( $_secondary ) ) {
+					$secondary = $_secondary;
+				}
+			}
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			if ( $primary === NULL ) {
+				$primary = get_post_meta( $template_page_id, '_gsm_primary', true );
+			}
+
+			if ( $secondary === NULL ) {
+				$secondary = get_post_meta( $template_page_id, '_gsm_menu', true );
+			}
+		}
+
+		if ( $primary || $secondary ) {
+			if ( ! is_array( $mods ) ) {
+				$mods = array();
+			}
+
+			if ( ! empty( $primary ) ) {
+				$mods['primary'] = (int) $primary;
+			}
+
+			if ( ! empty( $secondary ) ) {
+				$mods['secondary'] = (int) $secondary;
+			}
+		}
+
+		return $mods;
+	}
+
+	/**
+	 * Filter the Genesis simple sidebars widgets in each widget area.
+	 *
+	 * @since  2.0.0.80
+	 *
+	 * @param  array $widgets Widgets.
+	 * @return array
+	 */
+	public static function genesis_simple_sidebars_set_sidebars_widgets( $widgets ) {
+		if ( is_admin() ) {
+			return $widgets;
+		}
+
+		$sidebars = array();
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$term = get_queried_object();
+
+			if ( ! empty( $term ) && ! empty( $term->term_id ) ) {
+				$sidebars = array(
+					'sidebar'=> get_term_meta( $term->term_id, '_ss_sidebar', true ),
+					'sidebar-alt' => get_term_meta( $term->term_id, '_ss_sidebar_alt', true ),
+					'header-right' => get_term_meta( $term->term_id, '_ss_header', true )
+				);
+			}
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			if ( empty( $sidebars['sidebar'] ) ) {
+				$sidebars['sidebar'] = get_post_meta( $template_page_id, '_ss_sidebar', true );
+			}
+			if ( empty( $sidebars['sidebar-alt'] ) ) {
+				$sidebars['sidebar-alt'] = get_post_meta( $template_page_id, '_ss_sidebar_alt', true );
+			}
+			if ( empty( $sidebars['header-right'] ) ) {
+				$sidebars['header-right'] = get_post_meta( $template_page_id, '_ss_header', true );
+			}
+		}
+
+		if ( ! empty( $sidebars ) ) {
+			foreach ( $sidebars as $old_sidebar => $new_sidebar ) {
+				if ( ! is_registered_sidebar( $old_sidebar ) ) {
+					continue;
+				}
+
+				if ( $new_sidebar && ! empty( $widgets[ $new_sidebar ] ) ) {
+					$widgets[ $old_sidebar ] = $widgets[ $new_sidebar ];
+				}
+			}
+		}
+
+		return $widgets;
+	}
+
+	/**
+	 * Filter Page Builder Framework theme page layout.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 * @param string $layout Page layout.
+	 * @return string Filtered page layout.
+	 */
+	public static function wpbf_sidebar_layout( $layout ) {
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$sidebar_position = get_post_meta( $template_page_id, 'wpbf_sidebar_position', true );
+			$archive_sidebar_global = get_theme_mod( 'archive_sidebar_layout', 'global' );
+
+			$sidebar = 'global' !== $archive_sidebar_global ? $archive_sidebar_global : $layout;
+			$layout = $sidebar_position && 'global' !== $sidebar_position ? $sidebar_position : $sidebar;
+		}
+
+		return $layout;
+	}
+
+	/**
+	 * Filter Page Builder Framework content.
+	 *
+	 * @since 2.0.0.80
+	 */
+	public static function wpbf_inner_content( $inner_content ) {
+		global $gd_post;
+
+		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
+			$post_type = ! empty( $gd_post ) && ! empty( $gd_post->ID ) ? get_post_type( $gd_post->ID ) : '';
+
+			$template_page_id = (int) self::gd_page_id();
+		} elseif ( geodir_is_page( 'search' ) ) {
+			$post_type = geodir_get_current_posttype();
+
+			$template_page_id = (int) self::gd_page_id();
+		} else {
+			$template_page_id = 0;
+		}
+
+		if ( ! empty( $template_page_id ) ) {
+			$options = get_post_meta( $template_page_id, 'wpbf_options', true );
+
+			// Check if template is set to full width.
+			$fullwidth = $options ? in_array( 'full-width', $options ) : false;
+			if ( $fullwidth ) {
+				return false;
+			}
+
+			// Check if template is set to contained.
+			$contained = $options ? in_array( 'contained', $options ) : false;
+
+			// Check if Premium Add-On is active and template is not set to contained.
+			if ( wpbf_is_premium() && ! $contained ) {
+				$wpbf_settings = get_option( 'wpbf_settings' );
+
+				// Get array of post types that are set to full width under Appearance > Theme Settings > Global Templat Settings.
+				$fullwidth_global = isset( $wpbf_settings['wpbf_fullwidth_global'] ) ? $wpbf_settings['wpbf_fullwidth_global'] : array();
+
+				// If current post type has been set to full-width globally, set $inner_content to false.
+				$inner_content = $fullwidth_global && in_array( $post_type, $fullwidth_global ) ? false : $inner_content;
+			}
+		}
+
+		return $inner_content;
+	}
+
+	/**
+	 * Body classes.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 * @param array $classes The body classes.
+	 * @return array The updated body classes.
+	 */
+	public static function wpbf_body_class( $classes ) {
+		if ( $template_page_id = (int) self::gd_page_id() ) {
+			if ( in_array( 'wpbf-no-sidebar', $classes ) ) {
+				$_classes = implode( '::::', $classes );
+				$_classes = str_replace( '::::wpbf-no-sidebar', '', $_classes );
+				$classes = explode( '::::', $_classes );
+			}
+
+			if ( ! self::is_page_template( 'page-sidebar.php' ) ) {
+				$classes[] = 'wpbf-no-sidebar';
+			}
+		}
+
+		return $classes;
+	}
+
+	/**
+	 * Determines whether currently in a page template.
+	 *
+	 * @since 2.0.0.80
+	 *
+	 *
+	 * @param string|array $template The specific template name or array of templates to match.
+	 * @return bool True on success, false on failure.
+	 */
+	public static function is_page_template( $template = '' ) {
+		$page_template = get_page_template_slug( get_queried_object_id() );
+
+		if ( empty( $template ) ) {
+			return (bool) $page_template;
+		}
+
+		if ( $template == $page_template ) {
+			return true;
+		}
+
+		if ( is_array( $template ) ) {
+			if ( ( in_array( 'default', $template, true ) && ! $page_template )
+				|| in_array( $page_template, $template, true )
+			) {
+				return true;
+			}
+		}
+
+		return ( 'default' === $template && ! $page_template );
+	}
+
+	/**
+	 * Filters available template settings options.
+	 *
+	 * @since 2.0.0.81
+	 *
+	 * @param array
+	 */
+	public static function et_theme_builder_template_settings_options( $options ) {
+		if ( ! empty( $options['other'] ) ) {
+			$options['other']['settings'][] = array(
+				'id'       => 'gd_search',
+				'label'    => et_core_intentionally_unescaped( __( 'GD Search Results', 'geodirectory' ), 'react_jsx' ),
+				'priority' => 0,
+				'validate' => array( __CLASS__, 'et_theme_builder_template_setting_validate_gd_search' ),
+			);
+		}
+
+		return $options;
+	}
+
+	/**
+	 * Validate GD search.
+	 *
+	 * @since 2.0.0.81
+	 *
+	 * @param string $type
+	 * @param string $subtype
+	 * @param integer $id
+	 * @param string[] $setting
+	 *
+	 * @return bool
+	 */
+	public static function et_theme_builder_template_setting_validate_gd_search( $type, $subtype, $id, $setting ) {
+		return geodir_is_page( 'search' );
 	}
 }

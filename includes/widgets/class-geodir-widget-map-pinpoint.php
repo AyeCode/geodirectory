@@ -34,7 +34,7 @@ class GeoDir_Widget_Map_Pinpoint extends WP_Super_Duper {
 			'name'          => __( 'GD > Map Pinpoint', 'geodirectory' ),
 			'widget_ops'    => array(
 				'classname'   => 'geodir-map-pinpoint',
-				'description' => esc_html__( 'Shows the distance do the current post.', 'geodirectory' ),
+				'description' => esc_html__( 'Shows a link that will open the map marker window on the map.', 'geodirectory' ),
 				'geodirectory' => true,
 			),
 			'arguments'     => array(
@@ -81,20 +81,30 @@ class GeoDir_Widget_Map_Pinpoint extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-		global $wp_query, $gd_post;
+		global $wp_query, $gd_post,$gdecs_render_loop;
 
-		if ( ! ( ! empty( $wp_query ) && $wp_query->is_main_query() && ! empty( $gd_post ) ) ) {
-			return;
+		// skip some checks for elementor
+		if($gdecs_render_loop || (is_admin())){
+			if ( empty( $gd_post->default_category ) ) {
+				return;
+			}
+		}
+		else{
+			if ( ! ( ! empty( $wp_query ) && $wp_query->is_main_query() && ! empty( $gd_post ) ) ) {
+				return;
+			}
+
+			if ( empty( $gd_post->default_category ) ) {
+				return;
+			}
+
+			// Location-less
+			if ( ! GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) || geodir_is_page( 'detail' ) ) {
+				return;
+			}
 		}
 
-		if ( empty( $gd_post->default_category ) ) {
-			return;
-		}
 
-		// Location-less
-		if ( ! GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) || geodir_is_page( 'detail' ) ) {
-			return;
-		}
 
 		$defaults = array(
             'show' => '',

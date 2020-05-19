@@ -71,9 +71,17 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 						"label" => __('label', 'geodirectory'),
 						"value" => __('value', 'geodirectory'),
 						"value-strip" => __('value (strip_tags)', 'geodirectory'),
+						"value-raw" => __('value (saved in database)', 'geodirectory'),
 					),
 					'desc_tip' => true,
 					'advanced' => false
+				),
+				'no_wrap'  => array(
+					'title' => __('No Wrap:', 'geodirectory'),
+					'desc' => __('Remove wrapping div.', 'geodirectory'),
+					'type' => 'checkbox',
+					'default'  => '0',
+					'element_require' => '[%show%]=="value-strip" || [%show%]=="value-raw"',
 				),
 				'alignment'  => array(
 					'title' => __('Alignment:', 'geodirectory'),
@@ -193,10 +201,16 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'alignment'    => '', // left,right,center
 			'text_alignment'    => '', // left,right,center
 			'location'  => 'none',
+			'no_wrap'  => '',
 		), $args, 'gd_post_meta' );
 
 		if(empty($args['id'])){
 			$args['id'] =  isset($gd_post->ID) ? $gd_post->ID : 0;
+		}
+
+		// maybe no wrap
+		if($args['show']=='value-strip'){
+			$args['no_wrap'] = true;
 		}
 		
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
@@ -222,10 +236,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
 			$fields = geodir_post_custom_fields( $package_id,  'all', $post_type , 'none' );
 
-			$fields = $fields + self::get_standard_fields();
-
-//			echo '###';
-//			print_r( $fields );
+			$fields = $fields + geodir_post_meta_advance_fields( $post_type );
 
 			if(!empty($fields)){
 				$field = array();
@@ -267,6 +278,11 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 
 					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
 
+					// Return clean striped value.
+					if ( $args['show'] == 'value-strip' && $output != '' ) {
+						$output = wp_strip_all_tags( $output );
+					}
+
 					if($field['name']=='post_content'){
 						//$output = wp_strip_all_tags($output);
 					}
@@ -288,78 +304,26 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 	 *
 	 * @return array
 	 */
-	public function get_custom_field_keys(){
-		$fields = geodir_post_custom_fields('', 'all', 'all','none');
+	public function get_custom_field_keys() {
+		$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
 		$keys = array();
 		$keys[] = __('Select Key','geodirectory');
-		if(!empty($fields)){
-			foreach($fields as $field){
-				$keys[$field['htmlvar_name']] = $field['htmlvar_name'];
+		if ( ! empty( $fields ) ) {
+			$address = array();
+			foreach( $fields as $field ) {
+				$keys[ $field['htmlvar_name'] ] = $field['htmlvar_name'];
 			}
 		}
 
+		// Advance fields
+		$advance_fields = geodir_post_meta_advance_fields();
+		if ( ! empty( $advance_fields ) ) {
+			foreach ( $advance_fields as $field => $args ) {
+				$keys[ $field ] = $field;
+			}
+		}
 
-
-		// add some general types:
-		$keys['post_date'] = 'post_date';
-		$keys['post_modified'] = 'post_modified';
-		$keys['post_author'] = 'post_author';
-
-//		print_r($keys);exit;
 		return $keys;
-
-	}
-
-
-	/**
-	 * Get some standard post fields info.
-	 *
-	 * @return array
-	 */
-	public function get_standard_fields(){
-		$fields = array();
-
-
-		$fields['post_date'] = array(
-			'name'          =>  'post_modified',
-			'htmlvar_name'  =>  'post_modified',
-			'frontend_title'              =>  __('Modified','geodirectory'),
-			'type'              =>  'datepicker',
-			'field_icon'              =>  'fas fa-calendar-alt',
-			'field_type_key'              =>  '',
-			'css_class'              =>  '',
-			'extra_fields'              =>  '',
-		);
-
-		$fields['post_modified'] = array(
-			'name'          =>  'post_date',
-			'htmlvar_name'  =>  'post_date',
-			'frontend_title'              =>  __('Published','geodirectory'),
-			'type'              =>  'datepicker',
-			'field_icon'              =>  'fas fa-calendar-alt',
-			'field_type_key'              =>  '',
-			'css_class'              =>  '',
-			'extra_fields'              =>  '',
-		);
-
-		$fields['post_date_gmt'] = array(
-			'name'          =>  'post_author',
-			'htmlvar_name'  =>  'post_author',
-			'frontend_title'              =>  __('Author','geodirectory'),
-			'type'              =>  'author',
-			'field_icon'              =>  'fas fa-user',
-			'field_type_key'              =>  '',
-			'css_class'              =>  '',
-			'extra_fields'              =>  '',
-		);
-
-
-		/**
-		 * Filter the post meta standard fields info.
-		 *
-		 * @since 2.0.0.49
-		 */
-		return apply_filters('geodir_post_meta_standard_fields',$fields);
 	}
 
 	/**

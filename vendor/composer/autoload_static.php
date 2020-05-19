@@ -27,6 +27,7 @@ class ComposerStaticInit3225cff1a6fbcb5c09d8a0b088568404
     );
 
     public static $classMap = array (
+        'AyeCode_Connect_Helper' => __DIR__ . '/..' . '/ayecode/ayecode-connect-helper/ayecode-connect-helper.php',
         'WP_Super_Duper' => __DIR__ . '/..' . '/ayecode/wp-super-duper/wp-super-duper.php',
     );
 

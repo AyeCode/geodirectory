@@ -93,7 +93,34 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
                     ),
                     'desc_tip' => true,
                     'advanced' => true
-                )
+                ),
+                'icon'  => array(
+                    'type' => 'text',
+                    'title' => __('Icon class (font-awesome)', 'geodirectory'),
+                    'desc' => __('FontAwesome icon class to use.', 'geodirectory'),
+                    'placeholder' => 'fas fa-heart',
+                    'default' => '',
+                    'desc_tip' => true,
+                    'advanced' => true
+                ),
+                'icon_color_off'  => array(
+                    'type' => 'color',
+                    'title' => __('Icon color off', 'geodirectory'),
+                    'desc' => __('Color for the icon when not set.', 'geodirectory'),
+                    'placeholder' => '',
+                    'default' => '',
+                    'desc_tip' => true,
+                    'advanced' => true
+                ),
+                'icon_color_on'  => array(
+                    'type' => 'color',
+                    'title' => __('Icon color on', 'geodirectory'),
+                    'desc' => __('Color for the icon when set.', 'geodirectory'),
+                    'placeholder' => '',
+                    'default' => '',
+                    'desc_tip' => true,
+                    'advanced' => true
+                ),
             )
 
         );
@@ -117,6 +144,9 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
         $defaults = array(
             'show'      => '', // icon, text
             'alignment'      => '', // left, center, right
+            'icon_color_off'      => '',
+            'icon_color_on'      => '',
+            'icon'  => '',
         );
 
         /**
@@ -134,9 +164,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
             $class = "gd-align-right";
         }
 
-        if($args['show']=='stars'){ //@todo stars here is deprecated.
-            $class .= ' gd-fav-hide-text ';
-        }elseif($args['show']=='icon'){
+        if($args['show']=='icon'){
             $class .= ' gd-fav-hide-text ';
         }elseif($args['show']=='text'){
             $class .= ' gd-fav-hide-stars ';
@@ -157,7 +185,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
         $before = '<div class="geodir_post_meta gd-fav-info-wrap '. $class .'" >';
         $after  = '</div>';
 
-        $main = $this->get_fav_html();
+        $main = $this->get_fav_html($args);
 
 
 
@@ -172,12 +200,12 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
      *
      * @return string Favorite Html.
      */
-    public function get_fav_html(){
+    public function get_fav_html($args = array()){
         global $post;
         ob_start();
         ?>
         <span class="gd-list-favorite">
-            <?php geodir_favourite_html( '', $post->ID ); ?>
+            <?php geodir_favourite_html( '', $post->ID, $args ); ?>
         </span>
         <?php
         return ob_get_clean();

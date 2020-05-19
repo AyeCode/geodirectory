@@ -86,16 +86,14 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $post;
 
-		//print_r($args);
-
-		if(is_preview()){
+		if ( is_preview() ) {
 			return;
 		}
 
 		$defaults = array(
 			'hide_edit'      => 0,
 			'hide_delete'      => 0,
-			'author_page_only'   => 0,
+			'author_page_only'      => 0,
 		);
 
 		/**
@@ -104,8 +102,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		$args = wp_parse_args( $args, $defaults );
 
 		$show = true;
-
-		if( $args['author_page_only'] && !geodir_is_page('author')){
+		if ( $args['author_page_only'] && ! self::is_author_page() ) {
 			$show = false;
 		}
 
@@ -189,7 +186,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		$status_parts = array();
 		if (get_current_user_id()) {
 
-			$is_author_page = apply_filters('geodir_post_status_is_author_page', geodir_is_page('author'));
+			$is_author_page = self::is_author_page();
 			if ($is_author_page && !empty($post) && isset($post->post_author) && $post->post_author == get_current_user_id()) {
 
 				// we need to query real status direct as we dynamically change the status for author on author page so even non author status can view them.
@@ -219,6 +216,16 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		 */
 		return  apply_filters('geodir_filter_status_array_on_author_page', $status_parts );
 
+	}
+
+	public static function is_author_page() {
+		$is_author_page = apply_filters( 'geodir_post_status_is_author_page', geodir_is_page( 'author' ) );
+
+		if ( ! $is_author_page && wp_doing_ajax() && ! empty( $_REQUEST['is_gd_author'] ) ) {
+			$is_author_page = true;
+		}
+
+		return $is_author_page;
 	}
 }
 

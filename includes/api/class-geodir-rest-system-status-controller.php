@@ -833,7 +833,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 			),
 			_x( 'Add listing page', 'Page setting', 'geodirectory' ) => array(
 				'option'    => 'add',
-				'shortcode' => '[gd_add_listing]',
+				'shortcode' => 'gd_add_listing',
 			),
 			_x( 'Search Page', 'Page setting', 'geodirectory' ) => array(
 				'option'    => 'search',
@@ -874,7 +874,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 			if ( $values['shortcode']  && get_post( $page_id ) ) {
 				$shortcode_required = true;
 				$page = get_post( $page_id );
-				if ( strstr( $page->post_content, $values['shortcode'] ) ) {
+				if ( has_shortcode( $page->post_content, $values['shortcode'] ) ) {
 					$shortcode_present = true;
 				}
 			}

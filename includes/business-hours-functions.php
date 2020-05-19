@@ -172,9 +172,10 @@ function geodir_seconds_to_hhmm( $seconds ) {
  * Prints a string showing current time zone offset to UTC, considering daylight savings time.
  * @link                     http://php.net/manual/en/timezones.php
  * @param  string $time_zone Time zone name
+ * @param  bool   $formatted Format the offset. Converts +1.5 to +1:30.
  * @return string            Offset in hours, prepended by +/-
  */
-function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin' ) {
+function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin', $formatted = false ) {
 	$original_timezone = date_default_timezone_get();
 	// Set UTC as default time zone.
 	date_default_timezone_set( 'UTC' ); // @codingStandardsIgnoreEnd
@@ -185,13 +186,20 @@ function geodir_utc_offset_dst( $time_zone = 'Europe/Berlin' ) {
 	// Calculate offset.
 	$current   = timezone_open( $time_zone );
 	$offset_s  = timezone_offset_get( $current, $utc ); // seconds
-	$offset_h  = $offset_s / ( 60 * 60 ); // hours
-	// Prepend “+” when positive
-	$offset_h  = (string) $offset_h;
-	if ( strpos( $offset_h, '-' ) === FALSE ) {
-		$offset_h = '+' . $offset_h; // prepend +
+
+	if ( $formatted ) {
+		$offset_h = geodir_seconds_to_hhmm( $offset_s ); // Converts +1.5 to +1:30.
+	} else {
+		$offset_h  = $offset_s / ( 60 * 60 ); // hours
+		// Prepend “+” when positive
+		$offset_h  = (string) $offset_h;
+		if ( strpos( $offset_h, '-' ) === FALSE ) {
+			$offset_h = '+' . $offset_h; // prepend +
+		}
 	}
+
 	date_default_timezone_set( $original_timezone ); // @codingStandardsIgnoreEnd
+
 	return $offset_h;
 }
 
@@ -310,7 +318,7 @@ function geodir_array_to_schema( $schema_input ) {
 	}
 
 	$days = geodir_day_short_names();
-	$offset = ! empty( $schema_input['offset'] ) ? $schema_input['offset'] : geodir_gmt_offset();
+	$offset = ! empty( $schema_input['offset'] ) || ( isset( $schema_input['offset'] ) && $schema_input['offset'] === '0' ) ? $schema_input['offset'] : geodir_gmt_offset();
 	$periods = array();
 
 	foreach ( $schema_hours as $day_no => $slots ) {
@@ -391,6 +399,9 @@ function geodir_schema_to_array( $schema ) {
 	if ( ! empty( $schema_array[1] ) ) {
 		$gmt_offset = str_replace(' ', '', $schema_array[1]);
 		$gmt_offset = str_replace(array('"UTC":"', '"', '[', ']'), '', $schema_array[1]);
+		if ( $gmt_offset === '0' ) {
+			$gmt_offset = '+0';
+		}
 		$return['offset'] = ( ! empty( $gmt_offset ) ? $gmt_offset : geodir_gmt_offset() );
 	}
 	
@@ -605,7 +616,7 @@ function geodir_get_business_hours( $value = '' ) {
 					$opens_time = strtotime( $opens );
 					$closes_time = strtotime( date_i18n( 'H:i:59', strtotime( $closes ) ) );
 					
-					if ( $is_today && $opens_time <= $time_int && $time_int <= $closes_time ) {
+					if ( $is_today && (($opens_time <= $time_int && $time_int <= $closes_time) || ($opens == '00:00' && $opens == $closes)) ) {
 						$is_open = 1;
 						$has_open = 1;
 					} else {
@@ -679,6 +690,54 @@ function geodir_get_business_hours( $value = '' ) {
 
 	return apply_filters( 'geodir_get_business_hours', $hours, $data );
 }
+
+/**
+ * Set the business hours as closed if the temp_closed field is used and set.
+ *
+ * @since 2.0.0.83
+ */
+function geodir_filter_business_hours_if_temp_closed($hours){
+	global $gd_post;
+
+	if(!empty($gd_post->temp_closed) && !empty($hours['days'])){
+		foreach($hours['days'] as $key=>$val){
+			$hours['days'][$key]['closed'] = 1;
+			$hours['days'][$key]['open'] = 0;
+			$hours['days'][$key]['slots'] = array(); // blank timings
+
+			$hours['days'][$key]['slots'][] = array(
+				'slot' => NULL,
+				'range' => __( 'Temporarily Closed', 'geodirectory'),
+				'open' => 0,
+				'time' => array(),
+				'minutes' => array()
+			);
+		}
+	}
+
+	return $hours;
+}
+add_filter('geodir_get_business_hours','geodir_filter_business_hours_if_temp_closed');
+
+/**
+ * Set the business hours as closed if the temp_closed field is used and set.
+ *
+ * @since 2.0.0.83
+ * @param $schema
+ * @param $gd_post
+ *
+ * @return mixed
+ */
+function geodir_filter_schema_business_hours_if_temp_closed($schema){
+	global $gd_post;
+
+	if(!empty($gd_post->temp_closed) && !empty($gd_post->business_hours)){
+		$schema['openingHours'] = array();
+	}
+
+	return $schema;
+}
+add_filter('geodir_details_schema','geodir_filter_schema_business_hours_if_temp_closed');
 
 /**
  * Converts hhmm to business hour minutes.

@@ -88,6 +88,11 @@ function geodir_get_template_part( $slug, $name = '' ) {
 	// If template file doesn't exist, look in yourtheme/slug.php and yourtheme/geodirectory/slug.php
 	if ( ! $template ) {
 		$template = locate_template( array( "{$slug}.php", geodir_get_theme_template_dir_name() . "/{$slug}.php" ) );
+
+		// If template file doesn't exist, look in /geodirectory/templates/slug.php
+		if ( ! $template && file_exists( geodir_get_templates_dir() . "/{$slug}.php" ) ) {
+			$template = geodir_get_templates_dir() . "/{$slug}.php";
+		}
 	}
 
 	// Allow 3rd party plugins to filter template file from their plugin.
@@ -625,7 +630,7 @@ function geodir_template_redirect() {
 
 	if ( is_page() ) {
 
-		if ( ! isset( $_REQUEST['listing_type'] ) && geodir_is_page( 'add-listing' ) ) {
+		if ( ! isset( $_REQUEST['listing_type'] ) && geodir_is_page( 'add-listing' ) && !isset($_REQUEST['action']) ) {
 			if ( ! empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
 			} else {
 				$post_type = geodir_add_listing_default_post_type();
@@ -823,14 +828,18 @@ function geodir_get_cpt_page_id( $page, $post_type = '' ) {
 /**
  * Adds a responsive embed wrapper around oEmbed content
  *
- * @param  string $html The oEmbed markup
- * @param  string $url  The URL being embedded
- * @param  array  $attr An array of attributes
+ * @param string $html The oEmbed markup.
+ * @param string $url  The URL being embedded. Default empty.
+ * @param array  $attr An array of attributes. Default empty.
+ * @param int    $post_ID Post ID. Default 0.
  * @return string       Updated embed markup
  */
-function geodir_responsive_embeds($html, $url, $attr) {
+function geodir_responsive_embeds( $html, $url = '', $attr = array(), $post_ID = 0 ) {
+	if ( empty( $url ) ) {
+		return $html;
+	}
 
-	if ( false !== strpos( $url, "://www.youtube.com") || false !== strpos( $url, "://youtube.com") || false !== strpos( $url, "://youtu.be" ) ) {
+	if ( false !== strpos( $url, "://www.youtube.com" ) || false !== strpos( $url, "://youtube.com" ) || false !== strpos( $url, "://youtu.be" ) ) {
 		$html = '<div class="geodir-embed-container">' . $html . '</div>';
 	}
 

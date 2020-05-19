@@ -13,20 +13,19 @@
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $post The current post object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
  * @param int|string $post_id Optional. The post ID.
  *
  * @return object|bool Returns full post details as an object. If no details returns false.
  */
 function geodir_get_post_info( $post_id = '' ) {
-	// check for cache
+	// Check for cache
 	$cache = wp_cache_get( "gd_post_" . $post_id, 'gd_post' );
 	if ( $cache ) {
 		return $cache;
 	}
 
-	global $wpdb, $plugin_prefix, $post, $post_info, $preview;
+	global $wpdb, $post, $post_info, $preview;
 
 	if ( $post_id == '' && ! empty( $post ) ) {
 		$post_id = $post->ID;
@@ -38,18 +37,16 @@ function geodir_get_post_info( $post_id = '' ) {
 		$post_type = get_post_type( wp_get_post_parent_id( $post_id ) );
 	}
 
-	// check if preview
+	// Check if preview
 	if ( $preview && $post->ID == $post_id ) {
 		$post_id = GeoDir_Post_Data::get_post_preview_id( $post_id );
 	}
 
-	$all_postypes = geodir_get_posttypes();
-
-	if ( ! in_array( $post_type, $all_postypes ) ) {
+	if ( ! geodir_is_gd_post_type( $post_type ) ) {
 		return new stdClass();
 	}
 
-	$table = $plugin_prefix . $post_type . '_detail';
+	$table = geodir_db_cpt_table( $post_type );
 
 	/**
 	 * Apply Filter to change Post info
@@ -59,26 +56,23 @@ function geodir_get_post_info( $post_id = '' ) {
 	 * @since 1.0.0
 	 * @package GeoDirectory
 	 */
-	$query = apply_filters( 'geodir_post_info_query', $wpdb->prepare( "SELECT p.*,pd.* FROM " . $wpdb->posts . " p," . $table . " pd
-			  WHERE p.ID = pd.post_id
-			  AND pd.post_id = %d", $post_id ) );
+	$query = apply_filters( 'geodir_post_info_query', $wpdb->prepare( "SELECT p.*,pd.* FROM " . $wpdb->posts . " p," . $table . " pd WHERE p.ID = pd.post_id AND pd.post_id = %d", $post_id ) );
 
 	$post_detail = $wpdb->get_row( $query );
 
-	// check for distance setting
+	// Check for distance setting
 	if ( ! empty( $post_detail ) && ! empty( $post->distance ) ) {
 		$post_detail->distance = $post->distance;
 	}
 
-	$return = ( ! empty( $post_detail ) ) ? $post_info = $post_detail : $post_info = false;
+	$return = ! empty( $post_detail ) ? $post_info = $post_detail : $post_info = false;
 
-	// set cache
+	// Set cache
 	if ( ! empty( $post_detail ) ) {
 		wp_cache_set( "gd_post_" . $post_id, $post_detail, 'gd_post' );
 	}
 
 	return $return;
-
 }
 
 /**
@@ -335,7 +329,7 @@ function geodir_new_post_default_status() {
  *
  * @return string
  */
-function geodir_favourite_html( $user_id, $post_id ) {
+function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 
 	global $current_user, $post;
 
@@ -409,18 +403,37 @@ function geodir_favourite_html( $user_id, $post_id ) {
 	 */
 	$unfavourite_icon = apply_filters( 'geodir_unfavourite_icon', 'fas fa-heart' );
 
-//    echo get_current_user_id().'###';print_r($current_user);
+
+	// overwrite settings if set in widget
+
+	// set icon if user set
+	if(!empty($args['icon'])){
+		$unfavourite_icon = $favourite_icon = esc_attr($args['icon']);
+	}
+
+	// set colour
+	$icon_color_off = !empty($args['icon_color_off']) ? sanitize_hex_color($args['icon_color_off']) : '';
+	$icon_color_on = !empty($args['icon_color_on']) ? sanitize_hex_color($args['icon_color_on']) : '';
+
+	$icon_style = '';
 
 	$user_meta_data = '';
 	if ( isset( $current_user->data->ID ) ) {
 		$user_meta_data = geodir_get_user_favourites( $current_user->data->ID );
 	}
 
+
 	if ( ! empty( $user_meta_data ) && in_array( $post_id, $user_meta_data ) ) {
+		$icon_style = $icon_color_on ? "color:$icon_color_on;" : '';
+		$custom_icon = !empty($args['icon']) ? esc_attr($args['icon']) : '';
 		?><span class="geodir-addtofav favorite_property_<?php echo $post_id; ?>"  ><a
 			class="geodir-removetofav-icon" href="javascript:void(0);"
 			onclick="javascript:gd_fav_save(<?php echo $post_id; ?>);"
-			title="<?php echo $remove_favourite_text; ?>"><i
+			title="<?php echo $remove_favourite_text; ?>"
+			data-icon="<?php echo $custom_icon;?>"
+			data-color-on="<?php echo $icon_color_on;?>"
+			data-color-off="<?php echo $icon_color_off;?>"><i
+				style="<?php echo $icon_style;?>"
 				class="<?php echo $unfavourite_icon; ?>"></i> <span class="geodir-fav-text"><?php echo $unfavourite_text; ?></span></a>   </span><?php
 
 	} else {
@@ -431,10 +444,17 @@ function geodir_favourite_html( $user_id, $post_id ) {
 			$script_text = 'javascript:gd_fav_save(' . $post_id . ')';
 		}
 
+		$icon_style = $icon_color_off ? "color:$icon_color_off;" : '';
+		$custom_icon = !empty($args['icon']) ? esc_attr($args['icon']) : '';
+
 		?><span class="geodir-addtofav favorite_property_<?php echo $post_id; ?>"><a class="geodir-addtofav-icon"
 		                                                                             href="javascript:void(0);"
 		                                                                             onclick="<?php echo $script_text; ?>"
-		                                                                             title="<?php echo $add_favourite_text; ?>"><i
+		                                                                             title="<?php echo $add_favourite_text; ?>"
+		                                                                             data-icon="<?php echo $custom_icon;?>"
+		                                                                             data-color-on="<?php echo $icon_color_on;?>"
+		                                                                             data-color-off="<?php echo $icon_color_off;?>"><i
+				style="<?php echo $icon_style;?>"
 				class="<?php echo $favourite_icon; ?>"></i> <span class="geodir-fav-text"><?php echo $favourite_text; ?></span></a></span>
 	<?php }
 }
@@ -757,6 +777,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		'css_class' => '',
 		'onclick'   => '',
 		'icon_class'=> '',
+		'extra_attributes'=> '', // 'data-save-list-id=123 data-other-post-id=321'
+		'tag'       => ''
 		'popover_title'=> '',
 		'popover_text'=> '',
 		'cta'=> '', // click through action
@@ -775,6 +797,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	$find_post   = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 
 	if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
+		$field = array();
 		$badge = $args['badge'];
 
 		// Check if there is a specific filter for field.
@@ -783,9 +806,9 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		}
 
 		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' ) {
-			$fields = geodir_post_custom_fields( '', 'all', $post_type, 'none' );
+			$package_id = geodir_get_post_package_id( $post_id, $post_type );
+			$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
-			$field = array();
 			foreach ( $fields as $field_info ) {
 				if ( $match_field == $field_info['htmlvar_name'] ) {
 					$field = $field_info;
@@ -814,6 +837,12 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		// If not then we run the standard output.
 		if ( empty( $output ) ) {
 			$search = $args['search'];
+
+			$is_date = ( ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) || in_array( $match_field, array( 'post_date', 'post_modified' ) ) ? true : false;
+			/**
+			 * @since 2.0.0.81
+			 */
+			$is_date = apply_filters( 'geodir_post_badge_is_date', $is_date, $match_field, $field, $args, $find_post );
 
 			$match_value = isset($find_post->{$match_field}) ? esc_attr( trim( $find_post->{$match_field} ) ) : ''; // escape user input
 			$match_found = $match_field === '' ? true : false;
@@ -875,6 +904,50 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 							$match_value = geodir_currency_format_number( $match_value, $field );
 						}
 					}
+				}
+
+				if ( $is_date && ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ) {
+					$args['datetime'] = mysql2date( 'c', $match_value, false );
+				}
+
+				// Option value
+				if ( ! empty( $field['option_values'] ) ) {
+					$option_values = geodir_string_values_to_options( stripslashes_deep( $field['option_values'] ), true );
+
+					if ( ! empty( $option_values ) ) {
+						if ( ! empty( $field['field_type'] ) && $field['field_type'] == 'multiselect' ) {
+							$values = explode( ',', trim( $match_value, ', ' ) );
+
+							if ( is_array( $values ) ) {
+								$values = array_map( 'trim', $values );
+							}
+
+							$_match_value = array();
+							foreach ( $option_values as $option_value ) {
+								if ( isset( $option_value['value'] ) && in_array( $option_value['value'], $values ) ) {
+									$_match_value[] = $option_value['label'];
+								}
+							}
+
+							$match_value = ! empty( $_match_value ) ? implode( ', ', $_match_value ) : '';
+						} else {
+							foreach ( $option_values as $option_value ) {
+								if ( isset( $option_value['value'] ) && $option_value['value'] == $match_value ) {
+									$match_value = $option_value['label'];
+								}
+							}
+						}
+					}
+				}
+
+				/**
+				 * @since 2.0.0.75
+				 */
+				$match_value = apply_filters( 'geodir_post_badge_match_value', $match_value, $match_field, $args, $find_post, $field );
+
+				// File
+				if ( ! empty( $badge ) &&  ! empty( $match_value ) && ! empty( $field['type'] ) && $field['type'] == 'file' ) {
+					$badge = $match_value;
 				}
 
 				// badge text
@@ -958,7 +1031,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$onclick = 'onclick="'.esc_attr($args['onclick']).'"';
 				}
 
-				// fontawesom icon
+				// FontAwesome icon
 				$icon = '';
 				if(!empty($args['icon_class'])){
 					$icon = '<i class="'.esc_attr($args['icon_class']).'" ></i>';
@@ -977,6 +1050,12 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				$title = $badge ? $badge : ( ! empty( $field['frontend_title'] ) ? __( $field['frontend_title'], 'geodirectory' ) : '' );
 				if ( ! empty( $title ) ) {
 					$title = sanitize_text_field( stripslashes( $title ) );
+				}
+
+				// Inner tag attributes
+				$inner_attributes = '';
+				if ( ! empty( $args['datetime'] ) ) {
+					$inner_attributes .= 'datetime="' . esc_attr( $args['datetime'] ) . '"';
 				}
 
 				// set badge text as secondary if icon is set.
@@ -1002,7 +1081,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				/**
 				 * @since 2.0.0.68
 				 */
-				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $args, $find_post );
+				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $match_value, $match_field, $args, $find_post, $field );
 
 				
 				if($design_style){
@@ -1083,22 +1162,26 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					if(!empty($args['size'])){$output .= '</span>';}
 					$output .= '</span>';
 
-
-
-//					$output .= '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
-//					if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
-//					$post_id = isset($find_post->ID) ? absint($find_post->ID) : '';
-//					// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
-//					$output .= '<div data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . $icon . $badge . '</div>';
-//					if(!empty($args['link'])){$output .= "</a>";}
-//					$output .= '</div>';
+					
 				}else{
+					$post_id = isset( $find_post->ID ) ? absint( $find_post->ID ) : '';
+					$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
+					// Element tag
+					if ( empty( $args['tag'] ) && $is_date ) {
+						$tag = 'time';
+					} else {
+						$tag = 'div';
+					}
+
 					$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
-					if(!empty($args['link'])){$output .= "<a href='".esc_url($args['link'])."' $new_window $rel>";}
-					$post_id = isset($find_post->ID) ? absint($find_post->ID) : '';
+					if ( ! empty( $link ) ) {
+						$output .= "<a href='" . $link . "' $new_window $rel>";
+					}
 					// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
-					$output .= '<div data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';">' . $icon . $badge . '</div>';
-					if(!empty($args['link'])){$output .= "</a>";}
+					$output .= '<' . $tag . ' data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';" ' . $inner_attributes . '>' . $icon . $badge . '</' . $tag . '>';
+					if ( ! empty( $link ) ) {
+						$output .= "</a>";
+					}
 					$output .= '</div>';
 				}
 			}
@@ -1267,7 +1350,7 @@ function geodir_replace_variables($text,$post_id = ''){
  * 
  * @since 2.0.0.67
  * 
- * @param bool $match_found Ture if match found else False.
+ * @param bool $match_found True if match found else False.
  * @param array $args Badge arguments.
  * @param object $gd_post The GD post object.
  * @return bool
@@ -1436,3 +1519,253 @@ function geodir_validate_custom_field_value_textarea( $value, $gd_post, $custom_
 }
 add_filter( 'geodir_custom_field_value_html', 'geodir_validate_custom_field_value_textarea', 10, 6 );
 add_filter( 'geodir_custom_field_value_textarea', 'geodir_validate_custom_field_value_textarea', 10, 6 );
+
+/**
+ * Get the post meta advance custom fields.
+ *
+ * @since 2.0.0.86
+ *
+ * $param string $post_type The post type. 
+ * @return array Standard fields.
+ */
+function geodir_post_meta_advance_fields( $post_type = 'gd_place' ) {
+	$fields = array();
+
+	// Standard fields
+	$standard_fields = geodir_post_meta_standard_fields( $post_type );
+	if ( ! empty( $standard_fields ) ) {
+		$fields = $standard_fields;
+	}
+
+	// Address fields
+	$address_fields = geodir_post_meta_address_fields( $post_type );
+	if ( ! empty( $address_fields ) ) {
+		$fields = ! empty( $fields ) ? array_merge( $fields, $address_fields ) : $address_fields;
+	}
+
+	/**
+	 * Filter the post meta advance fields.
+	 *
+	 * @since 2.0.0.86
+	 */
+	return apply_filters( 'geodir_post_meta_advance_fields', $fields, $post_type );
+}
+
+/**
+ * Get the post meta standard fields.
+ *
+ * @since 2.0.0.86
+ *
+ * $param string $post_type The post type. 
+ * @return array Standard fields.
+ */
+function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
+	$fields = array();
+
+	$fields['overall_rating'] = array(
+		'type' => 'custom',
+		'name' => 'overall_rating',
+		'htmlvar_name' => 'overall_rating',
+		'frontend_title' => __( 'Overall Rating', 'geodirectory' ),
+		'field_icon' => 'fas fa-star',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['rating_count'] = array(
+		'type' => 'custom',
+		'name' => 'rating_count',
+		'htmlvar_name' => 'rating_count',
+		'frontend_title' => __( 'Rating Count', 'geodirectory' ),
+		'field_icon' => 'fas fa-comments',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['post_date'] = array(
+		'name' => 'post_date',
+		'htmlvar_name' => 'post_date',
+		'frontend_title' => __('Published','geodirectory'),
+		'type' => 'datepicker',
+		'field_icon' => 'fas fa-calendar-alt',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => array( 'date_format' => geodir_date_format() ),
+	);
+
+	$fields['post_date_gmt'] = array(
+		'name' => 'post_date_gmt',
+		'htmlvar_name' => 'post_date_gmt',
+		'frontend_title' => __('Published','geodirectory'),
+		'type' => 'datepicker',
+		'field_icon' => 'fas fa-calendar-alt',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => array( 'date_format' => geodir_date_format() ),
+	);
+
+	$fields['post_modified'] = array(
+		'name' => 'post_modified',
+		'htmlvar_name' => 'post_modified',
+		'frontend_title' => __('Modified','geodirectory'),
+		'type' => 'datepicker',
+		'field_icon' => 'fas fa-calendar-alt',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => array( 'date_format' => geodir_date_format() ),
+	);
+
+	$fields['post_modified_gmt'] = array(
+		'name' => 'post_modified_gmt',
+		'htmlvar_name' => 'post_modified_gmt',
+		'frontend_title' => __('Modified','geodirectory'),
+		'type' => 'datepicker',
+		'field_icon' => 'fas fa-calendar-alt',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => array( 'date_format' => geodir_date_format() ),
+	);
+
+	$fields['post_author'] = array(
+		'name' => 'post_author',
+		'htmlvar_name' => 'post_author',
+		'frontend_title' => __('Author','geodirectory'),
+		'type' => 'author',
+		'field_icon' => 'fas fa-user',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => '',
+	);
+
+	/**
+	 * Filter the post meta standard fields info.
+	 *
+	 * @since 2.0.0.49
+	 */
+	return apply_filters( 'geodir_post_meta_standard_fields', $fields, $post_type );
+}
+
+/**
+ * Get the post meta address fields.
+ *
+ * @since 2.0.0.86
+ *
+ * $param string $post_type The post type. 
+ * @return array Address fields.
+ */
+function geodir_post_meta_address_fields( $post_type = 'gd_place' ) {
+	if ( empty( $post_type ) ) {
+		$post_type = 'gd_place';
+	} elseif( ! GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+		return array();
+	}
+
+	$field = geodir_get_field_infoby( 'htmlvar_name', 'address', $post_type );
+	$extra_fields = ! empty( $field['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $field['extra_fields'] ) ) : NULL;
+	$field_icon = ! empty( $field['field_icon'] ) ? $field['field_icon'] : 'fas fa-map-marker-alt';
+
+	$fields = array();
+
+	$fields['street'] = array(
+		'type' => 'custom',
+		'name' => 'street',
+		'htmlvar_name' => 'street',
+		'frontend_title' => ( ! empty( $field['frontend_title'] ) ? __( $field['frontend_title'], 'geodirectory' ) : __( 'Address', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['street2'] = array(
+		'type' => 'custom',
+		'name' => 'street2',
+		'htmlvar_name' => 'street2',
+		'frontend_title' => __( 'Address line 2', 'geodirectory' ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['city'] = array(
+		'type' => 'custom',
+		'name' => 'city',
+		'htmlvar_name' => 'city',
+		'frontend_title' => ( ! empty( $extra_fields['city_lable'] ) ? __( $extra_fields['city_lable'], 'geodirectory' ) : __( 'City', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['region'] = array(
+		'type' => 'custom',
+		'name' => 'region',
+		'htmlvar_name' => 'region',
+		'frontend_title' => ( ! empty( $extra_fields['region_lable'] ) ? __( $extra_fields['region_lable'], 'geodirectory' ) : __( 'Region', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['country'] = array(
+		'type' => 'custom',
+		'name' => 'country',
+		'htmlvar_name' => 'country',
+		'frontend_title' => ( ! empty( $extra_fields['country_lable'] ) ? __( $extra_fields['country_lable'], 'geodirectory' ) : __( 'Country', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['zip'] = array(
+		'type' => 'custom',
+		'name' => 'zip',
+		'htmlvar_name' => 'zip',
+		'frontend_title' => ( ! empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ) ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['latitude'] = array(
+		'type' => 'custom',
+		'name' => 'latitude',
+		'htmlvar_name' => 'latitude',
+		'frontend_title' => __( 'Latitude', 'geodirectory' ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['longitude'] = array(
+		'type' => 'custom',
+		'name' => 'longitude',
+		'htmlvar_name' => 'longitude',
+		'frontend_title' => __( 'Longitude', 'geodirectory' ),
+		'field_icon' => $field_icon,
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['map_directions'] = array(
+		'type' => 'custom',
+		'name' => 'map_directions',
+		'htmlvar_name' => 'map_directions',
+		'frontend_title' => __( 'Map Directions', 'geodirectory' ),
+		'field_icon' => 'fas fa-directions',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	return apply_filters( 'geodir_post_meta_address_fields', $fields, $post_type );
+}

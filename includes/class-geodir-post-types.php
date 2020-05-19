@@ -490,6 +490,20 @@ class GeoDir_Post_types {
 					$value = false;
 				}
 				break;
+			case 'comments':
+				if ( isset( $post_types[ $post_type ] ) && ! empty( $post_types[ $post_type ][ 'disable_comments' ] ) ) {
+					$value = false;
+				}else{
+					$value = true;
+				}
+				break;
+			case 'single_review':
+				if ( isset( $post_types[ $post_type ] ) && ! empty( $post_types[ $post_type ][ 'single_review' ] ) ) {
+					$value = true;
+				}else{
+					$value = false;
+				}
+				break;
 		}
 
 

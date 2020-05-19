@@ -1,0 +1,9 @@
+// Hide empty social icons
+.elementor-widget-social-icons{
+	.elementor-social-icons-wrapper{
+		a.elementor-social-icon:not([href]),
+		a.elementor-social-icon[href="tel:"]{
+			display: none;
+		}
+	}
+}

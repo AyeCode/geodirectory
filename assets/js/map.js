@@ -132,9 +132,9 @@ function initMap(map_options) {
 }
 
 function geodir_build_static_map(map_canvas){
-    if (!window.gdMaps) {
-        geodir_no_map_api(map_canvas);
-        return false;
+    if (window.gdMaps != 'google') {
+        build_map_ajax_search_param(map_canvas, false);
+        return;
     }
     options = eval(map_canvas);
 
@@ -307,6 +307,15 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
                 .find("li") //Find the spans
                 .map(function() { return jQuery(this).data("post-id") }) //Project Ids
                 .get(); //ToArray
+
+            // check if elementor loop
+            if(!idarray.length && jQuery('.elementor-posts-container').length){
+                $containerClass = jQuery('.geodir-loop-container').length ? jQuery(".geodir-loop-container") : jQuery(".elementor-posts-container");
+                idarray = $containerClass
+                    .find(".elementor-post ") //Find the spans
+                    .map(function() { return jQuery(this).attr('class').match(/post-\d+/)[0].replace("post-",""); }) //Project Ids
+                    .get(); //ToArray
+            }
 
             if(idarray){
                 posts = idarray;
@@ -667,7 +676,15 @@ function animate_marker(map_canvas, id) {
     try {
         if (window.gdMaps == 'google') {
             if (jQuery.goMap.mapId.data(id) != null) {
-                jQuery.goMap.mapId.data(id).setAnimation(google.maps.Animation.BOUNCE);
+                var anim = geodir_params.markerAnimation;
+                if ( anim == 'drop' || anim == 'DROP' ) {
+                    _anim = google.maps.Animation.DROP;
+                } else if ( anim == 'null' || anim == 'none' || anim == null || anim == '' ) {
+                    _anim = null;
+                } else {
+                    _anim = google.maps.Animation.BOUNCE;
+                }
+                jQuery.goMap.mapId.data(id).setAnimation(_anim);
             }
         } else if(window.gdMaps == 'osm') {
             jQuery.goMap.gdlayers.eachLayer(function(marker) {

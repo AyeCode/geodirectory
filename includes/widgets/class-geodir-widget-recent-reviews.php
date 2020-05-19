@@ -215,9 +215,9 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		if ( GeoDir_Post_types::supports( $post_type, 'location' ) && $add_location_filter && defined( 'GEODIRLOCATION_VERSION' ) ) {
 			$source = geodir_is_page( 'search' ) ? 'session' : 'query_vars';
 			$location_terms = geodir_get_current_location_terms( $source );
-			$country = !empty( $location_terms['gd_country'] ) ? get_actual_location_name( 'country', $location_terms['gd_country'] ) : '';
-			$region = !empty( $location_terms['gd_region'] ) ? get_actual_location_name( 'region', $location_terms['gd_region'] ) : '';
-			$city = !empty( $location_terms['gd_city'] ) ? get_actual_location_name( 'city', $location_terms['gd_city'] ) : '';
+			$country = !empty( $location_terms['country'] ) ? get_actual_location_name( 'country', $location_terms['country'] ) : '';
+			$region = !empty( $location_terms['region'] ) ? get_actual_location_name( 'region', $location_terms['region'] ) : '';
+			$city = !empty( $location_terms['city'] ) ? get_actual_location_name( 'city', $location_terms['city'] ) : '';
 
 			if ( $country ) {
 				$where .= $wpdb->prepare( " AND r.country LIKE %s", $country );

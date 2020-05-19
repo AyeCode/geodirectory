@@ -127,8 +127,8 @@ class GeoDir_Admin_Setup_Wizard {
 			'thickbox'
 		), GEODIRECTORY_VERSION );
 		wp_register_script( 'geodir-lity', geodir_plugin_url() . '/assets/js/libraries/gd_lity' . $suffix . '.js', array(), GEODIRECTORY_VERSION );
-		wp_register_style( 'font-awesome', 'https://use.fontawesome.com/releases/v5.5.0/css/all.css', array( 'font-awesome-shim' ), GEODIRECTORY_VERSION );
-		wp_register_style( 'font-awesome-shim', 'https://use.fontawesome.com/releases/v5.5.0/css/v4-shims.css', array(), GEODIRECTORY_VERSION );
+		wp_register_style( 'font-awesome', 'https://use.fontawesome.com/releases/v5.13.0/css/all.css', array( 'font-awesome-shim' ), GEODIRECTORY_VERSION );
+		wp_register_style( 'font-awesome-shim', 'https://use.fontawesome.com/releases/v5.13.0/css/v4-shims.css', array(), GEODIRECTORY_VERSION );
 		wp_add_inline_script( 'geodir-admin-script', "window.gdSetMap = window.gdSetMap || '" . GeoDir_Maps::active_map() . "';", 'before' );
 		wp_add_inline_script( 'geodir-admin-script', "var ajaxurl = '" . admin_url( 'admin-ajax.php' ) . "';", 'before' );
 

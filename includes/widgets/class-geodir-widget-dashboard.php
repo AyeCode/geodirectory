@@ -79,7 +79,7 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 		if ( is_user_logged_in() ) {
 
 
-			echo "<div class='geodir-dashbaord'>";
+			echo "<div class='geodir-dashboard'>";
 
 			$this->dashboard_output( $options );
 

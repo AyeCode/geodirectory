@@ -1355,17 +1355,19 @@ function geodir_get_php_arg_separator_output() {
  */
 function geodir_rgb_from_hex( $color ) {
     $color = str_replace( '#', '', $color );
-	
+
     // Convert shorthand colors to full format, e.g. "FFF" -> "FFFFFF"
     $color = preg_replace( '~^(.)(.)(.)$~', '$1$1$2$2$3$3', $color );
-	if ( empty( $color ) ) {
-		return NULL;
-	}
+    if ( empty( $color ) ) {
+        return NULL;
+    }
+
+    $color = str_split( $color );
 
     $rgb      = array();
-    $rgb['R'] = hexdec( $color{0}.$color{1} );
-    $rgb['G'] = hexdec( $color{2}.$color{3} );
-    $rgb['B'] = hexdec( $color{4}.$color{5} );
+    $rgb['R'] = hexdec( $color[0] . $color[1] );
+    $rgb['G'] = hexdec( $color[2] . $color[3] );
+    $rgb['B'] = hexdec( $color[4] . $color[5] );
 
     return $rgb;
 }
@@ -1580,16 +1582,14 @@ function geodir_array_splice_assoc( $input, $offset, $length, $replacement ) {
  *
  * @return array
  */
-function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ){
-	// check for cache
-	$cache = wp_cache_get( "gd_category_options_".$post_type.":".$hide_empty, 'gd_category_options' );
-	if($cache){
-		return $cache;
+function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ) {
+	$cache_key = 'gd_category_options_' . $post_type . ':' . $hide_empty;
+	$options = wp_cache_get( $cache_key, 'gd_category_options' );
+
+	if ( ! empty( $options ) ) {
+		return $options;
 	}
 
-	$options    = array(
-		'0' => __( 'All', 'geodirectory' )
-	);
 	$post_types = geodir_get_posttypes();
 
 	if ( ! in_array( $post_type, $post_types ) ) {
@@ -1598,14 +1598,17 @@ function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ){
 
 	$terms = get_terms( array( 'taxonomy' => $post_type . 'category', 'orderby' => 'count', 'order' => 'DESC', 'hide_empty' => $hide_empty ) );
 
+	$options = array(
+		'0' => __( 'All', 'geodirectory' )
+	);
+
 	if ( ! is_wp_error( $terms ) ) {
 		foreach ( $terms as $term ) {
-			$options[ $term->term_id ] = geodir_utf8_ucfirst( $term->name );
+			$options[ $term->term_id ] = $term->name;
 		}
-	}
 
-	// set cache
-	wp_cache_set( "gd_category_options_".$post_type.":".$hide_empty, $options, 'gd_category_options' );
+		wp_cache_set( $cache_key, $options, 'gd_category_options' );
+	}
 
 	return $options;
 }

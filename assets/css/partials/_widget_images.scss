@@ -49,13 +49,13 @@
 
       a.geodir-lightbox-image{
 
-        .fa-search-plus{
+        i,svg.svg-inline--fa{
           display: none;
         }
 
         &:hover{
 
-          .fa-search-plus{
+          i,svg.svg-inline--fa{
             display: block;
             text-rendering: auto;
             -webkit-font-smoothing: antialiased;
@@ -69,7 +69,7 @@
             padding-bottom: 20%;
           }
 
-          i.fa-search-plus{
+          i{
             font-size: 30px;
           }
 
@@ -183,6 +183,9 @@
 .geodir-category-list-view{
   .geodir-image-container {
     ul.geodir-images {
+      li.geodir-active-slide{
+        z-index: 1 !important;
+      }
       &.geodir-gallery{
         li {
             display: none;
@@ -192,7 +195,6 @@
           }
         }
       }
-
     }
   }
 }

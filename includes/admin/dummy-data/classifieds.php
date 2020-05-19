@@ -812,7 +812,7 @@ $dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' po
 [gd_post_badge key='price' condition='is_not_empty'  badge='%%input%%' bg_color='#f70c0c' txt_color='#ffffff' css_class='gd-ab-bottom-right']
 [gd_post_badge key='seller_type' condition='is_equal' search='Trade' icon_class='fas fa-user-tie' badge='Trade' bg_color='#46c40d' txt_color='#ffffff' list_hide='5' list_hide_secondary='3' css_class='gd-ab-bottom-left']
 [gd_post_badge key='seller_type' condition='is_equal' search='Private' icon_class='fas fa-user' badge='Private' bg_color='#00bf9f' txt_color='#ffffff' list_hide='5' list_hide_secondary='3' css_class='gd-ab-bottom-left']
-[gd_post_images type='image' ajax_load='true' link_to='post' show_logo='true']
+[gd_post_images type='image' ajax_load='true' link_to='post' types='logo,post_images']
 [gd_archive_item_section type='close' position='left']
 [gd_archive_item_section type='open' position='right']
 [gd_post_title tag='h2']

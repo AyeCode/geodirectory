@@ -267,6 +267,11 @@ class GeoDir_Template_Loader {
         $search_files[] = 'geodirectory.php';
         $search_files[] = 'page.php';
 
+        // Some themes like Twenty Twenty does not contain optional file page.php.
+        if ( ( empty( $default_file ) || $default_file === ' ' ) && isset( $_REQUEST['geodir_search'] ) && is_search() && ! get_query_template( 'page' ) && get_index_template() ) {
+            $search_files[] = 'index.php';
+        }
+
         return array_unique( $search_files );
     }
 
@@ -549,7 +554,7 @@ class GeoDir_Template_Loader {
      * @since 2.0.0
      */
     public static function disable_theme_featured_output(){
-        if(geodir_is_singular() && geodir_get_option('details_disable_featured',true) ){
+        if(geodir_is_singular() && geodir_get_option('details_disable_featured',false) ){
             add_filter( "get_post_metadata", array(__CLASS__,'filter_thumbnail_id'), 10, 4 );
         }
     }
@@ -579,31 +584,37 @@ class GeoDir_Template_Loader {
 
         return $metadata;
     }
-	
-	/**
+
+    /**
      * Setup the map popup content.
      *
      * @since 2.0.0
+     * @since 2.0.0.90 Added a post type as template part name.
+     *
+     * @global object $gd_post GeoDirectory post object.
+     *
      * @return string The filtered content.
      */
-    public static function map_popup_template_content(){
-		ob_start();
+    public static function map_popup_template_content() {
+        global $gd_post;
 
-		geodir_get_template_part( 'map', 'popup' );
+        ob_start();
 
-		$content = ob_get_clean();
+        geodir_get_template_part( 'map-popup', $gd_post->post_type );
 
-		if ( ! empty( $content ) ) {
-			// run the shortcodes on the content
-			$content = do_shortcode( $content );
+        $content = ob_get_clean();
 
-            // run block content if its available
-            if(function_exists('do_blocks')){
+        if ( ! empty( $content ) ) {
+            // Run the shortcodes on the content
+            $content = do_shortcode( $content );
+
+            // Run block content if its available
+            if ( function_exists( 'do_blocks' ) ) {
                 $content = do_blocks( $content );
             }
-		}
+        }
 
-		return $content;
+        return $content;
     }
 
     /**

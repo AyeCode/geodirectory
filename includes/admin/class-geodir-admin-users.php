@@ -69,7 +69,7 @@ class GeoDir_Admin_Users {
 		$output = '';
 		$user_listing = geodir_user_post_listing_count( $user_id, true );
 		if(empty($user_listing)){
-			$output .= __('No listings','goedirectory');
+			$output .= __('No listings','geodirectory');
 		}else{
 			$post_types = geodir_get_posttypes( 'array' );
 			foreach($user_listing as $post_type => $count){

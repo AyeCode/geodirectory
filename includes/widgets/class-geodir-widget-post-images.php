@@ -175,13 +175,20 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => true
 				),
-				'show_logo'  => array(
-					'title' => __('Show logo (deprecated):', 'geodirectory'),
-					'desc' => __('(deprecated, use `types` below) Show the listing logo first if uploaded.', 'geodirectory'),
-					'type' => 'checkbox',
+				'link_screenshot_to'  => array(
+					'title' => __('Link screenshots to:', 'geodirectory'),
+					'desc' => __('Link screenshot images to where.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"post" => __('Post', 'geodirectory'),
+						"lightbox" => __('Lightbox image', 'geodirectory'),
+						"lightbox_url" => __('Lightbox iframe URL', 'geodirectory'),
+						"url" => __('URL (new window)', 'geodirectory'),
+						"url_same" => __('URL (same window)', 'geodirectory'),
+					),
+					'default'  => '',
 					'desc_tip' => true,
-					'value'  => '1',
-					'default'  => 0,
 					'advanced' => true
 				),
 				'types'  => array(
@@ -191,7 +198,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'value'  => '',
 					'default'  => '',
-					'placeholder'  => 'post_images,logo',
+					'placeholder'  => 'post_images,logo,comment_images,website_screenshot',
 					'advanced' => true
 				),
 				'fallback_types'  => array(
@@ -259,13 +266,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			)
 		);
 
-		// maybe show logo options
-//		global $wpdb;
-//		if($wpdb->get_var("SELECT id FROM ".GEODIR_CUSTOM_FIELDS_TABLE." WHERE htmlvar_name='logo' LIMIT 1")){
-//
-//		}
-
-
 		parent::__construct( $options );
 	}
 
@@ -318,8 +318,9 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'limit'     => '',
 			'limit_show'     => '',
 			'link_to'     => '',
+			'link_screenshot_to'     => '',
 			'image_size'     => 'medium',
-			'show_logo'     => 'false',
+			'show_logo'     => '0',
 			'cover'   => '', // image cover type
 			'types'   => '', // types to show, post_images,comment_images,logo
 			'fallback_types'   => 'logo,cat_default,cpt_default,listing_default,website_screenshot', //logo,cat_default,cpt_default,listing_default
@@ -355,10 +356,9 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$options['fallback_types'] = array('logo','cat_default','cpt_default','listing_default');
 		}
 
-//		$options['types'] = array("logo","comment_images","post_images"); // @todo remove this line after testing
-
-
 		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types'],$options['fallback_types']);
+
+//		print_r($post_images );
 
 		// make it just a image if only one
 		if($options['type']=='slider' && count($post_images) == 1 && $options['limit_show']){
@@ -427,6 +427,12 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					<ul class="<?php echo esc_attr($ul_class );?> geodir-images clearfix"><?php
 						$image_count = 0;
 						foreach($post_images as $image){
+
+							// reset temp tags
+							$link_tag_open_ss = '';
+							$link_tag_close_ss = '';
+
+
 							$limit_show = !empty($options['limit_show']) && $image_count >= $options['limit_show'] ? "style='display:none;'" : '';
 							echo "<li $limit_show >";
 
@@ -443,6 +449,32 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 								$link = geodir_get_image_src($image, 'large');
 							}
 
+							// check if screenshot link is different
+							if($options['link_screenshot_to']!='' && $options['link_screenshot_to']!=$options['link_to'] && !$image->ID && stripos(strrev($image->type), "tohsneercs_") === 0){
+								if($options['link_screenshot_to']=='post'){
+									$link = get_the_permalink($post->ID);
+									$link_tag_open_ss = "<a href='%s'>";
+									$link_tag_close_ss = "</a>";
+								}elseif($options['link_screenshot_to']=='lightbox'){
+									$link = geodir_get_image_src($image, 'large');
+									$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image' data-lity>";
+									$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
+								}elseif($options['link_screenshot_to']=='lightbox_url'){
+									$field_key = str_replace("_screenshot","",$image->type);
+									$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
+									$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image' data-lity>";
+									$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
+								}elseif($options['link_screenshot_to']=='url' || $options['link_screenshot_to']=='url_same'){
+									$field_key = str_replace("_screenshot","",$image->type);
+									$target = $options['link_screenshot_to']=='url' ? "target='_blank'" : '';
+									$link_icon = $options['link_screenshot_to']=='url' ? "fas fa-external-link-alt" : 'fas fa-link';
+									$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
+									$link_tag_open_ss = "<a href='%s' $target class='geodir-lightbox-image' rel='nofollow noopener noreferrer'>";
+									$link_tag_close_ss = "<i class=\"$link_icon\" aria-hidden=\"true\"></i></a>";
+								}
+
+							}
+
 							// ajaxify images
 							if($options['type']=='slider' && $options['ajax_load'] && $image_count){
 								$img_tag = geodir_image_tag_ajaxify($img_tag,$options['type']!='slider');
@@ -450,29 +482,37 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 								$img_tag = geodir_image_tag_ajaxify($img_tag);
 							}
 							// output image
-							echo $link_tag_open ? sprintf($link_tag_open,esc_url($link)) : '';
+							if($link_tag_open_ss){
+								echo $link_tag_open_ss ? sprintf($link_tag_open_ss,esc_url($link)) : '';
+							}else{
+								echo $link_tag_open ? sprintf($link_tag_open,esc_url($link)) : '';
+							}
 							echo $img_tag;
-							echo $link_tag_close;
+							if($link_tag_close_ss){
+								echo $link_tag_close_ss;
+							}else{
+								echo $link_tag_close;
+							}
 
-
+							$flex_caption = '';
 							if($options['type']=='slider' && $options['show_title'] && !empty($image->title)){
-								
-								$flex_caption = esc_attr( $image->title );
 
-								//Maybe add a caption to the title
-								
-								/**
-        						 * Filters whether or not the caption should be displayed.
-        						 *
-        						 * @since   2.0.0.63
-        						 * @package GeoDirectory
-        						 */
-        						$show_caption = apply_filters( 'geodir_post_images_show_caption', $options['show_caption'] );
+								$flex_caption = esc_attr( stripslashes_deep( $image->title ) );
+							}
+							//Maybe add a caption to the title
+							
+							/**
+							 * Filters whether or not the caption should be displayed.
+							 *
+							 * @since   2.0.0.63
+							 * @package GeoDirectory
+							 */
+							$show_caption = apply_filters( 'geodir_post_images_show_caption', $options['show_caption'] );
 
-								if( $show_caption && !empty( $image->caption ) ) {
-									$flex_caption .= "<small>".esc_attr( $image->caption )."</small>";
-								}
-
+							if( $show_caption && !empty( $image->caption ) ) {
+								$flex_caption .= "<small>".esc_attr( stripslashes_deep( $image->caption ) )."</small>";
+							}
+							if( !empty( $flex_caption ) ){
 								echo '<p class="flex-caption gd-flex-caption">'.$flex_caption.'</p>';
 							}
 							echo "</li>";
@@ -526,21 +566,20 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 * 
 	 * @return array
 	 */
-	public static function get_image_sizes(){
-		$image_sizes = array(''=>'default');
+	public static function get_image_sizes() {
+		$image_sizes = array( '' => 'default' );
+
 		$available = get_intermediate_image_sizes();
 
-		if(!empty($available)){
-			foreach($available as $size){
-				$image_sizes[$size] = $size;
+		if ( ! empty( $available ) ) {
+			foreach( $available as $size ) {
+				$image_sizes[ $size ] = $size;
 			}
 		}
 
 		$image_sizes['full'] = 'full';
 
-
 		return $image_sizes;
 	}
 
 }
-

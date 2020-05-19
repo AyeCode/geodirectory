@@ -84,7 +84,7 @@ class GeoDir_Defaults {
 	public static function page_archive_item_content($no_filter = false){
 		$content = "[gd_archive_item_section type='open' position='left']
 [gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-top-left-angle gd-badge-shadow']
-[gd_post_images type='image' ajax_load='true' link_to='post' show_logo='true']
+[gd_post_images type='image' ajax_load='true' link_to='post' types='logo,post_images']
 [gd_archive_item_section type='close' position='left']
 [gd_archive_item_section type='open' position='right']
 [gd_post_title tag='h2']
@@ -538,7 +538,7 @@ Thank You.","geodirectory"
 	 * @return string
 	 */
 	public static function seo_search_meta_title(){
-		return __("%%pt_plural%% search results for %%search_term%%, Near %%search_near%% %%sep%% %%sitename%%","geodirectory");
+		return __("%%pt_plural%% search results for %%search_term%% %%search_near%% %%sep%% %%sitename%%","geodirectory");
 	}
 
 	/**
@@ -547,7 +547,7 @@ Thank You.","geodirectory"
 	 * @return string
 	 */
 	public static function seo_search_meta_description(){
-		return __("%%pt_plural%% search results for %%search_term%%, Near %%search_near%%","geodirectory");
+		return __("%%pt_plural%% search results for %%search_term%% %%search_near%%","geodirectory");
 	}
 
 	/**

@@ -18,17 +18,23 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function geodir_get_screen_ids() {
-
-	$geodir_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
-
 	$screen_ids = array(
-		'toplevel_page_' . $geodir_screen_id,
+		'toplevel_page_geodirectory',
 		'geodirectory_page_gd-settings',
 		'geodirectory_page_gd-status',
 		'geodirectory_page_gd-addons',
 		'comment'
 	);
 
+	// Check for translated screen id. 
+	$geodir_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
+
+	if ( $geodir_screen_id != 'geodirectory' ) {
+		$screen_ids[] = 'toplevel_page_' . $geodir_screen_id;
+		$screen_ids[] = $geodir_screen_id . '_page_gd-settings';
+		$screen_ids[] = $geodir_screen_id . '_page_gd-status';
+		$screen_ids[] = $geodir_screen_id . '_page_gd-addons';
+	}
 
 	// Add the CPT screens
 	$post_types = geodir_get_posttypes( 'names' );
@@ -476,6 +482,15 @@ add_action( 'geodir_update_marker_address', 'geodir_setup_timezone_api', 1, 1 );
  */
 function geodir_admin_body_class_active_map($class = '') {
 	$class .= ' gd-map-' . GeoDir_Maps::active_map();
+
+	// Add original geodirectory page class when geodirectory screen is translated.
+	if ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], array( 'gd-settings', 'gd-status', 'gd-addons' ) ) ) {
+		$geodir_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
+
+		if ( $geodir_screen_id != 'geodirectory' ) {
+			$class .= ' geodirectory_page_' . sanitize_text_field( $_GET['page'] );
+		}
+	}
 
 	return $class;
 }

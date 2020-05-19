@@ -316,7 +316,7 @@ function geodir_cfi_url($html,$cf){
 
         // validation message
         if(isset($cf['validation_msg']) && $cf['validation_msg']){
-            $validation_msg = $cf['validation_msg'];
+            $validation_msg = __( $cf['validation_msg'], 'geodirectory' );
         }else{$validation_msg = __('Please enter a valid URL including http://', 'geodirectory');}
         ?>
 
@@ -332,7 +332,7 @@ function geodir_cfi_url($html,$cf){
                    value="<?php echo esc_attr(stripslashes($value));?>" type="url" class="geodir_textfield"
                    oninvalid="setCustomValidity('<?php echo esc_attr($validation_msg); ?>')"
                    onchange="try{setCustomValidity('')}catch(e){}"
-                <?php echo $validation;echo $validation_msg;?>
+                <?php echo $validation;?>
             />
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
@@ -604,21 +604,21 @@ function geodir_cfi_select($html,$cf){
 
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
-
+		$frontend_title = __($cf['frontend_title'], 'geodirectory');
+		$placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : '';
         ?>
         <div id="<?php echo $cf['name'];?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
+                <?php echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <?php
             $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
             $select_options = '';
             if (!empty($option_values_arr)) {
-                foreach ($option_values_arr as $option_row) {
-                    if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
+                foreach ($option_values_arr as $key => $option_row) {
+					if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
                         $option_label = isset($option_row['label']) ? $option_row['label'] : '';
 
                         $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
@@ -629,12 +629,20 @@ function geodir_cfi_select($html,$cf){
 
                         $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
                     }
+
+					if ( $key == 0 && empty( $option_row['optgroup'] ) && ! empty( $option_label ) && isset( $option_row['value'] ) && $option_row['value'] === '' ) {
+						$placeholder = $option_label;
+					}
                 }
             }
+
+			if ( empty( $placeholder ) ) {
+				$placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), $frontend_title );
+			}
             ?>
             <select field_type="<?php echo $cf['type'];?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
                     class="geodir_textfield textfield_x geodir-select"
-                    data-placeholder="<?php echo __('Choose', 'geodirectory') . ' ' . $frontend_title . '&hellip;';?>"
+                    data-placeholder="<?php echo esc_attr( $placeholder ); ?>"
                     option-ajaxchosen="false" data-allow_clear="true"><?php echo $select_options;?></select>
             <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
             <?php if ($cf['is_required']) { ?>
@@ -682,8 +690,10 @@ function geodir_cfi_multiselect($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
+        $frontend_title = __( $cf['frontend_title'], 'geodirectory' );
+        $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), $frontend_title );
         $extra_fields = !empty($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : NULL;
-		$multi_display = !empty($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
+        $multi_display = !empty($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
         ?>
         <div id="<?php echo $cf['name']; ?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
@@ -697,7 +707,7 @@ function geodir_cfi_multiselect($html,$cf){
             <div class="geodir_multiselect_list">
                 <select field_type="<?php echo $cf['type']; ?>" name="<?php echo $cf['name']; ?>[]" id="<?php echo $cf['name']; ?>"
                         multiple="multiple" class="geodir_textfield textfield_x geodir-select"
-                        data-placeholder="<?php _e('Select', 'geodirectory'); ?>"
+                        data-placeholder="<?php echo esc_attr( $placeholder ); ?>"
                         option-ajaxchosen="false" data-allow_clear="true">
                     <?php
                     } else {
@@ -866,15 +876,10 @@ function geodir_cfi_datepicker($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
-        $extra_fields = unserialize($cf['extra_fields']);
-        $name = $cf['name'];
-
-        if ($extra_fields['date_format'] == '')
-            $extra_fields['date_format'] = 'yy-mm-dd';
-
-        $date_format = $extra_fields['date_format'];
-        $jquery_date_format  = $date_format;
-
+		$name = $cf['name'];
+        $extra_fields = ! empty( $cf['extra_fields'] ) ? maybe_unserialize( $cf['extra_fields'] ) : NULL;
+        $date_format = ! empty( $extra_fields['date_format'] ) ? $extra_fields['date_format'] : 'yy-mm-dd';
+        $jquery_date_format = $date_format;
 
         // check if we need to change the format or not
         $date_format_len = strlen(str_replace(' ', '', $date_format));
@@ -897,19 +902,21 @@ function geodir_cfi_datepicker($html,$cf){
 
         ?>
         <script type="text/javascript">
-
-            jQuery(function () {
-
+            jQuery(function() {
                 jQuery("#<?php echo $cf['name'];?>_show").datepicker({
                     changeMonth: true,
                     changeYear: true,
                     dateFormat: "<?php echo $jquery_date_format;?>",
                     altFormat: "yy-mm-dd",
-                    altField: "#<?php echo $cf['name'];?>"<?php
-
-                    // check for default value date range
-                    if(!empty($extra_fields['date_range'])){
-                       echo  ',yearRange: "'.esc_attr($extra_fields['date_range']).'"';
+                    altField: "#<?php echo $cf['name'];?>",
+                    onClose: function(dateText, inst) {
+                        if(dateText == '') {
+                            jQuery(inst.settings["altField"]).val('');
+                        }
+                    }<?php
+                    // Check for default value date range
+                    if ( ! empty( $extra_fields['date_range'] ) ) {
+                       echo ',yearRange: "' . esc_attr( $extra_fields['date_range'] ) . '"';
                     }
                     /**
                      * Used to add extra option to datepicker per custom field.
@@ -917,16 +924,17 @@ function geodir_cfi_datepicker($html,$cf){
                      * @since 1.5.7
                      * @param string $name The custom field name.
                      */
-                    echo apply_filters("gd_datepicker_extra_{$name}",'');?>});
-
-
-
-            <?php if(!empty($value)){?>
+                    echo apply_filters( "gd_datepicker_extra_{$name}", '' ); ?>
+                });
+                <?php if ( ! empty( $value ) ) { ?>
                 jQuery("#<?php echo $name;?>_show").datepicker("setDate", '<?php echo $value;?>');
                 <?php } ?>
-
+                jQuery("input#<?php echo $name;?>_show").on('change', function(e) {
+                    if (!jQuery(this).val()) {
+                        jQuery("input#<?php echo $cf['name'];?>").val('');
+                    }
+                });
             });
-
         </script>
         <div id="<?php echo $name;?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
@@ -1032,13 +1040,16 @@ add_filter('geodir_custom_field_input_time','geodir_cfi_time',10,2);
 /**
  * Get the html input for the custom field: address
  *
+ * @global null|int $mapzoom Map zoom level.
+ *
  * @param string $html The html to be filtered.
  * @param array $cf The custom field array details.
  * @since 1.6.6
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cfi_address($html,$cf){
+function geodir_cfi_address( $html, $cf ) {
+    global $mapzoom;
 
     $html_var = $cf['htmlvar_name'];
 
@@ -1085,16 +1096,38 @@ function geodir_cfi_address($html,$cf){
         ($extra_fields['map_lable'] != '') ? $map_title = $extra_fields['map_lable'] : $map_title = geodir_ucwords('set address on map');
         ($extra_fields['mapview_lable'] != '') ? $mapview_title = $extra_fields['mapview_lable'] : $mapview_title = geodir_ucwords($prefix . ' mapview');
 
-
-       $street  = $gd_post->street;
-        $street2     = isset( $gd_post->street2 ) ? $gd_post->street2 : '';
+        $street  = $gd_post->street;
+        $street2 = isset( $gd_post->street2 ) ? $gd_post->street2 : '';
         $zip     = isset( $gd_post->zip ) ? $gd_post->zip : '';
-       $lat     = isset( $gd_post->latitude) ? $gd_post->latitude : '';
-       $lng     = isset( $gd_post->longitude) ? $gd_post->longitude : '';
-       $mapview = isset( $gd_post->mapview ) ? $gd_post->mapview : '';
-       $post_mapzoom = $mapzoom = isset( $gd_post->mapzoom ) ? $gd_post->mapzoom : '';
+        $lat     = isset( $gd_post->latitude) ? $gd_post->latitude : '';
+        $lng     = isset( $gd_post->longitude) ? $gd_post->longitude : '';
+        $mapview = isset( $gd_post->mapview ) ? $gd_post->mapview : '';
+        $post_mapzoom = isset( $gd_post->mapzoom ) ? $gd_post->mapzoom : '';
 
+        // Map zoom
+        if ( ! empty( $post_mapzoom ) ) {
+            $_mapzoom = absint( $post_mapzoom );
+        } elseif ( ! empty( $_REQUEST['mapzoom'] ) ) {
+            $_mapzoom = absint( $_REQUEST['mapzoom'] );
+        } else {
+            $_mapzoom = 0;
+        }
 
+        if ( ! empty( $_mapzoom ) && $_mapzoom > 0 && $_mapzoom < 21 ) {
+            $mapzoom = $_mapzoom;
+        } else {
+            $mapzoom = 12; // Default zoom
+        }geodir_error_log( $mapzoom, 'mapzoom', __FILE__, __LINE__ );
+
+        /**
+         * Filter add listing page map zoom.
+         *
+         * @since 2.0.0.94
+         *
+         * @param int $mapzoom Map zoom level.
+         * @param object $gd_post The GeoDirectory post object.
+         */
+        $mapzoom = apply_filters( 'geodir_add_listing_page_map_zoom', $mapzoom, $gd_post );
 
         $location = $geodirectory->location->get_default_location();
         if (empty($city)) $city = isset($location->city) ? $location->city : '';
@@ -1324,6 +1357,7 @@ function geodir_cfi_taxonomy($html,$cf){
         $is_admin = $cf['for_admin_use'];
         $required_msg = $cf['required_msg'];
         $taxonomy = $cf['post_type']."category";
+        $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Select Category', 'geodirectory' );
 
         if ($value == $cf['default']) {
             $value = '';
@@ -1367,7 +1401,6 @@ function geodir_cfi_taxonomy($html,$cf){
                         $post_cat = geodir_get_post_meta($_REQUEST['pid'], 'post_category', true);
                 }
 
-
                 $category_limit = ! empty( $package ) && isset( $package->category_limit ) ? absint( $package->category_limit ) : 0;
 				$category_limit = (int) apply_filters( 'geodir_cfi_post_categories_limit', $category_limit, $post, $package );
 
@@ -1392,9 +1425,7 @@ function geodir_cfi_taxonomy($html,$cf){
 						} else {
 							$default_field = 'data-cselect="default_category"';
 						}
-
-                        //echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[' . $taxonomy . '][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
-                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '" ' . $default_field . '>';
+						echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . '>';
 
 
                         if ($cat_display == 'select')
@@ -1468,6 +1499,7 @@ function geodir_cfi_categories($html,$cf){
         $is_admin = $cf['for_admin_use'];
         $required_msg = $cf['required_msg'];
         $taxonomy = $cf['post_type']."category";
+        $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Select Category', 'geodirectory' );
 
         if ($value == $cf['default']) {
             $value = '';
@@ -1534,9 +1566,7 @@ function geodir_cfi_categories($html,$cf){
 							$default_field = 'data-cselect="default_category"';
 						}
 
-                       // echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="post_category[]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '">';
-                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . __('Select Category', 'geodirectory') . '" ' . $default_field . ' aria-label="' . esc_attr__('Select Category', 'geodirectory') . '">';
-
+                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . ' aria-label="' . esc_attr( $placeholder ) . '">';
 
                         if ($cat_display == 'select')
                             echo '<option value="">' . __('Select Category', 'geodirectory') . '</option>';
@@ -1603,6 +1633,7 @@ function geodir_cfi_tags( $html, $cf ) {
 
         $value = geodir_get_cf_value( $cf );
 
+        $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter tags separated by a comma ,', 'geodirectory' );
         $cf['option_values'] = "tag1,tag2";
 
         $post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
@@ -1641,10 +1672,9 @@ function geodir_cfi_tags( $html, $cf ) {
             <div class="geodir_multiselect_list">
                 <select field_type="<?php echo $cf['type']; ?>" name="tax_input[<?php echo wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"; ?>][]" id="<?php echo $cf['name']; ?>"
                         multiple="multiple" class="geodir_textfield textfield geodir-select-tags"
-                        data-placeholder="<?php _e('Enter tags separated by a comma ,', 'geodirectory'); ?>"
+                        data-placeholder="<?php echo esc_attr( $placeholder ); ?>"
                         >
                     <?php
-
                     // current tags
                     $current_tags_arr = geodir_string_values_to_options($value, true);
 
@@ -1724,10 +1754,16 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		$weekdays = geodir_get_weekdays();
 		$hours = array();
 		$display = 'none';
-		$timezone_string = trim( get_option('timezone_string') );
-		$gmt_offset = esc_attr( geodir_utc_offset_dst( $timezone_string ) );
+		$location_timezone = trim( geodir_get_option( 'default_location_timezone' ) );
+		if ( $location_timezone != '' ) {
+			$timezone_string = geodir_utc_offset( $location_timezone ); // Default location timezone.
+		} else {
+			$timezone_string = trim( get_option('timezone_string') ); // WordPress default timezone.
+		}
+		$default_offset = esc_attr( geodir_utc_offset_dst( $timezone_string, true ) );
+		$gmt_offset = $default_offset;
 
-        if ( ! empty( $value ) ) {
+		if ( ! empty( $value ) ) {
 			$display = '';
 			$value = stripslashes_deep( $value );
 			$periods = geodir_schema_to_array( $value );
@@ -1798,7 +1834,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 							<?php } ?>
 							<tr class="gd-tz-item">
 								<td colspan="4"><label form="<?php echo $htmlvar_name; ?>_f_timezone"><?php _e( 'Timezone offset from UTC (not including daylight savings time This is set automatically when address is set)', 'geodirectory' ); ?></label> 
-                                    <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( geodir_utc_offset_dst( $timezone_string ) ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN">
+                                    <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( $default_offset ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN">
                                 </td>
                             </tr>
 						</tbody>
@@ -1858,17 +1894,8 @@ function geodir_cfi_files( $html, $cf ) {
         ob_start(); // Start buffering;
 
         $extra_fields = maybe_unserialize( $cf['extra_fields'] );
-        $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? maybe_unserialize( $extra_fields['file_limit'] ) : '';
-
-        if ( $file_limit === '' ) {
-            if ( $html_var == 'post_images' ) {
-                $file_limit = '0';
-            } else {
-                $file_limit = '1';
-            }
-        }
-
-		$file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
+        $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? absint( $extra_fields['file_limit'] ) : 0;
+        $file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
 
         $allowed_file_types = isset( $extra_fields['gd_file_types'] ) ? maybe_unserialize( $extra_fields['gd_file_types'] ) : array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp');
         $display_file_types = $allowed_file_types != '' ? '.' . implode( ", .", $allowed_file_types ) : '';
@@ -1878,8 +1905,6 @@ function geodir_cfi_files( $html, $cf ) {
 
         // adjust values here
         $id = $cf['htmlvar_name']; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
-
-        $multiple = true; // allow multiple files upload
 
         $revision_id = isset( $gd_post->post_parent ) && $gd_post->post_parent ? $gd_post->ID : '';
         $post_id = isset( $gd_post->post_parent ) && $gd_post->post_parent ? $gd_post->post_parent : $gd_post->ID;
@@ -1898,7 +1923,8 @@ function geodir_cfi_files( $html, $cf ) {
             $total_files = 0;
         }
 
-        $image_limit = $file_limit;
+        $image_limit = absint( $file_limit );
+        $multiple = $image_limit == 1 ? false : true; // Allow multiple files upload
         $show_image_input_box = true;
         /**
          * Filter to be able to show/hide the image upload section of the add listing form.
@@ -1923,12 +1949,7 @@ function geodir_cfi_files( $html, $cf ) {
                     } ?>
                 </label>
                 <span class="geodir_message_note gd_images_desc"><?php esc_attr_e( $cf['desc'], 'geodirectory' ); ?></span>
-
-                <?php if ( $cf['is_required'] ) { ?>
-                    <span class="geodir_message_error"><?php _e( $cf['required_msg'], 'geodirectory' ); ?></span>
-                <?php }
-
-
+                <?php
                 // params for file upload
                 $is_required = $cf['is_required'];
 
@@ -1944,7 +1965,7 @@ function geodir_cfi_files( $html, $cf ) {
                     'multiple'            => $multiple,
                 ) );
 
-                if ($cf['is_required']) { ?>
+                if ( $is_required ) { ?>
                     <span class="geodir_message_error"><?php esc_attr_e($cf['required_msg'], 'geodirectory'); ?></span>
                 <?php } ?>
             </div>

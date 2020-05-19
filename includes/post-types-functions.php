@@ -366,7 +366,7 @@ function geodir_posttype_link($link, $post_type) {
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @param bool $echo Prints the label when set to true.
- * @param bool $translate Returns translated label if True. DefauT false.
+ * @param bool $translate Returns translated label if True. Default false.
  * @return void|string Label.
  */
 function get_post_type_singular_label($post_type, $echo = false, $translate = false) {
@@ -391,7 +391,7 @@ function get_post_type_singular_label($post_type, $echo = false, $translate = fa
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @param bool $echo Prints the label when set to true.
- * @param bool $translate Returns translated label if True. DefauT false.
+ * @param bool $translate Returns translated label if True. Default false.
  * @return void|string Label.
  */
 function get_post_type_plural_label($post_type, $echo = false, $translate = false) {
@@ -532,7 +532,7 @@ function geodir_get_current_posttype() {
     if (is_tax())
         $geodir_post_type = geodir_get_taxonomy_posttype();
 
-    // Retrive post type for map marker html ajax request on preview page.
+    // Retrieve post type for map marker html ajax request on preview page.
     if (empty($geodir_post_type) && defined('DOING_AJAX') && !empty($post)) {
         if (!empty($post->post_type)) {
             $geodir_post_type = $post->post_type;
@@ -785,4 +785,85 @@ function geodir_cpt_permalink_rewrite_slug( $post_type, $post_type_obj = NULL ) 
 	$slug = GeoDir_Post_types::get_rewrite_slug( $post_type, $post_type_obj );
 
 	return apply_filters( 'geodir_cpt_permalink_rewrite_slug', $slug, $post_type, $post_type_obj );
+}
+
+/**
+ * Add _search_title column to detail table.
+ *
+ * @param string $post_type The post type.
+ * @return void.
+ */
+function geodir_check_column_search_title( $post_type ) {
+	$table = geodir_db_cpt_table( $post_type );
+
+	return geodir_add_column_if_not_exist( $table, '_search_title', "text NOT NULL AFTER `post_title`" );
+}
+
+/**
+ * Generate keywords from post title.
+ *
+ * @param bool $force True to copy all search titles. 
+ *                    False to copy only empty search titles. Default False.
+ * @return int No. of keywords generated.
+ */
+function geodir_generate_title_keywords( $force = false ) {
+	$post_types = geodir_get_posttypes();
+
+	$generated = 0;
+
+	// Add _search_title column in details table.
+	if ( ! empty( $post_types ) ) {
+		foreach ( $post_types as $post_type ) {
+			$generated += (int) geodir_cpt_generate_title_keywords( $post_type, $force );
+		}
+	}
+
+	return $generated;
+}
+
+/**
+ * Generate keywords from post title for post type.
+ *
+ * @param string $post_type The post type.
+ * @param bool $force True to copy all search titles. 
+ *                    False to copy only empty search titles. Default False.
+ * @return int No. of keywords generated.
+ */
+function geodir_cpt_generate_title_keywords( $post_type, $force = false ) {
+	global $wpdb;
+
+	// Check & add column _search_title. 
+	geodir_check_column_search_title( $post_type );
+
+	$table = geodir_db_cpt_table( $post_type );
+
+	// Blank existing search titles.
+	if ( $force ) {
+		$wpdb->query( "UPDATE `{$table}` SET _search_title = ''" );
+	}
+
+	$generated = 0;
+	$results = $wpdb->get_results( "SELECT post_id, post_title, _search_title FROM `{$table}` WHERE `post_title` != '' AND `_search_title` = '' ORDER BY `post_id` ASC" );
+
+	if ( ! empty( $results ) ) {
+		foreach ( $results as $k => $row ) {
+			// Format the data query arguments.
+			$data = array(
+				'_search_title' => geodir_sanitize_keyword( $row->post_title, $post_type )
+			);
+
+			// Format the where query arguments.
+			$where = array(
+				'post_id' => $row->post_id
+			);
+
+			$result = $wpdb->update( $table, $data, $where, array( '%s' ), array( '%d' ) );
+
+			if ( $result ) {
+				$generated++;
+			}
+		}
+	}
+
+	return $generated;
 }

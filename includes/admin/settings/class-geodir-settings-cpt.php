@@ -281,6 +281,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 				array(
+					'name' => __( 'Disable comments', 'geodirectory' ),
+					'desc' => __( 'Disable comments for all posts for this post type.', 'geodirectory' ),
+					'id' => 'disable_comments',
+					'type' => 'checkbox',
+					'std' => '0',
+					'advanced' => true,
+					'value' => ( isset( $post_type_values['disable_comments'] ) ? $post_type_values['disable_comments'] : 0 )
+				),
+
+				array(
 					'name' => __( 'Disable ratings', 'geodirectory' ),
 					'desc' => __( 'Disable review stars without disabling comments.', 'geodirectory' ),
 					'id'   => 'disable_reviews',
@@ -288,6 +298,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'std'  => '0',
 					'advanced' => true,
 					'value'	   => $post_type_values['disable_reviews']
+				),
+
+				array(
+					'name' => __( 'Single review', 'geodirectory' ),
+					'desc' => __( 'Restrict user to leave more than one review per post.', 'geodirectory' ),
+					'id' => 'single_review',
+					'type' => 'checkbox',
+					'std' => '0',
+					'advanced' => true,
+					'value' => ( isset( $post_type_values['single_review'] ) && $post_type_values['single_review'] ? absint( $post_type_values['single_review'] ) : 0 )
 				),
 
 				array(
@@ -486,7 +506,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'advanced' => true,
 					'value'	   => $post_type_values['description']
 				),
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_description' ),
 
 				array(
 					'title'    => __( 'SEO Overrides', 'geodirectory' ),
@@ -528,7 +548,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 				// Page template
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_page' ),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
 
 				array(
 					'title'    => __( 'Template Page Settings', 'geodirectory' ),
@@ -588,7 +608,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_page' ),
 
 
 			) );
@@ -671,6 +691,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output = array();
 
 			$post_types = geodir_get_option( 'post_types', array() );
+			$raw = stripslashes_deep( $raw );
 			$post_type = isset($raw['new_post_type']) && $raw['new_post_type'] ? str_replace("-","_",sanitize_key($raw['new_post_type'])) : self::$post_type;
 			$name = isset($raw['name']) && $raw['name'] ? sanitize_text_field($raw['name']) : null;
 			$singular_name = isset($raw['singular_name']) && $raw['singular_name'] ? sanitize_text_field($raw['singular_name']) : null;
@@ -750,7 +771,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['listing_order'] = isset($raw['order']) && $raw['order'] ? absint($raw['order']) : 0;
 
 			// disable features
+			$output[$post_type]['disable_comments'] = isset($raw['disable_comments']) && $raw['disable_comments'] ? absint($raw['disable_comments']) : 0;
 			$output[$post_type]['disable_reviews'] = isset($raw['disable_reviews']) && $raw['disable_reviews'] ? absint($raw['disable_reviews']) : 0;
+			$output[$post_type]['single_review'] = isset( $raw['single_review'] ) && $raw['single_review'] ? absint( $raw['single_review'] ) : 0;
 			$output[$post_type]['disable_favorites'] = isset($raw['disable_favorites']) && $raw['disable_favorites'] ? absint($raw['disable_favorites']) : 0;
 			$output[$post_type]['disable_frontend_add'] = isset($raw['disable_frontend_add']) && $raw['disable_frontend_add'] ? absint($raw['disable_frontend_add']) : 0;
 

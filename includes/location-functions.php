@@ -636,7 +636,7 @@ function geodir_get_gps_from_address( $address = array(), $wp_error = false ) {
 			if ( is_wp_error( $_gps ) ) {
 				return $_gps;
 			} else {
-				return new WP_Error( 'geodir-gps-from-address', esc_attr__( 'Fail to retrieve GPS data from a address using API.', 'geodirectory' ) );
+				return new WP_Error( 'geodir-gps-from-address', esc_attr__( 'Failed to retrieve GPS data from a address using API.', 'geodirectory' ) );
 			}
 		} else {
 			return NULL;

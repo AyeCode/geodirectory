@@ -32,6 +32,9 @@ class GeoDir_Admin_Install {
 		),
 		'2.0.0.64' => array(
 			'geodir_upgrade_20064',
+		),
+		'2.0.0.82' => array(
+			'geodir_upgrade_20082',
 		)
 	);
 
@@ -52,6 +55,9 @@ class GeoDir_Admin_Install {
 		//add_action( 'geodir_plugin_background_installer', array( __CLASS__, 'background_installer' ), 10, 2 );
 
 		add_filter('upgrader_package_options',array( __CLASS__, 'maybe_downgrade_v1'));
+
+		// schedule rewrite rules
+		add_action( 'geodirectory_installed', array( __CLASS__, 'schedule_rewrite_rules' ), 99 );
 	}
 
 	/**
@@ -1089,19 +1095,20 @@ class GeoDir_Admin_Install {
 	/**
 	 * Get the Custom Post Type database default fields.
 	 *
+	 * @since 2.0.0
+	 * @since 2.0.0.82 Added _search_title column.
+	 *
 	 * @param bool $cpt CPT parameters.
 	 * @param string $post_type The post type.
-	 * @since 2.0.0
-	 *
 	 * @return array The array of default fields.
 	 */
-	public static function db_cpt_default_columns($cpt = array(),$post_type = ''){
-
+	public static function db_cpt_default_columns( $cpt = array(), $post_type = '' ) {
 		$columns = array();
 
 		// Standard fields
 		$columns['post_id'] = "post_id int(11) NOT NULL";
 		$columns['post_title'] = "post_title text NULL DEFAULT NULL";
+		$columns['_search_title'] = "_search_title text NOT NULL";
 		$columns['post_status'] = "post_status varchar(20) NULL DEFAULT NULL";
 		$columns['post_tags'] = "post_tags text NULL DEFAULT NULL";
 		$columns['post_category'] = "post_category varchar(254) NULL DEFAULT NULL";
@@ -1113,21 +1120,20 @@ class GeoDir_Admin_Install {
 		$columns['rating_count'] = "rating_count int(11) DEFAULT '0'";
 
 		// Location fields
-		if(!isset($cpt['disable_location']) || !$cpt['disable_location']){
+		if ( ! isset( $cpt['disable_location'] ) || ! $cpt['disable_location'] ) {
 			$columns['street'] = "street VARCHAR( 254 ) NULL";
 			$columns['street2'] = "street2 VARCHAR( 254 ) NULL";
 			$columns['city'] = "city VARCHAR( 50 ) NULL";
 			$columns['region'] = "region VARCHAR( 50 ) NULL";
 			$columns['country'] = "country VARCHAR( 50 ) NULL";
-			$columns['zip'] = "zip VARCHAR( 20 ) NULL";
+			$columns['zip'] = "zip VARCHAR( 50 ) NULL";
 			$columns['latitude'] = "latitude VARCHAR( 22 ) NULL";
 			$columns['longitude'] = "longitude VARCHAR( 22 ) NULL";
 			$columns['mapview'] = "mapview VARCHAR( 15 ) NULL";
 			$columns['mapzoom'] = "mapzoom VARCHAR( 3 ) NULL";
 		}
 
-
-		return apply_filters('geodir_db_cpt_default_columns',$columns,$cpt,$post_type);
+		return apply_filters( 'geodir_db_cpt_default_columns', $columns, $cpt, $post_type );
 	}
 
 	/**
@@ -1180,6 +1186,20 @@ class GeoDir_Admin_Install {
 		if (get_option( 'geodirectory_version' ) && version_compare(get_option( 'geodirectory_version' ), '2.0.0.13-beta', '<=')) {
 			global $wpdb;
 			$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
+		}
+	}
+
+	/**
+	 * Check & schedule flush rewrite rules.
+	 *
+	 * @since 2.0.0.92
+	 *
+	 * @return void
+	 */
+	public static function schedule_rewrite_rules() {
+		// Rank Math schedule flush rewrite rules.
+		if ( class_exists( 'RankMath\\Helper' ) ) {
+			update_option( 'geodir_rank_math_flush_rewrite', 1 );
 		}
 	}
 }

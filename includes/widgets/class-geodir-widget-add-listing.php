@@ -90,6 +90,16 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                 'desc_tip' => true,
                 'advanced' => true
             ),
+            'mapzoom' => array(
+                'type'        => 'select',
+                'title'       => __( 'Map Zoom level:', 'geodirectory' ),
+                'desc'        => __( 'This is the zoom level of the map, `auto` is recommended.', 'geodirectory' ),
+                'options'     => array_merge( array( '0' => __( 'Auto', 'geodirectory' ) ), range( 1, 19 ) ),
+                'placeholder' => '',
+                'desc_tip'    => true,
+                'default'     => '0',
+                'advanced'    => true
+            ),
         );
     }
 
@@ -126,7 +136,8 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             'listing_type'  => $default_post_type,
             'login_msg'     => __( 'You must login to post.', 'geodirectory' ),
             'show_login'    => true,
-            'container'    => '',
+            'container'     => '',
+            'mapzoom'       => '0',
         );
 
         $params = wp_parse_args( $args,$defaults);

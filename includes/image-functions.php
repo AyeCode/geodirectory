@@ -81,13 +81,19 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
 
     $meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
     $img_src = geodir_get_image_src($image, $size);
-    $width = isset($meta['width']) ? $meta['width'] : '';
-    $height = isset($meta['height']) ? $meta['height'] : '';
+	$width = '';
+	$height = '';
+	if($size){
+		$width = isset($meta['sizes'][$size]['width']) ? $meta['sizes'][$size]['width'] : '';
+		$height = isset($meta['sizes'][$size]['height']) ? $meta['sizes'][$size]['height'] : '';
+	}
+    if(!$width){$width = isset($meta['width']) ? $meta['width'] : '';}
+	if(!$height){$height = isset($meta['height']) ? $meta['height'] : '';}
     $hwstring = image_hwstring($width, $height);
 
     $id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
-    $title = isset( $image->title ) && $image->title ? 'title="' .  esc_attr( wp_strip_all_tags( $image->title ) ) . '" ' : '';
-    $alt = isset( $image->caption ) && $image->caption ? esc_attr( wp_strip_all_tags($image->caption ) ) : 'image-'.$id;
+    $title = isset( $image->title ) && $image->title ? 'title="' . esc_attr( wp_strip_all_tags( stripslashes_deep( $image->title ) ) ) . '" ' : '';
+    $alt = isset( $image->caption ) && $image->caption ? esc_attr( wp_strip_all_tags( stripslashes_deep( $image->caption ) ) ) : '';
     $class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id;
 
     /**
@@ -243,13 +249,13 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 	    foreach($fallback_types as $fallback_type){
 		    $default_img_id = 0;
 		    //logo
-		    if($fallback_type == 'logo' && isset( $gd_post->logo ) && $gd_post->logo){
-			    $logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
-			    if ( $logo_image ) {
-				    $post_images = $logo_image;
-				    break;
-			    }
-		    }elseif($fallback_type == 'cat_default'){
+			if ( $fallback_type == 'logo' && isset( $gd_post->logo ) && $gd_post->logo && geodir_post_has_image_types( 'logo', $post_id ) ) {
+				$logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
+				if ( $logo_image ) {
+					$post_images = $logo_image;
+					break;
+				}
+			}elseif($fallback_type == 'cat_default'){
 			    $term_img = 0;
 			    // cat image
 			    if ( geodir_is_page('archive' ) ) {
@@ -344,8 +350,8 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 				    $image->ID = 0;
 				    $image->post_id = $default_image_post->ID;
 				    $image->user_id = 0;
-				    $image->title = !empty($default_image_post->post_title) ? $default_image_post->post_title : __( 'Placeholder image', 'geodirectory' );
-				    $image->caption = !empty($default_image_post->post_excerpt) ? $default_image_post->post_excerpt : '';
+				    $image->title = !empty($default_image_post->post_title) ? stripslashes_deep( $default_image_post->post_title ) : __( 'Placeholder image', 'geodirectory' );
+				    $image->caption = !empty($default_image_post->post_excerpt) ? stripslashes_deep( $default_image_post->post_excerpt ) : '';
 				    $image->file = str_replace( $wp_upload_dir['basedir'], '', get_attached_file( $default_img_id ) );
 				    $image->mime_type = $default_image_post->post_mime_type;
 				    $image->menu_order = 0;
