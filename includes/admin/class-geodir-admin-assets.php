@@ -87,10 +87,6 @@ class GeoDir_Admin_Assets {
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_style( 'geodir-pluplodar-css');
 			wp_enqueue_style( 'geodir-rtl-style');
-			// Fix select2 style conflict after Yoast 14.1.
-			wp_deregister_style( 'yoast-seo-select2' );
-			wp_deregister_style( 'yoast-seo-monorepo' );
-
 		}
 
 		if ( $page == 'geodirectory' ) {
