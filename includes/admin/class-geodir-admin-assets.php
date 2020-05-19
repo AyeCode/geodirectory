@@ -25,20 +25,20 @@ class GeoDir_Admin_Assets {
 	public function __construct() {
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'fix_script_conflicts' ), 99 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'fix_script_conflicts' ),99 );
 
 		// Localize jQuery Timepicker
 		add_action( 'admin_enqueue_scripts', 'geodir_localize_jquery_ui_timepicker', 1001 );
 	}
 
 	/**
-	 * Fix style/script conflict from thired party plugins/themes.
+	 * Fix style/script conflict from third party plugins/themes.
 	 */
 	public function fix_script_conflicts(){
 		// Fix select2 style conflict after Yoast 14.1.
-		if ( wp_script_is( 'geodir-admin-script', 'enqueued' ) && wp_style_is( 'yoast-seo-select2', 'enqueued' ) && wp_style_is( 'yoast-seo-monorepo', 'enqueued' ) ) {
-			wp_deregister_style( 'yoast-seo-select2' );
-			wp_deregister_style( 'yoast-seo-monorepo' );
+		if ( defined( 'WPSEO_VERSION' ) && wp_script_is( 'geodir-admin-script', 'enqueued' ) && wp_style_is( 'yoast-seo-select2', 'enqueued' ) && wp_style_is( 'yoast-seo-monorepo', 'enqueued' ) ) {
+			wp_dequeue_style( 'yoast-seo-select2' );
+			wp_dequeue_style( 'yoast-seo-monorepo' );
 		}
 	}
 
