@@ -213,9 +213,17 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 	 * @return mixed|string|void
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
-		global $post;
+		global $post, $gd_post;
 
-		$post_id 	= ! empty( $args['id'] ) ? $args['id'] : ( ! empty( $post->ID ) ? $post->ID : 0 );
+		if ( ! empty( $args['id'] ) ) {
+			$post_id = absint( $args['id'] );
+		} elseif ( ! empty( $post->ID ) ) {
+			$post_id = $post->ID;
+		} elseif ( ! empty( $gd_post->ID ) ) {
+			$post_id = $gd_post->ID;
+		} else {
+			$post_id = 0;
+		}
 		$post_type 	= $post_id ? get_post_type( $post_id ) : '';
 
 		$args['id'] = $post_id;
