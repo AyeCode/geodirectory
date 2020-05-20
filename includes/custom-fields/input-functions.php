@@ -1117,7 +1117,7 @@ function geodir_cfi_address( $html, $cf ) {
             $mapzoom = $_mapzoom;
         } else {
             $mapzoom = 12; // Default zoom
-        }geodir_error_log( $mapzoom, 'mapzoom', __FILE__, __LINE__ );
+        }
 
         /**
          * Filter add listing page map zoom.
