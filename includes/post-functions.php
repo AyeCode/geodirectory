@@ -1456,6 +1456,17 @@ function geodir_post_meta_advance_fields( $post_type = 'gd_place' ) {
 function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
 	$fields = array();
 
+	$fields['default_category'] = array(
+		'type' => 'custom',
+		'name' => 'default_category',
+		'htmlvar_name' => 'default_category',
+		'frontend_title' => __( 'Default Category', 'geodirectory' ),
+		'field_icon' => 'fas fa-folder-open',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
 	$fields['overall_rating'] = array(
 		'type' => 'custom',
 		'name' => 'overall_rating',
@@ -1531,6 +1542,17 @@ function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
 		'field_type_key' => '',
 		'css_class' => '',
 		'extra_fields' => '',
+	);
+
+	$fields['post_status'] = array(
+		'type' => 'custom',
+		'name' => 'post_status',
+		'htmlvar_name' => 'post_status',
+		'frontend_title' => __( 'Status', 'geodirectory' ),
+		'field_icon' => 'fas fa-play',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
 	);
 
 	/**

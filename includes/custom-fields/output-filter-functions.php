@@ -273,10 +273,10 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
                 return $value;
             }
 
-	        // round rating
-	        if($value && $htmlvar_name == 'overall_rating' ){
-		        $value = round($value, 1);
-	        }
+            // round rating
+            if ( $value && $htmlvar_name == 'overall_rating' ) {
+                $value = round( $value, 1 );
+            }
 
             if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'INT' || $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) && isset( $cf['extra_fields'] ) && $cf['extra_fields'] ) {
                 $extra_fields = stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) );
@@ -391,3 +391,153 @@ function geodir_custom_field_output_map_directions( $html, $location, $cf, $outp
 	return $html;
 }
 add_filter( 'geodir_custom_field_output_custom_var_map_directions', 'geodir_custom_field_output_map_directions', 10, 5 );
+
+/**
+ * Filter post status post meta field output.
+ *
+ * @since 2.0.0.94
+ *
+ * @param string $html The html to filter.
+ * @param string $location The location to output the html.
+ * @param array $cf The custom field array.
+ * @param string $output The output string that tells us what to output.
+ * @return string The html to output.
+ */
+function geodir_custom_field_output_post_status( $html, $location, $cf, $output, $_gd_post ) {
+	if ( ! empty( $_gd_post ) ) {
+		$gd_post = $_gd_post;
+	} else {
+		global $gd_post;
+	}
+
+	$htmlvar_name = $cf['htmlvar_name'];
+
+	if ( isset( $gd_post->{$htmlvar_name} ) && $gd_post->{$htmlvar_name} != '' ) {
+		$class = "geodir-i-custom";
+		$field_icon = geodir_field_icon_proccess( $cf );
+		$output = geodir_field_output_process( $output );
+		if ( strpos( $field_icon, 'http' ) !== false ) {
+			$field_icon_af = '';
+		} elseif ( $field_icon == '' ) {
+			$field_icon_af = '';
+		} else {
+			$field_icon_af = $field_icon;
+			$field_icon = '';
+		}
+
+		$value = $gd_post->{$htmlvar_name};
+
+		// Database value.
+		if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+			return $value;
+		}
+
+		$value = geodir_get_post_status_name( $value );
+
+		// Return stripped value.
+		if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+			return $value;
+		}
+
+		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $htmlvar_name . '">';
+
+		if ( $output == '' || isset( $output['icon'] ) ) {
+			$html .= '<span class="geodir_post_meta_icon '.$class.'" style="' . $field_icon . '">' . $field_icon_af;
+		}
+		if ( $output == '' || isset( $output['label'] ) ) {
+			$html .= $cf['frontend_title'] != '' ? '<span class="geodir_post_meta_title" >' . __( $cf['frontend_title'], 'geodirectory' ) . ': '.'</span>' : '';
+		}
+		if ( $output == '' || isset( $output['icon'] ) ) {
+			$html .= '</span>';
+		}
+		if ( $output == '' || isset( $output['value'] ) ) {
+			$html .= $value;
+		}
+
+		$html .= '</div>';
+	}
+
+	return $html;
+}
+add_filter( 'geodir_custom_field_output_custom_var_post_status', 'geodir_custom_field_output_post_status', 10, 5 );
+
+/**
+ * Filter default category post meta field output.
+ *
+ * @since 2.0.0.94
+ *
+ * @param string $html The html to filter.
+ * @param string $location The location to output the html.
+ * @param array $cf The custom field array.
+ * @param string $output The output string that tells us what to output.
+ * @return string The html to output.
+ */
+function geodir_custom_field_output_default_category( $html, $location, $cf, $output, $_gd_post ) {
+	if ( ! empty( $_gd_post ) ) {
+		$gd_post = $_gd_post;
+	} else {
+		global $gd_post;
+	}
+
+	$htmlvar_name = $cf['htmlvar_name'];
+
+	if ( isset( $gd_post->{$htmlvar_name} ) && ! empty( $gd_post->{$htmlvar_name} ) ) {
+		$class = "geodir-i-custom";
+		$field_icon = geodir_field_icon_proccess( $cf );
+		$output = geodir_field_output_process( $output );
+		if ( strpos( $field_icon, 'http' ) !== false ) {
+			$field_icon_af = '';
+		} elseif ( $field_icon == '' ) {
+			$field_icon_af = '';
+		} else {
+			$field_icon_af = $field_icon;
+			$field_icon = '';
+		}
+
+		$value = $gd_post->{$htmlvar_name};
+
+		// Database value.
+		if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+			return $value;
+		}
+
+		$term = get_term_by( 'id', absint( $value ), $gd_post->post_type . 'category' );
+
+		if ( ! ( ! empty( $term ) && is_object( $term ) && ! is_wp_error( $term ) ) ) {
+			return NULL;
+		}
+
+		$value = $term->name;
+
+		// Return stripped value.
+		if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+			return $value;
+		}
+
+		$term_link = get_term_link( $term );
+
+		if ( ! empty( $term_link ) && ! is_wp_error( $term_link ) ) {
+			$value = '<a href="' . esc_url( $term_link ) . '">' . $value . '</a>';
+		}
+
+		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $htmlvar_name . '">';
+
+		if ( $output == '' || isset( $output['icon'] ) ) {
+			$html .= '<span class="geodir_post_meta_icon '.$class.'" style="' . $field_icon . '">' . $field_icon_af;
+		}
+		if ( $output == '' || isset( $output['label'] ) ) {
+			$html .= $cf['frontend_title'] != '' ? '<span class="geodir_post_meta_title" >' . __( $cf['frontend_title'], 'geodirectory' ) . ': '.'</span>' : '';
+		}
+		if ( $output == '' || isset( $output['icon'] ) ) {
+			$html .= '</span>';
+		}
+		if ( $output == '' || isset( $output['value'] ) ) {
+			$html .= $value;
+		}
+
+		$html .= '</div>';
+	}
+
+	return $html;
+}
+add_filter( 'geodir_custom_field_output_custom_var_default_category', 'geodir_custom_field_output_default_category', 10, 5 );
