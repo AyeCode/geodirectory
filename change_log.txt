@@ -1,3 +1,6 @@
+= 2.0.0.95 =
+* Changes for Ninja Forms fix related to API requests - CHANGED
+
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED
 * Switching package shows all images instead of package image limit - FIXED
