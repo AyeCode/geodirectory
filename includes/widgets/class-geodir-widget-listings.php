@@ -332,7 +332,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			    'title' => __( "Elementor Skin", 'geodirectory' ),
 			    'desc' => '',
 			    'type' => 'select',
-			    'options' =>  self::get_elementor_pro_skins(),
+			    'options' =>  GeoDir_Elementor::get_elementor_pro_skins(),
 			    'default'  => '',
 			    'desc_tip' => false,
 			    'advanced' => false,
@@ -361,35 +361,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	    
 	    return $arguments;
     }
-
-	//@todo add caching here and in skin template class
-	public static function get_elementor_pro_skins(){
-		global $wpdb;
-
-		$cache = wp_cache_get("geodir_elementor_pro_skins");
-		if($cache !== false){
-			return $cache;
-		}
-		
-		$templates = $wpdb->get_results(
-			"SELECT $wpdb->term_relationships.object_id as ID, $wpdb->posts.post_title as post_title FROM $wpdb->term_relationships
-						INNER JOIN $wpdb->term_taxonomy ON
-							$wpdb->term_relationships.term_taxonomy_id=$wpdb->term_taxonomy.term_taxonomy_id
-						INNER JOIN $wpdb->terms ON 
-							$wpdb->term_taxonomy.term_id=$wpdb->terms.term_id AND $wpdb->terms.slug='geodirectory-archive-item'
-						INNER JOIN $wpdb->posts ON
-							$wpdb->term_relationships.object_id=$wpdb->posts.ID
-          WHERE  $wpdb->posts.post_status='publish'"
-		);
-		$options = [ 0 => 'Select a template' ];
-		foreach ( $templates as $template ) {
-			$options[ $template->ID ] = $template->post_title;
-		}
-		
-		wp_cache_set("geodir_elementor_pro_skins",$options);
-			
-		return $options;
-	}
 
 
     /**
