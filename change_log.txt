@@ -3,6 +3,7 @@
 * [gd_post_meta] add support for default category & post status - ADDED
 * [gd_post_meta] allow option to show icon only - ADDED
 * GD > Recently Viewed now supports Elementor pro skins - ADDED
+* Should not send comment email notification to author for spam comment - CHANGED
 
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED

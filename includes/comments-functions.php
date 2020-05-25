@@ -429,6 +429,11 @@ function geodir_new_comment_notify_postauthor( $comment_ID ) {
 		$maybe_notify = (bool) GeoDir_Email::is_email_enabled( 'owner_comment_submit' );
 	}
 
+	// Only send notifications for approved or pending comments.
+	if ( $maybe_notify && ! ( in_array( 'comment_approved', array_keys( (array) $comment ) ) && ( $comment->comment_approved == '0' || $comment->comment_approved == 'hold' || $comment->comment_approved == '1' || $comment->comment_approved == 'approve' ) ) ) {
+		$maybe_notify = false;
+	}
+
 	/**
 	 * Filters whether to send the post author new comment notification emails,
 	 * overriding the site setting.
