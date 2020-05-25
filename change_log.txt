@@ -2,6 +2,7 @@
 * Changes for Ninja Forms fix related to API requests - CHANGED
 * [gd_post_meta] add support for default category & post status - ADDED
 * [gd_post_meta] allow option to show icon only - ADDED
+* GD > Recently Viewed now supports Elementor pro skins - ADDED
 
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED
