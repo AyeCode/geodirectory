@@ -1948,7 +1948,7 @@ function geodir_cfi_files( $html, $cf ) {
                         echo '<span>*</span>';
                     } ?>
                 </label>
-                <span class="geodir_message_note gd_images_desc"><?php esc_attr_e( $cf['desc'], 'geodirectory' ); ?></span>
+                <span class="geodir_message_note gd_images_desc"><?php _e( $cf['desc'], 'geodirectory' ); ?></span>
                 <?php
                 // params for file upload
                 $is_required = $cf['is_required'];
