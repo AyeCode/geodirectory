@@ -18,7 +18,7 @@ Create a location-based business directory with our plugin, 100% compatible with
 
 Turn any WordPress theme into a lightning-fast global business directory. Now 100% compatible with Gutenberg and also the most popular page builders such as Elementor, Beaver Builder, Divi, SiteOrigin Page Builder and more! Includes extensive new set of shortcodes, Gutenberg Blocks and Widgets. 
 
-[youtube https://www.youtube.com/watch?v=o8zgcNwNKyY]
+[youtube https://www.youtube.com/watch?v=fEdOOucOtUg]
 
 = Scale easily - go global =
 
