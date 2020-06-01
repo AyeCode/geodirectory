@@ -159,7 +159,9 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 					$the_time = $match_field == 'post_modified' ? get_the_modified_date( 'Y-m-d', $find_post ) : get_the_time( 'Y-m-d', $find_post );
 					$until_time = strtotime( $the_time . ' ' . $search . ' days' );
 					$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
-					if ( $until_time >= $now_time ) {
+					if ( ( empty( $args['condition'] ) || $args['condition'] == 'is_less_than' ) && $until_time > $now_time ) {
+						$match_found = true;
+					} elseif ( $args['condition'] == 'is_greater_than' && $until_time < $now_time ) {
 						$match_found = true;
 					}
 				}
