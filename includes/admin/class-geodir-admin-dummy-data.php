@@ -826,7 +826,7 @@ class GeoDir_Admin_Dummy_Data {
 			),
             'freelancer'   => array(
                 'name'  => __( 'Freelancer', 'geodirectory' ),
-                'count' => 5,
+                'count' => 20,
                 'has_templates' => true
             )
 		);
