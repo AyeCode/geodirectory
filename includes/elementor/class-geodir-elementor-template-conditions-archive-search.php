@@ -17,10 +17,27 @@ class GeoDir_Elementor_Template_Conditions_Archive_Search extends \ElementorPro\
 	}
 
 	public function get_label() {
-		return __( 'GD Search Results', 'geodirectory' );
+		return __( 'All GD Search Results', 'geodirectory' );
 	}
 
 	public function check( $args ) {
 		return geodir_is_page('search');
+	}
+
+	public function register_sub_conditions() {
+
+		// CPT Archives
+		$post_types = geodir_get_posttypes('array');
+		foreach($post_types as $key => $post_type){
+
+			$condition = new GeoDir_Elementor_Template_Conditions_Archive_Search_CPT( [
+				'post_type' => $key,
+				'cpt'       => $post_type,
+			] );
+
+			$this->register_sub_condition( $condition );
+
+		}
+
 	}
 }
