@@ -8,6 +8,7 @@
 * [gd_post_badge] is_greater_than condition is not working with post date - FIXED
 * Elementor Image dynamic field fallback image not working - FIXED
 * Elementor Pro template conditions added for specific CPTs - ADDED
+* Elementor GD Archive Item template dynamic background & style is not working - FIXED
 
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED
