@@ -1264,7 +1264,7 @@ class GeoDir_Post_Data {
 		$post_id   = isset( $post_data['ID'] ) ? absint( $post_data['ID'] ) : '';
 		$parent_id = isset( $post_data['post_parent'] ) ? absint( $post_data['post_parent'] ) : '';
 		if ( ! self::can_edit( $post_id, get_current_user_id(), $parent_id ) ) {
-			return new WP_Error( 'save_post', __( "You don not have the privileges to perform this action.", "geodirectory" ) );
+			return new WP_Error( 'save_post', __( "You do not have the privileges to perform this action.", "geodirectory" ) );
 		}
 
 		// set that we are doing an auto save
@@ -1490,7 +1490,7 @@ class GeoDir_Post_Data {
 		$post_id   = isset( $post_data['ID'] ) ? absint( $post_data['ID'] ) : '';
 		$parent_id = isset( $post_data['post_parent'] ) ? absint( $post_data['post_parent'] ) : '';
 		if ( ! self::can_edit( $post_id, get_current_user_id(), $parent_id ) ) {
-			return new WP_Error( 'save_post', __( "You don not have the privileges to perform this action.", "geodirectory" ) );
+			return new WP_Error( 'save_post', __( "You do not have the privileges to perform this action.", "geodirectory" ) );
 		}
 
 		// Pre validation
