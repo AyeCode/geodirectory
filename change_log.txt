@@ -9,6 +9,7 @@
 * Elementor Image dynamic field fallback image not working - FIXED
 * Elementor Pro template conditions added for specific CPTs - ADDED
 * Elementor GD Archive Item template dynamic background & style is not working - FIXED
+* Schema list updated to add some new types - ADDED
 
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED

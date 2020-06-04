@@ -1128,7 +1128,7 @@ class GeoDir_Elementor {
 						if (
 							$archive_condition == 'include/geodirectory_archive' // all archives
 							|| stripos( strrev( $archive_condition ), strrev( $type ) ) === 0 // all search
-							|| stripos( strrev( $archive_condition ), strrev( $type."/".$post_type ) ) === 0 // cpt search
+							|| stripos( strrev( $archive_condition ), strrev( $type."_".$post_type ) ) === 0 // cpt search
 						) {
 							$result = true;
 							break 2;
