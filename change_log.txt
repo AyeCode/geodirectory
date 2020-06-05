@@ -5,6 +5,7 @@
 * GD > Recently Viewed now supports Elementor pro skins - ADDED
 * Should not send comment email notification to author for spam comment - CHANGED
 * OSM Directions API changed to non SSL temporarily to fix their certificate error - CHANGED
+* Missing translatable labels - FIXED
 
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED
