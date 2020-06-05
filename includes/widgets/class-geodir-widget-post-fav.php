@@ -201,11 +201,11 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
      * @return string Favorite Html.
      */
     public function get_fav_html($args = array()){
-        global $post;
+        global $gd_post;
         ob_start();
         ?>
         <span class="gd-list-favorite">
-            <?php geodir_favourite_html( '', $post->ID, $args ); ?>
+            <?php geodir_favourite_html( '', $gd_post->ID, $args ); ?>
         </span>
         <?php
         return ob_get_clean();
