@@ -11,6 +11,7 @@
 * Elementor GD Archive Item template dynamic background & style is not working - FIXED
 * Schema list updated to add some new types - ADDED
 * Dynamic content widget does not validates fields excluded from package - FIXED
+* GD custom field SEO variables not working in Yoast meta title & description - FIXED
 
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED
