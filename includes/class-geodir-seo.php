@@ -975,6 +975,28 @@ class GeoDir_SEO {
 			}
 		}
 
+		// Custom fields
+		$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
+		if ( ! empty( $fields ) ) {
+			foreach( $fields as $field ) {
+				if ( empty( $variables[ '_' . $field['htmlvar_name'] ] ) ) {
+					$variables[ '_' . $field['htmlvar_name'] ] = __( stripslashes( $field['admin_title'] ), 'geodirectory' );
+				}
+			}
+		}
+
+		// Advance custom fields
+		$advance_fields = geodir_post_meta_advance_fields();
+		if ( ! empty( $advance_fields ) ) {
+			foreach ( $advance_fields as $key => $field ) {
+				if ( empty( $variables[ '_' . $key ] ) ) {
+					$variables[ '_' . $key ] = __( stripslashes( $field['frontend_title'] ), 'geodirectory' );
+				}
+			}
+		}
+
+		$variables = apply_filters( 'geodir_wpseo_register_extra_replacements', $variables );
+
 		$replacer = new WPSEO_Replace_Vars();
 
 		foreach ( $variables as $var => $help ) {
