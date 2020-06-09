@@ -824,11 +824,11 @@ class GeoDir_Admin_Dummy_Data {
 				'count' => 20,
 				'has_templates' => true
 			),
-            'freelancer'   => array(
-                'name'  => __( 'Freelancer', 'geodirectory' ),
-                'count' => 20,
-                'has_templates' => true
-            )
+//            'freelancer'   => array(
+//                'name'  => __( 'Freelancer', 'geodirectory' ),
+//                'count' => 20,
+//                'has_templates' => true
+//            )
 		);
 
 		return apply_filters( 'geodir_dummy_data_types', $data, $post_type );

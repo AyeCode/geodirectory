@@ -9,7 +9,6 @@
 // Set the dummy image url
 //$dummy_image_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/'; // CDN URL will be faster
 
-//$dummy_image_url = plugin_dir_url( __FILE__ ) . 'freelancer-images';
 $dummy_image_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/freelancers/images';
 $dummy_caticon_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/freelancers/icons';
 
@@ -120,7 +119,7 @@ We can help you design, implement and customize every aspect of your directory. 
 	"website" => 'http://example.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'PHP' ),
+	"areas_of_expertise" => 'PHP,JS,SQL,CSS,HTML',
 	"post_images"   => array(
 		"$dummy_image_url/fr-1.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -153,7 +152,7 @@ I also provide amazing custom template layouts for GDV2 with builders to really 
 	"website" => 'http://example.com/',
 	"hourly_price" => '30',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'Installing GD' ),
+	"areas_of_expertise" =>  'Graphic Design' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-2.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -188,7 +187,7 @@ I’m friendly, professional, and very passionate about what I do. My promise to
 	"website" => 'http://example.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'PHP', 'NodeJS' ),
+	"areas_of_expertise" => 'PHP,NodeJS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-3.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -219,7 +218,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'PHP', 'NodeJS' ),
+	"areas_of_expertise" => 'PHP,NodeJS',
 	"post_images"   => array(
 		"$dummy_image_url/fr-4.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -252,7 +251,7 @@ Importantly, I Enjoy my job. Just give me a chance to work with you and I will a
 	"website" => 'http://example.com/',
 	"hourly_price" => '14',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'SEO', 'SQL' ),
+	"areas_of_expertise" => 'SEO,SQL' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-5.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -283,7 +282,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '50',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'SASS', 'CSS' ),
+	"areas_of_expertise" => 'PHP,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-6.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -314,7 +313,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '30',
 	"for_hire" => 0,
-	"area_of_expertise" => array( 'SQL', 'CSS' ),
+	"areas_of_expertise" => 'SQL,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-7.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -345,7 +344,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'SQL', 'CSS' ),
+	"areas_of_expertise" => 'SQL,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-8.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -376,7 +375,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '90',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'SEO', 'CSS' ),
+	"areas_of_expertise" => 'SEO,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-9.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -407,7 +406,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '65',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'GD', 'CSS' ),
+	"areas_of_expertise" => 'GD,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-10.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -440,7 +439,7 @@ We can help you design, implement and customize every aspect of your directory. 
 	"website" => 'http://example.com/',
 	"hourly_price" => '78',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'PHP' ),
+	"areas_of_expertise" =>  'PHP' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-11.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -471,7 +470,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '48',
 	"for_hire" => 0,
-	"area_of_expertise" => array( 'CSS' ),
+	"areas_of_expertise" => 'CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-12.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -502,7 +501,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '76',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'PHP', 'NodeJS' ),
+	"areas_of_expertise" => 'PHP,NodeJS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-13.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -533,7 +532,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '110',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'PHP', 'NodeJS' ),
+	"areas_of_expertise" => 'PHP,NodeJS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-14.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -564,7 +563,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '150',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'SEO', 'SQL' ),
+	"areas_of_expertise" =>  'SEO,SQL' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-15.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -595,7 +594,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '50',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'SASS', 'CSS' ),
+	"areas_of_expertise" => 'PHP,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-16.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -626,7 +625,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '30',
 	"for_hire" => 0,
-	"area_of_expertise" => array( 'SQL', 'CSS' ),
+	"areas_of_expertise" => 'SQL,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-17.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -657,7 +656,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'SQL', 'CSS' ),
+	"areas_of_expertise" => 'SQL,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-18.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -688,7 +687,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '90',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'SEO', 'CSS' ),
+	"areas_of_expertise" => 'SEO,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-19.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -719,7 +718,7 @@ $dummy_posts[] = array(
 	"website" => 'http://example.com/',
 	"hourly_price" => '65',
 	"for_hire" => 1,
-	"area_of_expertise" => array( 'GD', 'CSS' ),
+	"areas_of_expertise" =>  'JS,CSS' ,
 	"post_images"   => array(
 		"$dummy_image_url/fr-20.jpg",
 		"$dummy_image_url/frp-1.jpg",
@@ -746,17 +745,17 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 		'post_type' => $post_type,
 		'data_type' => 'VARCHAR',
 		'field_type' => 'text',
-		'admin_title' => __('EMail', 'geodirectory'),
-		'frontend_desc' => __('You can enter your business or listing email.', 'geodirectory'),
-		'frontend_title' => __('EMail', 'geodirectory'),
+		'admin_title' => __('Email', 'geodirectory'),
+		'frontend_desc' => __('Please enter your contact email address.', 'geodirectory'),
+		'frontend_title' => __('Email', 'geodirectory'),
 		'htmlvar_name' => 'email',
 		'default_value' => '',
 		'is_active' => '1',
 		'option_values' => '',
 		'is_default' => '0',
-		'clabels' => __('EMail', 'geodirectory'),
+		'clabels' => __('Email', 'geodirectory'),
 		'is_required' => true,
-		'required_msg' => __('Entrer email to get leads!', 'geodirectory'),
+		'required_msg' => __('Enter email to get leads!', 'geodirectory'),
 	);
 	
 	// website
@@ -766,8 +765,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 		'data_type'				=> 'VARCHAR',
 		'admin_title'			=> __('Website', 'geodirectory'),
 		'frontend_title'		=> __('Website', 'geodirectory'),
-		'frontend_desc'			=> __('You can enter your business or listing website.
-', 'geodirectory' ),
+		'frontend_desc'			=> __('You can enter your business website.', 'geodirectory' ),
 		'htmlvar_name'			=> 'website',
 		'is_active'				=> true,
 		'for_admin_use'			=> false,
@@ -792,10 +790,9 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 		'default_value'			=> '',
 		'option_values' 		=> '',
 		'is_required'			=> true,
-		'required_msg' => __('Please enter your hourly fee', 'geodirectory'),
+		'required_msg'          => __('Please enter your hourly rate', 'geodirectory'),
 		'validation_pattern'	=> addslashes_gpc( '\d+(\.\d{2})?' ), // add slashes required
 		'validation_msg'		=> 'Please enter number and decimal only ie: 100.50',
-		'required_msg'			=> '',
 		'field_icon'			=> 'fas fa-dollar-sign',
 		'css_class'				=> '',
 		'cat_sort'				=> true,
@@ -817,9 +814,8 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 		'post_type' => $post_type,
 		'data_type' => 'TINYINT', 
 		'field_type' => 'radio', 
-		'field_type_key' => 'for_hire', 
-		'admin_title' => __('For Hire?', 'geodirectory'), 
-		'frontend_desc' => __('Tick "Yes" if you are avaible for Hire.', 'geodirectory'), 
+		'admin_title' => __('For Hire?', 'geodirectory'),
+		'frontend_desc' => __('Tick "Yes" if you are available for Hire.', 'geodirectory'),
 		'frontend_title' => __('For Hire?', 'geodirectory'), 
 		'htmlvar_name' => 'for_hire', 
 		'sort_order' => '0',
@@ -834,8 +830,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 	$fields[] = array(
 		'post_type' => $post_type,
 		'data_type' => 'VARCHAR',
-		'field_type' => 'select',
-		'field_type_key' => 'select',
+		'field_type' => 'multiselect',
 		'is_active' => 1,
 		'for_admin_use' => 0,
 		'is_default' => 0,
@@ -847,12 +842,12 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 		'is_required' => '1',
 		'required_msg' => __('Select your areas of expertise', 'geodirectory'),
 		'show_on_pkg' => $package,
-		'option_values' => __('PHP, JS, HTML, CSS, SQL, Installing GD, Setting GD Up, Graphics Design, SEO, Data Entry', 'geodirectory'),
+		'option_values' => 'PHP,JS,HTML,CSS,SQL,UX,UI,NodeJS,Graphic Design,SEO,Data Entry',
 		'field_icon' => 'fas fa-home',
 		'css_class' => '',
 		'cat_sort' => 1,
 		'cat_filter' => 1,
-		'show_on_pkg' => $package,
+		'show_in' => '[detail]',
 		'clabels' => __('Areas of Expertise', 'geodirectory'),
 	);
 
@@ -861,14 +856,14 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 				'data_type' => 'TEXT',
 				'field_type' => 'url',
 				'admin_title' => __('Portfolio link 1', 'geodirectory'),
-				'frontend_desc' => __('Please add any links to GeoDirectory sites you have built. This will help you become a verified expert.', 'geodirectory'),
+				'frontend_desc' => __('Please add a link to a website you have created.', 'geodirectory'),
 				'frontend_title' => __('Portfolio link 1', 'geodirectory'),
 				'htmlvar_name' => 'portfolio_link_1',
 				'default_value' => '',
 				'is_active' => '1',
 				'option_values' => '',
 				'is_default' => '0',
-				'show_in' => '[detail]',
+				'show_in' => '',
 				'show_on_pkg' => $package,
 				'clabels' => __('Portfolio link 1', 'geodirectory')
 			);
@@ -878,14 +873,14 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 			'data_type' => 'TEXT',
 			'field_type' => 'url',
 			'admin_title' => __('Portfolio link 2', 'geodirectory'),
-			'frontend_desc' => __('Please add any links to GeoDirectory sites you have built. This will help you become a verified expert.', 'geodirectory'),
+			'frontend_desc' => __('Please add a link to a website you have created.', 'geodirectory'),
 			'frontend_title' => __('Portfolio link 2', 'geodirectory'),
 			'htmlvar_name' => 'portfolio_link_2',
 			'default_value' => '',
 			'is_active' => '1',
 			'option_values' => '',
 			'is_default' => '0',
-			'show_in' => '[detail]',
+			'show_in' => '',
 			'show_on_pkg' => $package,
 			'clabels' => __('Portfolio link 2', 'geodirectory')
 		);
@@ -895,14 +890,14 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'data_type' => 'TEXT',
 					'field_type' => 'url',
 					'admin_title' => __('Portfolio link 3', 'geodirectory'),
-					'frontend_desc' => __('Please add any links to GeoDirectory sites you have built. This will help you become a verified expert.', 'geodirectory'),
+					'frontend_desc' => __('Please add a link to a website you have created.', 'geodirectory'),
 					'frontend_title' => __('Portfolio link 3', 'geodirectory'),
 					'htmlvar_name' => 'portfolio_link_3',
 					'default_value' => '',
 					'is_active' => '1',
 					'option_values' => '',
 					'is_default' => '0',
-					'show_in' => '[detail]',
+					'show_in' => '',
 					'show_on_pkg' => $package,
 					'clabels' => __('Portfolio link 3', 'geodirectory')
 				);
@@ -911,14 +906,14 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'data_type' => 'TEXT',
 					'field_type' => 'url',
 					'admin_title' => __('Portfolio link 4', 'geodirectory'),
-					'frontend_desc' => __('Please add any links to GeoDirectory sites you have built. This will help you become a verified expert.', 'geodirectory'),
+					'frontend_desc' => __('Please add a link to a website you have created.', 'geodirectory'),
 					'frontend_title' => __('Portfolio link 4', 'geodirectory'),
 					'htmlvar_name' => 'portfolio_link_4',
 					'default_value' => '',
 					'is_active' => '1',
 					'option_values' => '',
 					'is_default' => '0',
-					'show_in' => '[detail]',
+					'show_in' => '',
 					'show_on_pkg' => $package,
 					'clabels' => __('Portfolio link 4', 'geodirectory')
 				);
@@ -927,14 +922,14 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'data_type' => 'TEXT',
 					'field_type' => 'url',
 					'admin_title' => __('Portfolio link 5', 'geodirectory'),
-					'frontend_desc' => __('Please add any links to GeoDirectory sites you have built. This will help you become a verified expert.', 'geodirectory'),
+					'frontend_desc' => __('Please add a link to a website you have created.', 'geodirectory'),
 					'frontend_title' => __('Portfolio link 5', 'geodirectory'),
 					'htmlvar_name' => 'portfolio_link_5',
 					'default_value' => '',
 					'is_active' => '1',
 					'option_values' => '',
 					'is_default' => '0',
-					'show_in' => '[detail]',
+					'show_in' => '',
 					'show_on_pkg' => $package,
 					'clabels' => __('Portfolio link 5', 'geodirectory')
 				);
@@ -943,14 +938,14 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'data_type' => 'TEXT',
 					'field_type' => 'url',
 					'admin_title' => __('Portfolio link 6', 'geodirectory'),
-					'frontend_desc' => __('Please add any links to GeoDirectory sites you have built. This will help you become a verified expert.', 'geodirectory'),
+					'frontend_desc' => __('Please add a link to a website you have created.', 'geodirectory'),
 					'frontend_title' => __('Portfolio link 6', 'geodirectory'),
 					'htmlvar_name' => 'portfolio_link_6',
 					'default_value' => '',
 					'is_active' => '1',
 					'option_values' => '',
 					'is_default' => '0',
-					'show_in' => '[detail]',
+					'show_in' => '',
 					'show_on_pkg' => $package,
 					'clabels' => __('Portfolio link 6', 'geodirectory')
 				);
@@ -959,14 +954,14 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'data_type' => 'TEXT',
 					'field_type' => 'url',
 					'admin_title' => __('Portfolio link 7', 'geodirectory'),
-					'frontend_desc' => __('Please add any links to GeoDirectory sites you have built. This will help you become a verified expert.', 'geodirectory'),
+					'frontend_desc' => __('Please add a link to a website you have created.', 'geodirectory'),
 					'frontend_title' => __('Portfolio link 7', 'geodirectory'),
 					'htmlvar_name' => 'portfolio_link_7',
 					'default_value' => '',
 					'is_active' => '1',
 					'option_values' => '',
 					'is_default' => '0',
-					'show_in' => '[detail]',
+					'show_in' => '',
 					'show_on_pkg' => $package,
 					'clabels' => __('Portfolio link 7', 'geodirectory')
 				);
@@ -975,14 +970,14 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'data_type' => 'TEXT',
 					'field_type' => 'url',
 					'admin_title' => __('Portfolio link 8', 'geodirectory'),
-					'frontend_desc' => __('Please add any links to GeoDirectory sites you have built. This will help you become a verified expert.', 'geodirectory'),
+					'frontend_desc' => __('Please add a link to a website you have created.', 'geodirectory'),
 					'frontend_title' => __('Portfolio link 8', 'geodirectory'),
 					'htmlvar_name' => 'portfolio_link_8',
 					'default_value' => '',
 					'is_active' => '1',
 					'option_values' => '',
 					'is_default' => '0',
-					'show_in' => '[detail]',
+					'show_in' => '',
 					'show_on_pkg' => $package,
 					'clabels' => __('Portfolio link 8', 'geodirectory')
 				);
