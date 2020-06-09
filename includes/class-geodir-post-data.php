@@ -2107,7 +2107,7 @@ class GeoDir_Post_Data {
 		if ( ! get_current_user_id() ) {
 			$nonce = geodir_getcookie( '_gd_logged_out_post_author' );
 
-			if ( empty( $nonce ) ) {
+			if ( empty( $nonce ) && !empty($_REQUEST['listing_type'])  ) {
 				$nonce = substr( wp_hash( time(), 'nonce' ), -12, 10 );
 				geodir_setcookie( '_gd_logged_out_post_author', $nonce );
 				$nonce = geodir_getcookie( '_gd_logged_out_post_author' );
