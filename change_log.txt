@@ -11,6 +11,9 @@
 * Elementor GD Archive Item template dynamic background & style is not working - FIXED
 * Schema list updated to add some new types - ADDED
 * Add ID in nav endpoints to avoid notice - ADDED
+* Dynamic content widget does not validates fields excluded from package - FIXED
+* GD custom field SEO variables not working in Yoast meta title & description - FIXED
+* Warning added to setting `Allow posting without logging in` when WP Engine hosting is used that an extra step is needed - ADDED
 
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED
@@ -47,7 +50,7 @@
 
 = 2.0.0.91 =
 * Category font awesome icons have extra fas class on output which break few icons – FIXED
-* Post badge widget shows excluded fields from package - FIELD
+* Post badge widget shows excluded fields from package - FIXED
 * GD Archive map with elementor loop might not filter markers if map is before loop - FIXED
 * Translation of screen_id break GD dashboard functionality - FIXED
 * YOOtheme shows incorrect title on GD pages - FIXED
@@ -461,7 +464,7 @@ Front end author actions - After delete, page is 404 - FIXED
 No map icon validation on edit cat - FIXED
 Rating input not working from admin area edit comment screen - FIXED
 Change for SEOPress caused Beaver builder issues on search page - FIXED
-Post meta widget shows excluded fields from package - FIELD
+Post meta widget shows excluded fields from package - FIXED
 Beaver Builder :: Added warning message to template pages to say best to use Beaver Themer - ADDED
 If reviews disabled comment counts can be wrong for standard comments - FIXED
 If reviews are disabled the standard comments form can sometimes show twice - FIXED

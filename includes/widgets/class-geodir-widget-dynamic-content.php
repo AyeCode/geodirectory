@@ -137,18 +137,47 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		}
 
 		$output = '';
-		if ( ! empty( $errors ) ){
+		if ( ! empty( $errors ) ) {
 			$output .= implode( ", ", $errors );
 		}
 
 		$html = $args['html'];
-		$find_post   = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
+		$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 		$match_field = $args['key'];
+		if ( $match_field == 'address' ) {
+			$match_field = 'street';
+		}
 
 		if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
+			$field = array();
 			$search = $args['search'];
 
-			$match_value = isset($find_post->{$match_field}) ? esc_attr( trim( $find_post->{$match_field} ) ) : ''; // escape user input
+			if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' ) {
+				$package_id = geodir_get_post_package_id( $post_id, $post_type );
+				$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
+
+				foreach ( $fields as $field_info ) {
+					if ( $match_field == $field_info['htmlvar_name'] ) {
+						$field = $field_info;
+						break;
+					} elseif( $match_field == 'street' && 'address' == $field_info['htmlvar_name'] ) {
+						$field = $field_info;
+						break;
+					}
+				}
+
+				if ( empty( $field ) ) {
+					return $output; // Field not allowed.
+				}
+			}
+
+			$is_date = ( ! empty( $field['type'] ) && $field['type'] == 'datepicker' ) || in_array( $match_field, array( 'post_date', 'post_modified' ) ) ? true : false;
+			/**
+			 * @since 2.0.0.95
+			 */
+			$is_date = apply_filters( 'geodir_dynamic_content_is_date', $is_date, $match_field, $field, $args, $find_post );
+
+			$match_value = isset( $find_post->{$match_field} ) ? esc_attr( trim( $find_post->{$match_field} ) ) : ''; // escape user input
 			$match_found = $match_field === '' ? true : false;
 
 			if ( ! $match_found ) {
@@ -164,8 +193,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 					} elseif ( $args['condition'] == 'is_greater_than' && $until_time < $now_time ) {
 						$match_found = true;
 					}
-				}
-				else {
+				} else {
 					switch ( $args['condition'] ) {
 						case 'is_equal':
 							$match_found = (bool) ( $search != '' && $match_value == $search );
@@ -195,6 +223,10 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				}
 			}
 
+			/**
+			 * @since 2.0.0.95
+			 */
+			$match_found = apply_filters( 'geodir_dynamic_content_check_match_found', $match_found, $args, $find_post );
 
 			if ( $match_found ) {
 				// check for price format
@@ -208,34 +240,81 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 					}
 				}
 
+				if ( $is_date && ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ) {
+					$args['datetime'] = mysql2date( 'c', $match_value, false );
+				}
+
+				// Option value
+				if ( ! empty( $field['option_values'] ) ) {
+					$option_values = geodir_string_values_to_options( stripslashes_deep( $field['option_values'] ), true );
+
+					if ( ! empty( $option_values ) ) {
+						if ( ! empty( $field['field_type'] ) && $field['field_type'] == 'multiselect' ) {
+							$values = explode( ',', trim( $match_value, ', ' ) );
+
+							if ( is_array( $values ) ) {
+								$values = array_map( 'trim', $values );
+							}
+
+							$_match_value = array();
+							foreach ( $option_values as $option_value ) {
+								if ( isset( $option_value['value'] ) && in_array( $option_value['value'], $values ) ) {
+									$_match_value[] = $option_value['label'];
+								}
+							}
+
+							$match_value = ! empty( $_match_value ) ? implode( ', ', $_match_value ) : '';
+						} else {
+							foreach ( $option_values as $option_value ) {
+								if ( isset( $option_value['value'] ) && $option_value['value'] == $match_value ) {
+									$match_value = $option_value['label'];
+								}
+							}
+						}
+					}
+				}
+
+				/**
+				 * @since 2.0.0.95
+				 */
+				$match_value = apply_filters( 'geodir_dynamic_content_match_value', $match_value, $match_field, $args, $find_post, $field );
+
+				// File
+				if ( ! empty( $html ) &&  ! empty( $match_value ) && ! empty( $field['type'] ) && $field['type'] == 'file' ) {
+					$html = $match_value;
+				}
 
 				// badge text
 				if ( empty( $html ) && empty($args['icon_class']) ) {
 					$html = $field['frontend_title'];
 				}
-				if( !empty( $html ) && $html = str_replace("%%input%%",$match_value,$html) ){
-					// will be replace in condition check
-				}
-				if( !empty( $html ) && $post_id && $html = str_replace("%%post_url%%",get_permalink($post_id),$html) ){
+
+				if ( ! empty( $html ) && $html = str_replace( "%%input%%", $match_value, $html ) ) {
 					// will be replace in condition check
 				}
 
-				// replace other post variables
-				if(!empty($html)){
-					$html = geodir_replace_variables($html);
+				if( ! empty( $html ) && $post_id && $html = str_replace( "%%post_url%%", get_permalink( $post_id ),$html ) ) {
+					// will be replace in condition check
+				}
 
-					if(!empty($html)){
-						$output .= do_shortcode($html);
+				if ( empty( $html ) ) {
+					if ( empty( $html ) && $match_field == 'post_date' ) {
+						$badge = __( 'NEW', 'geodirectory' );
+					} elseif ( empty( $html ) && $match_field == 'post_modified' ) {
+						$html = __( 'UPDATED', 'geodirectory' );
 					}
 				}
 
+				// replace other post variables
+				if ( ! empty( $html ) ) {
+					$html = geodir_replace_variables( $html );
 
-
+					if ( ! empty( $html ) ) {
+						$output .= do_shortcode( $html );
+					}
+				}
 			}
-
-
 		}
-
 
 		return $output;
 	}
