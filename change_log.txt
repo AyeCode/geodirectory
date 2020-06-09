@@ -12,6 +12,7 @@
 * Schema list updated to add some new types - ADDED
 * Dynamic content widget does not validates fields excluded from package - FIXED
 * GD custom field SEO variables not working in Yoast meta title & description - FIXED
+* Warning added to setting `Allow posting without logging in` when WP Engine hosting is used that an extra step is needed - ADDED
 
 = 2.0.0.94 =
 * Image lightbox can show image id if title is empty - FIXED
