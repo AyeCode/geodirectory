@@ -946,7 +946,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 				array(
 					'name' => __( 'Allow posting without logging in?', 'geodirectory' ),
-					'desc' => __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ),
+					'desc' => defined('WPE_PLUGIN_VERSION') ? __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ) . " <span style='color:red'>" . sprintf( __( 'WP ENGINE DETECTED: please see %sthis guide%s for this feature to work properly.', 'geodirectory' ),'<a href="https://docs.wpgeodirectory.com/article/221-how-to-allow-posting-without-logging-in-when-using-wp-engine-hosting">','</a>' ) . "</span>" : __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ),
 					'id'   => 'post_logged_out',
 					'type' => 'checkbox',
 					'default'  => '0',

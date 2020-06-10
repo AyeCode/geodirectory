@@ -855,7 +855,9 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					$the_time = $match_field == 'post_modified' ? get_the_modified_date( 'Y-m-d', $find_post ) : get_the_time( 'Y-m-d', $find_post );
 					$until_time = strtotime( $the_time . ' ' . $search . ' days' );
 					$now_time   = strtotime( date_i18n( 'Y-m-d', current_time( 'timestamp' ) ) );
-					if ( $until_time >= $now_time ) {
+					if ( ( empty( $args['condition'] ) || $args['condition'] == 'is_less_than' ) && $until_time > $now_time ) {
+						$match_found = true;
+					} elseif ( $args['condition'] == 'is_greater_than' && $until_time < $now_time ) {
 						$match_found = true;
 					}
 				}
@@ -1562,6 +1564,17 @@ function geodir_post_meta_advance_fields( $post_type = 'gd_place' ) {
 function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
 	$fields = array();
 
+	$fields['default_category'] = array(
+		'type' => 'custom',
+		'name' => 'default_category',
+		'htmlvar_name' => 'default_category',
+		'frontend_title' => __( 'Default Category', 'geodirectory' ),
+		'field_icon' => 'fas fa-folder-open',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
 	$fields['overall_rating'] = array(
 		'type' => 'custom',
 		'name' => 'overall_rating',
@@ -1637,6 +1650,17 @@ function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
 		'field_type_key' => '',
 		'css_class' => '',
 		'extra_fields' => '',
+	);
+
+	$fields['post_status'] = array(
+		'type' => 'custom',
+		'name' => 'post_status',
+		'htmlvar_name' => 'post_status',
+		'frontend_title' => __( 'Status', 'geodirectory' ),
+		'field_icon' => 'fas fa-play',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
 	);
 
 	/**

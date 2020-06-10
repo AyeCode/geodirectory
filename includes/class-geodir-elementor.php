@@ -144,6 +144,7 @@ class GeoDir_Elementor {
 		$conditions_archive = new GeoDir_Elementor_Template_Conditions_Archive();
 		$conditions_manager->get_condition( 'general' )->register_sub_condition( $conditions_archive );
 
+
 		// Archive item, show message that no Conditions are needed.
 		$conditions_archive_item = new GeoDir_Elementor_Template_Conditions_Archive_item();
 		$conditions_manager->get_condition( 'general' )->register_sub_condition( $conditions_archive_item );
@@ -1097,6 +1098,7 @@ class GeoDir_Elementor {
 		$result    = false;
 		$type      = '';
 		$page_type = '';
+		$post_type = '';
 
 		// set post_type
 		if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) ) {
@@ -1115,6 +1117,7 @@ class GeoDir_Elementor {
 			$page_type = 'single';
 		} elseif ( geodir_is_page( 'search' ) ) {
 			$type      = 'search';
+			$post_type = geodir_get_current_posttype();
 			$page_type = 'archive';
 		}
 
@@ -1122,7 +1125,11 @@ class GeoDir_Elementor {
 			if ( $page_type == 'archive' && ! empty( $conditions['archive'] ) ) {
 				foreach ( $conditions['archive'] as $archive_conditions ) {
 					foreach ( $archive_conditions as $archive_condition ) {
-						if ( $archive_condition == 'include/geodirectory_archive' || stripos( strrev( $archive_condition ), strrev( $type ) ) === 0 ) {
+						if (
+							$archive_condition == 'include/geodirectory_archive' // all archives
+							|| stripos( strrev( $archive_condition ), strrev( $type ) ) === 0 // all search
+							|| stripos( strrev( $archive_condition ), strrev( $type."_".$post_type ) ) === 0 // cpt search
+						) {
 							$result = true;
 							break 2;
 						}
@@ -1175,5 +1182,39 @@ class GeoDir_Elementor {
 		}
 
 		return $page_title;
+	}
+
+
+	/**
+	 * Get the list of GD Archive item template skins.
+	 * 
+	 * @return array|bool|mixed
+	 */
+	public static function get_elementor_pro_skins(){
+		global $wpdb;
+
+		$cache = wp_cache_get("geodir_elementor_pro_skins");
+		if($cache !== false){
+			return $cache;
+		}
+
+		$templates = $wpdb->get_results(
+			"SELECT $wpdb->term_relationships.object_id as ID, $wpdb->posts.post_title as post_title FROM $wpdb->term_relationships
+						INNER JOIN $wpdb->term_taxonomy ON
+							$wpdb->term_relationships.term_taxonomy_id=$wpdb->term_taxonomy.term_taxonomy_id
+						INNER JOIN $wpdb->terms ON 
+							$wpdb->term_taxonomy.term_id=$wpdb->terms.term_id AND $wpdb->terms.slug='geodirectory-archive-item'
+						INNER JOIN $wpdb->posts ON
+							$wpdb->term_relationships.object_id=$wpdb->posts.ID
+          WHERE  $wpdb->posts.post_status='publish'"
+		);
+		$options = [ 0 => 'Select a template' ];
+		foreach ( $templates as $template ) {
+			$options[ $template->ID ] = $template->post_title;
+		}
+
+		wp_cache_set("geodir_elementor_pro_skins",$options);
+
+		return $options;
 	}
 }

@@ -30,7 +30,7 @@ class GeoDir_Admin_Help {
 	 * Add help tabs.
 	 */
 	public function add_tabs() {
-		$screen = get_current_screen(); // geodir_error_log( geodir_get_screen_ids(), @$screen->id, __FILE__, __LINE__ );
+		$screen = get_current_screen();
 
 		if ( ! $screen || ! in_array( $screen->id, geodir_get_screen_ids() ) ) {
 			return;

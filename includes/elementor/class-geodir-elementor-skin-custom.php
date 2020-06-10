@@ -149,28 +149,45 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 	}
 
 	protected function get_template(){
-    global $gdecs_render_loop, $wp_query,$ecs_index;
-    $ecs_index++;
-    $old_query=$wp_query;
-    $new_query=new \WP_Query( array( 'p' => get_the_ID(), 'post_type' => get_post_type() ) );
-    $wp_query = $new_query;
+		global $gdecs_render_loop, $wp_query, $ecs_index, $geodir_el_archive_item_tl;
+
+		$ecs_index++;
+		$old_query = $wp_query;
+		$new_query = new \WP_Query( array( 'p' => get_the_ID(), 'post_type' => get_post_type() ) );
+		$wp_query = $new_query;
 		$settings = $this->parent->get_settings();
-		$this->pid=get_the_ID();//set the current id in private var usefull to passid
-    $default_template = $this->get_instance_value( 'skin_template' ) ;
-    $template = $default_template;
-    /* move to pro */
-    $template = apply_filters( 'GDECS_action_template', $template,$this,$ecs_index );
-    $template = $this->get_current_ID($template);
+		$this->pid = get_the_ID(); // set the current id in private var useful to passid
+		$default_template = $this->get_instance_value( 'skin_template' ) ;
+		$template = $default_template;
 
-    $gdecs_render_loop=get_the_ID().",".$template;
-    //echo $gdecs_render_loop;
+		/* move to pro */
+		$template = apply_filters( 'GDECS_action_template', $template, $this, $ecs_index );
+		$template = $this->get_current_ID( $template );
 
+		$gdecs_render_loop = get_the_ID() . "," . $template;
+		/* end pro */
 
-    /* end pro */
-		if (!$template) return;
-		$return = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template );
-    $gdecs_render_loop=false;
-    $wp_query = $old_query;
+		$return = '';
+		if ( $template ) {
+			$geodir_el_archive_item_tl = $template;
+
+			$return = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template );
+
+			if ( $return ) {
+				$css_file = \Elementor\Core\DynamicTags\Dynamic_CSS::create( $this->pid, $template );
+				$css_file->enqueue();
+
+				if ( $css = $css_file->get_content() ) {
+					$css = str_replace( '.elementor-' . $this->pid . ' ', '.elementor-' . $template . '.post-' . $this->pid . ' ', $css );
+					$css = '<style id="elementor-post-dynamic-' . $this->pid . '">' . $css . '</style>';
+					$return = $css . $return;
+				}
+			}
+		}
+
+		$gdecs_render_loop = false;
+		$wp_query = $old_query;
+
 		return $return;
 	}
   
@@ -191,29 +208,40 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 	}
   
 	protected function render_post() {
-	  do_action( 'GDECS_before_render_post_header', $this );
-    $this->render_post_header();
-    do_action( 'GDECS_after_render_post_header', $this );
+		global $geodir_el_archive_item_tl;
 
-		if ($this->get_instance_value( 'skin_template' )){
-      if ($this->get_instance_value( 'use_keywords' ) == "yes") {
-        global $post;
-        $template = $this->get_template();
-        $new_template = apply_filters( 'ecs_dynamic_filter', $template, $post  );
-        echo  $new_template ? $new_template : $template;
-      }
-        else echo $this->get_template();
-    }
+		do_action( 'GDECS_before_render_post_header', $this );
+			$this->render_post_header();
+		do_action( 'GDECS_after_render_post_header', $this );
 
-			else  echo '<div style="display:table;border:1px solid #c6ced5; background:#dde1e5; width:100%; height:100%; min-height:200px;text-align:center; padding:20px;"><span style="vertical-align:middle;display: table-cell;color:#8995a0;">'.
-        __( "Please select a default template! ", 'geodirectory').'</span></div>';
+		ob_start();
+		if ( $this->get_instance_value( 'skin_template' ) ) {
+			if ( $this->get_instance_value( 'use_keywords' ) == "yes" ) {
+				global $post;
+				$template = $this->get_template();
+				$new_template = apply_filters( 'ecs_dynamic_filter', $template, $post  );
+				echo  $new_template ? $new_template : $template;
+			} else {
+				echo $this->get_template();
+			}
+		} else  {
+			echo '<div style="display:table;border:1px solid #c6ced5; background:#dde1e5; width:100%; height:100%; min-height:200px;text-align:center; padding:20px;"><span style="vertical-align:middle;display: table-cell;color:#8995a0;">' . __( "Please select a default template! ", 'geodirectory' ) . '</span></div>';
+		}
+		$item_content = ob_get_clean();
 
-    do_action( 'GDECS_before_render_post_footer', $this );
-		$this->render_post_footer();
-    do_action( 'GDECS_after_render_post_footer', $this );
+		// Remove css with template id.
+		if ( $item_content && $geodir_el_archive_item_tl && get_post_type( $geodir_el_archive_item_tl ) == 'elementor_library' ) {
+			$item_content = preg_replace( '#<style id="elementor-post-dynamic-' . $geodir_el_archive_item_tl . '">(.*?)</style>#', '', $item_content );
+		}
 
+		echo $item_content;
+
+		do_action( 'GDECS_before_render_post_footer', $this );
+			$this->render_post_footer();
+		do_action( 'GDECS_after_render_post_footer', $this );
+
+		unset( $geodir_el_archive_item_tl );
 	}
-  
 
   	protected function render_loop_header() {
     $parent_settings = $this->parent->get_settings();

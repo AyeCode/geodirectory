@@ -1,9 +1,18 @@
 <?php
 /**
  * Schema data types, sourced from https://schema.org/docs/tree.jsonld
+ *
+ * @info Stiofan has a PHP script to build this in his localhost.
  */
 function geodir_data_schemas() {
 	return array(
+		'Brand' => 'Brand',
+		'BroadcastChannel' => 'BroadcastChannel',
+		'RadioChannel' => '- RadioChannel',
+		'AMRadioChannel' => '- - AMRadioChannel',
+		'FMRadioChannel' => '- - FMRadioChannel',
+		'TelevisionChannel' => '- TelevisionChannel',
+		'JobPosting' => 'JobPosting',
 		'Airline' => 'Airline',
 		'Consortium' => 'Consortium',
 		'Corporation' => 'Corporation',
@@ -247,6 +256,15 @@ function geodir_data_schemas() {
 		'GatedResidenceCommunity' => '- GatedResidenceCommunity',
 		'TouristAttraction' => 'TouristAttraction',
 		'TouristDestination' => 'TouristDestination',
+		'IndividualProduct' => 'IndividualProduct',
+		'ProductModel' => 'ProductModel',
+		'SomeProducts' => 'SomeProducts',
+		'Vehicle' => 'Vehicle',
+		'BusOrCoach' => '- BusOrCoach',
+		'Car' => '- Car',
+		'Motorcycle' => '- Motorcycle',
+		'MotorizedBicycle' => '- MotorizedBicycle',
+		'Person' => 'Person',
 
 	);
 }

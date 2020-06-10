@@ -125,9 +125,17 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 				}
 			}
 
+		}
 
 
-		} 
+		// fallback image
+		if ( empty( $image_data['url'] ) && $this->get_settings( 'fallback_image' ) ) {
+			$value = $this->get_settings( 'fallback_image' );
+		}
+		if ( ! empty( $value ) && is_array( $value ) ) {
+			$image_data['id'] = $value['id'];
+			$image_data['url'] = $value['url'];
+		}
 
 		return $image_data;
 	}

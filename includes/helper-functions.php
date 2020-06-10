@@ -1761,7 +1761,7 @@ function geodir_setcookie( $name, $value, $expire = 0, $secure = false, $httponl
 		setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure, apply_filters( 'geodir_cookie_httponly', $httponly, $name, $value, $expire, $secure ) );
 		$_COOKIE[ $name ] = $value;
 	} elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
-		geodir_error_log( "{$name} cookie cannot be set - headers already sent by {$file} on line {$line}" ); // @codingStandardsIgnoreLine
+		geodir_error_log( "{$name} cookie cannot be set - headers already sent!" ); // @codingStandardsIgnoreLine
 	}
 }
 

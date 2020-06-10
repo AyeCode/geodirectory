@@ -74,7 +74,9 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 							$term_url = get_term_link( $term_id, $post->post_type."category" );
 							$value = '<a href="'.$term_url.'" >'.esc_attr($term->name).'</a>';
 						}elseif($show=='value-strip'){
-							$value = esc_attr($term->name);
+							if(!empty($term->name)){
+								$value = esc_attr($term->name);
+							}
 						}
 
 					}else{

@@ -235,6 +235,12 @@ class GeoDir_AJAX {
 
 		$post_ids = !empty($_REQUEST['viewed_post_id']) ? json_decode(stripslashes($_REQUEST['viewed_post_id']), true) : '';
 
+		// elementor pro
+		$skin_id = ! empty( $_REQUEST['skin_id'] ) ? absint( $_REQUEST['skin_id'] ) : '';
+		$skin_column_gap = ! empty( $_REQUEST['skin_column_gap'] ) ? absint( $_REQUEST['skin_column_gap'] ) : '';
+		$skin_row_gap = ! empty( $_REQUEST['skin_row_gap'] ) ? absint( $_REQUEST['skin_row_gap'] ) : '';
+
+
 		$listings_ids = array();
 
 		if( !empty( $post_type ) ) {
@@ -260,9 +266,31 @@ class GeoDir_AJAX {
 		}
 
 		if(!empty($widget_listings)){
-			$gd_layout_class = $layout;
 
-			geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
+			// elementor
+			$skin_active = false;
+			$columns = 1;
+			if(defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id){
+				if(get_post_status ( $skin_id )=='publish'){
+					$skin_active = true;
+				}
+				if($skin_active){
+					$columns = isset($layout) ? absint($layout) : 1;
+					if($columns == '0'){$columns = 6;}// we have no 6 row option to lets use list view
+				}
+			}
+
+			$gd_layout_class = geodir_convert_listing_view_class( $layout );
+
+			if($skin_active){
+				$column_gap = $skin_column_gap;
+				$row_gap = $skin_row_gap;
+				geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
+
+			}else{
+				geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
+			}
+
 		}else{
 			_e("Your recently viewed listings will show here.","geodirectory");
 		}

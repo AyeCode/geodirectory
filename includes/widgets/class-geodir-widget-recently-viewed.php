@@ -67,13 +67,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			'title' => __('Layout:', 'geodirectory'),
 			'desc' => __('How the listings should laid out by default.', 'geodirectory'),
 			'type' => 'select',
-			'options'   =>  array(
-				"gridview_onehalf"        =>  __('Grid View (Two Columns)', 'geodirectory'),
-				"gridview_onethird"        =>  __('Grid View (Three Columns)', 'geodirectory'),
-				"gridview_onefourth"        =>  __('Grid View (Four Columns)', 'geodirectory'),
-				"gridview_onefifth"        =>  __('Grid View (Five Columns)', 'geodirectory'),
-				"list"        =>  __('List view', 'geodirectory'),
-			),
+			'options'   =>  geodir_get_layout_options(),
 			'default'  => 'h3',
 			'desc_tip' => true,
 			'advanced' => true
@@ -100,6 +94,41 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			'default'  => 0,
 			'advanced' => true
 		);
+
+		/*
+		 * Elementor Pro features below here
+		 */
+		if(defined( 'ELEMENTOR_PRO_VERSION' )){
+			$widget_args['skin_id'] = array(
+				'title' => __( "Elementor Skin", 'geodirectory' ),
+				'desc' => '',
+				'type' => 'select',
+				'options' =>  GeoDir_Elementor::get_elementor_pro_skins(),
+				'default'  => '',
+				'desc_tip' => false,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+			);
+
+			$widget_args['skin_column_gap'] = array(
+				'title' => __('Skin column gap', 'geodirectory'),
+				'desc' => __('The px value for the column gap.', 'geodirectory'),
+				'type' => 'number',
+				'default'  => '30',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+			);
+			$widget_args['skin_row_gap'] = array(
+				'title' => __('Skin row gap', 'geodirectory'),
+				'desc' => __('The px value for the row gap.', 'geodirectory'),
+				'type' => 'number',
+				'default'  => '35',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+			);
+		}
 
 		return $widget_args;
 	}
@@ -132,6 +161,27 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		$layout = !empty( $args['layout'] ) ? $args['layout'] : 'list';
 		$post_type = !empty( $args['post_type'] ) ? $args['post_type'] : 'all_post';
 		$enqueue_slider = !empty( $args['enqueue_slider'] ) ? true : false;
+		
+		// elementor pro
+		if(defined( 'ELEMENTOR_PRO_VERSION' )) {
+			$skin_id         = ! empty( $args['skin_id'] ) ? absint( $args['skin_id'] ) : '';
+			$skin_column_gap = ! empty( $args['skin_column_gap'] ) ? absint( $args['skin_column_gap'] ) : '';
+			$skin_row_gap    = ! empty( $args['skin_row_gap'] ) ? absint( $args['skin_row_gap'] ) : '';
+		}
+
+		// elementor
+		$skin_active = false;
+		$elementor_wrapper_class = '';
+		if(defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id){
+			if(get_post_status ( $skin_id )=='publish'){
+				$skin_active = true;
+			}
+			if($skin_active){
+				$columns = isset($layout) ? absint($layout) : 1;
+				if($columns == '0'){$columns = 6;}// we have no 6 row option to lets use list view
+				$elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-'.$columns.' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
+			}
+		}
 
 		ob_start();
 
@@ -141,7 +191,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		}
 		?>
 		<div class="geodir-recently-reviewed">
-			<div class="recently-reviewed-content recently-reviewed-content-<?php echo absint($geodir_recently_viewed_count); ?>"></div>
+			<div class="recently-reviewed-content recently-reviewed-content-<?php echo absint($geodir_recently_viewed_count); echo $elementor_wrapper_class;?>"></div>
 			<div class="recently-reviewed-loader" style="display: none;text-align: center;"><i class="fas fa-sync fa-spin fa-2x"></i></div>
 		</div>
 
@@ -156,7 +206,18 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 					'viewed_post_id' : recently_viewed,
 					'list_per_page' :'<?php echo $post_page_limit; ?>' ,
 					'layout' : '<?php echo $layout; ?>',
-					'post_type':'<?php echo $post_type; ?>'
+					'post_type':'<?php echo $post_type; ?>',
+					<?php
+					// elementor pro
+					if(defined( 'ELEMENTOR_PRO_VERSION' )) {
+						?>
+					'skin_id':'<?php echo $skin_id; ?>',
+					'skin_column_gap':'<?php echo $skin_column_gap; ?>',
+					'skin_row_gap':'<?php echo $skin_row_gap; ?>',
+						<?php
+					}
+					?>
+					
 				};
 
 				jQuery.post(geodir_params.ajax_url, data, function(response) {

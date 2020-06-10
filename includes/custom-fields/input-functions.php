@@ -1117,7 +1117,7 @@ function geodir_cfi_address( $html, $cf ) {
             $mapzoom = $_mapzoom;
         } else {
             $mapzoom = 12; // Default zoom
-        }geodir_error_log( $mapzoom, 'mapzoom', __FILE__, __LINE__ );
+        }
 
         /**
          * Filter add listing page map zoom.
@@ -1948,7 +1948,7 @@ function geodir_cfi_files( $html, $cf ) {
                         echo '<span>*</span>';
                     } ?>
                 </label>
-                <span class="geodir_message_note gd_images_desc"><?php esc_attr_e( $cf['desc'], 'geodirectory' ); ?></span>
+                <span class="geodir_message_note gd_images_desc"><?php _e( $cf['desc'], 'geodirectory' ); ?></span>
                 <?php
                 // params for file upload
                 $is_required = $cf['is_required'];
