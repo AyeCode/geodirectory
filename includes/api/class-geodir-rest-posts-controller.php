@@ -2239,7 +2239,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'context'       => array( 'view', 'edit' ),
 						'title'         => !empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ),
 						'description'   => __( 'Zip/Post Code', 'geodirectory' ),
-						'required'      => (bool) ( $required && !empty( $extra_fields['show_zip'] ) ),
+						'required'      => (bool) ( ! empty( $extra_fields['zip_required'] ) && ! empty( $extra_fields['show_zip'] ) ),
 						'extra_fields'  => array(
 							'show' => (bool) ! empty( $extra_fields['show_zip'] )
 						)
