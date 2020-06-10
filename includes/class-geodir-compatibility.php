@@ -29,7 +29,8 @@ class GeoDir_Compatibility {
 		add_filter( 'geodir_seo_options', array( __CLASS__, 'wpseo_disable' ), 10 );
 		add_filter( 'Yoast\WP\SEO\prominent_words_post_types', array( __CLASS__, 'wpseo_prominent_words_post_types' ), 20, 1 );
 		add_filter( 'rank_math/opengraph/url', array( __CLASS__, 'rank_math_location_url_callback' ), 10 );
-
+		add_action( 'rank_math/opengraph/facebook/add_additional_images', array( __CLASS__, 'rank_math_cat_image' ), 10 );
+		add_action( 'rank_math/opengraph/twitter/add_additional_images', array( __CLASS__, 'rank_math_cat_image' ), 10 );
 		/*######################################################
 		Rank Math SEO
 		######################################################*/
@@ -174,6 +175,22 @@ class GeoDir_Compatibility {
 				// GD Loop
 				add_filter( 'geodir_before_get_template_part',array( __CLASS__, 'avada_get_temp_globals' ), 10);
 				add_filter( 'geodir_after_get_template_part',array( __CLASS__, 'avada_set_temp_globals' ), 10);
+			}
+		}
+	}
+
+	/**
+	 * Rank Math Category image
+	 * 
+	 * @param object $this_var rankmath class object
+	 */
+	function rank_math_cat_image( $this_var ){
+		global $wp_query;
+		if( is_category() || is_tax() ){
+			$term = $wp_query->get_queried_object();
+			if ( ! empty( $term->term_id ) && ! empty( $term->taxonomy ) && geodir_is_gd_taxonomy( $term->taxonomy ) ) {
+				$image_id = get_term_meta( $term->term_id, "rank_math_facebook_image_id", true );
+				$this_var->add_image_by_id( $image_id );
 			}
 		}
 	}
