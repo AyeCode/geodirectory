@@ -7,7 +7,7 @@
 * OSM Directions API changed to non SSL temporarily to fix their certificate error - CHANGED
 * [gd_post_badge] is_greater_than condition is not working with post date - FIXED
 * Elementor Image dynamic field fallback image not working - FIXED
-* Elementor Pro template conditions added for specific CPTs - ADDED
+* Elementor Pro search template conditions added for specific CPTs - ADDED
 * Elementor GD Archive Item template dynamic background & style is not working - FIXED
 * Schema list updated to add some new types - ADDED
 * Add ID in nav endpoints to avoid notice - ADDED
