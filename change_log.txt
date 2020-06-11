@@ -1,4 +1,5 @@
 = 2.0.0.96 =
+* Option added to make zip/post code as a required field - FIXED
 * The Open Graph image does not work from geodirectory categories - FIXED
 
 = 2.0.0.95 =
