@@ -1,5 +1,6 @@
 = 2.0.0.96 =
 * Option added to make zip/post code as a required field - FIXED
+* The Open Graph image does not work from geodirectory categories - FIXED
 
 = 2.0.0.95 =
 * Changes for Ninja Forms fix related to API requests - CHANGED
@@ -10,7 +11,7 @@
 * OSM Directions API changed to non SSL temporarily to fix their certificate error - CHANGED
 * [gd_post_badge] is_greater_than condition is not working with post date - FIXED
 * Elementor Image dynamic field fallback image not working - FIXED
-* Elementor Pro template conditions added for specific CPTs - ADDED
+* Elementor Pro search template conditions added for specific CPTs - ADDED
 * Elementor GD Archive Item template dynamic background & style is not working - FIXED
 * Schema list updated to add some new types - ADDED
 * Add ID in nav endpoints to avoid notice - ADDED
