@@ -1212,15 +1212,15 @@ function geodir_cfi_address( $html, $cf ) {
         if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) { ?>
 
             <div id="geodir_<?php echo $prefix . 'zip'; ?>_row"
-                 class="<?php echo ( $extra_fields['zip_required'] ? 'required_field ' : '' ); ?>geodir_form_row clearfix gd-fieldset-details">
+                 class="<?php echo ( ! empty( $extra_fields['zip_required'] ) ? 'required_field ' : '' ); ?>geodir_form_row clearfix gd-fieldset-details">
                 <label for="<?php echo esc_attr( $prefix . 'zip' ); ?>">
-                    <?php _e($zip_title, 'geodirectory'); ?> <?php echo ( $extra_fields['zip_required'] ? '<span>*</span>' : '' ); ?>
+                    <?php _e($zip_title, 'geodirectory'); ?> <?php echo ( ! empty( $extra_fields['zip_required'] ) ? '<span>*</span>' : '' ); ?>
                 </label>
                 <input type="text" field_type="<?php echo $type; ?>" name="<?php echo 'zip'; ?>"
                        id="<?php echo $prefix . 'zip'; ?>" class="geodir_textfield autofill"
                        value="<?php echo esc_attr(stripslashes($zip)); ?>"/>
                 <span class="geodir_message_note"><?php echo sprintf( __('Please enter listing %s', 'geodirectory'), __($zip_title, 'geodirectory') );?></span>
-                <?php echo ( $extra_fields['zip_required'] ? '<span class="geodir_message_error">' . __( 'Zip/Post Code is required!', 'geodirectory' ) . '</span>' : '' ); ?>
+                <?php echo ( ! empty( $extra_fields['zip_required'] ) ? '<span class="geodir_message_error">' . __( 'Zip/Post Code is required!', 'geodirectory' ) . '</span>' : '' ); ?>
             </div>
         <?php } ?>
 
