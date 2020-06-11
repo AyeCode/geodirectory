@@ -1,3 +1,6 @@
+= 2.0.0.96 =
+* The Open Graph image does not work from geodirectory categories - FIXED
+
 = 2.0.0.95 =
 * Changes for Ninja Forms fix related to API requests - CHANGED
 * [gd_post_meta] add support for default category & post status - ADDED
