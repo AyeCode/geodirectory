@@ -627,6 +627,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				</label>
 			</p>
 
+			<p class="gd-advanced-setting" data-setting="zip_required" <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {echo "style='display:none;'";}?>>
+				<label for="zip_required" class="dd-setting-name">
+					<?php
+					echo geodir_help_tip( __( 'Tick to set zip/post code field as required. Some countries do not use ZIP codes, please only enable if your directory is limited to countries that do.', 'geodirectory' ));
+					_e( 'Make zip/post code mandatory?', 'geodirectory' ); ?>
+					<input type="hidden" name="extra[zip_required]" value="0" />
+					<input type="checkbox" name="extra[zip_required]" value="1" <?php checked( ! empty( $address['zip_required'] ), true, true );?>/>
+				</label>
+			</p>
+
 			<p  class="cf-zip-lable gd-advanced-setting"  <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {echo "style='display:none;'";}?> data-setting="zip_lable">
 				<label for="zip_lable" class="dd-setting-name">
 					<?php

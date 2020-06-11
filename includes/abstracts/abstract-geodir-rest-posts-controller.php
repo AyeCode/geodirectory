@@ -888,7 +888,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'type'          => 'string',
                             'context'       => array( 'view', 'edit' ),
                             'title'         => !empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ),
-                            'required'      => (bool)$required,
+                            'required'      => ! empty( $extra_fields['zip_required'] ) ? true : false,
                         );
                     }
                     
