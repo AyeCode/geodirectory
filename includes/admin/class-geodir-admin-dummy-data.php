@@ -360,7 +360,18 @@ class GeoDir_Admin_Dummy_Data {
                      * @package GeoDirectory
                      */
                     include_once( 'dummy-data/freelancer.php' );
-                } else {
+                } elseif ( $key == 'doctors' ) {
+                    add_filter( 'geodir_extra_custom_fields', 'geodir_extra_custom_fields_' . $key, 10, 3 );
+
+                    /**
+                     * Contains dummy data for doctors.
+                     *
+                     * @since 2.0.0.60
+                     * @package GeoDirectory
+                     */
+                    include_once( 'dummy-data/doctors.php' );
+                }
+                 else {
 					do_action( 'geodir_dummy_data_include_file', $post_type, $data_type, $val, $item_index );
 				}
 			}
@@ -826,6 +837,11 @@ class GeoDir_Admin_Dummy_Data {
 			),
             'freelancer'   => array(
                 'name'  => __( 'Freelancer', 'geodirectory' ),
+                'count' => 20,
+                'has_templates' => true
+            ),
+            'doctors'   => array(
+                'name'  => __( 'Doctors', 'geodirectory' ),
                 'count' => 20,
                 'has_templates' => true
             )

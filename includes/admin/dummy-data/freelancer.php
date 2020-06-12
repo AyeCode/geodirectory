@@ -7,9 +7,6 @@
  */
 
 // Set the dummy image url
-//$dummy_image_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/'; // CDN URL will be faster
-
-//$dummy_image_url = plugin_dir_url( __FILE__ ) . 'freelancer-images';
 $dummy_image_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/freelancers/images';
 $dummy_caticon_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/freelancers/icons';
 
@@ -176,7 +173,7 @@ I also provide amazing custom template layouts for GDV2 with builders to really 
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Anna Sthesia',
+	"post_title" => 'Robert S. Lane',
 	"post_content" => 'Allow me to introduce myself, my name is Anna Sthesia, I am a fulltime pro-active WordPress GeoDirectory developer having 6+ years of experience on designing and developing WordPress Geodirectory websites.
 
 I’m friendly, professional, and very passionate about what I do. My promise to you is to deliver the best quality work, in the shortest amount of time, for a price that will fit your budget.
@@ -211,7 +208,7 @@ I’m friendly, professional, and very passionate about what I do. My promise to
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Bob Frapples',
+	"post_title" => 'Bobby M. Swann',
 	"post_content" => 'I have been a WordPress tragic for a long time now. I also am part of the GeoDirectory team since the beginning of that plugin and its add-ons, and my role there is to provide customer support, not only for the GeoDirectory plugins and plugins, but also the WP Invoicing and UsersWP plugins.',
 	"post_category" => array( 'Full Stack' ),
 	"post_tags" => array( 'mySQL', 'Linux Server' ),
@@ -275,11 +272,11 @@ Importantly, I Enjoy my job. Just give me a chance to work with you and I will a
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Minnie Van Ryder',
-	"post_content" => 'Hello Minnie Van Ryder, web designer, theme developer and founder of example.com, with over 8 years of experience in : UI/UX design, Front-End development, WordPress, I have the creative flair, originality and strong visual sense needed to satisfy the requirements of the most demanding of clients.',
+	"post_title" => 'James E. Craig',
+	"post_content" => 'Hello James E. Craig, web designer, theme developer and founder of example.com, with over 8 years of experience in : UI/UX design, Front-End development, WordPress, I have the creative flair, originality and strong visual sense needed to satisfy the requirements of the most demanding of clients.',
 	"post_category" => array( 'Front End', 'SEO', 'Back End' ),
 	"post_tags" => array( 'CSS', 'saas', 'scss' ),
-	"email" => 'van@example.com',
+	"email" => 'james@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '50',
 	"for_hire" => 1,
@@ -306,11 +303,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Eileen Sideways',
+	"post_title" => 'Robert C. Carroll',
 	"post_content" => 'Expert in SQL development and CSS, have more than 5+ years of experience.',
 	"post_category" => array( 'Implementer', 'SEO' ),
 	"post_tags" => array( 'SQL', 'saas', 'CSS' ),
-	"email" => 'eileen@example.com',
+	"email" => 'robert@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '30',
 	"for_hire" => 0,
@@ -337,11 +334,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Paige Turner',
+	"post_title" => 'Donny J. Charette',
 	"post_content" => 'Expert in SEO development and CSS, have more than 5+ years of experience.',
 	"post_category" => array( 'SEO', 'Back End' ),
 	"post_tags" => array( 'SQL', 'SEO' ),
-	"email" => 'paige@example.com',
+	"email" => 'donny@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
@@ -368,11 +365,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Wes Yabinlatelee',
+	"post_title" => 'Catherine B. Harris',
 	"post_content" => 'Expert in Full stack development, have more than 15+ years of experience.',
 	"post_category" => array( 'Full Stack', 'Implementer' ),
 	"post_tags" => array( 'css', 'SEO', 'sass', 'html' ),
-	"email" => 'paige@example.com',
+	"email" => 'cat@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '90',
 	"for_hire" => 1,
@@ -399,11 +396,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Karen Onnabit',
+	"post_title" => 'Herbert N. Fallin',
 	"post_content" => 'Expert in GD Ecosystem development, have more than 3+ years of experience of GD themes and plugins.',
 	"post_category" => array( 'Implementer', 'Front End' ),
 	"post_tags" => array( 'css', 'SEO', 'sass', 'html' ),
-	"email" => 'karen@example.com',
+	"email" => 'herbert@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '65',
 	"for_hire" => 1,
@@ -436,7 +433,7 @@ $dummy_posts[] = array(
 We can help you design, implement and customize every aspect of your directory. We can develop both GeoDirectory Themes and Add-ons.	',
 	"post_category" => array( 'Back End', 'SEO', 'Front End' ),
 	"post_tags" => array( 'mySQL', 'Linux Server' ),
-	"email" => 'info@example.com',
+	"email" => 'percy@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '78',
 	"for_hire" => 1,
@@ -463,11 +460,11 @@ We can help you design, implement and customize every aspect of your directory. 
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Percy Kewshun',
+	"post_title" => 'Margaret J. Cardenas',
 	"post_content" => 'Expert in Frontend development, have more than 15+ years of experience.',
 	"post_category" => array( 'Back End', 'Implementer', 'Front End' ),
 	"post_tags" => array( 'CSS', 'SCSS', 'NODEJS' ),
-	"email" => 'hello@example.com',
+	"email" => 'marg@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '48',
 	"for_hire" => 0,
@@ -525,11 +522,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Toi Story',
+	"post_title" => 'Jerry K. Phillips',
 	"post_content" => 'Expert in GeoDirectory themes and Plugins, have more than 10+ years of experience in Web Development.',
 	"post_category" => array( 'Full Stack', 'Back End', 'Front End' ),
 	"post_tags" => array( 'mySQL', 'Linux Server' ),
-	"email" => 'bob@example.com',
+	"email" => 'jerry@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '110',
 	"for_hire" => 1,
@@ -556,11 +553,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Gene Eva Convenshun',
+	"post_title" => 'Clifford M. Green',
 	"post_content" => 'Expert in Backend development and SEO, have more than 10+ years of experience.',
 	"post_category" => array( 'Implementer', 'Front End', 'Full Stack' ),
 	"post_tags" => array( 'mySQL', 'Linux Server', 'implementer' ),
-	"email" => 'gail@example.com',
+	"email" => 'green@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '150',
 	"for_hire" => 1,
@@ -587,11 +584,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Polly Ester Undawair',
+	"post_title" => 'Robert D. Powers',
 	"post_content" => 'Expert in Frontend development and Sass, have more than 5+ years of experience.',
 	"post_category" => array( 'Front End', 'Implementer', 'SEO' ),
 	"post_tags" => array( 'CSS', 'saas', 'scss' ),
-	"email" => 'van@example.com',
+	"email" => 'power@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '50',
 	"for_hire" => 1,
@@ -622,7 +619,7 @@ $dummy_posts[] = array(
 	"post_content" => 'Expert in SQL development and CSS, have more than 5+ years of experience.',
 	"post_category" => array( 'Implementer', 'Front End', 'Back End' ),
 	"post_tags" => array( 'SQL', 'saas', 'CSS' ),
-	"email" => 'eileen@example.com',
+	"email" => 'mike@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '30',
 	"for_hire" => 0,
@@ -649,11 +646,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Stanley Knife',
+	"post_title" => 'Rosalva R. Willis',
 	"post_content" => 'Expert in SEO development and CSS, have more than 5+ years of experience.',
 	"post_category" => array( 'SEO', 'Implementer', 'Full Stack' ),
 	"post_tags" => array( 'SQL', 'SEO' ),
-	"email" => 'paige@example.com',
+	"email" => 'rosa@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
@@ -680,11 +677,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Clyde Stale',
+	"post_title" => 'Lucinda W. Lee',
 	"post_content" => 'Expert in Full stack development, have more than 15+ years of experience.',
 	"post_category" => array( 'Full Stack', 'Front End', 'Back End', 'SEO', 'Implementer' ),
 	"post_tags" => array( 'css', 'SEO', 'sass', 'html' ),
-	"email" => 'paige@example.com',
+	"email" => 'lee@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '90',
 	"for_hire" => 1,
@@ -711,11 +708,11 @@ $dummy_posts[] = array(
 $dummy_posts[] = array(
 	"post_type" => $post_type,
 	"post_status" => 'publish',
-	"post_title" => 'Al Annon',
+	"post_title" => 'Kenneth J. Malott',
 	"post_content" => 'Expert in GD Ecosystem development, have more than 3+ years of experience of GD themes and plugins.',
 	"post_category" => array( 'Full Stack', 'Front End', 'Back End', 'SEO', 'Implementer' ),
 	"post_tags" => array( 'css', 'SEO', 'sass', 'html' ),
-	"email" => 'karen@example.com',
+	"email" => 'malott@example.com',
 	"website" => 'http://example.com/',
 	"hourly_price" => '65',
 	"for_hire" => 1,
@@ -989,3 +986,31 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 						  
 	return $fields;
 }
+
+
+// Dummy page templates
+$dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' position='left']
+[gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-top-left-angle gd-badge-shadow']
+[gd_post_badge key='video' condition='is_not_empty' icon_class='fas fa-video' badge='Video' link='%%input%%' bg_color='#0073aa' txt_color='#ffffff' list_hide_secondary='2' css_class='gd-badge-shadow gd-ab-top-right gd-lity']
+
+[gd_post_images type='image' ajax_load='true' link_to='post' types='logo,post_images']
+[gd_archive_item_section type='close' position='left']
+[gd_archive_item_section type='open' position='right']
+[gd_post_title tag='h2']
+
+[gd_post_badge key='for_hire' condition='is_not_empty' icon_class='fas fa-user-check' badge='For hire: %%input%%' bg_color='#19be00' txt_color='#ffffff' alignment='left']
+[gd_post_fav show='' alignment='right' list_hide_secondary='2']
+[gd_post_content key='post_content' limit='3000']
+
+[gd_post_meta key='hourly_price' alignment='left' text_alignment='left']
+[gd_post_rating alignment='right' list_hide_secondary='2']
+
+[gd_author_actions author_page_only='1']
+
+[gd_post_meta key='website' alignment='block' text_alignment='left']
+[gd_post_meta key='post_category' alignment='block' text_alignment='left']
+[gd_post_meta key='area_of_expertise' alignment='block' text_alignment='left']
+
+[gd_output_location location='listing']
+
+[gd_archive_item_section type='close' position='right']";
