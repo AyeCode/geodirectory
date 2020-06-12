@@ -1138,7 +1138,7 @@ class GeoDir_Query {
 						$orderby = $sort_by . " " . $order;
 						break;
 					case 'overall_rating':
-						$use_bayesian = apply_filters( 'gd_use_bayesian', true, $table );
+						$use_bayesian = apply_filters( 'geodir_use_bayesian', true, $table );
 						$avg_rating = 0;
 
 						if ( $use_bayesian ) {
