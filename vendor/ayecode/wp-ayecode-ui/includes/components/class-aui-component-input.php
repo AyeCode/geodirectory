@@ -30,14 +30,19 @@ class AUI_Component_Input {
 			'required'   => false,
 			'label'      => '',
 			'label_after'=> false,
+			'label_class'=> '',
 			'validation_text'   => '',
 			'validation_pattern' => '',
 			'no_wrap'    => false,
 			'input_group_right' => '',
 			'input_group_left' => '',
+			'input_group_right_inside' => false, // forces the input group inside the input
+			'input_group_left_inside' => false, // forces the input group inside the input
 			'step'       => '',
 			'switch'     => false, // to show checkbox as a switch
+			'checked'   => false, // set a checkbox or radio as selected
 			'password_toggle' => true, // toggle view/hide password
+			'extra_attributes'  => array() // an array of extra attributes
 		);
 
 		/**
@@ -47,8 +52,8 @@ class AUI_Component_Input {
 		$output = '';
 		if ( ! empty( $args['type'] ) ) {
 			$type = sanitize_html_class( $args['type'] );
-			$label_args = array('title'=>$args['label'],'for'=>$args['id']);
-			
+			$label_args = array('title'=>$args['label'],'for'=>$args['id'],'class' => $args['label_class']." ");
+
 			// Some special sauce for files
 			if($type=='file' ){
 				$args['label_after'] = true; // if type file we need the label after
@@ -61,7 +66,7 @@ class AUI_Component_Input {
 
 			// label before
 			if(!empty($args['label']) && !$args['label_after']){
-				if($type == 'file'){$label_args['class'] = 'custom-file-label';}
+				if($type == 'file'){$label_args['class'] .= 'custom-file-label';}
 				$output .= self::label( $label_args, $type );
 			}
 
@@ -93,6 +98,11 @@ class AUI_Component_Input {
 				$output .= ' value="'.sanitize_text_field($args['value']).'" ';
 			}
 
+			// checked, for radio and checkboxes
+			if( ( $type == 'checkbox' || $type == 'radio' ) && $args['checked'] ){
+				$output .= ' checked ';
+			}
+
 			// validation text
 			if(!empty($args['validation_text'])){
 				$output .= ' oninvalid="setCustomValidity(\''.esc_attr($args['validation_text']).'\')" ';
@@ -118,18 +128,25 @@ class AUI_Component_Input {
 			$class = !empty($args['class']) ? $args['class'] : '';
 			$output .= ' class="form-control '.$class.'" ';
 
+			// data-attributes
+			$output .= AUI_Component_Helper::data_attributes($args);
+
+			// extra attributes
+			if(!empty($args['extra_attributes'])){
+				$output .= AUI_Component_Helper::extra_attributes($args['extra_attributes']);
+			}
 
 			// close
 			$output .= ' >';
 
 			// label after
 			if(!empty($args['label']) && $args['label_after']){
-				if($type == 'file'){$label_args['class'] = 'custom-file-label';}
-				elseif($type == 'checkbox'){$label_args['class'] = 'custom-control-label';}
+				if($type == 'file'){$label_args['class'] .= 'custom-file-label';}
+				elseif($type == 'checkbox'){$label_args['class'] .= 'custom-control-label';}
 				$output .= self::label( $label_args, $type );
 			}
 
-			
+
 			// some input types need a separate wrap
 			if($type == 'file') {
 				$output = self::wrap( array(
@@ -157,18 +174,21 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// input group wraps
 			if($args['input_group_left'] || $args['input_group_right']){
+				$w100 = strpos($args['class'], 'w-100') !== false ? ' w-100' : '';
 				if($args['input_group_left']){
 					$output = self::wrap( array(
 						'content' => $output,
-						'class'   => 'input-group',
-						'input_group_right' => $args['input_group_left']
+						'class'   => $args['input_group_left_inside'] ? 'input-group-inside'.$w100  : 'input-group',
+						'input_group_left' => $args['input_group_left'],
+						'input_group_left_inside'    => $args['input_group_left_inside']
 					) );
 				}
 				if($args['input_group_right']){
 					$output = self::wrap( array(
 						'content' => $output,
-						'class'   => 'input-group',
-						'input_group_right' => $args['input_group_right']
+						'class'   => $args['input_group_right_inside'] ? 'input-group-inside'.$w100 : 'input-group',
+						'input_group_right' => $args['input_group_right'],
+						'input_group_right_inside'    => $args['input_group_right_inside']
 					) );
 				}
 
@@ -388,6 +408,8 @@ else{$eli.attr(\'type\',\'password\');}"
 			'content'   => '',
 			'input_group_left' => '',
 			'input_group_right' => '',
+			'input_group_left_inside' => false,
+			'input_group_right_inside' => false,
 		);
 
 		/**
@@ -407,10 +429,12 @@ else{$eli.attr(\'type\',\'password\');}"
 			// close wrap
 			$output .= ' >';
 
+
 			// Input group left
 			if(!empty($args['input_group_left'])){
+				$position_class = !empty($args['input_group_left_inside']) ? 'position-absolute' : '';
 				$input_group_left = strpos($args['input_group_left'], '<') !== false ? $args['input_group_left'] : '<span class="input-group-text">'.$args['input_group_left'].'</span>';
-				$output .= '<div class="input-group-prepend">'.$input_group_left.'</div>';
+				$output .= '<div class="input-group-prepend '.$position_class.'">'.$input_group_left.'</div>';
 			}
 
 			// content
@@ -418,8 +442,9 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// Input group right
 			if(!empty($args['input_group_right'])){
+				$position_class = !empty($args['input_group_left_inside']) ? 'position-absolute' : '';
 				$input_group_right = strpos($args['input_group_right'], '<') !== false ? $args['input_group_right'] : '<span class="input-group-text">'.$args['input_group_right'].'</span>';
-				$output .= '<div class="input-group-append">'.$input_group_right.'</div>';
+				$output .= '<div class="input-group-append '.$position_class.'">'.$input_group_right.'</div>';
 			}
 
 
@@ -566,7 +591,7 @@ else{$eli.attr(\'type\',\'password\');}"
 							$selected = selected( $args['value'], $val, false);
 						}
 					}
-					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';	
+					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';
 				}
 			}
 

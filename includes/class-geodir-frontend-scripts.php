@@ -583,7 +583,7 @@ class GeoDir_Frontend_Scripts {
 		self::register_scripts();
 		self::register_styles();
 
-		if($design_style){
+		if(!$design_style){
 
 
 			// global enqueues

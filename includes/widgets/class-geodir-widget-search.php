@@ -30,7 +30,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
             'name'          => __('GD > Search','geodirectory'), // the name of the widget.
             //'disable_widget'=> true,
             'widget_ops'    => array(
-                'classname'   => 'geodir-search-container', // widget class
+                'classname'   => 'geodir-search-container bsui', // widget class
                 'description' => esc_html__('Shows the GeoDirectory search bar.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),
@@ -101,8 +101,6 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
          */
         extract($args, EXTR_SKIP);
 
-        // prints the widget
-        extract($args, EXTR_SKIP);
 
         // set the CPT to be used.
         if(isset($post_type) && $post_type && geodir_is_gd_post_type($post_type)){
@@ -117,8 +115,11 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
             $geodir_search_post_type_hide = true;
         }
 
-        geodir_get_template_part('listing', 'filter-form');
 
+        $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
+        $template = $design_style ? $design_style."/search-bar/form.php" : "listing-filter-form.php";
+
+        echo geodir_get_template_html( $template );
 
         // after outputing the search reset the CPT
         global $geodir_search_post_type;

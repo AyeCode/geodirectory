@@ -165,7 +165,7 @@ class AUI_Component_Helper {
 
 	/**
 	 * Build a font awesome icon from a class.
-	 * 
+	 *
 	 * @param $class
 	 * @param bool $space_after
 	 *
@@ -181,6 +181,24 @@ class AUI_Component_Helper {
 				if($space_after){
 					$output .= " ";
 				}
+			}
+		}
+
+		return $output;
+	}
+
+	/**
+	 * @param $args
+	 *
+	 * @return string
+	 */
+	public static function extra_attributes($args){
+		$output = '';
+
+		if(!empty($args) && is_array($args) ){
+
+			foreach($args as $key => $val){
+				$output .= ' '.sanitize_html_class($key).'="'.esc_attr($val).'" ';
 			}
 		}
 
