@@ -4,6 +4,7 @@
 * Skip duplicate slug checking for WP post categories & tags - CHANGED
 * Compatibility for rankmath breadcrumb - FIXED
 * Divi search template shows archive item in multiple loop - FIXED
+* Add listing page is not working properly with Divi page builder - FIXED
 
 = 2.0.0.95 =
 * Changes for Ninja Forms fix related to API requests - CHANGED
