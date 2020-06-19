@@ -35,6 +35,9 @@ class GeoDir_Admin_Install {
 		),
 		'2.0.0.82' => array(
 			'geodir_upgrade_20082',
+		),
+		'2.0.0.96' => array(
+			'geodir_upgrade_20096',
 		)
 	);
 
@@ -751,15 +754,6 @@ class GeoDir_Admin_Install {
 		  UNIQUE KEY comment_id (comment_id)
 		) $collate; ";
 			
-		// Table for storing business hours info
-		$tables .= " CREATE TABLE " . GEODIR_BUSINESS_HOURS_TABLE . " (
-			id int(11) NOT NULL AUTO_INCREMENT,
-			post_id int(11) DEFAULT NULL,
-			open int(11) DEFAULT NULL,
-			close int(11) DEFAULT NULL,
-			PRIMARY KEY  (id)
-			) $collate; ";
-			
 		// Table to store api keys
 		$tables .= " CREATE TABLE " . GEODIR_API_KEYS_TABLE . " (
 			  key_id BIGINT UNSIGNED NOT NULL auto_increment,
@@ -897,7 +891,6 @@ class GeoDir_Admin_Install {
 		$tables = array();
 		$tables["{$gd_prefix}api_keys"] = "{$db_prefix}{$gd_prefix}api_keys";
 		$tables["{$gd_prefix}attachments"] = "{$db_prefix}{$gd_prefix}attachments";
-		$tables["{$gd_prefix}business_hours"] = "{$db_prefix}{$gd_prefix}business_hours";
 		$tables["{$gd_prefix}custom_fields"] = "{$db_prefix}{$gd_prefix}custom_fields";
 		$tables["{$gd_prefix}custom_sort_fields"] = "{$db_prefix}{$gd_prefix}custom_sort_fields";
 		$tables["{$gd_prefix}post_review"] = "{$db_prefix}{$gd_prefix}post_review";

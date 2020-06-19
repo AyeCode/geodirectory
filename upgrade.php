@@ -182,3 +182,35 @@ function geodir_upgrade_20082() {
 	// Generate title keywords.
 	geodir_generate_title_keywords();
 }
+
+/**
+ * Update for 2.0.0.96
+ *
+ * @since 2.0.0.96
+ *
+ * @return void
+ */
+function geodir_upgrade_20096() {
+	global $wpdb;
+
+	// Add columns in business hours table.
+	$table = $wpdb->prefix . 'geodir_business_hours';
+
+	if ( ! geodir_column_exist( $table, 'open_utc' ) ) {
+		$wpdb->query( "ALTER TABLE `{$table}` 
+			ADD open_utc int(9) UNSIGNED NOT NULL, 
+			ADD close_utc int(9) UNSIGNED NOT NULL, 
+			ADD open_dst int(9) UNSIGNED NOT NULL, 
+			ADD close_dst int(9) UNSIGNED NOT NULL, 
+			ADD timezone_string varchar(100) NOT NULL, 
+			ADD has_dst tinyint(1) NOT NULL DEFAULT '0', 
+			ADD is_dst tinyint(1) NOT NULL DEFAULT '0'" 
+		);
+	}
+
+	// Update timezone to timezone string.
+	$country = geodir_get_option( 'default_location_country' );
+	$timezone = geodir_get_option( 'default_location_timezone' );
+	$timezone_string = geodir_offset_to_timezone_string( $timezone, $country );
+	geodir_update_option( 'default_location_timezone_string', $timezone_string );
+}

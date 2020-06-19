@@ -1210,7 +1210,6 @@ function geodir_cfi_address( $html, $cf ) {
         do_action('geodir_address_extra_listing_fields', $cf);
 
         if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) { ?>
-
             <div id="geodir_<?php echo $prefix . 'zip'; ?>_row"
                  class="<?php echo ( ! empty( $extra_fields['zip_required'] ) ? 'required_field ' : '' ); ?>geodir_form_row clearfix gd-fieldset-details">
                 <label for="<?php echo esc_attr( $prefix . 'zip' ); ?>">
@@ -1744,43 +1743,44 @@ add_filter('geodir_custom_field_input_tags','geodir_cfi_tags',10,2);
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_business_hours( $html, $cf ) {
-    if ( empty( $html ) ) {
-        $htmlvar_name = $cf['htmlvar_name'];
+	global $gd_post;
+
+	if ( empty( $html ) ) {
+		$htmlvar_name = $cf['htmlvar_name'];
 		$name = $cf['name'];
 		$label = __( $cf['frontend_title'], 'geodirectory' );
 		$description = __( $cf['desc'], 'geodirectory' );
-		$value = geodir_get_cf_value( $cf );
-		
+		$value = geodir_get_cf_value( $cf );geodir_error_log( $value, 'value', __FILE__, __LINE__ );
+
+		$locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
+		$time_format = geodir_bh_input_time_format();
+		$timezone_string = geodir_timezone_string();
 		$weekdays = geodir_get_weekdays();
+
 		$hours = array();
 		$display = 'none';
-		$location_timezone = trim( geodir_get_option( 'default_location_timezone' ) );
-		if ( $location_timezone != '' ) {
-			$timezone_string = geodir_utc_offset( $location_timezone ); // Default location timezone.
-		} else {
-			$timezone_string = trim( get_option('timezone_string') ); // WordPress default timezone.
-		}
-		$default_offset = esc_attr( geodir_utc_offset_dst( $timezone_string, true ) );
-		$gmt_offset = $default_offset;
 
 		if ( ! empty( $value ) ) {
 			$display = '';
 			$value = stripslashes_deep( $value );
-			$periods = geodir_schema_to_array( $value );
+			$periods = geodir_schema_to_array( $value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
 			if ( ! empty( $periods['hours'] ) ) {
 				$hours = $periods['hours'];
 			}
-			if ( ! empty( $periods['offset'] ) ) {
-				$gmt_offset = $periods['offset'];
+
+			if ( ! empty( $periods['timezone_string'] ) ) {
+				$timezone_string = $periods['timezone_string'];
 			}
 		} else {
 			$hours = geodir_bh_default_values(); // Default value
 		}
 
-		$time_format = geodir_bh_input_time_format();
+		$timezone_data = geodir_timezone_data( $timezone_string );
+
+		geodir_error_log( $timezone_data, $timezone_string, __FILE__, __LINE__ );
 		ob_start();
 		?>
-		<script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':'<?php echo $gmt_offset; ?>'});});</script>
+		<script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
         <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row">
             <label for="<?php echo $htmlvar_name; ?>_f_active_1"><?php echo $label; ?></label>
 			<div class="gd-bh-field" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
@@ -1833,8 +1833,8 @@ function geodir_cfi_business_hours( $html, $cf ) {
 							</tr>
 							<?php } ?>
 							<tr class="gd-tz-item">
-								<td colspan="4"><label form="<?php echo $htmlvar_name; ?>_f_timezone"><?php _e( 'Timezone offset from UTC (not including daylight savings time This is set automatically when address is set)', 'geodirectory' ); ?></label> 
-                                    <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( $default_offset ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN">
+								<td colspan="4"><label for="<?php echo $htmlvar_name; ?>_f_timezone_string"><?php _e( 'Timezone', 'geodirectory' ); ?></label>
+									<select data-field="timezone_string" id="<?php echo $htmlvar_name; ?>_f_timezone_string" class="geodir_textfield textfield_x geodir-select" data-placeholder="<?php esc_attr_e( 'Select a city/timezone&hellip;', 'geodirectory' ); ?>" data-allow_clear="true"><?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?></select>
                                 </td>
                             </tr>
 						</tbody>

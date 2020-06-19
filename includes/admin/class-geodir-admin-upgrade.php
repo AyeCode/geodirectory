@@ -416,7 +416,7 @@ class GeoDir_Admin_Upgrade {
 			'default_location_country' => $default_location['country'],
 			'default_location_latitude' => $default_location['city_latitude'],
 			'default_location_longitude' => $default_location['city_longitude'],
-			'default_location_timezone' => '',
+			'default_location_timezone_string' => geodir_timezone_string(),
 			'permalink_category_base' => 'category',
 			'permalink_tag_base' => 'tags',
 

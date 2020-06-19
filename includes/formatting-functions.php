@@ -334,36 +334,46 @@ function geodir_format_decimal( $number, $dp = false, $trim_zeros = false ) {
  * @return string PHP timezone string for the site
  */
 function geodir_timezone_string() {
+	$timezone_string = '';
 
-	// if site timezone string exists, return it
-	if ( $timezone = get_option( 'timezone_string' ) ) {
-		return $timezone;
+	$timezones = timezone_identifiers_list();
+
+	$_timezone_string = geodir_get_option( 'default_location_timezone_string' );
+	if ( $_timezone_string && in_array( $_timezone_string, $timezones ) ) {
+		$timezone_string = $_timezone_string;
 	}
 
-	// get UTC offset, if it isn't set then return UTC
-	if ( 0 === ( $utc_offset = intval( get_option( 'gmt_offset', 0 ) ) ) ) {
-		return 'UTC';
-	}
-
-	// adjust UTC offset from hours to seconds
-	$utc_offset *= 3600;
-
-	// attempt to guess the timezone string from the UTC offset
-	if ( $timezone = timezone_name_from_abbr( '', $utc_offset ) ) {
-		return $timezone;
-	}
-
-	// last try, guess timezone string manually
-	foreach ( timezone_abbreviations_list() as $abbr ) {
-		foreach ( $abbr as $city ) {
-			if ( (bool) date( 'I' ) === (bool) $city['dst'] && $city['timezone_id'] && intval( $city['offset'] ) === $utc_offset ) {
-				return $city['timezone_id'];
-			}
+	if ( ! $timezone_string && ( $_timezone_string = trim( get_option('timezone_string') ) ) ) {
+		if ( in_array( $_timezone_string, $timezones ) ) {
+			$timezone_string = $_timezone_string;
 		}
 	}
 
-	// fallback to UTC
-	return 'UTC';
+	if ( ! $timezone_string ) {
+		$timezone_string = 'UTC';
+	}
+
+	return apply_filters( 'geodir_timezone_string', $timezone_string );
+}
+
+/**
+ * Retrieve the timezone offset.
+ *
+ * @since 2.0.0.96
+ * @return string PHP timezone string for the site
+ */
+function geodir_timezone_utc_offset( $timezone_string = '', $dst = true ) {
+	$offset = '';
+
+	if ( empty( $timezone_string ) ) {
+		$timezone_string = geodir_timezone_string();
+	}
+
+	$data = geodir_timezone_data( $timezone_string );
+
+	$offset = $dst && ! empty( $data['is_dst'] ) ? $data['utc_offset_dst'] : $data['utc_offset'];
+
+	return apply_filters( 'geodir_timezone_utc_offset', $offset, $timezone_string, $dst );
 }
 
 /**

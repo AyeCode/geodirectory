@@ -103,8 +103,6 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         );
     }
 
-
-
     /**
      * The Super block output function.
      *
