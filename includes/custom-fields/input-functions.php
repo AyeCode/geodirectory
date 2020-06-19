@@ -1750,7 +1750,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		$name = $cf['name'];
 		$label = __( $cf['frontend_title'], 'geodirectory' );
 		$description = __( $cf['desc'], 'geodirectory' );
-		$value = geodir_get_cf_value( $cf );geodir_error_log( $value, 'value', __FILE__, __LINE__ );
+		$value = geodir_get_cf_value( $cf );
 
 		$locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
 		$time_format = geodir_bh_input_time_format();
@@ -1777,7 +1777,6 @@ function geodir_cfi_business_hours( $html, $cf ) {
 
 		$timezone_data = geodir_timezone_data( $timezone_string );
 
-		geodir_error_log( $timezone_data, $timezone_string, __FILE__, __LINE__ );
 		ob_start();
 		?>
 		<script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
