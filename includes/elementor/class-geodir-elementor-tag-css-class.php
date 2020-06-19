@@ -60,6 +60,11 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 
 		$value = '';
 		$key   = $this->get_settings( 'key' );
+
+		if ( $key == 'post_images' ) {
+			$key = 'featured_image';
+		}
+
 		$condition   = $this->get_settings( 'condition' );
 		$match   = $this->get_settings( 'match' );
 		$show = 'value-raw';
@@ -114,8 +119,9 @@ Class GeoDir_Elementor_Tag_CSS_Class extends \Elementor\Core\DynamicTags\Tag {
 				}
 			} elseif ( substr( $key, 0, 9 ) === "category_" ) {
 				$value = $this->get_category_meta( $key, $show );
+			} elseif ( ! in_array( $key, array_keys( (array) $gd_post ) ) ) {
+				$key = ''; // Key doen't exists.
 			}
-
 
 			// conditions
 			$match_found = false;
