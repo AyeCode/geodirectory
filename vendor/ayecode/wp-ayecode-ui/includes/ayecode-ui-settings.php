@@ -106,6 +106,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				if ( is_admin() ) {
 					add_action( 'admin_menu', array( self::$instance, 'menu_item' ) );
 					add_action( 'admin_init', array( self::$instance, 'register_settings' ) );
+
+					// Maybe show example page
+					add_action( 'template_redirect', array( self::$instance,'maybe_show_examples' ) );
 				}
 
 				add_action( 'customize_register', array( self::$instance, 'customizer_settings' ));
@@ -1027,6 +1030,123 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			}
 
 			return '#' . implode($hexCode);
+		}
+
+		/**
+		 * Check if we should display examples.
+		 */
+		public function maybe_show_examples(){
+			if(current_user_can('manage_options') && isset($_REQUEST['preview-aui'])){
+				echo "<head>";
+				wp_head();
+				echo "</head>";
+				echo "<body>";
+				echo $this->get_examples();
+				echo "</body>";
+				exit;
+			}
+		}
+
+		/**
+		 * Get developer examples.
+		 * 
+		 * @return string
+		 */
+		public function get_examples(){
+			$output = '';
+
+
+			// open form
+			$output .= "<form class='p-5 m-5 border rounded'>";
+
+			// input example
+			$output .= aui()->input(array(
+				'type'  =>  'text',
+				'id'    =>  'text-example',
+				'name'    =>  'text-example',
+				'placeholder'   => 'text placeholder',
+				'title'   => 'Text input example',
+				'value' =>  '',
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Text input example label'
+			));
+
+			// input example
+			$output .= aui()->input(array(
+				'type'  =>  'url',
+				'id'    =>  'text-example2',
+				'name'    =>  'text-example',
+				'placeholder'   => 'url placeholder',
+				'title'   => 'Text input example',
+				'value' =>  '',
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Text input example label'
+			));
+
+			// checkbox example
+			$output .= aui()->input(array(
+				'type'  =>  'checkbox',
+				'id'    =>  'checkbox-example',
+				'name'    =>  'checkbox-example',
+				'placeholder'   => 'checkbox-example',
+				'title'   => 'Checkbox example',
+				'value' =>  '1',
+				'checked'   => true,
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Checkbox checked'
+			));
+
+			// checkbox example
+			$output .= aui()->input(array(
+				'type'  =>  'checkbox',
+				'id'    =>  'checkbox-example2',
+				'name'    =>  'checkbox-example2',
+				'placeholder'   => 'checkbox-example',
+				'title'   => 'Checkbox example',
+				'value' =>  '1',
+				'checked'   => false,
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Checkbox un-checked'
+			));
+
+			// switch example
+			$output .= aui()->input(array(
+				'type'  =>  'checkbox',
+				'id'    =>  'switch-example',
+				'name'    =>  'switch-example',
+				'placeholder'   => 'checkbox-example',
+				'title'   => 'Switch example',
+				'value' =>  '1',
+				'checked'   => true,
+				'switch'    => true,
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Switch on'
+			));
+
+			// switch example
+			$output .= aui()->input(array(
+				'type'  =>  'checkbox',
+				'id'    =>  'switch-example2',
+				'name'    =>  'switch-example2',
+				'placeholder'   => 'checkbox-example',
+				'title'   => 'Switch example',
+				'value' =>  '1',
+				'checked'   => false,
+				'switch'    => true,
+				'required'  => false,
+				'help_text' => 'help text',
+				'label' => 'Switch off'
+			));
+
+			// close form
+			$output .= "</form>";
+
+			return $output;
 		}
 
 	}

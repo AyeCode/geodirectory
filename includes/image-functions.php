@@ -77,7 +77,7 @@ function geodir_get_image_src($image, $size = 'medium'){
  * @param string $align Optional. get the image alignment value. Default null.
  * @return string $html Image tag.
  */
-function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
+function geodir_get_image_tag( $image, $size = 'medium',$align = '', $classes = '' ) {
 
     $meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
     $img_src = geodir_get_image_src($image, $size);
@@ -94,7 +94,7 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
     $id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
     $title = isset( $image->title ) && $image->title ? 'title="' . esc_attr( wp_strip_all_tags( stripslashes_deep( $image->title ) ) ) . '" ' : '';
     $alt = isset( $image->caption ) && $image->caption ? esc_attr( wp_strip_all_tags( stripslashes_deep( $image->caption ) ) ) : '';
-    $class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id;
+    $class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id .' w-100 p-0 m-0 mw-100 border-0 '.$classes;
 
     /**
      * Filters the value of the attachment's image tag class attribute.

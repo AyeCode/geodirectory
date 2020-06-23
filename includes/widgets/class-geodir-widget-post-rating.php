@@ -33,7 +33,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
             'base_id'       => 'gd_post_rating', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Post Rating','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-post-rating', // widget class
+                'classname'   => 'geodir-post-rating bsui', // widget class
                 'description' => esc_html__('This shows a GD post rating stars.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
@@ -188,7 +188,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         global $post;
         ob_start();
         ?>
-        <div class="gd-list-rating-stars">
+        <div class="gd-list-rating-stars d-inline-block">
            <?php
            if ( ! empty( $post->post_type ) && geodir_cpt_has_rating_disabled( $post->post_type ) ) {
                echo '<i class="fas fa-comments" aria-hidden="true"></i>';
@@ -220,7 +220,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         global $gd_post;
         ob_start();
         ?>
-        <span class="gd-list-rating-text">
+        <span class="gd-list-rating-text d-inline-bloc">
             <a href="<?php comments_link(); ?>" class="gd-list-rating-link">
                 <?php geodir_comments_number( $gd_post ); ?>
             </a>

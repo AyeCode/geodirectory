@@ -82,11 +82,24 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
         $args = wp_parse_args( $args, $defaults );
         $output = '';
 
+
+
 //        print_r($args);
         if(isset($args['type']) && $args['type']=='open'){
-            $class = !empty($args['class']) ? esc_attr($args['class']) : '';
-            $position = isset($args['position']) && $args['position']=='left' ? 'left' : 'right';
-            $output = '<div class="gd-list-item-'.$position.' '.$class.'">';
+
+            $design_style = geodir_design_style();
+
+            if($design_style){
+                $class = !empty($args['class']) ? esc_attr($args['class']) : '';
+                $position = isset($args['position']) && $args['position']=='left' ? 'card-img-top overflow-hidden' : 'card-body';
+                $output = '<div class="'.$position.' '.$class.'">';
+            }else{
+                $class = !empty($args['class']) ? esc_attr($args['class']) : '';
+                $position = isset($args['position']) && $args['position']=='left' ? 'left' : 'right';
+                $output = '<div class="gd-list-item-'.$position.' '.$class.'">';
+            }
+
+
         }elseif(isset($args['type']) && $args['type']=='close'){
             $output = "</div>";
         }

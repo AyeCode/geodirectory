@@ -25,10 +25,12 @@ global $gd_post;
 ?>
 
 <div <?php GeoDir_Post_Data::post_class("col mb-4"); ?> data-post-id="<?php echo esc_attr( $gd_post->ID ); ?>">
+	<div class="card h-100">
 	<?php
 
-	// get content from GD Archive Item page template
-	echo GeoDir_Template_Loader::archive_item_template_content( $gd_post->post_type );
+		// get content from GD Archive Item page template
+		echo GeoDir_Template_Loader::archive_item_template_content( $gd_post->post_type );
 
 	?>
+	</div>
 </div>

@@ -1,3 +1,10 @@
+= 0.1.11 =
+* IOS scroll bar class .scrollbars-ios added - ADDED
+
+= 0.1.10 =
+* Embed item cover classes added - ADDED
+* Input group inside ability added - ADDED
+
 = 0.1.8 =
 * Checkbox / radio can now set an item selected by setting argument `checked` to true - ADDED
 

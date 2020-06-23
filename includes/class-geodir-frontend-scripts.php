@@ -439,6 +439,7 @@ class GeoDir_Frontend_Scripts {
 		$map_extra = apply_filters('geodir_googlemap_script_extra', '');
 
 		$suffix           = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$aui = geodir_design_style() ? '-aui' : '';
 		$register_scripts = array(
 			'select2' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js',
@@ -501,7 +502,7 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory' . $suffix . '.js',
+				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory'. $aui . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
@@ -521,6 +522,13 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			)
 		);
+
+//		// AUI Scripts
+//		$register_scripts['geodirectory-aui'] = array(
+//			'src'     => geodir_plugin_url() . '/assets/js/geodirectory-aui' . $suffix . '.js',
+//			'deps'    => array('jquery'),
+//			'version' => GEODIRECTORY_VERSION,
+//		);
 		foreach ( $register_scripts as $name => $props ) {
 			self::register_script( $name, $props['src'], $props['deps'], $props['version'] );
 		}
@@ -583,6 +591,10 @@ class GeoDir_Frontend_Scripts {
 		self::register_scripts();
 		self::register_styles();
 
+
+
+//		self::enqueue_script( 'geodir' );
+
 		if(!$design_style){
 
 
@@ -618,6 +630,10 @@ class GeoDir_Frontend_Scripts {
 				//self::enqueue_script( 'jquery-flexslider' ); // moved to widget
 			}
 
+		}else{
+			// js
+			self::enqueue_script( 'geodir' ); // original
+//			self::enqueue_script( 'geodirectory-aui' );
 		}
 
 		// Maps

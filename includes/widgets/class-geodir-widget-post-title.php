@@ -18,32 +18,32 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 			'block-icon'    => 'minus',
 			'block-category'=> 'common',
 			'block-keywords'=> "['title','geo','geodir']",
-			'block-output'   => array( // the block visual output elements as an array
-				array(
-					'element' => 'h1',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h1"',
-					'content'   => __("Demo title h1","geodirectory"),
-				),
-				array(
-					'element' => 'h2',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h2"',
-					'content'   => __("Demo title h2","geodirectory"),
-				),
-				array(
-					'element' => 'h3',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h3"',
-					'content'   => __("Demo title h3","geodirectory"),
-				),
-
-			),
+//			'block-output'   => array( // the block visual output elements as an array
+//				array(
+//					'element' => 'h1',
+//					'class'   => '[%className%]',
+//					'element_require' => '[%tag%]=="h1"',
+//					'content'   => __("Demo title h1","geodirectory"),
+//				),
+//				array(
+//					'element' => 'h2',
+//					'class'   => '[%className%]',
+//					'element_require' => '[%tag%]=="h2"',
+//					'content'   => __("Demo title h2","geodirectory"),
+//				),
+//				array(
+//					'element' => 'h3',
+//					'class'   => '[%className%]',
+//					'element_require' => '[%tag%]=="h3"',
+//					'content'   => __("Demo title h3","geodirectory"),
+//				),
+//
+//			),
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_title', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Post Title','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-title', // widget class
+				'classname'   => 'geodir-post-title bsui', // widget class
 				'description' => esc_html__('This shows a GD post title with link.','geodirectory'), // widget description
 				'geodirectory' => true,
 			),
@@ -59,10 +59,38 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 					),
 					'default'  => 'h2',
 					'desc_tip' => true,
-					'advanced' => true
+					'advanced' => false
 				)
 			)
 		);
+
+
+		// add more options if using AUI
+		$design_style = geodir_design_style();
+		if($design_style){
+			$options['arguments']['font_size_class'] = array(
+				'title' => __('Font size', 'geodirectory'),
+				'desc' => __('Set the font-size class for the title. These are bootstrap font sizes not, HTML tags.', 'geodirectory'),
+				'type' => 'select',
+				'options'   =>  array(
+					"" => __("Default (h2)","geodirectory"),
+					"h1" => "h1",
+					"h2" => "h2",
+					"h3" => "h3",
+					"h4" => "h4",
+					"h5" => "h5",
+					"h6" => "h6",
+					"display-1" => "display-1",
+					"display-2" => "display-2",
+					"display-3" => "display-3",
+					"display-4" => "display-4",
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+			);
+		}
 
 		parent::__construct( $options );
 	}
@@ -82,6 +110,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		// options
 		$defaults = array(
 			'tag' => 'h2', // h1, h2, h3
+			'font_size_class' => 'h2', // h1, h2, h3
 		);
 
 		$backup_post = $post;
@@ -107,9 +136,15 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		 */
 		$title_tag = empty( $instance['tag'] ) ? 'h2' : apply_filters( 'geodir_widget_gd_post_title_tag', $instance['tag'], $instance, $args, $this );
 
+		$design_style = geodir_design_style();
+		$classes = '';
+		if($design_style){
+			$classes = " p-0 m-0 " . sanitize_html_class($instance['font_size_class']);
+		}
+
 		ob_start();
 		?>
-		<<?php echo esc_attr($title_tag);?> class="geodir-entry-title">
+		<<?php echo esc_attr($title_tag);?> class="geodir-entry-title <?php echo $classes;?>">
 			<a href="<?php the_permalink(); ?>" title="<?php echo esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), stripslashes( the_title_attribute( array( 'echo' => false ) ) ) ) ); ?>"><?php echo stripslashes( get_the_title() ); ?></a>
 		</<?php echo esc_attr($title_tag);?>>
 		<?php

@@ -757,14 +757,43 @@ class GeoDir_Comments {
 		$rating_wrap_title = $rating_wrap_title ? 'title="' . esc_attr( $rating_wrap_title ) . '"' : '';
 		ob_start();
 
-		echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap">';
-		if($rating_label){
+		$design_style = geodir_design_style();
+
+		if($design_style){
+			echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap">';
+			if($rating_label){
+				?>
+				<span class="gd-rating-label"><?php echo esc_attr($rating_label);?>: </span>
+				<?php
+			}
 			?>
-			<span class="gd-rating-label"><?php echo esc_attr($rating_label);?>: </span>
+			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
+			<span class="gd-rating-wrap d-inline-flex" <?php echo $rating_wrap_title; ?>>
+				<span class="gd-rating-foreground position-absolute text-nowrap" <?php echo $foreground_style; ?>>
+				<?php echo $rating_html; ?>
+				</span>
+				<span class="gd-rating-background" <?php echo $rating_color_off; ?>>
+				<?php echo $rating_html; ?>
+				</span>
+			</span>
+				<?php if ( $type == 'input' ) { ?>
+					<span class="gd-rating-text"
+					      data-title="<?php _e( 'Select a rating', 'geodirectory' ); ?>"><?php _e( 'Select a rating', 'geodirectory' ); ?></span>
+					<input type="hidden" id="<?php echo $args['id']; ?>" name="<?php echo $args['id']; ?>"
+					       value="<?php echo esc_attr( $rating ); ?>"/>
+				<?php } ?>
+			</div>
 			<?php
-		}
-		?>
-		<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
+			echo "</div>";
+		}else{
+			echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap">';
+			if($rating_label){
+				?>
+				<span class="gd-rating-label"><?php echo esc_attr($rating_label);?>: </span>
+				<?php
+			}
+			?>
+			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
 			<span class="gd-rating-wrap" <?php echo $rating_wrap_title; ?>>
 				<span class="gd-rating-foreground" <?php echo $foreground_style; ?>>
 				<?php echo $rating_html; ?>
@@ -773,15 +802,18 @@ class GeoDir_Comments {
 				<?php echo $rating_html; ?>
 				</span>
 			</span>
-			<?php if ( $type == 'input' ) { ?>
-				<span class="gd-rating-text"
-				      data-title="<?php _e( 'Select a rating', 'geodirectory' ); ?>"><?php _e( 'Select a rating', 'geodirectory' ); ?></span>
-				<input type="hidden" id="<?php echo $args['id']; ?>" name="<?php echo $args['id']; ?>"
-				       value="<?php echo esc_attr( $rating ); ?>"/>
-			<?php } ?>
-		</div>
-		<?php
-		echo "</div>";
+				<?php if ( $type == 'input' ) { ?>
+					<span class="gd-rating-text"
+					      data-title="<?php _e( 'Select a rating', 'geodirectory' ); ?>"><?php _e( 'Select a rating', 'geodirectory' ); ?></span>
+					<input type="hidden" id="<?php echo $args['id']; ?>" name="<?php echo $args['id']; ?>"
+					       value="<?php echo esc_attr( $rating ); ?>"/>
+				<?php } ?>
+			</div>
+			<?php
+			echo "</div>";
+		}
+
+
 
 		return ob_get_clean();
 	}
