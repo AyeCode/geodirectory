@@ -35,7 +35,9 @@ class GeoDir_SEO {
 
 		// maybe noindex empty archive pages
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
-        add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
+		add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
+		add_filter( 'rank_math/frontend/breadcrumb/items', array( __CLASS__, 'rank_breadcrumb_links' ), 10, 1 );
+
 		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( __CLASS__, 'wpseo_exclude_from_sitemap_by_post_ids' ), 20, 1 );
 		if ( ! is_admin() ) {
 			add_filter( 'page_link', array( __CLASS__, 'page_link' ), 10, 3 );
@@ -750,7 +752,6 @@ class GeoDir_SEO {
     public static function breadcrumb_links($crumbs){
 
 	    // maybe add category link to single page
-
         if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
 	        global $wp_query;
 	        $breadcrumb = array();
@@ -761,8 +762,8 @@ class GeoDir_SEO {
 		        if(!empty($term)){
 			        $breadcrumb[]['term'] = $term;
 		        }
-	        }
-
+			}
+			
 	        $offset = apply_filters('wpseo_breadcrumb_links_offset', 2, $breadcrumb, $crumbs);
 	        $length = apply_filters('wpseo_breadcrumb_links_length', 0, $breadcrumb, $crumbs);
 
@@ -773,7 +774,39 @@ class GeoDir_SEO {
         }
 
         return $crumbs;
-    }
+	}
+	/**
+	 * Filter Rank Math breadcrumbs to add cat to details page.
+	 *
+	 * @param $crumbs
+	 *
+	 * @return mixed
+	 */
+	public static function rank_breadcrumb_links($crumbs){
+
+	    // maybe add category link to single page
+        if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
+	        global $wp_query;
+	        $breadcrumb = array();
+	        $post_type   = geodir_get_current_posttype();
+	        $category = !empty($wp_query->query_vars[$post_type."category"]) ? $wp_query->query_vars[$post_type."category"] : '';
+	        if($category){
+		        $term  = get_term_by( 'slug', $category, $post_type."category");
+		        if(!empty($term)){
+					$breadcrumb[]= array( $term->name, get_term_link($term->slug, $post_type."category" ) );
+		        }
+			}
+
+			$offset = apply_filters('rankmath_breadcrumb_links_offset', 2, $breadcrumb, $crumbs);
+			$length = apply_filters('rankmath_breadcrumb_links_length', 0, $breadcrumb, $crumbs);
+			
+	        if(!empty($breadcrumb) && count($breadcrumb) > 0 ){
+		       array_splice( $crumbs, $offset, $length, $breadcrumb );
+			}
+		}
+		
+        return $crumbs;
+	}
 
 	/**
 	 * Filter link for GD Archive pages.
