@@ -987,7 +987,7 @@ class GeoDir_Post_Data {
 			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both"
 			     style="padding:2px;text-align:center;">
 				<button type="submit" class="geodir_button">
-					<?php _e( 'Submit Listing', 'geodirectory' ); ?>
+					<?php echo apply_filters( 'geodir_add_listing_btn_text', __( 'Submit Listing', 'geodirectory' ) ); ?>
 				</button>
 
 				<?php
