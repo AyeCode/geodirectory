@@ -7,6 +7,7 @@
 * Add listing page is not working properly with Divi page builder - FIXED
 * Business hours timezone input replaced with timezones string list - CHANGED
 * Elementor GD CSS Hide Condition is not working with post_images key - FIXED
+* Listing reviews pagination not working with some permalink structure - FIXED
 
 = 2.0.0.95 =
 * Changes for Ninja Forms fix related to API requests - CHANGED
