@@ -938,11 +938,6 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				 */
 				$match_value = apply_filters( 'geodir_post_badge_match_value', $match_value, $match_field, $args, $find_post, $field );
 
-				// File
-				if ( ! empty( $badge ) &&  ! empty( $match_value ) && ! empty( $field['type'] ) && $field['type'] == 'file' ) {
-					$badge = $match_value;
-				}
-
 				// badge text
 				if ( empty( $badge ) && empty($args['icon_class']) ) {
 					$badge = $field['frontend_title'];
