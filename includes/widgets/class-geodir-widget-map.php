@@ -985,7 +985,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 * @return string $content.
 	 */
 	public static function render_map( $map_args ) {
-		global $geodirectory;
+		global $geodirectory, $gd_post;
+
 		$defaults = array(
 			'map_type'       => 'auto',                    // auto, directory, archive, post
 			'map_canvas'     => '',
@@ -1006,7 +1007,6 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		);
 
 		$params = wp_parse_args( $map_args, $defaults );
-
 
 		// map type
 		if ( ! in_array( $params['map_type'], array( 'auto', 'directory', 'archive', 'post' ) ) ) {
@@ -1053,6 +1053,24 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$params['default_lng'] = $default_location->longitude;
 		}
 
+		// Set latitude, longitude, zoom for empty results on map.
+		if ( $params['map_type'] == 'post' && ! empty( $gd_post ) && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
+			$nomap_lat = $gd_post->latitude;
+			$nomap_lng = $gd_post->longitude;
+		} elseif ( ! empty( $geodirectory->location ) && ! empty( $geodirectory->location->latitude ) && ! empty( $geodirectory->location->longitude ) ) {
+			$nomap_lat = $geodirectory->location->latitude;
+			$nomap_lng = $geodirectory->location->longitude;
+		} elseif ( ( $_nomap_lat = GeoDir_Query::get_query_var( 'sgeo_lat' ) ) && ( $_nomap_lng = GeoDir_Query::get_query_var( 'sgeo_lon' ) ) ) {
+			$nomap_lat = $_nomap_lat;
+			$nomap_lng = $_nomap_lng;
+		} else {
+			$nomap_lat = $params['default_lat'];
+			$nomap_lng = $params['default_lng'];
+		}
+		$params['nomap_lat'] = filter_var( $nomap_lat, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+		$params['nomap_lng'] = filter_var( $nomap_lng, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
+		$params['nomap_zoom'] = absint( $params['zoom'] ) > 0 ? absint( $params['zoom'] ) : 11;
+
 		// terms
 		if ( is_array( $params['terms'] ) ) {
 			$params['terms'] = ! empty( $params['terms'] ) ? implode( ',', $params['terms'] ) : '';
@@ -1079,16 +1097,14 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$params = apply_filters( 'geodir_map_params', $params, $map_args );
 
 		// add post lat/lon if static post map
-		if($params['map_type']=='post' && $params['static']){
-			global $gd_post;
-
-			if(!empty($gd_post->latitude) && !empty($gd_post->longitude)){
+		if ( $params['map_type'] == 'post' && $params['static'] ) {
+			if ( ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
 				$params['latitude'] = filter_var( $gd_post->latitude, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 				$params['longitude'] = filter_var( $gd_post->longitude, FILTER_SANITIZE_NUMBER_FLOAT, FILTER_FLAG_ALLOW_FRACTION );
 			}
 
 			// set icon url
-			if(!empty($gd_post->default_category)){
+			if ( ! empty( $gd_post->default_category ) ) {
 				$params['icon_url'] = geodir_get_cat_icon( $gd_post->default_category, true, true );
 			}
 		}

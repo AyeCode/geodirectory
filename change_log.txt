@@ -10,6 +10,7 @@
 * Listing reviews pagination not working with some permalink structure - FIXED
 * Map shows worng markers when distance filter is active - FIXED
 * Filter added to resize map marker icons - ADDED
+* Allow to set zoom and map center when no results found - ADDED
 
 = 2.0.0.95 =
 * Changes for Ninja Forms fix related to API requests - CHANGED

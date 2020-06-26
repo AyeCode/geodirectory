@@ -472,12 +472,15 @@ function parse_marker_jason(json, map_canvas_var) {
 		}
 	} else {
 		document.getElementById(map_canvas_var + '_map_nofound').style.display = 'block';
-		var mapcenter = new google.maps.LatLng(options.latitude, options.longitude);
+		var nLat = options.nomap_lat ? options.nomap_lat : ( options.default_lat ? options.default_lat : '39.952484' );
+		var nLng = options.nomap_lng ? options.nomap_lng : ( options.default_lng ? options.default_lng : '-75.163786' );
+		var nZoom = parseInt(options.nomap_zoom) > 0 ? parseInt(options.nomap_zoom) : ( parseInt(options.zoom) > 0 ? parseInt(options.zoom) : 11 );
+		var mapcenter = new google.maps.LatLng(nLat, nLng);
 		list_markers(json, map_canvas_var);
 		if (options.enable_marker_cluster_no_reposition) {} //dont reposition after load
 		else {
 			jQuery.goMap.map.setCenter(mapcenter);
-			jQuery.goMap.map.setZoom(parseInt(options.zoom));
+			jQuery.goMap.map.setZoom(nZoom);
 		}
 	}
 	if (options.marker_cluster) {
@@ -1162,11 +1165,14 @@ function parse_marker_jason_osm(json, map_canvas_var) {
         }
     } else {
         document.getElementById(map_canvas_var + '_map_nofound').style.display = 'block';
-        var mapcenter = new L.latLng(options.default_lat, options.default_lng);
+        var nLat = options.nomap_lat ? options.nomap_lat : ( options.default_lat ? options.default_lat : '39.952484' );
+        var nLng = options.nomap_lng ? options.nomap_lng : ( options.default_lng ? options.default_lng : '-75.163786' );
+        var nZoom = parseInt(options.nomap_zoom) > 0 ? parseInt(options.nomap_zoom) : ( parseInt(options.zoom) > 0 ? parseInt(options.zoom) : 11 );
+        var mapcenter = new L.latLng(nLat, nLng);
         list_markers(json, map_canvas_var);
         if (options.enable_marker_cluster_no_reposition) {} //dont reposition after load
         else {
-            jQuery.goMap.map.setView(mapcenter, options.zoom);
+            jQuery.goMap.map.setView(mapcenter, nZoom);
         }
     }
     jQuery('#' + map_canvas_var + '_loading_div').hide();
