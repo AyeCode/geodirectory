@@ -554,6 +554,41 @@ function create_marker(item, map_canvas) {
         title = geodir_htmlEscape(item['t']);
         cs = item['cs'];
         icon = item['icon'] ? item['icon'] : geodir_params.default_marker_icon;
+        iconW = item['w'] ? parseFloat(item['w']) : 0;
+        iconH = item['h'] ? parseFloat(item['h']) : 0;
+        iconMW = geodir_params.marker_max_width ? parseFloat(geodir_params.marker_max_width) : 0;
+        iconMH = geodir_params.marker_max_height ? parseFloat(geodir_params.marker_max_height) : 0;
+        if (geodir_params.resize_marker && iconW > 5 && iconH > 5 && ((iconMW > 5 && iconW > iconMW) || (iconMH > 5 && iconH > iconMH))) {
+            resizeW = iconW;
+            resizeH = iconH;
+            resize = false;
+
+            if (iconMH > 5 && resizeH > iconMH) {
+                _resizeH = iconMH;
+                _resizeW = Math.round(((_resizeH * resizeW) / resizeH) * 10) / 10;
+
+                resizeW = _resizeW;
+                resizeH = _resizeH;
+                resize = true;
+            }
+
+            if (iconMW > 5 && resizeW > iconMW) {
+                _resizeW = iconMW;
+                _resizeH = Math.round(((_resizeW * resizeH) / resizeW) * 10) / 10;
+
+                resizeW = _resizeW;
+                resizeH = _resizeH;
+                resize = true;
+            }
+            if (resize && resizeW > 5 && resizeH > 5) {
+                icon = {
+                    url: icon,
+                    scaledSize: new google.maps.Size(resizeW, resizeH),
+                    origin: new google.maps.Point(0, 0),
+                    anchor: new google.maps.Point((Math.round(resizeW / 2)), resizeH)
+                };
+            }
+        }
         var latlng = new google.maps.LatLng(item.lt, item.ln);
         var marker = jQuery.goMap.createMarker({
             id: marker_id,
@@ -1149,6 +1184,35 @@ function create_marker_osm(item, map_canvas) {
         icon = item['icon'] ? item['icon'] : geodir_params.default_marker_icon;
         iconW = item['w'] ? item['w'] : geodir_params.default_marker_w;
         iconH = item['h'] ? item['h'] : geodir_params.default_marker_h;
+        iconMW = geodir_params.marker_max_width ? parseFloat(geodir_params.marker_max_width) : 0;
+        iconMH = geodir_params.marker_max_height ? parseFloat(geodir_params.marker_max_height) : 0;
+        if (geodir_params.resize_marker && iconW > 5 && iconH > 5 && ((iconMW > 5 && iconW > iconMW) || (iconMH > 5 && iconH > iconMH))) {
+            resizeW = iconW;
+            resizeH = iconH;
+            resize = false;
+
+            if (iconMH > 5 && resizeH > iconMH) {
+                _resizeH = iconMH;
+                _resizeW = Math.round(((_resizeH * resizeW) / resizeH) * 10) / 10;
+
+                resizeW = _resizeW;
+                resizeH = _resizeH;
+                resize = true;
+            }
+
+            if (iconMW > 5 && resizeW > iconMW) {
+                _resizeW = iconMW;
+                _resizeH = Math.round(((_resizeW * resizeH) / resizeW) * 10) / 10;
+
+                resizeW = _resizeW;
+                resizeH = _resizeH;
+                resize = true;
+            }
+            if (resize && resizeW > 5 && resizeH > 5) {
+                iconW = resizeW;
+                iconH = resizeH;
+            }
+        }
         var coord = new L.latLng(item.lt, item.ln);
         var marker = jQuery.goMap.createMarker({
             id: marker_id,

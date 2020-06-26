@@ -9,6 +9,7 @@
 * Elementor GD CSS Hide Condition is not working with post_images key - FIXED
 * Listing reviews pagination not working with some permalink structure - FIXED
 * Map shows worng markers when distance filter is active - FIXED
+* Filter added to resize map marker icons - ADDED
 
 = 2.0.0.95 =
 * Changes for Ninja Forms fix related to API requests - CHANGED

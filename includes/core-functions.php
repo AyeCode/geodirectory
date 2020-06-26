@@ -381,6 +381,9 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 			'year' => _x( 'about a year', 'time ago', 'geodirectory' ),
 			'years' => _x( '%d years', 'time ago', 'geodirectory' ),
 		),
+		'resize_marker' => apply_filters( 'geodir_map_marker_resize_marker', false ), /* Resize map marker icon */
+		'marker_max_width' => apply_filters( 'geodir_map_resize_marker_max_width', 50 ), /* Max width to apply resize marker icon */
+		'marker_max_height' => apply_filters( 'geodir_map_resize_marker_max_height', 50 ) /* Max height to apply resize marker icon. */
 	);
 
 	/**
