@@ -955,8 +955,9 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		if ( empty( $map_args['country'] ) && empty( $map_args['region'] ) && empty( $map_args['city'] ) && empty( $map_args['neighbourhood'] ) && ! empty( $current_location->latitude ) ) {
 			$map_args['lat'] = ! empty( $current_location->latitude ) ? $current_location->latitude : '';
 			$map_args['lon'] = ! empty( $current_location->longitude ) ? $current_location->longitude : '';
-			if ( get_query_var( 'near' ) ) {
-				$map_args['dist'] = get_query_var( 'dist' );
+
+			if ( GeoDir_Query::get_query_var( 'snear' ) && ( $distance = (float) GeoDir_Query::get_query_var( 'dist' ) ) ) {
+				$map_args['dist'] = $distance;
 			}
 		}
 

@@ -196,7 +196,7 @@ function geodir_upgrade_20096() {
 	// Add columns in business hours table.
 	$table = $wpdb->prefix . 'geodir_business_hours';
 
-	if ( ! geodir_column_exist( $table, 'open_utc' ) ) {
+	if ( $wpdb->get_var( "SHOW TABLES LIKE '{$table}'" ) && ! geodir_column_exist( $table, 'open_utc' ) ) {
 		$wpdb->query( "ALTER TABLE `{$table}` 
 			ADD open_utc int(9) UNSIGNED NOT NULL, 
 			ADD close_utc int(9) UNSIGNED NOT NULL, 
