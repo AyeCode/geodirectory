@@ -1776,3 +1776,23 @@ function geodir_setcookie( $name, $value, $expire = 0, $secure = false, $httponl
 function geodir_getcookie( $name ) {
 	return ! empty( $_COOKIE ) && isset( $_COOKIE[ $name ] ) ? $_COOKIE[ $name ] : '';
 }
+
+function geodir_aui_colors(){
+	return array(
+		"primary" => __('Primary', 'geodirectory'),
+		"secondary" => __('Secondary', 'geodirectory'),
+		"success" => __('Success', 'geodirectory'),
+		"danger" => __('Danger', 'geodirectory'),
+		"warning" => __('Warning', 'geodirectory'),
+		"info" => __('Info', 'geodirectory'),
+		"light" => __('Light', 'geodirectory'),
+		"dark" => __('Dark', 'geodirectory'),
+		"white" => __('White', 'geodirectory'),
+		"purple" => __('Purple', 'geodirectory'),
+		"salmon" => __('Salmon', 'geodirectory'),
+		"cyan" => __('Cyan', 'geodirectory'),
+		"gray" => __('Gray', 'geodirectory'),
+		"indigo" => __('Indigo', 'geodirectory'),
+		"orange" => __('Orange', 'geodirectory'),
+	);
+}

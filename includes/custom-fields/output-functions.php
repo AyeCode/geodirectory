@@ -1076,6 +1076,8 @@ function geodir_cf_select($html,$location,$cf,$p='',$output=''){
                 return stripslashes( $field_value );
             }
 
+            $design_style = geodir_design_style();
+
             $field_icon = geodir_field_icon_proccess($cf);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
@@ -2452,6 +2454,16 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
             $offset = isset( $business_hours['extra']['offset'] ) ? $business_hours['extra']['offset'] : '';
 
             if (!empty($show_value)) {
+
+                $design_style = geodir_design_style();
+                $dropdown_class =  $design_style ? ' dropdown ' : '';
+                $dropdown_item_class =  $design_style ? ' dropdown-item py-0 ' : '';
+                $dropdown_item_inline_class =  $design_style ? ' d-inline-block ' : '';
+                $dropdown_item_mr_class =  $design_style ? ' mr-3 ' : '';
+                $dropdown_item_float_class =  $design_style ? ' float-right' : '';
+                $dropdown_menu_class =  $design_style ? ' dropdown-menu mt-3 ' : '';
+                $cf['field_icon'] = $design_style ? $cf['field_icon']." mr-1" : $cf['field_icon'];
+
                 $field_icon = geodir_field_icon_proccess($cf);
                 $output = geodir_field_output_process($output);
                 if (strpos($field_icon, 'http') !== false) {
@@ -2463,6 +2475,8 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                     $field_icon = '';
                 }
 
+//                $field_icon = $design_style ? 'color:green;'.$design_style : $design_style;
+
                 // Database value.
                 if ( ! empty( $output ) && isset( $output['raw'] ) ) {
                     return $value;
@@ -2473,17 +2487,22 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                     $extra_class .= ' gd-bh-closed';
                 }
 
-                $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . '" style="clear:both;">';
+
+
+                $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . $dropdown_class. '" style="clear:both;">';
+                $html .= $design_style ? '<a class="dropdown-toggle text-reset" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' : '';
                 $html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
                 $html .= '<span class="gd-bh-expand-range" data-offset="' . geodir_gmt_offset( $offset ) . '" data-offsetsec="' . geodir_gmt_offset( $offset, false ) . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range">' . $show_value . '</span>';
-                $html .= '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span></span>';
-                $html .= '<div class="gd-bh-open-hours">';
+                $html .= $design_style ? '' : '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span>';
+                $html .= '</span>';
+                $html .= $design_style ? '</a>' : '';
+                $html .= '<div class="gd-bh-open-hours '.$dropdown_menu_class.'">';
                 foreach ( $business_hours['days'] as $day => $slots ) {
                     $class = '';
                     if ( ! empty( $slots['closed'] ) ) {
                         $class .= 'gd-bh-days-closed ';
                     }
-                    $html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d">' . $slots['day_short'] . '</div><div class="gd-bh-slots">';
+                    $html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="'.$dropdown_item_class.' gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d '.$dropdown_item_inline_class.$dropdown_item_mr_class.'">' . $slots['day_short'] . '</div><div class="gd-bh-slots '.$dropdown_item_inline_class.$dropdown_item_float_class.'">';
                     foreach ( $slots['slots'] as $i => $slot ) {
                         $attrs = '';
 						$class = '';
@@ -2501,15 +2520,6 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                 }
                 $html .= '</div></div>';
 
-                ###
-//                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
-//
-//                if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-field-' . $html_var . $extra_class . '" style="' . $field_icon . '">' . $field_icon_af;
-//                if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
-//                if($output=='' || isset($output['icon']))$html .= '</span>';
-//                if($output=='' || isset($output['value']))$html .= $address_fields;
-//
-//                $html .= '</div>';
             }
         }
     }

@@ -249,11 +249,22 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						jQuery(this).addClass('navbar-expand');
 
 						// vars
-						var $vlinks = jQuery(this).find('.navbar-nav').addClass("being-greedy w-100");
-						jQuery($vlinks).append('<li class="nav-item list-unstyled ml-auto greedy-btn d-none ">' +
+						var $vlinks = '';
+						var $dDownClass = '';
+						if(jQuery(this).find('.navbar-nav').length){
+							$vlinks = jQuery(this).find('.navbar-nav').addClass("being-greedy w-100");
+						}else if(jQuery(this).find('.nav').length){
+							$vlinks = jQuery(this).find('.nav').addClass("being-greedy w-100");
+							$dDownClass = ' mt-2 ';
+						}else{
+							return false;
+						}
+
+						jQuery($vlinks).append('<li class="nav-item list-unstyled ml-auto greedy-btn d-none dropdown ">' +
 							'<a href="javascript:void(0)" data-toggle="dropdown" class="nav-link"><i class="fas fa-ellipsis-h"></i> <span class="greedy-count badge badge-dark badge-pill"></span></a>' +
-							'<div class="dropdown"><ul class="greedy-links dropdown-menu  dropdown-menu-right"></ul></div>' +
+							'<ul class="greedy-links dropdown-menu  dropdown-menu-right '+$dDownClass+'"></ul>' +
 							'</li>');
+
 						var $hlinks = jQuery(this).find('.greedy-links');
 						var $btn = jQuery(this).find('.greedy-btn');
 

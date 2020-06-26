@@ -22,6 +22,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public $block_code;
 		public $options;
 		public $base_id;
+		public $settings_hash;
 		public $arguments = array();
 		public $instance = array();
 		private $class_name;
@@ -1333,6 +1334,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			$class = isset( $this->options['widget_ops']['classname'] ) ? esc_attr( $this->options['widget_ops']['classname'] ) : '';
+			$class .= " sdel-".$this->get_instance_hash();
 
 			$class = apply_filters( 'wp_super_duper_div_classname', $class, $args, $this );
 			$class = apply_filters( 'wp_super_duper_div_classname_' . $this->base_id, $class, $args, $this );
@@ -1824,8 +1826,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 									if ( $show_advanced ) {
 									?>
 									el('div', {
-										style: {'padding-left': '16px','padding-right': '16px'}
-									},
+											style: {'padding-left': '16px','padding-right': '16px'}
+										},
 										el(
 											wp.components.ToggleControl,
 											{
@@ -2234,8 +2236,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			ob_start();
 			if ( $output && ! $no_wrap ) {
+
+				$class_original = $this->options['widget_ops']['classname'];
+				$class = $this->options['widget_ops']['classname']." sdel-".$this->get_instance_hash();
+
 				// Before widget
 				$before_widget = $args['before_widget'];
+				$before_widget = str_replace($class_original,$class,$before_widget);
 				$before_widget = apply_filters( 'wp_super_duper_before_widget', $before_widget, $args, $instance, $this );
 				$before_widget = apply_filters( 'wp_super_duper_before_widget_' . $this->base_id, $before_widget, $args, $instance, $this );
 
@@ -2247,7 +2254,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				echo $before_widget;
 				// elementor strips the widget wrapping div so we check for and add it back if needed
 				if ( $this->is_elementor_widget_output() ) {
-					echo ! empty( $this->options['widget_ops']['classname'] ) ? "<span class='" . esc_attr( $this->options['widget_ops']['classname'] ) . "'>" : '';
+					echo ! empty( $this->options['widget_ops']['classname'] ) ? "<span class='" . esc_attr( $class  ) . "'>" : '';
 				}
 				echo $this->output_title( $args, $instance );
 				echo $output;
@@ -2794,6 +2801,43 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $result;
+		}
+
+		/**
+		 * Get an instance hash that will be unique to the type and settings.
+		 *
+		 * @since 1.0.20
+		 * @return string
+		 */
+		public function get_instance_hash(){
+			$instance_string = $this->base_id.serialize($this->instance);
+			return hash('crc32b',$instance_string);
+		}
+
+		/**
+		 * Generate and return inline styles from CSS rules that will match the unique class of the instance.
+		 *
+		 * @param array $rules
+		 *
+		 * @since 1.0.20
+		 * @return string
+		 */
+		public function get_instance_style($rules = array()){
+			$css = '';
+
+			if(!empty($rules)){
+				$rules = array_unique($rules);
+				$instance_hash = $this->get_instance_hash();
+				$css .= "<style>";
+				foreach($rules as $rule){
+					$css .= ".sdel-$instance_hash $rule";
+				}
+				$css .= "</style>";
+			}
+
+
+			return $css;
+
 		}
 
 	}

@@ -8,6 +8,35 @@ jQuery(document).ready(function($) {
     // Maybe ajax load the next slide
     gd_init_carousel_ajax();
 
+    // init things when new tab is shown
+    jQuery('.nav-tabs,.nav-pills').on('shown.bs.tab', 'a', function (e) {
+       // Greedy nav fix
+        if(jQuery(this).closest('.greedy').length){
+            if(jQuery(this).closest('.greedy-btn').length){
+                jQuery(this).closest('.greedy-btn').find('> .nav-link').addClass('active');
+            }else{
+                jQuery(this).closest(".greedy").find(".greedy-links .nav-link").removeClass("active");
+            }
+        }
+
+        jQuery(window).trigger('resize');
+    });
+
+
+    // fix tabs url hash on clikc and load
+    jQuery(function(){
+        var hash = window.location.hash;
+        hash && jQuery('ul.nav a[href="' + hash + '"]').tab('show');
+
+        jQuery('.nav-tabs a').click(function (e) {
+            jQuery(this).tab('show');
+            var scrollmem = jQuery('body').scrollTop() || jQuery('html').scrollTop();
+            window.location.hash = this.hash;
+            jQuery('html,body').scrollTop(scrollmem);
+        });
+    });
+
+
 });
 
 /**
@@ -271,17 +300,17 @@ jQuery(function($) {
         );
     }
 
-    $(document).on('click', '.gd-bh-show-field .gd-bh-expand-range', function(e){
-        var $wrap = $(this).closest('.geodir_post_meta')
-        var $hours = $wrap.find('.gd-bh-open-hours')
-        if($hours.is(':visible')){
-            $hours.slideUp(100);
-            $wrap.removeClass('gd-bh-expanded').addClass('gd-bh-toggled');
-        } else {
-            $hours.slideDown(100);
-            $wrap.removeClass('gd-bh-toggled').addClass('gd-bh-expanded');
-        }
-    });
+    // $(document).on('click', '.gd-bh-show-field .gd-bh-expand-range', function(e){
+    //     var $wrap = $(this).closest('.geodir_post_meta')
+    //     var $hours = $wrap.find('.gd-bh-open-hours')
+    //     if($hours.is(':visible')){
+    //         $hours.slideUp(100);
+    //         $wrap.removeClass('gd-bh-expanded').addClass('gd-bh-toggled');
+    //     } else {
+    //         $hours.slideDown(100);
+    //         $wrap.removeClass('gd-bh-toggled').addClass('gd-bh-expanded');
+    //     }
+    // });
     if ($('.gd-bh-show-field').length) {
         setInterval(function(e) {
             geodir_refresh_business_hours();
@@ -501,138 +530,6 @@ function geodir_init_flexslider(){
 
 
 jQuery(window).load(function() {
-
-    /*-----------------------------------------------------------------------------------*/
-    /* Tabs
-     /*-----------------------------------------------------------------------------------*/
-    jQuery('.geodir-tabs-content').show(); // set the tabs to show once js loaded to avoid double scroll bar in chrome
-    tabNoRun = false;
-
-    function activateTab(tab) {
-        if ( !jQuery( ".geodir-tab-head" ).length ) {
-            return;
-        }
-        // change name for mobile tabs menu
-        tabName = urlHash = tab.find('a').html();
-
-        if (tabName && jQuery('.geodir-mobile-active-tab').length) {
-            jQuery('.geodir-mobile-active-tab').html(tabName);
-        }
-
-        if (tabNoRun) {
-            tabNoRun = false;
-            return;
-        }
-        var activeTab = tab.closest('dl').find('dd.geodir-tab-active'), contentLocation = tab.find('a').attr("data-tab") + 'Tab';
-        urlHash = tab.find('a').attr("data-tab");
-
-        if (jQuery(tab).hasClass("geodir-tab-active")) {} else {
-            if (typeof urlHash === 'undefined') {
-                if (window.location.hash.substring(0, 8) == '#comment') {
-                    tab = jQuery('*[data-tab="#reviews"]').parent();
-                    tabNoRun = true;
-                }
-            } else {
-                if (history.pushState) {
-                    //history.pushState(null, null, urlHash);
-                    history.replaceState(null, null, urlHash); // wont make the browser back button go back to prev has value
-                } else {
-                    window.location.hash = urlHash;
-                }
-            }
-        }
-
-        //Make Tab Active
-        activeTab.removeClass('geodir-tab-active');
-        tab.addClass('geodir-tab-active');
-
-        //Show Tab Content
-        jQuery(contentLocation).closest('.geodir-tabs-content').children('li').hide();
-        jQuery(contentLocation).fadeIn();
-        jQuery(contentLocation).css({
-            'display': 'block'
-        });
-
-        if (urlHash == '#post_map' && window.gdMaps) {
-            window.setTimeout(function() {
-                var map_canvas = jQuery('.geodir-map-canvas', jQuery('#post_mapTab')).data('map-canvas');
-                var options = map_canvas ? eval(map_canvas) : {};
-                jQuery("#" + map_canvas).goMap(options);
-                var center = jQuery.goMap.map.getCenter();
-                if (window.gdMaps == 'osm') {
-                    jQuery.goMap.map.invalidateSize();
-                    jQuery.goMap.map._onResize();
-                    jQuery.goMap.map.panTo(center);
-                } else {
-                    google.maps.event.trigger(jQuery.goMap.map, 'resize');
-                    jQuery.goMap.map.setCenter(center);
-                }
-            }, 100);
-        }
-
-        if (history.pushState && window.location.hash && jQuery('#publish_listing').length === 0) {
-            if (jQuery(window).width() < 1060) {
-                jQuery('#gd-tabs .geodir-tab-head').toggle();
-                jQuery('html, body').animate({
-                    scrollTop: jQuery('#geodir-tab-mobile-menu').offset().top
-                }, 500);
-            }
-        }
-
-        // trigger the window resize to content can adjust
-        jQuery(window).trigger('resize');
-    } // end activateTab()
-
-    jQuery('dl.geodir-tab-head').each(function() {
-        //Get all tabs
-        var tabs = jQuery(this).children('dd');
-        tabs.click(function(e) {
-            if (jQuery(this).find('a').attr('data-status') == 'enable') {
-                activateTab(jQuery(this));
-            }
-        });
-    });
-
-    if (window.location.hash) {
-        activateTab(jQuery('a[data-tab="' + window.location.hash + '"]').parent());
-    }
-
-    jQuery('.gd-tabs .gd-tab-next').click(function(ele) {
-        var is_validate = true;
-
-        if (is_validate) {
-            var tab = jQuery('dl.geodir-tab-head').find('dd.geodir-tab-active').next();
-            if (tab.find('a').attr('data-status') == 'enable') {
-                activateTab(tab);
-            }
-            if (!jQuery('dl.geodir-tab-head').find('dd.geodir-tab-active').next().is('dd')) {
-                jQuery(this).hide();
-                jQuery('#gd-add-listing-submit').show();
-            }
-        }
-    });
-
-    jQuery('#gd-login-options input').change(function() {
-        jQuery('.gd-login_submit').toggle();
-    });
-
-    jQuery('ul.geodir-tabs-content').css({
-        'z-index': '0',
-        'position': 'relative'
-    });
-
-    jQuery('dl.geodir-tab-head dd.geodir-tab-active').trigger('click');
-
-    // Show the tab if an anchor link is clicked
-    jQuery('a[href*=\\#]').on('click', function (event) {
-        if(this.pathname === window.location.pathname){
-            if(jQuery(this.hash+'Tab').length){
-                activateTab(jQuery('a[data-tab="' + this.hash + '"]').parent());
-            }else if(this.hash=='#respond' && jQuery('#reviewsTab').length){
-                activateTab(jQuery('a[data-tab="#reviews"]').parent());
-            }
-        }
-    });
 
     // Set times to time ago
     if(jQuery('.gd-timeago').length){
@@ -1120,7 +1017,7 @@ function geodir_refresh_business_hour($this) {
             dayname = $d.find('.gd-bh-days-d').text() + " ";
         } else {
             $this.removeClass('gd-bh-open gd-bh-close');
-            $this.find('div').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today');
+            $this.find('div,span').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today text-success text-danger');
         }
         $d.addClass('gd-bh-days-today');
         if ($d.data('closed') != '1') {
@@ -1148,7 +1045,7 @@ function geodir_refresh_business_hour($this) {
         }
         if (hasOpen) {
             times = opens;
-            $d.addClass('gd-bh-days-open');
+            $d.addClass('gd-bh-days-open').find('.gd-bh-slots').addClass('text-success');
         } else {
             $d.addClass('gd-bh-days-close');
         }
@@ -1159,10 +1056,10 @@ function geodir_refresh_business_hour($this) {
     }
     if (hasOpen || hasPrevOpen) {
         label = geodir_params.txt_open_now;
-        $this.addClass('gd-bh-open');
+        $this.addClass('gd-bh-open').find('.geodir-i-business_hours').addClass('text-success');
     } else {
         label = hasClosed ? geodir_params.txt_closed_today : geodir_params.txt_closed_now;
-        $this.addClass('gd-bh-close');
+        $this.addClass('gd-bh-close').find('.geodir-i-business_hours').addClass('text-danger');
     }
     jQuery('.geodir-i-biz-hours font', $this).html(label);
 }
