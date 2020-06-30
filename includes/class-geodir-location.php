@@ -283,13 +283,13 @@ class GeoDir_Location {
 		return array('country','region','city');
 	}
 
-	public function is_type_gps(){
+	public function is_type_gps() {
 		$gps_type = false;
 
-		if($this->type && in_array($this->type,array('gps','me','search')) && !empty($this->get_latlon())){
-			$gps_type = true;echo '###1';
+		if ( $this->type && in_array( $this->type, array( 'gps', 'me', 'search' ) ) && ! empty( $this->get_latlon() ) ) {
+			$gps_type = true;
 		}
-echo '###2'.$this->type ;
+
 		return $gps_type;
 	}
 

@@ -92,7 +92,6 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		return $arguments;
 	}
 
-
 	/**
 	 * Outputs the post badge on the front-end.
 	 *
@@ -363,4 +362,3 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 	}
 	
 }
-

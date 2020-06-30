@@ -423,27 +423,35 @@ var GeoDir_Business_Hours = {
         this.$field = jQuery('[name="' + this.field + '"]');
         this.$wrap = this.$field.closest('.gd-bh-row');
         this.sample = jQuery('.gd-bh-items .gd-bh-blank').html();
-		this.default_offset = geodir_params.gmt_offset;
+        this.default_timezone_string = geodir_params.timezone_string;
+        this.default_offset = geodir_params.gmt_offset;
         this.gmt_offset = (params.offset ? params.offset : geodir_params.gmt_offset);
         jQuery('[data-field="active"]', this.$wrap).on("change", function(e) {
             $wrap = this.$wrap;
             if (jQuery(this).val() == '1') {
                 jQuery('.gd-bh-items', $wrap).slideDown(200);
+                jQuery('[data-field="timezone_string"]', $wrap).each(function(){
+                    if (jQuery(this).hasClass('enhanced')) {
+                        jQuery(this).select2('destroy');
+                        jQuery(this).removeClass('enhanced');
+                    }
+                    jQuery(this).trigger('geodir-select-init');
+                });
             } else {
                 jQuery('.gd-bh-items', $wrap).slideUp(200);
             }
             $this.setValue();
             e.preventDefault();
         });
-		jQuery('[data-field="timezone"]', this.$wrap).on("change", function(e) {
+		jQuery('[data-field="timezone_string"]', this.$wrap).on("change", function(e) {
 			$this.setValue();
-            e.preventDefault();
+			e.preventDefault();
 		});
 		jQuery('[name="latitude"], [name="longitude"]', this.$wrap.closest('form')).on("change", function(e) {
 			if (!window.gdTzApi) {
 				window.gdTzApi = true;
 				setTimeout(function() {
-					$this.getTimezone('[data-field="timezone"]');
+					$this.getTimezone('[data-field="timezone_string"]');
 				}, 1000);
 			}
             e.preventDefault();
@@ -556,11 +564,20 @@ var GeoDir_Business_Hours = {
             v += JSON.stringify(pa);
             v += ',';
         }
-		tz = jQuery('[data-field="timezone"]', $this.$wrap).val().trim();
-		if (tz === '' || tz === null || tz == 'undefined') {
+		tzstring = tz = '';
+		if (jQuery('[data-field="timezone_string"]', $this.$wrap).length) {
+			$tzstring = jQuery('[data-field="timezone_string"]', $this.$wrap);
+			tzstring = $tzstring.val();
+
+			if ($tzstring.find(':selected').length) {
+				tz = $tzstring.find(':selected').data('offset');
+			}
+		}
+		if (tzstring === '' || tzstring === null || tzstring == 'undefined') {
+			tzstring = this.default_timezone_string;
 			tz = this.default_offset;
 		}
-        v += '["UTC":"' + tz + '"]';
+        v += '["UTC":"' + tz + '","Timezone":"' + tzstring + '"]';
         return v;
     },
     timepickers: function() {
@@ -632,10 +649,8 @@ var GeoDir_Business_Hours = {
 				if (res && typeof res == 'object') {
 					if (res.success) {
 						data = res.data;
-						if (typeof data.rawOffset != 'undefined') {
-							offset = data.rawOffset;
-							offset = $this.secondsToHM(offset);
-							jQuery(el).val(offset).trigger('change');
+						if (typeof data.timeZoneId != 'undefined') {
+							jQuery(el).val(data.timeZoneId).trigger("change");
 						}
 					} else if (res.data) {
 						data = res.data;

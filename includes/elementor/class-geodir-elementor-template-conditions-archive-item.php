@@ -22,7 +22,7 @@ class GeoDir_Elementor_Template_Conditions_Archive_Item extends \ElementorPro\Mo
 	}
 
 	public function get_label() {
-		return '';
+		return 'Geodirectory Archive item';
 	}
 
 	public function get_all_label() {
