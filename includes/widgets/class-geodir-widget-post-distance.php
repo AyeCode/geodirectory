@@ -58,30 +58,22 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 			}
 		}
 
-		$distance = round( (float) $gd_post->distance, 2 );
-		if ( ! (float) $distance > 0 ) {
-			$distance = '0';
-		}
-		$distance .= ' ' . geodir_get_option( 'search_distance_long' );
+		$distance = isset( $gd_post->distance ) && (float) $gd_post->distance > 0 ? (float) $gd_post->distance : 0;
 
-		ob_start();
-
+		$content = '';
 		if ( isset( $gd_post->latitude ) ) {
 			if ( geodir_is_page( 'single' ) ) {
-				?>
-				<a href="#post_map" onclick="gd_set_get_directions('<?php echo esc_attr($gd_post->latitude);?>','<?php echo esc_attr($gd_post->longitude);?>');">
-				<?php
+				$content .= '<a href="#post_map" onclick="gd_set_get_directions(\'' . esc_attr( $gd_post->latitude ) . '\',\'' . esc_attr( $gd_post->longitude ) . '\');">';
 			}
-			?>
-			<span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road" aria-hidden="true"></i> <?php echo $distance; ?></span>
-			<?php 
-			if ( geodir_is_page( 'single' ) ) { 
-				?>
-				</a>
-				<?php
+
+			$content .= '<span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road" aria-hidden="true"></i> ' . geodir_show_distance( $distance ) . '</span>';
+
+			if ( geodir_is_page( 'single' ) ) {
+				$content .= '</a>';
 			}
 		}
-		return ob_get_clean();
+
+		return apply_filters( 'geodir_post_distance_content', $content, $gd_post );
 	}
 
 }

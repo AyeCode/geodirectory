@@ -90,24 +90,7 @@ function geodir_predefined_custom_field_output_distanceto( $html, $location, $cf
 
 		$unit = geodir_get_option( 'search_distance_long', 'miles' );
 		$distance = geodir_calculateDistanceFromLatLong( $start_point, $end_point, $unit );
-		if ( round( $distance, 2 ) == 0 ) {
-			$unit = geodir_get_option( 'search_distance_short', 'feet' );
-			$distance = geodir_calculateDistanceFromLatLong( $start_point, $end_point, $unit );
-			if ( $unit == 'feet' ) {
-				$unit = __( 'feet', 'geodirectory' );
-			} else {
-				$unit = __( 'meters', 'geodirectory' );
-			}
-			$distance =  round( $distance );
-		} else {
-			if ( $unit == 'miles' ) {
-				$unit = __( 'miles', 'geodirectory' );
-			} else {
-				$unit = __( 'km', 'geodirectory' );
-			}
-			$distance =  round( $distance, 2 );
-		}
-		$_distance =  $distance . ' ' . $unit;
+		$_distance = geodir_show_distance( (float) $distance );
 
 		$field_icon = geodir_field_icon_proccess( $cf );
 		$output = geodir_field_output_process($output);
@@ -174,6 +157,14 @@ function geodir_post_badge_match_value( $match_value, $match_field, $args, $find
 			if ( $date_format ) {
 				$match_value = ! empty( $match_value ) && strpos( $match_value, '0000-00-00' ) === false ? date_i18n( $date_format, strtotime( $match_value ) ) : '';
 			}
+		}
+
+		// Featured image
+		if ( ! empty( $match_value ) && $match_field == 'featured_image' && ! empty( $args['badge'] ) && strpos( $args['badge'], '%%input%%' ) !== false ) {
+			$upload_dir = wp_upload_dir();
+			$upload_baseurl = $upload_dir['baseurl'];
+
+			$match_value = str_replace( array( '%%input%%', '&lt;', '&gt;' ), array( $upload_baseurl . $match_value, '<', '>' ), $args['badge'] );
 		}
 
 		// File

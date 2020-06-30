@@ -285,7 +285,6 @@ class GeoDir_Query {
 			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 			if ( $support_location && ( $snear != '' || $latlon = $geodirectory->location->get_latlon() ) ) {
 				$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
-				$unit = geodir_get_option( 'search_distance_long', 'miles' );
 
 				/* 
 				 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition. 
