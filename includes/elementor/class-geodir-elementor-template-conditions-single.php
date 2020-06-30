@@ -14,7 +14,7 @@ class GeoDir_Elementor_Template_Conditions_Single extends \ElementorPro\Modules\
 	}
 
 	public function get_label() {
-		return __( 'GeoDirectory', 'geodirectory' );
+		return __( 'GeoDirectory Single', 'geodirectory' );
 	}
 
 	public function get_all_label() {
