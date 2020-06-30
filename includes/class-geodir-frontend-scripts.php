@@ -487,12 +487,12 @@ class GeoDir_Frontend_Scripts {
 			),
 			'geodir-goMap' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js',
-				'deps'    => array(),
+				'deps'    => array('jquery'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-map-widget' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/map' . $suffix . '.js',
-				'deps'    => array(),
+				'deps'    => array('jquery'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-plupload' => array(
@@ -502,12 +502,12 @@ class GeoDir_Frontend_Scripts {
 			),
 			'geodir' => array(
 				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory' . $suffix . '.js',
-				'deps'    => array(),
+				'deps'    => array('jquery'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'jquery-flexslider' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/jquery.flexslider' . $suffix . '.js',
-				'deps'    => array(),
+				'deps'    => array('jquery'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-add-listing' => array(
@@ -517,7 +517,7 @@ class GeoDir_Frontend_Scripts {
 			),
 			'geodir_lity' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/libraries/gd_lity' . $suffix . '.js',
-				'deps'    => array(),
+				'deps'    => array('jquery'),
 				'version' => GEODIRECTORY_VERSION,
 			)
 		);
