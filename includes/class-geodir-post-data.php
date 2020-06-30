@@ -685,6 +685,13 @@ class GeoDir_Post_Data {
 				}
 			}
 
+			if ( $result ) {
+				/**
+				 * @since 2.0.0.95
+				 */
+				do_action( 'geodir_post_saved', $postarr, $gd_post, $post, $update );
+			}
+
 			// re-hook this function
 			add_action( 'save_post', array( __CLASS__, 'save_post' ), 10, 3 );
 		}

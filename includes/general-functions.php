@@ -2413,3 +2413,67 @@ function geodir_nonce_token( $action = -1, $uid = 0 ) {
 
 	return substr( wp_hash( $i . '|' . $action . '|' . $uid . '|' . $token, 'nonce' ), -12, 10 );
 }
+
+/**
+ * Show post distance with unit.
+ *
+ * @since 2.0.0.96
+ *
+ * @param float $distance Distance.
+ * @param string $short_unit Short distance unit. meters or feet.
+ * @return string Distance with unit.
+ */
+function geodir_show_distance( $distance, $short_unit = '' ) {
+	$unit = geodir_get_option( 'search_distance_long' );
+
+	if ( $unit != 'km' && $unit != 'miles' ) {
+		$unit = 'miles';
+	}
+
+	if ( $short_unit != 'feet' && $short_unit != 'meters' ) {
+		$short_unit = geodir_get_option( 'search_distance_short' );
+
+		if ( $short_unit != 'feet' && $short_unit != 'meters' ) {
+			$short_unit = 'feet';
+		}
+	}
+
+	$_distance = $distance;
+	$_unit = $unit;
+
+	if ( $unit == 'km' ) {
+		if ( round( $distance, 3 ) < 0.1 ) {
+			if ( $short_unit == 'meters' ) {
+				$_distance = round( round( $distance * 1000, 3 ) ); // km => meters
+				$_unit = __( 'meters', 'geodirectory' );
+			} elseif ( $short_unit == 'feet' ) {
+				$_distance = round( round( $distance * 3280.8399, 3 ) ); // km => feet
+				$_unit = __( 'feet', 'geodirectory' );
+			} else {
+				$_distance =  round( $distance, 2 );
+			}
+		} else {
+			$_distance =  round( $distance, 2 );
+		}
+	} elseif ( $unit == 'miles' ) {
+		if ( round( $distance, 3 ) < 0.1 ) {
+			if ( $short_unit == 'meters' ) {
+					$_distance = round( round( $distance * 1609.344, 3 ) ); // miles => meters
+					$_unit = __( 'meters', 'geodirectory' );
+			} elseif ( $short_unit == 'feet' ) {
+				$_distance = round( round( $distance * 5280, 3 ) ); // miles => feet
+				$_unit = __( 'feet', 'geodirectory' );
+			} else {
+				$_distance =  round( $distance, 2 );
+			}
+		} else {
+			$_distance =  round( $distance, 2 );
+		}
+	} else {
+		$_distance =  round( $distance, 2 );
+	}
+
+	$content = $_distance . ' ' .  $_unit;
+
+	return $_distance . ' ' .  $_unit;
+}

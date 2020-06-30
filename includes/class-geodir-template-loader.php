@@ -312,30 +312,29 @@ class GeoDir_Template_Loader {
         return $result;
     }
 
-
     /**
      * Setup the GD Archive page content.
      *
      * @since 2.0.0
+     *
+     * @global bool $gd_skip_the_content Prevent looping for the_content from listing post_content.
+     *
      * @return string The filtered content.
      */
     public static function setup_archive_page_content($content){
-
+        global $wp_query, $post, $gd_done_archive_loop, $gd_skip_the_content;
 
         // if we are not filtering the archive page content then bail.
-        if(!self::is_archive_page_content()){
+        if ( $gd_skip_the_content || ! self::is_archive_page_content() ) {
             return $content;
         }
 
-		global $wp_query, $post,$gd_done_archive_loop;
-
         // if its outside the loop then bail so we don't set the current_post number and cause have_posts() to return false.
-        if(!in_the_loop()){
-
-            if(current_filter()=='the_excerpt' && $gd_done_archive_loop){
+        if ( ! in_the_loop() ) {
+            if ( current_filter() == 'the_excerpt' && $gd_done_archive_loop ) {
                 // we might be inside a "the_excerpt" filter which might be outside the loop so we don't return.
-            }else{
-                return;//$content;
+            } else {
+                return;;
             }
         }
 

@@ -780,14 +780,16 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	);
 	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
-	$match_field = $args['key'];
+	$match_field = $_match_field = $args['key'];
 	if ( $match_field == 'address' ) {
 		$match_field = 'street';
+	} elseif ( $match_field == 'post_images' ) {
+		$match_field = 'featured_image';
 	}
 
-	$find_post   = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
+	$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 
-	if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
+	if ($match_field === '' || ( ! empty( $find_post ) && ( isset( $find_post->{$match_field} ) || isset( $find_post->{$_match_field} ) ) ) ) {
 		$field = array();
 		$badge = $args['badge'];
 
@@ -804,7 +806,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				if ( $match_field == $field_info['htmlvar_name'] ) {
 					$field = $field_info;
 					break;
-				} elseif( $match_field == 'street' && 'address' == $field_info['htmlvar_name'] ) {
+				} elseif( $_match_field == $field_info['htmlvar_name'] ) {
 					$field = $field_info;
 					break;
 				}
@@ -937,11 +939,6 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				 * @since 2.0.0.75
 				 */
 				$match_value = apply_filters( 'geodir_post_badge_match_value', $match_value, $match_field, $args, $find_post, $field );
-
-				// File
-				if ( ! empty( $badge ) &&  ! empty( $match_value ) && ! empty( $field['type'] ) && $field['type'] == 'file' ) {
-					$badge = $match_value;
-				}
 
 				// badge text
 				if ( empty( $badge ) && empty($args['icon_class']) ) {

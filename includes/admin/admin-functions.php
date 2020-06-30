@@ -462,7 +462,7 @@ function geodir_get_core_supported_themes() {
 
 function geodir_setup_timezone_api( $prefix ) {
 	?>
-	if (jQuery('[name="<?php echo $prefix; ?>region"]').length && jQuery('[name="<?php echo $prefix; ?>timezone"]').length) {
+	if (jQuery('[name="<?php echo $prefix; ?>region"]').length && jQuery('[name="<?php echo $prefix; ?>timezone_string"]').length) {
 		if (getState && getState != jQuery('[name="<?php echo $prefix; ?>region"]').data('prev-value')) {
 			geodir_fill_timezone('<?php echo $prefix; ?>');
 		}

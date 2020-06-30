@@ -103,8 +103,6 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         );
     }
 
-
-
     /**
      * The Super block output function.
      *
@@ -128,7 +126,6 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             return '';
         }
 
-        ob_start();
         $default_post_type = geodir_add_listing_default_post_type();
 
         $defaults = array(

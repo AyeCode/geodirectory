@@ -41,5 +41,4 @@ class GeoDir_Elementor_Template_Conditions_Archive_Search_CPT extends \Elementor
 		return false;
 	}
 
-
 }

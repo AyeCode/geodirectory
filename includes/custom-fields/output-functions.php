@@ -2442,14 +2442,19 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if ( empty( $html ) ) {
         if ( ! empty( $gd_post->{$cf['htmlvar_name']} ) ) {
-            $value = stripslashes_deep($gd_post->{$cf['htmlvar_name']});
-            $business_hours = geodir_get_business_hours( $value );
+            $value = stripslashes_deep( $gd_post->{$cf['htmlvar_name']} );
+            $business_hours = geodir_get_business_hours( $value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
 
             if ( empty( $business_hours['days'] ) ) {
                 return $html;
             }
             $show_value = $business_hours['extra']['today_range'];
-            $offset = isset( $business_hours['extra']['offset'] ) ? $business_hours['extra']['offset'] : '';
+            $offset = isset( $business_hours['extra']['offset'] ) ? (int) $business_hours['extra']['offset'] : '';
+            $utc_offset = isset( $business_hours['extra']['utc_offset'] ) ? $business_hours['extra']['utc_offset'] : '';
+            if ( ! empty( $business_hours['extra']['is_dst'] ) ) {
+                $offset = isset( $business_hours['extra']['offset_dst'] ) ? (int) $business_hours['extra']['offset_dst'] : $offset;
+                $utc_offset = isset( $business_hours['extra']['utc_offset_dst'] ) ? $business_hours['extra']['utc_offset_dst'] : $utc_offset;
+            }
 
             if (!empty($show_value)) {
                 $field_icon = geodir_field_icon_proccess($cf);
@@ -2475,7 +2480,7 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
 
                 $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . '" style="clear:both;">';
                 $html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
-                $html .= '<span class="gd-bh-expand-range" data-offset="' . geodir_gmt_offset( $offset ) . '" data-offsetsec="' . geodir_gmt_offset( $offset, false ) . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range">' . $show_value . '</span>';
+                $html .= '<span class="gd-bh-expand-range" data-offset="' . $utc_offset . '" data-offsetsec="' . $offset . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range">' . $show_value . '</span>';
                 $html .= '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span></span>';
                 $html .= '<div class="gd-bh-open-hours">';
                 foreach ( $business_hours['days'] as $day => $slots ) {
@@ -2500,16 +2505,6 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                     $html .= '</div></div>';
                 }
                 $html .= '</div></div>';
-
-                ###
-//                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
-//
-//                if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-field-' . $html_var . $extra_class . '" style="' . $field_icon . '">' . $field_icon_af;
-//                if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
-//                if($output=='' || isset($output['icon']))$html .= '</span>';
-//                if($output=='' || isset($output['value']))$html .= $address_fields;
-//
-//                $html .= '</div>';
             }
         }
     }
