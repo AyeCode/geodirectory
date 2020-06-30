@@ -632,17 +632,31 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 							$term_icon     = $cat_font_icon ? '<i class="' . $cat_font_icon . '" aria-hidden="true"></i>' : $term_icon_url;
 						}
 
-
 						$term_link = get_term_link( $category, $category->taxonomy );
 						/** Filter documented in includes/general_functions.php **/
 						$term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );
 						$count = $category->count;
-						$tax_terms = get_terms( $category->taxonomy, array( 'child_of' => $category->term_id ) );
-						if( !empty( $tax_terms )){
-						    foreach ($tax_terms as $tax_term) {
-						        $count += $tax_term->count;
-						    }
+
+						/**
+						 * Whether include child categories posts count in parent category or not.
+						 *
+						 * @since 2.0.0.96
+						 *
+						 * @param bool $child_term_count True to include child categories posts count. Default true.
+						 * @param int $category->term_id Term ID.
+						 * @param string $category->taxonomy Term taxonomy.
+						 */
+						$child_term_count = apply_filters( 'geodir_categories_include_child_terms_posts_count', true, $category->term_id, $category->taxonomy );
+
+						if ( $child_term_count ) {
+							$tax_terms = get_terms( $category->taxonomy, array( 'child_of' => $category->term_id ) );
+							if ( ! empty( $tax_terms ) ) {
+								foreach ( $tax_terms as $tax_term ) {
+									$count += $tax_term->count;
+								}
+							}
 						}
+
 						$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $count . '</span>' : '';
 
 						$cpt_row .= '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';

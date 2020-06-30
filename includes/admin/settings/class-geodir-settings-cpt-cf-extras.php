@@ -650,8 +650,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			</p>
 
 			<input type="hidden" name="extra[show_map]" value="1" />
-
-
 			<p class="gd-advanced-setting" data-setting="map_lable">
 				<label for="map_lable" class="dd-setting-name">
 					<?php

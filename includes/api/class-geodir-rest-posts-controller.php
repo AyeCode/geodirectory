@@ -2788,7 +2788,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 					if ( ! empty( $field_value ) ) {
 						$data[ $field_name ] = array(
 							'raw'		=> stripslashes( $field_value ),
-							'rendered' 	=> geodir_get_business_hours( $field_value )
+							'rendered' 	=> geodir_get_business_hours( $field_value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) )
 						);
 					} else {
 						$data[ $field_name ] = NULL;

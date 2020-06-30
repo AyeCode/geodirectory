@@ -635,8 +635,12 @@ class GeoDir_Permalinks {
 
 	/**
 	 * Register GD rewrite rules.
+	 *
+	 * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
 	 */
 	public function post_rewrite_rules() {
+		global $wp_rewrite;
+
 		$gd_permalink_structure = geodir_get_permalink_structure();
 
 		$post_types = geodir_get_posttypes( 'array' );
@@ -687,6 +691,13 @@ class GeoDir_Permalinks {
 				}
 
 				$after = $gd_permalink_structure == "/%postname%/" ? 'bottom' : 'top';
+
+				// Create query for /comment-page-xx.
+				$comment_regex = trim( $regex, '?^' );
+				$comment_regex .= $wp_rewrite->comments_pagination_base . '-([0-9]{1,})/?$';
+				$comment_redirect = $redirect . '&cpage=$matches[' . $match . ']';
+				$this->add_rewrite_rule( $comment_regex, $comment_redirect, 'top' );
+
 				$this->add_rewrite_rule( $regex, $redirect, $after );
 
 				// Translate slug
@@ -694,9 +705,6 @@ class GeoDir_Permalinks {
 			}
 		}
 	}
-
-
-
 
 	/**
 	 * Add GD rewrite tags.
@@ -712,8 +720,6 @@ class GeoDir_Permalinks {
 		add_rewrite_tag('%latlon%', '((\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?))');
 		add_rewrite_tag('%dist%', '((?=.+)(?:[1-9]\d*|0)?(?:\.\d+))');
 	}
-
-	
 
 	/**
 	 * Get the slug for user favs.

@@ -1139,6 +1139,27 @@ class GeoDir_Admin_Settings {
 							</td>
 						</tr><?php
 					break;
+				// Single timezone select
+				case 'single_select_timezone' :
+					if ( isset( $value['value'] ) ) {
+						$timezone_string = (string) $value['value'];
+					} else {
+						$timezone_string = (string) self::get_option( $value['id'], $value['default'] );
+					}
+					$placeholder = ! empty( $value['placeholder'] ) ? $value['placeholder'] : __( 'Choose a city/timezone&hellip;', 'geodirectory' );
+					$locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
+					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+						<th scope="row" class="titledesc">
+							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<?php echo $tooltip_html; ?>
+						</th>
+						<td class="forminp">
+						<select id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" data-placeholder="<?php echo esc_attr( $placeholder ); ?>" aria-label="<?php esc_attr_e( 'Timezone', 'geodirectory' ) ?>" class="regular-text <?php echo esc_attr( $value['class'] ); ?>">
+							<?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?>
+						</select> <?php echo $description; ?>
+						</td>
+					</tr><?php
+					break;
 
 				// Default: run an action
 				default:

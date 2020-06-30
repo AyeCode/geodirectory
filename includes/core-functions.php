@@ -351,6 +351,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_lose_changes'                             => __( 'You may lose changes if you navigate away now!', 'geodirectory' ),
 		'txt_are_you_sure'                             => __( 'Are you sure?', 'geodirectory' ),
 		'gmt_offset'                                   => geodir_gmt_offset(),
+		'timezone_string'                              => geodir_timezone_string(),
 		'autosave'                                     => apply_filters('geodir_autosave',10000),// 10000 = 10 seconds, set to 0 to disable
 		'search_users_nonce'                           => wp_create_nonce( 'search-users' ),
 		'google_api_key'                               => GeoDir_Maps::google_api_key(),
@@ -380,6 +381,9 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 			'year' => _x( 'about a year', 'time ago', 'geodirectory' ),
 			'years' => _x( '%d years', 'time ago', 'geodirectory' ),
 		),
+		'resize_marker' => apply_filters( 'geodir_map_marker_resize_marker', false ), /* Resize map marker icon */
+		'marker_max_width' => apply_filters( 'geodir_map_resize_marker_max_width', 50 ), /* Max width to apply resize marker icon */
+		'marker_max_height' => apply_filters( 'geodir_map_resize_marker_max_height', 50 ) /* Max height to apply resize marker icon. */
 	);
 
 	/**

@@ -851,14 +851,15 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 				array(
 					'name'     => __( 'Timezone', 'geodirectory' ),
-					'desc'     => __( 'Set the site timezone. Ex: +5:30 or GMT+5:30 or UTC+5:30', 'geodirectory' ),
-					'id'       => 'default_location_timezone',
-					'type'     => 'text',
+					'desc'     => __( 'Select a city/timezone.', 'geodirectory' ),
+					'id'       => 'default_location_timezone_string',
 					'css'      => 'min-width:300px;',
 					'desc_tip' => true,
-					'placeholder' => geodir_wp_gmt_offset(),
 					'advanced' => true,
-					'required' => true
+					'type'     => 'single_select_timezone',
+					'class'    => 'geodir-select',
+					'default'  => geodir_timezone_string(),
+					'options'  => array()
 				),
 
 				array(

@@ -70,7 +70,7 @@ function geodir_day_short_names() {
  * @return string Formatted offset.
  */
 function geodir_utc_offset( $offeset = '', $formatted = true ) {
-	$offset = $offeset || $offeset == '0' ? $offeset : geodir_get_option( 'default_location_timezone' );
+	$offset = $offeset || $offeset == '0' ? $offeset : geodir_timezone_utc_offset( '', false );
 	if ( $offset == '' ) {
 		return geodir_wp_gmt_offset( $formatted );
 	} else {
@@ -106,7 +106,7 @@ function geodir_utc_offset( $offeset = '', $formatted = true ) {
  */
 function geodir_gmt_offset( $offeset = '', $formatted = true ) {
 
-	$offset = $offeset || $offeset == '0' ? $offeset : geodir_get_option( 'default_location_timezone' );
+	$offset = $offeset || $offeset == '0' ? $offeset : geodir_timezone_utc_offset( '', false );
 	if ( $offset == '' ) {
 		return geodir_wp_gmt_offset( $formatted );
 	} else {
@@ -155,15 +155,18 @@ function geodir_gmt_offset( $offeset = '', $formatted = true ) {
  * @since 2.0.0
  *
  * @param string $seconds A business hours value in schema form.
+ * @param bool $abs True to remove ':00' minutes.
  * @return string $hhmm Formatted hhmm.
  */
-function geodir_seconds_to_hhmm( $seconds ) {
+function geodir_seconds_to_hhmm( $seconds, $abs = false ) {
 	$sign = $seconds < 0 ? '-' : '+';
 	$seconds = absint( $seconds );
 	$hours = floor( $seconds / 3600 );
 	$minutes = floor( ( $seconds - ( $hours * 3600 ) ) / 60 );
 	$hhmm = $hours;
-	$hhmm .= ":" . ( $minutes < 10 ? "0" . (string) $minutes : (string) $minutes );
+	if ( ! ( $abs && $minutes == 0 ) ) {
+		$hhmm .= ":" . ( $minutes < 10 ? "0" . (string) $minutes : (string) $minutes );
+	}
 	$hhmm = $sign . '' .  $hhmm;
 	return $hhmm;
 }
@@ -318,7 +321,11 @@ function geodir_array_to_schema( $schema_input ) {
 	}
 
 	$days = geodir_day_short_names();
-	$offset = ! empty( $schema_input['offset'] ) || ( isset( $schema_input['offset'] ) && $schema_input['offset'] === '0' ) ? $schema_input['offset'] : geodir_gmt_offset();
+	if ( isset( $schema_input['offset'] ) && $schema_input['offset'] === '0' ) {
+		$schema_input['offset'] = '+0';
+	}
+	$offset = ! empty( $schema_input['offset'] ) ? $schema_input['offset'] : geodir_gmt_offset();
+	$timezone_string = ! empty( $schema_input['timezone_string'] ) ? $schema_input['timezone_string'] : geodir_timezone_string();
 	$periods = array();
 
 	foreach ( $schema_hours as $day_no => $slots ) {
@@ -341,7 +348,7 @@ function geodir_array_to_schema( $schema_input ) {
 	if ( !empty( $periods ) ) {
 		$property[] = json_encode( $periods );
 	}
-	$property[] = '["UTC":"' . $offset . '"]';
+	$property[] = '["UTC":"' . $offset . '","Timezone":"' . $timezone_string . '"]';
 
 	$schema = implode( ",", $property );
 	
@@ -354,18 +361,23 @@ function geodir_array_to_schema( $schema_input ) {
  * @since 2.0.0
  *
  * @param string $schema Business hour schema.
+ * @param string $country Country name to find timezone string.
  * @return array $return Offset and hour.
  */
-function geodir_schema_to_array( $schema ) {
+function geodir_schema_to_array( $schema, $country = '' ) {
 	if ( empty( $schema ) ) {
 		return array();
 	}
 
 	$return = array();
-	$schema_array = explode('],[', $schema);
+	$schema_array = explode( '],[', $schema );
+
 	if ( ! empty( $schema_array[0] ) ) {
 		$day_names = geodir_day_short_names();
-		$schema_str = $schema_array[0] . ']';
+		$schema_str = $schema_array[0];
+		if ( count( $schema_array ) > 1 ) {
+			$schema_str .= ']';
+		}
 		$schema_arr = json_decode( $schema_str );
 		$properties = array();
 
@@ -396,15 +408,56 @@ function geodir_schema_to_array( $schema ) {
 			$return['hours'] = $properties;
 		}
 	}
+
 	if ( ! empty( $schema_array[1] ) ) {
-		$gmt_offset = str_replace(' ', '', $schema_array[1]);
-		$gmt_offset = str_replace(array('"UTC":"', '"', '[', ']'), '', $schema_array[1]);
-		if ( $gmt_offset === '0' ) {
-			$gmt_offset = '+0';
+		$_offset_value = str_replace( array( '"', '[', ']', "'" ), '', trim( $schema_array[1] ) );
+		$_offset_value = explode( ',', $_offset_value, 2 );
+
+		$timezone_string = '';
+		$utc_offset = '';
+
+		if ( ! empty( $_offset_value ) ) {
+			foreach ( $_offset_value as $_value ) {
+				$_values = explode( ':', $_value, 2 );
+
+				if ( strtolower( trim( $_values[0] ) ) == 'utc' || strtolower( trim ( $_values[0] ) ) == 'gmt' ) {
+					$utc_offset = isset( $_values[1] ) ? trim( $_values[1] ) : '';
+				} elseif ( strtolower( trim( $_values[0] ) ) == 'timezone' ) {
+					$timezone_string = isset( $_values[1] ) ? trim( $_values[1] ) : '';
+				}
+			}
 		}
-		$return['offset'] = ( ! empty( $gmt_offset ) ? $gmt_offset : geodir_gmt_offset() );
+
+		if ( empty( $timezone_string ) ) {
+			if ( $utc_offset === '0' ) {
+				$utc_offset = '+0';
+			}
+
+			if ( empty( $utc_offset ) ) {
+				$timezone_string = geodir_timezone_string();
+				$utc_offset = '';
+			} else {
+				$timezone_string = geodir_offset_to_timezone_string( $utc_offset, $country );
+			}
+		}
+
+		if ( empty( $utc_offset ) ) {
+			$timezone_data = geodir_timezone_data( $timezone_string );
+			$utc_offset = $timezone_data['utc_offset'];
+		}
+
+		$return['timezone_string'] = $timezone_string;
+		$return['utc_offset'] = $utc_offset;
 	}
-	
+
+	if ( ! empty( $return['hours'] ) && empty( $return['timezone_string'] ) ) {
+		$timezone_string = geodir_timezone_string();
+		$timezone_data = geodir_timezone_data( $timezone_string );
+
+		$return['timezone_string'] = $timezone_string;
+		$return['utc_offset'] = $timezone_data['utc_offset'];
+	}
+
 	return $return;
 }
 
@@ -568,19 +621,19 @@ function geodir_parse_hours_range( $hours_str ) {
  * @param string $value Optional. A business hour values. Default null.
  * @return array $hours List of hour data.
  */
-function geodir_get_business_hours( $value = '' ) {
+function geodir_get_business_hours( $value = '', $country = '' ) {
 	if ( empty( $value ) ) {
 		return NULL;
 	}
 	
 	if ( ! is_array( $value ) ) {
-		$data = geodir_schema_to_array( stripslashes_deep( $value ) );
+		$data = geodir_schema_to_array( stripslashes_deep( $value ), $country );
 	} else {
 		$data = $value;
 	}
 
 	$hours = array();
-	if ( ! empty( $data['hours'] ) || ! empty( $data['offset'] ) ) {
+	if ( ! empty( $data['hours'] ) || ! empty( $data['timezone_string'] ) || ! empty( $data['utc_offset'] ) ) {
 		$days = geodir_get_weekdays(true);
 		$day_nos = array_flip( geodir_day_short_names() );
 
@@ -594,10 +647,14 @@ function geodir_get_business_hours( $value = '' ) {
 		$closed_now_label = __( 'Closed now', 'geodirectory');
 		$open_24hours_label = __( 'Open 24 hours', 'geodirectory');
 
+		$timezone_string = ! empty( $data['timezone_string'] ) ? $data['timezone_string'] : geodir_timezone_string();
+		$timezone_data = geodir_timezone_data( $timezone_string );
+
 		$has_open = 0;
 		$has_closed = 0;
 		$day_slots = array();
 		$today_range = $closed_label;
+		$max = ( 24 * 60 * 7 ); // Week in minutes
 		foreach ( $days as $day => $day_name ) {
 			$day_no = (int)$day_nos[ $day ];
 			$is_today = date( 'N' ) == $day_no ? 1 : 0;
@@ -629,13 +686,68 @@ function geodir_get_business_hours( $value = '' ) {
 					}
 					$day_range[] = $range;
 
-					$ranges[] = array( 
+					$minutes = array( geodir_hhmm_to_bh_minutes( $opens, $day_no ), geodir_hhmm_to_bh_minutes( $closes, $day_no ) );
+
+					$_range = array( 
 						'slot' => $opens . '-' . $closes,
 						'range' => $range,
 						'open' => $is_open,
 						'time' => array( date_i18n( 'Hi', $opens_time ) , date_i18n( 'Hi', $closes_time ) ),
-						'minutes' => array( geodir_hhmm_to_bh_minutes( $opens, $day_no ), geodir_hhmm_to_bh_minutes( $closes, $day_no ) )
+						'minutes' => $minutes,
 					);
+
+					if ( ! ( $timezone_string == 'UTC' || ( empty( $timezone_data['offset'] ) && empty( $timezone_data['offset_dst'] ) ) ) ) {
+						// UTC
+						if ( ! empty( $timezone_data['offset'] ) ) {
+							$offset_utc = round( $timezone_data['offset'] / 60 ); // Minutes
+							$open_utc = $_open_utc = $minutes[0] - $offset_utc;
+							$close_utc = $_close_utc = $minutes[1] - $offset_utc;
+
+							if ( $close_utc <= $open_utc ) {
+								$close_utc = $close_utc + ( 24 * 60 ); // Close on next day.
+							}
+
+							$diff = $close_utc - $open_utc;
+
+							if ( $_open_utc < 0 ) {
+								$open_utc = $_open_utc + $max;
+							} elseif ( $_open_utc >= $max ) {
+								$open_utc = $_open_utc - $max;
+							}
+							
+							$close_utc = $open_utc + $diff;
+						} else {
+							$open_utc = $minutes[0];
+							$close_utc = $minutes[1];
+						}
+						
+						$_range['utc_minutes'] = array( $open_utc, $close_utc );
+
+						// UTC + DST
+						if ( ! empty( $timezone_data['has_dst'] ) && ! empty( $timezone_data['offset_dst'] ) ) {
+							$offset_dst = round( $timezone_data['offset_dst'] / 60 ); // Minutes
+							$open_dst = $_open_dst = $minutes[0] - $offset_dst;
+							$close_dst = $_close_dst = $minutes[1] - $offset_dst;
+
+							if ( $close_dst <= $open_dst ) {
+								$close_dst = $close_dst + ( 24 * 60 ); // Close on next day.
+							}
+
+							$diff = $close_dst - $open_dst;
+
+							if ( $_open_dst < 0 ) {
+								$open_dst = $_open_dst + $max;
+							} elseif ( $_open_dst >= $max ) {
+								$open_dst = $_open_dst - $max;
+							}
+
+							$close_dst = $open_dst + $diff;
+
+							$_range['utc_minutes_dst'] = array( $open_dst, $close_dst );
+						}
+					}
+
+					$ranges[] = $_range;
 				}
 				if ( $is_today && ! empty( $day_range ) ) {
 					$today_range = implode( ', ', $day_range );
@@ -684,7 +796,13 @@ function geodir_get_business_hours( $value = '' ) {
 			'date_format' => $date_format,
 			'time_format' => $time_format,
 			'full_date_format' => $date_format . ' ' . $time_format,
-			'offset' => isset( $data['offset'] ) && $data['offset'] !== '' ? $data['offset'] : geodir_gmt_offset()
+			'timezone_string' => $timezone_string,
+			'offset' => $timezone_data['offset'],
+			'utc_offset' => $timezone_data['utc_offset'],
+			'offset_dst' => $timezone_data['offset_dst'],
+			'utc_offset_dst' => $timezone_data['utc_offset_dst'],
+			'has_dst' => $timezone_data['has_dst'],
+			'is_dst' => $timezone_data['is_dst'],
 		);
 	}
 
@@ -765,119 +883,51 @@ function geodir_hhmm_to_bh_minutes( $hm, $day_no = 0 ) {
 }
 
 /**
- * Save the business hours.
- *
- * @since 2.0.0
- *
- * @param int $post_ID Places post id.
- * @param string $data Optional. Business hour metadata. Default NULL.
- * @return int|false $saved The number of rows inserted, or false on error.
- */
-function geodir_save_business_hours( $post_ID, $data = NULL ) {
-	global $wpdb;
-
-	if ( empty( $post_ID ) ) {
-		return false;
-	}
-
-	if ( $data === NULL ) {
-		$data = get_post_meta( $post_ID, 'business_hours', true );
-	}
-
-	// clear old rows
-	$saved = geodir_delete_business_hours( $post_ID );
-
-	$business_hours = geodir_get_business_hours( $data );
-	if ( ! empty( $business_hours['days'] ) ) {
-		foreach ( $business_hours['days'] as $day => $hours ) {
-			if ( empty( $hours['closed'] ) && ! empty( $hours['slots'] ) && ! empty( $hours['day_no'] ) ) {
-				foreach ( $hours['slots'] as $slot ) {
-					if ( ! empty( $slot['minutes'] ) && is_array( $slot['minutes'] ) && count( $slot['minutes'] ) == 2 ) {
-						$saved = $wpdb->insert( GEODIR_BUSINESS_HOURS_TABLE, array( 'post_id' => $post_ID, 'open' => $slot['minutes'][0], 'close' => $slot['minutes'][1] ) );
-					}
-				}
-			}
-		}
-	}
-
-	return $saved;
-}
-
-/**
- * Delete the business hours.
- *
- * @since 2.0.0
- *
- * @param int $post_ID Places post id.
- * @return int|false Number of rows affected/selected or false on error.
- */
-function geodir_delete_business_hours( $post_ID ) {
-	global $wpdb;
-	
-	if ( empty( $post_ID ) ) {
-		return false;
-	}
-
-	return $wpdb->query( $wpdb->prepare( "DELETE FROM `" . GEODIR_BUSINESS_HOURS_TABLE . "` WHERE `post_id` = %d", array( $post_ID ) ) );
-}
-
-/**
- * Update the business hours.
- *
- * @since 2.0.0
- *
- * @param array $post_data Business hours data.
- * @param bool $update Optional. True or false. Default false.
- */
-function geodir_update_business_hours( $post_data, $update = false ) {
-	global $gd_business_hours_updated;
-
-	if ( empty( $post_data['ID'] ) ) {
-		return;
-	}
-
-	$post_ID = $post_data['ID'];
-	$post    = geodir_get_post_info( $post_ID );
-	if ( empty( $post ) ) {
-		return;
-	}
-	
-	if ( empty( $gd_business_hours_updated ) ) {
-		$gd_business_hours_updated = array();
-	}
-	
-	if ( ! in_array( $post_ID, $gd_business_hours_updated ) ) {
-		$gd_business_hours_updated[] = $post_ID;
-	}
-	
-	$business_hours = isset( $post->business_hours ) ? $post->business_hours : '';
-	
-	geodir_save_business_hours( $post_ID, $business_hours );
-}
-//add_action( 'geodir_ajax_post_saved', 'geodir_update_business_hours', 0, 2 ); @remove this once we implement search by open_now
-
-/**
  * Sanitize business hours value.
  *
  * @since 2.0.0
  *
  * @param string $value Business hours value.
+ * @param object $gd_post GD Post.
  * @param string $custom_field Custom field.
  * @param int $post_id Post id.
  * @param object $post Post.
  * @param string $update Update.
  * @return string $value Sanitize business hours.
  */
-function geodir_sanitize_business_hours_value( $value, $custom_field, $post_id, $post, $update ) {
+function geodir_sanitize_business_hours_value( $value, $gd_post, $custom_field, $post_id, $post, $update ) {
 	if ( ! empty( $value ) && ! is_array( $value ) ) {
-		$value = stripslashes( $value );
-		if ( strpos( $value, '"UTC"' ) === false ) {
-			$value .= ',["UTC":"' . geodir_gmt_offset() . '"]';
+		$value = stripslashes_deep( $value );
+
+		if ( strpos( $value, '"UTC"' ) === false || strpos( $value, '"Timezone"' ) === false ) {
+			$schema = explode( '],[', $value, 2 );
+
+			if ( ! empty( $gd_post['country'] ) ) {
+				$country = $gd_post['country'];
+			} elseif ( GeoDir_Post_types::supports( $post->post_type, 'location' ) ) {
+				$country = geodir_get_post_meta( $post_id, 'country', true );
+			} else {
+				$country = geodir_get_option( 'default_location_country' );
+			}
+
+			$_value = geodir_schema_to_array( $value, $country );
+
+			if ( ! empty( $_value['hours'] ) || ! empty( $_value['timezone_string'] ) ) {
+				if ( ! empty( $_value['hours'] ) ) {
+					$value = $schema[0];
+					if ( count( $schema ) > 1 ) {
+						$value .= ']';
+					}
+					$value .= ',';
+				}
+
+				$value .= '["UTC":"' . $_value['utc_offset'] . '","Timezone":"' . $_value['timezone_string'] . '"]';
+			}
 		}
 	}
 	return $value;
 }
-add_filter( 'geodir_custom_field_value_business_hours', 'geodir_sanitize_business_hours_value', 10, 5 );
+add_filter( 'geodir_custom_field_value_business_hours', 'geodir_sanitize_business_hours_value', 10, 6 );
 
 /**
  * Business hours time format for input field.
@@ -897,4 +947,988 @@ function geodir_bh_input_time_format( $jqueryui = false ) {
 	}
 
 	return $time_format;
+}
+
+/**
+ * Converts UTC offset in minutes.
+ *
+ * @since 2.0.0.95
+ *
+ * @param string $offset UTC offset.
+ * @return int Offset in minutes.
+ */
+function geodir_offset_to_minutes( $offset ) {
+	if ( empty( $offset ) ) {
+		return 0;
+	}
+
+	$offset = strtoupper( $offset );
+	$offset = str_replace( array( 'UTC', 'GMT', ' ', '.' ), array( '', '', '', ':' ), $offset );
+	$sign = strpos( $offset, '-' ) === 0 ? -1 : 1;
+	$offset = str_replace( array( '+', '-' ), array( '', '' ), $offset );
+
+	$minutes = geodir_hhmm_to_bh_minutes( $offset ); // HH:mm to minutes
+
+	if ( $minutes > 0 ) {
+		$minutes = $minutes * $sign; // Assign +- sign
+	}
+
+	return $minutes;
+}
+
+/**
+ * Gives a nicely-formatted list of timezone strings.
+ *
+ * @since 2.0.0.96
+ *
+ * @staticvar bool $mo_loaded
+ * @staticvar string $locale_loaded
+ *
+ * @param string $selected_zone Selected timezone.
+ * @param string $locale        Optional. Locale to load the timezones in. Default current site locale.
+ * @param string $manual_offsets Whether to include manual offsets.
+ * @return string
+ */
+function geodir_timezone_choice( $selected_zone, $locale = null, $manual_offsets = false ) {
+	static $mo_loaded = false, $locale_loaded = null;
+
+	$continents = array( 'Africa', 'America', 'Antarctica', 'Arctic', 'Asia', 'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific' );
+
+	// Load translations for continents and cities.
+	if ( ! $mo_loaded || $locale !== $locale_loaded ) {
+		$locale_loaded = $locale ? $locale : get_locale();
+		$mofile        = WP_LANG_DIR . '/continents-cities-' . $locale_loaded . '.mo';
+		unload_textdomain( 'continents-cities' );
+		load_textdomain( 'continents-cities', $mofile );
+		$mo_loaded = true;
+	}
+
+	$zonen = array();
+	foreach ( timezone_identifiers_list() as $zone ) {
+		$zone = explode( '/', $zone );
+		if ( ! in_array( $zone[0], $continents ) ) {
+			continue;
+		}
+
+		// This determines what gets set and translated - we don't translate Etc/* strings here, they are done later.
+		$exists    = array(
+			0 => ( isset( $zone[0] ) && $zone[0] ),
+			1 => ( isset( $zone[1] ) && $zone[1] ),
+			2 => ( isset( $zone[2] ) && $zone[2] ),
+		);
+		$exists[3] = ( $exists[0] && 'Etc' !== $zone[0] );
+		$exists[4] = ( $exists[1] && $exists[3] );
+		$exists[5] = ( $exists[2] && $exists[3] );
+
+		// phpcs:disable WordPress.WP.I18n.LowLevelTranslationFunction,WordPress.WP.I18n.NonSingularStringLiteralText
+		$zonen[] = array(
+			'continent'   => ( $exists[0] ? $zone[0] : '' ),
+			'city'        => ( $exists[1] ? $zone[1] : '' ),
+			'subcity'     => ( $exists[2] ? $zone[2] : '' ),
+			't_continent' => ( $exists[3] ? translate( str_replace( '_', ' ', $zone[0] ), 'continents-cities' ) : '' ),
+			't_city'      => ( $exists[4] ? translate( str_replace( '_', ' ', $zone[1] ), 'continents-cities' ) : '' ),
+			't_subcity'   => ( $exists[5] ? translate( str_replace( '_', ' ', $zone[2] ), 'continents-cities' ) : '' ),
+		);
+		// phpcs:enable
+	}
+	usort( $zonen, '_wp_timezone_choice_usort_callback' );
+
+	$structure = array();
+
+	//if ( empty( $selected_zone ) ) {
+		//$structure[] = '<option selected="selected" value="">' . __( 'Select a city', 'geodirectory' ) . '</option>';
+	//}
+	// Do UTC.
+	$structure[] = '<optgroup label="' . esc_attr__( 'UTC', 'geodirectory' ) . '">';
+	$selected    = '';
+	if ( 'UTC' === $selected_zone || empty( $selected_zone ) ) {
+		$selected = 'selected="selected" ';
+	}
+	$structure[] = '<option ' . $selected . 'value="' . esc_attr( 'UTC' ) . '" data-offset="+0">' . __( 'UTC', 'geodirectory' ) . '</option>';
+	$structure[] = '</optgroup>';
+
+	foreach ( $zonen as $key => $zone ) {
+		// Build value in an array to join later.
+		$value = array( $zone['continent'] );
+
+		if ( empty( $zone['city'] ) ) {
+			// It's at the continent level (generally won't happen).
+			$display = $zone['t_continent'];
+		} else {
+			// It's inside a continent group.
+
+			// Continent optgroup.
+			if ( ! isset( $zonen[ $key - 1 ] ) || $zonen[ $key - 1 ]['continent'] !== $zone['continent'] ) {
+				$label       = $zone['t_continent'];
+				$structure[] = '<optgroup label="' . esc_attr( $label ) . '">';
+			}
+
+			// Add the city to the value.
+			$value[] = $zone['city'];
+
+			$display = $zone['t_city'];
+			if ( ! empty( $zone['subcity'] ) ) {
+				// Add the subcity to the value.
+				$value[]  = $zone['subcity'];
+				$display .= ' - ' . $zone['t_subcity'];
+			}
+		}
+
+		// Build the value.
+		$value    = join( '/', $value );
+		$selected = '';
+		if ( $value === $selected_zone ) {
+			$selected = 'selected="selected" ';
+		}
+
+		$timezone_data = geodir_timezone_data( $value );
+
+		// Offset
+		$offset = $timezone_data['utc_offset'];
+		$offset_display = ! empty( $timezone_data['has_dst'] ) && ! empty( $timezone_data['is_dst'] ) ? $timezone_data['utc_offset_dst'] : $timezone_data['utc_offset'];
+		$structure[] = '<option ' . $selected . 'value="' . esc_attr( $value ) . '" data-offset="' . esc_attr( $offset ) . '">' . esc_html( $display ) . ' - UTC' . $offset_display . '</option>';
+
+		// Close continent optgroup.
+		if ( ! empty( $zone['city'] ) && ( ! isset( $zonen[ $key + 1 ] ) || ( isset( $zonen[ $key + 1 ] ) && $zonen[ $key + 1 ]['continent'] !== $zone['continent'] ) ) ) {
+			$structure[] = '</optgroup>';
+		}
+	}
+
+	// Do manual UTC offsets.
+	if ( $manual_offsets ) {
+		$structure[]  = '<optgroup label="' . esc_attr__( 'Manual Offsets', 'geodirectory' ) . '">';
+		$offset_range = array(
+			-12,
+			-11.5,
+			-11,
+			-10.5,
+			-10,
+			-9.5,
+			-9,
+			-8.5,
+			-8,
+			-7.5,
+			-7,
+			-6.5,
+			-6,
+			-5.5,
+			-5,
+			-4.5,
+			-4,
+			-3.5,
+			-3,
+			-2.5,
+			-2,
+			-1.5,
+			-1,
+			-0.5,
+			0,
+			0.5,
+			1,
+			1.5,
+			2,
+			2.5,
+			3,
+			3.5,
+			4,
+			4.5,
+			5,
+			5.5,
+			5.75,
+			6,
+			6.5,
+			7,
+			7.5,
+			8,
+			8.5,
+			8.75,
+			9,
+			9.5,
+			10,
+			10.5,
+			11,
+			11.5,
+			12,
+			12.75,
+			13,
+			13.75,
+			14,
+		);
+		foreach ( $offset_range as $offset ) {
+			if ( 0 <= $offset ) {
+				$offset_name = '+' . $offset;
+			} else {
+				$offset_name = (string) $offset;
+			}
+
+			$offset_value = $offset_name;
+			$offset_name = str_replace( array( '.25', '.5', '.75' ), array( ':15', ':30', ':45' ), $offset_name );
+			$_offset_name = $offset_name;
+			$offset_name = 'UTC' . $offset_name;
+			$offset_value = 'UTC' . $offset_value;
+			$selected = '';
+			if ( $offset_value === $selected_zone ) {
+				$selected = 'selected="selected" ';
+			}
+			$structure[] = '<option ' . $selected . 'value="' . esc_attr( $offset_value ) . '" data-offset="' . esc_attr( $_offset_name ) . '">' . esc_html( $offset_name ) . '</option>';
+
+		}
+		$structure[] = '</optgroup>';
+	}
+
+	$structure = apply_filters( 'geodir_timezone_choice_options', $structure, $selected_zone, $locale, $manual_offsets );
+
+	$structure = is_array( $structure ) && ! empty( $structure ) ? join( "\n", $structure ) : '';
+
+	return $structure;
+}
+
+function geodir_timezone_data( $tzstring = 'UTC', $time = null ) {
+	$data = array(
+		'offset' => 0,
+		'utc_offset' => '',
+		'offset_dst' => 0,
+		'utc_offset_dst' => '',
+		'has_dst' => 0,
+		'is_dst' => 0
+	);
+
+	if ( in_array( $tzstring, timezone_identifiers_list() ) ) {
+		if ( empty( $time ) ) {
+			$time = time();
+		}
+
+		$transitions = timezone_transitions_get( timezone_open( $tzstring ), $time );
+
+		if ( ! empty( $transitions[0]['isdst'] ) || ! empty( $transitions[1]['isdst'] ) ) {
+			$data['offset'] = empty( $transitions[0]['isdst'] ) ? (int) $transitions[0]['offset'] : (int) $transitions[1]['offset'];
+			$data['offset_dst'] = ! empty( $transitions[0]['isdst'] ) ? (int) $transitions[0]['offset'] : (int) $transitions[1]['offset'];
+
+			$data['has_dst'] = 1;
+			if ( ! empty( $transitions[0]['isdst'] ) ) {
+				$data['is_dst'] = 1;
+			}
+		} else {
+			$data['offset'] = (int) $transitions[0]['offset'];
+			$data['offset_dst'] = (int) $transitions[0]['offset'];
+		}
+
+		$data['utc_offset'] = geodir_seconds_to_hhmm( $data['offset'], true );
+		$data['utc_offset_dst'] = geodir_seconds_to_hhmm( $data['offset_dst'], true );
+	}
+
+	return $data;
+}
+
+function geodir_offset_to_timezone_string( $offset, $country = '' ) {
+	$timezone_string = '';
+
+	$offset = str_replace( array( 'UTC', 'GMT', ' ', '.' ), array( '', '', '', ':' ), $offset );
+	if ( $offset == '' ) {
+		$offset = geodir_gmt_offset();
+	}
+
+	$seconds = geodir_offset_to_minutes( $offset ) * 60;
+	$sign = $seconds < 0 ? '-' : '+';
+	$seconds = absint( $seconds );
+	$hours = floor( $seconds / 3600 );
+	$minutes = floor( ( $seconds - ( $hours * 3600 ) ) / 60 );
+	$hhmm = ( $hours < 10 ? "0" . (string) $hours : (string) $hours );
+	$hhmm .= ":" . ( $minutes < 10 ? "0" . (string) $minutes : (string) $minutes );
+	$hhmm = $sign . '' .  $hhmm;
+
+	$timezone_countries = geodir_timezone_countries();
+
+	if ( isset( $timezone_countries[ $hhmm ] ) ) {
+		$zones = $timezone_countries[ $hhmm ];
+
+		if ( count( $zones ) == 1 ) {
+			return $zones[0]['z'];
+		}
+
+		if ( ! empty( $country ) ) {
+			$country = stripslashes( $country );
+
+			foreach ( $zones as $zone ) {
+				if ( geodir_strtolower( $country ) == geodir_strtolower( $zone['c'] ) ) {
+					return $zone['z'];
+				}
+			}
+		}
+	}
+
+	if ( $hhmm != '+00:00' ) {
+		$_timezone_string = timezone_name_from_abbr( '', $seconds, 0 );
+		if ( $_timezone_string === false ) {
+			$_timezone_string = timezone_name_from_abbr( '', $seconds, 1 ); // DST
+		}
+
+		if ( $_timezone_string ) {
+			return $_timezone_string;
+		}
+	}
+
+	$timezone_string = 'UTC';
+
+	return $timezone_string;
+}
+
+function geodir_timezone_countries() {
+	return apply_filters( 'geodir_timezone_countries', 
+	array(
+		'-12:00' => array(
+			array( 'c' => 'United States', 'z' => 'Pacific/Midway' )
+		),
+		'-11:00' => array(
+			array( 'c' => 'American Samoa', 'z' => 'Pacific/Pago_Pago' ),
+			array( 'c' => 'Niue', 'z' => 'Pacific/Niue' ),
+			array( 'c' => 'United States', 'z' => 'Pacific/Midway' ),
+			array( 'c' => 'United States Minor Outlying Islands', 'z' => 'Pacific/Midway' )
+		),
+		'-10:00' => array(
+			array( 'c' => 'Cook Islands', 'z' => 'Pacific/Rarotonga' ),
+			array( 'c' => 'French Polynesia', 'z' => 'Pacific/Tahiti' ),
+			array( 'c' => 'United States', 'z' => 'America/Adak' ),
+			array( 'c' => 'United States', 'z' => 'Pacific/Honolulu' )
+		),
+		'-09:30' => array(
+			array( 'c' => 'French Polynesia', 'z' => 'Pacific/Marquesas' )
+		),
+		'-09:00' => array(
+			array( 'c' => 'French Polynesia', 'z' => 'Pacific/Gambier' ),
+			array( 'c' => 'United States', 'z' => 'America/Adak' ),
+			array( 'c' => 'United States', 'z' => 'America/Anchorage' ),
+			array( 'c' => 'United States', 'z' => 'America/Juneau' ),
+			array( 'c' => 'United States', 'z' => 'America/Metlakatla' ),
+			array( 'c' => 'United States', 'z' => 'America/Nome' ),
+			array( 'c' => 'United States', 'z' => 'America/Sitka' ),
+			array( 'c' => 'United States', 'z' => 'America/Yakutat' )
+		),
+		'-08:00' => array(
+			array( 'c' => 'Canada', 'z' => 'America/Dawson' ),
+			array( 'c' => 'Canada', 'z' => 'America/Vancouver' ),
+			array( 'c' => 'Canada', 'z' => 'America/Whitehorse' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Tijuana' ),
+			array( 'c' => 'Pitcairn', 'z' => 'Pacific/Pitcairn' ),
+			array( 'c' => 'United States', 'z' => 'America/Anchorage' ),
+			array( 'c' => 'United States', 'z' => 'America/Juneau' ),
+			array( 'c' => 'United States', 'z' => 'America/Los_Angeles' ),
+			array( 'c' => 'United States', 'z' => 'America/Metlakatla' ),
+			array( 'c' => 'United States', 'z' => 'America/Nome' ),
+			array( 'c' => 'United States', 'z' => 'America/Sitka' ),
+			array( 'c' => 'United States', 'z' => 'America/Yakutat' )
+		),
+		'-07:00' => array(
+			array( 'c' => 'Canada', 'z' => 'America/Cambridge_Bay' ),
+			array( 'c' => 'Canada', 'z' => 'America/Inuvik' ),
+			array( 'c' => 'Canada', 'z' => 'America/Creston' ),
+			array( 'c' => 'Canada', 'z' => 'America/Whitehorse' ),
+			array( 'c' => 'Canada', 'z' => 'America/Vancouver' ),
+			array( 'c' => 'Canada', 'z' => 'America/Yellowknife' ),
+			array( 'c' => 'Canada', 'z' => 'America/Fort_Nelson' ),
+			array( 'c' => 'Canada', 'z' => 'America/Edmonton' ),
+			array( 'c' => 'Canada', 'z' => 'America/Dawson_Creek' ),
+			array( 'c' => 'Canada', 'z' => 'America/Dawson' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Chihuahua' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Hermosillo' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Mazatlan' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Ojinaga' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Tijuana' ),
+			array( 'c' => 'United States', 'z' => 'America/Boise' ),
+			array( 'c' => 'United States', 'z' => 'America/Denver' ),
+			array( 'c' => 'United States', 'z' => 'America/Los_Angeles' ),
+			array( 'c' => 'United States', 'z' => 'America/Phoenix' )
+		),
+		'-06:00' => array(
+			array( 'c' => 'Belize', 'z' => 'America/Belize' ),
+			array( 'c' => 'Canada', 'z' => 'America/Resolute' ),
+			array( 'c' => 'Canada', 'z' => 'America/Cambridge_Bay' ),
+			array( 'c' => 'Canada', 'z' => 'America/Winnipeg' ),
+			array( 'c' => 'Canada', 'z' => 'America/Swift_Current' ),
+			array( 'c' => 'Canada', 'z' => 'America/Yellowknife' ),
+			array( 'c' => 'Canada', 'z' => 'America/Regina' ),
+			array( 'c' => 'Canada', 'z' => 'America/Rankin_Inlet' ),
+			array( 'c' => 'Canada', 'z' => 'America/Rainy_River' ),
+			array( 'c' => 'Canada', 'z' => 'America/Inuvik' ),
+			array( 'c' => 'Canada', 'z' => 'America/Edmonton' ),
+			array( 'c' => 'Chile', 'z' => 'Pacific/Easter' ),
+			array( 'c' => 'Costa Rica', 'z' => 'America/Costa_Rica' ),
+			array( 'c' => 'Ecuador', 'z' => 'Pacific/Galapagos' ),
+			array( 'c' => 'El Salvador', 'z' => 'America/El_Salvador' ),
+			array( 'c' => 'Guatemala', 'z' => 'America/Guatemala' ),
+			array( 'c' => 'Honduras', 'z' => 'America/Tegucigalpa' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Mexico_City' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Ojinaga' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Monterrey' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Chihuahua' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Merida' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Mazatlan' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Matamoros' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Bahia_Banderas' ),
+			array( 'c' => 'Nicaragua', 'z' => 'America/Managua' ),
+			array( 'c' => 'United States', 'z' => 'America/Boise' ),
+			array( 'c' => 'United States', 'z' => 'America/Chicago' ),
+			array( 'c' => 'United States', 'z' => 'America/Denver' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Knox' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Tell_City' ),
+			array( 'c' => 'United States', 'z' => 'America/Menominee' ),
+			array( 'c' => 'United States', 'z' => 'America/North_Dakota/Beulah' ),
+			array( 'c' => 'United States', 'z' => 'America/North_Dakota/Center' ),
+			array( 'c' => 'United States', 'z' => 'America/North_Dakota/New_Salem' )
+		),
+		'-05:00' => array(
+			array( 'c' => 'Bahamas', 'z' => 'America/Nassau' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Eirunepe' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Rio_Branco' ),
+			array( 'c' => 'Canada', 'z' => 'America/Rankin_Inlet' ),
+			array( 'c' => 'Canada', 'z' => 'America/Winnipeg' ),
+			array( 'c' => 'Canada', 'z' => 'America/Thunder_Bay' ),
+			array( 'c' => 'Canada', 'z' => 'America/Resolute' ),
+			array( 'c' => 'Canada', 'z' => 'America/Toronto' ),
+			array( 'c' => 'Canada', 'z' => 'America/Rainy_River' ),
+			array( 'c' => 'Canada', 'z' => 'America/Pangnirtung' ),
+			array( 'c' => 'Canada', 'z' => 'America/Nipigon' ),
+			array( 'c' => 'Canada', 'z' => 'America/Iqaluit' ),
+			array( 'c' => 'Canada', 'z' => 'America/Atikokan' ),
+			array( 'c' => 'Cayman Islands', 'z' => 'America/Cayman' ),
+			array( 'c' => 'Chile', 'z' => 'Pacific/Easter' ),
+			array( 'c' => 'Colombia', 'z' => 'America/Bogota' ),
+			array( 'c' => 'Cuba', 'z' => 'America/Havana' ),
+			array( 'c' => 'Ecuador', 'z' => 'America/Guayaquil' ),
+			array( 'c' => 'Haiti', 'z' => 'America/Port-au-Prince' ),
+			array( 'c' => 'Jamaica', 'z' => 'America/Jamaica' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Monterrey' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Mexico_City' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Merida' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Matamoros' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Bahia_Banderas' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Cancun' ),
+			array( 'c' => 'Panama', 'z' => 'America/Panama' ),
+			array( 'c' => 'Peru', 'z' => 'America/Lima' ),
+			array( 'c' => 'Turks and Caicos Islands', 'z' => 'America/Grand_Turk' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Winamac' ),
+			array( 'c' => 'United States', 'z' => 'America/North_Dakota/Center' ),
+			array( 'c' => 'United States', 'z' => 'America/North_Dakota/Beulah' ),
+			array( 'c' => 'United States', 'z' => 'America/New_York' ),
+			array( 'c' => 'United States', 'z' => 'America/Menominee' ),
+			array( 'c' => 'United States', 'z' => 'America/Kentucky/Monticello' ),
+			array( 'c' => 'United States', 'z' => 'America/Kentucky/Louisville' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Petersburg' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Vincennes' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Vevay' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Tell_City' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Marengo' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Knox' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Indianapolis' ),
+			array( 'c' => 'United States', 'z' => 'America/Detroit' ),
+			array( 'c' => 'United States', 'z' => 'America/Chicago' ),
+			array( 'c' => 'United States', 'z' => 'America/North_Dakota/New_Salem' )
+		),
+		'-04:00' => array(
+			array( 'c' => 'Anguilla', 'z' => 'America/Anguilla' ),
+			array( 'c' => 'Antigua and Barbuda', 'z' => 'America/Antigua' ),
+			array( 'c' => 'Aruba', 'z' => 'America/Aruba' ),
+			array( 'c' => 'Bahamas', 'z' => 'America/Nassau' ),
+			array( 'c' => 'Barbados', 'z' => 'America/Barbados' ),
+			array( 'c' => 'Bermuda', 'z' => 'Atlantic/Bermuda' ),
+			array( 'c' => 'Bolivia', 'z' => 'America/La_Paz' ),
+			array( 'c' => 'Bonaire, Sint Eustatius and Saba', 'z' => 'America/Kralendijk' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Boa_Vista' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Campo_Grande' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Cuiaba' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Manaus' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Porto_Velho' ),
+			array( 'c' => 'British Virgin Islands', 'z' => 'America/Tortola' ),
+			array( 'c' => 'Canada', 'z' => 'America/Nipigon' ),
+			array( 'c' => 'Canada', 'z' => 'America/Toronto' ),
+			array( 'c' => 'Canada', 'z' => 'America/Thunder_Bay' ),
+			array( 'c' => 'Canada', 'z' => 'America/Pangnirtung' ),
+			array( 'c' => 'Canada', 'z' => 'America/Goose_Bay' ),
+			array( 'c' => 'Canada', 'z' => 'America/Moncton' ),
+			array( 'c' => 'Canada', 'z' => 'America/Iqaluit' ),
+			array( 'c' => 'Canada', 'z' => 'America/Halifax' ),
+			array( 'c' => 'Canada', 'z' => 'America/Blanc-Sablon' ),
+			array( 'c' => 'Canada', 'z' => 'America/Glace_Bay' ),
+			array( 'c' => 'Chile', 'z' => 'America/Santiago' ),
+			array( 'c' => 'Cuba', 'z' => 'America/Havana' ),
+			array( 'c' => 'Curaçao', 'z' => 'America/Curacao' ),
+			array( 'c' => 'Dominica', 'z' => 'America/Dominica' ),
+			array( 'c' => 'Dominican Republic', 'z' => 'America/Santo_Domingo' ),
+			array( 'c' => 'Greenland', 'z' => 'America/Thule' ),
+			array( 'c' => 'Grenada', 'z' => 'America/Grenada' ),
+			array( 'c' => 'Guadeloupe', 'z' => 'America/Guadeloupe' ),
+			array( 'c' => 'Guyana', 'z' => 'America/Guyana' ),
+			array( 'c' => 'Haiti', 'z' => 'America/Port-au-Prince' ),
+			array( 'c' => 'Martinique', 'z' => 'America/Martinique' ),
+			array( 'c' => 'Montserrat', 'z' => 'America/Montserrat' ),
+			array( 'c' => 'Paraguay', 'z' => 'America/Asuncion' ),
+			array( 'c' => 'Puerto Rico', 'z' => 'America/Puerto_Rico' ),
+			array( 'c' => 'Saint Barthélemy', 'z' => 'America/St_Barthelemy' ),
+			array( 'c' => 'Saint Kitts and Nevis', 'z' => 'America/St_Kitts' ),
+			array( 'c' => 'Saint Lucia', 'z' => 'America/St_Lucia' ),
+			array( 'c' => 'Saint Martin', 'z' => 'America/Marigot' ),
+			array( 'c' => 'Saint Vincent and the Grenadines', 'z' => 'America/St_Vincent' ),
+			array( 'c' => 'Sint Maarten', 'z' => 'America/Lower_Princes' ),
+			array( 'c' => 'Trinidad and Tobago', 'z' => 'America/Port_of_Spain' ),
+			array( 'c' => 'Turks and Caicos Islands', 'z' => 'America/Grand_Turk' ),
+			array( 'c' => 'US Virgin Islands', 'z' => 'America/St_Thomas' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Petersburg' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Vevay' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Vincennes' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Winamac' ),
+			array( 'c' => 'United States', 'z' => 'America/Kentucky/Louisville' ),
+			array( 'c' => 'United States', 'z' => 'America/Kentucky/Monticello' ),
+			array( 'c' => 'United States', 'z' => 'America/New_York' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Marengo' ),
+			array( 'c' => 'United States', 'z' => 'America/Indiana/Indianapolis' ),
+			array( 'c' => 'United States', 'z' => 'America/Detroit' ),
+			array( 'c' => 'Venezuela', 'z' => 'America/Caracas' )
+		),
+		'-03:30' => array(
+			array( 'c' => 'Canada', 'z' => 'America/St_Johns' )
+		),
+		'-03:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Rothera' ),
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Palmer' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Rio_Gallegos' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Ushuaia' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Tucuman' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/San_Luis' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/San_Juan' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Salta' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Mendoza' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/La_Rioja' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Jujuy' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Cordoba' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Catamarca' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Buenos_Aires' ),
+			array( 'c' => 'Bermuda', 'z' => 'Atlantic/Bermuda' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Sao_Paulo' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Santarem' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Recife' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Maceio' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Cuiaba' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Fortaleza' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Campo_Grande' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Belem' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Bahia' ),
+			array( 'c' => 'Brazil', 'z' => 'America/Araguaina' ),
+			array( 'c' => 'Canada', 'z' => 'America/Glace_Bay' ),
+			array( 'c' => 'Canada', 'z' => 'America/Goose_Bay' ),
+			array( 'c' => 'Canada', 'z' => 'America/Halifax' ),
+			array( 'c' => 'Canada', 'z' => 'America/Moncton' ),
+			array( 'c' => 'Chile', 'z' => 'America/Punta_Arenas' ),
+			array( 'c' => 'Chile', 'z' => 'America/Santiago' ),
+			array( 'c' => 'Falkland Islands', 'z' => 'Atlantic/Stanley' ),
+			array( 'c' => 'French Guiana', 'z' => 'America/Cayenne' ),
+			array( 'c' => 'Greenland', 'z' => 'America/Godthab' ),
+			array( 'c' => 'Greenland', 'z' => 'America/Thule' ),
+			array( 'c' => 'Paraguay', 'z' => 'America/Asuncion' ),
+			array( 'c' => 'Saint Pierre and Miquelon', 'z' => 'America/Miquelon' ),
+			array( 'c' => 'Suriname', 'z' => 'America/Paramaribo' ),
+			array( 'c' => 'Uruguay', 'z' => 'America/Montevideo' )
+		),
+		'-02:30' => array(
+			array( 'c' => 'Canada', 'z' => 'America/St_Johns' )
+		),
+		'-02:00' => array(
+			array( 'c' => 'Brazil', 'z' => 'America/Noronha' ),
+			array( 'c' => 'Greenland', 'z' => 'America/Godthab' ),
+			array( 'c' => 'Saint Pierre and Miquelon', 'z' => 'America/Miquelon' ),
+			array( 'c' => 'South Georgia and the South Sandwich Islands', 'z' => 'Atlantic/South_Georgia' )
+		),
+		'-01:00' => array(
+			array( 'c' => 'Cabo Verde', 'z' => 'Atlantic/Cape_Verde' ),
+			array( 'c' => 'Greenland', 'z' => 'America/Scoresbysund' ),
+			array( 'c' => 'Portugal', 'z' => 'Atlantic/Azores' )
+		),
+		'+00:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Troll' ),
+			array( 'c' => 'Burkina Faso', 'z' => 'Africa/Ouagadougou' ),
+			array( 'c' => "Côte d'Ivoire", 'z' => 'Africa/Abidjan' ),
+			array( 'c' => 'Faroe Islands', 'z' => 'Atlantic/Faroe' ),
+			array( 'c' => 'Gambia', 'z' => 'Africa/Banjul' ),
+			array( 'c' => 'Ghana', 'z' => 'Africa/Accra' ),
+			array( 'c' => 'Greenland', 'z' => 'America/Danmarkshavn' ),
+			array( 'c' => 'Greenland', 'z' => 'America/Scoresbysund' ),
+			array( 'c' => 'Guernsey', 'z' => 'Europe/Guernsey' ),
+			array( 'c' => 'Guinea', 'z' => 'Africa/Conakry' ),
+			array( 'c' => 'Guinea-Bissau', 'z' => 'Africa/Bissau' ),
+			array( 'c' => 'Iceland', 'z' => 'Atlantic/Reykjavik' ),
+			array( 'c' => 'Ireland', 'z' => 'Europe/Dublin' ),
+			array( 'c' => 'Isle of Man', 'z' => 'Europe/Isle_of_Man' ),
+			array( 'c' => 'Jersey', 'z' => 'Europe/Jersey' ),
+			array( 'c' => 'Liberia', 'z' => 'Africa/Monrovia' ),
+			array( 'c' => 'Mali', 'z' => 'Africa/Bamako' ),
+			array( 'c' => 'Mauritania', 'z' => 'Africa/Nouakchott' ),
+			array( 'c' => 'Portugal', 'z' => 'Atlantic/Azores' ),
+			array( 'c' => 'Portugal', 'z' => 'Atlantic/Madeira' ),
+			array( 'c' => 'Portugal', 'z' => 'Europe/Lisbon' ),
+			array( 'c' => 'Saint Helena, Ascension and Tristan da Cunha', 'z' => 'Atlantic/St_Helena' ),
+			array( 'c' => 'Sao Tome and Principe', 'z' => 'Africa/Sao_Tome' ),
+			array( 'c' => 'Senegal', 'z' => 'Africa/Dakar' ),
+			array( 'c' => 'Sierra Leone', 'z' => 'Africa/Freetown' ),
+			array( 'c' => 'Spain', 'z' => 'Atlantic/Canary' ),
+			array( 'c' => 'Togo', 'z' => 'Africa/Lome' ),
+			array( 'c' => 'United Kingdom', 'z' => 'Europe/London' ),
+			array( 'c' => 'Western Sahara', 'z' => 'Africa/El_Aaiun' )
+		),
+		'+01:00' => array(
+			array( 'c' => 'Albania', 'z' => 'Europe/Tirane' ),
+			array( 'c' => 'Algeria', 'z' => 'Africa/Algiers' ),
+			array( 'c' => 'Andorra', 'z' => 'Europe/Andorra' ),
+			array( 'c' => 'Angola', 'z' => 'Africa/Luanda' ),
+			array( 'c' => 'Austria', 'z' => 'Europe/Vienna' ),
+			array( 'c' => 'Belgium', 'z' => 'Europe/Brussels' ),
+			array( 'c' => 'Benin', 'z' => 'Africa/Porto-Novo' ),
+			array( 'c' => 'Bosnia and Herzegovina', 'z' => 'Europe/Sarajevo' ),
+			array( 'c' => 'Cameroon', 'z' => 'Africa/Douala' ),
+			array( 'c' => 'Central African Republic', 'z' => 'Africa/Bangui' ),
+			array( 'c' => 'Chad', 'z' => 'Africa/Ndjamena' ),
+			array( 'c' => 'Congo', 'z' => 'Africa/Brazzaville' ),
+			array( 'c' => 'Croatia', 'z' => 'Europe/Zagreb' ),
+			array( 'c' => 'Czechia', 'z' => 'Europe/Prague' ),
+			array( 'c' => 'Democratic Republic of the Congo', 'z' => 'Africa/Kinshasa' ),
+			array( 'c' => 'Denmark', 'z' => 'Europe/Copenhagen' ),
+			array( 'c' => 'Equatorial Guinea', 'z' => 'Africa/Malabo' ),
+			array( 'c' => 'Faroe Islands', 'z' => 'Atlantic/Faroe' ),
+			array( 'c' => 'France', 'z' => 'Europe/Paris' ),
+			array( 'c' => 'Gabon', 'z' => 'Africa/Libreville' ),
+			array( 'c' => 'Germany', 'z' => 'Europe/Berlin' ),
+			array( 'c' => 'Germany', 'z' => 'Europe/Busingen' ),
+			array( 'c' => 'Gibraltar', 'z' => 'Europe/Gibraltar' ),
+			array( 'c' => 'Guernsey', 'z' => 'Europe/Guernsey' ),
+			array( 'c' => 'Holy See', 'z' => 'Europe/Vatican' ),
+			array( 'c' => 'Hungary', 'z' => 'Europe/Budapest' ),
+			array( 'c' => 'Ireland', 'z' => 'Europe/Dublin' ),
+			array( 'c' => 'Isle of Man', 'z' => 'Europe/Isle_of_Man' ),
+			array( 'c' => 'Italy', 'z' => 'Europe/Rome' ),
+			array( 'c' => 'Jersey', 'z' => 'Europe/Jersey' ),
+			array( 'c' => 'Liechtenstein', 'z' => 'Europe/Vaduz' ),
+			array( 'c' => 'Luxembourg', 'z' => 'Europe/Luxembourg' ),
+			array( 'c' => 'Macedonia (the former Yugoslav Republic of)', 'z' => 'Europe/Skopje' ),
+			array( 'c' => 'Malta', 'z' => 'Europe/Malta' ),
+			array( 'c' => 'Monaco', 'z' => 'Europe/Monaco' ),
+			array( 'c' => 'Montenegro', 'z' => 'Europe/Podgorica' ),
+			array( 'c' => 'Morocco', 'z' => 'Africa/Casablanca' ),
+			array( 'c' => 'Netherlands', 'z' => 'Europe/Amsterdam' ),
+			array( 'c' => 'Niger', 'z' => 'Africa/Niamey' ),
+			array( 'c' => 'Nigeria', 'z' => 'Africa/Lagos' ),
+			array( 'c' => 'Norway', 'z' => 'Europe/Oslo' ),
+			array( 'c' => 'Poland', 'z' => 'Europe/Warsaw' ),
+			array( 'c' => 'Portugal', 'z' => 'Atlantic/Madeira' ),
+			array( 'c' => 'Portugal', 'z' => 'Europe/Lisbon' ),
+			array( 'c' => 'San Marino', 'z' => 'Europe/San_Marino' ),
+			array( 'c' => 'Serbia', 'z' => 'Europe/Belgrade' ),
+			array( 'c' => 'Slovakia', 'z' => 'Europe/Bratislava' ),
+			array( 'c' => 'Slovenia', 'z' => 'Europe/Ljubljana' ),
+			array( 'c' => 'Spain', 'z' => 'Africa/Ceuta' ),
+			array( 'c' => 'Spain', 'z' => 'Atlantic/Canary' ),
+			array( 'c' => 'Spain', 'z' => 'Europe/Madrid' ),
+			array( 'c' => 'Svalbard and Jan Mayen', 'z' => 'Arctic/Longyearbyen' ),
+			array( 'c' => 'Sweden', 'z' => 'Europe/Stockholm' ),
+			array( 'c' => 'Switzerland', 'z' => 'Europe/Zurich' ),
+			array( 'c' => 'Tunisia', 'z' => 'Africa/Tunis' ),
+			array( 'c' => 'United Kingdom', 'z' => 'Europe/London' ),
+			array( 'c' => 'Western Sahara', 'z' => 'Africa/El_Aaiun' )
+		),
+		'+02:00' => array(
+			array( 'c' => 'Albania', 'z' => 'Europe/Tirane' ),
+			array( 'c' => 'Andorra', 'z' => 'Europe/Andorra' ),
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Troll' ),
+			array( 'c' => 'Austria', 'z' => 'Europe/Vienna' ),
+			array( 'c' => 'Belgium', 'z' => 'Europe/Brussels' ),
+			array( 'c' => 'Bosnia and Herzegovina', 'z' => 'Europe/Sarajevo' ),
+			array( 'c' => 'Botswana', 'z' => 'Africa/Gaborone' ),
+			array( 'c' => 'Bulgaria', 'z' => 'Europe/Sofia' ),
+			array( 'c' => 'Burundi', 'z' => 'Africa/Bujumbura' ),
+			array( 'c' => 'Croatia', 'z' => 'Europe/Zagreb' ),
+			array( 'c' => 'Cyprus', 'z' => 'Asia/Famagusta' ),
+			array( 'c' => 'Cyprus', 'z' => 'Asia/Nicosia' ),
+			array( 'c' => 'Czechia', 'z' => 'Europe/Prague' ),
+			array( 'c' => 'Democratic Republic of the Congo', 'z' => 'Africa/Lubumbashi' ),
+			array( 'c' => 'Denmark', 'z' => 'Europe/Copenhagen' ),
+			array( 'c' => 'Egypt', 'z' => 'Africa/Cairo' ),
+			array( 'c' => 'Estonia', 'z' => 'Europe/Tallinn' ),
+			array( 'c' => 'Finland', 'z' => 'Europe/Helsinki' ),
+			array( 'c' => 'France', 'z' => 'Europe/Paris' ),
+			array( 'c' => 'Germany', 'z' => 'Europe/Berlin' ),
+			array( 'c' => 'Germany', 'z' => 'Europe/Busingen' ),
+			array( 'c' => 'Gibraltar', 'z' => 'Europe/Gibraltar' ),
+			array( 'c' => 'Greece', 'z' => 'Europe/Athens' ),
+			array( 'c' => 'Holy See', 'z' => 'Europe/Vatican' ),
+			array( 'c' => 'Hungary', 'z' => 'Europe/Budapest' ),
+			array( 'c' => 'Israel', 'z' => 'Asia/Jerusalem' ),
+			array( 'c' => 'Italy', 'z' => 'Europe/Rome' ),
+			array( 'c' => 'Jordan', 'z' => 'Asia/Amman' ),
+			array( 'c' => 'Latvia', 'z' => 'Europe/Riga' ),
+			array( 'c' => 'Lebanon', 'z' => 'Asia/Beirut' ),
+			array( 'c' => 'Lesotho', 'z' => 'Africa/Maseru' ),
+			array( 'c' => 'Libya', 'z' => 'Africa/Tripoli' ),
+			array( 'c' => 'Liechtenstein', 'z' => 'Europe/Vaduz' ),
+			array( 'c' => 'Lithuania', 'z' => 'Europe/Vilnius' ),
+			array( 'c' => 'Luxembourg', 'z' => 'Europe/Luxembourg' ),
+			array( 'c' => 'Macedonia (the former Yugoslav Republic of)', 'z' => 'Europe/Skopje' ),
+			array( 'c' => 'Malawi', 'z' => 'Africa/Blantyre' ),
+			array( 'c' => 'Malta', 'z' => 'Europe/Malta' ),
+			array( 'c' => 'Moldova', 'z' => 'Europe/Chisinau' ),
+			array( 'c' => 'Monaco', 'z' => 'Europe/Monaco' ),
+			array( 'c' => 'Montenegro', 'z' => 'Europe/Podgorica' ),
+			array( 'c' => 'Mozambique', 'z' => 'Africa/Maputo' ),
+			array( 'c' => 'Namibia', 'z' => 'Africa/Windhoek' ),
+			array( 'c' => 'Netherlands', 'z' => 'Europe/Amsterdam' ),
+			array( 'c' => 'Norway', 'z' => 'Europe/Oslo' ),
+			array( 'c' => 'Palestine', 'z' => 'Asia/Hebron' ),
+			array( 'c' => 'Palestine', 'z' => 'Asia/Gaza' ),
+			array( 'c' => 'Poland', 'z' => 'Europe/Warsaw' ),
+			array( 'c' => 'Romania', 'z' => 'Europe/Bucharest' ),
+			array( 'c' => 'Russia', 'z' => 'Europe/Kaliningrad' ),
+			array( 'c' => 'Rwanda', 'z' => 'Africa/Kigali' ),
+			array( 'c' => 'San Marino', 'z' => 'Europe/San_Marino' ),
+			array( 'c' => 'Serbia', 'z' => 'Europe/Belgrade' ),
+			array( 'c' => 'Slovakia', 'z' => 'Europe/Bratislava' ),
+			array( 'c' => 'Slovenia', 'z' => 'Europe/Ljubljana' ),
+			array( 'c' => 'South Africa', 'z' => 'Africa/Johannesburg' ),
+			array( 'c' => 'Spain', 'z' => 'Europe/Madrid' ),
+			array( 'c' => 'Sudan', 'z' => 'Africa/Khartoum' ),
+			array( 'c' => 'Svalbard and Jan Mayen', 'z' => 'Arctic/Longyearbyen' ),
+			array( 'c' => 'Swaziland', 'z' => 'Africa/Mbabane' ),
+			array( 'c' => 'Sweden', 'z' => 'Europe/Stockholm' ),
+			array( 'c' => 'Switzerland', 'z' => 'Europe/Zurich' ),
+			array( 'c' => 'Syrian Arab Republic', 'z' => 'Asia/Damascus' ),
+			array( 'c' => 'Ukraine', 'z' => 'Europe/Kiev' ),
+			array( 'c' => 'Ukraine', 'z' => 'Europe/Uzhgorod' ),
+			array( 'c' => 'Ukraine', 'z' => 'Europe/Zaporozhye' ),
+			array( 'c' => 'Zambia', 'z' => 'Africa/Lusaka' ),
+			array( 'c' => 'Zimbabwe', 'z' => 'Africa/Harare' ),
+			array( 'c' => 'Åland Islands', 'z' => 'Europe/Mariehamn' )
+		),
+		'+03:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Syowa' ),
+			array( 'c' => 'Bahrain', 'z' => 'Asia/Bahrain' ),
+			array( 'c' => 'Belarus', 'z' => 'Europe/Minsk' ),
+			array( 'c' => 'Bulgaria', 'z' => 'Europe/Sofia' ),
+			array( 'c' => 'Comoros', 'z' => 'Indian/Comoro' ),
+			array( 'c' => 'Cyprus', 'z' => 'Asia/Nicosia' ),
+			array( 'c' => 'Djibouti', 'z' => 'Africa/Djibouti' ),
+			array( 'c' => 'Eritrea', 'z' => 'Africa/Asmara' ),
+			array( 'c' => 'Estonia', 'z' => 'Europe/Tallinn' ),
+			array( 'c' => 'Ethiopia', 'z' => 'Africa/Addis_Ababa' ),
+			array( 'c' => 'Finland', 'z' => 'Europe/Helsinki' ),
+			array( 'c' => 'Greece', 'z' => 'Europe/Athens' ),
+			array( 'c' => 'Iraq', 'z' => 'Asia/Baghdad' ),
+			array( 'c' => 'Israel', 'z' => 'Asia/Jerusalem' ),
+			array( 'c' => 'Jordan', 'z' => 'Asia/Amman' ),
+			array( 'c' => 'Kenya', 'z' => 'Africa/Nairobi' ),
+			array( 'c' => 'Kuwait', 'z' => 'Asia/Kuwait' ),
+			array( 'c' => 'Latvia', 'z' => 'Europe/Riga' ),
+			array( 'c' => 'Lebanon', 'z' => 'Asia/Beirut' ),
+			array( 'c' => 'Lithuania', 'z' => 'Europe/Vilnius' ),
+			array( 'c' => 'Madagascar', 'z' => 'Indian/Antananarivo' ),
+			array( 'c' => 'Mayotte', 'z' => 'Indian/Mayotte' ),
+			array( 'c' => 'Moldova', 'z' => 'Europe/Chisinau' ),
+			array( 'c' => 'Palestine', 'z' => 'Asia/Gaza' ),
+			array( 'c' => 'Palestine', 'z' => 'Asia/Hebron' ),
+			array( 'c' => 'Qatar', 'z' => 'Asia/Qatar' ),
+			array( 'c' => 'Romania', 'z' => 'Europe/Bucharest' ),
+			array( 'c' => 'Russia', 'z' => 'Europe/Kirov' ),
+			array( 'c' => 'Russia', 'z' => 'Europe/Moscow' ),
+			array( 'c' => 'Saudi Arabia', 'z' => 'Asia/Riyadh' ),
+			array( 'c' => 'Somalia', 'z' => 'Africa/Mogadishu' ),
+			array( 'c' => 'South Sudan', 'z' => 'Africa/Juba' ),
+			array( 'c' => 'Syrian Arab Republic', 'z' => 'Asia/Damascus' ),
+			array( 'c' => 'Tanzania', 'z' => 'Africa/Dar_es_Salaam' ),
+			array( 'c' => 'Turkey', 'z' => 'Europe/Istanbul' ),
+			array( 'c' => 'Uganda', 'z' => 'Africa/Kampala' ),
+			array( 'c' => 'Ukraine', 'z' => 'Europe/Kiev' ),
+			array( 'c' => 'Ukraine', 'z' => 'Europe/Simferopol' ),
+			array( 'c' => 'Ukraine', 'z' => 'Europe/Uzhgorod' ),
+			array( 'c' => 'Ukraine', 'z' => 'Europe/Zaporozhye' ),
+			array( 'c' => 'Yemen', 'z' => 'Asia/Aden' ),
+			array( 'c' => 'Åland Islands', 'z' => 'Europe/Mariehamn' )
+		),
+		'+03:30' => array(
+			array( 'c' => 'Iran', 'z' => 'Asia/Tehran' )
+		),
+		'+04:00' => array(
+			array( 'c' => 'Armenia', 'z' => 'Asia/Yerevan' ),
+			array( 'c' => 'Azerbaijan', 'z' => 'Asia/Baku' ),
+			array( 'c' => 'Georgia', 'z' => 'Asia/Tbilisi' ),
+			array( 'c' => 'Mauritius', 'z' => 'Indian/Mauritius' ),
+			array( 'c' => 'Oman', 'z' => 'Asia/Muscat' ),
+			array( 'c' => 'Russia', 'z' => 'Europe/Astrakhan' ),
+			array( 'c' => 'Russia', 'z' => 'Europe/Samara' ),
+			array( 'c' => 'Russia', 'z' => 'Europe/Saratov' ),
+			array( 'c' => 'Russia', 'z' => 'Europe/Ulyanovsk' ),
+			array( 'c' => 'Russia', 'z' => 'Europe/Volgograd' ),
+			array( 'c' => 'Réunion', 'z' => 'Indian/Reunion' ),
+			array( 'c' => 'Seychelles', 'z' => 'Indian/Mahe' ),
+			array( 'c' => 'United Arab Emirates', 'z' => 'Asia/Dubai' )
+		),
+		'+04:30' => array(
+			array( 'c' => 'Afghanistan', 'z' => 'Asia/Kabul' ),
+			array( 'c' => 'Iran', 'z' => 'Asia/Tehran' )
+		),
+		'+05:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Mawson' ),
+			array( 'c' => 'French Southern Territories', 'z' => 'Indian/Kerguelen' ),
+			array( 'c' => 'Kazakhstan', 'z' => 'Asia/Aqtau' ),
+			array( 'c' => 'Kazakhstan', 'z' => 'Asia/Aqtobe' ),
+			array( 'c' => 'Kazakhstan', 'z' => 'Asia/Atyrau' ),
+			array( 'c' => 'Kazakhstan', 'z' => 'Asia/Oral' ),
+			array( 'c' => 'Kazakhstan', 'z' => 'Asia/Qyzylorda' ),
+			array( 'c' => 'Maldives', 'z' => 'Indian/Maldives' ),
+			array( 'c' => 'Pakistan', 'z' => 'Asia/Karachi' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Yekaterinburg' ),
+			array( 'c' => 'Tajikistan', 'z' => 'Asia/Dushanbe' ),
+			array( 'c' => 'Turkmenistan', 'z' => 'Asia/Ashgabat' ),
+			array( 'c' => 'Uzbekistan', 'z' => 'Asia/Samarkand' ),
+			array( 'c' => 'Uzbekistan', 'z' => 'Asia/Tashkent' )
+		),
+		'+05:30' => array(
+			array( 'c' => 'India', 'z' => 'Asia/Kolkata' ),
+			array( 'c' => 'Sri Lanka', 'z' => 'Asia/Colombo' )
+		),
+		'+05:45' => array(
+			array( 'c' => 'Nepal', 'z' => 'Asia/Kathmandu' )
+		),
+		'+06:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Vostok' ),
+			array( 'c' => 'Bangladesh', 'z' => 'Asia/Dhaka' ),
+			array( 'c' => 'Bhutan', 'z' => 'Asia/Thimphu' ),
+			array( 'c' => 'British Indian Ocean Territory', 'z' => 'Indian/Chagos' ),
+			array( 'c' => 'China', 'z' => 'Asia/Urumqi' ),
+			array( 'c' => 'Kazakhstan', 'z' => 'Asia/Almaty' ),
+			array( 'c' => 'Kyrgyzstan', 'z' => 'Asia/Bishkek' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Omsk' )
+		),
+		'+06:30' => array(
+			array( 'c' => 'Cocos (Keeling) Islands', 'z' => 'Indian/Cocos' ),
+			array( 'c' => 'Myanmar', 'z' => 'Asia/Yangon' )
+		),
+		'+07:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Davis' ),
+			array( 'c' => 'Cambodia', 'z' => 'Asia/Phnom_Penh' ),
+			array( 'c' => 'Christmas Island', 'z' => 'Indian/Christmas' ),
+			array( 'c' => 'Indonesia', 'z' => 'Asia/Jakarta' ),
+			array( 'c' => 'Indonesia', 'z' => 'Asia/Pontianak' ),
+			array( 'c' => "Lao People's Democratic Republic", 'z' => 'Asia/Vientiane' ),
+			array( 'c' => 'Mongolia', 'z' => 'Asia/Hovd' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Barnaul' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Krasnoyarsk' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Novokuznetsk' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Novosibirsk' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Tomsk' ),
+			array( 'c' => 'Thailand', 'z' => 'Asia/Bangkok' ),
+			array( 'c' => 'Vietnam', 'z' => 'Asia/Ho_Chi_Minh' )
+		),
+		'+08:00' => array(
+			array( 'c' => 'Australia', 'z' => 'Australia/Perth' ),
+			array( 'c' => 'Brunei Darussalam', 'z' => 'Asia/Brunei' ),
+			array( 'c' => 'China', 'z' => 'Asia/Shanghai' ),
+			array( 'c' => 'Hong Kong', 'z' => 'Asia/Hong_Kong' ),
+			array( 'c' => 'Indonesia', 'z' => 'Asia/Makassar' ),
+			array( 'c' => 'Macao', 'z' => 'Asia/Macau' ),
+			array( 'c' => 'Malaysia', 'z' => 'Asia/Kuala_Lumpur' ),
+			array( 'c' => 'Malaysia', 'z' => 'Asia/Kuching' ),
+			array( 'c' => 'Mongolia', 'z' => 'Asia/Choibalsan' ),
+			array( 'c' => 'Mongolia', 'z' => 'Asia/Ulaanbaatar' ),
+			array( 'c' => 'Philippines', 'z' => 'Asia/Manila' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Irkutsk' ),
+			array( 'c' => 'Singapore', 'z' => 'Asia/Singapore' ),
+			array( 'c' => 'Taiwan', 'z' => 'Asia/Taipei' )
+		),
+		'+08:45' => array(
+			array( 'c' => 'Australia', 'z' => 'Australia/Eucla' )
+		),
+		'+09:00' => array(
+			array( 'c' => 'Indonesia', 'z' => 'Asia/Jayapura' ),
+			array( 'c' => 'Japan', 'z' => 'Asia/Tokyo' ),
+			array( 'c' => 'North Korea', 'z' => 'Asia/Pyongyang' ),
+			array( 'c' => 'Palau', 'z' => 'Pacific/Palau' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Chita' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Khandyga' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Yakutsk' ),
+			array( 'c' => 'South Korea', 'z' => 'Asia/Seoul' ),
+			array( 'c' => 'Timor-Leste', 'z' => 'Asia/Dili' )
+		),
+		'+09:30' => array(
+			array( 'c' => 'Australia', 'z' => 'Australia/Adelaide' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Broken_Hill' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Darwin' )
+		),
+		'+10:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/DumontDUrville' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Brisbane' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Currie' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Hobart' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Lindeman' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Melbourne' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Sydney' ),
+			array( 'c' => 'Guam', 'z' => 'Pacific/Guam' ),
+			array( 'c' => 'Micronesia', 'z' => 'Pacific/Chuuk' ),
+			array( 'c' => 'Northern Mariana Islands', 'z' => 'Pacific/Saipan' ),
+			array( 'c' => 'Papua New Guinea', 'z' => 'Pacific/Port_Moresby' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Ust-Nera' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Vladivostok' )
+		),
+		'+10:30' => array(
+			array( 'c' => 'Australia', 'z' => 'Australia/Adelaide' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Broken_Hill' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Lord_Howe' )
+		),
+		'+11:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Casey' ),
+			array( 'c' => 'Australia', 'z' => 'Antarctica/Macquarie' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Currie' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Hobart' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Lord_Howe' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Melbourne' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Sydney' ),
+			array( 'c' => 'Micronesia', 'z' => 'Pacific/Pohnpei' ),
+			array( 'c' => 'Micronesia', 'z' => 'Pacific/Kosrae' ),
+			array( 'c' => 'New Caledonia', 'z' => 'Pacific/Noumea' ),
+			array( 'c' => 'Norfolk Island', 'z' => 'Pacific/Norfolk' ),
+			array( 'c' => 'Papua New Guinea', 'z' => 'Pacific/Bougainville' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Magadan' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Sakhalin' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Srednekolymsk' ),
+			array( 'c' => 'Solomon Islands', 'z' => 'Pacific/Guadalcanal' ),
+			array( 'c' => 'Vanuatu', 'z' => 'Pacific/Efate' )
+		),
+		'+12:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/McMurdo' ),
+			array( 'c' => 'Fiji', 'z' => 'Pacific/Fiji' ),
+			array( 'c' => 'Kiribati', 'z' => 'Pacific/Tarawa' ),
+			array( 'c' => 'Marshall Islands', 'z' => 'Pacific/Kwajalein' ),
+			array( 'c' => 'Marshall Islands', 'z' => 'Pacific/Majuro' ),
+			array( 'c' => 'Nauru', 'z' => 'Pacific/Nauru' ),
+			array( 'c' => 'New Zealand', 'z' => 'Pacific/Auckland' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Anadyr' ),
+			array( 'c' => 'Russia', 'z' => 'Asia/Kamchatka' ),
+			array( 'c' => 'Tuvalu', 'z' => 'Pacific/Funafuti' ),
+			array( 'c' => 'United States Minor Outlying Islands', 'z' => 'Pacific/Wake' ),
+			array( 'c' => 'Wallis and Futuna', 'z' => 'Pacific/Wallis' )
+		),
+		'+12:45' => array(
+			array( 'c' => 'New Zealand', 'z' => 'Pacific/Chatham' )
+		),
+		'+13:00' => array(
+			array( 'c' => 'Antarctica', 'z' => 'Antarctica/McMurdo' ),
+			array( 'c' => 'Fiji', 'z' => 'Pacific/Fiji' ),
+			array( 'c' => 'Kiribati', 'z' => 'Pacific/Enderbury' ),
+			array( 'c' => 'New Zealand', 'z' => 'Pacific/Auckland' ),
+			array( 'c' => 'Samoa', 'z' => 'Pacific/Apia' ),
+			array( 'c' => 'Tokelau', 'z' => 'Pacific/Fakaofo' ),
+			array( 'c' => 'Tonga', 'z' => 'Pacific/Tongatapu' )
+		),
+		'+13:45' => array(
+			array( 'c' => 'New Zealand', 'z' => 'Pacific/Chatham' )
+		),
+		'+14:00' => array(
+			array( 'c' => 'Kiribati', 'z' => 'Pacific/Kiritimati' ),
+			array( 'c' => 'Samoa', 'z' => 'Pacific/Apia' ),
+			array( 'c' => 'Tonga', 'z' => 'Pacific/Tongatapu' )
+		)
+	) );
 }

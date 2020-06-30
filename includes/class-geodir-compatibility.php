@@ -31,6 +31,7 @@ class GeoDir_Compatibility {
 		add_filter( 'rank_math/opengraph/url', array( __CLASS__, 'rank_math_location_url_callback' ), 10 );
 		add_action( 'rank_math/opengraph/facebook/add_additional_images', array( __CLASS__, 'rank_math_cat_image' ), 10 );
 		add_action( 'rank_math/opengraph/twitter/add_additional_images', array( __CLASS__, 'rank_math_cat_image' ), 10 );
+
 		/*######################################################
 		Rank Math SEO
 		######################################################*/
@@ -184,7 +185,7 @@ class GeoDir_Compatibility {
 	 * 
 	 * @param object $this_var rankmath class object
 	 */
-	public static function rank_math_cat_image( $this_var ){
+	public static function rank_math_cat_image( $this_var ) {
 		global $wp_query;
 		if( is_category() || is_tax() ){
 			$term = $wp_query->get_queried_object();

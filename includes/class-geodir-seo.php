@@ -752,6 +752,7 @@ class GeoDir_SEO {
     public static function breadcrumb_links($crumbs){
 
 	    // maybe add category link to single page
+
         if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
 	        global $wp_query;
 	        $breadcrumb = array();
@@ -762,8 +763,8 @@ class GeoDir_SEO {
 		        if(!empty($term)){
 			        $breadcrumb[]['term'] = $term;
 		        }
-			}
-			
+	        }
+
 	        $offset = apply_filters('wpseo_breadcrumb_links_offset', 2, $breadcrumb, $crumbs);
 	        $length = apply_filters('wpseo_breadcrumb_links_length', 0, $breadcrumb, $crumbs);
 
@@ -774,7 +775,8 @@ class GeoDir_SEO {
         }
 
         return $crumbs;
-	}
+    }
+
 	/**
 	 * Filter Rank Math breadcrumbs to add cat to details page.
 	 *
@@ -783,7 +785,6 @@ class GeoDir_SEO {
 	 * @return mixed
 	 */
 	public static function rank_breadcrumb_links($crumbs){
-
 	    // maybe add category link to single page
         if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
 	        global $wp_query;
@@ -804,8 +805,8 @@ class GeoDir_SEO {
 		       array_splice( $crumbs, $offset, $length, $breadcrumb );
 			}
 		}
-		
-        return $crumbs;
+
+		return $crumbs;
 	}
 
 	/**

@@ -285,7 +285,6 @@ class GeoDir_Query {
 			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 			if ( $support_location && ( $snear != '' || $latlon = $geodirectory->location->get_latlon() ) ) {
 				$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
-				$unit = geodir_get_option( 'search_distance_long', 'miles' );
 
 				/* 
 				 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition. 
@@ -1567,5 +1566,30 @@ class GeoDir_Query {
 		}
 
 		return $preempt;
+	}
+
+	/**
+	 * Retrieve the variable from query or request.
+	 *
+	 * @since 2.0.0.96
+	 *
+	 * @global object $wp WordPress object.
+	 *
+	 * @param string $var       The variable key to retrieve.
+	 * @param mixed  $default   Optional. Value to return if the query variable is not set. Default empty.
+	 * @return mixed Contents of the query variable.
+	 */
+	public static function get_query_var( $var, $default = '' ) {
+		global $wp;
+
+		if ( ! empty( $wp ) && ! empty( $wp->query_vars ) && isset( $wp->query_vars[ $var ] ) ) {
+			$value = $wp->query_vars[ $var ];
+		} elseif ( isset( $_REQUEST[ $var ] ) ) {
+			$value = geodir_clean( $_REQUEST[ $var ] );
+		} else {
+			$value = $default;
+		}
+
+		return $value;
 	}
 }
