@@ -930,6 +930,39 @@ function geodir_sanitize_business_hours_value( $value, $gd_post, $custom_field, 
 add_filter( 'geodir_custom_field_value_business_hours', 'geodir_sanitize_business_hours_value', 10, 6 );
 
 /**
+ * Sanitize business hours schema and add timezone.
+ *
+ * @since 2.0.0.96
+ *
+ * @param string $value Business hours schema.
+ * @param string $country Country.
+ * @return string Business hours schema.
+ */
+function geodir_sanitize_business_hours( $value, $country = '' ) {
+	$value = stripslashes_deep( $value );
+
+	if ( ! empty( $value ) && is_scalar( $value ) && ( strpos( $value, '"UTC"' ) === false || strpos( $value, '"Timezone"' ) === false ) ) {
+		$schema = explode( '],[', $value, 2 );
+
+		$_value = geodir_schema_to_array( $value, $country );
+
+		if ( ! empty( $_value['hours'] ) || ! empty( $_value['timezone_string'] ) ) {
+			if ( ! empty( $_value['hours'] ) ) {
+				$value = trim( $schema[0] );
+				if ( count( $schema ) > 1 ) {
+					$value .= ']';
+				}
+				$value .= ',';
+			}
+
+			$value .= '["UTC":"' . $_value['utc_offset'] . '","Timezone":"' . $_value['timezone_string'] . '"]';
+		}
+	}
+
+	return $value;
+}
+
+/**
  * Business hours time format for input field.
  *
  * @since 2.0.0

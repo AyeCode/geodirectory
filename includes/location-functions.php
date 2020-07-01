@@ -584,6 +584,9 @@ function geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 )
 			$body = (array) json_decode( wp_remote_retrieve_body( $response ) );
 
 			if ( ! empty( $body ) && $body['status'] == 'OK' ) {
+				if ( isset( $body['timeZoneId'] ) && $body['timeZoneId'] == 'Asia/Calcutta' ) {
+					$body['timeZoneId'] = 'Asia/Kolkata';
+				}
 				$data = $body;
 			} elseif ( ! empty( $body ) && ! empty( $body['errorMessage'] ) ) {
 				$error = __( $body['errorMessage'], 'geodirectory' );
