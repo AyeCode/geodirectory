@@ -784,6 +784,11 @@ class GeoDir_Admin_Import_Export {
 					$csv_rows[] = apply_filters( 'geodir_export_posts_csv_columns', $columns, $post_type );
 				}
 
+				// Business Hours Timezone
+				if ( ! empty( $post_info['business_hours'] ) ) {
+					$post_info['business_hours'] = geodir_sanitize_business_hours( $post_info['business_hours'], ( ! empty( $post_info['country'] ) ? $post_info['country'] : '' ) );
+				}
+
 				$csv_rows[] = apply_filters( 'geodir_export_posts_csv_row', $post_info, $post_info['ID'], $post_type );
 				$i ++;
 			}
