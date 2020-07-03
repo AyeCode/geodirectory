@@ -209,8 +209,10 @@ function geodir_upgrade_20096() {
 	}
 
 	// Update timezone to timezone string.
-	$country = geodir_get_option( 'default_location_country' );
-	$timezone = geodir_get_option( 'default_location_timezone' );
-	$timezone_string = geodir_offset_to_timezone_string( $timezone, $country );
-	geodir_update_option( 'default_location_timezone_string', $timezone_string );
+	if ( ! geodir_get_option( 'default_location_timezone_string' ) ) {
+		$country = geodir_get_option( 'default_location_country' );
+		$timezone = geodir_get_option( 'default_location_timezone' );
+		$timezone_string = geodir_offset_to_timezone_string( $timezone, $country );
+		geodir_update_option( 'default_location_timezone_string', $timezone_string );
+	}
 }

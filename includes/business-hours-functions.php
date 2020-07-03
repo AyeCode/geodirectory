@@ -1269,6 +1269,7 @@ function geodir_offset_to_timezone_string( $offset, $country = '' ) {
 	$hhmm = ( $hours < 10 ? "0" . (string) $hours : (string) $hours );
 	$hhmm .= ":" . ( $minutes < 10 ? "0" . (string) $minutes : (string) $minutes );
 	$hhmm = $sign . '' .  $hhmm;
+	$wp_timezone_string = get_option( 'timezone_string' );
 
 	$timezone_countries = geodir_timezone_countries();
 
@@ -1281,6 +1282,14 @@ function geodir_offset_to_timezone_string( $offset, $country = '' ) {
 
 		if ( ! empty( $country ) ) {
 			$country = stripslashes( $country );
+
+			if ( $wp_timezone_string ) {
+				foreach ( $zones as $zone ) {
+					if ( $wp_timezone_string == $zone['z'] ) {
+						return $zone['z'];
+					}
+				}
+			}
 
 			foreach ( $zones as $zone ) {
 				if ( geodir_strtolower( $country ) == geodir_strtolower( $zone['c'] ) ) {
@@ -1343,9 +1352,9 @@ function geodir_timezone_countries() {
 			array( 'c' => 'Canada', 'z' => 'America/Whitehorse' ),
 			array( 'c' => 'Mexico', 'z' => 'America/Tijuana' ),
 			array( 'c' => 'Pitcairn', 'z' => 'Pacific/Pitcairn' ),
+			array( 'c' => 'United States', 'z' => 'America/Los_Angeles' ),
 			array( 'c' => 'United States', 'z' => 'America/Anchorage' ),
 			array( 'c' => 'United States', 'z' => 'America/Juneau' ),
-			array( 'c' => 'United States', 'z' => 'America/Los_Angeles' ),
 			array( 'c' => 'United States', 'z' => 'America/Metlakatla' ),
 			array( 'c' => 'United States', 'z' => 'America/Nome' ),
 			array( 'c' => 'United States', 'z' => 'America/Sitka' ),
@@ -1367,9 +1376,9 @@ function geodir_timezone_countries() {
 			array( 'c' => 'Mexico', 'z' => 'America/Mazatlan' ),
 			array( 'c' => 'Mexico', 'z' => 'America/Ojinaga' ),
 			array( 'c' => 'Mexico', 'z' => 'America/Tijuana' ),
+			array( 'c' => 'United States', 'z' => 'America/Los_Angeles' ),
 			array( 'c' => 'United States', 'z' => 'America/Boise' ),
 			array( 'c' => 'United States', 'z' => 'America/Denver' ),
-			array( 'c' => 'United States', 'z' => 'America/Los_Angeles' ),
 			array( 'c' => 'United States', 'z' => 'America/Phoenix' )
 		),
 		'-06:00' => array(
@@ -1399,8 +1408,8 @@ function geodir_timezone_countries() {
 			array( 'c' => 'Mexico', 'z' => 'America/Matamoros' ),
 			array( 'c' => 'Mexico', 'z' => 'America/Bahia_Banderas' ),
 			array( 'c' => 'Nicaragua', 'z' => 'America/Managua' ),
-			array( 'c' => 'United States', 'z' => 'America/Boise' ),
 			array( 'c' => 'United States', 'z' => 'America/Chicago' ),
+			array( 'c' => 'United States', 'z' => 'America/Boise' ),
 			array( 'c' => 'United States', 'z' => 'America/Denver' ),
 			array( 'c' => 'United States', 'z' => 'America/Indiana/Knox' ),
 			array( 'c' => 'United States', 'z' => 'America/Indiana/Tell_City' ),
@@ -1413,11 +1422,11 @@ function geodir_timezone_countries() {
 			array( 'c' => 'Bahamas', 'z' => 'America/Nassau' ),
 			array( 'c' => 'Brazil', 'z' => 'America/Eirunepe' ),
 			array( 'c' => 'Brazil', 'z' => 'America/Rio_Branco' ),
+			array( 'c' => 'Canada', 'z' => 'America/Toronto' ),
 			array( 'c' => 'Canada', 'z' => 'America/Rankin_Inlet' ),
 			array( 'c' => 'Canada', 'z' => 'America/Winnipeg' ),
 			array( 'c' => 'Canada', 'z' => 'America/Thunder_Bay' ),
 			array( 'c' => 'Canada', 'z' => 'America/Resolute' ),
-			array( 'c' => 'Canada', 'z' => 'America/Toronto' ),
 			array( 'c' => 'Canada', 'z' => 'America/Rainy_River' ),
 			array( 'c' => 'Canada', 'z' => 'America/Pangnirtung' ),
 			array( 'c' => 'Canada', 'z' => 'America/Nipigon' ),
@@ -1430,8 +1439,8 @@ function geodir_timezone_countries() {
 			array( 'c' => 'Ecuador', 'z' => 'America/Guayaquil' ),
 			array( 'c' => 'Haiti', 'z' => 'America/Port-au-Prince' ),
 			array( 'c' => 'Jamaica', 'z' => 'America/Jamaica' ),
-			array( 'c' => 'Mexico', 'z' => 'America/Monterrey' ),
 			array( 'c' => 'Mexico', 'z' => 'America/Mexico_City' ),
+			array( 'c' => 'Mexico', 'z' => 'America/Monterrey' ),
 			array( 'c' => 'Mexico', 'z' => 'America/Merida' ),
 			array( 'c' => 'Mexico', 'z' => 'America/Matamoros' ),
 			array( 'c' => 'Mexico', 'z' => 'America/Bahia_Banderas' ),
@@ -1439,10 +1448,10 @@ function geodir_timezone_countries() {
 			array( 'c' => 'Panama', 'z' => 'America/Panama' ),
 			array( 'c' => 'Peru', 'z' => 'America/Lima' ),
 			array( 'c' => 'Turks and Caicos Islands', 'z' => 'America/Grand_Turk' ),
+			array( 'c' => 'United States', 'z' => 'America/New_York' ),
 			array( 'c' => 'United States', 'z' => 'America/Indiana/Winamac' ),
 			array( 'c' => 'United States', 'z' => 'America/North_Dakota/Center' ),
 			array( 'c' => 'United States', 'z' => 'America/North_Dakota/Beulah' ),
-			array( 'c' => 'United States', 'z' => 'America/New_York' ),
 			array( 'c' => 'United States', 'z' => 'America/Menominee' ),
 			array( 'c' => 'United States', 'z' => 'America/Kentucky/Monticello' ),
 			array( 'c' => 'United States', 'z' => 'America/Kentucky/Louisville' ),
@@ -1472,8 +1481,8 @@ function geodir_timezone_countries() {
 			array( 'c' => 'Brazil', 'z' => 'America/Manaus' ),
 			array( 'c' => 'Brazil', 'z' => 'America/Porto_Velho' ),
 			array( 'c' => 'British Virgin Islands', 'z' => 'America/Tortola' ),
-			array( 'c' => 'Canada', 'z' => 'America/Nipigon' ),
 			array( 'c' => 'Canada', 'z' => 'America/Toronto' ),
+			array( 'c' => 'Canada', 'z' => 'America/Nipigon' ),
 			array( 'c' => 'Canada', 'z' => 'America/Thunder_Bay' ),
 			array( 'c' => 'Canada', 'z' => 'America/Pangnirtung' ),
 			array( 'c' => 'Canada', 'z' => 'America/Goose_Bay' ),
@@ -1505,13 +1514,13 @@ function geodir_timezone_countries() {
 			array( 'c' => 'Trinidad and Tobago', 'z' => 'America/Port_of_Spain' ),
 			array( 'c' => 'Turks and Caicos Islands', 'z' => 'America/Grand_Turk' ),
 			array( 'c' => 'US Virgin Islands', 'z' => 'America/St_Thomas' ),
+			array( 'c' => 'United States', 'z' => 'America/New_York' ),
 			array( 'c' => 'United States', 'z' => 'America/Indiana/Petersburg' ),
 			array( 'c' => 'United States', 'z' => 'America/Indiana/Vevay' ),
 			array( 'c' => 'United States', 'z' => 'America/Indiana/Vincennes' ),
 			array( 'c' => 'United States', 'z' => 'America/Indiana/Winamac' ),
 			array( 'c' => 'United States', 'z' => 'America/Kentucky/Louisville' ),
 			array( 'c' => 'United States', 'z' => 'America/Kentucky/Monticello' ),
-			array( 'c' => 'United States', 'z' => 'America/New_York' ),
 			array( 'c' => 'United States', 'z' => 'America/Indiana/Marengo' ),
 			array( 'c' => 'United States', 'z' => 'America/Indiana/Indianapolis' ),
 			array( 'c' => 'United States', 'z' => 'America/Detroit' ),
@@ -1523,10 +1532,10 @@ function geodir_timezone_countries() {
 		'-03:00' => array(
 			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Rothera' ),
 			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Palmer' ),
+			array( 'c' => 'Argentina', 'z' => 'America/Argentina/San_Luis' ),
 			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Rio_Gallegos' ),
 			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Ushuaia' ),
 			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Tucuman' ),
-			array( 'c' => 'Argentina', 'z' => 'America/Argentina/San_Luis' ),
 			array( 'c' => 'Argentina', 'z' => 'America/Argentina/San_Juan' ),
 			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Salta' ),
 			array( 'c' => 'Argentina', 'z' => 'America/Argentina/Mendoza' ),
@@ -1892,12 +1901,12 @@ function geodir_timezone_countries() {
 		),
 		'+10:00' => array(
 			array( 'c' => 'Antarctica', 'z' => 'Antarctica/DumontDUrville' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Sydney' ),
 			array( 'c' => 'Australia', 'z' => 'Australia/Brisbane' ),
 			array( 'c' => 'Australia', 'z' => 'Australia/Currie' ),
 			array( 'c' => 'Australia', 'z' => 'Australia/Hobart' ),
 			array( 'c' => 'Australia', 'z' => 'Australia/Lindeman' ),
 			array( 'c' => 'Australia', 'z' => 'Australia/Melbourne' ),
-			array( 'c' => 'Australia', 'z' => 'Australia/Sydney' ),
 			array( 'c' => 'Guam', 'z' => 'Pacific/Guam' ),
 			array( 'c' => 'Micronesia', 'z' => 'Pacific/Chuuk' ),
 			array( 'c' => 'Northern Mariana Islands', 'z' => 'Pacific/Saipan' ),
@@ -1912,12 +1921,12 @@ function geodir_timezone_countries() {
 		),
 		'+11:00' => array(
 			array( 'c' => 'Antarctica', 'z' => 'Antarctica/Casey' ),
+			array( 'c' => 'Australia', 'z' => 'Australia/Sydney' ),
 			array( 'c' => 'Australia', 'z' => 'Antarctica/Macquarie' ),
 			array( 'c' => 'Australia', 'z' => 'Australia/Currie' ),
 			array( 'c' => 'Australia', 'z' => 'Australia/Hobart' ),
 			array( 'c' => 'Australia', 'z' => 'Australia/Lord_Howe' ),
 			array( 'c' => 'Australia', 'z' => 'Australia/Melbourne' ),
-			array( 'c' => 'Australia', 'z' => 'Australia/Sydney' ),
 			array( 'c' => 'Micronesia', 'z' => 'Pacific/Pohnpei' ),
 			array( 'c' => 'Micronesia', 'z' => 'Pacific/Kosrae' ),
 			array( 'c' => 'New Caledonia', 'z' => 'Pacific/Noumea' ),
