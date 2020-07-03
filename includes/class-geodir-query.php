@@ -1270,13 +1270,11 @@ class GeoDir_Query {
 				if ( geodir_is_page( 'home' ) ) {
 					$wp->query_vars['gd_is_geodir_page'] = true;
 				}
-
-
 			}
 
 			if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $wp->query_vars['page_id'] ) ) {
 				if (
-					$wp->query_vars['page_id'] == geodir_add_listing_page_id()
+					geodir_is_page_id( $wp->query_vars['page_id'], 'add' )
 					|| $wp->query_vars['page_id'] == geodir_preview_page_id()
 					|| $wp->query_vars['page_id'] == geodir_success_page_id()
 					|| $wp->query_vars['page_id'] == geodir_location_page_id()
@@ -1290,7 +1288,7 @@ class GeoDir_Query {
 				$page = get_page_by_path( $wp->query_vars['pagename'] );
 
 				if ( ! empty( $page ) && (
-						$page->ID == geodir_add_listing_page_id()
+						geodir_is_page_id( $page->ID, 'add' )
 						|| $page->ID == geodir_preview_page_id()
 						|| $page->ID == geodir_success_page_id()
 						|| $page->ID == geodir_location_page_id()

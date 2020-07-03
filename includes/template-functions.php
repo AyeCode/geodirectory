@@ -612,20 +612,24 @@ function geodir_template_redirect() {
 	global $wp_query, $wp, $post;
 
 	if ( is_page() ) {
-
-		if ( ! isset( $_REQUEST['listing_type'] ) && geodir_is_page( 'add-listing' ) && !isset($_REQUEST['action']) ) {
-			if ( ! empty( $_REQUEST['pid'] ) && $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) {
+		if ( ! isset( $_REQUEST['listing_type'] ) && geodir_is_page( 'add-listing' ) && ! isset( $_REQUEST['action'] ) ) {
+			if ( ! empty( $_REQUEST['pid'] ) && ( $post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) ) {
 			} else {
-				$post_type = geodir_add_listing_default_post_type();
+				$page_id = ! empty( $post->ID ) && $post->post_type == 'page' ? $post->ID : 0;
+
+				if ( $page_id && ( $_post_type = geodir_cpt_template_post_type( $page_id, 'add' ) ) ) {
+					$post_type = $_post_type; // Detect post from CPT add listing page id.
+				} else {
+					$post_type = geodir_add_listing_default_post_type();
+				}
 
 				if ( ! empty( $post->post_content ) && has_shortcode( $post->post_content, 'gd_add_listing' ) ) {
-
-					$regex_pattern = get_shortcode_regex();
+					$regex_pattern = get_shortcode_regex( array( 'gd_add_listing' ) );
 					preg_match( '/' . $regex_pattern . '/s', $post->post_content, $regex_matches );
 
 					if ( ! empty( $regex_matches ) && ! empty( $regex_matches[2] ) == 'gd_add_listing' && ! empty( $regex_matches[3] ) ) {
 						$shortcode_atts = shortcode_parse_atts( $regex_matches[3] );
-						$post_type      = ! empty( $shortcode_atts ) && ! empty( $shortcode_atts['post_type'] ) ? $shortcode_atts['post_type'] : $post_type;
+						$post_type = ! empty( $shortcode_atts ) && ! empty( $shortcode_atts['post_type'] ) && geodir_is_gd_post_type( $shortcode_atts['post_type'] ) ? $shortcode_atts['post_type'] : $post_type;
 					}
 				}
 			}
@@ -877,7 +881,7 @@ function geodir_extra_loop_actions() {
 /**
  * Retrieve CPT page id.
  *
- * @since 2.0.28
+ * @since 2.0.0.28
  *
  * @param string $page
  * @param string $post_type Post type.
@@ -886,7 +890,7 @@ function geodir_extra_loop_actions() {
  */
 function geodir_get_cpt_page_id( $page, $post_type = '' ) {
 	$page_id = 0;
-	$pages   = array( 'page_details', 'page_archive', 'page_archive_item' );
+	$pages   = array( 'page_add', 'page_details', 'page_archive', 'page_archive_item' );
 
 	if ( empty( $page ) || ! in_array( 'page_' . $page, $pages ) ) {
 		return $page_id;;

@@ -301,6 +301,8 @@ class GeoDir_Compatibility {
 				$is_geodir_page_template = false;
 				if(!empty($geodirectory->settings['page_search']) && $geodirectory->settings['page_search'] == $id ){
 					$is_geodir_page_template = true;
+				}elseif(!empty($geodirectory->settings['page_add']) && $geodirectory->settings['page_add'] == $id ){
+					$is_geodir_page_template = true;
 				}elseif(!empty($geodirectory->settings['page_details']) && $geodirectory->settings['page_details'] == $id ){
 					$is_geodir_page_template = true;
 				}elseif(!empty($geodirectory->settings['page_archive']) && $geodirectory->settings['page_archive'] == $id ){

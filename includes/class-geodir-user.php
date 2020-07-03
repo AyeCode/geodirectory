@@ -404,7 +404,7 @@ class GeoDir_User {
 		foreach ( $post_types as $key => $postobj ) {
 			
 			if ( ! isset( $postobj->disable_frontend_add ) || $postobj->disable_frontend_add == '0' ) {
-				if ( $add_link = geodir_get_addlisting_link( $key ) ) {
+				if ( $add_link = geodir_add_listing_page_url( $key ) ) {
 
 					$name = $postobj->labels->name;
 

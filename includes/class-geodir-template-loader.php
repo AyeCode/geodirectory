@@ -163,21 +163,21 @@ class GeoDir_Template_Loader {
                     $default_file = $template;
                 }
             }
-        } elseif(geodir_is_page( 'add-listing' )){
-
-            // the add listing page should never be cached
+        } elseif ( geodir_is_page( 'add-listing' ) ) {
+            // The add listing page should never be cached
             geodir_nocache_headers();
 
-            $page_id = geodir_add_listing_page_id();
-            if($page_id &&  $template = get_page_template_slug( $page_id )){
-                // make sure the template exists before loading it, it might be from a old theme
-                if(locate_template( $template )){
-                    //$wp_query->is_page = 1; //@todo, is this needed? (depends on theme?)
+            $post_type = geodir_get_current_posttype();
+            $page_id = geodir_add_listing_page_id( $post_type );
+
+            if ( $page_id && ( $template = get_page_template_slug( $page_id ) ) ) {
+                // Make sure the template exists before loading it, it might be from a old theme
+                if ( locate_template( $template ) ) {
+                    //$wp_query->is_page = 1; // @todo, is this needed? (depends on theme?)
                     $default_file = $template;
                 }
             }
-        }else{
-
+        } else {
             $archive_template = geodir_get_option('archive_page_template');
 
             if($archive_template && locate_template( $archive_template )){
@@ -623,16 +623,22 @@ class GeoDir_Template_Loader {
      *
      * @since 2.0.0
      */
-    public static function disable_page_templates_frontend(){
+    public static function disable_page_templates_frontend() {
         global $post;
-        if(isset($post->ID) && !current_user_can('administrator') && (
-                $post->ID == geodir_get_option('page_details')
-                || $post->ID == geodir_get_option('page_archive')
-                || $post->ID == geodir_get_option('page_archive_item')
-				|| geodir_is_cpt_template_page( $post->ID )
-            )){
-            wp_redirect(home_url(), 301);
-            exit;
+
+        if ( isset( $post->ID ) && ! current_user_can( 'administrator' ) ) {
+            if ( geodir_is_cpt_template_page( $post->ID, 'add' ) ) {
+                return; // Bail for add listing page.
+            }
+
+            if ( $post->ID == geodir_get_option( 'page_details' ) 
+                || $post->ID == geodir_get_option( 'page_archive' ) 
+                || $post->ID == geodir_get_option( 'page_archive_item' ) 
+                || geodir_is_cpt_template_page( $post->ID ) 
+            ) {
+                wp_redirect( home_url(), 301 );
+                exit;
+            }
         }
     }
 }

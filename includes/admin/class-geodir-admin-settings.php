@@ -733,8 +733,18 @@ class GeoDir_Admin_Settings {
 							<?php if($args['selected']){ ?>
 							<a href="<?php echo get_edit_post_link( $args['selected'] ); ?>" class="button gd-page-setting-edit"><?php _e('Edit Page','geodirectory');?></a>
 
-								<?php if(empty($value['is_template_page'])){ ?>
-								<a href="<?php echo get_permalink($args['selected']);?>" class="button gd-page-setting-view"><?php _e('View Page','geodirectory');?></a>
+								<?php 
+								if ( empty( $value['is_template_page'] ) ) {
+									$page_url = get_permalink( $args['selected'] );
+									if ( ! empty( $value['view_page_args'] ) && is_array( $value['view_page_args'] ) ) {
+										foreach ( $value['view_page_args'] as $_key => $_value ) {
+											if ( ! empty( $_key ) && $_value != '' ) {
+												$page_url = add_query_arg( $_key, $_value, $page_url );
+											}
+										}
+									}
+								?>
+								<a href="<?php echo $page_url; ?>" class="button gd-page-setting-view"><?php _e('View Page','geodirectory');?></a>
 							<?php }
 							}
 							
