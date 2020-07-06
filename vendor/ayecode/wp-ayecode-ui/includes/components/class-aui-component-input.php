@@ -53,7 +53,7 @@ class AUI_Component_Input {
 		if ( ! empty( $args['type'] ) ) {
 			$type = sanitize_html_class( $args['type'] );
 			$label_args = array('title'=>$args['label'],'for'=>$args['id'],'class' => $args['label_class']." ");
-			
+
 			// Some special sauce for files
 			if($type=='file' ){
 				$args['label_after'] = true; // if type file we need the label after
@@ -75,7 +75,7 @@ class AUI_Component_Input {
 
 			// name
 			if(!empty($args['name'])){
-				$output .= ' name="'.sanitize_html_class($args['name']).'" ';
+				$output .= ' name="'.esc_attr($args['name']).'" ';
 			}
 
 			// id
@@ -146,7 +146,7 @@ class AUI_Component_Input {
 				$output .= self::label( $label_args, $type );
 			}
 
-			
+
 			// some input types need a separate wrap
 			if($type == 'file') {
 				$output = self::wrap( array(
@@ -386,9 +386,9 @@ else{$eli.attr(\'type\',\'password\');}"
 			$output .= '>';
 
 
-			// title
+			// title, don't escape as can contain html
 			if(!empty($args['title'])){
-				$output .= esc_attr($args['title']);
+				$output .= $args['title'];
 			}
 
 			// close wrap
@@ -480,6 +480,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'multiple'   => false,
 			'select2'    => false,
 			'no_wrap'    => false,
+			'extra_attributes'  => array() // an array of extra attributes
 		);
 
 		/**
@@ -544,6 +545,11 @@ else{$eli.attr(\'type\',\'password\');}"
 		// aria-attributes
 		$output .= AUI_Component_Helper::aria_attributes($args);
 
+		// extra attributes
+		if(!empty($args['extra_attributes'])){
+			$output .= AUI_Component_Helper::extra_attributes($args['extra_attributes']);
+		}
+
 		// required
 		if(!empty($args['required'])){
 			$output .= ' required ';
@@ -591,7 +597,7 @@ else{$eli.attr(\'type\',\'password\');}"
 							$selected = selected( $args['value'], $val, false);
 						}
 					}
-					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';	
+					$output .= '<option value="'.esc_attr($val).'" '.$selected.'>'.esc_attr($name).'</option>';
 				}
 			}
 

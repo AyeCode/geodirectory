@@ -943,12 +943,21 @@ function geodir_search_form_post_type_input() {
 
 		if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 && $show_select) {
 
+			$design_style = geodir_design_style();
+
 			$new_style = geodir_get_option( 'geodir_show_search_old_search_from' ) ? false : true;
 			if ( $new_style ) {
-				echo "<div class='gd-search-input-wrapper gd-search-field-cpt'>";
+				$wrap_class = $design_style ? " col-auto flex-fill" : '';
+				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class'>";
 			}
+
+			$select_class = $design_style ? " custom-select" : '';
+
+			echo $design_style ? '<div class="form-group">' : '';
+			echo $design_style ? '<label class="sr-only sr-only ">'.__("Select search type","geodirectory").'</label>' : '';
+
 			?>
-			<select name="stype" class="search_by_post">
+			<select name="stype" class="search_by_post <?php echo $select_class;?>">
 				<?php foreach ( $post_types as $post_type => $info ):
 					global $wpdb;
 					$pt_slug = isset($info->rewrite->slug) ? esc_attr($info->rewrite->slug) : 'places';
@@ -969,6 +978,8 @@ function geodir_search_form_post_type_input() {
 				<?php endforeach; ?>
 			</select>
 			<?php
+			echo $design_style ? '</div>' : '';
+
 			if ( $new_style ) {
 				echo "</div>";
 			}
@@ -1160,8 +1171,11 @@ function geodir_search_form(){
 
 	geodir_get_search_post_type();
 
-	geodir_get_template_part('listing', 'filter-form');
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/search-bar/form.php" : "listing-filter-form.php";
 
+	echo geodir_get_template_html( $template );
+	
 	// Always die in functions echoing ajax content
 	die();
 }

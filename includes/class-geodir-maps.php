@@ -367,6 +367,9 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		}
 
 		$main_list_class = '';
+		$design_style = geodir_design_style();
+		$ul_class = $design_style ? ' list-unstyled p-0 m-0' : '';
+		$li_class = $design_style ? ' list-unstyled p-0 m-0 ' : '';
 		//If there are terms, start displaying
 		if ( count( $cat_terms ) > 0 ) {
 			//Displaying as a list
@@ -375,13 +378,15 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 			if ($cat_parent == 0) {
 				$list_class = 'main_list geodir-map-terms';
+				$li_class = $design_style ? ' list-unstyled p-0 m-0 ' : '';
 				$display = '';
 			} else {
 				$list_class = 'sub_list';
+				$li_class = $design_style ? ' list-unstyled p-0 m-0 ml-2 ' : '';
 				$display = !$child_collapse ? '' : 'display:none';
 			}
 
-			$out = '<ul class="treeview ' . $list_class . '" style="margin-left:' . $p . 'px;' . $display . ';">';
+			$out = '<ul class="treeview ' . $list_class . $ul_class .'" style="margin-left:' . $p . 'px;' . $display . ';">';
 
 			$geodir_cat_icons = geodir_get_term_icon();
 
@@ -419,8 +424,32 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 					$term_check = '<input type="checkbox" ' . $checked . ' id="' .$map_canvas.'_tick_cat_'. $cat_term->term_id . '" class="group_selector ' . $main_list_class . '"';
 					$term_check .= ' name="' . $map_canvas . '_cat[]" ';
 					$term_check .= '  title="' . esc_attr(geodir_utf8_ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas . '\',false, this)">';
-					$term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '"/>';
-					$out .= '<li>' . $term_check . '<label for="' . $map_canvas.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><span class="gd-map-cat-toggle"><i class="fas fa-long-arrow-alt-down" aria-hidden="true" style="display:none"></i></span>';
+
+					if($design_style){
+						$term_img = '<img class="w-auto mr-1 ml-n1 rounded-circle" style="height:22px;" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '"/>';
+
+						$term_html = '<li class="'.$li_class.'">' .aui()->input(
+							array(
+								'id'                => "{$map_canvas}_tick_cat_{$cat_term->term_id}",
+								'name'              => "{$map_canvas}_cat[]",
+								'type'              => "checkbox",
+								'value'             => absint( $cat_term->term_id),
+								'label'             => $term_img . esc_attr(geodir_utf8_ucfirst($cat_term->name)),
+								'class'             => 'group_selector ' . $main_list_class,
+								'checked'           => $checked,
+								'no_wrap'            => true,
+								'extra_attributes'  => array(
+									'onclick' => 'javascript:build_map_ajax_search_param(\'' . $map_canvas . '\',false, this)',
+								),
+							)
+						);
+					}else{
+						$term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '"/>';
+
+						$term_html = '<li class="'.$li_class.'">' . $term_check . '<label for="' . $map_canvas.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><span class="gd-map-cat-toggle"><i class="fas fa-long-arrow-alt-down" aria-hidden="true" style="display:none"></i></span>';
+					}
+
+					$out .= $term_html;
 				}
 
 				// get sub category by recursion

@@ -439,7 +439,7 @@ class GeoDir_Frontend_Scripts {
 		$map_extra = apply_filters('geodir_googlemap_script_extra', '');
 
 		$suffix           = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		$aui = geodir_design_style() ? '-aui' : '';
+		$aui = geodir_design_style() ? '/aui' : '';
 		$register_scripts = array(
 			'select2' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js',
@@ -492,7 +492,7 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-map-widget' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/map' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),
@@ -502,7 +502,7 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory'. $aui . $suffix . '.js',
+				'src'     =>  geodir_plugin_url() . '/assets'.$aui.'/js/geodirectory'. $suffix . '.js',
 				'deps'    => array(),
 				'version' => GEODIRECTORY_VERSION,
 			),

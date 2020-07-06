@@ -19,7 +19,7 @@ jQuery(document).ready(function($) {
             }
         }
 
-        jQuery(window).trigger('resize');
+        window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
     });
 
 
@@ -574,53 +574,28 @@ jQuery(document).ready(function() {
 
     jQuery(".gd-trigger").click(function() {
         jQuery(this).toggleClass("active").next().slideToggle("slow");
-        var aD = jQuery(this).toggleClass("active").next().hasClass('map_category') ? true : false;
-        if (jQuery(".gd-trigger").hasClass("gd-triggeroff")) {
-            jQuery(".gd-trigger").removeClass('gd-triggeroff');
-            jQuery(".gd-trigger").addClass('gd-triggeron');
-            if (aD) {
-                gd_compress_animate(this, 0);
-            }
-        } else {
-            jQuery(".gd-trigger").removeClass('gd-triggeron');
-            jQuery(".gd-trigger").addClass('gd-triggeroff');
-            if (aD) {
-                gd_compress_animate(this, parseFloat(jQuery(this).toggleClass("active").next().outerWidth()));
-            }
-        }
+        jQuery(this).find('i').toggleClass("d-none");
+
     });
 
-    jQuery(".gd-trigger").each(function() {
-        if (jQuery(this).hasClass('gd-triggeroff') && jQuery(this).next().hasClass('map_category')) {
-            gd_compress_animate(this, parseFloat(jQuery(this).next().outerWidth()));
-        }
-    });
 
     jQuery(".trigger_sticky").click(function() {
-        var effect = 'slide';
-        var options = {
-            direction: 'right'
-        };
-        var duration = 500;
         var tigger_sticky = jQuery(this);
-        // tigger_sticky.hide();
-        // jQuery('div.stickymap').toggle(effect, options, duration, function() {
-        //     tigger_sticky.show();
-        // });
 
         jQuery('body').toggleClass('stickymap_hide');
 
         if (tigger_sticky.hasClass("triggeroff_sticky")) {
             tigger_sticky.removeClass('triggeroff_sticky');
             tigger_sticky.addClass('triggeron_sticky');
-            // setCookie('geodir_stickystatus', 'shide', 1);
             if(geodir_is_localstorage()){localStorage.setItem("gd_sticky_map",'shide');}
         } else {
             tigger_sticky.removeClass('triggeron_sticky');
             tigger_sticky.addClass('triggeroff_sticky');
-            // setCookie('geodir_stickystatus', 'sshow', 1);
             if(geodir_is_localstorage()){localStorage.setItem("gd_sticky_map",'sshow');}
         }
+
+        window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
+
     });
 
     function gd_compress_animate(e, r) {
@@ -696,6 +671,7 @@ jQuery(document).ready(function() {
         }
     });
 });
+
 
 /* Show Hide Filters End */
 /* Hide Pinpoint If Listing MAP Not On Page */
@@ -824,7 +800,7 @@ function geodir_load_search_form(stype, el) {
 
             geodir_setup_search_form();
             // trigger a custom event wen setting up the search form so we can hook to it from addons
-            jQuery("body").trigger("geodir_setup_search_form", $container.find('fome[name="geodir-listing-search"]'));
+            jQuery("body").trigger("geodir_setup_search_form", $container.find('form[name="geodir-listing-search"]'));
 
             geodir_search_wait(0);
         },
