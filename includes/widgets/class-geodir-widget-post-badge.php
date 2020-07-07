@@ -42,8 +42,10 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 	 *
 	 */
 	public function set_arguments() {
-		$arguments = array(
-			'id'  	=> array(
+		$design_style = geodir_design_style();
+
+		$arguments = array();
+		$arguments['id']  	= array(
 				'type' => 'number',
 				'title' => __('Post ID:', 'geodirectory'),
 				'desc' => __('Leave blank to use current post id.', 'geodirectory'),
@@ -51,8 +53,8 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'default' => '',
 				'desc_tip' => true,
 				'advanced' => false
-			),
-			'key'  => array(
+			);
+		$arguments['key']  = array(
 				'type' => 'select',
 				'title' => __('Field Key:', 'geodirectory'),
 				'desc' => __('This is the custom field key.', 'geodirectory'),
@@ -61,202 +63,249 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				'default'  => '',
 				'desc_tip' => true,
 				'advanced' => false
-			),
-			'condition'  => array(
-				'type' => 'select',
-				'title' => __('Field condition:', 'geodirectory'),
-				'desc' => __('Select the custom field condition.', 'geodirectory'),
-				'placeholder' => '',
-				'options' => $this->get_badge_conditions(),
-				'default' => 'is_equal',
-				'desc_tip' => true,
-				'advanced' => false
-			),
-			'search'  => array(
-				'type' => 'text',
-				'title' => __('Value to match:', 'geodirectory'),
-				'desc' => __('Match this text with field value to display post badge. For post date enter value like +7 or -7.', 'geodirectory'),
-				'placeholder' => '',
-				'default' => '',
-				'desc_tip' => true,
-				'advanced' => false,
-				'element_require' => '[%condition%]!="is_empty" && [%condition%]!="is_not_empty"'
-			),
-			'icon_class'  => array(
-				'type' => 'text',
-				'title' => __('Icon class:', 'geodirectory'),
-				'desc' => __('You can show a font-awesome icon here by entering the icon class.', 'geodirectory'),
-				'placeholder' => 'fas fa-award',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Design","geodirectory")
-			),
-			'badge'  => array(
-				'type' => 'text',
-				'title' => __('Badge:', 'geodirectory'),
-				'desc' => __('Badge text. Ex: FOR SALE. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field or %%post_url%% for the post url, or the field key for any other info %%email%%.', 'geodirectory'),
-				'placeholder' => '',
-				'default' => '',
-				'desc_tip' => true,
-				'advanced' => false,
-			),
-			'link'  => array(
-				'type' => 'text',
-				'title' => __('Link url:', 'geodirectory'),
-				'desc' => __('Badge link url. You can use this to make the button link to something, %%input%% can be used here if a link or %%post_url%% for the post url.', 'geodirectory'),
-				'placeholder' => '',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Click Action","geodirectory")
-			),
-			'new_window'  => array(
-				'title' => __('Open link in new window:', 'geodirectory'),
-				'desc' => __('This will open the link in a new window.', 'geodirectory'),
-				'type' => 'checkbox',
-				'desc_tip' => true,
-				'value'  => '1',
-				'default'  => 0,
-				'group'     => __("Click Action","geodirectory")
-			),
-			'popover_title'  => array(
-				'type' => 'text',
-				'title' => __('Popover title:', 'geodirectory'),
-				'desc' => __('Reveals some title text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'geodirectory'),
-				'placeholder' => '',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Click Action","geodirectory")
-			),
-			'popover_text'  => array(
-				'type' => 'text',
-				'title' => __('Popover text:', 'geodirectory'),
-				'desc' => __('Reveals some text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'geodirectory'),
-				'placeholder' => '',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Click Action","geodirectory")
-			),
-			'cta'  => array(
-				'type' => 'text',
-				'title' => __('Click through action:', 'geodirectory'),
-				'desc' => __('This will attempt to send a Google Analytics custom event when clicked. By default this will use the field key, you can add your own such as `phone sidebar` or enter zero `0` to disable tracking.', 'geodirectory'),
-				'placeholder' => 'phone',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Click Action","geodirectory")
-			),
-			'tooltip_text'  => array(
-				'type' => 'text',
-				'title' => __('Tooltip text:', 'geodirectory'),
-				'desc' => __('Reveals some text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%. (this can NOT be used with popover text)', 'geodirectory'),
-				'placeholder' => '',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Hover Action","geodirectory")
-			),
-			'hover_content'  => array(
-				'type' => 'text',
-				'title' => __('Hover content:', 'geodirectory'),
-				'desc' => __('Change the button text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'geodirectory'),
-				'placeholder' => '',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Hover Action","geodirectory")
-			),
-			'hover_icon'  => array(
-				'type' => 'text',
-				'title' => __('Hover icon:', 'geodirectory'),
-				'desc' => __('Change the button icon on hover. You can show a font-awesome icon here by entering the icon class.', 'geodirectory'),
-				'placeholder' => 'fas fa-bacon',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Hover Action","geodirectory")
-			),
-			'bg_color'  => array(
-				'type' => 'color',
-				'title' => __('Badge background color:', 'geodirectory'),
-				'desc' => __('Color for the badge background.', 'geodirectory'),
-				'placeholder' => '',
-				'default' => '#0073aa',
-				'desc_tip' => true,
-				'group'     => __("Design","geodirectory")
-			),
-			'txt_color'  => array(
-				'type' => 'color',
-				'title' => __('Badge text color:', 'geodirectory'),
-				'desc' => __('Color for the badge text.', 'geodirectory'),
-				'placeholder' => '',
-				'desc_tip' => true,
-				'default'  => '#ffffff',
-				'group'     => __("Design","geodirectory")
-			),
-			'size'  => array(
-				'type' => 'select',
-				'title' => __('Badge size:', 'geodirectory'),
-				'desc' => __('Size of the badge.', 'geodirectory'),
-				'options' =>  array(
-					"" => __('h6', 'geodirectory'),
-					"h5" => __('h5', 'geodirectory'),
-					"h4" => __('h4', 'geodirectory'),
-					"h3" => __('h3', 'geodirectory'),
-					"h2" => __('h2', 'geodirectory'),
-					"h1" => __('h1', 'geodirectory'),
+		);
+		$arguments['condition']  = array(
+			'type' => 'select',
+			'title' => __('Field condition:', 'geodirectory'),
+			'desc' => __('Select the custom field condition.', 'geodirectory'),
+			'placeholder' => '',
+			'options' => $this->get_badge_conditions(),
+			'default' => 'is_equal',
+			'desc_tip' => true,
+			'advanced' => false
+		);
+		$arguments['search']  = array(
+			'type' => 'text',
+			'title' => __('Value to match:', 'geodirectory'),
+			'desc' => __('Match this text with field value to display post badge. For post date enter value like +7 or -7.', 'geodirectory'),
+			'placeholder' => '',
+			'default' => '',
+			'desc_tip' => true,
+			'advanced' => false,
+			'element_require' => '[%condition%]!="is_empty" && [%condition%]!="is_not_empty"'
+		);
+		$arguments['icon_class']  = array(
+			'type' => 'text',
+			'title' => __('Icon class:', 'geodirectory'),
+			'desc' => __('You can show a font-awesome icon here by entering the icon class.', 'geodirectory'),
+			'placeholder' => 'fas fa-award',
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Design","geodirectory")
+		);
+		$arguments['badge']  = array(
+			'type' => 'text',
+			'title' => __('Badge:', 'geodirectory'),
+			'desc' => __('Badge text. Ex: FOR SALE. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field or %%post_url%% for the post url, or the field key for any other info %%email%%.', 'geodirectory'),
+			'placeholder' => '',
+			'default' => '',
+			'desc_tip' => true,
+			'advanced' => false,
+		);
+		$arguments['link']  = array(
+			'type' => 'text',
+			'title' => __('Link url:', 'geodirectory'),
+			'desc' => __('Badge link url. You can use this to make the button link to something, %%input%% can be used here if a link or %%post_url%% for the post url.', 'geodirectory'),
+			'placeholder' => '',
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Click Action","geodirectory")
+		);
+		$arguments['new_window']  = array(
+			'title' => __('Open link in new window:', 'geodirectory'),
+			'desc' => __('This will open the link in a new window.', 'geodirectory'),
+			'type' => 'checkbox',
+			'desc_tip' => true,
+			'value'  => '1',
+			'default'  => 0,
+			'group'     => __("Click Action","geodirectory")
+		);
+		$arguments['popover_title']  = array(
+			'type' => 'text',
+			'title' => __('Popover title:', 'geodirectory'),
+			'desc' => __('Reveals some title text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'geodirectory'),
+			'placeholder' => '',
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Click Action","geodirectory")
+		);
+		$arguments['popover_text']  = array(
+			'type' => 'text',
+			'title' => __('Popover text:', 'geodirectory'),
+			'desc' => __('Reveals some text onclick. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'geodirectory'),
+			'placeholder' => '',
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Click Action","geodirectory")
+		);
+		$arguments['cta']  = array(
+			'type' => 'text',
+			'title' => __('Click through action:', 'geodirectory'),
+			'desc' => __('This will attempt to send a Google Analytics custom event when clicked. By default this will use the field key, you can add your own such as `phone sidebar` or enter zero `0` to disable tracking.', 'geodirectory'),
+			'placeholder' => 'phone',
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Click Action","geodirectory")
+		);
+		$arguments['tooltip_text']  = array(
+			'type' => 'text',
+			'title' => __('Tooltip text:', 'geodirectory'),
+			'desc' => __('Reveals some text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%. (this can NOT be used with popover text)', 'geodirectory'),
+			'placeholder' => '',
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Hover Action","geodirectory")
+		);
+		$arguments['hover_content']  = array(
+			'type' => 'text',
+			'title' => __('Hover content:', 'geodirectory'),
+			'desc' => __('Change the button text on hover. Enter some text or use %%input%% to use the input value of the field or the field key for any other info %%email%%.', 'geodirectory'),
+			'placeholder' => '',
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Hover Action","geodirectory")
+		);
+		$arguments['hover_icon']  = array(
+			'type' => 'text',
+			'title' => __('Hover icon:', 'geodirectory'),
+			'desc' => __('Change the button icon on hover. You can show a font-awesome icon here by entering the icon class.', 'geodirectory'),
+			'placeholder' => 'fas fa-bacon',
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Hover Action","geodirectory")
+		);
 
-				),
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Design","geodirectory")
-			),
-			'alignment'  => array(
+		if($design_style) {
+			$arguments['type'] = array(
+				'title' => __('Type', 'geodirectory'),
+				'desc' => __('Select the badge type.', 'geodirectory'),
 				'type' => 'select',
-				'title' => __('Alignment:', 'geodirectory'),
-				'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
 				'options'   =>  array(
-					"" => __('None', 'geodirectory'),
-					"left" => __('Left', 'geodirectory'),
-					"center" => __('Center', 'geodirectory'),
-					"right" => __('Right', 'geodirectory'),
+					"" => __('Badge', 'geodirectory'),
+					"pill" => __('Pill', 'geodirectory'),
 				),
+				'default'  => '',
 				'desc_tip' => true,
+				'advanced' => false,
 				'group'     => __("Design","geodirectory")
-			),
-			'list_hide'  => array(
-				'title' => __('Hide item on view:', 'geodirectory'),
-				'desc' => __('You can set at what view the item will become hidden.', 'geodirectory'),
+			);
+
+			$arguments['shadow'] = array(
+				'title' => __('Shadow', 'geodirectory'),
+				'desc' => __('Select the shadow badge type.', 'geodirectory'),
 				'type' => 'select',
 				'options'   =>  array(
 					"" => __('None', 'geodirectory'),
-					"2" => __('Grid view 2', 'geodirectory'),
-					"3" => __('Grid view 3', 'geodirectory'),
-					"4" => __('Grid view 4', 'geodirectory'),
-					"5" => __('Grid view 5', 'geodirectory'),
+					"small" => __('small', 'geodirectory'),
+					"medium" => __('medium', 'geodirectory'),
+					"large" => __('large', 'geodirectory'),
 				),
+				'default'  => '',
 				'desc_tip' => true,
+				'advanced' => false,
 				'group'     => __("Design","geodirectory")
-			),
-			'list_hide_secondary'  => array(
-				'title' => __('Hide secondary info on view', 'geodirectory'),
-				'desc' => __('You can set at what view the secondary info such as label will become hidden.', 'geodirectory'),
+			);
+
+			$arguments['color'] = array(
+				'title' => __('Badge Color', 'geodirectory'),
+				'desc' => __('Select the the badge color.', 'geodirectory'),
 				'type' => 'select',
 				'options'   =>  array(
-					"" => __('None', 'geodirectory'),
-					"2" => __('Grid view 2', 'geodirectory'),
-					"3" => __('Grid view 3', 'geodirectory'),
-					"4" => __('Grid view 4', 'geodirectory'),
-					"5" => __('Grid view 5', 'geodirectory'),
-				),
+					                "" => __('Custom colors', 'geodirectory'),
+				                )+geodir_aui_colors(true),
+				'default'  => '',
 				'desc_tip' => true,
+				'advanced' => false,
 				'group'     => __("Design","geodirectory")
+			);
+		}
+
+		$arguments['bg_color']  = array(
+			'type' => 'color',
+			'title' => __('Badge background color:', 'geodirectory'),
+			'desc' => __('Color for the badge background.', 'geodirectory'),
+			'placeholder' => '',
+			'default' => '#0073aa',
+			'desc_tip' => true,
+			'group'     => __("Design","geodirectory"),
+			'element_require' => $design_style ?  '[%color%]==""' : '',
+		);
+		$arguments['txt_color']  = array(
+			'type' => 'color',
+			'title' => __('Badge text color:', 'geodirectory'),
+			'desc' => __('Color for the badge text.', 'geodirectory'),
+			'placeholder' => '',
+			'desc_tip' => true,
+			'default'  => '#ffffff',
+			'group'     => __("Design","geodirectory"),
+			'element_require' => $design_style ?  '[%color%]==""' : '',
+		);
+		$arguments['size']  = array(
+			'type' => 'select',
+			'title' => __('Badge size:', 'geodirectory'),
+			'desc' => __('Size of the badge.', 'geodirectory'),
+			'options' =>  array(
+				"" => __('h6', 'geodirectory'),
+				"h5" => __('h5', 'geodirectory'),
+				"h4" => __('h4', 'geodirectory'),
+				"h3" => __('h3', 'geodirectory'),
+				"h2" => __('h2', 'geodirectory'),
+				"h1" => __('h1', 'geodirectory'),
+
 			),
-			'css_class'  => array(
-				'type' => 'text',
-				'title' => __('Extra class:', 'geodirectory'),
-				'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'geodirectory'),
-				'placeholder' => '',
-				'default' => '',
-				'desc_tip' => true,
-				'group'     => __("Design","geodirectory")
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Design","geodirectory")
+		);
+		$arguments['alignment']  = array(
+			'type' => 'select',
+			'title' => __('Alignment:', 'geodirectory'),
+			'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
+			'options'   =>  array(
+				"" => __('None', 'geodirectory'),
+				"left" => __('Left', 'geodirectory'),
+				"center" => __('Center', 'geodirectory'),
+				"right" => __('Right', 'geodirectory'),
 			),
+			'desc_tip' => true,
+			'group'     => __("Design","geodirectory")
+		);
+		$arguments['list_hide']  = array(
+			'title' => __('Hide item on view:', 'geodirectory'),
+			'desc' => __('You can set at what view the item will become hidden.', 'geodirectory'),
+			'type' => 'select',
+			'options'   =>  array(
+				"" => __('None', 'geodirectory'),
+				"2" => __('Grid view 2', 'geodirectory'),
+				"3" => __('Grid view 3', 'geodirectory'),
+				"4" => __('Grid view 4', 'geodirectory'),
+				"5" => __('Grid view 5', 'geodirectory'),
+			),
+			'desc_tip' => true,
+			'group'     => __("Design","geodirectory")
+		);
+		$arguments['list_hide_secondary']  = array(
+			'title' => __('Hide secondary info on view', 'geodirectory'),
+			'desc' => __('You can set at what view the secondary info such as label will become hidden.', 'geodirectory'),
+			'type' => 'select',
+			'options'   =>  array(
+				"" => __('None', 'geodirectory'),
+				"2" => __('Grid view 2', 'geodirectory'),
+				"3" => __('Grid view 3', 'geodirectory'),
+				"4" => __('Grid view 4', 'geodirectory'),
+				"5" => __('Grid view 5', 'geodirectory'),
+			),
+			'desc_tip' => true,
+			'group'     => __("Design","geodirectory")
+		);
+		$arguments['css_class']  = array(
+			'type' => 'text',
+			'title' => __('Extra class:', 'geodirectory'),
+			'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'geodirectory'),
+			'placeholder' => '',
+			'default' => '',
+			'desc_tip' => true,
+			'group'     => __("Design","geodirectory")
 		);
 
 		return $arguments;
@@ -274,6 +323,19 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $post, $gd_post;
+
+
+		// Default options
+		$defaults = array(
+			'type' => '',
+			'shadow' => '',
+			'color' => '',
+		);
+
+		/**
+		 * Parse incoming $args into an array and merge it with $defaults
+		 */
+		$args = wp_parse_args( $args, $defaults );
 
 		if ( ! empty( $args['id'] ) ) {
 			$post_id = absint( $args['id'] );

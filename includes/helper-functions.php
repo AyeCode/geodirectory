@@ -1777,8 +1777,8 @@ function geodir_getcookie( $name ) {
 	return ! empty( $_COOKIE ) && isset( $_COOKIE[ $name ] ) ? $_COOKIE[ $name ] : '';
 }
 
-function geodir_aui_colors(){
-	return array(
+function geodir_aui_colors($include_branding = false){
+	$theme_colors = array(
 		"primary" => __('Primary', 'geodirectory'),
 		"secondary" => __('Secondary', 'geodirectory'),
 		"success" => __('Success', 'geodirectory'),
@@ -1794,5 +1794,27 @@ function geodir_aui_colors(){
 		"gray" => __('Gray', 'geodirectory'),
 		"indigo" => __('Indigo', 'geodirectory'),
 		"orange" => __('Orange', 'geodirectory'),
+	);
+
+	if($include_branding){
+		$theme_colors = $theme_colors  + geodir_aui_branding_colors();
+	}
+
+	return $theme_colors;
+}
+
+function geodir_aui_branding_colors(){
+	return array(
+		"facebook" => __('Facebook', 'geodirectory'),
+		"twitter" => __('Twitter', 'geodirectory'),
+		"instagram" => __('Instagram', 'geodirectory'),
+		"linkedin" => __('Linkedin', 'geodirectory'),
+		"flickr" => __('Flickr', 'geodirectory'),
+		"github" => __('GitHub', 'geodirectory'),
+		"youtube" => __('YouTube', 'geodirectory'),
+		"wordpress" => __('WordPress', 'geodirectory'),
+		"google" => __('Google', 'geodirectory'),
+		"yahoo" => __('Yahoo', 'geodirectory'),
+		"vkontakte" => __('Vkontakte', 'geodirectory'),
 	);
 }

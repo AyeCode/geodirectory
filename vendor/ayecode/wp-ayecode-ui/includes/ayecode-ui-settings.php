@@ -264,7 +264,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 							'<a href="javascript:void(0)" data-toggle="dropdown" class="nav-link"><i class="fas fa-ellipsis-h"></i> <span class="greedy-count badge badge-dark badge-pill"></span></a>' +
 							'<ul class="greedy-links dropdown-menu  dropdown-menu-right '+$dDownClass+'"></ul>' +
 							'</li>');
-
+						
 						var $hlinks = jQuery(this).find('.greedy-links');
 						var $btn = jQuery(this).find('.greedy-btn');
 
@@ -405,6 +405,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					jQuery('[data-toggle="popover"]').popover();
 					jQuery('[data-toggle="popover-html"]').popover({
 						html: true
+					});
+
+					// fix popover container compatibility
+					jQuery('[data-toggle="popover"],[data-toggle="popover-html"]').on('inserted.bs.popover', function () {
+						jQuery('body > .popover').wrapAll("<div class='bsui' />");
 					});
 				}
 

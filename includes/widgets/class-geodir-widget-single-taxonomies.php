@@ -90,7 +90,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
                 'type' => 'select',
                 'options'   =>  array(
                     "" => __('Category color', 'geodirectory'),
-                )+geodir_aui_colors(),
+                )+geodir_aui_colors(true),
                 'default'  => '',
                 'desc_tip' => true,
                 'advanced' => false,

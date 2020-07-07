@@ -23,7 +23,7 @@ jQuery(document).ready(function($) {
     });
 
 
-    // fix tabs url hash on clikc and load
+    // fix tabs url hash on click and load
     jQuery(function(){
         var hash = window.location.hash;
         hash && jQuery('ul.nav a[href="' + hash + '"]').tab('show');
@@ -35,6 +35,8 @@ jQuery(document).ready(function($) {
             jQuery('html,body').scrollTop(scrollmem);
         });
     });
+    
+    
 
 
 });

@@ -785,7 +785,9 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		'tooltip_text'  => '',
 		'hover_content'  => '',
 		'hover_icon'  => '',
-		'extra_attributes'=> '' // 'data-save-list-id=123 data-other-post-id=321'
+		'type'=> '', // AUI only
+		'color'=> '', // AUI only
+		'shadow'=> '', // AUI only
 	);
 	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
@@ -1088,12 +1090,44 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				
 				if($design_style){
 //					print_r( $args );
+
+					$btn_class = 'border-0 align-middle gd-badge';
+					// color
+					$color_custom = true;
+					if( !empty( $args['color'] ) ) {
+						$btn_class .= ' badge-' . sanitize_html_class($args['color']);
+						$color_custom = false;
+					}else{
+						$btn_class .= ' badge-primary'; // custom colors will override this anyway.
+					}
+
+					// shadow
+					if( !empty( $args['shadow'] ) ) {
+						if($args['shadow']=='small'){ $btn_class .= ' shadow-sm'; }
+						elseif($args['shadow']=='medium'){ $btn_class .= ' shadow'; }
+						elseif($args['shadow']=='large'){ $btn_class .= ' shadow-lg'; }
+					}
+
+						// type
+					if( !empty( $args['type'] ) && $args['type']=='pill' ){
+						$btn_class .= ' badge badge-pill';
+					}else{
+						$btn_class .= ' badge';
+					}
+
+
+					if ( ! empty( $args['css_class'] ) ) {
+						// replace some old classes
+						$user_classes = str_replace(array("gd-ab-","gd-badge-shadow"),array("ab-","shadow"),esc_attr($args['css_class']));
+						$btn_class .= ' ' .$user_classes ;
+					}
 					$btn_args = array(
 //						'class'     => 'btn btn-primary  btn-sm px-1 py-0 font-weight-bold gd-badgex',
-						'class'     => 'badge badge-primary font-weight-boldx align-middle gd-badge',
+						'class'     => $btn_class,
 						'content' => $badge,
-						'style' => 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';color:' . sanitize_hex_color( $args['txt_color'] ) . ';',
+						'style' => $color_custom ? 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';color:' . sanitize_hex_color( $args['txt_color'] ) . ';' : '',
 						'data-badge'    => esc_attr($match_field),
+//						'data-trigger'    => 'focus', // this could mess with any html inside the popover
 						'data-badge-condition'  => esc_attr($args['condition']),
 					);
 
@@ -1142,10 +1176,10 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 					// style
 					$btn_args['style'] = '';
-					if(!empty($args['bg_color'])){
+					if($color_custom && !empty($args['bg_color'])){
 						$btn_args['style'] .= 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';border-color:' . sanitize_hex_color( $args['bg_color'] ).';';
 					}
-					if(!empty($args['txt_color'])){
+					if($color_custom && !empty($args['txt_color'])){
 						$btn_args['style'] .= 'color:' . sanitize_hex_color( $args['txt_color'] ) . ';';
 					}
 
