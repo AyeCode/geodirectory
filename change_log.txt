@@ -2,6 +2,7 @@
 * Adjust timezone for listings saved with different offset for same timezone - FIXED
 * Allow to setup separate add listing page for each CPT - ADDED
 * Rank Math breadcrumb shows multiple categories on detail page - FIXED
+* Review reply/cancel reply links are not working on touch screen devices - FIXED
 
 = 2.0.0.96 =
 * Option added to make zip/post code as a required field - FIXED
