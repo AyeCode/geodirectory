@@ -2275,7 +2275,7 @@ function geodir_cpt_template_page( $page, $post_type ) {
 
 	// Bail if its not a CPT template
 	if ( in_array( $page, $pages ) ) {
-		$post_types = geodir_get_posttypes( 'object' );
+		$post_types = geodir_get_posttypes( 'array' );
 
 		if ( isset( $post_types[ $post_type ][ $page ] ) && $post_types[ $post_type ][ $page ] ) {
 			$page_id = $post_types[ $post_type ][ $page ];
