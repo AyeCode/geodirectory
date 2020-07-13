@@ -615,7 +615,8 @@ function geodir_extra_custom_fields_weed( $fields, $post_type, $package_id ) {
 		'option_values' => 'Yes/1,No/0',
 		'clabels' => __('Online Orders?', 'geodirectory'), 
 		'is_active' => '1',
-		'field_icon' => 'fas fa-phone-volume'
+		'field_icon' => 'fas fa-phone-volume',
+		'show_in' => '[detail]',
 	);
 
 	// Recreational or Medical
@@ -641,6 +642,8 @@ function geodir_extra_custom_fields_weed( $fields, $post_type, $package_id ) {
 		'cat_filter' => 1,
 		'show_on_pkg' => $package,
 		'clabels' => __('Recreational or Medical', 'geodirectory'),
+		'show_in' => '[detail]',
+		'field_icon' => 'fas fa-umbrella-beach',
 	);
 
 
@@ -679,6 +682,9 @@ $dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' po
 [gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-top-left-angle gd-badge-shadow']
 [gd_post_badge key='video' condition='is_not_empty' icon_class='fas fa-video' badge='Video' link='%%input%%' bg_color='#0073aa' txt_color='#ffffff' list_hide_secondary='2' css_class='gd-badge-shadow gd-ab-top-right gd-lity']
 
+[gd_post_badge key='for_online_orders' condition='is_not_empty' icon_class='fas fa-phone-volume' badge='Online Order: %%input%%' bg_color='#19be00' txt_color='#ffffff' alignment='block' css_class='gd-ab-bottom-right']
+
+
 [gd_post_images type='image' ajax_load='true' link_to='post' types='logo,post_images']
 [gd_archive_item_section type='close' position='left']
 [gd_archive_item_section type='open' position='right']
@@ -695,7 +701,6 @@ $dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' po
 [gd_post_meta key='post_category' alignment='block' text_alignment='left']
 [gd_post_meta key='store_features' alignment='block' text_alignment='left']
 [gd_post_meta key='special_offers' alignment='block' text_alignment='left']
-[gd_post_badge key='for_online_orders' condition='is_not_empty' icon_class='fas fa-phone-volume' badge='Online Order: %%input%%' bg_color='#19be00' txt_color='#ffffff' alignment='block']
 
 [gd_post_content key='post_content' limit='60']
 [gd_archive_item_section type='close' position='right']";

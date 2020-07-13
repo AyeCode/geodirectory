@@ -1090,7 +1090,7 @@ $dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' po
 [gd_post_meta key='website' alignment='left' text_alignment='left']
 [gd_post_fav show='' alignment='right' list_hide_secondary='2']
 
-[gd_post_meta key="business_hours" alignment="block" text_alignment="left"]
+[gd_post_meta key='business_hours' alignment='block' text_alignment='left']
 
 [gd_post_meta key='post_category' alignment='block' text_alignment='left']
 [gd_post_meta key='post_tags' alignment='block' text_alignment='left']

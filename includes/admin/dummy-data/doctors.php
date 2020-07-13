@@ -15,13 +15,13 @@ $dummy_caticon_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-s
 $dummy_categories  = array();
 
 $dummy_categories['alternative-medicine'] = array(
-	'name'        => 'Alternative Medicine',
+	'name'        => __( 'Alternative Medicine', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/alternative-medicine.png',
 	'font_icon'   => 'fas fa-database',
 	'color'       => '#254e4e',
 );
 $dummy_categories['ayurveda'] = array(
-	'name'        => 'Ayurveda',
+	'name'        => __('Ayurveda', 'geodirectory' ),
 	'parent-name' => 'Alternative Medicine',
 	'icon'        => $dummy_caticon_url . '/ayurveda.png',
 	'font_icon'   => 'fas fa-database',
@@ -29,41 +29,41 @@ $dummy_categories['ayurveda'] = array(
 );
 
 $dummy_categories['allopathy-doctors'] = array(
-	'name'        => 'Allopathy Doctors',
+	'name'        => __( 'Allopathy Doctors', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/Allopathy.png',
 	'font_icon'   => 'fas fa-file-code',
 	'color'       => '#5551b9',
 );
 $dummy_categories['ophthalmology'] = array(
-	'name'        => 'Ophthalmology',
+	'name'        => __( 'Ophthalmology', 'geodirectory' ),
 	'parent-name' => 'Allopathy Doctors',
 	'icon'        => $dummy_caticon_url . '/Ophthalmology.png',
 	'font_icon'   => 'fas fa-cubes',
 	'color'       => '#852d2d',
 );
 $dummy_categories['general-medicine'] = array(
-	'name'        => 'General Medicine',
+	'name'        => __( 'General Medicine', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/general-medecine.png',
 	'font_icon'   => 'fas fa-star',
 	'color'       => '#84612d',
 );
 
 $dummy_categories['oncology'] = array(
-	'name'        => 'Oncology',
+	'name'        => __( 'Oncology', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/Oncology.png',
 	'font_icon'   => 'fas fa-star',
 	'color'       => '#84612d',
 );
 
 $dummy_categories['dermatology'] = array(
-	'name'        => 'Dermatology',
+	'name'        => __( 'Dermatology', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/Dermatology.png',
 	'font_icon'   => 'fas fa-search-plus',
 	'color'       => '#84612d',
 );
 
 $dummy_categories['obstetrics-and-gynecology'] = array(
-	'name'        => 'Obstetrics and Gynecology',
+	'name'        => __( 'Obstetrics and Gynecology', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/Obstetrics.png',
 	'font_icon'   => 'fas fa-search-plus',
 	'color'       => '#84612d',
@@ -124,6 +124,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Bariatric Surgery', 'Oncology' ),
 	"email" => 'edward@edward.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS - MADURAI MEDICAL COLLEGE - 2001
 						MD - PGIMER CHANDIGARH - 2008
 						DM CLINICAL HAEMATOLOGY - CMC, IHTM ,KOLKATA MEDICAL COLLEGE - 2011',
@@ -154,6 +157,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Bariatric Surgery', 'Oncology' ),
 	"email" => 'paddy@paddy.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS - MADURAI MEDICAL COLLEGE - 2001
 						DGO - College Of Physician And Surgery Of England - 2008',
 	"gender" => 1,
@@ -183,6 +189,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Allopathy', 'Gynecology' ),
 	"email" => 'paddy@paddy.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS - London Govt. Hospital - 2016
 	MD - KEMI Hospital London - 2019',
 	"gender" => 0,
@@ -212,6 +221,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Bariatric Surgery', 'Oncology' ),
 	"email" => 'blenkinsop@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS - London Govt. Hospital - 2016
 	MD - KEMI Hospital London - 2019',
 	"gender" => 1,
@@ -242,6 +254,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Psychology', 'General Medicine' ),
 	"email" => 'pamela@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'Certificate Course In Positive Psychology - University Of Penn - 2018
 						DNB Psychiatry - NBE - 2016
 						MD - RGUHS - 2006',
@@ -276,6 +291,9 @@ His philosophy, the CMC motto - "My Work is for a King"',
 	"post_tags" => array( 'Dermatology', 'Blood' ),
 	"email" => 'helsing@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS - Christian Medical College And Hospital, Ludhiana - 2003
 MD - Christian Medical College And Hospital, Ludhiana - 2010
 DM - Christian Medical College, Vellore - 2014',
@@ -307,6 +325,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Family Medicine', 'General Medicine' ),
 	"email" => 'victor@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MD - Dr. D. Y. Patil Homoeopathic Medical College And Research Centre - 2018
 BHMS - Foster Developments Homoeopathic Medical College, Affiliated To Ukaraine University Of Health Sciences - 2012',
 	"gender" => 1,
@@ -336,6 +357,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Family Medicine', 'Gastroenterology', 'Psychology' ),
 	"email" => 'bardamu@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'BHMS - 2009',
 	"gender" => 0,
 	"experience" => 8,
@@ -367,6 +391,9 @@ He Strongly Believes In Evidence Based Practices.',
 	"post_tags" => array( 'Audiology', 'Speech Therapy' ),
 	"email" => 'charles@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'B.Sc. (Hons) Speech and Hearing - 2000',
 	"gender" => 1,
 	"experience" => 6,
@@ -395,6 +422,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Oncologist', 'cancer', 'hormonal treatment' ),
 	"email" => 'timothy@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS, MD (Hons) Oncology - 1990',
 	"gender" => 1,
 	"experience" => 30,
@@ -423,6 +453,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Bariatric Surgery', 'Oncology' ),
 	"email" => 'paige@paige.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS - MADURAI MEDICAL COLLEGE - 2001
 						MD - PGIMER CHANDIGARH - 2008
 						DM CLINICAL HAEMATOLOGY - CMC, IHTM ,KOLKATA MEDICAL COLLEGE - 2011',
@@ -453,7 +486,10 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'hair', 'skin' ),
 	"email" => 'hanni@paddy.com',
 	"website" => 'http://example.com/',
-	"qualification" => 'MBBS - MADURAI MEDICAL COLLEGE - 2001
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
+	"qualification" => 'MBBS - California MEDICAL COLLEGE - 2001
 						DGO - College Of Physician And Surgery Of England - 2008',
 	"gender" => 1,
 	"experience" => 21,
@@ -482,6 +518,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Allopathy', 'Gynecology' ),
 	"email" => 'sandra@paddy.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS - London Govt. Hospital - 2016
 	MD - KEMI Hospital London - 2019',
 	"gender" => 0,
@@ -511,6 +550,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Surgery', 'Gynecology' ),
 	"email" => 'hirsch@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS - London Govt. Hospital - 2016
 	MD - KEMI Hospital London - 2019',
 	"gender" => 0,
@@ -541,6 +583,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Ophthalmology', 'General Medicine' ),
 	"email" => 'martin@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'Certificate Course In Ophthalmology - University Of Penn - 2018
 						DNB Ophthalmology - NBE - 2016
 						MD - RGUHS - 2006',
@@ -571,6 +616,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Ayurveda', 'herbes' ),
 	"email" => 'robin@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS - Christian Medical College And Hospital, Ludhiana - 2003
 MD - Christian Medical College And Hospital, Ludhiana - 2010
 DM - Christian Medical College, Vellore - 2014',
@@ -602,6 +650,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Medicine', 'no-pills', 'clinic' ),
 	"email" => 'miguel@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MD - Dr. D. Y. Patil Homoeopathic Medical College And Research Centre - 2018
 BHMS - Foster Developments Homoeopathic Medical College, Affiliated To Ukaraine University Of Health Sciences - 2012',
 	"gender" => 0,
@@ -631,6 +682,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Medicine', 'Gastroenterology', 'Ayurveda' ),
 	"email" => 'ramon@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'BHMS - 2009',
 	"gender" => 0,
 	"experience" => 3,
@@ -662,6 +716,9 @@ He Strongly Believes In Evidence Based Practices.',
 	"post_tags" => array( 'Dermatology', 'hair', 'shampoo' ),
 	"email" => 'thomas@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'B.Sc. (Hons) Speech and Hearing - 2000',
 	"gender" => 1,
 	"experience" => 13,
@@ -690,6 +747,9 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'Oncology', 'cancer', 'hormonal treatment' ),
 	"email" => 'timothy@example.com',
 	"website" => 'http://example.com/',
+	"phone" => '+01212125781',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"qualification" => 'MBBS, MD (Hons) Oncology - 1990',
 	"gender" => 1,
 	"experience" => 6,
@@ -758,7 +818,9 @@ function geodir_extra_custom_fields_doctors( $fields, $post_type, $package_id ) 
 		'for_admin_use'			=> false,
 		'default_value'			=> '',
 		'option_values' 		=> '',
-		'clabels' 				=> 'Qualification'
+		'clabels' 				=> 'Qualification',
+		'show_in' 				=> '[detail]',
+		'field_icon'			=> 'fas fa-briefcase-medical',
     );
 
     // Gender
@@ -799,6 +861,7 @@ function geodir_extra_custom_fields_doctors( $fields, $post_type, $package_id ) 
 		'css_class'				=> '',
 		'cat_sort'				=> true,
 		'cat_filter'			=> true,
+		'show_in'				=> '[detail]',
 		'show_on_pkg' 			=> $package,
 		'clabels' 				=> 'experience'
     );
@@ -818,6 +881,7 @@ function geodir_extra_custom_fields_doctors( $fields, $post_type, $package_id ) 
 		'is_default' => '0',
 		'show_in' => '[detail]',
 		'show_on_pkg' => $package,
+		'field_icon' => 'fas fa-brain',
 		'clabels' => __('Experience in words', 'geodirectory')
 	);
 
@@ -860,6 +924,7 @@ function geodir_extra_custom_fields_doctors( $fields, $post_type, $package_id ) 
 		'css_class' => '',
 		'cat_sort' => 1,
 		'cat_filter' => 1,
+		'show_in' => '[detail]',
 		'show_on_pkg' => $package,
 		'clabels' => __('Select your known languages', 'geodirectory'),
 	);
@@ -882,10 +947,11 @@ function geodir_extra_custom_fields_doctors( $fields, $post_type, $package_id ) 
 		'required_msg' => __('Select your areas of expertise', 'geodirectory'),
 		'show_on_pkg' => $package,
 		'option_values' => __( 'Oncology, Obstetrics and Gynecology, Pediatrics, Allergy & Immunology, Dermatology, Diagnostic Radiology, Emergency Medicine, Neurology, Ophthalmology, Preventive Medicine, Psychiatry, Urology', 'geodirectory'),
-		'field_icon' => 'fas fa-home',
+		'field_icon' => 'fas fa-hospital-user',
 		'css_class' => '',
 		'cat_sort' => 1,
 		'cat_filter' => 1,
+		'show_in' => '[detail]',
 		'show_on_pkg' => $package,
 		'clabels' => __('Areas of Expertise', 'geodirectory'),
 	);
@@ -905,7 +971,8 @@ function geodir_extra_custom_fields_doctors( $fields, $post_type, $package_id ) 
 		'is_default' => '0',
 		'show_in' => '[detail]',
 		'show_on_pkg' => $package,
-		'clabels' => __('Areas of special interest and expertise', 'geodirectory')
+		'clabels' => __('Areas of special interest and expertise', 'geodirectory'),
+		'field_icon' => 'fas fa-stethoscope',
 	);
 							  
 	return $fields;
@@ -916,12 +983,13 @@ $dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' po
 [gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-top-left-angle gd-badge-shadow']
 [gd_post_badge key='video' condition='is_not_empty' icon_class='fas fa-video' badge='Video' link='%%input%%' bg_color='#0073aa' txt_color='#ffffff' list_hide_secondary='2' css_class='gd-badge-shadow gd-ab-top-right gd-lity']
 
+[gd_post_badge key='for_online' condition='is_not_empty' icon_class='fas fa-phone-volume' badge='Online Consultation: %%input%%' bg_color='#19be00' txt_color='#ffffff' alignment='block' css_class='gd-ab-bottom-right']
+
 [gd_post_images type='image' ajax_load='true' link_to='post' types='logo,post_images']
 [gd_archive_item_section type='close' position='left']
 [gd_archive_item_section type='open' position='right']
 [gd_post_title tag='h2']
 
-[gd_post_badge key='for_online' condition='is_not_empty' icon_class='fas fa-phone-volume' badge='Online Consultation: %%input%%' bg_color='#19be00' txt_color='#ffffff' alignment='block']
 [gd_post_badge key='experience' condition='is_not_empty' icon_class='fas fa-user-md' badge='Experience: %%input%% years' alignment='block']
 
 [gd_author_actions author_page_only='1']

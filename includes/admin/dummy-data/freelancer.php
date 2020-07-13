@@ -15,31 +15,31 @@ $dummy_caticon_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-s
 $dummy_categories  = array();
 
 $dummy_categories['back-end'] = array(
-	'name'        => 'Back End',
+	'name'        => __( 'Back End', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/back-end.png',
 	'font_icon'   => 'fas fa-database',
 	'color'       => '#254e4e',
 );
 $dummy_categories['front-end'] = array(
-	'name'        => 'Front End',
+	'name'        => __( 'Front End', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/front-end.png',
 	'font_icon'   => 'fas fa-file-code',
 	'color'       => '#5551b9',
 );
 $dummy_categories['full-stack'] = array(
-	'name'        => 'Full Stack',
+	'name'        => __( 'Full Stack', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/full-stack.png',
 	'font_icon'   => 'fas fa-cubes',
 	'color'       => '#852d2d',
 );
 $dummy_categories['implementer'] = array(
-	'name'        => 'Implementer',
+	'name'        => __( 'Implementer', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/implementer.png',
 	'font_icon'   => 'fas fa-star',
 	'color'       => '#84612d',
 );
 $dummy_categories['seo'] = array(
-	'name'        => 'SEO',
+	'name'        => __( 'SEO', 'geodirectory' ),
 	'icon'        => $dummy_caticon_url . '/seo.png',
 	'font_icon'   => 'fas fa-search-plus',
 	'color'       => '#84612d',
@@ -115,6 +115,8 @@ We can help you design, implement and customize every aspect of your directory. 
 	"post_tags" => array( 'PHP', 'JS', 'SQL', 'CSS', 'HTML' ),
 	"email" => 'paddy@paddy.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'PHP' ),
@@ -148,6 +150,8 @@ I also provide amazing custom template layouts for GDV2 with builders to really 
 	"post_tags" => array( 'CSS', 'SCSS', 'NODEJS' ),
 	"email" => 'mario@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '30',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'Installing GD' ),
@@ -183,6 +187,8 @@ I’m friendly, professional, and very passionate about what I do. My promise to
 	"post_tags" => array( 'SEO', 'Page Index' ),
 	"email" => 'se0@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'PHP', 'NodeJS' ),
@@ -214,6 +220,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'mySQL', 'Linux Server' ),
 	"email" => 'bob@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'PHP', 'NodeJS' ),
@@ -247,6 +255,8 @@ Importantly, I Enjoy my job. Just give me a chance to work with you and I will a
 	"post_tags" => array( 'mySQL', 'Linux Server', 'implementer' ),
 	"email" => 'gail@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '14',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'SEO', 'SQL' ),
@@ -278,6 +288,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'CSS', 'saas', 'scss' ),
 	"email" => 'james@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '50',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'SASS', 'CSS' ),
@@ -309,6 +321,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'SQL', 'saas', 'CSS' ),
 	"email" => 'robert@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '30',
 	"for_hire" => 0,
 	"area_of_expertise" => array( 'SQL', 'CSS' ),
@@ -340,6 +354,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'SQL', 'SEO' ),
 	"email" => 'donny@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'SQL', 'CSS' ),
@@ -371,6 +387,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'css', 'SEO', 'sass', 'html' ),
 	"email" => 'cat@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '90',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'SEO', 'CSS' ),
@@ -402,6 +420,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'css', 'SEO', 'sass', 'html' ),
 	"email" => 'herbert@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '65',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'GD', 'CSS' ),
@@ -435,6 +455,8 @@ We can help you design, implement and customize every aspect of your directory. 
 	"post_tags" => array( 'mySQL', 'Linux Server' ),
 	"email" => 'percy@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '78',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'PHP' ),
@@ -466,6 +488,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'CSS', 'SCSS', 'NODEJS' ),
 	"email" => 'marg@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '48',
 	"for_hire" => 0,
 	"area_of_expertise" => array( 'CSS' ),
@@ -497,6 +521,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'SEO', 'Page Index' ),
 	"email" => 'se0@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '76',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'PHP', 'NodeJS' ),
@@ -528,6 +554,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'mySQL', 'Linux Server' ),
 	"email" => 'jerry@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '110',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'PHP', 'NodeJS' ),
@@ -559,6 +587,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'mySQL', 'Linux Server', 'implementer' ),
 	"email" => 'green@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '150',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'SEO', 'SQL' ),
@@ -590,6 +620,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'CSS', 'saas', 'scss' ),
 	"email" => 'power@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '50',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'SASS', 'CSS' ),
@@ -621,6 +653,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'SQL', 'saas', 'CSS' ),
 	"email" => 'mike@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '30',
 	"for_hire" => 0,
 	"area_of_expertise" => array( 'SQL', 'CSS' ),
@@ -652,6 +686,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'SQL', 'SEO' ),
 	"email" => 'rosa@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '20',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'SQL', 'CSS' ),
@@ -683,6 +719,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'css', 'SEO', 'sass', 'html' ),
 	"email" => 'lee@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '90',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'SEO', 'CSS' ),
@@ -714,6 +752,8 @@ $dummy_posts[] = array(
 	"post_tags" => array( 'css', 'SEO', 'sass', 'html' ),
 	"email" => 'malott@example.com',
 	"website" => 'http://example.com/',
+	"twitter" => 'https://twitter.com/',
+	"facebook" => 'https://facebook.com/',
 	"hourly_price" => '65',
 	"for_hire" => 1,
 	"area_of_expertise" => array( 'GD', 'CSS' ),
@@ -806,7 +846,8 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 			'currency_symbol_placement' => 'left'
 		),
 		'show_on_pkg' 			=> $package,
-		'clabels' 				=> 'hourly_price'
+		'clabels' 				=> 'hourly_price',
+		'show_in' => '[detail]',
     );
 
     // For Hire
@@ -823,7 +864,8 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 		'option_values' => 'Yes/1,No/0',
 		'clabels' => __('For Hire?', 'geodirectory'), 
 		'is_active' => '1',
-		'field_icon' => 'fas fa-sitemap'
+		'field_icon' => 'fas fa-sitemap',
+		'show_in' => '[detail]',
 	);
 
 	
@@ -849,7 +891,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 		'css_class' => '',
 		'cat_sort' => 1,
 		'cat_filter' => 1,
-		'show_on_pkg' => $package,
+		'show_in' => '[detail]',
 		'clabels' => __('Areas of Expertise', 'geodirectory'),
 	);
 
@@ -867,7 +909,8 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 				'is_default' => '0',
 				'show_in' => '[detail]',
 				'show_on_pkg' => $package,
-				'clabels' => __('Portfolio link 1', 'geodirectory')
+				'clabels' => __('Portfolio link 1', 'geodirectory'),
+				'field_icon' => 'fas fa-link',
 			);
 
 	$fields[] = array(
@@ -884,6 +927,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 			'is_default' => '0',
 			'show_in' => '[detail]',
 			'show_on_pkg' => $package,
+			'field_icon' => 'fas fa-link',
 			'clabels' => __('Portfolio link 2', 'geodirectory')
 		);
 	
@@ -901,6 +945,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'is_default' => '0',
 					'show_in' => '[detail]',
 					'show_on_pkg' => $package,
+					'field_icon' => 'fas fa-link',
 					'clabels' => __('Portfolio link 3', 'geodirectory')
 				);
 		$fields[] = array(
@@ -917,6 +962,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'is_default' => '0',
 					'show_in' => '[detail]',
 					'show_on_pkg' => $package,
+					'field_icon' => 'fas fa-link',
 					'clabels' => __('Portfolio link 4', 'geodirectory')
 				);
 		$fields[] = array(
@@ -933,6 +979,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'is_default' => '0',
 					'show_in' => '[detail]',
 					'show_on_pkg' => $package,
+					'field_icon' => 'fas fa-link',
 					'clabels' => __('Portfolio link 5', 'geodirectory')
 				);
 		$fields[] = array(
@@ -949,6 +996,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'is_default' => '0',
 					'show_in' => '[detail]',
 					'show_on_pkg' => $package,
+					'field_icon' => 'fas fa-link',
 					'clabels' => __('Portfolio link 6', 'geodirectory')
 				);
 		$fields[] = array(
@@ -965,6 +1013,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'is_default' => '0',
 					'show_in' => '[detail]',
 					'show_on_pkg' => $package,
+					'field_icon' => 'fas fa-link',
 					'clabels' => __('Portfolio link 7', 'geodirectory')
 				);
 		$fields[] = array(
@@ -981,6 +1030,7 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 					'is_default' => '0',
 					'show_in' => '[detail]',
 					'show_on_pkg' => $package,
+					'field_icon' => 'fas fa-link',
 					'clabels' => __('Portfolio link 8', 'geodirectory')
 				);
 						  
@@ -992,13 +1042,14 @@ function geodir_extra_custom_fields_freelancer( $fields, $post_type, $package_id
 $dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' position='left']
 [gd_post_badge key='featured' condition='is_not_empty' badge='FEATURED' bg_color='#fd4700' txt_color='#ffffff' css_class='gd-ab-top-left-angle gd-badge-shadow']
 [gd_post_badge key='video' condition='is_not_empty' icon_class='fas fa-video' badge='Video' link='%%input%%' bg_color='#0073aa' txt_color='#ffffff' list_hide_secondary='2' css_class='gd-badge-shadow gd-ab-top-right gd-lity']
+[gd_post_badge key='for_hire' condition='is_not_empty' icon_class='fas fa-phone-volume' badge='For hire' bg_color='#19be00' txt_color='#ffffff' alignment='block' css_class='gd-ab-bottom-right']
 
 [gd_post_images type='image' ajax_load='true' link_to='post' types='logo,post_images']
 [gd_archive_item_section type='close' position='left']
 [gd_archive_item_section type='open' position='right']
 [gd_post_title tag='h2']
 
-[gd_post_badge key='for_hire' condition='is_not_empty' icon_class='fas fa-user-check' badge='For hire: %%input%%' bg_color='#19be00' txt_color='#ffffff' alignment='left']
+[gd_post_meta key='website' alignment='left' text_alignment='left']
 [gd_post_fav show='' alignment='right' list_hide_secondary='2']
 [gd_post_content key='post_content' limit='3000']
 
@@ -1007,7 +1058,6 @@ $dummy_page_templates['archive_item'] = "[gd_archive_item_section type='open' po
 
 [gd_author_actions author_page_only='1']
 
-[gd_post_meta key='website' alignment='block' text_alignment='left']
 [gd_post_meta key='post_category' alignment='block' text_alignment='left']
 [gd_post_meta key='area_of_expertise' alignment='block' text_alignment='left']
 
