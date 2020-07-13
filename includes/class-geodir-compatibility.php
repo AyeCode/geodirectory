@@ -437,6 +437,14 @@ class GeoDir_Compatibility {
 	 */
 	public static function buddypress_notices() {
 		if ( is_admin() ) {
+			// In BuddyPress v6.0.0 no /search/ conflict detected.
+			if ( version_compare( bp_get_version(), '6.0.0', '>=' ) ) {
+				// Remove existing notice.
+				if ( GeoDir_Admin_Notices::has_notice( 'buddypress_search_slug_error' ) ) {
+					GeoDir_Admin_Notices::remove_notice( 'buddypress_search_slug_error' );
+				} 
+				return;
+			}
 
 			// maybe add search slug warning.
 			$search_page_id = geodir_search_page_id();
