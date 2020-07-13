@@ -178,6 +178,22 @@ class GeoDir_Compatibility {
 				add_filter( 'geodir_after_get_template_part',array( __CLASS__, 'avada_set_temp_globals' ), 10);
 			}
 		}
+
+		if ( wp_doing_ajax() ) {
+			add_action( 'admin_init', array( __CLASS__, 'ajax_admin_init' ), 5 );
+		}
+	}
+
+	/**
+	 * Setup actions on admin AJAX load.
+	 *
+	 * @since 2.0.0.97
+	 */
+	public static function ajax_admin_init() {
+		// WPBakery Page Builder render vc tags in AJAX content.
+		if ( class_exists( 'WPBMap' ) && ! empty( $_REQUEST['action'] ) && strpos( $_REQUEST['action'], 'geodir_' ) === 0 ) {
+			WPBMap::addAllMappedShortcodes();
+		}
 	}
 
 	/**

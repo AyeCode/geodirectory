@@ -5,6 +5,7 @@
 * Review reply/cancel reply links are not working on touch screen devices - FIXED
 * Some themes don't load comment reply JS on GD single page - FIXED
 * Featured image field not updated on delete all images - FIXED
+* GD Listings pagination don't renders WPBakery Page Builder shortcodes - FIXED
 
 = 2.0.0.96 =
 * Option added to make zip/post code as a required field - FIXED

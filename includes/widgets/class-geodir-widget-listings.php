@@ -468,7 +468,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          *
          * @param string $instance ['related_to'] Filter by related to categories/tags.
          */
-        $related_to = empty( $instance['related_to'] ) ? '' : apply_filters( 'widget_related_to', $instance['related_to'], $instance, $this->id_base );
+        $related_to = empty( $instance['related_to'] ) ? '' : apply_filters( 'widget_related_to', ( geodir_is_page( 'single' ) ? $instance['related_to'] : '' ), $instance, $this->id_base );
 		/**
          * Filter the widget tags param.
          *
