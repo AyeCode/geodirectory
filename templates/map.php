@@ -144,7 +144,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             // get the proper response as somtimes the GPS results will return names in English when they should not.
             responses.forEach(function(response) {
                 if(response.types[0] == "locality"){
-
                     for (var i = 0; i < response.address_components.length; i++) {
                         var addr = response.address_components[i];
                         if (addr.types[0] == 'administrative_area_level_1') {
@@ -175,9 +174,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 }
             });
 
-
-
-            
             for (var i = 0; i < responses[0].address_components.length; i++) {
                 var addr = responses[0].address_components[i];
                 if (addr.types[0] == 'street_number') {
@@ -302,10 +298,8 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 rr = country.short_name;
             }
 
-
             //$country_arr = ["US", "CA", "IN","DE","NL"];
             // fix for regions in GB
-
             $country_arr = <?php
             /**
              * Filter the regions array that uses administrative_area_level_2 instead of administrative_area_level_1.
@@ -334,6 +328,11 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 getState = "Isle of Man";
             }else if(getCountryISO=='SG'){
                 getState = "Singapore";
+            }
+
+            /* Fix region name for ‎Belgium */
+            if (getState == 'Brussels Hoofdstedelijk Gewest') {
+                getState = 'Brussels';
             }
 
             //getCity
@@ -371,7 +370,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     getCity = administrative_area_level_1.long_name;
                 }
             }else if(rr=="FR") {
-
                 if (administrative_area_level_2.long_name=='Paris') {
                     getCity = administrative_area_level_2.long_name;
                 }else{
@@ -412,6 +410,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if (postal_code.long_name) {
                 getZip = postal_code.long_name;
             }
+            console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
             <?php 
             /**
              * Fires to add javascript variable to use in google map.
@@ -716,14 +715,14 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             var getState = response.state;
             var getCountry = response.country;
             getCountryISO = response.country_code;
-            
+            console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
             if (updateMap && response.lat && response.lon) {
                 var newLatLng = new L.latLng(response.lat, response.lon);
                 baseMarker.setLatLng(newLatLng);
                 centerMap(newLatLng);
                 updateMarkerPositionOSM(baseMarker.getLatLng());
             }
-            <?php 
+            <?php
             /**
              * Fires to add javascript variable to use in google map.
              *
