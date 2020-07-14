@@ -77,7 +77,24 @@ jQuery(document).ready(function($) {
 
             uploader.init();
 
+            /* Fires when a file is to be uploaded by the runtime. */
+            uploader.bind('UploadFile', function(up, file) {
+                if (imgId == 'post_images') {
+                    window.geodirUploading = true;
+                }
+            });
+
+            /* Fires when all files in a queue are uploaded. */
+            uploader.bind('UploadComplete', function(up, files) {
+                if (imgId == 'post_images') {
+                    window.geodirUploading = false;
+                }
+            });
+
             uploader.bind('Error', function(up, files) {
+                if (imgId == 'post_images') {
+                    window.geodirUploading = false;
+                }
                 if (files.code == -600) {
                     jQuery('#' + imgId + 'upload-error').addClass('upload-error');
 
