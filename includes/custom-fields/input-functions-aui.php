@@ -52,6 +52,63 @@ function geodir_cfi_fieldset($html,$cf){
 add_filter('geodir_custom_field_input_fieldset','geodir_cfi_fieldset',10,2);
 
 
+/**
+ * Many input types share the same output function.
+ *
+ * @param $cf
+ *
+ * @return string
+ */
+function geodir_cfi_input_output($cf){
+    $extra_attributes = array();
+    $title = '';
+    $value = geodir_get_cf_value($cf);
+
+    $type = $cf['type'];
+
+    // blank value if default set for email. @todo, not sure we need this?
+    if($type == 'email' && $value == $cf['default']){
+        $value = '';
+    }
+
+    //number and float validation $validation_pattern
+    if(isset($cf['data_type']) && $cf['data_type']=='INT'){$type = 'number'; $extra_attributes['lang'] ='EN';}
+    elseif(isset($cf['data_type']) && $cf['data_type']=='FLOAT'){$type = 'float'; $extra_attributes['lang'] ='EN';}
+
+    //validation
+    if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
+        $extra_attributes['pattern'] = $cf['validation_pattern'];
+    }
+
+    // validation message
+    if(isset($cf['validation_msg']) && $cf['validation_msg']){
+        $title = $cf['validation_msg'];
+    }
+
+    // field type (used for validation)
+    $extra_attributes['field_type'] = $cf['type'];
+
+    // required
+    $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
+
+    return aui()->input(
+        array(
+            'id'                => $cf['name'],
+            'name'              => $cf['name'],
+            'required'          => !empty($cf['is_required']) ? true : false,
+            'label'              => __($cf['frontend_title'], 'geodirectory').$required,
+            'label_show'       => true,
+            'label_type'       => 'horizontal',
+            'type'              => $type,
+            'title'             =>  $title,
+            'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+            'class'             => '',
+            'value'             => $value, // esc_attr(stripslashes($value))
+            'help_text'         => __($cf['desc'], 'geodirectory'),
+            'extra_attributes'  => $extra_attributes
+        )
+    );
+}
 
 /**
  * Get the html input for the custom field: text
@@ -84,46 +141,8 @@ function geodir_cfi_text($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
+        $html = geodir_cfi_input_output($cf);
 
-        $value = geodir_get_cf_value($cf);
-        $type = $cf['type'];
-        $fix_html5_decimals = '';
-        //number and float validation $validation_pattern
-        if(isset($cf['data_type']) && $cf['data_type']=='INT'){$type = 'number'; $fix_html5_decimals =' lang="EN" ';}
-        elseif(isset($cf['data_type']) && $cf['data_type']=='FLOAT'){$type = 'float';$fix_html5_decimals =' lang="EN" ';}
-
-        //validation
-        if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
-            $validation = ' pattern="'.$cf['validation_pattern'].'" ';
-        }else{$validation='';}
-
-        // validation message
-        if(isset($cf['validation_msg']) && $cf['validation_msg']){
-            $validation_msg = 'title="'.$cf['validation_msg'].'"';
-        }else{$validation_msg='';}
-        ?>
-
-        <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
-            <input field_type="<?php echo $type;?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
-                   <?php echo $fix_html5_decimals;
-                   if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; }
-                   ?>
-                   value="<?php echo esc_attr(stripslashes($value));?>" type="<?php echo $type;?>" class="geodir_textfield" <?php echo $validation;echo $validation_msg;?> />
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
-
-        <?php
-        $html = ob_get_clean();
     }
 
     return $html;
@@ -159,47 +178,13 @@ function geodir_cfi_email($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
-        $value = geodir_get_cf_value($cf);
+        $html = geodir_cfi_input_output($cf);
 
-        if ($value == $cf['default']) {
-            $value = '';
-        }
-
-        //validation
-        if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
-            $validation = ' pattern="'.$cf['validation_pattern'].'" ';
-        }else{$validation='';}
-
-        // validation message
-        if(isset($cf['validation_msg']) && $cf['validation_msg']){
-            $validation_msg = 'title="'.$cf['validation_msg'].'"';
-        }else{$validation_msg='';}
-        ?>
-
-        <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
-            <input field_type="<?php echo $cf['type'];?>" name="<?php  echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
-                   <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
-                   value="<?php echo esc_attr(stripslashes($value));?>" type="email" class="geodir_textfield" <?php echo $validation;echo $validation_msg;?> />
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
-
-        <?php
-        $html = ob_get_clean();
     }
 
     return $html;
 }
-add_filter('geodir_custom_field_input_email','geodir_cfi_email',10,2);
+add_filter('geodir_custom_field_input_email','geodir_cfi_text',10,2);
 
 
 
@@ -231,42 +216,8 @@ function geodir_cfi_phone($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
-        $value = geodir_get_cf_value($cf);
+        $html = geodir_cfi_input_output($cf);
 
-        if ($value == $cf['default']) {
-            $value = '';
-        }
-
-        //validation
-        if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
-            $validation = ' pattern="'.$cf['validation_pattern'].'" ';
-        }else{$validation='';}
-
-        // validation message
-        if(isset($cf['validation_msg']) && $cf['validation_msg']){
-            $validation_msg = 'title="'.$cf['validation_msg'].'"';
-        }else{$validation_msg='';}
-        ?>
-
-        <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
-            <input field_type="<?php echo $cf['type'];?>" name="<?php  echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
-                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
-                   value="<?php echo esc_attr(stripslashes($value));?>" type="tel" class="geodir_textfield" <?php echo $validation;echo $validation_msg;?> />
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
-
-        <?php
-        $html = ob_get_clean();
     }
 
     return $html;
@@ -303,45 +254,7 @@ function geodir_cfi_url($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
-        $value = geodir_get_cf_value($cf);
-
-        if ($value == $cf['default']) {
-            $value = '';
-        }
-        //validation
-        if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
-            $validation = ' pattern="'.$cf['validation_pattern'].'" ';
-        }else{$validation='';}
-
-        // validation message
-        if(isset($cf['validation_msg']) && $cf['validation_msg']){
-            $validation_msg = __( $cf['validation_msg'], 'geodirectory' );
-        }else{$validation_msg = __('Please enter a valid URL including http://', 'geodirectory');}
-        ?>
-
-        <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
-            <input field_type="<?php echo $cf['type'];?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
-                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
-                   value="<?php echo esc_attr(stripslashes($value));?>" type="url" class="geodir_textfield"
-                   oninvalid="setCustomValidity('<?php echo esc_attr($validation_msg); ?>')"
-                   onchange="try{setCustomValidity('')}catch(e){}"
-                <?php echo $validation;?>
-            />
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
-
-        <?php
-        $html = ob_get_clean();
+        $html = geodir_cfi_input_output($cf);
     }
 
     return $html;
@@ -376,40 +289,30 @@ function geodir_cfi_radio($html,$cf){
 
     // If no html then we run the standard output.
     if(empty($html)) {
-        ob_start(); // Start  buffering;
-        $value = geodir_get_cf_value($cf);
 
-        ?>
-        <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label>
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
-            <?php if ($cf['option_values']) {
-                $option_values = geodir_string_values_to_options($cf['option_values'], true);
-
-                if (!empty($option_values)) {
-                    foreach ($option_values as $option_value) {
-                        if (empty($option_value['optgroup'])) {
-                            ?>
-                            <span class="gd-radios" role="radio"><input name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>" <?php checked(stripslashes($value), $option_value['value']);?> value="<?php echo esc_attr($option_value['value']); ?>" class="gd-checkbox" field_type="<?php echo $cf['type'];?>" type="radio" aria-label="<?php esc_attr( $option_value['label'] ); ?>" /><?php echo $option_value['label']; ?></span>
-                            <?php
-                        }
-                    }
-                }
+        $option_values_deep = geodir_string_to_options($cf['option_values'],true);
+        $option_values = array();
+        if(!empty($option_values_deep)){
+            foreach($option_values_deep as $option){
+                $option_values[$option['value']] = $option['label'];
             }
-            ?>
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
+        }
 
-        <?php
-        $html = ob_get_clean();
-            
+        $value = geodir_get_cf_value($cf);
+        $html = aui()->radio(
+            array(
+                'id'                => $cf['name'],
+                'name'              => $cf['name'],
+                'type'              => "radio",
+                'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
+                'label'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
+                'label_type'       => 'horizontal',
+                'class'             => '',
+                'value'             => $value,
+                'options'           => $option_values
+            )
+        );
+
     }
 
 
@@ -447,47 +350,63 @@ function geodir_cfi_checkbox($html,$cf){
     }
 
     // If no html then we run the standard output.
-    if(empty($html)) {
-
-        ob_start(); // Start  buffering;
-        $value = geodir_get_cf_value($cf);
-
-        if ( empty( $value ) && $cf['default']) {
+    if ( empty( $html ) ) {
+        $title = '';
+        $value = geodir_get_cf_value( $cf );
+        if ( empty( $value ) && $cf['default'] ) {
             $value = '1';
         }
-        ?>
+        $checked          = $value == '1' ? true : false;
+        $extra_attributes = array();
 
-        <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
-            <?php if ($value != '1') {
-                $value = '0';
-            }?>
-            <input type="hidden" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>" value="<?php echo esc_attr($value);?>"/>
-            <input  <?php if ($value == '1') {
-                echo 'checked="checked"';
-            }?>  value="1" class="gd-checkbox" field_type="<?php echo $cf['type'];?>" type="checkbox"
-                 onchange="if(this.checked){jQuery('#<?php echo $cf['name'];?>').val('1');} else{ jQuery('#<?php echo $cf['name'];?>').val('0');}"/>
-            <?php
-            if(isset($cf['field_type_key']) && $cf['field_type_key']=='terms_conditions'){
-                $tc = geodir_terms_and_conditions_page_id();
-                $tc_link = get_permalink($tc);
-                echo "<a href='$tc_link' target='_blank'>".__($cf['desc'], 'geodirectory')." <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
-            }else{
-                _e($cf['desc'], 'geodirectory');
-            }
-            ?>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
 
-        <?php
-        $html = ob_get_clean();
+        //validation
+        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+            $extra_attributes['pattern'] = $cf['validation_pattern'];
+        }
+
+        // validation message
+        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
+            $title = $cf['validation_msg'];
+        }
+
+        // field type (used for validation)
+        $extra_attributes['field_type'] = $cf['type'];
+
+
+        // required
+        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+
+        //onchange
+        $extra_attributes['onchange'] = "if(this.checked){jQuery('#checkbox_" . $cf['name'] . "').val('1');} else{ jQuery('#checkbox_" . $cf['name'] . "').val('0');}";
+
+        // help text
+        $help_text = __( $cf['desc'], 'geodirectory' );
+
+        if ( isset( $cf['field_type_key'] ) && $cf['field_type_key'] == 'terms_conditions' ) {
+            $tc        = geodir_terms_and_conditions_page_id();
+            $tc_link   = get_permalink( $tc );
+            $help_text = "<a href='$tc_link' target='_blank'>" . __( $cf['desc'], 'geodirectory' ) . " <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
+        }
+
+        $html = '<input type="hidden" name="' . $cf['name'] . '" id="checkbox_' . $cf['name'] . '" value="' . esc_attr( $value ) . '"/>';
+        $html .= aui()->input(
+            array(
+                'id'               => $cf['name'],
+                'name'             => $cf['name'],
+                'type'             => "checkbox",
+                'value'            => $value,
+                'title'            => $title,
+                'label'            => __( $cf['frontend_title'], 'geodirectory' ) . $required,
+                'label_show'       => true,
+                'required'          => !empty($cf['is_required']) ? true : false,
+                'label_type'       => 'horizontal',
+                'checked'          => $checked,
+                'help_text'        => $help_text,
+                'extra_attributes' => $extra_attributes,
+            )
+        );
+
     }
 
     return $html;
@@ -526,48 +445,56 @@ function geodir_cfi_textarea($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
+        $title = '';
+        $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
-
         $extra_fields = maybe_unserialize($cf['extra_fields']);
-		$html_editor = ! empty( $extra_fields['advanced_editor'] );
-        ?>
+        $html_editor = ! empty( $extra_fields['advanced_editor'] );
 
-        <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label><?php
+        //validation
+        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+            $extra_attributes['pattern'] = $cf['validation_pattern'];
+        }
 
+        // validation message
+        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
+            $title = $cf['validation_msg'];
+        }
 
-            if ( apply_filters( 'geodir_custom_field_allow_html_editor', $html_editor, $cf ) ) {
+        // wysiwyg
+        $wysiwyg = apply_filters( 'geodir_custom_field_allow_html_editor', $html_editor, $cf );
 
-                $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);?>
+        // field type (used for validation)
+        $extra_attributes['field_type'] =  $wysiwyg ? 'editor' :  $cf['type'];
 
-            <div class="editor" field_id="<?php echo $cf['name'];?>" field_type="editor">
-                <?php wp_editor(stripslashes($value), $cf['name'], $editor_settings); ?>
-                </div><?php
+        // required
+        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
-            } else {
-				$attributes = apply_filters( 'geodir_cfi_textarea_attributes', array(), $cf );
-				$attributes = is_array( $attributes ) && ! empty( $attributes ) ? implode( ' ', $attributes ) : ''; 
-                ?><textarea field_type="<?php echo $cf['type'];?>" class="geodir_textarea" name="<?php echo $cf['name'];?>"
-                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
-                            id="<?php echo $cf['name'];?>" <?php echo $attributes; ?>><?php echo stripslashes($value);?></textarea><?php
-
-            }?>
+        // help text
+        $help_text = __( $cf['desc'], 'geodirectory' );
 
 
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
+        $html = aui()->textarea(array(
+            'name'       => $cf['name'],
+            'class'      => '',
+            'id'         => $cf['name'],
+            'placeholder'=> esc_html__( $cf['placeholder_value'], 'geodirectory'),
+            'title'      => $title,
+            'value'      => stripslashes($value),
+            'label_show'       => true,
+            'label_type'       => 'horizontal',
+            'required'   => !empty($cf['is_required']) ? true : false,
+            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
+            'no_wrap'    => false,
+            'rows'      => 8,
+            'wysiwyg'   => $wysiwyg ? array('quicktags' => true) : false,
+            'help_text'        => $help_text,
+            'extra_attributes' => $extra_attributes,
+        ));
 
-        <?php
-        $html = ob_get_clean();
+
     }
 
     return $html;
@@ -603,56 +530,56 @@ function geodir_cfi_select($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
+        $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
-		$frontend_title = __($cf['frontend_title'], 'geodirectory');
-		$placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : '';
-        ?>
-        <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
-            <?php
-            $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
-            $select_options = '';
-            if (!empty($option_values_arr)) {
-                foreach ($option_values_arr as $key => $option_row) {
-					if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
-                        $option_label = isset($option_row['label']) ? $option_row['label'] : '';
+        $title = '';
+        //validation
+        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+            $extra_attributes['pattern'] = $cf['validation_pattern'];
+        }
 
-                        $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
-                    } else {
-                        $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-                        $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                        $selected = selected($option_value,stripslashes($value), false);
+        // validation message
+        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
+            $title = $cf['validation_msg'];
+        }
 
-                        $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
-                    }
+        // required
+        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
-					if ( $key == 0 && empty( $option_row['optgroup'] ) && ! empty( $option_label ) && isset( $option_row['value'] ) && $option_row['value'] === '' ) {
-						$placeholder = $option_label;
-					}
-                }
-            }
+        // help text
+        $help_text = __( $cf['desc'], 'geodirectory' );
 
-			if ( empty( $placeholder ) ) {
-				$placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), $frontend_title );
-			}
-            ?>
-            <select field_type="<?php echo $cf['type'];?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"
-                    class="geodir_textfield textfield_x geodir-select"
-                    data-placeholder="<?php echo esc_attr( $placeholder ); ?>"
-                    option-ajaxchosen="false" data-allow_clear="true"><?php echo $select_options;?></select>
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
+        // placeholder
+        $placeholder = esc_attr__( $cf['placeholder_value'], 'geodirectory' );
+        if ( empty( $placeholder ) ) {
+            $placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), __($cf['frontend_title'], 'geodirectory'));
+        }
 
-        <?php
-        $html = ob_get_clean();
+        //extra
+        $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
+        $extra_attributes['option-ajaxchosen'] = 'false';
+        $extra_attributes['data-allow_clear'] = 'true';
+
+
+        $html .= aui()->select( array(
+            'id'               => $cf['name'],
+            'name'               => $cf['name'],
+            'title'             => $title,
+            'placeholder'      => $placeholder,
+            'value'            => $value,
+            'required'   => !empty($cf['is_required']) ? true : false,
+            'label_show'       => true,
+            'label_type'       => 'horizontal',
+            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
+            'help_text'        => $help_text,
+            'extra_attributes' => $extra_attributes,
+            'options'          => geodir_string_values_to_options($cf['option_values'], true),
+            'select2'       => true,
+
+        ) );
+
     }
 
     return $html;
@@ -688,94 +615,56 @@ function geodir_cfi_multiselect($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
+        $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
+        $title = '';
+        //validation
+        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+            $extra_attributes['pattern'] = $cf['validation_pattern'];
+        }
 
-        $frontend_title = __( $cf['frontend_title'], 'geodirectory' );
-        $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), $frontend_title );
-        $extra_fields = !empty($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : NULL;
-        $multi_display = !empty($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
-        ?>
-        <div id="<?php echo $cf['name']; ?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>'; ?>
-            </label>
-            <input type="hidden" name="<?php echo $cf['name']; ?>" value=""/>
-            <?php if ($multi_display == 'select') { ?>
-            <div class="geodir_multiselect_list">
-                <select field_type="<?php echo $cf['type']; ?>" name="<?php echo $cf['name']; ?>[]" id="<?php echo $cf['name']; ?>"
-                        multiple="multiple" class="geodir_textfield textfield_x geodir-select"
-                        data-placeholder="<?php echo esc_attr( $placeholder ); ?>"
-                        option-ajaxchosen="false" data-allow_clear="true">
-                    <?php
-                    } else {
-                        echo '<ul class="gd_multi_choice gd-ios-scrollbars">';
-                    }
+        // validation message
+        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
+            $title = $cf['validation_msg'];
+        }
 
-                    $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
-                    $select_options = '';
-                    if (!empty($option_values_arr)) {
-                        foreach ($option_values_arr as $option_row) {
-                            if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
-                                $option_label = isset($option_row['label']) ? $option_row['label'] : '';
+        // required
+        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
-                                if ($multi_display == 'select') {
-                                    $select_options .= $option_row['optgroup'] == 'start' ? '<optgroup label="' . esc_attr($option_label) . '">' : '</optgroup>';
-                                } else {
-                                    $select_options .= $option_row['optgroup'] == 'start' ? '<li>' . $option_label . '</li>' : '';
-                                }
-                            } else {
-                                if (!is_array($value) && $value != '') {
-                                    $value = trim($value);
-                                }
-                                
-                                $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-                                $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                                $selected = $option_value == $value ? 'selected="selected"' : '';
-                                $selected = '';
-                                $checked = '';
+        // help text
+        $help_text = __( $cf['desc'], 'geodirectory' );
 
-                                if ((!is_array($value) && trim($value) != '') || (is_array($value) && !empty($value))) {
-                                    if (!is_array($value)) {
-                                        $value_array = explode(',', $value);
-                                    } else {
-                                        $value_array = $value;
-                                    }
-                                    
-                                    $value_array = stripslashes_deep($value_array);
+        // placeholder
+        $placeholder = esc_attr__( $cf['placeholder_value'], 'geodirectory' );
+        if ( empty( $placeholder ) ) {
+            $placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), __($cf['frontend_title'], 'geodirectory'));
+        }
 
-                                    if (is_array($value_array)) {
-                                        $value_array = array_map('trim', $value_array);
-                                        
-                                        if (in_array($option_value, $value_array)) {
-                                            $selected = 'selected="selected"';
-                                            $checked = 'checked="checked"';
-                                        }
-                                    }
-                                }
+        //extra
+        $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
+        $extra_attributes['option-ajaxchosen'] = 'false';
+        $extra_attributes['data-allow_clear'] = 'true';
 
-                                if ($multi_display == 'select') {
-                                    $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
-                                } else {
-                                    $select_options .= '<li><input name="' . $cf['name'] . '[]" ' . $checked . ' value="' . esc_attr($option_value) . '" class="gd-' . $multi_display . '" field_type="' . $multi_display . '" type="' . $multi_display . '" />&nbsp;' . $option_label . ' </li>';
-                                }
-                            }
-                        }
-                    }
-                    echo $select_options;
 
-                    if ($multi_display == 'select') { ?></select></div>
-        <?php } else { ?></ul><?php } ?>
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory'); ?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
-        <?php
-        $html = ob_get_clean();
+        $html .= aui()->select( array(
+            'id'               => $cf['name'],
+            'name'               => $cf['name'],
+            'title'             => $title,
+            'placeholder'      => $placeholder,
+            'value'            => $value,
+            'required'   => !empty($cf['is_required']) ? true : false,
+            'label_show'       => true,
+            'label_type'       => 'horizontal',
+            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
+            'help_text'        => $help_text,
+            'extra_attributes' => $extra_attributes,
+            'options'          => geodir_string_values_to_options($cf['option_values'], true),
+            'select2'       => true,
+            'multiple'   => true,
+        ) );
+
     }
 
     return $html;
@@ -811,33 +700,54 @@ function geodir_cfi_html($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
+        $title = '';
+        $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
-        ?>
+        $extra_fields = maybe_unserialize($cf['extra_fields']);
+        $html_editor = ! empty( $extra_fields['advanced_editor'] );
 
-        <div id="<?php echo $cf['name']; ?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>'; ?>
-            </label>
+        //validation
+        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+            $extra_attributes['pattern'] = $cf['validation_pattern'];
+        }
 
-            <?php $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10); ?>
+        // validation message
+        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
+            $title = $cf['validation_msg'];
+        }
 
-            <div class="editor" field_id="<?php echo $cf['name']; ?>" field_type="editor">
-                <?php wp_editor(stripslashes($value), $cf['name'], $editor_settings); ?>
-            </div>
+        // field type (used for validation)
+        $extra_attributes['field_type'] = 'editor' ;
 
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory'); ?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
+        // required
+        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
-        </div>
+        // help text
+        $help_text = __( $cf['desc'], 'geodirectory' );
 
-        <?php
-        $html = ob_get_clean();
+        // $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);
+
+
+        $html = aui()->textarea(array(
+            'name'       => $cf['name'],
+            'class'      => '',
+            'id'         => $cf['name'],
+            'placeholder'=> esc_html__( $cf['placeholder_value'], 'geodirectory'),
+            'title'      => $title,
+            'value'      => stripslashes($value),
+            'label_show'       => true,
+            'label_type'       => 'horizontal',
+            'required'   => !empty($cf['is_required']) ? true : false,
+            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
+            'no_wrap'    => false,
+            'rows'      => 8,
+            'wysiwyg'   => array('quicktags' => true),
+            'help_text'        => $help_text,
+            'extra_attributes' => $extra_attributes,
+        ));
+
     }
 
     return $html;
@@ -874,10 +784,11 @@ function geodir_cfi_datepicker($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
+        $extra_attributes = array();
+        $title = '';
         $value = geodir_get_cf_value($cf);
 
-		$name = $cf['name'];
+        $name = $cf['name'];
         $extra_fields = ! empty( $cf['extra_fields'] ) ? maybe_unserialize( $cf['extra_fields'] ) : NULL;
         $date_format = ! empty( $extra_fields['date_format'] ) ? $extra_fields['date_format'] : 'yy-mm-dd';
         $jquery_date_format = $date_format;
@@ -895,70 +806,48 @@ function geodir_cfi_datepicker($html,$cf){
         }
 
         if($value=='0000-00-00'){$value='';}//if date not set, then mark it empty
-        if($value && !isset($_REQUEST['backandedit'])) {
-            //$time = strtotime($value);
-            //$value = date_i18n($date_format, $time);
-        }
+
         $value = geodir_date($value, 'Y-m-d', $date_format);
+       
+        //validation
+        if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
+            $extra_attributes['pattern'] = $cf['validation_pattern'];
+        }
 
-        ?>
-        <script type="text/javascript">
-            jQuery(function() {
-                jQuery("#<?php echo $cf['name'];?>_show").datepicker({
-                    changeMonth: true,
-                    changeYear: true,
-                    dateFormat: "<?php echo $jquery_date_format;?>",
-                    altFormat: "yy-mm-dd",
-                    altField: "#<?php echo $cf['name'];?>",
-                    onClose: function(dateText, inst) {
-                        if(dateText == '') {
-                            jQuery(inst.settings["altField"]).val('');
-                        }
-                    }<?php
-                    // Check for default value date range
-                    if ( ! empty( $extra_fields['date_range'] ) ) {
-                       echo ',yearRange: "' . esc_attr( $extra_fields['date_range'] ) . '"';
-                    }
-                    /**
-                     * Used to add extra option to datepicker per custom field.
-                     *
-                     * @since 1.5.7
-                     * @param string $name The custom field name.
-                     */
-                    echo apply_filters( "gd_datepicker_extra_{$name}", '' ); ?>
-                });
-                <?php if ( ! empty( $value ) ) { ?>
-                jQuery("#<?php echo $name;?>_show").datepicker("setDate", '<?php echo $value;?>');
-                <?php } ?>
-                jQuery("input#<?php echo $name;?>_show").on('change', function(e) {
-                    if (!jQuery(this).val()) {
-                        jQuery("input#<?php echo $cf['name'];?>").val('');
-                    }
-                });
-            });
-        </script>
-        <div id="<?php echo $name;?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $name ); ?>">
+        // validation message
+        if(isset($cf['validation_msg']) && $cf['validation_msg']){
+            $title = $cf['validation_msg'];
+        }
 
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
+        // field type (used for validation)
+	    $extra_attributes['field_type'] = $cf['type'];
 
-            <input field_type="<?php echo $cf['type'];?>" name="<?php echo $name;?>_show" id="<?php echo $name;?>_show"
-                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
-                   value="<?php echo esc_attr($value);?>" type="text" class="geodir_textfield"/>
-            <input type="hidden" name="<?php echo $name;?>" id="<?php echo $name;?>">
+	    // flatpickr attributes
+	    $extra_attributes['data-alt-input'] = 'true';
+	    $extra_attributes['data-alt-format'] = $date_format;
+	    $extra_attributes['data-date-format'] = 'Y-m-d';
 
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
+        // required
+        $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
 
-        <?php
-        $html = ob_get_clean();
+        $html = aui()->input(
+            array(
+                'id'                => $cf['name'],
+                'name'              => $cf['name'],
+                'required'          => !empty($cf['is_required']) ? true : false,
+                'label'              => __($cf['frontend_title'], 'geodirectory').$required,
+                'label_show'       => true,
+                'label_type'       => 'horizontal',
+                'type'              => 'datepicker',
+                'title'             =>  $title,
+                'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+                'class'             => '',
+                'value'             => $value, // esc_attr(stripslashes($value))
+                'help_text'         => __($cf['desc'], 'geodirectory'),
+                'extra_attributes'  => $extra_attributes
+            )
+        );
+
     }
 
     return $html;
@@ -994,43 +883,51 @@ function geodir_cfi_time($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        ob_start(); // Start  buffering;
-        $value = geodir_get_cf_value($cf);
+	    $extra_attributes = array();
+	    $title = '';
+	    $value = geodir_get_cf_value($cf);
 
-        $name = $cf['name'];
+	    if ($value != '')
+		    $value = date('H:i', strtotime($value));
 
-        if ($value != '')
-            $value = date('H:i', strtotime($value));
-        ?>
-        <script type="text/javascript">
-            jQuery(document).ready(function () {
+	    //validation
+	    if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
+		    $extra_attributes['pattern'] = $cf['validation_pattern'];
+	    }
 
-                jQuery('#<?php echo $name;?>').timepicker({
-                    showPeriod: true,
-                    showLeadingZero: true,
-                    showPeriod: true,
-                });
-            });
-        </script>
-        <div id="<?php echo $name;?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $name ); ?>">
+	    // validation message
+	    if(isset($cf['validation_msg']) && $cf['validation_msg']){
+		    $title = $cf['validation_msg'];
+	    }
 
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>';?>
-            </label>
-            <input readonly="readonly" field_type="<?php echo $cf['type'];?>" name="<?php echo $name;?>"
-                <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?>
-                   id="<?php echo $name;?>" value="<?php echo esc_attr($value);?>" type="text" class="geodir_textfield"/>
+	    // field type (used for validation)
+	    $extra_attributes['field_type'] = $cf['type'];
 
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
-        <?php
-        $html = ob_get_clean();
+	    // flatpickr attributes
+	    $extra_attributes['data-enable-time'] = 'true';
+	    $extra_attributes['data-no-calendar'] = 'true';
+	    $extra_attributes['data-date-format'] = 'H:i';
+
+	    // required
+	    $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
+
+	    $html = aui()->input(
+		    array(
+			    'id'                => $cf['name'],
+			    'name'              => $cf['name'],
+			    'required'          => !empty($cf['is_required']) ? true : false,
+			    'label'              => __($cf['frontend_title'], 'geodirectory').$required,
+			    'label_show'       => true,
+			    'label_type'       => 'horizontal',
+			    'type'              => 'timepicker',
+			    'title'             =>  $title,
+			    'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+			    'class'             => '',
+			    'value'             => $value, // esc_attr(stripslashes($value))
+			    'help_text'         => __($cf['desc'], 'geodirectory'),
+			    'extra_attributes'  => $extra_attributes
+		    )
+	    );
     }
 
     return $html;
@@ -1074,8 +971,8 @@ function geodir_cfi_address( $html, $cf ) {
         if(empty($gd_post)){
             $gd_post = geodir_get_post_info($post->ID);
         }
-//echo '###';
-        //print_r($gd_post);
+
+
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
         $name = $cf['name'];
@@ -1087,6 +984,7 @@ function geodir_cfi_address( $html, $cf ) {
         $is_admin = $cf['for_admin_use'];
         $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
         $prefix = $name . '_';
+        $street2_title = '';
 
         // steet2
         if(!isset($extra_fields['street2_lable'])){$extra_fields['street2_lable'] = '';}
@@ -1163,41 +1061,68 @@ function geodir_cfi_address( $html, $cf ) {
         $lng = apply_filters('geodir_default_longitude', $lng, $is_admin);
 
         $locate_me = !empty($extra_fields['show_map']) && GeoDir_Maps::active_map() != 'none' ? true : false;
-        $locate_me_class = $locate_me ? ' gd-form-control' : '';
-        ?>
-        <div id="geodir_<?php echo $prefix . 'street';?>_row"
-             class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $prefix . 'street' ); ?>"><?php _e($address_title, 'geodirectory'); ?> <?php if ($is_required) echo '<span>*</span>';?></label>
-            <?php if ($locate_me) { ?>
-            <div class="gd-input-group gd-locate-me">
-            <?php }
-            // NOTE autocomplete="new-password" seems to be the only way to disable chrome autofill and others.
-            ?>
-                <input autocomplete="new-password" type="text" field_type="<?php echo $type;?>" name="<?php echo 'street';?>" id="<?php echo $prefix . 'street';?>" class="geodir_textfield<?php echo $locate_me_class;?>" value="<?php echo esc_attr(stripslashes($street)); ?>" <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?> />
-                <?php if ($locate_me) { ?>
-                <span class="gd-locate-me-btn gd-input-group-addon" title="<?php esc_attr_e('My location', 'geodirectory'); ?>"><i class="fas fa-crosshairs fa-fw" aria-hidden="true"></i></span>
-            </div>
-            <?php } ?>
-            <span class="geodir_message_note"><?php _e($frontend_desc, 'geodirectory');?></span>
-            <?php if ($is_required) { ?>
-                <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
-        
-        <?php
 
-        if (isset($extra_fields['show_street2']) && $extra_fields['show_street2']) { ?>
-            <div id="geodir_<?php echo $prefix . 'street2'; ?>_row"
-                 class="geodir_form_row clearfix gd-fieldset-details">
-                <label for="<?php echo esc_attr( $prefix . 'street2' ); ?>">
-                    <?php _e($street2_title, 'geodirectory'); ?>
-                </label>
-                <input type="text" field_type="<?php echo $type; ?>" name="<?php echo 'street2'; ?>"
-                       id="<?php echo $prefix . 'street2'; ?>" class="geodir_textfield autofill"
-                       value="<?php echo esc_attr(stripslashes($street2)); ?>"/>
-                <span class="geodir_message_note"><?php echo sprintf( __('Please enter listing %s', 'geodirectory'), __($street2_title, 'geodirectory') );?></span>
-            </div>
-        <?php
+        $extra_attributes = array();
+        $title = '';
+        $value = geodir_get_cf_value($cf);
+
+        // field type (used for validation)
+        $extra_attributes['field_type'] = 'text';
+
+        // required
+        $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
+
+        // NOTE autocomplete="new-password" seems to be the only way to disable chrome autofill and others.
+        $extra_attributes['autocomplete'] = 'new-password';
+
+        // make hint appear when field selected
+        $extra_attributes['onfocus'] = "jQuery('.gd-locate-me-btn').tooltip('show');";
+        $extra_attributes['onblur'] = "jQuery('.gd-locate-me-btn').tooltip('hide');";
+
+        echo aui()->input(
+            array(
+                'id'                => $prefix . 'street',
+                'name'              => 'street',
+                'required'          => !empty($cf['is_required']) ? true : false,
+                'label'              => esc_attr__($address_title, 'geodirectory').$required,
+                'label_show'       => true,
+                'label_type'       => 'horizontal',
+                'type'              => 'text',
+                'title'             =>  $title,
+                'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+                'class'             => 'gd-add-listing-address-input',
+                'value'             => esc_attr(stripslashes($value)),
+                'help_text'         => __($cf['desc'], 'geodirectory'),
+                'input_group_right' => $locate_me ? '<div class="gd-locate-me-btn input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'use my location', 'geodirectory' ) . '"><i class="fas fa-location-arrow"></i></div>' : '',
+                'extra_attributes'  => $extra_attributes,
+            )
+        );
+
+
+
+
+        if (isset($extra_fields['show_street2']) && $extra_fields['show_street2']) {
+            $extra_attributes = array();
+            $title = '';
+            // field type (used for validation)
+            $extra_attributes['field_type'] = 'text';
+            echo aui()->input(
+                array(
+                    'id'                => $prefix . 'street2',
+                    'name'              => 'street2',
+                    'required'          => false,
+                    'label'              => esc_attr__($street2_title, 'geodirectory'),
+                    'label_show'       => true,
+                    'label_type'       => 'horizontal',
+                    'type'              => 'text',
+                    'title'             =>  $title,
+                    'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+                    'class'             => '',
+                    'value'             => esc_attr(stripslashes($street2)),
+                    'help_text'         => sprintf( __('Please enter listing %s', 'geodirectory'), __($street2_title, 'geodirectory') ),
+                    'extra_attributes'  => $extra_attributes,
+                )
+            );
         }
 
         /**
@@ -1210,20 +1135,29 @@ function geodir_cfi_address( $html, $cf ) {
          */
         do_action('geodir_address_extra_listing_fields', $cf);
 
-        if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) { ?>
-
-            <div id="geodir_<?php echo $prefix . 'zip'; ?>_row"
-                 class="<?php /*if($is_required) echo 'required_field';*/ ?> geodir_form_row clearfix gd-fieldset-details">
-                <label for="<?php echo esc_attr( $prefix . 'zip' ); ?>">
-                    <?php _e($zip_title, 'geodirectory'); ?>
-                    <?php /*if($is_required) echo '<span>*</span>';*/ ?>
-                </label>
-                <input type="text" field_type="<?php echo $type; ?>" name="<?php echo 'zip'; ?>"
-                       id="<?php echo $prefix . 'zip'; ?>" class="geodir_textfield autofill"
-                       value="<?php echo esc_attr(stripslashes($zip)); ?>"/>
-                <span class="geodir_message_note"><?php echo sprintf( __('Please enter listing %s', 'geodirectory'), __($zip_title, 'geodirectory') );?></span>
-            </div>
-        <?php } ?>
+        if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) {
+            $title = '';
+            $extra_attributes = array();
+            // field type (used for validation)
+            $extra_attributes['field_type'] = 'text';
+            echo aui()->input(
+                array(
+                    'id'                => $prefix . 'zip',
+                    'name'              => 'zip',
+                    'required'          => false,
+                    'label'              => esc_attr__($zip_title, 'geodirectory'),
+                    'label_show'       => true,
+                    'label_type'       => 'horizontal',
+                    'type'              => 'text',
+                    'title'             =>  $title,
+//                    'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+                    'class'             => '',
+                    'value'             => esc_attr(stripslashes($zip)),
+                    'help_text'         => sprintf( __('Please enter listing %s', 'geodirectory'), __($zip_title, 'geodirectory') ),
+                    'extra_attributes'  => $extra_attributes,
+                )
+            );
+            } ?>
 
         <?php  if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
 
@@ -1234,73 +1168,115 @@ function geodir_cfi_address( $html, $cf ) {
                  *
                  * @since 1.0.0
                  */
-                include( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
+                include( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map/map-add-listing.php' );
                 if ($lat_lng_blank) {
                     $lat = '';
                     $lng = '';
                 }
                 ?>
-                <span class="geodir_message_note"><?php echo stripslashes( __( 'Click on "Set Address on Map" and then you can also drag pinpoint to locate the correct address', 'geodirectory' ) ); ?></span>
             </div>
             <?php
             /* show lat lng */
-            $style_latlng = ((isset($extra_fields['show_latlng']) && $extra_fields['show_latlng']) || is_admin()) ? '' : 'style="display:none"'; ?>
-            <div id="geodir_<?php echo $prefix . 'latitude'; ?>_row"
-                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details" <?php echo $style_latlng; ?>>
-                <label for="<?php echo esc_attr( $prefix . 'latitude' ); ?>">
-                    <?php _e( 'Address Latitude', 'geodirectory' ); ?>
-                    <?php if ($is_required) echo '<span>*</span>'; ?>
-                </label>
-                <input type="number" field_type="<?php echo $type; ?>" name="<?php echo 'latitude'; ?>"
-                       id="<?php echo $prefix . 'latitude'; ?>" class="geodir_textfield"
-                       value="<?php echo esc_attr(stripslashes($lat)); ?>" size="25"
-                       min="-90" max="90" step="any" lang='EN'
+            $style_latlng = ((isset($extra_fields['show_latlng']) && $extra_fields['show_latlng']) || is_admin()) ? '' : 'sr-only';
 
-                />
-                <span class="geodir_message_note"><?php _e( 'Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory' ); ?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
+            $title = '';
+            $extra_attributes = array();
+            // required
+            $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
 
-            <div id="geodir_<?php echo $prefix . 'longitude'; ?>_row"
-                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details" <?php echo $style_latlng; ?>>
-                <label for="<?php echo esc_attr( $prefix . 'longitude' ); ?>">
-                    <?php _e( 'Address Longitude', 'geodirectory' ); ?>
-                    <?php if ($is_required) echo '<span>*</span>'; ?>
-                </label>
-                <input type="number" field_type="<?php echo $type; ?>" name="<?php echo 'longitude'; ?>"
-                       id="<?php echo $prefix . 'longitude'; ?>" class="geodir_textfield"
-                       value="<?php echo esc_attr(stripslashes($lng)); ?>" size="25"
-                       min="-180" max="180" step="any" lang='EN'
-                />
-                <span class="geodir_message_note"><?php _e( 'Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>', 'geodirectory' ); ?></span>
-                <?php if ($is_required) { ?>
-                    <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-        <?php } ?>
+            // field type (used for validation)
+            $extra_attributes['field_type'] = 'number';
 
-        <?php if (isset($extra_fields['show_mapview']) && $extra_fields['show_mapview']) { ?>
-            <div id="geodir_<?php echo $prefix . 'mapview'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
-                <label for="<?php echo esc_attr( $prefix . 'mapview' ); ?>"><?php _e($mapview_title, 'geodirectory'); ?></label>
+            // number extras
+            $extra_attributes['min'] = '-90';
+            $extra_attributes['max'] = '90';
+            $extra_attributes['step'] = 'any';
+            $extra_attributes['lang'] = 'EN';
+            $extra_attributes['size'] = '25';
 
-                <select  name="<?php echo 'mapview'; ?>" id="<?php echo $prefix . 'mapview'; ?>" class="geodir-select">
-                    <?php
-                    $mapview_options = array(
+            echo aui()->input(
+                array(
+                    'id'                => $prefix . 'latitude',
+                    'name'              => 'latitude',
+                    'required'          => $is_required,
+                    'label'              => esc_attr__('Address Latitude', 'geodirectory').$required,
+                    'label_show'       => true,
+                    'label_type'       => 'horizontal',
+                    'type'              => 'number',
+                    'title'             =>  $title,
+                   // 'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+                    'class'             => $style_latlng,
+                    'value'             => esc_attr(stripslashes($lat)),
+                    'help_text'         => __( 'Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory' ),
+                    'extra_attributes'  => $extra_attributes,
+                )
+            );
+
+            $title = '';
+            $extra_attributes = array();
+            // required
+            $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
+
+            // field type (used for validation)
+            $extra_attributes['field_type'] = 'number';
+
+            // number extras
+            $extra_attributes['min'] = '-180';
+            $extra_attributes['max'] = '180';
+            $extra_attributes['step'] = 'any';
+            $extra_attributes['lang'] = 'EN';
+            $extra_attributes['size'] = '25';
+
+            echo aui()->input(
+                array(
+                    'id'                => $prefix . 'longitude',
+                    'name'              => 'longitude',
+                    'required'          => $is_required,
+                    'label'              => esc_attr__('Address Longitude', 'geodirectory').$required,
+                    'label_show'       => true,
+                    'label_type'       => 'horizontal',
+                    'type'              => 'number',
+                    'title'             =>  $title,
+                    //'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+                    'class'             => $style_latlng,
+                    'value'             => esc_attr(stripslashes($lng)),
+                    'help_text'         => __( 'Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>', 'geodirectory' ),
+                    'extra_attributes'  => $extra_attributes,
+                )
+            );
+            } ?>
+
+        <?php if (isset($extra_fields['show_mapview']) && $extra_fields['show_mapview']) {
+
+            $title = '';
+            $extra_attributes = array();
+            // field type (used for validation)
+            $extra_attributes['field_type'] = 'text';
+            echo aui()->select(
+                array(
+                    'id'                => $prefix . 'mapview',
+                    'name'              => 'mapview',
+                    'required'          => false,
+                    'label'              => esc_attr__($mapview_title, 'geodirectory'),
+                    'label_show'       => true,
+                    'label_type'       => 'horizontal',
+                    'type'              => 'text',
+                    'title'             =>  $title,
+                    'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+                    'class'             => '',
+                    'value'             => esc_attr(stripslashes($mapview)),
+                    'help_text'         => __('Please select listing map view to use', 'geodirectory'),
+                    'extra_attributes'  => $extra_attributes,
+                    'options'           => array(
                         'ROADMAP'=>__('Default Map', 'geodirectory'),
                         'SATELLITE'=>__('Satellite Map', 'geodirectory'),
                         'HYBRID'=>__('Hybrid Map', 'geodirectory'),
                         'TERRAIN'=>__('Terrain Map', 'geodirectory'),
-                    );
-                    foreach($mapview_options as $val => $name){
-                        echo "<option value='$val' ".selected($val,$mapview,false)." >$name</option>";
-                    }
-                    ?>
-                </select>
-                <span class="geodir_message_note"><?php _e('Please select listing map view to use', 'geodirectory');?></span>
-            </div>
-        <?php }?>
+                    )
+                )
+            );
+
+            }?>
 
         <?php if (isset($post_mapzoom)) { ?>
             <input type="hidden" value="<?php if (isset($post_mapzoom)) {
@@ -1492,6 +1468,7 @@ function geodir_cfi_categories($html,$cf){
 
         if(is_admin() && $cf['name']=='post_tags'){return;}
 
+        $horizontal = true;
         //print_r($cf);echo '###';
         $name = $cf['name'];
         $frontend_title = $cf['frontend_title'];
@@ -1505,15 +1482,21 @@ function geodir_cfi_categories($html,$cf){
         if ($value == $cf['default']) {
             $value = '';
         } ?>
+
+        <script>
+            jQuery(function() {
+                jQuery("select.geodir-select").trigger('geodir-select-init');
+            });
+        </script>
         <div id="<?php echo $taxonomy;?>_row"
-             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="cat_limit">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group row">
+            <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : '';?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($is_required) echo '<span>*</span>';?>
+                <?php if ($is_required) echo '<span class="text-danger">*</span>';?>
             </label>
 
-            <div id="<?php echo $taxonomy;?>" class="geodir_taxonomy_field" style="float:left; width:70%;">
+            <div id="<?php echo $taxonomy;?>" class="geodir_taxonomy_field <?php echo $horizontal ? ' col-sm-10' : '';?>" >
                 <?php
 
                 global $wpdb, $gd_post, $cat_display, $post_cat, $package_id, $exclude_cats;
@@ -1567,7 +1550,7 @@ function geodir_cfi_categories($html,$cf){
 							$default_field = 'data-cselect="default_category"';
 						}
 
-                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . ' aria-label="' . esc_attr( $placeholder ) . '">';
+                        echo '<select  id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir-select aui-select2x" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . ' aria-label="' . esc_attr( $placeholder ) . '" style="width:100%">';
 
                         if ($cat_display == 'select')
                             echo '<option value="">' . __('Select Category', 'geodirectory') . '</option>';
@@ -1581,14 +1564,13 @@ function geodir_cfi_categories($html,$cf){
 
                 }
 
+                echo AUI_Component_Helper::help_text(__($frontend_desc, 'geodirectory'));
                 ?>
             </div>
 
-            <span class="geodir_message_note"><?php _e($frontend_desc, 'geodirectory');?></span>
-            <?php if ($is_required) { ?>
-                <span class="geodir_message_error"><?php _e($required_msg, 'geodirectory'); ?></span>
-            <?php } ?>
         </div>
+
+
 
         <?php
         $html = ob_get_clean();
@@ -1630,22 +1612,55 @@ function geodir_cfi_tags( $html, $cf ) {
 
     // If no html then we run the standard output.
     if ( empty( $html ) ) {
-        ob_start(); // Start  buffering;
 
-        $value = geodir_get_cf_value( $cf );
+        $extra_attributes = array();
+        $value = geodir_get_cf_value($cf);
+        $title = '';
 
-        $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter tags separated by a comma ,', 'geodirectory' );
         $cf['option_values'] = "tag1,tag2";
+
+
+        //validation
+        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+            $extra_attributes['pattern'] = $cf['validation_pattern'];
+        }
+
+        // validation message
+        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
+            $title = $cf['validation_msg'];
+        }
+
+        // required
+        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+
+        // help text
+        $help_text = __( $cf['desc'], 'geodirectory' );
+
+        // field type (used for validation)
+        $extra_attributes['field_type'] = $cf['type'];
+
+        // placeholder
+        $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter tags separated by a comma ,', 'geodirectory' );
+
+
+        //extra
+        $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
+        $extra_attributes['option-ajaxchosen'] = 'false';
+        $extra_attributes['data-tags'] = 'true';
+        $extra_attributes['data-token-separators'] = "[',']";
+        $extra_attributes['data-allow-clear'] = 'false';
+
 
         $post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
         $term_array = array();
+        $options = array();
 
-		if ( $post_type ) {
+        if ( $post_type ) {
             $terms = get_terms( array(
                 'taxonomy' => $post_type . "_tags",
                 'hide_empty' => false,
                 'orderby' => 'count',
-				'order' => 'DESC',
+                'order' => 'DESC',
                 'number' => 10
             ) );
 
@@ -1661,72 +1676,53 @@ function geodir_cfi_tags( $html, $cf ) {
             }
         }
 
-        ?>
-        <div id="<?php echo $cf['name']; ?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
-            <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
-                <?php if ($cf['is_required']) echo '<span>*</span>'; ?>
-            </label>
-            <input type="hidden" name="gd_field_<?php echo $cf['name']; ?>" value="1"/>
-            <div class="geodir_multiselect_list">
-                <select field_type="<?php echo $cf['type']; ?>" name="tax_input[<?php echo wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"; ?>][]" id="<?php echo $cf['name']; ?>"
-                        multiple="multiple" class="geodir_textfield textfield geodir-select-tags"
-                        data-placeholder="<?php echo esc_attr( $placeholder ); ?>"
-                        >
-                    <?php
-                    // current tags
-                    $current_tags_arr = geodir_string_values_to_options($value, true);
+        $value_array = array();
+        if(!empty($value)){
+            $value_array = array_map('trim',explode(",",$value));
+        }
 
-                    // popular tags
-                    $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
+        // popular tags
+        $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
+        if(!empty($option_values_arr)){
+            $options =  array_merge( array( array('label'=>__('Popular tags','geodirectory'),'optgroup'=>'start') ) ,  $option_values_arr );
+            $options =  array_merge( $options , array( array('optgroup'=>'end')));
 
-                    // add the popular tags
-                    $select_options = '';
-                    $value_array = array();
-                    if(!empty($value)){
-                        $value_array = array_map('trim',explode(",",$value));
-                    }
-                    if (!empty($option_values_arr) || !empty($current_tags_arr)) {
-                        $select_options .= '<optgroup label="'.__('Popular tags','geodirectory').'">';
-                        foreach ($option_values_arr as $option_row) {
-                            if(is_array($current_tags_arr) && in_array($option_row,$current_tags_arr)){
-                                continue;
-                            }
-                            $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-                            $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                            $selected = in_array($option_value,$value_array ) ? 'selected="selected"' : '';
-                            $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
-                        }
-                        $select_options .= '</optgroup>';
-                    }
+            // remove from the popular list if already selected
+            foreach($options as $key => $val){
+                if(!empty($val['value']) && !empty($value_array) && in_array($val['value'],$value_array)){
+                    unset($options[$key]);
+                }
+            }
+        }
 
-                    // add the post current tags
-                    if (!empty($current_tags_arr)) {
-                        $select_options .= '<optgroup label="'.__('Your tags','geodirectory').'">';
-                        foreach ($current_tags_arr as $option_row) {
-                            $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-                            $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                            $selected = in_array($option_value,$value_array ) ? 'selected="selected"' : '';
-                            $select_options .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
-                        }
-                        $select_options .= '</optgroup>';
-                    }
+        // current tags
+        $current_tags_arr = geodir_string_values_to_options($value, true);
+        if(!empty($current_tags_arr)){
+            $current_options =  array_merge( array( array('label'=>__('Your tags','geodirectory'),'optgroup'=>'start') ) ,  $current_tags_arr );
+            $current_options =  array_merge( $current_options , array( array('optgroup'=>'end')));
+            $options = array_merge( $options, $current_options);
+        }
 
+        echo  aui()->select( array(
+            'id'               => $cf['name'],
+            'name'               => "tax_input[".wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"."][]" ,
+            'title'             => $title,
+            'placeholder'      => $placeholder,
+            'value'            => $value_array,
+            'required'   => !empty($cf['is_required']) ? true : false,
+            'label_show'       => true,
+            'label_type'       => 'horizontal',
+            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
+            'help_text'        => $help_text,
+            'multiple'          => true,
+            'extra_attributes' => $extra_attributes,
+            'options'          => $options, //geodir_string_values_to_options($cf['option_values'], true),
+            'select2'       => true,
+            'style'         => 'width:100%;height:inherit;'
+        ) );
 
-
-                    echo $select_options;
-?>
-                    </select></div>
-
-            <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory'); ?></span>
-            <?php if ($cf['is_required']) { ?>
-                <span class="geodir_message_error"><?php _e($cf['required_msg'], 'geodirectory'); ?></span>
-            <?php } ?>
-        </div>
-        <?php
-        $html = ob_get_clean();
     }
 
     return $html;
@@ -1894,6 +1890,8 @@ function geodir_cfi_files( $html, $cf ) {
 
         ob_start(); // Start buffering;
 
+        $horizontal = true;
+
         $extra_fields = maybe_unserialize( $cf['extra_fields'] );
         $file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? absint( $extra_fields['file_limit'] ) : 0;
         $file_limit = apply_filters( "geodir_custom_field_file_limit", $file_limit, $cf, $gd_post );
@@ -1940,22 +1938,30 @@ function geodir_cfi_files( $html, $cf ) {
             add_thickbox();  
             ?>
 
-            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> geodir_form_row clearfix gd-fieldset-details ">
+            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row ">
 
-                <label for="<?php echo $id; ?>">
+
+                <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
                     <?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
                     echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; ?>
                     <?php if ( $cf['is_required'] ) {
                         echo '<span>*</span>';
                     } ?>
                 </label>
-                <span class="geodir_message_note gd_images_desc"><?php _e( $cf['desc'], 'geodirectory' ); ?></span>
+
+                <?php
+
+                if($horizontal){echo "<div class='col-sm-10'>";}
+                echo AUI_Component_Helper::help_text(__( $cf['desc'], 'geodirectory' ));
+                if($horizontal){echo "</div>";}
+
+                ?>
                 <?php
                 // params for file upload
                 $is_required = $cf['is_required'];
 
                 // the file upload template
-                echo geodir_get_template_html( "file-upload.php", array(
+                echo geodir_get_template_html( "bootstrap/file-upload.php", array(
                     'id'                  => $id,
                     'is_required'         => $is_required,
                     'files'	              => $files,
@@ -1970,6 +1976,7 @@ function geodir_cfi_files( $html, $cf ) {
                     <span class="geodir_message_error"><?php esc_attr_e($cf['required_msg'], 'geodirectory'); ?></span>
                 <?php } ?>
             </div>
+            
             <?php
         }
         $html = ob_get_clean();

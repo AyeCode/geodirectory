@@ -39,7 +39,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             'base_id'       => 'gd_add_listing', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Add Listing','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-add-listing-container', // widget class
+                'classname'   => 'geodir-add-listing- bsui', // widget class
                 'description' => esc_html__('Shows the GeoDirectory add listing form.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),

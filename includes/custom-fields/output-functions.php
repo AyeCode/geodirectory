@@ -285,19 +285,19 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
     if(empty($html)){
 
         if ($gd_post->{$cf['htmlvar_name']}):
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
 
-                if ($cf['name'] == 'geodir_facebook') {
-                    $field_icon_af = '<i class="fab fa-facebook-square" aria-hidden="true"></i>';
-                } elseif ($cf['name'] == 'geodir_twitter') {
-                    $field_icon_af = '<i class="fab fa-twitter-square" aria-hidden="true"></i>';
+                if ($cf['name'] == 'facebook') {
+                    $field_icon_af = $design_style ?  '<i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i> ' : '<i class="fab fa-facebook-square" aria-hidden="true"></i>';
+                } elseif ($cf['name'] == 'twitter') {
+                    $field_icon_af = $design_style ? '<i class="fab fa-twitter-square fa-fw" aria-hidden="true"></i> ' : '<i class="fab fa-twitter-square" aria-hidden="true"></i>';
                 } else {
-                    $field_icon_af = '<i class="fas fa-link" aria-hidden="true"></i>';
+                    $field_icon_af = $design_style ? '<i class="fas fa-link fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-link" aria-hidden="true"></i>';
                 }
 
             } else {
@@ -431,13 +431,13 @@ function geodir_cf_phone($html,$location,$cf,$p='',$output=''){
     if(empty($html)){
 
         if ($gd_post->{$cf['htmlvar_name']}):
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="fas fa-phone" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="fas fa-phone fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-phone" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -550,13 +550,13 @@ function geodir_cf_time($html,$location,$cf,$p='',$output=''){
     if ( empty( $html ) ) {
         if ( $gd_post->{$html_var} ) {
             $value = date_i18n( get_option('time_format'), strtotime( $gd_post->{$html_var} ) );
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="fas fa-clock" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="fas fa-clock fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-clock" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -1343,13 +1343,13 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
 
 
         if ($gd_post->{$cf['htmlvar_name']}) {
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="far fa-envelope" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="far fa-envelope fa-fw" aria-hidden="true"></i> ' : '<i class="far fa-envelope" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -1706,6 +1706,7 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
     // If not html then we run the standard output.
     if ( empty( $html ) ) {
         if ( ! empty( $gd_post->{$html_var} ) ) {
+            $design_style = geodir_design_style();
             $extra_fields = ! empty( $cf['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
             $field_icon = geodir_field_icon_proccess( $cf );
             $output = geodir_field_output_process( $output );
@@ -1723,6 +1724,11 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
             if ( ! empty( $output ) && isset( $output['raw'] ) ) {
                 return stripslashes( $gd_post->{$html_var} );
             }
+
+            if( $design_style ){
+                $cf['css_class'] .= " position-relative";
+            }
+
 
             $max_height = ! empty( $output['fade'] ) ? absint( $output['fade'] )."px" : '';
             $max_height_style = $max_height ? " style='max-height:$max_height;overflow:hidden;' " : '';
@@ -1776,7 +1782,14 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
                         $link =  get_permalink( $post_id );
                         $link = $link . "#" . $html_var; // Set the hash value
                         $link_class = ! empty( $output['fade'] ) ? 'gd-read-more-fade' : '';
-                        $html .= " <a href='$link' class='gd-read-more  $link_class'>" . esc_attr( $more_text ) . "</a>";
+                        $link_style = '';
+
+                        if( $design_style ){
+                            $link_class .= " w-100 position-absolute text-center pt-5";
+                            $link_style .= "bottom:0;left:0;background-image: linear-gradient(to bottom,transparent,#fff);";
+                        }
+
+                        $html .= " <a href='$link' class='gd-read-more  $link_class' style='$link_style'>" . esc_attr( $more_text ) . "</a>";
                     }
                 }
             }
@@ -2462,7 +2475,7 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                 $dropdown_item_mr_class =  $design_style ? ' mr-3 ' : '';
                 $dropdown_item_float_class =  $design_style ? ' float-right' : '';
                 $dropdown_menu_class =  $design_style ? ' dropdown-menu mt-3 ' : '';
-                $cf['field_icon'] = $design_style ? $cf['field_icon']." mr-1" : $cf['field_icon'];
+                $cf['field_icon'] = $design_style ? $cf['field_icon'] : $cf['field_icon'];
 
                 $field_icon = geodir_field_icon_proccess($cf);
                 $output = geodir_field_output_process($output);

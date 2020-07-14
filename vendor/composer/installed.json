@@ -53,24 +53,24 @@
     },
     {
         "name": "ayecode/wp-ayecode-ui",
-        "version": "0.1.14",
-        "version_normalized": "0.1.14.0",
+        "version": "0.1.16",
+        "version_normalized": "0.1.16.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-            "reference": "acb4d53c9653d812f32a9591619fb09f59aeda64"
+            "reference": "823fe6fa995b0fb7faff86f8cfe65ba5946937aa"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/acb4d53c9653d812f32a9591619fb09f59aeda64",
-            "reference": "acb4d53c9653d812f32a9591619fb09f59aeda64",
+            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/823fe6fa995b0fb7faff86f8cfe65ba5946937aa",
+            "reference": "823fe6fa995b0fb7faff86f8cfe65ba5946937aa",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2020-07-07T16:10:37+00:00",
+        "time": "2020-07-10T12:14:40+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {

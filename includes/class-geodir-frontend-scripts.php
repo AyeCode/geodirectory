@@ -497,7 +497,7 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-plupload' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/geodirectory-plupload' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets'.$aui.'/js/geodirectory-plupload' . $suffix . '.js',
 				'deps'    => array('plupload','jquery','jquery-ui-sortable'),
 				'version' => GEODIRECTORY_VERSION,
 			),
@@ -512,7 +512,7 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-add-listing' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/add-listing' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets'.$aui.'/js/add-listing' . $suffix . '.js',
 				'deps'    => array( 'geodir-jquery-ui-timepicker' ),
 				'version' => GEODIRECTORY_VERSION,
 			),
@@ -633,7 +633,17 @@ class GeoDir_Frontend_Scripts {
 		}else{
 			// js
 			self::enqueue_script( 'geodir' ); // original
-//			self::enqueue_script( 'geodirectory-aui' );
+
+			// add-listing @todo do we need all these?
+			if(geodir_is_page('add-listing') && !isset($_REQUEST['ct_builder'])){
+				self::enqueue_script( 'geodir-plupload' );
+				self::enqueue_script( 'geodir-add-listing' );
+//				self::enqueue_script( 'geodir-jquery-ui-timepicker' );
+				self::enqueue_script( 'geodir-select2' );
+
+//				wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
+
+			}
 		}
 
 		// Maps

@@ -30,7 +30,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
             'base_id'       => 'gd_output_location', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Output Location','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-output-location', // widget class
+                'classname'   => 'geodir-output-location bsui', // widget class
                 'description' => esc_html__('This can be used to output many custom fields in one location.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
