@@ -31,7 +31,6 @@ class AUI_Component_Input {
 			'label'      => '',
 			'label_after'=> false,
 			'label_class'=> '',
-			'label_show' => false, // force the lable to show even if globally hidden
 			'label_type' => '', // sets the lable type, horizontal
 			'help_text'  => '',
 			'validation_text'   => '',
@@ -63,7 +62,6 @@ class AUI_Component_Input {
 				'title'=> $args['label'],
 				'for'=> $args['id'],
 				'class' => $args['label_class']." ",
-				'label_show'=> $args['label_show'],
 				'label_type' => $args['label_type']
 			);
 
@@ -289,7 +287,6 @@ else{$eli.attr(\'type\',\'password\');}"
 			'required'   => false,
 			'label'      => '',
 			'label_class'      => '',
-			'label_show' => false, // force the lable to show even if globally hidden
 			'label_type' => '', // sets the lable type, horizontal
 			'help_text'  => '',
 			'validation_text'   => '',
@@ -312,7 +309,6 @@ else{$eli.attr(\'type\',\'password\');}"
 				'title'=> $args['label'],
 				'for'=> $args['id'],
 				'class' => $args['label_class']." ",
-				'label_show'=> $args['label_show'],
 				'label_type' => $args['label_type']
 			);
 			$output .= self::label( $label_args );
@@ -438,7 +434,6 @@ else{$eli.attr(\'type\',\'password\');}"
 			'title'       => 'div',
 			'for'      => '',
 			'class'      => '',
-			'label_show'    => false, // force show a label
 			'label_type'    => '', // horizontal
 		);
 
@@ -451,7 +446,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		if($args['title']){
 
 			// maybe hide labels //@todo set a global option for visibility class
-			if($type == 'file' || $type == 'checkbox' || $type == 'radio' || !empty($args['label_show']) ){
+			if($type == 'file' || $type == 'checkbox' || $type == 'radio' || !empty($args['label_type']) ){
 				$class = $args['class'];
 			}else{
 				$class = 'sr-only '.$args['class'];
@@ -566,7 +561,6 @@ else{$eli.attr(\'type\',\'password\');}"
 			'required'   => false,
 			'label'      => '',
 			'label_class'      => '',
-			'label_show' => false, // force the lable to show even if globally hidden
 			'label_type' => '', // sets the lable type, horizontal
 			'help_text'  => '',
 			'placeholder'=> '',
@@ -613,7 +607,6 @@ else{$eli.attr(\'type\',\'password\');}"
 				'title'=> $args['label'],
 				'for'=> $args['id'],
 				'class' => $args['label_class']." ",
-				'label_show'=> $args['label_show'],
 				'label_type' => $args['label_type']
 			);
 			$output .= self::label($label_args);
@@ -683,6 +676,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		// Options
 		if(!empty($args['options'])){
 			foreach($args['options'] as $val => $name){
+				$selected = '';
 				if(is_array($name)){
 					if (isset($name['optgroup']) && ($name['optgroup'] == 'start' || $name['optgroup'] == 'end')) {
 						$option_label = isset($name['label']) ? $name['label'] : '';
@@ -691,21 +685,19 @@ else{$eli.attr(\'type\',\'password\');}"
 					} else {
 						$option_label = isset($name['label']) ? $name['label'] : '';
 						$option_value = isset($name['value']) ? $name['value'] : '';
-
 						if(!empty($args['multiple']) && !empty($args['value'])){
 							$selected = in_array($option_value, stripslashes_deep($args['value'])) ? "selected" : "";
-						} else {
+						} elseif(!empty($args['value'])) {
 							$selected = selected($option_value,stripslashes_deep($args['value']), false);
 						}
 
 						$output .= '<option value="' . esc_attr($option_value) . '" ' . $selected . '>' . $option_label . '</option>';
 					}
 				}else{
-					$selected = '';
 					if(!empty($args['value'])){
 						if(is_array($args['value'])){
 							$selected = in_array($val,$args['value']) ? 'selected="selected"' : '';
-						}else{
+						} elseif(!empty($args['value'])) {
 							$selected = selected( $args['value'], $val, false);
 						}
 					}
@@ -758,7 +750,6 @@ else{$eli.attr(\'type\',\'password\');}"
 			'value'      => '',
 			'label'      => '',
 			'label_class'=> '',
-			'label_show' => false, // force the lable to show even if globally hidden
 			'label_type' => '', // sets the lable type, horizontal
 			'inline'     => true,
 			'required'   => false,
@@ -776,7 +767,6 @@ else{$eli.attr(\'type\',\'password\');}"
 		$label_args = array(
 			'title'=> $args['label'],
 			'class' => $args['label_class']." pt-0 ",
-			'label_show'=> true,
 			'label_type' => $args['label_type']
 		);
 

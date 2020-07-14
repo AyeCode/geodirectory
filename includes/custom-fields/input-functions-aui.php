@@ -36,13 +36,16 @@ function geodir_cfi_fieldset($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
+        $horizontal = true;
+
         ob_start(); // Start  buffering;
         ?>
-        <h5 id="geodir_fieldset_<?php echo (int) $cf['id']; ?>" class="geodir-fieldset-row"
-            gd-fieldset="<?php echo (int) $cf['id']; ?>"><?php echo __( $cf['frontend_title'], 'geodirectory' ); ?>
+        <fieldset class="form-group" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>">
+            <h3 class="h3"><?php echo __( $cf['frontend_title'], 'geodirectory' ); ?></h3>
             <?php if ( $cf['desc'] != '' ) {
-                echo '<small>( ' . __( $cf['desc'], 'geodirectory' ) . ' )</small>';
-            } ?></h5>
+                echo '<small class="text-muted">( ' . __( $cf['desc'], 'geodirectory' ) . ' )</small>';
+            } ?>
+        </fieldset>
         <?php
         $html = ob_get_clean();
     }
@@ -51,6 +54,9 @@ function geodir_cfi_fieldset($html,$cf){
 }
 add_filter('geodir_custom_field_input_fieldset','geodir_cfi_fieldset',10,2);
 
+function geodir_cfi_admin_only($cf){
+    return !empty($cf['for_admin_use']) ? ' <i class="far fa-eye text-warning c-pointer" data-toggle="tooltip"  title="'.__("Admin only","geodirectory").'"></i>' : '';
+}
 
 /**
  * Many input types share the same output function.
@@ -91,12 +97,15 @@ function geodir_cfi_input_output($cf){
     // required
     $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
 
+    // admin only
+    $admin_only = geodir_cfi_admin_only($cf);
+
     return aui()->input(
         array(
             'id'                => $cf['name'],
             'name'              => $cf['name'],
             'required'          => !empty($cf['is_required']) ? true : false,
-            'label'              => __($cf['frontend_title'], 'geodirectory').$required,
+            'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
             'label_show'       => true,
             'label_type'       => 'horizontal',
             'type'              => $type,
@@ -298,6 +307,13 @@ function geodir_cfi_radio($html,$cf){
             }
         }
 
+        // required
+        $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
+
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
+
+
         $value = geodir_get_cf_value($cf);
         $html = aui()->radio(
             array(
@@ -305,7 +321,7 @@ function geodir_cfi_radio($html,$cf){
                 'name'              => $cf['name'],
                 'type'              => "radio",
                 'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
-                'label'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
+                'label'             => esc_attr__($cf['frontend_title'], 'geodirectory').$admin_only.$required,
                 'label_type'       => 'horizontal',
                 'class'             => '',
                 'value'             => $value,
@@ -390,6 +406,10 @@ function geodir_cfi_checkbox($html,$cf){
         }
 
         $html = '<input type="hidden" name="' . $cf['name'] . '" id="checkbox_' . $cf['name'] . '" value="' . esc_attr( $value ) . '"/>';
+
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
+
         $html .= aui()->input(
             array(
                 'id'               => $cf['name'],
@@ -397,7 +417,7 @@ function geodir_cfi_checkbox($html,$cf){
                 'type'             => "checkbox",
                 'value'            => $value,
                 'title'            => $title,
-                'label'            => __( $cf['frontend_title'], 'geodirectory' ) . $required,
+                'label'            => __( $cf['frontend_title'], 'geodirectory' ) . $admin_only. $required,
                 'label_show'       => true,
                 'required'          => !empty($cf['is_required']) ? true : false,
                 'label_type'       => 'horizontal',
@@ -470,6 +490,9 @@ function geodir_cfi_textarea($html,$cf){
         // required
         $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
+
         // help text
         $help_text = __( $cf['desc'], 'geodirectory' );
 
@@ -484,7 +507,7 @@ function geodir_cfi_textarea($html,$cf){
             'label_show'       => true,
             'label_type'       => 'horizontal',
             'required'   => !empty($cf['is_required']) ? true : false,
-            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only . $required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
             'no_wrap'    => false,
@@ -560,6 +583,8 @@ function geodir_cfi_select($html,$cf){
         $extra_attributes['option-ajaxchosen'] = 'false';
         $extra_attributes['data-allow_clear'] = 'true';
 
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
 
         $html .= aui()->select( array(
             'id'               => $cf['name'],
@@ -570,7 +595,7 @@ function geodir_cfi_select($html,$cf){
             'required'   => !empty($cf['is_required']) ? true : false,
             'label_show'       => true,
             'label_type'       => 'horizontal',
-            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
             'help_text'        => $help_text,
@@ -645,6 +670,8 @@ function geodir_cfi_multiselect($html,$cf){
         $extra_attributes['option-ajaxchosen'] = 'false';
         $extra_attributes['data-allow_clear'] = 'true';
 
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
 
         $html .= aui()->select( array(
             'id'               => $cf['name'],
@@ -655,7 +682,7 @@ function geodir_cfi_multiselect($html,$cf){
             'required'   => !empty($cf['is_required']) ? true : false,
             'label_show'       => true,
             'label_type'       => 'horizontal',
-            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'label'      => __($cf['frontend_title'], 'geodirectory'). $admin_only .$required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
             'help_text'        => $help_text,
@@ -727,6 +754,8 @@ function geodir_cfi_html($html,$cf){
 
         // $editor_settings = array('media_buttons' => false, 'textarea_rows' => 10);
 
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
 
         $html = aui()->textarea(array(
             'name'       => $cf['name'],
@@ -738,7 +767,7 @@ function geodir_cfi_html($html,$cf){
             'label_show'       => true,
             'label_type'       => 'horizontal',
             'required'   => !empty($cf['is_required']) ? true : false,
-            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
             'no_wrap'    => false,
@@ -830,12 +859,15 @@ function geodir_cfi_datepicker($html,$cf){
         // required
         $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
 
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
+
         $html = aui()->input(
             array(
                 'id'                => $cf['name'],
                 'name'              => $cf['name'],
                 'required'          => !empty($cf['is_required']) ? true : false,
-                'label'              => __($cf['frontend_title'], 'geodirectory').$required,
+                'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only . $required,
                 'label_show'       => true,
                 'label_type'       => 'horizontal',
                 'type'              => 'datepicker',
@@ -911,12 +943,15 @@ function geodir_cfi_time($html,$cf){
 	    // required
 	    $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
 
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
+
 	    $html = aui()->input(
 		    array(
 			    'id'                => $cf['name'],
 			    'name'              => $cf['name'],
 			    'required'          => !empty($cf['is_required']) ? true : false,
-			    'label'              => __($cf['frontend_title'], 'geodirectory').$required,
+			    'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
 			    'label_show'       => true,
 			    'label_type'       => 'horizontal',
 			    'type'              => 'timepicker',
@@ -1349,7 +1384,7 @@ function geodir_cfi_taxonomy($html,$cf){
 
             <div id="<?php echo $taxonomy;?>" class="geodir_taxonomy_field" style="float:left; width:70%;">
                 <?php
-                global $wpdb, $gd_post, $cat_display, $post_cat, $package_id, $exclude_cats;
+                global $wpdb, $gd_post, $cat_display, $post_cat, $package_id, $exclude_cats, $post;
 
                 $exclude_cats = array();
 
@@ -1479,6 +1514,9 @@ function geodir_cfi_categories($html,$cf){
         $taxonomy = $cf['post_type']."category";
         $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Select Category', 'geodirectory' );
 
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
+
         if ($value == $cf['default']) {
             $value = '';
         } ?>
@@ -1492,7 +1530,7 @@ function geodir_cfi_categories($html,$cf){
              class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group row">
             <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : '';?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
+                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
                 <?php if ($is_required) echo '<span class="text-danger">*</span>';?>
             </label>
 
@@ -1703,6 +1741,9 @@ function geodir_cfi_tags( $html, $cf ) {
             $options = array_merge( $options, $current_options);
         }
 
+        // admin only
+        $admin_only = geodir_cfi_admin_only($cf);
+
         echo  aui()->select( array(
             'id'               => $cf['name'],
             'name'               => "tax_input[".wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"."][]" ,
@@ -1712,7 +1753,7 @@ function geodir_cfi_tags( $html, $cf ) {
             'required'   => !empty($cf['is_required']) ? true : false,
             'label_show'       => true,
             'label_type'       => 'horizontal',
-            'label'      => __($cf['frontend_title'], 'geodirectory').$required,
+            'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
             'help_text'        => $help_text,
@@ -1742,12 +1783,15 @@ add_filter('geodir_custom_field_input_tags','geodir_cfi_tags',10,2);
  */
 function geodir_cfi_business_hours( $html, $cf ) {
     if ( empty( $html ) ) {
+
+        $horizontal = true;
+
         $htmlvar_name = $cf['htmlvar_name'];
 		$name = $cf['name'];
 		$label = __( $cf['frontend_title'], 'geodirectory' );
 		$description = __( $cf['desc'], 'geodirectory' );
 		$value = geodir_get_cf_value( $cf );
-		
+
 		$weekdays = geodir_get_weekdays();
 		$hours = array();
 		$display = 'none';
@@ -1778,13 +1822,13 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		ob_start();
 		?>
 		<script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':'<?php echo $gmt_offset; ?>'});});</script>
-        <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row">
-            <label for="<?php echo $htmlvar_name; ?>_f_active_1"><?php echo $label; ?></label>
-			<div class="gd-bh-field" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
-				<span class="gd-radios" role="radio"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( ! empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'Yes', 'geodirectory' ); ?>"> <?php _e( 'Yes', 'geodirectory' ); ?></span> 
+        <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row form-group row">
+            <label for="<?php echo $htmlvar_name; ?>_f_active_1" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>"><?php echo $label; ?></label>
+			<div class="gd-bh-field <?php echo $horizontal ? '  col-sm-10' : '';?>" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
+				<span class="gd-radios" role="radio"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( ! empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'Yes', 'geodirectory' ); ?>"> <?php _e( 'Yes', 'geodirectory' ); ?></span>
 				<span class="gd-radios" role="radio"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_0" value="0" class="gd-checkbox" field_type="radio" type="radio" <?php checked( empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'No', 'geodirectory' ); ?>"> <?php _e( 'No', 'geodirectory' ); ?></span>
 				<div class="gd-bh-items" style="display:<?php echo $display; ?>" data-12am="<?php echo esc_attr( date_i18n( $time_format, strtotime( '00:00' ) ) ); ?>">
-					<table class="form-table widefat fixed">
+					<table class="table table-borderless">
 						<thead>
 							<tr><th class="gd-bh-day"><?php _e( 'Day', 'geodirectory' ); ?></th><th class="gd-bh-24hours"><?php _e( 'Open 24 hours', 'geodirectory' ); ?></th><th class="gd-bh-time"><?php _e( 'Opening Hours', 'geodirectory' ); ?></th><th class="gd-bh-act"><span class="sr-only"><?php _e( 'Add', 'geodirectory' ); ?></span></th></tr>
 						</thead>
@@ -1795,7 +1839,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 								<td class="gd-bh-day"><?php echo $day; ?></td>
 								<td class="gd-bh-24hours"><input type="checkbox" value="1"></td>
 								<td class="gd-bh-time" data-day="<?php echo $day_no; ?>" data-field="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>]">
-									<?php 
+									<?php
 										if ( ! empty( $hours[ $day_no ] ) ) {
 											$slots = $hours[ $day_no ];
 
@@ -1830,7 +1874,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 							</tr>
 							<?php } ?>
 							<tr class="gd-tz-item">
-								<td colspan="4"><label form="<?php echo $htmlvar_name; ?>_f_timezone"><?php _e( 'Timezone offset from UTC (not including daylight savings time This is set automatically when address is set)', 'geodirectory' ); ?></label> 
+								<td colspan="4"><label form="<?php echo $htmlvar_name; ?>_f_timezone"><?php _e( 'Timezone offset from UTC (not including daylight savings time This is set automatically when address is set)', 'geodirectory' ); ?></label>
                                     <input type="text" data-field="timezone" placeholder="<?php echo esc_attr( $default_offset ); ?>" id="<?php echo $htmlvar_name; ?>_f_timezone" value="<?php echo esc_attr( $gmt_offset ); ?>" lang="EN">
                                 </td>
                             </tr>
@@ -1844,7 +1888,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
         <?php
         $html = ob_get_clean();
     }
-	
+
 	return $html;
 }
 add_filter( 'geodir_custom_field_input_business_hours', 'geodir_cfi_business_hours', 10, 2 );
@@ -1935,7 +1979,9 @@ function geodir_cfi_files( $html, $cf ) {
         $show_image_input_box = apply_filters( 'geodir_file_uploader_on_add_listing', $show_image_input_box, $cf['post_type'] );
 
         if ( $show_image_input_box ) {
-            add_thickbox();  
+
+            // admin only
+            $admin_only = geodir_cfi_admin_only($cf);
             ?>
 
             <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row ">
@@ -1943,7 +1989,7 @@ function geodir_cfi_files( $html, $cf ) {
 
                 <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
                     <?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
-                    echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; ?>
+                    echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
                     <?php if ( $cf['is_required'] ) {
                         echo '<span>*</span>';
                     } ?>
