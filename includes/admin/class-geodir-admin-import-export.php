@@ -154,7 +154,10 @@ class GeoDir_Admin_Import_Export {
 	 * Try to set higher limits on the fly
 	 */
 	public static function set_php_limits() {
-		error_reporting( 0 );
+		if ( ! ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
+			error_reporting( 0 );
+		}
+		@ini_set( 'display_errors', 0 );
 
 		// try to set higher limits for import
 		$max_input_time     = ini_get( 'max_input_time' );
