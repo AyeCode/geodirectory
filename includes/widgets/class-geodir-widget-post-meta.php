@@ -254,6 +254,9 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 						$field['css_class'] .=" ".$args['css_class']." ";
 					}
 
+					$design_style = geodir_design_style();
+
+
 					// set text alignment class
 					if($args['text_alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
 					if($args['text_alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
@@ -266,16 +269,16 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					if($args['alignment']=='block'){$field['css_class'] .= " gd-d-block gd-clear-both ";}
 
 					// set list_hide class
-					if($args['list_hide']=='2'){$field['css_class'] .= " gd-lv-2 ";}
-					if($args['list_hide']=='3'){$field['css_class'] .= " gd-lv-3 ";}
-					if($args['list_hide']=='4'){$field['css_class'] .= " gd-lv-4 ";}
-					if($args['list_hide']=='5'){$field['css_class'] .= " gd-lv-5 ";}
+					if($args['list_hide']=='2'){$field['css_class'] .= $design_style ? " gv-hide-2 " : " gd-lv-2 ";}
+					if($args['list_hide']=='3'){$field['css_class'] .= $design_style ? " gv-hide-3 " : " gd-lv-3 ";}
+					if($args['list_hide']=='4'){$field['css_class'] .= $design_style ? " gv-hide-4 " : " gd-lv-4 ";}
+					if($args['list_hide']=='5'){$field['css_class'] .= $design_style ? " gv-hide-5 " : " gd-lv-5 ";}
 
 					// set list_hide_secondary class
-					if($args['list_hide_secondary']=='2'){$field['css_class'] .= " gd-lv-s-2 ";}
-					if($args['list_hide_secondary']=='3'){$field['css_class'] .= " gd-lv-s-3 ";}
-					if($args['list_hide_secondary']=='4'){$field['css_class'] .= " gd-lv-s-4 ";}
-					if($args['list_hide_secondary']=='5'){$field['css_class'] .= " gd-lv-s-5 ";}
+					if($args['list_hide_secondary']=='2'){$field['css_class'] .= $design_style ? " gv-hide-s-2 " : " gd-lv-s-2 ";}
+					if($args['list_hide_secondary']=='3'){$field['css_class'] .= $design_style ? " gv-hide-s-3 " : " gd-lv-s-3 ";}
+					if($args['list_hide_secondary']=='4'){$field['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
+					if($args['list_hide_secondary']=='5'){$field['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
 					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
 

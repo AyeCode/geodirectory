@@ -170,17 +170,19 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
             $class .= ' gd-fav-hide-stars ';
         }
 
+        $design_style = geodir_design_style();
+
         // set list_hide class
-        if($args['list_hide']=='2'){$class .= " gd-lv-2 ";}
-        if($args['list_hide']=='3'){$class .= " gd-lv-3 ";}
-        if($args['list_hide']=='4'){$class .= " gd-lv-4 ";}
-        if($args['list_hide']=='5'){$class .= " gd-lv-5 ";}
+        if($args['list_hide']=='2'){$class .= $design_style ? " gv-hide-2 " : " gd-lv-2 ";}
+        if($args['list_hide']=='3'){$class .= $design_style ? " gv-hide-3 " : " gd-lv-3 ";}
+        if($args['list_hide']=='4'){$class .= $design_style ? " gv-hide-4 " : " gd-lv-4 ";}
+        if($args['list_hide']=='5'){$class .= $design_style ? " gv-hide-5 " : " gd-lv-5 ";}
 
         // set list_hide_secondary class
-        if($args['list_hide_secondary']=='2'){$class .= " gd-lv-s-2 ";}
-        if($args['list_hide_secondary']=='3'){$class .= " gd-lv-s-3 ";}
-        if($args['list_hide_secondary']=='4'){$class .= " gd-lv-s-4 ";}
-        if($args['list_hide_secondary']=='5'){$class .= " gd-lv-s-5 ";}
+        if($args['list_hide_secondary']=='2'){$class .= $design_style ? " gv-hide-s-2 " : " gd-lv-s-2 ";}
+        if($args['list_hide_secondary']=='3'){$class .= $design_style ? " gv-hide-s-3 " : " gd-lv-s-3 ";}
+        if($args['list_hide_secondary']=='4'){$class .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
+        if($args['list_hide_secondary']=='5'){$class .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
         $before = '<div class="geodir_post_meta gd-fav-info-wrap '. $class .'" >';
         $after  = '</div>';

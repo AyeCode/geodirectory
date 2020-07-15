@@ -33,7 +33,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		$listSelect.find('button').removeClass('active');
 		$listSelect.find('button[data-gridview="'+$val+'"]').addClass('active');
-		$list.removeClass('row-cols-md-0 row-cols-md-2 row-cols-md-3 row-cols-md-4 row-cols-md-5').addClass('row-cols-sm-2 row-cols-md-'+$val);
+		$list.removeClass('row-cols-md-0 row-cols-md-1 row-cols-md-2 row-cols-md-3 row-cols-md-4 row-cols-md-5').addClass('row-cols-sm-2 row-cols-md-'+$val);
 
 
 		// only store if it was a user action

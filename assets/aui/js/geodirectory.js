@@ -1611,8 +1611,8 @@ function geodir_widget_listings_pagination(id, params) {
     jQuery('.geodir-loop-paging-container', $container).each(function() {
         var $paging = jQuery(this);
         if (!$paging.hasClass('geodir-paging-setup')) {
-            if (jQuery('.page-numbers .page-numbers', $paging).length) {
-                jQuery('.page-numbers a.page-numbers', $paging).each(function() {
+            if (jQuery('.pagination .page-link', $paging).length) {
+                jQuery('.pagination a.page-link', $paging).each(function() {
                     href = jQuery(this).attr('href');
                     hrefs = href.split("#");
                     page = (hrefs.length > 1 && parseInt(hrefs[1]) > 0 ? parseInt(hrefs[1]) : (parseInt(jQuery(this).text()) > 0 ? parseInt(jQuery(this).text()) : 1));
@@ -1624,7 +1624,7 @@ function geodir_widget_listings_pagination(id, params) {
         }
     });
 
-    jQuery("a.page-numbers", $container).on("click", function(e) {
+    jQuery("a.page-link", $container).on("click", function(e) {
         pagenum = parseInt(jQuery(this).data('geodir-pagenum'));
         if (!pagenum > 0) {
             return;
@@ -1634,7 +1634,7 @@ function geodir_widget_listings_pagination(id, params) {
 
         params['pageno'] = pagenum;
 
-        $widget.addClass('geodir-listings-loading');
+        $widget.addClass('geodir-listings-loading').find('.geodir-ajax-listings-loader').show();
 
         jQuery.ajax({
             type: "POST",
@@ -1651,10 +1651,10 @@ function geodir_widget_listings_pagination(id, params) {
                         geodir_load_badge_class();
                     }
                 }
-                $widget.removeClass('geodir-listings-loading');
+                $widget.removeClass('geodir-listings-loading').find('.geodir-ajax-listings-loader').hide();
             },
             fail: function(data) {
-                $widget.removeClass('geodir-listings-loading');
+                $widget.removeClass('geodir-listings-loading').find('.geodir-ajax-listings-loader').hide();
             }
         });
 

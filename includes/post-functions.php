@@ -434,7 +434,7 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 			data-color-on="<?php echo $icon_color_on;?>"
 			data-color-off="<?php echo $icon_color_off;?>"><i
 				style="<?php echo $icon_style;?>"
-				class="<?php echo $unfavourite_icon; ?>"></i> <span class="geodir-fav-text"><?php echo $unfavourite_text; ?></span></a>   </span><?php
+				class="<?php echo $unfavourite_icon; ?>"></i> <span class="geodir-fav-text gv-secondary"><?php echo $unfavourite_text; ?></span></a>   </span><?php
 
 	} else {
 
@@ -455,7 +455,7 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		                                                                             data-color-on="<?php echo $icon_color_on;?>"
 		                                                                             data-color-off="<?php echo $icon_color_off;?>"><i
 				style="<?php echo $icon_style;?>"
-				class="<?php echo $favourite_icon; ?>"></i> <span class="geodir-fav-text"><?php echo $favourite_text; ?></span></a></span>
+				class="<?php echo $favourite_icon; ?>"></i> <span class="geodir-fav-text gv-secondary"><?php echo $favourite_text; ?></span></a></span>
 	<?php }
 }
 
@@ -1064,7 +1064,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 				// set badge text as secondary if icon is set.
 				if( $icon ){
-					$badge = " <span class='gd-secondary'>$badge</span>";
+					$badge = " <span class='gd-secondary gv-secondary'>$badge</span>";
 				}
 
 				// phone & email link

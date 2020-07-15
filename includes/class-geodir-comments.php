@@ -709,11 +709,11 @@ class GeoDir_Comments {
 
 		$rating_color = $args['rating_color'];
 		if ( $rating_color == '#ff9900' ) {
-			$rating_color = '';
+			$rating_color = '#ff9900';
 		}
 		$rating_color_off = $args['rating_color_off'];
 		if ( $rating_color_off == '#afafaf' ) {
-			$rating_color_off = '';
+			$rating_color_off = "style='color:#afafaf;'";
 		} else {
 			$rating_color_off = "style='color:$rating_color_off;'";
 		}
@@ -734,7 +734,7 @@ class GeoDir_Comments {
 				$i ++;
 			}
 			if ( $rating_color == '#ff9900' ) {
-				$rating_color = '';
+				$rating_color = 'background:#ff9900';
 			} else {
 				$rating_color = "background:$rating_color;";
 			}
@@ -768,8 +768,8 @@ class GeoDir_Comments {
 			}
 			?>
 			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
-			<span class="gd-rating-wrap d-inline-flex" <?php echo $rating_wrap_title; ?>>
-				<span class="gd-rating-foreground position-absolute text-nowrap" <?php echo $foreground_style; ?>>
+			<span class="gd-rating-wrap d-inline-flex position-relative" <?php echo $rating_wrap_title; ?>>
+				<span class="gd-rating-foreground position-absolute text-nowrap overflow-hidden" <?php echo $foreground_style; ?>>
 				<?php echo $rating_html; ?>
 				</span>
 				<span class="gd-rating-background" <?php echo $rating_color_off; ?>>

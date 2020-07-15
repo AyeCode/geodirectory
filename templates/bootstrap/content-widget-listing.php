@@ -24,7 +24,7 @@ do_action( 'geodir_before_listing_listview' );
 
 ?>
 	<div
-		class="row row-cols-1 row-cols-sm-2 row-cols-md-3 geodir-category-list-view <?php echo apply_filters( 'geodir_listing_listview_ul_extra_class', '', 'widget' ); ?>">
+		class="row row-cols-1 row-cols-sm-2 geodir-category-list-view <?php echo apply_filters( 'geodir_listing_listview_ul_extra_class', '', 'widget' ); ?>">
 		<?php if ( ! empty( $widget_listings ) ) {
 
 			/**

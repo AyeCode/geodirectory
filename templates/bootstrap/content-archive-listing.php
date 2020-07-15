@@ -26,7 +26,7 @@ global $related_nearest, $related_parent_lat, $related_parent_lon, $gd_layout_cl
 
 ?>
 <div
-	class="row row-cols-1 row-cols-sm-2 row-cols-md-3 geodir-category-list-view <?php echo apply_filters('geodir_listing_listview_ul_extra_class', $gd_layout_class, 'listing'); ?>">
+	class="row row-cols-1 row-cols-sm-2 geodir-category-list-view <?php echo apply_filters('geodir_listing_listview_ul_extra_class', $gd_layout_class, 'listing'); ?>">
 
 <?php if (have_posts()) {
 

@@ -238,6 +238,7 @@ if ( $wp_query->max_num_pages <= 1 ) {
 
 	$gd_advanced_pagination = !empty($args['show_advanced']) ? esc_attr($args['show_advanced']) : ''; 
 	$pagination_info = '';
+	$design_style = geodir_design_style();
 	if ($gd_advanced_pagination != '') {
 		global $posts_per_page, $wpdb, $paged;
 
@@ -283,7 +284,8 @@ if ( $wp_query->max_num_pages <= 1 ) {
 		} else {
 			$pegination_desc = wp_sprintf( __( 'Showing listings %d-%d of %d', 'geodirectory' ), $start_no, $end_no, $numposts );
 		}
-		$pagination_info = '<div class="gd-pagination-details">' . $pegination_desc . '</div>';
+		$bs_class = $design_style ? 'text-muted pb-2' : '';
+		$pagination_info = '<div class="gd-pagination-details '.$bs_class.'">' . $pegination_desc . '</div>';
 
 		/**
 		 * Adds an extra pagination info above/under pagination.
@@ -312,7 +314,7 @@ if ( $wp_query->max_num_pages <= 1 ) {
 		$args['after_paging'] = $pagination_info;
 	}
 
-	$design_style = geodir_design_style();
+
 	$template = $design_style ? $design_style."/loop/pagination.php" : "loop/pagination.php";
 	geodir_get_template( $template, array(
 		'args' => $args

@@ -140,17 +140,19 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
             $class = "gd-align-right";
         }
 
+        $design_style = geodir_design_style();
+
         // set list_hide class
-        if($args['list_hide']=='2'){$class .= " gd-lv-2 ";}
-        if($args['list_hide']=='3'){$class .= " gd-lv-3 ";}
-        if($args['list_hide']=='4'){$class .= " gd-lv-4 ";}
-        if($args['list_hide']=='5'){$class .= " gd-lv-5 ";}
+        if($args['list_hide']=='2'){$class .= $design_style ? " gv-hide-2 " : " gd-lv-2 ";}
+        if($args['list_hide']=='3'){$class .= $design_style ? " gv-hide-3 " : " gd-lv-3 ";}
+        if($args['list_hide']=='4'){$class .= $design_style ? " gv-hide-4 " : " gd-lv-4 ";}
+        if($args['list_hide']=='5'){$class .= $design_style ? " gv-hide-5 " : " gd-lv-5 ";}
 
         // set list_hide_secondary class
-        if($args['list_hide_secondary']=='2'){$class .= " gd-lv-s-2 ";}
-        if($args['list_hide_secondary']=='3'){$class .= " gd-lv-s-3 ";}
-        if($args['list_hide_secondary']=='4'){$class .= " gd-lv-s-4 ";}
-        if($args['list_hide_secondary']=='5'){$class .= " gd-lv-s-5 ";}
+        if($args['list_hide_secondary']=='2'){$class .= $design_style ? " gv-hide-s-2 " : " gd-lv-s-2 ";}
+        if($args['list_hide_secondary']=='3'){$class .= $design_style ? " gv-hide-s-3 " : " gd-lv-s-3 ";}
+        if($args['list_hide_secondary']=='4'){$class .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
+        if($args['list_hide_secondary']=='5'){$class .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
 
 
@@ -220,7 +222,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         global $gd_post;
         ob_start();
         ?>
-        <span class="gd-list-rating-text d-inline-bloc">
+        <span class="gd-list-rating-text d-inline-bloc gv-secondary">
             <a href="<?php comments_link(); ?>" class="gd-list-rating-link">
                 <?php geodir_comments_number( $gd_post ); ?>
             </a>
