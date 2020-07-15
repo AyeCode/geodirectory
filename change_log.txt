@@ -8,7 +8,8 @@
 * GD Listings pagination don't renders WPBakery Page Builder shortcodes - FIXED
 * BuddyPress v6.0.0 compatibility - CHANGED
 * Auto save don't saves all images when image upload is in progress - FIXED
-* Address within Brussels, Belgium don't retrives region name - FIXED
+* Address within Brussels, Belgium don't retrieves region name - FIXED
+* Business Hours UI changes for small screen devices - CHANGED
 
 = 2.0.0.96 =
 * Option added to make zip/post code as a required field - FIXED

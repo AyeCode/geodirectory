@@ -13,9 +13,8 @@
  * @return array $weekdays The days of the week
  * @param bool $untranslated If the returned day names should be translated or not.
  */
-function geodir_get_weekdays($untranslated = false) {
-
-	if($untranslated){
+function geodir_get_weekdays( $untranslated = false ) {
+	if ( $untranslated ) {
 		$weekdays = array(
 			'Mo'    => 'Monday',
 			'Tu'  	=> 'Tuesday',
@@ -25,19 +24,52 @@ function geodir_get_weekdays($untranslated = false) {
 			'Sa'  	=> 'Saturday',
 			'Su'    => 'Sunday'
 		);
-	}else{
+	} else {
 		$weekdays = array(
-			'Mo'    	=> __( 'Monday' ),
+			'Mo'    => __( 'Monday' ),
 			'Tu'  	=> __( 'Tuesday' ),
 			'We' 	=> __( 'Wednesday' ),
 			'Th'  	=> __( 'Thursday' ),
-			'Fr'    	=> __( 'Friday' ),
+			'Fr'    => __( 'Friday' ),
 			'Sa'  	=> __( 'Saturday' ),
-			'Su'    	=> __( 'Sunday' )
+			'Su'    => __( 'Sunday' )
 		);
 	}
 
-   return apply_filters( 'geodir_get_weekdays', $weekdays,$untranslated );
+	return apply_filters( 'geodir_get_weekdays', $weekdays, $untranslated );
+}
+
+/**
+ * Return three letter abbreviation week day.
+ *
+ * @since 2.0.0.97
+ * @return array $weekdays The days of the week
+ * @param bool $untranslated If the returned day names should be translated or not.
+ */
+function geodir_get_short_weekdays( $untranslated = false ) {
+	if ( $untranslated ) {
+		$weekdays = array(
+			'Mo'    => 'Mon',
+			'Tu'  	=> 'Tue',
+			'We' 	=> 'Wed',
+			'Th'  	=> 'Thu',
+			'Fr'    => 'Fri',
+			'Sa'  	=> 'Sat',
+			'Su'    => 'Sun'
+		);
+	} else {
+		$weekdays = array(
+			'Mo'    => __( 'Mon' ),
+			'Tu'  	=> __( 'Tue' ),
+			'We' 	=> __( 'Wed' ),
+			'Th'  	=> __( 'Thu' ),
+			'Fr'    => __( 'Fri' ),
+			'Sa'  	=> __( 'Sat' ),
+			'Su'    => __( 'Sun' )
+		);
+	}
+
+	return apply_filters( 'geodir_get_short_weekdays', $weekdays, $untranslated );
 }
 
 /**

@@ -190,3 +190,27 @@
         width: auto;
     }
 }
+
+@media screen and (max-width: 782px) {
+    .geodir_form_row .gd-bh-field {
+        float: none;
+        width: 100%;
+    }
+
+    .geodir_form_row .gd-bh-items {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .geodir_form_row .gd-bh-items .gd-bh-day {
+        padding-left: 5px;
+    }
+
+    .geodir_form_row .gd-bh-items .gd-bh-24hours {
+        width: auto;
+    }
+
+    .geodir_form_row .gd-bh-items .gd-tz-item td {
+        padding: 10px 5px 5px 5px;
+    }
+}

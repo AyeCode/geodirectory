@@ -1755,7 +1755,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		$locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
 		$time_format = geodir_bh_input_time_format();
 		$timezone_string = geodir_timezone_string();
-		$weekdays = geodir_get_weekdays();
+		$weekdays = geodir_get_short_weekdays();
 
 		$hours = array();
 		$display = 'none';
