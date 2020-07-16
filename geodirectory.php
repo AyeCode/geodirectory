@@ -11,7 +11,7 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.0.0.96
+ * Version: 2.0.0.97
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
@@ -19,7 +19,6 @@
  * Requires at least: 4.5
  * Tested up to: 5.4
  */
-
 
 if ( ! class_exists( 'GeoDirectory' ) ) :
 
@@ -35,7 +34,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.0.0.96';
+    public $version = '2.0.0.97';
 
     /**
      * GeoDirectory instance.
@@ -83,18 +82,13 @@ final class GeoDirectory {
             }
 
             self::$instance->includes();
-
-	        self::$instance->init_hooks();
-
-
+            self::$instance->init_hooks();
 
             do_action( 'geodirectory_loaded' );
         }
 
         return self::$instance;
     }
-
-
 
     /**
      * Setup plugin constants.
@@ -251,7 +245,6 @@ final class GeoDirectory {
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-auth.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-register-wp-admin-settings.php' );
 
-
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
             if ( !empty( $_REQUEST['taxonomy'] ) ) {
                 require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/class-geodir-admin-taxonomies.php' );
@@ -285,7 +278,7 @@ final class GeoDirectory {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
         }
 
-		// If curent WP Version >= 4.9.6.
+		// If current WP Version >= 4.9.6.
 		if ( version_compare( $wp_version, '4.9.6', '>=' ) ) {
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-privacy.php' );
 		}
