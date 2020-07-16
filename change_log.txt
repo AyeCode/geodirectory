@@ -10,6 +10,7 @@
 * Auto save don't saves all images when image upload is in progress - FIXED
 * Address within Brussels, Belgium don't retrieves region name - FIXED
 * Business Hours UI changes for small screen devices - CHANGED
+* GD Listings pagination on detail page don't filter category - FIXED
 
 = 2.0.0.96 =
 * Option added to make zip/post code as a required field - FIXED
