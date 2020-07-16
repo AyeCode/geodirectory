@@ -298,13 +298,6 @@ class GeoDir_Admin_Menus {
 		$items['pages'] = array();
 		$loop_index = 999;
 
-		// Get the add listing page id and url
-		$add_listing_page_id = geodir_add_listing_page_id();
-		if($add_listing_page_id){
-			$add_listing_page_url = get_page_link($add_listing_page_id);
-		}
-		
-
 		// Add the Location menu item
 		$gd_location_page_id = geodir_location_page_id();
 		if($gd_location_page_id){
@@ -397,26 +390,23 @@ class GeoDir_Admin_Menus {
 
 				$items['cpt_archives'][$name] = $item;
 
+				// Item for add listing
+				$add_item = new stdClass();
+				$loop_index++;
+				$add_item->ID = $loop_index;
+				$add_item->object_id = $loop_index;
+				$add_item->db_id = 0;
+				$add_item->object = 'page';
+				$add_item->menu_item_parent = 0;
+				$add_item->type = 'custom';
+				$add_item->title = sprintf( __('Add %s', 'geodirectory'), __($cpt['labels']['singular_name'],'geodirectory') );
+				$add_item->url = geodir_add_listing_page_url( $name );
+				$add_item->target = '';
+				$add_item->attr_title = '';
+				$add_item->classes = array('gd-menu-item','geodir-location-switcher');
+				$add_item->xfn = '';
 
-				if($add_listing_page_id){
-					// item for add listing
-					$add_item = new stdClass();
-					$loop_index++;
-					$add_item->ID = $loop_index;
-					$add_item->object_id = $loop_index;
-					$add_item->db_id = 0;
-					$add_item->object =  'page';
-					$add_item->menu_item_parent = 0;
-					$add_item->type = 'custom';
-					$add_item->title = sprintf( __('Add %s', 'geodirectory'), __($cpt['labels']['singular_name'],'geodirectory') );
-					$add_item->url = trailingslashit($add_listing_page_url)."?listing_type=$name";
-					$add_item->target = '';
-					$add_item->attr_title = '';
-					$add_item->classes = array('gd-menu-item','geodir-location-switcher');
-					$add_item->xfn = '';
-
-					$items['cpt_add_listing'][$name] = $add_item;
-				}
+				$items['cpt_add_listing'][$name] = $add_item;
 			}
 		}
 		

@@ -1204,51 +1204,68 @@ function gd_ajax_lightbox($action,$nonce,$post_id,$extra){
 /**
  * Change the texts for the reply/review comments section.
  */
-function gd_init_comment_reply_link(){
-
-    jQuery(".geodir-comments-area .comment-reply-link").click(function(event){
-
-        setTimeout(function(){
-
-            jQuery('#reply-title').contents().filter(function() {
-                return this.nodeType == 3
-            }).each(function(){
-                this.textContent = this.textContent.replace(geodir_params.txt_leave_a_review,geodir_params.txt_leave_a_reply);
-            });
-
-            $html = jQuery('#respond .comment-form-comment').html();
-            $new_html = $html.replace(geodir_params.txt_review_text,geodir_params.txt_reply_text);
-            jQuery('#respond .comment-form-comment').html($new_html);
-
-            $html = jQuery('#respond input.submit').val();
-            $new_html = $html.replace(geodir_params.txt_post_review,geodir_params.txt_post_reply);
-            jQuery('#respond input.submit').val($new_html);
-
-            jQuery('#respond .gd-rating-input-wrap').hide();
-        }, 10);
+function gd_init_comment_reply_link() {
+    jQuery(".geodir-page-single .comment-reply-link").on('click', function(e) {
+        geodirOnReplyClick(this, e);
     });
 
-    jQuery("#cancel-comment-reply-link").click(function(event){
-
-        setTimeout(function(){
-
-            jQuery('#reply-title').contents().filter(function() {
-                return this.nodeType == 3
-            }).each(function(){
-                this.textContent = this.textContent.replace(geodir_params.txt_leave_a_reply,geodir_params.txt_leave_a_review);
-            });
-
-            $html = jQuery('#respond .comment-form-comment').html();
-            $new_html = $html.replace(geodir_params.txt_reply_text,geodir_params.txt_review_text);
-            jQuery('#respond .comment-form-comment').html($new_html);
-
-            $html = jQuery('#respond input.submit').val();
-            $new_html = $html.replace(geodir_params.txt_post_reply,geodir_params.txt_post_review);
-            jQuery('#respond input.submit').val($new_html);
-
-            jQuery('#respond .gd-rating-input-wrap').show();
-        }, 10);
+    /* Detect reply button click event on touch screen device */
+    jQuery(".geodir-page-single .comment-reply-link").on('touchstart', function(e) {
+        geodirOnReplyClick(this, e);
     });
+
+    jQuery(".geodir-page-single #cancel-comment-reply-link").on('click', function(e) {
+        geodirOnCancelReplyClick(this, e);
+    });
+
+    /* Detect cancel reply button click on touch screen device */
+    jQuery(".geodir-page-single #cancel-comment-reply-link").on('touchstart', function(e) {
+        geodirOnCancelReplyClick(this, e);
+    });
+}
+
+function geodirOnReplyClick(el, e) {
+    setTimeout(function() {
+        jQuery('#reply-title').contents().filter(function() {
+            return this.nodeType == 3
+        }).each(function() {
+            this.textContent = this.textContent.replace(geodir_params.txt_leave_a_review, geodir_params.txt_leave_a_reply);
+        });
+
+        $html = jQuery('#respond .comment-form-comment').html();
+        $new_html = $html.replace(geodir_params.txt_review_text, geodir_params.txt_reply_text);
+        jQuery('#respond .comment-form-comment').html($new_html);
+
+        var btnEl = jQuery('#respond input.submit').length ? '#respond input.submit' : '#respond input#submit';
+        $html = jQuery(btnEl).val();
+        $new_html = $html.replace(geodir_params.txt_post_review, geodir_params.txt_post_reply);
+        jQuery(btnEl).val($new_html);
+        jQuery(btnEl).closest('form').toggleClass('geodir-form-review-reply', true);
+
+        jQuery('#respond .gd-rating-input-wrap').hide();
+    }, 10);
+}
+
+function geodirOnCancelReplyClick(el, e) {
+    setTimeout(function() {
+        jQuery('#reply-title').contents().filter(function() {
+            return this.nodeType == 3
+        }).each(function() {
+            this.textContent = this.textContent.replace(geodir_params.txt_leave_a_reply, geodir_params.txt_leave_a_review);
+        });
+
+        $html = jQuery('#respond .comment-form-comment').html();
+        $new_html = $html.replace(geodir_params.txt_reply_text, geodir_params.txt_review_text);
+        jQuery('#respond .comment-form-comment').html($new_html);
+
+        var btnEl = jQuery('#respond input.submit').length ? '#respond input.submit' : '#respond input#submit';
+        $html = jQuery(btnEl).val();
+        $new_html = $html.replace(geodir_params.txt_post_reply, geodir_params.txt_post_review);
+        jQuery(btnEl).val($new_html);
+        jQuery(btnEl).closest('form').toggleClass('geodir-form-review-reply', false);
+
+        jQuery('#respond .gd-rating-input-wrap').show();
+    }, 10);
 }
 
 /**

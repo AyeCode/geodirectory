@@ -187,6 +187,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				'author_posts_private' => '0',
 				'author_favorites_private' => '0',
 				// Page template
+				'page_add' => '0',
 				'page_details' => '0',
 				'page_archive' => '0',
 				'page_archive_item' => '0',
@@ -559,6 +560,24 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'advanced' => true,
 				),
 				array(
+					'name'     => __( 'Add listing page', 'geodirectory' ),
+					'desc'     => __( 'Select the page to use as the GD add listing page template', 'geodirectory' ),
+					'id'       => 'page_add',
+					'type'     => 'single_select_page',
+					'class'    => 'geodir-select',
+					'desc_tip' => true,
+					'advanced' => true,
+					'value'	   => $post_type_values['page_add'],
+					'view_page_args' => array( 
+						'listing_type' => $post_type
+					),
+					'args'     => array(
+						'show_option_none' => wp_sprintf( __( 'Default (%s)', 'geodirectory' ), get_the_title( geodir_get_option( 'page_add' ) ) ),
+						'option_none_value' => '0',
+						'sort_column' => 'post_title',
+					)
+				),
+				array(
 					'name'     => __( 'Details Page', 'geodirectory' ),
 					'desc'     => __( 'Select the page to use as the GD details page template', 'geodirectory' ),
 					'id'       => 'page_details',
@@ -790,6 +809,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['default_image'] = !empty( $raw['default_image'] ) ? $raw['default_image'] : '';
 
 			// Page template
+			$output[$post_type]['page_add'] = isset( $raw['page_add'] ) ? (int)$raw['page_add'] : 0;
 			$output[$post_type]['page_details'] = isset( $raw['page_details'] ) ? (int)$raw['page_details'] : 0;
 			$output[$post_type]['page_archive'] = isset( $raw['page_archive'] ) ? (int)$raw['page_archive'] : 0;
 			$output[$post_type]['page_archive_item'] = isset( $raw['page_archive_item'] ) ? (int)$raw['page_archive_item'] : 0;

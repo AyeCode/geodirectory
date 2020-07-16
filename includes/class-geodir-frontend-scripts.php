@@ -81,7 +81,12 @@ class GeoDir_Frontend_Scripts {
 	 * @since 1.6.22
 	 */
 	public static function fix_script_conflicts() {
-		if(geodir_is_page('single')) {
+		if ( geodir_is_page( 'single' ) ) {
+			// Some themes don't load comment reply JS.
+			if ( ! wp_script_is( 'comment-reply', 'enqueued' ) ) {
+				wp_enqueue_script( 'comment-reply' );
+			}
+
 			if ( wp_script_is( 'flexslider', 'enqueued' ) && wp_script_is( 'jquery-flexslider', 'enqueued' ) ) {
 				wp_dequeue_script( 'flexslider' );
 			}
@@ -591,12 +596,10 @@ class GeoDir_Frontend_Scripts {
 		self::enqueue_script( 'geodir' );
 		self::enqueue_script( 'geodir_lity' );
 
-
-		//rtl
+		// rtl
 		if(is_rtl()){
 			self::enqueue_style( 'geodir-rtl' );
 		}
-
 
 		// add-listing
 		if(geodir_is_page('add-listing') && !isset($_REQUEST['ct_builder'])){
@@ -605,14 +608,7 @@ class GeoDir_Frontend_Scripts {
 			self::enqueue_script( 'geodir-jquery-ui-timepicker' );
 
 			wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
-
 		}
-
-		// details page
-		if(geodir_is_page('single')){
-			//self::enqueue_script( 'jquery-flexslider' ); // moved to widget
-		}
-
 
 		// Maps
 		$geodir_map_name = GeoDir_Maps::active_map();

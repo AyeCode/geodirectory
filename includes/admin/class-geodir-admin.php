@@ -164,6 +164,9 @@ class GeoDir_Admin {
 			} else if ( ! empty( $post_type_arr[ 'page_details' ] ) && $post->ID == $post_type_arr[ 'page_details' ] ) {
 				$post_states['geodir_details_page_' . $post_type] = wp_sprintf( __( 'GD Details template (%s)', 'geodirectory' ), $name ) .
 													  geodir_help_tip( wp_sprintf( __( 'Used to design the %s details page but should never be linked to directly.', 'geodirectory' ), $name ) );
+			} else if ( ! empty( $post_type_arr[ 'page_add' ] ) && $post->ID == $post_type_arr[ 'page_add' ] ) {
+				$post_states['geodir_add_listing_page_' . $post_type] = wp_sprintf( __( 'GD Add listing page (%s)', 'geodirectory' ), $name ) .
+													  geodir_help_tip( wp_sprintf( __( 'Used to design the add %s page for the frontend.', 'geodirectory' ), $name ) );
 			}
 		}
 

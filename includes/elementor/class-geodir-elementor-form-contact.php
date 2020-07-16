@@ -290,7 +290,7 @@ class GeoDir_Elementor_Form_Contact extends \ElementorPro\Modules\Forms\Classes\
 		$widget->add_control(
 			'geodir_email_to_note',
 			[
-				'label' => __( 'To', 'plugin-name' ),
+				'label' => __( 'To', 'geodirectory' ),
 				'type' => \Elementor\Controls_Manager::RAW_HTML,
 				'raw' => __( 'This will email the listing defined email address.', 'geodirectory' ),
 				'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',

@@ -27,12 +27,15 @@ function geodir_db_cpt_table($post_type){
  *
  * @package Geodirectory
  * @since 1.4.6
+ * @since 2.0.0.97 Added $post_type parameter.
+ *
+ * @param string $post_type The post type.
  * @return int|null Return the page ID if present or null if not.
  */
-function geodir_add_listing_page_id(){
-    $gd_page_id = geodir_get_page_id( 'add' );
+function geodir_add_listing_page_id( $post_type = '' ) {
+    $gd_page_id = geodir_get_page_id( 'add', $post_type );
 
-	return apply_filters( 'geodir_add_listing_page_id', $gd_page_id );
+	return apply_filters( 'geodir_add_listing_page_id', $gd_page_id, $post_type );
 }
 
 /**

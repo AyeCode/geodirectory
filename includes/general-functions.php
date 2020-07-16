@@ -121,31 +121,22 @@ function geodir_getlink( $url, $params = array(), $use_existing_arguments = fals
 	return $link;
 }
 
-
 /**
- * Returns add listing page link.
+ * Returns add listing page url.
  *
- * @since   1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
+ * @since   2.0.0.97
  *
  * @param string $post_type The post type.
- *
- * @return string Listing page url if valid. Otherwise home url will be returned.
+ * @return string Add listing page url.
  */
-function geodir_get_addlisting_link( $post_type = '' ) {
+function geodir_add_listing_page_url( $post_type = '' ) {
 	global $wpdb;
 
-	//$check_pkg  = $wpdb->get_var("SELECT pid FROM ".GEODIR_PRICE_TABLE." WHERE post_type='".$post_type."' and status != '0'");
-	$check_pkg = 1;
-	if ( post_type_exists( $post_type ) && $check_pkg ) {
+	$page_id = geodir_add_listing_page_id( $post_type );
 
-		$add_listing_link = get_page_link( geodir_add_listing_page_id() );
+	$page_link = add_query_arg( array( 'listing_type' => $post_type ), get_page_link( $page_id ) );
 
-		return esc_url( add_query_arg( array( 'listing_type' => $post_type ), $add_listing_link ) );
-	} else {
-		return get_bloginfo( 'url' );
-	}
+	return apply_filters( 'geodir_add_listing_page_url', $page_link, $post_type );
 }
 
 /**
@@ -269,7 +260,7 @@ function geodir_is_page( $gdpage = '' ) {
 	switch ( $gdpage ):
 		case 'add-listing':
 
-			if ( is_page() && $page_id == geodir_add_listing_page_id() ) {
+			if ( is_page() && geodir_is_page_id( $page_id, 'add' ) ) {
 				return true;
 			} elseif ( is_page() && isset( $post->post_content ) && has_shortcode( $post->post_content, 'gd_add_listing' ) ) {
 				return true;
@@ -366,6 +357,39 @@ function geodir_is_page( $gdpage = '' ) {
 	return false;
 }
 
+/**
+ * Check that page id is.
+ *
+ * @since   2.0.0.97
+ *
+ * @param int $page_id The page id.
+ * @param string $gdpage The page type.
+ *
+ * @return bool If valid returns true. Otherwise false.
+ */
+function geodir_is_page_id( $page_id, $gdpage ) {
+	global $wp_query, $post, $wp;
+
+	if ( empty( $page_id ) || empty( $gdpage ) ) {
+		return false;
+	}
+
+	switch ( $gdpage ) {
+		case 'add':
+		case 'add-listing':
+			if ( $page_id == geodir_add_listing_page_id() ) {
+				return true;
+			} elseif ( geodir_is_cpt_template_page( $page_id, 'add' ) ) {
+				return true;
+			}
+			break;
+		default:
+			return false;
+			break;
+	}
+
+	return false;
+}
 
 /**
  * Sets a key and value in $wp object if the current page is a geodir page.
@@ -394,7 +418,7 @@ function geodir_set_is_geodir_page( $wp ) {
 
 		if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $wp->query_vars['page_id'] ) ) {
 			if (
-				$wp->query_vars['page_id'] == geodir_add_listing_page_id()
+				geodir_is_page_id( $wp->query_vars['page_id'], 'add' )
 				|| $wp->query_vars['page_id'] == geodir_preview_page_id()
 				|| $wp->query_vars['page_id'] == geodir_success_page_id()
 				|| $wp->query_vars['page_id'] == geodir_location_page_id()
@@ -407,7 +431,7 @@ function geodir_set_is_geodir_page( $wp ) {
 			$page = get_page_by_path( $wp->query_vars['pagename'] );
 
 			if ( ! empty( $page ) && (
-					$page->ID == geodir_add_listing_page_id()
+					geodir_is_page_id( $page->ID, 'add' )
 					|| $page->ID == geodir_preview_page_id()
 					|| $page->ID == geodir_success_page_id()
 					|| $page->ID == geodir_location_page_id()
@@ -2159,12 +2183,15 @@ function geodir_get_blogurl() {
  * Checks whether a page id is a GD CPT template page or not.
  *
  * @since   2.0.0.28
- * @package GeoDirectory
-
+ * @since   2.0.0.97 Added $page parameter.
+ *
+ * @param int $id Page ID.
+ * @param string $page Page type. Default empty.
  * @return bool If the page is a GD CPT template page returns true. Otherwise false.
  */
-function geodir_is_cpt_template_page( $id ) {
-	$return = wp_cache_get( 'geodir_check_cpt_template_page:' . $id, 'geodir_cpt_template_page' );
+function geodir_is_cpt_template_page( $id, $page = '' ) {
+	$cache_key = 'geodir_check_cpt_template_page:' . $id . ': ' . $page;
+	$return = wp_cache_get( $cache_key, 'geodir_cpt_template_page' );
 
 	if ( $return !== false ) {
 		return (bool)$return;
@@ -2172,15 +2199,15 @@ function geodir_is_cpt_template_page( $id ) {
 
 	$return = 0;
 
-	if ( ! empty( $id ) && ( $pages = geodir_cpt_template_pages() ) ) {
+	if ( ! empty( $id ) && ( $pages = geodir_cpt_template_pages( $page ) ) ) {
 		if ( in_array( $id, $pages ) ) {
 			$return = true;
 		}
 	}
 
-	$return = apply_filters( 'geodir_is_cpt_template_page', $return, $id );
+	$return = apply_filters( 'geodir_is_cpt_template_page', $return, $id, $page );
 
-	wp_cache_set( 'geodir_check_cpt_template_page:' . $id, $return, 'geodir_cpt_template_page' );
+	wp_cache_set( $cache_key, $return, 'geodir_cpt_template_page' );
 
 	return $return;
 }
@@ -2189,38 +2216,46 @@ function geodir_is_cpt_template_page( $id ) {
  * Get CPT templage page ids.
  *
  * @since   2.0.0.28
- * @package GeoDirectory
-
+ * @since   2.0.0.97 Added $page parameter.
+ *
+ * @param string $page Page type. Default empty.
  * @return array CPT template page ids.
  */
-function geodir_cpt_template_pages() {
-	$page_ids = wp_cache_get( 'geodir_cpt_template_pages', 'geodir_cpt_template_page' );
+function geodir_cpt_template_pages( $page = '' ) {
+	if ( ! empty( $page ) ) {
+		$page = strpos( $page, 'page_' ) === 0 ? $page : 'page_' . $page;
+	}
+
+	$cache_key = 'geodir_cpt_template_pages:' . $page;
+	$page_ids = wp_cache_get( $cache_key, 'geodir_cpt_template_page' );
 
 	if ( $page_ids !== false ) {
-		return (array)$page_ids;
+		return (array) $page_ids;
 	}
 
 	$post_types = geodir_get_posttypes( 'object' );
-	$pages = array( 'page_details', 'page_archive', 'page_archive_item' );
+	$pages = array( 'page_add', 'page_details', 'page_archive', 'page_archive_item' );
+	if ( ! empty( $page ) ) {
+		$pages = array( $page );
+	}
 
 	$page_ids = array();
 
 	foreach ( $post_types as $post_type => $post_type_obj ) {
-		foreach ( $pages as $page ) {
-			if ( ! empty( $post_type_obj->{$page} ) ) {
-				$page_ids[] = absint( $post_type_obj->{$page} );
+		foreach ( $pages as $_page ) {
+			if ( ! empty( $post_type_obj->{$_page} ) ) {
+				$page_ids[] = absint( $post_type_obj->{$_page} );
 			}
 		}
 	}
 
-	$page_ids = apply_filters( 'geodir_cpt_template_pages', $page_ids );
-
+	$page_ids = apply_filters( 'geodir_cpt_template_pages', $page_ids, $page );
 
 	if ( ! empty( $page_ids ) ) {
 		$page_ids = array_unique( $page_ids );
 	}
 
-	wp_cache_set( 'geodir_cpt_template_pages', $page_ids, 'geodir_cpt_template_page' );
+	wp_cache_set( $cache_key, $page_ids, 'geodir_cpt_template_page' );
 
 	return $page_ids;
 }
@@ -2233,23 +2268,73 @@ function geodir_cpt_template_pages() {
 
  * @return int The page id.
  */
-function geodir_cpt_template_page($page,$post_type) {
-
-	$default = geodir_get_option($page);
+function geodir_cpt_template_page( $page, $post_type ) {
+	$default = geodir_get_option( $page );
 	$page_id = $default ? $default : '';
-	$pages = array( 'page_details', 'page_archive', 'page_archive_item' );
+	$pages = array( 'page_add', 'page_details', 'page_archive', 'page_archive_item' );
 
+	// Bail if its not a CPT template
+	if ( in_array( $page, $pages ) ) {
+		$post_types = geodir_get_posttypes( 'array' );
 
-	// bail if its not a CPT template
-	if(in_array($page,$pages)){
-
-		$post_types = geodir_get_posttypes( 'object' );
-		if(isset($post_types->{$post_type}->page_details) && $post_types->{$post_type}->page_details){
-			$page_id = $post_types->{$post_type}->page_details;
+		if ( isset( $post_types[ $post_type ][ $page ] ) && $post_types[ $post_type ][ $page ] ) {
+			$page_id = $post_types[ $post_type ][ $page ];
 		}
 	}
 
 	return $page_id;
+}
+
+/**
+ * Get post type of the CPT template page id.
+ *
+ * @since   2.0.0.97 Added $page parameter.
+ *
+ * @param int $page_id Page id.
+ * @param string $page Page type. Default empty.
+ * @return string Post type.
+ */
+function geodir_cpt_template_post_type( $page_id, $page = '' ) {
+	if ( ! empty( $page ) ) {
+		$page = strpos( $page, 'page_' ) === 0 ? $page : 'page_' . $page;
+	}
+
+	$cache_key = 'geodir_cpt_template_post_type:' . $page_id . ':' . $page;
+	$post_type = wp_cache_get( $cache_key, 'geodir_cpt_template_post_type' );
+
+	if ( $post_type ) {
+		return $post_type;
+	}
+
+	$pages = array( 'page_add', 'page_details', 'page_archive', 'page_archive_item' );
+	if ( ! empty( $page ) ) {
+		$pages = array( $page );
+	}
+
+	$post_types = geodir_get_posttypes( 'object' );
+	foreach ( $post_types as $_post_type => $post_type_obj ) {
+		if ( $post_type ) {
+			break;
+		}
+
+		foreach ( $pages as $_page ) {
+			if ( ! empty( $post_type_obj->{$_page} ) ) {
+				$_page_id = absint( $post_type_obj->{$_page} );
+				$page_ids = apply_filters( 'geodir_cpt_template_pages', array( $_page_id ), $page );
+
+				if ( in_array( $page_id, $page_ids ) ) {
+					$post_type = $_post_type;
+					break;
+				}
+			}
+		}
+	}
+
+	$post_type = apply_filters( 'geodir_cpt_template_post_type', $post_type, $page_id, $page );
+
+	wp_cache_set( $cache_key, $post_type, 'geodir_cpt_template_post_type' );
+
+	return $post_type;
 }
 
 /**

@@ -453,6 +453,15 @@ function geodir_get_commentoverall( $comment_id = 0 ) {
 }
 }
 
+/**
+ * @deprecated 2.0.0.97
+ */
+function geodir_get_addlisting_link( $post_type = '' ) {
+	//_deprecated_function( __FUNCTION__, '2.0.0.97', 'geodir_add_listing_page_url()' );
+
+	return geodir_add_listing_page_url( $post_type );
+}
+
 
 //
 ///**

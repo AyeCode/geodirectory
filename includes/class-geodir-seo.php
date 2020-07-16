@@ -37,6 +37,7 @@ class GeoDir_SEO {
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
 		add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
 		add_filter( 'rank_math/frontend/breadcrumb/items', array( __CLASS__, 'rank_breadcrumb_links' ), 10, 1 );
+		add_filter( 'rank_math/frontend/breadcrumb/main_term', array( __CLASS__, 'rank_math_frontend_breadcrumb_main_term' ), 20, 2 );
 
 		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( __CLASS__, 'wpseo_exclude_from_sitemap_by_post_ids' ), 20, 1 );
 		if ( ! is_admin() ) {
@@ -784,29 +785,59 @@ class GeoDir_SEO {
 	 *
 	 * @return mixed
 	 */
-	public static function rank_breadcrumb_links($crumbs){
-	    // maybe add category link to single page
-        if ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) {
-	        global $wp_query;
-	        $breadcrumb = array();
-	        $post_type   = geodir_get_current_posttype();
-	        $category = !empty($wp_query->query_vars[$post_type."category"]) ? $wp_query->query_vars[$post_type."category"] : '';
-	        if($category){
-		        $term  = get_term_by( 'slug', $category, $post_type."category");
-		        if(!empty($term)){
-					$breadcrumb[]= array( $term->name, get_term_link($term->slug, $post_type."category" ) );
-		        }
+	public static function rank_breadcrumb_links( $crumbs ) {
+		global $wp_query, $gd_detail_breadcrumb;
+
+		// maybe add category link to single page
+		if ( ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) && ! $gd_detail_breadcrumb ) {
+			$post_type = geodir_get_current_posttype();
+			$category = ! empty( $wp_query->query_vars[ $post_type . "category" ] ) ? $wp_query->query_vars[ $post_type . "category" ] : '';
+
+			$breadcrumb = array();
+			if ( $category ) {
+				$term  = get_term_by( 'slug', $category, $post_type . "category" );
+
+				if ( ! empty( $term ) ) {
+					$breadcrumb[]= array( $term->name, get_term_link( $term->slug, $post_type . "category" ) );
+				}
 			}
 
-			$offset = apply_filters('rankmath_breadcrumb_links_offset', 2, $breadcrumb, $crumbs);
-			$length = apply_filters('rankmath_breadcrumb_links_length', 0, $breadcrumb, $crumbs);
-			
-	        if(!empty($breadcrumb) && count($breadcrumb) > 0 ){
-		       array_splice( $crumbs, $offset, $length, $breadcrumb );
+			$offset = apply_filters( 'rankmath_breadcrumb_links_offset', 2, $breadcrumb, $crumbs );
+			$length = apply_filters( 'rankmath_breadcrumb_links_length', 0, $breadcrumb, $crumbs );
+
+			if ( ! empty( $breadcrumb ) && count( $breadcrumb ) > 0 ) {
+				array_splice( $crumbs, $offset, $length, $breadcrumb );
 			}
 		}
 
 		return $crumbs;
+	}
+
+	/**
+	 * Filter Rank Math breadcrumb post main term.
+	 *
+	 * @since 2.0.0.97
+	 *
+	 * @global array $gd_post The post.
+	 * @global bool $gd_detail_breadcrumb True if term is set in post breadcrumb.
+	 *
+	 * @param object $term Post main term.
+	 * @param array $terms Post terms.
+	 * @return object The post main term.
+	 */
+	public static function rank_math_frontend_breadcrumb_main_term( $term, $terms = array() ) {
+		global $gd_post, $gd_detail_breadcrumb;
+
+		if ( ! empty( $terms ) && geodir_is_page( 'detail' ) && ! empty( $gd_post ) && ! empty( $gd_post->default_category ) ) {
+			foreach ( $terms as $_term ) {
+				if ( $_term->term_id == $gd_post->default_category ) {
+					$term = $_term;
+					$gd_detail_breadcrumb = true;
+				}
+			}
+		}
+
+		return $term;
 	}
 
 	/**

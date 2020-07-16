@@ -130,6 +130,7 @@ jQuery(function($) {
  * Prevent navigation away if there are unsaved changes.
  */
 var geodir_changes_made = false;
+window.geodirUploading = false; // Don't run auto save when image upload is in progress.
 window.onbeforeunload = function() {
     return geodir_changes_made ? geodir_params.txt_lose_changes : null;
 };
@@ -155,6 +156,9 @@ function geodir_auto_save_poll(old_form_data) {
  * Saves the post in the background via ajax.
  */
 function geodir_auto_save_post() {
+    if (window.geodirUploading) {
+        return;
+    }
     var form_data = geodir_get_form_data();
     form_data += "&action=geodir_auto_save_post&target=auto";
     jQuery.ajax({

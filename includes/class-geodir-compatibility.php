@@ -178,6 +178,22 @@ class GeoDir_Compatibility {
 				add_filter( 'geodir_after_get_template_part',array( __CLASS__, 'avada_set_temp_globals' ), 10);
 			}
 		}
+
+		if ( wp_doing_ajax() ) {
+			add_action( 'admin_init', array( __CLASS__, 'ajax_admin_init' ), 5 );
+		}
+	}
+
+	/**
+	 * Setup actions on admin AJAX load.
+	 *
+	 * @since 2.0.0.97
+	 */
+	public static function ajax_admin_init() {
+		// WPBakery Page Builder render vc tags in AJAX content.
+		if ( class_exists( 'WPBMap' ) && ! empty( $_REQUEST['action'] ) && strpos( $_REQUEST['action'], 'geodir_' ) === 0 ) {
+			WPBMap::addAllMappedShortcodes();
+		}
 	}
 
 	/**
@@ -301,6 +317,8 @@ class GeoDir_Compatibility {
 				$is_geodir_page_template = false;
 				if(!empty($geodirectory->settings['page_search']) && $geodirectory->settings['page_search'] == $id ){
 					$is_geodir_page_template = true;
+				}elseif(!empty($geodirectory->settings['page_add']) && $geodirectory->settings['page_add'] == $id ){
+					$is_geodir_page_template = true;
 				}elseif(!empty($geodirectory->settings['page_details']) && $geodirectory->settings['page_details'] == $id ){
 					$is_geodir_page_template = true;
 				}elseif(!empty($geodirectory->settings['page_archive']) && $geodirectory->settings['page_archive'] == $id ){
@@ -419,6 +437,14 @@ class GeoDir_Compatibility {
 	 */
 	public static function buddypress_notices() {
 		if ( is_admin() ) {
+			// In BuddyPress v6.0.0 no /search/ conflict detected.
+			if ( version_compare( bp_get_version(), '6.0.0', '>=' ) ) {
+				// Remove existing notice.
+				if ( GeoDir_Admin_Notices::has_notice( 'buddypress_search_slug_error' ) ) {
+					GeoDir_Admin_Notices::remove_notice( 'buddypress_search_slug_error' );
+				} 
+				return;
+			}
 
 			// maybe add search slug warning.
 			$search_page_id = geodir_search_page_id();

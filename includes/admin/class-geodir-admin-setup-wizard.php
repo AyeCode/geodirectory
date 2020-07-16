@@ -280,8 +280,8 @@ public function setup_wizard_header() {
 	public function setup_introduction() {
 		?>
 		<h1><?php esc_html_e( 'Welcome to the world of GeoDirectory!', 'geodirectory' ); ?></h1>
-		<p><?php _e( 'Thank you for choosing GeoDirectory to power your online directory! This quick setup wizard will help you configure the basic settings. <strong>It’s completely optional and shouldn’t take longer than five minutes.</strong>', 'geodirectory' ); ?></p>
-		<p><?php esc_html_e( 'No time right now? If you don’t want to go through the wizard, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!', 'geodirectory' ); ?></p>
+		<p><?php _e( "Thank you for choosing GeoDirectory to power your online directory! This quick setup wizard will help you configure the basic settings. <strong>It's completely optional and should not take longer than five minutes.</strong>", 'geodirectory' ); ?></p>
+		<p><?php esc_html_e( "No time right now? If you don't want to go through the wizard, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!", 'geodirectory' ); ?></p>
 		<p class="gd-setup-actions step">
 			<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
 			   class="button-primary button button-large button-next"><?php esc_html_e( 'Let\'s go!', 'geodirectory' ); ?></a>

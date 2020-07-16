@@ -36,22 +36,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<?php if(defined('WP_EASY_UPDATES_ACTIVE')){?>
 
 
-					<h2>Have a membership key?</h2>
+					<h2><?php echo _e( 'Have a membership key?', 'geodirectory' ); ?></h2>
 
 					<p>
 						<?php
 						$wpeu_admin = new External_Updates_Admin('wpgeodirectory.com','2');
 						echo $wpeu_admin->render_licence_actions('wpgeodirectory.com', 'membership',array(66235,111330,111327));
 						?>
-						<a  href="https://wpgeodirectory.com/downloads/membership/">Dont Have a membership Key?</a>
+						<a href="https://wpgeodirectory.com/downloads/membership/"><?php echo _e( 'Don\'t have a membership key?', 'geodirectory' ); ?></a>
 					</p>
 				<?php }else{ ?>
-				<p class="easy-update">	If you already have a membership Key please install <a href="https://wpgeodirectory.com/wp-easy-updates/" target="_blank">WP Easy Update </a></p>
+				<p class="easy-update"><?php echo wp_sprintf( __( 'If you already have a membership key please install <a href="%s" target="_blank">WP Easy Updates</a>', 'geodirectory' ) , 'https://wpgeodirectory.com/wp-easy-updates/' ); ?></p>
 			<?php	}?>
 
 				<div class="membership-cta-contet">
 					<div class="main-cta">
-							<h2><?php echo __("Membership benefit Includes:","userswp"); ?></h2>
+							<h2><?php echo __("Membership benefit Includes:","geodirectory"); ?></h2>
 							<div class="feature-list">
 								<ul>
 
@@ -66,16 +66,16 @@ if ( ! defined( 'ABSPATH' ) ) {
 								</ul>
 							</div>
 							<div class="feature-cta">
-								<h3><?php echo __("Membership ","userswp"); ?> <br><?php echo __("Starts from","userswp"); ?></h3>
-								<h4><?php echo __("$99","userswp"); ?></h4>
-								<a href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","userswp"); ?></a>
+								<h3><?php echo __("Membership ","geodirectory"); ?> <br><?php echo __("Starts from","geodirectory"); ?></h3>
+								<h4><?php echo __("$99","geodirectory"); ?></h4>
+								<a href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","geodirectory"); ?></a>
 							</div>
 
 					</div>
 
 
 					<div class="member-testimonials">
-						<h3><?php echo __("Testimonials","userswp"); ?></h3>
+						<h3><?php echo __("Testimonials","geodirectory"); ?></h3>
 						<div class="testimonial-content">
 							<div class="t-image">
 								<?php
@@ -84,10 +84,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</div>
 							<div class="t-content">
 								<p><?php echo __("I'm becoming more impressed with  @wpGeoDirectory
-as v2 evolves. It's a pretty awesome WordPress directory plugin.","userswp"); ?>
+as v2 evolves. It's a pretty awesome WordPress directory plugin.","geodirectory"); ?>
 
 								</p>
-								<p><strong><?php echo __("Vanessa Harris","userswp"); ?></strong> <?php echo __("Product  @Google, formerly at  @Microsoft","userswp"); ?></p>
+								<p><strong><?php echo __("Vanessa Harris","geodirectory"); ?></strong> <?php echo __("Product  @Google, formerly at  @Microsoft","geodirectory"); ?></p>
 							</div>
 						</div>
 
@@ -98,17 +98,17 @@ as v2 evolves. It's a pretty awesome WordPress directory plugin.","userswp"); ?>
 								?>
 							</div>
 							<div class="t-content">
-								<p><?php echo __("Switched from Joomla to WordPress and installed Geodirectory V2 to create a multi location directory and events site. Support has been absolutely brilliant with very quick response times, solving almost every issue I ran into (most of the time just me getting used to the new environment) in a matter of minutes but also a few other, more serious issues, in less than a day. I would definitely recommend Geodirectory to anyone who plans on creating a directory. It’s easy to use as it uses the new Gutenberg blocks and custom fields to create and layout your pages and comes with lots of great add-ons for a very reasonable price. Keep up the good work! I’m hooked on WordPress and Geodirectory V2. That’s a fact.","userswp"); ?>
+								<p><?php echo __("Switched from Joomla to WordPress and installed Geodirectory V2 to create a multi location directory and events site. Support has been absolutely brilliant with very quick response times, solving almost every issue I ran into (most of the time just me getting used to the new environment) in a matter of minutes but also a few other, more serious issues, in less than a day. I would definitely recommend Geodirectory to anyone who plans on creating a directory. It's easy to use as it uses the new Gutenberg blocks and custom fields to create and layout your pages and comes with lots of great add-ons for a very reasonable price. Keep up the good work! I'm hooked on WordPress and Geodirectory V2. That's a fact.","geodirectory"); ?>
 
 								</p>
-								<p><strong><?php echo __("gdweb (@gdweb)","userswp"); ?></strong> <?php echo __("Graphic Design and Web Design Studio in Phuket","userswp"); ?></p>
+								<p><strong><?php echo __("gdweb (@gdweb)","geodirectory"); ?></strong> <?php echo __("Graphic Design and Web Design Studio in Phuket","geodirectory"); ?></p>
 							</div>
 						</div>
 					</div>
 
 					<div class="member-footer">
-						<a class="footer-btn" href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","userswp"); ?></a>
-						<a class="footer-link" href="post-new.php?post_type=gd_place"><?php echo __("Create your First Listing","userswp"); ?></a>
+						<a class="footer-btn" href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","geodirectory"); ?></a>
+						<a class="footer-link" href="post-new.php?post_type=gd_place"><?php echo __("Create your First Listing","geodirectory"); ?></a>
 					</div>
 				</div>
 
@@ -127,7 +127,7 @@ as v2 evolves. It's a pretty awesome WordPress directory plugin.","userswp"); ?>
 //			echo '###'.geodir_file_relative_url( 'http://localhost/wp-content/uploads/2018/12/restaurants19-2-150x150.jpg' );exit;
 				?>
 				<ul class="gd-products"><?php foreach ( $addons as $addon ) :
-						if(388371==$addon->info->id || 65079==$addon->info->id){continue;}// don't show GD Dashbaord
+						if(388371==$addon->info->id || 65079==$addon->info->id){continue;}// don't show GD Dashboard
 						?><li class="gd-product">
 								<div class="gd-product-title">
 									<h3><?php

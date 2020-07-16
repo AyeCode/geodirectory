@@ -1,3 +1,16 @@
+= 2.0.0.97 =
+* Adjust timezone for listings saved with different offset for same timezone - FIXED
+* Allow to setup separate add listing page for each CPT - ADDED
+* Rank Math breadcrumb shows multiple categories on detail page - FIXED
+* Review reply/cancel reply links are not working on touch screen devices - FIXED
+* Some themes don't load comment reply JS on GD single page - FIXED
+* Featured image field not updated on delete all images - FIXED
+* GD Listings pagination don't renders WPBakery Page Builder shortcodes - FIXED
+* BuddyPress v6.0.0 compatibility - CHANGED
+* Auto save don't saves all images when image upload is in progress - FIXED
+* Address within Brussels, Belgium don't retrieves region name - FIXED
+* Business Hours UI changes for small screen devices - CHANGED
+
 = 2.0.0.96 =
 * Option added to make zip/post code as a required field - FIXED
 * The Open Graph image does not work from geodirectory categories - FIXED

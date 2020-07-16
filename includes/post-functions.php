@@ -679,16 +679,14 @@ function geodir_post_is_closed( $post ) {
  * @package GeoDirectory
  */
 function geodir_edit_post_link( $post_id = '' ) {
-
 	if ( ! $post_id ) {
 		global $post;
 		$post_id = $post->ID;
 	}
 
-	$postlink = get_permalink( geodir_add_listing_page_id() );
+	$postlink = geodir_add_listing_page_url( get_post_type( $post_id ) );
 
 	return geodir_getlink( $postlink, array( 'pid' => $post_id ), false );
-
 }
 
 /**
