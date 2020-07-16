@@ -440,6 +440,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 //	    print_r($instance);
         global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings;
 
+        $is_single = ( geodir_is_page( 'single' ) || ! empty( $instance['set_post'] ) ) && ! empty( $gd_post ) ? true : false;
+
         // prints the widget
         extract( $args, EXTR_SKIP );
 
@@ -468,7 +470,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
          *
          * @param string $instance ['related_to'] Filter by related to categories/tags.
          */
-        $related_to = empty( $instance['related_to'] ) ? '' : apply_filters( 'widget_related_to', ( geodir_is_page( 'single' ) ? $instance['related_to'] : '' ), $instance, $this->id_base );
+        $related_to = empty( $instance['related_to'] ) ? '' : apply_filters( 'widget_related_to', ( $is_single ? $instance['related_to'] : '' ), $instance, $this->id_base );
 		/**
          * Filter the widget tags param.
          *
@@ -668,7 +670,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             $viewall_url = '';
         }
 
-		$distance_to_post = $list_sort == 'distance_asc' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) && ( geodir_is_page( 'detail' ) || ! empty( $instance['set_post'] ) ) ? true : false;
+		$distance_to_post = $list_sort == 'distance_asc' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) && $is_single ? true : false;
 
 		if ( $list_sort == 'distance_asc' && ! $distance_to_post ) {
 			$list_sort = geodir_get_posts_default_sort( $post_type );
@@ -787,7 +789,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 					'terms'    => $terms
 				)
             );
-        } elseif( !empty( $gd_post->ID ) && geodir_is_page( 'detail' ) && empty( $instance['franchise_of'] )){ 
+        } elseif( $is_single && empty( $instance['franchise_of'] )){ 
             $query_args['post__not_in'] = $gd_post->ID;
         }
 
@@ -989,8 +991,23 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			}
 			if ( ! empty( $widget_listings ) && ( $top_pagination || $bottom_pagination ) ) {
 				$params = array_merge( $instance, $query_args );
-				$params['set_query_vars'] = $wp->query_vars;
-				if ( ! empty( $gd_post ) && ( geodir_is_page( 'detail' ) || ! empty( $instance['set_post'] ) ) ) {
+
+				$set_query_vars = (array) $wp->query_vars;
+				if ( isset( $query_args['tax_query'] ) ) {
+					$set_query_vars['tax_query'] = $query_args['tax_query'];
+				}
+
+				if ( isset( $query_args['post__in'] ) ) {
+					$set_query_vars['post__in'] = $query_args['post__in'];
+				}
+
+				if ( isset( $query_args['post__not_in'] ) ) {
+					$set_query_vars['post__not_in'] = $query_args['post__not_in'];
+				}
+
+				$params['set_query_vars'] = $set_query_vars;
+
+				if ( $is_single ) {
 					$params['set_post'] = $gd_post->ID;
 				}
 
