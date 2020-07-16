@@ -33,7 +33,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		    'base_id'       => 'gd_best_of', // this us used as the widget id and the shortcode id.
 		    'name'          => __('GD > Best of listings','geodirectory'), // the name of the widget.
 		    'widget_ops'    => array(
-			    'classname'   => 'geodir-best-of', // widget class
+			    'classname'   => 'geodir-best-of bsui', // widget class
 			    'description' => esc_html__('Shows the best of listings from categories.','geodirectory'), // widget description
 			    'customize_selective_refresh' => true,
 			    'geodirectory' => true,
@@ -247,6 +247,8 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
          */
         $add_location_filter = empty($instance['add_location_filter']) ? '1' : apply_filters('bestof_widget_location_filter', $instance['add_location_filter']);
 
+	    $design_style = geodir_design_style();
+
         // set post type to current viewing post type
         if ($use_viewing_post_type) {
             $current_post_type = geodir_get_current_posttype();
@@ -326,8 +328,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             if ($is_dropdown) {
                 $nav_html .= '<select id="geodir_bestof_tab_dd" class="geodir-select" name="geodir_bestof_tab_dd" data-placeholder="' . esc_attr(__('Select Category', 'geodirectory')) . '">';
             } else {
-                $nav_html .= '<ul class="geodir-tab-head geodir-bestof-cat-list">';
-               // $nav_html .= '<dt></dt>';
+                $nav_html .= $design_style ? '<ul class="geodir-tab-head geodir-bestof-cat-list nav nav-tabs">' :  '<ul class="geodir-tab-head geodir-bestof-cat-list">';
             }
 
 
@@ -344,9 +345,9 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                         $nav_html .= '<option ' . $selected . ' value="' . $cat->term_id . '">' . geodir_ucwords($cat->name) . '</option>';
                     } else {
                         if ($cat_count == 1) {
-                            $nav_html .= '<li class="geodir-tab-active">';
+                            $nav_html .= $design_style ? '<li class="nav-item">' : '<li class="geodir-tab-active">';
                         } else {
-                            $nav_html .= '<li class="">';
+                            $nav_html .= $design_style ? '<li class="nav-item">' : '<li class="">';
                         }
 
 
@@ -359,49 +360,27 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 	                    $term_icon = $cat_font_icon ? '<i class="'.$cat_font_icon.'" aria-hidden="true" aria-hidden="true"></i>' : $term_icon_url;
 
-	                    $nav_html .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" title="' . esc_attr($cat->name) . '">';
-	                    $nav_html .= "<span class='gd-cptcat-icon' >$term_icon</span>";
-	                    $nav_html .= '</a></span>';
+	                    if($design_style){
+		                    $active = $cat_count == 1 ? 'active' : '';
+		                    $nav_html .= '<a class="nav-link '.$active.'" data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '">';
+		                    $nav_html .= "<span class='gd-cptcat-icon' style='color: $cat_color' >$term_icon</span> ";
+		                    $nav_html .=  esc_attr($cat->name);
+		                    $nav_html .= '</a>';
 
-	                    $nav_html .= '<span class="gd-cptcat-cat-right"><a data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" title="' . esc_attr($cat->name) . '">';
-	                    $nav_html .= $cat->name;
-	                    $nav_html .= '<small>';
-//	                    if (isset($cat->review_count)) {
-//		                    $num_reviews = $cat->review_count;
-//		                    if ($num_reviews == 0) {
-//			                    $reviews = __('No Reviews', 'geodirectory');
-//		                    } elseif ($num_reviews > 1) {
-//			                    $reviews = $num_reviews . __(' Reviews', 'geodirectory');
-//		                    } else {
-//			                    $reviews = __('1 Review', 'geodirectory');
-//		                    }
-//		                    $nav_html .= $reviews;
-//	                    }
-	                    $nav_html .= '</small>';
-	                    $nav_html .= '</a></span>';
+	                    }else{
+		                    $nav_html .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" title="' . esc_attr($cat->name) . '">';
+		                    $nav_html .= "<span class='gd-cptcat-icon' >$term_icon</span>";
+		                    $nav_html .= '</a></span>';
+		                    $nav_html .= '<span class="gd-cptcat-cat-right"><a data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" title="' . esc_attr($cat->name) . '">';
+		                    $nav_html .= $cat->name;
+		                    $nav_html .= '<small>';
+		                    $nav_html .= '</small>';
+		                    $nav_html .= '</a></span>';
 
-//
-//
-//                        $nav_html .= '<a data-termid="' . $cat->term_id . '" href="' . get_term_link($cat, $cat->taxonomy) . '">';
-//                        $nav_html .= '<img alt="' . $cat->name . ' icon" class="bestof-cat-icon" src="' . $term_icon_url . '"/>';
-//                        $nav_html .= '<span>';
-//                        $nav_html .= geodir_ucwords($cat->name);
-//                        $nav_html .= '<small>';
-//                        if (isset($cat->review_count)) {
-//                            $num_reviews = $cat->review_count;
-//                            if ($num_reviews == 0) {
-//                                $reviews = __('No Reviews', 'geodirectory');
-//                            } elseif ($num_reviews > 1) {
-//                                $reviews = $num_reviews . __(' Reviews', 'geodirectory');
-//                            } else {
-//                                $reviews = __('1 Review', 'geodirectory');
-//                            }
-//                            $nav_html .= $reviews;
-//                        }
-//                        $nav_html .= '</small>';
-//                        $nav_html .= '</span>';
-//                        $nav_html .= '</a>';
-                        $nav_html .= '</li>';
+	                    }
+
+	                    $nav_html .= '</li>';
+
                     }
                 }
             }
@@ -464,9 +443,6 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	    }
 
 
-
-	    //print_r($instance);
-	    //print_r($query_args);
             if ($terms) {
                 $view_all_link = add_query_arg(array('sort_by' => 'rating_count_desc'), get_term_link($first_term, $first_term->taxonomy));
                 /**
@@ -480,7 +456,11 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                  */
                 $view_all_link = apply_filters('geodir_bestof_widget_view_all_link', $view_all_link, $post_type, $first_term);
 
-                echo '<h4 class="bestof-cat-title">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '<a href="' . esc_url($view_all_link) . '">' . __("View all", 'geodirectory') . '</a></h4>';
+	            if($design_style){
+		            echo '<h4 class="bestof-cat-title h4 py-3 p-0 m-0 w-100">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '</h4>';
+	            }else{
+		            echo '<h4 class="bestof-cat-title">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '<a href="' . esc_url($view_all_link) . '">' . __("View all", 'geodirectory') . '</a></h4>';
+	            }
             }
             if ($excerpt_type == 'show-reviews') {
                 add_filter('get_the_excerpt', array(__CLASS__,'best_of_show_review_in_excerpt'));
@@ -493,6 +473,25 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             if ($excerpt_type == 'show-reviews') {
                 remove_filter('get_the_excerpt', array(__CLASS__,'best_of_show_review_in_excerpt'));
             }
+
+
+	    if ($design_style && $terms) {
+		    $view_all_link = add_query_arg(array('sort_by' => 'rating_count_desc'), get_term_link($first_term, $first_term->taxonomy));
+		    /**
+		     * Filter the page link to view all listings.
+		     *
+		     * @since 1.5.1
+		     *
+		     * @param array $view_all_link View all listings page link.
+		     * @param array $post_type The Post type.
+		     * @param array $first_term The category term object.
+		     */
+		    $view_all_link = apply_filters('geodir_bestof_widget_view_all_link', $view_all_link, $post_type, $first_term);
+
+		    echo '<div class="text-center"><a class="btn btn-outline-primary" href="' . esc_url($view_all_link) . '">' . __("View all", 'geodirectory') . '</a></div>';
+
+	    }
+
 
 
 	    if(!defined( 'DOING_AJAX' )) {
@@ -568,7 +567,14 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		$geodir_is_widget_listing = true;
 		$gd_layout_class = '';
 
-		geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+		$design_style = geodir_design_style();
+		$template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
+
+		echo geodir_get_template_html( $template, array(
+			'widget_listings' => $widget_listings
+		) );
+
+		//geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
 
 		$geodir_is_widget_listing = false;
 

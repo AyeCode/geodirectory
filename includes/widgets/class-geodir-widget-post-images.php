@@ -318,7 +318,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 */
 	public function output_images($options){
 		global $post, $gd_post;
-		if(!isset($post->ID)){return '';}
+		if(!isset($gd_post->ID)){return '';}
 		ob_start();
 
 		// options
@@ -373,8 +373,9 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$options['fallback_types'] = array('logo','cat_default','cpt_default','listing_default');
 		}
 
-		$post_images = geodir_get_images($post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types'],$options['fallback_types']);
+		$post_images = geodir_get_images($gd_post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types'],$options['fallback_types']);
 
+//		print_r($gd_post );
 //		print_r($post_images );
 
 		// make it just a image if only one
@@ -409,7 +410,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 			// Set the slider ID
 			$slider_id = wp_doing_ajax() ? "geodir_images_ajax" : "geodir_images";
-			$slider_id .= '_' . uniqid() . '_' . $post->ID; // Generate unique slider id. //@todo this is not cache friendly
+			$slider_id .= '_' . uniqid() . '_' . $gd_post->ID; // Generate unique slider id. //@todo this is not cache friendly
 
 			// responsive image class
 			$aspect = $options['aspect'];
@@ -433,7 +434,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$link_tag_open = "";
 			$link_tag_close = "";
 			if($options['link_to']=='post'){
-				$link = get_the_permalink($post->ID);
+				$link = get_the_permalink($gd_post->ID);
 				$link_tag_open = "<a href='%s' class='$responsive_image_class'>";
 				$link_tag_close = "<i class=\"fas fa-link\" aria-hidden=\"true\"></i></a>";
 			}elseif($options['link_to']=='lightbox'){
