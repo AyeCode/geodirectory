@@ -21,7 +21,7 @@
 	width: 70%;
 }
 .gd-bh-items {
-	max-width: 420px;
+	max-width: 480px;
 }
 .gd-bh-items table {
 	width: 100%;
@@ -32,6 +32,7 @@
 .gd-bh-items table td {
 	padding: 10px 5px;
 	vertical-align: top;
+	display: table-cell;
 }
 .gd-bh-items table td.gd-bh-time {
 	padding-top: 2px;
@@ -51,6 +52,7 @@
 .gd-bh-items .gd-bh-day {
 	text-align: left;
 	padding-left: 10px;
+	max-width: 90px;
 }
 .gd-bh-items .gd-bh-24hours {
 	text-align: center;
@@ -76,6 +78,13 @@
 	text-align: center;
 	display: inline-block;
 	padding: 3px 5px;
+}
+.gd-bh-item .gd-bh-time input[data-field-alt="open"] {
+	margin-left: 0;
+	margin-right: 0;
+}
+.gd-bh-item .gd-bh-time input[data-field-alt="close"] {
+	margin-left: 0;
 }
 .gd-bh-item .gd-bh-hours {
 	padding: 5px 0;
@@ -218,4 +227,28 @@
 
 .geodir_form_row .gd-bh-items table.fixed {
 	position: inherit;
+}
+
+@media screen and (max-width: 782px) {
+    .geodir_form_row .gd-bh-field {
+        float: none;
+        width: 100%;
+    }
+
+    .geodir_form_row .gd-bh-items {
+        max-width: 100%;
+        width: 100%;
+    }
+
+    .geodir_form_row .gd-bh-items .gd-bh-day {
+        padding-left: 5px;
+    }
+
+    .geodir_form_row .gd-bh-items .gd-bh-24hours {
+        width: auto;
+    }
+
+    .geodir_form_row .gd-bh-items .gd-tz-item td {
+        padding: 10px 5px 5px 5px;
+    }
 }
