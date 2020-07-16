@@ -316,9 +316,16 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 	    $final_html = '';
 	    $nav_html = '';
+	    $tabs_left = false;
+	    if(!empty($instance['tab_layout']) && $instance['tab_layout']=='left'){
+		    $nav_html .= '<div class="row"><div class="col-3"> ';
+		    $tabs_left = true;
+	    }
+//	    print_r($instance);
 
         //term navigation - start
-	    if(!defined( 'DOING_AJAX' )) $nav_html = '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
+	    if(!defined( 'DOING_AJAX' )) $nav_html .= '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
+
 
 
         foreach ($layout as $tab_layout) {
@@ -326,9 +333,14 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             $is_dropdown = ($tab_layout == 'bestof-tabs-as-dropdown') ? true : false;
 
             if ($is_dropdown) {
-                $nav_html .= '<select id="geodir_bestof_tab_dd" class="geodir-select" name="geodir_bestof_tab_dd" data-placeholder="' . esc_attr(__('Select Category', 'geodirectory')) . '">';
+	            if($design_style){
+		            $nav_html .= '<select id="geodir_bestof_tab_dd" class="geodir-select form-control mb-3" name="geodir_bestof_tab_dd" data-placeholder="' . esc_attr(__('Select Category', 'geodirectory')) . '">';
+	            }else{
+		            $nav_html .= '<select id="geodir_bestof_tab_dd" class="geodir-select" name="geodir_bestof_tab_dd" data-placeholder="' . esc_attr(__('Select Category', 'geodirectory')) . '">';
+	            }
             } else {
-                $nav_html .= $design_style ? '<ul class="geodir-tab-head geodir-bestof-cat-list nav nav-tabs">' :  '<ul class="geodir-tab-head geodir-bestof-cat-list">';
+	            $tabs_class = $tabs_left ? 'flex-column nav-pills' : 'nav-tabs';
+                $nav_html .= $design_style ? '<ul class="geodir-tab-head geodir-bestof-cat-list mb-3 nav '.$tabs_class.'">' :  '<ul class="geodir-tab-head geodir-bestof-cat-list">';
             }
 
 
@@ -358,7 +370,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	                    $cat_color = get_term_meta( $cat->term_id, 'ct_cat_color', true );
 	                    $cat_color = $cat_color ? $cat_color : '#ababab';
 
-	                    $term_icon = $cat_font_icon ? '<i class="'.$cat_font_icon.'" aria-hidden="true" aria-hidden="true"></i>' : $term_icon_url;
+	                    $term_icon = $cat_font_icon ? '<i class="'.$cat_font_icon.' fa-fw" aria-hidden="true" aria-hidden="true"></i>' : $term_icon_url;
 
 	                    if($design_style){
 		                    $active = $cat_count == 1 ? 'active' : '';
@@ -392,6 +404,10 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             }
             //$final_html .= $nav_html;
         }
+
+	    if(!empty($instance['tab_layout']) && $instance['tab_layout']=='left'){
+		    $nav_html .= '</div>';
+	    }
 
 	    if(!defined( 'DOING_AJAX' )) $nav_html .= '</div>';
         //term navigation - end
@@ -438,6 +454,9 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 
 
+		    if(!empty($instance['tab_layout']) && $instance['tab_layout']=='left'){
+			    echo '<div class="col-9"> ';
+		    }
 
 		    echo '<div id="geodir-bestof-places">';
 	    }
@@ -457,7 +476,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                 $view_all_link = apply_filters('geodir_bestof_widget_view_all_link', $view_all_link, $post_type, $first_term);
 
 	            if($design_style){
-		            echo '<h4 class="bestof-cat-title h4 py-3 p-0 m-0 w-100">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '</h4>';
+		            echo '<h4 class="bestof-cat-title h4  pb-3 p-0 m-0 w-100">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '</h4>';
 	            }else{
 		            echo '<h4 class="bestof-cat-title">' . wp_sprintf(__('Best of %s', 'geodirectory'), $first_term->name) . '<a href="' . esc_url($view_all_link) . '">' . __("View all", 'geodirectory') . '</a></h4>';
 	            }
@@ -504,6 +523,10 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		    ?>
 		    <?php
 		    echo "</div>";
+	    }
+
+	    if(!empty($instance['tab_layout']) && $instance['tab_layout']=='left'){
+		    echo '</div> ';
 	    }
     }
 

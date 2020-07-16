@@ -32,7 +32,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
             'name'          => __('GD > Categories','geodirectory'), // the name of the widget.
             //'disable_widget'=> true,
             'widget_ops'    => array(
-                'classname'   => 'geodir-categories-container', // widget class
+                'classname'   => 'geodir-categories-container bsui', // widget class
                 'description' => esc_html__('Shows a list of GeoDirectory categories.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
@@ -537,6 +537,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			// Backup
 			$backup_geodirectory = $geodirectory;
 
+			$design_style = geodir_design_style();
+
 			$cpt_options = array();
 			$cpt_list = '';
 			foreach ($post_types as $cpt => $cpt_info) {
@@ -609,6 +611,10 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						$cpt_row .= '<' . esc_attr( $args['title_tag'] ) . ' class="gd-cptcat-title">' . wp_sprintf( __( '%s Categories', 'geodirectory' ), __( $cpt_info['labels']['singular_name'], 'geodirectory' ) ) . '</' . esc_attr( $args['title_tag'] ) . '>';
 					}
 
+					if($design_style){
+						$cpt_row .= '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">';
+					}
+
 					foreach ($categories as $category) {
 						$term_icon = '';
 						$cat_color ='';
@@ -645,16 +651,21 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						}
 						$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $count . '</span>' : '';
 
-						$cpt_row .= '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';
+						$cpt_row .= $design_style ? '<div class="gd-cptcat-ul gd-cptcat-parent col mb-4">' : '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';
 
 						$cpt_row .= self::categories_loop_output('gd-cptcat-li-main',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon,$hide_icon,$use_image);
 
 						if (!$skip_childs && ($all_childs || $max_count_child > 0) && ($max_level == 'all' || (int)$max_level > 0)) {
 							$cpt_row .= self::child_cats( $category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count_child, $max_level, $term_icons, $hide_icon,$use_image, 1, $filter_terms );
 						}
-						$cpt_row .= '</li>';
-						$cpt_row .= '</ul>';
+						$cpt_row .= $design_style ? '</div></div>' : '</li>';
+						$cpt_row .= $design_style ? '</div>' : '</ul>';
 					}
+
+					if($design_style){
+						$cpt_row .= '</div>';
+					}
+
 					$cpt_row .= '</div>';
 
 					$cpt_list .= $cpt_row;
@@ -707,18 +718,38 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 	public static function categories_loop_output($li_class = 'gd-cptcat-li-main',$hide_count=false,$cat_count='',$cat_color,$term_link,$cat_name,$cat_icon,$hide_icon,$use_image){
 		$cpt_row = '';
-		$cpt_row .= '<li class="gd-cptcat-li '.$li_class.'">';
-		$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $cat_count . '</span>' : '';
 
-		if(!$hide_icon){
-			$cpt_row .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '">';
-			$cpt_row .= "<span class='gd-cptcat-icon' >$cat_icon</span>";
-			$cpt_row .= '</a></span>';
+		$design_style = geodir_design_style();
+
+		if($design_style ){
+			$cpt_row .= '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " ><div class="card-body text-center btn btn-outline-primary p-1 py-4">';
+			$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
+
+			if(!$hide_icon){
+				$cpt_row .= '<div class="gd-cptcat-cat-left h1 iconbox iconsmallx iconlarge fill rounded-circle bg-white text-whitex  shadowx border-0 m-0 mb-3" >';
+				$cpt_row .= "<span class='gd-cptcat-icon' style='color: $cat_color;'>$cat_icon</span>";
+				$cpt_row .= '</div>';
+			}
+
+
+			$cpt_row .= '<div class="gd-cptcat-cat-right   text-uppercase text-truncate"><a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '" class="text-lightx text-reset stretched-link font-weight-bold h5 ">';
+			$cpt_row .= $cat_name  . '</a>'. $count.'</div>';
+		}else{
+			$cpt_row .= '<li class="gd-cptcat-li '.$li_class.'">';
+			$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $cat_count . '</span>' : '';
+
+			if(!$hide_icon){
+				$cpt_row .= '<span class="gd-cptcat-cat-left" style="background: '.$cat_color.';"><a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '">';
+				$cpt_row .= "<span class='gd-cptcat-icon' >$cat_icon</span>";
+				$cpt_row .= '</a></span>';
+			}
+
+
+			$cpt_row .= '<span class="gd-cptcat-cat-right"><a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '">';
+			$cpt_row .= $cat_name . $count . '</a></span>';
 		}
 
 
-		$cpt_row .= '<span class="gd-cptcat-cat-right"><a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '">';
-		$cpt_row .= $cat_name . $count . '</a></span>';
 
 		return $cpt_row;
 	}

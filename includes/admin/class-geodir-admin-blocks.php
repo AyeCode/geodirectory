@@ -77,7 +77,7 @@ class GeoDir_Admin_Blocks {
      * @since 2.0.0
      */
 	public function enqueue() {
-
+		$design_style = geodir_design_style();
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
 
@@ -88,13 +88,15 @@ class GeoDir_Admin_Blocks {
 			GEODIRECTORY_VERSION
 		);
 
-		wp_enqueue_style(
-			'gd-gutenberg',
-			geodir_plugin_url() . '/assets/css/block_editor.css',
-//			array( 'wp-edit-blocks','font-awesome' ),
-			array( 'wp-edit-blocks' ),
-			GEODIRECTORY_VERSION
-		);
+		if(!$design_style){
+			wp_enqueue_style(
+				'gd-gutenberg',
+				geodir_plugin_url() . '/assets/css/block_editor.css',
+				array( 'wp-edit-blocks' ),
+				GEODIRECTORY_VERSION
+			);
+		}
+		
 	}
 }
 // init the class.
