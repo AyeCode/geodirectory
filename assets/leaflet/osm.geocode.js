@@ -356,13 +356,22 @@ function gd_osm_parse_item(item) {
             formated = gd_osm_parse_name(formated, address.postcode);
         }
 
-		if (address.country_code == 'gb') {
-			if (address.county) {
-				address.state = address.county;
-			} else if (address.state_district) {
-				address.state = address.state_district;
-			}
-		}
+        if (address.country_code == 'gb') {
+            if (address.county) {
+                address.state = address.county;
+            } else if (address.state_district) {
+                address.state = address.state_district;
+            }
+        }
+
+        // Bermuda
+        if (address.country_code == 'bm' && ! address.state) {
+            if (address.county) {
+                address.state = address.county;
+            } else if (address.state_district) {
+                address.state = address.state_district;
+            }
+        }
         
         if (address.state) {
             item.state = address.state;
