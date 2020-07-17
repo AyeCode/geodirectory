@@ -219,13 +219,22 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	            'group'     => __("Filters","geodirectory")
             ),
             'use_viewing_post_type'  => array(
-	            'title' => __("Use current viewing post type?", 'geodirectory'),
-	            'type' => 'checkbox',
-	            'desc_tip' => true,
-	            'value'  => '1',
-	            'default'  => '0',
-	            'advanced' => true,
-	            'group'     => __("Filters","geodirectory")
+                'title' => __("Use current viewing post type?", 'geodirectory'),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '0',
+                'advanced' => true,
+                'group'     => __("Filters","geodirectory")
+            ),
+            'use_viewing_term' => array(
+                'title' => __( 'Filter by current viewing category/tag?', 'geodirectory'),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value' => '1',
+                'default' => '0',
+                'advanced' => true,
+                'group' => __( 'Filters', 'geodirectory' )
             ),
             'sort_by'  => array(
                 'title' => __('Sort by:', 'geodirectory'),
@@ -398,6 +407,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'show_favorites_only' => '',
                   'favorites_by_user' => '',
                   'use_viewing_post_type' => '',
+                  'use_viewing_term' => '',
                   'hide_if_empty' => '',
 				  'view_all_link' => '1',
 				  'with_pagination' => '0',
@@ -418,163 +428,156 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         return ob_get_clean();
     }
 
+	/**
+	 * Generates popular postview HTML.
+	 *
+	 * @since   1.0.0
+	 * @since   1.5.1 View all link fixed for location filter disabled.
+	 * @since   1.6.24 View all link should go to search page with near me selected.
+	 * @package GeoDirectory
+	 * @global object $post                    The current post object.
+	 * @global string $gd_layout_class The girdview style of the listings for widget.
+	 * @global bool $geodir_is_widget_listing  Is this a widget listing?. Default: false.
+	 *
+	 * @param array|string $args               Display arguments including before_title, after_title, before_widget, and
+	 *                                         after_widget.
+	 * @param array|string $instance           The settings for the particular instance of the widget.
+	 */
+	public function output_html( $args = '', $instance = '' ) {
+		global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings;
 
-    /**
-     * Generates popular postview HTML.
-     *
-     * @since   1.0.0
-     * @since   1.5.1 View all link fixed for location filter disabled.
-     * @since   1.6.24 View all link should go to search page with near me selected.
-     * @package GeoDirectory
-     * @global object $post                    The current post object.
-     * @global string $gd_layout_class The girdview style of the listings for widget.
-     * @global bool $geodir_is_widget_listing  Is this a widget listing?. Default: false.
-     *
-     * @param array|string $args               Display arguments including before_title, after_title, before_widget, and
-     *                                         after_widget.
-     * @param array|string $instance           The settings for the particular instance of the widget.
-     */
-    public function output_html( $args = '', $instance = '' ) {
-//	    print_r($args);
-//	    echo '###';
-//	    print_r($instance);
-        global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings;
+		$is_single = ( geodir_is_page( 'single' ) || ! empty( $instance['set_post'] ) ) && ! empty( $gd_post ) ? true : false;
 
-        $is_single = ( geodir_is_page( 'single' ) || ! empty( $instance['set_post'] ) ) && ! empty( $gd_post ) ? true : false;
+		// Prints the widget
+		extract( $args, EXTR_SKIP );
 
-        // prints the widget
-        extract( $args, EXTR_SKIP );
-
-        /** This filter is documented in includes/widget/class-geodir-widget-advance-search.php.php */
-        $title = empty( $instance['title'] ) ? geodir_ucwords( $instance['category_title'] ) : apply_filters( 'widget_title', __( $instance['title'], 'geodirectory' ) );
-        /**
-         * Filter the widget post type.
-         *
-         * @since 1.0.0
-         *
-         * @param string $instance ['post_type'] Post type of listing.
-         */
-        $post_type = empty( $instance['post_type'] ) ? 'gd_place' : apply_filters( 'widget_post_type', $instance['post_type'] );
-        /**
-         * Filter the widget's term.
-         *
-         * @since 1.0.0
-         *
-         * @param string $instance ['category'] Filter by term. Can be any valid term.
-         */
-        $category = empty( $instance['category'] ) ? '0' : apply_filters( 'widget_category', $instance['category'] );
+		/** This filter is documented in includes/widget/class-geodir-widget-advance-search.php.php */
+		$title = empty( $instance['title'] ) ? geodir_ucwords( $instance['category_title'] ) : apply_filters( 'widget_title', __( $instance['title'], 'geodirectory' ) );
 		/**
-         * Filter the widget related_to param.
-         *
-         * @since 2.0.0
-         *
-         * @param string $instance ['related_to'] Filter by related to categories/tags.
-         */
-        $related_to = empty( $instance['related_to'] ) ? '' : apply_filters( 'widget_related_to', ( $is_single ? $instance['related_to'] : '' ), $instance, $this->id_base );
+		 * Filter the widget post type.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $instance ['post_type'] Post type of listing.
+		 */
+		$post_type = empty( $instance['post_type'] ) ? 'gd_place' : apply_filters( 'widget_post_type', $instance['post_type'] );
 		/**
-         * Filter the widget tags param.
-         *
-         * @since 2.0.0
-         *
-         * @param string $instance ['tags'] Filter by tags.
-         */
-        $tags = empty( $instance['tags'] ) ? '' : apply_filters( 'widget_tags', $instance['tags'], $instance, $this->id_base );
+		 * Filter the widget's term.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $instance ['category'] Filter by term. Can be any valid term.
+		 */
+		$category = empty( $instance['category'] ) ? '0' : apply_filters( 'widget_category', $instance['category'] );
 		/**
-         * Filter the widget post_author param.
-         *
-         * @since 2.0.0
-         *
-         * @param string $instance ['post_author'] Filter by author.
-         */
-        $post_author = empty( $instance['post_author'] ) ? '' : apply_filters( 'widget_post_author', $instance['post_author'], $instance, $this->id_base );
-        /**
-         * Filter the widget listings limit.
-         *
-         * @since 1.0.0
-         *
-         * @param string $instance ['post_number'] Number of listings to display.
-         */
-        $post_number = empty( $instance['post_limit'] ) ? '5' : apply_filters( 'widget_post_number', $instance['post_limit'] );
-	    /**
-	     * Filter the widget listings post ids.
-	     *
-	     * @since 1.0.0
-	     *
-	     * @param string $instance ['post_ids'] Post ids to include or exclude.
-	     */
-	    $post_ids = empty( $instance['post_ids'] ) ? '' : apply_filters( 'widget_post_ids', $instance['post_ids'] );
-        /**
-         * Filter widget's "layout" type.
-         *
-         * @since 1.0.0
-         *
-         * @param string $instance ['layout'] Widget layout type.
-         */
-        $layout = !isset( $instance['layout'] )  ? 'gridview_onehalf' : apply_filters( 'widget_layout', $instance['layout'] );
-        /**
-         * Filter widget's "add_location_filter" value.
-         *
-         * @since 1.0.0
-         *
-         * @param string|bool $instance ['add_location_filter'] Do you want to add location filter? Can be 1 or 0.
-         */
-        $add_location_filter = empty( $instance['add_location_filter'] ) ? '0' : apply_filters( 'widget_add_location_filter', $instance['add_location_filter'] );
-        /**
-         * Filter widget's listing width.
-         *
-         * @since 1.0.0
-         *
-         * @param string $instance ['listing_width'] Listing width.
-         */
-        $listing_width = empty( $instance['listing_width'] ) ? '' : apply_filters( 'widget_listing_width', $instance['listing_width'] );
-        /**
-         * Filter widget's "list_sort" type.
-         *
-         * @since 1.0.0
-         *
-         * @param string $instance ['list_sort'] Listing sort by type.
-         */
-        $list_sort             = empty( $instance['sort_by'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['sort_by'] );
+		 * Filter the widget related_to param.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $instance ['related_to'] Filter by related to categories/tags.
+		 */
+		$related_to = empty( $instance['related_to'] ) ? '' : apply_filters( 'widget_related_to', ( $is_single ? $instance['related_to'] : '' ), $instance, $this->id_base );
 		/**
-         * Filter widget's "title_tag" type.
-         *
-         * @since 1.6.26
-         *
-         * @param string $instance ['title_tag'] Listing title tag.
-         */
-        $title_tag            = empty( $instance['title_tag'] ) ? 'h3' : apply_filters( 'widget_title_tag', $instance['title_tag'] );
+		 * Filter the widget tags param.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $instance ['tags'] Filter by tags.
+		 */
+		$tags = empty( $instance['tags'] ) ? '' : apply_filters( 'widget_tags', $instance['tags'], $instance, $this->id_base );
 		/**
-         * Filter widget's "show_favorites_only" type.
-         *
-         * @since 1.6.26
-         *
-         * @param string $instance ['show_favorites_only'] Listing show favorites only.
-         */
-        $show_favorites_only = empty( $instance['show_favorites_only'] ) ? '' : apply_filters( 'widget_show_favorites_only', absint( $instance['show_favorites_only'] ), $instance, $this->id_base );
+		 * Filter the widget post_author param.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $instance ['post_author'] Filter by author.
+		 */
+		$post_author = empty( $instance['post_author'] ) ? '' : apply_filters( 'widget_post_author', $instance['post_author'], $instance, $this->id_base );
 		/**
-         * Filter the widget favorites_by_user param.
-         *
-         * @since 2.0.0
-         *
-         * @param string $instance ['favorites_by_user'] Filter favorites by user.
-         */
-        $favorites_by_user = empty( $instance['favorites_by_user'] ) || empty( $show_favorites_only ) ? '' : apply_filters( 'widget_favorites_by_user', $instance['favorites_by_user'], $instance, $this->id_base );
+		 * Filter the widget listings limit.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $instance ['post_number'] Number of listings to display.
+		 */
+		$post_number = empty( $instance['post_limit'] ) ? '5' : apply_filters( 'widget_post_number', $instance['post_limit'] );
+		/**
+		 * Filter the widget listings post ids.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $instance ['post_ids'] Post ids to include or exclude.
+		 */
+		$post_ids = empty( $instance['post_ids'] ) ? '' : apply_filters( 'widget_post_ids', $instance['post_ids'] );
+		/**
+		 * Filter widget's "layout" type.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $instance ['layout'] Widget layout type.
+		 */
+		$layout = !isset( $instance['layout'] )  ? 'gridview_onehalf' : apply_filters( 'widget_layout', $instance['layout'] );
+		/**
+		 * Filter widget's "add_location_filter" value.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string|bool $instance ['add_location_filter'] Do you want to add location filter? Can be 1 or 0.
+		 */
+		$add_location_filter = empty( $instance['add_location_filter'] ) ? '0' : apply_filters( 'widget_add_location_filter', $instance['add_location_filter'] );
+		/**
+		 * Filter widget's listing width.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $instance ['listing_width'] Listing width.
+		 */
+		$listing_width = empty( $instance['listing_width'] ) ? '' : apply_filters( 'widget_listing_width', $instance['listing_width'] );
+		/**
+		 * Filter widget's "list_sort" type.
+		 *
+		 * @since 1.0.0
+		 *
+		 * @param string $instance ['list_sort'] Listing sort by type.
+		 */
+		$list_sort             = empty( $instance['sort_by'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['sort_by'] );
+		/**
+		 * Filter widget's "title_tag" type.
+		 *
+		 * @since 1.6.26
+		 *
+		 * @param string $instance ['title_tag'] Listing title tag.
+		 */
+		$title_tag            = empty( $instance['title_tag'] ) ? 'h3' : apply_filters( 'widget_title_tag', $instance['title_tag'] );
+		/**
+		 * Filter widget's "show_favorites_only" type.
+		 *
+		 * @since 1.6.26
+		 *
+		 * @param string $instance ['show_favorites_only'] Listing show favorites only.
+		 */
+		$show_favorites_only = empty( $instance['show_favorites_only'] ) ? '' : apply_filters( 'widget_show_favorites_only', absint( $instance['show_favorites_only'] ), $instance, $this->id_base );
+		/**
+		 * Filter the widget favorites_by_user param.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $instance ['favorites_by_user'] Filter favorites by user.
+		 */
+		$favorites_by_user = empty( $instance['favorites_by_user'] ) || empty( $show_favorites_only ) ? '' : apply_filters( 'widget_favorites_by_user', $instance['favorites_by_user'], $instance, $this->id_base );
 
+		/**
+		 * Filter the widget skin_id param.
+		 *
+		 * @since 2.0.0.86
+		 *
+		 * @param string $instance ['skin_id'] Filter skin_id.
+		 */
+		$skin_id = empty( $instance['skin_id'] ) ? '' : apply_filters( 'widget_skin_id', $instance['skin_id'], $instance, $this->id_base );
 
-	    /**
-	     * Filter the widget skin_id param.
-	     *
-	     * @since 2.0.0.86
-	     *
-	     * @param string $instance ['skin_id'] Filter skin_id.
-	     */
-	    $skin_id = empty( $instance['skin_id'] ) ? '' : apply_filters( 'widget_skin_id', $instance['skin_id'], $instance, $this->id_base );
-
-
-	    $view_all_link = ! empty( $instance['view_all_link'] ) ? true : false;
-
-        $use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
-
+		$view_all_link = ! empty( $instance['view_all_link'] ) ? true : false;
+		$use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
+		$use_viewing_term = ! empty( $instance['use_viewing_term'] ) ? true : false;
 		$shortcode_atts = ! empty( $instance['shortcode_atts'] ) ? $instance['shortcode_atts'] : array();
 		$top_pagination = ! empty( $instance['with_pagination'] ) && ! empty( $instance['top_pagination'] ) ? true : false;
 		$bottom_pagination = ! empty( $instance['with_pagination'] ) && ! empty( $instance['bottom_pagination'] ) ? true : false;
@@ -584,14 +587,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$pageno = 1;
 		}
 
-        // set post type to current viewing post type
-        if ( $use_viewing_post_type ) {
-            $current_post_type = geodir_get_current_posttype();
-            if ( $current_post_type != '' && $current_post_type != $post_type ) {
-                $post_type = $current_post_type;
-                $category  = array(); // old post type category will not work for current changed post type
-            }
-        }
+		// set post type to current viewing post type
+		if ( $use_viewing_post_type ) {
+			$current_post_type = geodir_get_current_posttype();
+			if ( $current_post_type != '' && $current_post_type != $post_type ) {
+				$post_type = $current_post_type;
+				$category  = array(); // old post type category will not work for current changed post type
+			}
+		}
 		if ( ( $related_to == 'default_category' || $related_to == 'category' || $related_to == 'tags' ) && ! empty( $gd_post->ID ) ) {
 			if ( $post_type != $gd_post->post_type ) {
 				$post_type = $gd_post->post_type;
@@ -599,76 +602,101 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			}
 		}
 
-	    // check its a GD post type, if not then bail
-	    if(!geodir_is_gd_post_type($post_type)){
-		    return '';
-	    }
+		// check its a GD post type, if not then bail
+		if ( ! geodir_is_gd_post_type( $post_type ) ) {
+			return '';
+		}
 
-        // replace widget title dynamically
-        $posttype_plural_label   = __( get_post_type_plural_label( $post_type ), 'geodirectory' );
-        $posttype_singular_label = __( get_post_type_singular_label( $post_type ), 'geodirectory' );
+		// Filter posts by current terms on category/tag/search archive pages.
+		if ( $use_viewing_term ) {
+			if ( is_tax() && ( $queried_object = get_queried_object() ) ) {
+				if ( ! empty( $queried_object->taxonomy ) ) {
+					if ( $queried_object->taxonomy == $post_type . 'category' ) {
+						$category = $queried_object->term_id;
+						$instance['category'] = $category;
+					} elseif ( $queried_object->taxonomy == $post_type . '_tags' ) {
+						$tags = $queried_object->name;
+						$instance['tags'] = $tags;
+					}
+				}
+			}
 
-        $title = str_replace( "%posttype_plural_label%", $posttype_plural_label, $title );
-        $title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
+			if ( geodir_is_page( 'search' ) && ! empty( $_REQUEST['stype'] ) && $_REQUEST['stype'] == $post_type && isset( $_REQUEST['spost_category'] ) && ( ( is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'][0] ) ) || ( ! is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'] ) ) ) ) {
+				if ( is_array( $_REQUEST['spost_category'] ) ) {
+					$_post_category = array_map( 'absint', $_REQUEST['spost_category'] );
+				} else {
+					$_post_category = array( absint( $_REQUEST['spost_category'] ) );
+				}
+				$category = implode( ',', $_post_category );
+				$instance['category'] = $category;
+			}
+		}
 
-        $categories = $category;
+		// replace widget title dynamically
+		$posttype_plural_label   = __( get_post_type_plural_label( $post_type ), 'geodirectory' );
+		$posttype_singular_label = __( get_post_type_singular_label( $post_type ), 'geodirectory' );
+
+		$title = str_replace( "%posttype_plural_label%", $posttype_plural_label, $title );
+		$title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
+
+		$categories = $category;
 		$category_taxonomy = $post_type . 'category';
-	    $category = is_array( $category ) ? $category : explode( ",", $category ); // convert to array
+		$category = is_array( $category ) ? $category : explode( ",", $category ); // convert to array
 		$category = apply_filters( 'geodir_filter_query_var_categories', $category, $post_type );
 
-        if ( isset( $instance['character_count'] ) ) {
-            /**
-             * Filter the widget's excerpt character count.
-             *
-             * @since 1.0.0
-             *
-             * @param int $instance ['character_count'] Excerpt character count.
-             */
-            $character_count = apply_filters( 'widget_list_character_count', $instance['character_count'] );
-        } else {
-            $character_count = '';
-        }
+		if ( isset( $instance['character_count'] ) ) {
+			/**
+			 * Filter the widget's excerpt character count.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param int $instance ['character_count'] Excerpt character count.
+			 */
+			$character_count = apply_filters( 'widget_list_character_count', $instance['character_count'] );
+		} else {
+			$character_count = '';
+		}
 
-        if ( empty( $title ) || $title == 'All' ) {
-            $title .= ' ' . __( get_post_type_plural_label( $post_type ), 'geodirectory' );
-        }
+		if ( empty( $title ) || $title == 'All' ) {
+			$title .= ' ' . __( get_post_type_plural_label( $post_type ), 'geodirectory' );
+		}
 
-        $location_allowed = GeoDir_Post_types::supports( $post_type, 'location' );
+		$location_allowed = GeoDir_Post_types::supports( $post_type, 'location' );
 
-        if ( $location_allowed && $add_location_filter && ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) && geodir_is_page( 'location' ) ) {
-            $viewall_url = add_query_arg( array(
-                'geodir_search' => 1,
-                'stype' => $post_type,
-                's' => '',
-                'snear' => __( 'Near:', 'geodirectory' ) . ' ' . __( 'Me', 'geodirectory' ),
-                'sgeo_lat' => $user_lat,
-                'sgeo_lon' => $user_lon
-            ), geodir_search_page_base_url() );
+		if ( $location_allowed && $add_location_filter && ( $user_lat = get_query_var( 'user_lat' ) ) && ( $user_lon = get_query_var( 'user_lon' ) ) && geodir_is_page( 'location' ) ) {
+			$viewall_url = add_query_arg( array(
+				'geodir_search' => 1,
+				'stype' => $post_type,
+				's' => '',
+				'snear' => __( 'Near:', 'geodirectory' ) . ' ' . __( 'Me', 'geodirectory' ),
+				'sgeo_lat' => $user_lat,
+				'sgeo_lon' => $user_lon
+			), geodir_search_page_base_url() );
 
-            if ( ! empty( $category ) && !in_array( '0', $category ) ) {
-                $viewall_url = add_query_arg( array( 's' . $post_type . 'category' => $category ), $viewall_url );
-            }
-        } else {
-            $viewall_url = get_post_type_archive_link( $post_type );
+			if ( ! empty( $category ) && !in_array( '0', $category ) ) {
+				$viewall_url = add_query_arg( array( 's' . $post_type . 'category' => $category ), $viewall_url );
+			}
+		} else {
+			$viewall_url = get_post_type_archive_link( $post_type );
 
-            if ( ! empty( $category ) && $category[0] != '0' ) {
-                global $geodir_add_location_url;
+			if ( ! empty( $category ) && $category[0] != '0' ) {
+				global $geodir_add_location_url;
 
-                $geodir_add_location_url = '0';
+				$geodir_add_location_url = '0';
 
-                if ( $add_location_filter != '0' ) {
-                    $geodir_add_location_url = '1';
-                }
+				if ( $add_location_filter != '0' ) {
+					$geodir_add_location_url = '1';
+				}
 
-                $viewall_url = get_term_link( (int) $category[0], $post_type . 'category' );
+				$viewall_url = get_term_link( (int) $category[0], $post_type . 'category' );
 
-                $geodir_add_location_url = null;
-            }
-        }
+				$geodir_add_location_url = null;
+			}
+		}
 
-        if ( is_wp_error( $viewall_url ) ) {
-            $viewall_url = '';
-        }
+		if ( is_wp_error( $viewall_url ) ) {
+			$viewall_url = '';
+		}
 
 		$distance_to_post = $list_sort == 'distance_asc' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) && $is_single ? true : false;
 
@@ -676,16 +704,16 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$list_sort = geodir_get_posts_default_sort( $post_type );
 		}
 
-         $query_args = array(
-            'posts_per_page' => $post_number,
-            'is_geodir_loop' => true,
-            'gd_location'    => $add_location_filter ? true : false,
-            'post_type'      => $post_type,
-            'order_by'       => $list_sort,
-            'distance_to_post' => $distance_to_post,
-            'pageno'         => $pageno,
-            'is_gd_author'   => ! empty( $instance['is_gd_author'] ) || geodir_is_page( 'author' )
-        );
+		 $query_args = array(
+			'posts_per_page' => $post_number,
+			'is_geodir_loop' => true,
+			'gd_location'    => $add_location_filter ? true : false,
+			'post_type'      => $post_type,
+			'order_by'       => $list_sort,
+			'distance_to_post' => $distance_to_post,
+			'pageno'         => $pageno,
+			'is_gd_author'   => ! empty( $instance['is_gd_author'] ) || geodir_is_page( 'author' )
+		);
 
 		// Post_number needs to be a positive integer
 		if ( ! empty( $post_author ) ) {
@@ -735,37 +763,37 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			}
 		}
 
-        if ( $character_count ) {
-            $query_args['excerpt_length'] = $character_count;
-        }
+		if ( $character_count ) {
+			$query_args['excerpt_length'] = $character_count;
+		}
 
-        if ( ! empty( $instance['show_featured_only'] ) ) {
-            $query_args['show_featured_only'] = 1;
-        }
+		if ( ! empty( $instance['show_featured_only'] ) ) {
+			$query_args['show_featured_only'] = 1;
+		}
 
-        if ( ! empty( $instance['show_special_only'] ) ) {
-            $query_args['show_special_only'] = 1;
-        }
+		if ( ! empty( $instance['show_special_only'] ) ) {
+			$query_args['show_special_only'] = 1;
+		}
 
-        if ( ! empty( $instance['with_pics_only'] ) ) {
-            $query_args['with_pics_only']      = 0;
-            $query_args['featured_image_only'] = 1;
-        }
+		if ( ! empty( $instance['with_pics_only'] ) ) {
+			$query_args['with_pics_only']      = 0;
+			$query_args['featured_image_only'] = 1;
+		}
 
-        if ( ! empty( $instance['with_videos_only'] ) ) {
-            $query_args['with_videos_only'] = 1;
-        }
-        $hide_if_empty = ! empty( $instance['hide_if_empty'] ) ? true : false;
+		if ( ! empty( $instance['with_videos_only'] ) ) {
+			$query_args['with_videos_only'] = 1;
+		}
+		$hide_if_empty = ! empty( $instance['hide_if_empty'] ) ? true : false;
 
-        if ( ! empty( $categories ) && $categories[0] != '0' ) {
-            $tax_query = array(
-                'taxonomy' => $category_taxonomy,
-                'field'    => 'id',
-                'terms'    => $category
-            );
+		if ( ! empty( $categories ) && $categories[0] != '0' ) {
+			$tax_query = array(
+				'taxonomy' => $category_taxonomy,
+				'field'    => 'id',
+				'terms'    => $category
+			);
 
-            $query_args['tax_query'] = array( $tax_query );
-        }
+			$query_args['tax_query'] = array( $tax_query );
+		}
 
 		if ( ( $related_to == 'default_category' || $related_to == 'category' || $related_to == 'tags' ) && ! empty( $gd_post->ID ) ) {
 			$terms = array();
@@ -788,10 +816,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 					'field'    => $term_field,
 					'terms'    => $terms
 				)
-            );
-        } elseif( $is_single && empty( $instance['franchise_of'] )){ 
-            $query_args['post__not_in'] = $gd_post->ID;
-        }
+			);
+		} elseif ( $is_single && empty( $instance['franchise_of'] ) ) { 
+			$query_args['post__not_in'] = $gd_post->ID;
+		}
 
 		// Clean tags
 		if ( ! empty( $tags ) ) {
@@ -819,47 +847,48 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				}
 			}
 		}
-	    
-	    // $post_ids, include or exclude post ids
-	    if(!empty($post_ids)){
-		    $post__not_in = array();
-		    $post__in = array();
-		    $post_ids = explode(",",$post_ids);
-		    foreach ($post_ids as $pid){
-			    $tmp_id = trim($pid);
-			    if(abs($tmp_id) != $tmp_id){
-				    $post__not_in[] = absint($tmp_id);
-			    }else{
-				    $post__in[] = absint($tmp_id);
-			    }
-		    }
 
-		    if(!empty($post__in)){
-			    $query_args['post__in'] = implode(",",$post__in);
-		    }elseif(!empty($post__not_in)){
-			    if(!empty($query_args['post__not_in'])){
-				    $post__not_in[] = $query_args['post__not_in'];
-			    }
-			    $query_args['post__not_in'] = implode(",",$post__not_in);
-		    }
-	    }
+		// $post_ids, include or exclude post ids
+		if ( ! empty( $post_ids ) ) {
+			$post__not_in = array();
+			$post__in = array();
+			$post_ids = explode( ",", $post_ids );
 
-        global $geodir_widget_cpt, $gd_layout_class, $geodir_is_widget_listing;
+			foreach ( $post_ids as $pid ) {
+				$tmp_id = trim( $pid );
+				if ( abs( $tmp_id ) != $tmp_id ) {
+					$post__not_in[] = absint( $tmp_id );
+				} else {
+					$post__in[] = absint( $tmp_id );
+				}
+			}
+
+			if ( ! empty( $post__in ) ) {
+				$query_args['post__in'] = implode( ",", $post__in );
+			} elseif ( ! empty( $post__not_in ) ) {
+				if ( ! empty( $query_args['post__not_in'] ) ) {
+					$post__not_in[] = $query_args['post__not_in'];
+				}
+				$query_args['post__not_in'] = implode( ",", $post__not_in );
+			}
+		}
+
+		global $geodir_widget_cpt, $gd_layout_class, $geodir_is_widget_listing;
 
 		/*
 		 * Filter widget listings query args.
 		 */
 		$query_args = apply_filters( 'geodir_widget_listings_query_args', $query_args, $instance );
 
-	    $query_args['country'] = isset($instance['country']) ? $instance['country'] : '';
-	    $query_args['region'] = isset($instance['region']) ? $instance['region'] : '';
-	    $query_args['city'] = isset($instance['city']) ? $instance['city'] : '';
+		$query_args['country'] = isset($instance['country']) ? $instance['country'] : '';
+		$query_args['region'] = isset($instance['region']) ? $instance['region'] : '';
+		$query_args['city'] = isset($instance['city']) ? $instance['city'] : '';
 
 		$post_count = geodir_get_widget_listings( $query_args, true );
 
-        if ( $hide_if_empty && empty( $post_count ) ) {
-            return;
-        }
+		if ( $hide_if_empty && empty( $post_count ) ) {
+			return;
+		}
 
 		$widget_listings = geodir_get_widget_listings( $query_args );
 
@@ -879,40 +908,43 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$backup_posts_per_page = $posts_per_page;
 		$backup_paged = $paged;
 		$backup_gd_advanced_pagination = $gd_advanced_pagination;
-		
+
 		$geodir_widget_cpt = $post_type;
 		$posts_per_page = $post_number;
 		$paged = $pageno;
 		$gd_advanced_pagination = $pagination_info;
 		$unique_id = 'geodir_' . uniqid();
 
-	    // elementor
-	    $skin_active = false;
-	    $elementor_wrapper_class = '';
-	    if(defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id){
-		    if(get_post_status ( $skin_id )=='publish'){
-			    $skin_active = true;
-		    }
-		    if($skin_active){
-			    $columns = isset($layout) ? absint($layout) : 1;
-			    if($columns == '0'){$columns = 6;}// we have no 6 row option to lets use list view
-			    $elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-'.$columns.' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
-		    }
-	    }
+		// Elementor
+		$skin_active = false;
+		$elementor_wrapper_class = '';
+		if ( defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id ) {
+			if ( get_post_status ( $skin_id ) == 'publish' ) {
+				$skin_active = true;
+			}
 
-        ?>
-        <div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; echo $elementor_wrapper_class; ?>">
-            <?php
-            if ( ! isset( $character_count ) ) {
-                /**
-                 * Filter the widget's excerpt character count.
-                 *
-                 * @since 1.0.0
-                 *
-                 * @param int $instance ['character_count'] Excerpt character count.
-                 */
-                $character_count = $character_count == '' ? 50 : apply_filters( 'widget_character_count', $character_count );
-            }
+			if ( $skin_active ) {
+				$columns = isset( $layout ) ? absint( $layout ) : 1;
+				if ( $columns == '0' ) {
+					$columns = 6; // we have no 6 row option to lets use list view
+				}
+				$elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-' . $columns . ' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
+			}
+		}
+
+		?>
+		<div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; echo $elementor_wrapper_class; ?>">
+			<?php
+			if ( ! isset( $character_count ) ) {
+				/**
+				 * Filter the widget's excerpt character count.
+				 *
+				 * @since 1.0.0
+				 *
+				 * @param int $instance ['character_count'] Excerpt character count.
+				 */
+				$character_count = $character_count == '' ? 50 : apply_filters( 'widget_character_count', $character_count );
+			}
 
 			if ( isset( $post ) ) {
 				$reset_post = $post;
@@ -926,13 +958,13 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				self::get_pagination( 'top', $post_count, $post_number, $pageno );
 			}
 
-		    if($skin_active){
-			    $column_gap = !empty($instance['skin_column_gap']) ? absint($instance['skin_column_gap']) : '';
-			    $row_gap = !empty($instance['skin_row_gap']) ? absint($instance['skin_row_gap']) : '';
-			    geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
-		    }else{
-			    geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
-		    }
+			if($skin_active){
+				$column_gap = !empty($instance['skin_column_gap']) ? absint($instance['skin_column_gap']) : '';
+				$row_gap = !empty($instance['skin_row_gap']) ? absint($instance['skin_row_gap']) : '';
+				geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
+			}else{
+				geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
+			}
 
 
 			if ( ! empty( $widget_listings ) && ( $bottom_pagination || $top_pagination ) ) {
@@ -952,7 +984,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				 * @param string $viewall_url View all url.
 				 * @param array $query_args WP_Query args.
 				 * @param array $instance Widget settings.
-			     * @param array $args Widget arguments.
+				 * @param array $args Widget arguments.
 				 * @param object $this The GeoDir_Widget_Listings object.
 				 */
 				$viewall_url = apply_filters( 'geodir_widget_gd_listings_view_all_url', $viewall_url, $query_args, $instance, $args, $this );
@@ -1041,7 +1073,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			<?php 
 		}
 		?>
-        </div>
+		</div>
 		<?php 
 
 		$geodir_widget_cpt = false;
@@ -1050,8 +1082,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$gd_advanced_pagination = $backup_gd_advanced_pagination;
 
 		remove_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 2 );
-    }
-
+	}
 
     /**
      * Get categories.
@@ -1099,6 +1130,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	public function ajax_listings( $data = array() ) {
 		global $wp, $geodirectory, $post, $gd_post, $geodir_ajax_gd_listings;
 
+		$backup_wp = $wp;
 		$geodir_ajax_gd_listings = true;
 
 		$data = apply_filters( 'geodir_widget_listings_ajax_listings', $data );
@@ -1110,6 +1142,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 		if ( ! empty( $data['set_query_vars'] ) ) {
 			$wp->query_vars = $data['set_query_vars'];
+
+			add_filter( 'geodir_location_set_current_check_404', array( $this, 'set_current_check_404' ), 999, 1 );
 
 			$geodirectory->location->set_current();
 		}
@@ -1131,6 +1165,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 		$output = ob_get_clean();
 
+		$wp = $backup_wp;
 		$geodir_ajax_gd_listings = false;
 
 		wp_send_json_success( array( 'content' => trim( $output ) ) );
@@ -1191,5 +1226,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$pagination_args['format'] = '#%#%#';
 
 		return $pagination_args;
+	}
+
+	public function set_current_check_404( $check_404 ) {
+		return false;
 	}
 }
