@@ -119,45 +119,45 @@ function geodir_get_address_by_lat_lan($lat, $lng)
  * @param string $gd_post_type The post type.
  * @return array The location term array.
  */
-function geodir_get_current_location_terms($location_array_from = null, $gd_post_type = '')
-{
+function geodir_get_current_location_terms( $location_array_from = null, $gd_post_type = '' ) {
+	global $wp, $geodirectory;
 
-//    print_r(GeoDir()->location);
-    global $wp,$geodirectory;
-    $location_array = array();
+	$location_array = array();
 
-    $location_terms = $geodirectory->location->allowed_query_variables();
+	if ( ( isset( $wp->query_vars['country'] ) && $wp->query_vars['country'] == 'me' ) || ( isset($wp->query_vars['region'] ) && $wp->query_vars['region'] == 'me' ) || ( isset( $wp->query_vars['city'] ) && $wp->query_vars['city'] == 'me' ) ) {
+		return $location_array;
+	}
 
-    if ((isset($wp->query_vars['country']) && $wp->query_vars['country'] == 'me') || (isset($wp->query_vars['region']) && $wp->query_vars['region'] == 'me') || (isset($wp->query_vars['city']) && $wp->query_vars['city'] == 'me')) {
-        return $location_array;
-    }
+	if ( ! ( ! empty( $geodirectory ) && ! empty( $geodirectory->location ) ) ) {
+		return $location_array;
+	}
 
-    foreach($location_terms as $location_term){
-        $location_array[$location_term] = isset($geodirectory->location->{$location_term."_slug"}) ? $geodirectory->location->{$location_term."_slug"} : '';
-    }
+	$location_terms = $geodirectory->location->allowed_query_variables();
 
+	foreach ( $location_terms as $location_term ) {
+		$location_array[ $location_term ] = isset( $geodirectory->location->{$location_term . "_slug"} ) ? $geodirectory->location->{$location_term . "_slug"} : '';
+	}
 
 	/**
 	 * Filter the location terms.
 	 *
 	 * @since 1.4.6
-     * @package GeoDirectory
+	 * @package GeoDirectory
 	 *
-     * @param array $location_array {
-     *    Attributes of the location_array.
-     *
-     *    @type string $gd_country The country slug.
-     *    @type string $gd_region The region slug.
-     *    @type string $gd_city The city slug.
-     *
-     * }
+	 * @param array $location_array {
+	 *    Attributes of the location_array.
+	 *
+	 *    @type string $gd_country The country slug.
+	 *    @type string $gd_region The region slug.
+	 *    @type string $gd_city The city slug.
+	 *
+	 * }
 	 * @param string $location_array_from Source type of location terms. Default session.
 	 * @param string $gd_post_type WP post type.
 	 */
 	$location_array = apply_filters( 'geodir_current_location_terms', $location_array, $location_array_from, $gd_post_type );
-//    print_r( $location_array );exit;
-    return $location_array;
 
+	return $location_array;
 }
 
 function geodir_location_name_from_slug($slug,$type){
