@@ -608,6 +608,9 @@ var GeoDir_Business_Hours = {
 					hour: hour,
 					minute: minute,
 					second: second,
+					controlType: (geodirIsTouchDevice() ? 'select' : 'slider'),
+					hourGrid: (geodirIsTouchDevice() ? 0 : 4),
+					minuteGrid: (geodirIsTouchDevice() ? 0 : 15),
 					onSelect: function(datetime, inst) {
 						uniqueid = jQuery(this).prop('id');
 						if (uniqueid) {
@@ -721,4 +724,8 @@ function geodir_save_all_tinymce_editors() {
             tinymce.editors[i].save();
         }
     }
+}
+
+function geodirIsTouchDevice() {
+	return ( 'ontouchstart' in window ) || ( navigator.maxTouchPoints > 0 ) || ( navigator.msMaxTouchPoints > 0 );
 }
