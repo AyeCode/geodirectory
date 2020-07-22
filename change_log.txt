@@ -2,6 +2,7 @@
 * OpenStreetMap don't populates region for Bermuda - FIXED
 * GD Listings filter posts by current category/tag - ADDED
 * Unable to select exact time in timepicker on touch screen device - FIXED
+* Publish post email not sent to user after publishing scheduled post - FIXED
 
 = 2.0.0.97 =
 * Adjust timezone for listings saved with different offset for same timezone - FIXED
