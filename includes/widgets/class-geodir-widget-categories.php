@@ -219,6 +219,89 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
         );
 
 
+	    $design_style = geodir_design_style();
+
+	    if($design_style){
+		    $options['arguments']['design_type'] = array(
+			    'title' => __('Design Type', 'geodirectory'),
+			    'desc' => __('Set the design type', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				    "icon-left" => __('Icon Left', 'geodirectory'),
+				    "icon-top" => __('Icon Top', 'geodirectory'),
+				    "image" => __('Image Background', 'geodirectory'),
+			    ),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+		    $options['arguments']['card_padding_inside'] = array(
+			    'title' => __('Card Padding Inside', 'geodirectory'),
+			    'desc' => __('Set the inside padding for the card', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				    "" => "3 (default)",
+				    "1" => "1",
+				    "2" => "2",
+				    "3" => "3",
+				    "4" => "4",
+				    "5" => "5",
+			    ),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+		    $options['arguments']['card_color'] = array(
+			    'title' => __('Card Color', 'geodirectory'),
+			    'desc' => __('Set the card color', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				                    "" => __('Select color', 'geodirectory'),
+			                    )+geodir_aui_colors(false,true),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+
+		    $options['arguments']['icon_color'] = array(
+			    'title' => __('Icon Color', 'geodirectory'),
+			    'desc' => __('Set the icon color', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				                    "" => __('Use Category Color (default)', 'geodirectory'),
+			                    )+geodir_aui_colors(),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+
+		    $options['arguments']['icon_size'] = array(
+			    'title' => __('Icon Size', 'geodirectory'),
+			    'desc' => __('Set the icon size', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				    "" => __('Boxed Small', 'geodirectory'),
+				    "box-medium" => __('Boxed Medium', 'geodirectory'),
+				    "box-large" => __('Boxed Large', 'geodirectory'),
+				    "h1" => 'h1',
+				    "h2" => 'h2',
+				    "h3" => 'h3',
+				    "h4" => 'h4',
+				    "h5" => 'h5',
+				    "h6" => 'h6',
+			    ),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+	    }
+
+
         parent::__construct( $options );
     }
 
@@ -245,16 +328,26 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			'cpt_ajax' => '0',
 			'filter_ids' => array(), // comma separated ids or array
 	        'title_tag' => 'h4',
-			'cpt_title' => ''
+            'cpt_title' => '',
+            'card_color' => 'outline-primary',
+            'icon_color' => '',
+            'icon_size' => 'box-small',
+            'design_type' => 'icon-left',
+	        'card_padding_inside'   => '3',
         );
 
         /**
          * Parse incoming $args into an array and merge it with $defaults
          */
-        $options = wp_parse_args( $args, $defaults );
+	    $options = wp_parse_args( $args, $defaults );
 
 //	    print_r($args);
 //	    print_r($options);
+
+	    if(empty($options['card_color'])){$options['card_color'] = $defaults['card_color'];}
+	    if(empty($options['icon_size'])){$options['icon_size'] = $defaults['icon_size'];}
+	    if(empty($options['design_type'])){$options['design_type'] = $defaults['design_type'];}
+	    if(empty($options['card_padding_inside'])){$options['card_padding_inside'] = $defaults['card_padding_inside'];}
 
         $output = self::categories_output($options );
 
@@ -304,7 +397,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		if ( ! empty( $output ) ) {
 			echo $output;
 		} else {
-			echo '<div class="gd-cptcats-empty">' . __( 'No categories found','geodirectory' ) . '</div>';
+			$design_style = geodir_design_style();
+			$alert_class = $design_style ? 'alert alert-info' : '';
+			echo '<div class="gd-cptcats-empty '.$alert_class.'">' . __( 'No categories found','geodirectory' ) . '</div>';
 		}
 	}
 	
@@ -386,6 +481,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'cpt_ajax' => '',
 				'filter_ids' => array(), // comma separated ids or array
 				'cpt_title' => '',
+				'card_color' => 'outline-primary',
+				'icon_color' => '',
+				'icon_size' => 'box-small',
+				'design_type' => 'icon-left',
+				'card_padding_inside'   => '3',
 			)
 		);
 
@@ -541,7 +641,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 			$cpt_options = array();
 			$cpt_list = '';
+			$cpt_count = 0;
+			$cpt_opened = false;
+			$cpt_closed = false;
 			foreach ($post_types as $cpt => $cpt_info) {
+				$cpt_count++;
 				if ($ajax_cpt && $ajax_cpt !== $cpt) {
 					continue;
 				}
@@ -605,14 +709,26 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					if ($is_listing) {
 						$row_class = $is_category ? ' gd-cptcat-categ' : ' gd-cptcat-listing';
 					}
-					$cpt_row = '<div class="gd-cptcat-row gd-cptcat-' . $cpt . $row_class . ' '.$cpt_left_class.'">';
-					
+					$cpt_row = '';
+					$open_wrap = true;
+					if($design_style){
+						if( empty( $args['cpt_title'] ) && $cpt_opened ){
+							$open_wrap = false;
+						}
+					}
+
+					if($open_wrap){
+						$cpt_row .= '<div class="gd-cptcat-row gd-cptcat-' . $cpt . $row_class . ' '.$cpt_left_class.'">';
+						$cpt_opened = true;
+					}
+
 					if ( ! empty( $args['cpt_title'] ) && ! $cpt_ajax ) {
 						$cpt_row .= '<' . esc_attr( $args['title_tag'] ) . ' class="gd-cptcat-title">' . wp_sprintf( __( '%s Categories', 'geodirectory' ), __( $cpt_info['labels']['singular_name'], 'geodirectory' ) ) . '</' . esc_attr( $args['title_tag'] ) . '>';
 					}
 
-					if($design_style){
-						$cpt_row .= '<div class="row row-cols-1 row-cols-sm-2 row-cols-md-3">';
+					if($design_style && $open_wrap){
+						$col_class = $cpt_left ? 'row-cols-1' : 'row-cols-1 row-cols-sm-2 row-cols-md-3';
+						$cpt_row .= '<div class="row '.$col_class.'">';
 					}
 
 					foreach ($categories as $category) {
@@ -631,7 +747,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 								$term_image = get_term_meta( $category->term_id, 'ct_cat_default_img', true );
 								if(!empty($term_image['id'])){
 									$cat_font_icon = false;
-									$term_icon_url = wp_get_attachment_image($term_image['id'],'medium');
+									$img_background_class = !empty($args['design_type']) && $args['design_type']=='image' ? ' card-img' : '';
+									$img_args = $design_style ? array('class'=>'embed-item-cover-xy align-top '.$img_background_class) : array();
+									$term_icon_url = wp_get_attachment_image($term_image['id'],'medium',false,$img_args);
 								}
 							}
 
@@ -653,20 +771,36 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 						$cpt_row .= $design_style ? '<div class="gd-cptcat-ul gd-cptcat-parent col mb-4">' : '<ul class="gd-cptcat-ul gd-cptcat-parent  '.$cpt_left_class.'">';
 
-						$cpt_row .= self::categories_loop_output('gd-cptcat-li-main',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon,$hide_icon,$use_image);
+						$cpt_row .= self::categories_loop_output('gd-cptcat-li-main',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon,$hide_icon,$use_image, 0, $args);
 
+						$child_cats = '';
 						if (!$skip_childs && ($all_childs || $max_count_child > 0) && ($max_level == 'all' || (int)$max_level > 0)) {
-							$cpt_row .= self::child_cats( $category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count_child, $max_level, $term_icons, $hide_icon,$use_image, 1, $filter_terms );
+							$child_cats .= self::child_cats( $category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count_child, $max_level, $term_icons, $hide_icon,$use_image, 1, $filter_terms,$args );
 						}
-						$cpt_row .= $design_style ? '</div></div>' : '</li>';
+						$cpt_row .= $child_cats;
+
+						$cpt_row .= $design_style ? '</div>' : '</li>';
+
+						$cpt_row .= $design_style ? '</div>' : '';
 						$cpt_row .= $design_style ? '</div>' : '</ul>';
 					}
 
+
+					$close_wrap = true;
 					if($design_style){
+						if( $cpt_opened && empty( $args['cpt_title'] ) && $cpt_count < count($post_types)  ){
+							$close_wrap = false;
+						}
+					}
+
+					if($design_style && $close_wrap){
 						$cpt_row .= '</div>';
 					}
 
-					$cpt_row .= '</div>';
+					if($close_wrap){
+						$cpt_row .= '</div>';
+					}
+
 
 					$cpt_list .= $cpt_row;
 				}
@@ -699,7 +833,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				if ( ! empty( $geodirectory->location ) ) {
 					$output .= '<input type="hidden" name="ajax_set_location" value="' . esc_attr( maybe_serialize( $geodirectory->location ) ) . '">';
 				}
-				$output .= '</div><select class="geodir-cat-list-tax geodir-select">' . implode( '', $cpt_options ) . '</select>';
+				$select_class = $design_style ? 'form-control mb-3' : '';
+				$output .= '</div><select class="geodir-cat-list-tax geodir-select '.$select_class.'">' . implode( '', $cpt_options ) . '</select>';
 				$output .= '</div><div class="gd-cptcat-rows">';
 			}
 			$output .= $cpt_list;
@@ -716,24 +851,64 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		return $output;
 	}
 
-	public static function categories_loop_output($li_class = 'gd-cptcat-li-main',$hide_count=false,$cat_count='',$cat_color,$term_link,$cat_name,$cat_icon,$hide_icon,$use_image){
+	public static function categories_loop_output($li_class = 'gd-cptcat-li-main',$hide_count=false,$cat_count='',$cat_color,$term_link,$cat_name,$cat_icon,$hide_icon,$use_image,$depth = 0, $args = array()){
 		$cpt_row = '';
 
 		$design_style = geodir_design_style();
 
 		if($design_style ){
-			$cpt_row .= '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " ><div class="card-body text-center btn btn-outline-primary p-1 py-4">';
-			$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
 
-			if(!$hide_icon){
-				$cpt_row .= '<div class="gd-cptcat-cat-left h1 iconbox iconsmallx iconlarge fill rounded-circle bg-white text-whitex  shadowx border-0 m-0 mb-3" >';
-				$cpt_row .= "<span class='gd-cptcat-icon' style='color: $cat_color;'>$cat_icon</span>";
-				$cpt_row .= '</div>';
-			}
+			$style = !empty($args['design_type']) ? esc_attr($args['design_type']) : 'icon-left';
+			if($style=='icon-left'){$style = 'icon-left';}
+			elseif($style=='icon-top'){$style = 'icon-top';}
+			elseif($style=='image'){$style = 'image';}
+			else{$style = 'icon-left';}
+			$style = $depth ? 'sub-item' : $style;
+			$template =  $design_style."/categories/$style.php";
 
-
-			$cpt_row .= '<div class="gd-cptcat-cat-right   text-uppercase text-truncate"><a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '" class="text-lightx text-reset stretched-link font-weight-bold h5 ">';
-			$cpt_row .= $cat_name  . '</a>'. $count.'</div>';
+			$cpt_row .=  geodir_get_template_html( $template ,array(
+				'li_class' =>  $li_class,
+				'hide_count'   =>  $hide_count,
+				'cat_count'    =>  $cat_count,
+				'cat_color'    =>  $cat_color,
+				'term_link'    =>  $term_link,
+				'cat_name' =>  $cat_name,
+				'cat_icon' =>  $cat_icon,
+				'hide_icon'    =>  $hide_icon,
+				'use_image'    =>  $use_image,
+				'depth'    =>  $depth,
+				'args'  =>  $args
+			));
+			
+//			$depth
+//			$cpt_row .= $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
+//			$cpt_row .= $depth ? '' : '<div class="card-body text-center btn btn-outline-primary p-1 py-4">';
+//			$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
+//
+//			$icon = '';
+//			if(!$hide_icon){
+//				$icon_size_class = isset($args['icon_size']) ? sanitize_html_class($args['icon_size']) : 'h1';
+//				if($icon_size_class=='box-large'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconlarge';}
+//				if($icon_size_class=='box-medium'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconmedium';}
+//				if($icon_size_class=='box-small'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconsmall';}
+//				$icon_size_class .= $args['icon_position'] == 'top' ? ' mb-3 ' : ' d-inline-block mr-1 align-middle';
+//				$img_class = $depth ? ' d-inline-block iconsmall mr-1' : $icon_size_class;
+//				$icon .= '<div class="gd-cptcat-cat-left  text-whitex border-0 m-0 '.$img_class.'" >';
+//				$icon .= "<span class='gd-cptcat-icon' style='color: $cat_color;'>$cat_icon</span>";
+//				$icon .= '</div>';
+//			}
+//
+//			if(!$depth && $args['icon_position'] != 'left'){$cpt_row .= $icon;}
+//
+//			$indents = $depth > 2 ? implode("", array_fill( 0,$depth - 2, "- " ) ) : '';
+//
+//			$link_class = $depth ? 'h6' : 'font-weight-bold h5';
+//			$cpt_row .= '<div class="gd-cptcat-cat-right   text-uppercase text-truncate">';
+//			$cpt_row .= '<a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '" class="text-lightx text-reset stretched-link   '.$link_class.'">';
+//			$cpt_row .= $indents;
+//			$cpt_row .= $args['icon_position'] == 'left' ? $icon : '';
+//			$cpt_row .= $cat_name  . '</a>'. $count;
+//			$cpt_row .= $depth  ? '</div></div>' : '</div>';
 		}else{
 			$cpt_row .= '<li class="gd-cptcat-li '.$li_class.'">';
 			$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $cat_count . '</span>' : '';
@@ -772,7 +947,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	 * @param array $filter_terms Array of terms to include/exclude.
 	 * @return string Html content.
 	 */
-	public static function child_cats( $parent_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons,$hide_icon, $use_image, $depth = 1, $filter_terms = array() ) {
+	public static function child_cats( $parent_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons,$hide_icon, $use_image, $depth = 1, $filter_terms = array(), $args = array() ) {
 		$cat_taxonomy = $cpt . 'category';
 
 		$orderby = 'count';
@@ -810,7 +985,18 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			$child_cats = geodir_sort_terms($child_cats, 'count');
 		}
 
-		$content = '<li class="gd-cptcat-li gd-cptcat-li-sub-container"><ul class="gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '">';
+		$design_style = geodir_design_style();
+
+		if($design_style ){
+			$link_height = !empty($args['card_padding_inside']) && $args['card_padding_inside'] < 3 ? "15px" : "22px";
+			$content = $depth == 1 ? '<div class="gd-cptcat-li gd-cptcat-li-sub-container dropdown w-100 position-absolute" style="bottom: 0;left: 0;height:'.$link_height.';">' : '';
+			$content .= $depth == 1 ? '<a class="btn btn-link z-index-1 p-0 text-reset w-100 align-top" href="#" id="cat-submenu-'.$parent_id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-chevron-down align-top"></i></a>' : '';
+			$content .= $depth == 1 ? '<ul class="p-0 mt-1 gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '  dropdown-menu dropdown-caret-0" aria-labelledby="cat-submenu-'.$parent_id.'">' : '';
+		}else{
+			$content = '<li class="gd-cptcat-li gd-cptcat-li-sub-container"><ul class="gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '">';
+		}
+
+
 		$depth++;
 		foreach ($child_cats as $category) {
 			$term_icon_url = !empty($term_icons) && isset($term_icons[$category->term_id]) ? $term_icons[$category->term_id] : '';
@@ -834,11 +1020,19 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			$term_link = apply_filters( 'geodir_category_term_link', $term_link, $category->term_id, $cpt );
 			$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $category->count . '</span>' : '';
 
-			$content .= self::categories_loop_output('gd-cptcat-li-sub',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon,$hide_icon,$use_image);
+			$content .= self::categories_loop_output('gd-cptcat-li-sub',$hide_count,$count,$cat_color,$term_link,$category->name,$term_icon,$hide_icon,$use_image,$depth, $args);
 
-			$content .= self::child_cats( $category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons,$hide_icon,$use_image, $depth, $filter_terms );
+			$content .= self::child_cats( $category->term_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons,$hide_icon,$use_image, $depth, $filter_terms,$args );
 		}
-		$content .= '</li></ul>';
+
+		if($design_style ){
+			$content .= $depth == 2 ? '</ul>' : '';
+			$content .= $depth == 2 ? '</div>' : '';
+		}else{
+			$content .= '</li>';
+			$content .= '</ul>';
+		}
+
 
 		return $content;
 	}

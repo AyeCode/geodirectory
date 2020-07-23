@@ -1777,24 +1777,43 @@ function geodir_getcookie( $name ) {
 	return ! empty( $_COOKIE ) && isset( $_COOKIE[ $name ] ) ? $_COOKIE[ $name ] : '';
 }
 
-function geodir_aui_colors($include_branding = false){
-	$theme_colors = array(
-		"primary" => __('Primary', 'geodirectory'),
-		"secondary" => __('Secondary', 'geodirectory'),
-		"success" => __('Success', 'geodirectory'),
-		"danger" => __('Danger', 'geodirectory'),
-		"warning" => __('Warning', 'geodirectory'),
-		"info" => __('Info', 'geodirectory'),
-		"light" => __('Light', 'geodirectory'),
-		"dark" => __('Dark', 'geodirectory'),
-		"white" => __('White', 'geodirectory'),
-		"purple" => __('Purple', 'geodirectory'),
-		"salmon" => __('Salmon', 'geodirectory'),
-		"cyan" => __('Cyan', 'geodirectory'),
-		"gray" => __('Gray', 'geodirectory'),
-		"indigo" => __('Indigo', 'geodirectory'),
-		"orange" => __('Orange', 'geodirectory'),
-	);
+function geodir_aui_colors($include_branding = false, $include_outlines = false){
+	$theme_colors = array();
+	
+	$theme_colors["primary"] = __('Primary', 'geodirectory');
+	$theme_colors["secondary"] = __('Secondary', 'geodirectory');
+	$theme_colors["success"] = __('Success', 'geodirectory');
+	$theme_colors["danger"] = __('Danger', 'geodirectory');
+	$theme_colors["warning"] = __('Warning', 'geodirectory');
+	$theme_colors["info"] = __('Info', 'geodirectory');
+	$theme_colors["light"] = __('Light', 'geodirectory');
+	$theme_colors["dark"] = __('Dark', 'geodirectory');
+	$theme_colors["white"] = __('White', 'geodirectory');
+	$theme_colors["purple"] = __('Purple', 'geodirectory');
+	$theme_colors["salmon"] = __('Salmon', 'geodirectory');
+	$theme_colors["cyan"] = __('Cyan', 'geodirectory');
+	$theme_colors["gray"] = __('Gray', 'geodirectory');
+	$theme_colors["indigo"] = __('Indigo', 'geodirectory');
+	$theme_colors["orange"] = __('Orange', 'geodirectory');
+
+	if($include_outlines){
+		$theme_colors["outline-primary"] = __('Primary outline', 'geodirectory');
+		$theme_colors["outline-secondary"] = __('Secondary outline', 'geodirectory');
+		$theme_colors["outline-success"] = __('Success outline', 'geodirectory');
+		$theme_colors["outline-danger"] = __('Danger outline', 'geodirectory');
+		$theme_colors["outline-warning"] = __('Warning outline', 'geodirectory');
+		$theme_colors["outline-info"] = __('Info outline', 'geodirectory');
+		$theme_colors["outline-light"] = __('Light outline', 'geodirectory');
+		$theme_colors["outline-dark"] = __('Dark outline', 'geodirectory');
+		$theme_colors["outline-white"] = __('White outline', 'geodirectory');
+		$theme_colors["outline-purple"] = __('Purple outline', 'geodirectory');
+		$theme_colors["outline-salmon"] = __('Salmon outline', 'geodirectory');
+		$theme_colors["outline-cyan"] = __('Cyan outline', 'geodirectory');
+		$theme_colors["outline-gray"] = __('Gray outline', 'geodirectory');
+		$theme_colors["outline-indigo"] = __('Indigo outline', 'geodirectory');
+		$theme_colors["outline-orange"] = __('Orange outline', 'geodirectory');
+	}
+	
 
 	if($include_branding){
 		$theme_colors = $theme_colors  + geodir_aui_branding_colors();
