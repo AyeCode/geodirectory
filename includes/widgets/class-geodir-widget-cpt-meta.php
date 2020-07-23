@@ -24,7 +24,7 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 			'base_id'       => 'gd_cpt_meta',
 			'name'          => __( 'GD > CPT Meta', 'geodirectory' ),
 			'widget_ops'    => array(
-				'classname'   => 'geodir-cpt-meta-container',
+				'classname'   => 'geodir-cpt-meta-container bsui',
 				'description' => esc_html__( 'Displays the meta title, meta description, cpt description, image on post type archive page.', 'geodirectory' ),
 				'geodirectory' => true,
 				'gd_wgt_showhide' => 'show_on',
@@ -164,6 +164,8 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 			return;
 		}
 
+		$design_style = geodir_design_style();
+
 		$key = $instance['key'];
 		$css_class = 'geodir-cpt-meta geodir-meta-' . $key;
 
@@ -172,11 +174,18 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 		}
 
 		if ( $instance['text_alignment'] != '' ) {
-			$css_class .= " geodir-text-align" . $instance['text_alignment'];
+			$css_class .= $design_style ? " text-".sanitize_html_class( $instance['text_alignment'] ) : " geodir-text-align" . sanitize_html_class( $instance['text_alignment'] );
 		}
 
 		if ( $instance['alignment'] != '' ) {
-			$css_class .= " geodir-align" . $instance['alignment'];
+			if($design_style){
+				if($instance['alignment']=='block'){$css_class .= " d-block ";}
+				elseif($instance['alignment']=='left'){$css_class .= " float-left mr-2 ";}
+				elseif($instance['alignment']=='right'){$css_class .= " float-right ml-2 ";}
+				elseif($instance['alignment']=='center'){$css_class .= " mw-100 d-block mx-auto ";}
+			}else{
+				$css_class .= " geodir-align" . sanitize_html_class( $instance['alignment'] );
+			}
 		}
 
 		$value = '';

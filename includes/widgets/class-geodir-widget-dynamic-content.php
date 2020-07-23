@@ -24,7 +24,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			'name'           => __( 'GD > Dynamic Content', 'geodirectory' ),						// the name of the widget.
 			'no_wrap'       => true,
 			'widget_ops'     => array(
-				'classname'     => 'geodir-dynamic-content',                                     	// widget class
+				'classname'     => 'geodir-dynamic-content bsui',                                     	// widget class
 				'description'   => esc_html__( 'Display dynamic content using post fields.', 'geodirectory' ),	// widget description
 				'geodirectory'  => true,
 			)

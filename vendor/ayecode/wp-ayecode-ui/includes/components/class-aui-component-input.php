@@ -671,10 +671,13 @@ else{$eli.attr(\'type\',\'password\');}"
 		// placeholder
 		if(!empty($args['placeholder']) && !$is_select2){
 			$output .= '<option value="" disabled selected hidden>'.esc_attr($args['placeholder']).'</option>';
+		}elseif($is_select2 && !empty($args['placeholder'])){
+			$output .= "<option></option>"; // select2 needs an empty select to fill the placeholder
 		}
 
 		// Options
 		if(!empty($args['options'])){
+
 			foreach($args['options'] as $val => $name){
 				$selected = '';
 				if(is_array($name)){

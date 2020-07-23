@@ -777,7 +777,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		'css_class' => '',
 		'onclick'   => '',
 		'icon_class'=> '',
-		'extra_attributes'=> '', // 'data-save-list-id=123 data-other-post-id=321'
+		'extra_attributes'=> '', // 'data-save-list-id=123 data-other-post-id=321', AUI is array
 		'tag'       => '',
 		'popover_title'=> '',
 		'popover_text'=> '',
@@ -1043,7 +1043,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 				// data-attributes
 				$extra_attributes = '';
-				if(!empty($args['extra_attributes'])){
+				if(!empty($args['extra_attributes']) && !is_array($args['extra_attributes'])){
 					$extra_attributes = esc_attr( $args['extra_attributes'] );
 					$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
 				}
@@ -1108,7 +1108,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						elseif($args['shadow']=='large'){ $btn_class .= ' shadow-lg'; }
 					}
 
-						// type
+					// type
 					if( !empty( $args['type'] ) && $args['type']=='pill' ){
 						$btn_class .= ' badge badge-pill';
 					}else{
@@ -1131,7 +1131,12 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						'data-badge-condition'  => esc_attr($args['condition']),
 					);
 
-					// onclick
+					// extra attributes
+					if(!empty($args['extra_attributes'])){
+						$btn_args['extra_attributes'] = $args['extra_attributes'];
+					}
+
+						// onclick
 					if(!empty($args['onclick'])){
 						$btn_args['onclick'] = esc_attr($args['onclick']);
 					}

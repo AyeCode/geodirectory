@@ -37,7 +37,7 @@ if ( ! empty( $tabs_array ) ) {
 			$name = stripslashes( esc_attr__( $tab['tab_name'], 'geodirectory' ) );
 			$data_toggle = $args['show_as_list'] ? '' : 'data-toggle="tab"';
 
-			echo '<li class="nav-item "><a class="nav-link '.$active.'" id="nav-home-tab" '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';
+			echo '<li class="nav-item "><a class="nav-link '.$active.'"  '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';
 
 			$count++;
 		}

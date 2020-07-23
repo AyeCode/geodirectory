@@ -35,6 +35,7 @@ class AUI_Component_Button {
 			'no_wrap'    => true,
 			'onclick'    => '',
 			'style'  => '',
+			'extra_attributes'  => array() // an array of extra attributes
 		);
 
 		/**
@@ -78,12 +79,17 @@ class AUI_Component_Button {
 			// class
 			$class = !empty($args['class']) ? $args['class'] : '';
 			$output .= AUI_Component_Helper::class_attr($class);
-			
+
 			// data-attributes
 			$output .= AUI_Component_Helper::data_attributes($args);
 
 			// aria-attributes
 			$output .= AUI_Component_Helper::aria_attributes($args);
+
+			// extra attributes
+			if(!empty($args['extra_attributes'])){
+				$output .= AUI_Component_Helper::extra_attributes($args['extra_attributes']);
+			}
 
 			// onclick, we don't escape this
 			if(!empty($args['onclick'])){
@@ -105,14 +111,14 @@ class AUI_Component_Button {
 				$output .= "<span class='hover-content'>".AUI_Component_Helper::icon($args['hover_icon'],$args['hover_content']).$args['hover_content']."</span>";
 				$hover_content = true;
 			}
-			
+
 			// content
 			if($hover_content){$output .= "<span class='hover-content-original'>";}
 			if(!empty($args['content']) || !empty($args['icon'])){
 				$output .= AUI_Component_Helper::icon($args['icon'],$args['content']).$args['content'];
 			}
 			if($hover_content){$output .= "</span>";}
-					
+
 
 
 			// close

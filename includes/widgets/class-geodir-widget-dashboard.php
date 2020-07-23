@@ -32,7 +32,7 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 		    'base_id'       => 'gd_dashboard', // this us used as the widget id and the shortcode id.
 		    'name'          => __('GD > Dashboard','geodirectory'), // the name of the widget.
 		    'widget_ops'    => array(
-			    'classname'   => 'geodir-dashboard-container', // widget class
+			    'classname'   => 'geodir-dashboard-container bsui', // widget class
 			    'description' => esc_html__('Shows the user dashboard to logged in users.','geodirectory'), // widget description
 			    'customize_selective_refresh' => true,
 			    'geodirectory' => true,
@@ -105,10 +105,13 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 		if ( is_user_logged_in() ) {
 			global $current_user;
 
+			$design_style = geodir_design_style();
+
 			$author_link = get_author_posts_url( $current_user->data->ID );
 			$author_link = geodir_getlink( $author_link, array( 'geodir_dashbord' => 'true' ), false );
 
-			echo '<ul class="geodir-loginbox-list">';
+			$ul_class = $design_style ? 'list-unstyled' : '';
+			echo '<ul class="geodir-loginbox-list '.$ul_class.'">';
 			ob_start();
 			do_action( 'geodir_dashboard_links_top' );
 

@@ -1599,8 +1599,14 @@ function gd_manually_set_user_position($msg){
 
 function gd_set_get_directions($lat,$lon){
     if(jQuery('#gd_map_canvas_post_fromAddress').length){
+        jQuery('#gd-single-tabs a[href="#post_map"]').tab('show');
+        setTimeout(function(){
+            jQuery('html, body').animate({
+                scrollTop: jQuery("#post_map").offset().top
+            }, 1000);
+        }, 300);
         jQuery('#gd_map_canvas_post_fromAddress').val($lat+","+$lon);
-        jQuery('.gd-map-get-directions').trigger('click');
+        jQuery('.geodir-map-directions-wrap button').trigger('click');
     }
 }
 
