@@ -1837,3 +1837,27 @@ function geodir_aui_branding_colors(){
 		"vkontakte" => __('Vkontakte', 'geodirectory'),
 	);
 }
+
+/**
+ * Get the post id of the first post that has content for a field key.
+ *
+ * This is used to help with block previews.
+ * 
+ * @param string $field_key
+ * @param string $post_type
+ *
+ * @return int|null|string
+ */
+function geodir_get_post_id_with_content($field_key = '',$post_type = 'gd_place'){
+	global $wpdb;
+
+	$post_id = 0;
+	$table = geodir_db_cpt_table( $post_type );
+	$result = $wpdb->get_var($wpdb->prepare("SELECT post_id FROM $table WHERE `post_status` = 'publish' AND %s != '' AND %s IS NOT NULL",$field_key,$field_key));
+	if(!empty($result)){
+		$post_id = $result;
+	}
+
+	return $post_id;
+
+}

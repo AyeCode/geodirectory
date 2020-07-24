@@ -323,7 +323,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 	 */
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $post, $gd_post;
-
+//		return '112s';
 
 		// Default options
 		$defaults = array(
@@ -346,28 +346,39 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		} else {
 			$post_id = 0;
 		}
+
+		$design_style = geodir_design_style();
+		$block_preview = $this->is_block_content_call();
+
+		if(empty($gd_post->ID) && $block_preview && !empty($args['key'])){
+			$post_id = geodir_get_post_id_with_content($args['key']);
+		}
+
 		$post_type 	= $post_id ? get_post_type( $post_id ) : '';
 
 		$args['id'] = $post_id;
 
 		// Errors.
 		$errors = array();
-		if ( empty( $args['id'] ) ) {
-			$errors[] = __('post id is missing','geodirectory');
+		if(!$block_preview){
+			if ( empty( $args['id'] ) ) {
+				$errors[] = __('post id is missing','geodirectory');
+			}
+			if ( empty( $post_type ) ) {
+				$errors[] = __('invalid post type','geodirectory');
+			}
+			if ( empty( $args['key'] ) ) {
+				$errors[] = __('field key is missing', 'geodirectory');
+			}
 		}
-		if ( empty( $post_type ) ) {
-			$errors[] = __('invalid post type','geodirectory');
-		}
-		if ( empty( $args['key'] ) ) {
-			$errors[] = __('field key is missing', 'geodirectory');
-		}
+
 
 		$output = '';
 		if ( ! empty( $errors ) ){
 			$output .= implode( ", ", $errors );
 		}
 
-		$design_style = geodir_design_style();
+
 
 		// set list_hide class
 		if($args['list_hide']=='2'){$args['css_class'] .= $design_style ? " gv-hide-2 " : " gd-lv-2 ";}
@@ -381,7 +392,6 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		if($args['list_hide_secondary']=='4'){$args['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
 		if($args['list_hide_secondary']=='5'){$args['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
-		$design_style = geodir_design_style();
 		if(!empty($args['size'])){
 			switch ($args['size']) {
 				case 'small':
@@ -409,6 +419,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 
 		}
 
+//		$output .= '@@@'.$post_id;
 		$output .= geodir_get_post_badge( $post_id, $args );
 
 		return $output;

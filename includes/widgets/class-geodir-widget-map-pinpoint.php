@@ -241,27 +241,31 @@ class GeoDir_Widget_Map_Pinpoint extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $wp_query, $gd_post,$gdecs_render_loop;
 
-		// skip some checks for elementor
-		if($gdecs_render_loop || (is_admin())){
-			if ( empty( $gd_post->default_category ) ) {
-				return;
+		$post_id = isset($gd_post->ID) ? $gd_post->ID : 0;
+
+		if ( !$this->is_block_content_call() ) {
+			// skip some checks for elementor
+			if($gdecs_render_loop || (is_admin())){
+				if ( empty( $gd_post->default_category ) ) {
+					return;
+				}
 			}
+			else{
+				if ( ! ( ! empty( $wp_query ) && $wp_query->is_main_query() && ! empty( $gd_post ) ) ) {
+					return;
+				}
+
+				if ( empty( $gd_post->default_category ) ) {
+					return;
+				}
+
+				// Location-less
+				if ( ! GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) || geodir_is_page( 'detail' ) ) {
+					return;
+				}
+			}
+
 		}
-		else{
-			if ( ! ( ! empty( $wp_query ) && $wp_query->is_main_query() && ! empty( $gd_post ) ) ) {
-				return;
-			}
-
-			if ( empty( $gd_post->default_category ) ) {
-				return;
-			}
-
-			// Location-less
-			if ( ! GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) || geodir_is_page( 'detail' ) ) {
-				return;
-			}
-		}
-
 
 		$design_style = geodir_design_style();
 
@@ -334,20 +338,20 @@ class GeoDir_Widget_Map_Pinpoint extends WP_Super_Duper {
 
 			// set the link
 			$args['link'] = '#open-marker';
-			$args['onclick'] = "if(typeof openMarker=='function'){openMarker('listing_map_canvas' ,'$gd_post->ID')}";
+			$args['onclick'] = "if(typeof openMarker=='function'){openMarker('listing_map_canvas' ,'$post_id')}";
 
 			$args['extra_attributes'] = array(
-				'onmouseover' => "if(typeof animate_marker=='function'){animate_marker('listing_map_canvas' ,'$gd_post->ID')}",
-				'onmouseout' => "if(typeof stop_marker_animation=='function'){stop_marker_animation('listing_map_canvas' ,'$gd_post->ID')}",
+				'onmouseover' => "if(typeof animate_marker=='function'){animate_marker('listing_map_canvas' ,'$post_id')}",
+				'onmouseout' => "if(typeof stop_marker_animation=='function'){stop_marker_animation('listing_map_canvas' ,'$post_id')}",
 			);
 
-			echo geodir_get_post_badge( $gd_post->ID, $args );
+			echo geodir_get_post_badge( $post_id, $args );
 		}else{
 			?>
 			<a href="javascript:void(0)" class="geodir-pinpoint-target"
-			   onclick="if(typeof openMarker=='function'){openMarker('listing_map_canvas' ,'<?php echo $gd_post->ID; ?>')}"
-			   onmouseover="if(typeof animate_marker=='function'){animate_marker('listing_map_canvas' ,'<?php echo $gd_post->ID; ?>')}"
-			   onmouseout="if(typeof stop_marker_animation=='function'){stop_marker_animation('listing_map_canvas' ,'<?php echo $gd_post->ID; ?>')}" >
+			   onclick="if(typeof openMarker=='function'){openMarker('listing_map_canvas' ,'<?php echo $post_id; ?>')}"
+			   onmouseover="if(typeof animate_marker=='function'){animate_marker('listing_map_canvas' ,'<?php echo $post_id; ?>')}"
+			   onmouseout="if(typeof stop_marker_animation=='function'){stop_marker_animation('listing_map_canvas' ,'<?php echo $post_id; ?>')}" >
 				<?php if ( $args['show'] != 'text' ) { ?>
 					<span class="geodir-pinpoint-icon"><i class="<?php echo esc_attr( $term_icon ); ?>" aria-hidden="true"></i> </span>
 				<?php } if ( $args['show'] != 'icon' ) { ?>

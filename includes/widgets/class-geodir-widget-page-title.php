@@ -20,49 +20,11 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 			'block-icon'    => 'location-alt',
 			'block-category'=> 'widgets',
 			'block-keywords'=> "['title','header','geodir']",
-			'block-output'  => array(
-				array(
-					'element' => 'h1',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h1"',
-					'content' => __( "Demo title h1", "geodirectory "),
-				),
-				array(
-					'element' => 'h2',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h2"',
-					'content' => __( "Demo title h2", "geodirectory" ),
-				),
-				array(
-					'element' => 'h3',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h3"',
-					'content' => __( "Demo title h3", "geodirectory" ),
-				),
-				array(
-					'element' => 'h4',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h4"',
-					'content' => __( "Demo title h4", "geodirectory" ),
-				),
-				array(
-					'element' => 'h5',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="h5"',
-					'content' => __( "Demo title h5", "geodirectory" ),
-				),
-				array(
-					'element' => 'div',
-					'class'   => '[%className%]',
-					'element_require' => '[%tag%]=="div"',
-					'content' => __( "Demo title div", "geodirectory" ),
-				),
-			),
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_page_title',
 			'name'          => __( 'GD > Page Title', 'geodirectory' ),
 			'widget_ops'    => array(
-				'classname'   => 'geodir-page-title-container',
+				'classname'   => 'geodir-page-title-container bsui',
 				'description' => esc_html__( 'Displays the page title on GD pages.', 'geodirectory' ),
 				'geodirectory' => true,
 				'gd_wgt_showhide' => 'gd',
@@ -72,7 +34,7 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 				'tag'  => array(
 					'type' => 'select',
 					'title' => __( 'Output Type:', 'geodirectory' ),
-					'desc' => __( 'Set the HTML tag for the title.', 'geodirectory' ),
+					'desc' => __( 'Set the HTML tag for the title. This is for SEO, the size is set in the design settings below.', 'geodirectory' ),
 					'options' => array(
 						"h1" => "h1",
 						"h2" => "h2",
@@ -165,6 +127,33 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 			)
 		);
 
+		// add more options if using AUI
+		$design_style = geodir_design_style();
+		if($design_style){
+			$options['arguments']['font_size_class'] = array(
+				'title' => __('Font size', 'geodirectory'),
+				'desc' => __('Set the font-size class for the title. These are bootstrap font sizes not, HTML tags.', 'geodirectory'),
+				'type' => 'select',
+				'options'   =>  array(
+					"" => __("Default (h1)","geodirectory"),
+					"h1" => "h1",
+					"h2" => "h2",
+					"h3" => "h3",
+					"h4" => "h4",
+					"h5" => "h5",
+					"h6" => "h6",
+					"display-1" => "display-1",
+					"display-2" => "display-2",
+					"display-3" => "display-3",
+					"display-4" => "display-4",
+				),
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+			);
+		}
+
 		parent::__construct( $options );
 	}
 
@@ -190,7 +179,8 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 				'alignment' => '',
 				'text_alignment' => '',
 				'container_class' => '',
-				'css_class' => 'entry-title'
+				'css_class' => 'entry-title',
+				'font_size_class'   => 'h1',
 			), 
 			$instance, 
 			'gd_page_title' 
@@ -199,15 +189,21 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 			$instance['tag'] = 'h1';
 		}
 
+		if ( empty( $instance['font_size_class'] ) ) {
+			$instance['font_size_class'] = 'h1';
+		}
+
+		$design_style = geodir_design_style();
+		$block_preview = $this->is_block_content_call();
 		$output = '';
 		if ( $this->is_preview() ) {
 			return $output;
 		}
 
 		// No GD page
-		if ( ! geodir_is_geodir_page() ) {
-			return;
-		}
+//		if ( ! geodir_is_geodir_page() && !$block_preview ) {
+//			return;
+//		}
 
 		// Title container class
 		$container_class = 'geodir-page-title-wrap geodir-page-title-' . sanitize_html_class( $instance['tag'] );
@@ -217,11 +213,18 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 		}
 
 		if ( $instance['text_alignment'] != '' ) {
-			$container_class .= ' geodir-text-align' . $instance['text_alignment'];
+			$container_class .= $design_style ? " text-".sanitize_html_class( $instance['text_alignment'] ) : " geodir-text-align" . sanitize_html_class( $instance['text_alignment'] );
 		}
 
 		if ( $instance['alignment'] != '' ) {
-			$container_class .= ' geodir-align' . $instance['alignment'];
+			if($design_style){
+				if($instance['alignment']=='block'){$container_class .= " d-block ";}
+				elseif($instance['alignment']=='left'){$container_class .= " float-left mr-2 ";}
+				elseif($instance['alignment']=='right'){$container_class .= " float-right ml-2 ";}
+				elseif($instance['alignment']=='center'){$container_class .= " mw-100 d-block mx-auto ";}
+			}else{
+				$container_class .= " geodir-align" . sanitize_html_class( $instance['alignment'] );
+			}
 		}
 
 		// Title class
@@ -231,7 +234,12 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 			$title_class .= ' ' . esc_attr( $instance['css_class'] );
 		}
 
+		if ( $instance['font_size_class'] != '' ) {
+			$title_class .= ' ' . esc_attr( $instance['font_size_class'] );
+		}
+
 		$title = GeoDir_SEO::set_meta();
+		if(empty($title) && $block_preview ){$title = "Demo title preview";}
 		$title = apply_filters( 'geodir_widget_page_title', $title, $instance, $args, $content );
 
 		// Tag

@@ -175,8 +175,11 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 			$args['id'] =  isset($gd_post->ID) ? $gd_post->ID : 0;
 		}
 
-		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
+		$design_style = geodir_design_style();
+		$block_preview = $this->is_block_content_call();
 
+		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
+		if($block_preview){$post_type = 'gd_place';}
 		// error checks
 		$errors = array();
 		if(empty($args['key'])){$errors[] = __('key is missing','geodirectory');}
@@ -205,9 +208,11 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 				}
 				if(!empty($field)){ // the field is allowed to be shown
 					$field = stripslashes_deep( $field );
-					if($args['alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
-					if($args['alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
-					if($args['alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
+
+					// set text alignment class
+					if ( $args['alignment'] != '' ) {
+						$field['css_class'] .= $design_style ? " text-".sanitize_html_class( $args['alignment'] ) : " geodir-text-align" . sanitize_html_class( $args['alignment'] );
+					}
 
 					// set to value if empty
 					if(empty($args['show'])){

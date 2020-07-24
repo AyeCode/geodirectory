@@ -24,7 +24,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'base_id'       => 'gd_post_meta', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Post Meta','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-meta-container', // widget class
+				'classname'   => 'geodir-post-meta-container bsui', // widget class
 				'description' => esc_html__('This shows a post single post meta.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,
@@ -213,6 +213,13 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		if($args['show']=='value-strip'){
 			$args['no_wrap'] = true;
 		}
+
+		$design_style = geodir_design_style();
+		$block_preview = $this->is_block_content_call();
+
+		if(empty($gd_post->ID) && $block_preview && !empty($args['key'])){
+			$args['id'] = geodir_get_post_id_with_content($args['key']);
+		}
 		
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
 
@@ -255,18 +262,22 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					}
 
 					$design_style = geodir_design_style();
-
-
+					
 					// set text alignment class
-					if($args['text_alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
-					if($args['text_alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
-					if($args['text_alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
-
+					if ( $args['text_alignment'] != '' ) {
+						$field['css_class'] .= $design_style ? " text-".sanitize_html_class( $args['text_alignment'] ) : " geodir-text-align" . sanitize_html_class( $args['text_alignment'] );
+					}
 					// set alignment class
-					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
-					if($args['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
-					if($args['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
-					if($args['alignment']=='block'){$field['css_class'] .= " gd-d-block gd-clear-both ";}
+					if ( $args['alignment'] != '' ) {
+						if($design_style){
+							if($args['alignment']=='block'){$field['css_class'] .= " d-block ";}
+							elseif($args['alignment']=='left'){$field['css_class'] .= " float-left mr-2 ";}
+							elseif($args['alignment']=='right'){$field['css_class'] .= " float-right ml-2 ";}
+							elseif($args['alignment']=='center'){$field['css_class'] .= " mw-100 d-block mx-auto ";}
+						}else{
+							$field['css_class'] .= $args['alignment']=='block' ? " gd-d-block gd-clear-both " : " geodir-align" . sanitize_html_class( $args['alignment'] );
+						}
+					}
 
 					// set list_hide class
 					if($args['list_hide']=='2'){$field['css_class'] .= $design_style ? " gv-hide-2 " : " gd-lv-2 ";}

@@ -1806,7 +1806,7 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
                         $link_class = ! empty( $output['fade'] ) ? 'gd-read-more-fade' : '';
                         $link_style = '';
 
-                        if( $design_style ){
+                        if( $design_style && $max_height ){
                             $link_class .= " w-100 position-absolute text-center pt-5";
                             $link_style .= "bottom:0;left:0;background-image: linear-gradient(to bottom,transparent,#fff);";
                         }
@@ -2156,6 +2156,12 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
     if( geodir_is_block_demo() ){
         $gd_post->{$cf['htmlvar_name']} = '123 Demo Street';
         $gd_post->street = '123 Demo Street';
+        $gd_post->street2 = 'Street line 2';
+        $gd_post->region = 'Pennsylvania';
+        $gd_post->city = 'Philadelphia';
+        $gd_post->zip = '19107';
+        $gd_post->neighbourhood = 'Chinatown';
+
     }
 
     $html_var = $cf['htmlvar_name'];

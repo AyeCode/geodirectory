@@ -1115,6 +1115,12 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$btn_class .= ' badge';
 					}
 
+					//alignment
+					if($args['alignment']=='block'){$btn_class .= " d-block ";}
+					elseif($args['alignment']=='left'){$btn_class .= " float-left mr-2 ";}
+					elseif($args['alignment']=='right'){$btn_class .= " float-right ml-2 ";}
+					elseif($args['alignment']=='center'){$btn_class .= " mw-100 d-block mx-auto ";}
+
 
 					if ( ! empty( $args['css_class'] ) ) {
 						// replace some old classes

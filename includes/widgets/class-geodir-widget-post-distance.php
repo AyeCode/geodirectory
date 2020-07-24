@@ -202,8 +202,14 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $post, $gd_post;
 
-		if ( empty( $gd_post ) ) {
-			return '';
+		$post_id = isset($gd_post->ID) ? $gd_post->ID : 0;
+		$block_preview = $this->is_block_content_call();
+		if ( !$block_preview ) {
+
+			if ( empty( $gd_post ) ) {
+				return '';
+			}
+
 		}
 
 		$design_style = geodir_design_style();
@@ -212,7 +218,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 			if ( ! empty( $post ) && ! empty( $gd_post->ID ) && $post->ID == $gd_post->ID && isset( $post->distance ) ) {
 				$gd_post->distance = $post->distance;
 			} else {
-				if ( !$design_style || !geodir_is_page( 'single' ) ) {
+				if ( !$design_style || !geodir_is_page( 'single' ) && !$block_preview ) {
 					return '';
 				}
 			}
@@ -244,38 +250,43 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 
 		ob_start();
 
-		if ( isset( $gd_post->latitude ) ) {
+		if ( isset( $gd_post->latitude ) || ( $block_preview && $design_style)  ) {
 
 			if($design_style){
 
 				if(geodir_is_page( 'single' )){
-					$main_post = get_queried_object_id();
-					$point1 = array(
-						'latitude'  => $gd_post->latitude,
-						'longitude'  => $gd_post->longitude,
-					);
-					$point2 = array(
-						'latitude'  => geodir_get_post_meta($main_post,'latitude',true),
-						'longitude'  => geodir_get_post_meta($main_post,'longitude',true),
-					);
-					if(empty($point2['latitude'])){return '';}
+					if(!$block_preview ){
+						$main_post = get_queried_object_id();
+						$point1 = array(
+							'latitude'  => $gd_post->latitude,
+							'longitude'  => $gd_post->longitude,
+						);
+						$point2 = array(
+							'latitude'  => geodir_get_post_meta($main_post,'latitude',true),
+							'longitude'  => geodir_get_post_meta($main_post,'longitude',true),
+						);
+						if(empty($point2['latitude'])){return '';}
 
-					$distance = geodir_calculateDistanceFromLatLong( $point1, $point2, $dist_units );
-					if($distance){
-						$distance = round( (float) $distance , 2 ) ;
-						$distance .= ' ' . $dist_units;
+						$distance = geodir_calculateDistanceFromLatLong( $point1, $point2, $dist_units );
+						if($distance){
+							$distance = round( (float) $distance , 2 ) ;
+							$distance .= ' ' . $dist_units;
+						}else{
+							return '';
+						}
 					}else{
-						return '';
+						$distance = "1.23 ".$dist_units;
 					}
-					$args['onclick'] = "gd_set_get_directions('".esc_attr($gd_post->latitude)."','".esc_attr($gd_post->longitude)."');";
+
+					$args['onclick'] = $block_preview ? '' : "gd_set_get_directions('".esc_attr($gd_post->latitude)."','".esc_attr($gd_post->longitude)."');";
 					$args['link'] = '#post_map';
 					$args['badge'] = $distance;
 					$args['icon_class'] = 'fas fa-arrows-alt-h';
 					$args['tooltip_text'] = __( "Distance from the current listing, click for directions.", "geodirectory" );
 				}else{
-					$args['link'] = 'https://maps.google.com/?daddr='.esc_attr($gd_post->latitude).','. esc_attr($gd_post->longitude);
+					$args['link'] = $block_preview ? '#link_to_directions' : 'https://maps.google.com/?daddr='.esc_attr($gd_post->latitude).','. esc_attr($gd_post->longitude);
 					$args['new_window'] = true;
-					$args['badge'] = $distance;
+					$args['badge'] = $block_preview ? "1.23 ".$dist_units : $distance;
 				}
 
 				// set list_hide class

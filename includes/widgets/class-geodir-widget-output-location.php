@@ -49,6 +49,25 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
             )
 
         );
+
+	    $design_style = geodir_design_style();
+
+	    if($design_style){
+		    $options['arguments']['list_style'] = array(
+			    'title' => __('List style', 'geodirectory'),
+			    'desc' => __('Select the list style', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				    "wrap" => __('Wrap with lines', 'geodirectory'),
+				    "line" => __('Line separators', 'geodirectory'),
+				    "none" => __('None', 'geodirectory'),
+			    ),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+	    }
         
         parent::__construct( $options );
     }
@@ -66,7 +85,8 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
     public function output($args = array(), $widget_args = array(),$content = ''){
 
         $defaults = array(
-            'location'      => '', //
+	        'location'      => '', //
+	        'list_style'      => 'wrap', //
         );
 
         /**
@@ -77,10 +97,33 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
             $args['location'] = str_replace(array('[',']'),'',$args['location']);
         }
 
-        $output = '';
+	    $wrap_class = '';
+	    $wrap_style = '';
+	    $design_style = geodir_design_style();
+	    if($design_style){
+		    if(empty($args['list_style'])){$args['list_style'] = $defaults['list_style'];}
+
+		    if($args['list_style']=='wrap'){
+			    $wrap_class = 'list-group';
+		    }elseif($args['list_style']=='line'){
+			    $wrap_class = 'list-group list-group-flush';
+		    }
+
+		    if($args['location']=='mapbubble'){
+			    $wrap_class = '';
+		    }elseif($args['location']=='listing'){
+			    $wrap_style .= $args['list_style']=='wrap' ? "margin-left:-21px;margin-right:-21px;" : "margin-left:-20px;margin-right:-20px;";
+		    }
+
+	    }
+
+	    $output = '';
 
         if (!empty($args['location']) && $geodir_post_detail_fields = geodir_show_listing_info($args['location'])) {
-            $output .= "<div class='geodir-output-location geodir-output-location-".esc_attr($args['location'])."' >";
+	        if($geodir_post_detail_fields && $design_style && $wrap_class){
+		        $geodir_post_detail_fields = str_replace("geodir_post_meta ","geodir_post_meta list-group-item list-group-item-action ",$geodir_post_detail_fields);
+	        }
+            $output .= "<div class='$wrap_class  geodir-output-location geodir-output-location-".esc_attr($args['location'])."' style='$wrap_style' >";
             $output .= $geodir_post_detail_fields;
             $output .= "</div>";
         }
