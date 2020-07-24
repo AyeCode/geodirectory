@@ -264,6 +264,8 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
                 return $value;
             }
 
+            $value = apply_filters( 'geodir_custom_field_output_field_value', $value, $location, $cf, $gd_post );
+
             // round rating
             if ( $value && $htmlvar_name == 'overall_rating' ) {
                 $value = round( $value, 1 );
