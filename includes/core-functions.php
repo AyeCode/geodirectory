@@ -929,7 +929,7 @@ function geodir_search_form_post_type_input() {
 				echo "<div class='gd-search-input-wrapper gd-search-field-cpt'>";
 			}
 			?>
-			<select name="stype" class="search_by_post">
+			<select name="stype" class="search_by_post" aria-label="<?php esc_attr_e( 'Post Type', 'geodirectory' ); ?>">
 				<?php foreach ( $post_types as $post_type => $info ):
 					global $wpdb;
 					$pt_slug = isset($info->rewrite->slug) ? esc_attr($info->rewrite->slug) : 'places';

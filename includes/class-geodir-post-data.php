@@ -71,6 +71,9 @@ class GeoDir_Post_Data {
 
 		// Set embed post thumbnail.
 		add_filter( 'embed_thumbnail_id', array( __CLASS__, 'embed_thumbnail_id' ), 20, 1 );
+
+		// Transition post status.
+		add_action( 'transition_post_status', array( __CLASS__, 'transition_post_status' ), 6, 3 );
 	}
 
 	/**
@@ -2142,5 +2145,40 @@ class GeoDir_Post_Data {
 		}
 
 		return $thumbnail_id;
+	}
+
+	/**
+	 * Managing post status transition.
+	 *
+	 * @since 2.0.0.98
+	 *
+	 * @global wpdb $wpdb WordPress database abstraction object.
+	 *
+	 * @param string  $new_status New post status.
+	 * @param string  $old_status Previous post status.
+	 * @param WP_Post $post       Post object.
+	 */
+	public static function transition_post_status( $new_status, $old_status, $post ) {
+		// Handle publish future post via cron.
+		if ( wp_doing_cron() && 'future' === $old_status && 'publish' === $new_status && geodir_is_gd_post_type( $post->post_type ) ) {
+			// Update post status in detail table.
+			geodir_save_post_meta( $post->ID, 'post_status', $new_status );
+
+			/**
+			 * Handle future to publish post status transition.
+			 *
+			 * @since 2.0.0.98
+			 *
+			 * @param WP_Post $post Post object.
+			 */
+			do_action( 'geodir_future_to_publish_post', $post );
+
+			$gd_post = geodir_get_post_info( $post->ID );
+
+			if ( ! empty( $gd_post ) ) {
+				// Send email to user
+				GeoDir_Email::send_user_publish_post_email( $gd_post );
+			}
+		}
 	}
 }

@@ -37,3 +37,11 @@
 .ui-timepicker-rtl dl dd {
     margin: 0 65px 10px 10px;
 }
+
+.ui-timepicker-div .ui_tpicker_hour .ui-timepicker-select,
+.ui-timepicker-div .ui_tpicker_minute .ui-timepicker-select,
+.ui-timepicker-div .ui_tpicker_second .ui-timepicker-select {
+    margin: auto;
+    padding: 2.5px;
+    width: 100%;
+}

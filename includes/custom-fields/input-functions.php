@@ -395,7 +395,7 @@ function geodir_cfi_radio($html,$cf){
                     foreach ($option_values as $option_value) {
                         if (empty($option_value['optgroup'])) {
                             ?>
-                            <span class="gd-radios" role="radio"><input name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>" <?php checked(stripslashes($value), $option_value['value']);?> value="<?php echo esc_attr($option_value['value']); ?>" class="gd-checkbox" field_type="<?php echo $cf['type'];?>" type="radio" aria-label="<?php esc_attr( $option_value['label'] ); ?>" /><?php echo $option_value['label']; ?></span>
+                            <span class="gd-radios" role="radio"><input name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>" <?php checked(stripslashes($value), $option_value['value']);?> value="<?php echo esc_attr($option_value['value']); ?>" class="gd-checkbox" field_type="<?php echo $cf['type'];?>" type="radio" aria-label="<?php esc_attr_e( $option_value['label'] ); ?>" /><?php echo $option_value['label']; ?></span>
                             <?php
                         }
                     }
