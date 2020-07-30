@@ -461,17 +461,15 @@ add_filter('post_updated_messages', 'geodir_custom_update_messages');
  * @param string $post_type The post type.
  * @return bool|array Post type details.
  */
-function geodir_get_posttype_info($post_type = '')
-{
-    $post_types = array();
+function geodir_get_posttype_info( $post_type = '' ) {
     $post_types = geodir_get_posttypes('array');
-    $post_types = stripslashes_deep($post_types);
-    if (!empty($post_types) && $post_type != '') {
-        return $post_types[$post_type];
+    $post_types = stripslashes_deep( $post_types );
+
+    if ( ! empty( $post_types ) && $post_type != '' && isset( $post_types[ $post_type ] ) ) {
+        return $post_types[ $post_type ];
     } else
         return false;
 }
-
 
 /**
  * Get default Post Type.

@@ -1431,11 +1431,12 @@ class GeoDir_Post_Data {
 			} else {
 				$user_id_from_username = username_exists( $user_name );
 				$user_id_from_email = email_exists( $user_email );
+				$post_author = 0;
 
 				if ( $user_id_from_username && $user_id_from_email && $user_id_from_username == $user_id_from_email ) { // user already exists
-					$post_data['post_author'] = $user_id_from_email;
+					$post_author = $user_id_from_email;
 				} elseif ( $user_id_from_email ) { // user exists from email
-					$post_data['post_author'] = $user_id_from_email;
+					$post_author = $user_id_from_email;
 				} else { // register new user
 					$user_name = geodir_generate_unique_username( $user_name );
 					if ( empty( $user_name ) ) {
@@ -1448,11 +1449,25 @@ class GeoDir_Post_Data {
 					if ( is_wp_error( $user_id ) ) {
 						$error = $user_id;
 					} elseif ( $user_id ) {
-						$post_data['post_author'] = $user_id;
+						$post_author = $user_id;
 						update_user_option( $user_id, 'default_password_nag', true, true ); //Set up the Password change nag.
 						do_action( 'register_new_user', $user_id ); // fire the new set registration action so the standard notifications are sent.
 					} else {
 						$error = new WP_Error( 'geodir_register_new_user', __( 'Something wrong! Fail to register a new user.', 'geodirectory' ) );
+					}
+				}
+
+				if ( $post_author ) {
+					$post_data['post_author'] = $post_author;
+
+					// Check posts limit.
+					$args = array( 'post_type' => $post_data['post_type'], 'post_author' => $post_author );
+					$can_add_post = GeoDir_Post_Limit::user_can_add_post( $args );
+
+					if ( ! $can_add_post ) {
+						$message = GeoDir_Post_Limit::posts_limit_message( $post_data['post_type'], $post_author );
+
+						$error = new WP_Error( 'add_listing_error', $message, array( 'status' => 400 ) );
 					}
 				}
 			}

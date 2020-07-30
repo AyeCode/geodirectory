@@ -210,6 +210,7 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
         GeoDir_AJAX::init();
 	    GeoDir_Post_Data::init(); // post data
+		GeoDir_Post_Limit::init(); // Posts limit
 	    //GeoDir_Post_Revision::init(); // post revisions @todo not implemented yet
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
 
