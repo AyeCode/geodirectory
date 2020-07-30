@@ -175,7 +175,7 @@ class GeoDir_Post_Limit {
 
 		return $output;
 	}
-	
+
 	public static function check_rest_api_post( $prepared_post, $request ) {
 		if ( empty( $prepared_post->ID ) ) {
 			$args = array( 'post_type' => $prepared_post->post_type );
