@@ -350,6 +350,11 @@ class GeoDir_Media {
 			$file = $file['file'];
 		}
 
+		// Throws exception if file is null.
+		if ( is_null( $file ) ) {
+			return new WP_Error( 'file_insert', __( "Failed to insert file info to DB.", "geodirectory" ) );
+		}
+
 		$file_info = array(
 			'post_id' => $post_id,
 			'date_gmt' => gmdate( 'Y-m-d H:i:s' ),
