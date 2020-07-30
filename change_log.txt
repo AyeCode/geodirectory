@@ -5,6 +5,7 @@
 * Publish post email not sent to user after publishing scheduled post - FIXED
 * The7 theme shows wrong content on empty search results page - FIXED
 * Add listing unable to tick radio buttons on RTL language due to BuddyBoss conflicts - FIXED
+* Limit maximum number of CPT posts per user - ADDED
 
 = 2.0.0.97 =
 * Adjust timezone for listings saved with different offset for same timezone - FIXED

@@ -367,6 +367,20 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'advanced' => true,
 					'value'	   => $post_type_values['author_favorites_private']
 				),
+				array(
+					'type' => 'number',
+					'id' => 'limit_posts',
+					'name' => __( 'Limit Posts', 'geodirectory' ),
+					'desc' => __( 'Limit total posts allowed per user. Leave blank or enter 0 to allow unlimited posts.', 'geodirectory' ),
+					'std' => '',
+					'custom_attributes' => array(
+						'min' => '-1',
+						'step' => '1'
+					),
+					'desc_tip' => true,
+					'advanced' => true,
+					'value' => ( isset( $post_type_values['limit_posts'] ) && $post_type_values['limit_posts'] ? (int) $post_type_values['limit_posts'] : '' )
+				),
 				array( 'type' => 'sectionend', 'id' => 'cpt_settings_author' ),
 
 
@@ -696,12 +710,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
          * @since 2.0.0
          *
          * @param array $raw {
-         *      An array sanatize posttype.
+         *      An array sanatize post type.
          *
-         * @type string $new_post_type New sanatize posttype.
-         * @type string $name New posttype name.
-         * @type string $singular_name New Posttype singular name.
-         * @type string $slug New posttype slug.
+         * @type string $new_post_type New sanatize post type.
+         * @type string $name New post type name.
+         * @type string $singular_name New Post type singular name.
+         * @type string $slug New post type slug.
          * }
          *
          * @return array $output.
@@ -799,6 +813,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			// author
 			$output[$post_type]['author_posts_private'] = isset($raw['author_posts_private']) && $raw['author_posts_private'] ? absint($raw['author_posts_private']) : 0;
 			$output[$post_type]['author_favorites_private'] = isset($raw['author_favorites_private']) && $raw['author_favorites_private'] ? absint($raw['author_favorites_private']) : 0;
+			$output[$post_type]['limit_posts'] = isset( $raw['limit_posts'] ) && $raw['limit_posts'] ? (int) $raw['limit_posts'] : 0;
 
 			// seo content
 			$output[$post_type]['seo']['title'] = isset($raw['title']) && $raw['title'] ? sanitize_text_field($raw['title']) : '';
