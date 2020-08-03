@@ -68,7 +68,7 @@ if(!$hide_icon){
 	<div class="card-body text-center btn btn-<?php echo $card_color;?> p-1 py-<?php echo $card_padding_inside;?>">
 		<?php echo $icon; ?>
 		<div class="gd-cptcat-cat-right text-uppercase text-truncate">
-			<a href="<?php echo esc_url($term_link);?>" class="text-reset stretched-link font-weight-bold h5">
+			<a href="<?php echo esc_url($term_link);?>" class="text-reset stretched-link font-weight-bold h6">
 				<?php echo esc_attr( $cat_name );?>
 			</a>
 			<?php echo $count;?>

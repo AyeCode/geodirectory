@@ -110,7 +110,7 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 			$author_link = get_author_posts_url( $current_user->data->ID );
 			$author_link = geodir_getlink( $author_link, array( 'geodir_dashbord' => 'true' ), false );
 
-			$ul_class = $design_style ? 'list-unstyled' : '';
+			$ul_class = $design_style ? 'list-unstyled p-0 m-0' : '';
 			echo '<ul class="geodir-loginbox-list '.$ul_class.'">';
 			ob_start();
 			do_action( 'geodir_dashboard_links_top' );

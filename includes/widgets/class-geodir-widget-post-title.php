@@ -73,7 +73,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 				'desc' => __('Set the font-size class for the title. These are bootstrap font sizes not, HTML tags.', 'geodirectory'),
 				'type' => 'select',
 				'options'   =>  array(
-					"" => __("Default (h2)","geodirectory"),
+					"" => __("Default (h4)","geodirectory"),
 					"h1" => "h1",
 					"h2" => "h2",
 					"h3" => "h3",
@@ -84,6 +84,20 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 					"display-2" => "display-2",
 					"display-3" => "display-3",
 					"display-4" => "display-4",
+				),
+				'default'  => 'h5',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+			);
+
+			$options['arguments']['overflow'] = array(
+				'title' => __('Text Overflow', 'geodirectory'),
+				'desc' => __('Set what happens when text overflows its container.', 'geodirectory'),
+				'type' => 'select',
+				'options'   =>  array(
+					"" => __("Line Break (default)","geodirectory"),
+					"ellipsis" => __("Truncate with ellipsis...","geodirectory"),
 				),
 				'default'  => '',
 				'desc_tip' => true,
@@ -110,7 +124,8 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		// options
 		$defaults = array(
 			'tag' => 'h2', // h1, h2, h3
-			'font_size_class' => 'h2', // h1, h2, h3
+			'font_size_class' => 'h5', // h1, h2, h3
+			'overflow' => '',
 		);
 
 		$backup_post = $post;
@@ -139,7 +154,12 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		$design_style = geodir_design_style();
 		$classes = '';
 		if($design_style){
-			$classes = " p-0 m-0 " . sanitize_html_class($instance['font_size_class']);
+			$classes = " p-0 mb-2 " . sanitize_html_class($instance['font_size_class']);
+
+			// text overflow
+			if(!empty($instance['overflow']) && $instance['overflow'] == 'ellipsis'){
+				$classes .= ' text-truncate';
+			}
 		}
 
 		ob_start();

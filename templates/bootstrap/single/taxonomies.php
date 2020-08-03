@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $tag_taxonomy The tag taxonomy slug.
  */
 ?>
-<div class="geodir_post_taxomomies mx-0 my-2 clearfix">
+<div class="geodir_post_taxomomies mx-0 mb-3 clearfix">
 	<?php 
 	
 	if ( isset( $taxonomies[ $cat_taxonomy ] ) ) { 

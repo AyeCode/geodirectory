@@ -206,7 +206,12 @@ function geodir_locate_template( $template_name, $template_path = '', $default_p
  *
  */
 function geodir_no_listings_found() {
-	geodir_get_template( 'loop/no-listings-found.php' );
+	$design_style = geodir_design_style();
+	if($design_style){
+		geodir_get_template( $design_style.'/loop/no-listings-found.php' );
+	}else{
+		geodir_get_template( 'loop/no-listings-found.php' );	
+	}
 }
 
 /**
@@ -383,22 +388,27 @@ function geodir_convert_listing_view_class( $columns = '' ) {
 	switch ( $columns ) {
 		case '1':
 		case 'gridview_one':
+		case 'row-cols-md-1':
 			$class = geodir_grid_view_class(1);
 			break;
 		case '2':
 		case 'gridview_onehalf':
-			$class = geodir_grid_view_class(2);
+		case 'row-cols-md-2':
+		$class = geodir_grid_view_class(2);
 			break;
 		case '3':
 		case 'gridview_onethird':
+		case 'row-cols-md-3':
 			$class = geodir_grid_view_class(3);
 			break;
 		case '4':
 		case 'gridview_onefourth':
+		case 'row-cols-md-4':
 			$class = geodir_grid_view_class(4);
 			break;
 		case '5':
 		case 'gridview_onefifth':
+		case 'row-cols-md-5':
 			$class = geodir_grid_view_class(5);
 			break;
 		case '0':

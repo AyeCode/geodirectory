@@ -903,13 +903,14 @@ function gd_fav_save(post_id) {
                     jQuery('.favorite_property_' + post_id + ' a').each(function( index ) {
                         $color_value = jQuery( this ).data("color-off");
                         $icon_value = jQuery( this ).data("icon");
+                        $text_classes = jQuery( this ).find('.geodir-fav-text').attr('class');
                         $style =  $color_value ? "style='color:"+$color_value+"'" : "";
                         $icon = $icon_value ? $icon_value : geodir_params.icon_fav;
                         jQuery( this )
                             .removeClass('geodir-removetofav-icon')
                             .addClass('geodir-addtofav-icon')
                             .attr("title", geodir_params.text_add_fav)
-                            .html('<i '+$style+' class="' + $icon + '"></i> <span class="geodir-fav-text">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>');
+                            .html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_fav ) + '</span>').tooltip('dispose').tooltip('enable');
                     });
 
                 } else {
@@ -917,16 +918,18 @@ function gd_fav_save(post_id) {
                     jQuery('.favorite_property_' + post_id + ' a').each(function( index ) {
                         $color_value = jQuery( this ).data("color-on");
                         $icon_value = jQuery( this ).data("icon");
+                        $text_classes = jQuery( this ).find('.geodir-fav-text').attr('class');
                         $style =  $color_value ? "style='color:"+$color_value+"'" : "";
                         $icon = $icon_value ? $icon_value : geodir_params.icon_fav;
                         jQuery( this )
                             .removeClass('geodir-addtofav-icon')
                             .addClass('geodir-removetofav-icon')
                             .attr("title", geodir_params.text_remove_fav)
-                            .html('<i '+$style+' class="' + $icon + '"></i> <span class="geodir-fav-text">' + ' ' + ( action_text ? action_text : geodir_params.text_unfav ) + '</span>');
+                            .html('<i '+$style+' class="' + $icon + '"></i> <span class="' + $text_classes + '">' + ' ' + ( action_text ? action_text : geodir_params.text_unfav ) + '</span>').tooltip('dispose').tooltip('enable');
                     });
 
                 }
+
             } else {
                 alert(geodir_params.loading_listing_error_favorite);
             }
@@ -1207,15 +1210,22 @@ function gd_init_comment_reply_link(){
                 this.textContent = this.textContent.replace(geodir_params.txt_leave_a_review,geodir_params.txt_leave_a_reply);
             });
 
-            $html = jQuery('#respond .comment-form-comment').html();
-            $new_html = $html.replace(geodir_params.txt_review_text,geodir_params.txt_reply_text);
-            jQuery('#respond .comment-form-comment').html($new_html);
+            // add padding to the top of the form
+            jQuery('#respond').addClass('mt-3');
 
-            $html = jQuery('#respond input.submit').val();
-            $new_html = $html.replace(geodir_params.txt_post_review,geodir_params.txt_post_reply);
-            jQuery('#respond input.submit').val($new_html);
+            // change the title
+            $reply_text = jQuery('.gd-comment-review-title').data('reply-text');
+            jQuery('.gd-comment-review-title').text($reply_text);
 
-            jQuery('#respond .gd-rating-input-wrap').hide();
+            // replace placeholder text
+            $placeholder = jQuery('#respond #comment').attr('placeholder');
+            jQuery('#respond #comment').data('placeholder',$placeholder).attr('placeholder',geodir_params.txt_reply_text);
+
+            // replace button value
+            $btn_text = jQuery('#respond input.submit').val();
+            jQuery('#respond input.submit').data('value',$btn_text).val(geodir_params.txt_post_reply);
+
+            jQuery('#respond .gd-rating-input-group').hide();
         }, 10);
     });
 
@@ -1229,15 +1239,19 @@ function gd_init_comment_reply_link(){
                 this.textContent = this.textContent.replace(geodir_params.txt_leave_a_reply,geodir_params.txt_leave_a_review);
             });
 
-            $html = jQuery('#respond .comment-form-comment').html();
-            $new_html = $html.replace(geodir_params.txt_reply_text,geodir_params.txt_review_text);
-            jQuery('#respond .comment-form-comment').html($new_html);
+            // change the title
+            $review_text = jQuery('.gd-comment-review-title').data('review-text');
+            jQuery('.gd-comment-review-title').text($review_text);
 
-            $html = jQuery('#respond input.submit').val();
-            $new_html = $html.replace(geodir_params.txt_post_reply,geodir_params.txt_post_review);
-            jQuery('#respond input.submit').val($new_html);
+            // replace placeholder text
+            $placeholder = jQuery('#respond #comment').data('placeholder');
+            jQuery('#respond #comment').attr('placeholder',$placeholder);
 
-            jQuery('#respond .gd-rating-input-wrap').show();
+            // replace button value
+            $btn_text = jQuery('#respond input.submit').data('value');
+            jQuery('#respond input.submit').val($btn_text);
+
+            jQuery('#respond .gd-rating-input-group').show();
         }, 10);
     });
 }

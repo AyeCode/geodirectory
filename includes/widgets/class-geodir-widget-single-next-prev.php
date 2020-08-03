@@ -48,16 +48,10 @@ class GeoDir_Widget_Single_Next_Prev extends WP_Super_Duper {
      */
     public function output($args = array(), $widget_args = array(),$content = ''){
 
-//        $design_style = geodir_design_style();
-//        $template = $design_style ? $design_style."/loop/actions.php" : "loop/actions.php";
-        ob_start();
-        ?>
-        <div class="geodir-pos_navigation clearfix">
-            <div class="geodir-post_left"><?php previous_post_link('%link', '' . __('Previous', 'geodirectory'), false) ?></div>
-            <div class="geodir-post_right"><?php next_post_link('%link', __('Next', 'geodirectory') . '', false) ?></div>
-        </div>
-        <?php
-        return ob_get_clean();
+        $design_style = geodir_design_style();
+        $template = $design_style ? $design_style."/single/next-prev.php" : "legacy/single/next-prev.php";
+        return geodir_get_template_html( $template, $args );
+
     }
 
 }

@@ -1,3 +1,9 @@
+= 0.1.19 =
+* Select placeholder not showing for select2 - FIXED
+* code font size too small for mobile SEO - FIXED
+* extra_attributes array now work with buttons - ADDED
+* Added input to be able to disable loading of scripts in wp-admin certain URLs - ADDED
+
 = 0.1.18 =
 * Hide grid view elements on small breakpoints - ADDED
 * Grid view 0 (list view) not going 100% if smaller grid view classes active - FIXED

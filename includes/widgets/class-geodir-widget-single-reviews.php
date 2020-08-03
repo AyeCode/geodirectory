@@ -27,7 +27,7 @@ class GeoDir_Widget_Single_Reviews extends WP_Super_Duper {
             'base_id'       => 'gd_single_reviews', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Single Reviews','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-single-reviews-container', // widget class
+                'classname'   => 'geodir-single-reviews-container bsui', // widget class
                 'description' => esc_html__('Shows the comment/reviews area for a single post. (this will remove any further instances of the comments section on the page)','geodirectory'), // widget description
                 'geodirectory' => true,
             ),
@@ -49,6 +49,7 @@ class GeoDir_Widget_Single_Reviews extends WP_Super_Duper {
     public function output($args = array(), $widget_args = array(),$content = ''){
         global $post;
         ob_start();
+        
         if(geodir_is_page('single')){
             comments_template();
         }

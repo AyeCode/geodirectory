@@ -436,6 +436,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 								'value'             => absint( $cat_term->term_id),
 								'label'             => $term_img . esc_attr(geodir_utf8_ucfirst($cat_term->name)),
 								'class'             => 'group_selector ' . $main_list_class,
+								'label_class'       => 'text-light',
 								'checked'           => $checked,
 								'no_wrap'            => true,
 								'extra_attributes'  => array(

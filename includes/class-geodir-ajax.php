@@ -288,11 +288,22 @@ class GeoDir_AJAX {
 				geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
 
 			}else{
-				geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
+				$design_style = geodir_design_style();
+				$template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
+
+				echo geodir_get_template_html( $template, array(
+					'widget_listings' => $widget_listings
+				) );
+
 			}
 
 		}else{
-			_e("Your recently viewed listings will show here.","geodirectory");
+			echo aui()->alert(array(
+					'type'=> 'info',
+					'content'=> __("Your recently viewed listings will show here.","geodirectory")
+				)
+			);
+
 		}
 
 		echo ob_get_clean();

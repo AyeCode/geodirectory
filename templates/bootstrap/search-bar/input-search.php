@@ -18,7 +18,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 	$input_group_html = '<span class="geodir-search-input-label hover-swap text-muted" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
 	$input_group_html .= '<i class="fas fa-search hover-content-original"></i>';
-	$input_group_html .= '<i class="fas fa-times geodir-search-input-label-clear hover-content" title="' . __( 'Clear field', 'geodirectory' ) . '"></i>';
+	$input_group_html .= '<i class="fas fa-times geodir-search-input-label-clear hover-content c-pointer" title="' . __( 'Clear field', 'geodirectory' ) . '"></i>';
 	$input_group_html .= '</span>';
 
 	echo aui()->input(

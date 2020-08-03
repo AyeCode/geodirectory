@@ -45,20 +45,20 @@ if ( ! defined( 'ABSPATH' ) ) {
 							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;z-index: 0;"></div>
 							<div id="<?php echo $map_canvas; ?>_loading_div"
 							     class="loading_div overlay overlay-black position-absolute row m-0"
-							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;">
+							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;top:0;z-index: 2;">
 								<div class="spinner-border mx-auto align-self-center text-white" role="status">
 									<span class="sr-only"><?php _e( "Loading...", "geodirectory" ); ?></span>
 								</div>
 							</div>
 							<div id="<?php echo $map_canvas; ?>_map_nofound"
-							     class="advmap_nofound position-absolute row m-0"
+							     class="advmap_nofound position-absolute row m-0 z-index-1"
 							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;display:none;top:0;">
 								<div class="alert alert-info text-center mx-auto align-self-center shadow-lg">
 									<?php echo wp_sprintf( __( '%sNo Records Found%s Sorry, no records were found. Please adjust your search criteria and try again.%s', 'geodirectory' ), "<div class='h3 alert-heading'>", "</div><p>", "</p>" ); ?>
 								</div>
 							</div>
 							<div id="<?php echo $map_canvas; ?>_map_notloaded"
-							     class="advmap_notloaded position-absolute row m-0"
+							     class="advmap_notloaded position-absolute row m-0 z-index-1"
 							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;display:none;top:0;">
 								<div class="alert alert-danger text-center mx-auto align-self-center shadow-lg">
 									<?php echo wp_sprintf( __( '%sMaps failed to load%s Sorry, unable to load the Maps API.%s', 'geodirectory' ), "<div class='h3 alert-heading'>", "</div><p>", "</p>" ); ?>

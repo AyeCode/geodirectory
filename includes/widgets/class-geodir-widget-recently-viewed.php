@@ -21,7 +21,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			'base_id'       => 'gd_recently_viewed',
 			'name'          => __('GD > Recently Viewed','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-recently-viewed', // widget class
+				'classname'   => 'geodir-recently-viewed bsui', // widget class
 				'description' => esc_html__('Shows the GeoDirectory Most Recently Viewed Listings.','geodirectory'),
 				'geodirectory' => true,
 			),
@@ -41,6 +41,8 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 	 * @return array
 	 */
 	public function set_arguments(){
+
+		$design_style = geodir_design_style();
 
 		$widget_args = array();
 
@@ -85,15 +87,20 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			'advanced' => true
 		);
 
-		$widget_args['enqueue_slider']  = array(
-			'title' => __('Enqueue Slider Script:', 'geodirectory'),
-			'desc' => __('This is only needed if your archive items are using a image slider.', 'geodirectory'),
-			'type' => 'checkbox',
-			'desc_tip' => true,
-			'value'  => '1',
-			'default'  => 0,
-			'advanced' => true
-		);
+
+		// not needed in AUI
+		if(!$design_style){
+			$widget_args['enqueue_slider']  = array(
+				'title' => __('Enqueue Slider Script:', 'geodirectory'),
+				'desc' => __('This is only needed if your archive items are using a image slider.', 'geodirectory'),
+				'type' => 'checkbox',
+				'desc_tip' => true,
+				'value'  => '1',
+				'default'  => 0,
+				'advanced' => true
+			);
+		}
+
 
 		/*
 		 * Elementor Pro features below here
@@ -157,6 +164,8 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			$geodir_recently_viewed_count++;
 		}
 
+		$design_style = geodir_design_style();
+
 		$post_page_limit = !empty( $args['post_limit'] ) ? $args['post_limit'] : '5';
 		$layout = !empty( $args['layout'] ) ? $args['layout'] : 'list';
 		$post_type = !empty( $args['post_type'] ) ? $args['post_type'] : 'all_post';
@@ -183,6 +192,15 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			}
 		}
 
+		// spinner
+
+		if($design_style){
+			$spinner = '<div class="spinner-border" role="status">
+  <span class="sr-only">'.__("Loading...","geodirectory").'</span>
+</div>';
+		}else{
+			$spinner = '<i class="fas fa-sync fa-spin fa-2x"></i>';
+		}
 		ob_start();
 
 		if($enqueue_slider ){
@@ -192,7 +210,9 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		?>
 		<div class="geodir-recently-reviewed">
 			<div class="recently-reviewed-content recently-reviewed-content-<?php echo absint($geodir_recently_viewed_count); echo $elementor_wrapper_class;?>"></div>
-			<div class="recently-reviewed-loader" style="display: none;text-align: center;"><i class="fas fa-sync fa-spin fa-2x"></i></div>
+			<div class="recently-reviewed-loader" style="display: none;text-align: center;">
+<?php echo $spinner;?>
+			</div>
 		</div>
 
 		<script type="text/javascript">

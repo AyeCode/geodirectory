@@ -17,7 +17,7 @@ if ( ! empty( $tabs_array ) ) {
 	if ( ! $args['show_as_list'] && $args['output'] != 'body' || ( $args['show_as_list'] && $args['output'] == 'head' ) ) {
 
 		$tab_style = empty($args['tab_style']) ? 'nav-tabs mb-3' : 'nav-pills border-bottom pb-3';
-		echo '<nav class="geodir-tab-head greedy"><ul class="nav '.$tab_style.' " id="gd-single-tabs" role="tablist">';
+		echo '<nav class="geodir-tab-head greedy"><ul class="nav '.$tab_style.' mx-0" id="gd-single-tabs" role="tablist">';
 
 		$count = 0;
 		foreach( $tabs_array as $tab ) {

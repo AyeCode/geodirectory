@@ -422,41 +422,102 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		$user_meta_data = geodir_get_user_favourites( $current_user->data->ID );
 	}
 
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/fav/fav.php" : "legacy/fav/fav.php";
+//	$template = "legacy/fav/fav.php";
+
+	$show = isset($args['show']) ? esc_attr($args['show']) : '';
+	$post_id = absint($post_id);
+	$text_style = '';
+	$text_class = '';
+	$wrap_class = '';
+	$icon_style = '';
+	$link_style = '';
+
 
 	if ( ! empty( $user_meta_data ) && in_array( $post_id, $user_meta_data ) ) {
-		$icon_style = $icon_color_on ? "color:$icon_color_on;" : '';
-		$custom_icon = !empty($args['icon']) ? esc_attr($args['icon']) : '';
-		?><span class="geodir-addtofav favorite_property_<?php echo $post_id; ?> text-reset"  ><a
-			class="geodir-removetofav-icon" href="javascript:void(0);"
-			onclick="javascript:gd_fav_save(<?php echo $post_id; ?>);"
-			title="<?php echo $remove_favourite_text; ?>"
-			data-icon="<?php echo $custom_icon;?>"
-			data-color-on="<?php echo $icon_color_on;?>"
-			data-color-off="<?php echo $icon_color_off;?>"><i
-				style="<?php echo $icon_style;?>"
-				class="<?php echo $unfavourite_icon; ?>"></i> <span class="geodir-fav-text gv-secondary"><?php echo $unfavourite_text; ?></span></a>   </span><?php
 
+		$link_class = 'geodir-removetofav-icon';
+		$onclick = "javascript:gd_fav_save($post_id);";
+		$title = $remove_favourite_text;
+		$icon_class = !empty($args['icon']) ? esc_attr($args['icon']) : $favourite_icon;
+		$icon_style .= $icon_color_on ? "color:$icon_color_on;" : '';
+		$text = $unfavourite_text;
+		
 	} else {
 
 		if ( ! isset( $current_user->data->ID ) || $current_user->data->ID == '' ) {
-			$script_text = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
+			$onclick = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
 		} else {
-			$script_text = 'javascript:gd_fav_save(' . $post_id . ')';
+			$onclick = 'javascript:gd_fav_save(' . $post_id . ')';
 		}
 
-		$icon_style = $icon_color_off ? "color:$icon_color_off;" : '';
-		$custom_icon = !empty($args['icon']) ? esc_attr($args['icon']) : '';
+		$link_class = 'geodir-addtofav-icon';
+		$title = $add_favourite_text;
+		$icon_class = !empty($args['icon']) ? esc_attr($args['icon']) : $favourite_icon;
+		$icon_style .= $icon_color_off ? "color:$icon_color_off;" : '';
+		$text = $favourite_text;
+	}
 
-		?><span class="geodir-addtofav favorite_property_<?php echo $post_id; ?>"><a class="geodir-addtofav-icon text-reset"
-		                                                                             href="javascript:void(0);"
-		                                                                             onclick="<?php echo $script_text; ?>"
-		                                                                             title="<?php echo $add_favourite_text; ?>"
-		                                                                             data-icon="<?php echo $custom_icon;?>"
-		                                                                             data-color-on="<?php echo $icon_color_on;?>"
-		                                                                             data-color-off="<?php echo $icon_color_off;?>"><i
-				style="<?php echo $icon_style;?>"
-				class="<?php echo $favourite_icon; ?>"></i> <span class="geodir-fav-text gv-secondary"><?php echo $favourite_text; ?></span></a></span>
-	<?php }
+	if($design_style){
+		// type
+		if($args['type'] == 'badge'){$link_class .= ' badge';}
+		if($args['type'] == 'pill'){$link_class .= ' badge badge-pill';}
+
+		// shadow
+		if(!empty($args['shadow'])){
+			if($args['shadow']=='small'){$link_class .= ' shadow-sm';}
+			elseif($args['shadow']=='medium'){$link_class .= ' shadow';}
+			elseif($args['shadow']=='large'){$link_class .= ' shadow-lg';}
+		}
+
+		// size
+		if(!empty($args['size'])){
+			$wrap_class .= ' '.sanitize_html_class($args['size']);
+		}
+
+		// bg color
+		if( !empty($args['color']) ){
+			$link_class .= ' badge-'.sanitize_html_class($args['color']);
+		}elseif( !empty($args['bg_color']) && $args['type']!='link'){
+			$link_style .= "background:".sanitize_hex_color($args['bg_color']).";";
+		}
+		
+		// text color
+		if( !empty($args['txt_color'])){
+			$text_style .= "color:".sanitize_hex_color($args['txt_color']).";";
+		}
+	}
+
+	$output = geodir_get_template_html( $template, array(
+		// pass whats used
+		'post_id'   => $post_id,
+		'link_class'   => $link_class,
+		'onclick'   => $onclick,
+		'title'     => $title,
+		'icon_class'      => $icon_class,
+		'text_class'      => $text_class,
+		'wrap_class'      => $wrap_class,
+		'link_style'      => $link_style,
+		'icon_style'      => $icon_style,
+		'text_style'      => $text_style,
+		'text'      => $text,
+		'show'  => $show,
+		// pass everything so it can be customised easily.
+		'args'  => $args,
+		'user_meta_data'    => $user_meta_data,
+		'icon_color_on' => $icon_color_on,
+		'icon_color_off' => $icon_color_off,
+		'custom_icon' => !empty($args['icon']) ? esc_attr($args['icon']) : '',
+		'add_favourite_text' => $add_favourite_text,
+		'remove_favourite_text' => $remove_favourite_text,
+		'unfavourite_text' => $unfavourite_text,
+		'favourite_text' => $favourite_text,
+		'favourite_icon' => $favourite_icon,
+		'unfavourite_icon' => $unfavourite_icon,
+	) );
+
+	echo $output;
 }
 
 /**

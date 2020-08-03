@@ -98,6 +98,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
         }
 
 	    $wrap_class = '';
+	    $inner_class = '';
 	    $wrap_style = '';
 	    $design_style = geodir_design_style();
 	    if($design_style){
@@ -112,7 +113,13 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 		    if($args['location']=='mapbubble'){
 			    $wrap_class = '';
 		    }elseif($args['location']=='listing'){
-			    $wrap_style .= $args['list_style']=='wrap' ? "margin-left:-21px;margin-right:-21px;" : "margin-left:-20px;margin-right:-20px;";
+			    $wrap_style .= "clear:both;";
+			    $wrap_class .= " mx-n2 ";
+
+			    if($args['list_style']=='wrap'){
+				    $inner_class .= ' border-left-0 border-right-0 rounded-0 px-2';
+			    }
+
 		    }
 
 	    }
@@ -121,9 +128,9 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 
         if (!empty($args['location']) && $geodir_post_detail_fields = geodir_show_listing_info($args['location'])) {
 	        if($geodir_post_detail_fields && $design_style && $wrap_class){
-		        $geodir_post_detail_fields = str_replace("geodir_post_meta ","geodir_post_meta list-group-item list-group-item-action ",$geodir_post_detail_fields);
+		        $geodir_post_detail_fields = str_replace("geodir_post_meta ","geodir_post_meta list-group-item list-group-item-action ".$inner_class,$geodir_post_detail_fields);
 	        }
-            $output .= "<div class='$wrap_class  geodir-output-location geodir-output-location-".esc_attr($args['location'])."' style='$wrap_style' >";
+            $output .= "<div class='$wrap_class d-block geodir-output-location geodir-output-location-".esc_attr($args['location'])."' style='$wrap_style' >";
             $output .= $geodir_post_detail_fields;
             $output .= "</div>";
         }

@@ -91,7 +91,7 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
 
             if($design_style){
                 $class = !empty($args['class']) ? esc_attr($args['class']) : '';
-                $position = isset($args['position']) && $args['position']=='left' ? 'card-img-top overflow-hidden position-relative' : 'card-body';
+                $position = isset($args['position']) && $args['position']=='left' ? 'card-img-top overflow-hidden position-relative' : 'card-body p-2';
                 $output = '<div class="'.$position.' '.$class.'">';
             }else{
                 $class = !empty($args['class']) ? esc_attr($args['class']) : '';

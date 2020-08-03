@@ -33,7 +33,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
             'name'          => __('GD > Recent Reviews','geodirectory'), // the name of the widget.
             //'disable_widget'=> true,
             'widget_ops'    => array(
-                'classname'   => 'geodir-wgt-recent-reviews', // widget class
+                'classname'   => 'geodir-wgt-recent-reviews bsui', // widget class
                 'description' => esc_html__('Display a list of recent reviews from GeoDirectory listings.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
@@ -107,6 +107,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		// prints the widget
         extract( $widget_args, EXTR_SKIP );
 
+	    $design_style = geodir_design_style();
+
         /** This filter is documented in includes/widget/class-geodir-widget-advance-search.php.php */
         $title = empty($instance['title']) ? '' : apply_filters('widget_title', __($instance['title'], 'geodirectory'));
         
@@ -126,7 +128,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
          *
          * @param int $g_size Height and width of the avatar image in pixels. Default 30.
          */
-        $g_size = apply_filters('geodir_recent_reviews_g_size', 30);
+        $g_size = apply_filters('geodir_recent_reviews_g_size', $design_style ? 44 : 30);
         /**
          * Filter the excerpt length
          *
@@ -166,7 +168,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			ob_start();
 			?>
 			<div class="geodir_recent_reviews_section">
-				<ul class="geodir_recent_reviews"><?php echo $comments_li; ?></ul>
+				<ul class="geodir_recent_reviews list-unstyled"><?php echo $comments_li; ?></ul>
 			</div>
 			<?php
 			$content = ob_get_clean();
@@ -239,6 +241,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 
 		$comments = $wpdb->get_results( $request );
 
+		$design_style = geodir_design_style();
+
 		foreach ( $comments as $comment ) {
 			$comment_id      = $comment->comment_ID;
 			$comment_content = strip_tags( $comment->comment_content );
@@ -251,7 +255,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			$post_title        = get_the_title( $comment_post_ID );
 			$permalink         = get_permalink( $comment_post_ID );
 			$comment_permalink = $permalink . "#comment-" . $comment->comment_ID;
-			$read_more         = '<a class="comment_excerpt" href="' . $comment_permalink . '">' . __( 'Read more', 'geodirectory' ) . '<span class="gd-visuallyhidden">' . __( 'about this listing', 'geodirectory' ) . '</span></a>';
+			$readmore_seo_class = $design_style ? 'sr-only' : '';
+			$read_more         = '<a class="comment_excerpt" href="' . $comment_permalink . '">' . __( 'Read more', 'geodirectory' ) . '<span class="gd-visuallyhidden '.$readmore_seo_class.'"> ' . __( 'about this listing', 'geodirectory' ) . '</span></a>';
 
 			$comment_content_length = strlen( $comment_content );
 			if ( $comment_content_length > $comment_lenth ) {
@@ -267,37 +272,22 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			}
 
 			if ( $comment_id ) {
-				$comments_echo .= '<li class="clearfix">';
 
+				$avatar_size = apply_filters( 'geodir_comment_avatar_size', $g_size );
 
-				$comments_echo .= '<span class="geodir_reviewer_content">';
+				$template = $design_style ? $design_style."/reviews/recent-item.php" : "legacy/reviews/recent-item.php";
 
-				$comments_echo .= "<span class=\"li" . $comment_id . " geodir_reviewer_image\">";
-				if ( function_exists( 'get_avatar' ) ) {
-					$avatar_size = apply_filters( 'geodir_comment_avatar_size', $g_size );
-					$comments_echo .= get_avatar( $comment, $avatar_size, '', $comment_id . ' comment avatar' );
-				}
+				$args = array(
+					'comment'  => $comment,
+					'comment_id'  => $comment_id,
+					'avatar_size'  => $avatar_size,
+					'permalink'  =>  $permalink,
+					'comment_excerpt'  => $comment_excerpt,
+					'post_title'  => $post_title,
+					'comment_post_ID'  => $comment_post_ID,
+				);
+				$comments_echo .= geodir_get_template_html( $template, $args );
 
-				$comments_echo .= "</span>\n";
-
-
-				if ( $comment->user_id ) {
-					$comments_echo .= '<a href="' . get_author_posts_url( $comment->user_id ) . '">';
-				}
-				$comments_echo .= '<span class="geodir_reviewer_author">' . $comment->comment_author . '</span> ';
-				if ( $comment->user_id ) {
-					$comments_echo .= '</a>';
-				}
-				$comments_echo .= '<span class="geodir_reviewer_reviewed">' . __( 'reviewed', 'geodirectory' ) . '</span> ';
-
-
-				$comments_echo .= '<a href="' . $permalink . '" class="geodir_reviewer_title">' . $post_title . '</a>';
-				$comments_echo .= geodir_get_rating_stars( $comment->rating, $comment_post_ID );
-				$comments_echo .= '<p class="geodir_reviewer_text">' . $comment_excerpt . '';
-				$comments_echo .= '</p>';
-
-				$comments_echo .= "</span>\n";
-				$comments_echo .= '</li>';
 			}
 		}
 
