@@ -721,6 +721,17 @@ class GeoDir_Admin_Settings {
 						'selected'         => absint( $option_value ),
 					);
 
+					$exclude_pages = array();
+					if ( $page_on_front = get_option( 'page_on_front' ) ) {
+						$exclude_pages[] = $page_on_front; // Exclude frontpage.
+					}
+					if ( $page_for_posts = get_option( 'page_for_posts' ) ) {
+						$exclude_pages[] = $page_for_posts; // Exclude Blog page.
+					}
+					if ( ! empty( $exclude_pages ) ) {
+						$args['exclude'] = $exclude_pages;
+					}
+
 					if ( isset( $value['args'] ) ) {
 						$args = wp_parse_args( $value['args'], $args );
 					}

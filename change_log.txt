@@ -1,3 +1,6 @@
+= 2.0.0.99 =
+* Hide frontpage & blog page from select GD pages dropdown list - CHANGED
+
 = 2.0.0.98 =
 * OpenStreetMap don't populates region for Bermuda - FIXED
 * GD Listings filter posts by current category/tag - ADDED
