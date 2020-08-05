@@ -45,6 +45,9 @@ class GeoDir_SEO {
 		}
 
 		add_action( 'template_redirect', array( __CLASS__, 'template_redirect' ), 9999 );
+
+		// WP Sitemaps
+		add_filter( 'wp_sitemaps_posts_query_args', array( __CLASS__, 'wp_sitemaps_exclude_post_ids' ), 20, 2 );
 	}
 
 	/**
@@ -1326,5 +1329,29 @@ class GeoDir_SEO {
 		}
 
 		return apply_filters( 'geodir_get_canonicals', $canonicals );
+	}
+
+	/**
+	 * Exclude GD template pages from WP XML sitemaps.
+	 *
+	 * @since 2.0.0.99
+	 *
+	 * @param array  $args Array of WP_Query arguments.
+	 * @param string $post_type Post type name.
+	 * @return array The posts to exclude.
+	 */
+	public static function wp_sitemaps_exclude_post_ids( $args, $post_type ) {
+		if ( 'page' === $post_type ) {
+			// GD template page ids.
+			$page_ids = self::get_noindex_page_ids();
+
+			if ( ! empty( $page_ids ) ) {
+				$post_not_in = ! empty( $args['post__not_in'] ) && is_array( $args['post__not_in'] ) ? array_merge( $args['post__not_in'], $page_ids ) : $page_ids;
+
+				$args['post__not_in'] = $post_not_in;
+			}
+		}
+
+		return $args;
 	}
 }
