@@ -507,10 +507,35 @@ class GeoDir_SEO {
 				$category = !empty( $_GET['spost_category'] ) ? $_GET['spost_category'] : '';
 				if ( !empty( $category[0] ) ) {
 					$term = get_term($category[0]);
-					$cat_name = wp_sprintf( __( 'In %s', 'geodirectory' ), $term->name );
+					$cat_name = !empty( $term->name )? $term->name: '';
 				}
 			}
 			$string = str_replace( "%%category%%", $cat_name, $string );
+		}
+		if ( strpos( $string, '%%in_category%%' ) !== false ) {
+			$cat_name = '';
+
+			if ( $gd_page == 'single' ) {
+				if ( $gd_post->default_category ) {
+					$cat      = get_term( $gd_post->default_category, $post->post_type . 'category' );
+					$cat_name = ( isset( $cat->name ) ) ? $cat->name : '';
+					$cat_name = wp_sprintf( __( 'In %s', 'geodirectory' ), $cat_name );
+				}
+			} else if ( $gd_page == 'archive' ) {
+				$queried_object = get_queried_object();
+				if ( isset( $queried_object->name ) ) {
+					$cat_name = wp_sprintf( __( 'In %s', 'geodirectory' ), $queried_object->name );
+				}
+			} else if ( $gd_page == 'search' ) {
+				$category = !empty( $_GET['spost_category'] ) ? $_GET['spost_category'] : '';
+				if ( !empty( $category[0] ) ) {
+					$term = get_term($category[0]);
+					$cat_name = ( isset( $term->name ) ) ? $term->name : '';
+					$cat_name = wp_sprintf( __( 'In %s', 'geodirectory' ), $cat_name );
+				}
+			}
+			
+			$string = str_replace( "%%in_category%%", $cat_name, $string );
 		}
 
 		if ( strpos( $string, '%%tag%%' ) !== false ) {
@@ -666,6 +691,7 @@ class GeoDir_SEO {
 			$vars['%%pt_single%%'] = __( 'Post type singular name.', 'geodirectory' );
 			$vars['%%pt_plural%%'] = __( 'Post type plural name.', 'geodirectory' );
 			$vars['%%category%%'] = __( 'The current category name.', 'geodirectory' );
+			$vars['%%in_category%%'] = __( 'Category prefixed with `in` eg: in Category', 'geodirectory' );
 			$vars['%%id%%'] = __( 'The current post id.', 'geodirectory' );
 		}
 
