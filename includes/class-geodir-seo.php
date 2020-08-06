@@ -400,7 +400,6 @@ class GeoDir_SEO {
 			self::$meta_description = ! empty( $gd_settings['seo_location_meta_description'] ) ? $gd_settings['seo_location_meta_description'] : GeoDir_Defaults::seo_location_meta_description();
 		} elseif ( geodir_is_page( 'search' ) ) {
 			self::$gd_page = 'search';
-
 			self::$title = ! empty( $gd_settings['seo_search_title'] ) ? $gd_settings['seo_search_title'] : GeoDir_Defaults::seo_search_title();
 			self::$meta_title = ! empty( $gd_settings['seo_search_meta_title'] ) ? $gd_settings['seo_search_meta_title'] : GeoDir_Defaults::seo_search_meta_title();
 			self::$meta_description = ! empty( $gd_settings['seo_search_meta_description'] ) ? $gd_settings['seo_search_meta_description'] : GeoDir_Defaults::seo_search_meta_description();
@@ -503,6 +502,12 @@ class GeoDir_SEO {
 				$queried_object = get_queried_object();
 				if ( isset( $queried_object->name ) ) {
 					$cat_name = $queried_object->name;
+				}
+			} else if ( $gd_page == 'search' ) {
+				$category = !empty( $_GET['spost_category'] ) ? $_GET['spost_category'] : '';
+				if ( !empty( $category[0] ) ) {
+					$term = get_term($category[0]);
+					$cat_name = wp_sprintf( __( 'In %s', 'geodirectory' ), $term->name );
 				}
 			}
 			$string = str_replace( "%%category%%", $cat_name, $string );
