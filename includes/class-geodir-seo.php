@@ -36,6 +36,7 @@ class GeoDir_SEO {
 		// maybe noindex empty archive pages
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
 		add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
+		add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
 		add_filter( 'rank_math/frontend/breadcrumb/items', array( __CLASS__, 'rank_breadcrumb_links' ), 10, 1 );
 		add_filter( 'rank_math/frontend/breadcrumb/main_term', array( __CLASS__, 'rank_math_frontend_breadcrumb_main_term' ), 20, 2 );
 
@@ -1253,6 +1254,25 @@ class GeoDir_SEO {
 		}
 
 		return $rel;
+	}
+
+	/**
+	 * Filter the meta robots output array of Yoast SEO.
+	 *
+	 * @since 2.0.0.99
+	 *
+	 * @param array $robots The meta robots directives to be used.
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @return array The meta robots array.
+	 */
+	public static function wpseo_robots_array( $robots, $presentation ) {
+		// Force to index single listing.
+		if ( ! empty( $robots ) && geodir_is_page( 'single' ) ) {
+			$robots['index'] = 'index';
+			$robots['follow'] = 'follow';
+		}
+
+		return $robots;
 	}
 
 	/**
