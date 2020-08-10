@@ -46,7 +46,7 @@ if ( $multiple ) {
 		</div>
 		<div class="plupload-thumbs <?php if ( $multiple ) { echo "plupload-thumbs-multiple"; } ?> clearfix" id="<?php echo $id; ?>plupload-thumbs"></div>
 		<?php if ( $multiple ) { ?>
-		<span id="upload-msg"><?php _e( 'Please drag &amp; drop the files to rearrange the order', 'geodirectory' ); ?></span>
+		<span id="upload-msg"><?php _e( 'Please drag & drop the files to rearrange the order', 'geodirectory' ); ?></span>
 		<?php } ?>
 		<span id="<?php echo $id; ?>upload-error" style="display:none"></span>
 		<span style="display: none" id="gd-image-meta-input" class="lity-hide lity-show"></span>
