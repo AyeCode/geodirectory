@@ -492,6 +492,14 @@ function geodir_admin_body_class_active_map($class = '') {
 		}
 	}
 
+	// Add body class for admin pages.
+	$screen = get_current_screen();
+	$screen_id = $screen ? $screen->id : '';
+
+	if ( $screen_id && in_array( $screen_id, geodir_get_screen_ids() ) ) {
+		$class .= ' geodir-admin-page geodir-admin-page-' . sanitize_key( $screen_id );
+	}
+
 	return $class;
 }
 add_filter('admin_body_class', 'geodir_admin_body_class_active_map', 100);

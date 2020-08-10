@@ -36,7 +36,8 @@ class GeoDir_SEO {
 		// maybe noindex empty archive pages
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
 		add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
-		add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
+		//add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
+		add_filter( 'get_post_metadata', array( __CLASS__, 'filter_post_metadata' ), 99, 5 );
 		add_filter( 'rank_math/frontend/breadcrumb/items', array( __CLASS__, 'rank_breadcrumb_links' ), 10, 1 );
 		add_filter( 'rank_math/frontend/breadcrumb/main_term', array( __CLASS__, 'rank_math_frontend_breadcrumb_main_term' ), 20, 2 );
 
@@ -1273,6 +1274,77 @@ class GeoDir_SEO {
 		}
 
 		return $robots;
+	}
+
+	/**
+	 * Filter the post meta data.
+	 *
+	 * @since 2.0.0.99
+	 * @access public
+	 *
+	 * @param mixed  $value     The metadata value or an array
+	 *                          of values depending on the value of `$single`. Default null.
+	 * @param int    $object_id ID of the object metadata is for.
+	 * @param string $meta_key  Metadata key.
+	 * @param bool   $single    Whether to return only the first value of the specified `$meta_key`.
+	 * @param string $meta_type Type of object metadata is for.
+	 * @return mixed Post metadata value.
+	 */
+	public static function filter_post_metadata( $value, $object_id, $meta_key, $single = false, $meta_type = '' ) {
+		global $geodir_post_meta_loop;
+		
+		if ( null === $value ) {
+			return $value;
+		}
+
+		if ( defined( 'WPSEO_VERSION' ) && ! empty( $object_id ) && ! is_admin() && empty( $meta_key ) && is_array( $value ) && empty( $geodir_post_meta_loop ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
+			$geodir_post_meta_loop = true;
+
+			// Check & remove filters
+			$has_filter_1 = has_filter( 'get_post_metadata', array( 'GeoDir_Compatibility', 'dynamically_add_post_meta' ) );
+			if ( $has_filter_1 ) {
+				remove_filter( 'get_post_metadata', array( 'GeoDir_Compatibility', 'dynamically_add_post_meta' ) );
+			}
+
+			$has_filter_2 = has_filter( 'get_post_metadata', array( 'GeoDir_SEO', 'filter_post_metadata' ) );
+			if ( $has_filter_2 ) {
+				remove_filter( 'get_post_metadata', array( 'GeoDir_SEO', 'filter_post_metadata' ) );
+			}
+
+			$_value = get_post_custom( $object_id );
+
+			if ( ! empty( $_value ) && is_array( $_value ) ) {
+				// Reserved post meta keys for single listing.
+				$reserve_keys = array( '_yoast_wpseo_content_score', '_yoast_wpseo_linkdex', '_yoast_wpseo_meta-robots-adv', '_yoast_wpseo_meta-robots-nofollow', '_yoast_wpseo_meta-robots-noindex', '_yoast_wpseo_is_cornerstone' );
+
+				// Remove template page post meta values.
+				foreach ( $value as $key => $data ) {
+					if ( in_array( $key, $reserve_keys ) ) {
+						unset( $value[ $key ] );
+					}
+				}
+
+				// Add single listing post meta values.
+				foreach ( $_value as $key => $data ) {
+					if ( in_array( $key, $reserve_keys ) ) {
+						$value[ $key ] = $data;
+					}
+				}
+			}
+
+			$geodir_post_meta_loop = false;
+
+			// Check & add filters back.
+			if ( $has_filter_1 ) {
+				add_filter( 'get_post_metadata', array( 'GeoDir_Compatibility', 'dynamically_add_post_meta' ), 10, 4 );
+			}
+
+			if ( $has_filter_2 ) {
+				add_filter( 'get_post_metadata', array( 'GeoDir_SEO', 'filter_post_metadata' ), 99, 5 );
+			}
+		}
+
+		return $value;
 	}
 
 	/**
