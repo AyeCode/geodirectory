@@ -1,7 +1,7 @@
 = 2.0.0.99 =
 * Hide frontpage & blog page from select GD pages dropdown list - CHANGED
 * WordPress v5.5 compatibility changes - CHANGED
-* Yoast SEO renders single listing as a nonindex - FIXED
+* Yoast SEO shows single listing as a noindex - FIXED
 
 = 2.0.0.98 =
 * OpenStreetMap don't populates region for Bermuda - FIXED
