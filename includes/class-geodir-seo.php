@@ -36,7 +36,7 @@ class GeoDir_SEO {
 		// maybe noindex empty archive pages
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
 		add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
-		//add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
+		add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
 		add_filter( 'get_post_metadata', array( __CLASS__, 'filter_post_metadata' ), 99, 5 );
 		add_filter( 'rank_math/frontend/breadcrumb/items', array( __CLASS__, 'rank_breadcrumb_links' ), 10, 1 );
 		add_filter( 'rank_math/frontend/breadcrumb/main_term', array( __CLASS__, 'rank_math_frontend_breadcrumb_main_term' ), 20, 2 );
@@ -1315,7 +1315,7 @@ class GeoDir_SEO {
 
 			if ( ! empty( $_value ) && is_array( $_value ) ) {
 				// Reserved post meta keys for single listing.
-				$reserve_keys = array( '_yoast_wpseo_content_score', '_yoast_wpseo_linkdex', '_yoast_wpseo_meta-robots-adv', '_yoast_wpseo_meta-robots-nofollow', '_yoast_wpseo_meta-robots-noindex', '_yoast_wpseo_is_cornerstone' );
+				$reserve_keys = array( '_yoast_wpseo_content_score', '_yoast_wpseo_linkdex', '_yoast_wpseo_meta-robots-adv', '_yoast_wpseo_meta-robots-nofollow', '_yoast_wpseo_meta-robots-noindex', '_yoast_wpseo_is_cornerstone', '_yoast_wpseo_title', '_yoast_wpseo_metadesc' );
 
 				// Remove template page post meta values.
 				foreach ( $value as $key => $data ) {
