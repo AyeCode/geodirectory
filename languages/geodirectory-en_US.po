@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.98\n"
+"Project-Id-Version: GeoDirectory 2.0.0.99\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-07-30 17:39+0530\n"
-"PO-Revision-Date: 2020-07-30 17:39+0530\n"
+"POT-Creation-Date: 2020-08-11 20:43+0530\n"
+"PO-Revision-Date: 2020-08-11 20:44+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -182,8 +182,8 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:852
 #: includes/admin/class-geodir-admin-dummy-data.php:1072
-#: includes/admin/class-geodir-admin-settings.php:810
-#: includes/admin/class-geodir-admin-settings.php:842
+#: includes/admin/class-geodir-admin-settings.php:821
+#: includes/admin/class-geodir-admin-settings.php:853
 #: includes/admin/settings/class-geodir-settings-general.php:810
 #: includes/api/class-geodir-rest-posts-controller.php:2198
 #: includes/post-functions.php:1632
@@ -947,7 +947,7 @@ msgid "Address fields are required"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1074
-#: includes/admin/class-geodir-admin-settings.php:939
+#: includes/admin/class-geodir-admin-settings.php:950
 msgid "Set Address On Map"
 msgstr ""
 
@@ -1456,7 +1456,7 @@ msgid "GD Pages"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:277
-#: includes/admin/class-geodir-admin-settings.php:850
+#: includes/admin/class-geodir-admin-settings.php:861
 msgid "Select all"
 msgstr ""
 
@@ -1676,7 +1676,7 @@ msgid "Select Files"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:379
-msgid "Please drag &amp; drop the images to rearrange the order"
+msgid "Please drag & drop the images to rearrange the order"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:490
@@ -1711,83 +1711,83 @@ msgstr ""
 msgid "Hard crop?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:731
+#: includes/admin/class-geodir-admin-settings.php:742
 msgid "Select a page&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:734
+#: includes/admin/class-geodir-admin-settings.php:745
 msgid "Edit Page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:747
+#: includes/admin/class-geodir-admin-settings.php:758
 msgid "View Page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:761
+#: includes/admin/class-geodir-admin-settings.php:772
 msgid "View Default Content"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:766
+#: includes/admin/class-geodir-admin-settings.php:777
 msgid "Default content has been modified by a plugin or theme."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:773
+#: includes/admin/class-geodir-admin-settings.php:784
 msgid "Original content below."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:810
+#: includes/admin/class-geodir-admin-settings.php:821
 msgid "Choose a country&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:842
+#: includes/admin/class-geodir-admin-settings.php:853
 msgid "Choose countries&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:850
+#: includes/admin/class-geodir-admin-settings.php:861
 msgid "Select none"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1004
+#: includes/admin/class-geodir-admin-settings.php:1015
 msgid "Generate API Key - ( MUST be logged in to your Google account )"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1004
+#: includes/admin/class-geodir-admin-settings.php:1015
 msgid "Generate API Key"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1005
-#: includes/admin/class-geodir-admin-settings.php:1037
+#: includes/admin/class-geodir-admin-settings.php:1016
+#: includes/admin/class-geodir-admin-settings.php:1048
 msgid "or get one here"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1005
+#: includes/admin/class-geodir-admin-settings.php:1016
 msgid "How to add a Google API KEY?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1036
+#: includes/admin/class-geodir-admin-settings.php:1047
 msgid ""
 "Generate Geocoding API Key - ( MUST be logged in to your Google account )"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1036
+#: includes/admin/class-geodir-admin-settings.php:1047
 msgid "Generate Geocoding API Key"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1071
+#: includes/admin/class-geodir-admin-settings.php:1082
 msgid "Select icon"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1159
+#: includes/admin/class-geodir-admin-settings.php:1170
 msgid "Choose a city/timezone&hellip;"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1167
+#: includes/admin/class-geodir-admin-settings.php:1178
 #: includes/admin/settings/class-geodir-settings-general.php:853
 #: includes/custom-fields/input-functions.php:1835
 msgid "Timezone"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-settings.php:1205
+#: includes/admin/class-geodir-admin-settings.php:1216
 #: includes/admin/views/html-notice-v2-update.php:183
 #: includes/general-functions.php:2470
 msgid "Documentation"
@@ -10429,134 +10429,134 @@ msgstr ""
 msgid "- Monitor the contact system for spam and abuse."
 msgstr ""
 
-#: includes/class-geodir-seo.php:566 includes/general-functions.php:1841
+#: includes/class-geodir-seo.php:571 includes/general-functions.php:1841
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:579 includes/general-functions.php:1854
+#: includes/class-geodir-seo.php:584 includes/general-functions.php:1854
 #, php-format
 msgid "near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:653
+#: includes/class-geodir-seo.php:658
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:654
+#: includes/class-geodir-seo.php:659
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:655
+#: includes/class-geodir-seo.php:660
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:656
+#: includes/class-geodir-seo.php:661
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:660
+#: includes/class-geodir-seo.php:665
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:661
+#: includes/class-geodir-seo.php:666
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:662
+#: includes/class-geodir-seo.php:667
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:663
+#: includes/class-geodir-seo.php:668
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:664
+#: includes/class-geodir-seo.php:669
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:669
+#: includes/class-geodir-seo.php:674
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:670
+#: includes/class-geodir-seo.php:675
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:671
+#: includes/class-geodir-seo.php:676
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:672
+#: includes/class-geodir-seo.php:677
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:673
+#: includes/class-geodir-seo.php:678
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:674
+#: includes/class-geodir-seo.php:679
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:675
+#: includes/class-geodir-seo.php:680
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:676
+#: includes/class-geodir-seo.php:681
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:677
+#: includes/class-geodir-seo.php:682
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:678
+#: includes/class-geodir-seo.php:683
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:683
+#: includes/class-geodir-seo.php:688
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:684
+#: includes/class-geodir-seo.php:689
 msgid "The currently used search for term with `for`. Ex: for dinner."
 msgstr ""
 
-#: includes/class-geodir-seo.php:685
+#: includes/class-geodir-seo.php:690
 msgid "The currently used search near term with `near`. Ex: near Philadelphia."
 msgstr ""
 
-#: includes/class-geodir-seo.php:686
+#: includes/class-geodir-seo.php:691
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:691
+#: includes/class-geodir-seo.php:696
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:692
+#: includes/class-geodir-seo.php:697
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:693
+#: includes/class-geodir-seo.php:698
 msgid "Total post found eg: 10"
 msgstr ""
 
-#: includes/class-geodir-seo.php:694
+#: includes/class-geodir-seo.php:699
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:699
+#: includes/class-geodir-seo.php:704
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore"
 msgstr ""
 
-#: includes/class-geodir-seo.php:719
+#: includes/class-geodir-seo.php:724
 msgid "Click to copy"
 msgstr ""
 
@@ -13374,14 +13374,14 @@ msgstr ""
 msgid "This enables marker cluster on the map."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:1204 language.php:65
+#: includes/widgets/class-geodir-widget-map.php:1210 language.php:65
 #: templates/map.php:905
 msgid ""
 "<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your "
 "search criteria and try again.</p>"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-map.php:1206
+#: includes/widgets/class-geodir-widget-map.php:1212
 msgid "<h3>Google Map Not Loaded</h3><p>Sorry, unable to load Google Maps API."
 msgstr ""
 
@@ -15975,7 +15975,7 @@ msgid "Allowed file types:"
 msgstr ""
 
 #: templates/file-upload.php:49
-msgid "Please drag &amp; drop the files to rearrange the order"
+msgid "Please drag & drop the files to rearrange the order"
 msgstr ""
 
 #: templates/loop/no-listings-found.php:23

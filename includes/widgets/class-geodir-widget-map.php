@@ -1126,7 +1126,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 * @param array $params map arguments array.
 	 */
 	public static function display_map( $params ) {
-		global $gd_maps_canvas;
+		global $gd_maps_canvas, $gd_post;
+
 		if ( empty( $gd_maps_canvas ) ) {
 			$gd_maps_canvas = array();
 		}
@@ -1166,6 +1167,11 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 
 		$gd_maps_canvas[ $map_options['map_canvas'] ] = $map_options;
 
+		$map_canvas_attribs = '';
+		if ( $map_options['map_type'] == 'post' && ! empty( $gd_post ) && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
+			$map_canvas_attribs .= ' data-lat="' . esc_attr( $gd_post->latitude ) . '" data-lng="' . esc_attr( $gd_post->longitude ) . '" ';
+		}
+
 		// Set map options to JS
 		wp_enqueue_script( 'geodir-map-widget' );
 		wp_localize_script( 'geodir-map-widget', $map_options['map_canvas'], $map_options );
@@ -1197,7 +1203,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 									<div id="<?php echo $map_canvas; ?>" class="geodir-map-canvas"
 									     data-map-type="<?php echo $map_type; ?>"
 									     data-map-canvas="<?php echo $map_canvas; ?>"
-									     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;"></div>
+									     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;"<?php echo $map_canvas_attribs; ?>></div>
 									<div id="<?php echo $map_canvas; ?>_loading_div" class="loading_div"
 									     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;"></div>
 									<div id="<?php echo $map_canvas; ?>_map_nofound"
