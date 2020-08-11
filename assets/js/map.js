@@ -515,8 +515,8 @@ function list_markers(json, map_canvas_var) {
 				}
 			}
 			if (map_options.map_type == 'post' && i == 0 ) {
-				jQuery('#' + map_canvas_var ).data('lat', marker.lt);
-				jQuery('#' + map_canvas_var ).data('lng', marker.ln);
+				jQuery('#' + map_canvas_var ).attr('data-lat', marker.lt);
+				jQuery('#' + map_canvas_var ).attr('data-lng', marker.ln);
 			}
 			var marker = create_marker(marker, map_canvas_var);
 		}
