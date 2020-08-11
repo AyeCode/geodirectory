@@ -66,6 +66,7 @@ function geodir_cfi_admin_only($cf){
  * @return string
  */
 function geodir_cfi_input_output($cf){
+    global $geodir_label_type;
     $extra_attributes = array();
     $title = '';
     $value = geodir_get_cf_value($cf);
@@ -107,7 +108,7 @@ function geodir_cfi_input_output($cf){
             'required'          => !empty($cf['is_required']) ? true : false,
             'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
             'label_show'       => true,
-            'label_type'       => 'horizontal',
+            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'type'              => $type,
             'title'             =>  $title,
             'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
@@ -298,6 +299,7 @@ function geodir_cfi_radio($html,$cf){
 
     // If no html then we run the standard output.
     if(empty($html)) {
+        global $geodir_label_type;
 
         $option_values_deep = geodir_string_to_options($cf['option_values'],true);
         $option_values = array();
@@ -322,7 +324,7 @@ function geodir_cfi_radio($html,$cf){
                 'type'              => "radio",
                 'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
                 'label'             => esc_attr__($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-                'label_type'       => 'horizontal',
+                'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                 'class'             => '',
                 'value'             => $value,
                 'options'           => $option_values
@@ -367,6 +369,8 @@ function geodir_cfi_checkbox($html,$cf){
 
     // If no html then we run the standard output.
     if ( empty( $html ) ) {
+        global $geodir_label_type;
+
         $title = '';
         $value = geodir_get_cf_value( $cf );
         if ( empty( $value ) && $cf['default'] ) {
@@ -420,7 +424,7 @@ function geodir_cfi_checkbox($html,$cf){
                 'label'            => __( $cf['frontend_title'], 'geodirectory' ) . $admin_only. $required,
                 'label_show'       => true,
                 'required'          => !empty($cf['is_required']) ? true : false,
-                'label_type'       => 'horizontal',
+                'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                 'checked'          => $checked,
                 'help_text'        => $help_text,
                 'extra_attributes' => $extra_attributes,
@@ -465,6 +469,8 @@ function geodir_cfi_textarea($html,$cf){
     // If no html then we run the standard output.
     if(empty($html)) {
 
+        global $geodir_label_type;
+        
         $title = '';
         $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
@@ -504,8 +510,7 @@ function geodir_cfi_textarea($html,$cf){
             'placeholder'=> esc_html__( $cf['placeholder_value'], 'geodirectory'),
             'title'      => $title,
             'value'      => stripslashes($value),
-            'label_show'       => true,
-            'label_type'       => 'horizontal',
+            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'required'   => !empty($cf['is_required']) ? true : false,
             'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only . $required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
@@ -552,6 +557,7 @@ function geodir_cfi_select($html,$cf){
 
     // If no html then we run the standard output.
     if(empty($html)) {
+        global $geodir_label_type;
 
         $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
@@ -594,7 +600,7 @@ function geodir_cfi_select($html,$cf){
             'value'            => $value,
             'required'   => !empty($cf['is_required']) ? true : false,
             'label_show'       => true,
-            'label_type'       => 'horizontal',
+            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
@@ -639,7 +645,7 @@ function geodir_cfi_multiselect($html,$cf){
 
     // If no html then we run the standard output.
     if(empty($html)) {
-
+        global $geodir_label_type;
         $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
         $title = '';
@@ -681,7 +687,7 @@ function geodir_cfi_multiselect($html,$cf){
             'value'            => $value,
             'required'   => !empty($cf['is_required']) ? true : false,
             'label_show'       => true,
-            'label_type'       => 'horizontal',
+            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'label'      => __($cf['frontend_title'], 'geodirectory'). $admin_only .$required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
@@ -726,6 +732,7 @@ function geodir_cfi_html($html,$cf){
 
     // If no html then we run the standard output.
     if(empty($html)) {
+        global $geodir_label_type;
 
         $title = '';
         $extra_attributes = array();
@@ -765,7 +772,7 @@ function geodir_cfi_html($html,$cf){
             'title'      => $title,
             'value'      => stripslashes($value),
             'label_show'       => true,
-            'label_type'       => 'horizontal',
+            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'required'   => !empty($cf['is_required']) ? true : false,
             'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
@@ -812,6 +819,7 @@ function geodir_cfi_datepicker($html,$cf){
 
     // If no html then we run the standard output.
     if(empty($html)) {
+        global $geodir_label_type;
 
         $extra_attributes = array();
         $title = '';
@@ -869,7 +877,7 @@ function geodir_cfi_datepicker($html,$cf){
                 'required'          => !empty($cf['is_required']) ? true : false,
                 'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only . $required,
                 'label_show'       => true,
-                'label_type'       => 'horizontal',
+                'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                 'type'              => 'datepicker',
                 'title'             =>  $title,
                 'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
@@ -914,6 +922,7 @@ function geodir_cfi_time($html,$cf){
 
     // If no html then we run the standard output.
     if(empty($html)) {
+        global $geodir_label_type;
 
 	    $extra_attributes = array();
 	    $title = '';
@@ -953,7 +962,7 @@ function geodir_cfi_time($html,$cf){
 			    'required'          => !empty($cf['is_required']) ? true : false,
 			    'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
 			    'label_show'       => true,
-			    'label_type'       => 'horizontal',
+			    'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
 			    'type'              => 'timepicker',
 			    'title'             =>  $title,
 			    'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
@@ -1001,7 +1010,7 @@ function geodir_cfi_address( $html, $cf ) {
     // If no html then we run the standard output.
     if(empty($html)) {
 
-        global $post,$gd_post,$geodirectory;
+        global $post,$gd_post,$geodirectory,$geodir_label_type;
 
         if(empty($gd_post)){
             $gd_post = geodir_get_post_info($post->ID);
@@ -1114,6 +1123,9 @@ function geodir_cfi_address( $html, $cf ) {
         $extra_attributes['onfocus'] = "jQuery('.gd-locate-me-btn').tooltip('show');";
         $extra_attributes['onblur'] = "jQuery('.gd-locate-me-btn').tooltip('hide');";
 
+        $address_label_type = !empty($geodir_label_type) ? $geodir_label_type : 'horizontal';
+        if( $address_label_type == 'floating'){  $address_label_type = 'hidden';}
+
         echo aui()->input(
             array(
                 'id'                => $prefix . 'street',
@@ -1121,7 +1133,7 @@ function geodir_cfi_address( $html, $cf ) {
                 'required'          => !empty($cf['is_required']) ? true : false,
                 'label'              => esc_attr__($address_title, 'geodirectory').$required,
                 'label_show'       => true,
-                'label_type'       => 'horizontal',
+                'label_type'       => $address_label_type,
                 'type'              => 'text',
                 'title'             =>  $title,
                 'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
@@ -1148,7 +1160,7 @@ function geodir_cfi_address( $html, $cf ) {
                     'required'          => false,
                     'label'              => esc_attr__($street2_title, 'geodirectory'),
                     'label_show'       => true,
-                    'label_type'       => 'horizontal',
+                    'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                     'type'              => 'text',
                     'title'             =>  $title,
                     'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
@@ -1182,7 +1194,7 @@ function geodir_cfi_address( $html, $cf ) {
                     'required'          => false,
                     'label'              => esc_attr__($zip_title, 'geodirectory'),
                     'label_show'       => true,
-                    'label_type'       => 'horizontal',
+                    'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                     'type'              => 'text',
                     'title'             =>  $title,
 //                    'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
@@ -1236,7 +1248,7 @@ function geodir_cfi_address( $html, $cf ) {
                     'required'          => $is_required,
                     'label'              => esc_attr__('Address Latitude', 'geodirectory').$required,
                     'label_show'       => true,
-                    'label_type'       => 'horizontal',
+                    'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                     'type'              => 'number',
                     'title'             =>  $title,
                    // 'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
@@ -1269,7 +1281,7 @@ function geodir_cfi_address( $html, $cf ) {
                     'required'          => $is_required,
                     'label'              => esc_attr__('Address Longitude', 'geodirectory').$required,
                     'label_show'       => true,
-                    'label_type'       => 'horizontal',
+                    'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                     'type'              => 'number',
                     'title'             =>  $title,
                     //'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
@@ -1294,7 +1306,7 @@ function geodir_cfi_address( $html, $cf ) {
                     'required'          => false,
                     'label'              => esc_attr__($mapview_title, 'geodirectory'),
                     'label_show'       => true,
-                    'label_type'       => 'horizontal',
+                    'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                     'type'              => 'text',
                     'title'             =>  $title,
                     'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
@@ -1497,13 +1509,13 @@ function geodir_cfi_categories($html,$cf){
 
     // If no html then we run the standard output.
     if(empty($html)) {
-
+        global $geodir_label_type;
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
         if(is_admin() && $cf['name']=='post_tags'){return;}
 
-        $horizontal = true;
+        $horizontal = $geodir_label_type == 'horizontal' ? true : false;
         //print_r($cf);echo '###';
         $name = $cf['name'];
         $frontend_title = $cf['frontend_title'];
@@ -1521,14 +1533,9 @@ function geodir_cfi_categories($html,$cf){
             $value = '';
         } ?>
 
-        <script>
-            jQuery(function() {
-                jQuery("select.geodir-select").trigger('geodir-select-init');
-            });
-        </script>
         <div id="<?php echo $taxonomy;?>_row"
-             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group row">
-            <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : '';?>">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group <?php echo $horizontal ? ' row' : '';?>">
+            <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : ''; echo $geodir_label_type == 'hidden' || $geodir_label_type=='floating' ? ' sr-only ' : '';?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
                 <?php if ($is_required) echo '<span class="text-danger">*</span>';?>
@@ -1602,7 +1609,7 @@ function geodir_cfi_categories($html,$cf){
 
                 }
 
-                echo AUI_Component_Helper::help_text(__($frontend_desc, 'geodirectory'));
+                echo class_exists("AUI_Component_Helper") ? AUI_Component_Helper::help_text(__($frontend_desc, 'geodirectory')) : '';
                 ?>
             </div>
 
@@ -1650,6 +1657,7 @@ function geodir_cfi_tags( $html, $cf ) {
 
     // If no html then we run the standard output.
     if ( empty( $html ) ) {
+        global $geodir_label_type;
 
         $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
@@ -1752,7 +1760,7 @@ function geodir_cfi_tags( $html, $cf ) {
             'value'            => $value_array,
             'required'   => !empty($cf['is_required']) ? true : false,
             'label_show'       => true,
-            'label_type'       => 'horizontal',
+            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
             'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
@@ -1998,7 +2006,7 @@ function geodir_cfi_files( $html, $cf ) {
                 <?php
 
                 if($horizontal){echo "<div class='col-sm-10'>";}
-                echo AUI_Component_Helper::help_text(__( $cf['desc'], 'geodirectory' ));
+                echo class_exists("AUI_Component_Helper") ? AUI_Component_Helper::help_text(__( $cf['desc'], 'geodirectory' )) : '';
                 if($horizontal){echo "</div>";}
 
                 ?>

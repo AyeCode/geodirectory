@@ -457,16 +457,18 @@ class GeoDir_Admin_Install {
 	 */
 	public static function create_pages() {
 
+		$gutenberg = geodir_is_gutenberg();
+
 		$pages = apply_filters( 'geodirectory_create_pages', array(
 			'page_add' => array(
 				'name'    => _x( 'add-listing', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Add Listing', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_add_content(),
+				'content' => GeoDir_Defaults::page_add_content(false, $gutenberg),
 			),
 			'page_search' => array(
 				'name'    => _x( 'search', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Search page', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_search_content(),
+				'content' => GeoDir_Defaults::page_search_content(false, $gutenberg),
 			),
 			'page_terms_conditions' => array(
 				'name'    => _x( 'terms-and-conditions', 'Page slug', 'geodirectory'),
@@ -476,22 +478,22 @@ class GeoDir_Admin_Install {
 			'page_location' => array(
 				'name'    => _x( 'location', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Location', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_location_content(),
+				'content' => GeoDir_Defaults::page_location_content(false, $gutenberg),
 			),
 			'page_archive' => array(
 				'name'    => _x( 'gd-archive', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Archive', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_archive_content(),
+				'content' => GeoDir_Defaults::page_archive_content(false, $gutenberg),
 			),
 			'page_archive_item' => array(
 				'name'    => _x( 'gd-archive-item', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Archive Item', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_archive_item_content(),
+				'content' => GeoDir_Defaults::page_archive_item_content(false, $gutenberg),
 			),
 			'page_details' => array(
 				'name'    => _x( 'gd-details', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Details', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_details_content(),
+				'content' => GeoDir_Defaults::page_details_content(false, $gutenberg),
 			),
 
 			

@@ -412,8 +412,8 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 	}
 
 	// set colour
-	$icon_color_off = !empty($args['icon_color_off']) ? sanitize_hex_color($args['icon_color_off']) : 'grey';
-	$icon_color_on = !empty($args['icon_color_on']) ? sanitize_hex_color($args['icon_color_on']) : '#e84739';
+	$icon_color_off = !empty($args['icon_color_off']) ? esc_attr($args['icon_color_off']) : 'grey';
+	$icon_color_on = !empty($args['icon_color_on']) ? esc_attr($args['icon_color_on']) : '#e84739';
 
 	$icon_style = '';
 
@@ -480,12 +480,12 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		if( !empty($args['color']) ){
 			$link_class .= ' badge-'.sanitize_html_class($args['color']);
 		}elseif( !empty($args['bg_color']) && $args['type']!='link'){
-			$link_style .= "background:".sanitize_hex_color($args['bg_color']).";";
+			$link_style .= "background:".esc_attr($args['bg_color']).";";
 		}
 		
 		// text color
 		if( !empty($args['txt_color'])){
-			$text_style .= "color:".sanitize_hex_color($args['txt_color']).";";
+			$text_style .= "color:".esc_attr($args['txt_color']).";";
 		}
 	}
 
@@ -849,6 +849,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		'type'=> '', // AUI only
 		'color'=> '', // AUI only
 		'shadow'=> '', // AUI only
+		'preview'=> '', // AUI only
 	);
 	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
@@ -868,7 +869,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$output = apply_filters( 'geodir_output_badge_field_key_' . $match_field, $output, $find_post, $args );
 		}
 
-		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' ) {
+		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' ) {
 			$package_id = geodir_get_post_package_id( $post_id, $post_type );
 			$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
@@ -1042,6 +1043,36 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 				}
 
+				// categories
+				if ( ! empty( $badge ) && $match_field == 'default_category' ) {
+					if(!empty($args['preview'])){
+
+					}else{
+
+					}
+					$term = get_term_by( 'id', absint( $badge ), $post_type.'category' );
+
+					// maybe link to it
+					if(( !empty($args['link']) || $args['link']=='%%input%%') && !empty($term)){
+						$term_link = get_term_link($term,$post_type.'category');
+						if(!is_wp_error($term_link)){
+							$args['link'] = $term_link;
+						}
+					}
+
+					if(!empty($term->name)){
+						$badge = esc_attr($term->name);
+					}
+
+				}
+
+				if(!empty($args['preview']) && !$badge){
+					$badge = 'Badge';
+				}
+
+//				print_r( $args );
+//				echo '###'.$badge.$post_type.$args['link'];
+
 				// replace other post variables
 				if(!empty($badge)){
 					$badge = geodir_replace_variables($badge);
@@ -1192,7 +1223,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 //						'class'     => 'btn btn-primary  btn-sm px-1 py-0 font-weight-bold gd-badgex',
 						'class'     => $btn_class,
 						'content' => $badge,
-						'style' => $color_custom ? 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';color:' . sanitize_hex_color( $args['txt_color'] ) . ';' : '',
+						'style' => $color_custom ? 'background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';' : '',
 						'data-badge'    => esc_attr($match_field),
 //						'data-trigger'    => 'focus', // this could mess with any html inside the popover
 						'data-badge-condition'  => esc_attr($args['condition']),
@@ -1249,10 +1280,10 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					// style
 					$btn_args['style'] = '';
 					if($color_custom && !empty($args['bg_color'])){
-						$btn_args['style'] .= 'background-color:' . sanitize_hex_color( $args['bg_color'] ) . ';border-color:' . sanitize_hex_color( $args['bg_color'] ).';';
+						$btn_args['style'] .= 'background-color:' . esc_attr( $args['bg_color'] ) . ';border-color:' . esc_attr( $args['bg_color'] ).';';
 					}
 					if($color_custom && !empty($args['txt_color'])){
-						$btn_args['style'] .= 'color:' . sanitize_hex_color( $args['txt_color'] ) . ';';
+						$btn_args['style'] .= 'color:' . esc_attr( $args['txt_color'] ) . ';';
 					}
 
 					if(!empty($args['link']) && $args['link']!='#' && !$pop_link){

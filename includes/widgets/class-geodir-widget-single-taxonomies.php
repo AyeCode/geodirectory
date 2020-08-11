@@ -312,7 +312,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
                 $links = array();
                 $links[] = $this->style_tax_link('tag',"Demo",'#','',$args);
                 $links[] = $this->style_tax_link('tag',"Example",'#','',$args);
-                $taxonomies[ $tag_taxonomy ] =  $this->output_tax_list('cat', "Demo", $links, $links,$args);
+                $taxonomies[ $tag_taxonomy ] =  $this->output_tax_list('tag', "Demo", $links, $links,$args);
             }
         }
 

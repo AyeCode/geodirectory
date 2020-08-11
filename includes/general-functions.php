@@ -2425,3 +2425,26 @@ function geodir_nonce_token( $action = -1, $uid = 0 ) {
 function geodir_design_style(){
 	return geodir_get_option("design_style",'bootstrap');
 }
+
+/**
+ * Check if Gutenberg is in use.
+ *
+ * @since 2.1.0
+ * @return bool
+ */
+function geodir_is_gutenberg(){
+	global $wp_version;
+	$gutenberg = true;
+
+	// if less than v5
+	if ( version_compare( $wp_version, '5.0.0', '<' ) ) {
+		$gutenberg = false;
+	}
+
+	// if plugin active to disable
+	if(class_exists('Classic_Editor')){
+		$gutenberg = false;
+	}
+
+	return $gutenberg;
+}

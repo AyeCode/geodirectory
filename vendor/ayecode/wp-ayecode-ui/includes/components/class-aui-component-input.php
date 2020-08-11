@@ -677,7 +677,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// Options
 		if(!empty($args['options'])){
-			
+
 			foreach($args['options'] as $val => $name){
 				$selected = '';
 				if(is_array($name)){

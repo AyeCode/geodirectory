@@ -86,9 +86,9 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $post;
 
-		if ( is_preview() ) {
-			return;
-		}
+//		if ( is_preview() ) {
+//			//return;
+//		}
 
 		$defaults = array(
 			'hide_edit'      => 0,
@@ -101,8 +101,10 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		 */
 		$args = wp_parse_args( $args, $defaults );
 
+		$is_preview = $this->is_preview();
+
 		$show = true;
-		if ( $args['author_page_only'] && ! self::is_author_page() ) {
+		if ( $args['author_page_only'] && ! self::is_author_page() && ! $is_preview ) {
 			$show = false;
 		}
 

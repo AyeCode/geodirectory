@@ -33,19 +33,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		        'customClassName'   => false
 	        ),
             'block-keywords'=> "['listings','posts','geo']",
-            'block-output'   => array( // the block visual output elements as an array
-	            array(
-		            'element' => 'div',
-		            'title'   => __( 'Placeholder for listings', 'geodirectory' ),
-		            'class'   => '[%className%]',
-		            'style'   => '{background: "#eee",width: "100%", height: "450px", position:"relative"}',
-		            array(
-			            'element' => 'i',
-			            'if_class'   => '[%animation%]=="fade" ? "far fa-image gd-fadein-animation" : "fas fa-bars gd-right-left-animation"',
-			            'style'   => '{"text-align": "center", "vertical-align": "middle", "line-height": "450px", "height": "100%", width: "100%","font-size":"140px",color:"#aaa"}',
-		            ),
-	            ),
-            ),
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_listings', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Listings','geodirectory'), // the name of the widget.
@@ -70,6 +57,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @return array
      */
     public function set_arguments(){
+
+	    $design_style = geodir_design_style();
 
         $arguments = array(
             'title'  => array(
@@ -248,7 +237,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => 'h3',
                 'desc_tip' => true,
                 'advanced' => false,
-                'group'     => __("Design","geodirectory")
+                'group'     => __("SEO","geodirectory")
             ),
             'layout'  => array(
                 'title' => __('Layout:', 'geodirectory'),
@@ -320,9 +309,78 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	            'value'  => '1',
 	            'default'  => '0',
 	            'advanced' => false,
-	            'group'     => __("Design","geodirectory")
+	            'group'     => __("General","geodirectory")
             ),
         );
+
+	    if ( $design_style ) {
+
+		    $arguments['row_gap'] = array(
+			    'title' => __( "Card row gap", 'geodirectory' ),
+			    'desc' => __('This adjusts the spacing between the cards horizontally.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				    ''  =>  __("Default","geodirectory"),
+				    '1'  =>  '1',
+				    '2'  =>  '2',
+				    '3'  =>  '3',
+				    '4'  =>  '4',
+				    '5'  =>  '5',
+			    ),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    $arguments['column_gap'] = array(
+			    'title' => __( "Card column gap", 'geodirectory' ),
+			    'desc' => __('This adjusts the spacing between the cards vertically.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				    ''  =>  __("Default","geodirectory"),
+				    '1'  =>  '1',
+				    '2'  =>  '2',
+				    '3'  =>  '3',
+				    '4'  =>  '4',
+				    '5'  =>  '5',
+			    ),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    $arguments['card_border'] = array(
+			    'title' => __( "Card border", 'geodirectory' ),
+			    'desc' => __('Set the border style for the card.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				                  ''  =>  __("Default","geodirectory"),
+				                  'none'  =>  __("None","geodirectory"),
+			    ) + geodir_aui_colors(),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    $arguments['card_shadow'] = array(
+			    'title' => __( "Card shadow", 'geodirectory' ),
+			    'desc' => __('Set the card shadow style.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				    ''  =>  __("None","geodirectory"),
+				    'small'  =>  __("Small","geodirectory"),
+				    'medium'  =>  __("Medium","geodirectory"),
+				    'large'  =>  __("Large","geodirectory"),
+			    ),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+	    }
 
 	    /*
 		 * Elementor Pro features below here
@@ -408,6 +466,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	              'skin_id' => '',
 	              'skin_column_gap' => '',
 	              'skin_row_gap' => '',
+	            // AUI settings
+	              'column_gap'  => '',
+	              'row_gap'  => '',
+	              'card_border'  => '',
+	              'card_shadow'  => '',
             )
         );
 
@@ -872,6 +935,29 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		if ( $bottom_pagination ) {
 			$class .= ' geodir-wgt-pagination-bottom';
 		}
+
+	    // card border class
+	    $card_border_class = '';
+	    if(!empty($instance['card_border'])){
+		    if($instance['card_border']=='none'){
+			    $card_border_class = 'border-0';
+		    }else{
+			    $card_border_class = 'border-'.sanitize_html_class($instance['card_border']);
+		    }
+	    }
+
+	    // card shadow
+	    $card_shadow_class = '';
+	    if(!empty($instance['card_shadow'])){
+		    if($instance['card_shadow']=='small'){
+			    $card_shadow_class = 'shadow-sm';
+		    }elseif($instance['card_shadow']=='medium'){
+			    $card_shadow_class = 'shadow';
+		    }elseif($instance['card_shadow']=='large'){
+			    $card_shadow_class = 'shadow-lg';
+		    }
+	    }
+
 		$backup_posts_per_page = $posts_per_page;
 		$backup_paged = $paged;
 		$backup_gd_advanced_pagination = $gd_advanced_pagination;
@@ -896,8 +982,18 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		    }
 	    }
 
+	    // preview message
+	    $is_preview = $this->is_preview();
+	    if($is_preview && $design_style){
+		    echo aui()->alert(array(
+				    'type'=> 'info',
+				    'content'=> __("This preview shows all content items to give an idea of layout. Dummy data is used in places.","geodirectory")
+			    )
+		    );
+	    }
+
         ?>
-        <div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; echo $elementor_wrapper_class; ?>">
+        <div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; echo $elementor_wrapper_class; ?> position-relative">
             <?php
             if ( ! isset( $character_count ) ) {
                 /**
@@ -931,14 +1027,18 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			    $template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
 
 			    echo geodir_get_template_html( $template, array(
-				    'widget_listings' => $widget_listings
+				    'widget_listings' => $widget_listings,
+				    'column_gap_class'   => $instance['column_gap'] ? 'mb-'.absint($instance['column_gap']) : 'mb-4',
+				    'row_gap_class'   => $instance['row_gap'] ? 'px-'.absint($instance['row_gap']) : '',
+				    'card_border_class'   => $card_border_class,
+				    'card_shadow_class'  =>  $card_shadow_class,
 			    ) );
 		    }
 
 
 			if ( ! empty( $widget_listings ) && ( $bottom_pagination || $top_pagination ) ) {
 				if($design_style){
-					echo '<div class="geodir-ajax-listings-loader loading_div overlay overlay-black position-absolute row m-0 z-index-1 w-100" style="display: none;z-index: 3;">
+					echo '<div class="geodir-ajax-listings-loader loading_div overlay overlay-black position-absolute row m-0 z-index-1 w-100 h-100 rounded overflow-hidden" style="display: none;z-index: 3;top:0;">
 								<div class="spinner-border mx-auto align-self-center text-white" role="status">
 									<span class="sr-only">'.__("Loading...","geodirectory").'</span>
 								</div>

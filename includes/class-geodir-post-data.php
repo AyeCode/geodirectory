@@ -776,7 +776,7 @@ class GeoDir_Post_Data {
 	 */
 	public static function add_listing_form( $params = array() ) {
 
-		global $cat_display, $post_cat, $current_user, $gd_post;
+		global $cat_display, $post_cat, $current_user, $gd_post,$geodir_label_type;
 		$page_id       = get_the_ID();
 		$post          = '';
 		$submit_button = '';
@@ -873,7 +873,7 @@ class GeoDir_Post_Data {
 		$design_style =  geodir_design_style();
 		$horizontal = false;
 		if($design_style){
-			$horizontal = true;
+			$horizontal = $geodir_label_type == 'horizontal' ? true : false;
 		}
 
 
@@ -922,7 +922,7 @@ class GeoDir_Post_Data {
 							'name'              => "user_login",
 							'required'          => true,
 							'label'              => __("Name", 'geodirectory').' <span class="text-danger">*</span>',
-							'label_type'       => 'horizontal',
+							'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
 							'type'              => 'text',
 //							'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
 							'class'             => '',
@@ -936,7 +936,7 @@ class GeoDir_Post_Data {
 							'name'              => "user_email",
 							'required'          => true,
 							'label'              => __("Email", 'geodirectory').' <span class="text-danger">*</span>',
-							'label_type'       => 'horizontal',
+							'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
 							'type'              => 'email',
 //							'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
 							'class'             => '',
@@ -1039,11 +1039,11 @@ class GeoDir_Post_Data {
 			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both <?php echo $design_style && $horizontal? 'form-group row' :'';?>"
 			     style="<?php echo $design_style ? '' :'padding:2px;text-align:center;';?>">
 
-				<?php echo $design_style && $horizontal? '<label class="  col-sm-2 col-form-label"></label>' :'';?>
+				<?php echo $design_style && $horizontal ? '<label class="  col-sm-2 col-form-label"></label>' :'';?>
 
-				<?php echo $design_style && $horizontal? '<div class="col-sm-10">' :'';?>
+				<?php echo $design_style && $horizontal ? '<div class="col-sm-10">' :'';?>
 
-				<button type="submit" class="geodir_button <?php echo $design_style && $horizontal? 'btn btn-primary' :'';?>">
+				<button type="submit" class="geodir_button <?php echo $design_style ? 'btn btn-primary' :'';?>">
 					<?php _e( 'Submit Listing', 'geodirectory' ); ?>
 				</button>
 

@@ -735,3 +735,89 @@ function geodir_dashicon_options() {
 
 	return apply_filters( 'geodir_dashicon_options', $dashicons );
 }
+
+/**
+ * A helper function for margin inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_margin_input($type = 'mt', $include_negatives = true, $overwrite = array() ){
+	$options = array(
+		"" => __('None', 'geodirectory'),
+		"1" => "1",
+		"2" => "2",
+		"3" => "3",
+		"4" => "4",
+		"5" => "5",
+	);
+
+	if ( $include_negatives ) {
+		$options['n1'] = '-1';
+		$options['n2'] = '-2';
+		$options['n3'] = '-3';
+		$options['n4'] = '-4';
+		$options['n5'] = '-5';
+	}
+
+	$defaults = array(
+		'type' => 'select',
+		'title' => __('Margin top', 'geodirectory'),
+		'options' =>  $options,
+		'default' => '',
+		'desc_tip' => true,
+		'group'     => __("Positioning","geodirectory")
+	);
+
+	// title
+	if( $type == 'mt' ){
+		$defaults['title'] = __('Margin top', 'geodirectory');
+	}elseif( $type == 'mr' ){
+		$defaults['title'] = __('Margin right', 'geodirectory');
+	}elseif( $type == 'mb' ){
+		$defaults['title'] = __('Margin bottom', 'geodirectory');
+	}elseif( $type == 'ml' ){
+		$defaults['title'] = __('Margin left', 'geodirectory');
+	}
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+
+/**
+ * Check if we are on the archive item edit page.
+ *
+ * @return bool
+ */
+function geodir_is_archive_item_template_page(){
+	global $geodirectory;
+
+	$result = false;
+
+	$post_id = is_admin() && !empty($_REQUEST['post_id']) ? absint($_REQUEST['post_id']) : 0;
+
+	if ( $post_id ) {
+		// main post check
+		if( !empty( $geodirectory->settings['page_archive_item'] ) && $geodirectory->settings['page_archive_item'] == $post_id ){
+			$result = true;
+		}
+
+		// check all CPTs
+		if( !$result && !empty($geodirectory->settings['post_types'])){
+
+			foreach($geodirectory->settings['post_types'] as $post_type){
+				if ( ! empty( $post_type['page_archive_item'] ) && $post_type['page_archive_item'] == $post_id ) {
+					$result = true;
+					break;
+				}
+			}
+		}
+	}
+
+	return $result;
+}

@@ -70,8 +70,16 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
             global $gd_advanced_pagination;
             $gd_advanced_pagination = $args['show_advanced'];
         }
+        
+        // preview
+        $is_preview = $this->is_preview();
+        if(  $is_preview ){
+            $args['preview'] = true;
+            $args['total'] = 3;
+        }
+        
         ob_start();
-        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || $geodir_is_widget_listing){
+        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || $geodir_is_widget_listing ||  $is_preview ){
             geodir_loop_paging($args);
         }
         return ob_get_clean();

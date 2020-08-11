@@ -222,7 +222,7 @@ function geodir_loop_paging($args = array()) {
 
 global $wp_query;
 
-if ( $wp_query->max_num_pages <= 1 ) {
+if ( $wp_query->max_num_pages <= 1 && empty($args['preview']) ) {
 	return;
 }
 
@@ -247,8 +247,8 @@ if ( $wp_query->max_num_pages <= 1 ) {
 	if ($gd_advanced_pagination != '') {
 		global $posts_per_page, $wpdb, $paged;
 
-		$post_type = geodir_get_current_posttype();
-		$listing_type_name = get_post_type_plural_label($post_type);
+		$post_type = !empty($args['preview']) ? 'gd_place' : geodir_get_current_posttype();
+		$listing_type_name =  get_post_type_plural_label($post_type);
 		if (geodir_is_page('archive') || geodir_is_page('search')) {
 			$term = array();
 
@@ -276,7 +276,7 @@ if ( $wp_query->max_num_pages <= 1 ) {
 			}
 		}
 
-		$numposts = $wp_query->found_posts;
+		$numposts = !empty($args['preview']) ? 30 : $wp_query->found_posts;
 		$max_page = ceil($numposts / $posts_per_page);
 		if (empty($paged)) {
 			$paged = 1;
@@ -318,7 +318,6 @@ if ( $wp_query->max_num_pages <= 1 ) {
 	}elseif($gd_advanced_pagination=='after' && $pagination_info){
 		$args['after_paging'] = $pagination_info;
 	}
-
 
 	$template = $design_style ? $design_style."/loop/pagination.php" : "loop/pagination.php";
 	geodir_get_template( $template, array(

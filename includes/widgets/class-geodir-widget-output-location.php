@@ -126,7 +126,13 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 
 	    $output = '';
 
-        if (!empty($args['location']) && $geodir_post_detail_fields = geodir_show_listing_info($args['location'])) {
+	    $geodir_post_detail_fields = geodir_show_listing_info($args['location']);
+
+	    if(! $geodir_post_detail_fields && $design_style  && $this->is_preview() && geodir_is_archive_item_template_page() ){
+		    $geodir_post_detail_fields = $this->get_dummy_data();
+	    }
+
+        if (!empty($args['location']) && $geodir_post_detail_fields ) {
 	        if($geodir_post_detail_fields && $design_style && $wrap_class){
 		        $geodir_post_detail_fields = str_replace("geodir_post_meta ","geodir_post_meta list-group-item list-group-item-action ".$inner_class,$geodir_post_detail_fields);
 	        }
@@ -149,5 +155,15 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 		}
 
 		return $show_in_locations;
+	}
+
+	/**
+	 * Get some dummy data if empty.
+	 * 
+	 * @return string
+	 */
+	public function get_dummy_data(){
+		return ' <div href="#" class="geodir_post_meta ">Demo item 1</div>
+  <div href="#" class="geodir_post_meta ">Demo item 2</div>';
 	}
 }

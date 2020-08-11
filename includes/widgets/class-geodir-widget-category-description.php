@@ -67,6 +67,8 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
 
         ob_start();
 
+	    $is_preview = $this->is_preview();
+
 	    if(geodir_is_page( 'archive' )){
 		    $current_category = get_queried_object();
 		    $term_id = isset($current_category->term_id) ?  absint($current_category->term_id) : '';
@@ -80,10 +82,21 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
 				    echo "</p></div>";
 			    }
 		    }
+	    }elseif($is_preview){
+		    echo $this->get_dummy_description();
 	    }
 
         return ob_get_clean();
     }
+
+	/**
+	 * Get placeholder text for the category description.
+	 *
+	 * @return string
+	 */
+	public function get_dummy_description(){
+		return "<div class='mb-3'><p>".__("<b>This is a placeholder</b> for the category description. You set the description under each categories settings, when on the relevant category page the text will show here.","geodirectory") ."</p></div>";
+	}
 
 
 }

@@ -19,51 +19,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'block-icon'    => 'format-image',
 			'block-category'=> 'common',
 			'block-keywords'=> "['images','geo','geodir']",
-			'block-output'   => array( // the block visual output elements as an array
-				array(
-					'element' => 'div',
-					'title'   => __( 'Placeholder image', 'geodirectory' ),
-					'class'   => '[%className%]',
-					'element_require' => '[%type%]!="gallery"',
-					'style'   => '{background: "#eee",width: "100%", height: "450px", position:"relative"}',
-					array(
-						'element' => 'i',
-						'if_class'   => '[%animation%]=="fade" ? "far fa-image gd-fadein-animation" : "far fa-image gd-right-left-animation"',
-						'style'   => '{"text-align": "center", "vertical-align": "middle", "line-height": "450px", "height": "100%", width: "100%","font-size":"140px",color:"#aaa"}',
-					),
-					array(
-						'element' => 'p',
-						'element_require' => '[%show_title%] && [%type%]=="slider"',
-						'content' => __('This is a default picture title','geodirectory'),
-						'style'   => '{background: "#aaa","text-align": "left", "vertical-align": "middle","font-size":"14px",color:"#fff",position:"absolute","margin-top":"-30px",height:"30px","line-height":"30px",width:"100%","padding-left":"10px"}',
-					),
-				),
-				// default nav
-				array(
-					'element' => 'div',
-					'element_require' => '[%controlnav%]=="1" && [%type%]=="slider"',
-					'style'   => '{width: "100%","margin-top":"5px","text-align": "center"}',
-					array(
-						'element' => 'i',
-						'element_repeat' => '10',
-						'class'   => 'fas fa-circle',
-						'style'   => '{background: "#eee","text-align": "center", "vertical-align": "middle","font-size":"10px",color:"#aaa",margin:"0.2%"}',
-
-					),
-				),
-				// thumbnail nav
-				array(
-					'element' => 'div',
-					'element_require' => '[%controlnav%]=="2" || [%type%]=="gallery"',
-					'style'   => '{width: "100%","margin-top":"5px"}',
-					array(
-						'element' => 'i',
-						'element_repeat' => '5',
-						'class'   => 'far fa-image',
-						'style'   => '{background: "#eee","text-align": "center", "vertical-align": "middle", "line-height": "65px", width: "19.6%",height:"65px","font-size":"35px",color:"#aaa",margin:"0.2%"}',
-
-					),
-				),
+			'block-supports'=> array(
+				'customClassName'   => false
 			),
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_images', // this us used as the widget id and the shortcode id.
@@ -77,14 +34,79 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'arguments' => array(
 				'title'=> array(
 					'type' => 'text',
-					'title' => __( 'Title:', 'geodirectory' ),
+					'title' => __( 'Title', 'geodirectory' ),
 					'desc' => __( 'The widget title.', 'geodirectory' ),
 					'default' => '',
 					'desc_tip' => true,
-					'advanced' => false
+					'advanced' => false,
+					'group'     => __("General","geodirectory"),
+				),
+				'types'  => array(
+					'title' => __('Image types:', 'geodirectory'),
+					'desc' => __('Comma separated list of image types to show. Defaults to: post_images', 'geodirectory'),
+					'type' => 'text',
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'placeholder'  => 'post_images,logo,comment_images,website_screenshot',
+					'advanced' => false,
+					'group'     => __("General","geodirectory"),
+				),
+				'fallback_types'  => array(
+					'title' => __('Fallback types:', 'geodirectory'),
+					'desc' => __('Comma separated list of fallback types to show (only one will be shown). Defaults to: logo,cat_default,cpt_default,listing_default', 'geodirectory'),
+					'type' => 'text',
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'placeholder'  => 'logo,cat_default,cpt_default,listing_default',
+					'advanced' => false,
+					'group'     => __("General","geodirectory"),
+				),
+
+				'ajax_load'  => array(
+					'title' => __('Load via Ajax', 'geodirectory'),
+					'desc' => __('This will load all but the first slide via ajax for faster load times.', 'geodirectory'),
+					'type' => 'checkbox',
+					'desc_tip' => true,
+					'value'  => '1',
+					'default'  => 1,
+					'advanced' => true,
+					'group'     => __("General","geodirectory"),
+				),
+				'limit'  => array(
+					'title' => __('Image limit:', 'geodirectory'),
+					'desc' => __('Limit the number of images returned.', 'geodirectory'),
+					'type' => 'number',
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'advanced' => true,
+					'group'     => __("General","geodirectory"),
+				),
+				'limit_show'  => array(
+					'title' => __('Show limit:', 'geodirectory'),
+					'desc' => __('Limit the number of images shown. This can be used to output 1-2 images in a gallery and if linked to lightbox it can ajax load more images when in lightbox. This can also be sued to turn the slider into a carousel and will set the default visible images.', 'geodirectory'),
+					'type' => 'number',
+					'desc_tip' => true,
+					'value'  => '',
+					'default'  => '',
+					'advanced' => true,
+					'group'     => __("General","geodirectory"),
+				),
+
+				'css_class'  => array(
+					'type' => 'text',
+					'title' => __('Extra class:', 'geodirectory'),
+					'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'geodirectory'),
+					'placeholder' => '',
+					'default' => '',
+					'desc_tip' => true,
+					'advanced' => true,
+					'group'     => __("General","geodirectory"),
 				),
 				'type'  => array(
-					'title' => __('Output Type:', 'geodirectory'),
+					'title' => __('Output Type', 'geodirectory'),
 					'desc' => __('How the images should be displayed.', 'geodirectory'),
 					'type' => 'select',
 					'options'   =>  array(
@@ -94,62 +116,22 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					),
 					'default'  => 'image',
 					'desc_tip' => true,
-					'advanced' => false
-				),
-				'ajax_load'  => array(
-					'title' => __('Load via Ajax:', 'geodirectory'),
-					'desc' => __('This will load all but the first slide via ajax for faster load times.', 'geodirectory'),
-					'type' => 'checkbox',
-					'desc_tip' => true,
-					'value'  => '1',
-					'default'  => 1,
-					'advanced' => true
+					'advanced' => false,
+					'group'     => __("Design","geodirectory"),
 				),
 				'slideshow'  => array(
-					'title' => __('Auto start:', 'geodirectory'),
+					'title' => __('Auto start', 'geodirectory'),
 					'desc' => __('Should the slider auto start.', 'geodirectory'),
 					'type' => 'checkbox',
 					'desc_tip' => true,
 					'value'  => '1',
 					'default'  => 1,
 					'element_require' => '[%type%]=="slider"',
-					'advanced' => true
-				),
-				'show_title'  => array(
-					'title' => __('Show title:', 'geodirectory'),
-					'desc' => __('Show the titles on the image.', 'geodirectory'),
-					'type' => 'checkbox',
-					'desc_tip' => true,
-					'value'  => '1',
-					'default'  => 1,
-					'element_require' => '[%type%]=="slider"',
-					'advanced' => true
-				),
-				'show_caption'  => array(
-					'title' 	=> __('Show caption:', 'geodirectory'),
-					'desc' 		=> __('Show the captions on the image. Requires you to enable titles.', 'geodirectory'),
-					'type' 		=> 'checkbox',
-					'desc_tip' 	=> true,
-					'value'  	=> '0',
-					'default'   => 0,
-					'element_require' => '[%show_title%] && [%type%]=="slider"',
-					'advanced' 	=> true
-				),
-				'animation'  => array(
-					'title' => __('Animation:', 'geodirectory'),
-					'desc' => __('Slide or fade transition.', 'geodirectory'),
-					'type' => 'select',
-					'options'   =>  array(
-						"slide" => __('Slide', 'geodirectory'),
-						"fade" => __('Fade', 'geodirectory'),
-					),
-					'default'  => 'slide',
-					'desc_tip' => true,
-					'element_require' => '[%type%]=="slider"',
-					'advanced' => true
+					'advanced' => true,
+					'group'     => __("Design","geodirectory"),
 				),
 				'controlnav'  => array(
-					'title' => __('Control Navigation:', 'geodirectory'),
+					'title' => __('Control Navigation', 'geodirectory'),
 					'desc' => __('Image navigation controls below slider.', 'geodirectory'),
 					'type' => 'select',
 					'options'   =>  array(
@@ -160,56 +142,44 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'default'  => '1',
 					'desc_tip' => true,
 					'element_require' => '[%type%]=="slider"',
-					'advanced' => true
+					'advanced' => true,
+					'group'     => __("Design","geodirectory"),
 				),
-				'link_to'  => array(
-					'title' => __('Link to:', 'geodirectory'),
-					'desc' => __('Link images to where.', 'geodirectory'),
+				'animation'  => array(
+					'title' => __('Animation', 'geodirectory'),
+					'desc' => __('Slide or fade transition.', 'geodirectory'),
 					'type' => 'select',
 					'options'   =>  array(
-						"" => __('None', 'geodirectory'),
-						"post" => __('Post', 'geodirectory'),
-						"lightbox" => __('Lightbox image', 'geodirectory'),
+						"slide" => __('Slide', 'geodirectory'),
+						"fade" => __('Fade', 'geodirectory'),
 					),
-					'default'  => '',
+					'default'  => 'slide',
 					'desc_tip' => true,
-					'advanced' => true
+					'element_require' => '[%type%]=="slider"',
+					'advanced' => true,
+					'group'     => __("Design","geodirectory"),
 				),
-				'link_screenshot_to'  => array(
-					'title' => __('Link screenshots to:', 'geodirectory'),
-					'desc' => __('Link screenshot images to where.', 'geodirectory'),
-					'type' => 'select',
-					'options'   =>  array(
-						"" => __('None', 'geodirectory'),
-						"post" => __('Post', 'geodirectory'),
-						"lightbox" => __('Lightbox image', 'geodirectory'),
-						"lightbox_url" => __('Lightbox iframe URL', 'geodirectory'),
-						"url" => __('URL (new window)', 'geodirectory'),
-						"url_same" => __('URL (same window)', 'geodirectory'),
-					),
-					'default'  => '',
+				'show_title'  => array(
+					'title' => __('Show title', 'geodirectory'),
+					'desc' => __('Show the titles on the image.', 'geodirectory'),
+					'type' => 'checkbox',
 					'desc_tip' => true,
-					'advanced' => true
+					'value'  => '1',
+					'default'  => 1,
+					'element_require' => '[%type%]=="slider"',
+					'advanced' => true,
+					'group'     => __("Design","geodirectory"),
 				),
-				'types'  => array(
-					'title' => __('Image types:', 'geodirectory'),
-					'desc' => __('Comma separated list of image types to show. Defaults to: post_images', 'geodirectory'),
-					'type' => 'text',
-					'desc_tip' => true,
-					'value'  => '',
-					'default'  => '',
-					'placeholder'  => 'post_images,logo,comment_images,website_screenshot',
-					'advanced' => true
-				),
-				'fallback_types'  => array(
-					'title' => __('Fallback types:', 'geodirectory'),
-					'desc' => __('Comma separated list of fallback types to show (only one will be shown). Defaults to: logo,cat_default,cpt_default,listing_default', 'geodirectory'),
-					'type' => 'text',
-					'desc_tip' => true,
-					'value'  => '',
-					'default'  => '',
-					'placeholder'  => 'logo,cat_default,cpt_default,listing_default',
-					'advanced' => true
+				'show_caption'  => array(
+					'title' 	=> __('Show caption', 'geodirectory'),
+					'desc' 		=> __('Show the captions on the image. Requires you to enable titles.', 'geodirectory'),
+					'type' 		=> 'checkbox',
+					'desc_tip' 	=> true,
+					'value'  	=> '0',
+					'default'   => 0,
+					'element_require' => '[%show_title%] && [%type%]=="slider"',
+					'advanced' 	=> true,
+					'group'     => __("Design","geodirectory"),
 				),
 				'image_size'  => array(
 					'title' => __('Image size:', 'geodirectory'),
@@ -219,25 +189,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'value'  => '',
 					'default'  => '',
-					'advanced' => true
-				),
-				'limit'  => array(
-					'title' => __('Image limit:', 'geodirectory'),
-					'desc' => __('Limit the number of images returned.', 'geodirectory'),
-					'type' => 'number',
-					'desc_tip' => true,
-					'value'  => '',
-					'default'  => '',
-					'advanced' => true
-				),
-				'limit_show'  => array(
-					'title' => __('Show limit:', 'geodirectory'),
-					'desc' => __('Limit the number of images shown. This can be used to output 1-2 images in a gallery and if linked to lightbox it can ajax load more images when in lightbox. This can also be sued to turn the slider into a carousel and will set the default visible images.', 'geodirectory'),
-					'type' => 'number',
-					'desc_tip' => true,
-					'value'  => '',
-					'default'  => '',
-					'advanced' => true
+					'advanced' => true,
+					'group'     => __("Design","geodirectory"),
 				),
 				'aspect'  => array(
 					'title' => __('Aspect ratio', 'geodirectory')." ".__('(bootstrap only)', 'geodirectory'),
@@ -253,7 +206,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'value'  => '',
 					'default'  => '',
-					'advanced' => true
+					'advanced' => true,
+					'group'     => __("Design","geodirectory"),
 				),
 				'cover'  => array(
 					'title' => __('Image cover type:', 'geodirectory'),
@@ -268,19 +222,49 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'value'  => '',
 					'default'  => '',
-					'advanced' => true
+					'advanced' => true,
+					'group'     => __("Design","geodirectory"),
 				),
-				'css_class'  => array(
-					'type' => 'text',
-					'title' => __('Extra class:', 'geodirectory'),
-					'desc' => __('Give the wrapper an extra class so you can style things as you want.', 'geodirectory'),
-					'placeholder' => '',
-					'default' => '',
+				'link_to'  => array(
+					'title' => __('Link to:', 'geodirectory'),
+					'desc' => __('Link images to where.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"post" => __('Post', 'geodirectory'),
+						"lightbox" => __('Lightbox image', 'geodirectory'),
+					),
+					'default'  => '',
+					'desc_tip' => true,
+					'advanced' => false,
+					'group'     => __("Link","geodirectory"),
+				),
+				'link_screenshot_to'  => array(
+					'title' => __('Link screenshots to:', 'geodirectory'),
+					'desc' => __('Link screenshot images to where.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(
+						"" => __('None', 'geodirectory'),
+						"post" => __('Post', 'geodirectory'),
+						"lightbox" => __('Lightbox image', 'geodirectory'),
+						"lightbox_url" => __('Lightbox iframe URL', 'geodirectory'),
+						"url" => __('URL (new window)', 'geodirectory'),
+						"url_same" => __('URL (same window)', 'geodirectory'),
+					),
+					'default'  => '',
 					'desc_tip' => true,
 					'advanced' => true,
-				)
+					'group'     => __("Link","geodirectory"),
+				),
+
 			)
 		);
+
+		$design_style = geodir_design_style();
+
+		if ( $design_style ) {
+			$options['arguments']['mb']  = geodir_get_sd_margin_input('mb');
+		}
 
 		parent::__construct( $options );
 	}
@@ -318,8 +302,9 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 */
 	public function output_images($options){
 		global $post, $gd_post;
-		if(!isset($gd_post->ID)){return '';}
-		ob_start();
+		//return 'zzz';
+		//if(!isset($gd_post->ID)){return '';}
+
 
 		// options
 		$defaults = array(
@@ -342,6 +327,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'types'   => '', // types to show, post_images,comment_images,logo
 			'fallback_types'   => 'logo,cat_default,cpt_default,listing_default,website_screenshot', //logo,cat_default,cpt_default,listing_default
 			'css_class' => '',
+			'mb' => '',
 		);
 
 		/**
@@ -373,16 +359,24 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$options['fallback_types'] = array('logo','cat_default','cpt_default','listing_default');
 		}
 
-		$post_images = geodir_get_images($gd_post->ID, $options['limit'], $options['show_logo'],$revision_id,$options['types'],$options['fallback_types']);
+		// check if block preview
+		$block_preview = $this->is_block_content_call();
+		$post_id = !empty($gd_post->ID) ? absint($gd_post->ID) : 0;
+		if($block_preview){
+			$options['ajax_load'] = false; // disable ajax loading
+			$post_id = -1;
+		}
 
-//		print_r($gd_post );
-//		print_r($post_images );
+		if(!$post_id){return '';}
+
+		$post_images = $block_preview ? $this->get_dummy_images() : geodir_get_images($post_id, $options['limit'], $options['show_logo'],$revision_id,$options['types'],$options['fallback_types']);
 
 		// make it just a image if only one
 		if($options['type']=='slider' && count($post_images) == 1 && $options['limit_show']){
 			$options['type']='image';
 		}
 
+		ob_start();
 
 		if (!empty($post_images)) {
 			$main_wrapper_class = "geodir-image-container";
@@ -391,7 +385,10 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$image_size = isset($options['image_size']) && $options['image_size'] ? $options['image_size'] : 'medium_large';
 			$main_wrapper_class .= " geodir-image-sizes-".$image_size;
 
-
+			// margin_bottom
+			if ( !empty( $options['mb'] ) ) {
+				$main_wrapper_class .= " mb-".absint($options['mb']);
+			}
 
 			if($options['type']=='slider'){
 				// enqueue flexslider JS
@@ -410,7 +407,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 			// Set the slider ID
 			$slider_id = wp_doing_ajax() ? "geodir_images_ajax" : "geodir_images";
-			$slider_id .= '_' . uniqid() . '_' . $gd_post->ID; // Generate unique slider id. //@todo this is not cache friendly
+			$slider_id .= '_' . uniqid() . '_' . $post_id; // Generate unique slider id. //@todo this is not cache friendly
 
 			// responsive image class
 			$aspect = $options['aspect'];
@@ -425,6 +422,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-4by3';
 				}elseif($aspect=='1x1'){
 					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-1by1';
+				}else{
+					$responsive_image_class = $embed_action_class;
 				}
 			}
 
@@ -434,7 +433,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$link_tag_open = "";
 			$link_tag_close = "";
 			if($options['link_to']=='post'){
-				$link = get_the_permalink($gd_post->ID);
+				$link = get_the_permalink($post_id);
 				$link_tag_open = "<a href='%s' class='$responsive_image_class'>";
 				$link_tag_close = "<i class=\"fas fa-link\" aria-hidden=\"true\"></i></a>";
 			}elseif($options['link_to']=='lightbox'){
@@ -534,6 +533,47 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		$image_sizes['full'] = 'full';
 
 		return $image_sizes;
+	}
+
+	/**
+	 * Get dummy images for block demo content.
+	 *
+	 * @return array
+	 */
+	public static function get_dummy_images(){
+		$images = array();
+		$dummy_image_url = 'https://wpgd-jzgngzymm1v50s3e3fqotwtenpjxuqsmvkua.netdna-ssl.com/dummy/plugin/';
+		$dummy_images = array(
+			'burger.jpg',
+			'food-salad.jpg',
+			'las-vegas.jpg',
+			'plate-restaurant.jpg',
+			'san-francisco.jpg',
+			'sea-scape.jpg',
+		);
+
+		$count = 1;
+		foreach($dummy_images as $dummy_image){
+			// image
+			$image = new stdClass();
+			$image->ID = 0;
+			$image->post_id = 0;
+			$image->user_id = 0;
+			$image->title = sprintf( __( 'Demo image title %d', 'geodirectory' ),$count);
+			$image->caption = sprintf( __( 'Demo image caption %d', 'geodirectory' ),$count);
+			$image->file = $dummy_image_url.$dummy_image;
+			$image->mime_type = '';
+			$image->menu_order = 0;
+			$image->featured= 0;
+			$image->is_approved = 1;
+			$image->metadata = '';
+			$image->type = '_dummy';
+			$images[] = $image;
+			$count++;
+		}
+
+		return $images;
+
 	}
 
 }

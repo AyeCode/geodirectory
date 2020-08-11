@@ -29,19 +29,94 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 'classname'   => 'geodir-loop-container bsui', // widget class
                 'description' => esc_html__('Shows the current posts from the main WP query according to the URL.  This is only used on the `GD Archive template` page.  It loops through each post and outputs the `GD Archive Item` template.','geodirectory'), // widget description
                 'geodirectory' => true,
-            ),
-            'arguments'     => array(
-                'layout'  => array(
-                    'title' => __('Layout:', 'geodirectory'),
-                    'desc' => __('How the listings should laid out by default.', 'geodirectory'),
-                    'type' => 'select',
-                    'options'   =>  geodir_get_layout_options(),
-                    'default'  => 'h3',
-                    'desc_tip' => true,
-                    'advanced' => true
-                )
             )
         );
+
+
+        $arguments['layout'] = array(
+            'title' => __('Layout', 'geodirectory'),
+            'desc' => __('How the listings should laid out by default.', 'geodirectory'),
+            'type' => 'select',
+            'options'   =>  geodir_get_layout_options(),
+            'default'  => '2',
+            'desc_tip' => true,
+            'advanced' => false
+        );
+
+
+        $design_style = geodir_design_style();
+
+        if ( $design_style ) {
+
+            $arguments['row_gap'] = array(
+                'title' => __( "Card row gap", 'geodirectory' ),
+                'desc' => __('This adjusts the spacing between the cards horizontally.','geodirectory'),
+                'type' => 'select',
+                'options' =>  array(
+                    ''  =>  __("Default","geodirectory"),
+                    '1'  =>  '1',
+                    '2'  =>  '2',
+                    '3'  =>  '3',
+                    '4'  =>  '4',
+                    '5'  =>  '5',
+                ),
+                'default'  => '',
+                'desc_tip' => false,
+                'advanced' => false,
+                'group'     => __("Card Design","geodirectory")
+            );
+
+            $arguments['column_gap'] = array(
+                'title' => __( "Card column gap", 'geodirectory' ),
+                'desc' => __('This adjusts the spacing between the cards vertically.','geodirectory'),
+                'type' => 'select',
+                'options' =>  array(
+                    ''  =>  __("Default","geodirectory"),
+                    '1'  =>  '1',
+                    '2'  =>  '2',
+                    '3'  =>  '3',
+                    '4'  =>  '4',
+                    '5'  =>  '5',
+                ),
+                'default'  => '',
+                'desc_tip' => false,
+                'advanced' => false,
+                'group'     => __("Card Design","geodirectory")
+            );
+
+            $arguments['card_border'] = array(
+                'title' => __( "Card border", 'geodirectory' ),
+                'desc' => __('Set the border style for the card.','geodirectory'),
+                'type' => 'select',
+                'options' =>  array(
+                                  ''  =>  __("Default","geodirectory"),
+                                  'none'  =>  __("None","geodirectory"),
+                              ) + geodir_aui_colors(),
+                'default'  => '',
+                'desc_tip' => false,
+                'advanced' => false,
+                'group'     => __("Card Design","geodirectory")
+            );
+
+            $arguments['card_shadow'] = array(
+                'title' => __( "Card shadow", 'geodirectory' ),
+                'desc' => __('Set the card shadow style.','geodirectory'),
+                'type' => 'select',
+                'options' =>  array(
+                    ''  =>  __("None","geodirectory"),
+                    'small'  =>  __("Small","geodirectory"),
+                    'medium'  =>  __("Medium","geodirectory"),
+                    'large'  =>  __("Large","geodirectory"),
+                ),
+                'default'  => '',
+                'desc_tip' => false,
+                'advanced' => false,
+                'group'     => __("Card Design","geodirectory")
+            );
+        }
+
+
+        $options['arguments'] = $arguments;
 
 
         parent::__construct( $options );
@@ -60,18 +135,62 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
         global $wp_query, $gd_layout_class;
 
         ob_start();
+        $design_style = geodir_design_style();
+        $is_preview = $this->is_preview();
         if(
             geodir_is_post_type_archive()
            ||  geodir_is_taxonomy()
            ||  geodir_is_page('search')
            || (is_author() && !empty($wp_query->query['gd_favs'])
            || apply_filters('geodir_loop_active',false))
+           ||  $is_preview
         ){
             $widget_args = wp_parse_args( $args, array(
-                'layout' => ''
+                'layout' => '',
+                // AUI settings
+                'column_gap'  => '',
+                'row_gap'  => '',
+                'card_border'  => '',
+                'card_shadow'  => '',
             ) );
 
+            // card border class
+            $card_border_class = '';
+            if(!empty($widget_args['card_border'])){
+                if($widget_args['card_border']=='none'){
+                    $card_border_class = 'border-0';
+                }else{
+                    $card_border_class = 'border-'.sanitize_html_class($widget_args['card_border']);
+                }
+            }
+
+            // card shadow
+            $card_shadow_class = '';
+            if(!empty($widget_args['card_shadow'])){
+                if($widget_args['card_shadow']=='small'){
+                    $card_shadow_class = 'shadow-sm';
+                }elseif($widget_args['card_shadow']=='medium'){
+                    $card_shadow_class = 'shadow';
+                }elseif($widget_args['card_shadow']=='large'){
+                    $card_shadow_class = 'shadow-lg';
+                }
+            }
+
 			$gd_layout_class = geodir_convert_listing_view_class( $widget_args['layout'] );
+
+            // for preview just get the main posts
+            if( $is_preview ){
+                $wp_query = new WP_Query( array('post_type' => 'gd_place','posts_per_page' => 6 ) );
+
+                // preview message
+                if($is_preview && $design_style){
+                    echo aui()->alert(array(
+                            'type'=> 'info',
+                            'content'=> __("This preview shows all content items to give an idea of layout. Dummy data is used in places.","geodirectory")
+                        )
+                    );
+                }
+            }
 
             // check if we have listings or if we are faking it
             if($wp_query->post_count == 1 && empty($wp_query->posts)){
@@ -90,16 +209,21 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 }
 
                 $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
-                $template = $design_style ? $design_style."/" : "";
+                $template = $design_style ? $design_style."/content-archive-listing.php" : "content-archive-listing.php";
 
-                geodir_get_template_part($template.'content', 'archive-listing');
+                echo geodir_get_template_html( $template, array(
+                    'column_gap_class'   => $widget_args['column_gap'] ? 'mb-'.absint($widget_args['column_gap']) : 'mb-4',
+                    'row_gap_class'   => $widget_args['row_gap'] ? 'px-'.absint($widget_args['row_gap']) : '',
+                    'card_border_class'   => $card_border_class,
+                    'card_shadow_class'  =>  $card_shadow_class,
+                ) );
 
                 // set loop as done @todo this needs testing
                 global $wp_query;
                 $wp_query->current_post = $wp_query->post_count;
             }
         }else{
-            _e("No listings found that match your selection.","geodirectory");
+            geodir_no_listings_found();
         }
 
         // add filter to make main page comments closed after the GD loop

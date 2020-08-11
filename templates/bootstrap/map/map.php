@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 ?>
 <!--START geodir-map-wrap-->
-<div class="geodir-map-wrap geodir-<?php echo $map_type; ?>-map-wrap">
+<div class="geodir-map-wrap geodir-<?php echo $map_type; ?>-map-wrap mb-3">
 	<div id="catcher_<?php echo $map_canvas; ?>"></div>
 	<!--START stick_trigger_container-->
 	<div class="stick_trigger_container bsui">

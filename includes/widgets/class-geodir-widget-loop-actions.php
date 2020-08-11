@@ -48,7 +48,7 @@ class GeoDir_Widget_Loop_Actions extends WP_Super_Duper {
     public function output($args = array(), $widget_args = array(),$content = ''){
 
         ob_start();
-        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search')){
+        if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || $this->is_preview() ){
             geodir_loop_actions();
         }
         return ob_get_clean();

@@ -23,7 +23,10 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             'block-icon'    => 'admin-site',
             'block-category'=> 'widgets',
             'block-keywords'=> "['tabs','details','geodir']",
-            'block-output'   => array( // the block visual output elements as an array
+            'block-supports'=> array(
+                'customClassName'   => false
+            ),
+            'block-outputx'   => array( // the block visual output elements as an array
                 array(
                     'element' => 'div',
                     'title'   => __( 'Placeholder tabs', 'geodirectory' ),
@@ -46,16 +49,16 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             ),
             'arguments'     => array(
                 'show_as_list'  => array(
-                    'title' => __('Show as list:', 'geodirectory'),
+                    'title' => __('Show as list', 'geodirectory'),
                     'desc' => __('This will show the tabs as a list and not as tabs.', 'geodirectory'),
                     'type' => 'checkbox',
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => '',
-                    'advanced' => true
+                    'advanced' => false
                 ),
                 'output'  => array(
-                    'title' => __('Output Type:', 'geodirectory'),
+                    'title' => __('Output Type', 'geodirectory'),
                     'desc' => __('What parts should be output.', 'geodirectory'),
                     'type' => 'select',
                     'options'   =>  array(
@@ -85,7 +88,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 'default'  => '',
                 'desc_tip' => true,
                 'advanced' => false,
-                'group'     => __("Design","geodirectory")
+//                'group'     => __("Design","geodirectory")
             );
 
             $options['arguments']['disable_greedy'] = array(
@@ -96,7 +99,7 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 'value'  => '1',
                 'default'  => '',
                 'advanced' => false,
-                'group'     => __("Design","geodirectory")
+//                'group'     => __("Design","geodirectory")
             );
         }
 
@@ -135,11 +138,13 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         // Check if we have been here before
         $tabs_array = ! empty( $gd_single_tabs_array ) ? $gd_single_tabs_array : array();
 
-        $post_type = $post->post_type;
+        $post_type = isset($gd_post->post_type) ? $gd_post->post_type : 'gd_place';
 
         if ( empty( $tabs_array ) ) {
             // Get the tabs head
             $tabs = self::get_tab_settings( $post_type );
+
+//            print_r($tabs);
 
             // Get the tab contents first so we can decide to output the tab head
             $tabs_content = array();
@@ -333,6 +338,14 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
      * @return array|object $tabs.
      */
     public function get_tab_settings($post_type){
+
+        // check if block preview
+        $block_preview = $this->is_block_content_call();
+
+        if($block_preview){
+            return $this->block_preview_dummy_tabs();
+        }
+
         global $wpdb,$geodir_tab_layout_settings;
 
         if($geodir_tab_layout_settings){
@@ -348,6 +361,43 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
          * @param string $post_type The post type.
          */
         return apply_filters('geodir_tab_settings',$tabs,$post_type);
+    }
+
+    public function block_preview_dummy_tabs(){
+        $tabs = array();
+        $text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ";
+        $dummy_tabs = array(
+            'fas fa-home',
+            'fas fa-image',
+            'fas fa-globe-americas',
+            'fas fa-comments',
+            'fas fa-bed',
+            'fas fa-calendar-alt',
+            'fas fa-bullhorn',
+            'fas fa-cloud',
+        );
+
+        $count = 1;
+        foreach($dummy_tabs as $dummy_tab){
+            // tab
+            $tab = new stdClass();
+            $tab->id = $count;
+            $tab->post_type = 'gd_place';
+            $tab->sort_order = $count;
+            $tab->tab_layout = 'post';
+            $tab->tab_parent = '';
+            $tab->tab_type = 'standard';
+            $tab->tab_level = 0;
+            $tab->tab_name = sprintf( __( 'Demo tab %d', 'geodirectory' ),$count);
+            $tab->tab_icon = $dummy_tab;
+            $tab->tab_key = 'dummy_'.$count;
+            $tab->tab_content = sprintf( __( 'Demo tab content %d.', 'geodirectory' ),$count)." ".str_repeat($text,5);
+            
+            $tabs[] = $tab;
+            $count++;
+        }
+
+        return $tabs;
     }
     
 }

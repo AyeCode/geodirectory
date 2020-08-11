@@ -31,6 +31,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
             'base_id'       => 'gd_categories', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Categories','geodirectory'), // the name of the widget.
             //'disable_widget'=> true,
+//	        'example'   => array(
+//		        'hide_count'    => true,
+//		        'hide_empty'    => true,
+//		        'design_type'   => 'icon_top'
+//	        ),
             'widget_ops'    => array(
                 'classname'   => 'geodir-categories-container bsui', // widget class
                 'description' => esc_html__('Shows a list of GeoDirectory categories.','geodirectory'), // widget description

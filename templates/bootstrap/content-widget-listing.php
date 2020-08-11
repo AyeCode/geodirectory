@@ -19,6 +19,11 @@
  * This is used anywhere you see a list of listings.
  *
  * @since 1.0.0
+ *
+ * @var int $row_gap_class The row gap class setting.
+ * @var int $column_gap_class The column gap class setting.
+ * @var int $card_border_class The card border class setting.
+ * @var int $card_shadow_class The card shadow class setting.
  */
 do_action( 'geodir_before_listing_listview' );
 
@@ -40,7 +45,12 @@ do_action( 'geodir_before_listing_listview' );
 			foreach ( $widget_listings as $widget_listing ) {
 				geodir_setup_postdata( $widget_listing );
 
-				geodir_get_template_part( 'bootstrap/content', 'listing' );
+				echo geodir_get_template_html( "bootstrap/content-listing.php", array(
+					'column_gap_class'   => $column_gap_class,
+					'row_gap_class'   => $row_gap_class,
+					'card_border_class'   => $card_border_class,
+					'card_shadow_class'   => $card_shadow_class,
+				) );
 
 			}
 

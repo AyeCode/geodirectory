@@ -1377,7 +1377,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			// if preview show a placeholder if empty
 			if ( $this->is_preview() && $output == '' ) {
-				$output = $this->preview_placeholder_text( "[{" . $this->base_id . "}]" );
+				$output = $this->preview_placeholder_text( "{{" . $this->base_id . "}}" );
 			}
 
 			return apply_filters( 'wp_super_duper_widget_output', $output, $args, $shortcode_args, $this );
@@ -1496,9 +1496,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public function register_block() {
 			wp_add_inline_script( 'wp-blocks', $this->block() );
 			if ( class_exists( 'SiteOrigin_Panels' ) ) {
-
 				wp_add_inline_script( 'wp-blocks', $this->siteorigin_js() );
-
 			}
 		}
 
@@ -1672,6 +1670,10 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						category: '<?php echo isset( $this->options['block-category'] ) ? esc_attr( $this->options['block-category'] ) : 'common';?>', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 						<?php if ( isset( $this->options['block-keywords'] ) ) {
 						echo "keywords : " . $this->options['block-keywords'] . ",";
+						
+						if(isset($this->options['example'])){
+							echo "example: ".json_encode($this->options['example']).",";
+						}
 					}?>
 
 						<?php
@@ -1763,9 +1765,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 							function onChangeContent() {
 
-								if (!is_fetching && prev_attributes[props.id] != props.attributes) {
+								$refresh = false;
 
-									//console.log(props);
+								// Set the old content the same as the new one so we only compare all other attributes
+								if(typeof(prev_attributes[props.id]) != 'undefined'){
+									prev_attributes[props.id].content = props.attributes.content;
+								}else if(props.attributes.content === ""){
+									// if first load and content empty then refresh
+									$refresh = true;
+								}
+
+								if ( ( !is_fetching &&  JSON.stringify(prev_attributes[props.id]) != JSON.stringify(props.attributes) ) || $refresh  ) {
 
 									is_fetching = true;
 									var data = {
@@ -1790,6 +1800,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										props.setAttributes({content: env});
 										is_fetching = false;
 										prev_attributes[props.id] = props.attributes;
+
+										// if AUI is active call the js init function
+										if (typeof aui_init === "function") {
+											aui_init();
+										}
 									});
 
 
@@ -2008,8 +2023,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			$onchange  = "props.setAttributes({ $key: $key } )";
+			$onchangecomplete  = "";
 			$value     = "props.attributes.$key";
-			$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'color' );
+			$text_type = array( 'text', 'password', 'number', 'email', 'tel', 'url', 'colorx' );
 			if ( in_array( $args['type'], $text_type ) ) {
 				$type = 'TextControl';
 				// Save numbers as numbers and not strings
@@ -2017,9 +2033,20 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$onchange = "props.setAttributes({ $key: Number($key) } )";
 				}
 			}
-			//									elseif ( $args['type'] == 'color' ) { //@todo ColorPicker labels are not shown yet, we use html5 color input for now https://github.com/WordPress/gutenberg/issues/14378
-			//										$type = 'ColorPicker';
-			//									}
+			elseif ( $args['type'] == 'color' ) {
+				$type = 'ColorPicker';
+				$onchange = "";
+				$extra = "color: $value,";
+				if(!empty($args['disable_alpha'])){
+					$extra .= "disableAlpha: true,";
+				}
+				$onchangecomplete = "onChangeComplete: function($key) {
+				value =  $key.rgb.a && $key.rgb.a < 1 ? \"rgba(\"+$key.rgb.r+\",\"+$key.rgb.g+\",\"+$key.rgb.b+\",\"+$key.rgb.a+\")\" : $key.hex;
+                        props.setAttributes({
+                            $key: value
+                        });
+                    },";
+			}
 			elseif ( $args['type'] == 'checkbox' ) {
 				$type = 'CheckboxControl';
 				$extra .= "checked: props.attributes.$key,";
@@ -2054,6 +2081,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			if ( ! empty( $args['element_require'] ) ) {
 				echo $this->block_props_replace( $args['element_require'], true ) . " && ";
 			}
+
+			// color input does not show the labels so we add them
+			if($args['type']=='color'){
+				echo "el('div', {style: {'marginBottom': '8px'}}, '".addslashes( $args['title'] )."'),";
+			}
 			?>
 			el( wp.components.<?php echo $type; ?>, {
 			label: '<?php echo addslashes( $args['title'] ); ?>',
@@ -2070,11 +2102,18 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			<?php echo $options; ?>
 			<?php echo $extra; ?>
 			<?php echo $custom_attributes; ?>
+			<?php echo $onchangecomplete;?>
 			onChange: function ( <?php echo $key; ?> ) {
 			<?php echo $onchange; ?>
 			}
 			} ),
 			<?php
+			// color input does not show the labels so we add them
+			if($args['type']=='color'){
+				//echo "el('div', {style: {'marginBottom': '-8px','fontStyle': 'italic'}}, '".addslashes( $args['desc'] )."'),";
+			}
+
+
 		}
 
 		/**
@@ -2416,6 +2455,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			} elseif ( $this->is_fusion_preview() ) {
 				$preview = true;
 			} elseif ( $this->is_oxygen_preview() ) {
+				$preview = true;
+			} elseif( $this->is_block_content_call() ) {
 				$preview = true;
 			}
 

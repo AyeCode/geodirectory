@@ -232,6 +232,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		);
 		$arguments['txt_color']  = array(
 			'type' => 'color',
+//			'disable_alpha'=> true,
 			'title' => __('Badge text color:', 'geodirectory'),
 			'desc' => __('Color for the badge text.', 'geodirectory'),
 			'placeholder' => '',
@@ -257,6 +258,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			'desc_tip' => true,
 			'group'     => __("Design","geodirectory")
 		);
+
 		$arguments['alignment']  = array(
 			'type' => 'select',
 			'title' => __('Alignment:', 'geodirectory'),
@@ -268,8 +270,40 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				"right" => __('Right', 'geodirectory'),
 			),
 			'desc_tip' => true,
-			'group'     => __("Design","geodirectory")
+			'group'     => __("Positioning","geodirectory")
 		);
+
+		if($design_style) {
+			$arguments['position'] = array(
+				'type'     => 'select',
+				'title'    => __( 'Absolute Positioning', 'geodirectory' ),
+				'desc'     => __( 'Set an absolute position for floating badges over other content.', 'geodirectory' ),
+				'options'  => array(
+					""                      => __( 'None', 'geodirectory' ),
+					"ab-left"               => __( 'Left', 'geodirectory' ),
+					"ab-left-angle"         => __( 'Left angle', 'geodirectory' ),
+					"ab-top-left"           => __( 'Top left', 'geodirectory' ),
+					"ab-bottom-left"        => __( 'Bottom left', 'geodirectory' ),
+					"ab-top-left-angle"     => __( 'Top left angle', 'geodirectory' ),
+					"ab-bottom-left-angle"  => __( 'Bottom left angle', 'geodirectory' ),
+					"ab-right"              => __( 'Right', 'geodirectory' ),
+					"ab-right-angle"        => __( 'Right angle', 'geodirectory' ),
+					"ab-top-right"          => __( 'Top right', 'geodirectory' ),
+					"ab-bottom-right"       => __( 'Bottom right', 'geodirectory' ),
+					"ab-top-right-angle"    => __( 'Top right angle', 'geodirectory' ),
+					"ab-bottom-right-angle" => __( 'Bottom right angle', 'geodirectory' ),
+				),
+				'desc_tip' => true,
+				'group'    => __( "Positioning", "geodirectory" )
+			);
+
+			$arguments['mt']  = geodir_get_sd_margin_input('mt');
+			$arguments['mr']  = geodir_get_sd_margin_input('mr');
+			$arguments['mb']  = geodir_get_sd_margin_input('mb');
+			$arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+		}
+
 		$arguments['list_hide']  = array(
 			'title' => __('Hide item on view:', 'geodirectory'),
 			'desc' => __('You can set at what view the item will become hidden.', 'geodirectory'),
@@ -330,6 +364,11 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			'type' => '',
 			'shadow' => '',
 			'color' => '',
+			'position'  => '',
+			'mt'    => '',
+			'mb'    => '',
+			'mr'    => '',
+			'ml'    => '',
 		);
 
 		/**
@@ -345,6 +384,13 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			$post_id = $gd_post->ID;
 		} else {
 			$post_id = 0;
+		}
+
+		$is_preview = $this->is_preview();
+		if($is_preview){
+			$args['key'] = ''; // if preview blank the key so it will always show.
+			$args['preview'] = true; 
+			if(empty($args['badge'])){$args['badge'] = 'Badge';}
 		}
 
 		$design_style = geodir_design_style();
@@ -392,6 +438,17 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		if($args['list_hide_secondary']=='4'){$args['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
 		if($args['list_hide_secondary']=='5'){$args['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
+		// set positioning class
+		if(!empty($args['position'])){
+			$args['css_class'] .= sanitize_html_class( $args['position'] );
+		}
+
+		// margins
+		if ( !empty( $args['mt'] ) ) { $args['css_class'] .= " mt-".sanitize_html_class($args['mt'])." "; }
+		if ( !empty( $args['mr'] ) ) { $args['css_class'] .= " mr-".sanitize_html_class($args['mr'])." "; }
+		if ( !empty( $args['mb'] ) ) { $args['css_class'] .= " mb-".sanitize_html_class($args['mb'])." "; }
+		if ( !empty( $args['ml'] ) ) { $args['css_class'] .= " ml-".sanitize_html_class($args['ml'])." "; }
+
 		if(!empty($args['size'])){
 			switch ($args['size']) {
 				case 'small':
@@ -420,6 +477,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		}
 
 //		$output .= '@@@'.$post_id;
+//		print_r( $args );
 		$output .= geodir_get_post_badge( $post_id, $args );
 
 		return $output;
@@ -444,6 +502,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		}
 		$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
 		$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
+		$keys['default_category'] = 'default_category ( ' . __( 'Default Category', 'geodirectory' ) . ' )';
 
 		return apply_filters( 'geodir_badge_field_keys', $keys );
 	}

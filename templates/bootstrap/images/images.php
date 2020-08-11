@@ -79,7 +79,7 @@ global $gd_post;
 				}
 				elseif($type=='gallery'){
 					$limit_show_style = !empty($limit_show) && $image_count >= $limit_show ? "style='display:none;'" : '';
-					echo '<div class="col mb-4" '.$limit_show_style.'><div class="card">';
+					echo '<div class="col mb-4" '.$limit_show_style.'><div class="card m-0 p-0">';
 				}
 
 				$image_class = 'embed-responsive-item';
@@ -170,9 +170,9 @@ global $gd_post;
 
 				if($title || $caption){
 					?>
-					<div class="carousel-caption d-none d-md-block p-0 m-0 w-100 rounded-bottom <?php if($type=='gallery'){echo 'sr-only';}?>" style="bottom: 0;left:0;background: #00000060">
-						<h5 class="m-0 p-0 h4 font-weight-bold"><?php echo $title;?></h5>
-						<p class="m-0 p-0"><?php echo $caption;?></p>
+					<div class="carousel-caption d-none d-md-block p-0 m-0 py-1 w-100 rounded-bottom <?php if($type=='gallery'){echo 'sr-only';}?>" style="bottom: 0;left:0;background: #00000060">
+						<h5 class="m-0 p-0 h6 font-weight-bold text-white"><?php echo $title;?></h5>
+						<p class="m-0 p-0 h6 text-white"><?php echo $caption;?></p>
 					</div>
 					<?php
 				}
@@ -225,7 +225,7 @@ global $gd_post;
 					$limit_show_break = !empty($limit_show) && $image_count >= $limit_show ? true : false;
 					//if($limit_show_break){break;}
 					echo '<li data-target="#'.$slider_id.'" data-slide-to="'.$image_count.'" class="my-1 mx-1 bg-dark list-unstyled border-0 '.$active.'"" style="text-indent:0;height:60px;width:60px;min-width:60px;">';
-					$img_tag = geodir_get_image_tag($image,'thumbnail');
+					$img_tag = geodir_get_image_tag($image,'thumbnail','','embed-item-cover-xy');
 					$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
 					echo $img_tag;
 					echo '</li>';

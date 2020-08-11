@@ -31,12 +31,17 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'block-keywords' => "['geo','google','map']",
 			'block-output'   => array(
 				array(
-					'element' => 'img',
-					'title'   => __( 'Placeholder map', 'geodirectory' ),
-					'src'     => geodir_plugin_url() . "/assets/images/block-placeholder-map.png",
-					'alt'     => __( 'Placeholder', 'geodirectory' ),
-					'width'   => '[%width%]',
-					'height'  => '[%height%]'
+					'element' => 'div',
+					'style'   => '{overflow: "hidden",height: \'[%height%]\'}',
+					array(
+						'element' => 'img',
+						'title'   => __( 'Placeholder map', 'geodirectory' ),
+						'src'     => geodir_plugin_url() . "/assets/images/block-placeholder-map.png",
+						'alt'     => __( 'Placeholder', 'geodirectory' ),
+						'width'   => '[%width%]',
+						'height'  => '[%height%]',
+						'style'   => '{height: "inherit","object-fit": "cover"}',
+					)
 				)
 			),
 			'class_name'     => __CLASS__,
