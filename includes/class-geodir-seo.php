@@ -489,14 +489,12 @@ class GeoDir_SEO {
 			$string = str_replace( "%%excerpt%%",$post_content , $string );
 		}
 
-
-
 		if ( strpos( $string, '%%id%%' ) !== false ) {
 			$string = str_replace( "%%id%%", absint($post->ID), $string );
 		}
 
 		// archive
-		if ( strpos( $string, '%%category%%' ) !== false ) {
+		if ( strpos( $string, '%%category%%' ) !== false || strpos( $string, '%%in_category%%' ) !== false ) {
 			$cat_name = '';
 
 			if ( $gd_page == 'single' ) {
@@ -509,8 +507,14 @@ class GeoDir_SEO {
 				if ( isset( $queried_object->name ) ) {
 					$cat_name = $queried_object->name;
 				}
+			} else if ( $gd_page == 'search' ) {
+				$cat_name = self::get_searched_category_name( $post_type . 'category' );
 			}
+
+			$in_cat_name = $cat_name ? wp_sprintf( _x( 'in %s', 'in category', 'geodirectory' ), $cat_name ) : '';
+
 			$string = str_replace( "%%category%%", $cat_name, $string );
+			$string = str_replace( "%%in_category%%", $in_cat_name, $string );
 		}
 
 		if ( strpos( $string, '%%tag%%' ) !== false ) {
@@ -666,6 +670,7 @@ class GeoDir_SEO {
 			$vars['%%pt_single%%'] = __( 'Post type singular name.', 'geodirectory' );
 			$vars['%%pt_plural%%'] = __( 'Post type plural name.', 'geodirectory' );
 			$vars['%%category%%'] = __( 'The current category name.', 'geodirectory' );
+			$vars['%%in_category%%'] = __( 'The current category name prefixed with `in` eg: in Attractions', 'geodirectory' );
 			$vars['%%id%%'] = __( 'The current post id.', 'geodirectory' );
 		}
 
@@ -674,7 +679,7 @@ class GeoDir_SEO {
 			$vars['%%location%%'] = __( 'The full current location eg: United States, Pennsylvania, Philadelphia', 'geodirectory' );
 			$vars['%%location_single%%'] = __( 'The current viewing location type single name eg: Philadelphia', 'geodirectory' );
 			$vars['%%in_location%%'] = __( 'The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia', 'geodirectory' );
-			$vars['%%in_location_single%%'] = __( 'The current viewing location type single name prefixed with `in` eg: Philadelphia', 'geodirectory' );
+			$vars['%%in_location_single%%'] = __( 'The current viewing location type single name prefixed with `in` eg: in Philadelphia', 'geodirectory' );
 			$vars['%%location_country%%'] = __( 'The current viewing country eg: United States', 'geodirectory' );
 			$vars['%%in_location_country%%'] = __( 'The current viewing country prefixed with `in` eg: in United States', 'geodirectory' );
 			$vars['%%location_region%%'] = __( 'The current viewing region eg: Pennsylvania', 'geodirectory' );
@@ -1445,5 +1450,42 @@ class GeoDir_SEO {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Get searched category names.
+	 *
+	 * @since 2.0.0.100
+	 *
+	 * @param string $taxonomy Category taxonomy. Default empty.
+	 * @return string Category names.
+	 */
+	public static function get_searched_category_name( $taxonomy = '' ) {
+		$category_names = '';
+
+		if ( empty( $_REQUEST['spost_category'] ) ) {
+			return $category_names;
+		}
+
+		$post_category = is_array( $_REQUEST['spost_category'] ) ? array_map( 'absint', $_REQUEST['spost_category'] ) : array( absint( $_REQUEST['spost_category'] ) );
+		$_category_names = array();
+
+		if ( ! empty( $post_category ) ) {
+			$taxonomy = $taxonomy ? $taxonomy : geodir_get_current_posttype() . 'category';
+
+			foreach ( $post_category as $term_id ) {
+				$term = get_term( $term_id, $taxonomy );
+
+				if ( ! empty( $term ) && ! is_wp_error( $term ) ) {
+					$_category_names[] = $term->name;
+				}
+			}
+		}
+
+		if ( ! empty( $_category_names ) ) {
+			$category_names = implode( ', ', $_category_names );
+		}
+
+		return apply_filters( 'geodir_get_searched_category_name', $category_names, $_category_names, $taxonomy );
 	}
 }

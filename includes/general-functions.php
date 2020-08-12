@@ -1736,7 +1736,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 		$title = str_replace( "%%pt_plural%%", $plural_name, $title );
 	}
 
-	if ( strpos( $title, '%%category%%' ) !== false ) {
+	if ( strpos( $title, '%%category%%' ) !== false || strpos( $title, '%%in_category%%' ) !== false ) {
 		$cat_name = '';
 
 		if ( $gd_page == 'detail' ) {
@@ -1749,8 +1749,14 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 			if ( isset( $queried_object->name ) ) {
 				$cat_name = $queried_object->name;
 			}
+		} else if ( $gd_page == 'search' ) {
+			$cat_name = GeoDir_SEO::get_searched_category_name( $post_type . 'category' );
 		}
+
+		$in_cat_name = $cat_name ? wp_sprintf( _x( 'in %s', 'in category', 'geodirectory' ), $cat_name ) : '';
+
 		$title = str_replace( "%%category%%", $cat_name, $title );
+		$title = str_replace( "%%in_category%%", $in_cat_name, $title );
 	}
 
 	if ( strpos( $title, '%%tag%%' ) !== false ) {
