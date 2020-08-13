@@ -304,6 +304,33 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			    'advanced' => false,
 			    'group'     => __("Design","geodirectory")
 		    );
+
+
+		    // background
+		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+		    // margins
+		    $arguments['mt']  = geodir_get_sd_margin_input('mt');
+		    $arguments['mr']  = geodir_get_sd_margin_input('mr');
+		    $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+		    $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+		    // padding
+		    $arguments['pt']  = geodir_get_sd_padding_input('pt');
+		    $arguments['pr']  = geodir_get_sd_padding_input('pr');
+		    $arguments['pb']  = geodir_get_sd_padding_input('pb');
+		    $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+		    // border
+		    $arguments['border']  = geodir_get_sd_border_input('border');
+		    $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+		    $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+		    // shadow
+		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+
+		    $options['arguments'] = $options['arguments'] + $arguments;
 	    }
 
 
@@ -339,6 +366,19 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
             'icon_size' => 'box-small',
             'design_type' => 'icon-left',
 	        'card_padding_inside'   => '3',
+            'bg'    => '',
+            'mt'    => '',
+            'mb'    => '3',
+            'mr'    => '',
+            'ml'    => '',
+            'pt'    => '',
+            'pb'    => '',
+            'pr'    => '',
+            'pl'    => '',
+            'border'    => '',
+            'rounded'    => '',
+            'rounded_size'    => '',
+            'shadow'    => '',
         );
 
         /**
@@ -358,8 +398,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 		$ajax_class = ! empty( $options['cpt_ajax'] ) ? ' gd-wgt-cpt-ajax' : '';
 
+	    // wrapper class
+	    $wrap_class = geodir_build_aui_class($options);
+
 	    if($output){
-		    echo '<div class="gd-categories-widget ' . $ajax_class . '">';
+		    echo '<div class="gd-categories-widget ' . $ajax_class . ' ' . $wrap_class . '">';
 		    echo $output;
 		    echo '</div>';
 	    }

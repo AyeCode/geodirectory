@@ -57,7 +57,10 @@ global $gd_post;
 			$inner_wrapper_class = 'carousel-inner '.$limit_show_row;
 		}elseif($type=='gallery'){
 			$inner_wrapper_class = 'row row-cols-1 row-cols-md-3';
+		}elseif($type=='masonry'){
+			$inner_wrapper_class = 'card-columns';
 		}
+
 		?>
 
 
@@ -79,7 +82,10 @@ global $gd_post;
 				}
 				elseif($type=='gallery'){
 					$limit_show_style = !empty($limit_show) && $image_count >= $limit_show ? "style='display:none;'" : '';
-					echo '<div class="col mb-4" '.$limit_show_style.'><div class="card m-0 p-0">';
+					echo '<div class="col mb-4" '.$limit_show_style.'><div class="card m-0 p-0 overflow-hidden">';
+				}elseif($type=='masonry'){
+					$limit_show_style = !empty($limit_show) && $image_count >= $limit_show ? "style='display:none;'" : '';
+					echo '<div class="card m-0 mb-3 p-0 overflow-hidden">';
 				}
 
 				$image_class = 'embed-responsive-item';
@@ -89,6 +95,10 @@ global $gd_post;
 				elseif($cover =='y'){$image_class .= " embed-item-cover-y ";}
 				elseif($cover=='n'){$image_class .= " embed-item-contain ";}
 				else{$image_class .= " embed-item-cover-xy ";}
+
+				if($type=='masonry'){
+					$image_class = '';
+				}
 
 				$img_tag = geodir_get_image_tag($image,$image_size,'',$image_class );
 				$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';

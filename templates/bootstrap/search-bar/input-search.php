@@ -11,7 +11,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $default_search_for_text The placeholder text.
  */
 ?>
-<div class='gd-search-field-search col-auto flex-fill'>
+<div class='gd-search-field-search col-auto flex-fill' style="flex-grow: 9999 !important;">
 	<?php
 
 	do_action('geodir_before_search_for_input');
@@ -24,6 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	echo aui()->input(
 		array(
 			'value' =>  $search_term,
+			'name'  => 's',
 			'placeholder'  => esc_html__($default_search_for_text,'geodirectory'),
 			'class' => 'search_text gd_search_text pl-4 w-100',
 			'label'   => esc_html__($default_search_for_text,'geodirectory'),

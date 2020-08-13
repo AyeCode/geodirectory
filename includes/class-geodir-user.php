@@ -286,6 +286,7 @@ class GeoDir_User {
 						echo  aui()->select( array(
 							'id'               => "geodir_my_favourites",
 							'name'             => "geodir_my_favourites",
+							'class'             => 'mw-100',
 							'placeholder'      => esc_attr__( 'My Favorites', 'geodirectory' ),
 							'value'            => '',
 							'options'          => $options,
@@ -395,6 +396,7 @@ class GeoDir_User {
 					echo  aui()->select( array(
 						'id'               => "geodir_my_listings",
 						'name'             => "geodir_my_listings",
+						'class'             => 'mw-100',
 						'placeholder'      => esc_attr__( 'My Listings', 'geodirectory' ),
 						'value'            => '',
 						'options'          => $options,
@@ -487,6 +489,7 @@ class GeoDir_User {
 				echo  aui()->select( array(
 					'id'               => "geodir_add_listing",
 					'name'               => "geodir_add_listing",
+					'class'             => 'mw-100',
 					'placeholder'      => esc_attr__( 'Add Listing', 'geodirectory' ),
 					'value'            => '',
 					'options'          => $options,

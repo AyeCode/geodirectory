@@ -267,7 +267,10 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			$package_id = geodir_get_post_package_id( $post, $post_type );
 
 			wp_nonce_field( plugin_basename( __FILE__ ), 'geodir_post_info_noncename' );
-			echo '<div id="geodir_wrapper">';
+
+			$wrapper_class = geodir_design_style() ? 'bsui' : '';
+
+			echo '<div id="geodir_wrapper" class="'.$wrapper_class.'">';
 			/**
 			 * Called before the GD custom fields are output in the wp-admin area.
 			 *

@@ -46,6 +46,36 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
             )
         );
 
+        $design_style = geodir_design_style();
+
+        if($design_style) {
+
+            // background
+            $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+            // margins
+            $arguments['mt']  = geodir_get_sd_margin_input('mt');
+            $arguments['mr']  = geodir_get_sd_margin_input('mr');
+            $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+            $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+            // padding
+            $arguments['pt']  = geodir_get_sd_padding_input('pt');
+            $arguments['pr']  = geodir_get_sd_padding_input('pr');
+            $arguments['pb']  = geodir_get_sd_padding_input('pb');
+            $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+            // border
+            $arguments['border']  = geodir_get_sd_border_input('border');
+            $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+            $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+            // shadow
+            $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+            $options['arguments'] = $options['arguments'] + $arguments;
+
+        }
 
         parent::__construct( $options );
     }
@@ -64,6 +94,19 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 
 		$defaults = array(
             'show_advanced' => '',
+            'bg'    => '',
+            'mt'    => '',
+            'mb'    => '3',
+            'mr'    => '',
+            'ml'    => '',
+            'pt'    => '',
+            'pb'    => '',
+            'pr'    => '',
+            'pl'    => '',
+            'border'    => '',
+            'rounded'    => '',
+            'rounded_size'    => '',
+            'shadow'    => '',
         );
         $args = wp_parse_args( $args, $defaults );
         if(!empty($args['show_advanced'])){

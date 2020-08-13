@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $default_near_text The placeholder text.
  */
 ?>
-<div class='gd-search-field-near $near_class col-auto flex-fill'>
+<div class='gd-search-field-near $near_class col-auto flex-fill' style="flex-grow: 9999 !important;">
 	<?php
 	do_action( 'geodir_before_search_near_input' );
 
@@ -22,6 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	echo aui()->input(
 		array(
 			'value'                   => $near,
+			'name'                    => 'snear',
 			'placeholder'             => esc_html__( $default_near_text, 'geodirectory' ),
 			'class'                   => 'snear pl-4 w-100',
 			'label'                   => esc_html__( $default_near_text, 'geodirectory' ),

@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.19";
+		public $version = "1.0.20";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -1670,10 +1670,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						category: '<?php echo isset( $this->options['block-category'] ) ? esc_attr( $this->options['block-category'] ) : 'common';?>', // Block category — Group blocks together based on common traits E.g. common, formatting, layout widgets, embed.
 						<?php if ( isset( $this->options['block-keywords'] ) ) {
 						echo "keywords : " . $this->options['block-keywords'] . ",";
-						
-						if(isset($this->options['example'])){
-							echo "example: ".json_encode($this->options['example']).",";
-						}
 					}?>
 
 						<?php
@@ -2022,6 +2018,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				return;
 			}
 
+			// require advanced
+			$require_advanced = ! empty( $args['advanced'] ) ? "props.attributes.show_advanced && " : "";
+
+			// element require
+			$element_require = ! empty( $args['element_require'] ) ? $this->block_props_replace( $args['element_require'], true ) . " && " : "";
+
+
 			$onchange  = "props.setAttributes({ $key: $key } )";
 			$onchangecomplete  = "";
 			$value     = "props.attributes.$key";
@@ -2073,19 +2076,21 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				return;// if we have not implemented the control then don't break the JS.
 			}
 
-			// add show only if advanced
-			if ( ! empty( $args['advanced'] ) ) {
-				echo "props.attributes.show_advanced && ";
-			}
-			// add setting require if defined
-			if ( ! empty( $args['element_require'] ) ) {
-				echo $this->block_props_replace( $args['element_require'], true ) . " && ";
-			}
+
 
 			// color input does not show the labels so we add them
 			if($args['type']=='color'){
+				// add show only if advanced
+				echo $require_advanced;
+				// add setting require if defined
+				echo $element_require;
 				echo "el('div', {style: {'marginBottom': '8px'}}, '".addslashes( $args['title'] )."'),";
 			}
+
+			// add show only if advanced
+			echo $require_advanced;
+			// add setting require if defined
+			echo $element_require;
 			?>
 			el( wp.components.<?php echo $type; ?>, {
 			label: '<?php echo addslashes( $args['title'] ); ?>',
@@ -2108,11 +2113,6 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 			} ),
 			<?php
-			// color input does not show the labels so we add them
-			if($args['type']=='color'){
-				//echo "el('div', {style: {'marginBottom': '-8px','fontStyle': 'italic'}}, '".addslashes( $args['desc'] )."'),";
-			}
-
 
 		}
 

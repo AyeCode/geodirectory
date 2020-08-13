@@ -871,7 +871,7 @@ function geodir_search_wait(on){
 function geodir_click_search($this) {
     //we delay this so other functions have a change to change setting before search
     setTimeout(function() {
-        jQuery($this).parent().find('.geodir_submit_search').click();
+        jQuery($this).closest('.geodir-search').find('.geodir_submit_search').click();
     }, 100);
 }
 

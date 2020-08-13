@@ -15,7 +15,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var int $comment_post_ID The comment post ID.
  */
 ?>
-<li class="clearfix list-unstyled card m-0 p-0 mb-3">
+<li class="clearfix list-unstyled card m-0 p-0 mb-3 mw-100">
 	<div class="card-header toast-header">
 		<span class="li<?php echo $comment_id;?> geodir_reviewer_image mr-2">
 		<?php echo get_avatar( $comment, $avatar_size, '', $comment_id . ' comment avatar rounded-circle' );?>

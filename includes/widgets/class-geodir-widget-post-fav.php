@@ -83,8 +83,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 			'default'     => '',
 			'desc_tip'    => true,
 			'advanced'    => true,
-			'group'     => __("Design","geodirectory")
-
+			'group'     => __("Design","geodirectory"),
 		);
 		$arguments['icon_color_on']       = array(
 			'type'        => 'color',
@@ -94,8 +93,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 			'default'     => '',
 			'desc_tip'    => true,
 			'advanced'    => true,
-			'group'     => __("Design","geodirectory")
-
+			'group'     => __("Design","geodirectory"),
 		);
 
 
@@ -163,7 +161,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 				'desc_tip' => true,
 				'default'  => '',
 				'group'     => __("Design","geodirectory"),
-				'element_require' => $design_style ?  '[%color%]==""' : '',
+				'element_require' => $design_style ?  '[%color%]=="" && [%show%]!="icon"' : '',
 			);
 			$arguments['size']  = array(
 				'type' => 'select',

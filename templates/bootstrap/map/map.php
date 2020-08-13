@@ -11,10 +11,11 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $map_canvas The map canvas string.
  * @var string $height The map height setting.
  * @var string $width The map width setting.
+ * @var string $wrap_class The wrapper classes setting.
  */
 ?>
 <!--START geodir-map-wrap-->
-<div class="geodir-map-wrap geodir-<?php echo $map_type; ?>-map-wrap mb-3">
+<div class="geodir-map-wrap geodir-<?php echo $map_type; ?>-map-wrap <?php echo $wrap_class;?>">
 	<div id="catcher_<?php echo $map_canvas; ?>"></div>
 	<!--START stick_trigger_container-->
 	<div class="stick_trigger_container bsui">

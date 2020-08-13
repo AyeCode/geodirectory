@@ -113,6 +113,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 						"image" => __('Single image', 'geodirectory'),
 						"slider" => __('Slider', 'geodirectory'),
 						"gallery" => __('Gallery', 'geodirectory'),
+						"masonry" => __('Masonry Gallery', 'geodirectory'),
 					),
 					'default'  => 'image',
 					'desc_tip' => true,
@@ -166,7 +167,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' => true,
 					'value'  => '1',
 					'default'  => 1,
-					'element_require' => '[%type%]=="slider"',
+					'element_require' => '[%type%]!="gallery"',
 					'advanced' => true,
 					'group'     => __("Design","geodirectory"),
 				),
@@ -177,7 +178,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'desc_tip' 	=> true,
 					'value'  	=> '0',
 					'default'   => 0,
-					'element_require' => '[%show_title%] && [%type%]=="slider"',
+					'element_require' => '[%type%]!="gallery"',
 					'advanced' 	=> true,
 					'group'     => __("Design","geodirectory"),
 				),
@@ -263,7 +264,30 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		$design_style = geodir_design_style();
 
 		if ( $design_style ) {
-			$options['arguments']['mb']  = geodir_get_sd_margin_input('mb');
+			// background
+			$arguments['bg']  = geodir_get_sd_background_input('mt');
+
+			// margins
+			$arguments['mt']  = geodir_get_sd_margin_input('mt');
+			$arguments['mr']  = geodir_get_sd_margin_input('mr');
+			$arguments['mb']  = geodir_get_sd_margin_input('mb' );
+			$arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+			// padding
+			$arguments['pt']  = geodir_get_sd_padding_input('pt');
+			$arguments['pr']  = geodir_get_sd_padding_input('pr');
+			$arguments['pb']  = geodir_get_sd_padding_input('pb');
+			$arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+			// border
+			$arguments['border']  = geodir_get_sd_border_input('border');
+			$arguments['rounded']  = geodir_get_sd_border_input('rounded');
+			$arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+			// shadow
+			$arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+			$options['arguments'] = $options['arguments'] + $arguments;
 		}
 
 		parent::__construct( $options );
@@ -327,7 +351,19 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'types'   => '', // types to show, post_images,comment_images,logo
 			'fallback_types'   => 'logo,cat_default,cpt_default,listing_default,website_screenshot', //logo,cat_default,cpt_default,listing_default
 			'css_class' => '',
-			'mb' => '',
+			'bg'    => '',
+			'mt'    => '',
+			'mb'    => '3',
+			'mr'    => '',
+			'ml'    => '',
+			'pt'    => '',
+			'pb'    => '',
+			'pr'    => '',
+			'pl'    => '',
+			'border'    => '',
+			'rounded'    => '',
+			'rounded_size'    => '',
+			'shadow'    => '',
 		);
 
 		/**
@@ -386,8 +422,9 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$main_wrapper_class .= " geodir-image-sizes-".$image_size;
 
 			// margin_bottom
-			if ( !empty( $options['mb'] ) ) {
-				$main_wrapper_class .= " mb-".absint($options['mb']);
+			if ( !empty( $options ) ) {
+				// wrap class
+				$main_wrapper_class .= " ".geodir_build_aui_class($options);
 			}
 
 			if($options['type']=='slider'){
@@ -400,7 +437,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				if($options['limit_show']){
 					$second_wrapper_class .= " geodir-carousel ";
 				}
-			}elseif($options['type']=='gallery'){
+			}elseif($options['type']=='gallery' || $options['type']=='masonry'){
 				if(!$image_size){$image_size = 'medium_large';}
 				$ul_class = "geodir-gallery";
 			}
@@ -410,7 +447,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$slider_id .= '_' . uniqid() . '_' . $post_id; // Generate unique slider id. //@todo this is not cache friendly
 
 			// responsive image class
-			$aspect = $options['aspect'];
+			$aspect = $options['type']=='masonry' ? 'none' : $options['aspect'];
 			$responsive_image_class = '';
 			if(geodir_design_style()){
 				$embed_action_class = $options['link_to'] ? 'embed-has-action ' : '';

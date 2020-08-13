@@ -380,6 +380,29 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			    'advanced' => false,
 			    'group'     => __("Card Design","geodirectory")
 		    );
+
+		    // background
+		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+		    // margins
+		    $arguments['mt']  = geodir_get_sd_margin_input('mt');
+		    $arguments['mr']  = geodir_get_sd_margin_input('mr');
+		    $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+		    $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+		    // padding
+		    $arguments['pt']  = geodir_get_sd_padding_input('pt');
+		    $arguments['pr']  = geodir_get_sd_padding_input('pr');
+		    $arguments['pb']  = geodir_get_sd_padding_input('pb');
+		    $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+		    // border
+		    $arguments['border']  = geodir_get_sd_border_input('border');
+		    $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+		    $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+		    // shadow
+		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
 	    }
 
 	    /*
@@ -471,6 +494,19 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	              'row_gap'  => '',
 	              'card_border'  => '',
 	              'card_shadow'  => '',
+	              'bg'    => '',
+	              'mt'    => '',
+	              'mb'    => '3',
+	              'mr'    => '',
+	              'ml'    => '',
+	              'pt'    => '',
+	              'pb'    => '',
+	              'pr'    => '',
+	              'pl'    => '',
+	              'border'    => '',
+	              'rounded'    => '',
+	              'rounded_size'    => '',
+	              'shadow'    => '',
             )
         );
 
@@ -981,6 +1017,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			    $elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-'.$columns.' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
 		    }
 	    }
+
+	    // wrap class
+	    $class .= " " .geodir_build_aui_class($instance);
 
 	    // preview message
 	    $is_preview = $this->is_preview();

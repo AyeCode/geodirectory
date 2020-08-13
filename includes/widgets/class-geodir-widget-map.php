@@ -32,6 +32,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'block-output'   => array(
 				array(
 					'element' => 'div',
+					'class' => 'bsui',
 					'style'   => '{overflow: "hidden",height: \'[%height%]\'}',
 					array(
 						'element' => 'img',
@@ -41,6 +42,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 						'width'   => '[%width%]',
 						'height'  => '[%height%]',
 						'style'   => '{height: "inherit","object-fit": "cover"}',
+						'class' => 'mb-[%mb%] mt-[%mt%] ml-[%ml%] mr-[%mr%] pb-[%pb%] pt-[%pt%] pl-[%pl%] pr-[%pr%] border border-[%border%] [%rounded%] [%shadow%] rounded-[%rounded_size%] bg-[%bg%]',
 					)
 				)
 			),
@@ -327,6 +329,35 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			);
 		}
 
+		$design_style = geodir_design_style();
+
+		if($design_style) {
+
+			// background
+			$arguments['bg']  = geodir_get_sd_background_input('mt');
+			
+			// margins
+			$arguments['mt']  = geodir_get_sd_margin_input('mt');
+			$arguments['mr']  = geodir_get_sd_margin_input('mr');
+			$arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+			$arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+			// padding
+			$arguments['pt']  = geodir_get_sd_padding_input('pt');
+			$arguments['pr']  = geodir_get_sd_padding_input('pr');
+			$arguments['pb']  = geodir_get_sd_padding_input('pb');
+			$arguments['pl']  = geodir_get_sd_padding_input('pl');
+			
+			// border
+			$arguments['border']  = geodir_get_sd_border_input('border');
+			$arguments['rounded']  = geodir_get_sd_border_input('rounded');
+			$arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+			
+			// shadow
+			$arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+			
+		}
+
 		return $arguments;
 	}
 
@@ -368,6 +399,19 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'lat'              => '',
 			'lon'              => '',
 			'dist'             => '',
+			'bg'    => '',
+			'mt'    => '',
+			'mb'    => '3',
+			'mr'    => '',
+			'ml'    => '',
+			'pt'    => '',
+			'pb'    => '',
+			'pr'    => '',
+			'pl'    => '',
+			'border'    => '',
+			'rounded'    => '',
+			'rounded_size'    => '',
+			'shadow'    => '',
 		);
 
 		$map_args = wp_parse_args( $args, $defaults );
@@ -850,7 +894,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		}
 		// map class
 		if ( ! empty( $params['map_class'] ) ) {
-			$params['map_class'] = sanitize_html_class( $params['map_class'] );
+			$params['map_class'] = esc_attr( $params['map_class'] );
 		}
 		$params['map_canvas'] = sanitize_key( str_replace( '-', '_', sanitize_title( $params['map_canvas'] ) ) );
 		// width
@@ -925,6 +969,9 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			}
 		}
 
+		// wrap class
+		$params['wrap_class'] = geodir_build_aui_class($params);
+		
 		ob_start();
 
 		self::display_map( $params );
@@ -966,7 +1013,8 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 				'position' => 'TOP_LEFT',
 				'style'    => 'ZOOM_PAN'
 			),
-			'map_ajax_url'             => geodir_rest_markers_url()
+			'map_ajax_url'             => geodir_rest_markers_url(),
+			'wrap_class'   => ''
 		);
 		$map_options = wp_parse_args( $params, $defaults );
 
@@ -978,6 +1026,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$map_canvas = $map_options['map_canvas'];
 		$width      = $map_options['width'];
 		$height     = $map_options['height'];
+		$wrap_class = !empty($map_options['wrap_class']) ? $map_options['wrap_class'] : '';
 		$map_class  = 'geodir_map_container gd-map-' . $map_type . 'container';
 
 		$gd_maps_canvas[ $map_options['map_canvas'] ] = $map_options;
@@ -997,6 +1046,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'map_canvas'  => $map_canvas,
 			'height'  => $height,
 			'width'  => $width,
+			'wrap_class'    => $wrap_class,
 
 		);
 		echo geodir_get_template_html( $template, $args );

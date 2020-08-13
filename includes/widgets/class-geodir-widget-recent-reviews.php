@@ -82,6 +82,37 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
             )
         );
 
+	    $design_style = geodir_design_style();
+
+	    if($design_style) {
+
+		    // background
+		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+		    // margins
+		    $arguments['mt']  = geodir_get_sd_margin_input('mt');
+		    $arguments['mr']  = geodir_get_sd_margin_input('mr');
+		    $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+		    $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+		    // padding
+		    $arguments['pt']  = geodir_get_sd_padding_input('pt');
+		    $arguments['pr']  = geodir_get_sd_padding_input('pr');
+		    $arguments['pb']  = geodir_get_sd_padding_input('pb');
+		    $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+		    // border
+		    $arguments['border']  = geodir_get_sd_border_input('border');
+		    $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+		    $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+		    // shadow
+		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+		    
+
+		    $options['arguments'] = $options['arguments'] + $arguments;
+	    }
+
 		parent::__construct( $options );
 	}
 
@@ -100,7 +131,20 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
             'count' => '5',
             'min_rating' => 0,
 			'add_location_filter' => '',
-			'use_viewing_post_type' => ''
+			'use_viewing_post_type' => '',
+            'bg'    => '',
+            'mt'    => '',
+            'mb'    => '3',
+            'mr'    => '',
+            'ml'    => '',
+            'pt'    => '',
+            'pb'    => '',
+            'pr'    => '',
+            'pl'    => '',
+            'border'    => '',
+            'rounded'    => '',
+            'rounded_size'    => '',
+            'shadow'    => '',
         );
         $instance = wp_parse_args( $args, $defaults );
 
@@ -163,12 +207,15 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 
         $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter,$instance['min_rating']);
 
+	    // wrap class
+	    $wrap_class = geodir_build_aui_class($instance);
+
 		$content = '';
         if ( !empty( $comments_li ) ) {
 			ob_start();
 			?>
-			<div class="geodir_recent_reviews_section">
-				<ul class="geodir_recent_reviews list-unstyled"><?php echo $comments_li; ?></ul>
+			<div class="geodir_recent_reviews_section <?php echo $wrap_class;?>">
+				<ul class="geodir_recent_reviews list-unstyled m-0 p-0"><?php echo $comments_li; ?></ul>
 			</div>
 			<?php
 			$content = ob_get_clean();

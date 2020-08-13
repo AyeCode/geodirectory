@@ -240,6 +240,12 @@ class GeoDir_AJAX {
 		$skin_column_gap = ! empty( $_REQUEST['skin_column_gap'] ) ? absint( $_REQUEST['skin_column_gap'] ) : '';
 		$skin_row_gap = ! empty( $_REQUEST['skin_row_gap'] ) ? absint( $_REQUEST['skin_row_gap'] ) : '';
 
+		// AUI
+		$column_gap = ! empty( $_REQUEST['column_gap'] ) ? absint( $_REQUEST['column_gap'] ) : '';
+		$row_gap = ! empty( $_REQUEST['row_gap'] ) ? absint( $_REQUEST['row_gap'] ) : '';
+		$card_border = ! empty( $_REQUEST['card_border'] ) ? sanitize_html_class( $_REQUEST['card_border'] ) : '';
+		$card_shadow = ! empty( $_REQUEST['card_shadow'] ) ? sanitize_html_class( $_REQUEST['card_shadow'] ) : '';
+
 
 		$listings_ids = array();
 
@@ -282,6 +288,28 @@ class GeoDir_AJAX {
 
 			$gd_layout_class = geodir_convert_listing_view_class( $layout );
 
+			// card border class
+			$card_border_class = '';
+			if(!empty($card_border)){
+				if($card_border=='none'){
+					$card_border_class = 'border-0';
+				}else{
+					$card_border_class = 'border-'.sanitize_html_class($card_border);
+				}
+			}
+
+			// card shadow
+			$card_shadow_class = '';
+			if(!empty($card_shadow)){
+				if($card_shadow=='small'){
+					$card_shadow_class = 'shadow-sm';
+				}elseif($card_shadow=='medium'){
+					$card_shadow_class = 'shadow';
+				}elseif($card_shadow=='large'){
+					$card_shadow_class = 'shadow-lg';
+				}
+			}
+
 			if($skin_active){
 				$column_gap = $skin_column_gap;
 				$row_gap = $skin_row_gap;
@@ -292,7 +320,11 @@ class GeoDir_AJAX {
 				$template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
 
 				echo geodir_get_template_html( $template, array(
-					'widget_listings' => $widget_listings
+					'widget_listings' => $widget_listings,
+					'column_gap_class'   => $column_gap ? 'mb-'.absint($column_gap) : 'mb-4',
+					'row_gap_class'   => $row_gap ? 'px-'.absint($row_gap) : '',
+					'card_border_class'   => $card_border_class,
+					'card_shadow_class'  =>  $card_shadow_class,
 				) );
 
 			}

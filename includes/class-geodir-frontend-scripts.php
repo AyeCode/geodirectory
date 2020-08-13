@@ -353,7 +353,7 @@ class GeoDir_Frontend_Scripts {
 	 */
 	private static function register_script( $handle, $path, $deps = array( 'jquery' ), $version = GEODIRECTORY_VERSION, $in_footer = true ) {
 		self::$scripts[] = $handle;
-		if ( $handle == 'select2' && wp_script_is( 'select2', 'registered' ) ) {
+		if ( $handle == 'select2' && wp_script_is( 'select2', 'registered' ) && !geodir_design_style() ) {
 			wp_deregister_script( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
 		}
 		wp_register_script( $handle, $path, $deps, $version, $in_footer );
@@ -639,7 +639,7 @@ class GeoDir_Frontend_Scripts {
 				self::enqueue_script( 'geodir-plupload' );
 				self::enqueue_script( 'geodir-add-listing' );
 //				self::enqueue_script( 'geodir-jquery-ui-timepicker' );
-				self::enqueue_script( 'geodir-select2' );
+				//self::enqueue_script( 'geodir-select2' );
 
 //				wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
 

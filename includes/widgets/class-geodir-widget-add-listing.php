@@ -125,6 +125,32 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
                 'advanced' => false,
                 'group'     => __("General","geodirectory")
             );
+
+            // background
+            $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+            // margins
+            $arguments['mt']  = geodir_get_sd_margin_input('mt');
+            $arguments['mr']  = geodir_get_sd_margin_input('mr');
+            $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+            $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+            // padding
+            $arguments['pt']  = geodir_get_sd_padding_input('pt');
+            $arguments['pr']  = geodir_get_sd_padding_input('pr');
+            $arguments['pb']  = geodir_get_sd_padding_input('pb');
+            $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+            // border
+            $arguments['border']  = geodir_get_sd_border_input('border');
+            $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+            $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+            // shadow
+            $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+
+            $args = $args + $arguments;
         }
 
 
@@ -164,7 +190,20 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             'show_login'    => true,
             'container'     => '',
             'mapzoom'       => '0',
-            'label_type'    => 'horizontal'
+            'label_type'    => 'horizontal',
+            'bg'    => '',
+            'mt'    => '',
+            'mb'    => '3',
+            'mr'    => '',
+            'ml'    => '',
+            'pt'    => '',
+            'pb'    => '',
+            'pr'    => '',
+            'pl'    => '',
+            'border'    => '',
+            'rounded'    => '',
+            'rounded_size'    => '',
+            'shadow'    => '',
         );
 
         $params = wp_parse_args( $args,$defaults);
@@ -211,7 +250,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
 
 
         if(self::is_preview()){
-            return $design_style ? $this->get_dummy_preview() : '';
+            return $design_style ? $this->get_dummy_preview($params) : '';
         }
 
         foreach ( $params as $key => $value ) {
@@ -219,6 +258,7 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         }
 
         $user_id = get_current_user_id();
+
 
         ob_start();
 
@@ -260,10 +300,21 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         return $options;
     }
 
-    public function get_dummy_preview(){
+    public function get_dummy_preview($params){
         global $geodir_label_type;
-        $output = '';
 
+        // wrap class
+        $wrap_class = geodir_build_aui_class($params);
+
+
+        $output = '<div class="'.$wrap_class.'">';
+
+        $output .= aui()->alert(array(
+                'type'=> 'info',
+                'content'=> __("This is a simple preview for the add listing form.","geodirectory")
+            )
+        );
+        
         $output .= aui()->input(
             array(
                 'name'              => 'demo-title',
@@ -289,11 +340,9 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             'wysiwyg'   => false,
             'help_text'        => esc_html__( "Enter a description for your listing.", 'geodirectory'),
         ));
-        $output .= aui()->alert(array(
-                'type'=> 'info',
-                'content'=> __("This is a simple preview for the add listing form.","geodirectory")
-            )
-        );
+
+
+        $output .= "</div>";
 
         return $output;
     }

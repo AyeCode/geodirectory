@@ -40,6 +40,16 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
+				'post_type' => array(
+					'title' => __('Post Type:', 'geodirectory'),
+					'desc' => __('Select the CPT or leave as auto to have it auto detect the CPT.', 'geodirectory'),
+					'type' => 'select',
+					'options'   =>  array(''=>__("Auto Detect","geodirectory")) + geodir_get_posttypes('options-plural'),
+					'default'  => '',
+					'desc_tip' => true,
+					'advanced' => false,
+//					'group'     => __("Filters","geodirectory")
+				),
 				'key' => array(
 					'type' => 'select',
 					'title' => __( 'Key:', 'geodirectory' ),
@@ -75,7 +85,8 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 					'title' => __( 'No Wrap:', 'geodirectory' ),
 					'desc' => __( 'Remove wrapping div.', 'geodirectory' ),
 					'default' => '0',
-					'advanced' => true
+					'advanced' => false,
+					'group'     => __("Wrapper Styles","geodirectory")
 				),
 				'alignment' => array(
 					'type' => 'select',
@@ -116,6 +127,38 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 			)
 		);
 
+
+		$design_style = geodir_design_style();
+
+		if($design_style) {
+
+			// background
+			$arguments['bg']  = geodir_get_sd_background_input('mt');
+
+			// margins
+			$arguments['mt']  = geodir_get_sd_margin_input('mt');
+			$arguments['mr']  = geodir_get_sd_margin_input('mr');
+			$arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+			$arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+			// padding
+			$arguments['pt']  = geodir_get_sd_padding_input('pt');
+			$arguments['pr']  = geodir_get_sd_padding_input('pr');
+			$arguments['pb']  = geodir_get_sd_padding_input('pb');
+			$arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+			// border
+			$arguments['border']  = geodir_get_sd_border_input('border');
+			$arguments['rounded']  = geodir_get_sd_border_input('rounded');
+			$arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+			// shadow
+			$arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+			$options['arguments'] = $options['arguments'] + $arguments;
+
+		}
+
 		parent::__construct( $options );
 	}
 
@@ -135,12 +178,26 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 		$instance = shortcode_atts( 
 			array(
 				'title' => '',
+				'post_type' => '',
 				'key' => 'name',
 				'image_size' => '',
 				'no_wrap' => '',
 				'alignment' => '',
 				'text_alignment' => '',
-				'css_class' => ''
+				'css_class' => '',
+				'bg'    => '',
+				'mt'    => '',
+				'mb'    => '3',
+				'mr'    => '',
+				'ml'    => '',
+				'pt'    => '',
+				'pb'    => '',
+				'pr'    => '',
+				'pl'    => '',
+				'border'    => '',
+				'rounded'    => '',
+				'rounded_size'    => '',
+				'shadow'    => '',
 			), 
 			$instance, 
 			'gd_cpt_meta' 
@@ -149,16 +206,18 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 			$instance['image_size'] = 'thumbnail';
 		}
 
+		$post_type = !empty($instance['post_type']) ? esc_attr($instance['post_type']) : geodir_get_current_posttype();
+
 		$output = '';
-		if ( $this->is_preview() ) {
+		if ( $this->is_preview() && !$post_type ) {
+			$post_type = 'gd_place';
+		}
+
+
+		if(!geodir_is_gd_post_type($post_type)){
 			return $output;
 		}
 
-		if ( ! geodir_is_page( 'post_type' ) ) {
-			return;
-		}
-
-		$post_type = geodir_get_current_posttype();
 		$post_type_obj = $post_type ? get_post_type_object( $post_type ) : array();
 		if ( empty( $post_type_obj ) ) {
 			return;
@@ -236,6 +295,10 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 		}
 
 		if ( empty( $instance['no_wrap'] ) ) {
+
+			// wrap class
+			$css_class .= " ".geodir_build_aui_class($instance);
+
 			$output = '<div class="' . $css_class . '">' . $value . '</div>';
 		} else {
 			$output = $value;

@@ -49,6 +49,37 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
             )
         );
 
+	    $design_style = geodir_design_style();
+
+	    if($design_style) {
+
+		    // background
+		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+		    // margins
+		    $arguments['mt']  = geodir_get_sd_margin_input('mt');
+		    $arguments['mr']  = geodir_get_sd_margin_input('mr');
+		    $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+		    $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+		    // padding
+		    $arguments['pt']  = geodir_get_sd_padding_input('pt');
+		    $arguments['pr']  = geodir_get_sd_padding_input('pr');
+		    $arguments['pb']  = geodir_get_sd_padding_input('pb');
+		    $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+		    // border
+		    $arguments['border']  = geodir_get_sd_border_input('border');
+		    $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+		    $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+		    // shadow
+		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+		    $options['arguments'] = $options['arguments'] + $arguments;
+
+	    }
+
 
         parent::__construct( $options );
     }
@@ -75,7 +106,11 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
 		    if($term_id){
 			    $design_style = geodir_design_style();
 			    if($design_style){
-				    echo "<div class='mb-3'><p>";
+
+				    // wrap class
+				    $wrap_class = geodir_build_aui_class($args);
+
+				    echo "<div class='$wrap_class'><p>";
 			    }
 			    echo geodir_get_cat_top_description( $term_id );
 			    if($design_style){
@@ -83,7 +118,9 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
 			    }
 		    }
 	    }elseif($is_preview){
-		    echo $this->get_dummy_description();
+		    // wrap class
+		    $wrap_class = geodir_build_aui_class($args);
+		    echo $this->get_dummy_description($wrap_class);
 	    }
 
         return ob_get_clean();
@@ -94,8 +131,8 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
 	 *
 	 * @return string
 	 */
-	public function get_dummy_description(){
-		return "<div class='mb-3'><p>".__("<b>This is a placeholder</b> for the category description. You set the description under each categories settings, when on the relevant category page the text will show here.","geodirectory") ."</p></div>";
+	public function get_dummy_description($wrap_class){
+		return "<div class='$wrap_class'><p class='p-0 m-0'>".__("<b>This is a placeholder</b> for the category description. You set the description under each categories settings, when on the relevant category page the text will show here.","geodirectory") ."</p></div>";
 	}
 
 

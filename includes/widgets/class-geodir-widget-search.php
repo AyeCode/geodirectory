@@ -34,19 +34,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
                 'description' => esc_html__('Shows the GeoDirectory search bar.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),
-
-            //@todo add options via advanced search
-//            'arguments'     => array(
-//                'post_type'  => array(
-//                    'title' => __('Default Post Type:', 'geodirectory'),
-//                    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
-//                    'type' => 'select',
-//                    'options'   =>  $this->post_type_options(),
-//                    'default'  => 'image',
-//                    'desc_tip' => true,
-//                    'advanced' => true
-//                )
-//            )
+            'arguments' => array() // keep this
         );
 
         $post_types =  $this->post_type_options();
@@ -72,6 +60,36 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
                     'advanced' => true
                 )
             );
+        }
+
+        $design_style = geodir_design_style();
+
+        if($design_style) {
+
+            // background
+            $arguments['bg']  = geodir_get_sd_background_input('mt');
+            // margins
+            $arguments['mt']  = geodir_get_sd_margin_input('mt');
+            $arguments['mr']  = geodir_get_sd_margin_input('mr');
+            $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+            $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+            // padding
+            $arguments['pt']  = geodir_get_sd_padding_input('pt');
+            $arguments['pr']  = geodir_get_sd_padding_input('pr');
+            $arguments['pb']  = geodir_get_sd_padding_input('pb');
+            $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+            // border
+            $arguments['border']  = geodir_get_sd_border_input('border');
+            $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+            $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+            // shadow
+            $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+
+            $options['arguments'] = $options['arguments'] + $arguments;
         }
 
 
@@ -119,7 +137,11 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
         $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
         $template = $design_style ? $design_style."/search-bar/form.php" : "listing-filter-form.php";
 
-        echo geodir_get_template_html( $template );
+        $args = array(
+            'wrap_class'    => geodir_build_aui_class($args)
+        );
+
+        echo geodir_get_template_html( $template , $args);
 
         // after outputing the search reset the CPT
         global $geodir_search_post_type;

@@ -319,9 +319,13 @@ if ( $wp_query->max_num_pages <= 1 && empty($args['preview']) ) {
 		$args['after_paging'] = $pagination_info;
 	}
 
+	// wrap class
+	$wrap_class = geodir_build_aui_class($args);
+
 	$template = $design_style ? $design_style."/loop/pagination.php" : "loop/pagination.php";
 	geodir_get_template( $template, array(
-		'args' => $args
+		'args' => $args,
+		'wrap_class'   => $wrap_class
 	) );
 
 	if (function_exists('geodir_location_geo_home_link')) {
@@ -333,11 +337,17 @@ if ( $wp_query->max_num_pages <= 1 && empty($args['preview']) ) {
 /**
  * Display loop actions such as sort order and listing view type.
  */
-function geodir_loop_actions() {
+function geodir_loop_actions($args = array()) {
 	do_action( 'geodir_before_loop_actions' );
 	$design_style = geodir_design_style();
 	$template = $design_style ? $design_style."/loop/actions.php" : "loop/actions.php";
-	geodir_get_template( $template );
+
+	// wrap class
+	$wrap_class = geodir_build_aui_class($args);
+
+	echo geodir_get_template_html( $template, array(
+		'wrap_class' => $wrap_class,
+	) );
 	do_action( 'geodir_after_loop_actions' );
 }
 

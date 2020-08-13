@@ -70,6 +70,37 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			)
 		);
 
+	    $design_style = geodir_design_style();
+
+	    if($design_style) {
+
+		    // background
+		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+		    // margins
+		    $arguments['mt']  = geodir_get_sd_margin_input('mt');
+		    $arguments['mr']  = geodir_get_sd_margin_input('mr');
+		    $arguments['mb']  = geodir_get_sd_margin_input('mb');
+		    $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+		    // padding
+		    $arguments['pt']  = geodir_get_sd_padding_input('pt');
+		    $arguments['pr']  = geodir_get_sd_padding_input('pr');
+		    $arguments['pb']  = geodir_get_sd_padding_input('pb');
+		    $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+		    // border
+		    $arguments['border']  = geodir_get_sd_border_input('border');
+		    $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+		    $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+		    // shadow
+		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+		    $options['arguments'] = $options['arguments'] + $arguments;
+
+	    }
+
 		parent::__construct( $options );
 	}
 	
@@ -94,6 +125,19 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			'hide_edit'      => 0,
 			'hide_delete'      => 0,
 			'author_page_only'      => 0,
+			'bg'    => '',
+			'mt'    => '',
+			'mb'    => '3',
+			'mr'    => '',
+			'ml'    => '',
+			'pt'    => '',
+			'pb'    => '',
+			'pr'    => '',
+			'pl'    => '',
+			'border'    => '',
+			'rounded'    => '',
+			'rounded_size'    => '',
+			'shadow'    => '',
 		);
 
 		/**
@@ -149,6 +193,9 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 				);
 			}
 
+			// wrap class
+			$wrap_class = geodir_build_aui_class($args);
+
 
 			/*
 			 * Filter the author actions.
@@ -159,12 +206,13 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			 */
 			$author_actions = apply_filters('geodir_author_actions',$author_actions,$post_id);
 
-			
+
 			$design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
 			$template = $design_style ? $design_style."/author-actions.php" : "author-actions.php";
 			
 			$output = geodir_get_template_html( $template, array(
-				'author_actions'    => $author_actions
+				'author_actions'    => $author_actions,
+				'wrap_class'   => $wrap_class
 			) );
 
 		}

@@ -128,7 +128,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 
 	    $geodir_post_detail_fields = geodir_show_listing_info($args['location']);
 
-	    if(! $geodir_post_detail_fields && $design_style  && $this->is_preview() && geodir_is_archive_item_template_page() ){
+	    if(! $geodir_post_detail_fields && $design_style  && $this->is_preview() ){
 		    $geodir_post_detail_fields = $this->get_dummy_data();
 	    }
 

@@ -24,10 +24,12 @@ if ( $new_style ) {
  *
  * @since 1.0.0
  * @param string $form_class The class for the search form, default: 'geodir-listing-search'.
+ * @param string $wrap_class The wrapper class for styles.
  */
 $form_class = apply_filters('geodir_search_form_class', $form_class);
 ?>
-<form class="w-100 d-block <?php echo $form_class; ?>" name="geodir-listing-search" action="<?php echo geodir_search_page_base_url(); ?>" method="get">
+<div class="geodir-search-form-wrapper <?php echo $wrap_class;?>">
+<form class="w-100 d-block <?php echo $form_class; ?>" name="geodir-listing-search" action="<?php echo geodir_search_page_base_url(); ?>" method="get" style="box-sizing: content-box;">
     <input type="hidden" name="geodir_search" value="1" />
 
         <?php
@@ -38,7 +40,7 @@ $form_class = apply_filters('geodir_search_form_class', $form_class);
          */
         do_action('geodir_before_search_form') ?>
 
-        <div class="geodir-searchX form-row align-items-center">
+        <div class="geodir-search form-row align-items-center">
 
                 <?php
 
@@ -90,3 +92,4 @@ $form_class = apply_filters('geodir_search_form_class', $form_class);
     <input name="sgeo_lon" class="sgeo_lon" type="hidden" value="<?php echo sanitize_text_field($slon);?>"/>
     <?php do_action('geodir_search_hidden_fields');?>
 </form>
+</div>

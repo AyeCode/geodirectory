@@ -43,7 +43,6 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				    'title' => __('Title:', 'geodirectory'),
 				    'desc' => __('The widget title.', 'geodirectory'),
 				    'type' => 'text',
-				    //'placeholder' => __( 'My Dashboard', 'geodirectory' ),
 				    'default'  => '',
 				    'desc_tip' => true,
 				    'advanced' => false
@@ -68,7 +67,18 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                     ),
 				    'default'  => 'bestof-tabs-on-top',
 				    'desc_tip' => true,
-				    'advanced' => true
+				    'advanced' => false,
+				    'group'     => __("Design","geodirectory")
+			    ),
+			    'layout'  => array(
+				    'title' => __('Layout', 'geodirectory'),
+				    'desc' => __('How the listings should laid out by default.', 'geodirectory'),
+				    'type' => 'select',
+				    'options'   =>  geodir_get_layout_options(),
+				    'default'  => '0',
+				    'desc_tip' => true,
+				    'advanced' => false,
+				    'group'     => __("Design","geodirectory")
 			    ),
 			    'post_limit'  => array(
 				    'title' => __('Posts to show:', 'geodirectory'),
@@ -76,7 +86,9 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				    'type' => 'number',
 				    'default'  => '5',
 				    'desc_tip' => true,
-				    'advanced' => true
+				    'advanced' => false,
+				    'group'     => __("Design","geodirectory")
+
 			    ),
 			    'cat_limit'  => array(
 				    'title' => __('Categories to show:', 'geodirectory'),
@@ -84,7 +96,8 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				    'type' => 'number',
 				    'default'  => '3',
 				    'desc_tip' => true,
-				    'advanced' => true
+				    'advanced' => false,
+				    'group'     => __("Design","geodirectory")
 			    ),
 			    'add_location_filter'  => array(
 				    'title' => __("Enable location filter?", 'geodirectory'),
@@ -102,12 +115,109 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				    'default'  => '1',
 				    'advanced' => true
 			    ),
-
-
-
-
 		    )
 	    );
+
+
+	    $design_style = geodir_design_style();
+
+	    if($design_style) {
+
+		    // background
+		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+		    // margins
+		    $arguments['mt']  = geodir_get_sd_margin_input('mt');
+		    $arguments['mr']  = geodir_get_sd_margin_input('mr');
+		    $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+		    $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+		    // padding
+		    $arguments['pt']  = geodir_get_sd_padding_input('pt');
+		    $arguments['pr']  = geodir_get_sd_padding_input('pr');
+		    $arguments['pb']  = geodir_get_sd_padding_input('pb');
+		    $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+		    // border
+		    $arguments['border']  = geodir_get_sd_border_input('border');
+		    $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+		    $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+		    // shadow
+		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+
+		    // card design
+		    $arguments['row_gap'] = array(
+			    'title' => __( "Card row gap", 'geodirectory' ),
+			    'desc' => __('This adjusts the spacing between the cards horizontally.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				    ''  =>  __("Default","geodirectory"),
+				    '1'  =>  '1',
+				    '2'  =>  '2',
+				    '3'  =>  '3',
+				    '4'  =>  '4',
+				    '5'  =>  '5',
+			    ),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    $arguments['column_gap'] = array(
+			    'title' => __( "Card column gap", 'geodirectory' ),
+			    'desc' => __('This adjusts the spacing between the cards vertically.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				    ''  =>  __("Default","geodirectory"),
+				    '1'  =>  '1',
+				    '2'  =>  '2',
+				    '3'  =>  '3',
+				    '4'  =>  '4',
+				    '5'  =>  '5',
+			    ),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    $arguments['card_border'] = array(
+			    'title' => __( "Card border", 'geodirectory' ),
+			    'desc' => __('Set the border style for the card.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				                  ''  =>  __("Default","geodirectory"),
+				                  'none'  =>  __("None","geodirectory"),
+			                  ) + geodir_aui_colors(),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    $arguments['card_shadow'] = array(
+			    'title' => __( "Card shadow", 'geodirectory' ),
+			    'desc' => __('Set the card shadow style.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				    ''  =>  __("None","geodirectory"),
+				    'small'  =>  __("Small","geodirectory"),
+				    'medium'  =>  __("Medium","geodirectory"),
+				    'large'  =>  __("Large","geodirectory"),
+			    ),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+
+		    // add the args
+		    $options['arguments'] = $options['arguments'] + $arguments;
+	    }
 
 
 	    parent::__construct( $options );
@@ -173,7 +283,11 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	    }elseif($tab_layout =='dropdown'){
 		    $tab_layout = "bestof-tabs-as-".$tab_layout;
 	    }
-        if(!defined( 'DOING_AJAX' ))  echo '<div class="geodir_bestof_widget bestof-widget-tab-layout ' . $tab_layout . '">';
+
+	    // wrap class
+	    $wrap_class = geodir_build_aui_class($instance);
+
+        if(!defined( 'DOING_AJAX' ) || isset($_REQUEST['shortcode']) )  echo '<div class="geodir_bestof_widget bestof-widget-tab-layout ' . $tab_layout . ' '.$wrap_class .'">';
 
         $loc_terms = geodir_get_current_location_terms();
         if (!empty($loc_terms)) {
@@ -324,7 +438,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 //	    print_r($instance);
 
         //term navigation - start
-	    if(!defined( 'DOING_AJAX' )) $nav_html .= '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
+	    if(!defined( 'DOING_AJAX' ) || isset($_REQUEST['shortcode']) ) $nav_html .= '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
 
 
 
@@ -334,13 +448,13 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
             if ($is_dropdown) {
 	            if($design_style){
-		            $nav_html .= '<select id="geodir_bestof_tab_dd" class="geodir-select form-control mb-3" name="geodir_bestof_tab_dd" data-placeholder="' . esc_attr(__('Select Category', 'geodirectory')) . '">';
+		            $nav_html .= '<select id="geodir_bestof_tab_dd" class="geodir-select form-control mb-3 mw-100" name="geodir_bestof_tab_dd" data-placeholder="' . esc_attr(__('Select Category', 'geodirectory')) . '">';
 	            }else{
 		            $nav_html .= '<select id="geodir_bestof_tab_dd" class="geodir-select" name="geodir_bestof_tab_dd" data-placeholder="' . esc_attr(__('Select Category', 'geodirectory')) . '">';
 	            }
             } else {
 	            $tabs_class = $tabs_left ? 'flex-column nav-pills' : 'nav-tabs';
-                $nav_html .= $design_style ? '<ul class="geodir-tab-head geodir-bestof-cat-list mb-3 nav '.$tabs_class.'">' :  '<ul class="geodir-tab-head geodir-bestof-cat-list">';
+                $nav_html .= $design_style ? '<ul class="geodir-tab-head geodir-bestof-cat-list m-0 mb-3 nav '.$tabs_class.'">' :  '<ul class="geodir-tab-head geodir-bestof-cat-list">';
             }
 
 
@@ -409,7 +523,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		    $nav_html .= '</div>';
 	    }
 
-	    if(!defined( 'DOING_AJAX' )) $nav_html .= '</div>';
+	    if(!defined( 'DOING_AJAX' ) || isset($_REQUEST['shortcode']) ) $nav_html .= '</div>';
         //term navigation - end
 
         //first term listings by default - start
@@ -424,7 +538,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             $query_args['tax_query'] = array($tax_query);
         }
 
-	    if(!defined( 'DOING_AJAX' )) {
+	    if(!defined( 'DOING_AJAX' ) || isset($_REQUEST['shortcode']) ) {
 		    ?>
             <input type="hidden" id="bestof_widget_post_type" name="bestof_widget_post_type"
                    value="<?php echo $post_type; ?>">
@@ -446,7 +560,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 		    <?php
 		    if ($terms) {
-			    if(!defined( 'DOING_AJAX' ))echo $nav_html;
+			    if(!defined( 'DOING_AJAX' ) || isset($_REQUEST['shortcode']) ) echo $nav_html;
 		    }
 		    ?>
 
@@ -488,7 +602,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			 * Filter widget listings query args.
 			 */
 			$query_args = apply_filters( 'geodir_widget_listings_query_args', $query_args, $instance );
-            self::bestof_places_by_term($query_args);
+            self::bestof_places_by_term($query_args,$instance);
             if ($excerpt_type == 'show-reviews') {
                 remove_filter('get_the_excerpt', array(__CLASS__,'best_of_show_review_in_excerpt'));
             }
@@ -513,10 +627,17 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 
 
-	    if(!defined( 'DOING_AJAX' )) {
+	    if(!defined( 'DOING_AJAX' ) || isset($_REQUEST['shortcode']) ) {
 		    echo "</div>";
+
+		    // loading class
+		    if ( $design_style ) {
+			    echo '<div class="text-center"><p id="geodir-bestof-loading" class="geodir-bestof-loading spinner-border" style="display: none;" role="status"><span class="sr-only">'.__("Loading...","geodirectory").'</span></p></div>';
+		    }else{
+			    echo '<p id="geodir-bestof-loading" class="geodir-bestof-loading"><i class="fas fa-cog fa-spin" aria-hidden="true"></i></p>';
+		    }
 		    ?>
-		    <p id="geodir-bestof-loading" class="geodir-bestof-loading"><i class="fas fa-cog fa-spin" aria-hidden="true"></i></p>
+
 
 		    </div>
 		    <?php //first term listings by default - end
@@ -560,7 +681,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	 *
 	 * @param array $query_args The query array.
 	 */
-	public static function bestof_places_by_term($query_args) {
+	public static function bestof_places_by_term($query_args,$instance = array()) {
 		/**
 		 * This action called before querying widget listings.
 		 *
@@ -584,17 +705,49 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			$character_count = $character_count == '' ? 50 : apply_filters('bestof_widget_character_count', $character_count);
 		}
 
+		// card border class
+		$card_border_class = '';
+		if(!empty($instance['card_border'])){
+			if($instance['card_border']=='none'){
+				$card_border_class = 'border-0';
+			}else{
+				$card_border_class = 'border-'.sanitize_html_class($instance['card_border']);
+			}
+		}
+
+		// card shadow
+		$card_shadow_class = '';
+		if(!empty($instance['card_shadow'])){
+			if($instance['card_shadow']=='small'){
+				$card_shadow_class = 'shadow-sm';
+			}elseif($instance['card_shadow']=='medium'){
+				$card_shadow_class = 'shadow';
+			}elseif($instance['card_shadow']=='large'){
+				$card_shadow_class = 'shadow-lg';
+			}
+		}
+
+
 		global $post, $geodir_is_widget_listing, $gd_layout_class;
 		$current_post = $post;
 
 		$geodir_is_widget_listing = true;
-		$gd_layout_class = '';
+		$layout = isset($instance['layout']) ? $instance['layout'] : '';
+		$gd_layout_class = geodir_convert_listing_view_class( $layout );
 
 		$design_style = geodir_design_style();
 		$template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
 
+//		echo geodir_get_template_html( $template, array(
+//			'widget_listings' => $widget_listings
+//		) );
+
 		echo geodir_get_template_html( $template, array(
-			'widget_listings' => $widget_listings
+			'widget_listings' => $widget_listings,
+			'column_gap_class'   => $instance['column_gap'] ? 'mb-'.absint($instance['column_gap']) : 'mb-4',
+			'row_gap_class'   => $instance['row_gap'] ? 'px-'.absint($instance['row_gap']) : '',
+			'card_border_class'   => $card_border_class,
+			'card_shadow_class'  =>  $card_shadow_class,
 		) );
 
 		//geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );

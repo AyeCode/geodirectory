@@ -84,7 +84,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 		<button id="gd-list-view-select-grid" type="button" class="btn btn-outline-primary rounded-right gd-list-view-select-grid" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<i class="fas fa-th"></i>
 		</button>
-		<div class="dropdown-menu mt-3 p-0" aria-labelledby="gd-list-view-select-grid">
+		<div class="dropdown-menu dropdown-caret-0 my-3 p-0" aria-labelledby="gd-list-view-select-grid">
 			<?php
 			$layouts = geodir_get_layout_options(true);
 			if(!empty($layouts )){

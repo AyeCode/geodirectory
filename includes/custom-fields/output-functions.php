@@ -2508,7 +2508,7 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                 $dropdown_item_inline_class =  $design_style ? ' d-inline-block ' : '';
                 $dropdown_item_mr_class =  $design_style ? ' mr-3 ' : '';
                 $dropdown_item_float_class =  $design_style ? ' float-right' : '';
-                $dropdown_menu_class =  $design_style ? ' dropdown-menu mt-3 ' : '';
+                $dropdown_menu_class =  $design_style ? ' dropdown-menu dropdown-caret-0 my-3 ' : '';
                 $cf['field_icon'] = $design_style ? $cf['field_icon'] : $cf['field_icon'];
 
                 $field_icon = geodir_field_icon_proccess($cf);

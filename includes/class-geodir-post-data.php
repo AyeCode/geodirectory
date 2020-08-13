@@ -876,10 +876,12 @@ class GeoDir_Post_Data {
 			$horizontal = $geodir_label_type == 'horizontal' ? true : false;
 		}
 
+		// wrap class
+		$wrap_class = geodir_build_aui_class($params);
 
 		do_action( 'geodir_before_add_listing_form', $listing_type, $post, $package );
 		?>
-		<form name="geodirectory-add-post" id="geodirectory-add-post"
+		<form name="geodirectory-add-post" id="geodirectory-add-post" class="<?php echo $wrap_class;?>"
 		      action="<?php echo get_page_link( $post->ID ); ?>" method="post"
 		      enctype="multipart/form-data">
 			<input type="hidden" name="action" value="geodir_save_post"/>

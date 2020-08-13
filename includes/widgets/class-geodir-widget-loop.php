@@ -113,6 +113,29 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 'advanced' => false,
                 'group'     => __("Card Design","geodirectory")
             );
+
+            // background
+            $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+            // margins
+            $arguments['mt']  = geodir_get_sd_margin_input('mt');
+            $arguments['mr']  = geodir_get_sd_margin_input('mr');
+            $arguments['mb']  = geodir_get_sd_margin_input('mb');
+            $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+            // padding
+            $arguments['pt']  = geodir_get_sd_padding_input('pt');
+            $arguments['pr']  = geodir_get_sd_padding_input('pr');
+            $arguments['pb']  = geodir_get_sd_padding_input('pb');
+            $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+            // border
+            $arguments['border']  = geodir_get_sd_border_input('border');
+            $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+            $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+            // shadow
+            $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
         }
 
 
@@ -211,12 +234,20 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
                 $template = $design_style ? $design_style."/content-archive-listing.php" : "content-archive-listing.php";
 
+                // wrap class
+                $wrap_class = geodir_build_aui_class( $widget_args );
+
+                if($wrap_class){echo "<div class='$wrap_class'>";}
+
                 echo geodir_get_template_html( $template, array(
                     'column_gap_class'   => $widget_args['column_gap'] ? 'mb-'.absint($widget_args['column_gap']) : 'mb-4',
                     'row_gap_class'   => $widget_args['row_gap'] ? 'px-'.absint($widget_args['row_gap']) : '',
                     'card_border_class'   => $card_border_class,
                     'card_shadow_class'  =>  $card_shadow_class,
                 ) );
+
+                if($wrap_class){echo "</div>";}
+
 
                 // set loop as done @todo this needs testing
                 global $wp_query;
