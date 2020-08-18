@@ -17,7 +17,7 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'menu',
-			'block-category'=> 'common',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['geo','description','content']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_content', // this us used as the widget id and the shortcode id.

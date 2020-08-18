@@ -24,7 +24,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['categories','geo','taxonomy']",
 
             'class_name'    => __CLASS__,
@@ -256,6 +256,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			    'default'  => '',
 			    'desc_tip' => true,
 			    'advanced' => false,
+			    'element_require' => '[%design_type%]!="image"',
 			    'group'     => __("Design","geodirectory")
 		    );
 		    $options['arguments']['card_color'] = array(
@@ -268,6 +269,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			    'default'  => '',
 			    'desc_tip' => true,
 			    'advanced' => false,
+			    'element_require' => '[%design_type%]!="image"',
 			    'group'     => __("Design","geodirectory")
 		    );
 
@@ -281,6 +283,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			    'default'  => '',
 			    'desc_tip' => true,
 			    'advanced' => false,
+			    'element_require' => '[%design_type%]!="image"',
 			    'group'     => __("Design","geodirectory")
 		    );
 
@@ -292,16 +295,17 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				    "" => __('Boxed Small', 'geodirectory'),
 				    "box-medium" => __('Boxed Medium', 'geodirectory'),
 				    "box-large" => __('Boxed Large', 'geodirectory'),
-				    "h1" => 'h1',
-				    "h2" => 'h2',
-				    "h3" => 'h3',
-				    "h4" => 'h4',
-				    "h5" => 'h5',
-				    "h6" => 'h6',
+				    "h1" => 'XXL',
+				    "h2" => 'XL',
+				    "h3" => 'L',
+				    "h4" => 'M',
+				    "h5" => 'S',
+				    "h6" => 'XS',
 			    ),
 			    'default'  => '',
 			    'desc_tip' => true,
 			    'advanced' => false,
+			    'element_require' => '[%design_type%]!="image"',
 			    'group'     => __("Design","geodirectory")
 		    );
 

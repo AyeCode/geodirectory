@@ -22,7 +22,7 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
             'block-wrap'    => '', // the element to wrap the block output in. , ie: div, span or empty for no wrap
-            'block-category'=> 'layout',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['archive','section','geodir']",
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_archive_item_section', // this us used as the widget id and the shortcode id.

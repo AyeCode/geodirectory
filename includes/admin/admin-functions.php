@@ -958,7 +958,6 @@ function geodir_get_sd_background_input($type = 'bg', $overwrite = array() ){
 function geodir_build_aui_class($args){
 	$design_style = geodir_design_style();
 	if( !$design_style ){ return ''; }
-	
 	$classes = array();
 	
 	// margins

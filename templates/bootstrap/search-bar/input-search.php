@@ -32,7 +32,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'extra_attributes' => array(
 				'onkeydown' =>  'if(event.keyCode == 13) geodir_click_search(this);',
 				'onClick'   =>  'this.select();',
-				'autocomplete'  =>  'off'
+				'autocomplete'  =>  'off',
+				'size'  => 16 // this is the HTML minz size and affects flex wrapping
 			),
 			'input_group_left' => '<div class="input-group-text px-2 bg-transparent border-0">'.$input_group_html.'</div>',
 			'input_group_left_inside' => true

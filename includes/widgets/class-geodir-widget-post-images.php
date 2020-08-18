@@ -17,7 +17,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'format-image',
-			'block-category'=> 'common',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['images','geo','geodir']",
 			'block-supports'=> array(
 				'customClassName'   => false
@@ -471,11 +471,11 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$link_tag_close = "";
 			if($options['link_to']=='post'){
 				$link = get_the_permalink($post_id);
-				$link_tag_open = "<a href='%s' class='$responsive_image_class'>";
+				$link_tag_open = "<a href='%s' class='$responsive_image_class d-block'>";
 				$link_tag_close = "<i class=\"fas fa-link\" aria-hidden=\"true\"></i></a>";
 			}elseif($options['link_to']=='lightbox'){
 				$link = '';
-				$link_tag_open = "<a href='%s' class='geodir-lightbox-image $responsive_image_class' data-lity>";
+				$link_tag_open = "<a href='%s' class='geodir-lightbox-image $responsive_image_class d-block' data-lity>";
 				$link_tag_close = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
 			}elseif($responsive_image_class){
 				$link_tag_open = '<span class="'.$responsive_image_class.'">';

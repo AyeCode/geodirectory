@@ -18,7 +18,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'location-alt',
-			'block-category'=> 'common',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['geo','geodirectory','geodir']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_meta', // this us used as the widget id and the shortcode id.

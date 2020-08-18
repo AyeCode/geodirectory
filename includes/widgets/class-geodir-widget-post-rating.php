@@ -26,7 +26,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['rating','geo','geodir']",
 
             'class_name'    => __CLASS__,

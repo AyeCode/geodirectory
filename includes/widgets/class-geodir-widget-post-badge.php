@@ -21,7 +21,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			'block-supports'=> array(
 				'customClassName'   => false
 			),
-			'block-category' => 'widgets',
+			'block-category' => 'geodirectory',
 			'block-keywords' => "['badge','geodir','geodirectory']",
 			'class_name'     => __CLASS__,
 			'base_id'        => 'gd_post_badge',												// this us used as the widget id and the shortcode id.

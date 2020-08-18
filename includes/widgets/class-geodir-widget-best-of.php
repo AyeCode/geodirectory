@@ -14,7 +14,8 @@
  * @todo needs some styling and a bit of code tidying
  */
 class GeoDir_Widget_Best_Of extends WP_Super_Duper {
-    
+
+	private $w_settings = array();
     /**
      * Register the best of widget with WordPress.
      *
@@ -26,7 +27,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	    $options = array(
 		    'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 		    'block-icon'    => 'admin-site',
-		    'block-category'=> 'widgets',
+		    'block-category'=> 'geodirectory',
 		    'block-keywords'=> "['best','top','geo']",
 
 		    'class_name'    => __CLASS__,
@@ -235,7 +236,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	public function output($args = array(), $widget_args = array(),$content = ''){
 
 		add_action('wp_footer', array($this, 'best_of_js'));
-
+		$this->w_settings = $args;
 		ob_start();
 
 		// defaults
@@ -488,7 +489,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 	                    if($design_style){
 		                    $active = $cat_count == 1 ? 'active' : '';
-		                    $nav_html .= '<a class="nav-link '.$active.'" data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '">';
+		                    $nav_html .= '<a class="nav-link '.$active.'" data-termid="' . $cat->term_id . '" href="' . esc_url($term_link) . '" data-toggle="pill">';
 		                    $nav_html .= "<span class='gd-cptcat-icon' style='color: $cat_color' >$term_icon</span> ";
 		                    $nav_html .=  esc_attr($cat->name);
 		                    $nav_html .= '</a>';
@@ -795,10 +796,14 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                     var term_id = 0;
                     if (e.type === "change") {
                         term_id = jQuery(this).val();
-                    } else if (e.type === "click") {
+                    } else if (e.type === "click" && jQuery(this).attr('data-termid')!='undefined') {
                         term_id = jQuery(this).attr('data-termid');
                     }
 
+	                if(!term_id ){
+		                return;
+	                }
+	                
                     var post_type = jQuery(widgetBox).find('#bestof_widget_post_type').val();
                     var excerpt_type = jQuery(widgetBox).find('#bestof_widget_excerpt_type').val();
                     var post_limit = jQuery(widgetBox).find('#bestof_widget_post_limit').val();
@@ -806,18 +811,29 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                     var char_count = jQuery(widgetBox).find('#bestof_widget_char_count').val();
                     var add_location_filter = jQuery(widgetBox).find('#bestof_widget_location_filter').val();
 
-                    var data = {
-                        'action': 'geodir_bestof',
-                        'security': geodir_params.basic_nonce,
-                        'post_type': post_type,
-                        'excerpt_type': excerpt_type,
-                        'post_limit': post_limit,
-                        'taxonomy': taxonomy,
-                        'geodir_ajax': true,
-                        'term_id': term_id,
-                        'char_count': char_count,
-                        'add_location_filter': add_location_filter
-                    };
+	                var data = <?php echo json_encode( $this->w_settings ); ?>;
+	                data['action'] = 'geodir_bestof';
+	                data['security'] = geodir_params.basic_nonce;
+	                data['post_type'] = post_type;
+	                data['excerpt_type'] = excerpt_type;
+	                data['taxonomy'] = taxonomy;
+	                data['term_id'] = term_id;
+//	                data['action'] = 'geodir_bestof';
+//	                data['action'] = 'geodir_bestof';
+//	                data['action'] = 'geodir_bestof';
+//	                data['action'] = 'geodir_bestof';
+//                    var data = {
+//                        'action': 'geodir_bestof',
+//                        'security': geodir_params.basic_nonce,
+//                        'post_type': post_type,
+//                        'excerpt_type': excerpt_type,
+//                        'post_limit': post_limit,
+//                        'taxonomy': taxonomy,
+//                        'geodir_ajax': true,
+//                        'term_id': term_id,
+//                        'char_count': char_count,
+//                        'add_location_filter': add_location_filter
+//                    };
 
                     container.hide();
                     loading.show();

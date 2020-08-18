@@ -22,7 +22,7 @@ class GeoDir_Widget_Single_Closed_Text extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['category','taxonomies','geodir']",
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_single_closed_text', // this us used as the widget id and the shortcode id.

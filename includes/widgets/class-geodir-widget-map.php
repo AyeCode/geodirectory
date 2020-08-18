@@ -27,7 +27,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$options = array(
 			'textdomain'     => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'     => 'location-alt',
-			'block-category' => 'common',
+			'block-category' => 'geodirectory',
 			'block-keywords' => "['geo','google','map']",
 			'block-output'   => array(
 				array(

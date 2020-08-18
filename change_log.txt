@@ -1,5 +1,6 @@
-= 2.1.0.0 =
+= 2.1.0.0-beta =
 * AyeCode UI starting to be added to GeoDirectory - STARTED
+* First AUI beta release - INFO
 
 = 2.0.0.95 =
 * Changes for Ninja Forms fix related to API requests - CHANGED

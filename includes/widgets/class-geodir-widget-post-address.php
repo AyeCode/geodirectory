@@ -17,7 +17,7 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'admin-home',
-			'block-category'=> 'common',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['geo','address','location']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_address', // this us used as the widget id and the shortcode id.

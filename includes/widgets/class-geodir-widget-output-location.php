@@ -23,7 +23,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['output','geo','geodir']",
 
             'class_name'    => __CLASS__,

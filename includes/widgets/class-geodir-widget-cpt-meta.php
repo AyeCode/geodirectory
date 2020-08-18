@@ -18,7 +18,7 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => 'geodirectory',
 			'block-icon'    => 'location-alt',
-			'block-category'=> 'widgets',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['cpt','meta','post type']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_cpt_meta',

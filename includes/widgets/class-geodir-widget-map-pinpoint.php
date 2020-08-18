@@ -27,7 +27,7 @@ class GeoDir_Widget_Map_Pinpoint extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'admin-site',
-			'block-category'=> 'widgets',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['post','map','pinpoint']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_map_pinpoint',

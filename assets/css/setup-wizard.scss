@@ -132,8 +132,9 @@ body{
         select,input{
           width: 100%;
           box-sizing: border-box;
-          padding: 8px 5px;
+          //padding: 8px 5px;
           border-radius: 3px;
+          max-width: 100%;
           border: 1px solid #aaa;
           margin-bottom: 10px;
           height: 38px;
@@ -236,6 +237,7 @@ body{
     margin-left: -6px;
     margin-bottom: -8px;
     background: #fff;
+    box-sizing: content-box;
   }
   li.active {
     border-color: $progress-color;

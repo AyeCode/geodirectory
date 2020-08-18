@@ -451,7 +451,7 @@ function geodir_notification( $user_notes ) {
 						'type'=> $type ? $type : 'info',
 						'content'=> $note,
 						'dismissible'=> !empty($user_note['dismissible']) && $user_note['dismissible']!==false ? true : false,
-						'class' => !empty($user_note['icon']) ? $user_note['icon'] : '' // escaped in AUI
+						'class' => !empty($user_note['icon']) ? $user_note['icon'].$extra_class : $extra_class // escaped in AUI
 					)
 				);
 			}else{
@@ -465,7 +465,7 @@ function geodir_notification( $user_notes ) {
 			if($design_style){
 				$notes .= aui()->alert(array(
 						'type'=> $key,
-						'content'=> $user_note
+						'content'=> $user_note,
 					)
 				);
 			}else{

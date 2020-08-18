@@ -18,7 +18,7 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => 'geodirectory',
 			'block-icon'    => 'location-alt',
-			'block-category'=> 'widgets',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['title','header','geodir']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_page_title',

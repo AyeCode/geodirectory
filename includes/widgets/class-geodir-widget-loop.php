@@ -20,7 +20,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['loop','archive','geodir']",
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_loop', // this us used as the widget id and the shortcode id.

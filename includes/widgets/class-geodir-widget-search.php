@@ -22,7 +22,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['search','geo','geodir']",
 
             'class_name'    => __CLASS__,
@@ -46,7 +46,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
                     'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
                     'type' => 'select',
                     'options'   =>  $this->post_type_options(),
-                    'default'  => 'image',
+                    'default'  => '',
                     'desc_tip' => true,
                     'advanced' => true
                 ),

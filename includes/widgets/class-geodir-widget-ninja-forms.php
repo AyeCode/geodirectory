@@ -27,7 +27,7 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['ninja','contact','geo']",
 
             'class_name'    => __CLASS__,

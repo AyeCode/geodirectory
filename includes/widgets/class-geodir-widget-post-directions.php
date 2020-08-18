@@ -18,7 +18,7 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'minus',
 			'block-wrap'    => '',
-			'block-category'=> 'common',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['directions','geo','geodir']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_directions', // this us used as the widget id and the shortcode id.

@@ -21,7 +21,7 @@ class GeoDir_Widget_Single_Next_Prev extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['next','prev','geodir']",
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_single_next_prev', // this us used as the widget id and the shortcode id.

@@ -28,7 +28,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'fas fa-th-list',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
 	        'block-supports'=> array(
 		        'customClassName'   => false
 	        ),
@@ -77,6 +77,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => 'gd_place',
                 'desc_tip' => true,
                 'advanced' => false,
+	            'onchange_rest' => array(
+		            'path'  => '/geodir/v2/"+$value+"/categories',
+		            'values'    => $this->get_rest_slugs_array()
+	            ),
                 'group'     => __("Filters","geodirectory")
             ),
             'category'  => array(
@@ -88,6 +92,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '',
                 'desc_tip' => true,
                 'advanced' => false,
+	            'post_type_linked'  => true,
                 'group'     => __("Filters","geodirectory")
             ),
             'related_to'  => array(
@@ -1331,5 +1336,25 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$pagination_args['format'] = '#%#%#';
 
 		return $pagination_args;
+	}
+
+	/**
+	 * Get the rest API slug values.
+	 *
+	 * @return array
+	 */
+	public function get_rest_slugs_array(){
+		$post_types = geodir_get_posttypes('array');
+
+//		print_r($post_types);exit;
+
+		$options = array();
+		if (!empty($post_types)) {
+			foreach ($post_types as $key => $info) {
+				$options[$key] = $info['rewrite']['slug'];
+			}
+		}
+
+		return $options;
 	}
 }

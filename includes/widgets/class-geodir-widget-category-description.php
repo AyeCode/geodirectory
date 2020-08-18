@@ -24,7 +24,7 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['categories','geo','taxonomy']",
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_category_description', // this us used as the widget id and the shortcode id.

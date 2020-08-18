@@ -25,7 +25,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['geo','reviews','comments']",
 
             'class_name'    => __CLASS__,

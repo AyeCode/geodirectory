@@ -16,7 +16,7 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'minus',
-			'block-category'=> 'common',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['title','geo','geodir']",
 //			'block-output'   => array( // the block visual output elements as an array
 //				array(
