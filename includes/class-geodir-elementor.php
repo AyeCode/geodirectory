@@ -837,19 +837,22 @@ class GeoDir_Elementor {
 
 		} elseif ( ! empty( $settings['image']['gd-url'] ) ) {
 			$image_size = ! empty( $settings['image_size'] ) ? esc_attr( $settings['image_size'] ) : '';
+
 			if ( $image_size ) {
+				$html          = str_replace( array( '&amp;w=', '&amp;h=', '&amp;vpw=', '&amp;vph=', '&amp;requeue=' ), array( '&w=', '&h=', '&vpw=', '&vph=', '&requeue=' ), $html );
 				$image_sizes   = \Elementor\Group_Control_Image_Size::get_all_image_sizes();
 				$image_src     = $settings['image']['url'];
-				$image_url_src = esc_url_raw( $settings['image']['gd-url'] );
+				$image_url_src = $settings['image']['gd-url'];
+
 				if ( $image_size == 'custom' && ! empty( $settings['image_custom_dimension']['width'] ) ) {
 					$width         = ! empty( $settings['image_custom_dimension']['width'] ) ? absint( $settings['image_custom_dimension']['width'] ) : 1024;
 					$height        = ! empty( $settings['image_custom_dimension']['height'] ) ? absint( $settings['image_custom_dimension']['height'] ) : $width;
-					$new_image_url = esc_url_raw( "https://wordpress.com/mshots/v1/$image_url_src?w=$width&amp;h=$height" );
+					$new_image_url = geodir_get_screenshot( $image_url_src, array( 'w' => $width, 'h' => $height, 'image' => true ) );
 					$html          = str_replace( $image_src, $new_image_url, $html );
 				} elseif ( isset( $image_sizes[ $image_size ] ) ) {
 					$width         = ! empty( $image_sizes[ $image_size ]['width'] ) ? absint( $image_sizes[ $image_size ]['width'] ) : 1024;
 					$height        = ! empty( $image_sizes[ $image_size ]['height'] ) ? absint( $image_sizes[ $image_size ]['height'] ) : $width;
-					$new_image_url = "https://wordpress.com/mshots/v1/$image_url_src?w=$width&amp;h=$height";
+					$new_image_url = geodir_get_screenshot( $image_url_src, array( 'w' => $width, 'h' => $height, 'image' => true ) );
 					$html          = str_replace( $image_src, $new_image_url, $html );
 				}
 			}

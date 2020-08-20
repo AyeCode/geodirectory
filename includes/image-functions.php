@@ -127,19 +127,72 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '' ) {
     return apply_filters( 'geodir_get_image_tag', $html, $id, $alt, $title, $align, $size );
 }
 
-function geodir_get_field_screenshot($field,$sizes = array('w'=>825,'h'=>430)){
-	global $gd_post;
-	$url = '';
-	$width = isset($sizes['w']) ? absint($sizes['w']) : 825;
-	$height = isset($sizes['h']) ? absint($sizes['h']) : 430;
+/**
+ * Retrieve mshots screenshot url for requested url.
+ *
+ * @since 2.0.0.100
+ *
+ * @param string $url The url to generate screenshot.
+ * @param array  $params Screenshot parameters.
+ * @return string Screenshot url.
+ */
+function geodir_get_screenshot( $url, $params = array() ) {
+	$screenshot_base_url = 'https://s.wordpress.com/mshots/v1/';
 
-	if(isset($gd_post->{$field}) && esc_url($gd_post->{$field})){
-		$url = "https://wordpress.com/mshots/v1/".esc_url($gd_post->{$field})."?w=$width&h=$height";
+	$params = wp_parse_args( $params, array(
+		'image' => false,     // Check image & assign auto vpw & vph when empty.
+		'w' => '',            // Screenshot width
+		'h' => '',            // Screenshot height
+		'vpw' => '',          // Viewport width
+		'vph' => '',          // Viewport height
+		'requeue' => false,   // 'true' to remove cached & regenerate screenshot.
+	) );
+
+	$params = apply_filters( 'geodir_get_screenshot_params', $params, $url, $params );
+
+	$args = array();
+	if ( ! empty( $params['w'] ) ) {
+		$args['w'] = $params['w'];
 	}
-	
-	return $url;
+	if ( ! empty( $params['h'] ) ) {
+		$args['h'] = $params['h'];
+	}
+	if ( ! empty( $params['image'] ) && ( empty( $params['vpw'] ) || empty( $params['vph'] ) ) ) {
+		// Find image dimension.
+		$dimension = geodir_get_image_dimension( $url );
+
+		if ( ! empty( $dimension ) && ! empty( $dimension['width'] ) && ! empty( $dimension['height'] ) ) {
+			$args['vpw'] = $dimension['width'];
+			$args['vph'] = $dimension['height'];
+		}
+	}
+	if ( ! empty( $params['vpw'] ) && ! empty( $params['vph'] ) ) {
+		$args['vpw'] = $params['vpw'];
+		$args['vph'] = $params['vph'];
+	}
+	if ( ! empty( $params['requeue'] ) ) {
+		$args['requeue'] = 'true';
+	}
+
+	$screenshot = $screenshot_base_url . urlencode( $url );
+	if ( ! empty( $args ) ) {
+		$screenshot = add_query_arg( $args, $screenshot );
+	}
+
+	return apply_filters( 'geodir_get_screenshot', $screenshot, $url, $params, $args );
 }
 
+function geodir_get_field_screenshot( $field, $sizes = array( 'w' => 825, 'h' => 430, 'image' => 1 ) ) {
+	global $gd_post;
+
+	if ( isset( $gd_post->{$field} ) && esc_url( $gd_post->{$field}) ) {
+		$url = geodir_get_screenshot( $gd_post->{$field}, $sizes );
+	} else {
+		$url = '';
+	}
+
+	return $url;
+}
 
 /**
  * Gets the post images.
@@ -445,4 +498,66 @@ function geodir_post_has_image_types( $types = array(), $post_id, $revision_id =
 	}
 
 	return apply_filters( 'geodir_post_has_image_types', $image_types, $types, $post_id, $revision_id  );
+}
+
+/**
+ * Retrieve image dimension.
+ *
+ * @since 2.0.0.100
+ *
+ * @global array $geodir_image_dimension Array of cached image dimension.
+ *
+ * @param string $image_url The image url.
+ * @param array  $default Default dimension. Default empty.
+ * @return array Image dimension array.
+ */
+function geodir_get_image_dimension( $image_url, $default = array() ) {
+	global $geodir_image_dimension;
+
+	if ( empty( $geodir_image_dimension ) ) {
+		$geodir_image_dimension = array();
+	}
+
+	if ( ! empty( $geodir_image_dimension[ $image_url ] ) ) {
+		return $geodir_image_dimension[ $image_url ];
+	}
+
+	if ( empty( $image_url ) ) {
+		$geodir_image_dimension[ $image_url ] = $default;
+
+		return $default;
+	}
+
+	$_image_url = $image_url;
+
+	if ( ! path_is_absolute( $image_url ) ) {
+		$uploads = wp_upload_dir(); // Array of key => value pairs
+
+		$image_url = str_replace( $uploads['baseurl'], $uploads['basedir'], $image_url );
+	}
+
+	if ( ! path_is_absolute( $image_url ) && strpos( $image_url, WP_CONTENT_URL ) !== false ) {
+		$image_url = str_replace( WP_CONTENT_URL, WP_CONTENT_DIR, $image_url );
+	}
+
+	if ( strpos( $image_url, 'http://' ) !== false || strpos( $image_url, 'https://' ) !== false ) {
+		$geodir_image_dimension[ $_image_url ] = $default;
+
+		return $default;
+	}
+
+	$dimension = array();
+	if ( is_file( $image_url ) && file_exists( $image_url ) ) {
+		$size = @getimagesize( trim( $image_url ) );
+
+		if ( ! empty( $size ) && ! empty( $size[0] ) && ! empty( $size[1] ) ) {
+			$dimension = array( 'width' => $size[0], 'height' => $size[1] );
+		}
+	}
+
+	$dimension = ! empty( $dimension ) ? $dimension : $default;
+
+	$geodir_image_dimension[ $_image_url ] = $dimension;
+
+	return $dimension;
 }
