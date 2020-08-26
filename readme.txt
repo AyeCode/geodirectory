@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, real estate, job board, classifieds, listings
 Requires at least: 4.5
 Tested up to: 5.5
-Stable tag: 2.0.0.99
+Stable tag: 2.0.0.100
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -196,6 +196,9 @@ We don't offer free trials, but we have a 30 day money back guarantee in case yo
 == Changelog ==
 
 __WARNING: GDv2 is a major update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always it is recommended to try this on a staging site first. [Learn more](https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/)__
+
+= 2.0.0.100 =
+[GeoDirectory changelog for version 2.0.0.100](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.100).
 
 = 2.0.0.99 =
 [GeoDirectory changelog for version 2.0.0.99](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.99).
