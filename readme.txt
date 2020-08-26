@@ -1,28 +1,27 @@
-=== GeoDirectory - Business Directory Plugin ===
-Contributors: stiofansisland, paoltaia, ayecode, Ismiaini
-Donate link: https://www.ko-fi.com/stiofan
-License: GPLv3
-License URI: http://www.gnu.org/licenses/gpl-3.0.html
-Tags:  directory plugin, business directory, listings, classifieds, real estate, address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, business-directory, businesses, church, directories, directory, directory widget, geodirectory, googlemap, googlemaps, google maps, list, lists, member directory, members directories, members directory, microformat, microformats, multisite, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin, city directory
+=== Business Directory Plugin | GeoDirectory ===
+Contributors: stiofansisland, paoltaia, ayecode
+Donate link: https://wpgeodirectory.com
+Tags: business directory, real estate, job board, classifieds, listings
 Requires at least: 4.5
-Requires PHP: 5.6
 Tested up to: 5.5
 Stable tag: 2.0.0.99
+Requires PHP: 5.6
+License: GPLv3
+License URI: http://www.gnu.org/licenses/gpl-3.0.html
 
-
-Create a location-based business directory with our plugin, 100% compatible with any theme and page builders. In a few clicks you could be the next Yelp or Tripadvisor.
+The most powerful Business Directory Plugin. Build any kind of directories: Business directory, real estate, jobs listings, classifieds and much more.
 
 == Description ==
 
 [Addons](https://wpgeodirectory.com/downloads/category/addons/) | [Themes](https://wpgeodirectory.com/downloads/category/themes/) | [Demos](https://wpgeo.directory/) | [Docs](https://wpgeodirectory.com/docs-v2/) | [Showcase](https://wpgeodirectory.com/category/showcase/)
 
-Turn any WordPress theme into a lightning-fast global business directory. Now 100% compatible with Gutenberg and also the most popular page builders such as Elementor, Beaver Builder, Divi, SiteOrigin Page Builder and more! Includes extensive new set of shortcodes, Gutenberg Blocks and Widgets. 
+Turn any WordPress theme into a lightning-fast global business directory. Now 100% compatible with Gutenberg and also with the most popular page builders such as Elementor, Beaver Builder, Divi, SiteOrigin Page Builder and more! Includes extensive new set of shortcodes, Gutenberg Blocks and Widgets. 
 
 [youtube https://www.youtube.com/watch?v=fEdOOucOtUg]
 
 = Scale easily - go global =
 
-Millions of listings? Massive traffic? GeoDirectory is the only WordPress directory plugin capable of scaling to this degree, thanks to its highly-optimized database structure and queries. No need to come second: if you need scale, GeoDirectory has your back.
+Millions of listings? Massive traffic? GeoDirectory is the only WordPress business directory plugin capable of scaling to this degree, thanks to its highly-optimized database structure and queries. No need to come second: if you need scale, GeoDirectory has your back.
 
 = Lightweight, efficient, flexible =
 
@@ -30,15 +29,15 @@ We developed GeoDirectory using WordPress standards and best practice to give yo
 
 = Universal =
 
-GeoDirectory was built to work with any theme and the most popular page builders. If you need extra help getting your theme to work smoothly with GeoDirectory, just hit us up for support in our forum - we'll be right on it.
+GeoDirectory was built to work with any theme and the most popular page builders. If you need extra help getting your theme to work smoothly with GeoDirectory, just hit us up for support on our website - we'll be right on it.
 
 = Developer-friendly =
 
-WordPress developers can extend GeoDirectory infinitely, using hooks (actions and filters). Easily build custom themes around GeoDirectory.
+WordPress developers can extend GeoDirectory infinitely, using hooks (actions and filters). Easily build custom WordPress Directory themes around GeoDirectory.
 
 = Team focus =
 
-We have been wholly focused on directory tools for WordPress since 2011. That's how we made GeoDirectory the most dynamic and scalable directory plugin on the WordPress market, with awesome dedicated support. Try us!
+We have been wholly focused on our business directory plugin for WordPress since 2011. That's how we made GeoDirectory the most dynamic and scalable directory plugin on the WordPress market, with awesome dedicated support. Try us!
 
 = Features =
 
@@ -93,14 +92,13 @@ Premium [Addons](https://wpgeodirectory.com/addons/ "Premium addons for GeoDirec
 * [Embeddable Ratings Badge]( https://wpgeodirectory.com/downloads/embeddable-ratings-badge/ "Embeddable Ratings Badge") - NEW: Let users embed their listing info with current ratings on their site, styled the way they want.
 * [Compare Listings]( https://wpgeodirectory.com/downloads/compare-listings/ "Compare Listings") - NEW: Let your users compare listings side by side and compare vital info about the listings.
 
-
 = Go Pro - Become a member! =
 
-Get your hands on all the premium add-ons and themes. Sign up at [wpgeodirectory.com](https://wpgeodirectory.com/downloads/membership/ "Get GeoDirectory membership.").
+Get your hands on all the premium directory add-ons and themes. Sign up at [wpgeodirectory.com](https://wpgeodirectory.com/downloads/membership/ "Get GeoDirectory membership.").
 
 = Support =
 
-Get timely and friendly support for both Core Plugin and add-ons at our official website, wpgeodirectory.com
+Get timely and friendly support for both the Core Business Directory Plugin and add-ons at our official website, wpgeodirectory.com
 
 == Installation ==
 
@@ -128,9 +126,62 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 GeoDirectory comes with some dummy data you can use to see how listings look. You can install dummy data from your GeoDirectory back end.
 
+= Event Calendar Plugin =
+
+GeoDirectory comes with dummy data for events listings. Building Events geo directories only requires to instal the Events add-on that soon will be released for free. GeoDirectory can easily makes you rank for keywords : "Events near me", for this reason alone, it is a very powerful WordPress event calendar plugin.
+
+= Real Estate Plugin =
+
+GeoDirectory comes with dummy data for real estate listings that makes it super easy and quick to build real estate portals. Soon we will release a free real estate theme, making of GeoDirectory one of the most powerful WordPress Real Estate plugins.
+
+= Job Board Plugin =
+
+GeoDirectory comes with dummy data for job listings too and soon we will release a free freelancers and job board theme. Building a Job board with GeoDirectory is super easy and GeoDirectory is definitely amongst the best WordPress Job Board plugins.
+
+= Classifieds Plugin =
+
+GeoDirectory comes with dummy data for classifieds listings too. You can quickly build amazing classifieds directories with GeoDirectory, one of the most powerful WordPress classifieds plugins.
+
 == Frequently Asked Questions ==
 
-[GeoDirectory FAQ](https://wpgeodirectory.com/faq/).
+= What kind of directory can be built with GeoDirectory =
+
+Any kind of Business Directory, such as:
+Stores directory
+People directory (Team, Member, Staff) 
+Hotels directory
+Healthcare directory
+Restaurants directory
+Bars Directory
+Pets Directory 
+Church directory
+Travel review directories
+Software review sites
+Professional directory
+Events Directory 
+A Yellow Pages directory
+
+But because GeoDirectory alloes to create any kind of listing's type, each with unique custom fields, you can use GeoDirectory as Event Calendar plugin, a Real Estate Plugin, a Job Board Plugin, a Classifieds plugin and much more.
+
+= Can I use GeoDirectory for more than one city =
+
+Yes, but you'll need our Location Manager add-on.
+
+= Can users add and edit their own listings via the front-end? =
+
+Absolutely yes, Users can submit their listings from the front end and also edit them unlimited times. 
+
+= Which theme is compatible with GeoDirectory? =
+
+Any theme is compatible with GeoDirectory and if you find any bug with a theme, just ask for support and we'll fix it. 
+
+= Does GeoDirectory work with Elementor and other popular page builders? =
+
+Yes, GeoDirectory works perfectly with any page builder and we also have custom blocks for Gutenberg. Most GeoDirectory data, can also be pulled via dynamic elements of Elementor PRO.
+
+= May I have a free trial of the Premium Add-ons? =
+
+We don't offer free trials, but we have a 30 day money back guarantee in case you are not happy with our products or service.
 
 == Screenshots ==
 
@@ -280,7 +331,6 @@ __WARNING: GDv2 is a major update over GDv1 and may require some manual work suc
 
 = 2.0.0.51 =
 [GeoDirectory changelog for version 2.0.0.51](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.51).
-
 == Upgrade Notice ==
 
 = 2.0.0.58 =
