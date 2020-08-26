@@ -1661,6 +1661,12 @@ input[name="street"].ui-autocomplete-loading {
 .geodir-admin-page .yoast-field-group__textarea {
     min-height: 200px
 }
+.geodir-admin-page .column-cat_icon {
+    text-align: center;
+}
+.geodir-admin-page .column-cat_icon img {
+    max-width: 50px;
+}
 /********************************************************
 Media Queries
 ********************************************************/

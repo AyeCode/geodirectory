@@ -38,7 +38,8 @@ class GeoDir_SEO {
 		add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
 		add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
 		add_filter( 'get_post_metadata', array( __CLASS__, 'filter_post_metadata' ), 99, 5 );
-		add_filter( 'rank_math/frontend/breadcrumb/items', array( __CLASS__, 'rank_breadcrumb_links' ), 10, 1 );
+		add_filter( 'rank_math/frontend/breadcrumb/settings', array( __CLASS__, 'rank_math_frontend_breadcrumb_settings' ), 20, 1 );
+		add_filter( 'rank_math/frontend/breadcrumb/items', array( __CLASS__, 'rank_breadcrumb_links' ), 10, 2 );
 		add_filter( 'rank_math/frontend/breadcrumb/main_term', array( __CLASS__, 'rank_math_frontend_breadcrumb_main_term' ), 20, 2 );
 
 		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( __CLASS__, 'wpseo_exclude_from_sitemap_by_post_ids' ), 20, 1 );
@@ -489,14 +490,12 @@ class GeoDir_SEO {
 			$string = str_replace( "%%excerpt%%",$post_content , $string );
 		}
 
-
-
 		if ( strpos( $string, '%%id%%' ) !== false ) {
 			$string = str_replace( "%%id%%", absint($post->ID), $string );
 		}
 
 		// archive
-		if ( strpos( $string, '%%category%%' ) !== false ) {
+		if ( strpos( $string, '%%category%%' ) !== false || strpos( $string, '%%in_category%%' ) !== false ) {
 			$cat_name = '';
 
 			if ( $gd_page == 'single' ) {
@@ -509,8 +508,14 @@ class GeoDir_SEO {
 				if ( isset( $queried_object->name ) ) {
 					$cat_name = $queried_object->name;
 				}
+			} else if ( $gd_page == 'search' ) {
+				$cat_name = self::get_searched_category_name( $post_type . 'category' );
 			}
+
+			$in_cat_name = $cat_name ? wp_sprintf( _x( 'in %s', 'in category', 'geodirectory' ), $cat_name ) : '';
+
 			$string = str_replace( "%%category%%", $cat_name, $string );
+			$string = str_replace( "%%in_category%%", $in_cat_name, $string );
 		}
 
 		if ( strpos( $string, '%%tag%%' ) !== false ) {
@@ -666,6 +671,7 @@ class GeoDir_SEO {
 			$vars['%%pt_single%%'] = __( 'Post type singular name.', 'geodirectory' );
 			$vars['%%pt_plural%%'] = __( 'Post type plural name.', 'geodirectory' );
 			$vars['%%category%%'] = __( 'The current category name.', 'geodirectory' );
+			$vars['%%in_category%%'] = __( 'The current category name prefixed with `in` eg: in Attractions', 'geodirectory' );
 			$vars['%%id%%'] = __( 'The current post id.', 'geodirectory' );
 		}
 
@@ -674,7 +680,7 @@ class GeoDir_SEO {
 			$vars['%%location%%'] = __( 'The full current location eg: United States, Pennsylvania, Philadelphia', 'geodirectory' );
 			$vars['%%location_single%%'] = __( 'The current viewing location type single name eg: Philadelphia', 'geodirectory' );
 			$vars['%%in_location%%'] = __( 'The full current location prefixed with `in` eg: in United States, Pennsylvania, Philadelphia', 'geodirectory' );
-			$vars['%%in_location_single%%'] = __( 'The current viewing location type single name prefixed with `in` eg: Philadelphia', 'geodirectory' );
+			$vars['%%in_location_single%%'] = __( 'The current viewing location type single name prefixed with `in` eg: in Philadelphia', 'geodirectory' );
 			$vars['%%location_country%%'] = __( 'The current viewing country eg: United States', 'geodirectory' );
 			$vars['%%in_location_country%%'] = __( 'The current viewing country prefixed with `in` eg: in United States', 'geodirectory' );
 			$vars['%%location_region%%'] = __( 'The current viewing region eg: Pennsylvania', 'geodirectory' );
@@ -784,17 +790,33 @@ class GeoDir_SEO {
     }
 
 	/**
+	 * Filter Rank Math breadcrumbs settings to hide ancestors.
+	 *
+	 * @since 2.0.0.100
+	 *
+	 * @param array $settings Breadcrumbs settings.
+	 * @return array Breadcrumbs settings
+	 */
+	public static function rank_math_frontend_breadcrumb_settings( $settings ) {
+		if ( ! is_admin() && geodir_is_geodir_page() ) {
+			$settings['show_ancestors'] = false;
+		}
+
+		return $settings;
+	}
+
+	/**
 	 * Filter Rank Math breadcrumbs to add cat to details page.
 	 *
 	 * @param $crumbs
 	 *
 	 * @return mixed
 	 */
-	public static function rank_breadcrumb_links( $crumbs ) {
+	public static function rank_breadcrumb_links( $crumbs, $breadcrumbs = array() ) {
 		global $wp_query, $gd_detail_breadcrumb;
 
-		// maybe add category link to single page
-		if ( ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) && ! $gd_detail_breadcrumb ) {
+		// Maybe add category link to single page
+		if ( ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) ) && ! $gd_detail_breadcrumb ) {
 			$post_type = geodir_get_current_posttype();
 			$category = ! empty( $wp_query->query_vars[ $post_type . "category" ] ) ? $wp_query->query_vars[ $post_type . "category" ] : '';
 
@@ -807,10 +829,11 @@ class GeoDir_SEO {
 				}
 			}
 
-			$offset = apply_filters( 'rankmath_breadcrumb_links_offset', 2, $breadcrumb, $crumbs );
-			$length = apply_filters( 'rankmath_breadcrumb_links_length', 0, $breadcrumb, $crumbs );
-
 			if ( ! empty( $breadcrumb ) && count( $breadcrumb ) > 0 ) {
+				$offset = RankMath\Helper::get_settings( 'general.breadcrumbs_home' ) ? 2 : 1;
+				$offset = apply_filters( 'rankmath_breadcrumb_links_offset', $offset, $breadcrumb, $crumbs );
+				$length = apply_filters( 'rankmath_breadcrumb_links_length', 0, $breadcrumb, $crumbs );
+
 				array_splice( $crumbs, $offset, $length, $breadcrumb );
 			}
 		}
@@ -1445,5 +1468,42 @@ class GeoDir_SEO {
 		}
 
 		return $args;
+	}
+
+	/**
+	 * Get searched category names.
+	 *
+	 * @since 2.0.0.100
+	 *
+	 * @param string $taxonomy Category taxonomy. Default empty.
+	 * @return string Category names.
+	 */
+	public static function get_searched_category_name( $taxonomy = '' ) {
+		$category_names = '';
+
+		if ( empty( $_REQUEST['spost_category'] ) ) {
+			return $category_names;
+		}
+
+		$post_category = is_array( $_REQUEST['spost_category'] ) ? array_map( 'absint', $_REQUEST['spost_category'] ) : array( absint( $_REQUEST['spost_category'] ) );
+		$_category_names = array();
+
+		if ( ! empty( $post_category ) ) {
+			$taxonomy = $taxonomy ? $taxonomy : geodir_get_current_posttype() . 'category';
+
+			foreach ( $post_category as $term_id ) {
+				$term = get_term( $term_id, $taxonomy );
+
+				if ( ! empty( $term ) && ! is_wp_error( $term ) ) {
+					$_category_names[] = $term->name;
+				}
+			}
+		}
+
+		if ( ! empty( $_category_names ) ) {
+			$category_names = implode( ', ', $_category_names );
+		}
+
+		return apply_filters( 'geodir_get_searched_category_name', $category_names, $_category_names, $taxonomy );
 	}
 }

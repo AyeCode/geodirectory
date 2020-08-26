@@ -801,11 +801,12 @@ function geodir_map_sticky(map_options) {
             } else {
                 bounds =  new google.maps.LatLngBounds();
             }
-            
-            var wheight = jQuery(window).height();
-            
+
             if (jQuery(window).scrollTop() >= catcher.offset().top) {
                 if (!sticky.hasClass('stickymap')) {
+                    catcher.css({
+                        'height': mapheight
+                    });
                     sticky.addClass('stickymap');
                    /// sticky.hide();
                     sticky.appendTo('body');
@@ -817,9 +818,6 @@ function geodir_map_sticky(map_options) {
                     sticky.css({
                         'top': '25%',
                         'width': (widthpx + 2)
-                    });
-                    catcher.css({
-                        'height': mapheight
                     });
 
                     if(geodir_is_localstorage()){

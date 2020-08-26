@@ -94,22 +94,20 @@ Class GeoDir_Elementor_Tag_Image extends Elementor\Core\DynamicTags\Data_Tag {
 		if(substr( $key, 0, 9 ) === "category_"){
 			$image_data = $this->get_category_meta($key);
 		}elseif ( ! empty( $key ) && !empty($gd_post->ID)) {
-
 			$cf = geodir_get_field_infoby('htmlvar_name', $key, $gd_post->post_type);
 			$field_type = !empty($cf['field_type']) ? esc_attr($cf['field_type']) : '';
 
-			if($field_type == 'url'){
+			if ( $field_type == 'url' ) {
 				$field_value = $gd_post->{$key};
-				if(!empty($field_value)){
-					$field_value = esc_url_raw($field_value);
+
+				if ( ! empty( $field_value ) ) {
 					$image_data = [
 						'id' => null,
 						'gd-url'=> $field_value,
-						'url' => "https://wordpress.com/mshots/v1/$field_value?w=1024&amp;h=1024",
+						'url' => geodir_get_screenshot( $field_value, array( 'w' => 1024, 'h' => 1024, 'image' => true ) ),
 					];
 				}
-
-			}else{
+			} else {
 				$post_images = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $key, 1 );
 
 				if(!empty($post_images)){
