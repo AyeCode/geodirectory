@@ -64,6 +64,26 @@ We have been wholly focused on our business directory plugin for WordPress since
 * NEW - Guest Add Listing
 * NEW - Improved SEO permalinks settings.
 
+= Dummy data =
+
+GeoDirectory comes with some dummy data you can use to see how listings look. You can install dummy data from your GeoDirectory back end.
+
+= Event Calendar Plugin =
+
+GeoDirectory comes with dummy data for events listings. Building Events geo directories only requires to instal the Events add-on that soon will be released for free. GeoDirectory can easily makes you rank for keywords : "Events near me", for this reason alone, it is a very powerful WordPress event calendar plugin.
+
+= Real Estate Plugin =
+
+GeoDirectory comes with dummy data for real estate listings that makes it super easy and quick to build real estate portals. Soon we will release a free real estate theme, making of GeoDirectory one of the most powerful WordPress Real Estate plugins.
+
+= Job Board Plugin =
+
+GeoDirectory comes with dummy data for job listings too and soon we will release a free freelancers and job board theme. Building a Job board with GeoDirectory is super easy and GeoDirectory is definitely amongst the best WordPress Job Board plugins.
+
+= Classifieds Plugin =
+
+GeoDirectory comes with dummy data for classifieds listings too. You can quickly build amazing classifieds directories with GeoDirectory, one of the most powerful WordPress classifieds plugins.
+
 = Free Addons =
 
 * [WPML Multilingual](https://wpgeodirectory.com/downloads/wpml-multilingual/ "Adds WPML compatibility") - Adds WPML compatibility.
@@ -121,26 +141,6 @@ The manual installation method involves downloading our Directory plugin and upl
 = Updating =
 
 Automatic updates should seamlessly work. We always suggest you backup up your website before performing any automated update to avoid unforeseen problems.
-
-= Dummy data =
-
-GeoDirectory comes with some dummy data you can use to see how listings look. You can install dummy data from your GeoDirectory back end.
-
-= Event Calendar Plugin =
-
-GeoDirectory comes with dummy data for events listings. Building Events geo directories only requires to instal the Events add-on that soon will be released for free. GeoDirectory can easily makes you rank for keywords : "Events near me", for this reason alone, it is a very powerful WordPress event calendar plugin.
-
-= Real Estate Plugin =
-
-GeoDirectory comes with dummy data for real estate listings that makes it super easy and quick to build real estate portals. Soon we will release a free real estate theme, making of GeoDirectory one of the most powerful WordPress Real Estate plugins.
-
-= Job Board Plugin =
-
-GeoDirectory comes with dummy data for job listings too and soon we will release a free freelancers and job board theme. Building a Job board with GeoDirectory is super easy and GeoDirectory is definitely amongst the best WordPress Job Board plugins.
-
-= Classifieds Plugin =
-
-GeoDirectory comes with dummy data for classifieds listings too. You can quickly build amazing classifieds directories with GeoDirectory, one of the most powerful WordPress classifieds plugins.
 
 == Frequently Asked Questions ==
 
