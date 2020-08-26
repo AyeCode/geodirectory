@@ -38,7 +38,8 @@ class GeoDir_SEO {
 		add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
 		add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
 		add_filter( 'get_post_metadata', array( __CLASS__, 'filter_post_metadata' ), 99, 5 );
-		add_filter( 'rank_math/frontend/breadcrumb/items', array( __CLASS__, 'rank_breadcrumb_links' ), 10, 1 );
+		add_filter( 'rank_math/frontend/breadcrumb/settings', array( __CLASS__, 'rank_math_frontend_breadcrumb_settings' ), 20, 1 );
+		add_filter( 'rank_math/frontend/breadcrumb/items', array( __CLASS__, 'rank_breadcrumb_links' ), 10, 2 );
 		add_filter( 'rank_math/frontend/breadcrumb/main_term', array( __CLASS__, 'rank_math_frontend_breadcrumb_main_term' ), 20, 2 );
 
 		add_filter( 'wpseo_exclude_from_sitemap_by_post_ids', array( __CLASS__, 'wpseo_exclude_from_sitemap_by_post_ids' ), 20, 1 );
@@ -789,17 +790,33 @@ class GeoDir_SEO {
     }
 
 	/**
+	 * Filter Rank Math breadcrumbs settings to hide ancestors.
+	 *
+	 * @since 2.0.0.100
+	 *
+	 * @param array $settings Breadcrumbs settings.
+	 * @return array Breadcrumbs settings
+	 */
+	public static function rank_math_frontend_breadcrumb_settings( $settings ) {
+		if ( ! is_admin() && geodir_is_geodir_page() ) {
+			$settings['show_ancestors'] = false;
+		}
+
+		return $settings;
+	}
+
+	/**
 	 * Filter Rank Math breadcrumbs to add cat to details page.
 	 *
 	 * @param $crumbs
 	 *
 	 * @return mixed
 	 */
-	public static function rank_breadcrumb_links( $crumbs ) {
+	public static function rank_breadcrumb_links( $crumbs, $breadcrumbs = array() ) {
 		global $wp_query, $gd_detail_breadcrumb;
 
-		// maybe add category link to single page
-		if ( ( geodir_is_page( 'detail' ) || geodir_is_page( 'listing' ) ) && ! $gd_detail_breadcrumb ) {
+		// Maybe add category link to single page
+		if ( ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) ) && ! $gd_detail_breadcrumb ) {
 			$post_type = geodir_get_current_posttype();
 			$category = ! empty( $wp_query->query_vars[ $post_type . "category" ] ) ? $wp_query->query_vars[ $post_type . "category" ] : '';
 
@@ -812,10 +829,11 @@ class GeoDir_SEO {
 				}
 			}
 
-			$offset = apply_filters( 'rankmath_breadcrumb_links_offset', 2, $breadcrumb, $crumbs );
-			$length = apply_filters( 'rankmath_breadcrumb_links_length', 0, $breadcrumb, $crumbs );
-
 			if ( ! empty( $breadcrumb ) && count( $breadcrumb ) > 0 ) {
+				$offset = RankMath\Helper::get_settings( 'general.breadcrumbs_home' ) ? 2 : 1;
+				$offset = apply_filters( 'rankmath_breadcrumb_links_offset', $offset, $breadcrumb, $crumbs );
+				$length = apply_filters( 'rankmath_breadcrumb_links_length', 0, $breadcrumb, $crumbs );
+
 				array_splice( $crumbs, $offset, $length, $breadcrumb );
 			}
 		}

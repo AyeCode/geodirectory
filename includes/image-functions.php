@@ -550,6 +550,21 @@ function geodir_get_image_dimension( $image_url, $default = array() ) {
 	if ( is_file( $image_url ) && file_exists( $image_url ) ) {
 		$size = @getimagesize( trim( $image_url ) );
 
+		// Check for .svg image
+		if ( empty( $size ) && preg_match( '/\.svg$/i', $image_url ) ) {
+			if ( ( $xml = simplexml_load_file( $image_url ) ) !== false ) {
+				$attributes = $xml->attributes();
+
+				if ( ! empty( $attributes ) && isset( $attributes->viewBox ) ) {
+					$viewbox = explode( ' ', $attributes->viewBox );
+
+					$size = array();
+					$size[0] = isset( $attributes->width ) && preg_match( '/\d+/', $attributes->width, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[2] ) : 0 );
+					$size[1] = isset( $attributes->height ) && preg_match( '/\d+/', $attributes->height, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[3] ) : 0 );
+				}
+			}
+		}
+
 		if ( ! empty( $size ) && ! empty( $size[0] ) && ! empty( $size[1] ) ) {
 			$dimension = array( 'width' => $size[0], 'height' => $size[1] );
 		}

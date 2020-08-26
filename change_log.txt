@@ -2,6 +2,7 @@
 * Scroll to sticky map jumps the page - FIXED
 * Allow %%category%% & %%in_category%% on search page meta titles - CHANGED
 * Set viewport width & height in mshots screenshot generator for images - CHANGED
+* Resize marker does not supports .svg images - FIXED
 
 = 2.0.0.99 =
 * Hide frontpage & blog page from select GD pages dropdown list - CHANGED
