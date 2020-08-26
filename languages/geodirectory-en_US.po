@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.99\n"
+"Project-Id-Version: GeoDirectory 2.0.0.100\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-11 20:43+0530\n"
-"PO-Revision-Date: 2020-08-11 20:44+0530\n"
+"POT-Creation-Date: 2020-08-26 22:17+0530\n"
+"PO-Revision-Date: 2020-08-26 22:17+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -847,7 +847,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:929
 #: includes/admin/class-geodir-admin-dummy-data.php:937
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:739
-#: includes/general-functions.php:2471
+#: includes/general-functions.php:2477
 msgid "Video"
 msgstr ""
 
@@ -1789,7 +1789,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:1216
 #: includes/admin/views/html-notice-v2-update.php:183
-#: includes/general-functions.php:2470
+#: includes/general-functions.php:2476
 msgid "Documentation"
 msgstr ""
 
@@ -3341,7 +3341,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:363
 #: includes/elementor/class-geodir-elementor-form-contact.php:96
 #: includes/elementor/class-geodir-elementor-form-contact.php:404
-#: includes/general-functions.php:2375 language.php:53
+#: includes/general-functions.php:2381 language.php:53
 msgid "Time"
 msgstr ""
 
@@ -3853,7 +3853,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:65
 #: includes/admin/settings/class-geodir-settings-cpt-tabs.php:166
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:315
-#: includes/elementor/class-geodir-elementor-tag-image.php:254
+#: includes/elementor/class-geodir-elementor-tag-image.php:252
 #: includes/elementor/class-geodir-elementor-tag-text.php:228
 msgid "Custom Fields"
 msgstr ""
@@ -8031,48 +8031,48 @@ msgstr ""
 msgid "The schema type of the category."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:101
+#: includes/api/class-geodir-rest-post-types-controller.php:102
 msgid "Invalid post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:105
+#: includes/api/class-geodir-rest-post-types-controller.php:106
 msgid "Cannot view post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:109
+#: includes/api/class-geodir-rest-post-types-controller.php:110
 #: includes/api/class-geodir-rest-posts-controller.php:138
 msgid "Sorry, you are not allowed to edit posts in this post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:185
+#: includes/api/class-geodir-rest-post-types-controller.php:186
 msgid "All capabilities used by the post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:191
+#: includes/api/class-geodir-rest-post-types-controller.php:192
 msgid "A human-readable description of the post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:197
+#: includes/api/class-geodir-rest-post-types-controller.php:198
 msgid "Whether or not the post type should have children."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:203
+#: includes/api/class-geodir-rest-post-types-controller.php:204
 msgid "Human-readable labels for the post type for various contexts."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:209
+#: includes/api/class-geodir-rest-post-types-controller.php:210
 msgid "The title for the post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:215
+#: includes/api/class-geodir-rest-post-types-controller.php:216
 msgid "An alphanumeric identifier for the post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:221
+#: includes/api/class-geodir-rest-post-types-controller.php:222
 msgid "Taxonomies associated with post type."
 msgstr ""
 
-#: includes/api/class-geodir-rest-post-types-controller.php:230
+#: includes/api/class-geodir-rest-post-types-controller.php:231
 msgid "REST base route for the post type."
 msgstr ""
 
@@ -9628,7 +9628,7 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:1014
+#: includes/class-geodir-elementor.php:1017
 msgid "Could not retrieve template."
 msgstr ""
 
@@ -9819,7 +9819,7 @@ msgid ""
 "will be filtered for that location."
 msgstr ""
 
-#: includes/class-geodir-maps.php:437
+#: includes/class-geodir-maps.php:452
 msgid "No category"
 msgstr ""
 
@@ -10429,134 +10429,144 @@ msgstr ""
 msgid "- Monitor the contact system for spam and abuse."
 msgstr ""
 
-#: includes/class-geodir-seo.php:571 includes/general-functions.php:1841
+#: includes/class-geodir-seo.php:515 includes/general-functions.php:1756
+#, php-format
+msgctxt "in category"
+msgid "in %s"
+msgstr ""
+
+#: includes/class-geodir-seo.php:576 includes/general-functions.php:1847
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:584 includes/general-functions.php:1854
+#: includes/class-geodir-seo.php:589 includes/general-functions.php:1860
 #, php-format
 msgid "near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:658
+#: includes/class-geodir-seo.php:663
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:659
+#: includes/class-geodir-seo.php:664
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:660
+#: includes/class-geodir-seo.php:665
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:661
+#: includes/class-geodir-seo.php:666
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:665
+#: includes/class-geodir-seo.php:670
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:666
+#: includes/class-geodir-seo.php:671
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:667
+#: includes/class-geodir-seo.php:672
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:668
+#: includes/class-geodir-seo.php:673
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:669
-msgid "The current post id."
-msgstr ""
-
 #: includes/class-geodir-seo.php:674
-msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
+msgid "The current category name prefixed with `in` eg: in Attractions"
 msgstr ""
 
 #: includes/class-geodir-seo.php:675
+msgid "The current post id."
+msgstr ""
+
+#: includes/class-geodir-seo.php:680
+msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
+msgstr ""
+
+#: includes/class-geodir-seo.php:681
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:676
+#: includes/class-geodir-seo.php:682
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:677
+#: includes/class-geodir-seo.php:683
 msgid ""
-"The current viewing location type single name prefixed with `in` eg: "
+"The current viewing location type single name prefixed with `in` eg: in "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:678
+#: includes/class-geodir-seo.php:684
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:679
+#: includes/class-geodir-seo.php:685
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:680
+#: includes/class-geodir-seo.php:686
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:681
+#: includes/class-geodir-seo.php:687
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:682
+#: includes/class-geodir-seo.php:688
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:683
+#: includes/class-geodir-seo.php:689
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:688
+#: includes/class-geodir-seo.php:694
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:689
+#: includes/class-geodir-seo.php:695
 msgid "The currently used search for term with `for`. Ex: for dinner."
 msgstr ""
 
-#: includes/class-geodir-seo.php:690
+#: includes/class-geodir-seo.php:696
 msgid "The currently used search near term with `near`. Ex: near Philadelphia."
 msgstr ""
 
-#: includes/class-geodir-seo.php:691
+#: includes/class-geodir-seo.php:697
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:696
+#: includes/class-geodir-seo.php:702
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:697
+#: includes/class-geodir-seo.php:703
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:698
+#: includes/class-geodir-seo.php:704
 msgid "Total post found eg: 10"
 msgstr ""
 
-#: includes/class-geodir-seo.php:699
+#: includes/class-geodir-seo.php:705
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:704
+#: includes/class-geodir-seo.php:710
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore"
 msgstr ""
 
-#: includes/class-geodir-seo.php:724
+#: includes/class-geodir-seo.php:730
 msgid "Click to copy"
 msgstr ""
 
@@ -11256,7 +11266,7 @@ msgid "GD Email Listing"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-skin-custom.php:34
-#: includes/elementor/class-geodir-elementor-skin-custom.php:412
+#: includes/elementor/class-geodir-elementor-skin-custom.php:418
 #: includes/elementor/class-geodir-elementor-template-archive-item.php:74
 msgid "GD Archive Item"
 msgstr ""
@@ -11273,15 +11283,15 @@ msgstr ""
 msgid "View"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:228
+#: includes/elementor/class-geodir-elementor-skin-custom.php:234
 msgid "Please select a default template! "
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:305
+#: includes/elementor/class-geodir-elementor-skin-custom.php:311
 msgid "Page"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:328
+#: includes/elementor/class-geodir-elementor-skin-custom.php:334
 msgid "Pagination"
 msgstr ""
 
@@ -11292,7 +11302,7 @@ msgstr ""
 #: includes/elementor/class-geodir-elementor-tag-color.php:99
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:257
 #: includes/elementor/class-geodir-elementor-tag-gallery.php:106
-#: includes/elementor/class-geodir-elementor-tag-image.php:213
+#: includes/elementor/class-geodir-elementor-tag-image.php:211
 #: includes/elementor/class-geodir-elementor-tag-number.php:93
 #: includes/elementor/class-geodir-elementor-tag-text.php:183
 #: includes/elementor/class-geodir-elementor-tag-url.php:130
@@ -11385,7 +11395,7 @@ msgid "Raw Values"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-tag-css-class.php:355
-#: includes/elementor/class-geodir-elementor-tag-image.php:263
+#: includes/elementor/class-geodir-elementor-tag-image.php:261
 #: includes/elementor/class-geodir-elementor-tag-text.php:268
 msgid "Category meta"
 msgstr ""
@@ -11398,7 +11408,7 @@ msgstr ""
 msgid "Image Field"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-tag-image.php:222
+#: includes/elementor/class-geodir-elementor-tag-image.php:220
 msgid "Fallback"
 msgstr ""
 
@@ -11536,7 +11546,7 @@ msgstr ""
 msgid "First"
 msgstr ""
 
-#: includes/general-functions.php:223 includes/general-functions.php:2378
+#: includes/general-functions.php:223 includes/general-functions.php:2384
 msgid "Second"
 msgstr ""
 
@@ -11556,116 +11566,116 @@ msgstr ""
 msgid "Given image size is not valid"
 msgstr ""
 
-#: includes/general-functions.php:1984
+#: includes/general-functions.php:1990
 #, php-format
 msgid "Page %1$d of %2$d"
 msgstr ""
 
-#: includes/general-functions.php:2374
+#: includes/general-functions.php:2380
 msgid "Choose Time"
 msgstr ""
 
-#: includes/general-functions.php:2376
+#: includes/general-functions.php:2382
 msgid "Hour"
 msgstr ""
 
-#: includes/general-functions.php:2377
+#: includes/general-functions.php:2383
 msgid "Minute"
 msgstr ""
 
-#: includes/general-functions.php:2379
+#: includes/general-functions.php:2385
 msgid "Millisecond"
 msgstr ""
 
-#: includes/general-functions.php:2380
+#: includes/general-functions.php:2386
 msgid "Microsecond"
 msgstr ""
 
-#: includes/general-functions.php:2381
+#: includes/general-functions.php:2387
 msgid "Time Zone"
 msgstr ""
 
-#: includes/general-functions.php:2382
+#: includes/general-functions.php:2388
 msgid "Now"
 msgstr ""
 
-#: includes/general-functions.php:2383
+#: includes/general-functions.php:2389
 msgid "Done"
 msgstr ""
 
-#: includes/general-functions.php:2384 includes/helper-functions.php:618
+#: includes/general-functions.php:2390 includes/helper-functions.php:618
 msgid "AM"
 msgstr ""
 
-#: includes/general-functions.php:2385 includes/helper-functions.php:619
+#: includes/general-functions.php:2391 includes/helper-functions.php:619
 msgid "PM"
 msgstr ""
 
-#: includes/general-functions.php:2413
+#: includes/general-functions.php:2419
 msgid "View: Grid 1"
 msgstr ""
 
-#: includes/general-functions.php:2413
+#: includes/general-functions.php:2419
 msgid "Grid View (One Column)"
 msgstr ""
 
-#: includes/general-functions.php:2414
+#: includes/general-functions.php:2420
 msgid "View: Grid 2"
 msgstr ""
 
-#: includes/general-functions.php:2414
+#: includes/general-functions.php:2420
 msgid "Grid View (Two Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2415
+#: includes/general-functions.php:2421
 msgid "View: Grid 3"
 msgstr ""
 
-#: includes/general-functions.php:2415
+#: includes/general-functions.php:2421
 msgid "Grid View (Three Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2416
+#: includes/general-functions.php:2422
 msgid "View: Grid 4"
 msgstr ""
 
-#: includes/general-functions.php:2416
+#: includes/general-functions.php:2422
 msgid "Grid View (Four Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2417
+#: includes/general-functions.php:2423
 msgid "View: Grid 5"
 msgstr ""
 
-#: includes/general-functions.php:2417
+#: includes/general-functions.php:2423
 msgid "Grid View (Five Columns)"
 msgstr ""
 
-#: includes/general-functions.php:2418 includes/template-functions.php:755
+#: includes/general-functions.php:2424 includes/template-functions.php:755
 msgid "View: List"
 msgstr ""
 
-#: includes/general-functions.php:2418
+#: includes/general-functions.php:2424
 msgid "List view"
 msgstr ""
 
-#: includes/general-functions.php:2469
+#: includes/general-functions.php:2475
 msgid "Disable hints"
 msgstr ""
 
-#: includes/general-functions.php:2472
+#: includes/general-functions.php:2478
 msgid "Feedback"
 msgstr ""
 
-#: includes/general-functions.php:2473
+#: includes/general-functions.php:2479
 msgid "Admin Hints:"
 msgstr ""
 
-#: includes/general-functions.php:2533 includes/general-functions.php:2547
+#: includes/general-functions.php:2539 includes/general-functions.php:2553
 msgid "meters"
 msgstr ""
 
-#: includes/general-functions.php:2536 includes/general-functions.php:2550
+#: includes/general-functions.php:2542 includes/general-functions.php:2556
 msgid "feet"
 msgstr ""
 
@@ -11935,13 +11945,13 @@ msgstr ""
 msgid "Distance to current post (details page only)"
 msgstr ""
 
-#: includes/image-functions.php:202
+#: includes/image-functions.php:255
 #, php-format
 msgid "%s screenshot"
 msgstr ""
 
-#: includes/image-functions.php:284 includes/image-functions.php:324
-#: includes/image-functions.php:353
+#: includes/image-functions.php:337 includes/image-functions.php:377
+#: includes/image-functions.php:406
 #: includes/widgets/class-geodir-widget-post-images.php:25
 msgid "Placeholder image"
 msgstr ""
