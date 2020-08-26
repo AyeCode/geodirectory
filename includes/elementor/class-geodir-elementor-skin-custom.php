@@ -174,7 +174,13 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 			$return = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template );
 
 			if ( $return ) {
-				$css_file = \Elementor\Core\DynamicTags\Dynamic_CSS::create( $this->pid, $template );
+				if ( version_compare( ELEMENTOR_VERSION, '3.0.0', '>=' ) ) {
+					$post_css = \Elementor\Core\Files\CSS\Post::create( $this->pid );
+					$css_file = \Elementor\Core\DynamicTags\Dynamic_CSS::create( $template, $post_css );
+				} else {
+					$css_file = \Elementor\Core\DynamicTags\Dynamic_CSS::create( $this->pid, $template );
+				}
+
 				$css_file->enqueue();
 
 				if ( $css = $css_file->get_content() ) {
