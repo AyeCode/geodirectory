@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.0.0.100\n"
+"Project-Id-Version: GeoDirectory 2.0.0.101\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-08-26 22:17+0530\n"
-"PO-Revision-Date: 2020-08-26 22:17+0530\n"
+"POT-Creation-Date: 2020-08-27 20:00+0530\n"
+"PO-Revision-Date: 2020-08-27 20:00+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -9618,17 +9618,17 @@ msgstr ""
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:354 includes/core-functions.php:349
+#: includes/class-geodir-elementor.php:359 includes/core-functions.php:349
 #: includes/widgets/class-geodir-widget-single-next-prev.php:53
 msgid "Previous"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:358 includes/core-functions.php:350
+#: includes/class-geodir-elementor.php:363 includes/core-functions.php:350
 #: includes/widgets/class-geodir-widget-single-next-prev.php:54
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:1017
+#: includes/class-geodir-elementor.php:1022
 msgid "Could not retrieve template."
 msgstr ""
 
@@ -11265,33 +11265,37 @@ msgstr ""
 msgid "GD Email Listing"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:34
-#: includes/elementor/class-geodir-elementor-skin-custom.php:418
+#: includes/elementor/class-geodir-elementor-skin-custom.php:31
+#: includes/elementor/class-geodir-elementor-skin-custom.php:440
 #: includes/elementor/class-geodir-elementor-template-archive-item.php:74
 msgid "GD Archive Item"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:56
+#: includes/elementor/class-geodir-elementor-skin-custom.php:55
 msgid "Select a default template"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:59
+#: includes/elementor/class-geodir-elementor-skin-custom.php:56
 msgid "Create/edit a Loop Template"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:71
+#: includes/elementor/class-geodir-elementor-skin-custom.php:67
 msgid "View"
+msgstr ""
+
+#: includes/elementor/class-geodir-elementor-skin-custom.php:122
+msgid "Select a template"
 msgstr ""
 
 #: includes/elementor/class-geodir-elementor-skin-custom.php:234
 msgid "Please select a default template! "
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:311
+#: includes/elementor/class-geodir-elementor-skin-custom.php:312
 msgid "Page"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-skin-custom.php:334
+#: includes/elementor/class-geodir-elementor-skin-custom.php:336
 msgid "Pagination"
 msgstr ""
 
