@@ -19,12 +19,9 @@ if ( ! defined( 'ABSPATH' ) ) exit; // Exit if accessed directly
  * @package ElementorPro\Modules\Posts\Skins
  */
 class GeoDir_Elementor_Skin_Posts extends Skin_Base {
-
-	private $template_cache=[];
+	private $template_cache = [];
 	private $pid;
-  public $settings;
-
-
+	public $settings;
 
 	public function get_id() {
 		return 'gd_custom';
@@ -35,35 +32,34 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 	}
 
 	protected function _register_controls_actions() {
-    parent::_register_controls_actions();
-    add_action( 'elementor/element/posts/'.$this->get_id().'_section_design_layout/after_section_end', [ $this, 'register_navigation_design_controls' ] );
-    add_action( 'elementor/element/posts/section_pagination/after_section_end', [ $this, 'register_navigation_controls' ] );
-	}
-	public function register_navigation_controls() {
-    do_action( 'GDECS_after_pagination_controls', $this );
-  }
-  public function register_navigation_design_controls() {
-    do_action( 'GDECS_after_style_controls', $this );
-  }
- 
-	public function register_controls( Widget_Base $widget ) {
+		parent::_register_controls_actions();
 
+		add_action( 'elementor/element/posts/' . $this->get_id() . '_section_design_layout/after_section_end', [ $this, 'register_navigation_design_controls' ] );
+		add_action( 'elementor/element/posts/section_pagination/after_section_end', [ $this, 'register_navigation_controls' ] );
+	}
+
+	public function register_navigation_controls() {
+		do_action( 'geodir_ecs_after_pagination_controls', $this );
+	}
+
+	public function register_navigation_design_controls() {
+		do_action( 'geodir_ecs_after_style_controls', $this );
+	}
+
+	public function register_controls( Widget_Base $widget ) {
 		$this->parent = $widget;
 
-    $this->add_control(
+		$this->add_control(
 			'skin_template',
 			[
 				'label' => __( 'Select a default template', 'geodirectory' ),
-        'description' => '<div style="text-align:center;"><a target="_blank" style="text-align: center;font-style: normal;" href="' . esc_url( admin_url( '/edit.php?post_type=elementor_library&tabs_group&elementor_library_type=geodirectory-archive-item' ) ) .
-                          '" class="elementor-button elementor-button-default elementor-repeater-add">' .
-                          __( 'Create/edit a Loop Template', 'geodirectory' ) . '</a></div>',
+				'description' => '<div style="text-align:center;"><a target="_blank" style="text-align: center;font-style: normal;" href="' . esc_url( admin_url( '/edit.php?post_type=elementor_library&tabs_group&elementor_library_type=geodirectory-archive-item' ) ) . '" class="elementor-button elementor-button-default elementor-repeater-add">' . __( 'Create/edit a Loop Template', 'geodirectory' ) . '</a></div>',
 				'type' => Controls_Manager::SELECT2,
 				'label_block' => true,
 				'default' => [],
 				'options' => $this->get_skin_template(),
 			]
 		);
-
 
 		$this->add_control(//this would make use of 100% if width
 			'view',
@@ -75,17 +71,16 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 			]
 		);
 
-    do_action( 'GDECS_after_control', $this );
+		do_action( 'geodir_ecs_after_control', $this );
 
-  $this->add_control(
+		$this->add_control(
 			'hr2',
 			[
 				'type' => \Elementor\Controls_Manager::DIVIDER,
 			]
 		);
 
-    parent::register_controls($widget);
-
+	parent::register_controls( $widget );
 		$this->remove_control( 'img_border_radius' );
 		$this->remove_control( 'meta_data' );
 		$this->remove_control( 'item_ratio' );
@@ -99,18 +94,17 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 		$this->remove_control( 'read_more_text' );
 		$this->remove_control( 'show_excerpt' );
 		$this->remove_control( 'excerpt_length' );
-
 	}
 
 	private function get_post_id(){
 		return $this->pid;
 	}
-	
+
 	function get_skin_template(){
 		global $wpdb;
-				
-		$cache = wp_cache_get("geodir_elementor_pro_skins");
-		if($cache !== false){
+
+		$cache = wp_cache_get( "geodir_elementor_pro_skins" );
+		if ( $cache !== false ) {
 			return $cache;
 		}
 		
@@ -122,36 +116,38 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 					$wpdb->term_taxonomy.term_id=$wpdb->terms.term_id AND $wpdb->terms.slug='geodirectory-archive-item'
 				INNER JOIN $wpdb->posts ON
 					$wpdb->term_relationships.object_id=$wpdb->posts.ID
-  WHERE  $wpdb->posts.post_status='publish'"
+			WHERE  $wpdb->posts.post_status='publish'"
 		);
-		$options = [ 0 => 'Select a template' ];
+
+		$options = [ 0 => __( 'Select a template', 'geodirectory' ) ];
 		foreach ( $templates as $template ) {
 			$options[ $template->ID ] = $template->post_title;
 		}
-		
-		wp_cache_set("geodir_elementor_pro_skins",$options);
+
+		wp_cache_set( "geodir_elementor_pro_skins", $options );
+
 		return $options;
 	}
-
 
 	public function render_amp() {
 
 	}
 
-	protected function set_template($skin){// this is for terms we don't need passid so we can actually add them in cache
+	/**
+	 * This is for terms we don't need passid so we can actually add them in cache.
+	 */
+	protected function set_used_template( $skin ) {
+		if ( ! $skin ) {
+			return;
+		}
 
-		if (!$skin) return;
-		if (isset($this->template_cache[$skin])) return $this->template_cache[$skin];
-
-		$return = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $skin );
-		$this->template_cache[$skin] = $return;
-
+		$this->used_templates[ $skin ] = $skin;
 	}
 
-	protected function get_template(){
-		global $gdecs_render_loop, $wp_query, $ecs_index, $geodir_el_archive_item_tl;
+	protected function get_template() {
+		global $gdecs_render_loop, $wp_query, $gdecs_index, $geodir_el_archive_item_tl;
 
-		$ecs_index++;
+		$gdecs_index++;
 		$old_query = $wp_query;
 		$new_query = new \WP_Query( array( 'p' => get_the_ID(), 'post_type' => get_post_type() ) );
 		$wp_query = $new_query;
@@ -160,27 +156,21 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 		$default_template = $this->get_instance_value( 'skin_template' ) ;
 		$template = $default_template;
 
-		/* move to pro */
-		$template = apply_filters( 'GDECS_action_template', $template, $this, $ecs_index );
+		$template = apply_filters( 'geodir_ecs_action_template', $template, $this, $gdecs_index );
 		$template = $this->get_current_ID( $template );
 
 		$gdecs_render_loop = get_the_ID() . "," . $template;
-		/* end pro */
 
 		$return = '';
 		if ( $template ) {
+			$this->set_used_template( $template );
+
 			$geodir_el_archive_item_tl = $template;
 
 			$return = \Elementor\Plugin::instance()->frontend->get_builder_content_for_display( $template );
 
-			if ( $return ) {
-				if ( version_compare( ELEMENTOR_VERSION, '3.0.0', '>=' ) ) {
-					$post_css = \Elementor\Core\Files\CSS\Post::create( $this->pid );
-					$css_file = \Elementor\Core\DynamicTags\Dynamic_CSS::create( $template, $post_css );
-				} else {
-					$css_file = \Elementor\Core\DynamicTags\Dynamic_CSS::create( $this->pid, $template );
-				}
-
+			if ( $return && version_compare( ELEMENTOR_VERSION, '3.0.0', '<' ) ) {
+				$css_file = \Elementor\Core\DynamicTags\Dynamic_CSS::create( $this->pid, $template );
 				$css_file->enqueue();
 
 				if ( $css = $css_file->get_content() ) {
@@ -196,37 +186,47 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 
 		return $return;
 	}
-  
-  //this is for multilang porpouses... curently WPML
-  private function get_current_ID($id){
-    $newid = apply_filters( 'wpml_object_id', $id, 'elementor_library', TRUE  );
-    return $newid ? $newid : $id;
-  }
+
+	/**
+	 * This is for multilang porpouses. Ex: WPML.
+	 */
+	private function get_current_ID( $id ) {
+		$newid = apply_filters( 'wpml_object_id', $id, 'elementor_library', TRUE  );
+
+		return $newid ? $newid : $id;
+	}
 
 	protected function render_post_header() {
-    $classes = 'elementor-post elementor-grid-item';
-     $parent_settings = $this->parent->get_settings();
-    $parent_settings[$this->get_id().'_post_slider'] = isset($parent_settings[$this->get_id().'_post_slider'])? $parent_settings[$this->get_id().'_post_slider'] : "";
-     if($parent_settings[$this->get_id().'_post_slider'] == "yes") $classes .= ' swiper-slide'
-    ?>
+		$classes = 'elementor-post elementor-grid-item';
+		$parent_settings = $this->parent->get_settings();
+		$parent_settings[ $this->get_id().'_post_slider' ] = isset( $parent_settings[ $this->get_id() . '_post_slider' ] )? $parent_settings[ $this->get_id() . '_post_slider' ] : "";
+
+		if ( $parent_settings[ $this->get_id() . '_post_slider' ] == "yes") {
+			$classes .= ' swiper-slide';
+		}
+		?>
 		<article id="post-<?php the_ID(); ?>" <?php post_class( [ $classes ] ); ?>>
 		<?php
 	}
-  
+
+	protected function render_post_footer() {
+	  ?></article><?php
+	}
+
 	protected function render_post() {
 		global $geodir_el_archive_item_tl;
 
-		do_action( 'GDECS_before_render_post_header', $this );
+		do_action( 'geodir_ecs_before_render_post_header', $this );
 			$this->render_post_header();
-		do_action( 'GDECS_after_render_post_header', $this );
+		do_action( 'geodir_ecs_after_render_post_header', $this );
 
 		ob_start();
 		if ( $this->get_instance_value( 'skin_template' ) ) {
 			if ( $this->get_instance_value( 'use_keywords' ) == "yes" ) {
 				global $post;
 				$template = $this->get_template();
-				$new_template = apply_filters( 'ecs_dynamic_filter', $template, $post  );
-				echo  $new_template ? $new_template : $template;
+				$new_template = apply_filters( 'geodir_ecs_dynamic_filter', $template, $post, "", $this->parent->get_settings() );
+				echo $new_template ? $new_template : $template;
 			} else {
 				echo $this->get_template();
 			}
@@ -236,52 +236,53 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 		$item_content = ob_get_clean();
 
 		// Remove css with template id.
-		if ( $item_content && $geodir_el_archive_item_tl && get_post_type( $geodir_el_archive_item_tl ) == 'elementor_library' ) {
+		if ( $item_content && $geodir_el_archive_item_tl && version_compare( ELEMENTOR_VERSION, '3.0.0', '<' ) && get_post_type( $geodir_el_archive_item_tl ) == 'elementor_library' ) {
 			$item_content = preg_replace( '#<style id="elementor-post-dynamic-' . $geodir_el_archive_item_tl . '">(.*?)</style>#', '', $item_content );
 		}
 
 		echo $item_content;
 
-		do_action( 'GDECS_before_render_post_footer', $this );
+		do_action( 'geodir_ecs_before_render_post_footer', $this );
 			$this->render_post_footer();
-		do_action( 'GDECS_after_render_post_footer', $this );
+		do_action( 'geodir_ecs_after_render_post_footer', $this );
 
 		unset( $geodir_el_archive_item_tl );
 	}
 
-  	protected function render_loop_header() {
-    $parent_settings = $this->parent->get_settings();
-    $parent_settings[$this->get_id().'_post_slider'] = isset($parent_settings[$this->get_id().'_post_slider'])? $parent_settings[$this->get_id().'_post_slider'] : "";
+	protected function render_loop_header() {
+		$parent_settings = $this->parent->get_settings();
+		$parent_settings[ $this->get_id().'_post_slider' ] = isset( $parent_settings[ $this->get_id() . '_post_slider'] )? $parent_settings[ $this->get_id() . '_post_slider' ] : "";
+
 		$this->parent->add_render_attribute( 'container', [
 			'class' => [
 				'elementor-posts-container',
 				'elementor-posts',
-         $parent_settings[$this->get_id().'_post_slider'] == "yes" ? 'swiper-wrapper' : 'elementor-grid',
+				$parent_settings[ $this->get_id().'_post_slider' ] == "yes" ? 'swiper-wrapper' : 'elementor-grid',
 				$this->get_container_class(),
 			],
 		] );
-    if($parent_settings[$this->get_id().'_post_slider'] == "yes") {
-      echo '<div class="swiper-container">';
-    }
+
+		if ( $parent_settings[ $this->get_id() . '_post_slider' ] == "yes" ) {
+			echo '<div class="swiper-container">';
+		}
 		?>
 		<div <?php echo $this->parent->get_render_attribute_string( 'container' ); ?>>
 		<?php
 	}
 
 	protected function render_loop_footer() {
-
 		?>
 		</div>
 		<?php
 
 		$parent_settings = $this->parent->get_settings();
-    $parent_settings[$this->get_id().'_post_slider'] = isset($parent_settings[$this->get_id().'_post_slider'])? $parent_settings[$this->get_id().'_post_slider'] : "";
-    if($parent_settings[$this->get_id().'_post_slider'] == "yes") {
-      $this->slider_elements();
-      echo '</div>';
+		$parent_settings[ $this->get_id() . '_post_slider' ] = isset( $parent_settings[ $this->get_id() . '_post_slider' ] )? $parent_settings[ $this->get_id() . '_post_slider' ] : "";
+		if ( $parent_settings[ $this->get_id() . '_post_slider' ] == "yes" ) {
+			$this->slider_elements();
+			echo '</div>';
+		}
 
-    }
-    if ( '' === $parent_settings['pagination_type'] ) {
+		if ( '' === $parent_settings['pagination_type'] ) {
 			return;
 		}
 
@@ -313,6 +314,7 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 
 			if ( is_singular() && ! is_front_page() ) {
 				global $wp_rewrite;
+
 				if ( $wp_rewrite->using_permalinks() ) {
 					$paginate_args['base'] = trailingslashit( get_permalink() ) . '%_%';
 					$paginate_args['format'] = user_trailingslashit( '%#%', 'single_paged' );
@@ -336,36 +338,39 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 		</nav>
 		<?php
 	}
-  
-  private function slider_elements(){
-    $this->settings = $this->parent->get_settings();
-    do_action( 'GDECS_after_slider_elements', $this );
-  }
-  
-  private function nothing_found(){
-      $this->render_loop_header();
-      $should_escape = apply_filters( 'elementor_pro/theme_builder/archive/escape_nothing_found_message', true );
-      $message = $this->parent->get_settings_for_display( 'nothing_found_message' );
-      if ( $should_escape ) {
-          $message = esc_html( $message );
-      }
 
-      $message = '<div class="elementor-posts-nothing-found">' . $message . '</div>';
-      do_action( 'GDECS_not_found', $this );
-      echo  $message;
-      $this->render_loop_footer();
-  }
-  
-  public function render() {
+	private function slider_elements(){
+		$this->settings = $this->parent->get_settings();
+
+		do_action( 'geodir_ecs_after_slider_elements', $this );
+	}
+
+	private function nothing_found(){
+		$this->render_loop_header();
+
+		$should_escape = apply_filters( 'elementor_pro/theme_builder/archive/escape_nothing_found_message', true );
+		$message = $this->parent->get_settings_for_display( 'nothing_found_message' );
+		if ( $should_escape ) {
+			$message = esc_html( $message );
+		}
+
+		$message = '<div class="elementor-posts-nothing-found">' . $message . '</div>';
+		do_action( 'geodir_ecs_not_found', $this );
+		echo  $message;
+
+		$this->render_loop_footer();
+	}
+
+	public function render() {
 		$this->parent->query_posts();
 
 		/** @var \WP_Query $query */
 		$query = $this->parent->get_query();
 
-    do_action("GDECS_before_loop_query",$query,$this);
+		do_action( "geodir_ecs_before_loop_query", $query, $this );
 
-    if ( ! $query->found_posts ) {
-       $this->nothing_found();
+		if ( ! $query->found_posts ) {
+			$this->nothing_found();
 			return;
 		}
 
@@ -384,30 +389,47 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 			}
 		}
 
-    do_action("GDECS_after_loop_query",$query,$this);
+		do_action( "geodir_ecs_after_loop_query", $query, $this );
 
-    wp_reset_postdata();
+		wp_reset_postdata();
 
 		$this->render_loop_footer();
-
 	}
 
+	public function get_settings_for_display( $setting_key = null ) {
+		if ( $setting_key ) {
+			$settings = [
+				$setting_key => $this->parent->get_settings( $setting_key ),
+			];
+		} else {
+			$settings = $this->parent->get_active_settings();
+		}
+
+		$controls = $this->parent->get_controls();
+		$controls = array_intersect_key( $controls, $settings );
+		$parsed_settings = $this->parent->parse_dynamic_settings( $settings, $controls );
+
+		if ( $setting_key ) {
+			return $parsed_settings[ $setting_key ];
+		}
+
+		return $parsed_settings;
+	}
 }
 
-
-// it seems the same skin brakes if set to 2 widgets in the same time
-
+/**
+ * It seems the same skin brakes if set to 2 widgets in the same time.
+ */
 class GeoDir_Elementor_Skin_Archive extends GeoDir_Elementor_Skin_Posts {
-
-	private $template_cache=[];
+	private $template_cache =[];
 	private $pid;
 
-  protected function _register_controls_actions() {
+	protected function _register_controls_actions() {
 		add_action( 'elementor/element/archive-posts/section_layout/before_section_end', [ $this, 'register_controls' ] );
 		add_action( 'elementor/element/archive-posts/section_layout/after_section_end', [ $this, 'register_style_sections' ] );
 
-    add_action( 'elementor/element/archive-posts/'.$this->get_id().'_section_design_layout/after_section_end', [ $this, 'register_navigation_design_controls' ] );
-    add_action( 'elementor/element/archive-posts/section_pagination/after_section_end', [ $this, 'register_navigation_controls' ] );
+		add_action( 'elementor/element/archive-posts/' . $this->get_id() . '_section_design_layout/after_section_end', [ $this, 'register_navigation_design_controls' ] );
+		add_action( 'elementor/element/archive-posts/section_pagination/after_section_end', [ $this, 'register_navigation_controls' ] );
 	}
 
 	public function get_id() {
@@ -418,17 +440,18 @@ class GeoDir_Elementor_Skin_Archive extends GeoDir_Elementor_Skin_Posts {
 		return __( 'GD Archive Item', 'geodirectory' );
 	}
 
- /* Remove `posts_per_page` control */
-	protected function register_post_count_control(){}
+	/* Remove `posts_per_page` control */
+	protected function register_post_count_control() {
+	}
 
 }
 
 // Add a custom skin for the POSTS widget
-    add_action( 'elementor/widget/posts/skins_init', function( $widget ) {
-       $widget->add_skin( new GeoDir_Elementor_Skin_Posts( $widget ) );
-    } );
+add_action( 'elementor/widget/posts/skins_init', function( $widget ) {
+	$widget->add_skin( new GeoDir_Elementor_Skin_Posts( $widget ) );
+} );
+
 // Add a custom skin for the POST Archive widget
-    add_action( 'elementor/widget/archive-posts/skins_init', function( $widget ) {
-       $widget->add_skin( new GeoDir_Elementor_Skin_Archive( $widget ) );
-    } );
-    
+add_action( 'elementor/widget/archive-posts/skins_init', function( $widget ) {
+	$widget->add_skin( new GeoDir_Elementor_Skin_Archive( $widget ) );
+} );
