@@ -73,7 +73,12 @@ class GeoDir_Elementor {
 
 		}
 
-
+		// Elementor 3
+		if ( version_compare( ELEMENTOR_VERSION, '3.0.0', '>=' ) ) {
+			add_action( 'elementor/frontend/section/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
+			add_action( 'elementor/frontend/column/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
+			add_action( 'elementor/frontend/widget/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
+		}
 	}
 
 	/**
@@ -1219,5 +1224,93 @@ class GeoDir_Elementor {
 		wp_cache_set("geodir_elementor_pro_skins",$options);
 
 		return $options;
+	}
+
+	public static function custom_skin_dynamic_style( \Elementor\Element_Base $element ) {
+		global $gdecs_render_loop;
+
+		if ( ! $gdecs_render_loop ) {
+			return; // only act inside loop
+		}
+
+		list ( $PostID, $LoopID ) = explode( ",", $gdecs_render_loop );
+
+		$ElementID = $element->get_ID();
+
+		$dynamic_settings = $element->get_settings( '__dynamic__' );
+		$all_controls = $element->get_controls();
+		if ( empty( $dynamic_settings ) && empty( $all_controls ) ) {
+			return;
+		}
+
+		$all_controls = isset( $all_controls ) ? $all_controls : [];
+		$dynamic_settings = isset( $dynamic_settings ) ? $dynamic_settings : [];
+		$controls = array_intersect_key( $all_controls, $dynamic_settings );
+		if ( empty( $controls ) ) {
+			return;
+		}
+
+		self::custom_skin_recursive_unset( $dynamic_settings, 'link' ); // We don't need the link options
+
+		$settings = $element->parse_dynamic_settings( $dynamic_settings, $controls ); // @ <- dirty fix for that fugly controls-stack.php  Illegal string offset 'url' error
+		if ( empty( $settings ) ) {
+			return;
+		}
+
+		$element_wrapper = "#post-{$PostID} .elementor-{$LoopID} .elementor-element.elementor-element-{$ElementID}";
+
+		$css = "";
+		foreach ( $controls as $key => $control ) {
+			if ( isset( $control["selectors"] ) && ! empty( $control["selectors"] ) ) {
+				foreach( $control["selectors"] as $selector => $rules ) {
+					if ( isset( $settings[ $key ] ) ) {
+						$css.= self::custom_skin_parse_selector( $selector . "{" . $rules . "}", $element_wrapper, $settings[ $key ] );
+					}
+				}
+			}
+		}
+
+		if ( ! $css ) {
+			return;
+		}
+
+		echo '<style type="text/css">' . $css . '</style>';
+	}
+
+	public static function custom_skin_clean_selector_value( $values ) {
+		$interest = [ "url" ];
+
+		if ( is_array( $values ) ) {
+			foreach ( $values as $key => $value ) {
+				if ( in_array( $key, $interest ) ) {
+					return $value;
+				}
+			}
+		}
+
+		return $values;
+	}
+
+	public static function custom_skin_parse_selector( $selector, $wrapper, $value ) {
+		$clean_value = self::custom_skin_clean_selector_value( $value );
+
+		$selector = str_replace( "{{WRAPPER}}", $wrapper, $selector );
+		$selector = str_replace([ "{{VALUE}}", "{{URL}}", "{{UNIT}}" ], $clean_value, $selector );
+
+		return $selector;
+	}
+
+	public static function custom_skin_recursive_unset( &$array, $unwanted_key ) {
+		if ( isset( $array[ $unwanted_key ] ) ) {
+			unset( $array[ $unwanted_key ] );
+		}
+
+		if ( ! empty( $array ) ) {
+			foreach ( $array as &$value ) {
+				if ( is_array( $value ) ) {
+					self::custom_skin_recursive_unset( $value, $unwanted_key );
+				}
+			}
+		}
 	}
 }
