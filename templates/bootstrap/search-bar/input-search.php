@@ -28,7 +28,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			'placeholder'  => esc_html__($default_search_for_text,'geodirectory'),
 			'class' => 'search_text gd_search_text pl-4 w-100',
 			'label'   => esc_html__($default_search_for_text,'geodirectory'),
-			'label_class'   => 'sr-only',
+			'label_type'       => 'hidden',//hidden, top, horizontal, floating
 			'extra_attributes' => array(
 				'onkeydown' =>  'if(event.keyCode == 13) geodir_click_search(this);',
 				'onClick'   =>  'this.select();',

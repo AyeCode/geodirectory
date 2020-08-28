@@ -870,19 +870,22 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     /* ]]> */
 </script>
 
+<?php if(!wp_doing_ajax()){?>
 <div class="form-group <?php if($geodir_label_type=='horizontal'){ echo "row";}?>">
-    <?php if($geodir_label_type=='horizontal'){ ?>
+    <?php if($geodir_label_type=='horizontal'  ){ ?>
     <div class="col-sm-2 col-form-label"></div>
     <div class="col-sm-10">
         <?php } ?>
         <input type="button" id="<?php echo $prefix; ?>set_address_button" class=" btn btn-primary text-center mx-auto" value="<?php esc_attr_e($map_title, 'geodirectory'); ?>" />
         <?php
+        aui();
         echo AUI_Component_Helper::help_text(stripslashes( __( 'Click on "Set Address on Map" and then you can also drag map marker to locate the correct address', 'geodirectory' ) ));
         ?>
         <?php if($geodir_label_type=='horizontal'){ ?>
     </div>
 <?php } ?>
 </div>
+<?php } ?>
 <div class="form-group rowx">
 
     <?php

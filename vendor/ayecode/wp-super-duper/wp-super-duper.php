@@ -2074,40 +2074,40 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					$onchange = "props.setAttributes({ $key: Number($key) } )";
 				}
 			}
-/*
- * https://www.wptricks.com/question/set-current-tab-on-a-gutenberg-tabpanel-component-from-outside-that-component/ es5 layout
-			elseif($args['type']=='tabs'){
-				?>
-				<script>
-					el(
-						wp.components.TabPanel,
-						{
-							tabs: [
-								{
-									name: 'show',
-									title: __( 'Show', 'my-textdomain' ),
-								},
-								{
-									name: 'edit',
-									title: __( 'Edit', 'my-textdomain' ),
-								},
-							],
-						},
-						( tab ) => {
+			/*
+			 * https://www.wptricks.com/question/set-current-tab-on-a-gutenberg-tabpanel-component-from-outside-that-component/ es5 layout
+						elseif($args['type']=='tabs'){
+							?>
+							<script>
+								el(
+									wp.components.TabPanel,
+									{
+										tabs: [
+											{
+												name: 'show',
+												title: __( 'Show', 'my-textdomain' ),
+											},
+											{
+												name: 'edit',
+												title: __( 'Edit', 'my-textdomain' ),
+											},
+										],
+									},
+									( tab ) => {
 
-						if('show' === tab.name){
-						return 123;
-					}else if ( 'edit' === tab.name ) {
-						return 321;
-					}
+									if('show' === tab.name){
+									return 123;
+								}else if ( 'edit' === tab.name ) {
+									return 321;
+								}
 
-					}
-					),
-				</script>
-				<?php
-				return;
-			}
-*/
+								}
+								),
+							</script>
+							<?php
+							return;
+						}
+			*/
 			elseif ( $args['type'] == 'color' ) {
 				$type = 'ColorPicker';
 				$onchange = "";

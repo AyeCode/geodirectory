@@ -8,9 +8,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @var string $near The current near search term.
  * @var string $default_near_text The placeholder text.
+ * @var string $near_class The near class.
  */
 ?>
-<div class='gd-search-field-near $near_class col-auto flex-fill' style="flex-grow: 9999 !important;">
+<div class='gd-search-field-near <?php echo $near_class;?> col-auto flex-fill' style="flex-grow: 9999 !important;">
 	<?php
 	do_action( 'geodir_before_search_near_input' );
 

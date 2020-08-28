@@ -179,7 +179,7 @@ class GeoDir_Admin_Blocks {
 		wp_enqueue_script(
 			'gd-gutenberg',
 			geodir_plugin_url() . '/assets/js/blocks'.$suffix.'.js',
-			array( 'wp-blocks', 'wp-element' ),
+			array( 'wp-blocks', 'wp-element', 'wp-editor' ),
 			GEODIRECTORY_VERSION
 		);
 

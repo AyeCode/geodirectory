@@ -8,3 +8,45 @@
     );
     wp.blocks.updateCategory( 'geodirectory', { icon: GDIcon } );
 } )();
+
+
+// ( function( blocks, element, blockEditor ) {
+//     var el = element.createElement;
+//     var InnerBlocks = blockEditor.InnerBlocks;
+//
+//     blocks.registerBlockType( 'gutenberg-examples/example-06', {
+//         title: 'Example: Inner Blocks',
+//         category: 'design',
+//
+//         edit: function( props ) {
+//             return el(
+//                 'div',
+//                 { className: props.className,
+//                     style: {'minHeight': '300px','position':'relative','overflow':'hidden','backgroundImage': 'url(https://s.w.org/images/core/5.5/don-quixote-06.jpg)'}
+//                 },
+//                 el( InnerBlocks,{
+//                     // orientation: "horizontal",
+//                     // template: [
+//                     //     [ 'core/image', {} ],
+//                     //     [ 'core/heading', { placeholder: 'Book Title' } ],
+//                     //     [ 'core/paragraph', { placeholder: 'Summary' } ],
+//                     // ]
+//                 } )
+//             );
+//         },
+//
+//         save: function( props ) {
+//             return el(
+//                 'div',
+//                 { className: props.className,
+//                     style: {'minHeight': '300px','position':'relative','overflow':'hidden','backgroundImage': 'url(https://s.w.org/images/core/5.5/don-quixote-06.jpg)'}
+//                 },
+//                 el( InnerBlocks.Content )
+//             );
+//         }
+//     } );
+// } (
+//     window.wp.blocks,
+//     window.wp.element,
+//     window.wp.blockEditor
+// ) );

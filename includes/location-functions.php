@@ -55,7 +55,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
         $out_put .= '<option ' . selected($post_country, $country, false) . ' value="' . esc_attr($country) . '" data-country_code="' . $ccode . '" data-country_lat="' . $gps['lat'] . '" data-country_lon="' . $gps['lon'] . '" >' . $name . '</option>';
     }
 
-    echo $out_put;
+    return $out_put;
 }
 
 /**

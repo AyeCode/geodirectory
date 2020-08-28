@@ -1183,14 +1183,16 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				if($design_style){
 //					print_r( $args );
 
-					$btn_class = 'border-0 align-middle gd-badge';
+					$btn_class = ' align-middle gd-badge';
 					// color
 					$color_custom = true;
+					$badge_color = '';
 					if( !empty( $args['color'] ) ) {
-						$btn_class .= ' badge-' . sanitize_html_class($args['color']);
+//						$btn_class .= ' badge-' . sanitize_html_class($args['color']);
+						$badge_color = sanitize_html_class($args['color']);
 						$color_custom = false;
 					}else{
-						$btn_class .= ' badge-primary'; // custom colors will override this anyway.
+						//$btn_class .= ' badge-primary'; // custom colors will override this anyway.
 					}
 
 					// shadow
@@ -1202,9 +1204,16 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 					// type
 					if( !empty( $args['type'] ) && $args['type']=='pill' ){
-						$btn_class .= ' badge badge-pill';
+						$btn_class .= ' border-0 badge badge-pill';
+						$btn_class .= $badge_color ? ' badge-'.$badge_color. ' ' : '';
+					}elseif( !empty( $args['type'] ) && $args['type']=='button' ) {
+						$btn_class .= ' btn ';
+						$btn_class .= $badge_color ? ' btn-'.$badge_color. ' ' : '';
+					}elseif( !empty( $args['type'] ) && $args['type']=='link' ) {
+						$btn_class .= ' btn btn-link ';
 					}else{
-						$btn_class .= ' badge';
+						$btn_class .= ' border-0 badge';
+						$btn_class .= $badge_color ? ' badge-'.$badge_color. ' ' : '';
 					}
 
 					//alignment

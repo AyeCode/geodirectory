@@ -1564,7 +1564,6 @@ function gd_user_position_fail(err) {
  * @param $msg
  */
 function gd_manually_set_user_position($msg){
-    if(window.confirm(geodir_params.confirm_lbl_error + " "+$msg+ "\n" + geodir_params.confirm_set_location)){
 
         var $prefix = "geodir_manual_location_";
 
@@ -1574,10 +1573,12 @@ function gd_manually_set_user_position($msg){
             //trigger: $successFunction
         }, function(data) {
             if (data) {
-                $lity = lity("<div class='lity-show'>"+data+"</div>");
+                aui_modal("",data);
+
                 // map center is off due to lightbox zoom effect so we resize to fix
                 setTimeout(function(){
-                    jQuery('.lity-show .geodir_map_container').css('width','90%').css('width','99.99999%');
+                    jQuery('.aui-modal .geodir_map_container').css('width','90%').css('width','99.99999%');
+                    window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
                 }, 500);
 
                 jQuery( window ).off($prefix+'_trigger');
@@ -1592,23 +1593,13 @@ function gd_manually_set_user_position($msg){
                         if(typeof fn === 'function') {
                             fn(lat,lon);
                         }
-                        $lity.close();
+                        jQuery('.aui-modal').modal('hide');
                     }
                 });
 
                 return false;
             }
         });
-
-    }else{
-        // call the fail function if exists
-        if(window.gd_user_position_fail_callback ){
-            var fn = window.gd_user_position_fail_callback;
-            if(typeof fn === 'function') {
-                fn();
-            }
-        }
-    }
 }
 
 function gd_set_get_directions($lat,$lon){

@@ -1777,7 +1777,7 @@ function geodir_getcookie( $name ) {
 	return ! empty( $_COOKIE ) && isset( $_COOKIE[ $name ] ) ? $_COOKIE[ $name ] : '';
 }
 
-function geodir_aui_colors($include_branding = false, $include_outlines = false){
+function geodir_aui_colors($include_branding = false, $include_outlines = false, $outline_button_only_text = false){
 	$theme_colors = array();
 	
 	$theme_colors["primary"] = __('Primary', 'geodirectory');
@@ -1797,21 +1797,22 @@ function geodir_aui_colors($include_branding = false, $include_outlines = false)
 	$theme_colors["orange"] = __('Orange', 'geodirectory');
 
 	if($include_outlines){
-		$theme_colors["outline-primary"] = __('Primary outline', 'geodirectory');
-		$theme_colors["outline-secondary"] = __('Secondary outline', 'geodirectory');
-		$theme_colors["outline-success"] = __('Success outline', 'geodirectory');
-		$theme_colors["outline-danger"] = __('Danger outline', 'geodirectory');
-		$theme_colors["outline-warning"] = __('Warning outline', 'geodirectory');
-		$theme_colors["outline-info"] = __('Info outline', 'geodirectory');
-		$theme_colors["outline-light"] = __('Light outline', 'geodirectory');
-		$theme_colors["outline-dark"] = __('Dark outline', 'geodirectory');
-		$theme_colors["outline-white"] = __('White outline', 'geodirectory');
-		$theme_colors["outline-purple"] = __('Purple outline', 'geodirectory');
-		$theme_colors["outline-salmon"] = __('Salmon outline', 'geodirectory');
-		$theme_colors["outline-cyan"] = __('Cyan outline', 'geodirectory');
-		$theme_colors["outline-gray"] = __('Gray outline', 'geodirectory');
-		$theme_colors["outline-indigo"] = __('Indigo outline', 'geodirectory');
-		$theme_colors["outline-orange"] = __('Orange outline', 'geodirectory');
+		$button_only =  $outline_button_only_text ? " ".__("(button only)","geodirectory") : '';
+		$theme_colors["outline-primary"] = __('Primary outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-secondary"] = __('Secondary outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-success"] = __('Success outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-danger"] = __('Danger outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-warning"] = __('Warning outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-info"] = __('Info outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-light"] = __('Light outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-dark"] = __('Dark outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-white"] = __('White outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-purple"] = __('Purple outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-salmon"] = __('Salmon outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-cyan"] = __('Cyan outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-gray"] = __('Gray outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-indigo"] = __('Indigo outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-orange"] = __('Orange outline', 'geodirectory') . $button_only;
 	}
 	
 
@@ -1860,4 +1861,28 @@ function geodir_get_post_id_with_content($field_key = '',$post_type = 'gd_place'
 
 	return $post_id;
 
+}
+
+/**
+ * Checks a version number against the core version and adds a admin notice if requirements are not met.
+ *
+ * @param $name
+ * @param $version
+ *
+ * @return bool
+ */
+function geodir_min_version_check($name,$version){
+	if (version_compare(GEODIRECTORY_VERSION, $version, '<')) {
+		add_action( 'admin_notices', function () use (&$name){
+			?>
+			<div class="notice notice-error is-dismissible">
+				<p><?php echo sprintf( __("%s requires a newer version of GeoDirectory and will not run until the GeoDirectory plugin is updated.","geodirectory"),$name); ?></p>
+			</div>
+			<?php
+		});
+
+		return false;
+	}
+
+	return true;
 }

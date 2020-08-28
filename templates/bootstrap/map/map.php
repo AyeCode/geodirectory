@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<!--END map_background-->
 			<div class="map_background">
 				<div class="top_banner_section_in clearfix">
-					<div class="<?php echo $map_canvas; ?>_TopLeft TopLeft position-absolute bg-white text-muted rounded-sm shadow-sm m-2 px-1 py-1 h5 c-pointer" style="z-index: 3;">
+					<div class="<?php if(wp_doing_ajax()){echo "d-none ";} echo $map_canvas; ?>_TopLeft TopLeft position-absolute bg-white text-muted rounded-sm shadow-sm m-2 px-1 py-1 h5 c-pointer" style="z-index: 3;">
 						<span class="triggermap" id="<?php echo $map_canvas; ?>_triggermap">
 							<i class="fas fa-expand-arrows-alt fa-fw" aria-hidden="true"></i>
 							<i class="fas fa-compress-arrows-alt fa-fw d-none" aria-hidden="true"></i>
