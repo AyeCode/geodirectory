@@ -1,5 +1,6 @@
 = 2.0.0.102 =
 * Avada page builder don't render header on GD Archive pages - FIXED
+* %%term_title%% is not working in Yoast SEO meta title for tags - FIXED
 
 = 2.0.0.101 =
 * Elementor dynamic tag style is not working with Elementor v3 - FIXED
