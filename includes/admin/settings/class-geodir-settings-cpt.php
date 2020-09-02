@@ -781,7 +781,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['show_in_nav_menus'] = true;
 			$output[$post_type]['rewrite'] = array(
 				'slug' => $slug,
-				'with_front' => false,
+				'with_front' => apply_filters( 'geodir_cpt_rewrite_front', false ),
 				'hierarchical' => true,
 				'feeds' => true
 			);
