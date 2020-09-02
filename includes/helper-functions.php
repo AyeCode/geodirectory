@@ -1018,7 +1018,7 @@ function geodir_tool_restore_cpt_from_taxonomies() {
             'query_var' => true,
             'rewrite' => array (
                 'slug' => $cpt['slug'],
-                'with_front' => false,
+                'with_front' => apply_filters( 'geodir_cpt_rewrite_front', false ),
                 'hierarchical' => true,
                 'feeds' => true,
             ),
