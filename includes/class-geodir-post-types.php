@@ -147,7 +147,7 @@ class GeoDir_Post_types {
 				'query_var'       => true,
 				'rewrite'         => array(
 					'slug'         => $listing_slug,
-					'with_front'   => false,
+					'with_front'   => apply_filters( 'geodir_cpt_rewrite_front', false ),
 					'hierarchical' => true,
 					'feeds'        => true
 				),
@@ -200,7 +200,7 @@ class GeoDir_Post_types {
 			$gd_placetags['args'] = array(
 				'public' => true,
 				'hierarchical' => false,
-				'rewrite' => array('slug' => $listing_slug . '/tags', 'with_front' => false, 'hierarchical' => true),
+				'rewrite' => array('slug' => $listing_slug . '/tags', 'with_front' => apply_filters( 'geodir_cpt_rewrite_front', false ), 'hierarchical' => true),
 				'query_var' => true,
 
 				'labels' => array(
@@ -227,7 +227,7 @@ class GeoDir_Post_types {
 			$gd_placecategory['args'] = array(
 				'public' => true,
 				'hierarchical' => true,
-				'rewrite' => array('slug' => $listing_slug, 'with_front' => false, 'hierarchical' => true),
+				'rewrite' => array('slug' => $listing_slug, 'with_front' => apply_filters( 'geodir_cpt_rewrite_front', false ), 'hierarchical' => true),
 				'query_var' => true,
 				'labels' => array(
 					'name' => sprintf( __('%s Categories', 'geodirectory'), $singular_name ),
