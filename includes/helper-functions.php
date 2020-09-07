@@ -1886,3 +1886,12 @@ function geodir_min_version_check($name,$version){
 
 	return true;
 }
+
+/**
+ * Return the bsui class for AUI if AUI design is active.
+ * 
+ * @return string
+ */
+function geodir_bsui_class(){
+	return geodir_design_style() ? 'bsui' : '';
+}

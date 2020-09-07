@@ -903,6 +903,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     $map_canvas = $prefix .'map' ;
     $height = '350px';
     $width = '100%';
+    $wrap_class = '';
     include( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map/map.php' );
 
 

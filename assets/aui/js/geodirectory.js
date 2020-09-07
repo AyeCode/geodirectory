@@ -829,6 +829,8 @@ function geodir_setup_search_form(){
 
         });
     }, 100);
+
+    aui_init();
 }
 
 gdSearchDoing = 0;

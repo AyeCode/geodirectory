@@ -396,10 +396,7 @@ function geodir_cfi_checkbox($html,$cf){
 
         // required
         $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
-
-        //onchange
-        $extra_attributes['onchange'] = "if(this.checked){jQuery('#checkbox_" . $cf['name'] . "').val('1');} else{ jQuery('#checkbox_" . $cf['name'] . "').val('0');}";
-
+        
         // help text
         $help_text = __( $cf['desc'], 'geodirectory' );
 
@@ -409,7 +406,7 @@ function geodir_cfi_checkbox($html,$cf){
             $help_text = "<a href='$tc_link' target='_blank'>" . __( $cf['desc'], 'geodirectory' ) . " <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
         }
 
-        $html = '<input type="hidden" name="' . $cf['name'] . '" id="checkbox_' . $cf['name'] . '" value="' . esc_attr( $value ) . '"/>';
+        $html = '<input type="hidden" name="' . $cf['name'] . '" id="checkbox_' . $cf['name'] . '" value="0"/>'; // this ensures a value is sent, if the next one is checked then that will set it as true
 
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
@@ -419,7 +416,7 @@ function geodir_cfi_checkbox($html,$cf){
                 'id'               => $cf['name'],
                 'name'             => $cf['name'],
                 'type'             => "checkbox",
-                'value'            => $value,
+                'value'            => '1',
                 'title'            => $title,
                 'label'            => __( $cf['frontend_title'], 'geodirectory' ) . $admin_only. $required,
                 'label_show'       => true,
