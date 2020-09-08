@@ -3,6 +3,7 @@
 * %%term_title%% is not working in Yoast SEO meta title for tags - FIXED
 * GD Categories current post type filter is not working on search page - FIXED
 * GD Details sidebar not working with Astra theme custom template - FIXED
+* Unable to translate GD Ninja Form action text - FIXED
 
 = 2.0.0.101 =
 * Elementor dynamic tag style is not working with Elementor v3 - FIXED
