@@ -606,6 +606,7 @@ class GeoDir_Compatibility {
 			$gen_keys[] = 'site-sidebar-layout';
 			$gen_keys[] = 'site-content-layout';
 			$gen_keys[] = 'ast-featured-img';
+			$gen_keys[] = 'theme-transparent-header-meta';
 		}
 
 		// Enfold theme
@@ -764,8 +765,13 @@ class GeoDir_Compatibility {
 			&& $object_id == get_queried_object_id()
 			&& ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) )
 		) {
+			$post_type = get_post_type( $object_id );
 
-			$template_page_id = geodir_is_page( 'single' ) ? geodir_details_page_id() : geodir_archive_page_id();
+			if ( ! geodir_is_gd_post_type( $post_type ) ) {
+				$post_type = geodir_get_current_posttype();
+			}
+
+			$template_page_id = geodir_is_page( 'single' ) ? geodir_details_page_id( $post_type ) : geodir_archive_page_id( $post_type );
 
 			// if we got this far then we might as well load all the page post meta
 			global $gd_compat_post_meta;
@@ -850,9 +856,12 @@ class GeoDir_Compatibility {
 	 */
 	public static function astra_get_content_layout( $layout ) {
 		global $wp_query;
+
 		$page_id = isset( $wp_query->post->ID ) ? $wp_query->post->ID : '';
-		if ( $page_id && geodir_archive_page_id() == $page_id ) {
+
+		if ( $page_id && ( geodir_archive_page_id() == $page_id || geodir_archive_page_id( geodir_get_current_posttype() ) == $page_id ) ) {
 			$page_layout = get_post_meta( $page_id, 'site-content-layout', true );
+
 			if ( $page_layout != '' ) {
 				$layout = $page_layout;
 			}
@@ -870,9 +879,12 @@ class GeoDir_Compatibility {
 	 */
 	public static function astra_page_layout( $layout ) {
 		global $wp_query;
+
 		$page_id = isset( $wp_query->post->ID ) ? $wp_query->post->ID : '';
-		if ( $page_id && (geodir_archive_page_id() == $page_id || geodir_search_page_id() == $page_id )) {
+
+		if ( $page_id && ( geodir_archive_page_id() == $page_id || geodir_archive_page_id( geodir_get_current_posttype() ) == $page_id || geodir_search_page_id() == $page_id ) ) {
 			$page_layout = get_post_meta( $page_id, 'site-sidebar-layout', true );
+
 			if ( $page_layout != '' ) {
 				$layout = $page_layout;
 			}

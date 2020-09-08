@@ -2,6 +2,7 @@
 * Avada page builder don't render header on GD Archive pages - FIXED
 * %%term_title%% is not working in Yoast SEO meta title for tags - FIXED
 * GD Categories current post type filter is not working on search page - FIXED
+* GD Details sidebar not working with Astra theme custom template - FIXED
 
 = 2.0.0.101 =
 * Elementor dynamic tag style is not working with Elementor v3 - FIXED
