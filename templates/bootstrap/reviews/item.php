@@ -40,13 +40,13 @@ global $post;
 					echo $comment->user_id === $post->post_author ? ' <span class="ml-2 h6 m-0"><span class="badge badge-primary">'.__( 'Post author', 'geodirectory' ).'</span></span>' : '';
 					?>
 				</span>
-			
-				<a class="hidden-xs-down text-muted " href="<?php echo esc_url( get_comment_link( $comment->comment_ID, $args ) ); ?>">
-					<time class="chip timeago" datetime="<?php comment_time( 'c' ); ?>">
-						<?php comment_date() ?>,
-						<?php comment_time() ?>
-					</time>
-				</a>
+
+			<?php
+			if($rating != 0){
+				echo '<div class="geodir-review-ratings mb-n2">'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
+			}
+			?>
+
 
 		</div>
 		<!-- .comment-meta -->
@@ -62,26 +62,31 @@ global $post;
 
 		<div class="card-footer py-2 px-3 bg-white">
 			<div class="row">
-				<div class="col align-items-center d-flex">
-					<?php
-					if($rating != 0){
-						echo '<div class="geodir-review-ratings">'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
-					}
-					?>
+				<div class="col-5 align-items-center d-flex">
+					<a class="hidden-xs-down text-muted " href="<?php echo esc_url( get_comment_link( $comment->comment_ID, $args ) ); ?>">
+						<time class="chip timeago" datetime="<?php comment_time( 'c' ); ?>">
+							<?php comment_date() ?>,
+							<?php comment_time() ?>
+						</time>
+					</a>
 				</div>
-				<div class="col text-right">
+				<div class="col-7 text-right">
 					<div class="comment-links">
-						<?php edit_comment_link( __( 'Edit', 'geodirectory' ), '<span class="edit-link">', '</span>' ); ?>
-						<span class="reply-link ml-2">
+						<?php
+						do_action( "geodir_comment_links_start" , $comment );
+						edit_comment_link( __( 'Edit', 'geodirectory' ), '<span class="edit-link btn btn-link">', '</span>' );
+						do_action( "geodir_comment_links_after_edit" , $comment );
+						?>
+						<span class="reply-link">
 							<?php $reply_link = get_comment_reply_link( array_merge( $args, array(
 								'reply_text' => __( 'Reply', 'geodirectory' ),
-//								'after'      => ' <span>&darr;</span>',
 								'depth'      => $depth,
 								'max_depth'  => $args['max_depth']
 							) ) );
 							echo str_replace("comment-reply-link","comment-reply-link btn btn-primary",$reply_link);
 							?>
 						</span>
+						<?php do_action( "geodir_comment_links_end" , $comment ); ?>
 					</div>
 				</div>
 			</div>

@@ -21,7 +21,7 @@ if (post_password_required() || $preview)
     return;
 ?>
 
-<div id="comments" class="comments-area geodir-comments-area bsui">
+<div id="comments" class="comments-area geodir-comments-area bsui" style="padding:0;">
     <div class="commentlist-wrap">
 
     <?php // You can start editing here -- including this comment! ?>
@@ -53,7 +53,7 @@ if (post_password_required() || $preview)
          *
          * This is not shown everywhere but is used by reviews manager.
          */
-        $overall_label = apply_filters('geodir_overall_rating_label','');
+        $overall_label = apply_filters('geodir_overall_rating_label_main','');
         $post_rating = geodir_get_post_rating( $post->ID );
         echo "<div class='gd-main-overall-rating d-flex align-items-center h4'>" . geodir_get_rating_stars( $post_rating, $post->ID, $overall_label ) . "<span class='ml-2 gd-overall-rating-text badge badge-secondary' >".__("Overall rating","geodirectory")."</span></div>";
         /**

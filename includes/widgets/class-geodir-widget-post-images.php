@@ -371,6 +371,8 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		 */
 		$options = wp_parse_args( $options, $defaults );
 
+		$design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
+
 		if($this->is_preview()){
 			$options['ajax_load'] = false;
 		}
@@ -428,8 +430,11 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			}
 
 			if($options['type']=='slider'){
-				// enqueue flexslider JS
-				GeoDir_Frontend_Scripts::enqueue_script( 'jquery-flexslider' );
+				if(!$design_style){
+					// enqueue flexslider JS
+					GeoDir_Frontend_Scripts::enqueue_script( 'jquery-flexslider' );
+				}
+
 
 				$main_wrapper_class .= " geodir_flex-container ";
 				$second_wrapper_class .= " geodir_flexslider geodir-slider geodir-slider-loading ";
@@ -449,7 +454,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			// responsive image class
 			$aspect = $options['type']=='masonry' ? 'none' : $options['aspect'];
 			$responsive_image_class = '';
-			if(geodir_design_style()){
+			if($design_style){
 				$embed_action_class = $options['link_to'] ? 'embed-has-action ' : '';
 				if(!$aspect || $aspect=='16x9'){
 					$responsive_image_class = $embed_action_class.'embed-responsive embed-responsive-16by9';
@@ -517,7 +522,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 				'responsive_image_class'   => $responsive_image_class
 			);
 
-			$design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
+
 			$template = $design_style ? $design_style."/images/images.php" : "legacy/images/images.php";
 
 

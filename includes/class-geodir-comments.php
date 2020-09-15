@@ -705,7 +705,7 @@ class GeoDir_Comments {
 			$design_style = geodir_design_style();
 
 			if($design_style){
-				echo '<div class="form-group form-control h-auto rounded p-3 gd-rating-input-group ">';
+				echo '<div class="form-group form-control h-auto rounded px-3 pt-3 pb-2  gd-rating-input-group ">';
 			}
 
 			echo self::rating_input_html( $rating );
@@ -842,12 +842,8 @@ class GeoDir_Comments {
 		$design_style = geodir_design_style();
 
 		if($design_style){
-			echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap">';
-			if($rating_label){
-				?>
-				<span class="gd-rating-label"><?php echo esc_attr($rating_label);?>: </span>
-				<?php
-			}
+			echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap d-flex d-flex justify-content-between pb-2 w-100">';
+
 			$wrap_class = $type=='input' ? 'c-pointer' : '';
 			?>
 			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
@@ -860,13 +856,20 @@ class GeoDir_Comments {
 				</span>
 			</span>
 				<?php if ( $type == 'input' ) { ?>
-					<span class="gd-rating-text badge badge-secondary"
+					<span class="gd-rating-text badge badge-light border"
 					      data-title="<?php _e( 'Select a rating', 'geodirectory' ); ?>"><?php _e( 'Select a rating', 'geodirectory' ); ?></span>
 					<input type="hidden" id="<?php echo $args['id']; ?>" name="<?php echo $args['id']; ?>"
 					       value="<?php echo esc_attr( $rating ); ?>"/>
 				<?php } ?>
 			</div>
 			<?php
+
+			if($rating_label){
+				?>
+				<span class="gd-rating-label font-weight-bold p-0 m-0"><?php echo esc_attr($rating_label);?></span>
+				<?php
+			}
+
 			echo "</div>";
 		}else{
 			echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap">';

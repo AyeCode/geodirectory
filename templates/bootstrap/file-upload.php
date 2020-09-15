@@ -28,7 +28,7 @@ if ( $multiple ) {
 	$file_limit_message = '';
 }
 ?>
-<div class="geodir-add-files w-100 mx-3 p-0 bg-light text-center container" style="border: 4px dashed #ccc;">
+<div class="geodir-add-files w-100 m-0 mb-3 p-0 bg-light text-center container" style="border: 4px dashed #ccc;">
 	<div class="geodir_form_row clearfix geodir-files-dropbox position-relative p-3" id="<?php echo $id; ?>dropbox" >
 		<input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $files; ?>" class="<?php if ( $is_required ) { echo 'gd_image_required_field'; } ?>"/>
 		<input type="hidden" name="<?php echo $id; ?>image_limit" id="<?php echo $id; ?>image_limit" value="<?php echo $image_limit; ?>"/>

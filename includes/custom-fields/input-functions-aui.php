@@ -396,7 +396,7 @@ function geodir_cfi_checkbox($html,$cf){
 
         // required
         $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
-        
+
         // help text
         $help_text = __( $cf['desc'], 'geodirectory' );
 
@@ -2006,11 +2006,12 @@ function geodir_cfi_files( $html, $cf ) {
                 echo class_exists("AUI_Component_Helper") ? AUI_Component_Helper::help_text(__( $cf['desc'], 'geodirectory' )) : '';
                 if($horizontal){echo "</div>";}
 
-                ?>
-                <?php
+
+
                 // params for file upload
                 $is_required = $cf['is_required'];
 
+                if($horizontal){echo "<div class='mx-3 w-100'>";}
                 // the file upload template
                 echo geodir_get_template_html( "bootstrap/file-upload.php", array(
                     'id'                  => $id,
@@ -2022,6 +2023,7 @@ function geodir_cfi_files( $html, $cf ) {
                     'display_file_types'  => $display_file_types,
                     'multiple'            => $multiple,
                 ) );
+                if($horizontal){echo "</div>";}
 
                 if ( $is_required ) { ?>
                     <span class="geodir_message_error"><?php esc_attr_e($cf['required_msg'], 'geodirectory'); ?></span>

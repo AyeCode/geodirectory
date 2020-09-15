@@ -104,7 +104,7 @@ function geodir_lightbox_embed($link,ele){
             var a = this;
 
             $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
-            $carousel  += '<div class="carousel-item w-autox '+ $active+'"><div>';
+            $carousel  += '<div class="carousel-item '+ $active+'"><div>';
 
 
             // image

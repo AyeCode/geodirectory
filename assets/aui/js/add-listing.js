@@ -127,12 +127,12 @@ jQuery(function($) {
 	});
 
     // Conditional Fields on change
-    jQuery("#geodirectory-add-post").change(function () {
-        aui_conditional_fields("#geodirectory-add-post");
+    jQuery("#geodirectory-add-post,#post").change(function () {
+        aui_conditional_fields("#geodirectory-add-post,#post");
     });
 
     // Conditional Fields on load
-    aui_conditional_fields("#geodirectory-add-post");
+    aui_conditional_fields("#geodirectory-add-post,#post");
 });
 /**
  * Prevent navigation away if there are unsaved changes.
