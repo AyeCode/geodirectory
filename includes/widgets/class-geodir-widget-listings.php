@@ -28,29 +28,16 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'fas fa-th-list',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
 	        'block-supports'=> array(
 		        'customClassName'   => false
 	        ),
             'block-keywords'=> "['listings','posts','geo']",
-            'block-output'   => array( // the block visual output elements as an array
-	            array(
-		            'element' => 'div',
-		            'title'   => __( 'Placeholder for listings', 'geodirectory' ),
-		            'class'   => '[%className%]',
-		            'style'   => '{background: "#eee",width: "100%", height: "450px", position:"relative"}',
-		            array(
-			            'element' => 'i',
-			            'if_class'   => '[%animation%]=="fade" ? "far fa-image gd-fadein-animation" : "fas fa-bars gd-right-left-animation"',
-			            'style'   => '{"text-align": "center", "vertical-align": "middle", "line-height": "450px", "height": "100%", width: "100%","font-size":"140px",color:"#aaa"}',
-		            ),
-	            ),
-            ),
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_listings', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Listings','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-listings', // widget class
+                'classname'   => 'geodir-listings bsui', // widget class
                 'description' => esc_html__('Shows the GD listings filtered by your choices.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
@@ -71,6 +58,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      */
     public function set_arguments(){
 
+	    $design_style = geodir_design_style();
+
         $arguments = array(
             'title'  => array(
                 'title' => __('Title:', 'geodirectory'),
@@ -88,6 +77,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => 'gd_place',
                 'desc_tip' => true,
                 'advanced' => false,
+	            'onchange_rest' => array(
+		            'path'  => '/geodir/v2/"+$value+"/categories',
+		            'values'    => $this->get_rest_slugs_array()
+	            ),
                 'group'     => __("Filters","geodirectory")
             ),
             'category'  => array(
@@ -99,6 +92,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '',
                 'desc_tip' => true,
                 'advanced' => false,
+	            'post_type_linked'  => true,
                 'group'     => __("Filters","geodirectory")
             ),
             'related_to'  => array(
@@ -257,14 +251,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => 'h3',
                 'desc_tip' => true,
                 'advanced' => false,
-                'group'     => __("Design","geodirectory")
+                'group'     => __("SEO","geodirectory")
             ),
             'layout'  => array(
                 'title' => __('Layout:', 'geodirectory'),
                 'desc' => __('How the listings should laid out by default.', 'geodirectory'),
                 'type' => 'select',
                 'options'   =>  geodir_get_layout_options(),
-                'default'  => 'h3',
+                'default'  => '2',
                 'desc_tip' => true,
                 'advanced' => false,
 	            'group'     => __("Design","geodirectory")
@@ -329,9 +323,101 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	            'value'  => '1',
 	            'default'  => '0',
 	            'advanced' => false,
-	            'group'     => __("Design","geodirectory")
+	            'group'     => __("General","geodirectory")
             ),
         );
+
+	    if ( $design_style ) {
+
+		    $arguments['row_gap'] = array(
+			    'title' => __( "Card row gap", 'geodirectory' ),
+			    'desc' => __('This adjusts the spacing between the cards horizontally.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				    ''  =>  __("Default","geodirectory"),
+				    '1'  =>  '1',
+				    '2'  =>  '2',
+				    '3'  =>  '3',
+				    '4'  =>  '4',
+				    '5'  =>  '5',
+			    ),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    $arguments['column_gap'] = array(
+			    'title' => __( "Card column gap", 'geodirectory' ),
+			    'desc' => __('This adjusts the spacing between the cards vertically.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				    ''  =>  __("Default","geodirectory"),
+				    '1'  =>  '1',
+				    '2'  =>  '2',
+				    '3'  =>  '3',
+				    '4'  =>  '4',
+				    '5'  =>  '5',
+			    ),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    $arguments['card_border'] = array(
+			    'title' => __( "Card border", 'geodirectory' ),
+			    'desc' => __('Set the border style for the card.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				                  ''  =>  __("Default","geodirectory"),
+				                  'none'  =>  __("None","geodirectory"),
+			    ) + geodir_aui_colors(),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    $arguments['card_shadow'] = array(
+			    'title' => __( "Card shadow", 'geodirectory' ),
+			    'desc' => __('Set the card shadow style.','geodirectory'),
+			    'type' => 'select',
+			    'options' =>  array(
+				    ''  =>  __("None","geodirectory"),
+				    'small'  =>  __("Small","geodirectory"),
+				    'medium'  =>  __("Medium","geodirectory"),
+				    'large'  =>  __("Large","geodirectory"),
+			    ),
+			    'default'  => '',
+			    'desc_tip' => false,
+			    'advanced' => false,
+			    'group'     => __("Card Design","geodirectory")
+		    );
+
+		    // background
+		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+		    // margins
+		    $arguments['mt']  = geodir_get_sd_margin_input('mt');
+		    $arguments['mr']  = geodir_get_sd_margin_input('mr');
+		    $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+		    $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+		    // padding
+		    $arguments['pt']  = geodir_get_sd_padding_input('pt');
+		    $arguments['pr']  = geodir_get_sd_padding_input('pr');
+		    $arguments['pb']  = geodir_get_sd_padding_input('pb');
+		    $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+		    // border
+		    $arguments['border']  = geodir_get_sd_border_input('border');
+		    $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+		    $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+		    // shadow
+		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+	    }
 
 	    /*
 		 * Elementor Pro features below here
@@ -396,7 +482,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                   'list_order' => '',
                   'post_limit' => '5',
                   'post_ids' => '',
-                  'layout' => 'gridview_onehalf',
+                  'layout' => '2',
                   'listing_width' => '',
                   'add_location_filter' => '1',
                   'character_count' => '20',
@@ -418,6 +504,24 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	              'skin_id' => '',
 	              'skin_column_gap' => '',
 	              'skin_row_gap' => '',
+	            // AUI settings
+	              'column_gap'  => '',
+	              'row_gap'  => '',
+	              'card_border'  => '',
+	              'card_shadow'  => '',
+	              'bg'    => '',
+	              'mt'    => '',
+	              'mb'    => '3',
+	              'mr'    => '',
+	              'ml'    => '',
+	              'pt'    => '',
+	              'pb'    => '',
+	              'pr'    => '',
+	              'pl'    => '',
+	              'border'    => '',
+	              'rounded'    => '',
+	              'rounded_size'    => '',
+	              'shadow'    => '',
             )
         );
 
@@ -428,23 +532,24 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
         return ob_get_clean();
     }
 
-	/**
-	 * Generates popular postview HTML.
-	 *
-	 * @since   1.0.0
-	 * @since   1.5.1 View all link fixed for location filter disabled.
-	 * @since   1.6.24 View all link should go to search page with near me selected.
-	 * @package GeoDirectory
-	 * @global object $post                    The current post object.
-	 * @global string $gd_layout_class The girdview style of the listings for widget.
-	 * @global bool $geodir_is_widget_listing  Is this a widget listing?. Default: false.
-	 *
-	 * @param array|string $args               Display arguments including before_title, after_title, before_widget, and
-	 *                                         after_widget.
-	 * @param array|string $instance           The settings for the particular instance of the widget.
-	 */
-	public function output_html( $args = '', $instance = '' ) {
-		global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings;
+
+    /**
+     * Generates popular postview HTML.
+     *
+     * @since   1.0.0
+     * @since   1.5.1 View all link fixed for location filter disabled.
+     * @since   1.6.24 View all link should go to search page with near me selected.
+     * @package GeoDirectory
+     * @global object $post                    The current post object.
+     * @global string $gd_layout_class The girdview style of the listings for widget.
+     * @global bool $geodir_is_widget_listing  Is this a widget listing?. Default: false.
+     *
+     * @param array|string $args               Display arguments including before_title, after_title, before_widget, and
+     *                                         after_widget.
+     * @param array|string $instance           The settings for the particular instance of the widget.
+     */
+    public function output_html( $args = '', $instance = '' ) {
+        global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings;
 
 		$is_single = ( geodir_is_page( 'single' ) || ! empty( $instance['set_post'] ) ) && ! empty( $gd_post ) ? true : false;
 
@@ -486,61 +591,61 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		 */
 		$tags = empty( $instance['tags'] ) ? '' : apply_filters( 'widget_tags', $instance['tags'], $instance, $this->id_base );
 		/**
-		 * Filter the widget post_author param.
-		 *
-		 * @since 2.0.0
-		 *
-		 * @param string $instance ['post_author'] Filter by author.
-		 */
-		$post_author = empty( $instance['post_author'] ) ? '' : apply_filters( 'widget_post_author', $instance['post_author'], $instance, $this->id_base );
-		/**
-		 * Filter the widget listings limit.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $instance ['post_number'] Number of listings to display.
-		 */
-		$post_number = empty( $instance['post_limit'] ) ? '5' : apply_filters( 'widget_post_number', $instance['post_limit'] );
-		/**
-		 * Filter the widget listings post ids.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $instance ['post_ids'] Post ids to include or exclude.
-		 */
-		$post_ids = empty( $instance['post_ids'] ) ? '' : apply_filters( 'widget_post_ids', $instance['post_ids'] );
-		/**
-		 * Filter widget's "layout" type.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $instance ['layout'] Widget layout type.
-		 */
-		$layout = !isset( $instance['layout'] )  ? 'gridview_onehalf' : apply_filters( 'widget_layout', $instance['layout'] );
-		/**
-		 * Filter widget's "add_location_filter" value.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string|bool $instance ['add_location_filter'] Do you want to add location filter? Can be 1 or 0.
-		 */
-		$add_location_filter = empty( $instance['add_location_filter'] ) ? '0' : apply_filters( 'widget_add_location_filter', $instance['add_location_filter'] );
-		/**
-		 * Filter widget's listing width.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $instance ['listing_width'] Listing width.
-		 */
-		$listing_width = empty( $instance['listing_width'] ) ? '' : apply_filters( 'widget_listing_width', $instance['listing_width'] );
-		/**
-		 * Filter widget's "list_sort" type.
-		 *
-		 * @since 1.0.0
-		 *
-		 * @param string $instance ['list_sort'] Listing sort by type.
-		 */
-		$list_sort             = empty( $instance['sort_by'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['sort_by'] );
+         * Filter the widget post_author param.
+         *
+         * @since 2.0.0
+         *
+         * @param string $instance ['post_author'] Filter by author.
+         */
+        $post_author = empty( $instance['post_author'] ) ? '' : apply_filters( 'widget_post_author', $instance['post_author'], $instance, $this->id_base );
+        /**
+         * Filter the widget listings limit.
+         *
+         * @since 1.0.0
+         *
+         * @param string $instance ['post_number'] Number of listings to display.
+         */
+        $post_number = empty( $instance['post_limit'] ) ? '5' : apply_filters( 'widget_post_number', $instance['post_limit'] );
+	    /**
+	     * Filter the widget listings post ids.
+	     *
+	     * @since 1.0.0
+	     *
+	     * @param string $instance ['post_ids'] Post ids to include or exclude.
+	     */
+	    $post_ids = empty( $instance['post_ids'] ) ? '' : apply_filters( 'widget_post_ids', $instance['post_ids'] );
+        /**
+         * Filter widget's "layout" type.
+         *
+         * @since 1.0.0
+         *
+         * @param string $instance ['layout'] Widget layout type.
+         */
+        $layout = !isset( $instance['layout'] )  ? geodir_grid_view_class(0) : apply_filters( 'widget_layout', $instance['layout'] );
+        /**
+         * Filter widget's "add_location_filter" value.
+         *
+         * @since 1.0.0
+         *
+         * @param string|bool $instance ['add_location_filter'] Do you want to add location filter? Can be 1 or 0.
+         */
+        $add_location_filter = empty( $instance['add_location_filter'] ) ? '0' : apply_filters( 'widget_add_location_filter', $instance['add_location_filter'] );
+        /**
+         * Filter widget's listing width.
+         *
+         * @since 1.0.0
+         *
+         * @param string $instance ['listing_width'] Listing width.
+         */
+        $listing_width = empty( $instance['listing_width'] ) ? '' : apply_filters( 'widget_listing_width', $instance['listing_width'] );
+        /**
+         * Filter widget's "list_sort" type.
+         *
+         * @since 1.0.0
+         *
+         * @param string $instance ['list_sort'] Listing sort by type.
+         */
+        $list_sort             = empty( $instance['sort_by'] ) ? 'latest' : apply_filters( 'widget_list_sort', $instance['sort_by'] );
 		/**
 		 * Filter widget's "title_tag" type.
 		 *
@@ -575,8 +680,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		 */
 		$skin_id = empty( $instance['skin_id'] ) ? '' : apply_filters( 'widget_skin_id', $instance['skin_id'], $instance, $this->id_base );
 
-		$view_all_link = ! empty( $instance['view_all_link'] ) ? true : false;
-		$use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
+	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
+
+	    $view_all_link = ! empty( $instance['view_all_link'] ) ? true : false;
+        $use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
 		$use_viewing_term = ! empty( $instance['use_viewing_term'] ) ? true : false;
 		$shortcode_atts = ! empty( $instance['shortcode_atts'] ) ? $instance['shortcode_atts'] : array();
 		$top_pagination = ! empty( $instance['with_pagination'] ) && ! empty( $instance['top_pagination'] ) ? true : false;
@@ -905,6 +1012,29 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		if ( $bottom_pagination ) {
 			$class .= ' geodir-wgt-pagination-bottom';
 		}
+
+	    // card border class
+	    $card_border_class = '';
+	    if(!empty($instance['card_border'])){
+		    if($instance['card_border']=='none'){
+			    $card_border_class = 'border-0';
+		    }else{
+			    $card_border_class = 'border-'.sanitize_html_class($instance['card_border']);
+		    }
+	    }
+
+	    // card shadow
+	    $card_shadow_class = '';
+	    if(!empty($instance['card_shadow'])){
+		    if($instance['card_shadow']=='small'){
+			    $card_shadow_class = 'shadow-sm';
+		    }elseif($instance['card_shadow']=='medium'){
+			    $card_shadow_class = 'shadow';
+		    }elseif($instance['card_shadow']=='large'){
+			    $card_shadow_class = 'shadow-lg';
+		    }
+	    }
+
 		$backup_posts_per_page = $posts_per_page;
 		$backup_paged = $paged;
 		$backup_gd_advanced_pagination = $gd_advanced_pagination;
@@ -932,19 +1062,32 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			}
 		}
 
-		?>
-		<div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; echo $elementor_wrapper_class; ?>">
-			<?php
-			if ( ! isset( $character_count ) ) {
-				/**
-				 * Filter the widget's excerpt character count.
-				 *
-				 * @since 1.0.0
-				 *
-				 * @param int $instance ['character_count'] Excerpt character count.
-				 */
-				$character_count = $character_count == '' ? 50 : apply_filters( 'widget_character_count', $character_count );
-			}
+	    // wrap class
+	    $class .= " " .geodir_build_aui_class($instance);
+
+	    // preview message
+	    $is_preview = $this->is_preview();
+	    if($is_preview && $design_style){
+		    echo aui()->alert(array(
+				    'type'=> 'info',
+				    'content'=> __("This preview shows all content items to give an idea of layout. Dummy data is used in places.","geodirectory")
+			    )
+		    );
+	    }
+
+        ?>
+        <div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; echo $elementor_wrapper_class; ?> position-relative">
+            <?php
+            if ( ! isset( $character_count ) ) {
+                /**
+                 * Filter the widget's excerpt character count.
+                 *
+                 * @since 1.0.0
+                 *
+                 * @param int $instance ['character_count'] Excerpt character count.
+                 */
+                $character_count = $character_count == '' ? 50 : apply_filters( 'widget_character_count', $character_count );
+            }
 
 			if ( isset( $post ) ) {
 				$reset_post = $post;
@@ -955,23 +1098,40 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$geodir_is_widget_listing = true;
 
 			if ( ! empty( $widget_listings ) && $top_pagination ) {
-				self::get_pagination( 'top', $post_count, $post_number, $pageno );
+				self::get_pagination( 'top', $post_count, $post_number, $pageno, $pagination_info );
 			}
 
-			if($skin_active){
-				$column_gap = !empty($instance['skin_column_gap']) ? absint($instance['skin_column_gap']) : '';
-				$row_gap = !empty($instance['skin_row_gap']) ? absint($instance['skin_row_gap']) : '';
-				geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
-			}else{
-				geodir_get_template( 'content-widget-listing.php', array( 'widget_listings' => $widget_listings ) );
-			}
+		    if($skin_active){
+			    $column_gap = !empty($instance['skin_column_gap']) ? absint($instance['skin_column_gap']) : '';
+			    $row_gap = !empty($instance['skin_row_gap']) ? absint($instance['skin_row_gap']) : '';
+			    geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
+		    }else{
+
+			    $template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
+
+			    echo geodir_get_template_html( $template, array(
+				    'widget_listings' => $widget_listings,
+				    'column_gap_class'   => $instance['column_gap'] ? 'mb-'.absint($instance['column_gap']) : 'mb-4',
+				    'row_gap_class'   => $instance['row_gap'] ? 'px-'.absint($instance['row_gap']) : '',
+				    'card_border_class'   => $card_border_class,
+				    'card_shadow_class'  =>  $card_shadow_class,
+			    ) );
+		    }
 
 
 			if ( ! empty( $widget_listings ) && ( $bottom_pagination || $top_pagination ) ) {
-				echo '<div class="geodir-ajax-listings-loader" style="display:none"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';
+				if($design_style){
+					echo '<div class="geodir-ajax-listings-loader loading_div overlay overlay-black position-absolute row m-0 z-index-1 w-100 h-100 rounded overflow-hidden" style="display: none;z-index: 3;top:0;">
+								<div class="spinner-border mx-auto align-self-center text-white" role="status">
+									<span class="sr-only">'.__("Loading...","geodirectory").'</span>
+								</div>
+							</div>';
+				}else{
+					echo '<div class="geodir-ajax-listings-loader" style="display:none"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';
+				}
 
 				if ( $bottom_pagination ) {
-					self::get_pagination( 'bottom', $post_count, $post_number, $pageno );
+					self::get_pagination( 'bottom', $post_count, $post_number, $pageno, $pagination_info );
 				}
 			}
 
@@ -1006,7 +1166,12 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 					 */
 					$view_all_link = apply_filters( 'geodir_widget_gd_listings_view_all_link', $view_all_link, $viewall_url, $query_args, $instance, $args, $this );
 
-					echo '<div class="geodir-widget-bottom">' . $view_all_link . '</div>';
+					if($design_style){
+						$view_all_link = str_replace("geodir-all-link","geodir-all-link btn btn-outline-primary",$view_all_link);
+						echo '<div class="geodir-widget-bottom text-center">' . $view_all_link . '</div>';
+					}else{
+						echo '<div class="geodir-widget-bottom">' . $view_all_link . '</div>';
+					}
 				}
 			}
 
@@ -1171,7 +1336,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		wp_send_json_success( array( 'content' => trim( $output ) ) );
 	}
 
-	public static function get_pagination( $position, $post_count, $post_number, $pageno = 1 ) {
+	public static function get_pagination( $position, $post_count, $post_number, $pageno = 1, $show_advanced = '' ) {
 		global $wp_query;
 
 		$backup_wp_query = $wp_query;
@@ -1196,9 +1361,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 		add_filter( 'geodir_pagination_args', array( __CLASS__, 'filter_pagination_args' ), 999999, 1 );
 
+		$shortcode = '[gd_loop_paging show_advanced="'.$show_advanced.'"]';
+
 		ob_start();
 
-		echo do_shortcode( '[gd_loop_paging]' );
+		echo do_shortcode( $shortcode );
 
 		$pagination = ob_get_clean();
 
@@ -1226,6 +1393,26 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$pagination_args['format'] = '#%#%#';
 
 		return $pagination_args;
+	}
+
+	/**
+	 * Get the rest API slug values.
+	 *
+	 * @return array
+	 */
+	public function get_rest_slugs_array(){
+		$post_types = geodir_get_posttypes('array');
+
+//		print_r($post_types);exit;
+
+		$options = array();
+		if (!empty($post_types)) {
+			foreach ($post_types as $key => $info) {
+				$options[$key] = $info['rewrite']['slug'];
+			}
+		}
+
+		return $options;
 	}
 
 	public function set_current_check_404( $check_404 ) {

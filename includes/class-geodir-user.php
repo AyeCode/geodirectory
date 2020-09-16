@@ -231,6 +231,8 @@ class GeoDir_User {
 			return '';
 		}
 
+		$design_style = geodir_design_style();
+		$options = array();
 		// My Favourites in Dashboard
 		$show_favorite_link_user_dashboard = geodir_fav_allowed_post_types();
 		$user_favourite                    = self::get_post_type_fav_counts( $user_id );
@@ -271,24 +273,42 @@ class GeoDir_User {
 						$favourite_links[$key] = array('url' => $post_type_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
 					}
 
+					$options[$post_type_link] = __( geodir_utf8_ucfirst( $name ), 'geodirectory' );
+
 
 				}
 			}
 
 			if ( $favourite_links != '' ) {
 				if ( $output_type == 'select' ) {
-					?>
-					<li>
-						<select id="geodir_my_favourites" class="geodir-select"
-						        option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
-						        data-placeholder="<?php esc_attr_e( 'My Favorites', 'geodirectory' ); ?>" 
-								aria-label="<?php esc_attr_e( 'My Favorites', 'geodirectory' ); ?>">
-							<option value="" disabled="disabled" selected="selected"
-							        style='display:none;'><?php echo esc_attr( __( 'My Favorites', 'geodirectory' ) ); ?></option>
-							<?php echo $favourite_links; ?>
-						</select>
-					</li>
-					<?php
+					if($design_style){
+						echo "<li class='list-unstyled'>";
+						echo  aui()->select( array(
+							'id'               => "geodir_my_favourites",
+							'name'             => "geodir_my_favourites",
+							'class'             => 'mw-100',
+							'placeholder'      => esc_attr__( 'My Favorites', 'geodirectory' ),
+							'value'            => '',
+							'options'          => $options,
+							'extra_attributes' => array(
+								'option-autoredirect' => "1"
+							)
+						) );
+						echo "</li>";
+					}else {
+						?>
+						<li>
+							<select id="geodir_my_favourites" class="geodir-select"
+							        option-autoredirect="1" name="geodir_my_favourites" option-ajaxchosen="false"
+							        data-placeholder="<?php esc_attr_e( 'My Favorites', 'geodirectory' ); ?>"
+							        aria-label="<?php esc_attr_e( 'My Favorites', 'geodirectory' ); ?>">
+								<option value="" disabled="disabled" selected="selected"
+								        style='display:none;'><?php echo esc_attr( __( 'My Favorites', 'geodirectory' ) ); ?></option>
+								<?php echo $favourite_links; ?>
+							</select>
+						</li>
+						<?php
+					}
 				} elseif ( $output_type == 'link' ) {
 					if ( ! empty( $favourite_links ) ) {
 						echo implode( " | ", $favourite_links );
@@ -320,6 +340,9 @@ class GeoDir_User {
 		if ( ! $user_id ) {
 			return '';
 		}
+
+		$design_style = geodir_design_style();
+		$options = array();
 
 		$user_listing = geodir_user_post_listing_count( $user_id, true );
 
@@ -359,24 +382,43 @@ class GeoDir_User {
 				}elseif($output_type == 'array'){
 					$listing_links[] = array('url' => $listing_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
 				}
+
+				$options[$listing_link] = __( geodir_utf8_ucfirst( $name ), 'geodirectory' );
+
 			}
 		}
 
 
 		if ( !empty($listing_links) ) {
 			if ( $output_type == 'select' ) {
-				?>
-				<li>
-					<select id="geodir_my_listings" class="geodir-select" 
-					        option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
-					        data-placeholder="<?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?>" 
-					        aria-label="<?php esc_attr_e( 'My Listings' ,'geodirectory' ); ?>">
-						<option value="" disabled="disabled" selected="selected"
-						        style='display:none;'><?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?></option>
-						<?php echo implode("",$listing_links) ; ?>
-					</select>
-				</li>
-				<?php
+				if($design_style){
+					echo "<li class='list-unstyled'>";
+					echo  aui()->select( array(
+						'id'               => "geodir_my_listings",
+						'name'             => "geodir_my_listings",
+						'class'             => 'mw-100',
+						'placeholder'      => esc_attr__( 'My Listings', 'geodirectory' ),
+						'value'            => '',
+						'options'          => $options,
+						'extra_attributes' => array(
+							'option-autoredirect' => "1"
+						)
+					) );
+					echo "</li>";
+				}else {
+					?>
+					<li>
+						<select id="geodir_my_listings" class="geodir-select"
+						        option-autoredirect="1" name="geodir_my_listings" option-ajaxchosen="false"
+						        data-placeholder="<?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?>"
+						        aria-label="<?php esc_attr_e( 'My Listings', 'geodirectory' ); ?>">
+							<option value="" disabled="disabled" selected="selected"
+							        style='display:none;'><?php echo esc_attr( __( 'My Listings', 'geodirectory' ) ); ?></option>
+							<?php echo implode( "", $listing_links ); ?>
+						</select>
+					</li>
+					<?php
+				}
 			} elseif ( $output_type == 'link' ) {
 				if ( ! empty( $listing_links ) ) {
 					echo implode( " | ", $listing_links );
@@ -399,7 +441,8 @@ class GeoDir_User {
 	public static function show_add_listings($output = 'select') {
 
 		$post_types = geodir_get_posttypes( 'object' );
-
+		$design_style = geodir_design_style();
+		$options = array();
 		$addlisting_links = $output=='array' ? array() : '';
 		foreach ( $post_types as $key => $postobj ) {
 			
@@ -425,6 +468,7 @@ class GeoDir_User {
 					$add_link = apply_filters( 'geodir_dashboard_link_add_listing', $add_link, $key, get_current_user_id() );
 					$name     = apply_filters( 'geodir_dashboard_label_add_listing', $name, $key, get_current_user_id() );
 
+					$options[$add_link] = __( geodir_utf8_ucfirst( $name ), 'geodirectory' );
 					if($output == 'array'){
 						$addlisting_links[$key] = array('url' => $add_link,'text'=>__( geodir_utf8_ucfirst( $name ), 'geodirectory' ));
 					}else{
@@ -439,16 +483,32 @@ class GeoDir_User {
 		if($output == 'array'){
 			return $addlisting_links;
 		}
-		elseif ( $addlisting_links != '' ) { ?>
-
-			<li><select id="geodir_add_listing" class="geodir-select" 
-			            option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false"
-			            data-placeholder="<?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?>" 
-			            aria-label="<?php esc_attr_e( 'Add Listing' ,'geodirectory' ); ?>">
-					<option value="" disabled="disabled" selected="selected"
-					        style='display:none;'><?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?></option>
-					<?php echo $addlisting_links; ?>
-				</select></li> <?php
+		elseif ( $addlisting_links != '' ) {
+			if($design_style ){
+				echo "<li class='list-unstyled'>";
+				echo  aui()->select( array(
+					'id'               => "geodir_add_listing",
+					'name'               => "geodir_add_listing",
+					'class'             => 'mw-100',
+					'placeholder'      => esc_attr__( 'Add Listing', 'geodirectory' ),
+					'value'            => '',
+					'options'          => $options,
+					'extra_attributes' => array(
+						'option-autoredirect' => "1"
+					)
+				) );
+				echo "</li>";
+			}else {
+				?>
+				<li><select id="geodir_add_listing" class="geodir-select"
+				            option-autoredirect="1" name="geodir_add_listing" option-ajaxchosen="false"
+				            data-placeholder="<?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?>"
+				            aria-label="<?php esc_attr_e( 'Add Listing', 'geodirectory' ); ?>">
+						<option value="" disabled="disabled" selected="selected"
+						        style='display:none;'><?php echo esc_attr( __( 'Add Listing', 'geodirectory' ) ); ?></option>
+						<?php echo $addlisting_links; ?>
+					</select></li> <?php
+			}
 
 		}
 
@@ -490,13 +550,19 @@ class GeoDir_User {
 		}
 		$login_link = wp_login_url( $redirect );
 
+		$design_style = geodir_design_style();
+
+		$btn_class = $design_style ? 'btn btn-primary' : '';
+
 		$output = "<div class='gd-login-links'>";
-		$output .= '<a class="login-link uwp-login-link" href="' . esc_url( $login_link ) . '" title="' . $login_title . '">' . $login_title . '</a>';
+		$output .= '<a class="login-link uwp-login-link '.$btn_class.'" href="' . esc_url( $login_link ) . '" title="' . $login_title . '">' . $login_title . '</a>';
 
 		if ( get_option( 'users_can_register' ) ) {
+			$btn_class = $design_style ? 'btn btn-outline-primary' : '';
 			$register_title = esc_attr__( 'Register', 'geodirectory' );
 			$register_link = wp_registration_url();
-			$output .= ' | <a class="register-link uwp-register-link" href="' . esc_url( $register_link ) . '" title="' . $register_title . '">' . $register_title . '</a>';
+			$output .= $design_style ? ' ' : ' | ';
+			$output .= '<a class="register-link uwp-register-link '.$btn_class.'" href="' . esc_url( $register_link ) . '" title="' . $register_title . '">' . $register_title . '</a>';
 		}
 
 		$output .= "</div>";

@@ -1,3 +1,7 @@
+= 2.1.0.0-beta =
+* AyeCode UI starting to be added to GeoDirectory - STARTED
+* First AUI beta release - INFO
+
 = 2.0.0.102 =
 * Avada page builder don't render header on GD Archive pages - FIXED
 * %%term_title%% is not working in Yoast SEO meta title for tags - FIXED

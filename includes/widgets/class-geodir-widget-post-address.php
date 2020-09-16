@@ -17,13 +17,13 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'admin-home',
-			'block-category'=> 'common',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['geo','address','location']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_address', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Post Address','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-address-container', // widget class
+				'classname'   => 'geodir-post-address-container bsui', // widget class
 				'description' => esc_html__('This shows the post address formatted as required.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,
@@ -179,13 +179,20 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 			$args['id'] =  isset($gd_post->ID) ? $gd_post->ID : 0;
 		}
 
+		$design_style = geodir_design_style();
+		$block_preview = $this->is_block_content_call();
+
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
+		if($block_preview){$post_type = 'gd_place';}
 
 		// error checks
 		$errors = array();
-		if(empty($args['key'])){$errors[] = __('key is missing','geodirectory');}
-		if(empty($args['id'])){$errors[] = __('id is missing','geodirectory');}
-		if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
+		if(!$block_preview){
+			if(empty($args['key'])){$errors[] = __('key is missing','geodirectory');}
+			if(empty($args['id'])){$errors[] = __('id is missing','geodirectory');}
+			if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
+		}
+
 
 		if ( ! empty( $errors ) ) {
 			$output .= implode( ", ", $errors );
@@ -216,27 +223,33 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 					$field = stripslashes_deep( $field );
 
 					// set text alignment class
-					if($args['text_alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
-					if($args['text_alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
-					if($args['text_alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
+					if ( $args['text_alignment'] != '' ) {
+						$field['css_class'] .= $design_style ? " text-".sanitize_html_class( $args['text_alignment'] ) : " geodir-text-align" . sanitize_html_class( $args['text_alignment'] );
+					}
 
 					// set alignment class
-					if($args['alignment']=='left'){$field['css_class'] .= " geodir-alignleft ";}
-					if($args['alignment']=='center'){$field['css_class'] .= " geodir-aligncenter ";}
-					if($args['alignment']=='right'){$field['css_class'] .= " geodir-alignright ";}
-					if($args['alignment']=='block'){$field['css_class'] .= " gd-d-block gd-clear-both ";}
+					if ( $args['alignment'] != '' ) {
+						if($design_style){
+							if($args['alignment']=='block'){$field['css_class'] .= " d-block ";}
+							elseif($args['alignment']=='left'){$field['css_class'] .= " float-left mr-2 ";}
+							elseif($args['alignment']=='right'){$field['css_class'] .= " float-right ml-2 ";}
+							elseif($args['alignment']=='center'){$field['css_class'] .= " mw-100 d-block mx-auto ";}
+						}else{
+							$field['css_class'] .= $args['alignment']=='block' ? " gd-d-block gd-clear-both " : " geodir-align" . sanitize_html_class( $args['alignment'] );
+						}
+					}
 
 					// set list_hide class
-					if($args['list_hide']=='2'){$field['css_class'] .= " gd-lv-2 ";}
-					if($args['list_hide']=='3'){$field['css_class'] .= " gd-lv-3 ";}
-					if($args['list_hide']=='4'){$field['css_class'] .= " gd-lv-4 ";}
-					if($args['list_hide']=='5'){$field['css_class'] .= " gd-lv-5 ";}
+					if($args['list_hide']=='2'){$field['css_class'] .= $design_style ? " gv-hide-2 " : " gd-lv-2 ";}
+					if($args['list_hide']=='3'){$field['css_class'] .= $design_style ? " gv-hide-3 " : " gd-lv-3 ";}
+					if($args['list_hide']=='4'){$field['css_class'] .= $design_style ? " gv-hide-4 " : " gd-lv-4 ";}
+					if($args['list_hide']=='5'){$field['css_class'] .= $design_style ? " gv-hide-5 " : " gd-lv-5 ";}
 
 					// set list_hide_secondary class
-					if($args['list_hide_secondary']=='2'){$field['css_class'] .= " gd-lv-s-2 ";}
-					if($args['list_hide_secondary']=='3'){$field['css_class'] .= " gd-lv-s-3 ";}
-					if($args['list_hide_secondary']=='4'){$field['css_class'] .= " gd-lv-s-4 ";}
-					if($args['list_hide_secondary']=='5'){$field['css_class'] .= " gd-lv-s-5 ";}
+					if($args['list_hide_secondary']=='2'){$field['css_class'] .= $design_style ? " gv-hide-s-2 " : " gd-lv-s-2 ";}
+					if($args['list_hide_secondary']=='3'){$field['css_class'] .= $design_style ? " gv-hide-s-3 " : " gd-lv-s-3 ";}
+					if($args['list_hide_secondary']=='4'){$field['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
+					if($args['list_hide_secondary']=='5'){$field['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
 
 					// set to value if empty

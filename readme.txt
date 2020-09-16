@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, real estate, job board, classifieds, listings
 Requires at least: 4.5
 Tested up to: 5.5
-Stable tag: 2.0.0.101
+Stable tag: 2.1.0.0-beta
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -15,7 +15,7 @@ The best Business Directory Plugin. Build any directories: Business directory, r
 
 [Addons](https://wpgeodirectory.com/downloads/category/addons/) | [Themes](https://wpgeodirectory.com/downloads/category/themes/) | [Demos](https://wpgeo.directory/) | [Docs](https://wpgeodirectory.com/docs-v2/) | [Showcase](https://wpgeodirectory.com/category/showcase/)
 
-Turn any WordPress theme into a lightning-fast global business directory. Now 100% compatible with Gutenberg and the most popular page builders such as Elementor, Beaver Builder, Divi, SiteOrigin Page Builder, and more! It includes an extensive new set of shortcodes, Gutenberg Blocks, and Widgets. 
+Turn any WordPress theme into a lightning-fast global business directory. Now 100% compatible with Gutenberg and the most popular page builders such as Elementor, Beaver Builder, Divi, SiteOrigin Page Builder, and more! It includes an extensive new set of shortcodes, Gutenberg Blocks, and Widgets.
 
 [youtube https://www.youtube.com/watch?v=fEdOOucOtUg]
 
@@ -152,17 +152,17 @@ Automatic updates should seamlessly work. We always suggest you backup up your w
 
 Any Business Directory, such as:
 Stores directory
-People directory (Team, Member, Staff) 
+People directory (Team, Member, Staff)
 Hotels directory
 Healthcare directory
 Restaurants directory
 Bars Directory
-Pets Directory 
+Pets Directory
 Church directory
 Travel review directories
 Software review sites
 Professional directory
-Events Directory 
+Events Directory
 A Yellow Pages directory
 
 But because GeoDirectory allows you to create any listing's type, each with unique custom fields, you can use GeoDirectory as Event Calendar plugin, a Real Estate Plugin, a Job Board Plugin, a Classifieds plugin and much more.
@@ -173,11 +173,11 @@ Yes, but you'll need our Location Manager add-on.
 
 = Can users add and edit their listings via the front-end? =
 
-Absolutely yes, Users can submit their listings from the front end and also edit them unlimited times. 
+Absolutely yes, Users can submit their listings from the front end and also edit them unlimited times.
 
 = Which theme is compatible with GeoDirectory? =
 
-Any theme is compatible with GeoDirectory, and if you find any bug with a theme, ask for support, and we will fix it. 
+Any theme is compatible with GeoDirectory, and if you find any bug with a theme, ask for support, and we will fix it.
 
 = Does GeoDirectory work with Elementor and other popular page builders? =
 
@@ -346,6 +346,7 @@ __WARNING: GDv2 is a significant update over GDv1 and may require some manual wo
 
 = 2.0.0.51 =
 [GeoDirectory changelog for version 2.0.0.51](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.51).
+
 == Upgrade Notice ==
 
 = 2.0.0.58 =

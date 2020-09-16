@@ -1779,3 +1779,122 @@ function geodir_setcookie( $name, $value, $expire = 0, $secure = false, $httponl
 function geodir_getcookie( $name ) {
 	return ! empty( $_COOKIE ) && isset( $_COOKIE[ $name ] ) ? $_COOKIE[ $name ] : '';
 }
+
+function geodir_aui_colors($include_branding = false, $include_outlines = false, $outline_button_only_text = false){
+	$theme_colors = array();
+	
+	$theme_colors["primary"] = __('Primary', 'geodirectory');
+	$theme_colors["secondary"] = __('Secondary', 'geodirectory');
+	$theme_colors["success"] = __('Success', 'geodirectory');
+	$theme_colors["danger"] = __('Danger', 'geodirectory');
+	$theme_colors["warning"] = __('Warning', 'geodirectory');
+	$theme_colors["info"] = __('Info', 'geodirectory');
+	$theme_colors["light"] = __('Light', 'geodirectory');
+	$theme_colors["dark"] = __('Dark', 'geodirectory');
+	$theme_colors["white"] = __('White', 'geodirectory');
+	$theme_colors["purple"] = __('Purple', 'geodirectory');
+	$theme_colors["salmon"] = __('Salmon', 'geodirectory');
+	$theme_colors["cyan"] = __('Cyan', 'geodirectory');
+	$theme_colors["gray"] = __('Gray', 'geodirectory');
+	$theme_colors["indigo"] = __('Indigo', 'geodirectory');
+	$theme_colors["orange"] = __('Orange', 'geodirectory');
+
+	if($include_outlines){
+		$button_only =  $outline_button_only_text ? " ".__("(button only)","geodirectory") : '';
+		$theme_colors["outline-primary"] = __('Primary outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-secondary"] = __('Secondary outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-success"] = __('Success outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-danger"] = __('Danger outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-warning"] = __('Warning outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-info"] = __('Info outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-light"] = __('Light outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-dark"] = __('Dark outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-white"] = __('White outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-purple"] = __('Purple outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-salmon"] = __('Salmon outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-cyan"] = __('Cyan outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-gray"] = __('Gray outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-indigo"] = __('Indigo outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-orange"] = __('Orange outline', 'geodirectory') . $button_only;
+	}
+	
+
+	if($include_branding){
+		$theme_colors = $theme_colors  + geodir_aui_branding_colors();
+	}
+
+	return $theme_colors;
+}
+
+function geodir_aui_branding_colors(){
+	return array(
+		"facebook" => __('Facebook', 'geodirectory'),
+		"twitter" => __('Twitter', 'geodirectory'),
+		"instagram" => __('Instagram', 'geodirectory'),
+		"linkedin" => __('Linkedin', 'geodirectory'),
+		"flickr" => __('Flickr', 'geodirectory'),
+		"github" => __('GitHub', 'geodirectory'),
+		"youtube" => __('YouTube', 'geodirectory'),
+		"wordpress" => __('WordPress', 'geodirectory'),
+		"google" => __('Google', 'geodirectory'),
+		"yahoo" => __('Yahoo', 'geodirectory'),
+		"vkontakte" => __('Vkontakte', 'geodirectory'),
+	);
+}
+
+/**
+ * Get the post id of the first post that has content for a field key.
+ *
+ * This is used to help with block previews.
+ * 
+ * @param string $field_key
+ * @param string $post_type
+ *
+ * @return int|null|string
+ */
+function geodir_get_post_id_with_content($field_key = '',$post_type = 'gd_place'){
+	global $wpdb;
+
+	$post_id = 0;
+	$table = geodir_db_cpt_table( $post_type );
+	$result = $wpdb->get_var($wpdb->prepare("SELECT post_id FROM $table WHERE `post_status` = 'publish' AND %s != '' AND %s IS NOT NULL",$field_key,$field_key));
+	if(!empty($result)){
+		$post_id = $result;
+	}
+
+	return $post_id;
+
+}
+
+/**
+ * Checks a version number against the core version and adds a admin notice if requirements are not met.
+ *
+ * @param $name
+ * @param $version
+ *
+ * @return bool
+ */
+function geodir_min_version_check($name,$version){
+	if (version_compare(GEODIRECTORY_VERSION, $version, '<')) {
+		add_action( 'admin_notices', function () use (&$name){
+			?>
+			<div class="notice notice-error is-dismissible">
+				<p><?php echo sprintf( __("%s requires a newer version of GeoDirectory and will not run until the GeoDirectory plugin is updated.","geodirectory"),$name); ?></p>
+			</div>
+			<?php
+		});
+
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Return the bsui class for AUI if AUI design is active.
+ * 
+ * @return string
+ */
+function geodir_bsui_class(){
+	return geodir_design_style() ? 'bsui' : '';
+}

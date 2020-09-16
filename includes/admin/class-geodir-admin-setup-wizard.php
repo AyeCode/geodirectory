@@ -94,6 +94,14 @@ class GeoDir_Admin_Setup_Wizard {
 		$suffix          = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 		$geodir_map_name = GeoDir_Maps::active_map();
 
+		// AUI
+		$design_style = geodir_design_style();
+		// enqueue the script
+		$aui_settings = AyeCode_UI_Settings::instance();
+		$aui_settings->enqueue_scripts();
+		$aui_settings->enqueue_style();
+		
+
 		// load OSM styles if needed.
 		if ( $geodir_map_name == 'osm' ) {
 			wp_enqueue_style( 'geodir-leaflet-style' );
@@ -205,7 +213,7 @@ class GeoDir_Admin_Setup_Wizard {
 public function setup_wizard_header() {
 	?>
 	<!DOCTYPE html>
-	<html <?php language_attributes(); ?>>
+	<html <?php language_attributes(); ?> class="bsui">
 	<head>
 		<meta name="viewport" content="width=device-width"/>
 		<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
@@ -213,10 +221,21 @@ public function setup_wizard_header() {
 		<?php wp_print_scripts( 'geodir-setup' ); ?>
 		<?php do_action( 'admin_print_styles' ); ?>
 		<?php do_action( 'admin_head' ); ?>
+		<style>
+			body,p{
+				font-size: 16px;
+				font-weight: normal;
+			}
+		</style>
 	</head>
-	<body class="gd-setup wp-core-ui">
-	<h1 id="gd-logo"><a href="https://wpgeodirectory.com/"><img
-				src="<?php echo GEODIRECTORY_PLUGIN_URL; ?>/assets/images/gd-logo-grey.png" alt="GeoDirectory"/></a>
+	<body class="gd-setup wp-core-ui bg-white mx-auto mt-4" style="">
+	<h1 class="h2 text-center pb-3">
+		<a class=" text-decoration-none" href="https://wpgeodirectory.com/">
+			<i class="fas fa-globe-americas text-primary bg-white" style="color:#ff8333 !important;"></i>
+			<span class="text-black-50">
+				<span class="" style="color:#ff8333 !important;">Geo</span>Directory
+			</span>
+		</a>
 	</h1>
 	<?php
 	}
@@ -230,7 +249,7 @@ public function setup_wizard_header() {
 		$ouput_steps = $this->steps;
 		array_shift( $ouput_steps );
 		?>
-		<ol class="gd-setup-steps">
+		<ol class="gd-setup-steps mb-0 pb-4">
 			<?php foreach ( $ouput_steps as $step_key => $step ) : ?>
 				<li class="<?php
 				if ( $step_key === $this->step ) {
@@ -279,14 +298,13 @@ public function setup_wizard_header() {
 	 */
 	public function setup_introduction() {
 		?>
-		<h1><?php esc_html_e( 'Welcome to the world of GeoDirectory!', 'geodirectory' ); ?></h1>
-		<p><?php _e( "Thank you for choosing GeoDirectory to power your online directory! This quick setup wizard will help you configure the basic settings. <strong>It's completely optional and should not take longer than five minutes.</strong>", 'geodirectory' ); ?></p>
-		<p><?php esc_html_e( "No time right now? If you don't want to go through the wizard, you can skip and return to the WordPress dashboard. Come back anytime if you change your mind!", 'geodirectory' ); ?></p>
-		<p class="gd-setup-actions step">
-			<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-			   class="button-primary button button-large button-next"><?php esc_html_e( 'Let\'s go!', 'geodirectory' ); ?></a>
+		<h1 class="h3"><?php esc_html_e( 'Welcome to the world of GeoDirectory!', 'geodirectory' ); ?></h1>
+		<p><?php _e( 'This quick setup wizard will help you <b>configure the basic settings</b>. It’s <b>completely optional</b> and shouldn’t take longer than <b>five minutes<b/>.', 'geodirectory' ); ?></p>
+		<p class="gd-setup-actions step text-right">
 			<a href="<?php echo esc_url( admin_url() ); ?>"
-			   class="button button-large"><?php esc_html_e( 'Not right now', 'geodirectory' ); ?></a>
+			   class="btn btn-outline-primary "><?php esc_html_e( 'Not right now', 'geodirectory' ); ?></a>
+			<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
+			   class="btn btn-primary button-next"><?php esc_html_e( 'Let\'s go!', 'geodirectory' ); ?></a>
 		</p>
 		<?php
 	}
@@ -327,7 +345,13 @@ public function setup_wizard_header() {
 	public function setup_maps() {
 		?>
 		<form method="post">
-			<p><?php esc_html_e( 'To get maps to work properly in your directory please fill out the below details.', 'geodirectory' ); ?></p>
+			<?php
+				echo aui()->alert(array(
+						'type'=> 'info',
+						'content'=> __("Open Street Maps will be used if no Google API key is added.","geodirectory")
+					)
+				);
+				?>
 
 
 			<table class="gd-setup-maps" cellspacing="0">
@@ -351,14 +375,13 @@ public function setup_wizard_header() {
 				</tbody>
 			</table>
 
-			<p><?php esc_html_e( '( The Google maps API key is essential unless you are using OSM or no maps )', 'geodirectory' ); ?></p>
 
-			<p class="gd-setup-actions step">
-				<input type="submit" class="button-primary button button-large button-next"
-				       value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step"/>
+			<p class="gd-setup-actions step text-right mt-4">
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-				   class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
+				   class="btn btn-outline-primary"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
 				<?php wp_nonce_field( 'gd-setup' ); ?>
+				<input type="submit" class="btn btn-primary button-next"
+				       value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step"/>
 			</p>
 		</form>
 		<?php
@@ -426,13 +449,13 @@ public function setup_wizard_header() {
 
 
 			?>
-			<p class="gd-setup-actions step">
+			<p class="gd-setup-actions step text-right mt-4">
 				<?php $generalSettings->output_toggle_advanced(); ?>
-				<input type="submit" class="button-primary button button-large button-next"
-				       value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step"/>
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-				   class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
+				   class="btn btn-outline-primary"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
 				<?php wp_nonce_field( 'gd-setup' ); ?>
+				<input type="submit" class="btn btn-primary"
+				       value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step"/>
 			</p>
 		</form>
 
@@ -506,7 +529,7 @@ public function setup_wizard_header() {
 
 		$wizard_content = apply_filters( 'geodir_wizard_content', $wizard_content );
 		?>
-		<div class="geodir-wizard-content-parts">
+		<div class="geodir-wizard-content-parts mb-3">
 			<ul>
 				<?php
 				foreach ( $wizard_content as $slug => $title ) {
@@ -519,17 +542,17 @@ public function setup_wizard_header() {
 		<form method="post">
 			<?php
 			foreach ( $wizard_content as $slug => $title ) {
-				echo '<h2 class="gd-settings-title "><a id="' . esc_attr( $slug ) . '"></a>' . esc_attr( $title ) . '</h2>' . " \n"; // line break adds a nice spacing
+				echo '<h2 class="gd-settings-title h3"><a id="' . esc_attr( $slug ) . '"></a>' . esc_attr( $title ) . '</h2>' . " \n"; // line break adds a nice spacing
 				echo do_action( "geodir_wizard_content_{$slug}" );
 			}
 			?>
 
-			<p class="gd-setup-actions step">
-				<input type="submit" class="button-primary button button-large button-next"
-				       value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step"/>
+			<p class="gd-setup-actions step text-right mt-4">
 				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-				   class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
+				   class="btn btn-outline-primary"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
 				<?php wp_nonce_field( 'gd-setup' ); ?>
+				<input type="submit" class="btn btn-primary"
+				       value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step"/>
 			</p>
 		</form>
 
@@ -560,7 +583,7 @@ public function setup_wizard_header() {
 		<form method="post">
 			<div class="gd-wizard-recommend">
 
-				<h2 class="gd-settings-title "><?php _e( "Recommend Plugins", "geodirectory" ); ?></h2>
+				<h2 class="gd-settings-title h3 "><?php _e( "Recommend Plugins", "geodirectory" ); ?></h2>
 
 				<p><?php _e( "Below are a few recommend plugins that will help you with your directory.", "geodirectory" ); ?></p>
 
@@ -700,15 +723,16 @@ public function setup_wizard_header() {
 
 			</div>
 
-			<p class="gd-setup-actions step">
-				<input type="submit" class="button-primary button button-large button-next gd-install-recommend"
+			<p class="gd-setup-actions step text-right mt-4">
+				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
+				   class="btn btn-outline-primary"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
+				<?php wp_nonce_field( 'gd-setup' ); ?>
+				<input type="submit" class="btn btn-primary gd-install-recommend"
 				       value="<?php esc_attr_e( 'Install', 'geodirectory' ); ?>" name="install_recommend"
 				       onclick="gd_wizard_install_plugins('<?php echo $nonce; ?>');return false;"/>
-				<input type="submit" class="button-primary button button-large button-next gd-continue-recommend"
+				<input type="submit" class="btn btn-primary gd-continue-recommend"
 				       value="<?php esc_attr_e( 'Continue', 'geodirectory' ); ?>" name="save_step"/>
-				<a href="<?php echo esc_url( $this->get_next_step_link() ); ?>"
-				   class="button button-large button-next"><?php esc_html_e( 'Skip this step', 'geodirectory' ); ?></a>
-				<?php wp_nonce_field( 'gd-setup' ); ?>
+
 			</p>
 		</form>
 		<?php
@@ -736,7 +760,7 @@ public function setup_wizard_header() {
 		$this->setup_ready_actions();
 		?>
 
-		<h1><?php esc_html_e( 'Awesome, your directory is ready!', 'geodirectory' ); ?></h1>
+		<h1 class="h2"><?php esc_html_e( 'Awesome, your directory is ready!', 'geodirectory' ); ?></h1>
 
 		<?php if ( 'unknown' === geodir_get_option( 'usage_tracking', 'unknown' ) || '' === geodir_get_option( 'usage_tracking' ) ) { ?>
 			<div class="geodirectory-message geodirectory-tracker">
@@ -756,7 +780,7 @@ public function setup_wizard_header() {
 
 		<div class="gd-setup-next-steps">
 			<div class="gd-setup-next-steps-first">
-				<h2><?php esc_html_e( 'Next steps', 'geodirectory' ); ?></h2>
+				<h2 class="h3"><?php esc_html_e( 'Next steps', 'geodirectory' ); ?></h2>
 				<ul>
 					<li class="setup-listing"><a class="button button-primary button-large"
 					                             href="<?php echo esc_url( admin_url( 'post-new.php?post_type=gd_place' ) ); ?>"><?php esc_html_e( 'Create your first listing!', 'geodirectory' ); ?></a>
@@ -764,7 +788,7 @@ public function setup_wizard_header() {
 				</ul>
 			</div>
 			<div class="gd-setup-next-steps-last">
-				<h2><?php _e( 'Learn more', 'geodirectory' ); ?></h2>
+				<h2 class="h3"><?php _e( 'Learn more', 'geodirectory' ); ?></h2>
 				<ul>
 					<li class="gd-getting-started"><a
 							href="https://wpgeodirectory.com/docs-v2/geodirectory/getting-started/?utm_source=setupwizard&utm_medium=product&utm_content=getting-started&utm_campaign=geodirectoryplugin"
@@ -879,7 +903,7 @@ public function setup_wizard_header() {
 
 							?>
 						</select>
-						<?php echo geodir_notification( array( 'geodir-wizard-widgets-top-result' => '' ) ); ?>
+						<div class="geodir-wizard-widgets-top-result"></div>
 					</td>
 					<td><input type="button" value="<?php _e( "Insert widgets", "geodirectory" ); ?>"
 					           class="button-primary geodir_dummy_button"
@@ -950,7 +974,7 @@ public function setup_wizard_header() {
 
 						?>
 					</select>
-					<?php echo geodir_notification( array( 'geodir-wizard-widgets-result' => '' ) ); ?>
+					<div class="geodir-wizard-widgets-result"></div>
 				</td>
 				<td><input type="button" value="<?php _e( "Insert widgets", "geodirectory" ); ?>"
 				           class="button-primary geodir_dummy_button"
@@ -1044,9 +1068,10 @@ public function setup_wizard_header() {
 						//print_r($menus);
 					}
 
-					echo geodir_notification( array( 'geodir-wizard-menu-result' => '' ) );
+//					echo geodir_notification( array( 'geodir-wizard-menu-result' => '' ) );
 
 					?>
+					<div class="geodir-wizard-menu-result"></div>
 				</td>
 				<td><input type="button" value="<?php _e( "Insert menu items", "geodirectory" ); ?>"
 				           class="button-primary geodir_dummy_button"
