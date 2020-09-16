@@ -407,7 +407,7 @@ jQuery(window).load(function() {
             tabNoRun = false;
             return;
         }
-        var activeTab = tab.closest('dl').find('dd.geodir-tab-active'), contentLocation = tab.find('a').attr("data-tab") + 'Tab';
+        var activeTab = tab.closest('dl').find('dd.geodir-tab-active'), contentLocation = tab.find('a').attr("data-tab") + 'Tab', scrollTo;
         urlHash = tab.find('a').attr("data-tab");
         
         if (jQuery(tab).hasClass("geodir-tab-active")) {} else {
@@ -457,8 +457,14 @@ jQuery(window).load(function() {
         if (history.pushState && window.location.hash && jQuery('#publish_listing').length === 0) {
             if (jQuery(window).width() < 1060) {
                 jQuery('#gd-tabs .geodir-tab-head').toggle();
+                /* ElementorPro has visible all tabs contant & tabs with list option. */
+                if (jQuery('.geodir-single-tabs-container .geodir-tabs-as-list ' + urlHash + 'List').length) {
+                    scrollTo = jQuery('.geodir-single-tabs-container .geodir-tabs-as-list ' + urlHash + 'List').offset().top;
+                } else{
+                    scrollTo = jQuery('#geodir-tab-mobile-menu').offset().top;
+                }
                 jQuery('html, body').animate({
-                    scrollTop: jQuery('#geodir-tab-mobile-menu').offset().top
+                    scrollTop: scrollTo
                 }, 500);
             }
         }
