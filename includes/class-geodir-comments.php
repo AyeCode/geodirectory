@@ -13,6 +13,10 @@ class GeoDir_Comments {
      * @since 2.0.0
 	 */
 	public static function init() {
+
+		// AUI comment inputs
+		add_action( 'comment_form_defaults', array( __CLASS__, 'aui_comment_form_defaults' ) );
+
 		add_action( 'comment_form_logged_in_after', array( __CLASS__, 'rating_input' ) );
 		add_action( 'comment_form_before_fields', array( __CLASS__, 'rating_input' ) );
 
@@ -36,6 +40,114 @@ class GeoDir_Comments {
 
 		// change the comment hash to review hash
 		add_filter('get_comments_link', array(__CLASS__,'get_comments_link'), 15, 2);
+	}
+
+	/**
+	 * Bootstrap the default comment form inputs with AUI.
+	 *
+	 * @param $defaults
+	 *
+	 * @return mixed
+	 */
+	public static function aui_comment_form_defaults($defaults){
+
+//		print_r( $defaults );
+		$design_style = geodir_design_style();
+
+		if($design_style && geodir_is_page('single') ){
+
+			// comment field
+			$defaults['comment_field'] = aui()->textarea(array(
+				'name'       => 'comment',
+				'class'      => '',
+				'id'         => 'comment',
+				'placeholder'=> esc_html__( "Enter your review comments here (required)...", 'geodirectory'),
+				'required'   => true,
+				'label'      => esc_html__( "Review text", 'geodirectory'),
+				'rows'      => 8,
+			));
+
+			// author name
+			$defaults['fields']['author'] = aui()->input(
+				array(
+					'id'                => 'author',
+					'name'              => 'author',
+					'required'          => true,
+					'label'              => esc_html__( "Name", 'geodirectory'),
+					'type'              => 'text',
+					'placeholder'       => esc_html__( "Name (required)" , 'geodirectory'),
+					'extra_attributes'  => array(
+						'maxlength' => "245"
+					)
+				)
+			);
+
+			// author email
+			$defaults['fields']['email'] = aui()->input(
+				array(
+					'id'                => 'email',
+					'name'              => 'email',
+					'required'          => true,
+					'label'              => esc_html__( "Email", 'geodirectory'),
+					'type'              => 'email',
+					'placeholder'       => esc_html__( "Email (required)" , 'geodirectory'),
+					'extra_attributes'  => array(
+						'maxlength' => "100"
+					)
+				)
+			);
+
+			// website url
+			$defaults['fields']['url'] = aui()->input(
+				array(
+					'id'                => 'url',
+					'name'              => 'url',
+					'required'          => true,
+					'label'              => esc_html__( "Website", 'geodirectory'),
+					'type'              => 'url',
+					'placeholder'       => esc_html__( "Website" , 'geodirectory'),
+					'extra_attributes'  => array(
+						'maxlength' => "200"
+					)
+				)
+			);
+
+			// website url
+			$defaults['fields']['cookies'] = aui()->input(
+				array(
+					'id'                => 'wp-comment-cookies-consent',
+					'name'              => 'wp-comment-cookies-consent',
+					'required'          => true,
+					'value'             => 'yes',
+					'label'              => esc_html__( "Save my name, email, and website in this browser for the next time I comment.", 'geodirectory'),
+					'type'              => 'checkbox',
+				)
+			);
+
+			// logged in as
+			$defaults['logged_in_as'] = str_replace("logged-in-as","logged-in-as mb-3",$defaults['logged_in_as'] );
+
+			// logged out notes
+			$defaults['comment_notes_before'] = aui()->alert(array(
+					'type'=> 'info',
+					'content'=> __("Your email address will not be published.","geodirectory")
+				)
+			);
+
+			$defaults['class_submit'] .= " btn btn-primary form-control text-white";
+
+			$defaults['submit_field'] = '<div class="form-submit form-group">%1$s %2$s</div>';
+
+			$defaults['label_submit'] = esc_html__( "Post Review" , 'geodirectory');
+
+			$reply_text = esc_attr__("Leave a Review","geodirectory");
+			$defaults['title_reply'] = "<span class='gd-comment-review-title h4' data-review-text='$reply_text' data-reply-text='".esc_attr($defaults['title_reply'])."'>$reply_text</span>";
+		}
+
+
+
+
+		return $defaults;
 	}
 
 	/**
@@ -454,9 +566,11 @@ class GeoDir_Comments {
 				return $comment_template;
 			}
 
+			$design_style = geodir_design_style();
+
 			$template = locate_template( array( "geodirectory/reviews.php" ) ); // Use theme template if available
 			if ( ! $template ) {
-				$template = geodir_plugin_path() . '/templates/reviews.php';
+				$template = $design_style ? geodir_plugin_path() . '/templates/bootstrap/reviews.php' : geodir_plugin_path() . '/templates/reviews.php';
 			}
 			$gd_is_comment_template_set = true;
 
@@ -541,65 +655,19 @@ class GeoDir_Comments {
 			default :
 				// Proceed with normal comments.
 				global $post;
-				?>
-				<li <?php comment_class( 'geodir-comment' ); ?> id="li-comment-<?php comment_ID(); ?>">
-				<article id="comment-<?php comment_ID(); ?>" class="comment">
-					<header class="comment-meta comment-author vcard">
-						<?php
-						/**
-						 * Filter to modify comment avatar size
-						 *
-						 * You can use this filter to change comment avatar size.
-						 *
-						 * @since 1.0.0
-						 * @package GeoDirectory
-						 */
-						$avatar_size = apply_filters( 'geodir_comment_avatar_size', 44 );
-						echo get_avatar( $comment, $avatar_size );
-						printf( '<cite><b class="reviewer">%1$s</b> %2$s</cite>',
-							get_comment_author_link(),
-							// If current post author is also comment author, make it known visually.
-							( $comment->user_id === $post->post_author ) ? '<span class="geodir-review-author">' . __( 'Post author', 'geodirectory' ) . '</span>' : ''
-						);
-						$rating = self::get_comment_rating( $comment->comment_ID );
-						if($rating != 0){
-							echo '<div class="geodir-review-ratings">'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
-						}
-						printf( '<a class="geodir-review-time" href="%1$s"><span class="geodir-review-time" title="%3$s">%2$s</span></a>',
-							esc_url( get_comment_link( $comment->comment_ID ) ),
-							sprintf( _x( '%s ago', '%s = human-readable time difference', 'geodirectory' ), human_time_diff( get_comment_time( 'U' ), current_time( 'timestamp' ) ) ),
-							sprintf( __( '%1$s at %2$s', 'geodirectory' ), get_comment_date(), get_comment_time() )
-						);
 
-						?>
-					</header>
-					<!-- .comment-meta -->
+				$design_style = geodir_design_style();
 
-					<?php if ( '0' == $comment->comment_approved ) : ?>
-						<p class="comment-awaiting-moderation"><?php _e( 'Your comment is awaiting moderation.', 'geodirectory' ); ?></p>
-					<?php endif; ?>
+				$template = $design_style ? $design_style."/reviews/item.php" : "legacy/reviews/item.php";
 
-					<section class="comment-content comment">
-						<?php comment_text(); ?>
-					</section>
-					<!-- .comment-content -->
-
-					<div class="comment-links">
-						<?php edit_comment_link( __( 'Edit', 'geodirectory' ), '<span class="edit-link">', '</span>' ); ?>
-						<div class="reply">
-							<?php comment_reply_link( array_merge( $args, array(
-								'reply_text' => __( 'Reply', 'geodirectory' ),
-								'after'      => ' <span>&darr;</span>',
-								'depth'      => $depth,
-								'max_depth'  => $args['max_depth']
-							) ) ); ?>
-						</div>
-					</div>
-
-					<!-- .reply -->
-				</article>
-				<!-- #comment-## -->
-				<?php
+				$vars = array(
+					'comment'   => $comment,
+					'args' => $args,
+					'depth' => $depth,
+					'rating' => self::get_comment_rating( $comment->comment_ID )
+				);
+				echo geodir_get_template_html( $template, $vars );
+				
 				break;
 		endswitch; // end comment_type check
 	}
@@ -633,7 +701,18 @@ class GeoDir_Comments {
 			if ( isset( $comment->comment_post_ID ) && $comment->comment_post_ID ) {
 				$rating = self::get_comment_rating( $comment->comment_ID );
 			}
+
+			$design_style = geodir_design_style();
+
+			if($design_style){
+				echo '<div class="form-group form-control h-auto rounded px-3 pt-3 pb-2  gd-rating-input-group ">';
+			}
+
 			echo self::rating_input_html( $rating );
+
+			if($design_style){
+				echo '</div>';
+			}
 		}
 	}
 
@@ -709,11 +788,11 @@ class GeoDir_Comments {
 
 		$rating_color = $args['rating_color'];
 		if ( $rating_color == '#ff9900' ) {
-			$rating_color = '';
+			$rating_color = '#ff9900';
 		}
 		$rating_color_off = $args['rating_color_off'];
 		if ( $rating_color_off == '#afafaf' ) {
-			$rating_color_off = '';
+			$rating_color_off = "style='color:#afafaf;'";
 		} else {
 			$rating_color_off = "style='color:$rating_color_off;'";
 		}
@@ -734,7 +813,7 @@ class GeoDir_Comments {
 				$i ++;
 			}
 			if ( $rating_color == '#ff9900' ) {
-				$rating_color = '';
+				$rating_color = 'background:#ff9900';
 			} else {
 				$rating_color = "background:$rating_color;";
 			}
@@ -753,18 +832,54 @@ class GeoDir_Comments {
 
 
 		$rating_percent   = $type == 'output' ? 'width:' . $rating / $rating_input_count * 100 . '%;' : '';
+		if($type=='input' && !$rating){
+			$rating_percent = 'width:50%;';
+		}
 		$foreground_style = $rating_percent || $rating_color ? "style='$rating_percent $rating_color'" : '';
 		$rating_wrap_title = $rating_wrap_title ? 'title="' . esc_attr( $rating_wrap_title ) . '"' : '';
 		ob_start();
 
-		echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap">';
-		if($rating_label){
+		$design_style = geodir_design_style();
+
+		if($design_style){
+			echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap d-flex d-flex justify-content-between pb-2 w-100">';
+
+			$wrap_class = $type=='input' ? 'c-pointer' : '';
 			?>
-			<span class="gd-rating-label"><?php echo esc_attr($rating_label);?>: </span>
+			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
+			<span class="gd-rating-wrap d-inline-flex position-relative <?php echo $wrap_class;?>" <?php echo $rating_wrap_title; ?>>
+				<span class="gd-rating-foreground position-absolute text-nowrap overflow-hidden" <?php echo $foreground_style; ?>>
+				<?php echo $rating_html; ?>
+				</span>
+				<span class="gd-rating-background" <?php echo $rating_color_off; ?>>
+				<?php echo $rating_html; ?>
+				</span>
+			</span>
+				<?php if ( $type == 'input' ) { ?>
+					<span class="gd-rating-text badge badge-light border"
+					      data-title="<?php _e( 'Select a rating', 'geodirectory' ); ?>"><?php _e( 'Select a rating', 'geodirectory' ); ?></span>
+					<input type="hidden" id="<?php echo $args['id']; ?>" name="<?php echo $args['id']; ?>"
+					       value="<?php echo esc_attr( $rating ); ?>"/>
+				<?php } ?>
+			</div>
 			<?php
-		}
-		?>
-		<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
+
+			if($rating_label){
+				?>
+				<span class="gd-rating-label font-weight-bold p-0 m-0"><?php echo esc_attr($rating_label);?></span>
+				<?php
+			}
+
+			echo "</div>";
+		}else{
+			echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap">';
+			if($rating_label){
+				?>
+				<span class="gd-rating-label"><?php echo esc_attr($rating_label);?>: </span>
+				<?php
+			}
+			?>
+			<div class="gd-rating gd-rating-<?php echo esc_attr( $type ); ?> gd-rating-type-<?php echo $rating_type; ?>">
 			<span class="gd-rating-wrap" <?php echo $rating_wrap_title; ?>>
 				<span class="gd-rating-foreground" <?php echo $foreground_style; ?>>
 				<?php echo $rating_html; ?>
@@ -773,15 +888,18 @@ class GeoDir_Comments {
 				<?php echo $rating_html; ?>
 				</span>
 			</span>
-			<?php if ( $type == 'input' ) { ?>
-				<span class="gd-rating-text"
-				      data-title="<?php _e( 'Select a rating', 'geodirectory' ); ?>"><?php _e( 'Select a rating', 'geodirectory' ); ?></span>
-				<input type="hidden" id="<?php echo $args['id']; ?>" name="<?php echo $args['id']; ?>"
-				       value="<?php echo esc_attr( $rating ); ?>"/>
-			<?php } ?>
-		</div>
-		<?php
-		echo "</div>";
+				<?php if ( $type == 'input' ) { ?>
+					<span class="gd-rating-text"
+					      data-title="<?php _e( 'Select a rating', 'geodirectory' ); ?>"><?php _e( 'Select a rating', 'geodirectory' ); ?></span>
+					<input type="hidden" id="<?php echo $args['id']; ?>" name="<?php echo $args['id']; ?>"
+					       value="<?php echo esc_attr( $rating ); ?>"/>
+				<?php } ?>
+			</div>
+			<?php
+			echo "</div>";
+		}
+
+
 
 		return ob_get_clean();
 	}

@@ -11,7 +11,7 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.0.0.101
+ * Version: 2.1.0.0-beta
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
@@ -34,7 +34,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.0.0.101';
+    public $version = '2.1.0.0-beta';
 
     /**
      * GeoDirectory instance.
@@ -82,7 +82,7 @@ final class GeoDirectory {
             }
 
             self::$instance->includes();
-            self::$instance->init_hooks();
+	        self::$instance->init_hooks();
 
             do_action( 'geodirectory_loaded' );
         }
@@ -226,7 +226,11 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/image-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/taxonomy-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/input-functions.php' );
+	    if(geodir_design_style()){
+		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/input-functions-aui.php' );
+	    }else{
+		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/input-functions.php' );
+	    }
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-filter-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/functions.php' );

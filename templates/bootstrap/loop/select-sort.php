@@ -37,7 +37,7 @@ if(!empty($sort_options )) {
 		<button id="geodir-sort-by" type="button" class="btn btn-outline-primary rounded-right" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 			<?php echo $button_label;?> <i class="fas fa-sort"></i>
 		</button>
-		<div class="dropdown-menu mt-3 p-0" aria-labelledby="gd-list-view-select-grid">
+		<div class="dropdown-menu dropdown-caret-0 my-3 p-0" aria-labelledby="gd-list-view-select-grid">
 			<h6 class="dropdown-header"><?php esc_attr_e("Sort Options","geodirectory");?></h6>
 			<?php echo $sort_options_html;?>
 			<div class="dropdown-divider"></div>

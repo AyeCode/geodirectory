@@ -1,0 +1,9 @@
+* hide badges on different listing views. - DONE
+* multipel view image slider.
+* image gallery masonary view. - DONE
+* fix search button in sidebar - DONE
+* tackle business hours input once merged
+* map bubble
+* location not shard popup - DONE
+* add listing default category input
+* remove lit for ninja widget

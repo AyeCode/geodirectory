@@ -165,7 +165,7 @@ class GeoDir_Admin_Dashboard {
 								</div>
 							</div>
 							<div class="gd-stats-data gd-stats-wait"> 
-								<div class="gd-stat-loader" style="display:none;"><i class="fas fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only">Loading...</span></div>
+								<div class="gd-stat-loader" style="display:none;"><i class="fas fa-spinner fa-spin fa-3x fa-fw" aria-hidden="true"></i><span class="sr-only"><?php _e("Loading...","geodirectory");?></span></div>
 								<div class="gd-stat-format" style="display:none!important"><div class="col-xs-12 col-sm-6 col-md-4 col-lg-2 gd-stat gd-stat-{stat}"><div class="well text-center"><span class="gd-stat-icon"><i class="{icon}" aria-hidden="true"></i></span><span class="gd-stat-name">{label}</span><span class="gd-stat-no">{value}</span></div></div></div>
 								<div class="gd-stats-details">
 									<div class="row gd-stats-items">

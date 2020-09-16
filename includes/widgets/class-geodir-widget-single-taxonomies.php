@@ -10,6 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 
+    private $css_rules = array();
+    
     /**
      * Register the advanced search widget with WordPress.
      *
@@ -18,22 +20,118 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
      */
     public function __construct() {
 
+        
 
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['category','taxonomies','geodir']",
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_single_taxonomies', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Single Taxonomies','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-single-taxonomies-container', // widget class
+                'classname'   => 'geodir-single-taxonomies-container bsui', // widget class
                 'description' => esc_html__('Shows the current post`s categories and tags.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),
+            'arguments'     => array(
+                'taxonomy'  => array(
+                    'title' => __('Taxonomy', 'geodirectory'),
+                    'desc' => __('Select the taxonomy types to output.', 'geodirectory'),
+                    'type' => 'select',
+                    'options'   =>  array(
+                        "" => __('Categories and Tags', 'geodirectory'),
+                        "cats" => __('Categories', 'geodirectory'),
+                        "tags" => __('Tags', 'geodirectory'),
+                    ),
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => false
+                ),
+                'prefix'  => array(
+                    'title' => __('Prefix', 'geodirectory'),
+                    'desc' => __('Select the taxonomy types to output', 'geodirectory'),
+                    'type' => 'select',
+                    'options'   =>  array(
+                        "" => __('Taxonomy names', 'geodirectory'),
+                        "icons" => __('Icons', 'geodirectory'),
+                        "0" => __('None', 'geodirectory'),
+                    ),
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => false
+                )
+            )
         );
 
+
+        $design_style = geodir_design_style();
+
+        if($design_style){
+            $options['arguments']['link_style'] = array(
+                'title' => __('Link style', 'geodirectory'),
+                'desc' => __('Select the style for the links.', 'geodirectory'),
+                'type' => 'select',
+                'options'   =>  array(
+                    "" => __('Badge', 'geodirectory'),
+                    "pill" => __('Pill', 'geodirectory'),
+                    "link" => __('Link', 'geodirectory'),
+                ),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => false,
+                'group'     => __("Design","geodirectory")
+            );
+
+            $options['arguments']['link_color'] = array(
+                'title' => __('Link color', 'geodirectory'),
+                'desc' => __('Sets the link color.', 'geodirectory'),
+                'type' => 'select',
+                'options'   =>  array(
+                    "" => __('Category color', 'geodirectory'),
+                )+geodir_aui_colors(true),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => false,
+                'group'     => __("Design","geodirectory"),
+                'element_require' => '[%link_style%]!="link"',
+            );
+
+            $options['arguments']['link_color_custom'] = array(
+                'title' => __('Link custom color', 'geodirectory'),
+                'desc' => __('Sets the link color to a custom color.', 'geodirectory'),
+                'type' => 'color',
+                'desc_tip' => true,
+                'default'  => '',
+                'group'     => __("Design","geodirectory"),
+                'element_require' => '[%link_color%]=="custom"',
+            );
+
+            $options['arguments']['link_icon'] = array(
+                'title' => __('Link icons', 'geodirectory'),
+                'desc' => __('Show icons for the links.', 'geodirectory'),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '',
+                'group'     => __("Design","geodirectory")
+            );
+
+
+
+
+//            $options['arguments']['disable_greedy'] = array(
+//                'title' => __('Disable Greedy Menu', 'geodirectory'),
+//                'desc' => __('Greedy menu prevents a large menu falling onto another line by adding a dropdown select.', 'geodirectory'),
+//                'type' => 'checkbox',
+//                'desc_tip' => true,
+//                'value'  => '1',
+//                'default'  => '',
+//                'advanced' => false,
+//                'group'     => __("Design","geodirectory")
+//            );
+        }
 
         parent::__construct( $options );
     }
@@ -54,15 +152,33 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
             return;
         }
 
+        // Default options
+        $defaults = array(
+            'taxonomy' => '',
+            'prefix' => '',
+            'link_style' => '',
+            'link_color' => '',
+            'link_color_custom' => '',
+            'link_icon' => '',
+        );
+
+        /**
+         * Parse incoming $args into an array and merge it with $defaults
+         */
+        $args = wp_parse_args( $args, $defaults );
+        $css_rules = array();
+
+
         $post_id = isset( $post->ID ) ? $post->ID : '';
         $post_type = $post->post_type;
         $post_type_name = geodir_post_type_singular_name( $post_type, true );
         $cat_taxonomy = $post_type . 'category';
         $tag_taxonomy = $post_type . '_tags';
+        $design_style = geodir_design_style();
 
         $taxonomies = array();
 
-        if ( ! empty( $gd_post->post_tags ) ) {
+        if ( ! empty( $gd_post->post_tags ) && $args['taxonomy'] != 'cats' ) {
             if ( taxonomy_exists( $tag_taxonomy ) ) {
                 // To limit post tags
                 $post_tags = trim( $gd_post->post_tags, "," );
@@ -87,7 +203,6 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
                     // Fix slug creation order for tags & location
                     $post_term = trim( $post_term );
 
-                    $priority_location = false;
                     if ( $insert_term = term_exists( $post_term, $tag_taxonomy ) ) {
                         $term = get_term_by( 'id', $insert_term['term_id'], $tag_taxonomy );
                     } else {
@@ -95,34 +210,30 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
                     }
 
                     if ( ! empty( $term ) && ! is_wp_error( $term ) && is_object( $term ) ) {
-                        // Fix tag link on detail page
-                        if ( $priority_location ) {
-                            $tag_link = "<a href=''>" . $post_term . "</a>";
-                            /**
-                             * Filter the tag name on the details page.
-                             *
-                             * @since 1.5.6
-                             * @param string $tag_link The tag link html.
-                             * @param object $term The tag term object.
-                             */
-                            $tag_link = apply_filters( 'geodir_details_taxonomies_tag_link', $tag_link, $term );
-                            $links[] = $tag_link;
-                        } else {
-                            $tag_link = "<a href='" . esc_attr( get_term_link( $term->term_id, $term->taxonomy ) ) . "'>" . $term->name . "</a>";
-                            /** This action is documented in geodirectory-template_actions.php */
-                            $tag_link = apply_filters( 'geodir_details_taxonomies_tag_link', $tag_link, $term );
-                            $links[] = $tag_link;
-                        }
 
+                        $tag_href = esc_attr( get_term_link( $term->term_id, $term->taxonomy ) );
+
+                        $tag_link = $this->style_tax_link('tag',$term->name,$tag_href,$term,$args);
+
+                        /**
+                         * Filter the tag name on the details page.
+                         *
+                         * @since 1.5.6
+                         * @param string $tag_link The tag link html.
+                         * @param object $term The tag term object.
+                         */
+                        $tag_link = apply_filters( 'geodir_details_taxonomies_tag_link', $tag_link, $term );
+                        $links[] = $tag_link;
                         $terms[] = $term;
                     }
                 }
 
-                $taxonomies[ $tag_taxonomy ] = wp_sprintf( __( '%s Tags: %l', 'geodirectory' ), $post_type_name, $links, (object) $terms );
+                $taxonomies[ $tag_taxonomy ] = $this->output_tax_list('tag', $post_type_name, $links, $terms,$args);
+
             }
         }
 
-        if ( ! empty( $gd_post->post_category ) ) {
+        if ( ! empty( $gd_post->post_category )  && $args['taxonomy'] != 'tags' ) {
             if ( ! is_array( $gd_post->post_category ) ) {
                 $post_terms = explode( ",", trim( $gd_post->post_category, "," ) );
             } else {
@@ -145,7 +256,12 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
                         $term = get_term_by( 'id', $post_term, $cat_taxonomy );
 
                         if ( ! empty( $term ) && ! is_wp_error( $term ) && is_object( $term ) ) {
-                            $term_link = "<a href='" . esc_attr( get_term_link( $term, $cat_taxonomy ) ) . "'>" . $term->name ."</a>";
+
+                            $cat_href = esc_attr( get_term_link( $term->term_id, $term->taxonomy ) );
+
+                            $term_link = $this->style_tax_link('cat',$term->name,$cat_href,$term,$args);
+
+//                            $term_link = "<a href='" . esc_attr( get_term_link( $term, $cat_taxonomy ) ) . "'>" . $term->name ."</a>";
                             /**
                              * Filter the category name on the details page.
                              *
@@ -167,7 +283,8 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
                 $terms = $termsOrdered;
             }
 
-            $taxonomies[ $cat_taxonomy ] = wp_sprintf( __( '%s Category: %l', 'geodirectory' ), $post_type_name, $links, (object) $terms );
+            $taxonomies[ $cat_taxonomy ] = $this->output_tax_list('cat', $post_type_name, $links, $terms,$args);
+
         }
 
         /**
@@ -183,22 +300,161 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
 
         // Block demo content
         if ( geodir_is_block_demo() &&  empty( $taxonomies ) && $post_type == 'page' ) {
-            $taxonomies[ $cat_taxonomy ] = __( 'Category:', 'geodirectory' ) . " <a href='#'>" . __( 'Demo', 'geodirectory' ) . "</a>, <a href='#'>" . __( 'Example', 'geodirectory' ) . "</a>";
-            $taxonomies[ $tag_taxonomy ] = __( 'Tags:', 'geodirectory' ) . " <a href='#'>" . __( 'Demo', 'geodirectory' ) . "</a>, <a href='#'>" . __( 'Example', 'geodirectory' ) . "</a>";
+
+            if($args['taxonomy'] != 'tags' ){
+                $links = array();
+                $links[] = $this->style_tax_link('cat',"Demo",'#','',$args);
+                $links[] = $this->style_tax_link('cat',"Example",'#','',$args);
+                $taxonomies[ $cat_taxonomy ] =  $this->output_tax_list('cat', "Demo", $links, $links,$args);
+            }
+
+            if($args['taxonomy'] != 'cats' ){
+                $links = array();
+                $links[] = $this->style_tax_link('tag',"Demo",'#','',$args);
+                $links[] = $this->style_tax_link('tag',"Example",'#','',$args);
+                $taxonomies[ $tag_taxonomy ] =  $this->output_tax_list('tag', "Demo", $links, $links,$args);
+            }
         }
 
-        $content = '<p class="geodir_post_taxomomies clearfix">';
+        
+        $template = $design_style ? $design_style."/single/taxonomies.php" : "legacy/single/taxonomies.php";
 
-        if ( isset( $taxonomies[ $cat_taxonomy ] ) ) {
-            $content .= '<span class="geodir-category">' . $taxonomies[ $cat_taxonomy ] . '</span>';
+        $args = array(
+            'args'  => $args,
+            'taxonomies' => $taxonomies,
+            'cat_taxonomy' => $cat_taxonomy,
+            'tag_taxonomy' => $tag_taxonomy,
+        );
+        $content = geodir_get_template_html( $template, $args );
+
+        // maybe add css
+        if(!empty($this->css_rules) && method_exists($this,'get_instance_style')){
+            $content .= $this->get_instance_style($this->css_rules);
         }
-
-        if ( isset( $taxonomies[ $tag_taxonomy ] ) ) {
-            $content .= '<span class="geodir-tags">' . $taxonomies[ $tag_taxonomy ] . '</span>';
-        }
-
-        $content .= '</p>';
+        
 
         return $content;
+    }
+
+    /**
+     * Build the output from the taxonomy list.
+     *
+     * @param string $type
+     * @param $post_type_name
+     * @param $links
+     * @param $terms
+     * @param $args
+     *
+     * @return string
+     */
+    public function output_tax_list($type = 'cat', $post_type_name, $links, $terms,$args){
+        $output = '';
+        $design_style = geodir_design_style();
+        $links_array = $links;
+        $links = $design_style && $args['link_style'] !='link' ? implode(" ",$links) : $links;
+        if($type=='cat'){
+            if( $args['prefix']==='0'){
+                $output = wp_sprintf( __( '%s%l', 'geodirectory' ), '', $links, (object) $terms );
+            }elseif($args['prefix']=='icons'){
+                $output = wp_sprintf( __( '%s%s Categories%s %l', 'geodirectory' ), '<i class="fas fa-folder" data-toggle="tooltip" title="',$post_type_name,'"></i>', $links, (object) $terms );
+            }else{
+                if(count( $links_array)>1) {
+                    $output = wp_sprintf( __( '%s Categories: %l', 'geodirectory' ), $post_type_name, $links, (object) $terms );
+                }else{
+                    $output = wp_sprintf( __( '%s Category: %l', 'geodirectory' ), $post_type_name, $links, (object) $terms );
+                }
+            }
+        }else{
+            if( $args['prefix']==='0'){
+                $output = wp_sprintf( __( '%s%l', 'geodirectory' ), '', $links, (object) $terms );
+            }elseif($args['prefix']=='icons'){
+                $output = wp_sprintf( __( '%s%s Tags%s %l', 'geodirectory' ), '<i class="fas fa-tags" data-toggle="tooltip" title="',$post_type_name,'"></i>', $links, (object) $terms );
+            }else{
+                $output = wp_sprintf( __( '%s Tags: %l', 'geodirectory' ), $post_type_name, $links, (object) $terms );
+            }
+        }
+
+
+        return $output;
+    }
+
+    /**
+     * Build a link from taxonomy information.
+     *
+     * @param string $type
+     * @param string $name
+     * @param string $href
+     * @param $term
+     * @param array $args
+     *
+     * @return string
+     */
+    public function style_tax_link($type = 'cat',$name = '',$href = '#',$term,$args = array()){
+        $link = '';
+        $icon_output = '';
+        $icon = $type == 'cat' ? '<i class="fas fa-folder"></i>' : '<i class="fas fa-tag"></i>';
+        $design_style = geodir_design_style();
+
+        // style
+        $term_class = !empty($term->term_id) ? 'gd-termid-'.absint($term->term_id) : 'gd-termid-0';
+        $link_class = $term_class." ";
+        if($design_style && $args['link_style']!='link'){
+            $link_class .= 'badge ';
+            if($args['link_style']=='pill'){
+                $link_class .= ' badge-pill  ';
+            }
+        }
+
+        // color
+        if($design_style && $args['link_style']!='link'){
+            if(!empty($args['link_color_custom']) && $args['link_color']=='custom'){
+                $link_color_custom = sanitize_hex_color($args['link_color_custom']);
+                $css_target = $args['link_style']!='link' ? ".badge" : "a";
+                $css_type = $args['link_style']!='link' ? "background" : "color";
+                $this->css_rules[] = $css_target." {{$css_type}: $link_color_custom;color:#fff;}";
+                $this->css_rules[] = $css_target.":hover {color: #fff;}";
+            }elseif(empty($args['link_color'])){
+                $default_class = ' badge-dark text-light';
+                if($type == 'tag'){
+                    $link_class .= $default_class;
+                }else{
+                    $cat_color = '';
+                    if(!empty($term)){
+                        $cat_color = get_term_meta( $term->term_id, 'ct_cat_color', true );
+                    }
+                    
+                    if(!$cat_color ){
+                        $link_class .= $default_class; 
+                    }else{
+                        $link_color_custom = sanitize_hex_color($cat_color);
+                        $css_target = $args['link_style']!='link' ? ".badge.".$term_class : "a.".$term_class;
+                        $css_type = $args['link_style']!='link' ? "background" : "color";
+                        $this->css_rules[] = $css_target." {{$css_type}: $link_color_custom;color:#fff;}";
+                        $this->css_rules[] = $css_target.":hover {color: #fff;}";
+                    }
+                }
+
+            }elseif(!empty($args['link_color'])){
+                $link_class .= ' badge-'.sanitize_html_class($args['link_color']);
+            }
+
+            // if show icon
+            if($args['link_icon']){
+                $icon_output = $icon . " ";
+
+                if(!empty($term)){
+                    $cat_icon = get_term_meta( $term->term_id, 'ct_cat_font_icon', true );
+                    if($cat_icon){
+                        $icon_output =  '<i class="'. $cat_icon .'"></i> ';
+                    }
+                }
+            }
+        }
+
+
+
+        $link = "<a href='" . esc_url_raw($href) . "' class='$link_class'>$icon_output" . esc_attr($name) . "</a>";
+
+        return $link;
     }
 }

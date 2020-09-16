@@ -412,8 +412,8 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 	}
 
 	// set colour
-	$icon_color_off = !empty($args['icon_color_off']) ? sanitize_hex_color($args['icon_color_off']) : '';
-	$icon_color_on = !empty($args['icon_color_on']) ? sanitize_hex_color($args['icon_color_on']) : '';
+	$icon_color_off = !empty($args['icon_color_off']) ? esc_attr($args['icon_color_off']) : 'grey';
+	$icon_color_on = !empty($args['icon_color_on']) ? esc_attr($args['icon_color_on']) : '#e84739';
 
 	$icon_style = '';
 
@@ -422,41 +422,102 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		$user_meta_data = geodir_get_user_favourites( $current_user->data->ID );
 	}
 
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/fav/fav.php" : "legacy/fav/fav.php";
+//	$template = "legacy/fav/fav.php";
+
+	$show = isset($args['show']) ? esc_attr($args['show']) : '';
+	$post_id = absint($post_id);
+	$text_style = '';
+	$text_class = '';
+	$wrap_class = '';
+	$icon_style = '';
+	$link_style = '';
+
 
 	if ( ! empty( $user_meta_data ) && in_array( $post_id, $user_meta_data ) ) {
-		$icon_style = $icon_color_on ? "color:$icon_color_on;" : '';
-		$custom_icon = !empty($args['icon']) ? esc_attr($args['icon']) : '';
-		?><span class="geodir-addtofav favorite_property_<?php echo $post_id; ?>"  ><a
-			class="geodir-removetofav-icon" href="javascript:void(0);"
-			onclick="javascript:gd_fav_save(<?php echo $post_id; ?>);"
-			title="<?php echo $remove_favourite_text; ?>"
-			data-icon="<?php echo $custom_icon;?>"
-			data-color-on="<?php echo $icon_color_on;?>"
-			data-color-off="<?php echo $icon_color_off;?>"><i
-				style="<?php echo $icon_style;?>"
-				class="<?php echo $unfavourite_icon; ?>"></i> <span class="geodir-fav-text"><?php echo $unfavourite_text; ?></span></a>   </span><?php
 
+		$link_class = 'geodir-removetofav-icon';
+		$onclick = "javascript:gd_fav_save($post_id);";
+		$title = $remove_favourite_text;
+		$icon_class = !empty($args['icon']) ? esc_attr($args['icon']) : $favourite_icon;
+		$icon_style .= $icon_color_on ? "color:$icon_color_on;" : '';
+		$text = $unfavourite_text;
+		
 	} else {
 
 		if ( ! isset( $current_user->data->ID ) || $current_user->data->ID == '' ) {
-			$script_text = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
+			$onclick = 'javascript:window.location.href=\'' . geodir_login_url() . '\'';
 		} else {
-			$script_text = 'javascript:gd_fav_save(' . $post_id . ')';
+			$onclick = 'javascript:gd_fav_save(' . $post_id . ')';
 		}
 
-		$icon_style = $icon_color_off ? "color:$icon_color_off;" : '';
-		$custom_icon = !empty($args['icon']) ? esc_attr($args['icon']) : '';
+		$link_class = 'geodir-addtofav-icon';
+		$title = $add_favourite_text;
+		$icon_class = !empty($args['icon']) ? esc_attr($args['icon']) : $favourite_icon;
+		$icon_style .= $icon_color_off ? "color:$icon_color_off;" : '';
+		$text = $favourite_text;
+	}
 
-		?><span class="geodir-addtofav favorite_property_<?php echo $post_id; ?>"><a class="geodir-addtofav-icon"
-		                                                                             href="javascript:void(0);"
-		                                                                             onclick="<?php echo $script_text; ?>"
-		                                                                             title="<?php echo $add_favourite_text; ?>"
-		                                                                             data-icon="<?php echo $custom_icon;?>"
-		                                                                             data-color-on="<?php echo $icon_color_on;?>"
-		                                                                             data-color-off="<?php echo $icon_color_off;?>"><i
-				style="<?php echo $icon_style;?>"
-				class="<?php echo $favourite_icon; ?>"></i> <span class="geodir-fav-text"><?php echo $favourite_text; ?></span></a></span>
-	<?php }
+	if($design_style){
+		// type
+		if($args['type'] == 'badge'){$link_class .= ' badge';}
+		if($args['type'] == 'pill'){$link_class .= ' badge badge-pill';}
+
+		// shadow
+		if(!empty($args['shadow'])){
+			if($args['shadow']=='small'){$link_class .= ' shadow-sm';}
+			elseif($args['shadow']=='medium'){$link_class .= ' shadow';}
+			elseif($args['shadow']=='large'){$link_class .= ' shadow-lg';}
+		}
+
+		// size
+		if(!empty($args['size'])){
+			$wrap_class .= ' '.sanitize_html_class($args['size']);
+		}
+
+		// bg color
+		if( !empty($args['color']) ){
+			$link_class .= ' badge-'.sanitize_html_class($args['color']);
+		}elseif( !empty($args['bg_color']) && $args['type']!='link'){
+			$link_style .= "background:".esc_attr($args['bg_color']).";";
+		}
+		
+		// text color
+		if( !empty($args['txt_color'])){
+			$text_style .= "color:".esc_attr($args['txt_color']).";";
+		}
+	}
+
+	$output = geodir_get_template_html( $template, array(
+		// pass whats used
+		'post_id'   => $post_id,
+		'link_class'   => $link_class,
+		'onclick'   => $onclick,
+		'title'     => $title,
+		'icon_class'      => $icon_class,
+		'text_class'      => $text_class,
+		'wrap_class'      => $wrap_class,
+		'link_style'      => $link_style,
+		'icon_style'      => $icon_style,
+		'text_style'      => $text_style,
+		'text'      => $text,
+		'show'  => $show,
+		// pass everything so it can be customised easily.
+		'args'  => $args,
+		'user_meta_data'    => $user_meta_data,
+		'icon_color_on' => $icon_color_on,
+		'icon_color_off' => $icon_color_off,
+		'custom_icon' => !empty($args['icon']) ? esc_attr($args['icon']) : '',
+		'add_favourite_text' => $add_favourite_text,
+		'remove_favourite_text' => $remove_favourite_text,
+		'unfavourite_text' => $unfavourite_text,
+		'favourite_text' => $favourite_text,
+		'favourite_icon' => $favourite_icon,
+		'unfavourite_icon' => $unfavourite_icon,
+	) );
+
+	echo $output;
 }
 
 /**
@@ -759,6 +820,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		return $output;
 	}
 
+	$design_style = geodir_design_style();
+
 	$defaults = array(
 		'key'       => '',
 		'condition' => '',
@@ -773,8 +836,18 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 		'css_class' => '',
 		'onclick'   => '',
 		'icon_class'=> '',
-		'extra_attributes'=> '', // 'data-save-list-id=123 data-other-post-id=321'
-		'tag'       => ''
+		'extra_attributes'=> '', // 'data-save-list-id=123 data-other-post-id=321', AUI is array
+		'tag'       => '',
+		'popover_title'=> '',
+		'popover_text'=> '',
+		'cta'=> '', // click through action
+		'tooltip_text'  => '',
+		'hover_content'  => '',
+		'hover_icon'  => '',
+		'type'=> '', // AUI only
+		'color'=> '', // AUI only
+		'shadow'=> '', // AUI only
+		'preview'=> '', // AUI only
 	);
 	$args     = shortcode_atts( $defaults, $args, 'gd_post_badge' );
 
@@ -796,7 +869,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$output = apply_filters( 'geodir_output_badge_field_key_' . $match_field, $output, $find_post, $args );
 		}
 
-		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' ) {
+		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' ) {
 			$package_id = geodir_get_post_package_id( $post_id, $post_type );
 			$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
@@ -965,18 +1038,63 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 				}
 
+				// categories
+				if ( ! empty( $badge ) && $match_field == 'default_category' ) {
+					if(!empty($args['preview'])){
+
+					}else{
+
+					}
+					$term = get_term_by( 'id', absint( $badge ), $post_type.'category' );
+
+					// maybe link to it
+					if(( !empty($args['link']) || $args['link']=='%%input%%') && !empty($term)){
+						$term_link = get_term_link($term,$post_type.'category');
+						if(!is_wp_error($term_link)){
+							$args['link'] = $term_link;
+						}
+					}
+
+					if(!empty($term->name)){
+						$badge = esc_attr($term->name);
+					}
+
+				}
+
+				if(!empty($args['preview']) && !$badge){
+					$badge = 'Badge';
+				}
+
+//				print_r( $args );
+//				echo '###'.$badge.$post_type.$args['link'];
+
 				// replace other post variables
 				if(!empty($badge)){
 					$badge = geodir_replace_variables($badge);
 				}
+				if(!empty($args['popover_title'])){
+					$args['popover_title'] = geodir_replace_variables($args['popover_title']);
+				}
+				if(!empty($args['popover_text'])){
+					$args['popover_text'] = geodir_replace_variables($args['popover_text']);
+				}
+				if(!empty($args['tooltip_text'])){
+					$args['tooltip_text'] = geodir_replace_variables($args['tooltip_text']);
+				}
+				if(!empty($args['hover_content'])){
+					$args['hover_content'] = geodir_replace_variables($args['hover_content']);
+				}
 
 				$class = '';
-				if ( ! empty( $args['size'] ) ) {
-					$class .= ' gd-badge-' . sanitize_title( $args['size'] );
+				if(!$design_style){
+					if ( ! empty( $args['size'] ) ) {
+						$class .= ' gd-badge-' . sanitize_title( $args['size'] );
+					}
+					if ( ! empty( $args['alignment'] ) ) {
+						$class .= ' gd-badge-align' . sanitize_title($args['alignment']);
+					}	
 				}
-				if ( ! empty( $args['alignment'] ) ) {
-					$class .= ' gd-badge-align' . sanitize_title($args['alignment']);
-				}
+				
 				if ( ! empty( $args['css_class'] ) ) {
 					$class .= ' ' . esc_attr($args['css_class']);
 				}
@@ -1012,7 +1130,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 				// data-attributes
 				$extra_attributes = '';
-				if(!empty($args['extra_attributes'])){
+				if(!empty($args['extra_attributes']) && !is_array($args['extra_attributes'])){
 					$extra_attributes = esc_attr( $args['extra_attributes'] );
 					$extra_attributes = str_replace("&quot;",'"',$extra_attributes);
 				}
@@ -1033,7 +1151,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 				// set badge text as secondary if icon is set.
 				if( $icon ){
-					$badge = " <span class='gd-secondary'>$badge</span>";
+					$badge = " <span class='gd-secondary gv-secondary'>$badge</span>";
 				}
 
 				// phone & email link
@@ -1056,25 +1174,159 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				 */
 				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $match_value, $match_field, $args, $find_post, $field );
 
-				$post_id = isset( $find_post->ID ) ? absint( $find_post->ID ) : '';
-				$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
-				// Element tag
-				if ( empty( $args['tag'] ) && $is_date ) {
-					$tag = 'time';
-				} else {
-					$tag = 'div';
-				}
+				
+				if($design_style){
+//					print_r( $args );
 
-				$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
-				if ( ! empty( $link ) ) {
-					$output .= "<a href='" . $link . "' $new_window $rel>";
+					$btn_class = ' align-middle gd-badge';
+					// color
+					$color_custom = true;
+					$badge_color = '';
+					if( !empty( $args['color'] ) ) {
+//						$btn_class .= ' badge-' . sanitize_html_class($args['color']);
+						$badge_color = sanitize_html_class($args['color']);
+						$color_custom = false;
+					}else{
+						//$btn_class .= ' badge-primary'; // custom colors will override this anyway.
+					}
+
+					// shadow
+					if( !empty( $args['shadow'] ) ) {
+						if($args['shadow']=='small'){ $btn_class .= ' shadow-sm'; }
+						elseif($args['shadow']=='medium'){ $btn_class .= ' shadow'; }
+						elseif($args['shadow']=='large'){ $btn_class .= ' shadow-lg'; }
+					}
+
+					// type
+					if( !empty( $args['type'] ) && $args['type']=='pill' ){
+						$btn_class .= ' border-0 badge badge-pill';
+						$btn_class .= $badge_color ? ' badge-'.$badge_color. ' ' : '';
+					}elseif( !empty( $args['type'] ) && $args['type']=='button' ) {
+						$btn_class .= ' btn ';
+						$btn_class .= $badge_color ? ' btn-'.$badge_color. ' ' : '';
+					}elseif( !empty( $args['type'] ) && $args['type']=='link' ) {
+						$btn_class .= ' btn btn-link ';
+					}else{
+						$btn_class .= ' border-0 badge';
+						$btn_class .= $badge_color ? ' badge-'.$badge_color. ' ' : '';
+					}
+
+					//alignment
+					if($args['alignment']=='block'){$btn_class .= " d-block ";}
+					elseif($args['alignment']=='left'){$btn_class .= " float-left mr-2 ";}
+					elseif($args['alignment']=='right'){$btn_class .= " float-right ml-2 ";}
+					elseif($args['alignment']=='center'){$btn_class .= " mw-100 d-block mx-auto ";}
+
+
+					if ( ! empty( $args['css_class'] ) ) {
+						// replace some old classes
+						$user_classes = str_replace(array("gd-ab-","gd-badge-shadow"),array("ab-","shadow"),esc_attr($args['css_class']));
+						$btn_class .= ' ' .$user_classes ;
+					}
+					$btn_args = array(
+//						'class'     => 'btn btn-primary  btn-sm px-1 py-0 font-weight-bold gd-badgex',
+						'class'     => $btn_class,
+						'content' => $badge,
+						'style' => $color_custom ? 'background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';' : '',
+						'data-badge'    => esc_attr($match_field),
+//						'data-trigger'    => 'focus', // this could mess with any html inside the popover
+						'data-badge-condition'  => esc_attr($args['condition']),
+					);
+
+					// extra attributes
+					if(!empty($args['extra_attributes'])){
+						$btn_args['extra_attributes'] = $args['extra_attributes'];
+					}
+
+						// onclick
+					if(!empty($args['onclick'])){
+						$btn_args['onclick'] = esc_attr($args['onclick']);
+					}
+
+					// CTA
+					if( $args['cta'] != '0' ){
+						$action = $args['cta'] == '' ? esc_attr($args['key']) : esc_attr($args['cta']);
+						$cta = " if(typeof ga == 'function' && !jQuery(this).hasClass('gd-event-tracked')) { ga('send', 'event', {eventCategory: 'CTA',eventAction: '$action',transport: 'beacon' });jQuery(this).addClass('gd-event-tracked');} ";
+						if(!empty($btn_args['onclick'])){
+							$btn_args['onclick'] .= $cta;
+						}else{
+							$btn_args['onclick'] = $cta;
+						}
+					}
+
+					// popover / tooltip
+					$pop_link = false;
+					if(!empty($args['popover_title']) || !empty($args['popover_text'])){
+						$btn_args['type'] = "button";
+						$btn_args['data-toggle'] = "popover-html";
+						$btn_args['data-placement'] = "top";
+						$pop_link = true;
+						if(!empty($args['popover_title'])){
+							$btn_args['title'] = !empty($args['link']) && $args['link']!='#'  ? "<a href='".esc_url($args['link'])."' $new_window $rel>".$args['popover_title']."</a>" : $args['popover_title'];
+						}
+						if(!empty($args['popover_text'])){
+							$btn_args['data-content'] = !empty($args['link']) && $args['link']!='#'  ? "<a href='".esc_url($args['link'])."' $new_window $rel>".$args['popover_text']."</a>" : $args['popover_text'];
+						}
+					}elseif(!empty($args['tooltip_text'])){
+						$btn_args['data-toggle'] = "tooltip";
+						$btn_args['data-placement'] = "top";
+						$btn_args['title'] = esc_attr($args['tooltip_text']);
+					}
+
+					// hover content
+					if(!empty($args['hover_content'])){
+						$btn_args['hover_content'] = $args['hover_content'];
+					}
+					if(!empty($args['hover_icon'])){
+						$btn_args['hover_icon'] = $args['hover_icon'];
+					}
+
+					// style
+					$btn_args['style'] = '';
+					if($color_custom && !empty($args['bg_color'])){
+						$btn_args['style'] .= 'background-color:' . esc_attr( $args['bg_color'] ) . ';border-color:' . esc_attr( $args['bg_color'] ).';';
+					}
+					if($color_custom && !empty($args['txt_color'])){
+						$btn_args['style'] .= 'color:' . esc_attr( $args['txt_color'] ) . ';';
+					}
+
+					if(!empty($args['link']) && $args['link']!='#' && !$pop_link){
+						$btn_args['href'] = $args['link'];
+					}
+
+					if(!empty($args['link']) && $new_window){
+						$btn_args['new_window'] = true;
+					}
+					if(!empty($args['icon_class'])) { $btn_args['icon'] = $args['icon_class'];}
+
+					$output = '<span class="bsui gd-badge-meta">';
+					if(!empty($args['size'])){$output .= '<span class="'.esc_attr($args['size']).'">';}
+					$output .= aui()->badge( $btn_args );
+					if(!empty($args['size'])){$output .= '</span>';}
+					$output .= '</span>';
+
+					
+				}else{
+					$post_id = isset( $find_post->ID ) ? absint( $find_post->ID ) : '';
+					$link = ! empty( $args['link'] ) ? ( $args['link'] == 'javascript:void(0);' ? $args['link'] : esc_url( $args['link'] ) ) : '';
+					// Element tag
+					if ( empty( $args['tag'] ) && $is_date ) {
+						$tag = 'time';
+					} else {
+						$tag = 'div';
+					}
+
+					$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
+					if ( ! empty( $link ) ) {
+						$output .= "<a href='" . $link . "' $new_window $rel>";
+					}
+					// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
+					$output .= '<' . $tag . ' data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';" ' . $inner_attributes . '>' . $icon . $badge . '</' . $tag . '>';
+					if ( ! empty( $link ) ) {
+						$output .= "</a>";
+					}
+					$output .= '</div>';
 				}
-				// we escape the user input from $match_value but we don't escape the user badge input so they can use html like font awesome.
-				$output .= '<' . $tag . ' data-id="' . $post_id . '" class="gd-badge" data-badge="' . esc_attr($match_field) . '" data-badge-condition="' . esc_attr($args['condition']) . '" style="background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';" ' . $inner_attributes . '>' . $icon . $badge . '</' . $tag . '>';
-				if ( ! empty( $link ) ) {
-					$output .= "</a>";
-				}
-				$output .= '</div>';
 			}
 		}
 	}

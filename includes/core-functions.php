@@ -433,6 +433,7 @@ function geodir_nocache_headers() {
  */
 function geodir_notification( $user_notes ) {
 	$notes = '';
+	$design_style = geodir_design_style();
 	foreach ( $user_notes as $key => $user_note ) {
 
 		if(is_array($user_note)){
@@ -448,16 +449,35 @@ function geodir_notification( $user_notes ) {
 				elseif($type=='success'){$icon = '<i class="fas fa-check-circle"></i>';}
 				elseif($type=='info'){$icon = '<i class="fas fa-info-circle"></i>';}
 			}
-
-			$notes .= "<div class='gd-notification gd-$type $extra_class $dismissible'>";
-			if($icon) {$notes .= $icon. " ";}
-			$notes .= $note;
-			if($dismissible){$notes .= '<i class="fas fa-times gd-notification-dismiss" onclick="jQuery(this).parent().fadeOut();" title="'.__('Dismiss','geodirectory').'"></i>';}
-			$notes .= "</div>";
+			
+			if($design_style){
+				$notes .= aui()->alert(array(
+						'type'=> $type ? $type : 'info',
+						'content'=> $note,
+						'dismissible'=> !empty($user_note['dismissible']) && $user_note['dismissible']!==false ? true : false,
+						'class' => !empty($user_note['icon']) ? $user_note['icon'].$extra_class : $extra_class // escaped in AUI
+					)
+				);
+			}else{
+				$notes .= "<div class='gd-notification gd-$type $extra_class $dismissible'>";
+				if($icon) {$notes .= $icon. " ";}
+				$notes .= $note;
+				if($dismissible){$notes .= '<i class="fas fa-times gd-notification-dismiss" onclick="jQuery(this).parent().fadeOut();" title="'.__('Dismiss','geodirectory').'"></i>';}
+				$notes .= "</div>";
+			}
 		}else{
-			$notes .= "<div class='gd-notification $key'>";
-			$notes .= $user_note;
-			$notes .= "</div>";
+			if($design_style){
+				$notes .= aui()->alert(array(
+						'type'=> $key,
+						'content'=> $user_note,
+					)
+				);
+			}else{
+				$notes .= "<div class='gd-notification $key'>";
+				$notes .= $user_note;
+				$notes .= "</div>";
+			}
+
 		}
 
 
@@ -884,15 +904,18 @@ function geodir_search_form_submit_button() {
 	 * @param string $default_search_button_label The current search button text.
 	 */
 	$default_search_button_label = apply_filters( 'geodir_search_default_search_button_text', $default_search_button_label );
-
 	$fa_class = false;
 	if ( geodir_is_fa_icon( $default_search_button_label ) ) {
 		$fa_class = true;
 	}
 
-	?>
-	<button class="geodir_submit_search" data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>" aria-label="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'" aria-hidden="true"></i><span class="sr-only">' . __( 'Search', 'geodirectory' ). '</span>';}else{ echo __( $default_search_button_label ,'geodirectory') . '<span class="sr-only">' . $default_search_button_label . '</span>'; }?></button>
-	<?php
+	$args = array(
+		'fa_class'  => $fa_class,
+		'default_search_button_label'  => $default_search_button_label,
+	);
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/search-bar/button-search.php" : "legacy/search/button-search.php";
+	echo geodir_get_template_html( $template, $args );
 }
 
 add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5000 );
@@ -924,12 +947,21 @@ function geodir_search_form_post_type_input() {
 
 		if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 && $show_select) {
 
+			$design_style = geodir_design_style();
+
 			$new_style = geodir_get_option( 'geodir_show_search_old_search_from' ) ? false : true;
 			if ( $new_style ) {
-				echo "<div class='gd-search-input-wrapper gd-search-field-cpt'>";
+				$wrap_class = $design_style ? " col-auto flex-fill" : '';
+				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class'>";
 			}
+
+			$select_class = $design_style ? " form-control" : '';
+
+			echo $design_style ? '<div class="form-group">' : '';
+			echo $design_style ? '<label class="sr-only sr-only ">'.__("Select search type","geodirectory").'</label>' : '';
+
 			?>
-			<select name="stype" class="search_by_post" aria-label="<?php esc_attr_e( 'Post Type', 'geodirectory' ); ?>">
+			<select name="stype" class="search_by_post <?php echo $select_class;?>" aria-label="<?php esc_attr_e( 'Post Type', 'geodirectory' ); ?>">
 				<?php foreach ( $post_types as $post_type => $info ):
 					global $wpdb;
 					$pt_slug = isset($info->rewrite->slug) ? esc_attr($info->rewrite->slug) : 'places';
@@ -950,6 +982,8 @@ function geodir_search_form_post_type_input() {
 				<?php endforeach; ?>
 			</select>
 			<?php
+			echo $design_style ? '</div>' : '';
+
 			if ( $new_style ) {
 				echo "</div>";
 			}
@@ -989,23 +1023,21 @@ function geodir_search_form_post_type_input() {
 function geodir_search_form_search_input() {
 	$default_search_for_text = geodir_get_option('search_default_text');
 	if(!$default_search_for_text){$default_search_for_text = geodir_get_search_default_text();}
-	?>
-	<div class='gd-search-input-wrapper gd-search-field-search'>
-		<?php 	do_action('geodir_before_search_for_input');?>
-		<input class="search_text gd_search_text" name="s"
-		       value="<?php if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
-			       $search_term = esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
-			       echo str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
-		       } ?>" type="text"
-		       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"
-		       onClick="this.select();"
-		       placeholder="<?php esc_html_e($default_search_for_text,'geodirectory') ?>" 
-		       aria-label="<?php esc_html_e($default_search_for_text,'geodirectory') ?>"
-		       autocomplete="off"
-		/>
-		<?php 	do_action('geodir_after_search_for_input');?>
-	</div>
-	<?php
+
+	$search_term = '';
+	if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
+		$search_term = esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
+		$search_term = str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
+	}
+
+	$args = array(
+		'default_search_for_text' => $default_search_for_text,
+		'search_term'  => $search_term,
+	);
+
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/search-bar/input-search.php" : "legacy/search/input-search.php";
+	echo geodir_get_template_html( $template, $args  );
 }
 
 /**
@@ -1014,6 +1046,7 @@ function geodir_search_form_search_input() {
  * @since 2.0.0
  */
 function geodir_search_form_near_input() {
+
 
 	$default_near_text = geodir_get_option('search_default_near_text');
 	if(!$default_near_text){$default_near_text = geodir_get_search_default_near_text();}
@@ -1033,7 +1066,7 @@ function geodir_search_form_near_input() {
 	 * @since 1.6.9
 	 * @param string $curr_post_type The current post type.
 	 */
-	$near_input_extra = apply_filters('geodir_near_input_extra','',$curr_post_type);
+	$near_input_extra = apply_filters('geodir_near_input_extra','',$curr_post_type); // @todo we will need to fix this
 
 
 	/**
@@ -1066,21 +1099,16 @@ function geodir_search_form_near_input() {
 	 * @param string $class The class for the HTML near input, default is blank.
 	 */
 	$near_class = apply_filters( 'geodir_search_near_class', '' );
-
-
-	echo "<div class='gd-search-input-wrapper gd-search-field-near $near_class' $near_input_extra>";
-	do_action('geodir_before_search_near_input');
-	?>
-	<input name="snear" class="snear" type="text" value="<?php echo $near; ?>"
-	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>
-	       onClick="this.select();"
-	       placeholder="<?php esc_html_e($default_near_text,'geodirectory') ?>"
-	       aria-label="<?php esc_html_e($default_near_text,'geodirectory') ?>"
-	       autocomplete="off"
-	/>
-	<?php
-	do_action('geodir_after_search_near_input');
-	echo "</div>";
+	
+	$args = array(
+		'near_class' => $near_class,
+		'default_near_text' => $default_near_text,
+		'near' => $near,
+		'near_input_extra' => $near_input_extra,
+	);
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/search-bar/input-near.php" : "legacy/search/input-near.php";
+	echo geodir_get_template_html( $template, $args );
 }
 
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_post_type_input', 10 );
@@ -1091,10 +1119,13 @@ add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
  * Adds a icon to the search near input.
  */
 function geodir_search_near_label() {
-	echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');jQuery(\'.sgeo_lat,.sgeo_lon\').val(\'\');">';
-	echo '<i class="fas fa-map-marker-alt gd-show"></i>';
-	echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
-	echo '</span>';
+	if(!geodir_design_style()){
+		echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');jQuery(\'.sgeo_lat,.sgeo_lon\').val(\'\');">';
+		echo '<i class="fas fa-map-marker-alt gd-show"></i>';
+		echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
+		echo '</span>';
+	}
+
 }
 add_action('geodir_before_search_near_input','geodir_search_near_label');
 
@@ -1102,10 +1133,12 @@ add_action('geodir_before_search_near_input','geodir_search_near_label');
  * Adds a icon to the search for input.
  */
 function geodir_search_for_label() {
-	echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
-	echo '<i class="fas fa-search gd-show"></i>';
-	echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
-	echo '</span>';
+	if(!geodir_design_style()) {
+		echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
+		echo '<i class="fas fa-search gd-show"></i>';
+		echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="' . __( 'Clear field', 'geodirectory' ) . '"></i>';
+		echo '</span>';
+	}
 }
 add_action('geodir_before_search_for_input','geodir_search_for_label');
 
@@ -1142,8 +1175,11 @@ function geodir_search_form(){
 
 	geodir_get_search_post_type();
 
-	geodir_get_template_part('listing', 'filter-form');
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/search-bar/form.php" : "listing-filter-form.php";
 
+	echo geodir_get_template_html( $template );
+	
 	// Always die in functions echoing ajax content
 	die();
 }

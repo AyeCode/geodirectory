@@ -376,7 +376,6 @@ function geodir_cfi_radio($html,$cf){
 
     // If no html then we run the standard output.
     if(empty($html)) {
-
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
@@ -410,7 +409,9 @@ function geodir_cfi_radio($html,$cf){
 
         <?php
         $html = ob_get_clean();
+            
     }
+
 
     return $html;
 }

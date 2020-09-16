@@ -164,6 +164,8 @@ class GeoDir_AJAX {
 		$lng = isset( $location->longitude ) ? $location->longitude : '';
 		$mapzoom = 8;
 
+		$design_style = geodir_design_style();
+
 		// Try and center the map as close to the user as possible.
 		if ( $ip = geodir_get_ip() ) {
 			$geo = geodir_geo_by_ip( $ip );
@@ -176,14 +178,39 @@ class GeoDir_AJAX {
 
 		add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
 
-		echo "<style>.lity-show #" . $prefix . "set_address_button,.lity-show .TopLeft,.lity-show .TopRight,.lity-show .BottomRight,.lity-show .BottomLeft{display:none}.lity-show .geodir_map_container{margin-top:0 !important}</style>";
+		if(!$design_style ){
+			echo "<style>.lity-show #" . $prefix . "set_address_button,.lity-show .TopLeft,.lity-show .TopRight,.lity-show .BottomRight,.lity-show .BottomLeft{display:none}.lity-show .geodir_map_container{margin-top:0 !important}</style>";
+		}
 
-		include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
+		if($design_style ){
+			echo aui()->alert(array(
+					'type'=> 'info',
+					'content'=> __("Auto location detection failed, please manually set your location below by dragging the map / marker.","geodirectory")
+				)
+			);
+			include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map/map-add-listing.php' );
+		}else{
+			include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
+		}
+
 		?>
 		<input type="hidden" id="<?php echo $prefix . 'latitude'; ?>">
 		<input type="hidden" id="<?php echo $prefix . 'longitude'; ?>">
-		<button style="float: right;margin: 10px 0 0 0;" onclick="if(jQuery('#<?php echo $prefix . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo $prefix; ?>', [jQuery('#<?php echo $prefix . 'latitude'; ?>').val(), jQuery('#<?php echo $prefix . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
+
 		<?php
+		if( $design_style ) {
+			?>
+			<div class="text-right">
+			<button type="button" class="btn btn-link" data-dismiss="modal"><?php _e("Cancel","geodirectory");?></button>
+			<button class="btn btn-primary"
+			        onclick="if(jQuery('#<?php echo $prefix . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo $prefix; ?>', [jQuery('#<?php echo $prefix . 'latitude'; ?>').val(), jQuery('#<?php echo $prefix . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
+			</div><?php
+		}else{
+			?>
+			<button style="float: right;margin: 10px 0 0 0;"
+			        onclick="if(jQuery('#<?php echo $prefix . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo $prefix; ?>', [jQuery('#<?php echo $prefix . 'latitude'; ?>').val(), jQuery('#<?php echo $prefix . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
+			<?php
+		}
 		wp_die();
 	}
 
@@ -240,6 +267,12 @@ class GeoDir_AJAX {
 		$skin_column_gap = ! empty( $_REQUEST['skin_column_gap'] ) ? absint( $_REQUEST['skin_column_gap'] ) : '';
 		$skin_row_gap = ! empty( $_REQUEST['skin_row_gap'] ) ? absint( $_REQUEST['skin_row_gap'] ) : '';
 
+		// AUI
+		$column_gap = ! empty( $_REQUEST['column_gap'] ) ? absint( $_REQUEST['column_gap'] ) : '';
+		$row_gap = ! empty( $_REQUEST['row_gap'] ) ? absint( $_REQUEST['row_gap'] ) : '';
+		$card_border = ! empty( $_REQUEST['card_border'] ) ? sanitize_html_class( $_REQUEST['card_border'] ) : '';
+		$card_shadow = ! empty( $_REQUEST['card_shadow'] ) ? sanitize_html_class( $_REQUEST['card_shadow'] ) : '';
+
 
 		$listings_ids = array();
 
@@ -282,17 +315,54 @@ class GeoDir_AJAX {
 
 			$gd_layout_class = geodir_convert_listing_view_class( $layout );
 
+			// card border class
+			$card_border_class = '';
+			if(!empty($card_border)){
+				if($card_border=='none'){
+					$card_border_class = 'border-0';
+				}else{
+					$card_border_class = 'border-'.sanitize_html_class($card_border);
+				}
+			}
+
+			// card shadow
+			$card_shadow_class = '';
+			if(!empty($card_shadow)){
+				if($card_shadow=='small'){
+					$card_shadow_class = 'shadow-sm';
+				}elseif($card_shadow=='medium'){
+					$card_shadow_class = 'shadow';
+				}elseif($card_shadow=='large'){
+					$card_shadow_class = 'shadow-lg';
+				}
+			}
+
 			if($skin_active){
 				$column_gap = $skin_column_gap;
 				$row_gap = $skin_row_gap;
 				geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
 
 			}else{
-				geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
+				$design_style = geodir_design_style();
+				$template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
+
+				echo geodir_get_template_html( $template, array(
+					'widget_listings' => $widget_listings,
+					'column_gap_class'   => $column_gap ? 'mb-'.absint($column_gap) : 'mb-4',
+					'row_gap_class'   => $row_gap ? 'px-'.absint($row_gap) : '',
+					'card_border_class'   => $card_border_class,
+					'card_shadow_class'  =>  $card_shadow_class,
+				) );
+
 			}
 
 		}else{
-			_e("Your recently viewed listings will show here.","geodirectory");
+			echo aui()->alert(array(
+					'type'=> 'info',
+					'content'=> __("Your recently viewed listings will show here.","geodirectory")
+				)
+			);
+
 		}
 
 		echo ob_get_clean();
@@ -464,7 +534,7 @@ class GeoDir_AJAX {
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
-			wp_send_json_success($result);
+			wp_send_json_success(geodir_notification( array( 'info' => $result) ));
 		}
 
 		wp_die();
@@ -489,7 +559,7 @@ class GeoDir_AJAX {
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
-			wp_send_json_success($result);
+			wp_send_json_success(geodir_notification( array( 'info' => $result) ));
 		}
 
 		wp_die();
@@ -514,7 +584,7 @@ class GeoDir_AJAX {
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
-			wp_send_json_success($result);
+			wp_send_json_success(geodir_notification( array( 'info' => $result) ));
 		}
 
 		wp_die();

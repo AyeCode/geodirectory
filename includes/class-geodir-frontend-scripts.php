@@ -358,7 +358,7 @@ class GeoDir_Frontend_Scripts {
 	 */
 	private static function register_script( $handle, $path, $deps = array( 'jquery' ), $version = GEODIRECTORY_VERSION, $in_footer = true ) {
 		self::$scripts[] = $handle;
-		if ( $handle == 'select2' && wp_script_is( 'select2', 'registered' ) ) {
+		if ( $handle == 'select2' && wp_script_is( 'select2', 'registered' ) && !geodir_design_style() ) {
 			wp_deregister_script( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
 		}
 		wp_register_script( $handle, $path, $deps, $version, $in_footer );
@@ -444,6 +444,7 @@ class GeoDir_Frontend_Scripts {
 		$map_extra = apply_filters('geodir_googlemap_script_extra', '');
 
 		$suffix           = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$aui = geodir_design_style() ? '/aui' : '';
 		$register_scripts = array(
 			'select2' => array(
 				'src'     => geodir_plugin_url() . '/assets/js/select2/select2.full' . $suffix . '.js',
@@ -496,17 +497,17 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-map-widget' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/map' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js',
 				'deps'    => array('jquery'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-plupload' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/geodirectory-plupload' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets'.$aui.'/js/geodirectory-plupload' . $suffix . '.js',
 				'deps'    => array('plupload','jquery','jquery-ui-sortable'),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir' => array(
-				'src'     =>  geodir_plugin_url() . '/assets/js/geodirectory' . $suffix . '.js',
+				'src'     =>  geodir_plugin_url() . '/assets'.$aui.'/js/geodirectory'. $suffix . '.js',
 				'deps'    => array('jquery'),
 				'version' => GEODIRECTORY_VERSION,
 			),
@@ -516,7 +517,7 @@ class GeoDir_Frontend_Scripts {
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir-add-listing' => array(
-				'src'     => geodir_plugin_url() . '/assets/js/add-listing' . $suffix . '.js',
+				'src'     => geodir_plugin_url() . '/assets'.$aui.'/js/add-listing' . $suffix . '.js',
 				'deps'    => array( 'geodir-jquery-ui-timepicker' ),
 				'version' => GEODIRECTORY_VERSION,
 			),
@@ -582,24 +583,35 @@ class GeoDir_Frontend_Scripts {
 	public static function load_scripts() {
 		global $post;
 
+		$design_style = geodir_design_style();
+
 		// register scripts/styles
 		self::register_scripts();
 		self::register_styles();
 
-		// global enqueues
-		// css
-		self::enqueue_style( 'select2' );
-		self::enqueue_style( 'geodir-core' );
-		// js
-		self::enqueue_script( 'select2' );
-		self::enqueue_script( 'geodir-select2' );
-		self::enqueue_script( 'geodir' );
-		self::enqueue_script( 'geodir_lity' );
 
-		// rtl
-		if(is_rtl()){
-			self::enqueue_style( 'geodir-rtl' );
-		}
+
+//		self::enqueue_script( 'geodir' );
+
+		if(!$design_style){
+
+
+			// global enqueues
+			// css
+			self::enqueue_style( 'select2' );
+			self::enqueue_style( 'geodir-core' );
+			// js
+			self::enqueue_script( 'select2' );
+			self::enqueue_script( 'geodir-select2' );
+			self::enqueue_script( 'geodir' );
+			self::enqueue_script( 'geodir_lity' );
+
+
+			//rtl
+			if(is_rtl()){
+				self::enqueue_style( 'geodir-rtl' );
+			}
+
 
 		// add-listing
 		if(geodir_is_page('add-listing') && !isset($_REQUEST['ct_builder'])){
@@ -607,7 +619,29 @@ class GeoDir_Frontend_Scripts {
 			self::enqueue_script( 'geodir-add-listing' );
 			self::enqueue_script( 'geodir-jquery-ui-timepicker' );
 
-			wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
+				wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
+
+			}
+
+			// details page
+			if(geodir_is_page('single')){
+				//self::enqueue_script( 'jquery-flexslider' ); // moved to widget
+			}
+
+		}else{
+			// js
+			self::enqueue_script( 'geodir' ); // original
+
+			// add-listing @todo do we need all these?
+			if(geodir_is_page('add-listing') && !isset($_REQUEST['ct_builder'])){
+				self::enqueue_script( 'geodir-plupload' );
+				self::enqueue_script( 'geodir-add-listing' );
+//				self::enqueue_script( 'geodir-jquery-ui-timepicker' );
+				//self::enqueue_script( 'geodir-select2' );
+
+//				wp_enqueue_script( 'jquery-ui-autocomplete' ); // add listing only?
+
+			}
 		}
 
 		// Maps

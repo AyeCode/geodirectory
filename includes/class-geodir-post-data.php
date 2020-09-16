@@ -55,7 +55,7 @@ class GeoDir_Post_Data {
 		}
 
 		// add mandatory not to add listing page
-		add_action( 'geodir_add_listing_form_start', array( __CLASS__, 'add_listing_mandatory_note' ), - 10, 3 );
+//		add_action( 'geodir_add_listing_form_start', array( __CLASS__, 'add_listing_mandatory_note' ), - 10, 3 ); // i don't really think we need this
 
 		// add schema
 		add_action( 'wp_head', array( __CLASS__, 'schema' ), 10 );
@@ -787,7 +787,7 @@ class GeoDir_Post_Data {
 	 */
 	public static function add_listing_form( $params = array() ) {
 
-		global $cat_display, $post_cat, $current_user, $gd_post;
+		global $cat_display, $post_cat, $current_user, $gd_post,$geodir_label_type;
 		$page_id       = get_the_ID();
 		$post          = '';
 		$submit_button = '';
@@ -881,10 +881,18 @@ class GeoDir_Post_Data {
 		 */
 		$security_nonce = wp_create_nonce( "geodir-save-post" );
 
+		$design_style =  geodir_design_style();
+		$horizontal = false;
+		if($design_style){
+			$horizontal = $geodir_label_type == 'horizontal' ? true : false;
+		}
+
+		// wrap class
+		$wrap_class = geodir_build_aui_class($params);
 
 		do_action( 'geodir_before_add_listing_form', $listing_type, $post, $package );
 		?>
-		<form name="geodirectory-add-post" id="geodirectory-add-post"
+		<form name="geodirectory-add-post" id="geodirectory-add-post" class="<?php echo $wrap_class;?>"
 		      action="<?php echo get_page_link( $post->ID ); ?>" method="post"
 		      enctype="multipart/form-data">
 			<input type="hidden" name="action" value="geodir_save_post"/>
@@ -914,6 +922,42 @@ class GeoDir_Post_Data {
 			 * Add the register fields if no user_id
 			 */
 			if ( ! $user_id && geodir_get_option( "post_logged_out" ) && get_option( 'users_can_register' ) ) {
+
+				if($design_style ){
+
+					echo '<fieldset class="form-group" id="geodir_fieldset_your_details">';
+					echo '<h3 class="h3">'.__( "Your Details", "geodirectory" ).'</h3>';
+					echo '</fieldset>';
+
+					echo aui()->input(
+						array(
+							'id'                => "user_login",
+							'name'              => "user_login",
+							'required'          => true,
+							'label'              => __("Name", 'geodirectory').' <span class="text-danger">*</span>',
+							'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+							'type'              => 'text',
+//							'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+							'class'             => '',
+							'help_text'         => __("Enter your name.", 'geodirectory'),
+						)
+					);
+
+					echo aui()->input(
+						array(
+							'id'                => "user_email",
+							'name'              => "user_email",
+							'required'          => true,
+							'label'              => __("Email", 'geodirectory').' <span class="text-danger">*</span>',
+							'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+							'type'              => 'email',
+//							'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+							'class'             => '',
+							'help_text'         => __("Enter your email address.", 'geodirectory'),
+						)
+					);
+				}else{
+
 				?>
 				<h5 id="geodir_fieldset_details" class="geodir-fieldset-row"
 				    gd-fieldset="user_details"><?php _e( "Your Details", "geodirectory" ); ?></h5>
@@ -933,6 +977,8 @@ class GeoDir_Post_Data {
 					<span class="geodir_message_error"></span>
 				</div>
 				<?php
+
+				}
 			}
 
 			/**
@@ -955,9 +1001,17 @@ class GeoDir_Post_Data {
 			 */
 			$details_header = apply_filters( 'geodir_add_listing_details_header', __( 'Enter Listing Details', 'geodirectory' ), $listing_type, $post, $package );
 			if ( $details_header != '' ) {
-			?>
-			<h5 id="geodir_fieldset_details" class="geodir-fieldset-row" gd-fieldset="details"><?php echo $details_header; ?></h5>
-			<?php
+
+				if($design_style ) {
+					echo '<fieldset class="form-group" id="geodir_fieldset_details">';
+					echo '<h3 class="h3">' . $details_header . '</h3>';
+					echo '</fieldset>';
+				}else {
+					?>
+					<h5 id="geodir_fieldset_details" class="geodir-fieldset-row"
+					    gd-fieldset="details"><?php echo $details_header; ?></h5>
+					<?php
+				}
 			}
 			/**
 			 * Called at the top of the add listing page form for frontend.
@@ -987,17 +1041,22 @@ class GeoDir_Post_Data {
 				<noscript aria-hidden="true">
 					<div>
 						<label><?php _e( 'Type 64 into this box', 'geodirectory' ); ?></label>
-						<input type="text" id="geodir_spamblocker_top_form" name="geodir_spamblocker" value=""
+						<input type="text" id="geodir_spamblocker_top_form" <?php echo $design_style? 'class="d-none"' :'';?> name="geodir_spamblocker" value=""
 						       maxlength="10"/>
 					</div>
 				</noscript>
-				<input type="text" id="geodir_filled_by_spam_bot_top_form" name="geodir_filled_by_spam_bot" value=""
+				<input type="text" id="geodir_filled_by_spam_bot_top_form" <?php echo $design_style? 'class="d-none"' :'';?> name="geodir_filled_by_spam_bot" value=""
 				       aria-label="<?php esc_attr_e( 'Type 64 into this box', 'geodirectory' ); ?>"/>
 				<!-- end captcha code -->
 			<?php } ?>
-			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both"
-			     style="padding:2px;text-align:center;">
-				<button type="submit" class="geodir_button">
+			<div id="geodir-add-listing-submit" class="geodir_form_row clear_both <?php echo $design_style && $horizontal? 'form-group row' :'';?>"
+			     style="<?php echo $design_style ? '' :'padding:2px;text-align:center;';?>">
+
+				<?php echo $design_style && $horizontal ? '<label class="  col-sm-2 col-form-label"></label>' :'';?>
+
+				<?php echo $design_style && $horizontal ? '<div class="col-sm-10">' :'';?>
+
+				<button type="submit" class="geodir_button <?php echo $design_style ? 'btn btn-primary' :'';?>">
 					<?php echo apply_filters( 'geodir_add_listing_btn_text', __( 'Submit Listing', 'geodirectory' ) ); ?>
 				</button>
 
@@ -1008,11 +1067,14 @@ class GeoDir_Post_Data {
 				if ( geodir_get_option( 'post_preview' ) ) {
 					$preview_link = self::get_preview_link( $post );
 					$preview_id   = ! empty( $post->post_parent ) ? $post->post_parent : $post->ID;
-					echo "<a href='$preview_link' target='wp-preview-" . $preview_id . "' class='geodir_button geodir_preview_button'>" . __( 'Preview Listing', 'geodirectory' ) . " <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
+					$preview_class = $design_style ? 'btn btn-outline-primary' :'';
+					echo "<a href='$preview_link' target='wp-preview-" . $preview_id . "' class='geodir_button geodir_preview_button $preview_class'>" . __( 'Preview Listing', 'geodirectory' ) . " <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
 				}
 				?>
 				<span class="geodir_message_note"
 				      style="padding-left:0px;"> <?php //_e( 'Note: You will be able to see a preview in the next page', 'geodirectory' ); ?></span>
+
+				<?php echo $design_style && $horizontal? '</div>' :'';?>
 			</div>
 			<?php do_action( 'geodir_add_listing_form_end', $listing_type, $post, $package ); ?>
 		</form>
@@ -1108,6 +1170,8 @@ class GeoDir_Post_Data {
 	 * @return string $notes
 	 */
 	public static function output_user_notes( $user_notes ) {
+
+		$design_style = geodir_design_style();
 		/**
 		 * Filters the add listing user notes.
 		 *
@@ -1120,9 +1184,16 @@ class GeoDir_Post_Data {
 		$notes = '';
 		if ( ! empty( $user_notes ) ) {
 			foreach ( $user_notes as $key => $user_note ) {
-				$notes .= "<div class='gd-notification $key'>";
-				$notes .= $user_note;
-				$notes .= "</div>";
+				if($design_style){
+					$notes .= "<div class='alert alert-info $key' role='alert'>";
+					$notes .= $user_note;
+					$notes .= "</div>";
+				}else{
+					$notes .= "<div class='gd-notification $key'>";
+					$notes .= $user_note;
+					$notes .= "</div>";
+				}
+
 			}
 		}
 
