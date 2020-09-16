@@ -1,9 +1,10 @@
 * hide badges on different listing views. - DONE
-* multipel view image slider.
+* multiple view (at once) image slider (used in whoop).
 * image gallery masonary view. - DONE
 * fix search button in sidebar - DONE
 * tackle business hours input once merged
 * map bubble
 * location not shard popup - DONE
 * add listing default category input
-* remove lit for ninja widget
+* remove lity for ninja widget
+* We need to implement AUI for new installs and ask current GD users to switch with admin notice like UWP.
