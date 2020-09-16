@@ -339,7 +339,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			// margins
 			$arguments['mt']  = geodir_get_sd_margin_input('mt');
 			$arguments['mr']  = geodir_get_sd_margin_input('mr');
-			$arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+			$arguments['mb']  = geodir_get_sd_margin_input('mb',array('value'=>3));
 			$arguments['ml']  = geodir_get_sd_margin_input('ml');
 
 			// padding
@@ -879,6 +879,19 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'sticky'         => false,
 			'static'         => false,
 			'map_directions' => false,
+			'bg'    => '',
+			'mt'    => '',
+			'mb'    => '3',
+			'mr'    => '',
+			'ml'    => '',
+			'pt'    => '',
+			'pb'    => '',
+			'pr'    => '',
+			'pl'    => '',
+			'border'    => '',
+			'rounded'    => '',
+			'rounded_size'    => '',
+			'shadow'    => '',
 		);
 
 		$params = wp_parse_args( $map_args, $defaults );
@@ -970,8 +983,9 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		}
 
 		// wrap class
+
 		$params['wrap_class'] = geodir_build_aui_class($params);
-		
+
 		ob_start();
 
 		self::display_map( $params );

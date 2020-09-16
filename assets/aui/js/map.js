@@ -3,8 +3,15 @@ var zoom_listener = '';
 var gd_current_query = '';
 var gd_map_first_load = true;
 var gd_fullscreen_parent = '';
+var gd_toggle_bsui = true;
 
 function initMap(map_options) {
+    
+    // set if the bsui class on html should be toggled
+    if(jQuery('html').hasClass('bsui')){
+        gd_toggle_bsui = false;
+    }
+
     if (window.gdMaps == 'osm') {
         initMapOSM(map_options);
         return;
@@ -110,7 +117,8 @@ function initMap(map_options) {
         }
         
         // new
-        jQuery('html').toggleClass('bsui').attr('style', function(index, attr){
+        if(gd_toggle_bsui){jQuery('html').toggleClass('bsui');}
+        jQuery('html').attr('style', function(index, attr){
             return attr == 'margin-top:0 !important;' ? '' : 'margin-top:0 !important;';
         });
         jQuery('body').toggleClass('body_fullscreen overflow-hidden');
@@ -1087,7 +1095,8 @@ function initMapOSM(map_options) {
         }
 
         // new
-        jQuery('html').toggleClass('bsui').attr('style', function(index, attr){
+        if(gd_toggle_bsui){jQuery('html').toggleClass('bsui');}
+        jQuery('html').attr('style', function(index, attr){
             return attr == 'margin-top:0 !important;' ? '' : 'margin-top:0 !important;';
         });
         jQuery('body').toggleClass('body_fullscreen overflow-hidden');
