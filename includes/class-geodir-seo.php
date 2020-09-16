@@ -35,6 +35,7 @@ class GeoDir_SEO {
 
 		// maybe noindex empty archive pages
 		add_action('wp_head', array(__CLASS__,'maybe_noindex_empty_archives'));
+		add_filter( 'wpseo_frontend_presentation', array( __CLASS__, 'wpseo_frontend_presentation' ), 11, 2 );
 		add_filter('wpseo_breadcrumb_links', array(__CLASS__, 'breadcrumb_links'));
 		add_filter( 'wpseo_robots_array', array( __CLASS__, 'wpseo_robots_array' ), 20, 2 );
 		add_filter( 'get_post_metadata', array( __CLASS__, 'filter_post_metadata' ), 99, 5 );
@@ -1297,6 +1298,31 @@ class GeoDir_SEO {
 		}
 
 		return $robots;
+	}
+
+	/**
+	 * Prevent using post type archive index model on term archive page.
+	 *
+	 * @since 2.0.0.102
+	 *
+	 * @param Indexable_Presentation $presentation The presentation of an indexable.
+	 * @param object $context The meta tags context.
+	 * @return array Filtered presentation of an indexable.
+	 */
+	public static function wpseo_frontend_presentation( $presentation, $context ) {
+		if ( geodir_is_geodir_page() && is_tax() && is_post_type_archive() && geodir_is_page( 'archive' ) ) {
+			try {
+				if ( ! empty( $presentation->model->object_id ) && ! empty( $presentation->model->object_sub_type ) ) {
+					$term = get_term( $presentation->model->object_id, $presentation->model->object_sub_type );
+
+					if ( ! empty( $term ) && ! is_wp_error( $term ) ) {
+						$presentation->source = $term;
+					}
+				}
+			} catch ( Exception $e ) { }
+		}
+
+		return $presentation;
 	}
 
 	/**

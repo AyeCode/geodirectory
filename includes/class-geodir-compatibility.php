@@ -176,6 +176,10 @@ class GeoDir_Compatibility {
 				// GD Loop
 				add_filter( 'geodir_before_get_template_part',array( __CLASS__, 'avada_get_temp_globals' ), 10);
 				add_filter( 'geodir_after_get_template_part',array( __CLASS__, 'avada_set_temp_globals' ), 10);
+
+				// Avada header / footer actions
+				add_action( 'wp_head', array( __CLASS__, 'avada_wp_head_setup' ), 99 );
+				add_action( 'get_footer', array( __CLASS__, 'avada_get_footer_setup' ), 99 );
 			}
 		}
 
@@ -288,6 +292,66 @@ class GeoDir_Compatibility {
 			global $columns, $global_column_array, $fb_temp_columns, $fb_temp_global_column_array;
 			$columns = $fb_temp_columns;
 			$global_column_array = $fb_temp_global_column_array;
+		}
+	}
+
+	/**
+	 * Setup Avada header actions.
+	 *
+	 * @since 2.0.0.102
+	 */
+	public static function avada_wp_head_setup() {
+		if ( geodir_is_geodir_page() && has_action( 'avada_render_header' ) ) {
+			add_action( 'avada_render_header', array( __CLASS__, 'avada_pause_the_content' ), 1 );
+			add_action( 'avada_render_header', array( __CLASS__, 'avada_resume_the_content' ), 101 );
+		}
+	}
+
+	/**
+	 * Setup Avada footer actions.
+	 *
+	 * @since 2.0.0.102
+	 */
+	public static function avada_get_footer_setup() {
+		if ( geodir_is_geodir_page() && has_action( 'avada_render_footer' ) ) {
+			add_action( 'avada_render_footer', array( __CLASS__, 'avada_pause_the_content' ), 1 );
+			add_action( 'avada_render_footer', array( __CLASS__, 'avada_resume_the_content' ), 101 );
+		}
+	}
+
+	/**
+	 * Remove GD archive page template the_content filter.
+	 *
+	 * @since 2.0.0.102
+	 *
+	 * @global bool|null $geodir_avada_the_content Flag to remove filter.
+	 */
+	public static function avada_pause_the_content() {
+		global $geodir_avada_the_content;
+
+		if ( has_filter( 'the_content', array( 'GeoDir_Template_Loader', 'setup_archive_page_content' ) ) ) {
+			$geodir_avada_the_content = true;
+
+			remove_filter( 'the_content', array( 'GeoDir_Template_Loader', 'setup_archive_page_content' ) );
+		}
+	}
+
+	/**
+	 * Add GD archive page template the_content filter.
+	 *
+	 * @since 2.0.0.102
+	 *
+	 * @global bool|null $geodir_avada_the_content Flag to add filter back.
+	 */
+	public static function avada_resume_the_content() {
+		global $geodir_avada_the_content;
+
+		if ( $geodir_avada_the_content ) {
+			$geodir_avada_the_content = false;
+
+			if ( ! has_filter( 'the_content', array( 'GeoDir_Template_Loader', 'setup_archive_page_content' ) ) ) {
+				add_filter( 'the_content', array( 'GeoDir_Template_Loader', 'setup_archive_page_content' ) );
+			}
 		}
 	}
 
@@ -542,6 +606,7 @@ class GeoDir_Compatibility {
 			$gen_keys[] = 'site-sidebar-layout';
 			$gen_keys[] = 'site-content-layout';
 			$gen_keys[] = 'ast-featured-img';
+			$gen_keys[] = 'theme-transparent-header-meta';
 		}
 
 		// Enfold theme
@@ -700,8 +765,13 @@ class GeoDir_Compatibility {
 			&& $object_id == get_queried_object_id()
 			&& ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) )
 		) {
+			$post_type = get_post_type( $object_id );
 
-			$template_page_id = geodir_is_page( 'single' ) ? geodir_details_page_id() : geodir_archive_page_id();
+			if ( ! geodir_is_gd_post_type( $post_type ) ) {
+				$post_type = geodir_get_current_posttype();
+			}
+
+			$template_page_id = geodir_is_page( 'single' ) ? geodir_details_page_id( $post_type ) : geodir_archive_page_id( $post_type );
 
 			// if we got this far then we might as well load all the page post meta
 			global $gd_compat_post_meta;
@@ -786,9 +856,12 @@ class GeoDir_Compatibility {
 	 */
 	public static function astra_get_content_layout( $layout ) {
 		global $wp_query;
+
 		$page_id = isset( $wp_query->post->ID ) ? $wp_query->post->ID : '';
-		if ( $page_id && geodir_archive_page_id() == $page_id ) {
+
+		if ( $page_id && ( geodir_archive_page_id() == $page_id || geodir_archive_page_id( geodir_get_current_posttype() ) == $page_id ) ) {
 			$page_layout = get_post_meta( $page_id, 'site-content-layout', true );
+
 			if ( $page_layout != '' ) {
 				$layout = $page_layout;
 			}
@@ -806,9 +879,12 @@ class GeoDir_Compatibility {
 	 */
 	public static function astra_page_layout( $layout ) {
 		global $wp_query;
+
 		$page_id = isset( $wp_query->post->ID ) ? $wp_query->post->ID : '';
-		if ( $page_id && (geodir_archive_page_id() == $page_id || geodir_search_page_id() == $page_id )) {
+
+		if ( $page_id && ( geodir_archive_page_id() == $page_id || geodir_archive_page_id( geodir_get_current_posttype() ) == $page_id || geodir_search_page_id() == $page_id ) ) {
 			$page_layout = get_post_meta( $page_id, 'site-sidebar-layout', true );
+
 			if ( $page_layout != '' ) {
 				$layout = $page_layout;
 			}
@@ -2941,7 +3017,7 @@ class GeoDir_Compatibility {
 			if ( wpbf_is_premium() && ! $contained ) {
 				$wpbf_settings = get_option( 'wpbf_settings' );
 
-				// Get array of post types that are set to full width under Appearance > Theme Settings > Global Templat Settings.
+				// Get array of post types that are set to full width under Appearance > Theme Settings > Global Template Settings.
 				$fullwidth_global = isset( $wpbf_settings['wpbf_fullwidth_global'] ) ? $wpbf_settings['wpbf_fullwidth_global'] : array();
 
 				// If current post type has been set to full-width globally, set $inner_content to false.

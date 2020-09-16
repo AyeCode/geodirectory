@@ -406,7 +406,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		$post_ID = 0;
 		$is_listing_page = geodir_is_page('listing');
 		$is_detail_page = geodir_is_page('detail');
-		if ($is_listing_page || $is_detail_page) {
+		if ( $is_listing_page || $is_detail_page || geodir_is_page( 'search' ) ) {
 			$current_posttype = geodir_get_current_posttype();
 
 			if ($current_posttype != '' && isset($gd_post_types[$current_posttype])) {
@@ -417,8 +417,6 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					$is_listing = true;
 					if (is_tax()) { // category page
 						$current_term_id = get_queried_object_id();
-						$current_taxonomy = get_query_var('taxonomy');
-						$current_posttype = geodir_get_current_posttype();
 
 						if ($current_term_id && $current_posttype && get_query_var('taxonomy') == $current_posttype . 'category') {
 							$is_category = true;

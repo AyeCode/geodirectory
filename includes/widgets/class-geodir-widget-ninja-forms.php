@@ -156,20 +156,21 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
 		 */
 		$show = apply_filters( 'geodir_show_ninja_form_widget', $show, $post, $args, $this );
 
-        if($show){
-            if($args['output']=='button'){
-                $output = '<button class="btn btn-default geodir-ninja-forms-link" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\','.absint($post_id).','.absint($args['form_id']).'); return false;">'.esc_attr($args['text']).'</button>';
-            }elseif($args['output']=='form'){
-                $output = do_shortcode("[ninja_form id=".absint($args['form_id'])."]");
-                //$output = '<a class="geodir-ninja-forms-link" href="#" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\','.absint($post_id).','.absint($args['form_id']).'); return false;">'.esc_attr($args['text']).'</a>';
-            }else{
-                $output = '<a class="geodir-ninja-forms-link" href="#" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\','.absint($post_id).','.absint($args['form_id']).'); return false;">'.esc_attr($args['text']).'</a>';
-            }
-        }
+		if ( $show ) {
+			$action_text = apply_filters( 'geodir_ninja_form_widget_action_text', $args['text'], $post->ID, $args );
+			$action_text = __( $action_text, 'geodirectory' );
 
-        return $output;
-    }
+			if ( $args['output'] == 'button' ) {
+				$output = '<button class="btn btn-default geodir-ninja-forms-link" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</button>';
+			} elseif ( $args['output'] == 'form' ) {
+				$output = do_shortcode( "[ninja_form id=" . absint( $args['form_id'] ) . "]" );
+			} else {
+				$output = '<a class="geodir-ninja-forms-link" href="#" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</a>';
+			}
+		}
 
+		return $output;
+	}
 
     /**
      * Get an array of Ninja Forms forms to choose from.
