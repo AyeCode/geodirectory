@@ -23,7 +23,7 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 			'base_id'       => 'gd_post_content', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Post Content','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-content-container bsui', // widget class
+				'classname'   => 'geodir-post-content-container '.geodir_bsui_class(), // widget class
 				'description' => esc_html__('This shows a post content text. You can show text from any textarea field.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,

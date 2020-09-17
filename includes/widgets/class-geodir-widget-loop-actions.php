@@ -26,7 +26,7 @@ class GeoDir_Widget_Loop_Actions extends WP_Super_Duper {
             'base_id'       => 'gd_loop_actions', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Loop Actions','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-loop-actions-container bsui', // widget class
+                'classname'   => 'geodir-loop-actions-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows the archive loop actions such as sort by and grid view,  only used on Archive template page, usually above `gd_loop`.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),

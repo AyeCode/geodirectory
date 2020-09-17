@@ -1288,82 +1288,11 @@ function create_marker_osm(item, map_canvas) {
 
 function gdMyGeoDirection(map_canvas) {
     window.currentMapCanvas = map_canvas;
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(gdMyGeoPositionSuccess, gdMyGeoPositionError);
-    } else {
-        gdMyGeoPositionError(-1);
-    }
+    gd_get_user_position(gdMyGeoPositionSuccess);
 }
 
-function gdMyGeoPositionError(err) {
-    var msg;
-    switch (err.code) {
-        case err.UNKNOWN_ERROR:
-            msg = geodir_params.geoErrUNKNOWN_ERROR;
-            break;
-        case err.PERMISSION_DENINED:
-            msg = geodir_params.geoErrPERMISSION_DENINED;
-            break;
-        case err.POSITION_UNAVAILABLE:
-            msg = geodir_params.geoErrPOSITION_UNAVAILABLE;
-            break;
-        case err.BREAK:
-            msg = geodir_params.geoErrBREAK;
-            break;
-        default:
-            msg = geodir_params.geoErrDEFAULT;
-    }
-    gd_manually_set_user_position_old(msg,'gdMyGeoPositionSuccess');
-    //alert(msg);
-}
-
-function gd_manually_set_user_position_old($msg,$successFunction){
-    if(window.confirm(geodir_params.confirm_lbl_error + " "+$msg+ "\n" + geodir_params.confirm_set_location)){
-
-        jQuery.post(geodir_params.ajax_url, {
-            action: 'geodir_manual_map',
-            trigger: $successFunction+'_trigger'
-            //trigger: $successFunction
-        }, function(data) {
-            if (data) {
-                $lity = lity("<div class='lity-show'>"+data+"</div>");
-                // map center is off due to lightbox zoom effect so we resize to fix
-                setTimeout(function(){
-                    jQuery('.lity-show .geodir_map_container').css('width','90%').css('width','99.99999%');
-                }, 500);
-
-                jQuery( window ).off($successFunction+'_trigger');
-                jQuery( window ).on( $successFunction+'_trigger', function (event,lat,lon)
-                {
-                    if(lat && lon){
-                        var position ={};
-                        position.latitude = lat;
-                        position.longitude = lon;
-                        window[$successFunction](position);
-                        $lity.close();
-                    }
-                });
-
-                return false;
-            }
-        });
-
-    }else{
-        // call the fail function if exists
-        if(window.gd_user_position_fail_callback ){
-            var fn = window.gd_user_position_fail_callback;
-            if(typeof fn === 'function') {
-                fn();
-            }
-        }
-    }
-}
-
-function gdMyGeoPositionSuccess(position) {
-    var coords = position.coords || position.coordinate || position;
-    if (coords && coords.latitude && coords.longitude) {
-        var myLat = coords.latitude,
-            myLng = coords.longitude;
+function gdMyGeoPositionSuccess(myLat,myLng) {
+    if (myLat && myLng) {
         var geoAddress = myLat + ', ' + myLng;
         if (window.gdMaps == 'google' || window.gdMaps == 'osm') {
             gdMyGeoGetDirections(geoAddress);

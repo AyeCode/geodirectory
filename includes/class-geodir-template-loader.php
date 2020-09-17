@@ -596,13 +596,13 @@ class GeoDir_Template_Loader {
      */
     public static function map_popup_template_content() {
         global $gd_post;
+        
+        $design_style = geodir_design_style();
 
-        ob_start();
+        $template = $design_style ? $design_style."/map/map-popup.php" : "map-popup.php";
 
-        geodir_get_template_part( 'map-popup', $gd_post->post_type );
-
-        $content = ob_get_clean();
-
+        $content = geodir_get_template_html( $template  );
+        
         if ( ! empty( $content ) ) {
             // Run the shortcodes on the content
             $content = do_shortcode( $content );

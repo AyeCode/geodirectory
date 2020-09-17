@@ -52,7 +52,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			'name'           => __( 'GD > Map', 'geodirectory' ),
 			// the name of the widget.
 			'widget_ops'     => array(
-				'classname'    => 'geodir-wgt-map bsui',                                        // widget class
+				'classname'    => 'geodir-wgt-map '.geodir_bsui_class(),                                        // widget class
 				'description'  => esc_html__( 'Displays the map.', 'geodirectory' ),        // widget description
 				'geodirectory' => true,
 			)

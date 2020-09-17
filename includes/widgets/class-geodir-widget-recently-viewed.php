@@ -21,7 +21,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			'base_id'       => 'gd_recently_viewed',
 			'name'          => __('GD > Recently Viewed','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-recently-viewed bsui', // widget class
+				'classname'   => 'geodir-recently-viewed '.geodir_bsui_class(), // widget class
 				'description' => esc_html__('Shows the GeoDirectory Most Recently Viewed Listings.','geodirectory'),
 				'geodirectory' => true,
 			),

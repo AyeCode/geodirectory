@@ -30,7 +30,7 @@ class GeoDir_Widget_Category_Description extends WP_Super_Duper {
             'base_id'       => 'gd_category_description', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Category Description','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-category-description-container bsui', // widget class
+                'classname'   => 'geodir-category-description-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows the current category description text.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,

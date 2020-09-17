@@ -31,7 +31,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
             'base_id'       => 'gd_single_taxonomies', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Single Taxonomies','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-single-taxonomies-container bsui', // widget class
+                'classname'   => 'geodir-single-taxonomies-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows the current post`s categories and tags.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),

@@ -24,7 +24,7 @@ class GeoDir_Widget_CPT_Meta extends WP_Super_Duper {
 			'base_id'       => 'gd_cpt_meta',
 			'name'          => __( 'GD > CPT Meta', 'geodirectory' ),
 			'widget_ops'    => array(
-				'classname'   => 'geodir-cpt-meta-container bsui',
+				'classname'   => 'geodir-cpt-meta-container '.geodir_bsui_class(),
 				'description' => esc_html__( 'Displays the meta title, meta description, cpt description, image on post type archive page.', 'geodirectory' ),
 				'geodirectory' => true,
 				'gd_wgt_showhide' => 'show_on',

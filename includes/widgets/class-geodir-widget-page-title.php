@@ -24,7 +24,7 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 			'base_id'       => 'gd_page_title',
 			'name'          => __( 'GD > Page Title', 'geodirectory' ),
 			'widget_ops'    => array(
-				'classname'   => 'geodir-page-title-container bsui',
+				'classname'   => 'geodir-page-title-container '.geodir_bsui_class(),
 				'description' => esc_html__( 'Displays the page title on GD pages.', 'geodirectory' ),
 				'geodirectory' => true,
 				'gd_wgt_showhide' => 'gd',

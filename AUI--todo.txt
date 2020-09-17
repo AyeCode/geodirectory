@@ -3,8 +3,8 @@
 * image gallery masonary view. - DONE
 * fix search button in sidebar - DONE
 * tackle business hours input once merged
-* map bubble
+* map bubble - DONE
 * location not shard popup - DONE
-* add listing default category input
-* remove lity for ninja widget
+* add listing default category input - DONE
+* remove lity for ninja widget -  DONE
 * We need to implement AUI for new installs and ask current GD users to switch with admin notice like UWP.

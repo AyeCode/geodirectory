@@ -24,7 +24,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'base_id'       => 'gd_post_meta', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Post Meta','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-meta-container bsui', // widget class
+				'classname'   => 'geodir-post-meta-container '.geodir_bsui_class(), // widget class
 				'description' => esc_html__('This shows a post single post meta.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,

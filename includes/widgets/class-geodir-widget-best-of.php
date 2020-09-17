@@ -34,7 +34,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		    'base_id'       => 'gd_best_of', // this us used as the widget id and the shortcode id.
 		    'name'          => __('GD > Best of listings','geodirectory'), // the name of the widget.
 		    'widget_ops'    => array(
-			    'classname'   => 'geodir-best-of bsui', // widget class
+			    'classname'   => 'geodir-best-of '.geodir_bsui_class(), // widget class
 			    'description' => esc_html__('Shows the best of listings from categories.','geodirectory'), // widget description
 			    'customize_selective_refresh' => true,
 			    'geodirectory' => true,

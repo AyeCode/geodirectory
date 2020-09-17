@@ -34,7 +34,7 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
             'base_id'       => 'gd_ninja_forms', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Ninja Forms','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-ninja-forms', // widget class
+                'classname'   => 'geodir-ninja-forms '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Lets you use a ninja form to send to listings.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,
@@ -58,8 +58,10 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
      */
     public function set_arguments(){
 
-        return array(
-            'form_id'  => array(
+        $design_style = geodir_design_style();
+
+        $arguments = array();
+        $arguments['form_id'] = array(
                 'title' => __('Form:', 'geodirectory'),
                 'desc' => __('Select the form to use. (You can create a GD contact form from the Ninja Forms settings', 'geodirectory'),
                 'type' => 'select',
@@ -70,16 +72,16 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 ),
                 'desc_tip' => true,
                 'advanced' => false
-            ),
-            'text'  => array(
+            );
+            $arguments['text'] = array(
                 'title' => __('Text:', 'geodirectory'),
                 'desc' => __('The text shown than opens the lightbox.', 'geodirectory'),
                 'type' => 'text',
                 'default'  => __('Contact form','geodirectory'),
                 'desc_tip' => true,
                 'advanced' => false
-            ),
-            'post_contact'  => array(
+            );
+            $arguments['post_contact'] = array(
                 'title' => __("Post Contact form", 'geodirectory'),
                 'desc' => __('If the form is to contact a listing this will only show the form if the `email` field is filled.', 'geodirectory'),
                 'type' => 'checkbox',
@@ -87,8 +89,8 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 'value'  => '1',
                 'default'  => '1',
                 'advanced' => true
-            ),
-            'output'  => array(
+            );
+            $arguments['output'] = array(
                 'title' => __('Output Type:', 'geodirectory'),
                 'desc' => __('How the link to open the lightbox is displayed.', 'geodirectory'),
                 'type' => 'select',
@@ -100,9 +102,122 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 'default'  => 'button',
                 'desc_tip' => true,
                 'advanced' => true
-            )
+            );
 
-        );
+
+        if($design_style) {
+
+            $arguments['alignment']           = array(
+                'name'     => 'alignment',
+                'title'    => __( 'Alignment:', 'geodirectory' ),
+                'desc'     => __( 'How the item should be positioned on the page.', 'geodirectory' ),
+                'type'     => 'select',
+                'options'  => array(
+                    ""       => __( 'None', 'geodirectory' ),
+                    "left"   => __( 'Left', 'geodirectory' ),
+                    "center" => __( 'Center', 'geodirectory' ),
+                    "right"  => __( 'Right', 'geodirectory' ),
+                ),
+                'desc_tip' => true,
+                'advanced' => false,
+                'group'    => __( "Positioning", "geodirectory" )
+            );
+
+            $arguments['output'] = array(
+                'title' => __('Output Type:', 'geodirectory'),
+                'desc' => __('How the link to open the lightbox is displayed.', 'geodirectory'),
+                'type' => 'select',
+                'options'  => array(
+                    "button" => __('Button', 'geodirectory'),
+                    "badge" => __( 'Badge', 'geodirectory' ),
+                    "pill"  => __( 'Pill', 'geodirectory' ),
+                    "link"  => __( 'Link', 'geodirectory' ),
+                    'form'      => __("Form",'geodirectory'),
+                ),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => false,
+                'group'    => __( "Design", "geodirectory" )
+            );
+
+            $arguments['shadow'] = array(
+                'title' => __('Shadow', 'geodirectory'),
+                'desc' => __('Select the shadow badge type.', 'geodirectory'),
+                'type' => 'select',
+                'options'   =>  array(
+                    "" => __('None', 'geodirectory'),
+                    "small" => __('small', 'geodirectory'),
+                    "medium" => __('medium', 'geodirectory'),
+                    "large" => __('large', 'geodirectory'),
+                ),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => false,
+                'group'     => __("Design","geodirectory")
+            );
+
+            $arguments['color'] = array(
+                'title' => __('Badge Color', 'geodirectory'),
+                'desc' => __('Select the the badge color.', 'geodirectory'),
+                'type' => 'select',
+                'options'   =>  array(
+                                    "" => __('Custom colors', 'geodirectory'),
+                                )+geodir_aui_colors(true),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => false,
+                'group'     => __("Design","geodirectory")
+            );
+
+            $arguments['bg_color']  = array(
+                'type' => 'color',
+                'title' => __('Badge background color:', 'geodirectory'),
+                'desc' => __('Color for the badge background.', 'geodirectory'),
+                'placeholder' => '',
+                'default' => '',
+                'desc_tip' => true,
+                'group'     => __("Design","geodirectory"),
+                'element_require' => $design_style ?  '[%color%]==""' : '',
+            );
+            $arguments['txt_color']  = array(
+                'type' => 'color',
+                'title' => __('Badge text color:', 'geodirectory'),
+                'desc' => __('Color for the badge text.', 'geodirectory'),
+                'placeholder' => '',
+                'desc_tip' => true,
+                'default'  => '#fff',
+                'group'     => __("Design","geodirectory"),
+                'element_require' => $design_style ?  '[%color%]=="" && [%show%]!="icon"' : '',
+            );
+            $arguments['size']  = array(
+                'type' => 'select',
+                'title' => __('Badge size:', 'geodirectory'),
+                'desc' => __('Size of the badge.', 'geodirectory'),
+                'options' =>  array(
+                    "" => __('Default', 'geodirectory'),
+                    "h6" => __('XS (badge)', 'geodirectory'),
+                    "h5" => __('S (badge)', 'geodirectory'),
+                    "h4" => __('M (badge)', 'geodirectory'),
+                    "h3" => __('L (badge)', 'geodirectory'),
+                    "h2" => __('XL (badge)', 'geodirectory'),
+                    "h1" => __('XXL (badge)', 'geodirectory'),
+                    "btn-lg" => __('L (button)', 'geodirectory'),
+                    "btn-sm" => __('S (button)', 'geodirectory'),
+                ),
+                'default' => 'h5',
+                'desc_tip' => true,
+                'group'     => __("Design","geodirectory")
+            );
+
+            $arguments['mt']  = geodir_get_sd_margin_input('mt');
+            $arguments['mr']  = geodir_get_sd_margin_input('mr');
+            $arguments['mb']  = geodir_get_sd_margin_input('mb');
+            $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+        }
+
+
+        return $arguments;
     }
 
 
@@ -124,12 +239,31 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
             'text' => __('Contact form','geodirectory'),
             'post_contact' => '1',
             'output' => 'button',
+            'shadow'           => '',
+            'color'           => 'primary',
+            'bg_color'           => '',
+            'txt_color'           => '#ffffff',
+            'size'           => 'h5',
+            'position'           => '',
+            'mt'    => '',
+            'mb'    => '',
+            'mr'    => '',
+            'ml'    => '',
         );
 
         /**
          * Parse incoming $args into an array and merge it with $defaults
          */
         $args = wp_parse_args( $args, $defaults );
+
+        $design_style = geodir_design_style();
+
+        if($design_style){
+            $args['type'] = $args['output'];
+            $args['badge'] = $args['text'];
+        }
+
+        $is_preview = $this->is_preview();
 
         $output = '';
 
@@ -144,6 +278,12 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
             $show = true;
         }
 
+        if ( $is_preview ) {
+            $show = true;
+            $post_id = 0;
+        }
+        
+
 		/**
 		 * Filters whether show or not widget output.
 		 *
@@ -157,16 +297,82 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
 		$show = apply_filters( 'geodir_show_ninja_form_widget', $show, $post, $args, $this );
 
 		if ( $show ) {
+
+
+            
 			$action_text = apply_filters( 'geodir_ninja_form_widget_action_text', $args['text'], $post->ID, $args );
 			$action_text = __( $action_text, 'geodirectory' );
 
-			if ( $args['output'] == 'button' ) {
-				$output = '<button class="btn btn-default geodir-ninja-forms-link" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</button>';
-			} elseif ( $args['output'] == 'form' ) {
-				$output = do_shortcode( "[ninja_form id=" . absint( $args['form_id'] ) . "]" );
-			} else {
-				$output = '<a class="geodir-ninja-forms-link" href="#" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</a>';
-			}
+            if ( $design_style ) {
+
+                // margins
+                if ( !empty( $args['mt'] ) ) { $args['css_class'] .= " mt-".sanitize_html_class($args['mt'])." "; }
+                if ( !empty( $args['mr'] ) ) { $args['css_class'] .= " mr-".sanitize_html_class($args['mr'])." "; }
+                if ( !empty( $args['mb'] ) ) { $args['css_class'] .= " mb-".sanitize_html_class($args['mb'])." "; }
+                if ( !empty( $args['ml'] ) ) { $args['css_class'] .= " ml-".sanitize_html_class($args['ml'])." "; }
+
+                // set alignment class
+                if ( $args['alignment'] != '' ) {
+                    if($design_style){
+                        if($args['alignment']=='block'){$args['css_class'] .= " d-block ";}
+                        elseif($args['alignment']=='left'){$args['css_class'] .= " float-left mr-2 ";}
+                        elseif($args['alignment']=='right'){$args['css_class'] .= " float-right ml-2 ";}
+                        elseif($args['alignment']=='center'){$args['css_class'] .= " text-center ";}
+                    }else{
+                        $args['css_class'] .= $args['alignment']=='block' ? " gd-d-block gd-clear-both " : " geodir-align-" . sanitize_html_class( $args['alignment'] );
+                    }
+                }
+
+                if(!empty($args['size'])){
+                    switch ($args['size']) {
+                        case 'small':
+                            $args['size'] = $design_style ? '' : 'small';
+                            break;
+                        case 'medium':
+                            $args['size'] = $design_style ? 'h4' : 'medium';
+                            break;
+                        case 'large':
+                            $args['size'] = $design_style ? 'h2' : 'large';
+                            break;
+                        case 'extra-large':
+                            $args['size'] = $design_style ? 'h1' : 'extra-large';
+                            break;
+                        case 'h6': $args['size'] = 'h6';break;
+                        case 'h5': $args['size'] = 'h5';break;
+                        case 'h4': $args['size'] = 'h4';break;
+                        case 'h3': $args['size'] = 'h3';break;
+                        case 'h2': $args['size'] = 'h2';break;
+                        case 'h1': $args['size'] = 'h1';break;
+                        case 'btn-lg': $args['size'] = ''; $args['css_class'] = 'btn-lg';break;
+                        case 'btn-sm':$args['size'] = '';  $args['css_class'] = 'btn-sm';break;
+                        default:
+                            $args['size'] = '';
+
+                    }
+
+                }
+
+                if ( $args['output'] == 'form' ) {
+                    $output = $is_preview ? '' :  do_shortcode( "[ninja_form id=" . absint( $args['form_id'] ) . "]" );
+                }else{
+
+                    $args['link']       ="#form";
+                    $args['onclick'] = 'gd_ninja_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;';
+
+
+                    $output = geodir_get_post_badge( $post_id, $args );
+                }
+            }else{
+                if ( $args['output'] == 'button' ) {
+                    $output = '<button class="btn btn-default geodir-ninja-forms-link" onclick="gd_ninja_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</button>';
+                } elseif ( $args['output'] == 'form' ) {
+                    $output = $is_preview ? '' : do_shortcode( "[ninja_form id=" . absint( $args['form_id'] ) . "]" );
+                } else {
+                    $output = '<a class="geodir-ninja-forms-link" href="#" onclick="gd_ninja_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</a>';
+                }
+            }
+
+
 		}
 
 		return $output;

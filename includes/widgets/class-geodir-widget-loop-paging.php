@@ -26,7 +26,7 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
             'base_id'       => 'gd_loop_paging', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Loop Paging','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-loop-paging-container bsui', // widget class
+                'classname'   => 'geodir-loop-paging-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows the pagination links if the current query has multiple pages of results.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),

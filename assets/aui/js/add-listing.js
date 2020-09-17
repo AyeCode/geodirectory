@@ -133,6 +133,12 @@ jQuery(function($) {
 
     // Conditional Fields on load
     aui_conditional_fields("#geodirectory-add-post,#post");
+
+    // Default cat set
+    jQuery(".geodir-category-select").change(function () {
+        geodir_populate_default_category_input();
+    });
+    geodir_populate_default_category_input();
 });
 /**
  * Prevent navigation away if there are unsaved changes.
@@ -495,10 +501,17 @@ var GeoDir_Business_Hours = {
 		sample = sample.replace(/GD_UNIQUE_ID/g, uniqueid);
         sample = sample.replace('data-field="open"', 'data-field="open" name="' + jQuery('.gd-bh-time', $item).data('field') + '[open][]"');
         sample = sample.replace('data-field="close"', 'data-field="close" name="' + jQuery('.gd-bh-time', $item).data('field') + '[close][]"');
+       // twice as two inputs and JS has sucky support for replaceAll
+        sample = sample.replace('readonly="readonly"', '');
+        sample = sample.replace('readonly="readonly"', '');
+        sample = sample.replace('flatpickr-input', '');
+        sample = sample.replace('flatpickr-input', '');
+
         jQuery('.gd-bh-time', $item).append(sample);
     },
     cancelSlot: function($el) {
         var $item = $el.closest('.gd-bh-time');
+        jQuery('.gd-bh-remove i').tooltip('dispose');
         $el.closest('.gd-bh-hours').remove();
         if (jQuery('.gd-bh-hours', $item).length < 1) {
             $item.closest('.gd-bh-item').addClass('gd-bh-item-closed');
@@ -572,46 +585,7 @@ var GeoDir_Business_Hours = {
         return v;
     },
     timepickers: function() {
-        var $this = this;
-		jQuery(this.$wrap).find('[data-bh="time"]').each(function() {
-            var $el = jQuery(this), altField, time, hour = minute = second = "", $item;
-            if (!$el.hasClass('hasDatepicker')) {
-				$item = $el.closest('.gd-bh-item');
-				time = $el.data('time');
-				if (time && (times = time.split(':'))) {
-					if (times.length == 3) {
-						hour = times[0];
-						minute = times[1];
-						second = times[2];
-					}
-				}
-				$el.timepicker({
-                    timeFormat: geodir_params.BH_altTimeFormat,
-                    showPeriod: true,
-                    showLeadingZero: true,
-                    showPeriod: true,
-					altField: '#' + $el.prop('id') + 'a',
-					altTimeFormat: 'HH:mm',
-					hour: hour,
-					minute: minute,
-					second: second,
-					onSelect: function(datetime, inst) {
-						uniqueid = jQuery(this).prop('id');
-						if (uniqueid) {
-							$this.handle24Hours($item);
-							jQuery('#' + uniqueid + 'a').trigger('change');
-						}
-					},
-					onClose : function(datetime, inst) {
-						uniqueid = jQuery(this).prop('id');
-						if (uniqueid) {
-							$this.handle24Hours($item);
-							jQuery('#' + uniqueid + 'a').trigger('change');
-						}
-					}
-                });
-            }
-        });
+        aui_init();
     },
 	getTimezone: function(el, prefix) {
 		var $this = this, $form, lat, lng, url;
@@ -709,5 +683,29 @@ function geodir_save_all_tinymce_editors() {
             // example: write the content back to the form foreach editor instance
             tinymce.editors[i].save();
         }
+    }
+}
+
+function geodir_populate_default_category_input(){
+    var selected_cats = jQuery('.geodir-category-select').val();
+    var default_cat = jQuery('#default_category').val();
+
+    if(selected_cats && selected_cats.length){
+        jQuery('#default_category').html('');
+
+        jQuery(".geodir-category-select option").each(function(index)
+        {
+
+            if(jQuery.inArray(jQuery( this ).val(), selected_cats) !== -1){
+                jQuery('#default_category').append(jQuery('<option>', {
+                    value: jQuery( this ).val(),
+                    text: jQuery( this ).text(),
+                    selected: jQuery('#default_category').val() == jQuery( this ).val() || (!jQuery('#default_category').val() && selected_cats[0] == jQuery( this ).val())
+                }));
+            }
+
+        });
+    }else{
+        jQuery('#default_category').val('');
     }
 }

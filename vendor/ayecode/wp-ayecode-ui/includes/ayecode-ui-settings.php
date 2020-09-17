@@ -272,6 +272,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				function aui_init_greedy_nav(){
 					jQuery('nav.greedy').each(function(i, obj) {
 
+						console.log(1);
 						// Check if already initialized, if so continue.
 						if(jQuery(this).hasClass("being-greedy")){return true;}
 
@@ -282,8 +283,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						var $vlinks = '';
 						var $dDownClass = '';
 						if(jQuery(this).find('.navbar-nav').length){
+							if(jQuery(this).find('.navbar-nav').hasClass("being-greedy")){return true;}
 							$vlinks = jQuery(this).find('.navbar-nav').addClass("being-greedy w-100");
 						}else if(jQuery(this).find('.nav').length){
+							if(jQuery(this).find('.nav').hasClass("being-greedy")){return true;}
 							$vlinks = jQuery(this).find('.nav').addClass("being-greedy w-100");
 							$dDownClass = ' mt-2 ';
 						}else{
@@ -446,11 +449,105 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				/**
 				 * Initiate flatpickrs on the page.
 				 */
+				$aui_doing_init_flatpickr = false;
 				function aui_init_flatpickr(){
-					if ( jQuery.isFunction(jQuery.fn.flatpickr) ) {
-						jQuery("input.aui-flatpickr").flatpickr();
+					if ( jQuery.isFunction(jQuery.fn.flatpickr) && !$aui_doing_init_flatpickr) {
+						$aui_doing_init_flatpickr = true;
+						jQuery('input[data-aui-init="flatpickr"]:not(.flatpickr-input)').flatpickr();
 					}
+					$aui_doing_init_flatpickr = false;
 				}
+
+				function aui_modal($title,$body,$footer,$dismissible,$class,$dialog_class) {
+					if(!$class){$class = '';}
+					if(!$dialog_class){$dialog_class = '';}
+					if(!$body){$body = '<div class="text-center"><div class="spinner-border" role="status"></div></div>';}
+					// remove it first
+					jQuery('.aui-modal').modal('hide').modal('dispose').remove();
+					jQuery('.modal-backdrop').remove();
+
+					var $modal = '';
+
+					$modal += '<div class="modal aui-modal fade shadow bsui '+$class+'" tabindex="-1">'+
+						'<div class="modal-dialog modal-dialog-centered '+$dialog_class+'">'+
+							'<div class="modal-content">';
+
+					if($title) {
+						$modal += '<div class="modal-header">' +
+						'<h5 class="modal-title">' + $title + '</h5>';
+
+						if ($dismissible) {
+							$modal += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
+								'<span aria-hidden="true">&times;</span>' +
+								'</button>';
+						}
+
+						$modal += '</div>';
+					}
+					$modal += '<div class="modal-body">'+
+									$body+
+								'</div>';
+
+					if($footer){
+						$modal += '<div class="modal-footer">'+
+							$footer +
+							'</div>';
+					}
+
+					$modal +='</div>'+
+						'</div>'+
+					'</div>';
+
+					jQuery('body').append($modal);
+
+					jQuery('.aui-modal').modal('hide').modal({
+						//backdrop: 'static'
+					});
+				}
+
+				/**
+				 * Show / hide fields depending on conditions.
+				 */
+				function aui_conditional_fields(form){
+					jQuery(form).find(".aui-conditional-field").each(function () {
+
+						var $element_require = jQuery(this).data('element-require');
+
+						if ($element_require) {
+
+							$element_require = $element_require.replace("&#039;", "'"); // replace single quotes
+							$element_require = $element_require.replace("&quot;", '"'); // replace double quotes
+
+							if (eval($element_require)) {
+								jQuery(this).removeClass('d-none');
+							} else {
+								jQuery(this).addClass('d-none');
+							}
+						}
+					});
+				}
+
+				/**
+				 * A function to determine if a element is on screen.
+				 */
+				jQuery.fn.aui_isOnScreen = function(){
+
+					var win = jQuery(window);
+
+					var viewport = {
+						top : win.scrollTop(),
+						left : win.scrollLeft()
+					};
+					viewport.right = viewport.left + win.width();
+					viewport.bottom = viewport.top + win.height();
+
+					var bounds = this.offset();
+					bounds.right = bounds.left + this.outerWidth();
+					bounds.bottom = bounds.top + this.outerHeight();
+
+					return (!(viewport.right < bounds.left || viewport.left > bounds.right || viewport.bottom < bounds.top || viewport.top > bounds.bottom));
+
+				};
 
 				/**
 				 * Initiate all AUI JS.
