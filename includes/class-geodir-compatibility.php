@@ -1485,6 +1485,10 @@ class GeoDir_Compatibility {
 					add_filter( 'avf_custom_sidebar', array( __CLASS__, 'avf_custom_sidebar' ), 20, 1 );
 					add_filter( 'template_include', array( __CLASS__, 'avia_template_include' ), 11, 1 );
 				}
+
+				if ( geodir_is_page( 'single' ) ) {
+					add_filter( 'avf_shortcode_handler_prepare_current_post', array( __CLASS__, 'avf_shortcode_handler_prepare_current_post' ), 20, 1 );
+				}
 			}
 
 			// Porto (theme)
@@ -2405,6 +2409,22 @@ class GeoDir_Compatibility {
 		}
 
 		return $template;
+	}
+
+	/**
+	 * Filter current post for shortcode.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @param null|WP_Post $current_post Current post.
+	 * @return null|WP_Post Current post.
+	 */
+	public static function avf_shortcode_handler_prepare_current_post( $post ) {
+		if ( $template_page_id = (int) self::gd_page_id() ) {
+			$post = get_post( $template_page_id );
+		}
+
+		return $post;
 	}
 
 	/**
