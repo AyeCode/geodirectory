@@ -215,7 +215,7 @@ class GeoDir_Defaults {
 <!-- /wp:geodirectory/geodir-widget-archive-item-section -->
 
 <!-- wp:geodirectory/geodir-widget-post-rating {\"show\":\"stars\",\"alignment\":\"left\",\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-post-rating alignleft\">[gd_post_rating show='stars'  size=''  alignment='left'  list_hide=''  list_hide_secondary='' ]</div>
+<div class=\"wp-block-geodirectory-geodir-widget-post-rating\">[gd_post_rating show='stars'  size=''  alignment='left'  list_hide=''  list_hide_secondary='' ]</div>
 <!-- /wp:geodirectory/geodir-widget-post-rating -->
 
 <!-- wp:geodirectory/geodir-widget-post-meta {\"show_advanced\":true,\"key\":\"business_hours\",\"alignment\":\"right\",\"list_hide_secondary\":\"2\",\"content\":\"\"} -->
