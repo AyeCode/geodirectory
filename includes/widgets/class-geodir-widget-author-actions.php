@@ -33,7 +33,7 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			'base_id'       => 'gd_author_actions', // this us used as the widget id and the shortcode id.
 			'name'          => __( 'GD > Author Actions', 'geodirectory' ), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   	=> 'geodir-author-actions bsui', // widget class
+				'classname'   	=> 'geodir-author-actions '.geodir_bsui_class(), // widget class
 				'description' 	=> esc_html__( 'Display author actions.', 'geodirectory' ), // widget description
 				'geodirectory' 	=> true,
 				'gd_wgt_showhide' => 'show_on',

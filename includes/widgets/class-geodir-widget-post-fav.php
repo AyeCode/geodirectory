@@ -32,7 +32,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 			'base_id'    => 'gd_post_fav', // this us used as the widget id and the shortcode id.
 			'name'       => __( 'GD > Post Favorite', 'geodirectory' ), // the name of the widget.
 			'widget_ops' => array(
-				'classname'                   => 'geodir-post-fav bsui',
+				'classname'                   => 'geodir-post-fav '.geodir_bsui_class(),
 				// widget class
 				'description'                 => esc_html__( 'This shows a GD post favorite link.', 'geodirectory' ),
 				// widget description

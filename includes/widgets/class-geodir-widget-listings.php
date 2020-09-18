@@ -37,7 +37,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             'base_id'       => 'gd_listings', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Listings','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-listings bsui', // widget class
+                'classname'   => 'geodir-listings '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows the GD listings filtered by your choices.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,

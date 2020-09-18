@@ -33,7 +33,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
             'name'          => __('GD > Recent Reviews','geodirectory'), // the name of the widget.
             //'disable_widget'=> true,
             'widget_ops'    => array(
-                'classname'   => 'geodir-wgt-recent-reviews bsui', // widget class
+                'classname'   => 'geodir-wgt-recent-reviews '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Display a list of recent reviews from GeoDirectory listings.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,

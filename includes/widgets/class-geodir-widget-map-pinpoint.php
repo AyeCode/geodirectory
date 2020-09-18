@@ -33,7 +33,7 @@ class GeoDir_Widget_Map_Pinpoint extends WP_Super_Duper {
 			'base_id'       => 'gd_map_pinpoint',
 			'name'          => __( 'GD > Map Pinpoint', 'geodirectory' ),
 			'widget_ops'    => array(
-				'classname'   => 'geodir-map-pinpoint bsui',
+				'classname'   => 'geodir-map-pinpoint '.geodir_bsui_class(),
 				'description' => esc_html__( 'Shows a link that will open the map marker window on the map.', 'geodirectory' ),
 				'geodirectory' => true,
 			),

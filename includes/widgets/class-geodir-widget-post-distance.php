@@ -25,7 +25,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 			'base_id'       => 'gd_post_distance', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Distance To Post','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-distance bsui', // widget class
+				'classname'   => 'geodir-post-distance '.geodir_bsui_class(), // widget class
 				'description' => esc_html__('Shows the distance do the current post.','geodirectory'), // widget description
 				'geodirectory' => true,
 			),

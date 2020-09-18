@@ -1152,14 +1152,14 @@ function gd_delete_post($post_id){
 }
 
 /**
- * Loads an action inot a lity lighbox, such as the ninja form shortcode.
+ * Loads the ninja lightbox.
  *
  * @param $action
  * @param $nonce
  * @param $post_id
  * @param $extra
  */
-function gd_ajax_lightbox($action,$nonce,$post_id,$extra){
+function gd_ninja_lightbox($action,$nonce,$post_id,$extra){
     if($action){
         if(!$nonce || $nonce==''){$nonce = geodir_params.basic_nonce;}
         $content = "<div class='geodir-ajax-content ''>Loading content</div>";
@@ -1172,28 +1172,9 @@ function gd_ajax_lightbox($action,$nonce,$post_id,$extra){
             delete nfForms;
         }
 
-        $lightbox = lity(geodir_params.ajax_url+"?action="+$action+"&security="+$nonce+"&p="+$post_id+"&extra="+$extra);
+        url = geodir_params.ajax_url+"?action="+$action+"&security="+$nonce+"&p="+$post_id+"&extra="+$extra;
+        aui_modal(' ','<div class="modal-loading text-center mt-5"><div class="spinner-border" role="status"></div></div><iframe onload="jQuery(\'.modal-loading\').hide();jQuery(this).css(\'height\',this.contentWindow.document.body.offsetHeight + 50 + \'px\');" id="gd-ninja-iframe" src="'+url+'" width="100%" height="0" frameborder="0" allowtransparency="true"></iframe>','',true,'','modal-xl');
         return;
-
-        jQuery.ajax({
-            url: geodir_params.ajax_url,
-            type: 'POST',
-            // dataType: 'json',
-            data: {
-                action: $action,
-                security: $nonce,
-                post_id: $post_id,
-                extra: $extra
-            },
-            //timeout: 20000,
-            beforeSend: function() {
-                $lightbox = lity($content);
-            },
-            success: function(content) {
-                //jQuery('.geodir-ajax-content').html(content);
-                jQuery('.geodir-ajax-content').addClass('lity-show').html(content);
-            }
-        });
     }
 }
 

@@ -181,6 +181,9 @@ class GeoDir_Admin_Install {
 		// Queue upgrades/setup wizard
 		self::maybe_enable_setup_wizard();
 
+		// Maybe add try AUI notice
+		self::maybe_try_aui();
+
 		// Update GD version
 		self::update_gd_version();
 
@@ -1195,6 +1198,14 @@ class GeoDir_Admin_Install {
 		// Rank Math schedule flush rewrite rules.
 		if ( class_exists( 'RankMath\\Helper' ) ) {
 			update_option( 'geodir_rank_math_flush_rewrite', 1 );
+		}
+	}
+	
+	public static function maybe_try_aui(){
+		if(self::is_new_install()){
+			// new installs should be set to use it by default
+		}else{
+			GeoDir_Admin_Notices::add_notice( 'try_aui' );
 		}
 	}
 }

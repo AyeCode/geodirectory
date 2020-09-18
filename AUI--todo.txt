@@ -2,9 +2,9 @@
 * multiple view (at once) image slider (used in whoop).
 * image gallery masonary view. - DONE
 * fix search button in sidebar - DONE
-* tackle business hours input once merged
-* map bubble
+* tackle business hours input once merged - Started, waiting on Kirans help.
+* map bubble - DONE
 * location not shard popup - DONE
-* add listing default category input
-* remove lity for ninja widget
-* We need to implement AUI for new installs and ask current GD users to switch with admin notice like UWP.
+* add listing default category input - DONE
+* remove lity for ninja widget -  DONE
+* We need to implement AUI for new installs and ask current GD users to switch with admin notice like UWP. - DONE

@@ -33,7 +33,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
             'base_id'       => 'gd_post_rating', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Post Rating','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-post-rating bsui', // widget class
+                'classname'   => 'geodir-post-rating '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('This shows a GD post rating stars.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,

@@ -27,7 +27,7 @@ class GeoDir_Widget_Single_Next_Prev extends WP_Super_Duper {
             'base_id'       => 'gd_single_next_prev', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Single Next Prev','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-single-taxonomies-container bsui', // widget class
+                'classname'   => 'geodir-single-taxonomies-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows the current post`s next and previous post links on the details page.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),

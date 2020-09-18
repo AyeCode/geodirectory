@@ -32,6 +32,7 @@ class GeoDir_Admin_Notices {
 		'install'             => 'install_notice',
 		'update'              => 'update_notice',
 		'theme_support'       => 'theme_check_notice',
+		'try_aui'       => 'try_aui_notice',
 		//'beta'                => 'beta_notice',
 	);
 
@@ -231,6 +232,24 @@ class GeoDir_Admin_Notices {
 	 */
 	public static function beta_notice() {
 		include( 'views/html-notice-beta.php' );
+	}
+
+	/**
+	 * Meybe show a notice to try AUI.
+	 */
+	public static function try_aui_notice() {
+		if(is_admin() && current_user_can( 'manage_options' )  && isset($_REQUEST['page']) && $_REQUEST['page']=='gd-settings' && !empty($_REQUEST['try-bootstrap']) ){
+			geodir_update_option('design_style','bootstrap');
+			self::remove_notice('try_aui');
+			?>
+			<div class="notice notice-success">
+				<p><strong>GeoDirectory - </strong><?php _e( 'Congratulations your site is now set to use the new Bootstrap styles!', 'geodirectory' ); ?></p>
+			</div>
+			<?php
+		}elseif(geodir_get_option("design_style")!='bootstrap'){
+			include( 'views/html-notice-aui.php' );
+		}
+
 	}
 
 

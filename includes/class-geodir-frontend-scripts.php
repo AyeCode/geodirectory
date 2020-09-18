@@ -518,7 +518,7 @@ class GeoDir_Frontend_Scripts {
 			),
 			'geodir-add-listing' => array(
 				'src'     => geodir_plugin_url() . '/assets'.$aui.'/js/add-listing' . $suffix . '.js',
-				'deps'    => array( 'geodir-jquery-ui-timepicker' ),
+				'deps'    => array( 'jquery' ),
 				'version' => GEODIRECTORY_VERSION,
 			),
 			'geodir_lity' => array(

@@ -24,7 +24,7 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 			'base_id'       => 'gd_post_directions', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Directions','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-directions bsui', // widget class
+				'classname'   => 'geodir-post-directions '.geodir_bsui_class(), // widget class
 				'description' => esc_html__('This shows a link to map directions to the current post.','geodirectory'), // widget description
 				'geodirectory' => true,
 			),

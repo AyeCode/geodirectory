@@ -28,7 +28,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 			'name'           => __( 'GD > Post Badge', 'geodirectory' ),						// the name of the widget.
 			'no_wrap'       => true,
 			'widget_ops'     => array(
-				'classname'     => 'geodir-post-badge bsui',                                     	// widget class
+				'classname'     => 'geodir-post-badge '.geodir_bsui_class(),                                     	// widget class
 				'description'   => esc_html__( 'Displays the post badge.', 'geodirectory' ),	// widget description
 				'geodirectory'  => true,
 			)

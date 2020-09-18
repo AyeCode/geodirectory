@@ -32,7 +32,7 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 		    'base_id'       => 'gd_dashboard', // this us used as the widget id and the shortcode id.
 		    'name'          => __('GD > Dashboard','geodirectory'), // the name of the widget.
 		    'widget_ops'    => array(
-			    'classname'   => 'geodir-dashboard-container bsui', // widget class
+			    'classname'   => 'geodir-dashboard-container '.geodir_bsui_class(), // widget class
 			    'description' => esc_html__('Shows the user dashboard to logged in users.','geodirectory'), // widget description
 			    'customize_selective_refresh' => true,
 			    'geodirectory' => true,

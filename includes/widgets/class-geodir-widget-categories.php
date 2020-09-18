@@ -37,7 +37,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 //		        'design_type'   => 'icon_top'
 //	        ),
             'widget_ops'    => array(
-                'classname'   => 'geodir-categories-container bsui', // widget class
+                'classname'   => 'geodir-categories-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows a list of GeoDirectory categories.','geodirectory'), // widget description
                 'customize_selective_refresh' => true,
                 'geodirectory' => true,

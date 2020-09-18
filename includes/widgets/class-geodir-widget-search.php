@@ -30,7 +30,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
             'name'          => __('GD > Search','geodirectory'), // the name of the widget.
             //'disable_widget'=> true,
             'widget_ops'    => array(
-                'classname'   => 'geodir-search-container bsui', // widget class
+                'classname'   => 'geodir-search-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows the GeoDirectory search bar.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),
