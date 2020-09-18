@@ -1483,6 +1483,11 @@ class GeoDir_Compatibility {
 				if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
 					add_filter( 'avia_layout_filter', array( __CLASS__, 'avia_layout_filter' ), 20, 2 );
 					add_filter( 'avf_custom_sidebar', array( __CLASS__, 'avf_custom_sidebar' ), 20, 1 );
+					add_filter( 'template_include', array( __CLASS__, 'avia_template_include' ), 11, 1 );
+				}
+
+				if ( geodir_is_page( 'single' ) ) {
+					add_filter( 'avf_shortcode_handler_prepare_current_post', array( __CLASS__, 'avf_shortcode_handler_prepare_current_post' ), 20, 1 );
 				}
 			}
 
@@ -2384,6 +2389,42 @@ class GeoDir_Compatibility {
 		}
 
 		return $custom_sidebar;
+	}
+
+	/**
+	 * Filter Enfold template builder redirect.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @global array $avia_config Enfold settings.
+	 *
+	 * @param string $template The template.
+	 * @return string The template.
+	 */
+	public static function avia_template_include( $template ) {
+		global $avia_config;
+
+		if ( $template_page_id = (int) self::gd_page_id() ) {
+			$avia_config['builder_redirect_id'] = $template_page_id;
+		}
+
+		return $template;
+	}
+
+	/**
+	 * Filter current post for shortcode.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @param null|WP_Post $current_post Current post.
+	 * @return null|WP_Post Current post.
+	 */
+	public static function avf_shortcode_handler_prepare_current_post( $post ) {
+		if ( $template_page_id = (int) self::gd_page_id() ) {
+			$post = get_post( $template_page_id );
+		}
+
+		return $post;
 	}
 
 	/**

@@ -1008,7 +1008,11 @@ function geodir_bh_input_time_format( $jqueryui = false ) {
 	$time_format = apply_filters( 'geodir_business_hours_input_time_format', $time_format );
 
 	if ( $jqueryui ) {
-		$time_format = geodir_date_format_php_to_jqueryui( $time_format );
+		if ( geodir_design_style() ) {
+			$time_format = geodir_date_format_php_to_aui( $time_format ); // AUI Flatpickr
+		} else {
+			$time_format = geodir_date_format_php_to_jqueryui( $time_format );
+		}
 	}
 
 	return $time_format;
