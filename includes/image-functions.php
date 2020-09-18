@@ -351,7 +351,7 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 			    }
 
 		    }
-		    if($fallback_type == 'cpt_default'){
+		    if ( $fallback_type == 'cpt_default' && ! empty( $gd_post ) ) {
 				// check for CPT default image
 			    $cpt = $gd_post->post_type;
 			    if ( $cpt ) {
