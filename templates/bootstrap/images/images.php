@@ -40,7 +40,7 @@ global $gd_post;
 	// slider stuff
 	if($type=='slider'){
 	//echo '<div class="geodir_flex-loader"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>';?>
-	<div id="<?php echo $slider_id; ?>" class="carousel slide <?php if($animation =='fade'){echo "carousel-fade ";} echo $second_wrapper_class;?>" <?php
+	<div id="<?php echo $slider_id; ?>" class="carousel <?php if($limit_show){echo 'carousel-multiple-items';} ?> slide <?php if($animation =='fade'){echo "carousel-fade ";} echo $second_wrapper_class;?>" <?php
 	if($controlnav==1){echo " data-controlnav='1' ";}
 	if($animation =='fade'){echo " data-animation='fade' ";}
 	if($slideshow){echo " data-ride='carousel' ";}
@@ -122,12 +122,12 @@ global $gd_post;
 						$link_tag_close_ss = "</a>";
 					}elseif($link_screenshot_to=='lightbox'){
 						$link = geodir_get_image_src($image, 'large');
-						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image $responsive_image_class' data-lity>";
+						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image $responsive_image_class' >";
 						$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
 					}elseif($link_screenshot_to=='lightbox_url'){
 						$field_key = str_replace("_screenshot","",$image->type);
 						$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
-						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image $responsive_image_class' data-lity>";
+						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image $responsive_image_class' >";
 						$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
 					}elseif($link_screenshot_to=='url' || $link_screenshot_to=='url_same'){
 						$field_key = str_replace("_screenshot","",$image->type);
@@ -219,7 +219,7 @@ global $gd_post;
 					$active = $image_count == 0 ? 'active' : '';
 					$limit_show_break = !empty($limit_show) && $image_count >= $limit_show ? true : false;
 					//if($limit_show_break){break;}
-					echo '<li data-target="#'.$slider_id.'" data-slide-to="'.$image_count.'" class="my-1 mx-1 bg-dark '.$active.'""></li>';
+					echo '<li data-target="#'.$slider_id.'" data-slide-to="'.$image_count.'" class="my-1 mx-1 bg-dark '.$active.'"></li>';
 					$image_count++;
 				}
 				?>
