@@ -965,7 +965,7 @@ function geodir_refresh_business_hour($this) {
     if ($this.find('[data-day="' + prevD + '"] .gd-bh-next-day').length) {
         $pd = $this.find('[data-day="' + prevD + '"]');
         $this.removeClass('gd-bh-open gd-bh-close');
-        $this.find('div').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today');
+        $this.find('div').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today text-primary');
         $pd.addClass('gd-bh-days-prevday');
         $pd.find('.gd-bh-slot').each(function() {
             isOpen = false;
@@ -1000,9 +1000,10 @@ function geodir_refresh_business_hour($this) {
             dayname = $d.find('.gd-bh-days-d').text() + " ";
         } else {
             $this.removeClass('gd-bh-open gd-bh-close');
-            $this.find('div,span').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today text-success text-danger');
+            $this.find('div,span').removeClass('gd-bh-open gd-bh-close gd-bh-days-open gd-bh-days-close gd-bh-slot-open gd-bh-slot-close gd-bh-days-today text-success text-danger text-primary');
         }
         $d.addClass('gd-bh-days-today');
+        $d.find('.gd-bh-days-d').addClass('text-primary');
         if ($d.data('closed') != '1') {
             $d.find('.gd-bh-slot').each(function() {
                 isOpen = false;
