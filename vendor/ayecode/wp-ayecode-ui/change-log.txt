@@ -1,3 +1,6 @@
+= 0.1.24 =
+* Added ability to add multiple visible items to a slider responsively - ADDED
+
 = 0.1.23 =
 * Conditional fields options now work with AUI inputs - ADDED
 * Changed flatpikr to a data attribute initiator - CHANGED

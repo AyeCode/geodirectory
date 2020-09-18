@@ -261,7 +261,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			ob_start();
 			?>
 			<script>
-
+				
 				/**
 				 * An AUI bootstrap adaptation of GreedyNav.js ( by Luke Jackson ).
 				 *
@@ -272,7 +272,6 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				function aui_init_greedy_nav(){
 					jQuery('nav.greedy').each(function(i, obj) {
 
-						console.log(1);
 						// Check if already initialized, if so continue.
 						if(jQuery(this).hasClass("being-greedy")){return true;}
 
@@ -550,6 +549,121 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				};
 
 				/**
+				 * Maybe show multiple carousel items if set to do so.
+				 */ 
+				function aui_carousel_maybe_show_multiple_items($carousel){
+					var $items = {};
+					var $item_count = 0;
+
+					// maybe backup
+					if(!jQuery($carousel).find('.carousel-inner-original').length){
+						jQuery($carousel).append('<div class="carousel-inner-original d-none">'+jQuery($carousel).find('.carousel-inner').html()+'</div>');
+					}
+
+					// Get the original items html
+					jQuery($carousel).find('.carousel-inner-original .carousel-item').each(function () {
+						$items[$item_count] = jQuery(this).html();
+						$item_count++;
+					});
+
+					// bail if no items
+					if(!$item_count){return;}
+
+					if(jQuery(window).width() <= 576){
+						// maybe restore original
+						if(jQuery($carousel).find('.carousel-inner').hasClass('aui-multiple-items') && jQuery($carousel).find('.carousel-inner-original').length){
+							jQuery($carousel).find('.carousel-inner').removeClass('aui-multiple-items').html(jQuery($carousel).find('.carousel-inner-original').html());
+							jQuery($carousel).find(".carousel-indicators li").removeClass("d-none");
+						}
+
+					}else{
+						// new items
+						var $md_count = jQuery($carousel).data('limit_show');
+						var $new_items = '';
+						var $new_items_count = 0;
+						var $new_item_count = 0;
+						var $closed = true;
+						Object.keys($items).forEach(function(key,index) {
+
+							// close
+							if(index != 0 && Number.isInteger(index/$md_count) ){
+								$new_items += '</div></div>';
+								$closed = true;
+							}
+
+							// open
+							if(index == 0 || Number.isInteger(index/$md_count) ){
+								$active = index == 0 ? 'active' : '';
+								$new_items += '<div class="carousel-item '+$active+'"><div class="row m-0">';
+								$closed = false;
+								$new_items_count++;
+								$new_item_count = 0;
+							}
+
+							// content
+							$new_items += '<div class="col pr-1 pl-0">'+$items[index]+'</div>';
+							$new_item_count++;
+
+
+						});
+
+						// close if not closed in the loop
+						if(!$closed){
+							// check for spares
+							if($md_count-$new_item_count > 0){
+								$placeholder_count = $md_count-$new_item_count;
+								while($placeholder_count > 0){
+									$new_items += '<div class="col pr-1 pl-0"></div>';
+									$placeholder_count--;
+								}
+
+							}
+
+							$new_items += '</div></div>';
+						}
+
+						// insert the new items
+						jQuery($carousel).find('.carousel-inner').addClass('aui-multiple-items').html($new_items);
+
+						// fix any lazyload images in the active slider
+						jQuery($carousel).find('.carousel-item.active img').each(function () {
+							// fix the srcset
+							if(real_srcset = jQuery(this).attr("data-srcset")){
+								if(!jQuery(this).attr("srcset")) jQuery(this).attr("srcset",real_srcset);
+							}
+							// fix the src
+							if(real_src = jQuery(this).attr("data-src")){
+								if(!jQuery(this).attr("srcset"))  jQuery(this).attr("src",real_src);
+							}
+						});
+
+						// maybe fix carousel indicators
+						$hide_count = $new_items_count-1;
+						jQuery($carousel).find(".carousel-indicators li:gt("+$hide_count+")").addClass("d-none");
+					}
+
+					// trigger a global action to say we have
+					jQuery( window ).trigger( "aui_carousel_multiple" );
+				}
+
+				/**
+				 * Init Multiple item carousels.
+				 */ 
+				function aui_init_carousel_multiple_items(){
+					jQuery(window).resize(function(){
+						jQuery('.carousel-multiple-items').each(function () {
+							aui_carousel_maybe_show_multiple_items(this);
+						});
+					});
+
+					// run now
+					jQuery('.carousel-multiple-items').each(function () {
+						aui_carousel_maybe_show_multiple_items(this);
+					});
+				}
+				
+
+				/**
 				 * Initiate all AUI JS.
 				 */
 				function aui_init(){
@@ -567,6 +681,9 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					// Set times to time ago
 					aui_time_ago('timeago');
+					
+					// init multiple item carousels
+					aui_init_carousel_multiple_items();
 				}
 
 				// run on window loaded
