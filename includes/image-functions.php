@@ -355,7 +355,8 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 				// check for CPT default image
 			    $cpt = $gd_post->post_type;
 			    if ( $cpt ) {
-				    $cpts = geodir_get_posttypes('array');
+					$cpts = geodir_get_posttypes('array');
+					$cpt = ( !empty( $cpt ))?  $cpt: $gd_post->post_type;
 				    if ( ! empty( $cpts[$cpt]['default_image'] ) ) {
 					    $default_img_id = absint( $cpts[$cpt]['default_image'] );
 					    break;
