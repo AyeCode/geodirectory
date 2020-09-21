@@ -220,17 +220,27 @@ class GeoDir_Media {
 		 */
 		$sizes = apply_filters( 'intermediate_image_sizes_advanced', $sizes, $metadata );
 
-		if ( $sizes ) { 
+		// Fetch additional metadata from EXIF/IPTC.
+		$image_meta = wp_read_image_metadata( $file );
+
+		if ( $sizes ) {
 			$editor = wp_get_image_editor( $file );
 
-			if ( ! is_wp_error( $editor ) )
+			if ( ! is_wp_error( $editor ) ){
+				// If stored EXIF data exists, rotate the source image before creating sub-sizes.
+				if ( ! empty( $image_meta ) ) {
+					$rotated = $editor->maybe_exif_rotate();
+				}
+
+				// create sizes
 				$metadata['sizes'] = $editor->multi_resize( $sizes );
+			}
+
 		} else {
 			$metadata['sizes'] = array();
 		}
 
-		// Fetch additional metadata from EXIF/IPTC.
-		$image_meta = wp_read_image_metadata( $file );
+
 		if ( $image_meta )
 			$metadata['image_meta'] = $image_meta;
 

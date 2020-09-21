@@ -1,8 +1,8 @@
 * hide badges on different listing views. - DONE
-* multiple view (at once) image slider (used in whoop).
+* multiple view (at once) image slider (used in whoop). - DONE
 * image gallery masonary view. - DONE
 * fix search button in sidebar - DONE
-* tackle business hours input once merged - Started, waiting on Kirans help.
+* tackle business hours input once merged - Started, waiting on Kirans help. - DONE
 * map bubble - DONE
 * location not shard popup - DONE
 * add listing default category input - DONE

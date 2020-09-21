@@ -5,12 +5,20 @@ jQuery(document).ready(function($) {
         geodir_lightbox_embed(this,ele);
     });
 
+    // add trigger for carousel multiple items
+    jQuery( window ).on( "aui_carousel_multiple", function() {
+        // Open a lightbox for embeded items
+        jQuery('.geodir-lightbox-image').click(function(ele) {
+            geodir_lightbox_embed(this,ele);
+        });
+    });
+
     // Maybe ajax load the next slide
     gd_init_carousel_ajax();
 
     // init things when new tab is shown
     jQuery('.nav-tabs,.nav-pills').on('shown.bs.tab', 'a', function (e) {
-       // Greedy nav fix
+        // Greedy nav fix
         if(jQuery(this).closest('.greedy').length){
             if(jQuery(this).closest('.greedy-btn').length){
                 jQuery(this).closest('.greedy-btn').find('> .nav-link').addClass('active');
@@ -35,8 +43,8 @@ jQuery(document).ready(function($) {
             jQuery('html,body').scrollTop(scrollmem);
         });
     });
-    
-    
+
+
 
 
 });
@@ -47,7 +55,7 @@ jQuery(document).ready(function($) {
 function gd_init_carousel_ajax(){
     jQuery('.carousel').on('slide.bs.carousel', function (el) {
         geodir_ajax_load_slider(el.relatedTarget);
-    })
+    });
 }
 
 
@@ -146,7 +154,7 @@ function geodir_lightbox_embed($link,ele){
 
 
 /**
-################################## old stuff ###################################
+ ################################## old stuff ###################################
  */
 
 // get url paramiters
@@ -1246,14 +1254,16 @@ function gd_init_comment_reply_link(){
  * @param slide
  */
 function geodir_ajax_load_slider(slide){
-    // fix the srcset
-    if(real_srcset = jQuery(slide).find('img').attr("data-srcset")){
-        if(!jQuery(slide).find('img').attr("srcset")) jQuery(slide).find('img').attr("srcset",real_srcset);
-    }
-    // fix the src
-    if(real_src = jQuery(slide).find('img').attr("data-src")){
-        if(!jQuery(slide).find('img').attr("srcset"))  jQuery(slide).find('img').attr("src",real_src);
-    }
+    jQuery(slide).find('img').each(function () {
+        // fix the srcset
+        if(real_srcset = jQuery(this).attr("data-srcset")){
+            if(!jQuery(this).attr("srcset")) jQuery(this).attr("srcset",real_srcset);
+        }
+        // fix the src
+        if(real_src = jQuery(this).attr("data-src")){
+            if(!jQuery(this).attr("srcset"))  jQuery(this).attr("src",real_src);
+        }
+    });
 }
 
 /**
@@ -1549,41 +1559,41 @@ function gd_user_position_fail(err) {
  */
 function gd_manually_set_user_position($msg){
 
-        var $prefix = "geodir_manual_location_";
+    var $prefix = "geodir_manual_location_";
 
-        jQuery.post(geodir_params.ajax_url, {
-            action: 'geodir_manual_map',
-            trigger: $prefix+'_trigger'
-            //trigger: $successFunction
-        }, function(data) {
-            if (data) {
-                aui_modal("",data);
+    jQuery.post(geodir_params.ajax_url, {
+        action: 'geodir_manual_map',
+        trigger: $prefix+'_trigger'
+        //trigger: $successFunction
+    }, function(data) {
+        if (data) {
+            aui_modal("",data);
 
-                // map center is off due to lightbox zoom effect so we resize to fix
-                setTimeout(function(){
-                    jQuery('.aui-modal .geodir_map_container').css('width','90%').css('width','99.99999%');
-                    window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
-                }, 500);
+            // map center is off due to lightbox zoom effect so we resize to fix
+            setTimeout(function(){
+                jQuery('.aui-modal .geodir_map_container').css('width','90%').css('width','99.99999%');
+                window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
+            }, 500);
 
-                jQuery( window ).off($prefix+'_trigger');
-                jQuery( window ).on( $prefix+'_trigger', function (event,lat,lon)
-                {
-                    if(lat && lon){
-                        var position ={};
-                        position.latitude = lat;
-                        position.longitude = lon;
-                        // window[$successFunction](position);
-                        var fn = window.gd_user_position_success_callback;
-                        if(typeof fn === 'function') {
-                            fn(lat,lon);
-                        }
-                        jQuery('.aui-modal').modal('hide');
+            jQuery( window ).off($prefix+'_trigger');
+            jQuery( window ).on( $prefix+'_trigger', function (event,lat,lon)
+            {
+                if(lat && lon){
+                    var position ={};
+                    position.latitude = lat;
+                    position.longitude = lon;
+                    // window[$successFunction](position);
+                    var fn = window.gd_user_position_success_callback;
+                    if(typeof fn === 'function') {
+                        fn(lat,lon);
                     }
-                });
+                    jQuery('.aui-modal').modal('hide');
+                }
+            });
 
-                return false;
-            }
-        });
+            return false;
+        }
+    });
 }
 
 function gd_set_get_directions($lat,$lon){

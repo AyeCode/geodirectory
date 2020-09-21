@@ -1,7 +1,10 @@
+= 2.1.0.1-beta =
+* GD Archive template not rendered correctly for Enfold Builder - FIXED
+* Only main image rotated if needed, smaller sizes fail to rotate based on metadata - FIXED
+
 = 2.1.0.0-beta =
 * AyeCode UI starting to be added to GeoDirectory - STARTED
 * First AUI beta release - INFO
-* GD Archive template not rendered correctly for Enfold Builder - FIXED
 
 = 2.0.0.102 =
 * Avada page builder don't render header on GD Archive pages - FIXED
