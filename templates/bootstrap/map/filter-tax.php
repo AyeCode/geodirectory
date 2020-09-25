@@ -67,7 +67,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="geodir_toggle my-1">
 					<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), $map_options['terms'], true, $map_options['tick_terms'] ); ?>
 					<script type="text/javascript">
-						jQuery(window).load(function () {
+						jQuery(window).on("load",function () {
 							geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');
 						});</script>
 				</div>

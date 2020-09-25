@@ -687,7 +687,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				}
 
 				// run on window loaded
-				jQuery(window).load(function() {
+				jQuery(window).on("load",function() {
 					aui_init();
 				});
 			</script>

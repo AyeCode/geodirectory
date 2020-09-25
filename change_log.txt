@@ -2,6 +2,7 @@
 * GD Archive template not rendered correctly for Enfold Builder - FIXED
 * Only main image rotated if needed, smaller sizes fail to rotate based on metadata - FIXED
 * Sometime zip field looses the value on select autocomplete address - FIXED
+* Replace jQuery deprecated load() function - CHANGED
 
 = 2.1.0.0-beta =
 * AyeCode UI starting to be added to GeoDirectory - STARTED

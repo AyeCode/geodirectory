@@ -1,6 +1,6 @@
 gd_infowindow = window.gdMaps == 'google' ? new google.maps.InfoWindow() : null;
 
-jQuery(window).load(function() {
+jQuery(window).on("load",function() {
     
     // tooltips
     gd_init_tooltips();
