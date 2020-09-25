@@ -1510,6 +1510,10 @@ class GeoDir_Compatibility {
 				if ( function_exists( 'genesis_simple_sidebars' ) ) {
 					add_filter( 'sidebars_widgets', array( __CLASS__, 'genesis_simple_sidebars_set_sidebars_widgets' ), 20, 1 );
 				}
+
+				if ( geodir_is_page( 'single' ) ) {
+					add_filter( 'genesis_before_comments', array( __CLASS__, 'genesis_before_comments' ), 1 );
+				}
 			}
 
 			// Fix Divi builder GD pages header
@@ -2992,6 +2996,22 @@ class GeoDir_Compatibility {
 		}
 
 		return $widgets;
+	}
+
+	/**
+	 * Set post comments to show in Genesis separate comments.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @global WP_Query $wp_query The WP Query object.
+	 */
+	public static function genesis_before_comments() {
+		global $wp_query;
+
+		// Genesis comments template shows comments separately for comment types.
+		if ( empty( $wp_query->comments_by_type['comment'] ) && ! empty( $wp_query->comments ) ) {
+			$wp_query->comments_by_type['comment'] = $wp_query->comments;
+		}
 	}
 
 	/**
