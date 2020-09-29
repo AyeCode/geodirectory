@@ -1849,6 +1849,11 @@ function geodir_cfi_business_hours( $html, $cf ) {
 
         $timezone_data = geodir_timezone_data( $timezone_string );
 
+
+        // enqueue the script
+        $aui_settings = AyeCode_UI_Settings::instance();
+        $aui_settings->enqueue_flatpickr();
+        
         ob_start();
         ?>
         <script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
