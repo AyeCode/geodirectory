@@ -539,7 +539,7 @@ function geodir_init_flexslider(){
 }
 
 
-jQuery(window).load(function() {
+jQuery(window).on("load",function() {
 
     // Set times to time ago
     if(jQuery('.gd-timeago').length){
@@ -685,7 +685,7 @@ jQuery(document).ready(function() {
 
 /* Show Hide Filters End */
 /* Hide Pinpoint If Listing MAP Not On Page */
-jQuery(window).load(function () {
+jQuery(window).on("load",function () {
     if (jQuery(".map_background").length == 0) {
         jQuery('.geodir-pinpoint').hide();
     } else {
@@ -716,7 +716,7 @@ function geodir_get_post_term(el) {
 }
 
 /* we recalc the stars because some browsers can't do subpixle percents, we should be able to remove this in a few years. */
-jQuery(window).load(function() {
+jQuery(window).on("load",function() {
     geodir_resize_rating_stars();
 
     jQuery(document).on('click', '.geodir-rating,.gd-star-rating', function(e) {
