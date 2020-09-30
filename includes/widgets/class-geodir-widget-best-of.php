@@ -38,87 +38,94 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			    'description' => esc_html__('Shows the best of listings from categories.','geodirectory'), // widget description
 			    'customize_selective_refresh' => true,
 			    'geodirectory' => true,
-		    ),
-		    'arguments'     => array(
-			    'title'  => array(
-				    'title' => __('Title:', 'geodirectory'),
-				    'desc' => __('The widget title.', 'geodirectory'),
-				    'type' => 'text',
-				    'default'  => '',
-				    'desc_tip' => true,
-				    'advanced' => false
-			    ),
-			    'post_type'  => array(
-                    'title' => __('Default Post Type:', 'geodirectory'),
-                    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
-                    'type' => 'select',
-                    'options'   =>  geodir_get_posttypes('options-plural'),
-                    'default'  => 'gd_place',
-                    'desc_tip' => true,
-                    'advanced' => true
-                ),
-			    'tab_layout'  => array(
-				    'title' => __('Tabs layout:', 'geodirectory'),
-				    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
-				    'type' => 'select',
-				    'options'   =>  array(
-					    'top' => __('Tabs on top','geodirectory'),
-					    'left' => __('Tabs on left','geodirectory'),
-					    'dropdown' => __('Tabs as dropdown','geodirectory'),
-                    ),
-				    'default'  => 'bestof-tabs-on-top',
-				    'desc_tip' => true,
-				    'advanced' => false,
-				    'group'     => __("Design","geodirectory")
-			    ),
-			    'layout'  => array(
-				    'title' => __('Layout', 'geodirectory'),
-				    'desc' => __('How the listings should laid out by default.', 'geodirectory'),
-				    'type' => 'select',
-				    'options'   =>  geodir_get_layout_options(),
-				    'default'  => '0',
-				    'desc_tip' => true,
-				    'advanced' => false,
-				    'group'     => __("Design","geodirectory")
-			    ),
-			    'post_limit'  => array(
-				    'title' => __('Posts to show:', 'geodirectory'),
-				    'desc' => __('The number of posts to show by default.', 'geodirectory'),
-				    'type' => 'number',
-				    'default'  => '5',
-				    'desc_tip' => true,
-				    'advanced' => false,
-				    'group'     => __("Design","geodirectory")
-
-			    ),
-			    'cat_limit'  => array(
-				    'title' => __('Categories to show:', 'geodirectory'),
-				    'desc' => __('The number of categories to show by default.', 'geodirectory'),
-				    'type' => 'number',
-				    'default'  => '3',
-				    'desc_tip' => true,
-				    'advanced' => false,
-				    'group'     => __("Design","geodirectory")
-			    ),
-			    'add_location_filter'  => array(
-				    'title' => __("Enable location filter?", 'geodirectory'),
-				    'type' => 'checkbox',
-				    'desc_tip' => true,
-				    'value'  => '1',
-				    'default'  => '1',
-				    'advanced' => true
-			    ),
-			    'use_viewing_post_type'  => array(
-				    'title' => __("Use current viewing post type?", 'geodirectory'),
-				    'type' => 'checkbox',
-				    'desc_tip' => true,
-				    'value'  => '1',
-				    'default'  => '1',
-				    'advanced' => true
-			    ),
 		    )
 	    );
 
+	    parent::__construct( $options );
+    }
+	/**
+	 * Set widget arguments.
+	 *
+	 */
+	public function set_arguments() {
+		$arguments = array(
+			'title'  => array(
+				'title' => __('Title:', 'geodirectory'),
+				'desc' => __('The widget title.', 'geodirectory'),
+				'type' => 'text',
+				'default'  => '',
+				'desc_tip' => true,
+				'advanced' => false
+			),
+			'post_type'  => array(
+				'title' => __('Default Post Type:', 'geodirectory'),
+				'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
+				'type' => 'select',
+				'options'   =>  geodir_get_posttypes('options-plural'),
+				'default'  => 'gd_place',
+				'desc_tip' => true,
+				'advanced' => true
+			),
+			'tab_layout'  => array(
+				'title' => __('Tabs layout:', 'geodirectory'),
+				'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
+				'type' => 'select',
+				'options'   =>  array(
+					'top' => __('Tabs on top','geodirectory'),
+					'left' => __('Tabs on left','geodirectory'),
+					'dropdown' => __('Tabs as dropdown','geodirectory'),
+				),
+				'default'  => 'bestof-tabs-on-top',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+			),
+			'layout'  => array(
+				'title' => __('Layout', 'geodirectory'),
+				'desc' => __('How the listings should laid out by default.', 'geodirectory'),
+				'type' => 'select',
+				'options'   =>  geodir_get_layout_options(),
+				'default'  => '0',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+			),
+			'post_limit'  => array(
+				'title' => __('Posts to show:', 'geodirectory'),
+				'desc' => __('The number of posts to show by default.', 'geodirectory'),
+				'type' => 'number',
+				'default'  => '5',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+
+			),
+			'cat_limit'  => array(
+				'title' => __('Categories to show:', 'geodirectory'),
+				'desc' => __('The number of categories to show by default.', 'geodirectory'),
+				'type' => 'number',
+				'default'  => '3',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'     => __("Design","geodirectory")
+			),
+			'add_location_filter'  => array(
+				'title' => __("Enable location filter?", 'geodirectory'),
+				'type' => 'checkbox',
+				'desc_tip' => true,
+				'value'  => '1',
+				'default'  => '1',
+				'advanced' => true
+			),
+			'use_viewing_post_type'  => array(
+				'title' => __("Use current viewing post type?", 'geodirectory'),
+				'type' => 'checkbox',
+				'desc_tip' => true,
+				'value'  => '1',
+				'default'  => '1',
+				'advanced' => true
+			),
+		);
 
 	    $design_style = geodir_design_style();
 
@@ -214,16 +221,9 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			    'advanced' => false,
 			    'group'     => __("Card Design","geodirectory")
 		    );
-
-
-		    // add the args
-		    $options['arguments'] = $options['arguments'] + $arguments;
 	    }
-
-
-	    parent::__construct( $options );
-    }
-
+		return $arguments;
+	}
 	/**
 	 * The Super block output function.
 	 *
@@ -238,22 +238,6 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		add_action('wp_footer', array($this, 'best_of_js'));
 		$this->w_settings = $args;
 		ob_start();
-
-		// defaults
-
-//			    array(
-//				    'title' => '',
-//				    'post_type' => '',
-//				    'post_limit' => '5',
-//				    'cat_limit' => '3',
-//				    'character_count' => '20',
-//				    'add_location_filter' => '1',
-//				    'tab_layout' => 'bestof-tabs-on-top',
-//				    'excerpt_type' => 'show-desc',
-//				    'use_viewing_post_type' => ''
-//			    )
-
-
 		$this::best_of($widget_args, $args );
 
 		return ob_get_clean();
@@ -270,7 +254,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
      * @param array $instance Saved values from database.
      */
     public static function best_of($args, $instance) {
-        extract($args);
+		extract($args);
         /**
          * Filter the best of widget tab layout.
          *
@@ -331,7 +315,16 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
          *
          * @param string $instance ['excerpt_type'] The excerpt type.
          */
-        $excerpt_type = empty($instance['excerpt_type']) ? 'show-desc' : apply_filters('bestof_widget_excerpt_type', $instance['excerpt_type']);
+		$excerpt_type = empty($instance['excerpt_type']) ? 'show-desc' : apply_filters('bestof_widget_excerpt_type', $instance['excerpt_type']);
+		
+        /**
+         * Filter the event type.
+         *
+         * @since 1.5.4
+         *
+         * @param string $instance ['event_type'] The event type.
+         */
+        $event_type = empty($instance['event_type']) ? 'show-desc' : apply_filters('bestof_widget_event_type', $instance['event_type']);
 
 
         /**
@@ -436,7 +429,6 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		    $nav_html .= '<div class="row"><div class="col-3"> ';
 		    $tabs_left = true;
 	    }
-//	    print_r($instance);
 
         //term navigation - start
 	    if(!defined( 'DOING_AJAX' ) || isset($_REQUEST['shortcode']) ) $nav_html .= '<div class="geodir-tabs gd-bestof-tabs" id="gd-bestof-tabs" style="position:relative;">';
@@ -544,7 +536,9 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
             <input type="hidden" id="bestof_widget_post_type" name="bestof_widget_post_type"
                    value="<?php echo $post_type; ?>">
             <input type="hidden" id="bestof_widget_excerpt_type" name="bestof_widget_excerpt_type"
-                   value="<?php echo $excerpt_type; ?>">
+                   value="<?php echo $excerpt_type; ?>">	   
+			<input type="hidden" id="bestof_widget_event_type" name="bestof_widget_event_type"
+                   value="<?php echo $event_type; ?>">
             <input type="hidden" id="bestof_widget_post_limit" name="bestof_widget_post_limit"
                    value="<?php echo $post_limit; ?>">
             <input type="hidden" id="bestof_widget_taxonomy" name="bestof_widget_taxonomy"
@@ -691,7 +685,6 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		do_action('geodir_bestof_get_widget_listings_before');
 
 		$widget_listings = geodir_get_widget_listings($query_args);
-
 		/**
 		 * This action called after querying widget listings.
 		 *
