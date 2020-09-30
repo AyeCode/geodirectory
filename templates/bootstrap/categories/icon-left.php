@@ -38,7 +38,7 @@ if(!$hide_icon){
 }
 
 ?>
-<div class="card h-100 shadow-sm p-0 m-0" >
+<div class="card h-100 shadow-sm p-0 m-0 border-0 bg-transparent" >
 	<div class="card-body text-center btn btn-<?php echo $card_color;?> p-1 py-<?php echo $card_padding_inside;?>">
 		<div class="gd-cptcat-cat-right text-uppercase text-truncate">
 			<a href="<?php echo esc_url($term_link);?>" class="text-reset stretched-link font-weight-bold h6">

@@ -1,14 +1,14 @@
 jQuery(document).ready(function($) {
 
     // Open a lightbox for embeded items
-    jQuery('.geodir-lightbox-image').click(function(ele) {
+    jQuery('.geodir-lightbox-image').unbind('click').click(function(ele) {
         geodir_lightbox_embed(this,ele);
     });
 
     // add trigger for carousel multiple items
     jQuery( window ).on( "aui_carousel_multiple", function() {
         // Open a lightbox for embeded items
-        jQuery('.geodir-lightbox-image').click(function(ele) {
+        jQuery('.geodir-lightbox-image').unbind('click').click(function(ele) {
             geodir_lightbox_embed(this,ele);
         });
     });

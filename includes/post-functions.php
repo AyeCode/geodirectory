@@ -487,6 +487,11 @@ function geodir_favourite_html( $user_id, $post_id, $args = array() ) {
 		if( !empty($args['txt_color'])){
 			$text_style .= "color:".esc_attr($args['txt_color']).";";
 		}
+
+		// position
+		if( !empty($args['alignment']) && $args['alignment']=='block' ){
+			$link_class .= " w-100 ";
+		}
 	}
 
 	$output = geodir_get_template_html( $template, array(
