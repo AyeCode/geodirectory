@@ -354,7 +354,7 @@ public function setup_wizard_header() {
 				?>
 
 
-			<table class="gd-setup-maps" cellspacing="0">
+			<table class="gd-setup-maps w-100" cellspacing="0">
 
 				<tbody>
 
@@ -368,7 +368,12 @@ public function setup_wizard_header() {
 
 				$settings[] = $api_arr;
 
+				ob_start();
 				GeoDir_Admin_Settings::output_fields( $settings );
+				$settings_output = ob_get_clean();
+
+				$settings_output = str_replace(array('regular-text geodir-select'),array('form-control w-100 mw-100'),$settings_output );
+				echo $settings_output;
 				?>
 
 
@@ -423,7 +428,12 @@ public function setup_wizard_header() {
 			// Change the description
 			$settings[0]['title'] = '';
 			$settings[0]['desc']  = __( 'Drag the map or the marker to set the city/town you wish to use as the default location.', 'geodirectory' );
+
+			ob_start();
 			GeoDir_Admin_Settings::output_fields( $settings );
+			$settings_output = ob_get_clean();
+//			echo $settings_output;
+			echo str_replace(array('regular-text','geodir-select','button-primary'),array('form-control w-100 mw-100','form-control w-100 mw-100','btn btn-primary btn-sm mb-4'),$settings_output );
 
 			// check if there are already listing before saving new location
 			global $wpdb;
@@ -765,10 +775,10 @@ public function setup_wizard_header() {
 		<?php if ( 'unknown' === geodir_get_option( 'usage_tracking', 'unknown' ) || '' === geodir_get_option( 'usage_tracking' ) ) { ?>
 			<div class="geodirectory-message geodirectory-tracker">
 				<p><?php printf( __( 'Want to help make GeoDirectory even more awesome? Allow GeoDirectory to collect non-sensitive diagnostic data and usage information. %1$sFind out more%2$s.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/usage-tracking/" target="_blank">', '</a>' ); ?></p>
-				<p class="submit">
-					<a class="button-primary button button-large"
+				<p class="">
+					<a class="btn btn-primary btn-sm"
 					   href="<?php echo esc_url( wp_nonce_url( remove_query_arg( 'gd_tracker_optout', add_query_arg( 'gd_tracker_optin', 'true' ) ), 'gd_tracker_optin', 'gd_tracker_nonce' ) ); ?>"><?php esc_html_e( 'Allow', 'geodirectory' ); ?></a>
-					<a class="button-secondary button button-large skip"
+					<a class="btn btn-link btn-sm"
 					   href="<?php echo esc_url( wp_nonce_url( remove_query_arg( 'gd_tracker_optin', add_query_arg( 'gd_tracker_optout', 'true' ) ), 'gd_tracker_optout', 'gd_tracker_nonce' ) ); ?>"><?php esc_html_e( 'No thanks', 'geodirectory' ); ?></a>
 				</p>
 			</div>
@@ -779,10 +789,10 @@ public function setup_wizard_header() {
 		<?php } ?>
 
 		<div class="gd-setup-next-steps">
-			<div class="gd-setup-next-steps-first">
+			<div class="gd-setup-next-steps-first mb-4">
 				<h2 class="h3"><?php esc_html_e( 'Next steps', 'geodirectory' ); ?></h2>
 				<ul>
-					<li class="setup-listing"><a class="button button-primary button-large"
+					<li class="setup-listing"><a class="btn btn-primary btn-sm"
 					                             href="<?php echo esc_url( admin_url( 'post-new.php?post_type=gd_place' ) ); ?>"><?php esc_html_e( 'Create your first listing!', 'geodirectory' ); ?></a>
 					</li>
 				</ul>
@@ -834,7 +844,12 @@ public function setup_wizard_header() {
 		// Change the description
 		$settings[0]['title'] = '';//__("Demo content","geodirectory");
 		$settings[0]['desc']  = '';//__( 'Drag the map or the marker to set the city/town you wish to use as the default location.', 'geodirectory' );
+
+		ob_start();
 		GeoDir_Admin_Settings::output_fields( $settings );
+		$settings_output = ob_get_clean();
+		echo str_replace(array('regular-text', 'geodir-select'),array('form-control w-100 mw-100','form-control form-control-sm w-100 mw-100'),$settings_output );
+
 	}
 
 	/**
@@ -854,7 +869,7 @@ public function setup_wizard_header() {
 
 				<tr>
 					<td>
-						<select id='geodir-wizard-widgets-top' class="geodir-select">
+						<select id='geodir-wizard-widgets-top' class="geodir-select form-control form-control-sm w-100 mw-100 ">
 							<?php
 							$is_sidebar    = '';
 							$maybe_sidebar = '';
@@ -906,7 +921,7 @@ public function setup_wizard_header() {
 						<div class="geodir-wizard-widgets-top-result"></div>
 					</td>
 					<td><input type="button" value="<?php _e( "Insert widgets", "geodirectory" ); ?>"
-					           class="button-primary geodir_dummy_button"
+					           class="btn btn-primary btn-sm geodir_dummy_button"
 					           onclick="gd_wizard_add_widgets_top('<?php echo wp_create_nonce( "geodir-wizard-widgets-top" ); ?>');return false;">
 					</td>
 				</tr>
@@ -924,7 +939,7 @@ public function setup_wizard_header() {
 
 			<tr>
 				<td>
-					<select id='geodir-wizard-widgets' class="geodir-select">
+					<select id='geodir-wizard-widgets' class="geodir-select form-control form-control-sm w-100 mw-100">
 						<?php
 						$is_sidebar    = '';
 						$maybe_sidebar = '';
@@ -977,7 +992,7 @@ public function setup_wizard_header() {
 					<div class="geodir-wizard-widgets-result"></div>
 				</td>
 				<td><input type="button" value="<?php _e( "Insert widgets", "geodirectory" ); ?>"
-				           class="button-primary geodir_dummy_button"
+				           class="btn btn-primary btn-sm geodir_dummy_button"
 				           onclick="gd_wizard_add_widgets('<?php echo wp_create_nonce( "geodir-wizard-widgets" ); ?>');return false;">
 				</td>
 			</tr>
@@ -1010,7 +1025,7 @@ public function setup_wizard_header() {
 
 					if ( ! empty( $set_menus ) ) {
 						//echo '##1';
-						echo "<select id='geodir-wizard-menu-id' data-type='add' class='geodir-select' >";
+						echo "<select id='geodir-wizard-menu-id' data-type='add' class='geodir-select form-control form-control-sm w-100 mw-100' >";
 
 						foreach ( $set_menus as $menu_location => $menu_id ) {
 							$selected = '';
@@ -1042,7 +1057,7 @@ public function setup_wizard_header() {
 						//print_r($menus );
 
 						if ( ! empty( $menus ) ) {
-							echo "<select id='geodir-wizard-menu-location' data-type='create' class='geodir-select' >";
+							echo "<select id='geodir-wizard-menu-location' data-type='create' class='geodir-select form-control form-control-sm w-100 mw-100' >";
 
 							foreach ( $menus as $menu_slug => $menu_name ) {
 								$selected = '';
@@ -1074,7 +1089,7 @@ public function setup_wizard_header() {
 					<div class="geodir-wizard-menu-result"></div>
 				</td>
 				<td><input type="button" value="<?php _e( "Insert menu items", "geodirectory" ); ?>"
-				           class="button-primary geodir_dummy_button"
+				           class="btn btn-primary btn-sm geodir_dummy_button"
 				           onclick="gd_wizard_setup_menu('<?php echo wp_create_nonce( "geodir-wizard-setup-menu" ); ?>');return false;">
 				</td>
 			</tr>

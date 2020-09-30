@@ -268,6 +268,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 				"left" => __('Left', 'geodirectory'),
 				"center" => __('Center', 'geodirectory'),
 				"right" => __('Right', 'geodirectory'),
+				"block" => __('Block', 'geodirectory'),
 			),
 			'desc_tip' => true,
 			'group'     => __("Positioning","geodirectory")

@@ -58,7 +58,7 @@ if(!$hide_icon){
 }
 
 ?>
-<div class="card h-100 shadow-sm p-0 card bg-dark overlayx overlay-blackx text-white shadow-sm border-0 rounded m-0" >
+<div class="card h-100 shadow-sm p-0 card bg-dark overlayx overlay-blackx text-white shadow-sm border-0 rounded m-0"  >
 	<a href="<?php echo esc_url($term_link);?>" class="embed-has-action embed-responsive embed-responsive-4by3 stretched-link">
 	<?php echo $icon; ?>
 	</a>

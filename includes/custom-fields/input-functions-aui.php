@@ -1849,6 +1849,11 @@ function geodir_cfi_business_hours( $html, $cf ) {
 
         $timezone_data = geodir_timezone_data( $timezone_string );
 
+
+        // enqueue the script
+        $aui_settings = AyeCode_UI_Settings::instance();
+        $aui_settings->enqueue_flatpickr();
+        
         ob_start();
         ?>
         <script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
@@ -1884,8 +1889,8 @@ function geodir_cfi_business_hours( $html, $cf ) {
                             <td colspan="4" class="gd-bh-blank">
                                 <div class="gd-bh-hours row">
                                     <div class="input-group col-11 p-0 mb-1">
-                                        <input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-open form-control bg-white GD_UNIQUE_ID_oa" class="form-control bg-white" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>">
-                                        <input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-close form-control bg-white GD_UNIQUE_ID_oa" class="form-control bg-white" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>">
+                                        <input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-open form-control bg-white GD_UNIQUE_ID_oa" class="form-control bg-white" id="GD_UNIQUE_ID_o" data-field-alt="open" data-bh="time" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" value="09:00">
+                                        <input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-close form-control bg-white GD_UNIQUE_ID_oa" class="form-control bg-white" id="GD_UNIQUE_ID_c" data-field-alt="close" data-bh="time" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" value="17:00">
                                     </div>
                                     <span class="gd-bh-remove col-1 "><i class="fas fa-minus-circle c-pointer" title="<?php _e("Remove hours","geodirectory"); ?>" data-toggle="tooltip" aria-hidden="true"></i></span>
                                 </div>
@@ -1921,8 +1926,8 @@ function geodir_cfi_business_hours( $html, $cf ) {
                                             ?>
                                             <div class="gd-bh-hours<?php echo ( ( $open == '00:00' && $open == $close ) ? ' gd-bh-has24' : '' ); ?> row">
                                                 <div class="input-group col-11 p-0 mb-1">
-                                                    <input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-open form-control bg-white <?php echo $unique_id; ?>_oa" data-aui-init="flatpickr" class="form-control bg-white" id="<?php echo $unique_id; ?>_o" data-field-alt="open" data-bh="time" value="<?php echo esc_attr( $open_display ); ?>" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" data-time="<?php echo $open_His; ?>" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]">
-                                                    <input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-close form-control bg-white <?php echo $unique_id; ?>_oa" data-aui-init="flatpickr" class="form-control bg-white" id="<?php echo $unique_id; ?>_c" data-field-alt="close" data-bh="time" value="<?php echo esc_attr( $close_display ); ?>" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" data-time="<?php echo $close_His; ?>" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]">
+                                                    <input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-open form-control bg-white <?php echo $unique_id; ?>_oa" data-aui-init="flatpickr" class="form-control bg-white" id="<?php echo $unique_id; ?>_o" data-field-alt="open" data-bh="time" value="<?php echo esc_attr( $open_His ); ?>" aria-label="<?php esc_attr_e( 'Open', 'geodirectory' ); ?>" data-time="<?php echo $open_His; ?>" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][open][]">
+                                                    <input type="text" field_type="time" data-enable-time="true" data-no-calendar="true" data-date-format="H:i" data-alt-input="true" data-alt-format="<?php echo esc_attr( $timepicker_format ); ?>" data-alt-input-class="gd-alt-close form-control bg-white <?php echo $unique_id; ?>_oa" data-aui-init="flatpickr" class="form-control bg-white" id="<?php echo $unique_id; ?>_c" data-field-alt="close" data-bh="time" value="<?php echo esc_attr( $close_His ); ?>" aria-label="<?php esc_attr_e( 'Close', 'geodirectory' ); ?>" data-time="<?php echo $close_His; ?>" name="<?php echo $htmlvar_name; ?>_f[hours][<?php echo $day_no; ?>][close][]">
                                                 </div>
                                                 <span class="gd-bh-remove col-1 "><i class="fas fa-minus-circle c-pointer" title="<?php _e( "Remove hours", "geodirectory" ); ?>" data-toggle="tooltip" aria-hidden="true"></i></span>
                                             </div>

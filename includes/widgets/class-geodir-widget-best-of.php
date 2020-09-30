@@ -766,7 +766,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		$ajax_nonce = wp_create_nonce("geodir-bestof-nonce");
 		?>
         <script type="text/javascript">
-            jQuery(document).ready(function () {
+	        document.addEventListener("DOMContentLoaded", function(event) {
                 jQuery('.geodir-bestof-cat-list a, #geodir_bestof_tab_dd').on("click change", function (e) {
                     var widgetBox = jQuery(this).closest('.geodir_bestof_widget');
                     var loading = jQuery(widgetBox).find("#geodir-bestof-loading");
@@ -839,7 +839,7 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
                     });
                 })
             });
-            jQuery(document).ready(function () {
+	        document.addEventListener("DOMContentLoaded", function(event) {
                 if (jQuery(window).width() < 660) {
                     if (jQuery('.bestof-widget-tab-layout').hasClass('bestof-tabs-on-left')) {
                         jQuery('.bestof-widget-tab-layout').removeClass('bestof-tabs-on-left').addClass('bestof-tabs-as-dropdown');

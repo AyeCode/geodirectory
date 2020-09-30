@@ -820,9 +820,8 @@ class GeoDir_Admin_Settings {
 						<td class="forminp">
 						<select id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'geodirectory' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'geodirectory' ) ?>" class="regular-text <?php echo esc_attr( $value['class'] ); ?>">
 							<?php
-							geodir_get_country_dl($country);
-
-							//WC()->countries->country_dropdown_options( $country, $state ); ?>
+							echo geodir_get_country_dl($country);
+							?>
 						</select> <?php echo $description; ?>
 						</td>
 					</tr><?php
@@ -1007,12 +1006,12 @@ class GeoDir_Admin_Settings {
 							type="<?php echo esc_attr( $value['type'] ); ?>"
 							style="<?php echo esc_attr( $value['css'] ); ?>"
 							value="<?php echo esc_attr( $option_value ); ?>"
-							class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
+							class="regular-text <?php echo esc_attr( $value['class'] ); ?> <?php if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-setup'){echo "form-control w-100 mb-2";}?>"
 							placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 							<?php echo implode( ' ', $custom_attributes ); ?>
 						/>
 						<?php $gm_api_url = 'https://console.developers.google.com/henhouse/?pb=["hh-1","maps_backend",null,[],"https://developers.google.com",null,["static_maps_backend","street_view_image_backend","maps_embed_backend","places_backend","geocoding_backend","directions_backend","distance_matrix_backend","geolocation","elevation_backend","timezone_backend","maps_backend"],null]';?>
-						<a id="gd-api-key" onclick='window.open("<?php echo wp_slash($gm_api_url);?>", "newwindow", "width=600, height=400"); return false;' href='<?php echo $gm_api_url;?>' class="button-primary" name="<?php _e('Generate API Key - ( MUST be logged in to your Google account )','geodirectory');?>" ><?php _e('Generate API Key','geodirectory');?></a>
+						<a id="gd-api-key" onclick='window.open("<?php echo wp_slash($gm_api_url);?>", "newwindow", "width=600, height=400"); return false;' href='<?php echo $gm_api_url;?>' class="<?php if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-setup'){echo 'btn btn-primary btn-sm';}else{echo 'button-primary';}?>" name="<?php _e('Generate API Key - ( MUST be logged in to your Google account )','geodirectory');?>" ><?php _e('Generate API Key','geodirectory');?></a>
 						<a href="https://console.developers.google.com/flows/enableapi?apiid=static_maps_backend,street_view_image_backend,maps_embed_backend,places_backend,geocoding_backend,directions_backend,distance_matrix_backend,geolocation,elevation_backend,timezone_backend,maps_backend&amp;keyType=CLIENT_SIDE&amp;reusekey=true" target="_blank"><?php _e('or get one here','geodirectory');?></a> :: (<a href="https://wpgeodirectory.com/docs-v2/integrations/google/#easy" target="_blank"><?php _e('How to add a Google API KEY?','geodirectory');?>)</a>
 						<br />
 						<?php echo $description; ?>

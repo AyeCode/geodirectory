@@ -241,6 +241,24 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			    'advanced' => false,
 			    'group'     => __("Design","geodirectory")
 		    );
+		    $options['arguments']['row_items'] = array(
+			    'title' => __('Row Items', 'geodirectory'),
+			    'desc' => __('The number of items in a row on desktop view.', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				    "" => __('Default (3)', 'geodirectory'),
+				    "1" => "1",
+				    "2" => "2",
+				    "3" => "3",
+				    "4" => "4",
+				    "5" => "5",
+				    "6" => "6",
+			    ),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
 		    $options['arguments']['card_padding_inside'] = array(
 			    'title' => __('Card Padding Inside', 'geodirectory'),
 			    'desc' => __('Set the inside padding for the card', 'geodirectory'),
@@ -369,6 +387,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
             'icon_color' => '',
             'icon_size' => 'box-small',
             'design_type' => 'icon-left',
+            'row_items' => '3',
 	        'card_padding_inside'   => '3',
             'bg'    => '',
             'mt'    => '',
@@ -464,7 +483,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		?>
         <script type="text/javascript">
             if (!window.gdCategoriesJs) {
-                jQuery(document).ready(function() {
+	            document.addEventListener("DOMContentLoaded", function(event) {
                     jQuery('.geodir-cat-list-tax').on("change", function(e) {
                         e.preventDefault();
                         var $widgetBox = jQuery(this).closest('.geodir-categories-container');
@@ -537,6 +556,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'icon_color' => '',
 				'icon_size' => 'box-small',
 				'design_type' => 'icon-left',
+				'row_items' => '3',
 				'card_padding_inside'   => '3',
 			)
 		);
@@ -777,7 +797,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					}
 
 					if($design_style && $open_wrap){
-						$col_class = $cpt_left ? 'row-cols-1' : 'row-cols-1 row-cols-sm-2 row-cols-md-3';
+						$desktop_class = absint($args['row_items']) ? "row-cols-md-".absint($args['row_items']) : "row-cols-md-3";
+						$col_class = $cpt_left ? 'row-cols-1' : 'row-cols-1 row-cols-sm-2 '.$desktop_class;
 						$cpt_row .= '<div class="row '.$col_class.'">';
 					}
 

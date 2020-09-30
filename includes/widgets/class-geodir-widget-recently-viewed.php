@@ -29,7 +29,9 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 
 		parent::__construct( $options );
 
-		add_action('wp_footer', array( $this, 'geodir_recently_viewed_posts' ));
+
+		add_action('wp_enqueue_scripts',array( $this,  'enqueue_script') );
+//		add_action('wp_footer', array( $this, 'geodir_recently_viewed_posts' ),1000);
 
 	}
 
@@ -444,7 +446,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 	 *
 	 * @since 2.0.0
 	 */
-	public function geodir_recently_viewed_posts() {
+	public static function geodir_recently_viewed_posts() {
 
 		if( is_single() ){
 
@@ -453,9 +455,9 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 			$gd_post_types = geodir_get_posttypes();
 
 			if( !empty( $get_post_type ) && in_array( $get_post_type,$gd_post_types )) {
-				?>
-				<script type="text/javascript">
-					jQuery( document ).ready(function($) {
+				ob_start();
+			if(0){ ?><script><?php }?>
+					document.addEventListener("DOMContentLoaded", function(event) {
 
 						if(!geodir_is_localstorage()){return;}
 
@@ -512,11 +514,18 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 							localStorage.setItem("gd_recently_viewed", JSON.stringify(reviewed_arr));
 						}
 					});
-				</script>
-				<?php
+					<?php if(0){ ?></script><?php }
+
+				return ob_get_clean();
 			}
 
 		}
 
+		return '';
+
+	}
+
+	public function enqueue_script(){
+		wp_add_inline_script( 'geodir', self::geodir_recently_viewed_posts() );
 	}
 }
