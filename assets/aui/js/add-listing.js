@@ -546,7 +546,7 @@ var GeoDir_Business_Hours = {
     },
     setValue: function() {
         var v;
-        if (jQuery('[name="' + this.field + '_f[active]"]:checked').val() == '1') {
+        if (jQuery('[name="' + this.field + '_f_active"]:checked', this.$wrap).val() == '1') {
             v = this.toSchema();
         } else {
             v = '';
