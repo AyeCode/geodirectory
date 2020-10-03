@@ -6,6 +6,7 @@
  * @version    1.3.2 2011.07.01
  * This software is released under the MIT License <http://www.opensource.org/licenses/mit-license.php>
  */
+function geodirGoMapInit() {
 (function ($) {
     if ((window.gdSetMap=='google' || window.gdSetMap=='auto') && window.google && typeof google.maps!=='undefined') {
         gdMaps = 'google';
@@ -249,7 +250,10 @@
             }
 
             // Overlapping Marker Spiderfier LeafLet
-            this.oms = new OverlappingMarkerSpiderfier(this.map);
+			try {
+				this.oms = new OverlappingMarkerSpiderfier(this.map);
+			} catch(e){
+			}
 
             for (var j = 0, l = opts.markers.length; j < l; j++)
                 this.createMarker(opts.markers[j]);
@@ -860,11 +864,14 @@
             this.overlay = new MyOverlay(this.map);
 
             // Overlapping Marker Spiderfier
-            this.oms = new OverlappingMarkerSpiderfier(this.map, {
-                markersWontMove: true,   // we promise not to move any markers, allowing optimizations
-                markersWontHide: true,   // we promise not to change visibility of any markers, allowing optimizations
-                basicFormatEvents: true  // allow the library to skip calculating advanced formatting information
-            });
+			try {
+				this.oms = new OverlappingMarkerSpiderfier(this.map, {
+					markersWontMove: true,   // we promise not to move any markers, allowing optimizations
+					markersWontHide: true,   // we promise not to change visibility of any markers, allowing optimizations
+					basicFormatEvents: true  // allow the library to skip calculating advanced formatting information
+				});
+			} catch(e) {
+			}
 
             this.overlays = {
                 polyline: {id: 'plId', array: 'polylines', create: 'createPolyline'},
@@ -1613,6 +1620,13 @@
         }
     }
 })(jQuery);
+}
+
+/* Do not load for lazy load */
+if ( ! window.gdLoadMap ) {
+	geodirGoMapInit();
+}
+
 function gdGeoLocateMe(el, type) {
     window.gdLocate = '';
     if (typeof type != 'undefined') {
