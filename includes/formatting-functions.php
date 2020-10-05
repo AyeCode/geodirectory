@@ -591,3 +591,15 @@ function geodir_keyword_replacements() {
 	 */
 	return apply_filters( 'geodir_keyword_replacements', $replacements );
 }
+
+/**
+ * Strip block content to shortcodes only.
+ *
+ * @param $content
+ * @since 2.1
+ *
+ * @return mixed
+ */
+function geodir_blocks_to_shortcodes($content){
+	return preg_replace('/\n(\s*\n)+/', "\n",wp_strip_all_tags( $content ) );
+}

@@ -266,7 +266,8 @@ class GeoDir_Elementor {
 			}elseif($type  === 'icon-list'){
 				// remove icon list items that have fallback link of #hide
 				$html = preg_replace('/<li class="elementor-icon-list-item" >([\n\r\s]+)<a href="#hide">(.*?)<\/li>/ms', '', $html);
-				$html = preg_replace('/<li class="elementor-icon-list-item" >([\n\r\s]+)<span class="elementor-icon-list-icon">([\n\r\s]+)<i aria-hidden="true" class="[a-z0-9 .\-]+"><\/i>([\n\r\s]+)<\/span>([\n\r\s]+)<span class="elementor-icon-list-text">#hide<\/span>([\n\r\s]+)<\/li>/', '', $html);
+				$html = preg_replace('/<li class="elementor-icon-list-item" >([\n\r\s]+)<span class="elementor-icon-list-icon">([\n\r\s]+)<i aria-hidden="true" class="[a-z0-9 .\-]+"><\/i>([\n\r\s]+)<\/span>([\n\r\s]+)<span class="elementor-icon-list-text">#hide<\/span>([\n\r\s]+)<\/li>/', '', $html); // < 3.0
+				$html = preg_replace('/<li class="elementor-icon-list-item">([\n\r\s]+)<span class="elementor-icon-list-icon">([\n\r\s]+)<i aria-hidden="true" class="[a-z0-9 .\-]+"><\/i>([\n\r\s]+)<\/span>([\n\r\s]+)<span class="elementor-icon-list-text">#hide<\/span>([\n\r\s]+)<\/li>/', '', $html); // > 3.0+
 			}
 		}
 

@@ -118,19 +118,18 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
                 'group'     => __("Design","geodirectory")
             );
 
+            // margins
+            $options['arguments']['mt']  = geodir_get_sd_margin_input('mt');
+            $options['arguments']['mr']  = geodir_get_sd_margin_input('mr');
+            $options['arguments']['mb']  = geodir_get_sd_margin_input('mb',array('default'=>2));
+            $options['arguments']['ml']  = geodir_get_sd_margin_input('ml');
 
+            // padding
+            $options['arguments']['pt']  = geodir_get_sd_padding_input('pt');
+            $options['arguments']['pr']  = geodir_get_sd_padding_input('pr');
+            $options['arguments']['pb']  = geodir_get_sd_padding_input('pb');
+            $options['arguments']['pl']  = geodir_get_sd_padding_input('pl');
 
-
-//            $options['arguments']['disable_greedy'] = array(
-//                'title' => __('Disable Greedy Menu', 'geodirectory'),
-//                'desc' => __('Greedy menu prevents a large menu falling onto another line by adding a dropdown select.', 'geodirectory'),
-//                'type' => 'checkbox',
-//                'desc_tip' => true,
-//                'value'  => '1',
-//                'default'  => '',
-//                'advanced' => false,
-//                'group'     => __("Design","geodirectory")
-//            );
         }
 
         parent::__construct( $options );
@@ -160,6 +159,14 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
             'link_color' => '',
             'link_color_custom' => '',
             'link_icon' => '',
+            'mt'    => '',
+            'mb'    => '2',
+            'mr'    => '',
+            'ml'    => '',
+            'pt'    => '',
+            'pb'    => '',
+            'pr'    => '',
+            'pl'    => '',
         );
 
         /**
@@ -319,11 +326,15 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
         
         $template = $design_style ? $design_style."/single/taxonomies.php" : "legacy/single/taxonomies.php";
 
+        // wrapper class
+        $wrap_class = geodir_build_aui_class($args);
+
         $args = array(
             'args'  => $args,
             'taxonomies' => $taxonomies,
             'cat_taxonomy' => $cat_taxonomy,
             'tag_taxonomy' => $tag_taxonomy,
+            'wrap_class'    => $wrap_class,
         );
         $content = geodir_get_template_html( $template, $args );
 

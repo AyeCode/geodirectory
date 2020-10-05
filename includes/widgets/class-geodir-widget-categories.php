@@ -329,7 +329,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 
 		    // background
-		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+		    $arguments['bg']  = geodir_get_sd_background_input();
 
 		    // margins
 		    $arguments['mt']  = geodir_get_sd_margin_input('mt');

@@ -159,6 +159,23 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			)
 		);
 
+		$design_style = geodir_design_style();
+
+		if($design_style){
+			// margins
+			$options['arguments']['mt']  = geodir_get_sd_margin_input('mt');
+			$options['arguments']['mr']  = geodir_get_sd_margin_input('mr');
+			$options['arguments']['mb']  = geodir_get_sd_margin_input('mb');
+			$options['arguments']['ml']  = geodir_get_sd_margin_input('ml');
+
+			// padding
+			$options['arguments']['pt']  = geodir_get_sd_padding_input('pt');
+			$options['arguments']['pr']  = geodir_get_sd_padding_input('pr');
+			$options['arguments']['pb']  = geodir_get_sd_padding_input('pb');
+			$options['arguments']['pl']  = geodir_get_sd_padding_input('pl');
+
+		}
+
 
 		parent::__construct( $options );
 
@@ -203,6 +220,14 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			'text_alignment'    => '', // left,right,center
 			'location'  => 'none',
 			'no_wrap'  => '',
+			'mt'    => '',
+			'mb'    => '',
+			'mr'    => '',
+			'ml'    => '',
+			'pt'    => '',
+			'pb'    => '',
+			'pr'    => '',
+			'pl'    => '',
 		), $args, 'gd_post_meta' );
 
 		if(empty($args['id'])){
@@ -291,6 +316,10 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					if($args['list_hide_secondary']=='4'){$field['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
 					if($args['list_hide_secondary']=='5'){$field['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
+					// wrapper class
+					$wrap_class = geodir_build_aui_class($args);
+					$field['css_class'] .= " ".$wrap_class;
+					
 					$output = apply_filters("geodir_custom_field_output_{$field['type']}",'',$args['location'],$field,$args['id'],$args['show']);
 
 					// Return clean striped value.

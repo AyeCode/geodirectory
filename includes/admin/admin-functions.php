@@ -755,6 +755,7 @@ function geodir_dashicon_options() {
 function geodir_get_sd_margin_input($type = 'mt', $overwrite = array(), $include_negatives = true ){
 	$options = array(
 		"" => __('None', 'geodirectory'),
+		"0" => "0",
 		"1" => "1",
 		"2" => "2",
 		"3" => "3",
@@ -807,6 +808,7 @@ function geodir_get_sd_margin_input($type = 'mt', $overwrite = array(), $include
 function geodir_get_sd_padding_input($type = 'pt', $overwrite = array() ){
 	$options = array(
 		"" => __('None', 'geodirectory'),
+		"0" => "0",
 		"1" => "1",
 		"2" => "2",
 		"3" => "3",
@@ -969,17 +971,16 @@ function geodir_build_aui_class($args){
 	$classes = array();
 	
 	// margins
-	if ( !empty( $args['mt'] ) ) { $classes[] = "mt-".sanitize_html_class($args['mt']); }
-	if ( !empty( $args['mr'] ) ) { $classes[] = "mr-".sanitize_html_class($args['mr']); }
-	if ( !empty( $args['mb'] ) ) { $classes[] = "mb-".sanitize_html_class($args['mb']); }
-	if ( !empty( $args['ml'] ) ) { $classes[] = "ml-".sanitize_html_class($args['ml']); }
-
+	if ( !empty( $args['mt'] ) || ( isset( $args['mt'] ) && $args['mt'] == '0' ) ) { $classes[] = "mt-".sanitize_html_class($args['mt']); }
+	if ( !empty( $args['mr'] ) || ( isset( $args['mr'] ) && $args['mr'] == '0' ) ) { $classes[] = "mr-".sanitize_html_class($args['mr']); }
+	if ( !empty( $args['mb'] ) || ( isset( $args['mb'] ) && $args['mb'] == '0' ) ) { $classes[] = "mb-".sanitize_html_class($args['mb']); }
+	if ( !empty( $args['ml'] ) || ( isset( $args['ml'] ) && $args['ml'] == '0' ) ) { $classes[] = "ml-".sanitize_html_class($args['ml']); }
 
 	// padding
-	if ( !empty( $args['pt'] ) ) { $classes[] = "pt-".sanitize_html_class($args['pt']); }
-	if ( !empty( $args['pr'] ) ) { $classes[] = "pr-".sanitize_html_class($args['pr']); }
-	if ( !empty( $args['pb'] ) ) { $classes[] = "pb-".sanitize_html_class($args['pb']); }
-	if ( !empty( $args['pl'] ) ) { $classes[] = "pl-".sanitize_html_class($args['pl']); }
+	if ( !empty( $args['pt'] ) || ( isset( $args['pt'] ) && $args['pt'] == '0' ) ) { $classes[] = "pt-".sanitize_html_class($args['pt']); }
+	if ( !empty( $args['pr'] ) || ( isset( $args['pr'] ) && $args['pr'] == '0' ) ) { $classes[] = "pr-".sanitize_html_class($args['pr']); }
+	if ( !empty( $args['pb'] ) || ( isset( $args['pb'] ) && $args['pb'] == '0' ) ) { $classes[] = "pb-".sanitize_html_class($args['pb']); }
+	if ( !empty( $args['pl'] ) || ( isset( $args['pl'] ) && $args['pl'] == '0' ) ) { $classes[] = "pl-".sanitize_html_class($args['pl']); }
 
 	// border
 	if ( !empty( $args['border'] ) && ( $args['border']=='none' || $args['border']==='0') ) { $classes[] = "border-0"; }
@@ -1002,6 +1003,9 @@ function geodir_build_aui_class($args){
 
 	// background
 	if ( !empty( $args['bg'] ) ) { $classes[] = "bg-".sanitize_html_class($args['bg']); }
+
+	// text_color
+	if ( !empty( $args['text_color'] ) ) { $classes[] = "text-".sanitize_html_class($args['text_color']); }
 
 	return implode(" ",$classes);
 }

@@ -4,6 +4,8 @@
 * Sometime zip field looses the value on select autocomplete address - FIXED
 * Replace jQuery deprecated load() function - CHANGED
 * Genesis don't show comments when rating stars disabled - FIXED
+* Elementor list icons fallback #hide not working with latest elementor - FIXED
+* Default page content will now use blocks if block editor is enabled - CHANGED
 
 = 2.1.0.0-beta =
 * AyeCode UI starting to be added to GeoDirectory - STARTED
