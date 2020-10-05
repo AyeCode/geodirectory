@@ -141,8 +141,12 @@ global $gd_post;
 				}
 
 				// ajaxify images
-				if($type=='slider' && $ajax_load && $image_count){
-					$img_tag = geodir_image_tag_ajaxify($img_tag,$type!='slider');
+				if($type=='slider' && $ajax_load ){
+					if( !$image_count && geodir_is_page('single') ){
+						// don't ajax the first image for a details page slider to improve the FCP pagespeed score.
+					}else{
+						$img_tag = geodir_image_tag_ajaxify($img_tag,$type!='slider');
+					}
 				}elseif($ajax_load){
 					$img_tag = geodir_image_tag_ajaxify($img_tag);
 				}
