@@ -2603,3 +2603,25 @@ function geodir_is_gutenberg(){
 
 	return $gutenberg;
 }
+
+/**
+ * Map lazy load..
+ *
+ * @since 2.1.0.0
+ *
+ * @return string Map lazy load type.
+ */
+function geodir_lazy_load_map() {
+	return GeoDir_Maps::lazy_load_map();
+}
+
+/**
+ * Array of map parameters.
+ *
+ * @since 2.1.0.0
+ *
+ * @return array Map params array.
+ */
+function geodir_map_params() {
+	return GeoDir_Maps::get_map_params();
+}

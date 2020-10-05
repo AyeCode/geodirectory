@@ -723,52 +723,54 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	public static function custom_script( $map_options ) {
 		$map_canvas = $map_options['map_canvas'];
 
-		?>
-		<script type="text/javascript">
-			jQuery(function ($) {
-				var gdMapCanvas = '<?php echo $map_canvas; ?>';
-				<?php
-				if($map_options['map_type']=='post' && $map_options['static']){
-					echo 'geodir_build_static_map(gdMapCanvas);';
-				}else{
-					echo 'build_map_ajax_search_param(gdMapCanvas, false);';
-				}
-				?>
-				<?php if ( ! empty( $map_options['sticky'] ) ) { ?>
-				geodir_map_sticky(gdMapCanvas);
-				<?php } ?>
-				<?php if ( ! empty( $map_options['map_directions'] ) ) { ?>
-				geodir_map_directions_init(gdMapCanvas);
-				<?php } ?>
-				<?php if ( strpos( $map_options['height'], 'vh' ) !== false ) { $height = str_replace( 'vh', '', $map_options['height'] ); ?>
-				var screenH, heightVH, ptypeH = 0;
-				screenH = $(window).height();
-				heightVH = parseFloat('<?php echo $height; ?>');
-				if ($("#" + gdMapCanvas + "_posttype_menu").length) {
-					ptypeH = $("#" + gdMapCanvas + "_posttype_menu").outerHeight();
-				}
-				$("#sticky_map_" + gdMapCanvas).css("min-height", screenH * (heightVH / 100) + 'px');
-				$("#" + gdMapCanvas + "_wrapper").height(screenH * (heightVH / 100) + 'px');
-				$("#" + gdMapCanvas).height(screenH * (heightVH / 100) + 'px');
-				$("#" + gdMapCanvas + "_loading_div").height(screenH * (heightVH / 100) + 'px');
-				$("#" + gdMapCanvas + "_cat").css("max-height", (screenH * (heightVH / 100)) - ptypeH + 'px');
-				<?php } elseif ( strpos( $map_options['height'], 'px' ) !== false ) { $height = str_replace( 'px', '', $map_options['height'] ); ?>
-				var screenH, heightVH, ptypeH = 0;
-				screenH = $(window).height();
-				heightVH = parseFloat('<?php echo $height; ?>');
-				if ($("#" + gdMapCanvas + "_posttype_menu").length) {
-					ptypeH = $("#" + gdMapCanvas + "_posttype_menu").outerHeight();
-				}
-				$("#" + gdMapCanvas + "_cat").css("max-height", heightVH - ptypeH + 'px');
-				<?php } ?>
-			});
-		</script>
+?>
+<script type="text/javascript">
+jQuery(function ($) {
+	<?php if ( geodir_lazy_load_map() ) { ?>
+	jQuery('#<?php echo $map_canvas; ?>').geodirLoadMap({
+		map_canvas: '<?php echo $map_canvas; ?>',
+		callback: function() {<?php } ?>
+			var gdMapCanvas = '<?php echo $map_canvas; ?>';
+			<?php
+			if($map_options['map_type']=='post' && $map_options['static']){
+				echo 'geodir_build_static_map(gdMapCanvas);';
+			}else{
+				echo 'build_map_ajax_search_param(gdMapCanvas, false);';
+			}
+			?>
+			<?php if ( ! empty( $map_options['sticky'] ) ) { ?>
+			geodir_map_sticky(gdMapCanvas);
+			<?php } ?>
+			<?php if ( ! empty( $map_options['map_directions'] ) ) { ?>
+			geodir_map_directions_init(gdMapCanvas);
+			<?php } ?>
+			<?php if ( strpos( $map_options['height'], 'vh' ) !== false ) { $height = str_replace( 'vh', '', $map_options['height'] ); ?>
+			var screenH, heightVH, ptypeH = 0;
+			screenH = $(window).height();
+			heightVH = parseFloat('<?php echo $height; ?>');
+			if ($("#" + gdMapCanvas + "_posttype_menu").length) {
+				ptypeH = $("#" + gdMapCanvas + "_posttype_menu").outerHeight();
+			}
+			$("#sticky_map_" + gdMapCanvas).css("min-height", screenH * (heightVH / 100) + 'px');
+			$("#" + gdMapCanvas + "_wrapper").height(screenH * (heightVH / 100) + 'px');
+			$("#" + gdMapCanvas).height(screenH * (heightVH / 100) + 'px');
+			$("#" + gdMapCanvas + "_loading_div").height(screenH * (heightVH / 100) + 'px');
+			$("#" + gdMapCanvas + "_cat").css("max-height", (screenH * (heightVH / 100)) - ptypeH + 'px');
+			<?php } elseif ( strpos( $map_options['height'], 'px' ) !== false ) { $height = str_replace( 'px', '', $map_options['height'] ); ?>
+			var screenH, heightVH, ptypeH = 0;
+			screenH = $(window).height();
+			heightVH = parseFloat('<?php echo $height; ?>');
+			if ($("#" + gdMapCanvas + "_posttype_menu").length) {
+				ptypeH = $("#" + gdMapCanvas + "_posttype_menu").outerHeight();
+			}
+			$("#" + gdMapCanvas + "_cat").css("max-height", heightVH - ptypeH + 'px');
+			<?php } ?><?php if ( geodir_lazy_load_map() ) { ?>
+		}
+	});<?php } ?>
+});
+</script>
 		<?php
 	}
-
-
-
-
 
 	/**
 	 * Get the post type options.
