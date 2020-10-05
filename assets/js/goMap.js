@@ -179,10 +179,10 @@ function geodirGoMapInit() {
                 zoom: parseInt(opts.zoom),
                 minZoom: opts.minZoom ? opts.minZoom : 1,
                 maxZoom: opts.maxZoom > 18 ? 18 : opts.maxZoom,
-                zoomControl: true,
+                zoomControl: opts.zoomControl === "0" || !opts.zoomControl ? false : true,
                 doubleClickZoom: opts.disableDoubleClickZoom === "0" || !opts.disableDoubleClickZoom ? true : false,
                 dragging: true,
-				worldCopyJump: true,
+                worldCopyJump: true,
                 scrollWheelZoom: opts.scrollwheel === "0" || !opts.scrollwheel ? false : opts.scrollwheel,
                 attributionControl: typeof opts.attributionControl !== 'undefined' ? opts.attributionControl : true,
                 defaultBaseLayer: typeof opts.osmBaseLayer !== 'undefined' && opts.osmBaseLayer ? opts.osmBaseLayer : null,
@@ -847,7 +847,7 @@ function geodirGoMapInit() {
                     position: google.maps.ControlPosition[opts.navigationControlOptions.position.toUpperCase()],
                     style: google.maps.NavigationControlStyle[opts.navigationControlOptions.style.toUpperCase()]
                 },
-                zoomControl: true,
+                zoomControl: opts.zoomControl === "0" || !opts.zoomControl ? false : true,
                 zoomControlOptions: {
                     position: google.maps.ControlPosition[opts.zoomControlOptions.position.toUpperCase()]
                 },
@@ -858,7 +858,6 @@ function geodirGoMapInit() {
                 minZoom: parseInt(opts.minZoom),
                 maxZoom: parseInt(opts.maxZoom)
             };
-
 
             this.map = new google.maps.Map(el, myOptions);
             this.overlay = new MyOverlay(this.map);
