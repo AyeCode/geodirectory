@@ -17,7 +17,7 @@ window.geodirMapScriptOnError = function(el) {
 };
 
 ;(function($, window, document, undefined) {
-    //'use strict';
+    'use strict';
 
     var $window = $(window),
         $body = $('body'),
@@ -123,25 +123,38 @@ window.geodirMapScriptOnError = function(el) {
 
         geodirLoadScripts = function(scripts, mainLoaded) {
             $(scripts).each(function(i, file) {
-                if (!($('script#' + (file.id)).length) && !(typeof file.check !== 'undefined' && file.check === false) && ((i == 0 && !mainLoaded) || (i > 0 && mainLoaded))) {
-                    if (file.callback) {
-                        file.src += ((file.src).indexOf('?') === -1 ? '?' : '&') + 'callback=' + file.callback;
+                if (!($('script#' + (file.id)).length) && !(typeof file.check !== 'undefined' && file.check === false)) {
+                    if (!window.geodirMapScripts) {
+                        window.geodirMapScripts = [];
                     }
-                    var el = document.createElement("script");
-                    el.setAttribute("type", "text/javascript");
-                    el.setAttribute("id", file.id);
-                    el.setAttribute("src", file.src);
-                    el.setAttribute("async", true);
-                    if (file.main) {
-                        file.onLoad = 'javascript:geodirMapMainScriptOnLoad(this);';
+                    if (!window.geodirMapScripts[window.geodirApiLoaded]) {
+                        window.geodirMapScripts[window.geodirApiLoaded] = [];
                     }
-                    if (file.onLoad) {
-                        el.setAttribute("onload", (typeof file.onLoad == 'string' ? file.onLoad : 'javascript:geodirMapScriptOnLoad(this);'));
+                    if ((window.geodirMapScripts[window.geodirApiLoaded]).indexOf(file.id) === -1) {
+                        (window.geodirMapScripts[window.geodirApiLoaded]).push(file.id);
                     }
-                    if (file.onError) {
-                        el.setAttribute("onerror", (typeof file.onError == 'string' ? file.onError : 'javascript:geodirMapScriptOnError(this);'));
+                    if ((i == 0 && !mainLoaded) || (i > 0 && mainLoaded)) {
+                        if (file.callback) {
+                            file.src += ((file.src).indexOf('?') === -1 ? '?' : '&') + 'callback=' + file.callback;
+                        }
+                        var el = document.createElement("script");
+                        el.setAttribute("type", "text/javascript");
+                        el.setAttribute("id", file.id);
+                        el.setAttribute("src", file.src);
+                        el.setAttribute("async", true);
+                        var onLoad = 'javascript:geodirMapScriptOnLoad(this);';
+                        if (file.main) {
+                            onLoad += 'javascript:geodirMapMainScriptOnLoad(this);';
+                        }
+                        if (file.onLoad) {
+                            onLoad += file.onLoad;
+                        }
+                        el.setAttribute("onload", onLoad);
+                        if (file.onError) {
+                            el.setAttribute("onerror", (typeof file.onError == 'string' ? file.onError : 'javascript:geodirMapScriptOnError(this);'));
+                        }
+                        document.getElementsByTagName("head")[0].appendChild(el);
                     }
-                    document.getElementsByTagName("head")[0].appendChild(el);
                 }
             });
             return true;
@@ -184,14 +197,27 @@ window.geodirMapScriptOnError = function(el) {
             });
         };
 
-    $window.on('geodirMapScriptCallbackBefore', function() {
+    $window.on('geodirMapScriptOnLoad', function(el, file) {
+            if (file.id && typeof window.geodirMapScripts == 'object' && window.geodirApiLoaded && typeof window.geodirMapScripts[window.geodirApiLoaded] == 'object') {
+                var $loaded = window.geodirMapScripts[window.geodirApiLoaded];
+                $loaded.splice($loaded.indexOf(file.id), 1);
+                window.geodirMapScripts[window.geodirApiLoaded] = $loaded;
+                if ($loaded.length === 0) {
+                    window.geodirMapAllScriptsLoaded = true;
+                    jQuery(window).trigger('geodirMapAllScriptsLoaded');
+                }
+            }
+        })
+        .on('geodirMapAllScriptsLoaded', function() {
+            geodirMapScriptCallback();
+        })
+        .on('geodirMapScriptCallbackBefore', function() {
             /* goMap init */
             geodirGoMapInit();
         })
         .on('geodirMapMainScriptOnLoad', function(scripts) {
-            if (geodirLoadScriptsStyles(true)) {
-                geodirMapScriptCallback();
-            }
+            /* Load dependency scripts */
+            geodirLoadScriptsStyles(true);
         })
         .on('geodirMapScriptCallback', function() {
             window.geodirApiScriptLoaded = true;
@@ -244,6 +270,7 @@ window.geodirMapScriptOnError = function(el) {
                         $lazyload.on('click', function() {
                             $(this).hide();
                             $(this).parent().find('.loading_div').show();
+                            $(this).closest('.geodir_map_container').find('.geodir-map-cat-filter-wrap').show();
 
                             $this.data('loadMap', true);
 

@@ -1070,10 +1070,15 @@ jQuery(function ($) {
 			$map_canvas_attribs .= ' data-lat="' . esc_attr( $gd_post->latitude ) . '" data-lng="' . esc_attr( $gd_post->longitude ) . '" ';
 		}
 
-		// Set map options to JS
-		wp_enqueue_script( 'geodir-map-widget' );
-		wp_localize_script( 'geodir-map-widget', $map_options['map_canvas'], $map_options );
-
+		// Maps
+		if ( geodir_lazy_load_map() ) {
+			// Lazy Load
+			wp_enqueue_script( 'geodir-map' );
+			wp_localize_script( 'geodir-map', $map_options['map_canvas'], $map_options );
+		} else {
+			wp_enqueue_script( 'geodir-map-widget' );
+			wp_localize_script( 'geodir-map-widget', $map_options['map_canvas'], $map_options );
+		}
 
 		// template output
 		$design_style = geodir_design_style();
