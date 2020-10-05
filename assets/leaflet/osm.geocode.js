@@ -1,4 +1,3 @@
-if (typeof window.L != "undefined") {
 L.gdGeoCode = {};
 L.gdGeoCode.Provider = {};
 
@@ -321,7 +320,6 @@ L.gdGeoCode.Provider.OpenStreetMap = L.Class.extend({
         return results;
     }
 });
-}
 
 function gd_highlight(data, search, start, end) {
     if (typeof start === 'undefined') {

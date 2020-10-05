@@ -4,6 +4,7 @@
 * Sometime zip field looses the value on select autocomplete address - FIXED
 * Replace jQuery deprecated load() function - CHANGED
 * Genesis don't show comments when rating stars disabled - FIXED
+* Lazy Load map feature added - ADDED
 
 = 2.1.0.0-beta =
 * AyeCode UI starting to be added to GeoDirectory - STARTED

@@ -769,7 +769,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 		jQuery("#<?php echo $prefix.'map';?>").geodirLoadMap({
 		loadJS: true,
 		callback: function() {<?php } ?>
-        $("#<?php echo $prefix.'map';?>").goMap({
+        var $addressMap = $("#<?php echo $prefix.'map';?>").goMap({
             latitude: <?php echo $prefix;?>CITY_MAP_CENTER_LAT,
             longitude: <?php echo $prefix;?>CITY_MAP_CENTER_LNG,
             zoom: <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT,
@@ -829,6 +829,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 updateMarkerPosition(baseMarker.getPosition());
             });
             google.maps.event.addListener($.goMap.map, 'zoom_changed', function () {
+				if (typeof $.goMap.map === 'undefined') {
+					$.goMap.map = $addressMap;
+				}
                 updateMapZoom($.goMap.map.zoom);
             });
 
@@ -879,6 +882,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 updateMarkerPositionOSM(baseMarker.getLatLng());
             });
             $.goMap.map.on('zoom', function(e) {
+				if (typeof $.goMap.map === 'undefined') {
+					$.goMap.map = $addressMap;
+				}
                 updateMapZoom($.goMap.map.getZoom());
             });
 
