@@ -581,11 +581,12 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 								'id' => 'geodir-google-maps-script',
 								'src' => 'https://maps.googleapis.com/maps/api/js?key=' . $google_api_key . '&libraries=places&language=' . $language . '&ver=' . GEODIRECTORY_VERSION,
 								'callback' => 'geodirMapScriptCallback',
+								'main' => true,
 								'onLoad' => true,
 								'onError' => true,
 							),
 							array( 
-								'id' => 'geodir-g-overlappingmarker',
+								'id' => 'geodir-g-overlappingmarker-script',
 								'src' => geodir_plugin_url() . '/assets/jawj/oms' . $suffix . '.js' . $version_tag,
 								'check' => ! geodir_is_page( 'add-listing' )
 							)
@@ -609,7 +610,8 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 							array( 
 								'id' => 'geodir-leaflet-script',
 								'src' => geodir_plugin_url() . '/assets/leaflet/leaflet' . $suffix . '.js' . $version_tag,
-								'onLoad' => 'javascript:geodirMapScriptCallback();'
+								'onLoad' => 'javascript:geodirMapScriptCallback();',
+								'main' => true,
 							),
 							array( 
 								'id' => 'geodir-leaflet-geo-script',
