@@ -551,6 +551,9 @@ function create_marker(item, map_canvas) {
     }
     var map_options = eval(map_canvas);
     jQuery("#" + map_canvas).goMap();
+    if (typeof gd_infowindow == 'undefined') {
+        gd_infowindow = (typeof google !== 'undefined' && typeof google.maps !== 'undefined') ? new google.maps.InfoWindow({maxWidth: 200}) : null;
+    }
     if (item.lt && item.ln) {
         var marker_id, title, icon, cs;
         marker_id = item['m'];
@@ -905,6 +908,9 @@ function geodirFindRoute(map_canvas) {
         }
     } else if (window.gdMaps == 'google') {
         // Direction map
+		var rendererOptions = { draggable: true };
+		var directionsDisplay = (typeof google !== 'undefined' && typeof google.maps !== 'undefined') ? new google.maps.DirectionsRenderer(rendererOptions) : {};
+		var directionsService = (typeof google !== 'undefined' && typeof google.maps !== 'undefined') ? new google.maps.DirectionsService() : {};
         directionsDisplay.setMap(jQuery.goMap.map);
         directionsDisplay.setPanel(document.getElementById(map_canvas + "_directionsPanel"));
         google.maps.event.addListener(directionsDisplay, 'directions_changed', function() {
