@@ -571,7 +571,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			'api' => self::active_map(),
 			'lazyLoad' => self::lazy_load_map(),
 			'language' => $language,
-			'lazyLoadButton' => '<div class="btn btn-light text-center mx-auto align-self-center shadow-lg">' . __( 'Click to Load Map', 'geodirectory' ) . '</div>',
+			'lazyLoadButton' => '<div class="btn btn-light text-center mx-auto align-self-center shadow-lg c-pointer">' . __( 'Click to Load Map', 'geodirectory' ) . '</div>',
 			'apis' => array(
 				'google' => apply_filters( 'geodir_map_api_google_data',
 					array(
