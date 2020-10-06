@@ -566,6 +566,8 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 		// Google Maps API
 		$google_api_key = self::google_api_key();
+		
+		$aui = geodir_design_style() ? '/aui' : '';
 
 		$map_params = array(
 			'api' => self::active_map(),
@@ -580,15 +582,22 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 							array( 
 								'id' => 'geodir-google-maps-script',
 								'src' => 'https://maps.googleapis.com/maps/api/js?key=' . $google_api_key . '&libraries=places&language=' . $language . '&ver=' . GEODIRECTORY_VERSION,
-								'callback' => 'geodirMapScriptCallback',
 								'main' => true,
 								'onLoad' => true,
 								'onError' => true,
 							),
 							array( 
+								'id' => 'geodir-gomap-script',
+								'src' => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js' . $version_tag,
+							),
+							array( 
 								'id' => 'geodir-g-overlappingmarker-script',
 								'src' => geodir_plugin_url() . '/assets/jawj/oms' . $suffix . '.js' . $version_tag,
 								'check' => ! geodir_is_page( 'add-listing' )
+							),
+							array( 
+								'id' => 'geodir-map-widget-script',
+								'src' => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js' . $version_tag,
 							)
 						)
 					)
@@ -610,7 +619,6 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 							array( 
 								'id' => 'geodir-leaflet-script',
 								'src' => geodir_plugin_url() . '/assets/leaflet/leaflet' . $suffix . '.js' . $version_tag,
-								'onLoad' => 'javascript:geodirMapScriptCallback();',
 								'main' => true,
 							),
 							array( 
@@ -626,6 +634,14 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 								'id' => 'geodir-o-overlappingmarker-script',
 								'src' => geodir_plugin_url() . '/assets/jawj/oms-leaflet' . $suffix . '.js' . $version_tag,
 								'check' => ! geodir_is_page( 'add-listing' )
+							),
+							array( 
+								'id' => 'geodir-gomap-script',
+								'src' => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js' . $version_tag,
+							),
+							array( 
+								'id' => 'geodir-map-widget-script',
+								'src' => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js' . $version_tag,
 							)
 						)
 					)
