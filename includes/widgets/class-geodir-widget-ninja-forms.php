@@ -256,11 +256,13 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
          */
         $args = wp_parse_args( $args, $defaults );
 
+
         $design_style = geodir_design_style();
 
         if($design_style){
             $args['type'] = $args['output'];
             $args['badge'] = $args['text'];
+            if(empty($args['color'])){$args['color'] = $defaults['color'];}
         }
 
         $is_preview = $this->is_preview();

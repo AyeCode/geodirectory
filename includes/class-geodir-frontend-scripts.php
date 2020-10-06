@@ -800,10 +800,10 @@ class GeoDir_Frontend_Scripts {
 				             'image_limit' => $image_limit,
 				             'upload_img_size' => geodir_max_upload_size()
 				);
-			break;
+				break;
 			case 'geodir-map' :
 				return geodir_map_params();
-			break;
+				break;
 
 		}
 		return false;
