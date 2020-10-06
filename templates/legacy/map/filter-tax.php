@@ -12,7 +12,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 ?>
 <!-- START cat_filter/search_filter -->
-<div class="map-category-listing-main geodir-map-cat-filter-wrap">
+<div class="map-category-listing-main geodir-map-cat-filter-wrap"<?php echo ( geodir_lazy_load_map() == 'click' ? ' style="display:none;"' : '' ); ?>>
 	<div class="map-category-listing<?php echo $cat_filter_class; ?>">
 		<div class="gd-trigger gd-triggeroff"><i class="fas fa-compress" aria-hidden="true"></i><i
 				class="fas fa-expand" aria-hidden="true"></i>
@@ -35,9 +35,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<div class="geodir_toggle">
 					<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), $map_options['terms'], true, $map_options['tick_terms'] ); ?>
 					<script type="text/javascript">
-						jQuery(window).on("load",function () {
+						<?php if ( geodir_lazy_load_map() ) { ?>
+						jQuery(window).on("geodirMapScriptCallback",function() {
 							geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');
-						});</script>
+						});
+						<?php } else { ?>
+						jQuery(window).on("load",function() {
+							geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');
+						});<?php } ?>
+					</script>
 				</div>
 			<?php } else { ?>
 				<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="0"/>
