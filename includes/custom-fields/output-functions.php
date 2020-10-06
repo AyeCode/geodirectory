@@ -669,6 +669,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if ( empty( $html ) ) {
         if ( ! empty( $gd_post->{$html_var} ) && $gd_post->{$html_var} != '0000-00-00' ) {
+            $design_style = geodir_design_style();
             $date_format = geodir_date_format();
 
             if ( $cf['extra_fields'] != '' ) {
@@ -685,7 +686,7 @@ function geodir_cf_datepicker($html,$location,$cf,$p='',$output=''){
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="fas fa-calendar" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="fas fa-calendar fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-calendar" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -791,13 +792,11 @@ function geodir_cf_text($html,$location,$cf,$p='',$output=''){
         $html = apply_filters("geodir_custom_field_output_text_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
-
-
     // If not html then we run the standard output.
     if(empty($html)){
 
         if (isset($gd_post->{$cf['htmlvar_name']}) && $gd_post->{$cf['htmlvar_name']} != '' ):
-
+            $design_style = geodir_design_style();
             $class = ($cf['htmlvar_name'] == 'geodir_timing') ? "geodir-i-time" : "geodir-i-text";
 
             $field_icon = geodir_field_icon_proccess($cf);
@@ -805,7 +804,7 @@ function geodir_cf_text($html,$location,$cf,$p='',$output=''){
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = ($cf['htmlvar_name'] == 'geodir_timing') ? '<i class="fas fa-clock" aria-hidden="true"></i>' : "";
+                $field_icon_af = ($cf['htmlvar_name'] == 'timing') ? ( $design_style ? '<i class="fas fa-clock fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-clock" aria-hidden="true"></i>' ) : "";
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -2277,13 +2276,13 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
         }
 
         if ($gd_post->street) {
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess( $cf );
             $output = geodir_field_output_process($output);
             if ( strpos( $field_icon, 'http' ) !== false ) {
                 $field_icon_af = '';
             } elseif ( $field_icon == '' ) {
-                $field_icon_af = '<i class="fas fa-home" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="fas fa-home fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-home" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon    = '';
