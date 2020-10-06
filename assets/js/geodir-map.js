@@ -66,9 +66,9 @@ window.geodirMapScriptOnError = function(el) {
             var geodirMapApi, apiStyles, apiScripts, apiCallback;
 
             if ((window.geodirApiLoaded == 'google' || window.geodirApiLoaded == 'auto') && geodir_map_params.apis.google) {
-                geodirMapApi = scripts = geodir_map_params.apis.google;
+                geodirMapApi = geodir_map_params.apis.google;
             } else if (window.geodirApiLoaded == 'osm' && geodir_map_params.apis.osm) {
-                geodirMapApi = scripts = geodir_map_params.apis.osm;
+                geodirMapApi = geodir_map_params.apis.osm;
             }
 
             if (geodirMapApi) {
@@ -250,7 +250,7 @@ window.geodirMapScriptOnError = function(el) {
             options);
 
         this.each(function() {
-            var $this = $(this);
+            var $this = $(this), $map_wrap, $loading, $lazyload;
             $this.data('options', options);
             $this.data('loadMap', $this.is(':visible'));
 
