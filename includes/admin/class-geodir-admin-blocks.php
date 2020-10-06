@@ -77,13 +77,16 @@ class GeoDir_Admin_Blocks {
 
 	public function register_block_patterns(){
 
-		register_block_pattern_category(
-			'geodirectory',
-			array( 'label' => __( 'GeoDirectory', 'geodirectory' ) )
-		);
+		if(function_exists('register_block_pattern_category')){
+			register_block_pattern_category(
+				'geodirectory',
+				array( 'label' => __( 'GeoDirectory', 'geodirectory' ) )
+			);
 
-		$this->search_bp();
-		$this->category_bp();
+			$this->search_bp();
+			$this->category_bp();
+		}
+
 	}
 
 	public function search_bp(){
