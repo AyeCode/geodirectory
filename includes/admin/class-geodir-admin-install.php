@@ -181,9 +181,6 @@ class GeoDir_Admin_Install {
 		// Queue upgrades/setup wizard
 		self::maybe_enable_setup_wizard();
 
-		// Maybe add try AUI notice
-		self::maybe_try_aui();
-
 		// Update GD version
 		self::update_gd_version();
 
@@ -547,6 +544,9 @@ class GeoDir_Admin_Install {
      * @since 2.0.0
 	 */
 	private static function create_options() {
+		// Before set default options.
+		self::before_create_options();
+
 		// Include settings so that we can run through defaults
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-settings.php' );
 		
@@ -1177,7 +1177,6 @@ class GeoDir_Admin_Install {
      * @global object $wpdb WordPress Database object.
      */
 	public static function upgrades(){
-
 		/**
 		 * DB type change for post_images
 		 */
@@ -1200,12 +1199,36 @@ class GeoDir_Admin_Install {
 			update_option( 'geodir_rank_math_flush_rewrite', 1 );
 		}
 	}
-	
-	public static function maybe_try_aui(){
-		if(self::is_new_install()){
-			// new installs should be set to use it by default
-		}else{
-			GeoDir_Admin_Notices::add_notice( 'try_aui' );
+
+	/**
+	 * Execute before default options are set.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @return void
+	 */
+	public static function before_create_options() {
+		// Maybe add try AUI notice
+		self::maybe_try_aui();
+	}
+
+	/**
+	 * Check and set default AUI option value.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @return void
+	 */
+	public static function maybe_try_aui() {
+		if ( self::is_new_install() ) {
+			// New installs should be set to use it by default.
+		} else {
+			if ( get_option( 'geodirectory_version' ) && version_compare( get_option( 'geodirectory_version' ), '2.0.9.0', '<' ) && ! geodir_get_option( 'design_style' ) ) {
+				// Update blank to set default.
+				geodir_update_option( 'design_style', '' );
+
+				GeoDir_Admin_Notices::add_notice( 'try_aui' );
+			}
 		}
 	}
 }

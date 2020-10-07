@@ -369,11 +369,11 @@ class GeoDir_Widget_Map_Pinpoint extends WP_Super_Duper {
 
 		$class = '';
         if($args['alignment']=='left'){
-            $class = "gd-align-left";
+            $class = "geodir-align-left";
         }elseif($args['alignment']=='center'){
-            $class = "gd-align-center";
+            $class = "geodir-align-center";
         }elseif($args['alignment']=='right'){
-            $class = "gd-align-right";
+            $class = "geodir-align-right";
         }
 
         if($args['show']=='icon'){
