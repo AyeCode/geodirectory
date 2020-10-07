@@ -1270,7 +1270,7 @@ function geodir_timezone_data( $tzstring = 'UTC', $time = null ) {
 		$transitions = timezone_transitions_get( timezone_open( $tzstring ), $time );
 
 		if ( ! empty( $transitions[0]['isdst'] ) || ! empty( $transitions[1]['isdst'] ) ) {
-			$data['offset'] = empty( $transitions[0]['isdst'] ) ? (int) $transitions[0]['offset'] : (int) $transitions[1]['offset'];
+			$data['offset'] = ! empty( $transitions[0]['isdst'] ) ? (int) $transitions[0]['offset'] : (int) $transitions[1]['offset'];
 			$data['offset_dst'] = ! empty( $transitions[0]['isdst'] ) ? (int) $transitions[0]['offset'] : (int) $transitions[1]['offset'];
 
 			$data['has_dst'] = 1;
