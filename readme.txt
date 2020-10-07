@@ -206,6 +206,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 
 __WARNING: GDv2 is a significant update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always, we recommend to try this on a staging site first. [Learn more](https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/)__
 
+= 2.1.0.0 =
+[GeoDirectory changelog for version 2.1.0.0](https://wpgeodirectory.com/change-logs-v2/#v2.1.0.0).
+
 = 2.0.0.101 =
 [GeoDirectory changelog for version 2.0.0.101](https://wpgeodirectory.com/change-logs-v2/#v2.0.0.101).
 
