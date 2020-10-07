@@ -9,6 +9,7 @@
 * Tab nav changes for pagespeed FCP - CAHNGED
 * Don't lazyload first image on slider on details page for better pagespeed scores - CHANGED
 * Lazy Load map feature added - ADDED
+* Events - upcoming filter not working on Best of widget - FIXED
 
 = 2.1.0.0-beta =
 * AyeCode UI starting to be added to GeoDirectory - STARTED
