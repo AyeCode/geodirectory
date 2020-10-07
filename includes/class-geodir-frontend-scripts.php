@@ -125,6 +125,24 @@ class GeoDir_Frontend_Scripts {
 			var dist = 0;
 			var Sgeocoder = (typeof google!=='undefined' && typeof google.maps!=='undefined') ? new google.maps.Geocoder() : {};
 
+			<?php if ( geodir_lazy_load_map() ) { ?>
+			jQuery(function($) {
+				if ($('.geodir-listing-search input[name="snear"]').length && !window.geodirMapAllScriptsLoaded) {
+					$('.geodir-listing-search input[name="snear"]').each(function() {
+						if (!window.geodirMapAllScriptsLoaded) {
+							$(this).on('focus', function(e){
+								/* Load lazy load scripts */
+								if (!window.geodirMapAllScriptsLoaded && !window.geodirApiScriptLoading) {
+									$(this).geodirLoadMap({loadJS: true});
+									jQuery(window).trigger('resize');
+								}
+							});
+						}
+					});
+				}
+			});
+			<?php } ?>
+
 			function geodir_setup_submit_search($form) {
 				jQuery('.geodir_submit_search').unbind('click');// unbind any other click events
 				jQuery('.geodir_submit_search').click(function(e) {

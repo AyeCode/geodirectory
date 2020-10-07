@@ -167,6 +167,54 @@
     z-index: 1007 !important;
 }
 
+.geodir-lazyload-div {
+    z-index: 2;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    text-align: center;
+    width: 100%;
+    overflow: hidden;
+    flex-wrap: wrap;
+    display: flex;
+    margin: 0;
+}
+
+.geodir-lazyload-div:before {
+    content: "";
+    display: block;
+    height: 100%;
+    left: 0;
+    top: 0;
+    position: absolute;
+    width: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+.geodir-lazyload-div .btn {
+    text-align: center;
+    cursor: pointer;
+    margin: auto;
+    box-shadow: 0 10px 25px 0 rgba(0,0,0,0.3);
+    color: #212529;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+    display: inline-block;
+    font-weight: 400;
+    border: 1px solid transparent;
+    padding: .45rem 1.2rem;
+    font-size: 1rem;
+    line-height: 1.6;
+    border-radius: .25rem;
+    position: relative;
+}
+
+.geodir-lazyload-div .btn:hover {
+    color: #212529;
+    background-color: #e2e6ea;
+    border-color: #dae0e5
+}
+
 .gd-trigger {
     position: absolute;
     right: 0;
@@ -558,6 +606,7 @@ div.geodir_map_container.geodir-map-iphone .map_background .triggermap {
 .gd-osm-gmaps .map-places-listing,
 .gd-osm-gmaps .map-category-listing,
 .gd-osm-gmaps .loading_div,
+.gd-osm-gmaps .geodir-lazyload-div,
 .gd-osm-gmaps .gd-triggered-map {
     z-index: 9999
 }
