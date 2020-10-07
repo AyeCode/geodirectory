@@ -128,33 +128,20 @@ body{
         margin: 0;
       }
 
-      tbody{
-        //select,input{
-        //  width: 100%;
-        //  box-sizing: border-box;
-        //  //padding: 8px 5px;
-        //  border-radius: 3px;
-        //  max-width: 100%;
-        //  border: 1px solid #aaa;
-        //  margin-bottom: 10px;
-        //  height: 38px;
-        //  line-height: 38px;
-        //  font-size: 16px;
-        //  color: #5d5c5c;
-        //  &.button-primary{
-        //    color: #FFF;
-        //  }
-        //}
+      &.gd-dummy-data{
+        tbody{
+          select{
+            width: auto !important;
+            float: left;
+          }
+          #gd_place_data_type{
+            min-width: 150px;
+          }
 
-        #gd_place_data_type,#gd_place_data_type_count{
-          width: auto !important;
-          float: left;
         }
-        #gd_place_data_type{
-          min-width: 150px;
-        }
-
       }
+
+
     }
 
     .gd-google-api-error{

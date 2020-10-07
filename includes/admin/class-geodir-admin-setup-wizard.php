@@ -848,7 +848,7 @@ public function setup_wizard_header() {
 		ob_start();
 		GeoDir_Admin_Settings::output_fields( $settings );
 		$settings_output = ob_get_clean();
-		echo str_replace(array('regular-text', 'geodir-select'),array('form-control w-100 mw-100','form-control form-control-sm w-100 mw-100'),$settings_output );
+		echo str_replace(array('gd-dummy-table','regular-text', 'geodir-select'),array('gd-dummy-table gd-dummy-data','form-control w-100 mw-100','form-control form-control-sm w-100 mw-100'),$settings_output );
 
 	}
 

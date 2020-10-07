@@ -212,6 +212,8 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 					// set text alignment class
 					if ( $args['alignment'] != '' ) {
 						$field['css_class'] .= $design_style ? " text-".sanitize_html_class( $args['alignment'] ) : " geodir-text-align" . sanitize_html_class( $args['alignment'] );
+					}elseif($design_style){
+						$field['css_class'] .= " clear-both ";
 					}
 
 					// set to value if empty

@@ -299,9 +299,12 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 							elseif($args['alignment']=='left'){$field['css_class'] .= " float-left mr-2 ";}
 							elseif($args['alignment']=='right'){$field['css_class'] .= " float-right ml-2 ";}
 							elseif($args['alignment']=='center'){$field['css_class'] .= " mw-100 d-block mx-auto ";}
+							else{$field['css_class'] .= " clear-both ";}
 						}else{
 							$field['css_class'] .= $args['alignment']=='block' ? " gd-d-block gd-clear-both " : " geodir-align" . sanitize_html_class( $args['alignment'] );
 						}
+					}elseif($design_style){
+						$field['css_class'] .= " clear-both ";
 					}
 
 					// set list_hide class
