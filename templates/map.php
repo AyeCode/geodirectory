@@ -765,7 +765,11 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     <?php $geodir_map_name = GeoDir_Maps::active_map();
     if($geodir_map_name!='none'){ ?>
     jQuery(function ($) {
-        $("#<?php echo $prefix.'map';?>").goMap({
+		<?php if ( geodir_lazy_load_map() ) { ?>
+		jQuery("#<?php echo $prefix.'map';?>").geodirLoadMap({
+		loadJS: true,
+		callback: function() {<?php } ?>
+        var $addressMap = $("#<?php echo $prefix.'map';?>").goMap({
             latitude: <?php echo $prefix;?>CITY_MAP_CENTER_LAT,
             longitude: <?php echo $prefix;?>CITY_MAP_CENTER_LNG,
             zoom: <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT,
@@ -825,6 +829,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 updateMarkerPosition(baseMarker.getPosition());
             });
             google.maps.event.addListener($.goMap.map, 'zoom_changed', function () {
+				if (typeof $.goMap.map === 'undefined') {
+					$.goMap.map = $addressMap;
+				}
                 updateMapZoom($.goMap.map.zoom);
             });
 
@@ -875,6 +882,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 updateMarkerPositionOSM(baseMarker.getLatLng());
             });
             $.goMap.map.on('zoom', function(e) {
+				if (typeof $.goMap.map === 'undefined') {
+					$.goMap.map = $addressMap;
+				}
                 updateMapZoom($.goMap.map.getZoom());
             });
 
@@ -889,7 +899,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     $.goMap.map.setZoom(minZoomLevel);
                 }
             });
-        }
+        }<?php if ( geodir_lazy_load_map() ) { ?>
+		}
+	});<?php } ?>
     });
     <?php }?>
     /* ]]> */

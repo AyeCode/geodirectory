@@ -152,6 +152,18 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 				'advanced' => false,
 				'group'     => __("Design","geodirectory")
 			);
+
+			// margins
+			$arguments['mt']  = geodir_get_sd_margin_input('mt');
+			$arguments['mr']  = geodir_get_sd_margin_input('mr');
+			$arguments['mb']  = geodir_get_sd_margin_input('mb');
+			$arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+			// padding
+			$arguments['pt']  = geodir_get_sd_padding_input('pt');
+			$arguments['pr']  = geodir_get_sd_padding_input('pr');
+			$arguments['pb']  = geodir_get_sd_padding_input('pb');
+			$arguments['pl']  = geodir_get_sd_padding_input('pl');
 		}
 
 		parent::__construct( $options );
@@ -181,6 +193,15 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 				'container_class' => '',
 				'css_class' => 'entry-title',
 				'font_size_class'   => 'h1',
+				'bg'    => '',
+				'mt'    => '',
+				'mb'    => '',
+				'mr'    => '',
+				'ml'    => '',
+				'pt'    => '',
+				'pb'    => '',
+				'pr'    => '',
+				'pl'    => '',
 			), 
 			$instance, 
 			'gd_page_title' 
@@ -205,9 +226,15 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 //			return;
 //		}
 
+
+
 		// Title container class
 		$container_class = 'geodir-page-title-wrap geodir-page-title-' . sanitize_html_class( $instance['tag'] );
 
+		// wrapper class
+		$wrap_class = geodir_build_aui_class($instance);
+		$container_class .= " ".$wrap_class;
+		
 		if ( $instance['container_class'] != '' ) {
 			$container_class .= ' ' . esc_attr( $instance['container_class'] );
 		}

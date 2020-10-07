@@ -30,7 +30,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $aspect
  * @var string $responsive_image_class
  */
-//@todo implement limit show on slider
 global $gd_post;
 ?>
 <div class="<?php echo $main_wrapper_class;?> " >
@@ -67,6 +66,7 @@ global $gd_post;
 		<div class="geodir-images geodir-images-<?php echo $type . " " .$inner_wrapper_class ;?>   "><?php
 			$image_total = count( (array) $post_images );
 			$image_count = 0;
+			$max_width_percent = $limit_show ? 100/absint($limit_show) : '';
 			foreach($post_images as $image){
 
 				// reset temp tags
@@ -74,11 +74,10 @@ global $gd_post;
 				$link_tag_close_ss = '';
 
 				$active = $image_count == 0 ? 'active' : '';
-
+				$max_width = $active && $limit_show ? "style='width:$max_width_percent%'" : '';
 
 				if($type=='slider' || $type=='image' ){
-					$limit_show_cols = '';// $limit_show && $type=='slider' ? 'col-12 col-md-'.absint($limit_show) : '';
-					echo "<div class='carousel-item $limit_show_cols  $active'>";
+					echo "<div class='carousel-item  $active' $max_width>";
 				}
 				elseif($type=='gallery'){
 					$limit_show_style = !empty($limit_show) && $image_count >= $limit_show ? "style='display:none;'" : '';
@@ -141,8 +140,12 @@ global $gd_post;
 				}
 
 				// ajaxify images
-				if($type=='slider' && $ajax_load && $image_count){
-					$img_tag = geodir_image_tag_ajaxify($img_tag,$type!='slider');
+				if($type=='slider' && $ajax_load ){
+					if( !$image_count && geodir_is_page('single') ){
+						// don't ajax the first image for a details page slider to improve the FCP pagespeed score.
+					}else{
+						$img_tag = geodir_image_tag_ajaxify($img_tag);
+					}
 				}elseif($ajax_load){
 					$img_tag = geodir_image_tag_ajaxify($img_tag);
 				}

@@ -1113,18 +1113,23 @@ class GeoDir_Admin_Upgrade {
 							'tab_level'     => '0',
 							'tab_parent'    => '0'
 						);
-						
+
 						GeoDir_Settings_Cpt_Tabs::save_tab_item( $field );
+
+						$sort_by = geodir_get_posts_default_sort( $row->post_type );
+						if ( empty( $sort_by ) ) {
+							$sort_by = 'latest';
+						}
 
 						$sort_order++;
 						$field = array(
 							'post_type'     => $row->htmlvar_name,
 							'tab_layout'    => 'post',
-							'tab_type'      => 'link_from',
+							'tab_type'      => 'shortcode',
 							'tab_name'      => $post_types[ $row->post_type ]['labels']['name'],
 							'tab_icon'      => $row->field_icon,
 							'tab_key'       => $post_types[ $row->post_type ]['has_archive'],
-							'tab_content'   => '[gd_linked_posts link_type="from" post_type="' . $row->post_type . '" sort_by="latest" title_tag="h3" layout="gridview_onehalf" post_limit="5"]',
+							'tab_content'   => '[gd_listings post_type="' . $row->post_type . '" linked_posts="from" sort_by="' . esc_attr( $sort_by ) . '" post_limit=5 layout=2 mb=3]',
 							'sort_order'    => $sort_order,
 							'tab_level'     => '0',
 							'tab_parent'    => '0'

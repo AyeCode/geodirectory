@@ -133,8 +133,10 @@ class GeoDir_Maps {
 	 */
 	public static function footer_script() {
 		$osm_extra = '';
-		if ( in_array( self::active_map(), array( 'auto', 'google' ) ) ) {
+
+		if ( self::active_map() == 'auto' && ! self::lazy_load_map() ) {
 			$plugin_url = geodir_plugin_url();
+
 			ob_start();
 ?>
 if (!(window.google && typeof google.maps !== 'undefined')) {
@@ -149,8 +151,10 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 }
 <?php
 			do_action( 'geodir_maps_extra_script' );
+
 			$osm_extra = ob_get_clean();
 		}
+
 		return $osm_extra;
 	}
 
@@ -520,6 +524,141 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		return $content;
 	}
 
+	/**
+	 * Get the map load type.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @return null|string The map load type.
+	 */
+	public static function lazy_load_map() {
+		$lazy_load = geodir_get_option( 'maps_lazy_load', '' );
+
+		if ( ! in_array( $lazy_load, array( 'auto', 'click' ) ) ) {
+			$lazy_load = '';
+		}
+
+		if ( is_admin() && ! wp_doing_ajax() ) {
+			$lazy_load = '';
+		}
+
+		/**
+		 * Filter the map map load type
+		 *
+		 * @since 2.1.0.0
+		 *
+		 * @param null|string $lazy_load The map load type.
+		 */
+		return apply_filters( 'geodir_lazy_load_map', $lazy_load );
+	}
+
+	/**
+	 * Array of map parameters.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @return array Map params array.
+	 */
+	public static function get_map_params() {
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$language = self::map_language();
+		$version_tag = '?ver=' . GEODIRECTORY_VERSION;
+
+		// Google Maps API
+		$google_api_key = self::google_api_key();
+		
+		$aui = geodir_design_style() ? '/aui' : '';
+
+		$map_params = array(
+			'api' => self::active_map(),
+			'lazyLoad' => self::lazy_load_map(),
+			'language' => $language,
+			'lazyLoadButton' => '<div class="btn btn-light text-center mx-auto align-self-center shadow-lg c-pointer"><i class="far fa-map"></i> ' . __( 'Load Map', 'geodirectory' ) . '</div>',
+			'lazyLoadPlaceholder' => geodir_plugin_url() . '/assets/images/placeholder.svg',
+			'apis' => array(
+				'google' => apply_filters( 'geodir_map_api_google_data',
+					array(
+						'key' => $google_api_key,
+						'scripts' => array(
+							array( 
+								'id' => 'geodir-google-maps-script',
+								'src' => 'https://maps.googleapis.com/maps/api/js?key=' . $google_api_key . '&libraries=places&language=' . $language . '&ver=' . GEODIRECTORY_VERSION,
+								'main' => true,
+								'onLoad' => true,
+								'onError' => true,
+							),
+							array( 
+								'id' => 'geodir-gomap-script',
+								'src' => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js' . $version_tag,
+							),
+							array( 
+								'id' => 'geodir-g-overlappingmarker-script',
+								'src' => geodir_plugin_url() . '/assets/jawj/oms' . $suffix . '.js' . $version_tag,
+								'check' => ! geodir_is_page( 'add-listing' )
+							),
+							array( 
+								'id' => 'geodir-map-widget-script',
+								'src' => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js' . $version_tag,
+							)
+						)
+					)
+				),
+				'osm' => apply_filters( 'geodir_map_api_osm_data',
+					array(
+						'styles' => array(
+							array( 
+								'id' => 'geodir-leaflet-css',
+								'src' => geodir_plugin_url() . '/assets/leaflet/leaflet.css' . $version_tag
+							),
+							array( 
+								'id' => 'geodir-leaflet-routing-machine-css',
+								'src' => geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine.css',
+								'check' => ! geodir_is_page( 'add-listing' )
+							),
+						),
+						'scripts' => array(
+							array( 
+								'id' => 'geodir-leaflet-script',
+								'src' => geodir_plugin_url() . '/assets/leaflet/leaflet' . $suffix . '.js' . $version_tag,
+								'main' => true,
+							),
+							array( 
+								'id' => 'geodir-leaflet-geo-script',
+								'src' => geodir_plugin_url() . '/assets/leaflet/osm.geocode' . $suffix . '.js' . $version_tag
+							),
+							array( 
+								'id' => 'leaflet-routing-machine-script',
+								'src' => geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine' . $suffix . '.js' . $version_tag,
+								'check' => ! geodir_is_page( 'add-listing' )
+							),
+							array( 
+								'id' => 'geodir-o-overlappingmarker-script',
+								'src' => geodir_plugin_url() . '/assets/jawj/oms-leaflet' . $suffix . '.js' . $version_tag,
+								'check' => ! geodir_is_page( 'add-listing' )
+							),
+							array( 
+								'id' => 'geodir-gomap-script',
+								'src' => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js' . $version_tag,
+							),
+							array( 
+								'id' => 'geodir-map-widget-script',
+								'src' => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js' . $version_tag,
+							)
+						)
+					)
+				)
+			)
+		);
+
+		/**
+		 * Filters the map parameters.
+		 *
+		 * @since 2.1.0.0
+		 *
+		 * @param array Map params array.
+		 */
+		return apply_filters( 'geodir_map_params', $map_params );
+	}
 }
 
 return new GeoDir_Maps();

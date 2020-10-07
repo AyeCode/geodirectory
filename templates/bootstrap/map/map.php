@@ -24,7 +24,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<i class="fas fa-angle-right"></i>
 		</div>
 		<!--end of stick trigger container-->
-		<div class="geodir_map_container <?php echo $map_canvas; ?> bsui position-relative"
+		<div class="geodir_map_container <?php echo $map_canvas; ?> bsui position-relative mw-100"
 		     id="sticky_map_<?php echo $map_canvas; ?>"
 		     style="width:<?php echo $width; ?>;min-height:<?php echo $height; ?>;">
 			<!--END map_background-->

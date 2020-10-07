@@ -10,9 +10,10 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var array taxonomies The array of taxonomies.
  * @var string $cat_taxonomy The category taxonomy slug.
  * @var string $tag_taxonomy The tag taxonomy slug.
+ * @var string $wrap_class The wrapper class.
  */
 ?>
-<div class="geodir_post_taxomomies mx-0 mb-3 clearfix">
+<div class="geodir_post_taxomomies clearfix <?php echo $wrap_class;?>">
 	<?php 
 	
 	if ( isset( $taxonomies[ $cat_taxonomy ] ) ) { 

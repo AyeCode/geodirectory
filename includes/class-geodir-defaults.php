@@ -39,7 +39,7 @@ class GeoDir_Defaults {
 		 if($no_filter){
 			 return $content;
 		 }else{
-			 return apply_filters("geodir_default_page_add_content",$content);
+			 return apply_filters("geodir_default_page_add_content", $content, $blocks);
 		 }
 	 }
 
@@ -77,7 +77,7 @@ class GeoDir_Defaults {
 		if($no_filter){
 			return $content;
 		}else{
-			return apply_filters("geodir_default_page_search_content",$content);
+			return apply_filters("geodir_default_page_search_content",$content, $blocks);
 		}
 	}
 
@@ -114,7 +114,7 @@ class GeoDir_Defaults {
 		if($no_filter){
 			return $content;
 		}else{
-			return apply_filters("geodir_default_page_location_content",$content);
+			return apply_filters("geodir_default_page_location_content",$content, $blocks);
 		}
 	}
 
@@ -151,7 +151,7 @@ class GeoDir_Defaults {
 		if($no_filter){
 			return $content;
 		}else{
-			return apply_filters("geodir_default_page_archive_content",$content);
+			return apply_filters("geodir_default_page_archive_content",$content,$blocks);
 		}
 	}
 	/**
@@ -252,7 +252,7 @@ class GeoDir_Defaults {
 		if($no_filter){
 			return $content;
 		}else{
-			return apply_filters("geodir_default_page_archive_item_content",$content);
+			return apply_filters("geodir_default_page_archive_item_content",$content, $blocks);
 		}
 	}
 

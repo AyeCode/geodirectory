@@ -104,6 +104,7 @@ class GeoDir_SEO {
 					add_filter( 'wpseo_metadesc', array( __CLASS__, 'wpseo_metadesc' ), 20, 2 );
 
 					add_filter( 'wpseo_opengraph_url', array( __CLASS__, 'wpseo_opengraph_url' ), 20, 2 );
+					add_filter( 'wpseo_add_opengraph_additional_images', array( __CLASS__, 'wpseo_opengraph_image' ), 20, 1 );
 					add_filter( 'wpseo_canonical', array( __CLASS__, 'wpseo_canonical' ), 20, 2 );
 					add_filter( 'wpseo_adjacent_rel_url', array( __CLASS__, 'wpseo_adjacent_rel_url' ), 20, 3 );
 

@@ -4,6 +4,11 @@
 * Sometime zip field looses the value on select autocomplete address - FIXED
 * Replace jQuery deprecated load() function - CHANGED
 * Genesis don't show comments when rating stars disabled - FIXED
+* Elementor list icons fallback #hide not working with latest elementor - FIXED
+* Default page content will now use blocks if block editor is enabled - CHANGED
+* Tab nav changes for pagespeed FCP - CAHNGED
+* Don't lazyload first image on slider on details page for better pagespeed scores - CHANGED
+* Lazy Load map feature added - ADDED
 * Events - upcoming filter not working on Best of widget - FIXED
 
 = 2.1.0.0-beta =

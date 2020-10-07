@@ -7,10 +7,10 @@
 jQuery(function($) {
     // Start polling the form for auto saves
     setTimeout(function() {
-		geodir_auto_save_poll(geodir_get_form_data());
-	}, 1);
+        geodir_auto_save_poll(geodir_get_form_data());
+    }, 1);
     /// check validation on blur
-    jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").delay( 2000 ).blur(function() {
+    jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").delay(2000).blur(function() {
         // give some time inc ase another script is filling data
         $this = this;
         setTimeout(function() {
@@ -102,29 +102,29 @@ jQuery(function($) {
         });
         $('.geodir_form_row input[data-cradio]:first').trigger('change');
     }
-	if ($('.gd-locate-me .gd-locate-me-btn').length) {
+    if ($('.gd-locate-me .gd-locate-me-btn').length) {
         $('.gd-locate-me .gd-locate-me-btn').on('click', function(e) {
             gdGeoLocateMe(this, 'add-listing');
         });
     }
-	/**
-	 * Save the post on preview link click.
-	 */
-	jQuery(".geodir_preview_button").click(function() {
-		geodir_auto_save_post();
-		$form = jQuery("#geodirectory-add-post");
-		return geodir_validate_submit($form);
-	});
-	/**
-	 * Save the post via ajax.
-	 */
-	jQuery("#geodirectory-add-post").submit(function(e) {
-		$valid = geodir_validate_submit(this);
-		if ($valid) {
-			$result = geodir_save_post();
-		}
-		e.preventDefault(); // avoid to execute the actual submit of the form.
-	});
+    /**
+     * Save the post on preview link click.
+     */
+    jQuery(".geodir_preview_button").click(function() {
+        geodir_auto_save_post();
+        $form = jQuery("#geodirectory-add-post");
+        return geodir_validate_submit($form);
+    });
+    /**
+     * Save the post via ajax.
+     */
+    jQuery("#geodirectory-add-post").submit(function(e) {
+        $valid = geodir_validate_submit(this);
+        if ($valid) {
+            $result = geodir_save_post();
+        }
+        e.preventDefault(); // avoid to execute the actual submit of the form.
+    });
 });
 /**
  * Prevent navigation away if there are unsaved changes.
@@ -210,9 +210,9 @@ function geodir_save_post() {
             } else {
                 jQuery('#geodir-add-listing-submit button').html($button_text).removeClass('gd-disabled').prop('disabled', false);
                 console.log('save failed');
-				if (typeof data == 'object' && data.success === false && data.data) {
-					alert(data.data);
-				}
+                if (typeof data == 'object' && data.success === false && data.data) {
+                    alert(data.data);
+                }
                 return false;
             }
         },
@@ -447,37 +447,37 @@ var GeoDir_Business_Hours = {
             $this.setValue();
             e.preventDefault();
         });
-		jQuery('[data-field="timezone_string"]', this.$wrap).on("change", function(e) {
-			$this.setValue();
-			e.preventDefault();
-		});
-		jQuery('[name="latitude"], [name="longitude"]', this.$wrap.closest('form')).on("change", function(e) {
-			if (!window.gdTzApi) {
-				window.gdTzApi = true;
-				setTimeout(function() {
-					$this.getTimezone('[data-field="timezone_string"]');
-				}, 1000);
-			}
+        jQuery('[data-field="timezone_string"]', this.$wrap).on("change", function(e) {
+            $this.setValue();
             e.preventDefault();
-		});
+        });
+        jQuery('[name="latitude"], [name="longitude"]', this.$wrap.closest('form')).on("change", function(e) {
+            if (!window.gdTzApi) {
+                window.gdTzApi = true;
+                setTimeout(function() {
+                    $this.getTimezone('[data-field="timezone_string"]');
+                }, 1000);
+            }
+            e.preventDefault();
+        });
         // add slot
         jQuery(".gd-bh-add", this.$wrap).on("click", function(e) {
             $this.addSlot(jQuery(this));
             $this.onAddSlot();
             e.preventDefault();
         });
-		setTimeout(function() {
-			if (jQuery('.gd-bh-has24').length) {
-				jQuery('.gd-bh-has24').each(function(e) {
-					$this.handle24Hours(jQuery(this).closest('.gd-bh-item'));
-				});
-			}
-			if (jQuery('.gd-bh-hours').length) {
-				$this.onAddSlot();
-			}
-			$this.onChangeValue();
-		}, 100);
-		jQuery('.gd-bh-items .gd-bh-24hours [type="checkbox"]').on('click', function(e) {
+        setTimeout(function() {
+            if (jQuery('.gd-bh-has24').length) {
+                jQuery('.gd-bh-has24').each(function(e) {
+                    $this.handle24Hours(jQuery(this).closest('.gd-bh-item'));
+                });
+            }
+            if (jQuery('.gd-bh-hours').length) {
+                $this.onAddSlot();
+            }
+            $this.onChangeValue();
+        }, 100);
+        jQuery('.gd-bh-items .gd-bh-24hours [type="checkbox"]').on('click', function(e) {
             $this.onChange24Hours(jQuery(this));
         });
     },
@@ -492,11 +492,11 @@ var GeoDir_Business_Hours = {
     addSlot: function($el) {
         var sample = this.sample;
         var $item = $el.closest('.gd-bh-item');
-		var uniqueid = Math.floor( Math.random() * 100000000000 ).toString();
-	  
+        var uniqueid = Math.floor( Math.random() * 100000000000 ).toString();
+      
         jQuery('.gd-bh-closed', $item).remove();
-		$item.removeClass('gd-bh-item-closed');
-		sample = sample.replace(/GD_UNIQUE_ID/g, uniqueid);
+        $item.removeClass('gd-bh-item-closed');
+        sample = sample.replace(/GD_UNIQUE_ID/g, uniqueid);
         sample = sample.replace('data-field="open"', 'data-field="open" name="' + jQuery('.gd-bh-time', $item).data('field') + '[open][]"');
         sample = sample.replace('data-field="close"', 'data-field="close" name="' + jQuery('.gd-bh-time', $item).data('field') + '[close][]"');
         jQuery('.gd-bh-time', $item).append(sample);
@@ -506,7 +506,7 @@ var GeoDir_Business_Hours = {
         $el.closest('.gd-bh-hours').remove();
         if (jQuery('.gd-bh-hours', $item).length < 1) {
             $item.closest('.gd-bh-item').addClass('gd-bh-item-closed');
-			$item.html('<div class="gd-bh-closed">' + geodir_params.txt_closed + '</div>');
+            $item.html('<div class="gd-bh-closed">' + geodir_params.txt_closed + '</div>');
         }
     },
     onAddSlot: function() {
@@ -568,149 +568,149 @@ var GeoDir_Business_Hours = {
             v += JSON.stringify(pa);
             v += ',';
         }
-		tzstring = tz = '';
-		if (jQuery('[data-field="timezone_string"]', $this.$wrap).length) {
-			$tzstring = jQuery('[data-field="timezone_string"]', $this.$wrap);
-			tzstring = $tzstring.val();
+        tzstring = tz = '';
+        if (jQuery('[data-field="timezone_string"]', $this.$wrap).length) {
+            $tzstring = jQuery('[data-field="timezone_string"]', $this.$wrap);
+            tzstring = $tzstring.val();
 
-			if ($tzstring.find(':selected').length) {
-				tz = $tzstring.find(':selected').data('offset');
-			}
-		}
-		if (tzstring === '' || tzstring === null || tzstring == 'undefined') {
-			tzstring = this.default_timezone_string;
-			tz = this.default_offset;
-		}
+            if ($tzstring.find(':selected').length) {
+                tz = $tzstring.find(':selected').data('offset');
+            }
+        }
+        if (tzstring === '' || tzstring === null || tzstring == 'undefined') {
+            tzstring = this.default_timezone_string;
+            tz = this.default_offset;
+        }
         v += '["UTC":"' + tz + '","Timezone":"' + tzstring + '"]';
         return v;
     },
     timepickers: function() {
         var $this = this;
-		jQuery(this.$wrap).find('[data-bh="time"]').each(function() {
+        jQuery(this.$wrap).find('[data-bh="time"]').each(function() {
             var $el = jQuery(this), altField, time, hour = minute = second = "", $item;
             if (!$el.hasClass('hasDatepicker')) {
-				$item = $el.closest('.gd-bh-item');
-				time = $el.data('time');
-				if (time && (times = time.split(':'))) {
-					if (times.length == 3) {
-						hour = times[0];
-						minute = times[1];
-						second = times[2];
-					}
-				}
-				$el.timepicker({
+                $item = $el.closest('.gd-bh-item');
+                time = $el.data('time');
+                if (time && (times = time.split(':'))) {
+                    if (times.length == 3) {
+                        hour = times[0];
+                        minute = times[1];
+                        second = times[2];
+                    }
+                }
+                $el.timepicker({
                     timeFormat: geodir_params.BH_altTimeFormat,
                     showPeriod: true,
                     showLeadingZero: true,
                     showPeriod: true,
-					altField: '#' + $el.prop('id') + 'a',
-					altTimeFormat: 'HH:mm',
-					hour: hour,
-					minute: minute,
-					second: second,
-					controlType: (geodirIsTouchDevice() ? 'select' : 'slider'),
-					hourGrid: (geodirIsTouchDevice() ? 0 : 4),
-					minuteGrid: (geodirIsTouchDevice() ? 0 : 15),
-					onSelect: function(datetime, inst) {
-						uniqueid = jQuery(this).prop('id');
-						if (uniqueid) {
-							$this.handle24Hours($item);
-							jQuery('#' + uniqueid + 'a').trigger('change');
-						}
-					},
-					onClose : function(datetime, inst) {
-						uniqueid = jQuery(this).prop('id');
-						if (uniqueid) {
-							$this.handle24Hours($item);
-							jQuery('#' + uniqueid + 'a').trigger('change');
-						}
-					}
+                    altField: '#' + $el.prop('id') + 'a',
+                    altTimeFormat: 'HH:mm',
+                    hour: hour,
+                    minute: minute,
+                    second: second,
+                    controlType: (geodirIsTouchDevice() ? 'select' : 'slider'),
+                    hourGrid: (geodirIsTouchDevice() ? 0 : 4),
+                    minuteGrid: (geodirIsTouchDevice() ? 0 : 15),
+                    onSelect: function(datetime, inst) {
+                        uniqueid = jQuery(this).prop('id');
+                        if (uniqueid) {
+                            $this.handle24Hours($item);
+                            jQuery('#' + uniqueid + 'a').trigger('change');
+                        }
+                    },
+                    onClose : function(datetime, inst) {
+                        uniqueid = jQuery(this).prop('id');
+                        if (uniqueid) {
+                            $this.handle24Hours($item);
+                            jQuery('#' + uniqueid + 'a').trigger('change');
+                        }
+                    }
                 });
             }
         });
     },
-	getTimezone: function(el, prefix) {
-		var $this = this, $form, lat, lng, url;
-		if (!prefix) {
-			prefix = '';
-		}
-
-		$form = jQuery(el).closest('form');
-		lat = jQuery('[name="' + prefix + 'latitude"]', $form).val();
-		lng = jQuery('[name="' + prefix + 'longitude"]', $form).val();
-		lat = lat ? lat.trim() : '';
-		lng = lng ? lng.trim() : '';
-		if (lat && lng) {
-			jQuery.ajax({
-				url: geodir_params.ajax_url,
-				type: 'POST',
-				dataType: 'json',
-				data: {
-					action: 'geodir_timezone_data',
-					security: geodir_params.basic_nonce,
-					lat: lat,
-					lon: lng,
-					ts: (Math.round((new Date().getTime()) / 1000)).toString()
-				}
-			}).done(function(res) {
-				if (res && typeof res == 'object') {
-					if (res.success) {
-						data = res.data;
-						if (typeof data.timeZoneId != 'undefined') {
-							jQuery(el).val(data.timeZoneId).trigger("change");
-						}
-					} else if (res.data) {
-						data = res.data;
-						if (data.error) {
-							console.log(data.error);
-						}
-					}
-				}
-				window.gdTzApi = false;
-			});
-		}
-	},
-	onChange24Hours: function($el) {
-		$item = $el.closest('.gd-bh-item');
-		$hours = jQuery('.gd-bh-hours:first', $item);
-		if ($el.is(':checked')) {
-			$12am = $el.closest('.gd-bh-items').data('12am').trim();
-			$item.addClass('gd-bh-item-24hours');
-			jQuery('[data-field-alt="open"]', $hours).val($12am);
-			jQuery('[data-field-alt="close"]', $hours).val($12am);
-			jQuery('[data-field="open"]', $hours).val('00:00');
-			jQuery('[data-field="close"]', $hours).val('00:00');
-			jQuery('[data-field="open"]', $hours).trigger('change');
+    getTimezone: function(el, prefix) {
+        var $this = this, $form, lat, lng, url;
+        if (!prefix) {
+            prefix = '';
         }
-	},
-	handle24Hours: function($item) {
-		var o, c, has24 = false;
-		jQuery('.gd-bh-hours', $item).each(function() {
-			o = jQuery('[data-field="open"]', jQuery(this)).val().trim();
-			c = jQuery('[data-field="close"]', jQuery(this)).val().trim();
-			if (o == '00:00' && o == c) {
-				has24 = true;
-			}
-		});
-		if (has24) {
-			jQuery('.gd-bh-24hours input[type="checkbox"]', $item).prop('checked', 'checked');
-			$item.addClass('gd-bh-item-24hours');
-		} else {
-			jQuery('.gd-bh-24hours input[type="checkbox"]', $item).prop('checked', false);
-			$item.removeClass('gd-bh-item-24hours');
-		}
-	},
-	secondsToHM: function(value) {
-		var $this = this, prefix, hours, minutes, result;
-		prefix = value < 0 ? '-' : '+';
-		value = Math.abs(value);
-		hours = Math.floor(value / 3600);
-		minutes = Math.floor((value - (hours * 3600)) / 60);
-		result = hours;
-		result += ":" + (minutes < 10 ? "0" + minutes : minutes);
-		result = prefix + '' +  result;
-		return result;
-	}
+
+        $form = jQuery(el).closest('form');
+        lat = jQuery('[name="' + prefix + 'latitude"]', $form).val();
+        lng = jQuery('[name="' + prefix + 'longitude"]', $form).val();
+        lat = lat ? lat.trim() : '';
+        lng = lng ? lng.trim() : '';
+        if (lat && lng) {
+            jQuery.ajax({
+                url: geodir_params.ajax_url,
+                type: 'POST',
+                dataType: 'json',
+                data: {
+                    action: 'geodir_timezone_data',
+                    security: geodir_params.basic_nonce,
+                    lat: lat,
+                    lon: lng,
+                    ts: (Math.round((new Date().getTime()) / 1000)).toString()
+                }
+            }).done(function(res) {
+                if (res && typeof res == 'object') {
+                    if (res.success) {
+                        data = res.data;
+                        if (typeof data.timeZoneId != 'undefined') {
+                            jQuery(el).val(data.timeZoneId).trigger("change");
+                        }
+                    } else if (res.data) {
+                        data = res.data;
+                        if (data.error) {
+                            console.log(data.error);
+                        }
+                    }
+                }
+                window.gdTzApi = false;
+            });
+        }
+    },
+    onChange24Hours: function($el) {
+        $item = $el.closest('.gd-bh-item');
+        $hours = jQuery('.gd-bh-hours:first', $item);
+        if ($el.is(':checked')) {
+            $12am = $el.closest('.gd-bh-items').data('12am').trim();
+            $item.addClass('gd-bh-item-24hours');
+            jQuery('[data-field-alt="open"]', $hours).val($12am);
+            jQuery('[data-field-alt="close"]', $hours).val($12am);
+            jQuery('[data-field="open"]', $hours).val('00:00');
+            jQuery('[data-field="close"]', $hours).val('00:00');
+            jQuery('[data-field="open"]', $hours).trigger('change');
+        }
+    },
+    handle24Hours: function($item) {
+        var o, c, has24 = false;
+        jQuery('.gd-bh-hours', $item).each(function() {
+            o = jQuery('[data-field="open"]', jQuery(this)).val().trim();
+            c = jQuery('[data-field="close"]', jQuery(this)).val().trim();
+            if (o == '00:00' && o == c) {
+                has24 = true;
+            }
+        });
+        if (has24) {
+            jQuery('.gd-bh-24hours input[type="checkbox"]', $item).prop('checked', 'checked');
+            $item.addClass('gd-bh-item-24hours');
+        } else {
+            jQuery('.gd-bh-24hours input[type="checkbox"]', $item).prop('checked', false);
+            $item.removeClass('gd-bh-item-24hours');
+        }
+    },
+    secondsToHM: function(value) {
+        var $this = this, prefix, hours, minutes, result;
+        prefix = value < 0 ? '-' : '+';
+        value = Math.abs(value);
+        hours = Math.floor(value / 3600);
+        minutes = Math.floor((value - (hours * 3600)) / 60);
+        result = hours;
+        result += ":" + (minutes < 10 ? "0" + minutes : minutes);
+        result = prefix + '' +  result;
+        return result;
+    }
 };
 
 /**
@@ -727,5 +727,5 @@ function geodir_save_all_tinymce_editors() {
 }
 
 function geodirIsTouchDevice() {
-	return ( 'ontouchstart' in window ) || ( navigator.maxTouchPoints > 0 ) || ( navigator.msMaxTouchPoints > 0 );
+    return ( 'ontouchstart' in window ) || ( navigator.maxTouchPoints > 0 ) || ( navigator.msMaxTouchPoints > 0 );
 }
