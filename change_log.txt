@@ -11,6 +11,7 @@
 * Don't lazyload first image on slider on details page for better pagespeed scores - CHANGED
 * Lazy Load map feature added - ADDED
 * Events - upcoming filter not working on Best of widget - FIXED
+* Business hours offset mismatch issue - FIXED
 
 = 2.0.0.102 =
 * Avada page builder don't render header on GD Archive pages - FIXED
