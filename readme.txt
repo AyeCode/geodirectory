@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, real estate, job board, classifieds, listings
 Requires at least: 4.5
 Tested up to: 5.5
-Stable tag: 2.1.0.0-beta
+Stable tag: 2.1.0.0
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html

@@ -262,9 +262,10 @@ window.geodirMapScriptOnError = function(el) {
                     if (!$('.geodir-lazyload-div', $map_wrap).length) {
                         $loading = $('.loading_div', $map_wrap);
                         $lazyload = $loading.clone();
-                        $lazyload = $lazyload.html(geodir_map_params.lazyLoadButton)
+                        $lazyload.css('background-image',"url('"+geodir_map_params.lazyLoadPlaceholder+"')").css('background-size','cover');
+                        $lazyload = $lazyload.html(geodir_map_params.lazyLoadButton);
                         $lazyload.attr('id', options.map_canvas + '_lazyload_div');
-                        $lazyload.removeClass('loading_div').addClass('geodir-lazyload-div');
+                        $lazyload.removeClass('loading_div').addClass('geodir-lazyload-div overflow-hidden');
                         $loading.hide();
 
                         $lazyload.on('click', function() {
