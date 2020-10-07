@@ -1,3 +1,7 @@
+= 0.1.26 =
+* List view image not fully taking up column - FIXED
+* clear-both class added - ADDED
+
 = 0.1.25 =
 * Primary and Secondary default colors can be set via PHP constant - ADDED
 * Replace jQuery deprecated load() function - CHANGED
