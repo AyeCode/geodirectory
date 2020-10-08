@@ -184,6 +184,8 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
             }else{
                 $class .= " geodir-align" . sanitize_html_class( $args['alignment'] );
             }
+        }elseif($design_style){
+            $class .= " clear-both ";
         }
 
         // size class

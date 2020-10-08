@@ -272,7 +272,7 @@ class GeoDir_Defaults {
 <!-- /wp:geodirectory/geodir-widget-post-images -->
 
 <!-- wp:geodirectory/geodir-widget-single-taxonomies {\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-single-taxonomies\">[gd_single_taxonomies taxonomy=''  prefix=''  link_style=''  link_color=''  link_color_custom=''  link_icon='false' ]</div>
+<div class=\"wp-block-geodirectory-geodir-widget-single-taxonomies\">[gd_single_taxonomies taxonomy=''  prefix=''  link_style=''  link_color=''  link_color_custom=''  link_icon='false'  mt=''  mr=''  mb='2'  ml=''  pt=''  pr=''  pb=''  pl='' ]</div>
 <!-- /wp:geodirectory/geodir-widget-single-taxonomies -->
 
 <!-- wp:geodirectory/geodir-widget-single-tabs {\"content\":\"\"} -->
