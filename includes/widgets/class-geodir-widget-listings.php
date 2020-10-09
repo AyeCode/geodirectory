@@ -60,6 +60,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 	    $design_style = geodir_design_style();
 
+	    $post_types = geodir_get_posttypes('options-plural');
+
         $arguments = array(
             'title'  => array(
                 'title' => __('Title:', 'geodirectory'),
@@ -73,7 +75,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'title' => __('Default Post Type:', 'geodirectory'),
                 'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
                 'type' => 'select',
-                'options'   =>  geodir_get_posttypes('options-plural'),
+                'options'   =>  $post_types,
                 'default'  => 'gd_place',
                 'desc_tip' => true,
                 'advanced' => false,
@@ -92,7 +94,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '',
                 'desc_tip' => true,
                 'advanced' => false,
-	            'post_type_linked'  => true,
+	            'post_type_linked'  => count($post_types) > 1 ? true : false,
                 'group'     => __("Filters","geodirectory")
             ),
             'related_to'  => array(
@@ -238,6 +240,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'default'  => '',
                 'desc_tip' => true,
                 'advanced' => false,
+                'post_type_linked'  => count($post_types) > 1 ? true : false,
                 'group'     => __("Sorting","geodirectory")
             ),
             'title_tag'  => array(
