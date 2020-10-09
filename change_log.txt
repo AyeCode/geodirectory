@@ -1,5 +1,6 @@
 = 2.1.0.1 =
 * Sort by options in GD > Listings widget not updating with post type change - FIXED
+* Hummingbird object cache does not clears feature image cache - FIXED
 
 = 2.1.0.0 =
 * AyeCode UI Bootstrap design - ADDED

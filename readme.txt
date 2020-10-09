@@ -1,7 +1,7 @@
 === Business Directory Plugin | GeoDirectory ===
 Contributors: stiofansisland, paoltaia, ayecode
 Donate link: https://wpgeodirectory.com
-Tags: business directory, real estate, job board, classifieds, listings
+Tags: business directory, real estate, job board, classifieds, listings, directory plugin, address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, businesses, church, directories, directory, directory widget, geodirectory, googlemap, googlemaps, google maps, list, lists, member directory, members directories, members directory, microformat, microformats, multisite, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin, city directory
 Requires at least: 4.5
 Tested up to: 5.5
 Stable tag: 2.1.0.0
@@ -19,7 +19,7 @@ Turn any WordPress theme into a lightning-fast global business directory. Now 10
 
 [youtube https://www.youtube.com/watch?v=fEdOOucOtUg]
 
-= The best business directory plugin for WordPress=
+= The best business directory plugin for WordPress =
 
 Create a location-based business directory with our plugin, 100% compatible with any theme and page builders. In a few clicks, you could be the next Yelp or Tripadvisor.
 
