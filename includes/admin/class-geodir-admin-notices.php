@@ -218,18 +218,6 @@ class GeoDir_Admin_Notices {
 	/**
 	 * Show the Theme Check notice.
 	 */
-	public static function theme_check_notice() {
-		return;// @todo lets not show this notice till we do testing.
-		if ( ! current_theme_supports( 'geodirectory' ) && ! in_array( get_option( 'template' ), geodir_get_core_supported_themes() ) ) {
-			include( 'views/html-notice-theme-support.php' );
-		} else {
-			self::remove_notice( 'theme_support' );
-		}
-	}
-
-	/**
-	 * Show the Theme Check notice.
-	 */
 	public static function beta_notice() {
 		include( 'views/html-notice-beta.php' );
 	}

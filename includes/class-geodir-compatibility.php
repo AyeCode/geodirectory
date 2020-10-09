@@ -395,7 +395,7 @@ class GeoDir_Compatibility {
 				if($is_geodir_page_template ){
 					$warning_message = sprintf(
 						__('GeoDirectory template pages work much better with %sBeaver Themer%s :: %sLearn more%s', 'geodirectory'),
-						'<a href="https://www.wpbeaverbuilder.com/beaver-themer/" target="_blank">', //@todo add affiliate code to beaver themer link
+						'<a href="https://www.wpbeaverbuilder.com/beaver-themer/" target="_blank">',
 						' <i class="fas fa-external-link-alt"></i></a>',
 						'<a href="https://wpgeodirectory.com/docs-v2/integrations/builders/#bb-themer" target="_blank">',
 						' <i class="fas fa-external-link-alt"></i></a>'
