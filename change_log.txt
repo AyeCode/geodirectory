@@ -1,3 +1,6 @@
+= 2.1.0.1 =
+* Hummingbird object cache does not clears feature image cache - FIXED
+
 = 2.1.0.0 =
 * AyeCode UI Bootstrap design - ADDED
 * GD Archive template not rendered correctly for Enfold Builder - FIXED

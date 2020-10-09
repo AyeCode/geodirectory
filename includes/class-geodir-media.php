@@ -410,6 +410,9 @@ class GeoDir_Media {
 		// Clear the post attachment cache
 		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $type . ':::' . $other_id;
 		wp_cache_delete( $cache_key, 'gd_attachments_by_type' );
+		if ( ! $other_id ) {
+			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $type . ':1::', 'gd_attachments_by_type' );
+		}
 
 		$file_info['ID'] = $wpdb->insert_id;
 
@@ -570,6 +573,9 @@ class GeoDir_Media {
 		// Clear the post attachment cache
 		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $field . ':::' . $other_id;
 		wp_cache_delete( $cache_key, 'gd_attachments_by_type' );
+		if ( ! $other_id ) {
+			wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $field . ':1::', 'gd_attachments_by_type' );
+		}
 
 		// Attachment info.
 		$attachment = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE ID = %d", $file_id ), ARRAY_A );
@@ -783,6 +789,10 @@ class GeoDir_Media {
 						}
 					}
 				}
+
+				// Clear post attachment cache.
+				wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $attachment->type . ':::', 'gd_attachments_by_type' );
+				wp_cache_delete( 'gd_attachments_by_type:' . $post_id . ':' . $attachment->type . ':1::', 'gd_attachments_by_type' );
 			}
 		}
 
@@ -988,6 +998,12 @@ class GeoDir_Media {
 					if(isset($file->featured) && $file->featured){
 						$post_thumbnail_id = get_post_thumbnail_id( $file->post_id );
 						wp_delete_attachment( $post_thumbnail_id, true);
+
+						if ( ! empty( $file->type ) ) {
+							// Clear post attachment cache.
+							wp_cache_delete( 'gd_attachments_by_type:' . $file->post_id . ':' . $file->type . ':::', 'gd_attachments_by_type' );
+							wp_cache_delete( 'gd_attachments_by_type:' . $file->post_id . ':' . $file->type . ':1::', 'gd_attachments_by_type' );
+						}
 					}else{
 						self::delete_attachment($file->ID,$file->post_id, $file);
 					}
