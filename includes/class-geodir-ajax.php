@@ -66,7 +66,8 @@ class GeoDir_AJAX {
 			'recently_viewed_listings' => true,
 			'embed_widget' => true,
 			'embed_script' => true,
-			'timezone_data' => true
+			'timezone_data' => true,
+			'get_sort_options' => false,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -79,6 +80,17 @@ class GeoDir_AJAX {
 				add_action( 'gd_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	/**
+	 * Get the CPT sort options for the listings widget.
+	 */
+	public static function get_sort_options(){
+		$post_type = !empty($_REQUEST['post_type']) ? sanitize_key( $_REQUEST['post_type'] ) : 'gd_place';
+		$sort_options = geodir_sort_by_options( $post_type );
+
+		echo json_encode($sort_options);
+		exit;
 	}
 
 	public static function embed_script(){
