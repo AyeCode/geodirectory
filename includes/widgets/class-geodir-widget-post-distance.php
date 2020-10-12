@@ -25,7 +25,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 			'base_id'       => 'gd_post_distance', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Distance To Post','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-distance '.geodir_bsui_class(), // widget class
+				'classname'   => 'geodir-post-distance ' . geodir_bsui_class(), // widget class
 				'description' => esc_html__('Shows the distance do the current post.','geodirectory'), // widget description
 				'geodirectory' => true,
 			),
@@ -33,26 +33,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 
 		$design_style = geodir_design_style();
 
-		if($design_style){
-//			$arguments['badge']  = array(
-//				'type' => 'text',
-//				'title' => __('Text', 'geodirectory'),
-//				'desc' => __('Badge text. Ex: FOR SALE. Leave blank to show field title as a badge, or use %%input%% to use the input value of the field or %%post_url%% for the post url, or the field key for any other info %%email%%.', 'geodirectory'),
-//				'placeholder' => esc_attr__( 'Get Directions', 'geodirectory' ),
-//				'default' => '',
-//				'desc_tip' => true,
-//				'advanced' => false,
-//			);
-//			$arguments['icon_class']  = array(
-//				'type' => 'text',
-//				'title' => __('Icon class:', 'geodirectory'),
-//				'desc' => __('You can show a font-awesome icon here by entering the icon class.', 'geodirectory'),
-//				'placeholder' => 'fas fa-location-arrow',
-//				'default' => '',
-//				'desc_tip' => true,
-//				'group'     => __("Design","geodirectory")
-//			);
-
+		if ( $design_style ) {
 			$arguments['type'] = array(
 				'title' => __('Type', 'geodirectory'),
 				'desc' => __('Select the badge type.', 'geodirectory'),
@@ -184,7 +165,6 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 			);
 
 			$options['arguments'] = $arguments;
-
 		}
 
 		parent::__construct( $options );
@@ -204,12 +184,11 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 
 		$post_id = isset($gd_post->ID) ? $gd_post->ID : 0;
 		$block_preview = $this->is_block_content_call();
-		if ( !$block_preview ) {
 
+		if ( ! $block_preview ) {
 			if ( empty( $gd_post ) ) {
 				return '';
 			}
-
 		}
 
 		$design_style = geodir_design_style();
@@ -218,20 +197,13 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 			if ( ! empty( $post ) && ! empty( $gd_post->ID ) && $post->ID == $gd_post->ID && isset( $post->distance ) ) {
 				$gd_post->distance = $post->distance;
 			} else {
-				if ( !$design_style || !geodir_is_page( 'single' ) && !$block_preview ) {
+				if ( ! $design_style || ! geodir_is_page( 'single' ) && ! $block_preview ) {
 					return '';
 				}
 			}
 		}
 
-
-
 		$distance = isset( $gd_post->distance ) && (float) $gd_post->distance > 0 ? (float) $gd_post->distance : 0;
-		if ( ! (float) $distance > 0 ) {
-			$distance = '0';
-		}
-		$dist_units = geodir_get_option( 'search_distance_long' );
-		$distance .= ' ' . $dist_units;
 
 		// Default options
 		$defaults = array(
@@ -244,50 +216,57 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 		 */
 		$args = wp_parse_args( $args, $defaults );
 
-
 		// set defaults
-		if(empty($args['icon_class'])){$args['icon_class'] = $defaults['icon_class'];}
+		if ( empty( $args['icon_class'] ) ) {
+			$args['icon_class'] = $defaults['icon_class'];
+		}
 
 		ob_start();
 
-		if ( isset( $gd_post->latitude ) || ( $block_preview && $design_style)  ) {
-
-			if($design_style){
-
-				if(geodir_is_page( 'single' )){
-					if(!$block_preview ){
+		if ( isset( $gd_post->latitude ) || ( $block_preview && $design_style ) ) {
+			if ( $design_style ) {
+				if ( geodir_is_page( 'single' ) ) {
+					if ( ! $block_preview ) {
+						$distance_unit = geodir_get_option( 'search_distance_long' );
 						$main_post = get_queried_object_id();
+
 						$point1 = array(
 							'latitude'  => $gd_post->latitude,
 							'longitude'  => $gd_post->longitude,
 						);
-						$point2 = array(
-							'latitude'  => geodir_get_post_meta($main_post,'latitude',true),
-							'longitude'  => geodir_get_post_meta($main_post,'longitude',true),
-						);
-						if(empty($point2['latitude'])){return '';}
 
-						$distance = geodir_calculateDistanceFromLatLong( $point1, $point2, $dist_units );
-						if($distance){
-							$distance = round( (float) $distance , 2 ) ;
-							$distance .= ' ' . $dist_units;
-						}else{
+						$point2 = array(
+							'latitude'  => geodir_get_post_meta( $main_post,'latitude', true ),
+							'longitude'  => geodir_get_post_meta( $main_post,'longitude', true ),
+						);
+
+						if ( empty( $point2['latitude'] ) ) {
 							return '';
 						}
-					}else{
-						$distance = "1.23 ".$dist_units;
+
+						$distance = (float) geodir_calculateDistanceFromLatLong( $point1, $point2, $distance_unit );
+						if ( ! $distance > 0 ) {
+							$distance = 0;
+						}
+					} else {
+						$distance = 1.23;
 					}
 
-					$args['onclick'] = $block_preview ? '' : "gd_set_get_directions('".esc_attr($gd_post->latitude)."','".esc_attr($gd_post->longitude)."');";
+					$args['onclick'] = $block_preview ? '' : "gd_set_get_directions('" . esc_attr( $gd_post->latitude ) . "','" . esc_attr( $gd_post->longitude ) . "');";
 					$args['link'] = '#post_map';
 					$args['badge'] = $distance;
 					$args['icon_class'] = 'fas fa-arrows-alt-h';
 					$args['tooltip_text'] = __( "Distance from the current listing, click for directions.", "geodirectory" );
-				}else{
-					$args['link'] = $block_preview ? '#link_to_directions' : 'https://maps.google.com/?daddr='.esc_attr($gd_post->latitude).','. esc_attr($gd_post->longitude);
+				} else {
+					$args['link'] = $block_preview ? '#link_to_directions' : 'https://maps.google.com/?daddr=' . esc_attr( $gd_post->latitude ) . ',' . esc_attr( $gd_post->longitude );
 					$args['new_window'] = true;
-					$args['badge'] = $block_preview ? "1.23 ".$dist_units : $distance;
+
+					if ( $block_preview ) {
+						$distance = 1.23;
+					}
 				}
+
+				$args['badge'] = geodir_show_distance( $distance );
 
 				// set list_hide class
 				if($args['list_hide']=='2'){$args['css_class'] .= $design_style ? " gv-hide-2 " : " gd-lv-2 ";}
@@ -301,8 +280,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 				if($args['list_hide_secondary']=='4'){$args['css_class'] .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
 				if($args['list_hide_secondary']=='5'){$args['css_class'] .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
-				$design_style = geodir_design_style();
-				if(!empty($args['size'])){
+				if ( ! empty( $args['size'] ) ) {
 					switch ($args['size']) {
 						case 'small':
 							$args['size'] = $design_style ? '' : 'small';
@@ -324,33 +302,21 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 						case 'h1': $args['size'] = 'h1';break;
 						default:
 							$args['size'] = '';
-
 					}
-
 				}
 
-				// set the link
-				//$args['link'] = 'https://maps.google.com/?daddr='.esc_attr($lat).','. esc_attr($lon);
-//				$args['new_window'] = true;
-
-
-
-
 				echo geodir_get_post_badge( $gd_post->ID, $args );
-			}else{
-
+			} else {
 				if ( geodir_is_page( 'single' ) ) {
 					?>
-					<a href="#post_map" onclick="gd_set_get_directions('<?php echo esc_attr($gd_post->latitude);?>','<?php echo esc_attr($gd_post->longitude);?>');">
+					<a href="#post_map" onclick="gd_set_get_directions('<?php echo esc_attr( $gd_post->latitude ); ?>','<?php echo esc_attr( $gd_post->longitude ); ?>');">
 					<?php
 				}
 				?>
-				<span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road" aria-hidden="true"></i> <?php echo $distance; ?></span>
+				<span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road" aria-hidden="true"></i> <?php echo geodir_show_distance( $distance ); ?></span>
+				<?php if ( geodir_is_page( 'single' ) ) { ?>
+				</a>
 				<?php
-				if ( geodir_is_page( 'single' ) ) {
-					?>
-					</a>
-					<?php
 				}
 			}
 		}

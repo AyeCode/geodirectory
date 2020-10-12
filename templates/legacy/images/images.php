@@ -1,8 +1,22 @@
 <?php
+/**
+ * Display post images single image/slider/gallery
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/legacy/images/images.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://wpgeodirectory.com/docs-v2/faq/customizing/#templates
+ * @package    GeoDirectory/Templates
+ * @version    2.1.0.1
+ */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Variables.
  *
@@ -36,15 +50,15 @@ global $gd_post;
 	if($animation =='fade'){echo " data-animation='fade' ";}
 	if($slideshow){echo " data-slideshow='1' ";}
 	if($limit_show){echo " data-limit_show='".absint($limit_show)."' ";}
+	$image_total = count( (array) $post_images );
 	?>>
-		<ul class="<?php echo esc_attr($ul_class );?> geodir-images clearfix"><?php
+		<ul class="<?php echo esc_attr($ul_class );?> geodir-images geodir-images-n-<?php echo $image_total; ?> clearfix"><?php
 			$image_count = 0;
 			foreach($post_images as $image){
 
 				// reset temp tags
 				$link_tag_open_ss = '';
 				$link_tag_close_ss = '';
-
 
 				$limit_show = !empty($limit_show) && $image_count >= $limit_show ? "style='display:none;'" : '';
 				echo "<li $limit_show >";
