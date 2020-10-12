@@ -3,6 +3,7 @@
 * Hummingbird object cache does not clears feature image cache - FIXED
 * Post distance is not showing rounded value - FIXED
 * Post images slider do not covers full width when only one image to display - FIXED
+* GD ninja forms widget tries to open wrong lightbox for non AUI - FIXED
 
 = 2.1.0.0 =
 * AyeCode UI Bootstrap design - ADDED

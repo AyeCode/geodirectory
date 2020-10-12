@@ -44,12 +44,12 @@ class GeoDir_Admin_Help {
 				'<p>' . sprintf(
 					/* translators: %s: Documentation URL */
 					__( 'Should you need help understanding, using, or extending GeoDirectory, <a href="%s">please read our documentation</a>. You will find all kinds of resources including snippets, tutorials and much more.', 'geodirectory' ),
-					'https://wpgeodirectory.com/docs-v2/geodirectory/?utm_source=helptab&utm_medium=product&utm_content=docs&utm_campaign=geodirectoryplugin'
+					'https://docs.wpgeodirectory.com/?utm_source=helptab&utm_medium=product&utm_content=docs&utm_campaign=geodirectoryplugin'
 				) . '</p>' .
 				'<p>' . sprintf(
 					/* translators: %s: Forum URL */
-					__( 'For further assistance with GeoDirectory core or with premium extensions sold by GeoDirectory you can use our <a href="%1$s">support forums</a>.', 'geodirectory' ),
-					'https://wpgeodirectory.com/support/forum/?utm_source=helptab&utm_medium=product&utm_content=forum&utm_campaign=geodirectoryplugin'
+					__( 'For further assistance with GeoDirectory core or with premium extensions sold by GeoDirectory you can open a <a href="%1$s">support ticket</a>.', 'geodirectory' ),
+					'https://wpgeodirectory.com/support/?utm_source=helptab&utm_medium=product&utm_content=forum&utm_campaign=geodirectoryplugin'
 				) . '</p>' .
 				'<p>' . __( 'Before asking for help we recommend checking the system status page to identify any problems with your configuration.', 'geodirectory' ) . '</p>' .
 				'<p><a href="' . admin_url( 'admin.php?page=gd-status' ) . '" class="button button-primary">' . __( 'System status', 'geodirectory' ) . '</a> <a href="https://wpgeodirectory.com/support/?utm_source=helptab&utm_medium=product&utm_content=forum&utm_campaign=geodirectoryplugin" class="button">' . __( 'GeoDirectory support', 'geodirectory' ) . '</a></p>',

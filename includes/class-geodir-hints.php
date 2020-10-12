@@ -103,7 +103,7 @@ class GeoDir_Hints {
 
 		return self::format_hints(
 			$hints,
-			"https://wpgeodirectory.com/docs-v2/templates/archive/", // documentation url
+			"https://docs.wpgeodirectory.com/article/39-geodirectory-pages", // documentation url
 			"https://www.youtube.com/watch?v=o8zgcNwNKyY", // video documentation url
 			"archive_template" // feedback id
 		);
@@ -141,7 +141,7 @@ class GeoDir_Hints {
 
 		return self::format_hints(
 			$hints,
-			"https://wpgeodirectory.com/docs-v2/places/search/", // documentation url
+			"https://docs.wpgeodirectory.com/article/39-geodirectory-pages", // documentation url
 			"https://www.youtube.com/watch?v=o8zgcNwNKyY", // video documentation url
 			"search_template" // feedback id
 		);
@@ -175,13 +175,13 @@ class GeoDir_Hints {
 			__("The tabs output can be changed via drag and drop %shere%s. %sDocumentation%s","geodirectory"),
 			"<a href='$tabs_link'>",
 			"</a>",
-			"<a href='https://wpgeodirectory.com/docs-v2/places/tabs/'>",
+			"<a href='https://docs.wpgeodirectory.com/article/323-how-to-use-the-tabs-builder-in-geodirectory'>",
 			"</a>"
 		);
 
 		return self::format_hints(
 			$hints,
-			"https://wpgeodirectory.com/docs-v2/templates/details/", // documentation url
+			"https://docs.wpgeodirectory.com/article/39-geodirectory-pages", // documentation url
 			"https://www.youtube.com/watch?v=o8zgcNwNKyY", // video documentation url
 			"single_template" // feedback id
 		);
@@ -220,7 +220,7 @@ class GeoDir_Hints {
 
 		return self::format_hints(
 			$hints,
-			"https://wpgeodirectory.com/docs-v2/templates/location/", // documentation url
+			"https://docs.wpgeodirectory.com/article/39-geodirectory-pages", // documentation url
 			"https://www.youtube.com/watch?v=o8zgcNwNKyY", // video documentation url
 			"location_template" // feedback id
 		);
