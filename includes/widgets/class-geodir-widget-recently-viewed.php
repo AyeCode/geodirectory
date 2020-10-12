@@ -394,7 +394,7 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 		</div>
 
 		<script type="text/javascript">
-			jQuery( document ).ready(function() {
+			document.addEventListener("DOMContentLoaded", function() {
 				if(!geodir_is_localstorage()){return;}
 				jQuery('.recently-reviewed-loader').show();
 
