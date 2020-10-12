@@ -366,11 +366,12 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 }
             }else{
                 if ( $args['output'] == 'button' ) {
-                    $output = '<button class="btn btn-default geodir-ninja-forms-link" onclick="gd_ninja_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</button>';
+                    $output = '<button class="btn btn-default geodir-ninja-forms-link" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</button>';
                 } elseif ( $args['output'] == 'form' ) {
                     $output = $is_preview ? '' : do_shortcode( "[ninja_form id=" . absint( $args['form_id'] ) . "]" );
                 } else {
-                    $output = '<a class="geodir-ninja-forms-link" href="#" onclick="gd_ninja_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</a>';
+                    $output = '<a class="geodir-ninja-forms-link" href="#" onclick="gd_ajax_lightbox(\'geodir_ninja_forms\',\'\',' . absint( $post_id ) . ',' . absint( $args['form_id'] ) . '); return false;">' . esc_attr( $action_text ) . '</a>';
+
                 }
             }
 
