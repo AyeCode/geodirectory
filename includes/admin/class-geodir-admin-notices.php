@@ -31,8 +31,7 @@ class GeoDir_Admin_Notices {
 	private static $core_notices = array(
 		'install'             => 'install_notice',
 		'update'              => 'update_notice',
-		'theme_support'       => 'theme_check_notice',
-		'try_aui'       => 'try_aui_notice',
+		'try_aui'             => 'try_aui_notice',
 		//'beta'                => 'beta_notice',
 	);
 
@@ -79,7 +78,6 @@ class GeoDir_Admin_Notices {
 	 */
 	public static function reset_admin_notices() {
 		if ( ! current_theme_supports( 'geodirectory' ) && ! in_array( get_option( 'template' ), geodir_get_core_supported_themes() ) ) {
-			self::add_notice( 'theme_support' );
 			self::add_notice( 'beta' );
 		}
 		self::add_notice( 'template_files' );
