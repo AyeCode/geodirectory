@@ -6,6 +6,7 @@
 * GD ninja forms widget tries to open wrong lightbox for non AUI - FIXED
 * Issue in save multiselect values with bootstrap active - FIXED
 * Recent reviews widget image not rounded - FIXED
+* Lazyload map category images natively - CHANGED
 
 = 2.1.0.0 =
 * AyeCode UI Bootstrap design - ADDED

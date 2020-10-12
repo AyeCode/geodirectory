@@ -445,8 +445,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 					$term_check .= '  title="' . esc_attr(geodir_utf8_ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas . '\',false, this)">';
 
 					if($design_style){
-						$term_img = '<img class="w-auto mr-1 ml-n1 rounded-circle" style="height:22px;" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '"/>';
-
+						$term_img = '<img class="w-auto mr-1 ml-n1 rounded-circle" style="height:22px;" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" loading=lazy />';
 						$term_html = '<li class="'.$li_class.'">' .aui()->input(
 							array(
 								'id'                => "{$map_canvas}_tick_cat_{$cat_term->term_id}",
@@ -463,8 +462,9 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 								),
 							)
 						);
+
 					}else{
-						$term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '"/>';
+						$term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" loading=lazy />';
 
 						$term_html = '<li class="'.$li_class.'">' . $term_check . '<label for="' . $map_canvas.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><span class="gd-map-cat-toggle"><i class="fas fa-long-arrow-alt-down" aria-hidden="true" style="display:none"></i></span>';
 					}
