@@ -1,8 +1,22 @@
 <?php
+/**
+ * Display post images single image/slider/gallery
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/bootstrap/images/images.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://wpgeodirectory.com/docs-v2/faq/customizing/#templates
+ * @package    GeoDirectory/Templates
+ * @version    2.1.0.1
+ */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
+
 /**
  * Variables.
  *
@@ -60,16 +74,18 @@ global $gd_post;
 			$inner_wrapper_class = 'card-columns';
 		}
 
+		$image_total = count( (array) $post_images );
+
+		if ( $limit_show > 0 && $limit_show > $image_total ) {
+			$limit_show = $image_total;
+		}
 		?>
-
-
-		<div class="geodir-images geodir-images-<?php echo $type . " " .$inner_wrapper_class ;?>   "><?php
-			$image_total = count( (array) $post_images );
+		<div class="geodir-images geodir-images-n-<?php echo $image_total; ?> geodir-images-<?php echo $type . " " .$inner_wrapper_class ; ?> "><?php
 			$image_count = 0;
-			$max_width_percent = $limit_show ? 100/absint($limit_show) : '';
-			foreach($post_images as $image){
+			$max_width_percent = $limit_show ? 100 / absint( $limit_show ) : '';
 
-				// reset temp tags
+			foreach($post_images as $image){
+				// Reset temp tags
 				$link_tag_open_ss = '';
 				$link_tag_close_ss = '';
 
