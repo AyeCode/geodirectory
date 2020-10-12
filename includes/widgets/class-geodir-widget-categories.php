@@ -558,6 +558,20 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'design_type' => 'icon-left',
 				'row_items' => '3',
 				'card_padding_inside'   => '3',
+
+				'bg'    => '',
+		        'mt'    => '',
+		        'mb'    => '3',
+		        'mr'    => '',
+		        'ml'    => '',
+		        'pt'    => '',
+		        'pb'    => '',
+		        'pr'    => '',
+		        'pl'    => '',
+		        'border'    => '',
+		        'rounded'    => '',
+		        'rounded_size'    => '',
+		        'shadow'    => '',
 			)
 		);
 
@@ -911,6 +925,28 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$output .= '<input type="hidden" name="no_cpt_filter" value="' . absint( $args['no_cpt_filter'] ) . '">';
 				$output .= '<input type="hidden" name="no_cat_filter" value="' . absint( $args['no_cat_filter'] ) . '">';
 				$output .= '<input type="hidden" name="ajax_is_listing" value="' . $is_listing . '">';
+
+
+				$output .= '<input type="hidden" name="card_color" value="' . esc_attr( $args['card_color'] ) . '">';
+				$output .= '<input type="hidden" name="icon_color" value="' . esc_attr( $args['icon_color'] ) . '">';
+				$output .= '<input type="hidden" name="icon_size" value="' . esc_attr( $args['icon_size'] ) . '">';
+				$output .= '<input type="hidden" name="design_type" value="' . esc_attr( $args['design_type'] ) . '">';
+				$output .= '<input type="hidden" name="row_items" value="' . absint( $args['row_items'] ) . '">';
+				$output .= '<input type="hidden" name="card_padding_inside" value="' . absint( $args['card_padding_inside'] ) . '">';
+				$output .= '<input type="hidden" name="bg" value="' . esc_attr( $args['bg'] ) . '">';
+				$output .= '<input type="hidden" name="mt" value="' . absint( $args['mt'] ) . '">';
+				$output .= '<input type="hidden" name="mb" value="' . absint( $args['mb'] ) . '">';
+				$output .= '<input type="hidden" name="mr" value="' . absint( $args['mr'] ) . '">';
+				$output .= '<input type="hidden" name="ml" value="' . absint( $args['ml'] ) . '">';
+				$output .= '<input type="hidden" name="pt" value="' . absint( $args['pt'] ) . '">';
+				$output .= '<input type="hidden" name="pb" value="' . absint( $args['pb'] ) . '">';
+				$output .= '<input type="hidden" name="pr" value="' . absint( $args['pr'] ) . '">';
+				$output .= '<input type="hidden" name="pl" value="' . absint( $args['pl'] ) . '">';
+				$output .= '<input type="hidden" name="border" value="' . esc_attr( $args['border'] ) . '">';
+				$output .= '<input type="hidden" name="rounded" value="' . esc_attr( $args['rounded'] ) . '">';
+				$output .= '<input type="hidden" name="rounded_size" value="' . esc_attr( $args['rounded_size'] ) . '">';
+				$output .= '<input type="hidden" name="shadow" value="' . esc_attr( $args['shadow'] ) . '">';
+
 				$output .= '<input type="hidden" name="ajax_is_detail" value="' . $is_detail . '">';
 				$output .= '<input type="hidden" name="ajax_is_category" value="' . $is_category . '">';
 				$output .= '<input type="hidden" name="ajax_post_ID" value="' . $post_ID . '">';
