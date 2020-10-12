@@ -644,7 +644,7 @@ function geodir_cfi_multiselect($html,$cf){
     if(empty($html)) {
         global $geodir_label_type;
         $extra_attributes = array();
-        $value = geodir_get_cf_value($cf);
+        $_value = geodir_get_cf_value($cf);
         $title = '';
         //validation
         if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
@@ -668,6 +668,17 @@ function geodir_cfi_multiselect($html,$cf){
             $placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), __($cf['frontend_title'], 'geodirectory'));
         }
 
+        $value = ( ! is_array( $_value ) && $_value !== '' ) ? trim( $_value ) : $_value;
+        if ( ! is_array( $value ) ) {
+            $value = explode( ',', $value );
+        }
+
+        if ( ! empty( $value ) ) {
+            $value = stripslashes_deep( $value );
+            $value = array_map( 'trim', $value );
+        }
+        $value = array_filter( $value );
+
         //extra
         $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
         $extra_attributes['option-ajaxchosen'] = 'false';
@@ -677,22 +688,22 @@ function geodir_cfi_multiselect($html,$cf){
         $admin_only = geodir_cfi_admin_only($cf);
 
         $html .= aui()->select( array(
-            'id'               => $cf['name'],
+            'id'                 => $cf['name'],
             'name'               => $cf['name'],
-            'title'             => $title,
-            'placeholder'      => $placeholder,
-            'value'            => $value,
-            'required'   => !empty($cf['is_required']) ? true : false,
-            'label_show'       => true,
-            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
-            'label'      => __($cf['frontend_title'], 'geodirectory'). $admin_only .$required,
-            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'title'              => $title,
+            'placeholder'        => $placeholder,
+            'value'              => $value,
+            'required'           => !empty($cf['is_required']) ? true : false,
+            'label_show'         => true,
+            'label_type'         => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+            'label'              => __($cf['frontend_title'], 'geodirectory'). $admin_only .$required,
+            'validation_text'    => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
-            'help_text'        => $help_text,
-            'extra_attributes' => $extra_attributes,
-            'options'          => geodir_string_values_to_options($cf['option_values'], true),
-            'select2'       => true,
-            'multiple'   => true,
+            'help_text'          => $help_text,
+            'extra_attributes'   => $extra_attributes,
+            'options'            => geodir_string_values_to_options($cf['option_values'], true),
+            'select2'            => true,
+            'multiple'           => true,
         ) );
 
     }
