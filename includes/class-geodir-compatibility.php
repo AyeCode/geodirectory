@@ -138,6 +138,11 @@ class GeoDir_Compatibility {
 			add_action( 'admin_init', array( __CLASS__, 'buddypress_notices' ) );
 		}
 
+		/*######################################################
+		FORCE LEGACY STYLES
+		######################################################*/
+		add_action( 'init', array( __CLASS__, 'maybe_force_legacy_styles' ) );
+
 
 		/*######################################################
 		GENERAL
@@ -186,6 +191,52 @@ class GeoDir_Compatibility {
 		if ( wp_doing_ajax() ) {
 			add_action( 'admin_init', array( __CLASS__, 'ajax_admin_init' ), 5 );
 		}
+	}
+
+	/**
+	 * Maybe force legacy theme styles.
+	 */
+	public static function maybe_force_legacy_styles(){
+
+		// Kleo theme (runs Bootstrap v3 which makes new styles incompatible)
+		if ( function_exists( 'kleo_setup' ) ) {
+			global $aui_disabled_notice;
+			add_filter('ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
+			add_filter('geodir_get_option_design_style','__return_empty_string');
+			add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
+			$aui_disabled_notice = __("AyeCode UI bootstrap styles has been disabled due to an incompatibility with Kleo theme using an older version of bootstrap.","geodirectory");
+		}
+	}
+
+	/**
+	 * Show a notice if AUI is disabled.
+	 */
+	public static function notice_aui_disabled() {
+		global $aui_disabled_notice;
+
+		if($aui_disabled_notice && (
+				isset($_REQUEST['page']) && ( $_REQUEST['page'] == 'ayecode-ui-settings' || $_REQUEST['page'] == 'gd-settings'  )
+			)){
+			$class = 'notice notice-error';
+			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $aui_disabled_notice ) );
+		}
+
+	}
+
+	/**
+	 * Disable AUI
+	 *
+	 * @param $settings
+	 *
+	 * @return mixed
+	 */
+	public static function disable_aui($settings){
+
+		$settings['css'] = '';
+		$settings['js'] = '';
+		$settings['html_font_size'] = '';
+
+		return $settings;
 	}
 
 	/**
