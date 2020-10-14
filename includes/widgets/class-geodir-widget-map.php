@@ -722,7 +722,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 */
 	public static function custom_script( $map_options ) {
 		$map_canvas = $map_options['map_canvas'];
-		$load_terms = ! empty( $map_options['cat_filter'] ) ? 'true' : 'false';
+		$load_terms = ! empty( $map_options['cat_filter'] ) && geodir_lazy_load_map() ? 'true' : 'false';
 ?>
 <script type="text/javascript">
 jQuery(function ($) {
