@@ -20,7 +20,7 @@ if ( ! empty( $tabs_array ) ) {
 		$layout_shift_fix_class = $greedy_menu_class ? ' overflow-hidden flex-nowrap ' : '';
 		$tab_style = empty($args['tab_style']) ? 'nav-tabs mb-3 '.$layout_shift_fix_class : 'nav-pills border-bottom pb-3';
 
-		echo '<nav class="geodir-tab-head '.$greedy_menu_class.'"><ul class="nav '.$tab_style.' mx-0" id="gd-single-tabs" role="tablist">';
+		echo '<nav class="geodir-tab-head '.$greedy_menu_class.'"><ul class="nav list-unstyled '.$tab_style.' mx-0" id="gd-single-tabs" role="tablist">';
 
 		$count = 0;
 		foreach( $tabs_array as $tab ) {
@@ -40,7 +40,7 @@ if ( ! empty( $tabs_array ) ) {
 			$name = stripslashes( esc_attr__( $tab['tab_name'], 'geodirectory' ) );
 			$data_toggle = $args['show_as_list'] ? '' : 'data-toggle="tab"';
 
-			echo '<li class="nav-item "><a class="nav-link text-nowrap '.$active.'"  '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';
+			echo '<li class="nav-item list-unstyled"><a class="nav-link text-nowrap '.$active.'"  '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';
 
 			$count++;
 		}
