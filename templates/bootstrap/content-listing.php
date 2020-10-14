@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://wpgeodirectory.com/docs/customizing-geodirectory-templates/
+ * @see     https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @author  AyeCode
  * @package GeoDirectory/Templates
  * @version 1.0.0
