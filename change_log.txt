@@ -1,7 +1,8 @@
-= 2.1.0.2 =
+= 2.1.0.3 =
 * Kleo & Listimia themes not compatible with new AUI styles, revert to legacy styles if active - FIXED
+* Hide latitude/longitude still shows field labels - FIXED
 
-= 2.1.0.1 =
+= 2.1.0.2 =
 * Sort by options in GD > Listings widget not updating with post type change - FIXED
 * Hummingbird object cache does not clears feature image cache - FIXED
 * Post distance is not showing rounded value - FIXED

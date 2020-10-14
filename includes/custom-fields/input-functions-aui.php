@@ -1231,8 +1231,8 @@ function geodir_cfi_address( $html, $cf ) {
                 ?>
             </div>
             <?php
-            /* show lat lng */
-            $style_latlng = ((isset($extra_fields['show_latlng']) && $extra_fields['show_latlng']) || is_admin()) ? '' : 'sr-only';
+            /* Hide latitude/longitude */
+            $wrap_class = ( ( isset( $extra_fields['show_latlng'] ) && $extra_fields['show_latlng'] ) || is_admin() ) ? '' : 'd-none';
 
             $title = '';
             $extra_attributes = array();
@@ -1254,23 +1254,20 @@ function geodir_cfi_address( $html, $cf ) {
                     'id'                => $prefix . 'latitude',
                     'name'              => 'latitude',
                     'required'          => $is_required,
-                    'label'              => esc_attr__('Address Latitude', 'geodirectory').$required,
-                    'label_show'       => true,
-                    'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+                    'label'             => esc_attr__( 'Address Latitude', 'geodirectory' ) . $required,
+                    'label_show'        => true,
+                    'label_type'        => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
                     'type'              => 'number',
                     'title'             =>  $title,
-                    // 'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
-                    'class'             => $style_latlng,
-                    'value'             => esc_attr(stripslashes($lat)),
+                    'value'             => esc_attr( stripslashes( $lat ) ),
                     'help_text'         => __( 'Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory' ),
                     'extra_attributes'  => $extra_attributes,
+                    'wrap_class'        => $wrap_class,
                 )
             );
 
             $title = '';
             $extra_attributes = array();
-            // required
-            $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
 
             // field type (used for validation)
             $extra_attributes['field_type'] = 'number';
@@ -1287,16 +1284,15 @@ function geodir_cfi_address( $html, $cf ) {
                     'id'                => $prefix . 'longitude',
                     'name'              => 'longitude',
                     'required'          => $is_required,
-                    'label'              => esc_attr__('Address Longitude', 'geodirectory').$required,
-                    'label_show'       => true,
-                    'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+                    'label'             => esc_attr__( 'Address Longitude', 'geodirectory' ) . $required,
+                    'label_show'        => true,
+                    'label_type'        => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
                     'type'              => 'number',
                     'title'             =>  $title,
-                    //'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
-                    'class'             => $style_latlng,
-                    'value'             => esc_attr(stripslashes($lng)),
+                    'value'             => esc_attr( stripslashes( $lng ) ),
                     'help_text'         => __( 'Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>', 'geodirectory' ),
                     'extra_attributes'  => $extra_attributes,
+                    'wrap_class'        => $wrap_class,
                 )
             );
         } ?>
