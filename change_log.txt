@@ -1,3 +1,6 @@
+= 2.1.0.4 =
+* Load categories on map via AJAX - CHANGED
+
 = 2.1.0.3 =
 * Kleo & Listimia themes not compatible with new AUI styles, revert to legacy styles if active - FIXED
 * Hide latitude/longitude still shows field labels - FIXED
