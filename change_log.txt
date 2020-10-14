@@ -1,6 +1,7 @@
 = 2.1.0.3 =
 * Kleo & Listimia themes not compatible with new AUI styles, revert to legacy styles if active - FIXED
 * Hide latitude/longitude still shows field labels - FIXED
+* Business Hours field input mobile compatibility - FIXED
 
 = 2.1.0.2 =
 * Sort by options in GD > Listings widget not updating with post type change - FIXED
