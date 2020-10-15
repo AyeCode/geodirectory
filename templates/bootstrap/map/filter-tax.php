@@ -13,8 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 ?>
 <!-- START cat_filter/search_filter -->
-<div class="geodir-map-cat-filter-wrap position-absolute row m-0 text-light px-2"
-     style="right: 0;bottom: 0; background: #000000a1;<?php echo ( geodir_lazy_load_map() == 'click' ? 'display:none;' : '' ); ?>">
+<div class="geodir-map-cat-filter-wrap position-absolute row m-0 text-light px-2 overflow-hidden" style="right:0;bottom:0;background:#000000a1;<?php echo ( geodir_lazy_load_map() == 'click' ? 'display:none;' : '' ); ?>">
 	<div class="map-category-listing<?php echo $cat_filter_class; ?>">
 		<div class="gd-trigger gd-triggeroff text-right c-pointer">
 			<i class="fas fa-chevron-down"></i>
