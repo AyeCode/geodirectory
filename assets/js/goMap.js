@@ -98,6 +98,7 @@ function geodirGoMapInit() {
             directions: false,
             directionsResult: null,
             disableDoubleClickZoom: false,
+            touchZoom: '*', // Boolean|String. Default: *. Whether the map can be zoomed by touch-dragging with two fingers.
             streetViewControl: true,
             streetViewControlOptions: {
                 position: 'bottomleft'
@@ -180,6 +181,7 @@ function geodirGoMapInit() {
                 minZoom: opts.minZoom ? opts.minZoom : 1,
                 maxZoom: opts.maxZoom > 18 ? 18 : opts.maxZoom,
                 zoomControl: opts.zoomControl === "0" || !opts.zoomControl ? false : true,
+                touchZoom: opts.touchZoom,
                 doubleClickZoom: opts.disableDoubleClickZoom === "0" || !opts.disableDoubleClickZoom ? true : false,
                 dragging: true,
                 worldCopyJump: true,
