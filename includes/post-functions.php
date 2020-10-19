@@ -65,6 +65,18 @@ function geodir_get_post_info( $post_id = '' ) {
 		$post_detail->distance = $post->distance;
 	}
 
+	if ( ! empty( $post_detail ) ) {
+		/**
+		 * Filter GeoDirectory post info object.
+		 *
+		 * @since 2.1.0.4
+		 *
+		 * @param object $post_detail The GeoDirectory post object.
+		 * @param int    $post_id The post ID.
+		 */
+		$post_detail = apply_filters( 'geodir_get_post_info', $post_detail, $post_id );
+	}
+
 	$return = ! empty( $post_detail ) ? $post_info = $post_detail : $post_info = false;
 
 	// Set cache

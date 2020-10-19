@@ -399,7 +399,11 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 
 		// check if block preview
 		$block_preview = $this->is_block_content_call();
-		$post_id = !empty($gd_post->ID) ? absint($gd_post->ID) : 0;
+		$post_id = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
+		if ( $post_id && wp_is_post_revision( $post_id ) ) {
+			$post_id = wp_get_post_parent_id( $post_id );
+		}
+
 		if($block_preview){
 			$options['ajax_load'] = false; // disable ajax loading
 			$post_id = -1;

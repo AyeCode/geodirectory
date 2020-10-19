@@ -722,7 +722,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 	 */
 	public static function custom_script( $map_options ) {
 		$map_canvas = $map_options['map_canvas'];
-
+		$load_terms = ! empty( $map_options['cat_filter'] ) && geodir_lazy_load_map() ? 'true' : 'false';
 ?>
 <script type="text/javascript">
 jQuery(function ($) {
@@ -735,7 +735,7 @@ jQuery(function ($) {
 			if($map_options['map_type']=='post' && $map_options['static']){
 				echo 'geodir_build_static_map(gdMapCanvas);';
 			}else{
-				echo 'build_map_ajax_search_param(gdMapCanvas, false);';
+				echo 'build_map_ajax_search_param(gdMapCanvas, ' . $load_terms . ');';
 			}
 			?>
 			<?php if ( ! empty( $map_options['sticky'] ) ) { ?>

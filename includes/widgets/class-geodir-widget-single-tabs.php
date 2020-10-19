@@ -138,13 +138,15 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         // Check if we have been here before
         $tabs_array = ! empty( $gd_single_tabs_array ) ? $gd_single_tabs_array : array();
 
-        $post_type = isset($gd_post->post_type) ? $gd_post->post_type : 'gd_place';
+        $post_id = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
+        if ( $post_id && wp_is_post_revision( $post_id ) ) {
+            $post_id = wp_get_post_parent_id( $post_id );
+        }
+        $post_type = $post_id ? get_post_type( $post_id ) : 'gd_place';
 
         if ( empty( $tabs_array ) ) {
             // Get the tabs head
             $tabs = self::get_tab_settings( $post_type );
-
-//            print_r($tabs);
 
             // Get the tab contents first so we can decide to output the tab head
             $tabs_content = array();

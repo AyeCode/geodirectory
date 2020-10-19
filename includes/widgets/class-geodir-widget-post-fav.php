@@ -363,8 +363,6 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 			$class .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";
 		}
 
-
-
 		// set positioning class
 		if(!empty($args['position'])){
 			$class .= sanitize_html_class( $args['position'] );
@@ -381,9 +379,7 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 
 		$main = $this->get_fav_html( $args );
 
-
 		return $before . $main . $after;
-
 	}
 
 	/**
@@ -395,11 +391,12 @@ class GeoDir_Widget_Post_Fav extends WP_Super_Duper {
 	 */
 	public function get_fav_html( $args = array() ) {
 		global $gd_post;
+
 		ob_start();
 		?>
 		<span class="gd-list-favorite">
-            <?php geodir_favourite_html( '', $gd_post->ID, $args ); ?>
-        </span>
+			<?php geodir_favourite_html( '', ( ! empty( $gd_post ) ? $gd_post->ID : 0 ), $args ); ?>
+		</span>
 		<?php
 		return ob_get_clean();
 	}
