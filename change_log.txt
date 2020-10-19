@@ -3,6 +3,7 @@
 * Map with full page width shows scroll bar when toggle categories - FIXED
 * OpenStreetMap add touchZoom map option - ADDED
 * Preview page is not showing post images & tabs on Listimia theme - FIXED
+* Kleo theme, remove force legacy styles if version >= 4.9.170 - CHANGED
 
 = 2.1.0.3 =
 * Kleo & Listimia themes not compatible with new AUI styles, revert to legacy styles if active - FIXED

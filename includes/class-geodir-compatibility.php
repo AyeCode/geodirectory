@@ -200,11 +200,16 @@ class GeoDir_Compatibility {
 
 		// Kleo theme (runs Bootstrap v3 which makes new styles incompatible)
 		if ( function_exists( 'kleo_setup' ) ) {
-			global $aui_disabled_notice;
-			add_filter('ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
-			add_filter('geodir_get_option_design_style','__return_empty_string');
-			add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
-			$aui_disabled_notice = __("AyeCode UI bootstrap styles have been disabled due to an incompatibility with Kleo theme using an older version of bootstrap.","geodirectory");
+			
+			// disable if older ver ov Kleo
+			if( define('SVQ_THEME_VERSION') && version_compare(SVQ_THEME_VERSION,'4.9.170','<') ){
+				global $aui_disabled_notice;
+				add_filter('ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
+				add_filter('geodir_get_option_design_style','__return_empty_string');
+				add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
+				$aui_disabled_notice = __("AyeCode UI bootstrap styles have been disabled due to an incompatibility with Kleo theme using an older version of bootstrap.","geodirectory");
+			}
+
 		}elseif ( function_exists( 'listimia_setup' ) ) {
 			global $aui_disabled_notice;
 			add_filter('ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
