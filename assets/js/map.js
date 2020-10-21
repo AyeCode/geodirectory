@@ -297,7 +297,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
             if (custom_loop && jQuery(custom_loop + ' .geodir-category-list-view').length) {
                 // custom loop from listings widget on non gd pages.
                 var loopIds = jQuery(custom_loop + ' .geodir-category-list-view')
-                    .find("li.type-" + post_type) //Find the spans
+                    .find(".geodir-post.type-" + post_type) //Find the spans
                     .map(function() {
                         return jQuery(this).data("post-id")
                     }) //Project Ids
@@ -320,7 +320,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
         // archive pages
         if (posts == 'geodir-loop-container') {
             var idarray = jQuery(".geodir-loop-container")
-                .find("li") //Find the spans
+                .find(".geodir-post") //Find the spans
                 .map(function() {
                     return jQuery(this).data("post-id")
                 }) //Project Ids
