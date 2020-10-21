@@ -184,14 +184,38 @@ function geodir_get_screenshot( $url, $params = array() ) {
 
 function geodir_get_field_screenshot( $field, $sizes = array( 'w' => 825, 'h' => 430, 'image' => 1 ) ) {
 	global $gd_post;
-
+	$url = '';
 	if ( isset( $gd_post->{$field} ) && esc_url( $gd_post->{$field}) ) {
-		$url = geodir_get_screenshot( $gd_post->{$field}, $sizes );
-	} else {
-		$url = '';
+		// check if maybe a video URL
+		if ($video = geodir_get_video_screenshot( $gd_post->{$field})) {
+			$url = $video;
+		}else{
+			$url = geodir_get_screenshot( $gd_post->{$field}, $sizes );
+		}
 	}
 
 	return $url;
+}
+
+/**
+ * Get a screenshot URL from a video URL.
+ * 
+ * @param $field_raw
+ *
+ * @return mixed|void
+ */
+function geodir_get_video_screenshot( $field_raw ) {
+	$screenshot = '';
+	$screenshot_base_url = 'https://img.youtube.com/vi/%s/hqdefault.jpg';
+
+	// check if its a video URL
+	if (!empty($field_raw) && preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $field_raw, $matches) ) {
+		if(!empty($matches[1])){
+			$screenshot = esc_url( sprintf($screenshot_base_url, esc_attr($matches[1])) );
+		}
+	}
+
+	return apply_filters( 'geodir_get_video_screenshot', $screenshot, $field_raw);
 }
 
 /**
