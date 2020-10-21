@@ -1783,24 +1783,24 @@ function geodir_cfi_tags( $html, $cf ) {
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
 
-        echo  aui()->select( array(
-            'id'               => $cf['name'],
+        $html = aui()->select( array(
+            'id'                 => $cf['name'],
             'name'               => "tax_input[".wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"."][]" ,
-            'title'             => $title,
-            'placeholder'      => $placeholder,
-            'value'            => $value_array,
-            'required'   => !empty($cf['is_required']) ? true : false,
-            'label_show'       => true,
-            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
-            'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'title'              => $title,
+            'placeholder'        => $placeholder,
+            'value'              => $value_array,
+            'required'           => !empty($cf['is_required']) ? true : false,
+            'label_show'         => true,
+            'label_type'         => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+            'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
+            'validation_text'    => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
-            'help_text'        => $help_text,
-            'multiple'          => true,
-            'extra_attributes' => $extra_attributes,
-            'options'          => $options, //geodir_string_values_to_options($cf['option_values'], true),
-            'select2'       => true,
-            'style'         => 'width:100%;height:inherit;'
+            'help_text'          => $help_text,
+            'multiple'           => true,
+            'extra_attributes'   => $extra_attributes,
+            'options'            => $options, //geodir_string_values_to_options($cf['option_values'], true),
+            'select2'            => true,
+            'style'              => 'width:100%;height:inherit;'
         ) );
 
     }
