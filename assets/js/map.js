@@ -587,6 +587,11 @@ function create_marker(item, map_canvas) {
         iconH = item['h'] ? parseFloat(item['h']) : 0;
         iconMW = geodir_params.marker_max_width ? parseFloat(geodir_params.marker_max_width) : 0;
         iconMH = geodir_params.marker_max_height ? parseFloat(geodir_params.marker_max_height) : 0;
+        /* Some svg files has dimensions with different unit */
+        if (geodir_params.resize_marker && ( iconW < iconMW || iconH < iconMH ) && icon.substr((icon.lastIndexOf('.')+1)).toLowerCase() == 'svg') {
+            iconW = iconW * 10;
+            iconH = iconH * 10;
+        }
         if (geodir_params.resize_marker && iconW > 5 && iconH > 5 && ((iconMW > 5 && iconW > iconMW) || (iconMH > 5 && iconH > iconMH))) {
             resizeW = iconW;
             resizeH = iconH;
@@ -1230,6 +1235,11 @@ function create_marker_osm(item, map_canvas) {
         iconH = item['h'] ? item['h'] : geodir_params.default_marker_h;
         iconMW = geodir_params.marker_max_width ? parseFloat(geodir_params.marker_max_width) : 0;
         iconMH = geodir_params.marker_max_height ? parseFloat(geodir_params.marker_max_height) : 0;
+        /* Some svg files has dimensions with different unit */
+        if (geodir_params.resize_marker && ( iconW < iconMW || iconH < iconMH ) && icon.substr((icon.lastIndexOf('.')+1)).toLowerCase() == 'svg') {
+            iconW = iconW * 10;
+            iconH = iconH * 10;
+        }
         if (geodir_params.resize_marker && iconW > 5 && iconH > 5 && ((iconMW > 5 && iconW > iconMW) || (iconMH > 5 && iconH > iconMH))) {
             resizeW = iconW;
             resizeH = iconH;
