@@ -212,10 +212,18 @@ class GeoDir_Compatibility {
 
 		}elseif ( function_exists( 'listimia_setup' ) ) {
 			global $aui_disabled_notice;
-			add_filter('ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
-			add_filter('geodir_get_option_design_style','__return_empty_string');
-			add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
-			$aui_disabled_notice = __("AyeCode UI bootstrap styles have been disabled for best compatibility with current Listimia theme version.","geodirectory");
+
+			$parent_theme = wp_get_theme();
+			if ( ! empty( $parent_theme ) && is_child_theme() ) {
+				$parent_theme = wp_get_theme( $parent_theme->Template );
+			}
+
+			if ( ! empty( $parent_theme ) && version_compare( $parent_theme->Version, '2.0', '<' ) ) {
+				add_filter( 'ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
+				add_filter( 'geodir_get_option_design_style', '__return_empty_string' );
+				add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
+				$aui_disabled_notice = __("AyeCode UI bootstrap styles have been disabled for best compatibility with current Listimia theme version.","geodirectory");
+			}
 		}
 	}
 
