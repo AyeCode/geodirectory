@@ -307,7 +307,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
             if (custom_loop && jQuery(custom_loop + ' .geodir-category-list-view').length) {
                 // custom loop from listings widget on non gd pages.
                 var loopIds = jQuery(custom_loop + ' .geodir-category-list-view')
-                    .find("li.type-" + post_type) //Find the spans
+                    .find(".geodir-post.type-" + post_type) //Find the spans
                     .map(function() {
                         return jQuery(this).data("post-id")
                     }) //Project Ids
@@ -330,7 +330,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
         // archive pages
         if (posts == 'geodir-loop-container') {
             var idarray = jQuery(".geodir-loop-container")
-                .find("li") //Find the spans
+                .find(".geodir-post") //Find the spans
                 .map(function() {
                     return jQuery(this).data("post-id")
                 }) //Project Ids
@@ -602,6 +602,11 @@ function create_marker(item, map_canvas) {
         iconH = item['h'] ? parseFloat(item['h']) : 0;
         iconMW = geodir_params.marker_max_width ? parseFloat(geodir_params.marker_max_width) : 0;
         iconMH = geodir_params.marker_max_height ? parseFloat(geodir_params.marker_max_height) : 0;
+        /* Some svg files has dimensions with different unit */
+        if (geodir_params.resize_marker && ( iconW < iconMW || iconH < iconMH ) && icon.substr((icon.lastIndexOf('.')+1)).toLowerCase() == 'svg') {
+            iconW = iconW * 10;
+            iconH = iconH * 10;
+        }
         if (geodir_params.resize_marker && iconW > 5 && iconH > 5 && ((iconMW > 5 && iconW > iconMW) || (iconMH > 5 && iconH > iconMH))) {
             resizeW = iconW;
             resizeH = iconH;
@@ -1268,6 +1273,11 @@ function create_marker_osm(item, map_canvas) {
         iconH = item['h'] ? item['h'] : geodir_params.default_marker_h;
         iconMW = geodir_params.marker_max_width ? parseFloat(geodir_params.marker_max_width) : 0;
         iconMH = geodir_params.marker_max_height ? parseFloat(geodir_params.marker_max_height) : 0;
+        /* Some svg files has dimensions with different unit */
+        if (geodir_params.resize_marker && ( iconW < iconMW || iconH < iconMH ) && icon.substr((icon.lastIndexOf('.')+1)).toLowerCase() == 'svg') {
+            iconW = iconW * 10;
+            iconH = iconH * 10;
+        }
         if (geodir_params.resize_marker && iconW > 5 && iconH > 5 && ((iconMW > 5 && iconW > iconMW) || (iconMH > 5 && iconH > iconMH))) {
             resizeW = iconW;
             resizeH = iconH;

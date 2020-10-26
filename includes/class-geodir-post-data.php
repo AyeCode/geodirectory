@@ -2150,6 +2150,7 @@ class GeoDir_Post_Data {
 			return $classes;
 		}
 
+		$classes[] = 'geodir-post';
 		$classes[] = 'post-' . $post->ID;
 		if ( ! is_admin() || wp_doing_ajax() ) {
 			$classes[] = $post->post_type;

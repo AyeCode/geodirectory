@@ -1443,8 +1443,13 @@ function geodir_cfi_taxonomy($html,$cf){
                     echo '<input type="hidden" cat_limit="' . $category_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
                     echo '<input type="hidden" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
 
-
                     if ($cat_display == 'select' || $cat_display == 'multiselect') {
+                        $data_attrs = '';
+                        if ( $category_limit == 1 ) {
+                            $cat_display = 'select'; // Force single select.
+                        } elseif ( $category_limit > 0 ) {
+                            $data_attrs .= ' data-maximum-selection-length="' . $category_limit . '"';
+                        }
                         $multiple = '';
                         $default_field = '';
                         if ($cat_display == 'multiselect') {
@@ -1453,8 +1458,7 @@ function geodir_cfi_taxonomy($html,$cf){
                         } else {
                             $default_field = 'data-cselect="default_category"';
                         }
-                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . '>';
-
+                        echo '<select id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir_textfield textfield_x geodir-select" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . '' . $data_attrs . '>';
 
                         if ($cat_display == 'select')
                             echo '<option value="">' . __('Select Category', 'geodirectory') . '</option>';
@@ -1576,18 +1580,20 @@ function geodir_cfi_categories($html,$cf){
                 $category_limit = (int) apply_filters( 'geodir_cfi_post_categories_limit', $category_limit, $gd_post, $package );
 
                 if ($cat_display != '') {
-
                     $required_limit_msg = '';
                     if ($category_limit > 0 && $cat_display != 'select' && $cat_display != 'radio') {
-
                         $required_limit_msg = wp_sprintf( __('Only select %d categories for this package.', 'geodirectory'), $category_limit );
-
                     } else {
                         $required_limit_msg = $required_msg;
                     }
 
-
                     if ($cat_display == 'select' || $cat_display == 'multiselect') {
+                        $data_attrs = '';
+                        if ( $category_limit == 1 ) {
+                            $cat_display = 'select'; // Force single select.
+                        } elseif ( $category_limit > 0 ) {
+                            $data_attrs .= ' data-maximum-selection-length="' . $category_limit . '"';
+                        }
                         $multiple = '';
                         $default_field = '';
                         if ($cat_display == 'multiselect') {
@@ -1597,11 +1603,10 @@ function geodir_cfi_categories($html,$cf){
                             $default_field = 'data-cselect="default_category"';
                         }
 
-                        echo '<select  id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir-category-select geodir-select aui-select2" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . ' aria-label="' . esc_attr( $placeholder ) . '" style="width:100%">';
+                        echo '<select  id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir-category-select geodir-select aui-select2" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . ' aria-label="' . esc_attr( $placeholder ) . '" style="width:100%"' . $data_attrs . '>';
 
                         if ($cat_display == 'select')
                             echo '<option value="">' . __('Select Category', 'geodirectory') . '</option>';
-
                     }
 
                     echo GeoDir_Admin_Taxonomies::taxonomy_walker($taxonomy);
@@ -1667,6 +1672,8 @@ add_filter('geodir_custom_field_input_categories','geodir_cfi_categories',10,2);
  * @return string The html to output for the custom field.
  */
 function geodir_cfi_tags( $html, $cf ) {
+    global $gd_post;
+
     // we use the standard WP tags UI in backend
     if ( is_admin() ) {
         return '';
@@ -1696,6 +1703,14 @@ function geodir_cfi_tags( $html, $cf ) {
 
         $cf['option_values'] = "tag1,tag2";
 
+        $package = geodir_get_post_package( $gd_post, $cf['post_type'] );
+
+        // Tag limit
+        $tag_limit = ! empty( $package ) && isset( $package->tag_limit ) ? absint( $package->tag_limit ) : 0;
+        $tag_limit = (int) apply_filters( 'geodir_cfi_post_tags_limit', $tag_limit, $gd_post, $package );
+        if ( $tag_limit > 0 ) {
+             $extra_attributes['data-maximum-selection-length'] = $tag_limit;
+        }
 
         //validation
         if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
@@ -1719,14 +1734,12 @@ function geodir_cfi_tags( $html, $cf ) {
         // placeholder
         $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter tags separated by a comma ,', 'geodirectory' );
 
-
         //extra
         $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
         $extra_attributes['option-ajaxchosen'] = 'false';
         $extra_attributes['data-tags'] = 'true';
         $extra_attributes['data-token-separators'] = "[',']";
         $extra_attributes['data-allow-clear'] = 'false';
-
 
         $post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
         $term_array = array();
@@ -1783,24 +1796,24 @@ function geodir_cfi_tags( $html, $cf ) {
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
 
-        echo  aui()->select( array(
-            'id'               => $cf['name'],
+        $html = aui()->select( array(
+            'id'                 => $cf['name'],
             'name'               => "tax_input[".wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"."][]" ,
-            'title'             => $title,
-            'placeholder'      => $placeholder,
-            'value'            => $value_array,
-            'required'   => !empty($cf['is_required']) ? true : false,
-            'label_show'       => true,
-            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
-            'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'title'              => $title,
+            'placeholder'        => $placeholder,
+            'value'              => $value_array,
+            'required'           => !empty($cf['is_required']) ? true : false,
+            'label_show'         => true,
+            'label_type'         => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+            'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
+            'validation_text'    => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
-            'help_text'        => $help_text,
-            'multiple'          => true,
-            'extra_attributes' => $extra_attributes,
-            'options'          => $options, //geodir_string_values_to_options($cf['option_values'], true),
-            'select2'       => true,
-            'style'         => 'width:100%;height:inherit;'
+            'help_text'          => $help_text,
+            'multiple'           => true,
+            'extra_attributes'   => $extra_attributes,
+            'options'            => $options, //geodir_string_values_to_options($cf['option_values'], true),
+            'select2'            => true,
+            'style'              => 'width:100%;height:inherit;'
         ) );
 
     }
