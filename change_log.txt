@@ -7,6 +7,7 @@
 * Video fields now support image screenshots in the GD > Post Images widget eg: video_screenshot - ADDED
 * Category archive map shows all markers from category on bootstrap style - FIXED
 * Some svg map markers are not resized due to unknown dimensions unit - FIXED
+* Package category limit validation is not working - FIXED
 
 = 2.1.0.3 =
 * Kleo & Listimia themes not compatible with new AUI styles, revert to legacy styles if active - FIXED
