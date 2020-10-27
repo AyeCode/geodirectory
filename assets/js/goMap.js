@@ -183,14 +183,15 @@ function geodirGoMapInit() {
                 zoomControl: opts.zoomControl === "0" || !opts.zoomControl ? false : true,
                 touchZoom: opts.touchZoom,
                 doubleClickZoom: opts.disableDoubleClickZoom === "0" || !opts.disableDoubleClickZoom ? true : false,
-                dragging: true,
+                dragging: typeof opts.dragging !== 'undefined' ? opts.dragging : !L.Browser.mobile,
+                tap: typeof opts.dragging !== 'undefined' ? opts.dragging : !L.Browser.mobile,
                 worldCopyJump: true,
                 scrollWheelZoom: opts.scrollwheel === "0" || !opts.scrollwheel ? false : opts.scrollwheel,
                 attributionControl: typeof opts.attributionControl !== 'undefined' ? opts.attributionControl : true,
                 defaultBaseLayer: typeof opts.osmBaseLayer !== 'undefined' && opts.osmBaseLayer ? opts.osmBaseLayer : null,
                 defaultOverlays: typeof opts.osmOverlays !== 'undefined' && opts.osmOverlays ? opts.osmOverlays : [],
-            };
-            
+            }
+
             if (myOptions.defaultBaseLayer) {
                 try {
                     baseLayer = L.tileLayer.provider(myOptions.defaultBaseLayer);
