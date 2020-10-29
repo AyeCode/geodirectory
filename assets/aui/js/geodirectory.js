@@ -828,7 +828,6 @@ function geodir_setup_search_form(){
         gd_s_post_type = "gd_place";
     }
 
-
     setTimeout(function(){
         jQuery('.search_by_post').change(function() {
             gd_s_post_type = jQuery(this).val();
@@ -838,7 +837,9 @@ function geodir_setup_search_form(){
         });
     }, 100);
 
-    aui_init();
+    if (typeof aui_init === "function") {
+        aui_init();
+    }
 }
 
 gdSearchDoing = 0;
