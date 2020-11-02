@@ -80,13 +80,16 @@ jQuery.fn.gdunveil = function(threshold, callback, extra1) {
 
 };
 
-function geodir_init_lazy_load() {
+function geodir_init_lazy_load(gdQuery) {
+    if (!gdQuery) {
+        gdQuery = jQuery;
+    }
     // load for GD images
     var _opacity = 1;
     if ('objectFit' in document.documentElement.style === false) {
         _opacity = 0;
     }
-    jQuery(".geodir-lazy-load").gdunveil(100, function() {
+    gdQuery(".geodir-lazy-load").gdunveil(100, function() {
         this.style.opacity = _opacity;
     }, '#geodir_content');
 
@@ -143,7 +146,7 @@ function geodir_load_badge_class() {
 
 jQuery(function($) {
     // start lazy load if it's turned on
-    geodir_init_lazy_load();
+    geodir_init_lazy_load($);
 
     if ('objectFit' in document.documentElement.style === false) {
         //Fix after document loads
