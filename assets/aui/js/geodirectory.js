@@ -116,7 +116,8 @@ function geodir_lightbox_embed($link,ele){
 
 
             // image
-            var img = jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('height','90vh').get(0).outerHTML;
+            var css_height = window.innerWidth > window.innerHeight ? '90vh' : 'auto';
+            var img = jQuery(a).find('img').clone().removeClass().addClass('mx-auto d-block w-auto mw-100 rounded').css('height',css_height).get(0).outerHTML;
             $carousel  += img;
             // captions
             if(jQuery(a).parent().find('.carousel-caption').length ){
