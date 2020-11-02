@@ -378,11 +378,26 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				<div class="plupload-thumbs <?php if ( $multiple ): ?>plupload-thumbs-multiple<?php endif; ?> clearfix"
 				     id="<?php echo $id; ?>plupload-thumbs" style="border-top:1px solid #ccc; padding-top:10px;">
 				</div>
-        <span
-	        id="upload-msg"><?php _e( 'Please drag & drop the images to rearrange the order', 'geodirectory' ); ?></span>
+				<span id="upload-msg"><?php _e( 'Please drag & drop the images to rearrange the order', 'geodirectory' ); ?></span>
 				<span id="<?php echo $id; ?>upload-error" style="display:none"></span>
-
+				<?php if ( geodir_design_style() ) { ?>
+				<div class="modal fade bsui" id="gd-image-meta-input" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title"><?php _e('Set Image Texts','geodirectory'); ?></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body text-left"></div>
+							<div class="modal-footer"></div>
+						</div>
+					</div>
+				</div>
+				<?php } else { ?>
 				<span style="display: none" id="gd-image-meta-input" class="lity-hide lity-show"></span>
+				<?php } ?>
 			</div>
 
 			<?php
