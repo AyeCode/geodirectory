@@ -118,7 +118,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function left_panel_title() {
-			return sprintf( __( 'Add new %s form field', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Add new %s form field', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 
@@ -130,7 +130,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The box description.
 		 */
 		public function left_panel_note() {
-			return sprintf( __( 'Click on any box below to add a field of that type to the add %s listing form. You can use a fieldset to group your fields.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Click on any box below to add a field of that type to the add %s listing form. You can use a fieldset to group your fields.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**
@@ -1285,7 +1285,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function right_panel_title() {
-			return sprintf( __( 'List of fields that will appear on add new %s listing form', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'List of fields that will appear on add new %s listing form', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 
@@ -1297,7 +1297,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The box description.
 		 */
 		public function right_panel_note() {
-			return sprintf( __( 'Click to expand and view field related settings. You may drag and drop to arrange fields order on add %s listing form too.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Click to expand and view field related settings. You may drag and drop to arrange fields order on add %s listing form too.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**

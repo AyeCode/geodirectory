@@ -1720,7 +1720,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 
 	if ( strpos( $title, '%%pt_single%%' ) !== false ) {
 		$singular_name = '';
-		if ( $post_type && $singular_name = get_post_type_singular_label( $post_type ) ) {
+		if ( $post_type && $singular_name = geodir_get_post_type_singular_label( $post_type ) ) {
 			$singular_name = __( $singular_name, 'geodirectory' );
 		}
 
@@ -1729,7 +1729,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 
 	if ( strpos( $title, '%%pt_plural%%' ) !== false ) {
 		$plural_name = '';
-		if ( $post_type && $plural_name = get_post_type_plural_label( $post_type ) ) {
+		if ( $post_type && $plural_name = geodir_get_post_type_plural_label( $post_type ) ) {
 			$plural_name = __( $plural_name, 'geodirectory' );
 		}
 
