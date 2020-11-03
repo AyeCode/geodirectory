@@ -1,6 +1,7 @@
 = 2.1.0.5 =
 * JavaScript error breaks Divi visual builder when bootstrap style enabled - FIXED
 * Edit image title/caption is not working in backend edit post page - FIXED
+* Lightbox gallery on mobile can vertically streach images - FIXED
 
 = 2.1.0.4 =
 * Load categories on map via AJAX - CHANGED
