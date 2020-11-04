@@ -191,6 +191,7 @@ class AUI_Component_Input {
 				) );
 			}elseif($type == 'checkbox'){
 				$wrap_class = $args['switch'] ? 'custom-switch' : 'custom-checkbox';
+				$wrap_class .= ' '.$args['wrap_class'];
 				$output = self::wrap( array(
 					'content' => $output,
 					'class'   => 'custom-control '.$wrap_class
@@ -533,6 +534,7 @@ else{$eli.attr(\'type\',\'password\');}"
 	public static function wrap($args = array()){
 		$defaults = array(
 			'type'       => 'div',
+			'wrap_class' => '',
 			'class'      => 'form-group',
 			'content'   => '',
 			'input_group_left' => '',
@@ -937,6 +939,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'required'   => false,
 			'inline'     => true,
 			'label'      => '',
+			'wrap_class' => '',
 			'options'    => array(),
 			'icon'       => '',
 			'no_wrap'    => false,
@@ -1009,6 +1012,7 @@ else{$eli.attr(\'type\',\'password\');}"
 		// wrap
 		if(!$args['no_wrap']){
 			$wrap_class = $args['inline'] ? 'form-check form-check-inline' : 'form-check';
+			$wrap_class .= ' '.$args['wrap_class'];
 			$output = self::wrap(array(
 				'content' => $output,
 				'class' => $wrap_class
