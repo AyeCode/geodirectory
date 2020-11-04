@@ -97,7 +97,7 @@ function geodir_cfi_text($html,$cf){
         if(isset($cf['validation_pattern']) && $cf['validation_pattern']){
             $validation = ' pattern="'.$cf['validation_pattern'].'" ';
         }else{$validation='';}
-
+        
         // validation message
         if(isset($cf['validation_msg']) && $cf['validation_msg']){
             $validation_msg = 'title="'.$cf['validation_msg'].'"';
@@ -105,7 +105,7 @@ function geodir_cfi_text($html,$cf){
         ?>
 
         <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -178,7 +178,7 @@ function geodir_cfi_email($html,$cf){
         ?>
 
         <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -250,7 +250,7 @@ function geodir_cfi_phone($html,$cf){
         ?>
 
         <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -321,7 +321,7 @@ function geodir_cfi_url($html,$cf){
         ?>
 
         <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -381,7 +381,7 @@ function geodir_cfi_radio($html,$cf){
 
         ?>
         <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label>
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -458,7 +458,7 @@ function geodir_cfi_checkbox($html,$cf){
         ?>
 
         <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -534,7 +534,7 @@ function geodir_cfi_textarea($html,$cf){
         ?>
 
         <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -609,7 +609,7 @@ function geodir_cfi_select($html,$cf){
 		$placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : '';
         ?>
         <div id="<?php echo $cf['name'];?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row geodir_custom_fields clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
@@ -697,7 +697,7 @@ function geodir_cfi_multiselect($html,$cf){
         $multi_display = !empty($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
         ?>
         <div id="<?php echo $cf['name']; ?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -816,7 +816,7 @@ function geodir_cfi_html($html,$cf){
         ?>
 
         <div id="<?php echo $cf['name']; ?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -938,7 +938,7 @@ function geodir_cfi_datepicker($html,$cf){
             });
         </script>
         <div id="<?php echo $name;?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $name ); ?>">
 
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
@@ -1013,7 +1013,7 @@ function geodir_cfi_time($html,$cf){
             });
         </script>
         <div id="<?php echo $name;?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $name ); ?>">
 
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
@@ -1166,7 +1166,7 @@ function geodir_cfi_address( $html, $cf ) {
         $locate_me_class = $locate_me ? ' gd-form-control' : '';
         ?>
         <div id="geodir_<?php echo $prefix . 'street';?>_row"
-             class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $prefix . 'street' ); ?>"><?php _e($address_title, 'geodirectory'); ?> <?php if ($is_required) echo '<span>*</span>';?></label>
             <?php if ($locate_me) { ?>
             <div class="gd-input-group gd-locate-me">
@@ -1188,7 +1188,7 @@ function geodir_cfi_address( $html, $cf ) {
 
         if (isset($extra_fields['show_street2']) && $extra_fields['show_street2']) { ?>
             <div id="geodir_<?php echo $prefix . 'street2'; ?>_row"
-                 class="geodir_form_row clearfix gd-fieldset-details">
+                 class="<?php echo esc_attr( $cf['css_class'] ); ?> geodir_form_row clearfix gd-fieldset-details">
                 <label for="<?php echo esc_attr( $prefix . 'street2' ); ?>">
                     <?php _e($street2_title, 'geodirectory'); ?>
                 </label>
@@ -1212,7 +1212,7 @@ function geodir_cfi_address( $html, $cf ) {
 
         if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) { ?>
             <div id="geodir_<?php echo $prefix . 'zip'; ?>_row"
-                 class="<?php echo ( ! empty( $extra_fields['zip_required'] ) ? 'required_field ' : '' ); ?>geodir_form_row clearfix gd-fieldset-details">
+                 class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php echo ( ! empty( $extra_fields['zip_required'] ) ? 'required_field ' : '' ); ?>geodir_form_row clearfix gd-fieldset-details">
                 <label for="<?php echo esc_attr( $prefix . 'zip' ); ?>">
                     <?php _e($zip_title, 'geodirectory'); ?> <?php echo ( ! empty( $extra_fields['zip_required'] ) ? '<span>*</span>' : '' ); ?>
                 </label>
@@ -1226,7 +1226,7 @@ function geodir_cfi_address( $html, $cf ) {
 
         <?php  if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
 
-            <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
+            <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="<?php echo esc_attr( $cf['css_class'] ); ?> geodir_form_row clearfix gd-fieldset-details">
                 <?php
                 /**
                  * Contains add listing page map functions.
@@ -1245,7 +1245,7 @@ function geodir_cfi_address( $html, $cf ) {
             /* show lat lng */
             $style_latlng = ((isset($extra_fields['show_latlng']) && $extra_fields['show_latlng']) || is_admin()) ? '' : 'style="display:none"'; ?>
             <div id="geodir_<?php echo $prefix . 'latitude'; ?>_row"
-                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details" <?php echo $style_latlng; ?>>
+                 class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details" <?php echo $style_latlng; ?>>
                 <label for="<?php echo esc_attr( $prefix . 'latitude' ); ?>">
                     <?php _e( 'Address Latitude', 'geodirectory' ); ?>
                     <?php if ($is_required) echo '<span>*</span>'; ?>
@@ -1263,7 +1263,7 @@ function geodir_cfi_address( $html, $cf ) {
             </div>
 
             <div id="geodir_<?php echo $prefix . 'longitude'; ?>_row"
-                 class="<?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details" <?php echo $style_latlng; ?>>
+                 class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details" <?php echo $style_latlng; ?>>
                 <label for="<?php echo esc_attr( $prefix . 'longitude' ); ?>">
                     <?php _e( 'Address Longitude', 'geodirectory' ); ?>
                     <?php if ($is_required) echo '<span>*</span>'; ?>
@@ -1281,7 +1281,7 @@ function geodir_cfi_address( $html, $cf ) {
         <?php } ?>
 
         <?php if (isset($extra_fields['show_mapview']) && $extra_fields['show_mapview']) { ?>
-            <div id="geodir_<?php echo $prefix . 'mapview'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
+            <div id="geodir_<?php echo $prefix . 'mapview'; ?>_row" class="<?php echo esc_attr( $cf['css_class'] ); ?> geodir_form_row clearfix gd-fieldset-details">
                 <label for="<?php echo esc_attr( $prefix . 'mapview' ); ?>"><?php _e($mapview_title, 'geodirectory'); ?></label>
 
                 <select  name="<?php echo 'mapview'; ?>" id="<?php echo $prefix . 'mapview'; ?>" class="geodir-select">
@@ -1363,7 +1363,7 @@ function geodir_cfi_taxonomy($html,$cf){
             $value = '';
         } ?>
         <div id="<?php echo $taxonomy;?>_row"
-             class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $taxonomy ); ?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -1662,7 +1662,7 @@ function geodir_cfi_tags( $html, $cf ) {
 
         ?>
         <div id="<?php echo $cf['name']; ?>_row"
-             class="<?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
                 <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -1781,7 +1781,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
 		ob_start();
 		?>
 		<script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
-        <div id="<?php echo $name;?>_row" class="geodir_form_row clearfix gd-fieldset-details gd-bh-row">
+        <div id="<?php echo $name;?>_row" class="<?php echo esc_attr( $cf['css_class'] ); ?> geodir_form_row clearfix gd-fieldset-details gd-bh-row">
             <label for="<?php echo $htmlvar_name; ?>_f_active_1"><?php echo $label; ?></label>
 			<div class="gd-bh-field" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
 				<span class="gd-radios" role="radio"><input name="<?php echo $htmlvar_name; ?>_f[active]" id="<?php echo $htmlvar_name; ?>_f_active_1" value="1" class="gd-checkbox" field_type="radio" type="radio" <?php checked( ! empty( $value ), true ); ?> data-field="active" aria-label="<?php esc_attr_e( 'Yes', 'geodirectory' ); ?>"> <?php _e( 'Yes', 'geodirectory' ); ?></span> 
@@ -1939,7 +1939,7 @@ function geodir_cfi_files( $html, $cf ) {
             add_thickbox();  
             ?>
 
-            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> geodir_form_row clearfix gd-fieldset-details ">
+            <div id="<?php echo $cf['name']; ?>_row" class="<?php echo esc_attr( $cf['css_class'] ); ?><?php if ( $cf['is_required'] ) {echo 'required_field';} ?> geodir_form_row clearfix gd-fieldset-details ">
 
                 <label for="<?php echo $id; ?>">
                     <?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );

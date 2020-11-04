@@ -1216,7 +1216,7 @@ function geodir_cfi_address( $html, $cf ) {
 
         <?php  if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
 
-            <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
+            <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="<?php echo esc_attr( $cf['css_class'] ); ?> geodir_form_row clearfix gd-fieldset-details">
                 <?php
                 /**
                  * Contains add listing page map functions.
@@ -1391,7 +1391,7 @@ function geodir_cfi_taxonomy($html,$cf){
             $value = '';
         } ?>
         <div id="<?php echo $taxonomy;?>_row"
-             class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $taxonomy ); ?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
@@ -2070,7 +2070,7 @@ function geodir_cfi_files( $html, $cf ) {
             $admin_only = geodir_cfi_admin_only($cf);
             ?>
 
-            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row ">
+            <div id="<?php echo $cf['name']; ?>_row" class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row ">
 
 
                 <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
