@@ -12,7 +12,22 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
+ * Export multiple types data.
+ */
+//$export = new GeoDir_Export( array( 'custom_fields', 'sort_fields', 'tabs', 'search_fields', 'price_packages' ) );
+//$array = $export->export(); // Retrieve PHP array
+//$json = $export->export_json(); // Retrieve JSON
+
+/**
+ * Export single type data.
+ */
+//$export = new GeoDir_Export( array( 'custom_fields' ) );
+//$array = $export->export(); // Retrieve PHP array
+//$json = $export->export_json(); // Retrieve JSON
+
+/**
  * Class used to export GeoDirectory data.
+ *
  */
 class GeoDir_Export {
 
