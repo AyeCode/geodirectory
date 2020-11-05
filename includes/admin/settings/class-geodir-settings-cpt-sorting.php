@@ -98,7 +98,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function left_panel_title() {
-			return sprintf( __( 'Available sorting options for %s listing and search results', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Available sorting options for %s listing and search results', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 
 		}
 
@@ -110,7 +110,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @return string The box description.
 		 */
 		public function left_panel_note() {
-			return sprintf( __( 'Click on any box below to make it appear in the sorting option dropdown on %s listing and search results.<br />To make a field available here, go to custom fields tab and expand any field from selected fields panel and tick the checkbox saying \'Include this field in sort option\'.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Click on any box below to make it appear in the sorting option dropdown on %s listing and search results.<br />To make a field available here, go to custom fields tab and expand any field from selected fields panel and tick the checkbox saying \'Include this field in sort option\'.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**
@@ -181,7 +181,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function right_panel_title() {
-			return sprintf( __( 'List of fields that will appear in %s listing and search results sorting option dropdown box.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'List of fields that will appear in %s listing and search results sorting option dropdown box.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**
@@ -192,7 +192,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @return string The box description.
 		 */
 		public function right_panel_note() {
-			return sprintf( __( 'Click to expand and view field related settings. You may drag and drop to arrange fields order in sorting option dropdown box on %s listing and search results page.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Click to expand and view field related settings. You may drag and drop to arrange fields order in sorting option dropdown box on %s listing and search results page.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**

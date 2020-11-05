@@ -99,7 +99,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function left_panel_title() {
-			return sprintf( __( 'Fields', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Fields', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 
 		}
 
@@ -111,7 +111,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		 * @return string The box description.
 		 */
 		public function left_panel_note() {
-			return sprintf( __( 'Fields that can be added to the %s tabs.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Fields that can be added to the %s tabs.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**
@@ -194,7 +194,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function right_panel_title() {
-			return sprintf( __( '%s Tabs', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( '%s Tabs', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**
@@ -205,7 +205,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		 * @return string The box description.
 		 */
 		public function right_panel_note() {
-			return sprintf( __( 'Drag and drop the items to create the %s tabs.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Drag and drop the items to create the %s tabs.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
         /**

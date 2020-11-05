@@ -462,6 +462,23 @@ function geodir_get_addlisting_link( $post_type = '' ) {
 	return geodir_add_listing_page_url( $post_type );
 }
 
+/**
+ * @deprecated 2.1.0.5
+ */
+function get_post_type_plural_label( $post_type, $echo = false, $translate = false ) {
+	//_deprecated_function( __FUNCTION__, '2.1.0.5', 'geodir_get_post_type_plural_label()' );
+
+	return geodir_get_post_type_plural_label( $post_type, $echo, $translate );
+}
+
+/**
+ * @deprecated 2.1.0.5
+ */
+function get_post_type_singular_label( $post_type, $echo = false, $translate = false ) {
+	//_deprecated_function( __FUNCTION__, '2.1.0.5', 'geodir_get_post_type_singular_label()' );
+
+	return geodir_get_post_type_singular_label( $post_type, $echo, $translate );
+}
 
 //
 ///**

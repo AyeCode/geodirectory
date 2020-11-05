@@ -743,8 +743,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		}
 
 		// replace widget title dynamically
-		$posttype_plural_label   = __( get_post_type_plural_label( $post_type ), 'geodirectory' );
-		$posttype_singular_label = __( get_post_type_singular_label( $post_type ), 'geodirectory' );
+		$posttype_plural_label   = __( geodir_get_post_type_plural_label( $post_type ), 'geodirectory' );
+		$posttype_singular_label = __( geodir_get_post_type_singular_label( $post_type ), 'geodirectory' );
 
 		$title = str_replace( "%posttype_plural_label%", $posttype_plural_label, $title );
 		$title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
@@ -768,7 +768,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		}
 
 		if ( empty( $title ) || $title == 'All' ) {
-			$title .= ' ' . __( get_post_type_plural_label( $post_type ), 'geodirectory' );
+			$title .= ' ' . __( geodir_get_post_type_plural_label( $post_type ), 'geodirectory' );
 		}
 
 		$location_allowed = GeoDir_Post_types::supports( $post_type, 'location' );

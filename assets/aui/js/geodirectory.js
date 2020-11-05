@@ -1436,7 +1436,7 @@ function gd_init_rating_input(){
  */
 function geodir_animate_markers(){
     if (typeof(animate_marker) == 'function') {
-        var groupTab = jQuery("ul.geodir-category-list-view").children("li");
+        var groupTab = jQuery(".geodir-category-list-view").children(".geodir-post");
         groupTab.hover(function () {
             animate_marker('listing_map_canvas', String(jQuery(this).data("post-id")));
         }, function () {
