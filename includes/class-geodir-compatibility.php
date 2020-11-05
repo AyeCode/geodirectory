@@ -198,19 +198,20 @@ class GeoDir_Compatibility {
 	 */
 	public static function maybe_force_legacy_styles(){
 
+		$design_style = geodir_design_style();
+
 		// Kleo theme (runs Bootstrap v3 which makes new styles incompatible)
-		if ( function_exists( 'kleo_setup' ) ) {
+		if ( function_exists( 'kleo_setup' ) && $design_style ) {
 
 			// disable if older ver ov Kleo
 			if( defined('SVQ_THEME_VERSION') && version_compare(SVQ_THEME_VERSION,'4.9.170','<') ){
 				global $aui_disabled_notice;
-				add_filter('ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
-				add_filter('geodir_get_option_design_style','__return_empty_string');
 				add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
-				$aui_disabled_notice = __("AyeCode UI bootstrap styles have been disabled due to an incompatibility with Kleo theme using an older version of bootstrap.","geodirectory");
+				$settings_link = admin_url("admin.php?page=gd-settings&tab=general&section=developer");
+				$aui_disabled_notice = sprintf( __("Kleo theme works best with GeoDirectory legacy styles, please set legacy styles %shere%s","geodirectory"),"<a href='$settings_link'>","</a>");
 			}
 
-		}elseif ( function_exists( 'listimia_setup' ) ) {
+		}elseif ( function_exists( 'listimia_setup' ) && $design_style ) {
 			global $aui_disabled_notice;
 
 			$parent_theme = wp_get_theme();
@@ -219,10 +220,9 @@ class GeoDir_Compatibility {
 			}
 
 			if ( ! empty( $parent_theme ) && version_compare( $parent_theme->Version, '2.0', '<' ) ) {
-				add_filter( 'ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
-				add_filter( 'geodir_get_option_design_style', '__return_empty_string' );
 				add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
-				$aui_disabled_notice = __("AyeCode UI bootstrap styles have been disabled for best compatibility with current Listimia theme version.","geodirectory");
+				$settings_link = admin_url("admin.php?page=gd-settings&tab=general&section=developer");
+				$aui_disabled_notice = sprintf( __("Listimia theme works best with GeoDirectory legacy styles, please set legacy styles %shere%s","geodirectory"),"<a href='$settings_link'>","</a>");
 			}
 		} elseif ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) ) {
 			global $aui_disabled_notice;
@@ -245,7 +245,7 @@ class GeoDir_Compatibility {
 				isset($_REQUEST['page']) && ( $_REQUEST['page'] == 'ayecode-ui-settings' || $_REQUEST['page'] == 'gd-settings'  )
 			)){
 			$class = 'notice notice-error';
-			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), esc_html( $aui_disabled_notice ) );
+			printf( '<div class="%1$s"><p>%2$s</p></div>', esc_attr( $class ), $aui_disabled_notice );
 		}
 
 	}

@@ -4,6 +4,8 @@
 * Lightbox gallery on mobile can vertically streach images - FIXED
 * Avada Builder not compatible with new AUI styles, revert to legacy styles if active - FIXED
 * Map bounce on listing hover is not working with bootstrap style - FIXED
+* Lightbox gallery on mobile can vertically stretch images - FIXED
+* Added filters to search input arguments - ADDED
 
 = 2.1.0.4 =
 * Load categories on map via AJAX - CHANGED

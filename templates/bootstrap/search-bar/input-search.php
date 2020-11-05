@@ -22,7 +22,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	$input_group_html .= '</span>';
 
 	echo aui()->input(
-		array(
+		apply_filters('geodir_search_for_input_args',array(
 			'value' =>  $search_term,
 			'name'  => 's',
 			'placeholder'  => esc_html__($default_search_for_text,'geodirectory'),
@@ -37,7 +37,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			),
 			'input_group_left' => '<div class="input-group-text px-2 bg-transparent border-0">'.$input_group_html.'</div>',
 			'input_group_left_inside' => true
-		)
+		))
 	);
 
 	do_action('geodir_after_search_for_input');
