@@ -224,6 +224,14 @@ class GeoDir_Compatibility {
 				add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
 				$aui_disabled_notice = __("AyeCode UI bootstrap styles have been disabled for best compatibility with current Listimia theme version.","geodirectory");
 			}
+		} elseif ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) ) {
+			global $aui_disabled_notice;
+
+			add_filter( 'ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
+			add_filter( 'geodir_get_option_design_style', '__return_empty_string' );
+			add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
+
+			$aui_disabled_notice = __( "AyeCode UI bootstrap styles have been disabled due to an incompatibility with Avada Builder using an older version of bootstrap.", "geodirectory" );
 		}
 	}
 

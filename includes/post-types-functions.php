@@ -361,15 +361,15 @@ function geodir_posttype_link($link, $post_type) {
 /**
  * Print or Get post type singular label.
  *
- * @since 1.0.0
- * @since 1.6.16 New $translate parameter added.
+ * @since 2.1.0.5
+ *
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @param bool $echo Prints the label when set to true.
  * @param bool $translate Returns translated label if True. Default false.
  * @return void|string Label.
  */
-function get_post_type_singular_label($post_type, $echo = false, $translate = false) {
+function geodir_get_post_type_singular_label( $post_type, $echo = false, $translate = false ) {
     $obj_post_type = get_post_type_object($post_type);
     if (!is_object($obj_post_type)) {
         return;
@@ -386,15 +386,15 @@ function get_post_type_singular_label($post_type, $echo = false, $translate = fa
 /**
  * Print or Get post type plural label.
  *
- * @since 1.0.0
- * @since 1.6.16 New $translate parameter added.
+ * @since 2.1.0.5
+ *
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @param bool $echo Prints the label when set to true.
  * @param bool $translate Returns translated label if True. Default false.
  * @return void|string Label.
  */
-function get_post_type_plural_label($post_type, $echo = false, $translate = false) {
+function geodir_get_post_type_plural_label( $post_type, $echo = false, $translate = false ) {
     $all_postypes = geodir_get_posttypes();
 
     if (!in_array($post_type, $all_postypes))

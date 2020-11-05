@@ -540,13 +540,13 @@ class GeoDir_SEO {
 
 		// CPT
 		if ( strpos( $string, '%%pt_single%%' ) !== false ) {
-			if ( $post_type && $singular_name = get_post_type_singular_label( $post_type ) ) {
+			if ( $post_type && $singular_name = geodir_get_post_type_singular_label( $post_type ) ) {
 				$string = str_replace( "%%pt_single%%", __( $singular_name, 'geodirectory' ), $string );
 			}
 		}
 
 		if ( strpos( $string, '%%pt_plural%%' ) !== false ) {
-			if ( $post_type && $plural_name = get_post_type_plural_label( $post_type ) ) {
+			if ( $post_type && $plural_name = geodir_get_post_type_plural_label( $post_type ) ) {
 				$string = str_replace( "%%pt_plural%%", __( $plural_name, 'geodirectory' ), $string );
 			}
 		}

@@ -2,6 +2,8 @@
 * JavaScript error breaks Divi visual builder when bootstrap style enabled - FIXED
 * Edit image title/caption is not working in backend edit post page - FIXED
 * Lightbox gallery on mobile can vertically streach images - FIXED
+* Avada Builder not compatible with new AUI styles, revert to legacy styles if active - FIXED
+* Map bounce on listing hover is not working with bootstrap style - FIXED
 
 = 2.1.0.4 =
 * Load categories on map via AJAX - CHANGED

@@ -248,7 +248,7 @@ if ( $wp_query->max_num_pages <= 1 && empty($args['preview']) ) {
 		global $posts_per_page, $wpdb, $paged;
 
 		$post_type = !empty($args['preview']) ? 'gd_place' : geodir_get_current_posttype();
-		$listing_type_name =  get_post_type_plural_label($post_type);
+		$listing_type_name =  geodir_get_post_type_plural_label($post_type);
 		if (geodir_is_page('archive') || geodir_is_page('search')) {
 			$term = array();
 
