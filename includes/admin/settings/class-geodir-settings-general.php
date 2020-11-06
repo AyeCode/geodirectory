@@ -167,14 +167,14 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				array(
 					'id' => 'design_style',
 					'name' => __('Default Design Style', 'geodirectory'),
-					'desc' => __('The default design style to use.', 'geodirectory'),
+					'desc' => wp_sprintf( __( 'The default design style to use. Go to Settings > %s AyeCode UI %s to adjust AyeCode UI settings if you are having compatibility issues with Bootstrap style.', 'geodirectory' ), '<a href="' . admin_url( 'options-general.php?page=ayecode-ui-settings' ) . '">', '</a>' ),
 					'type' => 'select',
 					'options' => array(
 						'bootstrap' =>  __('Bootstrap', 'geodirectory'),
 						'' =>  __('Legacy (non-bootstrap)', 'geodirectory'),
 					),
 					'class' => 'uwp-select',
-					'desc_tip' => true,
+					'desc_tip' => false,
 					'default' => 'bootstrap',
 				),
 
