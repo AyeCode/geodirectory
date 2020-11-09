@@ -27,16 +27,17 @@ global $post;
 			 * @package GeoDirectory
 			 */
 			$avatar_size = apply_filters( 'geodir_comment_avatar_size', 44 );
-
 			?>
 				<?php if ( $avatar_size != 0  ): ?>
-					<a href="<?php echo get_comment_author_url($comment->comment_ID); ?>" class="media-object float-left">
+					<?php if(!empty($comment->user_id)){ ?><a href="<?php echo get_author_posts_url($comment->user_id); ?>" class="media-object float-left"><?php }?>
 						<?php echo get_avatar( $comment, $avatar_size,'mm','', array('class'=>"comment_avatar rounded-circle") ); ?>
-					</a>
+					<?php if(!empty($comment->user_id)){ ?></a><?php }?>
 				<?php endif; ?>
 				<span class="media-heading pl-2 mr-auto h4 m-0 align-items-center d-flex justify-content-center">
 					<?php
-					echo get_comment_author_link($comment->comment_ID);
+					if(!empty($comment->user_id)){ echo "<a href='".get_author_posts_url($comment->user_id)."' class='' >"; }
+					echo get_comment_author($comment->comment_ID);
+					if(!empty($comment->user_id)){ echo "</a>"; }
 					echo $comment->user_id === $post->post_author ? ' <span class="ml-2 h6 m-0"><span class="badge badge-primary">'.__( 'Post author', 'geodirectory' ).'</span></span>' : '';
 					?>
 				</span>

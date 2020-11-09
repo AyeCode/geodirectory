@@ -1770,7 +1770,12 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
                         $content =  wp_strip_all_tags( do_shortcode( wpautop( $value ) ) );
                     } else {
                         if ( $embed ) {
-                            // Embed media.
+
+                            if ( $design_style ) {
+                                // check if we have any media in iframe first, if so maybe wrap in responsive wrapper.
+                                $value = str_replace(array("<iframe ","</iframe>"),array('<div class="geodir-embed-container embed-responsive embed-responsive-16by9"><iframe ','</iframe></div>'),$value);
+                            }
+                             // Embed media.
                             global $wp_embed;
                             $value = $wp_embed->autoembed( $value );
                         }
