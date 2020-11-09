@@ -395,7 +395,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		}
 
 		$design_style = geodir_design_style();
-		$block_preview = $this->is_block_content_call();
+		$block_preview = $this->is_block_content_call() || $is_preview;
 
 		if(empty($gd_post->ID) && $block_preview && !empty($args['key'])){
 			$post_id = geodir_get_post_id_with_content($args['key']);
