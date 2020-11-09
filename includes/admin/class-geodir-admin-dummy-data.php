@@ -166,7 +166,7 @@ class GeoDir_Admin_Dummy_Data {
 	 * @global object $wpdb WordPress Database object.
 	 * @global string $plugin_prefix Geodirectory plugin table prefix.
 	 */
-	public static function delete_dummy_posts( $post_type) {
+	public static function delete_dummy_posts( $post_type ) {
 		global $wpdb, $plugin_prefix;
 
 

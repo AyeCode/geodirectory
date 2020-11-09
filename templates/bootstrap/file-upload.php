@@ -52,7 +52,7 @@ if ( $multiple ) {
 		
 		<span id="<?php echo $id; ?>upload-error" class="d-none alert alert-danger" role="alert"></span>
 
-		<div class="modal fade" id="gd-image-meta-input" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+		<div class="modal bsui fade" id="gd-image-meta-input" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<div class="modal-header">
