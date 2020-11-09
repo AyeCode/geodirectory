@@ -8,6 +8,7 @@
 * Added filters to search input arguments - ADDED
 * Divi visual editor shows "field key is missing" for badge - FIXED
 * Reviews, link to author profile instead of author URL input - CHANGED
+* Embedded videos not responsive in AUI styles - FIXED
 
 = 2.1.0.4 =
 * Load categories on map via AJAX - CHANGED
