@@ -50,6 +50,9 @@ class GeoDir_Admin {
 			delete_transient( 'gd_addons_section_themes' );
 		}
 
+		if ( ! empty( $_REQUEST['action'] ) && $_REQUEST['action'] == 'geodir_post_attachment_upload' ) {
+			add_filter( 'wp_check_filetype_and_ext', array( $this, 'wp_check_filetype_and_ext' ), 10, 5 );
+		}
 
 		// disable GD pages from being able to be selected for some settings
 		add_filter( 'wp_dropdown_pages',array( $this, 'dropdown_pages_disable' ), 10,3 );
@@ -396,5 +399,30 @@ class GeoDir_Admin {
 		if ( function_exists( 'GD_Dashboard_init' ) && is_plugin_active( 'geodir_dashboard/geodir_dashboard.php' ) ) {
 			deactivate_plugins( 'geodir_dashboard/geodir_dashboard.php' );
 		}
+	}
+
+	/**
+	 * Filter the "real" file type of the CSV file during import.
+	 *
+	 * @since 2.1.0.5
+	 *
+	 * @param array       $data Values for the extension, mime type, and corrected filename.
+	 * @param string      $file Full path to the file.
+	 * @param string      $filename The name of the file (may differ from $file due to $file being in a tmp directory).
+	 * @param string[]    $mimes Array of mime types keyed by their file extension regex.
+	 * @param string|bool $real_mime The actual mime type or false if the type cannot be determined.
+	 */
+	public function wp_check_filetype_and_ext( $data, $file, $filename, $mimes, $real_mime = '' ) {
+		if ( ! empty( $_REQUEST['imgid'] ) && strpos( $_REQUEST['imgid'], 'gd_im_' ) === 0 && ! empty( $_REQUEST['name'] ) && current_user_can( 'manage_options' ) && strtolower( substr( strrchr( $filename, '.' ), 1 ) ) == 'csv' ) {
+			$wp_filetype = wp_check_filetype( $filename, $mimes );
+
+			$ext = $wp_filetype['ext'];
+			$type = $wp_filetype['type'];
+			$proper_filename = $data['proper_filename'];
+
+			$data = compact( 'ext', 'type', 'proper_filename' );
+		}
+
+		return $data;
 	}
 }

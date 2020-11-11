@@ -10,6 +10,7 @@
 * Reviews, link to author profile instead of author URL input - CHANGED
 * Embedded videos not responsive in AUI styles - FIXED
 * Map show markers for wrong Elementor loop - FIXED
+* Fix import csv error "Sorry, this file type is not permitted for security reasons." - FIXED
 
 = 2.1.0.4 =
 * Load categories on map via AJAX - CHANGED
