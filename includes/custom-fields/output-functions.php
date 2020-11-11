@@ -1748,7 +1748,6 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
                 $cf['css_class'] .= " position-relative";
             }
 
-
             $max_height = ! empty( $output['fade'] ) ? absint( $output['fade'] )."px" : '';
             $max_height_style = $max_height ? " style='max-height:$max_height;overflow:hidden;' " : '';
 
@@ -1770,11 +1769,6 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
                         $content =  wp_strip_all_tags( do_shortcode( wpautop( $value ) ) );
                     } else {
                         if ( $embed ) {
-
-                            if ( $design_style ) {
-                                // check if we have any media in iframe first, if so maybe wrap in responsive wrapper.
-                                $value = str_replace(array("<iframe ","</iframe>"),array('<div class="geodir-embed-container embed-responsive embed-responsive-16by9"><iframe ','</iframe></div>'),$value);
-                            }
                              // Embed media.
                             global $wp_embed;
                             $value = $wp_embed->autoembed( $value );
@@ -1788,6 +1782,11 @@ function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
                     } else {
                         $content = apply_filters( 'the_content', $value );
                     }
+                }
+
+                if ( $design_style ) {
+                    // check if we have any media in iframe first, if so maybe wrap in responsive wrapper.
+                    $content = str_replace( array( "<iframe ", "</iframe>" ), array( '<div class="geodir-embed-container embed-responsive embed-responsive-16by9"><iframe ', '</iframe></div>' ), $content );
                 }
 
                 $gd_skip_the_content = false;
@@ -1928,6 +1927,11 @@ function geodir_cf_html($html,$location,$cf,$p='',$output=''){
             if ( ! empty( $output ) && isset( $output['strip'] ) ) {
                 // Stripped value.
                 return $value;
+            }
+
+            if ( geodir_design_style() ) {
+                // check if we have any media in iframe first, if so maybe wrap in responsive wrapper.
+                $value = str_replace( array( "<iframe ", "</iframe>" ), array( '<div class="geodir-embed-container embed-responsive embed-responsive-16by9"><iframe ', '</iframe></div>' ), $value );
             }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
