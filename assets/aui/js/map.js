@@ -338,7 +338,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 
             // check if elementor loop
             if (!idarray.length && jQuery('.elementor-posts-container').length) {
-                $containerClass = jQuery('.geodir-loop-container').length ? jQuery(".geodir-loop-container") : jQuery(".elementor-posts-container");
+                $containerClass = jQuery('.geodir-loop-container').length ? jQuery(".geodir-loop-container") : (jQuery('.elementor-widget-archive-posts .elementor-posts-container:visible').length ? jQuery('.elementor-widget-archive-posts .elementor-posts-container:visible') : jQuery('.elementor-posts-container'));
                 idarray = $containerClass
                     .find(".elementor-post ") //Find the spans
                     .map(function() {
