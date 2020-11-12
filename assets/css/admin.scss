@@ -335,6 +335,15 @@ Import/export
   display: block !important;
   opacity: 1 !important;
 }
+
+.gd-import-export .postbox > .handlediv {
+    position: absolute;
+    text-align: center;
+}
+.gd-import-export .postbox > .gd-hndle-click {
+    text-indent: 25px;
+}
+
 .gd-import-export .gd-imex-btns {
 	margin-top: 20px;
 }
