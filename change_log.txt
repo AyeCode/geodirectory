@@ -11,6 +11,7 @@
 * Embedded videos not responsive in AUI styles - FIXED
 * Map show markers for wrong Elementor loop - FIXED
 * Fix import csv error "Sorry, this file type is not permitted for security reasons." - FIXED
+* Near search not working when lazy load map active and no map on the page - FIXED
 
 = 2.1.0.4 =
 * Load categories on map via AJAX - CHANGED

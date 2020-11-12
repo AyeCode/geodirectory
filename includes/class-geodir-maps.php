@@ -659,6 +659,26 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		 */
 		return apply_filters( 'geodir_map_params', $map_params );
 	}
+
+	/**
+	 * Check and add map script when no map on the page.
+	 *
+	 * @since 2.1.0.5
+	 */
+	public static function check_map_script() {
+		global $geodir_map_script;
+
+		if ( ! $geodir_map_script && geodir_lazy_load_map() && GeoDir_Maps::active_map() !='none' && ! wp_script_is( 'geodir-map', 'enqueued' ) ) {
+			$geodir_map_script = true;
+			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+?><script type="text/javascript">
+/* <![CDATA[ */
+<?php echo "var geodir_map_params=" . wp_json_encode( geodir_map_params() ) . ';'; ?>var el=document.createElement("script");el.setAttribute("type","text/javascript");el.setAttribute("id",'geodir-map-js');el.setAttribute("src",'<?php echo geodir_plugin_url(); ?>/assets/js/geodir-map<?php echo $suffix; ?>.js');el.setAttribute("async",true);document.getElementsByTagName("head")[0].appendChild(el);
+/* ]]> */
+</script><?php
+		}
+	}
 }
 
 return new GeoDir_Maps();
