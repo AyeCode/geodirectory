@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.0.4\n"
+"Project-Id-Version: GeoDirectory 2.1.0.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-10-27 21:49+0530\n"
-"PO-Revision-Date: 2020-10-27 21:50+0530\n"
+"POT-Creation-Date: 2020-11-12 19:36+0530\n"
+"PO-Revision-Date: 2020-11-12 19:36+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1896,11 +1896,16 @@ msgstr ""
 msgid "Select Files"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:382
+#: includes/admin/class-geodir-admin-post-view.php:381
 msgid "Please drag & drop the images to rearrange the order"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-post-view.php:493
+#: includes/admin/class-geodir-admin-post-view.php:388
+#: templates/bootstrap/file-upload.php:59
+msgid "Set Image Texts"
+msgstr ""
+
+#: includes/admin/class-geodir-admin-post-view.php:508
 #, php-format
 msgid "Save as %s"
 msgstr ""
@@ -2562,119 +2567,119 @@ msgstr ""
 msgid "Taxonomies Page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:132
+#: includes/admin/class-geodir-admin.php:135
 msgid "GD Add listing page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:133
+#: includes/admin/class-geodir-admin.php:136
 msgid "This is where users will add listings via the frontend if enabled."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:135
+#: includes/admin/class-geodir-admin.php:138
 msgid "GD Location page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:136
+#: includes/admin/class-geodir-admin.php:139
 msgid ""
 "This page can be used as the main directory page and is also used by some "
 "addons."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:138
+#: includes/admin/class-geodir-admin.php:141
 msgid "GD Search page"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:139
+#: includes/admin/class-geodir-admin.php:142
 msgid "This is the GD search results page."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:141
-msgid "GD Archive template"
-msgstr ""
-
-#: includes/admin/class-geodir-admin.php:142
-msgid ""
-"Used to design the archive pages but should never be linked to directly."
-msgstr ""
-
 #: includes/admin/class-geodir-admin.php:144
-msgid "GD Archive Item template"
+msgid "GD Archive template"
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:145
 msgid ""
-"Used to design the archive items but should never be linked to directly."
+"Used to design the archive pages but should never be linked to directly."
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:147
-msgid "GD Details template"
+msgid "GD Archive Item template"
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:148
-msgid "Used to design the details page but should never be linked to directly."
+msgid ""
+"Used to design the archive items but should never be linked to directly."
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:150
-msgid "GD T&Cs"
+msgid "GD Details template"
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:151
+msgid "Used to design the details page but should never be linked to directly."
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:153
+msgid "GD T&Cs"
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:154
 msgid "This is the page that will be used for your terms and conditions."
-msgstr ""
-
-#: includes/admin/class-geodir-admin.php:159
-#, php-format
-msgid "GD Archive template (%s)"
-msgstr ""
-
-#: includes/admin/class-geodir-admin.php:160
-#, php-format
-msgid ""
-"Used to design the %s archive pages but should never be linked to directly."
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:162
 #, php-format
-msgid "GD Archive Item template (%s)"
+msgid "GD Archive template (%s)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:163
 #, php-format
 msgid ""
-"Used to design the %s archive items but should never be linked to directly."
+"Used to design the %s archive pages but should never be linked to directly."
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:165
 #, php-format
-msgid "GD Details template (%s)"
+msgid "GD Archive Item template (%s)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:166
 #, php-format
 msgid ""
-"Used to design the %s details page but should never be linked to directly."
+"Used to design the %s archive items but should never be linked to directly."
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:168
 #, php-format
-msgid "GD Add listing page (%s)"
+msgid "GD Details template (%s)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin.php:169
 #, php-format
+msgid ""
+"Used to design the %s details page but should never be linked to directly."
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:171
+#, php-format
+msgid "GD Add listing page (%s)"
+msgstr ""
+
+#: includes/admin/class-geodir-admin.php:172
+#, php-format
 msgid "Used to design the add %s page for the frontend."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:225
+#: includes/admin/class-geodir-admin.php:228
 msgid "GeoDirectory - an AyeCode product!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:226
+#: includes/admin/class-geodir-admin.php:229
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:41
 msgid "Please confirm you wish to connect your site?"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:227
+#: includes/admin/class-geodir-admin.php:230
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:42
 #, php-format
 msgid ""
@@ -2682,38 +2687,38 @@ msgid ""
 "downloading zip files, connect your site for instant access. %slearn more%s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:228
+#: includes/admin/class-geodir-admin.php:231
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:43
 msgid "Connect Site"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:229
+#: includes/admin/class-geodir-admin.php:232
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:44
 msgid "Connecting..."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:230
+#: includes/admin/class-geodir-admin.php:233
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:45
 msgid "This service will only work with a live domain, not a localhost."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:231
+#: includes/admin/class-geodir-admin.php:234
 #: vendor/ayecode/ayecode-connect-helper/ayecode-connect-helper.php:46
 msgid "Something went wrong, please refresh and try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:373
+#: includes/admin/class-geodir-admin.php:376
 #, php-format
 msgid ""
 "If you like <strong>GeoDirectory</strong> please leave us a %s rating. A "
 "huge thanks in advance!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:373
+#: includes/admin/class-geodir-admin.php:376
 msgid "Thanks :)"
 msgstr ""
 
-#: includes/admin/class-geodir-admin.php:376
+#: includes/admin/class-geodir-admin.php:379
 msgid "Thank you for using GeoDirectory!"
 msgstr ""
 
@@ -5699,7 +5704,11 @@ msgid "Default Design Style"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:170
-msgid "The default design style to use."
+#, php-format
+msgid ""
+"The default design style to use. Go to Settings > %s AyeCode UI %s to adjust "
+"AyeCode UI settings if you are having compatibility issues with Bootstrap "
+"style."
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:173
@@ -9650,26 +9659,34 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:210
+#: includes/class-geodir-compatibility.php:211
+#, php-format
 msgid ""
-"AyeCode UI bootstrap styles have been disabled due to an incompatibility "
-"with Kleo theme using an older version of bootstrap."
+"Kleo theme works best with GeoDirectory legacy styles, please set legacy "
+"styles %shere%s"
 msgstr ""
 
 #: includes/class-geodir-compatibility.php:225
+#, php-format
 msgid ""
-"AyeCode UI bootstrap styles have been disabled for best compatibility with "
-"current Listimia theme version."
+"Listimia theme works best with GeoDirectory legacy styles, please set legacy "
+"styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:467
+#: includes/class-geodir-compatibility.php:234
+msgid ""
+"AyeCode UI bootstrap styles have been disabled due to an incompatibility "
+"with Avada Builder using an older version of bootstrap."
+msgstr ""
+
+#: includes/class-geodir-compatibility.php:475
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:595
+#: includes/class-geodir-compatibility.php:603
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -9677,63 +9694,63 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1104
+#: includes/class-geodir-compatibility.php:1112
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1106
+#: includes/class-geodir-compatibility.php:1114
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1111
+#: includes/class-geodir-compatibility.php:1119
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1112
+#: includes/class-geodir-compatibility.php:1120
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1283
+#: includes/class-geodir-compatibility.php:1291
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1285
+#: includes/class-geodir-compatibility.php:1293
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1290
+#: includes/class-geodir-compatibility.php:1298
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1291
+#: includes/class-geodir-compatibility.php:1299
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2516
+#: includes/class-geodir-compatibility.php:2524
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2527
+#: includes/class-geodir-compatibility.php:2535
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2534
+#: includes/class-geodir-compatibility.php:2542
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2535
+#: includes/class-geodir-compatibility.php:2543
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3228
+#: includes/class-geodir-compatibility.php:3236
 msgid "GD Search Results"
 msgstr ""
 
@@ -11392,7 +11409,7 @@ msgstr ""
 msgid "Select search type"
 msgstr ""
 
-#: includes/core-functions.php:1125 includes/core-functions.php:1139
+#: includes/core-functions.php:1123 includes/core-functions.php:1137
 #: templates/bootstrap/search-bar/input-near.php:20
 #: templates/bootstrap/search-bar/input-search.php:21
 msgid "Clear field"
@@ -11578,12 +11595,12 @@ msgstr ""
 msgid "Some demo text."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:1802
+#: includes/custom-fields/output-functions.php:1806
 #: includes/widgets/class-geodir-widget-post-content.php:102
 msgid "Read more..."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2554
+#: includes/custom-fields/output-functions.php:2563
 msgid "Expand opening hours"
 msgstr ""
 
@@ -12968,7 +12985,7 @@ msgid "Show the action only on the author page."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-author-actions.php:180 language.php:128
-#: templates/bootstrap/reviews/item.php:77 templates/legacy/reviews/item.php:59
+#: templates/bootstrap/reviews/item.php:78 templates/legacy/reviews/item.php:59
 msgid "Edit"
 msgstr ""
 
@@ -16053,7 +16070,7 @@ msgstr ""
 msgid "Add Comment"
 msgstr ""
 
-#: language.php:127 templates/bootstrap/reviews/item.php:82
+#: language.php:127 templates/bootstrap/reviews/item.php:83
 #: templates/legacy/reviews/item.php:62
 msgid "Reply"
 msgstr ""
@@ -17433,10 +17450,6 @@ msgstr ""
 msgid "Please drag &amp; drop the files to rearrange the order"
 msgstr ""
 
-#: templates/bootstrap/file-upload.php:59
-msgid "Set Image Texts"
-msgstr ""
-
 #: templates/bootstrap/file-upload.php:74
 msgid "Drop Here"
 msgstr ""
@@ -17587,11 +17600,11 @@ msgstr ""
 msgid "Reviews are closed."
 msgstr ""
 
-#: templates/bootstrap/reviews/item.php:40 templates/legacy/reviews/item.php:33
+#: templates/bootstrap/reviews/item.php:41 templates/legacy/reviews/item.php:33
 msgid "Post author"
 msgstr ""
 
-#: templates/bootstrap/reviews/item.php:55 templates/legacy/reviews/item.php:50
+#: templates/bootstrap/reviews/item.php:56 templates/legacy/reviews/item.php:50
 msgid "Your comment is awaiting moderation."
 msgstr ""
 

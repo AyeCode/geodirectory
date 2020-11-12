@@ -955,7 +955,7 @@ function geodir_search_form_post_type_input() {
 				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class'>";
 			}
 
-			$select_class = $design_style ? " form-control" : '';
+			$select_class = $design_style ? " form-control custom-select" : '';
 
 			echo $design_style ? '<div class="form-group">' : '';
 			echo $design_style ? '<label class="sr-only sr-only ">'.__("Select search type","geodirectory").'</label>' : '';
