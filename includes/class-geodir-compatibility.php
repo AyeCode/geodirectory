@@ -1613,6 +1613,8 @@ class GeoDir_Compatibility {
 			if ( geodir_is_page( 'post_type' ) || geodir_is_page( 'archive' ) || geodir_is_page( 'search' ) ) {
 				add_filter( 'body_class', array( __CLASS__, 'divi_et_body_class' ), 11, 1 );
 			}
+
+			add_filter( 'body_class', array( __CLASS__, 'divi_disable_smooth_scroll' ), 11, 2 );
 		}
 
 		// Jarida (theme)
@@ -1883,7 +1885,7 @@ class GeoDir_Compatibility {
 	}
 
 	/**
-	 * Divi theem filter body classes.
+	 * Divi theme filter body classes.
 	 *
 	 * @since 2.0.0.81
 	 *
@@ -1917,6 +1919,21 @@ class GeoDir_Compatibility {
 				$classes[] = $page_layout;
 			}
 		}
+
+		return $classes;
+	}
+
+	/**
+	 * Divi theme disable smooth scroll to fix images slider.
+	 *
+	 * @since 2.1.0.6
+	 *
+	 * @param array $classes The body classes.
+	 * @param string $class An array of additional class names added to the body.
+	 * @return array The updated body classes.
+	 */
+	public static function divi_disable_smooth_scroll( $classes, $class ) {
+		$classes[] = 'et_smooth_scroll_disabled';
 
 		return $classes;
 	}
