@@ -1,3 +1,6 @@
+= 2.1.0.6 =
+* Detail page image slider is not working with Divi theme - FIXED
+
 = 2.1.0.5 =
 * JavaScript error breaks Divi visual builder when bootstrap style enabled - FIXED
 * Edit image title/caption is not working in backend edit post page - FIXED
