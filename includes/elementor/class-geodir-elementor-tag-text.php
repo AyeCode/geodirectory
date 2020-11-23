@@ -55,40 +55,37 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 	 * Render the tag output.
 	 */
 	public function render() {
-
-		global $gd_post,$post;
+		global $post, $gd_post;
 
 		$value = '';
 		$key = $this->get_settings( 'key' );
 		$show = $this->get_settings( 'show' );
-		if ( !empty( $key ) ) {
-			if(isset($gd_post->{$key})){
-				
-				if($show == 'value-raw'){
+
+		if ( ! empty( $key ) ) {
+			if ( isset( $gd_post->{$key} ) ) {
+				if ( $show == 'value-raw' ) {
 					$value = $gd_post->{$key};
-				}else{
-					if($key=='default_category'){
-						$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
-						$term = get_term_by( 'id', $term_id, $post->post_type."category");
-						if($show == 'value'){
-							$term_url = get_term_link( $term_id, $post->post_type."category" );
-							$value = '<a href="'.$term_url.'" >'.esc_attr($term->name).'</a>';
-						}elseif($show=='value-strip'){
-							if(!empty($term->name)){
-								$value = esc_attr($term->name);
+				} else {
+					if ( $key == 'default_category' ) {
+						$term_id = isset( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
+						$term = get_term_by( 'id', $term_id, $post->post_type . "category" );
+						if ( $show == 'value' ) {
+							$term_url = get_term_link( $term_id, $post->post_type . "category" );
+							$value = '<a href="' . $term_url . '" >' . esc_attr( $term->name ) . '</a>';
+						} elseif ( $show == 'value-strip' ) {
+							if ( ! empty( $term->name ) ) {
+								$value = esc_attr( $term->name );
 							}
 						}
-
-					}else{
-						$value = do_shortcode("[gd_post_meta key='$key' show='$show' no_wrap='1']");
+					} else {
+						$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
 					}
 				}
-				
-			}elseif($key=='latitude,longitude' && !empty($gd_post->latitude) && !empty($gd_post->longitude) ){
-				$value = (float)$gd_post->latitude.",".$gd_post->longitude;
-			}elseif($key=='address' && !empty($gd_post->city) ){
-				$value = do_shortcode("[gd_post_meta key='$key' show='$show' no_wrap='1']");
-			}elseif($key=='address_raw' && !empty($gd_post->city) ){
+			} elseif ( $key == 'latitude,longitude' && ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
+				$value = (float) $gd_post->latitude . "," . $gd_post->longitude;
+			} elseif ( $key == 'address' && ! empty( $gd_post->city ) ) {
+				$value = do_shortcode( "[gd_post_meta key='$key' show='$show' no_wrap='1']" );
+			} elseif ( $key == 'address_raw' && ! empty( $gd_post->city ) ) {
 				$address_parts = array();
 				if(!empty($gd_post->street)){$address_parts[] = esc_attr($gd_post->street);}
 				if(!empty($gd_post->street2)){$address_parts[] = esc_attr($gd_post->street2);}
@@ -97,14 +94,26 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 				if(!empty($gd_post->country)){$address_parts[] = esc_attr($gd_post->country);}
 				if(!empty($gd_post->zip)){$address_parts[] = esc_attr($gd_post->zip);}
 
-				if(!empty($address_parts)){
-					$value = implode(", ",$address_parts);
+				if ( ! empty( $address_parts ) ) {
+					$value = implode( ", ",$address_parts );
 				}
-			}elseif(substr( $key, 0, 9 ) === "category_"){
-				$value = $this->get_category_meta($key,$show);
+			} elseif ( substr( $key, 0, 9 ) === "category_" ) {
+				$value = $this->get_category_meta( $key, $show );
 			}
 
-			echo wp_kses_post( $value );
+			$value = wp_kses_post( $value );
+			/*
+			 * Filter text render value.
+			 *
+			 * @since 2.1.0.6
+			 *
+			 * @param mixed  $value Tag value.
+			 * @param string $key Tag key.
+			 * @param object $this Tag object.
+			 */
+			$value = apply_filters( 'geodir_elementor_tag_text_render_value', $value, $key, $this );
+
+			echo $value;
 		}
 	}
 
