@@ -735,10 +735,9 @@ function geodir_populate_default_category_input() {
                 jQuery('#default_category').append(jQuery('<option>', {
                     value: jQuery(this).val(),
                     text: jQuery(this).text(),
-                    selected: jQuery('#default_category').val() == jQuery(this).val() || (!jQuery('#default_category').val() && selected_cats[0] == jQuery(this).val())
+                    selected: default_cat == jQuery(this).val() || (!default_cat && selected_cats[0] == jQuery(this).val())
                 }));
             }
-
         });
     } else {
         jQuery('#default_category').val('');
