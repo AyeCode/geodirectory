@@ -1168,15 +1168,28 @@ function geodir_get_search_post_type($pt=''){
  *
  * @since 2.0.0
  */
-function geodir_search_form(){
-
+function geodir_search_form() {
 	geodir_get_search_post_type();
 
 	$design_style = geodir_design_style();
-	$template = $design_style ? $design_style."/search-bar/form.php" : "listing-filter-form.php";
+	$template = $design_style ? $design_style . "/search-bar/form.php" : "listing-filter-form.php";
 
-	echo geodir_get_template_html( $template );
-	
+	$args = array();
+	if ( wp_doing_ajax() && ! empty( $_POST['keepArgs'] ) ) {
+		$_args = json_decode( stripslashes( sanitize_text_field( $_POST['keepArgs'] ) ), true );
+
+		if ( ! empty( $_args ) && is_array( $_args ) ) {
+			$args = $_args;
+		}
+	}
+
+	$args = array(
+		'wrap_class' => geodir_build_aui_class( $args ),
+		'keep_args' => $args
+	);
+
+	echo geodir_get_template_html( $template, $args );
+
 	// Always die in functions echoing ajax content
 	die();
 }

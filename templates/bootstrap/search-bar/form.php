@@ -91,5 +91,6 @@ $form_class = apply_filters('geodir_search_form_class', $form_class);
     <input name="sgeo_lat" class="sgeo_lat" type="hidden" value="<?php echo sanitize_text_field($slat);?>"/>
     <input name="sgeo_lon" class="sgeo_lon" type="hidden" value="<?php echo sanitize_text_field($slon);?>"/>
     <?php do_action('geodir_search_hidden_fields');?>
+	<?php if ( isset( $keep_args ) && ! empty( $keep_args ) ) { echo '<div class="geodir-keep-args" style="display:none!important">' . wp_json_encode( $keep_args ) . '</div>'; } ?>
 </form>
 </div>
