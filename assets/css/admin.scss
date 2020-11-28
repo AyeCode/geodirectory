@@ -205,6 +205,11 @@ Add/Edit post
     border-left: 0;
 }
 
+/* AUI post images sortable */
+.postbox .plupload-thumbs.ui-sortable > .col {
+    float: left;
+}
+
 /********************************************************
 Settings inputs
 ********************************************************/
