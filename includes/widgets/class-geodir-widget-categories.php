@@ -259,6 +259,20 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			    'advanced' => false,
 			    'group'     => __("Design","geodirectory")
 		    );
+		    $options['arguments']['row_positioning'] = array(
+			    'title' => __('Row Positioning', 'geodirectory'),
+			    'desc' => __('Positions items that do not fill a whole row.', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				    "" => __('Default (left)', 'geodirectory'),
+				    "center" => __('Center', 'geodirectory'),
+				    "right" => __('Right', 'geodirectory'),
+			    ),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
 		    $options['arguments']['card_padding_inside'] = array(
 			    'title' => __('Card Padding Inside', 'geodirectory'),
 			    'desc' => __('Set the inside padding for the card', 'geodirectory'),
@@ -388,6 +402,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
             'icon_size' => 'box-small',
             'design_type' => 'icon-left',
             'row_items' => '3',
+	        'row_positioning'   => '',
 	        'card_padding_inside'   => '3',
             'bg'    => '',
             'mt'    => '',
@@ -417,7 +432,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	    if(empty($options['design_type'])){$options['design_type'] = $defaults['design_type'];}
 	    if(empty($options['card_padding_inside'])){$options['card_padding_inside'] = $defaults['card_padding_inside'];}
 
-        $output = self::categories_output($options );
+        $output = self::categories_output( $options );
 
 		$ajax_class = ! empty( $options['cpt_ajax'] ) ? ' gd-wgt-cpt-ajax' : '';
 
@@ -557,6 +572,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'icon_size' => 'box-small',
 				'design_type' => 'icon-left',
 				'row_items' => '3',
+				'row_positioning'   => '',
 				'card_padding_inside'   => '3',
 
 				'bg'    => '',
@@ -811,8 +827,17 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					}
 
 					if($design_style && $open_wrap){
+
 						$desktop_class = absint($args['row_items']) ? "row-cols-md-".absint($args['row_items']) : "row-cols-md-3";
 						$col_class = $cpt_left ? 'row-cols-1' : 'row-cols-1 row-cols-sm-2 '.$desktop_class;
+
+						// row_positioning
+						if(!empty($args['row_positioning']) && $args['row_positioning']=='center'){
+							$col_class .= " justify-content-center";
+						}elseif(!empty($args['row_positioning']) && $args['row_positioning']=='right'){
+							$col_class .= " justify-content-end";
+						}
+
 						$cpt_row .= '<div class="row '.$col_class.'">';
 					}
 
@@ -932,6 +957,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$output .= '<input type="hidden" name="icon_size" value="' . esc_attr( $args['icon_size'] ) . '">';
 				$output .= '<input type="hidden" name="design_type" value="' . esc_attr( $args['design_type'] ) . '">';
 				$output .= '<input type="hidden" name="row_items" value="' . absint( $args['row_items'] ) . '">';
+				$output .= '<input type="hidden" name="row_positioning" value="' . esc_attr( $args['row_positioning'] ) . '">';
 				$output .= '<input type="hidden" name="card_padding_inside" value="' . absint( $args['card_padding_inside'] ) . '">';
 				$output .= '<input type="hidden" name="bg" value="' . esc_attr( $args['bg'] ) . '">';
 				$output .= '<input type="hidden" name="mt" value="' . absint( $args['mt'] ) . '">';

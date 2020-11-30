@@ -1,5 +1,8 @@
 = 2.1.0.6 =
 * Detail page image slider is not working with Divi theme - FIXED
+* Classifieds dummy data not using blocks when Gutenberg in use - FIXED
+* Category widget now has option to align items of partial rows - ADDED
+* Review output avatar now set as position relative to prevent theme CSS breaking alignment - CHANGED
 
 = 2.1.0.5 =
 * JavaScript error breaks Divi visual builder when bootstrap style enabled - FIXED
