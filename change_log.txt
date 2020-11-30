@@ -1,5 +1,10 @@
 = 2.1.0.6 =
 * Detail page image slider is not working with Divi theme - FIXED
+* Default category always shows first option selected with Bootstrap style - FIXED
+* Unable to translate street field default placeholder - FIXED
+* Elementor custom skin loop overwrites $wp_query - FIXED
+* Search form AUI does not keep padding margins when CPT select changed - FIXED
+* Backend re-arrange post images order not working with AUI - FIXED
 
 = 2.1.0.5 =
 * JavaScript error breaks Divi visual builder when bootstrap style enabled - FIXED

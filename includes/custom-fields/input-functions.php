@@ -1164,6 +1164,7 @@ function geodir_cfi_address( $html, $cf ) {
 
         $locate_me = !empty($extra_fields['show_map']) && GeoDir_Maps::active_map() != 'none' ? true : false;
         $locate_me_class = $locate_me ? ' gd-form-control' : '';
+        $placeholder = $cf['placeholder_value'] != '' ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter a location', 'geodirectory' );
         ?>
         <div id="geodir_<?php echo $prefix . 'street';?>_row"
              class="<?php if ($is_required) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
@@ -1173,7 +1174,7 @@ function geodir_cfi_address( $html, $cf ) {
             <?php }
             // NOTE autocomplete="new-password" seems to be the only way to disable chrome autofill and others.
             ?>
-                <input autocomplete="new-password" type="text" field_type="<?php echo $type;?>" name="<?php echo 'street';?>" id="<?php echo $prefix . 'street';?>" class="geodir_textfield<?php echo $locate_me_class;?>" value="<?php echo esc_attr(stripslashes($street)); ?>" <?php if(!empty($cf['placeholder_value'])){ echo 'placeholder="'.esc_html__( $cf['placeholder_value'], 'geodirectory').'"'; } ?> />
+                <input autocomplete="new-password" type="text" field_type="<?php echo $type;?>" name="<?php echo 'street';?>" id="<?php echo $prefix . 'street';?>" class="geodir_textfield<?php echo $locate_me_class;?>" value="<?php echo esc_attr(stripslashes($street)); ?>" <?php if(!empty($placeholder)){ echo 'placeholder="' . esc_html( $placeholder ) . '"'; } ?> />
                 <?php if ($locate_me) { ?>
                 <span class="gd-locate-me-btn gd-input-group-addon" title="<?php esc_attr_e('My location', 'geodirectory'); ?>"><i class="fas fa-crosshairs fa-fw" aria-hidden="true"></i></span>
             </div>

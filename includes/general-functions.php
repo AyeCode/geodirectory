@@ -227,14 +227,42 @@ function geodir_get_weeks() {
 	);
 }
 
+/**
+ * Check that page is.
+ *
+ * @since 1.0.0
+ * 
+ * @global object $wp_query WordPress Query object.
+ * @global object $gd_loop_wp_query WordPress Query object from GD loop.
+ *
+ * @param string $gdpage The page type.
+ *
+ * @return bool If valid returns true. Otherwise false.
+ */
+function geodir_is_page( $gdpage = '' ) {
+	global $wp_query, $gd_loop_wp_query;
+
+	// Backup $wp_query;
+	if ( ! empty( $gd_loop_wp_query ) ) {
+		$backup_wp_query = $wp_query;
+		$wp_query = $gd_loop_wp_query;
+	}
+
+	$is_page = geodir_check_page( $gdpage );
+
+	// Release $wp_query;
+	if ( ! empty( $gd_loop_wp_query ) && isset( $backup_wp_query ) ) {
+		$wp_query = $backup_wp_query;
+	}
+
+	return $is_page;
+}
 
 /**
  * Check that page is.
  *
- * @since   1.0.0
- * @since   1.5.6 Added to check GD invoices and GD checkout pages.
- * @since   1.5.7 Updated to validate buddypress dashboard listings page as a author page.
- * @package GeoDirectory
+ * @since 2.1.0.6
+ *
  * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
  *
@@ -242,7 +270,7 @@ function geodir_get_weeks() {
  *
  * @return bool If valid returns true. Otherwise false.
  */
-function geodir_is_page( $gdpage = '' ) {
+function geodir_check_page( $gdpage = '' ) {
 	global $wp_query, $post, $wp;
 
 	if ( empty( $wp_query ) ) {

@@ -145,10 +145,11 @@ class GeoDir_Elementor_Skin_Posts extends Skin_Base {
 	}
 
 	protected function get_template() {
-		global $gdecs_render_loop, $wp_query, $gdecs_index, $geodir_el_archive_item_tl;
+		global $gdecs_render_loop, $wp_query, $gd_loop_wp_query, $gdecs_index, $geodir_el_archive_item_tl;
 
 		$gdecs_index++;
 		$old_query = $wp_query;
+		$gd_loop_wp_query = $wp_query;
 		$new_query = new \WP_Query( array( 'p' => get_the_ID(), 'post_type' => get_post_type() ) );
 		$wp_query = $new_query;
 		$settings = $this->parent->get_settings();
