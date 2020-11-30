@@ -759,17 +759,22 @@ function geodir_resize_rating_stars(re) {
 }
 
 function geodir_load_search_form(stype, el) {
-    var $adv_show = jQuery(el).closest('.geodir-search-container').attr('data-show-adv');
+    var $container = jQuery(el).closest('.geodir-search-container');
+    var $adv_show = $container.attr('data-show-adv');
+    var data = {
+        action: 'geodir_search_form',
+        stype: stype,
+        adv: $adv_show
+    };
+    if (jQuery('.geodir-keep-args', $container).length && jQuery('.geodir-keep-args', $container).text()) {
+        data.keepArgs = jQuery('.geodir-keep-args', $container).text();
+    }
 
     jQuery.ajax({
         url: geodir_params.ajax_url,
         type: 'POST',
         dataType: 'html',
-        data: {
-            action: 'geodir_search_form',
-            stype: stype,
-            adv: $adv_show
-        },
+        data: data,
         beforeSend: function() {
             geodir_search_wait(1);
         },

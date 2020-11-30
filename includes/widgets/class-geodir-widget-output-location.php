@@ -134,7 +134,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 
         if (!empty($args['location']) && $geodir_post_detail_fields ) {
 	        if($geodir_post_detail_fields && $design_style && $wrap_class){
-		        $geodir_post_detail_fields = str_replace("geodir_post_meta ","geodir_post_meta list-group-item list-group-item-action ".$inner_class,$geodir_post_detail_fields);
+		        $geodir_post_detail_fields = str_replace("geodir_post_meta ","geodir_post_meta list-group-item list-group-item-action ".$inner_class.' ',$geodir_post_detail_fields);
 	        }
             $output .= "<div class='$wrap_class d-block geodir-output-location geodir-output-location-".esc_attr($args['location'])."' style='$wrap_style' >";
             $output .= $geodir_post_detail_fields;

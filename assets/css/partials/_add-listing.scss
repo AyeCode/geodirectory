@@ -105,7 +105,7 @@
 	text-decoration: none;
 }
 
-// bit generalised but etter than nothing
+// bit generalised but better than nothing
 .ui-timepicker-div{
 	font-size: 15px;
 	line-height: 15px;
@@ -227,6 +227,11 @@
 
 .geodir_form_row .gd-bh-items table.fixed {
 	position: inherit;
+}
+
+.avada-responsive .geodir_form_row, 
+.fusion-body .geodir_form_row {
+	width: 100%;
 }
 
 @media screen and (max-width: 782px) {

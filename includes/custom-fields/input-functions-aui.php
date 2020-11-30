@@ -1133,6 +1133,7 @@ function geodir_cfi_address( $html, $cf ) {
 
         $address_label_type = !empty($geodir_label_type) ? $geodir_label_type : 'horizontal';
         if( $address_label_type == 'floating'){  $address_label_type = 'hidden';}
+        $placeholder = $cf['placeholder_value'] != '' ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter a location', 'geodirectory' );
 
         echo aui()->input(
             array(
@@ -1144,7 +1145,7 @@ function geodir_cfi_address( $html, $cf ) {
                 'label_type'       => $address_label_type,
                 'type'              => 'text',
                 'title'             =>  $title,
-                'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
+                'placeholder'       => esc_html( $placeholder ),
                 'class'             => 'gd-add-listing-address-input',
                 'value'             => esc_attr(stripslashes($value)),
                 'help_text'         => __($cf['desc'], 'geodirectory'),
@@ -1152,9 +1153,6 @@ function geodir_cfi_address( $html, $cf ) {
                 'extra_attributes'  => $extra_attributes,
             )
         );
-
-
-
 
         if (isset($extra_fields['show_street2']) && $extra_fields['show_street2']) {
             $extra_attributes = array();
@@ -1619,42 +1617,37 @@ function geodir_cfi_categories($html,$cf){
                 echo class_exists("AUI_Component_Helper") ? AUI_Component_Helper::help_text(__($frontend_desc, 'geodirectory')) : '';
                 ?>
             </div>
-
         </div>
         <?php
-
         // cat limit
         echo '<input type="hidden" cat_limit="' . $category_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
 
-
         $html = ob_get_clean();
 
-
         // Default category select
-
-        if($cat_display == 'multiselect'){
+        if ( $cat_display == 'multiselect' ) {
             // required
             $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+
+            $default_category = (int) geodir_get_cf_default_category_value();
+
             $html .= aui()->select( array(
-                'id'               => "default_category",
-                'name'               => "default_category",
-                'placeholder'      => esc_attr__("Select Default Category", 'geodirectory'),
-                'value'            => esc_attr( geodir_get_cf_default_category_value() ),
-                'required'   => true,
-                'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
-                'label'      => __("Default Category", 'geodirectory').$required,
-                'help_text'        => esc_attr__("The default category can affect the listing URL and map marker.", 'geodirectory'),
-                'multiple'          => false,
-                'options'          => geodir_get_cf_default_category_value() ? array(esc_attr( geodir_get_cf_default_category_value() ) => '') : array(),
-                'element_require'   => '[%'.$taxonomy.'%]!=null',
+                'id'              => "default_category",
+                'name'            => "default_category",
+                'placeholder'     => esc_attr__( "Select Default Category", 'geodirectory' ),
+                'value'           => $default_category,
+                'required'        => true,
+                'label_type'      => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
+                'label'           => __( "Default Category", 'geodirectory' ) . $required,
+                'help_text'       => esc_attr__( "The default category can affect the listing URL and map marker.", 'geodirectory' ),
+                'multiple'        => false,
+                'options'         => $default_category ? array( $default_category => '' ) : array(),
+                'element_require' => '[%' . $taxonomy . '%]!=null',
             ) );
-        }else{
+        } else {
             // leaving this out should set the default as the main cat anyway
             // $html .= '<input type="hidden" id="default_category" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
         }
-
-
-
     }
 
     return $html;
