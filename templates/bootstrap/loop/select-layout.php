@@ -81,7 +81,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	/* ]]> */</script>
 <div class="btn-group btn-group-sm gd-list-view-select" role="group" aria-label="<?php esc_attr_e("List View","geodirectory");?>">
 	<div class="btn-group btn-group-sm" role="group">
-		<button id="gd-list-view-select-grid" type="button" class="btn btn-outline-primary rounded-right gd-list-view-select-grid" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		<button id="gd-list-view-select-grid" type="button" class="btn btn-outline-primary rounded-right gd-list-view-select-grid" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label="<?php esc_attr_e( "Select View", "geodirectory" ); ?>">
 			<i class="fas fa-th"></i>
 		</button>
 		<div class="dropdown-menu dropdown-caret-0 my-3 p-0" aria-labelledby="gd-list-view-select-grid">

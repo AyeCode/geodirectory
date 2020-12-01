@@ -981,7 +981,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					$output .= '<input type="hidden" name="ajax_set_location" value="' . esc_attr( maybe_serialize( $geodirectory->location ) ) . '">';
 				}
 				$select_class = $design_style ? 'form-control mb-3' : '';
-				$output .= '</div><select class="geodir-cat-list-tax geodir-select '.$select_class.'">' . implode( '', $cpt_options ) . '</select>';
+				$output .= '</div><select class="geodir-cat-list-tax geodir-select '.$select_class.'" aria-label="' . esc_attr__( 'CPT Categories', 'geodirectory' ) . '">' . implode( '', $cpt_options ) . '</select>';
 				$output .= '</div><div class="gd-cptcat-rows">';
 			}
 			$output .= $cpt_list;
@@ -1137,7 +1137,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		if($design_style ){
 			$link_height = !empty($args['card_padding_inside']) && $args['card_padding_inside'] < 3 ? "15px" : "22px";
 			$content = $depth == 1 ? '<div class="gd-cptcat-li gd-cptcat-li-sub-container dropdown w-100 position-absolute" style="bottom: 0;left: 0;height:'.$link_height.';">' : '';
-			$content .= $depth == 1 ? '<a class="btn btn-link z-index-1 p-0 text-reset w-100 align-top" href="#" id="cat-submenu-'.$parent_id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-chevron-down align-top"></i></a>' : '';
+			$content .= $depth == 1 ? '<a class="btn btn-link z-index-1 p-0 text-reset w-100 align-top" href="#" id="cat-submenu-'.$parent_id.'" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" aria-label><span class="sr-only">' . __( "Expand sub-categories", "geodirectory" ) . '</span><i class="fas fa-chevron-down align-top"></i></a>' : '';
 			$content .= $depth == 1 ? '<ul class="p-0 mt-1 gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '  dropdown-menu dropdown-caret-0" aria-labelledby="cat-submenu-'.$parent_id.'">' : '';
 		}else{
 			$content = '<li class="gd-cptcat-li gd-cptcat-li-sub-container"><ul class="gd-cptcat-ul gd-cptcat-sub gd-cptcat-sub-' . $depth . '">';

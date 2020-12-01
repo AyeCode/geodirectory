@@ -53,7 +53,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 						'data-toggle' => 'tooltip',
 						'data-placement' => 'left',
 						'onkeydown'       => "if(event.keyCode == 13){build_map_ajax_search_param('$map_canvas', false);}",
-						'style'         => "box-sizing: border-box;"
+						'style'         => "box-sizing: border-box;",
+						'aria-label' => esc_attr__( 'Search by name', 'geodirectory' )
 					),
 				)
 			);

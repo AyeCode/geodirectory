@@ -18,6 +18,7 @@ echo aui()->select( array(
 	'options'          => $map_post_types,
 	'no_wrap'          => true,
 	'extra_attributes' => array(
-		'onchange' => "build_map_ajax_search_param('$map_canvas', true);"
+		'onchange' => "build_map_ajax_search_param('$map_canvas', true);",
+		'aria-label' => __( 'Post Type', 'geodirectory' )
 	)
 ) );
