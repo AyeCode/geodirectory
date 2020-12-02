@@ -30,7 +30,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             'block-icon'    => 'fas fa-th-list',
             'block-category'=> 'geodirectory',
 	        'block-supports'=> array(
-		        'customClassName'   => false
+		      //  'customClassName'   => false
 	        ),
             'block-keywords'=> "['listings','posts','geo']",
             'class_name'    => __CLASS__,

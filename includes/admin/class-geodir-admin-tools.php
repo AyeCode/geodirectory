@@ -312,7 +312,7 @@ class GeoDir_Admin_Tools {
 		global $wpdb;
 
 		// Custom fields table
-		$sql  = "SELECT admin_title, frontend_desc, frontend_title, clabels, required_msg, default_value, option_values, validation_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
+		$sql  = "SELECT admin_title, frontend_desc, frontend_title, clabels, required_msg, placeholder_value, default_value, option_values, validation_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
 		$rows = $wpdb->get_results( $sql );
 
 		if ( ! empty( $rows ) ) {
@@ -335,6 +335,10 @@ class GeoDir_Admin_Tools {
 
 				if ( ! empty( $row->required_msg ) ) {
 					$translation_texts[] = stripslashes_deep( $row->required_msg );
+				}
+
+				if ( ! empty( $row->placeholder_value ) ) {
+					$translation_texts[] = stripslashes_deep( $row->placeholder_value );
 				}
 
 				if ( ! empty( $row->validation_msg ) ) {

@@ -30,7 +30,7 @@ global $post;
 			?>
 				<?php if ( $avatar_size != 0  ): ?>
 					<?php if(!empty($comment->user_id)){ ?><a href="<?php echo get_author_posts_url($comment->user_id); ?>" class="media-object float-left"><?php }?>
-						<?php echo get_avatar( $comment, $avatar_size,'mm','', array('class'=>"comment_avatar rounded-circle") ); ?>
+						<?php echo get_avatar( $comment, $avatar_size,'mm','', array('class'=>"comment_avatar rounded-circle position-relative") ); ?>
 					<?php if(!empty($comment->user_id)){ ?></a><?php }?>
 				<?php endif; ?>
 				<span class="media-heading pl-2 mr-auto h4 m-0 align-items-center d-flex justify-content-center">
