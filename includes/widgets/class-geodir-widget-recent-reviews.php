@@ -45,15 +45,17 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
                     'type' => 'text',
                     'default'  => '',
                     'desc_tip' => true,
-                    'advanced' => false
+                    'advanced' => false,
+                    'group'     => __("Title","geodirectory")
                 ),
                 'count'  => array(
                     'title' => __('Number of reviews to show:', 'geodirectory'),
                     'desc' => __('Number of reviews to show.', 'geodirectory'),
-                    'type' => 'text',
+                    'type' => 'number',
                     'default'  => '5',
                     'desc_tip' => true,
-                    'advanced' => true
+                    'advanced' => false,
+                    'group'     => __("Filter","geodirectory")
                 ),
                 'min_rating'  => array(
 	                'title' => __('Minimum rating of reviews:', 'geodirectory'),
@@ -61,7 +63,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 	                'type' => 'number',
 	                'default'  => '',
 	                'desc_tip' => true,
-	                'advanced' => true
+	                'advanced' => false,
+	                'group'     => __("Filter","geodirectory")
                 ),
 			    'add_location_filter'  => array(
 				    'title' => __("Enable location filter", 'geodirectory'),
@@ -69,7 +72,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 				    'desc_tip' => true,
 				    'value'  => '1',
 				    'default'  => 0,
-				    'advanced' => true
+				    'advanced' => false,
+				    'group'     => __("Filter","geodirectory")
 			    ),
 			    'use_viewing_post_type'  => array(
 				    'title' => __("Filter reviews for current viewing post type", 'geodirectory'),
@@ -77,7 +81,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 				    'desc_tip' => true,
 				    'value'  => '1',
 				    'default'  => 0,
-				    'advanced' => true
+				    'advanced' => false,
+				    'group'     => __("Filter","geodirectory")
 			    )
             )
         );
@@ -85,6 +90,43 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 	    $design_style = geodir_design_style();
 
 	    if($design_style) {
+
+		    // title styles
+		    $title_args = geodir_get_sd_title_inputs();
+		    $options['arguments'] = $options['arguments'] + $title_args;
+
+		    $options['arguments']['row_items'] = array(
+			    'title' => __('Row Items', 'geodirectory'),
+			    'desc' => __('The number of items in a row on desktop view.', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				    "" => __('Default (1)', 'geodirectory'),
+				    "2" => "2",
+				    "3" => "3",
+				    "4" => "4",
+				    "5" => "5",
+				    "6" => "6",
+			    ),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+
+		    $options['arguments']['carousel'] = array(
+			    'title' => __('Carousel', 'geodirectory'),
+			    'desc' => __('Display as a carousel.', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				    "" => __('None', 'geodirectory'),
+				    "slide" => __('Slide', 'geodirectory'),
+				    "fade" => __('Fade', 'geodirectory'),
+			    ),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
 
 		    // background
 		    $arguments['bg']  = geodir_get_sd_background_input('mt');
@@ -132,6 +174,8 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
             'min_rating' => 0,
 			'add_location_filter' => '',
 			'use_viewing_post_type' => '',
+	        'row_items' => '',
+	        'carousel'  => '',
             'bg'    => '',
             'mt'    => '',
             'mb'    => '3',
@@ -205,17 +249,58 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
         $use_viewing_post_type = apply_filters( 'geodir_recent_reviews_widget_use_viewing_post_type', empty( $instance['use_viewing_post_type'] ) ? false : true, $instance, $this->id_base );
         $post_type = $use_viewing_post_type ? geodir_get_current_posttype() : '';
 
-        $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter,$instance['min_rating']);
+
 
 	    // wrap class
 	    $wrap_class = geodir_build_aui_class($instance);
+
+	    $ul_class = '';
+	    $wrap_extra = '';
+	    $slider_id = 'gd-reviews-'.$this->get_instance_hash();
+	    if ( $design_style ) {
+
+
+		    if ( ! empty( $instance['carousel'] ) ) {
+			    $wrap_extra .= "data-ride='carousel'  data-limit_show='".absint( $instance['row_items'] )."'";
+			    $wrap_class .= ' carousel slide carousel-multiple-items';
+			    if ( $instance['carousel'] == 'fade' ) {
+				    $wrap_class .= ' carousel-fade';
+			    }
+
+			    $ul_class .= ' carousel-inner';
+		    }else{
+			     $ul_class .= " p-0 row row-cols-1 ";
+			    if(!empty($instance['row_items'])){
+				    $ul_class .= " row-cols-sm-" . absint( $instance['row_items'] );
+			    }
+		    }
+	    }
+
+	    $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter,$instance['min_rating'],$instance['carousel']);
 
 		$content = '';
         if ( !empty( $comments_li ) ) {
 			ob_start();
 			?>
-			<div class="geodir_recent_reviews_section <?php echo $wrap_class;?>">
-				<ul class="geodir_recent_reviews list-unstyled m-0 p-0"><?php echo $comments_li; ?></ul>
+			<div id="<?php echo $slider_id;?>" class="geodir_recent_reviews_section <?php echo $wrap_class;?> " <?php echo $wrap_extra;?> >
+				<ul class="geodir_recent_reviews list-unstyled my-0 <?php echo $ul_class;?>"><?php echo $comments_li; ?></ul>
+
+			<?php
+	        if ( $design_style && $instance['carousel']) {
+				$reviews_count = substr_count($comments_li," carousel-item");
+		        $loop_count = 0;
+		        ?>
+		        <ol class="carousel-indicators position-relative m-0">
+			        <?php
+			        while($loop_count <= $reviews_count) {
+				        $active = $loop_count == 0 ? 'active' : '';
+				        echo '<li data-target="#'.$slider_id.'" data-slide-to="'.$loop_count.'" class="my-1 mx-1 bg-dark '.$active.'"></li>';
+				        $loop_count++;
+			        }
+			        ?>
+		        </ol>
+	        <?php }?>
+
 			</div>
 			<?php
 			$content = ob_get_clean();
@@ -245,7 +330,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 	 *
 	 * @return string Returns the recent reviews html.
 	 */
-	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0 ) {
+	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0, $carousel = '' ) {
 		global $wpdb, $tablecomments, $tableposts, $rating_table_name, $table_prefix;
 		$tablecomments = $wpdb->comments;
 		$tableposts    = $wpdb->posts;
@@ -289,7 +374,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		$comments = $wpdb->get_results( $request );
 
 		$design_style = geodir_design_style();
-
+		$i = 0;
 		foreach ( $comments as $comment ) {
 			$comment_id      = $comment->comment_ID;
 			$comment_content = strip_tags( $comment->comment_content );
@@ -332,9 +417,11 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 					'comment_excerpt'  => $comment_excerpt,
 					'post_title'  => $post_title,
 					'comment_post_ID'  => $comment_post_ID,
+					'carousel'  => $carousel,
+					'active'  => $carousel && $i===0,
 				);
 				$comments_echo .= geodir_get_template_html( $template, $args );
-
+				$i++;
 			}
 		}
 

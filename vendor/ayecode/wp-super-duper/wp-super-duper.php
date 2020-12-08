@@ -2186,6 +2186,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 			} elseif ( $args['type'] == 'alignment' ) {
 				$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
+			}elseif ( $args['type'] == 'margins' ) {
+
 			} else {
 				return;// if we have not implemented the control then don't break the JS.
 			}
@@ -2205,28 +2207,186 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			echo $require_advanced;
 			// add setting require if defined
 			echo $element_require;
+
+			if($args['type']=='margins'){
+
+				if(empty($args['options'])){
+					$args['options'] = array(
+						"" => "",
+						"0" => "0",
+						"1" => "1",
+						"2" => "2",
+						"3" => "3",
+						"4" => "4",
+						"5" => "5",
+						"n5" => "-5",
+						"n4" => "-4",
+						"n3" => "-3",
+						"n2" => "-2",
+						"n1" => "-1",
+					);
+				}
+
+				$top_key = !empty($args['names']['top']) ? esc_attr($args['names']['top']) : $key."_mt";
+				$right_key = !empty($args['names']['right']) ? esc_attr($args['names']['right']) : $key."_mr";
+				$bottom_key = !empty($args['names']['bottom']) ? esc_attr($args['names']['bottom']) : $key."_mb";
+				$left_key = !empty($args['names']['left']) ? esc_attr($args['names']['left']) : $key."_ml";
+				if(false){?><script><?php }?>
+					el('div', {
+							//style: {'padding-left': '16px','padding-right': '16px'}
+							className: 'bsui',
+							label: '<?php echo addslashes( $args['title'] ); ?>',
+							help: '<?php if ( isset( $args['desc'] ) ) {
+								echo addslashes( $args['desc'] );
+							} ?>',
+
+						},
+						el(
+							'div',
+							{
+								className: 'row',
+							},
+							el(
+								'div',
+								{
+									className: 'col pr-2',
+								},
+								el('div', {
+									dangerouslySetInnerHTML: {__html: '<?php echo self::get_box_icon( 'top' ); ?>'},
+									className: 'text-center',
+								}),
+								el( wp.components.SelectControl, {
+									label: '',
+									value: props.attributes.<?php echo $top_key ;?>,
+									<?php
+									if ( ! empty( $args['options'] ) ) {
+										$options .= "options: [";
+										foreach ( $args['options'] as $option_val => $option_label ) {
+											$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+										}
+										$options .= "],";
+									}
+									echo $options;
+									?>
+									onChange: function ( <?php echo $top_key ;?> ) {
+										props.setAttributes({ <?php echo $top_key ;?>: <?php echo $top_key ;?> } )
+									}
+								}
+								)
+							),
+							el(
+								'div',
+								{
+									className: 'col pr-2 pl-0',
+								},
+								el('div', {
+									dangerouslySetInnerHTML: {__html: '<?php echo self::get_box_icon( 'right' ); ?>'},
+									className: 'text-center',
+								}),
+								el( wp.components.SelectControl, {
+										label: '',
+										value: props.attributes.<?php echo $right_key ;?>,
+										<?php
+										if ( ! empty( $args['options'] ) ) {
+											$options .= "options: [";
+											foreach ( $args['options'] as $option_val => $option_label ) {
+												$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+											}
+											$options .= "],";
+										}
+										echo $options;
+										?>
+										onChange: function ( <?php echo $right_key ;?> ) {
+											props.setAttributes({ <?php echo $right_key ;?>: <?php echo $right_key ;?> } )
+										}
+									}
+								)
+							),
+							el(
+								'div',
+								{
+									className: 'col pr-2 pl-0',
+								},
+								el('div', {
+									dangerouslySetInnerHTML: {__html: '<?php echo self::get_box_icon( 'bottom' ); ?>'},
+									className: 'text-center',
+								}),
+								el( wp.components.SelectControl, {
+										label: '',
+										value: props.attributes.<?php echo $bottom_key ;?>,
+										<?php
+										if ( ! empty( $args['options'] ) ) {
+											$options .= "options: [";
+											foreach ( $args['options'] as $option_val => $option_label ) {
+												$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+											}
+											$options .= "],";
+										}
+										echo $options;
+										?>
+										onChange: function ( <?php echo $bottom_key ;?> ) {
+											props.setAttributes({ <?php echo $bottom_key ;?>: <?php echo $bottom_key ;?> } )
+										}
+									}
+								)
+							),
+							el(
+								'div',
+								{
+									className: 'col pl-0',
+								},
+								el('div', {
+									dangerouslySetInnerHTML: {__html: '<?php echo self::get_box_icon( 'left' ); ?>'},
+									className: 'text-center',
+								}),
+								el( wp.components.SelectControl, {
+										label: '',
+										value: props.attributes.<?php echo $left_key ;?>,
+										<?php
+										if ( ! empty( $args['options'] ) ) {
+											$options .= "options: [";
+											foreach ( $args['options'] as $option_val => $option_label ) {
+												$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
+											}
+											$options .= "],";
+										}
+										echo $options;
+										?>
+										onChange: function ( <?php echo $left_key ;?> ) {
+											props.setAttributes({ <?php echo $left_key ;?>: <?php echo $left_key ;?> } )
+										}
+									}
+								)
+							),
+						)
+					)
+				<?php
+				if(false){?></script><?php }
+
+			}else{
 			?>
-			el( wp.components.<?php echo $type; ?>, {
-			label: '<?php echo addslashes( $args['title'] ); ?>',
-			help: '<?php if ( isset( $args['desc'] ) ) {
-				echo addslashes( $args['desc'] );
-			} ?>',
-			value: <?php echo $value; ?>,
-			<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
-				echo "type: '" . addslashes( $args['type'] ) . "',";
-			} ?>
-			<?php if ( ! empty( $args['placeholder'] ) ) {
-				echo "placeholder: '" . addslashes( $args['placeholder'] ) . "',";
-			} ?>
-			<?php echo $options; ?>
-			<?php echo $extra; ?>
-			<?php echo $custom_attributes; ?>
-			<?php echo $onchangecomplete;?>
-			onChange: function ( <?php echo $key; ?> ) {
-			<?php echo $onchange; ?>
+				el( wp.components.<?php echo $type; ?>, {
+				label: '<?php echo addslashes( $args['title'] ); ?>',
+				help: '<?php if ( isset( $args['desc'] ) ) {
+					echo addslashes( $args['desc'] );
+				} ?>',
+				value: <?php echo $value; ?>,
+				<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
+					echo "type: '" . addslashes( $args['type'] ) . "',";
+				} ?>
+				<?php if ( ! empty( $args['placeholder'] ) ) {
+					echo "placeholder: '" . addslashes( $args['placeholder'] ) . "',";
+				} ?>
+				<?php echo $options; ?>
+				<?php echo $extra; ?>
+				<?php echo $custom_attributes; ?>
+				<?php echo $onchangecomplete;?>
+				onChange: function ( <?php echo $key; ?> ) {
+				<?php echo $onchange; ?>
+				}
+				} ),
+				<?php
 			}
-			} ),
-			<?php
 
 		}
 
@@ -2590,7 +2750,32 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			if ( ! empty( $instance['title'] ) ) {
 				/** This filter is documented in wp-includes/widgets/class-wp-widget-pages.php */
 				$title  = apply_filters( 'widget_title', $instance['title'], $instance, $this->id_base );
-				$output = $args['before_title'] . $title . $args['after_title'];
+
+				if(empty($instance['widget_title_tag'])){
+					$output = $args['before_title'] . $title . $args['after_title'];
+				}else{
+					$title_tag = esc_attr( $instance['widget_title_tag'] );
+
+					// classes
+					$title_classes = array();
+					$title_classes[] = !empty( $instance['widget_title_size_class'] ) ? sanitize_html_class( $instance['widget_title_size_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_align_class'] ) ? sanitize_html_class( $instance['widget_title_align_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_color_class'] ) ? "text-".sanitize_html_class( $instance['widget_title_color_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_border_class'] ) ? sanitize_html_class( $instance['widget_title_border_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_border_color_class'] ) ? "border-".sanitize_html_class( $instance['widget_title_border_color_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_mt_class'] ) ? "mt-".absint( $instance['widget_title_mt_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_mr_class'] ) ? "mr-".absint( $instance['widget_title_mr_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_mb_class'] ) ? "mb-".absint( $instance['widget_title_mb_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_ml_class'] ) ? "ml-".absint( $instance['widget_title_ml_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_pt_class'] ) ? "pt-".absint( $instance['widget_title_pt_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_pr_class'] ) ? "pr-".absint( $instance['widget_title_pr_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_pb_class'] ) ? "pb-".absint( $instance['widget_title_pb_class'] ) : '';
+					$title_classes[] = !empty( $instance['widget_title_pl_class'] ) ? "pl-".absint( $instance['widget_title_pl_class'] ) : '';
+
+					$class = !empty( $title_classes ) ? implode(" ",$title_classes) : '';
+					$output = "<$title_tag class='$class' >$title</$title_tag>";
+				}
+
 			}
 
 			return $output;
@@ -2699,7 +2884,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @param $args
 		 * @param $instance
 		 */
-		public function widget_inputs( $args, $instance ) {
+		public function widget_inputs( $args, $instance, $no_wrap = false ) {
 
 			$class             = "";
 			$element_require   = "";
@@ -2737,114 +2922,187 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			// before wrapper
-			?>
-			<p class="sd-argument <?php echo esc_attr( $class ); ?>"
-			   data-argument='<?php echo esc_attr( $args['name'] ); ?>'
-			   data-element_require='<?php if ( $element_require ) {
-				   echo $this->convert_element_require( $element_require );
-			   } ?>'
-			>
+			if(!$no_wrap){
+				?>
+				<p class="sd-argument <?php echo esc_attr( $class ); ?>"
+				data-argument='<?php echo esc_attr( $args['name'] ); ?>'
+				data-element_require='<?php if ( $element_require ) {
+					echo $this->convert_element_require( $element_require );
+				} ?>'
+				>
 				<?php
+			}
 
-				switch ( $args['type'] ) {
-					//array('text','password','number','email','tel','url','color')
-					case "text":
-					case "password":
-					case "number":
-					case "email":
-					case "tel":
-					case "url":
-					case "color":
+			switch ( $args['type'] ) {
+				//array('text','password','number','email','tel','url','color')
+				case "text":
+				case "password":
+				case "number":
+				case "email":
+				case "tel":
+				case "url":
+				case "color":
+					?>
+					<label
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<input <?php echo $placeholder; ?> class="widefat"
+						<?php echo $custom_attributes; ?>
+						                               id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+						                               name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
+						                               type="<?php echo esc_attr( $args['type'] ); ?>"
+						                               value="<?php echo esc_attr( $value ); ?>">
+					<?php
+
+					break;
+				case "select":
+					$multiple = isset( $args['multiple'] ) && $args['multiple'] ? true : false;
+					if ( $multiple ) {
+						if ( empty( $value ) ) {
+							$value = array();
+						}
+					}
+					?>
+					<label
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<select <?php echo $placeholder; ?> class="widefat"
+						<?php echo $custom_attributes; ?>
+						                                id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+						                                name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) );
+						                                if ( $multiple ) {
+							                                echo "[]";
+						                                } ?>"
+						<?php if ( $multiple ) {
+							echo "multiple";
+						} //@todo not implemented yet due to gutenberg not supporting it
 						?>
-						<label
-							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-						<input <?php echo $placeholder; ?> class="widefat"
-							<?php echo $custom_attributes; ?>
-							                               id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							                               name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
-							                               type="<?php echo esc_attr( $args['type'] ); ?>"
-							                               value="<?php echo esc_attr( $value ); ?>">
+					>
 						<?php
 
-						break;
-					case "select":
-						$multiple = isset( $args['multiple'] ) && $args['multiple'] ? true : false;
-						if ( $multiple ) {
-							if ( empty( $value ) ) {
-								$value = array();
+						if ( ! empty( $args['options'] ) ) {
+							foreach ( $args['options'] as $val => $label ) {
+								if ( $multiple ) {
+									$selected = in_array( $val, $value ) ? 'selected="selected"' : '';
+								} else {
+									$selected = selected( $value, $val, false );
+								}
+								echo "<option value='$val' " . $selected . ">$label</option>";
 							}
 						}
 						?>
-						<label
-							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-						<select <?php echo $placeholder; ?> class="widefat"
-							<?php echo $custom_attributes; ?>
-							                                id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							                                name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) );
-							                                if ( $multiple ) {
-								                                echo "[]";
-							                                } ?>"
-							<?php if ( $multiple ) {
-								echo "multiple";
-							} //@todo not implemented yet due to gutenberg not supporting it
-							?>
-						>
-							<?php
+					</select>
+					<?php
+					break;
+				case "checkbox":
+					?>
+					<input <?php echo $placeholder; ?>
+						<?php checked( 1, $value, true ) ?>
+						<?php echo $custom_attributes; ?>
+						class="widefat" id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+						name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="checkbox"
+						value="1">
+					<label
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<?php
+					break;
+				case "textarea":
+					?>
+					<label
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+					<textarea <?php echo $placeholder; ?> class="widefat"
+						<?php echo $custom_attributes; ?>
+						                                  id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+						                                  name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
+					><?php echo esc_attr( $value ); ?></textarea>
+					<?php
 
-							if ( ! empty( $args['options'] ) ) {
-								foreach ( $args['options'] as $val => $label ) {
-									if ( $multiple ) {
-										$selected = in_array( $val, $value ) ? 'selected="selected"' : '';
-									} else {
-										$selected = selected( $value, $val, false );
-									}
-									echo "<option value='$val' " . $selected . ">$label</option>";
-								}
-							}
-							?>
-						</select>
-						<?php
-						break;
-					case "checkbox":
-						?>
-						<input <?php echo $placeholder; ?>
-							<?php checked( 1, $value, true ) ?>
-							<?php echo $custom_attributes; ?>
-							class="widefat" id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="checkbox"
-							value="1">
-						<label
-							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-						<?php
-						break;
-					case "textarea":
-						?>
-						<label
-							for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-						<textarea <?php echo $placeholder; ?> class="widefat"
-							<?php echo $custom_attributes; ?>
-							                                  id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-							                                  name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
-						><?php echo esc_attr( $value ); ?></textarea>
-						<?php
+					break;
+				case "margins":
+					// for use with AUI
+					$options = !empty($args['options']) ? $args['options'] : array(
+						"" => "",
+						"0" => "0",
+						"1" => "1",
+						"2" => "2",
+						"3" => "3",
+						"4" => "4",
+						"5" => "5",
+						"n5" => "-5",
+						"n4" => "-4",
+						"n3" => "-3",
+						"n2" => "-2",
+						"n1" => "-1",
+					);
+					$args['type'] = 'select';
+					$args['options'] = $options;
+					?>
+					<div class="bsui">
+						<label><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+						<div class="row text-center">
+							<div class="col pr-2">
+								<?php
+								echo self::get_box_icon( 'top' );
+								$args['desc'] = '';
+								$args['name'] = $args['name'] . "_top";
+								$args['title'] = '';
+								self::widget_inputs( $args, $instance, true );
+								?>
+							</div>
+							<div class="col pr-2 pl-0">
+								<?php
+								echo self::get_box_icon( 'right' );
+								$args['name'] = $args['name'] . "_right";
+								self::widget_inputs( $args, $instance, true );
+								?>
+							</div>
+							<div class="col pr-2 pl-0">
+								<?php
+								echo self::get_box_icon( 'bottom' );
+								$args['name'] = $args['name'] . "_bottom";
+								self::widget_inputs( $args, $instance, true );
+								?>
+							</div>
+							<div class="col pl-0">
+								<?php
+								echo self::get_box_icon( 'left' );
+								$args['name'] = $args['name'] . "_left";
+								self::widget_inputs( $args, $instance, true );
+								?>
+							</div>
+						</div>
+					</div>
+					<?php
 
-						break;
-					case "hidden":
-						?>
-						<input id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
-						       name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="hidden"
-						       value="<?php echo esc_attr( $value ); ?>">
-						<?php
-						break;
-					default:
-						echo "No input type found!"; // @todo we need to add more input types.
-				}
+					break;
+				case "hidden":
+					?>
+					<input id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
+					       name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="hidden"
+					       value="<?php echo esc_attr( $value ); ?>">
+					<?php
+					break;
+				default:
+					echo "No input type found!"; // @todo we need to add more input types.
+			}
 
-				// after wrapper
+			// after wrapper
+			if(!$no_wrap) {
 				?>
-			</p>
-			<?php
+				</p>
+				<?php
+			}
 
+		}
+
+		public function get_box_icon($highlight = 'top'){
+			if($highlight=='top'){
+				return '<svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1.048" height="9.017" fill="#555D66"></rect><rect x="16.265" y="5.498" width="1.023" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.186" width="8.964" height="2.482" fill="#272B2F"></rect><rect x="5.487" y="16.261" width="9.026" height="1.037" fill="#555D66"></rect></svg>';
+			}elseif($highlight=='right'){
+				return '<svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1.046" height="9.017" fill="#555D66"></rect><rect x="15.244" y="5.498" width="2.518" height="9.003" fill="#272B2F"></rect><rect x="5.518" y="2.719" width="8.964" height="0.954" fill="#555D66"></rect><rect x="5.487" y="16.308" width="9.026" height="0.99" fill="#555D66"></rect></svg>';
+			}elseif($highlight=='bottom'){
+				return '<svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1" height="9.017" fill="#555D66"></rect><rect x="16.261" y="5.498" width="1.027" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.719" width="8.964" height="0.968" fill="#555D66"></rect><rect x="5.487" y="15.28" width="9.026" height="2.499" fill="#272B2F"></rect></svg>';
+			}elseif($highlight=='left'){
+				return '<svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.202" y="5.492" width="2.503" height="9.017" fill="#272B2F"></rect><rect x="16.276" y="5.498" width="1.012" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.719" width="8.964" height="0.966" fill="#555D66"></rect><rect x="5.487" y="16.303" width="9.026" height="0.995" fill="#555D66"></rect></svg>';
+			}
 		}
 
 		/**

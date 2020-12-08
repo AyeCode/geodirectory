@@ -48,16 +48,18 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	 *
 	 */
 	public function set_arguments() {
-		$arguments = array(
-			'title'  => array(
+
+		$design_style = geodir_design_style();
+		$arguments = array();
+		$arguments ['title'] = array(
 				'title' => __('Title:', 'geodirectory'),
 				'desc' => __('The widget title.', 'geodirectory'),
 				'type' => 'text',
 				'default'  => '',
 				'desc_tip' => true,
 				'advanced' => false
-			),
-			'post_type'  => array(
+			);
+			$arguments['post_type'] = array(
 				'title' => __('Default Post Type:', 'geodirectory'),
 				'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
 				'type' => 'select',
@@ -65,8 +67,8 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'default'  => 'gd_place',
 				'desc_tip' => true,
 				'advanced' => true
-			),
-			'tab_layout'  => array(
+			);
+			$arguments['tab_layout'] = array(
 				'title' => __('Tabs layout:', 'geodirectory'),
 				'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
 				'type' => 'select',
@@ -79,8 +81,26 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'desc_tip' => true,
 				'advanced' => false,
 				'group'     => __("Design","geodirectory")
-			),
-			'layout'  => array(
+			);
+
+		if ( $design_style ) {
+			$arguments['tab_head_align'] = array(
+				'title' => __('Tabs align', 'geodirectory'),
+				'desc' => __('How he tabs should be aligned.', 'geodirectory'),
+				'type' => 'select',
+				'options'   =>  array(
+					'' => __('Left (default)','geodirectory'),
+					'center' => __('Center','geodirectory'),
+					'right' => __('Right','geodirectory'),
+				),
+				'default'  => 'bestof-tabs-on-top',
+				'desc_tip' => true,
+				'advanced' => false,
+				'element_require' => '[%tab_layout%]=="top"',
+				'group'     => __("Design","geodirectory")
+			);
+		}
+			$arguments['layout'] = array(
 				'title' => __('Layout', 'geodirectory'),
 				'desc' => __('How the listings should laid out by default.', 'geodirectory'),
 				'type' => 'select',
@@ -89,8 +109,8 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'desc_tip' => true,
 				'advanced' => false,
 				'group'     => __("Design","geodirectory")
-			),
-			'post_limit'  => array(
+			);
+			$arguments['post_limit'] = array(
 				'title' => __('Posts to show:', 'geodirectory'),
 				'desc' => __('The number of posts to show by default.', 'geodirectory'),
 				'type' => 'number',
@@ -99,8 +119,8 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'advanced' => false,
 				'group'     => __("Design","geodirectory")
 
-			),
-			'cat_limit'  => array(
+			);
+			$arguments['cat_limit'] = array(
 				'title' => __('Categories to show:', 'geodirectory'),
 				'desc' => __('The number of categories to show by default.', 'geodirectory'),
 				'type' => 'number',
@@ -108,26 +128,26 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 				'desc_tip' => true,
 				'advanced' => false,
 				'group'     => __("Design","geodirectory")
-			),
-			'add_location_filter'  => array(
+			);
+			$arguments['add_location_filter'] = array(
 				'title' => __("Enable location filter?", 'geodirectory'),
 				'type' => 'checkbox',
 				'desc_tip' => true,
 				'value'  => '1',
 				'default'  => '1',
 				'advanced' => true
-			),
-			'use_viewing_post_type'  => array(
+			);
+			$arguments['use_viewing_post_type'] = array(
 				'title' => __("Use current viewing post type?", 'geodirectory'),
 				'type' => 'checkbox',
 				'desc_tip' => true,
 				'value'  => '1',
 				'default'  => '1',
 				'advanced' => true
-			),
-		);
+			);
 
-	    $design_style = geodir_design_style();
+
+
 
 	    if($design_style) {
 
@@ -447,6 +467,11 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 	            }
             } else {
 	            $tabs_class = $tabs_left ? 'flex-column nav-pills' : 'nav-tabs';
+	            if ( ! empty( $instance['tab_head_align'] ) && ! empty( $instance['tab_layout'] ) && $instance['tab_layout']=='top' && $instance['tab_head_align']=='center' ) {
+		            $tabs_class .= ' justify-content-center';
+	            }elseif ( ! empty( $instance['tab_head_align'] ) && ! empty( $instance['tab_layout'] ) && $instance['tab_layout']=='top' && $instance['tab_head_align']=='right' ) {
+		            $tabs_class .= ' justify-content-end';
+	            }
                 $nav_html .= $design_style ? '<ul class="geodir-tab-head geodir-bestof-cat-list m-0 mb-3 nav '.$tabs_class.'">' :  '<ul class="geodir-tab-head geodir-bestof-cat-list">';
             }
 
