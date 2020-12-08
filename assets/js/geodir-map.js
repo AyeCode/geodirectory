@@ -280,6 +280,8 @@ window.geodirMapScriptOnError = function(el) {
 
                         $loading.after($lazyload);
                     }
+                } else if (options.forceLoad) {
+                    $this.data('loadMap', true);
                 }
             }
 

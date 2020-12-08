@@ -1582,7 +1582,7 @@ function gd_manually_set_user_position($msg){
             // map center is off due to lightbox zoom effect so we resize to fix
             setTimeout(function(){
                 jQuery('.aui-modal .geodir_map_container').css('width','90%').css('width','99.99999%');
-                window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
+                window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old kool.
             }, 500);
 
             jQuery( window ).off($prefix+'_trigger');

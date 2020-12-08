@@ -10,8 +10,9 @@
 
 /**
  * @global int $mapzoom Zoom level value for the map.
+ * @global bool $geodir_manual_map Check if manual map.
  */
-global $mapzoom,$geodir_label_type;
+global $mapzoom, $geodir_manual_map, $geodir_label_type;
 
 /**
  * Filter the map restriction for specific address only
@@ -749,6 +750,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 		<?php if ( geodir_lazy_load_map() ) { ?>
 		jQuery("#<?php echo $prefix.'map';?>").geodirLoadMap({
 		loadJS: true,
+		forceLoad: <?php echo ( isset( $geodir_manual_map ) && $geodir_manual_map ? 'true' : 'false' ); ?>,
 		callback: function() {<?php } ?>
         var $addressMap = $("#<?php echo $prefix.'map';?>").goMap({
             latitude: <?php echo $prefix;?>CITY_MAP_CENTER_LAT,

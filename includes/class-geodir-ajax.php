@@ -163,7 +163,7 @@ class GeoDir_AJAX {
 	 * @since 2.0.0
 	 */
 	public static function manual_map() {
-		global $geodirectory, $mapzoom;
+		global $geodirectory, $mapzoom, $geodir_manual_map;
 
 		$prefix = isset( $_POST['trigger'] ) ? esc_attr( $_POST['trigger'] ) : 'geodir_manual_location_';
 
@@ -177,6 +177,7 @@ class GeoDir_AJAX {
 		$mapzoom = 8;
 
 		$design_style = geodir_design_style();
+		$geodir_manual_map = true;
 
 		// Try and center the map as close to the user as possible.
 		if ( $ip = geodir_get_ip() ) {
