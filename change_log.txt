@@ -9,6 +9,7 @@
 * Category widget now has option to align items of partial rows - ADDED
 * Review output avatar now set as position relative to prevent theme CSS breaking alignment - CHANGED
 * Map on set manual location popup not working with lazy load - FIXED
+* Multiselect checkbox field with AUI is not working in add listing - FIXED
 
 = 2.1.0.5 =
 * JavaScript error breaks Divi visual builder when bootstrap style enabled - FIXED
