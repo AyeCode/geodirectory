@@ -1630,7 +1630,20 @@ function geodir_widget_listings_pagination(id, params) {
                 jQuery('.pagination a.page-link', $paging).each(function() {
                     href = jQuery(this).attr('href');
                     hrefs = href.split("#");
-                    page = (hrefs.length > 1 && parseInt(hrefs[1]) > 0 ? parseInt(hrefs[1]) : (parseInt(jQuery(this).text()) > 0 ? parseInt(jQuery(this).text()) : 1));
+                    page = (hrefs.length > 1 && parseInt(hrefs[1]) > 0 ? parseInt(hrefs[1]) : (parseInt(jQuery(this).text()) > 0 ? parseInt(jQuery(this).text()) : 0));
+                    if (!page > 0) {
+                        var cpage = parseInt(jQuery(this).closest('.pagination').find('[aria-current="page"]').text());
+                        if (cpage > 0) {
+                            if (jQuery(this).hasClass('next')) {
+                                page = cpage + 1;
+                            } else if (jQuery(this).hasClass('prev')) {
+                                page = cpage - 1;
+                            }
+                        }
+                    }
+                    if (!page > 0) {
+                        page = 1;
+                    }
                     jQuery(this).attr('data-geodir-pagenum', page);
                     jQuery(this).attr('href', 'javascript:void(0)');
                 });
