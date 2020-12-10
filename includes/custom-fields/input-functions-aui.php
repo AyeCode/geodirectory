@@ -624,220 +624,215 @@ add_filter('geodir_custom_field_input_select','geodir_cfi_select',10,2);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cfi_multiselect($html,$cf){
+function geodir_cfi_multiselect( $html, $cf ) {
+	$html_var = $cf['htmlvar_name'];
 
-    $html_var = $cf['htmlvar_name'];
+	// Check if there is a custom field specific filter.
+	if ( has_filter( "geodir_custom_field_input_multiselect_{$html_var}" ) ) {
+		/**
+		 * Filter the multiselect html by individual custom field.
+		 *
+		 * @param string $html The html to filter.
+		 * @param array $cf The custom field array.
+		 * @since 1.6.6
+		 */
+		$html = apply_filters( "geodir_custom_field_input_multiselect_{$html_var}", $html, $cf );
+	}
 
-    // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_input_multiselect_{$html_var}")){
-        /**
-         * Filter the multiselect html by individual custom field.
-         *
-         * @param string $html The html to filter.
-         * @param array $cf The custom field array.
-         * @since 1.6.6
-         */
-        $html = apply_filters("geodir_custom_field_input_multiselect_{$html_var}",$html,$cf);
-    }
+	// If no html then we run the standard output.
+	if ( empty( $html ) ) {
+		global $geodir_label_type;
+		$extra_attributes = array();
+		$_value = geodir_get_cf_value($cf);
+		$extra_fields = !empty($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : NULL;
+		$multi_display = !empty($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
+		$title = '';
+		$id = $cf['htmlvar_name'];
+		//validation
+		if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+			$extra_attributes['pattern'] = $cf['validation_pattern'];
+		}
 
-    // If no html then we run the standard output.
-    if(empty($html)) {
-        global $geodir_label_type;
-        $extra_attributes = array();
-        $_value = geodir_get_cf_value($cf);
-        $extra_fields = !empty($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : NULL;
-        $multi_display = !empty($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
-        $title = '';
-        $id = $cf['htmlvar_name'];
-        //validation
-        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
-            $extra_attributes['pattern'] = $cf['validation_pattern'];
-        }
+		// validation message
+		if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
+			$title = $cf['validation_msg'];
+		}
 
-        // validation message
-        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
-            $title = $cf['validation_msg'];
-        }
+		// required
+		$required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
-        // required
-        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+		// help text
+		$help_text = __( $cf['desc'], 'geodirectory' );
 
-        // help text
-        $help_text = __( $cf['desc'], 'geodirectory' );
+		// placeholder
+		$placeholder = esc_attr__( $cf['placeholder_value'], 'geodirectory' );
+		if ( empty( $placeholder ) ) {
+			$placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), __($cf['frontend_title'], 'geodirectory'));
+		}
 
-        // placeholder
-        $placeholder = esc_attr__( $cf['placeholder_value'], 'geodirectory' );
-        if ( empty( $placeholder ) ) {
-            $placeholder = wp_sprintf( __( 'Select %s&hellip;', 'geodirectory' ), __($cf['frontend_title'], 'geodirectory'));
-        }
+		$value = ( ! is_array( $_value ) && $_value !== '' ) ? trim( $_value ) : $_value;
+		if ( ! is_array( $value ) ) {
+			$value = explode( ',', $value );
+		}
 
-        $value = ( ! is_array( $_value ) && $_value !== '' ) ? trim( $_value ) : $_value;
-        if ( ! is_array( $value ) ) {
-            $value = explode( ',', $value );
-        }
+		if ( ! empty( $value ) ) {
+			$value = stripslashes_deep( $value );
+			$value = array_map( 'trim', $value );
+		}
+		$value = array_filter( $value );
 
-        if ( ! empty( $value ) ) {
-            $value = stripslashes_deep( $value );
-            $value = array_map( 'trim', $value );
-        }
-        $value = array_filter( $value );
+		//extra
+		$extra_attributes['data-placeholder'] = esc_attr( $placeholder );
+		$extra_attributes['option-ajaxchosen'] = 'false';
+		$extra_attributes['data-allow_clear'] = 'true';
 
-        //extra
-        $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
-        $extra_attributes['option-ajaxchosen'] = 'false';
-        $extra_attributes['data-allow_clear'] = 'true';
+		// admin only
+		$admin_only = geodir_cfi_admin_only( $cf );
 
-        // admin only
-        $admin_only = geodir_cfi_admin_only($cf);
+		if ( $multi_display == 'select' ) {
+			$html .= aui()->select( array(
+				'id'                 => $cf['name'],
+				'name'               => $cf['name'],
+				'title'              => $title,
+				'placeholder'        => $placeholder,
+				'value'              => $value,
+				'required'           => ! empty( $cf['is_required'] ) ? true : false,
+				'label_show'         => true,
+				'label_type'         => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
+				'label'              => __( $cf['frontend_title'], 'geodirectory' ) . $admin_only . $required,
+				'validation_text'    => ! empty( $cf['validation_msg'] ) ? $cf['validation_msg'] : '',
+				'validation_pattern' => ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
+				'help_text'          => $help_text,
+				'extra_attributes'   => $extra_attributes,
+				'options'            => geodir_string_values_to_options( $cf['option_values'], true ),
+				'select2'            => true,
+				'multiple'           => true,
+			) );
+		} elseif ( $multi_display == 'radiox' ) {
+			$option_values_deep = geodir_string_to_options( $cf['option_values'], true );
+			$option_values = array();
 
-        if ( $multi_display == 'select' ) {
-            $html .= aui()->select( array(
-                'id'                 => $cf['name'],
-                'name'               => $cf['name'],
-                'title'              => $title,
-                'placeholder'        => $placeholder,
-                'value'              => $value,
-                'required'           => ! empty( $cf['is_required'] ) ? true : false,
-                'label_show'         => true,
-                'label_type'         => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
-                'label'              => __( $cf['frontend_title'], 'geodirectory' ) . $admin_only . $required,
-                'validation_text'    => ! empty( $cf['validation_msg'] ) ? $cf['validation_msg'] : '',
-                'validation_pattern' => ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
-                'help_text'          => $help_text,
-                'extra_attributes'   => $extra_attributes,
-                'options'            => geodir_string_values_to_options( $cf['option_values'], true ),
-                'select2'            => true,
-                'multiple'           => true,
-            ) );
-        }elseif( $multi_display == 'radiox' ){
-        $option_values_deep = geodir_string_to_options($cf['option_values'],true);
-        $option_values = array();
-        if(!empty($option_values_deep)){
-            foreach($option_values_deep as $option){
-                $option_values[$option['value']] = $option['label'];
-            }
-        }
+			if ( ! empty( $option_values_deep ) ) {
+				foreach( $option_values_deep as $option ) {
+					$option_values[$option['value']] = $option['label'];
+				}
+			}
 
-//	        $html .= "<div class=' border rounded px-2 scrollbars-ios' style='max-height: 150px;overflow-y:auto;overflow-x: hidden;'>";
-	        $html .= aui()->radio(
-	            array(
-	                'id'                => $cf['name'],
-	                'name'              => $cf['name'],
-	                'type'              => "radio",
-	                'inline'            => false,
-	                'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
-	                'label'             => esc_attr__($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-	                'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
-	                'class'             => '',
-	                'value'             => $value,
-	                'options'           => $option_values
-	            )
-	        );
-//	        $html .= '</div>';
-        }else{
-            $horizontal = true;
-            ob_start();
-            ?>
-            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row ">
+			$html .= aui()->radio(
+				array(
+					'id'                => $cf['name'],
+					'name'              => $cf['name'],
+					'type'              => "radio",
+					'inline'            => false,
+					'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
+					'label'             => esc_attr__($cf['frontend_title'], 'geodirectory').$admin_only.$required,
+					'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+					'class'             => '',
+					'value'             => $value,
+					'options'           => $option_values
+				)
+			);
+		} else {
+			$horizontal = true;
+			ob_start();
+			?>
+			<div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row ">
+				<label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
+					<?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
+					echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
+					<?php if ( $cf['is_required'] ) {
+						echo '<span>*</span>';
+					} ?>
+				</label>
+			<?php
 
+			if ( $horizontal ) {
+				echo "<div class='col-sm-10 mt-2' ><div class=' border rounded px-2 scrollbars-ios' style='max-height: 150px;overflow-y:auto;overflow-x: hidden;'>";
+			}
 
-                <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
-                    <?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
-                    echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
-                    <?php if ( $cf['is_required'] ) {
-                        echo '<span>*</span>';
-                    } ?>
-                </label>
-            <?php
+			$option_values_arr = geodir_string_values_to_options( $cf['option_values'], true );
 
-            if($horizontal){echo "<div class='col-sm-10 mt-2' ><div class=' border rounded px-2 scrollbars-ios' style='max-height: 150px;overflow-y:auto;overflow-x: hidden;'>";}
+			if ( ! empty( $option_values_arr ) ) {
+				foreach ( $option_values_arr as $i => $option_row ) {
+					if ( isset( $option_row['optgroup'] ) && ( $option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end' ) ) {
+						$option_label = isset($option_row['label']) ? $option_row['label'] : '';
 
-            $option_values_arr = geodir_string_values_to_options($cf['option_values'], true);
-            $select_options = '';
-            if (!empty($option_values_arr)) {
-                foreach ($option_values_arr as $option_row) {
-                    if (isset($option_row['optgroup']) && ($option_row['optgroup'] == 'start' || $option_row['optgroup'] == 'end')) {
-                        $option_label = isset($option_row['label']) ? $option_row['label'] : '';
+						echo $option_row['optgroup'] == 'start' ? '<h6>' . $option_label . '</h6>' : '';
+					} else {
+						if ( ! is_array( $value) && $value != '' ) {
+							$value = trim( $value );
+						}
 
-                        echo $option_row['optgroup'] == 'start' ? '<h6>' . $option_label . '</h6>' : '';
-                    } else {
-                        if (!is_array($value) && $value != '') {
-                            $value = trim($value);
-                        }
+						$option_label = isset($option_row['label']) ? $option_row['label'] : '';
+						$option_value = isset($option_row['value']) ? $option_row['value'] : '';
+						$checked = '';
 
-                        $option_label = isset($option_row['label']) ? $option_row['label'] : '';
-                        $option_value = isset($option_row['value']) ? $option_row['value'] : '';
-                        $checked = '';
+						if ( ( ! is_array( $value ) && trim( $value ) != '' ) || ( is_array( $value ) && ! empty( $value ) ) ) {
+							if ( ! is_array( $value ) ) {
+								$value_array = explode( ',', $value );
+							} else {
+								$value_array = $value;
+							}
 
-                        if ((!is_array($value) && trim($value) != '') || (is_array($value) && !empty($value))) {
-                            if (!is_array($value)) {
-                                $value_array = explode(',', $value);
-                            } else {
-                                $value_array = $value;
-                            }
+							$value_array = stripslashes_deep( $value_array );
 
-                            $value_array = stripslashes_deep($value_array);
+							if ( is_array( $value_array ) ) {
+								$value_array = array_map( 'trim', $value_array );
 
-                            if (is_array($value_array)) {
-                                $value_array = array_map('trim', $value_array);
+								if ( in_array( $option_value, $value_array ) ) {
+									$checked = 'checked="checked"';
+								}
+							}
+						}
 
-                                if (in_array($option_value, $value_array)) {
-                                    $checked = 'checked="checked"';
-                                }
-                            }
-                        }
+						if ( $multi_display == 'checkbox' ) {
+							echo aui()->input(
+									array(
+										'name'             => $cf['name'] . '[]',
+										'id'               => $cf['name'] .'_'. $i,
+										'type'             => esc_attr( $multi_display ),
+										'value'            => esc_attr( $option_value ),
+										'title'            => $title,
+										'label'            => $option_label,
+										'label_type'       => 'hidden',
+										'no_wrap'          => true,
+										'checked'          => $checked,
+									)
+								);
+						} else {
+							if ( is_array( $value ) ) {
+								$value = ! empty( $value ) ? $value[0] : '';
+							}
+							echo aui()->radio(
+								array(
+									'name'              => $cf['name'],
+									'id'                => $cf['name'] .'_'. $i,
+									'type'              => "radio",
+									'inline'            => false,
+									'label'             => '',
+									'label_type'        => 'hidden',
+									'wrap_class'        => 'mb-1',
+									'class'             => '',
+									'value'             => $value,
+									'options'           => array( esc_attr( $option_value ) => $option_label )
+								)
+							);
+						}
+					}
+				}
+			}
 
-                        if($multi_display == 'checkbox'){
-                        echo aui()->input(
-                                array(
-                                    'name'             => $cf['name'].'[]',
-                                    'type'             => esc_attr($multi_display),
-                                    'value'            => esc_attr($option_value),
-                                    'title'            => $title,
-                                    'label'            => $option_label,
-                                    'label_type'       => 'hidden',
-                                    'no_wrap'          => true,
-                                    'checked'          => $checked,
-                                )
-                            );
-                        }else{
-                         echo aui()->radio(
-				            array(
-				                'name'              => $cf['name'].'[]',
-				                'type'              => "radio",
-				                'inline'            => false,
-//				                'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
-				                'label'             => '',
-				                'label_type'       => 'hidden',
-				                'wrap_class'        => 'mb-0',
-				                'class'             => '',
-				                'value'             => $value,
-				                'options'           => array(esc_attr($option_value)=>$option_label)
-				            )
-				        );
-                        }
+			if ( $horizontal ) {
+				echo "</div></div>";
+			}
 
+			echo "</div>";
 
+			$html .= ob_get_clean();
+		}
+	}
 
-
-
-                        $select_options .= '<li><input name="' . $cf['name'] . '[]" ' . $checked . ' value="' . esc_attr($option_value) . '" class="gd-' . $multi_display . '" field_type="' . $multi_display . '" type="' . $multi_display . '" />&nbsp;' . $option_label . ' </li>';
-
-                    }
-                }
-
-//                echo $select_options ;
-            }
-
-            if($horizontal){echo "</div></div>";}
-
-            echo "</div>";
-            $html .= ob_get_clean();
-        }
-
-    }
-
-    return $html;
+	return $html;
 }
 add_filter('geodir_custom_field_input_multiselect','geodir_cfi_multiselect',10,2);
 
@@ -1167,7 +1162,7 @@ function geodir_cfi_address( $html, $cf ) {
         $prefix = $name . '_';
         $street2_title = '';
 
-        // steet2
+        // street2
         if(!isset($extra_fields['street2_lable'])){$extra_fields['street2_lable'] = '';}
 
         ($frontend_title != '') ? $address_title = $frontend_title : $address_title = geodir_ucwords($prefix . ' street');
