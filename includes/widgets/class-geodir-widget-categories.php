@@ -371,36 +371,6 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		    // shadow
 		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
 
-
-//		    $options['arguments']['x_margins'] = array(
-//			    'title' => __('Margins', 'geodirectory'),
-//			    'desc' => __('Set the margins', 'geodirectory'),
-//			    'type' => 'margins',
-//			    'names' => array(
-//				    'top' => 'x_mt',
-//				    'right' => 'x_mr',
-//				    'bottom' => 'x_mb',
-//				    'left' => 'x_ml',
-//			    ),
-////			    'options'   =>  array(
-////				    "" => __('Boxed Small', 'geodirectory'),
-////				    "box-medium" => __('Boxed Medium', 'geodirectory'),
-////				    "box-large" => __('Boxed Large', 'geodirectory'),
-////				    "h1" => 'XXL',
-////				    "h2" => 'XL',
-////				    "h3" => 'L',
-////				    "h4" => 'M',
-////				    "h5" => 'S',
-////				    "h6" => 'XS',
-////			    ),
-//			    'default'  => '',
-//			    'desc_tip' => true,
-//			    'advanced' => false,
-////			    'element_require' => '[%design_type%]!="image"',
-//			    'group'     => __("Design","geodirectory")
-//		    );
-
-
 		    $options['arguments'] = $options['arguments'] + $arguments;
 	    }
 

@@ -1949,8 +1949,13 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										},
 										<?php
 
+
+
 										foreach ( $args as $k => $a ) {
+
+											$this->block_row_start( $k, $a );
 											$this->build_block_arguments( $k, $a );
+											$this->block_row_end( $k, $a );
 										}
 										?>
 									),
@@ -1966,7 +1971,9 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										},
 										<?php
 										foreach ( $this->arguments as $key => $args ) {
+											$this->block_row_start( $key, $args );
 											$this->build_block_arguments( $key, $args );
+											$this->block_row_end( $key, $args );
 										}
 										?>
 									),
@@ -2081,6 +2088,84 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			), '', $output );
 		}
 
+		public function block_row_start($key, $args){
+
+			// check for row
+			if(!empty($args['row'])){
+
+				if(!empty($args['row']['open'])){
+
+				// element require
+				$element_require = ! empty( $args['element_require'] ) ? $this->block_props_replace( $args['element_require'], true ) . " && " : "";
+				echo $element_require;
+
+					if(false){?><script><?php }?>
+						el('div', {
+								className: 'bsui components-base-control',
+							},
+							<?php if(!empty($args['row']['title'])){ ?>
+							el('label', {
+									className: 'components-base-control__label',
+								},
+								'<?php echo addslashes( $args['row']['title'] ); ?>'
+							),
+							<?php }?>
+							<?php if(!empty($args['row']['desc'])){ ?>
+							el('p', {
+									className: 'components-base-control__help mb-0',
+								},
+								'<?php echo addslashes( $args['row']['desc'] ); ?>'
+							),
+							<?php }?>
+							el(
+								'div',
+								{
+									className: 'row mb-n2 <?php if(!empty($args['row']['class'])){ echo esc_attr($args['row']['class']);} ?>',
+								},
+								el(
+									'div',
+									{
+										className: 'col pr-2',
+									},
+
+					<?php
+					if(false){?></script><?php }
+				}elseif(!empty($args['row']['close'])){
+					if(false){?><script><?php }?>
+						el(
+							'div',
+							{
+								className: 'col pl-0',
+							},
+					<?php
+					if(false){?></script><?php }
+				}else{
+					if(false){?><script><?php }?>
+						el(
+							'div',
+							{
+								className: 'col pl-0 pr-2',
+							},
+					<?php
+					if(false){?></script><?php }
+				}
+
+			}
+
+		}
+
+		public function block_row_end($key, $args){
+
+			if(!empty($args['row'])){
+				// maybe close
+				if(!empty($args['row']['close'])){
+					echo "))";
+				}
+
+				echo "),";
+			}
+		}
+
 		public function build_block_arguments( $key, $args ) {
 			$custom_attributes = ! empty( $args['custom_attributes'] ) ? $this->array_to_attributes( $args['custom_attributes'] ) : '';
 			$options           = '';
@@ -2090,6 +2175,20 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			// `content` is a protected and special argument
 			if ( $key == 'content' ) {
 				return;
+			}
+
+
+			// icon
+			$icon = '';
+			if( !empty( $args['icon'] ) ){
+				$icon .= "el('div', {";
+									$icon .= "dangerouslySetInnerHTML: {__html: '".self::get_widget_icon( esc_attr($args['icon']))."'},";
+									$icon .= "className: 'text-center',";
+									$icon .= "title: '".addslashes( $args['title'] )."',";
+								$icon .= "}),";
+
+				// blank title as its added to the icon.
+				$args['title'] = '';
 			}
 
 			// require advanced
@@ -2208,185 +2307,31 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			// add setting require if defined
 			echo $element_require;
 
-			if($args['type']=='margins'){
-
-				if(empty($args['options'])){
-					$args['options'] = array(
-						"" => "",
-						"0" => "0",
-						"1" => "1",
-						"2" => "2",
-						"3" => "3",
-						"4" => "4",
-						"5" => "5",
-						"n5" => "-5",
-						"n4" => "-4",
-						"n3" => "-3",
-						"n2" => "-2",
-						"n1" => "-1",
-					);
-				}
-
-				$top_key = !empty($args['names']['top']) ? esc_attr($args['names']['top']) : $key."_mt";
-				$right_key = !empty($args['names']['right']) ? esc_attr($args['names']['right']) : $key."_mr";
-				$bottom_key = !empty($args['names']['bottom']) ? esc_attr($args['names']['bottom']) : $key."_mb";
-				$left_key = !empty($args['names']['left']) ? esc_attr($args['names']['left']) : $key."_ml";
-				if(false){?><script><?php }?>
-					el('div', {
-							//style: {'padding-left': '16px','padding-right': '16px'}
-							className: 'bsui',
-							label: '<?php echo addslashes( $args['title'] ); ?>',
-							help: '<?php if ( isset( $args['desc'] ) ) {
-								echo addslashes( $args['desc'] );
-							} ?>',
-
-						},
-						el(
-							'div',
-							{
-								className: 'row',
-							},
-							el(
-								'div',
-								{
-									className: 'col pr-2',
-								},
-								el('div', {
-									dangerouslySetInnerHTML: {__html: '<?php echo self::get_box_icon( 'top' ); ?>'},
-									className: 'text-center',
-								}),
-								el( wp.components.SelectControl, {
-									label: '',
-									value: props.attributes.<?php echo $top_key ;?>,
-									<?php
-									if ( ! empty( $args['options'] ) ) {
-										$options .= "options: [";
-										foreach ( $args['options'] as $option_val => $option_label ) {
-											$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
-										}
-										$options .= "],";
-									}
-									echo $options;
-									?>
-									onChange: function ( <?php echo $top_key ;?> ) {
-										props.setAttributes({ <?php echo $top_key ;?>: <?php echo $top_key ;?> } )
-									}
-								}
-								)
-							),
-							el(
-								'div',
-								{
-									className: 'col pr-2 pl-0',
-								},
-								el('div', {
-									dangerouslySetInnerHTML: {__html: '<?php echo self::get_box_icon( 'right' ); ?>'},
-									className: 'text-center',
-								}),
-								el( wp.components.SelectControl, {
-										label: '',
-										value: props.attributes.<?php echo $right_key ;?>,
-										<?php
-										if ( ! empty( $args['options'] ) ) {
-											$options .= "options: [";
-											foreach ( $args['options'] as $option_val => $option_label ) {
-												$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
-											}
-											$options .= "],";
-										}
-										echo $options;
-										?>
-										onChange: function ( <?php echo $right_key ;?> ) {
-											props.setAttributes({ <?php echo $right_key ;?>: <?php echo $right_key ;?> } )
-										}
-									}
-								)
-							),
-							el(
-								'div',
-								{
-									className: 'col pr-2 pl-0',
-								},
-								el('div', {
-									dangerouslySetInnerHTML: {__html: '<?php echo self::get_box_icon( 'bottom' ); ?>'},
-									className: 'text-center',
-								}),
-								el( wp.components.SelectControl, {
-										label: '',
-										value: props.attributes.<?php echo $bottom_key ;?>,
-										<?php
-										if ( ! empty( $args['options'] ) ) {
-											$options .= "options: [";
-											foreach ( $args['options'] as $option_val => $option_label ) {
-												$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
-											}
-											$options .= "],";
-										}
-										echo $options;
-										?>
-										onChange: function ( <?php echo $bottom_key ;?> ) {
-											props.setAttributes({ <?php echo $bottom_key ;?>: <?php echo $bottom_key ;?> } )
-										}
-									}
-								)
-							),
-							el(
-								'div',
-								{
-									className: 'col pl-0',
-								},
-								el('div', {
-									dangerouslySetInnerHTML: {__html: '<?php echo self::get_box_icon( 'left' ); ?>'},
-									className: 'text-center',
-								}),
-								el( wp.components.SelectControl, {
-										label: '',
-										value: props.attributes.<?php echo $left_key ;?>,
-										<?php
-										if ( ! empty( $args['options'] ) ) {
-											$options .= "options: [";
-											foreach ( $args['options'] as $option_val => $option_label ) {
-												$options .= "{ value: '" . esc_attr( $option_val ) . "', label: '" . addslashes( $option_label ) . "' },";
-											}
-											$options .= "],";
-										}
-										echo $options;
-										?>
-										onChange: function ( <?php echo $left_key ;?> ) {
-											props.setAttributes({ <?php echo $left_key ;?>: <?php echo $left_key ;?> } )
-										}
-									}
-								)
-							),
-						)
-					)
-				<?php
-				if(false){?></script><?php }
-
-			}else{
+			// icon
+			echo $icon;
 			?>
-				el( wp.components.<?php echo $type; ?>, {
-				label: '<?php echo addslashes( $args['title'] ); ?>',
-				help: '<?php if ( isset( $args['desc'] ) ) {
-					echo addslashes( $args['desc'] );
-				} ?>',
-				value: <?php echo $value; ?>,
-				<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
-					echo "type: '" . addslashes( $args['type'] ) . "',";
-				} ?>
-				<?php if ( ! empty( $args['placeholder'] ) ) {
-					echo "placeholder: '" . addslashes( $args['placeholder'] ) . "',";
-				} ?>
-				<?php echo $options; ?>
-				<?php echo $extra; ?>
-				<?php echo $custom_attributes; ?>
-				<?php echo $onchangecomplete;?>
-				onChange: function ( <?php echo $key; ?> ) {
-				<?php echo $onchange; ?>
-				}
-				} ),
-				<?php
+			el( wp.components.<?php echo $type; ?>, {
+			label: '<?php echo addslashes( $args['title'] ); ?>',
+			help: '<?php if ( isset( $args['desc'] ) ) {
+				echo addslashes( $args['desc'] );
+			} ?>',
+			value: <?php echo $value; ?>,
+			<?php if ( $type == 'TextControl' && $args['type'] != 'text' ) {
+				echo "type: '" . addslashes( $args['type'] ) . "',";
+			} ?>
+			<?php if ( ! empty( $args['placeholder'] ) ) {
+				echo "placeholder: '" . addslashes( $args['placeholder'] ) . "',";
+			} ?>
+			<?php echo $options; ?>
+			<?php echo $extra; ?>
+			<?php echo $custom_attributes; ?>
+			<?php echo $onchangecomplete;?>
+			onChange: function ( <?php echo $key; ?> ) {
+			<?php echo $onchange; ?>
 			}
+			} ),
+			<?php
+
 
 		}
 
@@ -2821,7 +2766,11 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						echo "<div class='sd-toggle-group sd-input-group-" . sanitize_title_with_dashes( $key ) . "' $hide>";
 
 						foreach ( $args as $k => $a ) {
+
+							$this->widget_inputs_row_start($k, $a);
 							$this->widget_inputs( $a, $instance );
+							$this->widget_inputs_row_end($k, $a);
+
 						}
 
 						echo "</div>";
@@ -2831,10 +2780,46 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 				} else {
 					foreach ( $arguments as $key => $args ) {
+						$this->widget_inputs_row_start($key, $args);
 						$this->widget_inputs( $args, $instance );
+						$this->widget_inputs_row_end($key, $args);
 					}
 				}
 
+			}
+		}
+
+		public function widget_inputs_row_start($key, $args){
+			if(!empty($args['row'])){
+				// maybe open
+				if(!empty($args['row']['open'])){
+					?>
+					<div class='bsui sd-argument ' data-argument='<?php echo esc_attr( $args['row']['key'] ); ?>' data-element_require='<?php if ( !empty($args['row']['element_require'])) {
+						echo $this->convert_element_require( $args['row']['element_require'] );
+					} ?>'>
+					<?php if(!empty($args['row']['title'])){ ?>
+					<label class="mb-0 "><?php echo esc_attr( $args['row']['title'] ); ?><?php echo $this->widget_field_desc( $args['row'] ); ?></label>
+					<?php }?>
+					<div class='row <?php if(!empty($args['row']['class'])){ echo esc_attr($args['row']['class']);} ?>'>
+					<div class='col pr-2'>
+					<?php
+				}elseif(!empty($args['row']['close'])){
+					echo "<div class='col pl-0'>";
+				}else{
+					echo "<div class='col pl-0 pr-2'>";
+				}
+			}
+		}
+
+		public function widget_inputs_row_end($key, $args){
+
+			if(!empty($args['row'])){
+				// maybe close
+				if(!empty($args['row']['close'])){
+					echo "</div></div>";
+				}
+
+				echo "</div>";
 			}
 		}
 
@@ -2884,7 +2869,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @param $args
 		 * @param $instance
 		 */
-		public function widget_inputs( $args, $instance, $no_wrap = false ) {
+		public function widget_inputs( $args, $instance ) {
 
 			$class             = "";
 			$element_require   = "";
@@ -2921,17 +2906,17 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$custom_attributes = $this->array_to_attributes( $args['custom_attributes'], true );
 			}
 
+
 			// before wrapper
-			if(!$no_wrap){
-				?>
-				<p class="sd-argument <?php echo esc_attr( $class ); ?>"
-				data-argument='<?php echo esc_attr( $args['name'] ); ?>'
-				data-element_require='<?php if ( $element_require ) {
-					echo $this->convert_element_require( $element_require );
-				} ?>'
-				>
-				<?php
-			}
+			?>
+			<p class="sd-argument <?php echo esc_attr( $class ); ?>"
+			data-argument='<?php echo esc_attr( $args['name'] ); ?>'
+			data-element_require='<?php if ( $element_require ) {
+				echo $this->convert_element_require( $element_require );
+			} ?>'
+			>
+			<?php
+
 
 			switch ( $args['type'] ) {
 				//array('text','password','number','email','tel','url','color')
@@ -2944,7 +2929,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				case "color":
 					?>
 					<label
-						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args );?><?php echo $this->widget_field_desc( $args ); ?></label>
 					<input <?php echo $placeholder; ?> class="widefat"
 						<?php echo $custom_attributes; ?>
 						                               id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
@@ -2963,7 +2948,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 					?>
 					<label
-						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
 					<select <?php echo $placeholder; ?> class="widefat"
 						<?php echo $custom_attributes; ?>
 						                                id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
@@ -3001,75 +2986,18 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>" type="checkbox"
 						value="1">
 					<label
-						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args );?><?php echo $this->widget_field_desc( $args ); ?></label>
 					<?php
 					break;
 				case "textarea":
 					?>
 					<label
-						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
+						for="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"><?php echo $this->widget_field_title( $args ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
 					<textarea <?php echo $placeholder; ?> class="widefat"
 						<?php echo $custom_attributes; ?>
 						                                  id="<?php echo esc_attr( $this->get_field_id( $args['name'] ) ); ?>"
 						                                  name="<?php echo esc_attr( $this->get_field_name( $args['name'] ) ); ?>"
 					><?php echo esc_attr( $value ); ?></textarea>
-					<?php
-
-					break;
-				case "margins":
-					// for use with AUI
-					$options = !empty($args['options']) ? $args['options'] : array(
-						"" => "",
-						"0" => "0",
-						"1" => "1",
-						"2" => "2",
-						"3" => "3",
-						"4" => "4",
-						"5" => "5",
-						"n5" => "-5",
-						"n4" => "-4",
-						"n3" => "-3",
-						"n2" => "-2",
-						"n1" => "-1",
-					);
-					$args['type'] = 'select';
-					$args['options'] = $options;
-					?>
-					<div class="bsui">
-						<label><?php echo esc_attr( $args['title'] ); ?><?php echo $this->widget_field_desc( $args ); ?></label>
-						<div class="row text-center">
-							<div class="col pr-2">
-								<?php
-								echo self::get_box_icon( 'top' );
-								$args['desc'] = '';
-								$args['name'] = $args['name'] . "_top";
-								$args['title'] = '';
-								self::widget_inputs( $args, $instance, true );
-								?>
-							</div>
-							<div class="col pr-2 pl-0">
-								<?php
-								echo self::get_box_icon( 'right' );
-								$args['name'] = $args['name'] . "_right";
-								self::widget_inputs( $args, $instance, true );
-								?>
-							</div>
-							<div class="col pr-2 pl-0">
-								<?php
-								echo self::get_box_icon( 'bottom' );
-								$args['name'] = $args['name'] . "_bottom";
-								self::widget_inputs( $args, $instance, true );
-								?>
-							</div>
-							<div class="col pl-0">
-								<?php
-								echo self::get_box_icon( 'left' );
-								$args['name'] = $args['name'] . "_left";
-								self::widget_inputs( $args, $instance, true );
-								?>
-							</div>
-						</div>
-					</div>
 					<?php
 
 					break;
@@ -3085,23 +3013,22 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			// after wrapper
-			if(!$no_wrap) {
-				?>
-				</p>
-				<?php
-			}
+			?>
+			</p>
+			<?php
+
 
 		}
 
-		public function get_box_icon($highlight = 'top'){
-			if($highlight=='top'){
-				return '<svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1.048" height="9.017" fill="#555D66"></rect><rect x="16.265" y="5.498" width="1.023" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.186" width="8.964" height="2.482" fill="#272B2F"></rect><rect x="5.487" y="16.261" width="9.026" height="1.037" fill="#555D66"></rect></svg>';
-			}elseif($highlight=='right'){
-				return '<svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1.046" height="9.017" fill="#555D66"></rect><rect x="15.244" y="5.498" width="2.518" height="9.003" fill="#272B2F"></rect><rect x="5.518" y="2.719" width="8.964" height="0.954" fill="#555D66"></rect><rect x="5.487" y="16.308" width="9.026" height="0.99" fill="#555D66"></rect></svg>';
-			}elseif($highlight=='bottom'){
-				return '<svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1" height="9.017" fill="#555D66"></rect><rect x="16.261" y="5.498" width="1.027" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.719" width="8.964" height="0.968" fill="#555D66"></rect><rect x="5.487" y="15.28" width="9.026" height="2.499" fill="#272B2F"></rect></svg>';
-			}elseif($highlight=='left'){
-				return '<svg width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.202" y="5.492" width="2.503" height="9.017" fill="#272B2F"></rect><rect x="16.276" y="5.498" width="1.012" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.719" width="8.964" height="0.966" fill="#555D66"></rect><rect x="5.487" y="16.303" width="9.026" height="0.995" fill="#555D66"></rect></svg>';
+		public function get_widget_icon($icon = 'box-top', $title = ''){
+			if($icon=='box-top'){
+				return '<svg title="'.esc_attr($title).'" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1.048" height="9.017" fill="#555D66"></rect><rect x="16.265" y="5.498" width="1.023" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.186" width="8.964" height="2.482" fill="#272B2F"></rect><rect x="5.487" y="16.261" width="9.026" height="1.037" fill="#555D66"></rect></svg>';
+			}elseif($icon=='box-right'){
+				return '<svg title="'.esc_attr($title).'" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1.046" height="9.017" fill="#555D66"></rect><rect x="15.244" y="5.498" width="2.518" height="9.003" fill="#272B2F"></rect><rect x="5.518" y="2.719" width="8.964" height="0.954" fill="#555D66"></rect><rect x="5.487" y="16.308" width="9.026" height="0.99" fill="#555D66"></rect></svg>';
+			}elseif($icon=='box-bottom'){
+				return '<svg title="'.esc_attr($title).'" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.714" y="5.492" width="1" height="9.017" fill="#555D66"></rect><rect x="16.261" y="5.498" width="1.027" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.719" width="8.964" height="0.968" fill="#555D66"></rect><rect x="5.487" y="15.28" width="9.026" height="2.499" fill="#272B2F"></rect></svg>';
+			}elseif($icon=='box-left'){
+				return '<svg title="'.esc_attr($title).'" width="20px" height="20px" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd" stroke-linejoin="round" stroke-miterlimit="1.414" role="img" aria-hidden="true" focusable="false"><rect x="2.202" y="5.492" width="2.503" height="9.017" fill="#272B2F"></rect><rect x="16.276" y="5.498" width="1.012" height="9.003" fill="#555D66"></rect><rect x="5.518" y="2.719" width="8.964" height="0.966" fill="#555D66"></rect><rect x="5.487" y="16.303" width="9.026" height="0.995" fill="#555D66"></rect></svg>';
 			}
 		}
 
@@ -3125,6 +3052,27 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			}
 
 			return $description;
+		}
+
+		/**
+		 * Get the widget input title html.
+		 *
+		 * @param $args
+		 *
+		 * @return string
+		 */
+		public function widget_field_title( $args ) {
+
+			$title = '';
+			if ( isset( $args['title'] ) && $args['title'] ) {
+				if ( isset( $args['icon'] ) && $args['icon'] ) {
+					$title = self::get_widget_icon( $args['icon'], $args['title']  );
+				} else {
+					$title = esc_attr($args['title']);
+				}
+			}
+
+			return $title;
 		}
 
 		/**
