@@ -49,6 +49,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'type' => 'text',
                     'default'  => '',
                     'desc_tip' => true,
+                    'group'     => __("Title","geodirectory"),
                     'advanced' => false
                 ),
                 'post_type'  => array(
@@ -227,6 +228,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	    $design_style = geodir_design_style();
 
 	    if($design_style){
+
+		    // title styles
+		    $title_args = geodir_get_sd_title_inputs();
+		    $options['arguments'] = $options['arguments'] + $title_args;
+
 		    $options['arguments']['design_type'] = array(
 			    'title' => __('Design Type', 'geodirectory'),
 			    'desc' => __('Set the design type', 'geodirectory'),
@@ -364,7 +370,6 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 		    // shadow
 		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
-
 
 		    $options['arguments'] = $options['arguments'] + $arguments;
 	    }
