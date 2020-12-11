@@ -54,7 +54,7 @@ $icon = '';
 if(!$hide_icon){
 	$img_class =  ' d-inline-block mr-1 align-middle h1';
 	$cat_icon = str_replace('<i class="','<i style="opacity:0.8;" class="d-block ', $cat_icon);
-	$icon = "<div class='gd-cptcat-cat-left border-0 m-0 overflow-hidden embed-responsive-item $img_class' >$cat_icon</div>";
+	$icon = "<div class='gd-cptcat-cat-left border-0 m-0 overflow-hidden embed-responsive-item text-center $img_class' >$cat_icon</div>";
 }
 
 ?>
