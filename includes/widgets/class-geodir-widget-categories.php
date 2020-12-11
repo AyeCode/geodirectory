@@ -851,8 +851,16 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 						$cat_color ='';
 
 						if(!$hide_icon) {
+							$term_icon_class = '';
+							if ( $design_style ) {
+								$term_icon_class = 'mw-100 mh-100';
+								if ( ! empty($args['design_type']) && $args['design_type'] == 'image' ) {
+									$term_icon_class .= ' embed-item-contain align-top card-img';
+								}
+							}
+							$term_icon_class = $term_icon_class != '' ? ' class="' . $term_icon_class . '"' : '';
 							$term_icon_url = ! empty( $term_icons ) && isset( $term_icons[ $category->term_id ] ) ? $term_icons[ $category->term_id ] : '';
-							$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr( $category->name ) . ' icon" src="' . $term_icon_url . '" /> ' : '';
+							$term_icon_url = $term_icon_url != '' ? '<img alt="' . esc_attr( $category->name ) . ' icon" src="' . $term_icon_url . '" ' . $term_icon_class . '/> ' : '';
 							$cat_font_icon = get_term_meta( $category->term_id, 'ct_cat_font_icon', true );
 							$cat_color     = get_term_meta( $category->term_id, 'ct_cat_color', true );
 							$cat_color     = $cat_color ? $cat_color : '#ababab';
@@ -862,7 +870,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 								$term_image = get_term_meta( $category->term_id, 'ct_cat_default_img', true );
 								if(!empty($term_image['id'])){
 									$cat_font_icon = false;
-									$img_background_class = !empty($args['design_type']) && $args['design_type']=='image' ? ' card-img' : '';
+									$img_background_class = !empty($args['design_type']) && $args['design_type']=='image' ? ' card-img' : 'mw-100 mh-100';
 									$img_args = $design_style ? array('class'=>'embed-item-cover-xy align-top '.$img_background_class) : array();
 									$term_icon_url = wp_get_attachment_image($term_image['id'],'medium',false,$img_args);
 								}

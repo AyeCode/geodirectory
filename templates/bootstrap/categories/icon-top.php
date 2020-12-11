@@ -60,7 +60,7 @@ if(!$hide_icon){
 	if($icon_size_class=='box-small'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconsmall';}
 	$icon_size_class .= ' d-inline-block align-middle';
 	$img_class =  $icon_size_class;
-	$icon = "<div class='gd-cptcat-cat-left border-0 mb-3 overflow-hidden  $img_class' ><span class='gd-cptcat-icon' style='color: ".sanitize_hex_color($cat_color)." ;'>$cat_icon</span></div>";
+	$icon = "<div class='gd-cptcat-cat-left border-0 mb-3 overflow-hidden  $img_class'><span class='gd-cptcat-icon' " . ( $cat_color ? " style='color:" . sanitize_hex_color( $cat_color ) . ";'" : '' ) . ">$cat_icon</span></div>";
 }
 
 ?>
