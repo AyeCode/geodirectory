@@ -1203,376 +1203,707 @@
                     }
                 });
                 L.Routing.Localization = L.extend(L.Routing.Localization, {
-                    "en": {
+                    'en': {
                         directions: {
-                            N: "north",
-                            NE: "northeast",
-                            E: "east",
-                            SE: "southeast",
-                            S: "south",
-                            SW: "southwest",
-                            W: "west",
-                            NW: "northwest",
-                            SlightRight: "slight right",
-                            Right: "right",
-                            SharpRight: "sharp right",
-                            SlightLeft: "slight left",
-                            Left: "left",
-                            SharpLeft: "sharp left"
+                            N: 'north',
+                            NE: 'northeast',
+                            E: 'east',
+                            SE: 'southeast',
+                            S: 'south',
+                            SW: 'southwest',
+                            W: 'west',
+                            NW: 'northwest',
+                            SlightRight: 'slight right',
+                            Right: 'right',
+                            SharpRight: 'sharp right',
+                            SlightLeft: 'slight left',
+                            Left: 'left',
+                            SharpLeft: 'sharp left',
+                            Uturn: 'Turn around'
                         },
                         instructions: {
-                            "Head": ["Head {dir}", " on {road}"],
-                            "Continue": ["Continue {dir}"],
-                            "TurnAround": ["Turn around"],
-                            "WaypointReached": ["Waypoint reached"],
-                            "Roundabout": ["Take the {exitStr} exit in the roundabout", " onto {road}"],
-                            "DestinationReached": ["Destination reached"],
-                            "Fork": ["At the fork, turn {modifier}", " onto {road}"],
-                            "Merge": ["Merge {modifier}", " onto {road}"],
-                            "OnRamp": ["Turn {modifier} on the ramp", " onto {road}"],
-                            "OffRamp": ["Take the ramp on the {modifier}", " onto {road}"],
-                            "EndOfRoad": ["Turn {modifier} at the end of the road", " onto {road}"],
-                            "Onto": "onto {road}"
+                            // instruction, postfix if the road is named
+                            'Head': ['Head {dir}', ' on {road}'],
+                            'Continue': ['Continue {dir}'],
+                            'TurnAround': ['Turn around'],
+                            'WaypointReached': ['Waypoint reached'],
+                            'Roundabout': ['Take the {exitStr} exit in the roundabout', ' onto {road}'],
+                            'DestinationReached': ['Destination reached'],
+                            'Fork': ['At the fork, turn {modifier}', ' onto {road}'],
+                            'Merge': ['Merge {modifier}', ' onto {road}'],
+                            'OnRamp': ['Turn {modifier} on the ramp', ' onto {road}'],
+                            'OffRamp': ['Take the ramp on the {modifier}', ' onto {road}'],
+                            'EndOfRoad': ['Turn {modifier} at the end of the road', ' onto {road}'],
+                            'Onto': 'onto {road}'
                         },
                         formatOrder: function(n) {
                             var i = n % 10 - 1,
-                                suffix = ["st", "nd", "rd"];
-                            return suffix[i] ? n + suffix[i] : n + "th"
+                                suffix = ['st', 'nd', 'rd'];
+
+                            return suffix[i] ? n + suffix[i] : n + 'th';
                         },
                         ui: {
-                            startPlaceholder: "Start",
-                            viaPlaceholder: "Via {viaNumber}",
-                            endPlaceholder: "Enter Your Location"
+                            startPlaceholder: 'Start',
+                            viaPlaceholder: 'Via {viaNumber}',
+                            endPlaceholder: 'End'
                         },
                         units: {
-                            meters: "m",
-                            kilometers: "km",
-                            yards: "yd",
-                            miles: "mi",
-                            hours: "h",
-                            minutes: "m\u00edn",
-                            seconds: "s"
+                            meters: 'm',
+                            kilometers: 'km',
+                            yards: 'yd',
+                            miles: 'mi',
+                            hours: 'h',
+                            minutes: 'min',
+                            seconds: 's'
                         }
                     },
-                    "de": {
+
+                    'de': {
                         directions: {
-                            N: "Norden",
-                            NE: "Nordosten",
-                            E: "Osten",
-                            SE: "S\u00fcdosten",
-                            S: "S\u00fcden",
-                            SW: "S\u00fcdwesten",
-                            W: "Westen",
-                            NW: "Nordwesten"
+                            N: 'Norden',
+                            NE: 'Nordosten',
+                            E: 'Osten',
+                            SE: 'Südosten',
+                            S: 'Süden',
+                            SW: 'Südwesten',
+                            W: 'Westen',
+                            NW: 'Nordwesten',
+                            SlightRight: 'leicht rechts',
+                            Right: 'rechts',
+                            SharpRight: 'scharf rechts',
+                            SlightLeft: 'leicht links',
+                            Left: 'links',
+                            SharpLeft: 'scharf links',
+                            Uturn: 'Wenden'
                         },
                         instructions: {
-                            "Head": ["Richtung {dir}", " auf {road}"],
-                            "Continue": ["Geradeaus Richtung {dir}", " auf {road}"],
-                            "SlightRight": ["Leicht rechts abbiegen", " auf {road}"],
-                            "Right": ["Rechts abbiegen", " auf {road}"],
-                            "SharpRight": ["Scharf rechts abbiegen", " auf {road}"],
-                            "TurnAround": ["Wenden"],
-                            "SharpLeft": ["Scharf links abbiegen", " auf {road}"],
-                            "Left": ["Links abbiegen", " auf {road}"],
-                            "SlightLeft": ["Leicht links abbiegen", " auf {road}"],
-                            "WaypointReached": ["Zwischenhalt erreicht"],
-                            "Roundabout": ["Nehmen Sie die {exitStr} Ausfahrt im Kreisverkehr", " auf {road}"],
-                            "DestinationReached": ["Sie haben ihr Ziel erreicht"]
+                            // instruction, postfix if the road is named
+                            'Head': ['Richtung {dir}', ' auf {road}'],
+                            'Continue': ['Geradeaus Richtung {dir}', ' auf {road}'],
+                            'SlightRight': ['Leicht rechts abbiegen', ' auf {road}'],
+                            'Right': ['Rechts abbiegen', ' auf {road}'],
+                            'SharpRight': ['Scharf rechts abbiegen', ' auf {road}'],
+                            'TurnAround': ['Wenden'],
+                            'SharpLeft': ['Scharf links abbiegen', ' auf {road}'],
+                            'Left': ['Links abbiegen', ' auf {road}'],
+                            'SlightLeft': ['Leicht links abbiegen', ' auf {road}'],
+                            'WaypointReached': ['Zwischenhalt erreicht'],
+                            'Roundabout': ['Nehmen Sie die {exitStr} Ausfahrt im Kreisverkehr', ' auf {road}'],
+                            'DestinationReached': ['Sie haben ihr Ziel erreicht'],
+                            'Fork': ['An der Kreuzung {modifier}', ' auf {road}'],
+                            'Merge': ['Fahren Sie {modifier} weiter', ' auf {road}'],
+                            'OnRamp': ['Fahren Sie {modifier} auf die Auffahrt', ' auf {road}'],
+                            'OffRamp': ['Nehmen Sie die Ausfahrt {modifier}', ' auf {road}'],
+                            'EndOfRoad': ['Fahren Sie {modifier} am Ende der Straße', ' auf {road}'],
+                            'Onto': 'auf {road}'
                         },
                         formatOrder: function(n) {
-                            return n + "."
+                            return n + '.';
                         },
                         ui: {
-                            startPlaceholder: "Start",
-                            viaPlaceholder: "Via {viaNumber}",
-                            endPlaceholder: "Ziel"
+                            startPlaceholder: 'Start',
+                            viaPlaceholder: 'Via {viaNumber}',
+                            endPlaceholder: 'Ziel'
                         }
                     },
-                    "sv": {
+
+                    'sv': {
                         directions: {
-                            N: "norr",
-                            NE: "nordost",
-                            E: "\u00f6st",
-                            SE: "sydost",
-                            S: "syd",
-                            SW: "sydv\u00e4st",
-                            W: "v\u00e4st",
-                            NW: "nordv\u00e4st",
-                            SlightRight: "svagt h\u00f6ger",
-                            Right: "h\u00f6ger",
-                            SharpRight: "skarpt h\u00f6ger",
-                            SlightLeft: "svagt v\u00e4nster",
-                            Left: "v\u00e4nster",
-                            SharpLeft: "skarpt v\u00e4nster"
+                            N: 'norr',
+                            NE: 'nordost',
+                            E: 'öst',
+                            SE: 'sydost',
+                            S: 'syd',
+                            SW: 'sydväst',
+                            W: 'väst',
+                            NW: 'nordväst',
+                            SlightRight: 'svagt höger',
+                            Right: 'höger',
+                            SharpRight: 'skarpt höger',
+                            SlightLeft: 'svagt vänster',
+                            Left: 'vänster',
+                            SharpLeft: 'skarpt vänster',
+                            Uturn: 'Vänd'
                         },
                         instructions: {
-                            "Head": ["\u00c5k \u00e5t {dir}", " till {road}"],
-                            "Continue": ["Forts\u00e4tt {dir}"],
-                            "SlightRight": ["Svagt h\u00f6ger", " till {road}"],
-                            "Right": ["Sv\u00e4ng h\u00f6ger", " till {road}"],
-                            "SharpRight": ["Skarpt h\u00f6ger", " till {road}"],
-                            "TurnAround": ["V\u00e4nd"],
-                            "SharpLeft": ["Skarpt v\u00e4nster", " till {road}"],
-                            "Left": ["Sv\u00e4ng v\u00e4nster", " till {road}"],
-                            "SlightLeft": ["Svagt v\u00e4nster", " till {road}"],
-                            "WaypointReached": ["Viapunkt n\u00e5dd"],
-                            "Roundabout": ["Tag {exitStr} avfarten i rondellen", " till {road}"],
-                            "DestinationReached": ["Framme vid resans m\u00e5l"],
-                            "Fork": ["Tag av {modifier}", " till {road}"],
-                            "Merge": ["Anslut {modifier} ", " till {road}"],
-                            "OnRamp": ["Tag p\u00e5farten {modifier}", " till {road}"],
-                            "OffRamp": ["Tag avfarten {modifier}", " till {road}"],
-                            "EndOfRoad": ["Sv\u00e4ng {modifier} vid v\u00e4gens slut", " till {road}"],
-                            "Onto": "till {road}"
+                            // instruction, postfix if the road is named
+                            'Head': ['Åk åt {dir}', ' till {road}'],
+                            'Continue': ['Fortsätt {dir}'],
+                            'SlightRight': ['Svagt höger', ' till {road}'],
+                            'Right': ['Sväng höger', ' till {road}'],
+                            'SharpRight': ['Skarpt höger', ' till {road}'],
+                            'TurnAround': ['Vänd'],
+                            'SharpLeft': ['Skarpt vänster', ' till {road}'],
+                            'Left': ['Sväng vänster', ' till {road}'],
+                            'SlightLeft': ['Svagt vänster', ' till {road}'],
+                            'WaypointReached': ['Viapunkt nådd'],
+                            'Roundabout': ['Tag {exitStr} avfarten i rondellen', ' till {road}'],
+                            'DestinationReached': ['Framme vid resans mål'],
+                            'Fork': ['Tag av {modifier}', ' till {road}'],
+                            'Merge': ['Anslut {modifier} ', ' till {road}'],
+                            'OnRamp': ['Tag påfarten {modifier}', ' till {road}'],
+                            'OffRamp': ['Tag avfarten {modifier}', ' till {road}'],
+                            'EndOfRoad': ['Sväng {modifier} vid vägens slut', ' till {road}'],
+                            'Onto': 'till {road}'
                         },
                         formatOrder: function(n) {
-                            return ["f\u00f6rsta", "andra", "tredje", "fj\u00e4rde", "femte", "sj\u00e4tte", "sjunde", "\u00e5ttonde", "nionde", "tionde"][n - 1]
+                            return ['första', 'andra', 'tredje', 'fjärde', 'femte',
+                                'sjätte', 'sjunde', 'åttonde', 'nionde', 'tionde'
+                                /* Can't possibly be more than ten exits, can there? */
+                            ][n - 1];
                         },
                         ui: {
-                            startPlaceholder: "Fr\u00e5n",
-                            viaPlaceholder: "Via {viaNumber}",
-                            endPlaceholder: "Till"
+                            startPlaceholder: 'Från',
+                            viaPlaceholder: 'Via {viaNumber}',
+                            endPlaceholder: 'Till'
                         }
                     },
-                    "sp": {
+
+                    'es': {
                         directions: {
-                            N: "norte",
-                            NE: "noreste",
-                            E: "este",
-                            SE: "sureste",
-                            S: "sur",
-                            SW: "suroeste",
-                            W: "oeste",
-                            NW: "noroeste"
+                            N: 'norte',
+                            NE: 'noreste',
+                            E: 'este',
+                            SE: 'sureste',
+                            S: 'sur',
+                            SW: 'suroeste',
+                            W: 'oeste',
+                            NW: 'noroeste',
+                            SlightRight: 'leve giro a la derecha',
+                            Right: 'derecha',
+                            SharpRight: 'giro pronunciado a la derecha',
+                            SlightLeft: 'leve giro a la izquierda',
+                            Left: 'izquierda',
+                            SharpLeft: 'giro pronunciado a la izquierda',
+                            Uturn: 'media vuelta'
                         },
                         instructions: {
-                            "Head": ["Derecho {dir}", " sobre {road}"],
-                            "Continue": ["Continuar {dir}", " en {road}"],
-                            "SlightRight": ["Leve giro a la derecha", " sobre {road}"],
-                            "Right": ["Derecha", " sobre {road}"],
-                            "SharpRight": ["Giro pronunciado a la derecha", " sobre {road}"],
-                            "TurnAround": ["Dar vuelta"],
-                            "SharpLeft": ["Giro pronunciado a la izquierda", " sobre {road}"],
-                            "Left": ["Izquierda", " en {road}"],
-                            "SlightLeft": ["Leve giro a la izquierda", " en {road}"],
-                            "WaypointReached": ["Lleg\u00f3 a un punto del camino"],
-                            "Roundabout": ["Tomar {exitStr} salida en la rotonda", " en {road}"],
-                            "DestinationReached": ["Llegada a destino"]
+                            // instruction, postfix if the road is named
+                            'Head': ['Derecho {dir}', ' sobre {road}'],
+                            'Continue': ['Continuar {dir}', ' en {road}'],
+                            'TurnAround': ['Dar vuelta'],
+                            'WaypointReached': ['Llegó a un punto del camino'],
+                            'Roundabout': ['Tomar {exitStr} salida en la rotonda', ' en {road}'],
+                            'DestinationReached': ['Llegada a destino'],
+                            'Fork': ['En el cruce gira a {modifier}', ' hacia {road}'],
+                            'Merge': ['Incorpórate {modifier}', ' hacia {road}'],
+                            'OnRamp': ['Gira {modifier} en la salida', ' hacia {road}'],
+                            'OffRamp': ['Toma la salida {modifier}', ' hacia {road}'],
+                            'EndOfRoad': ['Gira {modifier} al final de la carretera', ' hacia {road}'],
+                            'Onto': 'hacia {road}'
                         },
                         formatOrder: function(n) {
-                            return n + "\u00ba"
+                            return n + 'º';
                         },
                         ui: {
-                            startPlaceholder: "Inicio",
-                            viaPlaceholder: "Via {viaNumber}",
-                            endPlaceholder: "Destino"
+                            startPlaceholder: 'Inicio',
+                            viaPlaceholder: 'Via {viaNumber}',
+                            endPlaceholder: 'Destino'
+                        },
+                        units: {
+                            meters: 'm',
+                            kilometers: 'km',
+                            yards: 'yd',
+                            miles: 'mi',
+                            hours: 'h',
+                            minutes: 'min',
+                            seconds: 's'
                         }
                     },
-                    "nl": {
+                    'sp': {
                         directions: {
-                            N: "noordelijke",
-                            NE: "noordoostelijke",
-                            E: "oostelijke",
-                            SE: "zuidoostelijke",
-                            S: "zuidelijke",
-                            SW: "zuidewestelijke",
-                            W: "westelijke",
-                            NW: "noordwestelijke"
+                            N: 'norte',
+                            NE: 'noreste',
+                            E: 'este',
+                            SE: 'sureste',
+                            S: 'sur',
+                            SW: 'suroeste',
+                            W: 'oeste',
+                            NW: 'noroeste',
+                            SlightRight: 'leve giro a la derecha',
+                            Right: 'derecha',
+                            SharpRight: 'giro pronunciado a la derecha',
+                            SlightLeft: 'leve giro a la izquierda',
+                            Left: 'izquierda',
+                            SharpLeft: 'giro pronunciado a la izquierda',
+                            Uturn: 'media vuelta'
                         },
                         instructions: {
-                            "Head": ["Vertrek in {dir} richting", " de {road} op"],
-                            "Continue": ["Ga in {dir} richting", " de {road} op"],
-                            "SlightRight": ["Volg de weg naar rechts", " de {road} op"],
-                            "Right": ["Ga rechtsaf", " de {road} op"],
-                            "SharpRight": ["Ga scherpe bocht naar rechts", " de {road} op"],
-                            "TurnAround": ["Keer om"],
-                            "SharpLeft": ["Ga scherpe bocht naar links", " de {road} op"],
-                            "Left": ["Ga linksaf", " de {road} op"],
-                            "SlightLeft": ["Volg de weg naar links", " de {road} op"],
-                            "WaypointReached": ["Aangekomen bij tussenpunt"],
-                            "Roundabout": ["Neem de {exitStr} afslag op de rotonde", " de {road} op"],
-                            "DestinationReached": ["Aangekomen op eindpunt"]
+                            // instruction, postfix if the road is named
+                            'Head': ['Derecho {dir}', ' sobre {road}'],
+                            'Continue': ['Continuar {dir}', ' en {road}'],
+                            'TurnAround': ['Dar vuelta'],
+                            'WaypointReached': ['Llegó a un punto del camino'],
+                            'Roundabout': ['Tomar {exitStr} salida en la rotonda', ' en {road}'],
+                            'DestinationReached': ['Llegada a destino'],
+                            'Fork': ['En el cruce gira a {modifier}', ' hacia {road}'],
+                            'Merge': ['Incorpórate {modifier}', ' hacia {road}'],
+                            'OnRamp': ['Gira {modifier} en la salida', ' hacia {road}'],
+                            'OffRamp': ['Toma la salida {modifier}', ' hacia {road}'],
+                            'EndOfRoad': ['Gira {modifier} al final de la carretera', ' hacia {road}'],
+                            'Onto': 'hacia {road}'
                         },
                         formatOrder: function(n) {
-                            if (n === 1 || n >= 20) return n + "ste";
-                            else return n + "de"
+                            return n + 'º';
                         },
                         ui: {
-                            startPlaceholder: "Vertrekpunt",
-                            viaPlaceholder: "Via {viaNumber}",
-                            endPlaceholder: "Bestemming"
+                            startPlaceholder: 'Inicio',
+                            viaPlaceholder: 'Via {viaNumber}',
+                            endPlaceholder: 'Destino'
+                        },
+                        units: {
+                            meters: 'm',
+                            kilometers: 'km',
+                            yards: 'yd',
+                            miles: 'mi',
+                            hours: 'h',
+                            minutes: 'min',
+                            seconds: 's'
                         }
                     },
-                    "fr": {
+
+                    'nl': {
                         directions: {
-                            N: "nord",
-                            NE: "nord-est",
-                            E: "est",
-                            SE: "sud-est",
-                            S: "sud",
-                            SW: "sud-ouest",
-                            W: "ouest",
-                            NW: "nord-ouest"
+                            N: 'noordelijke',
+                            NE: 'noordoostelijke',
+                            E: 'oostelijke',
+                            SE: 'zuidoostelijke',
+                            S: 'zuidelijke',
+                            SW: 'zuidewestelijke',
+                            W: 'westelijke',
+                            NW: 'noordwestelijke'
                         },
                         instructions: {
-                            "Head": ["Tout droit au {dir}", " sur {road}"],
-                            "Continue": ["Continuer au {dir}", " sur {road}"],
-                            "SlightRight": ["L\u00e9g\u00e8rement \u00e0 droite", " sur {road}"],
-                            "Right": ["A droite", " sur {road}"],
-                            "SharpRight": ["Compl\u00e8tement \u00e0 droite", " sur {road}"],
-                            "TurnAround": ["Faire demi-tour"],
-                            "SharpLeft": ["Compl\u00e8tement \u00e0 gauche", " sur {road}"],
-                            "Left": ["A gauche", " sur {road}"],
-                            "SlightLeft": ["L\u00e9g\u00e8rement \u00e0 gauche", " sur {road}"],
-                            "WaypointReached": ["Point d'\u00e9tape atteint"],
-                            "Roundabout": ["Au rond-point, prenez la {exitStr} sortie", " sur {road}"],
-                            "DestinationReached": ["Destination atteinte"]
+                            // instruction, postfix if the road is named
+                            'Head': ['Vertrek in {dir} richting', ' de {road} op'],
+                            'Continue': ['Ga in {dir} richting', ' de {road} op'],
+                            'SlightRight': ['Volg de weg naar rechts', ' de {road} op'],
+                            'Right': ['Ga rechtsaf', ' de {road} op'],
+                            'SharpRight': ['Ga scherpe bocht naar rechts', ' de {road} op'],
+                            'TurnAround': ['Keer om'],
+                            'SharpLeft': ['Ga scherpe bocht naar links', ' de {road} op'],
+                            'Left': ['Ga linksaf', ' de {road} op'],
+                            'SlightLeft': ['Volg de weg naar links', ' de {road} op'],
+                            'WaypointReached': ['Aangekomen bij tussenpunt'],
+                            'Roundabout': ['Neem de {exitStr} afslag op de rotonde', ' de {road} op'],
+                            'DestinationReached': ['Aangekomen op eindpunt'],
                         },
                         formatOrder: function(n) {
-                            return n + "\u00ba"
+                            if (n === 1 || n >= 20) {
+                                return n + 'ste';
+                            } else {
+                                return n + 'de';
+                            }
                         },
                         ui: {
-                            startPlaceholder: "D\u00e9part",
-                            viaPlaceholder: "Interm\u00e9diaire {viaNumber}",
-                            endPlaceholder: "Arriv\u00e9e"
+                            startPlaceholder: 'Vertrekpunt',
+                            viaPlaceholder: 'Via {viaNumber}',
+                            endPlaceholder: 'Bestemming'
                         }
                     },
-                    "it": {
+                    'fr': {
                         directions: {
-                            N: "nord",
-                            NE: "nord-est",
-                            E: "est",
-                            SE: "sud-est",
-                            S: "sud",
-                            SW: "sud-ovest",
-                            W: "ovest",
-                            NW: "nord-ovest"
+                            N: 'nord',
+                            NE: 'nord-est',
+                            E: 'est',
+                            SE: 'sud-est',
+                            S: 'sud',
+                            SW: 'sud-ouest',
+                            W: 'ouest',
+                            NW: 'nord-ouest'
                         },
                         instructions: {
-                            "Head": ["Dritto verso {dir}", " su {road}"],
-                            "Continue": ["Continuare verso {dir}", " su {road}"],
-                            "SlightRight": ["Mantenere la destra", " su {road}"],
-                            "Right": ["A destra", " su {road}"],
-                            "SharpRight": ["Strettamente a destra", " su {road}"],
-                            "TurnAround": ["Fare inversione di marcia"],
-                            "SharpLeft": ["Strettamente a sinistra", " su {road}"],
-                            "Left": ["A sinistra", " sur {road}"],
-                            "SlightLeft": ["Mantenere la sinistra", " su {road}"],
-                            "WaypointReached": ["Punto di passaggio raggiunto"],
-                            "Roundabout": ["Alla rotonda, prendere la {exitStr} uscita"],
-                            "DestinationReached": ["Destinazione raggiunta"]
+                            // instruction, postfix if the road is named
+                            'Head': ['Tout droit au {dir}', ' sur {road}'],
+                            'Continue': ['Continuer au {dir}', ' sur {road}'],
+                            'SlightRight': ['Légèrement à droite', ' sur {road}'],
+                            'Right': ['A droite', ' sur {road}'],
+                            'SharpRight': ['Complètement à droite', ' sur {road}'],
+                            'TurnAround': ['Faire demi-tour'],
+                            'SharpLeft': ['Complètement à gauche', ' sur {road}'],
+                            'Left': ['A gauche', ' sur {road}'],
+                            'SlightLeft': ['Légèrement à gauche', ' sur {road}'],
+                            'WaypointReached': ['Point d\'étape atteint'],
+                            'Roundabout': ['Au rond-point, prenez la {exitStr} sortie', ' sur {road}'],
+                            'DestinationReached': ['Destination atteinte'],
                         },
                         formatOrder: function(n) {
-                            return n + "\u00ba"
+                            return n + 'º';
                         },
                         ui: {
-                            startPlaceholder: "Partenza",
-                            viaPlaceholder: "Intermedia {viaNumber}",
-                            endPlaceholder: "Destinazione"
+                            startPlaceholder: 'Départ',
+                            viaPlaceholder: 'Intermédiaire {viaNumber}',
+                            endPlaceholder: 'Arrivée'
                         }
                     },
-                    "pt": {
+                    'it': {
                         directions: {
-                            N: "norte",
-                            NE: "nordeste",
-                            E: "leste",
-                            SE: "sudeste",
-                            S: "sul",
-                            SW: "sudoeste",
-                            W: "oeste",
-                            NW: "noroeste"
+                            N: 'nord',
+                            NE: 'nord-est',
+                            E: 'est',
+                            SE: 'sud-est',
+                            S: 'sud',
+                            SW: 'sud-ovest',
+                            W: 'ovest',
+                            NW: 'nord-ovest'
                         },
                         instructions: {
-                            "Head": ["Siga {dir}", " na {road}"],
-                            "Continue": ["Continue {dir}", " na {road}"],
-                            "SlightRight": ["Curva ligeira a direita", " na {road}"],
-                            "Right": ["Curva a direita", " na {road}"],
-                            "SharpRight": ["Curva fechada a direita", " na {road}"],
-                            "TurnAround": ["Retorne"],
-                            "SharpLeft": ["Curva fechada a esquerda", " na {road}"],
-                            "Left": ["Curva a esquerda", " na {road}"],
-                            "SlightLeft": ["Curva ligueira a esquerda", " na {road}"],
-                            "WaypointReached": ["Ponto de interesse atingido"],
-                            "Roundabout": ["Pegue a {exitStr} sa\u00edda na rotat\u00f3ria", " na {road}"],
-                            "DestinationReached": ["Destino atingido"]
+                            // instruction, postfix if the road is named
+                            'Head': ['Dritto verso {dir}', ' su {road}'],
+                            'Continue': ['Continuare verso {dir}', ' su {road}'],
+                            'SlightRight': ['Mantenere la destra', ' su {road}'],
+                            'Right': ['A destra', ' su {road}'],
+                            'SharpRight': ['Strettamente a destra', ' su {road}'],
+                            'TurnAround': ['Fare inversione di marcia'],
+                            'SharpLeft': ['Strettamente a sinistra', ' su {road}'],
+                            'Left': ['A sinistra', ' sur {road}'],
+                            'SlightLeft': ['Mantenere la sinistra', ' su {road}'],
+                            'WaypointReached': ['Punto di passaggio raggiunto'],
+                            'Roundabout': ['Alla rotonda, prendere la {exitStr} uscita'],
+                            'DestinationReached': ['Destinazione raggiunta'],
                         },
                         formatOrder: function(n) {
-                            return n + "\u00ba"
+                            return n + 'º';
                         },
                         ui: {
-                            startPlaceholder: "Origem",
-                            viaPlaceholder: "Interm\u00e9dio {viaNumber}",
-                            endPlaceholder: "Destino"
+                            startPlaceholder: 'Partenza',
+                            viaPlaceholder: 'Intermedia {viaNumber}',
+                            endPlaceholder: 'Destinazione'
                         }
                     },
-                    "sk": {
+                    'pt': {
                         directions: {
-                            N: "sever",
-                            NE: "serverov\u00fdchod",
-                            E: "v\u00fdchod",
-                            SE: "juhov\u00fdchod",
-                            S: "juh",
-                            SW: "juhoz\u00e1pad",
-                            W: "z\u00e1pad",
-                            NW: "serveroz\u00e1pad"
+                            N: 'norte',
+                            NE: 'nordeste',
+                            E: 'leste',
+                            SE: 'sudeste',
+                            S: 'sul',
+                            SW: 'sudoeste',
+                            W: 'oeste',
+                            NW: 'noroeste',
+                            SlightRight: 'curva ligeira a direita',
+                            Right: 'direita',
+                            SharpRight: 'curva fechada a direita',
+                            SlightLeft: 'ligeira a esquerda',
+                            Left: 'esquerda',
+                            SharpLeft: 'curva fechada a esquerda',
+                            Uturn: 'Meia volta'
                         },
                         instructions: {
-                            "Head": ["Mierte na {dir}", " na {road}"],
-                            "Continue": ["Pokra\u010dujte na {dir}", " na {road}"],
-                            "SlightRight": ["Mierne doprava", " na {road}"],
-                            "Right": ["Doprava", " na {road}"],
-                            "SharpRight": ["Prudko doprava", " na {road}"],
-                            "TurnAround": ["Oto\u010dte sa"],
-                            "SharpLeft": ["Prudko do\u013eava", " na {road}"],
-                            "Left": ["Do\u013eava", " na {road}"],
-                            "SlightLeft": ["Mierne do\u013eava", " na {road}"],
-                            "WaypointReached": ["Ste v prejazdovom bode."],
-                            "Roundabout": ["Odbo\u010dte na {exitStr} v\u00fdjazde", " na {road}"],
-                            "DestinationReached": ["Pri\u0161li ste do cie\u013ea."]
+                            // instruction, postfix if the road is named
+                            'Head': ['Siga {dir}', ' na {road}'],
+                            'Continue': ['Continue {dir}', ' na {road}'],
+                            'SlightRight': ['Curva ligeira a direita', ' na {road}'],
+                            'Right': ['Curva a direita', ' na {road}'],
+                            'SharpRight': ['Curva fechada a direita', ' na {road}'],
+                            'TurnAround': ['Retorne'],
+                            'SharpLeft': ['Curva fechada a esquerda', ' na {road}'],
+                            'Left': ['Curva a esquerda', ' na {road}'],
+                            'SlightLeft': ['Curva ligueira a esquerda', ' na {road}'],
+                            'WaypointReached': ['Ponto de interesse atingido'],
+                            'Roundabout': ['Pegue a {exitStr} saída na rotatória', ' na {road}'],
+                            'DestinationReached': ['Destino atingido'],
+                            'Fork': ['Na encruzilhada, vire a {modifier}', ' na {road}'],
+                            'Merge': ['Entre à {modifier}', ' na {road}'],
+                            'OnRamp': ['Vire {modifier} na rampa', ' na {road}'],
+                            'OffRamp': ['Entre na rampa na {modifier}', ' na {road}'],
+                            'EndOfRoad': ['Vire {modifier} no fim da rua', ' na {road}'],
+                            'Onto': 'na {road}'
+                        },
+                        formatOrder: function(n) {
+                            return n + 'º';
+                        },
+                        ui: {
+                            startPlaceholder: 'Origem',
+                            viaPlaceholder: 'Intermédio {viaNumber}',
+                            endPlaceholder: 'Destino'
+                        }
+                    },
+                    'sk': {
+                        directions: {
+                            N: 'sever',
+                            NE: 'serverovýchod',
+                            E: 'východ',
+                            SE: 'juhovýchod',
+                            S: 'juh',
+                            SW: 'juhozápad',
+                            W: 'západ',
+                            NW: 'serverozápad'
+                        },
+                        instructions: {
+                            // instruction, postfix if the road is named
+                            'Head': ['Mierte na {dir}', ' na {road}'],
+                            'Continue': ['Pokračujte na {dir}', ' na {road}'],
+                            'SlightRight': ['Mierne doprava', ' na {road}'],
+                            'Right': ['Doprava', ' na {road}'],
+                            'SharpRight': ['Prudko doprava', ' na {road}'],
+                            'TurnAround': ['Otočte sa'],
+                            'SharpLeft': ['Prudko doľava', ' na {road}'],
+                            'Left': ['Doľava', ' na {road}'],
+                            'SlightLeft': ['Mierne doľava', ' na {road}'],
+                            'WaypointReached': ['Ste v prejazdovom bode.'],
+                            'Roundabout': ['Odbočte na {exitStr} výjazde', ' na {road}'],
+                            'DestinationReached': ['Prišli ste do cieľa.'],
                         },
                         formatOrder: function(n) {
                             var i = n % 10 - 1,
-                                suffix = [".", ".", "."];
-                            return suffix[i] ? n + suffix[i] : n + "."
+                                suffix = ['.', '.', '.'];
+
+                            return suffix[i] ? n + suffix[i] : n + '.';
                         },
                         ui: {
-                            startPlaceholder: "Za\u010diatok",
-                            viaPlaceholder: "Cez {viaNumber}",
-                            endPlaceholder: "Koniec"
+                            startPlaceholder: 'Začiatok',
+                            viaPlaceholder: 'Cez {viaNumber}',
+                            endPlaceholder: 'Koniec'
                         }
                     },
-                    "el": {
+                    'el': {
                         directions: {
-                            N: "\u03b2\u03cc\u03c1\u03b5\u03b9\u03b1",
-                            NE: "\u03b2\u03bf\u03c1\u03b5\u03b9\u03bf\u03b1\u03bd\u03b1\u03c4\u03bf\u03bb\u03b9\u03ba\u03ac",
-                            E: "\u03b1\u03bd\u03b1\u03c4\u03bf\u03bb\u03b9\u03ba\u03ac",
-                            SE: "\u03bd\u03bf\u03c4\u03b9\u03bf\u03b1\u03bd\u03b1\u03c4\u03bf\u03bb\u03b9\u03ba\u03ac",
-                            S: "\u03bd\u03cc\u03c4\u03b9\u03b1",
-                            SW: "\u03bd\u03bf\u03c4\u03b9\u03bf\u03b4\u03c5\u03c4\u03b9\u03ba\u03ac",
-                            W: "\u03b4\u03c5\u03c4\u03b9\u03ba\u03ac",
-                            NW: "\u03b2\u03bf\u03c1\u03b5\u03b9\u03bf\u03b4\u03c5\u03c4\u03b9\u03ba\u03ac"
+                            N: 'βόρεια',
+                            NE: 'βορειοανατολικά',
+                            E: 'ανατολικά',
+                            SE: 'νοτιοανατολικά',
+                            S: 'νότια',
+                            SW: 'νοτιοδυτικά',
+                            W: 'δυτικά',
+                            NW: 'βορειοδυτικά'
                         },
                         instructions: {
-                            "Head": ["\u039a\u03b1\u03c4\u03b5\u03c5\u03b8\u03c5\u03bd\u03b8\u03b5\u03af\u03c4\u03b5 {dir}", " \u03c3\u03c4\u03b7\u03bd {road}"],
-                            "Continue": ["\u03a3\u03c5\u03bd\u03b5\u03c7\u03af\u03c3\u03c4\u03b5 {dir}", " \u03c3\u03c4\u03b7\u03bd {road}"],
-                            "SlightRight": ["\u0395\u03bb\u03b1\u03c6\u03c1\u03ce\u03c2 \u03b4\u03b5\u03be\u03b9\u03ac", " \u03c3\u03c4\u03b7\u03bd {road}"],
-                            "Right": ["\u0394\u03b5\u03be\u03b9\u03ac", " \u03c3\u03c4\u03b7\u03bd {road}"],
-                            "SharpRight": ["\u0391\u03c0\u03cc\u03c4\u03bf\u03bc\u03b7 \u03b4\u03b5\u03be\u03b9\u03ac \u03c3\u03c4\u03c1\u03bf\u03c6\u03ae", " \u03c3\u03c4\u03b7\u03bd {road}"],
-                            "TurnAround": ["\u039a\u03ac\u03bd\u03c4\u03b5 \u03b1\u03bd\u03b1\u03c3\u03c4\u03c1\u03bf\u03c6\u03ae"],
-                            "SharpLeft": ["\u0391\u03c0\u03cc\u03c4\u03bf\u03bc\u03b7 \u03b1\u03c1\u03b9\u03c3\u03c4\u03b5\u03c1\u03ae \u03c3\u03c4\u03c1\u03bf\u03c6\u03ae", " \u03c3\u03c4\u03b7\u03bd {road}"],
-                            "Left": ["\u0391\u03c1\u03b9\u03c3\u03c4\u03b5\u03c1\u03ac", " \u03c3\u03c4\u03b7\u03bd {road}"],
-                            "SlightLeft": ["\u0395\u03bb\u03b1\u03c6\u03c1\u03ce\u03c2 \u03b1\u03c1\u03b9\u03c3\u03c4\u03b5\u03c1\u03ac", " \u03c3\u03c4\u03b7\u03bd {road}"],
-                            "WaypointReached": ["\u03a6\u03c4\u03ac\u03c3\u03b1\u03c4\u03b5 \u03c3\u03c4\u03bf \u03c3\u03b7\u03bc\u03b5\u03af\u03bf \u03b1\u03bd\u03b1\u03c6\u03bf\u03c1\u03ac\u03c2"],
-                            "Roundabout": ["\u0391\u03ba\u03bf\u03bb\u03bf\u03c5\u03b8\u03ae\u03c3\u03c4\u03b5 \u03c4\u03b7\u03bd {exitStr} \u03ad\u03be\u03bf\u03b4\u03bf \u03c3\u03c4\u03bf \u03ba\u03c5\u03ba\u03bb\u03b9\u03ba\u03cc \u03ba\u03cc\u03bc\u03b2\u03bf", " \u03c3\u03c4\u03b7\u03bd {road}"],
-                            "DestinationReached": ["\u03a6\u03c4\u03ac\u03c3\u03b1\u03c4\u03b5 \u03c3\u03c4\u03bf\u03bd \u03c0\u03c1\u03bf\u03bf\u03c1\u03b9\u03c3\u03bc\u03cc \u03c3\u03b1\u03c2"]
+                            // instruction, postfix if the road is named
+                            'Head': ['Κατευθυνθείτε {dir}', ' στην {road}'],
+                            'Continue': ['Συνεχίστε {dir}', ' στην {road}'],
+                            'SlightRight': ['Ελαφρώς δεξιά', ' στην {road}'],
+                            'Right': ['Δεξιά', ' στην {road}'],
+                            'SharpRight': ['Απότομη δεξιά στροφή', ' στην {road}'],
+                            'TurnAround': ['Κάντε αναστροφή'],
+                            'SharpLeft': ['Απότομη αριστερή στροφή', ' στην {road}'],
+                            'Left': ['Αριστερά', ' στην {road}'],
+                            'SlightLeft': ['Ελαφρώς αριστερά', ' στην {road}'],
+                            'WaypointReached': ['Φτάσατε στο σημείο αναφοράς'],
+                            'Roundabout': ['Ακολουθήστε την {exitStr} έξοδο στο κυκλικό κόμβο', ' στην {road}'],
+                            'DestinationReached': ['Φτάσατε στον προορισμό σας'],
                         },
                         formatOrder: function(n) {
-                            return n + "\u00ba"
+                            return n + 'º';
                         },
                         ui: {
-                            startPlaceholder: "\u0391\u03c6\u03b5\u03c4\u03b7\u03c1\u03af\u03b1",
-                            viaPlaceholder: "\u03bc\u03ad\u03c3\u03c9 {viaNumber}",
-                            endPlaceholder: "\u03a0\u03c1\u03bf\u03bf\u03c1\u03b9\u03c3\u03bc\u03cc\u03c2"
+                            startPlaceholder: 'Αφετηρία',
+                            viaPlaceholder: 'μέσω {viaNumber}',
+                            endPlaceholder: 'Προορισμός'
+                        }
+                    },
+                    'ca': {
+                        directions: {
+                            N: 'nord',
+                            NE: 'nord-est',
+                            E: 'est',
+                            SE: 'sud-est',
+                            S: 'sud',
+                            SW: 'sud-oest',
+                            W: 'oest',
+                            NW: 'nord-oest',
+                            SlightRight: 'lleu gir a la dreta',
+                            Right: 'dreta',
+                            SharpRight: 'gir pronunciat a la dreta',
+                            SlightLeft: 'gir pronunciat a l\'esquerra',
+                            Left: 'esquerra',
+                            SharpLeft: 'lleu gir a l\'esquerra',
+                            Uturn: 'mitja volta'
+                        },
+                        instructions: {
+                            'Head': ['Recte {dir}', ' sobre {road}'],
+                            'Continue': ['Continuar {dir}'],
+                            'TurnAround': ['Donar la volta'],
+                            'WaypointReached': ['Ha arribat a un punt del camí'],
+                            'Roundabout': ['Agafar {exitStr} sortida a la rotonda', ' a {road}'],
+                            'DestinationReached': ['Arribada al destí'],
+                            'Fork': ['A la cruïlla gira a la {modifier}', ' cap a {road}'],
+                            'Merge': ['Incorpora\'t {modifier}', ' a {road}'],
+                            'OnRamp': ['Gira {modifier} a la sortida', ' cap a {road}'],
+                            'OffRamp': ['Pren la sortida {modifier}', ' cap a {road}'],
+                            'EndOfRoad': ['Gira {modifier} al final de la carretera', ' cap a {road}'],
+                            'Onto': 'cap a {road}'
+                        },
+                        formatOrder: function(n) {
+                            return n + 'º';
+                        },
+                        ui: {
+                            startPlaceholder: 'Origen',
+                            viaPlaceholder: 'Via {viaNumber}',
+                            endPlaceholder: 'Destí'
+                        },
+                        units: {
+                            meters: 'm',
+                            kilometers: 'km',
+                            yards: 'yd',
+                            miles: 'mi',
+                            hours: 'h',
+                            minutes: 'min',
+                            seconds: 's'
+                        }
+                    },
+                    'ru': {
+                        directions: {
+                            N: 'север',
+                            NE: 'северовосток',
+                            E: 'восток',
+                            SE: 'юговосток',
+                            S: 'юг',
+                            SW: 'югозапад',
+                            W: 'запад',
+                            NW: 'северозапад',
+                            SlightRight: 'плавно направо',
+                            Right: 'направо',
+                            SharpRight: 'резко направо',
+                            SlightLeft: 'плавно налево',
+                            Left: 'налево',
+                            SharpLeft: 'резко налево',
+                            Uturn: 'развернуться'
+                        },
+                        instructions: {
+                            'Head': ['Начать движение на {dir}', ' по {road}'],
+                            'Continue': ['Продолжать движение на {dir}', ' по {road}'],
+                            'SlightRight': ['Плавный поворот направо', ' на {road}'],
+                            'Right': ['Направо', ' на {road}'],
+                            'SharpRight': ['Резкий поворот направо', ' на {road}'],
+                            'TurnAround': ['Развернуться'],
+                            'SharpLeft': ['Резкий поворот налево', ' на {road}'],
+                            'Left': ['Поворот налево', ' на {road}'],
+                            'SlightLeft': ['Плавный поворот налево', ' на {road}'],
+                            'WaypointReached': ['Точка достигнута'],
+                            'Roundabout': ['{exitStr} съезд с кольца', ' на {road}'],
+                            'DestinationReached': ['Окончание маршрута'],
+                            'Fork': ['На развилке поверните {modifier}', ' на {road}'],
+                            'Merge': ['Перестройтесь {modifier}', ' на {road}'],
+                            'OnRamp': ['Поверните {modifier} на съезд', ' на {road}'],
+                            'OffRamp': ['Съезжайте на {modifier}', ' на {road}'],
+                            'EndOfRoad': ['Поверните {modifier} в конце дороги', ' на {road}'],
+                            'Onto': 'на {road}'
+                        },
+                        formatOrder: function(n) {
+                            return n + '-й';
+                        },
+                        ui: {
+                            startPlaceholder: 'Начало',
+                            viaPlaceholder: 'Через {viaNumber}',
+                            endPlaceholder: 'Конец'
+                        },
+                        units: {
+                            meters: 'м',
+                            kilometers: 'км',
+                            yards: 'ярд',
+                            miles: 'ми',
+                            hours: 'ч',
+                            minutes: 'м',
+                            seconds: 'с'
+                        }
+                    },
+
+                    'pl': {
+                        directions: {
+                            N: 'północ',
+                            NE: 'północny wschód',
+                            E: 'wschód',
+                            SE: 'południowy wschód',
+                            S: 'południe',
+                            SW: 'południowy zachód',
+                            W: 'zachód',
+                            NW: 'północny zachód',
+                            SlightRight: 'lekko w prawo',
+                            Right: 'w prawo',
+                            SharpRight: 'ostro w prawo',
+                            SlightLeft: 'lekko w lewo',
+                            Left: 'w lewo',
+                            SharpLeft: 'ostro w lewo',
+                            Uturn: 'zawróć'
+                        },
+                        instructions: {
+                            // instruction, postfix if the road is named
+                            'Head': ['Kieruj się na {dir}', ' na {road}'],
+                            'Continue': ['Jedź dalej przez {dir}'],
+                            'TurnAround': ['Zawróć'],
+                            'WaypointReached': ['Punkt pośredni'],
+                            'Roundabout': ['Wyjedź {exitStr} zjazdem na rondzie', ' na {road}'],
+                            'DestinationReached': ['Dojechano do miejsca docelowego'],
+                            'Fork': ['Na rozwidleniu {modifier}', ' na {road}'],
+                            'Merge': ['Zjedź {modifier}', ' na {road}'],
+                            'OnRamp': ['Wjazd {modifier}', ' na {road}'],
+                            'OffRamp': ['Zjazd {modifier}', ' na {road}'],
+                            'EndOfRoad': ['Skręć {modifier} na końcu drogi', ' na {road}'],
+                            'Onto': 'na {road}'
+                        },
+                        formatOrder: function(n) {
+                            return n + '.';
+                        },
+                        ui: {
+                            startPlaceholder: 'Początek',
+                            viaPlaceholder: 'Przez {viaNumber}',
+                            endPlaceholder: 'Koniec'
+                        },
+                        units: {
+                            meters: 'm',
+                            kilometers: 'km',
+                            yards: 'yd',
+                            miles: 'mi',
+                            hours: 'godz',
+                            minutes: 'min',
+                            seconds: 's'
+                        }
+                    },
+                    'uk': {
+                        directions: {
+                            N: 'північ',
+                            NE: 'північний схід',
+                            E: 'схід',
+                            SE: 'південний схід',
+                            S: 'південь',
+                            SW: 'південний захід',
+                            W: 'захід',
+                            NW: 'північний захід',
+                            SlightRight: 'плавно направо',
+                            Right: 'направо',
+                            SharpRight: 'різко направо',
+                            SlightLeft: 'плавно наліво',
+                            Left: 'наліво',
+                            SharpLeft: 'різко наліво',
+                            Uturn: 'розвернутися',
+                        },
+                        instructions: {
+                            'Head': ['Почати рух на {dir}', 'по {road}'],
+                            'Continue': ['Продовжувати рух на {dir}', 'по {road}'],
+                            'SlightRight': ['Плавний поворот направо', 'на {road}'],
+                            'Right': ['Направо', 'на {road}'],
+                            'SharpRight': ['Різкий поворот направо', 'на {road}'],
+                            'TurnAround': ['Розгорнутися'],
+                            'SharpLeft': ['Різкий поворот наліво', 'на {road}'],
+                            'Left': ['Поворот наліво', 'на {road}'],
+                            'SlightLeft': ['Плавний поворот наліво', 'на {road}'],
+                            'WaypointReached': ['Точка досягнута'],
+                            'Roundabout': ["{ExitStr} з'їзд з кільця", 'на {road}'],
+                            'DestinationReached': ['Закінчення маршруту'],
+                            'Fork': ['На розвилці поверніть {modifier}', 'на {road}'],
+                            'Merge': ['Візьміть {modifier}', 'на {road}'],
+                            'OnRamp': ["Поверніть {modifier} на з'їзд", 'на {road}'],
+                            'OffRamp': ["З'їжджайте на {modifier}", 'на {road}'],
+                            'EndOfRoad': ['Поверніть {modifier} в кінці дороги', 'на {road}'],
+                            'Onto': 'на {road}'
+                        },
+                        formatOrder: function(n) {
+                            return n + '-й';
+                        },
+                        ui: {
+                            startPlaceholder: 'Початок',
+                            viaPlaceholder: 'Через {viaNumber}',
+                            endPlaceholder: 'Кінець'
+                        },
+                        units: {
+                            meters: 'м',
+                            kilometers: 'км',
+                            yards: 'ярд',
+                            miles: 'ми',
+                            hours: 'г',
+                            minutes: 'хв',
+                            seconds: 'сек'
                         }
                     }
                 });

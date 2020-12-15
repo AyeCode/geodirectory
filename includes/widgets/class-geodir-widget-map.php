@@ -1091,7 +1091,7 @@ jQuery(function ($) {
 			'height'  => $height,
 			'width'  => $width,
 			'wrap_class'    => $wrap_class,
-
+			'extra_attribs' => $map_canvas_attribs
 		);
 		echo geodir_get_template_html( $template, $args );
 		
