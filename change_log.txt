@@ -1,5 +1,6 @@
 = 2.1.0.7 =
 * OpenStreetMap routing add more languages support including Russian language - CHANGED
+* Listing sets CPT default image instead of category default image as fallback - FIXED
 
 = 2.1.0.6 =
 * Detail page image slider is not working with Divi theme - FIXED
