@@ -1249,7 +1249,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
                 $field_value .= '<ul>';
 
                 foreach ($option_values as $val) {
-                    $field_value .= '<li>' . $val . '</li>';
+                    $field_value .= '<li class="geodir-fv-' . sanitize_html_class( sanitize_title_with_dashes( $val ) ) . '">' . $val . '</li>';
                 }
 
                 $field_value .= '</ul>';
