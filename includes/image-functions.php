@@ -93,14 +93,20 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '', $classes = 
 	$id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
 	$_title = isset( $image->title ) && $image->title ? wp_strip_all_tags( stripslashes_deep( $image->title ) ) : '';
 	$title = $_title ? 'title="' . esc_attr( $_title ) . '" ' : '';
-	$alt = isset( $image->caption ) && $image->caption ? esc_attr( wp_strip_all_tags( stripslashes_deep( $image->caption ) ) ) : '';
-	if ( $alt == '' ) {
-		if ( $_title ) {
-			$alt = esc_attr( geodir_strtolower( $_title ) );
-		} else if ( $img_src ) {
-			$alt = esc_attr( preg_replace( '/\.[^.]+$/', '', basename( $img_src ) ) );
-		}
+
+	if ( $_title ) {
+		$alt = $_title;
+	} else if ( $img_src ) {
+		$alt = preg_replace( '/\.[^.]+$/', '', basename( $img_src ) );
+		$alt = str_replace( array( '-', '_' ), ' ', $alt );
+	} else {
+		$alt = '';
 	}
+
+	if ( $alt ) {
+		$alt = esc_attr( trim( $alt ) );
+	}
+
 	$class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id .' w-100 p-0 m-0 mw-100 border-0 '.$classes;
 
 	/**
