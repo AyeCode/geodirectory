@@ -78,53 +78,60 @@ function geodir_get_image_src($image, $size = 'medium'){
  * @return string $html Image tag.
  */
 function geodir_get_image_tag( $image, $size = 'medium',$align = '', $classes = '' ) {
-
-    $meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
-    $img_src = geodir_get_image_src($image, $size);
+	$meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
+	$img_src = geodir_get_image_src($image, $size);
 	$width = '';
 	$height = '';
 	if($size){
 		$width = isset($meta['sizes'][$size]['width']) ? $meta['sizes'][$size]['width'] : '';
 		$height = isset($meta['sizes'][$size]['height']) ? $meta['sizes'][$size]['height'] : '';
 	}
-    if(!$width){$width = isset($meta['width']) ? $meta['width'] : '';}
+	if(!$width){$width = isset($meta['width']) ? $meta['width'] : '';}
 	if(!$height){$height = isset($meta['height']) ? $meta['height'] : '';}
-    $hwstring = image_hwstring($width, $height);
+	$hwstring = image_hwstring($width, $height);
 
-    $id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
-    $title = isset( $image->title ) && $image->title ? 'title="' . esc_attr( wp_strip_all_tags( stripslashes_deep( $image->title ) ) ) . '" ' : '';
-    $alt = isset( $image->caption ) && $image->caption ? esc_attr( wp_strip_all_tags( stripslashes_deep( $image->caption ) ) ) : '';
-    $class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id .' w-100 p-0 m-0 mw-100 border-0 '.$classes;
+	$id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
+	$_title = isset( $image->title ) && $image->title ? wp_strip_all_tags( stripslashes_deep( $image->title ) ) : '';
+	$title = $_title ? 'title="' . esc_attr( $_title ) . '" ' : '';
+	$alt = isset( $image->caption ) && $image->caption ? esc_attr( wp_strip_all_tags( stripslashes_deep( $image->caption ) ) ) : '';
+	if ( $alt == '' ) {
+		if ( $_title ) {
+			$alt = esc_attr( geodir_strtolower( $_title ) );
+		} else if ( $img_src ) {
+			$alt = esc_attr( preg_replace( '/\.[^.]+$/', '', basename( $img_src ) ) );
+		}
+	}
+	$class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id .' w-100 p-0 m-0 mw-100 border-0 '.$classes;
 
-    /**
-     * Filters the value of the attachment's image tag class attribute.
-     *
-     * @since 2.0.0
-     *
-     * @param string       $class CSS class name or space-separated list of classes.
-     * @param int          $id    Attachment ID.
-     * @param string       $align Part of the class name for aligning the image.
-     * @param string|array $size  Size of image. Image size or array of width and height values (in that order).
-     *                            Default 'medium'.
-     */
-    $class = apply_filters( 'geodir_get_image_tag_class', $class, $id, $align, $size );
+	/**
+	 * Filters the value of the attachment's image tag class attribute.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string       $class CSS class name or space-separated list of classes.
+	 * @param int          $id    Attachment ID.
+	 * @param string       $align Part of the class name for aligning the image.
+	 * @param string|array $size  Size of image. Image size or array of width and height values (in that order).
+	 *                            Default 'medium'.
+	 */
+	$class = apply_filters( 'geodir_get_image_tag_class', $class, $id, $align, $size );
 
-    $html = '<img src="' . esc_attr($img_src) . '" alt="' . esc_attr($alt) . '" ' . $title . $hwstring . 'class="' . $class . '" />';
+	$html = '<img src="' . esc_attr($img_src) . '" alt="' . $alt . '" ' . $title . $hwstring . 'class="' . $class . '" />';
 
-    /**
-     * Filters the HTML content for the image tag.
-     *
-     * @since 2.0.0
-     *
-     * @param string       $html  HTML content for the image.
-     * @param int          $id    Attachment ID.
-     * @param string       $alt   Alternate text.
-     * @param string       $title Attachment title.
-     * @param string       $align Part of the class name for aligning the image.
-     * @param string|array $size  Size of image. Image size or array of width and height values (in that order).
-     *                            Default 'medium'.
-     */
-    return apply_filters( 'geodir_get_image_tag', $html, $id, $alt, $title, $align, $size );
+	/**
+	 * Filters the HTML content for the image tag.
+	 *
+	 * @since 2.0.0
+	 *
+	 * @param string       $html  HTML content for the image.
+	 * @param int          $id    Attachment ID.
+	 * @param string       $alt   Alternate text.
+	 * @param string       $title Attachment title.
+	 * @param string       $align Part of the class name for aligning the image.
+	 * @param string|array $size  Size of image. Image size or array of width and height values (in that order).
+	 *                            Default 'medium'.
+	 */
+	return apply_filters( 'geodir_get_image_tag', $html, $id, $alt, $title, $align, $size );
 }
 
 /**
