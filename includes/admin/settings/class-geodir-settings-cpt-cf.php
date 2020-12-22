@@ -46,7 +46,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		public function __construct() {
 
 			self::$page = ! empty( $_REQUEST['page'] ) ? sanitize_title( $_REQUEST['page'] ) : '';
-			self::$post_type = ! empty( $_REQUEST['post_type'] ) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
+			self::$post_type = ( ! empty( $_REQUEST['post_type'] ) && is_scalar( $_REQUEST['post_type'] ) ) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
 			self::$sub_tab   = ! empty( $_REQUEST['tab'] ) ? sanitize_title( $_REQUEST['tab'] ) : 'general';
 
 
