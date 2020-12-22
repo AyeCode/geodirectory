@@ -3,6 +3,7 @@
 * Listing sets CPT default image instead of category default image as fallback - FIXED
 * Listing generate image alt attribute when empty to prevent web accessibility issue - CHANGED
 * Add missing translation for file upload field - FIXED
+* Images can now store full URL for external images - ADDED
 
 = 2.1.0.6 =
 * Detail page image slider is not working with Divi theme - FIXED
