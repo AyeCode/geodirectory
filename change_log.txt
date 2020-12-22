@@ -1,3 +1,6 @@
+= 2.1.0.7 =
+* Add missing translation for file upload field - FIXED
+
 = 2.1.0.6 =
 * Detail page image slider is not working with Divi theme - FIXED
 * Default category always shows first option selected with Bootstrap style - FIXED
