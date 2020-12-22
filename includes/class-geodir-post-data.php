@@ -421,7 +421,8 @@ class GeoDir_Post_Data {
 		if ( $gd_post = self::$post_temp ) {
 			$gd_post = apply_filters( 'geodir_save_post_temp_data', $gd_post, $post, $update );
 
-			$is_dummy = isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'geodir_insert_dummy_data' ? true : false;
+//			$is_dummy = isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'geodir_insert_dummy_data' ? true : false;
+			$is_dummy = isset( $gd_post['post_dummy'] ) && $gd_post['post_dummy'] ? true : false;
 
 			// POST REVISION :  grab the original info
 			if ( isset( $gd_post['ID'] ) && $gd_post['ID'] === 0 && $gd_post['post_type'] == 'revision' ) {

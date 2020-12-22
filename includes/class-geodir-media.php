@@ -263,7 +263,7 @@ class GeoDir_Media {
 	 *
 	 * @return array|WP_Error
 	 */
-	public static function insert_attachment( $post_id, $type = 'file', $url, $title = '', $caption = '', $order = '', $is_approved = 1, $is_placeholder = false, $other_id = '' ) {
+	public static function insert_attachment( $post_id, $type = 'file', $url, $title = '', $caption = '', $order = '', $is_approved = 1, $is_placeholder = false, $other_id = '',$raw_metadata = array() ) {
 		global $wpdb;
 
 		// Load media functions
@@ -282,10 +282,15 @@ class GeoDir_Media {
 			return new WP_Error( 'file_insert', __( "No post_id or file url, file insert failed.", "geodirectory" ) );
 		}
 
-		$metadata = '';
+		$metadata = !empty($raw_metadata) ? $raw_metadata : '';
 		if ( $is_placeholder ) { // If a placeholder image, such as a image name that will be uploaded manually to the upload dir
 			$upload_dir = wp_upload_dir();
-			$file = $upload_dir['subdir'] . '/' . basename( $url );
+			if(substr( $url, 0, 4 ) === "http"){
+				$file = esc_url_raw( $url );
+			}else{
+				$file = trailingslashit($upload_dir['subdir'] ) . basename( $url );
+			}
+//			$file = $upload_dir['subdir'] . '/' . basename( $url );
 			$file_type_arr = wp_check_filetype( basename( $url ) );
 			$file_type = $file_type_arr['type'];
 		} else {
@@ -512,10 +517,11 @@ class GeoDir_Media {
 		if ( $order === 0 && $field == 'post_images' && ! wp_is_post_revision( absint( $post_id ) ) ) {
 			// Get the path to the upload directory.
 			$wp_upload_dir = wp_upload_dir();
-			$filename = $wp_upload_dir['basedir'] . $wpdb->get_var( $wpdb->prepare( "SELECT file FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE ID = %d", $file_id ) );
+			$file = $wpdb->get_var( $wpdb->prepare( "SELECT file FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE ID = %d", $file_id ) );
+			$filename = $wp_upload_dir['basedir'] . $file;
 			$featured_img_url = get_the_post_thumbnail_url( $post_id, 'full' );
 
-			if ( $featured_img_url != $file_url ) {
+			if ( $featured_img_url != $file_url && substr( $file,  0, 4 ) !== "http") {
 				$file = wp_check_filetype( basename( $file_url ) );
 				$attachment = array(
 					'guid'           => $file_url,
@@ -913,10 +919,38 @@ class GeoDir_Media {
 		$sql = $wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type IN ( $prepare_types ) AND post_id IN( $prepare_ids ) $other_id_sql ORDER BY $field_orderby $default_orderby $limit_sql",$sql_args);
 //		echo $sql;echo '###';//exit;
 		$results = $wpdb->get_results($sql);
+
+		// maybe set external meta
+		$results = self::set_external_src_meta( $results );
+
 		// set cache
 		wp_cache_set( $cache_key, $results, 'gd_attachments_by_type' );
 		return $results;
 
+	}
+
+	/**
+	 * If the file src is eternal then set the meta src as external.
+	 *
+	 * @param $images
+	 *
+	 * @return mixed
+	 */
+	public static function set_external_src_meta($images){
+		
+		if ( ! empty( $images ) ) {
+			foreach ( $images as $key => $image ) {
+				if ( isset( $image->file ) && !empty($image->metadata) && substr( $image->file, 0, 4 ) === "http" ) {
+					$image_meta = maybe_unserialize($image->metadata);
+					if(!empty($image_meta['file'])){
+						$image_meta['file'] = $image->file;
+						$images[$key]->metadata = maybe_serialize($image_meta);
+					}
+				}
+			}
+		}
+		
+		return $images;
 	}
 
 	/**
@@ -951,7 +985,14 @@ class GeoDir_Media {
 			foreach( $files as $file ){
 				$is_approved = isset($file->is_approved) && $file->is_approved ? '' : '|0';
 				if($file->menu_order=="-1"){$is_approved = "|-1";}
-				$files_arr[] = $wp_upload_dir['baseurl'].$file->file."|".$file->ID."|".$file->title."|".$file->caption . $is_approved;
+
+				if(substr( $file->file, 0, 4 ) === "http"){
+					$img_src = esc_url_raw( $file->file );
+				}else{
+					$img_src = $wp_upload_dir['baseurl'].$file->file;
+				}
+
+				$files_arr[] = $img_src . "|".$file->ID."|".$file->title."|".$file->caption . $is_approved;
 			}
 			return implode("::",$files_arr);
 		}else{
