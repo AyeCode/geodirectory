@@ -172,11 +172,11 @@
             iframeUrl = transferHash(hashUrl, iframeUrl);
         }
 
-        return '<div class="lity-iframe-container"><iframe onload="jQuery(\'.lity-iframe-container .svg-inline--fa, .lity-iframe-container i\').remove();" frameborder="0" allowfullscreen src="' + iframeUrl + '"/><i class="fas fa-sync fa-spin fa-3x fa-fw"></i></div>';
+        return '<div class="lity-iframe-container"><iframe onload="jQuery(\'.lity-iframe-container .svg-inline--fa, .lity-iframe-container i\').remove();" frameborder="0" allowfullscreen src="' + iframeUrl + '"></iframe><i class="fas fa-sync fa-spin fa-3x fa-fw"></i></div>';
     }
 
     function error(msg) {
-        return $('<span class="lity-error"/>').append(msg);
+        return $('<span class="lity-error"></span>').append(msg);
     }
 
     function imageHandler(target, instance) {
@@ -255,7 +255,14 @@
                 }
 
                 deferred.resolve(img);
-                if(gallery_nav){initGallery();}
+                if (gallery_nav) {
+                    var gdLityTo;
+                    clearTimeout(gdLityTo);
+                    /* WP 5.6 with jQuery v3.5.x broken lity lightbox next/prev slideshow */
+                    gdLityTo = setTimeout(function() {
+                        initGallery();
+                    }, 50);
+                }
             })
             .on('error', failed)
         ;
@@ -285,7 +292,7 @@
             return false;
         }
 
-        placeholder = $('<i style="display:none !important"/>');
+        placeholder = $('<i style="display:none !important"></i>');
         hasHideClass = el.hasClass('lity-hide');
 
         instance
