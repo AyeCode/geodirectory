@@ -207,6 +207,28 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	}
 
 	/**
+	 * Get OpenStreepMap routing language.
+	 *
+	 * @since 2.1.0.7
+	 *
+	 * @return string Routing language.
+	 */
+	public static function osm_routing_language() {
+		$map_lang = self::map_language();
+		$langs = array( 'en', 'de', 'sv', 'es', 'sp', 'nl', 'fr', 'it', 'pt', 'sk', 'el', 'ca', 'ru', 'pl', 'uk' );
+
+		if ( in_array( $map_lang, $langs ) ) {
+			$routing_lang = $map_lang;
+		} else if ( in_array( substr( $map_lang, 0, 2 ), $langs ) ) {
+			$routing_lang = substr( $map_lang, 0, 2 );
+		} else {
+			$routing_lang = 'en';
+		}
+
+		return apply_filters( 'geodir_osm_routing_language', $routing_lang );
+	}
+
+	/**
 	 * Returns the Google maps api key.
 	 *
 	 * @since   1.6.4
