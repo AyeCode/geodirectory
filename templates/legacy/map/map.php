@@ -39,7 +39,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 							<div id="<?php echo $map_canvas; ?>" class="geodir-map-canvas"
 							     data-map-type="<?php echo $map_type; ?>"
 							     data-map-canvas="<?php echo $map_canvas; ?>"
-							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;"></div>
+							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;" <?php echo ( isset( $extra_attribs ) ? $extra_attribs : '' ); ?>></div>
 							<div id="<?php echo $map_canvas; ?>_loading_div" class="loading_div"
 							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;"></div>
 							<div id="<?php echo $map_canvas; ?>_map_nofound"

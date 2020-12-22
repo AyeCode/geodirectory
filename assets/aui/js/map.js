@@ -936,6 +936,7 @@ function geodirFindRoute(map_canvas) {
                 ],
                 routeWhileDragging: true,
                 geocoder: L.Control.Geocoder.nominatim(),
+                language: geodir_params.osmRouteLanguage,
                 waypointNameFallback: function(latLng) {
                     function zeroPad(n) {
                         n = Math.round(n);
@@ -958,7 +959,7 @@ function geodirFindRoute(map_canvas) {
 
             L.Routing.errorControl(control).addTo(jQuery.goMap.map);
 
-            jQuery('#' + map_canvas + ' .leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="' + map_canvas + '_mylocation" class="gd-map-mylocation"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
+            jQuery('#' + map_canvas + ' .leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="' + map_canvas + '_mylocation" class="gd-map-mylocation c-pointer ml-1"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
         } catch (e) {
             console.log(e.message);
         }
