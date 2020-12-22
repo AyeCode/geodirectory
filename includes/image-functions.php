@@ -46,10 +46,19 @@ function geodir_get_image_src($image, $size = 'medium'){
 
     $meta = isset($image->metadata) ? maybe_unserialize($image->metadata) : '';
     $upload_dir = wp_upload_dir();
+
+	// base url
+	$base_url = $upload_dir['baseurl'];
+
     if(isset($meta['sizes']) && $size){
-        $img_url_basename = wp_basename($upload_dir['baseurl'].$image->file);
+        $img_url_basename = wp_basename($base_url.$image->file);
         if($img_url_basename && isset($meta['sizes'][$size]) && isset($meta['sizes'][$size]['file']) && $meta['sizes'][$size]['file']){
-            $img_src = str_replace($img_url_basename, wp_basename($meta['sizes'][$size]['file']), $upload_dir['baseurl'].$image->file);
+	        if(substr( $image->file, 0, 4 ) === "http"){
+		        $img_url = esc_url_raw( $image->file );
+	        }else{
+		        $img_url = $base_url.$image->file;
+	        }
+            $img_src = str_replace($img_url_basename, wp_basename($meta['sizes'][$size]['file']), $img_url);
         }
     }
 
@@ -59,7 +68,7 @@ function geodir_get_image_src($image, $size = 'medium'){
 	        if(substr( $image->file, 0, 4 ) === "http"){
 		        $img_src = esc_url_raw( $image->file );
 	        }else{
-		        $img_src = $upload_dir['baseurl'].$image->file;
+		        $img_src = $base_url.$image->file;
 	        }
         }
     }
@@ -606,3 +615,27 @@ function geodir_get_image_dimension( $image_url, $default = array() ) {
 
 	return $dimension;
 }
+
+/**
+ * Check if a image meta file source is external and if so change the srcset to match.
+ * 
+ * @param $sources
+ * @param $size_array
+ * @param $image_src
+ * @param $image_meta
+ * @param $attachment_id
+ *
+ * @return mixed
+ */
+function geodir_set_external_srcset( $sources, $size_array, $image_src, $image_meta, $attachment_id ) {
+
+	if($attachment_id === 0 && !empty($sources) && isset($image_meta['file']) && substr( $image_meta['file'], 0, 4 ) === "http"){
+		$img_url_basename = wp_basename( $image_src );
+		foreach ( $sources as $key => $source ) {
+			$sources[$key]['url'] = str_replace($img_url_basename, wp_basename($source['url']), $image_src);
+		}
+	}
+
+	return $sources;
+}
+add_filter('wp_calculate_image_srcset','geodir_set_external_srcset',10,5);
