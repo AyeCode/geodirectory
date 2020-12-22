@@ -38,7 +38,7 @@ if ( $multiple ) {
 		<?php } ?>
 		<div class="plupload-upload-uic hide-if-no-js <?php if ( $multiple ) { echo "plupload-upload-uic-multiple"; } ?>" id="<?php echo $id; ?>plupload-upload-ui">
 			<div class="geodir-dropbox-title text-muted h3 m-0"><?php echo $drop_file_label; ?></div>
-			<p class="text-muted mb-2">or</p>
+			<p class="text-muted mb-2"><?php _e( 'OR', 'geodirectory' ); ?></p>
 			<input id="<?php echo $id; ?>plupload-browse-button" type="button" value="<?php echo esc_attr( $drop_file_button ); ?>" class="btn btn-primary mb-2 "/>
 			<div class="geodir-dropbox-file-types text-muted"><?php echo( $display_file_types != '' ? __( 'Allowed file types:', 'geodirectory' ) . ' ' . $display_file_types : '' ); ?></div>
 			<div class="geodir-dropbox-file-limit text-muted geodir-msg-file-limit-<?php echo $image_limit; ?>"><?php echo $file_limit_message;?></div>
