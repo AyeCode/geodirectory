@@ -705,7 +705,7 @@ function geodir_get_business_hours( $value = '', $country = '' ) {
 					$opens_time = strtotime( $opens );
 					$closes_time = strtotime( date_i18n( 'H:i:59', strtotime( $closes ) ) );
 					
-					if ( $is_today && (($opens_time <= $time_int && $time_int <= $closes_time) || ($opens == '00:00' && $opens == $closes)) ) {
+					if ( $is_today && (($opens_time <= $time_int && $time_int <= $closes_time) || ($opens == '00:00' && $opens == $closes) || ($opens != '00:00' && $opens == $closes && $opens_time <= $time_int)) ) {
 						$is_open = 1;
 						$has_open = 1;
 					} else {
@@ -2010,3 +2010,43 @@ function geodir_timezone_countries() {
 		)
 	) );
 }
+
+/**
+ * Filter post meta advance fields keys to show business hours for the day.
+ *
+ * @since 2.1.0.7
+ *
+ * @param array $fields The custom fields keys.
+ * @param string $post_type The post type.
+ * @return array The custom fields keys.
+ */
+function geodir_post_meta_business_hours_days( $fields, $post_type ) {
+	$days = array(
+		'today' => __( 'Today', 'geodirectory' ),
+		'mon' => __( 'Mon', 'geodirectory' ),
+		'tue' => __( 'Tue', 'geodirectory' ),
+		'wed' => __( 'Wed', 'geodirectory' ),
+		'thu' => __( 'Thu', 'geodirectory' ),
+		'fri' => __( 'Fri', 'geodirectory' ),
+		'sat' => __( 'Sat', 'geodirectory' ),
+		'sun' => __( 'Sun', 'geodirectory' ),
+	);
+
+	foreach ( $days as $key => $title ) {
+		$fields['business_hours_' . $key ] = array(
+			'type' => 'custom',
+			'name' => 'business_hours_' . $key,
+			'htmlvar_name' => 'business_hours_' . $key,
+			'frontend_title' => $title,
+			'field_icon' => 'fas fa-clock',
+			'field_type_key' => '',
+			'css_class' => '',
+			'extra_fields' => array(
+				'day' => $key
+			)
+		);
+	}
+
+	return $fields;
+}
+add_filter( 'geodir_post_meta_advance_fields', 'geodir_post_meta_business_hours_days', 50, 2 );

@@ -5,6 +5,7 @@
 * Add missing translation for file upload field - FIXED
 * Images can now store full URL for external images - ADDED
 * Detail page lightbox next/previous link not working with WP v5.6 & jQuery v3.5.x for legacy style - FIXED
+* Business hours show single day times with [gd_post_meta] shortcode - ADDED
 
 = 2.1.0.6 =
 * Detail page image slider is not working with Divi theme - FIXED
