@@ -305,8 +305,8 @@ class GeoDir_Post_Data {
 					$file       = GeoDir_Media::update_attachment( $file_id, $post_id, $field, $file_url, $file_title, $file_caption, $order, $approved );
 					$file_ids[] = $file_id;
 				} else { // its a new image we have to insert.
-
-					if ( defined( 'GEODIR_DOING_IMPORT' ) && strpos( $file_url, 'http' ) !== 0 ) {// if doing import and its not a full url then add placeholder attachment
+					// If doing import and its not a full url then add placeholder attachment OR when finds # in strat of the url.
+					if ( defined( 'GEODIR_DOING_IMPORT' ) && ( ! geodir_is_full_url( $file_url ) || strpos( $file_url, '#' ) === 0 ) ) {
 						// insert the image
 						$file = GeoDir_Media::insert_attachment( $post_id, $field, $file_url, $file_title, $file_caption, $order, $approved, true );
 					} else {
@@ -314,7 +314,6 @@ class GeoDir_Post_Data {
 						$file = GeoDir_Media::insert_attachment( $post_id, $field, $file_url, $file_title, $file_caption, $order, $approved );
 					}
 				}
-
 
 				// check for error
 				if ( is_wp_error( $file ) ) {
@@ -327,7 +326,6 @@ class GeoDir_Post_Data {
 				}
 
 			}
-
 
 			// Check if there are any missing file ids we need to delete
 			if ( ! empty( $current_files ) && ! empty( $files ) && ! empty( $file_ids ) ) {

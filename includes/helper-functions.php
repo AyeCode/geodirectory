@@ -1982,3 +1982,20 @@ function geodir_min_version_check($name,$version){
 function geodir_bsui_class(){
 	return geodir_design_style() ? 'bsui' : '';
 }
+
+/**
+ * Check full url or not.
+ *
+ * @since 2.1.0.7
+ *
+ * @param string $url The url.
+ * @return bool True if full url or False.
+ */
+function geodir_is_full_url( $url ) {
+	// Start with http: or https:.
+	if ( 0 === stripos( $url, 'http:' ) || 0 === stripos( $url, 'https:' ) ) {
+		return true;
+	}
+
+	return false;
+}

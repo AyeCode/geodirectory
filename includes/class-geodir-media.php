@@ -285,12 +285,15 @@ class GeoDir_Media {
 		$metadata = !empty($raw_metadata) ? $raw_metadata : '';
 		if ( $is_placeholder ) { // If a placeholder image, such as a image name that will be uploaded manually to the upload dir
 			$upload_dir = wp_upload_dir();
-			if(substr( $url, 0, 4 ) === "http"){
+
+			if ( geodir_is_full_url( $url ) ) {
 				$file = esc_url_raw( $url );
-			}else{
-				$file = trailingslashit($upload_dir['subdir'] ) . basename( $url );
+			} else if ( strpos( $url, '#' ) === 0 ) {
+				$file = esc_url_raw( ltrim( $url, '#' ) );
+			} else {
+				$file = trailingslashit( $upload_dir['subdir'] ) . basename( $url );
 			}
-//			$file = $upload_dir['subdir'] . '/' . basename( $url );
+
 			$file_type_arr = wp_check_filetype( basename( $url ) );
 			$file_type = $file_type_arr['type'];
 		} else {
@@ -521,7 +524,7 @@ class GeoDir_Media {
 			$filename = $wp_upload_dir['basedir'] . $file;
 			$featured_img_url = get_the_post_thumbnail_url( $post_id, 'full' );
 
-			if ( $featured_img_url != $file_url && substr( $file,  0, 4 ) !== "http") {
+			if ( $featured_img_url != $file_url && ! geodir_is_full_url( $file ) ) {
 				$file = wp_check_filetype( basename( $file_url ) );
 				$attachment = array(
 					'guid'           => $file_url,
@@ -936,20 +939,20 @@ class GeoDir_Media {
 	 *
 	 * @return mixed
 	 */
-	public static function set_external_src_meta($images){
-		
+	public static function set_external_src_meta( $images ) {
 		if ( ! empty( $images ) ) {
 			foreach ( $images as $key => $image ) {
-				if ( isset( $image->file ) && !empty($image->metadata) && substr( $image->file, 0, 4 ) === "http" ) {
-					$image_meta = maybe_unserialize($image->metadata);
-					if(!empty($image_meta['file'])){
+				if ( isset( $image->file ) && ! empty( $image->metadata ) && geodir_is_full_url( $image->file ) ) {
+					$image_meta = maybe_unserialize( $image->metadata );
+
+					if ( ! empty( $image_meta['file'] ) ) {
 						$image_meta['file'] = $image->file;
-						$images[$key]->metadata = maybe_serialize($image_meta);
+						$images[$key]->metadata = maybe_serialize( $image_meta );
 					}
 				}
 			}
 		}
-		
+
 		return $images;
 	}
 
@@ -976,26 +979,35 @@ class GeoDir_Media {
 	 *
 	 * @return string
 	 */
-	public static function get_field_edit_string($post_id,$field,$revision_id = '',$other_id = ''){
-		$files = self::get_attachments_by_type($post_id,$field,'',$revision_id,$other_id );
+	public static function get_field_edit_string( $post_id, $field, $revision_id = '', $other_id = '', $is_export = false ) {
+		$files = self::get_attachments_by_type( $post_id, $field, '', $revision_id, $other_id );
 
-		if(!empty($files)){
+		if ( ! empty( $files ) ) {
 			$wp_upload_dir = wp_upload_dir();
 			$files_arr = array();
-			foreach( $files as $file ){
-				$is_approved = isset($file->is_approved) && $file->is_approved ? '' : '|0';
-				if($file->menu_order=="-1"){$is_approved = "|-1";}
 
-				if(substr( $file->file, 0, 4 ) === "http"){
-					$img_src = esc_url_raw( $file->file );
-				}else{
-					$img_src = $wp_upload_dir['baseurl'].$file->file;
+			foreach( $files as $file ) {
+				$is_approved = isset( $file->is_approved ) && $file->is_approved ? '' : '|0';
+
+				if ( $file->menu_order == "-1" ) {
+					$is_approved = "|-1";
 				}
 
-				$files_arr[] = $img_src . "|".$file->ID."|".$file->title."|".$file->caption . $is_approved;
+				if ( geodir_is_full_url( $file->file ) ) {
+					$img_src = esc_url_raw( $file->file );
+
+					// Add '#' at start of the url when exporting the images.
+					if ( $is_export ) {
+						$img_src = '#' . $img_src;
+					}
+				} else {
+					$img_src = $wp_upload_dir['baseurl'] . $file->file;
+				}
+
+				$files_arr[] = $img_src . "|" . $file->ID . "|" . $file->title . "|" . $file->caption . $is_approved;
 			}
-			return implode("::",$files_arr);
-		}else{
+			return implode( "::", $files_arr );
+		} else {
 			return '';
 		}
 	}

@@ -220,12 +220,12 @@
             };
         }
 
-
         // Generate caption
         var caption = '';
         //var desc = (instance.opener() && instance.opener().data('lity-desc')) || 'Image with no description';
         var title = (instance.opener() && instance.opener().find('img').attr('title')) || '';
-        var desc = (instance.opener() && instance.opener().find('img').attr('alt')) || '';
+        var alt = (instance.opener() && instance.opener().find('img').attr('alt')) || '';
+        var desc = (instance.opener() && instance.opener().find('img').data('caption')) || '';
 
         // responsive
         var srcset = (instance.opener() && instance.opener().find('img').attr('srcset')) || '';
@@ -242,7 +242,7 @@
             }
             caption = caption + '</div>';
         }
-        var img = $('<img src="' + target + '" alt="' + desc + '" srcset="'+srcset+'"/>'+caption+gallery_nav);//+gallery_nav;
+        var img = $('<img src="' + target + '" alt="' + alt + '" srcset="'+srcset+'"/>'+caption+gallery_nav);//+gallery_nav;
         var deferred = _deferred();
         var failed = function() {
             deferred.reject(error('Failed loading image'));
