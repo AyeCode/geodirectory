@@ -2049,7 +2049,7 @@ function geodir_title_meta_pagenumber() {
  * @return string|null The current page total.
  */
 function geodir_title_meta_pagetotal() {
-	$replacement = null;
+	$replacement = 0;
 
 	$max = geodir_title_meta_pagenumbering( 'max' );
 	if ( isset( $max ) && $max > 0 ) {
@@ -2068,7 +2068,7 @@ function geodir_title_meta_pagetotal() {
  * @return string|null The total post found.
  */
 function geodir_title_meta_postcount() {
-	$replacement = null;
+	$replacement = 0;
 
 	$postcount = geodir_title_meta_pagenumbering( 'postcount' );
 	if ( isset( $postcount ) && $postcount > 0 ) {
