@@ -8,6 +8,7 @@
 * Business hours show single day times with [gd_post_meta] shortcode - ADDED
 * Images can now store full URL during import for external images - ADDED
 * %%post_count%% shows null when no post found - CHANGED
+* GD Listings pagination not working when with_pics_only enabled - FIXED
 
 = 2.1.0.6 =
 * Detail page image slider is not working with Divi theme - FIXED
