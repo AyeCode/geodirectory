@@ -1608,13 +1608,17 @@ function gd_manually_set_user_position($msg){
 
 function gd_set_get_directions($lat,$lon){
     if(jQuery('#gd_map_canvas_post_fromAddress').length){
+        var $map = jQuery("#gd_map_canvas_post_fromAddress").closest('.geodir-map-wrap');
         jQuery('#gd-single-tabs a[href="#post_map"]').tab('show');
         setTimeout(function(){
             jQuery('html, body').animate({
-                scrollTop: jQuery("#post_map").offset().top
+                scrollTop: $map.offset().top
             }, 1000);
         }, 300);
         jQuery('#gd_map_canvas_post_fromAddress').val($lat+","+$lon);
+        if($map.find('.leaflet-routing-geocoder').length) {
+            jQuery('.leaflet-routing-geocoder:last input', $map).val($lat+","+$lon).trigger('focus');
+        }
         jQuery('.geodir-map-directions-wrap button').trigger('click');
     }
 }

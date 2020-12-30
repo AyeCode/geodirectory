@@ -955,11 +955,17 @@ function geodirFindRoute(map_canvas) {
                     return hexagecimal(latLng.lat, 'N', 'S') + ' ' + hexagecimal(latLng.lng, 'E', 'W');
                 }
             });
-            control.addTo(jQuery.goMap.map);
+            var cExists = typeof jQuery.goMap.map._container != 'undefined' && jQuery('.leaflet-control.leaflet-routing-container', jQuery.goMap.map._container).length ? true : false;
+            if (!cExists) {
+                control.addTo(jQuery.goMap.map);
+            }
 
             L.Routing.errorControl(control).addTo(jQuery.goMap.map);
 
-            jQuery('#' + map_canvas + ' .leaflet-routing-geocoders .leaflet-routing-search-info').append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="' + map_canvas + '_mylocation" class="gd-map-mylocation c-pointer ml-1"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
+            var $routing = jQuery('#' + map_canvas + ' .leaflet-routing-geocoders .leaflet-routing-search-info');
+            if (!$routing.find('#' + map_canvas + '_mylocation').length) {
+                $routing.append('<span title="' + geodir_params.geoMyLocation + '" onclick="gdMyGeoDirection(' + map_canvas + ');" id="' + map_canvas + '_mylocation" class="gd-map-mylocation c-pointer ml-1"><i class="fas fa-crosshairs" aria-hidden="true"></i></span>');
+            }
         } catch (e) {
             console.log(e.message);
         }
