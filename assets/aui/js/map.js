@@ -855,12 +855,28 @@ function geodir_map_sticky(map_options) {
             }
 
             var wheight = jQuery(window).height();
+            var wScrTop = jQuery(window).scrollTop();
+            var maxScr = 0;
+            if (jQuery('.geodir-category-list-view').length) {
+                maxScr = parseFloat(jQuery('.geodir-category-list-view:last').offset().top) + parseFloat(jQuery('.geodir-category-list-view:last').innerHeight()) - 50;
+            }
+            if (jQuery('.elementor-posts').length) {
+                var _maxScr = parseFloat(jQuery('.elementor-posts:last').offset().top) + parseFloat(jQuery('.elementor-posts:last').innerHeight()) - 50;
+                if (_maxScr > maxScr) {
+                    maxScr = _maxScr;
+                }
+            }
+            if (maxScr < catcher.offset().top) {
+                maxScr = 0;
+            }
+            var noSticky = maxScr > 0 && wScrTop > maxScr && wScrTop > catcher.offset().top ? true : false;
 
-            if (jQuery(window).scrollTop() >= catcher.offset().top) {
+            if (wScrTop >= catcher.offset().top && !noSticky) {
                 if (!sticky.hasClass('stickymap')) {
                     sticky.addClass('stickymap');
                     /// sticky.hide();
                     sticky.appendTo('body');
+                    sticky.removeClass('position-relative').addClass('position-fixed');
                     sticky.css({
                         'position': 'fixed',
                         'right': '0',
@@ -879,6 +895,7 @@ function geodir_map_sticky(map_options) {
                     }
                     window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
                 }
+                sticky_show_hide_trigger.removeClass('position-relative').addClass('position-fixed');
                 sticky_show_hide_trigger.css({
                     'top': '25%',
                     'position': 'fixed',
@@ -887,11 +904,12 @@ function geodir_map_sticky(map_options) {
                 sticky_show_hide_trigger.show();
             }
 
-            if (jQuery(window).scrollTop() < catcher.offset().top) {
+            if (wScrTop < catcher.offset().top || noSticky) {
                 if (sticky.hasClass('stickymap')) {
                     sticky.appendTo(map_parent);
                     sticky.hide();
                     sticky.removeClass('stickymap');
+                    sticky.removeClass('position-fixed').addClass('position-relative');
                     sticky.css({
                         'position': 'relative',
                         'border': 'none',
@@ -904,6 +922,7 @@ function geodir_map_sticky(map_options) {
                     });
                     sticky_show_hide_trigger.removeClass('triggeroff_sticky');
                     sticky_show_hide_trigger.addClass('triggeron_sticky');
+                    sticky_show_hide_trigger.removeClass('position-fixed').addClass('position-relative');
                     window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
                 }
                 sticky_show_hide_trigger.hide();
