@@ -1788,7 +1788,7 @@ class GeoDir_Admin_Import_Export {
 			$comment_args['status'] = sanitize_text_field( $_REQUEST['gd_imex']['status'] );
 		}
 
-		return apply_filters( 'geodir_export_reviews_comment_args', $comment_args, $fields );
+		return apply_filters( 'geodir_export_reviews_comment_args', $comment_args );
 	}
 	
 	/**
