@@ -438,6 +438,14 @@ class GeoDir_Location {
 		}
 	}
 
+	/**
+	 * Set post location.
+	 *
+	 * @since 2.1.0.7
+	 *
+	 * @param  object $gd_post The post object.
+	 * @return object Post location object.
+	 */
 	public function multi_city_location( $gd_post ) {
 		$location = new stdClass();
 
@@ -458,5 +466,3 @@ class GeoDir_Location {
 		return $location;
 	}
 }
-
-
