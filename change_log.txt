@@ -10,6 +10,7 @@
 * %%post_count%% shows null when no post found - CHANGED
 * GD Listings pagination not working when with_pics_only enabled - FIXED
 * Map marker not bouncing when OpenStreetMaps enabled with AUI Bootstrap style - FIXED
+* Option added to allow add listing outside default city - ADDED
 
 = 2.1.0.6 =
 * Detail page image slider is not working with Divi theme - FIXED

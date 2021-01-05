@@ -1229,6 +1229,10 @@ function geodir_cfi_address( $html, $cf ) {
 
             <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
                 <?php
+                if ( geodir_core_multi_city() ) {
+                    add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
+                }
+
                 /**
                  * Contains add listing page map functions.
                  *

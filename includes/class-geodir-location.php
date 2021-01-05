@@ -41,6 +41,7 @@ class GeoDir_Location {
 
 		}
 
+		add_action( 'geodir_address_extra_listing_fields', array( $this, 'set_multi_city' ), 1, 1 );
 	}
 
 	public function clear_cache(){
@@ -172,7 +173,11 @@ class GeoDir_Location {
 		return geodir_get_option('default_location_city');
 	}
 
-	public function get_post_location($gd_post){
+	public function get_post_location( $gd_post ) {
+		if ( geodir_core_multi_city() ) {
+			return $this->multi_city_location( $gd_post );
+		}
+
 		return $this->get_default_location();
 	}
 
@@ -293,6 +298,165 @@ class GeoDir_Location {
 		return $gps_type;
 	}
 
+	/**
+	 * This is used to put country, region & city fields on add/edit listing page.
+	 *
+	 * @since 2.1.0.7
+	 *
+	 * @global object $gd_post The post object.
+	 *
+	 * @param array $field The array of setting for the custom field.
+	 */
+	public function set_multi_city( $field ) {
+		global $gd_post, $geodir_label_type;
+
+		if ( ! geodir_core_multi_city() ) {
+			return;
+		}
+
+		$location = $this->get_default_location();
+		$name = $field['name'];
+		$prefix = $name . '_';
+		$is_required = true;
+
+		if ( ! empty( $gd_post->country ) ) {
+			$country = $gd_post->country;
+		}  else if ( ! empty( $location->country ) ) {
+			$country = $location->country;
+		} else {
+			$country = '';
+		}
+
+		if ( ! empty( $gd_post->region ) ) {
+			$region = $gd_post->region;
+		}  else if ( ! empty( $location->region ) ) {
+			$region = $location->region;
+		} else {
+			$region = '';
+		}
+
+		if ( ! empty( $gd_post->city ) ) {
+			$city = $gd_post->city;
+		} else if ( ! empty( $location->city ) ) {
+			$city = $location->city;
+		} else {
+			$city = '';
+		}
+
+		$design_style = geodir_design_style();
+
+		if ( $design_style ) {
+			$required = ! empty( $is_required ) ? ' <span class="text-danger">*</span>' : '';
+
+			// Country
+			echo aui()->select( array(
+				'id'               => $prefix . "country",
+				'name'             => "country",
+				'placeholder'      => esc_attr__( 'Choose a country&hellip;', 'geodirectory' ),
+				'value'            => esc_attr( stripslashes( $country ) ),
+				'required'         => $is_required,
+				'label'            => esc_attr__( 'Country', 'geodirectory' ) . $required,
+				'label_type'       => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
+				'help_text'        => __( 'Click on above field and type to filter list.', 'geodirectory' ),
+				'options'          => geodir_get_country_dl( $country, $prefix ),
+				'extra_attributes' => array(
+					'data-address-type' => 'country',
+					'field_type'        => $field['type']
+				)
+			) );
+
+			// Region
+			echo aui()->input( array(
+				'type'             => 'text',
+				'id'               => $prefix . "region",
+				'name'             => "region",
+				'value'            => esc_attr( stripslashes( $region ) ),
+				'required'         => $is_required,
+				'label_show'       => true,
+				'label'            => esc_attr__( 'Region', 'geodirectory' ) . $required,
+				'label_type'       => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
+				'placeholder'      => ( ! empty( $location->region ) ? esc_attr( stripslashes( $location->region ) ) : '' ),
+				'help_text'        => __( 'Enter listing region.', 'geodirectory' ),
+				'extra_attributes' => array(
+					'data-address-type' => 'region',
+					'field_type'        => 'text',
+					'data-tags'         => "false"
+				)
+			) );
+
+			// City
+			echo aui()->input( array(
+				'type'             => 'text',
+				'id'               => $prefix . "city",
+				'name'             => "city",
+				'value'            => esc_attr( stripslashes( $city ) ),
+				'required'         => $is_required,
+				'label_show'       => true,
+				'label'            => esc_attr__( 'City', 'geodirectory' ) . $required,
+				'label_type'       => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
+				'placeholder'      => ( ! empty( $location->city ) ? esc_attr( stripslashes( $location->city ) ) : '' ),
+				'help_text'        => __( 'Enter listing city.', 'geodirectory' ),
+				'extra_attributes' => array(
+					'data-address-type' => 'city',
+					'field_type'        => 'text',
+					'data-tags'         => "false"
+				)
+			) );
+		} else {
+			?>
+			<div id="geodir_<?php echo $prefix . 'country'; ?>_row"
+				 class="geodir_form_row clearfix gd-fieldset-details geodir-address-row-multi<?php echo ( $is_required ? ' required_field' : '' ); ?>">
+				<label for="<?php echo $prefix ?>country"><?php echo esc_attr__( 'Country', 'geodirectory' ) . ( $is_required ? ' <span>*</span>' : '' ); ?></label>
+				<select id="<?php echo $prefix ?>country" name="country" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'geodirectory' ); ?>" class="geodir_textfield textfield_x geodir-select" field_type="<?php echo $field['type']; ?>" data-address-type="country">
+					<?php echo geodir_get_country_dl( $country, $prefix ); ?>
+				</select>
+				<span
+					class="geodir_message_note"><?php _e( 'Click on above field and type to filter list.', 'geodirectory' ); ?></span>
+				<?php if ( $is_required ) { ?>
+					<span class="geodir_message_error"><?php _e( 'Listing country is required.', 'geodirectory' ); ?></span>
+				<?php } ?>
+			</div>
+			<div id="geodir_<?php echo $prefix . 'region'; ?>_row"
+				 class="geodir_form_row clearfix gd-fieldset-details geodir-address-row-multi<?php echo ( $is_required ? ' required_field' : '' ); ?>">
+				<label for="<?php echo $prefix ?>region"><?php echo esc_attr__( 'Region', 'geodirectory' ) . ( $is_required ? ' <span>*</span>' : '' ); ?></label>
+				<input type="text" id="<?php echo $prefix ?>region" name="region" value="<?php echo esc_attr( stripslashes( $region ) ); ?>" placeholder="<?php echo ( ! empty( $location->region ) ? esc_attr( stripslashes( $location->region ) ) : '' ); ?>" class="geodir_textfield textfield_x" field_type="text" data-address-type="region" />
+				<span class="geodir_message_note"><?php _e( 'Enter listing region.', 'geodirectory' ); ?></span>
+				<?php if ( $is_required ) { ?>
+					<span class="geodir_message_error"><?php _e( 'Listing region is required.', 'geodirectory' ); ?></span>
+				<?php } ?>
+			</div>
+			<div id="geodir_<?php echo $prefix . 'city'; ?>_row"
+				 class="geodir_form_row clearfix gd-fieldset-details geodir-address-row-multi<?php echo ( $is_required ? ' required_field' : '' ); ?>">
+				<label for="<?php echo $prefix ?>city"><?php echo esc_attr__( 'City', 'geodirectory' ) . ( $is_required ? ' <span>*</span>' : '' ); ?></label>
+				<input type="text" id="<?php echo $prefix ?>city" name="city" value="<?php echo esc_attr( stripslashes( $city ) ); ?>" placeholder="<?php echo ( ! empty( $location->city ) ? esc_attr( stripslashes( $location->city ) ) : '' ); ?>" class="geodir_textfield textfield_x" field_type="text" data-address-type="city" />
+				<span class="geodir_message_note"><?php _e( 'Enter listing city.', 'geodirectory' ); ?></span>
+				<?php if ( $is_required ) { ?>
+					<span class="geodir_message_error"><?php _e( 'Listing city is required.', 'geodirectory' ); ?></span>
+				<?php } ?>
+			</div>
+			<?php
+		}
+	}
+
+	public function multi_city_location( $gd_post ) {
+		$location = new stdClass();
+
+		// Names
+		$location->city = ! empty( $gd_post->city ) ? stripslashes( $gd_post->city ) : '';
+		$location->region = ! empty( $gd_post->region ) ? stripslashes( $gd_post->region ) : '';
+		$location->country = ! empty( $gd_post->country ) ? stripslashes( $gd_post->country ) : '';
+
+		// Slugs
+		$location->city_slug = $location->city ? sanitize_title( $location->city ) : '';
+		$location->region_slug = $location->region ? sanitize_title( $location->region ) : '';
+		$location->country_slug = $location->country ? sanitize_title( $location->country ) : '';
+
+		// GPS
+		$location->latitude = ! empty( $gd_post->latitude ) ? $gd_post->latitude : '';
+		$location->longitude = ! empty( $gd_post->longitude ) ? $gd_post->longitude : '';
+
+		return $location;
+	}
 }
 
 
