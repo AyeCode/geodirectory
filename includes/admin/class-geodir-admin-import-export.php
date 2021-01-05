@@ -468,7 +468,7 @@ class GeoDir_Admin_Import_Export {
 			$i      = 0;
 			if ( ! empty( $images ) ) {
 				foreach ( $images as $image ) {
-					if ( strpos( $image, 'http' ) === 0 ) {
+					if ( geodir_is_full_url( $image ) || strpos( $image, '#' ) === 0 ) {
 						// It starts with 'http'
 					} else {
 						$i ++;
@@ -768,19 +768,15 @@ class GeoDir_Admin_Import_Export {
 
 		$posts = self::get_export_posts( $post_type, $per_page, $page_no );
 
-		//print_r($posts);exit;
-
 		$csv_rows = array();
 
 		if ( ! empty( $posts ) ) {
-
-
 			$i = 0; // posts processes
-			foreach ( $posts as $post_info ) {
 
+			foreach ( $posts as $post_info ) {
 				// add the post_images column
-				$post_info['post_images'] = GeoDir_Media::get_field_edit_string( $post_info['ID'],'post_images');
-				
+				$post_info['post_images'] = GeoDir_Media::get_field_edit_string( $post_info['ID'], 'post_images', '', '', true );
+
 				// fill in the CSV header
 				if ( $i === 0 ) {
 					$columns = array_keys( $post_info );
@@ -1231,7 +1227,7 @@ class GeoDir_Admin_Import_Export {
 								$image_id = 'image';
 								$image_url = trim( $uploads['subdir'] . '/' . $term_data['image'], '/\\' );
 
-								if ( strpos( $term_data['cat_image'], 'http://' ) === 0 || strpos( $term_data['cat_image'], 'https://' ) === 0 ) {
+								if ( geodir_is_full_url( $term_data['cat_image'] ) ) {
 									$attachment_id = self::generate_attachment_id( $term_data['cat_image'] );
 									if ( $attachment_id && ( $attachment_url = wp_get_attachment_url( $attachment_id ) ) ) {
 										$image_id = $attachment_id;
@@ -1254,7 +1250,7 @@ class GeoDir_Admin_Import_Export {
 								$image_id = 'icon';
 								$image_url = trim( $uploads['subdir'] . '/' . $term_data['icon'], '/\\' );
 
-								if ( strpos( $term_data['cat_icon'], 'http://' ) === 0 || strpos( $term_data['cat_icon'], 'https://' ) === 0 ) {
+								if ( geodir_is_full_url( $term_data['cat_icon'] ) ) {
 									$attachment_id = self::generate_attachment_id( $term_data['cat_icon'] );
 									if ( $attachment_id && ( $attachment_url = wp_get_attachment_url( $attachment_id ) ) ) {
 										$image_id = $attachment_id;
@@ -1792,7 +1788,7 @@ class GeoDir_Admin_Import_Export {
 			$comment_args['status'] = sanitize_text_field( $_REQUEST['gd_imex']['status'] );
 		}
 
-		return apply_filters( 'geodir_export_reviews_comment_args', $comment_args, $fields );
+		return apply_filters( 'geodir_export_reviews_comment_args', $comment_args );
 	}
 	
 	/**

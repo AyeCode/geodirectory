@@ -186,14 +186,12 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				/* If displaying the 'city' column. */
 				case 'image' :
 					$upload_dir = wp_upload_dir();
-					$image_raw = isset($gd_post->featured_image) && !empty($gd_post->featured_image) ? $gd_post->featured_image : '';
-					//print_r($gd_post);
+					$image_raw = isset( $gd_post->featured_image ) && ! empty( $gd_post->featured_image ) ? $gd_post->featured_image : '';
 					/* If no city is found, output a default message. */
-					if ( empty( $image_raw) ) {
+					if ( empty( $image_raw ) ) {
 						_e( 'N/A', 'geodirectory' );
 					} else {
-						/* if we get tot his point then it has a featured image */
-						the_post_thumbnail('thumbnail');
+						echo do_shortcode( '[gd_post_images types="post_images" fallback_types="post_images" limit="1" limit_show="1" type="image" slideshow="0" controlnav="0" show_title="0" show_caption="0" image_size="thumbnail"]' );
 					}
 					break;
 

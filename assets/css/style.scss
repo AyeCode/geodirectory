@@ -1394,69 +1394,6 @@ ul.gd_multi_choice {
 /* Google maps adds a span which breaks our mobile slide out menus */
 body > span[style*='top: -999px']{display: none;}
 
-/* OpenStreetMap marker bounce */
-@-webkit-keyframes gdbounce {
-    0%, 100% {
-        top: inherit;
-    }
-    20%, 80% {
-        top: -0.8em;
-    }
-    40%, 60% {
-        top: -1.6em;
-    }
-    50% {
-        top: -2em;
-    }
-}
-@-moz-keyframes gdbounce {
-    0%, 100% {
-        top: inherit;
-    }
-    20%, 80% {
-        top: -0.8em;
-    }
-    40%, 60% {
-        top: -1.6em;
-    }
-    50% {
-        top: -2em;
-    }
-}
-@-o-keyframes gdbounce {
-    0%, 100% {
-        top: inherit;
-    }
-    20%, 80% {
-        top: -0.8em;
-    }
-    40%, 60% {
-        top: -1.6em;
-    }
-    50% {
-        top: -2em;
-    }
-}
-@keyframes gdbounce {
-    0%, 100% {
-        top: inherit;
-    }
-    20%, 80% {
-        top: -0.8em;
-    }
-    40%, 60% {
-        top: -1.6em;
-    }
-    50% {
-        top: -2em;
-    }
-}
-.gd-osm-marker-bounce {
-    -webkit-animation: gdbounce .7s infinite;
-    -moz-animation: gdbounce .7s infinite;
-    -o-animation: gdbounce .7s infinite;
-    animation: gdbounce .7s infinite;
-}
 .geodir-gridview .geodir-rating,
 .geodir-listview .geodir-rating,
 .gd-bubble .geodir-rating,
@@ -2118,6 +2055,16 @@ body > span[style*='top: -999px']{display: none;}
         margin-left: 5px;
         margin-right: 0;
     }
+}
+.gd-bh-day-hours > * {
+    display: inline-block;
+}
+.gd-bh-day-hours .geodir_post_meta_icon {
+    vertical-align: top;
+}
+.gd-bh-day-hours .gd-bh-slot .gd-bh-slot-r {
+    text-align: left;
+    padding:0 .25rem;
 }
 /* business hours end */
 /* closed down message start */

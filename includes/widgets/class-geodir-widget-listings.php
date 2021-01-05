@@ -885,7 +885,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$query_args['show_special_only'] = 1;
 		}
 
-		if ( ! empty( $instance['with_pics_only'] ) ) {
+		if ( ! empty( $instance['with_pics_only'] ) || ! empty( $instance['featured_image_only'] ) ) {
 			$query_args['with_pics_only']      = 0;
 			$query_args['featured_image_only'] = 1;
 		}

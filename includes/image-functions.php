@@ -102,6 +102,8 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '', $classes = 
 	$id = isset($image->ID) ? esc_attr( $image->ID ) : 0;
 	$_title = isset( $image->title ) && $image->title ? wp_strip_all_tags( stripslashes_deep( $image->title ) ) : '';
 	$title = $_title ? 'title="' . esc_attr( $_title ) . '" ' : '';
+	$_caption = ! empty( $image->caption ) ? wp_strip_all_tags( stripslashes_deep( $image->caption ) ) : '';
+	$caption = $_caption ? ' data-caption="' . esc_attr( $_caption ) . '" ' : '';
 
 	if ( $_title ) {
 		$alt = $_title;
@@ -131,7 +133,7 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '', $classes = 
 	 */
 	$class = apply_filters( 'geodir_get_image_tag_class', $class, $id, $align, $size );
 
-	$html = '<img src="' . esc_attr($img_src) . '" alt="' . $alt . '" ' . $title . $hwstring . 'class="' . $class . '" />';
+	$html = '<img src="' . esc_attr($img_src) . '" alt="' . $alt . '" ' . $title . $caption . $hwstring . 'class="' . $class . '" />';
 
 	/**
 	 * Filters the HTML content for the image tag.

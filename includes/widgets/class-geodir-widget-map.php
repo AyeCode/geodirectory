@@ -575,6 +575,11 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			if ( GeoDir_Query::get_query_var( 'snear' ) && ( $distance = (float) GeoDir_Query::get_query_var( 'dist' ) ) ) {
 				$map_args['dist'] = $distance;
 			}
+		} elseif ( geodir_core_multi_city() ) { /* Core multi city */
+			$map_args['country']       = '';
+			$map_args['region']        = '';
+			$map_args['city']          = '';
+			$map_args['neighbourhood'] = '';
 		}
 
 		// post map

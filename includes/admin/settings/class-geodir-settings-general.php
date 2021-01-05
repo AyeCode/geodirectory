@@ -874,6 +874,15 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'default'  => geodir_timezone_string(),
 					'options'  => array()
 				),
+				array(
+					'type'     => 'checkbox',
+					'id'       => 'multi_city',
+					'name'     => __( 'Remove default city limit', 'geodirectory' ),
+					'desc'     => __( 'This will allow listings to be added anywhere (outside default location).', 'geodirectory' ),
+					'default'  => '0',
+					'desc_tip' => false,
+					'advanced' => false,
+				),
 
 				array(
 					'id'       => 'default_location_map',

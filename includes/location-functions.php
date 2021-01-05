@@ -911,3 +911,16 @@ function geodir_osm_get_gps_from_address( $address, $wp_error = false ) {
 
 	return $gps;
 }
+
+/**
+ * Check multi city active or not.
+ *
+ * @since 2.1.0.7
+ *
+ * @param array|string $address Array of address element or full address.
+ * @param bool $wp_error Optional. Whether to return a WP_Error on failure. Default false.
+ * @return bool|WP_Error GPS data or WP_Error on failure.
+ */
+function geodir_core_multi_city() {
+	return ( ! defined( 'GEODIRLOCATION_VERSION' ) && geodir_get_option( 'multi_city' ) );
+}

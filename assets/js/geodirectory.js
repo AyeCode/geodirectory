@@ -1360,7 +1360,7 @@ function geodir_ajax_load_slider(slide) {
 function geodir_init_slider($id) {
 
     // chrome 53 introduced a bug, so we need to repaint the slider when shown.
-    jQuery('.geodir-slides').addClass('flexslider-fix-rtl');
+    jQuery('#' + $id + ' .geodir-slides').addClass('flexslider-fix-rtl');
 
     jQuery("#" + $id + "_carousel").flexslider({
         animation: "slide",
@@ -1396,10 +1396,11 @@ function geodir_init_slider($id) {
         start: function(slider) {
 
             // chrome 53 introduced a bug, so we need to repaint the slider when shown.
-            jQuery('.geodir-slides').removeClass('flexslider-fix-rtl');
+            jQuery('#' + $id + ' .geodir-slides').removeClass('flexslider-fix-rtl');
             jQuery("#" + $id).removeClass('geodir-slider-loading');
 
-            jQuery(".geodir_flex-loader").hide(), jQuery("#" + $id).css({
+            jQuery("#" + $id).closest('.geodir-image-container').find(".geodir_flex-loader").hide();
+            jQuery("#" + $id).css({
                 visibility: "visible"
             }), jQuery("#" + $id + "_carousel").css({
                 visibility: "visible"
@@ -1735,6 +1736,7 @@ function geodir_widget_listings_pagination(id, params) {
                         $widget.find('.geodir_locations.geodir-wgt-pagination').replaceWith(res.data.content);
 
                         init_read_more();
+                        geodir_init_flexslider();
                         geodir_init_lazy_load();
                         geodir_refresh_business_hours();
                         geodir_load_badge_class();

@@ -534,3 +534,116 @@ function geodir_custom_field_output_default_category( $html, $location, $cf, $ou
 	return $html;
 }
 add_filter( 'geodir_custom_field_output_custom_var_default_category', 'geodir_custom_field_output_default_category', 10, 5 );
+
+/**
+ * Output business hours for the day.
+ *
+ * @since 2.1.0.7
+ *
+ * @param string $html The html to filter.
+ * @param string $location The location to output the html.
+ * @param array $cf The custom field array.
+ * @param int $p The post id.
+ * @param string $output The output string that tells us what to output.
+ * @return string The html to output.
+ */
+function geodir_custom_field_output_business_hours_day( $html, $location, $cf, $p = '', $output = '' ) {
+	if ( ! empty( $cf['name'] ) && ! empty( $cf['extra_fields'] ) && is_array( $cf['extra_fields'] ) && isset( $cf['extra_fields']['day'] ) && $cf['name'] == 'business_hours_' . $cf['extra_fields']['day'] ) {
+		$htmlvar_name = 'business_hours';
+		$day = $cf['extra_fields']['day'];
+		$design_style = geodir_design_style();
+
+		if ( $day == 'today' ) {
+			$day_nos = geodir_day_short_names();
+			$day = $day_nos[ date( 'N' ) ];
+		} else {
+			$day = ucfirst( substr( $day, 0, 2 ) );
+		}
+
+		if ( is_numeric( $p ) ) {
+			$gd_post = geodir_get_post_info( $p );
+		} else {
+			global $gd_post;
+		}
+
+		if ( ! ( ! empty( $gd_post ) && ! empty( $gd_post->{$htmlvar_name} ) && geodir_check_field_visibility( $gd_post->package_id, $htmlvar_name, $gd_post->post_type ) ) ) {
+			return $html;
+		}
+
+		$value = stripslashes_deep( $gd_post->{$htmlvar_name} );
+		$business_hours = geodir_get_business_hours( $value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
+
+		if ( ! ( ! empty( $business_hours['days'] ) && ! empty( $business_hours['days'][ $day ] ) ) ) {
+			return $html;
+		}
+		$hours = $business_hours['days'][ $day ];
+
+		$class = "geodir-i-custom";
+		$output = geodir_field_output_process( $output );
+		$field_icon = geodir_field_icon_proccess( $cf );
+		if ( strpos( $field_icon, 'http' ) !== false ) {
+			$field_icon_af = '';
+		} elseif ( $field_icon == '' ) {
+			$field_icon_af = '';
+		} else {
+			$field_icon_af = $field_icon;
+			$field_icon = '';
+		}
+
+		$css_class = ' ' . $cf['css_class'];
+		$has_open = false;
+		if ( ! empty( $hours['open'] ) ) {
+			$has_open = true;
+		}
+		if ( ! empty( $hours['closed'] ) ) {
+			$css_class .= ' gd-bh-days-closed';
+		}
+
+		$slots_class = '';
+		if ( $design_style ) {
+			$class .= ' d-inline-block mr-1 align-top';
+			$slots_class .= ' d-inline-block';
+			$css_class .= ' py-1';
+		}
+
+		$slots = '';
+		foreach ( $hours['slots'] as $i => $slot ) {
+			$slot_class = '';
+			if ( ! empty( $slot['open'] ) ) {
+				$slot_class .= ' gd-bh-open-now';
+
+				if ( ! $has_open ) {
+					$has_open = true;
+				}
+			}
+			$slots .= '<div class="gd-bh-slot' . $slot_class . '"><div class="gd-bh-slot-r">' . $slot['range'] . '</div></div>';
+		}
+
+		$value = '<div class="gd-bh-slots' . $slots_class . '">';
+		$value .= $slots;
+		$value .= '</div>';
+		if ( ! empty( $has_open ) ) {
+			$css_class .= ' gd-bh-open-today';
+		}
+
+		$html = '<div class="geodir_post_meta gd-bh-day-hours' . $css_class . ' geodir-field-' . $htmlvar_name . '">';
+
+		if ( $output == '' || isset( $output['icon'] ) ) {
+			$html .= '<span class="geodir_post_meta_icon ' . $class . '" style="' . $field_icon . '">' . $field_icon_af;
+		}
+		if ( $output == '' || isset( $output['label'] ) ) {
+			$html .= $cf['frontend_title'] != '' ? '<span class="geodir_post_meta_title" >' . __( $cf['frontend_title'], 'geodirectory' ) . ': '.'</span>' : '';
+		}
+		if ( $output == '' || isset( $output['icon'] ) ) {
+			$html .= '</span>';
+		}
+		if ( $output == '' || isset( $output['value'] ) ) {
+			$html .= $value;
+		}
+
+		$html .= '</div>';
+	}
+
+	return $html;
+}
+add_filter( 'geodir_custom_field_output_custom', 'geodir_custom_field_output_business_hours_day', 50, 5 );
