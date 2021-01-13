@@ -4,7 +4,7 @@ Donate link: https://wpgeodirectory.com
 Tags: business directory, real estate, job board, classifieds, listings, directory plugin, address book, addressbook, addresses, bio, biographies, bios, business, business directory plugin, businesses, church, directories, directory, directory widget, geodirectory, googlemap, googlemaps, google maps, list, lists, member directory, members directories, members directory, microformat, microformats, multisite, profile, profiles, staff, user, users, vcard, wordpress business directory, wordpress directory, wordpress directory plugin, yelp clone, tripadvisor clone, yellow pages clone, wordpress business directory plugin, wordpress directory theme, wordpress business directory theme, wordpress city directory plugin, wordpress local directory plugin, city directory
 Requires at least: 4.5
 Tested up to: 5.6
-Stable tag: 2.1.0.6
+Stable tag: 2.1.0.7
 Requires PHP: 5.6
 License: GPLv3
 License URI: http://www.gnu.org/licenses/gpl-3.0.html
@@ -205,6 +205,9 @@ We don't offer free trials, but we have a 30-day money-back guarantee if you are
 == Changelog ==
 
 __WARNING: GDv2 is a significant update over GDv1 and may require some manual work such as adding widgets to sidebars to recreate your current layout, as always, we recommend to try this on a staging site first. [Learn more](https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2)__
+
+= 2.1.0.7 =
+[GeoDirectory changelog for version 2.1.0.7](https://wpgeodirectory.com/change-logs-v2/#v2.1.0.7).
 
 = 2.1.0.6 =
 [GeoDirectory changelog for version 2.1.0.6](https://wpgeodirectory.com/change-logs-v2/#v2.1.0.6).
