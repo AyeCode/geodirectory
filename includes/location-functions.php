@@ -138,6 +138,11 @@ function geodir_get_current_location_terms( $location_array_from = null, $gd_pos
 		$location_array[ $location_term ] = isset( $geodirectory->location->{$location_term . "_slug"} ) ? $geodirectory->location->{$location_term . "_slug"} : '';
 	}
 
+	// Set empty locations terms when outside default location active. 
+	if ( geodir_core_multi_city() && ! geodir_is_page( 'single' ) && ! geodir_is_page( 'search' ) ) {
+		$location_array = array();
+	}
+
 	/**
 	 * Filter the location terms.
 	 *
