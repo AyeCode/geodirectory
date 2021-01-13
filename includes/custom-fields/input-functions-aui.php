@@ -1729,6 +1729,14 @@ function geodir_cfi_categories($html,$cf){
                             $default_field = 'data-cselect="default_category"';
                         }
 
+                        // Required category message.
+                        if ( ! empty( $required_msg ) ) {
+                            $required_msg = __( $required_msg, 'geodirectory' );
+                        } else {
+                            $required_msg = __( 'Select at least one category from the list!', 'geodirectory' );
+                        }
+                        $data_attrs .= ' required oninvalid="setCustomValidity(\'' . esc_attr( $required_msg ) . '\')" onchange="try{setCustomValidity(\'\')}catch(e){}"';
+
                         echo '<select  id="' .$taxonomy . '" ' . $multiple . ' type="' . $taxonomy . '" name="tax_input['.$taxonomy.'][]" alt="' . $taxonomy . '" field_type="' . $cat_display . '" class="geodir-category-select geodir-select aui-select2" data-placeholder="' . esc_attr( $placeholder ) . '" ' . $default_field . ' aria-label="' . esc_attr( $placeholder ) . '" style="width:100%"' . $data_attrs . '>';
 
                         if ($cat_display == 'select')
