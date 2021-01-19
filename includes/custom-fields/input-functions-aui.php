@@ -1873,14 +1873,18 @@ function geodir_cfi_tags( $html, $cf ) {
         $post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
         $term_array = array();
         $options = array();
-
+        $extra_fields = maybe_unserialize( $cf['extra_fields'] );
+        $tag_no       = 10;
+        if ( is_array( $extra_fields ) && ! empty( $extra_fields['no_of_tag'] ) ) {
+            $tag_no = filter_var( $extra_fields['no_of_tag'], FILTER_VALIDATE_INT );
+        }
         if ( $post_type ) {
             $terms = get_terms( array(
-                'taxonomy' => $post_type . "_tags",
+                'taxonomy'   => $post_type . "_tags",
                 'hide_empty' => false,
-                'orderby' => 'count',
-                'order' => 'DESC',
-                'number' => 10
+                'orderby'    => 'count',
+                'order'      => 'DESC',
+                'number'     => $tag_no,
             ) );
 
 
