@@ -1,3 +1,6 @@
+= 2.1.0.8 =
+* Sometimes published email shows broken post link when cache is enabled - FIXED
+
 = 2.1.0.7 =
 * OpenStreetMap routing add more languages support including Russian language - CHANGED
 * Listing sets CPT default image instead of category default image as fallback - FIXED
