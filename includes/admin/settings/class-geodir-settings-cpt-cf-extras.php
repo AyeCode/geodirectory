@@ -70,7 +70,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			// category display type
 			add_filter( 'geodir_cfa_extra_fields_categories', array( $this, 'category_input_type' ), 10, 4 );
-
 			// extra address fields
 			add_filter('geodir_cfa_extra_fields_address',array( $this, 'address_fields' ),10,4);
 
@@ -133,7 +132,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			
 			// address field is always required
 			add_filter( 'geodir_cfa_is_required_address', array($this,'is_required'), 10, 4 );
-
+			
+			// No of tags.
+			add_filter( 'geodir_cfa_extra_fields_tags', array( $this, 'no_of_tags_input_type' ), 10, 4 );
 		}
 
 		/**
@@ -761,6 +762,43 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			}
 
+			return $output;
+		}
+		/**
+		 * The no of tags setting.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $output Html output.
+		 * @param string $result_str Results string.
+		 * @param array  $cf Custom fields values.
+		 * @param object $field Extra fields information.
+		 * @return string $output.
+		 */
+		public static function no_of_tags_input_type( $output, $result_str, $cf, $field ) {
+
+			if ( $field->htmlvar_name == 'post_tags' ) {
+				ob_start();
+				// print_r($field->extra_fields);echo '###'.;
+				$extra = maybe_unserialize( $field->extra_fields );
+				?>
+				<p class="gd-advanced-setting" data-setting="no_of_tag">
+					<label for="no_of_tag" class="dd-setting-name">
+						<?php
+						echo wp_kses_post( geodir_help_tip( __( 'Enter number of tag', 'geodirectory' ) ) );
+						esc_html_e( 'Number of tag', 'geodirectory' );
+						if ( is_array( $extra ) && ! empty( $extra['no_of_tag'] ) ) {
+							$no_of_tag = $extra['no_of_tag'];
+						} else {
+							$no_of_tag = '';
+						}
+						?>
+						<input type="number" name="extra[no_of_tag]" id="no_of_tag" value="<?php echo esc_attr( $no_of_tag ); ?>"/>
+					</label>
+				</p>
+				<?php
+				$output .= ob_get_clean();
+			}
 			return $output;
 		}
 
