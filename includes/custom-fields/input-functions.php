@@ -1983,3 +1983,25 @@ function geodir_cfi_files( $html, $cf ) {
 }
 add_filter('geodir_custom_field_input_images','geodir_cfi_files',10,2);
 add_filter('geodir_custom_field_input_file','geodir_cfi_files',10,2);
+
+/**
+ * Filter the input tag arg.
+ *
+ * @since 2.0.0
+ *
+ * @param string $taxonomy taxonomy.
+ * @param bool   $hide_empty for check hide empty tag.
+ * @param string $orderby orderby query.
+ * @param string $order order query.
+ * @param int    $number number of tag.
+ */
+function geodir_cfi_input_tag( $taxonomy, $hide_empty = false, $orderby = 'count', $order = 'DESC', $number = 10 ) {
+    return array(
+        'taxonomy'   => $taxonomy,
+        'hide_empty' => $hide_empty,
+        'orderby'    => $orderby,
+        'order'      => $order,
+        'number'     => $number,
+    );
+}
+add_filter( 'geodir_custom_field_input_tag', 'geodir_cfi_input_tag', 10, 5 );

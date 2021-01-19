@@ -1879,15 +1879,15 @@ function geodir_cfi_tags( $html, $cf ) {
             $tag_no = filter_var( $extra_fields['no_of_tag'], FILTER_VALIDATE_INT );
         }
         if ( $post_type ) {
-            $terms = get_terms( array(
-                'taxonomy'   => $post_type . "_tags",
-                'hide_empty' => false,
-                'orderby'    => 'count',
-                'order'      => 'DESC',
-                'number'     => $tag_no,
-            ) );
-
-
+            $tag_filter =  array(
+                    'taxonomy'   => $post_type . "_tags",
+                    'hide_empty' => false,
+                    'orderby'    => 'count',
+                    'order'      => 'DESC',
+                    'number'     => $tag_no,
+            );
+            $tag_args = apply_filters( 'geodir_custom_field_input_tag', $tag_filter, $post_type . '_tags' );
+            $terms    = get_terms( $tag_args );
             if ( ! empty( $terms ) ) {
                 foreach( $terms as $term ) {
                     $term_array[] = $term->name;
