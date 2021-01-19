@@ -1,3 +1,6 @@
+= 2.1.0.8 =
+* Add fix for link icon issue for legacy design - FIXED
+
 = 2.1.0.7 =
 * OpenStreetMap routing add more languages support including Russian language - CHANGED
 * Listing sets CPT default image instead of category default image as fallback - FIXED
