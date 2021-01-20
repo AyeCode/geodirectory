@@ -31,7 +31,8 @@ class GeoDir_Email {
 		// frontend post save emails
 		add_action( 'geodir_ajax_post_saved', array( __CLASS__, 'send_email_on_post_saved' ), 10, 2 );
 
-
+		// Send post published email.
+		add_action( 'geodir_post_published', array( __CLASS__, 'send_user_publish_post_email' ), 999, 2 );
 	}
 
 	/**

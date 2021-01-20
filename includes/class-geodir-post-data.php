@@ -74,6 +74,9 @@ class GeoDir_Post_Data {
 
 		// Transition post status.
 		add_action( 'transition_post_status', array( __CLASS__, 'transition_post_status' ), 6, 3 );
+
+		// GD post saved.
+		add_action( 'geodir_post_saved', array( __CLASS__, 'on_gd_post_saved' ), 999, 4 );
 	}
 
 	/**
@@ -234,6 +237,10 @@ class GeoDir_Post_Data {
 	 * @return bool|null|string
 	 */
 	public static function save_files( $post_id = 0, $files = array(), $field = '', $dummy = false, $auto_save = '' ) {
+		// Check post revision exists.
+		if ( ! empty( $post_id ) && ! get_post_type( $post_id ) ) {
+			return false;
+		}
 
 		if ( $auto_save === '' ) {
 			$auto_save = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ? true : false;
@@ -2264,6 +2271,40 @@ class GeoDir_Post_Data {
 			if ( ! empty( $gd_post ) ) {
 				// Send email to user
 				GeoDir_Email::send_user_publish_post_email( $gd_post );
+			}
+		}
+	}
+
+	/**
+	 * Handle things after GD post saved.
+	 *
+	 * @since 2.1.0.8
+	 *
+	 * @global array $geodir_post_published Post ids being published.
+	 *
+	 * @param array  $data Post data.
+	 * @param array  $gd_post GD post array.
+	 * @param object $post The post object.
+	 * @param bool   $update True if post updated. 
+	 */
+	public static function on_gd_post_saved( $data, $gd_post, $post, $update = false ) {
+		global $geodir_post_published;
+
+		if ( ! empty( $geodir_post_published ) && is_array( $geodir_post_published ) && ! empty( $post->ID ) && ! empty( $geodir_post_published[ $post->ID ] ) ) {
+			unset( $geodir_post_published[ $post->ID ] );
+
+			$gd_post = geodir_get_post_info( $post->ID );
+
+			if ( ! empty( $gd_post ) ) {
+				/**
+				 * Set GD post published.
+				 *
+				 * @since 2.1.0.8
+				 *
+				 * @param object $gd_post GD post object.
+				 * @param array  $data Post data.
+				 */
+				do_action( 'geodir_post_published', $gd_post, $data );
 			}
 		}
 	}
