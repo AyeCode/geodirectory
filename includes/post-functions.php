@@ -629,22 +629,32 @@ function geodir_listing_belong_to_current_user( $listing_id = '', $exclude_admin
  * @since 1.0.0
  * @package GeoDirectory
  *
+ * @global array $geodir_post_published Post ids being published.
+ *
  * @param int $post_ID The post ID.
  * @param object $post_after The post object after update.
  * @param object $post_before The post object before update.
  */
 function geodir_function_post_updated( $post_ID, $post_after, $post_before ) {
+	global $geodir_post_published;
+
 	$post_type = get_post_type( $post_ID );
 
 	if ( $post_type != '' && in_array( $post_type, geodir_get_posttypes() ) ) {
 		// send notification to client when post moves from draft to publish
 		if ( ! empty( $post_after->post_status ) && $post_after->post_status == 'publish' && ! empty( $post_before->post_status ) && $post_before->post_status != 'publish' && $post_before->post_status != 'trash' ) {
 			$gd_post = geodir_get_post_info( $post_ID );
+
 			if ( empty( $gd_post ) ) {
 				return;
 			}
-			// Send email to user
-			GeoDir_Email::send_user_publish_post_email( $gd_post );
+
+			if ( ! is_array( $geodir_post_published ) ) {
+				$geodir_post_published = array();
+			}
+
+			// post_updated executed before data saved in detail table.
+			$geodir_post_published[ $post_ID ] = $post_ID;
 		}
 	}
 }
@@ -1241,6 +1251,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$btn_class .= ' ' .$user_classes ;
 					}
 					$btn_args = array(
+						'data-id' => $post_id,
 //						'class'     => 'btn btn-primary  btn-sm px-1 py-0 font-weight-bold gd-badgex',
 						'class'     => $btn_class,
 						'content' => $badge,
