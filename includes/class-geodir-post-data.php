@@ -237,6 +237,10 @@ class GeoDir_Post_Data {
 	 * @return bool|null|string
 	 */
 	public static function save_files( $post_id = 0, $files = array(), $field = '', $dummy = false, $auto_save = '' ) {
+		// Check post revision exists.
+		if ( ! empty( $post_id ) && ! get_post_type( $post_id ) ) {
+			return false;
+		}
 
 		if ( $auto_save === '' ) {
 			$auto_save = defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ? true : false;
