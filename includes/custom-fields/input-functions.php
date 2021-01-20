@@ -1645,15 +1645,20 @@ function geodir_cfi_tags( $html, $cf ) {
         $term_array = array();
 
 		if ( $post_type ) {
-            $terms = get_terms( array(
-                'taxonomy' => $post_type . "_tags",
+            $extra_fields = maybe_unserialize( $cf['extra_fields'] );
+            $tag_no       = 10;
+            if ( is_array( $extra_fields ) && ! empty( $extra_fields['no_of_tag'] ) ) {
+                $tag_no = absint( $extra_fields['no_of_tag'] );
+            }
+            $tag_filter = array(
+                'taxonomy'   => $post_type . '_tags',
                 'hide_empty' => false,
-                'orderby' => 'count',
-				'order' => 'DESC',
-                'number' => 10
-            ) );
-
-
+                'orderby'    => 'count',
+                'order'      => 'DESC',
+                'number'     => $tag_no,
+            );
+            $tag_args   = apply_filters( 'geodir_custom_field_input_tag_args', $tag_filter );
+            $terms      = get_terms( $tag_args );
             if ( ! empty( $terms ) ) {
                 foreach( $terms as $term ) {
                     $term_array[] = $term->name;
@@ -1983,25 +1988,3 @@ function geodir_cfi_files( $html, $cf ) {
 }
 add_filter('geodir_custom_field_input_images','geodir_cfi_files',10,2);
 add_filter('geodir_custom_field_input_file','geodir_cfi_files',10,2);
-
-/**
- * Filter the input tag arg.
- *
- * @since 2.0.0
- *
- * @param string $taxonomy taxonomy.
- * @param bool   $hide_empty for check hide empty tag.
- * @param string $orderby orderby query.
- * @param string $order order query.
- * @param int    $number number of tag.
- */
-function geodir_cfi_input_tag( $taxonomy, $hide_empty = false, $orderby = 'count', $order = 'DESC', $number = 10 ) {
-    return array(
-        'taxonomy'   => $taxonomy,
-        'hide_empty' => $hide_empty,
-        'orderby'    => $orderby,
-        'order'      => $order,
-        'number'     => $number,
-    );
-}
-add_filter( 'geodir_custom_field_input_tag', 'geodir_cfi_input_tag', 10, 5 );

@@ -768,7 +768,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		/**
 		 * The no of tags setting.
 		 *
-		 * @since 2.0.0
+		 * @since 2.1.0.7
 		 *
 		 * @param string $output Html output.
 		 * @param string $result_str Results string.
@@ -780,7 +780,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			if ( $field->htmlvar_name == 'post_tags' ) {
 				ob_start();
-				// print_r($field->extra_fields);echo '###'.;
 				$extra = maybe_unserialize( $field->extra_fields );
 				?>
 				<p class="gd-advanced-setting" data-setting="no_of_tag">
