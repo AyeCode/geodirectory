@@ -1251,6 +1251,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$btn_class .= ' ' .$user_classes ;
 					}
 					$btn_args = array(
+						'data-id' => $post_id,
 //						'class'     => 'btn btn-primary  btn-sm px-1 py-0 font-weight-bold gd-badgex',
 						'class'     => $btn_class,
 						'content' => $badge,

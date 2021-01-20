@@ -1,5 +1,6 @@
 = 2.1.0.8 =
 * Sometimes published email shows broken post link when cache is enabled - FIXED
+* Badge class not added to post class with AUI Bootstrap style - FIXED 
 
 = 2.1.0.7 =
 * OpenStreetMap routing add more languages support including Russian language - CHANGED
