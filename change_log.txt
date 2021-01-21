@@ -1,3 +1,5 @@
+= 2.1.0.9 =
+* Add comment_author (Comment Author) parameter(via input text) in GD > Recent Reviews (gd_recent_reviews) widget to filter reviews by author - Added
 = 2.1.0.8 =
 * Sometimes published email shows broken post link when cache is enabled - FIXED
 * Badge class not added to post class with AUI Bootstrap style - FIXED
