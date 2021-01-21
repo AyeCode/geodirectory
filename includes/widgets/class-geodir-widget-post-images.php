@@ -480,7 +480,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$link_tag_close = "";
 			if($options['link_to']=='post'){
 				$link = get_the_permalink($post_id);
-				$link_tag_open = "<a href='%s' class='$responsive_image_class d-block'>";
+				$link_tag_open = "<a href='%s' class='geodir-link-image $responsive_image_class d-block'>";
 				$link_tag_close = "<i class=\"fas fa-link\" aria-hidden=\"true\"></i></a>";
 			}elseif($options['link_to']=='lightbox'){
 				$link = '';

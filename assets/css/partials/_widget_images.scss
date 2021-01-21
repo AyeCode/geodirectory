@@ -47,6 +47,7 @@
         display: block;
       }
 
+      a.geodir-link-image,
       a.geodir-lightbox-image{
 
         i,svg.svg-inline--fa{
@@ -92,6 +93,7 @@
     &.geodir-slides{
       li{
 
+        a.geodir-link-image,
         a.geodir-lightbox-image{
           &:hover:after{
             font-size: 25px;
