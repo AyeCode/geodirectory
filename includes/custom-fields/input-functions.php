@@ -1645,15 +1645,20 @@ function geodir_cfi_tags( $html, $cf ) {
         $term_array = array();
 
 		if ( $post_type ) {
-            $terms = get_terms( array(
-                'taxonomy' => $post_type . "_tags",
+            $extra_fields = maybe_unserialize( $cf['extra_fields'] );
+            $tag_no       = 10;
+            if ( is_array( $extra_fields ) && ! empty( $extra_fields['no_of_tag'] ) ) {
+                $tag_no = absint( $extra_fields['no_of_tag'] );
+            }
+            $tag_filter = array(
+                'taxonomy'   => $post_type . '_tags',
                 'hide_empty' => false,
-                'orderby' => 'count',
-				'order' => 'DESC',
-                'number' => 10
-            ) );
-
-
+                'orderby'    => 'count',
+                'order'      => 'DESC',
+                'number'     => $tag_no,
+            );
+            $tag_args   = apply_filters( 'geodir_custom_field_input_tag_args', $tag_filter );
+            $terms      = get_terms( $tag_args );
             if ( ! empty( $terms ) ) {
                 foreach( $terms as $term ) {
                     $term_array[] = $term->name;
