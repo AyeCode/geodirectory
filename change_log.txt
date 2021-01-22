@@ -4,6 +4,7 @@
 * Add setting to allow users to set no. of tags to show in tags list in add/edit listing form - ADDED
 * Listings shows comments even comments are disable for post type - FIXED
 * Listing post image shows link icon on top of the image - FIXED
+* Allow to filter Recent Reviews by author - ADDED
 
 = 2.1.0.7 =
 * OpenStreetMap routing add more languages support including Russian language - CHANGED
