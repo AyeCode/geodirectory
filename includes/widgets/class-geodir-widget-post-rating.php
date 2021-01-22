@@ -153,15 +153,20 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
      *
      * @return mixed|string|void
      */
-    public function output($args = array(), $widget_args = array(),$content = ''){
-        global $post;
+    public function output( $args = array(), $widget_args = array(), $content = '' ) {
+        global $post, $gd_post;
+
+        // Check comments are disabled.
+        if ( ! geodir_is_block_demo() && ! ( ! empty( $gd_post ) && ! empty( $gd_post->post_type ) && GeoDir_Post_types::supports( $gd_post->post_type, 'comments' ) ) ) {
+            return;
+        }
 
         $defaults = array(
-            'show'      => '', // stars, text
-            'alignment'      => '', // left, center, right
-            'list_hide'    => '',
-            'list_hide_secondary'    => '',
-            'size'  => ''
+            'show' => '', // stars, text
+            'alignment' => '', // left, center, right
+            'list_hide' => '',
+            'list_hide_secondary' => '',
+            'size' => ''
         );
 
         /**
@@ -207,8 +212,6 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         if($args['list_hide_secondary']=='4'){$class .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
         if($args['list_hide_secondary']=='5'){$class .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
-
-
         if($args['show']=='stars'){
             $main .= $this->get_rating_stars();
         }elseif($args['show']=='text'){
@@ -229,7 +232,6 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         $after  = '</div>';
 
         return $before . $main . $after;
-
     }
 
     /**
