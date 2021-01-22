@@ -261,12 +261,43 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		/**
 		 * Filter the widget review_by_author param.
 		 *
-		 * @since 2.1.0.9
+		 * @since 2.1.0.8
 		 *
 		 * @param string $instance ['review_by_author'] Filter by author.
 		 */
-		$review_by_author = empty( $instance['review_by_author'] ) ? '' : apply_filters( 'widget_review_by_author', absint( $instance['review_by_author'] ), $instance, $this->id_base );
-
+		$review_by_author = empty( $instance['review_by_author'] ) ? '' : apply_filters( 'widget_review_by_author', $instance['review_by_author'], $instance, $this->id_base );
+		if ( ! empty( $review_by_author ) ) {
+			global $post;
+			// 'current' left for backwards compatibility
+			if ( $review_by_author === 'current' || $review_by_author === 'current_author' ) {
+				if (
+					! empty( $post )
+					&& is_object( $post )
+					&& property_exists( $post, 'post_type' )
+					&& property_exists( $post, 'post_author' )
+					&& $post->post_type != 'page'
+					&& isset( $post->post_author )
+				) {
+					$review_by_author = $post->post_author;
+				} else {
+					$review_by_author = -1; // Don't show any review widget.
+				}
+			} elseif ( $review_by_author === 'current_user' ) {
+				if (
+					is_user_logged_in()
+					&&
+					( ! empty( get_current_user_id() ) )
+				) {
+					$review_by_author = get_current_user_id();
+				} else {
+					$review_by_author = -1; // If not logged in then don't show review widget.
+				}
+			} elseif ( absint( $review_by_author ) > 0 ) {
+				$review_by_author = absint( $review_by_author );
+			} else {
+				$review_by_author = -1; // Don't show review widget.
+			}
+		}
 
 	    // wrap class
 	    $wrap_class = geodir_build_aui_class($instance);
