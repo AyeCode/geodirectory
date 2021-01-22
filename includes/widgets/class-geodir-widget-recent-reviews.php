@@ -265,7 +265,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		 *
 		 * @param string $instance ['review_by_author'] Filter by author.
 		 */
-		$review_by_author = empty( $instance['review_by_author'] ) ? '' : apply_filters( 'widget_review_by_author', $instance['review_by_author'], $instance, $this->id_base );
+		$review_by_author = empty( $instance['review_by_author'] ) ? '' : apply_filters( 'widget_review_by_author', absint( $instance['review_by_author'] ), $instance, $this->id_base );
 
 
 	    // wrap class
