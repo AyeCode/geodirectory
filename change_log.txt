@@ -5,6 +5,8 @@
 * Listings shows comments even comments are disable for post type - FIXED
 * Listing post image shows link icon on top of the image - FIXED
 * Allow to filter Recent Reviews by author - ADDED
+* Fix for some UK regions being wrong from Google API - FIXED
+* Create missing pages tool not working if menu item with same slug exists - FIXED
 
 = 2.1.0.7 =
 * OpenStreetMap routing add more languages support including Russian language - CHANGED

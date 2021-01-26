@@ -321,6 +321,14 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 else if (administrative_area_level_1.long_name) {
                     getState = administrative_area_level_1.long_name;
                 }
+
+                // fix some GB regions
+                if( rr == "GB" ){
+                    if(getState && getState == "Stoke-on-Trent" ){
+                        getState = 'Staffordshire';
+                    }
+                }
+
             } else {
                 if (administrative_area_level_1.long_name) {
                     getState = administrative_area_level_1.long_name;

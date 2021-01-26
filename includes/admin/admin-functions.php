@@ -279,7 +279,7 @@ function geodir_create_page( $slug, $option, $page_title = '', $page_content = '
 
 	$page_found = $wpdb->get_var(
 		$wpdb->prepare(
-			"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+			"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_type = 'page' LIMIT 1;",
 			array( $slug )
 		)
 	);
