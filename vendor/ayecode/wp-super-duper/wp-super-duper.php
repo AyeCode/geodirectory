@@ -1854,7 +1854,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 										'attributes': props.attributes,
 										'post_id': <?php global $post; if ( isset( $post->ID ) ) {
 										echo $post->ID;
-									}?>,
+									}else{echo "0";}?>,
 										'_ajax_nonce': '<?php echo wp_create_nonce( 'super_duper_output_shortcode' );?>'
 									};
 
