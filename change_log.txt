@@ -7,6 +7,7 @@
 * Allow to filter Recent Reviews by author - ADDED
 * Fix for some UK regions being wrong from Google API - FIXED
 * Create missing pages tool not working if menu item with same slug exists - FIXED
+* Map don't shows correct results filtered by GPS - FIXED
 
 = 2.1.0.7 =
 * OpenStreetMap routing add more languages support including Russian language - CHANGED
