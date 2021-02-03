@@ -162,7 +162,7 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 'type' => 'select',
                 'options'   =>  array(
                                     "" => __('Custom colors', 'geodirectory'),
-                                )+geodir_aui_colors(true),
+                                )+geodir_aui_colors(true, true, true),
                 'default'  => '',
                 'desc_tip' => true,
                 'advanced' => false,
@@ -174,7 +174,7 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 'title' => __('Badge background color:', 'geodirectory'),
                 'desc' => __('Color for the badge background.', 'geodirectory'),
                 'placeholder' => '',
-                'default' => '',
+                'default' => '#0073aa',
                 'desc_tip' => true,
                 'group'     => __("Design","geodirectory"),
                 'element_require' => $design_style ?  '[%color%]==""' : '',
@@ -185,7 +185,7 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
                 'desc' => __('Color for the badge text.', 'geodirectory'),
                 'placeholder' => '',
                 'desc_tip' => true,
-                'default'  => '#fff',
+                'default'  => '#ffffff',
                 'group'     => __("Design","geodirectory"),
                 'element_require' => $design_style ?  '[%color%]=="" && [%show%]!="icon"' : '',
             );
@@ -262,7 +262,6 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
         if($design_style){
             $args['type'] = $args['output'];
             $args['badge'] = $args['text'];
-            if(empty($args['color'])){$args['color'] = $defaults['color'];}
         }
 
         $is_preview = $this->is_preview();
