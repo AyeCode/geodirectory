@@ -183,8 +183,8 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
                     'group'     => __("Filters","geodirectory")
                 ),
                 'max_count'  => array(
-                    'title' => __('Max cats to show:', 'geodirectory'),
-                    'desc' => __('The maximum number of categories to show.', 'geodirectory'),
+                    'title' => __('Max cats to show per CPT:', 'geodirectory'),
+                    'desc' => __('The maximum number of categories to show per CPT.', 'geodirectory'),
                     'type' => 'select',
                     'options'   =>  array_merge(array('all' => __('All', 'geodirectory')), range(0, 10) ),
                     'default'  => 'all',
