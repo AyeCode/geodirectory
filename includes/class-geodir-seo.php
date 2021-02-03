@@ -1318,6 +1318,26 @@ class GeoDir_SEO {
 
 					if ( ! empty( $term ) && ! is_wp_error( $term ) ) {
 						$presentation->source = $term;
+						$term_meta = WPSEO_Taxonomy_Meta::get_term_meta( $term, $term->taxonomy, null );
+
+						if ( ! empty( $term_meta ) ) {
+							$is_robots_noindex = null;
+
+							if ( array_key_exists( 'wpseo_noindex', $term_meta ) ) {
+								$value = $term_meta['wpseo_noindex'];
+
+								if ( $value === 'noindex' ) {
+									$is_robots_noindex = true;
+								} elseif ( $value === 'index' ) {
+									$is_robots_noindex = false;
+								} elseif ( $value == 'default' ) {
+									$is_robots_noindex = ! WPSEO_Options::get( 'noindex-tax-' . $term->taxonomy, false ) ? false : true;
+								}
+							}
+		
+							$presentation->model->is_robots_noindex = $is_robots_noindex;
+							$presentation->model->is_public = ( $presentation->model->is_robots_noindex === null ) ? null : ! $presentation->model->is_robots_noindex;
+						}
 					}
 				}
 			} catch ( Exception $e ) { }
