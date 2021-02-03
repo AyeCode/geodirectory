@@ -417,7 +417,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// value
 			if(!empty($args['value'])){
-				$output .= sanitize_textarea_field($args['value']);
+				$output .= stripslashes($args['value']);
 			}
 
 			// closing tag
