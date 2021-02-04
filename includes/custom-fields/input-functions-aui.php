@@ -487,6 +487,9 @@ function geodir_cfi_textarea($html,$cf){
         // wysiwyg
         $wysiwyg = apply_filters( 'geodir_custom_field_allow_html_editor', $html_editor, $cf );
 
+        // Allow html tags
+        $allow_tags = apply_filters( 'geodir_custom_field_textarea_allow_tags', ( $wysiwyg || $cf['name'] == 'video' ), $cf );
+
         // field type (used for validation)
         $extra_attributes['field_type'] =  $wysiwyg ? 'editor' :  $cf['type'];
 
@@ -498,7 +501,6 @@ function geodir_cfi_textarea($html,$cf){
 
         // help text
         $help_text = __( $cf['desc'], 'geodirectory' );
-
 
         $html = aui()->textarea(array(
             'name'       => $cf['name'],
@@ -515,11 +517,10 @@ function geodir_cfi_textarea($html,$cf){
             'no_wrap'    => false,
             'rows'      => 8,
             'wysiwyg'   => $wysiwyg ? array('quicktags' => true) : false,
+            'allow_tags' => $allow_tags,
             'help_text'        => $help_text,
-            'extra_attributes' => $extra_attributes,
+            'extra_attributes' => $extra_attributes
         ));
-
-
     }
 
     return $html;
