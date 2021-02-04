@@ -1,4 +1,5 @@
 = 0.1.41 =
+* Time ago feature is not working - FIXED
 * Allow HTML tags in textarea field with allow_tags attribute - ADDED
 
 = 0.1.40 =
