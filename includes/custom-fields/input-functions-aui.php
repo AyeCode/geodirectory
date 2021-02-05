@@ -1668,7 +1668,7 @@ function geodir_cfi_categories($html,$cf){
         } ?>
 
         <div id="<?php echo $taxonomy;?>_row"
-             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>" >
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group geodir_form_row <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>" >
             <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : ''; echo $geodir_label_type == 'hidden' || $geodir_label_type=='floating' ? ' sr-only ' : '';?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
@@ -1757,6 +1757,7 @@ function geodir_cfi_categories($html,$cf){
         <?php
         // cat limit
         echo '<input type="hidden" cat_limit="' . $category_limit . '" id="cat_limit" value="' . esc_attr($required_limit_msg) . '" name="cat_limit[' . $taxonomy . ']"  />';
+        echo '<input type="hidden" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
 
         $html = ob_get_clean();
 
