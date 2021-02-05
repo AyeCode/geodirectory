@@ -90,6 +90,8 @@ function geodir_cfi_input_output($cf){
     // validation message
     if(isset($cf['validation_msg']) && $cf['validation_msg']){
         $title = $cf['validation_msg'];
+        // add user defined validation message.
+        $extra_attributes['oninvalid'] = "setCustomValidity('". $title ."')";
     }
 
     // field type (used for validation)
