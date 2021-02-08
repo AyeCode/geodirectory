@@ -300,6 +300,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'wysiwyg'   => false,
 			'allow_tags' => false, // Allow HTML tags
 			'element_require'   => '', // [%element_id%] == "1"
+			'extra_attributes'  => array(), // an array of extra attributes
 		);
 
 		/**
@@ -412,6 +413,10 @@ else{$eli.attr(\'type\',\'password\');}"
 			$class = !empty($args['class']) ? $args['class'] : '';
 			$output .= ' class="form-control '.$class.'" ';
 
+			// extra attributes
+			if(!empty($args['extra_attributes'])){
+				$output .= AUI_Component_Helper::extra_attributes($args['extra_attributes']);
+			}
 
 			// close tag
 			$output .= ' >';
