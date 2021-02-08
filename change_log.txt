@@ -10,6 +10,8 @@
 * GD > Ninja Forms Gutenberg background color issue - FIXED
 * Map don't shows correct results filtered by GPS - FIXED
 * Yoast taxonomies default nonindex setting not working for GD terms - FIXED
+* WP Rocket new JS deffer feature breaking GD variables - FIXED
+* Compatibility changes for Avada and Kleo themes using bootstrap 3 to work with new AUI styles - CHANGED
 
 = 2.1.0.7 =
 * OpenStreetMap routing add more languages support including Russian language - CHANGED
