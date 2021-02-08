@@ -7,9 +7,11 @@
 * Allow to filter Recent Reviews by author - ADDED
 * Fix for some UK regions being wrong from Google API - FIXED
 * Create missing pages tool not working if menu item with same slug exists - FIXED
+* Add filter for changing distance - ADDED
 * GD > Ninja Forms Gutenberg background color issue - FIXED
 * Map don't shows correct results filtered by GPS - FIXED
 * Yoast taxonomies default nonindex setting not working for GD terms - FIXED
+* Allow HTML tags in video field - CHANGED
 * WP Rocket new JS deffer feature breaking GD variables - FIXED
 * Compatibility changes for Avada and Kleo themes using bootstrap 3 to work with new AUI styles - CHANGED
 

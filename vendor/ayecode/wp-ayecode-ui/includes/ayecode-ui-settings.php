@@ -432,14 +432,19 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 					};
 
 					var elements = document.getElementsByClassName(selector);
-					for (var i in elements) {
-						var $this = elements[i];
-						if (typeof $this === 'object') {
-							$this.innerHTML = '<i class="far fa-clock"></i> ' + timer($this.getAttribute('title') || $this.getAttribute('datetime'));
+					if (selector && elements && elements.length) {
+						for (var i in elements) {
+							var $el = elements[i];
+							if (typeof $el === 'object') {
+								$el.innerHTML = '<i class="far fa-clock"></i> ' + timer($el.getAttribute('title') || $el.getAttribute('datetime'));
+							}
 						}
 					}
+
 					// update time every minute
-					setTimeout(aui_time_ago, 60000);
+					setTimeout(function() {
+						aui_time_ago(selector);
+					}, 60000);
 
 				}
 
