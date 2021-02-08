@@ -2592,9 +2592,15 @@ function geodir_show_distance( $distance, $short_unit = '' ) {
 		$_distance =  round( $distance, 2 );
 	}
 
-	$content = $_distance . ' ' .  $_unit;
+	/** 
+	* Filter to change format of distance. 
+	*
+	* @param $_distance distance value 
+	* @param $_unit unit of distance. 
+	*/
+	$content = apply_filters( 'geodir_show_distance', $_distance . ' ' .  $_unit, $_distance, $_unit );
 
-	return $_distance . ' ' .  $_unit;
+	return $content;
 }
 
 /**
