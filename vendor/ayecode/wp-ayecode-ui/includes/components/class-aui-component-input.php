@@ -298,6 +298,7 @@ else{$eli.attr(\'type\',\'password\');}"
 			'no_wrap'    => false,
 			'rows'      => '',
 			'wysiwyg'   => false,
+			'allow_tags' => false, // Allow HTML tags
 			'element_require'   => '', // [%element_id%] == "1"
 		);
 
@@ -416,8 +417,12 @@ else{$eli.attr(\'type\',\'password\');}"
 			$output .= ' >';
 
 			// value
-			if(!empty($args['value'])){
-				$output .= sanitize_textarea_field($args['value']);
+			if ( ! empty( $args['value'] ) ) {
+				if ( ! empty( $args['allow_tags'] ) ) {
+					$output .= AUI_Component_Helper::sanitize_html_field( $args['value'], $args ); // Sanitize HTML.
+				} else {
+					$output .= sanitize_textarea_field( $args['value'] );
+				}
 			}
 
 			// closing tag
