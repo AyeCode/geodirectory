@@ -97,6 +97,8 @@ function geodir_cfi_input_output($cf){
 
     // required
     $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
+    $required_msg = $required && $cf['required_msg'] != '' ? __( $cf['required_msg'] , 'geodirectory') : '';
+    $validation_msg = $title != '' ? __( $title , 'geodirectory') : $required_msg;
 
     // admin only
     $admin_only = geodir_cfi_admin_only($cf);
@@ -111,6 +113,8 @@ function geodir_cfi_input_output($cf){
             'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'type'              => $type,
             'title'             =>  $title,
+            'validation_text'   => $validation_msg,
+            'validation_pattern' => ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
             'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
             'class'             => '',
             'value'             => $value, // esc_attr(stripslashes($value))

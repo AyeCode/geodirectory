@@ -533,18 +533,21 @@ function gd_init_tabs_layout(){
  * @param $this
  */
 function gd_tabs_item_settings($this){
-
-    var is_open = !jQuery($this).parent().find('.dd-setting').is(':hidden');
+    var $dd = jQuery($this).parent().find('.dd-setting');
+    var is_open = !$dd.is(':hidden');
     jQuery('.dd-setting').hide();
     if(is_open){
         jQuery($this).addClass("fa-caret-down").removeClass( "fa-caret-up");
-        jQuery($this).parent().find('.dd-setting').hide().removeClass( "gd-tab-settings-open" );
+        $dd.hide().removeClass( "gd-tab-settings-open" );
     }else{
         jQuery($this).addClass("fa-caret-up").removeClass( "fa-caret-down");
-        jQuery($this).parent().find('.dd-setting').show().addClass( "gd-tab-settings-open" );
+        $dd.show().addClass( "gd-tab-settings-open" );
+        // Setup select2
+        if (jQuery('.geodir-select', $dd).length) {
+            jQuery('.geodir-select', $dd).removeClass('enhanced');
+            jQuery("select.geodir-select", $dd).trigger('geodir-select-init');
+        }
     }
-
-
 }
 
 function gd_tabs_add_tab($this){
