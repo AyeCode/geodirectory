@@ -219,7 +219,7 @@ class GeoDir_Compatibility {
 				$parent_theme = wp_get_theme( $parent_theme->Template );
 			}
 
-			if ( ! empty( $parent_theme ) && version_compare( $parent_theme->Version, '2.0', '<' ) ) {
+			if ( ! empty( $parent_theme ) && version_compare( $parent_theme->Version, '1.7', '<' ) ) {
 				add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
 				$settings_link = admin_url("admin.php?page=gd-settings&tab=general&section=developer");
 				$aui_disabled_notice = sprintf( __("Listimia theme works best with GeoDirectory legacy styles, please set legacy styles %shere%s","geodirectory"),"<a href='$settings_link'>","</a>");

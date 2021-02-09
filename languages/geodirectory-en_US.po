@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.0.7\n"
+"Project-Id-Version: GeoDirectory 2.1.0.8\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-01-13 15:51+0530\n"
-"PO-Revision-Date: 2021-01-13 15:51+0530\n"
+"POT-Creation-Date: 2021-02-09 19:19+0530\n"
+"PO-Revision-Date: 2021-02-09 19:20+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -187,7 +187,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:823
 #: includes/api/class-geodir-rest-posts-controller.php:2198
 #: includes/class-geodir-location.php:358
-#: includes/class-geodir-location.php:409 includes/post-functions.php:1901
+#: includes/class-geodir-location.php:409 includes/post-functions.php:1914
 msgid "Country"
 msgstr ""
 
@@ -201,7 +201,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:813
 #: includes/api/class-geodir-rest-posts-controller.php:2212
 #: includes/class-geodir-location.php:376
-#: includes/class-geodir-location.php:421 includes/post-functions.php:1890
+#: includes/class-geodir-location.php:421 includes/post-functions.php:1903
 msgid "Region"
 msgstr ""
 
@@ -215,7 +215,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:803
 #: includes/api/class-geodir-rest-posts-controller.php:2226
 #: includes/class-geodir-location.php:395
-#: includes/class-geodir-location.php:430 includes/post-functions.php:1879
+#: includes/class-geodir-location.php:430 includes/post-functions.php:1892
 msgid "City"
 msgstr ""
 
@@ -236,7 +236,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1073
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
-#: includes/post-functions.php:1912
+#: includes/post-functions.php:1925
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -257,14 +257,14 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:907
 #: includes/api/class-geodir-rest-posts-controller.php:2266
-#: includes/custom-fields/input-functions-aui.php:1383
+#: includes/custom-fields/input-functions-aui.php:1388
 #: includes/custom-fields/input-functions.php:1255 language.php:46
 msgid "Address Latitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:908
 #: includes/api/class-geodir-rest-posts-controller.php:2267
-#: includes/custom-fields/input-functions-aui.php:1389
+#: includes/custom-fields/input-functions-aui.php:1394
 #: includes/custom-fields/input-functions.php:1264 language.php:91
 msgid ""
 "Please enter latitude for google map perfection. eg. : "
@@ -273,14 +273,14 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:917
 #: includes/api/class-geodir-rest-posts-controller.php:2281
-#: includes/custom-fields/input-functions-aui.php:1413
+#: includes/custom-fields/input-functions-aui.php:1418
 #: includes/custom-fields/input-functions.php:1273 language.php:47
 msgid "Address Longitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:918
 #: includes/api/class-geodir-rest-posts-controller.php:2282
-#: includes/custom-fields/input-functions-aui.php:1419
+#: includes/custom-fields/input-functions-aui.php:1424
 #: includes/custom-fields/input-functions.php:1281 language.php:92
 msgid ""
 "Please enter longitude for google map perfection. eg. : "
@@ -477,7 +477,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-rating.php:96
 #: includes/widgets/class-geodir-widget-post-rating.php:111
 #: includes/widgets/class-geodir-widget-post-rating.php:127
-#: includes/widgets/class-geodir-widget-recent-reviews.php:121
+#: includes/widgets/class-geodir-widget-recent-reviews.php:130
 #: includes/widgets/class-geodir-widget-recently-viewed.php:151
 #: includes/widgets/class-geodir-widget-recently-viewed.php:164
 #: includes/widgets/class-geodir-widget-single-taxonomies.php:59
@@ -612,7 +612,7 @@ msgstr ""
 
 #: includes/admin/admin-functions.php:933
 #: includes/admin/admin-functions.php:1102
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:288
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:290
 #: includes/widgets/class-geodir-widget-archive-item-section.php:59
 #: includes/widgets/class-geodir-widget-cpt-meta.php:98
 #: includes/widgets/class-geodir-widget-cpt-meta.php:111
@@ -638,7 +638,7 @@ msgstr ""
 
 #: includes/admin/admin-functions.php:934
 #: includes/admin/admin-functions.php:1104
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:289
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:291
 #: includes/widgets/class-geodir-widget-archive-item-section.php:60
 #: includes/widgets/class-geodir-widget-best-of.php:94
 #: includes/widgets/class-geodir-widget-categories.php:275
@@ -1124,8 +1124,8 @@ msgid "Dummy data has not fully installed yet!"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:628
-#: templates/bootstrap/map/map-add-listing.php:678
-#: templates/bootstrap/map/map-add-listing.php:841 templates/map.php:677
+#: templates/bootstrap/map/map-add-listing.php:686
+#: templates/bootstrap/map/map-add-listing.php:849 templates/map.php:677
 #: templates/map.php:858
 msgid "Geocode was not successful for the following reason:"
 msgstr ""
@@ -1193,9 +1193,9 @@ msgstr ""
 #: includes/admin/dummy-data/freelancer.php:756
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:391
 #: includes/class-geodir-comments.php:91
-#: includes/class-geodir-post-data.php:950
-#: includes/class-geodir-post-data.php:972
-#: includes/widgets/class-geodir-widget-ninja-forms.php:429 language.php:35
+#: includes/class-geodir-post-data.php:957
+#: includes/class-geodir-post-data.php:979
+#: includes/widgets/class-geodir-widget-ninja-forms.php:428 language.php:35
 #: language.php:55 language.php:124 language.php:140
 msgid "Email"
 msgstr ""
@@ -1267,7 +1267,7 @@ msgid "Note: List out any special offers (optional)"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:980
-#: includes/class-geodir-post-data.php:869
+#: includes/class-geodir-post-data.php:876
 msgid "Listing"
 msgstr ""
 
@@ -1316,7 +1316,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1056
 #: includes/admin/class-geodir-admin-dummy-data.php:1058
 #: includes/admin/class-geodir-admin-dummy-data.php:1068
-#: includes/post-functions.php:1857
+#: includes/post-functions.php:1870
 msgid "Address"
 msgstr ""
 
@@ -1373,7 +1373,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:1220
 #: includes/admin/diagnostic-functions.php:781
-#: includes/class-geodir-email.php:255 includes/class-geodir-user.php:546
+#: includes/class-geodir-email.php:256 includes/class-geodir-user.php:546
 #: includes/widgets/class-geodir-widget-add-listing.php:80
 #: includes/widgets/class-geodir-widget-add-listing.php:89 language.php:30
 #: templates/auth/form-login.php:45
@@ -1810,7 +1810,7 @@ msgid "GeoDirectory status"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-menus.php:148
-#: includes/post-functions.php:1817
+#: includes/post-functions.php:1830
 msgid "Status"
 msgstr ""
 
@@ -2179,7 +2179,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-settings.php:1177
 #: includes/admin/settings/class-geodir-settings-general.php:866
-#: includes/custom-fields/input-functions.php:1841
+#: includes/custom-fields/input-functions.php:1846
 msgid "Timezone"
 msgstr ""
 
@@ -3822,344 +3822,352 @@ msgstr ""
 msgid "Enable the REST API"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:181
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:183
 msgid "Select if this field should be displayed as a price value."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:182
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:184
 msgid "Display as price"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:200
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:202
 msgid "Select the thousand separator."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:201
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:203
 msgid "Thousand separator"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:203
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:229
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:205
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:231
 msgid ", (comma)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:204
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:206
 msgid "\\ (slash)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:205
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:228
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:207
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:230
 msgid ". (period)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:206
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:208
 msgid " (space)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:207
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:209
 msgid "(none)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:225
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:227
 msgid "Select the decimal separator."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:226
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:228
 msgid "Decimal separator:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:246
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:248
 msgid "Select how the decimal is displayed."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:247
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:249
 msgid "Decimal display:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:249
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:251
 msgid "If used (not .00)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:250
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:252
 msgid "Always (.00)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:267
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:269
 msgid "Select the currency symbol."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:268
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:270
 msgid "Currency symbol:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:285
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:287
 msgid "Select the currency symbol placement."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:286
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:288
 msgid "Currency symbol placement:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:322
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:324
 msgid ""
 "Select file types to allowed for file uploading. (Select multiple file types "
 "by holding down \"Ctrl\" key.)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:323
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:325
 msgid "Allowed file types"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:325
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:327
 msgid "All types"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:327
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:329
 #, php-format
 msgid "%s formats"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:367
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:369
 msgid ""
 "Select the number of files that can be uploaded, Leave blank or 0 to allow "
 "unlimited files."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:368
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:370
 msgid "File upload limit"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:399
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:401
 msgid "Select the date format."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:400
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:402
 msgid "Date Format"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:467
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:469
 msgid "Set the date range, eg: 1920:2020 or for current dates: c-100:c+5"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:468
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:470
 msgid "Date Range"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:506
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:508
 msgid "Option Values should be separated by comma."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:507
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:509
 msgid ""
 "If using for a \"tick filter\" place a / and then either a 1 for true or 0 "
 "for false"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:508
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:510
 msgid "eg: \"No Dogs Allowed/0,Dogs Allowed/1\" (Select only, not multiselect)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:510
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:511
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:512
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:513
 msgid ""
 "- If using OPTGROUP tag to grouping options, use \"{optgroup}OPTGROUP-LABEL|"
 "OPTION-1,OPTION-2{/optgroup}\""
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:514
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:516
 msgid "Option Values:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:544
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:546
 msgid "Show multiselect input as multiselect,checkbox or radio."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:545
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:547
 msgid "Multiselect display type"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:547
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:746
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:919
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:549
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:748
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:957
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:398
 msgid "Select"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:548
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:752
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:550
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:754
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:370
 msgid "Checkbox"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:549
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:755
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:551
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:757
 #: includes/admin/settings/class-geodir-settings-cpt-cf.php:384
 msgid "Radio"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:593
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:595
 msgid "Address line 2 (optional)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:601
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:603
 msgid "Select if you want to show address line 2 field in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:602
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:604
 msgid "Display Address line 2"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:611
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:613
 msgid "Enter Address line 2 field label in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:612
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:614
 msgid "Address line 2 label"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:623
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:625
 msgid "Select if you want to show zip/post code field in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:624
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:626
 msgid "Display zip/post code"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:633
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:635
 msgid ""
 "Tick to set zip/post code field as required. Some countries do not use ZIP "
 "codes, please only enable if your directory is limited to countries that do."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:634
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:636
 msgid "Make zip/post code mandatory?"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:643
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:645
 msgid "Enter zip/post code field label in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:644
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:646
 msgid "Zip/Post code label"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:656
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:658
 msgid "Enter text for `set address on map` button in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:657
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:659
 msgid "Map button label"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:668
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:670
 msgid ""
 "Do you want to use the user defined map zoom level from the add listing page?"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:669
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:671
 msgid "Use user zoom level"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:678
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:680
 msgid ""
 "Select if you want to show `set default map` options in address section. "
 "( Satellite Map, Hybrid Map, Terrain Map)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:679
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:681
 msgid "Display map view"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:689
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:691
 msgid "Enter mapview field label in address section."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:690
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:692
 msgid "Map view label"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:701
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:703
 msgid ""
 "This will show/hide the longitude fields in the address section add listing "
 "form."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:702
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:704
 msgid "Show latitude and longitude"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:741
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:743
 msgid "Show categories list as select, multiselect, checkbox or radio"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:742
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:744
 msgid "Category display type"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:749
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:751
 msgid "Multiselect"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:791
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:788
+msgid "Enter number of tag"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:789
+msgid "Number of tag"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:829
 msgid "Enter regex expression for HTML5 pattern validation."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:792
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:830
 msgid "Validation Pattern:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:807
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:845
 msgid ""
 "Enter a extra validation message to show to the user if validation fails."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:808
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:846
 msgid "Validation Message:"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:837
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:875
 msgid "Select if you want to show the advanced editor on add listing page."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:838
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:876
 msgid "Show advanced editor :"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:883
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:921
 msgid ""
 "Select the data type for the field. This can affect things like search "
 "filtering."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:884
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:922
 msgid "Field Data Type :"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:890
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:928
 msgid "CHARACTER"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:894
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:932
 msgid "NUMBER"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:898
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:936
 msgid "DECIMAL"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:916
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:954
 msgid "Decimal point to display after point."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:917
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:955
 msgid "Select decimal point :"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:956
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:994
 msgid "Tick to allow embed videos, images, tweets, audio, and other content."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:957
+#: includes/admin/settings/class-geodir-settings-cpt-cf-extras.php:995
 msgid "Embed Media URLs:"
 msgstr ""
 
@@ -4932,8 +4940,8 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-cpt.php:396
 #: includes/admin/views/html-admin-page-status-report.php:578
 #: includes/class-geodir-comments.php:76
-#: includes/class-geodir-post-data.php:936
-#: includes/class-geodir-post-data.php:965 language.php:33 language.php:123
+#: includes/class-geodir-post-data.php:943
+#: includes/class-geodir-post-data.php:972 language.php:33 language.php:123
 msgid "Name"
 msgstr ""
 
@@ -5264,8 +5272,8 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-title.php:70
 #: includes/widgets/class-geodir-widget-post-title.php:84
 #: includes/widgets/class-geodir-widget-post-title.php:99
-#: includes/widgets/class-geodir-widget-recent-reviews.php:113
-#: includes/widgets/class-geodir-widget-recent-reviews.php:128
+#: includes/widgets/class-geodir-widget-recent-reviews.php:122
+#: includes/widgets/class-geodir-widget-recent-reviews.php:137
 #: includes/widgets/class-geodir-widget-recently-viewed.php:215
 #: includes/widgets/class-geodir-widget-recently-viewed.php:225
 #: includes/widgets/class-geodir-widget-recently-viewed.php:234
@@ -5540,7 +5548,7 @@ msgid ""
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-design.php:443
-#: includes/class-geodir-email.php:108
+#: includes/class-geodir-email.php:109
 #, php-format
 msgid "%s - Powered by GeoDirectory"
 msgstr ""
@@ -6074,8 +6082,8 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:771
 #: includes/admin/views/html-notice-v2-update.php:220
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:977
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1015
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1006
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1044
 msgid "Disabled"
 msgstr ""
 
@@ -8772,8 +8780,8 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2840
 #: includes/class-geodir-privacy-exporters.php:238
 #: includes/class-geodir-privacy-exporters.php:303
-#: includes/custom-fields/input-functions-aui.php:2014
-#: includes/custom-fields/input-functions.php:1792
+#: includes/custom-fields/input-functions-aui.php:2031
+#: includes/custom-fields/input-functions.php:1797
 #: includes/custom-fields/output-functions.php:86
 #: includes/widgets/class-geodir-widget-page-title.php:73
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:201
@@ -8783,8 +8791,8 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2800
 #: includes/api/class-geodir-rest-posts-controller.php:2838
 #: includes/class-geodir-privacy-exporters.php:301
-#: includes/custom-fields/input-functions-aui.php:2015
-#: includes/custom-fields/input-functions.php:1793
+#: includes/custom-fields/input-functions-aui.php:2032
+#: includes/custom-fields/input-functions.php:1798
 #: includes/custom-fields/output-functions.php:88
 #: includes/widgets/class-geodir-widget-page-title.php:72
 #: vendor/ayecode/wp-super-duper/wp-super-duper.php:201
@@ -9498,8 +9506,8 @@ msgid "Sun"
 msgstr ""
 
 #: includes/business-hours-functions.php:677 includes/core-functions.php:345
-#: includes/custom-fields/input-functions-aui.php:2077
-#: includes/custom-fields/input-functions.php:1834
+#: includes/custom-fields/input-functions-aui.php:2094
+#: includes/custom-fields/input-functions.php:1839
 msgid "Closed"
 msgstr ""
 
@@ -9512,8 +9520,8 @@ msgid "Closed now"
 msgstr ""
 
 #: includes/business-hours-functions.php:680
-#: includes/custom-fields/input-functions-aui.php:2026
-#: includes/custom-fields/input-functions.php:1797
+#: includes/custom-fields/input-functions-aui.php:2043
+#: includes/custom-fields/input-functions.php:1802
 msgid "Open 24 hours"
 msgstr ""
 
@@ -9821,20 +9829,14 @@ msgid ""
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:234
-msgid ""
-"AyeCode UI bootstrap styles have been disabled due to an incompatibility "
-"with Avada Builder using an older version of bootstrap."
-msgstr ""
-
-#: includes/class-geodir-compatibility.php:475
+#: includes/class-geodir-compatibility.php:467
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:603
+#: includes/class-geodir-compatibility.php:595
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -9842,63 +9844,63 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1112
+#: includes/class-geodir-compatibility.php:1104
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1114
+#: includes/class-geodir-compatibility.php:1106
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1119
+#: includes/class-geodir-compatibility.php:1111
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1120
+#: includes/class-geodir-compatibility.php:1112
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1291
+#: includes/class-geodir-compatibility.php:1283
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1293
+#: includes/class-geodir-compatibility.php:1285
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1298
+#: includes/class-geodir-compatibility.php:1290
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1299
+#: includes/class-geodir-compatibility.php:1291
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2541
+#: includes/class-geodir-compatibility.php:2533
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2552
+#: includes/class-geodir-compatibility.php:2544
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2559
+#: includes/class-geodir-compatibility.php:2551
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2560
+#: includes/class-geodir-compatibility.php:2552
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3253
+#: includes/class-geodir-compatibility.php:3245
 msgid "GD Search Results"
 msgstr ""
 
@@ -10172,7 +10174,7 @@ msgstr ""
 msgid "Could not retrieve template."
 msgstr ""
 
-#: includes/class-geodir-email.php:507
+#: includes/class-geodir-email.php:508
 #, php-format
 msgid ""
 "\n"
@@ -10181,11 +10183,11 @@ msgid ""
 "Subject: %s\n"
 msgstr ""
 
-#: includes/class-geodir-email.php:508
+#: includes/class-geodir-email.php:509
 msgid "Email from GeoDirectory plugin failed to send"
 msgstr ""
 
-#: includes/class-geodir-email.php:1070 includes/post-functions.php:1805
+#: includes/class-geodir-email.php:1071 includes/post-functions.php:1818
 msgid "Author"
 msgstr ""
 
@@ -10461,21 +10463,21 @@ msgstr ""
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:674
+#: includes/class-geodir-post-data.php:681
 #, php-format
 msgid "Could not update post in the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:687
+#: includes/class-geodir-post-data.php:694
 #, php-format
 msgid "Could not insert post into the database. %s"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:809
+#: includes/class-geodir-post-data.php:816
 msgid "You do not have permission to edit this post."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:827
+#: includes/class-geodir-post-data.php:834
 #, php-format
 msgid ""
 "Hey, we found some unsaved changes from earlier and are showing them below. "
@@ -10483,7 +10485,7 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:851
+#: includes/class-geodir-post-data.php:858
 #, php-format
 msgid ""
 "Hey, we found a post you started earlier and are showing it below. If you "
@@ -10491,86 +10493,86 @@ msgid ""
 "revision."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:928
-#: includes/class-geodir-post-data.php:962
+#: includes/class-geodir-post-data.php:935
+#: includes/class-geodir-post-data.php:969
 msgid "Your Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:941
-#: includes/class-geodir-post-data.php:968
+#: includes/class-geodir-post-data.php:948
+#: includes/class-geodir-post-data.php:975
 msgid "Enter your name."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:955
-#: includes/class-geodir-post-data.php:975
+#: includes/class-geodir-post-data.php:962
+#: includes/class-geodir-post-data.php:982
 msgid "Enter your email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1001 language.php:36
+#: includes/class-geodir-post-data.php:1008 language.php:36
 msgid "Enter Listing Details"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1042
-#: includes/class-geodir-post-data.php:1048
+#: includes/class-geodir-post-data.php:1049
+#: includes/class-geodir-post-data.php:1055
 msgid "Type 64 into this box"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1059
+#: includes/class-geodir-post-data.php:1066
 msgid "Submit Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1070
+#: includes/class-geodir-post-data.php:1077
 msgid "Preview Listing"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1254
+#: includes/class-geodir-post-data.php:1261
 msgid "You do not own this post"
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1259
+#: includes/class-geodir-post-data.php:1266
 msgid "Delete revision failed."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1348
-#: includes/class-geodir-post-data.php:1589
+#: includes/class-geodir-post-data.php:1355
+#: includes/class-geodir-post-data.php:1596
 msgid "You do not have the privileges to perform this action."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1498
+#: includes/class-geodir-post-data.php:1505
 msgid "User name must have atleast 3 characters."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1500
+#: includes/class-geodir-post-data.php:1507
 msgid "Invalid user email address."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1526
+#: includes/class-geodir-post-data.php:1533
 msgid "Something wrong! Fail to register a new user."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1681
+#: includes/class-geodir-post-data.php:1688
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1685
+#: includes/class-geodir-post-data.php:1692
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1694
+#: includes/class-geodir-post-data.php:1701
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1700
+#: includes/class-geodir-post-data.php:1707
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1788
+#: includes/class-geodir-post-data.php:1795
 msgid "Indicates mandatory fields"
 msgstr ""
 
@@ -10763,7 +10765,7 @@ msgctxt "URL slug"
 msgid "places"
 msgstr ""
 
-#: includes/class-geodir-post-types.php:391 includes/post-functions.php:685
+#: includes/class-geodir-post-types.php:391 includes/post-functions.php:695
 msgctxt "Listing status"
 msgid "Closed down"
 msgstr ""
@@ -10857,8 +10859,8 @@ msgid "Post Longitude"
 msgstr ""
 
 #: includes/class-geodir-privacy-exporters.php:344
-#: includes/custom-fields/input-functions-aui.php:1769
-#: includes/post-functions.php:1729
+#: includes/custom-fields/input-functions-aui.php:1782
+#: includes/post-functions.php:1742
 #: includes/widgets/class-geodir-widget-post-badge.php:506
 msgid "Default Category"
 msgstr ""
@@ -11448,12 +11450,12 @@ msgid "Leave a reply"
 msgstr ""
 
 #: includes/core-functions.php:340
-#: includes/widgets/class-geodir-widget-recent-reviews.php:391
+#: includes/widgets/class-geodir-widget-recent-reviews.php:442
 msgid "Read more"
 msgstr ""
 
 #: includes/core-functions.php:341
-#: includes/widgets/class-geodir-widget-recent-reviews.php:391
+#: includes/widgets/class-geodir-widget-recent-reviews.php:442
 msgid "about this listing"
 msgstr ""
 
@@ -11598,64 +11600,64 @@ msgstr ""
 msgid "Admin only"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:581
-#: includes/custom-fields/input-functions-aui.php:670
+#: includes/custom-fields/input-functions-aui.php:586
+#: includes/custom-fields/input-functions-aui.php:675
 #: includes/custom-fields/input-functions.php:641
 #: includes/custom-fields/input-functions.php:695
 #, php-format
 msgid "Select %s&hellip;"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1260
+#: includes/custom-fields/input-functions-aui.php:1265
 #: includes/custom-fields/input-functions.php:1167
 msgid "Enter a location"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1276
+#: includes/custom-fields/input-functions-aui.php:1281
 #: templates/bootstrap/map/directions.php:35
 msgid "use my location"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1299
-#: includes/custom-fields/input-functions-aui.php:1333
+#: includes/custom-fields/input-functions-aui.php:1304
+#: includes/custom-fields/input-functions-aui.php:1338
 #: includes/custom-fields/input-functions.php:1199
 #: includes/custom-fields/input-functions.php:1223
 #, php-format
 msgid "Please enter listing %s"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1445
+#: includes/custom-fields/input-functions-aui.php:1450
 #: includes/custom-fields/input-functions.php:1305
 msgid "Please select listing map view to use"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1448
+#: includes/custom-fields/input-functions-aui.php:1453
 #: includes/custom-fields/input-functions.php:1295
 msgid "Default Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1449
+#: includes/custom-fields/input-functions-aui.php:1454
 #: includes/custom-fields/input-functions.php:1296
 #: includes/widgets/class-geodir-widget-map.php:106
 msgid "Satellite Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1450
+#: includes/custom-fields/input-functions-aui.php:1455
 #: includes/custom-fields/input-functions.php:1297
 #: includes/widgets/class-geodir-widget-map.php:107
 msgid "Hybrid Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1451
+#: includes/custom-fields/input-functions-aui.php:1456
 #: includes/custom-fields/input-functions.php:1298
 #: includes/widgets/class-geodir-widget-map.php:108
 msgid "Terrain Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1514
-#: includes/custom-fields/input-functions-aui.php:1590
-#: includes/custom-fields/input-functions-aui.php:1661
-#: includes/custom-fields/input-functions-aui.php:1735
+#: includes/custom-fields/input-functions-aui.php:1519
+#: includes/custom-fields/input-functions-aui.php:1595
+#: includes/custom-fields/input-functions-aui.php:1666
+#: includes/custom-fields/input-functions-aui.php:1748
 #: includes/custom-fields/input-functions.php:1365
 #: includes/custom-fields/input-functions.php:1437
 #: includes/custom-fields/input-functions.php:1507
@@ -11666,82 +11668,86 @@ msgstr ""
 msgid "Select Category"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1564
-#: includes/custom-fields/input-functions-aui.php:1711
+#: includes/custom-fields/input-functions-aui.php:1569
+#: includes/custom-fields/input-functions-aui.php:1716
 #: includes/custom-fields/input-functions.php:1415
 #: includes/custom-fields/input-functions.php:1555
 #, php-format
 msgid "Only select %d categories for this package."
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1765
+#: includes/custom-fields/input-functions-aui.php:1741
+msgid "Select at least one category from the list!"
+msgstr ""
+
+#: includes/custom-fields/input-functions-aui.php:1778
 msgid "Select Default Category"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1770
+#: includes/custom-fields/input-functions-aui.php:1783
 msgid "The default category can affect the listing URL and map marker."
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1856
+#: includes/custom-fields/input-functions-aui.php:1869
 #: includes/custom-fields/input-functions.php:1641
 msgid "Enter tags separated by a comma ,"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1898
-#: includes/custom-fields/input-functions.php:1696
+#: includes/custom-fields/input-functions-aui.php:1915
+#: includes/custom-fields/input-functions.php:1701
 msgid "Popular tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1912
-#: includes/custom-fields/input-functions.php:1711
+#: includes/custom-fields/input-functions-aui.php:1929
+#: includes/custom-fields/input-functions.php:1716
 msgid "Your tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2026
-#: includes/custom-fields/input-functions.php:1797
+#: includes/custom-fields/input-functions-aui.php:2043
+#: includes/custom-fields/input-functions.php:1802
 msgid "Day"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2026
-#: includes/custom-fields/input-functions.php:1797
+#: includes/custom-fields/input-functions-aui.php:2043
+#: includes/custom-fields/input-functions.php:1802
 msgid "Opening Hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2026
-#: includes/custom-fields/input-functions.php:1797
+#: includes/custom-fields/input-functions-aui.php:2043
+#: includes/custom-fields/input-functions.php:1802
 msgid "Add"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2033
-#: includes/custom-fields/input-functions-aui.php:2070
-#: includes/custom-fields/input-functions.php:1800
-#: includes/custom-fields/input-functions.php:1830
+#: includes/custom-fields/input-functions-aui.php:2050
+#: includes/custom-fields/input-functions-aui.php:2087
+#: includes/custom-fields/input-functions.php:1805
+#: includes/custom-fields/input-functions.php:1835
 #: includes/widgets/class-geodir-widget-archive-item-section.php:42
 msgid "Open"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2034
-#: includes/custom-fields/input-functions-aui.php:2071
-#: includes/custom-fields/input-functions.php:1800
-#: includes/custom-fields/input-functions.php:1830
+#: includes/custom-fields/input-functions-aui.php:2051
+#: includes/custom-fields/input-functions-aui.php:2088
+#: includes/custom-fields/input-functions.php:1805
+#: includes/custom-fields/input-functions.php:1835
 msgid "Close"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2036
-#: includes/custom-fields/input-functions-aui.php:2073
+#: includes/custom-fields/input-functions-aui.php:2053
+#: includes/custom-fields/input-functions-aui.php:2090
 msgid "Remove hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2080
+#: includes/custom-fields/input-functions-aui.php:2097
 msgid "Add new set of hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2084
+#: includes/custom-fields/input-functions-aui.php:2101
 msgid "Timezone:"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2084
-#: includes/custom-fields/input-functions.php:1842
+#: includes/custom-fields/input-functions-aui.php:2101
+#: includes/custom-fields/input-functions.php:1847
 msgid "Select a city/timezone&hellip;"
 msgstr ""
 
@@ -12804,46 +12810,46 @@ msgstr ""
 msgid "Failed to retrieve GPS info from OpenStreetMap Nominatim server."
 msgstr ""
 
-#: includes/post-functions.php:1052
+#: includes/post-functions.php:1062
 #: includes/widgets/class-geodir-widget-dynamic-content.php:301
 msgid "NEW"
 msgstr ""
 
-#: includes/post-functions.php:1054
+#: includes/post-functions.php:1064
 #: includes/widgets/class-geodir-widget-dynamic-content.php:303
 msgid "UPDATED"
 msgstr ""
 
-#: includes/post-functions.php:1740
+#: includes/post-functions.php:1753
 msgid "Overall Rating"
 msgstr ""
 
-#: includes/post-functions.php:1751
+#: includes/post-functions.php:1764
 msgid "Rating Count"
 msgstr ""
 
-#: includes/post-functions.php:1761 includes/post-functions.php:1772
+#: includes/post-functions.php:1774 includes/post-functions.php:1785
 #: includes/widgets/class-geodir-widget-author-actions.php:246
 msgid "Published"
 msgstr ""
 
-#: includes/post-functions.php:1783 includes/post-functions.php:1794
+#: includes/post-functions.php:1796 includes/post-functions.php:1807
 msgid "Modified"
 msgstr ""
 
-#: includes/post-functions.php:1868
+#: includes/post-functions.php:1881
 msgid "Address line 2"
 msgstr ""
 
-#: includes/post-functions.php:1923
+#: includes/post-functions.php:1936
 msgid "Latitude"
 msgstr ""
 
-#: includes/post-functions.php:1934
+#: includes/post-functions.php:1947
 msgid "Longitude"
 msgstr ""
 
-#: includes/post-functions.php:1945
+#: includes/post-functions.php:1958
 msgid "Map Directions"
 msgstr ""
 
@@ -13509,11 +13515,11 @@ msgid "The maximum number of sub category levels to show."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:186
-msgid "Max cats to show:"
+msgid "Max cats to show per CPT:"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:187
-msgid "The maximum number of categories to show."
+msgid "The maximum number of categories to show per CPT."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:196
@@ -13555,12 +13561,12 @@ msgid "Image Background"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:251
-#: includes/widgets/class-geodir-widget-recent-reviews.php:99
+#: includes/widgets/class-geodir-widget-recent-reviews.php:108
 msgid "Row Items"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-categories.php:252
-#: includes/widgets/class-geodir-widget-recent-reviews.php:100
+#: includes/widgets/class-geodir-widget-recent-reviews.php:109
 msgid "The number of items in a row on desktop view."
 msgstr ""
 
@@ -14884,20 +14890,20 @@ msgstr ""
 msgid "S (button)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:397
+#: includes/widgets/class-geodir-widget-ninja-forms.php:396
 msgid "Select a form"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:421
+#: includes/widgets/class-geodir-widget-ninja-forms.php:420
 msgid ""
 "<span class=\"dashicons-before dashicons-admin-site\"> GeoDirectory</span>"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:537
+#: includes/widgets/class-geodir-widget-ninja-forms.php:536
 msgid "GeoDirectory Contact Form"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-ninja-forms.php:538
+#: includes/widgets/class-geodir-widget-ninja-forms.php:537
 msgid ""
 "Allow your users to contact the listing owners. You can add and remove "
 "fields as needed."
@@ -15458,12 +15464,12 @@ msgid "Slide or fade transition."
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-images.php:154
-#: includes/widgets/class-geodir-widget-recent-reviews.php:122
+#: includes/widgets/class-geodir-widget-recent-reviews.php:131
 msgid "Slide"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-images.php:155
-#: includes/widgets/class-geodir-widget-recent-reviews.php:123
+#: includes/widgets/class-geodir-widget-recent-reviews.php:132
 msgid "Fade"
 msgstr ""
 
@@ -15691,6 +15697,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-recent-reviews.php:67
 #: includes/widgets/class-geodir-widget-recent-reviews.php:76
 #: includes/widgets/class-geodir-widget-recent-reviews.php:85
+#: includes/widgets/class-geodir-widget-recent-reviews.php:94
 msgid "Filter"
 msgstr ""
 
@@ -15710,15 +15717,27 @@ msgstr ""
 msgid "Filter reviews for current viewing post type"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recent-reviews.php:103
+#: includes/widgets/class-geodir-widget-recent-reviews.php:88
+msgid "Reviews by author:"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-recent-reviews.php:89
+msgid ""
+"Filter by current_user, current_author or ID (default = unfiltered). "
+"current_user: Filters the reviews by author id of the logged in user. "
+"current_author: Filters the reviews by author id of current viewing post/"
+"listing/profile"
+msgstr ""
+
+#: includes/widgets/class-geodir-widget-recent-reviews.php:112
 msgid "Default (1)"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recent-reviews.php:117
+#: includes/widgets/class-geodir-widget-recent-reviews.php:126
 msgid "Carousel"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-recent-reviews.php:118
+#: includes/widgets/class-geodir-widget-recent-reviews.php:127
 msgid "Display as a carousel."
 msgstr ""
 
@@ -17741,20 +17760,20 @@ msgstr ""
 msgid "Loading categories..."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:426
-#: templates/bootstrap/map/map-add-listing.php:725 templates/map.php:425
+#: templates/bootstrap/map/map-add-listing.php:434
+#: templates/bootstrap/map/map-add-listing.php:733 templates/map.php:425
 #: templates/map.php:744
 #, php-format
 msgid "Please choose any address of the (%s) city only."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:445
-#: templates/bootstrap/map/map-add-listing.php:743 templates/map.php:444
+#: templates/bootstrap/map/map-add-listing.php:453
+#: templates/bootstrap/map/map-add-listing.php:751 templates/map.php:444
 #: templates/map.php:762
 msgid "Cannot determine address at this location."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:905
+#: templates/bootstrap/map/map-add-listing.php:913
 msgid ""
 "Click on \"Set Address on Map\" and then you can also drag map marker to "
 "locate the correct address"
@@ -17862,97 +17881,97 @@ msgstr ""
 msgid "Thanks for choosing an AyeCode Product!"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:956
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:985
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:304
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:961
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:990
 msgid "Here you can adjust settings if you are having compatibility issues."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:968
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:997
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:408
 msgid "Frontend"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:972
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1010
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1001
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1039
 msgid "Load CSS"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:975
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1013
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1004
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1042
 msgid "Compatibility Mode (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:976
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1005
 msgid "Full Mode"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:984
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1022
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1013
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1051
 msgid "Load JS"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:987
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1025
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1016
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1054
 msgid "Core + Popper (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:988
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1026
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1017
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1055
 msgid "Popper"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:989
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1027
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1018
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1056
 msgid "Required functions only"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:990
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1028
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1019
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1057
 msgid "Disabled (not recommended)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:997
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1026
 msgid "HTML Font Size (px)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1000
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1029
 msgid ""
 "Our font sizing is rem (responsive based) here you can set the html font "
 "size in-case your theme is setting it too low."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1006
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1035
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:410
 msgid "Backend"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1014
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1043
 msgid "Full Mode (will cause style issues)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1035
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1064
 msgid "Disable load on URL"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1037
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1066
 msgid ""
 "If you have backend conflict you can enter a partial URL argument that will "
 "disable the loading of AUI on those pages. Add each argument on a new line."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1058
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1087
 msgid "AyeCode UI"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1073
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1102
 msgid "Primary Color"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1086
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1115
 msgid "Secondary Color"
 msgstr ""
 
