@@ -1191,7 +1191,7 @@ class GeoDir_Post_Data {
 		if ( ! empty( $user_notes ) ) {
 			foreach ( $user_notes as $key => $user_note ) {
 				if($design_style){
-					$notes .= "<div class='alert alert-info $key' role='alert'>";
+					$notes .= "<div class='gd-notification alert alert-info $key' role='alert'>";
 					$notes .= $user_note;
 					$notes .= "</div>";
 				}else{
