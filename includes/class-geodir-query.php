@@ -591,7 +591,8 @@ class GeoDir_Query {
 
 				$content_where = $terms_where = '';
 				if ( $s != '' ) {
-					$content_where = $wpdb->prepare( " OR ($wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s) ", array( $s . '%', '% ' . $s . '%', '%>' . $s . '%', '%\n' . $s . '%' ) );
+					$content_where = $wpdb->prepare( " OR ($wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s OR $wpdb->posts.post_content LIKE %s) ", array( $s . '%', '% ' . $s . '%', '%>' . $s . '%', '%\n' . $s . '%' ) 
+					$content_where = str_replace( "\\n", "\n", $content_where ); // $wpdb->prepare() adds slash that unable to match in search.
 
 					/**
 					 * Filter the search query content where values.
