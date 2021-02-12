@@ -744,7 +744,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 												var obj_files = data.files;
 												var files = '';
 												for (var i in data.files) {
-													files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+													files += '<p>'+ obj_files[i].i +' <a download="' + ((obj_files[i].u).replace(/^.*[\\\/]/, '')) + '" class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
 												}
 												jQuery('#gd_ie_ex_files', el).append(files);
 												if (pages > page) {
@@ -801,7 +801,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 											var obj_files = data.files;
 											var files = '';
 											for (var i in data.files) {
-												files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+												files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" download="' + ((obj_files[i].u).replace(/^.*[\\\/]/, '')) + '" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
 											}
 											jQuery('#gd_ie_ex_files', el).append(files);
 											if (pages > page) {
@@ -941,7 +941,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 											var obj_files = res.files;
 											var files = '';
 											for (var i in res.files) {
-												files += '<p>' + obj_files[i].i + ' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+												files += '<p>' + obj_files[i].i + ' <a class="gd-ie-file" download="' + ((obj_files[i].u).replace(/^.*[\\\/]/, '')) + '" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
 											}
 											$('#gd_ie_ex_files', $parent).append(files);
 											if (iPages > iPage) {
