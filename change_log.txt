@@ -1,6 +1,7 @@
 = 2.1.0.9 =
 * Show markers for custom Elementor posts loop not working - FIXED
 * Export CSV opens in browser instead of download on some sites - FIXED
+* Search keyword don't matches with the word start with new line character - FIXED
 
 = 2.1.0.8 =
 * Sometimes published email shows broken post link when cache is enabled - FIXED
