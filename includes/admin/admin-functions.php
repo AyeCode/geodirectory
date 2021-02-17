@@ -1379,3 +1379,24 @@ function geodir_is_archive_item_template_page(){
 
 	return $result;
 }
+
+/**
+ * Tell AyeCode UI to load on certain admin pages.
+ *
+ * @param $screen_ids
+ *
+ * @return array
+ */
+function geodir_add_aui_screens($screen_ids){
+
+	// load on these pages if set
+	if( geodir_design_style() ){
+		$screen_ids = array_merge($screen_ids,geodir_get_screen_ids());
+	}
+
+	// AUI is also needed for setup wizard
+	$screen_ids[] = 'gd-setup';
+
+	return $screen_ids;
+}
+add_filter('aui_screen_ids','geodir_add_aui_screens');
