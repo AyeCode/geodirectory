@@ -1766,7 +1766,7 @@ function geodir_cfi_categories($html,$cf){
         $html = ob_get_clean();
 
         // Default category select
-        if ( $cat_display == 'multiselect' ) {
+        if ( $cat_display == 'multiselect' || $cat_display == 'checkbox' ) {
             // required
             $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
@@ -1787,7 +1787,7 @@ function geodir_cfi_categories($html,$cf){
             ) );
         } else {
             // leaving this out should set the default as the main cat anyway
-            // $html .= '<input type="hidden" id="default_category" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
+            $html .= '<input type="hidden" id="default_category" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
         }
     }
 
