@@ -232,7 +232,7 @@ global $gd_post;
 		if($type=='slider' && $controlnav==1 && $image_count > 1) {
 			$image_count = 0;
 			?>
-			<ol class="carousel-indicators position-relative mx-0 my-1">
+			<ol class="carousel-indicators w-100 position-relative mx-0 my-1">
 				<?php
 				foreach($post_images as $image){
 					$active = $image_count == 0 ? 'active' : '';
@@ -247,7 +247,7 @@ global $gd_post;
 		}elseif($type=='slider' && $controlnav==2 && $image_count > 1){
 			$image_count = 0;
 			?>
-			<ul class="carousel-indicators position-relative mx-0 my-1 list-unstyled overflow-auto scrollbars-ios">
+			<ul class="carousel-indicators w-100 position-relative mx-0 my-1 list-unstyled overflow-auto scrollbars-ios">
 				<?php
 				foreach($post_images as $image){
 					$active = $image_count == 0 ? 'active' : '';

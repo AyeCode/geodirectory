@@ -219,20 +219,12 @@ class GeoDir_Compatibility {
 				$parent_theme = wp_get_theme( $parent_theme->Template );
 			}
 
-			if ( ! empty( $parent_theme ) && version_compare( $parent_theme->Version, '2.0', '<' ) ) {
+			if ( ! empty( $parent_theme ) && version_compare( $parent_theme->Version, '1.7', '<' ) ) {
 				add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
 				$settings_link = admin_url("admin.php?page=gd-settings&tab=general&section=developer");
 				$aui_disabled_notice = sprintf( __("Listimia theme works best with GeoDirectory legacy styles, please set legacy styles %shere%s","geodirectory"),"<a href='$settings_link'>","</a>");
 			}
-		} elseif ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) ) {
-			global $aui_disabled_notice;
-
-			add_filter( 'ayecode-ui-settings',array( __CLASS__, 'disable_aui' ) );
-			add_filter( 'geodir_get_option_design_style', '__return_empty_string' );
-			add_action( 'admin_notices', array( __CLASS__, 'notice_aui_disabled' ) );
-
-			$aui_disabled_notice = __( "AyeCode UI bootstrap styles have been disabled due to an incompatibility with Avada Builder using an older version of bootstrap.", "geodirectory" );
-		}
+		} 
 	}
 
 	/**

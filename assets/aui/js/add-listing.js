@@ -135,7 +135,7 @@ jQuery(function($) {
     aui_conditional_fields("#geodirectory-add-post,#post");
 
     // Default cat set
-    jQuery(".geodir-category-select").change(function() {
+    jQuery(".geodir_taxonomy_field .geodir-category-select, .geodir_taxonomy_field [data-ccheckbox='default_category'], .geodir_taxonomy_field input[data-cradio]").change(function() {
         geodir_populate_default_category_input();
     });
     geodir_populate_default_category_input();
@@ -724,22 +724,53 @@ function geodirIsTouchDevice() {
 }
 
 function geodir_populate_default_category_input() {
-    var selected_cats = jQuery('.geodir-category-select').val();
     var default_cat = jQuery('#default_category').val();
 
-    if (selected_cats && selected_cats.length) {
+    if (jQuery(".geodir_taxonomy_field .geodir-category-select").length) {
         jQuery('#default_category').html('');
-
-        jQuery(".geodir-category-select option").each(function(index) {
-            if (jQuery.inArray(jQuery(this).val(), selected_cats) !== -1) {
-                jQuery('#default_category').append(jQuery('<option>', {
-                    value: jQuery(this).val(),
-                    text: jQuery(this).text(),
-                    selected: default_cat == jQuery(this).val() || (!default_cat && selected_cats[0] == jQuery(this).val())
-                }));
+        var selected_cats = jQuery('.geodir-category-select').val();
+        if (selected_cats && selected_cats.length) {
+            if (typeof selected_cats == 'object' || typeof selected_cats == 'array') {
+                jQuery(".geodir_taxonomy_field .geodir-category-select option").each(function(index) {
+                    if (jQuery.inArray(jQuery(this).val(), selected_cats) !== -1) {
+                        jQuery('#default_category').append(jQuery('<option>', {
+                            value: jQuery(this).val(),
+                            text: jQuery(this).text(),
+                            selected: default_cat == jQuery(this).val() || (!default_cat && selected_cats[0] == jQuery(this).val())
+                        }));
+                    }
+                });
+            } else {
+                jQuery('#default_category').val(selected_cats);
             }
+        } else {
+            jQuery('#default_category').val('');
+        }
+    } else if (jQuery(".geodir_taxonomy_field [data-ccheckbox='default_category']").length) {
+        jQuery('#default_category').html('');
+        var selected_cats = [];
+        jQuery("[data-ccheckbox='default_category']:checked").each(function(i){
+            selected_cats[i] = jQuery(this).val();
         });
-    } else {
-        jQuery('#default_category').val('');
+        if (selected_cats && selected_cats.length) {
+            jQuery("[data-ccheckbox='default_category']:checked").each(function(index) {
+                if (jQuery.inArray(jQuery(this).val(), selected_cats) !== -1) {
+                    jQuery('#default_category').append(jQuery('<option>', {
+                        value: jQuery(this).val(),
+                        text: jQuery(this).prop('title'),
+                        selected: default_cat == jQuery(this).val() || (!default_cat && selected_cats[0] == jQuery(this).val())
+                    }));
+                }
+            });
+        } else {
+            jQuery('#default_category').val('');
+        }
+    } else if (jQuery(".geodir_taxonomy_field [data-cradio='default_category']").length) {
+        var selected_cats = jQuery("[data-cradio='default_category']:checked").val();
+        if (selected_cats) {
+            jQuery('#default_category').val(selected_cats);
+        } else {
+            jQuery('#default_category').val('');
+        }
     }
 }

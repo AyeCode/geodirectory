@@ -198,7 +198,7 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 }
             }
 
-			$gd_layout_class = geodir_convert_listing_view_class( $widget_args['layout'] );
+            $gd_layout_class = geodir_convert_listing_view_class( $widget_args['layout'] );
 
             // for preview just get the main posts
             if( $is_preview ){
@@ -214,49 +214,58 @@ class GeoDir_Widget_Loop extends WP_Super_Duper {
                 }
             }
 
-            // check if we have listings or if we are faking it
-            if($wp_query->post_count == 1 && empty($wp_query->posts)){
+            // Check if we have listings or if we are faking it
+            if ( $wp_query->post_count == 1 && empty( $wp_query->posts ) ) {
                 geodir_no_listings_found();
-            }elseif(geodir_is_page('search') && !isset($_REQUEST['geodir_search'])){
+            } elseif ( geodir_is_page( 'search' ) && ! isset( $_REQUEST['geodir_search'] ) ) {
                 geodir_no_listings_found();
-            }else{
-
-                // check we are not inside a template builder container
-                if(isset($wp_query->posts[0]) && $wp_query->posts[0]->post_type=='page'){
-                    // reset the query count so the correct number of listings are output.
+            } else {
+                // Check we are not inside a template builder container
+                if ( isset( $wp_query->posts[0] ) && $wp_query->posts[0]->post_type == 'page' ) {
+                    // Reset the query count so the correct number of listings are output.
                     rewind_posts();
-                    // reset the proper loop content
-                    global $wp_query,$gd_temp_wp_query;
+                    // Reset the proper loop content
+                    global $wp_query, $gd_temp_wp_query;
+
                     $wp_query->posts = $gd_temp_wp_query;
                 }
 
-                $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
-                $template = $design_style ? $design_style."/content-archive-listing.php" : "content-archive-listing.php";
+                // Check if still have listings.
+                if ( $wp_query->post_count == 1 && empty( $wp_query->posts ) ) {
+                    geodir_no_listings_found();
+                } else {
+                    $design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : geodir_design_style();
+                    $template = $design_style ? $design_style . "/content-archive-listing.php" : "content-archive-listing.php";
 
-                // wrap class
-                $wrap_class = geodir_build_aui_class( $widget_args );
+                    // wrap class
+                    $wrap_class = geodir_build_aui_class( $widget_args );
 
-                if($wrap_class){echo "<div class='$wrap_class'>";}
+                    if ( $wrap_class ) {
+                        echo "<div class='$wrap_class'>";
+                    }
 
-                echo geodir_get_template_html( $template, array(
-                    'column_gap_class'   => $widget_args['column_gap'] ? 'mb-'.absint($widget_args['column_gap']) : 'mb-4',
-                    'row_gap_class'   => $widget_args['row_gap'] ? 'px-'.absint($widget_args['row_gap']) : '',
-                    'card_border_class'   => $card_border_class,
-                    'card_shadow_class'  =>  $card_shadow_class,
-                ) );
+                    echo geodir_get_template_html( $template, array(
+                        'column_gap_class'   => $widget_args['column_gap'] ? 'mb-'.absint($widget_args['column_gap']) : 'mb-4',
+                        'row_gap_class'   => $widget_args['row_gap'] ? 'px-'.absint($widget_args['row_gap']) : '',
+                        'card_border_class'   => $card_border_class,
+                        'card_shadow_class'  =>  $card_shadow_class,
+                    ) );
 
-                if($wrap_class){echo "</div>";}
+                    if ( $wrap_class ) {
+                        echo "</div>";
+                    }
 
+                    // set loop as done @todo this needs testing
+                    global $wp_query;
 
-                // set loop as done @todo this needs testing
-                global $wp_query;
-                $wp_query->current_post = $wp_query->post_count;
+                    $wp_query->current_post = $wp_query->post_count;
+                }
             }
-        }else{
+        } else {
             geodir_no_listings_found();
         }
 
-        // add filter to make main page comments closed after the GD loop
+        // Add filter to make main page comments closed after the GD loop
         add_filter( 'comments_open', array( __CLASS__, 'comments_open' ), 10, 2 );
 
         return ob_get_clean();

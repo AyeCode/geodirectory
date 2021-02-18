@@ -97,6 +97,8 @@ function geodir_cfi_input_output($cf){
 
     // required
     $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
+    $required_msg = $required && $cf['required_msg'] != '' ? __( $cf['required_msg'] , 'geodirectory') : '';
+    $validation_msg = $title != '' ? __( $title , 'geodirectory') : $required_msg;
 
     // admin only
     $admin_only = geodir_cfi_admin_only($cf);
@@ -111,6 +113,8 @@ function geodir_cfi_input_output($cf){
             'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'type'              => $type,
             'title'             =>  $title,
+            'validation_text'   => $validation_msg,
+            'validation_pattern' => ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
             'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
             'class'             => '',
             'value'             => $value, // esc_attr(stripslashes($value))
@@ -487,6 +491,9 @@ function geodir_cfi_textarea($html,$cf){
         // wysiwyg
         $wysiwyg = apply_filters( 'geodir_custom_field_allow_html_editor', $html_editor, $cf );
 
+        // Allow html tags
+        $allow_tags = apply_filters( 'geodir_custom_field_textarea_allow_tags', ( $wysiwyg || $cf['name'] == 'video' ), $cf );
+
         // field type (used for validation)
         $extra_attributes['field_type'] =  $wysiwyg ? 'editor' :  $cf['type'];
 
@@ -498,7 +505,6 @@ function geodir_cfi_textarea($html,$cf){
 
         // help text
         $help_text = __( $cf['desc'], 'geodirectory' );
-
 
         $html = aui()->textarea(array(
             'name'       => $cf['name'],
@@ -515,11 +521,10 @@ function geodir_cfi_textarea($html,$cf){
             'no_wrap'    => false,
             'rows'      => 8,
             'wysiwyg'   => $wysiwyg ? array('quicktags' => true) : false,
+            'allow_tags' => $allow_tags,
             'help_text'        => $help_text,
-            'extra_attributes' => $extra_attributes,
+            'extra_attributes' => $extra_attributes
         ));
-
-
     }
 
     return $html;
@@ -1761,7 +1766,7 @@ function geodir_cfi_categories($html,$cf){
         $html = ob_get_clean();
 
         // Default category select
-        if ( $cat_display == 'multiselect' ) {
+        if ( $cat_display == 'multiselect' || $cat_display == 'checkbox' ) {
             // required
             $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
@@ -1782,7 +1787,7 @@ function geodir_cfi_categories($html,$cf){
             ) );
         } else {
             // leaving this out should set the default as the main cat anyway
-            // $html .= '<input type="hidden" id="default_category" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
+            $html .= '<input type="hidden" id="default_category" name="default_category" value="' . esc_attr( geodir_get_cf_default_category_value() ) . '">';
         }
     }
 

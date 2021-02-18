@@ -303,7 +303,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_form_wait'                                => __( 'Wait...', 'geodirectory' ),
 		'txt_form_searching'                           => __( 'Searching...', 'geodirectory' ),
 		'txt_form_my_location'                           => __( 'My Location', 'geodirectory' ),
-		'rating_type'                                  => geodir_get_option( 'rating_type' ) ? geodir_get_option( 'rating_type' ) : 'font-awesome',
+		'rating_type'                                  => geodir_get_option( 'rating_type' ) && geodir_get_option( 'rating_type' ) =='image' ? 'image' : 'fa',
 		'reviewrating'                                 => defined( 'GEODIR_REVIEWRATING_VERSION' ) ? 1 : '',
 		'multirating'                                  => defined( 'GEODIR_REVIEWRATING_VERSION' ) && geodir_get_option( 'rr_enable_rating' ) ? true : false,
 		'map_name'                                     => GeoDir_Maps::active_map(),

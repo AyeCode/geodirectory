@@ -1,3 +1,9 @@
+= 2.1.0.9 =
+* Show markers for custom Elementor posts loop not working - FIXED
+* Export CSV opens in browser instead of download on some sites - FIXED
+* Search keyword don't matches with the word start with new line character - FIXED
+* Category checkbox hierarchy no longer showing option to set default category with AUI - FIXED
+
 = 2.1.0.8 =
 * Sometimes published email shows broken post link when cache is enabled - FIXED
 * Badge class not added to post class with AUI Bootstrap style - FIXED
@@ -7,9 +13,15 @@
 * Allow to filter Recent Reviews by author - ADDED
 * Fix for some UK regions being wrong from Google API - FIXED
 * Create missing pages tool not working if menu item with same slug exists - FIXED
+* Add filter for changing distance - ADDED
 * GD > Ninja Forms Gutenberg background color issue - FIXED
 * Map don't shows correct results filtered by GPS - FIXED
 * Yoast taxonomies default nonindex setting not working for GD terms - FIXED
+* Allow HTML tags in video field - CHANGED
+* WP Rocket new JS deffer feature breaking GD variables - FIXED
+* Compatibility changes for Avada and Kleo themes using bootstrap 3 to work with new AUI styles - CHANGED
+* Custom field user defined validation is not working with AUI - FIXED
+* Divi theme builder custom page template layout for search page breaking the search result layout - FIXED
 
 = 2.1.0.7 =
 * OpenStreetMap routing add more languages support including Russian language - CHANGED

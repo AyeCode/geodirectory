@@ -308,6 +308,18 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
                 } else {
                     query_string += '&post[]=-1';
                 }
+            } else if (custom_loop && jQuery(custom_loop + ' .elementor-posts').length) {
+                // Elementor posts loop.
+                var loopIds = jQuery(custom_loop + ' .elementor-posts').find(".elementor-post.type-" + post_type)
+                    .map(function() {
+                        return jQuery(this).attr('id').match(/post-\d+/)[0].replace("post-","");
+                    }).get();
+
+                if ((typeof loopIds == 'object' || typeof loopIds == 'array') && loopIds.length > 0) {
+                    query_string += '&post[]=' + loopIds.join("&post[]=");
+                } else {
+                    query_string += '&post[]=-1';
+                }
             } else {
                 query_string += '&tag[]=' + tags.join("&tag[]=");
             }

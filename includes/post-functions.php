@@ -1653,6 +1653,8 @@ function geodir_validate_custom_field_value_textarea( $value, $gd_post, $custom_
 						'scrolling'    => true,
 						'style'        => true,
 						'title'        => true,
+						'allow'        => true,
+						'allowfullscreen' => true,
 						'data-*'       => true,
 					);
 				}
