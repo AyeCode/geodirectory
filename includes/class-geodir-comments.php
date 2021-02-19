@@ -801,6 +801,7 @@ class GeoDir_Comments {
 		if ( $type == 'output' ) {
 			$rating_wrap_title = $rating ? sprintf( __( '%d star rating', 'geodirectory' ), $rating ) : __( "No rating yet!", "geodirectory" );
 		}
+		$rating_wrap_title  = apply_filters('geodir_rating_wrap_title', $rating_wrap_title, $rating );
 		$rating_html        = '';
 		$rating_input_count = $args['rating_input_count'];
 		$i                  = 1;
