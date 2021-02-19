@@ -799,7 +799,17 @@ class GeoDir_Comments {
 		$rating_texts      = $args['rating_texts'];
 		$rating_wrap_title = '';
 		if ( $type == 'output' ) {
-			$rating_wrap_title = $rating ? sprintf( __( '%d star rating', 'geodirectory' ), $rating ) : __( "No rating yet!", "geodirectory" );
+			if ( $rating > 0 ) {
+				$int_rating = (int) $rating > 1 ? (int) $rating : 1;
+				if ( ! empty( $args ) && ! empty( $args['rating_texts'] ) && ! empty( $args['rating_texts'][ $int_rating ] ) ) {
+					$rating_wrap_title = __( $args['rating_texts'][ $int_rating ], 'geodirectory' );
+				} else {
+					$rating_wrap_title = wp_sprintf( __( '%d star rating', 'geodirectory' ), $rating );
+				}
+			} else {
+				 $rating_wrap_title = __( 'No rating yet!', 'geodirectory' );
+			}
+			$rating_wrap_title = apply_filters( 'geodir_output_rating_title', $rating_wrap_title, $rating, $args );
 		}
 		$rating_html        = '';
 		$rating_input_count = $args['rating_input_count'];
