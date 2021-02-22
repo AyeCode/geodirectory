@@ -1,14 +1,14 @@
 jQuery(document).ready(function($) {
 
     // Open a lightbox for embeded items
-    jQuery('.geodir-lightbox-image').unbind('click').click(function(ele) {
+    jQuery('.geodir-lightbox-image, .geodir-lightbox-iframe').unbind('click').click(function(ele) {
         geodir_lightbox_embed(this,ele);
     });
 
     // add trigger for carousel multiple items
     jQuery( window ).on( "aui_carousel_multiple", function() {
         // Open a lightbox for embeded items
-        jQuery('.geodir-lightbox-image').unbind('click').click(function(ele) {
+        jQuery('.geodir-lightbox-image, .geodir-lightbox-iframe').unbind('click').click(function(ele) {
             geodir_lightbox_embed(this,ele);
         });
     });
@@ -74,6 +74,9 @@ function geodir_lightbox_embed($link,ele){
     jQuery('.geodir-carousel-modal').modal({
         //backdrop: 'static'
     });
+    jQuery('.geodir-carousel-modal').on('hidden.bs.modal', function (e) {
+        jQuery("iframe").attr('src', '');
+    });
 
     $container = jQuery($link).closest('.geodir-images');
 
@@ -123,6 +126,24 @@ function geodir_lightbox_embed($link,ele){
             if(jQuery(a).parent().find('.carousel-caption').length ){
                 $carousel  += jQuery(a).parent().find('.carousel-caption').clone().removeClass('sr-only').get(0).outerHTML;
             }
+            $carousel  += '</div></div>';
+            $i++;
+
+        });
+        $container.find('.geodir-lightbox-iframe').each(function() {
+            var a = this;
+
+            $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
+            $carousel  += '<div class="carousel-item '+ $active+'"><div class="modal-xl mx-auto embed-responsive embed-responsive-16by9">';
+
+
+            // iframe
+            var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
+            var url = jQuery(a).attr('href');
+            var iframe = '<iframe class="embed-responsive-item" style="height:'+css_height +'" src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" id="video" allow="autoplay"></iframe>';
+            var img = iframe ;//.css('height',css_height).get(0).outerHTML;
+            $carousel  += img;
+
             $carousel  += '</div></div>';
             $i++;
 
