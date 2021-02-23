@@ -142,14 +142,25 @@ global $gd_post;
 					}elseif($link_screenshot_to=='lightbox_url'){
 						$field_key = str_replace("_screenshot","",$image->type);
 						$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
-						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image $responsive_image_class' >";
-						$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
+						$fa_icon = 'fas fa-link';
+						// check if youtube
+						$screenshot_base_url = 'https://www.youtube.com/embed/%s';
+						// check if its a video URL
+						if (!empty($link) && preg_match("/^(?:http(?:s)?:\/\/)?(?:www\.)?(?:m\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"'>]+)/", $link , $matches) ) {
+							if(!empty($matches[1])){
+								$link = esc_url( sprintf($screenshot_base_url, esc_attr($matches[1])) );
+								$fa_icon = 'fas fa-video';
+							}
+						}
+
+						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-iframe $responsive_image_class' >";
+						$link_tag_close_ss = "<i class=\"$fa_icon\" aria-hidden=\"true\"></i></a>";
 					}elseif($link_screenshot_to=='url' || $link_screenshot_to=='url_same'){
 						$field_key = str_replace("_screenshot","",$image->type);
 						$target = $link_screenshot_to=='url' ? "target='_blank'" : '';
 						$link_icon = $link_screenshot_to=='url' ? "fas fa-external-link-alt" : 'fas fa-link';
 						$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
-						$link_tag_open_ss = "<a href='%s' $target class='geodir-lightbox-image $responsive_image_class' rel='nofollow noopener noreferrer'>";
+						$link_tag_open_ss = "<a href='%s' $target class=' $responsive_image_class' rel='nofollow noopener noreferrer'>";
 						$link_tag_close_ss = "<i class=\"$link_icon\" aria-hidden=\"true\"></i></a>";
 					}
 
