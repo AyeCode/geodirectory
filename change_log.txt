@@ -6,6 +6,7 @@
 * Show rating type name on hover of ratings instead of x stars. - ADDED
 * Image of screenshot of youtube link will now open in lightbox if link to iframe lightbox selected - ADDED/CHANGED
 * Pending post shows 404 to logged in post author - FIXED
+* OpenGraph settings not working properly with recent Yoast SEO - FIXED
 
 = 2.1.0.8 =
 * Sometimes published email shows broken post link when cache is enabled - FIXED
