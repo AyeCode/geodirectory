@@ -800,12 +800,12 @@ class GeoDir_Comments {
 		$rating_wrap_title = '';
 		if ( $type == 'output' ) {
 			if ( $rating > 0 ) {
-				$int_rating = (int) $rating > 1 ? (int) $rating : 1;
+				/*$int_rating = (int) $rating > 1 ? (int) $rating : 1;
 				if ( ! empty( $args ) && ! empty( $args['rating_texts'] ) && ! empty( $args['rating_texts'][ $int_rating ] ) ) {
 					$rating_wrap_title = __( $args['rating_texts'][ $int_rating ], 'geodirectory' );
-				} else {
+				} else {*/
 					$rating_wrap_title = wp_sprintf( __( '%d star rating', 'geodirectory' ), $rating );
-				}
+				//}
 			} else {
 				 $rating_wrap_title = __( 'No rating yet!', 'geodirectory' );
 			}

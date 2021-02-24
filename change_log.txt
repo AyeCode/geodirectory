@@ -1,3 +1,6 @@
+= 2.1.0.10 =
+* Show x stars back instead of rating type name on hover of ratings - CHANGED
+
 = 2.1.0.9 =
 * Show markers for custom Elementor posts loop not working - FIXED
 * Export CSV opens in browser instead of download on some sites - FIXED
