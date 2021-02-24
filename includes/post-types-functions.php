@@ -549,6 +549,10 @@ function geodir_get_current_posttype() {
         $geodir_post_type = sanitize_text_field($_REQUEST['stype']);
     }
 
+    // Set default past type on search page when stype is not set.
+    if ( empty( $geodir_post_type ) && geodir_is_page( 'search' ) ) {
+        $geodir_post_type = geodir_get_default_posttype();
+    }
 
     /**
      * Filter the default CPT return.
