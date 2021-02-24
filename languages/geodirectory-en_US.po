@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.0.8\n"
+"Project-Id-Version: GeoDirectory 2.1.0.9\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-02-09 19:19+0530\n"
-"PO-Revision-Date: 2021-02-09 19:20+0530\n"
+"POT-Creation-Date: 2021-02-24 16:38+0530\n"
+"PO-Revision-Date: 2021-02-24 16:38+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1750,7 +1750,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-api.php:43
 #: includes/admin/settings/class-geodir-settings-import-export.php:47
 #: includes/admin/views/html-admin-page-status-report.php:327
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1969
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1972
 msgid "Settings"
 msgstr ""
 
@@ -4784,7 +4784,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-images.php:85
 #: includes/widgets/class-geodir-widget-post-images.php:95
 #: includes/widgets/class-geodir-widget-post-images.php:106
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1594
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1597
 msgid "General"
 msgstr ""
 
@@ -6082,8 +6082,8 @@ msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-general.php:771
 #: includes/admin/views/html-notice-v2-update.php:220
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1006
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1044
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1050
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1088
 msgid "Disabled"
 msgstr ""
 
@@ -9781,37 +9781,37 @@ msgstr ""
 msgid "(Edit)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:802
+#: includes/class-geodir-comments.php:807
 #, php-format
 msgid "%d star rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:802
+#: includes/class-geodir-comments.php:810
 msgid "No rating yet!"
 msgstr ""
 
-#: includes/class-geodir-comments.php:860
-#: includes/class-geodir-comments.php:893
+#: includes/class-geodir-comments.php:870
+#: includes/class-geodir-comments.php:903
 msgid "Select a rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:929
+#: includes/class-geodir-comments.php:939
 msgid "Terrible"
 msgstr ""
 
-#: includes/class-geodir-comments.php:930
+#: includes/class-geodir-comments.php:940
 msgid "Poor"
 msgstr ""
 
-#: includes/class-geodir-comments.php:931
+#: includes/class-geodir-comments.php:941
 msgid "Average"
 msgstr ""
 
-#: includes/class-geodir-comments.php:932
+#: includes/class-geodir-comments.php:942
 msgid "Very Good"
 msgstr ""
 
-#: includes/class-geodir-comments.php:933
+#: includes/class-geodir-comments.php:943
 msgid "Excellent"
 msgstr ""
 
@@ -10157,14 +10157,14 @@ msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
 #: includes/class-geodir-elementor.php:360 includes/core-functions.php:349
-#: templates/bootstrap/images/images.php:223
+#: templates/bootstrap/images/images.php:234
 #: templates/bootstrap/single/next-prev.php:18
 #: templates/legacy/single/next-prev.php:12
 msgid "Previous"
 msgstr ""
 
 #: includes/class-geodir-elementor.php:364 includes/core-functions.php:350
-#: templates/bootstrap/images/images.php:227
+#: templates/bootstrap/images/images.php:238
 #: templates/bootstrap/single/next-prev.php:19
 #: templates/legacy/single/next-prev.php:13
 msgid "Next"
@@ -10455,11 +10455,11 @@ msgstr ""
 msgid "This %s is temporarily closed."
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:316
+#: includes/class-geodir-permalinks.php:330
 msgid "<b>GeoDirectory permalink error</b> the following rule appears twice:"
 msgstr ""
 
-#: includes/class-geodir-permalinks.php:317
+#: includes/class-geodir-permalinks.php:331
 msgid "<b>Try making the GeoDirectory permalinks more unique.</b>"
 msgstr ""
 
@@ -11007,144 +11007,144 @@ msgstr ""
 msgid "- Monitor the contact system for spam and abuse."
 msgstr ""
 
-#: includes/class-geodir-seo.php:517 includes/general-functions.php:1784
+#: includes/class-geodir-seo.php:531 includes/general-functions.php:1784
 #, php-format
 msgctxt "in category"
 msgid "in %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:578 includes/general-functions.php:1875
+#: includes/class-geodir-seo.php:592 includes/general-functions.php:1875
 #, php-format
 msgid "for %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:591 includes/general-functions.php:1888
+#: includes/class-geodir-seo.php:605 includes/general-functions.php:1888
 #, php-format
 msgid "near %s"
 msgstr ""
 
-#: includes/class-geodir-seo.php:665
+#: includes/class-geodir-seo.php:679
 msgid "The current post title."
 msgstr ""
 
-#: includes/class-geodir-seo.php:666
+#: includes/class-geodir-seo.php:680
 msgid "The site name from general settings: site title. "
 msgstr ""
 
-#: includes/class-geodir-seo.php:667
+#: includes/class-geodir-seo.php:681
 msgid "The site description from general settings: tagline."
 msgstr ""
 
-#: includes/class-geodir-seo.php:668
+#: includes/class-geodir-seo.php:682
 msgid "The separator mostly used in meta titles."
 msgstr ""
 
-#: includes/class-geodir-seo.php:672
+#: includes/class-geodir-seo.php:686
 msgid "The current post excerpt."
 msgstr ""
 
-#: includes/class-geodir-seo.php:673
+#: includes/class-geodir-seo.php:687
 msgid "Post type singular name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:674
+#: includes/class-geodir-seo.php:688
 msgid "Post type plural name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:675
+#: includes/class-geodir-seo.php:689
 msgid "The current category name."
 msgstr ""
 
-#: includes/class-geodir-seo.php:676
+#: includes/class-geodir-seo.php:690
 msgid "The current category name prefixed with `in` eg: in Attractions"
 msgstr ""
 
-#: includes/class-geodir-seo.php:677
+#: includes/class-geodir-seo.php:691
 msgid "The current post id."
 msgstr ""
 
-#: includes/class-geodir-seo.php:682
+#: includes/class-geodir-seo.php:696
 msgid "The full current location eg: United States, Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:683
+#: includes/class-geodir-seo.php:697
 msgid "The current viewing location type single name eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:684
+#: includes/class-geodir-seo.php:698
 msgid ""
 "The full current location prefixed with `in` eg: in United States, "
 "Pennsylvania, Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:685
+#: includes/class-geodir-seo.php:699
 msgid ""
 "The current viewing location type single name prefixed with `in` eg: in "
 "Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:686
+#: includes/class-geodir-seo.php:700
 msgid "The current viewing country eg: United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:687
+#: includes/class-geodir-seo.php:701
 msgid "The current viewing country prefixed with `in` eg: in United States"
 msgstr ""
 
-#: includes/class-geodir-seo.php:688
+#: includes/class-geodir-seo.php:702
 msgid "The current viewing region eg: Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:689
+#: includes/class-geodir-seo.php:703
 msgid "The current viewing region prefixed with `in` eg: in Pennsylvania"
 msgstr ""
 
-#: includes/class-geodir-seo.php:690
+#: includes/class-geodir-seo.php:704
 msgid "The current viewing city eg: Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:691
+#: includes/class-geodir-seo.php:705
 msgid "The current viewing city prefixed with `in` eg: in Philadelphia"
 msgstr ""
 
-#: includes/class-geodir-seo.php:696
+#: includes/class-geodir-seo.php:710
 msgid "The currently used search for term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:697
+#: includes/class-geodir-seo.php:711
 msgid "The currently used search for term with `for`. Ex: for dinner."
 msgstr ""
 
-#: includes/class-geodir-seo.php:698
+#: includes/class-geodir-seo.php:712
 msgid "The currently used search near term with `near`. Ex: near Philadelphia."
 msgstr ""
 
-#: includes/class-geodir-seo.php:699
+#: includes/class-geodir-seo.php:713
 msgid "The currently used search near term."
 msgstr ""
 
-#: includes/class-geodir-seo.php:704
+#: includes/class-geodir-seo.php:718
 msgid "Current page number eg: page 2 of 4"
 msgstr ""
 
-#: includes/class-geodir-seo.php:705
+#: includes/class-geodir-seo.php:719
 msgid "Total pages eg: 101"
 msgstr ""
 
-#: includes/class-geodir-seo.php:706
+#: includes/class-geodir-seo.php:720
 msgid "Total post found eg: 10"
 msgstr ""
 
-#: includes/class-geodir-seo.php:707
+#: includes/class-geodir-seo.php:721
 msgid "Current page number eg: 99"
 msgstr ""
 
-#: includes/class-geodir-seo.php:712
+#: includes/class-geodir-seo.php:726
 msgid ""
 "Show any custom field by using its field key prefixed with an _underscore"
 msgstr ""
 
-#: includes/class-geodir-seo.php:732
+#: includes/class-geodir-seo.php:746
 msgid "Click to copy"
 msgstr ""
 
@@ -17881,97 +17881,97 @@ msgstr ""
 msgid "Thanks for choosing an AyeCode Product!"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:985
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1029
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:304
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:990
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1034
 msgid "Here you can adjust settings if you are having compatibility issues."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:997
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1041
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:408
 msgid "Frontend"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1001
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1039
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1045
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1083
 msgid "Load CSS"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1004
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1042
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1048
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1086
 msgid "Compatibility Mode (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1005
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1049
 msgid "Full Mode"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1013
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1051
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1057
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1095
 msgid "Load JS"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1016
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1054
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1060
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1098
 msgid "Core + Popper (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1017
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1055
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1061
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1099
 msgid "Popper"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1018
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1056
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1062
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1100
 msgid "Required functions only"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1019
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1057
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1063
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1101
 msgid "Disabled (not recommended)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1026
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1070
 msgid "HTML Font Size (px)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1029
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1073
 msgid ""
 "Our font sizing is rem (responsive based) here you can set the html font "
 "size in-case your theme is setting it too low."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1035
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1079
 #: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:410
 msgid "Backend"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1043
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1087
 msgid "Full Mode (will cause style issues)"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1064
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1108
 msgid "Disable load on URL"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1066
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1110
 msgid ""
 "If you have backend conflict you can enter a partial URL argument that will "
 "disable the loading of AUI on those pages. Add each argument on a new line."
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1087
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1131
 msgid "AyeCode UI"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1102
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1146
 msgid "Primary Color"
 msgstr ""
 
-#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1115
+#: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1159
 msgid "Secondary Color"
 msgstr ""
 
@@ -18065,11 +18065,11 @@ msgstr ""
 msgid "Advanced Settings"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1394
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1397
 #, php-format
 msgid "Placeholder for: %s"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1867
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1870
 msgid "Placeholder for: "
 msgstr ""
