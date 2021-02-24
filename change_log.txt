@@ -1,12 +1,13 @@
 = 2.1.0.10 =
 * Show x stars back instead of rating type name on hover of ratings - CHANGED
+* Field description is missing for radio/checkbox multiselect fields - FIXED
 
 = 2.1.0.9 =
 * Show markers for custom Elementor posts loop not working - FIXED
 * Export CSV opens in browser instead of download on some sites - FIXED
 * Search keyword don't matches with the word start with new line character - FIXED
 * Category checkbox hierarchy no longer showing option to set default category with AUI - FIXED
-* Show rating type name on hover of ratings instead of x stars. - ADDED
+* Show rating type name on hover of ratings instead of x stars - ADDED
 * Image of screenshot of youtube link will now open in lightbox if link to iframe lightbox selected - ADDED/CHANGED
 * Pending post shows 404 to logged in post author - FIXED
 * OpenGraph settings not working properly with recent Yoast SEO - FIXED
