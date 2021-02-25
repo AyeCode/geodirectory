@@ -1178,6 +1178,12 @@ class GeoDir_Media {
 		return $upload;
 	}
 
+	public static function count_image_attachments() {
+		global $wpdb;
+
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . GEODIR_ATTACHMENT_TABLE . "` WHERE `mime_type` LIKE 'image/%' OR `type` = %s", array( 'post_images' ) ) );
+	}
+
 	/**
 	 * Set uploaded image as attachment.
 	 *
@@ -1226,5 +1232,85 @@ class GeoDir_Media {
 		}
 
 		return $attachment_id;
+	}
+
+	/**
+	 * Regenerate post thumbnails.
+	 *
+	 * @since 2.1.0.10
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 *
+	 * @param  int $post_id The post ID.
+	 * @return mixed
+	 */
+	public static function generate_post_attachment_metadata( $post_id ) {
+		global $wpdb;
+
+		if ( empty( $post_id ) ) {
+			return new WP_Error( 'gd-invalid-post-id', __( 'Invalid post id!', 'geodirectory' ) );
+		}
+
+		$data = array(
+			'success' => array(),
+			'error' => array()
+		);
+
+		$attachments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `" . GEODIR_ATTACHMENT_TABLE . "` WHERE `post_id` = %d AND ( `mime_type` LIKE 'image/%' OR `type` = %s ) ORDER BY ID ASC", array( $post_id, 'post_images' ) ) );
+
+		if ( ! empty( $attachments ) ) {
+			foreach ( $attachments as $attachment ) {
+				$result = self::generate_attachment_metadata( $attachment );
+
+				if ( is_wp_error( $result ) ) {
+					$data['error'][ $attachment->ID ] = $result;
+				} else {
+					$data['success'][ $attachment->ID ] = $result;
+				}
+			}
+		}
+
+		return $data;
+	}
+
+	/**
+	 * Regenerate attachment metadata.
+	 *
+	 * @since 2.1.0.10
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 *
+	 * @param object $attachment Post attachment object.
+	 * @return mixed
+	 */
+	public static function generate_attachment_metadata( $attachment = array() ) {
+		global $wpdb;
+
+		if ( ! ( ! empty( $attachment ) && ! empty( $attachment->ID ) && ! empty( $attachment->file ) ) ) {
+			return new WP_Error( 'gd-invalid-attachment', __( 'Invalid attachment!', 'geodirectory' ) );
+		}
+
+		// Full or external image url
+		if ( geodir_is_full_url( $attachment->file ) || strpos( $attachment->file, '#' ) === 0 ) {
+			return new WP_Error( 'gd-external-image', __( 'Attachment metadata not generated for external image!', 'geodirectory' ) );
+		}
+
+		$wp_upload_dir = wp_upload_dir();
+
+		$file_path = $wp_upload_dir['basedir'] . $attachment->file;
+
+		if ( is_file( $file_path ) && file_exists( $file_path ) ) {
+			$metadata = self::create_image_sizes( $file_path );
+
+			if ( is_wp_error( $metadata ) ) {
+				return $metadata;
+			}
+
+			if ( ! empty( $metadata ) && is_array( $metadata ) ) {
+				$wpdb->update( GEODIR_ATTACHMENT_TABLE, array( 'metadata' => maybe_serialize( $metadata ) ), array( 'ID' => $attachment->ID ) );
+			}
+		}
+
+		return $metadata;
 	}
 }

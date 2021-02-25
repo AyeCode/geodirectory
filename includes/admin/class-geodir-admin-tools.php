@@ -36,6 +36,12 @@ class GeoDir_Admin_Tools {
 	 * @return array
 	 */
 	public function get_tools() {
+		global $geodir_count_attachments;
+
+		if ( empty( $geodir_count_attachments ) ) {
+			$geodir_count_attachments = GeoDir_Media::count_image_attachments();
+		}
+
 		$tools = array(
 			'clear_version_numbers' => array(
 				'name'    => __( 'Clear version numbers', 'geodirectory' ),
@@ -65,6 +71,11 @@ class GeoDir_Admin_Tools {
 				'name'    => __( 'Generate Keywords', 'geodirectory' ),
 				'button'  => __( 'Run', 'geodirectory' ),
 				'desc'    => __( 'Generate keywords from post title to enhance searching.', 'geodirectory' ),
+			),
+			'generate_thumbnails' => array(
+				'name'    => __( 'Regenerate Thumbnails', 'geodirectory' ),
+				'button'  => __( 'Run', 'geodirectory' ),
+				'desc'    => __( 'Regenerate post images thumbnails & metadata.', 'geodirectory' ) . '<div class="geodir-tool-stats" data-total="' . (int) $geodir_count_attachments . '" data-per-page="10"></div>',
 			),
 			'export_db_texts' => array(
 				'name'    => __( 'DB text translation', 'geodirectory' ),

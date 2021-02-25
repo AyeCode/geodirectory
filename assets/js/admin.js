@@ -129,7 +129,94 @@ jQuery(window).on("load",function() {
         }
     });
 
+	/* Regenerate Thumbnails */
+	jQuery('[data-action="geodir-regenerate-thumbnails"]').on('click', function(e){
+		geodir_regenerate_thumbnails(this);
+	})
+
+	if (jQuery('#geodir_tool_generate_thumbnails').length) {
+		geodir_setup_regenerate_thumbnails();
+	}
 });
+
+function geodir_regenerate_thumbnails(el) {
+	var $el = jQuery(el), post_id;
+
+	post_id = $el.data('post-id');
+	if (!post_id) {
+		return;
+	}
+
+	var data = {
+		'action': 'geodir_regenerate_thumbnails',
+		'post_id': post_id
+	};
+
+    jQuery.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: data,
+        beforeSend: function(){
+            jQuery($el).append('<span class="geodir-regenerate-loading"> <i class="fas fa-sync fa-spin" aria-hidden="true"></i></span>').attr("disabled", true);
+        },
+        success: function(data) {
+			jQuery('.geodir-regenerate-loading', $el).html(' <i class="fas fa-check text-success" aria-hidden="true"></i>');
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+		complete: function(xhr, textStatus) {
+			jQuery($el).attr("disabled", false);
+			setTimeout(function(){
+				jQuery('.geodir-regenerate-loading', $el).fadeOut('slow');
+			}, 1250);
+        }
+    });
+}
+
+function geodir_setup_regenerate_thumbnails() {
+	var $el = jQuery('#geodir_tool_generate_thumbnails'), total, per_page;
+	jQuery('.button.generate_thumbnails', $el).attr('href', 'javascript:void(0)');
+
+	total = jQuery('.geodir-tool-stats', $el).data('total');
+	if (!total) {
+		return;
+	}
+	per_page = parseInt(jQuery('.geodir-tool-stats', $el).data('per-page'));
+	if (per_page < 1) {
+		per_page = 10;
+	}
+
+	jQuery('.button.generate_thumbnails', $el).on('click', function(e){
+		geodir_run_regenerate_thumbnails(total, 0, per_page);
+	})
+}
+
+function geodir_run_regenerate_thumbnails(total, page, per_page) {
+	var $el = jQuery('#geodir_tool_generate_thumbnails');
+
+	var data = {
+		'action': 'geodir_tool_regenerate_thumbnails',
+		'page': page,
+		'per_page': per_page
+	};
+
+    jQuery.ajax({
+        type: "POST",
+        url: ajaxurl,
+        data: data,
+        beforeSend: function(){
+            jQuery('.button.generate_thumbnails', $el).append('<span class="geodir-regenerate-loading"> <i class="fas fa-sync fa-spin" aria-hidden="true"></i></span>').attr("disabled", true);
+        },
+        success: function(data) {
+        },
+        error: function(xhr, textStatus, errorThrown) {
+            console.log(errorThrown);
+        },
+		complete: function(xhr, textStatus) {
+        }
+    });
+}
 
 function geodir_handle_uninstall_option($el) {
 	var $form = $el.closest('#mainform');

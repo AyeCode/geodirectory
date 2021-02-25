@@ -68,6 +68,7 @@ class GeoDir_AJAX {
 			'embed_script' => true,
 			'timezone_data' => true,
 			'get_sort_options' => false,
+			'regenerate_thumbnails' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -1346,6 +1347,31 @@ class GeoDir_AJAX {
 
 		$data = geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 );
 		
+		if ( is_wp_error( $data ) ) {
+			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
+		} else {
+			wp_send_json_success( $data );
+		}
+
+		wp_die();
+	}
+
+	/**
+	 * Regenerate thumbnails.
+	 *
+	 * @since 2.1.0.10
+	 *
+	 * @return mixed
+	 */
+	public static function regenerate_thumbnails() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		$post_id = ! empty( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+
+		$data = GeoDir_Media::generate_post_attachment_metadata( $post_id );geodir_error_log( $data, 'data', __FILE__, __LINE__ );
+
 		if ( is_wp_error( $data ) ) {
 			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
 		} else {

@@ -37,6 +37,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			add_action('admin_footer-post.php', array( __CLASS__,'post_form_footer'));
 			add_action('admin_footer-post-new.php', array( __CLASS__,'post_form_footer'));
 			add_action('post_date_column_status', array( __CLASS__,'posts_column_status'), 10, 4);
+			add_filter( 'post_row_actions', array( __CLASS__,'post_row_actions' ), 20, 2 );
 
 			self::add_post_type_view_filters();
 		}
@@ -377,6 +378,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				     id="<?php echo $id; ?>plupload-thumbs" style="border-top:1px solid #ccc; padding-top:10px;">
 				</div>
 				<span id="upload-msg"><?php _e( 'Please drag & drop the images to rearrange the order', 'geodirectory' ); ?></span>
+				<span class="geodir-regenerate-thumbnails bsui" style="margin:25px 0 10px 0;display:block;"><button type="button" class="button-secondary" aria-label="<?php esc_attr_e( 'Regenerate Thumbnails', 'geodirectory' );?>" aria-expanded="false" data-action="geodir-regenerate-thumbnails" data-post-id="<?php echo $post_id; ?>"><?php _e( 'Regenerate Thumbnails', 'geodirectory' );?></button><span style="margin-top:5px;display:block;"><?php _e( 'Regenerate thumbnails & metadata.', 'geodirectory' ); ?></span></span>
 				<span id="<?php echo $id; ?>upload-error" style="display:none"></span>
 				<?php if ( geodir_design_style() ) { ?>
 				<div class="modal fade bsui" id="gd-image-meta-input" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -542,6 +544,23 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				}
 			}
 			return $status;
+		}
+
+		/**
+		 * Filters the array of row action links on the Posts list table.
+		 *
+		 * @since 2.1.0.10
+		 *
+		 * @param string[] $actions An array of row action links.
+		 * @param WP_Post  $post    The post object.
+		 * @return array An array of row action links.
+		 */
+		public static function post_row_actions( $actions, $post ) {
+			if ( ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) {
+				$actions['geodir-regenerate-thumbnails bsui'] = '<button type="button" class="button-link" aria-label="' . esc_attr__( 'Regenerate Thumbnails', 'geodirectory' ) . '" aria-expanded="false" data-action="geodir-regenerate-thumbnails" data-post-id="' . $post->ID . '">' . __( 'Regenerate Thumbnails', 'geodirectory' ) . '</button>';
+			}
+
+			return $actions;
 		}
 
 	}
