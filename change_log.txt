@@ -1,6 +1,7 @@
 = 2.1.0.10 =
 * Show x stars back instead of rating type name on hover of ratings - CHANGED
 * Field description is missing for radio/checkbox multiselect fields - FIXED
+* Tool added to regenerate thumbnails for the post images - ADDED
 
 = 2.1.0.9 =
 * Show markers for custom Elementor posts loop not working - FIXED

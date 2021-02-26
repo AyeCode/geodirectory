@@ -68,6 +68,7 @@ class GeoDir_AJAX {
 			'embed_script' => true,
 			'timezone_data' => true,
 			'get_sort_options' => false,
+			'tool_regenerate_thumbnails' => true,
 			'regenerate_thumbnails' => true,
 		);
 
@@ -1357,6 +1358,32 @@ class GeoDir_AJAX {
 	}
 
 	/**
+	 * Regenerate thumbnails for bulk attachments.
+	 *
+	 * @since 2.1.0.10
+	 *
+	 * @return mixed
+	 */
+	public static function tool_regenerate_thumbnails() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		$page = ! empty( $_POST['per_page'] ) ? absint( $_POST['page'] ) : 1;
+		$per_page = ! empty( $_POST['per_page'] ) ? absint( $_POST['per_page'] ) : 10;
+
+		$data = GeoDir_Media::generate_bulk_attachment_metadata( $page, $per_page );
+
+		if ( is_wp_error( $data ) ) {
+			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
+		} else {
+			wp_send_json_success( $data );
+		}
+
+		wp_die();
+	}
+
+	/**
 	 * Regenerate thumbnails.
 	 *
 	 * @since 2.1.0.10
@@ -1370,7 +1397,7 @@ class GeoDir_AJAX {
 
 		$post_id = ! empty( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
 
-		$data = GeoDir_Media::generate_post_attachment_metadata( $post_id );geodir_error_log( $data, 'data', __FILE__, __LINE__ );
+		$data = GeoDir_Media::generate_post_attachment_metadata( $post_id );
 
 		if ( is_wp_error( $data ) ) {
 			wp_send_json_error( array( 'error' => $data->get_error_message() ) );

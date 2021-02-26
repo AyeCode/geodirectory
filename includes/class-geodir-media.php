@@ -1178,12 +1178,6 @@ class GeoDir_Media {
 		return $upload;
 	}
 
-	public static function count_image_attachments() {
-		global $wpdb;
-
-		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . GEODIR_ATTACHMENT_TABLE . "` WHERE `mime_type` LIKE 'image/%' OR `type` = %s", array( 'post_images' ) ) );
-	}
-
 	/**
 	 * Set uploaded image as attachment.
 	 *
@@ -1235,6 +1229,78 @@ class GeoDir_Media {
 	}
 
 	/**
+	 * Count total image attachments.
+	 *
+	 * @since 2.1.0.10
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 *
+	 * @return int Total image attachments.
+	 */
+	public static function count_image_attachments() {
+		global $wpdb;
+
+		return (int) $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(*) FROM `" . GEODIR_ATTACHMENT_TABLE . "` WHERE `mime_type` LIKE 'image/%' OR `type` = %s", array( 'post_images' ) ) );
+	}
+
+	/**
+	 * Regenerate thumbnails for bulk attachments.
+	 *
+	 * @since 2.1.0.10
+	 *
+	 * @global object $wpdb WordPress Database object.
+	 *
+	 * @param  int $page_no Page number.
+	 * @param  int $per_page Per page.
+	 * @return mixed
+	 */
+	public static function generate_bulk_attachment_metadata( $page_no, $per_page ) {
+		global $wpdb;
+
+		if ( $page_no < 1 ) {
+			$page_no = 1;
+		}
+
+		if ( $per_page < 1 ) {
+			$per_page = 10;
+		}
+
+		$data = array(
+			'success' => array(),
+			'error' => array(),
+			'processed' => 0
+		);
+
+		$offset = ( $page_no - 1 ) * $per_page;
+
+		if ( $offset > 0 ) {
+			$limit = "LIMIT " . $offset . "," . $per_page;
+		} else {
+			$limit = "LIMIT " . $per_page;
+		}
+
+		$attachments = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM `" . GEODIR_ATTACHMENT_TABLE . "` WHERE `mime_type` LIKE 'image/%' OR `type` = %s ORDER BY ID ASC {$limit}", array( 'post_images' ) ) );
+
+		if ( ! empty( $attachments ) ) {
+			foreach ( $attachments as $attachment ) {
+				$result = self::generate_attachment_metadata( $attachment );
+
+				$data['processed'] = $data['processed'] + 1;
+				if ( is_wp_error( $result ) ) {
+					geodir_error_log( $result->get_error_message(), __( 'Generate attachment metadata', 'geodirectory' ) );
+
+					$data['error'][ $attachment->ID ] = $result;
+				} else {
+					$data['success'][ $attachment->ID ] = $result;
+				}
+			}
+		} else {
+		}
+
+		return $data;
+	}
+
+	/**
 	 * Regenerate post thumbnails.
 	 *
 	 * @since 2.1.0.10
@@ -1263,6 +1329,8 @@ class GeoDir_Media {
 				$result = self::generate_attachment_metadata( $attachment );
 
 				if ( is_wp_error( $result ) ) {
+					geodir_error_log( $result->get_error_message(), __( 'Generate attachment metadata', 'geodirectory' ) );
+
 					$data['error'][ $attachment->ID ] = $result;
 				} else {
 					$data['success'][ $attachment->ID ] = $result;
@@ -1309,6 +1377,8 @@ class GeoDir_Media {
 			if ( ! empty( $metadata ) && is_array( $metadata ) ) {
 				$wpdb->update( GEODIR_ATTACHMENT_TABLE, array( 'metadata' => maybe_serialize( $metadata ) ), array( 'ID' => $attachment->ID ) );
 			}
+		} else {
+			$metadata = new WP_Error( 'gd-image-notfound', wp_sprintf( __( '%s not exists!', 'geodirectory' ), $wp_upload_dir['baseurl'] . $attachment->file ) );
 		}
 
 		return $metadata;
