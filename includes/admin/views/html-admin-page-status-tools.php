@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<table class="gd_status_table gd_status_table--tools widefat" cellspacing="0">
 		<tbody class="tools">
 			<?php foreach ( $tools as $action => $tool ) : ?>
-				<tr class="<?php echo sanitize_html_class( $action ); ?>">
+				<tr class="<?php echo sanitize_html_class( $action ); ?>" id="geodir_tool_<?php echo sanitize_html_class( $action ); ?>">
 					<th>
 						<strong class="name"><?php echo esc_html( $tool['name'] ); ?></strong>
 						<p class="description"><?php echo wp_kses_post( $tool['desc'] ); ?></p>

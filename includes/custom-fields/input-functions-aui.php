@@ -319,6 +319,8 @@ function geodir_cfi_radio($html,$cf){
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
 
+        // Help text
+        $help_text = $cf['desc'] != '' ? __( $cf['desc'], 'geodirectory' ) : '';
 
         $value = geodir_get_cf_value($cf);
         $html = aui()->radio(
@@ -328,7 +330,8 @@ function geodir_cfi_radio($html,$cf){
                 'type'              => "radio",
                 'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
                 'label'             => esc_attr__($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-                'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+                'label_type'        => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+                'help_text'         => $help_text,
                 'class'             => '',
                 'value'             => $value,
                 'options'           => $option_values
@@ -827,8 +830,10 @@ function geodir_cfi_multiselect( $html, $cf ) {
 				}
 			}
 
+			$description = $help_text != '' && class_exists( "AUI_Component_Helper" ) ? AUI_Component_Helper::help_text( $help_text ) : '';
+
 			if ( $horizontal ) {
-				echo "</div></div>";
+				echo "</div>" . $description . "</div>";
 			}
 
 			echo "</div>";
