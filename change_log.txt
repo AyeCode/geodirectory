@@ -3,6 +3,7 @@
 * Field description is missing for radio/checkbox multiselect fields - FIXED
 * Tool added to regenerate thumbnails for the post images - ADDED
 * Map can no longer be moved if no records found message shown - FIXED
+* Elementor loop shows wrong post class for first element - FIXED
 
 = 2.1.0.9 =
 * Show markers for custom Elementor posts loop not working - FIXED
