@@ -1834,6 +1834,17 @@ function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
 		'extra_fields' => ''
 	);
 
+	$fields['post_id'] = array(
+		'type' => 'custom',
+		'name' => 'post_id',
+		'htmlvar_name' => 'post_id',
+		'frontend_title' => __( 'Post id', 'geodirectory' ),
+		'field_icon' => 'fas fa-minus fa-fw',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
 	/**
 	 * Filter the post meta standard fields info.
 	 *

@@ -1,4 +1,5 @@
 = 2.1.0.9 =
+* Add post ID in gd_post_meta - ADDED
 * Show markers for custom Elementor posts loop not working - FIXED
 * Export CSV opens in browser instead of download on some sites - FIXED
 * Search keyword don't matches with the word start with new line character - FIXED
