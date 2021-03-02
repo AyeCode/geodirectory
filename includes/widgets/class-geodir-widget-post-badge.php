@@ -503,6 +503,7 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 		$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
 		$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
 		$keys['default_category'] = 'default_category ( ' . __( 'Default Category', 'geodirectory' ) . ' )';
+		$keys['post_id']          = 'post_id ( ' . __( 'post id', 'geodirectory' ) . ' )';
 
 		return apply_filters( 'geodir_badge_field_keys', $keys );
 	}

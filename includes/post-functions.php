@@ -896,7 +896,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$output = apply_filters( 'geodir_output_badge_field_key_' . $match_field, $output, $find_post, $args );
 		}
 
-		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' ) {
+		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' && $match_field !== 'post_id' ) {
 			$package_id = geodir_get_post_package_id( $post_id, $post_type );
 			$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
