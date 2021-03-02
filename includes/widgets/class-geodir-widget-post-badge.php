@@ -491,7 +491,6 @@ class GeoDir_Widget_Post_Badge extends WP_Super_Duper {
 	 */
 	public function get_custom_field_keys(){
 		$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
-
 		$keys = array();
 		if ( !empty( $fields ) ) {
 			foreach( $fields as $field ) {
