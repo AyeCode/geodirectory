@@ -53,15 +53,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 							</div>
 							<div id="<?php echo $map_canvas; ?>_map_nofound"
 							     class="advmap_nofound position-absolute row m-0 z-index-1"
-							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;display:none;top:0;">
-								<div class="alert alert-info text-center mx-auto align-self-center shadow-lg">
+							     style="display:none;transform: translate(-50%, -50%);top:50%;left:50%;opacity: .85;pointer-events: none;">
+								<div class="alert alert-info text-center mx-auto align-self-center shadow-lg mb-0">
 									<?php echo wp_sprintf( __( '%sNo Records Found%s Sorry, no records were found. Please adjust your search criteria and try again.%s', 'geodirectory' ), "<div class='h3 alert-heading'>", "</div><p>", "</p>" ); ?>
 								</div>
 							</div>
 							<div id="<?php echo $map_canvas; ?>_map_notloaded"
 							     class="advmap_notloaded position-absolute row m-0 z-index-1"
-							     style="height:<?php echo $height; ?>;width:<?php echo $width; ?>;display:none;top:0;">
-								<div class="alert alert-danger text-center mx-auto align-self-center shadow-lg">
+							     style="display:none;transform: translate(-50%, -50%);top:50%;left:50%;opacity: .85;pointer-events: none;">
+								<div class="alert alert-danger text-center mx-auto align-self-center shadow-lg mb-0">
 									<?php echo wp_sprintf( __( '%sMaps failed to load%s Sorry, unable to load the Maps API.%s', 'geodirectory' ), "<div class='h3 alert-heading'>", "</div><p>", "</p>" ); ?>
 								</div>
 							</div>

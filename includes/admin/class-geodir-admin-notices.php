@@ -41,6 +41,8 @@ class GeoDir_Admin_Notices {
 	public static function init() {
 		self::$notices = get_option( 'geodirectory_admin_notices', array() );
 
+		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
+		//add_action( 'admin_notices', array( __CLASS__, 'set_admin_notices' ) );
 		add_action( 'switch_theme', array( __CLASS__, 'reset_admin_notices' ) );
 		add_action( 'geodirectory_installed', array( __CLASS__, 'reset_admin_notices' ) );
 		add_action( 'wp_loaded', array( __CLASS__, 'hide_notices' ) );
@@ -48,6 +50,27 @@ class GeoDir_Admin_Notices {
 
 		if ( current_user_can( 'manage_options' ) ) {
 			add_action( 'admin_print_styles', array( __CLASS__, 'add_notices' ) );
+		}
+	}
+	public static function admin_init() {
+		add_action( 'admin_notices', array( __CLASS__, 'set_admin_notices' ) );
+	}
+
+	/**
+	 * Set dmin notices.
+	 *
+	 * @since 2.1.0.10
+	 */
+	public static function set_admin_notices() {
+		$page = ! empty( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+
+		/**
+		 * Regenerate Thumbnails
+		 * Regenerate Thumbnails Advanced
+		 * Perfect Images + Retina
+		 */
+		if ( ( $page == 'regenerate-thumbnails' && class_exists( 'RegenerateThumbnails' ) ) || ( $page == 'rta_generate_thumbnails' && defined( 'RTA_PLUGIN_VERSION' ) ) || ( $page == 'wr2x_dashboard' && defined( 'WR2X_VERSION' ) ) ) {
+			echo '<div class="notice notice-warning is-dismissible"><p>' . wp_sprintf( __( 'GeoDirectory\'s images are not supported by this tool, please use our tool %1$shere%2$s to regenerate them.', 'geodirectory' ), '<a href="' . esc_url( admin_url( 'admin.php?page=gd-status&tab=tools#geodir_tool_generate_thumbnails' ) ) . '">', '</a>' ) . '</p></div>';
 		}
 	}
 

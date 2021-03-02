@@ -36,6 +36,12 @@ class GeoDir_Admin_Tools {
 	 * @return array
 	 */
 	public function get_tools() {
+		global $geodir_count_attachments;
+
+		if ( empty( $geodir_count_attachments ) ) {
+			$geodir_count_attachments = GeoDir_Media::count_image_attachments();
+		}
+
 		$tools = array(
 			'clear_version_numbers' => array(
 				'name'    => __( 'Clear version numbers', 'geodirectory' ),
@@ -65,6 +71,11 @@ class GeoDir_Admin_Tools {
 				'name'    => __( 'Generate Keywords', 'geodirectory' ),
 				'button'  => __( 'Run', 'geodirectory' ),
 				'desc'    => __( 'Generate keywords from post title to enhance searching.', 'geodirectory' ),
+			),
+			'generate_thumbnails' => array(
+				'name'    => __( 'Regenerate Thumbnails', 'geodirectory' ),
+				'button'  => __( 'Run', 'geodirectory' ),
+				'desc'    => wp_sprintf( __( 'Regenerate thumbnails & metadata for the post images. Total image attachments found: %s', 'geodirectory' ), '<b>' . (int) $geodir_count_attachments . '</b>' ) . '<div class="geodir-tool-stats gd-hidden" data-total="' . (int) $geodir_count_attachments . '" data-per-page="10"><div id="gd_progressbar_box"><div id="gd_progressbar" class="gd_progressbar"><div class="gd-progress-label"></div></div></div><span style="display:inline-block">' . __( 'Elapsed Time:', 'geodirectory' ) . '</span>&nbsp;&nbsp;<span id="gd_timer" class="gd_timer">00:00:00</span></div>',
 			),
 			'export_db_texts' => array(
 				'name'    => __( 'DB text translation', 'geodirectory' ),
