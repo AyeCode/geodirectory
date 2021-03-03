@@ -6,9 +6,9 @@
 * Elementor loop shows wrong post class for first element - FIXED
 * Featured field shows checked for empty value when default set to checked - FIXED
 * GD Listings elementor skin element missing background image - FIXED
+* Add post ID in gd_post_meta,gd_post_badges and gd_dynamic_content - ADDED
 
 = 2.1.0.9 =
-* Add post ID in gd_post_meta,gd_post_badges and gd_dynamic_content - ADDED
 * Show markers for custom Elementor posts loop not working - FIXED
 * Export CSV opens in browser instead of download on some sites - FIXED
 * Search keyword don't matches with the word start with new line character - FIXED
