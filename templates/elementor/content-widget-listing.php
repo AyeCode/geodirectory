@@ -34,6 +34,8 @@ if($row_gap){
 if($styles){
 	$style_tag = "style='$styles'";
 }
+
+global $gdecs_render_loop, $geodir_el_archive_item_tl;
 ?>
 <div class="elementor-posts-container elementor-posts elementor-grid elementor-posts--skin-gd_custom" <?php echo $style_tag;?>>
 	<?php if ( !empty( $widget_listings ) ) {
@@ -50,7 +52,9 @@ if($styles){
 		$classes = 'elementor-post elementor-grid-item';
 		foreach ( $widget_listings as $widget_listing ) {
 			geodir_setup_postdata( $widget_listing );
-//			elementor-post elementor-grid-item post-160 gd_place type-gd_place status-publish has-post-thumbnail hentry gd_place_tags-house gd_place_tags-logde gd_placecategory-houses
+
+			$gdecs_render_loop = get_the_ID() . "," . $skin_id;
+			$geodir_el_archive_item_tl = $skin_id;
 			?>
 		<article id="post-<?php the_ID(); ?>" <?php post_class( [ $classes ] ); ?>>
 			<?php

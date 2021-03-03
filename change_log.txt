@@ -5,6 +5,7 @@
 * Map can no longer be moved if no records found message shown - FIXED
 * Elementor loop shows wrong post class for first element - FIXED
 * Featured field shows checked for empty value when default set to checked - FIXED
+* GD Listings elementor skin element missing background image - FIXED
 
 = 2.1.0.9 =
 * Show markers for custom Elementor posts loop not working - FIXED
