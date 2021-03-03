@@ -961,10 +961,10 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 							$match_found = (bool) ( $search != '' && $match_value != $search );
 							break;
 						case 'is_greater_than':
-							$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value > $search );
+							$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value > $search );
 							break;
 						case 'is_less_than':
-							$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value < $search );
+							$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value < $search );
 							break;
 						case 'is_empty':
 							$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
@@ -1838,8 +1838,8 @@ function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
 		'type' => 'custom',
 		'name' => 'post_id',
 		'htmlvar_name' => 'post_id',
-		'frontend_title' => __( 'Post id', 'geodirectory' ),
-		'field_icon' => 'fas fa-minus fa-fw',
+		'frontend_title' => __( 'ID', 'geodirectory' ),
+		'field_icon' => 'fas fa-thumbtack',
 		'field_type_key' => '',
 		'css_class' => '',
 		'extra_fields' => ''
