@@ -896,7 +896,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$output = apply_filters( 'geodir_output_badge_field_key_' . $match_field, $output, $find_post, $args );
 		}
 
-		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' ) {
+		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' && $match_field !== 'post_id' ) {
 			$package_id = geodir_get_post_package_id( $post_id, $post_type );
 			$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
@@ -1829,6 +1829,17 @@ function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
 		'htmlvar_name' => 'post_status',
 		'frontend_title' => __( 'Status', 'geodirectory' ),
 		'field_icon' => 'fas fa-play',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
+	$fields['post_id'] = array(
+		'type' => 'custom',
+		'name' => 'post_id',
+		'htmlvar_name' => 'post_id',
+		'frontend_title' => __( 'Post id', 'geodirectory' ),
+		'field_icon' => 'fas fa-minus fa-fw',
 		'field_type_key' => '',
 		'css_class' => '',
 		'extra_fields' => ''
