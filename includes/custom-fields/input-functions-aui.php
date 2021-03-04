@@ -380,12 +380,12 @@ function geodir_cfi_checkbox($html,$cf){
 
         $title = '';
         $value = geodir_get_cf_value( $cf );
-        if ( empty( $value ) && $cf['default'] ) {
+        // Set default checked.
+        if ( $value === '' && $cf['default'] ) {
             $value = '1';
         }
         $checked          = $value == '1' ? true : false;
         $extra_attributes = array();
-
 
         //validation
         if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {

@@ -452,7 +452,8 @@ function geodir_cfi_checkbox($html,$cf){
         ob_start(); // Start  buffering;
         $value = geodir_get_cf_value($cf);
 
-        if ( empty( $value ) && $cf['default']) {
+        // Set default checked.
+        if ( $value === '' && $cf['default'] ) {
             $value = '1';
         }
         ?>

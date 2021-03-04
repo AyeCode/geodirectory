@@ -150,8 +150,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
 			$field = array();
 			$search = $args['search'];
-
-			if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' ) {
+			if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'post_id' ) {
 				$package_id = geodir_get_post_package_id( $post_id, $post_type );
 				$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
@@ -201,10 +200,10 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 							$match_found = (bool) ( $search != '' && $match_value != $search );
 							break;
 						case 'is_greater_than':
-							$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value > $search );
+							$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value > $search );
 							break;
 						case 'is_less_than':
-							$match_found = (bool) ( $search != '' && is_float( $search ) && is_float( $match_value ) && $match_value < $search );
+							$match_found = (bool) ( $search != '' && ( is_float( $search ) || is_numeric( $search ) ) && ( is_float( $match_value ) || is_numeric( $match_value ) ) && $match_value < $search );
 							break;
 						case 'is_empty':
 							$match_found = (bool) ( $match_value === '' || $match_value === false || $match_value === '0' || is_null( $match_value ) );
@@ -337,7 +336,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		}
 		$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
 		$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
-
+		$keys['post_id'] = 'post_id ( ' . __( 'post id', 'geodirectory' ) . ' )';
 		return apply_filters( 'geodir_badge_field_keys', $keys );
 	}
 	
