@@ -92,6 +92,15 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false,
 					'group'    => __( "Filter", "geodirectory" )
+				),
+				'review_by_post_id'    => array(
+					'title'    => __('Reviews for post_id:', 'geodirectory'),
+					'desc'     => __('Filter by ID (default = unfiltered). current: Filters the reviews by post_id of current viewing post/listing/profile', 'geodirectory'),
+					'type'     => 'text',
+					'default'  => '',
+					'desc_tip' => true,
+					'advanced' => false,
+					'group'    => __( "Filter", "geodirectory" )
 				)
             )
         );
@@ -199,6 +208,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
             'rounded_size'    => '',
             'shadow'    => '',
 			'review_by_author' => '',
+			'review_by_post_id' => '',
         );
         $instance = wp_parse_args( $args, $defaults );
 
@@ -299,6 +309,25 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			}
 		}
 
+		/**
+		 * Filter the widget review_by_post_id param.
+		 *
+		 * @since 2.1.1.0
+		 *
+		 * @param string $instance ['review_by_post_id'] Filter by author.
+		 */
+		$review_by_post_id = empty( $instance['review_by_post_id'] ) ? '' : apply_filters( 'widget_review_by_post_id', $instance['review_by_post_id'], $instance, $this->id_base );
+		if ( ! empty( $review_by_post_id ) ) {
+			// 'current' left for backwards compatibility.
+			if ( $review_by_post_id === 'current' ) {
+				$review_by_post_id = get_the_ID();
+			} elseif ( absint( $review_by_post_id ) > 0 ) {
+				$review_by_post_id = absint( $review_by_post_id );
+			} else {
+				$review_by_post_id = -1; // Don't show review widget.
+			}
+		}
+
 	    // wrap class
 	    $wrap_class = geodir_build_aui_class($instance);
 
@@ -324,7 +353,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		    }
 	    }
 
-	    $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter,$instance['min_rating'],$instance['carousel'], $review_by_author );
+	    $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter,$instance['min_rating'],$instance['carousel'], $review_by_author, $review_by_post_id );
 
 		$content = '';
         if ( !empty( $comments_li ) ) {
@@ -378,7 +407,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 	 *
 	 * @return string Returns the recent reviews html.
 	 */
-	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0, $carousel = '', $review_by_author = '' ) {
+	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0, $carousel = '', $review_by_author = '', $review_by_post_id = '' ) {
 		global $wpdb, $tablecomments, $tableposts, $rating_table_name, $table_prefix;
 		$tablecomments = $wpdb->comments;
 		$tableposts    = $wpdb->posts;
@@ -395,6 +424,9 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		}
 		if ( ! empty( $review_by_author ) ) {
 			$where .= $wpdb->prepare( ' AND r.user_id = %s', $review_by_author );
+		}
+		if ( ! empty( $review_by_post_id ) ) {
+			$where .= $wpdb->prepare( ' AND p.ID = %s', $review_by_post_id );
 		}
 
 		if ( GeoDir_Post_types::supports( $post_type, 'location' ) && $add_location_filter && defined( 'GEODIRLOCATION_VERSION' ) ) {

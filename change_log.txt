@@ -1,3 +1,6 @@
+= 2.1.1.0 =
+* Allow to filter Recent Reviews by post id - ADDED
+
 = 2.1.0.10 =
 * Show x stars back instead of rating type name on hover of ratings - CHANGED
 * Field description is missing for radio/checkbox multiselect fields - FIXED
