@@ -109,7 +109,7 @@ class GeoDir_API {
 		}
 
 		$this->rest_api_includes();
-		
+
 		// Show / hide CPT from Rest API
 		add_action( 'init', array( $this, 'setup_show_in_rest' ), 10 );
 
@@ -132,7 +132,7 @@ class GeoDir_API {
 
 		// Authentication.
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-authentication.php' );
-		
+
 		// Abstract controllers.
 		include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-controller.php' );
 		include_once( dirname( __FILE__ ) . '/abstracts/abstract-geodir-rest-terms-controller.php' );

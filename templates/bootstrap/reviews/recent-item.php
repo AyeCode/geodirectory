@@ -21,7 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<div class="card h-100 mw-100">
 		<div class="card-header toast-header">
 			<span class="li<?php echo $comment_id;?> geodir_reviewer_image mr-2">
-			<?php echo get_avatar( $comment, $avatar_size, '', $comment_id . ' comment avatar',array('class'=>"comment_avatar rounded-circle") );?>
+			<?php echo get_avatar( $comment, $avatar_size, '', $comment_id . ' comment avatar',array('class'=>"comment_avatar rounded-circle position-static") );?>
 			</span>
 			<?php
 			if ( $comment->user_id ) {

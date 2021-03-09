@@ -26,7 +26,7 @@ function geodir_get_screen_ids() {
 		'comment'
 	);
 
-	// Check for translated screen id. 
+	// Check for translated screen id.
 	$geodir_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
 
 	if ( $geodir_screen_id != 'geodirectory' ) {
@@ -835,7 +835,7 @@ function geodir_get_sd_padding_input($type = 'pt', $overwrite = array() ){
 		"4" => "4",
 		"5" => "5",
 	);
-	
+
 	$defaults = array(
 		'type' => 'select',
 		'title' => __('Padding top', 'geodirectory'),
@@ -1148,9 +1148,9 @@ function geodir_get_sd_text_color_input( $overwrite = array() ){
 
 
 function geodir_get_sd_title_inputs(){
-	
+
 	$arguments = array();
-	
+
 	$arguments['widget_title_tag']  = geodir_get_sd_title_tag_input();
 	$arguments['widget_title_size_class']  = geodir_get_sd_font_size_input(
 		array(
@@ -1305,7 +1305,7 @@ function geodir_build_aui_class($args){
 	$design_style = geodir_design_style();
 	if( !$design_style ){ return ''; }
 	$classes = array();
-	
+
 	// margins
 	if ( !empty( $args['mt'] ) || ( isset( $args['mt'] ) && $args['mt'] == '0' ) ) { $classes[] = "mt-".sanitize_html_class($args['mt']); }
 	if ( !empty( $args['mr'] ) || ( isset( $args['mr'] ) && $args['mr'] == '0' ) ) { $classes[] = "mr-".sanitize_html_class($args['mr']); }
