@@ -942,7 +942,7 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	global $wp,$wpdb, $plugin_prefix, $table_prefix,$geodirectory;
 
 	$post_type = empty( $query_args['post_type'] ) ? 'gd_place' : $query_args['post_type'];
-	$table     = $plugin_prefix . $post_type . '_detail';
+	$table     = geodir_db_cpt_table( $post_type );
 
 	// check if this is a GPS filtered query
 	$support_location = $post_type  && GeoDir_Post_types::supports( $post_type , 'location' );

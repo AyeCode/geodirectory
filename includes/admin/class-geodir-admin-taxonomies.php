@@ -620,30 +620,7 @@ class GeoDir_Admin_Taxonomies {
             if ( !empty( $cat_icon['src'] ) ) {
                 $cat_icon['src'] = geodir_file_relative_url( $cat_icon['src'] );
             } elseif(!empty($_POST['ct_cat_font_icon'])) {
-                $background = !empty($_POST['ct_cat_color']) ? ltrim (sanitize_hex_color($_POST['ct_cat_color']),'#') : 'ef5646';
-                $fa_icon_parts = explode(" ",$_POST['ct_cat_font_icon']);
-                $fa_icon = !empty($fa_icon_parts[1]) ? sanitize_html_class($fa_icon_parts[0])." ".sanitize_html_class($fa_icon_parts[1]) : 'fas fa-star';
-                $icon_url = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/icon-stack?";
-                $icon_url .= "icon=".$fa_icon;
-                $icon_url .= "&size=50";
-                $icon_url .= "&color=fff";
-                $icon_url .= "&on=fas fa-map-marker";
-                $icon_url .= "&hoffset=0";
-                $icon_url .= "&voffset=-4";
-               // $icon_url .= "&iconSize=20"; //goes off center if you set a size
-                $icon_url .= "&oncolor=".$background;
-
-                $image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon,array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp'),array('ext'=>'png','type'=>'image/png') );
-
-                if(!empty($image['url'])){
-                    $attachment_id = GeoDir_Media::set_uploaded_image_as_attachment($image);
-                    if( $attachment_id ){
-                        $cat_icon['id'] = $attachment_id;
-                        $cat_icon['src'] = geodir_file_relative_url( $image['url'] );
-
-                    }
-                }
-
+                $cat_icon = $this->generate_cat_icon($_POST['ct_cat_font_icon'],$_POST['ct_cat_color']);
             } else {
                 $cat_icon = array();
             }
@@ -667,6 +644,62 @@ class GeoDir_Admin_Taxonomies {
         }
         
         do_action( 'geodir_term_save_category_fields', $term_id, $tt_id, $taxonomy );
+    }
+
+    /**
+     * @param $term_id
+     *
+     * @return bool
+     */
+    public function regenerate_term_icon( $term_id ){
+        $icon = get_term_meta($term_id,'ct_cat_font_icon', true);
+        $color = get_term_meta($term_id,'ct_cat_color', true);
+
+        if ( $icon && $color ) {
+            $this->generate_cat_icon($icon,$color);
+            return true;
+        }
+        
+        return false;
+    }
+
+    /**
+     * @param $icon
+     * @param $color
+     *
+     * @return array
+     */
+    public function generate_cat_icon($icon,$color){
+        $cat_icon = array();
+
+        if($icon && $color){
+            $background = !empty($color) ? ltrim (sanitize_hex_color($color),'#') : 'ef5646';
+            $fa_icon_parts = explode(" ",$icon);
+            $fa_icon = !empty($fa_icon_parts[1]) ? sanitize_html_class($fa_icon_parts[0])." ".sanitize_html_class($fa_icon_parts[1]) : 'fas fa-star';
+            $icon_url = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/icon-stack?";
+            $icon_url .= "icon=".$fa_icon;
+            $icon_url .= "&size=50";
+            $icon_url .= "&color=fff";
+            $icon_url .= "&on=fas fa-map-marker";
+            $icon_url .= "&hoffset=0";
+            $icon_url .= "&voffset=-4";
+            // $icon_url .= "&iconSize=20"; //goes off center if you set a size
+            $icon_url .= "&oncolor=".$background;
+
+            $image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon,array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp'),array('ext'=>'png','type'=>'image/png') );
+
+            if(!empty($image['url'])){
+                $attachment_id = GeoDir_Media::set_uploaded_image_as_attachment($image);
+                if( $attachment_id ){
+                    $cat_icon['id'] = $attachment_id;
+                    $cat_icon['src'] = geodir_file_relative_url( $image['url'] );
+
+                }
+            }
+        }
+
+        
+        return $cat_icon;
     }
 
     public function get_fixed_icon_slug($slug){
