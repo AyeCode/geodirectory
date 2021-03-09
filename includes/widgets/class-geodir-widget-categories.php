@@ -631,7 +631,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					} elseif ( geodir_is_page( 'search' ) && isset( $_REQUEST['spost_category'] ) && ( ( is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'][0] ) ) || ( ! is_array( $_REQUEST['spost_category'] ) && ! empty( $_REQUEST['spost_category'] ) ) ) ) {
 						$is_category = true;
 
-						if ( is_array( $_REQUEST['spost_category'] ) && count( $_REQUEST['spost_category'] == 1 ) ) {
+						if ( is_array( $_REQUEST['spost_category'] ) && 1 == count( $_REQUEST['spost_category']) ) {
 							$current_term_id = absint( $_REQUEST['spost_category'][0] );
 						} else {
 							$current_term_id = absint( $_REQUEST['spost_category'] );
