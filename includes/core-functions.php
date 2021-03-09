@@ -106,11 +106,11 @@ function geodir_is_singular( $post_types = array() ) {
  * @return bool True for custom taxonomy archive pages, false for built-in taxonomies.
  */
 function geodir_is_taxonomy( $taxonomies = array() ) {
-	if ( empty( $taxonomis ) ) {
-		$taxonomis = geodir_get_taxonomies( '', true );
+	if ( empty( $taxonomies ) ) {
+		$taxonomies = geodir_get_taxonomies( '', true );
 	}
 
-	return is_tax( $taxonomis );
+	return is_tax( $taxonomies );
 }
 
 /**
@@ -242,7 +242,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 	 *
 	 * @param string $allowed_img_types The image type extensions array.
 	 */
-	$allowed_img_types = apply_filters( 'geodir_allowed_post_image_exts', array( 'jpg', 'jpeg', 'jpe', 'gif', 'png' ) );
+	$allowed_img_types = apply_filters( 'geodir_allowed_post_image_exts', array( 'jpg', 'jpeg', 'jpe', 'gif', 'png', 'webp' ) );
 
 	$default_marker_icon   = GeoDir_Maps::default_marker_icon( true );
 	$default_marker_size   = GeoDir_Maps::get_marker_size( $default_marker_icon, array( 'w' => 20, 'h' => 34 ) );
@@ -286,8 +286,8 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'default_marker_icon'                          => $default_marker_icon,
 		'default_marker_w'                             => $default_marker_width,
 		'default_marker_h'                             => $default_marker_height,
-		'latitude_error_msg'                           => GEODIR_LATITUDE_ERROR_MSG,
-		'longgitude_error_msg'                         => GEODIR_LOGNGITUDE_ERROR_MSG,
+		'latitude_error_msg'                           => __( 'A numeric value is required. Please make sure you have either dragged the marker or clicked the button: Set Address On Map', 'geodirectory' ),
+		'longgitude_error_msg'                         => __( 'A numeric value is required. Please make sure you have either dragged the marker or clicked the button: Set Address On Map', 'geodirectory' ),
 		'gd_cmt_btn_post_reply'                        => __( 'Post Reply', 'geodirectory' ),
 		'gd_cmt_btn_reply_text'                        => __( 'Reply text', 'geodirectory' ),
 		'gd_cmt_btn_post_review'                       => __( 'Post Review', 'geodirectory' ),
@@ -303,13 +303,14 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_form_wait'                                => __( 'Wait...', 'geodirectory' ),
 		'txt_form_searching'                           => __( 'Searching...', 'geodirectory' ),
 		'txt_form_my_location'                           => __( 'My Location', 'geodirectory' ),
-		'rating_type'                                  => geodir_get_option( 'rating_type' ) ? geodir_get_option( 'rating_type' ) : 'font-awesome',
+		'rating_type'                                  => geodir_get_option( 'rating_type' ) && geodir_get_option( 'rating_type' ) =='image' ? 'image' : 'fa',
 		'reviewrating'                                 => defined( 'GEODIR_REVIEWRATING_VERSION' ) ? 1 : '',
 		'multirating'                                  => defined( 'GEODIR_REVIEWRATING_VERSION' ) && geodir_get_option( 'rr_enable_rating' ) ? true : false,
 		'map_name'                                     => GeoDir_Maps::active_map(),
 		'osmStart'                                     => __( 'Start', 'geodirectory' ),
 		'osmVia'                                       => __( 'Via {viaNumber}', 'geodirectory' ),
 		'osmEnd'                                       => __( 'Enter Your Location', 'geodirectory' ),
+		'osmPressEnter'                                => __( 'Press Enter key to search', 'geodirectory' ),
 		'geoMyLocation'                                => __( 'My Location', 'geodirectory' ),
 		'geoErrUNKNOWN_ERROR'                          => addslashes( __( 'Unable to find your location', 'geodirectory' ) ),
 		'geoErrPERMISSION_DENINED'                     => addslashes( __( 'Permission denied in finding your location', 'geodirectory' ) ),
@@ -350,16 +351,40 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_lose_changes'                             => __( 'You may lose changes if you navigate away now!', 'geodirectory' ),
 		'txt_are_you_sure'                             => __( 'Are you sure?', 'geodirectory' ),
 		'gmt_offset'                                   => geodir_gmt_offset(),
+		'timezone_string'                              => geodir_timezone_string(),
 		'autosave'                                     => apply_filters('geodir_autosave',10000),// 10000 = 10 seconds, set to 0 to disable
 		'search_users_nonce'                           => wp_create_nonce( 'search-users' ),
 		'google_api_key'                               => GeoDir_Maps::google_api_key(),
 		'mapLanguage'                                  => GeoDir_Maps::map_language(),
+		'osmRouteLanguage'                             => GeoDir_Maps::osm_routing_language(),
+		'markerAnimation'                              => apply_filters( 'geodir_map_marker_animation', 'bounce' ), // bounce, drop or none
 		'confirm_set_location'                         => addslashes( __( 'Would you like to manually set your location?', 'geodirectory' ) ),
 		'confirm_lbl_error'                            => addslashes( __( 'ERROR:', 'geodirectory' ) ),
 		'label_title'                                  => __( 'Title', 'geodirectory' ),
 		'label_caption'                                => __( 'Caption', 'geodirectory' ),
 		'button_set'                                   => __( 'Set', 'geodirectory' ),
 		'BH_altTimeFormat'                             => geodir_bh_input_time_format( true ),
+		'basic_nonce'                                  => wp_create_nonce( 'geodir_basic_nonce' ),
+		'time_ago'                                     => array(
+			'prefix_ago' => '',
+			'suffix_ago' => ' ' . _x( 'ago', 'time ago', 'geodirectory' ),
+			'prefix_after' => _x( 'after', 'time ago', 'geodirectory' ) . ' ',
+			'suffix_after' => '',
+			'seconds' => _x( 'less than a minute', 'time ago', 'geodirectory' ),
+			'minute' => _x( 'about a minute', 'time ago', 'geodirectory' ),
+			'minutes' => _x( '%d minutes', 'time ago', 'geodirectory' ),
+			'hour' => _x( 'about an hour', 'time ago', 'geodirectory' ),
+			'hours' => _x( 'about %d hours', 'time ago', 'geodirectory' ),
+			'day' => _x( 'a day', 'time ago', 'geodirectory' ),
+			'days' => _x( '%d days', 'time ago', 'geodirectory' ),
+			'month' => _x( 'about a month', 'time ago', 'geodirectory' ),
+			'months' => _x( '%d months', 'time ago', 'geodirectory' ),
+			'year' => _x( 'about a year', 'time ago', 'geodirectory' ),
+			'years' => _x( '%d years', 'time ago', 'geodirectory' ),
+		),
+		'resize_marker' => apply_filters( 'geodir_map_marker_resize_marker', false ), /* Resize map marker icon */
+		'marker_max_width' => apply_filters( 'geodir_map_resize_marker_max_width', 50 ), /* Max width to apply resize marker icon */
+		'marker_max_height' => apply_filters( 'geodir_map_resize_marker_max_height', 50 ) /* Max height to apply resize marker icon. */
 	);
 
 	/**
@@ -409,6 +434,7 @@ function geodir_nocache_headers() {
  */
 function geodir_notification( $user_notes ) {
 	$notes = '';
+	$design_style = geodir_design_style();
 	foreach ( $user_notes as $key => $user_note ) {
 
 		if(is_array($user_note)){
@@ -424,16 +450,35 @@ function geodir_notification( $user_notes ) {
 				elseif($type=='success'){$icon = '<i class="fas fa-check-circle"></i>';}
 				elseif($type=='info'){$icon = '<i class="fas fa-info-circle"></i>';}
 			}
-
-			$notes .= "<div class='gd-notification gd-$type $extra_class $dismissible'>";
-			if($icon) {$notes .= $icon. " ";}
-			$notes .= $note;
-			if($dismissible){$notes .= '<i class="fas fa-times gd-notification-dismiss" onclick="jQuery(this).parent().fadeOut();" title="'.__('Dismiss','geodirectory').'"></i>';}
-			$notes .= "</div>";
+			
+			if($design_style){
+				$notes .= aui()->alert(array(
+						'type'=> $type ? $type : 'info',
+						'content'=> $note,
+						'dismissible'=> !empty($user_note['dismissible']) && $user_note['dismissible']!==false ? true : false,
+						'class' => !empty($user_note['icon']) ? $user_note['icon'].$extra_class : $extra_class // escaped in AUI
+					)
+				);
+			}else{
+				$notes .= "<div class='gd-notification gd-$type $extra_class $dismissible'>";
+				if($icon) {$notes .= $icon. " ";}
+				$notes .= $note;
+				if($dismissible){$notes .= '<i class="fas fa-times gd-notification-dismiss" onclick="jQuery(this).parent().fadeOut();" title="'.__('Dismiss','geodirectory').'"></i>';}
+				$notes .= "</div>";
+			}
 		}else{
-			$notes .= "<div class='gd-notification $key'>";
-			$notes .= $user_note;
-			$notes .= "</div>";
+			if($design_style){
+				$notes .= aui()->alert(array(
+						'type'=> $key,
+						'content'=> $user_note,
+					)
+				);
+			}else{
+				$notes .= "<div class='gd-notification $key'>";
+				$notes .= $user_note;
+				$notes .= "</div>";
+			}
+
 		}
 
 
@@ -510,6 +555,7 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Category_Description' );
 		register_widget( 'GeoDir_Widget_Dashboard' );
 		register_widget( 'GeoDir_Widget_Recent_Reviews' );
+		register_widget( 'GeoDir_Widget_CPT_Meta' );
 
 		// post widgets
 		register_widget( 'GeoDir_Widget_Post_Badge' );
@@ -532,6 +578,7 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Single_Tabs' );
 		register_widget( 'GeoDir_Widget_Notifications' );
 		register_widget( 'GeoDir_Widget_Add_Listing' );
+		register_widget( 'GeoDir_Widget_Dynamic_Content' );
 
 
 		// Template widgets
@@ -541,8 +588,10 @@ function goedir_register_widgets() {
 		register_widget( 'GeoDir_Widget_Archive_Item_Section' );
 		register_widget( 'GeoDir_Widget_Single_Taxonomies' );
 		register_widget( 'GeoDir_Widget_Single_Next_Prev' );
+		register_widget( 'GeoDir_Widget_Single_Reviews' );
 		register_widget( 'GeoDir_Widget_Post_Distance' );
 		register_widget( 'GeoDir_Widget_Map_Pinpoint' );
+		register_widget( 'GeoDir_Widget_Page_Title' );
 
 		// Depreciated
 		new GeoDir_Widget_Single_Closed_Text();
@@ -856,15 +905,18 @@ function geodir_search_form_submit_button() {
 	 * @param string $default_search_button_label The current search button text.
 	 */
 	$default_search_button_label = apply_filters( 'geodir_search_default_search_button_text', $default_search_button_label );
-
 	$fa_class = false;
 	if ( geodir_is_fa_icon( $default_search_button_label ) ) {
 		$fa_class = true;
 	}
 
-	?>
-	<button class="geodir_submit_search" data-title="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>" aria-label="<?php esc_attr_e( $default_search_button_label ,'geodirectory'); ?>"><?php if($fa_class){echo '<i class="fas '.esc_attr($default_search_button_label).'" aria-hidden="true"></i><span class="sr-only">' . __( 'Search', 'geodirectory' ). '</span>';}else{ echo __( $default_search_button_label ,'geodirectory') . '<span class="sr-only">' . $default_search_button_label . '</span>'; }?></button>
-	<?php
+	$args = array(
+		'fa_class'  => $fa_class,
+		'default_search_button_label'  => $default_search_button_label,
+	);
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/search-bar/button-search.php" : "legacy/search/button-search.php";
+	echo geodir_get_template_html( $template, $args );
 }
 
 add_action( 'geodir_before_search_button', 'geodir_search_form_submit_button', 5000 );
@@ -896,12 +948,21 @@ function geodir_search_form_post_type_input() {
 
 		if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 && $show_select) {
 
+			$design_style = geodir_design_style();
+
 			$new_style = geodir_get_option( 'geodir_show_search_old_search_from' ) ? false : true;
 			if ( $new_style ) {
-				echo "<div class='gd-search-input-wrapper gd-search-field-cpt'>";
+				$wrap_class = $design_style ? " col-auto flex-fill" : '';
+				echo "<div class='gd-search-input-wrapper gd-search-field-cpt $wrap_class'>";
 			}
+
+			$select_class = $design_style ? " form-control custom-select" : '';
+
+			echo $design_style ? '<div class="form-group">' : '';
+			echo $design_style ? '<label class="sr-only sr-only ">'.__("Select search type","geodirectory").'</label>' : '';
+
 			?>
-			<select name="stype" class="search_by_post">
+			<select name="stype" class="search_by_post <?php echo $select_class;?>" aria-label="<?php esc_attr_e( 'Post Type', 'geodirectory' ); ?>">
 				<?php foreach ( $post_types as $post_type => $info ):
 					global $wpdb;
 					$pt_slug = isset($info->rewrite->slug) ? esc_attr($info->rewrite->slug) : 'places';
@@ -922,6 +983,8 @@ function geodir_search_form_post_type_input() {
 				<?php endforeach; ?>
 			</select>
 			<?php
+			echo $design_style ? '</div>' : '';
+
 			if ( $new_style ) {
 				echo "</div>";
 			}
@@ -961,24 +1024,21 @@ function geodir_search_form_post_type_input() {
 function geodir_search_form_search_input() {
 	$default_search_for_text = geodir_get_option('search_default_text');
 	if(!$default_search_for_text){$default_search_for_text = geodir_get_search_default_text();}
-	?>
-	<div class='gd-search-input-wrapper gd-search-field-search'>
-		<?php 	do_action('geodir_before_search_for_input');?>
-		<label class="visuallyhidden" for="s"><?php esc_html_e($default_search_for_text,'geodirectory') ?>:</label>
-		<input class="search_text gd_search_text" id="s" name="s"
-		       value="<?php if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
-			       $search_term = esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
-			       echo str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
-		       } ?>" type="text"
-		       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);"
-		       onClick="this.select();"
-		       placeholder="<?php esc_html_e($default_search_for_text,'geodirectory') ?>" 
-		       aria-label="<?php esc_html_e($default_search_for_text,'geodirectory') ?>"
-		       autocomplete="off"
-		/>
-		<?php 	do_action('geodir_after_search_for_input');?>
-	</div>
-	<?php
+
+	$search_term = '';
+	if ( isset( $_REQUEST['s'] ) && trim( $_REQUEST['s'] ) != '' ) {
+		$search_term = esc_attr( stripslashes_deep( $_REQUEST['s'] ) );
+		$search_term = str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
+	}
+
+	$args = array(
+		'default_search_for_text' => $default_search_for_text,
+		'search_term'  => $search_term,
+	);
+
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/search-bar/input-search.php" : "legacy/search/input-search.php";
+	echo geodir_get_template_html( $template, $args  );
 }
 
 /**
@@ -987,7 +1047,6 @@ function geodir_search_form_search_input() {
  * @since 2.0.0
  */
 function geodir_search_form_near_input() {
-
 	$default_near_text = geodir_get_option('search_default_near_text');
 	if(!$default_near_text){$default_near_text = geodir_get_search_default_near_text();}
 
@@ -997,7 +1056,6 @@ function geodir_search_form_near_input() {
 		$near = '';
 	}
 
-
 	global $geodir_search_post_type;
 	$curr_post_type = $geodir_search_post_type;
 	/**
@@ -1006,8 +1064,7 @@ function geodir_search_form_near_input() {
 	 * @since 1.6.9
 	 * @param string $curr_post_type The current post type.
 	 */
-	$near_input_extra = apply_filters('geodir_near_input_extra','',$curr_post_type);
-
+	$near_input_extra = apply_filters('geodir_near_input_extra','',$curr_post_type); // @todo we will need to fix this
 
 	/**
 	 * Filter the "Near" text value for the search form.
@@ -1040,21 +1097,17 @@ function geodir_search_form_near_input() {
 	 */
 	$near_class = apply_filters( 'geodir_search_near_class', '' );
 
+	add_action( 'wp_print_footer_scripts', array( 'GeoDir_Maps', 'check_map_script' ), 99999 );
 
-	echo "<div class='gd-search-input-wrapper gd-search-field-near $near_class' $near_input_extra>";
-	do_action('geodir_before_search_near_input');
-	?>
-	<label class="visuallyhidden" for="snear"><?php esc_html_e($default_near_text,'geodirectory') ?>:</label>
-	<input id="snear" name="snear" class="snear" type="text" value="<?php echo $near; ?>"
-	       onkeydown="javascript: if(event.keyCode == 13) geodir_click_search(this);" <?php echo $near_input_extra;?>
-	       onClick="this.select();"
-	       placeholder="<?php esc_html_e($default_near_text,'geodirectory') ?>"
-	       aria-label="<?php esc_html_e($default_near_text,'geodirectory') ?>"
-	       autocomplete="off"
-	/>
-	<?php
-	do_action('geodir_after_search_near_input');
-	echo "</div>";
+	$args = array(
+		'near_class' => $near_class,
+		'default_near_text' => $default_near_text,
+		'near' => $near,
+		'near_input_extra' => $near_input_extra,
+	);
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style."/search-bar/input-near.php" : "legacy/search/input-near.php";
+	echo geodir_get_template_html( $template, $args );
 }
 
 add_action( 'geodir_search_form_inputs', 'geodir_search_form_post_type_input', 10 );
@@ -1065,10 +1118,13 @@ add_action( 'geodir_search_form_inputs', 'geodir_search_form_near_input', 30 );
  * Adds a icon to the search near input.
  */
 function geodir_search_near_label() {
-	echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');jQuery(\'.sgeo_lat,.sgeo_lon\').val(\'\');">';
-	echo '<i class="fas fa-map-marker-alt gd-show"></i>';
-	echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
-	echo '</span>';
+	if(!geodir_design_style()){
+		echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.snear\').val(\'\').trigger(\'change\').trigger(\'keyup\');jQuery(\'.sgeo_lat,.sgeo_lon\').val(\'\');">';
+		echo '<i class="fas fa-map-marker-alt gd-show"></i>';
+		echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
+		echo '</span>';
+	}
+
 }
 add_action('geodir_before_search_near_input','geodir_search_near_label');
 
@@ -1076,10 +1132,12 @@ add_action('geodir_before_search_near_input','geodir_search_near_label');
  * Adds a icon to the search for input.
  */
 function geodir_search_for_label() {
-	echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
-	echo '<i class="fas fa-search gd-show"></i>';
-	echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="'.__('Clear field','geodirectory').'"></i>';
-	echo '</span>';
+	if(!geodir_design_style()) {
+		echo '<span class="gd-icon-hover-swap geodir-search-input-label" onclick="jQuery(\'.search_text\').val(\'\').trigger(\'change\').trigger(\'keyup\');">';
+		echo '<i class="fas fa-search gd-show"></i>';
+		echo '<i class="fas fa-times geodir-search-input-label-clear gd-hide" title="' . __( 'Clear field', 'geodirectory' ) . '"></i>';
+		echo '</span>';
+	}
 }
 add_action('geodir_before_search_for_input','geodir_search_for_label');
 
@@ -1103,7 +1161,6 @@ function geodir_get_search_post_type($pt=''){
 		$geodir_search_post_type = geodir_get_default_posttype();
 	}
 
-
 	return $geodir_search_post_type;
 }
 
@@ -1112,11 +1169,27 @@ function geodir_get_search_post_type($pt=''){
  *
  * @since 2.0.0
  */
-function geodir_search_form(){
-
+function geodir_search_form() {
 	geodir_get_search_post_type();
 
-	geodir_get_template_part('listing', 'filter-form');
+	$design_style = geodir_design_style();
+	$template = $design_style ? $design_style . "/search-bar/form.php" : "listing-filter-form.php";
+
+	$args = array();
+	if ( wp_doing_ajax() && ! empty( $_POST['keepArgs'] ) ) {
+		$_args = json_decode( stripslashes( sanitize_text_field( $_POST['keepArgs'] ) ), true );
+
+		if ( ! empty( $_args ) && is_array( $_args ) ) {
+			$args = $_args;
+		}
+	}
+
+	$args = array(
+		'wrap_class' => geodir_build_aui_class( $args ),
+		'keep_args' => $args
+	);
+
+	echo geodir_get_template_html( $template, $args );
 
 	// Always die in functions echoing ajax content
 	die();
