@@ -17,13 +17,13 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 			'block-icon'    => 'menu',
-			'block-category'=> 'common',
+			'block-category'=> 'geodirectory',
 			'block-keywords'=> "['geo','description','content']",
 			'class_name'    => __CLASS__,
 			'base_id'       => 'gd_post_content', // this us used as the widget id and the shortcode id.
 			'name'          => __('GD > Post Content','geodirectory'), // the name of the widget.
 			'widget_ops'    => array(
-				'classname'   => 'geodir-post-content-container', // widget class
+				'classname'   => 'geodir-post-content-container '.geodir_bsui_class(), // widget class
 				'description' => esc_html__('This shows a post content text. You can show text from any textarea field.','geodirectory'), // widget description
 				'customize_selective_refresh' => true,
 				'geodirectory' => true,
@@ -175,26 +175,26 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 			$args['id'] =  isset($gd_post->ID) ? $gd_post->ID : 0;
 		}
 
+		$design_style = geodir_design_style();
+		$block_preview = $this->is_block_content_call();
+
 		$post_type = !$original_id && isset($post->post_type) ? $post->post_type : get_post_type($args['id']);
-
-
-		// print_r($args);
+		if($block_preview){$post_type = 'gd_place';}
 		// error checks
 		$errors = array();
 		if(empty($args['key'])){$errors[] = __('key is missing','geodirectory');}
 		if(empty($args['id'])){$errors[] = __('id is missing','geodirectory');}
 		if(empty($post_type)){$errors[] = __('invalid post type','geodirectory');}
 
-		if(!empty($errors)){
-			$output .= implode(", ",$errors);
+		if ( ! empty( $errors ) ) {
+			$output .= implode( ", ", $errors );
 		}
 
-		// check if its demo content
-		if($post_type == 'page' && !empty($args['id']) && geodir_is_block_demo()){
-			$post_type = 'gd_place';
+		if ( $this->is_preview()) {
+			$output = ''; // Show placeholder on builder preview.
 		}
 
-		if(geodir_is_gd_post_type($post_type)){ //echo '###2';
+		if(geodir_is_gd_post_type($post_type)){
 
 			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
 			$fields = geodir_post_custom_fields($package_id ,  'all', $post_type);
@@ -208,9 +208,13 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 				}
 				if(!empty($field)){ // the field is allowed to be shown
 					$field = stripslashes_deep( $field );
-					if($args['alignment']=='left'){$field['css_class'] .= " geodir-text-alignleft ";}
-					if($args['alignment']=='center'){$field['css_class'] .= " geodir-text-aligncenter ";}
-					if($args['alignment']=='right'){$field['css_class'] .= " geodir-text-alignright ";}
+
+					// set text alignment class
+					if ( $args['alignment'] != '' ) {
+						$field['css_class'] .= $design_style ? " text-".sanitize_html_class( $args['alignment'] ) : " geodir-text-align" . sanitize_html_class( $args['alignment'] );
+					}elseif($design_style){
+						$field['css_class'] .= " clear-both ";
+					}
 
 					// set to value if empty
 					if(empty($args['show'])){

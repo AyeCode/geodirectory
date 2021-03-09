@@ -217,6 +217,8 @@ class Geodir_REST_Terms_Controller extends WP_REST_Terms_Controller {
 			$query_result = get_terms( $this->taxonomy, $prepared_args );
 		}
 
+		$query_result = apply_filters( "geodir_rest_{$this->taxonomy}_query_result", $query_result, $prepared_args, $request );
+
 		$count_args = $prepared_args;
 
 		unset( $count_args['number'], $count_args['offset'] );

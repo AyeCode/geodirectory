@@ -46,7 +46,6 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 				''          	=> __( 'Email options', 'geodirectory' ),
 				'admin_emails'       => __( 'Admin emails', 'geodirectory' ),
 				'client_emails' 	=> __( 'User emails', 'geodirectory' ),
-				'other_emails' 	=> __( 'Other emails', 'geodirectory' ),
 			);
 
 			return apply_filters( 'geodir_get_sections_' . $this->id, $sections );
@@ -80,13 +79,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 		 */
 		public function get_settings( $current_section = '' ) {
 
-			if($current_section == 'other_emails'){
-				$settings = apply_filters( 'geodir_other_email_settings', array(
-					
-
-				));
-			}
-			elseif($current_section == 'client_emails'){
+			if($current_section == 'client_emails'){
 				$settings = apply_filters( 'geodir_user_email_settings', array(
 
 

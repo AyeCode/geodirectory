@@ -796,8 +796,8 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
         $schema[ 'post_images' ] = array(
             'type'          => 'string',
             'context'       => array( 'view', 'edit' ),
-            'title'         => __( 'Listing images', 'geodir_rest' ),
-            'description'   => __( 'Comma separated list of listing images urls. First image will be set as a featured image for the listing.', 'geodir_rest' ),
+            'title'         => __( 'Listing images', 'geodirectory' ),
+            'description'   => __( 'Comma separated list of listing images urls. First image will be set as a featured image for the listing.', 'geodirectory' ),
         );
         
         foreach ( $custom_fields as $id => $field ) {
@@ -888,7 +888,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
                             'type'          => 'string',
                             'context'       => array( 'view', 'edit' ),
                             'title'         => !empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ),
-                            'required'      => (bool)$required,
+                            'required'      => ! empty( $extra_fields['zip_required'] ) ? true : false,
                         );
                     }
                     

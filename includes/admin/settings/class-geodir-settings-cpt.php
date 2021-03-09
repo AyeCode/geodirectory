@@ -39,7 +39,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 		 */
 		public function __construct() {
 
-			self::$post_type = ! empty( $_REQUEST['post_type'] ) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
+			self::$post_type = ( ! empty( $_REQUEST['post_type'] ) && is_scalar( $_REQUEST['post_type'] ) ) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
 			self::$sub_tab   = ! empty( $_REQUEST['tab'] ) ? sanitize_title( $_REQUEST['tab'] ) : 'general';
 
 			$this->id    = 'cpt';
@@ -187,6 +187,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				'author_posts_private' => '0',
 				'author_favorites_private' => '0',
 				// Page template
+				'page_add' => '0',
 				'page_details' => '0',
 				'page_archive' => '0',
 				'page_archive_item' => '0',
@@ -281,6 +282,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 				array(
+					'name' => __( 'Disable comments', 'geodirectory' ),
+					'desc' => __( 'Disable comments for all posts for this post type.', 'geodirectory' ),
+					'id' => 'disable_comments',
+					'type' => 'checkbox',
+					'std' => '0',
+					'advanced' => true,
+					'value' => ( isset( $post_type_values['disable_comments'] ) ? $post_type_values['disable_comments'] : 0 )
+				),
+
+				array(
 					'name' => __( 'Disable ratings', 'geodirectory' ),
 					'desc' => __( 'Disable review stars without disabling comments.', 'geodirectory' ),
 					'id'   => 'disable_reviews',
@@ -288,6 +299,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'std'  => '0',
 					'advanced' => true,
 					'value'	   => $post_type_values['disable_reviews']
+				),
+
+				array(
+					'name' => __( 'Single review', 'geodirectory' ),
+					'desc' => __( 'Restrict user to leave more than one review per post.', 'geodirectory' ),
+					'id' => 'single_review',
+					'type' => 'checkbox',
+					'std' => '0',
+					'advanced' => true,
+					'value' => ( isset( $post_type_values['single_review'] ) && $post_type_values['single_review'] ? absint( $post_type_values['single_review'] ) : 0 )
 				),
 
 				array(
@@ -345,6 +366,20 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'desc_tip' => true,
 					'advanced' => true,
 					'value'	   => $post_type_values['author_favorites_private']
+				),
+				array(
+					'type' => 'number',
+					'id' => 'limit_posts',
+					'name' => __( 'Limit Posts', 'geodirectory' ),
+					'desc' => __( 'Limit total posts allowed per user. Leave blank or enter 0 to allow unlimited posts.', 'geodirectory' ),
+					'std' => '',
+					'custom_attributes' => array(
+						'min' => '-1',
+						'step' => '1'
+					),
+					'desc_tip' => true,
+					'advanced' => true,
+					'value' => ( isset( $post_type_values['limit_posts'] ) && $post_type_values['limit_posts'] ? (int) $post_type_values['limit_posts'] : '' )
 				),
 				array( 'type' => 'sectionend', 'id' => 'cpt_settings_author' ),
 
@@ -486,7 +521,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'advanced' => true,
 					'value'	   => $post_type_values['description']
 				),
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_description' ),
 
 				array(
 					'title'    => __( 'SEO Overrides', 'geodirectory' ),
@@ -528,7 +563,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 				// Page template
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_page' ),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
 
 				array(
 					'title'    => __( 'Template Page Settings', 'geodirectory' ),
@@ -537,6 +572,24 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'id'       => 'cpt_settings_page',
 					'desc_tip' => true,
 					'advanced' => true,
+				),
+				array(
+					'name'     => __( 'Add listing page', 'geodirectory' ),
+					'desc'     => __( 'Select the page to use as the GD add listing page template', 'geodirectory' ),
+					'id'       => 'page_add',
+					'type'     => 'single_select_page',
+					'class'    => 'geodir-select',
+					'desc_tip' => true,
+					'advanced' => true,
+					'value'	   => $post_type_values['page_add'],
+					'view_page_args' => array( 
+						'listing_type' => $post_type
+					),
+					'args'     => array(
+						'show_option_none' => wp_sprintf( __( 'Default (%s)', 'geodirectory' ), get_the_title( geodir_get_option( 'page_add' ) ) ),
+						'option_none_value' => '0',
+						'sort_column' => 'post_title',
+					)
 				),
 				array(
 					'name'     => __( 'Details Page', 'geodirectory' ),
@@ -588,7 +641,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				),
 
 
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
+				array( 'type' => 'sectionend', 'id' => 'cpt_settings_page' ),
 
 
 			) );
@@ -657,12 +710,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
          * @since 2.0.0
          *
          * @param array $raw {
-         *      An array sanatize posttype.
+         *      An array sanatize post type.
          *
-         * @type string $new_post_type New sanatize posttype.
-         * @type string $name New posttype name.
-         * @type string $singular_name New Posttype singular name.
-         * @type string $slug New posttype slug.
+         * @type string $new_post_type New sanatize post type.
+         * @type string $name New post type name.
+         * @type string $singular_name New Post type singular name.
+         * @type string $slug New post type slug.
          * }
          *
          * @return array $output.
@@ -671,6 +724,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output = array();
 
 			$post_types = geodir_get_option( 'post_types', array() );
+			$raw = stripslashes_deep( $raw );
 			$post_type = isset($raw['new_post_type']) && $raw['new_post_type'] ? str_replace("-","_",sanitize_key($raw['new_post_type'])) : self::$post_type;
 			$name = isset($raw['name']) && $raw['name'] ? sanitize_text_field($raw['name']) : null;
 			$singular_name = isset($raw['singular_name']) && $raw['singular_name'] ? sanitize_text_field($raw['singular_name']) : null;
@@ -750,13 +804,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['listing_order'] = isset($raw['order']) && $raw['order'] ? absint($raw['order']) : 0;
 
 			// disable features
+			$output[$post_type]['disable_comments'] = isset($raw['disable_comments']) && $raw['disable_comments'] ? absint($raw['disable_comments']) : 0;
 			$output[$post_type]['disable_reviews'] = isset($raw['disable_reviews']) && $raw['disable_reviews'] ? absint($raw['disable_reviews']) : 0;
+			$output[$post_type]['single_review'] = isset( $raw['single_review'] ) && $raw['single_review'] ? absint( $raw['single_review'] ) : 0;
 			$output[$post_type]['disable_favorites'] = isset($raw['disable_favorites']) && $raw['disable_favorites'] ? absint($raw['disable_favorites']) : 0;
 			$output[$post_type]['disable_frontend_add'] = isset($raw['disable_frontend_add']) && $raw['disable_frontend_add'] ? absint($raw['disable_frontend_add']) : 0;
 
 			// author
 			$output[$post_type]['author_posts_private'] = isset($raw['author_posts_private']) && $raw['author_posts_private'] ? absint($raw['author_posts_private']) : 0;
 			$output[$post_type]['author_favorites_private'] = isset($raw['author_favorites_private']) && $raw['author_favorites_private'] ? absint($raw['author_favorites_private']) : 0;
+			$output[$post_type]['limit_posts'] = isset( $raw['limit_posts'] ) && $raw['limit_posts'] ? (int) $raw['limit_posts'] : 0;
 
 			// seo content
 			$output[$post_type]['seo']['title'] = isset($raw['title']) && $raw['title'] ? sanitize_text_field($raw['title']) : '';
@@ -767,6 +824,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['default_image'] = !empty( $raw['default_image'] ) ? $raw['default_image'] : '';
 
 			// Page template
+			$output[$post_type]['page_add'] = isset( $raw['page_add'] ) ? (int)$raw['page_add'] : 0;
 			$output[$post_type]['page_details'] = isset( $raw['page_details'] ) ? (int)$raw['page_details'] : 0;
 			$output[$post_type]['page_archive'] = isset( $raw['page_archive'] ) ? (int)$raw['page_archive'] : 0;
 			$output[$post_type]['page_archive_item'] = isset( $raw['page_archive_item'] ) ? (int)$raw['page_archive_item'] : 0;

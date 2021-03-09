@@ -56,14 +56,14 @@ body{
       margin-top: -25px !important;
     }
 
-    #default_location_set_address_button,.geodir_dummy_button{
-      float: none;
-      margin-bottom: 25px;
-      padding: 0px;
-      height: 35px;
-      border: none;
-      font-size: 14px;
-    }
+    //#default_location_set_address_button,.geodir_dummy_button{
+    //  float: none;
+    //  margin-bottom: 25px;
+    //  padding: 0px;
+    //  height: 35px;
+    //  border: none;
+    //  font-size: 14px;
+    //}
 
 
     .select2-container{
@@ -128,32 +128,20 @@ body{
         margin: 0;
       }
 
-      tbody{
-        select,input{
-          width: 100%;
-          box-sizing: border-box;
-          padding: 8px 5px;
-          border-radius: 3px;
-          border: 1px solid #aaa;
-          margin-bottom: 10px;
-          height: 38px;
-          line-height: 38px;
-          font-size: 16px;
-          color: #5d5c5c;
-          &.button-primary{
-            color: #FFF;
+      &.gd-dummy-data{
+        tbody{
+          select{
+            width: auto !important;
+            float: left;
           }
-        }
+          #gd_place_data_type{
+            min-width: 150px;
+          }
 
-        #gd_place_data_type,#gd_place_data_type_count{
-          width: auto !important;
-          float: left;
         }
-        #gd_place_data_type{
-          min-width: 150px;
-        }
-
       }
+
+
     }
 
     .gd-google-api-error{
@@ -236,6 +224,7 @@ body{
     margin-left: -6px;
     margin-bottom: -8px;
     background: #fff;
+    box-sizing: content-box;
   }
   li.active {
     border-color: $progress-color;

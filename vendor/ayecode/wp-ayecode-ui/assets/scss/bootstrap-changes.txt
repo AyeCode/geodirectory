@@ -1,0 +1,31 @@
+/*
+Fix badge hover actions
+*/
+File _badge.scss 18
+File /mixins/_badge.scss 5
+FROM
+  @at-root a#{&} {
+TO:
+  @at-root #{selector-unify(&, "a")} {
+
+
+/*
+Fix compile
+*/
+File _root.scss 5, 9
+FROM
+  --#{$color}: #{$value};
+TO:
+  #{--#{$color}}: #{$value};
+
+
+/*
+ & + & does not work with our wrapper setup
+*/
+File _list-group.scss 77
+File _list-group-rtl.scss 77
+FROM
+  & + & {
+TO:
+  & + .list-group-item{
+

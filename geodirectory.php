@@ -11,15 +11,14 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.0.0.59
+ * Version: 2.1.0.10
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
  * Domain Path: /languages
  * Requires at least: 4.5
- * Tested up to: 5.2
+ * Tested up to: 5.7
  */
-
 
 if ( ! class_exists( 'GeoDirectory' ) ) :
 
@@ -35,7 +34,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.0.0.59';
+    public $version = '2.1.0.10';
 
     /**
      * GeoDirectory instance.
@@ -83,18 +82,13 @@ final class GeoDirectory {
             }
 
             self::$instance->includes();
-
 	        self::$instance->init_hooks();
-
-
 
             do_action( 'geodirectory_loaded' );
         }
 
         return self::$instance;
     }
-
-	
 
     /**
      * Setup plugin constants.
@@ -129,7 +123,6 @@ final class GeoDirectory {
 	    $this->define( 'GEODIR_TABS_LAYOUT_TABLE', $plugin_prefix . 'tabs_layout' ); // custom fields table
         $this->define( 'GEODIR_CUSTOM_SORT_FIELDS_TABLE', $plugin_prefix . 'custom_sort_fields' ); // custom sort fields table
         $this->define( 'GEODIR_REVIEW_TABLE', $plugin_prefix . 'post_review' ); // post review table
-		$this->define( 'GEODIR_BUSINESS_HOURS_TABLE', $plugin_prefix . 'business_hours' ); // business hours table
 
 		$this->define( 'GEODIR_ROUNDING_PRECISION', 4 );
 
@@ -217,11 +210,12 @@ final class GeoDirectory {
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/user-functions.php' );
         GeoDir_AJAX::init();
 	    GeoDir_Post_Data::init(); // post data
+		GeoDir_Post_Limit::init(); // Posts limit
 	    //GeoDir_Post_Revision::init(); // post revisions @todo not implemented yet
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
 
 	    if( defined( 'ELEMENTOR_VERSION' ) ){
-		    new GeoDir_Elementor();
+		    GeoDir_Elementor::init();
 	    }
 
 	    GeoDir_SEO::init();
@@ -232,7 +226,11 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/image-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/post-types-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/taxonomy-functions.php' );
-        require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/input-functions.php' );
+	    if(geodir_design_style()){
+		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/input-functions-aui.php' );
+	    }else{
+		    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/input-functions.php' );
+	    }
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-functions.php' );
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/output-filter-functions.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/custom-fields/functions.php' );
@@ -251,7 +249,6 @@ final class GeoDirectory {
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-api.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-auth.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-register-wp-admin-settings.php' );
-
 
         if ( $this->is_request( 'admin' ) || $this->is_request( 'test' ) || $this->is_request( 'cli' ) ) {
             if ( !empty( $_REQUEST['taxonomy'] ) ) {
@@ -276,9 +273,9 @@ final class GeoDirectory {
                 add_action( $hook, 'geodir_admin_upgrade_notice', 20, 2 );
             }
 
-	        if( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow || ( defined('DOING_AJAX') && DOING_AJAX && $_REQUEST['action']=='inline-save')) {
-		        GeoDir_Admin_Post_View::init();
-	        }
+            if ( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow || ( defined( 'DOING_AJAX' ) && DOING_AJAX && isset( $_REQUEST['action'] ) && $_REQUEST['action'] == 'inline-save' ) ) {
+                GeoDir_Admin_Post_View::init();
+            }
 
         }
 
@@ -286,7 +283,7 @@ final class GeoDirectory {
             require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-template-loader.php' ); // Template Loader
         }
 
-		// If curent WP Version >= 4.9.6.
+		// If current WP Version >= 4.9.6.
 		if ( version_compare( $wp_version, '4.9.6', '>=' ) ) {
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-privacy.php' );
 		}
@@ -330,6 +327,13 @@ final class GeoDirectory {
 	    // notifications
 	    $notifications_class_name = apply_filters('geodir_class_notifications','GeoDir_Notifications');
 	    $this->notifications = new $notifications_class_name;
+
+	    // GD hints
+	    if(geodir_get_option('enable_hints',1)){
+		    if(current_user_can('administrator')) {
+			    new GeoDir_Hints();
+		    }
+	    }
 
         // Init action.
         do_action( 'geodirectory_init' );

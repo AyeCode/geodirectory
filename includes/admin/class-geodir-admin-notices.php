@@ -31,7 +31,7 @@ class GeoDir_Admin_Notices {
 	private static $core_notices = array(
 		'install'             => 'install_notice',
 		'update'              => 'update_notice',
-		'theme_support'       => 'theme_check_notice',
+		'try_aui'             => 'try_aui_notice',
 		//'beta'                => 'beta_notice',
 	);
 
@@ -41,6 +41,8 @@ class GeoDir_Admin_Notices {
 	public static function init() {
 		self::$notices = get_option( 'geodirectory_admin_notices', array() );
 
+		add_action( 'admin_init', array( __CLASS__, 'admin_init' ) );
+		//add_action( 'admin_notices', array( __CLASS__, 'set_admin_notices' ) );
 		add_action( 'switch_theme', array( __CLASS__, 'reset_admin_notices' ) );
 		add_action( 'geodirectory_installed', array( __CLASS__, 'reset_admin_notices' ) );
 		add_action( 'wp_loaded', array( __CLASS__, 'hide_notices' ) );
@@ -48,6 +50,27 @@ class GeoDir_Admin_Notices {
 
 		if ( current_user_can( 'manage_options' ) ) {
 			add_action( 'admin_print_styles', array( __CLASS__, 'add_notices' ) );
+		}
+	}
+	public static function admin_init() {
+		add_action( 'admin_notices', array( __CLASS__, 'set_admin_notices' ) );
+	}
+
+	/**
+	 * Set dmin notices.
+	 *
+	 * @since 2.1.0.10
+	 */
+	public static function set_admin_notices() {
+		$page = ! empty( $_GET['page'] ) ? sanitize_text_field( $_GET['page'] ) : '';
+
+		/**
+		 * Regenerate Thumbnails
+		 * Regenerate Thumbnails Advanced
+		 * Perfect Images + Retina
+		 */
+		if ( ( $page == 'regenerate-thumbnails' && class_exists( 'RegenerateThumbnails' ) ) || ( $page == 'rta_generate_thumbnails' && defined( 'RTA_PLUGIN_VERSION' ) ) || ( $page == 'wr2x_dashboard' && defined( 'WR2X_VERSION' ) ) ) {
+			echo '<div class="notice notice-warning is-dismissible"><p>' . wp_sprintf( __( 'GeoDirectory\'s images are not supported by this tool, please use our tool %1$shere%2$s to regenerate them.', 'geodirectory' ), '<a href="' . esc_url( admin_url( 'admin.php?page=gd-status&tab=tools#geodir_tool_generate_thumbnails' ) ) . '">', '</a>' ) . '</p></div>';
 		}
 	}
 
@@ -78,7 +101,6 @@ class GeoDir_Admin_Notices {
 	 */
 	public static function reset_admin_notices() {
 		if ( ! current_theme_supports( 'geodirectory' ) && ! in_array( get_option( 'template' ), geodir_get_core_supported_themes() ) ) {
-			self::add_notice( 'theme_support' );
 			self::add_notice( 'beta' );
 		}
 		self::add_notice( 'template_files' );
@@ -217,20 +239,26 @@ class GeoDir_Admin_Notices {
 	/**
 	 * Show the Theme Check notice.
 	 */
-	public static function theme_check_notice() {
-		return;// @todo lets not show this notice till we do testing.
-		if ( ! current_theme_supports( 'geodirectory' ) && ! in_array( get_option( 'template' ), geodir_get_core_supported_themes() ) ) {
-			include( 'views/html-notice-theme-support.php' );
-		} else {
-			self::remove_notice( 'theme_support' );
-		}
+	public static function beta_notice() {
+		include( 'views/html-notice-beta.php' );
 	}
 
 	/**
-	 * Show the Theme Check notice.
+	 * Meybe show a notice to try AUI.
 	 */
-	public static function beta_notice() {
-		include( 'views/html-notice-beta.php' );
+	public static function try_aui_notice() {
+		if(is_admin() && current_user_can( 'manage_options' )  && isset($_REQUEST['page']) && $_REQUEST['page']=='gd-settings' && !empty($_REQUEST['try-bootstrap']) ){
+			geodir_update_option('design_style','bootstrap');
+			self::remove_notice('try_aui');
+			?>
+			<div class="notice notice-success">
+				<p><strong>GeoDirectory - </strong><?php _e( 'Congratulations your site is now set to use the new Bootstrap styles!', 'geodirectory' ); ?></p>
+			</div>
+			<?php
+		}elseif(geodir_get_option("design_style")!='bootstrap'){
+			include( 'views/html-notice-aui.php' );
+		}
+
 	}
 
 

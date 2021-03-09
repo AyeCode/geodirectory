@@ -27,6 +27,18 @@ class GeoDir_Admin_Install {
 			'geodir_update_200_merge_data',
 			'geodir_update_200_db_version',
 		),
+		'2.0.0.60' => array(
+			'geodir_upgrade_20060',
+		),
+		'2.0.0.64' => array(
+			'geodir_upgrade_20064',
+		),
+		'2.0.0.82' => array(
+			'geodir_upgrade_20082',
+		),
+		'2.0.0.96' => array(
+			'geodir_upgrade_20096',
+		)
 	);
 
 	/** @var object Background update class */
@@ -46,6 +58,9 @@ class GeoDir_Admin_Install {
 		//add_action( 'geodir_plugin_background_installer', array( __CLASS__, 'background_installer' ), 10, 2 );
 
 		add_filter('upgrader_package_options',array( __CLASS__, 'maybe_downgrade_v1'));
+
+		// schedule rewrite rules
+		add_action( 'geodirectory_installed', array( __CLASS__, 'schedule_rewrite_rules' ), 99 );
 	}
 
 	/**
@@ -445,16 +460,18 @@ class GeoDir_Admin_Install {
 	 */
 	public static function create_pages() {
 
+		$gutenberg = geodir_is_gutenberg();
+
 		$pages = apply_filters( 'geodirectory_create_pages', array(
 			'page_add' => array(
 				'name'    => _x( 'add-listing', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Add Listing', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_add_content(),
+				'content' => GeoDir_Defaults::page_add_content(false, $gutenberg),
 			),
 			'page_search' => array(
 				'name'    => _x( 'search', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Search page', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_search_content(),
+				'content' => GeoDir_Defaults::page_search_content(false, $gutenberg),
 			),
 			'page_terms_conditions' => array(
 				'name'    => _x( 'terms-and-conditions', 'Page slug', 'geodirectory'),
@@ -464,22 +481,22 @@ class GeoDir_Admin_Install {
 			'page_location' => array(
 				'name'    => _x( 'location', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'Location', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_location_content(),
+				'content' => GeoDir_Defaults::page_location_content(false, $gutenberg),
 			),
 			'page_archive' => array(
 				'name'    => _x( 'gd-archive', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Archive', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_archive_content(),
+				'content' => GeoDir_Defaults::page_archive_content(false, $gutenberg),
 			),
 			'page_archive_item' => array(
 				'name'    => _x( 'gd-archive-item', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Archive Item', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_archive_item_content(),
+				'content' => GeoDir_Defaults::page_archive_item_content(false, $gutenberg),
 			),
 			'page_details' => array(
 				'name'    => _x( 'gd-details', 'Page slug', 'geodirectory'),
 				'title'   => _x( 'GD Details', 'Page title', 'geodirectory'),
-				'content' => GeoDir_Defaults::page_details_content(),
+				'content' => GeoDir_Defaults::page_details_content(false, $gutenberg),
 			),
 
 			
@@ -527,6 +544,9 @@ class GeoDir_Admin_Install {
      * @since 2.0.0
 	 */
 	private static function create_options() {
+		// Before set default options.
+		self::before_create_options();
+
 		// Include settings so that we can run through defaults
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-settings.php' );
 		
@@ -739,15 +759,6 @@ class GeoDir_Admin_Install {
 		  UNIQUE KEY comment_id (comment_id)
 		) $collate; ";
 			
-		// Table for storing business hours info
-		$tables .= " CREATE TABLE " . GEODIR_BUSINESS_HOURS_TABLE . " (
-			id int(11) NOT NULL AUTO_INCREMENT,
-			post_id int(11) DEFAULT NULL,
-			open int(11) DEFAULT NULL,
-			close int(11) DEFAULT NULL,
-			PRIMARY KEY  (id)
-			) $collate; ";
-			
 		// Table to store api keys
 		$tables .= " CREATE TABLE " . GEODIR_API_KEYS_TABLE . " (
 			  key_id BIGINT UNSIGNED NOT NULL auto_increment,
@@ -859,7 +870,7 @@ class GeoDir_Admin_Install {
 	public static function plugin_row_meta( $links, $file ) {
 		if ( GEODIRECTORY_PLUGIN_BASENAME == $file ) {
 			$row_meta = array(
-				'docs'    => '<a href="' . esc_url( apply_filters( 'geodirectory_docs_url', 'https://wpgeodirectory.com/docs-v2/' ) ) . '" aria-label="' . esc_attr__( 'View GeoDirectory documentation', 'geodirectory' ) . '">' . esc_html__( 'Docs', 'geodirectory' ) . '</a>',
+				'docs'    => '<a href="' . esc_url( apply_filters( 'geodirectory_docs_url', 'https://docs.wpgeodirectory.com/' ) ) . '" aria-label="' . esc_attr__( 'View GeoDirectory documentation', 'geodirectory' ) . '">' . esc_html__( 'Docs', 'geodirectory' ) . '</a>',
 				'support' => '<a href="' . esc_url( apply_filters( 'geodirectory_support_url', 'https://wpgeodirectory.com/support/' ) ) . '" aria-label="' . esc_attr__( 'Visit GeoDirectory support', 'geodirectory' ) . '">' . esc_html__( 'Support', 'geodirectory' ) . '</a>',
 				'translation' => '<a href="' . esc_url( apply_filters( 'geodirectory_translation_url', 'https://wpgeodirectory.com/translate/projects' ) ) . '" aria-label="' . esc_attr__( 'View translations', 'geodirectory' ) . '">' . esc_html__( 'Translations', 'geodirectory' ) . '</a>',
 			);
@@ -877,21 +888,23 @@ class GeoDir_Admin_Install {
 	 * @return array GeoDir tables.
 	 */
 	public static function get_tables() {
-		global $wpdb, $plugin_prefix;
+		global $wpdb;
+
+		$db_prefix = $wpdb->prefix;
+		$gd_prefix = 'geodir_';
 
 		$tables = array();
-		$tables[] = GEODIR_API_KEYS_TABLE;
-		$tables[] = GEODIR_ATTACHMENT_TABLE;
-		$tables[] = GEODIR_BUSINESS_HOURS_TABLE;
-		$tables[] = GEODIR_CUSTOM_FIELDS_TABLE;
-		$tables[] = GEODIR_CUSTOM_SORT_FIELDS_TABLE;
-		$tables[] = GEODIR_REVIEW_TABLE;
-		$tables[] = GEODIR_TABS_LAYOUT_TABLE;
+		$tables["{$gd_prefix}api_keys"] = "{$db_prefix}{$gd_prefix}api_keys";
+		$tables["{$gd_prefix}attachments"] = "{$db_prefix}{$gd_prefix}attachments";
+		$tables["{$gd_prefix}custom_fields"] = "{$db_prefix}{$gd_prefix}custom_fields";
+		$tables["{$gd_prefix}custom_sort_fields"] = "{$db_prefix}{$gd_prefix}custom_sort_fields";
+		$tables["{$gd_prefix}post_review"] = "{$db_prefix}{$gd_prefix}post_review";
+		$tables["{$gd_prefix}tabs_layout"] = "{$db_prefix}{$gd_prefix}tabs_layout";
 
 		$post_types = array_keys( (array) geodir_get_option( 'post_types' ) );
 		if ( ! empty( $post_types ) ) {
 			foreach ( $post_types as $post_type ) {
-				$tables[] = "{$plugin_prefix}{$post_type}_detail";
+				$tables["{$gd_prefix}{$post_type}_detail"] = "{$db_prefix}{$gd_prefix}{$post_type}_detail";
 			}
 		}
 
@@ -917,7 +930,7 @@ class GeoDir_Admin_Install {
 
 		$tables = self::get_tables();
 
-		foreach ( $tables as $table ) {
+		foreach ( $tables as $key => $table ) {
 			$wpdb->query( "DROP TABLE IF EXISTS {$table}" ); // phpcs:ignore WordPress.WP.PreparedSQL.NotPrepared
 		}
 	}
@@ -1080,19 +1093,20 @@ class GeoDir_Admin_Install {
 	/**
 	 * Get the Custom Post Type database default fields.
 	 *
+	 * @since 2.0.0
+	 * @since 2.0.0.82 Added _search_title column.
+	 *
 	 * @param bool $cpt CPT parameters.
 	 * @param string $post_type The post type.
-	 * @since 2.0.0
-	 *
 	 * @return array The array of default fields.
 	 */
-	public static function db_cpt_default_columns($cpt = array(),$post_type = ''){
-
+	public static function db_cpt_default_columns( $cpt = array(), $post_type = '' ) {
 		$columns = array();
 
 		// Standard fields
 		$columns['post_id'] = "post_id int(11) NOT NULL";
 		$columns['post_title'] = "post_title text NULL DEFAULT NULL";
+		$columns['_search_title'] = "_search_title text NOT NULL";
 		$columns['post_status'] = "post_status varchar(20) NULL DEFAULT NULL";
 		$columns['post_tags'] = "post_tags text NULL DEFAULT NULL";
 		$columns['post_category'] = "post_category varchar(254) NULL DEFAULT NULL";
@@ -1104,21 +1118,20 @@ class GeoDir_Admin_Install {
 		$columns['rating_count'] = "rating_count int(11) DEFAULT '0'";
 
 		// Location fields
-		if(!isset($cpt['disable_location']) || !$cpt['disable_location']){
+		if ( ! isset( $cpt['disable_location'] ) || ! $cpt['disable_location'] ) {
 			$columns['street'] = "street VARCHAR( 254 ) NULL";
 			$columns['street2'] = "street2 VARCHAR( 254 ) NULL";
 			$columns['city'] = "city VARCHAR( 50 ) NULL";
 			$columns['region'] = "region VARCHAR( 50 ) NULL";
 			$columns['country'] = "country VARCHAR( 50 ) NULL";
-			$columns['zip'] = "zip VARCHAR( 20 ) NULL";
+			$columns['zip'] = "zip VARCHAR( 50 ) NULL";
 			$columns['latitude'] = "latitude VARCHAR( 22 ) NULL";
 			$columns['longitude'] = "longitude VARCHAR( 22 ) NULL";
 			$columns['mapview'] = "mapview VARCHAR( 15 ) NULL";
 			$columns['mapzoom'] = "mapzoom VARCHAR( 3 ) NULL";
 		}
 
-
-		return apply_filters('geodir_db_cpt_default_columns',$columns,$cpt,$post_type);
+		return apply_filters( 'geodir_db_cpt_default_columns', $columns, $cpt, $post_type );
 	}
 
 	/**
@@ -1164,13 +1177,58 @@ class GeoDir_Admin_Install {
      * @global object $wpdb WordPress Database object.
      */
 	public static function upgrades(){
-
 		/**
 		 * DB type change for post_images
 		 */
 		if (get_option( 'geodirectory_version' ) && version_compare(get_option( 'geodirectory_version' ), '2.0.0.13-beta', '<=')) {
 			global $wpdb;
 			$wpdb->query("UPDATE ".GEODIR_ATTACHMENT_TABLE." SET type='post_images' WHERE type='post_image'");
+		}
+	}
+
+	/**
+	 * Check & schedule flush rewrite rules.
+	 *
+	 * @since 2.0.0.92
+	 *
+	 * @return void
+	 */
+	public static function schedule_rewrite_rules() {
+		// Rank Math schedule flush rewrite rules.
+		if ( class_exists( 'RankMath\\Helper' ) ) {
+			update_option( 'geodir_rank_math_flush_rewrite', 1 );
+		}
+	}
+
+	/**
+	 * Execute before default options are set.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @return void
+	 */
+	public static function before_create_options() {
+		// Maybe add try AUI notice
+		self::maybe_try_aui();
+	}
+
+	/**
+	 * Check and set default AUI option value.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @return void
+	 */
+	public static function maybe_try_aui() {
+		if ( self::is_new_install() ) {
+			// New installs should be set to use it by default.
+		} else {
+			if ( get_option( 'geodirectory_version' ) && version_compare( get_option( 'geodirectory_version' ), '2.0.9.0', '<' ) && ! geodir_get_option( 'design_style' ) ) {
+				// Update blank to set default.
+				geodir_update_option( 'design_style', '' );
+
+				GeoDir_Admin_Notices::add_notice( 'try_aui' );
+			}
 		}
 	}
 }

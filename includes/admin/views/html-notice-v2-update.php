@@ -168,7 +168,7 @@ $install_url = wp_nonce_url(
 		_e("Immediate attention required","geodirectory");
 		?>
 	</h2>
-	<p><strong><?php echo sprintf(__("This is a major update and may require some manual work such as adding widgets to sidebars to recreate your current layout. %sLearn more.%s","geodirectory"),"<a href='https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/#summary' target='_blank'>","</a>");?></strong></p>
+	<p><strong><?php echo sprintf(__("This is a major update and may require some manual work such as adding widgets to sidebars to recreate your current layout. %sLearn more.%s","geodirectory"),"<a href='https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2' target='_blank'>","</a>");?></strong></p>
 	<p><?php _e("Not ready? no problem","geodirectory");?><br><strong><a onclick="return confirm('<?php _e("This will downgrade GeoDirectory to the latest version 1","geodirectory");?>');" class="button button-primary" href="<?php echo $install_url;?>" target="_parent"><i class="fas fa-undo-alt"></i> <?php _e("Downgrade to latest v1","geodirectory");?></a></strong></p>
 	<p><strong><?php _e("OR","geodirectory");?></strong></p>
 	<p>
@@ -180,7 +180,7 @@ $install_url = wp_nonce_url(
 <div id="message" class="notice-warning notice notice-alt geodir-message geodir-v1-to-v2-notice">
 	<h2><?php _e( 'GeoDirectory v1 to v2 data conversion:', 'geodirectory' ); ?>
 	</h2>
-	<p><a class="button button-primary" href="https://wpgeodirectory.com/docs-v2/geodirectory/upgrade-from-gdv1/" target="_blank"><i class="fas fa-book"></i> <?php _e("Documentation","geodirectory");?></a></p>
+	<p><a class="button button-primary" href="https://docs.wpgeodirectory.com/article/260-upgrading-from-gdv1-to-gdv2" target="_blank"><i class="fas fa-book"></i> <?php _e("Documentation","geodirectory");?></a></p>
 	<h3><?php _e( 'You need to run the v1 to v2 data conversion now to update your directory database to the latest version to restore your directory functionality.', 'geodirectory' ); ?></h3>
 	<h3><?php _e( 'Please check following requirements before v1 to v2 data conversion:' ); ?></h3>
 	<p><b><?php _e( 'Note:', 'geodirectory' ); ?></b> <?php _e( 'This is a major update, so it is strongly recommended that you backup your database before start running v1 to v2 data conversion.', 'geodirectory' ); ?></p>

@@ -332,7 +332,7 @@ class GeoDir_Admin_Addons {
 //		$install_status = 'get';
 //		$onclick = '';
 
-		$wp_org_themes = array('supreme-directory','directory-starter');
+		$wp_org_themes = array('supreme-directory','directory-starter','whoop');
 
 		$button_args = array(
 			'type' => $current_tab,
@@ -498,6 +498,7 @@ class GeoDir_Admin_Addons {
 	 * Handles output of the addons page in admin.
 	 */
 	public static function output() {
+		add_thickbox();
 		$tabs            = self::get_tabs();
 		$sections        = self::get_sections();
 		$theme           = wp_get_theme();
@@ -513,12 +514,17 @@ class GeoDir_Admin_Addons {
 	 */
 	public static function get_recommend_wp_plugins(){
 		$plugins = array(
+			'ayecode-connect' => array(
+				'url'   => 'https://wordpress.org/plugins/ayecode-connect/',
+				'slug'   => 'ayecode-connect',
+				'name'   => 'AyeCode Connect',
+				'desc'   => __( 'Allows you to install any purchased AyeCode Ltd product add-ons without a zip file. It also installs and activates licences automatically, so there is no need to copy/paste licenses.', 'geodirectory' ),
+			),
 			'ninja-forms' => array(
 				'url'   => 'https://wordpress.org/plugins/ninja-forms/',
 				'slug'   => 'ninja-forms',
 				'name'   => 'Ninja Forms',
 				'desc'   => __('Setup forms such as contact or booking forms for your listings.','geodirectory'),
-				'thumbnail' => "https://ps.w.org/ninja-forms/assets/banner-772x250.png"
 			),
 			'userswp' => array(
 				'url'   => 'https://wordpress.org/plugins/userswp/',

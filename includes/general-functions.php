@@ -121,31 +121,22 @@ function geodir_getlink( $url, $params = array(), $use_existing_arguments = fals
 	return $link;
 }
 
-
 /**
- * Returns add listing page link.
+ * Returns add listing page url.
  *
- * @since   1.0.0
- * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
+ * @since   2.0.0.97
  *
  * @param string $post_type The post type.
- *
- * @return string Listing page url if valid. Otherwise home url will be returned.
+ * @return string Add listing page url.
  */
-function geodir_get_addlisting_link( $post_type = '' ) {
+function geodir_add_listing_page_url( $post_type = '' ) {
 	global $wpdb;
 
-	//$check_pkg  = $wpdb->get_var("SELECT pid FROM ".GEODIR_PRICE_TABLE." WHERE post_type='".$post_type."' and status != '0'");
-	$check_pkg = 1;
-	if ( post_type_exists( $post_type ) && $check_pkg ) {
+	$page_id = geodir_add_listing_page_id( $post_type );
 
-		$add_listing_link = get_page_link( geodir_add_listing_page_id() );
+	$page_link = add_query_arg( array( 'listing_type' => $post_type ), get_page_link( $page_id ) );
 
-		return esc_url( add_query_arg( array( 'listing_type' => $post_type ), $add_listing_link ) );
-	} else {
-		return get_bloginfo( 'url' );
-	}
+	return apply_filters( 'geodir_add_listing_page_url', $page_link, $post_type );
 }
 
 /**
@@ -236,14 +227,42 @@ function geodir_get_weeks() {
 	);
 }
 
+/**
+ * Check that page is.
+ *
+ * @since 1.0.0
+ * 
+ * @global object $wp_query WordPress Query object.
+ * @global object $gd_loop_wp_query WordPress Query object from GD loop.
+ *
+ * @param string $gdpage The page type.
+ *
+ * @return bool If valid returns true. Otherwise false.
+ */
+function geodir_is_page( $gdpage = '' ) {
+	global $wp_query, $gd_loop_wp_query;
+
+	// Backup $wp_query;
+	if ( ! empty( $gd_loop_wp_query ) ) {
+		$backup_wp_query = $wp_query;
+		$wp_query = $gd_loop_wp_query;
+	}
+
+	$is_page = geodir_check_page( $gdpage );
+
+	// Release $wp_query;
+	if ( ! empty( $gd_loop_wp_query ) && isset( $backup_wp_query ) ) {
+		$wp_query = $backup_wp_query;
+	}
+
+	return $is_page;
+}
 
 /**
  * Check that page is.
  *
- * @since   1.0.0
- * @since   1.5.6 Added to check GD invoices and GD checkout pages.
- * @since   1.5.7 Updated to validate buddypress dashboard listings page as a author page.
- * @package GeoDirectory
+ * @since 2.1.0.6
+ *
  * @global object $wp_query WordPress Query object.
  * @global object $post The current post object.
  *
@@ -251,7 +270,7 @@ function geodir_get_weeks() {
  *
  * @return bool If valid returns true. Otherwise false.
  */
-function geodir_is_page( $gdpage = '' ) {
+function geodir_check_page( $gdpage = '' ) {
 	global $wp_query, $post, $wp;
 
 	if ( empty( $wp_query ) ) {
@@ -269,12 +288,17 @@ function geodir_is_page( $gdpage = '' ) {
 	switch ( $gdpage ):
 		case 'add-listing':
 
-			if ( is_page() && $page_id == geodir_add_listing_page_id() ) {
+			if ( is_page() && geodir_is_page_id( $page_id, 'add' ) ) {
 				return true;
 			} elseif ( is_page() && isset( $post->post_content ) && has_shortcode( $post->post_content, 'gd_add_listing' ) ) {
 				return true;
 			}
 
+			break;
+		case 'edit-listing':
+			if ( ! empty( $_REQUEST['pid'] ) && geodir_is_gd_post_type( get_post_type( absint( $_REQUEST['pid'] ) ) ) && geodir_is_page( 'add-listing' ) ) {
+				return true;
+			}
 			break;
 		case 'preview':
 			if ( ( is_page() && $page_id === geodir_preview_page_id() ) && isset( $_REQUEST['listing_type'] )
@@ -361,6 +385,39 @@ function geodir_is_page( $gdpage = '' ) {
 	return false;
 }
 
+/**
+ * Check that page id is.
+ *
+ * @since   2.0.0.97
+ *
+ * @param int $page_id The page id.
+ * @param string $gdpage The page type.
+ *
+ * @return bool If valid returns true. Otherwise false.
+ */
+function geodir_is_page_id( $page_id, $gdpage ) {
+	global $wp_query, $post, $wp;
+
+	if ( empty( $page_id ) || empty( $gdpage ) ) {
+		return false;
+	}
+
+	switch ( $gdpage ) {
+		case 'add':
+		case 'add-listing':
+			if ( $page_id == geodir_add_listing_page_id() ) {
+				return true;
+			} elseif ( geodir_is_cpt_template_page( $page_id, 'add' ) ) {
+				return true;
+			}
+			break;
+		default:
+			return false;
+			break;
+	}
+
+	return false;
+}
 
 /**
  * Sets a key and value in $wp object if the current page is a geodir page.
@@ -389,7 +446,7 @@ function geodir_set_is_geodir_page( $wp ) {
 
 		if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $wp->query_vars['page_id'] ) ) {
 			if (
-				$wp->query_vars['page_id'] == geodir_add_listing_page_id()
+				geodir_is_page_id( $wp->query_vars['page_id'], 'add' )
 				|| $wp->query_vars['page_id'] == geodir_preview_page_id()
 				|| $wp->query_vars['page_id'] == geodir_success_page_id()
 				|| $wp->query_vars['page_id'] == geodir_location_page_id()
@@ -402,7 +459,7 @@ function geodir_set_is_geodir_page( $wp ) {
 			$page = get_page_by_path( $wp->query_vars['pagename'] );
 
 			if ( ! empty( $page ) && (
-					$page->ID == geodir_add_listing_page_id()
+					geodir_is_page_id( $page->ID, 'add' )
 					|| $page->ID == geodir_preview_page_id()
 					|| $page->ID == geodir_success_page_id()
 					|| $page->ID == geodir_location_page_id()
@@ -638,6 +695,7 @@ function geodir_getDistanceRadius( $uom = 'km' ) {
 }
 
 function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
+	global $wp;
 	if ( $unit != 'km' && $unit != 'miles' ) {
 		$unit = geodir_get_option( 'search_distance_long', 'miles' );
 	}
@@ -645,6 +703,8 @@ function geodir_get_between_latlon( $lat, $lon, $dist = '', $unit = '' ) {
 	if ( ! $dist ) {
 		if ( get_query_var( 'dist' ) ) {
 			$dist = get_query_var('dist');
+		}elseif(wp_doing_ajax() && !empty($wp->query_vars['dist'])){
+			$dist = (float)$wp->query_vars['dist'];
 		}else{
 			$dist = geodir_get_option( 'search_radius', 5 ); // seems to work in miles
 			$unit = geodir_get_option( 'search_distance_long', 'miles' );
@@ -756,13 +816,14 @@ function geodir_max_upload_size() {
  * @since   1.5.6 Add geodir-page class to body for all gd pages.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
+ * @global object $wp_query WordPress Query object.
  *
  * @param array $classes Body CSS classes.
  *
  * @return array Modified Body CSS classes.
  */
 function geodir_custom_posts_body_class( $classes ) {
-	global $wpdb, $wp,$gd_post;
+	global $wpdb, $wp, $wp_query, $gd_post;
 	$post_types = geodir_get_posttypes( 'object' );
 	if ( ! empty( $post_types ) && count( (array) $post_types ) > 1 ) {
 		$classes[] = 'geodir_custom_posts';
@@ -770,6 +831,10 @@ function geodir_custom_posts_body_class( $classes ) {
 
 	if ( geodir_is_geodir_page() ) {
 		$classes[] = 'geodir-page';
+
+		// Add post type to class.
+		$_post_type = geodir_get_current_posttype();
+		$classes[] = 'geodir-page-cpt-' . $_post_type;
 	}
 
 	if ( geodir_is_page( 'search' ) ) {
@@ -783,17 +848,42 @@ function geodir_custom_posts_body_class( $classes ) {
 		if(isset($post_types->{$post_type}) && isset($post_types->{$post_type}->disable_location) && $post_types->{$post_type}->disable_location){
 			$classes[] = 'geodir-archive-locationless';
 		}
+
+		// No results.
+		if ( ! empty( $wp_query ) && empty( $wp_query->found_posts ) ) {
+			$classes[] = 'geodir-no-results';
+		}
 	}
 
-	if(geodir_is_page( 'single' ) ){
-		if(!empty($gd_post->default_category)){
-			$classes[] = 'geodir-post-cat-'.absint($gd_post->default_category);
+	if ( geodir_is_page( 'single' ) ) { // Single page
+		if ( ! empty( $gd_post->default_category ) ) {
+			$classes[] = 'geodir-post-cat-'.absint( $gd_post->default_category );
 		}
-		if(!empty($gd_post->featured)){
+		if ( ! empty( $gd_post->featured ) ){
 			$classes[] = 'geodir-featured';
 		}
-	}
+		$classes[] = 'geodir-page-single';
+	} elseif ( geodir_is_page( 'add-listing' ) ) { // Add listing page
+		$classes[] = 'geodir-page-add';
 
+		$post_type = ! empty( $_REQUEST['listing_type'] ) ? sanitize_text_field( $_REQUEST['listing_type'] ) : '';
+
+		// Edit listing page
+		if ( geodir_is_page( 'edit-listing' ) ) {
+			$classes[] = 'geodir-page-edit';
+
+			if ( ! empty( $_REQUEST['pid'] ) && ( $_post_type = get_post_type( absint( $_REQUEST['pid'] ) ) ) ) {
+				$post_type = $_post_type;
+			}
+		}
+
+		// Add/edit post type
+		if ( $post_type ) {
+			$classes[] = 'geodir-form-' . $post_type;
+		}
+	} elseif ( geodir_is_page( 'location' ) ) { // Location page
+		$classes[] = 'geodir-page-location';
+	}
 
 	return $classes;
 }
@@ -809,11 +899,11 @@ add_filter( 'body_class', 'geodir_custom_posts_body_class' ); // let's add a cla
  * @global object $wpdb WordPress Database object.
  * @global string $plugin_prefix Geodirectory plugin table prefix.
  *
- * @param array $query_args The query array.
+ * @param array $deprecated The query array.
  *
  * @return string Orderby SQL.
  */
-function geodir_widget_listings_get_order( $query_args ) {
+function geodir_widget_listings_get_order( $deprecated = '') {
 	global $wpdb, $plugin_prefix, $gd_query_args_widgets;
 
 	$query_args = $gd_query_args_widgets;
@@ -826,8 +916,8 @@ function geodir_widget_listings_get_order( $query_args ) {
 	$sort_by = ! empty( $query_args['order_by'] ) ? $query_args['order_by'] : '';
 
 	$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
+	$orderby = GeoDir_Query::sort_by_children( $orderby, $sort_by, $post_type );
 
-//	echo '###'.$orderby.'###';
 	return $orderby;
 }
 
@@ -849,12 +939,21 @@ function geodir_widget_listings_get_order( $query_args ) {
  * @return mixed Result object.
  */
 function geodir_get_widget_listings( $query_args = array(), $count_only = false ) {
-	global $wpdb, $plugin_prefix, $table_prefix;
-	$GLOBALS['gd_query_args_widgets'] = $query_args;
-	$gd_query_args_widgets            = $query_args;
+	global $wp,$wpdb, $plugin_prefix, $table_prefix,$geodirectory;
 
 	$post_type = empty( $query_args['post_type'] ) ? 'gd_place' : $query_args['post_type'];
 	$table     = $plugin_prefix . $post_type . '_detail';
+
+	// check if this is a GPS filtered query
+	$support_location = $post_type  && GeoDir_Post_types::supports( $post_type , 'location' );
+	if ( $support_location && $latlon = $geodirectory->location->get_latlon() && ! empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' )  ) {
+		// set the order_by
+		$query_args['is_gps_query'] = true;
+		$query_args['order_by'] = 'distance_asc';
+	}
+
+	$GLOBALS['gd_query_args_widgets'] = $query_args;
+	$gd_query_args_widgets            = $query_args;
 
 	$fields = $wpdb->posts . ".*, " . $table . ".*";
 	/**
@@ -882,16 +981,37 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 
 	$post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
 
+	// Show posts with some post statuses on author page.
+	if ( ! empty( $query_args['post_author'] ) && $query_args['post_author'] > 0 && ! empty( $query_args['is_gd_author'] ) && $query_args['post_author'] == (int) get_current_user_id() ) {
+		$statuses = geodir_get_post_statuses();
+
+		if ( isset( $statuses['publish'] ) ) {
+			unset( $statuses['publish'] );
+		}
+
+		if ( isset( $statuses['gd-closed'] ) ) {
+			unset( $statuses['gd-closed'] );
+		}
+
+		if ( ! empty( $statuses ) ) {
+			$post_status = "OR " . $wpdb->posts . ".post_status IN('" . implode( "','", array_keys( $statuses ) ) . "')";
+		}
+	}
+
 	$where = " AND ( " . $wpdb->posts . ".post_status = 'publish' " . $post_status . " ) AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
 
 	// in / not in
-	if ( !empty($query_args['post__in'])) {
-		if(!is_array($query_args['post__in'])){$query_args['post__in'] = explode(",",$query_args['post__in']);}// convert to array if not an array
-		$post__in = implode(',', array_map( 'absint', $query_args['post__in']));
+	if ( ! empty( $query_args['post__in'] ) ) {
+		if ( ! is_array( $query_args['post__in'] ) ) {
+			$query_args['post__in'] = explode( ",", $query_args['post__in'] ); // convert to array if not an array
+		}
+		$post__in = implode( ',', array_map( 'absint', $query_args['post__in'] ) );
 		$where .= " AND {$wpdb->posts}.ID IN ($post__in)";
-	} elseif ( !empty($query_args['post__not_in']) ) {
-		if(!is_array($query_args['post__not_in'])){$query_args['post__not_in'] = explode(",",$query_args['post__not_in']);}// convert to array if not an array
-		$post__not_in = implode(',',  array_map( 'absint', $query_args['post__not_in'] ));
+	} elseif ( ! empty( $query_args['post__not_in'] ) ) {
+		if ( ! is_array( $query_args['post__not_in'] ) ) {
+			$query_args['post__not_in'] = explode( ",",$query_args['post__not_in'] ); // convert to array if not an array
+		}
+		$post__not_in = implode( ',',  array_map( 'absint', $query_args['post__not_in'] ) );
 		$where .= " AND {$wpdb->posts}.ID NOT IN ($post__not_in)";
 	}
 
@@ -918,12 +1038,58 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	$groupby = apply_filters( 'geodir_filter_widget_listings_groupby', $groupby, $post_type );
 
 	if ( $count_only ) {
-		$sql  = "SELECT COUNT(DISTINCT " . $wpdb->posts . ".ID) AS total FROM " . $wpdb->posts . "
+		$fields = "COUNT(DISTINCT " . $wpdb->posts . ".ID) AS total";
+		/**
+		 * Filter widget listing fields string part that is being used to count results.
+		 *
+		 * @since 2.0.0.71
+		 *
+		 * @param string $fields Fields string.
+		 * @param string $table Table name.
+		 * @param string $post_type Post type.
+		 */
+		$fields = apply_filters( 'geodir_filter_widget_listings_count_fields', $fields, $table, $post_type );
+
+		$sql  = "SELECT " . $fields . " FROM " . $wpdb->posts . "
 			" . $join . "
 			" . $where;
+
+		/**
+		 * Filters the listings count SQL query before sending.
+		 *
+		 * @since 2.0.0.71
+		 *
+		 * @param string $sql The SQL query.
+		 * @param string $post_type The post type.
+		 */
+		$sql = apply_filters( 'geodir_filter_widget_listings_count_sql', $sql, $post_type );
+
 		$rows = (int) $wpdb->get_var( $sql );
 	} else {
-		$orderby = geodir_widget_listings_get_order( $query_args );
+		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
+		if ( !empty($query_args['is_gps_query']) ) {
+			$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
+			if(wp_doing_ajax() && !empty($wp->query_vars['dist']) ){
+				$dist = (float)$wp->query_vars['dist'];
+			}
+
+			/*
+			 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
+			 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
+			 */
+			if ( strpos( $where, ' HAVING ') === false && strpos( $groupby, ' HAVING ') === false &&  strpos( $fields, 'AS distance')) {
+				$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
+				if ( trim( $groupby ) != '' ) {
+					$groupby .= $having;
+				} else {
+					$where .= $having;
+				}
+			}
+		}
+		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
+
+		$orderby = geodir_widget_listings_get_order(); // query args passed as global
+
 		/**
 		 * Filter widget listing orderby clause string part that is being used for query.
 		 *
@@ -962,6 +1128,17 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 			" . $groupby . "
 			" . $orderby . "
 			" . $limit;
+
+		/**
+		 * Filters the listings SQL query before sending.
+		 *
+		 * @since 2.0.0.71
+		 *
+		 * @param string $sql The SQL query.
+		 * @param string $post_type The post type.
+		 */
+		$sql = apply_filters( 'geodir_filter_widget_listings_sql', $sql, $post_type );
+
 		$rows = $wpdb->get_results( $sql );
 	}
 
@@ -1358,6 +1535,7 @@ function geodir_allowed_mime_types() {
 				'png'  => 'image/png',
 				'bmp'  => 'image/bmp',
 				'ico'  => 'image/x-icon',
+				'webp' => 'image/webp',
 			),
 			'Video'       => array( // Video formats.
 				'asf'  => 'video/x-ms-asf',
@@ -1506,6 +1684,8 @@ add_filter( 'geodir_seo_meta_description_pre', 'geodir_filter_title_variables', 
  * %%userid%%                    Replaced with the post/page author's userid
  * %%page%%                        Replaced with the current page number (i.e. page 2 of 4)
  * %%pagetotal%%                Replaced with the current page total
+ * %%postcount%%                Replaced with the current post found
+ *
  * %%pagenumber%%                Replaced with the current page number
  *
  * @since   1.5.7
@@ -1568,7 +1748,7 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 
 	if ( strpos( $title, '%%pt_single%%' ) !== false ) {
 		$singular_name = '';
-		if ( $post_type && $singular_name = get_post_type_singular_label( $post_type ) ) {
+		if ( $post_type && $singular_name = geodir_get_post_type_singular_label( $post_type ) ) {
 			$singular_name = __( $singular_name, 'geodirectory' );
 		}
 
@@ -1577,14 +1757,14 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 
 	if ( strpos( $title, '%%pt_plural%%' ) !== false ) {
 		$plural_name = '';
-		if ( $post_type && $plural_name = get_post_type_plural_label( $post_type ) ) {
+		if ( $post_type && $plural_name = geodir_get_post_type_plural_label( $post_type ) ) {
 			$plural_name = __( $plural_name, 'geodirectory' );
 		}
 
 		$title = str_replace( "%%pt_plural%%", $plural_name, $title );
 	}
 
-	if ( strpos( $title, '%%category%%' ) !== false ) {
+	if ( strpos( $title, '%%category%%' ) !== false || strpos( $title, '%%in_category%%' ) !== false ) {
 		$cat_name = '';
 
 		if ( $gd_page == 'detail' ) {
@@ -1597,8 +1777,14 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 			if ( isset( $queried_object->name ) ) {
 				$cat_name = $queried_object->name;
 			}
+		} else if ( $gd_page == 'search' ) {
+			$cat_name = GeoDir_SEO::get_searched_category_name( $post_type . 'category' );
 		}
+
+		$in_cat_name = $cat_name ? wp_sprintf( _x( 'in %s', 'in category', 'geodirectory' ), $cat_name ) : '';
+
 		$title = str_replace( "%%category%%", $cat_name, $title );
+		$title = str_replace( "%%in_category%%", $in_cat_name, $title );
 	}
 
 	if ( strpos( $title, '%%tag%%' ) !== false ) {
@@ -1672,22 +1858,45 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	 */
 	$title = apply_filters( 'geodir_replace_location_variables', $title, $location_array, $gd_page, $sep );
 
+	$search_term = '';
+	if ( isset( $_REQUEST['s'] ) ) {
+		$search_term = esc_attr( $_REQUEST['s'] );
+		$search_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_term ); // apple suck
+		$search_term = trim( stripslashes( $search_term ) );
+	}
+
+	// %%search_term%%
 	if ( strpos( $title, '%%search_term%%' ) !== false ) {
-		$search_term = '';
-		if ( isset( $_REQUEST['s'] ) ) {
-			$search_term = esc_attr( $_REQUEST['s'] );
-			$search_term = str_replace(array("%E2%80%99","’"),array("%27","'"),$search_term);// apple suck
-			$search_term = trim( stripslashes( $search_term ) );
-		}
 		$title = str_replace( "%%search_term%%", $search_term, $title );
 	}
 
-	if ( strpos( $title, '%%search_near%%' ) !== false ) {
-		$search_term = '';
-		if ( isset( $_REQUEST['snear'] ) ) {
-			$search_term = esc_attr( $_REQUEST['snear'] );
+	// %%for_search_term%%
+	if ( strpos( $title, '%%for_search_term%%' ) !== false ) {
+		$for_search_term = $search_term != '' ? wp_sprintf( __( 'for %s', 'geodirectory' ), $search_term ) : '';
+	
+		$title = str_replace( "%%for_search_term%%", $for_search_term, $title );
+	}
+
+	$search_near_term = '';
+	$search_near = '';
+	if ( isset( $_REQUEST['snear'] ) ) {
+		$search_near_term = esc_attr( $_REQUEST['snear'] );
+		$search_near_term = str_replace( array( "%E2%80%99", "’" ), array( "%27", "'" ), $search_near_term ); // apple suck
+		$search_near_term = trim( stripslashes( $search_near_term ) );
+
+		if ( $search_near_term != '' ) {
+			$search_near = wp_sprintf( __( 'near %s', 'geodirectory' ), $search_near_term );
 		}
-		$title = str_replace( "%%search_near%%", $search_term, $title );
+	}
+
+	// %%search_near_term%%
+	if ( strpos( $title, '%%search_near_term%%' ) !== false ) {
+		$title = str_replace( "%%search_near_term%%", $search_near_term, $title );
+	}
+
+	// %%search_near%%
+	if ( strpos( $title, '%%search_near%%' ) !== false ) {
+		$title = str_replace( "%%search_near%%", $search_near, $title );
 	}
 
 	if ( strpos( $title, '%%name%%' ) !== false ) {
@@ -1718,6 +1927,10 @@ function geodir_filter_title_variables( $title, $gd_page, $sep = '' ) {
 	if ( strpos( $title, '%%pagetotal%%' ) !== false ) {
 		$pagetotal = geodir_title_meta_pagetotal();
 		$title     = str_replace( "%%pagetotal%%", $pagetotal, $title );
+	}
+	if ( strpos( $title, '%%postcount%%' ) !== false ) {
+		$postcount = geodir_title_meta_postcount();
+		$title     = str_replace( "%%postcount%%", $postcount, $title );
 	}
 
 	$title = wptexturize( $title );
@@ -1836,11 +2049,30 @@ function geodir_title_meta_pagenumber() {
  * @return string|null The current page total.
  */
 function geodir_title_meta_pagetotal() {
-	$replacement = null;
+	$replacement = 0;
 
 	$max = geodir_title_meta_pagenumbering( 'max' );
 	if ( isset( $max ) && $max > 0 ) {
 		$replacement = (string) $max;
+	}
+
+	return $replacement;
+}
+
+/**
+ * Retrieve the total post found for use as replacement string.
+ *
+ * @since   1.6.0
+ * @package GeoDirectory
+ *
+ * @return string|null The total post found.
+ */
+function geodir_title_meta_postcount() {
+	$replacement = 0;
+
+	$postcount = geodir_title_meta_pagenumbering( 'postcount' );
+	if ( isset( $postcount ) && $postcount > 0 ) {
+		$replacement = (string) $postcount;
 	}
 
 	return $replacement;
@@ -1865,6 +2097,7 @@ function geodir_title_meta_pagenumbering( $request = 'nr' ) {
 	$page_number   = null;
 
 	$max_num_pages = 1;
+	$found_posts = 0;
 
 	if ( ! is_singular() ) {
 		$page_number = get_query_var( 'paged' );
@@ -1875,6 +2108,7 @@ function geodir_title_meta_pagenumbering( $request = 'nr' ) {
 		if ( isset( $wp_query->max_num_pages ) && ( $wp_query->max_num_pages != '' && $wp_query->max_num_pages != 0 ) ) {
 			$max_num_pages = $wp_query->max_num_pages;
 		}
+
 	} else {
 		$page_number = get_query_var( 'page' );
 		if ( $page_number === 0 || $page_number === '' ) {
@@ -1886,6 +2120,10 @@ function geodir_title_meta_pagenumbering( $request = 'nr' ) {
 		}
 	}
 
+	if ( isset( $wp_query->found_posts ) && ( $wp_query->found_posts != '' && $wp_query->found_posts != 0 ) ) {
+		$found_posts = $wp_query->found_posts;
+	}
+
 	$return = null;
 
 	switch ( $request ) {
@@ -1894,6 +2132,9 @@ function geodir_title_meta_pagenumbering( $request = 'nr' ) {
 			break;
 		case 'max':
 			$return = $max_num_pages;
+			break;
+		case 'postcount':
+			$return = $found_posts;
 			break;
 	}
 
@@ -1976,12 +2217,15 @@ function geodir_get_blogurl() {
  * Checks whether a page id is a GD CPT template page or not.
  *
  * @since   2.0.0.28
- * @package GeoDirectory
-
+ * @since   2.0.0.97 Added $page parameter.
+ *
+ * @param int $id Page ID.
+ * @param string $page Page type. Default empty.
  * @return bool If the page is a GD CPT template page returns true. Otherwise false.
  */
-function geodir_is_cpt_template_page( $id ) {
-	$return = wp_cache_get( 'geodir_check_cpt_template_page:' . $id, 'geodir_cpt_template_page' );
+function geodir_is_cpt_template_page( $id, $page = '' ) {
+	$cache_key = 'geodir_check_cpt_template_page:' . $id . ': ' . $page;
+	$return = wp_cache_get( $cache_key, 'geodir_cpt_template_page' );
 
 	if ( $return !== false ) {
 		return (bool)$return;
@@ -1989,13 +2233,15 @@ function geodir_is_cpt_template_page( $id ) {
 
 	$return = 0;
 
-	if ( ! empty( $id ) && ( $pages = geodir_cpt_template_pages() ) ) {
+	if ( ! empty( $id ) && ( $pages = geodir_cpt_template_pages( $page ) ) ) {
 		if ( in_array( $id, $pages ) ) {
 			$return = true;
 		}
 	}
 
-	wp_cache_set( 'geodir_check_cpt_template_page:' . $id, $return, 'geodir_cpt_template_page' );
+	$return = apply_filters( 'geodir_is_cpt_template_page', $return, $id, $page );
+
+	wp_cache_set( $cache_key, $return, 'geodir_cpt_template_page' );
 
 	return $return;
 }
@@ -2004,35 +2250,46 @@ function geodir_is_cpt_template_page( $id ) {
  * Get CPT templage page ids.
  *
  * @since   2.0.0.28
- * @package GeoDirectory
-
+ * @since   2.0.0.97 Added $page parameter.
+ *
+ * @param string $page Page type. Default empty.
  * @return array CPT template page ids.
  */
-function geodir_cpt_template_pages() {
-	$page_ids = wp_cache_get( 'geodir_cpt_template_pages', 'geodir_cpt_template_page' );
+function geodir_cpt_template_pages( $page = '' ) {
+	if ( ! empty( $page ) ) {
+		$page = strpos( $page, 'page_' ) === 0 ? $page : 'page_' . $page;
+	}
+
+	$cache_key = 'geodir_cpt_template_pages:' . $page;
+	$page_ids = wp_cache_get( $cache_key, 'geodir_cpt_template_page' );
 
 	if ( $page_ids !== false ) {
-		return (array)$page_ids;
+		return (array) $page_ids;
 	}
 
 	$post_types = geodir_get_posttypes( 'object' );
-	$pages = array( 'page_details', 'page_archive', 'page_archive_item' );
+	$pages = array( 'page_add', 'page_details', 'page_archive', 'page_archive_item' );
+	if ( ! empty( $page ) ) {
+		$pages = array( $page );
+	}
 
 	$page_ids = array();
 
 	foreach ( $post_types as $post_type => $post_type_obj ) {
-		foreach ( $pages as $page ) {
-			if ( ! empty( $post_type_obj->{$page} ) ) {
-				$page_ids[] = absint( $post_type_obj->{$page} );
+		foreach ( $pages as $_page ) {
+			if ( ! empty( $post_type_obj->{$_page} ) ) {
+				$page_ids[] = absint( $post_type_obj->{$_page} );
 			}
 		}
 	}
+
+	$page_ids = apply_filters( 'geodir_cpt_template_pages', $page_ids, $page );
 
 	if ( ! empty( $page_ids ) ) {
 		$page_ids = array_unique( $page_ids );
 	}
 
-	wp_cache_set( 'geodir_cpt_template_pages', $page_ids, 'geodir_cpt_template_page' );
+	wp_cache_set( $cache_key, $page_ids, 'geodir_cpt_template_page' );
 
 	return $page_ids;
 }
@@ -2045,23 +2302,73 @@ function geodir_cpt_template_pages() {
 
  * @return int The page id.
  */
-function geodir_cpt_template_page($page,$post_type) {
-
-	$default = geodir_get_option($page);
+function geodir_cpt_template_page( $page, $post_type ) {
+	$default = geodir_get_option( $page );
 	$page_id = $default ? $default : '';
-	$pages = array( 'page_details', 'page_archive', 'page_archive_item' );
+	$pages = array( 'page_add', 'page_details', 'page_archive', 'page_archive_item' );
 
+	// Bail if its not a CPT template
+	if ( in_array( $page, $pages ) ) {
+		$post_types = geodir_get_posttypes( 'array' );
 
-	// bail if its not a CPT template
-	if(in_array($page,$pages)){
-
-		$post_types = geodir_get_posttypes( 'object' );
-		if(isset($post_types->{$post_type}->page_details) && $post_types->{$post_type}->page_details){
-			$page_id = $post_types->{$post_type}->page_details;
+		if ( isset( $post_types[ $post_type ][ $page ] ) && $post_types[ $post_type ][ $page ] ) {
+			$page_id = $post_types[ $post_type ][ $page ];
 		}
 	}
 
 	return $page_id;
+}
+
+/**
+ * Get post type of the CPT template page id.
+ *
+ * @since   2.0.0.97 Added $page parameter.
+ *
+ * @param int $page_id Page id.
+ * @param string $page Page type. Default empty.
+ * @return string Post type.
+ */
+function geodir_cpt_template_post_type( $page_id, $page = '' ) {
+	if ( ! empty( $page ) ) {
+		$page = strpos( $page, 'page_' ) === 0 ? $page : 'page_' . $page;
+	}
+
+	$cache_key = 'geodir_cpt_template_post_type:' . $page_id . ':' . $page;
+	$post_type = wp_cache_get( $cache_key, 'geodir_cpt_template_post_type' );
+
+	if ( $post_type ) {
+		return $post_type;
+	}
+
+	$pages = array( 'page_add', 'page_details', 'page_archive', 'page_archive_item' );
+	if ( ! empty( $page ) ) {
+		$pages = array( $page );
+	}
+
+	$post_types = geodir_get_posttypes( 'object' );
+	foreach ( $post_types as $_post_type => $post_type_obj ) {
+		if ( $post_type ) {
+			break;
+		}
+
+		foreach ( $pages as $_page ) {
+			if ( ! empty( $post_type_obj->{$_page} ) ) {
+				$_page_id = absint( $post_type_obj->{$_page} );
+				$page_ids = apply_filters( 'geodir_cpt_template_pages', array( $_page_id ), $page );
+
+				if ( in_array( $page_id, $page_ids ) ) {
+					$post_type = $_post_type;
+					break;
+				}
+			}
+		}
+	}
+
+	$post_type = apply_filters( 'geodir_cpt_template_post_type', $post_type, $page_id, $page );
+
+	wp_cache_set( $cache_key, $post_type, 'geodir_cpt_template_post_type' );
+
+	return $post_type;
 }
 
 /**
@@ -2118,5 +2425,237 @@ function geodir_localize_jquery_ui_timepicker() {
 		return;
 	}
 	
-	wp_add_inline_script( 'geodir-jquery-ui-timepicker', "jQuery(document).ready(function(jQuery){jQuery.timepicker.setDefaults({$timepicker_defaults});});" );
+	wp_add_inline_script( 'geodir-jquery-ui-timepicker', 'jQuery(function($){$.timepicker.setDefaults(' . $timepicker_defaults . ');});' );
+}
+
+/**
+ * Get the listing layout view options.
+ *
+ * @since 2.0.0.60
+ * @return mixed|void
+ */
+/**
+ * Get the listing layout view options.
+ *
+ * @since 2.0.0.60
+ * @param bool $frontend If the call is for frontend user select.
+ *
+ * @return mixed|void
+ */
+function geodir_get_layout_options($frontend = false){
+	$layouts = array(
+		"1"        =>  $frontend ? __( 'View: Grid 1', 'geodirectory') : __('Grid View (One Column)', 'geodirectory'),
+		"2"        =>  $frontend ? __( 'View: Grid 2', 'geodirectory' ) : __('Grid View (Two Columns)', 'geodirectory'),
+		"3"        =>  $frontend ? __( 'View: Grid 3', 'geodirectory' ) : __('Grid View (Three Columns)', 'geodirectory'),
+		"4"        =>  $frontend ? __( 'View: Grid 4', 'geodirectory' ) : __('Grid View (Four Columns)', 'geodirectory'),
+		"5"        =>  $frontend ? __( 'View: Grid 5', 'geodirectory' ) : __('Grid View (Five Columns)', 'geodirectory'),
+		"0"        =>  $frontend ? __( 'View: List', 'geodirectory') : __('List view', 'geodirectory'),
+	);
+
+	return apply_filters('geodir_layout_options',$layouts,$frontend);
+}
+
+
+/**
+ * If hints are active and shouled be shown.
+ * 
+ * @return bool
+ */
+function geodir_show_hints(){
+	$show = false;
+	if(geodir_get_option('enable_hints',1)){
+		if(current_user_can('administrator')) {
+			$show = true;
+		}
+	}
+
+	return $show;
+}
+
+function geodir_output_hint($hints, $docs_url = '',$video_url = '',$feedback_id = ''){
+	$html = geodir_format_hints($hints, $docs_url,$video_url,$feedback_id);
+	$notifications = array();
+	$notifications[$feedback_id] = array(
+		'type'  =>  'info',
+		'note'  =>  $html,
+		'dismissible'  =>  true
+	);
+	return geodir_notification( $notifications );
+}
+
+function geodir_format_hints($hints, $docs_url = '',$video_url = '',$feedback_id = ''){
+	$text = '';
+
+	if(is_array($hints)){
+		$text .= "<ul class='gd-hints-list' style='margin: 0;padding: 0 2em;'>";
+		foreach($hints as $hint){
+			$text .= "<li>".$hint."</li>";
+		}
+		$text .= "</ul>";
+	}else{
+		$text .= $hints;
+	}
+
+	$feedback_url = $feedback_id ? "https://wpgeodirectory.com/support/forum/geodirectory-core-plugin-forum/general-discussion/?feedback=$feedback_id#new-post" : "https://wpgeodirectory.com/support/forum/geodirectory-core-plugin-forum/general-discussion/#new-post";
+
+	if($text){
+		$help_links = array();
+		$help_links[] = "<a href='".admin_url( 'admin.php?page=gd-settings&tab=general&section=developer#enable_hints' )."'>".__("Disable hints","geodirectory")."</a>";
+		$docs_url ? $help_links[] = "<i class=\"fas fa-book\"></i> <a href='$docs_url' target='_blank'>".__("Documentation","geodirectory")."</a>" : '';
+		$video_url ? $help_links[] = "<i class=\"fas fa-video\"></i> <a href='$video_url' target='_blank' data-lity>".__("Video","geodirectory")."</a>" : '';
+		$feedback_id ? $help_links[] = "<i class=\"fas fa-comment\"></i> <a href='$feedback_url' target='_blank'>".__("Feedback","geodirectory")."</a>" : '';
+		$text = "<b>".__("Admin Hints:","geodirectory")."</b> " . implode(" | ",$help_links) . $text;
+	}
+
+	return $text;
+}
+
+/**
+ * @since 2.0.0.74
+ */
+function geodir_create_nonce( $action = -1 ) {
+	do_action( 'geodir_create_nonce_before', $action );
+
+	$nonce = wp_create_nonce( $action );
+
+	do_action( 'geodir_create_nonce_after', $action, $nonce );
+
+	return apply_filters( 'geodir_create_nonce', $nonce, $action );
+}
+
+/**
+ * @since 2.0.0.74
+ */
+function geodir_nonce_token( $action = -1, $uid = 0 ) {
+	$token = wp_get_session_token();
+	$i = wp_nonce_tick();
+
+	return substr( wp_hash( $i . '|' . $action . '|' . $uid . '|' . $token, 'nonce' ), -12, 10 );
+}
+
+/**
+ * Show post distance with unit.
+ *
+ * @since 2.0.0.96
+ *
+ * @param float $distance Distance.
+ * @param string $short_unit Short distance unit. meters or feet.
+ * @return string Distance with unit.
+ */
+function geodir_show_distance( $distance, $short_unit = '' ) {
+	$unit = geodir_get_option( 'search_distance_long' );
+
+	if ( $unit != 'km' && $unit != 'miles' ) {
+		$unit = 'miles';
+	}
+
+	if ( $short_unit != 'feet' && $short_unit != 'meters' ) {
+		$short_unit = geodir_get_option( 'search_distance_short' );
+
+		if ( $short_unit != 'feet' && $short_unit != 'meters' ) {
+			$short_unit = 'feet';
+		}
+	}
+
+	$_distance = $distance;
+	$_unit = $unit;
+
+	if ( $unit == 'km' ) {
+		if ( round( $distance, 3 ) < 0.1 ) {
+			if ( $short_unit == 'meters' ) {
+				$_distance = round( round( $distance * 1000, 3 ) ); // km => meters
+				$_unit = __( 'meters', 'geodirectory' );
+			} elseif ( $short_unit == 'feet' ) {
+				$_distance = round( round( $distance * 3280.8399, 3 ) ); // km => feet
+				$_unit = __( 'feet', 'geodirectory' );
+			} else {
+				$_distance =  round( $distance, 2 );
+			}
+		} else {
+			$_distance =  round( $distance, 2 );
+		}
+	} elseif ( $unit == 'miles' ) {
+		if ( round( $distance, 3 ) < 0.1 ) {
+			if ( $short_unit == 'meters' ) {
+					$_distance = round( round( $distance * 1609.344, 3 ) ); // miles => meters
+					$_unit = __( 'meters', 'geodirectory' );
+			} elseif ( $short_unit == 'feet' ) {
+				$_distance = round( round( $distance * 5280, 3 ) ); // miles => feet
+				$_unit = __( 'feet', 'geodirectory' );
+			} else {
+				$_distance =  round( $distance, 2 );
+			}
+		} else {
+			$_distance =  round( $distance, 2 );
+		}
+	} else {
+		$_distance =  round( $distance, 2 );
+	}
+
+	/** 
+	* Filter to change format of distance. 
+	*
+	* @param $_distance distance value 
+	* @param $_unit unit of distance. 
+	*/
+	$content = apply_filters( 'geodir_show_distance', $_distance . ' ' .  $_unit, $_distance, $_unit );
+
+	return $content;
+}
+
+/**
+ * Get the design style for the site.
+ *
+ * This determines what template files are used.
+ *
+ * @since 2.1.0
+ * @return mixed
+ */
+function geodir_design_style(){
+	return geodir_get_option("design_style",'bootstrap');
+}
+
+/**
+ * Check if Gutenberg is in use.
+ *
+ * @since 2.1.0
+ * @return bool
+ */
+function geodir_is_gutenberg(){
+	global $wp_version;
+	$gutenberg = true;
+
+	// if less than v5
+	if ( version_compare( $wp_version, '5.0.0', '<' ) ) {
+		$gutenberg = false;
+	}
+
+	// if plugin active to disable
+	if(class_exists('Classic_Editor')){
+		$gutenberg = false;
+	}
+
+	return $gutenberg;
+}
+
+/**
+ * Map lazy load..
+ *
+ * @since 2.1.0.0
+ *
+ * @return string Map lazy load type.
+ */
+function geodir_lazy_load_map() {
+	return GeoDir_Maps::lazy_load_map();
+}
+
+/**
+ * Array of map parameters.
+ *
+ * @since 2.1.0.0
+ *
+ * @return array Map params array.
+ */
+function geodir_map_params() {
+	return GeoDir_Maps::get_map_params();
 }

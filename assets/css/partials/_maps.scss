@@ -42,8 +42,11 @@
     .map-places-listing{
       ul.place-list{
         list-style: none !important;
-        margin: 0 !important;
-        padding: 0 25px  !important;
+        margin-top: 0 !important;
+		margin-right: 0 !important;
+		margin-bottom: 0 !important;
+		margin-left: 0;
+        padding: 0 25px !important;
         list-style-type: none !important;
         line-height: unset !important;
 
@@ -54,6 +57,10 @@
           &:first-child{
             padding-left: 0;
           }
+        }
+
+        &:first-child{
+          padding-left: 0 !important;
         }
       }
     }

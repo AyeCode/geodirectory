@@ -184,6 +184,8 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 
 		$prepared_args = array();
 
+		$prepared_args['geodir_rest_review'] = true;
+
 		/*
 		 * For each known parameter which is both registered and present in the request,
 		 * set the parameter's value on the query $prepared_args.
@@ -784,15 +786,22 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 		$review = $this->get_review( $comment->comment_ID );
 		if ( ! empty( $review ) ) {
 			$data['post_type'] = $review->post_type;
-			$data['rating'] = (float) $review->rating;
 			$data['country'] = $review->country;
 			$data['region'] = $review->region;
 			$data['city'] = $review->city;
 			$data['latitude'] = $review->latitude;
 			$data['longitude'] = $review->longitude;
+			$data['rating'] = array(
+				'id' => 'overall',
+				'label' => __( 'Overall', 'geodirectory' ),
+				'rating' => (float) $review->rating,
+				'html' => GeoDir_Comments::rating_html( (float) $review->rating )
+			);
 		}
 	
 		$schema = $this->get_item_schema();
+
+		$data = apply_filters( 'geodir_rest_prepare_review_data', $data, $review, $comment, $schema, $request );
 
 		if ( ! empty( $schema['properties']['author_avatar_urls'] ) ) {
 			$data['author_avatar_urls'] = rest_get_avatar_urls( $comment->comment_author_email );
@@ -822,7 +831,7 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 		 * @param WP_Comment        $comment  The original comment object.
 		 * @param WP_REST_Request   $request  Request used to generate the response.
 		 */
-		return apply_filters( 'rest_prepare_comment', $response, $comment, $request );
+		return apply_filters( 'geodir_rest_prepare_comment', $response, $comment, $request );
 	}
 
 	/**
@@ -922,7 +931,7 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 				break;
 		}
 
-		return $normalized;
+		return apply_filters( 'geodir_rest_reviews_normalize_query_param', $normalized, $query_param, $prefix );
 	}
 
 	/**
@@ -1061,7 +1070,7 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 	public function get_item_schema() {
 		$schema = array(
 			'$schema'              => 'http://json-schema.org/draft-04/schema#',
-			'title'                => 'comment',
+			'title'                => 'geodir_review',
 			'type'                 => 'object',
 			'properties'           => array(
 				'id'               => array(
@@ -1180,6 +1189,11 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 					'context'      => array( 'view', 'edit', 'embed' ),
 					'readonly'     => true,
 				),
+				'rating'           => array(
+					'description'  => __( 'Overall main rating stars.' ),
+					'type'         => 'integer',
+					'context'      => array( 'view', 'edit' ),
+				),
 			),
 		);
 
@@ -1208,7 +1222,9 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 
 		$schema['properties']['meta'] = $this->meta->get_field_schema();
 
-		return $this->add_additional_fields_schema( $schema );
+		$schema = $this->add_additional_fields_schema( $schema );
+
+		return apply_filters( 'geodir_rest_review_schema', $schema );
 	}
 
 	/**
@@ -1365,7 +1381,7 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 		 *
 		 * @param array $query_params JSON Schema-formatted collection parameters.
 		 */
-		return apply_filters( 'rest_comment_collection_params', $query_params );
+		return apply_filters( 'geodir_rest_comment_collection_params', $query_params );
 	}
 
 	/**
@@ -1570,7 +1586,7 @@ class GeoDir_REST_Reviews_Controller extends WP_REST_Comments_Controller {
 	public static function get_review( $comment_ID ) {
 		global $wpdb;
 
-		$sql = $wpdb->prepare( "SELECT rating, ratings, attachments, post_type, city, region, country, latitude, longitude FROM `" . GEODIR_REVIEW_TABLE . "` WHERE comment_id = %d", array( $comment_ID ) );
+		$sql = $wpdb->prepare( "SELECT * FROM `" . GEODIR_REVIEW_TABLE . "` WHERE comment_id = %d", array( $comment_ID ) );
 		return $wpdb->get_row( $sql );
 	}
 }

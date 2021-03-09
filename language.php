@@ -13,16 +13,14 @@
  * Bad Example define('EXAMPLE_TEXT',__('It's a nice day.','geodirectory'));
  */
 
-//header_searchform.php
+/**
+ * deprecated @since 2.0.0.68 (no longer in use)
+ */
 define('NEAR_TEXT', __('Near', 'geodirectory'));
 define('SEARCH_FOR_TEXT', __('Search for', 'geodirectory'));
 define('SEARCH_FOR_MSG', __('food, products or place', 'geodirectory'));
 define('SEARCH_NEAR_MSG', __('Zip code or address', 'geodirectory'));
 define('SEARCH', __('Search', 'geodirectory'));
-
-
-/* ---- Add Listing ---- */
-
 define('ADD_LISTING_TEXT', __('Add Listing', 'geodirectory'));
 define('MY_LISTINGS_TEXT', __('My Listings', 'geodirectory'));
 define('LOGINORREGISTER', __("Login or Register", 'geodirectory'));
@@ -31,18 +29,13 @@ define('EXISTING_USER_TEXT', __("Existing User", 'geodirectory'));
 define('NEW_USER_TEXT', __("New User? Register Now", 'geodirectory'));
 define('LOGIN_TEXT', __('Login', 'geodirectory'));
 define('SUBMIT_BUTTON', __('Submit', 'geodirectory'));
-
-
 define('CONTACT_DETAIL_TITLE', __('Publisher Information', 'geodirectory'));
 define('CONTACT_NAME_TEXT', __('Name', 'geodirectory'));
 define('CONTACT_TEXT', __('Contact Number', 'geodirectory'));
 define('EMAIL_TEXT', __('Email', 'geodirectory'));
-
 define('LISTING_DETAILS_TEXT', __('Enter Listing Details', 'geodirectory'));
-
-define('PLACE_TITLE_TEXT', __('Listing Title', 'geodirectory')); // deprecated @since 1.6.3
-define('PLACE_DESC_TEXT', __('Listing Description', 'geodirectory'));// deprecated @since 1.6.3
-
+define('PLACE_TITLE_TEXT', __('Listing Title', 'geodirectory'));
+define('PLACE_DESC_TEXT', __('Listing Description', 'geodirectory'));
 define('LISTING_ADDRESS_TEXT', __('Listing Address:', 'geodirectory'));
 define('PLACE_ADDRESS', __('Address:', 'geodirectory'));
 define('ADDRESS_MSG', __('Please enter the listing street address. eg. : 230 Vine Street', 'geodirectory'));
@@ -53,10 +46,8 @@ define('PLACE_ZIP_TEXT', __('Zip/PostCode:', 'geodirectory'));
 define('PLACE_ADDRESS_LAT', __('Address Latitude', 'geodirectory'));
 define('PLACE_ADDRESS_LNG', __('Address Longitude', 'geodirectory'));
 define('PLACE_MAP_VIEW', __('Google Map View', 'geodirectory'));
-
 define('NOT_WITH_PACKAGE', __('Not available with the selected package.', 'geodirectory'));
 define('NO_CATEGORY_LISTINGS', __('<b>No Listings here</b>', 'geodirectory'));
-
 define('PRO_DESCRIPTION_TEXT', __('Listing Description', 'geodirectory'));
 define('PRO_FEATURE_TEXT', __('Special Offers', 'geodirectory'));
 define('PLACE_TIMING', __('Time', 'geodirectory'));
@@ -65,26 +56,17 @@ define('PLACE_CONTACT_EMAIL', __('Email', 'geodirectory'));
 define('WEBSITE_TEXT', __('Website', 'geodirectory'));
 define('TWITTER_TEXT', __('Twitter', 'geodirectory'));
 define('FACEBOOK_TEXT', __('Facebook', 'geodirectory'));
-
 define('PLACE_CATEGORY_TEXT', __('Category', 'geodirectory'));
-
 define('PRO_PHOTO_TEXT', __('Add Images : <small>(You can upload more than one images to create image gallery on detail page)</small>', 'geodirectory'));
 define('PHOTOES_BUTTON', __('Select Images', 'geodirectory'));
-
 define('PRO_VIDEO_TEXT', __('Video code', 'geodirectory'));
 define('HTML_VIDEO_TEXT', __('Add video code here, YouTube etc', 'geodirectory'));
-
 define('PRO_ADDFEATURE_TEXT', __('Add custom feature', 'geodirectory'));
-
 define('MAP_NO_RESULTS', __('<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your search criteria and try again.</p>', 'geodirectory'));
-
 define('LISTINGMAP_PAGE_VALIDATION_TEXT', __('<h3>No Record Found</h3><p>Sorry, This widget can only be used on listing page.</p>', 'geodirectory'));
 define('SINGLEMAP_PAGE_VALIDATION_TEXT', __('<h3>No Record Found</h3><p>Sorry, This widget can only be used on place page.</p>', 'geodirectory'));
-
-
 define('CAPTCHA_TITLE_TEXT', __('Captcha Verification', 'geodirectory'));
 define('CAPTCHA', __('Word Verification', 'geodirectory'));
-
 define('GOING_TO_PAY_MSG', __('This is a preview of your listing and its not published yet. <br />If there is something wrong then "Go back and edit" or if you want to add listing then click on "Publish".<br> You are going to pay <b>%s</b> &  alive days are <b>%s</b> as %s listing', 'geodirectory'));
 define('GOING_TO_UPDATE_MSG', __('This is a preview of your listing and its not updated yet. <br />If there is something wrong then "Go back and edit" or if you want to update listing then click on "Update now"', 'geodirectory'));
 define('GOING_TO_FREE_MSG', __('This is a preview of your listing and its not published yet. <br />If there is something wrong then "Go back and edit" or if you want to add listing then click on "Publish".<br> Your %s listing will published for <b>%s</b> days', 'geodirectory'));
@@ -94,22 +76,14 @@ define('PRO_BACK_AND_EDIT_TEXT', __('&laquo; Go Back and Edit', 'geodirectory'))
 define('PRO_UPDATE_BUTTON', __('Update Now', 'geodirectory'));
 define('PRO_SUBMIT_BUTTON', __('Publish', 'geodirectory'));
 define('PRO_CANCEL_BUTTON', __('Cancel', 'geodirectory'));
-
-
 define('PUBLISH_DAYS_TEXT', __('%s : number of publish days are %s (<span id="%s">%s %s</span>)', 'geodirectory'));
 define('SELECT_PAY_MEHTOD_TEXT', __('Select Payment Method', 'geodirectory'));
-
-
-/* ---- favourite ---- */
 define('FAVOURITE_TEXT', __('Favorite', 'geodirectory'));
 define('UNFAVOURITE_TEXT', __('Unfavorite', 'geodirectory'));
 define('MY_FAVOURITE_TEXT', __('My Favorites', 'geodirectory'));
 define('ADD_FAVOURITE_TEXT', __('Add to Favorites', 'geodirectory'));
 define('REMOVE_FAVOURITE_TEXT', __('Remove from Favorites', 'geodirectory'));
 define('FAVOURITE_NOT_AVAIL_MSG', __('You have not added any favorites yet.', 'geodirectory'));
-
-
-/* ---- Messages ---- */
 define('REGISTRATION_DESABLED_MSG', __('New user registration disabled.', 'geodirectory'));
 define('TIMING_MSG', __('Enter Business or Listing Timing Information. <br /> eg. : <b>10.00 am to 6 pm every day</b>', 'geodirectory'));
 define('EMAIL_TEXT_MSG', __('Enter valid Email otherwise you will face an error.', 'geodirectory'));
@@ -126,13 +100,8 @@ define('CATEGORY_MSG', __('Select listing category from here. Select at least on
 define('HTML_TAGS_ALLOW_MSG', __('Note : Basic HTML tags are allowed', 'geodirectory'));
 define('HTML_SPECIAL_TEXT', __('Note: List out any special offers (optional)', 'geodirectory'));
 define('IMAGE_SAVE_ORDERING_MSG', __('Note : You can sort images once the post is saved by clicking on "Edit" on the listing', 'geodirectory'));
-
-
-/* ---- Place Detail ---- */
 define('VERIFY_PAGE_TITLE', __('Verify Listing', 'geodirectory'));
 define('WRONG_CAPTCH_MSG', __('Enter correct verification code.', 'geodirectory'));
-
-//comments.php
 define('COMMENTS_TITLE_PLACE', __('Place Your Review', 'geodirectory'));
 define('COMMENTS_TITLE_BLOG', __('Your Comments', 'geodirectory'));
 define('RATING_MSG', __('Rate this place by clicking a star below :', 'geodirectory'));
@@ -141,7 +110,6 @@ define('REVIEW_TEXT', __('Review', 'geodirectory'));
 define('COMMENT_TEXT2', __('Comments', 'geodirectory'));
 define('REVIEW_TEXT2', __('Reviews', 'geodirectory'));
 define('REVIEW_SUBMIT_BTN', __('Submit Review', 'geodirectory'));
-//comments_functions.php
 define('OWNER_TEXT', __('Business Owner', 'geodirectory'));
 define('SITE_ADMIN', __('Site Admin', 'geodirectory'));
 define('COMMENT_TRACKBACKS', __('Trackbacks For This Post', 'geodirectory'));
@@ -160,31 +128,23 @@ define('COMMENT_REPLY_NAME', __('Reply', 'geodirectory'));
 define('COMMENT_EDIT_NAME', __('Edit', 'geodirectory'));
 define('COMMENT_DELETE_NAME', __('Delete', 'geodirectory'));
 define('COMMENT_SPAM_NAME', __('Spam', 'geodirectory'));
-//widget_functios.php
 define('ENTER_LOCATION_TEXT', __('Enter Your Location', 'geodirectory'));
 define('READMORE_TEXT', __('Read More...', 'geodirectory'));
-//dashboard.php
 define('DASHBOARD_TEXT', __('Dashboard', 'geodirectory'));
 define('EDIT_PROFILE_PAGE_TITLE', __('Edit Profile', 'geodirectory'));
 define('CHANGE_PW_TEXT', __('Change Password', 'geodirectory'));
 define('LOGOUT_TEXT', __('Logout', 'geodirectory'));
 define('WELCOME_TEXT', __('Welcome', 'geodirectory'));
-
-
-//registration.php
 define('FORGOT_PW_TEXT', __('Forgot Password?', 'geodirectory'));
 define('USERNAME_EMAIL_TEXT', __('E-mail', 'geodirectory'));
 define('USERNAME_TEXT', __('Email', 'geodirectory'));
 define('PASSWORD_TEXT', __('Password', 'geodirectory'));
 define('CONFIRM_PASSWORD_TEXT', __('Confirm Password', 'geodirectory'));
-
 define('PASSWORD_LENGTH_MSG', __('Enter your user password, must be 7 characters or more', 'geodirectory'));
 define('PASSWORD_LENGTH_TEXT', __('Password must be 7 characters or more', 'geodirectory'));
 define('PASSWORD_MATCH_TEXT', __('Passwords do not match', 'geodirectory'));
-
 define('REMEMBER_ON_COMPUTER_TEXT', __('Remember me on this computer', 'geodirectory'));
 define('GET_NEW_PW_TEXT', __('Get New Password', 'geodirectory'));
-
 define('REGISTRATION_NOW_TEXT', __('Sign Up Now', 'geodirectory'));
 define('PERSONAL_INFO_TEXT', __('Personal Information', 'geodirectory'));
 define('FIRST_NAME_TEXT', __('Full Name', 'geodirectory'));
@@ -215,18 +175,10 @@ define('DESIGN_POST_TYPE', __('Post Type', 'geodirectory'));
 define('DESIGN_POST_TYPE_CAT', __('Category', 'geodirectory'));
 define('CSV_INSERT_DATA', __('Data inserted successfully.', 'geodirectory'));
 define('CSV_TOTAL_RECORD', __('%s record(s) inserted.', 'geodirectory'));
-
-
 define('CSV_INVALID_TOTAL_RECORD', __('%s out of %s record(s) could not be inserted due to blank address. Address fields post_address, post_country, post_region, post_city, post_latitude and post_longitude are mandatory fields.', 'geodirectory'));
-
 define('CSV_INVALID_DEFUALT_ADDRESS', __('%s out of %s record(s) could not be inserted due to invalid address. You can import data in default location only as you do not have multilocation ad-on enabled.', 'geodirectory'));
-
-
 define('CSV_INVALID_POST_TYPE', __('%s out of %s record(s) could not be inserted due to invalid/blank post type. Only use geodirectory\'s post type.', 'geodirectory'));
-
-
 define('CSV_BLANK_POST_TITLE', __('%s out of %s record(s) could not be inserted due to blank post title.', 'geodirectory'));
-
 define('CSV_TRANSFER_IMG_FOLDER', __("Please transfer all new images to <b>'%s'</b> folder.", 'geodirectory'));
 define('CSV_INVAILD_FILE', __('File you are uploading is not valid. First colum should be "Post Title".', 'geodirectory'));
 define('CSV_UPLOAD_ONLY', __('Please upload CSV file only.', 'geodirectory'));
@@ -234,7 +186,6 @@ define('SELECT_CSV_FILE', __('Select CSV file to upload', 'geodirectory'));
 define('SELECT_UPLOAD_CSV', __('Select & Upload CSV', 'geodirectory'));
 define('CSV_IMPORT_DATA', __('Import data now', 'geodirectory'));
 define('PLZ_SELECT_CSV_FILE', __('Please select csv file.', 'geodirectory'));
-
 define('FEATURED_IMG_CLASS', __('featured_img_class', 'geodirectory'));
 
 /*

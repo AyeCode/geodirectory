@@ -25,14 +25,9 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 function geodir_get_option( $key = '', $default = false ) {
 	global $geodir_options;
-	//if ( isset( $geodir_options[ $key ] ) ) {
-	$value = isset( $geodir_options[ $key ] ) ? $geodir_options[ $key ] : $default;
-	/*} else { // TODO remove once all settings moved to one option
-		$value = get_option( $key, $default );
-		geodir_error_log( $key, '', __FILE__, __LINE__ );
-	}*/
 
-	//print_r($geodir_options);
+	$value = isset( $geodir_options[ $key ] ) ? $geodir_options[ $key ] : $default;
+
 	$value = apply_filters( 'geodir_get_option', $value, $key, $default );
 
 	return apply_filters( 'geodir_get_option_' . $key, $value, $key, $default );
@@ -58,8 +53,6 @@ function geodir_update_option( $key = '', $value = false ) {
 	if ( empty( $key ) ) {
 		return false;
 	}
-
-	//update_option( $key, $value ); // TODO remove once all settings moved to one option
 
 	$options = get_option( 'geodir_settings' );
 	if ( empty( $options ) ) {
@@ -96,8 +89,6 @@ function geodir_delete_option( $key = '' ) {
 	if ( empty( $key ) ) {
 		return false;
 	}
-
-	//delete_option( $key ); // TODO remove once all settings moved to one option
 
 	$options = get_option( 'geodir_settings' );
 	if ( empty( $options ) ) {

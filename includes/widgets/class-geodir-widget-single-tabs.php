@@ -21,9 +21,12 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['tabs','details','geodir']",
-            'block-output'   => array( // the block visual output elements as an array
+            'block-supports'=> array(
+                'customClassName'   => false
+            ),
+            'block-outputx'   => array( // the block visual output elements as an array
                 array(
                     'element' => 'div',
                     'title'   => __( 'Placeholder tabs', 'geodirectory' ),
@@ -40,23 +43,65 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             'base_id'       => 'gd_single_tabs', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Single Tabs','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-single-tabs-container', // widget class
+                'classname'   => 'geodir-single-tabs-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows the current posts tabs information.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),
             'arguments'     => array(
                 'show_as_list'  => array(
-                    'title' => __('Show as list:', 'geodirectory'),
+                    'title' => __('Show as list', 'geodirectory'),
                     'desc' => __('This will show the tabs as a list and not as tabs.', 'geodirectory'),
                     'type' => 'checkbox',
                     'desc_tip' => true,
                     'value'  => '1',
                     'default'  => '',
-                    'advanced' => true
+                    'advanced' => false
                 ),
+                'output'  => array(
+                    'title' => __('Output Type', 'geodirectory'),
+                    'desc' => __('What parts should be output.', 'geodirectory'),
+                    'type' => 'select',
+                    'options'   =>  array(
+                        "" => __('Default', 'geodirectory'),
+                        "head" => __('Head only', 'geodirectory'),
+                        "body" => __('Body only', 'geodirectory'),
+                        "json" => __('JSON Array (developer option)', 'geodirectory'),
+                    ),
+                    'default'  => '',
+                    'desc_tip' => true,
+                    'advanced' => true
+                )
             )
         );
 
+        $design_style = geodir_design_style();
+
+        if($design_style){
+            $options['arguments']['tab_style'] = array(
+                'title' => __('Tab style', 'geodirectory'),
+                'desc' => __('Output tab head as standard tabs or as pills.', 'geodirectory'),
+                'type' => 'select',
+                'options'   =>  array(
+                    "" => __('Tabs', 'geodirectory'),
+                    "pills" => __('Pills', 'geodirectory'),
+                ),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => false,
+//                'group'     => __("Design","geodirectory")
+            );
+
+            $options['arguments']['disable_greedy'] = array(
+                'title' => __('Disable Greedy Menu', 'geodirectory'),
+                'desc' => __('Greedy menu prevents a large menu falling onto another line by adding a dropdown select.', 'geodirectory'),
+                'type' => 'checkbox',
+                'desc_tip' => true,
+                'value'  => '1',
+                'default'  => '',
+                'advanced' => false,
+//                'group'     => __("Design","geodirectory")
+            );
+        }
 
         parent::__construct( $options );
     }
@@ -70,13 +115,19 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
      *
      * @return mixed|string|void
      */
-    public function output($args = array(), $widget_args = array(),$content = ''){
-        global $preview, $post,$gd_post;
-        if(!isset($post->ID)){return '';}
-        // options
+    public function output( $args = array(), $widget_args = array(), $content = '' ) {
+        global $preview, $post, $gd_post, $gd_single_tabs_array;
+
+        if ( ! isset( $post->ID ) ) {
+            return '';
+        }
+
+        // Default options
         $defaults = array(
             'show_as_list' => '0', // 0 =  all
-            //'title_tag' => 'h4',
+            'output' => '',
+            'tab_style' => '',
+            'disable_greedy' => '',
         );
 
         /**
@@ -84,130 +135,69 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
          */
         $args = wp_parse_args( $args, $defaults );
 
+        // Check if we have been here before
+        $tabs_array = ! empty( $gd_single_tabs_array ) ? $gd_single_tabs_array : array();
 
-
-        ob_start();
-        $post_type = $post->post_type;
-        $tabs = self::get_tab_settings($post_type);
-
-//       print_r( $tabs);
-
-        // get the tab contents first so we can decide to output the tab head
-        $tabs_content = array();
-        foreach($tabs as $tab){
-            $tabs_content[$tab->id."tab"] = self::tab_content($tab);
+        $post_id = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
+        if ( $post_id && wp_is_post_revision( $post_id ) ) {
+            $post_id = wp_get_post_parent_id( $post_id );
         }
+        $post_type = $post_id ? get_post_type( $post_id ) : 'gd_place';
 
-//        print_r( $tabs_content);
+        if ( empty( $tabs_array ) ) {
+            // Get the tabs head
+            $tabs = self::get_tab_settings( $post_type );
 
-        if(!empty($tabs)){
-            echo '<div class="geodir-tabs" id="gd-tabs">';
-
-            // tabs head
-            if(!$args['show_as_list']){
-
-                ?>
-                <div id="geodir-tab-mobile-menu">
-<!--                    <i class="fas fa-bars" aria-hidden="true"></i>-->
-                    <span class="geodir-mobile-active-tab"></span>
-                    <i class="fas fa-sort-down" aria-hidden="true"></i>
-                </div>
-                <?php
-                echo '<dl class="geodir-tab-head">';
-
-                $count = 0;
-                foreach($tabs as $tab){
-                    if($tab->tab_level>0){continue;}
-                    if(empty($tabs_content[$tab->id."tab"])){continue;}
-
-					// tab icon
-					$icon = trim( $tab->tab_icon );
-					if ( geodir_is_fa_icon( $icon ) ) {
-						$tab_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
-					} elseif ( strpos( $icon, 'fa-' ) === 0 ) {
-						$tab_icon = '<i class="fas ' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
-					} else {
-						$tab_icon = '';
-					}
-
-                    $tab_class = $count==0 ? 'geodir-tab-active' :'';
-                    $data_status = '';//$count==0 ? 'data-status="enable"' : '';
-                    echo '<dt></dt> <!-- added to comply with validation -->';
-                    echo '<dd class="'.$tab_class .'">';
-                    echo '<a data-tab="#'.esc_attr($tab->tab_key).'" data-status="enable">';
-                    echo $tab_icon;
-                    echo stripslashes(esc_attr__($tab->tab_name,'geodirectory')).'</a>';
-                    echo '</dd>';
-                    $count++;
-                }
-
-                echo '</dl>';
+            // Get the tab contents first so we can decide to output the tab head
+            $tabs_content = array();
+            foreach( $tabs as $tab ) {
+                $tabs_content[ $tab->id . "tab" ] = self::tab_content( $tab );
             }
 
-            // tabs content
-            $list_class =  $args['show_as_list'] ? 'geodir-tabs-as-list' : '';
-            echo '<ul class="geodir-tabs-content geodir-entry-content '.$list_class.'">';
-            foreach($tabs as $tab){
-                if($tab->tab_level>0){continue;}
-                if(empty($tabs_content[$tab->id."tab"])){continue;}
-
-                $add_tab = $args['show_as_list'] ? '' : 'Tab';
-                echo '<li id="'.esc_attr($tab->tab_key).$add_tab.'" >';
-                echo "<span id='".esc_attr($tab->tab_key)."'></span>";
-                if ( $args['show_as_list'] ) {
-                    $tab_icon = '';
-                    if($tab->tab_icon){
-                        $tab_icon = '<i class=" '.esc_attr($tab->tab_icon).'" aria-hidden="true"></i>';
+            // Setup the array
+            if ( ! empty( $tabs ) ) {
+                foreach( $tabs as $tab ) {
+                    if ( $tab->tab_level > 0 ) {
+                        continue;
                     }
-                    $tab_title = '<span class="gd-tab-list-title" ><a href="#' . esc_attr($tab->tab_key) . '">' . $tab_icon . esc_attr__( $tab->tab_name, 'geodirectory' ) . '</a></span><hr />';
 
-                    /**
-                     * Filter the tab list title html.
-                     *
-                     * @since 1.6.1
-                     *
-                     * @param string $tab_title      The html for the tab title.
-                     * @param array $tab             The array of values including title text.
-                     */
-                    echo apply_filters( 'geodir_tab_list_title', $tab_title, $tab );
+                    if ( empty( $tabs_content[ $tab->id . "tab" ] ) ) {
+                        continue;
+                    }
+
+                    $tab->tab_content_rendered = $tabs_content[ $tab->id . "tab" ];
+                    $tabs_array[] = (array) $tab;
                 }
-                echo '<div id="geodir-tab-content-'.esc_attr($tab->tab_key).'" class="hash-offset"></div>';
-
-                echo $tabs_content[$tab->id."tab"];
-
-                echo '</li>';
             }
-            echo '</ul>';
 
-            echo '</div>';
+            /**
+             * Filter the listing tabs results array.
+             *
+             * @since 2.0.0.77
+             *
+             * @param array $tabs_array Tabs array.
+             * @param array $gd_post The post.
+             */
+            $tabs_array = apply_filters( 'geodir_single_post_tabs_array', $tabs_array, $gd_post );
 
-            if ( ! $args['show_as_list']) { ?>
-                <script type="text/javascript">/* <![CDATA[ */
-					if (window.location.hash && window.location.hash.indexOf('&') === -1 && jQuery(window.location.hash + 'Tab').length) {
-						hashVal = window.location.hash;
-					} else {
-						hashVal = jQuery('dl.geodir-tab-head dd.geodir-tab-active').find('a').attr('data-tab');
-					}
-					jQuery('dl.geodir-tab-head dd').each(function() {
-						//Get all tabs
-						var tabs = jQuery(this).children('dd');
-						var tab = '';
-						tab = jQuery(this).find('a').attr('data-tab');
-						if (hashVal != tab) {
-							jQuery(tab + 'Tab').hide();
-						}
-					});
-                /* ]]> */</script>
-                <?php
-            }
+            $gd_single_tabs_array = $tabs_array;
         }
 
-        // echo "<hr style='clear:both;'>";
+        // Output JSON
+        if ( $args['output'] == 'json' ) {
+            return json_encode( $tabs_array );
+        }
 
+        $design_style = geodir_design_style();
+        $template = $design_style ? $design_style."/single/tabs.php" : "legacy/single/tabs.php";
 
-        // $this->detail_page_tabs();
+        $args = array(
+            'args'  => $args,
+            'tabs_array' => $tabs_array,
+        );
+        $output = geodir_get_template_html( $template, $args );
 
-        return ob_get_clean();
+        return $output;
     }
 
     /**
@@ -219,26 +209,37 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
      * @param bool $child Optional. Tab child. Default false.
      * @return string
      */
-    public function tab_content($tab,$child=false) {
-
+    public function tab_content( $tab, $child = false ) {
         ob_start();
-        // main content
-        if(!empty($tab->tab_content)){ // override content
-            $content = geodir_replace_variables(stripslashes( $tab->tab_content ));
+
+        // Main content
+        if ( ! empty( $tab->tab_content ) ) { // override content
+            $content = geodir_replace_variables( stripslashes( $tab->tab_content ));
             echo do_shortcode( $content );
-        }elseif($tab->tab_type=='meta'){ // meta info
-            echo do_shortcode('[gd_post_meta key="'.$tab->tab_key.'" show="value"]');
-        }elseif($tab->tab_type=='standard'){ // meta info
-            if($tab->tab_key=='reviews'){
+        } elseif ( $tab->tab_type == 'meta' ) { // meta info
+            echo do_shortcode('[gd_post_meta key="' . $tab->tab_key . '" show="value"]');
+        } elseif ( $tab->tab_type == 'standard' ) { // meta info
+            if ( $tab->tab_key == 'reviews' ) {
                 comments_template();
             } else {
-				do_action( 'geodir_standard_tab_content', $tab );
-			}
+                do_action( 'geodir_standard_tab_content', $tab );
+            }
         }
 
-        echo self::tab_content_child($tab);
+        echo self::tab_content_child( $tab );
 
-        return ob_get_clean();
+        $content = ob_get_clean();
+
+        /**
+         * Filter the listing tab content.
+         *
+         * @since 2.0.0.77
+         *
+         * @param string $content Tab content.
+         * @param object $tab Tab object.
+         * @param bool $child True if child tab else False.
+         */
+        return apply_filters( 'geodir_single_post_tab_content', $content, $tab, $child );
     }
 
     /**
@@ -249,30 +250,57 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
      * @param object $tab Tab object.
      * @return string
      */
-    public function tab_content_child($tab) {
-        ob_start();
+    public function tab_content_child( $tab ) {
         global $post;
+
         $post_type = $post->post_type;
-        $tabs = self::get_tab_settings($post_type);
+        $tabs = self::get_tab_settings( $post_type );
         $parent_id = $tab->id;
 
-        foreach($tabs as $child_tab){
-            if($child_tab->tab_parent==$parent_id){
-                if(!empty($child_tab->tab_content)){ // override content
-                    echo stripslashes( $child_tab->tab_content );
-                }elseif($child_tab->tab_type=='meta'){ // meta info
-                    echo do_shortcode('[gd_post_meta key="'.$child_tab->tab_key.'"]');
-                }elseif($child_tab->tab_type=='fieldset'){ // meta info
-                    self::output_fieldset($child_tab);
-                }elseif($child_tab->tab_type=='standard'){ // meta info
-                    if($child_tab->tab_key=='reviews'){
+        ob_start();
+
+        foreach ( $tabs as $child_tab ) {
+            if ( $child_tab->tab_parent == $parent_id ) {
+                ob_start();
+
+                if ( ! empty( $child_tab->tab_content ) ) { // override content
+                    $_content = geodir_replace_variables( stripslashes( $child_tab->tab_content ));
+                    echo do_shortcode( $_content );
+                } elseif ( $child_tab->tab_type == 'meta' ) { // meta info
+                    echo do_shortcode( '[gd_post_meta key="' . $child_tab->tab_key . '"]' );
+                } elseif ( $child_tab->tab_type == 'fieldset' ) { // meta info
+                    self::output_fieldset( $child_tab );
+                } elseif ( $child_tab->tab_type == 'standard' ) { // meta info
+                    if ( $child_tab->tab_key == 'reviews' ) {
                         comments_template();
                     }
                 }
+
+                $child_content = ob_get_clean();
+
+                /**
+                 * Filter the listing child tab content.
+                 *
+                 * @since 2.0.0.77
+                 *
+                 * @param string $child_content Child tab content.
+                 * @param object $child_tab Child tab object.
+                 * @param object $tab Parent tab object.
+                 */
+                 echo apply_filters( 'geodir_single_post_child_tab_content', $child_content, $child_tab, $tab );
             }
         }
-        return ob_get_clean();
+        $content = ob_get_clean();
 
+       /**
+         * Filter the listing tab content.
+         *
+         * @since 2.0.0.77
+         *
+         * @param string $content Tab content.
+         * @param object $tab Parent tab object.
+         */
+        return apply_filters( 'geodir_single_post_child_tabs_content', $content, $tab );
     }
 
     /**
@@ -312,6 +340,14 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
      * @return array|object $tabs.
      */
     public function get_tab_settings($post_type){
+
+        // check if block preview
+        $block_preview = $this->is_block_content_call();
+
+        if($block_preview){
+            return $this->block_preview_dummy_tabs();
+        }
+
         global $wpdb,$geodir_tab_layout_settings;
 
         if($geodir_tab_layout_settings){
@@ -327,6 +363,43 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
          * @param string $post_type The post type.
          */
         return apply_filters('geodir_tab_settings',$tabs,$post_type);
+    }
+
+    public function block_preview_dummy_tabs(){
+        $tabs = array();
+        $text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. ";
+        $dummy_tabs = array(
+            'fas fa-home',
+            'fas fa-image',
+            'fas fa-globe-americas',
+            'fas fa-comments',
+            'fas fa-bed',
+            'fas fa-calendar-alt',
+            'fas fa-bullhorn',
+            'fas fa-cloud',
+        );
+
+        $count = 1;
+        foreach($dummy_tabs as $dummy_tab){
+            // tab
+            $tab = new stdClass();
+            $tab->id = $count;
+            $tab->post_type = 'gd_place';
+            $tab->sort_order = $count;
+            $tab->tab_layout = 'post';
+            $tab->tab_parent = '';
+            $tab->tab_type = 'standard';
+            $tab->tab_level = 0;
+            $tab->tab_name = sprintf( __( 'Demo tab %d', 'geodirectory' ),$count);
+            $tab->tab_icon = $dummy_tab;
+            $tab->tab_key = 'dummy_'.$count;
+            $tab->tab_content = sprintf( __( 'Demo tab content %d.', 'geodirectory' ),$count)." ".str_repeat($text,5);
+            
+            $tabs[] = $tab;
+            $count++;
+        }
+
+        return $tabs;
     }
     
 }

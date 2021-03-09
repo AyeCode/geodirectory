@@ -29,7 +29,7 @@ function gd_wizard_add_widgets_top($security){
         success: function(data)
         {
             if(data.data){
-                jQuery( ".geodir-wizard-widgets-top-result" ).text(data.data);
+                jQuery( ".geodir-wizard-widgets-top-result" ).html(data.data);
             }
         }
     });
@@ -64,7 +64,7 @@ function gd_wizard_add_widgets($security){
         success: function(data)
         {
             if(data.data){
-                jQuery( ".geodir-wizard-widgets-result" ).text(data.data);
+                jQuery( ".geodir-wizard-widgets-result" ).html(data.data);
             }
         }
     });
@@ -101,7 +101,7 @@ function gd_wizard_setup_menu($security){
         success: function(data)
         {
             if(data.data){
-                jQuery( ".geodir-wizard-menu-result" ).text(data.data);
+                jQuery( ".geodir-wizard-menu-result" ).html(data.data);
             }
         }
     });

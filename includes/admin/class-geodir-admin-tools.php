@@ -36,6 +36,12 @@ class GeoDir_Admin_Tools {
 	 * @return array
 	 */
 	public function get_tools() {
+		global $geodir_count_attachments;
+
+		if ( empty( $geodir_count_attachments ) ) {
+			$geodir_count_attachments = GeoDir_Media::count_image_attachments();
+		}
+
 		$tools = array(
 			'clear_version_numbers' => array(
 				'name'    => __( 'Clear version numbers', 'geodirectory' ),
@@ -60,6 +66,16 @@ class GeoDir_Admin_Tools {
 				'name'    => __( 'Term counts', 'geodirectory' ),
 				'button'  => __( 'Run', 'geodirectory' ),
 				'desc'    => __( 'This tool will recount the listing terms.', 'geodirectory' ),
+			),
+			'generate_keywords' => array(
+				'name'    => __( 'Generate Keywords', 'geodirectory' ),
+				'button'  => __( 'Run', 'geodirectory' ),
+				'desc'    => __( 'Generate keywords from post title to enhance searching.', 'geodirectory' ),
+			),
+			'generate_thumbnails' => array(
+				'name'    => __( 'Regenerate Thumbnails', 'geodirectory' ),
+				'button'  => __( 'Run', 'geodirectory' ),
+				'desc'    => wp_sprintf( __( 'Regenerate thumbnails & metadata for the post images. Total image attachments found: %s', 'geodirectory' ), '<b>' . (int) $geodir_count_attachments . '</b>' ) . '<div class="geodir-tool-stats gd-hidden" data-total="' . (int) $geodir_count_attachments . '" data-per-page="10"><div id="gd_progressbar_box"><div id="gd_progressbar" class="gd_progressbar"><div class="gd-progress-label"></div></div></div><span style="display:inline-block">' . __( 'Elapsed Time:', 'geodirectory' ) . '</span>&nbsp;&nbsp;<span id="gd_timer" class="gd_timer">00:00:00</span></div>',
 			),
 			'export_db_texts' => array(
 				'name'    => __( 'DB text translation', 'geodirectory' ),
@@ -104,6 +120,15 @@ class GeoDir_Admin_Tools {
 					geodir_term_recount( $tags, get_taxonomy( $post_type . '_tags' ), $post_type, true, false );
 				}
 				$message = __( 'Terms successfully recounted', 'geodirectory' );
+				break;
+			case 'generate_keywords' :
+				$generated = (int) geodir_generate_title_keywords();
+				
+				if ( $generated > 0 ) {
+					$message = wp_sprintf( _n( '%d keyword generated.', '%d keywords generated.', $generated, 'geodirectory' ), $generated );
+				} else {
+					$message = __( 'No keyword generated.', 'geodirectory' );
+				}
 				break;
 			case 'install_pages' :
 				GeoDir_Admin_Install::create_pages();
@@ -298,7 +323,7 @@ class GeoDir_Admin_Tools {
 		global $wpdb;
 
 		// Custom fields table
-		$sql  = "SELECT admin_title, frontend_desc, frontend_title, clabels, required_msg, default_value, option_values, validation_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
+		$sql  = "SELECT admin_title, frontend_desc, frontend_title, clabels, required_msg, placeholder_value, default_value, option_values, validation_msg FROM " . GEODIR_CUSTOM_FIELDS_TABLE;
 		$rows = $wpdb->get_results( $sql );
 
 		if ( ! empty( $rows ) ) {
@@ -321,6 +346,10 @@ class GeoDir_Admin_Tools {
 
 				if ( ! empty( $row->required_msg ) ) {
 					$translation_texts[] = stripslashes_deep( $row->required_msg );
+				}
+
+				if ( ! empty( $row->placeholder_value ) ) {
+					$translation_texts[] = stripslashes_deep( $row->placeholder_value );
 				}
 
 				if ( ! empty( $row->validation_msg ) ) {

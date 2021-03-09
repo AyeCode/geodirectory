@@ -30,6 +30,11 @@ class GeoDir_API {
 		// Handle geodir-api endpoint requests.
 		add_action( 'parse_request', array( $this, 'handle_api_requests' ), 0 );
 
+		// Handle markers endpoint nonce.
+		add_action( 'geodir_create_nonce_before', array( __CLASS__, 'rest_nonce_set_hook' ), 10 );
+		add_action( 'geodir_create_nonce_after', array( __CLASS__, 'rest_nonce_hook_unset' ), 10, 2 );
+		add_filter( 'rest_authentication_errors', array( __CLASS__, 'rest_cookie_check_errors' ), 999, 1 );
+
 		// WP REST API.
 		$this->rest_api_init();
 	}
@@ -111,6 +116,7 @@ class GeoDir_API {
 		// Init REST API routes.
 		add_action( 'rest_api_init', array( $this, 'register_rest_routes' ), 100 );
 		add_action( 'rest_api_init', array( $this, 'register_rest_query' ), 101 );
+		add_action( 'rest_insert_comment', array( __CLASS__, 'rest_insert_comment' ), 1, 3 );
 
 		add_action( 'pre_get_posts', array( __CLASS__, 'rest_posts_request' ), 10, 2 );
 	}
@@ -418,26 +424,6 @@ class GeoDir_API {
      * @return string $where.
      */
 	public static function rest_posts_where( $where, $wp_query, $post_type ) {
-		//print_r($wp_query);exit;
-
-		// @todo should these location queries be here?
-		$support_location = $post_type && GeoDir_Post_types::supports( $post_type, 'location' );
-		$table            = geodir_db_cpt_table( $post_type );
-		global $wpdb,$geodirectory;
-		if ( $support_location ) {
-			// only query known location variables
-			$location_vars = $geodirectory->location->allowed_query_variables();
-			foreach ( $location_vars as $location_var ) {
-				if ( !empty($wp_query->query_vars[$location_var] ) ) {
-					$method_name = "get_{$location_var}_name_from_slug";
-					$var_name    = $location_var == 'neighbourhood' ? get_query_var( $location_var ) : $geodirectory->location->$method_name( $wp_query->query_vars[$location_var]  );
-					if ( $var_name ) {
-						$where .= $wpdb->prepare( " AND " . $table . "." . $location_var . " = %s ", $var_name );
-					}
-				}
-			}
-		}
-
 		return $where;
 	}
 
@@ -470,9 +456,12 @@ class GeoDir_API {
 		$geodir_post_type = $post_type;
 
 		$table = geodir_db_cpt_table( $post_type );
-		$sort_by = $wp_query->query_vars['orderby'];
+		$sort_by = ! empty( $wp_query ) && ! empty( $wp_query->query_vars['orderby'] ) ? $wp_query->query_vars['orderby'] : '';
 
-		$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type );
+		$sort_by = apply_filters( 'geodir_rest_posts_order_sort_by_key', $sort_by, $orderby, $post_type, $wp_query );
+
+		$orderby = GeoDir_Query::sort_by_sql( $sort_by, $post_type, $wp_query );
+		$orderby = GeoDir_Query::sort_by_children( $orderby, $sort_by, $post_type, $wp_query );
 
 		return apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $wp_query );
 	}
@@ -491,4 +480,98 @@ class GeoDir_API {
 		return $limits;
 	}
 
+	/**
+	 * Save review is submitted via the REST API.
+	 *
+	 * @since 2.0.0.71
+	 *
+	 * @param WP_Comment      $comment  Inserted or updated comment object.
+	 * @param WP_REST_Request $request  Request object.
+	 * @param bool            $creating True when creating a comment, false
+	 *                                  when updating.
+	 */
+	public static function rest_insert_comment( $comment, $request, $creating ) {
+		global $user_ID;
+
+		if ( empty( $comment->comment_post_ID ) ) {
+			return;
+		}
+
+		if ( ! geodir_is_gd_post_type( get_post_type( (int) $comment->comment_post_ID ) ) ) {
+			return;
+		}
+
+		if ( isset( $request['rating'] ) ) {
+			$_REQUEST['geodir_overallrating'] = absint( $request['rating'] );
+
+			$backup_user_ID = $user_ID;
+			$user_ID = $comment->user_id;
+			GeoDir_Comments::save_rating( $comment->comment_ID );
+			$user_ID = $backup_user_ID;
+		}
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.74
+	 *
+	 */
+	public static function rest_nonce_set_hook( $action ) {
+		global $geodir_rest_nonce_hook;
+
+		if ( $action == 'wp_rest' && ! is_user_logged_in() ) {
+			add_action( 'nonce_user_logged_out', array( __CLASS__, 'rest_nonce_user_logged_out' ), 9999, 2 );
+			$geodir_rest_nonce_hook = true;
+		}
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.74
+	 *
+	 */
+	public static function rest_nonce_hook_unset( $action, $nonce ) {
+		global $geodir_rest_nonce_hook;
+
+		if ( $geodir_rest_nonce_hook && ( $priority = has_action( 'nonce_user_logged_out', array( __CLASS__, 'rest_nonce_user_logged_out' ) ) ) ) {
+			remove_action( 'nonce_user_logged_out', array( __CLASS__, 'rest_nonce_user_logged_out' ), $priority, 2 );
+			$geodir_rest_nonce_hook = false;
+		}
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.74
+	 *
+	 */
+	public static function rest_nonce_user_logged_out( $uid, $action ) {
+		if ( $uid === 0 || $action != 'wp_rest' ) {
+			return $uid;
+		}
+
+		return geodir_nonce_token( $action );
+	}
+
+	/**
+	 *
+	 * @since 2.0.0.74
+	 *
+	 */
+	public static function rest_cookie_check_errors( $errors ) {
+		if ( is_wp_error( $errors ) && ! empty( $_REQUEST['_wpnonce'] ) &&  ! empty( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], '/wp-json/geodir/' ) !== false && strpos( $_SERVER['REQUEST_URI'], '/markers/' ) !== false && is_wp_error( $errors ) && $errors->get_error_code() == 'rest_cookie_invalid_nonce' ) {
+			if ( is_user_logged_in() ) { // Logged in user
+				return true;
+			} elseif ( geodir_create_nonce( 'wp_rest' ) == sanitize_text_field( $_REQUEST['_wpnonce'] ) ) {
+				return true;
+			} else {
+				$parse_referer = wp_parse_url( wp_get_referer() ); // Http referer
+				$parse_home = wp_parse_url( home_url( '/' ) ); // Home url
+
+				if ( ! empty( $parse_referer['host'] ) && ! empty( $parse_home['host'] ) && strtolower( $parse_referer['host'] ) == strtolower( $parse_home['host'] ) ) {
+					return true;
+				}
+			}
+		}
+		return $errors;
+	}
 }

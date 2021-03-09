@@ -9,8 +9,8 @@
 
 //print_r($field);
 $tab_class = isset($field->field_type) && $field->field_type=='random' ? 'mjs-nestedSortable-no-nesting' : '';
+$tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' ? 'random' : $field->htmlvar_name;
 ?>
-
 <li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>">
 	<div class="dd-form">
 		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
@@ -18,7 +18,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='random' ? 'mjs-ne
 			<?php
 			echo $field_icon;
 			echo isset($field->frontend_title) ? geodir_ucwords( ' ' . $field->frontend_title ) : ''; ?>
-			<span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php echo ' ('.esc_attr($field->htmlvar_name).')';?></span>
+			<span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php echo ' (' . esc_attr( $tab_field_name ) . ')'; ?></span>
 		</div>
 		<div class="dd-setting <?php echo 'dd-type-'.esc_attr($field->field_type);?>">
 

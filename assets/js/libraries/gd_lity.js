@@ -172,20 +172,17 @@
             iframeUrl = transferHash(hashUrl, iframeUrl);
         }
 
-        return '<div class="lity-iframe-container"><iframe onload="jQuery(\'.lity-iframe-container .svg-inline--fa, .lity-iframe-container i\').remove();" frameborder="0" allowfullscreen src="' + iframeUrl + '"/><i class="fas fa-sync fa-spin fa-3x fa-fw"></i></div>';
+        return '<div class="lity-iframe-container"><iframe onload="jQuery(\'.lity-iframe-container .svg-inline--fa, .lity-iframe-container i\').remove();" frameborder="0" allowfullscreen src="' + iframeUrl + '"></iframe><i class="fas fa-sync fa-spin fa-3x fa-fw"></i></div>';
     }
 
     function error(msg) {
-        return $('<span class="lity-error"/>').append(msg);
+        return $('<span class="lity-error"></span>').append(msg);
     }
 
     function imageHandler(target, instance) {
-
         // Generate Gallery
         var has_next = instance.opener().parent().next('li').find('a').length;
-        console.log(has_next);
         var has_prev = instance.opener().parent().prev('li').find('a').length;
-        console.log(has_prev);
         var gallery_nav = '';
         if(has_next || has_prev){
             gallery_nav = '<div class="lity-nav">';
@@ -223,15 +220,18 @@
             };
         }
 
-
         // Generate caption
         var caption = '';
         //var desc = (instance.opener() && instance.opener().data('lity-desc')) || 'Image with no description';
         var title = (instance.opener() && instance.opener().find('img').attr('title')) || '';
-        var desc = (instance.opener() && instance.opener().find('img').attr('alt')) || '';
+        var alt = (instance.opener() && instance.opener().find('img').attr('alt')) || '';
+        var desc = (instance.opener() && instance.opener().find('img').data('caption')) || '';
 
         // responsive
         var srcset = (instance.opener() && instance.opener().find('img').attr('srcset')) || '';
+		if (!srcset && instance.opener() && instance.opener().find('img').data('srcset')) {
+			srcset = instance.opener().find('img').attr('data-srcset');
+		}
         if(title || desc){
             caption = '<div class="lity-caption">';
             if(title){
@@ -242,7 +242,7 @@
             }
             caption = caption + '</div>';
         }
-        var img = $('<img src="' + target + '" alt="' + desc + '" srcset="'+srcset+'"/>'+caption+gallery_nav);//+gallery_nav;
+        var img = $('<img src="' + target + '" alt="' + alt + '" srcset="'+srcset+'"/>'+caption+gallery_nav);//+gallery_nav;
         var deferred = _deferred();
         var failed = function() {
             deferred.reject(error('Failed loading image'));
@@ -255,7 +255,14 @@
                 }
 
                 deferred.resolve(img);
-                if(gallery_nav){initGallery();}
+                if (gallery_nav) {
+                    var gdLityTo;
+                    clearTimeout(gdLityTo);
+                    /* WP 5.6 with jQuery v3.5.x broken lity lightbox next/prev slideshow */
+                    gdLityTo = setTimeout(function() {
+                        initGallery();
+                    }, 50);
+                }
             })
             .on('error', failed)
         ;
@@ -285,7 +292,7 @@
             return false;
         }
 
-        placeholder = $('<i style="display:none !important"/>');
+        placeholder = $('<i style="display:none !important"></i>');
         hasHideClass = el.hasClass('lity-hide');
 
         instance

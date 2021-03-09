@@ -375,7 +375,8 @@ function geodir_field_icon_proccess($cf){
     if (strpos($cf['field_icon'], 'http') !== false) {
         $field_icon = ' background: url(' . $cf['field_icon'] . ') no-repeat left center;background-size:18px 18px;padding-left: 21px;';
     } elseif (strpos($cf['field_icon'], 'fas fa-') !== false || strpos($cf['field_icon'], 'fa-') !== false) {
-        $field_icon = '<i class="' . $cf['field_icon'] . '" aria-hidden="true"></i>';
+        $design_style = geodir_design_style();
+        $field_icon = $design_style ? '<i class="' . $cf['field_icon'] . ' fa-fw" aria-hidden="true"></i> ' : '<i class="' . $cf['field_icon'] . '" aria-hidden="true"></i>';
     }else{
         $field_icon = $cf['field_icon'];
     }
@@ -428,30 +429,37 @@ if (!function_exists('geodir_show_listing_info')) {
     function geodir_show_listing_info($fields_location = '') {
         global $post, $preview, $wpdb;
 
+        $output_arr = array();
+
         $p_type = !empty($post->post_type) ? $post->post_type : geodir_get_current_posttype();
 		$package_id = geodir_get_post_package_id( $post, $p_type );
 
-        ob_start();
         $fields_info = geodir_post_custom_fields($package_id, 'all', $p_type, $fields_location);
 
         if (!empty($fields_info)) {
             $post = stripslashes_deep($post); // strip slashes
             
-            //echo '<div class="geodir-company_info field-group">';
             global $field_set_start;
             $field_set_start = 0;
 
 
-
             foreach ($fields_info as $type) {
-                if(isset($type['extra_fields'])){$extra_fields= $type['extra_fields'];}
-                $type = stripslashes_deep($type); // strip slashes
-                if(isset($type['extra_fields'])){$type['extra_fields'] = $extra_fields;}
+                if ( isset( $type['extra_fields'] ) ) {
+                    $extra_fields = $type['extra_fields'];
+                }
+                $type = stripslashes_deep( $type ); // strip slashes
+                if ( isset( $type['extra_fields'] ) ) {
+                    $type['extra_fields'] = $extra_fields;
+                }
+                $id = ! empty( $type['id'] ) ? absint( $type['id'] ) : '';
                 $html = '';
-                $field_icon = geodir_field_icon_proccess($type);
-                $filed_type = $type['type'];
-                $html_var = isset($type['htmlvar_name']) ? $type['htmlvar_name'] : '';
-                if($html_var=='post'){$html_var='post_address';}
+                $field_icon  = geodir_field_icon_proccess( $type );
+                $field_type  = $type['type'];
+                $is_fieldset = $field_type == 'fieldset' ? true : false;
+                $html_var    = isset( $type['htmlvar_name'] ) ? $type['htmlvar_name'] : '';
+                if ( $html_var == 'post' ) {
+                    $html_var = 'post_address';
+                }
 
                 /**
                  * Filter the output for custom fields.
@@ -462,29 +470,34 @@ if (!function_exists('geodir_show_listing_info')) {
                  * @param string $fields_location The location the field is to be show.
                  * @param array $type The array of field values.
                  */
-                $html = apply_filters("geodir_custom_field_output_{$filed_type}",$html,$fields_location,$type);
+                $html = apply_filters( "geodir_custom_field_output_{$field_type}", $html, $fields_location, $type );
 
                 $variables_array = array();
 
 
-                if ($type['type'] != 'fieldset'):
-                    $variables_array['post_id'] = !empty($post->ID) ? $post->ID : (!empty($post->pid) ? $post->pid : NULL);
-                    $variables_array['label'] = __($type['frontend_title'], 'geodirectory');
-                    $variables_array['value'] = '';
-                    if (isset($post->{$type['htmlvar_name']}))
+                if ( $type['type'] != 'fieldset' ):
+                    $variables_array['post_id'] = ! empty( $post->ID ) ? $post->ID : ( ! empty( $post->pid ) ? $post->pid : null );
+                    $variables_array['label']   = __( $type['frontend_title'], 'geodirectory' );
+                    $variables_array['value']   = '';
+                    if ( isset( $post->{$type['htmlvar_name']} ) ) {
                         $variables_array['value'] = $post->{$type['htmlvar_name']};
+                    }
                 endif;
 
 
-                if ($html):
+                ob_start();
+
+                if ( $html ) {
+
 
                     /**
                      * Called before a custom fields is output on the frontend.
                      *
                      * @since 1.0.0
+                     *
                      * @param string $html_var The HTML variable name for the field.
                      */
-                    do_action("geodir_before_show_{$html_var}");
+                    do_action( "geodir_before_show_{$html_var}" );
                     /**
                      * Filter custom field output.
                      *
@@ -494,26 +507,56 @@ if (!function_exists('geodir_show_listing_info')) {
                      * @param string $html Custom field unfiltered HTML.
                      * @param array $variables_array Custom field variables array.
                      */
-                    if ($html) echo apply_filters("geodir_show_{$html_var}", $html, $variables_array);
+                    if ( $html ) {
+                        echo apply_filters( "geodir_show_{$html_var}", $html, $variables_array );
+                    }
 
                     /**
                      * Called after a custom fields is output on the frontend.
                      *
                      * @since 1.0.0
+                     *
                      * @param string $html_var The HTML variable name for the field.
                      */
-                    do_action("geodir_after_show_{$html_var}");
+                    do_action( "geodir_after_show_{$html_var}" );
 
-                endif;
+
+                }
+
+                $arr_key = empty( $type['tab_level'] ) ? "parent-$id" : "child-" . absint( $type['tab_parent'] );
+                if ( $is_fieldset ) {
+                    $arr_key = "fieldset-$id";
+                }
+
+                if(isset($output_arr[ $arr_key ])){
+                    $output_arr[ $arr_key ] .= ob_get_clean();
+                }else{
+                    $output_arr[ $arr_key ] = ob_get_clean();
+                }
 
             }
 
-            //echo '</div>';
 
         }
 
+        $html = ''; // we need to rest the html var
+        
+        // loop the output_arr
+        if(!empty($output_arr)){
+            foreach($output_arr as $key => $output){
 
-        $html = ob_get_clean();
+                // only output a fieldset if it has child elements
+               if(substr( $key, 0, 1 ) === "f"){
+                   $parts = explode("-",$key);
+                   $id = !empty($parts[1]) ? absint($parts[1]) : '';
+                   if(!isset($output_arr["child-$id"]) || !empty($output_arr["child-$id"])){
+                       $html .= $output;
+                   }
+               }else{
+                   $html .= $output;
+               }
+            }
+        }
 
         /**
          * Filter the custom fields over all output.
@@ -549,6 +592,7 @@ function geodir_custom_upload_mimes($existing_mimes = array())
     $existing_mimes['xla|xls|xlt|xlw'] = 'application/vnd.ms-excel';
     $existing_mimes['docx'] = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document';
     $existing_mimes['xlsx'] = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
+	$existing_mimes['webp'] = 'image/webp';
     return $existing_mimes;
 }
 
@@ -718,14 +762,13 @@ function geodir_string_to_options($input = '', $translated = false)
                 if ($translated && $label != '') {
                     $label = __($label, 'geodirectory');
                 }
-                $label = geodir_utf8_ucfirst($label);
                 $value = trim($input_str[1]);
             } else {
                 $value = $input_str;
                 if ($translated && $input_str != '') {
                     $input_str = __($input_str, 'geodirectory');
                 }
-                $label = geodir_utf8_ucfirst($input_str);
+                $label = $input_str;
             }
 
             if ($label != '') {
@@ -773,7 +816,6 @@ function geodir_string_values_to_options($option_values = '', $translated = fals
                         if ($translated && $optgroup_label != '') {
                             $optgroup_label = __($optgroup_label, 'geodirectory');
                         }
-                        $optgroup_label = geodir_utf8_ucfirst($optgroup_label);
                         $optgroup_str = $optgroup_str_arr[1];
                     }
 

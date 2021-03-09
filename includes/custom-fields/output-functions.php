@@ -99,10 +99,20 @@ function geodir_cf_checkbox($html,$location,$cf,$p='',$output=''){
                 $field_icon = '';
             }
 
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                // Database value.
+                return $gd_post->{$html_var};
+            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                // Stripped value.
+                return $html_val;
+            }
+
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-checkbox" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $html_val );
 
@@ -125,7 +135,7 @@ add_filter('geodir_custom_field_output_checkbox','geodir_cf_checkbox',10,5);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_fieldset($html,$location,$cf,$p=''){
+function geodir_cf_fieldset( $html, $location, $cf, $p = '', $output = '' ) {
 
     // check we have the post value
     if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
@@ -180,11 +190,17 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
     if(empty($html)){
 
         global $field_set_start;
+        $output = geodir_field_output_process( $output );
         $fieldset_class = 'fieldset-'.sanitize_html_class(sanitize_title_with_dashes($cf['frontend_title']));
 
         if ($field_set_start == 1) {
             $html = '';
         } else {
+            // Database value.
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                return stripslashes( $cf['frontend_title'] );
+            }
+
             $html = '<h2 class="'.$fieldset_class.'">'. stripslashes( __($cf['frontend_title'], 'geodirectory') ) . '</h2>';
             //$field_set_start = 1;
         }
@@ -193,7 +209,7 @@ function geodir_cf_fieldset($html,$location,$cf,$p=''){
 
     return $html;
 }
-add_filter('geodir_custom_field_output_fieldset','geodir_cf_fieldset',10,4);
+add_filter( 'geodir_custom_field_output_fieldset','geodir_cf_fieldset', 10, 5 );
 
 
 /**
@@ -271,19 +287,19 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
     if(empty($html)){
 
         if ($gd_post->{$cf['htmlvar_name']}):
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
 
-                if ($cf['name'] == 'geodir_facebook') {
-                    $field_icon_af = '<i class="fab fa-facebook-square" aria-hidden="true"></i>';
-                } elseif ($cf['name'] == 'geodir_twitter') {
-                    $field_icon_af = '<i class="fab fa-twitter-square" aria-hidden="true"></i>';
+                if ($cf['name'] == 'facebook') {
+                    $field_icon_af = $design_style ?  '<i class="fab fa-facebook-square fa-fw" aria-hidden="true"></i> ' : '<i class="fab fa-facebook-square" aria-hidden="true"></i>';
+                } elseif ($cf['name'] == 'twitter') {
+                    $field_icon_af = $design_style ? '<i class="fab fa-twitter-square fa-fw" aria-hidden="true"></i> ' : '<i class="fab fa-twitter-square" aria-hidden="true"></i>';
                 } else {
-                    $field_icon_af = '<i class="fas fa-link" aria-hidden="true"></i>';
+                    $field_icon_af = $design_style ? '<i class="fas fa-link fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-link" aria-hidden="true"></i>';
                 }
 
             } else {
@@ -293,17 +309,24 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
 
             $a_url = geodir_parse_custom_field_url($gd_post->{$cf['htmlvar_name']});
 
-
             $website = !empty($a_url['url']) ? $a_url['url'] : '';
             $title = !empty($a_url['label']) ? $a_url['label'] : $cf['frontend_title'];
             if(!empty($cf['default_value'])){$title = $cf['default_value'];}
             $title = $title != '' ? __(stripslashes($title), 'geodirectory') : '';
             $post_id =  isset($gd_post->ID) ? $gd_post->ID : 0;
 
-
-
             // all search engines that use the nofollow value exclude links that use it from their ranking calculation
             $rel = strpos($website, get_site_url()) !== false ? '' : 'rel="nofollow"';
+
+            $value = '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $post_id) . '</strong></a>';
+
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                // Database value.
+                return $gd_post->{$cf['htmlvar_name']};
+            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                // Stripped value.
+                return $website;
+            }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
@@ -319,7 +342,7 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
              * @param string $website Website URL.
              * @param int $gd_post->ID Post ID.
              */
-            if($output=='' || isset($output['value']))$html .= '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $post_id) . '</strong></a>';
+            if($output=='' || isset($output['value']))$html .= $value;
 
             $html .= '</div>';
 
@@ -410,25 +433,37 @@ function geodir_cf_phone($html,$location,$cf,$p='',$output=''){
     if(empty($html)){
 
         if ($gd_post->{$cf['htmlvar_name']}):
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="fas fa-phone" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="fas fa-phone fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-phone" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
             }
 
+            $raw_value = stripslashes( $gd_post->{$cf['htmlvar_name']} );
+            $value = '<a href="tel:' . preg_replace('/[^0-9+]/', '', $gd_post->{$cf['htmlvar_name']}) . '">' . $raw_value . '</a>';
+
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                // Database value.
+                return $raw_value;
+            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                // Stripped value.
+                return $value;
+            }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-phone" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
-            if($output=='' || isset($output['value']))$html .= '<a href="tel:' . preg_replace('/[^0-9+]/', '', $gd_post->{$cf['htmlvar_name']}) . '">' . stripslashes( $gd_post->{$cf['htmlvar_name']} ) . '</a>';
+            if($output=='' || isset($output['value']))$html .= $value;
 
             $html .= '</div>';
 
@@ -516,37 +551,40 @@ function geodir_cf_time($html,$location,$cf,$p='',$output=''){
     }
 
     // If not html then we run the standard output.
-    if(empty($html)){
-
-        if ($gd_post->{$cf['htmlvar_name']}):
-
-            $value = '';
-            if ($gd_post->{$cf['htmlvar_name']} != '')
-                //$value = date('h:i',strtotime($gd_post->{$cf['htmlvar_name']}));
-                $value = date(get_option('time_format'), strtotime($gd_post->{$cf['htmlvar_name']}));
-
+    if ( empty( $html ) ) {
+        if ( $gd_post->{$html_var} ) {
+            $value = date_i18n( get_option('time_format'), strtotime( $gd_post->{$html_var} ) );
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="fas fa-clock" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="fas fa-clock fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-clock" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
             }
 
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                // Database value.
+                return $gd_post->{$html_var};
+            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                // Stripped value.
+                return $value;
+            }
+
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-time" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= $value;
 
             $html .= '</div>';
-
-        endif;
-
+        }
     }
 
     return $html;
@@ -629,62 +667,50 @@ function geodir_cf_datepicker($html,$location,$cf,$p='',$output=''){
     }
 
     // If not html then we run the standard output.
-    if(empty($html)){
-
-        if ($gd_post->{$cf['htmlvar_name']}):
-
+    if ( empty( $html ) ) {
+        if ( ! empty( $gd_post->{$html_var} ) && $gd_post->{$html_var} != '0000-00-00' ) {
+            $design_style = geodir_design_style();
             $date_format = geodir_date_format();
-            if ($cf['extra_fields'] != '') {
-                $date_format = stripslashes_deep(unserialize($cf['extra_fields']));
-                $date_format = $date_format['date_format'];
-            }
-            // check if we need to change the format or not
-            $date_format_len = strlen(str_replace(' ', '', $date_format));
-            if($date_format_len>5){// if greater then 4 then it's the old style format.
 
-                $search = array('dd','d','DD','mm','m','MM','yy'); //jQuery UI datepicker format
-                $replace = array('d','j','l','m','n','F','Y');//PHP date format
-
-                $date_format = str_replace($search, $replace, $date_format);
-
-                $post_htmlvar_value = ($date_format == 'd/m/Y' || $date_format == 'j/n/Y' ) ? str_replace('/', '-', $gd_post->{$cf['htmlvar_name']}) : $gd_post->{$cf['htmlvar_name']}; // PHP doesn't work well with dd/mm/yyyy format
-            }else{
-                $post_htmlvar_value = $gd_post->{$cf['htmlvar_name']};
+            if ( $cf['extra_fields'] != '' ) {
+                $_date_format = stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) );
+                if ( ! empty( $_date_format['date_format'] ) ) {
+                   $date_format = $_date_format['date_format'];
+               }
             }
 
-            if ($gd_post->{$cf['htmlvar_name']} != '' && $gd_post->{$cf['htmlvar_name']}!="0000-00-00") {
-                $date_format_from = $preview ? $date_format : 'Y-m-d';
-                $value = geodir_date($post_htmlvar_value, $date_format, $date_format_from); // save as sql format Y-m-d
-                //$post_htmlvar_value = strpos($post_htmlvar_value, '/') !== false ? str_replace('/', '-', $post_htmlvar_value) : $post_htmlvar_value;
-                //$value = date_i18n($date_format, strtotime($post_htmlvar_value));
-            }else{
-                return '';
-            }
+            $value = date_i18n( $date_format, strtotime( $gd_post->{$html_var} ) );
 
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="fas fa-calendar" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="fas fa-calendar fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-calendar" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
             }
 
-
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                // Database value.
+                return $gd_post->{$html_var};
+            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                // Stripped value.
+                return $value;
+            }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-datepicker" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= $value;
 
             $html .= '</div>';
-
-        endif;
-
+        }
     }
 
     return $html;
@@ -766,13 +792,11 @@ function geodir_cf_text($html,$location,$cf,$p='',$output=''){
         $html = apply_filters("geodir_custom_field_output_text_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
     }
 
-
-
     // If not html then we run the standard output.
     if(empty($html)){
 
         if (isset($gd_post->{$cf['htmlvar_name']}) && $gd_post->{$cf['htmlvar_name']} != '' ):
-
+            $design_style = geodir_design_style();
             $class = ($cf['htmlvar_name'] == 'geodir_timing') ? "geodir-i-time" : "geodir-i-text";
 
             $field_icon = geodir_field_icon_proccess($cf);
@@ -780,27 +804,43 @@ function geodir_cf_text($html,$location,$cf,$p='',$output=''){
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = ($cf['htmlvar_name'] == 'geodir_timing') ? '<i class="fas fa-clock" aria-hidden="true"></i>' : "";
+                $field_icon_af = ($cf['htmlvar_name'] == 'timing') ? ( $design_style ? '<i class="fas fa-clock fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-clock" aria-hidden="true"></i>' ) : "";
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
             }
 
-            $value = $gd_post->{$cf['htmlvar_name']};
-            if(isset($cf['data_type']) && ($cf['data_type']=='INT' || $cf['data_type']=='FLOAT') && isset($cf['extra_fields']) && $cf['extra_fields']){
-                $extra_fields = stripslashes_deep(maybe_unserialize($cf['extra_fields']));
-                if(isset($extra_fields['is_price']) && $extra_fields['is_price']){
-                    if(!ceil($value) > 0){return '';}// dont output blank prices
-                    $value = geodir_currency_format_number($value,$cf);
+            $value = stripslashes_deep( $gd_post->{$cf['htmlvar_name']} );
+
+            // Database value.
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                return $value;
+            }
+
+            if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'INT' || $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) && isset( $cf['extra_fields'] ) && $cf['extra_fields'] ) {
+                $extra_fields = stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) );
+
+                if ( ! empty( $extra_fields ) && isset( $extra_fields['is_price'] ) && $extra_fields['is_price'] ) {
+                    if ( ! ceil( $value ) > 0 ) {
+                        return '';// dont output blank prices
+                    }
+                    $value = geodir_currency_format_number( $value, $cf );
                 }
+            }
+
+            // Return stripped value.
+            if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                return $value;
             }
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon '.$class.'" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
-            if($output=='' || isset($output['value']))$html .= stripslashes( $value );
+            if($output=='' || isset($output['value']))$html .= $value;
 
             $html .= '</div>';
 
@@ -916,10 +956,20 @@ function geodir_cf_radio($html,$location,$cf,$p='',$output=''){
                 $field_icon = '';
             }
 
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                // Database value.
+                return stripslashes_deep( $gd_post->{$cf['htmlvar_name']} );
+            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                // Stripped value.
+                return stripslashes_deep( $html_val );
+            }
+
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-radio" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $html_val );
 
@@ -1012,7 +1062,13 @@ function geodir_cf_select($html,$location,$cf,$p='',$output=''){
     if(empty($html)){
 
         if (isset($gd_post->{$cf['htmlvar_name']}) && $gd_post->{$cf['htmlvar_name']} != ''):
+            $output = geodir_field_output_process($output);
             $field_value = isset($gd_post->{$cf['htmlvar_name']}) ? __($gd_post->{$cf['htmlvar_name']}, 'geodirectory') : '';
+
+            // Database value.
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                return stripslashes( $gd_post->{$cf['htmlvar_name']} );
+            }
 
             if (!empty($cf['option_values'])) {
                 $cf_option_values = geodir_string_values_to_options(stripslashes_deep($cf['option_values']), true);
@@ -1026,8 +1082,14 @@ function geodir_cf_select($html,$location,$cf,$p='',$output=''){
                 }
             }
 
+            // Stripped value.
+            if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                return stripslashes( $field_value );
+            }
+
+            $design_style = geodir_design_style();
+
             $field_icon = geodir_field_icon_proccess($cf);
-            $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
@@ -1039,8 +1101,10 @@ function geodir_cf_select($html,$location,$cf,$p='',$output=''){
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $field_value );
 
@@ -1150,6 +1214,11 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
                 $field_icon = '';
             }
 
+            // Database value.
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                return stripslashes( $gd_post->{$cf['htmlvar_name']} );
+            }
+
             $field_values = explode(',', trim($gd_post->{$cf['htmlvar_name']}, ","));
 
             if(is_array($field_values)){
@@ -1169,13 +1238,18 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
                 }
             }
 
+            // Stripped value.
+            if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                return ( ! empty( $option_values ) ? stripslashes( implode( ', ', $option_values ) ) : $option_values );
+            }
+
             $field_value = '';
 
             if (count($option_values) ) {
                 $field_value .= '<ul>';
 
                 foreach ($option_values as $val) {
-                    $field_value .= '<li>' . $val . '</li>';
+                    $field_value .= '<li class="geodir-fv-' . sanitize_html_class( sanitize_title_with_dashes( $val ) ) . '">' . $val . '</li>';
                 }
 
                 $field_value .= '</ul>';
@@ -1183,8 +1257,10 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-select" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $field_value );
 
@@ -1282,13 +1358,13 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
 
 
         if ($gd_post->{$cf['htmlvar_name']}) {
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
                 $field_icon_af = '';
             } elseif ($field_icon == '') {
-                $field_icon_af = '<i class="far fa-envelope" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="far fa-envelope fa-fw" aria-hidden="true"></i> ' : '<i class="far fa-envelope" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
@@ -1297,7 +1373,7 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
             $is_elementor_preview = class_exists( 'GeoDir_Elementor' ) && GeoDir_Elementor::is_elementor_view() ? true : false; // Check if elementor preview
             $email = $gd_post->{$cf['htmlvar_name']} ;
             $value = '';
-            if ( ! empty( $email ) && ( $email != 'testing@example.com' ) && ( $e_split = explode( '@', $email ) ) && ! defined( 'REST_REQUEST' ) && ! $is_elementor_preview ){
+            if ( ! empty( $email ) && ( $email != 'testing@example.com' ) && ( $e_split = explode( '@', $email ) ) && ! defined( 'REST_REQUEST' ) && ! $is_elementor_preview && ! wp_doing_ajax() && !isset( $output['strip'] ) ) {
                 /**
                  * Filter email custom field name output.
                  *
@@ -1306,18 +1382,37 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
                  * @param string $email The email string being output.
                  * @param array $cf Custom field variables array.
                  */
-                $email_name = apply_filters('geodir_email_field_name_output',$email,$cf);
-                $value .= "<script>document.write('<a href=\"mailto:'+'$e_split[0]' + '@' + '$e_split[1]'+'\">$email_name</a>')</script>";
-            } elseif ( ! empty( $email ) && ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || $is_elementor_preview ) ) {
-                $value .= "<a href='mailto:$email'>$email</a>";
+                $email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
+                $value .= '<a href="javascript:window.location.href=\'mailto:\'+([\'' . $e_split[0] . '\',\'' . $e_split[1] . '\']).join(\'@\')">' . str_replace( "@", "<!---->@<!---->", $email_name ) . '</a>';
+            } elseif ( ! empty( $email ) && ( ( defined( 'REST_REQUEST' ) && REST_REQUEST ) || $is_elementor_preview || wp_doing_ajax() ) && !isset( $output['strip'] ) ) {
+                /**
+                 * Filter email custom field name output.
+                 *
+                 * @since 1.5.3
+                 *
+                 * @param string $email The email string being output.
+                 * @param array $cf Custom field variables array.
+                 */
+                $email_name = apply_filters( 'geodir_email_field_name_output', $email, $cf );
+                $value .= "<a href='mailto:$email'>$email_name</a>";
             } else {
                 $value .= $email;
             }
 
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                // Database value.
+                return stripslashes( $email );
+            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                // Stripped value.
+                return $value;
+            }
+
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-email" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $value );
 
@@ -1346,27 +1441,31 @@ add_filter('geodir_custom_field_output_email','geodir_cf_email',10,5);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_file($html,$location,$cf,$p='',$output=''){
-
+function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
     // check we have the post value
-    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
-    else{ global $gd_post;}
-
-    if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
-        if(!$cf){return NULL;}
+    if ( is_numeric( $p ) ) {
+        $gd_post = geodir_get_post_info( $p );
+    } else {
+        global $gd_post;
     }
 
-    // Block demo content
-    //@todo this custom field is not working, so we need to fix it and then test
-    if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = 'testing@example.com';
+    if ( ! is_array( $cf ) && $cf != '' ){
+        $cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
+        if ( ! $cf ) {
+            return NULL;
+        }
     }
 
     $html_var = $cf['htmlvar_name'];
 
+    // Block demo content
+    //@todo this custom field is not working, so we need to fix it and then test
+    if ( geodir_is_block_demo() ) {
+        $gd_post->{$html_var} = 'testing@example.com';
+    }
+
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_file_loc_{$location}")){
+    if ( has_filter( "geodir_custom_field_output_file_loc_{$location}" ) ) {
         /**
          * Filter the file html by location.
          *
@@ -1376,11 +1475,11 @@ function geodir_cf_file($html,$location,$cf,$p='',$output=''){
          * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_file_loc_{$location}",$html,$cf,$output);
+        $html = apply_filters( "geodir_custom_field_output_file_loc_{$location}", $html, $cf, $output );
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_file_var_{$html_var}")){
+    if ( has_filter( "geodir_custom_field_output_file_var_{$html_var}" ) ) {
         /**
          * Filter the file html by individual custom field.
          *
@@ -1391,11 +1490,11 @@ function geodir_cf_file($html,$location,$cf,$p='',$output=''){
          * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_file_var_{$html_var}",$html,$location,$cf,$output);
+        $html = apply_filters( "geodir_custom_field_output_file_var_{$html_var}", $html, $location, $cf, $output );
     }
 
     // Check if there is a custom field key specific filter.
-    if(has_filter("geodir_custom_field_output_file_key_{$cf['field_type_key']}")){
+    if ( has_filter( "geodir_custom_field_output_file_key_{$cf['field_type_key']}" ) ) {
         /**
          * Filter the file html by field type key.
          *
@@ -1406,114 +1505,145 @@ function geodir_cf_file($html,$location,$cf,$p='',$output=''){
          * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_file_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
+        $html = apply_filters( "geodir_custom_field_output_file_key_{$cf['field_type_key']}", $html, $location, $cf, $output );
     }
 
     // If not html then we run the standard output.
-    if(empty($html)){
+    if ( empty( $html ) ) {
+        $files = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $html_var );
 
-        $files = GeoDir_Media::get_attachments_by_type($gd_post->ID,$html_var);
+        if ( ! empty( $files ) ) {
+            $output = geodir_field_output_process( $output );
 
-        //echo '####';
-        //print_r($files );
-        if (!empty($files)):
+            // Database value.
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                return ( isset( $gd_post->{$html_var} ) ? stripslashes_deep( $gd_post->{$html_var} ) : '' );
+            }
 
-            $extra_fields = !empty($cf['extra_fields']) ? stripslashes_deep(maybe_unserialize($cf['extra_fields'])) : NULL;
-            $allowed_file_types = !empty($extra_fields['gd_file_types']) && is_array($extra_fields['gd_file_types']) && !in_array("*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
+            $extra_fields = ! empty( $cf['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
+            $allowed_file_types = ! empty( $extra_fields['gd_file_types'] ) && is_array( $extra_fields['gd_file_types'] ) && ! in_array( "*", $extra_fields['gd_file_types'] ) ? $extra_fields['gd_file_types'] : '';
 
             $upload_dir = wp_upload_dir();
             $upload_basedir = $upload_dir['basedir'];
             $upload_baseurl = $upload_dir['baseurl'];
             $file_paths = '';
-            foreach ($files as $file) {
 
-                //print_r($file);
-                $file_path = isset($file->file) ? $file->file : '';
-                $title = isset($file->title) ? $file->title : '';
-                $desc = isset($file->caption) ? $file->caption : '';
-                $url = $upload_baseurl.$file_path;
-//echo $file_path.'###'.$title.'###'.$desc;
+            foreach ( $files as $file ) {
+                $file_path = isset( $file->file ) ? $file->file : '';
+                $title = isset( $file->title ) && $file->title != '' ? strip_tags( stripslashes_deep( $file->title ) ) : '';
+                $desc = isset( $file->caption ) ? stripslashes_deep( $file->caption ) : '';
+                $url = $upload_baseurl . $file_path;
+                $outout_item = '';
 
-                //continue;
+                if ( ! empty( $file ) ) {
+                    $image_name_arr = explode( '/', $url );
+                    $curr_img_dir = $image_name_arr[count( $image_name_arr ) - 2];
+                    $filename = end( $image_name_arr );
+                    $img_name_arr = explode( '.', $filename );
 
-                //$file = !empty( $file ) ? geodir_file_relative_url( $file, true ) : '';
-
-                if ( !empty( $file ) ) {
-                    $image_name_arr = explode('/', $url);
-                    $curr_img_dir = $image_name_arr[count($image_name_arr) - 2];
-                    $filename = end($image_name_arr);
-                    $img_name_arr = explode('.', $filename);
-
-                    $arr_file_type = wp_check_filetype($filename);
-                    if (empty($arr_file_type['ext']) || empty($arr_file_type['type'])) {
+                    $arr_file_type = wp_check_filetype( $filename );
+                    if ( empty( $arr_file_type['ext'] ) || empty( $arr_file_type['type'] ) ) {
                         continue;
                     }
 
                     $uploaded_file_type = $arr_file_type['type'];
-                    $uploaded_file_ext = $arr_file_type['ext'];
+                    $file_ext = $arr_file_type['ext'];
 
-                    if (!empty($allowed_file_types) && !in_array($uploaded_file_ext, $allowed_file_types)) {
+                    if ( ! empty( $allowed_file_types ) && ! in_array( $file_ext, $allowed_file_types ) ) {
                         continue; // Invalid file type.
                     }
 
+                    $ext_path = '_' . $html_var . '_';
+                    if ( $title ) {
+                        $_filename = $title;
+                    } else {
+                        $_filename = explode( $ext_path, $filename );
+                        $_filename = $_filename[count( $_filename ) - 1];
+                    }
+                    /**
+                     * @since 2.0.0.67
+                     */
+                    if ( has_filter( 'geodir_cf_file_' . $html_var . '_filename' ) ) {
+                        $_filename = apply_filters( 'geodir_cf_file_' . $html_var . '_filename', $_filename, $gd_post, $file, $cf );
+                    }
+
                     //$allowed_file_types = array('application/pdf', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', 'text/csv', 'text/plain');
-                    $image_file_types = array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon');
-                    $audio_file_types = array('audio/mpeg', 'audio/ogg', 'audio/mp4', 'audio/vnd.wav', 'audio/basic', 'audio/mid');
+                    $image_file_types = array( 'image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/bmp', 'image/x-icon', 'image/webp' );
+                    $audio_file_types = array( 'audio/mpeg', 'audio/ogg', 'audio/mp4', 'audio/vnd.wav', 'audio/basic', 'audio/mid' );
 
                     // If the uploaded file is image
-                    if (in_array($uploaded_file_type, $image_file_types)) {
-                        $file_paths .= '<div class="geodir-custom-field-file" class="clearfix">';
-                        $file_paths .= '<a href="'.$url.'" data-lity>';
-                        $file_paths .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
-                        $file_paths .= geodir_get_image_tag($file);
-                        $file_paths .= '</a>';
-                        // $file_paths .= '<img src="'.$url.'"  />';
-                        $file_paths .= '</div>';
-                    }elseif (1==2 && in_array($uploaded_file_type, $audio_file_types)) {// if audio
-                        $ext_path = '_' . $html_var . '_';
-                        $filename = explode($ext_path, $filename);
-                        $file_paths .= '<span class="gd-audio-name">'.$filename[count($filename) - 1].'</span>';
-                        $file_paths .= do_shortcode('[audio src="'.$url.'" ]');
+                    $file_type = 'unknown';
+                    if ( in_array( $uploaded_file_type, $image_file_types ) ) { // Image
+                        $file_type = 'image';
+                        $outout_item .= '<span class="geodir-cf-file-name clearfix"><i aria-hidden="true" class="fa fa-file-image"></i> ' . $_filename . '</span>';
+                        $outout_item .= '<a href="' . $url . '" data-lity>';
+                        $outout_item .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
+                        $outout_item .= geodir_get_image_tag( $file );
+                        $outout_item .= '</a>';
+                    } elseif ( in_array( $uploaded_file_type, $audio_file_types ) || in_array( $file_ext, wp_get_audio_extensions() ) ) { // Audio
+                        $file_type = 'audio';
+                        $outout_item .= '<span class="geodir-cf-file-name clearfix"><i aria-hidden="true" class="fa fa-file-audio"></i> ' . $_filename . '</span>';
+                        $outout_item .= do_shortcode( '[audio src="' . $url . '" ]' );
+                    } elseif ( in_array( $file_ext, wp_get_video_extensions() ) ) { // Video
+                        $file_type = 'video';
+                        $outout_item .= '<span class="geodir-cf-file-name clearfix"><i aria-hidden="true" class="fa fa-file-video"></i> ' . $_filename . '</span>';
+                        $outout_item .= do_shortcode( wp_embed_handler_video( array(), array(), $url, array() ) );
                     } else {
-                        $ext_path = '_' . $html_var . '_';
-                        $filename = explode($ext_path, $filename);
-                        $file_paths .= '<a class="gd-meta-file" href="' . $url . '" target="_blank" data-lity title="'.esc_attr($title).'">' . $filename[count($filename) - 1] . '</a>';
+                        $outout_item .= '<a class="gd-meta-file" href="' . $url . '" target="_blank" data-lity title="' . esc_attr( $title ) . '"><i aria-hidden="true" class="fa fa-file"></i> ' . $_filename . '</a>';
                     }
+                    $outout_item = '<div class="geodir-custom-field-file clearfix geodir-cf-file-' . $file_ext . ' geodir-cf-type-' . $file_type . '"> ' . $outout_item . '</div>';
+
+                     /**
+                     * Filter the file output html.
+                     *
+                     * @since 2.0.0.81
+                     *
+                     * @param string $outout_item The file html outout.
+                     * @param object $file The file object.
+                     * @param string $location The location to output the html.
+                     * @param array $cf The custom field array.
+                     * @param string $output The output string that tells us what to output.
+                     */
+                    $file_paths .= apply_filters( 'geodir_cf_file_output_item', $outout_item, $file, $location, $cf, $output );
                 }
             }
 
-            $field_icon = geodir_field_icon_proccess($cf);
-            $output = geodir_field_output_process($output);
-            if (strpos($field_icon, 'http') !== false) {
+            $field_icon = geodir_field_icon_proccess( $cf );
+            if ( strpos( $field_icon, 'http' ) !== false ) {
                 $field_icon_af = '';
-            } elseif ($field_icon == '') {
+            } elseif ( $field_icon == '' ) {
                 $field_icon_af = '';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
             }
 
+            // Stripped value.
+            if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                return $file_paths;
+            }
+
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
-            if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-file" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
-            if($output=='' || isset($output['icon']))$html .= '</span>';
-            if($output=='' || isset($output['value']))$html .= $file_paths;
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
+            if ( $output=='' || isset( $output['icon'] ) ) $html .= '<span class="geodir_post_meta_icon geodir-i-file" style="' . $field_icon . '">' . $field_icon_af;
+            if ( $output=='' || isset( $output['label'] ) ) $html .= trim( $cf['frontend_title'] ) != '' ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__( $cf['frontend_title'], 'geodirectory' ) . ': </span>' : '';
+            if ( $output=='' || isset( $output['icon'] ) ) $html .= '</span>';
+            if ( $output=='' || isset( $output['value'] ) ) $html .= $file_paths;
 
             $html .= '</div>';
-
-        endif;
-
+        }
     }
 
     return $html;
 }
-add_filter('geodir_custom_field_output_file','geodir_cf_file',10,5);
-
-
+add_filter( 'geodir_custom_field_output_file','geodir_cf_file', 10, 5 );
 
 /**
  * Get the html output for the custom field: textarea
+ *
+ * @global int $gd_skip_the_content
  *
  * @param string $html The html to be filtered.
  * @param string $location The location to output the html.
@@ -1524,26 +1654,32 @@ add_filter('geodir_custom_field_output_file','geodir_cf_file',10,5);
  *
  * @return string The html to output for the custom field.
  */
-function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
+function geodir_cf_textarea( $html, $location, $cf, $p = '', $output = '' ) {
+    global $gd_skip_the_content;
 
-    // check we have the post value
-    if(is_numeric($p)){$gd_post = geodir_get_post_info($p);}
-    else{ global $gd_post;}
-
-    if(!is_array($cf) && $cf!=''){
-        $cf = geodir_get_field_infoby('htmlvar_name', $cf, $gd_post->post_type);
-        if(!$cf){return NULL;}
+    // Check we have the post value
+    if ( is_numeric( $p ) ) {
+        $gd_post = geodir_get_post_info( $p );
+    } else{
+        global $gd_post;
     }
 
-    // Block demo content
-    if( geodir_is_block_demo() ){
-        $gd_post->{$cf['htmlvar_name']} = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus metus, rutrum in nunc eu, vestibulum iaculis lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean tristique arcu et eros convallis elementum. Maecenas sit amet quam eu velit euismod viverra. Etiam magna augue, mollis id nisi sit amet, eleifend sagittis tortor. Suspendisse vitae dignissim arcu, ac elementum eros. Mauris hendrerit at massa ut pellentesque.';
+    if ( ! is_array( $cf ) && $cf != '' ){
+        $cf = geodir_get_field_infoby( 'htmlvar_name', $cf, $gd_post->post_type );
+        if ( ! $cf ) {
+            return NULL;
+        }
     }
 
     $html_var = $cf['htmlvar_name'];
 
+    // Block demo content
+    if ( geodir_is_block_demo() ) {
+        $gd_post->{$html_var} = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam risus metus, rutrum in nunc eu, vestibulum iaculis lacus. Interdum et malesuada fames ac ante ipsum primis in faucibus. Aenean tristique arcu et eros convallis elementum. Maecenas sit amet quam eu velit euismod viverra. Etiam magna augue, mollis id nisi sit amet, eleifend sagittis tortor. Suspendisse vitae dignissim arcu, ac elementum eros. Mauris hendrerit at massa ut pellentesque.';
+    }
+
     // Check if there is a location specific filter.
-    if(has_filter("geodir_custom_field_output_textarea_loc_{$location}")){
+    if ( has_filter( "geodir_custom_field_output_textarea_loc_{$location}" ) ) {
         /**
          * Filter the textarea html by location.
          *
@@ -1553,11 +1689,11 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
          * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_loc_{$location}",$html,$cf,$output);
+        $html = apply_filters( "geodir_custom_field_output_textarea_loc_{$location}", $html, $cf, $output );
     }
 
     // Check if there is a custom field specific filter.
-    if(has_filter("geodir_custom_field_output_textarea_var_{$html_var}")){
+    if ( has_filter( "geodir_custom_field_output_textarea_var_{$html_var}" ) ) {
         /**
          * Filter the textarea html by individual custom field.
          *
@@ -1568,11 +1704,11 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
          * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_var_{$html_var}",$html,$location,$cf,$output);
+        $html = apply_filters( "geodir_custom_field_output_textarea_var_{$html_var}", $html, $location, $cf, $output );
     }
 
     // Check if there is a custom field key specific filter.
-    if(has_filter("geodir_custom_field_output_textarea_key_{$cf['field_type_key']}")){
+    if ( has_filter( "geodir_custom_field_output_textarea_key_{$cf['field_type_key']}" ) ) {
         /**
          * Filter the textarea html by field type key.
          *
@@ -1583,84 +1719,105 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
          * @since 2.0.0 $output param added.
          * @since 1.6.6
          */
-        $html = apply_filters("geodir_custom_field_output_textarea_key_{$cf['field_type_key']}",$html,$location,$cf,$output);
+        $html = apply_filters( "geodir_custom_field_output_textarea_key_{$cf['field_type_key']}", $html, $location, $cf, $output );
     }
 
     // If not html then we run the standard output.
-    if(empty($html)){
-
-        if (!empty($gd_post->{$cf['htmlvar_name']})) {
-			$extra_fields = isset( $cf['extra_fields'] ) && $cf['extra_fields'] != '' ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
-            $field_icon = geodir_field_icon_proccess($cf);
-            $output = geodir_field_output_process($output);
-			$embed = ! empty( $extra_fields['embed'] ) || $cf['htmlvar_name'] == 'video' ? true : false;
-            if (strpos($field_icon, 'http') !== false) {
+    if ( empty( $html ) ) {
+        if ( ! empty( $gd_post->{$html_var} ) ) {
+            $design_style = geodir_design_style();
+            $extra_fields = ! empty( $cf['extra_fields'] ) ? stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) ) : NULL;
+            $field_icon = geodir_field_icon_proccess( $cf );
+            $output = geodir_field_output_process( $output );
+            $embed = ! empty( $extra_fields['embed'] ) || $html_var == 'video' ? true : false;
+            if ( strpos( $field_icon, 'http' ) !== false ) {
                 $field_icon_af = '';
-            } elseif ($field_icon == '') {
+            } elseif ( $field_icon == '' ) {
                 $field_icon_af = '';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon = '';
             }
 
-            $max_height = !empty($output['fade']) ? absint($output['fade'])."px" : '';
+            // Database value.
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                return stripslashes( $gd_post->{$html_var} );
+            }
+
+            if( $design_style ){
+                $cf['css_class'] .= " position-relative";
+            }
+
+            $max_height = ! empty( $output['fade'] ) ? absint( $output['fade'] )."px" : '';
             $max_height_style = $max_height ? " style='max-height:$max_height;overflow:hidden;' " : '';
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" '.$max_height_style.'>';
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $html_var . '" ' . $max_height_style . '>';
+
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
 
             if ( $output == '' || isset( $output['icon'] ) ) $html .= '<span class="geodir_post_meta_icon geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
-            if ( $output == '' || isset( $output['label'] ) ) $html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if ( $output == '' || isset( $output['label'] ) ) $html .= trim( $cf['frontend_title'] ) != '' ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__( $cf['frontend_title'], 'geodirectory' ) . ': '.'</span>' : '';
             if ( $output == '' || isset( $output['icon'] ) ) $html .= '</span>';
 
             if ( $output == '' || isset( $output['value'] ) ) {
-				$value = stripslashes( $gd_post->{$cf['htmlvar_name']} );
+                $value = stripslashes( $gd_post->{$html_var} );
 
+                $gd_skip_the_content = true; // Set global variable to prevent looping on some themes/plugins.
                 $content = '';
-                if ( $cf['htmlvar_name'] != 'post_content' ) {
-					if ( isset( $output['strip'] ) ) {
+                if ( $html_var != 'post_content' ) {
+                    if ( isset( $output['strip'] ) ) {
                         $content =  wp_strip_all_tags( do_shortcode( wpautop( $value ) ) );
                     } else {
-						if ( $embed ) { // Embed media.
-							global $wp_embed;
-							$value = $wp_embed->autoembed( $value );
-						}
+                        if ( $embed ) {
+                             // Embed media.
+                            global $wp_embed;
+                            $value = $wp_embed->autoembed( $value );
+                        }
                         $content = do_shortcode( wpautop( $value ) );
                     }
-				} else { // Post content
-					if ( isset($output['strip'] ) ) {
+                } else {
+                    // Post content
+                    if ( isset( $output['strip'] ) ) {
                         $content = wp_strip_all_tags( apply_filters( 'the_content', $value ) );
                     } else {
                         $content = apply_filters( 'the_content', $value );
                     }
-				}
+                }
 
-                if($content){
+                if ( $design_style ) {
+                    // check if we have any media in iframe first, if so maybe wrap in responsive wrapper.
+                    $content = str_replace( array( "<iframe ", "</iframe>" ), array( '<div class="geodir-embed-container embed-responsive embed-responsive-16by9"><iframe ', '</iframe></div>' ), $content );
+                }
 
-                    // set a limit if it exists
-                    if(!empty($output['limit'])){
-                        $limit = absint($output['limit']);
+                $gd_skip_the_content = false;
+
+                if ( $content ) {
+                    // Set a limit if it exists
+                    if ( ! empty( $output['limit'] ) ) {
+                        $limit = absint( $output['limit'] );
                         $content = wp_trim_words( $content, $limit, '' );
                     }
 
                     $html .= $content;
 
-//                    print_r( $output );echo '###';
-
                     // add read more
-                    if(isset( $output['more'] )){
-                        $post_id = isset($gd_post->id) ? absint($gd_post->id) : 0;
-                        $more_text = empty( $output['more'] ) ? __("Read more...","geodirectory") : __($output['more'],"geodirectory");
-                        $link =  get_permalink($post_id);
-                        $link = $link."#".$cf['htmlvar_name'];// set the hash value
-                        $link_class = !empty($output['fade']) ? 'gd-read-more-fade' : '';
-                        $html .= " <a href='$link' class='gd-read-more  $link_class'>".esc_attr($more_text)."</a>";
+                    if ( isset( $output['more'] ) ) {
+                        $post_id = isset( $gd_post->id ) ? absint( $gd_post->id ) : 0;
+                        $more_text = empty( $output['more'] ) ? __( "Read more...", "geodirectory" ) : __( $output['more'], "geodirectory" );
+                        $link =  get_permalink( $post_id );
+                        $link = $link . "#" . $html_var; // Set the hash value
+                        $link_class = ! empty( $output['fade'] ) ? 'gd-read-more-fade' : '';
+                        $link_style = '';
+
+                        if( $design_style && $max_height ){
+                            $link_class .= " w-100 position-absolute text-center pt-5";
+                            $link_style .= "bottom:0;left:0;background-image: linear-gradient(to bottom,transparent,#fff);";
+                        }
+
+                        $html .= " <a href='$link' class='gd-read-more  $link_class' style='$link_style'>" . esc_attr( $more_text ) . "</a>";
                     }
-
-
                 }
-
-
-			}
+            }
 
             $html .= '</div>';
         }
@@ -1669,8 +1826,6 @@ function geodir_cf_textarea($html,$location,$cf,$p='',$output=''){
     return $html;
 }
 add_filter('geodir_custom_field_output_textarea','geodir_cf_textarea',10,5);
-
-
 
 /**
  * Get the html output for the custom field: html
@@ -1762,17 +1917,34 @@ function geodir_cf_html($html,$location,$cf,$p='',$output=''){
                 $field_icon = '';
             }
 
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                // Database value.
+                return stripslashes( $gd_post->{$cf['htmlvar_name']} );
+            }
+
+            $value = wpautop(do_shortcode(stripslashes($gd_post->{$cf['htmlvar_name']})));
+
+            if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                // Stripped value.
+                return $value;
+            }
+
+            if ( geodir_design_style() ) {
+                // check if we have any media in iframe first, if so maybe wrap in responsive wrapper.
+                $value = str_replace( array( "<iframe ", "</iframe>" ), array( '<div class="geodir-embed-container embed-responsive embed-responsive-16by9"><iframe ', '</iframe></div>' ), $value );
+            }
+
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-text" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
-            if($output=='' || isset($output['value']))$html .= wpautop(do_shortcode(stripslashes($gd_post->{$cf['htmlvar_name']})));
+            if($output=='' || isset($output['value']))$html .= $value;
 
             $html .= '</div>';
-
         }
-
     }
 
     return $html;
@@ -1884,8 +2056,14 @@ function geodir_cf_taxonomy($html,$location,$cf,$p='',$output=''){
         }
         if ($post_taxonomy && !empty($gd_post->{$html_var})) {
 
-            //$post_taxonomy = $gd_post->post_type . 'category';
+            $output = geodir_field_output_process($output);
             $field_value = $gd_post->{$html_var};
+
+            // Database value.
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                return $field_value;
+            }
+
             $links = array();
             $terms = array();
             $termsOrdered = array();
@@ -1894,8 +2072,6 @@ function geodir_cf_taxonomy($html,$location,$cf,$p='',$output=''){
             }
 
             $field_value = array_unique($field_value);
-
-            //print_r($field_value);
 
             if (!empty($field_value)) {
                 foreach ($field_value as $term) {
@@ -1921,9 +2097,13 @@ function geodir_cf_taxonomy($html,$location,$cf,$p='',$output=''){
             }
             $html_value = !empty($links) && !empty($terms) ? wp_sprintf('%l', $links, (object)$terms) : '';
 
+            // Stripped value.
+            if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                return $html_value;
+            }
+
             if ($html_value != '') {
                 $field_icon = geodir_field_icon_proccess($cf);
-                $output = geodir_field_output_process($output);
                 if (strpos($field_icon, 'http') !== false) {
                     $field_icon_af = '';
                 } else if ($field_icon == '') {
@@ -1935,8 +2115,10 @@ function geodir_cf_taxonomy($html,$location,$cf,$p='',$output=''){
 
                 $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+                $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
                 if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-taxonomy" style="' . $field_icon . '">' . $field_icon_af;
-                if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+                if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
                 if($output=='' || isset($output['icon']))$html .= '</span>';
                 if($output=='' || isset($output['value']))$html .= $html_value;
 
@@ -1982,6 +2164,12 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
     if( geodir_is_block_demo() ){
         $gd_post->{$cf['htmlvar_name']} = '123 Demo Street';
         $gd_post->street = '123 Demo Street';
+        $gd_post->street2 = 'Street line 2';
+        $gd_post->region = 'Pennsylvania';
+        $gd_post->city = 'Philadelphia';
+        $gd_post->zip = '19107';
+        $gd_post->neighbourhood = 'Chinatown';
+
     }
 
     $html_var = $cf['htmlvar_name'];
@@ -2033,6 +2221,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if(empty($html)){
 
+        $show_street2_in_address = true;
         $show_city_in_address = true;
         $show_region_in_address = true;
         $show_country_in_address = true;
@@ -2042,6 +2231,16 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
             $addition_fields = '';
             if (!empty($extra_fields)) {
+                $show_street2_in_address = false;
+                if (isset($extra_fields['show_street2']) && $extra_fields['show_street2']) {
+                    $show_street2_in_address = true;
+                }
+                /**
+                 * Filter "show city in address" value.
+                 *
+                 * @since 1.0.0
+                 */
+                $show_street2_in_address = apply_filters('geodir_show_street2_in_address', $show_street2_in_address);
                 $show_city_in_address = false;
                 if (isset($extra_fields['show_city']) && $extra_fields['show_city']) {
                     $show_city_in_address = true;
@@ -2086,13 +2285,13 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
         }
 
         if ($gd_post->street) {
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess( $cf );
             $output = geodir_field_output_process($output);
             if ( strpos( $field_icon, 'http' ) !== false ) {
                 $field_icon_af = '';
             } elseif ( $field_icon == '' ) {
-                $field_icon_af = '<i class="fas fa-home" aria-hidden="true"></i>';
+                $field_icon_af = $design_style ? '<i class="fas fa-home fa-fw" aria-hidden="true"></i> ' : '<i class="fas fa-home" aria-hidden="true"></i>';
             } else {
                 $field_icon_af = $field_icon;
                 $field_icon    = '';
@@ -2101,6 +2300,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             $address_items = array(
                 'post_title',
                 'street',
+                'street2',
                 'neighbourhood',
                 'city',
                 'region',
@@ -2110,7 +2310,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 'longitude'
             );
 
-            $address_template = !empty($cf['address_template']) ? $cf['address_template'] : '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%';
+            $address_template = !empty($cf['address_template']) ? $cf['address_template'] : '%%street_br%% %%street2_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%';
 
             $address_template = apply_filters(
                 "geodir_cf_address_template",
@@ -2127,8 +2327,14 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ( isset($gd_post->street) ) {
                 $address_fields['street'] = '<span itemprop="streetAddress">' . $gd_post->street . '</span>';
             }
+            if ( $show_street2_in_address && isset( $gd_post->street2 ) && $gd_post->street2 ) {
+                $address_fields['street2'] = '<span itemprop="streetAddress2">' . $gd_post->street2. '</span>';
+            }
             if ( $show_city_in_address && isset( $gd_post->city ) && $gd_post->city ) {
                 $address_fields['city'] = '<span itemprop="addressLocality">' . $gd_post->city. '</span>';
+            }
+            if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
+                $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
             }
             if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
                 $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
@@ -2145,6 +2351,18 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ( isset( $gd_post->longitude ) && $gd_post->longitude ) {
                 $address_fields['longitude'] = '<span itemprop="addressLongitude">' . $gd_post->longitude . '</span>';
             }
+            
+            // trick LM to add hoods if
+            if (strpos($address_template, '%%neighbourhood') !== false) {
+                if(!empty($cf['extra_fields'])){
+                  $extras = maybe_unserialize($cf['extra_fields']);
+                    $extras['show_neighbourhood'] = true;
+                    $cf['extra_fields'] = maybe_serialize($extras);
+                }else{
+                    $cf['extra_fields']['show_neighbourhood'] = true;
+                }
+            }
+
 
             /**
              * Filter the address fields array being displayed.
@@ -2178,10 +2396,24 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
 
             $address_fields = $address_template;
 
-            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
+            // Database value.
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                $address_fields = str_replace("<br>","",$address_fields);
+                return stripslashes( wp_strip_all_tags($address_fields) );
+            }
+
+            // Stripped value.
+            if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                $address_fields = str_replace("<br>",",",$address_fields);
+                return stripslashes( wp_strip_all_tags($address_fields) );
+            }
+
+            $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '" itemscope itemtype="http://schema.org/PostalAddress">';
+
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
 
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-address" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $address_fields );
 
@@ -2267,16 +2499,41 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
     // If not html then we run the standard output.
     if ( empty( $html ) ) {
         if ( ! empty( $gd_post->{$cf['htmlvar_name']} ) ) {
-            $value = stripslashes_deep($gd_post->{$cf['htmlvar_name']});
-            $business_hours = geodir_get_business_hours( $value );
+            $value = stripslashes_deep( $gd_post->{$cf['htmlvar_name']} );
+            $business_hours = geodir_get_business_hours( $value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) );
 
             if ( empty( $business_hours['days'] ) ) {
                 return $html;
             }
             $show_value = $business_hours['extra']['today_range'];
-            $offset = isset( $business_hours['extra']['offset'] ) ? $business_hours['extra']['offset'] : '';
+            $offset = isset( $business_hours['extra']['offset'] ) ? (int) $business_hours['extra']['offset'] : '';
+            $utc_offset = isset( $business_hours['extra']['utc_offset'] ) ? $business_hours['extra']['utc_offset'] : '';
+            if ( ! empty( $business_hours['extra']['is_dst'] ) ) {
+                $offset = isset( $business_hours['extra']['offset_dst'] ) ? (int) $business_hours['extra']['offset_dst'] : $offset;
+                $utc_offset = isset( $business_hours['extra']['utc_offset_dst'] ) ? $business_hours['extra']['utc_offset_dst'] : $utc_offset;
+            }
 
             if (!empty($show_value)) {
+
+                $bh_expanded = $location == 'owntab' || strpos($cf['css_class'], 'gd-bh-expanded') !== false ? true : false;
+
+                $design_style = geodir_design_style();
+                $dropdown_class =  $design_style ? ' dropdown ' : '';
+                $dropdown_toggle_class =  $design_style ? ' dropdown-toggle ' : '';
+                $dropdown_item_class =  $design_style ? ' dropdown-item py-1 ' : '';
+                $dropdown_item_inline_class =  $design_style ? ' d-inline-block ' : '';
+                $dropdown_item_mr_class =  $design_style ? ' mr-3 ' : '';
+                $dropdown_item_float_class =  $design_style ? ' float-right' : '';
+                $dropdown_menu_class =  $design_style ? ' dropdown-menu dropdown-caret-0 my-3 ' : '';
+
+                if($design_style && $bh_expanded ){
+                    $dropdown_class = '';
+                    $dropdown_menu_class = '';
+                    $dropdown_toggle_class = '';
+                }
+
+                $cf['field_icon'] = $design_style ? $cf['field_icon'] : $cf['field_icon'];
+
                 $field_icon = geodir_field_icon_proccess($cf);
                 $output = geodir_field_output_process($output);
                 if (strpos($field_icon, 'http') !== false) {
@@ -2288,50 +2545,56 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
                     $field_icon = '';
                 }
 
+                // Database value.
+                if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                    return $value;
+                }
+
                 $extra_class = $location == 'owntab' || strpos($cf['css_class'], 'gd-bh-expanded') !== false ? ' gd-bh-expanded' : ' gd-bh-toggled';
                 if ( ! empty( $business_hours['extra']['has_closed'] ) ) {
                     $extra_class .= ' gd-bh-closed';
                 }
 
-                $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . '" style="clear:both;">';
+
+
+                $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . $dropdown_class. '" style="">';
+                $html .= $design_style ? '<a class=" text-reset '.$dropdown_toggle_class.' d-block text-truncate" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' : '';
                 $html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
-                $html .= '<span class="gd-bh-expand-range" data-offset="' . geodir_gmt_offset( $offset ) . '" data-offsetsec="' . geodir_gmt_offset( $offset, false ) . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range">' . $show_value . '</span>';
-                $html .= '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span></span>';
-                $html .= '<div class="gd-bh-open-hours">';
+                $html .= '<span class="gd-bh-expand-range" data-offset="' . $utc_offset  . '" data-offsetsec="' . $offset . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range gv-secondary">' . $show_value . '</span>';
+                $html .= $design_style ? '' : '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span>';
+                $html .= '</span>';
+                $html .= $design_style ? '</a>' : '';
+                $html .= '<div class="gd-bh-open-hours '.$dropdown_menu_class.'" style="min-width:250px;">';
                 foreach ( $business_hours['days'] as $day => $slots ) {
                     $class = '';
                     if ( ! empty( $slots['closed'] ) ) {
                         $class .= 'gd-bh-days-closed ';
                     }
-                    $html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d">' . $slots['day_short'] . '</div><div class="gd-bh-slots">';
+                    $html .= '<div data-day="' . $slots['day_no'] . '" data-closed="' . $slots['closed'] . '" class="'.$dropdown_item_class.' gd-bh-days-list ' . trim( $class ) . '"><div class="gd-bh-days-d '.$dropdown_item_inline_class.$dropdown_item_mr_class.'">' . $slots['day_short'] . '</div><div class="gd-bh-slots '.$dropdown_item_inline_class.$dropdown_item_float_class.'">';
                     foreach ( $slots['slots'] as $i => $slot ) {
                         $attrs = '';
+						$class = '';
                         if ( ! empty( $slot['time'] ) ) {
-                            $attrs .= 'data-open="' . $slot['time'][0] . '"  data-close="' . $slot['time'][1] . '"';
+							$attrs .= 'data-open="' . $slot['time'][0] . '"  data-close="' . $slot['time'][1] . '"';
+							// Next day close
+							if ( (int)$slot['time'][0] == (int)$slot['time'][1] || (int)$slot['time'][1] < (int)$slot['time'][0] ) {
+								$class .= ' gd-bh-next-day';
+							}
                         }
-                        $html .= '<div ' . $attrs . ' class="gd-bh-slot"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
+                        $html .= '<div ' . $attrs . ' class="gd-bh-slot' . $class . '"><div class="gd-bh-slot-r">' . $slot['range'] . '</div>';
                         $html .= '</div>';
                     }
                     $html .= '</div></div>';
                 }
                 $html .= '</div></div>';
 
-                ###
-//                $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
-//
-//                if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-field-' . $html_var . $extra_class . '" style="' . $field_icon . '">' . $field_icon_af;
-//                if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
-//                if($output=='' || isset($output['icon']))$html .= '</span>';
-//                if($output=='' || isset($output['value']))$html .= $address_fields;
-//
-//                $html .= '</div>';
             }
         }
     }
 
     return $html;
 }
-add_filter('geodir_custom_field_output_business_hours','geodir_cf_business_hours',10,4);
+add_filter( 'geodir_custom_field_output_business_hours', 'geodir_cf_business_hours', 10 , 5 );
 
 /**
  * Get the html output for the custom field: author
@@ -2423,15 +2686,20 @@ function geodir_cf_author($html,$location,$cf,$p='',$output=''){
             $author_url = get_author_posts_url( $author_id, $author_name );
             $author_link = '<a href="'.$author_url.'" >'. $author_name.'</a>';
 
-            if ( isset( $output['strip'] ) ) {
-                $author_link = wp_strip_all_tags( $author_link );
+            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+                // Database value.
+                return $author_id;
+            } elseif ( ! empty( $output ) && isset( $output['strip'] ) ) {
+                // Stripped value.
+                return stripslashes( $author_link );
             }
-
 
             $html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $cf['htmlvar_name'] . '">';
 
+            $maybe_secondary_class = isset($output['icon']) ? 'gv-secondary' : '';
+
             if($output=='' || isset($output['icon'])) $html .= '<span class="geodir_post_meta_icon geodir-i-address" style="' . $field_icon . '">' . $field_icon_af;
-            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
+            if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $author_link );
 

@@ -171,7 +171,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 		 */
 		public static function get_import_export_js($nonce){
 			$uploads = wp_upload_dir();
-			$upload_dir = wp_sprintf( CSV_TRANSFER_IMG_FOLDER, str_replace( ABSPATH, '', $uploads['path'] ) );
+			$upload_dir = wp_sprintf( __( "Please transfer all new images to <b>'%s'</b> folder.", 'geodirectory' ), str_replace( ABSPATH, '', $uploads['path'] ) );
 			?>
 			<script type="text/javascript">
 				var timoutC, timoutP, timoutR;
@@ -243,7 +243,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 						jQuery(cont).find('.filelist .file').remove();
 
-						jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html("<p><?php echo esc_attr( PLZ_SELECT_CSV_FILE );?></p>");
+						jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html("<p><?php esc_attr_e( ' Please select csv file.', 'geodirectory' ); ?></p>");
 						jQuery('#gd-import-msg', cont).show();
 
 						return false;
@@ -717,8 +717,8 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 								jQuery(el).find('input[type="submit"]').prop('disabled', false);
 
 								if (typeof data == 'object') {
-									if (typeof data.error != 'undefined' && data.error) {
-										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.error);
+									if (typeof data.success != 'undefined' && data.success == false) {
+										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.data);
 										window.clearInterval(timer_posts);
 									} else {
 										if (getTotal) {
@@ -744,7 +744,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 												var obj_files = data.files;
 												var files = '';
 												for (var i in data.files) {
-													files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+													files += '<p>'+ obj_files[i].i +' <a download="' + ((obj_files[i].u).replace(/^.*[\\\/]/, '')) + '" class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
 												}
 												jQuery('#gd_ie_ex_files', el).append(files);
 												if (pages > page) {
@@ -785,8 +785,8 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 								jQuery(el).find('input[type="submit"]').prop('disabled', false);
 
 								if (typeof data == 'object') {
-									if (typeof data.error != 'undefined' && data.error) {
-										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.error);
+									if (typeof data.success != 'undefined' && data.success == false) {
+										gd_progressbar(el, 0, '<i class="fas fa-exclamation-triangle" aria-hidden="true"></i>' + data.data);
 										window.clearInterval(timer_cats);
 									} else {
 										if (pages < page || pages == page) {
@@ -801,7 +801,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 											var obj_files = data.files;
 											var files = '';
 											for (var i in data.files) {
-												files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+												files += '<p>'+ obj_files[i].i +' <a class="gd-ie-file" download="' + ((obj_files[i].u).replace(/^.*[\\\/]/, '')) + '" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
 											}
 											jQuery('#gd_ie_ex_files', el).append(files);
 											if (pages > page) {
@@ -941,7 +941,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 											var obj_files = res.files;
 											var files = '';
 											for (var i in res.files) {
-												files += '<p>' + obj_files[i].i + ' <a class="gd-ie-file" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
+												files += '<p>' + obj_files[i].i + ' <a class="gd-ie-file" download="' + ((obj_files[i].u).replace(/^.*[\\\/]/, '')) + '" href="' + obj_files[i].u + '" target="_blank">' + obj_files[i].u + '</a> (' + obj_files[i].s + ')</p>';
 											}
 											$('#gd_ie_ex_files', $parent).append(files);
 											if (iPages > iPage) {

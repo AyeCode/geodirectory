@@ -64,6 +64,7 @@ function geodir_rest_allowed_image_mime_types() {
 		'bmp'          => 'image/bmp',
 		'tiff|tif'     => 'image/tiff',
 		'ico'          => 'image/x-icon',
+		'webp'         => 'image/webp',
 	) );
 }
 
@@ -185,7 +186,6 @@ function geodir_rest_check_manager_permissions( $object, $context = 'read' ) {
 	);
 
 	$permission = current_user_can( $objects[ $object ] );
-	$permission = true; // @todo remove this after testing done.
 
 	return apply_filters( 'geodir_rest_check_permissions', $permission, $context, 0, $object );
 }
@@ -296,6 +296,7 @@ function geodir_rest_data_type_to_field_type( $data_type ) {
         case 'tinyint':
         case 'integer':
             $type = 'integer';
+            break;
         case 'date':
         case 'time':
         case 'text':

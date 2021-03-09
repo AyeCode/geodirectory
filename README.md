@@ -21,13 +21,13 @@ Automatic installation is the easiest option. To do an automatic install of GeoD
 
 In the search field type GeoDirectory and click Search Plugins. Once you've found our Direcotry plugin you install it by simply clicking Install Now. 
 
-Please refer this link. [GeoDirectory basic installation](http://wpgeodirectory.com/docs/basic-installation/)
+Please refer this link. [GeoDirectory basic installation](https://docs.wpgeodirectory.com/category/7-installation)
 
 ### Manual installation ###
 
 The manual installation method involves downloading our Directory plugin and uploading it to your webserver via your favourite FTP application. The WordPress codex will tell you more [here](http://codex.wordpress.org/Managing_Plugins#Manual_Plugin_Installation). 
 
-Please refer this link. [GeoDirectory basic installation](http://wpgeodirectory.com/docs/basic-installation/)
+Please refer this link. [GeoDirectory basic installation](https://docs.wpgeodirectory.com/category/7-installation)
 
 ### Updating ###
 

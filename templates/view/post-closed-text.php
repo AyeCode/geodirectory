@@ -5,7 +5,7 @@
  * This is used mostly on the listing (category) pages and outputs the actual grid or list of listings.
  * See the link below for info on how to replace the template in your theme.
  *
- * @link http://docs.wpgeodirectory.com/customizing-geodirectory-templates/
+ * @link https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @since 1.0.0
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.

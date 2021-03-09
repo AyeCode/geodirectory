@@ -596,7 +596,6 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 		$core_tables = array(
 			'api_keys',
 			'attachments',
-			'business_hours',
 			'custom_fields',
 			'custom_sort_fields',
 			'post_review',
@@ -618,7 +617,8 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 		/**
 		 * The countries tabel is not geodir_ prefixed.
 		 */
-		$core_tables[] = $wpdb->prefix.'countries';
+		$prefix = isset( $wpdb->base_prefix ) ? $wpdb->base_prefix : $wpdb->prefix;
+		$core_tables[] = $prefix . 'countries';
 
 		/**
 		 * Organize GeoDirectory and non-GeoDirectory tables separately for display purposes later.
@@ -832,7 +832,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 			),
 			_x( 'Add listing page', 'Page setting', 'geodirectory' ) => array(
 				'option'    => 'add',
-				'shortcode' => '[gd_add_listing]',
+				'shortcode' => 'gd_add_listing',
 			),
 			_x( 'Search Page', 'Page setting', 'geodirectory' ) => array(
 				'option'    => 'search',
@@ -873,7 +873,7 @@ class GeoDir_REST_System_Status_Controller extends GeoDir_REST_Controller {
 			if ( $values['shortcode']  && get_post( $page_id ) ) {
 				$shortcode_required = true;
 				$page = get_post( $page_id );
-				if ( strstr( $page->post_content, $values['shortcode'] ) ) {
+				if ( has_shortcode( $page->post_content, $values['shortcode'] ) ) {
 					$shortcode_present = true;
 				}
 			}

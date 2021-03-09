@@ -18,17 +18,23 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @return array
  */
 function geodir_get_screen_ids() {
-
-	$geodir_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
-
 	$screen_ids = array(
-		'toplevel_page_' . $geodir_screen_id,
+		'toplevel_page_geodirectory',
 		'geodirectory_page_gd-settings',
 		'geodirectory_page_gd-status',
 		'geodirectory_page_gd-addons',
 		'comment'
 	);
 
+	// Check for translated screen id. 
+	$geodir_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
+
+	if ( $geodir_screen_id != 'geodirectory' ) {
+		$screen_ids[] = 'toplevel_page_' . $geodir_screen_id;
+		$screen_ids[] = $geodir_screen_id . '_page_gd-settings';
+		$screen_ids[] = $geodir_screen_id . '_page_gd-status';
+		$screen_ids[] = $geodir_screen_id . '_page_gd-addons';
+	}
 
 	// Add the CPT screens
 	$post_types = geodir_get_posttypes( 'names' );
@@ -273,7 +279,7 @@ function geodir_create_page( $slug, $option, $page_title = '', $page_content = '
 
 	$page_found = $wpdb->get_var(
 		$wpdb->prepare(
-			"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s LIMIT 1;",
+			"SELECT ID FROM " . $wpdb->posts . " WHERE post_name = %s AND post_type = 'page' LIMIT 1;",
 			array( $slug )
 		)
 	);
@@ -451,12 +457,12 @@ function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 2
  * @return string[]
  */
 function geodir_get_core_supported_themes() {
-	return array( 'directory-starter', 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
+	return array( 'whoop','supreme-directory','directory-starter', 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
 }
 
 function geodir_setup_timezone_api( $prefix ) {
 	?>
-	if (jQuery('[name="<?php echo $prefix; ?>region"]').length && jQuery('[name="<?php echo $prefix; ?>timezone"]').length) {
+	if (jQuery('[name="<?php echo $prefix; ?>region"]').length && jQuery('[name="<?php echo $prefix; ?>timezone_string"]').length) {
 		if (getState && getState != jQuery('[name="<?php echo $prefix; ?>region"]').data('prev-value')) {
 			geodir_fill_timezone('<?php echo $prefix; ?>');
 		}
@@ -476,6 +482,23 @@ add_action( 'geodir_update_marker_address', 'geodir_setup_timezone_api', 1, 1 );
  */
 function geodir_admin_body_class_active_map($class = '') {
 	$class .= ' gd-map-' . GeoDir_Maps::active_map();
+
+	// Add original geodirectory page class when geodirectory screen is translated.
+	if ( ! empty( $_GET['page'] ) && in_array( $_GET['page'], array( 'gd-settings', 'gd-status', 'gd-addons' ) ) ) {
+		$geodir_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
+
+		if ( $geodir_screen_id != 'geodirectory' ) {
+			$class .= ' geodirectory_page_' . sanitize_text_field( $_GET['page'] );
+		}
+	}
+
+	// Add body class for admin pages.
+	$screen = get_current_screen();
+	$screen_id = $screen ? $screen->id : '';
+
+	if ( $screen_id && in_array( $screen_id, geodir_get_screen_ids() ) ) {
+		$class .= ' geodir-admin-page geodir-admin-page-' . sanitize_key( $screen_id );
+	}
 
 	return $class;
 }
@@ -720,3 +743,660 @@ function geodir_dashicon_options() {
 
 	return apply_filters( 'geodir_dashicon_options', $dashicons );
 }
+
+/**
+ * A helper function for margin inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_margin_input($type = 'mt', $overwrite = array(), $include_negatives = true ){
+	$options = array(
+		"" => __('None', 'geodirectory'),
+		"0" => "0",
+		"1" => "1",
+		"2" => "2",
+		"3" => "3",
+		"4" => "4",
+		"5" => "5",
+	);
+
+	if ( $include_negatives ) {
+		$options['n1'] = '-1';
+		$options['n2'] = '-2';
+		$options['n3'] = '-3';
+		$options['n4'] = '-4';
+		$options['n5'] = '-5';
+	}
+
+	$defaults = array(
+		'type' => 'select',
+		'title' => __('Margin top', 'geodirectory'),
+		'options' =>  $options,
+		'default' => '',
+		'desc_tip' => true,
+		'group'     => __("Wrapper Styles","geodirectory")
+	);
+
+	// title
+	if( $type == 'mt' ){
+		$defaults['title'] = __('Margin top', 'geodirectory');
+		$defaults['icon']  = 'box-top';
+		$defaults['row'] = array(
+			'title' => __('Margins', 'geodirectory'),
+			'key'   => 'wrapper-margins',
+			'open' => true,
+			'class' => 'text-center',
+		);
+	}elseif( $type == 'mr' ){
+		$defaults['title'] = __('Margin right', 'geodirectory');
+		$defaults['icon']  = 'box-right';
+		$defaults['row'] = array(
+			'key'   => 'wrapper-margins',
+		);
+	}elseif( $type == 'mb' ){
+		$defaults['title'] = __('Margin bottom', 'geodirectory');
+		$defaults['icon']  = 'box-bottom';
+		$defaults['row'] = array(
+			'key'   => 'wrapper-margins',
+		);
+	}elseif( $type == 'ml' ){
+		$defaults['title'] = __('Margin left', 'geodirectory');
+		$defaults['icon']  = 'box-left';
+		$defaults['row'] = array(
+			'key'   => 'wrapper-margins',
+			'close'   => true,
+		);
+	}
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+/**
+ * A helper function for padding inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_padding_input($type = 'pt', $overwrite = array() ){
+	$options = array(
+		"" => __('None', 'geodirectory'),
+		"0" => "0",
+		"1" => "1",
+		"2" => "2",
+		"3" => "3",
+		"4" => "4",
+		"5" => "5",
+	);
+	
+	$defaults = array(
+		'type' => 'select',
+		'title' => __('Padding top', 'geodirectory'),
+		'options' =>  $options,
+		'default' => '',
+		'desc_tip' => true,
+		'group'     => __("Wrapper Styles","geodirectory")
+	);
+
+	// title
+	if( $type == 'pt' ){
+		$defaults['title'] = __('Padding top', 'geodirectory');
+		$defaults['icon']  = 'box-top';
+		$defaults['row'] = array(
+			'title' => __('Padding', 'geodirectory'),
+			'key'   => 'wrapper-padding',
+			'open' => true,
+			'class' => 'text-center',
+		);
+	}elseif( $type == 'pr' ){
+		$defaults['title'] = __('Padding right', 'geodirectory');
+		$defaults['icon']  = 'box-right';
+		$defaults['row'] = array(
+			'key'   => 'wrapper-padding',
+		);
+	}elseif( $type == 'pb' ){
+		$defaults['title'] = __('Padding bottom', 'geodirectory');
+		$defaults['icon']  = 'box-bottom';
+		$defaults['row'] = array(
+			'key'   => 'wrapper-padding',
+		);
+	}elseif( $type == 'pl' ){
+		$defaults['title'] = __('Padding left', 'geodirectory');
+		$defaults['icon']  = 'box-left';
+		$defaults['row'] = array(
+			'key'   => 'wrapper-padding',
+			'close'   => true,
+
+		);
+	}
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+/**
+ * A helper function for border inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_border_input($type = 'border', $overwrite = array() ){
+
+	$defaults = array(
+		'type' => 'select',
+		'title' => __('Border', 'geodirectory'),
+		'options' =>  array(),
+		'default' => '',
+		'desc_tip' => true,
+		'group'     => __("Wrapper Styles","geodirectory")
+	);
+
+	// title
+	if( $type == 'rounded' ){
+		$defaults['title'] = __('Border radius type', 'geodirectory');
+		$defaults['options'] = array(
+			''  =>  __("Default","geodirectory"),
+			'rounded'  =>  'rounded',
+			'rounded-top'  =>  'rounded-top',
+			'rounded-right'  =>  'rounded-right',
+			'rounded-bottom'  =>  'rounded-bottom',
+			'rounded-left'  =>  'rounded-left',
+			'rounded-circle'  =>  'rounded-circle',
+			'rounded-pill'  =>  'rounded-pill',
+			'rounded-0'  =>  'rounded-0',
+		);
+	}elseif( $type == 'rounded_size' ){
+		$defaults['title'] = __('Border radius size', 'geodirectory');
+		$defaults['options'] = array(
+			''  =>  __("Default","geodirectory"),
+			'sm'  =>  __("Small","geodirectory"),
+			'lg'  =>  __("Large","geodirectory"),
+		);
+	}elseif( $type == 'type' ){
+		$defaults['title'] = __('Border type', 'geodirectory');
+		$defaults['options'] = array(
+			''  =>  __("None","geodirectory"),
+			'border'  =>  __("Full","geodirectory"),
+			'border-top'  =>  __("Top","geodirectory"),
+			'border-bottom'  =>  __("Bottom","geodirectory"),
+			'border-left'  =>  __("Left","geodirectory"),
+			'border-right'  =>  __("Right","geodirectory"),
+		);
+	}else{
+		$defaults['title'] = __('Border color', 'geodirectory');
+		$defaults['options'] = array(
+           ''  =>  __("Default","geodirectory"),
+           '0'  =>  __("None","geodirectory"),
+       ) + geodir_aui_colors();
+	}
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+/**
+ * A helper function for padding inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_shadow_input($type = 'shadow', $overwrite = array() ){
+	$options = array(
+		"" => __('None', 'geodirectory'),
+		"shadow-sm" => __('Small', 'geodirectory'),
+		"shadow" => __('Regular', 'geodirectory'),
+		"shadow-lg" => __('Large', 'geodirectory'),
+	);
+
+	$defaults = array(
+		'type' => 'select',
+		'title' => __('Shadow', 'geodirectory'),
+		'options' =>  $options,
+		'default' => '',
+		'desc_tip' => true,
+		'group'     => __("Wrapper Styles","geodirectory")
+	);
+
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+/**
+ * A helper function for padding inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_background_input($type = 'bg', $overwrite = array() ){
+	$options = array(
+		           ''  =>  __("None","geodirectory"),
+	           ) + geodir_aui_colors();
+
+	$defaults = array(
+		'type' => 'select',
+		'title' => __('Background color', 'geodirectory'),
+		'options' =>  $options,
+		'default' => '',
+		'desc_tip' => true,
+		'group'     => __("Wrapper Styles","geodirectory")
+	);
+
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+/**
+ * A helper function for title tag inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_title_tag_input( $overwrite = array() ){
+
+	$defaults = array(
+		'title' => __('Title HTML tag', 'geodirectory'),
+		'desc' => __('Set the HTML tag for the title.', 'geodirectory'),
+		'type' => 'select',
+		'options'   =>  array(
+			"" => __("Default (theme widget default)","geodirectory"),
+			"h1" => "h1",
+			"h2" => "h2",
+			"h3" => "h3",
+			"h4" => "h4",
+			"h5" => "h5",
+			"h6" => "h6",
+		),
+		'default'  => '',
+		'desc_tip' => true,
+		'advanced' => false,
+		'group'     => __("Title","geodirectory")
+	);
+
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+/**
+ * A helper function for font size inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_font_size_input( $overwrite = array() ){
+
+	$defaults = array(
+		'title' => __('Font size', 'geodirectory'),
+		'type' => 'select',
+		'options'   =>  array(
+			"" => __("Default (title tag size)","geodirectory"),
+			"h1" => 'XXL',
+			"h2" => 'XL',
+			"h3" => 'L',
+			"h4" => 'M',
+			"h5" => 'S',
+			"h6" => 'XS',
+			"display-1" => "display-1",
+			"display-2" => "display-2",
+			"display-3" => "display-3",
+			"display-4" => "display-4",
+		),
+		'default'  => '',
+		'desc_tip' => true,
+		'advanced' => false,
+		'group'     => __("Title","geodirectory")
+	);
+
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+
+/**
+ * A helper function for title tag inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_text_align_input( $overwrite = array() ){
+
+	$defaults = array(
+		'title' => __('Text align', 'geodirectory'),
+		'type' => 'select',
+		'options'   =>  array(
+			"" => __("Default (left)","geodirectory"),
+			"text-left" => __("Left","geodirectory"),
+			"text-center" => __("Center","geodirectory"),
+			"text-right" => __("Right","geodirectory"),
+		),
+		'default'  => '',
+		'desc_tip' => true,
+		'advanced' => false,
+		'group'     => __("Title","geodirectory")
+	);
+
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+/**
+ * A helper function for padding inputs.
+ *
+ * @param string $type
+ * @param array $overwrite
+ *
+ * @return array
+ */
+function geodir_get_sd_text_color_input( $overwrite = array() ){
+	$options = array(
+		           ''  =>  __("Default (theme color)","geodirectory"),
+	           ) + geodir_aui_colors();
+
+	$defaults = array(
+		'type' => 'select',
+		'title' => __('Text color', 'geodirectory'),
+		'options' =>  $options,
+		'default' => '',
+		'desc_tip' => true,
+		'advanced' => false,
+		'group'     => __("Title","geodirectory")
+	);
+
+
+	$input = wp_parse_args( $overwrite, $defaults );
+
+
+	return $input;
+}
+
+
+function geodir_get_sd_title_inputs(){
+	
+	$arguments = array();
+	
+	$arguments['widget_title_tag']  = geodir_get_sd_title_tag_input();
+	$arguments['widget_title_size_class']  = geodir_get_sd_font_size_input(
+		array(
+			'element_require' => '[%widget_title_tag%]!=""',
+			'row'       => array(
+				'key'   => 'title-attr',
+				'open' => true,
+			)
+		)
+	);
+	$arguments['widget_title_align_class'] = geodir_get_sd_text_align_input(
+		array(
+			'element_require' => '[%widget_title_tag%]!=""',
+			'row'       => array(
+				'key'   => 'title-attr',
+			)
+		)
+	);
+	$arguments['widget_title_color_class'] = geodir_get_sd_text_color_input(
+		array(
+			'element_require' => '[%widget_title_tag%]!=""',
+			'row'       => array(
+				'key'   => 'title-attr',
+				'close' => true,
+			)
+		)
+	);
+
+	// Border
+	$arguments['widget_title_border_class'] = geodir_get_sd_border_input('type',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'row'       => array(
+				'key'   => 'title-border',
+				'open' => true,
+			)
+		)
+	);
+	$arguments['widget_title_border_color_class'] = geodir_get_sd_border_input('border',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'row'       => array(
+				'key'   => 'title-border',
+				'close' => true,
+			)
+		)
+	);
+
+	// margins
+	$arguments['widget_title_mt_class']  = geodir_get_sd_margin_input('mt',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'icon'  => 'box-top',
+			'row'       => array(
+				'title' => __('Margins', 'geodirectory'),
+				'desc_tip' => true,
+				'key'   => 'title-margins',
+				'open' => true,
+				'class' => 'text-center',
+				'element_require' => '[%widget_title_tag%]!=""',
+			)
+		) );
+	$arguments['widget_title_mr_class']  = geodir_get_sd_margin_input('mr',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'icon'  => 'box-right',
+			'row'       => array(
+				'key'   => 'title-margins',
+			)
+		));
+	$arguments['widget_title_mb_class']  = geodir_get_sd_margin_input('mb',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'icon'  => 'box-bottom',
+			'row'       => array(
+				'key'   => 'title-margins',
+			)
+		));
+	$arguments['widget_title_ml_class']  = geodir_get_sd_margin_input('ml',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'icon'  => 'box-left',
+			'row'       => array(
+				'key'   => 'title-margins',
+				'close' => true,
+			)
+		));
+
+	// padding
+	$arguments['widget_title_pt_class']  = geodir_get_sd_padding_input('pt',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'icon'  => 'box-top',
+			'row'       => array(
+				'title' => __('Padding', 'geodirectory'),
+				'desc_tip' => true,
+				'key'   => 'title-padding',
+				'open' => true,
+				'class' => 'text-center',
+				'element_require' => '[%widget_title_tag%]!=""',
+			)
+		));
+	$arguments['widget_title_pr_class']  = geodir_get_sd_padding_input('pr',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'icon'  => 'box-right',
+			'row'       => array(
+				'key'   => 'title-padding',
+			)
+		));
+	$arguments['widget_title_pb_class']  = geodir_get_sd_padding_input('pb',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'icon'  => 'box-bottom',
+			'row'       => array(
+				'key'   => 'title-padding',
+			)
+		));
+	$arguments['widget_title_pl_class']  = geodir_get_sd_padding_input('pl',
+		array(
+			'group' => __("Title","geodirectory"),
+			'element_require' => '[%widget_title_tag%]!=""',
+			'icon'  => 'box-left',
+			'row'       => array(
+				'key'   => 'title-padding',
+				'close' => true,
+			)
+		));
+
+	return $arguments;
+
+}
+
+/**
+ * Build AUI classes from settings.
+ *
+ * @todo find best way to use px- py- or general p-
+ * @param $args
+ *
+ * @return string
+ */
+function geodir_build_aui_class($args){
+	$design_style = geodir_design_style();
+	if( !$design_style ){ return ''; }
+	$classes = array();
+	
+	// margins
+	if ( !empty( $args['mt'] ) || ( isset( $args['mt'] ) && $args['mt'] == '0' ) ) { $classes[] = "mt-".sanitize_html_class($args['mt']); }
+	if ( !empty( $args['mr'] ) || ( isset( $args['mr'] ) && $args['mr'] == '0' ) ) { $classes[] = "mr-".sanitize_html_class($args['mr']); }
+	if ( !empty( $args['mb'] ) || ( isset( $args['mb'] ) && $args['mb'] == '0' ) ) { $classes[] = "mb-".sanitize_html_class($args['mb']); }
+	if ( !empty( $args['ml'] ) || ( isset( $args['ml'] ) && $args['ml'] == '0' ) ) { $classes[] = "ml-".sanitize_html_class($args['ml']); }
+
+	// padding
+	if ( !empty( $args['pt'] ) || ( isset( $args['pt'] ) && $args['pt'] == '0' ) ) { $classes[] = "pt-".sanitize_html_class($args['pt']); }
+	if ( !empty( $args['pr'] ) || ( isset( $args['pr'] ) && $args['pr'] == '0' ) ) { $classes[] = "pr-".sanitize_html_class($args['pr']); }
+	if ( !empty( $args['pb'] ) || ( isset( $args['pb'] ) && $args['pb'] == '0' ) ) { $classes[] = "pb-".sanitize_html_class($args['pb']); }
+	if ( !empty( $args['pl'] ) || ( isset( $args['pl'] ) && $args['pl'] == '0' ) ) { $classes[] = "pl-".sanitize_html_class($args['pl']); }
+
+	// border
+	if ( !empty( $args['border'] ) && ( $args['border']=='none' || $args['border']==='0') ) { $classes[] = "border-0"; }
+	elseif ( !empty( $args['border'] ) ) { $classes[] = "border border-".sanitize_html_class($args['border']); }
+
+	// border radius type
+	if ( !empty( $args['rounded'] ) ) { $classes[] = sanitize_html_class($args['rounded']); }
+
+	// border radius size
+	if ( !empty( $args['rounded_size'] ) ) {
+		$classes[] = "rounded-".sanitize_html_class($args['rounded_size']);
+		// if we set a size then we need to remove "rounded" if set
+		if (($key = array_search("rounded", $classes)) !== false) {
+			unset($classes[$key]);
+		}
+	}
+
+	// shadow
+	if ( !empty( $args['shadow'] ) ) { $classes[] = sanitize_html_class($args['shadow']); }
+
+	// background
+	if ( !empty( $args['bg'] ) ) { $classes[] = "bg-".sanitize_html_class($args['bg']); }
+
+	// text_color
+	if ( !empty( $args['text_color'] ) ) { $classes[] = "text-".sanitize_html_class($args['text_color']); }
+
+	return implode(" ",$classes);
+}
+
+
+/**
+ * Check if we are on the archive item edit page.
+ *
+ * @return bool
+ */
+function geodir_is_archive_item_template_page(){
+	global $geodirectory;
+
+	$result = false;
+
+	$post_id = is_admin() && !empty($_REQUEST['post_id']) ? absint($_REQUEST['post_id']) : 0;
+
+	if ( $post_id ) {
+		// main post check
+		if( !empty( $geodirectory->settings['page_archive_item'] ) && $geodirectory->settings['page_archive_item'] == $post_id ){
+			$result = true;
+		}
+
+		// check all CPTs
+		if( !$result && !empty($geodirectory->settings['post_types'])){
+
+			foreach($geodirectory->settings['post_types'] as $post_type){
+				if ( ! empty( $post_type['page_archive_item'] ) && $post_type['page_archive_item'] == $post_id ) {
+					$result = true;
+					break;
+				}
+			}
+		}
+	}
+
+	return $result;
+}
+
+/**
+ * Tell AyeCode UI to load on certain admin pages.
+ *
+ * @param $screen_ids
+ *
+ * @return array
+ */
+function geodir_add_aui_screens($screen_ids){
+
+	// load on these pages if set
+	if( geodir_design_style() ){
+		$screen_ids = array_merge($screen_ids,geodir_get_screen_ids());
+	}
+
+	// AUI is also needed for setup wizard
+	$screen_ids[] = 'gd-setup';
+
+	return $screen_ids;
+}
+add_filter('aui_screen_ids','geodir_add_aui_screens');

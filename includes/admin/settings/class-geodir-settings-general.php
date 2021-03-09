@@ -137,8 +137,14 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc'     => __( 'Disable advanced toggle, show advanced settings at all times (not recommended).', 'geodirectory' ),
 					'id'       => 'admin_disable_advanced',
 					'type'     => 'checkbox',
-					//'desc_tip' => true,
-					//'advanced' => true
+				),
+
+				array(
+					'name'     => __( 'Enable admin hints', 'geodirectory' ),
+					'desc'     => __( 'This will enable admin hint notifications throughout the site to help new GD users find their way around, this will only be visible to admins.', 'geodirectory' ),
+					'id'       => 'enable_hints',
+					'type'     => 'checkbox',
+					'default'  => '1',
 				),
 
 				array(
@@ -147,8 +153,6 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'enable_404_rescue',
 					'type'     => 'checkbox',
 					'default'  => '1',
-					//'desc_tip' => true,
-					//'advanced' => true
 				),
 
 				array(
@@ -157,11 +161,22 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'admin_enable_beta',
 					'type'     => 'checkbox',
 					'default'  => '1',
-					//'desc_tip' => true,
-					//'advanced' => true
 				),
 
-
+				// @todo to be move to own design section
+				array(
+					'id' => 'design_style',
+					'name' => __('Default Design Style', 'geodirectory'),
+					'desc' => wp_sprintf( __( 'The default design style to use. Go to Settings > %s AyeCode UI %s to adjust AyeCode UI settings if you are having compatibility issues with Bootstrap style.', 'geodirectory' ), '<a href="' . admin_url( 'options-general.php?page=ayecode-ui-settings' ) . '">', '</a>' ),
+					'type' => 'select',
+					'options' => array(
+						'bootstrap' =>  __('Bootstrap', 'geodirectory'),
+						'' =>  __('Legacy (non-bootstrap)', 'geodirectory'),
+					),
+					'class' => 'uwp-select',
+					'desc_tip' => false,
+					'default' => 'bootstrap',
+				),
 
 
 				array( 'type' => 'sectionend', 'id' => 'developer_options' ),
@@ -741,7 +756,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'desc' => __('This is useful if your directory is limited to one location such as: New York or Australia (this setting should be blank if using default country, regions etc with multilocation addon as it will automatically add them)', 'geodirectory'),
 					'id' => 'search_near_addition',
 					'type' => 'text',
-					'placeholder' => __('New York','goedirectory'),
+					'placeholder' => __('New York','geodirectory'),
 					'default'  => '',
 					'desc_tip' => true,
 					'advanced' => true
@@ -849,14 +864,24 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 				array(
 					'name'     => __( 'Timezone', 'geodirectory' ),
-					'desc'     => __( 'Set the site timezone. Ex: +5:30 or GMT+5:30 or UTC+5:30', 'geodirectory' ),
-					'id'       => 'default_location_timezone',
-					'type'     => 'text',
+					'desc'     => __( 'Select a city/timezone.', 'geodirectory' ),
+					'id'       => 'default_location_timezone_string',
 					'css'      => 'min-width:300px;',
 					'desc_tip' => true,
-					'placeholder' => geodir_wp_gmt_offset(),
 					'advanced' => true,
-					'required' => true
+					'type'     => 'single_select_timezone',
+					'class'    => 'geodir-select',
+					'default'  => geodir_timezone_string(),
+					'options'  => array()
+				),
+				array(
+					'type'     => 'checkbox',
+					'id'       => 'multi_city',
+					'name'     => __( 'Remove default city limit', 'geodirectory' ),
+					'desc'     => __( 'This will allow listings to be added anywhere (outside default location).', 'geodirectory' ),
+					'default'  => '0',
+					'desc_tip' => false,
+					'advanced' => false,
 				),
 
 				array(
@@ -890,7 +915,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'class'      => 'geodir-select',
 					'options'    => geodir_user_roles(array('administrator')),
 					'desc_tip'   => true,
-					'docs'       => "https://wpgeodirectory.com/docs-v2/",
+					'docs'       => "https://docs.wpgeodirectory.com/",
 					//'advanced' => true
 				),
 
@@ -911,7 +936,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'   => 'user_trash_posts',
 					'type' => 'checkbox',
 					'default'  => '1',
-					'docs'       => "https://wpgeodirectory.com/docs-v2/",
+					'docs'       => "https://docs.wpgeodirectory.com/",
 
 				),
 				array(
@@ -931,7 +956,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 				array(
 					'name' => __( 'Allow posting without logging in?', 'geodirectory' ),
-					'desc' => __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ),
+					'desc' => defined('WPE_PLUGIN_VERSION') ? __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ) . " <span style='color:red'>" . sprintf( __( 'WP ENGINE DETECTED: please see %sthis guide%s for this feature to work properly.', 'geodirectory' ),'<a href="https://docs.wpgeodirectory.com/article/221-how-to-allow-posting-without-logging-in-when-using-wp-engine-hosting">','</a>' ) . "</span>" : __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ),
 					'id'   => 'post_logged_out',
 					'type' => 'checkbox',
 					'default'  => '0',
@@ -977,8 +1002,12 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				self::get_google_maps_api_key_setting(),
+	
+				self::get_google_geocode_api_key_setting(),
 
 				self::get_maps_api_setting(),
+
+				self::get_maps_lazy_load_setting(),
 
 				self::get_map_language_setting(),
 
@@ -993,7 +1022,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				),
 
 				array(
-					'name' => __('Enable map cache', 'geodirectory'), // @todo we ned to port this over from GDv1
+					'name' => __('Enable map cache', 'geodirectory'), // @todo we need to port this over from GDv1
 					'desc' => __('This will cache the map JSON for 24 hours or until a GD listing is saved.', 'geodirectory'),
 					'id' => 'map_cache',
 					'type' => 'checkbox',
@@ -1075,6 +1104,31 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 		);
 	}
 
+	/**
+	 * Map lazy load settings.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @return array Settings.
+	 */
+	public static function get_maps_lazy_load_setting(){
+		return array(
+			'name'       => __( 'Lazy Load Maps', 'geodirectory' ),
+			'desc'       => __( "How to load maps on frontend.", 'geodirectory' ),
+			'id'         => 'maps_lazy_load',
+			'default'    => '',
+			'type'       => 'select',
+			'class'      => 'geodir-select',
+			'options'    => array(
+				'' => __( 'Off (no lazy loading)', 'geodirectory' ),
+				'auto' => __( 'Auto (load when map visible on page scroll)', 'geodirectory' ),
+				'click' => __( 'Click to Load (show a button to load map)', 'geodirectory' ),
+			),
+			'desc_tip' => true,
+			'advanced' => true
+		);
+	}
+
     /**
      * Get google maps api key settings.
      *
@@ -1090,7 +1144,28 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 			'type' => 'map_key',
 			'default'  => '',
 			'desc_tip' => true,
+			'placeholder' => __( 'Leave this blank to use Open Street Maps (OSM)', 'geodirectory' )
 			//'advanced' => true
+		);
+	}
+
+	/**
+     * Get Google Geocoding API key settings.
+     *
+     * @since 2.0.0.64
+     *
+     * @return array Google Geocoding api key settings.
+     */
+	public static function get_google_geocode_api_key_setting(){
+		return array(
+			'type' => 'geocode_key',
+			'id' => 'google_geocode_api_key',
+			'name' => __( 'Google Geocoding API Key', 'geodirectory' ),
+			'desc' => __( 'If above Google MAPs API key is restricted by HTTP referrers then it requires to use separate API key for Geocoding & Timezone services.', 'geodirectory' ),
+			'default'  => '',
+			'placeholder' => geodir_get_option( 'google_maps_api_key' ),
+			'desc_tip' => true,
+			'advanced' => true
 		);
 	}
 

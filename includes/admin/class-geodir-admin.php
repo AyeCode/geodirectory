@@ -50,12 +50,17 @@ class GeoDir_Admin {
 			delete_transient( 'gd_addons_section_themes' );
 		}
 
+		if ( ! empty( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'geodir_post_attachment_upload', 'geodir_import_export' ) ) ) {
+			add_filter( 'wp_check_filetype_and_ext', array( $this, 'wp_check_filetype_and_ext' ), 10, 5 );
+		}
 
 		// disable GD pages from being able to be selected for some settings
 		add_filter( 'wp_dropdown_pages',array( $this, 'dropdown_pages_disable' ), 10,3 );
 
+		// Deactivate legacy plugins
+		$this->deactivate_plugin();
 	}
-
+	
 	/**
 	 * Disable some GD pages for some WP page settings.
 	 *
@@ -162,6 +167,9 @@ class GeoDir_Admin {
 			} else if ( ! empty( $post_type_arr[ 'page_details' ] ) && $post->ID == $post_type_arr[ 'page_details' ] ) {
 				$post_states['geodir_details_page_' . $post_type] = wp_sprintf( __( 'GD Details template (%s)', 'geodirectory' ), $name ) .
 													  geodir_help_tip( wp_sprintf( __( 'Used to design the %s details page but should never be linked to directly.', 'geodirectory' ), $name ) );
+			} else if ( ! empty( $post_type_arr[ 'page_add' ] ) && $post->ID == $post_type_arr[ 'page_add' ] ) {
+				$post_states['geodir_add_listing_page_' . $post_type] = wp_sprintf( __( 'GD Add listing page (%s)', 'geodirectory' ), $name ) .
+													  geodir_help_tip( wp_sprintf( __( 'Used to design the add %s page for the frontend.', 'geodirectory' ), $name ) );
 			}
 		}
 
@@ -182,14 +190,10 @@ class GeoDir_Admin {
 		include_once( dirname( __FILE__ ) . '/admin-functions.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-settings.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-comments.php' );
-//		include_once( dirname( __FILE__ ) . '/class--admin-post-types.php' );
-//		include_once( dirname( __FILE__ ) . '/class-wc-admin-taxonomies.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-menus.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-notices.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-assets.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-api-keys.php' );
-//		include_once( dirname( __FILE__ ) . '/class-wc-admin-webhooks.php' );
-//		include_once( dirname( __FILE__ ) . '/class-wc-admin-pointers.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-blocks.php' );
 
 		// Help Tabs
@@ -215,6 +219,21 @@ class GeoDir_Admin {
 		global $pagenow;
 		if($pagenow=='users.php'){
 			new GeoDir_Admin_Users();
+		}
+
+		// AyeCode Connect notice
+		if ( is_admin() ){
+			// set the strings so they can be translated
+			$strings = array(
+				'connect_title' => __("GeoDirectory - an AyeCode product!","geodirectory"),
+				'connect_external'  => __( "Please confirm you wish to connect your site?","geodirectory" ),
+				'connect'           => sprintf( __( "<strong>Have a license?</strong> Forget about entering license keys or downloading zip files, connect your site for instant access. %slearn more%s","geodirectory" ),"<a href='https://ayecode.io/introducing-ayecode-connect/' target='_blank'>","</a>" ),
+				'connect_button'    => __("Connect Site","geodirectory"),
+				'connecting_button'    => __("Connecting...","geodirectory"),
+				'error_localhost'   => __( "This service will only work with a live domain, not a localhost.","geodirectory" ),
+				'error'             => __( "Something went wrong, please refresh and try again.","geodirectory" ),
+			);
+			new AyeCode_Connect_Helper($strings,array('gd-addons'));
 		}
 	}
 
@@ -362,5 +381,48 @@ class GeoDir_Admin {
 		}
 
 		return $footer_text;
+	}
+
+	/**
+	 * Attempt to deactivate the legacy plugins.
+	 *
+	 * @since  2.0.0.62
+	 */
+	public function deactivate_plugin() {
+		include_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+		if ( ! function_exists( 'deactivate_plugins' ) ) {
+			return;
+		}
+
+		// Deactivate GD Dashboard plugin.
+		if ( function_exists( 'GD_Dashboard_init' ) && is_plugin_active( 'geodir_dashboard/geodir_dashboard.php' ) ) {
+			deactivate_plugins( 'geodir_dashboard/geodir_dashboard.php' );
+		}
+	}
+
+	/**
+	 * Filter the "real" file type of the CSV file during import.
+	 *
+	 * @since 2.1.0.5
+	 *
+	 * @param array       $data Values for the extension, mime type, and corrected filename.
+	 * @param string      $file Full path to the file.
+	 * @param string      $filename The name of the file (may differ from $file due to $file being in a tmp directory).
+	 * @param string[]    $mimes Array of mime types keyed by their file extension regex.
+	 * @param string|bool $real_mime The actual mime type or false if the type cannot be determined.
+	 */
+	public function wp_check_filetype_and_ext( $data, $file, $filename, $mimes, $real_mime = '' ) {
+		if ( ( ( ! empty( $_REQUEST['imgid'] ) && strpos( $_REQUEST['imgid'], 'gd_im_' ) === 0 && ! empty( $_REQUEST['name'] ) ) || defined( 'GEODIR_DOING_IMPORT' ) ) && current_user_can( 'manage_options' ) && strtolower( substr( strrchr( $filename, '.' ), 1 ) ) == 'csv' ) {
+			$wp_filetype = wp_check_filetype( $filename, $mimes );
+
+			$ext = $wp_filetype['ext'];
+			$type = $wp_filetype['type'];
+			$proper_filename = $data['proper_filename'];
+
+			$data = compact( 'ext', 'type', 'proper_filename' );
+		}
+
+		return $data;
 	}
 }

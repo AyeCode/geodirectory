@@ -66,6 +66,10 @@ class GeoDir_AJAX {
 			'recently_viewed_listings' => true,
 			'embed_widget' => true,
 			'embed_script' => true,
+			'timezone_data' => true,
+			'get_sort_options' => false,
+			'tool_regenerate_thumbnails' => true,
+			'regenerate_thumbnails' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -78,6 +82,17 @@ class GeoDir_AJAX {
 				add_action( 'gd_ajax_' . $ajax_event, array( __CLASS__, $ajax_event ) );
 			}
 		}
+	}
+
+	/**
+	 * Get the CPT sort options for the listings widget.
+	 */
+	public static function get_sort_options(){
+		$post_type = !empty($_REQUEST['post_type']) ? sanitize_key( $_REQUEST['post_type'] ) : 'gd_place';
+		$sort_options = geodir_sort_by_options( $post_type );
+
+		echo json_encode($sort_options);
+		exit;
 	}
 
 	public static function embed_script(){
@@ -144,46 +159,73 @@ class GeoDir_AJAX {
 		status_header( 200 );
 	}
 
-    /**
-     * Manual map
-     *
-     * @since 2.0.0
-     */
-	function manual_map(){
-		$prefix = isset($_POST['trigger']) ? esc_attr($_POST['trigger']): 'geodir_manual_location_';
-//		$prefix = 'geodir_manual_location_';
-		echo "<style>
-		.lity-show #".$prefix."set_address_button,
-		.lity-show .TopLeft,
-		.lity-show .TopRight,
-		.lity-show .BottomRight,
-		.lity-show .BottomLeft{
-		display: none;
-		}
-		
-		.lity-show .geodir_map_container{
-		margin-top: 0 !important;
-		}
-		
-		</style>";
+	/**
+	 * Manual map
+	 *
+	 * @since 2.0.0
+	 */
+	public static function manual_map() {
+		global $geodirectory, $mapzoom, $geodir_manual_map;
 
-		// try and center the map as close to the user as possible.
-		$ip = $_SERVER['REMOTE_ADDR'];
-		if($ip){
-			global $mapzoom;
-			$addr_details = geodir_geo_by_ip();
-			$mylat = $addr_details['latitude'];
-			$mylon = $addr_details['longitude'];
-			if($mylat){$lat = $mylat; $lng = $mylon; $mapzoom = 8;}// pass to the map as the starting position
+		$prefix = isset( $_POST['trigger'] ) ? esc_attr( $_POST['trigger'] ) : 'geodir_manual_location_';
+
+		$map_title = __( "Select Your Location", 'geodirectory' );
+		$location = $geodirectory->location->get_default_location();
+		$country = isset( $location->country ) ? $location->country : '';
+		$region = isset( $location->region ) ? $location->region : '';
+		$city = isset( $location->city ) ? $location->city : '';
+		$lat = isset( $location->latitude ) ? $location->latitude : '';
+		$lng = isset( $location->longitude ) ? $location->longitude : '';
+		$mapzoom = 8;
+
+		$design_style = geodir_design_style();
+		$geodir_manual_map = true;
+
+		// Try and center the map as close to the user as possible.
+		if ( $ip = geodir_get_ip() ) {
+			$geo = geodir_geo_by_ip( $ip );
+
+			if ( ! empty( $geo ) && ! empty( $geo['latitude'] ) && ! empty( $geo['longitude'] ) ) {
+				$lat = $geo['latitude'];
+				$lng = $geo['longitude'];
+			}
 		}
 
-		add_filter('geodir_add_listing_map_restrict','__return_false');
-		include_once(GEODIRECTORY_PLUGIN_DIR . 'templates/map.php');
+		add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
+
+		if(!$design_style ){
+			echo "<style>.lity-show #" . $prefix . "set_address_button,.lity-show .TopLeft,.lity-show .TopRight,.lity-show .BottomRight,.lity-show .BottomLeft{display:none}.lity-show .geodir_map_container{margin-top:0 !important}</style>";
+		}
+
+		if($design_style ){
+			echo aui()->alert(array(
+					'type'=> 'info',
+					'content'=> __("Auto location detection failed, please manually set your location below by dragging the map / marker.","geodirectory")
+				)
+			);
+			include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map/map-add-listing.php' );
+		}else{
+			include_once( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
+		}
+
 		?>
-		<input type="hidden" id="<?php echo $prefix.'latitude';?>">
-		<input type="hidden" id="<?php echo $prefix.'longitude';?>">
-		<button style="float: right;margin: 10px 0 0 0;" onclick="if(jQuery('#<?php echo $prefix.'latitude';?>').val()==''){alert('<?php _e('Please drag the marker or the map to set the position.','geodirectory');?>');}else{jQuery(window).triggerHandler('<?php echo $prefix;?>', [jQuery('#<?php echo $prefix.'latitude';?>').val(), jQuery('#<?php echo $prefix.'longitude';?>').val()]);}"><?php _e('Set my location','geodirectory');?></button>
+		<input type="hidden" id="<?php echo $prefix . 'latitude'; ?>">
+		<input type="hidden" id="<?php echo $prefix . 'longitude'; ?>">
+
 		<?php
+		if( $design_style ) {
+			?>
+			<div class="text-right">
+			<button type="button" class="btn btn-link" data-dismiss="modal"><?php _e("Cancel","geodirectory");?></button>
+			<button class="btn btn-primary"
+			        onclick="if(jQuery('#<?php echo $prefix . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo $prefix; ?>', [jQuery('#<?php echo $prefix . 'latitude'; ?>').val(), jQuery('#<?php echo $prefix . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
+			</div><?php
+		}else{
+			?>
+			<button style="float: right;margin: 10px 0 0 0;"
+			        onclick="if(jQuery('#<?php echo $prefix . 'latitude'; ?>').val()==''){alert('<?php _e( 'Please drag the marker or the map to set the position.', 'geodirectory' ); ?>');}else{jQuery(window).triggerHandler('<?php echo $prefix; ?>', [jQuery('#<?php echo $prefix . 'latitude'; ?>').val(), jQuery('#<?php echo $prefix . 'longitude'; ?>').val()]);}"><?php _e( 'Set my location', 'geodirectory' ); ?></button>
+			<?php
+		}
 		wp_die();
 	}
 
@@ -235,6 +277,18 @@ class GeoDir_AJAX {
 
 		$post_ids = !empty($_REQUEST['viewed_post_id']) ? json_decode(stripslashes($_REQUEST['viewed_post_id']), true) : '';
 
+		// elementor pro
+		$skin_id = ! empty( $_REQUEST['skin_id'] ) ? absint( $_REQUEST['skin_id'] ) : '';
+		$skin_column_gap = ! empty( $_REQUEST['skin_column_gap'] ) ? absint( $_REQUEST['skin_column_gap'] ) : '';
+		$skin_row_gap = ! empty( $_REQUEST['skin_row_gap'] ) ? absint( $_REQUEST['skin_row_gap'] ) : '';
+
+		// AUI
+		$column_gap = ! empty( $_REQUEST['column_gap'] ) ? absint( $_REQUEST['column_gap'] ) : '';
+		$row_gap = ! empty( $_REQUEST['row_gap'] ) ? absint( $_REQUEST['row_gap'] ) : '';
+		$card_border = ! empty( $_REQUEST['card_border'] ) ? sanitize_html_class( $_REQUEST['card_border'] ) : '';
+		$card_shadow = ! empty( $_REQUEST['card_shadow'] ) ? sanitize_html_class( $_REQUEST['card_shadow'] ) : '';
+
+
 		$listings_ids = array();
 
 		if( !empty( $post_type ) ) {
@@ -260,11 +314,70 @@ class GeoDir_AJAX {
 		}
 
 		if(!empty($widget_listings)){
-			$gd_layout_class = $layout;
 
-			geodir_get_template('content-widget-listing.php', array('widget_listings' => $widget_listings));
+			// elementor
+			$skin_active = false;
+			$columns = 1;
+			if(defined( 'ELEMENTOR_PRO_VERSION' )  && $skin_id){
+				if(get_post_status ( $skin_id )=='publish'){
+					$skin_active = true;
+				}
+				if($skin_active){
+					$columns = isset($layout) ? absint($layout) : 1;
+					if($columns == '0'){$columns = 6;}// we have no 6 row option to lets use list view
+				}
+			}
+
+			$gd_layout_class = geodir_convert_listing_view_class( $layout );
+
+			// card border class
+			$card_border_class = '';
+			if(!empty($card_border)){
+				if($card_border=='none'){
+					$card_border_class = 'border-0';
+				}else{
+					$card_border_class = 'border-'.sanitize_html_class($card_border);
+				}
+			}
+
+			// card shadow
+			$card_shadow_class = '';
+			if(!empty($card_shadow)){
+				if($card_shadow=='small'){
+					$card_shadow_class = 'shadow-sm';
+				}elseif($card_shadow=='medium'){
+					$card_shadow_class = 'shadow';
+				}elseif($card_shadow=='large'){
+					$card_shadow_class = 'shadow-lg';
+				}
+			}
+
+			if($skin_active){
+				$column_gap = $skin_column_gap;
+				$row_gap = $skin_row_gap;
+				geodir_get_template( 'elementor/content-widget-listing.php', array( 'widget_listings' => $widget_listings,'skin_id' => $skin_id,'columns'=>$columns,'column_gap'=> $column_gap,'row_gap'=>$row_gap ) );
+
+			}else{
+				$design_style = geodir_design_style();
+				$template = $design_style ? $design_style."/content-widget-listing.php" : "content-widget-listing.php";
+
+				echo geodir_get_template_html( $template, array(
+					'widget_listings' => $widget_listings,
+					'column_gap_class'   => $column_gap ? 'mb-'.absint($column_gap) : 'mb-4',
+					'row_gap_class'   => $row_gap ? 'px-'.absint($row_gap) : '',
+					'card_border_class'   => $card_border_class,
+					'card_shadow_class'  =>  $card_shadow_class,
+				) );
+
+			}
+
 		}else{
-			_e("Your recently viewed listings will show here.","geodirectory");
+			echo aui()->alert(array(
+					'type'=> 'info',
+					'content'=> __("Your recently viewed listings will show here.","geodirectory")
+				)
+			);
+
 		}
 
 		echo ob_get_clean();
@@ -436,7 +549,7 @@ class GeoDir_AJAX {
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
-			wp_send_json_success($result);
+			wp_send_json_success(geodir_notification( array( 'info' => $result) ));
 		}
 
 		wp_die();
@@ -461,7 +574,7 @@ class GeoDir_AJAX {
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
-			wp_send_json_success($result);
+			wp_send_json_success(geodir_notification( array( 'info' => $result) ));
 		}
 
 		wp_die();
@@ -486,7 +599,7 @@ class GeoDir_AJAX {
 		if(is_wp_error( $result ) ){
 			wp_send_json_error( $result->get_error_message() );
 		}else{
-			wp_send_json_success($result);
+			wp_send_json_success(geodir_notification( array( 'info' => $result) ));
 		}
 
 		wp_die();
@@ -645,28 +758,36 @@ class GeoDir_AJAX {
      *
      * @since 2.0.0
 	 */
-	public static function user_add_fav(){
+	public static function user_add_fav() {
 		// security
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
 		$user_id = get_current_user_id();
-		$post_id = absint($_REQUEST['pid']);
-		$type_action = isset($_REQUEST['type_action']) && $_REQUEST['type_action']=='add' ? 'add' : 'remove';
+		$post_id = absint( $_REQUEST['pid'] );
+		$type_action = isset( $_REQUEST['type_action'] ) && $_REQUEST['type_action'] == 'add' ? 'add' : 'remove';
 
-		if($user_id && $post_id ){
-			if($type_action=='add'){
-				$result = GeoDir_User::add_fav($post_id,$user_id);
-			}else{
-				$result = GeoDir_User::remove_fav($post_id,$user_id);
+		if ( $user_id && $post_id ) {
+			$data = array();
+
+			if ( $type_action == 'add' ) {
+				$result = GeoDir_User::add_fav( $post_id, $user_id );
+				if ( $result ) {
+					$data['action_text'] = apply_filters( 'geodir_favourite_text', __( 'Unfavorite', 'geodirectory' ) );
+				}
+			} else {
+				$result = GeoDir_User::remove_fav( $post_id, $user_id );
+				if ( $result ) {
+					$data['action_text'] = apply_filters( 'geodir_unfavourite_text', __( 'Favorite', 'geodirectory' ) );
+				}
 			}
 
-			if($result){
-				wp_send_json_success();
-			}else{
-				wp_send_json_error( __('Action failed.'));
+			if ( $result ){
+				wp_send_json_success( $data );
+			} else {
+				wp_send_json_error( __( 'Action failed.', 'geodirectory' ) );
 			}
-		}else{
-			wp_send_json_error( __('Action failed.'));
+		} else {
+			wp_send_json_error( __( 'Action failed.', 'geodirectory' ) );
 		}
 		wp_die();
 	}
@@ -739,6 +860,9 @@ class GeoDir_AJAX {
 			wp_die( -1 );
 		}
 
+		//Suspend cache additions
+		wp_suspend_cache_addition(true);
+		
 		$result = GeoDir_Admin_Dummy_Data::create_dummy_posts( $_REQUEST );
 
 		if(is_wp_error( $result ) ){
@@ -1205,6 +1329,81 @@ class GeoDir_AJAX {
 
 		$widget_listings = new GeoDir_Widget_Listings();
 		$widget_listings->ajax_listings( $_POST );
+
+		wp_die();
+	}
+
+	/**
+	 * Get timezone data for latitude & longitude.
+     *
+     * @since 2.0.0.66
+	 */
+	public static function timezone_data(){
+		// security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		$latitude = isset( $_POST['lat'] ) ? sanitize_text_field( $_POST['lat'] ) : '';
+		$longitude = isset( $_POST['lon'] ) ? sanitize_text_field( $_POST['lon'] ) : '';
+		$timestamp = isset( $_POST['ts'] ) ? absint( $_POST['ts'] ) : 0;
+
+		$data = geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 );
+		
+		if ( is_wp_error( $data ) ) {
+			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
+		} else {
+			wp_send_json_success( $data );
+		}
+
+		wp_die();
+	}
+
+	/**
+	 * Regenerate thumbnails for bulk attachments.
+	 *
+	 * @since 2.1.0.10
+	 *
+	 * @return mixed
+	 */
+	public static function tool_regenerate_thumbnails() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		$page = ! empty( $_POST['per_page'] ) ? absint( $_POST['page'] ) : 1;
+		$per_page = ! empty( $_POST['per_page'] ) ? absint( $_POST['per_page'] ) : 10;
+
+		$data = GeoDir_Media::generate_bulk_attachment_metadata( $page, $per_page );
+
+		if ( is_wp_error( $data ) ) {
+			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
+		} else {
+			wp_send_json_success( $data );
+		}
+
+		wp_die();
+	}
+
+	/**
+	 * Regenerate thumbnails.
+	 *
+	 * @since 2.1.0.10
+	 *
+	 * @return mixed
+	 */
+	public static function regenerate_thumbnails() {
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		$post_id = ! empty( $_POST['post_id'] ) ? absint( $_POST['post_id'] ) : 0;
+
+		$data = GeoDir_Media::generate_post_attachment_metadata( $post_id );
+
+		if ( is_wp_error( $data ) ) {
+			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
+		} else {
+			wp_send_json_success( $data );
+		}
 
 		wp_die();
 	}

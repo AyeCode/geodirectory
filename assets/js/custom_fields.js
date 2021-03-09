@@ -25,7 +25,7 @@ jQuery(document).ready(function () {
         var type = jQuery(this).data("field-type");
         var type_key = jQuery(this).data("field-type-key");
         var custom_type = jQuery(this).data("field-custom-type");
-        var post_type = jQuery('#new_post_type').val();
+        var post_type = jQuery('#gd_new_post_type').val();
         var id = 'new' + jQuery(".field_row_main ul.core li:last").index();
         var manage_field_type = jQuery(".manage_field_type").val();
         var gd_nonce = jQuery("#gd_new_field_nonce").val();
@@ -533,18 +533,21 @@ function gd_init_tabs_layout(){
  * @param $this
  */
 function gd_tabs_item_settings($this){
-
-    var is_open = !jQuery($this).parent().find('.dd-setting').is(':hidden');
+    var $dd = jQuery($this).parent().find('.dd-setting');
+    var is_open = !$dd.is(':hidden');
     jQuery('.dd-setting').hide();
     if(is_open){
         jQuery($this).addClass("fa-caret-down").removeClass( "fa-caret-up");
-        jQuery($this).parent().find('.dd-setting').hide().removeClass( "gd-tab-settings-open" );
+        $dd.hide().removeClass( "gd-tab-settings-open" );
     }else{
         jQuery($this).addClass("fa-caret-up").removeClass( "fa-caret-down");
-        jQuery($this).parent().find('.dd-setting').show().addClass( "gd-tab-settings-open" );
+        $dd.show().addClass( "gd-tab-settings-open" );
+        // Setup select2
+        if (jQuery('.geodir-select', $dd).length) {
+            jQuery('.geodir-select', $dd).removeClass('enhanced');
+            jQuery("select.geodir-select", $dd).trigger('geodir-select-init');
+        }
     }
-
-
 }
 
 function gd_tabs_add_tab($this){
@@ -559,7 +562,7 @@ function gd_tabs_add_tab($this){
     }
 
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
-    var $post_type = jQuery("#new_post_type").val();
+    var $post_type = jQuery("#gd_new_post_type").val();
     var $tab_layout = jQuery($this).data('tab_layout');
     var $tab_type = jQuery($this).data('tab_type');
     var $tab_name = jQuery($this).data('tab_name');
@@ -631,7 +634,7 @@ function gd_tabs_delete_tab($this){
     var $li = jQuery($form).closest("li");
     console.log($form.serialize());
     var gd_nonce = jQuery("#gd_new_field_nonce").val();
-    var $post_type = jQuery("#new_post_type").val();
+    var $post_type = jQuery("#gd_new_post_type").val();
     var $tab_id = jQuery($form).find("input[name=id]").val();
 
     if(!$tab_id){

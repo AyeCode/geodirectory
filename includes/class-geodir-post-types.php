@@ -474,19 +474,27 @@ class GeoDir_Post_types {
 					$value = false;
 				}
 				break;
+			case 'business_hours':
 			case 'featured':
-				$cf = geodir_get_field_infoby( 'htmlvar_name', 'featured', $post_type );
+			case 'special_offers':
+				$cf = geodir_get_field_infoby( 'htmlvar_name', $feature, $post_type );
 				if ( ! empty( $cf ) && ! empty( $cf['is_active'] ) ) {
 					$value = true;
 				} else {
 					$value = false;
 				}
 				break;
-			case 'special_offers':
-				$cf = geodir_get_field_infoby( 'htmlvar_name', 'special_offers', $post_type );
-				if ( ! empty( $cf ) && ! empty( $cf['is_active'] ) ) {
+			case 'comments':
+				if ( isset( $post_types[ $post_type ] ) && ! empty( $post_types[ $post_type ][ 'disable_comments' ] ) ) {
+					$value = false;
+				}else{
 					$value = true;
-				} else {
+				}
+				break;
+			case 'single_review':
+				if ( isset( $post_types[ $post_type ] ) && ! empty( $post_types[ $post_type ][ 'single_review' ] ) ) {
+					$value = true;
+				}else{
 					$value = false;
 				}
 				break;

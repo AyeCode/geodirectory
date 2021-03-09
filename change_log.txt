@@ -1,16 +1,545 @@
-= 2.0.0.60 =
+= 2.1.0.10 =
+* Show x stars back instead of rating type name on hover of ratings - CHANGED
+* Field description is missing for radio/checkbox multiselect fields - FIXED
+* Tool added to regenerate thumbnails for the post images - ADDED
+* Map can no longer be moved if no records found message shown - FIXED
+* Elementor loop shows wrong post class for first element - FIXED
+* Featured field shows checked for empty value when default set to checked - FIXED
+* GD Listings elementor skin element missing background image - FIXED
+* Add post ID in gd_post_meta,gd_post_badges and gd_dynamic_content - ADDED
+
+= 2.1.0.9 =
+* Show markers for custom Elementor posts loop not working - FIXED
+* Export CSV opens in browser instead of download on some sites - FIXED
+* Search keyword don't matches with the word start with new line character - FIXED
+* Category checkbox hierarchy no longer showing option to set default category with AUI - FIXED
+* Show rating type name on hover of ratings instead of x stars - ADDED
+* Image of screenshot of youtube link will now open in lightbox if link to iframe lightbox selected - ADDED/CHANGED
+* Pending post shows 404 to logged in post author - FIXED
+* OpenGraph settings not working properly with recent Yoast SEO - FIXED
+
+= 2.1.0.8 =
+* Sometimes published email shows broken post link when cache is enabled - FIXED
+* Badge class not added to post class with AUI Bootstrap style - FIXED
+* Add setting to allow users to set no. of tags to show in tags list in add/edit listing form - ADDED
+* Listings shows comments even comments are disable for post type - FIXED
+* Listing post image shows link icon on top of the image - FIXED
+* Allow to filter Recent Reviews by author - ADDED
+* Fix for some UK regions being wrong from Google API - FIXED
+* Create missing pages tool not working if menu item with same slug exists - FIXED
+* Add filter for changing distance - ADDED
+* GD > Ninja Forms Gutenberg background color issue - FIXED
+* Map don't shows correct results filtered by GPS - FIXED
+* Yoast taxonomies default nonindex setting not working for GD terms - FIXED
+* Allow HTML tags in video field - CHANGED
+* WP Rocket new JS deffer feature breaking GD variables - FIXED
+* Compatibility changes for Avada and Kleo themes using bootstrap 3 to work with new AUI styles - CHANGED
+* Custom field user defined validation is not working with AUI - FIXED
+* Divi theme builder custom page template layout for search page breaking the search result layout - FIXED
+
+= 2.1.0.7 =
+* OpenStreetMap routing add more languages support including Russian language - CHANGED
+* Listing sets CPT default image instead of category default image as fallback - FIXED
+* Listing generate image alt attribute when empty to prevent web accessibility issue - CHANGED
+* Add missing translation for file upload field - FIXED
+* Images can now store full URL for external images - ADDED
+* Detail page lightbox next/previous link not working with WP v5.6 & jQuery v3.5.x for legacy style - FIXED
+* Business hours show single day times with [gd_post_meta] shortcode - ADDED
+* Images can now store full URL during import for external images - ADDED
+* %%post_count%% shows null when no post found - CHANGED
+* GD Listings pagination not working when with_pics_only enabled - FIXED
+* Map marker not bouncing when OpenStreetMaps enabled with AUI Bootstrap style - FIXED
+* Option added to allow to add listing outside default city - ADDED
+* Clear existing map route when searched with a new route - FIXED
+
+= 2.1.0.6 =
+* Detail page image slider is not working with Divi theme - FIXED
+* Default category always shows first option selected with Bootstrap style - FIXED
+* Unable to translate street field default placeholder - FIXED
+* Elementor custom skin loop overwrites $wp_query - FIXED
+* Search form AUI does not keep padding margins when CPT select changed - FIXED
+* Backend re-arrange post images order not working with AUI - FIXED
+* Classifieds dummy data not using blocks when Gutenberg in use - FIXED
+* Category widget now has option to align items of partial rows - ADDED
+* Review output avatar now set as position relative to prevent theme CSS breaking alignment - CHANGED
+* Map on set manual location popup not working with lazy load - FIXED
+* Map Category select overflow not scrolling - FIXED
+* Multiselect checkbox field with AUI is not working in add listing - FIXED
+* GD Listings pagination next page link is not working with AUI style - FIXED
+
+= 2.1.0.5 =
+* JavaScript error breaks Divi visual builder when bootstrap style enabled - FIXED
+* Edit image title/caption is not working in backend edit post page - FIXED
+* Lightbox gallery on mobile can vertically stretch images - FIXED
+* Avada Builder not compatible with new AUI styles, revert to legacy styles if active - FIXED
+* Map bounce on listing hover is not working with bootstrap style - FIXED
+* Lightbox gallery on mobile can vertically stretch images - FIXED
+* Added filters to search input arguments - ADDED
+* Divi visual editor shows "field key is missing" for badge - FIXED
+* Reviews, link to author profile instead of author URL input - CHANGED
+* Embedded videos not responsive in AUI styles - FIXED
+* Map show markers for wrong Elementor loop - FIXED
+* Fix import csv error "Sorry, this file type is not permitted for security reasons." - FIXED
+* Near search not working when lazy load map active and no map on the page - FIXED
+
+= 2.1.0.4 =
+* Load categories on map via AJAX - CHANGED
+* Map with full page width shows scroll bar when toggle categories - FIXED
+* OpenStreetMap add touchZoom map option - ADDED
+* Preview page is not showing post images & tabs on Listimia theme - FIXED
+* Kleo theme, remove force legacy styles if version >= 4.9.170 - CHANGED
+* Video fields now support image screenshots in the GD > Post Images widget eg: video_screenshot - ADDED
+* Category archive map shows all markers from category on bootstrap style - FIXED
+* Some svg map markers are not resized due to unknown dimensions unit - FIXED
+* Package category limit validation is not working - FIXED
+* OpenStreetMap disable single finger dragging on touch devices - CHANGED
+
+= 2.1.0.3 =
+* Kleo & Listimia themes not compatible with new AUI styles, revert to legacy styles if active - FIXED
+* Hide latitude/longitude still shows field labels - FIXED
+* Business Hours field input mobile compatibility - FIXED
+
+= 2.1.0.2 =
+* Sort by options in GD > Listings widget not updating with post type change - FIXED
+* Hummingbird object cache does not clears feature image cache - FIXED
+* Post distance is not showing rounded value - FIXED
+* Post images slider do not covers full width when only one image to display - FIXED
+* GD ninja forms widget tries to open wrong lightbox for non AUI - FIXED
+* Issue in save multiselect values with bootstrap active - FIXED
+* Recent reviews widget image not rounded - FIXED
+* Lazyload map category images natively - CHANGED
+* Category widget CPT switcher not retaining all AUI styles on AJAX load - FIXED
+
+= 2.1.0.0 =
+* AyeCode UI Bootstrap design - ADDED
+* GD Archive template not rendered correctly for Enfold Builder - FIXED
+* Only main image rotated if needed, smaller sizes fail to rotate based on metadata - FIXED
+* Sometime zip field looses the value on select autocomplete address - FIXED
+* Replace jQuery deprecated load() function - CHANGED
+* Genesis don't show comments when rating stars disabled - FIXED
+* Elementor list icons fallback #hide not working with latest elementor - FIXED
+* Default page content will now use blocks if block editor is enabled - CHANGED
+* Tab nav changes for pagespeed FCP - CHANGED
+* Don't lazyload first image on slider on details page for better pagespeed scores - CHANGED
+* Lazy Load map feature added - ADDED
+* Events - upcoming filter not working on Best of widget - FIXED
+
+= 2.0.0.102 =
+* Avada page builder don't render header on GD Archive pages - FIXED
+* %%term_title%% is not working in Yoast SEO meta title for tags - FIXED
+* GD Categories current post type filter is not working on search page - FIXED
+* GD Details sidebar not working with Astra theme custom template - FIXED
+* Unable to translate GD Ninja Form action text - FIXED
+* ElementorPro single listing tab does not scroll to tab content on mobile - FIXED
+
+= 2.0.0.101 =
+* Elementor dynamic tag style is not working with Elementor v3 - FIXED
+
+= 2.0.0.100 =
+* Scroll to sticky map jumps the page - FIXED
+* Allow %%category%% & %%in_category%% on search page meta titles - CHANGED
+* Set viewport width & height in mshots screenshot generator for images - CHANGED
+* Resize marker does not supports .svg images - FIXED
+* Update to Elementor 3.x broken the site - FIXED
+
+= 2.0.0.99 =
+* Hide frontpage & blog page from select GD pages dropdown list - CHANGED
+* WordPress v5.5 compatibility changes - CHANGED
+* Yoast SEO 14+ renders single listing as a noindex if all pages set to noindex - FIXED
+* Clear LeafLet deprecated warnings - CHANGED
+
+= 2.0.0.98 =
+* OpenStreetMap don't populates region for Bermuda - FIXED
+* GD Listings filter posts by current category/tag - ADDED
+* Unable to select exact time in timepicker on touch screen device - FIXED
+* Publish post email not sent to user after publishing scheduled post - FIXED
+* The7 theme shows wrong content on empty search results page - FIXED
+* Add listing unable to tick radio buttons on RTL language due to BuddyBoss conflicts - FIXED
+* Limit max. number of CPT posts per user - ADDED
+* Leaflet map JavaScript library updated to 1.6.0 - CHANGED
+
+= 2.0.0.97 =
+* Adjust timezone for listings saved with different offset for same timezone - FIXED
+* Allow to setup separate add listing page for each CPT - ADDED
+* Rank Math breadcrumb shows multiple categories on detail page - FIXED
+* Review reply/cancel reply links are not working on touch screen devices - FIXED
+* Some themes don't load comment reply JS on GD single page - FIXED
+* Featured image field not updated on delete all images - FIXED
+* GD Listings pagination don't renders WPBakery Page Builder shortcodes - FIXED
+* BuddyPress v6.0.0 compatibility - CHANGED
+* Auto save don't saves all images when image upload is in progress - FIXED
+* Address within Brussels, Belgium don't retrieves region name - FIXED
+* Business Hours UI changes for small screen devices - CHANGED
+* GD Listings pagination on detail page don't filter category - FIXED
+
+= 2.0.0.96 =
+* Option added to make zip/post code as a required field - FIXED
+* The Open Graph image does not work from geodirectory categories - FIXED
+* Skip duplicate slug checking for WP post categories & tags - CHANGED
+* Compatibility for rankmath breadcrumb - FIXED
+* Divi search template shows archive item in multiple loop - FIXED
+* Add listing page is not working properly with Divi page builder - FIXED
+* Business hours timezone input replaced with timezones string list - CHANGED
+* Elementor GD CSS Hide Condition is not working with post_images key - FIXED
+* Listing reviews pagination not working with some permalink structure - FIXED
+* Map shows wrong markers when distance filter is active - FIXED
+* Filter added to resize map marker icons - ADDED
+* Allow to set zoom and map center when no results found - ADDED
+* [gd_post_badge] is not working with post_images field - FIXED
+* Text changes for Elementor Template Publish Settings - CHANGED
+* Add Filter to change submit listing button text - FIXED
+
+= 2.0.0.95 =
+* Changes for Ninja Forms fix related to API requests - CHANGED
+* [gd_post_meta] add support for default category & post status - ADDED
+* [gd_post_meta] allow option to show icon only - ADDED
+* GD > Recently Viewed now supports Elementor pro skins - ADDED
+* Should not send comment email notification to author for spam comment - CHANGED
+* OSM Directions API changed to non SSL temporarily to fix their certificate error - CHANGED
+* [gd_post_badge] is_greater_than condition is not working with post date - FIXED
+* Elementor Image dynamic field fallback image not working - FIXED
+* Elementor Pro search template conditions added for specific CPTs - ADDED
+* Elementor GD Archive Item template dynamic background & style is not working - FIXED
+* Schema list updated to add some new types - ADDED
+* Add ID in nav endpoints to avoid notice - ADDED
+* Dynamic content widget does not validates fields excluded from package - FIXED
+* GD custom field SEO variables not working in Yoast meta title & description - FIXED
+* Warning added to setting `Allow posting without logging in` when WP Engine hosting is used that an extra step is needed - ADDED
+
+= 2.0.0.94 =
+* Image lightbox can show image id if title is empty - FIXED
+* Switching package shows all images instead of package image limit - FIXED
+* Able to set default zoom level on add listing page map - ADDED
+* City, region names with Greek characters causes issue in meta title - FIXED
+* AyeCode Connect plugin added in recommend plugins list - ADDED
+* GD > Post meta for overall_rating is now rounded to one decimal place (raw value still available) - CHANGED
+* Titles and meta value for overall_rating is now rounded to one decimal place - CHANGED
+* GD > Post Images, when using screenshots from custom fields, screenshots can now link to different URL value - ADDED
+* Iphone ratings sometimes not able to set rating if text size of rating makes the rating jump between lines when changed - FIXED
+* select2 dropdown style conflict after Yoast 14.1 - FIXED
+* Constrain the proportions on preview of uploaded image - FIXED
+
+= 2.0.0.93 =
+* Elementor archive items not always given an ID so sometime map is not limited to current listings - FIXED
+* Image title & caption with apostrophes shows slash after saved - FIXED
+* Elementor social icons phone number displays even when empty - FIXED
+* Oxygen page builder can't edit the add listing page because of redirect - FIXED
+* Add GD variables to the Yoast extra replacements - ADDED
+* Elementor icon list fallback value #hide not working on archive pages - ADDED
+* [gd_page_title] shortcode/widget added to show page title on GD pages - ADDED
+* Fix for one comment restriction for cookie not enable case - FIXED
+* GD pages with Divi builder breaks header - FIXED
+* Translated GD screen id may break admin pages UI - FIXED
+* Form containing email & password fields has unique id - FIXED
+* Add body class geodir-page-cpt-POST_TYPE on search page - ADDED
+
+= 2.0.0.92 =
+* Static map sometimes not resizing on mobile view - FIXED
+* Fix recent review filter by location - FIXED
+* Rank Math sitemap shows 404 error after each GeoDirectory plugin update - FIXED
+* Yoast SEO v14.4 compatibility changes - FIXED
+
+= 2.0.0.91 =
+* Category font awesome icons have extra fas class on output which break few icons – FIXED
+* Post badge widget shows excluded fields from package - FIXED
+* GD Archive map with elementor loop might not filter markers if map is before loop - FIXED
+* Translation of screen_id break GD dashboard functionality - FIXED
+* YOOtheme shows incorrect title on GD pages - FIXED
+* Badge label shows option value instead of option label for select type field - FIXED
+* Option added to restrict user to submit one review per post - ADDED
+* Yoast SEO v14.x compatibility changes - FIXED
+
+= 2.0.0.90 =
+* Customize map popup template for the post type - ADDED
+* Detail page tabs & dropdown is not working on mobile device - FIXED
+* GD > Listings widget elementor skin select not working - FIXED
+* Use default location offset as a business hours default offset - CHANGED
+* Response header shows 404 status when on results found on GD search page - FIXED
+
+= 2.0.0.89 =
+* Badge shortcode for file field %%input%% return file array - FIXED
+* Yoast SEO OpenGraph meta not working on GD pages - FIXED
+* Elementor Pro Utils class moved which can cause errors in older vers of Elementor - FIXED
+* Elementor Icon List items can be hidden when empty by adding fallback of #hide - ADDED
+* Elementor Star Rating needs to be rounded to one decimal place - FIXED
+* Elementor CSS hide conditions now remove content instead of just hiding with CSS - CHANGED
+
+= 2.0.0.88 =
+* Comment images can now be used in Elementor Pro galleries - ADDED
+* Post Images widget can show logo if not specifically set not to - FIXED
+
+= 2.0.0.87 =
+* Allow show / hide categories in GD > Categories widget - ADDED
+* Incorrect validation message attribute on url type custom fields - FIXED
+* GD > Listings widget can now use Elementor Pro Archive item template - ADDED
+
+= 2.0.0.85 =
+* Embed post not working for GD listing - FIXED
+* Add address fields in post meta keys list - ADDED
+* [gd_cpt_meta] widget/shortcode added to show cpt meta title, meta description, description, image etc - ADDED
+* Check edit listing page & add body class for add/edit listing page - ADDED
+* Show image caption and title based on setting - FIXED
+* Elementor pro form widget now supports "GD Email Listing" action - ADDED
+* Elementor CSS Class display options to be able to hide content dependent on field values - ADDED
+* Elementor templates now updated via API call - CHANGED
+
+= 2.0.0.84 =
+* Listing Widget – Exclude Current Post - FIXED
+* GD title is not working on beaver themer archive template - FIXED
+* Font awesome settings icons updated to 5.13.0- UPDATED
+* Add body class on add listing, location & archive pages for empty results - ADDED
+* Fix add listing shortcode validation on status report - FIXED
+* Detail tabs not working on small screens - FIXED
+* Elementor number dynamic tags support added - ADDED
+* Elementor dynamic content, added some more hidden raw fields - ADDED
+* Elementor rating widget support added - ADDED
+* Elementor gallery widget support added - ADDED
+* Elementor dynamic color tag support added - ADDED
+* Elementor pro gallery widget support added - ADDED
+* Elementor pro image carousel widget support added - ADDED
+* Elementor pro theme builder types added for greater control - ADDED
+* Lity lightbox image slideshow shows different image size for some slides - FIXED
+* Option added to disable comments for post type - ADDED
+* Save to favorites now has custom color and icon options - ADDED
+* A couple of simple Elementor templates added for testing - ADDED
+
+= 2.0.0.83 =
+* 150 new Schema types added to category options ( including new CovidTestingFacility ) - ADDED
+* New temp_closed pre defined field for setting listing as temporarily closed - ADDED
+* Set business hours as closed and show business closed message on details page if temp_closed is set - ADDED
+
+= 2.0.0.82 =
+* Added GenerateBlocks plugin compatibility - ADDED
+* Search with category and tag keyword combination not showing correct results - FIXED
+* Avada theme blog global sidebar issue - FIXED
+* Placeholder for select custom fields is not working - FIXED
+* Yoast SEO Premium prominent words breaks internal linking feature - FIXED
+* Listing detail child tab not rendering shortcode - FIXED
+* Improve search functionality - CHANGED
+* Business hours parsing wrong TZ when GMT offset is set to 0 - FIXED
+* File limit not working for custom field field - FIXED
+* Add field visibility check for email in ninja form widget - FIXED
+* Allow to show field raw value with gd_post_meta - CHANGED
+* Elementor dynamic content support - ADDED
+* Advanced DB Default option added for when adding new custom field - ADDED
+* Changes for scheme Event Status - CHANGED
+* Image function can add wrong sizes to image tag - FIXED
+
+= 2.0.0.81 =
+* Remove title/meta variables not related to location page - CHANGED
+* Translation missing in OSM map routing search input description - FIXED
+* Style issues on iphone - FIXED
+* Show video file in HTML5 media format - ADDED
+* Divi theme builder template compatibility - FIXED
+* Filter added to customize Google map marker animation - ADDED
+* Near search not clearing GPS when only core is active - FIXED
+* Show "time ago" for post date - ADDED
+
+= 2.0.0.80 =
+* Unable to save empty value for date field - FIXED
+* Porto theme compatibility - FIXED
+* Export post edit date value in CSV - ADDED
+* AyeCode Connect notice now shows on extensions pages - ADDED
+* Genesis theme simple menus & simple sidebars compatibility - ADDED
+* Page Builder Framework theme compatibility - ADDED
+
+= 2.0.0.79 =
+* OceanWP theme & Elementor plugin compatibility - FIXED
+* Ninja Forms still have not fixed their bug, we have added a more permanent fix until they fix it - FIXED
+* Recipe schema option added - ADDED
+
+= 2.0.0.77 =
+* Avada v6.2 theme compatibility - FIXED
+
+= 2.0.0.76 =
+* Location page og:url for rank math - FIXED
+* File field shows required field error twice - FIXED
+* GD Listings widgets should show pending listings on author page - CHANGED
+* Ninja Forms recent update breaks maps & API requests - FIXED
+
+= 2.0.0.75 =
+* Longitude validation fails to validate longitude with minus sign - FIXED
+* Static map loads Google Map API even OSM API is enabled - FIXED
+* Show formatted post date & post modified date in a badge - ADDED
+* Twenty Twenty theme show 404 when no results found on search page - FIXED
+* Post preview is not working for listing with status pending - FIXED
+* Ninja Forms deprecated version with GeoDirectory shows blank page on site - FIXED
+* Dynamic Content widget added for output of dynamic html or shortcodes - ADDED
+* OceanWP theme shows incorrect titles on GD archive pages - FIXED
+* Sometimes pagination & feed not working on category pages - FIXED
+* Search with apostrophe on mac iOS device shows empty results - FIXED
+* Search page meta title shows duplicate "Near" string - FIXED
+* archive map show all posts param not working- FIXED
+* Fix class name typo for geodir-dashboard class - FIXED
+* GD search page is not loading with Divi page builder - FIXED
+
+= 2.0.0.74 =
+* Ninja Forms bug can cause PHP warnings on search page - TEMP FIX ADDED
+* Map marker popup is not working for non-logged users with WP 5.3.1 - FIXED
+
+= 2.0.0.72 =
+* REST API rating stars & images upload not working - ADDED
+* Elementor archive title element not rendering correct title on GD pages - FIXED
+* Not able to setup GD search page with recent Divi page builder - FIXED
+* JS variable conflict with Rank Math plugin - FIXED
+* Listing details shows wrong sidebar on Avada FusionBuilder - FIXED
+* Map marker popup not working for non-logged users when WPEngine cache is enabled - FIXED
+* Post content shortcode looping when Newspaper theme & tagDiv addons active - FIXED
+* Ninja Forms bug can cause PHP warnings to show in API response which can break some maps functionality - TEMP FIX ADDED
+
+= 2.0.0.70 =
+* REST API allow search posts by GPS, IP and near address - ADDED
+* GD Search Themer Layout overwrites the WordPress search page - FIXED
+* Decode special character in email title - FIXED
+* Limit embed wrap to videos - CHANGED
+
+= 2.0.0.69 =
+* Fixed some W3 validation issues - FIXED
+* Admin tooltips can break image upload buttons - FIXED
+
+= 2.0.0.68 =
+* Validate register user during add listing from frontend - FIXED
+* Enfold theme default layout & sidebar settings is not working - FIXED
+* WPML translation not working for strings defined via variable - FIXED
+* Custom field date shows un-translated date - FIXED
+* Option added to set post images widget title - ADDED
+* Option added in map widget/shortcode to tick/untick categories on the map - ADDED
+* Exclude GD template pages from Yoast XML page sitemap - ADDED
+* Rank Math SEO not detecting GD fields - FIXED
+* Add listing by logged out user not working in incognito mode - FIXED
+* Rescue category redirect url adds location twice - FIXED
+* %%in_location_single%% is not working on detail page meta title - FIXED
+* Map widget/shortcode doesn't show filtered listings on non GD pages - FIXED
+* Post badge add support for post modified date - ADDED
+* ffmp theme shows incorrect titles on GD pages - FIXED
+* Ninja contact form sometimes not finding the post id and email fails - FIXED
+* Better integration with Fusion builder, all items now also fusion items - ADDED
+
+= 2.0.0.67 =
+* Fail to save feature image for new listing when post revision is enabled - FIXED
+* Post link not working in email sent to admin on post edit - FIXED
+* Post badge does not supports category and tags - FIXED
+* Option added in gd_categories widget/shortcode to CPT title - ADDED
+* Rank Math SEO option overwrites Yoast SEO option - FIXED
+* Filter GD Categories widget get terms args - ADDED
+* Rank Math plugin sitemap image count wrong for GD listings - FIXED
+* Post Images widget now has `fallback_types` that can be set - ADDED
+* Post Images widget can now generate screenshots of url fields by appending `_screenshot` eg: website_screenshot - ADDED
+* Delete subsite removes data from main site on multisite network - FIXED
+* CPT type post class not set to ajax listings - FIXED
+* Custom field accepts script tags - FIXED
+* Business hours option added to show next day closing - FIXED
+* Network subsite shows countries table does not exist error - FIXED
+* Added a new pre-defined field "Distance To" - ADDED
+* Enfold theme builder color section not working on GD template - FIXED
+* Custom field option values always shows option uppercase first - FIXED
+
+= 2.0.0.66 =
+* GD post favourites widget issue for icon option - FIXED
+* Timezone API requests exposes the API key - FIXED
+* Setup wizard moved to later hook so is_block_editor() method can be used - FIXED
+* Category map icon no longer required when adding a category - CHANGED
+* Category map icon will be auto-generated if empty and Font Awesome icon is set - ADDED
+* Default map marker updated to new icon - CHANGED
+* Custom price field does not shows currency symbol for decimal data type - FIXED
+* Category should be auto selected/checked for a single category - CHANGED
+* Output location fieldset's with child elements will only be output if child elements have content - CHANGED
+* Import post not showing error for non GD post type - FIXED
+* Beaver themer layout not working with GD widgets - FIXED
+* Directory map not showing child categories for empty parent category - FIXED
+* If Google maps is disabled then use OpenStreetMap API to get GPS data during import - ADDED
+* Genesis theme listing detail page shows incorrect meta title - FIXED
+* [gd_post_meta] shortcode location parameter is not working - FIXED
+* Going away from edit listing page always shows popup warning about unsaved changes - FIXED
+* The7 theme compatibility for GD pages - FIXED
+* Ninja forms widget now has option to output the form direct, can be used in sidebar or in tab - ADDED
+* Include post images in Rank Math sitemap - ADDED
+
+= 2.0.0.65 =
+* Jarida theme compatibility for GD page sidebars - FIXED
+* Business hours timepicker translation not working on first load - FIXED
+* GeneratePress theme not showing correct SEO meta on detail page - FIXED
+* Listimia theme shows default page title for GD archive pages - FIXED
+* Widget shows logo image even it disabled via package - FIXED
+* GD Single Tabs, widget now has option to output head and body separately - ADDED
+* Category default image not working when category imported via csv - FIXED
+* Jupiter theme GD page sidebars not working - FIXED
+* AJAX listings pagination not working is email allowed to show on listings - FIXED
+* Newspaper theme sidebar position not working on GD pages - FIXED
+* Duplicate image slider id breaks ajax image slider - FIXED
+* Helper function to check if a given listing has a custom field - ADDED
+* Rank Math SEO plugin compatibility settings - ADDED
+
+= 2.0.0.64 = 
+* Beaver Builder content does not work for archive item template - FIXED
+* Autocomplete search result selection looses street number for some locations - FIXED
+* Option added to add Geocoding API key - ADDED
+* Allow to choose Font Awesome pro icons for active Pro subscription - ADDED
+* IE displays bg image over listing content - FIXED
+* GD Map allows to filter listings by tags - ADDED
+* Change country name "Russian Federation" to "Russia" - CHANGED
+* Missing required field error may results in JavaScript error - FIXED
+* Link in no posts found message redirects to wrong add listing post type page - FIXED
+* Listings widget list view not setting as widget checks for empty value - FIXED
+* Changes for location queries for GPS position - CHANGED
+* Post SMTP plugin conflicts with GD post save - FIXED
+
+= 2.0.0.63 =
+* Image import for old posts can set the wrong image url for the featured image - FIXED
+* Ability to add captions to the images slider - ADDED
+* Recent reviews widget does not display the correct number of reviews - FIXED
+* Apostrophe in title or caption wipes out the rest of the title/caption - FIXED
+* Sort by images is not working - FIXED
+* Custom Sidebars plugin compatibility - ADDED
+* Support added for image/webp type image upload - ADDED
+* GD Pages shows blank content when page not setup with Divi page builder - FIXED
+* Not able to setup GD search page with Divi page builder - FIXED
+* Individual word search limit shows unexpected results - FIXED
+* MightyMag theme compatibility for GD pages - ADDED
+* Sticky map not working with OpenStreetMap - FIXED
+* Add listing tags not showing popular tags at top of the list - FIXED
+* Enfold theme shows wrong title for GeoDirectory pages - FIXED
+* Avada theme compatibility for GD page sidebars - FIXED
+* Unable to save empty post tags - FIXED
+* Map post types slider not working in mobile devices - FIXED
+* GD > Single Reviews widget added that can show the comment/reviews section on the details page - ADDED
+* New GeoDir_Hints class introduced which will show setup hints to admins throughout the site - ADDED
+* Some WP_POST_REVISIONS settings can cause issues with first save on post added from wp-admin - FIXED
+
+= 2.0.0.62 =
+* GD Archive pages not rendering shortcodes when Elementor is active - FIXED
+* Ratings in listing view should be on its own line if placed after a gd_post_badge - CHANGED
+* Location filter enabled on location page default content gd_listings - CHANGED
+* Default view for archive page on install changed to Grid view 2 - CHANGED
+
+= 2.0.0.61 =
 * Polifill for CSS object-fit in browsers that don't support it - Added
 * Prevent saving custom fields found in array of standard fields - ADDED
 * Optional Address line 2 field added, can be enabled under address field - ADDED
 * Classifieds dummy content - ADDED
 * "Kingstudio" theme compatibility for gd pages sidebar - ADDED
+* Frontend edit post screen now shows restricted message if not allowed to edit - ADDED
 * Translation for "May" month abbreviation shows incorrect date - FIXED
 * 404 rescue setting not working for translated CPT slug - FIXED
 * Changed external API for IP to location to a more reliable one - CHANGED
 * WP Country Database lib updated to 1.0.3 - CHANGED
 * Customizr Pro theme does not locates the GD templates - FIXED
 * Genesis theme pagination conflicts with GD Listings pagination on mobile devices - FIXED
-* It allows to reset the custom field value of the select box - ADDED
+* Allow to reset the custom field value of the select box - ADDED
+* Elementor content not used for archive item template - FIXED
+* Yoast breadcrumbs not showing category on GD category pages - FIXED
+* Post Address widget sometimes not showing the neighbourhood - FIXED
+* GeneratePress theme page layout compatibility - ADDED
+* Removed "other emails" settings section which is no longer in use - REMOVED
+* Grid view 1 added to Listing and Loop widget - ADDED
+* Layout=1 in loop widget is now used for grid view 1 and layout=0 is used for list view (upgrade rectifies default content) - BREAKING CHANGE
+* Font Awesome Pro now supported - ADDED
+* Font Awesome Kits now supported - ADDED
+* Import listings post_date should supports d/m/Y date format - CHANGED
+* Post Badge widget can now open links in lightbox if class "gd-lity" is used - ADDED
+* Post Badge widget price fields used will now be price formatted - CHANGED
+* Category font awesome icons have extra fas class on output which can break brands - FIXED
+* Category widget not respecting max_level param - FIXED
 
 = 2.0.0.59 =
 * GD Listings widget title not working with pagination - FIXED
@@ -126,7 +655,7 @@ Front end author actions - After delete, page is 404 - FIXED
 No map icon validation on edit cat - FIXED
 Rating input not working from admin area edit comment screen - FIXED
 Change for SEOPress caused Beaver builder issues on search page - FIXED
-Post meta widget shows excluded fields from package - FIELD
+Post meta widget shows excluded fields from package - FIXED
 Beaver Builder :: Added warning message to template pages to say best to use Beaver Themer - ADDED
 If reviews disabled comment counts can be wrong for standard comments - FIXED
 If reviews are disabled the standard comments form can sometimes show twice - FIXED

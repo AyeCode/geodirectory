@@ -22,13 +22,13 @@ class GeoDir_Widget_Single_Closed_Text extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['category','taxonomies','geodir']",
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_single_closed_text', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Single Closed Text','geodirectory'), // the name of the widget.
             'widget_ops'    => array(
-                'classname'   => 'geodir-single-taxonomies-container', // widget class
+                'classname'   => 'geodir-single-taxonomies-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows a closed down warning text if a post has the closed status.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),

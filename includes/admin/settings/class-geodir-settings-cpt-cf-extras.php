@@ -70,7 +70,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			// category display type
 			add_filter( 'geodir_cfa_extra_fields_categories', array( $this, 'category_input_type' ), 10, 4 );
-
+			
 			// extra address fields
 			add_filter('geodir_cfa_extra_fields_address',array( $this, 'address_fields' ),10,4);
 
@@ -133,7 +133,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			
 			// address field is always required
 			add_filter( 'geodir_cfa_is_required_address', array($this,'is_required'), 10, 4 );
-
+			
+			// No of tags.
+			add_filter( 'geodir_cfa_extra_fields_tags', array( $this, 'no_of_tags_input_type' ), 10, 4 );
 		}
 
 		/**
@@ -181,7 +183,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					echo geodir_help_tip( __( 'Select if this field should be displayed as a price value.', 'geodirectory' ));
 					_e('Display as price', 'geodirectory'); ?>
 					<input type="hidden" name="extra[is_price]" value="0" />
-					<input type="checkbox" name="extra[is_price]" value="1" <?php checked( $value, 1, true );?> onclick="gd_show_hide_radio(this,'show','gdcf-price-extra');" />
+					<input type="checkbox" name="extra[is_price]" value="1" <?php checked( $value, 1, true );?> onclick="gd_show_hide_radio(this,'show','gdat-extra_is_price');" />
 				</label>
 			</p>
 
@@ -340,36 +342,38 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return $output;
 		}
 
+		/**
+		 * File limit input.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $output
+		 * @param string $result_str
+		 * @param array $cf
+		 * @param object $field_info
+		 * @return string $output.
+		 */
+		public static function file_limit( $output, $result_str, $cf, $field_info ) {
+			$extra_fields = ! empty( $field_info->extra_fields ) ? maybe_unserialize( $field_info->extra_fields ) : '';
+			if ( strpos( $result_str, 'new-' ) === 0 && ! ( ! empty( $extra_fields ) && isset( $extra_fields['file_limit'] ) ) ) {
+				$gd_file_limit = 1;
+			} else {
+				$gd_file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? absint( $extra_fields['file_limit'] ) : 0;
+			}
 
-        /**
-         * File limit input.
-         *
-         * @since 2.0.0
-         *
-         * @param string $output
-         * @param string $result_str
-         * @param array $cf
-         * @param object $field_info
-         * @return string $output.
-         */
-		public static function file_limit($output,$result_str,$cf,$field_info){
 			ob_start();
-
-			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
-			$gd_file_limit = !empty($extra_fields) && !empty($extra_fields['file_limit']) ? maybe_unserialize($extra_fields['file_limit']) : '';
-
 			?>
 			<p data-setting="file_limit">
 				<label for="gd_file_limit" class="dd-setting-name">
 					<?php
-					echo geodir_help_tip( __( 'Select the number of files that can be uploaded, 0 = unlimited.', 'geodirectory' ));
-					_e('File upload limit', 'geodirectory'); ?>
-					<input type="number" name="extra[file_limit]" id="gd_file_limit" value="<?php echo esc_attr($gd_file_limit);?>">
+					echo geodir_help_tip( __( 'Select the number of files that can be uploaded, Leave blank or 0 to allow unlimited files.', 'geodirectory' ) );
+					_e( 'File upload limit', 'geodirectory' ); ?>
+					<input type="number" name="extra[file_limit]" id="gd_file_limit" value="<?php echo $gd_file_limit; ?>" step="1" min="0">
 				</label>
 			</p>
 			<?php
-
 			$output .= ob_get_clean();
+
 			return $output;
 		}
 
@@ -444,20 +448,20 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		 * @param object $field_info Datepicker fields information.
 		 * @return string $output.
 		 */
-		public static function date_range($output,$result_str,$cf,$field_info){
-			ob_start();
-			$extra = array();
-			if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
-				$extra = unserialize($field_info->extra_fields);
+		public static function date_range( $output, $result_str, $cf, $field_info ) {
+			$extra_fields = array();
+			if ( ! empty( $field_info->extra_fields ) ) {
+				$extra_fields = is_array( $field_info->extra_fields ) ? $field_info->extra_fields : maybe_unserialize( $field_info->extra_fields );
 			}
 
 			$value = '';
-			if (isset($field_info->extra_fields->date_range)) {
-				$value = esc_attr($field_info->extra_fields->date_range);
-			}elseif(isset($cf['defaults']['extra_fields']['date_range']) && $cf['defaults']['extra_fields']['date_range']){
-				$value = esc_attr($cf['defaults']['extra_fields']['date_range']);
+			if ( isset( $extra_fields['date_range'] ) ) {
+				$value = esc_attr( $extra_fields['date_range'] );
+			} elseif ( isset( $cf['defaults']['extra_fields']['date_range'] ) && $cf['defaults']['extra_fields']['date_range'] ) {
+				$value = esc_attr( $cf['defaults']['extra_fields']['date_range'] );
 			}
 
+			ob_start();
 			?>
 			<p data-setting="date_range">
 				<label for="date_range" class="dd-setting-name">
@@ -469,11 +473,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				</label>
 			</p>
 			<?php
-
 			$output .= ob_get_clean();
+
 			return $output;
 		}
-
 
         /**
          * Multiple input option values.
@@ -626,6 +629,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				</label>
 			</p>
 
+			<p class="gd-advanced-setting" data-setting="zip_required" <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {echo "style='display:none;'";}?>>
+				<label for="zip_required" class="dd-setting-name">
+					<?php
+					echo geodir_help_tip( __( 'Tick to set zip/post code field as required. Some countries do not use ZIP codes, please only enable if your directory is limited to countries that do.', 'geodirectory' ));
+					_e( 'Make zip/post code mandatory?', 'geodirectory' ); ?>
+					<input type="hidden" name="extra[zip_required]" value="0" />
+					<input type="checkbox" name="extra[zip_required]" value="1" <?php checked( ! empty( $address['zip_required'] ), true, true );?>/>
+				</label>
+			</p>
+
 			<p  class="cf-zip-lable gd-advanced-setting"  <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {echo "style='display:none;'";}?> data-setting="zip_lable">
 				<label for="zip_lable" class="dd-setting-name">
 					<?php
@@ -639,8 +652,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			</p>
 
 			<input type="hidden" name="extra[show_map]" value="1" />
-
-
 			<p class="gd-advanced-setting" data-setting="map_lable">
 				<label for="map_lable" class="dd-setting-name">
 					<?php
@@ -752,6 +763,42 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			}
 
+			return $output;
+		}
+		/**
+		 * The no of tags setting.
+		 *
+		 * @since 2.1.0.7
+		 *
+		 * @param string $output Html output.
+		 * @param string $result_str Results string.
+		 * @param array  $cf Custom fields values.
+		 * @param object $field Extra fields information.
+		 * @return string $output.
+		 */
+		public static function no_of_tags_input_type( $output, $result_str, $cf, $field ) {
+
+			if ( $field->htmlvar_name == 'post_tags' ) {
+				ob_start();
+				$extra = maybe_unserialize( $field->extra_fields );
+				?>
+				<p class="gd-advanced-setting" data-setting="no_of_tag">
+					<label for="no_of_tag" class="dd-setting-name">
+						<?php
+						echo wp_kses_post( geodir_help_tip( __( 'Enter number of tag', 'geodirectory' ) ) );
+						esc_html_e( 'Number of tag', 'geodirectory' );
+						if ( is_array( $extra ) && ! empty( $extra['no_of_tag'] ) ) {
+							$no_of_tag = $extra['no_of_tag'];
+						} else {
+							$no_of_tag = '';
+						}
+						?>
+						<input type="number" name="extra[no_of_tag]" id="no_of_tag" value="<?php echo esc_attr( $no_of_tag ); ?>"/>
+					</label>
+				</p>
+				<?php
+				$output .= ob_get_clean();
+			}
 			return $output;
 		}
 

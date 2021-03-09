@@ -84,9 +84,9 @@ class GeoDir_Maps {
 
 		$icon_url = $icon;
 
-		$uploads = wp_upload_dir(); // Array of key => value pairs
-
 		if ( ! path_is_absolute( $icon ) ) {
+			$uploads = wp_upload_dir(); // Array of key => value pairs
+
 			$icon = str_replace( $uploads['baseurl'], $uploads['basedir'], $icon );
 		}
 
@@ -97,6 +97,21 @@ class GeoDir_Maps {
 		$sizes = array();
 		if ( is_file( $icon ) && file_exists( $icon ) ) {
 			$size = getimagesize( trim( $icon ) );
+
+			// Check for .svg image
+			if ( empty( $size ) && preg_match( '/\.svg$/i', $icon ) ) {
+				if ( ( $xml = simplexml_load_file( $icon ) ) !== false ) {
+					$attributes = $xml->attributes();
+
+					if ( ! empty( $attributes ) && isset( $attributes->viewBox ) ) {
+						$viewbox = explode( ' ', $attributes->viewBox );
+
+						$size = array();
+						$size[0] = isset( $attributes->width ) && preg_match( '/\d+/', $attributes->width, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[2] ) : 0 );
+						$size[1] = isset( $attributes->height ) && preg_match( '/\d+/', $attributes->height, $value ) ? (int) $value[0] : ( count( $viewbox ) == 4 ? (int) trim( $viewbox[3] ) : 0 );
+					}
+				}
+			}
 
 			if ( ! empty( $size[0] ) && ! empty( $size[1] ) ) {
 				$sizes = array( 'w' => $size[0], 'h' => $size[1] );
@@ -118,8 +133,10 @@ class GeoDir_Maps {
 	 */
 	public static function footer_script() {
 		$osm_extra = '';
-		if ( in_array( self::active_map(), array( 'auto', 'google' ) ) ) {
+
+		if ( self::active_map() == 'auto' && ! self::lazy_load_map() ) {
 			$plugin_url = geodir_plugin_url();
+
 			ob_start();
 ?>
 if (!(window.google && typeof google.maps !== 'undefined')) {
@@ -133,9 +150,11 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	document.write('<' + 'script id="geodirectory-o-overlappingmarker-script" src="<?php echo $plugin_url; ?>/assets/jawj/oms-leaflet.min.js?ver=<?php echo GEODIRECTORY_VERSION; ?>" type="text/javascript"><' + '/script>');
 }
 <?php
-			//do_action('geodir_maps_extra_script');
+			do_action( 'geodir_maps_extra_script' );
+
 			$osm_extra = ob_get_clean();
 		}
+
 		return $osm_extra;
 	}
 
@@ -188,6 +207,28 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	}
 
 	/**
+	 * Get OpenStreepMap routing language.
+	 *
+	 * @since 2.1.0.7
+	 *
+	 * @return string Routing language.
+	 */
+	public static function osm_routing_language() {
+		$map_lang = self::map_language();
+		$langs = array( 'en', 'de', 'sv', 'es', 'sp', 'nl', 'fr', 'it', 'pt', 'sk', 'el', 'ca', 'ru', 'pl', 'uk' );
+
+		if ( in_array( $map_lang, $langs ) ) {
+			$routing_lang = $map_lang;
+		} else if ( in_array( substr( $map_lang, 0, 2 ), $langs ) ) {
+			$routing_lang = substr( $map_lang, 0, 2 );
+		} else {
+			$routing_lang = 'en';
+		}
+
+		return apply_filters( 'geodir_osm_routing_language', $routing_lang );
+	}
+
+	/**
 	 * Returns the Google maps api key.
 	 *
 	 * @since   1.6.4
@@ -210,7 +251,36 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		 *
 		 * @param string $key Google maps api key.
 		 */
-		return apply_filters( 'geodir_google_api_key', $key );
+		return apply_filters( 'geodir_google_api_key', $key, $query );
+	}
+
+	/**
+	 * Returns the Google Geocoding API key.
+	 *
+	 * @since   2.0.0.64
+	 * @param bool $query If this is for a query and if so add the key=.
+	 * @package GeoDirectory
+	 * @return string Returns the Geocoding api key.
+	 */
+	public static function google_geocode_api_key( $query = false ) {
+		$key = geodir_get_option( 'google_geocode_api_key' );
+
+		if ( empty( $key ) ) {
+			$key = self::google_api_key();
+		}
+
+		if ( $key && $query ) {
+			$key = "&key=" . $key;
+		}
+
+		/**
+		 * Filter Google Geocoding API key.
+		 *
+		 * @since 2.0.0.64
+		 *
+		 * @param string $key Google Geocoding API key.
+		 */
+		return apply_filters( 'geodir_google_geocode_api_key', $key, $query );
 	}
 
 	/**
@@ -225,10 +295,12 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @param int $padding Optional. CSS padding value in pixels. e.g: 12 will be considers as 12px.
 	 * @param string $map_canvas Unique canvas name for your map.
 	 * @param bool $child_collapse Do you want to collapse child terms by default?.
-	 * @param bool $is_home_map Optional. Is this a home page map? Default: false.
+	 * @param string $terms Optional. Terms.
+	 * @param bool $hierarchical Whether to include terms that have non-empty descendants (even if $hide_empty is set to true). Default false.
+	 * @param string $tick_terms Tick/untick terms. Optional.
 	 * @return string|void
 	 */
-	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $terms = '' ) {
+	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $terms = '', $hierarchical = false, $tick_terms = '' ) {
 		global $cat_count, $geodir_cat_icons;
 
 		$taxonomy = $post_type . 'category';
@@ -238,26 +310,61 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		$exclude_categories = !empty($exclude_categories[$taxonomy]) && is_array($exclude_categories[$taxonomy]) ? array_unique($exclude_categories[$taxonomy]) : array();
 		$exclude_categories[$taxonomy] = "70";
 		$exclude_cat_str = implode(',', $exclude_categories);
-		$is_home_map = true;
 		// terms include/exclude
 		$include = array();
 		$exclude = array();
 
-		if($terms!== false && $terms !== true && $terms != ''){
-			$terms_array = explode(",",$terms);
-			foreach($terms_array as $term_id){
-				$tmp_id = trim($term_id);
-				if(abs($tmp_id) != $tmp_id){
-					$exclude[] = absint($tmp_id);
-				}else{
-					$include[] = absint($tmp_id);
+		if ( $terms !== false && $terms !== true && $terms != '' ) {
+			$terms_array = explode( ",", $terms );
+			foreach( $terms_array as $term_id ) {
+				$tmp_id = trim( $term_id );
+				if ( $tmp_id == '' ) {
+					continue;
+				}
+				if ( abs( $tmp_id ) != $tmp_id ) {
+					$exclude[] = absint( $tmp_id );
+				} else {
+					$include[] = absint( $tmp_id );
 				}
 			}
 		}
 
-//		if ($exclude_cat_str == '') {
-//			$exclude_cat_str = '0';
-//		}
+		$_tick_terms = array();
+		$_untick_terms = array();
+		// Tick/untick terms
+		if ( ! empty( $tick_terms ) ) {
+			$tick_terms_arr = explode( ',', $tick_terms );
+			foreach( $tick_terms_arr as $term_id ) {
+				$tmp_id = trim( $term_id );
+				if ( $tmp_id == '' ) {
+					continue;
+				}
+
+				if ( geodir_term_post_type( absint( $tmp_id ) ) != $post_type ) {
+					continue; // Bail for other CPT
+				}
+
+				if ( abs( $tmp_id ) != $tmp_id ) {
+					$_untick_terms[] = absint( $tmp_id );
+				} else {
+					$_tick_terms[] = absint( $tmp_id );
+				}
+			}
+		}
+
+		/**
+		 * Untick categories on the map.
+		 *
+		 * @since 2.0.0.68
+		 */
+		$_tick_terms = apply_filters( 'geodir_map_categories_tick_terms', $_tick_terms, $post_type, $cat_parent );
+
+		/**
+		 * Tick categories on the map.
+		 *
+		 * @since 2.0.0.68
+		 */
+		$_untick_terms = apply_filters( 'geodir_map_categories_untick_terms', $_untick_terms, $post_type, $cat_parent );
 
 		$term_args = array(
 			'taxonomy' => array( $taxonomy ),
@@ -274,17 +381,36 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 			$term_args['exclude'] = $exclude;
 		}
 
-		//echo '###';print_r($term_args );
+		/**
+		 * Filter terms order by field.
+		 *
+		 * @since 2.0.0.67
+		 */
+		$orderby = apply_filters( 'geodir_map_categories_orderby', '', $post_type, $cat_parent, $hierarchical );
+		if ( ! empty( $orderby ) ) {
+			$term_args['orderby'] = $orderby;
+		}
+
+		/**
+		 * Filter terms in ascending or descending order.
+		 *
+		 * @since 2.0.0.67
+		 */
+		$order = apply_filters( 'geodir_map_categories_order', '', $post_type, $cat_parent, $hierarchical );
+		if ( ! empty( $order ) ) {
+			$term_args['order'] = $order;
+		}
 
 		$cat_terms = get_terms( $term_args );
-
-
 		
-		if ($hide_empty) {
+		if ($hide_empty && ! $hierarchical) {
 			$cat_terms = geodir_filter_empty_terms($cat_terms);
 		}
-		//print_r($cat_terms);
+
 		$main_list_class = '';
+		$design_style = geodir_design_style();
+		$ul_class = $design_style ? ' list-unstyled p-0 m-0' : '';
+		$li_class = $design_style ? ' list-unstyled p-0 m-0 ' : '';
 		//If there are terms, start displaying
 		if ( count( $cat_terms ) > 0 ) {
 			//Displaying as a list
@@ -293,42 +419,83 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 
 			if ($cat_parent == 0) {
 				$list_class = 'main_list geodir-map-terms';
+				$li_class = $design_style ? ' list-unstyled p-0 m-0 ' : '';
 				$display = '';
 			} else {
 				$list_class = 'sub_list';
+				$li_class = $design_style ? ' list-unstyled p-0 m-0 ml-2 ' : '';
 				$display = !$child_collapse ? '' : 'display:none';
 			}
 
-			$out = '<ul class="treeview ' . $list_class . '" style="margin-left:' . $p . 'px;' . $display . ';">';
+			$out = '<ul class="treeview ' . $list_class . $ul_class .'" style="margin-left:' . $p . 'px;' . $display . ';">';
 
 			$geodir_cat_icons = geodir_get_term_icon();
 
-			$untick_terms = geodir_get_option('geodir_home_map_untick' );
-			
 			foreach ( $cat_terms as $cat_term ) {
 				$icon = !empty( $geodir_cat_icons ) && isset( $geodir_cat_icons[ $cat_term->term_id ] ) ? $geodir_cat_icons[ $cat_term->term_id ] : '';
 
 				if ( ! in_array( $cat_term->term_id, $exclude ) ) {
 					//Secret sauce.  Function calls itself to display child elements, if any
-					$checked = 'checked="checked"';
-
-					// Untick the category by default on home map
-					if ( $is_home_map && ! empty( $untick_terms ) ) {
-						$term_id = apply_filters( 'geodir_map_categories_term_id', $cat_term->term_id, $post_type );
-						if ( ! empty( $untick_terms ) && in_array( $post_type . '_' . $term_id, $untick_terms ) ) {
-							$checked = '';
+					$checked = true;
+					if ( empty( $_tick_terms ) && empty( $_untick_terms ) ) {
+						// Tick all
+					} elseif ( ! empty( $_tick_terms ) && empty( $_untick_terms ) ) {
+						if ( ! in_array( $cat_term->term_id, $_tick_terms ) ) {
+							$checked = false; // Untick
+						}
+					} elseif ( empty( $_tick_terms ) && ! empty( $_untick_terms ) ) {
+						if ( in_array( $cat_term->term_id, $_untick_terms ) ) {
+							$checked = false; // Untick
+						}
+					} else {
+						if ( ! in_array( $cat_term->term_id, $_tick_terms ) || in_array( $cat_term->term_id, $_untick_terms ) ) {
+							$checked = false; // Untick
 						}
 					}
+
+					/**
+					 * Tick category on the map.
+					 *
+					 * @since 2.0.0.68
+					 */
+					$checked = apply_filters( 'geodir_map_categories_tick_term', $checked, $cat_term->term_id );
+
+					$checked = $checked !== false ? 'checked="checked"' : '';
 
 					$term_check = '<input type="checkbox" ' . $checked . ' id="' .$map_canvas.'_tick_cat_'. $cat_term->term_id . '" class="group_selector ' . $main_list_class . '"';
 					$term_check .= ' name="' . $map_canvas . '_cat[]" ';
 					$term_check .= '  title="' . esc_attr(geodir_utf8_ucfirst($cat_term->name)) . '" value="' . $cat_term->term_id . '" onclick="javascript:build_map_ajax_search_param(\'' . $map_canvas . '\',false, this)">';
-					$term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '"/>';
-					$out .= '<li>' . $term_check . '<label for="' . $map_canvas.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><span class="gd-map-cat-toggle"><i class="fas fa-long-arrow-alt-down" aria-hidden="true" style="display:none"></i></span>';
+
+					if($design_style){
+						$term_img = '<img class="w-auto mr-1 ml-n1 rounded-circle" style="height:22px;" alt="' . esc_attr( geodir_strtolower( $cat_term->name ) ) . '." src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" loading=lazy />';
+						$term_html = '<li class="'.$li_class.'">' .aui()->input(
+							array(
+								'id'                => "{$map_canvas}_tick_cat_{$cat_term->term_id}",
+								'name'              => "{$map_canvas}_cat[]",
+								'type'              => "checkbox",
+								'value'             => absint( $cat_term->term_id),
+								'label'             => $term_img . esc_attr(geodir_utf8_ucfirst($cat_term->name)),
+								'class'             => 'group_selector h-100 ' . $main_list_class,
+								'label_class'       => 'text-light',
+								'checked'           => $checked,
+								'no_wrap'            => true,
+								'extra_attributes'  => array(
+									'onclick' => 'javascript:build_map_ajax_search_param(\'' . $map_canvas . '\',false, this)',
+								),
+							)
+						);
+
+					}else{
+						$term_img = '<img height="15" width="15" alt="' . $cat_term->taxonomy . '" src="' . $icon . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" loading=lazy />';
+
+						$term_html = '<li class="'.$li_class.'">' . $term_check . '<label for="' . $map_canvas.'_tick_cat_'. $cat_term->term_id . '">' . $term_img . geodir_utf8_ucfirst($cat_term->name) . '</label><span class="gd-map-cat-toggle"><i class="fas fa-long-arrow-alt-down" aria-hidden="true" style="display:none"></i></span>';
+					}
+
+					$out .= $term_html;
 				}
 
 				// get sub category by recursion
-				$out .= self::get_categories_filter( $post_type, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $terms );
+				$out .= self::get_categories_filter( $post_type, $cat_term->term_id, $hide_empty, $padding, $map_canvas, $child_collapse, $terms, false, $tick_terms );
 
 				$out .= '</li>';
 			}
@@ -379,6 +546,161 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 		return $content;
 	}
 
+	/**
+	 * Get the map load type.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @return null|string The map load type.
+	 */
+	public static function lazy_load_map() {
+		$lazy_load = geodir_get_option( 'maps_lazy_load', '' );
+
+		if ( ! in_array( $lazy_load, array( 'auto', 'click' ) ) ) {
+			$lazy_load = '';
+		}
+
+		if ( is_admin() && ! wp_doing_ajax() ) {
+			$lazy_load = '';
+		}
+
+		/**
+		 * Filter the map map load type
+		 *
+		 * @since 2.1.0.0
+		 *
+		 * @param null|string $lazy_load The map load type.
+		 */
+		return apply_filters( 'geodir_lazy_load_map', $lazy_load );
+	}
+
+	/**
+	 * Array of map parameters.
+	 *
+	 * @since 2.1.0.0
+	 *
+	 * @return array Map params array.
+	 */
+	public static function get_map_params() {
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		$language = self::map_language();
+		$version_tag = '?ver=' . GEODIRECTORY_VERSION;
+
+		// Google Maps API
+		$google_api_key = self::google_api_key();
+		
+		$aui = geodir_design_style() ? '/aui' : '';
+
+		$map_params = array(
+			'api' => self::active_map(),
+			'lazyLoad' => self::lazy_load_map(),
+			'language' => $language,
+			'lazyLoadButton' => '<div class="btn btn-light text-center mx-auto align-self-center shadow-lg c-pointer"><i class="far fa-map"></i> ' . __( 'Load Map', 'geodirectory' ) . '</div>',
+			'lazyLoadPlaceholder' => geodir_plugin_url() . '/assets/images/placeholder.svg',
+			'apis' => array(
+				'google' => apply_filters( 'geodir_map_api_google_data',
+					array(
+						'key' => $google_api_key,
+						'scripts' => array(
+							array( 
+								'id' => 'geodir-google-maps-script',
+								'src' => 'https://maps.googleapis.com/maps/api/js?key=' . $google_api_key . '&libraries=places&language=' . $language . '&ver=' . GEODIRECTORY_VERSION,
+								'main' => true,
+								'onLoad' => true,
+								'onError' => true,
+							),
+							array( 
+								'id' => 'geodir-gomap-script',
+								'src' => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js' . $version_tag,
+							),
+							array( 
+								'id' => 'geodir-g-overlappingmarker-script',
+								'src' => geodir_plugin_url() . '/assets/jawj/oms' . $suffix . '.js' . $version_tag,
+								'check' => ! geodir_is_page( 'add-listing' )
+							),
+							array( 
+								'id' => 'geodir-map-widget-script',
+								'src' => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js' . $version_tag,
+							)
+						)
+					)
+				),
+				'osm' => apply_filters( 'geodir_map_api_osm_data',
+					array(
+						'styles' => array(
+							array( 
+								'id' => 'geodir-leaflet-css',
+								'src' => geodir_plugin_url() . '/assets/leaflet/leaflet.css' . $version_tag
+							),
+							array( 
+								'id' => 'geodir-leaflet-routing-machine-css',
+								'src' => geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine.css',
+								'check' => ! geodir_is_page( 'add-listing' )
+							),
+						),
+						'scripts' => array(
+							array( 
+								'id' => 'geodir-leaflet-script',
+								'src' => geodir_plugin_url() . '/assets/leaflet/leaflet' . $suffix . '.js' . $version_tag,
+								'main' => true,
+							),
+							array( 
+								'id' => 'geodir-leaflet-geo-script',
+								'src' => geodir_plugin_url() . '/assets/leaflet/osm.geocode' . $suffix . '.js' . $version_tag
+							),
+							array( 
+								'id' => 'leaflet-routing-machine-script',
+								'src' => geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine' . $suffix . '.js' . $version_tag,
+								'check' => ! geodir_is_page( 'add-listing' )
+							),
+							array( 
+								'id' => 'geodir-o-overlappingmarker-script',
+								'src' => geodir_plugin_url() . '/assets/jawj/oms-leaflet' . $suffix . '.js' . $version_tag,
+								'check' => ! geodir_is_page( 'add-listing' )
+							),
+							array( 
+								'id' => 'geodir-gomap-script',
+								'src' => geodir_plugin_url() . '/assets/js/goMap' . $suffix . '.js' . $version_tag,
+							),
+							array( 
+								'id' => 'geodir-map-widget-script',
+								'src' => geodir_plugin_url() . '/assets'.$aui.'/js/map' . $suffix . '.js' . $version_tag,
+							)
+						)
+					)
+				)
+			)
+		);
+
+		/**
+		 * Filters the map parameters.
+		 *
+		 * @since 2.1.0.0
+		 *
+		 * @param array Map params array.
+		 */
+		return apply_filters( 'geodir_map_params', $map_params );
+	}
+
+	/**
+	 * Check and add map script when no map on the page.
+	 *
+	 * @since 2.1.0.5
+	 */
+	public static function check_map_script() {
+		global $geodir_map_script;
+
+		if ( ! $geodir_map_script && geodir_lazy_load_map() && GeoDir_Maps::active_map() !='none' && ! wp_script_is( 'geodir-map', 'enqueued' ) ) {
+			$geodir_map_script = true;
+			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+
+?><script type="text/javascript">
+/* <![CDATA[ */
+<?php echo "var geodir_map_params=" . wp_json_encode( geodir_map_params() ) . ';'; ?>var el=document.createElement("script");el.setAttribute("type","text/javascript");el.setAttribute("id",'geodir-map-js');el.setAttribute("src",'<?php echo geodir_plugin_url(); ?>/assets/js/geodir-map<?php echo $suffix; ?>.js');el.setAttribute("async",true);document.getElementsByTagName("head")[0].appendChild(el);
+/* ]]> */
+</script><?php
+		}
+	}
 }
 
 return new GeoDir_Maps();

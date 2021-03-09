@@ -22,7 +22,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
-            'block-category'=> 'widgets',
+            'block-category'=> 'geodirectory',
             'block-keywords'=> "['search','geo','geodir']",
 
             'class_name'    => __CLASS__,
@@ -30,23 +30,11 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
             'name'          => __('GD > Search','geodirectory'), // the name of the widget.
             //'disable_widget'=> true,
             'widget_ops'    => array(
-                'classname'   => 'geodir-search-container', // widget class
+                'classname'   => 'geodir-search-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows the GeoDirectory search bar.','geodirectory'), // widget description
                 'geodirectory' => true,
             ),
-
-            //@todo add options via advanced search
-//            'arguments'     => array(
-//                'post_type'  => array(
-//                    'title' => __('Default Post Type:', 'geodirectory'),
-//                    'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
-//                    'type' => 'select',
-//                    'options'   =>  $this->post_type_options(),
-//                    'default'  => 'image',
-//                    'desc_tip' => true,
-//                    'advanced' => true
-//                )
-//            )
+            'arguments' => array() // keep this
         );
 
         $post_types =  $this->post_type_options();
@@ -58,7 +46,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
                     'desc' => __('The custom post types to show by default. Only used when there are multiple CPTs.', 'geodirectory'),
                     'type' => 'select',
                     'options'   =>  $this->post_type_options(),
-                    'default'  => 'image',
+                    'default'  => '',
                     'desc_tip' => true,
                     'advanced' => true
                 ),
@@ -72,6 +60,36 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
                     'advanced' => true
                 )
             );
+        }
+
+        $design_style = geodir_design_style();
+
+        if($design_style) {
+
+            // background
+            $arguments['bg']  = geodir_get_sd_background_input('mt');
+            // margins
+            $arguments['mt']  = geodir_get_sd_margin_input('mt');
+            $arguments['mr']  = geodir_get_sd_margin_input('mr');
+            $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+            $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+            // padding
+            $arguments['pt']  = geodir_get_sd_padding_input('pt');
+            $arguments['pr']  = geodir_get_sd_padding_input('pr');
+            $arguments['pb']  = geodir_get_sd_padding_input('pb');
+            $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+            // border
+            $arguments['border']  = geodir_get_sd_border_input('border');
+            $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+            $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+            // shadow
+            $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+
+            $options['arguments'] = $options['arguments'] + $arguments;
         }
 
 
@@ -88,8 +106,7 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
      *
      * @return mixed|string|void
      */
-    public function output($args = array(), $widget_args = array(),$content = ''){
-
+    public function output( $args = array(), $widget_args = array(), $content = '' ) {
         ob_start();
         /**
          * @var bool $ajax_load Ajax load or not.
@@ -99,35 +116,53 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
          * @var bool $show_title If the title should be shown or not.
          * @var int/empty $limit If the number of images should be limited.
          */
-        extract($args, EXTR_SKIP);
+        extract( $args, EXTR_SKIP );
 
-        // prints the widget
-        extract($args, EXTR_SKIP);
-
-        // set the CPT to be used.
-        if(isset($post_type) && $post_type && geodir_is_gd_post_type($post_type)){
-            geodir_get_search_post_type($post_type);// set the post type
-        }else{
-            geodir_get_search_post_type();// set the post type
+        // Set the CPT to be used.
+        if ( isset( $post_type ) && $post_type && geodir_is_gd_post_type( $post_type ) ) {
+            geodir_get_search_post_type( $post_type ); // set the post type
+        } else {
+            geodir_get_search_post_type(); // set the post type
         }
 
-        // set if the cpt selector should be hidden
+        // Set if the cpt selector should be hidden
         global $geodir_search_post_type_hide;
-        if(isset($post_type_hide) && $post_type_hide){
+        if ( isset( $post_type_hide ) && $post_type_hide ) {
             $geodir_search_post_type_hide = true;
         }
 
-        geodir_get_template_part('listing', 'filter-form');
+        $design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : geodir_design_style();
+        $template = $design_style ? $design_style . "/search-bar/form.php" : "listing-filter-form.php";
 
+        if ( $design_style && ! empty( $args ) ) {
+            $keep_args = $args;
+            if ( isset( $keep_args['post_type'] ) ) {
+                unset( $keep_args['post_type'] );
+            }
+            if ( isset( $keep_args['post_type_hide'] ) ) {
+                unset( $keep_args['post_type_hide'] );
+            }
+            if ( isset( $keep_args['customize_filters'] ) ) {
+                unset( $keep_args['customize_filters'] );
+            }
+        } else {
+            $keep_args = array();
+        }
 
-        // after outputing the search reset the CPT
+        $args = array(
+            'wrap_class' => geodir_build_aui_class( $args ),
+            'keep_args' => $keep_args
+        );
+
+        echo geodir_get_template_html( $template, $args );
+
+        // After outputing the search reset the CPT
         global $geodir_search_post_type;
         $geodir_search_post_type = '';
         $geodir_search_post_type_hide = false;
 
         return ob_get_clean();
     }
-
 
     /**
      * Get the post type options for search.

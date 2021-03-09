@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://wpgeodirectory.com/docs/customizing-geodirectory-templates/
+ * @see     https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @author  AyeCode
  * @package GeoDirectory/Templates
  * @version 1.0.1
@@ -27,7 +27,7 @@ global $gd_post;
 		<div class="geodir-bubble_desc">
 			[gd_post_title tag='h4']
 			<div class="geodir-bubble_image">
-				[gd_post_images type="image" link_to="post" ajax_load="0" show_logo="true" ]
+				[gd_post_images type="image" link_to="post" ajax_load="0" types="logo,post_images" ]
 			</div>
 			<div class="geodir-bubble-meta-top">
 				[gd_post_rating alignment='left' ]

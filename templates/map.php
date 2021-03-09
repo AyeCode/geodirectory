@@ -10,8 +10,9 @@
 
 /**
  * @global int $mapzoom Zoom level value for the map.
+ * @global bool $geodir_manual_map Check if manual map.
  */
-global $mapzoom;
+global $mapzoom, $geodir_manual_map;
 
 /**
  * Filter the map restriction for specific address only
@@ -144,7 +145,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             // get the proper response as somtimes the GPS results will return names in English when they should not.
             responses.forEach(function(response) {
                 if(response.types[0] == "locality"){
-
                     for (var i = 0; i < response.address_components.length; i++) {
                         var addr = response.address_components[i];
                         if (addr.types[0] == 'administrative_area_level_1') {
@@ -175,9 +175,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 }
             });
 
-
-
-            
             for (var i = 0; i < responses[0].address_components.length; i++) {
                 var addr = responses[0].address_components[i];
                 if (addr.types[0] == 'street_number') {
@@ -271,7 +268,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if (getAddress == 'none' && typeof(establishment.long_name) !== 'undefined' && typeof(address_array[1]) !== 'undefined') {
                 getAddress = address_array[1];
                 getAddress2 = address_array[0];
-            } else {
+            } else if(getAddress == 'none' ) {/* added to fix street number for RU locations */
                 getAddress = address_array[0];
             }
 
@@ -302,10 +299,8 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 rr = country.short_name;
             }
 
-
             //$country_arr = ["US", "CA", "IN","DE","NL"];
             // fix for regions in GB
-
             $country_arr = <?php
             /**
              * Filter the regions array that uses administrative_area_level_2 instead of administrative_area_level_1.
@@ -334,6 +329,11 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 getState = "Isle of Man";
             }else if(getCountryISO=='SG'){
                 getState = "Singapore";
+            }
+
+            /* Fix region name for ‎Belgium */
+            if (getState == 'Brussels Hoofdstedelijk Gewest') {
+                getState = 'Brussels';
             }
 
             //getCity
@@ -371,7 +371,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     getCity = administrative_area_level_1.long_name;
                 }
             }else if(rr=="FR") {
-
                 if (administrative_area_level_2.long_name=='Paris') {
                     getCity = administrative_area_level_2.long_name;
                 }else{
@@ -412,6 +411,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if (postal_code.long_name) {
                 getZip = postal_code.long_name;
             }
+            console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
             <?php 
             /**
              * Fires to add javascript variable to use in google map.
@@ -433,7 +433,15 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             <?php } ?>
             updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry, getAddress2);
         } else {
-            updateMarkerAddress('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
+            <?php 
+            /**
+             * Fires to add javascript variable to use in google map.
+             *
+             * @since 1.0.0
+             */
+            do_action( 'geodir_add_listing_geocode_response_fail' );
+            ?>
+			updateMarkerAddress('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
         }
     }
     function centerMap(latlng) {
@@ -471,7 +479,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         <?php ob_start();?>
         var old_country = jQuery("#<?php echo $prefix.'country';?>").val();
         var old_region = jQuery("#<?php echo $prefix.'region';?>").val();
-        
+        var old_city = jQuery("#<?php echo $prefix.'city';?>").val();
+        var old_zip = jQuery("#<?php echo $prefix.'zip';?>").val();
+
         if (user_address == false || jQuery('#<?php echo $prefix.'street';?>').val() == '') {
             jQuery("#<?php echo $prefix.'street';?>").val(getAddress).trigger("blur");
         }
@@ -485,19 +495,25 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             oldstr_address2 = getAddress2;
         }
 
-        jQuery("#<?php echo $prefix.'zip';?>").val(getZip);
+        var updateZip = true;
+        if (!getZip && old_zip && old_city && old_city == getCity) {
+            updateZip = false;
+        }
+        if (updateZip) {
+            jQuery("#<?php echo $prefix.'zip';?>").val(getZip);
+        }
         if (getZip) {
             oldstr_zip = getZip;
         }
         if (set_map_val_in_fields) {
             if (getCountry) {
                setCountry = jQuery('#<?php echo $prefix . 'country'; ?> option[data-country_code="' + getCountryISO + '"]').val();
-			   if (!setCountry) {
-				   setCountry = getCountry;
-			   } else {
-				   getCountry = setCountry;
-			   }
-			   jQuery("#<?php echo $prefix . 'country'; ?>").val(setCountry).trigger('change.select2');
+               if (!setCountry) {
+                   setCountry = getCountry;
+               } else {
+                   getCountry = setCountry;
+               }
+               jQuery("#<?php echo $prefix . 'country'; ?>").val(setCountry).trigger('change.select2');
             }
             if (getState) {
                 if (jQuery("input#<?php echo $prefix . 'region'; ?>").length) {
@@ -598,6 +614,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             // incase there are any null values
             address =  address.replace(",null,", ",");
         }
+        if (address) {
+            address =  address.replace(",null,", ",");
+        }
         <?php $codeAddress = ob_get_clean();
         /**
          * Filter the address variable
@@ -611,7 +630,11 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         if (!window.gdMaps) { // No Google Map Loaded
             return;
         }
-
+        if (address && address != '') {
+            // Replace one or more commas in a row.
+            address = address.replace(/,+/g,',');
+            address = address.replace(/(^,)|(,$)/g, "");
+        }
         if ( window.gdMaps == 'osm' ) {
             if (address != '') {
                 if (zip != '') {
@@ -619,6 +642,14 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     var nAddress = address.toLowerCase().lastIndexOf(searchZip.toLowerCase());
                     address = address.slice(0, nAddress) + address.slice(nAddress).replace(new RegExp(searchZip, 'i'), "");
                 }
+				<?php 
+				/**
+				 * Fires before set geocode position.
+				 *
+				 * @since 1.0.0
+				 */
+				do_action('geodir_add_listing_codeaddress_before_geocode');
+				?>
                 geocodePositionOSM('', address, ISO2, true);
             }
         } else {
@@ -627,6 +658,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     console.log(status);
                     jQuery("#<?php echo $prefix.'map';?>").goMap();
                     if (status == google.maps.GeocoderStatus.OK) {
+                        console.log(results[0]);
                         baseMarker.setPosition(results[0].geometry.location);
                         jQuery.goMap.map.setCenter(results[0].geometry.location);
                         updateMarkerPosition(baseMarker.getPosition());
@@ -692,14 +724,14 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             var getState = response.state;
             var getCountry = response.country;
             getCountryISO = response.country_code;
-            
+            console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
             if (updateMap && response.lat && response.lon) {
                 var newLatLng = new L.latLng(response.lat, response.lon);
                 baseMarker.setLatLng(newLatLng);
                 centerMap(newLatLng);
                 updateMarkerPositionOSM(baseMarker.getLatLng());
             }
-            <?php 
+            <?php
             /**
              * Fires to add javascript variable to use in google map.
              *
@@ -719,20 +751,34 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             <?php } ?>
             updateMarkerAddress(getAddress, getZip, getCity, getState, getCountry,getAddress2);
         } else {
-            alert('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
+            <?php 
+            /**
+             * Fires to add javascript variable to use in google map.
+             *
+             * @since 1.0.0
+             */
+            do_action( 'geodir_add_listing_geocode_response_fail' );
+            ?>
+			alert('<?php echo addslashes_gpc(__('Cannot determine address at this location.','geodirectory'));?>');
         }
     }
 
     <?php $geodir_map_name = GeoDir_Maps::active_map();
     if($geodir_map_name!='none'){ ?>
     jQuery(function ($) {
-        $("#<?php echo $prefix.'map';?>").goMap({
+		<?php if ( geodir_lazy_load_map() ) { ?>
+		jQuery("#<?php echo $prefix.'map';?>").geodirLoadMap({
+		loadJS: true,
+		forceLoad: <?php echo ( isset( $geodir_manual_map ) && $geodir_manual_map ? 'true' : 'false' ); ?>,
+		callback: function() {<?php } ?>
+        var $addressMap = $("#<?php echo $prefix.'map';?>").goMap({
             latitude: <?php echo $prefix;?>CITY_MAP_CENTER_LAT,
             longitude: <?php echo $prefix;?>CITY_MAP_CENTER_LNG,
             zoom: <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT,
             maptype: 'ROADMAP', // Map type - HYBRID, ROADMAP, SATELLITE, TERRAIN
             streetViewControl: true,
             <?php if(geodir_get_option('geodir_add_listing_mouse_scroll')) { echo 'scrollwheel: false,';}?>
+			<?php do_action( 'geodir_template_render_map_js_params' ); ?>
         });
 
         if (window.gdMaps) {
@@ -785,6 +831,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 updateMarkerPosition(baseMarker.getPosition());
             });
             google.maps.event.addListener($.goMap.map, 'zoom_changed', function () {
+				if (typeof $.goMap.map === 'undefined') {
+					$.goMap.map = $addressMap;
+				}
                 updateMapZoom($.goMap.map.zoom);
             });
 
@@ -835,6 +884,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 updateMarkerPositionOSM(baseMarker.getLatLng());
             });
             $.goMap.map.on('zoom', function(e) {
+				if (typeof $.goMap.map === 'undefined') {
+					$.goMap.map = $addressMap;
+				}
                 updateMapZoom($.goMap.map.getZoom());
             });
 
@@ -849,7 +901,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     $.goMap.map.setZoom(minZoomLevel);
                 }
             });
-        }
+        }<?php if ( geodir_lazy_load_map() ) { ?>
+		}
+	});<?php } ?>
     });
     <?php }?>
     /* ]]> */
@@ -870,7 +924,7 @@ if (is_admin())
             <div id="<?php echo $prefix . 'map'; ?>" style="float:right;height:300px;position:relative;" class="form_row clearfix"></div>
             <div id="<?php echo $prefix; ?>loading_div" style="height:300px"></div>
             <div id="<?php echo $prefix; ?>advmap_counter"></div>
-            <div id="<?php echo $prefix; ?>advmap_nofound"><?php echo MAP_NO_RESULTS; ?></div>
+            <div id="<?php echo $prefix; ?>advmap_nofound"><?php _e('<h3>No Records Found</h3><p>Sorry, no records were found. Please adjust your search criteria and try again.</p>', 'geodirectory'); ?></div>
             <div id="<?php echo $prefix;?>advmap_notloaded" class="advmap_notloaded"><?php _e('<h3>Map Not Loaded</h3><p>Sorry, unable to load Maps API.', 'geodirectory'); ?></div>
         </div>
         <!-- new map end -->

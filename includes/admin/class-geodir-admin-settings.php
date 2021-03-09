@@ -721,6 +721,17 @@ class GeoDir_Admin_Settings {
 						'selected'         => absint( $option_value ),
 					);
 
+					$exclude_pages = array();
+					if ( $page_on_front = get_option( 'page_on_front' ) ) {
+						$exclude_pages[] = $page_on_front; // Exclude frontpage.
+					}
+					if ( $page_for_posts = get_option( 'page_for_posts' ) ) {
+						$exclude_pages[] = $page_for_posts; // Exclude Blog page.
+					}
+					if ( ! empty( $exclude_pages ) ) {
+						$args['exclude'] = $exclude_pages;
+					}
+
 					if ( isset( $value['args'] ) ) {
 						$args = wp_parse_args( $value['args'], $args );
 					}
@@ -733,8 +744,18 @@ class GeoDir_Admin_Settings {
 							<?php if($args['selected']){ ?>
 							<a href="<?php echo get_edit_post_link( $args['selected'] ); ?>" class="button gd-page-setting-edit"><?php _e('Edit Page','geodirectory');?></a>
 
-								<?php if(empty($value['is_template_page'])){ ?>
-								<a href="<?php echo get_permalink($args['selected']);?>" class="button gd-page-setting-view"><?php _e('View Page','geodirectory');?></a>
+								<?php 
+								if ( empty( $value['is_template_page'] ) ) {
+									$page_url = get_permalink( $args['selected'] );
+									if ( ! empty( $value['view_page_args'] ) && is_array( $value['view_page_args'] ) ) {
+										foreach ( $value['view_page_args'] as $_key => $_value ) {
+											if ( ! empty( $_key ) && $_value != '' ) {
+												$page_url = add_query_arg( $_key, $_value, $page_url );
+											}
+										}
+									}
+								?>
+								<a href="<?php echo $page_url; ?>" class="button gd-page-setting-view"><?php _e('View Page','geodirectory');?></a>
 							<?php }
 							}
 							
@@ -799,9 +820,8 @@ class GeoDir_Admin_Settings {
 						<td class="forminp">
 						<select id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'geodirectory' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'geodirectory' ) ?>" class="regular-text <?php echo esc_attr( $value['class'] ); ?>">
 							<?php
-							geodir_get_country_dl($country);
-
-							//WC()->countries->country_dropdown_options( $country, $state ); ?>
+							echo geodir_get_country_dl($country);
+							?>
 						</select> <?php echo $description; ?>
 						</td>
 					</tr><?php
@@ -986,13 +1006,45 @@ class GeoDir_Admin_Settings {
 							type="<?php echo esc_attr( $value['type'] ); ?>"
 							style="<?php echo esc_attr( $value['css'] ); ?>"
 							value="<?php echo esc_attr( $option_value ); ?>"
-							class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
+							class="regular-text <?php echo esc_attr( $value['class'] ); ?> <?php if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-setup'){echo "form-control w-100 mb-2";}?>"
 							placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
 							<?php echo implode( ' ', $custom_attributes ); ?>
 						/>
 						<?php $gm_api_url = 'https://console.developers.google.com/henhouse/?pb=["hh-1","maps_backend",null,[],"https://developers.google.com",null,["static_maps_backend","street_view_image_backend","maps_embed_backend","places_backend","geocoding_backend","directions_backend","distance_matrix_backend","geolocation","elevation_backend","timezone_backend","maps_backend"],null]';?>
-						<a id="gd-api-key" onclick='window.open("<?php echo wp_slash($gm_api_url);?>", "newwindow", "width=600, height=400"); return false;' href='<?php echo $gm_api_url;?>' class="button-primary" name="<?php _e('Generate API Key - ( MUST be logged in to your Google account )','geodirectory');?>" ><?php _e('Generate API Key','geodirectory');?></a>
-						<a href="https://console.developers.google.com/flows/enableapi?apiid=static_maps_backend,street_view_image_backend,maps_embed_backend,places_backend,geocoding_backend,directions_backend,distance_matrix_backend,geolocation,elevation_backend,timezone_backend,maps_backend&amp;keyType=CLIENT_SIDE&amp;reusekey=true" target="_blank"><?php _e('or get one here','geodirectory');?></a> :: (<a href="https://wpgeodirectory.com/docs-v2/integrations/google/#easy" target="_blank"><?php _e('How to add a Google API KEY?','geodirectory');?>)</a>
+						<a id="gd-api-key" onclick='window.open("<?php echo wp_slash($gm_api_url);?>", "newwindow", "width=600, height=400"); return false;' href='<?php echo $gm_api_url;?>' class="<?php if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-setup'){echo 'btn btn-primary btn-sm';}else{echo 'button-primary';}?>" name="<?php _e('Generate API Key - ( MUST be logged in to your Google account )','geodirectory');?>" ><?php _e('Generate API Key','geodirectory');?></a>
+						<a href="https://console.developers.google.com/flows/enableapi?apiid=static_maps_backend,street_view_image_backend,maps_embed_backend,places_backend,geocoding_backend,directions_backend,distance_matrix_backend,geolocation,elevation_backend,timezone_backend,maps_backend&amp;keyType=CLIENT_SIDE&amp;reusekey=true" target="_blank"><?php _e('or get one here','geodirectory');?></a> :: (<a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank"><?php _e('How to add a Google API KEY?','geodirectory');?>)</a>
+						<br />
+						<?php echo $description; ?>
+					</td>
+					</tr><?php
+					break;
+
+				case 'geocode_key' :
+					add_thickbox();// add the thickbox js/css
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'], $value['default'] );
+					}
+					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+					<th scope="row" class="titledesc">
+						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+						<?php echo $tooltip_html; ?>
+					</th>
+					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
+						<input
+							name="<?php echo esc_attr( $value['id'] ); ?>"
+							id="<?php echo esc_attr( $value['id'] ); ?>"
+							type="<?php echo esc_attr( $value['type'] ); ?>"
+							style="<?php echo esc_attr( $value['css'] ); ?>"
+							value="<?php echo esc_attr( $option_value ); ?>"
+							class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
+							placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
+							<?php echo implode( ' ', $custom_attributes ); ?>
+						/>
+						<?php $gm_api_url = 'https://console.developers.google.com/henhouse/?pb=["hh-1","geocoding_backend",null,[],"https://developers.google.com",null,["geocoding_backend","timezone_backend"],null]';?>
+						<a id="gd-geocode-api-key" onclick='window.open("<?php echo wp_slash($gm_api_url);?>", "newwindow", "width=600, height=400"); return false;' href='<?php echo $gm_api_url;?>' class="button-primary" name="<?php _e('Generate Geocoding API Key - ( MUST be logged in to your Google account )','geodirectory');?>" ><?php _e('Generate Geocoding API Key','geodirectory');?></a>
+						<a href="https://console.developers.google.com/flows/enableapi?apiid=geocoding_backend,timezone_backend&amp;keyType=CLIENT_SIDE&amp;reusekey=true" target="_blank"><?php _e('or get one here','geodirectory');?></a>
 						<br />
 						<?php echo $description; ?>
 					</td>
@@ -1106,6 +1158,27 @@ class GeoDir_Admin_Settings {
 									/> <?php echo $description; ?>
 							</td>
 						</tr><?php
+					break;
+				// Single timezone select
+				case 'single_select_timezone' :
+					if ( isset( $value['value'] ) ) {
+						$timezone_string = (string) $value['value'];
+					} else {
+						$timezone_string = (string) self::get_option( $value['id'], $value['default'] );
+					}
+					$placeholder = ! empty( $value['placeholder'] ) ? $value['placeholder'] : __( 'Choose a city/timezone&hellip;', 'geodirectory' );
+					$locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
+					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
+						<th scope="row" class="titledesc">
+							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
+							<?php echo $tooltip_html; ?>
+						</th>
+						<td class="forminp">
+						<select id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" data-placeholder="<?php echo esc_attr( $placeholder ); ?>" aria-label="<?php esc_attr_e( 'Timezone', 'geodirectory' ) ?>" class="regular-text <?php echo esc_attr( $value['class'] ); ?>">
+							<?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?>
+						</select> <?php echo $description; ?>
+						</td>
+					</tr><?php
 					break;
 
 				// Default: run an action

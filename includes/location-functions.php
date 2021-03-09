@@ -55,7 +55,7 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
         $out_put .= '<option ' . selected($post_country, $country, false) . ' value="' . esc_attr($country) . '" data-country_code="' . $ccode . '" data-country_lat="' . $gps['lat'] . '" data-country_lon="' . $gps['lon'] . '" >' . $name . '</option>';
     }
 
-    echo $out_put;
+    return $out_put;
 }
 
 /**
@@ -92,7 +92,7 @@ function geodir_get_countries()
  */
 function geodir_get_address_by_lat_lan($lat, $lng)
 {
-    $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng). GeoDir_Maps::google_api_key(true) ;
+    $url = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' . trim($lat) . ',' . trim($lng). GeoDir_Maps::google_geocode_api_key(true) ;
 
     $response = wp_remote_get($url);
     if ( is_wp_error( $response ) ) {
@@ -119,45 +119,50 @@ function geodir_get_address_by_lat_lan($lat, $lng)
  * @param string $gd_post_type The post type.
  * @return array The location term array.
  */
-function geodir_get_current_location_terms($location_array_from = null, $gd_post_type = '')
-{
+function geodir_get_current_location_terms( $location_array_from = null, $gd_post_type = '' ) {
+	global $wp, $geodirectory;
 
-//    print_r(GeoDir()->location);
-    global $wp,$geodirectory;
-    $location_array = array();
+	$location_array = array();
 
-    $location_terms = $geodirectory->location->allowed_query_variables();
+	if ( ( isset( $wp->query_vars['country'] ) && $wp->query_vars['country'] == 'me' ) || ( isset($wp->query_vars['region'] ) && $wp->query_vars['region'] == 'me' ) || ( isset( $wp->query_vars['city'] ) && $wp->query_vars['city'] == 'me' ) ) {
+		return $location_array;
+	}
 
-    if ((isset($wp->query_vars['country']) && $wp->query_vars['country'] == 'me') || (isset($wp->query_vars['region']) && $wp->query_vars['region'] == 'me') || (isset($wp->query_vars['city']) && $wp->query_vars['city'] == 'me')) {
-        return $location_array;
-    }
+	if ( ! ( ! empty( $geodirectory ) && ! empty( $geodirectory->location ) ) ) {
+		return $location_array;
+	}
 
-    foreach($location_terms as $location_term){
-        $location_array[$location_term] = isset($geodirectory->location->{$location_term."_slug"}) ? $geodirectory->location->{$location_term."_slug"} : '';
-    }
+	$location_terms = $geodirectory->location->allowed_query_variables();
 
+	foreach ( $location_terms as $location_term ) {
+		$location_array[ $location_term ] = isset( $geodirectory->location->{$location_term . "_slug"} ) ? $geodirectory->location->{$location_term . "_slug"} : '';
+	}
+
+	// Set empty locations terms when outside default location active. 
+	if ( geodir_core_multi_city() && ! geodir_is_page( 'single' ) && ! geodir_is_page( 'search' ) ) {
+		$location_array = array();
+	}
 
 	/**
 	 * Filter the location terms.
 	 *
 	 * @since 1.4.6
-     * @package GeoDirectory
+	 * @package GeoDirectory
 	 *
-     * @param array $location_array {
-     *    Attributes of the location_array.
-     *
-     *    @type string $gd_country The country slug.
-     *    @type string $gd_region The region slug.
-     *    @type string $gd_city The city slug.
-     *
-     * }
+	 * @param array $location_array {
+	 *    Attributes of the location_array.
+	 *
+	 *    @type string $gd_country The country slug.
+	 *    @type string $gd_region The region slug.
+	 *    @type string $gd_city The city slug.
+	 *
+	 * }
 	 * @param string $location_array_from Source type of location terms. Default session.
 	 * @param string $gd_post_type WP post type.
 	 */
 	$location_array = apply_filters( 'geodir_current_location_terms', $location_array, $location_array_from, $gd_post_type );
-//    print_r( $location_array );exit;
-    return $location_array;
 
+	return $location_array;
 }
 
 function geodir_location_name_from_slug($slug,$type){
@@ -293,41 +298,29 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
     $location_terms['gd_region'] = !empty($wp->query_vars['region']) ? $wp->query_vars['region'] : '';
     $location_terms['gd_country'] = !empty($wp->query_vars['country']) ? $wp->query_vars['country'] : '';
 
-    $location_names = array();
-    foreach ($location_terms as $type => $location) {
-        $location_name = $location;
-
-        if (!empty($location_name)) {
-            if ( function_exists( 'get_actual_location_name' ) ) {
-                $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
-                $location_name = get_actual_location_name($location_type, $location, true);
-            } else {
-                $location_name = preg_replace( '/-(\d+)$/', '', $location_name);
-                $location_name = preg_replace( '/[_-]/', ' ', $location_name );
-                $location_name = __(geodir_ucwords($location_name), 'geodirectory');
-            }
-        }
-
-        $location_names[$type] = $location_name;
-    }
-
     $location_single = '';
-    foreach ($location_terms as $type => $location) {
-        if (!empty($location)) {
-            if (!empty($location_names[$type])) {
-                $location_single = $location_names[$type];
+    $location_names = array();
+    foreach ( $location_terms as $type => $location ) {
+        $location_type = strpos( $type, 'gd_' ) === 0 ? substr( $type, 3 ) : $type;
+        if ( $location == '' && isset( $location_array[ $location_type ] ) ) {
+            $location = $location_array[ $location_type ];
+        };
+
+        if ( ! empty( $location ) ) {
+            if ( function_exists( 'get_actual_location_name' ) ) {
+                $location = get_actual_location_name( $location_type, $location, true );
             } else {
-                if ( function_exists( 'get_actual_location_name' ) ) {
-                    $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
-                    $location_single = get_actual_location_name($location_type, $location, true);
-                } else {
-                    $location_name = preg_replace( '/-(\d+)$/', '', $location);
-                    $location_name = preg_replace( '/[_-]/', ' ', $location_name );
-                    $location_single = __(geodir_ucwords($location_name), 'geodirectory');
-                }
+                $location = preg_replace( '/-(\d+)$/', '', $location);
+                $location = preg_replace( '/[_-]/', ' ', $location );
+                $location = __( geodir_ucwords( $location ), 'geodirectory' );
             }
-            break;
         }
+
+        if ( empty( $location_single ) ) {
+            $location_single = $location;
+        }
+
+        $location_names[ $type ] = $location;
     }
 
     $full_location = array();
@@ -556,4 +549,383 @@ function geodir_ip_api_data( $ip = '' ) {
     set_transient( 'geodir_ip_location_'.$ip, $data, 24 * HOUR_IN_SECONDS ); // cache ip location for 24 hours
 
     return $data;
+}
+
+/**
+ * Get timezone data from via timezone api service.
+ *
+ * @since 2.0.0.66
+ *
+ * @param string $latitude Latitude
+ * @param string $longitude Longitude
+ * @param int $timestamp Timestamp
+ * @return array|WP_Error
+ */
+function geodir_get_timezone_by_lat_lon( $latitude, $longitude, $timestamp = 0 ) {
+	global $wp_version;
+
+	$data = array();
+	$error = '';
+
+	if ( ! empty( $latitude ) && ! empty( $longitude ) ) {
+		$api_url = 'https://maps.googleapis.com/maps/api/timezone/json';
+		$api_url .= '?key=' . GeoDir_Maps::google_geocode_api_key();
+		$api_url .= '&timestamp=' . ( absint( $timestamp ) > 0 ? absint( $timestamp ) : current_time( 'timestamp' ) );
+		$api_url .= '&location=' . $latitude . ',' . $longitude;
+
+		$args = array(
+			'timeout'     => 5,
+			'redirection' => 5,
+			'httpversion' => '1.0',
+			'user-agent'  => 'WordPress/' . $wp_version . '; ' . home_url(),
+			'blocking'    => true,
+			'decompress'  => true,
+			'sslverify'   => false,
+		);
+
+		$response = wp_remote_get( $api_url , $args );
+
+		if ( ! is_wp_error( $response ) ) {
+			$body = (array) json_decode( wp_remote_retrieve_body( $response ) );
+
+			if ( ! empty( $body ) && $body['status'] == 'OK' ) {
+				if ( isset( $body['timeZoneId'] ) && $body['timeZoneId'] == 'Asia/Calcutta' ) {
+					$body['timeZoneId'] = 'Asia/Kolkata';
+				}
+				$data = $body;
+			} elseif ( ! empty( $body ) && ! empty( $body['errorMessage'] ) ) {
+				$error = __( $body['errorMessage'], 'geodirectory' );
+			}
+		} else {
+			if ( current_user_can( 'manage_options' ) ) {
+				$error = __( $response->get_error_message(), 'geodirectory' );
+			}
+		}
+	}
+
+	if ( empty( $data ) ) {
+		if ( empty( $error ) ) {
+			$error = __( 'There is an error in timezone data request.', 'geodirectory' );
+		}
+
+		$data = new WP_Error( 'gd-timezone-api', wp_sprintf( __( 'Google Timezone API: %s' ), $error ) );
+	}
+
+	return apply_filters( 'geodir_get_timezone_by_lat_lon', $data, $latitude, $longitude, $timestamp );
+}
+
+/**
+ * Get the GPS from a post address.
+ *
+ * @param $address
+ *
+ * @return WP_Error|array|bool
+ */
+function geodir_get_gps_from_address( $address = array(), $wp_error = false ) {
+	$api = GeoDir_Maps::active_map();
+
+	$api = apply_filters( 'geodir_post_gps_from_address_api', $api );
+
+	if ( $api == 'google' || $api == 'auto' ) {
+		$_gps = geodir_google_get_gps_from_address( $address, $wp_error );
+	} elseif ( $api == 'osm' ) {
+		$_gps = geodir_osm_get_gps_from_address( $address, $wp_error );
+	} else {
+		$_gps = apply_filters( 'geodir_gps_from_address_custom_api_gps', array(), $api );
+	}
+
+	$gps = array();
+
+	if ( is_array( $_gps ) && ! empty( $_gps['latitude'] ) && ! empty( $_gps['longitude'] ) ) {
+		$gps['latitude'] = $_gps['latitude'];
+		$gps['longitude'] = $_gps['longitude'];
+	} else {
+		if ( $wp_error ) {
+			if ( is_wp_error( $_gps ) ) {
+				return $_gps;
+			} else {
+				return new WP_Error( 'geodir-gps-from-address', esc_attr__( 'Failed to retrieve GPS data from a address using API.', 'geodirectory' ) );
+			}
+		} else {
+			return NULL;
+		}
+	}
+
+	return apply_filters( 'geodir_get_gps_from_address', $gps, $address, $api );
+}
+
+/**
+ * Get GPS info for the address using Google Geocode API.
+ *
+ * @since 2.0.0.66
+ *
+ * @param array|string $address Array of address element or full address.
+ * @param bool $wp_error Optional. Whether to return a WP_Error on failure. Default false.
+ * @return bool|WP_Error GPS data or WP_Error on failure.
+ */
+function geodir_google_get_gps_from_address( $address, $wp_error = false ) {
+	global $wp_version;
+
+	if ( empty( $address ) ) {
+		if ( $wp_error ) {
+			return new WP_Error( 'geodir-gps-from-address', __( 'Address must be non-empty.', 'geodirectory' ) );
+		} else {
+			return false;
+		}
+	}
+
+	if ( is_array( $address ) ) {
+		$address = wp_parse_args( $address, array(
+			'street' => '',
+			'city' => '',
+			'region' => '',
+			'country' => '',
+			'zip' => '',
+		) );
+
+		$_address = array();
+		if ( trim( $address['street'] ) != '' ) {
+			$_address[] = trim( $address['street'] );
+		}
+		if ( trim( $address['city'] ) != '' ) {
+			$_address[] = trim( $address['city'] );
+		}
+		if ( trim( $address['region'] ) != '' ) {
+			$_address[] = trim( $address['region'] );
+		}
+		if ( trim( $address['country'] ) != '' ) {
+			$_address[] = trim( $address['country'] );
+		}
+		if ( trim( $address['zip'] ) != '' ) {
+			$_address[] = trim( $address['zip'] );
+		}
+
+		// We must have at least 4 address items.
+		if ( count( $_address ) < 4 ) {
+			if ( $wp_error ) {
+				return new WP_Error( 'geodir-gps-from-address', __( 'Not enough location info for address.', 'geodirectory' ) );
+			} else {
+				return false;
+			}
+		}
+
+		$search_address = implode( ', ', $_address );
+	} else {
+		if ( trim( $address ) == '' ) {
+			if ( $wp_error ) {
+				return new WP_Error( 'geodir-gps-from-address', __( 'Not enough location info for address.', 'geodirectory' ) );
+			} else {
+				return false;
+			}
+		}
+
+		$search_address = trim( $address );
+	}
+
+	$request_url = 'https://maps.googleapis.com/maps/api/geocode/json';
+	$request_url .= '?address=' . $search_address;
+
+	// Api key if we have it, it helps with limits.
+	$google_api_key = GeoDir_Maps::google_geocode_api_key();
+	if ( $google_api_key ) {
+		$request_url .= '&key=' . $google_api_key;
+	}
+
+	$request_url = apply_filters( 'geodir_google_gps_from_address_request_url', $request_url, $address );
+
+	$args = array(
+		'timeout'     => 5,
+		'redirection' => 5,
+		'httpversion' => '1.0',
+		'user-agent'  => 'WordPress/' . $wp_version . '; ' . home_url(),
+		'blocking'    => true,
+		'decompress'  => true,
+		'sslverify'   => false,
+	);
+	$response = wp_remote_get( $request_url , $args );
+
+	// Check for errors
+	if ( is_wp_error( $response ) ) {
+		if ( $wp_error ) {
+			return new WP_Error( 'geodir-gps-from-address', __( 'Failed to reach Google geocode server.', 'geodirectory' ) );
+		} else {
+			return false;
+		}
+	}
+
+	$body = wp_remote_retrieve_body( $response );
+	$data = json_decode( $body, true );
+
+	$gps = array();
+	if ( isset( $data['status'] ) && $data['status'] == 'OK' ) {
+		if ( isset( $data['results'][0]['geometry']['location']['lat'] ) && $data['results'][0]['geometry']['location']['lat'] ) {
+			$gps['latitude'] = $data['results'][0]['geometry']['location']['lat'];
+			$gps['longitude'] = $data['results'][0]['geometry']['location']['lng'];
+		} else {
+			if ( $wp_error ) {
+				$gps = new WP_Error( 'geodir-gps-from-address', __( 'Listing has no GPS info, failed to geocode GPS info.', 'geodirectory' ) );
+			} else {
+				$gps = false;
+			}
+		}
+	} else {
+		if ( isset( $data['status'] ) ) {
+			$error = wp_sprintf( __( 'Google geocode failed: %s', 'geodirectory' ),  $data['status'] );
+		} else {
+			$error = __( 'Failed to reach Google geocode server.', 'geodirectory' );
+		}
+
+		if ( $wp_error ) {
+			$gps = new WP_Error( 'geodir-gps-from-address', $error );
+		} else {
+			$gps = false;
+		}
+	}
+
+	return $gps;
+}
+
+/**
+ * Get GPS info for the address using OpenStreetMap Nominatim API.
+ *
+ * @since 2.0.0.66
+ *
+ * @param array|string $address Array of address element or full address.
+ * @param bool $wp_error Optional. Whether to return a WP_Error on failure. Default false.
+ * @return bool|WP_Error GPS data or WP_Error on failure.
+ */
+function geodir_osm_get_gps_from_address( $address, $wp_error = false ) {
+	global $wp_version;
+
+	if ( empty( $address ) ) {
+		if ( $wp_error ) {
+			return new WP_Error( 'geodir-gps-from-address', __( 'Address must be non-empty.', 'geodirectory' ) );
+		} else {
+			return false;
+		}
+	}
+
+	$extra_params = '';
+	if ( is_array( $address ) ) {
+		$address = wp_parse_args( $address, array(
+			'street' => '',
+			'city' => '',
+			'region' => '',
+			'country' => '',
+			'zip' => '',
+			'country_code' => '',
+		) );
+
+		$_address = array();
+		if ( trim( $address['street'] ) != '' ) {
+			$_address[] = trim( $address['street'] );
+		}
+		if ( trim( $address['city'] ) != '' ) {
+			$_address[] = trim( $address['city'] );
+		}
+		if ( trim( $address['region'] ) != '' ) {
+			$_address[] = trim( $address['region'] );
+		}
+		if ( trim( $address['zip'] ) != '' ) {
+			$_address[] = trim( $address['zip'] );
+		}
+		if ( trim( $address['country'] ) != '' ) {
+			$_address[] = trim( $address['country'] );
+		}
+
+		// We must have at least 2 address items.
+		if ( count( $_address ) < 2 ) {
+			if ( $wp_error ) {
+				return new WP_Error( 'geodir-gps-from-address', __( 'Not enough location info for address.', 'geodirectory' ) );
+			} else {
+				return false;
+			}
+		}
+
+		$search_address = implode( ', ', $_address );
+
+		// Search within specific country code(s).
+		if ( ! empty( $address['country_code'] ) ) {
+			$extra_params .= '&countrycodes=' . ( is_array( $address['country_code'] ) ? implode( ',', $address['country_code'] ) : $address['country_code'] );
+		}
+	} else {
+		if ( trim( $address ) == '' ) {
+			if ( $wp_error ) {
+				return new WP_Error( 'geodir-gps-from-address', __( 'Not enough location info for address.', 'geodirectory' ) );
+			} else {
+				return false;
+			}
+		}
+
+		$search_address = trim( $address );
+	}
+
+	$request_url = 'https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&limit=1';
+	$request_url .= '&q=' . $search_address;
+	$request_url .= $extra_params;
+
+	// If making large numbers of request please include an appropriate email address to identify requests.
+	$request_url .= '&email=' . get_option( 'admin_email' );
+
+	$request_url = apply_filters( 'geodir_osm_gps_from_address_request_url', $request_url, $address );
+
+	$args = array(
+		'timeout'     => 5,
+		'redirection' => 5,
+		'httpversion' => '1.0',
+		'user-agent'  => 'WordPress/' . $wp_version . '; ' . home_url(),
+		'blocking'    => true,
+		'decompress'  => true,
+		'sslverify'   => false,
+	);
+	$response = wp_remote_get( $request_url , $args );
+
+	// Check for errors
+	if ( is_wp_error( $response ) ) {
+		if ( $wp_error ) {
+			return new WP_Error( 'geodir-gps-from-address', __( 'Failed to reach OpenStreetMap Nominatim server.', 'geodirectory' ) );
+		} else {
+			return false;
+		}
+	}
+
+	$body = wp_remote_retrieve_body( $response );
+	$data = json_decode( $body, true );
+
+	$gps = array();
+	if ( ! empty( $data ) && is_array( $data ) ) {
+		if ( ! empty( $data[0]['lat'] ) && ! empty( $data[0]['lon'] ) ) {
+			$details = $data[0];
+
+			$gps['latitude'] = $details['lat'];
+			$gps['longitude'] = $details['lon'];
+		} else {
+			if ( $wp_error ) {
+				$gps = new WP_Error( 'geodir-gps-from-address', __( 'Listing has no GPS info, failed to retrieve GPS info from OpenStreetMap Nominatim server.', 'geodirectory' ) );
+			} else {
+				$gps = false;
+			}
+		}
+	} else {
+		if ( $wp_error ) {
+			$gps = new WP_Error( 'geodir-gps-from-address', __( 'Failed to retrieve GPS info from OpenStreetMap Nominatim server.', 'geodirectory' ) );
+		} else {
+			$gps = false;
+		}
+	}
+
+	return $gps;
+}
+
+/**
+ * Check multi city active or not.
+ *
+ * @since 2.1.0.7
+ *
+ * @param array|string $address Array of address element or full address.
+ * @param bool $wp_error Optional. Whether to return a WP_Error on failure. Default false.
+ * @return bool|WP_Error GPS data or WP_Error on failure.
+ */
+function geodir_core_multi_city() {
+	return ( ! defined( 'GEODIRLOCATION_VERSION' ) && geodir_get_option( 'multi_city' ) );
 }

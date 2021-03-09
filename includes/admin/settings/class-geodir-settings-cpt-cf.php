@@ -46,7 +46,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		public function __construct() {
 
 			self::$page = ! empty( $_REQUEST['page'] ) ? sanitize_title( $_REQUEST['page'] ) : '';
-			self::$post_type = ! empty( $_REQUEST['post_type'] ) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
+			self::$post_type = ( ! empty( $_REQUEST['post_type'] ) && is_scalar( $_REQUEST['post_type'] ) ) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
 			self::$sub_tab   = ! empty( $_REQUEST['tab'] ) ? sanitize_title( $_REQUEST['tab'] ) : 'general';
 
 
@@ -118,7 +118,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function left_panel_title() {
-			return sprintf( __( 'Add new %s form field', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Add new %s form field', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 
@@ -130,7 +130,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The box description.
 		 */
 		public function left_panel_note() {
-			return sprintf( __( 'Click on any box below to add a field of that type to the add %s listing form. You can use a fieldset to group your fields.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Click on any box below to add a field of that type to the add %s listing form. You can use a fieldset to group your fields.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**
@@ -578,7 +578,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					'cat_sort'           => false,
 					'cat_filter'         => false,
 					'extra_fields'       => array(
-						'gd_file_types'     => array( 'jpg','jpe','jpeg','gif','png','bmp','ico'),
+						'gd_file_types'     => array( 'jpg','jpe','jpeg','gif','png','bmp','ico','webp'),
 						'file_limit'        => 1,
 					),
 					'single_use'         => true,
@@ -1210,6 +1210,66 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
                )
 			);
 
+			// distanceto
+			$custom_fields['distanceto'] = array(
+				'field_type'  => 'text',
+				'class'       => 'gd-distance-to',
+				'icon'        => 'fas fa-road',
+				'name'        => __( 'Distance To', 'geodirectory' ),
+				'description' => __( 'Adds a input for GPS coordinates that will then output the place distance to that point.', 'geodirectory' ),
+				'defaults'    => array(
+					'data_type'          => 'VARCHAR',
+					'admin_title'        => 'Distance To',
+					'frontend_title'     => 'Distance To',
+					'frontend_desc'      => 'Enter GPS coordinates like `53.347302,-6.258953`',
+					'htmlvar_name'       => 'distanceto',
+					'is_active'          => true,
+					'for_admin_use'      => false,
+					'default_value'      => '',
+					'show_in'            => '[detail]',
+					'is_required'        => false,
+					'validation_pattern' => '(-?\d{1,3}\.\d+),(-?\d{1,3}\.\d+)',
+					'validation_msg'     => 'Please enter valid GPS coordinates.',
+					'required_msg'       => '',
+					'field_icon'         => 'fas fa-road',
+					'css_class'          => 'gd-distance-to',
+					'cat_sort'           => false,
+					'cat_filter'         => false,
+	                'single_use'         => true
+				)
+			);
+
+			// Temporarily Closed
+			$custom_fields['temp_closed'] = array(
+				'field_type'  => 'checkbox',
+				'class'       => 'gd-checkbox',
+				'icon'        => 'fas fa-exclamation-circle',
+				'name'        => __( 'Temporarily Closed', 'geodirectory' ),
+				'description' => __( 'Mark listing as temporarily closed, this will set business hours as closed and show a message in the notifications section.', 'geodirectory' ),
+				'single_use'         => 'temp_closed',
+				'defaults'    => array(
+					'data_type'          => 'TINYINT',
+					'admin_title'        => __( 'Temporarily Closed', 'geodirectory' ),
+					'frontend_title'     => __( 'Temporarily Closed', 'geodirectory' ),
+					'frontend_desc'      => __( 'If your business is temporarily closed select this to let customers and search engines know.', 'geodirectory' ),
+					'htmlvar_name'       => 'temp_closed',
+					'is_active'          => true,
+					'for_admin_use'      => true,
+					'default_value'      => '0',
+					'show_in'            => '[detail],[listing],[mapbubble]',
+					'is_required'        => false,
+					'option_values'      => '',
+					'validation_pattern' => '',
+					'validation_msg'     => '',
+					'required_msg'       => '',
+					'field_icon'         => 'fas fa-exclamation-circle',
+					'css_class'          => '',
+					'cat_sort'           => true,
+					'cat_filter'         => true,
+					'single_use'         => true
+				)
+			);
+
 			/**
 			 * @see `geodir_custom_fields`
 			 */
@@ -1225,7 +1285,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function right_panel_title() {
-			return sprintf( __( 'List of fields that will appear on add new %s listing form', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'List of fields that will appear on add new %s listing form', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 
@@ -1237,7 +1297,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The box description.
 		 */
 		public function right_panel_note() {
-			return sprintf( __( 'Click to expand and view field related settings. You may drag and drop to arrange fields order on add %s listing form too.', 'geodirectory' ), get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Click to expand and view field related settings. You may drag and drop to arrange fields order on add %s listing form too.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**
@@ -1520,7 +1580,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$field->field_type = isset( $input['field_type'] ) ? sanitize_text_field( $input['field_type'] ) : null;
 			$field->field_type_key = isset( $input['field_type_key'] ) ? sanitize_text_field( $input['field_type_key'] ) : $field->field_type;
 			$field->htmlvar_name = isset( $input['htmlvar_name'] ) ? str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['htmlvar_name'] ) ) : null;
-			$field->frontend_desc = isset( $input['frontend_desc'] ) ? sanitize_text_field( $input['frontend_desc'] ) : '';
+			$field->frontend_desc = isset( $input['frontend_desc'] ) ? stripslashes( wp_kses_post( esc_attr( $input['frontend_desc'] ) ) ) : '';
+
 			$field->clabels = isset( $input['clabels'] ) ? sanitize_text_field( $input['clabels'] ) : null;
 			// default_value
 			$default_value = isset( $input['default_value'] ) ? $input['default_value'] : '';
@@ -1534,7 +1595,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				}
 			}
 			$field->default_value = $default_value;
-			$field->placeholder_value = isset( $input['placeholder_value'] ) ? sanitize_text_field( $input['placeholder_value'] ) : '';
+			$field->db_default = isset( $input['db_default'] ) ? sanitize_text_field( esc_attr( $input['db_default'] ) ) : '';
+			$field->placeholder_value = isset( $input['placeholder_value'] ) ? sanitize_text_field( esc_attr( $input['placeholder_value'] ) ) : '';
 			$field->sort_order = isset( $input['sort_order'] ) ? intval( $input['sort_order'] ) : self::default_sort_order();
 			$field->is_active = isset( $input['is_active'] ) ? absint( $input['is_active'] ) : 0;
 			$field->is_default  = isset( $input['is_default'] ) ? absint( $input['is_default'] ) : 0;
@@ -1940,9 +2002,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 //					break;
 				case 'checkbox':
 					$column_attr .= "( 1 ) NULL ";
-//					if ((int)$field->default_value === 1) {
-//						$column_attr .= " DEFAULT '1'";
-//					}
+					if (isset($field->db_default) && (int)$field->db_default === 1) {
+						$column_attr .= " DEFAULT '1'";
+					}
 					break;
 				case 'multiselect':
 				case 'select':
@@ -1976,9 +2038,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					}
 
 					$column_attr .= "( $op_size ) NULL ";
-//					if ($field->default_value != '') {
-//						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->default_value);
-//					}
+					if ($field->db_default != '') {
+						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
+					}
 
 					// Update the field size to new max
 					if($exists) {
@@ -2006,7 +2068,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					}else{
 						$column_attr .= "( 254 ) NULL ";
 					}
-					//print_r($extra_fields);print_r($field);exit;
+
+					if ($field->db_default != '') {
+						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
+					}
+
 				break;
 				case 'int':
 				case 'INT':

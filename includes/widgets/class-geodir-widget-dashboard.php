@@ -25,14 +25,14 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 	    $options = array(
 		    'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
 		    'block-icon'    => 'admin-site',
-		    'block-category'=> 'widgets',
+		    'block-category'=> 'geodirectory',
 		    'block-keywords'=> "['dashboard','login','geo']",
 
 		    'class_name'    => __CLASS__,
 		    'base_id'       => 'gd_dashboard', // this us used as the widget id and the shortcode id.
 		    'name'          => __('GD > Dashboard','geodirectory'), // the name of the widget.
 		    'widget_ops'    => array(
-			    'classname'   => 'geodir-dashboard-container', // widget class
+			    'classname'   => 'geodir-dashboard-container '.geodir_bsui_class(), // widget class
 			    'description' => esc_html__('Shows the user dashboard to logged in users.','geodirectory'), // widget description
 			    'customize_selective_refresh' => true,
 			    'geodirectory' => true,
@@ -49,6 +49,38 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 			    )
 		    )
 	    );
+
+	    $design_style = geodir_design_style();
+
+	    if($design_style) {
+
+		    // background
+		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+
+		    // margins
+		    $arguments['mt']  = geodir_get_sd_margin_input('mt');
+		    $arguments['mr']  = geodir_get_sd_margin_input('mr');
+		    $arguments['mb']  = geodir_get_sd_margin_input('mb',array('default'=>3));
+		    $arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+		    // padding
+		    $arguments['pt']  = geodir_get_sd_padding_input('pt');
+		    $arguments['pr']  = geodir_get_sd_padding_input('pr');
+		    $arguments['pb']  = geodir_get_sd_padding_input('pb');
+		    $arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+		    // border
+		    $arguments['border']  = geodir_get_sd_border_input('border');
+		    $arguments['rounded']  = geodir_get_sd_border_input('rounded');
+		    $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+		    // shadow
+		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+
+
+		    $options['arguments'] = $options['arguments'] + $arguments;
+
+	    }
 
 
 	    parent::__construct( $options );
@@ -69,17 +101,33 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 		// options
 		$defaults = array(
 			'title'      => __( 'My Dashboard', 'geodirectory' ),
+			'bg'    => '',
+			'mt'    => '',
+			'mb'    => '3',
+			'mr'    => '',
+			'ml'    => '',
+			'pt'    => '',
+			'pb'    => '',
+			'pr'    => '',
+			'pl'    => '',
+			'border'    => '',
+			'rounded'    => '',
+			'rounded_size'    => '',
+			'shadow'    => '',
 		);
 
 		/**
 		 * Parse incoming $args into an array and merge it with $defaults
 		 */
 		$options = wp_parse_args( $args, $defaults );
+
+		// wrap class
+		$wrap_class = geodir_build_aui_class($options);
 		
 		if ( is_user_logged_in() ) {
 
 
-			echo "<div class='geodir-dashbaord'>";
+			echo "<div class='geodir-dashboard $wrap_class'>";
 
 			$this->dashboard_output( $options );
 
@@ -105,10 +153,13 @@ class GeoDir_Widget_Dashboard extends WP_Super_Duper {
 		if ( is_user_logged_in() ) {
 			global $current_user;
 
+			$design_style = geodir_design_style();
+
 			$author_link = get_author_posts_url( $current_user->data->ID );
 			$author_link = geodir_getlink( $author_link, array( 'geodir_dashbord' => 'true' ), false );
 
-			echo '<ul class="geodir-loginbox-list">';
+			$ul_class = $design_style ? 'list-unstyled p-0 m-0' : '';
+			echo '<ul class="geodir-loginbox-list '.$ul_class.'">';
 			ob_start();
 			do_action( 'geodir_dashboard_links_top' );
 

@@ -148,7 +148,7 @@ class GeoDir_Privacy extends GeoDir_Abstract_Privacy {
 		}
 
 		// Get the request data.
-		$request = wp_get_user_request_data( $request_id );
+		$request = wp_get_user_request( $request_id );
 
 		if ( ! $request || 'export_personal_data' !== $request->action_name ) {
 			return false;

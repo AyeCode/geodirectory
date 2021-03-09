@@ -154,18 +154,21 @@ class GeoDir_Admin_Import_Export {
 	 * Try to set higher limits on the fly
 	 */
 	public static function set_php_limits() {
-		error_reporting( 0 );
+		if ( ! ( defined( 'WP_DEBUG' ) && WP_DEBUG ) ) {
+			error_reporting( 0 );
+		}
+		@ini_set( 'display_errors', 0 );
 
 		// try to set higher limits for import
 		$max_input_time     = ini_get( 'max_input_time' );
 		$max_execution_time = ini_get( 'max_execution_time' );
 		$memory_limit       = ini_get( 'memory_limit' );
 
-		if ( ! $max_input_time || $max_input_time < 3000 ) {
+		if ( $max_input_time !== 0 && $max_input_time != -1 && ( ! $max_input_time || $max_input_time < 3000 ) ) {
 			ini_set( 'max_input_time', 3000 );
 		}
 
-		if ( ! $max_execution_time || $max_execution_time < 3000 ) {
+		if ( $max_execution_time !== 0 && ( ! $max_execution_time || $max_execution_time < 3000 ) ) {
 			ini_set( 'max_execution_time', 3000 );
 		}
 
@@ -276,10 +279,15 @@ class GeoDir_Admin_Import_Export {
 
 
 				if ( is_array($post_info) ) {
+					/**
+					 * @since 2.0.0.68
+					 */
+					do_action( 'geodir_import_post_before', $post_info );
+
+					$result = false;
 
 					// Update
-					if ( isset( $post_info['ID'] ) && $post_info['ID'] ) {
-
+					if ( ! empty( $post_info['ID'] ) ) {
 						$result = wp_update_post( $post_info, true ); // we hook into the save_post hook
 						if ( $result ) {
 							$updated ++;
@@ -298,6 +306,11 @@ class GeoDir_Admin_Import_Export {
 							$errors[$csv_row] = sprintf( esc_attr__('Row %d Error: %s', 'geodirectory'), $csv_row, esc_attr($result->get_error_message()) );
 						}
 					}
+					
+					/**
+					 * @since 2.0.0.68
+					 */
+					do_action( 'geodir_import_post_after', $post_info, $result );
 
 				} else {
 					$invalid ++;
@@ -402,19 +415,31 @@ class GeoDir_Admin_Import_Export {
 	 * @return array
 	 */
 	public static function validate_post( $row ) {
-
 		$post_info = $row;
-		// validate post_type
-		if(isset($post_info['post_type']) && $post_info['post_type']){
-			$post_type = esc_attr($post_info['post_type']);
-		}else{
-			return esc_attr__('Post type missing','geodirectory');
-		}
 
+		// Validate post_type
+		if ( ! empty( $post_info['post_type'] ) ) {
+			$post_type = esc_attr( $post_info['post_type'] );
+
+			if ( ! geodir_is_gd_post_type( $post_type ) ) {
+				return esc_attr( wp_sprintf( __( 'Invalid post type - %s', 'geodirectory' ), $post_type ) );
+			}
+		} else {
+			return esc_attr__( 'Post type missing', 'geodirectory' );
+		}
 
 		// validate title
 		if ( isset( $post_info['post_title'] ) && empty($post_info['post_title']) ) {
-			return  esc_attr__('Title missing','geodirectory');
+			return esc_attr__('Title missing','geodirectory');
+		}
+
+		// Connvert date in mysql format
+		if ( ! empty( $post_info['post_date'] ) && strpos( $post_info['post_date'], '/' ) !== false ) {
+			$post_info['post_date'] = geodir_date( $post_info['post_date'], 'Y-m-d H:i:s' );
+		}
+
+		if ( ! empty( $post_info['post_modified'] ) && strpos( $post_info['post_modified'], '/' ) !== false ) {
+			$post_info['post_modified'] = geodir_date( $post_info['post_modified'], 'Y-m-d H:i:s' );
 		}
 
 		// change post_category to an array()
@@ -443,7 +468,7 @@ class GeoDir_Admin_Import_Export {
 			$i      = 0;
 			if ( ! empty( $images ) ) {
 				foreach ( $images as $image ) {
-					if ( strpos( $image, 'http' ) === 0 ) {
+					if ( geodir_is_full_url( $image ) || strpos( $image, '#' ) === 0 ) {
 						// It starts with 'http'
 					} else {
 						$i ++;
@@ -455,17 +480,19 @@ class GeoDir_Admin_Import_Export {
 			}
 		}
 
-		// fill in the GPS info from address if missing
-		if ( ( isset( $post_info['latitude'] ) && empty( $post_info['latitude'] ) ) || ( isset( $post_info['longitude'] ) && empty( $post_info['longitude'] ) ) ) {
-			$post_info = self::get_post_gps_from_address( $post_info );
-					// fill in the address if ONLY the GPS is provided
-		}elseif(
-			( isset( $post_info['city'] ) && empty( $post_info['city'] ) ) ||
-			( isset( $post_info['region'] ) && empty( $post_info['region'] ) ) ||
-			( isset( $post_info['country'] ) && empty( $post_info['country'] ) )
-		){
-			//$post_info = self::get_post_address_from_gps($post_info);
-			$post_info = esc_attr__('Address city, region or country missing','geodirectory');
+		if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+			// Fill in the GPS info from address if missing
+			if ( ( isset( $post_info['latitude'] ) && empty( $post_info['latitude'] ) ) || ( isset( $post_info['longitude'] ) && empty( $post_info['longitude'] ) ) ) {
+				$post_info = self::get_post_gps_from_address( $post_info );
+				// Fill in the address if ONLY the GPS is provided
+			} elseif (
+				( isset( $post_info['city'] ) && empty( $post_info['city'] ) ) ||
+				( isset( $post_info['region'] ) && empty( $post_info['region'] ) ) ||
+				( isset( $post_info['country'] ) && empty( $post_info['country'] ) )
+			) {
+				//$post_info = self::get_post_address_from_gps($post_info);
+				$post_info = esc_attr__( 'Address city, region or country missing', 'geodirectory' );
+			}
 		}
 
 		if ( isset( $post_info['post_status'] ) ) {
@@ -492,76 +519,20 @@ class GeoDir_Admin_Import_Export {
 	 * @return array|bool
 	 */
 	public static function get_post_gps_from_address( $post_info ) {
+		$gps = geodir_get_gps_from_address( $post_info, true );
 
-		// @todo if users require a higher limit we should look at https://locationiq.org/
-		// @todo we should add OSM geocoder here is not using Gmaps.
-
-		$address = array();
-		$api_url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-		$api_key = GeoDir_Maps::google_api_key();
-
-
-		// if we don't have either the street or zip then we can't get an accurate address
-		if( ( isset( $post_info['street'] ) && $post_info['street'] ) || ( isset( $post_info['zip'] ) && $post_info['zip'] ) ){}
-		else{return esc_attr__('Not enough location info for address.','geodirectory');}
-
-		// check we have an address
-		if( isset( $post_info['street'] ) && $post_info['street'] ){ $address[] = $post_info['street'];  }
-		if( isset( $post_info['city'] ) && $post_info['city'] ){ $address[] = $post_info['city'];  }
-		if( isset( $post_info['region'] ) && $post_info['region'] ){ $address[] = $post_info['region'];  }
-		if( isset( $post_info['country'] ) && $post_info['country'] ){ $address[] = $post_info['country'];  }
-		if( isset( $post_info['zip'] ) && $post_info['zip'] ){ $address[] = $post_info['zip'];  }
-
-		// we must have at least 4 address items
-		if( count($address) < 4 ){return false;}
-
-		$request_url = $api_url.implode(",",$address);
-
-		// add the api key if we have it, it helps with limits
-		if($api_key){
-			$request_url .= "&key=".$api_key;
-		}
-
-		global $wp_version;
-		$args = array(
-			'timeout'     => 5,
-			'redirection' => 5,
-			'httpversion' => '1.0',
-			'user-agent'  => 'WordPress/' . $wp_version . '; ' . home_url(),
-			'blocking'    => true,
-			'decompress'  => true,
-			'sslverify'   => false,
-		);
-		$response = wp_remote_get( $request_url , $args );
-
-		// Check for errors
-		if ( is_wp_error( $response ) ) {
-			return esc_attr__('Failed to reach Google geocode server.','geodirectory');
-		}
-
-		$body = wp_remote_retrieve_body( $response );
-		$json = json_decode( $body, true );
-
-		if(isset($json['status']) && $json['status']=='OK'){
-
-			if( isset( $json['results'][0]['geometry']['location']['lat'] ) && $json['results'][0]['geometry']['location']['lat'] ){
-				$post_info['latitude'] = $json['results'][0]['geometry']['location']['lat'];
-				$post_info['longitude'] = $json['results'][0]['geometry']['location']['lng'];
-			}else{
-				return esc_attr__('Listing has no GPS info, failed to geocode GPS info.','geodirectory');
+		if ( is_array( $gps ) && ! empty( $gps['latitude'] ) && ! empty( $gps['longitude'] ) ) {
+			$post_info['latitude'] = $gps['latitude'];
+			$post_info['longitude'] = $gps['longitude'];
+		} else {
+			if ( is_wp_error( $gps ) ) {
+				return $gps->get_error_message();
+			} else {
+				return esc_attr__( 'Failed to retrieve GPS data from a address using API.', 'geodirectory' );
 			}
-
-		}else{
-			if(isset($json['status'])){
-					return sprintf( esc_attr__('Google geocode failed: %s', 'geodirectory'),  esc_attr($json['status']) );
-
-			}else{
-				return esc_attr__('Failed to reach Google geocode server.','geodirectory');
-			}
-
 		}
 
-		return $post_info;
+		return apply_filters( 'geodir_get_post_gps_from_address', $post_info, $gps );
 	}
 
 	/**
@@ -576,7 +547,7 @@ class GeoDir_Admin_Import_Export {
 		// @todo if users require a higher limit we should look at https://locationiq.org/
 
 		$api_url = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-		$api_key = GeoDir_Maps::google_api_key();
+		$api_key = GeoDir_Maps::google_geocode_api_key();
 
 
 		// if we don't have either the street or zip then we can't get an accurate address
@@ -797,23 +768,24 @@ class GeoDir_Admin_Import_Export {
 
 		$posts = self::get_export_posts( $post_type, $per_page, $page_no );
 
-		//print_r($posts);exit;
-
 		$csv_rows = array();
 
 		if ( ! empty( $posts ) ) {
-
-
 			$i = 0; // posts processes
-			foreach ( $posts as $post_info ) {
 
+			foreach ( $posts as $post_info ) {
 				// add the post_images column
-				$post_info['post_images'] = GeoDir_Media::get_field_edit_string( $post_info['ID'],'post_images');
-				
+				$post_info['post_images'] = GeoDir_Media::get_field_edit_string( $post_info['ID'], 'post_images', '', '', true );
+
 				// fill in the CSV header
 				if ( $i === 0 ) {
 					$columns = array_keys( $post_info );
 					$csv_rows[] = apply_filters( 'geodir_export_posts_csv_columns', $columns, $post_type );
+				}
+
+				// Business Hours Timezone
+				if ( ! empty( $post_info['business_hours'] ) ) {
+					$post_info['business_hours'] = geodir_sanitize_business_hours( $post_info['business_hours'], ( ! empty( $post_info['country'] ) ? $post_info['country'] : '' ) );
 				}
 
 				$csv_rows[] = apply_filters( 'geodir_export_posts_csv_row', $post_info, $post_info['ID'], $post_type );
@@ -887,11 +859,13 @@ class GeoDir_Admin_Import_Export {
 		$columns[] = "{$wpdb->posts}.post_author";
 		$columns[] = "{$wpdb->posts}.post_type";
 		$columns[] = "{$wpdb->posts}.post_date";
+		$columns[] = "{$wpdb->posts}.post_modified";
 
 		// set the table fields
 		$cpt_exclude_columns = array(
 			'post_id',
 			'post_title',
+			'_search_title',
 			'post_status',
 			'submit_ip',
 			'overall_rating',
@@ -906,7 +880,7 @@ class GeoDir_Admin_Import_Export {
 		if ( ! empty( $all_objects ) ) {
 			foreach ( $all_objects as $column_schema ) {
 				if ( ! in_array( $column_schema->Field, $cpt_exclude_columns ) ) {
-					$columns[] = $column_schema->Field;
+					$columns[] = "`" . $column_schema->Field . "`";
 				}
 			}
 		}
@@ -1250,9 +1224,20 @@ class GeoDir_Admin_Import_Export {
 
 							if ( empty( $cat_image ) || ( ! empty( $cat_image ) && basename( $cat_image ) != $term_data['image'] ) ) {
 								$attachment = true;
+								$image_id = 'image';
+								$image_url = trim( $uploads['subdir'] . '/' . $term_data['image'], '/\\' );
+
+								if ( geodir_is_full_url( $term_data['cat_image'] ) ) {
+									$attachment_id = self::generate_attachment_id( $term_data['cat_image'] );
+									if ( $attachment_id && ( $attachment_url = wp_get_attachment_url( $attachment_id ) ) ) {
+										$image_id = $attachment_id;
+										$image_url = geodir_file_relative_url( $attachment_url );
+									}
+								}
+
 								update_term_meta( $term_id, 'ct_cat_default_img', array(
-									'id'  => 'image',
-									'src' => trim( $uploads['subdir'] . '/' . $term_data['image'], '/\\' )
+									'id'  => $image_id,
+									'src' => $image_url
 								) );
 							}
 						}
@@ -1262,9 +1247,20 @@ class GeoDir_Admin_Import_Export {
 
 							if ( empty( $cat_icon ) || ( ! empty( $cat_icon ) && basename( $cat_icon ) != $term_data['icon'] ) ) {
 								$attachment = true;
+								$image_id = 'icon';
+								$image_url = trim( $uploads['subdir'] . '/' . $term_data['icon'], '/\\' );
+
+								if ( geodir_is_full_url( $term_data['cat_icon'] ) ) {
+									$attachment_id = self::generate_attachment_id( $term_data['cat_icon'] );
+									if ( $attachment_id && ( $attachment_url = wp_get_attachment_url( $attachment_id ) ) ) {
+										$image_id = $attachment_id;
+										$image_url = geodir_file_relative_url( $attachment_url );
+									}
+								}
+
 								update_term_meta( $term_id, 'ct_cat_icon', array(
-									'id'  => 'icon',
-									'src' => trim( $uploads['subdir'] . '/' . $term_data['icon'], '/\\' )
+									'id'  => $image_id,
+									'src' => $image_url
 								) );
 							}
 						}
@@ -1322,14 +1318,14 @@ class GeoDir_Admin_Import_Export {
 		$cat_info_fixed['cat_font_icon']       = isset( $cat_info['cat_font_icon'] ) && $cat_info['cat_font_icon'] ? esc_attr( $cat_info['cat_font_icon'] ) : '';
 		$cat_info_fixed['cat_color']           = isset( $cat_info['cat_color'] ) && $cat_info['cat_color'] ? esc_attr( $cat_info['cat_color'] ) : '';
 		$cat_info_fixed['cat_top_description'] = isset( $cat_info['cat_top_description'] ) && $cat_info['cat_top_description'] ? esc_attr( $cat_info['cat_top_description'] ) : '';
-		$cat_info_fixed['image']               = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
-		$cat_info_fixed['icon']                = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
+		$cat_info_fixed['cat_image']           = isset( $cat_info['cat_image'] ) && $cat_info['cat_image'] ? $cat_info['cat_image'] : '';
+		$cat_info_fixed['cat_icon']            = isset( $cat_info['cat_icon'] ) && $cat_info['cat_icon'] ? $cat_info['cat_icon'] : '';
 
 		// validate @todo validate the info
 
 		// temp image fix
-		$cat_info_fixed['image'] 				= $cat_info_fixed['image'] != '' ? basename( $cat_info_fixed['image'] ) : '';
-		$cat_info_fixed['icon']  				= $cat_info_fixed['icon'] != '' ? basename( $cat_info_fixed['icon'] ) : '';
+		$cat_info_fixed['image'] 				= $cat_info_fixed['cat_image'] != '' ? basename( $cat_info_fixed['cat_image'] ) : '';
+		$cat_info_fixed['icon']  				= $cat_info_fixed['cat_icon'] != '' ? basename( $cat_info_fixed['cat_icon'] ) : '';
 
 		if ( ! empty( $cat_info_fixed['parent'] ) ) {
 			$parent = 0;
@@ -1792,7 +1788,7 @@ class GeoDir_Admin_Import_Export {
 			$comment_args['status'] = sanitize_text_field( $_REQUEST['gd_imex']['status'] );
 		}
 
-		return apply_filters( 'geodir_export_reviews_comment_args', $comment_args, $fields );
+		return apply_filters( 'geodir_export_reviews_comment_args', $comment_args );
 	}
 	
 	/**
@@ -2135,5 +2131,26 @@ class GeoDir_Admin_Import_Export {
 		$proper_filename = $data['proper_filename'];
 
 		return compact( 'ext', 'type', 'proper_filename' );
+	}
+	
+	public static function generate_attachment_id( $image_url ) {
+		if ( empty( $image_url ) ) {
+			return '';
+		}
+
+		$image_url = str_replace( 'geodirectory-assets/', 'assets/', $image_url );
+		$image_url = str_replace( 'geodirectory-functions/map-functions/icons', 'assets/images', $image_url );
+
+		$upload = GeoDir_Media::upload_image_from_url( $image_url );
+
+		if ( ! empty( $upload ) && ! is_wp_error( $upload ) && ! empty( $upload['file'] ) ) {
+			$attachment_id = GeoDir_Media::set_uploaded_image_as_attachment( $upload );
+
+			if ( ! empty( $attachment_id ) && ! is_wp_error( $attachment_id ) ) {
+				return $attachment_id;
+			}
+		}
+
+		return false;
 	}
 }

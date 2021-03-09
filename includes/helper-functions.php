@@ -27,12 +27,15 @@ function geodir_db_cpt_table($post_type){
  *
  * @package Geodirectory
  * @since 1.4.6
+ * @since 2.0.0.97 Added $post_type parameter.
+ *
+ * @param string $post_type The post type.
  * @return int|null Return the page ID if present or null if not.
  */
-function geodir_add_listing_page_id(){
-    $gd_page_id = geodir_get_page_id( 'add' );
+function geodir_add_listing_page_id( $post_type = '' ) {
+    $gd_page_id = geodir_get_page_id( 'add', $post_type );
 
-	return apply_filters( 'geodir_add_listing_page_id', $gd_page_id );
+	return apply_filters( 'geodir_add_listing_page_id', $gd_page_id, $post_type );
 }
 
 /**
@@ -540,6 +543,90 @@ function geodir_date_format_php_to_jqueryui( $php_format ) {
 	}
 
 	return $jqueryui_format;
+}
+
+/*
+ * Matches each symbol of PHP date format standard with Flatpickr equivalent codeword
+ *
+ * @since 2.1.0.0
+ * @param string $php_format The PHP date format.
+ * @return string The Flatpickr format date string.
+ */
+function geodir_date_format_php_to_aui( $php_format ) {
+	$symbols = array(
+		// Day
+		'd' => 'd', // Day of the month, 2 digits with leading zeros. Example: 01 to 31
+		'D' => 'D', // A textual representation of a day. Example: Mon through Sun
+		'j' => 'j', // Day of the month without leading zeros. Example: 1 to 31
+		'l' => 'l', // A full textual representation of the day of the week. Example: Sunday through Saturday
+		'N' => '',
+		'S' => 'J', // Day of the month without leading zeros and ordinal suffix. Example: 1st, 2nd, to 31st
+		'w' => 'w', // Numeric representation of the day of the week. Example: 0 (for Sunday) through 6 (for Saturday)
+		'z' => '',
+		'c' => 'Z', // ISO Date format. Example: 2017-03-04T01:23:43.000Z
+		'U' => 'U', // The number of seconds since the Unix Epoch. Example: 1413704993
+		// Week
+		'W' => 'W', // Numeric representation of the week. Example: 0 (first week of the year) through 52 (last week of the year)
+		// Month
+		'F' => 'F', // A full textual representation of a month. Example: January through December
+		'm' => 'm', // Numeric representation of a month, with leading zero. Example: 01 through 12
+		'M' => 'M', // A short textual representation of a month. Example: Jan through Dec
+		'n' => 'n', // Numeric representation of a month, without leading zeros. Example: 1 through 12
+		't' => '',
+		// Year
+		'L' => '',
+		'o' => '',
+		'Y' => 'Y', // A full numeric representation of a year, 4 digits. Example: 1999 or 2003
+		'y' => 'y', // A two digit representation of a year. Example: 99 or 03
+		// Time
+		'a' => 'K', // AM/PM
+		'A' => 'K', // AM/PM
+		'B' => '',
+		'g' => 'h', // Hours. Example: 1 to 12
+		'G' => 'H', // Hours (24 hours). Example: 00 to 23
+		'h' => 'G', // Hours, 2 digits with leading zeros. Example: 1 to 12
+		'H' => 'H', // Hours (24 hours). Example: 00 to 23
+		'i' => 'i', // Minutes. Example: 00 to 59
+		's' => 'S', // Seconds, 2 digits. Example: 00 to 59
+		'u' => ''
+	);
+
+	$aui_format = "";
+	$escaping = false;
+
+	for ( $i = 0; $i < strlen( $php_format ); $i++ ) {
+		$char = $php_format[$i];
+
+		// PHP date format escaping character
+		if ( $char === '\\' ) {
+			$i++;
+
+			if ( $escaping ) {
+				$aui_format .= $php_format[$i];
+			} else {
+				$aui_format .= '\'' . $php_format[$i];
+			}
+
+			$escaping = true;
+		} else {
+			if ( $escaping ) {
+				$aui_format .= "'";
+				$escaping = false;
+			}
+
+			if ( isset( $symbols[$char] ) ) {
+				$aui_format .= $symbols[$char];
+			} else {
+				$aui_format .= $char;
+			}
+		}
+	}
+
+	if ( $escaping ) {
+		$aui_format .= "'";
+	}
+
+	return $aui_format;
 }
 
 /**
@@ -1326,7 +1413,7 @@ function geodir_is_image_file( $url ) {
     if ( !empty( $url ) ) {
         $filetype = wp_check_filetype( $url );
         
-        if ( !empty( $filetype['ext'] ) && in_array( $filetype['ext'], array( 'jpg', 'jpeg', 'jpe',  'gif',  'png',  'bmp',   'tif',  'tiff', 'ico' ) ) ) {
+        if ( !empty( $filetype['ext'] ) && in_array( $filetype['ext'], array( 'jpg', 'jpeg', 'jpe',  'gif',  'png',  'bmp',   'tif',  'tiff', 'ico', 'webp' ) ) ) {
             return true;
         }
     }
@@ -1355,17 +1442,19 @@ function geodir_get_php_arg_separator_output() {
  */
 function geodir_rgb_from_hex( $color ) {
     $color = str_replace( '#', '', $color );
-	
+
     // Convert shorthand colors to full format, e.g. "FFF" -> "FFFFFF"
     $color = preg_replace( '~^(.)(.)(.)$~', '$1$1$2$2$3$3', $color );
-	if ( empty( $color ) ) {
-		return NULL;
-	}
+    if ( empty( $color ) ) {
+        return NULL;
+    }
+
+    $color = str_split( $color );
 
     $rgb      = array();
-    $rgb['R'] = hexdec( $color{0}.$color{1} );
-    $rgb['G'] = hexdec( $color{2}.$color{3} );
-    $rgb['B'] = hexdec( $color{4}.$color{5} );
+    $rgb['R'] = hexdec( $color[0] . $color[1] );
+    $rgb['G'] = hexdec( $color[2] . $color[3] );
+    $rgb['B'] = hexdec( $color[4] . $color[5] );
 
     return $rgb;
 }
@@ -1580,16 +1669,14 @@ function geodir_array_splice_assoc( $input, $offset, $length, $replacement ) {
  *
  * @return array
  */
-function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ){
-	// check for cache
-	$cache = wp_cache_get( "gd_category_options_".$post_type.":".$hide_empty, 'gd_category_options' );
-	if($cache){
-		return $cache;
+function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ) {
+	$cache_key = 'gd_category_options_' . $post_type . ':' . $hide_empty;
+	$options = wp_cache_get( $cache_key, 'gd_category_options' );
+
+	if ( ! empty( $options ) ) {
+		return $options;
 	}
 
-	$options    = array(
-		'0' => __( 'All', 'geodirectory' )
-	);
 	$post_types = geodir_get_posttypes();
 
 	if ( ! in_array( $post_type, $post_types ) ) {
@@ -1598,14 +1685,17 @@ function geodir_category_options( $post_type = 'gd_place', $hide_empty = true ){
 
 	$terms = get_terms( array( 'taxonomy' => $post_type . 'category', 'orderby' => 'count', 'order' => 'DESC', 'hide_empty' => $hide_empty ) );
 
+	$options = array(
+		'0' => __( 'All', 'geodirectory' )
+	);
+
 	if ( ! is_wp_error( $terms ) ) {
 		foreach ( $terms as $term ) {
-			$options[ $term->term_id ] = geodir_utf8_ucfirst( $term->name );
+			$options[ $term->term_id ] = $term->name;
 		}
-	}
 
-	// set cache
-	wp_cache_set( "gd_category_options_".$post_type.":".$hide_empty, $options, 'gd_category_options' );
+		wp_cache_set( $cache_key, $options, 'gd_category_options' );
+	}
 
 	return $options;
 }
@@ -1740,4 +1830,172 @@ function geodir_get_post_meta_raw($object_id, $meta_key){
 	$value = $wpdb->get_var($wpdb->prepare("SELECT meta_value FROM $wpdb->postmeta WHERE post_id = %d AND  meta_key = %s ",$object_id,$meta_key)  );
 
 	return $value;
+}
+
+/**
+ * Set a cookie - wrapper for setcookie using WP constants.
+ *
+ * @since 2.0.0.68
+ *
+ * @param string $name   Name of the cookie being set.
+ * @param string $value  Value of the cookie.
+ * @param integer $expire Expiry of the cookie.
+ * @param bool $secure Whether the cookie should be served only over https.
+ * @param bool $httponly Whether the cookie is only accessible over HTTP, not scripting languages like JavaScript.
+ */
+function geodir_setcookie( $name, $value, $expire = 0, $secure = false, $httponly = false ) {
+	if ( ! headers_sent() ) {
+		setcookie( $name, $value, $expire, COOKIEPATH ? COOKIEPATH : '/', COOKIE_DOMAIN, $secure, apply_filters( 'geodir_cookie_httponly', $httponly, $name, $value, $expire, $secure ) );
+		$_COOKIE[ $name ] = $value;
+	} elseif ( defined( 'WP_DEBUG' ) && WP_DEBUG ) {
+		geodir_error_log( "{$name} cookie cannot be set - headers already sent!" ); // @codingStandardsIgnoreLine
+	}
+}
+
+/**
+ * Get a cookie.
+ *
+ * @since 2.0.0.68
+ *
+ * @param  string $name Name of the cookie being set.
+ * @return string Value of the cookie.
+ */
+function geodir_getcookie( $name ) {
+	return ! empty( $_COOKIE ) && isset( $_COOKIE[ $name ] ) ? $_COOKIE[ $name ] : '';
+}
+
+function geodir_aui_colors($include_branding = false, $include_outlines = false, $outline_button_only_text = false){
+	$theme_colors = array();
+	
+	$theme_colors["primary"] = __('Primary', 'geodirectory');
+	$theme_colors["secondary"] = __('Secondary', 'geodirectory');
+	$theme_colors["success"] = __('Success', 'geodirectory');
+	$theme_colors["danger"] = __('Danger', 'geodirectory');
+	$theme_colors["warning"] = __('Warning', 'geodirectory');
+	$theme_colors["info"] = __('Info', 'geodirectory');
+	$theme_colors["light"] = __('Light', 'geodirectory');
+	$theme_colors["dark"] = __('Dark', 'geodirectory');
+	$theme_colors["white"] = __('White', 'geodirectory');
+	$theme_colors["purple"] = __('Purple', 'geodirectory');
+	$theme_colors["salmon"] = __('Salmon', 'geodirectory');
+	$theme_colors["cyan"] = __('Cyan', 'geodirectory');
+	$theme_colors["gray"] = __('Gray', 'geodirectory');
+	$theme_colors["indigo"] = __('Indigo', 'geodirectory');
+	$theme_colors["orange"] = __('Orange', 'geodirectory');
+
+	if($include_outlines){
+		$button_only =  $outline_button_only_text ? " ".__("(button only)","geodirectory") : '';
+		$theme_colors["outline-primary"] = __('Primary outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-secondary"] = __('Secondary outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-success"] = __('Success outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-danger"] = __('Danger outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-warning"] = __('Warning outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-info"] = __('Info outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-light"] = __('Light outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-dark"] = __('Dark outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-white"] = __('White outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-purple"] = __('Purple outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-salmon"] = __('Salmon outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-cyan"] = __('Cyan outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-gray"] = __('Gray outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-indigo"] = __('Indigo outline', 'geodirectory') . $button_only;
+		$theme_colors["outline-orange"] = __('Orange outline', 'geodirectory') . $button_only;
+	}
+	
+
+	if($include_branding){
+		$theme_colors = $theme_colors  + geodir_aui_branding_colors();
+	}
+
+	return $theme_colors;
+}
+
+function geodir_aui_branding_colors(){
+	return array(
+		"facebook" => __('Facebook', 'geodirectory'),
+		"twitter" => __('Twitter', 'geodirectory'),
+		"instagram" => __('Instagram', 'geodirectory'),
+		"linkedin" => __('Linkedin', 'geodirectory'),
+		"flickr" => __('Flickr', 'geodirectory'),
+		"github" => __('GitHub', 'geodirectory'),
+		"youtube" => __('YouTube', 'geodirectory'),
+		"wordpress" => __('WordPress', 'geodirectory'),
+		"google" => __('Google', 'geodirectory'),
+		"yahoo" => __('Yahoo', 'geodirectory'),
+		"vkontakte" => __('Vkontakte', 'geodirectory'),
+	);
+}
+
+/**
+ * Get the post id of the first post that has content for a field key.
+ *
+ * This is used to help with block previews.
+ * 
+ * @param string $field_key
+ * @param string $post_type
+ *
+ * @return int|null|string
+ */
+function geodir_get_post_id_with_content($field_key = '',$post_type = 'gd_place'){
+	global $wpdb;
+
+	$post_id = 0;
+	$table = geodir_db_cpt_table( $post_type );
+	$result = $wpdb->get_var($wpdb->prepare("SELECT post_id FROM $table WHERE `post_status` = 'publish' AND %s != '' AND %s IS NOT NULL",$field_key,$field_key));
+	if(!empty($result)){
+		$post_id = $result;
+	}
+
+	return $post_id;
+
+}
+
+/**
+ * Checks a version number against the core version and adds a admin notice if requirements are not met.
+ *
+ * @param $name
+ * @param $version
+ *
+ * @return bool
+ */
+function geodir_min_version_check($name,$version){
+	if (version_compare(GEODIRECTORY_VERSION, $version, '<')) {
+		add_action( 'admin_notices', function () use (&$name){
+			?>
+			<div class="notice notice-error is-dismissible">
+				<p><?php echo sprintf( __("%s requires a newer version of GeoDirectory and will not run until the GeoDirectory plugin is updated.","geodirectory"),$name); ?></p>
+			</div>
+			<?php
+		});
+
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Return the bsui class for AUI if AUI design is active.
+ * 
+ * @return string
+ */
+function geodir_bsui_class(){
+	return geodir_design_style() ? 'bsui' : '';
+}
+
+/**
+ * Check full url or not.
+ *
+ * @since 2.1.0.7
+ *
+ * @param string $url The url.
+ * @return bool True if full url or False.
+ */
+function geodir_is_full_url( $url ) {
+	// Start with http: or https:.
+	if ( 0 === stripos( $url, 'http:' ) || 0 === stripos( $url, 'https:' ) ) {
+		return true;
+	}
+
+	return false;
 }

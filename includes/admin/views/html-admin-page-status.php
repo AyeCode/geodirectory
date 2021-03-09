@@ -30,6 +30,8 @@ $tabs        = apply_filters( 'geodir_admin_status_tabs', $tabs );
 	<?php
 		switch ( $current_tab ) {
 			case "tools" :
+				wp_enqueue_script( 'jquery-ui-progressbar' );
+
 				GeoDir_Admin_Status::status_tools();
 			break;
 			default :

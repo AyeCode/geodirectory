@@ -37,6 +37,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			add_action('admin_footer-post.php', array( __CLASS__,'post_form_footer'));
 			add_action('admin_footer-post-new.php', array( __CLASS__,'post_form_footer'));
 			add_action('post_date_column_status', array( __CLASS__,'posts_column_status'), 10, 4);
+			add_filter( 'post_row_actions', array( __CLASS__,'post_row_actions' ), 20, 2 );
 
 			self::add_post_type_view_filters();
 		}
@@ -186,14 +187,12 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				/* If displaying the 'city' column. */
 				case 'image' :
 					$upload_dir = wp_upload_dir();
-					$image_raw = isset($gd_post->featured_image) && !empty($gd_post->featured_image) ? $gd_post->featured_image : '';
-					//print_r($gd_post);
+					$image_raw = isset( $gd_post->featured_image ) && ! empty( $gd_post->featured_image ) ? $gd_post->featured_image : '';
 					/* If no city is found, output a default message. */
-					if ( empty( $image_raw) ) {
+					if ( empty( $image_raw ) ) {
 						_e( 'N/A', 'geodirectory' );
 					} else {
-						/* if we get tot his point then it has a featured image */
-						the_post_thumbnail('thumbnail');
+						echo do_shortcode( '[gd_post_images types="post_images" fallback_types="post_images" limit="1" limit_show="1" type="image" slideshow="0" controlnav="0" show_title="0" show_caption="0" image_size="thumbnail"]' );
 					}
 					break;
 
@@ -267,7 +266,10 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			$package_id = geodir_get_post_package_id( $post, $post_type );
 
 			wp_nonce_field( plugin_basename( __FILE__ ), 'geodir_post_info_noncename' );
-			echo '<div id="geodir_wrapper">';
+
+			$wrapper_class = geodir_design_style() ? 'bsui' : '';
+
+			echo '<div id="geodir_wrapper" class="'.$wrapper_class.'">';
 			/**
 			 * Called before the GD custom fields are output in the wp-admin area.
 			 *
@@ -348,25 +350,19 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 					echo '<br /><small>(' . __( 'You can upload unlimited images with this package', 'geodirectory' ) . ')</small>';
 				} ?>
 			</h5>
-
-
 			<?php
-
-
 			$curImages = GeoDir_Media::get_field_edit_string($post_id,'post_images');
-
 
 			// adjust values here
 			$id = "post_images"; // this will be the name of form field. Image url(s) will be submitted in $_POST using this key. So if $id == �img1� then $_POST[�img1�] will have all the image urls
 
-			$svalue = $curImages; // this will be initial value of the above form field. Image urls.
+			$svalue = stripslashes_deep( $curImages ); // this will be initial value of the above form field. Image urls.
 
 			$multiple = true; // allow multiple files upload
 			?>
-
 			<div class="gtd-form_row clearfix" id="<?php echo $id; ?>dropbox"
 			     style="border:1px solid #999999;padding:5px;text-align:center;">
-				<input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo $svalue; ?>"/>
+				<input type="hidden" name="<?php echo $id; ?>" id="<?php echo $id; ?>" value="<?php echo esc_attr( $svalue ); ?>"/>
 
 				<div
 					class="plupload-upload-uic hide-if-no-js <?php if ( $multiple ): ?>plupload-upload-uic-multiple<?php endif; ?>"
@@ -381,11 +377,27 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				<div class="plupload-thumbs <?php if ( $multiple ): ?>plupload-thumbs-multiple<?php endif; ?> clearfix"
 				     id="<?php echo $id; ?>plupload-thumbs" style="border-top:1px solid #ccc; padding-top:10px;">
 				</div>
-        <span
-	        id="upload-msg"><?php _e( 'Please drag &amp; drop the images to rearrange the order', 'geodirectory' ); ?></span>
+				<span id="upload-msg"><?php _e( 'Please drag & drop the images to rearrange the order', 'geodirectory' ); ?></span>
+				<span class="geodir-regenerate-thumbnails bsui" style="margin:25px 0 10px 0;display:block;"><button type="button" class="button-secondary" aria-label="<?php esc_attr_e( 'Regenerate Thumbnails', 'geodirectory' );?>" aria-expanded="false" data-action="geodir-regenerate-thumbnails" data-post-id="<?php echo $post_id; ?>"><?php _e( 'Regenerate Thumbnails', 'geodirectory' );?></button><span style="margin-top:5px;display:block;"><?php _e( 'Regenerate thumbnails & metadata.', 'geodirectory' ); ?></span></span>
 				<span id="<?php echo $id; ?>upload-error" style="display:none"></span>
-
+				<?php if ( geodir_design_style() ) { ?>
+				<div class="modal fade bsui" id="gd-image-meta-input" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+					<div class="modal-dialog">
+						<div class="modal-content">
+							<div class="modal-header">
+								<h5 class="modal-title"><?php _e('Set Image Texts','geodirectory'); ?></h5>
+								<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+									<span aria-hidden="true">&times;</span>
+								</button>
+							</div>
+							<div class="modal-body text-left"></div>
+							<div class="modal-footer"></div>
+						</div>
+					</div>
+				</div>
+				<?php } else { ?>
 				<span style="display: none" id="gd-image-meta-input" class="lity-hide lity-show"></span>
+				<?php } ?>
 			</div>
 
 			<?php
@@ -532,6 +544,23 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				}
 			}
 			return $status;
+		}
+
+		/**
+		 * Filters the array of row action links on the Posts list table.
+		 *
+		 * @since 2.1.0.10
+		 *
+		 * @param string[] $actions An array of row action links.
+		 * @param WP_Post  $post    The post object.
+		 * @return array An array of row action links.
+		 */
+		public static function post_row_actions( $actions, $post ) {
+			if ( ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) {
+				$actions['geodir-regenerate-thumbnails bsui'] = '<button type="button" class="button-link" aria-label="' . esc_attr__( 'Regenerate Thumbnails', 'geodirectory' ) . '" aria-expanded="false" data-action="geodir-regenerate-thumbnails" data-post-id="' . $post->ID . '">' . __( 'Regenerate Thumbnails', 'geodirectory' ) . '</button>';
+			}
+
+			return $actions;
 		}
 
 	}

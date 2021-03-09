@@ -24,26 +24,95 @@ if ( ! defined( 'ABSPATH' ) ) {
 		</nav>
 
 		<?php
-		
-		if($current_tab == 'membership'){
 
+		if($current_tab == 'membership'){
 			?>
 
 			<div class="gd-membership-tab-conatiner">
+				<div class="membership-content">
+				<!--
 				<h2>With our GeoDirectory Membership you get access to all our products!</h2>
-				<p><a class="button button-primary" href="https://wpgeodirectory.com/downloads/membership/">View Memberships</a></p>
+				<p><a class="button button-primary" href="https://wpgeodirectory.com/downloads/membership/">View Memberships</a></p> -->
 				<?php if(defined('WP_EASY_UPDATES_ACTIVE')){?>
 
 
-					<h2>Have a membership key?</h2>
+					<h2><?php echo _e( 'Have a membership key?', 'geodirectory' ); ?></h2>
 
 					<p>
 						<?php
 						$wpeu_admin = new External_Updates_Admin('wpgeodirectory.com','2');
 						echo $wpeu_admin->render_licence_actions('wpgeodirectory.com', 'membership',array(66235,111330,111327));
 						?>
+						<a href="https://wpgeodirectory.com/downloads/membership/"><?php echo _e( 'Don\'t have a membership key?', 'geodirectory' ); ?></a>
 					</p>
-				<?php }?>
+				<?php }else{ ?>
+				<p class="easy-update"><?php echo wp_sprintf( __( 'If you already have a membership key please install <a href="%s" target="_blank">WP Easy Updates</a>', 'geodirectory' ) , 'https://wpgeodirectory.com/wp-easy-updates/' ); ?></p>
+			<?php	}?>
+
+				<div class="membership-cta-contet">
+					<div class="main-cta">
+							<h2><?php echo __("Membership benefit Includes:","geodirectory"); ?></h2>
+							<div class="feature-list">
+								<ul>
+
+									<?php
+									$addon_obj = new GeoDir_Admin_Addons();
+									if ($addons = $addon_obj->get_section_data( 'addons' ) ) {
+										foreach ( $addons as $addon ) {
+											echo '<li><i class="far fa-check-circle fa-sm"></i> '.esc_html( $addon->info->title ).'</li>';
+										}
+									}
+									?>
+								</ul>
+							</div>
+							<div class="feature-cta">
+								<h3><?php echo __("Membership ","geodirectory"); ?> <br><?php echo __("Starts from","geodirectory"); ?></h3>
+								<h4><?php echo __("$99","geodirectory"); ?></h4>
+								<a href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","geodirectory"); ?></a>
+							</div>
+
+					</div>
+
+
+					<div class="member-testimonials">
+						<h3><?php echo __("Testimonials","geodirectory"); ?></h3>
+						<div class="testimonial-content">
+							<div class="t-image">
+								<?php
+									echo '<img src="' . plugins_url( 'images/t-image2.png', dirname(__FILE__) ) . '" > ';
+								?>
+							</div>
+							<div class="t-content">
+								<p><?php echo __("I'm becoming more impressed with  @wpGeoDirectory
+as v2 evolves. It's a pretty awesome WordPress directory plugin.","geodirectory"); ?>
+
+								</p>
+								<p><strong><?php echo __("Vanessa Harris","geodirectory"); ?></strong> <?php echo __("Product  @Google, formerly at  @Microsoft","geodirectory"); ?></p>
+							</div>
+						</div>
+
+						<div class="testimonial-content">
+							<div class="t-image">
+								<?php
+									echo '<img src="' . plugins_url( 'images/t-image1.png', dirname(__FILE__) ) . '" > ';
+								?>
+							</div>
+							<div class="t-content">
+								<p><?php echo __("Switched from Joomla to WordPress and installed Geodirectory V2 to create a multi location directory and events site. Support has been absolutely brilliant with very quick response times, solving almost every issue I ran into (most of the time just me getting used to the new environment) in a matter of minutes but also a few other, more serious issues, in less than a day. I would definitely recommend Geodirectory to anyone who plans on creating a directory. It's easy to use as it uses the new Gutenberg blocks and custom fields to create and layout your pages and comes with lots of great add-ons for a very reasonable price. Keep up the good work! I'm hooked on WordPress and Geodirectory V2. That's a fact.","geodirectory"); ?>
+
+								</p>
+								<p><strong><?php echo __("gdweb (@gdweb)","geodirectory"); ?></strong> <?php echo __("Graphic Design and Web Design Studio in Phuket","geodirectory"); ?></p>
+							</div>
+						</div>
+					</div>
+
+					<div class="member-footer">
+						<a class="footer-btn" href="https://wpgeodirectory.com/downloads/membership/" target="_blank"><?php echo __("Buy Membership","geodirectory"); ?></a>
+						<a class="footer-link" href="post-new.php?post_type=gd_place"><?php echo __("Create your First Listing","geodirectory"); ?></a>
+					</div>
+				</div>
+
+			</div>
 			</div>
 
 			<?php
@@ -51,14 +120,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 		}else{
 			$installed_plugins = get_plugins();
-			if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) : 
-				
+			if ($addons = GeoDir_Admin_Addons::get_section_data( $current_tab ) ) :
+
 //				print_r($addons);
 
 //			echo '###'.geodir_file_relative_url( 'http://localhost/wp-content/uploads/2018/12/restaurants19-2-150x150.jpg' );exit;
 				?>
 				<ul class="gd-products"><?php foreach ( $addons as $addon ) :
-						if(388371==$addon->info->id || 65079==$addon->info->id){continue;}// don't show GD Dashbaord
+						if(388371==$addon->info->id || 65079==$addon->info->id){continue;}// don't show GD Dashboard
 						?><li class="gd-product">
 								<div class="gd-product-title">
 									<h3><?php
@@ -74,7 +143,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 									<?php endif;
 
 									if(isset($addon->info->link) && substr( $addon->info->link, 0, 21 ) === "https://wordpress.org"){
-										echo '<a href="'.admin_url('/plugin-install.php?gd_wizard_recommend=true&amp;tab=plugin-information&amp;plugin='.$addon->info->slug).')" data-lity="">';
+										echo '<a href="'.admin_url('/plugin-install.php?gd_wizard_recommend=true&amp;tab=plugin-information&amp;plugin='.$addon->info->slug).'" data-lity="">';
 										echo '<span class="gd-product-info">'.__('More info','geodirectory').'</span>';
 										echo '</a>';
 									}elseif(isset($addon->info->link) && substr( $addon->info->link, 0, 26 ) === "https://wpgeodirectory.com"){

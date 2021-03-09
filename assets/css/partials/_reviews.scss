@@ -26,11 +26,13 @@
       border-radius: 5px;
       list-style: none;
       .comment-meta {
+        display: block !important;
         .avatar{
           float: left;
           margin: 0;
           margin-right: 10px;
           border-radius: 50%;
+          position: unset !important;
         }
         .geodir-review-ratings{
           display: inline;

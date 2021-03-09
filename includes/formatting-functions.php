@@ -198,10 +198,16 @@ function geodir_time_format() {
  *
  * @since 2.0.0
  *
+ * @param string|bool $sep Separator. Default null.
  * @return string
  */
-function geodir_date_time_format() {
-	$date_time_format = geodir_date_format() . ' ' . geodir_time_format();
+function geodir_date_time_format( $sep = null ) {
+	if ( $sep === null || $sep === false ) {
+		$sep = ' ';
+	}
+
+	$date_time_format = geodir_date_format() . $sep . geodir_time_format();
+
 	return apply_filters( 'geodir_date_time_format', $date_time_format, $sep );
 }
 
@@ -328,36 +334,46 @@ function geodir_format_decimal( $number, $dp = false, $trim_zeros = false ) {
  * @return string PHP timezone string for the site
  */
 function geodir_timezone_string() {
+	$timezone_string = '';
 
-	// if site timezone string exists, return it
-	if ( $timezone = get_option( 'timezone_string' ) ) {
-		return $timezone;
+	$timezones = timezone_identifiers_list();
+
+	$_timezone_string = geodir_get_option( 'default_location_timezone_string' );
+	if ( $_timezone_string && in_array( $_timezone_string, $timezones ) ) {
+		$timezone_string = $_timezone_string;
 	}
 
-	// get UTC offset, if it isn't set then return UTC
-	if ( 0 === ( $utc_offset = intval( get_option( 'gmt_offset', 0 ) ) ) ) {
-		return 'UTC';
-	}
-
-	// adjust UTC offset from hours to seconds
-	$utc_offset *= 3600;
-
-	// attempt to guess the timezone string from the UTC offset
-	if ( $timezone = timezone_name_from_abbr( '', $utc_offset ) ) {
-		return $timezone;
-	}
-
-	// last try, guess timezone string manually
-	foreach ( timezone_abbreviations_list() as $abbr ) {
-		foreach ( $abbr as $city ) {
-			if ( (bool) date( 'I' ) === (bool) $city['dst'] && $city['timezone_id'] && intval( $city['offset'] ) === $utc_offset ) {
-				return $city['timezone_id'];
-			}
+	if ( ! $timezone_string && ( $_timezone_string = trim( get_option('timezone_string') ) ) ) {
+		if ( in_array( $_timezone_string, $timezones ) ) {
+			$timezone_string = $_timezone_string;
 		}
 	}
 
-	// fallback to UTC
-	return 'UTC';
+	if ( ! $timezone_string ) {
+		$timezone_string = 'UTC';
+	}
+
+	return apply_filters( 'geodir_timezone_string', $timezone_string );
+}
+
+/**
+ * Retrieve the timezone offset.
+ *
+ * @since 2.0.0.96
+ * @return string PHP timezone string for the site
+ */
+function geodir_timezone_utc_offset( $timezone_string = '', $dst = true ) {
+	$offset = '';
+
+	if ( empty( $timezone_string ) ) {
+		$timezone_string = geodir_timezone_string();
+	}
+
+	$data = geodir_timezone_data( $timezone_string );
+
+	$offset = $dst && ! empty( $data['is_dst'] ) ? $data['utc_offset_dst'] : $data['utc_offset'];
+
+	return apply_filters( 'geodir_timezone_utc_offset', $offset, $timezone_string, $dst );
 }
 
 /**
@@ -405,6 +421,7 @@ function geodir_sanitize_html_field( $str, $allowed_html = NULL ) {
 
 	$filtered = trim( wp_unslash( $str ) );
 	$filtered = wp_kses( $filtered, $allowed_html );
+	$filtered = balanceTags( $filtered ); // Balances tags
 
 	/**
 	 * Filter a sanitized html field string.
@@ -453,4 +470,136 @@ function geodir_sanitize_textarea_field( $str ) {
 	 * @param string $string   The string prior to being sanitized.
 	 */
 	return apply_filters( 'geodir_sanitize_textarea_field', $filtered, $str );
+}
+
+/**
+ * Sanitizes a keyword.
+ *
+ * @since 2.0.0.82
+ *
+ * @param string $keyword Keyword to sanitize.
+ * @param string $extra Extra parameter. Default empty.
+ * @return string Sanitized keyword.
+ */
+function geodir_sanitize_keyword( $keyword, $extra = '' ) {
+	$raw_keyword = $keyword;
+
+	$keyword = trim( $keyword );
+	if ( ! $keyword ) {
+		return $keyword;
+	}
+
+	// Converts a number of HTML entities into their special characters.
+	$keyword = stripslashes( wp_specialchars_decode( $keyword, ENT_QUOTES ) );
+
+	// Converts all accent characters to ASCII characters.
+	$keyword = remove_accents( $keyword );
+
+	// Properly strip all HTML tags including script and style.
+	$keyword = wp_strip_all_tags( $keyword );
+
+	$replacements = geodir_keyword_replacements();
+	if ( ! empty( $replacements ) ) {
+		$keyword = str_replace( array_keys( $replacements ), array_values( $replacements ), $keyword );
+	}
+
+	// Converts string to lower case.
+	$keyword = geodir_strtolower( $keyword );
+
+	// Normalize EOL characters and strip duplicate whitespace.
+	$keyword = normalize_whitespace( $keyword );
+
+	/**
+	 * Filter sanitized keyword.
+	 *
+	 * @since 2.0.0.82
+	 *
+	 * @param string $keyword Keyword to sanitize.
+	 * @param string $raw_keyword Original keyword to sanitize.
+	 * @param string $extra Extra parameter.
+	 */
+	return apply_filters( 'geodir_sanitize_keyword', $keyword, $raw_keyword, $extra );
+}
+
+/**
+ * Characters replacements for keyword sanitization.
+ *
+ * @since 2.0.0.82
+ *
+ * @return array Characters replacements.
+ */
+function geodir_keyword_replacements() {
+	//^*=;:
+	$replacements = array(
+		'‘'       => '',
+		'’'       => '',
+		"'"       => '',
+		'"'       => '',
+		'”'       => '',
+		'“'       => '',
+		'„'       => '',
+		'´'       => '',
+		'`'       => '',
+		'!'       => '',
+		'?'       => '',
+		'|'       => '',
+		'&#038;'  => '',
+		'&#8217;' => '',
+		'&amp;'   => ' ',
+		'&shy;'   => ' ',
+		'&nbsp;'  => ' ',
+		'@'       => ' ',
+		'€'       => ' ',
+		'®'       => ' ',
+		'©'       => ' ',
+		'™'       => ' ',
+		'×'       => ' ',
+		'~'       => ' ',
+		'…'       => ' ',
+		'-'       => ' ',
+		'–'       => ' ',
+		'—'       => ' ',
+		'('       => ' ',
+		')'       => ' ',
+		'{'       => ' ',
+		'}'       => ' ',
+		'['       => ' ',
+		']'       => ' ',
+		'+'       => ' ',
+		","       => ' ',
+		"^"       => ' ',
+		"="       => ' ',
+		//'&'       => ' ',
+		//'#'       => ' ',
+		//'$'       => ' ',
+		//'%'       => ' ',
+		//'%'       => '*',
+		//';'       => '',
+		//':'       => '',
+		//'/'       => '',
+		//'\\'      => '',
+		//'<'       => '',
+		//'>'       => '',
+	);
+
+	/**
+	 * Filter characters replacements for keyword sanitization.
+	 *
+	 * @since 2.0.0.82
+	 *
+	 * @param array $replacements Characters replacements.
+	 */
+	return apply_filters( 'geodir_keyword_replacements', $replacements );
+}
+
+/**
+ * Strip block content to shortcodes only.
+ *
+ * @param $content
+ * @since 2.1
+ *
+ * @return mixed
+ */
+function geodir_blocks_to_shortcodes($content){
+	return preg_replace('/\n(\s*\n)+/', "\n",wp_strip_all_tags( $content ) );
 }

@@ -6,11 +6,14 @@
  * @package GeoDirectory
  */
 
-ini_set( 'max_execution_time', 999999 );
-$max_execution_time = @ini_get( 'max_execution_time' );
-ini_restore( 'max_execution_time' );
+// Check if ini_set will work or not on the server.
+$current_max_ex_time = @ini_get( 'max_execution_time' );
+$new_max_ex_time = @ini_set( 'max_execution_time', 999999 ); // Returns the old value on success, FALSE on failure. 
 
-if ( $max_execution_time != 999999 ) { // only show these setting to the user if we can't change the ini setting
+if ( $current_max_ex_time && $new_max_ex_time !== false ) {
+	@ini_set( 'max_execution_time', $current_max_ex_time ); // Restore value.
+} else {
+	// only show these setting to the user if we can't change the ini setting
 ?>
 <div id="gd_ie_reqs" class="metabox-holder">
 	<div class="meta-box-sortables ui-sortable">

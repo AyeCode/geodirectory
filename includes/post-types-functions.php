@@ -361,15 +361,15 @@ function geodir_posttype_link($link, $post_type) {
 /**
  * Print or Get post type singular label.
  *
- * @since 1.0.0
- * @since 1.6.16 New $translate parameter added.
+ * @since 2.1.0.5
+ *
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @param bool $echo Prints the label when set to true.
- * @param bool $translate Returns translated label if True. DefauT false.
+ * @param bool $translate Returns translated label if True. Default false.
  * @return void|string Label.
  */
-function get_post_type_singular_label($post_type, $echo = false, $translate = false) {
+function geodir_get_post_type_singular_label( $post_type, $echo = false, $translate = false ) {
     $obj_post_type = get_post_type_object($post_type);
     if (!is_object($obj_post_type)) {
         return;
@@ -386,15 +386,15 @@ function get_post_type_singular_label($post_type, $echo = false, $translate = fa
 /**
  * Print or Get post type plural label.
  *
- * @since 1.0.0
- * @since 1.6.16 New $translate parameter added.
+ * @since 2.1.0.5
+ *
  * @package GeoDirectory
  * @param string $post_type The post type.
  * @param bool $echo Prints the label when set to true.
- * @param bool $translate Returns translated label if True. DefauT false.
+ * @param bool $translate Returns translated label if True. Default false.
  * @return void|string Label.
  */
-function get_post_type_plural_label($post_type, $echo = false, $translate = false) {
+function geodir_get_post_type_plural_label( $post_type, $echo = false, $translate = false ) {
     $all_postypes = geodir_get_posttypes();
 
     if (!in_array($post_type, $all_postypes))
@@ -461,17 +461,15 @@ add_filter('post_updated_messages', 'geodir_custom_update_messages');
  * @param string $post_type The post type.
  * @return bool|array Post type details.
  */
-function geodir_get_posttype_info($post_type = '')
-{
-    $post_types = array();
+function geodir_get_posttype_info( $post_type = '' ) {
     $post_types = geodir_get_posttypes('array');
-    $post_types = stripslashes_deep($post_types);
-    if (!empty($post_types) && $post_type != '') {
-        return $post_types[$post_type];
+    $post_types = stripslashes_deep( $post_types );
+
+    if ( ! empty( $post_types ) && $post_type != '' && isset( $post_types[ $post_type ] ) ) {
+        return $post_types[ $post_type ];
     } else
         return false;
 }
-
 
 /**
  * Get default Post Type.
@@ -532,7 +530,7 @@ function geodir_get_current_posttype() {
     if (is_tax())
         $geodir_post_type = geodir_get_taxonomy_posttype();
 
-    // Retrive post type for map marker html ajax request on preview page.
+    // Retrieve post type for map marker html ajax request on preview page.
     if (empty($geodir_post_type) && defined('DOING_AJAX') && !empty($post)) {
         if (!empty($post->post_type)) {
             $geodir_post_type = $post->post_type;
@@ -551,6 +549,10 @@ function geodir_get_current_posttype() {
         $geodir_post_type = sanitize_text_field($_REQUEST['stype']);
     }
 
+    // Set default past type on search page when stype is not set.
+    if ( empty( $geodir_post_type ) && geodir_is_page( 'search' ) ) {
+        $geodir_post_type = geodir_get_default_posttype();
+    }
 
     /**
      * Filter the default CPT return.
@@ -680,69 +682,36 @@ function geodir_display_sort_options($post_type) {
         return;
     }
 
-    $sort_by = '';
-
-    if ( isset( $_REQUEST['sort_by'] ) ) {
-        $sort_by = esc_attr($_REQUEST['sort_by']);
-    }
-
     $gd_post_type = $post_type;
 
-    $sort_options = geodir_get_sort_options( $gd_post_type );
-
+    $sort_options = array();
+    $sort_options_raw = geodir_get_sort_options( $gd_post_type );
+    
 
     $sort_field_options = '';
 
-    if ( ! empty( $sort_options ) && count($sort_options) > 1 ) {
-        foreach ( $sort_options as $sort ) {
+    if ( ! empty( $sort_options_raw ) && count($sort_options_raw) > 1 ) {
+        foreach ( $sort_options_raw as $sort ) {
             $sort = stripslashes_deep( $sort ); // strip slashes
 
-            $label = __( $sort->frontend_title, 'geodirectory' );
+            $sort->frontend_title = __( $sort->frontend_title, 'geodirectory' );
 
             if ( $sort->htmlvar_name == 'comment_count' ) {
                 $sort->htmlvar_name = 'rating_count';
             }
 
-            if ( $sort->field_type == 'random' ) {
-                $key = $sort->field_type;
-                ( $sort_by == $key || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
-                $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
-            }else{
-                if ( $sort->sort == 'asc' ) {
-                    $key   = $sort->htmlvar_name . '_asc';
-                    ( $sort_by == $key || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
-                    $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
-                }
-
-                if ( $sort->sort == 'desc' ) {
-                    $key   = $sort->htmlvar_name . '_desc';
-                    ( $sort_by == $key || ( $sort->is_default == '1' && ! isset( $_REQUEST['sort_by'] ) ) ) ? $selected = 'selected="selected"' : $selected = '';
-                    $sort_field_options .= '<option ' . $selected . ' value="' . esc_url( add_query_arg( 'sort_by', $key ) ) . '">' . __( $label, 'geodirectory' ) . '</option>';
-                }
-            }
+            $sort_options[] = $sort;
 
         }
     }
 
-    if ( $sort_field_options != '' ) {
+    if ( !empty($sort_options) ) {
 
-        ?>
-
-        <div class="geodir-tax-sort">
-
-            <select name="sort_by" class="geodir-select geodir-sort-by" aria-label="<?php esc_attr_e( 'Sort By' ,'geodirectory' ); ?>">>
-                <option
-                    value="<?php echo esc_url( add_query_arg( 'sort_by', '' ) ); ?>" <?php if ( $sort_by == '' ) {
-                    echo 'selected="selected"';
-                } ?>><?php _e( 'Sort By', 'geodirectory' ); ?></option><?php
-
-                echo $sort_field_options; ?>
-
-            </select>
-
-        </div>
-        <?php
-
+        $design_style = geodir_design_style();
+        $template = $design_style ? $design_style."/loop/select-sort.php" : "loop/select-sort.php";
+        echo geodir_get_template_html( $template, array(
+            'sort_options' => $sort_options
+        ) );
     }
 
 }
@@ -793,4 +762,85 @@ function geodir_cpt_permalink_rewrite_slug( $post_type, $post_type_obj = NULL ) 
 	$slug = GeoDir_Post_types::get_rewrite_slug( $post_type, $post_type_obj );
 
 	return apply_filters( 'geodir_cpt_permalink_rewrite_slug', $slug, $post_type, $post_type_obj );
+}
+
+/**
+ * Add _search_title column to detail table.
+ *
+ * @param string $post_type The post type.
+ * @return void.
+ */
+function geodir_check_column_search_title( $post_type ) {
+	$table = geodir_db_cpt_table( $post_type );
+
+	return geodir_add_column_if_not_exist( $table, '_search_title', "text NOT NULL AFTER `post_title`" );
+}
+
+/**
+ * Generate keywords from post title.
+ *
+ * @param bool $force True to copy all search titles. 
+ *                    False to copy only empty search titles. Default False.
+ * @return int No. of keywords generated.
+ */
+function geodir_generate_title_keywords( $force = false ) {
+	$post_types = geodir_get_posttypes();
+
+	$generated = 0;
+
+	// Add _search_title column in details table.
+	if ( ! empty( $post_types ) ) {
+		foreach ( $post_types as $post_type ) {
+			$generated += (int) geodir_cpt_generate_title_keywords( $post_type, $force );
+		}
+	}
+
+	return $generated;
+}
+
+/**
+ * Generate keywords from post title for post type.
+ *
+ * @param string $post_type The post type.
+ * @param bool $force True to copy all search titles. 
+ *                    False to copy only empty search titles. Default False.
+ * @return int No. of keywords generated.
+ */
+function geodir_cpt_generate_title_keywords( $post_type, $force = false ) {
+	global $wpdb;
+
+	// Check & add column _search_title. 
+	geodir_check_column_search_title( $post_type );
+
+	$table = geodir_db_cpt_table( $post_type );
+
+	// Blank existing search titles.
+	if ( $force ) {
+		$wpdb->query( "UPDATE `{$table}` SET _search_title = ''" );
+	}
+
+	$generated = 0;
+	$results = $wpdb->get_results( "SELECT post_id, post_title, _search_title FROM `{$table}` WHERE `post_title` != '' AND `_search_title` = '' ORDER BY `post_id` ASC" );
+
+	if ( ! empty( $results ) ) {
+		foreach ( $results as $k => $row ) {
+			// Format the data query arguments.
+			$data = array(
+				'_search_title' => geodir_sanitize_keyword( $row->post_title, $post_type )
+			);
+
+			// Format the where query arguments.
+			$where = array(
+				'post_id' => $row->post_id
+			);
+
+			$result = $wpdb->update( $table, $data, $where, array( '%s' ), array( '%d' ) );
+
+			if ( $result ) {
+				$generated++;
+			}
+		}
+	}
+
+	return $generated;
 }

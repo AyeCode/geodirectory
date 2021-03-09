@@ -193,10 +193,12 @@ class GeoDir_Admin_Taxonomies {
      * @param int $term_id The term ID.
      * @return bool true when exists. false when not exists.
      */
-    public function term_slug_is_exists($slug_exists, $slug, $term_id)
-    {
+    public function term_slug_is_exists( $slug_exists, $slug, $term_id ) {
+        global $wpdb, $table_prefix, $geodirectory;
 
-        global $wpdb, $table_prefix,$geodirectory;
+        if ( $slug_exists ) {
+            return $slug_exists;
+        }
 
         $default_location = $geodirectory->location->get_default_location();
 
@@ -204,11 +206,13 @@ class GeoDir_Admin_Taxonomies {
         $region_slug = $default_location->region_slug;
         $city_slug = $default_location->city_slug;
 
-        if ($country_slug == $slug || $region_slug == $slug || $city_slug == $slug)
-            return $slug_exists = true;
+        if ( $country_slug == $slug || $region_slug == $slug || $city_slug == $slug ) {
+            return true;
+        }
 
-        if ($wpdb->get_var($wpdb->prepare("SELECT slug FROM " . $table_prefix . "terms WHERE slug=%s AND term_id != %d", array($slug, $term_id))))
-            return $slug_exists = true;
+        // No longer required as we have category & tags slug now.
+        //if ($wpdb->get_var($wpdb->prepare("SELECT slug FROM " . $table_prefix . "terms WHERE slug=%s AND term_id != %d", array($slug, $term_id))))
+            //return $slug_exists = true;
 
         return $slug_exists;
     }
@@ -226,13 +230,14 @@ class GeoDir_Admin_Taxonomies {
      * @param int $tt_id term Taxonomy ID.
      * @param string $taxonomy Taxonomy slug.
      */
-    public function update_term_slug($term_id, $tt_id, $taxonomy)
-    {
-
+    public function update_term_slug( $term_id, $tt_id, $taxonomy ) {
         global $wpdb, $plugin_prefix, $table_prefix;
 
-        $tern_data = get_term_by('id', $term_id, $taxonomy);
+        if ( ! geodir_is_gd_taxonomy( $taxonomy ) ) {
+            return;
+        }
 
+        $tern_data = get_term_by( 'id', $term_id, $taxonomy );
         $slug = $tern_data->slug;
 
         /**
@@ -244,45 +249,40 @@ class GeoDir_Admin_Taxonomies {
          * @param string $slug The term slug.
          * @param int $term_id The term ID.
          */
-        $slug_exists = apply_filters('geodir_term_slug_is_exists', false, $slug, $term_id);
+        $slug_exists = apply_filters( 'geodir_term_slug_is_exists', false, $slug, $term_id );
 
-        if ($slug_exists) {
-
+        if ( $slug_exists ) {
             $suffix = 1;
+
             do {
-                $new_slug = _truncate_post_slug($slug, 200 - (strlen($suffix) + 1)) . "-$suffix";
+                $new_slug = _truncate_post_slug( $slug, 200 - ( strlen( $suffix ) + 1 ) ) . "-$suffix";
 
                 /** This action is documented in geodirectory_hooks_actions.php */
-                $term_slug_check = apply_filters('geodir_term_slug_is_exists', false, $new_slug, $term_id);
+                $term_slug_check = apply_filters( 'geodir_term_slug_is_exists', false, $new_slug, $term_id );
 
                 $suffix++;
-            } while ($term_slug_check && $suffix < 100);
+            } while ( $term_slug_check && $suffix < 100 );
 
             $slug = $new_slug;
 
-            //wp_update_term( $term_id, $taxonomy, array('slug' => $slug) );
-
-            $wpdb->query($wpdb->prepare("UPDATE " . $table_prefix . "terms SET slug=%s WHERE term_id=%d", array($slug, $term_id)));
-
+            $wpdb->query( $wpdb->prepare( "UPDATE " . $wpdb->terms . " SET slug = %s WHERE term_id = %d", array( $slug, $term_id ) ) );
         }
 
         // Update tag in detail table.
-        $taxonomy_obj = get_taxonomy($taxonomy);
-        $post_type = !empty($taxonomy_obj) ? $taxonomy_obj->object_type[0] : NULL;
+        if ( geodir_taxonomy_type( $taxonomy ) == 'tag' && geodir_is_gd_taxonomy( $taxonomy ) ) {
+            $posts = $wpdb->get_results( $wpdb->prepare( "SELECT object_id FROM " . $wpdb->term_relationships . " WHERE term_taxonomy_id = %d", array( $tt_id ) ) );
 
-        $post_types = geodir_get_posttypes();
-        if ($post_type && in_array($post_type, $post_types) && $post_type . '_tags' == $taxonomy) {
-            $posts_obj = $wpdb->get_results($wpdb->prepare("SELECT object_id FROM " . $wpdb->term_relationships . " WHERE term_taxonomy_id = %d", array($tt_id)));
+            if ( ! empty( $posts ) ) {
+                $post_type = substr( $taxonomy, 0, strlen( $taxonomy ) - 5 );
 
-            if (!empty($posts_obj)) {
-                foreach ($posts_obj as $post_obj) {
-                    $post_id = $post_obj->object_id;
+                foreach ( $posts as $_post ) {
+                    $post_id = $_post->object_id;
 
-                    $raw_tags = wp_get_object_terms($post_id, $post_type . '_tags', array('fields' => 'names'));
-                    $post_tags = !empty($raw_tags) ? implode(',', $raw_tags) : '';
+                    $object_terms = wp_get_object_terms( $post_id, $taxonomy, array( 'fields' => 'names' ) );
+                    $post_tags = ! empty( $object_terms ) ? implode( ',', $object_terms ) : '';
 
-                    $listing_table = $plugin_prefix . $post_type . '_detail';
-                    $wpdb->query($wpdb->prepare("UPDATE " . $listing_table . " SET post_tags=%s WHERE post_id =%d", array($post_tags, $post_id)));
+                    $table = geodir_db_cpt_table( $post_type );
+                    $wpdb->query( $wpdb->prepare( "UPDATE `{$table}` SET post_tags = %s WHERE post_id = %d", array( $post_tags, $post_id ) ) );
                 }
             }
         }
@@ -308,7 +308,7 @@ class GeoDir_Admin_Taxonomies {
             <?php echo $this->render_cat_default_img(); ?>
         </div>
         <?php do_action( 'geodir_add_category_after_cat_default_img', $taxonomy ); ?>
-        <div class="form-field term-ct_cat_icon-wrap gd-term-form-field form-required">
+        <div class="form-field term-ct_cat_icon-wrap gd-term-form-field">
             <label for="ct_cat_icon"><?php _e( 'Map Icon', 'geodirectory' ); ?></label>
             <?php echo $this->render_cat_icon(); ?>
         </div>
@@ -368,7 +368,7 @@ class GeoDir_Admin_Taxonomies {
             <td><?php echo $this->render_cat_default_img( $cat_default_img ); ?></td>
         </tr>
         <?php do_action( 'geodir_edit_category_after_cat_default_img', $term, $taxonomy ); ?>
-        <tr class="form-field term-ct_cat_icon-wrap gd-term-form-field form-required">
+        <tr class="form-field term-ct_cat_icon-wrap gd-term-form-field">
             <th scope="row"><label for="ct_cat_icon"><?php _e( 'Map Icon', 'geodirectory' ); ?></label></th>
             <td><?php echo $this->render_cat_icon( $cat_icon ); ?></td>
         </tr>
@@ -444,11 +444,11 @@ class GeoDir_Admin_Taxonomies {
             <div class="gd-upload-fields">
                 <input type="hidden" id="<?php echo $id; ?>[id]" name="<?php echo $name; ?>[id]" value="<?php echo $img_id; ?>" />
                 <input type="hidden" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" />
-                <button type="button" class="gd_upload_image_button button"><?php _e( 'Upload Image', 'geodirectory' ); ?></button>
+                <button type="button" class="gd_upload_image_button button"><?php _e( 'Select Image', 'geodirectory' ); ?></button>
                 <button type="button" class="gd_remove_image_button button"><?php _e( 'Remove Image', 'geodirectory' ); ?></button>
             </div>
         </div>
-        <p class="description clear"><?php _e( 'Choose a default image for the listing within this category.', 'geodirectory' ); ?></p>
+        <p class="description clear"><?php _e( 'Select a default image for the listing within this category.', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
@@ -478,12 +478,12 @@ class GeoDir_Admin_Taxonomies {
             <div class="gd-upload-display thumbnail"><div class="centered"><img src="<?php echo $show_img; ?>" /></div></div>
             <div class="gd-upload-fields">
                 <input type="hidden" id="<?php echo $id; ?>[id]" name="<?php echo $name; ?>[id]" value="<?php echo $img_id; ?>" />
-                <input type="text" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" required style="position:absolute;left:-500px;width:50px;" />
-                <button type="button" class="gd_upload_image_button button"><?php _e( 'Upload Icon', 'geodirectory' ); ?></button>
+                <input type="text" id="<?php echo $id; ?>[src]" name="<?php echo $name; ?>[src]" value="<?php echo $img_src; ?>" style="position:absolute;left:-500px;width:50px;" />
+                <button type="button" class="gd_upload_image_button button"><?php _e( 'Select Icon', 'geodirectory' ); ?></button>
                 <button type="button" class="gd_remove_image_button button"><?php _e( 'Remove Icon', 'geodirectory' ); ?></button>
             </div>
         </div>
-        <p class="description clear"><?php _e( 'Choose a category icon', 'geodirectory' ); ?></p>
+        <p class="description clear"><?php _e( 'Select a map icon, or pick a FontAwesome icon and color below to have one auto-generated. (if this field is empty)', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
@@ -521,7 +521,7 @@ class GeoDir_Admin_Taxonomies {
             }
             ?>
         </select>
-        <p class="description clear"><?php _e( 'Choose a category icon', 'geodirectory' ); ?></p>
+        <p class="description clear"><?php _e( 'Select a category icon', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
@@ -551,7 +551,7 @@ class GeoDir_Admin_Taxonomies {
             class="gd-color-picker"
             placeholder="<?php  ?>"
             data-default-color=""/>
-        <p class="description"><?php _e( 'Select the schema to use for this category', 'geodirectory' ); ?></p>
+        <p class="description"><?php _e( 'Select the color to use for this category', 'geodirectory' ); ?></p>
         <?php
         return ob_get_clean();
     }
@@ -575,7 +575,7 @@ class GeoDir_Admin_Taxonomies {
         
         ob_start();
         ?>
-        <select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" class="postform">
+        <select name="<?php echo esc_attr( $name ); ?>" id="<?php echo esc_attr( $id ); ?>" class="postform geodir-select">
             <?php foreach ( $schemas as $value => $label ) { ?>
             <option value="<?php echo esc_attr( $value ); ?>" <?php selected( $cat_schema == $value, true ); ?>><?php echo $label; ?></option>
             <?php } ?>
@@ -600,7 +600,7 @@ class GeoDir_Admin_Taxonomies {
             update_term_meta( $term_id, 'ct_cat_top_desc', $_POST['ct_cat_top_desc'] );
         }
         
-        // Categoty listing default image.
+        // Category listing default image.
         if ( isset( $_POST['ct_cat_default_img'] ) ) {
             $cat_default_img = $_POST['ct_cat_default_img'];
             
@@ -613,16 +613,41 @@ class GeoDir_Admin_Taxonomies {
             update_term_meta( $term_id, 'ct_cat_default_img', $cat_default_img );
         }
         
-        // Categoty icon.
+        // Category icon.
         if ( isset( $_POST['ct_cat_icon'] ) ) {
             $cat_icon = $_POST['ct_cat_icon'];
             
             if ( !empty( $cat_icon['src'] ) ) {
                 $cat_icon['src'] = geodir_file_relative_url( $cat_icon['src'] );
+            } elseif(!empty($_POST['ct_cat_font_icon'])) {
+                $background = !empty($_POST['ct_cat_color']) ? ltrim (sanitize_hex_color($_POST['ct_cat_color']),'#') : 'ef5646';
+                $fa_icon_parts = explode(" ",$_POST['ct_cat_font_icon']);
+                $fa_icon = !empty($fa_icon_parts[1]) ? sanitize_html_class($fa_icon_parts[0])." ".sanitize_html_class($fa_icon_parts[1]) : 'fas fa-star';
+                $icon_url = "https://cdn.mapmarker.io/api/v1/font-awesome/v5/icon-stack?";
+                $icon_url .= "icon=".$fa_icon;
+                $icon_url .= "&size=50";
+                $icon_url .= "&color=fff";
+                $icon_url .= "&on=fas fa-map-marker";
+                $icon_url .= "&hoffset=0";
+                $icon_url .= "&voffset=-4";
+               // $icon_url .= "&iconSize=20"; //goes off center if you set a size
+                $icon_url .= "&oncolor=".$background;
+
+                $image = (array) GeoDir_Media::get_external_media( $icon_url, $fa_icon,array('image/jpg', 'image/jpeg', 'image/gif', 'image/png', 'image/webp'),array('ext'=>'png','type'=>'image/png') );
+
+                if(!empty($image['url'])){
+                    $attachment_id = GeoDir_Media::set_uploaded_image_as_attachment($image);
+                    if( $attachment_id ){
+                        $cat_icon['id'] = $attachment_id;
+                        $cat_icon['src'] = geodir_file_relative_url( $image['url'] );
+
+                    }
+                }
+
             } else {
                 $cat_icon = array();
             }
-            
+
             update_term_meta( $term_id, 'ct_cat_icon', $cat_icon );
         }
 
@@ -633,7 +658,7 @@ class GeoDir_Admin_Taxonomies {
 
         // Category color.
         if ( isset( $_POST['ct_cat_color'] ) ) {
-            update_term_meta( $term_id, 'ct_cat_color', sanitize_text_field( $_POST['ct_cat_color'] ) );
+            update_term_meta( $term_id, 'ct_cat_color', sanitize_hex_color( $_POST['ct_cat_color'] ) );
         }
         
         // Category schema.
@@ -642,6 +667,14 @@ class GeoDir_Admin_Taxonomies {
         }
         
         do_action( 'geodir_term_save_category_fields', $term_id, $tt_id, $taxonomy );
+    }
+
+    public function get_fixed_icon_slug($slug){
+        $fixed_slugs = array(
+
+        );
+
+        return $slug;
     }
 
     /**
@@ -702,33 +735,33 @@ class GeoDir_Admin_Taxonomies {
      * Taxonomy walker.
      *
      * @since 2.0.0
+     * @since 2.0.0.66 Auto check/select option for a single category.
      *
      * @param string $cat_taxonomy Category taxonomy.
      * @param int $cat_parent Optional. Category parent ID. Default 0.
      * @param bool $hide_empty Optional. Taxonomy hide empty. Default false.
-     * @param int $pading Optional. Pading value . Default 0.
+     * @param int $padding Optional. Padding value . Default 0.
      * @return string Taxonomy walker html.
      */
-    public static function taxonomy_walker($cat_taxonomy, $cat_parent = 0, $hide_empty = false, $pading = 0)
-    {
+    public static function taxonomy_walker( $cat_taxonomy, $cat_parent = 0, $hide_empty = false, $padding = 0 ) {
         global $cat_display, $post_cat, $exclude_cats;
 
-        $search_terms = trim($post_cat, ",");
+        $search_terms = trim( $post_cat, "," );
+        $search_terms = explode( ",", $search_terms );
 
-        $search_terms = explode(",", $search_terms);
-
-        $cat_terms = get_terms(array('taxonomy' => $cat_taxonomy,'parent' => $cat_parent, 'hide_empty' => $hide_empty, 'exclude' => $exclude_cats));
+        $cat_terms = get_terms( array( 'taxonomy' => $cat_taxonomy, 'parent' => $cat_parent, 'hide_empty' => $hide_empty, 'exclude' => $exclude_cats ) );
 
         $display = '';
         $onchange = '';
         $term_check = '';
         $main_list_class = '';
         $out = '';
+
         //If there are terms, start displaying
         if (count($cat_terms) > 0) {
             //Displaying as a list
-            $p = $pading * 20;
-            $pading++;
+            $p = $padding * 20;
+            $padding++;
 
 
             if ((!geodir_is_page('listing')) || (is_search() && $_REQUEST['search_taxonomy'] == '')) {
@@ -746,18 +779,28 @@ class GeoDir_Admin_Taxonomies {
                 $out = '<div class="' . $list_class . ' gd-cat-row-' . $cat_parent . '" style="margin-left:' . $p . 'px;' . $display . ';">';
             }
 
-            foreach ($cat_terms as $cat_term) {
-
+            foreach ( $cat_terms as $cat_term ) {
                 $checked = '';
+				$sub_out = '';
+				$no_child = false;
 
-                if (in_array($cat_term->term_id, $search_terms)) {
-                    if ($cat_display == 'select' || $cat_display == 'multiselect')
+				if ( absint( $cat_parent ) == 0 && count( $cat_terms ) == 1 ) {
+					// Call recursion to print sub cats
+					$sub_out = self::taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $padding );
+
+					if ( trim( $sub_out ) == '' ) {
+						$no_child = true; // Set category selected when only one category.
+					}
+				}
+
+				if ( in_array( $cat_term->term_id, $search_terms ) || $no_child ) {
+                    if ( $cat_display == 'select' || $cat_display == 'multiselect' )
                         $checked = 'selected="selected"';
                     else
                         $checked = 'checked="checked"';
                 }
 
-                $child_dash = $p > 0 ? str_repeat("-", $p/20).' ' : '';
+                $child_dash = $p > 0 ? str_repeat( "-", $p / 20 ) . ' ' : '';
 
                 if ($cat_display == 'radio')
                     $out .= '<span style="display:block" ><input type="radio" field_type="radio" name="tax_input['.$cat_term->taxonomy .'][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" data-cradio="default_category">' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '</span>';
@@ -769,12 +812,15 @@ class GeoDir_Admin_Taxonomies {
                     $out .= '<span style="display:block" ' . $class . '><input style="display:inline-block" type="checkbox" field_type="checkbox" name="tax_input['.$cat_term->taxonomy .'][]" ' . $main_list_class . ' alt="' . $cat_term->taxonomy . '" title="' . geodir_utf8_ucfirst($cat_term->name) . '" value="' . $cat_term->term_id . '" ' . $checked . $onchange . ' id="gd-cat-' . $cat_term->term_id . '" data-ccheckbox="default_category">' . $term_check . geodir_utf8_ucfirst($cat_term->name) . '<span class="gd-make-default-term" style="display:none" title="' . esc_attr( wp_sprintf( __( 'Make %s default category', 'geodirectory' ), geodir_utf8_ucfirst($cat_term->name) ) ) . '">' . __( 'Make default', 'geodirectory' ). '</span><span class="gd-is-default-term" style="display:none">' . __( 'Default', 'geodirectory' ). '</span></span>';
                 }
 
-                // Call recurson to print sub cats
-                $out .= self::taxonomy_walker($cat_taxonomy, $cat_term->term_id, $hide_empty, $pading);
+                if ( ! ( absint( $cat_parent ) == 0 && count( $cat_terms ) == 1 ) ) {
+					// Call recursion to print sub cats
+					$sub_out = self::taxonomy_walker( $cat_taxonomy, $cat_term->term_id, $hide_empty, $padding );
+				}
 
+				$out .= $sub_out;
             }
 
-            if ($cat_display == 'checkbox' || $cat_display == 'radio')
+            if ( $cat_display == 'checkbox' || $cat_display == 'radio' )
                 $out .= '</div>';
 
             return $out;
@@ -825,101 +871,9 @@ class GeoDir_Admin_Taxonomies {
      * @return mixed|void
      */
     public static function get_schemas(){
-        $schemas = array(
-            '' => __( 'Default (LocalBusiness)', 'geodirectory' ),
-            'AccountingService' => 'AccountingService',
-            'Attorney' => 'Attorney',
-            'AutoBodyShop' => 'AutoBodyShop',
-            'AutoDealer' => 'AutoDealer',
-            'AutoPartsStore' => 'AutoPartsStore',
-            'AutoRental' => 'AutoRental',
-            'AutoRepair' => 'AutoRepair',
-            'AutoWash' => 'AutoWash',
-            'Bakery' => 'Bakery',
-            'BarOrPub' => 'BarOrPub',
-            'BeautySalon' => 'BeautySalon',
-            'BedAndBreakfast' => 'BedAndBreakfast',
-            'BikeStore' => 'BikeStore',
-            'BookStore' => 'BookStore',
-            'CafeOrCoffeeShop' => 'CafeOrCoffeeShop',
-            'Campground' => 'Campground',
-            'ChildCare' => 'ChildCare',
-            'ClothingStore' => 'ClothingStore',
-            'ComputerStore' => 'ComputerStore',
-            'DaySpa' => 'DaySpa',
-            'Dentist' => 'Dentist',
-            'DryCleaningOrLaundry' => 'DryCleaningOrLaundry',
-            'Electrician' => 'Electrician',
-            'ElectronicsStore' => 'ElectronicsStore',
-            'EmergencyService' => 'EmergencyService',
-            'EntertainmentBusiness' => 'EntertainmentBusiness',
-            'Event' => 'Event',
-            'EventVenue' => 'EventVenue',
-            'ExerciseGym' => 'ExerciseGym',
-            'FinancialService' => 'FinancialService',
-            'Florist' => 'Florist',
-            'FoodEstablishment' => 'FoodEstablishment',
-            'FurnitureStore' => 'FurnitureStore',
-            'GardenStore' => 'GardenStore',
-            'GeneralContractor' => 'GeneralContractor',
-            'GolfCourse' => 'GolfCourse',
-            'HairSalon' => 'HairSalon',
-            'HardwareStore' => 'HardwareStore',
-            'HealthAndBeautyBusiness' => 'HealthAndBeautyBusiness',
-            'HobbyShop' => 'HobbyShop',
-            'HomeAndConstructionBusiness' => 'HomeAndConstructionBusiness',
-            'HomeGoodsStore' => 'HomeGoodsStore',
-            'Hospital' => 'Hospital',
-            'Hostel' => 'Hostel',
-            'Hotel' => 'Hotel',
-            'HousePainter' => 'HousePainter',
-            'HVACBusiness' => 'HVACBusiness',
-            'InsuranceAgency' => 'InsuranceAgency',
-            'JewelryStore' => 'JewelryStore',
-            'LiquorStore' => 'LiquorStore',
-            'Locksmith' => 'Locksmith',
-            'LodgingBusiness' => 'LodgingBusiness',
-            'MedicalClinic' => 'MedicalClinic',
-            'MensClothingStore' => 'MensClothingStore',
-            'MobilePhoneStore' => 'MobilePhoneStore',
-            'Motel' => 'Motel',
-            'MotorcycleDealer' => 'MotorcycleDealer',
-            'MotorcycleRepair' => 'MotorcycleRepair',
-            'MovingCompany' => 'MovingCompany',
-            'MusicStore' => 'MusicStore',
-            'NailSalon' => 'NailSalon',
-            'NightClub' => 'NightClub',
-            'Notary' => 'Notary',
-            'OfficeEquipmentStore' => 'OfficeEquipmentStore',
-            'Optician' => 'Optician',
-            'PetStore' => 'PetStore',
-            'Physician' => 'Physician',
-            'Plumber' => 'Plumber',
-            'ProfessionalService' => 'ProfessionalService',
-            'RealEstateAgent' => 'RealEstateAgent',
-            'Residence' => 'Residence',
-            'Restaurant' => 'Restaurant',
-            'RoofingContractor' => 'RoofingContractor',
-            'RVPark' => 'RVPark',
-            'School' => 'School',
-            'SelfStorage' => 'SelfStorage',
-            'ShoeStore' => 'ShoeStore',
-            'SkiResort' => 'SkiResort',
-            'SportingGoodsStore' => 'SportingGoodsStore',
-            'SportsClub' => 'SportsClub',
-            'Store' => 'Store',
-            'TattooParlor' => 'TattooParlor',
-            'Taxi' => 'Taxi',
-            'TennisComplex' => 'TennisComplex',
-            'TireShop' => 'TireShop',
-            'TouristAttraction' => 'TouristAttraction',
-            'ToyStore' => 'ToyStore',
-            'TravelAgency' => 'TravelAgency',
-            //'VacationRentals' => 'VacationRentals', // Not recognised by google yet
-            'VeterinaryCare' => 'VeterinaryCare',
-            'WholesaleStore' => 'WholesaleStore',
-            'Winery' => 'Winery'
-        );
+        include_once( GEODIRECTORY_PLUGIN_DIR . 'includes/admin/settings/data_schemas.php' );
+        $raw_schemas = geodir_data_schemas();
+        $schemas = array_merge(array('' => __( 'Default (LocalBusiness)', 'geodirectory' )), $raw_schemas);
 
         /*
 		 * Allows you to add/filter the cat schema types.

@@ -163,21 +163,21 @@ class GeoDir_Template_Loader {
                     $default_file = $template;
                 }
             }
-        } elseif(geodir_is_page( 'add-listing' )){
-
-            // the add listing page should never be cached
+        } elseif ( geodir_is_page( 'add-listing' ) ) {
+            // The add listing page should never be cached
             geodir_nocache_headers();
 
-            $page_id = geodir_add_listing_page_id();
-            if($page_id &&  $template = get_page_template_slug( $page_id )){
-                // make sure the template exists before loading it, it might be from a old theme
-                if(locate_template( $template )){
-                    //$wp_query->is_page = 1; //@todo, is this needed? (depends on theme?)
+            $post_type = geodir_get_current_posttype();
+            $page_id = geodir_add_listing_page_id( $post_type );
+
+            if ( $page_id && ( $template = get_page_template_slug( $page_id ) ) ) {
+                // Make sure the template exists before loading it, it might be from a old theme
+                if ( locate_template( $template ) ) {
+                    //$wp_query->is_page = 1; // @todo, is this needed? (depends on theme?)
                     $default_file = $template;
                 }
             }
-        }else{
-
+        } else {
             $archive_template = geodir_get_option('archive_page_template');
 
             if($archive_template && locate_template( $archive_template )){
@@ -249,8 +249,10 @@ class GeoDir_Template_Loader {
             $search_files[] = geodir_get_theme_template_dir_name() . '/taxonomy-' . $term->taxonomy . '.php';
         }
 
-        $search_files[] = $default_file;
-        $search_files[] = geodir_get_theme_template_dir_name() . '/' . $default_file;
+	    if ( !empty($default_file) && $default_file !== ' ' ) {
+		    $search_files[] = $default_file;
+		    $search_files[] = geodir_get_theme_template_dir_name() . '/' . $default_file;
+	    }
 
         // check for archive template
         if(geodir_is_page('archive') || geodir_is_page('search')){
@@ -265,20 +267,26 @@ class GeoDir_Template_Loader {
         $search_files[] = 'geodirectory.php';
         $search_files[] = 'page.php';
 
+        // Some themes like Twenty Twenty does not contain optional file page.php.
+        if ( ( empty( $default_file ) || $default_file === ' ' ) && isset( $_REQUEST['geodir_search'] ) && is_search() && ! get_query_template( 'page' ) && get_index_template() ) {
+            $search_files[] = 'index.php';
+        }
+
         return array_unique( $search_files );
     }
 
-    public static function is_archive_page_id($id){
+    public static function is_archive_page_id( $id ) {
         global $geodirectory;
-        $page_archive_id = isset($geodirectory->settings['page_archive']) ? $geodirectory->settings['page_archive'] : 0;
-        $result = false;
-        if($id==$page_archive_id){// default page check
+        $page_archive_id = isset( $geodirectory->settings['page_archive'] ) ? $geodirectory->settings['page_archive'] : 0;
+
+		$result = false;
+        if ( $id == $page_archive_id ) { // default page check
             $result = true;
-        }elseif(geodir_is_cpt_template_page( $id )){ // could be a CPT specific page
+        } elseif( geodir_is_cpt_template_page( $id ) ) { // could be a CPT specific page
             $result = true;
         }
 
-        return $result;
+        return apply_filters( 'geodir_is_archive_page_id', $result, $id );
     }
 
     /**
@@ -304,30 +312,29 @@ class GeoDir_Template_Loader {
         return $result;
     }
 
-
     /**
      * Setup the GD Archive page content.
      *
      * @since 2.0.0
+     *
+     * @global bool $gd_skip_the_content Prevent looping for the_content from listing post_content.
+     *
      * @return string The filtered content.
      */
     public static function setup_archive_page_content($content){
-
+        global $wp_query, $post, $gd_done_archive_loop, $gd_skip_the_content;
 
         // if we are not filtering the archive page content then bail.
-        if(!self::is_archive_page_content()){
+        if ( $gd_skip_the_content || ! self::is_archive_page_content() ) {
             return $content;
         }
 
-		global $wp_query, $post,$gd_done_archive_loop;
-
         // if its outside the loop then bail so we don't set the current_post number and cause have_posts() to return false.
-        if(!in_the_loop()){
-
-            if(current_filter()=='the_excerpt' && $gd_done_archive_loop){
+        if ( ! in_the_loop() ) {
+            if ( current_filter() == 'the_excerpt' && $gd_done_archive_loop ) {
                 // we might be inside a "the_excerpt" filter which might be outside the loop so we don't return.
-            }else{
-                return;//$content;
+            } else {
+                return;;
             }
         }
 
@@ -512,15 +519,15 @@ class GeoDir_Template_Loader {
      */
     public static function archive_item_template_content($post_type = ''){
 
-
-//        global $wp_query,$gd_temp_wp_query; //@todo i don't think this is needed here, remove after a few version if not.
-//        if(!empty($gd_temp_wp_query)){
-//            $wp_query->posts = $gd_temp_wp_query;
-//        }
-
         // get the archive template page content
         $archive_page_id = geodir_archive_item_page_id($post_type);
         $content = get_post_field('post_content', $archive_page_id  );
+
+        // maybe bypass content
+        $bypass_content = apply_filters('geodir_bypass_archive_item_template_content','',$content,$archive_page_id);
+        if($bypass_content){
+            return $bypass_content;
+        }
 
         // if the content is blank then we grab the page defaults
         if($content==''){
@@ -546,7 +553,7 @@ class GeoDir_Template_Loader {
      * @since 2.0.0
      */
     public static function disable_theme_featured_output(){
-        if(geodir_is_singular() && geodir_get_option('details_disable_featured',true) ){
+        if(geodir_is_singular() && geodir_get_option('details_disable_featured',false) ){
             add_filter( "get_post_metadata", array(__CLASS__,'filter_thumbnail_id'), 10, 4 );
         }
     }
@@ -576,31 +583,37 @@ class GeoDir_Template_Loader {
 
         return $metadata;
     }
-	
-	/**
+
+    /**
      * Setup the map popup content.
      *
      * @since 2.0.0
+     * @since 2.0.0.90 Added a post type as template part name.
+     *
+     * @global object $gd_post GeoDirectory post object.
+     *
      * @return string The filtered content.
      */
-    public static function map_popup_template_content(){
-		ob_start();
+    public static function map_popup_template_content() {
+        global $gd_post;
+        
+        $design_style = geodir_design_style();
 
-		geodir_get_template_part( 'map', 'popup' );
+        $template = $design_style ? $design_style."/map/map-popup.php" : "map-popup.php";
 
-		$content = ob_get_clean();
+        $content = geodir_get_template_html( $template  );
+        
+        if ( ! empty( $content ) ) {
+            // Run the shortcodes on the content
+            $content = do_shortcode( $content );
 
-		if ( ! empty( $content ) ) {
-			// run the shortcodes on the content
-			$content = do_shortcode( $content );
-
-            // run block content if its available
-            if(function_exists('do_blocks')){
+            // Run block content if its available
+            if ( function_exists( 'do_blocks' ) ) {
                 $content = do_blocks( $content );
             }
-		}
+        }
 
-		return $content;
+        return $content;
     }
 
     /**
@@ -610,15 +623,22 @@ class GeoDir_Template_Loader {
      *
      * @since 2.0.0
      */
-    public static function disable_page_templates_frontend(){
+    public static function disable_page_templates_frontend() {
         global $post;
-        if(isset($post->ID) && !current_user_can('administrator') && (
-                $post->ID == geodir_get_option('page_details')
-                || $post->ID == geodir_get_option('page_archive')
-                || $post->ID == geodir_get_option('page_archive_item')
-				|| geodir_is_cpt_template_page( $post->ID )
-            )){
-            wp_die( __( 'Sorry, this is a page template and can not be accessed from the frontend, it is used for building the layouts of GeoDirectory sections.','geodirectory' ) );
+
+        if ( isset( $post->ID ) && ! current_user_can( 'administrator' ) ) {
+            if ( geodir_is_cpt_template_page( $post->ID, 'add' ) ) {
+                return; // Bail for add listing page.
+            }
+
+            if ( $post->ID == geodir_get_option( 'page_details' ) 
+                || $post->ID == geodir_get_option( 'page_archive' ) 
+                || $post->ID == geodir_get_option( 'page_archive_item' ) 
+                || geodir_is_cpt_template_page( $post->ID ) 
+            ) {
+                wp_redirect( home_url(), 301 );
+                exit;
+            }
         }
     }
 }

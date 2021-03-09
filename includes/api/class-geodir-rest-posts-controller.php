@@ -302,8 +302,6 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 
 		$posts_query  = new WP_Query();
 		$query_result = $posts_query->query( $query_args );
-//echo '###'.$posts_query->request;
-//		print_r($wp_query);exit;
 
 		// Allow access to all password protected posts if the context is edit.
 		if ( 'edit' === $request['context'] ) {
@@ -2171,7 +2169,12 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
             $args['title']          = $title;
             $args['description']    = !empty( $description ) ? $description : $title;
             $args['required']       = (bool)$required;
-            $args['default']        = $default;
+            if ( $name == 'package_id' ) {
+                $default = (int) $package_id > 0 ? (int) $package_id : (int) geodir_get_post_package_id( array(), $this->post_type );
+            }
+            if ( (bool)$required || $default !== '' ) {
+                $args['default']    = $default;
+            }
             
             $continue = false;
             
@@ -2236,7 +2239,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 						'context'       => array( 'view', 'edit' ),
 						'title'         => !empty( $extra_fields['zip_lable'] ) ? __( $extra_fields['zip_lable'], 'geodirectory' ) : __( 'Zip/Post Code', 'geodirectory' ),
 						'description'   => __( 'Zip/Post Code', 'geodirectory' ),
-						'required'      => (bool) ( $required && !empty( $extra_fields['show_zip'] ) ),
+						'required'      => (bool) ( ! empty( $extra_fields['zip_required'] ) && ! empty( $extra_fields['show_zip'] ) ),
 						'extra_fields'  => array(
 							'show' => (bool) ! empty( $extra_fields['show_zip'] )
 						)
@@ -2574,7 +2577,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 				$image->metadata = maybe_unserialize( $image->metadata );
 			}
 			$featured_image['id'] = $image->ID;
-			$featured_image['title'] = $image->title;
+			$featured_image['title'] = stripslashes_deep( $image->title );
 			$featured_image['src'] = geodir_get_image_src( $image, 'original' );
 			$featured_image['thumbnail'] = geodir_get_image_src( $image, 'thumbnail' );
 			$featured_image['width'] = ! empty( $image->metadata ) && isset( $image->metadata['width'] ) ? $image->metadata['width'] : '';
@@ -2599,7 +2602,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 			foreach ( $post_images as $image ) {
 				$row = array();
 				$row['id'] = $image->ID;
-				$row['title'] = $image->title;
+				$row['title'] = stripslashes_deep( $image->title );
 				$row['src'] = geodir_get_image_src( $image, 'original' );
 				$row['thumbnail'] = geodir_get_image_src( $image, 'thumbnail' );
 				$row['featured'] = (bool) $image->featured;
@@ -2785,7 +2788,7 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 					if ( ! empty( $field_value ) ) {
 						$data[ $field_name ] = array(
 							'raw'		=> stripslashes( $field_value ),
-							'rendered' 	=> geodir_get_business_hours( $field_value )
+							'rendered' 	=> geodir_get_business_hours( $field_value, ( ! empty( $gd_post->country ) ? $gd_post->country : '' ) )
 						);
 					} else {
 						$data[ $field_name ] = NULL;

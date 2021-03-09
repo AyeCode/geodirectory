@@ -115,13 +115,14 @@
 
     .gd-thumb-actions {
         background-color:rgba(0, 0, 0, 0.5);
-        margin-top: -25px;
+        margin-top: -22px;
         position: relative;
         color: #fff;
-        font-size: 20px;
+        font-size: 16px;
         display: none;
         z-index: 3;
         line-height: 0;
+        padding: 3px 0;
 
         .thumbeditlink, .thumbremovelink {
             width: 50%;
@@ -194,4 +195,25 @@
 .plupload-thumbs .gd-caption-preview{
     top: auto;
     bottom: 10px;
+}
+
+.postbox .inside .plupload-thumbs .thumb,
+.geodir-add-files .plupload-thumbs .thumb {
+	height: 85.33px;
+	width: 128px;
+}
+
+.columns-2 #postbox-container-1 .postbox .inside .plupload-thumbs .thumb {
+	height: 72px;
+	width: 108px;
+}
+
+.postbox .inside .plupload-thumbs .thumb img.gd-file-info,
+.geodir-add-files .plupload-thumbs .thumb img.gd-file-info {
+	max-width: 100%;
+	max-height: 100%;
+	width: inherit !important;
+	height: inherit !important;
+	vertical-align: middle;
+	object-fit: contain;
 }
