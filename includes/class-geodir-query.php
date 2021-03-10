@@ -173,8 +173,11 @@ class GeoDir_Query {
 			add_filter( 'posts_orderby', array( $this, 'posts_orderby' ),10,2 );
 
 		} elseif ( geodir_is_page( 'search' ) ) {
-			// Divi page builder breaks editor.
-			if ( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) {
+			// Some page builders breaks editor.
+			if ( 
+				( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) // Divi
+				|| ( class_exists( 'Brizy_Editor' ) && ( isset( $_GET[ Brizy_Editor::prefix( '-edit' ) ] ) || isset( $_GET[ Brizy_Editor::prefix( '-edit-iframe' ) ] ) ) ) // Brizy
+			) {
 			} else {
 				$q->is_page = false;
 				$q->is_singular = false;
