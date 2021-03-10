@@ -1,5 +1,7 @@
 = 2.1.0.11 =
 * Conflict of select2 basic version loaded - FIXED
+* Brizy page builder compatibility - ADDED
+* Featured field always shows checked - FIXED
 
 = 2.1.0.10 =
 * Show x stars back instead of rating type name on hover of ratings - CHANGED
