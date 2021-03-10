@@ -194,6 +194,11 @@ jQuery(function($) {
     // bounce the map markers
     geodir_animate_markers();
 
+    // Bounce the map markers on lazy load map
+    $(window).on('geodirMapAllScriptsLoaded', function() {
+        geodir_animate_markers();
+    });
+
     // fix accessibility issues
     $('.geodir-sort-by[name="sort_by"], #geodir_my_favourites[name="geodir_my_favourites"], #geodir_my_listings[name="geodir_my_listings"], #geodir_add_listing[name="geodir_add_listing"]').on("change", function(e) {
         if ($(this).val()) window.location = $(this).val();

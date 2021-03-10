@@ -4,6 +4,7 @@
 * Featured field always shows checked - FIXED
 * GD > Recent Reviews option added to filter reviews by post id - ADDED
 * GD > Categories icon color not working with icon top design - FIXED
+* Map marker hover bounce not working on lazy load map - FIXED
 
 = 2.1.0.10 =
 * Show x stars back instead of rating type name on hover of ratings - CHANGED
