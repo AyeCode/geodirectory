@@ -176,7 +176,13 @@ class GeoDir_Query {
 			// Some page builders breaks editor.
 			if ( 
 				( ( function_exists( 'et_divi_load_scripts_styles' ) || function_exists( 'dbp_filter_bfb_enabled' ) ) && ! empty( $_REQUEST['et_fb'] ) && ! empty( $_REQUEST['et_bfb'] ) ) // Divi
-				|| ( class_exists( 'Brizy_Editor' ) && ( isset( $_GET[ Brizy_Editor::prefix( '-edit' ) ] ) || isset( $_GET[ Brizy_Editor::prefix( '-edit-iframe' ) ] ) ) ) // Brizy
+				|| (
+					class_exists( 'Brizy_Editor' ) &&
+					(
+						( isset( $_GET[ Brizy_Editor::prefix( '-edit' ) ] ) || isset( $_GET[ Brizy_Editor::prefix( '-edit-iframe' ) ] ) ) ||
+						Brizy_Editor_Entity::isBrizyEnabled( geodir_search_page_id() )
+					)
+				) // Brizy
 			) {
 			} else {
 				$q->is_page = false;
