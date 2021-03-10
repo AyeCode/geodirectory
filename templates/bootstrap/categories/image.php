@@ -1,4 +1,9 @@
 <?php
+/**
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory\Templates
+ * @version    2.1.0.11
+ */
 
 //$cpt_row = $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
 //$cpt_row .= $depth ? '' : '<div class="card-body text-center btn btn-outline-primary p-1 py-4">';
@@ -77,5 +82,3 @@ if(!$hide_icon){
 //	</div>
 //</div>
 ?>
-
-
