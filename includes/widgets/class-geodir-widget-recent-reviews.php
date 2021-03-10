@@ -92,6 +92,15 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false,
 					'group'    => __( "Filter", "geodirectory" )
+				),
+				'post_id'    => array(
+					'title'    => __('Reviews for Post ID:', 'geodirectory'),
+					'desc'     => __('Filter by current or ID or blank (default = unfiltered). current: filters reviews submitted under current viewing post. ID: filters reviews submitted under specific post id. Leave blank to not apply post id filter.', 'geodirectory'),
+					'type'     => 'text',
+					'default'  => '',
+					'desc_tip' => true,
+					'advanced' => false,
+					'group'    => __( "Filter", "geodirectory" )
 				)
             )
         );
@@ -181,10 +190,12 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
             'title' => '',
             'count' => '5',
             'min_rating' => 0,
-			'add_location_filter' => '',
-			'use_viewing_post_type' => '',
-	        'row_items' => '',
-	        'carousel'  => '',
+            'add_location_filter' => '',
+            'use_viewing_post_type' => '',
+            'row_items' => '',
+            'review_by_author' => '',
+            'post_id' => '',
+            'carousel' => '',
             'bg'    => '',
             'mt'    => '',
             'mb'    => '3',
@@ -198,7 +209,6 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
             'rounded'    => '',
             'rounded_size'    => '',
             'shadow'    => '',
-			'review_by_author' => '',
         );
         $instance = wp_parse_args( $args, $defaults );
 
@@ -299,6 +309,26 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			}
 		}
 
+		/**
+		 * Filter the widget post_id param.
+		 *
+		 * @since 2.1.1.0
+		 *
+		 * @param string $instance ['post_id'] Filter by author.
+		 */
+		$post_id = empty( $instance['post_id'] ) ? '' : apply_filters( 'widget_review_by_post_id', $instance['post_id'], $instance, $this->id_base );
+
+		if ( ! empty( $post_id ) ) {
+			// 'current' left for backwards compatibility.
+			if ( $post_id === 'current' ) {
+				$post_id = get_the_ID();
+			} elseif ( absint( $post_id ) > 0 ) {
+				$post_id = absint( $post_id );
+			} else {
+				$post_id = -1; // Don't show review widget.
+			}
+		}
+
 	    // wrap class
 	    $wrap_class = geodir_build_aui_class($instance);
 
@@ -324,7 +354,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		    }
 	    }
 
-	    $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter,$instance['min_rating'],$instance['carousel'], $review_by_author );
+	    $comments_li = self::get_recent_reviews($g_size, $count, $excerpt_length, false, $post_type, $add_location_filter,$instance['min_rating'],$instance['carousel'], $review_by_author, $post_id );
 
 		$content = '';
         if ( !empty( $comments_li ) ) {
@@ -378,7 +408,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 	 *
 	 * @return string Returns the recent reviews html.
 	 */
-	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0, $carousel = '', $review_by_author = '' ) {
+	public static function get_recent_reviews( $g_size = 60, $no_comments = 10, $comment_lenth = 60, $show_pass_post = false, $post_type = '', $add_location_filter = false, $min_rating = 0, $carousel = '', $review_by_author = '', $post_id = '' ) {
 		global $wpdb, $tablecomments, $tableposts, $rating_table_name, $table_prefix;
 		$tablecomments = $wpdb->comments;
 		$tableposts    = $wpdb->posts;
@@ -395,6 +425,9 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 		}
 		if ( ! empty( $review_by_author ) ) {
 			$where .= $wpdb->prepare( ' AND r.user_id = %s', $review_by_author );
+		}
+		if ( ! empty( $post_id ) ) {
+			$where .= $wpdb->prepare( ' AND p.ID = %s', $post_id );
 		}
 
 		if ( GeoDir_Post_types::supports( $post_type, 'location' ) && $add_location_filter && defined( 'GEODIRLOCATION_VERSION' ) ) {
