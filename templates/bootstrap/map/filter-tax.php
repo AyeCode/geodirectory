@@ -65,11 +65,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 				<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="1"/>
 				<div class="geodir_toggle my-1">
 					<?php if ( geodir_lazy_load_map() ) { ?>
-					<div class="py-2 px-1 small"><div role="status" class="spinner-border text-white d-inline-block align-middle"></div><div class="ml-2 d-inline-block align-middle"><?php _e( "Loading categories...", "geodirectory" ); ?></div></div></div>
+					<div class="py-2 px-1 small"><div role="status" class="spinner-border text-white d-inline-block align-middle"></div><div class="ml-2 d-inline-block align-middle"><?php _e( "Loading categories...", "geodirectory" ); ?></div></div>
 					<?php } else { ?>
 					<?php echo GeoDir_Maps::get_categories_filter( $map_options['post_type'], 0, true, 0, $map_canvas, absint( $map_options['child_collapse'] ), $map_options['terms'], true, $map_options['tick_terms'] ); ?>
 					<script type="text/javascript">jQuery(window).on("load",function(){geodir_show_sub_cat_collapse_button('<?php echo $map_canvas; ?>');});</script>
 					<?php } ?>
+				</div>
 			<?php } else { ?>
 				<input type="hidden" id="<?php echo $map_canvas; ?>_cat_enabled" value="0"/>
 				<input type="hidden" id="<?php echo $map_canvas; ?>_child_collapse" value="0"/>
