@@ -6,6 +6,7 @@
 * GD > Categories icon color not working with icon top design - FIXED
 * Map marker hover bounce not working on lazy load map - FIXED
 * Cat filter on map breaks the design - FIXED
+* GD > Best of listings widget don't show empty categories - CHANGED
 
 = 2.1.0.10 =
 * Show x stars back instead of rating type name on hover of ratings - CHANGED
