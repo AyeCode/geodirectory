@@ -117,8 +117,46 @@ class GeoDir_Admin_Dummy_Data {
 							) );
 						}
 
+					}
+
+					// attach category default image
+					if ( ! empty( $category['default_img'] ) && isset( $category_return['term_id'] ) ) {
+						$uploaded = (array) GeoDir_Media::get_external_media( $category['default_img'] );
+
+
+						if ( ! empty( $uploaded['error'] ) ) {
+							continue;
+						}
+
+						if ( empty( $uploaded['file'] ) ) {
+							continue;
+						}
+
+						$wp_filetype = wp_check_filetype( basename( $uploaded['file'] ), null );
+
+						$attachment = array(
+							'guid'           => $uploads['baseurl'] . '/' . basename( $uploaded['file'] ),
+							'post_mime_type' => $wp_filetype['type'],
+							'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $uploaded['file'] ) ),
+							'post_content'   => '',
+							'post_status'    => 'inherit'
+						);
+						$attach_id  = wp_insert_attachment( $attachment, $uploaded['file'] );
+
+						// you must first include the image.php file
+						// for the function wp_generate_attachment_metadata() to work
+						require_once( ABSPATH . 'wp-admin/includes/image.php' );
+						$attach_data = wp_generate_attachment_metadata( $attach_id, $uploaded['file'] );
+						wp_update_attachment_metadata( $attach_id, $attach_data );
+
+						if ( isset( $attach_data['file'] ) ) {
+							update_term_meta( $category_return['term_id'], 'default_img', array( 'id'  => $attach_id,
+							                                                                     'src' => $attach_data['file']
+							) );
+						}
 
 					}
+
 				}
 
 			}
