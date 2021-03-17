@@ -258,8 +258,22 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
         $is_default = $val['is_default'];
 
         /* field available to site admin only for edit */
-        $for_admin_use = isset($val['for_admin_use']) && (int)$val['for_admin_use'] == 1 ? true : false;
-        if ($for_admin_use && !is_super_admin()) {
+        $for_admin_use = isset( $val['for_admin_use'] ) && (int) $val['for_admin_use'] == 1 ? true : false;
+        $is_hidden = ( $for_admin_use && ! is_super_admin() ) ? true : false;
+
+        /**
+         * Add listing form filter to hide post custom field.
+         *
+         * @since 2.1.0.11
+         *
+         * @param bool $is_hidden True to hide field.
+         * @param array $val Custom field array.
+         * @param int|string $package_id The package ID.
+         * @param string $default Optional. When set to "default" it will display only default fields.
+         */
+        $is_hidden = apply_filters( 'geodir_add_listing_custom_field_is_hidden', $is_hidden, $val, $package_id, $default );
+
+        if ( $is_hidden ) {
             continue;
         }
 
@@ -269,8 +283,6 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
             if (isset($_REQUEST['post']))
                 $_REQUEST['pid'] = $_REQUEST['post'];
         }
-
-        
 
         /**
          * Called before the custom fields info is output for submitting a post.
