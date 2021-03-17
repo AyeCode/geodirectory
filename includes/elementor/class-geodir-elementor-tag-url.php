@@ -54,20 +54,25 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 	 * Render the tag output.
 	 */
 	public function render() {
-
-		global $gd_post,$post;
+		global $gd_post, $post;
 
 		$value = '';
 		$key = $this->get_settings( 'key' );
 		$fallback = $this->get_settings( 'fallback_url' );
-		if ( !empty( $key ) ) {
-			if(isset($gd_post->{$key})){
 
-				if($key == 'post_category'){
-					$term_id = isset($gd_post->default_category) ? absint($gd_post->default_category) : '';
-					$term_url = get_term_link( $term_id, $post->post_type."category" );
-					$value = $term_url ? esc_url_raw($term_url) : '';
-				}else{
+		if ( ! empty( $key ) ) {
+			if ( isset( $gd_post->{$key} ) ) {
+				if ( $key == 'post_category' ) {
+					$term_id = isset( $gd_post->default_category ) ? absint( $gd_post->default_category ) : '';
+
+					if ( $term_id ) {
+						$term_url = get_term_link( $term_id, $post->post_type . "category" );
+
+						if ( $term_url && ! is_wp_error( $term_url ) ) {
+							$value = esc_url_raw( $term_url );
+						}
+					}
+				} else {
 					$cf = geodir_get_field_infoby('htmlvar_name', $key, $gd_post->post_type);
 					$field_type = !empty($cf['field_type']) ? esc_attr($cf['field_type']) : '';
 					$field_value = $gd_post->{$key};
