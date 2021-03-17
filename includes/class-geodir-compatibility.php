@@ -751,6 +751,7 @@ class GeoDir_Compatibility {
 			 || ( defined( 'PORTO_VERSION' ) ) // Porto
 			 || ( function_exists( 'wpbf_theme_setup' ) && ( empty( $meta_key ) || strpos( $meta_key, 'wpbf_' ) === 0 ) ) // Page Builder Framework
 			 || ( function_exists( 'generateblocks_do_activate' ) && strpos( $meta_key, '_generateblocks_' ) === 0 ) // GenerateBlocks plugin
+			 || ( defined( 'US_CORE_VERSION' ) && ( strpos( $meta_key, '_us_' ) === 0 || strpos( $meta_key, 'us_' ) === 0 || strpos( $meta_key, '_wpb_' ) === 0 ) ) // UpSolution Core plugin
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -1654,6 +1655,11 @@ class GeoDir_Compatibility {
 
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'generateblocks_enqueue_dynamic_css' ) );
 			add_action( 'wp_head', array( __CLASS__, 'generateblocks_print_inline_css' ) );
+		}
+
+		// UpSolution Core plugin
+		if ( defined( 'US_CORE_VERSION' ) && geodir_is_geodir_page() ) {
+			add_filter( 'us_get_page_area_id', array( __CLASS__, 'us_get_page_area_id' ), 10, 2 );
 		}
 	}
 
@@ -3265,5 +3271,36 @@ class GeoDir_Compatibility {
 	 */
 	public static function et_theme_builder_template_setting_validate_gd_search( $type, $subtype, $id, $setting ) {
 		return geodir_is_page( 'search' );
+	}
+
+	/**
+	 * Filter UpSolution Core page area id.
+	 *
+	 * @since 2.1.0.11
+	 *
+	 * @param int $area_id Page area id.
+	 * @param string $area Page area.
+	 * @return int Page area id.
+	 */
+	public static function us_get_page_area_id( $area_id, $area = 'none' ) {
+		$postID = self::gd_page_id();
+
+		if ( ! $postID || $area == 'none' ) {
+			return $area_id;
+		}
+
+		$area_id = usof_meta( 'us_' . $area . '_id', $postID );
+
+		// Reset Pages defaults
+		if ( $area_id == '__defaults__' ) {
+			$area_id = us_get_option( $area . '_id', '' );
+		}
+
+		// If you have WPML or Polylang plugins then check the translations
+		if ( has_filter( 'us_tr_object_id' ) && is_numeric( $area_id ) ) {
+			$area_id = (int) apply_filters( 'us_tr_object_id', $area_id );
+		}
+
+		return $area_id;
 	}
 }

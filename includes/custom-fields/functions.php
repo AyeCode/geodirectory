@@ -144,47 +144,43 @@ function geodir_post_custom_fields( $package_id = '', $default = 'all', $post_ty
  *
  * @return mixed|void
  */
-function geodir_get_cf_value($cf) {
-    global $post,$gd_post;
+function geodir_get_cf_value( $cf ) {
+    global $post, $gd_post;
     $value = '';
-    if (is_admin()) {
+    if ( is_admin() ) {
         global $post;
 
-
-        if (isset($_REQUEST['post'])) {
+        if ( isset( $_REQUEST['post'] ) ) {
             $_REQUEST['pid'] = (int)$_REQUEST['post'];
         }
-    }elseif(!empty($gd_post)){
+    } elseif ( ! empty( $gd_post ) ) {
 
     }
 
-    if(empty($gd_post) && !empty($post)){
-        $gd_post = geodir_get_post_info($post->ID);
+    if ( empty( $gd_post ) && ! empty( $post ) ) {
+        $gd_post = geodir_get_post_info( $post->ID );
     }
-
 
     // check if post content
-    if($cf['name']=='post_content'){
-        $value = get_post_field('post_content', $gd_post->ID);
-    }elseif($cf['name']=='post_date'){
-        $value = get_post_field('post_date', $gd_post->ID);
-    }elseif($cf['name']=='address'){
-        $value = geodir_get_post_meta($gd_post->ID, 'street', true);
-    }else{
-        $value = geodir_get_post_meta($gd_post->ID, $cf['name'], true);
+    if ( $cf['name'] == 'post_content' ) {
+        $value = get_post_field( 'post_content', $gd_post->ID );
+    } elseif ( $cf['name'] == 'post_date' ) {
+        $value = get_post_field( 'post_date', $gd_post->ID );
+    } elseif ( $cf['name'] == 'address' ) {
+        $value = geodir_get_post_meta( $gd_post->ID, 'street', true );
+    } else {
+        $value = geodir_get_post_meta( $gd_post->ID, $cf['name'], true );
     }
 
     // Set defaults
-    if ($value == '' && $gd_post->post_status=='auto-draft') {
+    if ( ( $value == '' || $cf['type'] == 'checkbox' ) && $gd_post->post_status == 'auto-draft' ) {
         $value = $cf['default'];
     }
 
     // Blank title for auto drafts
-    If($cf['name']=='post_title' && $value == __("Auto Draft")){ // no text domain used here on purpose as we are matching a core WP text.
+    if ( $cf['name'] == 'post_title' && $value == __( "Auto Draft" ) ) { // no text domain used here on purpose as we are matching a core WP text.
         $value = "";
     }
-
-
 
     /**
      * Filter the custom field value.

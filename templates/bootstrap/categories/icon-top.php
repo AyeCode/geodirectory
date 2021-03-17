@@ -1,4 +1,9 @@
 <?php
+/**
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory\Templates
+ * @version    2.1.0.11
+ */
 
 //$cpt_row = $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
 //$cpt_row .= $depth ? '' : '<div class="card-body text-center btn btn-outline-primary p-1 py-4">';
@@ -62,8 +67,10 @@ if(!$hide_icon){
 	$img_class =  $icon_size_class;
 	$icon_color_class = '';
 	$icon_color =  !empty($args['icon_color']) ? sanitize_html_class($args['icon_color']) : '';
-	if($icon_color){$icon_color_class = "text-$icon_color"; $cat_color = '';}
-	$icon = "<div class='gd-cptcat-cat-left border-0 mb-3 overflow-hidden  $img_class'><span class='gd-cptcat-icon $icon_color_class' " . ( $cat_color ? " style='color:" . sanitize_hex_color( $cat_color ) . ";'" : '' ) . ">$cat_icon</span></div>";
+	if($icon_color){$icon_color_class = " text-$icon_color"; $cat_color = '';}
+	$cat_color = $cat_color ? ' style="color:' . sanitize_hex_color( $cat_color ) . '"' : '';
+
+	$icon = "<div class='gd-cptcat-cat-left border-0 mb-3 overflow-hidden $img_class'><span class='gd-cptcat-icon" . $icon_color_class . "'" . $cat_color . ">$cat_icon</span></div>";
 }
 
 ?>
@@ -82,5 +89,3 @@ if(!$hide_icon){
 //	</div>
 //</div>
 ?>
-
-
