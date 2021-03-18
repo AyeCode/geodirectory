@@ -103,22 +103,34 @@ function geodir_cfi_input_output($cf){
     // admin only
     $admin_only = geodir_cfi_admin_only($cf);
 
+    $label = __( $cf['frontend_title'], 'geodirectory' );
+
+    if ( $cf['name'] == 'service_distance' ) {
+        $type = 'number';
+
+        if ( geodir_get_option( 'search_distance_long' ) == 'km' ) {
+            $label .= ' ' . __( '(km)', 'geodirectory');
+        } else {
+            $label .= ' ' . __( '(miles)', 'geodirectory');
+        }
+    }
+
     return aui()->input(
         array(
             'id'                => $cf['name'],
             'name'              => $cf['name'],
             'required'          => !empty($cf['is_required']) ? true : false,
-            'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-            'label_show'       => true,
-            'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+            'label'             => $label . $admin_only . $required,
+            'label_show'        => true,
+            'label_type'        => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'type'              => $type,
-            'title'             =>  $title,
+            'title'             => $title,
             'validation_text'   => $validation_msg,
-            'validation_pattern' => ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
+            'validation_pattern'=> ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
             'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
             'class'             => '',
-            'value'             => $value, // esc_attr(stripslashes($value))
-            'help_text'         => __($cf['desc'], 'geodirectory'),
+            'value'             => $value,
+            'help_text'         => __( $cf['desc'], 'geodirectory' ),
             'extra_attributes'  => $extra_attributes
         )
     );
