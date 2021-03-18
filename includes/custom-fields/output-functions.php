@@ -828,6 +828,10 @@ function geodir_cf_text($html,$location,$cf,$p='',$output=''){
                 }
             }
 
+            if ( $cf['htmlvar_name'] == 'service_distance' && ! empty( $value ) ) {
+                $value = geodir_show_distance( $value );
+            }
+
             // Return stripped value.
             if ( ! empty( $output ) && isset( $output['strip'] ) ) {
                 return $value;

@@ -1067,18 +1067,22 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 		$rows = (int) $wpdb->get_var( $sql );
 	} else {
 		/// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
-		if ( !empty($query_args['is_gps_query']) ) {
-			$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
-			if(wp_doing_ajax() && !empty($wp->query_vars['dist']) ){
-				$dist = (float)$wp->query_vars['dist'];
-			}
-
+		if ( ! empty( $query_args['is_gps_query'] ) ) {
 			/*
 			 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
 			 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
 			 */
 			if ( strpos( $where, ' HAVING ') === false && strpos( $groupby, ' HAVING ') === false &&  strpos( $fields, 'AS distance')) {
-				$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
+				if ( GeoDir_Post_types::supports( $post_type, 'service_distance' ) ) {
+					$having = " HAVING distance <= `{$table}`.`service_distance` ";
+				} else {
+					$dist = get_query_var( 'dist' ) ? (float) get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
+					if ( wp_doing_ajax() && ! empty( $wp->query_vars['dist'] ) ) {
+						$dist = (float)$wp->query_vars['dist'];
+					}
+					$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
+				}
+
 				if ( trim( $groupby ) != '' ) {
 					$groupby .= $having;
 				} else {
