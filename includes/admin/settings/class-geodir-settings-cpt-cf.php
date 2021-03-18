@@ -1239,6 +1239,34 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
+			$custom_fields['service_distance'] = array(
+				'field_type'  => 'text',
+				'class'       => 'gd-service-distance',
+				'icon'        => 'fas fa-arrows-alt-h',
+				'name'        => __( 'Service Distance', 'geodirectory' ),
+				'description' => __( 'Adds a input to set service area in distance.', 'geodirectory' ),
+				'defaults'    => array(
+					'data_type'          => 'VARCHAR',
+					'admin_title'        => 'Service Distance',
+					'frontend_title'     => 'Service Distance',
+					'frontend_desc'      => 'Enter your service area in distance. Ex: 10',
+					'htmlvar_name'       => 'service_distance',
+					'is_active'          => true,
+					'for_admin_use'      => false,
+					'default_value'      => '',
+					'show_in'            => '[detail]',
+					'is_required'        => false,
+					'validation_pattern' => '\d+(\.\d{2})?',
+					'validation_msg'     => 'Please enter valid service area in distance.',
+					'required_msg'       => '',
+					'field_icon'         => 'fas fa-arrows-alt-h',
+					'css_class'          => 'gd-service-distance',
+					'cat_sort'           => false,
+					'cat_filter'         => false,
+					'single_use'         => true
+				)
+			);
+
 			// Temporarily Closed
 			$custom_fields['temp_closed'] = array(
 				'field_type'  => 'checkbox',

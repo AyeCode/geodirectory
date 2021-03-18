@@ -102,13 +102,24 @@ function geodir_cfi_text($html,$cf){
         if(isset($cf['validation_msg']) && $cf['validation_msg']){
             $validation_msg = 'title="'.$cf['validation_msg'].'"';
         }else{$validation_msg='';}
+
+        $frontend_title = __( $cf['frontend_title'], 'geodirectory' );
+        if ( $cf['name'] == 'service_distance' ) {
+            $type = 'number';
+            $fix_html5_decimals =' lang="EN" ';
+
+            if ( geodir_get_option( 'search_distance_long' ) == 'km' ) {
+                $frontend_title .= ' ' . __( '(km)', 'geodirectory');
+            } else {
+                $frontend_title .= ' ' . __( '(miles)', 'geodirectory');
+            }
+        }
         ?>
 
         <div id="<?php echo $cf['name'];?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field';?> geodir_form_row clearfix gd-fieldset-details">
             <label for="<?php echo esc_attr( $cf['name'] ); ?>">
-                <?php $frontend_title = __($cf['frontend_title'], 'geodirectory');
-                echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
+                <?php echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; ?>
                 <?php if ($cf['is_required']) echo '<span>*</span>';?>
             </label>
             <input field_type="<?php echo $type;?>" name="<?php echo $cf['name'];?>" id="<?php echo $cf['name'];?>"

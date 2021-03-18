@@ -477,6 +477,7 @@ class GeoDir_Post_types {
 			case 'business_hours':
 			case 'featured':
 			case 'special_offers':
+			case 'service_distance':
 				$cf = geodir_get_field_infoby( 'htmlvar_name', $feature, $post_type );
 				if ( ! empty( $cf ) && ! empty( $cf['is_active'] ) ) {
 					$value = true;

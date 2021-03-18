@@ -288,19 +288,25 @@ class GeoDir_Query {
 	 * @return string
 	 */
 	public function posts_having( $clauses, $query = array() ) {
-
-		if(self::is_gd_main_query($query)) {
+		if ( self::is_gd_main_query( $query ) ) {
 			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $snear,$geodirectory;
-			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
-			if ( $support_location && ( $snear != '' || $latlon = $geodirectory->location->get_latlon() ) ) {
-				$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
 
+			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
+
+			if ( $support_location && ( $snear != '' || $latlon = $geodirectory->location->get_latlon() ) ) {
 				/* 
 				 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition. 
 				 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
 				 */
 				if ( strpos( $clauses['where'], ' HAVING ') === false && strpos( $clauses['groupby'], ' HAVING ') === false ) {
-					$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
+					if ( GeoDir_Post_types::supports( $geodir_post_type, 'service_distance' ) ) {
+						$_table = geodir_db_cpt_table( $geodir_post_type );
+						$having = " HAVING distance <= `{$_table}`.`service_distance` ";
+					} else {
+						$dist = get_query_var( 'dist' ) ? (float)get_query_var( 'dist' ) : geodir_get_option( 'search_radius', 5 );
+						$having = $wpdb->prepare( " HAVING distance <= %f ", $dist );
+					}
+
 					if ( trim( $clauses['groupby'] ) != '' ) {
 						$clauses['groupby'] .= $having;
 					} else {

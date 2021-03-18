@@ -257,14 +257,18 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 
 		// ADD THE HAVING TO LIMIT TO THE EXACT RADIUS
 		if ( $latitude && $longitude ) {
-			$distance = ! empty( $request['dist'] ) ? (float) $request['dist'] : geodir_get_option( 'search_radius', 5 );
-
 			/*
 			 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition.
 			 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
 			 */
 			if ( strpos( $where, ' HAVING ' ) === false && strpos( $group_by, ' HAVING ' ) === false && strpos( $fields, 'AS distance' ) ) {
-				$having = $wpdb->prepare( " HAVING distance <= %f ", $distance );
+				if ( GeoDir_Post_types::supports( $request['post_type'], 'service_distance' ) ) {
+					$having = " HAVING distance <= `pd`.`service_distance` ";
+				} else {
+					$distance = ! empty( $request['dist'] ) ? (float) $request['dist'] : geodir_get_option( 'search_radius', 5 );
+					$having = $wpdb->prepare( " HAVING distance <= %f ", $distance );
+				}
+
 				if ( trim( $group_by ) != '' ) {
 					$group_by .= $having;
 				} else {
