@@ -743,6 +743,11 @@ class GeoDir_Admin_Install {
 			) $collate; ";
 
 		// Table for storing review info
+		/**
+		 * UNIQUE KEY replaced to PRIMARY KEY to prevent database error:
+		 * "Percona-XtraDB-Cluster prohibits use of DML command on a table without an explicit 
+		 * primary key with pxc_strict_mode = ENFORCING or MASTER"
+		 */
 		$tables .= " CREATE TABLE " . GEODIR_REVIEW_TABLE . " (
 		  comment_id bigint(20) DEFAULT NULL,
 		  post_id bigint(20) DEFAULT '0',
@@ -756,7 +761,7 @@ class GeoDir_Admin_Install {
 		  country varchar(50) DEFAULT '',
 		  latitude varchar(22) DEFAULT '',
 		  longitude varchar(22) DEFAULT '',
-		  UNIQUE KEY comment_id (comment_id)
+		  PRIMARY KEY (comment_id)
 		) $collate; ";
 			
 		// Table to store api keys

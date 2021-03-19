@@ -3394,7 +3394,7 @@ class GeoDir_Compatibility {
 	 */
 	public static function oxygen_override_template_part( $template, $slug, $name ) {
 		if ( ! $slug && ! $name ) {
-			return $located;
+			return $template;
 		}
 
 		$_template = '';
