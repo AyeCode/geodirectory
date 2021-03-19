@@ -10,6 +10,7 @@
 * UpSolution Core plugin compatibility - ADDED
 * Hook added to extend "Admin Only" edit visibility to other user roles - ADDED
 * Field to filter posts by Service Distance added - ADDED
+* Allow geodirectory template override from theme directory - ADDED
 
 = 2.1.0.10 =
 * Show x stars back instead of rating type name on hover of ratings - CHANGED

@@ -1661,6 +1661,12 @@ class GeoDir_Compatibility {
 		if ( defined( 'US_CORE_VERSION' ) && geodir_is_geodir_page() ) {
 			add_filter( 'us_get_page_area_id', array( __CLASS__, 'us_get_page_area_id' ), 10, 2 );
 		}
+
+		// Oxygen plugin
+		if ( defined( 'CT_VERSION' ) ) {
+			add_filter( 'geodir_get_template', array( __CLASS__, 'oxygen_override_template' ), 11, 5 );
+			add_filter( 'geodir_get_template_part', array( __CLASS__, 'oxygen_override_template_part' ), 11, 3 );
+		}
 	}
 
 	/**
@@ -3302,5 +3308,127 @@ class GeoDir_Compatibility {
 		}
 
 		return $area_id;
+	}
+
+	/**
+	 * Get the geodirectory templates theme path.
+	 *
+	 * @since 2.1.0.11
+	 *
+	 * @return string Template path.
+	 */
+	public static function get_theme_template_path() {
+		$template = get_template();
+		$theme_root = get_theme_root( $template );
+
+		$theme_template_path = $theme_root . '/' . $template . '/' . untrailingslashit( geodir_get_theme_template_dir_name() );
+
+		return $theme_template_path;
+	}
+
+	/**
+	 * Oxygen locate theme template.
+	 *
+	 * @since 2.1.0.11
+	 *
+	 * @param string $template The template.
+	 * @return string The theme template.
+	 */
+	public static function oxygen_locate_template( $template ) {
+		$located = '';
+
+		if ( ! $template ) {
+			return $located;
+		}
+
+		$has_filter = has_filter( 'template', 'ct_oxygen_template_name' );
+
+		// Remove template filter
+		if ( $has_filter ) {
+			remove_filter( 'template', 'ct_oxygen_template_name' );
+		}
+
+		$_located = self::get_theme_template_path() . '/' . $template;
+
+		if ( file_exists( $_located ) ) {
+			$located = $_located;
+		}
+
+		// Add template filter
+		if ( $has_filter ) {
+			add_filter( 'template', 'ct_oxygen_template_name' );
+		}
+
+		return $located;
+	}
+
+	/**
+	 * Oxygen override theme template.
+	 *
+	 * @since 2.1.0.11
+	 *
+	 * @param string $located Located template.
+	 * @param string $template_name Template name.
+	 * @param array $located Template args.
+	 * @param string $template_path Template path.
+	 * @param string $default_path Template default path.
+	 * @return string Located template.
+	 */
+	public static function oxygen_override_template( $located, $template_name, $args, $template_path, $default_path ) {
+		if ( $_located = self::oxygen_locate_template( $template_name ) ) {
+			$located = $_located;
+		}
+
+		return $located;
+	}
+
+	/**
+	 * Oxygen override theme template part.
+	 *
+	 * @since 2.1.0.11
+	 *
+	 * @param string $template The template.
+	 * @param string $slug Template slug.
+	 * @param string $name Template name.
+	 * @return string Located template part.
+	 */
+	public static function oxygen_override_template_part( $template, $slug, $name ) {
+		if ( ! $slug && ! $name ) {
+			return $located;
+		}
+
+		$_template = '';
+
+		if ( $name ) {
+			// Look in yourtheme/geodirectory/slug-name.php
+			$_template = self::oxygen_locate_template( "{$slug}-{$name}.php" );
+		} else {
+			// Look in yourtheme/geodirectory/slug.php
+			$_template = self::oxygen_locate_template( "{$slug}.php" );
+		}
+
+		if ( $_template ) {
+			return $_template;
+		}
+
+		// Get default slug-name.php
+		if ( $name && file_exists( geodir_get_templates_dir() . "/{$slug}-{$name}.php" ) ) {
+			$_template = geodir_get_templates_dir() . "/{$slug}-{$name}.php";
+		} else if ( ! $name && file_exists( geodir_get_templates_dir() . "/{$slug}.php" ) ) {
+			$_template = geodir_get_templates_dir() . "/{$slug}.php";
+		}
+
+		if ( $_template ) {
+			return $_template;
+		}
+
+		// Look in yourtheme/geodirectory/slug.php
+		$_template = self::oxygen_locate_template( "{$slug}.php" );
+
+		if ( $_template ) {
+			$template = $_template;
+		}
+
+		return $template;
 	}
 }
