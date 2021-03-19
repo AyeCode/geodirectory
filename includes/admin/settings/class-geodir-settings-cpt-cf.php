@@ -1871,19 +1871,19 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 *
 		 * @return int|string
 		 */
-		public static function delete_custom_field($field_id){
-			global $wpdb,$plugin_prefix;
+		public static function delete_custom_field( $field_id ) {
+			global $wpdb;
 
-			$field_id = absint($field_id);
+			$field_id = absint( $field_id );
 
-			if ($field = $wpdb->get_row($wpdb->prepare("select htmlvar_name,post_type,field_type from " . GEODIR_CUSTOM_FIELDS_TABLE . " where id= %d", array($field_id)))) {
-				$wpdb->query($wpdb->prepare("delete from " . GEODIR_CUSTOM_FIELDS_TABLE . " where id= %d ", array($field_id)));
+			if ( $field = $wpdb->get_row( $wpdb->prepare( "SELECT htmlvar_name, post_type, field_type FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE id = %d LIMIT 1", array( $field_id ) ) ) ) {
+				$wpdb->query( $wpdb->prepare( "DELETE FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE id = %d", array( $field_id ) ) );
 
 				$post_type = $field->post_type;
 				$htmlvar_name = $field->htmlvar_name;
 
-				if ($post_type != '' && $htmlvar_name != '') {
-					$wpdb->query($wpdb->prepare("DELETE FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name=%s AND post_type=%s LIMIT 1", array($htmlvar_name, $post_type)));
+				if ( $post_type != '' && $htmlvar_name != '' ) {
+					$wpdb->query( $wpdb->prepare( "DELETE FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE htmlvar_name = %s AND post_type = %s LIMIT 1", array( $htmlvar_name, $post_type ) ) );
 				}
 
 				/**
@@ -1894,26 +1894,28 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				 * @param string $field->htmlvar_name The html variable name for the field.
 				 * @param string $post_type The post type the field belongs to.
 				 */
-				do_action('geodir_after_custom_field_deleted', $field_id, $field->htmlvar_name, $post_type);
-				
-				if ($field->field_type == 'address') {
-					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_address`");
-					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_city`");
-					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_region`");
-					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_country`");
-					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_zip`");
-					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_latitude`");
-					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_longitude`");
-					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_mapview`");
-					$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "_mapzoom`");
+				do_action( 'geodir_after_custom_field_deleted', $field_id, $field->htmlvar_name, $post_type );
+
+				$table =  geodir_db_cpt_table( $post_type );
+
+				if ( $field->field_type == 'address' ) {
+					$wpdb->query( "ALTER TABLE {$table} DROP `street`" );
+					$wpdb->query( "ALTER TABLE {$table} DROP `city`" );
+					$wpdb->query( "ALTER TABLE {$table} DROP `region`" );
+					$wpdb->query( "ALTER TABLE {$table} DROP `country`" );
+					$wpdb->query( "ALTER TABLE {$table} DROP `zip`" );
+					$wpdb->query( "ALTER TABLE {$table} DROP `latitude`" );
+					$wpdb->query( "ALTER TABLE {$table} DROP `longitude`" );
+					$wpdb->query( "ALTER TABLE {$table} DROP `mapview`" );
+					$wpdb->query( "ALTER TABLE {$table} DROP `mapzoom`" );
 				} else {
-					if ($field->field_type != 'fieldset') {
-						$wpdb->query("ALTER TABLE " . $plugin_prefix . $post_type . "_detail DROP `" . $field->htmlvar_name . "`");
+					if ( $field->field_type != 'fieldset' && $field->field_type != 'link_posts' ) {
+						$wpdb->query( "ALTER TABLE {$table} DROP `" . $field->htmlvar_name . "`" );
 					}
 				}
 
 				return $field_id;
-			}else{
+			} else {
 				return new WP_Error( 'invalid', __( "Invalid field.", "geodirectory" ) );
 			}
 		}
