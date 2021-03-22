@@ -338,13 +338,12 @@ class GeoDir_Frontend_Scripts {
 			/**
 			 * On unload page do some cleaning so back button cache does not store these values.
 			 */
-			window.onunload = function(){
+			jQuery(window).on("beforeunload", function(e) {
 				if(jQuery('.sgeo_lat').length ){
 					jQuery('.sgeo_lat').val('');
 					jQuery('.sgeo_lon').val('');
 				}
-			};
-
+			});
 		</script>
 		<?php
 	}
