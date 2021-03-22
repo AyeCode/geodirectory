@@ -39,8 +39,10 @@ if ( ! empty( $tabs_array ) ) {
 			$key = esc_attr( $tab['tab_key'] );
 			$name = stripslashes( esc_attr__( $tab['tab_name'], 'geodirectory' ) );
 			$data_toggle = $args['show_as_list'] ? '' : 'data-toggle="tab"';
+			$pill_js = $args['show_as_list'] && $args['tab_style'] ? 'onclick="jQuery(this).parent().parent().find(\'a\').removeClass(\'active\');jQuery(this).addClass(\'active\');"' : '';
 
-			echo '<li class="nav-item list-unstyled"><a class="nav-link text-nowrap '.$active.'"  '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';
+			// `list-unstyled` class added for some themes like Kadence that will prevent scroll when used as list
+			echo '<li class="nav-item list-unstyled"><a class="nav-link text-nowrap scroll-ignore '.$active.'" '.$pill_js.' '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';
 
 			$count++;
 		}
