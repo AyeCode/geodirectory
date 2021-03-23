@@ -1975,12 +1975,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 *
 		 * @return int|string
 		 */
-		public static function save_custom_field($field = array()){
-			global $wpdb, $plugin_prefix;
-			//print_r($field);
-			$field = self::sanatize_custom_field($field);
+		public static function save_custom_field( $field = array() ) {
+			global $wpdb;
 
-			//print_r($field);exit;
+			$field = self::sanatize_custom_field( $field );
 
 			//Ensure that field key/html var does not match standard wordpress columns
 			$wp_post_cols = array(
@@ -2006,18 +2004,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'post_mime_type',
 				'comment_count',
 			);
-			if(in_array( $field->htmlvar_name, $wp_post_cols )){
+
+			if ( in_array( $field->htmlvar_name, $wp_post_cols ) ) {
 				return new WP_Error( 'failed', __( "Field key name MUST NOT match a standard WordPress field, please use another key and re-save.", "geodirectory" ) );
 			}
 
 			// Check field exists.
-			$exists = self::field_exists($field);
+			$exists = self::field_exists( $field );
 
-			///if($exists){echo '###exizts';}else{echo '###nonexists';}
-
-			if(is_wp_error( $exists ) ){
+			if ( is_wp_error( $exists ) ) {
 				return new WP_Error( 'failed', $exists->get_error_message() );
-			}elseif( $exists && !$field->field_id ){
+			} else if ( $exists && !$field->field_id ) {
 				if ( $field->htmlvar_name == 'featured' ) {
 					return new WP_Error( 'failed', wp_sprintf( __( "%s field already exists, it can not be used twice.", "geodirectory" ),  $field->htmlvar_name ) );
 				} else {
@@ -2025,7 +2022,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				}
 			}
 
+			$table =  geodir_db_cpt_table( $field->post_type );
+			$old_field = geodir_get_field_infoby( 'htmlvar_name', $field->htmlvar_name, $field->post_type );
 			$column_attr = $field->data_type;
+
 			switch ($field->field_type){
 //				case 'address':
 //					echo $field->field_type; //@todo we need to do stuff here
@@ -2074,7 +2074,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 					// Update the field size to new max
 					if($exists) {
-						$meta_field_add = "ALTER TABLE " . $plugin_prefix . $field->post_type . "_detail CHANGE `" . $field->htmlvar_name . "` `" . $field->htmlvar_name . "` VARCHAR( $op_size ) NULL";
+						$meta_field_add = "ALTER TABLE {$table} CHANGE `" . $field->htmlvar_name . "` `" . $field->htmlvar_name . "` VARCHAR( $op_size ) NULL";
 						$alter_result   = $wpdb->query( $meta_field_add );
 						if ( $alter_result === false ) {
 							return new WP_Error( 'failed', __( "Column change failed, you may have too many columns.", "geodirectory" ) );
@@ -2090,19 +2090,45 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				case 'categories':
 					break;
 				case 'text':
-					if(isset($field->data_type) && ($field->data_type == "FLOAT" || $field->data_type == "DECIMAL")){
-						$decimal_place = isset($field->decimal_point) && $field->decimal_point ? $field->decimal_point : 2;
-						$column_attr = "DECIMAL(15,$decimal_place)";
-					}elseif(isset($field->data_type) && $field->data_type == "INT" ){
-						$column_attr = "INT";
-					}else{
+					$column_format = '';
+
+					if ( isset( $field->data_type ) && ( $field->data_type == "FLOAT" || $field->data_type == "DECIMAL" ) ) {
+						$decimal_place = isset( $field->decimal_point ) && $field->decimal_point ? absint( $field->decimal_point ) : 2;
+						$column_attr = "DECIMAL(" . ( 14 + $decimal_place ) . ",$decimal_place)";
+						$column_format = $column_attr;
+
+						if ( $field->db_default !== '' ) {
+							$db_default = $wpdb->prepare( " DEFAULT %f ", $field->db_default );
+						} else {
+							$db_default = " DEFAULT NULL ";
+						}
+					} else if ( isset( $field->data_type ) && $field->data_type == "INT" ) {
+						$column_attr = "BIGINT";
+						$column_format .= "BIGINT (20) NULL";
+
+						if ( $field->db_default !== '' ) {
+							$db_default = $wpdb->prepare( " DEFAULT %d ", $field->db_default );
+						} else {
+							$db_default = " DEFAULT NULL ";
+						}
+					} else {
 						$column_attr .= "( 254 ) NULL ";
+						$column_format .= "VARCHAR (254) NULL";
+
+						if ( $field->db_default !== '' ) {
+							$db_default = $wpdb->prepare( " DEFAULT %s ", $field->db_default );
+						} else {
+							$db_default = " DEFAULT NULL ";
+						}
 					}
 
-					if ($field->db_default != '') {
-						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
-					}
+					$column_attr .= $db_default;
+					$column_format .= $db_default;
 
+					// Update field data type if changed
+					if ( $exists && ! empty( $old_field ) && ! empty( $field->data_type ) && ( ( ! empty( $old_field->data_type ) && $field->data_type != $old_field->data_type ) || ( $field->data_type == "FLOAT" || $field->data_type == "DECIMAL" || $field->data_type == "INT" ) ) ) {
+						$wpdb->query( "ALTER TABLE {$table} CHANGE `" . $field->htmlvar_name . "` `" . $field->htmlvar_name . "` " . trim( $column_format ) );
+					}
 				break;
 				case 'int':
 				case 'INT':
@@ -2117,15 +2143,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				default:
 					$column_attr .= "( 254 ) NULL ";
 			}
-
-
-
-			// Serialise the extra info for the DB if needed
-//			$extra_field_query = '';
-//			if (!empty($extra_fields)) {
-//				$extra_field_query = serialize($extra_fields);
-//			}
-
 
 			$db_data = array(
 				'post_type' => $field->post_type,
@@ -2189,8 +2206,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				'%d', // for_admin_use
 			);
 
-			if($exists){
-
+			if ( $exists ) {
 				// Update the field settings.
 				$result = $wpdb->update(
 					GEODIR_CUSTOM_FIELDS_TABLE,
@@ -2199,13 +2215,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					$db_format
 				);
 				
-				if($result === false){
+				if ( $result === false ) {
 					return new WP_Error( 'failed', __( "Field update failed.x", "geodirectory" ) );
 				}
 
 				// @todo, should we ALTER the field type here to see if we can improve it, ie VARCHAR(123)
-
-			}else{
+			} else {
 				// Insert the field settings.
 				$result = $wpdb->insert(
 					GEODIR_CUSTOM_FIELDS_TABLE,
@@ -2224,21 +2239,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				if( ( !in_array($field->htmlvar_name,$default_fields) && ! apply_filters( 'geodir_cfa_skip_column_add', $field->field_type == 'fieldset', $field ) ) || !empty($field->add_column) ){
 
 					// Add the new column to the details table.
-					$add_details_column = geodir_add_column_if_not_exist($plugin_prefix . $field->post_type . '_detail', $field->htmlvar_name, $column_attr);
-					if ($add_details_column === false) {
+					$add_details_column = geodir_add_column_if_not_exist( $table, $field->htmlvar_name, $column_attr );
+					if ( $add_details_column === false ) {
 						return new WP_Error( 'failed', __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'geodirectory'));
 					}
-
 				}
-
-
-
 			}
-
 
 			// update or delete the sort order field.
 			self::save_sort_item($field);
-
 
 			/**
 			 * Called after all custom fields are saved for a post.

@@ -996,6 +996,14 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						if ( ceil( $match_value ) > 0 ) {
 							$match_value = geodir_currency_format_number( $match_value, $field );
 						}
+					} else if ( isset( $field['data_type'] ) && $field['data_type'] == 'INT' ) {
+						if ( ceil( $match_value ) > 0 ) {
+							$match_value = geodir_cf_format_number( $match_value, $field );
+						}
+					} else if ( isset( $field['data_type'] ) && ( $field['data_type'] == 'FLOAT' || $field['data_type'] == 'DECIMAL' ) ) {
+						if ( ceil( $match_value ) > 0 ) {
+							$match_value = geodir_cf_format_decimal( $match_value, $field );
+						}
 					}
 				}
 

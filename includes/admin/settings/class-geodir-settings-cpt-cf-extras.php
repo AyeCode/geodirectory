@@ -147,156 +147,202 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			return "<input type=\"hidden\" name=\"is_required\" value=\"1\" />";
 		}
 
+		/**
+		 * Price fields.
+		 *
+		 * @since 2.0.0
+		 *
+		 * @param string $output Price fields html output.
+		 * @param string $result_str Price fields results.
+		 * @param array $cf Custom fields value.
+		 * @param object $field_info Price fiels information.
+		 * @return string $output.
+		 */
+		public static function price_fields( $output, $result_str, $cf, $field_info ) {
+			$extra_fields = isset( $field_info->extra_fields ) && $field_info->extra_fields != '' ? maybe_unserialize( $field_info->extra_fields ) : '';
+			$radio_id = isset( $field_info->htmlvar_name ) ? $field_info->htmlvar_name : rand( 5, 500 );
 
-        /**
-         * Price fields.
-         *
-         * @since 2.0.0
-         *
-         * @param string $output Price fields html output.
-         * @param string $result_str Price fields results.
-         * @param array $cf Custom fields value.
-         * @param object $field_info Price fiels information.
-         * @return string $output.
-         */
-		public static function price_fields($output,$result_str,$cf,$field_info){
-			ob_start();
+			$data_type = isset( $field_info->data_type ) ? $field_info->data_type : '';
 
-			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
-			$radio_id = (isset($field_info->htmlvar_name)) ? $field_info->htmlvar_name : rand(5, 500);
+			$is_int = $data_type == 'INT' ? 1 : 0;
+			$is_float = $data_type == 'FLOAT' || $data_type == 'DECIMAL' ? 1 : 0;
+			$is_char = ! $is_int && ! $is_float ? 1 : 0;
 
-			$value = '';
-			if ($extra_fields && isset($extra_fields['is_price'])) {
-				$value = esc_attr($extra_fields['is_price']);
-			}elseif(isset($cf['defaults']['extra_fields']['is_price']) && $cf['defaults']['extra_fields']['is_price']){
-				$value = esc_attr($cf['defaults']['extra_fields']['is_price']);
+			// is_price
+			$is_price = 0;
+			if ( ! empty( $extra_fields ) && isset( $extra_fields['is_price'] ) ) {
+				$is_price = (int) $extra_fields['is_price'];
+			} else if ( isset( $cf['defaults']['extra_fields']['is_price'] ) && $cf['defaults']['extra_fields']['is_price'] ) {
+				$is_price = (int) $cf['defaults']['extra_fields']['is_price'];
 			}
 
+			// thousand_separator
+			$thousand_separator = 'comma';
+			if ( $extra_fields && isset( $extra_fields['thousand_separator'] ) ) {
+				$thousand_separator = esc_attr( $extra_fields['thousand_separator'] );
+			} else if ( isset( $cf['defaults']['extra_fields']['thousand_separator'] ) && $cf['defaults']['extra_fields']['thousand_separator'] ) {
+				$thousand_separator = esc_attr( $cf['defaults']['extra_fields']['thousand_separator'] );
+			}
 
-			$show_price_extra = ($value==1) ? 1 : 0;
+			// decimal_separator
+			$decimal_separator = '.';
+			if ( $extra_fields && isset( $extra_fields['decimal_separator'] ) ) {
+				$decimal_separator = esc_attr( $extra_fields['decimal_separator'] );
+			} else if ( isset( $cf['defaults']['extra_fields']['decimal_separator'] ) && $cf['defaults']['extra_fields']['decimal_separator'] ) {
+				$decimal_separator = esc_attr( $cf['defaults']['extra_fields']['decimal_separator'] );
+			}
 
-			$show_price = (isset($field_info->data_type) && ($field_info->data_type=='INT' || $field_info->data_type=='FLOAT')) ? 1 : 0;
+			// decimal_point
+			$decimal_point = 2;
+			if ( ! empty( $field_info ) && isset( $field_info->decimal_point ) ) {
+				$decimal_point = (int) $field_info->decimal_point;
+			} else if ( $extra_fields && isset( $extra_fields['decimal_point'] ) ) {
+				$decimal_point = (int) $extra_fields['decimal_point'];
+			} else if ( isset( $cf['defaults']['decimal_point'] ) && $cf['defaults']['decimal_point'] ) {
+				$decimal_point = (int) $cf['defaults']['decimal_point'];
+			} else if ( isset( $cf['defaults']['extra_fields']['decimal_point'] ) && $cf['defaults']['extra_fields']['decimal_point'] ) {
+				$decimal_point = (int) $cf['defaults']['extra_fields']['decimal_point'];
+			}
+
+			// decimal_display
+			$decimal_display = '';
+			if ( $extra_fields && isset( $extra_fields['decimal_display'] ) ) {
+				$decimal_display = esc_attr( $extra_fields['decimal_display'] );
+			} else if ( isset( $cf['defaults']['extra_fields']['decimal_display'] ) && $cf['defaults']['extra_fields']['decimal_display'] ) {
+				$decimal_display = esc_attr( $cf['defaults']['extra_fields']['decimal_display'] );
+			}
+
+			// currency_symbol
+			$currency_symbol = '';
+			if ( $extra_fields && isset( $extra_fields['currency_symbol'] ) ) {
+				$currency_symbol = esc_attr( $extra_fields['currency_symbol'] );
+			} else if ( isset( $cf['defaults']['extra_fields']['currency_symbol'] ) && $cf['defaults']['extra_fields']['currency_symbol'] ) {
+				$currency_symbol = esc_attr( $cf['defaults']['extra_fields']['currency_symbol'] );
+			}
+
+			// currency_symbol_placement
+			$currency_symbol_placement = '';
+			if ( $extra_fields && isset( $extra_fields['currency_symbol_placement'] ) ) {
+				$currency_symbol_placement = esc_attr( $extra_fields['currency_symbol_placement'] );
+			} else if ( isset( $cf['defaults']['extra_fields']['currency_symbol_placement'] ) && $cf['defaults']['extra_fields']['currency_symbol_placement'] ) {
+				$currency_symbol_placement = esc_attr( $cf['defaults']['extra_fields']['currency_symbol_placement'] );
+			}
+
+			$is_price_style = '';
+			$thousand_separator_style = '';
+			$decimal_separator_style = '';
+			$decimal_point_style = '';
+			$decimal_display_style = '';
+			$currency_symbol_style = '';
+			$price_heading_style = '';
+			$currency_symbol_placement_style = '';
+			if ( ! ( $is_int || $is_float ) ) {
+				$is_price = 0;
+				$thousand_separator = 'none';
+
+				$price_heading_style = 'style="display:none;"';
+				$is_price_style = 'style="display:none;"';
+				$thousand_separator_style = 'style="display:none;"';
+			}
+
+			if ( ! $is_float ) {
+				$decimal_point = '';
+
+				$decimal_separator_style = 'style="display:none;"';
+				$decimal_display_style = 'style="display:none;"';
+				$decimal_point_style = 'style="display:none;"';
+			}
+
+			if ( ! $is_price ) {
+				$currency_symbol = '';
+
+				$currency_symbol_style = 'style="display:none;"';
+				$currency_symbol_placement_style = 'style="display:none;"';
+			}
+			ob_start();
 			?>
-			<p class="gdcf-price-extra-set" <?php if(!$show_price){ echo "style='display:none;'";}?>  data-gdat-display-switch-set="gdat-extra_is_price" data-setting="is_price">
+			<h3 class="gd-advanced-setting" data-setting="price_heading" <?php echo $price_heading_style; ?>><?php _e( 'Price Options', 'geodirectory' ); ?></h3>
+			<p class="gdcf-price-extra-set" data-gdat-display-switch-set1="gdat-extra_is_price" data-setting="is_price" <?php echo $is_price_style; ?>>
 				<label for="is_price" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select if this field should be displayed as a price value.', 'geodirectory' ));
 					_e('Display as price', 'geodirectory'); ?>
 					<input type="hidden" name="extra[is_price]" value="0" />
-					<input type="checkbox" name="extra[is_price]" value="1" <?php checked( $value, 1, true );?> onclick="gd_show_hide_radio(this,'show','gdat-extra_is_price');" />
+					<input type="checkbox" name="extra[is_price]" value="1" <?php checked( $is_price, 1, true );?> onclick="gd_show_hide_radio(this,'show','gdat-extra_is_price');" />
 				</label>
 			</p>
-
-			<?php
-
-			$value = '';
-			if ($extra_fields && isset($extra_fields['thousand_separator'])) {
-				$value = esc_attr($extra_fields['thousand_separator']);
-			}elseif(isset($cf['defaults']['extra_fields']['thousand_separator']) && $cf['defaults']['extra_fields']['thousand_separator']){
-				$value = esc_attr($cf['defaults']['extra_fields']['thousand_separator']);
-			}
-			?>
-			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="thousand_separator">
-				<label for="thousand_separator" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' ));
-					_e('Thousand separator', 'geodirectory');?>
-					<select name="extra[thousand_separator]" id="thousand_separator">
-						<option value="comma" <?php selected(true, $value == 'comma');?>><?php _e(', (comma)', 'geodirectory'); ?></option>
-						<option value="slash" <?php selected(true, $value == "slash");?>><?php _e('\ (slash)', 'geodirectory'); ?></option>
-						<option value="period" <?php selected(true, $value == 'period');?>><?php _e('. (period)', 'geodirectory'); ?></option>
-						<option value="space" <?php selected(true, $value == 'space');?>><?php _e(' (space)', 'geodirectory'); ?></option>
-						<option value="none" <?php selected(true, $value == 'none');?>><?php _e('(none)', 'geodirectory'); ?></option>
-					</select>
-				</label>
-			</p>
-
-
-			<?php
-
-			$value = '';
-			if ($extra_fields && isset($extra_fields['decimal_separator'])) {
-				$value = esc_attr($extra_fields['decimal_separator']);
-			}elseif(isset($cf['defaults']['extra_fields']['decimal_separator']) && $cf['defaults']['extra_fields']['decimal_separator']){
-				$value = esc_attr($cf['defaults']['extra_fields']['decimal_separator']);
-			}
-			?>
-			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="decimal_separator">
-				<label for="decimal_separator" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select the decimal separator.', 'geodirectory' ));
-					_e('Decimal separator:', 'geodirectory');?>
-					<select name="extra[decimal_separator]" id="decimal_separator">
-						<option value="period" <?php selected(true, $value == 'period');?>><?php _e('. (period)', 'geodirectory'); ?></option>
-						<option value="comma" <?php selected(true, $value == "comma");?>><?php _e(', (comma)', 'geodirectory'); ?></option>
-					</select>
-				</label>
-			</p>
-
-			<?php
-
-			$value = '';
-			if ($extra_fields && isset($extra_fields['decimal_display'])) {
-				$value = esc_attr($extra_fields['decimal_display']);
-			}elseif(isset($cf['defaults']['extra_fields']['decimal_display']) && $cf['defaults']['extra_fields']['decimal_display']){
-				$value = esc_attr($cf['defaults']['extra_fields']['decimal_display']);
-			}
-			?>
-			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="decimal_display">
-				<label for="decimal_display" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select how the decimal is displayed.', 'geodirectory' ));
-					_e('Decimal display:', 'geodirectory');?>
-					<select name="extra[decimal_display]" id="decimal_display">
-						<option value="if" <?php selected(true, $value == 'if');?>><?php _e('If used (not .00)', 'geodirectory'); ?></option>
-						<option value="allways" <?php selected(true, $value == "allways");?>><?php _e('Always (.00)', 'geodirectory'); ?></option>
-					</select>
-				</label>
-			</p>
-
-			<?php
-
-			$value = '';
-			if ($extra_fields && isset($extra_fields['currency_symbol'])) {
-				$value = esc_attr($extra_fields['currency_symbol']);
-			}elseif(isset($cf['defaults']['extra_fields']['currency_symbol']) && $cf['defaults']['extra_fields']['currency_symbol']){
-				$value = esc_attr($cf['defaults']['extra_fields']['currency_symbol']);
-			}
-			?>
-			<p class="gdat-extra_is_price" data-setting="currency_symbol">
+			<p class="gdat-extra_is_price" data-setting="currency_symbol" <?php echo $currency_symbol_style; ?>>
 				<label for="currency_symbol" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select the currency symbol.', 'geodirectory' ));
 					_e('Currency symbol:', 'geodirectory');?>
-					<input type="text" name="extra[currency_symbol]" id="currency_symbol" value="<?php echo esc_attr($value); ?>"/>
+					<input type="text" name="extra[currency_symbol]" id="currency_symbol" value="<?php echo $currency_symbol; ?>"/>
 				</label>
 			</p>
-
-			<?php
-
-			$value = '';
-			if ($extra_fields && isset($extra_fields['currency_symbol_placement'])) {
-				$value = esc_attr($extra_fields['currency_symbol_placement']);
-			}elseif(isset($cf['defaults']['extra_fields']['currency_symbol_placement']) && $cf['defaults']['extra_fields']['currency_symbol_placement']){
-				$value = esc_attr($cf['defaults']['extra_fields']['currency_symbol_placement']);
-			}
-			?>
-			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="currency_symbol_placement">
+			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="currency_symbol_placement" <?php echo $currency_symbol_placement_style; ?>>
 				<label for="currency_symbol_placement" class="dd-setting-name">
 					<?php
 					echo geodir_help_tip( __( 'Select the currency symbol placement.', 'geodirectory' ));
 					_e('Currency symbol placement:', 'geodirectory');?>
 					<select name="extra[currency_symbol_placement]" id="currency_symbol_placement">
-						<option value="left" <?php selected(true, $value == 'left');?>><?php _e('Left', 'geodirectory'); ?></option>
-						<option value="right" <?php selected(true, $value == "right");?>><?php _e('Right', 'geodirectory'); ?></option>
+						<option value="left" <?php selected( true, $currency_symbol_placement == 'left' );?>><?php _e('Left', 'geodirectory'); ?></option>
+						<option value="right" <?php selected( true, $currency_symbol_placement == "right" );?>><?php _e('Right', 'geodirectory'); ?></option>
 					</select>
 				</label>
 			</p>
-
-
+			<p class="gd-advanced-setting" data-setting="thousand_separator" <?php echo $thousand_separator_style; ?>>
+				<label for="thousand_separator" class="dd-setting-name">
+					<?php
+					echo geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' ));
+					_e('Thousand separator', 'geodirectory');?>
+					<select name="extra[thousand_separator]" id="thousand_separator">
+						<option value="comma" <?php selected( true, $thousand_separator == 'comma' );?>><?php _e(', (comma)', 'geodirectory'); ?></option>
+						<option value="slash" <?php selected( true, $thousand_separator == "slash" );?>><?php _e('\ (slash)', 'geodirectory'); ?></option>
+						<option value="period" <?php selected( true, $thousand_separator == 'period' );?>><?php _e('. (period)', 'geodirectory'); ?></option>
+						<option value="space" <?php selected( true, $thousand_separator == 'space' );?>><?php _e(' (space)', 'geodirectory'); ?></option>
+						<option value="none" <?php selected( true, $thousand_separator == 'none' );?>><?php _e('(none)', 'geodirectory'); ?></option>
+					</select>
+				</label>
+			</p>
+			<p class="gd-advanced-setting" data-setting="decimal_separator" <?php echo $decimal_separator_style; ?>>
+				<label for="decimal_separator" class="dd-setting-name">
+					<?php
+					echo geodir_help_tip( __( 'Select the decimal separator.', 'geodirectory' ));
+					_e('Decimal separator:', 'geodirectory');?>
+					<select name="extra[decimal_separator]" id="decimal_separator">
+						<option value="period" <?php selected( true, $decimal_separator == 'period' );?>><?php _e('. (period)', 'geodirectory'); ?></option>
+						<option value="comma" <?php selected( true, $decimal_separator == "comma" );?>><?php _e(', (comma)', 'geodirectory'); ?></option>
+					</select>
+				</label>
+			</p>
+			<p class="dd-setting-name decimal-point-wrapper" data-setting="decimal_point" <?php echo $decimal_point_style; ?>>
+				<label for="decimal_point">
+					<?php
+					echo geodir_help_tip(__( 'Decimal point to display after point.', 'geodirectory' ));
+					_e( 'Select decimal point :', 'geodirectory' ); ?>
+					<select name="decimal_point" id="decimal_point">
+						<option value=""><?php echo _e( 'Select', 'geodirectory' ); ?></option>
+						<?php for ( $i = 1; $i <= 10; $i ++ ) {
+							$selected = $i == $decimal_point ? 'selected="selected"' : ''; ?>
+							<option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
+						<?php } ?>
+					</select>
+				</label>
+			</p>
+			<p class="gd-advanced-setting" data-setting="decimal_display" <?php echo $decimal_display_style; ?>>
+				<label for="decimal_display" class="dd-setting-name">
+					<?php
+					echo geodir_help_tip( __( 'Select how the decimal is displayed.', 'geodirectory' ));
+					_e('Decimal display:', 'geodirectory');?>
+					<select name="extra[decimal_display]" id="decimal_display">
+						<option value="if" <?php selected( true, $decimal_display == 'if' );?>><?php _e('If used (not .00)', 'geodirectory'); ?></option>
+						<option value="allways" <?php selected( true, $decimal_display == "allways" );?>><?php _e('Always (.00)', 'geodirectory'); ?></option>
+					</select>
+				</label>
+			</p>
 			<?php
-
 			$output .= ob_get_clean();
+
 			return $output;
 		}
 
@@ -935,31 +981,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 								echo 'selected="selected"';
 							} ?>><?php _e( 'DECIMAL', 'geodirectory' ); ?></option>
 						</select>
-				</label>
-			</p>
-
-			<?php
-			$value = '';
-			if ( isset( $field_info->decimal_point ) ) {
-				$value = esc_attr( $field_info->decimal_point );
-			} elseif ( isset( $cf['defaults']['decimal_point'] ) && $cf['defaults']['decimal_point'] ) {
-				$value = $cf['defaults']['decimal_point'];
-			}
-			?>
-
-			<p class="dd-setting-name decimal-point-wrapper"
-			    style="<?php echo ( $dt_value == 'FLOAT' ) ? '' : 'display:none' ?>" data-setting="decimal_point">
-				<label for="decimal_point">
-					<?php
-					echo geodir_help_tip(__( 'Decimal point to display after point.', 'geodirectory' ));
-					_e( 'Select decimal point :', 'geodirectory' ); ?>
-					<select name="decimal_point" id="decimal_point">
-						<option value=""><?php echo _e( 'Select', 'geodirectory' ); ?></option>
-						<?php for ( $i = 1; $i <= 10; $i ++ ) {
-							$selected = $i == $value ? 'selected="selected"' : ''; ?>
-							<option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
-						<?php } ?>
-					</select>
 				</label>
 			</p>
 			<?php
