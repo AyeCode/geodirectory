@@ -848,7 +848,6 @@ function geodir_string_values_to_options($option_values = '', $translated = fals
     return $options;
 }
 
-
 /**
  * Get currency number format.
  *
@@ -858,46 +857,134 @@ function geodir_string_values_to_options($option_values = '', $translated = fals
  * @param string $cf Optional. Custom fields. Default null.
  * @return string $number.
  */
-function geodir_currency_format_number($number='',$cf=''){
+function geodir_currency_format_number( $number = '', $cf = '' ) {
+	$extra_fields = isset( $cf['extra_fields'] ) ? maybe_unserialize( $cf['extra_fields'] ) : '';
 
-    $cs = isset($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : '';
+	$symbol = isset( $extra_fields['currency_symbol'] ) ? $extra_fields['currency_symbol'] : '$';
+	$decimals = isset( $cf['decimal_point'] ) && $cf['decimal_point'] ? $cf['decimal_point'] : 2;
+	$decimal_display = ! empty( $cf['decimal_display'] ) ? $cf['decimal_display'] : ( ! empty( $extra_fields['decimal_display'] ) ? $extra_fields['decimal_display'] : 'if' );
+	$decimalpoint = '.';
 
-    $symbol = isset($cs['currency_symbol']) ? $cs['currency_symbol'] : '$';
-    $decimals = isset($cf['decimal_point']) && $cf['decimal_point'] ? $cf['decimal_point'] : 2;
-    $decimal_display = !empty($cf['decimal_display']) ? $cf['decimal_display'] : (!empty($cs['decimal_display']) ? $cs['decimal_display'] : 'if');
-    $decimalpoint = '.';
+	if ( isset( $extra_fields['decimal_separator'] ) && $extra_fields['decimal_separator'] == 'comma' ) {
+		$decimalpoint = ',';
+	}
 
-    if(isset($cs['decimal_separator']) && $cs['decimal_separator']=='comma'){
-        $decimalpoint = ',';
-    }
+	$separator = ',';
 
-    $separator = ',';
+	if ( isset( $extra_fields['thousand_separator'] ) ) {
+		if ( $extra_fields['thousand_separator'] == 'comma' ) {
+			$separator = ',';
+		}
+		if ( $extra_fields['thousand_separator'] == 'slash' ) {
+			$separator = '\\';
+		}
+		if ( $extra_fields['thousand_separator'] == 'period' ) {
+			$separator = '.';
+		}
+		if ( $extra_fields['thousand_separator'] == 'space' ) {
+			$separator = ' ';
+		}
+		if ( $extra_fields['thousand_separator'] == 'none' ) {
+			$separator = '';
+		}
+	}
 
-    if(isset($cs['thousand_separator'])){
-        if($cs['thousand_separator']=='comma'){$separator = ',';}
-        if($cs['thousand_separator']=='slash'){$separator = '\\';}
-        if($cs['thousand_separator']=='period'){$separator = '.';}
-        if($cs['thousand_separator']=='space'){$separator = ' ';}
-        if($cs['thousand_separator']=='none'){$separator = '';}
-    }
+	$currency_symbol_placement = isset( $extra_fields['currency_symbol_placement'] ) ? $extra_fields['currency_symbol_placement'] : 'left';
 
-    $currency_symbol_placement = isset($cs['currency_symbol_placement']) ? $cs['currency_symbol_placement'] : 'left';
+	if ( $decimals > 0 && $decimal_display == 'if' ) {
+		if ( is_int( $number ) || floor( $number ) == $number ) {
+			$decimals = 0;
+		}
+	}
 
-    if($decimals>0 && $decimal_display=='if'){
-        if(is_int($number) || floor( $number ) == $number)
-            $decimals = 0;
-    }
+	$number = number_format( $number, $decimals, $decimalpoint, $separator );
 
-    $number = number_format($number,$decimals,$decimalpoint,$separator);
+	if ( $currency_symbol_placement == 'left' ) {
+		$number = $symbol . $number;
+	} else {
+		$number = $number . $symbol;
+	}
 
+	return $number;
+}
 
+/**
+ * Get custom field number format.
+ *
+ * @since 2.1.0.11
+ *
+ * @param string $number Optional. Number. Default null.
+ * @param string $cf Optional. Custom fields. Default null.
+ * @return string $number.
+ */
+function geodir_cf_format_number( $number = '', $cf = '' ) {
+	$extra_fields = isset( $cf['extra_fields'] ) ? maybe_unserialize( $cf['extra_fields'] ) : '';
+	$thousand_separator = isset( $extra_fields['thousand_separator'] ) ? $extra_fields['thousand_separator'] : '';
 
-    if($currency_symbol_placement=='left'){
-        $number = $symbol . $number;
-    }else{
-        $number = $number . $symbol;
-    }
+	if ( $thousand_separator == 'comma' ) {
+		$separator = ',';
+	} else if ( $thousand_separator == 'slash' ) {
+		$separator = '\\';
+	} else if ( $thousand_separator == 'period' ) {
+		$separator = '.';
+	} else if ( $thousand_separator == 'space' ) {
+		$separator = ' ';
+	} else {
+		$separator = '';
+	}
 
+	$number = number_format( floatval( $number ), 0, '', $separator );
 
-   return $number;
+	return $number;
+}
+
+/**
+ * Get custom field decimal format.
+ *
+ * @since 2.1.0.11
+ *
+ * @param string $number Optional. Number. Default null.
+ * @param string $cf Optional. Custom fields. Default null.
+ * @return string $number.
+ */
+function geodir_cf_format_decimal( $number = '', $cf = '' ) {
+	$extra_fields = isset( $cf['extra_fields'] ) ? maybe_unserialize( $cf['extra_fields'] ) : '';
+
+	$decimals = isset( $cf['decimal_point'] ) ? absint( $cf['decimal_point'] ) : 2;
+	$decimal_display = ! empty( $cf['decimal_display'] ) ? $cf['decimal_display'] : ( ! empty( $extra_fields['decimal_display'] ) ? $extra_fields['decimal_display'] : 'if' );
+	$decimalpoint = '.';
+
+	if ( isset( $extra_fields['decimal_separator'] ) && $extra_fields['decimal_separator'] == 'comma' ) {
+		$decimalpoint = ',';
+	}
+
+	$separator = ',';
+
+	if ( isset( $extra_fields['thousand_separator'] ) ) {
+		if ( $extra_fields['thousand_separator'] == 'comma' ) {
+			$separator = ',';
+		}
+		if ( $extra_fields['thousand_separator'] == 'slash' ) {
+			$separator = '\\';
+		}
+		if ( $extra_fields['thousand_separator'] == 'period' ) {
+			$separator = '.';
+		}
+		if ( $extra_fields['thousand_separator'] == 'space' ) {
+			$separator = ' ';
+		}
+		if ( $extra_fields['thousand_separator'] == 'none' ) {
+			$separator = '';
+		}
+	}
+
+	if ( $decimals > 0 && $decimal_display == 'if' ) {
+		if ( is_int( $number ) || floor( $number ) == $number ) {
+			$decimals = 0;
+		}
+	}
+
+	$number = number_format( $number, $decimals, $decimalpoint, $separator );
+
+	return $number;
 }

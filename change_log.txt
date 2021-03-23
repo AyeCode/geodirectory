@@ -14,6 +14,7 @@
 * Some database with pxc_strict_mode prevents insert review without primary key - FIXED
 * Tabs list with kadence theme might not scroll on first click - FIXED
 * Tabs list as pills does not switch active class - FIXED
+* Custom field price options are working properly - FIXED
 
 = 2.1.0.10 =
 * Show x stars back instead of rating type name on hover of ratings - CHANGED
