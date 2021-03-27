@@ -960,11 +960,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 
 					$cpt_list .= $cpt_row;
-				}
 
-				// check if closed or not
-				if($design_style && $cpt_count == count($post_types) && !$close_wrap ){
-					$cpt_list .= '</div></div>';
+					// check if closed or not
+					if($design_style && $cpt_count == count($post_types) && !$close_wrap ){
+						$cpt_list .= '</div></div>';
+					}
 				}
 
 			}
