@@ -30,12 +30,6 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_categories', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Categories','geodirectory'), // the name of the widget.
-            //'disable_widget'=> true,
-//	        'example'   => array(
-//		        'hide_count'    => true,
-//		        'hide_empty'    => true,
-//		        'design_type'   => 'icon_top'
-//	        ),
             'widget_ops'    => array(
                 'classname'   => 'geodir-categories-container '.geodir_bsui_class(), // widget class
                 'description' => esc_html__('Shows a list of GeoDirectory categories.','geodirectory'), // widget description
@@ -149,6 +143,18 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	                'advanced' => false,
 	                'group'     => __("Design","geodirectory")
                 ),
+				'image_size' => array(
+					'type' => 'select',
+					'title' => __( 'Image size:', 'geodirectory' ),
+					'desc' => __( 'Image size to show category image.', 'geodirectory' ),
+					'options' => self::get_image_sizes(),
+					'value' => '',
+					'default' => 'medium',
+					'desc_tip' => true,
+					'advanced' => false,
+					'element_require' => '([%use_image%]=="1" || [%design_type%]=="image")',
+					'group' => __( 'Design', 'geodirectory' ),
+				),
                 'cpt_left'  => array(
                     'title' => __('Show single column:', 'geodirectory'),
                     'desc' => __('This will show list in single column.', 'geodirectory'),
@@ -398,6 +404,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
             'hide_empty' => '0',
             'hide_count' => '0',
 	        'use_image' => '0',
+	        'image_size' => 'medium',
 			'cpt_ajax' => '0',
 			'filter_ids' => array(), // comma separated ids or array
 	        'title_tag' => 'h4',
@@ -674,6 +681,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		$hide_icon = !empty($args['hide_icon']) ? true : false;
 		$use_image = !empty($args['use_image']) ? true : false;
 		$cpt_left = !empty($args['cpt_left']) ? true : false;
+		$image_size = ! empty( $args['image_size'] ) ? $args['image_size'] : 'medium';
 
 		// Include/exclude terms
 		if ( ! empty( $args['filter_ids'] ) ) {
@@ -883,7 +891,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 									$cat_font_icon = false;
 									$img_background_class = !empty($args['design_type']) && $args['design_type']=='image' ? ' card-img' : 'mw-100 mh-100';
 									$img_args = $design_style ? array('class'=>'embed-item-cover-xy align-top '.$img_background_class) : array();
-									$term_icon_url = wp_get_attachment_image($term_image['id'],'medium',false,$img_args);
+									$term_icon_url = wp_get_attachment_image( $term_image['id'], $image_size, false, $img_args );
 								}
 							}
 
@@ -952,11 +960,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 
 					$cpt_list .= $cpt_row;
-				}
 
-				// check if closed or not
-				if($design_style && $cpt_count == count($post_types) && !$close_wrap ){
-					$cpt_list .= '</div></div>';
+					// check if closed or not
+					if($design_style && $cpt_count == count($post_types) && !$close_wrap ){
+						$cpt_list .= '</div></div>';
+					}
 				}
 
 			}
@@ -1125,6 +1133,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	 */
 	public static function child_cats( $parent_id, $cpt, $hide_empty, $hide_count, $sort_by, $max_count, $max_level, $term_icons,$hide_icon, $use_image, $depth = 1, $filter_terms = array(), $args = array() ) {
 		$cat_taxonomy = $cpt . 'category';
+		$image_size = ! empty( $args['image_size'] ) ? $args['image_size'] : 'medium';
 
 		$orderby = 'count';
 		$order = 'DESC';
@@ -1186,7 +1195,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$term_image = get_term_meta( $category->term_id, 'ct_cat_default_img', true );
 				if(!empty($term_image['id'])){
 					$cat_font_icon = false;
-					$term_icon_url = wp_get_attachment_image($term_image['id'], 'medium');
+					$term_icon_url = wp_get_attachment_image( $term_image['id'], $image_size );
 				}
 			}
 
@@ -1211,5 +1220,30 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 
 		return $content;
+	}
+
+	/**
+	 * Get images sizes.
+	 *
+	 * @since 2.1.0.12
+	 *
+	 * @return array Image sizes.
+	 */
+	public static function get_image_sizes() {
+		$image_sizes = array( 
+			'' => 'default (medium)'
+		);
+
+		$sizes = get_intermediate_image_sizes();
+
+		if ( ! empty( $sizes ) ) {
+			foreach( $sizes as $size ) {
+				$image_sizes[ $size ] = $size;
+			}
+		}
+
+		$image_sizes['full'] = 'full';
+
+		return $image_sizes;
 	}
 }
