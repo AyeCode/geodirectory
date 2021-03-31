@@ -22,6 +22,10 @@ class GeoDir_Elementor_Template_Archive extends \ElementorPro\Modules\ThemeBuild
 		return __( 'GD Archive', 'elementor-pro' );
 	}
 
+	public static function get_site_editor_thumbnail_url() {
+		return ELEMENTOR_ASSETS_URL . 'images/app/site-editor/archive.svg';
+	}
+
 //	public function enqueue_scripts() {
 //		// In preview mode it's not a real Woocommerce page - enqueue manually.
 //		if ( Plugin::elementor()->preview->is_preview_mode( $this->get_main_id() ) ) {
