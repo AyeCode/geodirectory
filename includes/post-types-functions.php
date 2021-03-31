@@ -658,9 +658,7 @@ function geodir_get_sort_options( $post_type ) {
 
         return $sort_field_info;
     }
-
 }
-
 
 /**
  * Display list of sort options available in front end using dropdown.
@@ -670,52 +668,48 @@ function geodir_get_sort_options( $post_type ) {
  * @global object $wp_query WordPress Query object.
  * @todo this function can be made much simpler
  */
-function geodir_display_sort_options($post_type) {
-    global $wp_query;
+function geodir_display_sort_options( $post_type, $args = array() ) {
+	global $wp_query;
 
-    /**
-     * On search pages there should be no sort options, sorting is done by search criteria.
-     *
-     * @since 1.4.4
-     */
-    if ( is_search() ) {
-        return;
-    }
+	/**
+	 * On search pages there should be no sort options, sorting is done by search criteria.
+	 *
+	 * @since 1.4.4
+	 */
+	if ( is_search() ) {
+		return;
+	}
 
-    $gd_post_type = $post_type;
+	$sort_options_raw = geodir_get_sort_options( $post_type );
 
-    $sort_options = array();
-    $sort_options_raw = geodir_get_sort_options( $gd_post_type );
-    
+	$sort_options = array();
 
-    $sort_field_options = '';
+	if ( ! empty( $sort_options_raw ) && count( $sort_options_raw ) > 1 ) {
+		foreach ( $sort_options_raw as $sort ) {
+			$sort = stripslashes_deep( $sort );
 
-    if ( ! empty( $sort_options_raw ) && count($sort_options_raw) > 1 ) {
-        foreach ( $sort_options_raw as $sort ) {
-            $sort = stripslashes_deep( $sort ); // strip slashes
+			$sort->frontend_title = __( $sort->frontend_title, 'geodirectory' );
 
-            $sort->frontend_title = __( $sort->frontend_title, 'geodirectory' );
+			if ( $sort->htmlvar_name == 'comment_count' ) {
+				$sort->htmlvar_name = 'rating_count';
+			}
 
-            if ( $sort->htmlvar_name == 'comment_count' ) {
-                $sort->htmlvar_name = 'rating_count';
-            }
+			$sort_options[] = $sort;
+		}
+	}
 
-            $sort_options[] = $sort;
+	if ( ! empty( $sort_options ) ) {
+		$design_style = geodir_design_style();
 
-        }
-    }
+		$template = $design_style ? $design_style . "/loop/select-sort.php" : "loop/select-sort.php";
 
-    if ( !empty($sort_options) ) {
-
-        $design_style = geodir_design_style();
-        $template = $design_style ? $design_style."/loop/select-sort.php" : "loop/select-sort.php";
-        echo geodir_get_template_html( $template, array(
-            'sort_options' => $sort_options
-        ) );
-    }
-
+		echo geodir_get_template_html( $template, array(
+			'sort_options' => $sort_options,
+			'args' => $args
+		) );
+	}
 }
-add_action('geodir_extra_loop_actions','geodir_display_sort_options',5);
+add_action( 'geodir_extra_loop_actions', 'geodir_display_sort_options', 5, 2 );
 
 function geodir_reorder_post_types() {
 	$post_types = geodir_get_option( 'post_types', array() );
