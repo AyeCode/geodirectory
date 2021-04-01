@@ -191,6 +191,8 @@ class GeoDir_Compatibility {
 		if ( wp_doing_ajax() ) {
 			add_action( 'admin_init', array( __CLASS__, 'ajax_admin_init' ), 5 );
 		}
+
+		add_filter( 'geodir_link_to_lightbox_attrs', array( __CLASS__, 'link_to_lightbox_attrs' ), 10, 1 );
 	}
 
 	/**
@@ -3430,5 +3432,22 @@ class GeoDir_Compatibility {
 		}
 
 		return $template;
+	}
+
+	/**
+	 * Add attributes to the lightbox link element.
+	 *
+	 * @since 2.1.0.12
+	 *
+	 * @param string $attrs Attributes.
+	 * @return string Attributes.
+	 */
+	public static function link_to_lightbox_attrs( $attrs = '' ) {
+		// Elementor disable lightbox.
+		if( defined( 'ELEMENTOR_VERSION' ) ) {
+			$attrs .= ' data-elementor-open-lightbox="no"';
+		}
+
+		return $attrs;
 	}
 }
