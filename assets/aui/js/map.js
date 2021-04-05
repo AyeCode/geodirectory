@@ -658,7 +658,9 @@ function create_marker(item, map_canvas) {
             visible: true,
             clickable: true,
             icon: icon,
-            label: cs
+            label: cs,
+            zIndex: (item.zIndex ? item.zIndex : 0),
+            zIndexOrg: (item.zIndexOrg ? item.zIndexOrg : 0)
         });
         bounds.extend(latlng);
         // Adding a click event to the marker
@@ -1360,7 +1362,9 @@ function create_marker_osm(item, map_canvas) {
             label: cs,
             w: iconW,
             h: iconH,
-            clustered: (parseInt(options.marker_cluster) === 1) && typeof item.cs !== 'undefined' ? true : false
+            clustered: (parseInt(options.marker_cluster) === 1) && typeof item.cs !== 'undefined' ? true : false,
+            zIndex: (item.zIndex ? item.zIndex : 0),
+            zIndexOrg: (item.zIndexOrg ? item.zIndexOrg : 0)
         });
         if ((parseInt(options.marker_cluster) === 1) && cs) {
             var labels = cs.split("_");
