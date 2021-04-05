@@ -4,6 +4,7 @@
 * Option added GD > Loop Actions to hide layouts for frontend list view - ADDED
 * Elementor Them Builder layout preview image missing for GD Elementor templates - FIXED
 * Photos gallery opens multiple lightbox if Elementor is active - FIXED
+* Unable to save max upload size in decimal - FIXED
 
 = 2.1.0.11 =
 * Conflict of select2 basic version loaded - FIXED
