@@ -17,7 +17,6 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class GeoDir_Admin_Tools {
 
-
 	/**
 	 * GeoDir_Admin_Tools constructor.
 	 */
@@ -26,7 +25,7 @@ class GeoDir_Admin_Tools {
 		add_filter('geodir_load_db_language', array($this,'load_custom_field_translation') );
 		add_filter('geodir_load_db_language', array($this,'load_cpt_text_translation') );
 		add_filter('geodir_load_db_language', array($this,'load_gd_options_text_translation') );
-
+		add_filter('geodir_debug_tools', array( $this, 'extra_debug_tools' ), 99, 1 );
 	}
 
 	/**
@@ -141,6 +140,11 @@ class GeoDir_Admin_Tools {
 					$message = __( 'There was a problem creating the file, please check file permissions: ', 'geodirectory' ). geodir_plugin_path() . 'db-language.php';
 					$ran     = false;
 				}
+				break;
+			case 'cleanup' :
+				$return = $this->remove_unused_data();
+
+				$message = __( 'Unused options data removed.', 'geodirectory' );
 				break;
 			default :
 				$tools = $this->get_tools();
@@ -613,5 +617,49 @@ class GeoDir_Admin_Tools {
 		$translation_texts = !empty($translation_texts) ? array_unique($translation_texts) : $translation_texts;
 
 		return $translation_texts;
+	}
+
+	/**
+	 * Tool to remove unused GDv1 options.
+	 * 
+	 * @since 2.1.0.12
+	 */
+	public function extra_debug_tools( $tools ) {
+		if ( get_option( 'geodir_post_types' ) && version_compare( get_option( 'geodirectory_db_version' ), '2.0.0.0', '>=' ) ) {
+			$tools['cleanup'] = array(
+				'name'    => __( 'Delete Unused Options Data', 'geodirectory' ),
+				'button'  => __( 'Run', 'geodirectory' ),
+				'desc'    => __( 'Remove unused GDv1 options data which are no longer required in GDv2. This minimizes options database table to load options data more faster.', 'geodirectory' ),
+			);
+		}
+
+		return $tools;
+	}
+
+	/**
+	 * Remove unused GDv1 options.
+	 * 
+	 * @since 2.1.0.12
+	 */
+	public function remove_unused_data() {
+		global $wpdb;
+
+		$table = $wpdb->options;
+
+		// Matching option names
+		$wpdb->query( "DELETE FROM `{$table}` WHERE `option_name` LIKE 'tax_meta_gd_%' OR `option_name` LIKE 'geodir_cat_loc_%' OR `option_name` LIKE 'geodir_revision_%'" );
+		$wpdb->query( "DELETE FROM `{$table}` WHERE `option_name` LIKE 'geodir_changes_%' OR `option_name` LIKE 'geodir_bcc_%' OR `option_name` LIKE 'geodir_listing_%' OR `option_name` LIKE 'geodir_meta_%' OR `option_name` LIKE 'geodir_show_%' OR `option_name` LIKE 'geodir_un_%' OR `option_name` LIKE 'geodir_width_%' OR `option_name` LIKE 'geodir_disable_%' OR `option_name` LIKE 'geodir_default_%' OR `option_name` LIKE 'geodir_sidebars%' OR `option_name` LIKE 'geodir_theme_location_%' OR ( `option_name` LIKE 'geodir_post_%' AND `option_name` LIKE '%_email_%' )" );
+
+		// Addons options
+		$wpdb->query( "DELETE FROM `{$table}` WHERE `option_name` NOT LIKE '%_version%' AND ( `option_name` LIKE 'geodir_buddypress_%' OR `option_name` LIKE 'geodir_claim_%' OR `option_name` LIKE 'geodir_event_%' OR `option_name` LIKE 'geodir_franchise_%' OR `option_name` LIKE 'geodir_ga_%' OR `option_name` LIKE 'geodir_location_%' OR `option_name` LIKE 'geodir_payment_%' OR `option_name` LIKE 'geodir_recaptcha_%' OR `option_name` LIKE 'geodir_reviewrating_%' OR `option_name` LIKE 'geodir_search_%' OR `option_name` LIKE 'geodir_social_%' )" );
+
+		// Core options
+		$wpdb->query( "DELETE FROM `{$table}` WHERE `option_name` IN ( 'gd_place_dummy_data_type', 'gd_event_dummy_data_type', 'gd_term_icons', 'gd_theme_compat', 'gd_theme_compats', 'gdevents_installed', 'geodir_accept_term_condition', 'geodir_add_categories_url', 'geodir_add_list_page', 'geodir_add_listing_link_add_listing_nav', 'geodir_add_listing_link_user_dashboard', 'geodir_add_listing_mouse_scroll', 'geodir_add_listing_page', 'geodir_add_location_url', 'geodir_add_posttype_in_listing_nav', 'geodir_add_related_listing_posttypes', 'geodir_allow_cpass', 'geodir_allow_posttype_frontend', 'geodir_allow_wpadmin', 'geodir_author_desc_word_limit', 'geodir_author_view', 'geodir_autocompleter_autosubmit', 'geodir_autocompleter_matches_label', 'geodir_autocompleter_max_results', 'geodir_autocompleter_min_chars', 'geodir_checkout_page', 'geodir_coustem_css', 'geodir_custom_gmaps_detail', 'geodir_custom_gmaps_home', 'geodir_custom_gmaps_listing', 'geodir_desc_word_limit', 'geodir_detail_sidebar_left_section', 'geodir_email_enquiry_content', 'geodir_email_enquiry_subject', 'geodir_enable_autocompleter', 'geodir_enable_city', 'geodir_enable_country', 'geodir_enable_map_cache', 'geodir_enable_region', 'geodir_everywhere_in_city_dropdown', 'geodir_everywhere_in_country_dropdown', 'geodir_everywhere_in_region_dropdown', 'geodir_exclude_cat_on_map', 'geodir_exclude_cat_on_map_upgrade', 'geodir_exclude_post_type_on_map', 'geodir_favorite_link_user_dashboard', 'geodir_footer_scripts', 'geodir_forgot_password_content', 'geodir_forgot_password_subject', 'geodir_gd_booster_options', 'geodir_global_review_count', 'geodir_google_api_key', 'geodir_header_scripts', 'geodir_home_go_to', 'geodir_home_page', 'geodir_info_page', 'geodir_installed', 'geodir_invoices_page', 'geodir_lazy_load', 'geodir_load_map', 'geodir_login_page', 'geodir_map_onoff_dragging', 'geodir_marker_cluster_size', 'geodir_marker_cluster_type' )" );
+
+		$wpdb->query( "DELETE FROM `{$table}` WHERE `option_name` IN ( 'geodir_marker_cluster_zoom', 'geodir_near_field_default_text', 'geodir_near_me_dist', 'geodir_new_post_default_status', 'geodir_notify_post_edited', 'geodir_notify_post_submit', 'geodir_page_title_add-listing', 'geodir_page_title_author', 'geodir_page_title_cat-listing', 'geodir_page_title_edit-listing', 'geodir_page_title_favorite', 'geodir_page_title_pt', 'geodir_page_title_tag-listing', 'geodir_pagination_advance_info', 'geodir_paid_listing_status', 'geodir_post_added_success_msg_content', 'geodir_post_types', 'geodir_post_types_claim_listing', 'geodir_preview_page', 'geodir_registration_success_email_content', 'geodir_registration_success_email_subject', 'geodir_related_post_count', 'geodir_related_post_excerpt', 'geodir_related_post_listing_view', 'geodir_related_post_location_filter', 'geodir_related_post_relate_to', 'geodir_related_post_sortby', 'geodir_remove_unnecessary_fields', 'geodir_remove_url_seperator', 'geodir_renew_email_content', 'geodir_renew_email_content2', 'geodir_renew_email_content3', 'geodir_renew_email_subject', 'geodir_renew_email_subject2', 'geodir_renew_email_subject3', 'geodir_review_count_force_update', 'geodir_selected_cities', 'geodir_selected_countries', 'geodir_selected_regions', 'geodir_success_page', 'geodir_tabs', 'geodir_taxonomies', 'geodir_term_condition_page', 'geodir_tiny_editor', 'geodir_tiny_editor_event_reg_on_add_listing', 'geodir_update_locations_default_options', 'geodir_upload_max_filesize', 'geodir_use_wp_media_large_size', 'skip_install_geodir_pages' )" );
+
+		delete_option( 'geodir_post_types' );
+
+		return true;
 	}
 }
