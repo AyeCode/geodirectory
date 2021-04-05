@@ -81,14 +81,19 @@ class GeoDir_WP_Dashboard {
      * @return bool
      */
 	public function recent_reviews_html( $total_items = 5 ) {
+		$design_style = geodir_design_style();
 		$reviews = GeoDir_Widget_Recent_Reviews::get_recent_reviews( 50, $total_items, 140 );
 
 		if ( ! empty( $reviews ) ) {
-			echo '<div id="gd-latest-reviews" class="activity-block">';
+			echo '<div id="gd-latest-reviews" class="activity-block' . ( $design_style ? ' bsui' : '' ) . '">';
 				echo '<ul id="gd-review-list" data-wp-lists="list:comment">';
-					echo $reviews;			
+					echo $reviews;
 				echo '</ul>';
 			echo '</div>';
+
+			if ( $design_style ) {
+				echo '<style>#geodir_dashboard_recent_reviews .bsui .card .geodir_reviewer_image{float:left;margin:0 10px 0 -65px;}#geodir_dashboard_recent_reviews .bsui .card{word-wrap:break-word;display:block;margin-top:0;padding:0 0 0 65px;min-width:inherit;max-width:inherit;border:none;background:transparent;box-shadow:none;position: initial;}</style>';
+			}
 		} else {
 			return false;
 		}
