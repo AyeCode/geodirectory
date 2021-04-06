@@ -298,13 +298,13 @@ class GeoDir_Widget_Ninja_Forms extends WP_Super_Duper {
 		$show = apply_filters( 'geodir_show_ninja_form_widget', $show, $post, $args, $this );
 
 		if ( $show ) {
-
-
-            
 			$action_text = apply_filters( 'geodir_ninja_form_widget_action_text', $args['text'], $post->ID, $args );
 			$action_text = __( $action_text, 'geodirectory' );
 
             if ( $design_style ) {
+                if ( empty( $args['css_class'] ) ) {
+                    $args['css_class'] = '';
+                }
 
                 // margins
                 if ( !empty( $args['mt'] ) ) { $args['css_class'] .= " mt-".sanitize_html_class($args['mt'])." "; }
