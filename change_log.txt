@@ -1,6 +1,12 @@
 = 2.1.0.12 =
 * GD > Categories option added to choose image size - ADDED
 * Frontend delete listing don't prompt any response message with AUI - FIXED
+* Option added GD > Loop Actions to hide layouts for frontend list view - ADDED
+* Elementor Them Builder layout preview image missing for GD Elementor templates - FIXED
+* Photos gallery opens multiple lightbox if Elementor is active - FIXED
+* Unable to save max upload size in decimal - FIXED
+* Allow to set marker z-index via hook - ADDED
+* Tool added to removed unused GDv1 options - ADDED
 
 = 2.1.0.11 =
 * Conflict of select2 basic version loaded - FIXED

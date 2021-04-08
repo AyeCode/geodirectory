@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory/Templates
- * @version    2.1.0.1
+ * @version    2.1.0.12
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -78,25 +78,27 @@ global $gd_post;
 
 				// check if screenshot link is different
 				if($link_screenshot_to!='' && $link_screenshot_to!=$link_to && !$image->ID && stripos(strrev($image->type), "tohsneercs_") === 0){
+					$lightbox_attrs = apply_filters( 'geodir_link_to_lightbox_attrs', '' );
+
 					if($link_screenshot_to=='post'){
 						$link = get_the_permalink($post->ID);
 						$link_tag_open_ss = "<a href='%s'>";
 						$link_tag_close_ss = "</a>";
 					}elseif($link_screenshot_to=='lightbox'){
 						$link = geodir_get_image_src($image, 'large');
-						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image' data-lity>";
+						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image' data-lity {$lightbox_attrs}>";
 						$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
 					}elseif($link_screenshot_to=='lightbox_url'){
 						$field_key = str_replace("_screenshot","",$image->type);
 						$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
-						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image' data-lity>";
+						$link_tag_open_ss = "<a href='%s' class='geodir-lightbox-image' data-lity {$lightbox_attrs}>";
 						$link_tag_close_ss = "<i class=\"fas fa-search-plus\" aria-hidden=\"true\"></i></a>";
 					}elseif($link_screenshot_to=='url' || $link_screenshot_to=='url_same'){
 						$field_key = str_replace("_screenshot","",$image->type);
 						$target = $link_screenshot_to=='url' ? "target='_blank'" : '';
 						$link_icon = $link_screenshot_to=='url' ? "fas fa-external-link-alt" : 'fas fa-link';
 						$link = isset($gd_post->{$field_key}) ? $gd_post->{$field_key} : '';
-						$link_tag_open_ss = "<a href='%s' $target class='geodir-lightbox-image' rel='nofollow noopener noreferrer'>";
+						$link_tag_open_ss = "<a href='%s' $target class='geodir-lightbox-image' rel='nofollow noopener noreferrer' {$lightbox_attrs}>";
 						$link_tag_close_ss = "<i class=\"$link_icon\" aria-hidden=\"true\"></i></a>";
 					}
 

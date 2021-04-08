@@ -749,7 +749,7 @@ class GeoDir_Admin_Install {
 		 * primary key with pxc_strict_mode = ENFORCING or MASTER"
 		 */
 		$tables .= " CREATE TABLE " . GEODIR_REVIEW_TABLE . " (
-		  comment_id bigint(20) DEFAULT NULL,
+		  comment_id bigint(20) UNSIGNED NOT NULL,
 		  post_id bigint(20) DEFAULT '0',
 		  user_id bigint(20) DEFAULT '0',
 		  rating float DEFAULT '0',

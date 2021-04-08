@@ -1,13 +1,25 @@
 <?php
 /**
- * Select Layout (default)
+ * Select Layout
  *
- * @ver 1.0.0
+ * This template can be overridden by copying it to yourtheme/geodirectory/loop/select-layout.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory
+ * @version    2.1.0.12
+ *
+ * @param string $post_type The post type.
+ * @param array  $layouts Layout options.
+ * @param array  $args Template arguments.
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
+defined( 'ABSPATH' ) || exit;
 ?>
 <script type="text/javascript">/* <![CDATA[ */
 	<?php
@@ -99,14 +111,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 	});
 	/* ]]> */</script>
 <div class="geodir-list-view-select">
-	<select name="gd_list_view" id="gd_list_view" class="geodir-select" style="min-width:140px;border-radius:4px;"
-	        aria-label="<?php esc_attr_e( 'Layout', 'geodirectory' ) ?>">
+	<select name="gd_list_view" id="gd_list_view" class="geodir-select" style="min-width:140px;border-radius:4px;" aria-label="<?php esc_attr_e( 'Layout', 'geodirectory' ) ?>">
 		<?php
-		$layouts = geodir_get_layout_options(true);
-		if(!empty($layouts )){
-			foreach($layouts  as $key => $layout){
-				$layout_name = $key ? sprintf(__( 'View: Grid %d', 'geodirectory' ),$key) : __( 'View: List', 'geodirectory' );
-				echo '<option value="'.absint($key).'">'.esc_attr($layout).'</option>';
+		if ( ! empty( $layouts ) ) {
+			foreach ( $layouts as $key => $layout ) {
+				$layout_name = $key ? wp_sprintf( __( 'View: Grid %d', 'geodirectory' ), $key ) : __( 'View: List', 'geodirectory' );
+				echo '<option value="' . absint( $key ) . '">' . esc_attr( $layout ) . '</option>';
 			}
 		}
 		?>

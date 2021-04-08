@@ -979,6 +979,10 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'type' => 'number',
 					'css'  => 'min-width:300px;',
 					'default'  => '2',
+					'custom_attributes' => array(
+						'min' => '0.1',
+						'step' => '0.5'
+					),
 					'desc_tip' => true,
 					'advanced' => true
 				),

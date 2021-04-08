@@ -74,6 +74,10 @@ class GeoDir_Elementor_Template_Archive_Item extends \ElementorPro\Modules\Theme
 		return __( 'GD Archive Item', 'elementor-pro' );
 	}
 
+	public static function get_site_editor_thumbnail_url() {
+		return ELEMENTOR_ASSETS_URL . 'images/app/site-editor/single-post.svg';
+	}
+
 //	public static function get_editor_panel_config() {
 //		$config = parent::get_editor_panel_config();
 //		$config['widgets_settings']['woocommerce-gd_place-content'] = [
