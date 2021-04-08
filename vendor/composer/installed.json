@@ -53,24 +53,24 @@
     },
     {
         "name": "ayecode/wp-ayecode-ui",
-        "version": "0.1.44",
-        "version_normalized": "0.1.44.0",
+        "version": "0.1.46",
+        "version_normalized": "0.1.46.0",
         "source": {
             "type": "git",
             "url": "https://github.com/AyeCode/wp-ayecode-ui.git",
-            "reference": "fcc3be87df4f8d7b5c99d845d8da6f2e4a0fa823"
+            "reference": "8b9825d9fe52f6da57302358df1a920eec3bace3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/fcc3be87df4f8d7b5c99d845d8da6f2e4a0fa823",
-            "reference": "fcc3be87df4f8d7b5c99d845d8da6f2e4a0fa823",
+            "url": "https://api.github.com/repos/AyeCode/wp-ayecode-ui/zipball/8b9825d9fe52f6da57302358df1a920eec3bace3",
+            "reference": "8b9825d9fe52f6da57302358df1a920eec3bace3",
             "shasum": ""
         },
         "require": {
             "composer/installers": "~1.0",
             "php": ">=5.3.0"
         },
-        "time": "2021-03-22T14:47:40+00:00",
+        "time": "2021-04-07T17:56:42+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -259,12 +259,12 @@
         "source": {
             "type": "git",
             "url": "https://github.com/composer/installers.git",
-            "reference": "e0be7bd9c671b7da3d3ab73515850daeefdf8e28"
+            "reference": "0f4a400e1c678d2650c5c27cce9e534cc3305c2a"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer/installers/zipball/e0be7bd9c671b7da3d3ab73515850daeefdf8e28",
-            "reference": "e0be7bd9c671b7da3d3ab73515850daeefdf8e28",
+            "url": "https://api.github.com/repos/composer/installers/zipball/0f4a400e1c678d2650c5c27cce9e534cc3305c2a",
+            "reference": "0f4a400e1c678d2650c5c27cce9e534cc3305c2a",
             "shasum": ""
         },
         "require": {
@@ -282,7 +282,7 @@
             "symfony/phpunit-bridge": "^4.2 || ^5",
             "symfony/process": "^2.3"
         },
-        "time": "2021-03-22T07:10:04+00:00",
+        "time": "2021-04-05T08:39:13+00:00",
         "type": "composer-plugin",
         "extra": {
             "class": "Composer\\Installers\\Plugin",
@@ -360,6 +360,7 @@
             "majima",
             "mako",
             "mediawiki",
+            "miaoxing",
             "modulework",
             "modx",
             "moodle",

@@ -1,3 +1,9 @@
+= 0.1.46 =
+* JS function added to open embedded items in a lightbox gallery - ADDED
+
+= 0.1.45 =
+* Some texts missing a textdomain - FIXED
+
 = 0.1.44 =
 * Field description is missing for radio field - FIXED
 * WP 5.7 Gutenberg widgets screen breaks some AUI CSS - FIXED
