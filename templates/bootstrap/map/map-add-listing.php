@@ -99,9 +99,11 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     var oldstr_zip;
     var strictBounds;
     var doingGeocode = false;
+    var postal_town;
+    var locality;
     function geocodePosition(latLon, address) {
         console.log(address);
-        if (address && (address.locality || address.postal_town) && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
+        if (address && (locality || postal_town) && address.country!='TR' && address.country!='SG' ) {// turkey select address does not return enough info so we get info from GPS only.
             doGeoCode = address;
         } else {
             doGeoCode = {
@@ -113,7 +115,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             geocodeResponse(responses);
         });
     }
-    
+
     function geocodeResponse(responses) {
         console.log(responses);//keep this for debugging
         if (responses && responses.length > 0) {
