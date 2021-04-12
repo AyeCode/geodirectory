@@ -1,5 +1,6 @@
 = 2.1.0.13 =
 * Small fix for the way some addresses are geocoded if "postal_town" is present - FIXED
+* Borlabs Cookie plugin integration added for GD maps - ADDED
 
 = 2.1.0.12 =
 * GD > Categories option added to choose image size - ADDED

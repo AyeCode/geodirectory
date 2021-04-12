@@ -193,6 +193,11 @@ class GeoDir_Compatibility {
 		}
 
 		add_filter( 'geodir_link_to_lightbox_attrs', array( __CLASS__, 'link_to_lightbox_attrs' ), 10, 1 );
+
+		// Borlabs Cookie setting
+		if ( defined( 'BORLABS_COOKIE_VERSION' ) ) {
+			add_filter( 'geodir_get_settings_general', array( __CLASS__, 'borlabs_cookie_setting' ), 20, 3 );
+		}
 	}
 
 	/**
@@ -1668,6 +1673,12 @@ class GeoDir_Compatibility {
 		if ( defined( 'CT_VERSION' ) ) {
 			add_filter( 'geodir_get_template', array( __CLASS__, 'oxygen_override_template' ), 11, 5 );
 			add_filter( 'geodir_get_template_part', array( __CLASS__, 'oxygen_override_template_part' ), 11, 3 );
+		}
+
+		// Borlabs Cookie Integration
+		if ( defined( 'BORLABS_COOKIE_VERSION' ) &&  ! is_admin() && geodir_get_option( 'borlabs_cookie' ) ) {
+			add_filter( 'geodir_lazy_load_map', array( __CLASS__, 'borlabs_cookie_setup' ), 999, 1 );
+			add_filter( 'wp_super_duper_widget_output', array( __CLASS__, 'borlabs_cookie_wrap' ), 999, 4 );
 		}
 	}
 
@@ -3449,5 +3460,101 @@ class GeoDir_Compatibility {
 		}
 
 		return $attrs;
+	}
+
+	/**
+	 * Borlabs Cookie map setting.
+	 *
+	 * @since 2.1.0.13
+	 *
+	 * @param array $settings General settings.
+	 * @return array General settings.
+	 */
+	public static function borlabs_cookie_setting( $settings ) {
+		$_settings = array();
+
+		foreach ( $settings as $key => $setting ) {
+			$_settings[] = $setting;
+
+			if ( ! empty( $setting['id'] ) && $setting['id'] == 'map_cache' ) {
+				$_settings[] = array(
+					'name' => __( 'Borlabs Cookie Integration', 'geodirectory'),
+					'desc' => __( 'Enable Borlabs Cookie integration for GeoDirecotry maps.', 'geodirectory' ),
+					'id' => 'borlabs_cookie',
+					'type' => 'checkbox',
+					'default' => '0',
+					'desc_tip' => false,
+					'advanced' => true
+				);
+			}
+		}
+
+		return $_settings;
+	}
+
+	/**
+	 * Borlabs Cookie map id.
+	 *
+	 * @since 2.1.0.13
+	 *
+	 * @return string Map id.
+	 */
+	public static function borlabs_cookie_id() {
+		if ( GeoDir_Maps::active_map() == 'osm' ) {
+			$content_id = 'openstreetmap'; // OpenStreetMap
+		} else if ( GeoDir_Maps::active_map() == 'none' ) {
+			$content_id = ''; // None
+		} else {
+			$content_id = 'googlemaps'; // Google Maps
+		}
+
+		return $content_id;
+	}
+
+	/**
+	 * Borlabs Cookie set lazy load map.
+	 *
+	 * @since 2.1.0.13
+	 *
+	 * @param string $lazy_load Lazy load type.
+	 * @return string Filtered lazy load map.
+	 */
+	public static function borlabs_cookie_setup( $lazy_load = '' ) {
+		if ( $lazy_load != 'click' && ( $cookie_id = self::borlabs_cookie_id() ) ) {
+			$contentBlockerData = BorlabsCookie\Cookie\Frontend\ContentBlocker::getInstance()->getContentBlockerData( $cookie_id );
+
+			// Apply when content blocker is active.
+			if ( ! empty( $contentBlockerData ) && ! BorlabsCookie\Cookie\Frontend\Cookies::getInstance()->checkConsent( $cookie_id ) ) {
+				$lazy_load = 'click';
+			}
+		}
+
+		return $lazy_load;
+	}
+
+	/**
+	 * Wrap map content by Borlabs Cookie.
+	 *
+	 * @since 2.1.0.13
+	 *
+	 * @param string $output Map widget content.
+	 * @return array $instance Widget instance.
+	 * @param array $args Widget args.
+	 * @return array $super_duper Super Duper class.
+	 * @return string Map widget content.
+	 */
+	public static function borlabs_cookie_wrap( $output, $instance, $args, $super_duper ) {
+		if ( $output != '' && ! empty( $super_duper->options['base_id'] ) && in_array( $super_duper->options['base_id'], array( 'gd_map' ) ) && ( $cookie_id = self::borlabs_cookie_id() ) ) {
+			$contentBlockerData = BorlabsCookie\Cookie\Frontend\ContentBlocker::getInstance()->getContentBlockerData( $cookie_id );
+
+			// Apply when content blocker is active.
+			if ( ! empty( $contentBlockerData ) && ! BorlabsCookie\Cookie\Frontend\Cookies::getInstance()->checkConsent( $cookie_id ) ) {
+				$script = geodir_lazy_load_map() == 'click' ? '<script type="text/javascript">jQuery(function($){$(".geodir-lazyload-div").trigger("click");});</script>' : '';
+
+				$output = do_shortcode( '[borlabs-cookie id="' . $cookie_id . '" type="content-blocker"]' . $output . $script . '[/borlabs-cookie]' );
+			}
+		}
+
+		return $output;
 	}
 }
