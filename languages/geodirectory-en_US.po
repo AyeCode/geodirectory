@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.0.12\n"
+"Project-Id-Version: GeoDirectory 2.1.0.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-04-08 11:17+0530\n"
-"PO-Revision-Date: 2021-04-08 11:17+0530\n"
+"POT-Creation-Date: 2021-04-19 16:11+0530\n"
+"PO-Revision-Date: 2021-04-19 16:11+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1080,7 +1080,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-best-of.php:655
 #: includes/widgets/class-geodir-widget-listings.php:1129
 #: includes/widgets/class-geodir-widget-recently-viewed.php:327
-#: templates/bootstrap/map/map.php:51
+#: templates/bootstrap/map/map.php:61
 msgid "Loading..."
 msgstr ""
 
@@ -1124,8 +1124,8 @@ msgid "Dummy data has not fully installed yet!"
 msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:666
-#: templates/bootstrap/map/map-add-listing.php:686
-#: templates/bootstrap/map/map-add-listing.php:849 templates/map.php:677
+#: templates/bootstrap/map/map-add-listing.php:696
+#: templates/bootstrap/map/map-add-listing.php:859 templates/map.php:677
 #: templates/map.php:858
 msgid "Geocode was not successful for the following reason:"
 msgstr ""
@@ -9883,28 +9883,28 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:213
+#: includes/class-geodir-compatibility.php:218
 #, php-format
 msgid ""
 "Kleo theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:227
+#: includes/class-geodir-compatibility.php:232
 #, php-format
 msgid ""
 "Listimia theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:469
+#: includes/class-geodir-compatibility.php:474
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:597
+#: includes/class-geodir-compatibility.php:602
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -9912,64 +9912,72 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1107
+#: includes/class-geodir-compatibility.php:1112
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1109
+#: includes/class-geodir-compatibility.php:1114
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1114
+#: includes/class-geodir-compatibility.php:1119
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1115
+#: includes/class-geodir-compatibility.php:1120
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1286
+#: includes/class-geodir-compatibility.php:1291
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1288
+#: includes/class-geodir-compatibility.php:1293
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1293
+#: includes/class-geodir-compatibility.php:1298
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1294
+#: includes/class-geodir-compatibility.php:1299
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2547
+#: includes/class-geodir-compatibility.php:2558
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2558
+#: includes/class-geodir-compatibility.php:2569
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2565
+#: includes/class-geodir-compatibility.php:2576
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2566
+#: includes/class-geodir-compatibility.php:2577
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3259
+#: includes/class-geodir-compatibility.php:3270
 msgid "GD Search Results"
+msgstr ""
+
+#: includes/class-geodir-compatibility.php:3481
+msgid "Borlabs Cookie Integration"
+msgstr ""
+
+#: includes/class-geodir-compatibility.php:3482
+msgid "Enable Borlabs Cookie integration for GeoDirecotry maps."
 msgstr ""
 
 #: includes/class-geodir-defaults.php:305
@@ -17939,33 +17947,33 @@ msgstr ""
 msgid "Loading categories..."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:434
-#: templates/bootstrap/map/map-add-listing.php:733 templates/map.php:425
+#: templates/bootstrap/map/map-add-listing.php:444
+#: templates/bootstrap/map/map-add-listing.php:743 templates/map.php:425
 #: templates/map.php:744
 #, php-format
 msgid "Please choose any address of the (%s) city only."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:453
-#: templates/bootstrap/map/map-add-listing.php:751 templates/map.php:444
+#: templates/bootstrap/map/map-add-listing.php:463
+#: templates/bootstrap/map/map-add-listing.php:761 templates/map.php:444
 #: templates/map.php:762
 msgid "Cannot determine address at this location."
 msgstr ""
 
-#: templates/bootstrap/map/map-add-listing.php:913
+#: templates/bootstrap/map/map-add-listing.php:923
 msgid ""
 "Click on \"Set Address on Map\" and then you can also drag map marker to "
 "locate the correct address"
 msgstr ""
 
-#: templates/bootstrap/map/map.php:58
+#: templates/bootstrap/map/map.php:68
 #, php-format
 msgid ""
 "%sNo Records Found%s Sorry, no records were found. Please adjust your search "
 "criteria and try again.%s"
 msgstr ""
 
-#: templates/bootstrap/map/map.php:65
+#: templates/bootstrap/map/map.php:75
 #, php-format
 msgid "%sMaps failed to load%s Sorry, unable to load the Maps API.%s"
 msgstr ""
