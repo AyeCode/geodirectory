@@ -1,10 +1,18 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 /**
- * Variables.
+ * Display Map
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/bootstrap/map/map.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory
+ * @version    2.1.0.13
  *
  * @var array $map_options The map settings options.
  * @var string $map_type The map type.
@@ -13,6 +21,8 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @var string $width The map width setting.
  * @var string $wrap_class The wrapper classes setting.
  */
+
+defined( 'ABSPATH' ) || exit;
 ?>
 <!--START geodir-map-wrap-->
 <div class="geodir-map-wrap geodir-<?php echo $map_type; ?>-map-wrap <?php if(!empty($wrap_class)){ echo $wrap_class; }?>">
@@ -30,7 +40,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 			<!--END map_background-->
 			<div class="map_background">
 				<div class="top_banner_section_in clearfix">
-					<div class="<?php if(wp_doing_ajax()){echo "d-none ";} echo $map_canvas; ?>_TopLeft TopLeft position-absolute bg-white text-muted rounded-sm shadow-sm m-2 px-1 py-1 h5 c-pointer" style="z-index: 3;">
+					<div class="<?php if ( wp_doing_ajax() || ! empty( $hide_expand_map ) ) { echo "d-none "; } echo $map_canvas; ?>_TopLeft TopLeft position-absolute bg-white text-muted rounded-sm shadow-sm m-2 px-1 py-1 h5 c-pointer" style="z-index: 3;">
 						<span class="triggermap" id="<?php echo $map_canvas; ?>_triggermap">
 							<i class="fas fa-expand-arrows-alt fa-fw" aria-hidden="true"></i>
 							<i class="fas fa-compress-arrows-alt fa-fw d-none" aria-hidden="true"></i>

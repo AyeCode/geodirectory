@@ -289,11 +289,11 @@ class GeoDir_Query {
 	 */
 	public function posts_having( $clauses, $query = array() ) {
 		if ( self::is_gd_main_query( $query ) ) {
-			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $snear,$geodirectory;
+			global $wp_query, $wpdb, $geodir_post_type, $table, $plugin_prefix, $dist, $snear, $geodirectory;
 
 			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 
-			if ( $support_location && ( $snear != '' || $latlon = $geodirectory->location->get_latlon() ) ) {
+			if ( $support_location && ( $latlon = $geodirectory->location->get_latlon() ) ) {
 				/* 
 				 * The HAVING clause is often used with the GROUP BY clause to filter groups based on a specified condition. 
 				 * If the GROUP BY clause is omitted, the HAVING clause behaves like the WHERE clause.
@@ -342,14 +342,13 @@ class GeoDir_Query {
 
 				$fields .= ", " . $table . ".* ";
 
-				if ( $support_location && $latlon = $geodirectory->location->get_latlon()) {
+				if ( $support_location && ( $latlon = $geodirectory->location->get_latlon() ) ) {
 					$DistanceRadius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
 					$lat = $latlon['lat'];
 					$lon = $latlon['lon'];
 
 					$fields .= " , (" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))) AS distance ";
 				}
-
 
 				global $s;// = get_search_query();
 				if ( geodir_is_page( 'search' ) && $s && trim( $s ) != '' ) {
@@ -846,17 +845,14 @@ class GeoDir_Query {
 	 * @param array $query Optional. Query. Default array.
 	 * @return mixed
 	 */
-	public function posts_orderby($orderby, $query = array()){
-		global $wpdb, $table_prefix, $geodir_post_type,$snear,$s;
+	public function posts_orderby( $orderby, $query = array() ) {
+		global $wpdb, $geodirectory, $geodir_post_type, $s;
 
-		if(self::is_gd_main_query($query)) {
-
-
+		if ( self::is_gd_main_query( $query ) ) {
 			$support_location = $geodir_post_type && GeoDir_Post_types::supports( $geodir_post_type, 'location' );
 			$sort_by          = '';
 			$orderby          = ' ';
 			$default_sort     = '';
-
 
 			if ( get_query_var( 'order_by' ) ) {
 				$sort_by = get_query_var( 'order_by' );
@@ -867,24 +863,18 @@ class GeoDir_Query {
 			}
 
 			if ( $sort_by == '' ) {
-//echo '###';exit;
-
-				if ( $support_location && $snear != '' ) {
-					//$orderby .= " distance,";
+				if ( $support_location && ( $latlon = $geodirectory->location->get_latlon() ) ) {
 					$sort_by = 'distance_asc';
 				} elseif ( is_search() && isset( $_REQUEST['geodir_search'] ) && $s && trim( $s ) != '' ) {
 					$sort_by = 'search_best';
 				} else {
 					$default_sort = geodir_get_posts_default_sort( $geodir_post_type );
-//				echo '###'.$default_sort;exit;
+
 					if ( ! empty( $default_sort ) ) {
 						$sort_by = $default_sort;
 					}
 				}
-
 			}
-
-			//if(geodir_is_page('search')){}
 
 			$table = geodir_db_cpt_table( $geodir_post_type );
 
@@ -892,7 +882,6 @@ class GeoDir_Query {
 
 			$orderby = self::sort_by_children( $orderby, $sort_by, $geodir_post_type, $query );
 
-//		echo '###'.$orderby;exit;
 			/**
 			 * Filter order by SQL.
 			 *
@@ -904,10 +893,6 @@ class GeoDir_Query {
 			 * @param WP_Query $query The WP_Query.
 			 */
 			$orderby = apply_filters( 'geodir_posts_order_by_sort', $orderby, $sort_by, $table, $query );
-
-			if ( $sort_by != 'random' ) {
-				//$orderby .= $table . ".featured asc, $wpdb->posts.post_date desc, $wpdb->posts.post_title ";
-			}
 		}
 
 		return $orderby;

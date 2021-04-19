@@ -981,7 +981,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'default'  => '2',
 					'custom_attributes' => array(
 						'min' => '0.1',
-						'step' => '0.5'
+						'step' => '0.1'
 					),
 					'desc_tip' => true,
 					'advanced' => true
