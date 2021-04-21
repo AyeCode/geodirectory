@@ -130,6 +130,11 @@ class GeoDir_SEO {
 				// setup vars
 				add_action('pre_get_document_title', array(__CLASS__,'set_meta'),9);
 			}
+
+			if ( defined( 'RANK_MATH_VERSION' ) ) {
+				add_action( 'rank_math/vars/register_extra_replacements', array( __CLASS__, 'rank_math_vars_register_extra_replacements' ), 20 );
+			}
+
 			return;
 		}
 
@@ -1589,5 +1594,92 @@ class GeoDir_SEO {
 		}
 
 		return apply_filters( 'geodir_get_searched_category_name', $category_names, $_category_names, $taxonomy );
+	}
+
+	/**
+	 * Register GD variables for Rank Math SEO extra replacements.
+	 *
+	 * @since 2.1.0.14
+	 *
+	 * @return void
+	 */
+	public static function rank_math_vars_register_extra_replacements() {
+		$pages = array( 'location', 'search', 'post_type', 'archive', 'add-listing', 'single' );
+
+		$variables = array();
+		foreach ( $pages as $page ) {
+			$_variables = GeoDir_SEO::variables( $page );
+
+			if ( ! empty( $_variables ) ) {
+				foreach ( $_variables as $var => $help ) {
+					if ( empty( $variables[ $var ] ) ) {
+						$variables[ $var ] = $help;
+					}
+				}
+			}
+		}
+
+		// Custom fields
+		$fields = geodir_post_custom_fields( '', 'all', 'all', 'none' );
+		if ( ! empty( $fields ) ) {
+			foreach( $fields as $field ) {
+				if ( empty( $variables[ '_' . $field['htmlvar_name'] ] ) ) {
+					$variables[ '_' . $field['htmlvar_name'] ] = __( stripslashes( $field['admin_title'] ), 'geodirectory' );
+				}
+			}
+		}
+
+		// Advance custom fields
+		$advance_fields = geodir_post_meta_advance_fields();
+		if ( ! empty( $advance_fields ) ) {
+			foreach ( $advance_fields as $key => $field ) {
+				if ( empty( $variables[ '_' . $key ] ) ) {
+					$variables[ '_' . $key ] = __( stripslashes( $field['frontend_title'] ), 'geodirectory' );
+				}
+			}
+		}
+
+		$variables = apply_filters( 'geodir_rank_math_register_extra_replacements', $variables );
+
+		foreach ( $variables as $var => $help ) {
+			if ( is_string( $var ) && $var !== '' ) {
+				$var = trim( $var, '%' );
+
+				if ( ! empty( $var ) ) {
+					$var = '_gd_' . $var; // Add prefix to prevent conflict with Yoast default vars.
+
+					rank_math_register_var_replacement(
+						$var,
+						array(
+							'name'        => esc_html( $help ),
+							'description' => esc_html( $help ),
+							'variable'    => $var
+						)
+					);
+
+					add_filter( 'rank_math/vars/' . $var, array( __CLASS__, 'rank_math_replacement' ), 20, 2 );
+				}
+			}
+		}
+	}
+
+	/**
+	 * Register GD variables for Ran Math SEO extra replacements.
+	 *
+	 * @since 2.1.0.14
+	 *
+	 * @param string $args Variable args.
+	 * @param array $variable Variable model.
+	 * @return string Variable value.
+	 */
+	public static function rank_math_replacement( $args, $variable = array() ) {
+		$var = ! empty( $variable ) ? $variable->get_id() : '';
+		if ( empty( $var ) ) {
+			return '';
+		}
+
+		$var = strpos( $var, '_gd_' ) === 0 ? substr( $var, 4 ) : $var;
+
+		return self::replace_variable( '%%' . $var . '%%', self::$gd_page );
 	}
 }
