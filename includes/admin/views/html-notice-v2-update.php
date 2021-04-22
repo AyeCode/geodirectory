@@ -63,15 +63,27 @@ if ( $db_version = get_option( 'geodir_custom_posts_db_version' ) ) {
 	);
 }
 if ( $db_version = get_option( 'geodirevents_db_version' ) ) {
-	$plugins[] = array(
-		'path' => 'geodir_event_manager/geodir_event_manager.php',
-		'directory' => 'geodir_event_manager',
-		'name' => 'GeoDirectory Events',
-		'db_version' => $db_version,
-		'min_version'   => '2.0.0.2',
-		'version'   => $all_plugins[ 'geodir_event_manager/geodir_event_manager.php' ]['Version'],
-		'status' => is_plugin_active( 'geodir_event_manager/geodir_event_manager.php' )
-	);
+	if ( ! empty( $all_plugins[ 'events-for-geodirectory/events-for-geodirectory.php' ] ) ) {
+		$plugins[] = array(
+			'path' => 'events-for-geodirectory/events-for-geodirectory.php',
+			'directory' => 'events-for-geodirectory',
+			'name' => 'Events for GeoDirectory',
+			'db_version' => $db_version,
+			'min_version' => '2.1.0.0',
+			'version' => $all_plugins[ 'events-for-geodirectory/events-for-geodirectory.php' ]['Version'],
+			'status' => is_plugin_active( 'events-for-geodirectory/events-for-geodirectory.php' )
+		);
+	} else {
+		$plugins[] = array(
+			'path' => 'geodir_event_manager/geodir_event_manager.php',
+			'directory' => 'geodir_event_manager',
+			'name' => 'GeoDirectory Events',
+			'db_version' => $db_version,
+			'min_version'   => '2.0.0.2',
+			'version'   => $all_plugins[ 'geodir_event_manager/geodir_event_manager.php' ]['Version'],
+			'status' => is_plugin_active( 'geodir_event_manager/geodir_event_manager.php' )
+		);
+	}
 }
 
 if ( $db_version = get_option( 'geodirlists_db_version' ) ) {
