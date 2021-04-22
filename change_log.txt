@@ -1,5 +1,6 @@
 = 2.1.0.14 =
 * Overwrite by Rank Math don't renders GD variables - FIXED
+* v1 to v2 upgrade shows missing Events plugin - FIXED
 
 = 2.1.0.13 =
 * Small fix for the way some addresses are geocoded if "postal_town" is present - FIXED
