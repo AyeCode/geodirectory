@@ -886,7 +886,7 @@ function geodir_responsive_embeds( $html, $url = '', $attr = array(), $post_ID =
 		return $html;
 	}
 
-	if ( false !== strpos( $url, "://www.youtube.com" ) || false !== strpos( $url, "://youtube.com" ) || false !== strpos( $url, "://youtu.be" ) ) {
+	if ( false !== strpos( $url, "://www.youtube.com" ) || false !== strpos( $url, "://youtube.com" ) || false !== strpos( $url, "://youtu.be" ) || false !== strpos( $url, "://youtube-nocookie.com" ) || false !== strpos( $url, "://www.youtube-nocookie.com" ) ) {
 		$html = '<div class="geodir-embed-container">' . $html . '</div>';
 	}
 
