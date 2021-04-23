@@ -1268,9 +1268,9 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
                 foreach ($option_values as $val) {
                     if( $show_as_csv && count($option_values) > 1 && count($option_values)!=$li_count+1 ){
                         $val = $val.",";
-                        $li_class = ' mx-0 pr-1 pl-0';
+                        $li_class = ' mx-0 pr-1 pl-0 d-inline-block';
                     }else{
-                        $li_class = ' mx-0 px-0';
+                        $li_class = ' mx-0 px-0 d-inline-block';
                     }
                     $field_value .= '<li class="geodir-fv-' . sanitize_html_class( sanitize_title_with_dashes( $val ) ) . $li_class.'">' . $val . '</li>';
                     $li_count++;
