@@ -1214,7 +1214,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
             if (is_array($gd_post->{$cf['htmlvar_name']})) {
                 $gd_post->{$cf['htmlvar_name']} = implode(', ', $gd_post->{$cf['htmlvar_name']});
             }
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
@@ -1257,7 +1257,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
 
             $field_value = '';
 
-            $show_as_csv = strpos($cf['css_class'], 'gd-comma-list') !== false ? true : false;
+            $show_as_csv = $design_style && strpos($cf['css_class'], 'gd-comma-list') !== false ? true : false;
 
             if (count($option_values) ) {
                 $ul_class = $show_as_csv ? 'list-inline d-inline' : '';
