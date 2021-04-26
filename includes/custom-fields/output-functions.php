@@ -1214,7 +1214,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
             if (is_array($gd_post->{$cf['htmlvar_name']})) {
                 $gd_post->{$cf['htmlvar_name']} = implode(', ', $gd_post->{$cf['htmlvar_name']});
             }
-
+            $design_style = geodir_design_style();
             $field_icon = geodir_field_icon_proccess($cf);
             $output = geodir_field_output_process($output);
             if (strpos($field_icon, 'http') !== false) {
@@ -1257,11 +1257,23 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
 
             $field_value = '';
 
-            if (count($option_values) ) {
-                $field_value .= '<ul>';
+            $show_as_csv = $design_style && strpos($cf['css_class'], 'gd-comma-list') !== false ? true : false;
 
+            if (count($option_values) ) {
+                $ul_class = $show_as_csv ? 'list-inline d-inline' : '';
+                $li_class = '';
+                $field_value .= '<ul class="'.$ul_class.'">';
+
+                $li_count = 0;
                 foreach ($option_values as $val) {
-                    $field_value .= '<li class="geodir-fv-' . sanitize_html_class( sanitize_title_with_dashes( $val ) ) . '">' . $val . '</li>';
+                    if( $show_as_csv && count($option_values) > 1 && count($option_values)!=$li_count+1 ){
+                        $val = $val.",";
+                        $li_class = ' mx-0 pr-1 pl-0 d-inline-block';
+                    }else{
+                        $li_class = ' mx-0 px-0 d-inline-block';
+                    }
+                    $field_value .= '<li class="geodir-fv-' . sanitize_html_class( sanitize_title_with_dashes( $val ) ) . $li_class.'">' . $val . '</li>';
+                    $li_count++;
                 }
 
                 $field_value .= '</ul>';

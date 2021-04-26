@@ -54,6 +54,7 @@ jQuery(document).ready(function($) {
  */
 function gd_init_carousel_ajax(){
     jQuery('.carousel').on('slide.bs.carousel', function (el) {
+        jQuery(this).find('iframe').attr('src', '');
         geodir_ajax_load_slider(el.relatedTarget);
     });
 }
@@ -71,18 +72,27 @@ function geodir_lightbox_embed($link,ele){
     var $modal = '<div class="modal fade geodir-carousel-modal bsui" tabindex="-1" role="dialog" aria-labelledby="uwp-profile-modal-title" aria-hidden="true"><div class="modal-dialog modal-dialog-centered modal-xl mw-100"><div class="modal-content bg-transparent border-0"><div class="modal-header"><h5 class="modal-title" id="uwp-profile-modal-title"></h5></div><div class="modal-body text-center"><i class="fas fa-circle-notch fa-spin fa-3x"></i></div></div></div></div>';
     jQuery('body').append($modal);
 
+    jQuery('.geodir-carousel-modal').on('shown.bs.modal', function (e) {
+        jQuery('.geodir-carousel-modal .carousel-item.active').find('iframe').each(function () {
+            // fix the src
+            if(real_src = jQuery(this).attr("data-src")){
+                if(!jQuery(this).attr("srcset"))  jQuery(this).attr("src",real_src);
+            }
+        });
+    });
+
     jQuery('.geodir-carousel-modal').modal({
         //backdrop: 'static'
     });
     jQuery('.geodir-carousel-modal').on('hidden.bs.modal', function (e) {
-        jQuery("iframe").attr('src', '');
+        jQuery(".geodir-carousel-modal iframe").attr('src', '');
     });
 
     $container = jQuery($link).closest('.geodir-images');
 
     $clicked_href = jQuery($link).attr('href');
     $images = [];
-    $container.find('.geodir-lightbox-image').each(function() {
+    $container.find('.geodir-lightbox-iframe, .geodir-lightbox-image').each(function() {
         var a = this;
         var href = jQuery(a).attr('href');
         if (href) {
@@ -97,7 +107,7 @@ function geodir_lightbox_embed($link,ele){
         if($images.length > 1){
             $i = 0;
             $carousel  += '<ol class="carousel-indicators position-fixed">';
-            $container.find('.geodir-lightbox-image').each(function() {
+            $container.find('.geodir-lightbox-iframe, .geodir-lightbox-image').each(function() {
                 $active = $clicked_href == jQuery(this).attr('href') ? 'active' : '';
                 $carousel  += '<li data-target="#geodir-embed-slider-modal" data-slide-to="'+$i+'" class="'+$active+'"></li>';
                 $i++;
@@ -140,7 +150,7 @@ function geodir_lightbox_embed($link,ele){
             // iframe
             var css_height = window.innerWidth > window.innerHeight ? '95vh' : 'auto';
             var url = jQuery(a).attr('href');
-            var iframe = '<iframe class="embed-responsive-item" style="height:'+css_height +'" src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" id="video" allow="autoplay"></iframe>';
+            var iframe = '<iframe class="embed-responsive-item" style="height:'+css_height +'" src="" data-src="'+url+'?rel=0&amp;showinfo=0&amp;modestbranding=1&amp;autoplay=1" id="video" allow="autoplay"></iframe>';
             var img = iframe ;//.css('height',css_height).get(0).outerHTML;
             $carousel  += img;
 
@@ -1295,6 +1305,13 @@ function geodir_ajax_load_slider(slide){
         if(real_srcset = jQuery(this).attr("data-srcset")){
             if(!jQuery(this).attr("srcset")) jQuery(this).attr("srcset",real_srcset);
         }
+        // fix the src
+        if(real_src = jQuery(this).attr("data-src")){
+            if(!jQuery(this).attr("srcset"))  jQuery(this).attr("src",real_src);
+        }
+    });
+
+    jQuery(slide).find('iframe').each(function () {
         // fix the src
         if(real_src = jQuery(this).attr("data-src")){
             if(!jQuery(this).attr("srcset"))  jQuery(this).attr("src",real_src);
