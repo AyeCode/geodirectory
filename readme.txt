@@ -13,7 +13,7 @@ The best Business Directory Plugin. Build any directories: Business directory, r
 
 == Description ==
 
-[Addons](https://wpgeodirectory.com/downloads/category/addons/) | [Themes](https://wpgeodirectory.com/downloads/category/themes/) | [Demos](https://wpgeo.directory/) | [Docs](https://docs.wpgeodirectory.com/) | [Showcase](https://wpgeodirectory.com/category/showcase/)
+[Addons](https://wpgeodirectory.com/downloads/category/addons/) | [Themes](https://wpgeodirectory.com/downloads/category/themes/) | [Demos](https://demos.ayecode.io/) | [Docs](https://docs.wpgeodirectory.com/) | [Showcase](https://wpgeodirectory.com/category/showcase/)
 
 Turn any WordPress theme into a lightning-fast global business directory. Now 100% compatible with Gutenberg and the most popular page builders such as Elementor, Beaver Builder, Divi, SiteOrigin Page Builder, and more! It includes an extensive new set of shortcodes, Gutenberg Blocks, and Widgets.
 

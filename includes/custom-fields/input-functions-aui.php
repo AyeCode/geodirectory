@@ -398,15 +398,23 @@ function geodir_cfi_checkbox($html,$cf){
         }
         $checked          = $value == '1' ? true : false;
         $extra_attributes = array();
+        $validation_text = '';
 
         //validation
         if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
             $extra_attributes['pattern'] = $cf['validation_pattern'];
         }
 
+        // required message
+        if ( ! empty( $cf['is_required'] ) && ! empty( $cf['required_msg'] ) ) {
+            $title = __( $cf['required_msg'], 'geodirectory' );
+            $validation_text = $title;
+        }
+
         // validation message
         if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
             $title = $cf['validation_msg'];
+            $validation_text = $title;
         }
 
         // field type (used for validation)
@@ -444,6 +452,7 @@ function geodir_cfi_checkbox($html,$cf){
                 'checked'          => $checked,
                 'help_text'        => $help_text,
                 'extra_attributes' => $extra_attributes,
+                'validation_text'  => $validation_text
             )
         );
 
@@ -1976,7 +1985,6 @@ function geodir_cfi_tags( $html, $cf ) {
     return $html;
 }
 add_filter('geodir_custom_field_input_tags','geodir_cfi_tags',10,2);
-
 
 
 /**

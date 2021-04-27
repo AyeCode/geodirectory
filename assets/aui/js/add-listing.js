@@ -128,11 +128,19 @@ jQuery(function($) {
 
     // Conditional Fields on change
     jQuery("#geodirectory-add-post,#post").change(function() {
-        aui_conditional_fields("#geodirectory-add-post,#post");
+        try {
+            aui_conditional_fields("#geodirectory-add-post,#post");
+        } catch(err) {
+            console.log(err.message);
+        }
     });
 
     // Conditional Fields on load
-    aui_conditional_fields("#geodirectory-add-post,#post");
+    try {
+        aui_conditional_fields("#geodirectory-add-post,#post");
+    } catch(err) {
+        console.log(err.message);
+    }
 
     // Default cat set
     jQuery(".geodir_taxonomy_field .geodir-category-select, .geodir_taxonomy_field [data-ccheckbox='default_category'], .geodir_taxonomy_field input[data-cradio]").change(function() {

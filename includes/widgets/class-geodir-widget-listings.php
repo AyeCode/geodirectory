@@ -749,10 +749,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$title = str_replace( "%posttype_plural_label%", $posttype_plural_label, $title );
 		$title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
 
-		$categories = $category;
 		$category_taxonomy = $post_type . 'category';
 		$category = is_array( $category ) ? $category : explode( ",", $category ); // convert to array
 		$category = apply_filters( 'geodir_filter_query_var_categories', $category, $post_type );
+		$categories = $category;
 
 		if ( isset( $instance['character_count'] ) ) {
 			/**
