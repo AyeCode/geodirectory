@@ -759,6 +759,8 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'wpbf_theme_setup' ) && ( empty( $meta_key ) || strpos( $meta_key, 'wpbf_' ) === 0 ) ) // Page Builder Framework
 			 || ( function_exists( 'generateblocks_do_activate' ) && strpos( $meta_key, '_generateblocks_' ) === 0 ) // GenerateBlocks plugin
 			 || ( defined( 'US_CORE_VERSION' ) && ( strpos( $meta_key, '_us_' ) === 0 || strpos( $meta_key, 'us_' ) === 0 || strpos( $meta_key, '_wpb_' ) === 0 ) ) // UpSolution Core plugin
+			 || ( function_exists( 'brivona_setup' ) && strpos( $meta_key, '_themetechmount' ) === 0 ) // Brivona theme
+			 || ( defined( 'ZEEN_ENGINE_VER' ) && ( strpos( $meta_key, 'tipi_' ) === 0 || strpos( $meta_key, 'zeen_' ) === 0 || strpos( $meta_key, '_menu_zeen_' ) === 0 ) ) // Zeen Tipi Builder
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );

@@ -71,7 +71,9 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 						$term = get_term_by( 'id', $term_id, $post->post_type . "category" );
 						if ( $show == 'value' ) {
 							$term_url = get_term_link( $term_id, $post->post_type . "category" );
-							$value = '<a href="' . $term_url . '" >' . esc_attr( $term->name ) . '</a>';
+							if ( $term_url && ! is_wp_error( $term_url ) ) {
+								$value = '<a href="' . $term_url . '" >' . esc_attr( $term->name ) . '</a>';
+							}
 						} elseif ( $show == 'value-strip' ) {
 							if ( ! empty( $term->name ) ) {
 								$value = esc_attr( $term->name );
