@@ -521,6 +521,8 @@ function geodir_cfi_textarea($html,$cf){
         // field type (used for validation)
         $extra_attributes['field_type'] =  $wysiwyg ? 'editor' :  $cf['type'];
 
+        $extra_attributes = apply_filters( 'geodir_cfi_aui_textarea_attributes', $extra_attributes, $cf );
+
         // required
         $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
 
