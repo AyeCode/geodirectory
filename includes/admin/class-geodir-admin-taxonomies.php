@@ -800,16 +800,28 @@ class GeoDir_Admin_Taxonomies {
             if ((!geodir_is_page('listing')) || (is_search() && $_REQUEST['search_taxonomy'] == '')) {
                 if ($cat_parent == 0) {
                     $list_class = 'main_list gd-parent-cats-list gd-cats-display-' . $cat_display;
-                    $main_list_class = 'class="main_list_selecter"';
+                    $main_list_class = 'main_list_selecter';
                 } else {
                     //$display = 'display:none';
                     $list_class = 'sub_list gd-sub-cats-list';
+
+                    if ( geodir_design_style() ) {
+                        $list_class .= ' pl-3'; // Left padding for sub-categories.
+                    }
                 }
             }
 
             if ($cat_display == 'checkbox' || $cat_display == 'radio') {
                 $p = 0;
                 $out = '<div class="' . $list_class . ' gd-cat-row-' . $cat_parent . '" style="margin-left:' . $p . 'px;' . $display . ';">';
+
+                if ( geodir_design_style() ) {
+                    $main_list_class .= ' mr-1';
+                }
+            }
+
+            if ( $main_list_class ) {
+                $main_list_class = 'class="' . $main_list_class . '"';
             }
 
             foreach ( $cat_terms as $cat_term ) {
