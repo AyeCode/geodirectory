@@ -266,6 +266,8 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 		}
 
 		if ( geodir_is_gd_post_type( $post_type ) ) {
+			$args['id'] = apply_filters( 'geodir_widget_post_meta_set_id', $args['id'], $args );
+
 			$package_id = geodir_get_post_package_id( $args['id'], $post_type );
 			$fields = geodir_post_custom_fields( $package_id,  'all', $post_type , 'none' );
 
@@ -340,6 +342,8 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 			}else{
 
 			}
+
+			$args['id'] = apply_filters( 'geodir_widget_post_meta_reset_id', $args['id'], $args );
 		}
 
 		return $output;

@@ -212,6 +212,8 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         if($args['list_hide_secondary']=='4'){$class .= $design_style ? " gv-hide-s-4 " : " gd-lv-s-4 ";}
         if($args['list_hide_secondary']=='5'){$class .= $design_style ? " gv-hide-s-5 " : " gd-lv-s-5 ";}
 
+        do_action( 'geodir_post_rating_widget_content_before' );
+
         if($args['show']=='stars'){
             $main .= $this->get_rating_stars();
         }elseif($args['show']=='text'){
@@ -231,7 +233,11 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         $before = '<div class="geodir_post_meta gd-rating-info-wrap '. $class .'" data-rating="'.round($post_rating, 1).'">';
         $after  = '</div>';
 
-        return $before . $main . $after;
+        $content = $before . $main . $after;
+
+        do_action( 'geodir_post_rating_widget_content_after' );
+
+        return $content;
     }
 
     /**
