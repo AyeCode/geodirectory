@@ -1537,7 +1537,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				$field->field_type_name = $field->field_type;
 			}
 
-			//print_r($field);
+			// Make new field active status ticked by default.
+			if ( empty( $field->is_active ) && isset( $field->id ) && strpos( $field->id, 'new-' ) !== false ) {
+				$field->is_active = 1;
+			}
 
 			/**
 			 * Contains custom field html.
