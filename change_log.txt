@@ -9,6 +9,7 @@
 * Rating not updated when SG optimizer cache is active - FIXED
 * Add listing child categories checkbox not showing left padding on frontend - FIXED
 * Make new field by default ticked active in field setting - CHANGED
+* Show loading effect on map popup when click on marker - ADDED
 
 = 2.1.0.13 =
 * Small fix for the way some addresses are geocoded if "postal_town" is present - FIXED
