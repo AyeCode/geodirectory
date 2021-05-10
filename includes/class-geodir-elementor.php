@@ -946,6 +946,10 @@ class GeoDir_Elementor {
 	public static function maybe_hijack_ajax() {
 		if ( ! empty( $_POST['actions'] ) ) {
 			$actions = json_decode( stripslashes( $_POST['actions'] ), true );
+			if ( empty( $actions ) ) {
+				// json_decode fails sometimes when request parameters are encoded.
+				$actions = json_decode( stripslashes( html_entity_decode( $_POST['actions'] ) ), true );
+			}
 
 			if ( ! empty( $actions ) ) {
 				foreach ( $actions as $key => $action ) {

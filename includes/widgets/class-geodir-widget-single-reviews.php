@@ -46,12 +46,17 @@ class GeoDir_Widget_Single_Reviews extends WP_Super_Duper {
      *
      * @return mixed|string|void
      */
-    public function output($args = array(), $widget_args = array(),$content = ''){
+    public function output( $args = array(), $widget_args = array(), $content = '' ) {
         global $post;
+
         ob_start();
-        
-        if(geodir_is_page('single')){
+
+        if ( geodir_is_page( 'single' ) ) {
+            do_action( 'geodir_single_reviews_widget_content_before' );
+
             comments_template();
+
+            do_action( 'geodir_single_reviews_widget_content_after' );
         }
 
         return ob_get_clean();

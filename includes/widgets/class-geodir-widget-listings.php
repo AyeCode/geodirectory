@@ -749,10 +749,10 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$title = str_replace( "%posttype_plural_label%", $posttype_plural_label, $title );
 		$title = str_replace( "%posttype_singular_label%", $posttype_singular_label, $title );
 
-		$categories = $category;
 		$category_taxonomy = $post_type . 'category';
 		$category = is_array( $category ) ? $category : explode( ",", $category ); // convert to array
 		$category = apply_filters( 'geodir_filter_query_var_categories', $category, $post_type );
+		$categories = $category;
 
 		if ( isset( $instance['character_count'] ) ) {
 			/**
@@ -1364,7 +1364,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 		add_filter( 'geodir_pagination_args', array( __CLASS__, 'filter_pagination_args' ), 999999, 1 );
 
-		$shortcode = '[gd_loop_paging show_advanced="'.$show_advanced.'"]';
+		$shortcode = '[gd_loop_paging mid_size=0 show_advanced="'.$show_advanced.'"]';
+
+		$shortcode = apply_filters( 'geodir_widget_listings_pagination_shortcode', $shortcode, $wp_query, $position, $post_number, $show_advanced );
 
 		ob_start();
 

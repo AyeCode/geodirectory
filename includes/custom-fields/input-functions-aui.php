@@ -398,15 +398,23 @@ function geodir_cfi_checkbox($html,$cf){
         }
         $checked          = $value == '1' ? true : false;
         $extra_attributes = array();
+        $validation_text = '';
 
         //validation
         if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
             $extra_attributes['pattern'] = $cf['validation_pattern'];
         }
 
+        // required message
+        if ( ! empty( $cf['is_required'] ) && ! empty( $cf['required_msg'] ) ) {
+            $title = __( $cf['required_msg'], 'geodirectory' );
+            $validation_text = $title;
+        }
+
         // validation message
         if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
             $title = $cf['validation_msg'];
+            $validation_text = $title;
         }
 
         // field type (used for validation)
@@ -444,6 +452,7 @@ function geodir_cfi_checkbox($html,$cf){
                 'checked'          => $checked,
                 'help_text'        => $help_text,
                 'extra_attributes' => $extra_attributes,
+                'validation_text'  => $validation_text
             )
         );
 
@@ -487,7 +496,7 @@ function geodir_cfi_textarea($html,$cf){
 
         global $geodir_label_type;
 
-        $title = '';
+        $validation_text = '';
         $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
         $extra_fields = maybe_unserialize($cf['extra_fields']);
@@ -498,9 +507,14 @@ function geodir_cfi_textarea($html,$cf){
             $extra_attributes['pattern'] = $cf['validation_pattern'];
         }
 
-        // validation message
-        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
-            $title = $cf['validation_msg'];
+        // Required message
+        if ( ! empty( $cf['is_required'] ) && ! empty( $cf['required_msg'] ) ) {
+            $validation_text = __( $cf['required_msg'], 'geodirectory' );
+        }
+
+        // Validation message
+        if ( ! empty( $cf['validation_msg'] ) ) {
+            $validation_text = __( $cf['validation_msg'], 'geodirectory' );
         }
 
         // wysiwyg
@@ -511,6 +525,8 @@ function geodir_cfi_textarea($html,$cf){
 
         // field type (used for validation)
         $extra_attributes['field_type'] =  $wysiwyg ? 'editor' :  $cf['type'];
+
+        $extra_attributes = apply_filters( 'geodir_cfi_aui_textarea_attributes', $extra_attributes, $cf );
 
         // required
         $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
@@ -526,12 +542,12 @@ function geodir_cfi_textarea($html,$cf){
             'class'      => '',
             'id'         => $cf['name'],
             'placeholder'=> esc_html__( $cf['placeholder_value'], 'geodirectory'),
-            'title'      => $title,
+            'title'      => $validation_text,
             'value'      => stripslashes($value),
             'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'required'   => !empty($cf['is_required']) ? true : false,
             'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only . $required,
-            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'validation_text'   => $validation_text,
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
             'no_wrap'    => false,
             'rows'      => 8,
@@ -604,7 +620,6 @@ function geodir_cfi_select($html,$cf){
         //extra
         $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
         $extra_attributes['option-ajaxchosen'] = 'false';
-        $extra_attributes['data-allow_clear'] = 'true';
 
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
@@ -625,7 +640,7 @@ function geodir_cfi_select($html,$cf){
             'extra_attributes' => $extra_attributes,
             'options'          => geodir_string_values_to_options($cf['option_values'], true),
             'select2'       => true,
-
+            'data-allow-clear' => true
         ) );
 
     }
@@ -704,7 +719,6 @@ function geodir_cfi_multiselect( $html, $cf ) {
 		//extra
 		$extra_attributes['data-placeholder'] = esc_attr( $placeholder );
 		$extra_attributes['option-ajaxchosen'] = 'false';
-		$extra_attributes['data-allow_clear'] = 'true';
 
 		// admin only
 		$admin_only = geodir_cfi_admin_only( $cf );
@@ -727,6 +741,7 @@ function geodir_cfi_multiselect( $html, $cf ) {
 				'options'            => geodir_string_values_to_options( $cf['option_values'], true ),
 				'select2'            => true,
 				'multiple'           => true,
+				'data-allow-clear'   => false
 			) );
 		} elseif ( $multi_display == 'radiox' ) {
 			$option_values_deep = geodir_string_to_options( $cf['option_values'], true );
@@ -1890,7 +1905,6 @@ function geodir_cfi_tags( $html, $cf ) {
         $extra_attributes['option-ajaxchosen'] = 'false';
         $extra_attributes['data-tags'] = 'true';
         $extra_attributes['data-token-separators'] = "[',']";
-        $extra_attributes['data-allow-clear'] = 'false';
 
         $post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
         $term_array = array();
@@ -1968,6 +1982,7 @@ function geodir_cfi_tags( $html, $cf ) {
             'extra_attributes'   => $extra_attributes,
             'options'            => $options, //geodir_string_values_to_options($cf['option_values'], true),
             'select2'            => true,
+            'data-allow-clear'   => false,
             'style'              => 'width:100%;height:inherit;'
         ) );
 
@@ -1976,7 +1991,6 @@ function geodir_cfi_tags( $html, $cf ) {
     return $html;
 }
 add_filter('geodir_custom_field_input_tags','geodir_cfi_tags',10,2);
-
 
 
 /**

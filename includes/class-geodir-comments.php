@@ -200,6 +200,9 @@ class GeoDir_Comments {
 		// delete post rating cache
 		wp_cache_delete( "gd_post_review_count_total_".$post_id);
 
+		// Clear the post cache
+		wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
+
 		/**
 		 * Called after Updating post overall rating and rating count.
 		 *

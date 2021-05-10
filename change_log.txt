@@ -3,6 +3,15 @@
 * v1 to v2 upgrade shows missing Events plugin - FIXED
 * Post meta output `gd-comma-list` not working with bootstrap styles - FIXED
 * Video screenshot linking to video lightbox does not work on single image output - FIXED
+* Required field text not showing for checkbox - FIXED
+* Import GD elementor templates not working - FIXED
+* Brivona theme & Zeen theme Tipi Builder compatibility - FIXED
+* Rating not updated when SG optimizer cache is active - FIXED
+* Add listing child categories checkbox not showing left padding on frontend - FIXED
+* Make new field by default ticked active in field setting - CHANGED
+* Show loading effect on map popup when click on marker - ADDED
+* Value not saved for the field which contains integer as field name - FIXED
+* Pagination looks messed in mobile devices - FIXED
 
 = 2.1.0.13 =
 * Small fix for the way some addresses are geocoded if "postal_town" is present - FIXED

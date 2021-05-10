@@ -813,7 +813,7 @@ class GeoDir_REST_Fields_Controller extends WP_REST_Controller {
 			$query_where .= $wpdb->prepare( ' AND is_default = %d', (int) $args['is_default'] );
 		}
 
-		if ( isset( $args['for_admin_use'] ) && $args['for_admin_use'] !== '' ) {
+		if ( isset( $args['for_admin_use'] ) && $args['for_admin_use'] !== '' && $args['for_admin_use'] !== 'all' ) {
 			$query_where .= $wpdb->prepare( ' AND for_admin_use = %d', (int) $args['for_admin_use'] );
 		}
 

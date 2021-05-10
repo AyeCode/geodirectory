@@ -678,7 +678,7 @@ function create_marker(item, map_canvas) {
             if (map_options.bubble_size) {
                 post_data += '&small=1';
             }
-            var loading = '<div id="map_loading"></div>';
+            var loading = '<div id="map_loading" class="p-2 text-center"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></div>';
             gd_infowindow.open(jQuery.goMap.map, marker);
             gd_infowindow.setContent(loading);
             jQuery.ajax({
@@ -1415,7 +1415,7 @@ function create_marker_osm(item, map_canvas) {
             if (options.bubble_size) {
                 post_data += '&small=1';
             }
-            var loading = '<div id="map_loading"></div>';
+            var loading = '<div id="map_loading" class="p-2 text-center"><i class="fas fa-spinner fa-spin" aria-hidden="true"></i></div>';
             var maxH = jQuery("#" + map_canvas).height();
             maxH -= (maxH * 0.10) + jQuery(marker._icon).outerHeight() + 20;
             marker.closePopup().unbindPopup().bindPopup(loading, {
@@ -1431,7 +1431,7 @@ function create_marker_osm(item, map_canvas) {
                     alert(error);
                 },
                 success: function(response) {
-                    jQuery("#" + map_canvas).goMap();
+                   /* jQuery("#" + map_canvas).goMap();
                     html = typeof response == 'object' && response.html ? geodir_htmlEscape(response.html) : '';
                     marker.bindPopup(html);
                     setTimeout(function() {
@@ -1444,7 +1444,7 @@ function create_marker_osm(item, map_canvas) {
                     // give the map 1 second to reposition before allowing it to reload
                     setTimeout(function() {
                         is_zooming = false;
-                    }, 1000);
+                    }, 1000);*/
                 }
             });
             return;

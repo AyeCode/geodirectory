@@ -212,6 +212,8 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
     public function tab_content( $tab, $child = false ) {
         ob_start();
 
+        do_action( 'geodir_single_tab_content_before', $tab, array() );
+
         // Main content
         if ( ! empty( $tab->tab_content ) ) { // override content
             $content = geodir_replace_variables( stripslashes( $tab->tab_content ));
@@ -225,6 +227,8 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                 do_action( 'geodir_standard_tab_content', $tab );
             }
         }
+
+        do_action( 'geodir_single_tab_content_after', $tab, array() );
 
         echo self::tab_content_child( $tab );
 
@@ -263,6 +267,8 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
             if ( $child_tab->tab_parent == $parent_id ) {
                 ob_start();
 
+                do_action( 'geodir_single_tab_content_before', $child_tab, $tab );
+
                 if ( ! empty( $child_tab->tab_content ) ) { // override content
                     $_content = geodir_replace_variables( stripslashes( $child_tab->tab_content ));
                     echo do_shortcode( $_content );
@@ -275,6 +281,8 @@ class GeoDir_Widget_Single_Tabs extends WP_Super_Duper {
                         comments_template();
                     }
                 }
+
+                do_action( 'geodir_single_tab_content_after', $child_tab, $tab );
 
                 $child_content = ob_get_clean();
 

@@ -1537,7 +1537,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				$field->field_type_name = $field->field_type;
 			}
 
-			//print_r($field);
+			// Make new field active status ticked by default.
+			if ( empty( $field->is_active ) && isset( $field->id ) && strpos( $field->id, 'new-' ) !== false ) {
+				$field->is_active = 1;
+			}
 
 			/**
 			 * Contains custom field html.
@@ -1659,8 +1662,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				if ( str_replace( '_', '', $htmlvar_name ) != '' ) {
 					$field->htmlvar_name = substr( $htmlvar_name, 0, 50 );
 				} else {
-					$field->htmlvar_name = time();
+					$field->htmlvar_name = 'cf' . time();
 				}
+			}
+
+			if ( empty( $field->field_id ) && is_int( $field->htmlvar_name ) ) {
+				$field->htmlvar_name = 'cf' . $field->htmlvar_name; // Integer as column name is not accepted.
 			}
 
 			return apply_filters( 'geodir_cpt_cf_sanatize_custom_field', $field, $input );
