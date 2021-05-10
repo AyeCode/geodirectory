@@ -42,13 +42,27 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
                     ),
                     'desc_tip' => true,
                     'advanced' => false
-                ),
+                )
             )
         );
 
         $design_style = geodir_design_style();
 
-        if($design_style) {
+        if ( $design_style ) {
+            $arguments = array();
+
+            // mid_size
+            $arguments['mid_size'] = array(
+                'type' => 'select',
+                'title' => __( 'Middle Pages Numbers:', 'geodirectory' ),
+                'desc' => __( 'How many numbers to either side of the current pages. Default 2.', 'geodirectory' ),
+                'options' => array(
+                    "" => __( 'Default (2)', 'geodirectory' ), "0" => "0", "1" => "1", "2" => "2", "3" => "3", "4" => "4", "5" => "5", "6" => "6", "7" => "7", "8" => "8", "9" => "9", "10" => "10"
+                ),
+                'default' => '',
+                'desc_tip' => true,
+                'advanced' => false
+            );
 
             // background
             $arguments['bg']  = geodir_get_sd_background_input('mt');
@@ -92,7 +106,7 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
     public function output($args = array(), $widget_args = array(),$content = ''){
         global $geodir_is_widget_listing;
 
-		$defaults = array(
+        $defaults = array(
             'show_advanced' => '',
             'bg'    => '',
             'mt'    => '',
@@ -107,6 +121,7 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
             'rounded'    => '',
             'rounded_size'    => '',
             'shadow'    => '',
+            'mid_size' => '',
         );
         $args = wp_parse_args( $args, $defaults );
         if(!empty($args['show_advanced'])){
@@ -120,7 +135,17 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
             $args['preview'] = true;
             $args['total'] = 3;
         }
-        
+
+        if ( $args['mid_size'] === '' ) {
+            $args['mid_size'] = 2;
+        }
+
+        // Mobile devices
+        if ( wp_is_mobile() ) {
+            $args['class'] = 'pagination-sm'; // On mobile devices.
+            $args['mid_size'] = (int) $args['mid_size'] > 1 ? 1 : $args['mid_size']; // On mobile devices.
+        }
+
         ob_start();
         if(geodir_is_post_type_archive() ||  geodir_is_taxonomy() ||  geodir_is_page('search') || $geodir_is_widget_listing ||  $is_preview ){
             geodir_loop_paging($args);
