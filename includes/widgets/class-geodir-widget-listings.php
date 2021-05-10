@@ -1364,7 +1364,9 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 
 		add_filter( 'geodir_pagination_args', array( __CLASS__, 'filter_pagination_args' ), 999999, 1 );
 
-		$shortcode = '[gd_loop_paging show_advanced="'.$show_advanced.'"]';
+		$shortcode = '[gd_loop_paging mid_size=0 show_advanced="'.$show_advanced.'"]';
+
+		$shortcode = apply_filters( 'geodir_widget_listings_pagination_shortcode', $shortcode, $wp_query, $position, $post_number, $show_advanced );
 
 		ob_start();
 

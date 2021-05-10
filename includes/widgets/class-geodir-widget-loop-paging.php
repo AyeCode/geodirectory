@@ -142,8 +142,7 @@ class GeoDir_Widget_Loop_Paging extends WP_Super_Duper {
 
         // Mobile devices
         if ( wp_is_mobile() ) {
-            $args['class'] = 'pagination-sm'; // On mobile devices.
-            $args['mid_size'] = (int) $args['mid_size'] > 1 ? 1 : $args['mid_size']; // On mobile devices.
+            $args['mid_size'] = 0; // On mobile devices.
         }
 
         ob_start();
