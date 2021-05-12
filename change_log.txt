@@ -1,3 +1,6 @@
+= 2.1.0.15 =
+* OpenStreetMap popup not working with AUI - FIXED
+
 = 2.1.0.14 =
 * Overwrite by Rank Math don't renders GD variables - FIXED
 * v1 to v2 upgrade shows missing Events plugin - FIXED
