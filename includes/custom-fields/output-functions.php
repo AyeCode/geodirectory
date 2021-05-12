@@ -1270,7 +1270,7 @@ function geodir_cf_multiselect($html,$location,$cf,$p='',$output=''){
                         $val = $val.",";
                         $li_class = ' mx-0 pr-1 pl-0 d-inline-block';
                     }else{
-                        $li_class = ' mx-0 px-0 d-inline-block';
+                        $li_class = '';
                     }
                     $field_value .= '<li class="geodir-fv-' . sanitize_html_class( sanitize_title_with_dashes( $val ) ) . $li_class.'">' . $val . '</li>';
                     $li_count++;
