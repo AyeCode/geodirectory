@@ -1431,7 +1431,7 @@ function create_marker_osm(item, map_canvas) {
                     alert(error);
                 },
                 success: function(response) {
-                   /* jQuery("#" + map_canvas).goMap();
+                    jQuery("#" + map_canvas).goMap();
                     html = typeof response == 'object' && response.html ? geodir_htmlEscape(response.html) : '';
                     marker.bindPopup(html);
                     setTimeout(function() {
@@ -1444,7 +1444,7 @@ function create_marker_osm(item, map_canvas) {
                     // give the map 1 second to reposition before allowing it to reload
                     setTimeout(function() {
                         is_zooming = false;
-                    }, 1000);*/
+                    }, 1000);
                 }
             });
             return;
