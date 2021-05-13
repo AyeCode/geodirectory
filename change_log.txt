@@ -1,5 +1,6 @@
 = 2.1.0.15 =
 * OpenStreetMap popup not working with AUI - FIXED
+* Multi-select list out broken if not using 'gd-comma-list' class - FIXED
 
 = 2.1.0.14 =
 * Overwrite by Rank Math don't renders GD variables - FIXED
