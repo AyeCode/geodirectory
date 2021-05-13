@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.0.14\n"
+"Project-Id-Version: GeoDirectory 2.1.0.15\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-05-11 19:59+0530\n"
-"PO-Revision-Date: 2021-05-11 20:00+0530\n"
+"POT-Creation-Date: 2021-05-13 11:59+0530\n"
+"PO-Revision-Date: 2021-05-13 11:59+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1750,7 +1750,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-api.php:43
 #: includes/admin/settings/class-geodir-settings-import-export.php:47
 #: includes/admin/views/html-admin-page-status-report.php:327
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1972
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1975
 msgid "Settings"
 msgstr ""
 
@@ -4843,7 +4843,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-images.php:85
 #: includes/widgets/class-geodir-widget-post-images.php:95
 #: includes/widgets/class-geodir-widget-post-images.php:106
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1597
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1600
 msgid "General"
 msgstr ""
 
@@ -18335,11 +18335,11 @@ msgstr ""
 msgid "Advanced Settings"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1397
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1400
 #, php-format
 msgid "Placeholder for: %s"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1870
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1873
 msgid "Placeholder for: "
 msgstr ""
