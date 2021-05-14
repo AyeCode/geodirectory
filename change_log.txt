@@ -1,5 +1,6 @@
 = 2.1.0.16 =
 * Progressbar not moving during the demo content installation step - FIXED
+* Hook added to filter GeoDirectory admin menu capability - ADDED
 
 = 2.1.0.15 =
 * OpenStreetMap popup not working with AUI - FIXED

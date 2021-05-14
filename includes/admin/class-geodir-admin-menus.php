@@ -96,17 +96,19 @@ class GeoDir_Admin_Menus {
 	public function admin_menu() {
 		global $menu;
 
+		$capability = $this->admin_menu_capability( 'geodirectory' );
+
 		// @todo we should change this to manage_geodirectory capability on install
-		if (current_user_can('manage_options')) $menu[] = array('', 'read', 'separator-geodirectory', '', 'wp-menu-separator geodirectory');
+		if ( current_user_can( $capability ) ) {
+			$menu[] = array( '', 'read', 'separator-geodirectory', '', 'wp-menu-separator geodirectory' ); // WPCS: override ok.
+		}
 
-		$menu_count = apply_filters('geodir_admin_menu_count',''); //@todo this seems to make some things not work like the claim listing view link, fix before using
+		$menu_count = apply_filters( 'geodir_admin_menu_count', '' ); //@todo this seems to make some things not work like the claim listing view link, fix before using
 
-		add_menu_page( __( 'Geodirectory Dashboard', 'geodirectory' ), __( 'GeoDirectory', 'geodirectory' ) . $menu_count, 'manage_options', 'geodirectory', array( $this, 'dashboard_page' ), 'dashicons-admin-site', '55.1984' );
-		add_submenu_page( 'geodirectory', __( 'Geodirectory Dashboard', 'geodirectory' ), __( 'Dashboard', 'geodirectory' ), 'manage_options', 'geodirectory', array( $this, 'dashboard_page' ) );
-		
-
+		add_menu_page( __( 'Geodirectory Dashboard', 'geodirectory' ), __( 'GeoDirectory', 'geodirectory' ) . $menu_count, $capability, 'geodirectory', array( $this, 'dashboard_page' ), 'dashicons-admin-site', '55.1984' );
+		add_submenu_page( 'geodirectory', __( 'Geodirectory Dashboard', 'geodirectory' ), __( 'Dashboard', 'geodirectory' ), $capability, 'geodirectory', array( $this, 'dashboard_page' ) );
 	}
-	
+
 	/**
 	 * Dashboard page.
 	 */
@@ -124,9 +126,7 @@ class GeoDir_Admin_Menus {
 		$post_types = geodir_get_option( 'post_types' );
 		if(!empty($post_types)){
 			foreach($post_types as $name => $cpt){
-				//echo '###'.$name;
-				//print_r($cpt);
-				add_submenu_page('edit.php?post_type='.$name, __('Settings', 'geodirectory'), __('Settings', 'geodirectory'), 'manage_options', $name.'-settings', array( $this, 'settings_page' ) );
+				add_submenu_page('edit.php?post_type='.$name, __('Settings', 'geodirectory'), __('Settings', 'geodirectory'), $this->admin_menu_capability( $name . '-settings' ), $name.'-settings', array( $this, 'settings_page' ) );
 			}
 		}
 	}
@@ -135,9 +135,7 @@ class GeoDir_Admin_Menus {
 	 * Add menu item.
 	 */
 	public function settings_menu() {
-		$settings_page = add_submenu_page( 'geodirectory', __( 'GeoDirectory settings', 'geodirectory' ),  __( 'Settings', 'geodirectory' ) , 'manage_options', 'gd-settings', array( $this, 'settings_page' ) );
-
-		//add_action( 'load-' . $settings_page, array( $this, 'settings_page_init' ) );
+		$settings_page = add_submenu_page( 'geodirectory', __( 'GeoDirectory settings', 'geodirectory' ),  __( 'Settings', 'geodirectory' ) , $this->admin_menu_capability( 'gd-settings' ), 'gd-settings', array( $this, 'settings_page' ) );
 	}
 
 
@@ -145,14 +143,14 @@ class GeoDir_Admin_Menus {
 	 * Add menu item.
 	 */
 	public function status_menu() {
-		add_submenu_page( 'geodirectory', __( 'GeoDirectory status', 'geodirectory' ),  __( 'Status', 'geodirectory' ) , 'manage_options', 'gd-status', array( $this, 'status_page' ) );
+		add_submenu_page( 'geodirectory', __( 'GeoDirectory status', 'geodirectory' ),  __( 'Status', 'geodirectory' ) , $this->admin_menu_capability( 'gd-status' ), 'gd-status', array( $this, 'status_page' ) );
 	}
 
 	/**
 	 * Addons menu item.
 	 */
 	public function addons_menu() {
-		add_submenu_page( 'geodirectory', __( 'GeoDirectory extensions', 'geodirectory' ),  __( 'Extensions', 'geodirectory' ) , 'manage_options', 'gd-addons', array( $this, 'addons_page' ) );
+		add_submenu_page( 'geodirectory', __( 'GeoDirectory extensions', 'geodirectory' ),  __( 'Extensions', 'geodirectory' ) , $this->admin_menu_capability( 'gd-addons' ), 'gd-addons', array( $this, 'addons_page' ) );
 	}
 
 
@@ -366,15 +364,7 @@ class GeoDir_Admin_Menus {
 				// item for archives
 				$item = new stdClass();
 				$loop_index++;
-				//echo '###'.$name;
-				//print_r($cpt);
-				//add_submenu_page('edit.php?post_type='.$name, __('Settings', 'geodirectory'), __('Settings', 'geodirectory'), 'manage_options', 'gd-cpt-settings', array( $this, 'settings_page' ) );
-//				$items['cpt_archives'][$name] = array(
-//					'menu-item-type'            =>  'post_type_archive',
-//					'menu-item-title'           =>  __($cpt['labels']['name'],'geodirectory'),
-//					'menu-item-url'             =>  get_post_type_archive_link( $name ),
-//					'menu-item-classes'         =>  'gd-menu-item',
-//				);
+
 				$item->ID = $loop_index;
 				$item->object_id = $loop_index;
 				$item->db_id = 0;
@@ -412,6 +402,28 @@ class GeoDir_Admin_Menus {
 		
 
 		return apply_filters( 'geodirectory_menu_items', $items,$loop_index );
+	}
+
+	/*
+	 * Get the capability required for GeoDirectory menu to be displayed to the user.
+	 *
+	 * @since 2.1.0.16
+	 *
+	 * @param  string $menu_slug The menu slug.
+	 * @return string The capability.
+	 */
+	public function admin_menu_capability( $menu_slug = '' ) {
+		$capability = 'manage_options';
+
+		/*
+		 * Filter the capability required for GeoDirectory menu to be displayed to the user.
+		 *
+		 * @since 2.1.0.16
+		 *
+		 * @param string $capability The capability required for GeoDirectory menu to be displayed to the user.
+		 * @param string $menu_slug The menu slug.
+		 */
+		return apply_filters( 'geodirectory_admin_menu_capability', $capability, $menu_slug );
 	}
 }
 
