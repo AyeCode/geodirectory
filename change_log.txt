@@ -2,6 +2,7 @@
 * Progressbar not moving during the demo content installation step - FIXED
 * Hook added to filter GeoDirectory admin menu capability - ADDED
 * Admin users are not allowed to access wp-admin area when they contains restricted user role - FIXED
+* Map param added to disable click on Google default places - ADDED
 
 = 2.1.0.15 =
 * OpenStreetMap popup not working with AUI - FIXED
