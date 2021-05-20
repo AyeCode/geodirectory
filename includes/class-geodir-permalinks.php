@@ -469,6 +469,12 @@ class GeoDir_Permalinks {
 			return $post_link; // If draft or post name is empty then return default url.
 		} elseif ( isset( $post_obj->ID ) && isset( $gd_post->ID ) && $post_obj->ID == $gd_post->ID ) {
 			// Check its the correct post.
+			// Update $gd_post on post saved.
+			if ( isset( $post_obj->post_status ) && isset( $gd_post->post_status ) && $post_obj->post_status != $gd_post->post_status ) {
+				wp_cache_delete( "gd_post_" . $gd_post->ID, 'gd_post' );
+
+				$gd_post = geodir_get_post_info( $gd_post->ID );
+			}
 		} else {
 			$correct_post = false;
 		}
