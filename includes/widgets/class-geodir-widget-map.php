@@ -1199,6 +1199,14 @@ jQuery(function ($) {
 					});
 				}
 			}
+			<?php if ( geodir_lazy_load_map() == 'auto' ) { ?>
+			jQuery(function($) {
+				$('[aria-controls="collapseMap"]').addClass('geodir-lazy-map');
+				$('.geodir-lazy-map').on('click', function(e) {
+					window.dispatchEvent(new Event('resize'));
+				});
+			});
+			<?php } ?>
 		</script>
 		<?php
 	}
