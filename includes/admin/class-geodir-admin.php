@@ -301,15 +301,36 @@ class GeoDir_Admin {
 	 * Restrict the wp-admin area from specific user roles if set to do so.
 	 */
 	public function prevent_admin_access() {
-		$restricted_roles = geodir_get_option('admin_blocked_roles',array());
-		if ( !empty($restricted_roles) && is_user_logged_in() && ( ! defined( 'DOING_AJAX' ) ) ) // checking action in request to allow ajax request go through
-		{
+		$restricted_roles = geodir_get_option( 'admin_blocked_roles', array() );
+
+		// Checking action in request to allow ajax request go through
+		if ( ! empty ( $restricted_roles ) && is_user_logged_in() && ! wp_doing_ajax() && ! wp_doing_cron() ) {
 			$roles = wp_get_current_user()->roles;
-			foreach($restricted_roles as $role){
-				if( in_array($role, $roles)){
-					wp_safe_redirect( home_url() );
-					exit;
+
+			$prevent = false;
+
+			// Always allow administrator role.
+			if ( ! ( ! empty( $roles ) && in_array( 'administrator', $roles ) ) ) {
+				foreach( $restricted_roles as $role ) {
+					if ( in_array( $role, $roles ) ) {
+						$prevent = true;
+						break;
+					}
 				}
+			}
+
+			/*
+			 * Check and prevent admin access based on user role.
+			 *
+			 * @since 2.1.0.16
+			 *
+			 * @param bool $prevent True to prevent admin access.
+			 */
+			$prevent = apply_filters( 'geodir_prevent_wp_admin_access', $prevent );
+
+			if ( $prevent ) {
+				wp_safe_redirect( home_url() );
+				exit;
 			}
 		}
 	}

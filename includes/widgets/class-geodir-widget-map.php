@@ -729,6 +729,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		$map_canvas = $map_options['map_canvas'];
 		$load_terms = ! empty( $map_options['cat_filter'] ) && geodir_lazy_load_map() ? 'true' : 'false';
 ?>
+<style>.geodir_map_container .poi-info-window .full-width{width:180px;position:relative;margin-left:inherit;left:inherit;}</style>
 <script type="text/javascript">
 jQuery(function ($) {
 	<?php if ( geodir_lazy_load_map() ) { ?>
@@ -1198,6 +1199,14 @@ jQuery(function ($) {
 					});
 				}
 			}
+			<?php if ( geodir_lazy_load_map() == 'auto' ) { ?>
+			jQuery(function($) {
+				$('[aria-controls="collapseMap"]').addClass('geodir-lazy-map');
+				$('.geodir-lazy-map').on('click', function(e) {
+					window.dispatchEvent(new Event('resize'));
+				});
+			});
+			<?php } ?>
 		</script>
 		<?php
 	}

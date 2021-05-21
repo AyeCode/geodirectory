@@ -680,9 +680,6 @@ class GeoDir_Post_Data {
 				if ( false === $result && ! empty( $wpdb->last_error ) ) {
 					geodir_error_log( wp_sprintf( __( 'Could not update post in the database. %s', 'geodirectory' ), $wpdb->last_error ) );
 				}
-
-				// Clear the post cache
-				wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
 			} else { // Insert in the database.
 				$result = $wpdb->insert(
 					$table,
@@ -694,6 +691,9 @@ class GeoDir_Post_Data {
 					geodir_error_log( wp_sprintf( __( 'Could not insert post into the database. %s', 'geodirectory' ), $wpdb->last_error ) );
 				}
 			}
+
+			// Clear the post cache
+			wp_cache_delete( "gd_post_" . $post_id, 'gd_post' );
 
 			if ( $result ) {
 				/**

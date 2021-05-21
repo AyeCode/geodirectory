@@ -757,6 +757,7 @@ function geodirGoMapInit() {
             directionsResult: null,
             disableDoubleClickZoom: false,
             streetViewControl: true,
+            clickableIcons: true, // When false, map icons are not clickable. A map icon represents a point of interest, also known as a POI.
             streetViewControlOptions: {
                 position: 'LEFT_CENTER'
             },
@@ -859,7 +860,8 @@ function geodirGoMapInit() {
                 fullscreenControl: opts.fullscreenControl,
                 zoom: parseInt(opts.zoom),
                 minZoom: parseInt(opts.minZoom),
-                maxZoom: parseInt(opts.maxZoom)
+                maxZoom: parseInt(opts.maxZoom),
+                clickableIcons: opts.clickableIcons ? true : false
             };
 
             this.map = new google.maps.Map(el, myOptions);
