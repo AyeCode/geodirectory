@@ -915,7 +915,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'class'      => 'geodir-select',
 					'options'    => geodir_user_roles(array('administrator')),
 					'desc_tip'   => true,
-					'docs'       => "https://docs.wpgeodirectory.com/",
+					//'docs'       => "https://docs.wpgeodirectory.com/",
 					//'advanced' => true
 				),
 
@@ -936,7 +936,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'   => 'user_trash_posts',
 					'type' => 'checkbox',
 					'default'  => '1',
-					'docs'       => "https://docs.wpgeodirectory.com/",
+					//'docs'       => "https://docs.wpgeodirectory.com/",
 
 				),
 				array(
