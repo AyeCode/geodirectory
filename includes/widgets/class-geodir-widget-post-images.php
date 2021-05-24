@@ -41,6 +41,15 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 					'advanced' => false,
 					'group'     => __("General","geodirectory"),
 				),
+				'id'  => array(
+					'title' => __( 'Post ID:', 'geodirectory' ),
+					'desc' => __( 'Leave blank to use current post id.', 'geodirectory' ),
+					'type' => 'number',
+					'placeholder' => __( 'Leave blank to use current post id.', 'geodirectory' ),
+					'desc_tip' => true,
+					'default'  => '',
+					'advanced' => false
+				),
 				'types'  => array(
 					'title' => __('Image types:', 'geodirectory'),
 					'desc' => __('Comma separated list of image types to show. Defaults to: post_images', 'geodirectory'),
@@ -326,9 +335,6 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	 */
 	public function output_images($options){
 		global $post, $gd_post;
-		//return 'zzz';
-		//if(!isset($gd_post->ID)){return '';}
-
 
 		// options
 		$defaults = array(
@@ -348,6 +354,7 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			'show_logo'     => '0',
 			'cover'   => '', // image cover type
 			'aspect'    => '', // image aspect ratio
+			'id' => '',
 			'types'   => '', // types to show, post_images,comment_images,logo
 			'fallback_types'   => 'logo,cat_default,cpt_default,listing_default,website_screenshot', //logo,cat_default,cpt_default,listing_default
 			'css_class' => '',
@@ -402,6 +409,11 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		$post_id = ! empty( $gd_post->ID ) ? absint( $gd_post->ID ) : 0;
 		if ( $post_id && wp_is_post_revision( $post_id ) ) {
 			$post_id = wp_get_post_parent_id( $post_id );
+		}
+
+		// Set static post ID.
+		if ( ! empty( $options['id'] ) ) {
+			$post_id = absint( $options['id'] );
 		}
 
 		if($block_preview){

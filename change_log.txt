@@ -7,6 +7,7 @@
 * Lazy load map not loading on mobile until page scroll on listimia theme - FIXED
 * Multi-select 'gd-comma-list' class dropping last element to new line - FIXED
 * Tooltips not rendering HTML - FIXED
+* [gd_post_images] option added to show images for specific post - ADDED
 
 = 2.1.0.15 =
 * OpenStreetMap popup not working with AUI - FIXED
