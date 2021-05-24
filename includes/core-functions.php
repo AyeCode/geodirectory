@@ -148,7 +148,7 @@ function geodir_help_tip( $tip, $allow_html = false ) {
 		$tip = esc_attr( $tip );
 	}
 
-	return '<span class="gd-help-tip dashicons dashicons-editor-help" title="' . $tip . '"></span>';
+	return '<span class="gd-help-tip dashicons dashicons-editor-help" title="' . $tip . '" data-toggle="tooltip" data-html="true"></span>';
 }
 
 /**

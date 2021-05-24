@@ -4,7 +4,9 @@
 * Admin users are not allowed to access wp-admin area when they contains restricted user role - FIXED
 * Map param added to disable click on Google default places - ADDED
 * WPEngine object cache sometime shows wrong link in published email - FIXED
-* Lazy load map not loading on mobile untill page scroll on listimia theme - FIXED
+* Lazy load map not loading on mobile until page scroll on listimia theme - FIXED
+* Multi-select 'gd-comma-list' class dropping last element to new line - FIXED
+* Tooltips not rendering HTML - FIXED
 
 = 2.1.0.15 =
 * OpenStreetMap popup not working with AUI - FIXED
