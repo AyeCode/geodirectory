@@ -1257,7 +1257,9 @@ class GeoDir_SEO {
 			$term = get_queried_object();
 
 			if ( ! empty( $term->term_id ) && ( $image = get_term_meta( $term->term_id, 'ct_cat_default_img', true ) ) ) {
-				$image_container->add_image_by_id( $image );
+				if ( ! empty( $image['id'] ) ) {
+					$image_container->add_image_by_id( $image['id'] );
+				}
 			}
 		}
 	}
