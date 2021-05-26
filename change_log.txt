@@ -8,6 +8,7 @@
 * Multi-select 'gd-comma-list' class dropping last element to new line - FIXED
 * Tooltips not rendering HTML - FIXED
 * [gd_post_images] option added to show images for specific post - ADDED
+* AUI: unable to save empty value for multiselect/multicheckbox fields - FIXED
 
 = 2.1.0.15 =
 * OpenStreetMap popup not working with AUI - FIXED
