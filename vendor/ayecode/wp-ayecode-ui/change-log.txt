@@ -1,5 +1,6 @@
 = 0.1.49 =
 * Unable to save empty value for multiselect fields - FIXED
+* Text left/right classes alignment swapped for RTL CSS - CHANGED
 
 = 0.1.48 =
 * Tooltips in wp-admin have wrong margin offset - FIXED
