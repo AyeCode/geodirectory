@@ -10,6 +10,8 @@
 * [gd_post_images] option added to show images for specific post - ADDED
 * AUI: unable to save empty value for multiselect/multicheckbox fields - FIXED
 * Category image not added in Yoast SEO meta - FIXED
+* Checkbox field description is not wrapped in a container ( Legacy design ) - FIXED
+
 
 = 2.1.0.15 =
 * OpenStreetMap popup not working with AUI - FIXED
