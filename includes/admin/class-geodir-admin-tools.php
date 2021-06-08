@@ -390,6 +390,18 @@ class GeoDir_Admin_Tools {
 			}
 		}
 
+		// Single listing tabs
+		$sql  = "SELECT tab_name FROM " . GEODIR_TABS_LAYOUT_TABLE;
+		$rows = $wpdb->get_results( $sql );
+
+		if ( ! empty( $rows ) ) {
+			foreach ( $rows as $row ) {
+				if ( ! empty( $row->tab_name ) ) {
+					$translation_texts[] = stripslashes( $row->tab_name );
+				}
+			}
+		}
+
 		// Advance search filter fields table @todo this should be in the advanced search addon
 		if ( defined( 'GEODIR_ADVANCE_SEARCH_TABLE' ) ) {
 			$sql  = "SELECT frontend_title, admin_title, description, range_from_title, range_to_title, extra_fields FROM " . GEODIR_ADVANCE_SEARCH_TABLE;

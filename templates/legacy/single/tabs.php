@@ -1,14 +1,25 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 /**
- * Variables.
+ * Single Listing Tabs
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/legacy/single/tabs.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory
+ * @version    2.1.0.16
  *
  * @var string $default_search_button_label The search button label text or font awesome class.
  * @var boolean $fa_class If a font awesome class is being used as the button text.
  */
+
+defined( 'ABSPATH' ) || exit;
+
 if ( ! empty( $tabs_array ) ) {
 	echo '<div class="geodir-tabs" id="gd-tabs">';
 
@@ -41,7 +52,7 @@ if ( ! empty( $tabs_array ) ) {
 			$href = $args['show_as_list'] ? ' href="#' . esc_attr( $tab['tab_key'] ) . '" ' : '';
 			echo '<a data-tab="#' . esc_attr( $tab['tab_key'] ) . '" data-status="enable" '. $href .'>';
 			echo $tab_icon;
-			echo stripslashes( esc_attr__( $tab['tab_name'], 'geodirectory' ) ).'</a>';
+			echo esc_attr__( stripslashes( $tab['tab_name'] ), 'geodirectory' ).'</a>';
 			echo '</dd>';
 			$count++;
 		}
@@ -63,7 +74,7 @@ if ( ! empty( $tabs_array ) ) {
 				if ( $tab['tab_icon'] ) {
 					$tab_icon = '<i class=" ' . esc_attr( $tab['tab_icon'] ) . '" aria-hidden="true"></i>';
 				}
-				$tab_title = '<span class="gd-tab-list-title" ><a href="#' . esc_attr( $tab['tab_key'] ) . '">' . $tab_icon . esc_attr__( $tab['tab_name'], 'geodirectory' ) . '</a></span><hr />';
+				$tab_title = '<span class="gd-tab-list-title" ><a href="#' . esc_attr( $tab['tab_key'] ) . '">' . $tab_icon . esc_attr__(  stripslashes( $tab['tab_name'] ), 'geodirectory' ) . '</a></span><hr />';
 
 				/**
 				 * Filter the tab list title html.
