@@ -489,8 +489,9 @@ function geodir_cfi_checkbox($html,$cf){
                 $tc = geodir_terms_and_conditions_page_id();
                 $tc_link = get_permalink($tc);
                 echo "<a href='$tc_link' target='_blank'>".__($cf['desc'], 'geodirectory')." <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
-            }else{
-                _e($cf['desc'], 'geodirectory');
+            }else{ ?>
+               <span class="geodir_message_note"><?php _e($cf['desc'], 'geodirectory');?></span>
+               <?php 
             }
             ?>
             <?php if ($cf['is_required']) { ?>
