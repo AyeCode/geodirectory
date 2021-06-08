@@ -456,7 +456,12 @@ class GeoDir_Ninja_Forms_MergeTags extends NF_Abstracts_MergeTags
 
         if ( is_admin() && defined( 'DOING_AJAX' ) && DOING_AJAX ) {
             // If we are doing AJAX, use the referer to get the Post ID.
-            $post_id = url_to_postid( wp_get_referer() );
+            $post_id = absint( url_to_postid( wp_get_referer() ) );
+
+            // Check referer contains correct post
+            if ( $post_id && ! geodir_is_gd_post_type( get_post_type( $post_id ) ) ) {
+                $post_id = 0;
+            }
 
             // Retrieve value from form data.
             if ( empty( $post_id ) && ( $_post_id = (int) $this->get_submitted_value( 'listing_id' ) ) ) {

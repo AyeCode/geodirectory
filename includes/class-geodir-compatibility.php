@@ -90,11 +90,6 @@ class GeoDir_Compatibility {
 		add_filter( 'geodir_bypass_setup_singular_page', array( __CLASS__, 'elementor_loop_bypass' ) );
 
 		/*######################################################
-		WP Easy Updates :: Allow beta addons if set
-		######################################################*/
-		add_filter( 'wp_easy_updates_api_params', array( __CLASS__, 'wp_easy_updates' ), 10, 2 );
-
-		/*######################################################
 		Genesis (theme) :: Fix archive pages excerpt.
 		######################################################*/
 		add_filter( 'genesis_pre_get_option_content_archive', array( __CLASS__, 'genesis_content_archive' ) );
@@ -1079,31 +1074,6 @@ class GeoDir_Compatibility {
 		}
 
 		return $wrap;
-	}
-
-	/**
-	 * @param $api_params
-	 * @param $_src
-	 *
-	 * @return mixed
-	 */
-	public static function wp_easy_updates( $api_params, $_src ) {
-
-		//@todo until GDv1 auto-updates are retired we need to force beta checks.
-		$enabled = 1;// geodir_get_option( 'admin_enable_beta', 1 );
-
-		if ( $enabled && strpos( $_src, 'wpgeodirectory.com' ) !== false ) {
-			if ( ! empty( $api_params['update_array'] ) ) {
-				foreach ( $api_params['update_array'] as $key => $val ) {
-					$api_params['update_array'][ $key ]['beta'] = true;
-				}
-			}
-
-			$api_params['beta'] = true;
-
-		}
-
-		return $api_params;
 	}
 
 	public static function rank_math_disable( $options ) {

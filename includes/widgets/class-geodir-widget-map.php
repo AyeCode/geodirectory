@@ -636,7 +636,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 			$map_post_types = self::map_post_types( true );
 		}
 
-		if ( ! empty( $map_options['cat_filter'] ) || ! empty( $map_options['search_filter'] ) ) {
+		if ( ! empty( $map_options['cat_filter'] ) || ! empty( $map_options['search_filter'] ) || ( ! empty( $map_options['post_type_filter'] ) && ! empty( $design_style ) ) ) {
 			$cat_filter_class   = '';
 			if ( ! empty( $map_options['post_type_filter'] ) ) {
 				$cpts_on_map        = $map_post_types;

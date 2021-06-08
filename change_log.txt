@@ -10,6 +10,9 @@
 * [gd_post_images] option added to show images for specific post - ADDED
 * AUI: unable to save empty value for multiselect/multicheckbox fields - FIXED
 * Category image not added in Yoast SEO meta - FIXED
+* Sometime ninja form dodn't send notification to listing email - FIXED
+* Disable beta addons setting on upgrade - CHANGED
+* Map CPT filter only visible when search filter is active - FIXED
 
 = 2.1.0.15 =
 * OpenStreetMap popup not working with AUI - FIXED
