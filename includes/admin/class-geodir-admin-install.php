@@ -38,6 +38,9 @@ class GeoDir_Admin_Install {
 		),
 		'2.0.0.96' => array(
 			'geodir_upgrade_20096',
+		),
+		'2.1.0.16' => array(
+			'geodir_upgrade_21016',
 		)
 	);
 

@@ -216,3 +216,15 @@ function geodir_upgrade_20096() {
 		geodir_update_option( 'default_location_timezone_string', $timezone_string );
 	}
 }
+
+/**
+ * Update for 2.1.0.16
+ *
+ * @since 2.1.0.16
+ *
+ * @return void
+ */
+function geodir_upgrade_21016() {
+	// Disable beta addons setting.
+	geodir_update_option( 'admin_enable_beta', '' );
+}
