@@ -1,14 +1,24 @@
 <?php
-
-if ( ! defined( 'ABSPATH' ) ) {
-	exit;
-}
 /**
- * Variables.
+ * Single Listing Tabs
+ *
+ * This template can be overridden by copying it to yourtheme/geodirectory/bootstrap/single/tabs.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory
+ * @version    2.1.0.16
  *
  * @var string $default_search_button_label The search button label text or font awesome class.
  * @var boolean $fa_class If a font awesome class is being used as the button text.
  */
+
+defined( 'ABSPATH' ) || exit;
 
 if ( ! empty( $tabs_array ) ) {
 	echo '<div class="geodir-tabs" id="gd-tabs">';
@@ -37,7 +47,7 @@ if ( ! empty( $tabs_array ) ) {
 			$active =  $count == 0 ? 'active' :'';
 			$selected =  $active ? 'true' :'false';
 			$key = esc_attr( $tab['tab_key'] );
-			$name = stripslashes( esc_attr__( $tab['tab_name'], 'geodirectory' ) );
+			$name = esc_attr__( stripslashes( $tab['tab_name'] ), 'geodirectory' );
 			$data_toggle = $args['show_as_list'] ? '' : 'data-toggle="tab"';
 			$pill_js = $args['show_as_list'] && $args['tab_style'] ? 'onclick="jQuery(this).parent().parent().find(\'a\').removeClass(\'active\');jQuery(this).addClass(\'active\');"' : '';
 
@@ -68,7 +78,7 @@ if ( ! empty( $tabs_array ) ) {
 				if ( $tab['tab_icon'] ) {
 					$tab_icon = '<i class=" ' . esc_attr( $tab['tab_icon'] ) . ' mr-1" aria-hidden="true"></i>';
 				}
-				$tab_title = '<h2 class="gd-tab-list-title h3" ><a href="#' . esc_attr( $tab['tab_key'] ) . '" class="text-reset">' . $tab_icon . esc_attr__( $tab['tab_name'], 'geodirectory' ) . '</a></h2><hr />';
+				$tab_title = '<h2 class="gd-tab-list-title h3" ><a href="#' . esc_attr( $tab['tab_key'] ) . '" class="text-reset">' . $tab_icon . esc_attr__( stripslashes( $tab['tab_name'] ), 'geodirectory' ) . '</a></h2><hr />';
 
 				/**
 				 * Filter the tab list title html.
