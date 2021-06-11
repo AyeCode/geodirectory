@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 // get the items first so we can label the button with current sort option
-$button_label = esc_attr( 'Sort By' ,'geodirectory' );
+$button_label = esc_attr__( 'Sort By' ,'geodirectory' );
 $sort_options_html = '';
 if(!empty($sort_options )) {
 	foreach ( $sort_options as $sort ) {

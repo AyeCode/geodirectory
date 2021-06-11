@@ -1113,7 +1113,7 @@ function geodir_timezone_choice( $selected_zone, $locale = null, $manual_offsets
 	if ( 'UTC' === $selected_zone || empty( $selected_zone ) ) {
 		$selected = 'selected="selected" ';
 	}
-	$structure[] = '<option ' . $selected . 'value="' . esc_attr( 'UTC' ) . '" data-offset="+0">' . __( 'UTC', 'geodirectory' ) . '</option>';
+	$structure[] = '<option ' . $selected . 'value="' . esc_attr__( 'UTC', 'geodirectory' ) . '" data-offset="+0">' . __( 'UTC', 'geodirectory' ) . '</option>';
 	$structure[] = '</optgroup>';
 
 	foreach ( $zonen as $key => $zone ) {
