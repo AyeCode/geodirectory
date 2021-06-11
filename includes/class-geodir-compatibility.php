@@ -193,6 +193,12 @@ class GeoDir_Compatibility {
 		if ( defined( 'BORLABS_COOKIE_VERSION' ) ) {
 			add_filter( 'geodir_get_settings_general', array( __CLASS__, 'borlabs_cookie_setting' ), 20, 3 );
 		}
+
+		// Complianz | GDPR/CCPA Cookie Consent plugin integration
+		if ( class_exists( 'COMPLIANZ' ) ) {
+			add_filter( 'cmplz_integrations', array( __CLASS__, 'complianz_gdpr_integration' ), 21, 1 );
+			add_filter( 'cmplz_integration_path', array( __CLASS__, 'complianz_integration_path' ), 21, 2 );
+		}
 	}
 
 	/**
@@ -3510,9 +3516,9 @@ class GeoDir_Compatibility {
 	 * @since 2.1.0.13
 	 *
 	 * @param string $output Map widget content.
-	 * @return array $instance Widget instance.
+	 * @param array $instance Widget instance.
 	 * @param array $args Widget args.
-	 * @return array $super_duper Super Duper class.
+	 * @param array $super_duper Super Duper class.
 	 * @return string Map widget content.
 	 */
 	public static function borlabs_cookie_wrap( $output, $instance, $args, $super_duper ) {
@@ -3528,5 +3534,39 @@ class GeoDir_Compatibility {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Complianz GDPR integration.
+	 *
+	 * @since 2.1.0.17
+	 *
+	 * @param array $integrations Plugins integrations.
+	 * @return array Plugins integrations.
+	 */
+	public static function complianz_gdpr_integration( $integrations ) {
+		$integrations['geodirectory'] = array(
+			'constant_or_function' => 'GeoDir',
+			'label'                => 'GeoDirectory',
+			'firstparty_marketing' => false,
+		);
+
+		return $integrations;
+	}
+
+	/**
+	 * Complianz GDPR integration.
+	 *
+	 * @since 2.1.0.17
+	 *
+	 * @param array $integrations Plugins integrations.
+	 * @return array Plugins integrations.
+	 */
+	public static function complianz_integration_path( $path, $plugin ) {
+		if ( $plugin == 'geodirectory' ) {
+			$path = GEODIRECTORY_PLUGIN_DIR . 'includes/complianz-gdpr.php';
+		}
+
+		return $path;
 	}
 }
