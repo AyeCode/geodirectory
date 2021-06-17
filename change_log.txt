@@ -1,6 +1,7 @@
 = 2.1.0.17 =
 * Complianz | GDPR/CCPA Cookie Consent plugin integration added for GD maps - ADDED
 * Show admin notices on GD pages templates for Divi Builder - ADDED
+* Add listing map view field shows incorrect placeholder with AUI style - FIXED
 
 = 2.1.0.16 =
 * Progressbar not moving during the demo content installation step - FIXED

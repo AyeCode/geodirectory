@@ -1481,7 +1481,6 @@ function geodir_cfi_address( $html, $cf ) {
                     'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                     'type'              => 'text',
                     'title'             =>  $title,
-                    'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
                     'class'             => '',
                     'value'             => esc_attr(stripslashes($mapview)),
                     'help_text'         => __('Please select listing map view to use', 'geodirectory'),
