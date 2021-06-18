@@ -10,7 +10,7 @@ jQuery(function($) {
         geodir_auto_save_poll(geodir_get_form_data());
     }, 1);
     /// check validation on blur
-    jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").delay(2000).blur(function() {
+    jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").delay(2000).on("blur",function() {
         // give some time inc ase another script is filling data
         $this = this;
         setTimeout(function() {
@@ -18,7 +18,7 @@ jQuery(function($) {
         }, 100)
     });
     // Check for validation on click for checkbox, radio
-    jQuery('#geodirectory-add-post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function() {
+    jQuery('#geodirectory-add-post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").on("click", function() {
         geodir_validate_field(this);
     });
     // Check for validation on click for select2
@@ -29,11 +29,11 @@ jQuery(function($) {
     if ($('form#post .postbox#geodir_post_info').length) {
         var $form = $('.postbox#geodir_post_info').closest('form#post');
         // check validation on blur
-        $('.required_field:visible', $form).find("[field_type]:visible, .editor textarea").blur(function() {
+        $('.required_field:visible', $form).find("[field_type]:visible, .editor textarea").on("blur",function() {
             geodir_validate_field(this);
         });
         // Check for validation on click for checkbox, radio
-        $('.required_field:visible', $form).find("input[type='checkbox'],input[type='radio']").click(function() {
+        $('.required_field:visible', $form).find("input[type='checkbox'],input[type='radio']").on("click", function() {
             geodir_validate_field(this);
         });
         // Check for validation on click for select2
@@ -110,7 +110,7 @@ jQuery(function($) {
     /**
      * Save the post on preview link click.
      */
-    jQuery(".geodir_preview_button").click(function() {
+    jQuery(".geodir_preview_button").on("click", function() {
         geodir_auto_save_post();
         $form = jQuery("#geodirectory-add-post");
         return geodir_validate_submit($form);
@@ -118,7 +118,7 @@ jQuery(function($) {
     /**
      * Save the post via ajax.
      */
-    jQuery("#geodirectory-add-post").submit(function(e) {
+    jQuery("#geodirectory-add-post").on("submit", function(e) {
         $valid = geodir_validate_submit(this);
         if ($valid) {
             $result = geodir_save_post();
@@ -127,13 +127,23 @@ jQuery(function($) {
     });
 
     // Conditional Fields on change
-    jQuery("#geodirectory-add-post,#post").change(function() {
+    jQuery("#geodirectory-add-post,#post").on("change", function() {
         try {
             aui_conditional_fields("#geodirectory-add-post,#post");
         } catch(err) {
             console.log(err.message);
         }
     });
+
+    // Handle hidden latitude/longitude required fields.
+    if (jQuery('.gd-hidden-latlng').length) {
+        var $_form = jQuery("#geodirectory-add-post");
+        jQuery("[type='submit']", $_form).on('click', function(e) {
+            if (!(jQuery('[name="latitude"]', $_form).val().trim() && jQuery('[name="longitude"]', $_form).val().trim())) {
+                jQuery('.gd-hidden-latlng').removeClass('d-none');
+            }
+        });
+    }
 
     // Conditional Fields on load
     try {
@@ -143,7 +153,7 @@ jQuery(function($) {
     }
 
     // Default cat set
-    jQuery(".geodir_taxonomy_field .geodir-category-select, .geodir_taxonomy_field [data-ccheckbox='default_category'], .geodir_taxonomy_field input[data-cradio]").change(function() {
+    jQuery(".geodir_taxonomy_field .geodir-category-select, .geodir_taxonomy_field [data-ccheckbox='default_category'], .geodir_taxonomy_field input[data-cradio]").on("change", function() {
         geodir_populate_default_category_input();
     });
     geodir_populate_default_category_input();
