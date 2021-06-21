@@ -461,13 +461,18 @@ class GeoDir_Template_Loader {
      * @since 2.0.0
      */
     public static function setup_singular_page($content){
+        
 
         // @todo this is Kiran's solution, lets keep an eye out and report any situations where this does not work out.
         global $post,$wp_query;
+
         if ( ! ( ! empty( $wp_query ) && ! empty( $post ) && ( $post->ID == get_queried_object_id() ) ) ) {
             return $content;
         }
 
+        if(post_password_required()){
+            return $content;
+        }
         /*
          * Some page builders need to be able to take control here so we add a filter to bypass it on the fly
          */
