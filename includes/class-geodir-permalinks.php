@@ -265,14 +265,25 @@ class GeoDir_Permalinks {
 	 *
 	 * @return mixed
 	 */
-	public function term_url_no_parent($termlink, $term, $taxonomy){
-		$geodir_taxonomies = GeoDir_Taxonomies::get_taxonomies('', true);
+	public function term_url_no_parent( $termlink, $term, $taxonomy ) {
+		if ( ! geodir_is_gd_taxonomy( $taxonomy ) ) {
+			return $termlink;
+		}
 
-		if (!empty($term->parent) && isset($taxonomy) && !empty($geodir_taxonomies) && in_array($taxonomy, $geodir_taxonomies)) {
-			$parent = self::get_term_parent_info($term->parent, $taxonomy );
-			$parent_slug = isset($parent->slug) ? $parent->slug : '';
-			if($parent_slug){
-				$termlink = str_replace("/$parent_slug/","/",$termlink);
+		if ( ! empty( $term ) && is_object( $term ) && ! isset( $term->parent ) && ! empty( $term->term_id ) ) {
+			$_term = get_term( $term->term_id );
+
+			if ( ! empty( $_term ) && ! is_wp_error( $_term ) ) {
+				$term = $_term;
+			}
+		}
+
+		if ( ! empty( $term->parent ) ) {
+			$parent = self::get_term_parent_info( $term->parent, $taxonomy );
+			$parent_slug = isset( $parent->slug ) ? $parent->slug : '';
+
+			if ( $parent_slug ) {
+				$termlink = str_replace( "/$parent_slug/", "/", $termlink );
 			}
 		}
 

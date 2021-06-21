@@ -3,6 +3,7 @@
 * Show admin notices on GD pages templates for Divi Builder - ADDED
 * Add listing map view field shows incorrect placeholder with AUI style - FIXED
 * Prevents add listing form submit when latitude/longitude fields are hidden - FIXED
+* Google XML sitemaps shows GD child term links hierarchically - FIXED
 
 = 2.1.0.16 =
 * Progressbar not moving during the demo content installation step - FIXED
