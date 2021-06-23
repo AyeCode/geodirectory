@@ -416,14 +416,27 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 			$post_id = absint( $options['id'] );
 		}
 
-		if($block_preview){
+		if ( $block_preview ) {
 			$options['ajax_load'] = false; // disable ajax loading
 			$post_id = -1;
 		}
 
-		if(!$post_id){return '';}
+		if ( ! $post_id ) {
+			return '';
+		}
 
-		$post_images = $block_preview ? $this->get_dummy_images() : geodir_get_images($post_id, $options['limit'], $options['show_logo'],$revision_id,$options['types'],$options['fallback_types']);
+		if ( $block_preview ) {
+			$post_images = $this->get_dummy_images();
+		} else {
+			// Show images with all statuses to admin & post author.
+			if ( is_preview() && geodir_listing_belong_to_current_user( $post_id ) ) {
+				$status = '';
+			} else {
+				$status = '1';
+			}
+
+			$post_images = geodir_get_images( $post_id, $options['limit'], $options['show_logo'], $revision_id, $options['types'], $options['fallback_types'], $status );
+		}
 
 		// make it just a image if only one
 		if($options['type']=='slider' && count($post_images) == 1 && $options['limit_show']){
