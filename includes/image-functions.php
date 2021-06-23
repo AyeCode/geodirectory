@@ -118,7 +118,10 @@ function geodir_get_image_tag( $image, $size = 'medium',$align = '', $classes = 
 		$alt = esc_attr( trim( $alt ) );
 	}
 
-	$class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id .' w-100 p-0 m-0 mw-100 border-0 '.$classes;
+	$class = 'align' . esc_attr($align) .' size-' . esc_attr($size) . ' geodir-image-' . $id .' ' . $classes;
+	if ( geodir_design_style() ) {
+		$class .= ' w-100 p-0 m-0 mw-100 border-0';
+	}
 
 	/**
 	 * Filters the value of the attachment's image tag class attribute.

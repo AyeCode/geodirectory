@@ -1533,6 +1533,7 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
 
     // If not html then we run the standard output.
     if ( empty( $html ) ) {
+        $design_style = geodir_design_style();
         $files = GeoDir_Media::get_attachments_by_type( $gd_post->ID, $html_var );
 
         if ( ! empty( $files ) ) {
@@ -1596,12 +1597,47 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
 
                     // If the uploaded file is image
                     $file_type = 'unknown';
+					$wrap_class = '';
                     if ( in_array( $uploaded_file_type, $image_file_types ) ) { // Image
                         $file_type = 'image';
-                        $outout_item .= '<span class="geodir-cf-file-name clearfix"><i aria-hidden="true" class="fa fa-file-image"></i> ' . $_filename . '</span>';
-                        $outout_item .= '<a href="' . $url . '" data-lity>';
-                        $outout_item .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false);
-                        $outout_item .= geodir_get_image_tag( $file );
+						$wrap_class = ' geodir-images';
+
+						$image_wrap_class = '';
+						$image_class = 'img-responsive';
+						if ( $design_style ) {
+							$image_wrap_class = 'embed-has-action';
+							$image_class .= ' mw-100 embed-responsive-item embed-item-cover-xy';
+						}
+						$lightbox_attrs = apply_filters( 'geodir_link_to_lightbox_attrs', '' );
+
+                        $outout_item .= '<span class="geodir-cf-file-name clearfix mb-1"><i aria-hidden="true" class="fa fa-file-image"></i> ' . $_filename . '</span>';
+                        $outout_item .= '<a href="' . $url . '" class="geodir-lightbox-image ' . $image_wrap_class . '" data-lity ' . $lightbox_attrs . '>';
+                        $outout_item .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false)
+
+						$image_params = array(
+							'size' => 'medium',
+							'align' => '',
+							'class' => $image_class
+						);
+						/**
+						  * Filter image file output parameters.
+						  *
+						  * @since 2.1.0.17
+						  *
+						  * @param array  $image_params Image parameters.
+						  * @param object $file Image file object.
+						  */
+						$image_params = apply_filters( 'geodir_cf_file_output_image_params', $image_params, $file );
+
+                        $image_tag = geodir_get_image_tag( $file, $image_params['size'], $image_params['align'], $image_params['class'] );
+						$metadata = ! empty( $file->metadata ) ? maybe_unserialize( $file->metadata ) : array();
+						if ( $image_params['size'] != 'thumbnail' ) {
+							$image_tag =  wp_image_add_srcset_and_sizes( $image_tag, $metadata , 0 );
+						}
+						$outout_item .= $image_tag;
+						if ( $design_style ) {
+							$outout_item .= '<i class="fas fa-search-plus" aria-hidden="true"></i>';
+						}
                         $outout_item .= '</a>';
                     } elseif ( in_array( $uploaded_file_type, $audio_file_types ) || in_array( $file_ext, wp_get_audio_extensions() ) ) { // Audio
                         $file_type = 'audio';
@@ -1614,7 +1650,7 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
                     } else {
                         $outout_item .= '<a class="gd-meta-file" href="' . $url . '" target="_blank" data-lity title="' . esc_attr( $title ) . '"><i aria-hidden="true" class="fa fa-file"></i> ' . $_filename . '</a>';
                     }
-                    $outout_item = '<div class="geodir-custom-field-file clearfix geodir-cf-file-' . $file_ext . ' geodir-cf-type-' . $file_type . '"> ' . $outout_item . '</div>';
+                    $outout_item = '<div class="geodir-custom-field-file clearfix geodir-cf-file-' . $file_ext . ' geodir-cf-type-' . $file_type . $wrap_class . '"> ' . $outout_item . '</div>';
 
                      /**
                      * Filter the file output html.

@@ -1400,7 +1400,7 @@ function geodir_cfi_address( $html, $cf ) {
             </div>
             <?php
             /* Hide latitude/longitude */
-            $wrap_class = ( ( isset( $extra_fields['show_latlng'] ) && $extra_fields['show_latlng'] ) || is_admin() ) ? '' : 'd-none';
+            $wrap_class = ( ( isset( $extra_fields['show_latlng'] ) && $extra_fields['show_latlng'] ) || is_admin() ) ? '' : 'd-none gd-hidden-latlng';
 
             $title = '';
             $extra_attributes = array();
@@ -1481,7 +1481,6 @@ function geodir_cfi_address( $html, $cf ) {
                     'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
                     'type'              => 'text',
                     'title'             =>  $title,
-                    'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
                     'class'             => '',
                     'value'             => esc_attr(stripslashes($mapview)),
                     'help_text'         => __('Please select listing map view to use', 'geodirectory'),

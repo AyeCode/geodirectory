@@ -163,3 +163,7 @@ html.lity-active{
     z-index: 555555;
   }
 }
+
+.geodir-cpt-cf-items [data-field_type="categories"] [data-setting="default_value"] {
+    display: none;
+}

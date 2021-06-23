@@ -1,3 +1,13 @@
+= 2.1.0.17 =
+* Complianz | GDPR/CCPA Cookie Consent plugin integration added for GD maps - ADDED
+* Show admin notices on GD pages templates for Divi Builder - ADDED
+* Add listing map view field shows incorrect placeholder with AUI style - FIXED
+* Prevents add listing form submit when latitude/longitude fields are hidden - FIXED
+* Google XML sitemaps shows GD child term links hierarchically - FIXED
+* Image displayed by [gd_post_meta] is not responsive - FIXED
+* Post distance badge shows wrong distance when cache is active - FIXED
+* Kadence theme single listing layout have no effect of page template settings - FIXED
+
 = 2.1.0.16 =
 * Progressbar not moving during the demo content installation step - FIXED
 * Hook added to filter GeoDirectory admin menu capability - ADDED
@@ -10,7 +20,7 @@
 * [gd_post_images] option added to show images for specific post - ADDED
 * AUI: unable to save empty value for multiselect/multicheckbox fields - FIXED
 * Category image not added in Yoast SEO meta - FIXED
-* Sometime ninja form dodn't send notification to listing email - FIXED
+* Sometime ninja form doesn't send notification to listing email - FIXED
 * Disable beta addons setting on upgrade - CHANGED
 * Map CPT filter only visible when search filter is active - FIXED
 * Checkbox field description is not wrapped in a container ( Legacy design ) - FIXED

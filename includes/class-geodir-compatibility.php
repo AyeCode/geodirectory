@@ -181,6 +181,8 @@ class GeoDir_Compatibility {
 				add_action( 'wp_head', array( __CLASS__, 'avada_wp_head_setup' ), 99 );
 				add_action( 'get_footer', array( __CLASS__, 'avada_get_footer_setup' ), 99 );
 			}
+		} else {
+			add_action( 'admin_notices', array( __CLASS__, 'page_builder_notices' ) );
 		}
 
 		if ( wp_doing_ajax() ) {
@@ -192,6 +194,12 @@ class GeoDir_Compatibility {
 		// Borlabs Cookie setting
 		if ( defined( 'BORLABS_COOKIE_VERSION' ) ) {
 			add_filter( 'geodir_get_settings_general', array( __CLASS__, 'borlabs_cookie_setting' ), 20, 3 );
+		}
+
+		// Complianz | GDPR/CCPA Cookie Consent plugin integration
+		if ( class_exists( 'COMPLIANZ' ) ) {
+			add_filter( 'cmplz_integrations', array( __CLASS__, 'complianz_gdpr_integration' ), 21, 1 );
+			add_filter( 'cmplz_integration_path', array( __CLASS__, 'complianz_integration_path' ), 21, 2 );
 		}
 	}
 
@@ -756,6 +764,7 @@ class GeoDir_Compatibility {
 			 || ( defined( 'US_CORE_VERSION' ) && ( strpos( $meta_key, '_us_' ) === 0 || strpos( $meta_key, 'us_' ) === 0 || strpos( $meta_key, '_wpb_' ) === 0 ) ) // UpSolution Core plugin
 			 || ( function_exists( 'brivona_setup' ) && strpos( $meta_key, '_themetechmount' ) === 0 ) // Brivona theme
 			 || ( defined( 'ZEEN_ENGINE_VER' ) && ( strpos( $meta_key, 'tipi_' ) === 0 || strpos( $meta_key, 'zeen_' ) === 0 || strpos( $meta_key, '_menu_zeen_' ) === 0 ) ) // Zeen Tipi Builder
+			 || ( defined( 'KADENCE_VERSION' ) && ( empty( $meta_key ) || strpos( $meta_key, '_kad_' ) === 0 ) ) // Kadence theme
 			 ) && geodir_is_gd_post_type( get_post_type( $object_id ) ) ) {
 			if ( geodir_is_page( 'detail' ) ) {
 				$template_page_id = geodir_details_page_id( get_post_type( $object_id ) );
@@ -3510,9 +3519,9 @@ class GeoDir_Compatibility {
 	 * @since 2.1.0.13
 	 *
 	 * @param string $output Map widget content.
-	 * @return array $instance Widget instance.
+	 * @param array $instance Widget instance.
 	 * @param array $args Widget args.
-	 * @return array $super_duper Super Duper class.
+	 * @param array $super_duper Super Duper class.
 	 * @return string Map widget content.
 	 */
 	public static function borlabs_cookie_wrap( $output, $instance, $args, $super_duper ) {
@@ -3528,5 +3537,57 @@ class GeoDir_Compatibility {
 		}
 
 		return $output;
+	}
+
+	/**
+	 * Complianz GDPR integration.
+	 *
+	 * @since 2.1.0.17
+	 *
+	 * @param array $integrations Plugins integrations.
+	 * @return array Plugins integrations.
+	 */
+	public static function complianz_gdpr_integration( $integrations ) {
+		$integrations['geodirectory'] = array(
+			'constant_or_function' => 'GeoDir',
+			'label'                => 'GeoDirectory',
+			'firstparty_marketing' => false,
+		);
+
+		return $integrations;
+	}
+
+	/**
+	 * Complianz GDPR integration.
+	 *
+	 * @since 2.1.0.17
+	 *
+	 * @param array $integrations Plugins integrations.
+	 * @return array Plugins integrations.
+	 */
+	public static function complianz_integration_path( $path, $plugin ) {
+		if ( $plugin == 'geodirectory' ) {
+			$path = GEODIRECTORY_PLUGIN_DIR . 'includes/complianz-gdpr.php';
+		}
+
+		return $path;
+	}
+
+	/**
+	 * Set admin notices on GD page templates for Divi builder.
+	 *
+	 * @since 2.1.0.17
+	 *
+	 * @global string $pagenow Current page type.
+	 * @global object $post The post object.
+	 */
+	public static function page_builder_notices() {
+		global $pagenow, $post;
+
+		if ( $pagenow === 'post.php' && ! empty( $post ) && ! empty( $post->post_type ) && $post->post_type == 'page' && function_exists( 'et_divi_load_scripts_styles' ) && geodir_is_geodir_page_id( (int) $post->ID ) ) {
+			echo '<div class="notice notice-warning is-dismissible geodir-builder-notice"><p>';
+			echo wp_sprintf( __( 'Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages with Divi Builder.', 'geodirectory' ), '<a href="https://docs.wpgeodirectory.com/article/210-getting-started-with-divi-builder" target="_blank">', '</a>' );
+			echo '</p></div>';
+		}
 	}
 }

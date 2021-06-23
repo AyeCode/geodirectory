@@ -193,14 +193,12 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 
 		$design_style = geodir_design_style();
 
-		if ( ! isset( $gd_post->distance ) ) {
-			if ( ! empty( $post ) && ! empty( $gd_post->ID ) && $post->ID == $gd_post->ID && isset( $post->distance ) ) {
-				$gd_post->distance = $post->distance;
-			} else {
-				if ( ! $design_style || ! geodir_is_page( 'single' ) && ! $block_preview ) {
-					return '';
-				}
-			}
+		if ( ! empty( $post ) && ! empty( $gd_post->ID ) && $post->ID == $gd_post->ID && isset( $post->distance ) ) {
+			$gd_post->distance = $post->distance;
+		}
+
+		if ( ! isset( $gd_post->distance ) && ( ! $design_style || ! geodir_is_page( 'single' ) ) && ! $block_preview ) {
+			return '';
 		}
 
 		$distance = isset( $gd_post->distance ) && (float) $gd_post->distance > 0 ? (float) $gd_post->distance : 0;
