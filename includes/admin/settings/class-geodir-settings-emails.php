@@ -371,7 +371,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'name' => __('Email address', 'geodirectory'),
 						'desc' => __('How the sender email appears in outgoing GeoDirectory emails.', 'geodirectory'),
 						'id' => 'email_address',
-						'type' => 'text',
+						'type' => 'email',
 						'placeholder' => GeoDir_Defaults::email_address(),
 						'desc_tip' => true,
 					),

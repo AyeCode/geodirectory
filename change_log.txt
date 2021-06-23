@@ -9,6 +9,7 @@
 * Kadence theme single listing layout have no effect of page template settings - FIXED
 * WP 5.8 block category filter updated as required - FIXED
 * Post images slider shows unapproved comments images - FIXED
+* Validate email address option in emails settings - FIXED
 
 = 2.1.0.16 =
 * Progressbar not moving during the demo content installation step - FIXED
