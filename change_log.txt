@@ -7,6 +7,7 @@
 * Image displayed by [gd_post_meta] is not responsive - FIXED
 * Post distance badge shows wrong distance when cache is active - FIXED
 * Kadence theme single listing layout have no effect of page template settings - FIXED
+* WP 5.8 block category filter updated as required - FIXED
 
 = 2.1.0.16 =
 * Progressbar not moving during the demo content installation step - FIXED
