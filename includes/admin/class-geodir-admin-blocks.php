@@ -67,10 +67,15 @@ class GeoDir_Admin_Blocks {
 	 * @return void
 	 */
 	private function setup_actions() {
+		global $wp_version;
 
 		add_action( 'enqueue_block_editor_assets', array( $this, 'enqueue' ) );
 
-		add_filter( 'block_categories', array( $this, 'block_category') , 8, 2 );
+		if( version_compare( $wp_version, "5.8-beta", "<" )){
+			add_filter( 'block_categories', array( $this, 'block_category') , 8, 2 );
+		}else{
+			add_filter( 'block_categories_all', array( $this, 'block_category') , 8, 2 );
+		}
 
 		add_action( 'init', array( $this, 'register_block_patterns'), 20  );
 	}
