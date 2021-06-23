@@ -210,6 +210,35 @@ Add/Edit post
     float: left;
 }
 
+.form-group .geodir-add-files.w-100 {
+    max-width: 100%;
+}
+
+.form-group .geodir-add-files.w-100 .geodir-files-dropbox {
+    margin: 0;
+    border: none;
+}
+
+.form-group .geodir-add-files.w-100 .plupload-thumbs.row {
+    margin-bottom: 0;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+}
+
+.form-group .geodir-add-files.w-100 .plupload-thumbs.row > .col {
+    margin-top: .5rem !important;
+}
+
+.form-group .geodir-add-files.w-100 .plupload-thumbs .thumb {
+    border: 1px solid #EBEBEB;
+    float: inherit;
+    height: auto;
+    width: inherit;
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
 /********************************************************
 Settings inputs
 ********************************************************/
