@@ -1790,7 +1790,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 								// taxonomies
 								if( $value && 'post_type' in prev_attributes[props.id] && 'category' in prev_attributes[props.id] && run ){
-									wp.apiFetch({path: "<?php if(isset($this->arguments['post_type']['onchange_rest']['path'])){echo $this->arguments['post_type']['onchange_rest']['path'];}else{'/wp/v2/"+$value+"/categories';} ?>"}).then(terms => {
+									wp.apiFetch({path: "<?php if(isset($this->arguments['post_type']['onchange_rest']['path'])){echo $this->arguments['post_type']['onchange_rest']['path'];}else{'/wp/v2/"+$value+"/categories/?per_page=100';} ?>"}).then(terms => {
 										while (taxonomies_<?php echo str_replace("-","_", $this->id);?>.length) {
 										taxonomies_<?php echo str_replace("-","_", $this->id);?>.pop();
 									}

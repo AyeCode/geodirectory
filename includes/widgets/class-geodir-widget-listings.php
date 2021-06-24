@@ -80,7 +80,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
                 'desc_tip' => true,
                 'advanced' => false,
 	            'onchange_rest' => array(
-		            'path'  => '/geodir/v2/"+$value+"/categories',
+		            'path'  => '/geodir/v2/"+$value+"/categories/?per_page=100',
 		            'values'    => $this->get_rest_slugs_array()
 	            ),
                 'group'     => __("Filters","geodirectory")
