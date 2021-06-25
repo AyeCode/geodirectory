@@ -542,6 +542,18 @@ class GeoDir_Media {
 				$attach_data = wp_generate_attachment_metadata( $attachment_id, $filename );
 				wp_update_attachment_metadata( $attachment_id , $attach_data );
 				set_post_thumbnail( $post_id, $attachment_id );
+			} else {
+				// Update post thumbnail title for existing attachment.
+				$post_thumbnail_id = get_post_thumbnail_id( $post_id );
+
+				if ( $post_thumbnail_id ) {
+					$wpdb->update(
+						$wpdb->posts,
+						array( 'post_title' => stripslashes( $file_title ), 'post_excerpt' => stripslashes( $file_caption ), 'post_content' => stripslashes( $file_caption ) ),
+						array( 'ID' => $post_thumbnail_id ),
+						array( '%s', '%s', '%s' )
+					);
+				}
 			}
 		}
 
