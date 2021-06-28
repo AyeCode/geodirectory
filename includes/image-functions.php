@@ -250,15 +250,19 @@ function geodir_get_video_screenshot( $field_raw ) {
  *
  * @since 1.0.0
  * @package GeoDirectory
- * @global object $wpdb WordPress Database object.
+ *
+ * @global object $gd_post The GeoDirectory post object.
+ *
  * @param int $post_id The post ID.
- * @param string $img_size Optional. Thumbnail size.
- * @param bool $no_images Optional. Do you want to return the default image when no image is available? Default: false.
- * @param bool $add_featured Optional. Do you want to include featured images too? Default: true.
  * @param int|string $limit Optional. Number of images.
+ * @param bool $logo Optional. Show logo image? Default: false.
+ * @param int $revision_id The revision post ID.
+ * @param array $types Images types to retrieve.
+ * @param array $fallback_types Fallback images types to retrieve for empty results.
+ * @param int|string $status Optional. Retrieve images with status passed.
  * @return array|bool Returns images as an array. Each item is an object.
  */
-function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_id = '', $types = array() , $fallback_types = array( 'logo', 'cat_default', 'cpt_default', 'listing_default', 'website_screenshot' ) ) {
+function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_id = '', $types = array() , $fallback_types = array( 'logo', 'cat_default', 'cpt_default', 'listing_default', 'website_screenshot' ), $status = '' ) {
 	global $gd_post;
 
 	$post_images = array();
@@ -316,7 +320,7 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 							}
 						}
 					} else {
-						$new_images = GeoDir_Media::get_attachments_by_type( $post_id, $type, $limit, $revision_id );
+						$new_images = GeoDir_Media::get_attachments_by_type( $post_id, $type, $limit, $revision_id, '', $status );
 					}
 
 					if ( ! empty( $new_images ) ) {
@@ -329,17 +333,17 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 					}
 				}
 			} else {
-				$post_images = GeoDir_Media::get_attachments_by_type( $post_id, $types, $limit, $revision_id );
+				$post_images = GeoDir_Media::get_attachments_by_type( $post_id, $types, $limit, $revision_id, '', $status );
 			}
 		}
 	} else {
-		$post_images = GeoDir_Media::get_post_images( $post_id, $limit, $revision_id );
+		$post_images = GeoDir_Media::get_post_images( $post_id, $limit, $revision_id, $status );
 	}
 
 	if ( ! empty( $post_images ) ) {
 		// wp_image_add_srcset_and_sizes( $image, $image_meta, $attachment_id );
 		if ( $logo && geodir_post_has_image_types( 'logo', $post_id, $revision_id ) ) {
-			$logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1, $revision_id );
+			$logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1, $revision_id, '', $status );
 			if ( $logo_image ) {
 				$post_images = $logo_image + $post_images;
 			}
@@ -352,7 +356,7 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 		foreach( $fallback_types as $fallback_type ) {
 			// Logo
 			if ( $fallback_type == 'logo' && isset( $gd_post->logo ) && $gd_post->logo && geodir_post_has_image_types( 'logo', $post_id ) ) {
-				$logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1 );
+				$logo_image = GeoDir_Media::get_attachments_by_type( $post_id, 'logo', 1, '', '', $status );
 				if ( $logo_image ) {
 					$post_images = $logo_image;
 					break;

@@ -538,7 +538,7 @@ var GeoDir_Business_Hours = {
     },
     cancelSlot: function($el) {
         var $item = $el.closest('.gd-bh-time');
-        jQuery('.gd-bh-remove i').tooltip('dispose');
+        jQuery('i', $el).tooltip('dispose');
         $el.closest('.gd-bh-hours').remove();
         if (jQuery('.gd-bh-hours', $item).length < 1) {
             $item.closest('.gd-bh-item').addClass('gd-bh-item-closed');

@@ -542,6 +542,18 @@ class GeoDir_Media {
 				$attach_data = wp_generate_attachment_metadata( $attachment_id, $filename );
 				wp_update_attachment_metadata( $attachment_id , $attach_data );
 				set_post_thumbnail( $post_id, $attachment_id );
+			} else {
+				// Update post thumbnail title for existing attachment.
+				$post_thumbnail_id = get_post_thumbnail_id( $post_id );
+
+				if ( $post_thumbnail_id ) {
+					$wpdb->update(
+						$wpdb->posts,
+						array( 'post_title' => stripslashes( $file_title ), 'post_excerpt' => stripslashes( $file_caption ), 'post_content' => stripslashes( $file_caption ) ),
+						array( 'ID' => $post_thumbnail_id ),
+						array( '%s', '%s', '%s' )
+					);
+				}
 			}
 		}
 
@@ -843,25 +855,27 @@ class GeoDir_Media {
 	 * @param $post_id
 	 * @param mixed $type
 	 * @param string $limit
-	 * @param string $revision_id
+	 * @param int $revision_id
+	 * @param int $other_id
+	 * @param int $status
 	 *
 	 * @return array|null|object
 	 */
-	public static function get_attachments_by_type($post_id,$type = 'post_images',$limit = '',$revision_id ='',$other_id = ''){
+	public static function get_attachments_by_type( $post_id, $type = 'post_images', $limit = '', $revision_id ='', $other_id = '', $status = '' ) {
 		global $wpdb;
 
 		$cache_type_key = $type;
-		if(is_array($type)){
-			$cache_type_key = implode(":",$type);
-			if(count($type)==1){
-				$type = reset($type);
+		if ( is_array( $type ) ) {
+			$cache_type_key = implode( ":", $type );
+			if ( count( $type ) == 1 ) {
+				$type = reset( $type );
 			}
 		}
 
-		// check for cache
-		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $cache_type_key. ':' . $limit . ':' . $revision_id . ':' . $other_id;
+		// Check for cache
+		$cache_key = 'gd_attachments_by_type:' . $post_id . ':' . $cache_type_key. ':' . $limit . ':' . $revision_id . ':' . $other_id . ':' . $status;
 		$cache = wp_cache_get( $cache_key, 'gd_attachments_by_type' );
-		if($cache !== false){
+		if ( $cache !== false ) {
 			return $cache;
 		}
 
@@ -870,16 +884,16 @@ class GeoDir_Media {
 		$default_orderby = " `menu_order` ASC, `ID` DESC ";
 
 		// types
-		if(is_array($type)){
-			$prepare_types = implode(",",array_fill(0, count($type), '%s'));
-			foreach($type as $key){
+		if ( is_array( $type ) ) {
+			$prepare_types = implode( ",", array_fill( 0, count( $type ), '%s' ) );
+			foreach ( $type as $key ) {
 				$sql_args[] = $key;
-				if($key=='comment_images'){
+				if ( $key == 'comment_images' ) {
 					$default_orderby = " `ID` DESC, `menu_order` ASC ";
 				}
 			}
-		}else{
-			if($type=='comment_images'){
+		} else {
+			if ( $type == 'comment_images' ) {
 				$default_orderby = " `ID` DESC, `menu_order` ASC ";
 			}
 			$prepare_types = "%s";
@@ -897,11 +911,16 @@ class GeoDir_Media {
 		}
 
 		// other ids (things like comments)
-		$other_id_sql = '';
-		if($other_id){
-			$other_id_sql = ' AND other_id = %d ';
-			$other_id  = absint($other_id);
+		$where = '';
+		if ( $other_id ) {
+			$where .= " AND other_id = %d";
+			$other_id  = absint( $other_id );
 			$sql_args[] = $other_id;
+		}
+
+		// Status
+		if ( $status !== '' ) {
+			$where .= absint( $status ) == 0 ? " AND is_approved = 0" : " AND is_approved != 0";
 		}
 
 		// order by fields
@@ -919,8 +938,8 @@ class GeoDir_Media {
 
 
 		// get the results
-		$sql = $wpdb->prepare("SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type IN ( $prepare_types ) AND post_id IN( $prepare_ids ) $other_id_sql ORDER BY $field_orderby $default_orderby $limit_sql",$sql_args);
-//		echo $sql;echo '###';//exit;
+		$sql = $wpdb->prepare( "SELECT * FROM " . GEODIR_ATTACHMENT_TABLE . " WHERE type IN ( $prepare_types ) AND post_id IN( $prepare_ids ) {$where} ORDER BY $field_orderby $default_orderby $limit_sql", $sql_args );
+
 		$results = $wpdb->get_results($sql);
 
 		// maybe set external meta
@@ -962,11 +981,12 @@ class GeoDir_Media {
 	 * @param $post_id
 	 * @param string $limit
 	 * @param string $revision_id
+	 * @param int|string $status Optional. Retrieve images with status passed.
 	 *
 	 * @return array|null|object
 	 */
-	public static function get_post_images($post_id,$limit = '',$revision_id = ''){
-		return self::get_attachments_by_type($post_id,'post_images',$limit,$revision_id );
+	public static function get_post_images( $post_id, $limit = '', $revision_id = '', $status = '' ) {
+		return self::get_attachments_by_type( $post_id, 'post_images', $limit, $revision_id, '', $status );
 	}
 
 
