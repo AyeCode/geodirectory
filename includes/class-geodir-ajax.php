@@ -33,6 +33,7 @@ class GeoDir_AJAX {
 		$ajax_events = array(
 			'get_custom_field_form'   => false,
 			'get_custom_field_sorting_form'   => false,
+			'auto_save_custom_field'  => false,
 			'save_custom_field'       => false,
 			'save_custom_sort_field'       => false,
 			'delete_custom_field'     => false,
@@ -977,6 +978,40 @@ class GeoDir_AJAX {
 			);
 		}
 		wp_send_json( $data );
+	}
+
+	/**
+	 * Auto save custom field.
+	 *
+	 * @since 2.1.0.17
+	 */
+	public static function auto_save_custom_field() {
+		// Security
+		check_ajax_referer( 'custom_fields_' . sanitize_text_field( $_POST['field_id'] ), 'security' );
+
+		if ( ! current_user_can( 'manage_options' ) ) {
+			wp_die( -1 );
+		}
+
+		$result = geodir_custom_field_save( $_POST );
+
+		if ( is_wp_error( $result ) ) {
+			wp_send_json_error( $result->get_error_message() );
+		} else {
+			$field = GeoDir_Settings_Cpt_Cf::get_item( $result );
+
+			$data = array();
+			if ( ! empty( $field ) ) {
+				$data['field_id'] = $field->id;
+				$data['htmlvar_name'] = $field->htmlvar_name;
+				$data['admin_title'] = stripslashes( $field->admin_title );
+				$data['field_icon'] = ! empty( $field->field_icon ) && geodir_is_fa_icon( $field->field_icon ) ? $field->field_icon : '';
+				$data['nonce'] = wp_create_nonce( 'custom_fields_' . $field->id );
+			}
+
+			wp_send_json_success( $data );
+		}
+		wp_die();
 	}
 
 	/**

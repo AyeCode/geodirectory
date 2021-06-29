@@ -657,6 +657,27 @@ Custom Post Type Settings
     font-size: 16px;
 }
 
+.geodir-cf-status {
+    float: right;
+    display: inline-block;
+    vertical-align: middle;
+    line-height: 2.5em;
+    margin-left: .75em;
+    margin-right: .75em;
+}
+
+.geodir-cf-tstatus {
+    position: absolute;
+    left: 42%;
+    top: 7px;
+}
+
+.geodir-cf-saved .geodir-cf-status .fas {
+    color: orange;
+}
+.geodir-cpt-cf-items .dd-handle .dd-title {
+    margin-left: 5px;
+}
 
 .side-sortables {
     border: 1px #DFDFDF solid;

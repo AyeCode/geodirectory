@@ -437,8 +437,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		public static function date_format($output,$result_str,$cf,$field_info){
 			ob_start();
 			$extra = array();
-			if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
-				$extra = unserialize($field_info->extra_fields);
+			if ( isset( $field_info->extra_fields ) && $field_info->extra_fields != '' ) {
+				$extra = maybe_unserialize( $field_info->extra_fields );
+			}
+
+			if ( is_array( $extra ) && empty( $extra['date_format'] ) ) {
+				$extra['date_format'] = geodir_date_format();
 			}
 			?>
 			<p data-setting="date_format">
@@ -468,7 +472,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 						<?php
 						foreach($date_formats as $format){
 							$selected = '';
-							if(!empty($extra) && esc_attr($extra['date_format'])==$format){
+							if ( ! empty( $extra ) && isset( $extra['date_format'] ) && esc_attr( $extra['date_format'] ) == $format ) {
 								$selected = "selected='selected'";
 							}
 							echo "<option $selected value='$format'>$format       (".date_i18n( $format, time()).")</option>";

@@ -13,6 +13,7 @@
 * GD > Listings block loads only 10 categories on CPT change - FIXED
 * Post thumbnail title not updated for existing attachment - FIXED
 * Deactivation survey popup added - ADDED
+* Auto save custom field setting feature added - ADDED
 
 = 2.1.0.16 =
 * Progressbar not moving during the demo content installation step - FIXED
