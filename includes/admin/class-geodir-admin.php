@@ -64,7 +64,7 @@ class GeoDir_Admin {
 		AyeCode_Deactivation_Survey::instance(array(
 			'slug'		=> 'geodirectory',
 			'version'	=> GEODIRECTORY_VERSION,
-			//'support_url'=> 'https://wpgeodirectory.com/support/',
+			'support_url'=> 'https://wpgeodirectory.com/support/',
 			'documentation_url'=> 'https://docs.wpgeodirectory.com/',
 			'activated' => 0 // a timestamp of when original activated @todo implement
 		));
