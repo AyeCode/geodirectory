@@ -686,6 +686,37 @@ function geodir_template_redirect() {
 			}
 		}
 	}
+
+	// Redirect default CPT search
+	if ( geodir_is_page( 'search' ) ) {
+		$args = array();
+
+		if ( empty( $_REQUEST['geodir_search'] ) ) {
+			$args['geodir_search'] = 1;
+		}
+
+		if ( ! ( ! empty( $_REQUEST['stype'] ) && geodir_is_gd_post_type( sanitize_text_field( $_REQUEST['stype'] ) ) ) ) {
+			$args['stype'] = geodir_search_default_post_type();
+		}
+
+		if ( ! isset( $_REQUEST['s'] ) ) {
+			$args['s'] = '';
+		}
+
+		/**
+		 * Filter url args to search page when redirect.
+		 *
+		 * @since 2.1.0.17
+		 *
+		 * @param array $args Urls args.
+		 */
+		$args = apply_filters( 'geodir_redirect_search_page_args', $args );
+
+		if ( ! empty( $args ) ) {
+			wp_redirect( add_query_arg( $args ) );
+			exit;
+		}
+	}
 }
 
 add_action( 'template_redirect', 'geodir_template_redirect' );
