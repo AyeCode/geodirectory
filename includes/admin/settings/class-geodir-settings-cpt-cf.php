@@ -1350,7 +1350,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 							<?php
 
 
-							echo '<ul class="dd-list gd-tabs-sortable gd-custom-fields-sortable">';
+							echo '<ul class="dd-list gd-tabs-sortable gd-custom-fields-sortable geodir-cpt-cf-items">';
 
 							if ( ! empty( $fields ) ) {
 

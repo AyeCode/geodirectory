@@ -1,17 +1,16 @@
-jQuery(document).ready(function() {
+jQuery(document).ready(function($) {
     //fire the toggle displays on advanced search show/hide
-    jQuery(".gd-advanced-toggle").click(function() {
+    jQuery(".gd-advanced-toggle").on("click", function() {
         setTimeout(function() {
             gd_toggle_switch_display();
         }, 100);
     });
 
-    jQuery(".gd-form-builder-tab ul li.gd-cf-tooltip-wrap a").click(function() {
+    jQuery(".gd-form-builder-tab ul li.gd-cf-tooltip-wrap a").on("click", function() {
         if (!jQuery(this).attr('id')) {
             return;
         }
         // check if its a single use item and if its already in use.
-        //var type = jQuery(this).attr('id').replace('gd-', '');
         var type = jQuery(this).data("field-type");
         var type_key = jQuery(this).data("field-type-key");
         var custom_type = jQuery(this).data("field-custom-type");
@@ -106,15 +105,38 @@ jQuery(document).ready(function() {
             }
         }
     });
+
+	$('.geodir-cpt-cf-items .dd-item').find('input,select,textarea').on('change', function(e){
+		var $this = this;
+		setTimeout(function(){
+			geodir_auto_save_custom_field($this, $);
+		}, 250);
+	});
+
     gd_toggle_switch_display();
-    jQuery('body').bind('geodir_on_save_custom_field', function(e, data) {});
-    jQuery('body').bind('geodir_on_get_custom_field', function(e, data) {});
+    jQuery('body').on('geodir_on_save_custom_field', function(e, data) {
+		$('#setName_' + data.id).closest('.geodir-cpt-cf-items').find('.dd-item').find('input,select,textarea').on('change', function(e){
+			var $this = this;
+			setTimeout(function(){
+				geodir_auto_save_custom_field($this, $);
+			}, 250);
+		});
+	});
+    jQuery('body').on('geodir_on_get_custom_field', function(e, data) {
+		$('#setName_' + data.id).closest('.geodir-cpt-cf-items').find('.dd-item').find('input,select,textarea').on('change', function(e){
+			var $this = this;
+			setTimeout(function(){
+				geodir_auto_save_custom_field($this, $);
+			}, 250);
+		});
+	});
     // init sort options
     gd_init_sort_options();
     // init custom fields settings
     gd_init_custom_fields_sortable();
     // init tabs layout settings
     gd_init_tabs_layout();
+	
 });
 
 function gd_data_type_changed(obj, cont) {
@@ -412,7 +434,6 @@ function gd_init_tabs_layout() {
         listType: 'ul',
         update: function(event, ui) {
             gd_tabs_save_order('geodir_save_tabs_order');
-            //console.log(jQuery('.gd-tabs-sortable').nestedSortable('serialize'));
         }
     });
     // int the new select2 boxes
@@ -587,4 +608,74 @@ function gd_tabs_save_order($action) {
             }
         }
     });
+}
+
+function geodir_auto_save_custom_field(el, jQ) {
+	var $li = jQuery(el).closest('.dd-item'), title = jQuery('[name="frontend_title"]', $li).val(), fData, data, $btn, fieldId, attr;
+
+	title = title.trim();
+	if (!title) {
+		return;
+	}
+	$btn = jQuery("[name='save']", $li);
+	fData = jQuery("input,select,textarea", $li).serialize();
+	data = 'create_field=true&field_ins_upd=submit&' + fData;
+
+	if ($li.hasClass('geodir-cf-saving')) {
+		return;
+	}
+
+	jQuery.ajax({
+		url: ajaxurl + '?action=geodir_auto_save_custom_field',
+		type: 'POST',
+		data: data,
+		dataType: 'json',
+		beforeSend: function(xhr, obj) {
+			jQuery('[name="sort_order"]', $li).val(parseInt($li.index()) + 1);
+			jQuery('[name="htmlvar_name"]', $li).prop('readonly', true);
+			$li.removeClass("geodir-cf-saved").addClass("geodir-cf-saving");
+			$btn.prop("disabled", true);
+			jQuery(".geodir-cf-status,.geodir-cf-tstatus", $li).remove();
+			jQuery(".dd-setting", $li).append('<span class="geodir-cf-tstatus"><i class="fas fa-sync fa-spin" aria-hidden="true"></i> ' + geodir_params.txt_saving + '</span>');
+			$btn.after('<span class="geodir-cf-status"><i class="fas fa-sync fa-spin" aria-hidden="true"></i> ' + geodir_params.txt_saving + '</span>');
+		}
+	})
+	.done(function(data, textStatus, jqXHR) {
+		if (typeof data == 'object' && data.success && data.data.field_id) {
+			if (data.data.field_icon) {
+				jQuery('.dd-handle .dd-icon i', $li).prop("class", data.data.field_icon);
+			}
+			if (data.data.admin_title) {
+				jQuery('.dd-handle .dd-title', $li).text(data.data.admin_title);
+			}
+			if (jQuery('[name="field_id"]', $li).val() == 'new-1') {
+				fieldId = data.data.field_id;
+				jQuery('[name="field_id"]', $li).val(fieldId);
+				jQuery('[name="htmlvar_name"]', $li).val(data.data.htmlvar_name);
+				jQuery('[name="security"]', $li).val(data.data.nonce);
+				$li.prop("id", "setName_" + fieldId);
+				$li.prop("data-select2-id", "setName_" + fieldId);
+				jQuery('[name="admin_title"]', $li).prop("id", "gd-admin-title-" + fieldId);
+				attr = jQuery('[name="data_type"]', $li).attr("onchange");
+				if (attr) {
+					jQuery('[name="data_type"]', $li).attr("onchange", attr.replace("new-1", fieldId));
+				}
+				attr = jQuery('[name="save"]', $li).attr("onclick");
+				if (attr) {
+					jQuery('[name="save"]', $li).attr("onclick", attr.replace("new-1", fieldId));
+				}
+				jQuery('a.item-delete', $li).attr("onclick", "gd_delete_custom_field('" + fieldId + "','" + data.data.nonce + "');return false;");
+			}
+			$li.addClass("geodir-cf-saved");
+			jQuery(".geodir-cf-status", $li).html('<i class="fas fa-check-circle" aria-hidden="true"></i> ' + geodir_params.txt_saved);
+		}
+	})
+	.always(function(data, textStatus, jqXHR) {
+		$btn.prop("disabled", false);
+		$li.removeClass("geodir-cf-saving");
+		jQuery(".geodir-cf-tstatus", $li).remove();
+		if (!jQuery('[name="htmlvar_name"]', $li).val()) {
+			jQuery('[name="htmlvar_name"]', $li).prop('readonly', false);
+		}
+	});
 }

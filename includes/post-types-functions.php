@@ -264,6 +264,21 @@ function geodir_add_listing_default_post_type() {
 }
 
 /**
+ * Get default search post type.
+ *
+ * @since 2.1.0.17
+ *
+ * @return string $post_type Default post type.
+ */
+function geodir_search_default_post_type() {
+	$post_types = geodir_get_posttypes();
+
+	$post_type = ! empty( $post_types ) && is_array( $post_types ) ? $post_types[0] : 'gd_place';
+
+	return apply_filters( 'geodir_search_default_post_type', $post_type );
+}
+
+/**
  * Function for check listing posttype.
  *
  * @since 2.0.0
