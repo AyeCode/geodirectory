@@ -1,0 +1,67 @@
+= 1.0.26 =
+* Error on setting array option value in block editor - FIXED
+
+= 1.0.25 =
+* PHP Warning if default field value not set - FIXED
+
+= 1.0.24 =
+* WP 5.7 Gutenberg widgets screen has JS error which breaks page saving - FIXED
+* WP 5.7 Gutenberg widgets screen legacy widgets have no `show advanced` button - FIXED
+
+= 1.0.23 =
+* Rows argument now available to group arguments to the one row - ADDED
+
+= 1.0.22 =
+* Sometimes arguments are not set early enough when building block JS - FIXED
+
+= 1.0.21 =
+* Block Category can now update on post_type change - FIXED
+* Non static method 'argument_values' should not be called statically - FIXED
+
+= 1.0.20 =
+* On change content don't compare the actual content, only attributes - CHANGED
+* Call AUI init JS function if defined on each block edit - ADDED
+* is_preview() now included block preview - CHANGED
+* Empty block previews can show broken class input - FIXED
+* color input for block now uses colorPicker - CHANGED
+
+= 1.0.19 =
+* Put non grouped block settings in to a "settings" group - CHANGED
+
+= 1.0.18 =
+* Conflicts with fusion builder elements - FIXED
+* Oxygen builder preview detection - ADDED
+* Elementor editor widget section types have no styling - FIXED
+
+= 1.0.17 =
+* Title & description in block editor shows escaped special characters - FIXED
+* Widget advanced settings button line-height too tall - FIXED
+
+= 1.0.16 =
+* wp.editor is deprecated, updated to wp.blockEditor - CHANGED
+* textarea field type now supported - ADDED
+* `html` special field name added that will allow HTML by making it an enclosing shortcode - ADDED
+* `no_wrap` special field name added that will prevent the wrapping div being added - ADDED
+
+
+
+// old style change log
+@since 1.0.3 is_block_content_call() method added.
+ * @since 1.0.3 Placeholder text will be shown for widget that return no block content.
+ * @since 1.0.4 is_elementor_widget_output() method added.
+ * @since 1.0.4 is_elementor_preview() method added.
+ * @since 1.0.5 Block checkbox options are set as true by default even when set as false - FIXED
+ * @since 1.0.6 Some refactoring for page builders - CHANGED
+ * @since 1.0.7 Some refactoring for page builders - CHANGED
+ * @since 1.0.8 Some refactoring for page builders ( cornerstone builder now supported ) - CHANGED
+ * @since 1.0.9 Numbers saving as strings and not numbers which can cause block render issues on refresh - FIXED
+ * @since 1.0.10 Some refactoring for page builders ( Avia builder for Enfold theme now supported ) - CHANGED
+ * @since 1.0.11 Some refactoring for page builders - CHANGED
+ * @since 1.0.12 A checkbox default value can make a argument true even when unchecked - FIXED
+ * @since 1.0.13 Block values can break JS if contains a comma - FIXED
+ * @since 1.0.14 Use of additional css class in block editor breaks the block html - FIXED
+ * @since 1.0.15 Fix conflicts with GeneratePress sections - FIXED
+ * @since 1.0.15 `group` setting option added to be able to group settings - ADDED
+ * @since 1.0.15 `block-supports` options array now supported - ADDED
+ * @since 1.0.15 `block-icon` now supports Font Awesome class - ADDED
+ * @since 1.0.15 Fusion builder (Avada) elements automatically created - ADDED

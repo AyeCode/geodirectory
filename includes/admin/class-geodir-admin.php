@@ -59,6 +59,15 @@ class GeoDir_Admin {
 
 		// Deactivate legacy plugins
 		$this->deactivate_plugin();
+
+		// Register with the deactivation survey class.
+		AyeCode_Deactivation_Survey::instance(array(
+			'slug'		=> 'geodirectory',
+			'version'	=> GEODIRECTORY_VERSION,
+			//'support_url'=> 'https://wpgeodirectory.com/support/',
+			'documentation_url'=> 'https://docs.wpgeodirectory.com/',
+			'activated' => 0 // a timestamp of when original activated @todo implement
+		));
 	}
 	
 	/**
