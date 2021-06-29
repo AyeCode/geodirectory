@@ -631,6 +631,7 @@ function geodir_auto_save_custom_field(el, jQ) {
 		data: data,
 		dataType: 'json',
 		beforeSend: function(xhr, obj) {
+			jQuery('[name="sort_order"]', $li).val(parseInt($li.index()) + 1);
 			jQuery('[name="htmlvar_name"]', $li).prop('readonly', true);
 			$li.removeClass("geodir-cf-saved").addClass("geodir-cf-saving");
 			$btn.prop("disabled", true);
