@@ -111,7 +111,7 @@ class GeoDir_Admin_Tracker {
 		// Jetpack & GeoDirectory Connect
 		$data['jetpack_version']    = defined( 'JETPACK__VERSION' ) ? JETPACK__VERSION : 'none';
 		$data['jetpack_connected']  = ( class_exists( 'Jetpack' ) && is_callable( 'Jetpack::is_active' ) && Jetpack::is_active() ) ? 'yes' : 'no';
-		$data['jetpack_is_staging'] = ( class_exists( 'Jetpack' ) && is_callable( 'Jetpack::is_staging_site' ) && Jetpack::is_staging_site() ) ? 'yes' : 'no';
+		$data['jetpack_is_staging'] = self::is_jetpack_staging_site() ? 'yes' : 'no';
 		//$data['connect_installed']  = class_exists( 'GeoDir_Connect_Loader' ) ? 'yes' : 'no';
 		//$data['connect_active']     = ( class_exists( 'GeoDir_Connect_Loader' ) && wp_next_scheduled( 'geodir_connect_fetch_service_schemas' ) ) ? 'yes' : 'no';
 
@@ -136,6 +136,26 @@ class GeoDir_Admin_Tracker {
 		$data['admin_user_agents']  = self::get_admin_user_agents();
 
 		return apply_filters( 'geodirectory_tracker_data', $data );
+	}
+
+	/**
+	 * Check whether a site is running with Jetpack staging site environment.
+	 *
+	 * @since 2.1.0.18
+	 *
+	 * @return bool
+	 */
+	private static function is_jetpack_staging_site() {
+		if ( class_exists( '\Automattic\Jetpack\Status' ) ) {
+			// Check with Jetpack 8.1+.
+			$jetpack_status = new \Automattic\Jetpack\Status();
+
+			if ( is_callable( array( $jetpack_status, 'is_staging_site' ) ) ) {
+				return $jetpack_status->is_staging_site();
+			}
+		}
+
+		return ( class_exists( 'Jetpack' ) && is_callable( 'Jetpack::is_staging_site' ) && Jetpack::is_staging_site() );
 	}
 
 	/**

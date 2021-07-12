@@ -1,5 +1,6 @@
 = 2.1.0.18 =
 * GD listings author page not working when author permalink contains custom link - FIXED
+* Compatibility changes for Jetpack v8.1+ - CHANGED
 
 = 2.1.0.17 =
 * Complianz | GDPR/CCPA Cookie Consent plugin integration added for GD maps - ADDED
