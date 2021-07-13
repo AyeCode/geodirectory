@@ -1539,12 +1539,14 @@ class GeoDir_Post_Data {
 
 					// Check posts limit.
 					$args = array( 'post_type' => $post_data['post_type'], 'post_author' => $post_author );
-					$can_add_post = GeoDir_Post_Limit::user_can_add_post( $args );
+					if ( ! empty( $post_data['package_id'] ) ) {
+						$args['package_id'] = (int) $post_data['package_id'];
+					}
 
-					if ( ! $can_add_post ) {
-						$message = GeoDir_Post_Limit::posts_limit_message( $post_data['post_type'], $post_author );
+					$can_add_post = GeoDir_Post_Limit::user_can_add_post( $args, true );
 
-						$error = new WP_Error( 'add_listing_error', $message, array( 'status' => 400 ) );
+					if ( is_wp_error( $can_add_post ) ) {
+						$error = new WP_Error( 'add_listing_error', $can_add_post->get_error_message(), array( 'status' => 400 ) );
 					}
 				}
 			}

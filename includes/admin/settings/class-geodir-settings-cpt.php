@@ -186,6 +186,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				// author
 				'author_posts_private' => '0',
 				'author_favorites_private' => '0',
+				'limit_posts' => '',
 				// Page template
 				'page_add' => '0',
 				'page_details' => '0',
@@ -370,16 +371,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				array(
 					'type' => 'number',
 					'id' => 'limit_posts',
-					'name' => __( 'Limit Posts', 'geodirectory' ),
+					'name' => __( 'Limit Posts Per User', 'geodirectory' ),
 					'desc' => __( 'Limit total posts allowed per user. Leave blank or enter 0 to allow unlimited posts.', 'geodirectory' ),
 					'std' => '',
+					'placeholder' => __( 'Unlimited', 'geodirectory' ),
+					'value' => ( (int) $post_type_values['limit_posts'] === 0 ? '' : ( (int) $post_type_values['limit_posts'] < 0 ? -1 : (int) $post_type_values['limit_posts'] ) ),
 					'custom_attributes' => array(
 						'min' => '-1',
 						'step' => '1'
 					),
 					'desc_tip' => true,
-					'advanced' => true,
-					'value' => ( isset( $post_type_values['limit_posts'] ) && $post_type_values['limit_posts'] ? (int) $post_type_values['limit_posts'] : '' )
+					'advanced' => true
 				),
 				array( 'type' => 'sectionend', 'id' => 'cpt_settings_author' ),
 
