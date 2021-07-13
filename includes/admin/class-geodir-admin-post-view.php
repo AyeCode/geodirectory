@@ -312,7 +312,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			);
 			?>
 			<label class="screen-reader-text" for="post_author_override"><?php _e('User', 'geodirectory'); ?></label>
-			<select class="geodir-user-search" name="post_author_override" id="post_author_override" data-placeholder="<?php esc_attr_e( 'Search for a user&hellip;', 'geodirectory' ); ?>" data-allow_clear="true"><option value="<?php echo esc_attr( $curent_user_id ); ?>" selected="selected"><?php echo $curent_user_name; ?><option></select>
+			<select class="geodir-user-search" name="post_author_override" id="post_author_override" data-placeholder="<?php esc_attr_e( 'Search for a user&hellip;', 'geodirectory' ); ?>" data-allow_clear="false"><option value="<?php echo esc_attr( $curent_user_id ); ?>" selected="selected"><?php echo $curent_user_name; ?><option></select>
 			<?php
 		}
 
