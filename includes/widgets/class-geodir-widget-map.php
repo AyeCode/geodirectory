@@ -583,7 +583,7 @@ class GeoDir_Widget_Map extends WP_Super_Duper {
 		}
 
 		// post map
-		if ( $map_args['map_type'] == 'post' ) {
+		if ( $map_args['map_type'] == 'post' || ( ! empty( $map_args['tags'] ) && is_scalar( $map_args['tags'] ) && ( strpos( $map_args['tags'], '.' ) === 0 || strpos( $map_args['tags'], '#' ) === 0 ) ) ) {
 			$map_args['country']       = '';
 			$map_args['region']        = '';
 			$map_args['city']          = '';
