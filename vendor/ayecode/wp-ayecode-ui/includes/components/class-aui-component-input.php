@@ -120,7 +120,7 @@ class AUI_Component_Input {
 
 			// value
 			if(!empty($args['value'])){
-				$output .= ' value="'.sanitize_text_field($args['value']).'" ';
+				$output .= AUI_Component_Helper::value($args['value']);
 			}
 
 			// checked, for radio and checkboxes
@@ -507,7 +507,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 			// for
 			if(!empty($args['for'])){
-				$output .= ' for="'.sanitize_text_field($args['for']).'" ';
+				$output .= ' for="'.esc_attr($args['for']).'" ';
 			}
 
 			// class
@@ -992,7 +992,7 @@ else{$eli.attr(\'type\',\'password\');}"
 
 		// value
 		if(isset($args['value'])){
-			$output .= ' value="'.sanitize_text_field($args['value']).'" ';
+			$output .= AUI_Component_Helper::value($args['value']);
 		}
 
 		// checked, for radio and checkboxes
@@ -1026,14 +1026,29 @@ else{$eli.attr(\'type\',\'password\');}"
 		}
 
 		// wrap
-		if(!$args['no_wrap']){
+		if ( ! $args['no_wrap'] ) {
 			$wrap_class = $args['inline'] ? 'form-check form-check-inline' : 'form-check';
+
+			// Unique wrap class
+			$uniq_class = 'fwrap';
+			if ( ! empty( $args['name'] ) ) {
+				$uniq_class .= '-' . $args['name'];
+			} else if ( ! empty( $args['id'] ) ) {
+				$uniq_class .= '-' . $args['id'];
+			}
+
+			if ( isset( $args['value'] ) || $args['value'] !== "" ) {
+				$uniq_class .= '-' . $args['value'];
+			} else {
+				$uniq_class .= '-' . $count;
+			}
+			$wrap_class .= ' ' . sanitize_html_class( $uniq_class );
+
 			$output = self::wrap(array(
 				'content' => $output,
 				'class' => $wrap_class
 			));
 		}
-
 
 		return $output;
 	}
