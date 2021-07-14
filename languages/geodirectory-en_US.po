@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.0.17\n"
+"Project-Id-Version: GeoDirectory 2.1.0.18\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-06-29 20:03+0530\n"
-"PO-Revision-Date: 2021-06-29 20:03+0530\n"
+"POT-Creation-Date: 2021-07-14 19:29+0530\n"
+"PO-Revision-Date: 2021-07-14 19:29+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -425,7 +425,7 @@ msgstr ""
 #: includes/admin/admin-functions.php:960
 #: includes/admin/admin-functions.php:992
 #: includes/admin/class-geodir-admin-taxonomies.php:514
-#: includes/admin/settings/class-geodir-settings-page.php:66
+#: includes/admin/settings/class-geodir-settings-page.php:60
 #: includes/admin/views/html-admin-settings-cpt-tab-item.php:29
 #: includes/widgets/class-geodir-widget-best-of.php:221
 #: includes/widgets/class-geodir-widget-best-of.php:234
@@ -722,7 +722,7 @@ msgstr ""
 #: includes/admin/dummy-data/property_sale.php:65
 #: includes/admin/dummy-data/standard_places.php:107
 #: includes/admin/settings/class-geodir-settings-cpt-sorting.php:368
-#: includes/admin/settings/class-geodir-settings-cpt.php:535
+#: includes/admin/settings/class-geodir-settings-cpt.php:537
 #: includes/admin/settings/class-geodir-settings-general.php:373
 #: includes/admin/settings/class-geodir-settings-general.php:487
 #: includes/admin/settings/class-geodir-settings-general.php:530
@@ -883,8 +883,8 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1041
 #: includes/admin/class-geodir-admin-dummy-data.php:1053
 #: includes/admin/diagnostic-functions.php:41
-#: includes/admin/settings/class-geodir-settings-cpt.php:507
-#: includes/admin/settings/class-geodir-settings-cpt.php:515
+#: includes/admin/settings/class-geodir-settings-cpt.php:509
+#: includes/admin/settings/class-geodir-settings-cpt.php:517
 #: includes/admin/views/html-keys-edit.php:16
 #: includes/widgets/class-geodir-widget-add-listing.php:335
 msgid "Description"
@@ -4848,44 +4848,44 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:208
+#: includes/admin/settings/class-geodir-settings-cpt.php:209
 #: includes/core-functions.php:967 language.php:174
 #: templates/bootstrap/map/filter-cpt.php:22
 msgid "Post Type"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:215
+#: includes/admin/settings/class-geodir-settings-cpt.php:216
 msgid "Post Type Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:221
+#: includes/admin/settings/class-geodir-settings-cpt.php:222
 msgid "Post type"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:222
+#: includes/admin/settings/class-geodir-settings-cpt.php:223
 msgid ""
 "The new post type system name ( max. 17 characters ). Lower-case characters "
 "and underscores only. Min 2 letters. Once added the post type system name "
 "cannot be changed. <b>Usually Singular.</b>"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:235
+#: includes/admin/settings/class-geodir-settings-cpt.php:236
 #: includes/widgets/class-geodir-widget-cpt-meta.php:61
 msgid "Slug"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:236
+#: includes/admin/settings/class-geodir-settings-cpt.php:237
 msgid ""
 "The listing slug name ( max. 20 characters ). Alphanumeric lower-case "
 "characters and underscores and hyphen(-) only. Min 2 letters. <b>Usually "
 "Plural.</b>"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:249
+#: includes/admin/settings/class-geodir-settings-cpt.php:250
 msgid "Order in post type list"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:250
+#: includes/admin/settings/class-geodir-settings-cpt.php:251
 msgid ""
 "Position at which this post type will appear in post type list everywhere on "
 "the website.\n"
@@ -4893,111 +4893,115 @@ msgid ""
 "this will not make any effect.</b>"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:260
+#: includes/admin/settings/class-geodir-settings-cpt.php:261
 msgid "Default image"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:261
+#: includes/admin/settings/class-geodir-settings-cpt.php:262
 msgid ""
 "Upload default post type image.  This will be used in some areas if the "
 "listing has no image and the category has no default image."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:270
+#: includes/admin/settings/class-geodir-settings-cpt.php:271
 msgid "Menu icon"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:271
+#: includes/admin/settings/class-geodir-settings-cpt.php:272
 msgid "The icon to be used in the admin menu from the post type."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:285
+#: includes/admin/settings/class-geodir-settings-cpt.php:286
 msgid "Disable comments"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:286
+#: includes/admin/settings/class-geodir-settings-cpt.php:287
 msgid "Disable comments for all posts for this post type."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:295
+#: includes/admin/settings/class-geodir-settings-cpt.php:296
 msgid "Disable ratings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:296
+#: includes/admin/settings/class-geodir-settings-cpt.php:297
 msgid "Disable review stars without disabling comments."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:305
+#: includes/admin/settings/class-geodir-settings-cpt.php:306
 msgid "Single review"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:306
+#: includes/admin/settings/class-geodir-settings-cpt.php:307
 msgid "Restrict user to leave more than one review per post."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:315
+#: includes/admin/settings/class-geodir-settings-cpt.php:316
 msgid "Disable favorites"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:316
+#: includes/admin/settings/class-geodir-settings-cpt.php:317
 msgid "Disable favorites for this post type?"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:325
+#: includes/admin/settings/class-geodir-settings-cpt.php:326
 msgid "Disable frontend add"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:326
+#: includes/admin/settings/class-geodir-settings-cpt.php:327
 msgid "Prevent this post type from being added from the frontend?"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:338
+#: includes/admin/settings/class-geodir-settings-cpt.php:339
 msgid "Author page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:345
+#: includes/admin/settings/class-geodir-settings-cpt.php:346
 msgid "Authors posts"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:346
+#: includes/admin/settings/class-geodir-settings-cpt.php:347
 msgid "Select the visibility of the authors posts on the authors posts url."
-msgstr ""
-
-#: includes/admin/settings/class-geodir-settings-cpt.php:350
-#: includes/admin/settings/class-geodir-settings-cpt.php:363
-msgid "Public"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:351
 #: includes/admin/settings/class-geodir-settings-cpt.php:364
+msgid "Public"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-cpt.php:352
+#: includes/admin/settings/class-geodir-settings-cpt.php:365
 msgid "Private"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:358
+#: includes/admin/settings/class-geodir-settings-cpt.php:359
 msgid "Authors favorites"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:359
+#: includes/admin/settings/class-geodir-settings-cpt.php:360
 msgid ""
 "Select the visibility of the authors favorites posts on the authors "
 "favorites url."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:373
-msgid "Limit Posts"
+#: includes/admin/settings/class-geodir-settings-cpt.php:374
+msgid "Limit Posts Per User"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:374
+#: includes/admin/settings/class-geodir-settings-cpt.php:375
 msgid ""
 "Limit total posts allowed per user. Leave blank or enter 0 to allow "
 "unlimited posts."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:388
+#: includes/admin/settings/class-geodir-settings-cpt.php:377 language.php:73
+msgid "Unlimited"
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-cpt.php:390
 msgid "Labels"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:396
+#: includes/admin/settings/class-geodir-settings-cpt.php:398
 #: includes/admin/views/html-admin-page-status-report.php:578
 #: includes/class-geodir-comments.php:76
 #: includes/class-geodir-post-data.php:943
@@ -5005,105 +5009,105 @@ msgstr ""
 msgid "Name"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:397
+#: includes/admin/settings/class-geodir-settings-cpt.php:399
 msgid "General name for the post type, <b>Usually Plural.</b>"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:409
+#: includes/admin/settings/class-geodir-settings-cpt.php:411
 msgid "Singular name"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:410
+#: includes/admin/settings/class-geodir-settings-cpt.php:412
 msgid "Name for one object of this post type. Defaults to value of name."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:422
+#: includes/admin/settings/class-geodir-settings-cpt.php:424
 msgid "Add new"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:423
+#: includes/admin/settings/class-geodir-settings-cpt.php:425
 msgid ""
 "The add new text. The default is Add New for both hierarchical and non-"
 "hierarchical types."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:432
+#: includes/admin/settings/class-geodir-settings-cpt.php:434
 msgid "Add new item"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:433
+#: includes/admin/settings/class-geodir-settings-cpt.php:435
 msgid "The add new item text. Default is Add New Post/Add New Page."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:442
+#: includes/admin/settings/class-geodir-settings-cpt.php:444
 msgid "Edit item"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:443
+#: includes/admin/settings/class-geodir-settings-cpt.php:445
 msgid "The edit item text. Default is Edit Post/Edit Page."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:452
+#: includes/admin/settings/class-geodir-settings-cpt.php:454
 msgid "New item"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:453
+#: includes/admin/settings/class-geodir-settings-cpt.php:455
 msgid "The new item text. Default is New Post/New Page."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:462
+#: includes/admin/settings/class-geodir-settings-cpt.php:464
 msgid "View item"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:463
+#: includes/admin/settings/class-geodir-settings-cpt.php:465
 msgid "The view item text. Default is View Post/View Page."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:472
+#: includes/admin/settings/class-geodir-settings-cpt.php:474
 msgid "Search items"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:473
+#: includes/admin/settings/class-geodir-settings-cpt.php:475
 msgid "The search items text. Default is Search Posts/Search Pages."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:482
+#: includes/admin/settings/class-geodir-settings-cpt.php:484
 msgid "Not found"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:483
+#: includes/admin/settings/class-geodir-settings-cpt.php:485
 msgid "The not found text. Default is No posts found/No pages found."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:492
+#: includes/admin/settings/class-geodir-settings-cpt.php:494
 msgid "Not found in trash"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:493
+#: includes/admin/settings/class-geodir-settings-cpt.php:495
 msgid ""
 "The not found in trash text. Default is No posts found in Trash/No pages "
 "found in Trash."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:516
+#: includes/admin/settings/class-geodir-settings-cpt.php:518
 msgid "A short descriptive summary of what the post type is."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:527
+#: includes/admin/settings/class-geodir-settings-cpt.php:529
 msgid "SEO Overrides"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:529
+#: includes/admin/settings/class-geodir-settings-cpt.php:531
 msgid ""
 "Main settings are set from the General>Titles & Meta settings, here you can "
 "override those per CPT."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:536
+#: includes/admin/settings/class-geodir-settings-cpt.php:538
 msgid "The page title will appear on the post type archive page."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:545
+#: includes/admin/settings/class-geodir-settings-cpt.php:547
 #: includes/admin/settings/class-geodir-settings-general.php:383
 #: includes/admin/settings/class-geodir-settings-general.php:497
 #: includes/admin/settings/class-geodir-settings-general.php:540
@@ -5113,11 +5117,11 @@ msgstr ""
 msgid "Meta Title"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:546
+#: includes/admin/settings/class-geodir-settings-cpt.php:548
 msgid "Meta title will appear in head tag of this post type archive page."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:555
+#: includes/admin/settings/class-geodir-settings-cpt.php:557
 #: includes/admin/settings/class-geodir-settings-general.php:393
 #: includes/admin/settings/class-geodir-settings-general.php:507
 #: includes/admin/settings/class-geodir-settings-general.php:550
@@ -5127,106 +5131,106 @@ msgstr ""
 msgid "Meta Description"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:556
+#: includes/admin/settings/class-geodir-settings-cpt.php:558
 msgid ""
 "Meta description will appear in head tag of this post type archive page."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:569
+#: includes/admin/settings/class-geodir-settings-cpt.php:571
 #: includes/admin/settings/class-geodir-settings-general.php:301
 msgid "Template Page Settings"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:571
+#: includes/admin/settings/class-geodir-settings-cpt.php:573
 msgid ""
 "Template pages are used to design the respective pages and should never be "
 "linked to directly."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:577
+#: includes/admin/settings/class-geodir-settings-cpt.php:579
 #: includes/admin/settings/class-geodir-settings-general.php:272
 #: includes/admin/settings/class-geodir-settings-general.php:606
 msgid "Add listing page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:578
+#: includes/admin/settings/class-geodir-settings-cpt.php:580
 msgid "Select the page to use as the GD add listing page template"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:589
-#: includes/admin/settings/class-geodir-settings-cpt.php:605
-#: includes/admin/settings/class-geodir-settings-cpt.php:621
-#: includes/admin/settings/class-geodir-settings-cpt.php:637
+#: includes/admin/settings/class-geodir-settings-cpt.php:591
+#: includes/admin/settings/class-geodir-settings-cpt.php:607
+#: includes/admin/settings/class-geodir-settings-cpt.php:623
+#: includes/admin/settings/class-geodir-settings-cpt.php:639
 #, php-format
 msgid "Default (%s)"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:595
+#: includes/admin/settings/class-geodir-settings-cpt.php:597
 #: includes/admin/settings/class-geodir-settings-general.php:309
 msgid "Details Page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:596
+#: includes/admin/settings/class-geodir-settings-cpt.php:598
 #: includes/admin/settings/class-geodir-settings-general.php:310
 msgid "Select the page to use as the GD details page template"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:611
+#: includes/admin/settings/class-geodir-settings-cpt.php:613
 #: includes/admin/settings/class-geodir-settings-general.php:319
 msgid "Archive page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:612
+#: includes/admin/settings/class-geodir-settings-cpt.php:614
 #: includes/admin/settings/class-geodir-settings-general.php:320
 msgid "Select the page to use for GD archives such as taxonomy and CPT pages"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:627
+#: includes/admin/settings/class-geodir-settings-cpt.php:629
 #: includes/admin/settings/class-geodir-settings-general.php:329
 msgid "Archive item page"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:628
+#: includes/admin/settings/class-geodir-settings-cpt.php:630
 #: includes/admin/settings/class-geodir-settings-general.php:330
 msgid ""
 "Select the page to use for GD archive items, this is the item template used "
 "on taxonomy and CPT pages"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:735
+#: includes/admin/settings/class-geodir-settings-cpt.php:737
 msgid "Invalid or missing post type"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:746
+#: includes/admin/settings/class-geodir-settings-cpt.php:748
 msgid "Post type already exists."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:752
+#: includes/admin/settings/class-geodir-settings-cpt.php:754
 msgid "Post type slug already exists."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:762
+#: includes/admin/settings/class-geodir-settings-cpt.php:764
 msgid "Add New "
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:763
+#: includes/admin/settings/class-geodir-settings-cpt.php:765
 msgid "Edit "
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:764
+#: includes/admin/settings/class-geodir-settings-cpt.php:766
 msgid "New "
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:765
+#: includes/admin/settings/class-geodir-settings-cpt.php:767
 msgid "View "
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:766
+#: includes/admin/settings/class-geodir-settings-cpt.php:768
 msgid "Search "
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-cpt.php:767
-#: includes/admin/settings/class-geodir-settings-cpt.php:768
+#: includes/admin/settings/class-geodir-settings-cpt.php:769
+#: includes/admin/settings/class-geodir-settings-cpt.php:770
 msgid "No "
 msgstr ""
 
@@ -6704,11 +6708,11 @@ msgstr ""
 msgid "Preparing export..."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-page.php:182
+#: includes/admin/settings/class-geodir-settings-page.php:176
 msgid "Show Advanced"
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-page.php:183
+#: includes/admin/settings/class-geodir-settings-page.php:177
 msgid "Hide Advanced"
 msgstr ""
 
@@ -7355,7 +7359,7 @@ msgstr ""
 
 #: includes/admin/views/html-admin-page-status-report.php:583
 #: includes/admin/views/html-notice-v2-update.php:203
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:369
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:375
 msgid "Version"
 msgstr ""
 
@@ -10650,7 +10654,7 @@ msgid "Delete revision failed."
 msgstr ""
 
 #: includes/class-geodir-post-data.php:1355
-#: includes/class-geodir-post-data.php:1596
+#: includes/class-geodir-post-data.php:1598
 msgid "You do not have the privileges to perform this action."
 msgstr ""
 
@@ -10666,40 +10670,42 @@ msgstr ""
 msgid "Something wrong! Fail to register a new user."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1688
+#: includes/class-geodir-post-data.php:1690
 #, php-format
 msgid "Update received, your changes are now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1692
+#: includes/class-geodir-post-data.php:1694
 msgid ""
 "Update received, your changes may need to be reviewed before going live."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1701
+#: includes/class-geodir-post-data.php:1703
 #, php-format
 msgid "Post received, your listing is now live and can be viewed %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1707
+#: includes/class-geodir-post-data.php:1709
 #, php-format
 msgid ""
 "Post received, your listing may need to be reviewed before going live, you "
 "can preview it %shere%s."
 msgstr ""
 
-#: includes/class-geodir-post-data.php:1795
+#: includes/class-geodir-post-data.php:1797
 msgid "Indicates mandatory fields"
 msgstr ""
 
-#: includes/class-geodir-post-limit.php:155
-#, php-format
-msgid "You are not allowed to add the listing under %s."
-msgstr ""
-
-#: includes/class-geodir-post-limit.php:157
+#: includes/class-geodir-post-limit.php:164
+#: includes/class-geodir-post-limit.php:201
 #, php-format
 msgid "You have reached the limit of %s you can add at this time."
+msgstr ""
+
+#: includes/class-geodir-post-limit.php:169
+#: includes/class-geodir-post-limit.php:199
+#, php-format
+msgid "You are not allowed to add the listing under %s."
 msgstr ""
 
 #: includes/class-geodir-post-types.php:125
@@ -14474,7 +14480,7 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-directions.php:58
 #: includes/widgets/class-geodir-widget-post-distance.php:38
 #: includes/widgets/class-geodir-widget-post-fav.php:103
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:336
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:342
 msgid "Type"
 msgstr ""
 
@@ -16386,10 +16392,6 @@ msgid ""
 "days"
 msgstr ""
 
-#: language.php:73
-msgid "Unlimited"
-msgstr ""
-
 #: language.php:74
 msgid "Home Information"
 msgstr ""
@@ -18127,7 +18129,7 @@ msgid "Thanks for choosing an AyeCode Product!"
 msgstr ""
 
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1245
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:304
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:310
 msgid "You do not have sufficient permissions to access this page."
 msgstr ""
 
@@ -18136,7 +18138,7 @@ msgid "Here you can adjust settings if you are having compatibility issues."
 msgstr ""
 
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1257
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:408
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:414
 msgid "Frontend"
 msgstr ""
 
@@ -18190,7 +18192,7 @@ msgid ""
 msgstr ""
 
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:1295
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:410
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:416
 msgid "Backend"
 msgstr ""
 
@@ -18282,70 +18284,70 @@ msgstr ""
 msgid "Posts navigation"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:341
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:347
 msgid "CSS (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:344
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:350
 msgid "Kits (settings managed on fontawesome.com)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:351
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:357
 msgid "Kit URL"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:359
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:365
 #, php-format
 msgid "Requires a free account with Font Awesome. %sGet kit url%s"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:373
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:379
 #, php-format
 msgid "Latest - %s (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:402
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:408
 msgid "Enqueue"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:406
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:412
 msgid "Frontend + Backend (default)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:417
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:423
 msgid "Enable pro"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:424
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:430
 #, php-format
 msgid "Requires a subscription. %sLearn more%s %sManage my allowed domains%s"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:436
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:442
 msgid "Enable v4 shims compatibility"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:442
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:448
 msgid ""
 "This enables v4 classes to work with v5, sort of like a band-aid until "
 "everyone has updated everything to v5."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:448
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:454
 msgid "Enable JS pseudo elements (not recommended)"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:455
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:461
 msgid ""
 "Used only with the JS version, this will make pseudo-elements work but can "
 "be CPU intensive on some sites."
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:461
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:467
 msgid "Dequeue"
 msgstr ""
 
-#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:467
+#: vendor/ayecode/wp-font-awesome-settings/wp-font-awesome-settings.php:473
 msgid ""
 "This will try to dequeue any other Font Awesome versions loaded by other "
 "sources if they are added with `font-awesome` or `fontawesome` in the name."
