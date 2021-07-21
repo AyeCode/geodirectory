@@ -182,6 +182,9 @@ jQuery(function($) {
         if (data.content && $(data.content).find('.gd-bh-show-field').length) {
             geodir_refresh_business_hours();
         }
+        geodir_init_lazy_load();
+        geodir_init_flexslider();
+        geodir_load_badge_class();
         geodir_fix_marker_pos(data.canvas);
     });
 
