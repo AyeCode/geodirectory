@@ -1354,8 +1354,8 @@ function geodir_cfi_address( $html, $cf ) {
          */
         do_action('geodir_address_extra_listing_fields', $cf);
 
-        if (isset($extra_fields['show_zip']) && $extra_fields['show_zip']) {
-            $title = '';
+        if ( isset( $extra_fields['show_zip'] ) && $extra_fields['show_zip'] ) {
+            $title = ! empty( $extra_fields['zip_required'] ) ? __( 'Zip/Post Code is required!', 'geodirectory' ) : '';
             $extra_attributes = array();
             // field type (used for validation)
             $extra_attributes['field_type'] = 'text';
@@ -1363,16 +1363,15 @@ function geodir_cfi_address( $html, $cf ) {
                 array(
                     'id'                => $prefix . 'zip',
                     'name'              => 'zip',
-                    'required'          => false,
-                    'label'              => esc_attr__($zip_title, 'geodirectory'),
-                    'label_show'       => true,
-                    'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
+                    'required'          => ( ! empty( $extra_fields['zip_required'] ) ? true : false ),
+                    'label'             => esc_attr__( $zip_title, 'geodirectory' ) . ( ! empty( $extra_fields['zip_required'] ) ? $required : '' ),
+                    'label_show'        => true,
+                    'label_type'        => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
                     'type'              => 'text',
                     'title'             =>  $title,
-//                    'placeholder'       => esc_html__( $cf['placeholder_value'], 'geodirectory'),
                     'class'             => '',
-                    'value'             => esc_attr(stripslashes($zip)),
-                    'help_text'         => sprintf( __('Please enter listing %s', 'geodirectory'), __($zip_title, 'geodirectory') ),
+                    'value'             => esc_attr( stripslashes( $zip ) ),
+                    'help_text'         => wp_sprintf( __( 'Please enter listing %s', 'geodirectory' ), __( $zip_title, 'geodirectory' ) ),
                     'extra_attributes'  => $extra_attributes,
                 )
             );
