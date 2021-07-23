@@ -17,7 +17,7 @@
  * Text Domain: geodirectory
  * Domain Path: /languages
  * Requires at least: 4.5
- * Tested up to: 5.7
+ * Tested up to: 5.8
  */
 
 if ( ! class_exists( 'GeoDirectory' ) ) :

@@ -2,6 +2,7 @@
 * Hide select layout view button on non-GD layouts - FIXED
 * Image slider & lightbox not working in map popup - FIXED
 * Add listing zip required option no working with AUI - FIXED
+* Region missing for address within Norway with OSM - FIXED
 
 = 2.1.0.18 =
 * GD listings author page not working when author permalink contains custom link - FIXED
