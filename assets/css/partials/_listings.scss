@@ -458,3 +458,17 @@ body { // wrapping ina  body tag makes rules more specific
 .geodir-post-distance {
 	clear: both;
 }
+/* Listings Slider */
+body .geodir_flex-container ul.geodir-category-list-view.geodir-gridview.geodir-slides > li {
+	margin-left: inherit !important;
+}
+body .geodir_flex-container ul.geodir-category-list-view.geodir-gridview.geodir-slides > li:first-child {
+	margin-left: 0 !important;
+}
+body .geodir_flex-container ul.geodir-category-list-view.geodir-slides > li {
+	clear: none;
+}
+.geodir-posts-carousel .elementor-posts.geodir-slides {
+	display: block;
+	margin-bottom: 30px
+}
