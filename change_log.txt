@@ -2,6 +2,7 @@
 * GD listings author page not working when author permalink contains custom link - FIXED
 * Compatibility changes for Jetpack v8.1+ - CHANGED
 * Map markers for custom loop filtering current location on single listing page - FIXED
+* AUI updated - CHANGED
 
 = 2.1.0.17 =
 * Complianz | GDPR/CCPA Cookie Consent plugin integration added for GD maps - ADDED
