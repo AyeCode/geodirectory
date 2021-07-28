@@ -24,7 +24,6 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      */
     public function __construct() {
 
-
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'fas fa-th-list',
@@ -44,11 +43,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
             ),
         );
 
-        
-
-
         parent::__construct( $options );
-
     }
 
     /**
@@ -422,6 +417,78 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
 	    }
 
+		// Carousel
+		$arguments['with_carousel'] = array(
+			'type' => 'select',
+			'title' => __( 'With Carousel:', 'geodirectory' ),
+			'desc' => __( 'Enable carousel to show listings slideshow.', 'geodirectory' ),
+			'options' => array(
+				'' => __( 'No', 'geodirectory' ),
+				'1' => __( 'Yes', 'geodirectory' )
+			),
+			'default' => '',
+			'desc_tip' => false,
+			'advanced' => false,
+			'group' => __( 'Carousel', 'geodirectory' )
+		);
+
+		$arguments['with_indicators'] = array(
+			'type' => 'select',
+			'title' => __( 'With Indicators:', 'geodirectory' ),
+			'desc' => __( 'Show the previous/next navigation indicators to the carousel.', 'geodirectory' ),
+			'options' => array(
+				'' => __( 'No', 'geodirectory' ),
+				'1' => __( 'Yes', 'geodirectory' )
+			),
+			'default' => '',
+			'desc_tip' => false,
+			'advanced' => false,
+			'element_require' => '[%with_carousel%]=="1"',
+			'group' => __( 'Carousel', 'geodirectory' )
+		);
+
+		$arguments['with_controls'] = array(
+			'type' => 'select',
+			'title' => __( 'With Controls:', 'geodirectory' ),
+			'desc' => __( 'Show the paging control of each slide to the carousel.', 'geodirectory' ),
+			'options' => array(
+				'' => __( 'No', 'geodirectory' ),
+				'1' => __( 'Yes', 'geodirectory' )
+			),
+			'default' => '',
+			'desc_tip' => false,
+			'advanced' => false,
+			'element_require' => '[%with_carousel%]=="1"',
+			'group' => __( 'Carousel', 'geodirectory' )
+		);
+
+		$arguments['slide_interval'] = array(
+			'type' => 'number',
+			'title' => __( 'Interval:', 'geodirectory' ),
+			'desc' => __( 'The amount of time in seconds to delay between automatically cycling an listing item. If 0, carousel will not automatically cycle.', 'geodirectory' ),
+			'default' => '5',
+			'desc_tip' => false,
+			'advanced' => false,
+			'element_require' => '[%with_carousel%]=="1"',
+			'group' => __( 'Carousel', 'geodirectory' )
+		);
+
+		$arguments['slide_ride'] = array(
+			'type' => 'select',
+			'title' => __( 'Autoplay:', 'geodirectory' ),
+			'desc' => __( 'Autoplays the carousel after the user manually cycles the first slide. If "carousel", autoplays the carousel on page load automatically.', 'geodirectory' ),
+			'options' => array(
+				'' => __( 'Default (Auto)', 'geodirectory' ),
+				'click' => __( 'On Click', 'geodirectory' ),
+				'auto' => __( 'Auto', 'geodirectory' )
+			),
+			'default' => '',
+			'desc_tip' => false,
+			'advanced' => false,
+			'element_require' => '[%with_carousel%]=="1"',
+			'group' => __( 'Carousel', 'geodirectory' )
+		);
+
 	    /*
 		 * Elementor Pro features below here
 		 */
@@ -525,6 +592,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	              'rounded'    => '',
 	              'rounded_size'    => '',
 	              'shadow'    => '',
+				  'with_carousel' => '',
+				  'with_controls' => '',
+				  'with_indicators' => '',
+				  'slide_interval' => '5',
+				  'slide_ride' => ''
             )
         );
 
@@ -684,6 +756,11 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$skin_id = empty( $instance['skin_id'] ) ? '' : apply_filters( 'widget_skin_id', $instance['skin_id'], $instance, $this->id_base );
 
 	    $design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
+
+		if ( ! empty( $instance['with_carousel'] ) ) {
+			$instance['with_pagination'] = false;
+			$instance['view_all_link'] = false;
+		}
 
 	    $view_all_link = ! empty( $instance['view_all_link'] ) ? true : false;
         $use_viewing_post_type = ! empty( $instance['use_viewing_post_type'] ) ? true : false;
@@ -1047,6 +1124,42 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$paged = $pageno;
 		$gd_advanced_pagination = $pagination_info;
 		$unique_id = 'geodir_' . uniqid();
+		$wrapper_attrs = '';
+
+		// Carousel
+		$carousel_items = absint( $layout );
+		$carousel_row = '#' . $unique_id . ' .row';
+		if ( ! empty( $instance['with_carousel'] ) && ! empty( $widget_listings ) ) {
+			if ( ! geodir_design_style() ) {
+				// Enqueue flexslider script.
+				GeoDir_Frontend_Scripts::enqueue_script( 'jquery-flexslider' );
+			}
+
+			$class .= ' geodir-posts-carousel';
+
+			if ( ! empty( $instance['with_controls'] ) ) {
+				$wrapper_attrs .= ' data-with-controls="1"';
+			}
+
+			if ( ! empty( $instance['with_indicators'] ) ) {
+				$wrapper_attrs .= ' data-with-indicators="1"';
+			}
+
+			// Interval
+			if ( $instance['slide_interval'] === "0" ) {
+				$slide_interval = "false";
+			} else {
+				$slide_interval = ! empty( $instance['slide_interval'] ) ? (float) $instance['slide_interval'] * 1000 : 5000;
+			}
+			$wrapper_attrs .= ' data-interval="' . $slide_interval . '"';
+			$wrapper_attrs .= ' data-ride="' . ( $instance['slide_ride'] == 'click' ? 'false' : 'carousel' ) . '"';
+
+			if ( $carousel_items < 1 ) {
+				$carousel_items = 1;
+			}
+
+			$wrapper_attrs .= ' data-with-items="' . $carousel_items . '"';
+		}
 
 		// Elementor
 		$skin_active = false;
@@ -1063,6 +1176,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 				}
 				$elementor_wrapper_class = ' elementor-element elementor-element-9ff57fdx elementor-posts--thumbnail-top elementor-grid-' . $columns . ' elementor-grid-tablet-2 elementor-grid-mobile-1 elementor-widget elementor-widget-posts ';
 			}
+			$carousel_row = '#' . $unique_id . ' .elementor-posts';
 		}
 
 	    // wrap class
@@ -1079,7 +1193,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 	    }
 
         ?>
-        <div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; echo $elementor_wrapper_class; ?> position-relative">
+        <div id="<?php echo $unique_id; ?>" class="geodir_locations geodir_location_listing<?php echo $class; echo $elementor_wrapper_class; ?> position-relative"<?php echo $wrapper_attrs; ?>>
             <?php
             if ( ! isset( $character_count ) ) {
                 /**
@@ -1243,6 +1357,8 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		?>
 		</div>
 		<?php 
+		if ( $design_style && ! empty( $instance['with_carousel'] ) && ! empty( $widget_listings ) ) { ?><style><?php echo $carousel_row; ?>.carousel-item.active,<?php echo $carousel_row; ?>.carousel-item-left,<?php echo $carousel_row; ?>.carousel-item-right{display:flex;}<?php echo $carousel_row; ?>.carousel-item{margin-left:auto;}</style>
+		<?php }
 
 		$geodir_widget_cpt = false;
 		$posts_per_page = $backup_posts_per_page;

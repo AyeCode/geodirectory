@@ -2395,9 +2395,6 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
                 $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
             }
-            if ($show_region_in_address && isset( $gd_post->region ) && $gd_post->region ) {
-                $address_fields['region'] = '<span itemprop="addressRegion">' . $gd_post->region . '</span>';
-            }
             if ( $show_zip_in_address && isset( $gd_post->zip ) && $gd_post->zip ) {
                 $address_fields['zip'] = '<span itemprop="postalCode">' . $gd_post->zip . '</span>';
             }

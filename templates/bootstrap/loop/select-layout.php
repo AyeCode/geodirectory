@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.1.0.12
+ * @version    2.1.0.19
  *
  * @param string $post_type The post type.
  * @param array  $layouts Layout options.
@@ -42,10 +42,14 @@ defined( 'ABSPATH' ) || exit;
 
 		var $listSelect = jQuery('.gd-list-view-select');
 
+		/* Hide button on non-GD layouts */
+		if ($listSelect.length && ! $list.length) {
+			$listSelect.addClass('d-none');
+		}
+
 		$listSelect.find('button').removeClass('active');
 		$listSelect.find('button[data-gridview="'+$val+'"]').addClass('active');
 		$list.removeClass('row-cols-md-0 row-cols-md-1 row-cols-md-2 row-cols-md-3 row-cols-md-4 row-cols-md-5').addClass('row-cols-sm-2 row-cols-md-'+$val);
-
 
 		// only store if it was a user action
 		if (!$noStore) {

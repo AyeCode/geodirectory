@@ -44,9 +44,10 @@ jQuery(document).ready(function($) {
         });
     });
 
-
-
-
+    // Listings carousel
+    $('.geodir-posts-carousel').each(function(index) {
+        geodir_init_listings_carousel(this, index);
+    });
 });
 
 /**
@@ -367,6 +368,10 @@ jQuery(function($) {
         if (data.content && $(data.content).find('.gd-bh-show-field').length) {
             geodir_refresh_business_hours();
         }
+        geodir_init_lazy_load();
+        geodir_init_flexslider();
+        geodir_load_badge_class();
+        jQuery(window).trigger("aui_carousel_multiple");
         geodir_fix_marker_pos(data.canvas);
     });
 
@@ -1846,4 +1851,67 @@ function geodir_time_ago(selector) {
     });
     // Update time every minute
     setTimeout(geodir_time_ago, 60000);
+}
+
+function geodir_init_listings_carousel(el, index) {
+    var $el = jQuery(el);
+    var wEl = '.geodir-widget-posts';
+    var rEl = '.col';
+    if (!$el.find(wEl).length && $el.find('.elementor-posts').length) {
+        var wEl = '.elementor-posts';
+        var rEl = '.elementor-post';
+    }
+    var items = $el.find(wEl + ' > ' + rEl).length;
+    var pitems = parseInt($el.data('with-items'));
+    var fWidth = parseFloat(jQuery(window).width());
+    if (pitems > 2 && fWidth < 768) {
+        pitems = 2;
+    }
+    if (pitems < 1 || fWidth < 576) {
+        pitems = 1;
+    }
+    if (items > 0 && items > pitems) {
+        var slides = Math.ceil(items / pitems);
+        var $carousel = $el.parent();
+        var cid = $carousel.prop('id');
+        if (!cid) {
+            cid = $el.prop('id') + '_' + index;
+            $carousel.prop('id', cid);
+        }
+        $carousel.addClass('carousel slide').addClass('d-block').attr('data-interval', $el.data('interval')).attr('data-ride', $el.data('ride'));
+        $el.addClass('carousel-inner');
+        $el.find(wEl).addClass('carousel-item');
+        var $content = jQuery($el.html()).empty();
+        $content = $content[0].outerHTML;
+        $content = $content.replace('</div>', '');
+        var $html = $content;
+        for (var i = 1; i <= items; i++) {
+            var $_html = $el.find(wEl + ' > ' + rEl + ':nth-child(' + i + ')');
+            $html += $_html[0].outerHTML;
+            if (i % pitems === 0 && i < items) {
+                $html += '</div>' + $content;
+            }
+        }
+        $el.html($html);
+        // Indicators
+        if ($el.data('with-indicators')) {
+            var indicators = '<ol class="carousel-indicators position-relative">';
+            for (var i = 0; i < slides; i++) {
+                var cls = i == 0 ? ' active' : '';
+                indicators += '<li data-target="#' + cid + '" data-slide-to="' + i + '" class="bg-dark' + cls + '"></li>';
+            }
+            indicators += '</ol>';
+            jQuery(el).after(indicators);
+        }
+        // Controls
+        if ($el.data('with-controls')) {
+            var controls = '<a class="carousel-control-prev text-dark mr-2 ml-n2 w-auto" href="#' + cid + '" role="button" data-slide="prev"><i class="fas fa-chevron-left fa-2x" aria-hidden="true"></i><span class="sr-only">' + geodir_params.txt_previous + '</span></a><a class="carousel-control-next text-dark ml-2 w-auto mr-n2" href="#' + cid + '" role="button" data-slide="next"><i class="fas fa-chevron-right fa-2x" aria-hidden="true"></i><span class="sr-only">' + geodir_params.txt_next + '</span></a>';
+            jQuery(el).after(controls);
+        }
+        geodir_ajax_load_slider($el);
+        $el.find('.carousel-item:first').addClass('active');
+        $el.find('.geodir-image-container .carousel-inner').removeClass('carousel-inner');
+        $el.find('.geodir-image-container .carousel-item.active').removeClass('active');
+        $el.find('.geodir-image-container .carousel-item').removeClass('carousel-item');
+    }
 }
