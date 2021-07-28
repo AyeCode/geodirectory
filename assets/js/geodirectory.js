@@ -211,6 +211,11 @@ jQuery(function($) {
     if (jQuery('.geodir-comments-area').length && !jQuery('#reviews').length) {
         jQuery('.geodir-comments-area').prepend('<span id="reviews"></span>');
     }
+
+	// Listings carousel
+    $('.geodir-posts-carousel').each(function(index) {
+        geodir_init_listings_carousel(this, index);
+    });
 });
 
 /* Placeholders.js v3.0.2  fixes placeholder support for older browsers */
@@ -1369,7 +1374,6 @@ function geodir_init_slider($id) {
 
     // chrome 53 introduced a bug, so we need to repaint the slider when shown.
     jQuery('#' + $id + ' .geodir-slides').addClass('flexslider-fix-rtl');
-
     jQuery("#" + $id + "_carousel").flexslider({
         animation: "slide",
         namespace: "geodir-",
@@ -1385,29 +1389,30 @@ function geodir_init_slider($id) {
     }), jQuery("#" + $id).flexslider({
 
         // enable carousel if settings are right
-        itemWidth: jQuery("#" + $id).attr("data-limit_show") ? 210 : "", // needed to be considered a carousel
-        itemMargin: jQuery("#" + $id).attr("data-limit_show") ? 3 : "",
+        itemWidth: jQuery("#" + $id).attr("data-item-width") ? parseInt(jQuery("#" + $id).attr("data-item-width")) : (jQuery("#" + $id).attr("data-limit_show") ? 210 : ""), // needed to be considered a carousel
+        itemMargin: jQuery("#" + $id).attr("data-item-margin") ? parseInt(jQuery("#" + $id).attr("data-item-margin")) : (jQuery("#" + $id).attr("data-limit_show") ? 3 : ""),
         minItems: jQuery("#" + $id).attr("data-limit_show") ? 1 : "",
         maxItems: jQuery("#" + $id).attr("data-limit_show") ? jQuery("#" + $id).attr("data-limit_show") : "",
 
         animation: jQuery("#" + $id).attr("data-animation") == 'fade' ? "fade" : "slide",
-        selector: ".geodir-slides > li",
+        selector: jQuery("#" + $id).attr("data-selector") ? jQuery("#" + $id).attr("data-selector") : ".geodir-slides > li",
         namespace: "geodir-",
         // controlNav: !0,
         controlNav: parseInt(jQuery("#" + $id).attr("data-controlnav")),
-        directionNav: 1,
+        directionNav: typeof jQuery("#" + $id).attr("data-directionnav") != 'undefined' ? parseInt(jQuery("#" + $id).attr("data-directionnav")) : 1,
         prevText: '<i class="fas fa-angle-right"></i>', // we flip with CSS
         nextText: '<i class="fas fa-angle-right"></i>',
         animationLoop: !0,
         slideshow: parseInt(jQuery("#" + $id).attr("data-slideshow")),
         sync: "#" + $id + "_carousel",
+        slideshowSpeed: parseInt(jQuery("#" + $id).attr("data-slideshow-speed")) > 100 ? parseInt(jQuery("#" + $id).attr("data-slideshow-speed")) : 7000,
         start: function(slider) {
 
             // chrome 53 introduced a bug, so we need to repaint the slider when shown.
             jQuery('#' + $id + ' .geodir-slides').removeClass('flexslider-fix-rtl');
             jQuery("#" + $id).removeClass('geodir-slider-loading');
 
-            jQuery("#" + $id).closest('.geodir-image-container').find(".geodir_flex-loader").hide();
+            jQuery("#" + $id).closest('.geodir-image-container,.geodir_flex-container').find(".geodir_flex-loader").hide();
             jQuery("#" + $id).css({
                 visibility: "visible"
             }), jQuery("#" + $id + "_carousel").css({
@@ -1870,4 +1875,43 @@ function geodir_time_ago(selector) {
     });
     // Update time every minute
     setTimeout(geodir_time_ago, 60000);
+}
+
+function geodir_init_listings_carousel(el, index) {
+    var $el = jQuery(el),
+        wEl = '.geodir-widget-posts',
+        rEl = '.geodir-post',
+        isElementor = false;
+    if (!$el.find(wEl).length && $el.find('.elementor-posts').length) {
+        var wEl = '.elementor-posts';
+        var rEl = '.elementor-post';
+        isElementor = true;
+    }
+    var items = $el.find(wEl + ' > ' + rEl).length,
+        pitems = parseInt($el.data('with-items')),
+        fWidth = parseFloat(jQuery(window).width());
+    if (items > 0 && items > pitems) {
+        var $item = $el.find(wEl + ' > ' + rEl + ':first').next();
+        var iW = parseFloat($item.width()),
+            iM = parseFloat($item.css('marginLeft')) + parseFloat($item.css('marginRight'));
+        if (isElementor && !iM) {
+            iM = 30;
+        }
+        $el.find(wEl + ' > ' + rEl).css("maxWidth", iW + "px");
+        $el.parent().addClass('geodir_flex-container');
+        $el.addClass('geodir_flexslider geodir-slider geodir-carousel');
+        $el.attr({
+            'data-slideshow': $el.data('ride') == 'carousel' ? 1 : 0,
+            'data-controlnav': parseInt($el.data('with-controls')),
+            'data-directionnav': parseInt($el.data('with-indicators')),
+            'data-slideshow-speed': parseInt($el.data('interval')),
+            'data-limit_show': pitems,
+            'data-item-width': iW,
+            'data-item-margin': iM,
+            'data-selector': (isElementor ? '.geodir-slides > .elementor-post' : '')
+        });
+        $el.before('<div class="geodir_flex-loader"><i class="fas fa-sync fa-spin" aria-hidden="true"></i></div>');
+        $el.find(wEl).addClass('geodir-slides');
+        geodir_init_slider($el.prop('id'));
+    }
 }

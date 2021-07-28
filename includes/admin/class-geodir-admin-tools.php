@@ -290,9 +290,9 @@ class GeoDir_Admin_Tools {
 		if ( ! empty( $contents_strings ) ) {
 			foreach ( $contents_strings as $string ) {
 				if ( is_scalar( $string ) && $string != '' ) {
-					$string = str_replace( "'", "\'", $string );
-
 					do_action( 'geodir_language_file_add_string', $string );
+
+					$string = str_replace( "'", "\'", $string );
 
 					$contents .= PHP_EOL . "__('" . $string . "', 'geodirectory');";
 				}
