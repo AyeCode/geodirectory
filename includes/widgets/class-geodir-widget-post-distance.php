@@ -202,6 +202,7 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 		}
 
 		$distance = isset( $gd_post->distance ) && (float) $gd_post->distance > 0 ? (float) $gd_post->distance : 0;
+		$is_single = ( geodir_is_page( 'single' ) || ( ! empty( $_REQUEST['set_post'] ) && wp_doing_ajax() ) ) ? true : false;
 
 		// Default options
 		$defaults = array(
@@ -223,10 +224,10 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 
 		if ( isset( $gd_post->latitude ) || ( $block_preview && $design_style ) ) {
 			if ( $design_style ) {
-				if ( geodir_is_page( 'single' ) ) {
+				if ( $is_single ) {
 					if ( ! $block_preview ) {
 						$distance_unit = geodir_get_option( 'search_distance_long' );
-						$main_post = get_queried_object_id();
+						$main_post = ( ! empty( $_REQUEST['set_post'] ) && wp_doing_ajax() ) ? absint( $_REQUEST['set_post'] ) : get_queried_object_id();
 
 						$point1 = array(
 							'latitude'  => $gd_post->latitude,
@@ -305,14 +306,14 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 
 				echo geodir_get_post_badge( $gd_post->ID, $args );
 			} else {
-				if ( geodir_is_page( 'single' ) ) {
+				if ( $is_single ) {
 					?>
 					<a href="#post_map" onclick="gd_set_get_directions('<?php echo esc_attr( $gd_post->latitude ); ?>','<?php echo esc_attr( $gd_post->longitude ); ?>');">
 					<?php
 				}
 				?>
 				<span class="geodir_post_meta_icon geodir-i-distance" style=""><i class="fas fa-road" aria-hidden="true"></i> <?php echo geodir_show_distance( $distance ); ?></span>
-				<?php if ( geodir_is_page( 'single' ) ) { ?>
+				<?php if ( $is_single ) { ?>
 				</a>
 				<?php
 				}
