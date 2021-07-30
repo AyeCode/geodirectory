@@ -1,6 +1,7 @@
 = 2.1.0.20 =
 * Distance to post badge don't set direction on map from ajax loaded listing - FIXED
 * Add listing page shows JS error when shortcode used with Elementor text editor - FIXED
+* Fix conflicts with select2 library with BuddyBoss theme - FIXED
 
 = 2.1.0.19 =
 * Hide select layout view button on non-GD layouts - FIXED
