@@ -1257,10 +1257,19 @@ class GeoDir_Query {
 	 * @param object $wp WordPress object.
 	 */
 	public static function set_is_geodir_page( $wp ) {
-
 		if ( ! is_admin() ) {
-			//$wp->query_vars['gd_is_geodir_page'] = false;
-			//print_r()
+			// Post attachment
+			if ( ! empty( $wp->query_vars['attachment'] ) && ! empty( $wp->query_vars['post_type'] ) && geodir_is_gd_post_type( $wp->query_vars['post_type'] ) ) {
+				if ( isset( $wp->query_vars[ $wp->query_vars['post_type'] ] ) ) {
+					unset( $wp->query_vars[ $wp->query_vars['post_type'] ] );
+				}
+				unset( $wp->query_vars[ 'post_type' ] );
+				if ( isset( $wp->query_vars[ 'name' ] ) ) {
+					unset( $wp->query_vars[ 'name' ] );
+				}
+				return;
+			}
+
 			if ( empty( $wp->query_vars ) || ! array_diff( array_keys( $wp->query_vars ), array(
 					'preview',
 					'page',
@@ -1327,7 +1336,6 @@ class GeoDir_Query {
 				}
 
 			}
-
 
 			// author pages
 			if ( ! isset( $wp->query_vars['gd_is_geodir_page'] ) && isset( $wp->query_vars['author_name'] ) && isset( $_REQUEST['geodir_dashbord'] ) ) {

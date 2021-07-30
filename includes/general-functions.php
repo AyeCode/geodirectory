@@ -318,7 +318,7 @@ function geodir_check_page( $gdpage = '' ) {
 			if ( is_array( $post_type ) ) {
 				$post_type = reset( $post_type );
 			}
-			if ( is_single() && in_array( $post_type, geodir_get_posttypes() ) ) {
+			if ( is_single() && in_array( $post_type, geodir_get_posttypes() ) && ! is_attachment() ) {
 				return true;
 			}
 			break;
