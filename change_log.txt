@@ -4,6 +4,7 @@
 * Fix conflicts with select2 library with BuddyBoss theme - FIXED
 * Listing featured attachment permalink url is not working - FIXED
 * Video shows extra padding on Divi theme - FIXED
+* Images object cache not cleared on attachment update - FIXED
 
 = 2.1.0.19 =
 * Hide select layout view button on non-GD layouts - FIXED
