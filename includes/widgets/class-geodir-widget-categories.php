@@ -1040,7 +1040,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 		return $output;
 	}
 
-	public static function categories_loop_output($li_class = 'gd-cptcat-li-main',$hide_count=false,$cat_count='',$cat_color,$term_link,$cat_name,$cat_icon,$hide_icon,$use_image,$depth = 0, $args = array()){
+	public static function categories_loop_output( $li_class = 'gd-cptcat-li-main', $hide_count = false, $cat_count = '', $cat_color = '', $term_link = '', $cat_name = '', $cat_icon = false, $hide_icon = false, $use_image = false, $depth = 0, $args = array() ) {
 		$cpt_row = '';
 
 		$design_style = geodir_design_style();
@@ -1055,7 +1055,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			$style = $depth ? 'sub-item' : $style;
 			$template =  $design_style."/categories/$style.php";
 
-			$cpt_row .=  geodir_get_template_html( $template ,array(
+			$cpt_row .= geodir_get_template_html( $template ,array(
 				'li_class' =>  $li_class,
 				'hide_count'   =>  $hide_count,
 				'cat_count'    =>  $cat_count,

@@ -717,7 +717,7 @@ class GeoDir_Post_Data {
 	/**
 	 * Not needed at present.
 	 */
-	public static function set_object_terms( $object_id, $terms, $tt_ids, $taxonomy, $append = false, $old_tt_ids ) {
+	public static function set_object_terms( $object_id, $terms, $tt_ids, $taxonomy, $append = false, $old_tt_ids = array() ) {
 
 	}
 

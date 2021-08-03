@@ -358,7 +358,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
      *
      * @return string
      */
-    public function output_tax_list($type = 'cat', $post_type_name, $links, $terms,$args){
+    public function output_tax_list( $type = 'cat', $post_type_name = '', $links = array(), $terms = array(), $args = array() ) {
         $output = '';
         $design_style = geodir_design_style();
         $links_array = $links;
@@ -400,7 +400,7 @@ class GeoDir_Widget_Single_Taxonomies extends WP_Super_Duper {
      *
      * @return string
      */
-    public function style_tax_link($type = 'cat',$name = '',$href = '#',$term,$args = array()){
+    public function style_tax_link( $type = 'cat', $name = '', $href = '#', $term = array(), $args = array() ) {
         $link = '';
         $icon_output = '';
         $icon = $type == 'cat' ? '<i class="fas fa-folder"></i>' : '<i class="fas fa-tag"></i>';
