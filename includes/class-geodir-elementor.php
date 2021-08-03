@@ -176,15 +176,13 @@ class GeoDir_Elementor {
 	/**
 	 * Add the image caption if present.
 	 *
-	 * @param $html
-	 * @param $widget
+	 * @param string      $html The html content of the widget.
+	 * @param Widget_Base $widget The widget.
 	 *
-	 * @return mixed
+	 * @return mixed Filterd the html content.
 	 */
 	public static function maybe_add_image_caption( $html, $widget ) {
-
-//		echo '###'.$widget->get_name();
-		if( geodir_is_page('single') || geodir_is_page('archive') ){
+		if ( geodir_is_page( 'single' ) || geodir_is_page( 'archive' ) ) {
 			$type = $widget->get_name();
 			if ($type  === 'image'  ) {
 				$settings = $widget->get_settings();
@@ -271,6 +269,10 @@ class GeoDir_Elementor {
 			}
 		}
 
+		// Replaces some encodes entities back to normal to prevent JavaScript errors.
+		if ( ! empty( $html ) && $widget->get_name() == 'text-editor' && strpos( $html, 'geodir-' ) !== false && strpos( $html, '<script' ) !== false ) {
+			$html = geodir_untexturize( $html );
+		}
 
 		return $html;
 	}

@@ -1853,6 +1853,17 @@ function geodir_post_meta_standard_fields( $post_type = 'gd_place' ) {
 		'extra_fields' => ''
 	);
 
+	$fields['post_link'] = array(
+		'type' => 'custom',
+		'name' => 'post_link',
+		'htmlvar_name' => 'post_link',
+		'frontend_title' => __( 'Post Link', 'geodirectory' ),
+		'field_icon' => 'fas fa-link',
+		'field_type_key' => '',
+		'css_class' => '',
+		'extra_fields' => ''
+	);
+
 	/**
 	 * Filter the post meta standard fields info.
 	 *

@@ -728,6 +728,9 @@ class GeoDir_Permalinks {
 
 				$after = $gd_permalink_structure == "/%postname%/" ? 'bottom' : 'top';
 
+				// Add rewrite rule for /attachment/.
+				$this->add_rewrite_rule( trim( $regex, '?^' ) . 'attachment/([^/]+)/?$', $redirect . '&attachment=$matches[' . $match . ']', 'top' );
+
 				// Create query for /comment-page-xx.
 				$comment_regex = trim( $regex, '?^' );
 				$comment_regex .= $wp_rewrite->comments_pagination_base . '-([0-9]{1,})/?$';
@@ -858,7 +861,7 @@ class GeoDir_Permalinks {
 					$slug = ! empty( $_regex[0] ) ? str_replace( '^', '', $_regex[0] ) : '';
 
 					if ( ! empty( $slug ) && ! in_array( $slug, $post_type_slugs ) ) {
-						$post_type_slugs[] = $_regex[0];
+						$post_type_slugs[ $post_type ] = $_regex[0];
 					}
 				}
 			}
@@ -868,7 +871,8 @@ class GeoDir_Permalinks {
 			return $rules;
 		}
 
-		$post_type_slugs = array_unique( $post_type_slugs );
+		$_post_type_slugs = array_flip( $post_type_slugs );
+		$post_type_slugs = array_unique( array_values( $post_type_slugs ) );
 
 		$_rules = $rules;
 		foreach ( $rules as $regex => $query ) {
@@ -879,7 +883,9 @@ class GeoDir_Permalinks {
 
 			foreach ( $post_type_slugs as $key => $slug ) {
 				if ( isset( $_rules[ $regex ] ) && ( strpos( $regex, '^' . $slug . '/' ) === 0 || strpos( $regex, $slug . '/' ) === 0 ) && ( strpos( $query, '?attachment=' ) !== false || strpos( $query, '&attachment=' ) !== false || strpos( $query, '&tb=1' ) !== false || strpos( $query, '&embed=true' ) !== false ) ) {
-					unset( $_rules[ $regex ] );
+					if ( strpos( $query, '&' . $_post_type_slugs[ $slug ] . '=' ) === false && strpos( $query, '?' . $_post_type_slugs[ $slug ] . '=' ) === false ) {
+						unset( $_rules[ $regex ] );
+					}
 				}
 			}
 		}

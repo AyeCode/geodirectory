@@ -300,7 +300,7 @@ if (!(window.google && typeof google.maps !== 'undefined')) {
 	 * @param string $tick_terms Tick/untick terms. Optional.
 	 * @return string|void
 	 */
-	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse, $terms = '', $hierarchical = false, $tick_terms = '' ) {
+	public static function get_categories_filter( $post_type, $cat_parent = 0, $hide_empty = true, $padding = 0, $map_canvas = '', $child_collapse = false, $terms = '', $hierarchical = false, $tick_terms = '' ) {
 		global $cat_count, $geodir_cat_icons;
 
 		$taxonomy = $post_type . 'category';

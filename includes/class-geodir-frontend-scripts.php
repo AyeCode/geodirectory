@@ -375,7 +375,8 @@ class GeoDir_Frontend_Scripts {
 	 */
 	private static function register_script( $handle, $path, $deps = array( 'jquery' ), $version = GEODIRECTORY_VERSION, $in_footer = true ) {
 		self::$scripts[] = $handle;
-		if ( $handle == 'select2' && wp_script_is( 'select2', 'registered' ) && ! geodir_design_style() ) {
+		// BuddyBoss loads basic version of select2.
+		if ( $handle == 'select2' && wp_script_is( 'select2', 'registered' ) && ( ! geodir_design_style() || class_exists( 'BuddyBoss_Theme' ) ) ) {
 			wp_deregister_script( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
 		}
 		wp_register_script( $handle, $path, $deps, $version, $in_footer );

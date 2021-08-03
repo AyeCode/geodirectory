@@ -533,7 +533,7 @@ function geodir_is_icon_url( $icon ) {
  * @param int $revision_id Post revision ID. Default 0.
  * @return array Array of valid image types.
  */
-function geodir_post_has_image_types( $types = array(), $post_id, $revision_id = 0 ) {
+function geodir_post_has_image_types( $types = array(), $post_id = 0, $revision_id = 0 ) {
 	if ( ! empty( $types ) ) {
 		if ( is_scalar( $types ) ) {
 			$image_types = array_map( 'trim', explode( ",", $types ) );

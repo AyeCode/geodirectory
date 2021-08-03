@@ -603,3 +603,42 @@ function geodir_keyword_replacements() {
 function geodir_blocks_to_shortcodes($content){
 	return preg_replace('/\n(\s*\n)+/', "\n",wp_strip_all_tags( $content ) );
 }
+
+/**
+ * Replaces some entities formatted back to normal.
+ *
+ * This reverses some entities formatted by wptexturize().
+ * Ex: replace "&#038;" to "&".
+ *
+ * @param string $text  The text to be formatted.
+ * @return string The string replaced with HTML entities.
+ */
+function geodir_untexturize( $text ) {
+	$orig_text = $text;
+
+	$replacements = array(
+		'&#038;'  => '&',
+	);
+
+	/**
+	 * Replacements entities.
+	 *
+	 * @since 2.1.0.20
+	 *
+	 * @param array  $replacements Replacements array.
+	 * @param string $text The text to be formatted.
+	 */
+	$replacements = apply_filters( 'geodir_untexturize_replacements', $replacements, $text );
+
+	$text = str_replace( array_keys( $replacements ), array_values( $replacements ), $text );
+
+	/**
+	 * Filter the formatted text.
+	 *
+	 * @since 2.1.0.20
+	 *
+	 * @param string $text The text to be formatted.
+	 * @param string $orig_text The original text.
+	 */
+	return apply_filters( 'geodir_untexturize', $text, $orig_text );
+}
