@@ -655,3 +655,74 @@ function geodir_custom_field_output_business_hours_day( $html, $location, $cf, $
 	return $html;
 }
 add_filter( 'geodir_custom_field_output_custom', 'geodir_custom_field_output_business_hours_day', 50, 5 );
+
+/**
+ * Filter post link post meta field output.
+ *
+ * @since 2.1.0.20
+ *
+ * @param string $html The html to filter.
+ * @param string $location The location to output the html.
+ * @param array $cf The custom field array.
+ * @param string $output The output string that tells us what to output.
+ * @return string The html to output.
+ */
+function geodir_custom_field_output_post_link( $html, $location, $cf, $output, $_gd_post ) {
+	if ( ! empty( $_gd_post ) ) {
+		$gd_post = $_gd_post;
+	} else {
+		global $gd_post;
+	}
+
+	$htmlvar_name = $cf['htmlvar_name'];
+
+	if ( ! empty( $gd_post ) ) {
+		$class = "geodir-i-custom";
+		$field_icon = geodir_field_icon_proccess( $cf );
+		$output = geodir_field_output_process( $output );
+		if ( strpos( $field_icon, 'http' ) !== false ) {
+			$field_icon_af = '';
+		} elseif ( $field_icon == '' ) {
+			$field_icon_af = '';
+		} else {
+			$field_icon_af = $field_icon;
+			$field_icon = '';
+		}
+
+		$value = get_permalink( $gd_post->ID );
+
+		// Database value.
+		if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+			return $value;
+		}
+
+		$value = geodir_get_post_status_name( $value );
+
+		// Return stripped value.
+		if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+			return $value;
+		}
+
+		$value = '<a href="' . $value . '" title="' . esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), stripslashes( get_the_title( $gd_post->ID ) ) ) ) . '">' . get_the_title( $gd_post->ID ) . '</a>';
+
+		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $htmlvar_name . '">';
+
+		if ( $output == '' || isset( $output['icon'] ) ) {
+			$html .= '<span class="geodir_post_meta_icon '.$class.'" style="' . $field_icon . '">' . $field_icon_af;
+		}
+		if ( $output == '' || isset( $output['label'] ) ) {
+			$html .= $cf['frontend_title'] != '' ? '<span class="geodir_post_meta_title" >' . __( $cf['frontend_title'], 'geodirectory' ) . ': '.'</span>' : '';
+		}
+		if ( $output == '' || isset( $output['icon'] ) ) {
+			$html .= '</span>';
+		}
+		if ( $output == '' || isset( $output['value'] ) ) {
+			$html .= $value;
+		}
+
+		$html .= '</div>';
+	}
+
+	return $html;
+}
+add_filter( 'geodir_custom_field_output_custom_var_post_link', 'geodir_custom_field_output_post_link', 10, 5 );
