@@ -965,9 +965,14 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					if($design_style && $cpt_count == count($post_types) && !$close_wrap ){
 						$cpt_list .= '</div></div>';
 					}
+				} else {
+					// Check if closed or not
+					if ( $design_style && $cpt_count == count( $post_types ) && ! $close_wrap && $cpt_list != '' ) {
+						$cpt_list .= '</div></div>';
+					}
 				}
-
 			}
+
 			if ( !$via_ajax && $cpt_ajax && ! empty( $cpt_options ) ) {
 				global $geodirectory;
 				$post_type = is_array( $args['post_type'] ) ? implode( ',', $args['post_type'] ) : (! empty($args['post_type']) ? $args['post_type'] : '0');
