@@ -180,14 +180,15 @@ class GeoDir_Admin_Blocks {
      * @since 2.0.0
      */
 	public function enqueue() {
+		global $pagenow,$wp_version;
 		$design_style = geodir_design_style();
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
-
+		
+		$deps = $pagenow == 'widgets.php' && version_compare( $wp_version, '5.8', '>=' ) ? array( 'wp-blocks', 'wp-element') : array( 'wp-blocks', 'wp-element', 'wp-editor' );
 		wp_enqueue_script(
 			'gd-gutenberg',
 			geodir_plugin_url() . '/assets/js/blocks'.$suffix.'.js',
-			array( 'wp-blocks', 'wp-element', 'wp-editor' ),
+			$deps,
 			GEODIRECTORY_VERSION
 		);
 
