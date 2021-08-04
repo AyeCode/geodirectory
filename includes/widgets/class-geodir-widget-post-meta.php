@@ -82,7 +82,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 					'desc' => __('Remove wrapping div.', 'geodirectory'),
 					'type' => 'checkbox',
 					'default'  => '0',
-					'element_require' => '[%show%]=="value-strip" || [%show%]=="value-raw"',
+					'element_require' => '( [%show%]=="value-strip" || [%show%]=="value-raw" )',
 				),
 				'alignment'  => array(
 					'title' => __('Alignment:', 'geodirectory'),

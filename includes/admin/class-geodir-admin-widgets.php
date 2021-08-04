@@ -89,7 +89,7 @@ class GeoDir_Admin_Widgets {
      */
 	public static function add_show_hide_widget_options($arguments,$options){
 
-		
+
 		if(isset($options['textdomain']) && $options['textdomain'] == GEODIRECTORY_TEXTDOMAIN || (isset($options['widget_ops']['gd_wgt_restrict']))){
 			$gd_wgt_showhide = isset($options['widget_ops']['gd_wgt_showhide']) && $options['widget_ops']['gd_wgt_showhide'] ? $options['widget_ops']['gd_wgt_showhide'] : '';
 			$gd_wgt_restrict = isset($options['widget_ops']['gd_wgt_restrict']) && $options['widget_ops']['gd_wgt_restrict'] ? $options['widget_ops']['gd_wgt_restrict'] : '';
@@ -125,7 +125,7 @@ class GeoDir_Admin_Widgets {
 				'default' => $gd_wgt_restrict,
 				'desc_tip' => true,
 				'advanced' => false,
-				'element_require' => '[%gd_wgt_showhide%]=="show_on" || [%gd_wgt_showhide%]=="hide_on"',
+				'element_require' => '( [%gd_wgt_showhide%]=="show_on" || [%gd_wgt_showhide%]=="hide_on" )',
 			);
 		}
 		return $arguments;
