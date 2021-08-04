@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.0.19\n"
+"Project-Id-Version: GeoDirectory 2.1.0.20\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-07-28 18:50+0530\n"
-"PO-Revision-Date: 2021-07-28 18:50+0530\n"
+"POT-Creation-Date: 2021-08-04 11:40+0530\n"
+"PO-Revision-Date: 2021-08-04 11:40+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -187,7 +187,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:823
 #: includes/api/class-geodir-rest-posts-controller.php:2198
 #: includes/class-geodir-location.php:358
-#: includes/class-geodir-location.php:409 includes/post-functions.php:1933
+#: includes/class-geodir-location.php:409 includes/post-functions.php:1944
 msgid "Country"
 msgstr ""
 
@@ -201,7 +201,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:813
 #: includes/api/class-geodir-rest-posts-controller.php:2212
 #: includes/class-geodir-location.php:376
-#: includes/class-geodir-location.php:421 includes/post-functions.php:1922
+#: includes/class-geodir-location.php:421 includes/post-functions.php:1933
 msgid "Region"
 msgstr ""
 
@@ -215,7 +215,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-general.php:803
 #: includes/api/class-geodir-rest-posts-controller.php:2226
 #: includes/class-geodir-location.php:395
-#: includes/class-geodir-location.php:430 includes/post-functions.php:1911
+#: includes/class-geodir-location.php:430 includes/post-functions.php:1922
 msgid "City"
 msgstr ""
 
@@ -236,7 +236,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1111
 #: includes/api/class-geodir-rest-posts-controller.php:2240
 #: includes/api/class-geodir-rest-posts-controller.php:2241
-#: includes/post-functions.php:1944
+#: includes/post-functions.php:1955
 msgid "Zip/Post Code"
 msgstr ""
 
@@ -995,7 +995,7 @@ msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
 #: includes/admin/class-geodir-admin-assets.php:227
-#: includes/class-geodir-frontend-scripts.php:794
+#: includes/class-geodir-frontend-scripts.php:795
 msgid "Allowed Files"
 msgstr ""
 
@@ -1141,9 +1141,9 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-dummy-data.php:719
 #: includes/admin/class-geodir-admin-dummy-data.php:827
-#: includes/admin/settings/class-geodir-settings-import-export.php:737
-#: includes/admin/settings/class-geodir-settings-import-export.php:794
-#: includes/admin/settings/class-geodir-settings-import-export.php:934
+#: includes/admin/settings/class-geodir-settings-import-export.php:740
+#: includes/admin/settings/class-geodir-settings-import-export.php:797
+#: includes/admin/settings/class-geodir-settings-import-export.php:937
 msgid "Complete!"
 msgstr ""
 
@@ -1317,7 +1317,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-dummy-data.php:1094
 #: includes/admin/class-geodir-admin-dummy-data.php:1096
 #: includes/admin/class-geodir-admin-dummy-data.php:1106
-#: includes/post-functions.php:1889
+#: includes/post-functions.php:1900
 msgid "Address"
 msgstr ""
 
@@ -1588,7 +1588,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-import-export.php:691
 #: includes/admin/class-geodir-admin-import-export.php:1004
 #: includes/admin/class-geodir-admin-import-export.php:1940
-#: includes/admin/settings/class-geodir-settings-import-export.php:884
+#: includes/admin/settings/class-geodir-settings-import-export.php:887
 msgid "No records to export."
 msgstr ""
 
@@ -6692,20 +6692,27 @@ msgid ""
 "invalid characters used in data."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-import-export.php:701
+#: includes/admin/settings/class-geodir-settings-import-export.php:544
+#, php-format
+msgid ""
+"Visit GeoDirectory -> Status -> Tools -> Term counts. Run that tool to "
+"update term counts after your import. Check more at %shere%s."
+msgstr ""
+
+#: includes/admin/settings/class-geodir-settings-import-export.php:704
 msgid "Preparing..."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-import-export.php:703
-#: includes/admin/settings/class-geodir-settings-import-export.php:741
-#: includes/admin/settings/class-geodir-settings-import-export.php:772
-#: includes/admin/settings/class-geodir-settings-import-export.php:798
-#: includes/admin/settings/class-geodir-settings-import-export.php:881
-#: includes/admin/settings/class-geodir-settings-import-export.php:938
+#: includes/admin/settings/class-geodir-settings-import-export.php:706
+#: includes/admin/settings/class-geodir-settings-import-export.php:744
+#: includes/admin/settings/class-geodir-settings-import-export.php:775
+#: includes/admin/settings/class-geodir-settings-import-export.php:801
+#: includes/admin/settings/class-geodir-settings-import-export.php:884
+#: includes/admin/settings/class-geodir-settings-import-export.php:941
 msgid "Exporting..."
 msgstr ""
 
-#: includes/admin/settings/class-geodir-settings-import-export.php:861
+#: includes/admin/settings/class-geodir-settings-import-export.php:864
 msgid "Preparing export..."
 msgstr ""
 
@@ -9666,13 +9673,13 @@ msgid "You have successfully deleted the Listing."
 msgstr ""
 
 #: includes/class-geodir-ajax.php:776
-#: includes/class-geodir-frontend-scripts.php:759
+#: includes/class-geodir-frontend-scripts.php:760
 #: includes/post-functions.php:396 language.php:82
 msgid "Unfavorite"
 msgstr ""
 
 #: includes/class-geodir-ajax.php:781
-#: includes/class-geodir-frontend-scripts.php:757
+#: includes/class-geodir-frontend-scripts.php:758
 #: includes/post-functions.php:376 language.php:81
 msgid "Favorite"
 msgstr ""
@@ -9757,7 +9764,7 @@ msgstr ""
 msgid "You do not have permission to access this page"
 msgstr ""
 
-#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:1152
+#: includes/class-geodir-auth.php:375 includes/class-geodir-media.php:1158
 #, php-format
 msgid "Error: %s."
 msgstr ""
@@ -10251,21 +10258,21 @@ msgstr ""
 msgid "Add your %%pt_single%% to %%sitename%%"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:360 includes/core-functions.php:349
+#: includes/class-geodir-elementor.php:362 includes/core-functions.php:349
 #: templates/bootstrap/images/images.php:236
 #: templates/bootstrap/single/next-prev.php:18
 #: templates/legacy/single/next-prev.php:12
 msgid "Previous"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:364 includes/core-functions.php:350
+#: includes/class-geodir-elementor.php:366 includes/core-functions.php:350
 #: templates/bootstrap/images/images.php:240
 #: templates/bootstrap/single/next-prev.php:19
 #: templates/legacy/single/next-prev.php:13
 msgid "Next"
 msgstr ""
 
-#: includes/class-geodir-elementor.php:1027
+#: includes/class-geodir-elementor.php:1029
 msgid "Could not retrieve template."
 msgstr ""
 
@@ -10324,76 +10331,76 @@ msgstr ""
 msgid "Location detection not supported in browser"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:756
+#: includes/class-geodir-frontend-scripts.php:757
 #: includes/post-functions.php:366 language.php:84
 msgid "Add to Favorites"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:758
+#: includes/class-geodir-frontend-scripts.php:759
 #: includes/post-functions.php:386 language.php:85
 msgid "Remove from Favorites"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:768
+#: includes/class-geodir-frontend-scripts.php:769
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2042
 msgid "Select an option&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:769
+#: includes/class-geodir-frontend-scripts.php:770
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2043
 msgctxt "enhanced select"
 msgid "No matches found"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:770
+#: includes/class-geodir-frontend-scripts.php:771
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2044
 msgctxt "enhanced select"
 msgid "Loading failed"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:771
+#: includes/class-geodir-frontend-scripts.php:772
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2045
 msgctxt "enhanced select"
 msgid "Please enter 1 or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:772
+#: includes/class-geodir-frontend-scripts.php:773
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2046
 msgctxt "enhanced select"
 msgid "Please enter %item% or more characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:773
+#: includes/class-geodir-frontend-scripts.php:774
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2047
 msgctxt "enhanced select"
 msgid "Please delete 1 character"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:774
+#: includes/class-geodir-frontend-scripts.php:775
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2048
 msgctxt "enhanced select"
 msgid "Please delete %item% characters"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:775
+#: includes/class-geodir-frontend-scripts.php:776
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2049
 msgctxt "enhanced select"
 msgid "You can only select 1 item"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:776
+#: includes/class-geodir-frontend-scripts.php:777
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2050
 msgctxt "enhanced select"
 msgid "You can only select %item% items"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:777
+#: includes/class-geodir-frontend-scripts.php:778
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2051
 msgctxt "enhanced select"
 msgid "Loading more results&hellip;"
 msgstr ""
 
-#: includes/class-geodir-frontend-scripts.php:778
+#: includes/class-geodir-frontend-scripts.php:779
 #: vendor/ayecode/wp-ayecode-ui/includes/ayecode-ui-settings.php:2052
 msgctxt "enhanced select"
 msgid "Searching&hellip;"
@@ -10510,57 +10517,57 @@ msgstr ""
 msgid "Failed to insert file info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:511
+#: includes/class-geodir-media.php:512
 msgid "No image_id, post_id or image url, image update failed."
 msgstr ""
 
-#: includes/class-geodir-media.php:591
+#: includes/class-geodir-media.php:592
 msgid "Failed to update image info to DB."
 msgstr ""
 
-#: includes/class-geodir-media.php:726
+#: includes/class-geodir-media.php:728
 msgid "Invalid URL Provided."
 msgstr ""
 
-#: includes/class-geodir-media.php:732
+#: includes/class-geodir-media.php:734
 msgid "Could not create Temporary file."
 msgstr ""
 
-#: includes/class-geodir-media.php:1140
+#: includes/class-geodir-media.php:1146
 #, php-format
 msgid "Invalid URL %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1152 includes/class-geodir-media.php:1154
+#: includes/class-geodir-media.php:1158 includes/class-geodir-media.php:1160
 #, php-format
 msgid "Error getting remote image %s."
 msgstr ""
 
-#: includes/class-geodir-media.php:1175
+#: includes/class-geodir-media.php:1181
 msgid "Invalid image type."
 msgstr ""
 
-#: includes/class-geodir-media.php:1193
+#: includes/class-geodir-media.php:1199
 msgid "Zero size file downloaded."
 msgstr ""
 
-#: includes/class-geodir-media.php:1310 includes/class-geodir-media.php:1352
+#: includes/class-geodir-media.php:1316 includes/class-geodir-media.php:1358
 msgid "Generate attachment metadata"
 msgstr ""
 
-#: includes/class-geodir-media.php:1337
+#: includes/class-geodir-media.php:1343
 msgid "Invalid post id!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1378
+#: includes/class-geodir-media.php:1384
 msgid "Invalid attachment!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1383
+#: includes/class-geodir-media.php:1389
 msgid "Attachment metadata not generated for external image!"
 msgstr ""
 
-#: includes/class-geodir-media.php:1401
+#: includes/class-geodir-media.php:1407
 #, php-format
 msgid "%s not exists!"
 msgstr ""
@@ -11940,6 +11947,13 @@ msgstr ""
 msgid "View on Map"
 msgstr ""
 
+#: includes/custom-fields/output-filter-functions.php:706
+#: includes/widgets/class-geodir-widget-post-title.php:190
+#, php-format
+msgctxt "listing title hover"
+msgid "View: %s"
+msgstr ""
+
 #: includes/custom-fields/output-functions.php:746
 msgid "Some demo text."
 msgstr ""
@@ -13039,19 +13053,23 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: includes/post-functions.php:1900
+#: includes/post-functions.php:1860
+msgid "Post Link"
+msgstr ""
+
+#: includes/post-functions.php:1911
 msgid "Address line 2"
 msgstr ""
 
-#: includes/post-functions.php:1955
+#: includes/post-functions.php:1966
 msgid "Latitude"
 msgstr ""
 
-#: includes/post-functions.php:1966
+#: includes/post-functions.php:1977
 msgid "Longitude"
 msgstr ""
 
-#: includes/post-functions.php:1977
+#: includes/post-functions.php:1988
 msgid "Map Directions"
 msgstr ""
 
@@ -13851,11 +13869,11 @@ msgstr ""
 msgid "No categories found"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:1021
+#: includes/widgets/class-geodir-widget-categories.php:1026
 msgid "CPT Categories"
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-categories.php:1178
+#: includes/widgets/class-geodir-widget-categories.php:1183
 msgid "Expand sub-categories"
 msgstr ""
 
@@ -15616,7 +15634,7 @@ msgstr ""
 msgid "Shows the distance do the current post."
 msgstr ""
 
-#: includes/widgets/class-geodir-widget-post-distance.php:257
+#: includes/widgets/class-geodir-widget-post-distance.php:258
 msgid "Distance from the current listing, click for directions."
 msgstr ""
 
@@ -15976,12 +15994,6 @@ msgstr ""
 
 #: includes/widgets/class-geodir-widget-post-title.php:94
 msgid "Default (inherit)"
-msgstr ""
-
-#: includes/widgets/class-geodir-widget-post-title.php:190
-#, php-format
-msgctxt "listing title hover"
-msgid "View: %s"
 msgstr ""
 
 #: includes/widgets/class-geodir-widget-recent-reviews.php:33
