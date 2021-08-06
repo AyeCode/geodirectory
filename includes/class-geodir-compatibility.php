@@ -496,7 +496,7 @@ class GeoDir_Compatibility {
 		/*######################################################
 		Boss. (BuddyBoss)
 		######################################################*/
-		if ( class_exists( 'BuddyBoss_Theme' ) ) {
+		if ( function_exists( 'buddyboss_theme' ) ) {
 			add_action( 'wp_enqueue_scripts', array( __CLASS__, 'buddyboss' ), 100 );
 			add_filter( 'body_class', array( __CLASS__, 'buddyboss_body_class' ) );
 		}
