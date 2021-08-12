@@ -47,12 +47,16 @@ global $related_nearest, $related_parent_lat, $related_parent_lon, $gd_layout_cl
 
 			while ( have_posts() ) : the_post();
 
+				do_action( 'geodir_before_listing_archive_item' );
+
 				echo geodir_get_template_html( "bootstrap/content-listing.php", array(
 					'column_gap_class'   => $column_gap_class,
 					'row_gap_class'   => $row_gap_class,
 					'card_border_class'   => $card_border_class,
 					'card_shadow_class'   => $card_shadow_class,
 				) );
+
+				do_action( 'geodir_after_listing_archive_item' );
 
 			endwhile;
 
