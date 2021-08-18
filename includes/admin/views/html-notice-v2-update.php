@@ -300,10 +300,10 @@ $install_url = wp_nonce_url(
 	<p <?php if($hide_upgrade_button){echo "style='display:none;'";}?> class="submit gd-let-me-upgrade-submit"><a href="<?php echo esc_url( add_query_arg( 'do_update_geodirectory', 'true', admin_url( 'admin.php?page=gd-settings' ) ) ); ?>" class="gd-update-now button-primary"><?php _e( 'Run GeoDirectory v1 to v2 data conversion', 'geodirectory' ); ?></a></p>
 </div>
 <script type="text/javascript">
-	jQuery( '.gd-update-now' ).click( 'click', function() {
+	jQuery( '.gd-update-now' ).on("click", 'click', function() {
 		return window.confirm( '<?php echo esc_js( $upgrade_message ); ?>' ); // jshint ignore:line
 	});
-	jQuery( '#gd-let-me-upgrade' ).click( 'click', function() {
+	jQuery( '#gd-let-me-upgrade' ).on("click", 'click', function() {
 		jQuery(".gd-let-me-upgrade-submit").toggle();
 	});
 </script>

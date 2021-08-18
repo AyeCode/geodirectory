@@ -193,26 +193,26 @@
             var initGallery = function() {
                 if(has_next){
                     // add keybaord support
-                    jQuery('.lity-opened').keydown(function(e) {
+                    jQuery('.lity-opened').on("keydown",function(e) {
                         if (e.which == 39) {
                             instance.close(); // close the original
                             instance.opener().parent().next('li').find('a').trigger( "click" ); // open the next one
                         }
                     });
-                    jQuery( ".lity-nav-right" ).click(function() {
+                    jQuery( ".lity-nav-right" ).on("click",function() {
                         instance.close(); // close the original
                         instance.opener().parent().next('li').find('a').trigger( "click" ); // open the next one
                     });
                 }
                 if(has_prev){
                     // add keybaord support
-                    jQuery('.lity-opened').keydown(function(e) {
+                    jQuery('.lity-opened').on("keydown",function(e) {
                         if (e.which == 37) {
                             instance.close(); // close the original
                             instance.opener().parent().prev('li').find('a').trigger( "click" ); // open the next one
                         }
                     });
-                    jQuery( ".lity-nav-left" ).click(function() {
+                    jQuery( ".lity-nav-left" ).on("click",function() {
                         instance.close(); // close the original
                         instance.opener().parent().prev('li').find('a').trigger( "click" ); // open the next one
                     });
@@ -637,7 +637,7 @@
             ;
 
             // remove gallery eventsZ
-            jQuery('.lity-opened').unbind("keydown");
+            jQuery('.lity-opened').off("keydown");
 
             return deferred.promise();
         };

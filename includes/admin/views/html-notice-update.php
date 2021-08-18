@@ -13,7 +13,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	<p class="submit"><a href="<?php echo esc_url( add_query_arg( 'do_update_geodirectory', 'true', admin_url( 'admin.php?page=gd-settings' ) ) ); ?>" class="gd-update-now button-primary"><?php _e( 'Run the updater', 'geodirectory' ); ?></a></p>
 </div>
 <script type="text/javascript">
-	jQuery( '.gd-update-now' ).click( 'click', function() {
+	jQuery( '.gd-update-now' ).on("click", 'click', function() {
 		return window.confirm( '<?php echo esc_js( __( 'It is strongly recommended that you backup your database before proceeding. Are you sure you wish to run the updater now?', 'geodirectory' ) ); ?>' ); // jshint ignore:line
 	});
 </script>

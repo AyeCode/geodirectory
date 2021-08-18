@@ -282,7 +282,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				echo $html;
 				$should_die = true;
 
-				// some builder get the editor via ajax so we should not die on those ocasions
+				// some builder get the editor via ajax so we should not die on those occasions
 				$dont_die = array(
 					'parent_tag',// WP Bakery
 					'avia_request' // enfold
@@ -354,7 +354,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @since 1.0.0
 		 *
 		 * @param string $editor_id Optional. Shortcode editor id. Default null.
-		 * @param string $insert_shortcode_function Optional. Insert shotcode function. Default null.
+		 * @param string $insert_shortcode_function Optional. Insert shortcode function. Default null.
 		 */
 		public static function shortcode_insert_button( $editor_id = '', $insert_shortcode_function = '' ) {
 			global $sd_widgets, $shortcode_insert_button_once;
@@ -431,7 +431,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			?>
 			<script>
 				/**
-				 * Check a form to see what items shoudl be shown or hidden.
+				 * Check a form to see what items should be shown or hidden.
 				 */
 				function sd_so_show_hide(form) {
 					jQuery(form).find(".sd-argument").each(function () {
@@ -483,7 +483,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 
 					// show hide on form change
-					jQuery(form).change(function () {
+					jQuery(form).on("change", function () {
 						sd_so_show_hide(form);
 					});
 
@@ -713,7 +713,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				/*
-				 Set the value of elements controled via react.
+				 Set the value of elements controlled via react.
 				 */
 				function sd_setNativeValue(element, value) {
 					let lastValue = element.value;
@@ -898,7 +898,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						}
 					});
 
-					// The below tries to add the shorcode builder button to the builders own raw/shortcode sections.
+					// The below tries to add the shortcode builder button to the builders own raw/shortcode sections.
 
 					// DIVI
 					jQuery(document).on('focusin', '.et-fb-codemirror', function () {
@@ -1088,7 +1088,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				/**
-				 * Check a form to see what items shoudl be shown or hidden.
+				 * Check a form to see what items should be shown or hidden.
 				 */
 				function sd_show_hide(form) {
 					console.log('show/hide');
@@ -1153,7 +1153,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 
 					// show hide on form change
-					jQuery(form).change(function () {
+					jQuery(form).on("change", function () {
 						sd_show_hide(form);
 					});
 
@@ -1197,7 +1197,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						}
 					});
 
-					// inint on widget updated
+					// init on widget updated
 					jQuery(document).on('widget-updated', function (e, widget) {
 						console.log('widget updated');
 
@@ -1346,7 +1346,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$class = apply_filters( 'wp_super_duper_div_classname_' . $this->base_id, $class, $args, $this );
 
 			$attrs = apply_filters( 'wp_super_duper_div_attrs', '', $args, $this );
-			$attrs = apply_filters( 'wp_super_duper_div_attrs_' . $this->base_id, '', $args, $this ); //@todo this does not seem right @kiran?
+			$attrs = apply_filters( 'wp_super_duper_div_attrs_' . $this->base_id, '', $args, $this );
 
 			$shortcode_args = array();
 			$output         = '';
@@ -2518,12 +2518,19 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				echo $before_widget;
 				// elementor strips the widget wrapping div so we check for and add it back if needed
 				if ( $this->is_elementor_widget_output() ) {
-					echo ! empty( $this->options['widget_ops']['classname'] ) ? "<span class='" . esc_attr( $class  ) . "'>" : '';
+					// Filter class & attrs for elementor widget output.
+					$class = apply_filters( 'wp_super_duper_div_classname', $class, $args, $this );
+					$class = apply_filters( 'wp_super_duper_div_classname_' . $this->base_id, $class, $args, $this );
+
+					$attrs = apply_filters( 'wp_super_duper_div_attrs', '', $args, $this );
+					$attrs = apply_filters( 'wp_super_duper_div_attrs_' . $this->base_id, '', $args, $this );
+
+					echo "<span class='" . esc_attr( $class  ) . "' " . $attrs . ">";
 				}
 				echo $this->output_title( $args, $instance );
 				echo $output;
 				if ( $this->is_elementor_widget_output() ) {
-					echo ! empty( $this->options['widget_ops']['classname'] ) ? "</span>" : '';
+					echo "</span>";
 				}
 				echo $after_widget;
 			} elseif ( $this->is_preview() && $output == '' ) {// if preview show a placeholder if empty
@@ -3202,11 +3209,521 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$css .= "</style>";
 			}
 
-
 			return $css;
-
 		}
 
-	}
+		/**
+		 * Get the conditional fields JavaScript.
+		 *
+		 * @return mixed
+		 */
+		public function conditional_fields_js() {
+			ob_start();
+			?>
+<script>
+/**
+ * Conditional Fields
+ */
+var sd_cf_field_rules = [], sd_cf_field_key_rules = {}, sd_cf_field_default_values = {};
 
+jQuery(function($) {
+    /* Init conditional fields */
+    sd_cf_field_init_rules($);
+});
+
+/**
+ * Conditional fields init.
+ */
+function sd_cf_field_init_rules($) {
+    if (!$('[data-has-rule]').length) {
+        return;
+    }
+
+    $('[data-rule-key]').on('change keypress keyup', 'input, textarea', function() {
+        sd_cf_field_apply_rules($(this));
+    });
+
+    $('[data-rule-key]').on('change', 'select', function() {
+        sd_cf_field_apply_rules($(this));
+    });
+
+    $('[data-rule-key]').on('change.select2', 'select', function() {
+        sd_cf_field_apply_rules($(this));
+    });
+
+    /*jQuery(document).on('sd_cf_field_on_change', function() {
+        sd_cf_field_hide_child_elements();
+    });*/
+
+    sd_cf_field_setup_rules($);
+}
+
+/**
+ * Setup conditional field rules.
+ */
+function sd_cf_field_setup_rules($) {
+    var sd_cf_field_keys = [];
+
+    $('[data-rule-key]').each(function() {
+        var key = jQuery(this).data('rule-key'),
+            irule = parseInt(jQuery(this).data('has-rule'));
+        if (key) {
+            sd_cf_field_keys.push(key);
+        }
+
+        var parse_conds = {};
+        if ($(this).data('rule-fie-0')) {
+            for (var i = 0; i < irule; i++) {
+                var field = $(this).data('rule-fie-' + i);
+                if (typeof parse_conds[i] === 'undefined') {
+                    parse_conds[i] = {};
+                }
+                parse_conds[i]['action'] = $(this).data('rule-act-' + i);
+                parse_conds[i]['field'] = $(this).data('rule-fie-' + i);
+                parse_conds[i]['condition'] = $(this).data('rule-con-' + i);
+                parse_conds[i]['value'] = $(this).data('rule-val-' + i);
+            }
+
+            jQuery.each(parse_conds, function(j, data) {
+                var item = {
+                    'field': {
+                        key: key,
+                        action: data.action,
+                        field: data.field,
+                        condition: data.condition,
+                        value: data.value,
+                        rule: {
+                            key: key,
+                            action: data.action,
+                            condition: data.condition,
+                            value: data.value
+                        }
+                    }
+                };
+                sd_cf_field_rules.push(item);
+            });
+        }
+        sd_cf_field_default_values[jQuery(this).data('rule-key')] = sd_cf_field_get_default_value(jQuery(this));
+    });
+
+    jQuery.each(sd_cf_field_keys, function(i, fkey) {
+        sd_cf_field_key_rules[fkey] = sd_cf_field_get_children(fkey);
+    });
+
+    jQuery('[data-rule-key]:visible').each(function() {
+        var conds = sd_cf_field_key_rules[jQuery(this).data('rule-key')];
+        if (conds && conds.length) {
+            var $main_el = jQuery(this), el = sd_cf_field_get_element($main_el);
+            if (jQuery(el).length) {
+                sd_cf_field_apply_rules(jQuery(el));
+            }
+        }
+    });
+}
+
+/**
+ * Apply conditional field rules.
+ */
+function sd_cf_field_apply_rules($el) {
+    if (!$el.parents('[data-rule-key]').length) {
+        return;
+    }
+
+    if ($el.data('no-rule')) {
+        return;
+    }
+
+    var key = $el.parents('[data-rule-key]').data('rule-key');
+    var conditions = sd_cf_field_key_rules[key];
+    if (typeof conditions === 'undefined') {
+        return;
+    }
+    var field_type = sd_cf_field_get_type($el.parents('[data-rule-key]')),
+        current_value = sd_cf_field_get_value($el);
+
+    var $keys = {},
+        $keys_values = {},
+        $key_rules = {};
+
+    jQuery.each(conditions, function(index, condition) {
+        if (typeof $keys_values[condition.key] == 'undefined') {
+            $keys_values[condition.key] = [];
+            $key_rules[condition.key] = {}
+        }
+
+        $keys_values[condition.key].push(condition.value);
+        $key_rules[condition.key] = condition;
+    });
+
+    jQuery.each(conditions, function(index, condition) {
+        if (typeof $keys[condition.key] == 'undefined') {
+            $keys[condition.key] = {};
+        }
+
+        if (condition.condition === 'empty') {
+            var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
+            if (!field_value || field_value === '') {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'not empty') {
+            var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
+            if (field_value && field_value !== '') {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'equals to') {
+            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+            if (((condition.value && condition.value == condition.value) || (condition.value === field_value)) && sd_cf_field_in_array(field_value, $keys_values[condition.key])) {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'not equals') {
+            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+            if (jQuery.isNumeric(condition.value) && parseInt(field_value) !== parseInt(condition.value) && field_value && !sd_cf_field_in_array(field_value, $keys_values[condition.key])) {
+                $keys[condition.key][index] = true;
+            } else if (condition.value != field_value && !sd_cf_field_in_array(field_value, $keys_values[condition.key])) {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'greater than') {
+            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+            if (jQuery.isNumeric(condition.value) && parseInt(field_value) > parseInt(condition.value)) {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'less than') {
+            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+            if (jQuery.isNumeric(condition.value) && parseInt(field_value) < parseInt(condition.value)) {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'contains') {
+            switch (field_type) {
+                case 'multiselect':
+                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && sd_cf_field_in_array(condition.value, current_value)))) { //
+                        $keys[condition.key][index] = true;
+                    } else {
+                        $keys[condition.key][index] = false;
+                    }
+                    break;
+                case 'checkbox':
+                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && sd_cf_field_in_array(condition.value, current_value)))) { //
+                        $keys[condition.key][index] = true;
+                    } else {
+                        $keys[condition.key][index] = false;
+                    }
+                    break;
+                default:
+                    if (typeof $keys[condition.key][index] === 'undefined') {
+                        if (current_value && current_value.indexOf(condition.value) >= 0 && sd_cf_field_in_array(current_value, $keys_values[condition.key])) {
+                            $keys[condition.key][index] = true;
+                        } else {
+                            $keys[condition.key][index] = false;
+                        }
+                    }
+                    break;
+            }
+        }
+    });
+
+    jQuery.each($keys, function(index, field) {
+        if (sd_cf_field_in_array(true, field)) {
+            sd_cf_field_apply_action($el, $key_rules[index], true);
+        } else {
+            sd_cf_field_apply_action($el, $key_rules[index], false);
+        }
+    });
+
+    /* Trigger field change */
+    if ($keys.length) {
+        $el.trigger('sd_cf_field_on_change');
+    }
+}
+
+/**
+ * Get the field element.
+ */
+function sd_cf_field_get_element($el) {
+    var el = $el.find('input,textarea,select'),
+        type = sd_cf_field_get_type($el);
+    if (type && window._sd_cf_field_elements && typeof window._sd_cf_field_elements == 'object' && typeof window._sd_cf_field_elements[type] != 'undefined') {
+        el = window._sd_cf_field_elements[type];
+    }
+    return el;
+}
+
+/**
+ * Get the field type.
+ */
+function sd_cf_field_get_type($el) {
+    return $el.data('rule-type');
+}
+
+/**
+ * Get the field value.
+ */
+function sd_cf_field_get_value($el) {
+    var current_value = $el.val();
+
+    if ($el.is(':checkbox')) {
+        current_value = '';
+        if ($el.parents('[data-rule-key]').find('input:checked').length > 1) {
+            $el.parents('[data-rule-key]').find('input:checked').each(function() {
+                current_value = current_value + jQuery(this).val() + ' ';
+            });
+        } else {
+            if ($el.parents('[data-rule-key]').find('input:checked').length >= 1) {
+                current_value = $el.parents('[data-rule-key]').find('input:checked').val();
+            }
+        }
+    }
+
+    if ($el.is(':radio')) {
+        current_value = $el.parents('[data-rule-key]').find('input[type=radio]:checked').val();
+    }
+
+    return current_value;
+}
+
+/**
+ * Get the field default value.
+ */
+function sd_cf_field_get_default_value($el) {
+    var value = '',
+        type = sd_cf_field_get_type($el);
+
+    switch (type) {
+        case 'text':
+        case 'number':
+        case 'date':
+        case 'textarea':
+        case 'select':
+            value = $el.find('input:text,input[type="number"],textarea,select').val();
+            break;
+        case 'phone':
+        case 'email':
+        case 'color':
+        case 'url':
+        case 'hidden':
+        case 'password':
+        case 'file':
+            value = $el.find('input[type="' + type + '"]').val();
+            break;
+        case 'multiselect':
+            value = $el.find('select').val();
+            break;
+        case 'radio':
+            if ($el.find('input[type="radio"]:checked').length >= 1) {
+                value = $el.find('input[type="radio"]:checked').val();
+            }
+            break;
+        case 'checkbox':
+            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
+                if ($el.find('input[type="checkbox"]:checked').length > 1) {
+                    var values = [];
+                    values.push(value);
+                    $el.find('input[type="checkbox"]:checked').each(function() {
+                        values.push(jQuery(this).val());
+                    });
+                    value = values;
+                } else {
+                    value = $el.find('input[type="checkbox"]:checked').val();
+                }
+            }
+            break;
+        default:
+            if (window._sd_cf_field_default_values && typeof window._sd_cf_field_default_values == 'object' && typeof window._sd_cf_field_default_values[type] != 'undefined') {
+                value = window._sd_cf_field_default_values[type];
+            }
+            break;
+    }
+    return {
+        type: type,
+        value: value
+    };
+}
+
+/**
+ * Reset field default value.
+ */
+function sd_cf_field_reset_default_value($el) {
+    var type = sd_cf_field_get_type($el),
+        key = $el.data('rule-key'),
+        field = sd_cf_field_default_values[key];
+
+    switch (type) {
+        case 'text':
+        case 'number':
+        case 'date':
+        case 'textarea':
+            $el.find('input:text,input[type="number"],textarea').val(field.value);
+            break;
+        case 'phone':
+        case 'email':
+        case 'color':
+        case 'url':
+        case 'hidden':
+        case 'password':
+        case 'file':
+            $el.find('input[type="' + type + '"]').val(field.value);
+            break;
+        case 'select':
+            $el.find('select').find('option').prop('selected', false);
+            $el.find('select').val(field.value);
+            $el.find('select').trigger('change');
+            break;
+        case 'multiselect':
+            $el.find('select').find('option').prop('selected', false);
+            if ((typeof field.value === 'object' || typeof field.value === 'array') && !field.value.length && $el.find('select option:first').text() == '') {
+                $el.find('select option:first').remove(); // Clear first option to show placeholder.
+            }
+            jQuery.each(field.value, function(i, v) {
+                $el.find('select').find('option[value="' + v + '"]').attr('selected', true);
+            });
+            $el.find('select').trigger('change');
+            break;
+        case 'checkbox':
+            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
+                $el.find('input[type="checkbox"]:checked').prop('checked', false);
+                if (Array.isArray(field.value)) {
+                    jQuery.each(field.value, function(i, v) {
+                        $el.find('input[type="checkbox"][value="' + v + '"]').attr('checked', true);
+                    });
+                } else {
+                    $el.find('input[type="checkbox"][value="' + field.value + '"]').attr('checked', true);
+                }
+            }
+            break;
+        case 'radio':
+            if ($el.find('input[type="radio"]:checked').length >= 1) {
+                setTimeout(function() {
+                    $el.find('input[type="radio"]:checked').prop('checked', false);
+                    $el.find('input[type="radio"][value="' + field.value + '"]').attr('checked', true);
+                }, 100);
+            }
+            break;
+        default:
+            jQuery(document.body).trigger('sd_cf_field_reset_default_value', type, $el, field);
+            break;
+    }
+
+    if (!$el.hasClass('sd-cf-field-has-changed')) {
+        var el = sd_cf_field_get_element($el);
+        if (type === 'radio' || type === 'checkbox') {
+            el = el.find(':checked');
+        }
+        if (el) {
+            el.trigger('change');
+            $el.addClass('sd-cf-field-has-changed');
+        }
+    }
+}
+
+/**
+ * Get the field children.
+ */
+function sd_cf_field_get_children(field_key) {
+    var rules = [];
+    jQuery.each(sd_cf_field_rules, function(j, rule) {
+        if (rule.field.field === field_key) {
+            rules.push(rule.field.rule);
+        }
+    });
+    return rules;
+}
+
+/**
+ * Check in array field value.
+ */
+function sd_cf_field_in_array(find, item, match) {
+    var found = false,
+        key;
+    match = !!match;
+
+    for (key in item) {
+        if ((match && item[key] === find) || (!match && item[key] == find)) {
+            found = true;
+            break;
+        }
+    }
+    return found;
+}
+
+/**
+ * App the field condition action.
+ */
+function sd_cf_field_apply_action($el, rule, isTrue) {
+    var $destEl = jQuery('[data-rule-key="' + rule.key + '"]');
+
+    if (rule.action === 'show' && isTrue) {
+        if ($destEl.is(':hidden')) {
+            sd_cf_field_reset_default_value($destEl);
+        }
+        sd_cf_field_show_element($destEl);
+    } else if (rule.action === 'show' && !isTrue) {
+        sd_cf_field_hide_element($destEl);
+    } else if (rule.action === 'hide' && isTrue) {
+        sd_cf_field_hide_element($destEl);
+    } else if (rule.action === 'hide' && !isTrue) {
+        if ($destEl.is(':hidden')) {
+            sd_cf_field_reset_default_value($destEl);
+        }
+        sd_cf_field_show_element($destEl);
+    }
+    return $el.removeClass('sd-cf-field-has-changed');
+}
+
+/**
+ * Show field element.
+ */
+function sd_cf_field_show_element($el) {
+    $el.removeClass('d-none').show();
+
+    if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
+        $el.css({
+            "visibility": "visible"
+        });
+    }
+}
+
+/**
+ * Hide field element.
+ */
+function sd_cf_field_hide_element($el) {
+    $el.addClass('d-none').hide();
+
+    if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
+        $el.css({
+            "visibility": "hidden"
+        });
+    }
+}
+
+/**
+ * Show field child elements.
+ */
+function sd_cf_field_hide_child_elements() {
+    jQuery.each(sd_cf_field_key_rules, function(i, conds) {
+        if (i && conds && conds.length && (jQuery('[data-rule-key="' + i + '"]:hidden').length >= 1 || jQuery('[data-rule-key="' + i + '"]').css('display') === 'none')) {
+            jQuery.each(conds, function(key, cond) {
+                jQuery('[data-rule-key="' + cond.key + '"]').addClass('d-none').hide();
+            });
+        }
+    });
+}
+<?php do_action( 'wp_super_duper_conditional_fields_js', $this ); ?>
+</script>
+			<?php
+			$output = ob_get_clean();
+
+			return str_replace( array( '<script>', '</script>' ), '', trim( $output ) );
+		}
+	}
 }

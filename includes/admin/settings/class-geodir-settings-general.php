@@ -85,7 +85,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 				<script>
 					jQuery(function () {
 						var default_location_city = jQuery("#default_location_city").val();
-						jQuery(".geodir-save-button").click(function () {
+						jQuery(".geodir-save-button").on("click",function () {
 							if(default_location_city && default_location_city != jQuery("#default_location_city").val()){
 								return confirm("<?php _e( "Are you sure? This can break current listings.", "geodirectory" );?>");
 							}

@@ -103,7 +103,7 @@ class GeoDir_Admin_Blocks {
 		/**
 		 * Filter search block pattern attributes.
 		 *
-		 * @since 2.1.0.21
+		 * @since 2.1.1.0
 		 *
 		 * @param string $attrs Attributes.
 		 */

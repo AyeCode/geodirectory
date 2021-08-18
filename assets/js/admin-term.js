@@ -1,5 +1,5 @@
 jQuery(function($) {
-    jQuery('#addtag #submit').click(function() {
+    jQuery('#addtag #submit').on("click",function() {
         try {
             var mceField = typeof tinymce != 'undefined' && typeof tinymce.editors != 'undefined' && typeof tinymce.editors['ct_cat_top_desc'] == 'object' ? tinymce.editors['ct_cat_top_desc'] : null;
             if (mceField) {

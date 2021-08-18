@@ -10,7 +10,7 @@ jQuery(function($) {
         geodir_auto_save_poll(geodir_get_form_data());
     }, 1);
     /// check validation on blur
-    jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").delay(2000).blur(function() {
+    jQuery('#geodirectory-add-post').find(".required_field:visible").find("[field_type]:visible, .editor textarea").delay(2000).on("blur", function() {
         // give some time inc ase another script is filling data
         $this = this;
         setTimeout(function() {
@@ -18,7 +18,7 @@ jQuery(function($) {
         }, 100)
     });
     // Check for validation on click for checkbox, radio
-    jQuery('#geodirectory-add-post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").click(function() {
+    jQuery('#geodirectory-add-post').find(".required_field:visible").find("input[type='checkbox'],input[type='radio']").on("click", function() {
         geodir_validate_field(this);
     });
     // Check for validation on click for select2
@@ -29,11 +29,11 @@ jQuery(function($) {
     if ($('form#post .postbox#geodir_post_info').length) {
         var $form = $('.postbox#geodir_post_info').closest('form#post');
         // check validation on blur
-        $('.required_field:visible', $form).find("[field_type]:visible, .editor textarea").blur(function() {
+        $('.required_field:visible', $form).find("[field_type]:visible, .editor textarea").on("blur", function() {
             geodir_validate_field(this);
         });
         // Check for validation on click for checkbox, radio
-        $('.required_field:visible', $form).find("input[type='checkbox'],input[type='radio']").click(function() {
+        $('.required_field:visible', $form).find("input[type='checkbox'],input[type='radio']").on("click", function() {
             geodir_validate_field(this);
         });
         // Check for validation on click for select2
@@ -110,7 +110,7 @@ jQuery(function($) {
     /**
      * Save the post on preview link click.
      */
-    jQuery(".geodir_preview_button").click(function() {
+    jQuery(".geodir_preview_button").on("click", function() {
         geodir_auto_save_post();
         $form = jQuery("#geodirectory-add-post");
         return geodir_validate_submit($form);
@@ -118,7 +118,7 @@ jQuery(function($) {
     /**
      * Save the post via ajax.
      */
-    jQuery("#geodirectory-add-post").submit(function(e) {
+    jQuery("#geodirectory-add-post").on("submit", function(e) {
         $valid = geodir_validate_submit(this);
         if ($valid) {
             $result = geodir_save_post();
@@ -204,7 +204,7 @@ function geodir_save_post() {
                 geodir_changes_made = false; // set the changes flag to false.
                 jQuery('.gd-notification').remove(); // remove current notes
                 $container = jQuery('#gd-add-listing-replace-container').length ? jQuery('#gd-add-listing-replace-container').val() : '#geodirectory-add-post'
-                jQuery($container).replaceWith(data.data); // remove the form and replae with the notification
+                jQuery($container).replaceWith(data.data); // remove the form and replace with the notification
                 jQuery(window).scrollTop(jQuery('.gd-notification').offset().top - 100); // scroll to new notification
                 return true;
             } else {

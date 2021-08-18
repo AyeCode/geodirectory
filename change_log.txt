@@ -1,5 +1,6 @@
-= 2.1.0.21 =
+= 2.1.1.0 =
 * GD Categories & search blocks shows validation errors in console - FIXED
+* Conditional fields feature for the custom fields - ADDED
 
 = 2.1.0.20 =
 * Distance to post badge don't set direction on map from ajax loaded listing - FIXED
