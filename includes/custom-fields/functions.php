@@ -1002,6 +1002,10 @@ function geodir_cf_format_decimal( $number = '', $cf = '' ) {
 function geodir_conditional_field_attrs( $field, $_key = '', $_type = '' ) {
 	$attrs = '';
 
+	if ( ! geodir_design_style() ) {
+		return $attrs;
+	}
+
 	if ( is_object( $field ) ) {
 		$key = ! empty( $field->htmlvar_name ) ? $field->htmlvar_name : '';
 		$type = ! empty( $field->field_type ) ? $field->field_type : '';

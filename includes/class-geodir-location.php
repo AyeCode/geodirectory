@@ -362,7 +362,8 @@ class GeoDir_Location {
 				'extra_attributes' => array(
 					'data-address-type' => 'country',
 					'field_type'        => $field['type']
-				)
+				),
+				'wrap_attributes' => geodir_conditional_field_attrs( $field, 'country', 'select' )
 			) );
 
 			// Region
@@ -381,7 +382,8 @@ class GeoDir_Location {
 					'data-address-type' => 'region',
 					'field_type'        => 'text',
 					'data-tags'         => "false"
-				)
+				),
+				'wrap_attributes' => geodir_conditional_field_attrs( $field, 'region', 'select' )
 			) );
 
 			// City
@@ -400,12 +402,13 @@ class GeoDir_Location {
 					'data-address-type' => 'city',
 					'field_type'        => 'text',
 					'data-tags'         => "false"
-				)
+				),
+				'wrap_attributes' => geodir_conditional_field_attrs( $field, 'city', 'select' )
 			) );
 		} else {
 			?>
 			<div id="geodir_<?php echo $prefix . 'country'; ?>_row"
-				 class="geodir_form_row clearfix gd-fieldset-details geodir-address-row-multi<?php echo ( $is_required ? ' required_field' : '' ); ?>"<?php echo geodir_conditional_field_attrs( $field, 'country', 'select' ); ?>>
+				 class="geodir_form_row clearfix gd-fieldset-details geodir-address-row-multi<?php echo ( $is_required ? ' required_field' : '' ); ?>">
 				<label for="<?php echo $prefix ?>country"><?php echo esc_attr__( 'Country', 'geodirectory' ) . ( $is_required ? ' <span>*</span>' : '' ); ?></label>
 				<select id="<?php echo $prefix ?>country" name="country" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'geodirectory' ); ?>" class="geodir_textfield textfield_x geodir-select" field_type="<?php echo $field['type']; ?>" data-address-type="country">
 					<?php echo geodir_get_country_dl( $country, $prefix ); ?>
@@ -417,7 +420,7 @@ class GeoDir_Location {
 				<?php } ?>
 			</div>
 			<div id="geodir_<?php echo $prefix . 'region'; ?>_row"
-				 class="geodir_form_row clearfix gd-fieldset-details geodir-address-row-multi<?php echo ( $is_required ? ' required_field' : '' ); ?>"<?php echo geodir_conditional_field_attrs( $field, 'region', 'select' ); ?>>
+				 class="geodir_form_row clearfix gd-fieldset-details geodir-address-row-multi<?php echo ( $is_required ? ' required_field' : '' ); ?>">
 				<label for="<?php echo $prefix ?>region"><?php echo esc_attr__( 'Region', 'geodirectory' ) . ( $is_required ? ' <span>*</span>' : '' ); ?></label>
 				<input type="text" id="<?php echo $prefix ?>region" name="region" value="<?php echo esc_attr( stripslashes( $region ) ); ?>" placeholder="<?php echo ( ! empty( $location->region ) ? esc_attr( stripslashes( $location->region ) ) : '' ); ?>" class="geodir_textfield textfield_x" field_type="text" data-address-type="region" />
 				<span class="geodir_message_note"><?php _e( 'Enter listing region.', 'geodirectory' ); ?></span>
@@ -426,7 +429,7 @@ class GeoDir_Location {
 				<?php } ?>
 			</div>
 			<div id="geodir_<?php echo $prefix . 'city'; ?>_row"
-				 class="geodir_form_row clearfix gd-fieldset-details geodir-address-row-multi<?php echo ( $is_required ? ' required_field' : '' ); ?>"<?php echo geodir_conditional_field_attrs( $field, 'city', 'select' ); ?>>
+				 class="geodir_form_row clearfix gd-fieldset-details geodir-address-row-multi<?php echo ( $is_required ? ' required_field' : '' ); ?>">
 				<label for="<?php echo $prefix ?>city"><?php echo esc_attr__( 'City', 'geodirectory' ) . ( $is_required ? ' <span>*</span>' : '' ); ?></label>
 				<input type="text" id="<?php echo $prefix ?>city" name="city" value="<?php echo esc_attr( stripslashes( $city ) ); ?>" placeholder="<?php echo ( ! empty( $location->city ) ? esc_attr( stripslashes( $location->city ) ) : '' ); ?>" class="geodir_textfield textfield_x" field_type="text" data-address-type="city" />
 				<span class="geodir_message_note"><?php _e( 'Enter listing city.', 'geodirectory' ); ?></span>

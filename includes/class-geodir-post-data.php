@@ -965,8 +965,7 @@ class GeoDir_Post_Data {
 				}else{
 
 				?>
-				<h5 id="geodir_fieldset_details" class="geodir-fieldset-row"
-				    gd-fieldset="user_details"<?php echo geodir_conditional_field_attrs( array( 'type' => 'fieldset' ), 'user_details', 'fieldset' ); ?>><?php _e( "Your Details", "geodirectory" ); ?></h5>
+				<h5 id="geodir_fieldset_details" class="geodir-fieldset-row" gd-fieldset="user_details"><?php _e( "Your Details", "geodirectory" ); ?></h5>
 
 				<div id="user_login_row" class="required_field geodir_form_row clearfix gd-fieldset-details">
 					<label><?php _e( "Name", "geodirectory" ); ?> <span>*</span></label>
@@ -1014,8 +1013,7 @@ class GeoDir_Post_Data {
 					echo '</fieldset>';
 				}else {
 					?>
-					<h5 id="geodir_fieldset_details" class="geodir-fieldset-row"
-					    gd-fieldset="details"<?php echo geodir_conditional_field_attrs( array( 'type' => 'fieldset' ), 'details', 'fieldset' ); ?>><?php echo $details_header; ?></h5>
+					<h5 id="geodir_fieldset_details" class="geodir-fieldset-row" gd-fieldset="details"><?php echo $details_header; ?></h5>
 					<?php
 				}
 			}

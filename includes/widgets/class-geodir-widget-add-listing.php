@@ -351,14 +351,18 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
      * @return mixed
      */
     public function enqueue_scripts() {
-        global $sd_cf_conditional_js;
+        global $aui_conditional_js;
 
         // Don't load JS again.
-        if ( empty( $sd_cf_conditional_js ) && is_callable( array( $this, 'conditional_fields_js' ) ) ) {
-            $conditional_fields_js = $this->conditional_fields_js();
+        if ( empty( $aui_conditional_js ) && geodir_design_style() && class_exists( 'AyeCode_UI_Settings' ) ) {
+            $aui_settings = AyeCode_UI_Settings::instance();
 
-            if ( ! empty( $conditional_fields_js ) ) {
-                $sd_cf_conditional_js = wp_add_inline_script( 'geodir-add-listing', $conditional_fields_js );
+            if ( is_callable( array( $aui_settings, 'conditional_fields_js' ) ) ) {
+                $conditional_fields_js = $aui_settings->conditional_fields_js();
+
+                if ( ! empty( $conditional_fields_js ) ) {
+                    $aui_conditional_js = wp_add_inline_script( 'geodir-add-listing', $conditional_fields_js );
+                }
             }
         }
     }
