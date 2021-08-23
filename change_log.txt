@@ -1,4 +1,6 @@
-= 2.1.0.21 =
+= 2.1.1.0 =
+* GD Categories & search blocks shows validation errors in console - FIXED
+* Conditional fields feature for the custom fields for AUI style - ADDED
 * Fix conflicts with select2 library with BuddyBoss theme - FIXED
 
 = 2.1.0.20 =

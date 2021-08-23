@@ -437,9 +437,14 @@ class GeoDir_Admin_Install {
 	 * @return array
 	 */
 	public static function cron_schedules( $schedules ) {
+		// Kadence starter templates page is broken when monthly schedule option is set. 
+		if ( ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page'] == 'kadence-starter-templates' ) || ( ! empty( $_REQUEST['action'] ) && in_array( $_REQUEST['action'], array( 'kadence_check_plugin_data', 'kadence_import_get_template_data', 'kadence_import_install_plugins' ) ) ) ) {
+			return $schedules;
+		}
+
 		$schedules['monthly'] = array(
 			'interval' => 2635200,
-			'display'  => __( 'Monthly', 'geodirectory' ),
+			'display'  => __( 'Once Monthly', 'geodirectory' ),
 		);
 		return $schedules;
 	}

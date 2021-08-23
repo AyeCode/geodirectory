@@ -236,7 +236,7 @@ function geodir_save_post() {
                 geodir_changes_made = false; // set the changes flag to false.
                 jQuery('.gd-notification').remove(); // remove current notes
                 $container = jQuery('#gd-add-listing-replace-container').length ? jQuery('#gd-add-listing-replace-container').val() : '#geodirectory-add-post'
-                jQuery($container).replaceWith(data.data); // remove the form and replae with the notification
+                jQuery($container).replaceWith(data.data); // remove the form and replace with the notification
                 jQuery(window).scrollTop(jQuery('.gd-notification').offset().top - 100); // scroll to new notification
                 return true;
             } else {

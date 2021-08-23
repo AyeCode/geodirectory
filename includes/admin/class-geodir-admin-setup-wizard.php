@@ -447,7 +447,7 @@ public function setup_wizard_header() {
 				<script>
 					jQuery(function () {
 						var default_location_city = jQuery("#default_location_city").val();
-						jQuery(".button-next").click(function () {
+						jQuery(".button-next").on("click",function () {
 							if (default_location_city && default_location_city != jQuery("#default_location_city").val()) {
 								return confirm("<?php _e( "Are you sure? This can break current listings.", "geodirectory" );?>");
 							}

@@ -144,8 +144,8 @@ class GeoDir_Frontend_Scripts {
 			<?php } ?>
 
 			function geodir_setup_submit_search($form) {
-				jQuery('.geodir_submit_search').unbind('click');// unbind any other click events
-				jQuery('.geodir_submit_search').click(function(e) {
+				jQuery('.geodir_submit_search').off('click');// unbind any other click events
+				jQuery('.geodir_submit_search').on("click",function(e) {
 
 					e.preventDefault();
 
@@ -162,7 +162,7 @@ class GeoDir_Frontend_Scripts {
 							jQuery('.sgeo_lat', $form).remove();
 							jQuery('.sgeo_lon', $form).remove();
 							jQuery('select[name="sort_by"]', $form).remove();
-							jQuery($form).submit();
+							jQuery($form).trigger("submit");
 							return;
 						}
 					}
@@ -187,12 +187,12 @@ class GeoDir_Frontend_Scripts {
 						geodir_setsearch($form);
 					} else {
 						jQuery(".snear", $form).val('');
-						jQuery($form).submit();
+						jQuery($form).trigger("submit");
 					}
 				});
 				// Clear near search GPS for core
 				if (!jQuery('input.geodir-location-search-type').length && jQuery('[name="snear"]').length){
-					jQuery('[name="snear"]').unbind('keyup');
+					jQuery('[name="snear"]').off('keyup');
 					jQuery('[name="snear"]').on('keyup', function($){
 						jQuery('.sgeo_lat').val('');
 						jQuery('.sgeo_lon').val('');
@@ -221,7 +221,7 @@ class GeoDir_Frontend_Scripts {
 					jQuery('.sgeo_lat').val(latLng.lat);
 					jQuery('.sgeo_lon').val(latLng.lon);
 				}
-				jQuery($form).submit(); // submit form after insering the lat long positions
+				jQuery($form).trigger("submit"); // submit form after insering the lat long positions
 			}
 
 			function geocodeAddress($form) {
@@ -232,7 +232,7 @@ class GeoDir_Frontend_Scripts {
 					if (jQuery('.snear', $form).val().match("^<?php _e('In:','geodirectory');?>")) {
 						jQuery(".snear", $form).val('');
 					}
-					jQuery($form).submit();
+					jQuery($form).trigger("submit");
 				} else {
 					var address = jQuery(".snear", $form).val();
 
@@ -268,7 +268,7 @@ class GeoDir_Frontend_Scripts {
 									}
 								});
 						} else {
-							jQuery($form).submit();
+							jQuery($form).trigger("submit");
 						}
 					}
 				}
@@ -332,7 +332,7 @@ class GeoDir_Frontend_Scripts {
 				jQuery('.sgeo_lat').val(coords.latitude);
 				jQuery('.sgeo_lon').val(coords.longitude);
 
-				jQuery('.geodir-listing-search').submit();
+				jQuery('.geodir-listing-search').trigger("submit");
 			}
 
 			/**

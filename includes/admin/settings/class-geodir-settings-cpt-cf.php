@@ -2068,10 +2068,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 						if (strlen($field->option_values)) {
 							$op_size =  strlen($field->option_values);
 						}
-
-						if (isset($request_field['multi_display_type'])) {
-							$field->extra_fields = $request_field['multi_display_type'];
-						}
 					}
 
 					$column_attr .= "( $op_size ) NULL ";

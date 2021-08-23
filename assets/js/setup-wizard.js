@@ -192,7 +192,7 @@ function gd_wizard_check_plugins(){
 jQuery(function() {
     gd_wizard_check_plugins();
 
-    jQuery('.gd_install_plugins').click(function() {
+    jQuery('.gd_install_plugins').on("click",function() {
         gd_wizard_check_plugins();
     });
 });

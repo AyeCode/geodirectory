@@ -1121,7 +1121,7 @@ jQuery(function ($) {
 				jQuery(function () {
 					geoDirMapSlide();
 				});
-				jQuery(window).resize(function () {
+				jQuery(window).on("resize",function () {
 					jQuery('.geodir_map_container .geodir-post-type-filter-wrap').each(function () {
 						jQuery(this).find('.geodir-map-posttype-list').css({
 							'width': 'auto'
@@ -1162,7 +1162,7 @@ jQuery(function ($) {
 						var $thisMap = this;
 						geoDirMapPrepare($thisMap);
 						var $objPlList = jQuery($thisMap).find('ul.place-list');
-						jQuery($thisMap).find('.geodir-leftarrow a').click(function (e) {
+						jQuery($thisMap).find('.geodir-leftarrow a').on("click",function (e) {
 							e.preventDefault();
 							var cm = $objPlList.css('margin-left');
 							var doMov = parseFloat($objPlList.attr('data-domov'));
@@ -1179,7 +1179,7 @@ jQuery(function ($) {
 								'margin-left': domargin + 'px'
 							}, 1000);
 						});
-						jQuery($thisMap).find('.geodir-rightarrow a').click(function (e) {
+						jQuery($thisMap).find('.geodir-rightarrow a').on("click",function (e) {
 							e.preventDefault();
 							var cm = $objPlList.css('margin-left');
 							var doMov = parseFloat($objPlList.attr('data-domov'));

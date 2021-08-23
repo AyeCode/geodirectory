@@ -101,10 +101,22 @@ Class GeoDir_Elementor_Tag_URL extends \Elementor\Core\DynamicTags\Tag {
 			}elseif($key == 'post_url'){
 				$value = get_permalink( $gd_post->ID );
 			}elseif($key == 'map_directions_url'){
-				$lat = !empty($gd_post->latitude) ? esc_attr($gd_post->latitude) : '';
-				$lon = !empty($gd_post->longitude) ? esc_attr($gd_post->longitude) : '';
-				$url = "https://maps.google.com/?daddr=".esc_attr($lat).",".esc_attr($lon);
-				$value = esc_url_raw($url);
+				$lat = ! empty( $gd_post->latitude ) ? $gd_post->latitude : '';
+				$lon = ! empty( $gd_post->longitude ) ? $gd_post->longitude : '';
+				$url = "https://maps.google.com/?daddr=" . esc_attr( $lat ) . "," . esc_attr( $lon );
+
+				/**
+				 * Filter Google map directions url.
+				 *
+				 * @since 2.1.1.0
+				 *
+				 * @param string $url Map directions URL.
+				 * @param string $lat Latitude.
+				 * @param string $lon Longitude.
+				 */
+				$url = apply_filters( 'geodir_custom_field_output_directions_on_map', $url, $lat, $lon );
+
+				$value = esc_url_raw( $url );
 			}
 
 			// set fallback
