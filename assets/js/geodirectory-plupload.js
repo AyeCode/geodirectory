@@ -212,11 +212,11 @@ jQuery(document).ready(function($) {
                     } else {
                         v1 = response;
                     }
-                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(v1);
+                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(v1).trigger("change");
                     //console.log(v1);
                 } else {
                     // single
-                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(response + "");
+                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(response + "").trigger("change");
                     //console.log(response);
                 }
                 // show thumbs
@@ -352,7 +352,7 @@ function plu_show_thumbs(imgId) {
 
             thumbsC.append(thumb);
 
-            thumb.find(".thumbremovelink").click(function() {
+            thumb.find(".thumbremovelink").on("click", function() {
                 //console.log("plu_show_thumbs-thumbremovelink");
                 if (jQuery('#' + imgId + 'plupload-upload-ui').hasClass("plupload-upload-uic-multiple")) {
                     totalImg--; // remove image from total
@@ -370,7 +370,7 @@ function plu_show_thumbs(imgId) {
                         kimages[kimages.length] = images[j];
                     }
                 }
-                $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join("::"));
+                $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join("::")).trigger("change");
                 //console.log("plu_show_thumbs-thumbremovelink-run");
                 plu_show_thumbs(imgId);
                 return false;
@@ -390,7 +390,7 @@ function plu_show_thumbs(imgId) {
                 var kimages = [];
                 thumbsC.find(".gd-file-info").each(function() {
                     kimages[kimages.length] = $(this).data("src") + "|" + $(this).data("id") + "|" + $(this).data("title") + "|" + $(this).data("caption");
-                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join("::"));
+                    $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join("::")).trigger("change");
                     plu_show_thumbs(imgId);
                     //console.log("plu_show_thumbs-sortable-run");
                 });
@@ -405,7 +405,7 @@ function plu_show_thumbs(imgId) {
     var kimages = [];
     thumbsC.find(".gd-file-info").each(function() {
         kimages[kimages.length] = $(this).data("src") + "|" + $(this).data("id") + "|" + $(this).data("title") + "|" + $(this).data("caption");
-        $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join("::"));
+        $("#" + imgId, $('#' + imgId + 'plupload-upload-ui').parent()).val(kimages.join("::")).trigger("change");
     });
 }
 
@@ -436,7 +436,7 @@ function gd_set_image_meta(input_id, order_id) {
     var image_caption = geodir_esc_entities(jQuery('#gd-image-meta-caption').val());
     images[order_id] = image_url + "|" + image_id + "|" + image_title + "|" + image_caption;
     imagesS = images.join("::");
-    jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val(imagesS);
+    jQuery("#" + input_id, jQuery('#' + input_id + 'plupload-upload-ui').parent()).val(imagesS).trigger("change");
     plu_show_thumbs(input_id);
     jQuery('[data-lity-close]', window.parent.document).trigger('click');
 }

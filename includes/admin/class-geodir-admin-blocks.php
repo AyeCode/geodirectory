@@ -100,6 +100,14 @@ class GeoDir_Admin_Blocks {
 
 		$post_type_option = count($post_types) > 1 ? "post_type=''" : '';
 		$post_type_hide_option = count($post_types) > 1 ? " post_type_hide='false' " : '';
+		/**
+		 * Filter search block pattern attributes.
+		 *
+		 * @since 2.1.1.0
+		 *
+		 * @param string $attrs Attributes.
+		 */
+		$extra_attrs = apply_filters( 'geodir_register_block_pattern_search_attrs', '' );
 
 		register_block_pattern(
 			'geodirectory/search-1',
@@ -108,7 +116,7 @@ class GeoDir_Admin_Blocks {
 				'description' => '',
 				'categories'  => array( 'geodirectory' ),
 				'content'     => "<!-- wp:geodirectory/geodir-widget-search {\"bg\":\"light\",\"pt\":\"3\",\"pr\":\"5\",\"pl\":\"5\",\"border\":\"gray\",\"rounded\":\"rounded-pill\",\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-search\">[gd_search ".$post_type_option.$post_type_hide_option."bg='light'  mt=''  mr=''  mb='3'  ml=''  pt='3'  pr='5'  pb=''  pl='5'  border='gray'  rounded='rounded-pill'  rounded_size=''  shadow='' ]</div>
+<div class=\"wp-block-geodirectory-geodir-widget-search\">[gd_search ".$post_type_option.$post_type_hide_option."bg='light'  mt=''  mr=''  mb='3'  ml=''  pt='3'  pr='5'  pb=''  pl='5'  border='gray'  rounded='rounded-pill'  rounded_size=''  shadow=''" . $extra_attrs . " ]</div>
 <!-- /wp:geodirectory/geodir-widget-search -->",
 			)
 		);
@@ -120,7 +128,7 @@ class GeoDir_Admin_Blocks {
 				'description' => '',
 				'categories'  => array( 'geodirectory' ),
 				'content'     => "<!-- wp:geodirectory/geodir-widget-search {\"show_advanced\":true,\"pt\":\"3\",\"pr\":\"3\",\"pl\":\"3\",\"border\":\"gray\",\"rounded\":\"rounded\",\"shadow\":\"shadow-sm\",\"content\":\"\"} -->
-<div class=\"wp-block-geodirectory-geodir-widget-search\">[gd_search ".$post_type_option.$post_type_hide_option."bg=''  mt=''  mr=''  mb='3'  ml=''  pt='3'  pr='3'  pb=''  pl='3'  border='gray'  rounded='rounded'  rounded_size=''  shadow='shadow-sm' ]</div>
+<div class=\"wp-block-geodirectory-geodir-widget-search\">[gd_search ".$post_type_option.$post_type_hide_option."bg=''  mt=''  mr=''  mb='3'  ml=''  pt='3'  pr='3'  pb=''  pl='3'  border='gray'  rounded='rounded'  rounded_size=''  shadow='shadow-sm'" . $extra_attrs . " ]</div>
 <!-- /wp:geodirectory/geodir-widget-search -->",
 			)
 		);

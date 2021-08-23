@@ -313,7 +313,7 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 				}
 			});
 			jQuery(function($) {
-				jQuery('.permalink-structure input').change(function() {
+				jQuery('.permalink-structure input').on("change",function() {
 					jQuery('.gd-permalink-structure').find('code.non-default-example, code.default-example').hide();
 					if (jQuery(this).val()) {
 						jQuery('.gd-permalink-structure code.non-default-example').show();
@@ -321,15 +321,15 @@ if ( ! class_exists( 'GeoDir_Admin_Permalink_Settings', false ) ) :
 						jQuery('.gd-available-structure-tags li button').removeAttr('disabled');
 					} else {
 						jQuery('.gd-permalink-structure code.default-example').show();
-						jQuery('.gd-permalink-structure input:eq(0)').click();
+						jQuery('.gd-permalink-structure input:eq(0)').trigger("click");
 						jQuery('.gd-permalink-structure input').attr('disabled', 'disabled');
 						jQuery('.gd-available-structure-tags li button').attr('disabled', 'disabled');
 					}
 
 				});
-				jQuery('.permalink-structure input:checked').change();
+				jQuery('.permalink-structure input:checked').trigger("change",);
 
-				jQuery('form[name="form"]').submit(function(e){
+				jQuery('form[name="form"]').on("submit",function(e){
 					$return = true;
 
 					$permalink_structure = jQuery('#geodir_permalink_structure').val();

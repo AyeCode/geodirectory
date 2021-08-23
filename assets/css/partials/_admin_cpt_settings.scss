@@ -167,3 +167,81 @@ html.lity-active{
 .geodir-cpt-cf-items [data-field_type="categories"] [data-setting="default_value"] {
     display: none;
 }
+
+.geodir-cpt-cf-items {
+    .gd-tab-actions {
+        padding-bottom: 8px;
+    }
+}
+
+/*** CONDITIONAL FIELDS ***/
+#geodir_conditional_fields {
+    display: none;
+    .geodir-conditional-template {
+        display: none !important;
+    }
+    .geodir-conditional-col {
+        display: inline-block;
+        padding: 0 .5em;
+        .geodir-conditional-el {
+            padding: 5px;
+            height: 15px;
+            line-height: 15px;
+            font-size: 13px;
+            margin: 0;
+            vertical-align: middle;
+        }
+    }
+    .geodir-conditional-row {
+        clear: both;
+        padding: .4em 0;
+    }
+    [data-conditional="action"] {
+        width: calc(20% - 1.1em);
+    }
+    [data-conditional="field"] {
+        width: calc(25% - 1.1em);
+    }
+    [data-conditional="condition"] {
+        width: calc(25% - 1.1em);
+    }
+    [data-conditional="value"] {
+        width: calc(25% - 1.1em);
+    }
+    [data-conditional="remove"] {
+        text-align: center;
+        width: calc(5% - 1em);
+    }
+    [data-setting="conditional_fields_add"] {
+        text-align: right;
+        border-bottom: solid 1px #dfdfdf;
+        padding-bottom: 10px;
+    }
+}
+[data-setting="conditional_fields_heading"] {
+    cursor: pointer;
+    a {
+        display: block;
+        text-decoration: none;
+        box-shadow: none;
+        &:active {
+            display: block;
+            text-decoration: none;
+            box-shadow: none;
+        }
+    }
+    span {
+        display: none;
+        margin-right: 2px;
+    }
+}
+.geodir-con-fields-open {
+    span.geodir-hide-cf {
+        display: inline-block;
+    }
+}
+.geodir-con-fields-hidden {
+    span.geodir-show-cf {
+        display: inline-block;
+    }
+}
