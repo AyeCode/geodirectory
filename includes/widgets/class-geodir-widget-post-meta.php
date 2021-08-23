@@ -385,7 +385,7 @@ class GeoDir_Widget_Post_Meta extends WP_Super_Duper {
 	 * @return array Output locations.
 	 */
 	public function show_in_locations() {
-		$locations = GeoDir_Settings_Cpt_Cf::show_in_locations();
+		$locations = geodir_show_in_locations();
 
 		$show_in_locations = array( '' => __( 'Auto', 'geodirectory' ) );
 		foreach ( $locations as $value => $label ) {

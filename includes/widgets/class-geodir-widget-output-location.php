@@ -146,7 +146,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
     }
 
 	public function show_in_locations() {
-		$locations = GeoDir_Settings_Cpt_Cf::show_in_locations();
+		$locations = geodir_show_in_locations();
 
 		$show_in_locations = array();
 		foreach ( $locations as $value => $label ) {

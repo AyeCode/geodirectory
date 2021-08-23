@@ -98,7 +98,7 @@ final class GeoDirectory {
      * @return void
      */
     private function setup_constants() {
-        global $wpdb, $plugin_prefix, $geodir_post_custom_fields_cache;
+        global $wpdb, $plugin_prefix;
 
 		$upload_dir = wp_upload_dir( null, false );
         $plugin_prefix = $wpdb->prefix . 'geodir_';
@@ -132,8 +132,7 @@ final class GeoDirectory {
 		$this->define( 'GEODIR_REST_SLUG', 'geodir' );
 		$this->define( 'GEODIR_REST_API_VERSION', '2' );
 
-        // This will store the cached post custom fields per package for each page load so not to run for each listing.
-        $geodir_post_custom_fields_cache = array();
+
     }
 
     /**

@@ -547,65 +547,92 @@ function geodir_column_exist( $db, $column ) {
  * Register Widgets.
  *
  * @since 2.0.0
+ * @since 2.1.1.0 Conditionally load widget code on the backend to reduce memory usage.
  */
 function goedir_register_widgets() {
-
+	
 	if ( get_option( 'geodirectory_version' ) ) {
-		register_widget( 'GeoDir_Widget_Search' );
-		register_widget( 'GeoDir_Widget_Best_Of' );
-		register_widget( 'GeoDir_Widget_Categories' );
-		register_widget( 'GeoDir_Widget_Category_Description' );
-		register_widget( 'GeoDir_Widget_Dashboard' );
-		register_widget( 'GeoDir_Widget_Recent_Reviews' );
-		register_widget( 'GeoDir_Widget_CPT_Meta' );
+		global $pagenow;
 
-		// post widgets
-		register_widget( 'GeoDir_Widget_Post_Badge' );
-		register_widget( 'GeoDir_Widget_Post_Meta' );
-		register_widget( 'GeoDir_Widget_Post_Images' );
-		register_widget( 'GeoDir_Widget_Post_Title' );
-		register_widget( 'GeoDir_Widget_Post_Rating' );
-		register_widget( 'GeoDir_Widget_Post_Fav' );
-		register_widget( 'GeoDir_Widget_Post_Directions' );
-		register_widget( 'GeoDir_Widget_Post_Content' );
-		register_widget( 'GeoDir_Widget_Post_Address' );
+		$block_widget_init_screens = function_exists('sd_pagenow_exclude') ? sd_pagenow_exclude() : array();
 
+		if ( is_admin() && $pagenow && in_array($pagenow, $block_widget_init_screens)) {
+			// don't initiate in these conditions.
+		}else{
+			
+			$exclude = function_exists('sd_widget_exclude') ? sd_widget_exclude() : array();
+			$widgets = geodir_get_widgets();
+			
+			if( !empty($widgets) ){
+				foreach ( $widgets as $widget ) {
+					if(!in_array($widget,$exclude)){
+						register_widget( $widget );
+					}
+				}
+			}
 
-		// Widgets
-		register_widget( 'GeoDir_Widget_Output_location' );
-		register_widget( 'GeoDir_Widget_Author_Actions' );
-		register_widget( 'GeoDir_Widget_Listings' );
-		register_widget( 'GeoDir_Widget_Map' );
-		register_widget( 'GeoDir_Widget_Recently_Viewed' );
-		register_widget( 'GeoDir_Widget_Single_Tabs' );
-		register_widget( 'GeoDir_Widget_Notifications' );
-		register_widget( 'GeoDir_Widget_Add_Listing' );
-		register_widget( 'GeoDir_Widget_Dynamic_Content' );
+			// Depreciated
+			new GeoDir_Widget_Single_Closed_Text();
 
-
-		// Template widgets
-		register_widget( 'GeoDir_Widget_Loop' );
-		register_widget( 'GeoDir_Widget_Loop_Paging' );
-		register_widget( 'GeoDir_Widget_Loop_Actions' );
-		register_widget( 'GeoDir_Widget_Archive_Item_Section' );
-		register_widget( 'GeoDir_Widget_Single_Taxonomies' );
-		register_widget( 'GeoDir_Widget_Single_Next_Prev' );
-		register_widget( 'GeoDir_Widget_Single_Reviews' );
-		register_widget( 'GeoDir_Widget_Post_Distance' );
-		register_widget( 'GeoDir_Widget_Map_Pinpoint' );
-		register_widget( 'GeoDir_Widget_Page_Title' );
-
-		// Depreciated
-		new GeoDir_Widget_Single_Closed_Text();
-
-		// 3rd party widgets
-		if ( class_exists( 'Ninja_Forms' ) && class_exists( 'NF_Abstracts_MergeTags' ) ) {
-			register_widget( 'GeoDir_Widget_Ninja_Forms' );
 		}
 	}
 }
 
 add_action( 'widgets_init', 'goedir_register_widgets' );
+
+/**
+ * Get a list of available widgets.
+ *
+ * @since 2.1.1.0
+ * @return mixed|void
+ */
+function geodir_get_widgets(){
+	
+	$widgets = array(
+		'GeoDir_Widget_Search',
+		'GeoDir_Widget_Best_Of',
+		'GeoDir_Widget_Categories',
+		'GeoDir_Widget_Category_Description',
+		'GeoDir_Widget_Dashboard',
+		'GeoDir_Widget_Recent_Reviews',
+		'GeoDir_Widget_CPT_Meta',
+		'GeoDir_Widget_Post_Badge',
+		'GeoDir_Widget_Post_Meta',
+		'GeoDir_Widget_Post_Images',
+		'GeoDir_Widget_Post_Title',
+		'GeoDir_Widget_Post_Rating',
+		'GeoDir_Widget_Post_Fav',
+		'GeoDir_Widget_Post_Directions',
+		'GeoDir_Widget_Post_Content',
+		'GeoDir_Widget_Post_Address',
+		'GeoDir_Widget_Output_location',
+		'GeoDir_Widget_Author_Actions',
+		'GeoDir_Widget_Listings',
+		'GeoDir_Widget_Map',
+		'GeoDir_Widget_Recently_Viewed',
+		'GeoDir_Widget_Single_Tabs',
+		'GeoDir_Widget_Notifications',
+		'GeoDir_Widget_Add_Listing',
+		'GeoDir_Widget_Dynamic_Content',
+		'GeoDir_Widget_Loop',
+		'GeoDir_Widget_Loop_Paging',
+		'GeoDir_Widget_Loop_Actions',
+		'GeoDir_Widget_Archive_Item_Section',
+		'GeoDir_Widget_Single_Taxonomies',
+		'GeoDir_Widget_Single_Next_Prev',
+		'GeoDir_Widget_Single_Reviews',
+		'GeoDir_Widget_Post_Distance',
+		'GeoDir_Widget_Map_Pinpoint',
+		'GeoDir_Widget_Page_Title',
+	);
+
+	// 3rd party widgets
+	if ( class_exists( 'Ninja_Forms' ) && class_exists( 'NF_Abstracts_MergeTags' ) ) {
+		$widgets[] = 'GeoDir_Widget_Ninja_Forms';
+	}
+	
+	return apply_filters('geodir_get_widgets', $widgets );
+}
 
 /**
  * Function for widget pages options.
