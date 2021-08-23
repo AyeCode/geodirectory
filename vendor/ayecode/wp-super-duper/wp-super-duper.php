@@ -282,7 +282,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				echo $html;
 				$should_die = true;
 
-				// some builder get the editor via ajax so we should not die on those ocasions
+				// some builder get the editor via ajax so we should not die on those occasions
 				$dont_die = array(
 					'parent_tag',// WP Bakery
 					'avia_request' // enfold
@@ -354,7 +354,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @since 1.0.0
 		 *
 		 * @param string $editor_id Optional. Shortcode editor id. Default null.
-		 * @param string $insert_shortcode_function Optional. Insert shotcode function. Default null.
+		 * @param string $insert_shortcode_function Optional. Insert shortcode function. Default null.
 		 */
 		public static function shortcode_insert_button( $editor_id = '', $insert_shortcode_function = '' ) {
 			global $sd_widgets, $shortcode_insert_button_once;
@@ -431,7 +431,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			?>
 			<script>
 				/**
-				 * Check a form to see what items shoudl be shown or hidden.
+				 * Check a form to see what items should be shown or hidden.
 				 */
 				function sd_so_show_hide(form) {
 					jQuery(form).find(".sd-argument").each(function () {
@@ -483,7 +483,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 
 					// show hide on form change
-					jQuery(form).change(function () {
+					jQuery(form).on("change", function () {
 						sd_so_show_hide(form);
 					});
 
@@ -713,7 +713,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				/*
-				 Set the value of elements controled via react.
+				 Set the value of elements controlled via react.
 				 */
 				function sd_setNativeValue(element, value) {
 					let lastValue = element.value;
@@ -898,7 +898,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						}
 					});
 
-					// The below tries to add the shorcode builder button to the builders own raw/shortcode sections.
+					// The below tries to add the shortcode builder button to the builders own raw/shortcode sections.
 
 					// DIVI
 					jQuery(document).on('focusin', '.et-fb-codemirror', function () {
@@ -1088,7 +1088,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				}
 
 				/**
-				 * Check a form to see what items shoudl be shown or hidden.
+				 * Check a form to see what items should be shown or hidden.
 				 */
 				function sd_show_hide(form) {
 					console.log('show/hide');
@@ -1153,7 +1153,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 
 					// show hide on form change
-					jQuery(form).change(function () {
+					jQuery(form).on("change", function () {
 						sd_show_hide(form);
 					});
 
@@ -1197,7 +1197,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 						}
 					});
 
-					// inint on widget updated
+					// init on widget updated
 					jQuery(document).on('widget-updated', function (e, widget) {
 						console.log('widget updated');
 
@@ -1346,7 +1346,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			$class = apply_filters( 'wp_super_duper_div_classname_' . $this->base_id, $class, $args, $this );
 
 			$attrs = apply_filters( 'wp_super_duper_div_attrs', '', $args, $this );
-			$attrs = apply_filters( 'wp_super_duper_div_attrs_' . $this->base_id, '', $args, $this ); //@todo this does not seem right @kiran?
+			$attrs = apply_filters( 'wp_super_duper_div_attrs_' . $this->base_id, '', $args, $this );
 
 			$shortcode_args = array();
 			$output         = '';
@@ -2518,12 +2518,19 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				echo $before_widget;
 				// elementor strips the widget wrapping div so we check for and add it back if needed
 				if ( $this->is_elementor_widget_output() ) {
-					echo ! empty( $this->options['widget_ops']['classname'] ) ? "<span class='" . esc_attr( $class  ) . "'>" : '';
+					// Filter class & attrs for elementor widget output.
+					$class = apply_filters( 'wp_super_duper_div_classname', $class, $args, $this );
+					$class = apply_filters( 'wp_super_duper_div_classname_' . $this->base_id, $class, $args, $this );
+
+					$attrs = apply_filters( 'wp_super_duper_div_attrs', '', $args, $this );
+					$attrs = apply_filters( 'wp_super_duper_div_attrs_' . $this->base_id, '', $args, $this );
+
+					echo "<span class='" . esc_attr( $class  ) . "' " . $attrs . ">";
 				}
 				echo $this->output_title( $args, $instance );
 				echo $output;
 				if ( $this->is_elementor_widget_output() ) {
-					echo ! empty( $this->options['widget_ops']['classname'] ) ? "</span>" : '';
+					echo "</span>";
 				}
 				echo $after_widget;
 			} elseif ( $this->is_preview() && $output == '' ) {// if preview show a placeholder if empty
@@ -3202,11 +3209,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 				$css .= "</style>";
 			}
 
-
 			return $css;
-
 		}
-
 	}
-
 }

@@ -553,7 +553,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 				jQuery(function($){
 					//jQuery('.postbox.gd-hndle-pbox').addClass('closed');
-					jQuery('.gd-import-export .postbox .gd-hndle-click, .gd-import-export .postbox .button-link').click(function(e){
+					jQuery('.gd-import-export .postbox .gd-hndle-click, .gd-import-export .postbox .button-link').on("click",function(e){
 						var $this = this;
 						var $postbox = jQuery($this).closest('.postbox');
 
@@ -563,7 +563,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					var intIp;
 					var intIc;
 
-					jQuery(".gd-imex-pupload").click(function () {
+					jQuery(".gd-imex-pupload").on("click",function () {
 						var $this = this;
 						var $cont = jQuery($this).closest('.gd-imex-box');
 						clearInterval(intIp);
@@ -574,7 +574,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 						}, 1000);
 					});
 
-					jQuery(".gd-imex-cupload").click(function () {
+					jQuery(".gd-imex-cupload").on("click",function () {
 						var $this = this;
 						var $cont = jQuery($this).closest('.gd-imex-box');
 						clearInterval(intIc);
@@ -585,7 +585,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 						}, 1000);
 					});
 					
-					$('#gd_ie_download_sample').click(function(e) {
+					$('#gd_ie_download_sample').on("click",function(e) {
 						if ($(this).data('sample-csv')) {
 							window.location.href = $(this).data('sample-csv');
 							return false;
@@ -600,7 +600,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 					var timer_posts;
 					var pseconds;
-					jQuery('#gd_ie_exposts_submit').click(function(){
+					jQuery('#gd_ie_exposts_submit').on("click",function(){
 						pseconds = 1;
 
 						var el = jQuery(this).closest('.postbox');
@@ -646,7 +646,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 					var timer_cats;
 					var cseconds;
-					jQuery('#gd_ie_excats_submit').click(function(){
+					jQuery('#gd_ie_excats_submit').on("click",function(){
 						cseconds = 1;
 
 						var el = jQuery(this).closest('.postbox');

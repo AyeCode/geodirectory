@@ -397,7 +397,7 @@ function geodir_show_sub_cat_collapse_button() {
 }
 
 function geodir_activate_collapse_pan() {
-    jQuery('ul.main_list').find('.gd-map-cat-toggle').unbind('click').click(function() {
+    jQuery('ul.main_list').find('.gd-map-cat-toggle').off('click').on("click",function() {
         jQuery(this)
             .parent('li')
             .find('ul.sub_list')
@@ -448,6 +448,7 @@ function map_ajax_search(map_canvas_var, query_string, marker_jason, hide_loadin
         jQuery.ajax({
             type: "GET",
             url: query_url,
+            dataType: "json",
             success: function(data) {
                 jQuery('#' + map_canvas_var + '_loading_div').hide();
                 parse_marker_jason(data, map_canvas_var);
@@ -905,7 +906,7 @@ function geodir_map_sticky(map_options) {
                 sticky_show_hide_trigger.hide();
             }
         });
-        jQuery(window).resize(function() {
+        jQuery(window).on("resize",function() {
             jQuery(window).scroll();
         });
     } // sticky if end
@@ -1034,7 +1035,7 @@ function geodirComputeTotalDistance(result, map_canvas) {
 }
 jQuery(function($) {
     setGeodirMapSize(false);
-    $(window).resize(function() {
+    $(window).on("resize",function() {
         setGeodirMapSize(true);
     });
 })
@@ -1563,6 +1564,7 @@ function geodir_map_post_type_terms(options, post_type, query_string) {
     jQuery.ajax({
         type: "GET",
         url: terms_query_url,
+        dataType: "json",
         success: function(data) {
             jQuery('#' + map_canvas + '_loading_div').hide();
             if (data && data.terms_filter) {

@@ -1,4 +1,10 @@
 = 2.1.1.0 =
+* GD Categories & search blocks shows validation errors in console - FIXED
+* Conditional fields feature for the custom fields for AUI style - ADDED
+* Kadence starter templates page is broken when monthly schedule option is set - FIXED
+* Caching improvements to enhance memory usage - CHANGED
+
+= 2.1.0.20 =
 * Distance to post badge don't set direction on map from ajax loaded listing - FIXED
 * Add listing page shows JS error when shortcode used with Elementor text editor - FIXED
 * Fix conflicts with select2 library with BuddyBoss theme - FIXED
@@ -6,7 +12,6 @@
 * Video shows extra padding on Divi theme - FIXED
 * Images object cache not cleared on attachment update - FIXED
 * [gd_post_meta] now supports the post link - ADDED
-* Caching improvements to enhance memory usage - CHANGED
 
 = 2.1.0.19 =
 * Hide select layout view button on non-GD layouts - FIXED

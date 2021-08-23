@@ -150,7 +150,7 @@ jQuery(function($) {
 				});
 			}
 			$('#' + chartId).closest('.gd-stats-chart').find('.gd-chart-legends').html(labels);
-			$('.gd-dash-legend').bind('click', function(e) {
+			$('.gd-dash-legend').on('click', function(e) {
 				if ($(this).hasClass('gd-morris-hidden')) {
 					$(this).removeClass('gd-morris-hidden');
 					$('#gd-morris-style', $(this)).remove();

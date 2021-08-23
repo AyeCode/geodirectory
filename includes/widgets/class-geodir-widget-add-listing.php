@@ -16,7 +16,6 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
      */
     public function __construct() {
 
-
         $options = array(
             'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
             'block-icon'    => 'admin-site',
@@ -45,8 +44,9 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
             ),
         );
 
-
         parent::__construct( $options );
+
+        add_action( 'wp_enqueue_scripts',array( $this, 'enqueue_scripts' ) );
     }
 
     /**
@@ -55,10 +55,8 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
      * @return array
      */
     public function set_arguments(){
-
         $args = array();
         $design_style = geodir_design_style();
-
 
         $args['post_type']  = array(
                 'title' => __('Default Post Type:', 'geodirectory'),
@@ -345,4 +343,27 @@ class GeoDir_Widget_Add_Listing extends WP_Super_Duper {
         return $output;
     }
 
+    /**
+     * Load conditional fields JS.
+     *
+     * @since 2.1.1.0
+     *
+     * @return mixed
+     */
+    public function enqueue_scripts() {
+        global $aui_conditional_js;
+
+        // Don't load JS again.
+        if ( empty( $aui_conditional_js ) && geodir_design_style() && class_exists( 'AyeCode_UI_Settings' ) ) {
+            $aui_settings = AyeCode_UI_Settings::instance();
+
+            if ( is_callable( array( $aui_settings, 'conditional_fields_js' ) ) ) {
+                $conditional_fields_js = $aui_settings->conditional_fields_js();
+
+                if ( ! empty( $conditional_fields_js ) ) {
+                    $aui_conditional_js = wp_add_inline_script( 'geodir-add-listing', $conditional_fields_js );
+                }
+            }
+        }
+    }
 }

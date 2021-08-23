@@ -513,7 +513,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			   var $mbox = $("#submitdiv");
 			   $("select#post_status", $mbox).append('<?php echo addslashes($status_list); ?>');
 			   <?php if ( $current_label ) { ?>$(".misc-pub-section #post-status-display", $mbox).text('<?php echo $current_label; ?>');<?php } ?>
-			   $('.save-post-status', $mbox).click(function(e) {
+			   $('.save-post-status', $mbox).on("click",function(e) {
 				   var txt = $("select#post_status option:selected", $mbox).data('save-text');
 				   if (txt) {
 					   $('#save-post', $mbox).show().val(txt);

@@ -1232,7 +1232,7 @@ add_action( 'wp_ajax_nopriv_geodir_search_form', 'geodir_search_form' );
  *
  * @since 1.6.16
  *
- * @param string $post_type WP post type or WP texonomy. Ex: gd_place.
+ * @param string $post_type WP post type or WP taxonomy. Ex: gd_place.
  * @param bool $taxonomy Whether $post_type is taxonomy or not.
  * @return bool True if review star disabled, otherwise false.
  */
@@ -1267,7 +1267,7 @@ function geodir_rating_disabled_post_types() {
  *
  * @since 1.6.16
  *
- * @param string|int $post_type WP post type or Post ID or WP texonomy. Ex: gd_place.
+ * @param string|int $post_type WP post type or Post ID or WP taxonomy. Ex: gd_place.
  * @param bool $taxonomy Whether $post_type is taxonomy or not.
  * @return bool True if review star disabled, otherwise false.
  */
@@ -1286,7 +1286,7 @@ function geodir_cpt_has_rating_disabled( $post_type = '', $taxonomy = false ) {
  *
  * @since 2.0.0
  *
- * @param string|int $post_type WP post type or Post ID or WP texonomy. Ex: gd_place.
+ * @param string|int $post_type WP post type or Post ID or WP taxonomy. Ex: gd_place.
  * @return bool True if review star disabled, otherwise false.
  */
 function geodir_cpt_has_favourite_disabled( $post_type = '') {

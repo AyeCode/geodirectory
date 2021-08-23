@@ -91,7 +91,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     window.gdMaps = window.gdMaps || gdMaps;
     
     user_address = false;
-    jQuery('#<?php echo $prefix.'street';?>').keypress(function () {
+    jQuery('#<?php echo $prefix.'street';?>').on("keypress",function () {
         user_address = true;
     });
 
@@ -800,7 +800,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             jQuery('#<?php echo $prefix.'map_notloaded';?>').show();
         }
         
-        $("#<?php echo $prefix;?>set_address_button").click(function () {
+        $("#<?php echo $prefix;?>set_address_button").on("click",function () {
             var set_on_map = true;
             geodir_codeAddress(set_on_map);
         });

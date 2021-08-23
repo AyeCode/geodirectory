@@ -21,7 +21,6 @@ jQuery(document).ready(function($) {
         var single_use = jQuery(this).data("field-single-use");
 
         if (single_use) {
-            console.log('single use');
             var is_used = false;
             jQuery('input[name^="htmlvar_name"]').each(function(i) {
                 if (jQuery(this).val() == single_use) {
@@ -106,7 +105,7 @@ jQuery(document).ready(function($) {
         }
     });
 
-	$('.geodir-cpt-cf-items .dd-item').find('input,select,textarea').on('change', function(e){
+	$(document).on('change', '.geodir-cpt-cf-items .dd-item input,.geodir-cpt-cf-items .dd-item select,.geodir-cpt-cf-items .dd-item textarea', function(e){
 		var $this = this;
 		setTimeout(function(){
 			geodir_auto_save_custom_field($this, $);
@@ -115,20 +114,8 @@ jQuery(document).ready(function($) {
 
     gd_toggle_switch_display();
     jQuery('body').on('geodir_on_save_custom_field', function(e, data) {
-		$('#setName_' + data.id).closest('.geodir-cpt-cf-items').find('.dd-item').find('input,select,textarea').on('change', function(e){
-			var $this = this;
-			setTimeout(function(){
-				geodir_auto_save_custom_field($this, $);
-			}, 250);
-		});
 	});
     jQuery('body').on('geodir_on_get_custom_field', function(e, data) {
-		$('#setName_' + data.id).closest('.geodir-cpt-cf-items').find('.dd-item').find('input,select,textarea').on('change', function(e){
-			var $this = this;
-			setTimeout(function(){
-				geodir_auto_save_custom_field($this, $);
-			}, 250);
-		});
 	});
     // init sort options
     gd_init_sort_options();
@@ -136,7 +123,9 @@ jQuery(document).ready(function($) {
     gd_init_custom_fields_sortable();
     // init tabs layout settings
     gd_init_tabs_layout();
-	
+
+	/* Conditional Fields Init */
+    geodir_field_init_conditional($);
 });
 
 function gd_data_type_changed(obj, cont) {
@@ -222,7 +211,6 @@ function gd_show_hide(id) {
 function gd_show_hide_radio(id, sh, cl) {
     setTimeout(function() {
         $show = jQuery(id).is(":checked");
-        console.log($show);
         if ($show) {
             console.log('checked');
             jQuery(id).closest('.dd-setting').find('.' + cl).show('fast');
@@ -678,4 +666,78 @@ function geodir_auto_save_custom_field(el, jQ) {
 			jQuery('[name="htmlvar_name"]', $li).prop('readonly', false);
 		}
 	});
+}
+
+/**
+ * Init conditional fields.
+ */
+function geodir_field_init_conditional($) {
+    if (!$('#geodir_conditional_fields').length) {
+        return;
+    }
+
+    $(document.body).on('click', '.geodir-conditional-add', function() {
+        geodir_field_add_condition(this);
+    });
+
+    $(document.body).on('click', '.geodir-conditional-remove', function() {
+        geodir_field_remove_condition(this);
+    });
+
+    $(document.body).on('click', '[data-setting="conditional_fields_heading"]', function() {
+        if ($(this).hasClass('geodir-con-fields-open')) {
+            $(this).removeClass('geodir-con-fields-open').addClass('geodir-con-fields-hidden');
+            $(this).closest('.dd-setting').find('#geodir_conditional_fields').hide();
+        } else {
+            $(this).removeClass('geodir-con-fields-hidden').addClass('geodir-con-fields-open');
+            $(this).closest('.dd-setting').find('#geodir_conditional_fields').show();
+        }
+    });
+}
+
+/**
+ * Add field condition.
+ */
+function geodir_field_add_condition(el) {
+    if (jQuery(el).hasClass('disabled')) {
+        return false;
+    }
+
+    var $cont = jQuery(el).closest('#geodir_conditional_fields'),
+        $items = $cont.find('.geodir-conditional-items');
+    template = $cont.find('.geodir-conditional-template').html();
+
+    jQuery(template).find('.geodir-conditional-el').val('');
+
+    $items.append(template);
+
+    geodir_field_refresh_conditions($items);
+}
+
+/**
+ * Remove field condition.
+ */
+function geodir_field_remove_condition(el) {
+    var $fields = jQuery(el).closest('#geodir_conditional_fields'),
+        $items = $fields.find('.geodir-conditional-items');;
+
+    jQuery(el).closest('.geodir-conditional-row').remove();
+
+    geodir_field_refresh_conditions($items);
+    $fields.find('.geodir-conditional-template .geodir-conditional-action').trigger('change');
+}
+
+/**
+ * Refresh conditions.
+ */
+function geodir_field_refresh_conditions($items) {
+    if ($items.find('.geodir-conditional-row').length) {
+        $items.find('.geodir-conditional-row').each(function(i) {
+            jQuery(this).attr('data-condition-index', i);
+            jQuery(this).find('.geodir-conditional-action').prop('id', 'conditional_action_' + i).prop('name', 'conditional_fields[' + i + '][action]');
+            jQuery(this).find('.geodir-conditional-field').prop('id', 'conditional_field_' + i).prop('name', 'conditional_fields[' + i + '][field]');
+            jQuery(this).find('.geodir-conditional-condition').prop('id', 'conditional_condition_' + i).prop('name', 'conditional_fields[' + i + '][condition]');
+            jQuery(this).find('.geodir-conditional-value').prop('id', 'conditional_value_' + i).prop('name', 'conditional_fields[' + i + '][value]');
+        });
+    }
 }

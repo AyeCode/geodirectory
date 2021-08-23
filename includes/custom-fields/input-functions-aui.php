@@ -40,7 +40,7 @@ function geodir_cfi_fieldset($html,$cf){
 
         ob_start(); // Start  buffering;
         ?>
-        <fieldset class="form-group" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>">
+        <fieldset class="form-group" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>"<?php echo geodir_conditional_field_attrs( $cf ); ?>>
             <h3 class="h3"><?php echo __( $cf['frontend_title'], 'geodirectory' ); ?></h3>
             <?php if ( $cf['desc'] != '' ) {
                 echo '<small class="text-muted">( ' . __( $cf['desc'], 'geodirectory' ) . ' )</small>';
@@ -131,7 +131,8 @@ function geodir_cfi_input_output($cf){
             'class'             => '',
             'value'             => $value,
             'help_text'         => __( $cf['desc'], 'geodirectory' ),
-            'extra_attributes'  => $extra_attributes
+            'extra_attributes'  => $extra_attributes,
+            'wrap_attributes'   => geodir_conditional_field_attrs( $cf )
         )
     );
 }
@@ -346,12 +347,11 @@ function geodir_cfi_radio($html,$cf){
                 'help_text'         => $help_text,
                 'class'             => '',
                 'value'             => $value,
-                'options'           => $option_values
+                'options'           => $option_values,
+                'wrap_attributes'   => geodir_conditional_field_attrs( $cf )
             )
         );
-
     }
-
 
     return $html;
 }
@@ -452,7 +452,8 @@ function geodir_cfi_checkbox($html,$cf){
                 'checked'          => $checked,
                 'help_text'        => $help_text,
                 'extra_attributes' => $extra_attributes,
-                'validation_text'  => $validation_text
+                'validation_text'  => $validation_text,
+                'wrap_attributes'  => geodir_conditional_field_attrs( $cf )
             )
         );
 
@@ -554,7 +555,8 @@ function geodir_cfi_textarea($html,$cf){
             'wysiwyg'   => $wysiwyg ? array('quicktags' => true) : false,
             'allow_tags' => $allow_tags,
             'help_text'        => $help_text,
-            'extra_attributes' => $extra_attributes
+            'extra_attributes' => $extra_attributes,
+            'wrap_attributes' => geodir_conditional_field_attrs( $cf )
         ));
     }
 
@@ -640,7 +642,8 @@ function geodir_cfi_select($html,$cf){
             'extra_attributes' => $extra_attributes,
             'options'          => geodir_string_values_to_options($cf['option_values'], true),
             'select2'       => true,
-            'data-allow-clear' => true
+            'data-allow-clear' => true,
+            'wrap_attributes' => geodir_conditional_field_attrs( $cf )
         ) );
 
     }
@@ -741,7 +744,8 @@ function geodir_cfi_multiselect( $html, $cf ) {
 				'options'            => geodir_string_values_to_options( $cf['option_values'], true ),
 				'select2'            => true,
 				'multiple'           => true,
-				'data-allow-clear'   => false
+				'data-allow-clear'   => false,
+				'wrap_attributes'    => geodir_conditional_field_attrs( $cf )
 			) );
 		} elseif ( $multi_display == 'radiox' ) {
 			$option_values_deep = geodir_string_to_options( $cf['option_values'], true );
@@ -764,14 +768,15 @@ function geodir_cfi_multiselect( $html, $cf ) {
 					'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
 					'class'             => '',
 					'value'             => $value,
-					'options'           => $option_values
+					'options'           => $option_values,
+					'wrap_attributes'   => geodir_conditional_field_attrs( $cf )
 				)
 			);
 		} else {
 			$horizontal = true;
 			ob_start();
 			?>
-			<div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row ">
+			<div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row"<?php echo geodir_conditional_field_attrs( $cf ); ?><?php echo geodir_conditional_field_attrs( $cf ); ?>>
 				<label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
 					<?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
 					echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
@@ -956,6 +961,7 @@ function geodir_cfi_html($html,$cf){
             'wysiwyg'   => array('quicktags' => true),
             'help_text'        => $help_text,
             'extra_attributes' => $extra_attributes,
+            'wrap_attributes'  => geodir_conditional_field_attrs( $cf )
         ));
 
     }
@@ -1058,7 +1064,8 @@ function geodir_cfi_datepicker($html,$cf){
                 'class'             => '',
                 'value'             => $value, // esc_attr(stripslashes($value))
                 'help_text'         => __($cf['desc'], 'geodirectory'),
-                'extra_attributes'  => $extra_attributes
+                'extra_attributes'  => $extra_attributes,
+                'wrap_attributes'   => geodir_conditional_field_attrs( $cf )
             )
         );
 
@@ -1143,7 +1150,8 @@ function geodir_cfi_time($html,$cf){
                 'class'             => '',
                 'value'             => $value, // esc_attr(stripslashes($value))
                 'help_text'         => __($cf['desc'], 'geodirectory'),
-                'extra_attributes'  => $extra_attributes
+                'extra_attributes'  => $extra_attributes,
+                'wrap_attributes'   => geodir_conditional_field_attrs( $cf )
             )
         );
     }
@@ -1317,6 +1325,7 @@ function geodir_cfi_address( $html, $cf ) {
                 'help_text'         => __($cf['desc'], 'geodirectory'),
                 'input_group_right' => $locate_me ? '<div class="gd-locate-me-btn input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'use my location', 'geodirectory' ) . '"><i class="fas fa-location-arrow"></i></div>' : '',
                 'extra_attributes'  => $extra_attributes,
+                'wrap_attributes'   => geodir_conditional_field_attrs( $cf, 'street', 'text' )
             )
         );
 
@@ -1340,6 +1349,7 @@ function geodir_cfi_address( $html, $cf ) {
                     'value'             => esc_attr(stripslashes($street2)),
                     'help_text'         => sprintf( __('Please enter listing %s', 'geodirectory'), __($street2_title, 'geodirectory') ),
                     'extra_attributes'  => $extra_attributes,
+                    'wrap_attributes'   => geodir_conditional_field_attrs( $cf, 'street2', 'text' )
                 )
             );
         }
@@ -1373,13 +1383,14 @@ function geodir_cfi_address( $html, $cf ) {
                     'value'             => esc_attr( stripslashes( $zip ) ),
                     'help_text'         => wp_sprintf( __( 'Please enter listing %s', 'geodirectory' ), __( $zip_title, 'geodirectory' ) ),
                     'extra_attributes'  => $extra_attributes,
+                    'wrap_attributes'   => geodir_conditional_field_attrs( $cf, 'zip', 'text' )
                 )
             );
         } ?>
 
         <?php  if (isset($extra_fields['show_map']) && $extra_fields['show_map']) { ?>
 
-            <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details">
+            <div id="geodir_<?php echo $prefix . 'map'; ?>_row" class="geodir_form_row clearfix gd-fieldset-details"<?php echo geodir_conditional_field_attrs( $cf, 'map', 'fieldset' ); ?>>
                 <?php
                 if ( geodir_core_multi_city() ) {
                     add_filter( 'geodir_add_listing_map_restrict', '__return_false' );
@@ -1430,6 +1441,7 @@ function geodir_cfi_address( $html, $cf ) {
                     'help_text'         => __( 'Please enter latitude for google map perfection. eg. : <b>39.955823048131286</b>', 'geodirectory' ),
                     'extra_attributes'  => $extra_attributes,
                     'wrap_class'        => $wrap_class,
+                    'wrap_attributes'   => geodir_conditional_field_attrs( $cf, 'latitude' )
                 )
             );
 
@@ -1460,6 +1472,7 @@ function geodir_cfi_address( $html, $cf ) {
                     'help_text'         => __( 'Please enter longitude for google map perfection. eg. : <b>-75.14408111572266</b>', 'geodirectory' ),
                     'extra_attributes'  => $extra_attributes,
                     'wrap_class'        => $wrap_class,
+                    'wrap_attributes'   => geodir_conditional_field_attrs( $cf, 'longitude' )
                 )
             );
         } ?>
@@ -1489,16 +1502,15 @@ function geodir_cfi_address( $html, $cf ) {
                         'SATELLITE'=>__('Satellite Map', 'geodirectory'),
                         'HYBRID'=>__('Hybrid Map', 'geodirectory'),
                         'TERRAIN'=>__('Terrain Map', 'geodirectory'),
-                    )
+                    ),
+                    'wrap_attributes'   => geodir_conditional_field_attrs( $cf, 'mapview', 'select' )
                 )
             );
 
         }?>
 
-        <?php if (isset($post_mapzoom)) { ?>
-            <input type="hidden" value="<?php if (isset($post_mapzoom)) {
-                echo esc_attr($post_mapzoom);
-            } ?>" name="<?php echo 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/>
+        <?php if ( isset( $post_mapzoom ) ) { ?>
+            <div data-argument="<?php echo $prefix . 'mapzoom'; ?>" class="form-group row d-none"<?php echo geodir_conditional_field_attrs( $cf, 'mapzoom', 'hidden' ); ?>><input type="hidden" value="<?php echo esc_attr( $post_mapzoom ); ?>" name="<?php echo 'mapzoom'; ?>" id="<?php echo $prefix . 'mapzoom'; ?>"/></div>
         <?php }
 
         $html = ob_get_clean();
@@ -1708,7 +1720,7 @@ function geodir_cfi_categories($html,$cf){
         } ?>
 
         <div id="<?php echo $taxonomy;?>_row"
-             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>" >
+             class="<?php echo esc_attr( $cf['css_class'] ); ?> <?php if ($is_required) echo 'required_field';?> form-group <?php echo $horizontal ? ' row' : '';?>"  data-argument="<?php echo esc_attr($taxonomy);?>"<?php echo geodir_conditional_field_attrs( $cf ); ?>>
             <label for="cat_limit" class=" <?php echo $horizontal ? ' col-sm-2 col-form-label' : ''; echo $geodir_label_type == 'hidden' || $geodir_label_type=='floating' ? ' sr-only ' : '';?>">
                 <?php $frontend_title = __($frontend_title, 'geodirectory');
                 echo (trim($frontend_title)) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
@@ -1986,7 +1998,8 @@ function geodir_cfi_tags( $html, $cf ) {
             'options'            => $options, //geodir_string_values_to_options($cf['option_values'], true),
             'select2'            => true,
             'data-allow-clear'   => false,
-            'style'              => 'width:100%;height:inherit;'
+            'style'              => 'width:100%;height:inherit;',
+            'wrap_attributes'    => geodir_conditional_field_attrs( $cf )
         ) );
 
     }
@@ -2049,7 +2062,7 @@ function geodir_cfi_business_hours( $html, $cf ) {
         ob_start();
         ?>
         <script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
-        <div id="<?php echo $name;?>_row" class="gd-bh-row form-group row">
+        <div id="<?php echo $name;?>_row" class="gd-bh-row form-group row"<?php echo geodir_conditional_field_attrs( $cf, $htmlvar_name, 'hidden' ); ?>>
             <label for="<?php echo $htmlvar_name; ?>_f_active_1" class="<?php echo ( $horizontal ? ' pt-0 col-sm-2 col-form-label' : '' ); ?>"><?php echo $label; ?></label>
             <div class="gd-bh-field<?php echo ( $horizontal ? ' col-sm-10' : '' ); ?>" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
                 <?php echo aui()->radio(
@@ -2066,7 +2079,8 @@ function geodir_cfi_business_hours( $html, $cf ) {
                             '0' => __( 'No','geodirectory' )
                         ),
                         'extra_attributes' => array(
-                            'data-field' => 'active'
+                            'data-field' => 'active',
+                            'data-no-rule' => 1
                         )
                     )
                 );
@@ -2242,7 +2256,7 @@ function geodir_cfi_files( $html, $cf ) {
             $admin_only = geodir_cfi_admin_only($cf);
             ?>
 
-            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row ">
+            <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row"<?php echo geodir_conditional_field_attrs( $cf, $cf['name'], 'hidden' ); ?>>
 
 
                 <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">

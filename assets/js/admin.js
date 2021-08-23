@@ -6,7 +6,7 @@ jQuery(window).on("load",function() {
     gd_init_tooltips();
 
     // rating click
-    jQuery( 'a.gd-rating-link' ).click( function() {
+    jQuery( 'a.gd-rating-link' ).on("click", function() {
         jQuery.post( ajaxurl, { action: 'geodirectory_rated' } );
         jQuery( this ).parent().text( jQuery( this ).data( 'rated' ) );
     });
@@ -107,7 +107,7 @@ jQuery(window).on("load",function() {
 	// Tick all addons option if core uninstall ticked
 	var $coreUn = jQuery('.geodirectory_page_gd-settings input[name="admin_uninstall"]');
 	if ($coreUn.length) {
-		$coreUn.click(function() {
+		$coreUn.on("click",function() {
 			geodir_handle_uninstall_option(jQuery(this));
 		});
 		if ($coreUn.is(':checked')) {
@@ -332,7 +332,7 @@ function gd_init_tooltips(){
 
 /* Check Uncheck All Related Options Start*/
 jQuery(document).ready(function() {
-    jQuery('#geodir_add_location_url').click(function() {
+    jQuery('#geodir_add_location_url').on("click",function() {
         if (jQuery(this).is(':checked')) {
             jQuery(this).closest('td').find('input').attr('checked', true).not(this).prop('disabled', false);
         } else {
@@ -363,7 +363,7 @@ jQuery(document).ready(function() {
         }
     }
 
-    jQuery('#location_save').click(function() {
+    jQuery('#location_save').on("click",function() {
         var is_validate = true;
 
         jQuery(this).closest('form').find('.required:visible').each(function() {
@@ -381,11 +381,11 @@ jQuery(document).ready(function() {
         location_validation(jQuery(this));
     });
 
-    jQuery('.default_location_form').find(".required:visible").find('select').change(function() {
+    jQuery('.default_location_form').find(".required:visible").find('select').on("change", function() {
         location_validation(jQuery(this));
     });
 
-    jQuery('.gd-cats-display-checkbox input[type="checkbox"]').click(function() {
+    jQuery('.gd-cats-display-checkbox input[type="checkbox"]').on("click",function() {
         var isChecked = jQuery(this).is(':checked');
 
         if (!isChecked) {
@@ -419,7 +419,7 @@ jQuery(document).ready(function() {
 // Diagnosis related js starts here
 /* Check Uncheck All Related Options Start*/
 jQuery(document).ready(function() {
-    jQuery('.geodir_diagnosis_button').click(function(e) {
+    jQuery('.geodir_diagnosis_button').on("click",function(e) {
         e.preventDefault();
         var diagnose = (jQuery(this).data('diagnose'));
         var step_process = (jQuery(this).data('step'));
@@ -502,7 +502,7 @@ function gd_process_diagnose_step(step, ptype, diagnose, result_container) {
 }
 
 function geodir_enable_fix_buttons() {
-    jQuery('.geodir_fix_diagnostic_issue').click(function() {
+    jQuery('.geodir_fix_diagnostic_issue').on("click",function() {
         var diagnose = (jQuery(this).data('diagnostic-issue'))
         var result_container = jQuery(this).parents('td').find("div")
 
@@ -542,7 +542,7 @@ function gd_progressbar(el, value, label) {
 jQuery(document).ready(function($) {
 
     jQuery('#geodir_location_prefix').attr('disabled', 'disabled');
-    jQuery('.button-primary').click(function() {
+    jQuery('.button-primary').on("click",function() {
         var error = false;
         var characterReg = /^\s*[a-zA-Z0-9,\s]+\s*$/;
         var listing_prefix = jQuery('#geodir_listing_prefix').val();
@@ -569,7 +569,7 @@ jQuery(document).ready(function($) {
         }
     });
 
-    jQuery('.map_post_type').click(function() {
+    jQuery('.map_post_type').on("click",function() {
         var divshow = jQuery(this).val();
 
         if (jQuery(this).is(':checked')) {
@@ -1077,7 +1077,7 @@ window.gdMaps = window.gdMaps || gdMaps;
 
 
 function init_advanced_settings(){
-    jQuery( ".gd-advanced-toggle" ).off("click").click(function() {
+    jQuery( ".gd-advanced-toggle" ).off("click").on("click",function() {
         jQuery(".gd-advanced-toggle").toggleClass("gda-hide");
         console.log('toggle');
         jQuery(".gd-advanced-setting, #default_location_set_address_button").toggleClass("gda-show");
@@ -1142,7 +1142,7 @@ function gd_recommended_buy_popup($this,$slug,$nonce,$item_id){
     if($licenced && !$single_licence){
         $lightbox = lity('#gd-recommended-buy');
 
-        jQuery(".gd-recommended-buy-button").unbind('click').click(function(){
+        jQuery(".gd-recommended-buy-button").off('click').on("click",function(){
             $licence =  jQuery(".gd-recommended-buy-key").val();
             if($licenced && $licence==''){
                 alert("Please enter a key");
@@ -1234,7 +1234,7 @@ function gd_set_button_installing($this){
 }
 
 function gd_settings_validation(){
-    jQuery("#mainform").submit(function(e){
+    jQuery("#mainform").on("submit",function(e){
         $error = '';
 
         if(jQuery('#page_location').length){
@@ -1307,7 +1307,7 @@ function geodir_seconds_to_hm(value) {
 }
 
 function geodir_init_helper_tags(){
-    jQuery(".geodir-helper-tags li").click(function(event){
+    jQuery(".geodir-helper-tags li").on("click",function(event){
 
 
 
@@ -1361,7 +1361,7 @@ function geodir_admin_init_rating_input(){
             $original_percent = $original_rating / $total * 100;
             $rating_set = false;
 
-            jQuery(this).hover(
+            jQuery(this).on("hover",
                 function () {
                     $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
                     $original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();
@@ -1388,7 +1388,7 @@ function geodir_admin_init_rating_input(){
                 }
             );
 
-            jQuery(this).click(function () {
+            jQuery(this).on("click",function () {
                 $original_percent = $percent;
                 $original_rating = $rating;
                 jQuery(this).closest('.gd-rating-input').find('input').val($rating);

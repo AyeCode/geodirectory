@@ -362,7 +362,8 @@ class GeoDir_Location {
 				'extra_attributes' => array(
 					'data-address-type' => 'country',
 					'field_type'        => $field['type']
-				)
+				),
+				'wrap_attributes' => geodir_conditional_field_attrs( $field, 'country', 'select' )
 			) );
 
 			// Region
@@ -381,7 +382,8 @@ class GeoDir_Location {
 					'data-address-type' => 'region',
 					'field_type'        => 'text',
 					'data-tags'         => "false"
-				)
+				),
+				'wrap_attributes' => geodir_conditional_field_attrs( $field, 'region', 'select' )
 			) );
 
 			// City
@@ -400,7 +402,8 @@ class GeoDir_Location {
 					'data-address-type' => 'city',
 					'field_type'        => 'text',
 					'data-tags'         => "false"
-				)
+				),
+				'wrap_attributes' => geodir_conditional_field_attrs( $field, 'city', 'select' )
 			) );
 		} else {
 			?>

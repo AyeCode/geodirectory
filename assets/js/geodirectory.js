@@ -94,7 +94,7 @@ function geodir_init_lazy_load(gdQuery) {
     }, '#geodir_content');
 
     // fire when the image tab is clicked on details page
-    jQuery('#gd-tabs').click(function() {
+    jQuery('#gd-tabs').on("click",function() {
         setTimeout(function() {
             jQuery(window).trigger("lookup");
         }, 100);
@@ -177,7 +177,7 @@ jQuery(function($) {
         }, 60000);
         geodir_refresh_business_hours();
     }
-    $('body').bind('geodir_map_infowindow_open', function(e, data) {
+    $('body').on('geodir_map_infowindow_open', function(e, data) {
         /* Render business hours */
         if (data.content && $(data.content).find('.gd-bh-show-field').length) {
             geodir_refresh_business_hours();
@@ -371,7 +371,7 @@ jQuery(document).ready(function($) {
     geodir_init_flexslider();
 
     //toggle detail page tabs mobile menu
-    jQuery('#geodir-tab-mobile-menu').click(function() {
+    jQuery('#geodir-tab-mobile-menu').on("click",function() {
         jQuery('#gd-tabs .geodir-tab-head').toggle();
     });
 
@@ -379,7 +379,7 @@ jQuery(document).ready(function($) {
         maxWidth: 200
     }) : null;
 
-    jQuery('.gd-cats-display-checkbox input[type="checkbox"]').click(function() {
+    jQuery('.gd-cats-display-checkbox input[type="checkbox"]').on("click",function() {
         var isChecked = jQuery(this).is(':checked');
         if (!isChecked) {
             var chkVal = jQuery(this).val();
@@ -387,7 +387,7 @@ jQuery(document).ready(function($) {
         }
     });
 
-    jQuery('.geodir-delete').click(function() {
+    jQuery('.geodir-delete').on("click",function() {
         var message = geodir_params.my_place_listing_del;
 
         if (jQuery(this).closest('.geodir-gridview').hasClass('gdp-franchise-m') || jQuery(this).closest('.geodir-listview').hasClass('gdp-franchise-m')) {
@@ -401,11 +401,11 @@ jQuery(document).ready(function($) {
         }
     });
 
-    jQuery('.gd-category-dd').hover(function() {
+    jQuery('.gd-category-dd').on("hover",function() {
         jQuery('.gd-category-dd ul').show();
     });
 
-    jQuery('.gd-category-dd ul li a').click(function(ele) {
+    jQuery('.gd-category-dd ul li a').on("click",function(ele) {
         jQuery('.gd-category-dd').find('input').val(jQuery(this).attr('data-slug'));
         jQuery('.gd-category-dd > a').html(jQuery(this).attr('data-name'));
         jQuery('.gd-category-dd ul').hide();
@@ -524,7 +524,7 @@ jQuery(window).on("load", function() {
     jQuery('dl.geodir-tab-head').each(function() {
         //Get all tabs
         var tabs = jQuery(this).children('dd');
-        tabs.click(function(e) {
+        tabs.on("click",function(e) {
             if (jQuery(this).find('a').attr('data-status') == 'enable') {
                 activateTab(jQuery(this));
             }
@@ -535,7 +535,7 @@ jQuery(window).on("load", function() {
         activateTab(jQuery('a[data-tab="' + window.location.hash + '"]').parent());
     }
 
-    jQuery('.gd-tabs .gd-tab-next').click(function(ele) {
+    jQuery('.gd-tabs .gd-tab-next').on("click",function(ele) {
         var is_validate = true;
 
         if (is_validate) {
@@ -550,7 +550,7 @@ jQuery(window).on("load", function() {
         }
     });
 
-    jQuery('#gd-login-options input').change(function() {
+    jQuery('#gd-login-options input').on("change",function() {
         jQuery('.gd-login_submit').toggle();
     });
 
@@ -588,7 +588,7 @@ function autofill_click(ele) {
 };
 
 jQuery(document).ready(function() {
-    jQuery('input[type=text]').keyup(function() {
+    jQuery('input[type=text]').on("keyup",function() {
         var input_field = jQuery(this);
         if (input_field.attr('data-type') == 'autofill' && input_field.attr('data-fill') != '') {
             var data_fill = input_field.attr('data-fill');
@@ -608,11 +608,11 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery('input[type=text]').parent().mouseleave(function() {
+    jQuery('input[type=text]').parent().on("mouseleave",function() {
         jQuery(this).find('.gd-autofill-dl').remove();
     });
 
-    jQuery(".gd-trigger").click(function() {
+    jQuery(".gd-trigger").on("click",function() {
         jQuery(this).toggleClass("active").next().slideToggle("slow");
         var aD = jQuery(this).toggleClass("active").next().hasClass('map_category') ? true : false;
         if (jQuery(".gd-trigger").hasClass("gd-triggeroff")) {
@@ -636,7 +636,7 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery(".trigger_sticky").click(function() {
+    jQuery(".trigger_sticky").on("click",function() {
         var effect = 'slide';
         var options = {
             direction: 'right'
@@ -676,7 +676,7 @@ jQuery(document).ready(function() {
     var gd_modal = "undefined" != typeof geodir_params.gd_modal && 1 == parseInt(geodir_params.gd_modal) ? false : true;
 
     /* Show Hide Rating for reply */
-    jQuery('.gd_comment_replaylink a').bind('click', function() {
+    jQuery('.gd_comment_replaylink a').on('click', function() {
         jQuery('#commentform #err_no_rating').remove();
         jQuery('#commentform .gd_rating').hide();
         jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').hide();
@@ -685,7 +685,7 @@ jQuery(document).ready(function() {
         jQuery('#respond .comment-form-comment label').html(geodir_params.gd_cmt_btn_reply_text);
     });
 
-    jQuery('.gd-cancel-replaylink a').bind('click', function() {
+    jQuery('.gd-cancel-replaylink a').on('click', function() {
         jQuery('#commentform #err_no_rating').remove();
         jQuery('#commentform .gd_rating').show();
         jQuery('#commentform .br-wrapper.br-theme-fontawesome-stars').show();
@@ -706,7 +706,7 @@ jQuery(document).ready(function() {
         }
 
         if (!geodir_params.multirating) {
-            $frm_obj.find('input[name="submit"]').click(function(e) {
+            $frm_obj.find('input[name="submit"]').on("click",function(e) {
                 $frm_obj.find('#err_no_rating').remove();
 
                 // skip rating stars validation if rating stars disabled
@@ -791,7 +791,7 @@ jQuery(window).on("load", function() {
     });
 });
 
-jQuery(window).resize(function() {
+jQuery(window).on("resize",function() {
     geodir_resize_rating_stars(true);
 });
 
@@ -887,7 +887,7 @@ function geodir_setup_search_form() {
     }
 
     setTimeout(function() {
-        jQuery('.search_by_post').change(function() {
+        jQuery('.search_by_post').on("change",function() {
             gd_s_post_type = jQuery(this).val();
 
             geodir_load_search_form(gd_s_post_type, this);
@@ -955,7 +955,7 @@ function geodir_search_wait(on) {
 function geodir_click_search($this) {
     //we delay this so other functions have a change to change setting before search
     setTimeout(function() {
-        jQuery($this).parent().find('.geodir_submit_search').click();
+        jQuery($this).parent().find('.geodir_submit_search').trigger("click");
     }, 100);
 }
 
@@ -1118,7 +1118,7 @@ function geodir_refresh_business_hour($this) {
             $d.addClass('gd-bh-days-close');
         }
         if (times) {
-            times = jQuery.unique(times);
+            times = jQuery.uniqueSort(times);
         }
         jQuery('.gd-bh-today-range', $this).html(times.join(', '));
     }
@@ -1165,7 +1165,7 @@ function init_read_more() {
         }
     });
 
-    jQuery(".gd-read-more-wrap .gd-read-more-button").click(function() {
+    jQuery(".gd-read-more-wrap .gd-read-more-button").on("click",function() {
 
         totalHeight = 0;
 
@@ -1485,7 +1485,7 @@ function gd_init_rating_input() {
             $original_percent = $original_rating / $total * 100;
             $rating_set = false;
 
-            jQuery(this).hover(
+            jQuery(this).on("hover",
                 function() {
                     $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
                     $original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();
@@ -1512,7 +1512,7 @@ function gd_init_rating_input() {
                 }
             );
 
-            jQuery(this).click(function() {
+            jQuery(this).on("click",function() {
                 $original_percent = $percent;
                 $original_rating = $rating;
                 jQuery(this).closest('.gd-rating-input').find('input').val($rating);
@@ -1531,7 +1531,7 @@ function gd_init_rating_input() {
 function geodir_animate_markers() {
     if (typeof(animate_marker) == 'function') {
         var groupTab = jQuery("ul.geodir-category-list-view").children("li");
-        groupTab.hover(function() {
+        groupTab.on("hover",function() {
             animate_marker('listing_map_canvas', String(jQuery(this).data("post-id")));
         }, function() {
             stop_marker_animation('listing_map_canvas', String(jQuery(this).data("post-id")));
@@ -1540,7 +1540,7 @@ function geodir_animate_markers() {
         // maybe elementor animate
         if (jQuery('body.archive .elementor-widget-archive-posts').length) {
             var ePosts = jQuery("body.archive .elementor-widget-archive-posts .elementor-posts").children(".elementor-post");
-            ePosts.hover(function() {
+            ePosts.on("hover",function() {
                 $post_id = jQuery(this).attr('class').match(/post-\d+/)[0].replace("post-", "");
                 animate_marker('listing_map_canvas', String($post_id));
             }, function() {

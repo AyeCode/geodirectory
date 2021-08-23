@@ -204,6 +204,9 @@ class GeoDir_Admin {
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-assets.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-api-keys.php' );
 		include_once( dirname( __FILE__ ) . '/class-geodir-admin-blocks.php' );
+		if ( geodir_design_style() ) {
+			include_once( dirname( __FILE__ ) . '/class-geodir-admin-conditional-fields.php' );
+		}
 
 		// Help Tabs
 		if ( apply_filters( 'geodir_enable_admin_help_tab', true ) ) {

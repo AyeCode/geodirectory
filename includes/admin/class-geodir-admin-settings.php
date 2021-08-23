@@ -969,7 +969,7 @@ class GeoDir_Admin_Settings {
 					<script>
 						//jQuery('.gd-advanced-toggle')
 
-						jQuery( ".gd-advanced-toggle" ).click(function() {
+						jQuery( ".gd-advanced-toggle" ).on("click",function() {
 							///jQuery( "#default_location_set_address_button" ).toggle();
 						});
 					</script>
