@@ -853,3 +853,36 @@ function geodir_cpt_generate_title_keywords( $post_type, $force = false ) {
 
 	return $generated;
 }
+
+/**
+ * Get the show in locations.
+ * 
+ * @param string $field
+ * @param string $field_type
+ *
+ * @return mixed|void
+ */
+function geodir_show_in_locations($field = '', $field_type=''){
+
+    /*
+	 * We wrap the key values in [] so we can search the DB easier with a LIKE query.
+	 */
+    $show_in_locations = array(
+        "[detail]"    => __( "Details page sidebar", 'geodirectory' ),
+        //"[moreinfo]"  => __( "More info tab", 'geodirectory' ),
+        "[listing]"   => __( "Listings page", 'geodirectory' ),
+        //"[owntab]"    => __( "Details page own tab", 'geodirectory' ),
+        "[mapbubble]" => __( "Map bubble", 'geodirectory' ),
+    );
+
+    /**
+     * Filter the locations array for where to display custom fields.
+     *
+     * @since 1.6.6
+     *
+     * @param array $show_in_locations The array of locations and descriptions.
+     * @param object $field The field being displayed info.
+     * @param string $field The type of field.
+     */
+    return apply_filters( 'geodir_show_in_locations', $show_in_locations, $field, $field_type );
+}

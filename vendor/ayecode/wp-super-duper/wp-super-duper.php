@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.26";
+		public $version = "1.0.27";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;

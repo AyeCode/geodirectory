@@ -1069,35 +1069,6 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'args'  =>  $args
 			));
 			
-//			$depth
-//			$cpt_row .= $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
-//			$cpt_row .= $depth ? '' : '<div class="card-body text-center btn btn-outline-primary p-1 py-4">';
-//			$count = !$hide_count ? ' <span class="gd-cptcat-count badge badge-light ml-2">' . $cat_count . '</span>' : '';
-//
-//			$icon = '';
-//			if(!$hide_icon){
-//				$icon_size_class = isset($args['icon_size']) ? sanitize_html_class($args['icon_size']) : 'h1';
-//				if($icon_size_class=='box-large'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconlarge';}
-//				if($icon_size_class=='box-medium'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconmedium';}
-//				if($icon_size_class=='box-small'){$icon_size_class = 'iconbox fill rounded-circle bg-white iconsmall';}
-//				$icon_size_class .= $args['icon_position'] == 'top' ? ' mb-3 ' : ' d-inline-block mr-1 align-middle';
-//				$img_class = $depth ? ' d-inline-block iconsmall mr-1' : $icon_size_class;
-//				$icon .= '<div class="gd-cptcat-cat-left  text-whitex border-0 m-0 '.$img_class.'" >';
-//				$icon .= "<span class='gd-cptcat-icon' style='color: $cat_color;'>$cat_icon</span>";
-//				$icon .= '</div>';
-//			}
-//
-//			if(!$depth && $args['icon_position'] != 'left'){$cpt_row .= $icon;}
-//
-//			$indents = $depth > 2 ? implode("", array_fill( 0,$depth - 2, "- " ) ) : '';
-//
-//			$link_class = $depth ? 'h6' : 'font-weight-bold h5';
-//			$cpt_row .= '<div class="gd-cptcat-cat-right   text-uppercase text-truncate">';
-//			$cpt_row .= '<a href="' . esc_url($term_link) . '" title="' . esc_attr($cat_name) . '" class="text-lightx text-reset stretched-link   '.$link_class.'">';
-//			$cpt_row .= $indents;
-//			$cpt_row .= $args['icon_position'] == 'left' ? $icon : '';
-//			$cpt_row .= $cat_name  . '</a>'. $count;
-//			$cpt_row .= $depth  ? '</div></div>' : '</div>';
 		}else{
 			$cpt_row .= '<li class="gd-cptcat-li '.$li_class.'">';
 			$count = !$hide_count ? ' <span class="gd-cptcat-count">' . $cat_count . '</span>' : '';

@@ -2,6 +2,8 @@
 * GD Categories & search blocks shows validation errors in console - FIXED
 * Conditional fields feature for the custom fields for AUI style - ADDED
 * Kadence starter templates page is broken when monthly schedule option is set - FIXED
+* Caching improvements to enhance memory usage - CHANGED
+* Fix conflicts with select2 library with BuddyBoss theme - FIXED
 
 = 2.1.0.20 =
 * Distance to post badge don't set direction on map from ajax loaded listing - FIXED

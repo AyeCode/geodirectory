@@ -386,7 +386,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						echo geodir_help_tip( __( 'Select in what locations you want to display this field.', 'geodirectory' ));
 						_e( 'Show in extra output location', 'geodirectory' );
 
-						$show_in_locations = GeoDir_Settings_Cpt_Cf::show_in_locations($field, $field->field_type );
+						$show_in_locations = geodir_show_in_locations($field, $field->field_type );
 
 						// remove some locations for some field types
 

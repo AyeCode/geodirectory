@@ -550,20 +550,22 @@ function geodir_column_exist( $db, $column ) {
  * @since 2.1.1.0 Conditionally load widget code on the backend to reduce memory usage.
  */
 function goedir_register_widgets() {
-	global $pagenow;
-
+	
 	if ( get_option( 'geodirectory_version' ) ) {
-		$block_widget_init_screens = function_exists( 'sd_pagenow_exclude' ) ? sd_pagenow_exclude() : array();
+		global $pagenow;
 
-		if ( is_admin() && $pagenow && in_array( $pagenow, $block_widget_init_screens ) ) {
-			// Don't initiate in these conditions.
-		} else {
-			$exclude = function_exists( 'sd_widget_exclude' ) ? sd_widget_exclude() : array();
+		$block_widget_init_screens = function_exists('sd_pagenow_exclude') ? sd_pagenow_exclude() : array();
+
+		if ( is_admin() && $pagenow && in_array($pagenow, $block_widget_init_screens)) {
+			// don't initiate in these conditions.
+		}else{
+			
+			$exclude = function_exists('sd_widget_exclude') ? sd_widget_exclude() : array();
 			$widgets = geodir_get_widgets();
 			
-			if ( ! empty( $widgets ) ) {
+			if( !empty($widgets) ){
 				foreach ( $widgets as $widget ) {
-					if ( ! in_array( $widget, $exclude ) ) {
+					if(!in_array($widget,$exclude)){
 						register_widget( $widget );
 					}
 				}
@@ -571,6 +573,7 @@ function goedir_register_widgets() {
 
 			// Depreciated
 			new GeoDir_Widget_Single_Closed_Text();
+
 		}
 	}
 }
@@ -581,10 +584,10 @@ add_action( 'widgets_init', 'goedir_register_widgets' );
  * Get a list of available widgets.
  *
  * @since 2.1.1.0
- *
- * @return array GD widgets list.
+ * @return mixed|void
  */
-function geodir_get_widgets() {
+function geodir_get_widgets(){
+	
 	$widgets = array(
 		'GeoDir_Widget_Search',
 		'GeoDir_Widget_Best_Of',
@@ -627,15 +630,8 @@ function geodir_get_widgets() {
 	if ( class_exists( 'Ninja_Forms' ) && class_exists( 'NF_Abstracts_MergeTags' ) ) {
 		$widgets[] = 'GeoDir_Widget_Ninja_Forms';
 	}
-
-	/**
-	 * Filter the list of available widgets.
-	 *
-	 * @since 2.1.1.0
-	 *
-	 * @param array $widgets The list of available widgets.
-	 */
-	return apply_filters( 'geodir_get_widgets', $widgets );
+	
+	return apply_filters('geodir_get_widgets', $widgets );
 }
 
 /**
