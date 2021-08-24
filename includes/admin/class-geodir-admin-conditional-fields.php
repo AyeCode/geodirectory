@@ -34,6 +34,7 @@ class GeoDir_Admin_Conditional_Fields {
 	public function __construct() {
 		add_action( 'geodir_cfa_before_save', array( $this, 'conditional_fields_setting' ), 1, 3 );
 		add_filter( 'geodir_cpt_cf_sanatize_custom_field', array( $this, 'save_conditional_fields' ), 11, 2 );
+		add_filter( 'geodir_cf_show_conditional_fields_setting_desc', array( $this, 'show_extra_description' ), 11, 3 );
 	}
 
 	/**
@@ -74,6 +75,18 @@ class GeoDir_Admin_Conditional_Fields {
 		<h3 class="geodir-con-fields-hidden" data-setting="conditional_fields_heading"><a href="javascript:void(0)"><span class="geodir-show-cf"><i class="fas fa-plus" aria-hidden="true"></i></span><span class="geodir-hide-cf"><i class="fas fa-minus" aria-hidden="true"></i></span> <?php _e( 'Conditional Fields', 'geodirectory' ); ?></a></h3>
 		<div class="gd-advanced-setting" data-setting="conditional_fields" id="geodir_conditional_fields">
 			<p data-setting="conditional_fields_desc"><?php _e( 'Setup conditional logic to show/hide this field in the listing form based on specific fields value or conditions.', 'geodirectory' ); ?></p>
+			<?php 
+			/**
+			 * Show conditional field extra message.
+			 *
+			 * @since 2.1.1.0
+			 *
+			 * @param string $post_type Current post type.
+			 * @param object $field Current field object.
+			 * @param array  $data Current field data.
+			 */
+			do_action( 'geodir_cf_show_conditional_fields_setting_desc', $post_type, $field, $data );
+			?>
 			<div class="geodir-conditional-template">
 				<div class="geodir-conditional-row" data-condition-index="TEMP">
 					<?php 
@@ -343,6 +356,22 @@ class GeoDir_Admin_Conditional_Fields {
 		}
 
 		return $field_data;
+	}
+
+	/**
+	 * Show conditional field extra message.
+	 *
+	 * @since 2.1.1.0
+	 *
+	 * @param string $post_type Current post type.
+	 * @param object $field Current field object.
+	 * @param array  $data Current field data.
+	 * @return mixed
+	 */
+	public function show_extra_description( $post_type, $field, $data ) {
+		if ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, array( 'post_title', 'post_content', 'post_category' ) ) ) {
+			?><p data-setting="conditional_fields_extra_desc"><?php _e( 'Please be aware that the form will not submit if this field is hidden.', 'geodirectory' ); ?></p><?php
+		}
 	}
 } }
 

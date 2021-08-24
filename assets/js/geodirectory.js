@@ -401,7 +401,7 @@ jQuery(document).ready(function($) {
         }
     });
 
-    jQuery('.gd-category-dd').on("hover",function() {
+    jQuery('.gd-category-dd').hover(function() {
         jQuery('.gd-category-dd ul').show();
     });
 
@@ -1485,7 +1485,7 @@ function gd_init_rating_input() {
             $original_percent = $original_rating / $total * 100;
             $rating_set = false;
 
-            jQuery(this).on("hover",
+            jQuery(this).hover(
                 function() {
                     $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
                     $original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();
@@ -1531,7 +1531,7 @@ function gd_init_rating_input() {
 function geodir_animate_markers() {
     if (typeof(animate_marker) == 'function') {
         var groupTab = jQuery("ul.geodir-category-list-view").children("li");
-        groupTab.on("hover",function() {
+        groupTab.hover(function() {
             animate_marker('listing_map_canvas', String(jQuery(this).data("post-id")));
         }, function() {
             stop_marker_animation('listing_map_canvas', String(jQuery(this).data("post-id")));
@@ -1540,7 +1540,7 @@ function geodir_animate_markers() {
         // maybe elementor animate
         if (jQuery('body.archive .elementor-widget-archive-posts').length) {
             var ePosts = jQuery("body.archive .elementor-widget-archive-posts .elementor-posts").children(".elementor-post");
-            ePosts.on("hover",function() {
+            ePosts.hover(function() {
                 $post_id = jQuery(this).attr('class').match(/post-\d+/)[0].replace("post-", "");
                 animate_marker('listing_map_canvas', String($post_id));
             }, function() {

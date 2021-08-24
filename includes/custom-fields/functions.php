@@ -1117,3 +1117,32 @@ function geodir_build_conditional_attrs( $conditions, $key = '', $type = '' ) {
 	 */
 	return apply_filters( 'geodir_build_conditional_attrs', $attrs, $conditions, $key, $type );
 }
+
+/**
+ * Get conditional field icon.
+ *
+ * @since 2.1.1.0
+ *
+ * @param string $attrs Conditional fields attributes.
+ * @param array  $field Field array.
+ * @return string Icon HTML.
+ */
+function geodir_conditional_field_icon( $attrs, $field = array() ) {
+	if ( ! empty( $attrs ) && strpos( $attrs, 'data-has-rule=' ) !== false ) {
+		$icon = ' <i class="far fa-eye text-info c-pointer" data-toggle="tooltip"  title="' . __( 'Has hide conditions', 'geodirectory' ) . '"></i>';
+	} else {
+		$icon = '';
+	}
+
+	/**
+	 * Filter conditional field icon.
+	 *
+	 * @since 2.1.1.0
+	 *
+	 * @param string $icon Conditional field icon.
+	 * @param string $attrs Conditional fields attributes.
+	 * @param array  $field Field array.
+	 * @return string Icon HTML.
+	 */
+	return apply_filters( 'geodir_conditional_field_icon', $icon, $attrs, $field );
+}
