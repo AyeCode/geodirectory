@@ -151,6 +151,11 @@ class GeoDir_API {
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-system-status-tools-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-countries-controller.php' );
 		include_once( dirname( __FILE__ ) . '/api/class-geodir-rest-markers-controller.php' );
+
+		// Load show/hide widget on block widgets page.
+		if ( ! empty( $_SERVER['REQUEST_URI'] ) && strpos( $_SERVER['REQUEST_URI'], '/widget-types/' ) !== false ) {
+			GeoDir_Admin_Widgets::init();
+		}
 	}
 
 	/**

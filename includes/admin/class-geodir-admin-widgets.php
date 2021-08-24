@@ -87,10 +87,8 @@ class GeoDir_Admin_Widgets {
      * }
      * @return array $arguments.
      */
-	public static function add_show_hide_widget_options($arguments,$options){
-
-
-		if(isset($options['textdomain']) && $options['textdomain'] == GEODIRECTORY_TEXTDOMAIN || (isset($options['widget_ops']['gd_wgt_restrict']))){
+	public static function add_show_hide_widget_options( $arguments, $options ) {
+		if ( ( isset( $options['textdomain'] ) && $options['textdomain'] == GEODIRECTORY_TEXTDOMAIN ) || ( isset( $options['widget_ops']['gd_wgt_restrict'] ) ) ) {
 			$gd_wgt_showhide = isset($options['widget_ops']['gd_wgt_showhide']) && $options['widget_ops']['gd_wgt_showhide'] ? $options['widget_ops']['gd_wgt_showhide'] : '';
 			$gd_wgt_restrict = isset($options['widget_ops']['gd_wgt_restrict']) && $options['widget_ops']['gd_wgt_restrict'] ? $options['widget_ops']['gd_wgt_restrict'] : '';
 			$arguments['gd_wgt_showhide'] = array(
