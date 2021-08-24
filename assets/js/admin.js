@@ -1361,7 +1361,7 @@ function geodir_admin_init_rating_input(){
             $original_percent = $original_rating / $total * 100;
             $rating_set = false;
 
-            jQuery(this).on("hover",
+            jQuery(this).hover(
                 function () {
                     $total = jQuery(this).closest('.gd-rating-input').find('.gd-rating-foreground > i, .gd-rating-foreground > svg, .gd-rating-foreground > img').length;
                     $original_rating = jQuery(this).closest('.gd-rating-input').find('input').val();

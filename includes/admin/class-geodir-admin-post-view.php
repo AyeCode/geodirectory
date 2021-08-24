@@ -38,6 +38,8 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			add_action('admin_footer-post-new.php', array( __CLASS__,'post_form_footer'));
 			add_action('post_date_column_status', array( __CLASS__,'posts_column_status'), 10, 4);
 			add_filter( 'post_row_actions', array( __CLASS__,'post_row_actions' ), 20, 2 );
+			add_filter( 'sd_pagenow_exclude', array( __CLASS__, 'sd_pagenow_exclude' ), 10, 1 );
+			add_filter( 'geodir_get_widgets', array( __CLASS__, 'sd_get_widgets' ), 99, 1 );
 
 			self::add_post_type_view_filters();
 		}
@@ -561,6 +563,42 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			}
 
 			return $actions;
+		}
+
+		/**
+		 * Load GD widgets on CPT list page.
+		 *
+		 * @since 2.1.1.0
+		 *
+		 * @param array $pagenow_exclude Exclude pagenow list.
+		 * @return array Filtered pagenow list.
+		 */
+		public static function sd_pagenow_exclude( $pagenow_exclude ) {
+			global $pagenow;
+
+			if ( $pagenow == 'edit.php' && ! empty( $pagenow_exclude ) && ( $key = array_search( 'edit.php', $pagenow_exclude ) ) !== false && ! empty( $_REQUEST['post_type'] ) && geodir_is_gd_post_type( sanitize_text_field( $_REQUEST['post_type'] ) ) ) {
+				unset( $pagenow_exclude[ $key ] );
+			}
+
+			return $pagenow_exclude;
+		}
+
+		/**
+		 * Load images widget on CPT list page.
+		 *
+		 * @since 2.1.1.0
+		 *
+		 * @param array $widgets Widget list.
+		 * @return array GD widgets to load on edit.php page.
+		 */
+		public static function sd_get_widgets( $widgets ) {
+			global $pagenow;
+
+			if ( $pagenow == 'edit.php' && ! empty( $_REQUEST['post_type'] ) && geodir_is_gd_post_type( sanitize_text_field( $_REQUEST['post_type'] ) ) ) {
+				$widgets = array( 'GeoDir_Widget_Post_Images' );
+			}
+
+			return $widgets;
 		}
 
 	}
