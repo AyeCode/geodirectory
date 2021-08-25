@@ -23,7 +23,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 	<div class="dd-form">
 		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
 		<div class="dd-handle">
-			<span class="dd-icon"><?php echo $field_icon; ?></span><span class="dd-title"><?php echo isset( $field->admin_title ) ? $field->admin_title : ''; ?></span><span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php echo ' ('.esc_attr($field->field_type_name).')';?></span>
+			<span class="dd-icon"><?php echo $field_icon; ?></span><span class="dd-title"><?php echo isset( $field->admin_title ) ? $field->admin_title : ''; ?></span><span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php do_action( 'geodir_cfa_tab_header_icon', $field, $cf ); ?><?php echo ' ('.esc_attr($field->field_type_name).')';?></span>
 		</div>
 		<div class="dd-setting <?php echo 'dd-type-'.esc_attr($field->field_type_name);?>">
 			<input type="hidden" name="security" value="<?php echo sanitize_text_field( $nonce ); ?>"/>

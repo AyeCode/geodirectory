@@ -1009,10 +1009,9 @@ class GeoDir_Post_Data {
 
 				if($design_style ) {
 					$conditional_attrs = geodir_conditional_field_attrs( array( 'type' => 'fieldset' ), 'details', 'fieldset' );
-					$conditional_icon = geodir_conditional_field_icon( $conditional_attrs, array( 'type' => 'fieldset', 'name' => 'details' ) );
 
 					echo '<fieldset class="form-group" id="geodir_fieldset_details"' . $conditional_attrs . '>';
-					echo '<h3 class="h3">' . $details_header . $conditional_icon . '</h3>';
+					echo '<h3 class="h3">' . $details_header . '</h3>';
 					echo '</fieldset>';
 				}else {
 					?>

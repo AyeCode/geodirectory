@@ -38,12 +38,11 @@ function geodir_cfi_fieldset($html,$cf){
         $horizontal = true;
 
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $conditional_icon = geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         ob_start(); // Start  buffering;
         ?>
         <fieldset class="form-group" id="geodir_fieldset_<?php echo (int) $cf['id']; ?>"<?php echo $conditional_attrs; ?>>
-            <h3 class="h3"><?php echo __( $cf['frontend_title'], 'geodirectory' ) . $conditional_icon; ?></h3>
+            <h3 class="h3"><?php echo __( $cf['frontend_title'], 'geodirectory' ); ?></h3>
             <?php if ( $cf['desc'] != '' ) {
                 echo '<small class="text-muted">( ' . __( $cf['desc'], 'geodirectory' ) . ' )</small>';
             } ?>
@@ -105,7 +104,6 @@ function geodir_cfi_input_output($cf){
     // admin only
     $admin_only = geodir_cfi_admin_only($cf);
     $conditional_attrs = geodir_conditional_field_attrs( $cf );
-    $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
     $label = __( $cf['frontend_title'], 'geodirectory' );
 
@@ -336,7 +334,6 @@ function geodir_cfi_radio($html,$cf){
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         // Help text
         $help_text = $cf['desc'] != '' ? __( $cf['desc'], 'geodirectory' ) : '';
@@ -444,7 +441,6 @@ function geodir_cfi_checkbox($html,$cf){
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         $html .= aui()->input(
             array(
@@ -543,7 +539,6 @@ function geodir_cfi_textarea($html,$cf){
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         // help text
         $help_text = __( $cf['desc'], 'geodirectory' );
@@ -636,7 +631,6 @@ function geodir_cfi_select($html,$cf){
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         $html .= aui()->select( array(
             'id'               => $cf['name'],
@@ -740,7 +734,6 @@ function geodir_cfi_multiselect( $html, $cf ) {
 
 		if ( $multi_display == 'select' ) {
 			$conditional_attrs = geodir_conditional_field_attrs( $cf );
-			$admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
 			$html .= aui()->select( array(
 				'id'                 => $cf['name'],
@@ -773,7 +766,6 @@ function geodir_cfi_multiselect( $html, $cf ) {
 			}
 
 			$conditional_attrs = geodir_conditional_field_attrs( $cf );
-			$admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
 			$html .= aui()->radio(
 				array(
@@ -792,7 +784,6 @@ function geodir_cfi_multiselect( $html, $cf ) {
 			);
 		} else {
 			$conditional_attrs = geodir_conditional_field_attrs( $cf );
-			$admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 			$horizontal = true;
 			ob_start();
 			?>
@@ -964,7 +955,6 @@ function geodir_cfi_html($html,$cf){
         $admin_only = geodir_cfi_admin_only($cf);
 
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         $html = aui()->textarea(array(
             'name'       => $cf['name'],
@@ -1074,7 +1064,6 @@ function geodir_cfi_datepicker($html,$cf){
         $admin_only = geodir_cfi_admin_only($cf);
 
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         $html = aui()->input(
             array(
@@ -1163,7 +1152,6 @@ function geodir_cfi_time($html,$cf){
         $admin_only = geodir_cfi_admin_only($cf);
 
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         $html = aui()->input(
             array(
@@ -1339,14 +1327,13 @@ function geodir_cfi_address( $html, $cf ) {
         $placeholder = $cf['placeholder_value'] != '' ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter a location', 'geodirectory' );
 
         $conditional_attrs = geodir_conditional_field_attrs( $cf, 'street', 'text' );
-        $conditional_icon  = geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         echo aui()->input(
             array(
                 'id'                => $prefix . 'street',
                 'name'              => 'street',
                 'required'          => !empty($cf['is_required']) ? true : false,
-                'label'              => esc_attr__($address_title, 'geodirectory') . $conditional_icon .$required,
+                'label'              => esc_attr__($address_title, 'geodirectory') .$required,
                 'label_show'       => true,
                 'label_type'       => $address_label_type,
                 'type'              => 'text',
@@ -1747,7 +1734,6 @@ function geodir_cfi_categories($html,$cf){
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         if ($value == $cf['default']) {
             $value = '';
@@ -2014,7 +2000,6 @@ function geodir_cfi_tags( $html, $cf ) {
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
-        $admin_only .= geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         $html = aui()->select( array(
             'id'                 => $cf['name'],
@@ -2096,13 +2081,12 @@ function geodir_cfi_business_hours( $html, $cf ) {
         $aui_settings->enqueue_flatpickr();
 
         $conditional_attrs = geodir_conditional_field_attrs( $cf, $htmlvar_name, 'hidden' );
-        $conditional_icon = geodir_conditional_field_icon( $conditional_attrs, $cf );
 
         ob_start();
         ?>
         <script type="text/javascript">jQuery(function($){GeoDir_Business_Hours.init({'field':'<?php echo $htmlvar_name; ?>','value':'<?php echo $value; ?>','json':'<?php echo stripslashes_deep(json_encode($value)); ?>','offset':<?php echo (int) $timezone_data['offset']; ?>,'utc_offset':'<?php echo $timezone_data['utc_offset']; ?>','offset_dst':<?php echo (int) $timezone_data['offset_dst']; ?>,'utc_offset_dst':'<?php echo $timezone_data['utc_offset_dst']; ?>','has_dst':<?php echo (int) $timezone_data['has_dst']; ?>,'is_dst':<?php echo (int) $timezone_data['is_dst']; ?>});});</script>
         <div id="<?php echo $name;?>_row" class="gd-bh-row form-group row"<?php echo $conditional_attrs; ?>>
-            <label for="<?php echo $htmlvar_name; ?>_f_active_1" class="<?php echo ( $horizontal ? ' pt-0 col-sm-2 col-form-label' : '' ); ?>"><?php echo $label . $conditional_icon; ?></label>
+            <label for="<?php echo $htmlvar_name; ?>_f_active_1" class="<?php echo ( $horizontal ? ' pt-0 col-sm-2 col-form-label' : '' ); ?>"><?php echo $label; ?></label>
             <div class="gd-bh-field<?php echo ( $horizontal ? ' col-sm-10' : '' ); ?>" data-field-name="<?php echo $htmlvar_name; ?>" role="radiogroup">
                 <?php echo aui()->radio(
                     array(
@@ -2294,14 +2278,13 @@ function geodir_cfi_files( $html, $cf ) {
             // admin only
             $admin_only = geodir_cfi_admin_only($cf);
             $conditional_attrs = geodir_conditional_field_attrs( $cf, $cf['name'], 'hidden' );
-            $conditional_icon = geodir_conditional_field_icon( $conditional_attrs, $cf );
             ?>
 
             <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row"<?php echo $conditional_attrs; ?>>
 
                 <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
                     <?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
-                    echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only . $conditional_icon;?>
+                    echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
                     <?php if ( $cf['is_required'] ) {
                         echo '<span>*</span>';
                     } ?>
