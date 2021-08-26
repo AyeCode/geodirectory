@@ -1129,7 +1129,7 @@ function geodir_build_conditional_attrs( $conditions, $key = '', $type = '' ) {
  */
 function geodir_conditional_field_icon( $attrs, $field = array() ) {
 	if ( ! empty( $attrs ) && strpos( $attrs, 'data-has-rule=' ) !== false ) {
-		$icon = ' <i class="far fa-eye text-info c-pointer" data-toggle="tooltip"  title="' . __( 'Has hide conditions', 'geodirectory' ) . '"></i>';
+		$icon = '<i class="far fa-eye text-warning c-pointer" data-toggle="tooltip"  title="' . __( 'Has hide conditions', 'geodirectory' ) . '"></i>';
 	} else {
 		$icon = '';
 	}

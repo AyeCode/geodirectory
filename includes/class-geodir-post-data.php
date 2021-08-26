@@ -902,12 +902,12 @@ class GeoDir_Post_Data {
 		      action="<?php echo get_page_link( $post->ID ); ?>" method="post"
 		      enctype="multipart/form-data">
 			<input type="hidden" name="action" value="geodir_save_post"/>
-			<input type="hidden" name="preview" value="<?php echo sanitize_text_field( $listing_type ); ?>"/>
-			<input type="hidden" name="post_type" value="<?php echo sanitize_text_field( $listing_type ); ?>"/>
-			<input type="hidden" name="post_parent" value="<?php echo sanitize_text_field( $post_parent ); ?>"/>
-			<input type="hidden" name="ID" value="<?php echo sanitize_text_field( $post_id ); ?>"/>
+			<input type="hidden" name="preview" value="<?php echo esc_attr( $listing_type ); ?>"/>
+			<input type="hidden" name="post_type" value="<?php echo esc_attr( $listing_type ); ?>"/>
+			<input type="hidden" name="post_parent" value="<?php echo esc_attr( $post_parent ); ?>"/>
+			<input type="hidden" name="ID" value="<?php echo esc_attr( $post_id ); ?>"/>
 			<input type="hidden" name="security"
-			       value="<?php echo sanitize_text_field( $security_nonce ); ?>"/>
+			       value="<?php echo esc_attr( $security_nonce ); ?>"/>
 
 
 			<?php if ( $page_id ) { ?>
@@ -919,7 +919,7 @@ class GeoDir_Post_Data {
 			if ( ! empty( $params['container'] ) ) {
 				?>
 				<input type="hidden" id="gd-add-listing-replace-container"
-				       value="<?php echo sanitize_text_field( $params['container'] ); ?>"/>
+				       value="<?php echo esc_attr( $params['container'] ); ?>"/>
 			<?php }
 
 			do_action( 'geodir_add_listing_form_start', $listing_type, $post, $package );
@@ -1009,10 +1009,9 @@ class GeoDir_Post_Data {
 
 				if($design_style ) {
 					$conditional_attrs = geodir_conditional_field_attrs( array( 'type' => 'fieldset' ), 'details', 'fieldset' );
-					$conditional_icon = geodir_conditional_field_icon( $conditional_attrs, array( 'type' => 'fieldset', 'name' => 'details' ) );
 
 					echo '<fieldset class="form-group" id="geodir_fieldset_details"' . $conditional_attrs . '>';
-					echo '<h3 class="h3">' . $details_header . $conditional_icon . '</h3>';
+					echo '<h3 class="h3">' . $details_header . '</h3>';
 					echo '</fieldset>';
 				}else {
 					?>

@@ -35,6 +35,7 @@ class GeoDir_Admin_Conditional_Fields {
 		add_action( 'geodir_cfa_before_save', array( $this, 'conditional_fields_setting' ), 1, 3 );
 		add_filter( 'geodir_cpt_cf_sanatize_custom_field', array( $this, 'save_conditional_fields' ), 11, 2 );
 		add_filter( 'geodir_cf_show_conditional_fields_setting_desc', array( $this, 'show_extra_description' ), 11, 3 );
+		add_filter( 'geodir_cfa_tab_header_icon', array( $this, 'show_conditional_icon' ), 10, 2 );
 	}
 
 	/**
@@ -371,6 +372,24 @@ class GeoDir_Admin_Conditional_Fields {
 	public function show_extra_description( $post_type, $field, $data ) {
 		if ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, array( 'post_title', 'post_content', 'post_category' ) ) ) {
 			?><p data-setting="conditional_fields_extra_desc"><?php _e( 'Please be aware that the form will not submit if this field is hidden.', 'geodirectory' ); ?></p><?php
+		}
+	}
+
+	/**
+	 * Show conditional field icon in tab header.
+	 *
+	 * @since 2.1.1.1
+	 *
+	 * @param object $field The field object settings.
+	 * @param array  $cf The customs field default settings.
+	 * @return mixed
+	 */
+	public function show_conditional_icon( $field, $cf ) {
+		$conditional_attrs = geodir_conditional_field_attrs( $field );
+		$conditional_icon = geodir_conditional_field_icon( $conditional_attrs, $field );
+
+		if ( $conditional_icon ) {
+			echo ' <span class="dd-extra-icon">' . $conditional_icon . '</span> ';
 		}
 	}
 } }

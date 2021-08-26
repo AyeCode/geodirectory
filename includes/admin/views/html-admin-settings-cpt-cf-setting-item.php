@@ -23,26 +23,26 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 	<div class="dd-form">
 		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
 		<div class="dd-handle">
-			<span class="dd-icon"><?php echo $field_icon; ?></span><span class="dd-title"><?php echo isset( $field->admin_title ) ? $field->admin_title : ''; ?></span><span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php echo ' ('.esc_attr($field->field_type_name).')';?></span>
+			<span class="dd-icon"><?php echo $field_icon; ?></span><span class="dd-title"><?php echo isset( $field->admin_title ) ? $field->admin_title : ''; ?></span><span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php do_action( 'geodir_cfa_tab_header_icon', $field, $cf ); ?><?php echo ' ('.esc_attr($field->field_type_name).')';?></span>
 		</div>
 		<div class="dd-setting <?php echo 'dd-type-'.esc_attr($field->field_type_name);?>">
-			<input type="hidden" name="security" value="<?php echo sanitize_text_field( $nonce ); ?>"/>
-			<input type="hidden" name="post_type" id="post_type"  value="<?php echo sanitize_text_field( $field->post_type ); ?>"/>
+			<input type="hidden" name="security" value="<?php echo esc_attr( $nonce ); ?>"/>
+			<input type="hidden" name="post_type" id="post_type"  value="<?php echo esc_attr( $field->post_type ); ?>"/>
 			<input type="hidden" name="field_type" id="field_type"
-			       value="<?php echo sanitize_text_field( $field->field_type ); ?>"/>
+			       value="<?php echo esc_attr( $field->field_type ); ?>"/>
 			<input type="hidden" name="field_type_key" id="field_type_key"
-			       value="<?php echo sanitize_text_field( $field->field_type_key ); ?>"/>
+			       value="<?php echo esc_attr( $field->field_type_key ); ?>"/>
 			<input type="hidden" name="field_id" id="field_id"
-			       value="<?php echo sanitize_text_field( $field->id ); ?>"/>
+			       value="<?php echo esc_attr( $field->id ); ?>"/>
 			<input type="hidden" name="clabels" id="clabels" value="<?php if ( isset( $field->clabels ) ) {
-				echo sanitize_text_field( $field->clabels );
+				echo esc_attr( $field->clabels );
 			} ?>"/>
 			<input type="hidden" readonly="readonly" name="sort_order" id="sort_order"
 			       value="<?php if ( isset( $field->sort_order ) ) {
 				       echo absint( $field->sort_order );
 			       } ?>"/>
 			<input type="hidden" name="is_default" id="is_default"
-			       value="<?php echo sanitize_text_field( $field->is_default ); ?>"/>
+			       value="<?php echo esc_attr( $field->is_default ); ?>"/>
 
 			<?php
 			// data_type

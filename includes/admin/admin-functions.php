@@ -488,7 +488,7 @@ function geodir_admin_body_class_active_map($class = '') {
 		$geodir_screen_id = sanitize_title( __( 'GeoDirectory', 'geodirectory' ) );
 
 		if ( $geodir_screen_id != 'geodirectory' ) {
-			$class .= ' geodirectory_page_' . sanitize_text_field( $_GET['page'] );
+			$class .= ' geodirectory_page_' . esc_attr( sanitize_text_field( $_GET['page'] ) );
 		}
 	}
 
