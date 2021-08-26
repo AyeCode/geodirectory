@@ -103,7 +103,7 @@ class GeoDir_Admin_Assets {
 	 * Enqueue scripts.
 	 */
 	public function admin_scripts() {
-		global $wp_query, $post, $pagenow;
+		global $wp_query, $post, $pagenow, $aui_conditional_js;
 
 		$screen       = get_current_screen();
 		$screen_id    = $screen ? $screen->id : '';
@@ -191,8 +191,21 @@ class GeoDir_Admin_Assets {
 			
 			// should prob only be loaded on details page
 			wp_enqueue_script('geodir-plupload');
-			if ( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow) {
+			if ( 'edit.php' === $pagenow || 'post.php' === $pagenow || 'post-new.php' == $pagenow ) {
 				wp_enqueue_script('geodir-add-listing');
+
+				// Don't load JS again.
+				if ( empty( $aui_conditional_js ) && geodir_design_style() && class_exists( 'AyeCode_UI_Settings' ) ) {
+					$aui_settings = AyeCode_UI_Settings::instance();
+
+					if ( is_callable( array( $aui_settings, 'conditional_fields_js' ) ) ) {
+						$conditional_fields_js = $aui_settings->conditional_fields_js();
+
+						if ( ! empty( $conditional_fields_js ) ) {
+							$aui_conditional_js = wp_add_inline_script( 'geodir-add-listing', $conditional_fields_js );
+						}
+					}
+				}
 			}
 			
 			$load_gomap_script = apply_filters( 'geodir_load_gomap_script', false );
