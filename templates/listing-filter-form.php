@@ -90,7 +90,7 @@ $form_class = apply_filters('geodir_search_form_class', $form_class);
     $slat = !empty($latlon['lat']) ? $latlon['lat'] : ''; // already escaped
     $slon = !empty($latlon['lon']) ? $latlon['lon'] : ''; // already escaped
     ?>
-    <input name="sgeo_lat" class="sgeo_lat" type="hidden" value="<?php echo sanitize_text_field($slat);?>"/>
-    <input name="sgeo_lon" class="sgeo_lon" type="hidden" value="<?php echo sanitize_text_field($slon);?>"/>
+    <input name="sgeo_lat" class="sgeo_lat" type="hidden" value="<?php echo esc_attr($slat);?>"/>
+    <input name="sgeo_lon" class="sgeo_lon" type="hidden" value="<?php echo esc_attr($slon);?>"/>
     <?php do_action('geodir_search_hidden_fields');?>
 </form>
