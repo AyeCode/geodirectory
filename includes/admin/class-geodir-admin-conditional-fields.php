@@ -34,6 +34,7 @@ class GeoDir_Admin_Conditional_Fields {
 	public function __construct() {
 		add_action( 'geodir_cfa_before_save', array( $this, 'conditional_fields_setting' ), 1, 3 );
 		add_filter( 'geodir_cpt_cf_sanatize_custom_field', array( $this, 'save_conditional_fields' ), 11, 2 );
+		add_filter( 'geodir_cf_show_conditional_fields_setting', array( $this, 'cf_show_conditional_fields_setting' ), 10, 4 );
 		add_filter( 'geodir_cf_show_conditional_fields_setting_desc', array( $this, 'show_extra_description' ), 11, 3 );
 		add_filter( 'geodir_cfa_tab_header_icon', array( $this, 'show_conditional_icon' ), 10, 2 );
 	}
@@ -360,6 +361,25 @@ class GeoDir_Admin_Conditional_Fields {
 	}
 
 	/**
+	 * Skip conditional for event dates field.
+	 *
+	 * @since 2.1.1.1
+	 *
+	 * @param bool   $hide True to hide.
+	 * @param string $post_type Current post type.
+	 * @param object $field Current field object.
+	 * @param array  $data Current field data.
+	 * @return bool True to hide, False to show.
+	 */
+	public function cf_show_conditional_fields_setting( $hide, $post_type, $field, $data ) {
+		if ( ! empty( $field->htmlvar_name ) && $field->htmlvar_name == 'address' ) {
+			$hide = true;
+		}
+
+		return $hide;
+	}
+
+	/**
 	 * Show conditional field extra message.
 	 *
 	 * @since 2.1.1.0
@@ -370,7 +390,7 @@ class GeoDir_Admin_Conditional_Fields {
 	 * @return mixed
 	 */
 	public function show_extra_description( $post_type, $field, $data ) {
-		if ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, array( 'post_title', 'post_content', 'post_category' ) ) ) {
+		if ( ! empty( $field->htmlvar_name ) && in_array( $field->htmlvar_name, array( 'post_title', 'post_content', 'post_category', 'address' ) ) ) {
 			?><p data-setting="conditional_fields_extra_desc"><?php _e( 'Please be aware that the form will not submit if this field is hidden.', 'geodirectory' ); ?></p><?php
 		}
 	}

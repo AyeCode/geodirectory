@@ -318,7 +318,7 @@ function geodir_cf_url($html,$location,$cf,$p='',$output=''){
             // all search engines that use the nofollow value exclude links that use it from their ranking calculation
             $rel = strpos($website, get_site_url()) !== false ? '' : 'rel="nofollow"';
 
-            $value = '<a href="' . $website . '" target="_blank" ' . $rel . ' ><strong>' . apply_filters('geodir_custom_field_website_name', $title, $website, $post_id) . '</strong></a>';
+            $value = '<a href="' . $website . '" target="_blank" ' . $rel . ' >' . apply_filters( 'geodir_custom_field_website_name', $title, $website, $post_id ) . '</a>';
 
             if ( ! empty( $output ) && isset( $output['raw'] ) ) {
                 // Database value.
