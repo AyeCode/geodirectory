@@ -1,6 +1,6 @@
 = 2.1.1.1 =
 * Show icon in CF setting when the field has hide conditions - CHANGED
-* XSS vulnerability changes - FIXED
+* Improved backend sensitization changes - CHANGED
 
 = 2.1.1.0 =
 * GD Categories & search blocks shows validation errors in console - FIXED
