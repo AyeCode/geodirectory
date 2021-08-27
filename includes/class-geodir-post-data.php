@@ -1599,6 +1599,22 @@ class GeoDir_Post_Data {
 		}
 
 		// Pre validation
+		$has_error = false;
+		if ( isset( $post_data['post_title'] ) && sanitize_text_field( $post_data['post_title'] ) == '' ) {
+			$has_error = true;
+			$field_title = __( 'Title', 'geodirectory' );
+		} elseif ( isset( $post_data['street'] ) && sanitize_text_field( $post_data['street'] ) == '' && isset( $post_data['post_type'] ) && GeoDir_Post_types::supports( sanitize_text_field( $post_data['post_type'] ), 'location' ) ) {
+			$has_error = true;
+			$field_title = __( 'Address', 'geodirectory' );
+		} elseif ( isset( $post_data['cat_limit'] ) && isset( $post_data['post_type'] ) && isset( $post_data['tax_input'] ) && empty( $post_data['tax_input'][ $post_data['post_type'] . 'category' ][0] ) ) {
+			$has_error = true;
+			$field_title = __( 'Category', 'geodirectory' );
+		}
+
+		if ( $has_error ) {
+			return new WP_Error( 'save_post', wp_sprintf( __( '%s is empty but is a mandatory field, please check and try again.', 'geodirectory' ), $field_title ) );
+		}
+
 		$validate = ! empty( $post_data['geodir_auto_save_post_error'] ) && is_wp_error( $post_data['geodir_auto_save_post_error'] ) ? $post_data['geodir_auto_save_post_error'] : true;
 		$validate = apply_filters( 'geodir_validate_ajax_save_post_data', $validate, $post_data, ! empty( $post_data['post_parent'] ) );
 

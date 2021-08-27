@@ -1035,7 +1035,7 @@ function geodir_conditional_field_attrs( $field, $_key = '', $_type = '' ) {
 
 	$extra_fields = maybe_unserialize( $extra_fields );
 
-	if ( is_array( $extra_fields ) && ! empty( $extra_fields['cat_display_type'] ) ) {
+	if ( is_array( $extra_fields ) && ! empty( $extra_fields['cat_display_type'] ) && $key != 'default_category' ) {
 		$type = $extra_fields['cat_display_type'];
 	}
 
