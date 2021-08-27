@@ -1,3 +1,8 @@
+= 2.1.1.2 =
+* Show alert if title, category fields are hidden & empty on submit add listing - CHANGED
+* Best of & categories widgets AJAX params no longer using serialized data for location - CHANGED
+* Sanitize email in output email field - FIXED
+
 = 2.1.1.1 =
 * Show icon in CF setting when the field has hide conditions - CHANGED
 * Improved backend sensitization changes - CHANGED

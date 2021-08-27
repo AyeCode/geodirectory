@@ -1851,6 +1851,7 @@ function geodir_cfi_categories($html,$cf){
                 'multiple'        => false,
                 'options'         => $default_category ? array( $default_category => '' ) : array(),
                 'element_require' => '[%' . $taxonomy . '%]!=null',
+                'wrap_attributes' => geodir_conditional_field_attrs( $cf, 'default_category', 'select' )
             ) );
         } else {
             // leaving this out should set the default as the main cat anyway

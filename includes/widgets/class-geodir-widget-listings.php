@@ -1424,8 +1424,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 			$gd_post = geodir_get_post_info( absint( $data['set_post'] ) );
 		}
 
-		if ( ! empty( $data['set_query_vars'] ) ) {
-			$wp->query_vars = $data['set_query_vars'];
+		if ( ! empty( $data['set_query_vars'] ) && is_array( $data['set_query_vars'] ) ) {
+			$set_query_vars = array();
+			foreach ( $data['set_query_vars'] as $_key => $_value ) {
+				if ( ! empty( $_key ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
+					$set_query_vars[ sanitize_text_field( $_key ) ] = sanitize_text_field( stripslashes( $_value ) );
+				}
+			}
+			$wp->query_vars = $set_query_vars;
 
 			add_filter( 'geodir_location_set_current_check_404', array( $this, 'set_current_check_404' ), 999, 1 );
 

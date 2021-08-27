@@ -726,7 +726,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 		$via_ajax = ! empty($params['via_ajax']) && wp_doing_ajax() ? true : false;
 		$ajax_cpt = ! empty($params['ajax_cpt']) && $via_ajax ? sanitize_text_field( $params['ajax_cpt'] ) : '';
-		$set_location = false;
+		$set_location = array();
 		if ( $via_ajax ) {
 			if ( ! empty( $params['ajax_is_listing'] ) ) {
 				$is_listing = true;
@@ -743,11 +743,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			if ( ! empty( $params['ajax_current_term_id'] ) ) {
 				$current_term_id = absint( $params['ajax_current_term_id'] );
 			}
-			if ( ! empty( $params['ajax_set_location'] ) ) {
-				$set_location = maybe_unserialize( sanitize_text_field( stripslashes( $params['ajax_set_location'] ) ) );
-
-				if ( ! ( is_object( $set_location ) && GeoDir_Post_types::supports( $ajax_cpt, 'location' ) ) ) {
-					$set_location = false;
+			if ( GeoDir_Post_types::supports( $ajax_cpt, 'location' ) ) {
+				foreach ( $params as $_key => $_value ) {
+					if ( strpos( $_key, '_gd_set_loc_' ) === 0 && ( $_key = substr( sanitize_text_field( $_key ), 12 ) ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
+						$set_location[ $_key ] = sanitize_text_field( stripslashes( $_value ) );
+					}
 				}
 			}
 		}
@@ -777,7 +777,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				if($cpt_ajax && $cpt_list != ''){ continue;}
 
 				if ( $via_ajax && $set_location ) {
-					$geodirectory->location = $set_location;
+					foreach ( $set_location as $_key => $_value ) {
+						$geodirectory->location->{$_key} = $_value;
+					}
 				}
 
 				$parent_category = ($is_category && $cat_filter && $cpt == $current_posttype) ? $current_term_id : 0;
@@ -1020,7 +1022,11 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				$output .= '<input type="hidden" name="ajax_post_ID" value="' . $post_ID . '">';
 				$output .= '<input type="hidden" name="ajax_current_term_id" value="' . $current_term_id . '">';
 				if ( ! empty( $geodirectory->location ) ) {
-					$output .= '<input type="hidden" name="ajax_set_location" value="' . esc_attr( maybe_serialize( $geodirectory->location ) ) . '">';
+					foreach ( $geodirectory->location as $key => $value ) {
+						if ( is_scalar( $value ) || ( ! is_object( $value ) && ! is_array( $value ) ) ) {
+							$output .= '<input type="hidden" data-set-param="1" name="_gd_set_loc_' . esc_attr( $key ) . '" value="' . esc_attr( $value ) . '">';
+						}
+					}
 				}
 				$select_class = $design_style ? 'form-control mb-3' : '';
 				$output .= '</div><select class="geodir-cat-list-tax geodir-select '.$select_class.'" aria-label="' . esc_attr__( 'CPT Categories', 'geodirectory' ) . '">' . implode( '', $cpt_options ) . '</select>';
