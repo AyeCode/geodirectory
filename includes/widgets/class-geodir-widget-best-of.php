@@ -390,20 +390,13 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 			}
 		}
 
-		$set_location = false;
-		if ( $is_ajax ) {
-			if ( ! empty( $instance['ajax_set_location'] ) ) {
-				$set_location = maybe_unserialize( sanitize_text_field( stripslashes( $instance['ajax_set_location'] ) ) );
-
-				if ( ! ( is_object( $set_location ) && GeoDir_Post_types::supports( $post_type, 'location' ) ) ) {
-					$set_location = false;
+		// Set location
+		if ( $is_ajax && $add_location_filter && GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+			foreach ( $instance as $_key => $_value ) {
+				if ( strpos( $_key, '_gd_set_loc_' ) === 0 && ( $_key = substr( sanitize_text_field( $_key ), 12 ) ) && ( is_scalar( $_value ) || ( ! is_object( $_value ) && ! is_array( $_value ) ) ) ) {
+					$geodirectory->location->{$_key} = sanitize_text_field( stripslashes( $_value ) );
 				}
 			}
-		}
-
-		// AJAX set location.
-		if ( $is_ajax && $set_location ) {
-			$geodirectory->location = $set_location;
 		}
 
 		if (isset($instance['character_count'])) {
@@ -576,14 +569,14 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 		if ( ! $is_ajax || isset( $_REQUEST['shortcode'] ) ) {
 			?>
 			<input type="hidden" id="bestof_widget_post_type" name="bestof_widget_post_type" value="<?php echo $post_type; ?>">
-			<input type="hidden" id="bestof_widget_excerpt_type" name="bestof_widget_excerpt_type" value="<?php echo $excerpt_type; ?>">	   
+			<input type="hidden" id="bestof_widget_excerpt_type" name="bestof_widget_excerpt_type" value="<?php echo $excerpt_type; ?>">
 			<input type="hidden" id="bestof_widget_event_type" name="bestof_widget_event_type" value="<?php echo $event_type; ?>">
 			<input type="hidden" id="bestof_widget_post_limit" name="bestof_widget_post_limit" value="<?php echo $post_limit; ?>">
 			<input type="hidden" id="bestof_widget_taxonomy" name="bestof_widget_taxonomy" value="<?php echo $category_taxonomy; ?>">
 			<input type="hidden" id="bestof_widget_location_filter" name="bestof_widget_location_filter" value="<?php echo (int) $add_location_filter; ?>">
-			<?php if ( ! empty( $geodirectory->location ) ) { ?>
-			<input type="hidden" id="bestof_widget_set_location" name="bestof_widget_set_location" value="<?php echo esc_attr( maybe_serialize( $geodirectory->location ) ); ?>">
-			<?php } ?>
+			<?php if ( $add_location_filter && GeoDir_Post_types::supports( $post_type, 'location' ) && ! empty( $geodirectory->location ) ) { foreach ( $geodirectory->location as $key => $value ) { if ( is_scalar( $value ) || ( ! is_object( $value ) && ! is_array( $value ) ) ) { ?>
+			<input type="hidden" data-set-param="1" name="_gd_set_loc_<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>">
+			<?php } } } ?>
 			<input type="hidden" id="bestof_widget_char_count" name="bestof_widget_char_count" value="<?php echo $character_count; ?>">
 			<div class="geo-bestof-contentwrap geodir-tabs-content" style="position: relative; z-index: 0;">
 
@@ -822,14 +815,17 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 					data['excerpt_type'] = excerpt_type;
 					data['taxonomy'] = taxonomy;
 					data['term_id'] = term_id;
-					if (jQuery(widgetBox).find('#bestof_widget_set_location').length) {
-						data['ajax_set_location'] = jQuery(widgetBox).find('#bestof_widget_set_location').val();
+					if (jQuery(widgetBox).find('[data-set-param]').length) {
+						jQuery(widgetBox).find('[data-set-param]').each(function(){
+							if (jQuery(this).attr('name')) {
+								data[jQuery(this).attr('name')] = jQuery(this).val();
+							}
+						});
 					}
 
 					container.hide();
 					loading.show();
 
-					console.log(data );
 					jQuery.post(geodir_params.ajax_url, data, function (response) {
 						container.html(response);
 						jQuery(widgetBox).find('.geodir_category_list_view li .geodir-post-img .geodir_thumbnail img').css('display', 'block');
