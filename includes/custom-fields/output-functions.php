@@ -1394,7 +1394,7 @@ function geodir_cf_email($html,$location,$cf,$p='',$output=''){
             }
 
             $is_elementor_preview = class_exists( 'GeoDir_Elementor' ) && GeoDir_Elementor::is_elementor_view() ? true : false; // Check if elementor preview
-            $email = $gd_post->{$cf['htmlvar_name']} ;
+            $email = sanitize_email( $gd_post->{$cf['htmlvar_name']} ) ;
             $value = '';
             if ( ! empty( $email ) && ( $email != 'testing@example.com' ) && ( $e_split = explode( '@', $email ) ) && ! defined( 'REST_REQUEST' ) && ! $is_elementor_preview && ! wp_doing_ajax() && !isset( $output['strip'] ) ) {
                 /**

@@ -1199,7 +1199,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					} elseif ( $field['field_type'] == 'email' ) {
 						$rel = 'rel="nofollow"';
 						if ( strpos( $args['link'], 'mailto:' ) !== 0 ) {
-							$args['link'] = 'mailto:' . $args['link'];
+							$args['link'] = 'mailto:' . sanitize_email( $args['link'] );
 						}
 					}
 				}
