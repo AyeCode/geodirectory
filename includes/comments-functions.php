@@ -334,7 +334,7 @@ function geodir_should_notify_comment_author( $comment ) {
 		$comment_id = $comment;
 	}
 
-	$notify      = GeoDir_Email::is_email_enabled( 'author_comment_approved' );
+	$notify      = GeoDir_Email::is_email_enabled( 'owner_comment_approved' );
 	$notify_sent = get_comment_meta( $comment_id, 'gd_comment_author_notified', true );
 
 	if ( ! empty( $notify ) && empty( $notify_sent ) ) {
@@ -388,7 +388,7 @@ function geodir_notify_on_comment_approved( $comment ) {
 	$notify_comment_author = geodir_should_notify_comment_author( $comment );
 	$notify_listing_author = geodir_should_notify_listing_author( $comment );
 
-	if ( ! ( $notify_comment_author || $notify_comment_author ) ) {
+	if ( ! ( $notify_comment_author || $notify_listing_author ) ) {
 		return;
 	}
 
