@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.1.0.16
+ * @version    2.1.1.3
  *
  * @var string $default_search_button_label The search button label text or font awesome class.
  * @var boolean $fa_class If a font awesome class is being used as the button text.
@@ -47,6 +47,9 @@ if ( ! empty( $tabs_array ) ) {
 			$active =  $count == 0 ? 'active' :'';
 			$selected =  $active ? 'true' :'false';
 			$key = esc_attr( $tab['tab_key'] );
+			if ( $key && is_numeric( substr( $key, 0, 1 ) ) ) {
+				$key = 'gdtab' . $key; // Tab is not working when ID start with number.
+			}
 			$name = esc_attr__( stripslashes( $tab['tab_name'] ), 'geodirectory' );
 			$data_toggle = $args['show_as_list'] ? '' : 'data-toggle="tab"';
 			$pill_js = $args['show_as_list'] && $args['tab_style'] ? 'onclick="jQuery(this).parent().parent().find(\'a\').removeClass(\'active\');jQuery(this).addClass(\'active\');"' : '';
@@ -70,15 +73,18 @@ if ( ! empty( $tabs_array ) ) {
 			$active =  $count == 0 ? ' show active' :'';
 			$add_tab = '';//$args['show_as_list'] ? 'List' : 'Tab';
 			$key = esc_attr( $tab['tab_key'] );
-			echo '<div id="' . esc_attr( $tab['tab_key'] ) . $add_tab . '" class="'.$tab_pane_class.' '.$active.'" role="tabpanel" aria-labelledby="'.$key.'">';
-			echo "<span id='" . esc_attr( $tab['tab_key'] ) . "-anchor' class='geodir-tabs-anchor'></span>";
+			if ( $key && is_numeric( substr( $key, 0, 1 ) ) ) {
+				$key = 'gdtab' . $key; // Tab is not working when ID start with number.
+			}
+			echo '<div id="' . $key . $add_tab . '" class="'.$tab_pane_class.' '.$active.'" role="tabpanel" aria-labelledby="'.$key.'">';
+			echo "<span id='" . $key . "-anchor' class='geodir-tabs-anchor'></span>";
 			if ( $args['show_as_list'] ) {
 				$tab_icon = '';
 
 				if ( $tab['tab_icon'] ) {
 					$tab_icon = '<i class=" ' . esc_attr( $tab['tab_icon'] ) . ' mr-1" aria-hidden="true"></i>';
 				}
-				$tab_title = '<h2 class="gd-tab-list-title h3" ><a href="#' . esc_attr( $tab['tab_key'] ) . '" class="text-reset">' . $tab_icon . esc_attr__( stripslashes( $tab['tab_name'] ), 'geodirectory' ) . '</a></h2><hr />';
+				$tab_title = '<h2 class="gd-tab-list-title h3" ><a href="#' . $key . '" class="text-reset">' . $tab_icon . esc_attr__( stripslashes( $tab['tab_name'] ), 'geodirectory' ) . '</a></h2><hr />';
 
 				/**
 				 * Filter the tab list title html.
@@ -90,7 +96,7 @@ if ( ! empty( $tabs_array ) ) {
 				 */
 				echo apply_filters( 'geodir_tab_list_title', $tab_title, (object)$tab );
 			}
-			echo '<div id="geodir-tab-content-' . esc_attr( $tab['tab_key'] ) . '" class="hash-offset"></div>';
+			echo '<div id="geodir-tab-content-' . $key . '" class="hash-offset"></div>';
 
 			echo $tab['tab_content_rendered'];
 

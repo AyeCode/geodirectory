@@ -1666,8 +1666,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				}
 			}
 
-			if ( empty( $field->field_id ) && is_int( $field->htmlvar_name ) ) {
-				$field->htmlvar_name = 'cf' . $field->htmlvar_name; // Integer as column name is not accepted.
+			if ( empty( $field->field_id ) && is_numeric( substr( $field->htmlvar_name, 0, 1 ) ) ) {
+				$field->htmlvar_name = 'cf' . $field->htmlvar_name; // Integer as column name is not accepted & ID's should not start with a number.
 			}
 
 			return apply_filters( 'geodir_cpt_cf_sanatize_custom_field', $field, $input );
