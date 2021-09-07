@@ -468,7 +468,7 @@ class GeoDir_Widget_Recent_Reviews extends WP_Super_Duper {
 			$comment_author_email = $comment->comment_author_email;
 			$comment_post_ID      = $comment->post_id;
 
-			$post_title        = get_the_title( $comment_post_ID );
+			$post_title        = trim( esc_html( strip_tags( stripslashes( get_the_title( $comment_post_ID ) ) ) ) );
 			$permalink         = get_permalink( $comment_post_ID );
 			$comment_permalink = $permalink . "#comment-" . $comment->comment_ID;
 			$readmore_seo_class = $design_style ? 'sr-only' : '';
