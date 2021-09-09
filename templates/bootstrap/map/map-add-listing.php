@@ -97,10 +97,10 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 
     baseMarker = '';
     geocoder = '';
-    var <?php echo $prefix;?>CITY_MAP_CENTER_LAT = <?php echo ($lat) ? $lat :  '39.952484'; ?>;
-    var <?php echo $prefix;?>CITY_MAP_CENTER_LNG = <?php echo ($lng) ? $lng :  '-75.163786'; ?>;
+    var <?php echo $prefix;?>CITY_MAP_CENTER_LAT = <?php echo ($lat) ? (float) $lat :  '39.952484'; ?>;
+    var <?php echo $prefix;?>CITY_MAP_CENTER_LNG = <?php echo ($lng) ? (float) $lng :  '-75.163786'; ?>;
     <?php if($lat_lng_blank){$lat='';$lng='';}?>
-    var <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT = <?php echo ($mapzoom) ? $mapzoom : 12;?>;
+    var <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT = <?php echo ($mapzoom) ? absint( $mapzoom ) : 12;?>;
     var minZoomLevel = <?php echo ($is_map_restrict) ? 5 : 0; ?>;
     var oldstr_address;
     var oldstr_address2;

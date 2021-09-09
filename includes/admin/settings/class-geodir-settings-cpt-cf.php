@@ -1523,9 +1523,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			// Set the field icon
 			if ( geodir_is_fa_icon( $icon ) ) {
-				$field_icon = '<i class="' . $icon . '" aria-hidden="true"></i>';
+				$field_icon = '<i class="' . esc_attr( $icon ) . '" aria-hidden="true"></i>';
 			} elseif ( geodir_is_icon_url( $icon ) ) {
-				$field_icon = '<b style="background-image: url("' . $icon . '")"></b>';
+				$field_icon = '<b style="background-image: url("' . esc_attr( $icon ) . '")"></b>';
 			} else {
 				$field_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
 			}
@@ -1666,8 +1666,8 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				}
 			}
 
-			if ( empty( $field->field_id ) && is_int( $field->htmlvar_name ) ) {
-				$field->htmlvar_name = 'cf' . $field->htmlvar_name; // Integer as column name is not accepted.
+			if ( empty( $field->field_id ) && is_numeric( substr( $field->htmlvar_name, 0, 1 ) ) ) {
+				$field->htmlvar_name = 'cf' . $field->htmlvar_name; // Integer as column name is not accepted & ID's should not start with a number.
 			}
 
 			return apply_filters( 'geodir_cpt_cf_sanatize_custom_field', $field, $input );

@@ -168,7 +168,8 @@ class GeoDir_AJAX {
 	public static function manual_map() {
 		global $geodirectory, $mapzoom, $geodir_manual_map;
 
-		$prefix = isset( $_POST['trigger'] ) ? esc_attr( $_POST['trigger'] ) : 'geodir_manual_location_';
+		$prefix = isset( $_POST['trigger'] ) ? sanitize_title( geodir_clean( $_POST['trigger'] ) ) : 'geodir_manual_location_';
+		$prefix = esc_attr( $prefix );
 
 		$map_title = __( "Select Your Location", 'geodirectory' );
 		$location = $geodirectory->location->get_default_location();

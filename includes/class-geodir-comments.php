@@ -571,9 +571,10 @@ class GeoDir_Comments {
 
 			$design_style = geodir_design_style();
 
-			$template = locate_template( array( "geodirectory/reviews.php" ) ); // Use theme template if available
+			$template_path = $design_style ? 'geodirectory/' . $design_style . '/reviews.php' : 'geodirectory/reviews.php';
+			$template = locate_template( array( $template_path ) ); // Use theme template if available
 			if ( ! $template ) {
-				$template = $design_style ? geodir_plugin_path() . '/templates/bootstrap/reviews.php' : geodir_plugin_path() . '/templates/reviews.php';
+				$template = untrailingslashit( geodir_get_templates_dir() ) . '/' . ( $design_style ? $design_style . '/reviews.php' : 'reviews.php' );
 			}
 			$gd_is_comment_template_set = true;
 

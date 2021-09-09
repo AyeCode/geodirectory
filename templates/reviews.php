@@ -42,7 +42,7 @@ if (post_password_required() || $preview)
         <h2 class="comments-title">
             <?php
             printf(_n('1 Review <span class="r-title-on">on</span> <span class="r-title">&ldquo;%2$s&rdquo;</span>', '%1$s Reviews <span>on</span> <span class="r-title"> &ldquo;%2$s&rdquo;</span>', get_comments_number(), 'geodirectory'),
-                number_format_i18n(get_comments_number()), get_the_title());
+                number_format_i18n(get_comments_number()), trim( esc_html( strip_tags( stripslashes( get_the_title() ) ) ) ));
             ?>
         </h2>
 

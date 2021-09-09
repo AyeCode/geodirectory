@@ -78,6 +78,10 @@ class GeoDir_Admin_Import_Export {
 			}
 		}
 
+		if ( $wp_filesystem->is_dir( $csv_file_dir ) && ! $wp_filesystem->exists( $csv_file_dir . '/index.php' ) ) {
+			$wp_filesystem->copy( GEODIRECTORY_PLUGIN_DIR . 'assets/index.php', $csv_file_dir . '/index.php' );
+		}
+
 		switch ( $task ) {
 			case "prepare_import":
 				return self::validate_csv();// validate CSV
@@ -713,8 +717,8 @@ class GeoDir_Admin_Import_Export {
 				}
 
 				if ( $wp_filesystem->exists( $file_path_temp ) ) {
-					$chunk_page_no   = $chunk_total_pages > 1 ? '-' . $j : '';
-					$chunk_file_name = $file_name . $chunk_page_no . '.csv';
+					$chunk_page_no   = $chunk_total_pages > 1 ? '_' . $j : '';
+					$chunk_file_name = $file_name . $chunk_page_no . '_' . substr( geodir_rand_hash(), 0, 8 ) . '.csv';
 					$file_path       = $csv_file_dir . '/' . $chunk_file_name;
 					$wp_filesystem->move( $file_path_temp, $file_path, true );
 
@@ -1026,8 +1030,8 @@ class GeoDir_Admin_Import_Export {
 				}
 
 				if ( $wp_filesystem->exists( $file_path_temp ) ) {
-					$chunk_page_no   = $chunk_total_pages > 1 ? '-' . $j : '';
-					$chunk_file_name = $file_name . $chunk_page_no . '.csv';
+					$chunk_page_no   = $chunk_total_pages > 1 ? '_' . $j : '';
+					$chunk_file_name = $file_name . $chunk_page_no . '_' . substr( geodir_rand_hash(), 0, 8 ) . '.csv';
 					$file_path       = $csv_file_dir . '/' . $chunk_file_name;
 					$wp_filesystem->move( $file_path_temp, $file_path, true );
 
@@ -1908,6 +1912,7 @@ class GeoDir_Admin_Import_Export {
 	public static function export_reviews() {
 		global $wp_filesystem;
 
+		$filters 		= ! empty( $_REQUEST['gd_imex'] ) && is_array( $_REQUEST['gd_imex'] ) ? $_REQUEST['gd_imex'] : null;
 		$nonce          = isset( $_REQUEST['_nonce'] ) ? $_REQUEST['_nonce'] : null;
 		$count 			= isset( $_REQUEST['_c'] ) ? absint( $_REQUEST['_c'] ) : 0;
 		$chunk_per_page = !empty( $_REQUEST['_n'] ) ? absint( $_REQUEST['_n'] ) : 5000;
@@ -1915,13 +1920,17 @@ class GeoDir_Admin_Import_Export {
 		$csv_file_dir   = self::import_export_cache_path( false );
 
 		$locale = self::switch_locale( 'all' );
-		
+
 		$file_name = 'geodir_reviews_' . date( 'dmyHi' );
+
+		if ( ! empty( $filters ) && ! empty( $filters['start_date'] ) && ! empty( $filters['end_date'] ) ) {
+			$file_name = 'geodir_reviews_' . date_i18n( 'dmy', strtotime( $filters['start_date'] ) ) . '_' . date_i18n( 'dmy', strtotime( $filters['end_date'] ) );
+		}
 
 		$file_url_base  = self::import_export_cache_path() . '/';
 		$file_url       = $file_url_base . $file_name . '.csv';
 		$file_path      = $csv_file_dir . '/' . $file_name . '.csv';
-		$file_path_temp = $csv_file_dir . '/' . $post_type . 'category_' . $nonce . '.csv';
+		$file_path_temp = $csv_file_dir . '/geodir_reviews_' . $nonce . '.csv';
 
 		$chunk_file_paths = array();
 
@@ -1964,8 +1973,8 @@ class GeoDir_Admin_Import_Export {
 				}
 
 				if ( $wp_filesystem->exists( $file_path_temp ) ) {
-					$chunk_page_no   = $chunk_total_pages > 1 ? '-' . $j : '';
-					$chunk_file_name = $file_name . $chunk_page_no . '.csv';
+					$chunk_page_no   = $chunk_total_pages > 1 ? '_' . $j : '';
+					$chunk_file_name = $file_name . $chunk_page_no . '_' . substr( geodir_rand_hash(), 0, 8 ) . '.csv';
 					$file_path       = $csv_file_dir . '/' . $chunk_file_name;
 					$wp_filesystem->move( $file_path_temp, $file_path, true );
 

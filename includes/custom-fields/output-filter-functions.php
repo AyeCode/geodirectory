@@ -703,7 +703,9 @@ function geodir_custom_field_output_post_link( $html, $location, $cf, $output, $
 			return $value;
 		}
 
-		$value = '<a href="' . $value . '" title="' . esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), stripslashes( get_the_title( $gd_post->ID ) ) ) ) . '">' . get_the_title( $gd_post->ID ) . '</a>';
+		$title = trim( esc_html( strip_tags( stripslashes( get_the_title( $gd_post->ID ) ) ) ) );
+
+		$value = '<a href="' . $value . '" title="' . esc_attr( wp_sprintf( _x( 'View: %s', 'listing title hover', 'geodirectory' ), $title ) ) . '">' . $title . '</a>';
 
 		$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $htmlvar_name . '">';
 
