@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.1.2\n"
+"Project-Id-Version: GeoDirectory 2.1.1.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-08-27 21:25+0530\n"
-"PO-Revision-Date: 2021-08-27 21:26+0530\n"
+"POT-Creation-Date: 2021-09-09 22:51+0530\n"
+"PO-Revision-Date: 2021-09-09 22:51+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -1608,123 +1608,123 @@ msgid ""
 "file permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:107
-#: includes/admin/class-geodir-admin-import-export.php:114
-#: includes/admin/class-geodir-admin-import-export.php:121
-#: includes/admin/class-geodir-admin-import-export.php:143
+#: includes/admin/class-geodir-admin-import-export.php:111
+#: includes/admin/class-geodir-admin-import-export.php:118
+#: includes/admin/class-geodir-admin-import-export.php:125
+#: includes/admin/class-geodir-admin-import-export.php:147
 msgid "Your favorite color is neither red, blue, nor green!"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:204
+#: includes/admin/class-geodir-admin-import-export.php:208
 msgid "The uploaded file is not a valid csv file. Please try again."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:228
-#: includes/admin/class-geodir-admin-import-export.php:325
-#: includes/admin/class-geodir-admin-import-export.php:1283
-#: includes/admin/class-geodir-admin-import-export.php:2097
+#: includes/admin/class-geodir-admin-import-export.php:232
+#: includes/admin/class-geodir-admin-import-export.php:329
+#: includes/admin/class-geodir-admin-import-export.php:1287
+#: includes/admin/class-geodir-admin-import-export.php:2106
 msgid "No data found in csv file."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:296
-#: includes/admin/class-geodir-admin-import-export.php:306
-#: includes/admin/class-geodir-admin-import-export.php:317
+#: includes/admin/class-geodir-admin-import-export.php:300
+#: includes/admin/class-geodir-admin-import-export.php:310
+#: includes/admin/class-geodir-admin-import-export.php:321
 #, php-format
 msgid "Row %d Error: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:425
+#: includes/admin/class-geodir-admin-import-export.php:429
 #, php-format
 msgid "Invalid post type - %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:428
+#: includes/admin/class-geodir-admin-import-export.php:432
 msgid "Post type missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:433
+#: includes/admin/class-geodir-admin-import-export.php:437
 msgid "Title missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:494
+#: includes/admin/class-geodir-admin-import-export.php:498
 msgid "Address city, region or country missing"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:531
+#: includes/admin/class-geodir-admin-import-export.php:535
 #: includes/location-functions.php:647
 msgid "Failed to retrieve GPS data from a address using API."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:555
+#: includes/admin/class-geodir-admin-import-export.php:559
 msgid "Not enough GPS info for address."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:578
-#: includes/admin/class-geodir-admin-import-export.php:596
+#: includes/admin/class-geodir-admin-import-export.php:582
+#: includes/admin/class-geodir-admin-import-export.php:600
 #: includes/location-functions.php:750 includes/location-functions.php:775
 msgid "Failed to reach Google geocode server."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:593
+#: includes/admin/class-geodir-admin-import-export.php:597
 #: includes/location-functions.php:773
 #, php-format
 msgid "Google geocode failed: %s"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:691
-#: includes/admin/class-geodir-admin-import-export.php:1004
-#: includes/admin/class-geodir-admin-import-export.php:1940
+#: includes/admin/class-geodir-admin-import-export.php:695
+#: includes/admin/class-geodir-admin-import-export.php:1008
+#: includes/admin/class-geodir-admin-import-export.php:1949
 #: includes/admin/settings/class-geodir-settings-import-export.php:887
 msgid "No records to export."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:737
-#: includes/admin/class-geodir-admin-import-export.php:1046
-#: includes/admin/class-geodir-admin-import-export.php:1984
+#: includes/admin/class-geodir-admin-import-export.php:741
+#: includes/admin/class-geodir-admin-import-export.php:1050
+#: includes/admin/class-geodir-admin-import-export.php:1993
 msgid ""
 "ERROR: Could not create csv file. This is usually due to inconsistent file "
 "permissions."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1582
+#: includes/admin/class-geodir-admin-import-export.php:1586
 msgid "json file is not valid."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1584
+#: includes/admin/class-geodir-admin-import-export.php:1588
 msgid "json file is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:1596
+#: includes/admin/class-geodir-admin-import-export.php:1600
 msgid "Settings updated."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2015
+#: includes/admin/class-geodir-admin-import-export.php:2024
 #, php-format
 msgid "GD IMPORT REVIEW [ROW %d]:"
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2023
+#: includes/admin/class-geodir-admin-import-export.php:2032
 msgid "data is empty."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2036
+#: includes/admin/class-geodir-admin-import-export.php:2045
 msgid "invalid comment content."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2040
+#: includes/admin/class-geodir-admin-import-export.php:2049
 msgid "invalid comment post ID."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2044
+#: includes/admin/class-geodir-admin-import-export.php:2053
 msgid "invalid user details(user id or author name, author email)."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2048
+#: includes/admin/class-geodir-admin-import-export.php:2057
 msgid "invalid rating."
 msgstr ""
 
-#: includes/admin/class-geodir-admin-import-export.php:2074
-#: includes/admin/class-geodir-admin-import-export.php:2091
+#: includes/admin/class-geodir-admin-import-export.php:2083
+#: includes/admin/class-geodir-admin-import-export.php:2100
 msgid "invalid data."
 msgstr ""
 
@@ -2118,7 +2118,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-post-view.php:310
 #: includes/admin/views/html-keys-edit.php:34
-#: includes/class-geodir-ajax.php:1298 includes/user-functions.php:206
+#: includes/class-geodir-ajax.php:1299 includes/user-functions.php:206
 #, php-format
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
@@ -8076,7 +8076,7 @@ msgid "Generate API key"
 msgstr ""
 
 #: includes/admin/views/html-keys-edit.php:110
-#: includes/class-geodir-ajax.php:1234
+#: includes/class-geodir-ajax.php:1235
 msgid "Revoke key"
 msgstr ""
 
@@ -9692,86 +9692,86 @@ msgstr ""
 msgid "Today"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:173
+#: includes/class-geodir-ajax.php:174
 msgid "Select Your Location"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:204
+#: includes/class-geodir-ajax.php:205
 msgid ""
 "Auto location detection failed, please manually set your location below by "
 "dragging the map / marker."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:220 language.php:78
+#: includes/class-geodir-ajax.php:221 language.php:78
 msgid "Cancel"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:222 includes/class-geodir-ajax.php:227
+#: includes/class-geodir-ajax.php:223 includes/class-geodir-ajax.php:228
 msgid "Please drag the marker or the map to set the position."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:222 includes/class-geodir-ajax.php:227
+#: includes/class-geodir-ajax.php:223 includes/class-geodir-ajax.php:228
 msgid "Set my location"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:248
+#: includes/class-geodir-ajax.php:249
 msgid "No tab_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:378
+#: includes/class-geodir-ajax.php:379
 msgid "Your recently viewed listings will show here."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:404 includes/class-geodir-ajax.php:1102
-#: includes/class-geodir-ajax.php:1135
+#: includes/class-geodir-ajax.php:405 includes/class-geodir-ajax.php:1103
+#: includes/class-geodir-ajax.php:1136
 msgid "No tabs provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:433 includes/class-geodir-ajax.php:462
+#: includes/class-geodir-ajax.php:434 includes/class-geodir-ajax.php:463
 msgid "No tab_type provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:650
+#: includes/class-geodir-ajax.php:651
 msgid "No post_id provided."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:661
+#: includes/class-geodir-ajax.php:662
 msgid "You have successfully deleted the Listing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:776
+#: includes/class-geodir-ajax.php:777
 #: includes/class-geodir-frontend-scripts.php:760
 #: includes/post-functions.php:396 language.php:82
 msgid "Unfavorite"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:781
+#: includes/class-geodir-ajax.php:782
 #: includes/class-geodir-frontend-scripts.php:758
 #: includes/post-functions.php:376 language.php:81
 msgid "Favorite"
 msgstr ""
 
-#: includes/class-geodir-ajax.php:788 includes/class-geodir-ajax.php:791
+#: includes/class-geodir-ajax.php:789 includes/class-geodir-ajax.php:792
 msgid "Action failed."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1168
+#: includes/class-geodir-ajax.php:1169
 msgid "Description is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1171
+#: includes/class-geodir-ajax.php:1172
 msgid "User is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1174
+#: includes/class-geodir-ajax.php:1175
 msgid "Permissions is missing."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1203
+#: includes/class-geodir-ajax.php:1204
 msgid "API Key updated successfully."
 msgstr ""
 
-#: includes/class-geodir-ajax.php:1233
+#: includes/class-geodir-ajax.php:1234
 msgid ""
 "API Key generated successfully. Make sure to copy your new keys now as the "
 "secret key will be hidden once you leave this page."
@@ -9927,45 +9927,45 @@ msgstr ""
 msgid "Leave a Review"
 msgstr ""
 
-#: includes/class-geodir-comments.php:655
+#: includes/class-geodir-comments.php:656
 msgid "Pingback:"
 msgstr ""
 
-#: includes/class-geodir-comments.php:655
+#: includes/class-geodir-comments.php:656
 msgid "(Edit)"
 msgstr ""
 
-#: includes/class-geodir-comments.php:810
+#: includes/class-geodir-comments.php:811
 #, php-format
 msgid "%d star rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:813
+#: includes/class-geodir-comments.php:814
 msgid "No rating yet!"
 msgstr ""
 
-#: includes/class-geodir-comments.php:873
-#: includes/class-geodir-comments.php:906
+#: includes/class-geodir-comments.php:874
+#: includes/class-geodir-comments.php:907
 msgid "Select a rating"
 msgstr ""
 
-#: includes/class-geodir-comments.php:942
+#: includes/class-geodir-comments.php:943
 msgid "Terrible"
 msgstr ""
 
-#: includes/class-geodir-comments.php:943
+#: includes/class-geodir-comments.php:944
 msgid "Poor"
 msgstr ""
 
-#: includes/class-geodir-comments.php:944
+#: includes/class-geodir-comments.php:945
 msgid "Average"
 msgstr ""
 
-#: includes/class-geodir-comments.php:945
+#: includes/class-geodir-comments.php:946
 msgid "Very Good"
 msgstr ""
 
-#: includes/class-geodir-comments.php:946
+#: includes/class-geodir-comments.php:947
 msgid "Excellent"
 msgstr ""
 
@@ -12016,7 +12016,7 @@ msgstr ""
 msgid "View on Map"
 msgstr ""
 
-#: includes/custom-fields/output-filter-functions.php:706
+#: includes/custom-fields/output-filter-functions.php:708
 #: includes/widgets/class-geodir-widget-post-title.php:190
 #, php-format
 msgctxt "listing title hover"

@@ -1,4 +1,4 @@
-<li class="dd-item" data-id="1" id="setName_<?php echo $tab->id;?>">
+<li class="dd-item" data-id="1" id="setName_<?php echo esc_attr( $tab->id );?>">
 	<div class="dd-form">
 		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
 		<div class="dd-handle">
@@ -6,20 +6,20 @@
 			<?php echo esc_attr($tab->tab_name);?>
 			<span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php echo esc_attr($tab->tab_key). ' ('.esc_attr($tab->tab_type).')';?></span>
 		</div>
-		<div class="dd-setting <?php echo 'dd-type-'.$tab->tab_type;?>">
+		<div class="dd-setting <?php echo 'dd-type-'.esc_attr( $tab->tab_type );?>">
 				<?php echo geodir_notification( array('gd-warn'=>__('Name and Icon settings are not used for sub items except fieldset.','geodirectory')) );?>
 
 			<p class="dd-setting-name">
-				<label for="gd-tab-name-<?php echo $tab->id;?>">
+				<label for="gd-tab-name-<?php echo esc_attr( $tab->id );?>">
 					<?php _e('Name:','geodirectory') ?><br>
-					<input type="text" name="tab_name" id="gd-tab-name-<?php echo $tab->id;?>" value="<?php echo esc_attr($tab->tab_name);?>">
+					<input type="text" name="tab_name" id="gd-tab-name-<?php echo esc_attr( $tab->id );?>" value="<?php echo esc_attr($tab->tab_name);?>">
 				</label>
 			</p>
 			<p class="dd-setting-icon">
-				<label for="gd-tab-icon-<?php echo $tab->id;?>">
+				<label for="gd-tab-icon-<?php echo esc_attr( $tab->id );?>">
 					<?php _e('Icon (optional):','geodirectory'); ?><br>
 					<select
-						id="gd-tab-icon-<?php echo $tab->id;?>"
+						id="gd-tab-icon-<?php echo esc_attr( $tab->id );?>"
 						name="tab_icon"
 						class="regular-text geodir-select"
 						data-fa-icons="1"  tabindex="-1" aria-hidden="true"
@@ -43,7 +43,7 @@
 			if($tab->tab_type=='shortcode'){
 				?>
 				<p>
-					<label for="gd-tab-content-<?php echo $tab->id;?>">
+					<label for="gd-tab-content-<?php echo esc_attr( $tab->id );?>">
 						<?php _e('Tab content:','geodirectory');
 						if($tab->tab_type=='shortcode'){
 							echo WP_Super_Duper::shortcode_button("'gd-tab-content-".$tab->id."'");
@@ -58,11 +58,11 @@
 				echo '<input type="hidden" name="tab_content" value=\''.stripslashes($tab->tab_content).'\'>';
 			}
 			?>
-			<input type="hidden" name="id" value="<?php echo $tab->id;?>">
-			<input type="hidden" name="post_type" value="<?php echo $tab->post_type;?>">
-			<input type="hidden" name="tab_layout" value="<?php echo $tab->tab_layout;?>">
-			<input type="hidden" name="tab_type" value="<?php echo $tab->tab_type;?>">
-			<input type="hidden" name="tab_key" value="<?php echo $tab->tab_key;?>">
+			<input type="hidden" name="id" value="<?php echo esc_attr( $tab->id );?>">
+			<input type="hidden" name="post_type" value="<?php echo esc_attr( $tab->post_type );?>">
+			<input type="hidden" name="tab_layout" value="<?php echo esc_attr( $tab->tab_layout );?>">
+			<input type="hidden" name="tab_type" value="<?php echo esc_attr( $tab->tab_type );?>">
+			<input type="hidden" name="tab_key" value="<?php echo esc_attr( $tab->tab_key );?>">
 			
 
 			<p class="gd-tab-actions">
