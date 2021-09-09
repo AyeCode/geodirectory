@@ -568,16 +568,16 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 		if ( ! $is_ajax || isset( $_REQUEST['shortcode'] ) ) {
 			?>
-			<input type="hidden" id="bestof_widget_post_type" name="bestof_widget_post_type" value="<?php echo $post_type; ?>">
-			<input type="hidden" id="bestof_widget_excerpt_type" name="bestof_widget_excerpt_type" value="<?php echo $excerpt_type; ?>">
-			<input type="hidden" id="bestof_widget_event_type" name="bestof_widget_event_type" value="<?php echo $event_type; ?>">
-			<input type="hidden" id="bestof_widget_post_limit" name="bestof_widget_post_limit" value="<?php echo $post_limit; ?>">
-			<input type="hidden" id="bestof_widget_taxonomy" name="bestof_widget_taxonomy" value="<?php echo $category_taxonomy; ?>">
+			<input type="hidden" id="bestof_widget_post_type" name="bestof_widget_post_type" value="<?php echo esc_attr( $post_type ); ?>">
+			<input type="hidden" id="bestof_widget_excerpt_type" name="bestof_widget_excerpt_type" value="<?php echo esc_attr( $excerpt_type ); ?>">
+			<input type="hidden" id="bestof_widget_event_type" name="bestof_widget_event_type" value="<?php echo esc_attr( $event_type ); ?>">
+			<input type="hidden" id="bestof_widget_post_limit" name="bestof_widget_post_limit" value="<?php echo esc_attr( $post_limit ); ?>">
+			<input type="hidden" id="bestof_widget_taxonomy" name="bestof_widget_taxonomy" value="<?php echo esc_attr( $category_taxonomy ); ?>">
 			<input type="hidden" id="bestof_widget_location_filter" name="bestof_widget_location_filter" value="<?php echo (int) $add_location_filter; ?>">
 			<?php if ( $add_location_filter && GeoDir_Post_types::supports( $post_type, 'location' ) && ! empty( $geodirectory->location ) ) { foreach ( $geodirectory->location as $key => $value ) { if ( is_scalar( $value ) || ( ! is_object( $value ) && ! is_array( $value ) ) ) { ?>
 			<input type="hidden" data-set-param="1" name="_gd_set_loc_<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>">
 			<?php } } } ?>
-			<input type="hidden" id="bestof_widget_char_count" name="bestof_widget_char_count" value="<?php echo $character_count; ?>">
+			<input type="hidden" id="bestof_widget_char_count" name="bestof_widget_char_count" value="<?php echo esc_attr( $character_count ); ?>">
 			<div class="geo-bestof-contentwrap geodir-tabs-content" style="position: relative; z-index: 0;">
 
 			<?php
