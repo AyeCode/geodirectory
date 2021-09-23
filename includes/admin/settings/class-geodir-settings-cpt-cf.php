@@ -97,17 +97,21 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * Output the settings.
 		 */
 		public function output() {
+			global $hide_save_button, $geodir_cpt_cf_output;
 
-			global $hide_save_button;
+			// Prevent rendering custom fields output twice.
+			if ( $geodir_cpt_cf_output ) {
+				return;
+			}
 
 			$hide_save_button = true;
+			$geodir_cpt_cf_output = true;
 
 			$listing_type = self::$post_type;
 
 			$sub_tab = self::$sub_tab;
 
 			include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-cf.php' );
-
 		}
 
 		/**

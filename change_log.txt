@@ -2,6 +2,7 @@
 * Near me map marker changes - CHANGED
 * Don't create custom field entry if DB column creation fails - FIXED
 * Option added in GD > Categories to adjust card shadow - ADDED
+* Sometimes CPT custom fields settings section rendered twice - FIXED
 
 = 2.1.1.3 =
 * Single post tab is not working when tab id starts with number - FIXED
