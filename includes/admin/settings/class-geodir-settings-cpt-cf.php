@@ -53,7 +53,28 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$this->id    = 'general';
 			$this->label = __( 'Custom Fields', 'geodirectory' );
 
-			// init the CF extra fields
+			// Init hooks
+			$this->init_hooks();
+		}
+
+		/**
+		 * Init custom fields hooks.
+		 *
+		 * @since 2.1.1.4
+		 *
+		 * @return mixed
+		 */
+		public function init_hooks() {
+			global $geodir_cpt_cf_init;
+
+			// Prevent executing hooks twice.
+			if ( $geodir_cpt_cf_init ) {
+				return;
+			}
+
+			$geodir_cpt_cf_init = true;
+
+			// Init the CF extra fields
 			GeoDir_Settings_Cpt_Cf_Extras::instance();
 
 			if ( self::$page == self::$post_type.'-settings' ) {
@@ -70,8 +91,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			}
 
 			add_action( 'admin_footer', array( $this, 'font_awesome_select' ) );
-
-
 		}
 
 		/**
@@ -97,15 +116,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * Output the settings.
 		 */
 		public function output() {
-			global $hide_save_button, $geodir_cpt_cf_output;
-
-			// Prevent rendering custom fields output twice.
-			if ( $geodir_cpt_cf_output ) {
-				return;
-			}
+			global $hide_save_button;
 
 			$hide_save_button = true;
-			$geodir_cpt_cf_output = true;
 
 			$listing_type = self::$post_type;
 
