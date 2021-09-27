@@ -2,7 +2,7 @@
 /**
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory\Templates
- * @version    2.1.0.11
+ * @version    2.1.1.4
  */
 
 //$cpt_row = $depth ? '<div class="gd-cptcat-li '.$li_class.' list-group-item list-group-item-action" >' :  '<div class="gd-cptcat-li '.$li_class.' card h-100 shadow-sm p-0 " >';
@@ -63,7 +63,7 @@ if(!$hide_icon){
 }
 
 ?>
-<div class="card h-100 shadow-sm p-0 card bg-dark overlayx overlay-blackx text-white shadow-sm border-0 rounded m-0"  >
+<div class="card h-100 p-0 bg-dark overlayx overlay-blackx text-white border-0 rounded m-0 <?php echo $card_class; ?>">
 	<a href="<?php echo esc_url($term_link);?>" class="embed-has-action embed-responsive embed-responsive-4by3 stretched-link">
 	<?php echo $icon; ?>
 	</a>

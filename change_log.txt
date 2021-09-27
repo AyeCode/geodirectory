@@ -1,4 +1,8 @@
 = 2.1.1.4 =
+* Near me map marker changes - CHANGED
+* Don't create custom field entry if DB column creation fails - FIXED
+* Option added in GD > Categories to adjust card shadow - ADDED
+* Sometimes CPT custom fields settings section rendered twice - FIXED
 * fallback image for cat_image is not working - FIXED
 
 = 2.1.1.3 =

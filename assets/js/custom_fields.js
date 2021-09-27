@@ -656,6 +656,8 @@ function geodir_auto_save_custom_field(el, jQ) {
 			}
 			$li.addClass("geodir-cf-saved");
 			jQuery(".geodir-cf-status", $li).html('<i class="fas fa-check-circle" aria-hidden="true"></i> ' + geodir_params.txt_saved);
+		} else {
+			jQuery(".geodir-cf-status", $li).html('');
 		}
 	})
 	.always(function(data, textStatus, jqXHR) {

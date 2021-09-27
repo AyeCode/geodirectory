@@ -317,6 +317,22 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 			    'group'     => __("Design","geodirectory")
 		    );
 
+			$options['arguments']['card_shadow'] = array(
+				'title' => __( 'Card shadow', 'geodirectory' ),
+				'desc' => __( 'Set the card shadow style.', 'geodirectory' ),
+				'type' => 'select',
+				'options' => array(
+					'small' => __( 'Default(small)', 'geodirectory' ),
+					'medium' => __( 'Medium', 'geodirectory' ),
+					'large' => __( 'Large', 'geodirectory' ),
+					'none' => __( 'None', 'geodirectory' ),
+				),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group'  => __( 'Design', 'geodirectory' )
+			);
+
 		    $options['arguments']['icon_color'] = array(
 			    'title' => __('Icon Color', 'geodirectory'),
 			    'desc' => __('Set the icon color', 'geodirectory'),
@@ -410,6 +426,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 	        'title_tag' => 'h4',
             'cpt_title' => '',
             'card_color' => 'outline-primary',
+			'card_shadow' => 'small',
             'icon_color' => '',
             'icon_size' => 'box-small',
             'design_type' => 'icon-left',
@@ -580,6 +597,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'filter_ids' => array(), // comma separated ids or array
 				'cpt_title' => '',
 				'card_color' => 'outline-primary',
+				'card_shadow' => 'small',
 				'icon_color' => '',
 				'icon_size' => 'box-small',
 				'design_type' => 'icon-left',
@@ -1051,14 +1069,27 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 		$design_style = geodir_design_style();
 
-		if($design_style ){
-
+		if ( $design_style ) {
 			$style = !empty($args['design_type']) ? esc_attr($args['design_type']) : 'icon-left';
 			if($style=='icon-left'){$style = 'icon-left';}
 			elseif($style=='icon-top'){$style = 'icon-top';}
 			elseif($style=='image'){$style = 'image';}
 			else{$style = 'icon-left';}
 			$style = $depth ? 'sub-item' : $style;
+
+			$card_shadow = ! empty( $args['card_shadow'] ) ? $args['card_shadow'] : 'small';
+
+			// card class
+			if ( $card_shadow == 'none' ) {
+				$card_class = 'shadow-none';
+			} else if ( $card_shadow == 'medium' ) {
+				$card_class = 'shadow';
+			} else if ( $card_shadow == 'large' ) {
+				$card_class = 'shadow-lg';
+			} else {
+				$card_class = 'shadow-sm';
+			}
+
 			$template =  $design_style."/categories/$style.php";
 
 			$cpt_row .= geodir_get_template_html( $template ,array(
@@ -1072,6 +1103,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 				'hide_icon'    =>  $hide_icon,
 				'use_image'    =>  $use_image,
 				'depth'    =>  $depth,
+				'card_class' => $card_class,
 				'args'  =>  $args
 			));
 			
