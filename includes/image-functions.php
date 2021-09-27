@@ -383,7 +383,7 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 				if ( ! empty( $term_img ) ) {
 					$default_img_id = $term_img['id'];
 
-					if ( $default_img_id == 'image' && ! empty( $term_img['src'] ) ) {
+					if ( !empty( $default_img_id ) && ! empty( $term_img['src'] ) ) {
 						$image_src = geodir_file_relative_url( $term_img['src'], false );
 						$post_images = array();
 						$image = new stdClass();
