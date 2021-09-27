@@ -524,6 +524,10 @@ function parse_marker_jason(json, map_canvas_var) {
             create_marker_cluster(map_canvas_var)
         }
     }
+
+    // Add near me marker.
+    geodir_map_show_near_me(options);
+
     jQuery('#' + map_canvas_var + '_loading_div').hide();
     jQuery("body").trigger("map_show", map_canvas_var);
 }
@@ -1240,6 +1244,10 @@ function parse_marker_jason_osm(json, map_canvas_var) {
             jQuery.goMap.map.setView(mapcenter, nZoom);
         }
     }
+
+    // Add near me marker.
+    geodir_map_show_near_me_osm(options);
+
     jQuery('#' + map_canvas_var + '_loading_div').hide();
     jQuery("body").trigger("map_show", map_canvas_var);
 }
@@ -1580,4 +1588,70 @@ function geodir_map_post_type_terms(options, post_type, query_string) {
         }
     });
     return false;
+}
+
+/**
+ * Show near me marker on map.
+ */
+function geodir_map_show_near_me(options) {
+    var iMarker, oMarker, bDrag;
+
+    if (options.nearLat && options.nearLng && options.nearIcon) {
+        bDrag = options.nearDraggable ? true : false;
+
+        iMarker = {
+            url: options.nearIcon,
+            size: null,
+            origin: new google.maps.Point(0, 0),
+            anchor: new google.maps.Point(8, 8),
+            scaledSize: new google.maps.Size(17, 17)
+        };
+
+        oMarker = jQuery.goMap.createMarker({
+            optimized: true,
+            flat: true,
+            draggable: bDrag,
+            id: 'nearme',
+            title: options.nearTitle,
+            position: new google.maps.LatLng(options.nearLat, options.nearLng),
+            visible: true,
+            clickable: false,
+            icon: iMarker
+        });
+
+        jQuery.goMap.gdUmarker = oMarker;
+    }
+}
+
+/**
+ * Show near me marker on OpenstreetMap.
+ */
+function geodir_map_show_near_me_osm(options) {
+    var oMarker, bDrag;
+
+    if (options.nearLat && options.nearLng && options.nearIcon && !jQuery.goMap.gdUmarker) {
+        bDrag = options.nearDraggable ? true : false;
+
+        oMarker = jQuery.goMap.createMarker({
+            optimized: false,
+            flat: true,
+            draggable: bDrag,
+            id: 'mapme',
+            title: options.nearTitle,
+            position: new L.latLng(options.nearLat, options.nearLng),
+            visible: true,
+            clickable: false,
+            addToMap: true,
+            zIndex: 0
+        });
+
+        oMarker.setIcon(L.divIcon({
+            iconSize: [17, 17],
+            iconAnchor: [8.5, 8.5],
+            className: 'geodir-near-marker',
+            html: '<div class="geodir-near-marker-wrap"><div class="geodir-near-marker-animate"></div><img class="geodir-near-marker-img" src="' + options.nearIcon + '" /></div>'
+        }));
+
+        jQuery.goMap.gdUmarker = oMarker;
+    }
 }

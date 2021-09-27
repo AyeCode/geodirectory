@@ -439,14 +439,15 @@ function geodir_admin_current_post_type() {
  * @param string $column The column name.
  * @param string $column_attr The column attributes.
  */
-function geodir_add_column_if_not_exist($db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL")
-{
+function geodir_add_column_if_not_exist( $db, $column, $column_attr = "VARCHAR( 255 ) NOT NULL" ) {
 	global $wpdb;
-	$result = 0;// no rows affected
-	if (!geodir_column_exist($db, $column)) {
-		if (!empty($db) && !empty($column))
-			$result = $wpdb->query("ALTER TABLE `$db` ADD `$column`  $column_attr");
+
+	$result = 0; // No rows affected
+
+	if ( ! empty( $db ) && ! empty( $column ) && ! geodir_column_exist( $db, $column ) ) {
+		$result = $wpdb->query( "ALTER TABLE `$db` ADD `$column` $column_attr" );
 	}
+
 	return $result;
 }
 

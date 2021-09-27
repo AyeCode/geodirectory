@@ -53,7 +53,28 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$this->id    = 'general';
 			$this->label = __( 'Custom Fields', 'geodirectory' );
 
-			// init the CF extra fields
+			// Init hooks
+			$this->init_hooks();
+		}
+
+		/**
+		 * Init custom fields hooks.
+		 *
+		 * @since 2.1.1.4
+		 *
+		 * @return mixed
+		 */
+		public function init_hooks() {
+			global $geodir_cpt_cf_init;
+
+			// Prevent executing hooks twice.
+			if ( $geodir_cpt_cf_init ) {
+				return;
+			}
+
+			$geodir_cpt_cf_init = true;
+
+			// Init the CF extra fields
 			GeoDir_Settings_Cpt_Cf_Extras::instance();
 
 			if ( self::$page == self::$post_type.'-settings' ) {
@@ -70,8 +91,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			}
 
 			add_action( 'admin_footer', array( $this, 'font_awesome_select' ) );
-
-
 		}
 
 		/**
@@ -97,7 +116,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * Output the settings.
 		 */
 		public function output() {
-
 			global $hide_save_button;
 
 			$hide_save_button = true;
@@ -107,7 +125,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$sub_tab = self::$sub_tab;
 
 			include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-cf.php' );
-
 		}
 
 		/**
@@ -2228,7 +2245,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				if ( $result === false ) {
 					return new WP_Error( 'failed', __( "Field update failed.x", "geodirectory" ) );
 				}
-
 				// @todo, should we ALTER the field type here to see if we can improve it, ie VARCHAR(123)
 			} else {
 				// Insert the field settings.
@@ -2238,20 +2254,26 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					$db_format
 				);
 
-				if($result === false){
+				if ( $result === false ) {
 					return new WP_Error( 'failed', __( "Field create failed.", "geodirectory" ) );
-				}else{
+				} else {
 					$field->field_id = $wpdb->insert_id;
 				}
 
-				// check if its a default field that does not need a column added
+				// Check if its a default field that does not need a column added
 				$default_fields = self::get_default_field_htmlvars();
-				if( ( !in_array($field->htmlvar_name,$default_fields) && ! apply_filters( 'geodir_cfa_skip_column_add', $field->field_type == 'fieldset', $field ) ) || !empty($field->add_column) ){
 
+				if ( ( ! in_array( $field->htmlvar_name, $default_fields ) && ! apply_filters( 'geodir_cfa_skip_column_add', $field->field_type == 'fieldset', $field ) ) || ! empty( $field->add_column ) ) {
 					// Add the new column to the details table.
 					$add_details_column = geodir_add_column_if_not_exist( $table, $field->htmlvar_name, $column_attr );
+
 					if ( $add_details_column === false ) {
-						return new WP_Error( 'failed', __('Column creation failed, you may have too many columns or the default value does not match with field data type.', 'geodirectory'));
+						// Delete CF if column creaition fails.
+						if ( ! empty( $field->field_id ) ) {
+							$wpdb->query( $wpdb->prepare( "DELETE FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE id = %d", array( $field->field_id ) ) );
+						}
+
+						return new WP_Error( 'failed', __( 'Column creation failed, you may have too many columns or the default value does not match with field data type.', 'geodirectory' ) );
 					}
 				}
 			}
