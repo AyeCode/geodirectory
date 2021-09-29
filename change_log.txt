@@ -1,3 +1,6 @@
+= 2.1.1.5 =
+* Dynamic condition shortcode not working for a new field - FIXED
+
 = 2.1.1.4 =
 * Near me map marker changes - CHANGED
 * Don't create custom field entry if DB column creation fails - FIXED

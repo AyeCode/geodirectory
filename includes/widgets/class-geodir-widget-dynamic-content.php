@@ -147,7 +147,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			$match_field = 'street';
 		}
 
-		if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
+		if ( $match_field === '' ||  ! empty( $find_post ) ) {
 			$field = array();
 			$search = $args['search'];
 			if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'post_id' ) {
