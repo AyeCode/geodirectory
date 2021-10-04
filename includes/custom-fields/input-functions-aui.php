@@ -792,7 +792,7 @@ function geodir_cfi_multiselect( $html, $cf ) {
 					<?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
 					echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
 					<?php if ( $cf['is_required'] ) {
-						echo '<span>*</span>';
+						echo '<span class="text-danger">*</span>';
 					} ?>
 				</label>
 			<?php
