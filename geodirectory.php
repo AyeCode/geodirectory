@@ -287,6 +287,10 @@ final class GeoDirectory {
 			require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-privacy.php' );
 		}
 
+	    // @todo not ready for production yet
+	    //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-fse.php' );
+
+
         $this->query = new GeoDir_Query();
 		$this->api   = new GeoDir_API();
 
