@@ -22,9 +22,9 @@ class GeoDir_FSE {
 	public function __construct() {
 		// Add query vars
 		add_filter( 'default_template_types', array( $this, 'default_template_types' ), 10 );
-
+		
 	}
-
+	
 	public function default_template_types( $templates ){
 
 
