@@ -269,6 +269,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'address_not_found_on_map_msg'                 => __( 'Address not found for:', 'geodirectory' ),
 		// end not show alert msg
 		'my_place_listing_del'                         => __( 'Are you sure you wish to delete this listing?', 'geodirectory' ),
+		'confirmPostAuthorAction'                      => __( 'Are you sure you wish to perform this action?', 'geodirectory' ),
 		'my_main_listing_del'                          => __( 'Deleting the main listing of a franchise will turn all franchises in regular listings. Are you sure wish to delete this main listing?', 'geodirectory' ),
 		//start not show alert msg
 		'rating_error_msg'                             => __( 'Error : please retry', 'geodirectory' ),

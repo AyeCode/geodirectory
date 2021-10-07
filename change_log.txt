@@ -1,5 +1,7 @@
 = 2.1.1.5 =
 * Multiselect custom field checkbox type shows wrong color for required astrik - FIXED
+* Dynamic condition shortcode not working for a new field - FIXED
+* Classifieds/Real-estate Sold Functionality - ADDED
 
 = 2.1.1.4 =
 * Near me map marker changes - CHANGED

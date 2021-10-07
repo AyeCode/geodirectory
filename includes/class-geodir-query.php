@@ -261,7 +261,7 @@ class GeoDir_Query {
 				$s_SA = '';
 			}
 		}elseif(is_author()){
-			add_filter( 'posts_where', array( $this, 'author_where' ) );
+			add_filter( 'posts_where', array( $this, 'author_where' ), 10, 2 );
 			//$q->is_archive = true;
 			//$q->is_post_type_archive = true;
 		}
@@ -677,8 +677,32 @@ class GeoDir_Query {
 					$snear = ' ';
 				}
 
-				if ( $support_location && $snear != '' && $latlon) {
+				// post_status
+				$status = geodir_get_post_stati( 'search', array( 'post_type' => $post_types ) );
+				if ( empty( $status ) ) {
+					$status = array( 'publish' );
+				} elseif ( is_scalar( $status ) ) {
+					$status = array( $status );
+				}
 
+				if ( count( $status ) > 1 ) {
+					$status_where = "AND {$wpdb->posts}.post_status IN( '" . implode( "', '", $status ) . "' )";
+				} else {
+					$status_where = "AND {$wpdb->posts}.post_status = '{$status[0]}'";
+				}
+
+				/**
+				 * Filter post_status where condition.
+				 *
+				 * @soince 2.1.1.5
+				 *
+				 * @param string $status_where Status where condition.
+				 * @param array  $status Post status array.
+				 * $param string $post_types Post type.
+				 */
+				$status_where = apply_filters( 'geodir_posts_where_post_status', $status_where, $status, $post_types );
+
+				if ( $support_location && $snear != '' && $latlon) {
 					$lat = $latlon['lat'];
 					$lon = $latlon['lon'];
 					$between          = geodir_get_between_latlon( $lat, $lon, $dist );
@@ -687,13 +711,11 @@ class GeoDir_Query {
 								$content_where 
 								$terms_sql
 							)
-						AND $wpdb->posts.post_type in ('{$post_types}')
-						AND ($wpdb->posts.post_status = 'publish')";
+						AND $wpdb->posts.post_type = '{$post_types}' {$status_where}";
 
-					if(!empty($between)){
-						$where .= $wpdb->prepare( " AND latitude between %f and %f AND longitude between %f and %f ", $between['lat1'], $between['lat2'], $between['lon1'], $between['lon2'] );
+					if ( ! empty( $between ) ) {
+						$where .= $wpdb->prepare( " AND ( latitude BETWEEN %f AND %f ) AND ( longitude BETWEEN %f AND %f ) ", $between['lat1'], $between['lat2'], $between['lon1'], $between['lon2'] );
 					}
-
 
 					if ( isset( $_REQUEST['sdistance'] ) && $_REQUEST['sdistance'] != 'all' ) {
 						$DistanceRadius = geodir_getDistanceRadius( geodir_get_option( 'search_distance_long' ) );
@@ -707,8 +729,7 @@ class GeoDir_Query {
 						$content_where  
 						$terms_sql 
 					)
-					AND $wpdb->posts.post_type in ('$post_types')
-					AND $wpdb->posts.post_status = 'publish' ";
+					AND $wpdb->posts.post_type = '{$post_types}' {$status_where}";
 				}
 			}
 
@@ -733,68 +754,83 @@ class GeoDir_Query {
      *
      * @return mixed|string
      */
-	public function author_where($where){
-		global $wp_query,$wpdb;
+	public function author_where( $where, $query = array() ) {
+		global $wp_query, $wpdb;
 
-		$cpts = geodir_get_posttypes('array');
+		if ( ! self::is_gd_main_query( $query ) ) {
+			return $where;
+		}
+
+		$cpts = geodir_get_posttypes( 'array' );
 
 		// author saves/favs filter
-		if(is_author() && !empty($wp_query->query['gd_favs']) ){
+		if ( is_author() && ! empty( $wp_query->query['gd_favs'] ) ) {
+			$post_types = array_keys( $cpts );
 
 			$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
-			if($author_id){
 
-				//echo $where.'###'.$author_id;exit;
-				$where = str_replace("AND ($wpdb->posts.post_author = $author_id)","",$where); // remove the author restriction
+			if ( $author_id ) {
+				$where = str_replace( "AND ($wpdb->posts.post_author = $author_id)", "", $where ); // Remove the author restriction
+
 				$user_favs = geodir_get_user_favourites( $author_id );
-				if(empty($user_favs)){
+
+				if ( empty( $user_favs ) ) {
 					$fav_in = "''"; // blank it so we get no results
-				}else{
+				} else {
 					$fav_in = $user_favs;
-					$prepare_ids = implode(",",array_fill(0, count($user_favs), '%d'));
+					$prepare_ids = implode( ",", array_fill( 0, count( $user_favs ), '%d' ) );
 				}
-				$where .= $wpdb->prepare(" AND $wpdb->posts.ID IN ($prepare_ids)",$fav_in);
 
-				// replace 'post' with GD post types
+				$where .= $wpdb->prepare( " AND $wpdb->posts.ID IN ($prepare_ids)", $fav_in );
 
-				//print_r($post_types);
-				if(!isset($wp_query->query['post_type'])){
-					$post_types = geodir_get_posttypes();
-					$prepare_cpts = implode(",",array_fill(0, count($post_types), '%s'));
-					$gd_cpt_replace = $wpdb->prepare("$wpdb->posts.post_type IN ($prepare_cpts)",$post_types);
-					$where = str_replace("$wpdb->posts.post_type = 'post'",$gd_cpt_replace,$where);
+				// Replace 'post' with GD post types
+				if ( ! isset( $wp_query->query['post_type'] ) ) {
+					$prepare_cpts = implode( ",", array_fill( 0, count( $post_types ), '%s' ) );
+					$gd_cpt_replace = $wpdb->prepare( "$wpdb->posts.post_type IN ($prepare_cpts)", $post_types );
+					$where = str_replace( "$wpdb->posts.post_type = 'post'", $gd_cpt_replace, $where );
 				}
 
 				$user_id = get_current_user_id();
 				$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
-				// check if restricted
-				$post_type = isset($wp_query->query['post_type']) ? $wp_query->query['post_type'] : 'gd_place';
-				$author_favorites_private = isset($cpts[$post_type]['author_favorites_private']) && $cpts[$post_type]['author_favorites_private'] ? true : false;
-				if($author_favorites_private && $author_id != $user_id){
+
+				// Check if restricted
+				$post_type = isset($wp_query->query['post_type']) ? $wp_query->query['post_type'] : $post_types[0];
+				$author_favorites_private = isset( $cpts[$post_type]['author_favorites_private'] ) && $cpts[$post_type]['author_favorites_private'] ? true : false;
+
+				if ( $author_favorites_private && $author_id != $user_id ) {
 					$where .= " AND 1=2";
 				}
 
 			}
-		}elseif(is_author()){
+		} elseif ( is_author() ) {
+			$post_type = isset( $wp_query->query['post_type'] ) ? $wp_query->query['post_type'] : $post_types[0];
 			$user_id = get_current_user_id();
+			$author_id = isset( $wp_query->query_vars['author'] ) ? $wp_query->query_vars['author'] : 0;
 
-			$author_id = isset($wp_query->query_vars['author']) ? $wp_query->query_vars['author'] : 0;
-			if($author_id && $author_id == $user_id){
-				$where = str_replace("{$wpdb->posts}.post_status = 'publish'","{$wpdb->posts}.post_status = 'publish' OR {$wpdb->posts}.post_status = 'draft' OR {$wpdb->posts}.post_status = 'pending'",$where);
+			if ( $author_id && $author_id == $user_id ) {
+				$statuses = geodir_get_post_stati( 'author-archive', array( 'post_type' => $post_type ) );
+
+				$_statuses = "{$wpdb->posts}.post_status = 'publish'";
+
+				foreach ( $statuses as $status ) {
+					if ( strpos( $where, "{$wpdb->posts}.post_status = '" . $status . "'" ) === false ) {
+						$_statuses .= " OR {$wpdb->posts}.post_status = '" . $status . "'";
+					}
+				}
+
+				$where = str_replace( "{$wpdb->posts}.post_status = 'publish'", $_statuses, $where );
 			}
 
 			// check if restricted
-			$post_type = isset($wp_query->query['post_type']) ? $wp_query->query['post_type'] : 'gd_place';
-			$author_posts_private = isset($cpts[$post_type]['author_posts_private']) && $cpts[$post_type]['author_posts_private'] ? true : false;
-			if($author_posts_private && $author_id != $user_id){
+			$author_posts_private = isset( $cpts[ $post_type ]['author_posts_private'] ) && $cpts[$post_type]['author_posts_private'] ? true : false;
+
+			if ( $author_posts_private && $author_id != $user_id ) {
 				$where .= " AND 1=2";
 			}
-
 		}
 
 		return $where;
 	}
-
 
     /**
      * Posts join.

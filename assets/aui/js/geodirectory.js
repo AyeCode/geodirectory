@@ -555,7 +555,7 @@ jQuery(document).ready(function($) {
         }
     });
 
-    jQuery('.gd-category-dd').hover(function() {
+    jQuery('.gd-category-dd').on("hover",function() {
         jQuery('.gd-category-dd ul').show();
     });
 
@@ -1204,6 +1204,58 @@ function gd_delete_post($post_id){
                 jQuery('.post-' + $post_id + '[data-post-id="' + $post_id + '"] .gd_user_action.delete_link').removeClass('opacity-2');
             }
         });
+
+        return true;
+    } else {
+        return false;
+    }
+}
+
+function geodir_post_author_action(el, post_id, action) {
+    var _confirm = geodir_params.confirmPostAuthorAction;
+    if (jQuery(el).text()) {
+        _confirm = jQuery(el).text() + ': ' + _confirm;
+    }
+
+    if (confirm(_confirm)) {
+        var data = {
+            action: 'geodir_post_author_action',
+            _action: action,
+            post_id: post_id,
+            security: geodir_params.basic_nonce,
+        };
+
+        jQuery.ajax({
+                url: geodir_params.ajax_url,
+                type: 'POST',
+                data: data,
+                dataType: 'json',
+                beforeSend: function(xhr, obj) {
+                    jQuery(el).addClass('disabled');
+                }
+            })
+            .done(function(data, textStatus, jqXHR) {
+                if (data.data.message) {
+                    if (data.success) {
+                        aui_modal("", '<div class="gd-notification gd-success"><i class="fas fa-check-circle"></i> ' + data.data.message + '</div>', '', true);
+                    } else {
+                        aui_modal("", '<div class="gd-notification gd-error"><i class="fas fa-exclamation-circle"></i> ' + data.data.message + '</div>', '', true);
+                    }
+                }
+
+                if (data.data.redirect_to) {
+                    setTimeout(function() {
+                        if (data.data.redirect_to === true || data.data.redirect_to === 1) {
+                            window.location.reload()
+                        } else {
+                            window.location = data.data.redirect_to;
+                        }
+                    }, 3000);
+                }
+            })
+            .always(function(data, textStatus, jqXHR) {
+                jQuery(el).removeClass('disabled');
+            });
 
         return true;
     } else {

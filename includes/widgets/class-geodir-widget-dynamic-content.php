@@ -147,10 +147,10 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 			$match_field = 'street';
 		}
 
-		if ($match_field === '' || ( ! empty( $find_post ) && isset( $find_post->{$match_field} ) ) ) {
+		if ( $match_field === '' || ! empty( $find_post ) ) {
 			$field = array();
 			$search = $args['search'];
-			if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'post_id' ) {
+			if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'post_id' && $match_field !== 'post_status' ) {
 				$package_id = geodir_get_post_package_id( $post_id, $post_type );
 				$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 
@@ -345,6 +345,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		$keys['post_date'] = 'post_date ( ' . __( 'post date', 'geodirectory' ) . ' )';
 		$keys['post_modified'] = 'post_modified ( ' . __( 'post modified', 'geodirectory' ) . ' )';
 		$keys['post_id'] = 'post_id ( ' . __( 'post id', 'geodirectory' ) . ' )';
+		$keys['post_status'] = 'post_status ( ' . __( 'Post Status', 'geodirectory' ) . ' )';
 		return apply_filters( 'geodir_badge_field_keys', $keys );
 	}
 	

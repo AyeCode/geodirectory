@@ -642,7 +642,7 @@ function geodir_function_post_updated( $post_ID, $post_after, $post_before ) {
 
 	if ( $post_type != '' && in_array( $post_type, geodir_get_posttypes() ) ) {
 		// send notification to client when post moves from draft to publish
-		if ( ! empty( $post_after->post_status ) && $post_after->post_status == 'publish' && ! empty( $post_before->post_status ) && $post_before->post_status != 'publish' && $post_before->post_status != 'trash' ) {
+		if ( ! empty( $post_after->post_status ) && in_array( $post_after->post_status, geodir_get_publish_statuses( array( 'post_type' => $post_type ) ) ) && ! empty( $post_before->post_status ) && ! in_array( $post_before->post_status, geodir_get_publish_statuses( array( 'post_type' => $post_type ) ) ) && $post_before->post_status != 'trash' ) {
 			$gd_post = geodir_get_post_info( $post_ID );
 
 			if ( empty( $gd_post ) ) {
@@ -687,31 +687,154 @@ add_action( 'wp_head', 'geodir_fb_like_thumbnail' );
  * Get custom statuses.
  *
  * @since 2.0.0
+ * @since 2.1.1.5 $post_type parameter added.
  *
+ * @param string $post_type The post type. Default empty.
  * @return array $custom_statuses.
  */
-function geodir_get_custom_statuses() {
+function geodir_get_custom_statuses( $post_type = '' ) {
 	$custom_statuses = array(
 		'gd-closed' => _x( 'Closed down', 'Listing status', 'geodirectory' )
 	);
 
-	return apply_filters( 'geodir_listing_custom_statuses', $custom_statuses );
+	return apply_filters( 'geodir_listing_custom_statuses', $custom_statuses, $post_type );
 }
 
 /**
  * Get post statuses.
  *
  * @since 2.0.0
+ * @since 2.1.1.5 $post_type parameter added.
  *
  * @return array $statuses.
  */
-function geodir_get_post_statuses() {
+function geodir_get_post_statuses( $post_type = '' ) {
 	$default_statuses = get_post_statuses();
-	$custom_statuses  = geodir_get_custom_statuses();
+	$custom_statuses  = geodir_get_custom_statuses( $post_type );
 
 	$statuses = array_merge( $default_statuses, $custom_statuses );
 
 	return apply_filters( 'geodir_post_statuses', $statuses );
+}
+
+/**
+ * @since 2.1.1.5.
+ */
+function geodir_register_custom_statuses() {
+	$statuses = array(
+		'gd-closed'    => array(
+			'label'                     => _x( 'Closed down', 'Listing status', 'geodirectory' ),
+			'public'                    => false,
+			'exclude_from_search'       => true,
+			'show_in_admin_all_list'    => true,
+			'show_in_admin_status_list' => true,
+			'label_count'               => _n_noop( 'Closed down <span class="count">(%s)</span>', 'Closed down <span class="count">(%s)</span>', 'geodirectory' ),
+		)
+	);
+
+	return apply_filters( 'geodir_register_post_statuses', $statuses );
+}
+
+/**
+ * Get list of statuses which are consider 'publish'.
+ *
+ * @since  2.1.1.5
+ * @return array
+ */
+function geodir_get_publish_statuses( $args = array() ) {
+	return apply_filters( 'geodir_get_publish_statuses', array( 'publish' ), $args );
+}
+
+/**
+ * Get list of statuses which are consider 'pending'.
+ *
+ * @since  2.1.1.5
+ * @return array
+ */
+function geodir_get_pending_statuses( $args = array() ) {
+	return apply_filters( 'geodir_get_pending_statuses', array( 'pending' ), $args );
+}
+
+/**
+ * Get a list of post statuses.
+ *
+ * @since 2.1.1.5.
+ *
+ * @param string $context The context.
+ * @param string $args The args.
+ * @return array Post statuses.
+ */
+function geodir_get_post_stati( $context, $args = array() ) {
+	$statuses = array();
+	$publish_statuses = geodir_get_publish_statuses( $args );
+
+	switch( $context ) {
+		case 'author-archive':
+		case 'widget-listings-author':
+			$custom_statuses = geodir_register_custom_statuses();
+
+			if ( ! empty( $custom_statuses ) ) {
+				$publish_statuses = array_merge( $publish_statuses, array_keys( $custom_statuses ) );
+			}
+
+			$statuses = array_merge( $publish_statuses, array( 'pending', 'draft', 'private', 'future' ) );
+			break;
+		case 'search':
+			$statuses = $publish_statuses;
+			break;
+		case 'single-map':
+			$statuses = array_merge( $publish_statuses, array( 'pending', 'draft', 'inherit', 'auto-draft' ) );
+
+			$non_public_statuses = geodir_get_post_stati( 'non-public', $args );
+
+			if ( ! empty( $non_public_statuses ) && is_array( $non_public_statuses ) ) {
+				$statuses = array_merge( $statuses, $non_public_statuses );
+			}
+			break;
+		case 'map':
+			$statuses = $publish_statuses;
+			break;
+		case 'non-public':
+			$custom_statuses = geodir_register_custom_statuses();
+
+			foreach ( $custom_statuses as $status => $data ) {
+				if ( isset( $data['public'] ) && $data['public'] === false ) {
+					$statuses[] = $status;
+				}
+			}
+			break;
+		case 'widget-listings':
+			$statuses = $publish_statuses;
+
+			if ( is_super_admin() ) {
+				$statuses[] = 'private';
+			}
+			break;
+		case 'import':
+			$statuses = array_keys( geodir_get_post_statuses( ( ! empty( $args['post_type'] ) ? $args['post_type'] : '' ) ) );
+			break;
+		case 'posts-count-live':
+			$statuses = $publish_statuses;
+			break;
+		case 'posts-count-offline':
+			$statuses = geodir_get_post_stati( 'non-public', $args );
+			$statuses = array_merge( $statuses, array( 'pending', 'draft', 'private', 'future' ) );
+			break;
+		case 'unpublished':
+			$statuses = array( 'pending', 'draft', 'auto-draft', 'trash' );
+			break;
+		default:
+			$statuses = $publish_statuses;
+			break;
+	}
+
+	$statuses = apply_filters( 'geodir_get_post_stati', $statuses, $context, $args );
+
+	if ( ! empty( $statuses ) ) {
+		$statuses = array_unique( $statuses );
+	}
+
+	return $statuses;
 }
 
 /**
@@ -896,7 +1019,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 			$output = apply_filters( 'geodir_output_badge_field_key_' . $match_field, $output, $find_post, $args );
 		}
 
-		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' && $match_field !== 'post_id' ) {
+		if ( $match_field && $match_field !== 'post_date' && $match_field !== 'post_modified' && $match_field !== 'default_category' && $match_field !== 'post_id' && $match_field !== 'post_status' ) {
 			$package_id = geodir_get_post_package_id( $post_id, $post_type );
 			$fields = geodir_post_custom_fields( $package_id, 'all', $post_type, 'none' );
 

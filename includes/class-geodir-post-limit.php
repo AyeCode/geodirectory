@@ -102,7 +102,7 @@ class GeoDir_Post_Limit {
 		}
 
 		if ( empty( $query_args['post_status'] ) ) {
-			$query_args['post_status'] = array_keys( geodir_get_post_statuses() );
+			$query_args['post_status'] = array_keys( geodir_get_post_statuses( $query_args['post_type'] ) );
 		}
 
 		$table = geodir_db_cpt_table( $query_args['post_type'] );
