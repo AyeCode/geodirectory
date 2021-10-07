@@ -799,7 +799,7 @@ function geodir_cfi_multiselect( $html, $cf ) {
 
 			// Set hidden input to save empty value for checkbox set.
 			if ( $multi_display == 'checkbox' && ! empty( $cf['name'] ) ) {
-				echo '<input type="hidden" ' . AUI_Component_Helper::name( $cf['name'] ) . ' value=""/>';
+				echo '<input type="hidden" name="' . esc_attr( $cf['name'] ) . '" value=""/>';
 			}
 
 			if ( $horizontal ) {

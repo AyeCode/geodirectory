@@ -131,7 +131,7 @@ class GeoDir_Permalinks {
 
 		// Allow post author to access their pending listings.
 		if ( ! empty( $wp_query ) && ! empty( $wp_query->query_vars['post_type'] ) && ! empty( $wp_query->query_vars['p'] ) && is_404() && ! is_preview() && ( $user_id = (int) get_current_user_id() ) ) {
-			if ( geodir_is_gd_post_type( $wp_query->query_vars['post_type'] ) && in_array( get_post_status( (int) $wp_query->query_vars['p'] ), array_keys( geodir_get_post_statuses() ) ) && GeoDir_Post_Data::owner_check( (int) $wp_query->query_vars['p'], $user_id ) && ( $redirect = get_permalink( (int) $wp_query->query_vars['p'] ) ) ) {
+			if ( geodir_is_gd_post_type( $wp_query->query_vars['post_type'] ) && in_array( get_post_status( (int) $wp_query->query_vars['p'] ), array_keys( geodir_get_post_statuses( $wp_query->query_vars['post_type'] ) ) ) && GeoDir_Post_Data::owner_check( (int) $wp_query->query_vars['p'], $user_id ) && ( $redirect = get_permalink( (int) $wp_query->query_vars['p'] ) ) ) {
 				$redirect = add_query_arg( array( 'preview' => 'true' ), $redirect );
 
 				if ( $redirect && $redirect != geodir_curPageURL() ) {

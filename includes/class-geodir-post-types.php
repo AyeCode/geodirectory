@@ -384,19 +384,7 @@ class GeoDir_Post_types {
      * @since 2.0.0
 	 */
 	public static function register_post_status() {
-
-		$listing_statuses = apply_filters( 'geodir_register_post_statuses',
-			array(
-				'gd-closed'    => array(
-					'label'                     => _x( 'Closed down', 'Listing status', 'geodirectory' ),
-					'public'                    => false,
-					'exclude_from_search'       => true,
-					'show_in_admin_all_list'    => true,
-					'show_in_admin_status_list' => true,
-					'label_count'               => _n_noop( 'Closed down <span class="count">(%s)</span>', 'Closed down <span class="count">(%s)</span>', 'geodirectory' ),
-				)
-			)
-		);
+		$listing_statuses = geodir_register_custom_statuses();
 
 		foreach ( $listing_statuses as $listing_status => $values ) {
 			register_post_status( $listing_status, $values );

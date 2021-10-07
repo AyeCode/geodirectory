@@ -71,6 +71,7 @@ class GeoDir_AJAX {
 			'get_sort_options' => false,
 			'tool_regenerate_thumbnails' => true,
 			'regenerate_thumbnails' => true,
+			'post_author_action' => false,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -1439,6 +1440,44 @@ class GeoDir_AJAX {
 			wp_send_json_error( array( 'error' => $data->get_error_message() ) );
 		} else {
 			wp_send_json_success( $data );
+		}
+
+		wp_die();
+	}
+
+	/**
+	 * Handle user post action.
+	 *
+	 * @since 2.1.1.5
+	 *
+	 * @return mixed
+	 */
+	public static function post_author_action() {
+		// Security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		$the_post = ! empty( $_POST['post_id'] ) ? geodir_get_post_info( absint( $_POST['post_id'] ) ) : array();
+		$action = ! empty( $_POST['_action'] ) ? geodir_clean( $_POST['_action'] ) : '';
+
+		$data = array();
+		if ( empty( $the_post ) ) {
+			$data['message'] = __( 'Invalid post.', 'geodirectory' );
+			wp_send_json_error( $data );
+		} else {
+			if ( ! geodir_listing_belong_to_current_user( $the_post->ID ) ) {
+				$data['message'] = __( 'Invalid post.', 'geodirectory' );
+				wp_send_json_error( $data );
+			} else {
+				$result = GeoDir_User::post_author_action( $action, $the_post );
+
+				if ( is_wp_error( $result ) ) {
+					$data['message'] = $result->get_error_message();
+
+					wp_send_json_error( $data );
+				} else {
+					wp_send_json_success( $result );
+				}
+			}
 		}
 
 		wp_die();

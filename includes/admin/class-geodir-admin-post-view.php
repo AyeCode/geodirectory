@@ -472,8 +472,9 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 			if ( ! ( $screen_id && in_array( $screen_id, geodir_get_screen_ids() ) ) ) {
 				return;
 			}
-			
-			$statuses = geodir_get_custom_statuses();
+			$post_type = isset( $screen->post_type ) ? $screen->post_type : '';
+
+			$statuses = geodir_get_custom_statuses( $post_type );
 			$status_list = '';
 			foreach ( $statuses as $status => $label ) {
 			  $status_list .= '<option value="' . $status . '">' . $label . '</option>';
@@ -500,7 +501,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
 				return;
 			}
 			 
-			$statuses = geodir_get_custom_statuses();
+			$statuses = geodir_get_custom_statuses( $post->post_type );
 			$status_list = '';
 			$current_label = '';
 			foreach ( $statuses as $status => $label ) {
@@ -540,7 +541,7 @@ if ( ! class_exists( 'GeoDir_Admin_Post_View', false ) ) {
          */
 		public static function posts_column_status( $status, $post, $column, $mode ) {
 			if ( $column == 'date' && ! empty( $post->post_type ) && geodir_is_gd_post_type( $post->post_type ) ) {
-				$statuses = geodir_get_custom_statuses();
+				$statuses = geodir_get_custom_statuses( $post->post_type );
 				if ( ! empty( $statuses[ $post->post_status ] ) ) {
 					$status = $statuses[ $post->post_status ];
 				}

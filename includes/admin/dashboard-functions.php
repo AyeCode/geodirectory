@@ -242,7 +242,7 @@ function geodir_dashboard_query_posts_count( $post_type, $statuses = array(), $w
 	global $wpdb;
 
 	if ( empty( $statuses ) ) {
-		$statuses = array_keys( geodir_get_post_statuses() );
+		$statuses = array_keys( geodir_get_post_statuses( $post_type ) );
 		$statuses = apply_filters( 'geodir_dashboard_query_posts_statuses', $statuses, $post_type );
 	} else {
 		if ( ! is_array( $statuses ) ) {

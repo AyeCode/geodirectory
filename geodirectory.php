@@ -11,7 +11,7 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.1.1.4
+ * Version: 2.1.1.5
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
@@ -34,7 +34,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.1.1.4';
+    public $version = '2.1.1.5';
 
     /**
      * GeoDirectory instance.
@@ -212,6 +212,7 @@ final class GeoDirectory {
 		GeoDir_Post_Limit::init(); // Posts limit
 	    //GeoDir_Post_Revision::init(); // post revisions @todo not implemented yet
 	    GeoDir_Compatibility::init(); // plugin/theme comaptibility checks
+		GeoDir_Classifieds::init();
 
 	    if( defined( 'ELEMENTOR_VERSION' ) ){
 		    GeoDir_Elementor::init();
@@ -237,6 +238,7 @@ final class GeoDirectory {
 	    GeoDir_Comments::init();
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/location-functions.php' );
 		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/business-hours-functions.php' );
+		require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/classifieds-functions.php' );
 
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-maps.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );

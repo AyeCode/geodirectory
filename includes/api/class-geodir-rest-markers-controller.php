@@ -229,10 +229,22 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 
 		if ( ! empty( $request['post'] ) && is_array( $request['post'] ) && count( $request['post'] ) == 1 ) {
 			$where = $wpdb->prepare( "pd.post_id IS NOT NULL AND ( p.post_type = %s OR p.post_type = %s )", array( $request['post_type'],'revision' ) );
-			$where .= " AND p.post_status IN('publish', 'pending', 'draft', 'gd-closed','inherit','auto-draft')";
+
+			$statuses = geodir_get_post_stati( 'single-map', $request );
+
+			if ( ! empty( $statuses ) ) {
+				$where .= " AND p.post_status IN( '" . implode( "', '", $statuses ) . "' )";
+			}
 		} else {
 			$where = $wpdb->prepare( "pd.post_id IS NOT NULL AND p.post_type = %s", array( $request['post_type'] ) );
-			$where .= " AND p.post_status = 'publish'";
+
+			$status = geodir_get_post_stati( 'map', $request );
+
+			if ( count( $status ) > 1 ) {
+				$where .= " AND p.post_status IN( '" . implode( "', '", $status ) . "' )";
+			} else {
+				$where .= " AND p.post_status = '{$status[0]}'";
+			}
 		}
 		$where = apply_filters( 'geodir_rest_markers_query_where', $where, $request );
 

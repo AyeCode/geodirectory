@@ -570,4 +570,9 @@ class GeoDir_User {
 		return apply_filters( 'geodir_login_link', $output, $login_title, $login_link, $redirect );
 	}
 
+	public static function post_author_action( $action, $the_post ) {
+		$data = array();
+
+		return apply_filters( 'geodir_post_author_action_' . $action, $data, $action, $the_post );
+	}
 }

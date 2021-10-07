@@ -979,26 +979,22 @@ function geodir_get_widget_listings( $query_args = array(), $count_only = false 
 	 */
 	$join = apply_filters( 'geodir_filter_widget_listings_join', $join, $post_type );
 
-	$post_status = is_super_admin() ? " OR " . $wpdb->posts . ".post_status = 'private'" : '';
-
 	// Show posts with some post statuses on author page.
 	if ( ! empty( $query_args['post_author'] ) && $query_args['post_author'] > 0 && ! empty( $query_args['is_gd_author'] ) && $query_args['post_author'] == (int) get_current_user_id() ) {
-		$statuses = geodir_get_post_statuses();
-
-		if ( isset( $statuses['publish'] ) ) {
-			unset( $statuses['publish'] );
-		}
-
-		if ( isset( $statuses['gd-closed'] ) ) {
-			unset( $statuses['gd-closed'] );
-		}
-
-		if ( ! empty( $statuses ) ) {
-			$post_status = "OR " . $wpdb->posts . ".post_status IN('" . implode( "','", array_keys( $statuses ) ) . "')";
-		}
+		$context = 'widget-listings-author';
+	} else {
+		$context = 'widget-listings';
 	}
 
-	$where = " AND ( " . $wpdb->posts . ".post_status = 'publish' " . $post_status . " ) AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
+	$statuses = geodir_get_post_stati( $context, $query_args );
+
+	if ( count( $statuses ) > 1 ) {
+		$where = "AND {$wpdb->posts}.post_status IN( '" . implode( "', '", $statuses ) . "' )";
+	} else {
+		$where = "AND {$wpdb->posts}.post_status = '{$statuses[0]}'";
+	}
+
+	$where .= " AND " . $wpdb->posts . ".post_type = '" . $post_type . "'";
 
 	// in / not in
 	if ( ! empty( $query_args['post__in'] ) ) {

@@ -505,9 +505,10 @@ class GeoDir_Admin_Import_Export {
 				$post_info['post_status'] = 'publish';
 			}
 
-			$statuses = geodir_get_post_statuses();
+			$statuses = geodir_get_post_stati( 'import', $post_info );
+
 			// Set post status pending for non-standard status
-			if ( ! ( ! empty( $statuses ) && isset( $statuses[ $post_info['post_status'] ] ) ) ) {
+			if ( ! in_array( $post_info['post_status'], $statuses ) ) {
 				$post_info['post_status'] = 'pending';
 			}
 		}

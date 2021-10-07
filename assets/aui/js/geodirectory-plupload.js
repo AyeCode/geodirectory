@@ -213,6 +213,9 @@ jQuery(document).ready(function($) {
 });
 
 function geodir_esc_entities(str){
+    // Check & decode entities.
+    str = geodir_decode_entities(str);
+
     var entityMap = {
         '&': '&amp;',
         '<': '&lt;',
@@ -227,6 +230,29 @@ function geodir_esc_entities(str){
     return String(str).replace(/[&<>"'`=\/]/g, function(s) {
         return entityMap[s];
     });
+}
+
+function geodir_decode_entities(str){
+    if (!str) {
+        return str;
+    }
+    var entityMap = {
+        '&amp;': '&',
+        '&lt;': '<',
+        '&gt;': '>',
+        '&quot;': '"',
+        "&#39;": "'",
+        '&#x2F;': '/',
+        '&#x60;': '`',
+        '&#x3D;': '='
+      };
+
+    for (k in entityMap) {
+        var pat = new RegExp(k, 'g');
+        str = str.replace(pat, entityMap[k]);
+    }
+
+    return str;
 }
 
 function geodir_remove_file_index(indexes) {

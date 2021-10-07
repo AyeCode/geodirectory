@@ -13,16 +13,16 @@
  * @since 2.0.0
  */
 class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
-    
-    public $arguments;
+
+	public $arguments;
 
 	/**
-     * Sets up a new Detail User Actions widget instance.
-     *
-     * @since 2.0.0
-     * @access public
-     */
-    public function __construct() {
+	 * Sets up a new Detail User Actions widget instance.
+	 *
+	 * @since 2.0.0
+	 * @access public
+	 */
+	public function __construct() {
 
 		$options = array(
 			'textdomain'    => GEODIRECTORY_TEXTDOMAIN,
@@ -70,36 +70,109 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			)
 		);
 
-	    $design_style = geodir_design_style();
+		$design_style = geodir_design_style();
 
-	    if($design_style) {
+		if ( $design_style ) {
+			$arguments['display'] = array(
+				'type' => 'select',
+				'title' => __( 'Display as:', 'geodirectory' ),
+				'desc' => __( 'Display author actions as a list of buttons or dropdown.', 'geodirectory' ),
+				'options' => array(
+					"" => __( 'Buttons (default)', 'geodirectory' ),
+					"dropdown" => __( 'Dropdown', 'geodirectory' ),
+				),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group' => __( 'Design', 'geodirectory' )
+			);
 
-		    // background
-		    $arguments['bg']  = geodir_get_sd_background_input('mt');
+			$arguments['size'] = array(
+				'type' => 'select',
+				'title' => __( 'Button Size:', 'geodirectory' ),
+				'desc' => __( 'Size of the buttons.', 'geodirectory' ),
+				'options' => array(
+					"" => __( 'Small (default)', 'geodirectory' ),
+					"medium" => __( 'Medium', 'geodirectory' ),
+					"large" => __( 'Large', 'geodirectory' ),
+				),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group' => __( 'Design', 'geodirectory' ),
+			);
 
-		    // margins
-		    $arguments['mt']  = geodir_get_sd_margin_input('mt');
-		    $arguments['mr']  = geodir_get_sd_margin_input('mr');
-		    $arguments['mb']  = geodir_get_sd_margin_input('mb');
-		    $arguments['ml']  = geodir_get_sd_margin_input('ml');
+			$arguments['alignment'] = array(
+				'type' => 'select',
+				'title' => __( 'Alignment:', 'geodirectory' ),
+				'desc' => __( 'How the buttons should be positioned in the widget.', 'geodirectory' ),
+				'options' => array(
+					"" => __( 'Inline (default)', 'geodirectory' ),
+					"block" => __( 'Block', 'geodirectory' ),
+				),
+				'default' => '',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group' => __( 'Design', 'geodirectory' ),
+			);
 
-		    // padding
-		    $arguments['pt']  = geodir_get_sd_padding_input('pt');
-		    $arguments['pr']  = geodir_get_sd_padding_input('pr');
-		    $arguments['pb']  = geodir_get_sd_padding_input('pb');
-		    $arguments['pl']  = geodir_get_sd_padding_input('pl');
+			$arguments['color'] = array(
+				'title' => __( 'Color', 'geodirectory'),
+				'desc' => __( 'Select the button/dropdown color.', 'geodirectory' ),
+				'type' => 'select',
+				'options' =>  array(
+					"" => __( 'Custom colors', 'geodirectory' ),
+				) + geodir_aui_colors( true ),
+				'default' => 'primary',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group' => __( 'Design', 'geodirectory' ),
+			);
 
-		    // border
-		    $arguments['border']  = geodir_get_sd_border_input('border');
-		    $arguments['rounded']  = geodir_get_sd_border_input('rounded');
-		    $arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+			$arguments['text_color'] = array(
+				'title' => __( 'Text Color', 'geodirectory'),
+				'desc' => __( 'Select the button/dropdown text color.', 'geodirectory' ),
+				'type' => 'select',
+				'options' =>  array(
+					"" => __( 'Custom colors', 'geodirectory' ),
+				) + geodir_aui_colors( true ),
+				'default' => 'white',
+				'desc_tip' => true,
+				'advanced' => false,
+				'group' => __( 'Design', 'geodirectory' ),
+			);
 
-		    // shadow
-		    $arguments['shadow']  = geodir_get_sd_shadow_input('shadow');
+			// button margins
+			$arguments['btn_mt']  = geodir_get_sd_margin_input( 'mt', array( 'group' => __( 'Design', 'geodirectory' ), 'default' => 1 ), false );
+			$arguments['btn_mr']  = geodir_get_sd_margin_input( 'mr', array( 'group' => __( 'Design', 'geodirectory' ) ), false );
+			$arguments['btn_mb']  = geodir_get_sd_margin_input( 'mb', array( 'group' => __( 'Design', 'geodirectory' ), 'default' => 1 ), false );
+			$arguments['btn_ml']  = geodir_get_sd_margin_input( 'ml', array( 'group' => __( 'Design', 'geodirectory' ) ), false );
 
-		    $options['arguments'] = $options['arguments'] + $arguments;
+			// background
+			$arguments['bg']  = geodir_get_sd_background_input('mt');
 
-	    }
+			// margins
+			$arguments['mt']  = geodir_get_sd_margin_input('mt');
+			$arguments['mr']  = geodir_get_sd_margin_input('mr');
+			$arguments['mb']  = geodir_get_sd_margin_input('mb');
+			$arguments['ml']  = geodir_get_sd_margin_input('ml');
+
+			// padding
+			$arguments['pt']  = geodir_get_sd_padding_input('pt');
+			$arguments['pr']  = geodir_get_sd_padding_input('pr');
+			$arguments['pb']  = geodir_get_sd_padding_input('pb');
+			$arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+			// border
+			$arguments['border']  = geodir_get_sd_border_input('border');
+			$arguments['rounded']  = geodir_get_sd_border_input('rounded');
+			$arguments['rounded_size']  = geodir_get_sd_border_input('rounded_size');
+
+			// shadow
+			$arguments['shadow'] = geodir_get_sd_shadow_input('shadow');
+
+			$options['arguments'] = $options['arguments'] + $arguments;
+		}
 
 		parent::__construct( $options );
 	}
@@ -117,14 +190,17 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $post;
 
-//		if ( is_preview() ) {
-//			//return;
-//		}
-
 		$defaults = array(
 			'hide_edit'      => 0,
 			'hide_delete'      => 0,
 			'author_page_only'      => 0,
+			'display' => '',
+			'size' => '',
+			'alignment' => '',
+			'btn_mt'    => '1',
+			'btn_mb'    => '1',
+			'btn_mr'    => '',
+			'btn_ml'    => '',
 			'bg'    => '',
 			'mt'    => '',
 			'mb'    => '3',
@@ -153,49 +229,47 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 		}
 
 		$output = '';
-		if( $show && !empty($post->ID) && geodir_listing_belong_to_current_user($post->ID)){
-
-
+		if ( $show && ! empty( $post->ID ) && geodir_listing_belong_to_current_user( $post->ID ) ) {
 			$post_id = $post->ID;
-			if (isset($_REQUEST['pid']) && $_REQUEST['pid'] != '') {
-				$post_id = absint($_REQUEST['pid']);
-			}
 
+			if ( isset( $_REQUEST['pid'] ) && $_REQUEST['pid'] != '' ) {
+				$post_id = absint( $_REQUEST['pid'] );
+			}
 
 			$author_actions = array();
 
 			// status
 			$post_status = self::post_status_author_page();// the post status on the author page
-			if(!empty($post_status)){
+			if ( ! empty( $post_status ) ) {
 				$author_actions['status'] = $post_status;
 			}
 
 			// Edit
-			if(!$args['hide_edit']){
+			if ( ! $args['hide_edit'] ) {
+				$editlink = geodir_edit_post_link( $post_id );
 
-				$editlink = geodir_edit_post_link($post_id);
-				if($editlink){
+				if ( $editlink ) {
 					$author_actions['edit'] = array(
-						'icon'  => 'fas fa-pencil-alt',
+						'icon' => 'fas fa-pencil-alt',
 						'title' => __('Edit', 'geodirectory'),
-						'url'   => esc_url($editlink)
+						'url' => esc_url( $editlink )
 					);
 				}
 			}
 
 			// Delete
-			if(!$args['hide_delete']) {
+			if ( ! $args['hide_delete'] ) {
 				$author_actions['delete'] = array(
 					'icon'  => 'fas fa-trash',
 					'title' => __('Delete', 'geodirectory'),
 					'url'   => 'javascript:void(0);',
-					'onclick'   => 'gd_delete_post('.$post_id.');'
+					'onclick'   => 'gd_delete_post(' . $post_id . ');',
+					'color' => 'danger'
 				);
 			}
 
 			// wrap class
-			$wrap_class = geodir_build_aui_class($args);
-
+			$wrap_class = geodir_build_aui_class( $args );
 
 			/*
 			 * Filter the author actions.
@@ -204,15 +278,55 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 			 * @param array $author_actions An array of author actions.
 			 * @param int $post_id The post id.
 			 */
-			$author_actions = apply_filters('geodir_author_actions',$author_actions,$post_id);
+			$author_actions = apply_filters( 'geodir_author_actions', $author_actions, $post_id );
 
+			$design_style = ! empty( $args['design_style'] ) ? esc_attr( $args['design_style'] ) : geodir_design_style();
 
-			$design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
-			$template = $design_style ? $design_style."/author-actions.php" : "author-actions.php";
-			
+			if ( $design_style ) {
+				if ( $args['display'] == 'dropdown' ) {
+					$template = 'author-actions-dropdown.php';
+				} else {
+					$template = 'author-actions.php';
+				}
+				$template = $design_style . '/' . $template;
+
+				// color
+				if ( ! empty( $args['color'] ) ) {
+					$args['color'] = $args['color'];
+				} else {
+					$args['color'] = 'primary';
+				}
+
+				// text_color
+				if ( ! empty( $args['text_color'] ) ) {
+					$args['text_color'] = $args['text_color'];
+				} else {
+					$args['text_color'] = 'white';
+				}
+
+				// size
+				if ( $args['size'] == 'medium' ) {
+					$args['size'] = '';
+				} elseif ( $args['size'] == 'large' ) {
+					$args['size'] = 'lg';
+				} else {
+					$args['size'] = 'sm';
+				}
+
+				$button_class = geodir_build_aui_class( array( 'mt' => $args['btn_mt'], 'mr' => $args['btn_mr'], 'mb' => $args['btn_mb'], 'ml' => $args['btn_ml'] ) );
+				if ( $args['alignment'] ) {
+					$button_class .= ' btn-' . sanitize_html_class( $args['alignment'] );
+				}
+			} else {
+				$template = "author-actions.php";
+				$button_class = '';
+			}
+
 			$output = geodir_get_template_html( $template, array(
-				'author_actions'    => $author_actions,
-				'wrap_class'   => $wrap_class
+				'author_actions' => $author_actions,
+				'wrap_class' => $wrap_class,
+				'btn_class' => $button_class,
+				'args' => $args
 			) );
 
 		}
@@ -229,32 +343,30 @@ class GeoDir_Widget_Author_Actions extends WP_Super_Duper {
 	 * @global object $wpdb WordPress Database object.
 	 * @global object $post The current post object.
 	 */
-	public static function post_status_author_page()
-	{
+	public static function post_status_author_page() {
 		global $wpdb, $post;
 
 		$status_parts = array();
-		if (get_current_user_id()) {
-
+		if ( get_current_user_id() ) {
 			$is_author_page = self::is_author_page();
-			if ($is_author_page && !empty($post) && isset($post->post_author) && $post->post_author == get_current_user_id()) {
 
-				// we need to query real status direct as we dynamically change the status for author on author page so even non author status can view them.
-				$real_status = $wpdb->get_var("SELECT post_status from $wpdb->posts WHERE ID=$post->ID");
-				if ($real_status == 'publish') {
+			if ( $is_author_page && ! empty( $post ) && isset( $post->post_author ) && $post->post_author == get_current_user_id() ) {
+				// We need to query real status direct as we dynamically change the status for author on author page so even non author status can view them.
+				$real_status = $wpdb->get_var( "SELECT post_status FROM $wpdb->posts WHERE ID = {$post->ID}" );
+
+				if ( $real_status == 'publish' ) {
 					$status_icon = 'fas fa-play';
-					$status = __('Published', 'geodirectory');
-				} elseif($real_status == 'pending') {
-					$status = __('Awaiting review', 'geodirectory');
+					$status = __( 'Published', 'geodirectory' );
+				} elseif ( $real_status == 'pending' ) {
+					$status = __( 'Awaiting review', 'geodirectory' );
 					$status_icon = 'fas fa-pause';
-				}else {
-					$status = __('Not published', 'geodirectory');
+				} else {
+					$status = __( 'Not published', 'geodirectory' );
 					$status_icon = 'fas fa-pause';
-
 				}
 
-				$status_parts['title'] = apply_filters('geodir_post_status_author_page',$status,$real_status,$post->ID);
-				$status_parts['icon'] = apply_filters('geodir_post_status_icon_author_page',$status_icon,$real_status,$post->ID);
+				$status_parts['title'] = apply_filters( 'geodir_post_status_author_page', $status, $real_status, $post->ID );
+				$status_parts['icon'] = apply_filters( 'geodir_post_status_icon_author_page', $status_icon, $real_status, $post->ID );
 			}
 		}
 

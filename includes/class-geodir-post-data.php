@@ -50,8 +50,9 @@ class GeoDir_Post_Data {
 
 		if ( ! is_admin() ) {
 			add_filter( 'pre_get_posts', array( __CLASS__, 'show_public_preview' ) );
-			add_filter( 'posts_results', array( __CLASS__, 'set_closed_status' ), 999, 2 );
-			add_filter( 'the_posts', array( __CLASS__, 'reset_closed_status' ), 999, 2 );
+
+			add_filter( 'posts_results', array( __CLASS__, 'set_public_status' ), 999, 2 );
+			add_filter( 'the_posts', array( __CLASS__, 'reset_public_status' ), 999, 2 );
 		}
 
 		// add mandatory not to add listing page
@@ -1590,8 +1591,7 @@ class GeoDir_Post_Data {
 	 * @return int|WP_Error $result
 	 */
 	public static function ajax_save_post( $post_data ) {
-
-		// check if user has privileges to edit the post
+		// Check if user has privileges to edit the post
 		$post_id   = isset( $post_data['ID'] ) ? absint( $post_data['ID'] ) : '';
 		$parent_id = isset( $post_data['post_parent'] ) ? absint( $post_data['post_parent'] ) : '';
 		if ( ! self::can_edit( $post_id, get_current_user_id(), $parent_id ) ) {
@@ -1649,7 +1649,6 @@ class GeoDir_Post_Data {
 			 * Check if its a logged out user and if we have details to register the user
 			 */
 			$post_data = self::check_logged_out_author( $post_data );
-
 		} else {
 			$post_data['post_status'] = $post_status;
 		}
@@ -1658,6 +1657,11 @@ class GeoDir_Post_Data {
 		if ( ! empty( $post_data['geodir_auto_save_post_error'] ) && is_wp_error( $post_data['geodir_auto_save_post_error'] ) ) {
 			return $post_data['geodir_auto_save_post_error'];
 		}
+
+		/**
+		 * @since 2.1.1.5
+		 */
+		$post_data = apply_filters( 'geodir_ajax_update_post_data', $post_data, ! empty( $post_data['post_parent'] ) );
 
 		// Save the post.
 		$result = wp_update_post( $post_data, true );
@@ -1694,31 +1698,26 @@ class GeoDir_Post_Data {
 	 * @return string
 	 */
 	public static function ajax_save_post_message( $post_data ) {
-
 		$message = '';
 
 		// if its an update.
 		if ( isset( $post_data['post_parent'] ) && $post_data['post_parent'] ) {
-
 			// live changes have been made.
-			if ( $post_data['post_status'] == 'publish' ) {
+			if ( in_array( $post_data['post_status'], geodir_get_publish_statuses( $post_data ) ) ) {
 				$link    = get_permalink( $post_data['ID'] );
 				$message = sprintf( __( 'Update received, your changes are now live and can be viewed %shere%s.', 'geodirectory' ), "<a href='$link' >", "</a>" );
 			} // changes are not live
 			else {
-				//$message = sprintf( __('Update received, your changes may need to be reviewed before going live.', 'geodirectory'), "<a href='$link' >", "</a>" );
 				$message = __( 'Update received, your changes may need to be reviewed before going live.', 'geodirectory' );
 			}
-
 		} // if its a new post.
 		else {
-
 			// post published
-			if ( $post_data['post_status'] == 'publish' ) {
+			if ( in_array( $post_data['post_status'], geodir_get_publish_statuses( $post_data ) ) ) {
 				$link    = get_permalink( $post_data['ID'] );
 				$message = sprintf( __( 'Post received, your listing is now live and can be viewed %shere%s.', 'geodirectory' ), "<a href='$link' >", "</a>" );
-			} // post needs review
-			else {
+			} else {
+				// post needs review
 				$post         = new stdClass();
 				$post->ID     = $post_data['ID'];
 				$preview_link = self::get_preview_link( $post );
@@ -1914,6 +1913,50 @@ class GeoDir_Post_Data {
 		if ( $gd_reset_closed && isset( $wp_post_statuses['gd-closed'] ) ) {
 			$wp_post_statuses['gd-closed']->public = false;
 			$gd_reset_closed                       = false;
+		}
+
+		return $posts;
+	}
+
+	/**
+	 * Set public status.
+	 *
+	 * @since 2.1.1.5
+	 *
+	 * @param object $posts Posts object.
+	 * @param object $wp_query Wordpress query object.
+	 *
+	 * @return object $posts.
+	 */
+	public static function set_public_status( $posts, $wp_query ) {
+		global $wp_post_statuses, $geodir_set_public;
+
+		if ( ! empty( $wp_query->is_single ) && ! empty( $posts ) && ! empty( $posts[0]->post_type ) && geodir_is_gd_post_type( $posts[0]->post_type ) && ! empty( $posts[0]->post_status ) && isset( $wp_post_statuses[ $posts[0]->post_status ] ) && ( $non_public_statuses = geodir_get_post_stati( 'non-public', array( 'post_type' => $posts[0]->post_type ) ) ) ) {
+			if ( in_array( $posts[0]->post_status, $non_public_statuses ) ) {
+				$wp_post_statuses[ $posts[0]->post_status ]->public = true;
+				$geodir_set_public = $posts[0]->post_status;
+			}
+		}
+
+		return $posts;
+	}
+
+	/**
+	 * Reset public status.
+	 *
+	 * @since 2.1.1.5
+	 *
+	 * @param object $posts Post object.
+	 * @param object $wp_query Wordpress query object.
+	 *
+	 * @return object $posts.
+	 */
+	public static function reset_public_status( $posts, $wp_query ) {
+		global $wp_post_statuses, $geodir_set_public;
+
+		if ( $geodir_set_public && isset( $wp_post_statuses[ $geodir_set_public ] ) ) {
+			$wp_post_statuses[ $geodir_set_public ]->public = false;
+			$geodir_set_public = false;
 		}
 
 		return $posts;
@@ -2271,7 +2314,7 @@ class GeoDir_Post_Data {
 	 */
 	public static function transition_post_status( $new_status, $old_status, $post ) {
 		// Handle publish future post via cron.
-		if ( wp_doing_cron() && 'future' === $old_status && 'publish' === $new_status && geodir_is_gd_post_type( $post->post_type ) ) {
+		if ( wp_doing_cron() && 'future' === $old_status && geodir_is_gd_post_type( $post->post_type ) && in_array( $new_status, geodir_get_publish_statuses( (array) $post ) ) ) {
 			// Update post status in detail table.
 			geodir_save_post_meta( $post->ID, 'post_status', $new_status );
 

@@ -47,37 +47,44 @@ function geodir_get_user_favourites( $user_id = '' ) {
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
  * @global object $current_user Current user object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
  * @return array User listing count for each post type.
  */
-function geodir_user_post_listing_count($user_id = null,$unpublished = false)
-{
-	global $wpdb, $plugin_prefix, $current_user;
-	if(!$user_id){
+function geodir_user_post_listing_count( $user_id = null, $unpublished = false ) {
+	global $wpdb, $current_user;
+
+	if ( ! $user_id ) {
 		$user_id = $current_user->ID;
 	}
 
-	if(!$user_id){
+	if ( ! $user_id ) {
 		return array();
 	}
 
 	$unpublished_sql = '';
-	if($unpublished){
-		$unpublished_sql = " OR post_status='pending' OR post_status='gd-closed' OR post_status='gd-expired' ";
+
+	if ( $unpublished ) {
+		$unpublished_sql = " OR post_status = 'pending' OR post_status = 'gd-closed' OR post_status = 'gd-expired' ";
 	}
-	
+
 	$all_postypes = geodir_get_posttypes();
 
 	$user_listing = array();
-	foreach ($all_postypes as $ptype) {
+	foreach ( $all_postypes as $post_type ) {
+		$statuses = geodir_get_post_stati( 'posts-count-live', array( 'post_type' => $post_type ) );
 
-		$total_posts = $wpdb->get_var("SELECT count( ID ) FROM " . $wpdb->prefix . "posts WHERE post_author=" . $user_id . " AND post_type='" . $ptype . "' AND ( post_status = 'publish' OR post_status = 'draft' OR post_status = 'private' $unpublished_sql )");
+		if ( $unpublished ) {
+			$statuses = array_merge( $statuses, geodir_get_post_stati( 'posts-count-offline', array( 'post_type' => $post_type ) ) );
+		}
 
-		if ($total_posts > 0) {
-			$user_listing[$ptype] = $total_posts;
+		$statuses = array_unique( $statuses );
+
+		$total_posts = $wpdb->get_var( "SELECT count( ID ) FROM " . $wpdb->posts . " WHERE post_author = " . $user_id . " AND post_type = '" . $post_type . "' AND {$wpdb->posts}.post_status IN( '" . implode( "', '", $statuses ) . "' )");
+
+		if ( $total_posts > 0 ) {
+			$user_listing[ $post_type ] = $total_posts;
 		}
 	}
-	
+
 	return $user_listing;
 }
 
