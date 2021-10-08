@@ -1,3 +1,8 @@
+= 2.1.1.7 =
+* Backend image editing broken due to error in minified JS file - FIXED
+* Output location block does not have default value set, meaning value must be changed to work initially - FIXED
+* Elementor Pro can cause fatal error with Super Duper v2 if widget called the v1 way - FIXED
+
 = 2.1.1.5 =
 * Multiselect custom field checkbox type shows wrong color for required astrik - FIXED
 * Dynamic condition shortcode not working for a new field - FIXED

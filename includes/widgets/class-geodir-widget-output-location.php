@@ -42,6 +42,7 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
                     'title' => __('Location:', 'geodirectory'),
                     'desc' => __('The location type to output.', 'geodirectory'),
                     'type' => 'select',
+                    'default'  => 'detail',
                     'options' => $this->show_in_locations(),
                     'desc_tip' => true,
                     'advanced' => false
