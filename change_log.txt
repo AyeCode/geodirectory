@@ -1,3 +1,5 @@
+= 2.1.1.9 =
+* GD > Badge not showing default_category - FIXED
 = 2.1.1.8 =
 * Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve - FIXED
 
