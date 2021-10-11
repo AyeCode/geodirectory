@@ -951,7 +951,6 @@ function geodir_setup_postdata( $the_post ) {
  */
 function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	global $gd_post;
-
 //	print_r( $args );
 
 	$output = '';
@@ -965,7 +964,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 	if ($post_type &&  $post_type == 'page' && geodir_is_block_demo() ) {
 		$post_type = 'gd_place';
 	}
-
+	
 	if ($post_type &&  ! geodir_is_gd_post_type( $post_type ) ) {
 		return $output;
 	}
@@ -1198,12 +1197,14 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 
 				// categories
 				if ( ! empty( $badge ) && $match_field == 'default_category' ) {
+					
 					if(!empty($args['preview'])){
 
 					}else{
 
 					}
-					$term = get_term_by( 'id', absint( $badge ), $post_type.'category' );
+					
+					$term = get_term_by( 'id', absint( $match_value ), $post_type.'category' );
 
 					// maybe link to it
 					if(( !empty($args['link']) || $args['link']=='%%input%%') && !empty($term)){
@@ -1216,7 +1217,6 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					if(!empty($term->name)){
 						$badge = esc_attr($term->name);
 					}
-
 				}
 
 				if(!empty($args['preview']) && !$badge){
