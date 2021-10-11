@@ -1630,20 +1630,31 @@ function geodir_get_no_replace_fields(){
  *
  * @return mixed
  */
-function geodir_replace_variables($text,$post_id = ''){
+function geodir_replace_variables( $text, $post_id = '' ) {
 	global $gd_post;
 
-	// only run if we have a GD post and the start of a var
-	if(!empty($gd_post->ID) && strpos( $text, '%%' ) !== false){
+	// Only run if we have a GD post and the start of a var
+	if ( ! empty( $gd_post->ID ) && strpos( $text, '%%' ) !== false ) {
 		$non_replace = geodir_get_no_replace_fields();
-		foreach($gd_post as $key => $val){
-			if(!in_array($key,$non_replace)){
-				$val = apply_filters( 'geodir_replace_variables_' . $key, $val, $text );
-				$text = str_replace('%%'.$key.'%%',$val,$text);
+
+		foreach( $gd_post as $key => $val ) {
+			if ( ! in_array( $key, $non_replace ) ) {
+				// Replace plain variables.
+				if ( strpos( $text, '%%' . $key . '%%' ) !== false ) {
+					$val = apply_filters( 'geodir_replace_variables_' . $key, $val, $text );
+					$text = str_replace( '%%' . $key . '%%', $val, $text );
+				}
+
+				// Replace encloded variables.
+				if ( strpos( $text, '%%' . $key . '_encode%%' ) !== false ) {
+					$encode_val = ! empty( $val ) ? urlencode( trim( $val ) ) : '';
+					$encode_val = apply_filters( 'geodir_replace_variables_encode_' . $key, $encode_val, $text );
+					$text = str_replace( '%%' . $key . '_encode%%', $encode_val, $text );
+				}
 			}
 		}
 	}
-	
+
 	return $text;
 }
 
