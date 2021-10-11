@@ -1,5 +1,7 @@
 = 2.1.1.9 =
-* GD > Badge not showing default_category - FIXED
+* GD > Badge is not showing default category link - FIXED
+* Use category image title & caption on fallback image title & caption - CHANGED
+
 = 2.1.1.8 =
 * Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve - FIXED
 

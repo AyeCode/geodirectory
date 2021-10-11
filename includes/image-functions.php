@@ -384,20 +384,45 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 					$default_img_id = $term_img['id'];
 
 					if ( !empty( $default_img_id ) && ! empty( $term_img['src'] ) ) {
+						$imag_title = __( 'Placeholder image', 'geodirectory' );
+						$imag_caption = '';
+						$image_mime_type = '';
+						$image_metadata = '';
+
+						if ( absint( $default_img_id ) > 0 && ( $default_image_post = get_post( absint( $default_img_id ) ) ) ) {
+							// Image title
+							if ( ! empty( $default_image_post->post_title ) ) {
+								$imag_title = strip_tags( $default_image_post->post_title );
+							}
+
+							// Image caption
+							if ( ! empty( $default_image_post->post_excerpt ) ) {
+								$imag_caption = strip_tags( $default_image_post->post_excerpt );
+							}
+
+							// Image mime type
+							if ( ! empty( $default_image_post->post_mime_type ) ) {
+								$image_mime_type = strip_tags( $default_image_post->post_mime_type );
+							}
+
+							// Image metadata
+							$image_metadata = wp_get_attachment_metadata( absint( $default_img_id ) );
+						}
+
 						$image_src = geodir_file_relative_url( $term_img['src'], false );
 						$post_images = array();
 						$image = new stdClass();
 						$image->ID = 0;
 						$image->post_id = $post_id;
 						$image->user_id = 0;
-						$image->title = __( 'Placeholder image', 'geodirectory' );
-						$image->caption = '';
+						$image->title = $imag_title;
+						$image->caption = $imag_caption;
 						$image->file = '/' . ltrim( $image_src, '/\\' );
-						$image->mime_type = '';
+						$image->mime_type = $image_mime_type;
 						$image->menu_order = 0;
 						$image->featured= 0;
 						$image->is_approved = 1;
-						$image->metadata = '';
+						$image->metadata = $image_metadata;
 						$image->type = 'post_images';
 						$post_images[] = $image;
 						break;
@@ -444,7 +469,7 @@ function geodir_get_images( $post_id = 0, $limit = '', $logo = false, $revision_
 						$image->ID = 0;
 						$image->post_id = $post_id;
 						$image->user_id = 0;
-						$image->title = __( 'Placeholder image', 'geodirectory' );
+						$image->title = wp_sprintf( __( '%s screenshot', 'geodirectory' ), esc_attr( $field ) );
 						$image->caption = '';
 						$image->file = ltrim( $image_src, '/\\' );
 						$image->mime_type = '';
