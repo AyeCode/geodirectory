@@ -1,3 +1,6 @@
+= 2.1.1.8 =
+* Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve - FIXED
+
 = 2.1.1.7 =
 * Backend image editing broken due to error in minified JS file - FIXED
 * Output location block does not have default value set, meaning value must be changed to work initially - FIXED
