@@ -356,7 +356,7 @@ function plu_show_thumbs(imgId) {
                 } else if (file_ext == 'doc' || file_ext == 'odt') {
                     file_type_class = 'fa-file-word';
                 } else if (file_ext == 'txt' || file_ext == 'text') {
-                    file_type_class = 'fa-file-text';
+                    file_type_class = 'fa-file';
                 } else if (file_ext == 'csv' || file_ext == 'ods' || file_ext == 'ots') {
                     file_type_class = 'fa-file-excel';
                 } else if (file_ext == 'avi' || file_ext == 'mp4' || file_ext == 'mov') {
