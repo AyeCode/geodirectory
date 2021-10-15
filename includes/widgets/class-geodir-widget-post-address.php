@@ -73,6 +73,15 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 					'desc_tip' => true,
 					'advanced' => false
 				),
+				'map_link' => array(
+					'type' => 'checkbox',
+					'title' => __( 'Link to show address on Google Map:', 'geodirectory' ),
+					'value' => '1',
+					'default' => '',
+					'element_require' => '[%show%]!="label"',
+					'desc_tip' => false,
+					'advanced' => true
+				),
 				'alignment'  => array(
 					'title' => __('Alignment:', 'geodirectory'),
 					'desc' => __('How the item should be positioned on the page.', 'geodirectory'),
@@ -173,6 +182,7 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 			'list_hide'    => '',
 			'list_hide_secondary'    => '',
 			'address_template' => '%%street_br%% %%neighbourhood_br%% %%city_br%% %%region_br%% %%zip_br%% %%country%%',
+			'map_link' => '',
 			'location'  => 'none',
 		), $args, 'gd_post_meta' );
 		if(empty($args['id'])){
@@ -255,6 +265,10 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 					// set to value if empty
 					if(empty($args['show'])){
 						$args['show'] = 'icon-label-value';
+					}
+
+					if ( ! empty( $args['map_link'] ) ) {
+						$args['show'] = str_replace( 'value', 'link', $args['show'] );
 					}
 
 					$field['address_template'] = $args['address_template'];

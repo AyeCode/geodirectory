@@ -2472,6 +2472,27 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $address_fields );
+			if ( $output == '' || isset( $output['link'] ) ) {
+				$value = stripslashes( $address_fields );
+				$address = normalize_whitespace( wp_strip_all_tags( $value ) );
+				$map_link = 'https://www.google.com/maps?q=' . urlencode( $address );
+
+				/**
+				 * Filter address map link.
+				 *
+				 * @since 2.1.1.9
+				 *
+				 * @param string $map_link Address map link.
+				 * @param string $address Full address.
+				 * @param object $gd_post Post object.
+				 * @param array  $cf Custom field.
+				 */
+				$map_link = apply_filters( 'geodir_custom_field_output_address_map_link', $map_link, $address, $gd_post, $cf );
+
+				$html .= '<a href="' . esc_url( $map_link ) . '" target="_blank" title="' . esc_attr__( 'View on map', 'geodirectory' ) . '">';
+				$html .= $value;
+				$html .= '</a>';
+			}
 
             $html .= '</div>';
         }
@@ -2480,8 +2501,6 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
     return $html;
 }
 add_filter('geodir_custom_field_output_address','geodir_cf_address',10,5);
-
-
 
 /**
  * Filter the business hours custom field output to show a link.
