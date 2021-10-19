@@ -2472,7 +2472,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             if($output=='' || isset($output['label']))$html .= (trim($cf['frontend_title'])) ? '<span class="geodir_post_meta_title '.$maybe_secondary_class.'" >'.__($cf['frontend_title'], 'geodirectory') . ': '.'</span>' : '';
             if($output=='' || isset($output['icon']))$html .= '</span>';
             if($output=='' || isset($output['value']))$html .= stripslashes( $address_fields );
-			if ( $output == '' || isset( $output['link'] ) ) {
+			if ( ! empty( $output ) && isset( $output['link'] ) ) {
 				$value = stripslashes( $address_fields );
 				$address = normalize_whitespace( wp_strip_all_tags( $value ) );
 				$map_link = 'https://www.google.com/maps?q=' . urlencode( $address );
