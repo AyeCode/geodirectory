@@ -331,10 +331,12 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 	/**
 	 * Output the imae slider.
 	 *
+	* @global bool $geodir_carousel_open  Check whether carousel already open.
+	 *
 	 * @param $options
 	 */
 	public function output_images($options){
-		global $post, $gd_post;
+		global $post, $gd_post, $geodir_carousel_open;
 
 		// options
 		$defaults = array(
@@ -377,6 +379,14 @@ class GeoDir_Widget_Post_Images extends WP_Super_Duper {
 		 * Parse incoming $args into an array and merge it with $defaults
 		 */
 		$options = wp_parse_args( $options, $defaults );
+
+		// Nested carousels/sliders are not supported.
+		if ( $geodir_carousel_open && $options['type'] == 'slider' ) {
+			$options['type'] = 'image';
+			$options['slideshow'] = false;
+			$options['limit_show'] = 1;
+			$options['limit'] = 1;
+		}
 
 		$design_style = !empty($args['design_style']) ? esc_attr($args['design_style']) : geodir_design_style();
 

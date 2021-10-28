@@ -4,6 +4,7 @@
 * Preview option added to attachments icon to show attachment preview - ADDED
 * GD > Dynamic Content is not working properly with block editor - FIXED
 * GD > Post Address add option add link to show address on map - ADDED
+* Prevent nested carousel in GD Listings - FIXED
 
 = 2.1.1.8 =
 * Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve - FIXED
