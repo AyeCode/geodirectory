@@ -280,6 +280,10 @@ class GeoDir_Widget_Post_Address extends WP_Super_Duper {
 
 				}
 			}
+
+			if ( ! empty( $output ) && absint( $args['id'] ) ) {
+				$output = geodir_post_address( $output, 'gd_post_address', absint( $args['id'] ) );
+			}
 		}
 
 		return $output;

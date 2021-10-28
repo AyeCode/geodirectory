@@ -209,6 +209,7 @@ function build_map_ajax_search_param(map_canvas, reload_cat_list, catObj, hide_l
 
     // post type
     query_string += 'post_type=' + post_type;
+    query_string += '&_wpnonce=' + options._wpnonce;
 
     // locations
     if (options.country) {

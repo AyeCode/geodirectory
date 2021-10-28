@@ -1229,25 +1229,31 @@ add_filter( 'geodir_filter_widget_listings_join', 'geodir_function_widget_listin
  * @since   1.6.18 New attributes added in gd_listings shortcode to filter user favorite listings.
  * @package GeoDirectory
  * @global object $wpdb WordPress Database object.
- * @global string $plugin_prefix Geodirectory plugin table prefix.
+ * @global object $geodirectory GeoDirectory object.
+ * @global array  $gd_query_args_widgets Widget args.
  *
  * @param string $where Where clause SQL.
  *
  * @return string Modified where clause SQL.
  */
 function geodir_function_widget_listings_where( $where ) {
-	global $wpdb, $plugin_prefix, $gd_query_args_widgets;
+	global $wpdb, $geodirectory, $gd_query_args_widgets;
 
 	$query_args = $gd_query_args_widgets;
 	if ( empty( $query_args ) || empty( $query_args['is_geodir_loop'] ) ) {
 		return $where;
 	}
 	$post_type = empty( $query_args['post_type'] ) ? 'gd_place' : $query_args['post_type'];
-	$table     = $plugin_prefix . $post_type . '_detail';
+	$table     = geodir_db_cpt_table( $post_type );
 
 	if ( ! empty( $query_args ) ) {
 		if ( ! empty( $query_args['gd_location'] ) && function_exists( 'geodir_default_location_where' ) ) {
 			$where = geodir_default_location_where( $where, $table );
+		}
+
+		// Private address filter
+		if ( $geodirectory->location->get_latlon() && GeoDir_Post_types::supports( $post_type, 'location' ) && GeoDir_Post_types::supports( $post_type, 'private_address' ) ) {
+			$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
 		}
 
 		if ( ! empty( $query_args['post_author'] ) ) {

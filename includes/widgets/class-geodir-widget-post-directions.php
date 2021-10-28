@@ -204,19 +204,19 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 	 */
 	public function output($args = array(), $widget_args = array(),$content = ''){
 		global $gd_post,$geodirectory;
+
 		ob_start();
 
-		$lat = !empty($gd_post->latitude) ? esc_attr($gd_post->latitude) : '';
-		$lon = !empty($gd_post->longitude) ? esc_attr($gd_post->longitude) : '';
+		$lat = ! empty( $gd_post->latitude ) ? esc_attr( $gd_post->latitude ) : '';
+		$lon = ! empty( $gd_post->longitude ) ? esc_attr( $gd_post->longitude ) : '';
 
-		if(geodir_is_block_demo() && !$lat && !$lon){
+		if ( geodir_is_block_demo() && ! $lat && ! $lon ) {
 			$default_location = $geodirectory->location->get_default_location();
 			$lat = $default_location->latitude;
 			$lon = $default_location->longitude;
 		}
 
-		if($lat && $lon) {
-
+		if ( $lat && $lon ) {
 			// Default options
 			$defaults = array(
 				'badge' => esc_attr__( 'Get Directions', 'geodirectory' ),
@@ -228,7 +228,6 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 			 * Parse incoming $args into an array and merge it with $defaults
 			 */
 			$args = wp_parse_args( $args, $defaults );
-
 
 			// set defaults
 			if(empty($args['badge'])){$args['badge'] = $defaults['badge'];}
@@ -271,9 +270,7 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 						case 'h1': $args['size'] = 'h1';break;
 						default:
 							$args['size'] = '';
-
 					}
-
 				}
 
 				// set the link
@@ -281,7 +278,7 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 				$args['new_window'] = true;
 
 				echo geodir_get_post_badge( $gd_post->ID, $args );
-			}else{
+			} else {
 			?>
 			<div class="geodir_post_meta  geodir_get_directions" style="clear:both;">
 				<span class="geodir_post_meta_icon geodir-i-address" style=""><i class="fas fa-location-arrow" aria-hidden="true"></i></span>
@@ -294,8 +291,13 @@ class GeoDir_Widget_Post_Directions extends WP_Super_Duper {
 			}
 		}
 
-		return ob_get_clean();
+		$output = ob_get_clean();
 
+		if ( ! empty( $output ) && ! empty( $gd_post ) ) {
+			$output = geodir_post_address( $output, 'gd_post_directions', $gd_post );
+		}
+
+		return $output;
 	}
 
 }

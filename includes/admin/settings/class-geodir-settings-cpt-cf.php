@@ -1284,6 +1284,36 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				)
 			);
 
+			// Private Address
+			$custom_fields['private_address'] = array(
+				'field_type'  => 'checkbox',
+				'class'       => 'gd-private-address',
+				'icon'        => 'fas fa-eye-slash',
+				'name'        => __( 'Private Address', 'geodirectory' ),
+				'description' => __( 'Adds a checkbox in add listing page to allow users to mark their listings address as a private.', 'geodirectory' ),
+				'defaults'    => array(
+					'data_type'          => 'TINYINT',
+					'admin_title'        => 'Private Address',
+					'frontend_title'     => 'Private Address',
+					'frontend_desc'      => __( 'This will prevent address and location info from displaying to the users.', 'geodirectory' ),
+					'htmlvar_name'       => 'private_address',
+					'is_active'          => true,
+					'for_admin_use'      => false,
+					'is_required'        => false,
+					'default_value'      => '0',
+					'show_in'            => '',
+					'option_values'      => '',
+					'validation_pattern' => '',
+					'validation_msg'     => '',
+					'required_msg'       => '',
+					'field_icon'         => 'fas fa-eye-slash',
+					'css_class'          => 'gd-private-address',
+					'cat_sort'           => false,
+					'cat_filter'         => false,
+					'single_use'         => true
+				)
+			);
+
 			// Temporarily Closed
 			$custom_fields['temp_closed'] = array(
 				'field_type'  => 'checkbox',
@@ -2268,7 +2298,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					$add_details_column = geodir_add_column_if_not_exist( $table, $field->htmlvar_name, $column_attr );
 
 					if ( $add_details_column === false ) {
-						// Delete CF if column creaition fails.
+						// Delete CF if column creation fails.
 						if ( ! empty( $field->field_id ) ) {
 							$wpdb->query( $wpdb->prepare( "DELETE FROM `" . GEODIR_CUSTOM_FIELDS_TABLE . "` WHERE id = %d", array( $field->field_id ) ) );
 						}

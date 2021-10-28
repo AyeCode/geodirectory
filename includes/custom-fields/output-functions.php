@@ -2419,7 +2419,6 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 }
             }
 
-
             /**
              * Filter the address fields array being displayed.
              *
@@ -2431,7 +2430,6 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
              * @since 1.6.21
              */
             $address_fields = apply_filters('geodir_custom_field_output_address_fields', $address_fields, $gd_post, $cf, $location);
-
 
             foreach($address_items as $type){
                 // normal value
@@ -2451,6 +2449,9 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
             $address_template = str_replace('%%br%%', "<br>" ,$address_template);
 
             $address_fields = $address_template;
+
+            // Render private address.
+            $address_fields = geodir_post_address( $address_fields, 'address', $gd_post );
 
             // Database value.
             if ( ! empty( $output ) && isset( $output['raw'] ) ) {

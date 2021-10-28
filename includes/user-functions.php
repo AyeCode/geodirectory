@@ -232,3 +232,16 @@ function geodir_dropdown_users( $args = '' ) {
     }
     return $html;
 }
+
+/**
+ * Returns whether the current user has the specified capability.
+ *
+ * @since 2.1.1.9
+ *
+ * @param string $capability Capability name.
+ * @param array  $args Further parameters.
+ * @return bool Whether the current user has the given capability.
+ */
+function geodir_user_can( $capability, $args = array() ) {
+	return GeoDir_User::user_can( $capability, $args );
+}

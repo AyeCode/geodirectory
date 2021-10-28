@@ -322,6 +322,10 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 
 		$content = ob_get_clean();
 
+		if ( ! empty( $content ) && ! empty( $gd_post ) ) {
+			$content = geodir_post_address( $content, 'gd_post_distance', $gd_post );
+		}
+
 		return apply_filters( 'geodir_post_distance_content', $content, $gd_post );
 	}
 

@@ -1332,7 +1332,10 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				 */
 				$badge = apply_filters( 'geodir_post_badge_output_badge', $badge, $match_value, $match_field, $args, $find_post, $field );
 
-				
+				if ( ! empty( $badge ) && $match_field == 'street' ) {
+					$badge = geodir_post_address( $badge, 'post_badge_street', $find_post );
+				}
+
 				if($design_style){
 //					print_r( $args );
 

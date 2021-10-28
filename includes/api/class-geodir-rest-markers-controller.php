@@ -488,6 +488,23 @@ class GeoDir_REST_Markers_Controller extends WP_REST_Controller {
 		// locations
 		global $geodirectory;
 
+		// Private Address
+		if ( GeoDir_Post_types::supports( $request['post_type'], 'private_address' ) ) {
+			$single_post = 0;
+
+			if ( ! empty( $request['post'] ) ) {
+				$_single_post = is_array( $request['post'] ) ? $request['post'] : array_filter( array_map( explode( ',', $request['post'] ) ) );
+
+				if ( is_array( $_single_post ) && count( $_single_post ) == 1 && (int) $_single_post[0] > 0 ) {
+					$single_post = (int) $_single_post[0];
+				}
+			}
+
+			if ( ! ( ! empty( $single_post ) && geodir_user_can( 'see_private_address', array( 'post' => $single_post ) ) ) ) {
+				$where .= " AND ( `pd`.`private_address` IS NULL OR `pd`.`private_address` <> 1 ) ";
+			}
+		}
+
 		if ( ! empty( $request['country'] ) ) {
 			$country = $geodirectory->location->get_country_name_from_slug( $request['country'] );
 			$where .= $wpdb->prepare( " AND pd.country = %s ", $country );

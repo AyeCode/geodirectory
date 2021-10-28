@@ -99,6 +99,8 @@ Class GeoDir_Elementor_Tag_Text extends \Elementor\Core\DynamicTags\Tag {
 				if ( ! empty( $address_parts ) ) {
 					$value = implode( ", ",$address_parts );
 				}
+
+				$value = geodir_post_address( $value, 'address', $gd_post );
 			} elseif ( substr( $key, 0, 9 ) === "category_" ) {
 				$value = $this->get_category_meta( $key, $show );
 			}
