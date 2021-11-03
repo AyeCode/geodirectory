@@ -709,7 +709,7 @@ class GeoDir_Comments {
 			$design_style = geodir_design_style();
 
 			if($design_style){
-				echo '<div class="form-group form-control h-auto rounded px-3 pt-3 pb-2  gd-rating-input-group ">';
+				echo '<div class="form-group form-control h-auto rounded px-3 pt-3 pb-3  gd-rating-input-group ">';
 			}
 
 			echo self::rating_input_html( $rating );
@@ -856,7 +856,7 @@ class GeoDir_Comments {
 		$design_style = geodir_design_style();
 
 		if($design_style){
-			echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap d-flex d-flex justify-content-between pb-2 w-100">';
+			echo '<div class="gd-rating-outer-wrap gd-rating-'.esc_attr( $type ).'-wrap d-flex d-flex justify-content-between flex-nowrap w-100">';
 
 			$wrap_class = $type=='input' ? 'c-pointer' : '';
 			?>

@@ -632,6 +632,7 @@ function geodir_get_widgets(){
 		'GeoDir_Widget_Post_Distance',
 		'GeoDir_Widget_Map_Pinpoint',
 		'GeoDir_Widget_Page_Title',
+		'GeoDir_Widget_Simple_Archive_Item',
 	);
 
 	// 3rd party widgets

@@ -1103,6 +1103,7 @@ function geodir_get_sd_text_align_input( $overwrite = array() ){
 			"text-left" => __("Left","geodirectory"),
 			"text-center" => __("Center","geodirectory"),
 			"text-right" => __("Right","geodirectory"),
+			"text-justify" => __("Justify","geodirectory"),
 		),
 		'default'  => '',
 		'desc_tip' => true,
@@ -1343,6 +1344,9 @@ function geodir_build_aui_class($args){
 
 	// text_color
 	if ( !empty( $args['text_color'] ) ) { $classes[] = "text-".sanitize_html_class($args['text_color']); }
+
+	// text_align
+	if ( !empty( $args['text_align'] ) ) { $classes[] = sanitize_html_class($args['text_align']); }
 
 	return implode(" ",$classes);
 }

@@ -40,7 +40,7 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
                     'type' => 'select',
                     'options'   =>  array(
                         "open" => __('Open', 'geodirectory'),
-                        "close" => __('close', 'geodirectory'),
+                        "close" => __('Close', 'geodirectory'),
                     ),
                     'default'  => 'open',
                     'desc_tip' => true,
@@ -65,6 +65,65 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
                 ),
             )
         );
+
+
+        if($design_style){
+
+            $options['arguments']['bg']  = array(
+                'title' => __('Background color', 'geodirectory'),
+                'desc' => __('Select the the background color.', 'geodirectory'),
+                'type' => 'select',
+                'options'   =>  array(
+                                    "" => __('Default', 'geodirectory'),
+                                )+geodir_aui_colors(true),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => false,
+                'group'     => __("Design","geodirectory"),
+                'element_require' => '[%type%]=="open"',
+            );
+
+            $options['arguments']['border']  = array(
+                'title' => __('Border separator color', 'geodirectory'),
+                'desc' => __('Select the border separator color.', 'geodirectory'),
+                'type' => 'select',
+                'options'   =>  array(
+                                    "" => __('Default', 'geodirectory'),
+                                    "none" => __('None', 'geodirectory'),
+                                )+geodir_aui_colors(true),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => false,
+                'group'     => __("Design","geodirectory"),
+                'element_require' => '[%type%]=="open" && ([%position%]=="header" || [%position%]=="footer")',
+            );
+
+            $options['arguments']['font_size']  = array(
+                'title' => __('Font size', 'geodirectory'),
+                'desc' => __('Select the font size', 'geodirectory'),
+                'type' => 'select',
+                'options'   =>  array(
+                                    "" => __('Default', 'geodirectory'),
+                                    "small" => __('Small', 'geodirectory'),
+                                ),
+                'default'  => '',
+                'desc_tip' => true,
+                'advanced' => false,
+                'group'     => __("Design","geodirectory"),
+                'element_require' => '[%type%]=="open"',
+            );
+
+            // footer padding
+            $overwrite = array(
+                'group'     => __("Design","geodirectory"),
+                'element_require' => '[%type%]=="open"',
+            );
+            $options['arguments']['pt']  = geodir_get_sd_padding_input('pt', $overwrite );
+            $options['arguments']['pr']  = geodir_get_sd_padding_input('pr', $overwrite );
+            $options['arguments']['pb']  = geodir_get_sd_padding_input('pb', $overwrite );
+            $options['arguments']['pl']  = geodir_get_sd_padding_input('pl', $overwrite );
+
+        }
 
 
         parent::__construct( $options );
@@ -97,6 +156,20 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
 
 
             if($design_style){
+
+                // wrapper class
+                $wrap_class = geodir_build_aui_class($args);
+
+                // border separator
+                if(!empty($args['border']) && $args['border']!='none'){
+                    $wrap_class .= " border-right-0 border-left-0 border-bottom-0";
+                }
+
+                // font size
+                if ( ! empty( $args['font_size'] ) && $args['font_size'] == 'small' ) {
+                    $wrap_class .= " small";
+                }
+
                 $class = !empty($args['class']) ? esc_attr($args['class']) : '';
                 $position = '';
                 if( empty($args['position']) || $args['position'] == 'left' ){
@@ -108,7 +181,7 @@ class GeoDir_Widget_Archive_Item_Section extends WP_Super_Duper {
                 }elseif( $args['position'] == 'footer' ){
                     $position = 'card-footer p-2';
                 }
-                $output = '<div class="'.$position.' '.$class.'">';
+                $output = '<div class="'.$position.' '.$class.' '.$wrap_class.'">';
             }else{
                 $class = !empty($args['class']) ? esc_attr($args['class']) : '';
                 $position = isset($args['position']) && $args['position']=='left' ? 'left' : 'right';

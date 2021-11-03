@@ -2561,8 +2561,9 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
             if ( empty( $business_hours['days'] ) ) {
                 return $html;
             }
-            $show_value = $business_hours['extra']['today_range'];
-            $offset = isset( $business_hours['extra']['offset'] ) ? (int) $business_hours['extra']['offset'] : '';
+            $show_value = geodir_is_block_demo() ? __("Open now","geodirectory") : $business_hours['extra']['today_range'];
+            $preview_class = geodir_is_block_demo() ? 'text-success' : '';
+                $offset = isset( $business_hours['extra']['offset'] ) ? (int) $business_hours['extra']['offset'] : '';
             $utc_offset = isset( $business_hours['extra']['utc_offset'] ) ? $business_hours['extra']['utc_offset'] : '';
             if ( ! empty( $business_hours['extra']['is_dst'] ) ) {
                 $offset = isset( $business_hours['extra']['offset_dst'] ) ? (int) $business_hours['extra']['offset_dst'] : $offset;
@@ -2615,8 +2616,8 @@ function geodir_cf_business_hours($html,$location,$cf,$p='',$output=''){
 
                 $html = '<div class="geodir_post_meta gd-bh-show-field ' . $cf['css_class'] . ' geodir-field-' . $html_var . $extra_class . $dropdown_class. '" style="">';
                 $html .= $design_style ? '<a class=" text-reset '.$dropdown_toggle_class.' d-block text-truncate" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">' : '';
-                $html .= '<span class="geodir-i-business_hours geodir-i-biz-hours" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
-                $html .= '<span class="gd-bh-expand-range" data-offset="' . $utc_offset  . '" data-offsetsec="' . $offset . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range gv-secondary">' . $show_value . '</span>';
+                $html .= '<span class="geodir-i-business_hours geodir-i-biz-hours '.$preview_class.'" style="' . $field_icon . '">' . $field_icon_af . '<font></font>' . ': </span>';
+                $html .= '<span class="gd-bh-expand-range '.$preview_class.'" data-offset="' . $utc_offset  . '" data-offsetsec="' . $offset . '" title="' . esc_attr__( 'Expand opening hours' , 'geodirectory' ) . '"><span class="gd-bh-today-range gv-secondary">' . $show_value . '</span>';
                 $html .= $design_style ? '' : '<span class="gd-bh-expand"><i class="fas fa-caret-up" aria-hidden="true"></i><i class="fas fa-caret-down" aria-hidden="true"></i></span>';
                 $html .= '</span>';
                 $html .= $design_style ? '</a>' : '';

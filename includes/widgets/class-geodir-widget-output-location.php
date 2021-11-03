@@ -68,6 +68,43 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 			    'advanced' => false,
 			    'group'     => __("Design","geodirectory")
 		    );
+
+		    // item padding
+		    $options['arguments']['item_py'] = array(
+			    'title' => __('Item vertical padding', 'geodirectory'),
+			    'desc' => __('The padding between items', 'geodirectory'),
+			    'type' => 'select',
+			    'options'   =>  array(
+				    "" => __('Default', 'geodirectory'),
+				    "0" => "0",
+				    "1" => "1",
+				    "2" => "2",
+				    "3" => "3",
+				    "4" => "4",
+				    "5" => "5",
+			    ),
+			    'default'  => '',
+			    'desc_tip' => true,
+			    'advanced' => false,
+			    'group'     => __("Design","geodirectory")
+		    );
+
+		    // text alignment
+		    $options['arguments']['text_align'] = geodir_get_sd_text_align_input(array('group'     => __( "Design", "geodirectory" )));
+
+		    // margins
+		    $options['arguments']['mt']  = geodir_get_sd_margin_input('mt');
+		    $options['arguments']['mr']  = geodir_get_sd_margin_input('mr');
+		    $options['arguments']['mb']  = geodir_get_sd_margin_input('mb');
+		    $options['arguments']['ml']  = geodir_get_sd_margin_input('ml');
+
+		    // padding
+		    $options['arguments']['pt']  = geodir_get_sd_padding_input('pt');
+		    $options['arguments']['pr']  = geodir_get_sd_padding_input('pr');
+		    $options['arguments']['pb']  = geodir_get_sd_padding_input('pb');
+		    $options['arguments']['pl']  = geodir_get_sd_padding_input('pl');
+
+
 	    }
         
         parent::__construct( $options );
@@ -88,6 +125,16 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
         $defaults = array(
 	        'location'      => '', //
 	        'list_style'      => 'wrap', //
+	        'item_py' => '',
+	        'text_align' => '',
+	        'mt' => '',
+	        'mr' => '',
+	        'mb' => '',
+	        'ml' => '',
+	        'pt' => '',
+	        'pr' => '',
+	        'pb' => '',
+	        'pl' => '',
         );
 
         /**
@@ -103,12 +150,17 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 	    $wrap_style = '';
 	    $design_style = geodir_design_style();
 	    if($design_style){
+
+		    $inner_class = 'list-group-item list-group-item-action';
+
 		    if(empty($args['list_style'])){$args['list_style'] = $defaults['list_style'];}
 
 		    if($args['list_style']=='wrap'){
 			    $wrap_class = 'list-group';
 		    }elseif($args['list_style']=='line'){
 			    $wrap_class = 'list-group list-group-flush';
+		    }elseif($args['list_style']=='none'){
+			    $inner_class = '';
 		    }
 
 		    if($args['location']=='mapbubble'){
@@ -119,9 +171,21 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 
 			    if($args['list_style']=='wrap'){
 				    $inner_class .= ' border-left-0 border-right-0 rounded-0 px-2';
+			    }elseif($args['list_style']=='none'){
+//				    $wrap_style = '';
+				    $wrap_class = '';
+				   // $inner_class .= ' p-2 ';
 			    }
 
 		    }
+
+		    if ( ! empty( $args['item_py'] ) || $args['item_py']=='0' ) {
+			    $inner_class .= ' py-'.absint($args['item_py']);
+		    }
+
+
+		    // wrapper class
+		    $wrap_class .= " ".geodir_build_aui_class($args);
 
 	    }
 
@@ -134,8 +198,9 @@ class GeoDir_Widget_Output_Location extends WP_Super_Duper {
 	    }
 
         if (!empty($args['location']) && $geodir_post_detail_fields ) {
-	        if($geodir_post_detail_fields && $design_style && $wrap_class){
-		        $geodir_post_detail_fields = str_replace("geodir_post_meta ","geodir_post_meta list-group-item list-group-item-action ".$inner_class.' ',$geodir_post_detail_fields);
+
+	        if($geodir_post_detail_fields && $design_style && $inner_class){
+		        $geodir_post_detail_fields = str_replace("geodir_post_meta ","geodir_post_meta  ".$inner_class.' ',$geodir_post_detail_fields);
 	        }
             $output .= "<div class='$wrap_class d-block geodir-output-location geodir-output-location-".esc_attr($args['location'])."' style='$wrap_style' >";
             $output .= $geodir_post_detail_fields;

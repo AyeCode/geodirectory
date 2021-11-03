@@ -164,6 +164,9 @@ class GeoDir_Widget_Page_Title extends WP_Super_Duper {
 			$arguments['pr']  = geodir_get_sd_padding_input('pr');
 			$arguments['pb']  = geodir_get_sd_padding_input('pb');
 			$arguments['pl']  = geodir_get_sd_padding_input('pl');
+
+			// text alignment
+			$arguments['text_align'] = geodir_get_sd_text_align_input();
 		}
 
 		parent::__construct( $options );
