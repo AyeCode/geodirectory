@@ -44,7 +44,7 @@ global $post;
 
 			<?php
 			if($rating != 0){
-				echo '<div class="geodir-review-ratings mb-n2">'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
+				echo '<div class="geodir-review-ratings">'. geodir_get_rating_stars( $rating, $comment->comment_ID ) . '</div>';
 			}
 			?>
 

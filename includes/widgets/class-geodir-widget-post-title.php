@@ -110,6 +110,9 @@ class GeoDir_Widget_Post_Title extends WP_Super_Duper {
 			$options['arguments']['pr']  = geodir_get_sd_padding_input('pr');
 			$options['arguments']['pb']  = geodir_get_sd_padding_input('pb');
 			$options['arguments']['pl']  = geodir_get_sd_padding_input('pl');
+
+			// text alignment
+			$options['arguments']['text_align'] = geodir_get_sd_text_align_input();
 		}
 
 		parent::__construct( $options );

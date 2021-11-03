@@ -111,6 +111,7 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 						"left" => __('Left', 'geodirectory'),
 						"center" => __('Center', 'geodirectory'),
 						"right" => __('Right', 'geodirectory'),
+						"justify" => __("Justify","geodirectory"),
 					),
 					'desc_tip' => true,
 					'advanced' => false
@@ -126,6 +127,26 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 				),
 			)
 		);
+
+		// text color
+		$options['arguments']['text_color'] = geodir_get_sd_text_color_input(array('group'     => __("General","geodirectory")));
+
+		// background
+		$options['arguments']['bg']  = geodir_get_sd_background_input();
+
+		// margins
+		$options['arguments']['mt']  = geodir_get_sd_margin_input('mt');
+		$options['arguments']['mr']  = geodir_get_sd_margin_input('mr');
+		$options['arguments']['mb']  = geodir_get_sd_margin_input('mb');
+		$options['arguments']['ml']  = geodir_get_sd_margin_input('ml');
+
+		// padding
+		$options['arguments']['pt']  = geodir_get_sd_padding_input('pt');
+		$options['arguments']['pr']  = geodir_get_sd_padding_input('pr');
+		$options['arguments']['pb']  = geodir_get_sd_padding_input('pb');
+		$options['arguments']['pl']  = geodir_get_sd_padding_input('pl');
+
+
 
 
 		parent::__construct( $options );
@@ -170,6 +191,16 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 			'limit'    => '', // the word limit number (default: 20)
 			'alignment'    => '', // left,right,center
 			'location'  => 'none',
+			'text_color'    => '',
+			'bg'    => '',
+			'mt'    => '',
+			'mr'    => '',
+			'mb'    => '',
+			'ml'    => '',
+			'pt'    => '',
+			'pr'    => '',
+			'pb'    => '',
+			'pl'    => '',
 		), $args, 'gd_post_meta' );
 		if(empty($args['id'])){
 			$args['id'] =  isset($gd_post->ID) ? $gd_post->ID : 0;
@@ -214,6 +245,10 @@ class GeoDir_Widget_Post_Content extends WP_Super_Duper {
 						$field['css_class'] .= $design_style ? " text-".sanitize_html_class( $args['alignment'] ) : " geodir-text-align" . sanitize_html_class( $args['alignment'] );
 					}elseif($design_style){
 						$field['css_class'] .= " clear-both ";
+					}
+
+					if ( $design_style ) {
+						$field['css_class'] .= " ".geodir_build_aui_class($args);
 					}
 
 					// set to value if empty

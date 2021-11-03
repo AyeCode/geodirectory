@@ -1232,15 +1232,19 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				}
 				if(!empty($args['popover_title'])){
 					$args['popover_title'] = geodir_replace_variables($args['popover_title']);
+					$args['popover_title'] = str_replace("%%input%%",$match_value,$args['popover_title']);
 				}
 				if(!empty($args['popover_text'])){
 					$args['popover_text'] = geodir_replace_variables($args['popover_text']);
+					$args['popover_text'] = str_replace("%%input%%",$match_value,$args['popover_text']);
 				}
 				if(!empty($args['tooltip_text'])){
 					$args['tooltip_text'] = geodir_replace_variables($args['tooltip_text']);
+					$args['tooltip_text'] = str_replace("%%input%%",$match_value,$args['tooltip_text']);
 				}
 				if(!empty($args['hover_content'])){
 					$args['hover_content'] = geodir_replace_variables($args['hover_content']);
+					$args['hover_content'] = str_replace("%%input%%",$match_value,$args['hover_content']);
 				}
 
 				$class = '';
@@ -1339,7 +1343,8 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				if($design_style){
 //					print_r( $args );
 
-					$btn_class = ' align-middle gd-badge';
+//					$btn_class = ' align-middle gd-badge';
+					$btn_class = ' gd-badge';
 					// color
 					$color_custom = true;
 					$badge_color = '';

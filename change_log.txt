@@ -7,6 +7,8 @@
 * Prevent nested carousel in GD Listings - FIXED
 * Option added to make a post address private - ADDED
 * Schema issue for review - FIXED
+* GD Simple Archive Item block added (not yet default) - ADDED
+* Several blocks have more design options added - ADDED
 
 = 2.1.1.8 =
 * Super Duper v2 causing some issues with builders that use widgets, rolled back to SDv1 to resolve - FIXED
