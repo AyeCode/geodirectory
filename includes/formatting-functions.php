@@ -642,3 +642,54 @@ function geodir_untexturize( $text ) {
 	 */
 	return apply_filters( 'geodir_untexturize', $text, $orig_text );
 }
+
+/**
+ * Replaces formatted entities with back to common plain text characters .
+ *
+ * As an example,
+ *
+ *    &#8217;cause today&#8217;s effort makes it worth tomorrow&#8217;s &#8220;holiday&#8221; &#8230;
+ *
+ * Becomes:
+ *
+ *    'cause today's effort makes it worth tomorrow's "holiday" ...
+ *
+ * @since 2.1.1.9
+ *
+ * @param string $text  The text to be formatted.
+ * @return string The string replaced with HTML entities.
+ */
+function geodir_unwptexturize( $text ) {
+	if ( $text == '' ) {
+		return $text;
+	}
+
+	$replacements = array(
+		'“'       => '"', // left double curly quotation mark
+		'”'       => '"', // right double curly quotation mark
+		'‘'       => "'", // left double curly quotation mark
+		'’'       => "'", // right double curly quotation mark
+		'&#8216;' => "'", // left single quotation mark
+		'&#8217;' => "'", // right single quotation mark
+		'&#8218;' => "'", // single low 9 quotation mark
+		'&#8220;' => '"', // left double quotation mark
+		'&#8221;' => '"', // right double quotation mark
+		'&#8222;' => '"', // double low 9 quotation mark
+		'&#8242;' => "'", // prime mark
+		'&#8243;' => '"', // double prime mark
+	);
+
+	/**
+	 * Filters the character replacements.
+	 *
+	 * @since 2.1.1.9
+	 *
+	 * @param array  $replacements Array of replacements.
+	 * @param string $text  The text to be formatted.
+	 */
+	$replacements = apply_filters( 'geodir_unwptexturize_replacements', $replacements, $text );
+
+	$text = str_replace( array_keys( $replacements ), array_values( $replacements ), $text );
+
+	return $text;
+}

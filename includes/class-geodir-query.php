@@ -722,6 +722,10 @@ class GeoDir_Query {
 						$where .= " AND CONVERT((" . $DistanceRadius . " * 2 * ASIN(SQRT( POWER(SIN((ABS($lat) - ABS(" . $table . ".latitude)) * pi()/180 / 2), 2) +COS(ABS($lat) * pi()/180) * COS( ABS(" . $table . ".latitude) * pi()/180) *POWER(SIN(($lon - " . $table . ".longitude) * pi()/180 / 2), 2) ))),DECIMAL(64,4)) <= " . $dist;
 					}
 
+					// Private address
+					if ( GeoDir_Post_types::supports( $post_types, 'private_address' ) ) {
+						$where .= " AND ( `{$table}`.`private_address` IS NULL OR `{$table}`.`private_address` <> 1 ) ";
+					}
 				} else {
 					$post_title_where = $s != "" ? $wpdb->prepare( "{$wpdb->posts}.post_title LIKE %s", array( $s ) ) : "1=1";
 					$where .= " AND ( 

@@ -78,6 +78,9 @@ class GeoDir_Post_Data {
 
 		// GD post saved.
 		add_action( 'geodir_post_saved', array( __CLASS__, 'on_gd_post_saved' ), 999, 4 );
+
+		// Private Address
+		add_filter( 'geodir_check_display_map', array( __CLASS__, 'check_display_map' ), 11, 2 );
 	}
 
 	/**
@@ -2108,7 +2111,8 @@ class GeoDir_Post_Data {
 		$schema['url']    = $c_url;
 		$schema['sameAs'] = $external_links;
 		$schema['image']  = $images;
-		if ( isset( $gd_post->post_type ) && GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) ) {
+		$can_see_address = isset( $gd_post->post_type ) && GeoDir_Post_types::supports( $gd_post->post_type, 'location' ) && geodir_user_can( 'see_private_address', array( 'post' => $gd_post ) ) ? true : false;
+		if ( $can_see_address ) {
 			$schema['address'] = array(
 				"@type"           => "PostalAddress",
 				"streetAddress"   => $gd_post->street,
@@ -2126,7 +2130,7 @@ class GeoDir_Post_Data {
 			$schema['openingHours'] = $business_hours;
 		}
 
-		if ( ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) ) {
+		if ( ! empty( $gd_post->latitude ) && ! empty( $gd_post->longitude ) && $can_see_address ) {
 			$schema['geo'] = array(
 				"@type"     => "GeoCoordinates",
 				"latitude"  => $gd_post->latitude,
@@ -2371,5 +2375,87 @@ class GeoDir_Post_Data {
 				do_action( 'geodir_post_published', $gd_post, $data );
 			}
 		}
+	}
+
+	/**
+	 * Whether display map or not.
+	 *
+	 * @since 2.1.1.9
+	 *
+	 * @param bool  $display The post.
+	 * @param array $params Map parameters.
+	 * @return bool True to display map, otherwise false.
+	 */
+	public static function check_display_map( $display, $params ) {
+		if ( $display && ! empty( $params['map_type'] ) && $params['map_type'] == 'post' && ! empty( $params['posts'] ) ) {
+			if ( ! geodir_user_can( 'see_private_address', array( 'post' => absint( $params['posts'] ) ) ) ) {
+				$display = false;
+			}
+		}
+
+		return $display;
+	}
+
+	/**
+	 * Filters whether post have private address.
+	 *
+	 * @since 2.1.1.9
+	 *
+	 * @param int|object $post The post.
+	 * @return string True when post has private address, otherwise false.
+	 */
+	public static function has_private_address( $post ) {
+		global $geodir_private_address;
+
+		if ( empty( $post ) ) {
+			return false;
+		}
+
+		if ( is_array( $post ) ) {
+			$gd_post = (object) $post;
+		} else if( is_scalar( $post ) ) {
+			$gd_post = geodir_get_post_info( absint( $post ) );
+		} else {
+			$gd_post = $post;
+		}
+
+		// Check for a valid post.
+		if ( ! ( is_object( $gd_post ) && ! empty( $gd_post->ID ) && ! empty( $gd_post->post_type ) ) ) {
+			return false;
+		}
+
+		$is_private = false;
+
+		// Cache the value.
+		if ( empty( $geodir_private_address ) || ! is_array( $geodir_private_address ) ) {
+			$geodir_private_address = array();
+		}
+
+		if ( isset( $geodir_private_address[ $gd_post->ID ] ) ) {
+			$is_private = $geodir_private_address[ $gd_post->ID ];
+		} else {
+			// Check private address enabled or not.
+			if ( GeoDir_Post_types::supports( $gd_post->post_type, 'private_address' ) ) {
+				if ( empty( $gd_post->post_id ) ) {
+					$gd_post = geodir_get_post_info( $gd_post->ID );
+				}
+
+				if ( ! empty( $gd_post->private_address ) ) {
+					$is_private = true;
+				}
+			}
+
+			$geodir_private_address[ $gd_post->ID ] = $is_private;
+		}
+
+		/**
+		 * Filters whether post have private address.
+		 *
+		 * @since 2.1.1.9
+		 *
+		 * @param bool   $is_private True when post has private address, otherwise false.
+		 * @param object $gd_post The post.
+		 */
+		return apply_filters( 'geodir_post_has_private_address', $is_private, $gd_post );
 	}
 }

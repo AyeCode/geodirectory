@@ -244,77 +244,88 @@ function geodir_cf_custom( $html, $location, $cf, $p = '', $output = '' ) {
 	}
 
 	if ( empty( $html ) ) {
-        if ( isset( $gd_post->{$htmlvar_name} ) && $gd_post->{$htmlvar_name} != '' ) {
-            $class = "geodir-i-custom";
+		$value = isset( $gd_post->{$htmlvar_name} ) ? $gd_post->{$htmlvar_name} : '';
+
+		if ( ! empty( $value ) ) {
+			$value = stripslashes_deep( $value );
+
+			// Private address
+			$address_fields = geodir_post_meta_address_fields( $gd_post->post_type );
+
+			if ( ! empty( $value ) && ! empty( $address_fields ) && isset( $address_fields[ $htmlvar_name ] ) ) {
+				$value = geodir_post_address( $value, $htmlvar_name, $gd_post );
+			}
+		}
+
+		if ( $value != '' ) {
+			$class = "geodir-i-custom";
 			$field_icon = geodir_field_icon_proccess( $cf );
-            $output = geodir_field_output_process( $output );
-            if ( strpos( $field_icon, 'http' ) !== false ) {
-                $field_icon_af = '';
-            } elseif ( $field_icon == '' ) {
-                $field_icon_af = '';
-            } else {
-                $field_icon_af = $field_icon;
-                $field_icon = '';
-            }
+			$output = geodir_field_output_process( $output );
+			if ( strpos( $field_icon, 'http' ) !== false ) {
+				$field_icon_af = '';
+			} elseif ( $field_icon == '' ) {
+				$field_icon_af = '';
+			} else {
+				$field_icon_af = $field_icon;
+				$field_icon = '';
+			}
 
-            $value = stripslashes_deep( $gd_post->{$htmlvar_name} );
+			// Database value.
+			if ( ! empty( $output ) && isset( $output['raw'] ) ) {
+				return $value;
+			}
 
-            // Database value.
-            if ( ! empty( $output ) && isset( $output['raw'] ) ) {
-                return $value;
-            }
+			$value = apply_filters( 'geodir_custom_field_output_field_value', $value, $location, $cf, $gd_post );
 
-            $value = apply_filters( 'geodir_custom_field_output_field_value', $value, $location, $cf, $gd_post );
+			// round rating
+			if ( $value && $htmlvar_name == 'overall_rating' ) {
+				$value = round( $value, 1 );
+			}
 
-            // round rating
-            if ( $value && $htmlvar_name == 'overall_rating' ) {
-                $value = round( $value, 1 );
-            }
+			if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'INT' || $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) && isset( $cf['extra_fields'] ) && $cf['extra_fields'] ) {
+				$extra_fields = stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) );
 
-            if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'INT' || $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) && isset( $cf['extra_fields'] ) && $cf['extra_fields'] ) {
-                $extra_fields = stripslashes_deep( maybe_unserialize( $cf['extra_fields'] ) );
+				if ( ! empty( $extra_fields ) && isset( $extra_fields['is_price'] ) && $extra_fields['is_price'] ) {
+					if ( ! ceil( $value ) > 0 ) {
+						return '';// dont output blank prices
+					}
+					$value = geodir_currency_format_number( $value, $cf );
+				} else if ( isset( $cf['data_type'] ) && $cf['data_type'] == 'INT' ) {
+					if ( ceil( $value ) > 0 ) {
+						$value = geodir_cf_format_number( $value, $cf );
+					}
+				} else if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) ) {
+					if ( ceil( $value ) > 0 ) {
+						$value = geodir_cf_format_decimal( $value, $cf );
+					}
+				}
+			}
 
-                if ( ! empty( $extra_fields ) && isset( $extra_fields['is_price'] ) && $extra_fields['is_price'] ) {
-                    if ( ! ceil( $value ) > 0 ) {
-                        return '';// dont output blank prices
-                    }
-                    $value = geodir_currency_format_number( $value, $cf );
-                } else if ( isset( $cf['data_type'] ) && $cf['data_type'] == 'INT' ) {
-                    if ( ceil( $value ) > 0 ) {
-                        $value = geodir_cf_format_number( $value, $cf );
-                    }
-                } else if ( isset( $cf['data_type'] ) && ( $cf['data_type'] == 'FLOAT' || $cf['data_type'] == 'DECIMAL' ) ) {
-                    if ( ceil( $value ) > 0 ) {
-                        $value = geodir_cf_format_decimal( $value, $cf );
-                    }
-                }
-            }
-
-            // Return stripped value.
-            if ( ! empty( $output ) && isset( $output['strip'] ) ) {
-                return $value;
-            }
+			// Return stripped value.
+			if ( ! empty( $output ) && isset( $output['strip'] ) ) {
+				return $value;
+			}
 
 			$html = '<div class="geodir_post_meta ' . $cf['css_class'] . ' geodir-field-' . $htmlvar_name . '">';
 
-            if ( $output == '' || isset( $output['icon'] ) ) {
+			if ( $output == '' || isset( $output['icon'] ) ) {
 				$html .= '<span class="geodir_post_meta_icon '.$class.'" style="' . $field_icon . '">' . $field_icon_af;
 			}
-            if ( $output == '' || isset( $output['label'] ) ) {
+			if ( $output == '' || isset( $output['label'] ) ) {
 				$html .= $cf['frontend_title'] != '' ? '<span class="geodir_post_meta_title" >' . __( $cf['frontend_title'], 'geodirectory' ) . ': '.'</span>' : '';
 			}
-            if ( $output == '' || isset( $output['icon'] ) ) {
+			if ( $output == '' || isset( $output['icon'] ) ) {
 				$html .= '</span>';
 			}
-            if ( $output == '' || isset( $output['value'] ) ) {
+			if ( $output == '' || isset( $output['value'] ) ) {
 				$html .= $value;
 			}
 
-            $html .= '</div>';
-        }
-    }
+			$html .= '</div>';
+		}
+	}
 
-    return $html;
+	return $html;
 }
 add_filter( 'geodir_custom_field_output_custom', 'geodir_cf_custom', 10, 5 );
 
@@ -356,6 +367,12 @@ function geodir_custom_field_output_map_directions( $html, $location, $cf, $outp
 
 		$map_directions_url = 'https://www.google.com/maps/dir/' . $latitude . ',' . $longitude . '/';
 		$map_directions_url = apply_filters( 'geodir_custom_field_output_directions_on_map', $map_directions_url, $latitude, $longitude );
+
+		$map_directions_url = geodir_post_address( $map_directions_url, 'map_directions', $gd_post );
+
+		if ( empty( $map_directions_url ) ) {
+			return '';
+		}
 
 		if ( ! empty( $output ) && ( isset( $output['raw'] ) || isset( $output['strip'] ) ) ) {
 			// Stripped value.

@@ -45,7 +45,7 @@ $tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' 
 						<?php
 						echo geodir_help_tip( __( 'Select the sort direction: (A-Z or Z-A)', 'geodirectory' ));
 						_e('Ascending or Descending','geodirectory') ?>
-						<select name="sort" id="gd-sort-<?php echo $field->id;?>">
+						<select name="sort" id="gd-sort-<?php echo esc_attr( $field->id );?>">
 							<?php $value = isset( $field->sort ) && $field->sort=='desc'  ? 'desc' : 'asc'; ?>
 							<option value="asc" <?php selected( 'asc', $value, true ); ?>><?php _e( 'Ascending', 'geodirectory' ); ?></option>
 							<option	value="desc" <?php selected( 'desc', $value, true ); ?>><?php _e( 'Descending', 'geodirectory' ); ?></option>

@@ -475,6 +475,9 @@ class GeoDir_SEO {
 
 		$post_type = geodir_get_current_posttype();
 
+		// Private address
+		$check_address = ( $gd_page == 'single' || geodir_is_page( 'single' ) ) && ! empty( $gd_post ) && GeoDir_Post_types::supports( $post_type, 'private_address' ) ? true : false;
+
 		/**
 		 * Filter pre meta title.
 		 *
@@ -556,7 +559,6 @@ class GeoDir_SEO {
 			$string = str_replace( "%%tag%%", $cat_name, $string );
 		}
 
-
 		// CPT
 		if ( strpos( $string, '%%pt_single%%' ) !== false ) {
 			if ( $post_type && $singular_name = geodir_get_post_type_singular_label( $post_type ) ) {
@@ -569,7 +571,6 @@ class GeoDir_SEO {
 				$string = str_replace( "%%pt_plural%%", __( $plural_name, 'geodirectory' ), $string );
 			}
 		}
-
 
 		// location variable
 		$location_replace_vars = geodir_location_replace_vars();
@@ -639,27 +640,30 @@ class GeoDir_SEO {
 			$string     = str_replace( "%%postcount%%", $postcount, $string );
 		}
 
-
-		// CPT vars
-		if($gd_page == 'pt'){
-
-		}
-
 		// let custom fields be used
 		if ( strpos( $string, '%%_' ) !== false ) {
-			$matches_count = preg_match_all('/%%_[^%%]*%%/',$string,$matches);
-			if($matches_count && !empty($matches[0])){
+			$address_fields = geodir_post_meta_address_fields( $post_type );
+
+			$matches_count = preg_match_all( '/%%_[^%%]*%%/', $string, $matches );
+
+			if ( $matches_count && ! empty( $matches[0] ) ) {
 				$matches = $matches[0];
-				foreach($matches as $cf){
-					$field_name = str_replace(array("%%_","%%"),"",$cf);
-					$cf_value = isset($gd_post->{$field_name}) ? $gd_post->{$field_name} : '';//geodir_get_post_meta($post->ID,$field_name,true);
+
+				foreach ( $matches as $cf ) {
+					$field_name = str_replace( array( "%%_", "%%" ), "", $cf );
+					$cf_value = isset( $gd_post->{$field_name} ) ? $gd_post->{$field_name} : '';
 
 					// round rating
-					if($cf_value && $field_name == 'overall_rating'){
+					if ( $cf_value && $field_name == 'overall_rating' ) {
 						$cf_value = round($cf_value, 1);
 					}
 
-					$string     = str_replace( "%%_{$field_name}%%", $cf_value, $string );
+					// Private address
+					if ( ! empty( $cf_value ) && $check_address && isset( $address_fields[ $field_name ] ) ) {
+						$cf_value = geodir_post_address( $cf_value, $field_name, $gd_post, '' );
+					}
+
+					$string = str_replace( "%%_{$field_name}%%", $cf_value, $string );
 				}
 			}
 		}

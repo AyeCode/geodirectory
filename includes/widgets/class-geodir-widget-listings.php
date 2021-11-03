@@ -618,13 +618,14 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
      * @global object $post                    The current post object.
      * @global string $gd_layout_class The girdview style of the listings for widget.
      * @global bool $geodir_is_widget_listing  Is this a widget listing?. Default: false.
+     * @global bool $geodir_carousel_open  Check whether widget has carousel or not.
      *
      * @param array|string $args               Display arguments including before_title, after_title, before_widget, and
      *                                         after_widget.
      * @param array|string $instance           The settings for the particular instance of the widget.
      */
     public function output_html( $args = '', $instance = '' ) {
-        global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings;
+        global $wp, $geodirectory, $gd_post, $post, $gd_advanced_pagination, $posts_per_page, $paged, $geodir_ajax_gd_listings, $geodir_carousel_open;
 
 		$is_single = ( geodir_is_page( 'single' ) || ! empty( $instance['set_post'] ) ) && ! empty( $gd_post ) ? true : false;
 
@@ -1129,6 +1130,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		// Carousel
 		$carousel_items = absint( $layout );
 		$carousel_row = '#' . $unique_id . ' .row';
+		$geodir_carousel_open = ! empty( $instance['with_carousel'] ) ? true : false;
 		if ( ! empty( $instance['with_carousel'] ) && ! empty( $widget_listings ) ) {
 			if ( ! geodir_design_style() ) {
 				// Enqueue flexslider script.
@@ -1364,6 +1366,7 @@ class GeoDir_Widget_Listings extends WP_Super_Duper {
 		$posts_per_page = $backup_posts_per_page;
 		$paged = $backup_paged;
 		$gd_advanced_pagination = $backup_gd_advanced_pagination;
+		$geodir_carousel_open = false;
 
 		remove_filter( 'geodir_widget_gd_post_title_tag', array( $this, 'filter_post_title_tag' ), 10, 2 );
 	}

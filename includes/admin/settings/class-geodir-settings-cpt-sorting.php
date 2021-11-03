@@ -138,7 +138,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 								?>
 
 								<li class="gd-cf-tooltip-wrap" <?php echo $display; ?>>
-									<a id="gd-<?php echo $val['field_type']; ?>-_-<?php echo $val['htmlvar_name']; ?>"
+									<a id="gd-<?php echo esc_attr( $val['field_type'] . '-_-' . $val['htmlvar_name'] ); ?>"
 									   data-field-type-key="<?php echo esc_attr( $val['htmlvar_name'] ); ?>"
 									   data-field-type="<?php echo esc_attr( $val['field_type'] ); ?>"
 									   class="gd-draggable-form-items  gd-<?php echo esc_attr( $val['field_type'] ); ?> geodir-sort-<?php echo esc_attr( $val['htmlvar_name'] ); ?>"

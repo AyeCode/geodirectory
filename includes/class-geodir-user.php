@@ -575,4 +575,65 @@ class GeoDir_User {
 
 		return apply_filters( 'geodir_post_author_action_' . $action, $data, $action, $the_post );
 	}
+
+	/**
+	 * Returns whether the current user has the specified capability.
+	 *
+	 * @since 2.1.1.9
+	 *
+	 * @param string $capability Capability name.
+	 * @param array  $args Further parameters.
+	 * @return bool Whether the current user has the given capability.
+	 */
+	public static function user_can( $capability, $args = array() ) {
+		$_args = $args;
+
+		switch( $capability ) {
+			case 'see_private_address':
+				$has_cap = true;
+
+				$defaults = array(
+					'post' => NULL,
+					'author' => true,
+				);
+
+				$_args = wp_parse_args( $args, $defaults );
+
+				if ( GeoDir_Post_Data::has_private_address( $_args['post'] ) ) {
+					if ( ! empty( $_args['author'] ) ) {
+						if ( is_scalar( $_args['post'] ) ) {
+							$post_ID = absint( $_args['post'] );
+						} else if ( is_object( $_args['post'] ) ) {
+							$post_ID = $_args['post']->ID;
+						} else {
+							$post_ID = 0;
+						}
+
+						if ( ! geodir_listing_belong_to_current_user( $post_ID ) ) {
+							$has_cap = false;
+						}
+					} else {
+						$has_cap = false;
+					}
+				}
+				break;
+			default:
+				$has_cap = false;
+
+				break;
+		}
+
+		/**
+		 * Filters whether the current user has the specified capability.
+		 *
+		 * @since 2.1.1.9
+		 *
+		 * @param bool   $has_cap Whether the current user has the given capability.
+		 * @param string $capability Capability name.
+		 * @param array  $_args Further parameters.
+		 * @param array  $args Original parameters.
+		 * @return bool Whether the current user has the given capability.
+		 */
+		return apply_filters( 'geodir_current_user_can', $has_cap, $capability, $_args, $args );
+	}
 }

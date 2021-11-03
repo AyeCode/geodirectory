@@ -2881,6 +2881,8 @@ class GeoDir_REST_Posts_Controller extends WP_REST_Posts_Controller {
 					}
 					break;
 				case 'address':
+					$data[ $field_name ] = geodir_post_address( $field_value, $field_name, $gd_post );
+					break;
 				case 'email':
 				case 'file':
 				case 'html':
