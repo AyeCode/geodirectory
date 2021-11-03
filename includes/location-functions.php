@@ -284,14 +284,16 @@ add_filter('geodir_replace_location_variables', 'geodir_replace_location_variabl
  * @param string $gd_page Optional.The page being filtered. Default null.
  * @return array $location_replace_vars.
  */
-function geodir_location_replace_vars($location_array = array(), $sep = NULL, $gd_page = ''){
+function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $gd_page = '' ) {
+    global $wp, $gd_post;
 
-    global $wp;
+    // Private address
+    $check_address = ( $gd_page == 'single' || geodir_is_page( 'single' ) ) && ! empty( $gd_post ) && GeoDir_Post_types::supports( $gd_post->post_type, 'private_address' ) ? true : false;
 
-    if (empty($location_array)) {
-        $location_array = geodir_get_current_location_terms('query_vars');
+    if ( empty( $location_array ) ) {
+        $location_array = geodir_get_current_location_terms( 'query_vars' );
     }
-    
+
     $location_terms = array();
     $location_terms['gd_neighbourhood'] = !empty($wp->query_vars['neighbourhood']) ? $wp->query_vars['neighbourhood'] : '';
     $location_terms['gd_city'] = !empty($wp->query_vars['city']) ? $wp->query_vars['city'] : '';
@@ -316,6 +318,10 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
             }
         }
 
+		if ( $check_address && ! empty( $location ) ) {
+			$location = geodir_post_address( $location, $location_type, $gd_post, '' );
+		}
+
         if ( empty( $location_single ) ) {
             $location_single = $location;
         }
@@ -324,24 +330,30 @@ function geodir_location_replace_vars($location_array = array(), $sep = NULL, $g
     }
 
     $full_location = array();
-    if (!empty($location_array)) {
-        $location_array = array_reverse($location_array);
-
-        foreach ($location_array as $type => $location) {
-            if (!empty($location_names[$type])) {
-                $location_name = $location_names[$type];
+    if ( ! empty( $location_array ) ) {
+        $location_array = array_reverse( $location_array );
+        foreach ( $location_array as $type => $location ) {
+            if ( ! empty( $location_names[ $type ] ) ) {
+                $location_name = $location_names[ $type ];
             } else {
+                $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
+
                 if ( function_exists( 'get_actual_location_name' ) ) {
-                    $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
-                    $location_name = get_actual_location_name($location_type, $location, true);
+                    $location_name = get_actual_location_name( $location_type, $location, true );
                 } else {
-                    $location_name = preg_replace( '/-(\d+)$/', '', $location);
+                    $location_name = preg_replace( '/-(\d+)$/', '', $location );
                     $location_name = preg_replace( '/[_-]/', ' ', $location_name );
-                    $location_name = __(geodir_ucwords($location_name), 'geodirectory');
+                    $location_name = __( geodir_ucwords( $location_name ), 'geodirectory' );
                 }
             }
 
             $location_name = trim( $location_name );
+
+			// Private address
+			if ( $check_address && ! empty( $location_name ) ) {
+				$location_name = geodir_post_address( $location_name, $location_type, $gd_post, '' );
+			}
+
 			if ( $location_name != '' ) {
 				$full_location[] = $location_name;
 			}
@@ -928,4 +940,79 @@ function geodir_osm_get_gps_from_address( $address, $wp_error = false ) {
  */
 function geodir_core_multi_city() {
 	return ( ! defined( 'GEODIRLOCATION_VERSION' ) && geodir_get_option( 'multi_city' ) );
+}
+
+/**
+ * Render the post address field value.
+ *
+ * @since 2.1.1.9
+ *
+ * @param string $value Field value.
+ * @param string $key Field key.
+ * @param int|object $post The post.
+ * @param mixed $default Whether to use default value.
+ * @return string Filtered field value.
+ */
+function geodir_post_address( $value, $key, $post, $default = NULL ) {
+	if ( geodir_is_block_demo() ) {
+		return $value;
+	}
+
+	if ( ! empty( $post ) && ! geodir_user_can( 'see_private_address', array( 'post' => $post ) ) ) {
+		switch( $key ) {
+			case 'address':
+			case 'street':
+			case 'street2':
+			case 'city':
+			case 'region':
+			case 'country':
+			case 'neighbourhood':
+			case 'zip':
+			case 'latitude':
+			case 'longitude':
+			case 'post_badge_street':          /* GD > Post Badge (address) widget/block */
+				if ( $default !== NULL ) {
+					$output = $default;
+				} else {
+					$output = __( 'Private Address', 'geodirectory' );
+				}
+				break;
+			case 'gd_post_address':            /* GD > Post Address widget/block */
+				if ( $default !== NULL ) {
+					$output = $default;
+				} else {
+					$output = $value;
+				}
+				break;
+			case 'gd_post_directions':         /* GD > Directions widget/block */
+			case 'gd_post_distance':           /* GD > Distance To Post widget/block */
+			case 'map_directions':             /* GD > Post Meta (map_directions) */
+			case 'gd_location_description':    /* GD > Location Description widget/block */
+			case 'gd_location_meta':           /* GD > Location Meta widget/block */
+				if ( $default !== NULL ) {
+					$output = $default;
+				} else {
+					$output = '';
+				}
+				break;
+			default:
+				$output = $value;
+				break;
+		}
+	} else {
+		$output = $value;
+	}
+
+	/**
+	 * Filters post address field value.
+	 *
+	 * @since 2.1.1.9
+	 *
+	 * @param string $output Field filtered value.
+	 * @param string $value Field original value.
+	 * @param string $key Field key.
+	 * @param int|object $post The post.
+	 * @param mixed $default Whether to use default value.
+	 */
+	return apply_filters( 'geodir_render_post_address', $output, $value, $key, $post, $default );
 }

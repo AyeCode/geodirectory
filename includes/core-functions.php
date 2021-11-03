@@ -353,6 +353,9 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_are_you_sure'                             => __( 'Are you sure?', 'geodirectory' ),
 		'txt_saving'                                   => __( 'Saving...', 'geodirectory' ),
 		'txt_saved'                                    => __( 'Saved', 'geodirectory' ),
+		'txt_preview'                                  => strip_tags( __( 'Preview', 'geodirectory' ) ),
+		'txt_edit'                                     => strip_tags( __( 'Edit', 'geodirectory' ) ),
+		'txt_delete'                                   => strip_tags( __( 'Delete', 'geodirectory' ) ),
 		'gmt_offset'                                   => geodir_gmt_offset(),
 		'timezone_string'                              => geodir_timezone_string(),
 		'autosave'                                     => apply_filters('geodir_autosave',10000),// 10000 = 10 seconds, set to 0 to disable

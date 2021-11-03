@@ -342,7 +342,7 @@ function plu_show_thumbs(imgId) {
                 } else if (file_ext == 'doc' || file_ext == 'odt') {
                     file_type_class = 'fa-file-word';
                 } else if (file_ext == 'txt' || file_ext == 'text') {
-                    file_type_class = 'fa-file-text';
+                    file_type_class = 'fa-file';
                 } else if (file_ext == 'csv' || file_ext == 'ods' || file_ext == 'ots') {
                     file_type_class = 'fa-file-excel';
                 } else if (file_ext == 'avi' || file_ext == 'mp4' || file_ext == 'mov') {
@@ -357,8 +357,9 @@ function plu_show_thumbs(imgId) {
                 file_display +
                 image_caption_html +
                 '<div class="gd-thumb-actions position-absolute text-white w-100  d-flex justify-content-around" style="bottom: 0;background: #00000063;">' +
-                '<span class="thumbeditlink c-pointer " onclick="gd_edit_image_meta(' + imgId + ',' + i + ');"><i class="far fa-edit" aria-hidden="true"></i></span>' +
-                '<span class="thumbremovelink c-pointer " id="thumbremovelink' + imgId + i + '"><i class="fas fa-trash-alt" aria-hidden="true"></i></span>' +
+                '<a class="thumbpreviewlink text-white" title="' + geodir_esc_entities( geodir_params.txt_preview ) + '" id="thumbpreviewlink' + imgId + i + '" href="' + image_url + '" target="_blank"><i class="far fa-eye" aria-hidden="true"></i></a> ' +
+                '<span class="thumbeditlink c-pointer" title="' + geodir_esc_entities( geodir_params.txt_edit ) + '" onclick="gd_edit_image_meta(' + imgId + ',' + i + ');"><i class="far fa-edit" aria-hidden="true"></i></span>' +
+                '<span class="thumbremovelink c-pointer" title="' + geodir_esc_entities( geodir_params.txt_delete ) + '" id="thumbremovelink' + imgId + i + '"><i class="fas fa-trash-alt" aria-hidden="true"></i></span>' +
                 '</div>' +
                 '</div></div>');
 
