@@ -2019,7 +2019,10 @@ class GeoDir_Post_Data {
 				if ( $rating_value = GeoDir_Comments::get_comment_rating( $review->comment_ID ) ) {
 					$reviews[] = array(
 						"@type"         => "Review",
-						"author"        => $review->comment_author,
+						"author"        => array(
+							"@type" => "Person",
+							"name" => $review->comment_author
+						),
 						"datePublished" => $review->comment_date,
 						"description"   => $review->comment_content,
 						"reviewRating"  => array(
