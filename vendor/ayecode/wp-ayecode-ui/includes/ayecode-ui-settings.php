@@ -35,7 +35,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		 *
 		 * @var string
 		 */
-		public $version = '0.1.61';
+		public $version = '0.1.62';
 
 		/**
 		 * Class textdomain.
@@ -198,7 +198,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 		/**
 		 * Check if the current admin screen should load scripts.
-		 *
+		 * 
 		 * @return bool
 		 */
 		public function is_aui_screen(){
@@ -587,11 +587,11 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					$modal += '<div class="modal aui-modal fade shadow bsui '+$class+'" tabindex="-1">'+
 						'<div class="modal-dialog modal-dialog-centered '+$dialog_class+'">'+
-						'<div class="modal-content">';
+							'<div class="modal-content">';
 
 					if($title) {
 						$modal += '<div class="modal-header">' +
-							'<h5 class="modal-title">' + $title + '</h5>';
+						'<h5 class="modal-title">' + $title + '</h5>';
 
 						if ($dismissible) {
 							$modal += '<button type="button" class="close" data-dismiss="modal" aria-label="Close">' +
@@ -602,8 +602,8 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						$modal += '</div>';
 					}
 					$modal += '<div class="modal-body">'+
-						$body+
-						'</div>';
+									$body+
+								'</div>';
 
 					if($footer){
 						$modal += '<div class="modal-footer">'+
@@ -613,7 +613,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					$modal +='</div>'+
 						'</div>'+
-						'</div>';
+					'</div>';
 
 					jQuery('body').append($modal);
 
@@ -678,7 +678,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 				/**
 				 * Maybe show multiple carousel items if set to do so.
-				 */
+				 */ 
 				function aui_carousel_maybe_show_multiple_items($carousel){
 					var $items = {};
 					var $item_count = 0;
@@ -776,7 +776,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 				/**
 				 * Init Multiple item carousels.
-				 */
+				 */ 
 				function aui_init_carousel_multiple_items(){
 					jQuery(window).on("resize",function(){
 						jQuery('.carousel-multiple-items').each(function () {
@@ -954,7 +954,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 						aui_lightbox_embed(this,ele);
 					});
 				}
-
+				
 
 				/**
 				 * Initiate all AUI JS.
@@ -962,7 +962,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				function aui_init(){
 					// nav menu submenus
 					init_nav_sub_menus();
-
+					
 					// init tooltips
 					aui_init_tooltips();
 
@@ -977,10 +977,10 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 					// Set times to time ago
 					aui_time_ago('timeago');
-
+					
 					// init multiple item carousels
 					aui_init_carousel_multiple_items();
-
+					
 					// init lightbox embeds
 					aui_init_lightbox_embed();
 				}
@@ -1387,28 +1387,28 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 			ob_start();
 			?>
 			<style>
-				/* Bootstrap 3 compatibility */
-				body.modal-open .modal-backdrop.show:not(.in) {opacity:0.5;}
-				body.modal-open .modal.show:not(.in)  {opacity:1;z-index: 99999}
-				body.modal-open .modal.show:not(.in) .modal-content  {box-shadow: none;}
-				body.modal-open .modal.show:not(.in)  .modal-dialog {transform: initial;}
+			/* Bootstrap 3 compatibility */
+			body.modal-open .modal-backdrop.show:not(.in) {opacity:0.5;}
+			body.modal-open .modal.show:not(.in)  {opacity:1;z-index: 99999}
+			body.modal-open .modal.show:not(.in) .modal-content  {box-shadow: none;}
+			body.modal-open .modal.show:not(.in)  .modal-dialog {transform: initial;}
 
-				body.modal-open .modal.bsui .modal-dialog{left: auto;}
+			body.modal-open .modal.bsui .modal-dialog{left: auto;}
 
-				.collapse.show:not(.in){display: inherit;}
-				.fade.show{opacity: 1;}
+			.collapse.show:not(.in){display: inherit;}
+			.fade.show{opacity: 1;}
 
-				<?php if( defined( 'SVQ_THEME_VERSION' ) ){ ?>
-				/* KLEO theme specific */
-				.kleo-main-header .navbar-collapse.collapse.show:not(.in){display: block !important;}
-				<?php } ?>
+			<?php if( defined( 'SVQ_THEME_VERSION' ) ){ ?>
+			/* KLEO theme specific */
+			.kleo-main-header .navbar-collapse.collapse.show:not(.in){display: block !important;}
+			<?php } ?>
 
-				<?php if( defined( 'FUSION_BUILDER_VERSION' ) ){ ?>
-				/* With Avada builder */
-				body.modal-open .modal.in  {opacity:1;z-index: 99999}
-				body.modal-open .modal.bsui.in .modal-content  {box-shadow: none;}
-				.bsui .collapse.in{display: inherit;}
-				<?php } ?>
+			<?php if( defined( 'FUSION_BUILDER_VERSION' ) ){ ?>
+			/* With Avada builder */
+			body.modal-open .modal.in  {opacity:1;z-index: 99999}
+			body.modal-open .modal.bsui.in .modal-content  {box-shadow: none;}
+			.bsui .collapse.in{display: inherit;}
+			<?php } ?>
 			</style>
 			<?php
 			return str_replace( array(
@@ -1425,7 +1425,7 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 
 			$primary_color = !empty($settings['color_primary']) ? $settings['color_primary'] : AUI_PRIMARY_COLOR;
 			$secondary_color = !empty($settings['color_secondary']) ? $settings['color_secondary'] : AUI_SECONDARY_COLOR;
-			//AUI_PRIMARY_COLOR_ORIGINAL
+				//AUI_PRIMARY_COLOR_ORIGINAL
 			?>
 			<style>
 				<?php
@@ -1985,46 +1985,46 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 				$month_long[] = addslashes( $params[ 'month_long_' . $i ] );
 			}
 
-			ob_start();
-		if ( 0 ) { ?><script><?php } ?>
-				{
-					weekdays: {
-						shorthand: ['<?php echo implode( "','", $day_s3 ); ?>'],
-							longhand: ['<?php echo implode( "','", $day_s5 ); ?>'],
-					},
-					months: {
-						shorthand: ['<?php echo implode( "','", $month_s ); ?>'],
-							longhand: ['<?php echo implode( "','", $month_long ); ?>'],
-					},
-					daysInMonth: [31,28,31,30,31,30,31,31,30,31,30,31],
-						firstDayOfWeek: <?php echo (int) $params[ 'firstDayOfWeek' ]; ?>,
-					ordinal: function (nth) {
-						var s = nth % 100;
-						if (s > 3 && s < 21)
-							return "th";
-						switch (s % 10) {
-							case 1:
-								return "st";
-							case 2:
-								return "nd";
-							case 3:
-								return "rd";
-							default:
-								return "th";
-						}
-					},
-					rangeSeparator: '<?php echo addslashes( $params[ 'rangeSeparator' ] ); ?>',
-						weekAbbreviation: '<?php echo addslashes( $params[ 'weekAbbreviation' ] ); ?>',
-					scrollTitle: '<?php echo addslashes( $params[ 'scrollTitle' ] ); ?>',
-					toggleTitle: '<?php echo addslashes( $params[ 'toggleTitle' ] ); ?>',
-					amPM: ['<?php echo addslashes( $params[ 'am_upper' ] ); ?>','<?php echo addslashes( $params[ 'pm_upper' ] ); ?>'],
-					yearAriaLabel: '<?php echo addslashes( $params[ 'year' ] ); ?>',
-					hourAriaLabel: '<?php echo addslashes( $params[ 'hour' ] ); ?>',
-					minuteAriaLabel: '<?php echo addslashes( $params[ 'minute' ] ); ?>',
-					time_24hr: <?php echo ( $params[ 'time_24hr' ] ? 'true' : 'false' ) ; ?>
-				}
-				<?php if ( 0 ) { ?></script><?php } ?>
-			<?php
+ob_start();
+if ( 0 ) { ?><script><?php } ?>
+{
+	weekdays: {
+		shorthand: ['<?php echo implode( "','", $day_s3 ); ?>'],
+		longhand: ['<?php echo implode( "','", $day_s5 ); ?>'],
+	},
+	months: {
+		shorthand: ['<?php echo implode( "','", $month_s ); ?>'],
+		longhand: ['<?php echo implode( "','", $month_long ); ?>'],
+	},
+	daysInMonth: [31,28,31,30,31,30,31,31,30,31,30,31],
+	firstDayOfWeek: <?php echo (int) $params[ 'firstDayOfWeek' ]; ?>,
+	ordinal: function (nth) {
+		var s = nth % 100;
+		if (s > 3 && s < 21)
+			return "th";
+		switch (s % 10) {
+			case 1:
+				return "st";
+			case 2:
+				return "nd";
+			case 3:
+				return "rd";
+			default:
+				return "th";
+		}
+	},
+	rangeSeparator: '<?php echo addslashes( $params[ 'rangeSeparator' ] ); ?>',
+	weekAbbreviation: '<?php echo addslashes( $params[ 'weekAbbreviation' ] ); ?>',
+	scrollTitle: '<?php echo addslashes( $params[ 'scrollTitle' ] ); ?>',
+	toggleTitle: '<?php echo addslashes( $params[ 'toggleTitle' ] ); ?>',
+	amPM: ['<?php echo addslashes( $params[ 'am_upper' ] ); ?>','<?php echo addslashes( $params[ 'pm_upper' ] ); ?>'],
+	yearAriaLabel: '<?php echo addslashes( $params[ 'year' ] ); ?>',
+	hourAriaLabel: '<?php echo addslashes( $params[ 'hour' ] ); ?>',
+	minuteAriaLabel: '<?php echo addslashes( $params[ 'minute' ] ); ?>',
+	time_24hr: <?php echo ( $params[ 'time_24hr' ] ? 'true' : 'false' ) ; ?>
+}
+<?php if ( 0 ) { ?></script><?php } ?>
+<?php
 			$locale = ob_get_clean();
 
 			return apply_filters( 'ayecode_ui_flatpickr_locale', trim( $locale ) );
@@ -2208,508 +2208,508 @@ if ( ! class_exists( 'AyeCode_UI_Settings' ) ) {
 		public function conditional_fields_js() {
 			ob_start();
 			?>
-			<script>
-				/**
-				 * Conditional Fields
-				 */
-				var aui_cf_field_rules = [], aui_cf_field_key_rules = {}, aui_cf_field_default_values = {};
+<script>
+/**
+ * Conditional Fields
+ */
+var aui_cf_field_rules = [], aui_cf_field_key_rules = {}, aui_cf_field_default_values = {};
 
-				jQuery(function($) {
-					aui_cf_field_init_rules($);
-				});
+jQuery(function($) {
+    aui_cf_field_init_rules($);
+});
 
-				/**
-				 * Conditional fields init.
-				 */
-				function aui_cf_field_init_rules($) {
-					if (!$('[data-has-rule]').length) {
-						return;
-					}
+/**
+ * Conditional fields init.
+ */
+function aui_cf_field_init_rules($) {
+    if (!$('[data-has-rule]').length) {
+        return;
+    }
 
-					$('[data-rule-key]').on('change keypress keyup', 'input, textarea', function() {
-						aui_cf_field_apply_rules($(this));
-					});
+    $('[data-rule-key]').on('change keypress keyup', 'input, textarea', function() {
+        aui_cf_field_apply_rules($(this));
+    });
 
-					$('[data-rule-key]').on('change', 'select', function() {
-						aui_cf_field_apply_rules($(this));
-					});
+    $('[data-rule-key]').on('change', 'select', function() {
+        aui_cf_field_apply_rules($(this));
+    });
 
-					$('[data-rule-key]').on('change.select2', 'select', function() {
-						aui_cf_field_apply_rules($(this));
-					});
+    $('[data-rule-key]').on('change.select2', 'select', function() {
+        aui_cf_field_apply_rules($(this));
+    });
 
-					aui_cf_field_setup_rules($);
-				}
+    aui_cf_field_setup_rules($);
+}
 
-				/**
-				 * Setup conditional field rules.
-				 */
-				function aui_cf_field_setup_rules($) {
-					var aui_cf_field_keys = [];
+/**
+ * Setup conditional field rules.
+ */
+function aui_cf_field_setup_rules($) {
+    var aui_cf_field_keys = [];
 
-					$('[data-rule-key]').each(function() {
-						var key = $(this).data('rule-key'), irule = parseInt($(this).data('has-rule'));
-						if (key) {
-							aui_cf_field_keys.push(key);
-						}
+    $('[data-rule-key]').each(function() {
+        var key = $(this).data('rule-key'), irule = parseInt($(this).data('has-rule'));
+        if (key) {
+            aui_cf_field_keys.push(key);
+        }
 
-						var parse_conds = {};
-						if ($(this).data('rule-fie-0')) {
-							$(this).find('input,select,textarea').each(function() {
-								if ($(this).attr('required') || $(this).attr('oninvalid')) {
-									$(this).addClass('aui-cf-req');
-									if ($(this).attr('required')) {
-										$(this).attr('data-rule-req', true);
-									}
-									if ($(this).attr('oninvalid')) {
-										$(this).attr('data-rule-oninvalid', $(this).attr('oninvalid'));
-									}
-								}
-							});
-							for (var i = 0; i < irule; i++) {
-								var field = $(this).data('rule-fie-' + i);
-								if (typeof parse_conds[i] === 'undefined') {
-									parse_conds[i] = {};
-								}
-								parse_conds[i]['action'] = $(this).data('rule-act-' + i);
-								parse_conds[i]['field'] = $(this).data('rule-fie-' + i);
-								parse_conds[i]['condition'] = $(this).data('rule-con-' + i);
-								parse_conds[i]['value'] = $(this).data('rule-val-' + i);
-							}
+        var parse_conds = {};
+        if ($(this).data('rule-fie-0')) {
+            $(this).find('input,select,textarea').each(function() {
+                if ($(this).attr('required') || $(this).attr('oninvalid')) {
+                    $(this).addClass('aui-cf-req');
+                    if ($(this).attr('required')) {
+                        $(this).attr('data-rule-req', true);
+                    }
+                    if ($(this).attr('oninvalid')) {
+                        $(this).attr('data-rule-oninvalid', $(this).attr('oninvalid'));
+                    }
+                }
+            });
+            for (var i = 0; i < irule; i++) {
+                var field = $(this).data('rule-fie-' + i);
+                if (typeof parse_conds[i] === 'undefined') {
+                    parse_conds[i] = {};
+                }
+                parse_conds[i]['action'] = $(this).data('rule-act-' + i);
+                parse_conds[i]['field'] = $(this).data('rule-fie-' + i);
+                parse_conds[i]['condition'] = $(this).data('rule-con-' + i);
+                parse_conds[i]['value'] = $(this).data('rule-val-' + i);
+            }
 
-							$.each(parse_conds, function(j, data) {
-								var item = {
-									'field': {
-										key: key,
-										action: data.action,
-										field: data.field,
-										condition: data.condition,
-										value: data.value,
-										rule: {
-											key: key,
-											action: data.action,
-											condition: data.condition,
-											value: data.value
-										}
-									}
-								};
-								aui_cf_field_rules.push(item);
-							});
-						}
-						aui_cf_field_default_values[$(this).data('rule-key')] = aui_cf_field_get_default_value($(this));
-					});
+            $.each(parse_conds, function(j, data) {
+                var item = {
+                    'field': {
+                        key: key,
+                        action: data.action,
+                        field: data.field,
+                        condition: data.condition,
+                        value: data.value,
+                        rule: {
+                            key: key,
+                            action: data.action,
+                            condition: data.condition,
+                            value: data.value
+                        }
+                    }
+                };
+                aui_cf_field_rules.push(item);
+            });
+        }
+        aui_cf_field_default_values[$(this).data('rule-key')] = aui_cf_field_get_default_value($(this));
+    });
 
-					$.each(aui_cf_field_keys, function(i, fkey) {
-						aui_cf_field_key_rules[fkey] = aui_cf_field_get_children(fkey);
-					});
+    $.each(aui_cf_field_keys, function(i, fkey) {
+        aui_cf_field_key_rules[fkey] = aui_cf_field_get_children(fkey);
+    });
 
-					$('[data-rule-key]:visible').each(function() {
-						var conds = aui_cf_field_key_rules[$(this).data('rule-key')];
-						if (conds && conds.length) {
-							var $main_el = $(this), el = aui_cf_field_get_element($main_el);
-							if ($(el).length) {
-								aui_cf_field_apply_rules($(el));
-							}
-						}
-					});
-				}
+    $('[data-rule-key]:visible').each(function() {
+        var conds = aui_cf_field_key_rules[$(this).data('rule-key')];
+        if (conds && conds.length) {
+            var $main_el = $(this), el = aui_cf_field_get_element($main_el);
+            if ($(el).length) {
+                aui_cf_field_apply_rules($(el));
+            }
+        }
+    });
+}
 
-				/**
-				 * Apply conditional field rules.
-				 */
-				function aui_cf_field_apply_rules($el) {
-					if (!$el.parents('[data-rule-key]').length) {
-						return;
-					}
+/**
+ * Apply conditional field rules.
+ */
+function aui_cf_field_apply_rules($el) {
+    if (!$el.parents('[data-rule-key]').length) {
+        return;
+    }
 
-					if ($el.data('no-rule')) {
-						return;
-					}
+    if ($el.data('no-rule')) {
+        return;
+    }
 
-					var key = $el.parents('[data-rule-key]').data('rule-key');
-					var conditions = aui_cf_field_key_rules[key];
-					if (typeof conditions === 'undefined') {
-						return;
-					}
-					var field_type = aui_cf_field_get_type($el.parents('[data-rule-key]')), current_value = aui_cf_field_get_value($el);
-					var $keys = {}, $keys_values = {}, $key_rules = {};
+    var key = $el.parents('[data-rule-key]').data('rule-key');
+    var conditions = aui_cf_field_key_rules[key];
+    if (typeof conditions === 'undefined') {
+        return;
+    }
+    var field_type = aui_cf_field_get_type($el.parents('[data-rule-key]')), current_value = aui_cf_field_get_value($el);
+    var $keys = {}, $keys_values = {}, $key_rules = {};
 
-					jQuery.each(conditions, function(index, condition) {
-						if (typeof $keys_values[condition.key] == 'undefined') {
-							$keys_values[condition.key] = [];
-							$key_rules[condition.key] = {}
-						}
+    jQuery.each(conditions, function(index, condition) {
+        if (typeof $keys_values[condition.key] == 'undefined') {
+            $keys_values[condition.key] = [];
+            $key_rules[condition.key] = {}
+        }
 
-						$keys_values[condition.key].push(condition.value);
-						$key_rules[condition.key] = condition;
-					});
+        $keys_values[condition.key].push(condition.value);
+        $key_rules[condition.key] = condition;
+    });
 
-					jQuery.each(conditions, function(index, condition) {
-						if (typeof $keys[condition.key] == 'undefined') {
-							$keys[condition.key] = {};
-						}
+    jQuery.each(conditions, function(index, condition) {
+        if (typeof $keys[condition.key] == 'undefined') {
+            $keys[condition.key] = {};
+        }
 
-						if (condition.condition === 'empty') {
-							var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
-							if (!field_value || field_value === '') {
-								$keys[condition.key][index] = true;
-							} else {
-								$keys[condition.key][index] = false;
-							}
-						} else if (condition.condition === 'not empty') {
-							var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
-							if (field_value && field_value !== '') {
-								$keys[condition.key][index] = true;
-							} else {
-								$keys[condition.key][index] = false;
-							}
-						} else if (condition.condition === 'equals to') {
-							var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
-							if (((condition.value && condition.value == condition.value) || (condition.value === field_value)) && aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
-								$keys[condition.key][index] = true;
-							} else {
-								$keys[condition.key][index] = false;
-							}
-						} else if (condition.condition === 'not equals') {
-							var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
-							if (jQuery.isNumeric(condition.value) && parseInt(field_value) !== parseInt(condition.value) && field_value && !aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
-								$keys[condition.key][index] = true;
-							} else if (condition.value != field_value && !aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
-								$keys[condition.key][index] = true;
-							} else {
-								$keys[condition.key][index] = false;
-							}
-						} else if (condition.condition === 'greater than') {
-							var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
-							if (jQuery.isNumeric(condition.value) && parseInt(field_value) > parseInt(condition.value)) {
-								$keys[condition.key][index] = true;
-							} else {
-								$keys[condition.key][index] = false;
-							}
-						} else if (condition.condition === 'less than') {
-							var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
-							if (jQuery.isNumeric(condition.value) && parseInt(field_value) < parseInt(condition.value)) {
-								$keys[condition.key][index] = true;
-							} else {
-								$keys[condition.key][index] = false;
-							}
-						} else if (condition.condition === 'contains') {
-							switch (field_type) {
-								case 'multiselect':
-									if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
-										$keys[condition.key][index] = true;
-									} else {
-										$keys[condition.key][index] = false;
-									}
-									break;
-								case 'checkbox':
-									if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
-										$keys[condition.key][index] = true;
-									} else {
-										$keys[condition.key][index] = false;
-									}
-									break;
-								default:
-									if (typeof $keys[condition.key][index] === 'undefined') {
-										if (current_value && current_value.indexOf(condition.value) >= 0 && aui_cf_field_in_array(current_value, $keys_values[condition.key], false, true)) {
-											$keys[condition.key][index] = true;
-										} else {
-											$keys[condition.key][index] = false;
-										}
-									}
-									break;
-							}
-						}
-					});
+        if (condition.condition === 'empty') {
+            var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
+            if (!field_value || field_value === '') {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'not empty') {
+            var field_value = Array.isArray(current_value) ? current_value.join('') : current_value;
+            if (field_value && field_value !== '') {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'equals to') {
+            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+            if (((condition.value && condition.value == condition.value) || (condition.value === field_value)) && aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'not equals') {
+            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+            if (jQuery.isNumeric(condition.value) && parseInt(field_value) !== parseInt(condition.value) && field_value && !aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
+                $keys[condition.key][index] = true;
+            } else if (condition.value != field_value && !aui_cf_field_in_array(field_value, $keys_values[condition.key])) {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'greater than') {
+            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+            if (jQuery.isNumeric(condition.value) && parseInt(field_value) > parseInt(condition.value)) {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'less than') {
+            var field_value = (Array.isArray(current_value) && current_value.length === 1) ? current_value[0] : current_value;
+            if (jQuery.isNumeric(condition.value) && parseInt(field_value) < parseInt(condition.value)) {
+                $keys[condition.key][index] = true;
+            } else {
+                $keys[condition.key][index] = false;
+            }
+        } else if (condition.condition === 'contains') {
+            switch (field_type) {
+                case 'multiselect':
+                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
+                        $keys[condition.key][index] = true;
+                    } else {
+                        $keys[condition.key][index] = false;
+                    }
+                    break;
+                case 'checkbox':
+                    if (current_value && ((!Array.isArray(current_value) && current_value.indexOf(condition.value) >= 0) || (Array.isArray(current_value) && aui_cf_field_in_array(condition.value, current_value)))) {
+                        $keys[condition.key][index] = true;
+                    } else {
+                        $keys[condition.key][index] = false;
+                    }
+                    break;
+                default:
+                    if (typeof $keys[condition.key][index] === 'undefined') {
+                        if (current_value && current_value.indexOf(condition.value) >= 0 && aui_cf_field_in_array(current_value, $keys_values[condition.key], false, true)) {
+                            $keys[condition.key][index] = true;
+                        } else {
+                            $keys[condition.key][index] = false;
+                        }
+                    }
+                    break;
+            }
+        }
+    });
 
-					jQuery.each($keys, function(index, field) {
-						if (aui_cf_field_in_array(true, field)) {
-							aui_cf_field_apply_action($el, $key_rules[index], true);
-						} else {
-							aui_cf_field_apply_action($el, $key_rules[index], false);
-						}
-					});
+    jQuery.each($keys, function(index, field) {
+        if (aui_cf_field_in_array(true, field)) {
+            aui_cf_field_apply_action($el, $key_rules[index], true);
+        } else {
+            aui_cf_field_apply_action($el, $key_rules[index], false);
+        }
+    });
 
-					/* Trigger field change */
-					if ($keys.length) {
-						$el.trigger('aui_cf_field_on_change');
-					}
-				}
+    /* Trigger field change */
+    if ($keys.length) {
+        $el.trigger('aui_cf_field_on_change');
+    }
+}
 
-				/**
-				 * Get the field element.
-				 */
-				function aui_cf_field_get_element($el) {
-					var el = $el.find('input,textarea,select'),
-						type = aui_cf_field_get_type($el);
-					if (type && window._aui_cf_field_elements && typeof window._aui_cf_field_elements == 'object' && typeof window._aui_cf_field_elements[type] != 'undefined') {
-						el = window._aui_cf_field_elements[type];
-					}
-					return el;
-				}
+/**
+ * Get the field element.
+ */
+function aui_cf_field_get_element($el) {
+    var el = $el.find('input,textarea,select'),
+        type = aui_cf_field_get_type($el);
+    if (type && window._aui_cf_field_elements && typeof window._aui_cf_field_elements == 'object' && typeof window._aui_cf_field_elements[type] != 'undefined') {
+        el = window._aui_cf_field_elements[type];
+    }
+    return el;
+}
 
-				/**
-				 * Get the field type.
-				 */
-				function aui_cf_field_get_type($el) {
-					return $el.data('rule-type');
-				}
+/**
+ * Get the field type.
+ */
+function aui_cf_field_get_type($el) {
+    return $el.data('rule-type');
+}
 
-				/**
-				 * Get the field value.
-				 */
-				function aui_cf_field_get_value($el) {
-					var current_value = $el.val();
+/**
+ * Get the field value.
+ */
+function aui_cf_field_get_value($el) {
+    var current_value = $el.val();
 
-					if ($el.is(':checkbox')) {
-						current_value = '';
-						if ($el.parents('[data-rule-key]').find('input:checked').length > 1) {
-							$el.parents('[data-rule-key]').find('input:checked').each(function() {
-								current_value = current_value + jQuery(this).val() + ' ';
-							});
-						} else {
-							if ($el.parents('[data-rule-key]').find('input:checked').length >= 1) {
-								current_value = $el.parents('[data-rule-key]').find('input:checked').val();
-							}
-						}
-					}
+    if ($el.is(':checkbox')) {
+        current_value = '';
+        if ($el.parents('[data-rule-key]').find('input:checked').length > 1) {
+            $el.parents('[data-rule-key]').find('input:checked').each(function() {
+                current_value = current_value + jQuery(this).val() + ' ';
+            });
+        } else {
+            if ($el.parents('[data-rule-key]').find('input:checked').length >= 1) {
+                current_value = $el.parents('[data-rule-key]').find('input:checked').val();
+            }
+        }
+    }
 
-					if ($el.is(':radio')) {
-						current_value = $el.parents('[data-rule-key]').find('input[type=radio]:checked').val();
-					}
+    if ($el.is(':radio')) {
+        current_value = $el.parents('[data-rule-key]').find('input[type=radio]:checked').val();
+    }
 
-					return current_value;
-				}
+    return current_value;
+}
 
-				/**
-				 * Get the field default value.
-				 */
-				function aui_cf_field_get_default_value($el) {
-					var value = '', type = aui_cf_field_get_type($el);
+/**
+ * Get the field default value.
+ */
+function aui_cf_field_get_default_value($el) {
+    var value = '', type = aui_cf_field_get_type($el);
 
-					switch (type) {
-						case 'text':
-						case 'number':
-						case 'date':
-						case 'textarea':
-						case 'select':
-							value = $el.find('input:text,input[type="number"],textarea,select').val();
-							break;
-						case 'phone':
-						case 'email':
-						case 'color':
-						case 'url':
-						case 'hidden':
-						case 'password':
-						case 'file':
-							value = $el.find('input[type="' + type + '"]').val();
-							break;
-						case 'multiselect':
-							value = $el.find('select').val();
-							break;
-						case 'radio':
-							if ($el.find('input[type="radio"]:checked').length >= 1) {
-								value = $el.find('input[type="radio"]:checked').val();
-							}
-							break;
-						case 'checkbox':
-							if ($el.find('input[type="checkbox"]:checked').length >= 1) {
-								if ($el.find('input[type="checkbox"]:checked').length > 1) {
-									var values = [];
-									values.push(value);
-									$el.find('input[type="checkbox"]:checked').each(function() {
-										values.push(jQuery(this).val());
-									});
-									value = values;
-								} else {
-									value = $el.find('input[type="checkbox"]:checked').val();
-								}
-							}
-							break;
-						default:
-							if (window._aui_cf_field_default_values && typeof window._aui_cf_field_default_values == 'object' && typeof window._aui_cf_field_default_values[type] != 'undefined') {
-								value = window._aui_cf_field_default_values[type];
-							}
-							break;
-					}
-					return {
-						type: type,
-						value: value
-					};
-				}
+    switch (type) {
+        case 'text':
+        case 'number':
+        case 'date':
+        case 'textarea':
+        case 'select':
+            value = $el.find('input:text,input[type="number"],textarea,select').val();
+            break;
+        case 'phone':
+        case 'email':
+        case 'color':
+        case 'url':
+        case 'hidden':
+        case 'password':
+        case 'file':
+            value = $el.find('input[type="' + type + '"]').val();
+            break;
+        case 'multiselect':
+            value = $el.find('select').val();
+            break;
+        case 'radio':
+            if ($el.find('input[type="radio"]:checked').length >= 1) {
+                value = $el.find('input[type="radio"]:checked').val();
+            }
+            break;
+        case 'checkbox':
+            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
+                if ($el.find('input[type="checkbox"]:checked').length > 1) {
+                    var values = [];
+                    values.push(value);
+                    $el.find('input[type="checkbox"]:checked').each(function() {
+                        values.push(jQuery(this).val());
+                    });
+                    value = values;
+                } else {
+                    value = $el.find('input[type="checkbox"]:checked').val();
+                }
+            }
+            break;
+        default:
+            if (window._aui_cf_field_default_values && typeof window._aui_cf_field_default_values == 'object' && typeof window._aui_cf_field_default_values[type] != 'undefined') {
+                value = window._aui_cf_field_default_values[type];
+            }
+            break;
+    }
+    return {
+        type: type,
+        value: value
+    };
+}
 
-				/**
-				 * Reset field default value.
-				 */
-				function aui_cf_field_reset_default_value($el) {
-					var type = aui_cf_field_get_type($el), key = $el.data('rule-key'), field = aui_cf_field_default_values[key];
+/**
+ * Reset field default value.
+ */
+function aui_cf_field_reset_default_value($el) {
+    var type = aui_cf_field_get_type($el), key = $el.data('rule-key'), field = aui_cf_field_default_values[key];
 
-					switch (type) {
-						case 'text':
-						case 'number':
-						case 'date':
-						case 'textarea':
-							$el.find('input:text,input[type="number"],textarea').val(field.value);
-							break;
-						case 'phone':
-						case 'email':
-						case 'color':
-						case 'url':
-						case 'hidden':
-						case 'password':
-						case 'file':
-							$el.find('input[type="' + type + '"]').val(field.value);
-							break;
-						case 'select':
-							$el.find('select').find('option').prop('selected', false);
-							$el.find('select').val(field.value);
-							$el.find('select').trigger('change');
-							break;
-						case 'multiselect':
-							$el.find('select').find('option').prop('selected', false);
-							if ((typeof field.value === 'object' || typeof field.value === 'array') && !field.value.length && $el.find('select option:first').text() == '') {
-								$el.find('select option:first').remove(); // Clear first option to show placeholder.
-							}
-							jQuery.each(field.value, function(i, v) {
-								$el.find('select').find('option[value="' + v + '"]').attr('selected', true);
-							});
-							$el.find('select').trigger('change');
-							break;
-						case 'checkbox':
-							if ($el.find('input[type="checkbox"]:checked').length >= 1) {
-								$el.find('input[type="checkbox"]:checked').prop('checked', false);
-								if (Array.isArray(field.value)) {
-									jQuery.each(field.value, function(i, v) {
-										$el.find('input[type="checkbox"][value="' + v + '"]').attr('checked', true);
-									});
-								} else {
-									$el.find('input[type="checkbox"][value="' + field.value + '"]').attr('checked', true);
-								}
-							}
-							break;
-						case 'radio':
-							if ($el.find('input[type="radio"]:checked').length >= 1) {
-								setTimeout(function() {
-									$el.find('input[type="radio"]:checked').prop('checked', false);
-									$el.find('input[type="radio"][value="' + field.value + '"]').attr('checked', true);
-								}, 100);
-							}
-							break;
-						default:
-							jQuery(document.body).trigger('aui_cf_field_reset_default_value', type, $el, field);
-							break;
-					}
+    switch (type) {
+        case 'text':
+        case 'number':
+        case 'date':
+        case 'textarea':
+            $el.find('input:text,input[type="number"],textarea').val(field.value);
+            break;
+        case 'phone':
+        case 'email':
+        case 'color':
+        case 'url':
+        case 'hidden':
+        case 'password':
+        case 'file':
+            $el.find('input[type="' + type + '"]').val(field.value);
+            break;
+        case 'select':
+            $el.find('select').find('option').prop('selected', false);
+            $el.find('select').val(field.value);
+            $el.find('select').trigger('change');
+            break;
+        case 'multiselect':
+            $el.find('select').find('option').prop('selected', false);
+            if ((typeof field.value === 'object' || typeof field.value === 'array') && !field.value.length && $el.find('select option:first').text() == '') {
+                $el.find('select option:first').remove(); // Clear first option to show placeholder.
+            }
+            jQuery.each(field.value, function(i, v) {
+                $el.find('select').find('option[value="' + v + '"]').attr('selected', true);
+            });
+            $el.find('select').trigger('change');
+            break;
+        case 'checkbox':
+            if ($el.find('input[type="checkbox"]:checked').length >= 1) {
+                $el.find('input[type="checkbox"]:checked').prop('checked', false);
+                if (Array.isArray(field.value)) {
+                    jQuery.each(field.value, function(i, v) {
+                        $el.find('input[type="checkbox"][value="' + v + '"]').attr('checked', true);
+                    });
+                } else {
+                    $el.find('input[type="checkbox"][value="' + field.value + '"]').attr('checked', true);
+                }
+            }
+            break;
+        case 'radio':
+            if ($el.find('input[type="radio"]:checked').length >= 1) {
+                setTimeout(function() {
+                    $el.find('input[type="radio"]:checked').prop('checked', false);
+                    $el.find('input[type="radio"][value="' + field.value + '"]').attr('checked', true);
+                }, 100);
+            }
+            break;
+        default:
+            jQuery(document.body).trigger('aui_cf_field_reset_default_value', type, $el, field);
+            break;
+    }
 
-					if (!$el.hasClass('aui-cf-field-has-changed')) {
-						var el = aui_cf_field_get_element($el);
-						if (type === 'radio' || type === 'checkbox') {
-							el = el.find(':checked');
-						}
-						if (el) {
-							el.trigger('change');
-							$el.addClass('aui-cf-field-has-changed');
-						}
-					}
-				}
+    if (!$el.hasClass('aui-cf-field-has-changed')) {
+        var el = aui_cf_field_get_element($el);
+        if (type === 'radio' || type === 'checkbox') {
+            el = el.find(':checked');
+        }
+        if (el) {
+            el.trigger('change');
+            $el.addClass('aui-cf-field-has-changed');
+        }
+    }
+}
 
-				/**
-				 * Get the field children.
-				 */
-				function aui_cf_field_get_children(field_key) {
-					var rules = [];
-					jQuery.each(aui_cf_field_rules, function(j, rule) {
-						if (rule.field.field === field_key) {
-							rules.push(rule.field.rule);
-						}
-					});
-					return rules;
-				}
+/**
+ * Get the field children.
+ */
+function aui_cf_field_get_children(field_key) {
+    var rules = [];
+    jQuery.each(aui_cf_field_rules, function(j, rule) {
+        if (rule.field.field === field_key) {
+            rules.push(rule.field.rule);
+        }
+    });
+    return rules;
+}
 
-				/**
-				 * Check in array field value.
-				 */
-				function aui_cf_field_in_array(find, item, exact, match) {
-					var found = false, key;
-					exact = !!exact;
+/**
+ * Check in array field value.
+ */
+function aui_cf_field_in_array(find, item, exact, match) {
+    var found = false, key;
+    exact = !!exact;
 
-					for (key in item) {
-						if ((exact && item[key] === find) || (!exact && item[key] == find) || (match && (typeof find === 'string' || typeof find === 'number') && (typeof item[key] === 'string' || typeof item[key] === 'number') && find.length && find.indexOf(item[key]) >= 0)) {
-							found = true;
-							break;
-						}
-					}
-					return found;
-				}
+    for (key in item) {
+        if ((exact && item[key] === find) || (!exact && item[key] == find) || (match && (typeof find === 'string' || typeof find === 'number') && (typeof item[key] === 'string' || typeof item[key] === 'number') && find.length && find.indexOf(item[key]) >= 0)) {
+            found = true;
+            break;
+        }
+    }
+    return found;
+}
 
-				/**
-				 * App the field condition action.
-				 */
-				function aui_cf_field_apply_action($el, rule, isTrue) {
-					var $destEl = jQuery('[data-rule-key="' + rule.key + '"]');
+/**
+ * App the field condition action.
+ */
+function aui_cf_field_apply_action($el, rule, isTrue) {
+    var $destEl = jQuery('[data-rule-key="' + rule.key + '"]');
 
-					if (rule.action === 'show' && isTrue) {
-						if ($destEl.is(':hidden')) {
-							aui_cf_field_reset_default_value($destEl);
-						}
-						aui_cf_field_show_element($destEl);
-					} else if (rule.action === 'show' && !isTrue) {
-						aui_cf_field_hide_element($destEl);
-					} else if (rule.action === 'hide' && isTrue) {
-						aui_cf_field_hide_element($destEl);
-					} else if (rule.action === 'hide' && !isTrue) {
-						if ($destEl.is(':hidden')) {
-							aui_cf_field_reset_default_value($destEl);
-						}
-						aui_cf_field_show_element($destEl);
-					}
-					return $el.removeClass('aui-cf-field-has-changed');
-				}
+    if (rule.action === 'show' && isTrue) {
+        if ($destEl.is(':hidden')) {
+            aui_cf_field_reset_default_value($destEl);
+        }
+        aui_cf_field_show_element($destEl);
+    } else if (rule.action === 'show' && !isTrue) {
+        aui_cf_field_hide_element($destEl);
+    } else if (rule.action === 'hide' && isTrue) {
+        aui_cf_field_hide_element($destEl);
+    } else if (rule.action === 'hide' && !isTrue) {
+        if ($destEl.is(':hidden')) {
+            aui_cf_field_reset_default_value($destEl);
+        }
+        aui_cf_field_show_element($destEl);
+    }
+    return $el.removeClass('aui-cf-field-has-changed');
+}
 
-				/**
-				 * Show field element.
-				 */
-				function aui_cf_field_show_element($el) {
-					$el.removeClass('d-none').show();
+/**
+ * Show field element.
+ */
+function aui_cf_field_show_element($el) {
+    $el.removeClass('d-none').show();
 
-					$el.find('.aui-cf-req').each(function() {
-						if (jQuery(this).data('rule-req')) {
-							jQuery(this).removeAttr('required').prop('required', true);
-						}
-						if (jQuery(this).data('rule-oninvalid')) {
-							jQuery(this).removeAttr('oninvalid').attr('oninvalid', jQuery(this).data('rule-oninvalid'));
-						}
-					});
+    $el.find('.aui-cf-req').each(function() {
+        if (jQuery(this).data('rule-req')) {
+            jQuery(this).removeAttr('required').prop('required', true);
+        }
+        if (jQuery(this).data('rule-oninvalid')) {
+            jQuery(this).removeAttr('oninvalid').attr('oninvalid', jQuery(this).data('rule-oninvalid'));
+        }
+    });
 
-					if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
-						$el.css({
-							"visibility": "visible"
-						});
-					}
-				}
+    if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
+        $el.css({
+            "visibility": "visible"
+        });
+    }
+}
 
-				/**
-				 * Hide field element.
-				 */
-				function aui_cf_field_hide_element($el) {
-					$el.addClass('d-none').hide();
+/**
+ * Hide field element.
+ */
+function aui_cf_field_hide_element($el) {
+    $el.addClass('d-none').hide();
 
-					$el.find('.aui-cf-req').each(function() {
-						if (jQuery(this).data('rule-req')) {
-							jQuery(this).removeAttr('required');
-						}
-						if (jQuery(this).data('rule-oninvalid')) {
-							jQuery(this).removeAttr('oninvalid');
-						}
-					});
+    $el.find('.aui-cf-req').each(function() {
+        if (jQuery(this).data('rule-req')) {
+            jQuery(this).removeAttr('required');
+        }
+        if (jQuery(this).data('rule-oninvalid')) {
+            jQuery(this).removeAttr('oninvalid');
+        }
+    });
 
-					if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
-						$el.css({
-							"visibility": "hidden"
-						});
-					}
-				}
-				<?php do_action( 'aui_conditional_fields_js', $this ); ?>
-			</script>
+    if (window && window.navigator.userAgent.indexOf("MSIE") !== -1) {
+        $el.css({
+            "visibility": "hidden"
+        });
+    }
+}
+<?php do_action( 'aui_conditional_fields_js', $this ); ?>
+</script>
 			<?php
 			$output = ob_get_clean();
 
