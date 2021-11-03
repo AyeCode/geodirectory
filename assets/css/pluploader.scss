@@ -197,6 +197,21 @@
     bottom: 10px;
 }
 
+.wp-admin .thumb.embed-responsive .gd-thumb-actions.justify-content-around {
+    margin-top: -20px;
+    justify-content: space-around;
+}
+.wp-admin .thumb.embed-responsive:hover .gd-thumb-actions.justify-content-around {
+    display: flex;
+}
+
+.wp-admin .thumb.embed-responsive .gd-thumb-actions > * {
+    width: auto;
+    font-size: 13px;
+    line-height: 1;
+    color: #fff !important;
+}
+
 .postbox .inside .plupload-thumbs .thumb,
 .geodir-add-files .plupload-thumbs .thumb {
 	height: 85.33px;

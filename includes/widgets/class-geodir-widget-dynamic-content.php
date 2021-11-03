@@ -104,6 +104,10 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 	public function output( $args = array(), $widget_args = array(), $content = '' ) {
 		global $post,$gd_post;
 
+		if ( $this->is_preview() ) {
+			return '';
+		}
+
 		$post_id 	= ! empty( $args['id'] ) ? $args['id'] : ( ! empty( $post->ID ) ? $post->ID : 0 );
 		$post_type 	= $post_id ? get_post_type( $post_id ) : '';
 
@@ -141,6 +145,19 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 		}
 
 		$html = $args['html'];
+
+		// Decode &lt; & &gt;
+		if ( ! empty( $html ) ) {
+			$trans   = array(
+				'&lt;' => '<',
+				'&gt;' => '>'
+			);
+
+			$html = strtr( $html, $trans );
+
+			$html = geodir_unwptexturize( $html );
+		}
+
 		$find_post = ! empty( $gd_post->ID ) && $gd_post->ID == $post_id ? $gd_post : geodir_get_post_info( $post_id );
 		$match_field = $args['key'];
 		if ( $match_field == 'address' ) {
@@ -291,7 +308,7 @@ class GeoDir_Widget_Dynamic_Content extends WP_Super_Duper {
 				}
 
 				// badge text
-				if ( empty( $html ) && empty($args['icon_class']) ) {
+				if ( empty( $html ) && empty( $args['icon_class'] ) && isset( $field['frontend_title'] ) ) {
 					$html = $field['frontend_title'];
 				}
 
