@@ -364,8 +364,8 @@ function gd_osm_parse_item(item) {
             }
         }
 
-        // Bermuda
-        if ((address.country_code == 'bm' || address.country_code == 'no') && ! address.state) {
+        // Bermuda, Sweden
+        if ((address.country_code == 'bm' || address.country_code == 'no' || address.country_code == 'se') && ! address.state) {
             if (address.county) {
                 address.state = address.county;
             } else if (address.state_district) {

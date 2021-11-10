@@ -1,3 +1,6 @@
+= 2.1.1.10 =
+* OpenStreetMap don't populates region for Sweden - FIXED
+
 = 2.1.1.9 =
 * GD > Badge is not showing default category link - FIXED
 * Use category image title & caption on fallback image title & caption - CHANGED

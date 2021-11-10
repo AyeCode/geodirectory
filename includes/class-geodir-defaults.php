@@ -490,7 +490,7 @@ Thank you,
 		return apply_filters('geodir_email_admin_post_edit_body',
 			__("Dear Admin,
 
-A listing [#listing_link#] has been edited by it's author [#post_author_name#].
+A listing [#listing_link#] has been edited by its author [#post_author_name#].
 
 Listing Details:
 Listing ID: [#post_id#]
