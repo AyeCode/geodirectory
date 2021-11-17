@@ -1,5 +1,6 @@
 = 2.1.1.10 =
 * OpenStreetMap don't populates region for Sweden - FIXED
+* Avada builder not working for search page - FIXED
 
 = 2.1.1.9 =
 * GD > Badge is not showing default category link - FIXED
