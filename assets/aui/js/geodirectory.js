@@ -48,6 +48,12 @@ jQuery(document).ready(function($) {
     $('.geodir-posts-carousel').each(function(index) {
         geodir_init_listings_carousel(this, index);
     });
+
+    $(document).on('elementor/popup/show', (e, id, ins) => {
+        if ($('.elementor-popup-modal .geodir-lazy-load').length) {
+            geodir_init_lazy_load($);
+        }
+    });
 });
 
 /**
@@ -280,7 +286,7 @@ function geodir_init_lazy_load(gdQuery){
     if ('objectFit' in document.documentElement.style === false) {
         _opacity = 0;
     }
-    gdQuery(".geodir-lazy-load").gdunveil(100,function() {this.style.opacity = _opacity;},'#geodir_content');
+    gdQuery(".geodir-lazy-load").gdunveil(100,function() {this.style.opacity = _opacity;},'#geodir_content, .dialog-lightbox-message');
 
     // fire when the image tab is clicked on details page
     jQuery('#gd-tabs').on("click",function() {
