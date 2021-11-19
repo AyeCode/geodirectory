@@ -2,6 +2,7 @@
 * OpenStreetMap don't populates region for Sweden - FIXED
 * Avada builder not working for search page - FIXED
 * Lazyload images don't work in elementor popup - FIXED
+* GD show/hide widget option not working on Widget Block - FIXED
 
 = 2.1.1.9 =
 * GD > Badge is not showing default category link - FIXED
