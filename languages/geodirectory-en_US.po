@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.1.9\n"
+"Project-Id-Version: GeoDirectory 2.1.1.10\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-03 14:21+0530\n"
-"PO-Revision-Date: 2021-11-03 14:21+0530\n"
+"POT-Creation-Date: 2021-12-02 13:12+0530\n"
+"PO-Revision-Date: 2021-12-02 13:12+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -413,7 +413,7 @@ msgstr ""
 #: includes/admin/class-geodir-admin-blocks.php:88
 #: includes/admin/class-geodir-admin-blocks.php:177
 #: includes/admin/class-geodir-admin-menus.php:108
-#: includes/class-geodir-privacy.php:24 includes/core-functions.php:836
+#: includes/class-geodir-privacy.php:24 includes/core-functions.php:927
 #: includes/elementor/class-geodir-elementor-form-contact.php:128
 msgid "GeoDirectory"
 msgstr ""
@@ -1890,7 +1890,7 @@ msgstr ""
 #: includes/admin/settings/class-geodir-settings-api.php:43
 #: includes/admin/settings/class-geodir-settings-import-export.php:47
 #: includes/admin/views/html-admin-page-status-report.php:327
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1990
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:2009
 msgid "Settings"
 msgstr ""
 
@@ -5014,12 +5014,12 @@ msgstr ""
 #: includes/widgets/class-geodir-widget-post-images.php:94
 #: includes/widgets/class-geodir-widget-post-images.php:104
 #: includes/widgets/class-geodir-widget-post-images.php:115
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1615
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1634
 msgid "General"
 msgstr ""
 
 #: includes/admin/settings/class-geodir-settings-cpt.php:209
-#: includes/core-functions.php:1006 language.php:174
+#: includes/core-functions.php:1097 language.php:174
 #: templates/bootstrap/map/filter-cpt.php:22
 msgid "Post Type"
 msgstr ""
@@ -10130,28 +10130,28 @@ msgstr ""
 msgid "Excellent"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:221
+#: includes/class-geodir-compatibility.php:224
 #, php-format
 msgid ""
 "Kleo theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:235
+#: includes/class-geodir-compatibility.php:238
 #, php-format
 msgid ""
 "Listimia theme works best with GeoDirectory legacy styles, please set legacy "
 "styles %shere%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:477
+#: includes/class-geodir-compatibility.php:587
 #, php-format
 msgid ""
 "GeoDirectory template pages work much better with %sBeaver Themer%s :: "
 "%sLearn more%s"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:605
+#: includes/class-geodir-compatibility.php:715
 #, php-format
 msgid ""
 "<b>WARNING:</b> BuddyPress hijacks the slug `search`, GD search will not "
@@ -10159,75 +10159,75 @@ msgid ""
 "href=\"%s\">Edit page</a>"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1093
+#: includes/class-geodir-compatibility.php:1203
 msgid "Rank Math SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1095
+#: includes/class-geodir-compatibility.php:1205
 msgid ""
 "The Rank Math SEO plugin has been detected and will take over the "
 "GeoDirectory meta Settings unless disabled below. (titles from here will "
 "still be used, but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1100
+#: includes/class-geodir-compatibility.php:1210
 msgid "Disable Rank Math"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1101
+#: includes/class-geodir-compatibility.php:1211
 msgid "Disable overwrite by Rank Math titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1272
+#: includes/class-geodir-compatibility.php:1382
 msgid "Yoast SEO detected"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1274
+#: includes/class-geodir-compatibility.php:1384
 msgid ""
 "The Yoast SEO plugin has been detected and will take over the GeoDirectory "
 "meta Settings unless disabled below. (titles from here will still be used, "
 "but not meta)"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1279
+#: includes/class-geodir-compatibility.php:1389
 msgid "Disable Yoast"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:1280
+#: includes/class-geodir-compatibility.php:1390
 msgid "Disable overwrite by Yoast SEO titles & metas on GD pages?"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2539
+#: includes/class-geodir-compatibility.php:2680
 msgid "Select Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2550
+#: includes/class-geodir-compatibility.php:2691
 msgid "Beaver Builder Settings"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2557
+#: includes/class-geodir-compatibility.php:2698
 msgid "Search Page Themer Layout"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:2558
+#: includes/class-geodir-compatibility.php:2699
 msgid ""
 "To use themer layout for GD search page, create a layout with blank location "
 "under Beaver Builder > Themer Layouts > Add New > Archive Layout."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3251
+#: includes/class-geodir-compatibility.php:3392
 msgid "GD Search Results"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3462
+#: includes/class-geodir-compatibility.php:3603
 msgid "Borlabs Cookie Integration"
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3463
+#: includes/class-geodir-compatibility.php:3604
 msgid "Enable Borlabs Cookie integration for GeoDirecotry maps."
 msgstr ""
 
-#: includes/class-geodir-compatibility.php:3589
+#: includes/class-geodir-compatibility.php:3730
 #, php-format
 msgid ""
 "Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages "
@@ -10336,7 +10336,7 @@ msgstr ""
 msgid ""
 "Dear Admin,\n"
 "\n"
-"A listing [#listing_link#] has been edited by it's author "
+"A listing [#listing_link#] has been edited by its author "
 "[#post_author_name#].\n"
 "\n"
 "Listing Details:\n"
@@ -12022,11 +12022,11 @@ msgstr ""
 msgid "Login Page"
 msgstr ""
 
-#: includes/core-functions.php:1003
+#: includes/core-functions.php:1094
 msgid "Select search type"
 msgstr ""
 
-#: includes/core-functions.php:1162 includes/core-functions.php:1176
+#: includes/core-functions.php:1253 includes/core-functions.php:1267
 #: templates/bootstrap/search-bar/input-near.php:20
 #: templates/bootstrap/search-bar/input-search.php:21
 msgid "Clear field"
@@ -19220,11 +19220,11 @@ msgstr ""
 msgid "Advanced Settings"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1415
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1434
 #, php-format
 msgid "Placeholder for: %s"
 msgstr ""
 
-#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1888
+#: vendor/ayecode/wp-super-duper/wp-super-duper.php:1907
 msgid "Placeholder for: "
 msgstr ""
