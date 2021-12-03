@@ -1057,6 +1057,31 @@ function geodir_cfi_datepicker($html,$cf){
         $extra_attributes['data-alt-format'] = $date_format;
         $extra_attributes['data-date-format'] = 'Y-m-d';
 
+        // minDate / maxDate
+        if ( ! empty( $extra_fields['date_range'] ) ) {
+            $year_range = geodir_input_parse_year_range( $extra_fields['date_range'] );
+
+            // minDate
+            if ( ! empty( $year_range['min_year'] ) ) {
+                $extra_attributes['data-min-date'] = $year_range['min_year'] . '-01-01';
+            }
+
+            // maxDate
+            if ( ! empty( $year_range['max_year'] ) ) {
+                $extra_attributes['data-max-date'] = $year_range['max_year'] . '-12-31';
+            }
+        }
+
+        /**
+         * Filter datepicker field extra attributes.
+         *
+         * @since 2.1.1.11
+         *
+         * @param array $extra_attributes Field attributes.
+         * @param array $cf The custom field array.
+         */
+        $extra_attributes = apply_filters( 'geodir_cfi_datepicker_extra_attrs', $extra_attributes, $cf );
+
         // required
         $required = !empty($cf['is_required']) ? ' <span class="text-danger">*</span>' : '';
 
@@ -2330,3 +2355,85 @@ function geodir_cfi_files( $html, $cf ) {
 }
 add_filter('geodir_custom_field_input_images','geodir_cfi_files',10,2);
 add_filter('geodir_custom_field_input_file','geodir_cfi_files',10,2);
+
+function geodir_input_parse_year_range( $range ) {
+	$current_year = (int) date_i18n( 'Y' );
+
+	$year_range = array(
+		'min_year' => 0,
+		'max_year' => 0
+	);
+
+	$_range = explode( ":", trim( $range ) );
+
+	if ( isset( $_range[0] ) ) {
+		$year_range['min_year'] = geodir_input_parse_year( $_range[0] );
+	}
+
+	if ( isset( $_range[1] ) ) {
+		$year_range['max_year'] = geodir_input_parse_year( $_range[1] );
+	}
+
+	if ( ! empty( $year_range['min_year'] ) && ! empty( $year_range['max_year'] ) ) {
+		$_year_range = array_values( $year_range );
+		$year_range['min_year'] = min( $_year_range );
+		$year_range['max_year'] = max( $_year_range );
+	} else if ( ! empty( $year_range['min_year'] ) && empty( $year_range['max_year'] ) && (int) $year_range['min_year'] > $current_year ) {
+		$year_range['max_year'] = $year_range['min_year'];
+		$year_range['min_year'] = 0;
+	} else if ( empty( $year_range['min_year'] ) && ! empty( $year_range['max_year'] ) && $year_range['max_year'] < $current_year ) {
+		$year_range['min_year'] = $year_range['max_year'];
+		$year_range['max_year'] = 0;
+	} 
+
+	return $year_range;
+}
+
+function geodir_input_parse_year( $range ) {
+	$current_year = (int) date_i18n( 'Y' );
+
+	$range = str_replace( "c", $current_year, $range );
+	$year = 0;
+
+	if ( strpos( $range, '-' ) !== false ) {
+		$_year = explode( "-", $range );
+
+		$min = trim( $_year[0] );
+		$diff = trim( $_year[1] );
+
+		$year = strlen( $min ) == 4 ? $min : $current_year;
+		$diff = trim( $_year[1] ) !== "" ? $_year[1] : "";
+
+		if ( $diff !== "" ) {
+			$year = $year - (int) $diff;
+		}
+	} else if ( strpos( $range, '+' ) !== false ) {
+		$_year = explode( "+", $range );
+
+		$min = trim( $_year[0] );
+		$diff = trim( $_year[1] );
+
+		$year = strlen( $min ) == 4 ? $min : $current_year;
+		$diff = trim( $_year[1] ) !== "" ? $_year[1] : "";
+
+		if ( $diff !== "" ) {
+			$year = $year + (int) $diff;
+		}
+	} else {
+		$_year = trim( $range );
+
+		if ( $_year !== "" ) {
+			if ( strlen( $_year ) == 4 ) {
+				$year = (int) $_year;
+			} else {
+				$year = $current_year + (int) $_year;
+			}
+		}
+	}
+
+	if ( strlen( $year ) != 4 ) {
+		$year = 0;
+	}
+
+	return $year;
+}
