@@ -5,6 +5,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class GeoDir_Elementor_Template_Archive extends \ElementorPro\Modules\ThemeBuilder\Documents\Archive {
 
+	public function __construct( array $data = [] ) {
+		parent::__construct( $data );
+	}
+
 	public static function get_properties() {
 		$properties = parent::get_properties();
 
@@ -14,42 +18,25 @@ class GeoDir_Elementor_Template_Archive extends \ElementorPro\Modules\ThemeBuild
 		return $properties;
 	}
 
+	public static function get_type() {
+		return 'geodirectory-archive';
+	}
+
 	public function get_name() {
 		return 'geodirectory-archive';
 	}
 
 	public static function get_title() {
-		return __( 'GD Archive', 'elementor-pro' );
+		return esc_html__( 'GD Archive', 'geodirectory' );
+	}
+
+	public static function get_plural_title() {
+		return esc_html__( 'GD Archives', 'geodirectory' );
 	}
 
 	public static function get_site_editor_thumbnail_url() {
 		return ELEMENTOR_ASSETS_URL . 'images/app/site-editor/archive.svg';
 	}
-
-//	public function enqueue_scripts() {
-//		// In preview mode it's not a real Woocommerce page - enqueue manually.
-//		if ( Plugin::elementor()->preview->is_preview_mode( $this->get_main_id() ) ) {
-//			wp_enqueue_script( 'woocommerce' );
-//		}
-//	}
-
-//	public function get_container_attributes() {
-//		$attributes = parent::get_container_attributes();
-//
-//		$attributes['class'] .= ' product';
-//
-//		return $attributes;
-//	}
-
-//	public function filter_body_classes( $body_classes ) {
-//		$body_classes = parent::filter_body_classes( $body_classes );
-//
-//		if ( get_the_ID() === $this->get_main_id() || Plugin::elementor()->preview->is_preview_mode( $this->get_main_id() ) ) {
-//			$body_classes[] = 'woocommerce';
-//		}
-//
-//		return $body_classes;
-//	}
 
 	public static function get_preview_as_default() {
 		return 'post_type_archive/gd_place';
@@ -78,38 +65,6 @@ class GeoDir_Elementor_Template_Archive extends \ElementorPro\Modules\ThemeBuild
 			],
 		];
 	}
-
-	public function __construct( array $data = [] ) {
-		parent::__construct( $data );
-
-//		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ], 11 );
-	}
-
-//	protected static function get_editor_panel_categories() {
-//		$categories = [
-//			'woocommerce-elements-archive' => [
-//				'title' => __( 'Product Archive', 'elementor-pro' ),
-//			],
-//			// Move to top as active.
-//			'woocommerce-elements' => [
-//				'title' => __( 'WooCommerce', 'elementor-pro' ),
-//				'active' => true,
-//			],
-//		];
-//
-//		$categories += parent::get_editor_panel_categories();
-//
-//		unset( $categories['theme-elements-archive'] );
-//
-//		return $categories;
-//	}
-
-//	public static function get_editor_panel_config() {
-//		$config = parent::get_editor_panel_config();
-//		$config['widgets_settings']['theme-archive-title']['categories'][] = 'woocommerce-elements-archive';
-//
-//		return $config;
-//	}
 
 	protected function _register_controls() {
 		parent::_register_controls();
