@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.1.10\n"
+"Project-Id-Version: GeoDirectory 2.1.1.11\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-12-02 13:12+0530\n"
-"PO-Revision-Date: 2021-12-02 13:12+0530\n"
+"POT-Creation-Date: 2021-12-07 16:07+0530\n"
+"PO-Revision-Date: 2021-12-07 16:07+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -258,14 +258,14 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:907
 #: includes/api/class-geodir-rest-posts-controller.php:2266
-#: includes/custom-fields/input-functions-aui.php:1454
+#: includes/custom-fields/input-functions-aui.php:1479
 #: includes/custom-fields/input-functions.php:1268 language.php:46
 msgid "Address Latitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:908
 #: includes/api/class-geodir-rest-posts-controller.php:2267
-#: includes/custom-fields/input-functions-aui.php:1460
+#: includes/custom-fields/input-functions-aui.php:1485
 #: includes/custom-fields/input-functions.php:1277 language.php:91
 msgid ""
 "Please enter latitude for google map perfection. eg. : "
@@ -274,14 +274,14 @@ msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:917
 #: includes/api/class-geodir-rest-posts-controller.php:2281
-#: includes/custom-fields/input-functions-aui.php:1485
+#: includes/custom-fields/input-functions-aui.php:1510
 #: includes/custom-fields/input-functions.php:1286 language.php:47
 msgid "Address Longitude"
 msgstr ""
 
 #: includes/abstracts/abstract-geodir-rest-posts-controller.php:918
 #: includes/api/class-geodir-rest-posts-controller.php:2282
-#: includes/custom-fields/input-functions-aui.php:1491
+#: includes/custom-fields/input-functions-aui.php:1516
 #: includes/custom-fields/input-functions.php:1294 language.php:92
 msgid ""
 "Please enter longitude for google map perfection. eg. : "
@@ -1159,7 +1159,7 @@ msgstr ""
 
 #: includes/admin/class-geodir-admin-conditional-fields.php:238
 #: includes/class-geodir-privacy-exporters.php:344
-#: includes/custom-fields/input-functions-aui.php:1849
+#: includes/custom-fields/input-functions-aui.php:1874
 #: includes/post-functions.php:1892
 #: includes/widgets/class-geodir-widget-post-badge.php:503
 msgid "Default Category"
@@ -3396,7 +3396,7 @@ msgid "Archive page is missing."
 msgstr ""
 
 #: includes/admin/diagnostic-functions.php:831
-#: includes/elementor/class-geodir-elementor-template-archive.php:22
+#: includes/elementor/class-geodir-elementor-template-archive.php:30
 msgid "GD Archive"
 msgstr ""
 
@@ -9027,7 +9027,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2840
 #: includes/class-geodir-privacy-exporters.php:238
 #: includes/class-geodir-privacy-exporters.php:303
-#: includes/custom-fields/input-functions-aui.php:2102
+#: includes/custom-fields/input-functions-aui.php:2127
 #: includes/custom-fields/input-functions.php:1810
 #: includes/custom-fields/output-functions.php:86
 #: includes/widgets/class-geodir-widget-listings.php:427
@@ -9041,7 +9041,7 @@ msgstr ""
 #: includes/api/class-geodir-rest-posts-controller.php:2800
 #: includes/api/class-geodir-rest-posts-controller.php:2838
 #: includes/class-geodir-privacy-exporters.php:301
-#: includes/custom-fields/input-functions-aui.php:2103
+#: includes/custom-fields/input-functions-aui.php:2128
 #: includes/custom-fields/input-functions.php:1811
 #: includes/custom-fields/output-functions.php:88
 #: includes/widgets/class-geodir-widget-listings.php:426
@@ -9773,7 +9773,7 @@ msgid "Sun"
 msgstr ""
 
 #: includes/business-hours-functions.php:677 includes/core-functions.php:346
-#: includes/custom-fields/input-functions-aui.php:2166
+#: includes/custom-fields/input-functions-aui.php:2191
 #: includes/custom-fields/input-functions.php:1852
 msgid "Closed"
 msgstr ""
@@ -9788,7 +9788,7 @@ msgid "Closed now"
 msgstr ""
 
 #: includes/business-hours-functions.php:680
-#: includes/custom-fields/input-functions-aui.php:2115
+#: includes/custom-fields/input-functions-aui.php:2140
 #: includes/custom-fields/input-functions.php:1815
 msgid "Open 24 hours"
 msgstr ""
@@ -12062,62 +12062,62 @@ msgstr ""
 msgid "Select %s&hellip;"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1327
+#: includes/custom-fields/input-functions-aui.php:1352
 #: includes/custom-fields/input-functions.php:1180
 msgid "Enter a location"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1345
+#: includes/custom-fields/input-functions-aui.php:1370
 #: templates/bootstrap/map/directions.php:35
 msgid "use my location"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1369
-#: includes/custom-fields/input-functions-aui.php:1403
+#: includes/custom-fields/input-functions-aui.php:1394
+#: includes/custom-fields/input-functions-aui.php:1428
 #: includes/custom-fields/input-functions.php:1212
 #: includes/custom-fields/input-functions.php:1236
 #, php-format
 msgid "Please enter listing %s"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1387
+#: includes/custom-fields/input-functions-aui.php:1412
 #: includes/custom-fields/input-functions.php:1237
 msgid "Zip/Post Code is required!"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1517
+#: includes/custom-fields/input-functions-aui.php:1542
 #: includes/custom-fields/input-functions.php:1318
 msgid "Please select listing map view to use"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1520
+#: includes/custom-fields/input-functions-aui.php:1545
 #: includes/custom-fields/input-functions.php:1308
 msgid "Default Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1521
+#: includes/custom-fields/input-functions-aui.php:1546
 #: includes/custom-fields/input-functions.php:1309
 #: includes/widgets/class-geodir-widget-map.php:106
 #: vendor/ayecode/wp-super-duper/map.php:158
 msgid "Satellite Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1522
+#: includes/custom-fields/input-functions-aui.php:1547
 #: includes/custom-fields/input-functions.php:1310
 #: includes/widgets/class-geodir-widget-map.php:107
 msgid "Hybrid Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1523
+#: includes/custom-fields/input-functions-aui.php:1548
 #: includes/custom-fields/input-functions.php:1311
 #: includes/widgets/class-geodir-widget-map.php:108
 msgid "Terrain Map"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1585
-#: includes/custom-fields/input-functions-aui.php:1661
-#: includes/custom-fields/input-functions-aui.php:1732
-#: includes/custom-fields/input-functions-aui.php:1815
+#: includes/custom-fields/input-functions-aui.php:1610
+#: includes/custom-fields/input-functions-aui.php:1686
+#: includes/custom-fields/input-functions-aui.php:1757
+#: includes/custom-fields/input-functions-aui.php:1840
 #: includes/custom-fields/input-functions.php:1378
 #: includes/custom-fields/input-functions.php:1450
 #: includes/custom-fields/input-functions.php:1520
@@ -12128,86 +12128,86 @@ msgstr ""
 msgid "Select Category"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1635
-#: includes/custom-fields/input-functions-aui.php:1783
+#: includes/custom-fields/input-functions-aui.php:1660
+#: includes/custom-fields/input-functions-aui.php:1808
 #: includes/custom-fields/input-functions.php:1428
 #: includes/custom-fields/input-functions.php:1568
 #, php-format
 msgid "Only select %d categories for this package."
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1808
+#: includes/custom-fields/input-functions-aui.php:1833
 msgid "Select at least one category from the list!"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1845
+#: includes/custom-fields/input-functions-aui.php:1870
 msgid "Select Default Category"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1850
+#: includes/custom-fields/input-functions-aui.php:1875
 msgid "The default category can affect the listing URL and map marker."
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1937
+#: includes/custom-fields/input-functions-aui.php:1962
 #: includes/custom-fields/input-functions.php:1654
 msgid "Enter tags separated by a comma ,"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1982
+#: includes/custom-fields/input-functions-aui.php:2007
 #: includes/custom-fields/input-functions.php:1714
 msgid "Popular tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:1996
+#: includes/custom-fields/input-functions-aui.php:2021
 #: includes/custom-fields/input-functions.php:1729
 msgid "Your tags"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2115
+#: includes/custom-fields/input-functions-aui.php:2140
 #: includes/custom-fields/input-functions.php:1815
 msgid "Day"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2115
+#: includes/custom-fields/input-functions-aui.php:2140
 #: includes/custom-fields/input-functions.php:1815
 msgid "Opening Hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2115
+#: includes/custom-fields/input-functions-aui.php:2140
 #: includes/custom-fields/input-functions.php:1815
 msgid "Add"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2122
-#: includes/custom-fields/input-functions-aui.php:2159
+#: includes/custom-fields/input-functions-aui.php:2147
+#: includes/custom-fields/input-functions-aui.php:2184
 #: includes/custom-fields/input-functions.php:1818
 #: includes/custom-fields/input-functions.php:1848
 #: includes/widgets/class-geodir-widget-archive-item-section.php:42
 msgid "Open"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2123
-#: includes/custom-fields/input-functions-aui.php:2160
+#: includes/custom-fields/input-functions-aui.php:2148
+#: includes/custom-fields/input-functions-aui.php:2185
 #: includes/custom-fields/input-functions.php:1818
 #: includes/custom-fields/input-functions.php:1848
 #: includes/widgets/class-geodir-widget-archive-item-section.php:43
 msgid "Close"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2125
-#: includes/custom-fields/input-functions-aui.php:2162
+#: includes/custom-fields/input-functions-aui.php:2150
+#: includes/custom-fields/input-functions-aui.php:2187
 msgid "Remove hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2169
+#: includes/custom-fields/input-functions-aui.php:2194
 msgid "Add new set of hours"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2173
+#: includes/custom-fields/input-functions-aui.php:2198
 msgid "Timezone:"
 msgstr ""
 
-#: includes/custom-fields/input-functions-aui.php:2173
+#: includes/custom-fields/input-functions-aui.php:2198
 #: includes/custom-fields/input-functions.php:1860
 msgid "Select a city/timezone&hellip;"
 msgstr ""
@@ -12605,26 +12605,34 @@ msgstr ""
 msgid "Fallback URL"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-template-archive.php:64
+#: includes/elementor/class-geodir-elementor-template-archive-item.php:78
+msgid "GD Archive Items"
+msgstr ""
+
+#: includes/elementor/class-geodir-elementor-template-archive.php:34
+msgid "GD Archives"
+msgstr ""
+
+#: includes/elementor/class-geodir-elementor-template-archive.php:51
 #, php-format
 msgid "%s Archive"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-template-archive.php:67
+#: includes/elementor/class-geodir-elementor-template-archive.php:54
 #, php-format
 msgid "%s Categories Archive"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-template-archive.php:68
+#: includes/elementor/class-geodir-elementor-template-archive.php:55
 #, php-format
 msgid "%s Tags Archive"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-template-archive.php:72
+#: includes/elementor/class-geodir-elementor-template-archive.php:59
 msgid "Search Results"
 msgstr ""
 
-#: includes/elementor/class-geodir-elementor-template-archive.php:76
+#: includes/elementor/class-geodir-elementor-template-archive.php:63
 msgid "Archive"
 msgstr ""
 
@@ -12666,6 +12674,10 @@ msgstr ""
 
 #: includes/elementor/class-geodir-elementor-template-single.php:74
 msgid "GD Single"
+msgstr ""
+
+#: includes/elementor/class-geodir-elementor-template-single.php:78
+msgid "GD Singles"
 msgstr ""
 
 #: includes/general-functions.php:222
