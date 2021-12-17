@@ -1,5 +1,4 @@
 jQuery(document).ready(function($) {
-
     // Open a lightbox for embeded items
     jQuery('.geodir-lightbox-image, .geodir-lightbox-iframe').off('click').on("click",function(ele) {
         geodir_lightbox_embed(this,ele);
@@ -30,7 +29,6 @@ jQuery(document).ready(function($) {
         window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
     });
 
-
     // fix tabs url hash on click and load
     jQuery(function(){
         var hash = window.location.hash;
@@ -54,6 +52,28 @@ jQuery(document).ready(function($) {
             geodir_init_lazy_load($);
         }
     });
+
+    /* Scroll to reviews/comment on detail page */
+    if ($('#gd-tabs #reviews').length && window.location.hash) {
+        var lHash = window.location.hash, $sEl = '';
+        if (lHash.substring(0, 9) == '#comment-' || lHash.substring(0, 8) == '#reviews') {
+            if ($('#gd-tabs #reviews').find(lHash).length) {
+                $sEl = $('#gd-tabs #reviews').find(lHash);
+            } else {
+                $sEl = $('#gd-tabs #reviews');
+            }
+        }
+        if ($sEl) {
+            if (!$('#gd-tabs #reviews').is(':visible')) {
+                $('#gd-tabs [href="#reviews"]').trigger('click');
+            }
+            setTimeout(function() {
+                $('html,body').animate({
+                    scrollTop: $sEl.offset().top
+                }, 'slow');
+            }, 200);
+        }
+    }
 });
 
 /**
