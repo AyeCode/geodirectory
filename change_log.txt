@@ -1,3 +1,6 @@
+= 2.1.1.12 =
+* Address with comma and without line break - FIXED
+
 = 2.1.1.11 =
 * Date range is not working in date field - FIXED
 * Elementor Pro theme builder doesn't show GD layout types - FIXED
