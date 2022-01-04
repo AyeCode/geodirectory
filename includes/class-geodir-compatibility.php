@@ -2193,8 +2193,10 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_sidebar_context( $c_page_id, $sidebar = 1 ) {
-		$sidebar_1 = get_post_meta( $c_page_id, 'sbg_selected_sidebar_replacement', true );
-		$sidebar_2 = get_post_meta( $c_page_id, 'sbg_selected_sidebar_2_replacement', true );
+		$post_type = get_post_type( $c_page_id );
+		$sidebars_option_names = avada_get_sidebar_post_meta_option_names( $post_type );
+		$sidebar_1 = (array) fusion_get_option( $sidebars_option_names[0] );
+		$sidebar_2 = (array) fusion_get_option( $sidebars_option_names[1] );
 
 		if ( Avada()->settings->get( 'pages_global_sidebar' ) ) {
 			$sidebar_1 = ( 'None' !== Avada()->settings->get( 'pages_sidebar' ) ) ? array( Avada()->settings->get( 'pages_sidebar' ) ) : '';
