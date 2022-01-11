@@ -72,6 +72,8 @@ class GeoDir_AJAX {
 			'tool_regenerate_thumbnails' => true,
 			'regenerate_thumbnails' => true,
 			'post_author_action' => false,
+			'report_post_form' => true,
+			'submit_report_post' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -1479,6 +1481,75 @@ class GeoDir_AJAX {
 				}
 			}
 		}
+
+		wp_die();
+	}
+
+	/**
+	 * Handle report post action.
+	 *
+	 * @since 2.1.1.12
+	 *
+	 * @return mixed
+	 */
+	public static function report_post_form() {
+		// Security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		$the_post = ! empty( $_POST['post_id'] ) ? geodir_get_post_info( absint( $_POST['post_id'] ) ) : array();
+		$extra = ! empty( $_POST['extra'] ) ? geodir_clean( $_POST['extra'] ) : '';
+
+		$success = false;
+		$data = array(
+			'title' => __( 'Report Post', 'geodirectory' )
+		);
+
+		if ( empty( $the_post ) ) {
+			$data['body'] = aui()->alert(
+				array(
+					'type'=> 'warning',
+					'content'=> __( 'Invalid post.', 'geodirectory' ),
+					'class' => 'mb-0'
+				)
+			);
+		} else {
+			if ( ! apply_filters( 'geodir_allow_report_post', true, $the_post ) ) {
+				$data['body'] = aui()->alert(
+					array(
+						'type'=> 'warning',
+						'content'=> __( 'You can\' report this post.', 'geodirectory' ),
+						'class' => 'mb-0'
+					)
+				);
+			} else {
+				$success = true;
+				$data['body'] = GeoDir_Report_Post::get_form( $the_post );
+			}
+		}
+
+		$data = apply_filters( 'geodir_report_post_form_response', $data, $success );
+
+		if ( $success ) {
+			wp_send_json_success( $data );
+		} else {
+			wp_send_json_error( $data );
+		}
+
+		wp_die();
+	}
+
+	/**
+	 * Handle report post request.
+	 *
+	 * @since 2.1.1.12
+	 *
+	 * @return mixed
+	 */
+	public static function submit_report_post() {
+		// Security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		GeoDir_Report_Post::handle_request( $_POST );
 
 		wp_die();
 	}

@@ -913,7 +913,8 @@ Radio input buttons
 tr.gd-row-color-picker td > .wp-picker-container {
 	margin-top: 5px;
 }
-.geodirectory nav.gd-nav-tab-wrapper {
+.geodirectory nav.gd-nav-tab-wrapper,
+.geodirectory .subsubsub {
     margin: 1.5em 0 1em;
     .awaiting-mod, .update-plugins {
         display: inline-block;

@@ -891,172 +891,184 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 				array( 'type' => 'sectionend', 'id' => 'default_location' ),
 			));
-		}else{
+		} else {
 			/**
-			 * Filter GD general settings array.
+			 * Filter GD general pre settings array.
 			 *
-			 * @since 1.0.0
-			 * @package GeoDirectory
+			 * @since 2.1.1.12
+			 *
+			 * @param array  $settings Settings array.
+			 * @param string $current_section Current section.
 			 */
-			$settings = apply_filters( 'geodir_general_options', array(
-				array(
-					'title' => __( 'Site Settings', 'geodirectory' ),
-					'type'  => 'title',
-					'desc'  => '',
-					'id'    => 'general_options'
-				),
+			$settings = apply_filters( 'geodir_general_default_options', array(), $current_section );
 
-				array(
-					'name'       => __( 'Restrict wp-admin', 'geodirectory' ),
-					'desc'       => __( 'The user roles that should be restricted from the wp-admin area.', 'geodirectory' ),
-					'id'         => 'admin_blocked_roles',
-					'default'    => array('subscriber'),
-					'type'       => 'multiselect',
-					'class'      => 'geodir-select',
-					'options'    => geodir_user_roles(array('administrator')),
-					'desc_tip'   => true,
-					//'docs'       => "https://docs.wpgeodirectory.com/",
-					//'advanced' => true
-				),
-
-
-				array( 'type' => 'sectionend', 'id' => 'general_options' ),
-
-				array(
-					'title' => __( 'Listing Settings', 'geodirectory' ),
-					'type'  => 'title',
-					'desc'  => '',
-					'id'    => 'general_options_add'
-				),
-
-
-				array(
-					'name' => __( 'User deleted posts', 'geodirectory' ),
-					'desc' => __( 'If checked a user deleted post will go to trash, otherwise it will be permanently deleted', 'geodirectory' ),
-					'id'   => 'user_trash_posts',
-					'type' => 'checkbox',
-					'default'  => '1',
-					//'docs'       => "https://docs.wpgeodirectory.com/",
-
-				),
-				array(
-					'name'       => __( 'New listing default status', 'geodirectory' ),
-					'desc'       => __( 'This is the post status a new listing will get when submitted from the frontend.', 'geodirectory' ),
-					'id'         => 'default_status',
-					'default'    => 'pending',
-					'type'       => 'select',
-					'class'      => 'geodir-select',
-					'options' => array_unique(array(
-						'pending' => __('Pending Review', 'geodirectory'),
-						'publish' => __('Publish', 'geodirectory'),
-
-					)),
-					'desc_tip' => true,
-					//'advanced' => true
-				),
-				array(
-					'name' => __( 'Allow posting without logging in?', 'geodirectory' ),
-					'desc' => defined('WPE_PLUGIN_VERSION') ? __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ) . " <span style='color:red'>" . sprintf( __( 'WP ENGINE DETECTED: please see %sthis guide%s for this feature to work properly.', 'geodirectory' ),'<a href="https://docs.wpgeodirectory.com/article/221-how-to-allow-posting-without-logging-in-when-using-wp-engine-hosting">','</a>' ) . "</span>" : __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ),
-					'id'   => 'post_logged_out',
-					'type' => 'checkbox',
-					'default'  => '0',
-					'advanced' => true
-				),
-
-				array(
-					'name' => __( 'Show preview button?', 'geodirectory' ),
-					'desc' => __( 'If checked a preview button will be shown on the add listing page so uses can preview their post.', 'geodirectory' ),
-					'id'   => 'post_preview',
-					'type' => 'checkbox',
-					'default'  => '1',
-					'advanced' => true
-				),
-
-				array(
-					'name' => __( 'Max upload file size(in mb)', 'geodirectory' ),
-					'desc' => __( '(Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), for ex: 2. This setting will overwrite the max upload file size limit in image/file upload & import listings for entire GeoDirectory core + GeoDirectory plugins.)', 'geodirectory' ).wp_max_upload_size(),
-					'id'   => 'upload_max_filesize',
-					'type' => 'number',
-					'css'  => 'min-width:300px;',
-					'default'  => '2',
-					'custom_attributes' => array(
-						'min' => '0.1',
-						'step' => '0.1'
+			if ( empty( $settings ) ) {
+				/**
+				 * Filter GD general settings array.
+				 *
+				 * @since 1.0.0
+				 * @package GeoDirectory
+				 */
+				$settings = apply_filters( 'geodir_general_options', array(
+					array(
+						'title' => __( 'Site Settings', 'geodirectory' ),
+						'type'  => 'title',
+						'desc'  => '',
+						'id'    => 'general_options'
 					),
-					'desc_tip' => true,
-					'advanced' => true
-				),
 
-				array(
-					'name' => __( 'Noindex empty archives?', 'geodirectory' ),
-					'desc' => __( 'If checked this will attempt to add `noindex` tags to empty GD archive pages.', 'geodirectory' ),
-					'id'   => 'noindex_archives',
-					'type' => 'checkbox',
-					'default'  => '0',
-					'advanced' => true
-				),
+					array(
+						'name'       => __( 'Restrict wp-admin', 'geodirectory' ),
+						'desc'       => __( 'The user roles that should be restricted from the wp-admin area.', 'geodirectory' ),
+						'id'         => 'admin_blocked_roles',
+						'default'    => array('subscriber'),
+						'type'       => 'multiselect',
+						'class'      => 'geodir-select',
+						'options'    => geodir_user_roles(array('administrator')),
+						'desc_tip'   => true,
+						//'docs'       => "https://docs.wpgeodirectory.com/",
+						//'advanced' => true
+					),
 
-				array( 'type' => 'sectionend', 'id' => 'general_options_add' ),
 
-				array(
-					'title' => __( 'Map Settings', 'geodirectory' ),
-					'type'  => 'title',
-					'desc'  => '',
-					'id'    => 'general_options_map'
-				),
+					array( 'type' => 'sectionend', 'id' => 'general_options' ),
 
-				self::get_google_maps_api_key_setting(),
-	
-				self::get_google_geocode_api_key_setting(),
+					array(
+						'title' => __( 'Listing Settings', 'geodirectory' ),
+						'type'  => 'title',
+						'desc'  => '',
+						'id'    => 'general_options_add'
+					),
 
-				self::get_maps_api_setting(),
 
-				self::get_maps_lazy_load_setting(),
+					array(
+						'name' => __( 'User deleted posts', 'geodirectory' ),
+						'desc' => __( 'If checked a user deleted post will go to trash, otherwise it will be permanently deleted', 'geodirectory' ),
+						'id'   => 'user_trash_posts',
+						'type' => 'checkbox',
+						'default'  => '1',
+						//'docs'       => "https://docs.wpgeodirectory.com/",
 
-				self::get_map_language_setting(),
+					),
+					array(
+						'name'       => __( 'New listing default status', 'geodirectory' ),
+						'desc'       => __( 'This is the post status a new listing will get when submitted from the frontend.', 'geodirectory' ),
+						'id'         => 'default_status',
+						'default'    => 'pending',
+						'type'       => 'select',
+						'class'      => 'geodir-select',
+						'options' => array_unique(array(
+							'pending' => __('Pending Review', 'geodirectory'),
+							'publish' => __('Publish', 'geodirectory'),
 
-				array(
-					'name'     => __( 'Default marker icon', 'geodirectory' ),
-					'desc'     => __( 'This is the marker icon used if the category does not have a marker icon set.', 'geodirectory' ),
-					'id'       => 'map_default_marker_icon',
-					'type'     => 'image',
-					'default'  => '',
-					'desc_tip' => true,
-					'advanced' => true
-				),
+						)),
+						'desc_tip' => true,
+						//'advanced' => true
+					),
+					array(
+						'name' => __( 'Allow posting without logging in?', 'geodirectory' ),
+						'desc' => defined('WPE_PLUGIN_VERSION') ? __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ) . " <span style='color:red'>" . sprintf( __( 'WP ENGINE DETECTED: please see %sthis guide%s for this feature to work properly.', 'geodirectory' ),'<a href="https://docs.wpgeodirectory.com/article/221-how-to-allow-posting-without-logging-in-when-using-wp-engine-hosting">','</a>' ) . "</span>" : __( 'If checked non logged in users will be able to post listings from the frontend.', 'geodirectory' ),
+						'id'   => 'post_logged_out',
+						'type' => 'checkbox',
+						'default'  => '0',
+						'advanced' => true
+					),
 
-				array(
-					'name' => __('Enable map cache', 'geodirectory'), // @todo we need to port this over from GDv1
-					'desc' => __('This will cache the map JSON for 24 hours or until a GD listing is saved.', 'geodirectory'),
-					'id' => 'map_cache',
-					'type' => 'checkbox',
-					'default'  => '0',
-					'desc_tip' => false,
-					'advanced' => true
-				),
+					array(
+						'name' => __( 'Show preview button?', 'geodirectory' ),
+						'desc' => __( 'If checked a preview button will be shown on the add listing page so uses can preview their post.', 'geodirectory' ),
+						'id'   => 'post_preview',
+						'type' => 'checkbox',
+						'default'  => '1',
+						'advanced' => true
+					),
 
-				array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
+					array(
+						'name' => __( 'Max upload file size(in mb)', 'geodirectory' ),
+						'desc' => __( '(Maximum upload file size in MB, 1 MB = 1024 KB. Must be greater then 0(ZERO), for ex: 2. This setting will overwrite the max upload file size limit in image/file upload & import listings for entire GeoDirectory core + GeoDirectory plugins.)', 'geodirectory' ).wp_max_upload_size(),
+						'id'   => 'upload_max_filesize',
+						'type' => 'number',
+						'css'  => 'min-width:300px;',
+						'default'  => '2',
+						'custom_attributes' => array(
+							'min' => '0.1',
+							'step' => '0.1'
+						),
+						'desc_tip' => true,
+						'advanced' => true
+					),
 
-				array(
-					'title' => __( 'Tracking Settings', 'geodirectory' ),
-					'type'  => 'title',
-					'desc'  => '',
-					'id'    => 'general_options_tracking',
-					'advanced' => true
-				),
+					array(
+						'name' => __( 'Noindex empty archives?', 'geodirectory' ),
+						'desc' => __( 'If checked this will attempt to add `noindex` tags to empty GD archive pages.', 'geodirectory' ),
+						'id'   => 'noindex_archives',
+						'type' => 'checkbox',
+						'default'  => '0',
+						'advanced' => true
+					),
 
-				array(
-					'name' => __( 'Allow Usage Tracking?', 'geodirectory' ),
-					'desc' => sprintf( __( 'Want to help make GeoDirectory even more awesome? Allow GeoDirectory to collect non-sensitive diagnostic data and usage information. %1$sFind out more%2$s.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/usage-tracking/" target="_blank">', '</a>' ),
-					'id'   => 'usage_tracking',
-					'type' => 'checkbox',
-					'default'  => '',
-					'advanced' => true
-				),
+					array( 'type' => 'sectionend', 'id' => 'general_options_add' ),
 
-				array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
+					array(
+						'title' => __( 'Map Settings', 'geodirectory' ),
+						'type'  => 'title',
+						'desc'  => '',
+						'id'    => 'general_options_map'
+					),
 
-			) );/* General Options End*/
+					self::get_google_maps_api_key_setting(),
+		
+					self::get_google_geocode_api_key_setting(),
+
+					self::get_maps_api_setting(),
+
+					self::get_maps_lazy_load_setting(),
+
+					self::get_map_language_setting(),
+
+					array(
+						'name'     => __( 'Default marker icon', 'geodirectory' ),
+						'desc'     => __( 'This is the marker icon used if the category does not have a marker icon set.', 'geodirectory' ),
+						'id'       => 'map_default_marker_icon',
+						'type'     => 'image',
+						'default'  => '',
+						'desc_tip' => true,
+						'advanced' => true
+					),
+
+					array(
+						'name' => __('Enable map cache', 'geodirectory'), // @todo we need to port this over from GDv1
+						'desc' => __('This will cache the map JSON for 24 hours or until a GD listing is saved.', 'geodirectory'),
+						'id' => 'map_cache',
+						'type' => 'checkbox',
+						'default'  => '0',
+						'desc_tip' => false,
+						'advanced' => true
+					),
+
+					array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
+
+					array(
+						'title' => __( 'Tracking Settings', 'geodirectory' ),
+						'type'  => 'title',
+						'desc'  => '',
+						'id'    => 'general_options_tracking',
+						'advanced' => true
+					),
+
+					array(
+						'name' => __( 'Allow Usage Tracking?', 'geodirectory' ),
+						'desc' => sprintf( __( 'Want to help make GeoDirectory even more awesome? Allow GeoDirectory to collect non-sensitive diagnostic data and usage information. %1$sFind out more%2$s.', 'geodirectory' ), '<a href="https://wpgeodirectory.com/usage-tracking/" target="_blank">', '</a>' ),
+						'id'   => 'usage_tracking',
+						'type' => 'checkbox',
+						'default'  => '',
+						'advanced' => true
+					),
+
+					array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
+
+				) );/* General Options End*/
+			}
 		}
 
 

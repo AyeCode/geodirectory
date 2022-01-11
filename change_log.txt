@@ -1,6 +1,8 @@
 = 2.1.1.12 =
 * Yoast SEO select2 conflicts on backend add listing page - FIXED
 * Comment link from recent reviews don't scrolls to comment - FIXED
+* Hook added to filter preview action text - ADDED
+* Report Post feature added - ADDED
 
 = 2.1.1.11 =
 * Date range is not working in date field - FIXED

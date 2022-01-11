@@ -1,4 +1,7 @@
 jQuery(document).ready(function($) {
+    geodir_params.loader = null;
+    geodir_params.addPopup = null;
+
     // Open a lightbox for embeded items
     jQuery('.geodir-lightbox-image, .geodir-lightbox-iframe').off('click').on("click",function(ele) {
         geodir_lightbox_embed(this,ele);
@@ -28,6 +31,7 @@ jQuery(document).ready(function($) {
 
         window.dispatchEvent(new Event('resize')); // OSM does not work with the jQuery trigger so we do it old skool.
     });
+
 
     // fix tabs url hash on click and load
     jQuery(function(){
@@ -424,6 +428,13 @@ jQuery(function($) {
     if(jQuery('.geodir-comments-area').length && !jQuery('#reviews').length){
         jQuery('.geodir-comments-area').prepend('<span id="reviews"></span>');
     }
+
+	// Report post submit
+	$(document).on('submit', 'form.geodir-report-post-form', function(e) {
+		e.preventDefault();
+		geodir_report_post(this);
+		return false;
+	});
 });
 
 
@@ -1992,4 +2003,97 @@ function geodir_init_listings_carousel(el, index) {
         $el.find('.geodir-image-container .carousel-item.active').removeClass('active');
         $el.find('.geodir-image-container .carousel-item').removeClass('carousel-item');
     }
+}
+
+/**
+ * Loads the AUI modal.
+ *
+ * @param action
+ * @param nonce
+ * @param post_id
+ * @param extra
+ */
+function geodir_aui_ajax_modal(action, nonce, post_id, extra) {
+    if (action) {
+        if (!nonce) {
+            nonce = geodir_params.basic_nonce;
+        }
+
+		/* Close any instance of the popup */
+		if ( geodir_params.addPopup ) {
+			geodir_params.addPopup.close();
+		}
+
+		/* Show loading screen */
+		geodir_params.loader = aui_modal();
+
+		var data = {
+			action: action,
+			security: nonce,
+			post_id: post_id,
+			extra: extra
+		};
+
+		jQuery.ajax({
+			url: geodir_params.ajax_url,
+			type: 'POST',
+			data: data,
+			dataType: 'json',
+			beforeSend: function(xhr, obj) {}
+		})
+		.done(function(res, textStatus, jqXHR) {
+			if (typeof res == 'object') {
+				var _title, _body, _footer, _dismiss, _class;
+
+				_title = res.data.title ? res.data.title : '';
+				_body = res.data.body ? res.data.body : '';
+				_footer = res.data.footer ? res.data.footer : '';
+				_dismiss = typeof res.data.dismissible !== 'undefined' ? res.data.dismissible : true;
+				_class = res.data.class ? res.data.class : 'geodir-aui-imodal';
+
+				geodir_params.addPopup = aui_modal(_title,_body,_footer,_dismiss,_class);
+			}
+		})
+		.always(function(data, textStatus, jqXHR) {
+		});
+    }
+}
+
+/**
+ * Submit the report post.
+ *
+ * @param el
+ */
+function geodir_report_post(el) {
+	var $form = jQuery(el), $button = $form.find('.geodir-report-post-button'), nonce = geodir_params.basic_nonce;
+
+	// Recaptcha check
+	if ($form.find('.g-recaptcha-response').length && $form.find('.g-recaptcha-response').val()=='') {
+		return;
+	}
+
+	jQuery.ajax({
+		url: geodir_params.ajax_url,
+		type: 'POST',
+		data: 'action=geodir_submit_report_post&security=' + nonce + '&' + $form.serialize(),
+		dataType: 'json',
+		beforeSend: function(xhr, obj) {
+			$form.find('.geodir-report-post-msg').remove();
+			$button.parent().find('.fa-spin').remove();
+			$button.prop('disabled', true).after('<i class="fas fa-circle-notch fa-spin ml-2"></i>');
+		}
+	})
+	.done(function(res, textStatus, jqXHR) {
+		if (typeof res == 'object'&& res.data.message ) {
+			if ( res.success ) {
+				$form.html(res.data.message);
+			} else {
+				$button.before(res.data.message);
+			}
+		}
+	})
+	.always(function(data, textStatus, jqXHR) {
+		$button.parent().find('.fa-spin').remove();
+		$button.prop('disabled', false);
+	});
 }
