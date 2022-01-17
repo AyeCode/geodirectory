@@ -4,6 +4,7 @@
 * Hook added to filter preview action text - ADDED
 * Report Post feature added - ADDED
 * Map filter should not cover copyright text - FIXED
+* GD > Recently Viewed is not working priperly on SG Cached site - FIXED
 
 = 2.1.1.11 =
 * Date range is not working in date field - FIXED

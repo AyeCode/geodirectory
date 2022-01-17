@@ -447,82 +447,65 @@ class GeoDir_Widget_Recently_Viewed extends WP_Super_Duper {
 	 * @since 2.0.0
 	 */
 	public static function geodir_recently_viewed_posts() {
+		if ( is_single() ) {
+			$get_post_id = (int) get_the_ID();
+			$get_post_type = get_post_type( $get_post_id );
 
-		if( is_single() ){
-
-			$get_post_id = get_the_ID();
-			$get_post_type = get_post_type($get_post_id);
-			$gd_post_types = geodir_get_posttypes();
-
-			if( !empty( $get_post_type ) && in_array( $get_post_type,$gd_post_types )) {
+			if ( geodir_is_gd_post_type( $get_post_type ) ) {
 				ob_start();
-			if(0){ ?><script><?php }?>
-					document.addEventListener("DOMContentLoaded", function(event) {
-
-						if(!geodir_is_localstorage()){return;}
-
-						function gdrv_is_not_empty(obj) {
-							for(var key in obj) {
-								if(obj.hasOwnProperty(key))
-									return true;
-							}
-							return false;
-						}
-
-						//localStorage.removeItem("gd_recently_viewed");
-
-						var post_id = '<?php echo $get_post_id; ?>',
-							post_type = '<?php echo $get_post_type; ?>',
-							reviewed_arr = {},
-							recently_reviewed = JSON.parse(localStorage.getItem('gd_recently_viewed'));
-
-						if( null != recently_reviewed ) {
-
-							if(gdrv_is_not_empty(recently_reviewed)) {
-
-								if ( post_type in recently_reviewed ) {
-
-									var temp_post_arr = [];
-
-									if( recently_reviewed[post_type].length > 0 ) {
-										temp_post_arr = recently_reviewed[post_type];
-									}
-
-									if(jQuery.inArray(post_id, temp_post_arr) === -1) {
-										temp_post_arr.push(post_id);
-									}
-
-									// limit to 50 per CPT
-									if(temp_post_arr.length > 50){
-										temp_post_arr = temp_post_arr.slice(-50);
-									}
-
-									recently_reviewed[post_type] = temp_post_arr;
-
-								} else{
-									recently_reviewed[post_type] = [post_id];
-								}
-
-							} else{
-								recently_reviewed[post_type] = [post_id];
-							}
-
-							localStorage.setItem("gd_recently_viewed", JSON.stringify(recently_reviewed));
-
-						} else{
-							reviewed_arr[post_type] = [post_id];
-							localStorage.setItem("gd_recently_viewed", JSON.stringify(reviewed_arr));
-						}
-					});
-					<?php if(0){ ?></script><?php }
-
-				return ob_get_clean();
+				if ( 0 ) { ?><script><?php }?>
+document.addEventListener("DOMContentLoaded", function(event) {
+	if (!geodir_is_localstorage()) {
+		return;
+	}
+	function gdrv_is_not_empty(obj) {
+		for (var key in obj) {
+			if (obj.hasOwnProperty(key))
+				return true;
+		}
+		return false;
+	}
+	/*localStorage.removeItem("gd_recently_viewed");*/
+	var post_id = '<?php echo $get_post_id; ?>',
+		post_type = '<?php echo $get_post_type; ?>',
+		reviewed_arr = {},
+		recently_reviewed = JSON.parse(localStorage.getItem('gd_recently_viewed'));
+	if (null != recently_reviewed) {
+		if (gdrv_is_not_empty(recently_reviewed)) {
+			if (post_type in recently_reviewed) {
+				var temp_post_arr = [];
+				if (recently_reviewed[post_type].length > 0) {
+					temp_post_arr = recently_reviewed[post_type];
+				}
+				if (jQuery.inArray(post_id, temp_post_arr) === -1) {
+					temp_post_arr.push(post_id);
+				}
+				/* Limit to 50 per CPT */
+				if (temp_post_arr.length > 50) {
+					temp_post_arr = temp_post_arr.slice(-50);
+				}
+				recently_reviewed[post_type] = temp_post_arr;
+			} else {
+				recently_reviewed[post_type] = [post_id];
 			}
+		} else {
+			recently_reviewed[post_type] = [post_id];
+		}
+		localStorage.setItem("gd_recently_viewed", JSON.stringify(recently_reviewed));
+	} else {
+		reviewed_arr[post_type] = [post_id];
+		localStorage.setItem("gd_recently_viewed", JSON.stringify(reviewed_arr));
+	}
+});
+				<?php if ( 0 ) { ?></script><?php }
 
+				$script = ob_get_clean();
+
+				return trim( $script );
+			}
 		}
 
 		return '';
-
 	}
 
 	public function enqueue_script(){
