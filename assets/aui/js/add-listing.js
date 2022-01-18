@@ -154,7 +154,7 @@ jQuery(function($) {
 
     // Default cat set
     jQuery(".geodir_taxonomy_field .geodir-category-select, .geodir_taxonomy_field [data-ccheckbox='default_category'], .geodir_taxonomy_field input[data-cradio]").on("change", function() {
-        geodir_populate_default_category_input();
+        geodir_populate_default_category_input();jQuery('[name="default_category"]').trigger('change');
     });
     geodir_populate_default_category_input();
 });
