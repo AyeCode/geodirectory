@@ -6,6 +6,7 @@
 * Map filter should not cover copyright text - FIXED
 * GD > Recently Viewed is not working priperly on SG Cached site - FIXED
 * GD > Single Tabs does not scrolls to tab content - FIXED
+* GD > Listings AJAX pagination don't loads Kadence blocks CSS - FIXED
 
 = 2.1.1.11 =
 * Date range is not working in date field - FIXED
