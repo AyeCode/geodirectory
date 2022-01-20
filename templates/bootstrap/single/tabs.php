@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.1.1.3
+ * @version    2.1.1.12
  *
  * @var string $default_search_button_label The search button label text or font awesome class.
  * @var boolean $fa_class If a font awesome class is being used as the button text.
@@ -52,7 +52,10 @@ if ( ! empty( $tabs_array ) ) {
 			}
 			$name = esc_attr__( stripslashes( $tab['tab_name'] ), 'geodirectory' );
 			$data_toggle = $args['show_as_list'] ? '' : 'data-toggle="tab"';
-			$pill_js = $args['show_as_list'] && $args['tab_style'] ? 'onclick="jQuery(this).parent().parent().find(\'a\').removeClass(\'active\');jQuery(this).addClass(\'active\');"' : '';
+			if ( $args['output'] == 'head' ) {
+				$data_toggle = 'data-tab="' . $key . '"';
+			}
+			$pill_js = ( $args['show_as_list'] || $args['output'] == 'head' ) && $args['tab_style'] ? 'onclick="jQuery(this).parent().parent().find(\'a\').removeClass(\'active\');jQuery(this).addClass(\'active\');"' : '';
 
 			// `list-unstyled` class added for some themes like Kadence that will prevent scroll when used as list
 			echo '<li class="nav-item list-unstyled"><a class="nav-link text-nowrap scroll-ignore '.$active.'" '.$pill_js.' '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';

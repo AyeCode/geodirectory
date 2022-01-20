@@ -2436,6 +2436,10 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
                 $value = isset($address_fields[$type]) ? $address_fields[$type] : '';
                 $address_template = str_replace('%%'.$type.'%%', $value ,$address_template);
 
+                // value with comma
+                $value = isset($address_fields[$type]) ? $address_fields[$type].', ' : '';
+                $address_template = str_replace('%%'.$type.'_c%%', $value ,$address_template);
+
                 // value with line break
                 $value_br = isset($address_fields[$type]) ? $address_fields[$type]."<br>" : '';
                 $address_template = str_replace('%%'.$type.'_br%%', $value_br ,$address_template);

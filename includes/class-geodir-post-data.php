@@ -1078,7 +1078,26 @@ class GeoDir_Post_Data {
 					$preview_link = self::get_preview_link( $post );
 					$preview_id   = ! empty( $post->post_parent ) ? $post->post_parent : $post->ID;
 					$preview_class = $design_style ? 'btn btn-outline-primary' :'';
-					echo "<a href='$preview_link' target='wp-preview-" . $preview_id . "' class='geodir_button geodir_preview_button $preview_class'>" . __( 'Preview Listing', 'geodirectory' ) . " <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
+					/**
+					 * Filter preview action text.
+					 *
+					 * @since 2.1.1.12
+					 *
+					 * @param string $preview_text Preview action text.
+					 * @param int    $preview_id Preview id.
+					 */
+					$preview_text = apply_filters( 'geodir_add_listing_preview_btn_text', __( 'Preview Listing', 'geodirectory' ), $preview_id );
+					$preview_action = "<a href='$preview_link' target='wp-preview-" . $preview_id . "' class='geodir_button geodir_preview_button $preview_class'>" . $preview_text . " <i class=\"fas fa-external-link-alt\" aria-hidden=\"true\"></i></a>";
+					/**
+					 * Filter preview action.
+					 *
+					 * @since 2.1.1.12
+					 *
+					 * @param string $preview_action Preview action.
+					 * @param int    $preview_id Preview id.
+					 * @param string $preview_link Preview link.
+					 */
+					echo apply_filters( 'geodir_add_listing_preview_action', $preview_action, $preview_id, $preview_link );
 				}
 				?>
 				<span class="geodir_message_note"

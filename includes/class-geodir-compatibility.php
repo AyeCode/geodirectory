@@ -204,6 +204,9 @@ class GeoDir_Compatibility {
 			add_filter( 'cmplz_integrations', array( __CLASS__, 'complianz_gdpr_integration' ), 21, 1 );
 			add_filter( 'cmplz_integration_path', array( __CLASS__, 'complianz_integration_path' ), 21, 2 );
 		}
+
+		// Handle pre AJAX widget listings.
+		add_action( 'geodir_widget_ajax_listings_before', array( __CLASS__, 'ajax_listings_before' ), 10, 1 );
 	}
 
 	/**
@@ -3731,6 +3734,20 @@ class GeoDir_Compatibility {
 			echo '<div class="notice notice-warning is-dismissible geodir-builder-notice"><p>';
 			echo wp_sprintf( __( 'Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages with Divi Builder.', 'geodirectory' ), '<a href="https://docs.wpgeodirectory.com/article/210-getting-started-with-divi-builder" target="_blank">', '</a>' );
 			echo '</p></div>';
+		}
+	}
+
+	/**
+	 * Handle pre AJAX widget listings.
+	 *
+	 * @since 2.1.1.12
+	 *
+	 * @param array $data Listings widget parameters.
+	 */
+	public static function ajax_listings_before( $data ) {
+		// Kadence Blocks Compatibility.
+		if ( defined( 'KADENCE_BLOCKS_VERSION' ) ) {
+			add_filter( 'kadence_blocks_force_render_inline_css_in_content', '__return_true', 10, 3 );
 		}
 	}
 }

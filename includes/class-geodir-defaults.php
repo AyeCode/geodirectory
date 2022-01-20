@@ -540,6 +540,43 @@ Thank You.","geodirectory"
 	}
 
 	/**
+	 * The report post admin email subject default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_admin_report_post_subject(){
+		return apply_filters( 'geodir_email_admin_report_post_subject', __( "[[#site_name#]] Someone has reported a post!", "geodirectory" ) );
+	}
+
+	/**
+	 * The report post admin email body default.
+	 *
+	 * @return mixed|void
+	 */
+	public static function email_admin_report_post_body(){
+		return apply_filters('geodir_email_admin_report_post_body',
+			__("Dear Admin,
+
+Someone has reported a post [#listing_link#].
+
+Details:
+Post: [#listing_title#] (Post ID: [#post_id#])
+Post Url: [#listing_url#]
+Reporter Name: [#report_post_user_name#] (User ID: [#report_post_user_id#])
+Reporter Email: [#report_post_user_email#]
+Reporter IP: [#report_post_user_ip#]
+Date: [#report_post_date#]
+Reason: [#report_post_reason#]
+Message: [#report_post_message#]
+
+---
+Please visit the report post section for more details: [#report_post_section_link#]
+
+Thank You.", "geodirectory" )
+		);
+	}
+
+	/**
 	 * The default email name text.
 	 *
 	 * @return mixed|void
