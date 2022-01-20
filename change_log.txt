@@ -1,4 +1,14 @@
 = 2.1.1.12 =
+* Yoast SEO select2 conflicts on backend add listing page - FIXED
+* Comment link from recent reviews don't scrolls to comment - FIXED
+* Hook added to filter preview action text - ADDED
+* Report Post feature added - ADDED
+* Map filter should not cover copyright text - FIXED
+* GD > Recently Viewed is not working priperly on SG Cached site - FIXED
+* GD > Single Tabs does not scrolls to tab content - FIXED
+* GD > Listings AJAX pagination don't loads Kadence blocks CSS - FIXED
+* Default category conditional field is not triggered on main category changed - FIXED
+* Google map don't populates region for some addresses within Greece - FIXED
 * Address with comma and without line break - FIXED
 
 = 2.1.1.11 =

@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.1.0.13
+ * @version    2.1.1.12
  *
  * @var array $map_options The map settings options.
  * @var string $map_type The map type.
@@ -85,14 +85,4 @@ defined( 'ABSPATH' ) || exit;
 		<?php do_action( 'geodir_map_custom_script', $map_options ); ?>
 	</div><!--END stick_trigger_container-->
 </div><!--END geodir-map-wrap-->
-<style>
-	body.stickymap_hide .stickymap{ display: none !important;}
-	body.stickymap_hide .stick_trigger_container .fa-angle-right{ transform: rotate(180deg);}
-
-	/* fullscreen map */
-	body.body_fullscreen > .stick_trigger_container{width: 100vw;
-		height: 100vh;
-		position: fixed;
-		z-index: 50000;}
-
-</style>
+<style>body.stickymap_hide .stickymap{display:none!important}body.stickymap_hide .stick_trigger_container .fa-angle-right{transform:rotate(180deg)}body.body_fullscreen>.stick_trigger_container{width:100vw;height:100vh;position:fixed;z-index:50000}body.gd-google-maps .geodir-map-wrap .geodir-map-cat-filter-wrap{margin-bottom:14px!important}body.gd-osm-gmaps .geodir-map-wrap .geodir-map-cat-filter-wrap{margin-bottom:16.5px!important}</style>

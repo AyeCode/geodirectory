@@ -788,6 +788,23 @@ class GeoDir_Admin_Install {
 			  KEY consumer_secret (consumer_secret)
 			) $collate; ";
 
+		$tables .= " CREATE TABLE " . GEODIR_POST_REPORTS_TABLE . " (
+			`id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
+			  `post_id` bigint(20) UNSIGNED NOT NULL,
+			  `user_id` bigint(20) UNSIGNED NOT NULL,
+			  `user_ip` varchar(200) DEFAULT NULL,
+			  `user_name` varchar(100) NOT NULL,
+			  `user_email` varchar(100) NOT NULL,
+			  `reason` varchar(200) NOT NULL,
+			  `message` text NOT NULL,
+			  `status` varchar(50) NOT NULL,
+			  `report_date` datetime DEFAULT NULL,
+			  `updated_date` datetime DEFAULT NULL,
+			  PRIMARY KEY (`id`),
+			  KEY `post_id` (`post_id`),
+			  KEY `user_id` (`user_id`)
+			) $collate; ";
+
 		return $tables;
 	}
 
@@ -913,6 +930,7 @@ class GeoDir_Admin_Install {
 		$tables["{$gd_prefix}custom_sort_fields"] = "{$db_prefix}{$gd_prefix}custom_sort_fields";
 		$tables["{$gd_prefix}post_review"] = "{$db_prefix}{$gd_prefix}post_review";
 		$tables["{$gd_prefix}tabs_layout"] = "{$db_prefix}{$gd_prefix}tabs_layout";
+		$tables["{$gd_prefix}post_reports"] = "{$db_prefix}{$gd_prefix}post_reports";
 
 		$post_types = array_keys( (array) geodir_get_option( 'post_types' ) );
 		if ( ! empty( $post_types ) ) {

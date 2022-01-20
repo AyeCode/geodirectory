@@ -348,11 +348,13 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                 }
             }
 
-            // fix some countries without regions, Isle of Man, Singapore
-            if(getCountryISO=='IM'){
+            /* Fix some countries without regions, Isle of Man, Singapore, Greece. */
+            if (getCountryISO=='IM'){
                 getState = "Isle of Man";
             }else if(getCountryISO=='SG'){
                 getState = "Singapore";
+            } else if(getCountryISO == 'GR' && !getState && administrative_area_level_3.long_name) {
+                getState = administrative_area_level_3.long_name;
             }
 
             //getCity
