@@ -635,8 +635,12 @@ function geodir_get_widgets(){
 		'GeoDir_Widget_Post_Distance',
 		'GeoDir_Widget_Map_Pinpoint',
 		'GeoDir_Widget_Page_Title',
-		'GeoDir_Widget_Simple_Archive_Item',
+		'GeoDir_Widget_Simple_Archive_Item'
 	);
+
+	if ( geodir_design_style() ) {
+		$widgets[] = 'GeoDir_Widget_Report_Post';
+	}
 
 	// 3rd party widgets
 	if ( class_exists( 'Ninja_Forms' ) && class_exists( 'NF_Abstracts_MergeTags' ) ) {
