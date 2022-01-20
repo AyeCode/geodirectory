@@ -9,6 +9,7 @@
 * GD > Listings AJAX pagination don't loads Kadence blocks CSS - FIXED
 * Default category conditional field is not triggered on main category changed - FIXED
 * Google map don't populates region for some addresses within Greece - FIXED
+* Address with comma and without line break - FIXED
 
 = 2.1.1.11 =
 * Date range is not working in date field - FIXED
