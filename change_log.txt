@@ -1,3 +1,6 @@
+= 2.1.1.13 =
+* Hide new line break for empty address in post address - CHANGED
+
 = 2.1.1.12 =
 * Yoast SEO select2 conflicts on backend add listing page - FIXED
 * Comment link from recent reviews don't scrolls to comment - FIXED
