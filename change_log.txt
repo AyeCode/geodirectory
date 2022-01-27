@@ -1,3 +1,7 @@
+= 2.1.1.13 =
+* Hide new line break for empty address in post address - CHANGED
+* WordPress v5.9 update breaks custom fields drag and drop - FIXED
+
 = 2.1.1.12 =
 * Yoast SEO select2 conflicts on backend add listing page - FIXED
 * Comment link from recent reviews don't scrolls to comment - FIXED

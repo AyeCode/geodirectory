@@ -2431,26 +2431,40 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
              */
             $address_fields = apply_filters('geodir_custom_field_output_address_fields', $address_fields, $gd_post, $cf, $location);
 
-            foreach($address_items as $type){
-                // normal value
-                $value = isset($address_fields[$type]) ? $address_fields[$type] : '';
-                $address_template = str_replace('%%'.$type.'%%', $value ,$address_template);
+            $address_fields_extra = array(
+                'c' => ', ', // Value with comma
+                'br' => '<br>', // Value with line break
+                'brc' => ',<br>', // Value with comma & line break
+                'space' => ' ', // Value with space
+                'dash' => ' - ' // Value with dash
+            );
 
-                // value with comma
-                $value = isset($address_fields[$type]) ? $address_fields[$type].', ' : '';
-                $address_template = str_replace('%%'.$type.'_c%%', $value ,$address_template);
+            /**
+             * Filter the address fields array being displayed.
+             *
+             * @param array $address_fields The array of address fields.
+             * @param object $gd_post The current post object.
+             * @param array $cf The custom field array details.
+             * @param string $location The location to output the html.
+             *
+             * @since 2.1.1.13
+             */
+            $address_fields_extra = apply_filters( 'geodir_custom_field_output_address_fields_extra', $address_fields_extra, $gd_post, $cf, $location );
 
-                // value with line break
-                $value_br = isset($address_fields[$type]) ? $address_fields[$type]."<br>" : '';
-                $address_template = str_replace('%%'.$type.'_br%%', $value_br ,$address_template);
+            foreach ( $address_items as $type ) {
+                // Normal value
+                $value = isset( $address_fields[ $type ] ) ? $address_fields[ $type ] : '';
+                $address_template = str_replace( '%%' . $type . '%%', $value, $address_template );
 
-                // value with coman and then line break
-                $value_br = isset($address_fields[$type]) ? $address_fields[$type].",<br>" : '';
-                $address_template = str_replace('%%'.$type.'_brc%%', $value_br ,$address_template);
+                foreach ( $address_fields_extra as $_var => $_rep ) {
+                    $address_template = str_replace( '%%' . $_var . '_' . $type . '%%', ( $value != '' ? $_rep . $value : '' ), $address_template );
+                    $address_template = str_replace( '%%' . $type  . '_' . $_var . '%%', ( $value != '' ? $value . $_rep : '' ), $address_template );
+                }
             }
 
-            // add line breaks
-            $address_template = str_replace('%%br%%', "<br>" ,$address_template);
+            foreach ( $address_fields_extra as $_var => $_rep ) {
+                $address_template = str_replace( '%%' . $_var . '%%', $_rep, $address_template );
+            }
 
             $address_fields = $address_template;
 
