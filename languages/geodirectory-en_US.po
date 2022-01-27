@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
-"Project-Id-Version: GeoDirectory 2.1.1.12\n"
+"Project-Id-Version: GeoDirectory 2.1.1.13\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-01-20 13:58+0530\n"
-"PO-Revision-Date: 2022-01-20 13:58+0530\n"
+"POT-Creation-Date: 2022-01-27 20:07+0530\n"
+"PO-Revision-Date: 2022-01-27 20:07+0530\n"
 "Last-Translator: \n"
 "Language-Team: AyeCode Ltd <contact@ayecode.io>\n"
 "Language: en_US\n"
@@ -9949,7 +9949,7 @@ msgid "Closed"
 msgstr ""
 
 #: includes/business-hours-functions.php:678 includes/core-functions.php:343
-#: includes/custom-fields/output-functions.php:2588
+#: includes/custom-fields/output-functions.php:2602
 msgid "Open now"
 msgstr ""
 
@@ -12637,11 +12637,11 @@ msgstr ""
 msgid "Read more..."
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2497
+#: includes/custom-fields/output-functions.php:2511
 msgid "View on map"
 msgstr ""
 
-#: includes/custom-fields/output-functions.php:2644
+#: includes/custom-fields/output-functions.php:2658
 msgid "Expand opening hours"
 msgstr ""
 
