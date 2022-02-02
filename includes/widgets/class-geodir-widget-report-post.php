@@ -24,7 +24,7 @@ class GeoDir_Widget_Report_Post extends WP_Super_Duper {
 
 		$options = array(
 			'textdomain'     => GEODIRECTORY_TEXTDOMAIN,
-			'block-icon'     => 'money-alt',
+			'block-icon'     => 'flag',
 			'block-category' => 'geodirectory',
 			'block-keywords' => "['geo','geodir','report']",
 			'class_name'     => __CLASS__,

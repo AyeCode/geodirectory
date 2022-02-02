@@ -266,7 +266,7 @@ function geodir_get_custom_fields_html($package_id = '', $default = 'custom', $p
 
         /* field available to site admin only for edit */
         $for_admin_use = isset( $val['for_admin_use'] ) && (int) $val['for_admin_use'] == 1 ? true : false;
-        $is_hidden = ( $for_admin_use && ! is_super_admin() ) ? true : false;
+        $is_hidden = ( $for_admin_use && ! current_user_can( 'manage_options' ) ) ? true : false;
 
         /**
          * Add listing form filter to hide post custom field.
