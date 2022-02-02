@@ -806,7 +806,7 @@ function geodir_get_post_stati( $context, $args = array() ) {
 		case 'widget-listings':
 			$statuses = $publish_statuses;
 
-			if ( is_super_admin() ) {
+			if ( current_user_can( 'manage_options' ) ) {
 				$statuses[] = 'private';
 			}
 			break;
