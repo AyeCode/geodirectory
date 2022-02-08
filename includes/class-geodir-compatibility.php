@@ -207,6 +207,9 @@ class GeoDir_Compatibility {
 
 		// Handle pre AJAX widget listings.
 		add_action( 'geodir_widget_ajax_listings_before', array( __CLASS__, 'ajax_listings_before' ), 10, 1 );
+
+		// Register scripts on block theme.
+		add_action( 'wp_super_duper_widget_init', array( __CLASS__, 'block_theme_load_scripts' ), 5, 2 );
 	}
 
 	/**
@@ -3606,7 +3609,7 @@ class GeoDir_Compatibility {
 			if ( ! empty( $setting['id'] ) && $setting['id'] == 'map_cache' ) {
 				$_settings[] = array(
 					'name' => __( 'Borlabs Cookie Integration', 'geodirectory'),
-					'desc' => __( 'Enable Borlabs Cookie integration for GeoDirecotry maps.', 'geodirectory' ),
+					'desc' => __( 'Enable Borlabs Cookie integration for GeoDirectory maps.', 'geodirectory' ),
 					'id' => 'borlabs_cookie',
 					'type' => 'checkbox',
 					'default' => '0',
@@ -3748,6 +3751,26 @@ class GeoDir_Compatibility {
 		// Kadence Blocks Compatibility.
 		if ( defined( 'KADENCE_BLOCKS_VERSION' ) ) {
 			add_filter( 'kadence_blocks_force_render_inline_css_in_content', '__return_true', 10, 3 );
+		}
+	}
+
+	/**
+	 * Register scripts on block theme.
+	 *
+	 * Block theme like Twenty Twenty Two has issue in loading scripts.
+	 *
+	 * @since 2.1.1.14
+	 *
+	 * @param array $options Super Duper block options.
+	 * @param object $super_duper Super Duper object.
+	 */
+	public static function block_theme_load_scripts( $options, $super_duper ) {
+		global $geodir_frontend_scripts_loaded;
+
+		if ( ! $geodir_frontend_scripts_loaded && wp_is_block_theme() && ! wp_script_is( 'geodir', 'registered' ) ) {
+			$geodir_frontend_scripts_loaded = true;
+
+			GeoDir_Frontend_Scripts::load_scripts();
 		}
 	}
 }

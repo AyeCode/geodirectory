@@ -1,3 +1,6 @@
+= 2.1.1.14 =
+* Block theme like Twenty Twenty Two don't loads map scripts - FIXED
+
 = 2.1.1.13 =
 * Hide new line break for empty address in post address - CHANGED
 * WordPress v5.9 update breaks custom fields drag and drop - FIXED
