@@ -3767,7 +3767,7 @@ class GeoDir_Compatibility {
 	public static function block_theme_load_scripts( $options, $super_duper ) {
 		global $geodir_frontend_scripts_loaded;
 
-		if ( ! $geodir_frontend_scripts_loaded && wp_is_block_theme() && ! wp_script_is( 'geodir', 'registered' ) ) {
+		if ( ! $geodir_frontend_scripts_loaded && function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() && ! wp_script_is( 'geodir', 'registered' ) ) {
 			$geodir_frontend_scripts_loaded = true;
 
 			GeoDir_Frontend_Scripts::load_scripts();
