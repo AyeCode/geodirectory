@@ -34,11 +34,15 @@ class GeoDir_Admin_Assets {
 	/**
 	 * Fix style/script conflict from third party plugins/themes.
 	 */
-	public function fix_script_conflicts(){
+	public function fix_script_conflicts() {
 		// Fix select2 style conflict after Yoast 14.1.
 		if ( defined( 'WPSEO_VERSION' ) && wp_script_is( 'geodir-admin-script', 'enqueued' ) && wp_style_is( 'yoast-seo-select2', 'enqueued' ) && wp_style_is( 'yoast-seo-monorepo', 'enqueued' ) ) {
-			wp_dequeue_style( 'yoast-seo-select2' );
-			wp_dequeue_style( 'yoast-seo-monorepo' );
+			wp_deregister_style( 'yoast-seo-select2' );
+
+			// Yoast SEO metabox CSS dependent on yoast-seo-select2. 
+			if ( wp_style_is( 'yoast-seo-metabox-css', 'registered' ) ) {
+				wp_register_style( 'yoast-seo-select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION );
+			}
 		}
 	}
 

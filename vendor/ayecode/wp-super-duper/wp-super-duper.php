@@ -1328,6 +1328,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		 * @return string
 		 */
 		public function shortcode_output( $args = array(), $content = '' ) {
+			$_instance = $args;
+
 			$args = $this->argument_values( $args );
 
 			// add extra argument so we know its a output to gutenberg
@@ -1337,6 +1339,23 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 			// if we have a enclosed shortcode we add it to the special `html` argument
 			if ( ! empty( $content ) ) {
 				$args['html'] = $content;
+			}
+
+			if ( ! $this->is_preview() ) {
+				/**
+				 * Filters the settings for a particular widget args.
+				 *
+				 * @since 1.0.28
+				 *
+				 * @param array          $args      The current widget instance's settings.
+				 * @param WP_Super_Duper $widget    The current widget settings.
+				 * @param array          $_instance An array of default widget arguments.
+				 */
+				$args = apply_filters( 'wp_super_duper_widget_display_callback', $args, $this, $_instance );
+
+				if ( ! is_array( $args ) ) {
+					return $args;
+				}
 			}
 
 			$class = isset( $this->options['widget_ops']['classname'] ) ? esc_attr( $this->options['widget_ops']['classname'] ) : '';

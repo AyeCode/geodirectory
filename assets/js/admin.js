@@ -156,6 +156,14 @@ jQuery(window).on("load",function() {
     }
 
 
+    })
+
+    jQuery('.geodir-report-view').on('click', function(e) {
+        if(jQuery(this).closest('tr').prop('id') && jQuery('#geodir-view-' + jQuery(this).closest('tr').prop('id')).text()) {
+            $lightbox = lity('#geodir-view-' + jQuery(this).closest('tr').prop('id'));
+            return false;
+        }
+    })
 });
 
 function geodir_setup_generate_thumbs() {

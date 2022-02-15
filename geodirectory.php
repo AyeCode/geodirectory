@@ -11,13 +11,13 @@
  * Plugin Name: GeoDirectory
  * Plugin URI: https://wpgeodirectory.com/
  * Description: GeoDirectory plugin for WordPress.
- * Version: 2.1.1.9
+ * Version: 2.1.1.13
  * Author: AyeCode Ltd
  * Author URI: https://wpgeodirectory.com
  * Text Domain: geodirectory
  * Domain Path: /languages
  * Requires at least: 4.5
- * Tested up to: 5.8
+ * Tested up to: 5.9
  */
 
 if ( ! class_exists( 'GeoDirectory' ) ) :
@@ -123,6 +123,7 @@ final class GeoDirectory {
 	    $this->define( 'GEODIR_TABS_LAYOUT_TABLE', $plugin_prefix . 'tabs_layout' ); // custom fields table
         $this->define( 'GEODIR_CUSTOM_SORT_FIELDS_TABLE', $plugin_prefix . 'custom_sort_fields' ); // custom sort fields table
         $this->define( 'GEODIR_REVIEW_TABLE', $plugin_prefix . 'post_review' ); // post review table
+		$this->define( 'GEODIR_POST_REPORTS_TABLE', $plugin_prefix . 'post_reports' ); // post reports table
 
 		$this->define( 'GEODIR_ROUNDING_PRECISION', 4 );
 
@@ -243,6 +244,10 @@ final class GeoDirectory {
 	    require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-maps.php' );
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-frontend-scripts.php' );
         //require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/class-geodir-permalinks.php' );
+
+		if ( geodir_design_style() ) {
+			GeoDir_Report_Post::init(); // Report Post
+		}
 
 		/**
 		 * REST API.

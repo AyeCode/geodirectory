@@ -679,7 +679,7 @@ class GeoDir_Email {
 		if ( $update ) {
 			$user_id = (int) get_current_user_id();
 
-			if ( $user_id > 0 && ! empty( $gd_post->post_author ) && $user_id == $gd_post->post_author && ! is_super_admin() && empty( $gd_notified_edited[ $post_ID ] ) && self::is_email_enabled( 'admin_post_edit' ) ) {
+			if ( $user_id > 0 && ! empty( $gd_post->post_author ) && $user_id == $gd_post->post_author && ! current_user_can( 'manage_options' ) && empty( $gd_notified_edited[ $post_ID ] ) && self::is_email_enabled( 'admin_post_edit' ) ) {
 				if ( empty( $gd_notified_edited ) ) {
 					$gd_notified_edited = array();
 				}

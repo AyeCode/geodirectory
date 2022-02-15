@@ -1705,7 +1705,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			// we use original input so the special chars are no converted already
 			if ( empty( $field->htmlvar_name ) ) {
-				$htmlvar_name = sanitize_key( str_replace( array( '-', ' ', '"', "'" ), array( '_', '_', '', '' ), $input['frontend_title'] ) );
+				$htmlvar_name = sanitize_key( str_replace( array( ' - ', '-', ' ', '"', "'" ), array( '_', '_', '_', '', '' ), $input['frontend_title'] ) );
 				if ( str_replace( '_', '', $htmlvar_name ) != '' ) {
 					$field->htmlvar_name = substr( $htmlvar_name, 0, 50 );
 				} else {

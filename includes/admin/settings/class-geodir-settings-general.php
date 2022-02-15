@@ -894,20 +894,31 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 				array( 'type' => 'sectionend', 'id' => 'default_location' ),
 			));
-		}else{
+		} else {
 			/**
-			 * Filter GD general settings array.
+			 * Filter GD general pre settings array.
 			 *
-			 * @since 1.0.0
-			 * @package GeoDirectory
+			 * @since 2.1.1.12
+			 *
+			 * @param array  $settings Settings array.
+			 * @param string $current_section Current section.
 			 */
-			$settings = apply_filters( 'geodir_general_options', array(
-				array(
-					'title' => __( 'Site Settings', 'geodirectory' ),
-					'type'  => 'title',
-					'desc'  => '',
-					'id'    => 'general_options'
-				),
+			$settings = apply_filters( 'geodir_general_default_options', array(), $current_section );
+
+			if ( empty( $settings ) ) {
+				/**
+				 * Filter GD general settings array.
+				 *
+				 * @since 1.0.0
+				 * @package GeoDirectory
+				 */
+				$settings = apply_filters( 'geodir_general_options', array(
+					array(
+						'title' => __( 'Site Settings', 'geodirectory' ),
+						'type'  => 'title',
+						'desc'  => '',
+						'id'    => 'general_options'
+					),
 
 				array(
 					'name'       => __( 'Restrict wp-admin', 'geodirectory' ),
@@ -1057,9 +1068,10 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'advanced' => true
 				),
 
-				array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
+					array( 'type' => 'sectionend', 'id' => 'general_options_map' ),
 
-			) );/* General Options End*/
+				) );/* General Options End*/
+			}
 		}
 
 

@@ -180,6 +180,9 @@ class GeoDir_Compatibility {
 				// Avada header / footer actions
 				add_action( 'wp_head', array( __CLASS__, 'avada_wp_head_setup' ), 99 );
 				add_action( 'get_footer', array( __CLASS__, 'avada_get_footer_setup' ), 99 );
+				add_action( 'fusion_template_content', array( __CLASS__, 'avada_fusion_template_content_pause' ), 1 );
+				add_action( 'fusion_template_content', array( __CLASS__, 'avada_fusion_template_content_resume' ), 101 );
+				add_action( 'fusion_tb_override', array( __CLASS__, 'avada_fusion_tb_override' ), 10, 2 );
 			}
 		} else {
 			add_action( 'admin_notices', array( __CLASS__, 'page_builder_notices' ) );
@@ -201,6 +204,9 @@ class GeoDir_Compatibility {
 			add_filter( 'cmplz_integrations', array( __CLASS__, 'complianz_gdpr_integration' ), 21, 1 );
 			add_filter( 'cmplz_integration_path', array( __CLASS__, 'complianz_integration_path' ), 21, 2 );
 		}
+
+		// Handle pre AJAX widget listings.
+		add_action( 'geodir_widget_ajax_listings_before', array( __CLASS__, 'ajax_listings_before' ), 10, 1 );
 	}
 
 	/**
@@ -381,9 +387,16 @@ class GeoDir_Compatibility {
 	 * @since 2.0.0.102
 	 */
 	public static function avada_wp_head_setup() {
-		if ( geodir_is_geodir_page() && has_action( 'avada_render_header' ) ) {
-			add_action( 'avada_render_header', array( __CLASS__, 'avada_pause_the_content' ), 1 );
-			add_action( 'avada_render_header', array( __CLASS__, 'avada_resume_the_content' ), 101 );
+		if ( geodir_is_geodir_page() ) {
+			if ( has_action( 'avada_render_header' ) ) {
+				add_action( 'avada_render_header', array( __CLASS__, 'avada_pause_the_content' ), 1 );
+				add_action( 'avada_render_header', array( __CLASS__, 'avada_resume_the_content' ), 101 );
+			}
+
+			if ( has_action( 'avada_override_current_page_title_bar' ) ) {
+				add_action( 'avada_override_current_page_title_bar', array( __CLASS__, 'avada_pause_the_content' ), 1 );
+				add_action( 'avada_override_current_page_title_bar', array( __CLASS__, 'avada_resume_the_content' ), 101 );
+			}
 		}
 	}
 
@@ -397,6 +410,106 @@ class GeoDir_Compatibility {
 			add_action( 'avada_render_footer', array( __CLASS__, 'avada_pause_the_content' ), 1 );
 			add_action( 'avada_render_footer', array( __CLASS__, 'avada_resume_the_content' ), 101 );
 		}
+	}
+
+	public static function avada_fusion_template_content_pause() {
+		if ( geodir_is_page( 'search' ) ) {
+			self::avada_pause_the_content();
+		}
+	}
+
+	public static function avada_fusion_template_content_resume() {
+		if ( geodir_is_page( 'search' ) ) {
+			self::avada_resume_the_content();
+		}
+	}
+
+	public static function avada_fusion_tb_override( $override, $c_page_id ) {
+		if ( geodir_is_page( 'search' ) ) {
+			$Fusion_Template_Builder = Fusion_Template_Builder();
+
+			$args                  = [
+				'post_type'        => 'fusion_tb_layout',
+				'post_status'      => 'publish',
+				'posts_per_page'   => -1,
+				'suppress_filters' => true,
+			];
+
+			if ( class_exists( 'WooCommerce' ) ) {
+				remove_filter( 'the_posts', [ WC()->query, 'remove_product_query_filters' ] );
+				$layouts = fusion_cached_query( $args );
+				add_filter( 'the_posts', [ WC()->query, 'remove_product_query_filters' ] );
+			} else {
+				$layouts = fusion_cached_query( $args );
+			}
+
+			$layouts = $layouts->posts;
+			$target_post = get_post( geodir_search_page_id() );
+			$target_post->is_singular = true;
+
+			/**
+			 * Check if whatever is being loaded should have a template override.
+			 */
+			 $_layout = null;
+			if ( is_array( $layouts ) ) {
+				foreach ( $layouts as $layout ) {
+					if ( self::check_full_conditions( $layout, $target_post, $Fusion_Template_Builder ) ) {
+						$layout->permalink = get_permalink( $layout->ID );
+						$Fusion_Template_Builder->layout = $layout;
+						$_layout = $layout;
+					}
+				}
+			}
+
+			$override = $_layout;
+
+			// We're on purpose using wp_reset_query() instead of wp_reset_postdata() here
+			// because we've altered the main query above.
+			wp_reset_query(); // phpcs:ignore WordPress.WP.DiscouragedFunctions
+		}
+
+		return $override;
+	}
+
+	/**
+	 * Check if current post matched conditions of template.
+	 *
+	 * @since 2.2
+	 * @param WP_Post $template    Section post object.
+	 * @param WP_Post $target_post The target post object.
+	 * @return bool Whether it passed or not.
+	 * @access public
+	 */
+	public static function check_full_conditions( $template, $target_post, $Fusion_Template_Builder ) {
+		global $pagenow;
+
+		$conditions    = Fusion_Template_Builder::get_conditions( $template );
+		$backend_pages = [ 'post.php', 'term.php' ];
+
+		if ( is_array( $conditions ) ) {
+			foreach ( $conditions as $condition ) {
+				if ( isset( $condition['type'] ) && '' !== $condition['type'] && isset( $condition[ $condition['type'] ] ) ) {
+					$type    = $condition['type'];
+					$exclude = 'exclude' === $condition['mode'];
+
+					if ( fusion_is_preview_frame() || ( is_admin() && in_array( $pagenow, $backend_pages ) ) ) { // phpcs:ignore WordPress.PHP.StrictInArray
+						$pass = 'archives' === $type ? $Fusion_Template_Builder->builder_check_archive_condition( $condition ) : $Fusion_Template_Builder->builder_check_singular_condition( $condition, $target_post );
+					} else {
+						$pass = 'archives' === $type && ! is_search() ? $Fusion_Template_Builder->check_archive_condition( $condition ) : $Fusion_Template_Builder->builder_check_singular_condition( $condition, $target_post );
+					}
+
+					// If it doesn't pass all exclude conditions check is false.
+					// If all exclude conditions are valid and we find one valid condition check is true.
+					if ( $exclude && ! $pass ) {
+						return false;
+					} elseif ( ! $exclude && $pass ) {
+						return true;
+					}
+				}
+			}
+		}
+		// The default behaviour.
+		return false;
 	}
 
 	/**
@@ -757,7 +870,7 @@ class GeoDir_Compatibility {
 			 || ( function_exists( 'genesis_theme_support' ) && ( strpos( $meta_key, '_genesis_' ) === 0 || strpos( $meta_key, '_gsm_' ) === 0 || strpos( $meta_key, '_ss_' ) === 0 || empty( $meta_key ) ) && ! in_array( $meta_key, array( '_genesis_title', '_genesis_description', '_genesis_keywords' ) ) ) // Genesis
 			 || ( class_exists( 'The7_Aoutoloader' ) && ( strpos( $meta_key, '_dt_' ) === 0 || empty( $meta_key ) ) ) // The7
 			 || ( function_exists( 'avia_get_option' ) && ( ! empty( $meta_key ) && in_array( $meta_key, $gen_keys ) ) ) // Enfold
-			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || empty( $meta_key ) ) || in_array( $meta_key, array( 'pages_sidebar', 'pages_sidebar_2', 'default_sidebar_pos' ) ) ) // Avada + FusionBuilder
+			 || ( class_exists( 'Avada' ) && class_exists( 'FusionBuilder' ) && ( strpos( $meta_key, 'pyre_' ) === 0 || strpos( $meta_key, 'sbg_' ) === 0 || strpos( $meta_key, '_fusion' ) === 0 || empty( $meta_key ) ) || in_array( $meta_key, array( 'pages_sidebar', 'pages_sidebar_2', 'default_sidebar_pos' ) ) ) // Avada + FusionBuilder
 			 || ( class_exists( 'OCEANWP_Theme_Class' ) && ( empty( $meta_key ) || strpos( $meta_key, 'ocean_' ) === 0 || strpos( $meta_key, 'menu_item_' ) === 0 || strpos( $meta_key, '_menu_item_' ) === 0 ) ) // OceanWP
 			 || ( defined( 'PORTO_VERSION' ) ) // Porto
 			 || ( function_exists( 'wpbf_theme_setup' ) && ( empty( $meta_key ) || strpos( $meta_key, 'wpbf_' ) === 0 ) ) // Page Builder Framework
@@ -1527,9 +1640,7 @@ class GeoDir_Compatibility {
 
 			// Avada (theme)
 			if ( class_exists( 'Avada' ) ) {
-				if ( ! self::has_avada_62() ) {
-					add_filter( 'body_class', array( __CLASS__, 'avada_body_class' ), 999, 1 );
-				}
+				add_filter( 'body_class', array( __CLASS__, 'avada_body_class' ), 999, 1 );
 			}
 
 			// Custom sidebars
@@ -2021,7 +2132,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_has_sidebar( $has_sidebar, $body_classes, $class ) {
-		if ( ! self::has_avada_62() && geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
+		if ( geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
 			$has_sidebar = in_array( 'has-sidebar', $body_classes ) ? true : false;
 		}
 
@@ -2029,7 +2140,7 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_has_double_sidebars( $double_sidebars, $body_classes, $class ) {
-		if ( ! self::has_avada_62() && geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
+		if ( geodir_is_geodir_page() && ( $body_classes = self::avada_body_classes() ) ) {
 			$double_sidebars = in_array( 'double-sidebars', $body_classes ) ? true : false;
 		}
 
@@ -2100,8 +2211,10 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_sidebar_context( $c_page_id, $sidebar = 1 ) {
-		$sidebar_1 = get_post_meta( $c_page_id, 'sbg_selected_sidebar_replacement', true );
-		$sidebar_2 = get_post_meta( $c_page_id, 'sbg_selected_sidebar_2_replacement', true );
+		$post_type = get_post_type( $c_page_id );
+		$sidebars_option_names = avada_get_sidebar_post_meta_option_names( $post_type );
+		$sidebar_1 = (array) fusion_get_option( $sidebars_option_names[0] );
+		$sidebar_2 = (array) fusion_get_option( $sidebars_option_names[1] );
 
 		if ( Avada()->settings->get( 'pages_global_sidebar' ) ) {
 			$sidebar_1 = ( 'None' !== Avada()->settings->get( 'pages_sidebar' ) ) ? array( Avada()->settings->get( 'pages_sidebar' ) ) : '';
@@ -2124,20 +2237,53 @@ class GeoDir_Compatibility {
 	}
 
 	public static function avada_body_class( $classes ) {
-		$body_classes = self::avada_body_classes();
+		if ( ! self::has_avada_62() ) {
+			$body_classes = self::avada_body_classes();
 
-		if ( ! empty( $body_classes ) && ! empty( $classes ) ) {
-			$new_classes = array();
-			$check_classes = array( 'layout-boxed-mode', 'layout-wide-mode', 'has-sidebar', 'double-sidebars', 'fusion-top-header', 'side-header-left', 'side-header-right' );
+			if ( ! empty( $body_classes ) && ! empty( $classes ) ) {
+				$new_classes = array();
+				$check_classes = array( 'layout-boxed-mode', 'layout-wide-mode', 'has-sidebar', 'double-sidebars', 'fusion-top-header', 'side-header-left', 'side-header-right' );
 
-			foreach ( $classes as $class ) {
-				if ( in_array( $class, $check_classes ) || strpos( $class, 'layout-boxed-mode-' ) === 0 || strpos( $class, 'menu-text-align-' ) === 0 ) {
-					continue;
+				foreach ( $classes as $class ) {
+					if ( in_array( $class, $check_classes ) || strpos( $class, 'layout-boxed-mode-' ) === 0 || strpos( $class, 'menu-text-align-' ) === 0 ) {
+						continue;
+					}
+					$new_classes[] = $class;
 				}
-				$new_classes[] = $class;
-			}
 
-			$classes = array_merge( $new_classes, $body_classes );
+				$classes = array_merge( $new_classes, $body_classes );
+			}
+		}
+
+		if ( geodir_is_page( 'search' ) ) {
+			$c_page_id = (int) self::gd_page_id();
+
+			$sidebar_1_original = self::avada_sidebar_context( $c_page_id, 1 );
+			$sidebar_2_original = self::avada_sidebar_context( $c_page_id, 2 );
+
+			$override = function_exists( 'Fusion_Template_Builder' ) ? Fusion_Template_Builder()->get_override( 'content' ) : false;
+			if ( $override ) {
+				$classes = array_unique( $classes );
+				$has_sidebar_key = array_search( 'has-sidebar', $classes, true );
+				$has_double_sidebars_key = array_search( 'double-sidebars', $classes, true );
+
+				if ( is_array( $sidebar_1_original ) && ! empty( $sidebar_1_original ) && $sidebar_1_original[0] ) {
+					$classes[] = 'has-sidebar';
+
+					if ( is_array( $sidebar_2_original ) && ! empty( $sidebar_2_original ) && $sidebar_2_original[0] ) {
+						$classes[] = 'double-sidebars';
+					} elseif ( $has_double_sidebars_key ) {
+						unset( $classes[ $has_double_sidebars_key ] );
+					}
+				} else {
+					if ( $has_sidebar_key ) {
+						unset( $classes[ $has_sidebar_key ] );
+					}
+					if ( $has_double_sidebars_key ) {
+						unset( $classes[ $has_double_sidebars_key ] );
+					}
+				}
+			}
 		}
 
 		return $classes;
@@ -3603,6 +3749,20 @@ class GeoDir_Compatibility {
 			echo '<div class="notice notice-warning is-dismissible geodir-builder-notice"><p>';
 			echo wp_sprintf( __( 'Divi Users: Please check this %sdocumentation%s to setup GeoDirectory pages with Divi Builder.', 'geodirectory' ), '<a href="https://docs.wpgeodirectory.com/article/210-getting-started-with-divi-builder" target="_blank">', '</a>' );
 			echo '</p></div>';
+		}
+	}
+
+	/**
+	 * Handle pre AJAX widget listings.
+	 *
+	 * @since 2.1.1.12
+	 *
+	 * @param array $data Listings widget parameters.
+	 */
+	public static function ajax_listings_before( $data ) {
+		// Kadence Blocks Compatibility.
+		if ( defined( 'KADENCE_BLOCKS_VERSION' ) ) {
+			add_filter( 'kadence_blocks_force_render_inline_css_in_content', '__return_true', 10, 3 );
 		}
 	}
 }

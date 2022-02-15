@@ -747,10 +747,10 @@ class GeoDir_Widget_Best_Of extends WP_Super_Duper {
 
 		echo geodir_get_template_html( $template, array(
 			'widget_listings' => $widget_listings,
-			'column_gap_class'   => $instance['column_gap'] ? 'mb-'.absint($instance['column_gap']) : 'mb-4',
-			'row_gap_class'   => $instance['row_gap'] ? 'px-'.absint($instance['row_gap']) : '',
-			'card_border_class'   => $card_border_class,
-			'card_shadow_class'  =>  $card_shadow_class,
+			'column_gap_class' => isset( $instance['column_gap'] ) && $instance['column_gap'] ? 'mb-'.absint($instance['column_gap']) : 'mb-4',
+			'row_gap_class' => isset( $instance['row_gap'] ) && $instance['row_gap'] ? 'px-'.absint($instance['row_gap']) : '',
+			'card_border_class' => $card_border_class,
+			'card_shadow_class' => $card_shadow_class,
 		) );
 
 		$geodir_is_widget_listing = false;

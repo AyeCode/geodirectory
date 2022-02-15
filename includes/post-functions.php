@@ -806,7 +806,7 @@ function geodir_get_post_stati( $context, $args = array() ) {
 		case 'widget-listings':
 			$statuses = $publish_statuses;
 
-			if ( is_super_admin() ) {
+			if ( current_user_can( 'manage_options' ) ) {
 				$statuses[] = 'private';
 			}
 			break;
@@ -1394,8 +1394,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 					$btn_args = array(
 						'data-id' => $post_id,
-//						'class'     => 'btn btn-primary  btn-sm px-1 py-0 font-weight-bold gd-badgex',
-						'class'     => $btn_class,
+						'class' => normalize_whitespace( $btn_class ),
 						'content' => $badge,
 						'style' => $color_custom ? 'background-color:' . esc_attr( $args['bg_color'] ) . ';color:' . esc_attr( $args['txt_color'] ) . ';' : '',
 						'data-badge'    => esc_attr($match_field),
@@ -1486,7 +1485,7 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 						$tag = 'div';
 					}
 
-					$output = '<div class="gd-badge-meta ' . trim( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
+					$output = '<div class="gd-badge-meta ' . normalize_whitespace( $class ) . ' gd-badge-meta-' . sanitize_title_with_dashes( esc_attr( $title ) ).'" '.$onclick.' '.$extra_attributes.' title="'.esc_attr( $title ).'">';
 					if ( ! empty( $link ) ) {
 						$output .= "<a href='" . $link . "' $new_window $rel>";
 					}
