@@ -692,12 +692,28 @@ class GeoDir_SEO {
 		}
 
 		if ( $gd_page != 'location_tags' && $gd_page != 'location' ) {
+			$vars['%%id%%'] = __( 'The current post id.', 'geodirectory' );
 			$vars['%%excerpt%%'] = __( 'The current post excerpt.', 'geodirectory' );
 			$vars['%%pt_single%%'] = __( 'Post type singular name.', 'geodirectory' );
 			$vars['%%pt_plural%%'] = __( 'Post type plural name.', 'geodirectory' );
 			$vars['%%category%%'] = __( 'The current category name.', 'geodirectory' );
 			$vars['%%in_category%%'] = __( 'The current category name prefixed with `in` eg: in Attractions', 'geodirectory' );
-			$vars['%%id%%'] = __( 'The current post id.', 'geodirectory' );
+		}
+
+		// Paging
+		if ( $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' ) {
+			$vars['%%page%%'] = __( 'Current page number eg: page 2 of 4', 'geodirectory' );
+			$vars['%%pagetotal%%'] = __( 'Total pages eg: 101', 'geodirectory' );
+			$vars['%%postcount%%'] = __( 'Total post found eg: 10', 'geodirectory' );
+			$vars['%%pagenumber%%'] = __( 'Current page number eg: 99', 'geodirectory' );
+		}
+
+		// Search page only
+		if ( $gd_page == 'search' ) {
+			$vars['%%search_term%%'] = __( 'The currently used search for term.', 'geodirectory' );
+			$vars['%%for_search_term%%'] = __( 'The currently used search for term with `for`. Ex: for dinner.', 'geodirectory' );
+			$vars['%%search_near%%'] = __( 'The currently used search near term with `near`. Ex: near Philadelphia.', 'geodirectory' );
+			$vars['%%search_near_term%%'] = __( 'The currently used search near term.', 'geodirectory' );
 		}
 
 		// Location tags
@@ -714,25 +730,9 @@ class GeoDir_SEO {
 			$vars['%%in_location_city%%'] = __( 'The current viewing city prefixed with `in` eg: in Philadelphia', 'geodirectory' );
 		}
 
-		// Search page only
-		if ( $gd_page == 'search' ) {
-			$vars['%%search_term%%'] = __( 'The currently used search for term.', 'geodirectory' );
-			$vars['%%for_search_term%%'] = __( 'The currently used search for term with `for`. Ex: for dinner.', 'geodirectory' );
-			$vars['%%search_near%%'] = __( 'The currently used search near term with `near`. Ex: near Philadelphia.', 'geodirectory' );
-			$vars['%%search_near_term%%'] = __( 'The currently used search near term.', 'geodirectory' );
-		}
-
-		// Paging
-		if ( $gd_page == 'search' || $gd_page == 'pt' || $gd_page == 'archive' ) {
-			$vars['%%page%%'] = __( 'Current page number eg: page 2 of 4', 'geodirectory' );
-			$vars['%%pagetotal%%'] = __( 'Total pages eg: 101', 'geodirectory' );
-			$vars['%%postcount%%'] = __( 'Total post found eg: 10', 'geodirectory' );
-			$vars['%%pagenumber%%'] = __( 'Current page number eg: 99', 'geodirectory' );
-		}
-
 		// Single page
 		if ( $gd_page == 'single' ) {
-			$vars['%%_FIELD-KEY%%'] = __( 'Show any custom field by using its field key prefixed with an _underscore', 'geodirectory' );
+			$vars['%%_FIELD-KEY%%'] = __( 'Show any custom field by using its field key prefixed with an _underscore. Ex: _phone.', 'geodirectory' );
 		}
 
 		return apply_filters( 'geodir_seo_variables', $vars, $gd_page );

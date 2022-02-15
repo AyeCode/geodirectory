@@ -17,7 +17,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 	 */
 	class WP_Super_Duper extends WP_Widget {
 
-		public $version = "1.0.27";
+		public $version = "1.0.28";
 		public $font_awesome_icon_version = "5.11.2";
 		public $block_code;
 		public $options;
@@ -691,7 +691,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 							$editor_id = '#generate-sections-modal-dialog ' + $editor_id;
 							tmceActive = jQuery($editor_id).closest('.wp-editor-wrap').hasClass('tmce-active') ? true : false;
 						}
-						if (tinyMCE && tinyMCE.activeEditor && tmceActive) {
+						if (typeof tinyMCE !== 'undefined' && tinyMCE.activeEditor && tmceActive) {
 							tinyMCE.execCommand('mceInsertContent', false, $shortcode);
 						} else {
 							var $txt = jQuery($editor_id);
@@ -1548,12 +1548,8 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 		public function block_show_advanced() {
 
 			$show      = false;
-			$arguments = $this->arguments;
-
-			if ( empty( $arguments ) ) {
-				$arguments = $this->get_arguments();
-			}
-
+			$arguments = $this->get_arguments();
+			
 			if ( ! empty( $arguments ) ) {
 				foreach ( $arguments as $argument ) {
 					if ( isset( $argument['advanced'] ) && $argument['advanced'] ) {
@@ -2321,7 +2317,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 					}
 				}
 				if ( isset( $args['multiple'] ) && $args['multiple'] ) { //@todo multiselect does not work at the moment: https://github.com/WordPress/gutenberg/issues/5550
-					$extra .= ' multiple: true, ';
+					$extra .= ' multiple:true,style:{height:"auto",paddingRight:"8px"}, ';
 				}
 			} elseif ( $args['type'] == 'alignment' ) {
 				$type = 'AlignmentToolbar'; // @todo this does not seem to work but cant find a example
