@@ -47,7 +47,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 
 			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
-			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+//			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
 
 			add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
 			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
@@ -205,12 +205,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$settings  = apply_filters( "geodir_cpt_settings_{$post_type}", array(
 
 
-				array(
-					'name' => __( 'Post Type', 'geodirectory' ),
-					'type' => 'title',
-					'desc' => '',
-					'id'   => 'cpt_settings'
-				),
+//				array(
+//					'name' => __( 'Post Type', 'geodirectory' ),
+//					'type' => 'title',
+//					'desc' => '',
+//					'id'   => 'cpt_settings'
+//				),
 
 				array(
 					'name' => __( 'Post Type Settings', 'geodirectory' ),
@@ -518,7 +518,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'desc'     => __( 'A short descriptive summary of what the post type is.', 'geodirectory' ),
 					'id'       => 'description',
 					'type'     => 'textarea',
-					'class'    => 'large-text',
+					'class'    => 'active-placeholder',
 					'desc_tip' => true,
 					'advanced' => true,
 					'value'	   => $post_type_values['description']
@@ -538,7 +538,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'desc'     => __( 'The page title will appear on the post type archive page.', 'geodirectory' ),
 					'id'       => 'title',
 					'type'     => 'text',
-					'class'    => 'large-text',
+					'class'    => 'active-placeholder',
 					'desc_tip' => true,
 					'advanced' => true,
 					'value'	   => $post_type_values['title']
@@ -548,7 +548,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'desc'     => __( 'Meta title will appear in head tag of this post type archive page.', 'geodirectory' ),
 					'id'       => 'meta_title',
 					'type'     => 'text',
-					'class'    => 'large-text',
+					'class'    => 'active-placeholder',
 					'desc_tip' => true,
 					'advanced' => true,
 					'value'	   => $post_type_values['meta_title']
@@ -558,7 +558,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 					'desc'     => __( 'Meta description will appear in head tag of this post type archive page.', 'geodirectory' ),
 					'id'       => 'meta_description',
 					'type'     => 'textarea',
-					'class'    => 'large-text',
+					'class'    => 'active-placeholder',
 					'desc_tip' => true,
 					'advanced' => true,
 					'value'	   => $post_type_values['meta_description']

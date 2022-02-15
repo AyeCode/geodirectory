@@ -81,82 +81,82 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 		public function get_settings( $current_section = '' ) {
 			if ( $current_section == 'categories' ) {
 				$settings = apply_filters( 'geodir_import_export_listings_settings', array(
-					array(
-						'title' 	=> '',//__( 'Import & Export Categories', 'geodirectory' ),
-						'type' 		=> 'title',
-						'id' 		=> 'import_export_options',
-					),
+//					array(
+//						'title' 	=> '',//__( 'Import & Export Categories', 'geodirectory' ),
+//						'type' 		=> 'title',
+//						'id' 		=> 'import_export_options',
+//					),
 
 					array(
 						'id'       => 'import_export_categories',
 						'type'     => 'import_export_categories',
 					),
 
-					array(
-						'type' 	=> 'sectionend',
-						'id' 	=> 'import_export_options',
-					),
+//					array(
+//						'type' 	=> 'sectionend',
+//						'id' 	=> 'import_export_options',
+//					),
 
 				));
 
 			} elseif ( $current_section == 'reviews' ) {
 				$settings = apply_filters( 'geodir_import_export_reviews_settings', array(
-					array(
-						'title' 	=> '',
-						'type' 		=> 'title',
-						'id' 		=> 'import_export_options',
-					),
+//					array(
+//						'title' 	=> '',
+//						'type' 		=> 'title',
+//						'id' 		=> 'import_export_options',
+//					),
 
 					array(
 						'id'       => 'import_export_reviews',
 						'type'     => 'import_export_reviews',
 					),
 
-					array(
-						'type' 	=> 'sectionend',
-						'id' 	=> 'import_export_options',
-					),
+//					array(
+//						'type' 	=> 'sectionend',
+//						'id' 	=> 'import_export_options',
+//					),
 
 				));
 
 			} elseif ( 'settings' == $current_section ) {
 
 				$settings = apply_filters( 'geodir_import_export_geodirectory_settings', array(
-					array(
-						'title' 	=> '',//__( 'Import & Export Categories', 'geodirectory' ),
-						'type' 		=> 'title',
-						'id' 		=> 'import_export_options',
-					),
+//					array(
+//						'title' 	=> '',//__( 'Import & Export Categories', 'geodirectory' ),
+//						'type' 		=> 'title',
+//						'id' 		=> 'import_export_options',
+//					),
 
 					array(
 						'id'       => 'import_export_settings',
 						'type'     => 'import_export_settings',
 					),
 
-					array(
-						'type' 	=> 'sectionend',
-						'id' 	=> 'import_export_options',
-					),
+//					array(
+//						'type' 	=> 'sectionend',
+//						'id' 	=> 'import_export_options',
+//					),
 
 				));
 
 			} else {
 				$settings = apply_filters( 'geodir_import_export_listings_settings', array(
-					array(
-						'title' 	=> '',//__( 'Import & Export Listings', 'geodirectory' ),
-						'type' 		=> 'title',
-						'id' 		=> 'import_export_options',
-					),
+//					array(
+//						'title' 	=> '',//__( 'Import & Export Listings', 'geodirectory' ),
+//						'type' 		=> 'title',
+//						'id' 		=> 'import_export_options',
+//					),
 
 					array(
 						'id'       => 'import_export_listings',
 						'type'     => 'import_export_listings',
 					),
 
-					array(
-						'type' 	=> 'sectionend',
-						'id' 	=> 'import_export_options',
-					),
+//					array(
+//						'type' 	=> 'sectionend',
+//						'id' 	=> 'import_export_options',
+//					),
 
 				));
 			}
@@ -177,7 +177,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 				var timoutC, timoutP, timoutR;
 
 				function gd_imex_PrepareImport(el, type) {
-					var cont = jQuery(el).closest('.gd-imex-box');
+					var cont = jQuery(el).closest('.card-body');
 					var gd_prepared = jQuery('#gd_prepared', cont).val();
 					var uploadedFile = jQuery('#gd_im_' + type, cont).val();
 					jQuery('gd-import-msg', cont).hide();
@@ -223,13 +223,13 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 				}
 
 				function gd_imex_StartImport(el, type) {
-					var cont = jQuery(el).closest('.gd-imex-box');
+					var cont = jQuery(el).closest('.card-body');
 
 					var limit = 1;
 					var total = parseInt(jQuery('#gd_total', cont).val());
 					var total_processed = parseInt(jQuery('#gd_processed', cont).val());
 					var uploadedFile = jQuery('#gd_im_' + type, cont).val();
-					var choice = jQuery('input[name="gd_im_choice'+ type +'"]:checked', cont).val();
+					var choice = jQuery('.gd_im_choicepost', cont).val();
 
 					if (!uploadedFile) {
 						jQuery('#gd_import_data', cont).removeAttr('disabled').show();
@@ -552,20 +552,13 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 
 				jQuery(function($){
-					//jQuery('.postbox.gd-hndle-pbox').addClass('closed');
-					jQuery('.gd-import-export .postbox .gd-hndle-click, .gd-import-export .postbox .button-link').on("click",function(e){
-						var $this = this;
-						var $postbox = jQuery($this).closest('.postbox');
-
-						$postbox.toggleClass('closed');
-					});
 
 					var intIp;
 					var intIc;
 
 					jQuery(".gd-imex-pupload").on("click",function () {
 						var $this = this;
-						var $cont = jQuery($this).closest('.gd-imex-box');
+						var $cont = jQuery($this).closest('.card-body');
 						clearInterval(intIp);
 						intIp = setInterval(function () {
 							if (jQuery($cont).find('.gd-imex-file').val()) {
@@ -576,7 +569,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 					jQuery(".gd-imex-cupload").on("click",function () {
 						var $this = this;
-						var $cont = jQuery($this).closest('.gd-imex-box');
+						var $cont = jQuery($this).closest('.card-body');
 						clearInterval(intIc);
 						intIc = setInterval(function () {
 							if (jQuery($cont).find('.gd-imex-file').val()) {
@@ -603,7 +596,9 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					jQuery('#gd_ie_exposts_submit').on("click",function(){
 						pseconds = 1;
 
-						var el = jQuery(this).closest('.postbox');
+						jQuery('.gd-export-listings-progress').show();
+
+						var el = jQuery(this).closest('#gd_ie_ex_posts');
 						var post_type = jQuery(el).find('#gd_post_type').val();
 						if ( !post_type ) {
 							jQuery(el).find('#gd_post_type').focus();
@@ -649,7 +644,9 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					jQuery('#gd_ie_excats_submit').on("click",function(){
 						cseconds = 1;
 
-						var el = jQuery(this).closest('.postbox');
+						jQuery('.gd-export-categories-progress').show();
+
+						var el = jQuery(this).closest('.card-body');
 						var post_type = jQuery(el).find('#gd_post_type').val();
 						if ( !post_type ) {
 							jQuery(el).find('#gd_post_type').focus();
@@ -840,7 +837,8 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					function geodir_start_export(el) {
 						var $this, $parent, sExport, fields = '', iPerPage;
 						$this = $(el);
-						$parent = $this.closest('.postbox');
+						jQuery('.gd-export-reviews-progress').show();
+						$parent = $this.closest('.card-body');
 						sExport = $this.data('export');
 						iPerPage = parseInt($('#gd_chunk_size', $parent).val());
 						if (!sExport) {
@@ -990,7 +988,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 					//alert('import');
 
-					var cont = jQuery(el).closest('.gd-imex-box');
+					var cont = jQuery(el).closest('.card-body');
 					var gd_prepared = jQuery('#gd_prepared', cont).val();
 					var uploadedFile = jQuery('#gd_im_' + type, cont).val();
 					jQuery('gd-import-msg', cont).hide();
@@ -1007,10 +1005,10 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 							success: function(data) {
 								if(typeof data == 'object') {
 									if(data.success) {
-										jQuery('#gd-import-msg', cont).find('#message').removeClass('error').addClass('updated').html('<p>' + data.data + '</p>');
+										jQuery('#gd-import-msg', cont).find('#message').removeClass('error').addClass('updated').html( data.data );
 										jQuery('#gd-import-msg', cont).show();
 									} else{
-										jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html('<p>' + data.data + '</p>');
+										jQuery('#gd-import-msg', cont).find('#message').removeClass('updated').addClass('error').html( data.data );
 										jQuery('#gd-import-msg', cont).show();
 									}
 								}

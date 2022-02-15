@@ -1186,6 +1186,9 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				if( !empty( $args['link'] ) && $post_id && $args['link'] = str_replace("%%post_url%%",get_permalink($post_id),$args['link']) ){
 					// will be replace in condition check
 				}
+				if ( ! empty( $args['link'] ) ) {
+					$args['link'] = geodir_replace_variables($args['link']);
+				}
 
 				if ( empty( $badge ) ) {
 					if ( empty( $badge ) && $match_field == 'post_date' ) {

@@ -369,6 +369,19 @@ class GeoDir_Post_types {
 
 				//print_r($args);
 
+//				$args['template'] = array(
+//					array( 'core/columns', array(), array(
+//						array( 'core/column', array(), array(
+//							array( 'core/image', array() ),
+//						) ),
+//						array( 'core/column', array(), array(
+//							array( 'core/paragraph', array(
+//								'placeholder' => 'Add a inner paragraph'
+//							) ),
+//						) ),
+//					) )
+//				);
+
 				register_post_type($post_type, $args);
 
 			endforeach;

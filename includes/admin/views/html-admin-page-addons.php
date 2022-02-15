@@ -51,7 +51,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 				<div class="membership-cta-contet">
 					<div class="main-cta">
-							<h2><?php echo __("Membership benefit Includes:","geodirectory"); ?></h2>
+							<h2><?php echo __("Membership benefits Includes:","geodirectory"); ?></h2>
 							<div class="feature-list">
 								<ul>
 

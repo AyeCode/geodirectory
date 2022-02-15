@@ -38,7 +38,7 @@ abstract class GeoDir_Settings_Page {
 	 */
 	public function __construct() {
 		add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
-		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+//		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
 		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
 		add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
 		add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
@@ -167,7 +167,7 @@ abstract class GeoDir_Settings_Page {
      *
      * @since 2.0.0
      */
-	public static function toggle_advanced_button(){
+	public static function toggle_advanced_button($btn_class = 'btn btn-sm btn-primary ml-auto gd-advanced-toggle',$init = true){
 
 		$show = geodir_get_option( 'admin_disable_advanced', false );
 
@@ -187,31 +187,34 @@ abstract class GeoDir_Settings_Page {
 		}
 		?>
 		<style>
-			.gd-advanced-setting,#default_location_set_address_button{display: none;}
-			.gd-advanced-setting.gda-show,#default_location_set_address_button.gda-show{display: block;}
-			tr.gd-advanced-setting.gda-show{display: table-row;}
-			li.gd-advanced-setting.gda-show{display: list-item;}
+
+			/*.gd-advanced-setting,#default_location_set_address_button{display: none;}*/
+			/*.gd-advanced-setting.gda-show,#default_location_set_address_button.gda-show{display: block;}*/
+			/*tr.gd-advanced-setting.gda-show{display: table-row;}*/
+			/*li.gd-advanced-setting.gda-show{display: list-item;}*/
+
 			/* Show Advanced */
-			.gd-advanced-toggle .gdat-text-show {display: block;}
-			.gd-advanced-toggle .gdat-text-hide {display: none;}
+			.gd-advanced-btn .gdat-text-show {display: block;}
+			.gd-advanced-btn .gdat-text-hide {display: none;}
 
 			/* Hide Advanced */
-			.gd-advanced-toggle.gda-hide .gdat-text-show {display: none;}
-			.gd-advanced-toggle.gda-hide .gdat-text-hide {display: block;}
+			.gd-advanced-btn.gda-hide .gdat-text-show {display: none;}
+			.gd-advanced-btn.gda-hide .gdat-text-hide {display: block;}
 		</style>
 
 		<?php
-
-		echo "<button class='button-primary gd-advanced-toggle $toggle_CSS' type=\"button\"  >";
+		echo "<button class='".esc_attr( $btn_class )." gd-advanced-btn $toggle_CSS' type=\"button\"  >";
 		echo "<span class='gdat-text-show'>$text_show</span>";
 		echo "<span class='gdat-text-hide'>$text_hide</span>";
 		echo "</button>";
 
-		?>
-		<script>
-			init_advanced_settings();
-		</script>
-		<?php
+		if( $init ) {
+			?>
+			<script>
+				init_advanced_settings();
+			</script>
+			<?php
+		}
 	}
 
 	/**
@@ -220,21 +223,36 @@ abstract class GeoDir_Settings_Page {
 	public function output_sections() {
 		global $current_section;
 
+		$output = '';
+
 		$sections = $this->get_sections();
 
-		if ( empty( $sections ) || 1 === sizeof( $sections ) ) {
-			return;
+		if ( !empty( $sections ) && sizeof( $sections ) > 1 ) {
+			$output .= '<ul class="subsubsub m-0 p-0	">';
+
+			$array_keys = array_keys( $sections );
+
+			foreach ( $sections as $id => $label ) {
+				$output .= '<li><a href="' . admin_url( 'admin.php?page=gd-settings&tab=' . $this->id . '&section=' . sanitize_title( $id ) ) . '" class="' . ( $current_section == $id ? 'current' : '' ) . '">' . $label . '</a> ' . ( end( $array_keys ) == $id ? '' : '|' ) . ' </li>';
+			}
+
+			$output .= '</ul>';
 		}
 
-		echo '<ul class="subsubsub">';
+		ob_start();
 
-		$array_keys = array_keys( $sections );
+		$this->output_toggle_advanced();
 
-		foreach ( $sections as $id => $label ) {
-			echo '<li><a href="' . admin_url( 'admin.php?page=gd-settings&tab=' . $this->id . '&section=' . sanitize_title( $id ) ) . '" class="' . ( $current_section == $id ? 'current' : '' ) . '">' . $label . '</a> ' . ( end( $array_keys ) == $id ? '' : '|' ) . ' </li>';
+		$output .= ob_get_clean();
+
+		if ( $output ) {
+			echo "<div class='clearfix d-flex align-content-center flex-wrap'>";
+			echo $output;
+			echo "</div>";
 		}
 
-		echo '</ul><br class="clear" />';
+
+
 	}
 
 	/**

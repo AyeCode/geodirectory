@@ -118,7 +118,7 @@ class GeoDir_Admin_Addons {
 		$api_url = "https://wpgeodirectory.com/edd-api/v2/products/";
 		$section_data = new stdClass();
 
-		//echo '###'.$section_id;
+		//delete_transient( 'gd_addons_section_' . $section_id );
 
 		if($section_id=='recommended_plugins'){
 			$section_data->products = self::get_recommend_wp_plugins_edd_formatted();
@@ -127,7 +127,7 @@ class GeoDir_Admin_Addons {
 			if ( false === ( $section_data = get_transient( 'gd_addons_section_' . $section_id ) ) ) { //@todo restore after testing
 //			if ( 1==1) {
 
-				$query_args = array( 'category' => $section_id, 'number' => 100);
+				$query_args = array( 'category' => $section_id, 'number' => 100, 'orderby' => 'sales', 'order' => 'desc');
 				$query_args = apply_filters('wpeu_edd_api_query_args',$query_args,$api_url,$section_id);
 
 				$raw_section = wp_safe_remote_get( esc_url_raw( add_query_arg($query_args ,$api_url) ), array( 'user-agent' => 'GeoDirectory Addons Page','timeout'     => 15, ) );
@@ -212,6 +212,12 @@ class GeoDir_Admin_Addons {
 					$file = $p_slug;break;
 				}
 			}
+		}
+
+
+		// if no file then try to guess it
+		if ( ! $file && isset($addon->licensing->edd_slug)) {
+			$file = esc_attr($addon->licensing->edd_slug)."/".esc_attr($addon->licensing->edd_slug).".php";
 		}
 
 
@@ -518,18 +524,21 @@ class GeoDir_Admin_Addons {
 				'url'   => 'https://wordpress.org/plugins/ayecode-connect/',
 				'slug'   => 'ayecode-connect',
 				'name'   => 'AyeCode Connect',
+				'file'  => 'ayecode-connect/ayecode-connect.php',
 				'desc'   => __( 'Allows you to install any purchased AyeCode Ltd product add-ons without a zip file. It also installs and activates licences automatically, so there is no need to copy/paste licenses.', 'geodirectory' ),
 			),
 			'ninja-forms' => array(
 				'url'   => 'https://wordpress.org/plugins/ninja-forms/',
 				'slug'   => 'ninja-forms',
 				'name'   => 'Ninja Forms',
+				'file'  => 'ninja-forms/ninja-forms.php',
 				'desc'   => __('Setup forms such as contact or booking forms for your listings.','geodirectory'),
 			),
 			'userswp' => array(
 				'url'   => 'https://wordpress.org/plugins/userswp/',
 				'slug'   => 'userswp',
 				'name'   => 'UsersWP',
+				'file'  => 'userswp/userswp.php',
 				'desc'   => __('Allow frontend user login and registration as well as have slick profile pages.','geodirectory'),
 			),
 			// just testing script for below plugins
@@ -572,5 +581,11 @@ class GeoDir_Admin_Addons {
 		}
 
 		return $formatted;
+	}
+
+	public static function get_wizard_paid_addons(){
+		$addons = self::get_section_data( 'addons' );
+		
+		return $addons;
 	}
 }

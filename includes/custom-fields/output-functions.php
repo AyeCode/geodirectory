@@ -1610,7 +1610,7 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
 						}
 						$lightbox_attrs = apply_filters( 'geodir_link_to_lightbox_attrs', '' );
 
-                        $outout_item .= '<span class="geodir-cf-file-name clearfix mb-1"><i aria-hidden="true" class="fa fa-file-image"></i> ' . $_filename . '</span>';
+                        $outout_item .= '<span class="geodir-cf-file-name text-break clearfix mb-1"><i aria-hidden="true" class="fa fa-file-image"></i> ' . $_filename . '</span>';
                         $outout_item .= '<a href="' . $url . '" class="geodir-lightbox-image ' . $image_wrap_class . '" data-lity ' . $lightbox_attrs . '>';
                         $outout_item .= '';//@todo this function needs replaced ::::::: geodir_show_image(array('src' => $file), 'thumbnail', false, false)
 
@@ -1641,11 +1641,11 @@ function geodir_cf_file( $html, $location, $cf, $p = '', $output = '' ) {
                         $outout_item .= '</a>';
                     } elseif ( in_array( $uploaded_file_type, $audio_file_types ) || in_array( $file_ext, wp_get_audio_extensions() ) ) { // Audio
                         $file_type = 'audio';
-                        $outout_item .= '<span class="geodir-cf-file-name clearfix"><i aria-hidden="true" class="fa fa-file-audio"></i> ' . $_filename . '</span>';
+                        $outout_item .= '<span class="geodir-cf-file-name text-break clearfix"><i aria-hidden="true" class="fa fa-file-audio"></i> ' . $_filename . '</span>';
                         $outout_item .= do_shortcode( '[audio src="' . $url . '" ]' );
                     } elseif ( in_array( $file_ext, wp_get_video_extensions() ) ) { // Video
                         $file_type = 'video';
-                        $outout_item .= '<span class="geodir-cf-file-name clearfix"><i aria-hidden="true" class="fa fa-file-video"></i> ' . $_filename . '</span>';
+                        $outout_item .= '<span class="geodir-cf-file-name text-break clearfix"><i aria-hidden="true" class="fa fa-file-video"></i> ' . $_filename . '</span>';
                         $outout_item .= do_shortcode( wp_embed_handler_video( array(), array(), $url, array() ) );
                     } else {
                         $outout_item .= '<a class="gd-meta-file" href="' . $url . '" target="_blank" data-lity title="' . esc_attr( $title ) . '"><i aria-hidden="true" class="fa fa-file"></i> ' . $_filename . '</a>';

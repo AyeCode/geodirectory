@@ -23,7 +23,7 @@ function gd_wizard_add_widgets_top($security){
         data: data, // serializes the form's elements.
         beforeSend: function()
         {
-            jQuery( ".geodir-wizard-widgets-top-result" ).html('<i class="fas fa-sync fa-spin" style="font-size:18px"></i>');
+            jQuery( ".geodir-wizard-widgets-top-result" ).html('<div class="spinner-border text-dark" role="status"></div>');
 
         },
         success: function(data)
@@ -58,7 +58,7 @@ function gd_wizard_add_widgets($security){
         data: data, // serializes the form's elements.
         beforeSend: function()
         {
-            jQuery( ".geodir-wizard-widgets-result" ).html('<i class="fas fa-sync fa-spin" style="font-size:18px"></i>');
+            jQuery( ".geodir-wizard-widgets-result" ).html('<div class="spinner-border text-dark" role="status"></div>');
 
         },
         success: function(data)
@@ -95,7 +95,7 @@ function gd_wizard_setup_menu($security){
         data: data, // serializes the form's elements.
         beforeSend: function()
         {
-            jQuery( ".geodir-wizard-menu-result" ).html('<i class="fas fa-sync fa-spin" style="font-size:18px"></i>');
+            jQuery( ".geodir-wizard-menu-result" ).html('<div class="spinner-border text-dark" role="status"></div>');
 
         },
         success: function(data)
@@ -109,8 +109,8 @@ function gd_wizard_setup_menu($security){
     return false;
 }
 
-function gd_wizard_install_plugin($slug,$nonce){
-    //alert($slug);
+function gd_wizard_install_plugin($slug,$nonce,$activate){
+    // alert($slug);
 
     var data = {
         'action':           'install-plugin',
@@ -118,13 +118,38 @@ function gd_wizard_install_plugin($slug,$nonce){
         'slug':              $slug
     };
 
+    $id =  jQuery('#'+$slug).data("id");
+    if($id) {
+        $licence =  jQuery('#'+$slug).data("key");
+
+        if($licence && $licence!='free'){
+            data.license = $licence;
+            data.wpeu_activate = 1; // activate the licence first or it won't allow download from the url.
+        }else if($licence=='free'){
+            data.free_download = '1'; // requires EDD free downloads to work
+        }
+
+        data.item_id = $id;
+        data.update_url = 'https://wpgeodirectory.com/';
+    }
+
+    $ajaxurl = ajaxurl;
+    if($activate){
+        data = {};
+        $ajaxurl = $activate;
+    }else if($id){
+        $url = jQuery('#'+$slug).data("activateurl");
+    }
+
+    console.log(data);
+
     jQuery.ajax({
         type: "POST",
-        url: ajaxurl,
+        url: $ajaxurl,
         data: data, // serializes the form's elements.
         beforeSend: function()
         {
-           jQuery( "."+$slug + " .gd-plugin-status").html(jQuery('#gd-installing-text').val());
+            jQuery( "."+$slug + " .gd-plugin-status").removeClass('d-none').html(jQuery('#gd-installing-text').val());
 
         },
         success: function(data)
@@ -133,12 +158,15 @@ function gd_wizard_install_plugin($slug,$nonce){
             //     jQuery( ".geodir-wizard-widgets-result" ).text(data.data);
             // }
             console.log(data);
-            if(data.success){
+            if(data.success || $activate){
                 jQuery( "."+$slug + " .gd-plugin-status").html(jQuery('#gd-installed-text').val());
                 jQuery( "."+$slug + " input:checkbox").removeClass('gd_install_plugins').prop("disabled", true);
-                gd_wizard_check_plugins();
                 gd_wizard_install_plugins($nonce);
-                if(data.data.activateUrl){
+                gd_wizard_check_plugins();
+
+                if($id && $url){
+                    gd_wizard_activate_plugin($url,$slug);
+                }else if(!$activate && data.data.activateUrl){
                     gd_wizard_activate_plugin(data.data.activateUrl,$slug);
                 }
             }else{
@@ -162,12 +190,25 @@ function gd_wizard_activate_plugin($url,$slug){
 function gd_wizard_install_plugins($nonce){
     //alert($slug);
 
+    // disable buttons
+    jQuery('.gd-install-recommend,.gd-install-skip').addClass('d-none');
+    jQuery('.gd-installing').removeClass('d-none');
+
+    // return;
+
     var $result = '';
     jQuery('.gd_install_plugins').each(function() {
         if(this.checked){
             console.log(this.id);
-            $result = gd_wizard_install_plugin(this.id,$nonce);
-            jQuery('.gd-install-recommend').prop("disabled", true);
+            $status = jQuery(this).data("status");
+            $slug = jQuery(this).data("slug");
+            $url = jQuery(this).data("activateurl");
+            if($status=='install'){
+                $result = gd_wizard_install_plugin(this.id,$nonce);
+            }else{
+                $result = gd_wizard_install_plugin(this.id,$nonce,$url);
+            }
+
             return false;// break so we run from next function
         }
     });
@@ -181,11 +222,12 @@ function gd_wizard_check_plugins(){
     console.log($install);
 
     if($install){
-        jQuery('.gd-install-recommend').show();
-        jQuery('.gd-continue-recommend').hide();
+        jQuery('.gd-install-recommend').removeClass('d-none');
+        jQuery('.gd-continue-recommend').addClass('d-none');
     }else{
-        jQuery('.gd-install-recommend').hide();
-        jQuery('.gd-continue-recommend').show();
+        jQuery('.gd-installing').addClass('d-none');
+        jQuery('.gd-install-recommend').addClass('d-none');
+        jQuery('.gd-continue-recommend').removeClass('d-none');
     }
 }
 
@@ -195,4 +237,28 @@ jQuery(function() {
     jQuery('.gd_install_plugins').on("click",function() {
         gd_wizard_check_plugins();
     });
+
+    jQuery('#gd-wizard-save-map-key').submit(function(event) {
+        $api_key = jQuery('#google_maps_api_key').val();
+        if($api_key && $api_key!=jQuery('#google_maps_api_key').data("key-original")){
+            jQuery('#geodir_validate_google_api_key_error_project,#geodir_validate_google_api_key_error_invalid,#geodir_validate_google_api_key_error_referer').toast('hide');
+            geodir_validate_google_api_key($api_key,'google_maps_api_key');
+            event.preventDefault();
+
+            setTimeout(function (){
+
+                // if no error then try to submit again
+                if( gd_has_map_error ){
+                    $btn_val = jQuery('.submit-btn').data("continue-text");
+                    jQuery('.submit-btn').removeClass('disabled').html( $btn_val );
+                }else{
+                    jQuery('#google_maps_api_key').data("key-original",$api_key);
+                    jQuery('#gd-wizard-save-map-key .submit-btn').click();
+                }
+
+            }, 8000);
+
+        }
+    });
+
 });

@@ -29,7 +29,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 
 			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
-			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
+//			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
 
 			add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
 			add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
@@ -97,7 +97,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_user_pending_post_subject',
 						'type' => 'text',
-						'class' => 'large-text',
+						'class' => 'active-placeholder',
 						'desc_tip' => true,
 						'placeholder' => GeoDir_Defaults::email_user_pending_post_subject(),
 						'advanced' => true
@@ -132,7 +132,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_user_publish_post_subject',
 						'type' => 'text',
-						'class' => 'large-text',
+						'class' => 'active-placeholder',
 						'desc_tip' => true,
 						'placeholder' => GeoDir_Defaults::email_user_publish_post_subject(),
 						'advanced' => true
@@ -164,7 +164,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_owner_comment_submit_subject',
 						'type' => 'text',
-						'class' => 'large-text',
+						'class' => 'active-placeholder',
 						'desc_tip' => true,
 						'placeholder' => GeoDir_Defaults::email_owner_comment_submit_subject(),
 						'advanced' => true
@@ -196,7 +196,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_owner_comment_approved_subject',
 						'type' => 'text',
-						'class' => 'large-text',
+						'class' => 'active-placeholder',
 						'desc_tip' => true,
 						'placeholder' => GeoDir_Defaults::email_owner_comment_approved_subject(),
 						'advanced' => true
@@ -227,7 +227,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_author_comment_approved_subject',
 						'type' => 'text',
-						'class' => 'large-text',
+						'class' => 'active-placeholder',
 						'desc_tip' => true,
 						'placeholder' => GeoDir_Defaults::email_author_comment_approved_subject(),
 						'advanced' => true
@@ -264,7 +264,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_admin_pending_post_subject',
 						'type' => 'text',
-						'class' => 'large-text',
+						'class' => 'active-placeholder',
 						'desc_tip' => true,
 						'placeholder' => GeoDir_Defaults::email_admin_pending_post_subject(),
 						'advanced' => true
@@ -299,7 +299,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_admin_post_edit_subject',
 						'type' => 'text',
-						'class' => 'large-text',
+						'class' => 'active-placeholder',
 						'desc_tip' => true,
 						'placeholder' => GeoDir_Defaults::email_admin_post_edit_subject(),
 						'advanced' => true
@@ -333,7 +333,7 @@ if ( ! class_exists( 'GeoDir_Settings_Emails', false ) ) :
 						'desc' => __('The email subject.', 'geodirectory'),
 						'id' => 'email_admin_moderate_comment_subject',
 						'type' => 'text',
-						'class' => 'large-text',
+						'class' => 'active-placeholder',
 						'desc_tip' => true,
 						'placeholder' => GeoDir_Defaults::email_admin_moderate_comment_subject(),
 						'advanced' => true

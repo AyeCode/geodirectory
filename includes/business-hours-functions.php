@@ -1058,7 +1058,7 @@ function geodir_offset_to_minutes( $offset ) {
  * @param string $manual_offsets Whether to include manual offsets.
  * @return string
  */
-function geodir_timezone_choice( $selected_zone, $locale = null, $manual_offsets = false ) {
+function geodir_timezone_choice( $selected_zone, $locale = null, $manual_offsets = false, $return_array = false ) {
 	static $mo_loaded = false, $locale_loaded = null;
 
 	$continents = array( 'Africa', 'America', 'Antarctica', 'Arctic', 'Asia', 'Atlantic', 'Australia', 'Europe', 'Indian', 'Pacific' );
@@ -1104,17 +1104,26 @@ function geodir_timezone_choice( $selected_zone, $locale = null, $manual_offsets
 
 	$structure = array();
 
-	//if ( empty( $selected_zone ) ) {
-		//$structure[] = '<option selected="selected" value="">' . __( 'Select a city', 'geodirectory' ) . '</option>';
-	//}
+
 	// Do UTC.
-	$structure[] = '<optgroup label="' . esc_attr__( 'UTC', 'geodirectory' ) . '">';
-	$selected    = '';
-	if ( 'UTC' === $selected_zone || empty( $selected_zone ) ) {
-		$selected = 'selected="selected" ';
+	if ( $return_array ) {
+		$structure[] = array('optgroup' => 'start','label' => esc_attr__( 'UTC', 'geodirectory' ));
+		$structure[] = array(
+			'label' => __( 'UTC', 'geodirectory' ),
+			'value' => esc_attr( 'UTC' ),
+			'extra_attributes'  => array('data-offset' => "+0")
+		);
+		$structure[] = array( 'optgroup' => 'end' );
+	}else{
+		$structure[] = '<optgroup label="' . esc_attr__( 'UTC', 'geodirectory' ) . '">';
+		$selected    = '';
+		if ( 'UTC' === $selected_zone || empty( $selected_zone ) ) {
+			$selected = 'selected="selected" ';
+		}
+		$structure[] = '<option ' . $selected . 'value="' . esc_attr( 'UTC' ) . '" data-offset="+0">' . __( 'UTC', 'geodirectory' ) . '</option>';
+		$structure[] = '</optgroup>';
 	}
-	$structure[] = '<option ' . $selected . 'value="' . esc_attr( 'UTC' ) . '" data-offset="+0">' . __( 'UTC', 'geodirectory' ) . '</option>';
-	$structure[] = '</optgroup>';
+
 
 	foreach ( $zonen as $key => $zone ) {
 		// Build value in an array to join later.
@@ -1129,7 +1138,7 @@ function geodir_timezone_choice( $selected_zone, $locale = null, $manual_offsets
 			// Continent optgroup.
 			if ( ! isset( $zonen[ $key - 1 ] ) || $zonen[ $key - 1 ]['continent'] !== $zone['continent'] ) {
 				$label       = $zone['t_continent'];
-				$structure[] = '<optgroup label="' . esc_attr( $label ) . '">';
+				$structure[] = $return_array ? array('optgroup' => 'start','label' => esc_attr( $label ) ) : '<optgroup label="' . esc_attr( $label ) . '">';
 			}
 
 			// Add the city to the value.
@@ -1155,17 +1164,21 @@ function geodir_timezone_choice( $selected_zone, $locale = null, $manual_offsets
 		// Offset
 		$offset = $timezone_data['utc_offset'];
 		$offset_display = ! empty( $timezone_data['has_dst'] ) && ! empty( $timezone_data['is_dst'] ) ? $timezone_data['utc_offset_dst'] : $timezone_data['utc_offset'];
-		$structure[] = '<option ' . $selected . 'value="' . esc_attr( $value ) . '" data-offset="' . esc_attr( $offset ) . '">' . esc_html( $display ) . ' - UTC' . $offset_display . '</option>';
+		$structure[] = $return_array ? array(
+			'label' => esc_html( $display ) . ' - UTC' . $offset_display,
+			'value' => esc_attr( $value ),
+			'extra_attributes'  => array('data-offset' => esc_attr( $offset ) )
+		) : '<option ' . $selected . 'value="' . esc_attr( $value ) . '" data-offset="' . esc_attr( $offset ) . '">' . esc_html( $display ) . ' - UTC' . $offset_display . '</option>';
 
 		// Close continent optgroup.
 		if ( ! empty( $zone['city'] ) && ( ! isset( $zonen[ $key + 1 ] ) || ( isset( $zonen[ $key + 1 ] ) && $zonen[ $key + 1 ]['continent'] !== $zone['continent'] ) ) ) {
-			$structure[] = '</optgroup>';
+			$structure[] = $return_array ? array( 'optgroup' => 'end' ) : '</optgroup>';
 		}
 	}
 
 	// Do manual UTC offsets.
 	if ( $manual_offsets ) {
-		$structure[]  = '<optgroup label="' . esc_attr__( 'Manual Offsets', 'geodirectory' ) . '">';
+		$structure[]  = $return_array ? array('optgroup' => 'start','label' => esc_attr__( 'Manual Offsets', 'geodirectory' ) ) : '<optgroup label="' . esc_attr__( 'Manual Offsets', 'geodirectory' ) . '">';
 		$offset_range = array(
 			-12,
 			-11.5,
@@ -1239,15 +1252,22 @@ function geodir_timezone_choice( $selected_zone, $locale = null, $manual_offsets
 			if ( $offset_value === $selected_zone ) {
 				$selected = 'selected="selected" ';
 			}
-			$structure[] = '<option ' . $selected . 'value="' . esc_attr( $offset_value ) . '" data-offset="' . esc_attr( $_offset_name ) . '">' . esc_html( $offset_name ) . '</option>';
+			$structure[] = $return_array ? array(
+				'label' => esc_html( $offset_name ),
+				'value' => esc_attr( $offset_value ),
+				'extra_attributes'  => array('data-offset' => esc_attr( $_offset_name )  )
+			) : '<option ' . $selected . 'value="' . esc_attr( $offset_value ) . '" data-offset="' . esc_attr( $_offset_name ) . '">' . esc_html( $offset_name ) . '</option>';
 
 		}
-		$structure[] = '</optgroup>';
+		$structure[] = $return_array ? array( 'optgroup' => 'end' ) : '</optgroup>';
 	}
 
-	$structure = apply_filters( 'geodir_timezone_choice_options', $structure, $selected_zone, $locale, $manual_offsets );
+	$structure = apply_filters( 'geodir_timezone_choice_options', $structure, $selected_zone, $locale, $manual_offsets, $return_array );
 
-	$structure = is_array( $structure ) && ! empty( $structure ) ? join( "\n", $structure ) : '';
+	if( !$return_array ){
+		$structure = is_array( $structure ) && ! empty( $structure ) ? join( "\n", $structure ) : '';
+	}
+
 
 	return $structure;
 }

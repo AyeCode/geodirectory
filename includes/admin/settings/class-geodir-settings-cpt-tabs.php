@@ -122,7 +122,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		 */
 		public function left_panel_content() {
 			?>
-			<h3><?php _e( 'Standard Fields', 'geodirectory' ); ?></h3>
+			<h3 class="h6 text-muted"><?php _e( 'Standard Fields', 'geodirectory' ); ?></h3>
 
 			<div class="inside">
 
@@ -143,7 +143,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 			</div>
 
-			<h3><?php _e( 'Predefined Fields', 'geodirectory' ); ?></h3>
+			<h3 class="h6  text-muted"><?php _e( 'Predefined Fields', 'geodirectory' ); ?></h3>
 			<div class="inside">
 
 				<div id="gd-form-builder-tab-predefined" class="gd-form-builder-tab gd-tabs-panel">
@@ -163,7 +163,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 
 			</div>
 
-			<h3><?php _e( 'Custom Fields', 'geodirectory' ); ?></h3>
+			<h3 class="h6  text-muted"><?php _e( 'Custom Fields', 'geodirectory' ); ?></h3>
 			<div class="inside">
 
 				<div id="gd-form-builder-tab" class="gd-tabs-panel">
@@ -376,7 +376,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		 */
 		public function output_fields($cfs) {
 			if ( ! empty( $cfs ) ) {
-				echo '<ul>';
+				echo '<ul class="row row-cols-2 px-2">';
 				foreach ( $cfs as $id => $cf ) {
 					$cf = stripslashes_deep( (array)$cf );
 					// tab icon
@@ -391,9 +391,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 						$tab_icon = '<i class="fas fa-cog" aria-hidden="true"></i>';
 					}
 					?>
-					<li>
+					<li class="col px-1">
 						<a id="gd-<?php echo esc_attr($cf['tab_key']); ?>"
-						   class="gd-draggable-form-items gd-fieldset"
+						   class="gd-draggable-form-items gd-fieldset  btn btn-sm d-block m-0 btn-outline-gray text-dark text-left"
 						   href="javascript:void(0);"
 						   data-tab_layout="post"
 						   data-tab_type="<?php echo esc_attr($cf['tab_type']); ?>"
@@ -542,9 +542,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Tabs', false ) ) :
 		public function output_custom_fields($sub_tab = '', $post_type ='' ) {
 
 			// insert the required code for the SD button.
-			$js_insert_function = self::insert_shortcode_function();
-			WP_Super_Duper::shortcode_insert_button('',$js_insert_function);
-
+			$js_insert_function = '';//self::insert_shortcode_function();
+//			WP_Super_Duper::shortcode_insert_button('',$js_insert_function);
+			add_thickbox();
+			add_action( 'admin_footer', array( 'WP_Super_Duper', 'shortcode_insert_button_script' ) );
 
 			$cfs = self::get_custom_fields($post_type);
 			self::output_fields($cfs);

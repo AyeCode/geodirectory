@@ -147,8 +147,9 @@ function geodir_help_tip( $tip, $allow_html = false ) {
 	} else {
 		$tip = esc_attr( $tip );
 	}
-
-	return '<span class="gd-help-tip dashicons dashicons-editor-help" title="' . $tip . '" data-toggle="tooltip" data-html="true"></span>';
+//<i class="fas fa-question-circle"></i>
+	return '<i class="fas fa-question-circle gd-help-tip ml-2 text-muted" title="' . $tip . '" data-toggle="tooltip" data-html="true"></i>';
+//	return '<span class="gd-help-tip dashicons dashicons-editor-help text-muted" title="' . $tip . '" data-toggle="tooltip" data-html="true"></span>';
 }
 
 /**
@@ -353,9 +354,22 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_are_you_sure'                             => __( 'Are you sure?', 'geodirectory' ),
 		'txt_saving'                                   => __( 'Saving...', 'geodirectory' ),
 		'txt_saved'                                    => __( 'Saved', 'geodirectory' ),
+		'txt_order_saved'                                    => __( 'Order saved', 'geodirectory' ),
 		'txt_preview'                                  => strip_tags( __( 'Preview', 'geodirectory' ) ),
 		'txt_edit'                                     => strip_tags( __( 'Edit', 'geodirectory' ) ),
 		'txt_delete'                                   => strip_tags( __( 'Delete', 'geodirectory' ) ),
+		'txt_cancel'                                   => strip_tags( __( 'Cancel', 'geodirectory' ) ),
+		'txt_confirm'                                   => strip_tags( __( 'Confirm', 'geodirectory' ) ),
+		'txt_yes'                                   => strip_tags( __( 'Yes', 'geodirectory' ) ),
+		'txt_deleted'                                   => strip_tags( __( 'Deleted', 'geodirectory' ) ),
+		'txt_google_key_error'                         => __( 'Google API key Error', 'geodirectory' ),
+		'txt_documentation'                            => __( 'Documentation', 'geodirectory' ),
+		'txt_google_key_verifying'                 => __( 'Verifying API Key', 'geodirectory' ),
+		'txt_google_key_enable_billing'                 => __( 'Enable Billing', 'geodirectory' ),
+		'txt_google_key_error_project'                 => __( 'Key invalid, you might have entered the project number instead of the API key', 'geodirectory' ),
+		'txt_google_key_error_invalid'                 => __( 'Key invalid, please double check you have entered it correctly', 'geodirectory' ),
+		'txt_google_key_error_referer'                 => __( 'This URL is not allowed for this API Key', 'geodirectory' ),
+		'txt_google_key_error_billing'                 => __( 'You must enable billing on your Google account.', 'geodirectory' ),
 		'gmt_offset'                                   => geodir_gmt_offset(),
 		'timezone_string'                              => geodir_timezone_string(),
 		'autosave'                                     => apply_filters('geodir_autosave',10000),// 10000 = 10 seconds, set to 0 to disable

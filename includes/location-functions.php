@@ -25,7 +25,7 @@ function geodir_create_location_slug( $location_string ) {
  * @param string $post_country The dropdown default selected country.
  * @param string $prefix Not yet implemented.
  */
-function geodir_get_country_dl($post_country = '', $prefix = '')
+function geodir_get_country_dl($post_country = '', $prefix = '', $return_array = false )
 {
     global $wpdb,$wp_country_database;
 
@@ -46,16 +46,30 @@ function geodir_get_country_dl($post_country = '', $prefix = '')
     }
     
     asort($countries);
+	
+	$array_out = array();
     
     $out_put = '<option ' . selected('', $post_country, false) . ' value="">' . __('Select Country', 'geodirectory') . '</option>';
     foreach ($countries as $country => $name) {
         $ccode = $ISO2[$country];
         $gps = $latlng[$country];
+	    $value = esc_attr($country);
 
-        $out_put .= '<option ' . selected($post_country, $country, false) . ' value="' . esc_attr($country) . '" data-country_code="' . $ccode . '" data-country_lat="' . $gps['lat'] . '" data-country_lon="' . $gps['lon'] . '" >' . $name . '</option>';
+        $out_put .= '<option ' . selected($post_country, $country, false) . ' value="' . $value . '" data-country_code="' . $ccode . '" data-country_lat="' . $gps['lat'] . '" data-country_lon="' . $gps['lon'] . '" >' . $name . '</option>';
+
+	    $array_out[$value] = array(
+		    'label' => $name,
+		    'value' => $value,
+		    'extra_attributes' => array(
+			    'data-country_code' => $ccode,
+			    'data-country_lat'  => $gps['lat'],
+			    'data-country_lon'  => $gps['lon']
+			    
+		    )
+	    );
     }
 
-    return $out_put;
+    return $return_array ? $array_out : $out_put;
 }
 
 /**

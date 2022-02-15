@@ -753,7 +753,7 @@ class GeoDir_Admin_Taxonomies {
             $columns .= $id;
         }
         
-        if ( $column == 'cat_icon' && $icon = geodir_get_cat_icon( $id, true ) ) {
+        if ( $column == 'cat_icon' && $icon = geodir_get_cat_icon( $id, true, true ) ) {
             $columns .= '<img src="' . esc_url( $icon ) . '" />';
         }
 

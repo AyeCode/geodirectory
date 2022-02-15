@@ -34,7 +34,7 @@ final class GeoDirectory {
      *
      * @var string
      */
-    public $version = '2.1.1.9';
+    public $version = '2.2';
 
     /**
      * GeoDirectory instance.

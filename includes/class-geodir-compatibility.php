@@ -493,6 +493,7 @@ class GeoDir_Compatibility {
 	 * @since 2.0.0
 	 */
 	public static function for_later_checks() {
+
 		/*######################################################
 		Boss. (BuddyBoss)
 		######################################################*/
@@ -1477,6 +1478,20 @@ class GeoDir_Compatibility {
 	 */
 	public static function buddyboss() {
 		wp_dequeue_script( 'selectboxes' );
+
+		// fix buddyboss dropdown CSS
+		$bb_css = "
+						.bsui .dropdown {
+						    position: relative !important;
+						    width: auto !important;
+						    overflow: initial !important;
+						    box-shadow: unset !important;
+						    background: inherit !important;
+						    max-height: none !important;
+						}
+					";
+		wp_add_inline_style( 'ayecode-ui', $bb_css );
+
 	}
 
 	/**

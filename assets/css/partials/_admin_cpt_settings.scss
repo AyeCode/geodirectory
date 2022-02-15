@@ -1,15 +1,5 @@
 .gd-tabs-sortable{
 
-  &.gd-sortable-sortable{
-    .dd-item{
-      .dd-item{
-        .dd-default-sort{
-          display: none;
-        }
-      }
-    }
-  }
-
   ul{
     padding-left: 25px;
 
@@ -23,12 +13,6 @@
     }
   }
 
-  .dd-setting-name{
-    .gd-help-tip{
-      float: none;
-      margin: 0;
-    }
-  }
 
 
   .dd-item,
@@ -43,20 +27,7 @@
     line-height: 25px;
   }
 
-  .dd-handle {
-    display: block;
-    height: 37px;
-    padding: 5px 10px;
-    color: #333;
-    text-decoration: none;
-    font-weight: bold;
-    background: #fafafa;
-    box-sizing: border-box;
-    -moz-box-sizing: border-box;
-  }
-  .dd-handle:hover {
-    cursor: move;
-  }
+
 
   .placeholder {
     outline: 1px dashed #4183C4;
@@ -183,47 +154,47 @@ html.lity-active{
 
 /*** CONDITIONAL FIELDS ***/
 #geodir_conditional_fields {
-    display: none;
+
     .geodir-conditional-template {
         display: none !important;
     }
-    .geodir-conditional-col {
-        display: inline-block;
-        padding: 0 .5em;
-        .geodir-conditional-el {
-            padding: 5px;
-            height: 15px;
-            line-height: 15px;
-            font-size: 13px;
-            margin: 0;
-            vertical-align: middle;
-        }
-    }
-    .geodir-conditional-row {
-        clear: both;
-        padding: .4em 0;
-    }
-    [data-conditional="action"] {
-        width: calc(20% - 1.1em);
-    }
-    [data-conditional="field"] {
-        width: calc(25% - 1.1em);
-    }
-    [data-conditional="condition"] {
-        width: calc(25% - 1.1em);
-    }
-    [data-conditional="value"] {
-        width: calc(25% - 1.1em);
-    }
-    [data-conditional="remove"] {
-        text-align: center;
-        width: calc(5% - 1em);
-    }
-    [data-setting="conditional_fields_add"] {
-        text-align: right;
-        border-bottom: solid 1px #dfdfdf;
-        padding-bottom: 10px;
-    }
+    //.geodir-conditional-col {
+    //    display: inline-block;
+    //    padding: 0 .5em;
+    //    .geodir-conditional-el {
+    //        padding: 5px;
+    //        height: 15px;
+    //        line-height: 15px;
+    //        font-size: 13px;
+    //        margin: 0;
+    //        vertical-align: middle;
+    //    }
+    //}
+    //.geodir-conditional-row {
+    //    clear: both;
+    //    padding: .4em 0;
+    ////}
+    //[data-conditional="action"] {
+    //    width: calc(20% - 1.1em);
+    //}
+    //[data-conditional="field"] {
+    //    width: calc(25% - 1.1em);
+    //}
+    //[data-conditional="condition"] {
+    //    width: calc(25% - 1.1em);
+    //}
+    //[data-conditional="value"] {
+    //    width: calc(25% - 1.1em);
+    //}
+    //[data-conditional="remove"] {
+    //    text-align: center;
+    //    width: calc(5% - 1em);
+    //}
+    //[data-setting="conditional_fields_add"] {
+    //    text-align: right;
+    //    border-bottom: solid 1px #dfdfdf;
+    //    padding-bottom: 10px;
+    //}
 }
 [data-setting="conditional_fields_heading"] {
     cursor: pointer;

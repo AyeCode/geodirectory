@@ -200,6 +200,10 @@ class GeoDir_Admin_Settings {
 	public static function output_fields( $options ) {
 	//echo 'xxx';print_r($options);
 		foreach ( $options as $value ) {
+			
+			// skip titles for import/export
+//			if( ( $value['type'] == 'title' ||  $value['type'] == 'title') substr( $string_n, 0, 4 ) === "http" )
+			
 			if ( ! isset( $value['type'] ) ) {
 				continue;
 			}
@@ -232,51 +236,121 @@ class GeoDir_Admin_Settings {
 			$custom_attributes = array();
 
 			if ( ! empty( $value['custom_attributes'] ) && is_array( $value['custom_attributes'] ) ) {
-				foreach ( $value['custom_attributes'] as $attribute => $attribute_value ) {
-					$custom_attributes[] = esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
-				}
+				$custom_attributes = $value['custom_attributes'];
+//				foreach ( $value['custom_attributes'] as $attribute => $attribute_value ) {
+//					$custom_attributes[] = esc_attr( $attribute ) . '="' . esc_attr( $attribute_value ) . '"';
+//				}
 			}
 
 			// Description handling
 			$field_description = self::get_field_description( $value );
 			extract( $field_description );
 
+
+			$boxed_settings = true;
+
+			$label_type =  isset($_REQUEST['page']) && $_REQUEST['page']=='gd-setup' ? 'top' : 'horizontal';
+
+
 			// Switch based on type
 			switch ( $value['type'] ) {
 
 				// Section Titles
-				case 'title':
+				case 'page-title':
+
 					if ( ! empty( $value['title'] ) ) {
-						$advanced = (isset($value['advanced']) && $value['advanced']) ? "gd-advanced-setting" :'';
-						echo '<h2 class="gd-settings-title '.$advanced.'">';
+
+						echo '<div class="gd-seetting-page-title"><h2 class="gd-settings-title h4 mb-0 ">';
 						echo esc_html( $value['title'] );
 						if(!empty($value['title_html'])){echo $value['title_html'];}
 						if(isset($value['desc_tip']) && $value['desc_tip']){
 							echo $tooltip_html;
 						}
-						echo '</h2>';
-					}
-					//print_r($value);
-					if ( ! empty( $value['desc'] ) && (!isset($value['desc_tip']) || !$value['desc_tip']) ) {
-						echo wpautop( wptexturize( wp_kses_post( $value['desc'] ) ) );
-					}
-
-					if(isset($value['seo_helper_tags']) && $value['seo_helper_tags']){
-						echo GeoDir_SEO::helper_tags($value['seo_helper_tags']);
-					}
-
-					echo '<table class="form-table">' . "\n\n";
-					if ( ! empty( $value['id'] ) ) {
-						do_action( 'geodir_settings_' . sanitize_title( $value['id'] ) );
+						echo '</h2></div>';
 					}
 					break;
+				case 'title':
+				case 'sectionstart':
+
+
+
+					if ( $boxed_settings ) {
+						$advanced = (isset($value['advanced']) && $value['advanced']) ? "gd-advanced-setting collapse in" :'';
+						echo '<div class="accordion '.$advanced.'" ><div class="card p-0 mw-100 border-0 shadow-sm" style="overflow: initial;">' . "\n\n";
+						if ( ! empty( $value['title'] ) ) {
+
+						echo '<div class="card-header bg-white rounded-top"><h2 class="gd-settings-title h5 mb-0 ">';
+							echo esc_html( $value['title'] );
+							if(!empty($value['title_html'])){echo $value['title_html'];}
+							if(isset($value['desc_tip']) && $value['desc_tip']){
+								echo $tooltip_html;
+							}
+						echo '</h2></div>';
+						}
+
+						echo '<div class="card-body">' . "\n\n";
+
+						//print_r($value);
+						if ( ! empty( $value['desc'] ) && (!isset($value['desc_tip']) || !$value['desc_tip']) ) {
+							echo wpautop( wptexturize( wp_kses_post( $value['desc'] ) ) );
+						}
+
+						if(isset($value['seo_helper_tags']) && $value['seo_helper_tags']){
+							echo GeoDir_SEO::helper_tags($value['seo_helper_tags']);
+						}
+
+
+
+						if ( ! empty( $value['id'] ) ) {
+							do_action( 'geodir_settings_' . sanitize_title( $value['id'] ) );
+						}
+					}else{
+
+						if ( ! empty( $value['title'] ) ) {
+							$advanced = (isset($value['advanced']) && $value['advanced']) ? "gd-advanced-setting collapse in" :'';
+							echo '<h2 class="gd-settings-title h4 clearfix '.$advanced.'">';
+							echo esc_html( $value['title'] );
+							if(!empty($value['title_html'])){echo $value['title_html'];}
+							if(isset($value['desc_tip']) && $value['desc_tip']){
+								echo $tooltip_html;
+							}
+							echo '</h2>';
+						}
+
+						if ( ! empty( $value['desc'] ) && (!isset($value['desc_tip']) || !$value['desc_tip']) ) {
+							echo wpautop( wptexturize( wp_kses_post( $value['desc'] ) ) );
+						}
+
+						if(isset($value['seo_helper_tags']) && $value['seo_helper_tags']){
+							echo GeoDir_SEO::helper_tags($value['seo_helper_tags']);
+						}
+
+						echo '<table class="form-table">' . "\n\n";
+
+						if ( ! empty( $value['id'] ) ) {
+							do_action( 'geodir_settings_' . sanitize_title( $value['id'] ) );
+						}
+					}
+
+
+					break;
+
+				// Section start
+//				case 'sectionstart':
+//
+//					echo  $boxed_settings ? '<div><div><div>' : '<table>';
+////
+//					break;
 
 				// Section Ends
 				case 'sectionend':
 					if ( ! empty( $value['id'] ) ) {
 						do_action( 'geodir_settings_' . sanitize_title( $value['id'] ) . '_end' );
 					}
-					echo '</table>';
+
+					echo  $boxed_settings ? '</div></div></div>' : '</table>';
+//					echo '</table>';
+//					echo '</div></div></div>';
 					if ( ! empty( $value['id'] ) ) {
 						do_action( 'geodir_settings_' . sanitize_title( $value['id'] ) . '_after' );
 					}
@@ -293,26 +367,27 @@ class GeoDir_Admin_Settings {
 					} else {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
-					//echo $value['id'].'zzz'.$option_value;
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<input
-								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								type="<?php echo esc_attr( $value['type'] ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								value="<?php echo esc_attr( $option_value ); ?>"
-								class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
-								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								<?php if($value['type']=='number'){echo "lang='EN'";} // HTML5 number input can change number format depending on browser language, we don't want that ?>
-								/> <?php echo $description; ?>
-						</td>
-					</tr><?php
+
+				echo aui()->input(
+					array(
+						'id'                => $value['id'],
+						'name'              => $value['id'],
+						'label_type'        => $label_type,
+						'label_col'        => '3',
+						'label_class'=> 'font-weight-bold',
+						'class' => !empty($value['class']) ? $value['class'] : '',
+						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+						'label'              => $value['title'] . $tooltip_html,
+						'type'              =>  $value['type'] ?  $value['type']  : 'text',
+						'placeholder'       => $value['placeholder'],
+						'required'       => !empty($value['required']) ? true : false,
+						'value' => $option_value,
+						'help_text'  => isset($description) ? $description : '',
+						'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+						'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+					)
+				);
+
 					break;
 
 				// Color picker.
@@ -323,24 +398,30 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-					?><tr valign="top" class="gd-row-color-picker <?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<input 
-									name="<?php echo esc_attr( $value['id'] ); ?>" 
-									id="<?php echo sanitize_key( $value['id'] ); ?>" 
-									type="text" 
-									dir="ltr"
-									value="<?php echo esc_attr( $option_value ); ?>" 
-									class="gd-color-picker" 
-									placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>" 
-									data-default-color="<?php echo esc_attr( $value['default'] ); ?> 
-									<?php echo esc_attr( implode( ' ', $custom_attributes ) ); ?> "/>&lrm; <?php echo $description; ?>
-						</td>
-					</tr><?php
+					$custom_attributes['data-default-color'] = esc_attr( $value['default'] );
+
+					echo aui()->input(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'label_class'=> 'font-weight-bold',
+//							'label_force_left'  => true,
+							//'required'          => true,
+							'class' => $value['class'].' gd-color-picker d-none',
+//							'wrap_class'    => 'gd-row-color-picker',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in gd-row-color-picker" : ' gd-row-color-picker ',
+							'label'              => $value['title'] . $tooltip_html,
+							'type'              =>  $value['type'] ?  $value['type']  : 'text',
+							'value' => $option_value,
+							'placeholder'       => $value['placeholder'],
+							'help_text'  => isset($description) ? $description : '',
+							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+
 					break;
 
 				// Color picker.
@@ -370,23 +451,36 @@ class GeoDir_Admin_Settings {
 						$show_img = '<img src="'.admin_url( 'images/media-button-image.gif' ).'" />';
 					}
 
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-					<th scope="row" class="titledesc">
-						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
-					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
 
-						<div class="gd-upload-img" data-field="<?php echo esc_attr( $value['id'] ); ?>">
-							<div class="gd-upload-display gd-img-size-<?php echo $image_size; ?> thumbnail"><div class="centered"><?php echo $show_img; ?></div></div>
-							<div class="gd-upload-fields">
-								<input type="hidden" id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" value="<?php echo esc_attr( $option_value ); ?>" />
-								<button type="button" class="gd_upload_image_button button"><?php _e( 'Upload Image', 'geodirectory' ); ?></button>
-								<button type="button" class="gd_remove_image_button button <?php echo $remove_class;?>"><?php _e( 'Remove Image', 'geodirectory' ); ?></button>
-							</div>
-						</div>
-					</td>
-					</tr><?php
+					// @todo this can be improved a lot.
+					echo aui()->input(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'label_class'=> 'font-weight-bold',
+							'class' => !empty($value['class']) ? $value['class'] : '',
+							//'required'          => true,
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'label'              => $value['title'] . $tooltip_html,
+							'type'              =>  'hidden',//$value['type'] ?  $value['type']  : 'text',
+							'placeholder'       => $value['placeholder'],
+							'value' => $option_value,
+							'help_text'  => isset($description) ? $description : '',
+							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+							'input_group_left'  => '
+							<div class="gd-upload-img" data-field="'.esc_attr( $value['id'] ).'">
+							<button type="button" class="gd_upload_image_button btn btn-outline-primary">'.__( 'Upload Image', 'geodirectory' ).'</button>
+								<button type="button" class="gd_remove_image_button btn btn-outline-primary '.$remove_class.'">'.__( 'Remove Image', 'geodirectory' ).'</button>
+							<div class="gd-upload-display gd-img-size-'.$image_size.' thumbnail"><div class="centered">'.$show_img.'</div></div>
+
+								</div>
+							',
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+
 					break;
 
 				// Textarea
@@ -398,27 +492,26 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<?php echo $description; ?>
+					$rows = !empty( $value['size'] ) ? absint($value['size']) : 4;
+					echo aui()->textarea(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'class' => !empty($value['class']) ? $value['class'] : '',
+							'label_class'=> 'font-weight-bold',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'label'              => $value['title'] . $tooltip_html,
+							'placeholder'       => $value['placeholder'],
+							'value' => $option_value,
+							'help_text'  => isset($description) ? $description : '',
+							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+							'rows'      => $rows,
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
 
-							<textarea
-								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								class="large-text <?php echo esc_attr( $value['class'] ); ?>"
-								placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								><?php echo esc_textarea( $option_value );  ?></textarea>
-							<?php if ( ! empty( $value['custom_desc'] ) ) { ?>
-							<span class="gd-custom-desc"><?php echo $value['custom_desc']; ?></span>
-							<?php } ?>
-						</td>
-					</tr><?php
 					break;
 				// Editor
 				case 'editor':
@@ -433,6 +526,9 @@ class GeoDir_Admin_Settings {
 					}
 
 					$rows = !empty( $value['size'] ) ? absint($value['size']) : 20;
+
+					// @todo is this used in any settings?
+
 					?><tr valign="top" class="<?php echo (!empty($value['advanced']) ? 'gd-advanced-setting' : ''); ?>">
 						<th scope="row" class="titledesc">
 							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
@@ -471,46 +567,32 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<select
-								name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
-								<?php echo ! empty( $value['sortable'] ) ? ' data-sortable="true"' : ''; ?>
-								<?php echo ! empty( $value['placeholder'] ) ? ' data-placeholder="' . esc_attr( $value['placeholder'] ) . '"' : ''; ?>
-								>
-								<?php
-									foreach ( $value['options'] as $key => $val ) {
-										if(stripos(strrev($key), strrev('optgroup-open')) === 0){
-											echo '<optgroup label="'.esc_attr( $val ).'">';
-										}elseif(stripos(strrev($key), strrev('optgroup-close')) === 0){
-											echo '</optgroup>';
-										}else{
-											?>
-											<option value="<?php echo esc_attr( $key ); ?>" <?php
 
-											if ( is_array( $option_value ) ) {
-												selected( in_array( $key, $option_value ), true );
-											} else {
-												selected( $option_value, $key );
-											}
+					$select2 = strpos($value['class'], 'geodir-select') !== false ? true : false;
+//				$value['class'] = str_replace('geodir-select')
+					
+				echo aui()->select(
+					array(
+						'id'                => $value['id'],
+						'name'              => $value['id'],
+						'label_type'        => $label_type,
+						'label_col'        => '3',
+						'label_class'=> 'font-weight-bold',
+						'multiple'   => 'multiselect' == $value['type'] ? true : false,
+						'class' => $value['class']." mw-100",
+						//'required'          => true,
+						'select2'   => $select2,
+						'options'       => $value['options'],
+						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+						'label'              => $value['title'] . $tooltip_html,
+						'placeholder'       => $value['placeholder'],
+						'value' => $option_value,
+						'help_text'  => isset($description) ? $description : '',
+						'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+						'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+					)
+				);
 
-											?>><?php echo $val ?></option>
-											<?php
-										}
-									}
-								?>
-							</select> <?php echo $description; ?>
-						</td>
-					</tr><?php
 					break;
 
 				// Radio inputs
@@ -522,36 +604,31 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<fieldset>
-								<?php echo $description; ?>
-								<ul>
-								<?php
-									foreach ( $value['options'] as $key => $val ) {
-										?>
-										<li>
-											<label><input
-												name="<?php echo esc_attr( $value['id'] ); ?>"
-												value="<?php echo $key; ?>"
-												type="radio"
-												style="<?php echo esc_attr( $value['css'] ); ?>"
-												class="<?php echo esc_attr( $value['class'] ); ?>"
-												<?php echo implode( ' ', $custom_attributes ); ?>
-												<?php checked( $key, $option_value ); ?>
-												/> <?php echo $val ?></label>
-										</li>
-										<?php
-									}
-								?>
-								</ul>
-							</fieldset>
-						</td>
-					</tr><?php
+
+					$html = aui()->radio(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'label_class'=> 'font-weight-bold',
+							'type'              => "radio",
+//							'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
+							'label'             => $value['title'] . $tooltip_html,
+//							'help_text'         => $help_text,
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'class'             => '',
+							'value'             => $option_value,
+							'inline'            => false,
+							'options'           => $value['options'],
+//							'wrap_attributes'   => $conditional_attrs,
+							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+
+					echo $html;
+					
 					break;
 
 				// Checkbox input
@@ -562,70 +639,34 @@ class GeoDir_Admin_Settings {
 					} else {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
-					$visbility_class = array();
 
-					if ( ! isset( $value['hide_if_checked'] ) ) {
-						$value['hide_if_checked'] = false;
-					}
-					if ( ! isset( $value['show_if_checked'] ) ) {
-						$value['show_if_checked'] = false;
-					}
-					if ( 'yes' == $value['hide_if_checked'] || 'yes' == $value['show_if_checked'] ) {
-						$visbility_class[] = 'hidden_option';
-					}
-					if ( 'option' == $value['hide_if_checked'] ) {
-						$visbility_class[] = 'hide_options_if_checked';
-					}
-					if ( 'option' == $value['show_if_checked'] ) {
-						$visbility_class[] = 'show_options_if_checked';
-					}
+					$description .= $tooltip_html;
 
-					if ( ! isset( $value['checkboxgroup'] ) || 'start' == $value['checkboxgroup'] ) {
-						?>
-							<tr valign="top" class="<?php echo esc_attr( implode( ' ', $visbility_class ) ); ?> <?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>" >
-								<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?></th>
-								<td class="forminp forminp-checkbox">
-									<fieldset>
-						<?php
-					} else {
-						?>
-							<fieldset class="<?php echo esc_attr( implode( ' ', $visbility_class ) ); ?>">
-						<?php
-					}
+//					echo '###'. $option_value;
+					
+					echo aui()->input(
+					array(
+						'id'                => $value['id'],
+						'name'              => $value['id'],
+						'value'              => isset($value['value']) ? $value['value'] : '1',
+						'label_type'        => $label_type,
+						'label_col'        => '3',
+						'label_class'=> 'font-weight-bold',
+						'label_force_left'  => true,
+						'class' => !empty($value['class']) ? $value['class'] : '',
+						//'required'          => true,
+						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+						'label'              => $value['title'],
+						'type'              =>  $value['type'] ?  $value['type']  : 'text',
+						'placeholder'       => $value['placeholder'],
+						'checked' => $option_value,
+						'help_text'  => isset($description) ? $description : ' ',
+						'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+						'switch'    => 'md',
+						'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+					)
+				);
 
-					if ( ! empty( $value['title'] ) ) {
-						?>
-							<legend class="screen-reader-text"><span><?php echo esc_html( $value['title'] ) ?></span></legend>
-							
-						<?php
-					}
-
-					?>
-						<label for="<?php echo $value['id'] ?>">
-							<input
-								name="<?php echo esc_attr( $value['id'] ); ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								type="checkbox"
-								class="<?php echo esc_attr( isset( $value['class'] ) ? $value['class'] : '' ); ?>"
-								value="1"
-								<?php checked( $option_value, '1' ); ?>
-								<?php checked( $option_value, 'yes' ); ?>
-								<?php echo implode( ' ', $custom_attributes ); ?>
-							/> <?php echo $description ?>
-						</label> <?php echo $tooltip_html; ?>
-					<?php
-
-					if ( ! isset( $value['checkboxgroup'] ) || 'end' == $value['checkboxgroup'] ) {
-									?>
-									</fieldset>
-								</td>
-							</tr>
-						<?php
-					} else {
-						?>
-							</fieldset>
-						<?php
-					}
 					break;
 				
 				// Checkbox input
@@ -704,6 +745,7 @@ class GeoDir_Admin_Settings {
 
 				// Single page selects
 				case 'single_select_page' :
+					add_thickbox();
 					if ( isset( $value['value'] ) ) {
 						$option_value = $value['value'];
 					} else {
@@ -736,29 +778,57 @@ class GeoDir_Admin_Settings {
 						$args = wp_parse_args( $value['args'], $args );
 					}
 
-					?><tr valign="top" class="single_select_page <?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc"><?php echo esc_html( $value['title'] ) ?> <?php echo $tooltip_html; ?></th>
-						<td class="forminp">
-							<?php echo str_replace( ' id=', " data-placeholder='" . esc_attr__( 'Select a page&hellip;', 'geodirectory' ) . "' style='" . $value['css'] . "' class='" . $value['class'] . "' id=", wp_dropdown_pages( $args ) ); ?> <?php echo $description; ?>
 
-							<?php if($args['selected']){ ?>
-							<a href="<?php echo get_edit_post_link( $args['selected'] ); ?>" class="button gd-page-setting-edit"><?php _e('Edit Page','geodirectory');?></a>
+					$defaults = array(
+						'depth'                 => 0,
+						'child_of'              => 0,
+						'selected'              => 0,
+						'echo'                  => 1,
+						'name'                  => 'page_id',
+						'id'                    => '',
+						'class'                 => '',
+						'show_option_none'      => '',
+						'show_option_no_change' => '',
+						'option_none_value'     => '',
+						'value_field'           => 'ID',
+					);
 
-								<?php 
-								if ( empty( $value['is_template_page'] ) ) {
-									$page_url = get_permalink( $args['selected'] );
-									if ( ! empty( $value['view_page_args'] ) && is_array( $value['view_page_args'] ) ) {
-										foreach ( $value['view_page_args'] as $_key => $_value ) {
-											if ( ! empty( $_key ) && $_value != '' ) {
-												$page_url = add_query_arg( $_key, $_value, $page_url );
-											}
-										}
-									}
-								?>
-								<a href="<?php echo $page_url; ?>" class="button gd-page-setting-view"><?php _e('View Page','geodirectory');?></a>
-							<?php }
+					$parsed_args = wp_parse_args( $args, $defaults );
+
+					$pages  = get_pages( $parsed_args );
+					$page_options = array();
+
+					if ( ! empty( $pages ) ) {
+						foreach ( $pages as $page ) {
+							$id = !empty($page->ID) ? absint($page->ID) : '';
+							$title = !empty($page->post_title) ? esc_attr($page->post_title) : '';
+							$page_options[$id] = $title;
+						}
+					}
+
+//					print_r( $pages );exit;
+
+
+					$buttons = '';
+					$buttons_links = array();
+
+					ob_start();
+					if($args['selected']){
+						$buttons_links[get_edit_post_link( $args['selected'] )] = __('Edit Page','geodirectory');
+
+					if ( empty( $value['is_template_page'] ) ) {
+						$page_url = get_permalink( $args['selected'] );
+						if ( ! empty( $value['view_page_args'] ) && is_array( $value['view_page_args'] ) ) {
+							foreach ( $value['view_page_args'] as $_key => $_value ) {
+								if ( ! empty( $_key ) && $_value != '' ) {
+									$page_url = add_query_arg( $_key, $_value, $page_url );
+								}
 							}
-							
+						}
+						$buttons_links[$page_url] = __('View Page','geodirectory');
+						}
+				}
+
 							if(!empty($value['default_content'])){
 
 								$raw_default_content = '';
@@ -768,9 +838,9 @@ class GeoDir_Admin_Settings {
 								if(method_exists('GeoDir_Defaults', $default_method) && GeoDir_Defaults::$default_method(true) != $value['default_content']){
 									$raw_default_content = GeoDir_Defaults::$default_method(true);
 								}
+								$buttons_links["#TB_inline?&width=650&height=350&inlineId=gd_default_content_".esc_attr($value['id'])] = __('View Default Content','geodirectory');
 								?>
-								<a href="#gd_default_content_<?php echo esc_attr($value['id'])?>" data-lity class="button gd-page-setting-view"><?php _e('View Default Content','geodirectory');?></a>
-								<div id="gd_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;" class="lity-hide gd-notification ">
+								<div id="gd_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;display:none;" class="lity-hidex gd-notification ">
 									<?php
 									$height = "50";
 									if($raw_default_content){
@@ -790,10 +860,55 @@ class GeoDir_Admin_Settings {
 								</div>
 								<?php
 							}
-							?>
 
-						</td>
-					</tr><?php
+					if(!empty($buttons_links)) {
+						?>
+						<button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown"
+						        aria-haspopup="true"
+						        aria-expanded="false"><?php _e( "Actions", "geodirectory" ); ?></button>
+						<div class="dropdown-menu">
+							<?php
+							foreach($buttons_links as $link => $title){
+								if ( substr( $link, 0, 1 ) === "#" ) {
+									echo '<a class="dropdown-item thickbox" href="'.esc_attr($link).'">'.$title.'</a>';
+								}else{
+									echo '<a class="dropdown-item" href="'.esc_attr($link).'">'.$title.'</a>';
+								}
+
+							}
+							?>
+						</div>
+						<?php
+					}
+
+					$buttons = ob_get_clean();
+
+					$output =  aui()->select(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'label_class'=> 'font-weight-bold',
+							'multiple'   => 'multiselect' == $value['type'] ? true : false,
+							'class'             => $buttons ? $value['class']. ' mw-100 w-auto' : $value['class'].' mw-100 w-100',
+							//'required'          => true,
+							'select2'   => strpos($value['class'], 'geodir-select') !== false ? true : false,
+							'options'       => array('' => esc_attr__( 'Select a page&hellip;', 'geodirectory' )) +  $page_options,
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'label'              => $value['title'] . $tooltip_html,
+							'placeholder'       => $value['placeholder'] ? $value['placeholder'] :  esc_attr__( 'Select a page&hellip;', 'geodirectory' ),
+							'value' => $option_value,
+							'help_text'  => isset($description) ? $description : '',
+							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+							'input_group_right'  => $buttons, //'<button class="btn-sm btn btn-outline-secondary" type="button">Button</button>',
+//							'no_wrap' => true,
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+
+					echo $output;
+
 					break;
 
 				// Single country selects
@@ -812,19 +927,30 @@ class GeoDir_Admin_Settings {
 						$country = $country_setting;
 						$state   = '*';
 					}
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp">
-						<select id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" data-placeholder="<?php esc_attr_e( 'Choose a country&hellip;', 'geodirectory' ); ?>" aria-label="<?php esc_attr_e( 'Country', 'geodirectory' ) ?>" class="regular-text <?php echo esc_attr( $value['class'] ); ?>">
-							<?php
-							echo geodir_get_country_dl($country);
-							?>
-						</select> <?php echo $description; ?>
-						</td>
-					</tr><?php
+
+					$countries = geodir_get_country_dl($country,'',true);
+					echo aui()->select(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'label_class'=> 'font-weight-bold',
+							'multiple'   => 'multiselect' == $value['type'] ? true : false,
+							'class'             => $value['class'].' mw-100',
+							//'required'          => true,
+							'select2'   => strpos($value['class'], 'geodir-select') !== false ? true : false,
+							'options'       => $countries,
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'label'              => $value['title'] . $tooltip_html,
+							'placeholder'       => $value['placeholder'],
+							'value'         => $country,
+							'help_text'  => isset($description) ? $description : '',
+							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+					
 					break;
 
 				// Country multiselects
@@ -954,8 +1080,7 @@ class GeoDir_Admin_Settings {
 
                     ?>
 
-					<tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<td class="forminp" colspan="2">
+					<div class="form-group">
 					<?php /**
                      * Contains add listing page map functions.
                      *
@@ -963,16 +1088,7 @@ class GeoDir_Admin_Settings {
                      */
                     include( GEODIRECTORY_PLUGIN_DIR . 'templates/map.php' );
 					?>
-						</td>
-					</tr>
-
-					<script>
-						//jQuery('.gd-advanced-toggle')
-
-						jQuery( ".gd-advanced-toggle" ).on("click",function() {
-							///jQuery( "#default_location_set_address_button" ).toggle();
-						});
-					</script>
+					</div>
 
                     <?php
 
@@ -987,68 +1103,67 @@ class GeoDir_Admin_Settings {
 					break;
 
 				case 'map_key' :
-					add_thickbox();// add the thickbox js/css
 					if ( isset( $value['value'] ) ) {
 						$option_value = $value['value'];
 					} else {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
-					//echo $value['id'].'zzz'.$option_value;
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-					<th scope="row" class="titledesc">
-						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
-					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-						<input
-							name="<?php echo esc_attr( $value['id'] ); ?>"
-							id="<?php echo esc_attr( $value['id'] ); ?>"
-							type="<?php echo esc_attr( $value['type'] ); ?>"
-							style="<?php echo esc_attr( $value['css'] ); ?>"
-							value="<?php echo esc_attr( $option_value ); ?>"
-							class="regular-text <?php echo esc_attr( $value['class'] ); ?> <?php if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-setup'){echo "form-control w-100 mb-2";}?>"
-							placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-							<?php echo implode( ' ', $custom_attributes ); ?>
-						/>
-						<?php $gm_api_url = 'https://console.developers.google.com/henhouse/?pb=["hh-1","maps_backend",null,[],"https://developers.google.com",null,["static_maps_backend","street_view_image_backend","maps_embed_backend","places_backend","geocoding_backend","directions_backend","distance_matrix_backend","geolocation","elevation_backend","timezone_backend","maps_backend"],null]';?>
-						<a id="gd-api-key" onclick='window.open("<?php echo wp_slash($gm_api_url);?>", "newwindow", "width=600, height=400"); return false;' href='<?php echo $gm_api_url;?>' class="<?php if(isset($_REQUEST['page']) && $_REQUEST['page']=='gd-setup'){echo 'btn btn-primary btn-sm';}else{echo 'button-primary';}?>" name="<?php _e('Generate API Key - ( MUST be logged in to your Google account )','geodirectory');?>" ><?php _e('Generate API Key','geodirectory');?></a>
-						<a href="https://console.developers.google.com/flows/enableapi?apiid=static_maps_backend,street_view_image_backend,maps_embed_backend,places_backend,geocoding_backend,directions_backend,distance_matrix_backend,geolocation,elevation_backend,timezone_backend,maps_backend&amp;keyType=CLIENT_SIDE&amp;reusekey=true" target="_blank"><?php _e('or get one here','geodirectory');?></a> :: (<a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank"><?php _e('How to add a Google API KEY?','geodirectory');?>)</a>
-						<br />
-						<?php echo $description; ?>
-					</td>
-					</tr><?php
+
+					$gm_api_url = 'https://console.developers.google.com/henhouse/?pb=["hh-1","maps_backend",null,[],"https://developers.google.com",null,["static_maps_backend","street_view_image_backend","maps_embed_backend","places_backend","geocoding_backend","directions_backend","distance_matrix_backend","geolocation","elevation_backend","timezone_backend","maps_backend"],null]';
+
+
+					$custom_attributes['data-key-original'] = esc_attr($option_value);
+
+					echo aui()->input(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'class' => !empty($value['class']) ? $value['class'] : '',
+							'label_class'=> 'font-weight-bold',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'label'              => $value['title'] . $tooltip_html,
+							'type'              =>  $value['type'] ?  $value['type']  : 'text',
+							'placeholder'       => $value['placeholder'],
+							'value' => $option_value,
+							'help_text'  => $description,
+							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+							'input_group_right' => '<button class="btn btn-success" type="button"  onclick="geodir_validate_google_api_key(jQuery(\'#google_maps_api_key\').val());">'.esc_attr__( 'Verify', 'geodirectory' ).'</button><div class="input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'API Key Guide', 'geodirectory' ) . '"><a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="text-dark"><i class="fas fa-info-circle"></i></a></div><button class="btn btn-primary" type="button"  onclick=\'window.open("'.wp_slash($gm_api_url).'", "newwindow", "width=600, height=400"); return false;\' >' . esc_attr__( 'Generate Key', 'geodirectory' ) . '</button>',
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+
 					break;
 
 				case 'geocode_key' :
-					add_thickbox();// add the thickbox js/css
 					if ( isset( $value['value'] ) ) {
 						$option_value = $value['value'];
 					} else {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-					<th scope="row" class="titledesc">
-						<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-						<?php echo $tooltip_html; ?>
-					</th>
-					<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-						<input
-							name="<?php echo esc_attr( $value['id'] ); ?>"
-							id="<?php echo esc_attr( $value['id'] ); ?>"
-							type="<?php echo esc_attr( $value['type'] ); ?>"
-							style="<?php echo esc_attr( $value['css'] ); ?>"
-							value="<?php echo esc_attr( $option_value ); ?>"
-							class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
-							placeholder="<?php echo esc_attr( $value['placeholder'] ); ?>"
-							<?php echo implode( ' ', $custom_attributes ); ?>
-						/>
-						<?php $gm_api_url = 'https://console.developers.google.com/henhouse/?pb=["hh-1","geocoding_backend",null,[],"https://developers.google.com",null,["geocoding_backend","timezone_backend"],null]';?>
-						<a id="gd-geocode-api-key" onclick='window.open("<?php echo wp_slash($gm_api_url);?>", "newwindow", "width=600, height=400"); return false;' href='<?php echo $gm_api_url;?>' class="button-primary" name="<?php _e('Generate Geocoding API Key - ( MUST be logged in to your Google account )','geodirectory');?>" ><?php _e('Generate Geocoding API Key','geodirectory');?></a>
-						<a href="https://console.developers.google.com/flows/enableapi?apiid=geocoding_backend,timezone_backend&amp;keyType=CLIENT_SIDE&amp;reusekey=true" target="_blank"><?php _e('or get one here','geodirectory');?></a>
-						<br />
-						<?php echo $description; ?>
-					</td>
-					</tr><?php
+
+					$gm_api_url = 'https://console.developers.google.com/henhouse/?pb=["hh-1","geocoding_backend",null,[],"https://developers.google.com",null,["geocoding_backend","timezone_backend"],null]';
+					echo aui()->input(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'class' => !empty($value['class']) ? $value['class'] : '',
+							'label_class'=> 'font-weight-bold',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'label'              => $value['title'] . $tooltip_html,
+							'type'              =>  $value['type'] ?  $value['type']  : 'text',
+							'placeholder'       => $value['placeholder'],
+							'value' => $option_value,
+							'help_text'  => $description,
+							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+							'input_group_right' => '<div class="input-group-text c-pointer" data-toggle="tooltip" title="' . esc_attr__( 'API Key Guide', 'geodirectory' ) . '"><a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="text-dark"><i class="fas fa-info-circle"></i></a></div><button class="btn btn-primary" type="button"  onclick=\'window.open("'.wp_slash($gm_api_url).'", "newwindow", "width=600, height=400"); return false;\' >' . esc_attr__( 'Generate Key', 'geodirectory' ) . '</button>',
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+
 					break;
 
 				// Select boxes
@@ -1064,38 +1179,46 @@ class GeoDir_Admin_Settings {
 						$option_value = self::get_option( $value['id'], $value['default'] );
 					}
 
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<select
-								name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
-								>
-								<option value=""><?php _e("Select icon","geodirectory");?></option>
-								<?php
-								foreach ( $value['options'] as $key => $val ) {
-									?>
-									<option value="<?php echo esc_attr( $key ); ?>" data-fa-icon="<?php echo esc_attr( $key ); ?>" <?php
+					$options = array();
 
-									if ( is_array( $option_value ) ) {
-										selected( in_array( $key, $option_value ), true );
-									} else {
-										selected( $option_value, $key );
-									}
-									?>><?php echo $key ?></option>
-									<?php
-								}
-								?>
-							</select> <?php echo $description; ?>
-						</td>
-					</tr><?php
+//					print_r( $value['options'] );exit;
+
+					foreach ( $value['options'] as $key => $val ) {
+						$options[] = array(
+							'label' => esc_attr($key),
+							'value' => esc_attr($key),
+							'extra_attributes' => array(
+								'data-fa-icon' => esc_attr( $key )
+							)
+						);
+					}
+
+
+					//@todo we should change this to a better icon picker
+
+					echo aui()->input(
+						array(
+							'type'              =>  'iconpicker',
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'label_class'=> 'font-weight-bold',
+							//'multiple'   => 'multiselect' == $value['type'] ? true : false,
+							'class'             => $value['class'],
+							//'required'          => true,
+							//'select2'   => false,//strpos($value['class'], 'geodir-select') !== false ? true : false,
+//							'options'       => $options,
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'label'              => $value['title'] . $tooltip_html,
+							'placeholder'       => $value['placeholder'],
+							'value'         => $option_value,
+							'help_text'  => isset($description) ? $description : '',
+							'extra_attributes'  => !empty($value['custom_attributes'] ) ? $value['custom_attributes'] : array(),
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+
 					break;
 				case 'dashicon' :
 					$value['options'] = geodir_dashicon_options();
@@ -1107,36 +1230,72 @@ class GeoDir_Admin_Settings {
 					}
 					$option_value = GeoDir_Post_types::sanitize_menu_icon( $option_value );
 
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-							<select
-								name="<?php echo esc_attr( $value['id'] ); ?><?php echo ( 'multiselect' === $value['type'] ) ? '[]' : ''; ?>"
-								id="<?php echo esc_attr( $value['id'] ); ?>"
-								style="<?php echo esc_attr( $value['css'] ); ?>"
-								class="regular-text <?php echo esc_attr( $value['class'] ); ?>"
-								<?php echo implode( ' ', $custom_attributes ); ?>
-								<?php echo ( 'multiselect' == $value['type'] ) ? 'multiple="multiple"' : ''; ?>
-								>
-								<?php
-								foreach ( $value['options'] as $key => $val ) {
+					$options = array();
+
+//					print_r( $value['options'] );exit;
+
+					foreach ( $value['options'] as $key => $val ) {
+						$options[] = array(
+							'label' => str_replace( 'dashicons-', '', $key ),
+							'value' => esc_attr($key) ,
+							'extra_attributes' => array(
+								'data-dashicon' => esc_attr( $key )
+							)
+						);
+					}
+
+					$value['class'] = str_replace( "geodir-select", "", $value['class'] );
+
+					echo aui()->input(
+						array(
+							'type'              =>  'iconpicker',
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'label_class'=> 'font-weight-bold',
+							'multiple'   => 'multiselect' == $value['type'] ? true : false,
+							'class'             => $value['class']. " gd-dashicons-picker",
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'label'              => $value['title'] . $tooltip_html,
+							'placeholder'       => $value['placeholder'],
+							'value'         => $option_value,
+							'help_text'  => isset($description) ? $description : '',
+							'extra_attributes'  => !empty($value['custom_attributes'] ) ? $value['custom_attributes'] : array(),
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+
+					?>
+					<script>
+						var $dashicons = [
+							<?php
+							if ( ! empty( $value['options'] ) ) {
+								foreach($value['options'] as $key => $val){
 									?>
-									<option value="<?php echo esc_attr( $key ); ?>" data-dashicon="<?php echo esc_attr( $key ); ?>" <?php
-									if ( is_array( $option_value ) ) {
-										selected( in_array( $key, $option_value ), true );
-									} else {
-										selected( $option_value, $key );
-									}
-									?>><?php echo str_replace( 'dashicons-', '', $key ); ?></option>
+										{
+											title: "<?php echo esc_attr($key);?>",
+											searchTerms: []
+										},
 									<?php
 								}
-								?>
-							</select> <?php echo $description; ?>
-						</td>
-					</tr><?php
+							}
+
+							?>
+						];
+
+						jQuery(function() {
+							jQuery(".gd-dashicons-picker").iconpicker({
+								icons: $dashicons,
+								fullClassFormatter: function(val) {
+									return 'dashicons ' + val;
+								},
+							});
+						});
+
+					</script>
+					<?php
+
 					break;
 					case 'hidden' :
 						if ( isset( $value['value'] ) ) {
@@ -1144,20 +1303,27 @@ class GeoDir_Admin_Settings {
 						} else {
 							$option_value = self::get_option( $value['id'], $value['default'] );
 						}
-						?><tr valign="top" style="display:none!important">
-							<th scope="row" class="titledesc">
-								<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							</th>
-							<td class="forminp forminp-<?php echo sanitize_title( $value['type'] ) ?>">
-								<input
-									name="<?php echo esc_attr( $value['id'] ); ?>"
-									id="<?php echo esc_attr( $value['id'] ); ?>"
-									type="hidden"
-									value="<?php echo esc_attr( $option_value ); ?>"
-									<?php echo implode( ' ', $custom_attributes ); ?>
-									/> <?php echo $description; ?>
-							</td>
-						</tr><?php
+
+						echo aui()->input(
+							array(
+								'id'                => $value['id'],
+								'name'              => $value['id'],
+								'label_type'        => $label_type,
+								'label_col'        => '3',
+								'label_class'=> 'font-weight-bold',
+								'class' => !empty($value['class']) ? $value['class'] : '',
+								//'required'          => true,
+								'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : 'd-none',
+								'label'              => $value['title'] . $tooltip_html,
+								'type'              =>  $value['type'] ?  $value['type']  : 'hidden',
+								'placeholder'       => $value['placeholder'],
+								'value' => $option_value,
+								'help_text'  => isset($description) ? $description : '',
+								'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+								'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+							)
+						);
+
 					break;
 				// Single timezone select
 				case 'single_select_timezone' :
@@ -1168,17 +1334,31 @@ class GeoDir_Admin_Settings {
 					}
 					$placeholder = ! empty( $value['placeholder'] ) ? $value['placeholder'] : __( 'Choose a city/timezone&hellip;', 'geodirectory' );
 					$locale = function_exists( 'get_user_locale' ) ? get_user_locale() : get_locale();
-					?><tr valign="top" class="<?php if(isset($value['advanced']) && $value['advanced']){echo "gd-advanced-setting";}?>">
-						<th scope="row" class="titledesc">
-							<label for="<?php echo esc_attr( $value['id'] ); ?>"><?php echo esc_html( $value['title'] ); ?></label>
-							<?php echo $tooltip_html; ?>
-						</th>
-						<td class="forminp">
-						<select id="<?php echo esc_attr( $value['id'] ); ?>" name="<?php echo esc_attr( $value['id'] ); ?>" style="<?php echo esc_attr( $value['css'] ); ?>" data-placeholder="<?php echo esc_attr( $placeholder ); ?>" aria-label="<?php esc_attr_e( 'Timezone', 'geodirectory' ) ?>" class="regular-text <?php echo esc_attr( $value['class'] ); ?>">
-							<?php echo geodir_timezone_choice( $timezone_string, $locale ) ;?>
-						</select> <?php echo $description; ?>
-						</td>
-					</tr><?php
+
+
+					$tz = geodir_timezone_choice( $timezone_string, $locale, true );
+					echo aui()->select(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'        => '3',
+							'label_class'=> 'font-weight-bold',
+							'multiple'   => 'multiselect' == $value['type'] ? true : false,
+							'class'             => $value['class'].' mw-100',
+							//'required'          => true,
+							'select2'   => strpos($value['class'], 'geodir-select') !== false ? true : false,
+							'options'       => $tz,
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'label'              => $value['title'] . $tooltip_html,
+							'placeholder'       => $value['placeholder'],
+							'value'         => $locale ,
+							'help_text'  => isset($description) ? $description : '',
+							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
+							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+						)
+					);
+
 					break;
 
 				// Default: run an action
@@ -1232,7 +1412,7 @@ class GeoDir_Admin_Settings {
 
 
 		if ( $tooltip_html && in_array( $value['type'], array( 'checkbox' ) ) ) {
-			$tooltip_html = '<p class="description">' . $tooltip_html . '</p>';
+			$tooltip_html =  $tooltip_html;
 		} elseif ( $tooltip_html ) {
 			$tooltip_html = geodir_help_tip( $tooltip_html );
 		}

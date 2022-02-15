@@ -72,10 +72,14 @@ class GeoDir_Admin_Conditional_Fields {
 		$extra_fields = ! empty( $field->extra_fields ) ? $field->extra_fields : array();
 		$conditions = geodir_parse_field_conditions( $extra_fields );
 
+		$count = count($conditions);
+		$count_badge = $count ?  '<span class="badge badge-warning ml-2">'.absint($count).'</span>' : '';;
 		?>
-		<h3 class="geodir-con-fields-hidden" data-setting="conditional_fields_heading"><a href="javascript:void(0)"><span class="geodir-show-cf"><i class="fas fa-plus" aria-hidden="true"></i></span><span class="geodir-hide-cf"><i class="fas fa-minus" aria-hidden="true"></i></span> <?php _e( 'Conditional Fields', 'geodirectory' ); ?></a></h3>
-		<div class="gd-advanced-setting" data-setting="conditional_fields" id="geodir_conditional_fields">
-			<p data-setting="conditional_fields_desc"><?php _e( 'Setup conditional logic to show/hide this field in the listing form based on specific fields value or conditions.', 'geodirectory' ); ?></p>
+		<div class="geodir-con-fields-hidden border-top mt-4 pt-4" data-setting="conditional_fields_heading">
+			<a href="#geodir_conditional_fields" data-toggle="collapse" class="btn btn-block btn-outline-primary"><span class="geodir-show-cf"><i class="fas fa-plus" aria-hidden="true"></i></span><span class="geodir-hide-cf"><i class="fas fa-minus" aria-hidden="true"></i></span> <?php _e( 'Conditional Fields', 'geodirectory' ); echo $count_badge; ?></a>
+		</div>
+		<div class="collapse"  data-setting="conditional_fields" id="geodir_conditional_fields">
+			<p data-setting="conditional_fields_desc" class="pt-2"><?php _e( 'Setup conditional logic to show/hide this field in the listing form based on specific fields value or conditions.', 'geodirectory' ); ?></p>
 			<?php 
 			/**
 			 * Show conditional field extra message.
@@ -87,11 +91,13 @@ class GeoDir_Admin_Conditional_Fields {
 			 * @param array  $data Current field data.
 			 */
 			do_action( 'geodir_cf_show_conditional_fields_setting_desc', $post_type, $field, $data );
+			$if = '<div class="input-group-prepend"><span class="input-group-text border-left-0 px-2">'.__("if","geodirectory").'</span></div>';
 			?>
 			<div class="geodir-conditional-template">
-				<div class="geodir-conditional-row" data-condition-index="TEMP">
+				<div class="geodir-conditional-row  input-group input-group-sm mb-2" data-condition-index="TEMP">
 					<?php 
 					echo $this->get_field( 'action' );
+					echo $if;
 					echo $this->get_field( 'field' );
 					echo $this->get_field( 'condition' );
 					echo $this->get_field( 'value' );
@@ -102,9 +108,10 @@ class GeoDir_Admin_Conditional_Fields {
 			<div class="geodir-conditional-items">
 				<?php if ( ! empty( $conditions ) ) { ?>
 					<?php foreach ( $conditions as $k => $condition ) { ?>
-						<div class="geodir-conditional-row" data-condition-index="<?php echo esc_attr( $k ); ?>">
+						<div class="geodir-conditional-row  input-group input-group-sm mb-2" data-condition-index="<?php echo esc_attr( $k ); ?>">
 							<?php 
 							echo $this->get_field( 'action', $condition['action'], $k );
+							echo $if;
 							echo $this->get_field( 'field', $condition['field'], $k );
 							echo $this->get_field( 'condition', $condition['condition'], $k );
 							echo $this->get_field( 'value', $condition['value'], $k );
@@ -113,9 +120,10 @@ class GeoDir_Admin_Conditional_Fields {
 						</div>
 					<?php } ?>
 				<?php } else { ?>
-				<div class="geodir-conditional-row" data-condition-index="0">
+				<div class="geodir-conditional-row  input-group input-group-sm mb-2" data-condition-index="0">
 					<?php 
 					echo $this->get_field( 'action', '', 0 );
+					echo $if;
 					echo $this->get_field( 'field', '', 0 );
 					echo $this->get_field( 'condition', '', 0 );
 					echo $this->get_field( 'value', '', 0 );
@@ -124,7 +132,9 @@ class GeoDir_Admin_Conditional_Fields {
 				</div>
 				<?php } ?>
 			</div>
-			<p data-setting="conditional_fields_add"><a href="javascript:void(0);" class="button button-secondary geodir-conditional-add"><i class="fas fa-plus-circle"></i> <?php _e( 'Add Rule', 'geodirectory' ); ?></a></p>
+			<p data-setting="conditional_fields_add" class="pt-1 text-right">
+				<a href="javascript:void(0);" class="btn btn-primary btn-sm geodir-conditional-add"><i class="fas fa-plus-circle"></i> <?php _e( 'Add Rule', 'geodirectory' ); ?></a>
+			</p>
 		</div>
 		<?php
 	}
@@ -143,7 +153,7 @@ class GeoDir_Admin_Conditional_Fields {
 		ob_start();
 		switch ( $key ) {
 			case 'action':
-				?><select class="geodir-conditional-el geodir-conditional-<?php echo $key; ?>" name="conditional_fields[<?php echo $index; ?>][action]" id="conditional_action_<?php echo $index; ?>">
+				?><select class="geodir-conditional-el geodir-conditional-<?php echo $key; ?> form-control" name="conditional_fields[<?php echo $index; ?>][action]" id="conditional_action_<?php echo $index; ?>">
 					<option value=""><?php _e( 'ACTION', 'geodirectory' ); ?></option>
 					<option value="show" <?php selected( $value == 'show', true ); ?>><?php _e( 'show', 'geodirectory' ); ?></option>
 					<option value="hide" <?php selected( $value == 'hide', true ); ?>><?php _e( 'hide', 'geodirectory' ); ?></option>
@@ -151,7 +161,7 @@ class GeoDir_Admin_Conditional_Fields {
 				break;
 			case 'field':
 				$fields = $this->get_fields( self::$post_type );
-				?><select class="geodir-conditional-el geodir-conditional-<?php echo $key; ?>" name="conditional_fields[<?php echo $index; ?>][field]" id="conditional_field_<?php echo $index; ?>">
+				?><select class="geodir-conditional-el geodir-conditional-<?php echo $key; ?> form-control" name="conditional_fields[<?php echo $index; ?>][field]" id="conditional_field_<?php echo $index; ?>">
 					<option value=""><?php _e( 'FIELD', 'geodirectory' ); ?></option>
 					<?php if ( ! empty( $fields ) ) { ?>
 						<?php foreach ( $fields as $name => $label ) {
@@ -175,7 +185,7 @@ class GeoDir_Admin_Conditional_Fields {
 				</select><?php
 				break;
 			case 'condition':
-				?><select class="geodir-conditional-el geodir-conditional-<?php echo $key; ?>" name="conditional_fields[<?php echo $index; ?>][condition]" id="conditional_condition_<?php echo $index; ?>">
+				?><select class="geodir-conditional-el geodir-conditional-<?php echo $key; ?> form-control" name="conditional_fields[<?php echo $index; ?>][condition]" id="conditional_condition_<?php echo $index; ?>">
 					<option value=""><?php _e( 'CONDITION', 'geodirectory' ); ?></option>
 					<option value="empty" <?php selected( $value == 'empty', true ); ?>><?php _e( 'empty', 'geodirectory' ); ?></option>
 					<option value="not empty" <?php selected( $value == 'not empty', true ); ?>><?php _e( 'not empty', 'geodirectory' ); ?></option>
@@ -188,19 +198,24 @@ class GeoDir_Admin_Conditional_Fields {
 				break;
 			case 'value':
 				?>
-				<input class="geodir-conditional-el geodir-conditional-<?php echo $key; ?>" type="text" name="conditional_fields[<?php echo $index; ?>][value]" id="conditional_value_<?php echo $index; ?>" value="<?php echo esc_attr( $value ); ?>" placeholder="<?php esc_attr_e( 'VALUE', 'geodirectory' ); ?>">
+				<input class="geodir-conditional-el geodir-conditional-<?php echo $key; ?> form-control" type="text" name="conditional_fields[<?php echo $index; ?>][value]" id="conditional_value_<?php echo $index; ?>" value="<?php echo esc_attr( $value ); ?>" placeholder="<?php esc_attr_e( 'VALUE', 'geodirectory' ); ?>">
 				<?php
 				break;
 			case 'remove':
 				?>
-				<a class="geodir-conditional-<?php echo $key; ?>" href="javascript:void(0);" title="<?php esc_attr_e( 'Remove', 'geodirectory' ); ?>"><i class="fas fa-minus-circle"></i></a>
+				<div class="input-group-append">
+					<span class="input-group-text px-2">
+						<a class="geodir-conditional-<?php echo $key; ?> text-danger" data-toggle="tooltip"  href="javascript:void(0);" title="<?php esc_attr_e( 'Remove', 'geodirectory' ); ?>"><i class="fas fa-minus-circle"></i></a>
+					</span>
+				</div>
 				<?php
 				break;
 		}
 
 		$content = ob_get_clean();
 
-		return '<div class="geodir-conditional-col" data-conditional="' . $key . '">' . trim( $content ) . '</div>';
+		return trim( $content );
+//		return '<div class="geodir-conditional-col" data-conditional="' . $key . '" >' . trim( $content ) . '</div>';
 	}
 
 	/**
@@ -407,7 +422,7 @@ class GeoDir_Admin_Conditional_Fields {
 		$conditional_icon = geodir_conditional_field_icon( $conditional_attrs, $field );
 
 		if ( $conditional_icon ) {
-			echo ' <span class="dd-extra-icon">' . $conditional_icon . '</span> ';
+			echo ' <span class="dd-extra-icon ml-2 mr-0">' . $conditional_icon . '</span> ';
 		}
 	}
 } }

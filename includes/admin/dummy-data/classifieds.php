@@ -879,7 +879,7 @@ if( $gutenberg ) {
 [gd_archive_item_section type='close'  position='right' ]
 <!-- /wp:geodirectory/geodir-widget-archive-item-section -->
 
-<!-- wp:geodirectory/geodir-widget-archive-item-section {\"position\":\"footer\",\"content\":\" -->
+<!-- wp:geodirectory/geodir-widget-archive-item-section {\"position\":\"footer\",\"content\":\"\"} -->
 [gd_archive_item_section type='open'  position='footer' ]
 <!-- /wp:geodirectory/geodir-widget-archive-item-section -->
 

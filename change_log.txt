@@ -1,5 +1,13 @@
+= 2.2 =
+* Long file names can cause overflow issues on mobile - FIXED
+* Admin settings screen UI changed to AUI style (UI breaking change to older addons) - CHANGED
+* Setup Wizard updated - CHANGED
+
 = 2.1.1.10 =
 * OpenStreetMap don't populates region for Sweden - FIXED
+* BuddyBoss breaks some dropdowns such as business hours - FIXED
+* Allow adding listings outside default location now the default option - CHANGED
+* Classifieds archive item page template data broken - FIXED
 
 = 2.1.1.9 =
 * GD > Badge is not showing default category link - FIXED

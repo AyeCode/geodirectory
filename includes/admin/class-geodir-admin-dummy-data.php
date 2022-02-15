@@ -515,12 +515,12 @@ class GeoDir_Admin_Dummy_Data {
 		} else {
 
 			?>
-			<table class="form-table gd-dummy-table">
+			<table class="form-table gd-dummy-table table table-borderless table-sm gd-dummy-data">
 				<tbody>
 				<tr>
 					<td><strong><?php _e( 'CPT', 'geodirectory' ); ?></strong></td>
 					<td><strong><?php _e( 'Data Type', 'geodirectory' ); ?></strong></td>
-					<td><strong><?php _e( 'Action', 'geodirectory' ); ?></strong></td>
+					<td class="text-right invisible"><strong><?php _e( 'Action', 'geodirectory' ); ?></strong></td>
 				</tr>
 
 				<?php
@@ -549,8 +549,8 @@ class GeoDir_Admin_Dummy_Data {
 
 
 					$select_disabled = $post_counts > 0 ? 'disabled' : '';
-					echo "<td>";
-					echo "<select id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='geodir-select' style='min-width:200px'>";
+					echo "<td class='d-flex flex-row'>";
+					echo "<select title='".__( "Select the data type", "geodirectory" )."' data-toggle=\"tooltip\" id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='flex-fill form-control form-control-sm' style='min-width:200px'>";
 
 					$c = 0;
 					foreach ( $data_types as $key => $val ) {
@@ -564,7 +564,7 @@ class GeoDir_Admin_Dummy_Data {
 					echo "</select>";
 
 					$select_display = $post_counts > 0 ? 'display:none;' : '';
-					echo "<span class='gd-data-type-count' style='$select_display'><select id='" . $post_type . "_data_type_count' style='min-width:65px;' class='geodir-select'>";
+					echo "<span title='".__( "Set the number of listings", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-count flex-shrink-1 flex-fill ml-1' style='$select_display'><select id='" . $post_type . "_data_type_count' style='min-width:65px;' class='form-control form-control-sm '>";
 					$x = 1;
 					while ( $x <= $count ) {
 						$selected = ( $x == $count ) ? "selected='selected'" : '';
@@ -574,17 +574,23 @@ class GeoDir_Admin_Dummy_Data {
 					echo "</select></span>";
 
 					// Page templates styles
-					echo "<span class='gd-data-type-templates' style='margin-left: 30px;$select_display'>";
-					echo "<label><input value='1' style='width: auto;height: 16px;' id='" . $post_type . "_data_type_templates' type='checkbox' name='gd-data-templates' checked />".__("(Update page templates)","geodirectory")."</label>";
+					echo "<span title='".__( "Overwrite the template designs to suit the data type", "geodirectory" )."' data-toggle=\"tooltip\" class='gd-data-type-templates ml-1 flex-fill' style='$select_display'>";
+					echo "<label>";
+//					echo "<input value='1' style='width: auto;height: 16px;' id='" . $post_type . "_data_type_templates' type='checkbox' name='gd-data-templates' checked />".__("(Update page templates)","geodirectory");
+					echo "<select style=''  id='" . $post_type . "_data_type_templates' name='gd-data-templates' class='form-control form-control-sm'>";
+					echo "<option value='1'>".__("Update page templates","geodirectory")."</option>";
+					echo "<option value='0'>".__("Do not update page templates","geodirectory")."</option>";
+					echo "</select>";
+					echo "</label>";
 					echo "</span>";
 
 					echo "</td>";
 
 
 					if ( $post_counts > 0 ) {
-						echo '<td><input type="button" value="' . __( 'Remove posts', 'geodirectory' ) . '" class="button-primary geodir_dummy_button gd-remove-data" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
+						echo '<td class="text-right"><input type="button" value="' . __( 'Remove posts', 'geodirectory' ) . '" class="btn btn-danger btn-sm geodir_dummy_button gd-remove-data" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
 					} else {
-						echo '<td><input type="button" value="' . __( 'Insert posts', 'geodirectory' ) . '" class="button-primary geodir_dummy_button" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
+						echo '<td class="text-right"><input type="button" value="' . __( 'Insert posts', 'geodirectory' ) . '" class="btn btn-primary btn-sm geodir_dummy_button" onclick="gdInstallDummyData(this,\'' . $nonce . '\',\'' . $post_type . '\'); return false;" ></td>';
 					}
 
 					echo "</tr>";
@@ -692,17 +698,18 @@ class GeoDir_Admin_Dummy_Data {
 						jQuery('.gd-dummy-data-results-' + posttype).remove();
 						jQuery('<tr class="gd-dummy-data-results gd-dummy-data-results-' + posttype + '" >' +
 							'<td colspan="3">' +
-							'<div class="gd_progressbar_container_' + posttype + '">' +
-							'<div id="gd_progressbar" class="gd_progressbar_' + posttype + '">' +
-							'<div class="gd-progress-label"></div>' +
-							'</div>' +
+							'<div class="gd_progressbar_container_' + posttype + '  progress" style="height: 2em;">' +
+							'<div id="gd_progressbar_dummy" class="gd_progressbar_' + posttype + ' progress-bar bg-success progress-bar-striped progress-bar-animated" style="height: 2em;"></div>' +
+							'<div class="gd-dummy-progress-label w-100 text-center text-dark position-absolute" style="left:0;height: 2em;padding-top: 5px;"></div>' +
 							'</div>' +
 							'</td>' +
 							'</tr>').insertAfter(jQuery(obj).parents('tr'));
 
-						jQuery('.gd_progressbar_' + posttype).progressbar({value: 0});
+//						jQuery('.gd_progressbar_' + posttype).progressbar({value: 0});
 
-						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '<i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Removing data...', 'geodirectory' ) );?>');
+
+
+						jQuery('.gd_progressbar_container_' + posttype + ' .progress-bar' ).width(0).parent().find('.gd-dummy-progress-label').html(  '<i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i> <?php echo esc_attr( __( 'Removing data...', 'geodirectory' ) );?>');
 
 
 
@@ -716,7 +723,7 @@ class GeoDir_Admin_Dummy_Data {
 							data,
 							function (data) {
 								geodir_installing_dummy_data = false;
-								gd_progressbar('.gd_progressbar_container_' + posttype, 100, '<i class="fas fa-check" aria-hidden="true"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
+								jQuery('.gd_progressbar_container_' + posttype + ' .progress-bar' ).removeClass('progress-bar-striped progress-bar-animated').width('100%').parent().find('.gd-dummy-progress-label').html( '<i class="fas fa-check" aria-hidden="true"></i> <?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
 								jQuery(obj).removeClass('gd-remove-data');
 								jQuery(obj).val('<?php _e( 'Insert data', 'geodirectory' );?>');
 								jQuery(obj).prop('disabled', false);
@@ -762,24 +769,23 @@ class GeoDir_Admin_Dummy_Data {
 					var dateType = jQuery('#' + posttype + '_data_type').val();
 					//var dateTypeCount = jQuery('#'+posttype+'_data_type').find(':selected').data('count');
 					var dateTypeCount = jQuery('#' + posttype + '_data_type_count').val();
-					var dateTypeTemplates = jQuery('#' + posttype + '_data_type_templates').attr("checked") ? 1 : 0;
+					var dateTypeTemplates = jQuery('#' + posttype + '_data_type_templates').val();
 
 					var result_container = jQuery('.gd-dummy-data-results-' + posttype);
 					if (!result_container.length) {
 
 						jQuery('<tr class="gd-dummy-data-results gd-dummy-data-results-' + posttype + '" >' +
 							'<td colspan="3">' +
-							'<div class="gd_progressbar_container_' + posttype + '">' +
-							'<div id="gd_progressbar" class="gd_progressbar_' + posttype + '">' +
-							'<div class="gd-progress-label"></div>' +
-							'</div>' +
+							'<div class="gd_progressbar_container_' + posttype + '  progress" style="height: 2em;">' +
+							'<div id="gd_progressbar_dummy" class="gd_progressbar_' + posttype + ' progress-bar bg-success progress-bar-striped progress-bar-animated" style="height: 2em;"></div>' +
+							'<div class="gd-dummy-progress-label w-100 text-center text-dark position-absolute" style="left:0;height: 2em;padding-top: 5px;"></div>' +
 							'</div>' +
 							'</td>' +
 							'</tr>').insertAfter(jQuery(obj).parents('tr'));
 
-						jQuery('.gd_progressbar_' + posttype).progressbar({value: 0});
+//						jQuery('.gd_progressbar_' + posttype).progressbar({value: 0});
 
-						gd_progressbar('.gd_progressbar_container_' + posttype, 0, '0% (0 / ' + dateTypeCount + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Creating categories and custom fields...', 'geodirectory' ) );?>');
+						jQuery('.gd_progressbar_container_' + posttype + ' .progress-bar' ).width(0).parent().find('.gd-dummy-progress-label').html( '0% (0 / ' + dateTypeCount + ') <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i> <?php echo esc_attr( __( 'Creating categories and custom fields...', 'geodirectory' ) );?>');
 					}
 
 					if (!(typeof bound_lat_lng == 'object' && bound_lat_lng.length == 4)) {
@@ -816,15 +822,14 @@ class GeoDir_Admin_Dummy_Data {
 							var percentage = Math.round((insertedCount / dateTypeCount ) * 100);
 							percentage = percentage > 100 ? 100 : percentage;
 
-
-							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-sync fa-spin" aria-hidden="true"></i><?php echo esc_attr( __( 'Inserting data...', 'geodirectory' ) );?>');
+							jQuery('.gd_progressbar_container_' + posttype + ' .progress-bar' ).width(percentage+"%").parent().find('.gd-dummy-progress-label').html( percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-circle-notch fa-spin" aria-hidden="true"></i> <?php echo esc_attr( __( 'Inserting data...', 'geodirectory' ) );?>');
 							console.log(insertedCount);
 							gdInstallDummyData(obj, nonce, posttype, insertedCount);
 						}
 						else {
 							geodir_installing_dummy_data = false;
 							percentage = 100;
-							gd_progressbar('.gd_progressbar_container_' + posttype, percentage, percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-check" aria-hidden="true"></i><?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
+							jQuery('.gd_progressbar_container_' + posttype + ' .progress-bar' ).removeClass('progress-bar-striped progress-bar-animated').width(percentage+"%").parent().find('.gd-dummy-progress-label').html( percentage + '% (' + insertedCount + ' / ' + dateTypeCount + ') <i class="fas fa-check" aria-hidden="true"></i> <?php echo esc_attr( __( 'Complete!', 'geodirectory' ) );?>');
 							jQuery(obj).addClass('gd-remove-data');
 							jQuery(obj).val('<?php _e( 'Remove data', 'geodirectory' );?>');
 							jQuery(obj).prop('disabled', false);

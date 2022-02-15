@@ -1,59 +1,63 @@
-<li class="dd-item" data-id="1" id="setName_<?php echo esc_attr( $tab->id );?>">
-	<div class="dd-form">
-		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
-		<div class="dd-handle">
+<li class="dd-item " data-id="<?php echo esc_attr( $tab->id );?>" id="setName_<?php echo esc_attr( $tab->id );?>" >
+	<div class="hover-shadow dd-form d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-left bg-light" onclick="gd_tabs_item_settings(this);">
+		<div class="  flex-fill font-weight-bold">
 			<?php echo $tab_icon; ?>
 			<?php echo esc_attr($tab->tab_name);?>
-			<span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php echo esc_attr($tab->tab_key). ' ('.esc_attr($tab->tab_type).')';?></span>
+			<span class="float-right text-right small" title="<?php _e('Open/Close','geodirectory');?>"><?php echo esc_attr($tab->tab_key). ' ('.esc_attr($tab->tab_type).')';?></span>
 		</div>
-		<div class="dd-setting <?php echo 'dd-type-'.esc_attr( $tab->tab_type );?>">
-				<?php echo geodir_notification( array('gd-warn'=>__('Name and Icon settings are not used for sub items except fieldset.','geodirectory')) );?>
+		<div class="dd-handle">
 
-			<p class="dd-setting-name">
-				<label for="gd-tab-name-<?php echo esc_attr( $tab->id );?>">
-					<?php _e('Name:','geodirectory') ?><br>
-					<input type="text" name="tab_name" id="gd-tab-name-<?php echo esc_attr( $tab->id );?>" value="<?php echo esc_attr($tab->tab_name);?>">
-				</label>
-			</p>
-			<p class="dd-setting-icon">
-				<label for="gd-tab-icon-<?php echo esc_attr( $tab->id );?>">
-					<?php _e('Icon (optional):','geodirectory'); ?><br>
-					<select
-						id="gd-tab-icon-<?php echo esc_attr( $tab->id );?>"
-						name="tab_icon"
-						class="regular-text geodir-select"
-						data-fa-icons="1"  tabindex="-1" aria-hidden="true"
-					>
-						<?php
-						include_once( dirname( __FILE__ ) . '/../settings/data_fontawesome.php' );
-						echo "<option value=''>".__('None','geodirectory')."</option>";
-						$tab_icon = $tab->tab_icon;
-						foreach ( geodir_font_awesome_array() as $key => $val ) {
-							?>
-							<option value="<?php echo esc_attr( $key ); ?>" data-fa-icon="<?php echo esc_attr( $key ); ?>" <?php
-							selected( $tab_icon, $key );
-							?>><?php echo $key ?></option>
-							<?php
-						}
-						?>
-					</select>
-				</label>
-			</p>
+			<i class="far fa-trash-alt text-danger ml-2" id="delete-16"  onclick="gd_tabs_delete_tab(this);event.stopPropagation();return false;"></i>
+			<i class="fas fa-grip-vertical text-muted ml-2" style="cursor: move" aria-hidden="true" ></i>
+
+		</div>
+		<script type="text/template" class="dd-setting <?php echo 'dd-type-'.esc_attr( $tab->tab_type );?> d-none ">
 			<?php
+			//include_once( dirname( __FILE__ ) . '/../settings/data_fontawesome.php' );
+			echo geodir_notification( array('info'=>__('Name and Icon settings are not used for sub items except fieldset.','geodirectory')) );
+
+			echo aui()->input(
+				array(
+					'id'                => 'gd-tab-name-'.esc_attr( $tab->id ),
+					'name'              => 'tab_name',
+					'label_type'        => 'top',//'horizontal',
+//				'label_class'=> 'font-weight-bold',
+					'label'              => __('Name','geodirectory'),
+					'type'              =>   'text',
+					'value' => esc_attr($tab->tab_name),
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'gd-tab-icon-'.esc_attr( $tab->id ),
+					'name'              => 'tab_icon',
+					'label_type'        => 'top',//'horizontal',
+//				'label_class'=> 'font-weight-bold',
+					'placeholder'      => esc_attr__( 'Select icon', 'geodirectory' ),
+					'label'              => __('Icon','geodirectory'),
+					'type'              =>   'iconpicker',
+					'value' => esc_attr($tab->tab_icon),
+				)
+			);
+
+
 			if($tab->tab_type=='shortcode'){
-				?>
-				<p>
-					<label for="gd-tab-content-<?php echo esc_attr( $tab->id );?>">
-						<?php _e('Tab content:','geodirectory');
-						if($tab->tab_type=='shortcode'){
-							echo WP_Super_Duper::shortcode_button("'gd-tab-content-".$tab->id."'");
-//							echo ' <a href="#TB_inline?width=100%&height=550&inlineId=super-duper-content" class="thickbox button super-duper-content-open" title="'. __('Add Shortcode','geodirectory').'"><i class="fas fa-cubes" aria-hidden="true"></i></a>';
-						}
-						?><br>
-						<textarea name="tab_content" id="gd-tab-content-<?php echo $tab->id;?>" placeholder="<?php _e('Add shortcode here.','geodirectory');?>"><?php echo stripslashes($tab->tab_content);?></textarea>
-					</label>
-				</p>
-				<?php
+				$textarea =  aui()->textarea(array(
+					'name'       => 'tab_content',
+					'class'      => '',
+					'id'         => 'gd-tab-content-'.absint($tab->id),
+					'placeholder'=> esc_html__( "Add shortcode here.", 'geodirectory'),
+					'required'   => true,
+					'label_type'        => 'top',
+					'label'      => esc_html__( "Tab content", 'geodirectory')." {shortcode button}",
+					'rows'      => 2,
+					'value' =>  stripslashes($tab->tab_content)
+				));
+
+//			$sc_btn = WP_Super_Duper::shortcode_button("'gd-tab-content-".absint($tab->id)."'");
+//			echo str_replace("{shortcode button}",$sc_btn,$textarea);
+				echo str_replace("{shortcode button}"," <a onclick=\"sd_ajax_get_picker('gd-tab-content-".absint($tab->id)."');\" href=\"#TB_inline?width=100%&height=550&inlineId=super-duper-content-ajaxed\" class='thickbox sd-lable-shortcode-inserter super-duper-content-open badge badge-primary'>".__( "Add shortcode", 'geodirectory')."</a>",$textarea);
 			}else{
 				echo '<input type="hidden" name="tab_content" value=\''.stripslashes($tab->tab_content).'\'>';
 			}
@@ -63,12 +67,18 @@
 			<input type="hidden" name="tab_layout" value="<?php echo esc_attr( $tab->tab_layout );?>">
 			<input type="hidden" name="tab_type" value="<?php echo esc_attr( $tab->tab_type );?>">
 			<input type="hidden" name="tab_key" value="<?php echo esc_attr( $tab->tab_key );?>">
-			
 
-			<p class="gd-tab-actions">
-				<a class="item-delete submitdelete deletion" id="delete-16" href="javascript:void(0);" onclick="gd_tabs_delete_tab(this);return false;"><?php _e("Remove","geodirectory");?></a>
-				<input type="button" class="button button-primary" name="save" id="save" value="<?php _e("Save","geodirectory");?>" onclick="gd_tabs_save_tab(this);return false;">
-			</p>
-		</div>
+
+			<div class="gd-tab-actions text-right mb-0">
+				<a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="gd_tabs_close_settings(this); return false;"><?php _e("close","geodirectory");?></a>
+				<button type="button" class="btn btn-primary" name="save" id="save" data-save-text="<?php _e("Save","geodirectory");?>" onclick="gd_tabs_save_tab(this);jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'geodirectory' ); ?>').addClass('disabled');return false;">
+					<?php _e("Save","geodirectory");?>
+				</button>
+			</div>
+		</script>
 	</div>
+
+	<ul></ul>
+
+
 </li>

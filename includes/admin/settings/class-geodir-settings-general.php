@@ -31,9 +31,10 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 		add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 		add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
-		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
-		add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+//		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
 		add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
+		add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
+
 
 
 	}
@@ -359,6 +360,8 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					//'desc_tip' => true,
 				),
 
+				array( 'type' => 'sectionend', 'id' => 'seo_archive_options' ),
+
 				// CPT archive
 				array(
 					'title' => __( 'Post type page', 'geodirectory' ),
@@ -375,7 +378,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_cpt_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_cpt_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -385,7 +388,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_cpt_meta_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_cpt_meta_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -395,7 +398,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_cpt_meta_description',
 					'type'     => 'textarea',
 					'placeholder' => GeoDir_Defaults::seo_cpt_meta_description(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -417,7 +420,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_cat_archive_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_cat_archive_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -427,7 +430,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_cat_archive_meta_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_cat_archive_meta_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -437,7 +440,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_cat_archive_meta_description',
 					'type'     => 'textarea',
 					'placeholder' => GeoDir_Defaults::seo_cat_archive_meta_description(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -447,7 +450,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_tag_archive_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_tag_archive_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -457,7 +460,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_tag_archive_meta_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_tag_archive_meta_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -467,7 +470,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_tag_archive_meta_description',
 					'type'     => 'textarea',
 					'placeholder' => GeoDir_Defaults::seo_tag_archive_meta_description(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -489,7 +492,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_single_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_single_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -499,7 +502,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_single_meta_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_single_meta_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -509,7 +512,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_single_meta_description',
 					'type'     => 'textarea',
 					'placeholder' => GeoDir_Defaults::seo_single_meta_description(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -532,7 +535,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_location_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_location_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -542,7 +545,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_location_meta_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_location_meta_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -552,7 +555,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_location_meta_description',
 					'type'     => 'textarea',
 					'placeholder' => GeoDir_Defaults::seo_location_meta_description(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -575,7 +578,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_search_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_search_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -585,7 +588,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_search_meta_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_search_meta_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -595,7 +598,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_search_meta_description',
 					'type'     => 'textarea',
 					'placeholder' => GeoDir_Defaults::seo_search_meta_description(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -617,7 +620,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_add_listing_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_add_listing_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -627,7 +630,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_add_listing_title_edit',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_add_listing_title_edit(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -637,7 +640,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_add_listing_meta_title',
 					'type'     => 'text',
 					'placeholder' => GeoDir_Defaults::seo_add_listing_meta_title(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -647,7 +650,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'seo_add_listing_meta_description',
 					'type'     => 'textarea',
 					'placeholder' => GeoDir_Defaults::seo_add_listing_meta_description(),
-					'class'     => 'large-text',
+					'class'     => 'active-placeholder',
 					'desc_tip' => true,
 				),
 
@@ -656,7 +659,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 
 
 
-				array( 'type' => 'sectionend', 'id' => 'seo_archive_options' ),
+
 			));
 		}
 
@@ -879,7 +882,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'       => 'multi_city',
 					'name'     => __( 'Remove default city limit', 'geodirectory' ),
 					'desc'     => __( 'This will allow listings to be added anywhere (outside default location).', 'geodirectory' ),
-					'default'  => '0',
+					'default'  => '1',
 					'desc_tip' => false,
 					'advanced' => false,
 				),
@@ -945,7 +948,7 @@ class GeoDir_Settings_General extends GeoDir_Settings_Page {
 					'id'         => 'default_status',
 					'default'    => 'pending',
 					'type'       => 'select',
-					'class'      => 'geodir-select',
+//					'class'      => 'geodir-select',
 					'options' => array_unique(array(
 						'pending' => __('Pending Review', 'geodirectory'),
 						'publish' => __('Publish', 'geodirectory'),

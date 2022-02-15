@@ -1,4 +1,4 @@
-<li class="gd-cf-tooltip-wrap">
+<li class="col px-1">
 	<?php
 //print_r($cf);
 	?>
@@ -9,7 +9,7 @@
 	   data-field-type-key="<?php echo esc_attr($id); ?>"
 	   data-field-type="<?php echo esc_attr($cf['field_type']); ?>"
 	   data-field-single-use="<?php echo isset($cf['single_use']) && $cf['single_use'] ? esc_attr($cf['single_use']) : 0; ?>"
-	   class="gd-draggable-form-items <?php echo esc_attr($cf['class']); ?>"
+	   class="gd-draggable-form-items btn btn-sm d-block m-0 btn-outline-gray text-dark text-left <?php echo esc_attr($cf['class']); ?>"
 	   href="javascript:void(0);">
 
 		<?php if ( isset( $cf['icon'] ) && geodir_is_fa_icon( $cf['icon'] ) ) {
@@ -21,7 +21,7 @@
 		} ?>
 		<?php echo esc_attr($cf['name']); ?>
 		
-		<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help" title="<?php echo esc_attr($cf['description']);?>"></span>
+		<span class="dashicons dashicons-editor-help text-muted float-right" data-toggle="tooltip" title="<?php echo esc_attr($cf['description']);?>"></span>
 
 	</a>
 </li>

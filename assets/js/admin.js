@@ -115,7 +115,7 @@ jQuery(window).on("load",function() {
 		}
 	}
 
-    jQuery('.geodirectory .forminp .large-text').focus(function() {
+    jQuery('.geodirectory .active-placeholder').focus(function() {
         var placeholder = jQuery(this).attr('placeholder');
         var current_val = jQuery(this).val();
         if( '' == current_val ){
@@ -136,7 +136,26 @@ jQuery(window).on("load",function() {
 
     jQuery('[data-action="geodir-regenerate-thumbnails"]').on('click', function(e) {
         geodir_post_generate_thumbs(this);
-    })
+    });
+
+    // Conditional Fields on change
+    jQuery(".gd-settings-wrap").off('change').on("change", function() {
+        try {
+            aui_conditional_fields('.gd-settings-wrap');
+            console.log('on-change');
+        } catch(err) {
+            console.log(err.message);
+        }
+    });
+
+    // Conditional Fields on load
+    try {
+        aui_conditional_fields(".gd-settings-wrap");
+    } catch(err) {
+        console.log(err.message);
+    }
+
+
 });
 
 function geodir_setup_generate_thumbs() {
@@ -531,11 +550,16 @@ function geodir_enable_fix_buttons() {
 function gd_progressbar(el, value, label) {
     var value = parseFloat(value);
     if ( value <= 100 ) {
-        jQuery(el).find('#gd_progressbar').progressbar("value",value);
-        jQuery(el).find(".ui-progressbar-value").css({"width":value+"%"});
+        jQuery(el).find('#gd_progressbar').removeClass('ui-progressbar ui-corner-all ui-widget ui-widget-content').addClass('progress').css({"height":"2em"});
+        jQuery(el).find(".ui-progressbar-value").removeClass('ui-corner-left ui-widget-header').addClass('progress-bar').css({"width":value+"%"}).show();
         if (typeof label != 'undefined') {
-            jQuery(el).find('#gd_progressbar .gd-progress-label').html(label);
+            jQuery(el).find('#gd_progressbar .gd-progress-label').addClass('w-100 text-center text-dark position-absolute').html(label);
+            if(value>60){
+                jQuery(el).find('#gd_progressbar .gd-progress-label').removeClass('text-dark').addClass('text-light');
+            }
         }
+    }else if(value==100){
+        jQuery(el).find(".ui-progressbar-value").addClass('bg-success');
     }
 }
 
@@ -1080,7 +1104,17 @@ function init_advanced_settings(){
     jQuery( ".gd-advanced-toggle" ).off("click").on("click",function() {
         jQuery(".gd-advanced-toggle").toggleClass("gda-hide");
         console.log('toggle');
-        jQuery(".gd-advanced-setting, #default_location_set_address_button").toggleClass("gda-show");
+        // jQuery(".gd-advanced-setting, #default_location_set_address_button").toggleClass("gda-show d-none");
+        jQuery(".gd-advanced-setting, #default_location_set_address_button").collapse('toggle');
+    });
+}
+
+function init_advanced_settings_field(){
+    jQuery( "#geodir-field-settings .gd-advanced-toggle-field" ).off("click").on("click",function() {
+        jQuery("#geodir-field-settings .gd-advanced-toggle-field").toggleClass("gda-hide");
+        console.log('toggle');
+        // jQuery(".gd-advanced-setting, #default_location_set_address_button").toggleClass("gda-show d-none");
+        jQuery("#geodir-field-settings .gd-advanced-setting").collapse('toggle');
     });
 }
 
@@ -1410,4 +1444,88 @@ function geodir_tooltip_version() {
         ttv = parseFloat(jQuery.fn.tooltip.Constructor.VERSION);
     }
     return ttv;
+}
+
+var gd_console_logging = false;
+var gd_has_map_error = false;
+function geodir_validate_google_api_key($key,$id){
+    gd_has_map_error = false;
+    console.log($key);
+
+    if(!gd_console_logging){
+        gd_console_logging = true;
+        console.defaultError = console.error.bind(console);
+        console.errors = [];
+        console.error = function(){
+            // default &  console.error()
+            console.defaultError.apply(console, arguments);
+            // our check
+            geodir_get_map_error(arguments);
+        }
+
+        console.defaultWarn = console.warn.bind(console);
+        console.warns = [];
+        console.warn = function(){
+            // default &  console.warn()
+            console.defaultWarn.apply(console, arguments);
+
+            // our check
+            geodir_get_map_error(arguments);
+        }
+    }
+
+    //aui_toast($id,$type,$title,$title_small,$body,$time,$can_close)
+    $title = geodir_params.txt_google_key_verifying + ' <div class="spinner-border spinner-border-sm" role="status"><span class="sr-only"></span></div>';
+    aui_toast('geodir_validate_google_api_key','info', $title ,'','',10000,false);
+    setTimeout(function (){
+        if( !gd_has_map_error ){
+            aui_toast('geodir_validate_google_api_key_success','success', 'Key Looks Good' ,'','',10000,false);
+        }
+    }, 10000);
+
+    jQuery.getScript( "https://maps.google.com/maps/api/js?language=en&key="+$key+"&libraries=places" )
+        .done(function( script, textStatus ) {
+            console.log( textStatus );
+            jQuery('#hidden-map-test').remove();
+            jQuery(document.body).append("<div id='hidden-map-test' style='height: 1px;width:1px;margin-top: -100px;'></div>");
+            map = new google.maps.Map(document.getElementById("hidden-map-test"), {
+                center: { lat: 0, lng: 0 },
+                zoom: 14,
+            });
+
+        })
+        .fail(function( jqxhr, settings, exception ) {
+            alert( "Triggered ajaxError handler." );
+        });
+}
+
+function geodir_get_map_error($message){
+    //alert(JSON.stringify(arguments));
+    jQuery.each($message, function(propName, propVal) {
+       $body = '';$id = ''; $docs = '';
+        //console.log(propName, propVal);
+        if (propVal.indexOf("#key-looks-like-project-number") >= 0){
+            $id = 'geodir_validate_google_api_key_error_project';
+            $body = geodir_params.txt_google_key_error_project;
+            $docs = '<a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_documentation+'</a>';
+        }else if(propVal.indexOf("#invalid-key") >= 0){
+            $id = 'geodir_validate_google_api_key_error_invalid';
+            $body = geodir_params.txt_google_key_error_invalid;
+            $docs = '<a href="https://docs.wpgeodirectory.com/article/186-google-api" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_documentation+'</a>';
+        }else if(propVal.indexOf("#referer-not-allowed-map-error") >= 0){
+            $id = 'geodir_validate_google_api_key_error_referer';
+            $body = geodir_params.txt_google_key_error_referer;
+            $docs = '<a href="https://docs.wpgeodirectory.com/article/186-google-api#step-4-restrict-api-key-access" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_documentation+'</a>';
+        }else if(propVal.indexOf("You must enable Billing") >= 0){
+            $id = 'geodir_validate_google_api_key_error_billing';
+            $body = geodir_params.txt_google_key_error_billing;
+            $docs = '<a href="https://console.cloud.google.com/project/_/billing/enable" target="_blank" class="btn btn-light d-block mt-2 text-dark">'+geodir_params.txt_google_key_enable_billing+'</a>';
+        }
+
+        if($id){
+            gd_has_map_error = true;
+            jQuery('#geodir_validate_google_api_key').toast('hide');
+            aui_toast($id,'error', geodir_params.txt_google_key_error ,'',$body + $docs ,60000,true);
+        }
+    });
 }

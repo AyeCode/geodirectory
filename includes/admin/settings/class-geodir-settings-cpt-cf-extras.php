@@ -228,119 +228,176 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$currency_symbol_placement = esc_attr( $cf['defaults']['extra_fields']['currency_symbol_placement'] );
 			}
 
-			$is_price_style = '';
-			$thousand_separator_style = '';
-			$decimal_separator_style = '';
-			$decimal_point_style = '';
-			$decimal_display_style = '';
-			$currency_symbol_style = '';
 			$price_heading_style = '';
-			$currency_symbol_placement_style = '';
 			if ( ! ( $is_int || $is_float ) ) {
 				$is_price = 0;
 				$thousand_separator = 'none';
 
 				$price_heading_style = 'style="display:none;"';
-				$is_price_style = 'style="display:none;"';
-				$thousand_separator_style = 'style="display:none;"';
 			}
 
 			if ( ! $is_float ) {
 				$decimal_point = '';
-
-				$decimal_separator_style = 'style="display:none;"';
-				$decimal_display_style = 'style="display:none;"';
-				$decimal_point_style = 'style="display:none;"';
 			}
 
 			if ( ! $is_price ) {
 				$currency_symbol = '';
-
-				$currency_symbol_style = 'style="display:none;"';
-				$currency_symbol_placement_style = 'style="display:none;"';
 			}
 			ob_start();
 			?>
-			<h3 class="gd-advanced-setting" data-setting="price_heading" <?php echo $price_heading_style; ?>><?php _e( 'Price Options', 'geodirectory' ); ?></h3>
-			<p class="gdcf-price-extra-set" data-gdat-display-switch-set1="gdat-extra_is_price" data-setting="is_price" <?php echo $is_price_style; ?>>
-				<label for="is_price" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select if this field should be displayed as a price value.', 'geodirectory' ));
-					_e('Display as price', 'geodirectory'); ?>
-					<input type="hidden" name="extra[is_price]" value="0" />
-					<input type="checkbox" name="extra[is_price]" value="1" <?php checked( $is_price, 1, true );?> onclick="gd_show_hide_radio(this,'show','gdat-extra_is_price');" />
-				</label>
-			</p>
-			<p class="gdat-extra_is_price" data-setting="currency_symbol" <?php echo $currency_symbol_style; ?>>
-				<label for="currency_symbol" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select the currency symbol.', 'geodirectory' ));
-					_e('Currency symbol:', 'geodirectory');?>
-					<input type="text" name="extra[currency_symbol]" id="currency_symbol" value="<?php echo $currency_symbol; ?>"/>
-				</label>
-			</p>
-			<p class="gd-advanced-setting gdat-extra_is_price" data-setting="currency_symbol_placement" <?php echo $currency_symbol_placement_style; ?>>
-				<label for="currency_symbol_placement" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select the currency symbol placement.', 'geodirectory' ));
-					_e('Currency symbol placement:', 'geodirectory');?>
-					<select name="extra[currency_symbol_placement]" id="currency_symbol_placement">
-						<option value="left" <?php selected( true, $currency_symbol_placement == 'left' );?>><?php _e('Left', 'geodirectory'); ?></option>
-						<option value="right" <?php selected( true, $currency_symbol_placement == "right" );?>><?php _e('Right', 'geodirectory'); ?></option>
-					</select>
-				</label>
-			</p>
-			<p class="gd-advanced-setting" data-setting="thousand_separator" <?php echo $thousand_separator_style; ?>>
-				<label for="thousand_separator" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' ));
-					_e('Thousand separator', 'geodirectory');?>
-					<select name="extra[thousand_separator]" id="thousand_separator">
-						<option value="comma" <?php selected( true, $thousand_separator == 'comma' );?>><?php _e(', (comma)', 'geodirectory'); ?></option>
-						<option value="slash" <?php selected( true, $thousand_separator == "slash" );?>><?php _e('\ (slash)', 'geodirectory'); ?></option>
-						<option value="period" <?php selected( true, $thousand_separator == 'period' );?>><?php _e('. (period)', 'geodirectory'); ?></option>
-						<option value="space" <?php selected( true, $thousand_separator == 'space' );?>><?php _e(' (space)', 'geodirectory'); ?></option>
-						<option value="none" <?php selected( true, $thousand_separator == 'none' );?>><?php _e('(none)', 'geodirectory'); ?></option>
-					</select>
-				</label>
-			</p>
-			<p class="gd-advanced-setting" data-setting="decimal_separator" <?php echo $decimal_separator_style; ?>>
-				<label for="decimal_separator" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select the decimal separator.', 'geodirectory' ));
-					_e('Decimal separator:', 'geodirectory');?>
-					<select name="extra[decimal_separator]" id="decimal_separator">
-						<option value="period" <?php selected( true, $decimal_separator == 'period' );?>><?php _e('. (period)', 'geodirectory'); ?></option>
-						<option value="comma" <?php selected( true, $decimal_separator == "comma" );?>><?php _e(', (comma)', 'geodirectory'); ?></option>
-					</select>
-				</label>
-			</p>
-			<p class="dd-setting-name decimal-point-wrapper" data-setting="decimal_point" <?php echo $decimal_point_style; ?>>
-				<label for="decimal_point">
-					<?php
-					echo geodir_help_tip(__( 'Decimal point to display after point.', 'geodirectory' ));
-					_e( 'Select decimal point :', 'geodirectory' ); ?>
-					<select name="decimal_point" id="decimal_point">
-						<option value=""><?php echo _e( 'Select', 'geodirectory' ); ?></option>
-						<?php for ( $i = 1; $i <= 10; $i ++ ) {
-							$selected = $i == $decimal_point ? 'selected="selected"' : ''; ?>
-							<option value="<?php echo $i; ?>" <?php echo $selected; ?>><?php echo $i; ?></option>
-						<?php } ?>
-					</select>
-				</label>
-			</p>
-			<p class="gd-advanced-setting" data-setting="decimal_display" <?php echo $decimal_display_style; ?>>
-				<label for="decimal_display" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select how the decimal is displayed.', 'geodirectory' ));
-					_e('Decimal display:', 'geodirectory');?>
-					<select name="extra[decimal_display]" id="decimal_display">
-						<option value="if" <?php selected( true, $decimal_display == 'if' );?>><?php _e('If used (not .00)', 'geodirectory'); ?></option>
-						<option value="allways" <?php selected( true, $decimal_display == "allways" );?>><?php _e('Always (.00)', 'geodirectory'); ?></option>
-					</select>
-				</label>
-			</p>
+			<h3 class="gd-advanced-setting border-bottom text-dark h4 pt-3 pb-2 mb-3"
+			    data-element-require="jQuery(form).find(&#039;[data-argument=&quot;data_type&quot;]&#039;).find(&#039;input,select,textarea&#039;).val() == &quot;INT&quot; || jQuery(form).find(&#039;[data-argument=&quot;data_type&quot;]&#039;).find(&#039;input,select,textarea&#039;).val() == &quot;DECIMAL&quot;"			    data-setting="price_heading" <?php //echo $price_heading_style; ?>>
+				<?php _e( 'Price Options', 'geodirectory' ); ?>
+			</h3>
+
 			<?php
+			echo aui()->input(
+				array(
+					'id'                => 'is_price',
+					'name'              => 'extra[is_price]',
+					'label_type'        => 'horizontal',
+					'label_col'        => '4',
+					'label'              => __('Display as price','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => $is_price,
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+//					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'help_text' => geodir_help_tip( __( 'Select if this field should be displayed as a price value.', 'geodirectory' )),
+					'element_require'   => '[%data_type%] == "INT" || [%data_type%] == "DECIMAL"'
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'currency_symbol',
+					'name'              => 'extra[currency_symbol]',
+					'label_type'        => 'top',
+					'label'              => __('Currency symbol','geodirectory') . geodir_help_tip( __( 'Select the currency symbol.', 'geodirectory' )),
+					'type'              =>   'text',
+					'value' => $currency_symbol,
+					'element_require'   => '[%is_price%:checked]'
+				)
+			);
+
+			echo aui()->select(
+				array(
+					'id'                => 'currency_symbol_placement',
+					'name'              =>  'extra[currency_symbol_placement]',
+					'label_type'        => 'top',
+					'multiple'   => false,
+					'class'             => ' mw-100',
+					'options'       => array(
+						'left'   =>  __( 'Left', 'geodirectory' ),
+						'right'   =>  __( 'Right', 'geodirectory' ),
+					),
+					'label'              => __('Currency symbol placement','geodirectory') . geodir_help_tip( __( 'Select the currency symbol placement.', 'geodirectory' )),
+					'value'         => $currency_symbol_placement,
+					'element_require'   => '[%is_price%:checked]'
+				)
+			);
+
+			echo aui()->select(
+				array(
+					'id'                => 'thousand_separator',
+					'name'              =>  'extra[thousand_separator]',
+					'label_type'        => 'top',
+					'multiple'   => false,
+					'class'             => ' mw-100',
+					'options'       => array(
+						'comma'   =>  __( ', (comma)', 'geodirectory' ),
+						'slash'   =>  __( '\ (slash)', 'geodirectory' ),
+						'period'   =>  __( '. (period)', 'geodirectory' ),
+						'space'   =>  __( ' (space)', 'geodirectory' ),
+						'none'   =>  __( '(none)', 'geodirectory' ),
+					),
+					'label'              => __('Thousand separator','geodirectory') . geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' )),
+					'value'         => $thousand_separator,
+					'element_require'   => '[%is_price%:checked]'
+				)
+			);
+
+			echo aui()->select(
+				array(
+					'id'                => 'thousand_separator',
+					'name'              =>  'extra[thousand_separator]',
+					'label_type'        => 'top',
+					'multiple'   => false,
+					'class'             => ' mw-100',
+					'options'       => array(
+						'comma'   =>  __( ', (comma)', 'geodirectory' ),
+						'slash'   =>  __( '\ (slash)', 'geodirectory' ),
+						'period'   =>  __( '. (period)', 'geodirectory' ),
+						'space'   =>  __( ' (space)', 'geodirectory' ),
+						'none'   =>  __( '(none)', 'geodirectory' ),
+					),
+					'label'              => __('Thousand separator','geodirectory') . geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' )),
+					'value'         => $thousand_separator,
+					'element_require'   => '[%data_type%] == "INT" || [%data_type%] == "DECIMAL"'
+				)
+			);
+
+			echo aui()->select(
+				array(
+					'id'                => 'decimal_separator',
+					'name'              =>  'extra[decimal_separator]',
+					'label_type'        => 'top',
+					'multiple'   => false,
+					'class'             => ' mw-100',
+					'options'       => array(
+						'period'   =>  __( '. (period)', 'geodirectory' ),
+						'comma'   =>  __( ', (comma)', 'geodirectory' ),
+					),
+					'label'              => __('Decimal separator','geodirectory') . geodir_help_tip( __( 'Decimal point to display after point.', 'geodirectory' )),
+					'value'         => $decimal_separator,
+					'element_require'   => '[%data_type%] == "DECIMAL"'
+				)
+			);
+
+			echo aui()->select(
+				array(
+					'id'                => 'decimal_point',
+					'name'              =>  'decimal_point',
+					'label_type'        => 'top',
+					'multiple'   => false,
+					'class'             => ' mw-100',
+					'options'       => array(
+						''   =>  __( 'Select', 'geodirectory' ),
+						'1'   =>  '1',
+						'2'   =>  '2',
+						'3'   =>  '3',
+						'4'   =>  '4',
+						'5'   =>  '5',
+						'6'   =>  '6',
+						'7'   =>  '7',
+						'8'   =>  '8',
+						'9'   =>  '9',
+						'10'   =>  '10',
+					),
+					'label'              => __('Decimal points','geodirectory') . geodir_help_tip( __( 'Decimals to display after point.', 'geodirectory' )),
+					'value'         => $decimal_point,
+					'element_require'   => '[%data_type%] == "DECIMAL"'
+				)
+			);
+
+			echo aui()->select(
+				array(
+					'id'                => 'decimal_display',
+					'name'              =>  'extra[decimal_display]',
+					'label_type'        => 'top',
+					'multiple'   => false,
+					'class'             => ' mw-100',
+					'options'       => array(
+						'if'   =>  __( 'Not show if not used', 'geodirectory' ),
+						'allways'   =>  __( 'Always (.00)', 'geodirectory' ),
+					),
+					'label'              => __('Decimal display','geodirectory') . geodir_help_tip( __( 'Select how the decimal is displayed if empty.', 'geodirectory' )),
+					'value'         => $decimal_display,
+					'element_require'   => '[%data_type%] == "DECIMAL" && [%decimal_point%] != "" '
+				)
+			);
+
 			$output .= ob_get_clean();
 
 			return $output;
@@ -358,33 +415,56 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
          * @return string $output.
          */
 		public static function file_types($output,$result_str,$cf,$field_info){
-			ob_start();
+
 			$allowed_file_types = geodir_allowed_mime_types();
 
 			$extra_fields = isset($field_info->extra_fields) && $field_info->extra_fields != '' ? maybe_unserialize($field_info->extra_fields) : '';
 			$gd_file_types = !empty($extra_fields) && !empty($extra_fields['gd_file_types']) ? maybe_unserialize($extra_fields['gd_file_types']) : array('*');
-			?>
-			<p data-setting="gd_file_types">
-				<label for="gd_file_types" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select file types to allowed for file uploading. (Select multiple file types by holding down "Ctrl" key.)', 'geodirectory' ));
-					_e('Allowed file types', 'geodirectory'); ?>
-					<select name="extra[gd_file_types][]" id="gd_file_types" multiple="multiple" style="height:100px;width:90%;">
-						<option value="*" <?php selected(true, in_array('*', $gd_file_types));?>><?php _e('All types', 'geodirectory') ;?></option>
-						<?php foreach ( $allowed_file_types as $format => $types ) { ?>
-							<optgroup label="<?php echo esc_attr( wp_sprintf(__('%s formats', 'geodirectory'), __($format, 'geodirectory') ) ) ;?>">
-								<?php foreach ( $types as $ext => $type ) { ?>
-									<option value="<?php echo esc_attr($ext) ;?>" <?php selected(true, in_array($ext, $gd_file_types));?>><?php echo '.' . $ext ;?></option>
-								<?php } ?>
-							</optgroup>
-						<?php } ?>
-					</select>
-				</label>
-			</p>
 
-			<?php
+			$options = array(
+				'*' => __('All types', 'geodirectory')
+			);
 
-			$output .= ob_get_clean();
+//			print_r( $gd_file_types );exit;
+
+			foreach ( $allowed_file_types as $format => $types ) {
+
+				if ( ! empty( $types ) ) {
+					$options[] = array(
+						'optgroup'  => 'start',
+						'label'     => esc_attr( wp_sprintf(__('%s formats', 'geodirectory'), __($format, 'geodirectory') ) )
+					);
+
+					foreach ( $types as $ext => $type ) {
+						$options[] = array(
+							'value'  => esc_attr($ext) ,
+							'label'     => ".".esc_attr($ext)
+						);
+					}
+
+					$options[] = array(
+						'optgroup'  => 'end',
+					);
+				}
+
+			}
+
+			$output .= aui()->select(
+				array(
+					'id'                => 'gd_file_types',
+					'name'              =>  'extra[gd_file_types][]',
+					'label_type'        => 'top',
+					'multiple'   => true,
+					'select2'   => true,
+					'class'             => ' mw-100',
+					'options'       => $options,
+					'label'              => __('Allowed file types','geodirectory') . geodir_help_tip( __( 'Select file types to allowed for file uploading. (Select multiple file types by holding down "Ctrl" key.)', 'geodirectory' )),
+					'value'         => $gd_file_types,
+//					'element_require'   => '[%data_type%] == "DECIMAL" && [%decimal_point%] != "" '
+				)
+			);
+
+
 			return $output;
 		}
 
@@ -407,18 +487,21 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$gd_file_limit = ! empty( $extra_fields ) && ! empty( $extra_fields['file_limit'] ) ? absint( $extra_fields['file_limit'] ) : 0;
 			}
 
-			ob_start();
-			?>
-			<p data-setting="file_limit">
-				<label for="gd_file_limit" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select the number of files that can be uploaded, Leave blank or 0 to allow unlimited files.', 'geodirectory' ) );
-					_e( 'File upload limit', 'geodirectory' ); ?>
-					<input type="number" name="extra[file_limit]" id="gd_file_limit" value="<?php echo $gd_file_limit; ?>" step="1" min="0">
-				</label>
-			</p>
-			<?php
-			$output .= ob_get_clean();
+			$output .= aui()->input(
+				array(
+					'id'                => 'gd_file_limit',
+					'name'              => 'extra[file_limit]',
+					'label_type'        => 'top',
+					'label'              => __('File upload limit','geodirectory') . geodir_help_tip( __( 'Select the number of files that can be uploaded, Leave blank or 0 to allow unlimited files.', 'geodirectory' ) ),
+					'type'              =>   'number',
+					'value' => $gd_file_limit,
+					'extra_attributes'  => array(
+						'step'  => "1",
+						'min'   =>  "0"
+					)
+//					'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
+				)
+			);
 
 			return $output;
 		}
@@ -444,44 +527,40 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			if ( is_array( $extra ) && empty( $extra['date_format'] ) ) {
 				$extra['date_format'] = geodir_date_format();
 			}
-			?>
-			<p data-setting="date_format">
-				<label for="date_format" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select the date format.', 'geodirectory' ));
-					_e('Date Format', 'geodirectory');
 
-					$date_formats = array(
-						'm/d/Y',
-						'd/m/Y',
-						'Y/m/d',
-						'm-d-Y',
-						'd-m-Y',
-						'Y-m-d',
-						'F j, Y',
-					);
-					/**
-					 * Filter the custom field date format options.
-					 *
-					 * @since 1.6.5
-					 * @param array $date_formats The PHP date format array.
-					 */
-					$date_formats = apply_filters('geodir_date_formats',$date_formats);
-					?>
-					<select name="extra[date_format]" id="date_format">
-						<?php
-						foreach($date_formats as $format){
-							$selected = '';
-							if ( ! empty( $extra ) && isset( $extra['date_format'] ) && esc_attr( $extra['date_format'] ) == $format ) {
-								$selected = "selected='selected'";
-							}
-							echo "<option $selected value='$format'>$format       (".date_i18n( $format, time()).")</option>";
-						}
-						?>
-					</select>
-				</label>
-			</p>
-			<?php
+			$date_formats = array(
+				'm/d/Y',
+				'd/m/Y',
+				'Y/m/d',
+				'm-d-Y',
+				'd-m-Y',
+				'Y-m-d',
+				'F j, Y',
+			);
+			/**
+			 * Filter the custom field date format options.
+			 *
+			 * @since 1.6.5
+			 * @param array $date_formats The PHP date format array.
+			 */
+			$date_formats = apply_filters('geodir_date_formats',$date_formats);
+			$date_formats_rendered = array();
+			foreach($date_formats as $format){
+				$date_formats_rendered[$format] = $format . ' ('.date_i18n( $format, time()).')';
+			}
+
+			echo aui()->select(
+				array(
+					'id'                => 'date_format',
+					'name'              =>  'extra[date_format]',
+					'label_type'        => 'top',
+					'multiple'   => false,
+					'class'             => ' mw-100',
+					'options'       => $date_formats_rendered,
+					'label'              => __('Date Format','geodirectory').geodir_help_tip( __( 'Select the date format.', 'geodirectory' )),
+					'value'         => $extra['date_format'],
+				)
+			);
 
 			$output .= ob_get_clean();
 			return $output;
@@ -511,19 +590,17 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$value = esc_attr( $cf['defaults']['extra_fields']['date_range'] );
 			}
 
-			ob_start();
-			?>
-			<p data-setting="date_range">
-				<label for="date_range" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Set the date range, eg: 1920:2020 or for current dates: c-100:c+5', 'geodirectory' ));
-					_e('Date Range', 'geodirectory');
-					?>
-					<input type="text" name="extra[date_range]" id="date_range" value="<?php echo $value;?>">
-				</label>
-			</p>
-			<?php
-			$output .= ob_get_clean();
+			$output .= aui()->input(
+				array(
+					'id'                => 'date_range',
+					'name'              => 'extra[date_range]',
+					'label_type'        => 'top',
+					'label'              => __('Date Range','geodirectory') . geodir_help_tip( __( 'Set the date range, eg: 1920:2020 or for current dates: c-100:c+5', 'geodirectory' )),
+					'type'              =>   'text',
+					///'wrap_class'    => 'gd-advanced-setting collapse in',
+					'value' => $value,
+				)
+			);
 
 			return $output;
 		}
@@ -541,8 +618,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
          */
 		public static function option_values($output,$result_str,$cf,$field_info){
 
-			ob_start();
-
 			$value = '';
 			if (isset($field_info->option_values)) {
 				$value = esc_attr($field_info->option_values);
@@ -551,25 +626,29 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			}
 
 			$field_type = isset($field_info->field_type) ? $field_info->field_type : '';
-			?>
-			<p data-setting="option_values">
-				<label for="option_values" class="dd-setting-name">
-					<?php
-					$option_values_tool_top = __( 'Option Values should be separated by comma.', 'geodirectory' ).'<br/>';
-					$option_values_tool_top .= __( 'If using for a "tick filter" place a / and then either a 1 for true or 0 for false', 'geodirectory' ).'<br/>';
-					$option_values_tool_top .= __( 'eg: "No Dogs Allowed/0,Dogs Allowed/1" (Select only, not multiselect)', 'geodirectory' ).'<br/>';
-					if ($field_type == 'multiselect' || $field_type == 'select') {
-						$option_values_tool_top .= '<small><span>'.__( '- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'geodirectory' ).'</span>';
-						$option_values_tool_top .= '<span>'.__( '- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'geodirectory' ).'</span></small>';
-					}
-					echo geodir_help_tip( $option_values_tool_top );
-					_e('Option Values:', 'geodirectory'); ?>
-					<input type="text" name="option_values" id="option_values" value="<?php echo $value;?>"/>
-				</label>
-			</p>
-			<?php
 
-			$output .= ob_get_clean();
+			$option_values_tool_top = __( 'Option Values should be separated by comma.', 'geodirectory' ).'<br/>';
+			$option_values_tool_top .= __( 'If using for a "tick filter" place a / and then either a 1 for true or 0 for false', 'geodirectory' ).'<br/>';
+			$option_values_tool_top .= __( 'eg: "No Dogs Allowed/0,Dogs Allowed/1" (Select only, not multiselect)', 'geodirectory' ).'<br/>';
+			if ($field_type == 'multiselect' || $field_type == 'select') {
+				$option_values_tool_top .= '<small><span>'.__( '- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'geodirectory' ).'</span>';
+				$option_values_tool_top .= '<span>'.__( '- If using OPTGROUP tag to grouping options, use "{optgroup}OPTGROUP-LABEL|OPTION-1,OPTION-2{/optgroup}"', 'geodirectory' ).'</span></small>';
+			}
+
+
+			$output .= aui()->input(
+				array(
+					'id'                => 'option_values',
+					'name'              => 'option_values',
+					'label_type'        => 'top',
+					'label'              => __('Option Values','geodirectory') . geodir_help_tip( $option_values_tool_top ),
+					'type'              =>   'text',
+//					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'value' => $value,
+//					'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
+				)
+			);
+
 			return $output;
 		}
 
@@ -585,26 +664,27 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
          * @return string $output.
          */
 		public static function multiselect_input($output,$result_str,$cf,$field_info){
-			ob_start();
 
 			$extra_fields = !empty($field_info->extra_fields) ? maybe_unserialize($field_info->extra_fields) : NULL;
 			$multi_display_type = isset($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
-			?>
-			<p class="gd-advanced-setting" data-setting="multi_display_type">
-				<label for="multi_display_type" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Show multiselect input as multiselect,checkbox or radio.', 'geodirectory' ));
-					_e('Multiselect display type', 'geodirectory'); ?>
-					<select name="extra[multi_display_type]" id="multi_display_type">
-						<option <?php selected($multi_display_type,'select');?> value="select"><?php _e('Select', 'geodirectory');?></option>
-						<option <?php selected($multi_display_type,'checkbox');?> value="checkbox"><?php _e('Checkbox', 'geodirectory');?></option>
-						<option <?php selected($multi_display_type,'radio');?> value="radio"><?php _e('Radio', 'geodirectory');?></option>
-					</select>
-				</label>
-			</p>
-			<?php
 
-			$output .= ob_get_clean();
+			$output .= aui()->select(
+				array(
+					'id'                => 'multi_display_type',
+					'name'              =>  'extra[multi_display_type]',
+					'label_type'        => 'top',
+					'multiple'   => false,
+					'class'             => ' mw-100',
+					'options'       => array(
+						'select'   =>  __( 'Select', 'geodirectory' ),
+						'checkbox'   =>  __( 'Checkbox', 'geodirectory' ),
+						'radio'   =>  __( 'Radio', 'geodirectory' ),
+					),
+					'label'              => __('Multiselect display type','geodirectory') . geodir_help_tip( __( 'Show multiselect input as multiselect,checkbox or radio.', 'geodirectory' )),
+					'value'         => $multi_display_type,
+				)
+			);
+
 			return $output;
 		}
 
@@ -645,117 +725,169 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$address['street2_lable'] = __('Address line 2 (optional)', 'geodirectory');
 			}
 
+			echo aui()->input(
+				array(
+					'id'                => 'show_street2',
+					'name'              => 'extra[show_street2]',
+					'label_type'        => 'horizontal',
+					'label_col'        => '4',
+					'label'              => __('Display Address line 2','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => $address['show_street2'],
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'help_text' => geodir_help_tip( __( 'Select if you want to show address line 2 field in address section.', 'geodirectory' ))
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'street2_lable',
+					'name'              => 'extra[street2_lable]',
+					'label_type'        => 'top',
+					'label'              => __('Address line 2 label','geodirectory') . geodir_help_tip( __( 'Enter Address line 2 field label in address section.', 'geodirectory' )),
+					'type'              =>   'text',
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'value' => $address['street2_lable'],
+					'element_require'   => '[%show_street2%:checked]'
+
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'show_zip',
+					'name'              => 'extra[show_zip]',
+					'label_type'        => 'horizontal',
+					'label_col'        => '4',
+					'label'              => __('Display zip/post code','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => $address['show_zip'],
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'help_text' => geodir_help_tip( __( 'Select if you want to show zip/post code field in address section.', 'geodirectory' ))
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'zip_required',
+					'name'              => 'extra[zip_required]',
+					'label_type'        => 'horizontal',
+					'label_col'        => '4',
+					'label'              => __('Make zip code required','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => isset($address['zip_required']) ? $address['zip_required'] : '',
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'element_require'   => '[%show_zip%:checked]',
+					'help_text' => geodir_help_tip( __( 'Tick to set zip/post code field as required. Some countries do not use ZIP codes, please only enable if your directory is limited to countries that do.', 'geodirectory' ))
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'zip_lable',
+					'name'              => 'extra[zip_lable]',
+					'label_type'        => 'top',
+					'label'              => __('Zip/Post code label','geodirectory') . geodir_help_tip( __( 'Enter zip/post code field label in address section.', 'geodirectory' )),
+					'type'              =>   'text',
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'value' => isset($address['zip_lable']) ? $address['zip_lable'] : '',
+					'element_require'   => '[%show_zip%:checked]'
+
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'map_lable',
+					'name'              => 'extra[map_lable]',
+					'label_type'        => 'top',
+					'label'              => __('Map button label','geodirectory') . geodir_help_tip( __( 'Enter text for `set address on map` button in address section.', 'geodirectory' )),
+					'type'              =>   'text',
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'value' => isset($address['map_lable']) ? $address['map_lable'] : '',
+//					'element_require'   => '[%show_zip%:checked]'
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'show_mapzoom',
+					'name'              => 'extra[show_mapzoom]',
+					'label_type'        => 'horizontal',
+					'label_col'        => '4',
+					'label'              => __('Use user zoom level','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => isset($address['show_mapzoom']) ? $address['show_mapzoom'] : '',
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+//					'element_require'   => '[%show_zip%:checked]',
+					'help_text' => geodir_help_tip( __( 'Do you want to use the user defined map zoom level from the add listing page?', 'geodirectory' ))
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'show_mapview',
+					'name'              => 'extra[show_mapview]',
+					'label_type'        => 'horizontal',
+					'label_col'        => '4',
+					'label'              => __('Display map view','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => isset($address['show_mapview']) ? $address['show_mapview'] : '',
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+//					'element_require'   => '[%show_zip%:checked]',
+					'help_text' => geodir_help_tip( __( 'Select if you want to show `set default map` options in address section. ( Satellite Map, Hybrid Map, Terrain Map)', 'geodirectory' ))
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'mapview_lable',
+					'name'              => 'extra[mapview_lable]',
+					'label_type'        => 'top',
+					'label'              => __('Map view label','geodirectory') . geodir_help_tip( __( 'Enter mapview field label in address section.', 'geodirectory' )),
+					'type'              =>   'text',
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'value' => isset($address['mapview_lable']) ? $address['mapview_lable'] : '',
+					'element_require'   => '[%show_mapview%:checked]'
+				)
+			);
+
+			echo aui()->input(
+				array(
+					'id'                => 'show_latlng',
+					'name'              => 'extra[show_latlng]',
+					'label_type'        => 'horizontal',
+					'label_col'        => '4',
+					'label'              => __('Show latitude and longitude','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => isset($address['show_latlng']) ? $address['show_latlng'] : '',
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+//					'element_require'   => '[%show_zip%:checked]',
+					'help_text' => geodir_help_tip( __( 'This will show/hide the longitude fields in the address section add listing form.', 'geodirectory' ))
+				)
+			);
 			?>
 
-			<p class="gd-advanced-setting" data-setting="show_street2">
-				<label for="show_zip" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select if you want to show address line 2 field in address section.', 'geodirectory' ));
-					_e('Display Address line 2', 'geodirectory'); ?>
-					<input type="hidden" name="extra[show_street2]" value="0" />
-					<input type="checkbox" name="extra[show_street2]" value="1" <?php checked( $address['show_street2'], 1, true );?> onclick="gd_show_hide_radio(this,'show','cf-street2-lable');" />
-				</label>
-			</p>
-
-			<p  class="cf-street2-lable gd-advanced-setting"  <?php if ((isset($address['show_street2']) && !$address['show_street2']) || !isset($address['show_street2'])) {echo "style='display:none;'";}?> data-setting="street2_lable">
-				<label for="street2_lable" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Enter Address line 2 field label in address section.', 'geodirectory' ));
-					_e('Address line 2 label', 'geodirectory'); ?>
-					<input type="text" name="extra[street2_lable]" id="street2_lable"
-					       value="<?php if (isset($address['street2_lable'])) {
-						       echo esc_attr($address['street2_lable']);
-					       }?>"/>
-				</label>
-			</p>
-
-			<p class="gd-advanced-setting" data-setting="show_zip">
-				<label for="show_zip" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select if you want to show zip/post code field in address section.', 'geodirectory' ));
-					_e('Display zip/post code', 'geodirectory'); ?>
-					<input type="hidden" name="extra[show_zip]" value="0" />
-					<input type="checkbox" name="extra[show_zip]" value="1" <?php checked( $address['show_zip'], 1, true );?> onclick="gd_show_hide_radio(this,'show','cf-zip-lable');" />
-				</label>
-			</p>
-
-			<p class="gd-advanced-setting" data-setting="zip_required" <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {echo "style='display:none;'";}?>>
-				<label for="zip_required" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Tick to set zip/post code field as required. Some countries do not use ZIP codes, please only enable if your directory is limited to countries that do.', 'geodirectory' ));
-					_e( 'Make zip/post code mandatory?', 'geodirectory' ); ?>
-					<input type="hidden" name="extra[zip_required]" value="0" />
-					<input type="checkbox" name="extra[zip_required]" value="1" <?php checked( ! empty( $address['zip_required'] ), true, true );?>/>
-				</label>
-			</p>
-
-			<p  class="cf-zip-lable gd-advanced-setting"  <?php if ((isset($address['show_zip']) && !$address['show_zip']) || !isset($address['show_zip'])) {echo "style='display:none;'";}?> data-setting="zip_lable">
-				<label for="zip_lable" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Enter zip/post code field label in address section.', 'geodirectory' ));
-					_e('Zip/Post code label', 'geodirectory'); ?>
-					<input type="text" name="extra[zip_lable]" id="zip_lable"
-					       value="<?php if (isset($address['zip_lable'])) {
-						       echo esc_attr($address['zip_lable']);
-					       }?>"/>
-				</label>
-			</p>
-
 			<input type="hidden" name="extra[show_map]" value="1" />
-			<p class="gd-advanced-setting" data-setting="map_lable">
-				<label for="map_lable" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Enter text for `set address on map` button in address section.', 'geodirectory' ));
-					_e('Map button label', 'geodirectory'); ?>
-					<input type="text" name="extra[map_lable]" id="map_lable"
-					       value="<?php if (isset($address['map_lable'])) {
-						       echo esc_attr($address['map_lable']);
-					       }?>"/>
-				</label>
-			</p>
 
-			<p class="gd-advanced-setting" data-setting="show_mapzoom">
-				<label for="show_mapzoom" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Do you want to use the user defined map zoom level from the add listing page?', 'geodirectory' ));
-					_e('Use user zoom level', 'geodirectory'); ?>
-					<input type="hidden" name="extra[show_mapzoom]" value="0" />
-					<input type="checkbox" name="extra[show_mapzoom]" value="1" <?php if(isset($address['show_mapzoom'])){checked( $address['show_mapzoom'], 1, true );}?> />
-				</label>
-			</p>
-
-			<p class="gd-advanced-setting" data-setting="show_mapview">
-				<label for="show_mapview" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select if you want to show `set default map` options in address section. ( Satellite Map, Hybrid Map, Terrain Map)', 'geodirectory' ));
-					_e('Display map view', 'geodirectory'); ?>
-					<input type="hidden" name="extra[show_mapview]" value="0" />
-					<input type="checkbox" name="extra[show_mapview]" value="1" <?php checked( $address['show_mapview'], 1, true );?> />
-				</label>
-			</p>
-
-
-			<p class="gd-advanced-setting" data-setting="mapview_lable">
-				<label for="mapview_lable" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Enter mapview field label in address section.', 'geodirectory' ));
-					_e('Map view label', 'geodirectory'); ?>
-					<input type="text" name="extra[mapview_lable]" id="mapview_lable"
-					       value="<?php if (isset($address['mapview_lable'])) {
-						       echo esc_attr($address['mapview_lable']);
-					       }?>"/>
-				</label>
-			</p>
-
-			<p class="gd-advanced-setting" data-setting="show_latlng">
-				<label for="show_latlng" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'This will show/hide the longitude fields in the address section add listing form.', 'geodirectory' ));
-					_e('Show latitude and longitude', 'geodirectory'); ?>
-					<input type="hidden" name="extra[show_latlng]" value="0" />
-					<input type="checkbox" name="extra[show_latlng]" value="1" <?php checked( $address['show_latlng'], 1, true );?> />
-				</label>
-			</p>
 			<?php
 
 			$html = ob_get_clean();
@@ -776,8 +908,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		public static function category_input_type( $output, $result_str, $cf, $field ) {
 
 			if ( $field->htmlvar_name == 'post_category' ) {
-				ob_start();
-				//print_r($field->extra_fields);echo '###';
+
 				$extra = maybe_unserialize( $field->extra_fields );
 
 				if ( is_array( $extra ) && ! empty( $extra['cat_display_type'] ) ) {
@@ -786,30 +917,24 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					$cat_display_type = 'select';
 				}
 
-				?>
-				<p class="gd-advanced-setting" data-setting="cat_display_type">
-					<label for="cat_display_type" class="dd-setting-name">
-						<?php
-						echo geodir_help_tip( __( 'Show categories list as select, multiselect, checkbox or radio', 'geodirectory' ));
-						_e( 'Category display type', 'geodirectory' ); ?>
-						<select name="extra[cat_display_type]" id="cat_display_type">
-							<option <?php if ( $cat_display_type == 'select' ) {
-								echo 'selected="selected"';
-							} ?> value="select"><?php _e( 'Select', 'geodirectory' ); ?></option>
-							<option <?php if ( $cat_display_type == 'multiselect' ) {
-								echo 'selected="selected"';
-							} ?> value="multiselect"><?php _e( 'Multiselect', 'geodirectory' ); ?></option>
-							<option <?php if ( $cat_display_type == 'checkbox' ) {
-								echo 'selected="selected"';
-							} ?> value="checkbox"><?php _e( 'Checkbox', 'geodirectory' ); ?></option>
-							<option <?php if ( $cat_display_type == 'radio' ) {
-								echo 'selected="selected"';
-							} ?> value="radio"><?php _e( 'Radio', 'geodirectory' ); ?></option>
-						</select>
-					</label>
-				</p>
-				<?php
-				$output .= ob_get_clean();
+				$output .= aui()->select(
+					array(
+						'id'                => 'cat_display_type',
+						'name'              =>  'extra[cat_display_type]',
+						'label_type'        => 'top',
+						'multiple'   => false,
+						'class'             => ' mw-100',
+						'options'       => array(
+							'select'   =>  __( 'Select', 'geodirectory' ),
+							'multiselect'   =>  __( 'Multiselect', 'geodirectory' ),
+							'checkbox'   =>  __( 'Checkbox', 'geodirectory' ),
+							'radio'   =>  __( 'Radio', 'geodirectory' ),
+						),
+						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'label'              => __('Category display type','geodirectory') . geodir_help_tip( __( 'Show categories list as select, multiselect, checkbox or radio', 'geodirectory' )),
+						'value'         => $cat_display_type,
+					)
+				);
 
 			}
 
@@ -829,25 +954,28 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		public static function no_of_tags_input_type( $output, $result_str, $cf, $field ) {
 
 			if ( $field->htmlvar_name == 'post_tags' ) {
-				ob_start();
 				$extra = maybe_unserialize( $field->extra_fields );
-				?>
-				<p class="gd-advanced-setting" data-setting="no_of_tag">
-					<label for="no_of_tag" class="dd-setting-name">
-						<?php
-						echo wp_kses_post( geodir_help_tip( __( 'Enter number of tag', 'geodirectory' ) ) );
-						esc_html_e( 'Number of tag', 'geodirectory' );
-						if ( is_array( $extra ) && ! empty( $extra['no_of_tag'] ) ) {
-							$no_of_tag = $extra['no_of_tag'];
-						} else {
-							$no_of_tag = '';
-						}
-						?>
-						<input type="number" name="extra[no_of_tag]" id="no_of_tag" value="<?php echo esc_attr( $no_of_tag ); ?>"/>
-					</label>
-				</p>
-				<?php
-				$output .= ob_get_clean();
+				if ( is_array( $extra ) && ! empty( $extra['no_of_tag'] ) ) {
+					$no_of_tag = $extra['no_of_tag'];
+				} else {
+					$no_of_tag = '';
+				}
+				$output .= aui()->input(
+					array(
+						'id'                => 'no_of_tag',
+						'name'              => 'extra[no_of_tag]',
+						'label_type'        => 'top',
+						'label'              => __('Number of allowed tags','geodirectory') . geodir_help_tip( __( 'Enter number of allowed tags', 'geodirectory' ) ),
+						'type'              =>   'number',
+						'value' => $no_of_tag,
+						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'extra_attributes'  => array(
+							'step'  => "1",
+							'min'   =>  "0"
+						)
+//					'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
+					)
+				);
 			}
 			return $output;
 		}
@@ -872,32 +1000,36 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			} elseif ( isset( $cf['defaults']['validation_pattern'] ) && $cf['defaults']['validation_pattern'] ) {
 				$value = esc_attr( $cf['defaults']['validation_pattern'] );
 			}
-			?>
-			<p class="gd-advanced-setting" data-setting="validation_pattern">
-				<label for="validation_pattern" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'geodirectory' ));
-					_e( 'Validation Pattern:', 'geodirectory' ); ?>
-					<input type="text" name="validation_pattern" id="validation_pattern" value="<?php echo $value; ?>"/>
-				</label>
-			</p>
-			<?php
+			echo aui()->input(
+				array(
+					'id'                => 'validation_pattern',
+					'name'              => 'validation_pattern',
+					'label_type'        => 'top',
+					'label'              => __('Validation Pattern','geodirectory') . geodir_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'geodirectory' )),
+					'type'              =>   'text',
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'value' => $value,
+				)
+			);
+
 			$value = '';
 			if ( isset( $field_info->validation_msg ) ) {
 				$value = esc_attr( $field_info->validation_msg );
 			} elseif ( isset( $cf['defaults']['validation_msg'] ) && $cf['defaults']['validation_msg'] ) {
 				$value = esc_attr( $cf['defaults']['validation_msg'] );
 			}
-			?>
-			<p class="gd-advanced-setting" data-setting="validation_msg">
-				<label for="validation_msg" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Enter a extra validation message to show to the user if validation fails.', 'geodirectory' ));
-					_e( 'Validation Message:', 'geodirectory' ); ?>
-					<input type="text" name="validation_msg" id="validation_msg" value="<?php echo $value; ?>"/>
-				</label>
-			</p>
-			<?php
+
+			echo aui()->input(
+				array(
+					'id'                => 'validation_msg',
+					'name'              => 'validation_msg',
+					'label_type'        => 'top',
+					'label'              => __('Validation Message','geodirectory') . geodir_help_tip( __( 'Enter a extra validation message to show to the user if validation fails.', 'geodirectory' )),
+					'type'              =>   'text',
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'value' => $value,
+				)
+			);
 
 			$output = ob_get_clean();
 
@@ -917,29 +1049,29 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
          */
 		public static function advanced_editor( $output, $result_str, $cf, $field_info ) {
 
-			ob_start();
-			?>
-			<p class="gd-advanced-setting" data-setting="advanced_editor">
-				<label for="advanced_editor" class="dd-setting-name">
-					<?php
-					echo geodir_help_tip( __( 'Select if you want to show the advanced editor on add listing page.', 'geodirectory' ));
-					_e( 'Show advanced editor :', 'geodirectory' );
-					$extra = ! empty( $field_info->extra_fields ) ? maybe_unserialize( $field_info->extra_fields ) : array();
-
-					$value = '';
-					if ( is_array( $extra ) && isset( $extra['advanced_editor'] ) ) {
-						$value = absint( $extra['advanced_editor'] );
-					} elseif ( isset( $cf['defaults']['advanced_editor'] ) && $cf['defaults']['advanced_editor'] ) {
-						$value = absint( $cf['defaults']['advanced_editor'] );
-					}
-					?>
-					<input type="hidden" name="extra[advanced_editor]" value="0" />
-					<input type="checkbox" name="extra[advanced_editor]" value="1" <?php checked( $value, 1, true );?> />
-				</label>
-			</p>
-			<?php
-
-			$output .= ob_get_clean();
+			$value = '';
+			$extra = ! empty( $field_info->extra_fields ) ? maybe_unserialize( $field_info->extra_fields ) : array();
+			if ( is_array( $extra ) && isset( $extra['advanced_editor'] ) ) {
+				$value = absint( $extra['advanced_editor'] );
+			} elseif ( isset( $cf['defaults']['advanced_editor'] ) && $cf['defaults']['advanced_editor'] ) {
+				$value = absint( $cf['defaults']['advanced_editor'] );
+			}
+			$output .= aui()->input(
+				array(
+					'id'                => 'advanced_editor',
+					'name'              => 'extra[advanced_editor]',
+					'label_type'        => 'horizontal',
+					'label_col'        => '4',
+					'label'              => __('Advanced editor','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => $value,
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'help_text' => geodir_help_tip( __( 'Select if you want to show the advanced editor on add listing page.', 'geodirectory' ))
+				)
+			);
 
 			return $output;
 		}
@@ -964,30 +1096,34 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			} elseif ( isset( $cf['defaults']['data_type'] ) && $cf['defaults']['data_type'] ) {
 				$dt_value = $cf['defaults']['data_type'];
 			}
-			?>
-			<p class="dd-setting-name gd-advanced-setting" data-setting="data_type">
-				<label for="data_type">
-                <?php
-					echo geodir_help_tip(__( 'Select the data type for the field. This can affect things like search filtering.', 'geodirectory' ));
-					_e( 'Field Data Type :', 'geodirectory' ); ?>
-						<select name="data_type" id="data_type"
-						        onchange="javascript:gd_data_type_changed(this, '<?php echo $result_str; ?>');">
-							<option
-								value="XVARCHAR" <?php if ( $dt_value == 'VARCHAR' ) {
-								echo 'selected="selected"';
-							} ?>><?php _e( 'CHARACTER', 'geodirectory' ); ?></option>
-							<option
-								value="INT" <?php if ( $dt_value == 'INT' ) {
-								echo 'selected="selected"';
-							} ?>><?php _e( 'NUMBER', 'geodirectory' ); ?></option>
-							<option
-								value="DECIMAL" <?php if ( $dt_value == 'FLOAT' || $dt_value == 'DECIMAL' ) {
-								echo 'selected="selected"';
-							} ?>><?php _e( 'DECIMAL', 'geodirectory' ); ?></option>
-						</select>
-				</label>
-			</p>
-			<?php
+
+			// fix some values
+			if ( $dt_value == 'VARCHAR' ) {
+				$dt_value = 'XVARCHAR';
+			} elseif ( $dt_value == 'FLOAT' ) {
+				$dt_value = 'DECIMAL';
+			}
+
+			echo aui()->select(
+				array(
+					'id'                => "data_type",
+					'name'              =>  "data_type",
+					'label_type'        => 'top',
+					'multiple'   => false,
+					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'class'             => 'mw-100',
+					'options'       => array(
+						'XVARCHAR'   =>  __( 'CHARACTER', 'geodirectory' ),
+						'INT'   =>  __( 'NUMBER', 'geodirectory' ),
+						'DECIMAL'   =>  __( 'DECIMAL', 'geodirectory' ),
+					),
+					'label'              => __('Data Type','geodirectory').geodir_help_tip( __( 'Select the data type for the field. This can affect things like search filtering.', 'geodirectory' )),
+					'value'         => $dt_value,
+					'extra_attributes'  => array(
+						'onchange'  => "javascript:gd_data_type_changed(this, '$result_str');"
+					)
+				)
+			);
 
 			$output = ob_get_clean();
 
@@ -1012,27 +1148,33 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				<input type="hidden" name="extra[embed]" value="1" />
 				<?php
 			} else {
-				?>
-				<p class="gd-advanced-setting" data-setting="embed">
-					<label for="embed" class="dd-setting-name">
-						<?php
-						echo geodir_help_tip( __( 'Tick to allow embed videos, images, tweets, audio, and other content.', 'geodirectory' ));
-						_e( 'Embed Media URLs:', 'geodirectory' );
-						$extra = ! empty( $field_info->extra_fields ) ? maybe_unserialize( $field_info->extra_fields ) : array();
 
-						if ( is_array( $extra ) && isset( $extra['embed'] ) ) {
-							$value = absint( $extra['embed'] );
-						} elseif ( isset( $cf['defaults']['embed'] ) && $cf['defaults']['embed'] ) {
-							$value = absint( $cf['defaults']['embed'] );
-						} else {
-							$value = 0;
-						}
-						?>
-						<input type="hidden" name="extra[embed]" value="0" />
-						<input type="checkbox" name="extra[embed]" value="1" <?php checked( $value, 1, true );?> />
-					</label>
-				</p>
-				<?php
+				$extra = ! empty( $field_info->extra_fields ) ? maybe_unserialize( $field_info->extra_fields ) : array();
+
+				if ( is_array( $extra ) && isset( $extra['embed'] ) ) {
+					$value = absint( $extra['embed'] );
+				} elseif ( isset( $cf['defaults']['embed'] ) && $cf['defaults']['embed'] ) {
+					$value = absint( $cf['defaults']['embed'] );
+				} else {
+					$value = 0;
+				}
+				echo aui()->input(
+					array(
+						'id'                => 'embed',
+						'name'              => 'extra[embed]',
+						'label_type'        => 'horizontal',
+						'label_col'        => '4',
+						'label'              => __('Embed Media URLs','geodirectory') ,
+						'type'              =>   'checkbox',
+						'checked' => $value,
+						'value' => '1',
+						'switch'    => 'md',
+						'label_force_left'  => true,
+						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'help_text' => geodir_help_tip( __( 'Tick to allow embed videos, images, tweets, audio, and other content.', 'geodirectory' ))
+					)
+				);
+
 			}
 			$output .= ob_get_clean();
 

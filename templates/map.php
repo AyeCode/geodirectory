@@ -911,7 +911,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 <?php
 $set_button_class = 'geodir_button';
 if (is_admin())
-    $set_button_class = 'button-primary';
+    $set_button_class = 'btn btn-primary collapse';
 ?>
 <input type="button" id="<?php echo $prefix; ?>set_address_button" class="<?php echo $set_button_class; ?>" value="<?php esc_attr_e($map_title, 'geodirectory'); ?>" style="float:none;"/>
 <div id="<?php echo $prefix; ?>d_mouseClick"></div>

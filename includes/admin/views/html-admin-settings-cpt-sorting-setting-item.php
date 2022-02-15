@@ -11,16 +11,24 @@
 $tab_class = isset($field->field_type) && $field->field_type=='random' ? 'mjs-nestedSortable-no-nesting' : '';
 $tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' ? 'random' : $field->htmlvar_name;
 ?>
-<li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo esc_attr( $field->id );?>">
-	<div class="dd-form">
-		<i class="fas fa-caret-down" aria-hidden="true" onclick="gd_tabs_item_settings(this);"></i>
+<li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo esc_attr( $field->id );?>" data-field-nonce="<?php echo esc_attr( $nonce ); ?>">
+	<div class="dd-form hover-shadow d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-left bg-light <?php if(empty($field->is_active)){echo 'border-warning';} ?>" onclick="gd_tabs_item_settings(this);">
+		<div class="  flex-fill font-weight-bold">
+			<?php echo $field_icon; ?>
+			<?php echo isset($field->frontend_title) ? geodir_ucwords( ' ' . esc_html( $field->frontend_title ) ) : ''; ?>
+			<span class="float-right text-right small" title="<?php _e('Open/Close','geodirectory');?>"><?php echo ' ('.esc_attr( $tab_field_name ).')';?></span>
+		</div>
 		<div class="dd-handle">
 			<?php
-			echo $field_icon;
-			echo isset($field->frontend_title) ? geodir_ucwords( ' ' . esc_html( $field->frontend_title ) ) : ''; ?>
-			<span class="dd-key" title="<?php _e('Open/Close','geodirectory');?>"><?php echo ' (' . esc_attr( $tab_field_name ) . ')'; ?></span>
+			if(empty($field->is_active)){
+			?>
+			<i class="fas fa-exclamation-triangle text-warning ml-2" title="<?php _e("Inactive","geodirectory");?>" data-toggle="tooltip"></i>
+			<?php } ?>
+			<i class="fas fa-check-circle ml-2 text-primary gd-is-default <?php if(empty($field->is_default)){echo 'd-none';}?>" title="<?php _e("Default sort option","geodirectory");?>" data-toggle="tooltip"></i>
+			<i class="far fa-trash-alt text-danger ml-2" id="delete-16"  onclick="gd_delete_sort_field('<?php echo esc_attr( $field->id ); ?>', '<?php echo esc_attr( $nonce ); ?>', this);event.stopPropagation();return false;"></i>
+			<i class="fas fa-grip-vertical text-muted ml-2" style="cursor: move" aria-hidden="true" ></i>
 		</div>
-		<div class="dd-setting <?php echo 'dd-type-'.esc_attr($field->field_type);?>">
+		<script type="text/template" class="dd-setting <?php echo 'dd-type-'.esc_attr($field->field_type);?> d-none">
 
 			<input type="hidden" name="_wpnonce" value="<?php echo esc_attr( $nonce ); ?>"/>
 			<input type="hidden" name="post_type" id="post_type" value="<?php echo esc_attr( $field->post_type ); ?>"/>
@@ -29,54 +37,76 @@ $tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' 
 			<input type="hidden" name="data_type" id="data_type" value="<?php if ( isset( $field->data_type ) ) {echo esc_attr( $field->data_type );} ?>"/>
 			<input type="hidden" name="htmlvar_name" id="htmlvar_name" value="<?php echo esc_attr( $field->htmlvar_name ); ?>"/>
 
-			<p class="dd-setting-name gd-advanced-setting">
-				<label for="gd-admin-title-<?php echo esc_attr( $field->id );?>">
-					<?php
-					echo geodir_help_tip( __( 'This is the text used for the sort option.', 'geodirectory' ));
-					_e('Frontend title','geodirectory') ?>
-					<input type="text" name="frontend_title" id="frontend_title" value="<?php echo esc_attr( $frontend_title ) ?>"/>
-				</label>
-			</p>
+			<?php
+			echo aui()->input(
+				array(
+					'id'                => 'frontend_title',
+					'name'              => 'frontend_title',
+					'label_type'        => 'top',
+					'label'              => __('Frontend title','geodirectory') . geodir_help_tip( __( 'This is the text used for the sort option.', 'geodirectory' )),
+					'type'              =>   'text',
+					'value' => esc_attr( $frontend_title),
+				)
+			);
 
-			<?php if ( $field->field_type != 'random' ) { ?>
 
-				<p class="dd-setting-name">
-					<label for="gd-sort-<?php echo esc_attr( $field->id );?>">
-						<?php
-						echo geodir_help_tip( __( 'Select the sort direction: (A-Z or Z-A)', 'geodirectory' ));
-						_e('Ascending or Descending','geodirectory') ?>
-						<select name="sort" id="gd-sort-<?php echo esc_attr( $field->id );?>">
-							<?php $value = isset( $field->sort ) && $field->sort=='desc'  ? 'desc' : 'asc'; ?>
-							<option value="asc" <?php selected( 'asc', $value, true ); ?>><?php _e( 'Ascending', 'geodirectory' ); ?></option>
-							<option	value="desc" <?php selected( 'desc', $value, true ); ?>><?php _e( 'Descending', 'geodirectory' ); ?></option>
-						</select>
-					</label>
-				</p>
-				
-			<?php } ?>
+			if ( $field->field_type != 'random' ) {
 
-				<p class="dd-setting-name dd-default-sort">
-					<label for="gd-is_default-<?php echo esc_attr( $field->id );?>">
-						<?php
-						echo geodir_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'geodirectory' ));
-						_e('Default sort?','geodirectory') ?>
-						<input type="radio" name="is_default"
-						       value="1" <?php if ( isset( $field->is_default ) && $field->is_default == 1 ) {
-							echo 'checked="checked"';
-						} ?>/>
-					</label>
-				</p>
+				$value = isset( $field->sort ) && $field->sort=='desc'  ? 'desc' : 'asc';
+				echo aui()->select(
+					array(
+						'id'                => "gd-sort-".esc_attr( $field->id ),
+						'name'              =>  "gd-sort-".esc_attr( $field->id ),
+						'label_type'        => 'top',
+						'multiple'   => false,
+						'class'             => ' mw-100',
+						'options'       => array(
+							'asc'   =>  __( 'Ascending', 'geodirectory' ),
+							'desc'   =>  __( 'Descending', 'geodirectory' ),
+						),
+						'label'              => __('Ascending or Descending','geodirectory').geodir_help_tip( __( 'Select the sort direction: (A-Z or Z-A)', 'geodirectory' )),
+						'value'         => $value ,
+//						'help_text'  => isset($description) ? $description : '',
+					)
+				);
 
-				<p class="dd-setting-name">
-					<label for="gd-is_active-<?php echo esc_attr( $field->id );?>">
-						<?php
-						echo geodir_help_tip( __( 'Set if this sort option is active or not, if not it will not be shown to users.', 'geodirectory' ));
-						_e('Is active','geodirectory') ?>
-						<?php $value = isset( $field->is_active ) && $field->is_active  ? $field->is_active : 0; ?>
-						<input type="hidden" name="is_active" value="0" />
-						<input type="checkbox" name="is_active" value="1" <?php checked( $value, 1, true );?> onclick="gd_show_hide_radio(this,'show','cfs-asc-title');" />
-					</label>
-				</p>
+			}
+
+			echo aui()->input(
+				array(
+					'id'                => 'is_default',
+					'name'              => 'is_default',
+					'label_type'        => 'horizontal',
+					'label_col'        => '3',
+					'label'              => __('Default sort','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => isset( $field->is_default ) && $field->is_default == 1 ? 1 : 0,
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+					'help_text' => geodir_help_tip( __( 'This sets the option as the overall default sort value, there can be only one.', 'geodirectory' ))
+				)
+			);
+
+//			$value = isset( $field->is_active ) && $field->is_active  ? $field->is_active : 0;
+			echo aui()->input(
+				array(
+					'id'                => 'is_active',
+					'name'              => 'is_active',
+					'label_type'        => 'horizontal',
+					'label_col'        => '3',
+					'label'              => __('Is active','geodirectory') ,
+					'type'              =>   'checkbox',
+					'checked' => isset( $field->is_active ) && $field->is_active ? 1 : 0,
+					'value' => '1',
+					'switch'    => 'md',
+					'label_force_left'  => true,
+					'help_text' => geodir_help_tip( __( 'Set if this sort option is active or not, if not it will not be shown to users.', 'geodirectory' ))
+				)
+			);
+
+			?>
+			
 
 				<input type="hidden" readonly="readonly" name="sort_order" id="sort_order"
 			       value="<?php if ( isset( $field->sort_order ) ) {
@@ -85,12 +115,15 @@ $tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' 
 
 
 
-				<p class="gd-tab-actions">
-					<a class="item-delete submitdelete deletion" id="delete-16" href="javascript:void(0);" onclick="gd_delete_sort_field('<?php echo esc_attr( $field->id ); ?>', '<?php echo esc_attr( $nonce ); ?>', this);return false;"><?php _e("Remove","geodirectory");?></a>
-					<input type="button" class="button button-primary" name="save" id="save" value="<?php _e("Save","geodirectory");?>" onclick="gd_save_sort_field('<?php echo esc_attr( $field->id ); ?>');return false;">
-				</p>
+			<div class="gd-tab-actions text-right mb-0">
+				<a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="gd_tabs_close_settings(this); return false;"><?php _e("close","geodirectory");?></a>
+				<button type="button" class="btn btn-primary" name="save" id="save" data-save-text="<?php _e("Save","geodirectory");?>"  onclick="gd_save_sort_field('<?php echo esc_attr( $field->id ); ?>');jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'geodirectory' ); ?>').addClass('disabled');return false;">
+					<?php _e("Save","geodirectory");?>
+				</button>
+			</div>
 
 
-		</div>
+
+		</script>
 	</div>
 </li>

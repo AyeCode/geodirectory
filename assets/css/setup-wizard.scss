@@ -1,18 +1,18 @@
-$progress-color: rebeccapurple;//#0085ba;
-$button-color: rebeccapurple;//#0085ba;
+$progress-color: #44c553; // rebeccapurple;//#0085ba;
+$button-color: #44c553; // rebeccapurple;//#0085ba;
 
 html{
-  background: rebeccapurple;
-  background: linear-gradient(-225deg,rgba(102, 51, 153, 1), rgba(155, 89, 182, 1));
+  //background: rebeccapurple;
+  //background: linear-gradient(-225deg,rgba(102, 51, 153, 1), rgba(155, 89, 182, 1));
   margin: 0;
   height: 100vh;
   background-attachment: fixed;
 }
 
 body{
-  box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
-  border-radius: 5px;
-  margin-top: 40px;
+  //box-shadow: 0 0 15px 1px rgba(0, 0, 0, 0.4);
+  //border-radius: 5px;
+  //margin-top: 40px;
 }
 
 .gd-setup{
@@ -197,7 +197,7 @@ body{
   margin: 0;
   list-style: none outside;
   overflow: hidden;
-  color: #ccc;
+  color: #787878;
   width:100%;
   display: -webkit-inline-flex;
   display: -ms-inline-flexbox;
@@ -243,7 +243,8 @@ body{
   }
 }
 .gd-setup .gd-setup-actions {
-  overflow: hidden;
+  //overflow: hidden;
+  margin-bottom: 0;
   .button {
     float: right;
     font-size: 1.25em;

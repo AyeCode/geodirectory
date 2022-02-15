@@ -98,7 +98,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function left_panel_title() {
-			return sprintf( __( 'Available sorting options for %s listing and search results', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Fields', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 
 		}
 
@@ -124,7 +124,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			<div class="inside">
 
 				<div id="gd-form-builder-tab" class="gd-form-builder-tab gd-tabs-panel">
-					<ul>
+					<ul class="row row-cols-2 px-2">
 						<?php
 						$sort_options = self::custom_sort_options( self::$post_type );
 
@@ -137,11 +137,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 								//print_r($val);
 								?>
 
-								<li class="gd-cf-tooltip-wrap" <?php echo $display; ?>>
+								<li class="col px-1" <?php echo $display; ?>>
 									<a id="gd-<?php echo esc_attr( $val['field_type'] . '-_-' . $val['htmlvar_name'] ); ?>"
 									   data-field-type-key="<?php echo esc_attr( $val['htmlvar_name'] ); ?>"
 									   data-field-type="<?php echo esc_attr( $val['field_type'] ); ?>"
-									   class="gd-draggable-form-items  gd-<?php echo esc_attr( $val['field_type'] ); ?> geodir-sort-<?php echo esc_attr( $val['htmlvar_name'] ); ?>"
+									   class="gd-draggable-form-items  gd-<?php echo esc_attr( $val['field_type'] ); ?> geodir-sort-<?php echo esc_attr( $val['htmlvar_name'] ); ?> btn btn-sm d-block m-0 btn-outline-gray text-dark text-left"
 									   href="javascript:void(0);">
 										<?php if ( isset( $val['field_icon'] ) && strpos( $val['field_icon'], 'fa-' ) !== false ) {
 											echo '<i class="fas ' . esc_attr( $val['field_icon'] ) . '" aria-hidden="true"></i>';
@@ -152,7 +152,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 										} ?>
 										<?php echo esc_attr( $val['frontend_title'] ); ?>
 										<?php if ( ! empty( $val['description'] ) ) { ?>
-										<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help"
+										<span class="dashicons dashicons-editor-help text-muted float-right" data-toggle="tooltip"
 										      title="<?php echo esc_attr( $val['description'] ); ?>">
 										<?php } ?>
 								</span>
@@ -181,7 +181,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function right_panel_title() {
-			return sprintf( __( 'List of fields that will appear in %s listing and search results sorting option dropdown box.', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Sorting options', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 		/**

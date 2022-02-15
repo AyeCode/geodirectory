@@ -750,7 +750,7 @@ class GeoDir_SEO {
 		$output = '';
 		$variables = self::variables($page);
 		if(!empty($variables)){
-			$output .= '<ul class="geodir-helper-tags">';
+			$output .= '<ul class="geodir-helper-tags d-block clearfix">';
 			foreach($variables as $variable => $desc){
 				$output .= "<li><span class='geodir-helper-tag' title='".__("Click to copy","geodirectory")."'>".esc_attr($variable)."</span>".geodir_help_tip( $desc )."</li>";
 			}

@@ -135,7 +135,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function left_panel_title() {
-			return sprintf( __( 'Add new %s form field', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Fields', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 
@@ -159,7 +159,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		public function left_panel_content() {
 
 			?>
-			<h3><?php _e( 'Standard Fields', 'geodirectory' ); ?></h3>
+			<h3 class="h6 text-muted"><?php _e( 'Standard Fields', 'geodirectory' ); ?></h3>
 
 			<div class="inside">
 
@@ -180,7 +180,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			</div>
 
-			<h3><?php _e( 'Predefined Fields', 'geodirectory' ); ?></h3>
+			<h3 class="h6  text-muted"><?php _e( 'Predefined Fields', 'geodirectory' ); ?></h3>
 			<div class="inside">
 
 				<div id="gd-form-builder-tab-predefined" class="gd-form-builder-tab gd-tabs-panel">
@@ -200,7 +200,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			</div>
 
-			<h3><?php _e( 'Custom Fields', 'geodirectory' ); ?></h3>
+			<h3 class="h6  text-muted"><?php _e( 'Custom Fields', 'geodirectory' ); ?></h3>
 			<div class="inside">
 
 				<div id="gd-form-builder-tab" class="gd-tabs-panel">
@@ -239,10 +239,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 			$cfs = self::fields_standard( self::$post_type );
 			?>
-			<ul class="full ">
-				<li class="gd-cf-tooltip-wrap">
+			<ul class="row row-cols-1 px-2 mb-0">
+				<li class="gd-cf-tooltip-wrap col px-1">
 					<a id="gd-fieldset"
-					   class="gd-draggable-form-items gd-fieldset"
+					   class="gd-draggable-form-items gd-fieldset btn btn-sm d-block m-0 btn-outline-gray text-dark text-left"
 					   href="javascript:void(0);"
 					   data-field-custom-type=""
 					   data-field-type="fieldset"
@@ -252,7 +252,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 						<i class="fas fa-long-arrow-alt-right " aria-hidden="true"></i>
 						<?php _e( 'Fieldset (section separator)', 'geodirectory' ); ?>
 
-						<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help" title="<?php _e( 'This adds a section separator with a title.', 'geodirectory' );?>"></span>
+						<span class="gd-help-tip gd-help-tip-no-margin dashicons dashicons-editor-help text-muted float-right" data-toggle="tooltip" title="<?php _e( 'This adds a section separator with a title.', 'geodirectory' );?>"></span>
 					</a>
 				</li>
 			</ul>
@@ -261,7 +261,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 
 
 			if ( ! empty( $cfs ) ) {
-				echo '<ul>';
+				echo '<ul class="row row-cols-2 px-2">';
 				foreach ( $cfs as $id => $cf ) {
 					include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-cf-option-item.php' );
 				}
@@ -288,7 +288,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$cfs = self::fields_predefined( $listing_type );
 
 			if ( ! empty( $cfs ) ) {
-				echo '<ul>';
+				echo '<ul class="row row-cols-2 px-2">';
 				foreach ( $cfs as $id => $cf ) {
 					include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-cf-option-item.php' );
 				}
@@ -315,7 +315,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			$cfs = self::fields_custom( $listing_type );
 
 			if ( ! empty( $cfs ) ) {
-				echo '<ul>';
+				echo '<ul class="row row-cols-2 px-2">';
 				foreach ( $cfs as $id => $cf ) {
 					include( dirname( __FILE__ ) . '/../views/html-admin-settings-cpt-cf-option-item.php' );
 				}
@@ -1360,7 +1360,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 		 * @return string The page heading.
 		 */
 		public static function right_panel_title() {
-			return sprintf( __( 'List of fields that will appear on add new %s listing form', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
+			return sprintf( __( 'Add listing form', 'geodirectory' ), geodir_get_post_type_singular_label( self::$post_type, false, true ) );
 		}
 
 

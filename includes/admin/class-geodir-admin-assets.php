@@ -81,7 +81,10 @@ class GeoDir_Admin_Assets {
 			}
 
 			wp_enqueue_style( 'geodir-admin-css' );
-			wp_enqueue_style( 'select2' );
+			if ( ! empty( $_REQUEST['page'] ) && $_REQUEST['page']  != 'gd-settings' ) {
+				wp_enqueue_style( 'select2' );
+			}
+
 			wp_enqueue_style( 'geodir-jquery-ui-timepicker-css' );
 			wp_enqueue_style( 'geodir-jquery-ui-css' );
 			wp_enqueue_style( 'wp-color-picker' );
