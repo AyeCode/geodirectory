@@ -85,7 +85,7 @@ class GeoDir_Report_Post {
 			$settings = apply_filters( 'geodir_admin_report_post_settings', 
 				array(
 					array(
-						'type'  => 'title',
+						'type'  => 'page-title',
 						'id'    => 'report_post',
 						'title' => $title,
 						'desc'  => ''
@@ -98,10 +98,10 @@ class GeoDir_Report_Post {
 						'css' => 'min-width:300px;',
 						'std' => '40'
 					),
-					array(
-						'type' => 'sectionend',
-						'id' => 'report_post'
-					)
+//					array(
+//						'type' => 'sectionend',
+//						'id' => 'report_post'
+//					)
 				) 
 			);
 		}
