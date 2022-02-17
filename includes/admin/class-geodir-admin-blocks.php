@@ -192,7 +192,7 @@ class GeoDir_Admin_Blocks {
 		$design_style = geodir_design_style();
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
-		$deps = $pagenow == 'widgets.php' && version_compare( $wp_version, '5.8', '>=' ) ? array( 'wp-blocks', 'wp-element') : array( 'wp-blocks', 'wp-element', 'wp-editor' );
+		$deps = ( $pagenow == 'widgets.php' || ( $pagenow == 'site-editor.php' && ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) ) ) && version_compare( $wp_version, '5.8', '>=' ) ? array( 'wp-blocks', 'wp-element') : array( 'wp-blocks', 'wp-element', 'wp-editor' );
 		wp_enqueue_script(
 			'gd-gutenberg',
 			geodir_plugin_url() . '/assets/js/blocks'.$suffix.'.js',
