@@ -1549,7 +1549,7 @@ if ( ! class_exists( 'WP_Super_Duper' ) ) {
 
 			$show      = false;
 			$arguments = $this->get_arguments();
-			
+
 			if ( ! empty( $arguments ) ) {
 				foreach ( $arguments as $argument ) {
 					if ( isset( $argument['advanced'] ) && $argument['advanced'] ) {
