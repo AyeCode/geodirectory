@@ -24,7 +24,6 @@ class GeoDir_Widget_Search extends WP_Super_Duper {
             'block-icon'    => 'admin-site',
             'block-category'=> 'geodirectory',
             'block-keywords'=> "['search','geo','geodir']",
-
             'class_name'    => __CLASS__,
             'base_id'       => 'gd_search', // this us used as the widget id and the shortcode id.
             'name'          => __('GD > Search','geodirectory'), // the name of the widget.

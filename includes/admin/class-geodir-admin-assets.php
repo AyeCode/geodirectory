@@ -23,6 +23,8 @@ class GeoDir_Admin_Assets {
 	 * Hook in tabs.
 	 */
 	public function __construct() {
+		//enqueue_block_assets
+//		add_action( 'enqueue_block_assets', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'fix_script_conflicts' ),99 );
@@ -60,6 +62,16 @@ class GeoDir_Admin_Assets {
 		if ( wp_style_is( 'select2', 'registered' ) ) {
 			wp_deregister_style( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
 		}
+
+		// here we register a hidden block to add our styles on the fly for FSE iframe
+		register_block_type( 'geodirectory/fse-styles', array(
+//			'editor_script' => '', // do we need block scripts?
+			'editor_style'  => 'geodir-fse',
+		) );
+		// for FSE iframe
+		wp_register_style('geodir-fse', geodir_plugin_url() . '/assets/css/admin.css', array('font-awesome','ayecode-ui'), GEODIRECTORY_VERSION);
+
+		
 		wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-admin-css', geodir_plugin_url() . '/assets/css/admin.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-jquery-ui-timepicker-css', geodir_plugin_url() . '/assets/css/jquery.ui.timepicker.css', array(), GEODIRECTORY_VERSION);
@@ -68,7 +80,6 @@ class GeoDir_Admin_Assets {
 		wp_register_style('geodir-rtl-style', geodir_plugin_url() . '/assets/css/rtl.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-leaflet-routing-style', geodir_plugin_url() . '/assets/leaflet/routing/leaflet-routing-machine.css', array(), GEODIRECTORY_VERSION);
 		wp_register_style('geodir-leaflet-style', geodir_plugin_url() . '/assets/leaflet/leaflet.css', array(), GEODIRECTORY_VERSION);
-
 
 		// load rating scripts on comments & dashboard page.
 		if($screen_id == 'comment' || $screen_id == 'edit-comments' || $screen_id == 'dashboard'){
