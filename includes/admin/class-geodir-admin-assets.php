@@ -63,13 +63,19 @@ class GeoDir_Admin_Assets {
 			wp_deregister_style( 'select2' ); // Fix conflict with select2 basic version loaded via 3rd party plugins.
 		}
 
-		// here we register a hidden block to add our styles on the fly for FSE iframe
-		register_block_type( 'geodirectory/fse-styles', array(
-//			'editor_script' => '', // do we need block scripts?
-			'editor_style'  => 'geodir-fse',
-		) );
-		// for FSE iframe
-		wp_register_style('geodir-fse', geodir_plugin_url() . '/assets/css/admin.css', array('font-awesome','ayecode-ui'), GEODIRECTORY_VERSION);
+		// @todo FSE stuff, uncomment when ready.
+//		// auto block recovery
+//		wp_register_script('geodir-auto-block-recover', geodir_plugin_url() . '/assets/js/admin-auto-block-recover.js', array('jquery','wp-blocks', 'wp-element', 'wp-editor','react', 'react-dom', 'wp-data', 'wp-edit-post' ), GEODIRECTORY_VERSION );
+////		wp_enqueue_script( 'geodir-auto-block-recover' );
+//
+//		// here we register a hidden block to add our styles on the fly for FSE iframe
+//		register_block_type( 'geodirectory/fse-styles', array(
+//			'script' => 'geodir-auto-block-recover', // do we need block scripts?
+//			'editor_style'  => 'geodir-fse',
+//		) );
+//		
+//		// for FSE iframe
+//		wp_register_style('geodir-fse', geodir_plugin_url() . '/assets/css/admin.css', array('font-awesome','ayecode-ui'), GEODIRECTORY_VERSION);
 
 		
 		wp_register_style('select2', geodir_plugin_url() . '/assets/css/select2/select2.css', array(), GEODIRECTORY_VERSION);
@@ -193,6 +199,8 @@ class GeoDir_Admin_Assets {
 			// geodir_params
 			wp_localize_script('geodir-admin-script', 'geodir_params', geodir_params());
 		}
+
+
 
 
 
