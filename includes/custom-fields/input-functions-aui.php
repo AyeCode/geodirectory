@@ -842,6 +842,24 @@ function geodir_cfi_multiselect( $html, $cf ) {
 						}
 
 						if ( $multi_display == 'checkbox' ) {
+							// Set checkbox required.
+							$required = false;
+							$extra_attributes = array();
+
+							if ( ! empty( $cf['is_required'] ) ) {
+								$cf_name = esc_attr( $cf['name'] );
+								$extra_attributes['onchange'] = "if(jQuery('[name=\"" . $cf_name . "[]\"]:checked').length || !jQuery('input#" . $cf_name . "_0').is(':visible')){jQuery('#" . $cf_name . "_0').removeAttr('required')}else{jQuery('#" . $cf_name . "_0').attr('required',true)}";
+								$extra_attributes['oninput'] = "try{document.getElementById('" . $cf_name . "_0').setCustomValidity('')}catch(e){}";
+
+								if ( $i === 0 ) {
+									$extra_attributes['oninvalid'] = 'try{document.getElementById(\'' . $cf_name . '_0\').setCustomValidity(\'' . esc_attr( addslashes( __( $cf['required_msg'], 'geodirectory' ) ) ) . '\')}catch(e){}';
+
+									if ( empty( $value ) ) {
+										$required = true;
+									}
+								}
+							}
+
 							echo aui()->input(
 									array(
 										'name'             => $cf['name'] . '[]',
@@ -853,6 +871,8 @@ function geodir_cfi_multiselect( $html, $cf ) {
 										'label_type'       => 'hidden',
 										'no_wrap'          => true,
 										'checked'          => $checked,
+										'required'         => $required,
+										'extra_attributes' => $extra_attributes
 									)
 								);
 						} else {
