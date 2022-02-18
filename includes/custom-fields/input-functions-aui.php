@@ -1364,7 +1364,7 @@ function geodir_cfi_address( $html, $cf ) {
         $extra_attributes['autocomplete'] = 'new-password';
 
         // make hint appear when field selected
-        $extra_attributes['onfocus'] = "jQuery('.gd-locate-me-btn').tooltip('show');";
+        $extra_attributes['onfocus'] = "jQuery('.gd-locate-me-btn').tooltip('show');jQuery(this).attr('autocomplete','new-password');";
         $extra_attributes['onblur'] = "jQuery('.gd-locate-me-btn').tooltip('hide');";
 
         $address_label_type = !empty($geodir_label_type) ? $geodir_label_type : 'horizontal';
