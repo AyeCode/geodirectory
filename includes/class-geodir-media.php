@@ -737,7 +737,10 @@ class GeoDir_Media {
 		$response = wp_remote_get( $url, array( 'timeout' => $timeout, 'stream' => true, 'filename' => $tmpfname ) );
 
 		if ( is_wp_error( $response ) ) {
-			unlink( $tmpfname );
+			if( $tmpfname && file_exists( $tmpfname ) ){
+				unlink( $tmpfname );
+			}
+
 			return $response;
 		}
 
