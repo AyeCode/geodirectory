@@ -150,33 +150,48 @@ $user_string    = sprintf(
 </div>
 
 <script type="text/template" id="tmpl-api-keys-template">
-	<p id="copy-error"></p>
-	<table class="form-table">
-		<tbody>
-			<tr valign="top">
-				<th scope="row" class="titledesc">
-					<?php _e( 'Consumer key', 'geodirectory' ); ?>
-				</th>
-				<td class="forminp">
-					<input id="key_consumer_key" type="text" value="{{ data.consumer_key }}" size="55" readonly="readonly"> <button type="button" class="button-secondary copy-key" data-tip="<?php esc_attr_e( 'Copied!', 'geodirectory' ); ?>"><?php _e( 'Copy', 'geodirectory' ); ?></button>
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" class="titledesc">
-					<?php _e( 'Consumer secret', 'geodirectory' ); ?>
-				</th>
-				<td class="forminp">
-					<input id="key_consumer_secret" type="text" value="{{ data.consumer_secret }}" size="55" readonly="readonly"> <button type="button" class="button-secondary copy-secret" data-tip="<?php esc_attr_e( 'Copied!', 'geodirectory' ); ?>"><?php _e( 'Copy', 'geodirectory' ); ?></button>
-				</td>
-			</tr>
-			<tr valign="top">
-				<th scope="row" class="titledesc">
-					<?php _e( 'QRCode', 'geodirectory' ); ?>
-				</th>
-				<td class="forminp">
-					<div id="keys-qrcode"></div>
-				</td>
-			</tr>
-		</tbody>
-	</table>
+	<p id="copy-error" class="alert alert-info"></p>
+	<?php
+	echo aui()->input(
+		array(
+			'id'                => 'key_consumer_key',
+			'name'              => 'key_consumer_key',
+			'label_type'        => 'horizontal',
+			'label_col'         => '3',
+			'class'             => '',
+			'label_class'       => 'font-weight-bold',
+			'wrap_class'        => '',
+			'label'             => __( 'Consumer key', 'geodirectory' ),
+			'type'              => 'text',
+			'placeholder'       => '',
+			'value'             => '{{ data.consumer_key }}',
+			'extra_attributes'  => array( 'readonly' => 'readonly' ),
+			'input_group_right' => '<button class="btn btn-primary copy-key"  data-tip="' . esc_attr__( 'Copied!', 'geodirectory' ) . '" type="button">' . esc_attr__( 'Copy', 'geodirectory' ) . '</button>',
+			'element_require'   => '',
+		)
+	);
+
+	echo aui()->input(
+		array(
+			'id'                => 'key_consumer_secret',
+			'name'              => 'key_consumer_secret',
+			'label_type'        => 'horizontal',
+			'label_col'         => '3',
+			'class'             => '',
+			'label_class'       => 'font-weight-bold',
+			'wrap_class'        => '',
+			'label'             => __( 'Consumer secret', 'geodirectory' ),
+			'type'              => 'text',
+			'placeholder'       => '',
+			'value'             => '{{ data.consumer_secret }}',
+			'extra_attributes'  => array( 'readonly' => 'readonly' ),
+			'input_group_right' => '<button class="btn btn-primary copy-secret"  data-tip="' . esc_attr__( 'Copied!', 'geodirectory' ) . '" type="button">' . esc_attr__( 'Copy', 'geodirectory' ) . '</button>',
+			'element_require'   => '',
+		)
+	);
+	?>
+	<div data-argument="keys-qrcode" class="form-group row">
+		<label for="keys-qrcode" class="font-weight-bold  col-sm-3 col-form-label"><?php _e( 'QRCode', 'geodirectory' ); ?></label>
+		<div class="col-sm-9"><div class="input-group"><div id="keys-qrcode"></div></div>
+	</div>
 </script>

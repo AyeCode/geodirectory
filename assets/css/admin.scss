@@ -1689,7 +1689,8 @@ input[name="street"].ui-autocomplete-loading {
 .geodir-admin-page .yoast-field-group .screen-reader-text {
     height: 1px;
     overflow: hidden;
-    positionAidth: 1px;
+    position: absolute;
+    width: 1px;
     border: 0;
     clip: rect(1px, 1px, 1px, 1px);
     -webkit-clip-path: inset(50%);

@@ -253,7 +253,7 @@ jQuery(function() {
                     jQuery('.submit-btn').removeClass('disabled').html( $btn_val );
                 }else{
                     jQuery('#google_maps_api_key').data("key-original",$api_key);
-                    jQuery('#gd-wizard-save-map-key .submit-btn').click();
+                    jQuery('#gd-wizard-save-map-key .submit-btn').trigger("click");
                 }
 
             }, 8000);

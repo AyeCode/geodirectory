@@ -1235,7 +1235,7 @@ class GeoDir_AJAX {
 				$data['consumer_key']    = $consumer_key;
 				$data['consumer_secret'] = $consumer_secret;
 				$data['message']         = __( 'API Key generated successfully. Make sure to copy your new keys now as the secret key will be hidden once you leave this page.', 'geodirectory' );
-				$data['revoke_url']      = '<a style="color: #a00; text-decoration: none;" href="' . esc_url( wp_nonce_url( add_query_arg( array( 'revoke-key' => $key_id ), admin_url( 'admin.php?page=gd-settings&tab=api&section=keys' ) ), 'revoke' ) ) . '">' . __( 'Revoke key', 'geodirectory' ) . '</a>';
+				$data['revoke_url']      = '<a class="btn btn-danger" href="' . esc_url( wp_nonce_url( add_query_arg( array( 'revoke-key' => $key_id ), admin_url( 'admin.php?page=gd-settings&tab=api&section=keys' ) ), 'revoke' ) ) . '">' . __( 'Revoke key', 'geodirectory' ) . '</a>';
 			}
 
 			wp_send_json_success( $data );

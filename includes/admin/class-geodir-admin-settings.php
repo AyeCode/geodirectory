@@ -198,15 +198,17 @@ class GeoDir_Admin_Settings {
 	 * @param array $options Opens array to output
 	 */
 	public static function output_fields( $options ) {
-	//echo 'xxx';print_r($options);
+		$disable_advanced = geodir_get_option( 'admin_disable_advanced', false );
+
 		foreach ( $options as $value ) {
-			
-			// skip titles for import/export
-//			if( ( $value['type'] == 'title' ||  $value['type'] == 'title') substr( $string_n, 0, 4 ) === "http" )
-			
 			if ( ! isset( $value['type'] ) ) {
 				continue;
 			}
+
+			if ( $disable_advanced ) {
+				$value['advanced'] = false;
+			}
+
 			if ( ! isset( $value['id'] ) ) {
 				$value['id'] = '';
 			}
@@ -275,7 +277,7 @@ class GeoDir_Admin_Settings {
 
 
 					if ( $boxed_settings ) {
-						$advanced = (isset($value['advanced']) && $value['advanced']) ? "gd-advanced-setting collapse in" :'';
+						$advanced = (isset($value['advanced']) && $value['advanced']) ? geodir_advanced_toggle_class() :'';
 						echo '<div class="accordion '.$advanced.'" ><div class="card p-0 mw-100 border-0 shadow-sm" style="overflow: initial;">' . "\n\n";
 						if ( ! empty( $value['title'] ) ) {
 
@@ -307,7 +309,7 @@ class GeoDir_Admin_Settings {
 					}else{
 
 						if ( ! empty( $value['title'] ) ) {
-							$advanced = (isset($value['advanced']) && $value['advanced']) ? "gd-advanced-setting collapse in" :'';
+							$advanced = (isset($value['advanced']) && $value['advanced']) ? geodir_advanced_toggle_class() :'';
 							echo '<h2 class="gd-settings-title h4 clearfix '.$advanced.'">';
 							echo esc_html( $value['title'] );
 							if(!empty($value['title_html'])){echo $value['title_html'];}
@@ -376,7 +378,7 @@ class GeoDir_Admin_Settings {
 						'label_col'        => '3',
 						'label_class'=> 'font-weight-bold',
 						'class' => !empty($value['class']) ? $value['class'] : '',
-						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 						'label'              => $value['title'] . $tooltip_html,
 						'type'              =>  $value['type'] ?  $value['type']  : 'text',
 						'placeholder'       => $value['placeholder'],
@@ -411,7 +413,7 @@ class GeoDir_Admin_Settings {
 							//'required'          => true,
 							'class' => $value['class'].' gd-color-picker d-none',
 //							'wrap_class'    => 'gd-row-color-picker',
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in gd-row-color-picker" : ' gd-row-color-picker ',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() . " gd-row-color-picker" : ' gd-row-color-picker ',
 							'label'              => $value['title'] . $tooltip_html,
 							'type'              =>  $value['type'] ?  $value['type']  : 'text',
 							'value' => $option_value,
@@ -443,6 +445,8 @@ class GeoDir_Admin_Settings {
 						$remove_class = '';
 						if ( strpos( $option_value, 'dashicons-' ) === 0 ) {
 							$show_img = '<div class="dashicons-before ' . esc_attr( $option_value ) . '"></div>';
+						} else if ( strpos( $option_value, 'plugins/geodirectory' ) === 0 ) {
+							$show_img = '<img src="' . esc_url( geodir_file_relative_url( $option_value, true ) ) . '" />';
 						} else {
 							$show_img = wp_get_attachment_image($option_value, $image_size);
 						}
@@ -462,7 +466,7 @@ class GeoDir_Admin_Settings {
 							'label_class'=> 'font-weight-bold',
 							'class' => !empty($value['class']) ? $value['class'] : '',
 							//'required'          => true,
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'type'              =>  'hidden',//$value['type'] ?  $value['type']  : 'text',
 							'placeholder'       => $value['placeholder'],
@@ -501,7 +505,7 @@ class GeoDir_Admin_Settings {
 							'label_col'        => '3',
 							'class' => !empty($value['class']) ? $value['class'] : '',
 							'label_class'=> 'font-weight-bold',
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'placeholder'       => $value['placeholder'],
 							'value' => $option_value,
@@ -583,7 +587,7 @@ class GeoDir_Admin_Settings {
 						//'required'          => true,
 						'select2'   => $select2,
 						'options'       => $value['options'],
-						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 						'label'              => $value['title'] . $tooltip_html,
 						'placeholder'       => $value['placeholder'],
 						'value' => $option_value,
@@ -616,7 +620,7 @@ class GeoDir_Admin_Settings {
 //							'title'             => esc_attr__($cf['frontend_title'], 'geodirectory'),
 							'label'             => $value['title'] . $tooltip_html,
 //							'help_text'         => $help_text,
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'class'             => '',
 							'value'             => $option_value,
 							'inline'            => false,
@@ -655,7 +659,7 @@ class GeoDir_Admin_Settings {
 						'label_force_left'  => true,
 						'class' => !empty($value['class']) ? $value['class'] : '',
 						//'required'          => true,
-						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+						'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 						'label'              => $value['title'],
 						'type'              =>  $value['type'] ?  $value['type']  : 'text',
 						'placeholder'       => $value['placeholder'],
@@ -848,7 +852,7 @@ class GeoDir_Admin_Settings {
 										$height = "25";
 									}
 									?>
-									<textarea style="min-width: 50vw;min-height: <?php echo $height;?>vh; display:block;"><?php echo $value['default_content'];?></textarea>
+									<textarea style="min-width: calc(50vw - 32px);min-height: <?php echo $height;?>vh; display:block;"><?php echo $value['default_content'];?></textarea>
 									<?php
 									if($raw_default_content){
 										echo geodir_notification( array('gd-info'=>__('Original content below.','geodirectory')) );
@@ -895,7 +899,7 @@ class GeoDir_Admin_Settings {
 							//'required'          => true,
 							'select2'   => strpos($value['class'], 'geodir-select') !== false ? true : false,
 							'options'       => array('' => esc_attr__( 'Select a page&hellip;', 'geodirectory' )) +  $page_options,
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'placeholder'       => $value['placeholder'] ? $value['placeholder'] :  esc_attr__( 'Select a page&hellip;', 'geodirectory' ),
 							'value' => $option_value,
@@ -941,7 +945,7 @@ class GeoDir_Admin_Settings {
 							//'required'          => true,
 							'select2'   => strpos($value['class'], 'geodir-select') !== false ? true : false,
 							'options'       => $countries,
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'placeholder'       => $value['placeholder'],
 							'value'         => $country,
@@ -1122,7 +1126,7 @@ class GeoDir_Admin_Settings {
 							'label_col'        => '3',
 							'class' => !empty($value['class']) ? $value['class'] : '',
 							'label_class'=> 'font-weight-bold',
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'type'              =>  $value['type'] ?  $value['type']  : 'text',
 							'placeholder'       => $value['placeholder'],
@@ -1152,7 +1156,7 @@ class GeoDir_Admin_Settings {
 							'label_col'        => '3',
 							'class' => !empty($value['class']) ? $value['class'] : '',
 							'label_class'=> 'font-weight-bold',
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'type'              =>  $value['type'] ?  $value['type']  : 'text',
 							'placeholder'       => $value['placeholder'],
@@ -1209,7 +1213,7 @@ class GeoDir_Admin_Settings {
 							//'required'          => true,
 							//'select2'   => false,//strpos($value['class'], 'geodir-select') !== false ? true : false,
 //							'options'       => $options,
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'placeholder'       => $value['placeholder'],
 							'value'         => $option_value,
@@ -1256,7 +1260,7 @@ class GeoDir_Admin_Settings {
 							'label_class'=> 'font-weight-bold',
 							'multiple'   => 'multiselect' == $value['type'] ? true : false,
 							'class'             => $value['class']. " gd-dashicons-picker",
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'placeholder'       => $value['placeholder'],
 							'value'         => $option_value,
@@ -1280,11 +1284,11 @@ class GeoDir_Admin_Settings {
 									<?php
 								}
 							}
-
 							?>
 						];
 
 						jQuery(function() {
+							jQuery.iconpicker.batch(".gd-dashicons-picker", 'destroy');
 							jQuery(".gd-dashicons-picker").iconpicker({
 								icons: $dashicons,
 								fullClassFormatter: function(val) {
@@ -1313,7 +1317,7 @@ class GeoDir_Admin_Settings {
 								'label_class'=> 'font-weight-bold',
 								'class' => !empty($value['class']) ? $value['class'] : '',
 								//'required'          => true,
-								'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : 'd-none',
+								'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : 'd-none',
 								'label'              => $value['title'] . $tooltip_html,
 								'type'              =>  $value['type'] ?  $value['type']  : 'hidden',
 								'placeholder'       => $value['placeholder'],
@@ -1349,7 +1353,7 @@ class GeoDir_Admin_Settings {
 							//'required'          => true,
 							'select2'   => strpos($value['class'], 'geodir-select') !== false ? true : false,
 							'options'       => $tz,
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? "gd-advanced-setting collapse in" : '',
+							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
 							'placeholder'       => $value['placeholder'],
 							'value'         => $locale ,

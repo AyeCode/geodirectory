@@ -263,7 +263,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'value' => '1',
 					'switch'    => 'md',
 					'label_force_left'  => true,
-//					'wrap_class'    => 'gd-advanced-setting collapse in',
+//					'wrap_class' => geodir_advanced_toggle_class(),
 					'help_text' => geodir_help_tip( __( 'Select if this field should be displayed as a price value.', 'geodirectory' )),
 					'element_require'   => '[%data_type%] == "INT" || [%data_type%] == "DECIMAL"'
 				)
@@ -597,7 +597,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'top',
 					'label'              => __('Date Range','geodirectory') . geodir_help_tip( __( 'Set the date range, eg: 1920:2020 or for current dates: c-100:c+5', 'geodirectory' )),
 					'type'              =>   'text',
-					///'wrap_class'    => 'gd-advanced-setting collapse in',
+					///'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => $value,
 				)
 			);
@@ -643,7 +643,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'top',
 					'label'              => __('Option Values','geodirectory') . geodir_help_tip( $option_values_tool_top ),
 					'type'              =>   'text',
-//					'wrap_class'    => 'gd-advanced-setting collapse in',
+//					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => $value,
 //					'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
 				)
@@ -737,7 +737,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'value' => '1',
 					'switch'    => 'md',
 					'label_force_left'  => true,
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'help_text' => geodir_help_tip( __( 'Select if you want to show address line 2 field in address section.', 'geodirectory' ))
 				)
 			);
@@ -749,7 +749,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'top',
 					'label'              => __('Address line 2 label','geodirectory') . geodir_help_tip( __( 'Enter Address line 2 field label in address section.', 'geodirectory' )),
 					'type'              =>   'text',
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => $address['street2_lable'],
 					'element_require'   => '[%show_street2%:checked]'
 
@@ -761,15 +761,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'id'                => 'show_zip',
 					'name'              => 'extra[show_zip]',
 					'label_type'        => 'horizontal',
-					'label_col'        => '4',
-					'label'              => __('Display zip/post code','geodirectory') ,
+					'label_col'         => '4',
+					'label'             => __( 'Display zip/post code', 'geodirectory' ) ,
 					'type'              =>   'checkbox',
-					'checked' => $address['show_zip'],
-					'value' => '1',
-					'switch'    => 'md',
+					'checked'           => ( isset( $address['show_zip'] ) ? $address['show_zip'] : '' ),
+					'value'             => '1',
+					'switch'            => 'md',
 					'label_force_left'  => true,
-					'wrap_class'    => 'gd-advanced-setting collapse in',
-					'help_text' => geodir_help_tip( __( 'Select if you want to show zip/post code field in address section.', 'geodirectory' ))
+					'wrap_class'        => geodir_advanced_toggle_class(),
+					'help_text'         => geodir_help_tip( __( 'Select if you want to show zip/post code field in address section.', 'geodirectory' ))
 				)
 			);
 
@@ -785,7 +785,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'value' => '1',
 					'switch'    => 'md',
 					'label_force_left'  => true,
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'element_require'   => '[%show_zip%:checked]',
 					'help_text' => geodir_help_tip( __( 'Tick to set zip/post code field as required. Some countries do not use ZIP codes, please only enable if your directory is limited to countries that do.', 'geodirectory' ))
 				)
@@ -798,7 +798,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'top',
 					'label'              => __('Zip/Post code label','geodirectory') . geodir_help_tip( __( 'Enter zip/post code field label in address section.', 'geodirectory' )),
 					'type'              =>   'text',
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => isset($address['zip_lable']) ? $address['zip_lable'] : '',
 					'element_require'   => '[%show_zip%:checked]'
 
@@ -812,7 +812,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'top',
 					'label'              => __('Map button label','geodirectory') . geodir_help_tip( __( 'Enter text for `set address on map` button in address section.', 'geodirectory' )),
 					'type'              =>   'text',
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => isset($address['map_lable']) ? $address['map_lable'] : '',
 //					'element_require'   => '[%show_zip%:checked]'
 				)
@@ -830,7 +830,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'value' => '1',
 					'switch'    => 'md',
 					'label_force_left'  => true,
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 //					'element_require'   => '[%show_zip%:checked]',
 					'help_text' => geodir_help_tip( __( 'Do you want to use the user defined map zoom level from the add listing page?', 'geodirectory' ))
 				)
@@ -848,7 +848,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'value' => '1',
 					'switch'    => 'md',
 					'label_force_left'  => true,
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 //					'element_require'   => '[%show_zip%:checked]',
 					'help_text' => geodir_help_tip( __( 'Select if you want to show `set default map` options in address section. ( Satellite Map, Hybrid Map, Terrain Map)', 'geodirectory' ))
 				)
@@ -861,7 +861,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'top',
 					'label'              => __('Map view label','geodirectory') . geodir_help_tip( __( 'Enter mapview field label in address section.', 'geodirectory' )),
 					'type'              =>   'text',
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => isset($address['mapview_lable']) ? $address['mapview_lable'] : '',
 					'element_require'   => '[%show_mapview%:checked]'
 				)
@@ -879,7 +879,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'value' => '1',
 					'switch'    => 'md',
 					'label_force_left'  => true,
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 //					'element_require'   => '[%show_zip%:checked]',
 					'help_text' => geodir_help_tip( __( 'This will show/hide the longitude fields in the address section add listing form.', 'geodirectory' ))
 				)
@@ -930,7 +930,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 							'checkbox'   =>  __( 'Checkbox', 'geodirectory' ),
 							'radio'   =>  __( 'Radio', 'geodirectory' ),
 						),
-						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'wrap_class' => geodir_advanced_toggle_class(),
 						'label'              => __('Category display type','geodirectory') . geodir_help_tip( __( 'Show categories list as select, multiselect, checkbox or radio', 'geodirectory' )),
 						'value'         => $cat_display_type,
 					)
@@ -968,7 +968,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 						'label'              => __('Number of allowed tags','geodirectory') . geodir_help_tip( __( 'Enter number of allowed tags', 'geodirectory' ) ),
 						'type'              =>   'number',
 						'value' => $no_of_tag,
-						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'wrap_class' => geodir_advanced_toggle_class(),
 						'extra_attributes'  => array(
 							'step'  => "1",
 							'min'   =>  "0"
@@ -1007,7 +1007,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'top',
 					'label'              => __('Validation Pattern','geodirectory') . geodir_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'geodirectory' )),
 					'type'              =>   'text',
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => $value,
 				)
 			);
@@ -1026,7 +1026,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'top',
 					'label'              => __('Validation Message','geodirectory') . geodir_help_tip( __( 'Enter a extra validation message to show to the user if validation fails.', 'geodirectory' )),
 					'type'              =>   'text',
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => $value,
 				)
 			);
@@ -1068,7 +1068,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'value' => '1',
 					'switch'    => 'md',
 					'label_force_left'  => true,
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'help_text' => geodir_help_tip( __( 'Select if you want to show the advanced editor on add listing page.', 'geodirectory' ))
 				)
 			);
@@ -1110,7 +1110,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'name'              =>  "data_type",
 					'label_type'        => 'top',
 					'multiple'   => false,
-					'wrap_class'    => 'gd-advanced-setting collapse in',
+					'wrap_class' => geodir_advanced_toggle_class(),
 					'class'             => 'mw-100',
 					'options'       => array(
 						'XVARCHAR'   =>  __( 'CHARACTER', 'geodirectory' ),
@@ -1170,7 +1170,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 						'value' => '1',
 						'switch'    => 'md',
 						'label_force_left'  => true,
-						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'wrap_class' => geodir_advanced_toggle_class(),
 						'help_text' => geodir_help_tip( __( 'Tick to allow embed videos, images, tweets, audio, and other content.', 'geodirectory' ))
 					)
 				);
