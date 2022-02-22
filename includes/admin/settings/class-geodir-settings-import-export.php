@@ -556,12 +556,12 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					var intIp;
 					var intIc;
 
-					jQuery(".gd-imex-pupload").on("click",function () {
+					jQuery(".gd-imex-pupload").on("click",function () {console.log(1);
 						var $this = this;
-						var $cont = jQuery($this).closest('.card-body');
+						var $cont = jQuery($this).closest('.card-body');console.log($cont);
 						clearInterval(intIp);
-						intIp = setInterval(function () {
-							if (jQuery($cont).find('.gd-imex-file').val()) {
+						intIp = setInterval(function () {console.log(2);
+							if (jQuery($cont).find('.gd-imex-file').val()) {console.log(3);
 								jQuery($cont).find('.gd-imex-btns').show();
 							}
 						}, 1000);

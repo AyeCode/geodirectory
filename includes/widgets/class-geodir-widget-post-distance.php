@@ -227,19 +227,24 @@ class GeoDir_Widget_Post_Distance extends WP_Super_Duper {
 				if ( $is_single ) {
 					if ( ! $block_preview ) {
 						$distance_unit = geodir_get_option( 'search_distance_long' );
-						$main_post = ( ! empty( $_REQUEST['set_post'] ) && wp_doing_ajax() ) ? absint( $_REQUEST['set_post'] ) : get_queried_object_id();
+						$main_post = ( ! empty( $_REQUEST['set_post'] ) && wp_doing_ajax() ) ? absint( $_REQUEST['set_post'] ) : (int) get_queried_object_id();
 
 						$point1 = array(
 							'latitude'  => $gd_post->latitude,
 							'longitude'  => $gd_post->longitude,
 						);
 
-						$point2 = array(
-							'latitude'  => geodir_get_post_meta( $main_post,'latitude', true ),
-							'longitude'  => geodir_get_post_meta( $main_post,'longitude', true ),
-						);
+						if ( $main_post && GeoDir_Post_types::supports( get_post_type( $main_post ), 'location' ) ) {
+							$point2 = array(
+								'latitude'  => geodir_get_post_meta( $main_post,'latitude', true ),
+								'longitude'  => geodir_get_post_meta( $main_post,'longitude', true ),
+							);
+						} else {
+							$point2 = array();
+						}
 
 						if ( empty( $point2['latitude'] ) ) {
+							ob_get_clean();
 							return '';
 						}
 

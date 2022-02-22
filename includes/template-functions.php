@@ -949,3 +949,21 @@ function geodir_grid_view_class($view = 0){
 		return $style == '' ? '' : 'row-cols-md-0';
 	}
 }
+
+/**
+ * Get the advances setting toggle CSS class.
+ *
+ * @since 2.2
+ *
+ * @param string $default Default CSS class.
+ * @return string CSS class.
+ */
+function geodir_advanced_toggle_class( $default = "" ) {
+	if ( geodir_get_option( 'admin_disable_advanced', false ) ) {
+		$class = "";
+	} else {
+		$class = $default ? $default : 'gd-advanced-setting collapse in';
+	}
+
+	return $class;
+}

@@ -110,16 +110,13 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'id'                => 'gd-admin-title-'.$field->id,
 						'name'              => 'admin_title',
 						'label_type'        => 'top',
-						'label'              => __('Admin name','geodirectory') . geodir_help_tip( __( 'This is used as the field setting name here in the backend only.', 'geodirectory' )),
+						'label'             => __('Admin name','geodirectory') . geodir_help_tip( __( 'This is used as the field setting name here in the backend only.', 'geodirectory' )),
 						'type'              =>   'text',
-						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'wrap_class'        => geodir_advanced_toggle_class(),
 						'value' => $value,
 					)
 				);
 			}
-
-
-
 
 			do_action( "geodir_cfa_before_frontend_title_{$field->field_type}", $cf, $field);
 
@@ -140,9 +137,9 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'id'                => 'frontend_title',
 						'name'              => 'frontend_title',
 						'label_type'        => 'top',
-						'label'              => __('Label','geodirectory') . geodir_help_tip( __( 'This will be the label for the field input on the frontend.', 'geodirectory' )),
+						'label'             => __('Label','geodirectory') . geodir_help_tip( __( 'This will be the label for the field input on the frontend.', 'geodirectory' )),
 						'type'              =>   'text',
-//						'wrap_class'    => 'gd-advanced-setting collapse in',
+//						'wrap_class'        => geodir_advanced_toggle_class(),
 						'value' => $value,
 					)
 				);
@@ -169,9 +166,9 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'id'                => 'frontend_desc',
 						'name'              => 'frontend_desc',
 						'label_type'        => 'top',
-						'label'              => __('Description','geodirectory') . geodir_help_tip( __( 'This will be shown below the field on the add listing form.', 'geodirectory' )),
+						'label'             => __('Description','geodirectory') . geodir_help_tip( __( 'This will be shown below the field on the add listing form.', 'geodirectory' )),
 						'type'              =>   'text',
-//						'wrap_class'    => 'gd-advanced-setting collapse in',
+//						'wrap_class'        => geodir_advanced_toggle_class(),
 						'value' => $value,
 					)
 				);
@@ -207,9 +204,9 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'name'              => 'htmlvar_name',
 						'title'             => __( 'Must not contain spaces or special characters', 'geodirectory' ),
 						'label_type'        => 'top',
-						'label'              => __('Key','geodirectory') . geodir_help_tip( __( 'This is a unique identifier used in the database and HTML, it MUST NOT contain spaces or special characters.', 'geodirectory' )),
+						'label'             => __('Key','geodirectory') . geodir_help_tip( __( 'This is a unique identifier used in the database and HTML, it MUST NOT contain spaces or special characters.', 'geodirectory' )),
 						'type'              =>   'text',
-						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'wrap_class'        => geodir_advanced_toggle_class(),
 						'value' => $value ? preg_replace( '/geodir_/', '', $value, 1 ) : '',
 						'extra_attributes' => $extra_attributes
 					)
@@ -320,7 +317,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 							),
 							'label'              => __('Default value','geodirectory') . $help_text,
 							'value'         => $value ,
-							'wrap_class'    => 'gd-advanced-setting collapse in',
+							'wrap_class'    => geodir_advanced_toggle_class(),
 						)
 					);
 				}else{
@@ -329,9 +326,9 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 							'id'                => 'default_value',
 							'name'              => 'default_value',
 							'label_type'        => 'top',
-							'label'              => __('Default value','geodirectory') . $help_text,
+							'label'             => __('Default value','geodirectory') . $help_text,
 							'type'              =>   'text',
-							'wrap_class'    => 'gd-advanced-setting collapse in',
+							'wrap_class'        => geodir_advanced_toggle_class(),
 							'value' => $value,
 							'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
 						)
@@ -378,7 +375,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 								),
 								'label'              => __('Database Default value','geodirectory') . $help_text,
 								'value'         => $value ,
-								'wrap_class'    => 'gd-advanced-setting collapse in',
+								'wrap_class'    => geodir_advanced_toggle_class(),
 							)
 						);
 					}else{
@@ -387,9 +384,9 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 								'id'                => 'db_default',
 								'name'              => 'db_default',
 								'label_type'        => 'top',
-								'label'              => __('Database Default value','geodirectory') . $help_text,
+								'label'             => __('Database Default value','geodirectory') . $help_text,
 								'type'              =>   'text',
-								'wrap_class'    => 'gd-advanced-setting collapse in',
+								'wrap_class'        => geodir_advanced_toggle_class(),
 								'value' => $value,
 								'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
 							)
@@ -421,7 +418,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'label_type'        => 'top',
 						'label'              => __('Placeholder value','geodirectory') . geodir_help_tip( __( 'A placeholder value to use for text input fields.', 'geodirectory' )),
 						'type'              =>   'text',
-						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'wrap_class'        => geodir_advanced_toggle_class(),
 						'value' => $value,
 					)
 				);
@@ -490,7 +487,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'label'              => __('Show in extra output location','geodirectory') . geodir_help_tip( __( 'Select in what locations you want to display this field.', 'geodirectory' )),
 						'value'         => $show_in_values,
 						'placeholder' => __( 'Select locations', 'geodirectory' ),
-//						'wrap_class'    => 'gd-advanced-setting collapse in',
+//						'wrap_class'    => geodir_advanced_toggle_class(),
 					)
 				);
 			}
@@ -557,7 +554,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'label_type'        => 'top',
 						'label'              => __('Required message','geodirectory') . geodir_help_tip( __( 'Enter text for the error message if the field is required and has not fulfilled the requirements.', 'geodirectory' )),
 						'type'              =>   'text',
-						///'wrap_class'    => 'gd-advanced-setting collapse in',
+						///'wrap_class'    => geodir_advanced_toggle_class(),
 						'value' => $value,
 						'element_require' => '[%is_required%:checked]'
 					)
@@ -588,7 +585,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					$value = $cf['defaults']['field_icon'];
 				}
 				?>
-<!--				<h3 class="h6 gd-advanced-setting collapse in border-bottom">--><?php //echo __( 'Custom css', 'geodirectory' ); ?><!--</h3>-->
+<!--				<h3 class="h6 border-bottom <?php echo geodir_advanced_toggle_class(); ?>">--><?php //echo __( 'Custom css', 'geodirectory' ); ?><!--</h3>-->
 				<?php
 
 				echo aui()->input(
@@ -598,7 +595,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'label_type'        => 'top',
 						'label'              => __('Icon','geodirectory') . geodir_help_tip( __( 'Upload icon using media and enter its url path, or enter font awesome class eg:"fas fa-home"', 'geodirectory' )),
 						'type'              =>   'iconpicker',
-						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'wrap_class'        => geodir_advanced_toggle_class(),
 						'value' => $value,
 					)
 				);
@@ -633,7 +630,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'label_type'        => 'top',
 						'label'              => __('Css class','geodirectory') . geodir_help_tip($help_text),
 						'type'              =>   'text',
-						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'wrap_class'        => geodir_advanced_toggle_class(),
 						'value' => isset( $field->css_class ) ? esc_attr( $field->css_class ) : '',
 					)
 				);
@@ -661,24 +658,21 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				}
 
 				$hide_cat_sort = ( isset( $cf['defaults']['cat_sort'] ) && $cf['defaults']['cat_sort'] === false ) ? "style='display:none;'" : '';
+				/**
+				 * Filter the section title.
+				 *
+				 * Filter the section title in custom field form in admin
+				 * custom fields settings.
+				 *
+				 * @since 1.0.0
+				 *
+				 * @param string $title Title of the section.
+				 * @param string $field ->field_type Current field type.
+				 */
+				$cat_sort_heading_label = apply_filters( 'geodir_advance_custom_fields_heading', __( 'Posts sort options', 'geodirectory' ), $field->field_type );
 				?>
-				<h3 class="h6 d-none gd-advanced-setting collapse in border-bottom" data-setting="cat_sort_heading"><?php
-					/**
-					 * Filter the section title.
-					 *
-					 * Filter the section title in custom field form in admin
-					 * custom fields settings.
-					 *
-					 * @since 1.0.0
-					 *
-					 * @param string $title Title of the section.
-					 * @param string $field ->field_type Current field type.
-					 */
-					echo apply_filters( 'geodir_advance_custom_fields_heading', __( 'Posts sort options', 'geodirectory' ), $field->field_type );
-
-					?></h3>
+				<h3 class="border-bottom text-dark h4 pt-3 pb-2 mb-3 <?php echo geodir_advanced_toggle_class(); ?>" data-setting="cat_sort_heading"><?php echo $cat_sort_heading_label; ?></h3>
 				<?php
-
 				echo aui()->input(
 					array(
 						'id'                => 'cat_sort',
@@ -691,7 +685,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 						'value' => '1',
 						'switch'    => 'md',
 						'label_force_left'  => true,
-						'wrap_class'    => 'gd-advanced-setting collapse in',
+						'wrap_class'    => geodir_advanced_toggle_class(),
 						'help_text' => geodir_help_tip( __( 'Lets you use this field as a sorting option, set from sorting options above.', 'geodirectory' ))
 					)
 				);
@@ -745,7 +739,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				</span>
 
 
-				<a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="gd_tabs_close_settings(this); return false;"><?php _e("close","geodirectory");?></a>
+				<a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="gd_tabs_close_settings(this); return false;"><?php _e("Close","geodirectory");?></a>
 				<button type="button" class="btn btn-primary" name="save" id="save" data-save-text="<?php _e("Save","geodirectory");?>"  onclick="gd_save_custom_field('<?php echo esc_attr( $field->id ); ?>');jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'geodirectory' ); ?>').addClass('disabled');return false;">
 					<?php _e("Save","geodirectory");?>
 				</button>

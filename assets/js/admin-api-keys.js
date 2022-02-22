@@ -24,21 +24,20 @@ var GeoDir_Admin_API_Keys = {
     },
     initTipTip: function(css_class) {
         jQuery(document.body).on('click', css_class, function(evt) {
-            console.log('this');
             evt.preventDefault();
             if (!document.queryCommandSupported('copy')) {
-                jQuery(css_class).parent().find('input').focus().select();
+                jQuery(css_class).closest('.input-group').find('input').focus().select();
                 jQuery('#copy-error').text(geodir_admin_api_keys_params.clipboard_failed);
             } else {
                 jQuery('#copy-error').text('');
                 gdClearClipboard();
-                gdSetClipboard(jQuery.trim(jQuery(this).prev('input').val()), jQuery(css_class));
+                gdSetClipboard(jQuery.trim(jQuery(css_class).closest('.input-group').find('input').val()), jQuery(css_class));
             }
         }).on('aftercopy', css_class, function() {
             jQuery('#copy-error').text('');
             jQuery('#copy-error').text(geodir_admin_api_keys_params.clipboard_copied);
         }).on('aftercopyerror', css_class, function() {
-            jQuery(css_class).parent().find('input').focus().select();
+            jQuery(css_class).closest('.input-group').find('input').focus().select();
             jQuery('#copy-error').text(geodir_admin_api_keys_params.clipboard_failed);
         });
     },
@@ -61,7 +60,6 @@ var GeoDir_Admin_API_Keys = {
             user: jQuery('#key_user', $self.el).val(),
             permissions: jQuery('#key_permissions', $self.el).val()
         };
-        console.log(data);
         jQuery.ajax({
             url: geodir_params.ajax_url,
             type: 'POST',
@@ -72,25 +70,25 @@ var GeoDir_Admin_API_Keys = {
                 jQuery('.gd-api-message', $self.el).remove();
                 if (res.success) {
                     var data = res.data;
-                    jQuery('#api-keys-options', $self.el).before('<div class="gd-api-message updated"><p>' + data.message + '</p></div>');
                     if (0 < data.consumer_key.length && 0 < data.consumer_secret.length) {
-                        jQuery('#api-keys-options', $self.el).remove();
-                        jQuery('p.submit', $self.el).empty().append(data.revoke_url);
+                        jQuery('#gd_ie_imreviews', $self.el).html('<div class="gd-api-message updated message alert alert-success mb-4 mt-0">' + data.message + '</div>');
                         var template = wp.template('api-keys-template');
-                        jQuery('p.submit', $self.el).before(template({
+                        jQuery('#gd_ie_imreviews', $self.el).append(template({
                             consumer_key: data.consumer_key,
                             consumer_secret: data.consumer_secret
                         }));
+                        jQuery('#gd_ie_imreviews', $self.el).append(data.revoke_url);
                         $self.createQRCode(data.consumer_key, data.consumer_secret);
                         $self.initTipTip('.copy-key');
                         $self.initTipTip('.copy-secret');
                     } else {
+                        jQuery('#gd_ie_imreviews', $self.el).prepend('<div class="gd-api-message updated message alert alert-success mb-4 mt-0">' + data.message + '</div>');
                         jQuery('#key_description', $self.el).val(data.description);
                         jQuery('#key_user', $self.el).val(data.user_id);
                         jQuery('#key_permissions', $self.el).val(data.permissions);
                     }
                 } else {
-                    jQuery('#api-keys-options', $self.el).before('<div class="gd-api-message error"><p>' + res.data.message + '</p></div>');
+                    jQuery('#gd_ie_imreviews', $self.el).prepend('<div class="gd-api-message error message alert alert-warning mb-4 mt-0">' + res.data.message + '</div>');
                 }
                 $self.unblock();
             },

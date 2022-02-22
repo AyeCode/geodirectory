@@ -30,7 +30,7 @@ jQuery(document).ready(function($) {
                 if (jQuery(this).val() == single_use) {
                     is_used = true;
                     alert(geodir_params.txt_single_use);
-                    jQuery('#setName_new-1').click();
+                    jQuery('#setName_new-1').trigger("click");
                 }
             });
             if (is_used) {
@@ -117,7 +117,7 @@ jQuery(document).ready(function($) {
 		var $this = this;
 		setTimeout(function(){
             gd_doing_field_auto_save = true;
-            jQuery($this).closest('#geodir-field-settings').find('.card-footer #save').click();
+            jQuery($this).closest('#geodir-field-settings').find('.card-footer #save').trigger("click");
 
 			//geodir_auto_save_custom_field($this, $);
 		}, 250);

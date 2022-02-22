@@ -23,6 +23,7 @@ class GeoDir_Report_Post {
 
 			add_action( 'geodir_settings_general', array( __CLASS__, 'setup_admin_page' ), 1, 1 );
 			add_filter( 'geodir_get_sections_general', array( __CLASS__, 'add_admin_section' ), 10, 1 );
+			add_filter( 'geodir_general_default_options', array( __CLASS__, 'add_admin_setting' ), 10, 2 );
 			add_action( 'geodir_admin_field_list_reported_posts', array( __CLASS__, 'output_list_table' ), 10, 1 );
 
 			if ( ! empty( $_REQUEST['section'] ) && $_REQUEST['section'] == 'report_post' ) {
@@ -48,13 +49,11 @@ class GeoDir_Report_Post {
 	}
 
 	public static function setup_admin_page() {
-		global $current_section, $hide_save_button;
+		global $current_section, $hide_save_button, $hide_advanced_toggle;
 
 		if ( $current_section == 'report_post' ) {
 			$hide_advanced_toggle = true;
 			$hide_save_button = true;
-
-			add_filter( 'geodir_general_default_options', array( __CLASS__, 'add_admin_setting' ), 10, 2 );
 		}
 	}
 
@@ -97,11 +96,7 @@ class GeoDir_Report_Post {
 						'type' => 'list_reported_posts',
 						'css' => 'min-width:300px;',
 						'std' => '40'
-					),
-//					array(
-//						'type' => 'sectionend',
-//						'id' => 'report_post'
-//					)
+					)
 				) 
 			);
 		}

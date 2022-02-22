@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.1.1.12
+ * @version    2.2
  *
  * @var string $default_search_button_label The search button label text or font awesome class.
  * @var boolean $fa_class If a font awesome class is being used as the button text.
@@ -51,11 +51,16 @@ if ( ! empty( $tabs_array ) ) {
 				$key = 'gdtab' . $key; // Tab is not working when ID start with number.
 			}
 			$name = esc_attr__( stripslashes( $tab['tab_name'] ), 'geodirectory' );
-			$data_toggle = $args['show_as_list'] ? '' : 'data-toggle="tab"';
-			if ( $args['output'] == 'head' ) {
-				$data_toggle = 'data-tab="' . $key . '"';
+			if ( $args['output'] == 'head' && empty( $args['show_as_list'] ) && ! empty( $args['tab_style'] ) ) {
+				$pill_js = 'data-toggle="tab"';
+				$data_toggle= "";
+			} else {
+				$data_toggle = $args['show_as_list'] ? '' : 'data-toggle="tab"';
+				if ( $args['output'] == 'head' ) {
+					$data_toggle = 'data-tab="' . $key . '"';
+				}
+				$pill_js = ( $args['show_as_list'] || $args['output'] == 'head' ) && $args['tab_style'] ? 'onclick="jQuery(this).parent().parent().find(\'a\').removeClass(\'active\');jQuery(this).addClass(\'active\');"' : '';
 			}
-			$pill_js = ( $args['show_as_list'] || $args['output'] == 'head' ) && $args['tab_style'] ? 'onclick="jQuery(this).parent().parent().find(\'a\').removeClass(\'active\');jQuery(this).addClass(\'active\');"' : '';
 
 			// `list-unstyled` class added for some themes like Kadence that will prevent scroll when used as list
 			echo '<li class="nav-item list-unstyled"><a class="nav-link text-nowrap scroll-ignore '.$active.'" '.$pill_js.' '.$data_toggle .' href="#'.$key.'" role="tab" aria-controls="'.$key.'" aria-selected="'.$selected .'">'.$tab_icon.$name.'</a></li>';
@@ -108,26 +113,31 @@ if ( ! empty( $tabs_array ) ) {
 		}
 		echo '</div>';
 	}
-
 	echo '</div>';
 
 	if ( ! $args['show_as_list']) { ?>
-		<script type="text/javascript">/* <![CDATA[ */
-			if (window.location.hash && window.location.hash.indexOf('&') === -1 && jQuery(window.location.hash + 'Tab').length) {
+<script type="text/javascript">/* <![CDATA[ */
+	var hashVal;
+	if (window.location.hash) {
+		if (window.location.hash.indexOf('&') === -1) {
+			if (jQuery(window.location.hash + 'Tab').length) {
 				hashVal = window.location.hash;
-			} else {
-				hashVal = jQuery('dl.geodir-tab-head dd.geodir-tab-active').find('a').attr('data-tab');
 			}
-			jQuery('dl.geodir-tab-head dd').each(function() {
-				//Get all tabs
-				var tabs = jQuery(this).children('dd');
-				var tab = '';
-				tab = jQuery(this).find('a').attr('data-tab');
-				if (hashVal != tab) {
-					jQuery(tab + 'Tab').hide();
-				}
-			});
-			/* ]]> */</script>
+		}
+	}
+	if (!hashVal) {
+		hashVal = jQuery('dl.geodir-tab-head dd.geodir-tab-active').find('a').attr('data-tab');
+	}
+	jQuery('dl.geodir-tab-head dd').each(function() {
+		/* Get all tabs */
+		var tabs = jQuery(this).children('dd');
+		var tab = '';
+		tab = jQuery(this).find('a').attr('data-tab');
+		if (hashVal != tab) {
+			jQuery(tab + 'Tab').hide();
+		}
+	});
+	/* ]]> */</script>
 		<?php
 	}
 }

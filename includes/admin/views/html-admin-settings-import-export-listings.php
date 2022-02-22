@@ -113,6 +113,13 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 									'href'      => esc_url($gd_posts_sample_csv),
 								)
 							);
+
+							/**
+							 * Called just after the sample CSV download link.
+							 *
+							 * @since 1.0.0
+							 */
+							do_action('geodir_sample_csv_download_link');
 							?>
 						</div>
 					</div>
@@ -124,14 +131,6 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 							<input id="gd_im_postplupload-browse-button" type="hidden" value="<?php esc_attr_e( 'Select & Upload CSV', 'geodirectory' ); ?>" class="gd-imex-pupload button-primary" />
 							<input type="hidden" value="<?php esc_attr_e( 'Download Sample CSV', 'geodirectory' );?>" class="button-secondary" name="gd_ie_download_sample" id="gd_ie_download_sample" data-sample-csv="<?php echo $gd_posts_sample_csv;?>">
 							<input type="hidden" id="gd_im_post_allowed_types" data-exts=".csv" value="csv" />
-							<?php
-							/**
-							 * Called just after the sample CSV download link.
-							 *
-							 * @since 1.0.0
-							 */
-							do_action('geodir_sample_csv_download_link');
-							?>
 							<span class="ajaxnonceplu" id="ajaxnonceplu<?php echo wp_create_nonce( 'gd_im_postpluploadan' ); ?>"></span>
 							<div class="filelist"></div>
 						</div>

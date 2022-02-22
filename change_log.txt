@@ -3,6 +3,8 @@
 * Admin settings screen UI changed to AUI style (UI breaking change to older addons) - CHANGED
 * Setup Wizard updated - CHANGED
 * Block theme like Twenty Twenty Two don't loads map scripts - FIXED
+* Multiselect checkbox required error option not working - FIXED
+* Chrome Autofill covers Google Autocomplete address search - FIXED
 
 = 2.1.1.13 =
 * Hide new line break for empty address in post address - CHANGED
