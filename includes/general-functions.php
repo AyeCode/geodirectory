@@ -1425,7 +1425,9 @@ function geodir_count_posts_by_term( $data, $term ) {
  * @return array Sorted terms array.
  */
 function geodir_sort_terms_by_count( $terms ) {
-	usort( $terms, "geodir_sort_by_count_obj" );
+	if ( ! empty( $terms ) ) {
+		usort( $terms, "geodir_sort_by_count_obj" );
+	}
 
 	return $terms;
 }
@@ -1441,7 +1443,9 @@ function geodir_sort_terms_by_count( $terms ) {
  * @return array Sorted terms array.
  */
 function geodir_sort_terms_by_review_count( $terms ) {
-	usort( $terms, "geodir_sort_by_review_count_obj" );
+	if ( ! empty( $terms ) ) {
+		usort( $terms, "geodir_sort_by_review_count_obj" );
+	}
 
 	return $terms;
 }
@@ -1458,12 +1462,17 @@ function geodir_sort_terms_by_review_count( $terms ) {
  * @return array Sorted terms array.
  */
 function geodir_sort_terms( $terms, $sort = 'count' ) {
-	if ( $sort == 'count' ) {
-		return geodir_sort_terms_by_count( $terms );
+
+	if ( ! empty( $terms ) && ! is_wp_error( $terms ) ) {
+		if ( $sort == 'count' ) {
+			return geodir_sort_terms_by_count( $terms );
+		}
+		if ( $sort == 'review_count' ) {
+			return geodir_sort_terms_by_review_count( $terms );
+		}
 	}
-	if ( $sort == 'review_count' ) {
-		return geodir_sort_terms_by_review_count( $terms );
-	}
+
+	return array();
 }
 
 /*-----------------------------------------------------------------------------------*/

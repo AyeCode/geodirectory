@@ -5,7 +5,7 @@
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '685950a5951d94b03f76f136ed4772389f7a3c2b',
+        'reference' => 'ecbcabf5d88d185a76c587ab5bac0cffcde3aa34',
         'name' => 'ayecode/geodirectory',
         'dev' => true,
     ),
@@ -25,7 +25,7 @@
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '685950a5951d94b03f76f136ed4772389f7a3c2b',
+            'reference' => 'ecbcabf5d88d185a76c587ab5bac0cffcde3aa34',
             'dev_requirement' => false,
         ),
         'ayecode/wp-ayecode-ui' => array(
@@ -65,12 +65,12 @@
             'dev_requirement' => false,
         ),
         'ayecode/wp-super-duper' => array(
-            'pretty_version' => '1.0.28',
-            'version' => '1.0.28.0',
+            'pretty_version' => '1.0.29',
+            'version' => '1.0.29.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../ayecode/wp-super-duper',
             'aliases' => array(),
-            'reference' => 'c3d8a73d9760352719da271ee13cfe676f5af075',
+            'reference' => '18f3da558aec750cfeaa582f72619fbf8867677a',
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
