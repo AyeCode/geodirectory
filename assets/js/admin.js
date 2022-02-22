@@ -156,7 +156,6 @@ jQuery(window).on("load",function() {
     }
 
 
-    })
 
     jQuery('.geodir-report-view').on('click', function(e) {
         if(jQuery(this).closest('tr').prop('id') && jQuery('#geodir-view-' + jQuery(this).closest('tr').prop('id')).text()) {
@@ -1459,6 +1458,11 @@ var gd_has_map_error = false;
 function geodir_validate_google_api_key($key,$id){
     gd_has_map_error = false;
     console.log($key);
+
+    if($key.length < 10 ){
+        aui_toast($id,'error', geodir_params.txt_google_key_error_missing );
+        return;
+    }
 
     if(!gd_console_logging){
         gd_console_logging = true;
