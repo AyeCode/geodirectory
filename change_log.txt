@@ -1,3 +1,8 @@
+= 2.2.1 =
+* Brave browser can cause API verify function to return false positive (warning added)- FIXED
+* Place settings checkboxes not all showing correct setting - FIXED
+* Setup wizard lightbox membership shows empty cart - FIXED/CHANGED
+
 = 2.2 =
 * Long file names can cause overflow issues on mobile - FIXED
 * Admin settings screen UI changed to AUI style (UI breaking change to older addons) - CHANGED

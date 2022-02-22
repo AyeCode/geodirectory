@@ -1464,6 +1464,11 @@ function geodir_validate_google_api_key($key,$id){
         return;
     }
 
+    //brave browser blocks this check if shield is up
+    if(navigator.brave){
+        aui_toast($id,'error', geodir_params.txt_google_key_error_brave);
+    }
+
     if(!gd_console_logging){
         gd_console_logging = true;
         console.defaultError = console.error.bind(console);
