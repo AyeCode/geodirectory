@@ -810,8 +810,9 @@ class GeoDir_Admin_Settings {
 						}
 					}
 
-//					print_r( $pages );exit;
-
+					if ( isset( $parsed_args['show_option_none'] ) ) {
+						$parsed_args['show_option_none'] = trim( $parsed_args['show_option_none'] );
+					}
 
 					$buttons = '';
 					$buttons_links = array();
@@ -884,30 +885,36 @@ class GeoDir_Admin_Settings {
 						</div>
 						<?php
 					}
-
 					$buttons = ob_get_clean();
+
+					// Placeholder
+					if ( ! empty( $parsed_args['show_option_none'] ) ) {
+						$placeholder = $parsed_args['show_option_none'];
+					} elseif ( ! empty( $parsed_args['placeholder'] ) ) {
+						$placeholder = $parsed_args['placeholder'];
+					} else {
+						$placeholder = __( 'Select a page&hellip;', 'geodirectory' );
+					}
 
 					$output =  aui()->select(
 						array(
 							'id'                => $value['id'],
 							'name'              => $value['id'],
 							'label_type'        => $label_type,
-							'label_col'        => '3',
-							'label_class'=> 'font-weight-bold',
-							'multiple'   => 'multiselect' == $value['type'] ? true : false,
+							'label_col'         => '3',
+							'label_class'       => 'font-weight-bold',
+							'multiple'          => 'multiselect' == $value['type'] ? true : false,
 							'class'             => $buttons ? $value['class']. ' mw-100 w-auto' : $value['class'].' mw-100 w-100',
-							//'required'          => true,
-							'select2'   => strpos($value['class'], 'geodir-select') !== false ? true : false,
-							'options'       => array('' => esc_attr__( 'Select a page&hellip;', 'geodirectory' )) +  $page_options,
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
+							'select2'           => strpos( $value['class'], 'geodir-select' ) !== false ? true : false,
+							'options'           => array( '' => esc_html( $placeholder ) ) + $page_options,
+							'wrap_class'        => ! empty( $value['advanced'] ) ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
-							'placeholder'       => $value['placeholder'] ? $value['placeholder'] :  esc_attr__( 'Select a page&hellip;', 'geodirectory' ),
-							'value' => $option_value,
-							'help_text'  => isset($description) ? $description : '',
-							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
-							'input_group_right'  => $buttons, //'<button class="btn-sm btn btn-outline-secondary" type="button">Button</button>',
-//							'no_wrap' => true,
-							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+							'placeholder'       => esc_html( $placeholder ),
+							'value'             => $option_value,
+							'help_text'         => isset( $description ) ? $description : '',
+							'extra_attributes'  => ! empty( $custom_attributes ) ? $custom_attributes : array(),
+							'input_group_right' => $buttons,
+							'element_require'   => ! empty( $value['element_require'] ) ? $value['element_require'] : '',
 						)
 					);
 

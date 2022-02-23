@@ -1,3 +1,6 @@
+= 2.2.2 =
+* CPT pages options show default option as a placeholder - CHANGED
+
 = 2.2.1 =
 * Brave browser can cause API verify function to return false positive (warning added)- FIXED
 * Place settings checkboxes not all showing correct setting - FIXED
