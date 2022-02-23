@@ -665,22 +665,52 @@ public function setup_wizard_header() {
 						);
 					}else {
 						$info_url = 'https://wpgeodirectory.com/checkout/?edd_action=add_to_cart&download_id=66235&edd_options[price_id]=1';
-						$buy_now = '<span class="badge badge-pill badge-primary" onclick="aui_modal_iframe(\''.__("Buy membership","geodirectory").'\',\''.$info_url.'\',\'\',true,\'\',\'modal-lg\')">'.__("Buy now","geodirectory").'</span>';
+
+						//@todo we can't iframe this until we update our PHP version ont he server so we can allow CORS cookies.
+						//$buy_now = '<span class="badge badge-pill badge-primary" onclick="aui_modal_iframe(\''.__("Buy membership","geodirectory").'\',\''.$info_url.'\',\'\',true,\'\',\'modal-lg\')">'.__("Buy now","geodirectory").'</span>';
+						$buy_now = '<a class="" href="'.$info_url.'" target="_blank"><span class="badge badge-pill badge-primary" href="'.$info_url.'" target="_blank">'.__("Buy now","geodirectory").'</span></a>';
 						?>
-						<a href="#" class="list-group-item list-group-item-action bg-light border-primary ">
+						<script>
+							function gd_ayecode_connect_licences($input){
+								jQuery.ajax({
+									url: ajaxurl,
+									type: 'POST',
+									dataType: 'json',
+									data: {
+										action: 'ayecode_connect_licences',
+										security: '<?php echo wp_create_nonce( 'ayecode-connect' );?>',
+										state: 1
+									},
+									beforeSend: function() {
+										jQuery($input).replaceWith('<div class="spinner-border spinner-border-sm" role="status"></div>');
+
+//										jQuery($input).closest('li').find('.spinner-border').toggleClass('d-none');
+									},
+									success: function(data, textStatus, xhr) {
+										location.reload();
+									},
+									error: function(xhr, textStatus, errorThrown) {
+										alert(textStatus);
+									}
+								}); // end of ajax
+							}
+						</script>
+						<span  class="list-group-item list-group-item-action bg-light border-primary ">
 							<div class="d-flex w-100 justify-content-between <?php echo $blur_class; ?>">
 								<div class="custom-control custom-checkbox c-pointer">
 									<input type="checkbox" class="custom-control-input"
 									       id="membership" <?php echo $disabled; ?>>
 									<label class="custom-control-label"
-									       for="membership"><?php _e( "Membership (includes all extensions on unlimited sites)", "geodirectory" ); ?></label>
+									       for="membership"><?php _e( "Membership (includes all extensions on unlimited sites)", "geodirectory" ); ?>
+									<small class="d-block text-info"><?php _e( "Recent purchase?", "geodirectory" ); ?> <span class="badge badge-pill badge-primary c-pointer" onclick="gd_ayecode_connect_licences(this);"><?php _e( "Refresh Licenses", "geodirectory" ); ?></span></small>
+									</label>
 								</div>
 								<small class="gd-price-year d-none"><?php echo $buy_now;?> <span class="badge badge-pill badge-secondary">$199 / year</span>
 								</small>
 								<small class="gd-price-month"><?php echo $buy_now;?> <span
 										class="badge badge-pill badge-secondary">$16.59 / month</span></small>
 							</div>
-						</a>
+						</span>
 
 						<?php
 					}

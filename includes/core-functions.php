@@ -370,6 +370,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_google_key_error_invalid'                 => __( 'Key invalid, please double check you have entered it correctly', 'geodirectory' ),
 		'txt_google_key_error_referer'                 => __( 'This URL is not allowed for this API Key', 'geodirectory' ),
 		'txt_google_key_error_billing'                 => __( 'You must enable billing on your Google account.', 'geodirectory' ),
+		'txt_google_key_error_brave'                 => __( 'Brave browser shield will block this check and return a false positive', 'geodirectory' ),
 		'gmt_offset'                                   => geodir_gmt_offset(),
 		'timezone_string'                              => geodir_timezone_string(),
 		'autosave'                                     => apply_filters('geodir_autosave',10000),// 10000 = 10 seconds, set to 0 to disable

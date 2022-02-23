@@ -652,7 +652,7 @@ class GeoDir_Admin_Settings {
 					array(
 						'id'                => $value['id'],
 						'name'              => $value['id'],
-						'value'              => isset($value['value']) ? $value['value'] : '1',
+						'value'              => !empty($value['value']) ? $value['value'] : '1',
 						'label_type'        => $label_type,
 						'label_col'        => '3',
 						'label_class'=> 'font-weight-bold',
