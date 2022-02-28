@@ -601,19 +601,27 @@ function geodir_cfi_select($html,$cf){
 
         $extra_attributes = array();
         $value = geodir_get_cf_value($cf);
-        $title = '';
-        //validation
-        if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
+        $validation_text = '';
+
+        // Required
+        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+
+        // Required message
+        if ( $required && ! empty( $cf['required_msg'] ) ) {
+            $validation_text = __( $cf['required_msg'], 'geodirectory' );
+        }
+
+        // Validation message
+        if ( ! empty( $cf['validation_msg'] ) ) {
+            $validation_text = __( $cf['validation_msg'], 'geodirectory' );
+        }
+
+        // Validation
+        if ( ! empty( $cf['validation_pattern'] ) ) {
             $extra_attributes['pattern'] = $cf['validation_pattern'];
         }
 
-        // validation message
-        if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
-            $title = $cf['validation_msg'];
-        }
-
-        // required
-        $required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+        $title = $validation_text;
 
         // help text
         $help_text = __( $cf['desc'], 'geodirectory' );
@@ -627,6 +635,12 @@ function geodir_cfi_select($html,$cf){
         //extra
         $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
         $extra_attributes['option-ajaxchosen'] = 'false';
+
+        // Set validation message
+        if ( ! empty( $validation_text ) ) {
+            $extra_attributes['oninvalid'] = 'try{this.setCustomValidity(\'' . esc_attr( addslashes( $validation_text ) ) . '\')}catch(e){}';
+            $extra_attributes['onchange'] = 'try{this.setCustomValidity(\'\')}catch(e){}';
+        }
 
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
@@ -642,7 +656,7 @@ function geodir_cfi_select($html,$cf){
             'label_show'       => true,
             'label_type'       => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'label'      => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-            'validation_text'   => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'validation_text'    => $validation_text,
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
             'help_text'        => $help_text,
             'extra_attributes' => $extra_attributes,
@@ -690,20 +704,28 @@ function geodir_cfi_multiselect( $html, $cf ) {
 		$_value = geodir_get_cf_value($cf);
 		$extra_fields = !empty($cf['extra_fields']) ? maybe_unserialize($cf['extra_fields']) : NULL;
 		$multi_display = !empty($extra_fields['multi_display_type']) ? $extra_fields['multi_display_type'] : 'select';
-		$title = '';
+		$validation_text = '';
 		$id = $cf['htmlvar_name'];
-		//validation
-		if ( isset( $cf['validation_pattern'] ) && $cf['validation_pattern'] ) {
-			$extra_attributes['pattern'] = $cf['validation_pattern'];
-		}
-
-		// validation message
-		if ( isset( $cf['validation_msg'] ) && $cf['validation_msg'] ) {
-			$title = $cf['validation_msg'];
-		}
 
 		// required
 		$required = ! empty( $cf['is_required'] ) ? ' <span class="text-danger">*</span>' : '';
+
+		// Required message
+		if ( $required && ! empty( $cf['required_msg'] ) ) {
+			$validation_text = __( $cf['required_msg'], 'geodirectory' );
+		}
+
+		// Validation message
+		if ( ! empty( $cf['validation_msg'] ) ) {
+			$validation_text = __( $cf['validation_msg'], 'geodirectory' );
+		}
+
+				// Validation
+		if ( ! empty( $cf['validation_pattern'] ) ) {
+			$extra_attributes['pattern'] = $cf['validation_pattern'];
+		}
+
+		$title = $validation_text;
 
 		// help text
 		$help_text = __( $cf['desc'], 'geodirectory' );
@@ -733,6 +755,12 @@ function geodir_cfi_multiselect( $html, $cf ) {
 		$admin_only = geodir_cfi_admin_only( $cf );
 
 		if ( $multi_display == 'select' ) {
+			// Set validation message
+			if ( ! empty( $validation_text ) ) {
+				$extra_attributes['oninvalid'] = 'try{this.setCustomValidity(\'' . esc_attr( addslashes( $validation_text ) ) . '\')}catch(e){}';
+				$extra_attributes['onchange'] = 'try{this.setCustomValidity(\'\')}catch(e){}';
+			}
+
 			$conditional_attrs = geodir_conditional_field_attrs( $cf );
 
 			$html .= aui()->select( array(
@@ -745,7 +773,7 @@ function geodir_cfi_multiselect( $html, $cf ) {
 				'label_show'         => true,
 				'label_type'         => ! empty( $geodir_label_type ) ? $geodir_label_type : 'horizontal',
 				'label'              => __( $cf['frontend_title'], 'geodirectory' ) . $admin_only . $required,
-				'validation_text'    => ! empty( $cf['validation_msg'] ) ? $cf['validation_msg'] : '',
+				'validation_text'    => $validation_text,
 				'validation_pattern' => ! empty( $cf['validation_pattern'] ) ? $cf['validation_pattern'] : '',
 				'help_text'          => $help_text,
 				'extra_attributes'   => $extra_attributes,
@@ -876,6 +904,24 @@ function geodir_cfi_multiselect( $html, $cf ) {
 									)
 								);
 						} else {
+							// Set redio required.
+							$required = false;
+							$extra_attributes = array();
+
+							if ( ! empty( $cf['is_required'] ) ) {
+								$cf_name = esc_attr( $cf['name'] );
+								$extra_attributes['onchange'] = "if(jQuery('input[name=\"" . $cf_name . "\"]:checked').length || !jQuery('input#" . $cf_name . "_00').is(':visible')){jQuery('#" . $cf_name . "_00').removeAttr('required')}else{jQuery('#" . $cf_name . "_00').attr('required',true)}";
+								$extra_attributes['oninput'] = "try{document.getElementById('" . $cf_name . "_00').setCustomValidity('')}catch(e){}";
+
+								if ( $i === 0 ) {
+									$extra_attributes['oninvalid'] = 'try{document.getElementById(\'' . $cf_name . '_00\').setCustomValidity(\'' . esc_attr( addslashes( __( $cf['required_msg'], 'geodirectory' ) ) ) . '\')}catch(e){}';
+
+									if ( empty( $value ) ) {
+										$required = true;
+									}
+								}
+							}
+
 							if ( is_array( $value ) ) {
 								$value = ! empty( $value ) ? $value[0] : '';
 							}
@@ -890,7 +936,9 @@ function geodir_cfi_multiselect( $html, $cf ) {
 									'wrap_class'        => 'mb-1',
 									'class'             => '',
 									'value'             => $value,
-									'options'           => array( esc_attr( $option_value ) => $option_label )
+									'options'           => array( esc_attr( $option_value ) => $option_label ),
+									'required'         => $required,
+									'extra_attributes' => $extra_attributes
 								)
 							);
 						}
