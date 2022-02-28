@@ -473,14 +473,7 @@ class GeoDir_Admin_Settings {
 							'value' => $option_value,
 							'help_text'  => isset($description) ? $description : '',
 							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
-							'input_group_left'  => '
-							<div class="gd-upload-img" data-field="'.esc_attr( $value['id'] ).'">
-							<button type="button" class="gd_upload_image_button btn btn-outline-primary">'.__( 'Upload Image', 'geodirectory' ).'</button>
-								<button type="button" class="gd_remove_image_button btn btn-outline-primary '.$remove_class.'">'.__( 'Remove Image', 'geodirectory' ).'</button>
-							<div class="gd-upload-display gd-img-size-'.$image_size.' thumbnail"><div class="centered">'.$show_img.'</div></div>
-
-								</div>
-							',
+							'input_group_left'  => '<div class="gd-upload-img" data-field="' . esc_attr( $value['id'] ) . '"><button type="button" class="gd_upload_image_button btn btn-outline-primary mr-2">' . __( 'Upload Image', 'geodirectory' ) . '</button><button type="button" class="gd_remove_image_button btn btn-outline-primary ' . $remove_class . '">' . __( 'Remove Image', 'geodirectory' ) . '</button> <div class="gd-upload-display gd-img-size-' . $image_size . ' thumbnail mr-3"><div class="centered">' . $show_img . '</div></div></div>',
 							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
 						)
 					);
