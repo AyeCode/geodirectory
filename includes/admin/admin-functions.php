@@ -1392,11 +1392,10 @@ function geodir_is_archive_item_template_page(){
  *
  * @return array
  */
-function geodir_add_aui_screens($screen_ids){
-
-	// load on these pages if set
-	if( geodir_design_style() ){
-		$screen_ids = array_merge($screen_ids,geodir_get_screen_ids());
+function geodir_add_aui_screens( $screen_ids ) {
+	// Load on these pages if set
+	if ( geodir_design_style() || ( is_admin() && ! wp_doing_ajax() ) ) {
+		$screen_ids = array_merge( $screen_ids, geodir_get_screen_ids() );
 	}
 
 	// AUI is also needed for setup wizard
@@ -1404,4 +1403,4 @@ function geodir_add_aui_screens($screen_ids){
 
 	return $screen_ids;
 }
-add_filter('aui_screen_ids','geodir_add_aui_screens');
+add_filter( 'aui_screen_ids', 'geodir_add_aui_screens' );

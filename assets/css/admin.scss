@@ -8,7 +8,7 @@
 @import "partials/notifications";
 
 .bsui {
-    .select2-container .select2-selection {
+    .select2-container .select2-selection--single {
         height: calc(1.6em + 1.1rem + 2px) !important;
     }
     .select2-selection--single .select2-selection__rendered {
@@ -1296,15 +1296,18 @@ table.gd_status_table th.run-tool {
   float: left;
   margin-top: 5px;
 }
-.select2-container.gd-select2-container .select2-selection--multiple .select2-selection__choice {
+.select2-container.gd-select2-container .select2-selection--multiple .select2-selection__choice,
+.bsui .select2-container .select2-selection--multiple .select2-selection__choice {
   margin: 6px 0 0 7px;
   padding: 1px 6px 2px 6px;
   line-height: normal;
 }
-.select2-container.gd-select2-container .select2-selection--multiple .select2-search--inline {
+.select2-container.gd-select2-container .select2-selection--multiple .select2-search--inline,
+.bsui .select2-container .select2-selection--multiple .select2-search--inline {
   margin: 0;
 }
-.select2-container.gd-select2-container .select2-selection--multiple .select2-search--inline .select2-search__field {
+.select2-container.gd-select2-container .select2-selection--multiple .select2-search--inline .select2-search__field,
+.bsui .select2-container .select2-selection--multiple .select2-search--inline .select2-search__field {
   background: transparent;
   padding: 0 12px;
   height: 34px;
@@ -1313,13 +1316,16 @@ table.gd_status_table th.run-tool {
   min-width: 5em;
   margin-right: auto;
   float: none;
+  box-shadow: inherit;
 }
-.select2-container.gd-select2-container .select2-selection--multiple .select2-selection__choice__remove {
+.select2-container.gd-select2-container .select2-selection--multiple .select2-selection__choice__remove,
+.bsui .select2-container .select2-selection--multiple .select2-selection__choice__remove {
   color: #999;
   cursor: pointer;
   display: inline-block;
   font-weight: bold;
   margin-right: 3px;
+  margin-left: 0;
 }
 .select2-container.gd-select2-container .select2-selection--multiple .select2-selection__choice__remove:hover {
   color: #333;
