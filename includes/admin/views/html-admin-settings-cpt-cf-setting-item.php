@@ -19,7 +19,7 @@
 //mjs-nestedSortable-no-nesting
 $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 'mjs-nestedSortable-no-nesting';
 ?>
-<li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>" data-field_type="<?php echo esc_attr( $field->field_type ); ?>" data-field_type_key="<?php echo esc_attr( $field->field_type_key ); ?>" data-field-nonce="<?php echo esc_attr( $nonce ); ?>">
+<li class="dd-item <?php echo $tab_class;?>" data-id="1" id="setName_<?php echo $field->id;?>" data-htmlvar_name="<?php echo ( isset( $field->htmlvar_name ) ? esc_attr( $field->htmlvar_name ) : '' );?>" id="setName_<?php echo $field->id;?>" data-field_type="<?php echo esc_attr( $field->field_type ); ?>" data-field_type_key="<?php echo esc_attr( $field->field_type_key ); ?>" data-field-nonce="<?php echo esc_attr( $nonce ); ?>">
 	<div class="hover-shadow dd-form d-flex justify-content-between rounded c-pointer list-group-item border rounded-smx text-left bg-light <?php if(empty($field->is_active)){echo 'border-warning';} ?>" onclick="gd_tabs_item_settings(this);">
 		<div class="  flex-fill font-weight-bold">
 			<?php echo $field_icon; ?>
@@ -84,6 +84,34 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 				<?php
 			}
 
+			do_action( "geodir_cfa_before_frontend_title_{$field->field_type}", $cf, $field);
+
+			// frontend_title
+			if ( has_filter( "geodir_cfa_frontend_title_{$field->field_type}" ) ) {
+
+			echo apply_filters( "geodir_cfa_frontend_title_{$field->field_type}", '', $field->id, $cf, $field );
+
+			} else {
+			$value = '';
+			if ( isset( $field->frontend_title ) ) {
+			$value = esc_attr( $field->frontend_title );
+			} elseif ( isset( $cf['defaults']['frontend_title'] ) && $cf['defaults']['frontend_title'] ) {
+			$value = $cf['defaults']['frontend_title'];
+			}
+				echo aui()->input(
+					array(
+						'id'                => 'frontend_title',
+						'name'              => 'frontend_title',
+						'label_type'        => 'top',
+						'label'             => __('Label','geodirectory') . geodir_help_tip( __( 'This will be the label for the field input on the frontend.', 'geodirectory' )),
+						'type'              =>   'text',
+//						'wrap_class'        => geodir_advanced_toggle_class(),
+						'value' => $value,
+					)
+				);
+
+			}
+
 			/**
 			 * Action before the custom field setting: geodir_cfa_before_FIELD_TYPE
 			 *
@@ -117,35 +145,6 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 					)
 				);
 			}
-
-			do_action( "geodir_cfa_before_frontend_title_{$field->field_type}", $cf, $field);
-
-			// frontend_title
-			if ( has_filter( "geodir_cfa_frontend_title_{$field->field_type}" ) ) {
-
-			echo apply_filters( "geodir_cfa_frontend_title_{$field->field_type}", '', $field->id, $cf, $field );
-
-			} else {
-			$value = '';
-			if ( isset( $field->frontend_title ) ) {
-			$value = esc_attr( $field->frontend_title );
-			} elseif ( isset( $cf['defaults']['frontend_title'] ) && $cf['defaults']['frontend_title'] ) {
-			$value = $cf['defaults']['frontend_title'];
-			}
-				echo aui()->input(
-					array(
-						'id'                => 'frontend_title',
-						'name'              => 'frontend_title',
-						'label_type'        => 'top',
-						'label'             => __('Label','geodirectory') . geodir_help_tip( __( 'This will be the label for the field input on the frontend.', 'geodirectory' )),
-						'type'              =>   'text',
-//						'wrap_class'        => geodir_advanced_toggle_class(),
-						'value' => $value,
-					)
-				);
-
-			}
-
 
 			// frontend_desc
 			do_action( "geodir_cfa_before_frontend_desc_{$field->field_type}", $cf, $field);
@@ -740,7 +739,7 @@ $tab_class = isset($field->field_type) && $field->field_type=='fieldset' ? '' : 
 
 
 				<a class=" btn btn-link text-muted" href="javascript:void(0);" onclick="gd_tabs_close_settings(this); return false;"><?php _e("Close","geodirectory");?></a>
-				<button type="button" class="btn btn-primary" name="save" id="save" data-save-text="<?php _e("Save","geodirectory");?>"  onclick="gd_save_custom_field('<?php echo esc_attr( $field->id ); ?>');jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'geodirectory' ); ?>').addClass('disabled');return false;">
+				<button type="button" class="btn btn-primary" name="save" id="save" data-save-text="<?php _e("Save","geodirectory");?>"  onclick="gd_save_custom_field('<?php echo esc_attr( $field->id ); ?>',event);jQuery(this).html('<span class=\'spinner-border spinner-border-sm\' role=\'status\'></span> <?php esc_attr_e( 'Saving', 'geodirectory' ); ?>').addClass('disabled');return false;">
 					<?php _e("Save","geodirectory");?>
 				</button>
 			</div>

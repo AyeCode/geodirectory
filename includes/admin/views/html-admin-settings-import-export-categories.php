@@ -127,9 +127,8 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 					</div>
 
 					<div class="plupload-upload-uic hide-if-no-js" id="gd_im_catplupload-upload-ui">
-						<input id="gd_im_catplupload-browse-button" type="hidden"
-						       value="<?php esc_attr_e( 'Select & Upload CSV', 'geodirectory' ); ?>"
-						       class="gd-imex-cupload button-primary"/>
+						<input type="hidden" readonly="readonly" name="gd_im_cat_file" class="gd-imex-file gd_im_cat_file" id="gd_im_cat" onclick="jQuery('#gd_im_catplupload-browse-button').trigger('click');" />
+						<input id="gd_im_catplupload-browse-button" type="hidden" value="<?php esc_attr_e( 'Select & Upload CSV', 'geodirectory' ); ?>" class="gd-imex-cupload button-primary"/>
 						<input type="hidden" id="gd_im_cat_allowed_types" data-exts=".csv" value="csv"/>
 						<?php
 						/**
@@ -167,20 +166,23 @@ $gd_chunksize_option .= '<option value="' . $value . '" ' . selected($value, 500
 						</div>
 					</div>
 					<div class="gd-import-msg" id="gd-import-msg" style="display:none">
-						<div id="message" class="message fade"></div>
+						<div id="message" class="message alert alert-success fade show"></div>
+					</div>
+					<div class="gd-import-csv-msg" id="gd-import-errors" style="display:none">
+						<div id="gd-csv-errors" class="message fade"></div>
 					</div>
 					<div class="gd-imex-btns" style="display:none;">
 						<input type="hidden" class="geodir_import_file" name="geodir_import_file"
 						       value="save"/>
 						<input onclick="gd_imex_PrepareImport(this, 'cat')" type="button"
 						       value="<?php esc_attr_e( 'Import data now', 'geodirectory' ); ?>"
-						       id="gd_import_data" class="button-primary"/>
+						       id="gd_import_data" class="btn btn-primary"/>
 						<input onclick="gd_imex_ContinueImport(this, 'cat')" type="button"
 						       value="<?php _e( "Continue Import Data", 'geodirectory' ); ?>"
-						       id="gd_continue_data" class="button-primary" style="display:none"/>
+						       id="gd_continue_data" class="btn btn-primary" style="display:none"/>
 						<input type="button"
 						       value="<?php _e( "Terminate Import Data", 'geodirectory' ); ?>"
-						       id="gd_stop_import" class="button-primary" name="gd_stop_import"
+						       id="gd_stop_import" class="btn btn-outline-danger" name="gd_stop_import"
 						       style="display:none" onclick="gd_imex_TerminateImport(this, 'cat')"/>
 						<div id="gd_process_data" style="display:none">
 											<span class="spinner is-active"

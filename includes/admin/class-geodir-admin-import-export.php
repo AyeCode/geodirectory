@@ -2024,7 +2024,7 @@ class GeoDir_Admin_Import_Export {
 			$update_or_skip = isset( $_POST['_ch'] ) && $_POST['_ch'] == 'update' ? 'update' : 'skip';
 			$log_error = __( 'GD IMPORT REVIEW [ROW %d]:', 'geodirectory' );
 
-			foreach ( $rows as $row ) {
+			foreach ( $rows as $i => $row ) {
 				$line_no = $processed + $i + 1;
 				$line_error = wp_sprintf( $log_error, $line_no );
 				$row = self::validate_review( $row );
