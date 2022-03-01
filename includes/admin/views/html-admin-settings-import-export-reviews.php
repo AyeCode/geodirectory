@@ -255,7 +255,7 @@ foreach ($gd_chunksize_options as $value => $title) {
 							<?php
 							echo aui()->select(
 								array(
-									'id'                => 'gd_imex_min_rating]',
+									'id'                => 'gd_imex_min_rating',
 									'name'              => 'gd_imex[min_rating]',
 									'class'             => 'w-100',
 									'no_wrap'           => true,

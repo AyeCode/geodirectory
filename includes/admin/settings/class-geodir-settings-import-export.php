@@ -229,7 +229,7 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					var total = parseInt(jQuery('#gd_total', cont).val());
 					var total_processed = parseInt(jQuery('#gd_processed', cont).val());
 					var uploadedFile = jQuery('#gd_im_' + type, cont).val();
-					var choice = jQuery('.gd_im_choicepost', cont).val();
+					var choice = jQuery('#gd_im_choice' + type, cont).val();
 
 					if (!uploadedFile) {
 						jQuery('#gd_import_data', cont).removeAttr('disabled').show();
@@ -430,6 +430,9 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 				function gd_imex_TerminateImport(el, type) {
 					var cont = jQuery(el).closest('.gd-imex-box');
+					if (!cont.length) {
+						cont = jQuery('#gd_importer').parent();
+					}
 					jQuery('#gd_terminateaction', cont).val('terminate');
 					jQuery('#gd_import_data', cont).hide();
 					jQuery('#gd_stop_import', cont).hide();
@@ -439,6 +442,9 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 				function gd_imex_ContinueImport(el, type) {
 					var cont = jQuery(el).closest('.gd-imex-box');
+					if (!cont.length) {
+						cont = jQuery('#gd_importer').parent();
+					}
 					var processed = jQuery('#gd_processed', cont).val();
 					var total = jQuery('#gd_total', cont).val();
 					if (parseInt(processed) > parseInt(total)) {
@@ -477,6 +483,9 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 
 				function gd_imex_showStatusMsg(el, type) {
 					var cont = jQuery(el).closest('.gd-imex-box');
+					if (!cont.length) {
+						cont = jQuery('#gd_importer').parent();
+					}
 
 					var total = parseInt(jQuery('#gd_total', cont).val());
 					var processed = parseInt(jQuery('#gd_processed', cont).val());
@@ -556,12 +565,12 @@ if ( ! class_exists( 'GD_Settings_Import_Export', false ) ) :
 					var intIp;
 					var intIc;
 
-					jQuery(".gd-imex-pupload").on("click",function () {console.log(1);
+					jQuery(".gd-imex-pupload").on("click",function () {
 						var $this = this;
-						var $cont = jQuery($this).closest('.card-body');console.log($cont);
+						var $cont = jQuery($this).closest('.card-body');
 						clearInterval(intIp);
-						intIp = setInterval(function () {console.log(2);
-							if (jQuery($cont).find('.gd-imex-file').val()) {console.log(3);
+						intIp = setInterval(function () {
+							if (jQuery($cont).find('.gd-imex-file').val()) {
 								jQuery($cont).find('.gd-imex-btns').show();
 							}
 						}, 1000);

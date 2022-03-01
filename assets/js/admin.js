@@ -115,13 +115,13 @@ jQuery(window).on("load",function() {
 		}
 	}
 
-    jQuery('.geodirectory .active-placeholder').focus(function() {
+    jQuery('.geodirectory .active-placeholder').on("focus",function() {
         var placeholder = jQuery(this).attr('placeholder');
         var current_val = jQuery(this).val();
         if( '' == current_val ){
             jQuery(this).val( placeholder );
         }
-    }).blur(function() {
+    }).on("blur",function() {
         var placeholder = jQuery(this).attr('placeholder');
         var current_val = jQuery(this).val();
         if( current_val == placeholder ){
@@ -403,7 +403,7 @@ jQuery(document).ready(function() {
         }
     });
 
-    jQuery('.default_location_form').find(".required:visible").find('input').blur(function() {
+    jQuery('.default_location_form').find(".required:visible").find('input').on("blur",function() {
         location_validation(jQuery(this));
     });
 

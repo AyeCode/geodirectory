@@ -1,6 +1,7 @@
 = 2.2.2 =
 * CPT pages options show default option as a placeholder - CHANGED
 * Select field required error option not working - FIXED
+* Backend setting style broken for legacy mode - FIXED
 
 = 2.2.1 =
 * Brave browser can cause API verify function to return false positive (warning added)- FIXED

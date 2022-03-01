@@ -1784,10 +1784,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
          * @param array $value Array values.
          * @return string $value.
          */
-		private static function sanatize_show_in( $value ){
-			if(is_array($value)){
-				if(empty($value)){$value = '';}else {
-					$value = implode( ",", array_map( 'sanitize_text_field', $value ) );
+		private static function sanatize_show_in( $value ) {
+			if ( is_array( $value ) ) {
+				if ( empty( $value ) ) {
+					$value = '';
+				} else {
+					$value = array_map( 'sanitize_text_field', $value );
+					$value = array_filter( $value );
+					$value = ! empty( $value ) ? implode( ",", $value ) : '';
 				}
 			}
 
