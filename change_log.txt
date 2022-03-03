@@ -1,4 +1,7 @@
 = 2.2.2 =
+* Sorting tab fields are not updating data #2029
+
+= 2.2.2 =
 * CPT pages options show default option as a placeholder - CHANGED
 * Select field required error option not working - FIXED
 * Backend setting style broken for legacy mode - FIXED
