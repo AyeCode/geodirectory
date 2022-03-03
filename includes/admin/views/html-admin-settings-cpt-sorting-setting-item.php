@@ -49,27 +49,24 @@ $tab_field_name = isset( $field->field_type ) && $field->field_type == 'random' 
 				)
 			);
 
-
 			if ( $field->field_type != 'random' ) {
-
 				$value = isset( $field->sort ) && $field->sort=='desc'  ? 'desc' : 'asc';
+
 				echo aui()->select(
 					array(
-						'id'                => "gd-sort-".esc_attr( $field->id ),
-						'name'              =>  "gd-sort-".esc_attr( $field->id ),
-						'label_type'        => 'top',
+						'id'         => 'gd-sort-' . esc_attr( $field->id ),
+						'name'       => 'sort',
+						'label_type' => 'top',
 						'multiple'   => false,
-						'class'             => ' mw-100',
-						'options'       => array(
-							'asc'   =>  __( 'Ascending', 'geodirectory' ),
-							'desc'   =>  __( 'Descending', 'geodirectory' ),
+						'class'      => ' mw-100',
+						'options'    => array(
+							'asc'  => __( 'Ascending', 'geodirectory' ),
+							'desc' => __( 'Descending', 'geodirectory' ),
 						),
-						'label'              => __('Ascending or Descending','geodirectory').geodir_help_tip( __( 'Select the sort direction: (A-Z or Z-A)', 'geodirectory' )),
-						'value'         => $value ,
-//						'help_text'  => isset($description) ? $description : '',
+						'label'      => __( 'Ascending or Descending', 'geodirectory' ) . geodir_help_tip( __( 'Select the sort direction: (A-Z or Z-A)', 'geodirectory' ) ),
+						'value'      => $value
 					)
 				);
-
 			}
 
 			echo aui()->input(

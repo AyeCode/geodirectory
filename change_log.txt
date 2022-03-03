@@ -1,3 +1,6 @@
+= 2.2.3 =
+* CPT sorting unable to save descending order - FIXED
+
 = 2.2.2 =
 * CPT pages options show default option as a placeholder - CHANGED
 * Select field required error option not working - FIXED
