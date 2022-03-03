@@ -559,7 +559,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			$field->data_type = isset( $input['data_type'] ) ? sanitize_text_field( $input['data_type'] ) : '';
 			$field->htmlvar_name = isset( $input['htmlvar_name'] ) ? str_replace(array('-',' ','"',"'"), array('_','','',''), sanitize_title_with_dashes( $input['htmlvar_name'] ) ) : null;
 			$field->frontend_title = isset( $input['frontend_title'] ) ? sanitize_text_field( $input['frontend_title'] ) : null;
-			$field->sort = isset( $input['sort'] ) ? sanitize_text_field( $input['sort'] ) : 'asc';
+			$field->sort = isset( $input['gd-sort-'. $field->field_id ] ) ? sanitize_text_field( $input['gd-sort-'.$field->field_id] ) : 'asc';
 			//$field->asc = isset( $input['asc'] ) ? absint( $input['asc'] ) : 0;
 			//$field->asc_title = isset( $input['asc_title'] ) ? sanitize_text_field( $input['asc_title'] ) : $field->frontend_title." ASC";
 			//$field->desc = isset( $input['desc'] ) ? absint( $input['desc'] ) : 0;
