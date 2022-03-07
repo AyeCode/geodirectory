@@ -1,5 +1,6 @@
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
+* Custom fields setting Price Options shoud not visible on all field types - CHANGED
 
 = 2.2.2 =
 * CPT pages options show default option as a placeholder - CHANGED

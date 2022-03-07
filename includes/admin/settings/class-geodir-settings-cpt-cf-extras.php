@@ -155,7 +155,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 		 * @param string $output Price fields html output.
 		 * @param string $result_str Price fields results.
 		 * @param array $cf Custom fields value.
-		 * @param object $field_info Price fiels information.
+		 * @param object $field_info Price fields information.
 		 * @return string $output.
 		 */
 		public static function price_fields( $output, $result_str, $cf, $field_info ) {
@@ -245,72 +245,67 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			}
 			ob_start();
 			?>
-			<h3 class="gd-advanced-setting border-bottom text-dark h4 pt-3 pb-2 mb-3"
-			    data-element-require="jQuery(form).find(&#039;[data-argument=&quot;data_type&quot;]&#039;).find(&#039;input,select,textarea&#039;).val() == &quot;INT&quot; || jQuery(form).find(&#039;[data-argument=&quot;data_type&quot;]&#039;).find(&#039;input,select,textarea&#039;).val() == &quot;DECIMAL&quot;"			    data-setting="price_heading" <?php //echo $price_heading_style; ?>>
-				<?php _e( 'Price Options', 'geodirectory' ); ?>
-			</h3>
-
+			<h3 class="gd-advanced-setting border-bottom text-dark h4 pt-3 pb-2 mb-3 aui-conditional-field" data-element-require="jQuery(form).find(&#039;[data-argument=&quot;data_type&quot;]&#039;).find(&#039;input,select,textarea&#039;).val() == &quot;INT&quot; || jQuery(form).find(&#039;[data-argument=&quot;data_type&quot;]&#039;).find(&#039;input,select,textarea&#039;).val() == &quot;DECIMAL&quot;" data-setting="price_heading"><?php _e( 'Number Options', 'geodirectory' ); ?></h3>
 			<?php
 			echo aui()->input(
 				array(
-					'id'                => 'is_price',
-					'name'              => 'extra[is_price]',
-					'label_type'        => 'horizontal',
+					'id'               => 'is_price',
+					'name'             => 'extra[is_price]',
+					'label_type'       => 'horizontal',
 					'label_col'        => '4',
-					'label'              => __('Display as price','geodirectory') ,
-					'type'              =>   'checkbox',
-					'checked' => $is_price,
-					'value' => '1',
-					'switch'    => 'md',
-					'label_force_left'  => true,
-//					'wrap_class' => geodir_advanced_toggle_class(),
-					'help_text' => geodir_help_tip( __( 'Select if this field should be displayed as a price value.', 'geodirectory' )),
-					'element_require'   => '[%data_type%] == "INT" || [%data_type%] == "DECIMAL"'
+					'label'            => __( 'Display as price', 'geodirectory' ),
+					'type'             => 'checkbox',
+					'checked'          => $is_price,
+					'value'            => '1',
+					'switch'           => 'md',
+					'label_force_left' => true,
+					'help_text'        => geodir_help_tip( __( 'Select if this field should be displayed as a price value.', 'geodirectory' ) ),
+					'element_require'  => '[%data_type%] == "INT" || [%data_type%] == "DECIMAL"'
 				)
 			);
 
 			echo aui()->input(
 				array(
-					'id'                => 'currency_symbol',
-					'name'              => 'extra[currency_symbol]',
-					'label_type'        => 'top',
-					'label'              => __('Currency symbol','geodirectory') . geodir_help_tip( __( 'Select the currency symbol.', 'geodirectory' )),
-					'type'              =>   'text',
-					'value' => $currency_symbol,
-					'element_require'   => '[%is_price%:checked]'
+					'id'              => 'currency_symbol',
+					'name'            => 'extra[currency_symbol]',
+					'label_type'      => 'top',
+					'label'           => __( 'Currency symbol', 'geodirectory' ) . geodir_help_tip( __( 'Select the currency symbol.', 'geodirectory' ) ),
+					'type'            => 'text',
+					'value'           => $currency_symbol,
+					'element_require' => '[%is_price%:checked]'
 				)
 			);
 
 			echo aui()->select(
 				array(
-					'id'                => 'currency_symbol_placement',
-					'name'              =>  'extra[currency_symbol_placement]',
-					'label_type'        => 'top',
-					'multiple'   => false,
-					'class'             => ' mw-100',
-					'options'       => array(
-						'left'   =>  __( 'Left', 'geodirectory' ),
-						'right'   =>  __( 'Right', 'geodirectory' ),
+					'id'              => 'currency_symbol_placement',
+					'name'            => 'extra[currency_symbol_placement]',
+					'label_type'      => 'top',
+					'multiple'        => false,
+					'class'           => ' mw-100',
+					'options'         => array(
+						'left'  => __( 'Left', 'geodirectory' ),
+						'right' => __( 'Right', 'geodirectory' ),
 					),
-					'label'              => __('Currency symbol placement','geodirectory') . geodir_help_tip( __( 'Select the currency symbol placement.', 'geodirectory' )),
-					'value'         => $currency_symbol_placement,
-					'element_require'   => '[%is_price%:checked]'
+					'label'           => __( 'Currency symbol placement', 'geodirectory' ) . geodir_help_tip( __( 'Select the currency symbol placement.', 'geodirectory' ) ),
+					'value'           => $currency_symbol_placement,
+					'element_require' => '[%is_price%:checked]'
 				)
 			);
 
 			echo aui()->select(
 				array(
 					'id'                => 'thousand_separator',
-					'name'              =>  'extra[thousand_separator]',
+					'name'              => 'extra[thousand_separator]',
 					'label_type'        => 'top',
 					'multiple'   => false,
 					'class'             => ' mw-100',
 					'options'       => array(
-						'comma'   =>  __( ', (comma)', 'geodirectory' ),
-						'slash'   =>  __( '\ (slash)', 'geodirectory' ),
-						'period'   =>  __( '. (period)', 'geodirectory' ),
-						'space'   =>  __( ' (space)', 'geodirectory' ),
-						'none'   =>  __( '(none)', 'geodirectory' ),
+						'comma'   => __( ', (comma)', 'geodirectory' ),
+						'slash'   => __( '\ (slash)', 'geodirectory' ),
+						'period'   => __( '. (period)', 'geodirectory' ),
+						'space'   => __( ' (space)', 'geodirectory' ),
+						'none'   => __( '(none)', 'geodirectory' ),
 					),
 					'label'              => __('Thousand separator','geodirectory') . geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' )),
 					'value'         => $thousand_separator,
@@ -321,16 +316,16 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			echo aui()->select(
 				array(
 					'id'                => 'thousand_separator',
-					'name'              =>  'extra[thousand_separator]',
+					'name'              => 'extra[thousand_separator]',
 					'label_type'        => 'top',
 					'multiple'   => false,
 					'class'             => ' mw-100',
 					'options'       => array(
-						'comma'   =>  __( ', (comma)', 'geodirectory' ),
-						'slash'   =>  __( '\ (slash)', 'geodirectory' ),
-						'period'   =>  __( '. (period)', 'geodirectory' ),
-						'space'   =>  __( ' (space)', 'geodirectory' ),
-						'none'   =>  __( '(none)', 'geodirectory' ),
+						'comma'   => __( ', (comma)', 'geodirectory' ),
+						'slash'   => __( '\ (slash)', 'geodirectory' ),
+						'period'   => __( '. (period)', 'geodirectory' ),
+						'space'   => __( ' (space)', 'geodirectory' ),
+						'none'   => __( '(none)', 'geodirectory' ),
 					),
 					'label'              => __('Thousand separator','geodirectory') . geodir_help_tip( __( 'Select the thousand separator.', 'geodirectory' )),
 					'value'         => $thousand_separator,
@@ -341,13 +336,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			echo aui()->select(
 				array(
 					'id'                => 'decimal_separator',
-					'name'              =>  'extra[decimal_separator]',
+					'name'              => 'extra[decimal_separator]',
 					'label_type'        => 'top',
 					'multiple'   => false,
 					'class'             => ' mw-100',
 					'options'       => array(
-						'period'   =>  __( '. (period)', 'geodirectory' ),
-						'comma'   =>  __( ', (comma)', 'geodirectory' ),
+						'period'   => __( '. (period)', 'geodirectory' ),
+						'comma'   => __( ', (comma)', 'geodirectory' ),
 					),
 					'label'              => __('Decimal separator','geodirectory') . geodir_help_tip( __( 'Decimal point to display after point.', 'geodirectory' )),
 					'value'         => $decimal_separator,
@@ -358,22 +353,22 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			echo aui()->select(
 				array(
 					'id'                => 'decimal_point',
-					'name'              =>  'decimal_point',
+					'name'              => 'decimal_point',
 					'label_type'        => 'top',
 					'multiple'   => false,
 					'class'             => ' mw-100',
 					'options'       => array(
-						''   =>  __( 'Select', 'geodirectory' ),
-						'1'   =>  '1',
-						'2'   =>  '2',
-						'3'   =>  '3',
-						'4'   =>  '4',
-						'5'   =>  '5',
-						'6'   =>  '6',
-						'7'   =>  '7',
-						'8'   =>  '8',
-						'9'   =>  '9',
-						'10'   =>  '10',
+						''   => __( 'Select', 'geodirectory' ),
+						'1'   => '1',
+						'2'   => '2',
+						'3'   => '3',
+						'4'   => '4',
+						'5'   => '5',
+						'6'   => '6',
+						'7'   => '7',
+						'8'   => '8',
+						'9'   => '9',
+						'10'   => '10',
 					),
 					'label'              => __('Decimal points','geodirectory') . geodir_help_tip( __( 'Decimals to display after point.', 'geodirectory' )),
 					'value'         => $decimal_point,
@@ -384,13 +379,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			echo aui()->select(
 				array(
 					'id'                => 'decimal_display',
-					'name'              =>  'extra[decimal_display]',
+					'name'              => 'extra[decimal_display]',
 					'label_type'        => 'top',
 					'multiple'   => false,
 					'class'             => ' mw-100',
 					'options'       => array(
-						'if'   =>  __( 'Not show if not used', 'geodirectory' ),
-						'allways'   =>  __( 'Always (.00)', 'geodirectory' ),
+						'if'   => __( 'Not show if not used', 'geodirectory' ),
+						'always'   => __( 'Always (.00)', 'geodirectory' ),
 					),
 					'label'              => __('Decimal display','geodirectory') . geodir_help_tip( __( 'Select how the decimal is displayed if empty.', 'geodirectory' )),
 					'value'         => $decimal_display,
@@ -452,7 +447,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			$output .= aui()->select(
 				array(
 					'id'                => 'gd_file_types',
-					'name'              =>  'extra[gd_file_types][]',
+					'name'              => 'extra[gd_file_types][]',
 					'label_type'        => 'top',
 					'multiple'   => true,
 					'select2'   => true,
@@ -497,7 +492,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'value' => $gd_file_limit,
 					'extra_attributes'  => array(
 						'step'  => "1",
-						'min'   =>  "0"
+						'min'   => "0"
 					)
 //					'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
 				)
@@ -552,7 +547,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			echo aui()->select(
 				array(
 					'id'                => 'date_format',
-					'name'              =>  'extra[date_format]',
+					'name'              => 'extra[date_format]',
 					'label_type'        => 'top',
 					'multiple'   => false,
 					'class'             => ' mw-100',
@@ -642,7 +637,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'name'              => 'option_values',
 					'label_type'        => 'top',
 					'label'              => __('Option Values','geodirectory') . geodir_help_tip( $option_values_tool_top ),
-					'type'              =>   'text',
+					'type'              => 'text',
 //					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => $value,
 //					'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
@@ -671,14 +666,14 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			$output .= aui()->select(
 				array(
 					'id'                => 'multi_display_type',
-					'name'              =>  'extra[multi_display_type]',
+					'name'              => 'extra[multi_display_type]',
 					'label_type'        => 'top',
 					'multiple'   => false,
 					'class'             => ' mw-100',
 					'options'       => array(
-						'select'   =>  __( 'Select', 'geodirectory' ),
-						'checkbox'   =>  __( 'Checkbox', 'geodirectory' ),
-						'radio'   =>  __( 'Radio', 'geodirectory' ),
+						'select'   => __( 'Select', 'geodirectory' ),
+						'checkbox'   => __( 'Checkbox', 'geodirectory' ),
+						'radio'   => __( 'Radio', 'geodirectory' ),
 					),
 					'label'              => __('Multiselect display type','geodirectory') . geodir_help_tip( __( 'Show multiselect input as multiselect,checkbox or radio.', 'geodirectory' )),
 					'value'         => $multi_display_type,
@@ -732,7 +727,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'horizontal',
 					'label_col'        => '4',
 					'label'              => __('Display Address line 2','geodirectory') ,
-					'type'              =>   'checkbox',
+					'type'              => 'checkbox',
 					'checked' => $address['show_street2'],
 					'value' => '1',
 					'switch'    => 'md',
@@ -748,7 +743,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'name'              => 'extra[street2_lable]',
 					'label_type'        => 'top',
 					'label'              => __('Address line 2 label','geodirectory') . geodir_help_tip( __( 'Enter Address line 2 field label in address section.', 'geodirectory' )),
-					'type'              =>   'text',
+					'type'              => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => $address['street2_lable'],
 					'element_require'   => '[%show_street2%:checked]'
@@ -763,7 +758,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'horizontal',
 					'label_col'         => '4',
 					'label'             => __( 'Display zip/post code', 'geodirectory' ) ,
-					'type'              =>   'checkbox',
+					'type'              => 'checkbox',
 					'checked'           => ( isset( $address['show_zip'] ) ? $address['show_zip'] : '' ),
 					'value'             => '1',
 					'switch'            => 'md',
@@ -780,7 +775,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'horizontal',
 					'label_col'        => '4',
 					'label'              => __('Make zip code required','geodirectory') ,
-					'type'              =>   'checkbox',
+					'type'              => 'checkbox',
 					'checked' => isset($address['zip_required']) ? $address['zip_required'] : '',
 					'value' => '1',
 					'switch'    => 'md',
@@ -797,7 +792,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'name'              => 'extra[zip_lable]',
 					'label_type'        => 'top',
 					'label'              => __('Zip/Post code label','geodirectory') . geodir_help_tip( __( 'Enter zip/post code field label in address section.', 'geodirectory' )),
-					'type'              =>   'text',
+					'type'              => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => isset($address['zip_lable']) ? $address['zip_lable'] : '',
 					'element_require'   => '[%show_zip%:checked]'
@@ -811,7 +806,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'name'              => 'extra[map_lable]',
 					'label_type'        => 'top',
 					'label'              => __('Map button label','geodirectory') . geodir_help_tip( __( 'Enter text for `set address on map` button in address section.', 'geodirectory' )),
-					'type'              =>   'text',
+					'type'              => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => isset($address['map_lable']) ? $address['map_lable'] : '',
 //					'element_require'   => '[%show_zip%:checked]'
@@ -825,7 +820,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'horizontal',
 					'label_col'        => '4',
 					'label'              => __('Use user zoom level','geodirectory') ,
-					'type'              =>   'checkbox',
+					'type'              => 'checkbox',
 					'checked' => isset($address['show_mapzoom']) ? $address['show_mapzoom'] : '',
 					'value' => '1',
 					'switch'    => 'md',
@@ -843,7 +838,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'horizontal',
 					'label_col'        => '4',
 					'label'              => __('Display map view','geodirectory') ,
-					'type'              =>   'checkbox',
+					'type'              => 'checkbox',
 					'checked' => isset($address['show_mapview']) ? $address['show_mapview'] : '',
 					'value' => '1',
 					'switch'    => 'md',
@@ -860,7 +855,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'name'              => 'extra[mapview_lable]',
 					'label_type'        => 'top',
 					'label'              => __('Map view label','geodirectory') . geodir_help_tip( __( 'Enter mapview field label in address section.', 'geodirectory' )),
-					'type'              =>   'text',
+					'type'              => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => isset($address['mapview_lable']) ? $address['mapview_lable'] : '',
 					'element_require'   => '[%show_mapview%:checked]'
@@ -874,7 +869,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'horizontal',
 					'label_col'        => '4',
 					'label'              => __('Show latitude and longitude','geodirectory') ,
-					'type'              =>   'checkbox',
+					'type'              => 'checkbox',
 					'checked' => isset($address['show_latlng']) ? $address['show_latlng'] : '',
 					'value' => '1',
 					'switch'    => 'md',
@@ -920,15 +915,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 				$output .= aui()->select(
 					array(
 						'id'                => 'cat_display_type',
-						'name'              =>  'extra[cat_display_type]',
+						'name'              => 'extra[cat_display_type]',
 						'label_type'        => 'top',
 						'multiple'   => false,
 						'class'             => ' mw-100',
 						'options'       => array(
-							'select'   =>  __( 'Select', 'geodirectory' ),
-							'multiselect'   =>  __( 'Multiselect', 'geodirectory' ),
-							'checkbox'   =>  __( 'Checkbox', 'geodirectory' ),
-							'radio'   =>  __( 'Radio', 'geodirectory' ),
+							'select'   => __( 'Select', 'geodirectory' ),
+							'multiselect'   => __( 'Multiselect', 'geodirectory' ),
+							'checkbox'   => __( 'Checkbox', 'geodirectory' ),
+							'radio'   => __( 'Radio', 'geodirectory' ),
 						),
 						'wrap_class' => geodir_advanced_toggle_class(),
 						'label'              => __('Category display type','geodirectory') . geodir_help_tip( __( 'Show categories list as select, multiselect, checkbox or radio', 'geodirectory' )),
@@ -966,12 +961,12 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 						'name'              => 'extra[no_of_tag]',
 						'label_type'        => 'top',
 						'label'              => __('Number of allowed tags','geodirectory') . geodir_help_tip( __( 'Enter number of allowed tags', 'geodirectory' ) ),
-						'type'              =>   'number',
+						'type'              => 'number',
 						'value' => $no_of_tag,
 						'wrap_class' => geodir_advanced_toggle_class(),
 						'extra_attributes'  => array(
 							'step'  => "1",
-							'min'   =>  "0"
+							'min'   => "0"
 						)
 //					'placeholder' =>  $field->field_type == 'email' ? __( 'info@mysite.com', 'geodirectory' ) : ''
 					)
@@ -1006,7 +1001,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'name'              => 'validation_pattern',
 					'label_type'        => 'top',
 					'label'              => __('Validation Pattern','geodirectory') . geodir_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'geodirectory' )),
-					'type'              =>   'text',
+					'type'              => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => $value,
 				)
@@ -1025,7 +1020,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'name'              => 'validation_msg',
 					'label_type'        => 'top',
 					'label'              => __('Validation Message','geodirectory') . geodir_help_tip( __( 'Enter a extra validation message to show to the user if validation fails.', 'geodirectory' )),
-					'type'              =>   'text',
+					'type'              => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
 					'value' => $value,
 				)
@@ -1063,7 +1058,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					'label_type'        => 'horizontal',
 					'label_col'        => '4',
 					'label'              => __('Advanced editor','geodirectory') ,
-					'type'              =>   'checkbox',
+					'type'              => 'checkbox',
 					'checked' => $value,
 					'value' => '1',
 					'switch'    => 'md',
@@ -1107,15 +1102,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			echo aui()->select(
 				array(
 					'id'                => "data_type",
-					'name'              =>  "data_type",
+					'name'              => "data_type",
 					'label_type'        => 'top',
 					'multiple'   => false,
 					'wrap_class' => geodir_advanced_toggle_class(),
 					'class'             => 'mw-100',
 					'options'       => array(
-						'XVARCHAR'   =>  __( 'CHARACTER', 'geodirectory' ),
-						'INT'   =>  __( 'NUMBER', 'geodirectory' ),
-						'DECIMAL'   =>  __( 'DECIMAL', 'geodirectory' ),
+						'XVARCHAR'   => __( 'CHARACTER', 'geodirectory' ),
+						'INT'   => __( 'NUMBER', 'geodirectory' ),
+						'DECIMAL'   => __( 'DECIMAL', 'geodirectory' ),
 					),
 					'label'              => __('Data Type','geodirectory').geodir_help_tip( __( 'Select the data type for the field. This can affect things like search filtering.', 'geodirectory' )),
 					'value'         => $dt_value,
@@ -1165,7 +1160,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 						'label_type'        => 'horizontal',
 						'label_col'        => '4',
 						'label'              => __('Embed Media URLs','geodirectory') ,
-						'type'              =>   'checkbox',
+						'type'              => 'checkbox',
 						'checked' => $value,
 						'value' => '1',
 						'switch'    => 'md',
