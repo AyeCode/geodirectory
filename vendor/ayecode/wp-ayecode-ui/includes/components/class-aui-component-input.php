@@ -632,7 +632,7 @@ else{$eli.attr(\'type\',\'password\');}"
 				if ( ! empty( $args['allow_tags'] ) ) {
 					$output .= AUI_Component_Helper::sanitize_html_field( $args['value'], $args ); // Sanitize HTML.
 				} else {
-					$output .= sanitize_textarea_field( $args['value'] );
+					$output .= AUI_Component_Helper::sanitize_textarea_field( $args['value'] );
 				}
 			}
 
