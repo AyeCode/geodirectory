@@ -314,6 +314,11 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
     $location_terms['gd_region'] = !empty($wp->query_vars['region']) ? $wp->query_vars['region'] : '';
     $location_terms['gd_country'] = !empty($wp->query_vars['country']) ? $wp->query_vars['country'] : '';
 
+    // On single page set neighbourhood from post.
+    if ( ! empty( $location_terms['gd_city'] ) && empty( $location_terms['gd_neighbourhood'] ) && ( $gd_page == 'single' || geodir_is_page( 'single' ) ) && ! empty( $gd_post->neighbourhood ) ) {
+        $location_terms['gd_neighbourhood'] = $gd_post->neighbourhood;
+    }
+
     $location_single = '';
     $location_names = array();
     foreach ( $location_terms as $type => $location ) {
@@ -416,7 +421,7 @@ function geodir_location_replace_vars( $location_array = array(), $sep = NULL, $
 
     foreach ($location_names as $type => $name) {
         $location_type = strpos($type, 'gd_') === 0 ? substr($type, 3) : $type;
-
+        $location_replace_vars['%%_' . $location_type . '%%'] = $name;
         $location_replace_vars['%%location_' . $location_type . '%%'] = $name;
         $location_replace_vars['%%in_location_' . $location_type . '%%'] = !empty($name) ? sprintf( _x('in %s','in location', 'geodirectory'), $name ) : '';
     }
