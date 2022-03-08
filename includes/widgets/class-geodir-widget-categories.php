@@ -831,7 +831,9 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 					$category_args['object_ids'] = $post_ID;
 					$categories    = get_terms($cat_taxonomy, $category_args);
 				} else {
-					$category_args['parent'] = $parent_category;
+					if ( empty( $category_args['include'] ) || $parent_category > 0 ) {
+						$category_args['parent'] = $parent_category;
+					}
 					$categories = get_terms($cat_taxonomy, $category_args);
 				}
 
@@ -1162,7 +1164,7 @@ class GeoDir_Widget_Categories extends WP_Super_Duper {
 
 		$term_args = array( 'orderby' => $orderby, 'order' => $order, 'hide_empty' => $hide_empty, 'parent' => $parent_id, 'number' => $max_count );
 		// Include terms
-		if ( ! empty( $filter_terms['include'] ) ) {
+		if ( ! empty( $filter_terms['include'] ) && empty( $parent_id ) ) {
 			$term_args['include'] = $filter_terms['include'];
 		}
 

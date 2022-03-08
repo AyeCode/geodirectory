@@ -1,5 +1,6 @@
 = 2.2.4 =
 * Neighbourhood SEO variable not working on single page - FIXED
+* GD Categories widget option include categories is not working for child categories - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
