@@ -1,3 +1,6 @@
+= 2.2.4 =
+* Neighbourhood SEO variable not working on single page - FIXED
+
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
 * Custom fields setting Price Options should not visible on all field types - CHANGED
