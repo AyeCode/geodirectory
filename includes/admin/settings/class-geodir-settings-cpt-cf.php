@@ -1717,6 +1717,28 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 				$field->htmlvar_name = 'cf' . $field->htmlvar_name; // Integer as column name is not accepted & ID's should not start with a number.
 			}
 
+			// Check for reserved fields before assign generated htmlvar_name.
+			if ( ! empty( $field->post_type ) && empty( $field->field_id ) && ! empty( $field->htmlvar_name ) && empty( $input['htmlvar_name'] ) ) {
+				$reserved_fields = self::reserved_fields( $field->post_type );
+
+				if ( in_array( $field->htmlvar_name, $reserved_fields ) ) {
+					$table =  geodir_db_cpt_table( $field->post_type );
+					$exists = geodir_column_exist( $table, $field->htmlvar_name );
+
+					if ( $exists ) {
+						$suffix = 1;
+
+						do {
+							$_column = $field->htmlvar_name . "_$suffix";
+							$exists = geodir_column_exist( $table, $_column );
+							$suffix++;
+						} while ( $exists );
+
+						$field->htmlvar_name = $_column;
+					}
+				}
+			}
+
 			return apply_filters( 'geodir_cpt_cf_sanatize_custom_field', $field, $input );
 
 		}
@@ -1967,7 +1989,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 					$wpdb->query( "ALTER TABLE {$table} DROP `mapview`" );
 					$wpdb->query( "ALTER TABLE {$table} DROP `mapzoom`" );
 				} else {
-					if ( $field->field_type != 'fieldset' && $field->field_type != 'link_posts' ) {
+					$is_system = in_array( $field->htmlvar_name, self::system_fields( $field->post_type ) ); // Prevent deleting system fields.
+					$is_reserved = in_array( $field->htmlvar_name, self::reserved_fields( $field->post_type ) ); // Prevent deleting reserved fields.
+
+					if ( $field->field_type != 'fieldset' && $field->field_type != 'link_posts' && ! $is_system && ! $is_reserved ) {
 						$wpdb->query( "ALTER TABLE {$table} DROP `" . $field->htmlvar_name . "`" );
 					}
 				}
@@ -2381,6 +2406,79 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 			global $wpdb;
 
 			return $wpdb->get_results( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_FIELDS_TABLE . " WHERE tab_parent = %d ORDER BY sort_order ASC, tab_level ASC", array( $parent ) ) );
+		}
+
+		/**
+		 * Get the list of GD system fields.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param string $post_type The post type.
+		 * @return array List of system fields.
+		 */
+		public static function system_fields( $post_type ) {
+			$fields = array(
+				'post_title',
+				'post_content',
+				'post_category',
+				'post_tags',
+				'post_images'
+			);
+
+			/**
+			 * Filter the list of GD system fields.
+			 *
+			 * @since 2.2.4
+			 *
+			 * @param array List of system fields.
+			 * @param string $post_type The post type.
+			 */
+			return apply_filters( 'geodir_cpt_cf_system_fields', $fields, $post_type );
+		}
+
+		/**
+		 * Get the list of GD reserved fields.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param string $post_type The post type.
+		 * @return array List of reserved fields.
+		 */
+		public static function reserved_fields( $post_type ) {
+			$fields = array(
+				'post_id',
+				'_search_title',
+				'post_status',
+				'default_category',
+				'featured_image',
+				'overall_rating',
+				'rating_count',
+				'ratings'
+			);
+
+			if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+				$fields = array_merge( $fields, array(
+					'city',
+					'region',
+					'country',
+					'neighbourhood',
+					'zip',
+					'latitude',
+					'longitude',
+					'mapview',
+					'mapzoom'
+				) );
+			}
+
+			/**
+			 * Filter the list of GD reserved fields.
+			 *
+			 * @since 2.2.4
+			 *
+			 * @param array List of reserved fields.
+			 * @param string $post_type The post type.
+			 */
+			return apply_filters( 'geodir_cpt_cf_reserved_fields', $fields, $post_type );
 		}
 	}
 
