@@ -3,6 +3,7 @@
 * GD Categories widget option include categories is not working for child categories - FIXED
 * Prevent add/delete column for reserved fields like city, region etc - CHANGED
 * Unable to disable mouse scroll zoom on map - FIXED
+* Default empty badge attribute shows nothing for default category badge - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
