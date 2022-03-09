@@ -12,7 +12,7 @@
  *
  * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
  * @package    GeoDirectory
- * @version    2.1.0.13
+ * @version    2.2.4
  *
  * @global int $mapzoom Zoom level value for the map.
  * @global bool $geodir_manual_map Check if manual map.
@@ -509,7 +509,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         if (getAddress) {
             oldstr_address = getAddress;
         }
-        if (user_address == false || jQuery('#<?php echo $prefix.'street2';?>').val() == '') {
+        if (getAddress2 && (user_address == false || jQuery('#<?php echo $prefix.'street2';?>').val() == '')) {
             jQuery("#<?php echo $prefix.'street2';?>").val(getAddress2);
         }
         if (getAddress2) {

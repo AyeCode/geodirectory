@@ -4,6 +4,7 @@
 * Prevent add/delete column for reserved fields like city, region etc - CHANGED
 * Unable to disable mouse scroll zoom on map - FIXED
 * Default empty badge attribute shows nothing for default category badge - FIXED
+* Set address on map makes Address Line 2 blank - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
