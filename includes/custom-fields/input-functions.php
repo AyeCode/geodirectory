@@ -1098,7 +1098,7 @@ function geodir_cfi_address( $html, $cf ) {
         $required_msg = $cf['required_msg'];
         $frontend_title = $cf['frontend_title'];
         $is_admin = $cf['for_admin_use'];
-        $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
+        $extra_fields = stripslashes_deep(maybe_unserialize($cf['extra_fields']));
         $prefix = $name . '_';
 
         // steet2
