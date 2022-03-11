@@ -78,8 +78,52 @@ class GeoDir_Elementor {
 			add_action( 'elementor/frontend/section/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
 			add_action( 'elementor/frontend/column/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
 			add_action( 'elementor/frontend/widget/before_render', array( __CLASS__,'custom_skin_dynamic_style' ), 11, 1 );
+			add_filter( 'elementor/elements/categories_registered', array( __CLASS__,'add_elementor_widget_categories' ), 1, 1  );
+			add_filter( 'elementor/editor/localize_settings', array( __CLASS__,'alter_widget_config' ), 5, 1  );
 		}
 	}
+
+	/**
+	 * Force our widget to show for search and to be in our own category.
+	 * 
+	 * @param $config
+	 *
+	 * @return mixed
+	 */
+	public static function alter_widget_config( $config ){
+
+		if ( ! empty( $config['initial_document']['widgets'] ) ) {
+			foreach( $config['initial_document']['widgets'] as $key => $widget){
+				if(substr( $key, 0, 13 ) === "wp-widget-gd_"){
+					$config['initial_document']['widgets'][$key]['categories'][] = 'geodirectory';
+					$config['initial_document']['widgets'][$key]['hide_on_search'] = false;
+					$config['initial_document']['widgets'][$key]['icon'] = 'eicon-globe'; //@todo if no icons use on page then font-awesome is not loaded, wif we can fifure out how to force load we can use icons. <i class="fas fa-globe-americas"></i><i class="fa-solid fa-earth-americas"></i>
+				}
+			}
+		}
+
+
+
+		return $config;
+	}
+
+	/**
+	 * Add our own Category.
+	 *
+	 * @param $elements_manager
+	 */
+	public static function add_elementor_widget_categories( $elements_manager ) {
+
+		$elements_manager->add_category(
+			'geodirectory',
+			[
+				'title' => esc_html__( 'GeoDirectory', 'geodirectory' ),
+				'icon' => 'fa fa-plug',
+			]
+		);
+
+	}
+
 
 	/**
 	 * Clear any caches we use on post save hook.
