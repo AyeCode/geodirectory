@@ -1,11 +1,21 @@
 <?php
 /**
- * Displays the map in add listing map
+ * Display Add Listing Map
  *
- * @since 1.0.0
- * @since 1.5.6 Fixed breaking maps when there is an apostrophe in location name.
- * @since 1.6.11 Fix: OpenStreetMap does not working when third party plugin using the Google Maps JS API.
- * @package GeoDirectory
+ * This template can be overridden by copying it to yourtheme/geodirectory/map.php.
+ *
+ * HOWEVER, on occasion GeoDirectory will need to update template files and you
+ * (the theme developer) will need to copy the new files to your theme to
+ * maintain compatibility. We try to do this as little as possible, but it does
+ * happen. When this occurs the version of the template file will be bumped and
+ * the readme will list any important changes.
+ *
+ * @see        https://docs.wpgeodirectory.com/article/346-customizing-templates/
+ * @package    GeoDirectory
+ * @version    2.2.4
+ *
+ * @global int $mapzoom Zoom level value for the map.
+ * @global bool $geodir_manual_map Check if manual map.
  */
 
 /**
@@ -19,7 +29,7 @@ global $mapzoom, $geodir_manual_map;
  *
  * @since 1.0.0
  *
- * @param bool $var Whether to ristrict the map for specific address only.
+ * @param bool $var Whether to restrict the map for specific address only.
  */
 $is_map_restrict = apply_filters('geodir_add_listing_map_restrict', true);
 
@@ -66,7 +76,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     /* <![CDATA[ */
     <?php 
 	/**
-	 * Fires at the start of the add javascript on the add lsitings map.
+	 * Fires at the start of the add javascript on the add listings map.
 	 *
 	 * @since 1.0.0
      * @param string $prefix The prefix for all elements.
@@ -490,7 +500,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
         if (getAddress) {
             oldstr_address = getAddress;
         }
-        if (user_address == false || jQuery('#<?php echo $prefix.'street2';?>').val() == '') {
+        if (getAddress2 && (user_address == false || jQuery('#<?php echo $prefix.'street2';?>').val() == '')) {
             jQuery("#<?php echo $prefix.'street2';?>").val(getAddress2);
         }
         if (getAddress2) {

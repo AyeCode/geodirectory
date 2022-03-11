@@ -1169,8 +1169,12 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				$match_value = apply_filters( 'geodir_post_badge_match_value', $match_value, $match_field, $args, $find_post, $field );
 
 				// badge text
-				if ( empty( $badge ) && empty($args['icon_class']) ) {
-					$badge = $field['frontend_title'];
+				if ( empty( $badge ) && empty( $args['icon_class'] ) ) {
+					if ( isset( $field['frontend_title'] ) ) {
+						$badge = $field['frontend_title'];
+					} else if ( $match_field == 'default_category' ) {
+						$badge = __( 'Default Category', 'geodirectory' ); // default_category don't have frontend_title.
+					}
 				}
 				if( !empty( $badge ) && $badge = str_replace("%%input%%",$match_value,$badge) ){
 					// will be replace in condition check
@@ -1180,6 +1184,32 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 				}
 
 				//link url, replace vars
+				// default_category
+				if ( ! empty( $find_post->default_category ) ) {
+					if ( ! empty( $args['link'] ) && $match_field == 'default_category' && strpos( $args['link'], "%%input%%" ) !== false ) {
+						$term_link = get_term_link( absint( $find_post->default_category ), $post_type . 'category' );
+
+						if ( ! is_wp_error( $term_link ) ) {
+							$args['link'] = str_replace( "%%input%%", $term_link, $args['link'] );
+						}
+					}
+
+					// cat_url
+					if ( strpos( $badge, "%%cat_url%%" ) !== false || strpos( $args['link'], "%%cat_url%%" ) !== false ) {
+						$term_link = get_term_link( absint( $find_post->default_category ), $post_type . 'category' );
+
+						if ( ! is_wp_error( $term_link ) ) {
+							$badge = str_replace( "%%cat_url%%", $term_link, $badge );
+							$args['link'] = str_replace( "%%cat_url%%", $term_link, $args['link'] );
+						}
+					}
+
+					// cat_fa_icon
+					if ( strpos( $args['icon_class'], "%%cat_fa_icon%%" ) !== false && ( $cat_fa_icon = get_term_meta( absint( $find_post->default_category ), 'ct_cat_font_icon', true ) ) ) {
+						$args['icon_class'] = str_replace( "%%cat_fa_icon%%", esc_attr( $cat_fa_icon ), $args['icon_class'] );
+					}
+				}
+
 				if( !empty( $args['link'] ) && $args['link'] = str_replace("%%input%%",$match_value,$args['link']) ){
 					// will be replace in condition check
 				}
@@ -1198,41 +1228,15 @@ function geodir_get_post_badge( $post_id ='', $args = array() ) {
 					}
 				}
 
-				// categories
-				if ( ! empty( $badge ) && $match_field == 'default_category' ) {
-					
-					if(!empty($args['preview'])){
-
-					}else{
-
-					}
-					
-					$term = get_term_by( 'id', absint( $match_value ), $post_type.'category' );
-
-					// maybe link to it
-					if(( !empty($args['link']) || $args['link']=='%%input%%') && !empty($term)){
-						$term_link = get_term_link($term,$post_type.'category');
-						if(!is_wp_error($term_link)){
-							$args['link'] = $term_link;
-						}
-					}
-
-					if(!empty($term->name)){
-						$badge = esc_attr($term->name);
-					}
-				}
-
-				if(!empty($args['preview']) && !$badge){
+				if ( ! empty( $args['preview'] ) && ! $badge ) {
 					$badge = 'Badge';
 				}
 
-//				print_r( $args );
-//				echo '###'.$badge.$post_type.$args['link'];
-
-				// replace other post variables
-				if(!empty($badge)){
-					$badge = geodir_replace_variables($badge);
+				// Replace other post variables
+				if ( ! empty( $badge ) ) {
+					$badge = geodir_replace_variables( $badge );
 				}
+
 				if(!empty($args['popover_title'])){
 					$args['popover_title'] = geodir_replace_variables($args['popover_title']);
 					$args['popover_title'] = str_replace("%%input%%",$match_value,$args['popover_title']);
@@ -1655,7 +1659,7 @@ function geodir_replace_variables( $text, $post_id = '' ) {
 					$text = str_replace( '%%' . $key . '%%', $val, $text );
 				}
 
-				// Replace encloded variables.
+				// Replace encoded variables.
 				if ( strpos( $text, '%%' . $key . '_encode%%' ) !== false ) {
 					$encode_val = ! empty( $val ) ? urlencode( trim( $val ) ) : '';
 					$encode_val = apply_filters( 'geodir_replace_variables_encode_' . $key, $encode_val, $text );

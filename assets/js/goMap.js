@@ -166,7 +166,7 @@ function geodirGoMapInit() {
 
             if (opts.address)
                 this.geocode({address: opts.address, center: true});
-            else if ($.isArray(opts.markers) && opts.markers.length > 0) {
+            else if (Array.isArray(opts.markers) && opts.markers.length > 0) {
                 if (opts.markers[0].address)
                     this.geocode({address: opts.markers[0].address, center: true});
                 else
@@ -490,7 +490,7 @@ function geodirGoMapInit() {
                     }
 
                 }
-                else if (type && type == 'markers' && $.isArray(markers)) {
+                else if (type && type == 'markers' && Array.isArray(markers)) {
                     for (var i = 0, l = markers.length; i < l; i++) {
                         this.bounds.extend($(this.mapId).data(markers[i]).position);
                     }
@@ -824,7 +824,7 @@ function geodirGoMapInit() {
                 this.geocode({address: opts.address, center: true});
 //			else if (opts.latitude != $.goMapBase.defaults.latitude && opts.longitude != $.goMapBase.defaults.longitude)
 //				this.centerLatLng = new google.maps.LatLng(opts.latitude, opts.longitude);
-            else if ($.isArray(opts.markers) && opts.markers.length > 0) {
+            else if (Array.isArray(opts.markers) && opts.markers.length > 0) {
                 if (opts.markers[0].address)
                     this.geocode({address: opts.markers[0].address, center: true});
                 else
@@ -835,9 +835,9 @@ function geodirGoMapInit() {
 
             var myOptions = {
                 center: this.centerLatLng,
-                disableDoubleClickZoom: opts.disableDoubleClickZoom,
-                mapTypeControl: opts.mapTypeControl,
-                streetViewControl: opts.streetViewControl,
+                disableDoubleClickZoom: (opts.disableDoubleClickZoom === "0" || !opts.disableDoubleClickZoom ? false : true),
+                mapTypeControl: (opts.mapTypeControl === "0" || !opts.mapTypeControl ? false : true),
+                streetViewControl: (opts.streetViewControl === "0" || !opts.streetViewControl ? false : true),
                 streetViewControlOptions: {
                     position: google.maps.ControlPosition[opts.streetViewControlOptions.position.toUpperCase()]
                 },
@@ -851,17 +851,17 @@ function geodirGoMapInit() {
                     position: google.maps.ControlPosition[opts.navigationControlOptions.position.toUpperCase()],
                     style: google.maps.NavigationControlStyle[opts.navigationControlOptions.style.toUpperCase()]
                 },
-                zoomControl: opts.zoomControl === "0" || !opts.zoomControl ? false : true,
+                zoomControl: (opts.zoomControl === "0" || !opts.zoomControl ? false : true),
                 zoomControlOptions: {
                     position: google.maps.ControlPosition[opts.zoomControlOptions.position.toUpperCase()]
                 },
-                scaleControl: opts.scaleControl,
-                scrollwheel: opts.scrollwheel,
-                fullscreenControl: opts.fullscreenControl,
+                scaleControl: (opts.scaleControl === "0" || !opts.scaleControl ? false : true),
+                scrollwheel: (opts.scrollwheel === "0" || !opts.scrollwheel ? false : true),
+                fullscreenControl: (opts.fullscreenControl === "0" || !opts.fullscreenControl ? false : true),
                 zoom: parseInt(opts.zoom),
-                minZoom: parseInt(opts.minZoom),
+                minZoom: (opts.minZoom ? parseInt(opts.minZoom) : 0),
                 maxZoom: parseInt(opts.maxZoom),
-                clickableIcons: opts.clickableIcons ? true : false
+                clickableIcons: (opts.clickableIcons === "0" || !opts.clickableIcons ? false : true)
             };
 
             this.map = new google.maps.Map(el, myOptions);
@@ -1134,7 +1134,7 @@ function geodirGoMapInit() {
                     }
 
                 }
-                else if (type && type == 'markers' && $.isArray(markers)) {
+                else if (type && type == 'markers' && Array.isArray(markers)) {
                     for (var i = 0, l = markers.length; i < l; i++) {
                         this.bounds.extend($(this.mapId).data(markers[i]).position);
                     }

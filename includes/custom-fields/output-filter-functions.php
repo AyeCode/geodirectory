@@ -188,6 +188,15 @@ function geodir_post_badge_match_value( $match_value, $match_field, $args, $find
 				}
 			}
 		}
+
+		// Default category
+		if ( $match_field == 'default_category' && ! empty( $find_post->default_category ) ) {
+			$term = get_term_by( 'id', absint( $find_post->default_category ), $find_post->post_type . 'category' );
+
+			if ( ! empty( $term ) && ! is_wp_error( $term ) ) {
+				$match_value = esc_attr( $term->name );
+			}
+		}
 	}
 
 	return $match_value;

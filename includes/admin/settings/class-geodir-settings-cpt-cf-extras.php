@@ -699,7 +699,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			ob_start();
 			if (isset($field_info->extra_fields) && $field_info->extra_fields != '') {
-				$address = stripslashes_deep(unserialize($field_info->extra_fields));
+				$address = stripslashes_deep(maybe_unserialize($field_info->extra_fields));
 			}
 
 			/**

@@ -1609,7 +1609,7 @@ class GeoDir_Admin_Upgrade {
 						'invoice_id' => $row->invoice_id,
 						'product_id' => $product_id,
 						'task' => $task,
-						'meta' => serialize( $meta ),
+						'meta' => maybe_serialize( $meta ),
 						'date' => $invoice_post->post_date,
 						'status' => $invoice_post->post_status,
 					);
@@ -1701,7 +1701,7 @@ class GeoDir_Admin_Upgrade {
 						'is_active' => '1', 
 						'show_in' => '[detail]',  
 						'packages' => $packages, 
-						'extra_fields' => serialize( array( 'max_posts' => 1, 'all_posts' => 0 ) ), 
+						'extra_fields' => maybe_serialize( array( 'max_posts' => 1, 'all_posts' => 0 ) ), 
 						'field_icon' => 'fas fa-link'
 					);
 

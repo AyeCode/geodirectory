@@ -2287,7 +2287,7 @@ function geodir_cf_address($html,$location,$cf,$p='',$output=''){
         $show_zip_in_address = true;
 
         if (!empty($cf['extra_fields'])) {
-            $extra_fields = stripslashes_deep(unserialize($cf['extra_fields']));
+            $extra_fields = stripslashes_deep(maybe_unserialize($cf['extra_fields']));
             $addition_fields = '';
             if (!empty($extra_fields)) {
                 $show_street2_in_address = false;
