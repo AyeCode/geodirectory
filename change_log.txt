@@ -6,6 +6,7 @@
 * Default empty badge attribute shows nothing for default category badge - FIXED
 * Set address on map makes Address Line 2 blank - FIXED
 * GeoDirectory Elementor widgets not showing in searches - FIXED
+* Backend settings textarea options strips HTML tags - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
