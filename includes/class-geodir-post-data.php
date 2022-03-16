@@ -2187,9 +2187,19 @@ class GeoDir_Post_Data {
 
 		echo '<script type="application/ld+json">' . json_encode( $schema ) . '</script>';
 
+		$facebook_og = '';
 
-		$uploads     = wp_upload_dir();
-		$facebook_og = ( isset( $gd_post->featured_image ) && $gd_post->featured_image ) ? '<meta property="og:image" content="' . $uploads['baseurl'] . $gd_post->featured_image . '"/>' : '';
+		if( isset( $gd_post->featured_image ) && $gd_post->featured_image ){
+
+			if(substr($gd_post->featured_image, 0, 4 ) === "http"){
+				$image_url = esc_url_raw($gd_post->featured_image);
+			}else{
+				$uploads     = wp_upload_dir();
+				$image_url = esc_url_raw($uploads['baseurl'] . $gd_post->featured_image);
+			}
+			$facebook_og = '<meta property="og:image" content="' . $image_url . '"/>';
+
+		}
 
 		/**
 		 * Show facebook open graph meta info
