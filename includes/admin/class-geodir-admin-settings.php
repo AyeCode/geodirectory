@@ -490,22 +490,24 @@ class GeoDir_Admin_Settings {
 					}
 
 					$rows = !empty( $value['size'] ) ? absint($value['size']) : 4;
+
 					echo aui()->textarea(
 						array(
-							'id'                => $value['id'],
-							'name'              => $value['id'],
-							'label_type'        => $label_type,
+							'id'               => $value['id'],
+							'name'             => $value['id'],
+							'label_type'       => $label_type,
 							'label_col'        => '3',
-							'class' => !empty($value['class']) ? $value['class'] : '',
-							'label_class'=> 'font-weight-bold',
-							'wrap_class'        => isset($value['advanced']) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
-							'label'              => $value['title'] . $tooltip_html,
-							'placeholder'       => $value['placeholder'],
-							'value' => $option_value,
-							'help_text'  => isset($description) ? $description : '',
-							'extra_attributes'  => !empty($custom_attributes) ? $custom_attributes : array(),
-							'rows'      => $rows,
-							'element_require' => !empty($value['element_require']) ? $value['element_require'] : '',
+							'class'            => ! empty( $value['class'] ) ? $value['class'] : '',
+							'label_class'      => 'font-weight-bold',
+							'wrap_class'       => isset( $value['advanced'] ) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
+							'label'            => $value['title'] . $tooltip_html,
+							'placeholder'      => $value['placeholder'],
+							'value'            => $option_value,
+							'help_text'        => isset( $description ) ? $description : '',
+							'extra_attributes' => ! empty( $custom_attributes ) ? $custom_attributes : array(),
+							'rows'             => $rows,
+							'allow_tags'       => isset( $value['allow_tags'] ) ? $value['allow_tags'] : true, // Allow HTML Tags. Default True.
+							'element_require'  => ! empty( $value['element_require'] ) ? $value['element_require'] : '',
 						)
 					);
 
