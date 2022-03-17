@@ -224,7 +224,7 @@ class GeoDir_Widget_Post_Rating extends WP_Super_Duper {
         }
 
         $post_rating = (float) $this->post_rating;
-        if($post_rating===0){
+        if( $post_rating == 0 ){
             $class .= " geodir-post-rating-value-0";
         }elseif($post_rating){
             $class .= " geodir-post-rating-value-".absint($post_rating);
