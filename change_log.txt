@@ -8,6 +8,7 @@
 * GeoDirectory Elementor widgets not showing in searches - FIXED
 * Backend settings textarea options strips HTML tags - FIXED
 * Imported external linked image not working for og:image - FIXED
+* missing no rating class on listing grid - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
