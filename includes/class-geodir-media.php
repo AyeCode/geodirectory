@@ -263,7 +263,7 @@ class GeoDir_Media {
 	 *
 	 * @return array|WP_Error
 	 */
-	public static function insert_attachment( $post_id, $type = 'file', $url, $title = '', $caption = '', $order = '', $is_approved = 1, $is_placeholder = false, $other_id = '',$raw_metadata = array() ) {
+	public static function insert_attachment( $post_id, $type = 'file', $url = '', $title = '', $caption = '', $order = '', $is_approved = 1, $is_placeholder = false, $other_id = '',$raw_metadata = array() ) {
 		global $wpdb;
 
 		// Load media functions
