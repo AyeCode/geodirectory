@@ -941,13 +941,18 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
      * @var string $height The map height setting.
      * @var string $width The map width setting.
      */
-    $map_options = array();
     $map_type = 'add_listing';
     $map_canvas = $prefix .'map' ;
     $height = '350px';
     $width = '100%';
     $wrap_class = '';
     $hide_expand_map = true;
+    $map_options = array(
+        'map_canvas' => $map_canvas,
+        'map_type' => $map_type,
+        'height' => $height,
+        'width' => $width
+    );
     include( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map/map.php' );
     ?>
 </div>

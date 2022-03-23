@@ -155,12 +155,16 @@ jQuery(window).on("load",function() {
         console.log(err.message);
     }
 
-
-
     jQuery('.geodir-report-view').on('click', function(e) {
         if(jQuery(this).closest('tr').prop('id') && jQuery('#geodir-view-' + jQuery(this).closest('tr').prop('id')).text()) {
             $lightbox = lity('#geodir-view-' + jQuery(this).closest('tr').prop('id'));
             return false;
+        }
+    });
+
+	jQuery('.gd-wp-tmpl-new').on('click', function(e) {
+        if(jQuery(this).data('page')) {
+            geodir_new_wp_template(this);
         }
     })
 });
@@ -1545,4 +1549,53 @@ function geodir_get_map_error($message){
             aui_toast($id,'error', geodir_params.txt_google_key_error ,'',$body + $docs ,60000,true);
         }
     });
+}
+
+function geodir_new_wp_template(el) {
+	var $btn = jQuery(el);
+
+	aui_confirm(geodir_params.confirm_new_wp_template, geodir_params.txt_continue, geodir_params.txt_cancel).then(function(confirmed) {
+		if (confirmed) {
+			var page = $btn.data('page');
+
+			var data = {
+				'action': 'geodir_new_wp_template',
+				'gd_page': page,
+				'gd_post_type': $btn.data('post-type'),
+				'gd_cpt_name': jQuery('#mainform input#name').val(),
+				security: geodir_params.basic_nonce
+			};
+
+			jQuery.ajax({
+				url: ajaxurl,
+				type: 'POST',
+				data: data,
+				dataType: 'json',
+				beforeSend: function(xhr, obj) {
+					$btn.prop("disabled", true);
+				}
+			})
+			.done(function(data, textStatus, jqXHR) {
+				if (typeof data == 'object') {
+					if (data.data.post_id && data.data.post_title) {
+						jQuery("select#" + page).append('<option value="' + data.data.post_id + '">' + data.data.post_title + '</option>');
+                        jQuery("select#" + page).val(data.data.post_id).trigger("change.select2");
+					}
+
+					if (data.data.message) {
+						alert(data.data.message);
+						aui_toast('geodir_new_wp_template_error','error', data.data.message);
+					}
+
+					if (true === data.data.reload && parseInt($btn.data('reload')) === 1) {
+						window.location.reload();
+						return;
+					}
+				}
+			})
+			.always(function(data, textStatus, jqXHR) {
+				$btn.prop("disabled", false);
+			});
+		}
+	});
 }

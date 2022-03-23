@@ -262,7 +262,7 @@ class GeoDir_Admin_Settings {
 
 					if ( ! empty( $value['title'] ) ) {
 
-						echo '<div class="gd-seetting-page-title"><h2 class="gd-settings-title h4 mb-0 ">';
+						echo '<div class="gd-setting-page-title"><h2 class="gd-settings-title h4 mb-0 ">';
 						echo esc_html( $value['title'] );
 						if(!empty($value['title_html'])){echo $value['title_html'];}
 						if(isset($value['desc_tip']) && $value['desc_tip']){
@@ -904,6 +904,209 @@ class GeoDir_Admin_Settings {
 							'options'           => array( '' => esc_html( $placeholder ) ) + $page_options,
 							'wrap_class'        => ! empty( $value['advanced'] ) ? geodir_advanced_toggle_class() : '',
 							'label'              => $value['title'] . $tooltip_html,
+							'placeholder'       => esc_html( $placeholder ),
+							'value'             => $option_value,
+							'help_text'         => isset( $description ) ? $description : '',
+							'extra_attributes'  => ! empty( $custom_attributes ) ? $custom_attributes : array(),
+							'input_group_right' => $buttons,
+							'element_require'   => ! empty( $value['element_require'] ) ? $value['element_require'] : '',
+						)
+					);
+
+					echo $output;
+
+					break;
+				// Single template selects
+				case 'single_wp_template' :
+					add_thickbox();
+					if ( isset( $value['value'] ) ) {
+						$option_value = $value['value'];
+					} else {
+						$option_value = self::get_option( $value['id'] );
+					}
+
+					$args = array(
+						'name'             => $value['id'],
+						'id'               => $value['id'],
+						'sort_column'      => 'menu_order',
+						'sort_order'       => 'ASC',
+						'show_option_none' => ' ',
+						'class'            => ' regular-text '.$value['class'],
+						'echo'             => false,
+						'selected'         => absint( $option_value ),
+					);
+
+					$post = $option_value ? get_post( absint( $option_value ) ) : array();
+
+					$exclude_pages = array();
+					if ( $page_on_front = get_option( 'page_on_front' ) ) {
+						$exclude_pages[] = $page_on_front; // Exclude frontpage.
+					}
+					if ( $page_for_posts = get_option( 'page_for_posts' ) ) {
+						$exclude_pages[] = $page_for_posts; // Exclude Blog page.
+					}
+					if ( ! empty( $exclude_pages ) ) {
+						$args['exclude'] = $exclude_pages;
+					}
+
+					if ( isset( $value['args'] ) ) {
+						$args = wp_parse_args( $value['args'], $args );
+					}
+
+					$defaults = array(
+						'depth'                 => 0,
+						'child_of'              => 0,
+						'selected'              => 0,
+						'echo'                  => 1,
+						'name'                  => 'page_id',
+						'id'                    => '',
+						'class'                 => '',
+						'show_option_none'      => '',
+						'show_option_no_change' => '',
+						'option_none_value'     => '',
+						'value_field'           => 'ID',
+					);
+
+					$parsed_args = wp_parse_args( $args, $defaults );
+
+					$pages = self::get_wp_templates();
+					$page_options = array();
+
+					if ( ! empty( $pages ) ) {
+						foreach ( $pages as $page ) {
+							if ( $page->post_name && $page->post_name == 'front-page' ) {
+								continue;
+							}
+							$id = ! empty( $page->ID ) ? absint( $page->ID ) : '';
+							$title = ! empty( $page->post_title ) ? esc_attr( $page->post_title ) : '';
+							$page_options[ $id ] = $title;
+						}
+					}
+
+					if ( isset( $parsed_args['show_option_none'] ) ) {
+						$parsed_args['show_option_none'] = trim( $parsed_args['show_option_none'] );
+					}
+
+					$buttons = '';
+					$buttons_links = array();
+
+					if ( $option_value && ! empty( $post ) ) {
+						$customize_url = self::get_site_editor_url( $post->post_type, $post->post_name );
+						$buttons_links[ $customize_url ] = __( 'Edit Template','geodirectory' );
+					}
+
+					if ( empty( $value['is_template_page'] ) ) {
+						if ( ! empty( $value['page_option'] ) ) {
+							$view_page_id = absint( geodir_get_option( $value['page_option'] ) );
+						} else if ( ! empty( $option_value ) ) {
+							$view_page_id = absint( $option_value );
+						} else {
+							$view_page_id = 0;
+						}
+
+						if ( $view_page_id && get_post_type( $view_page_id ) ) {
+							$page_url = get_permalink( $view_page_id );
+
+							if ( ! empty( $value['view_page_args'] ) && is_array( $value['view_page_args'] ) ) {
+								foreach ( $value['view_page_args'] as $_key => $_value ) {
+									if ( ! empty( $_key ) ) {
+										$page_url = add_query_arg( $_key, $_value, $page_url );
+									}
+								}
+							}
+
+							$buttons_links[ $page_url ] = __( 'View Page','geodirectory' );
+						}
+					}
+
+					ob_start();
+
+					if ( ! empty( $value['default_content'] ) ) {
+						$raw_default_content = '';
+						$default_method = $value['id'].'_content';
+
+						// Check if the default content has been filtered.
+						if ( method_exists( 'GeoDir_Defaults', $default_method ) && GeoDir_Defaults::$default_method( true ) != $value['default_content'] ) {
+							$raw_default_content = GeoDir_Defaults::$default_method( true );
+						}
+						$buttons_links[ "#TB_inline?&width=650&height=350&inlineId=gd_default_content_".esc_attr( $value['id'] ) ] = __( 'View Default Content', 'geodirectory' );
+						?>
+						<div id="gd_default_content_<?php echo esc_attr($value['id'])?>" style="background:#fff;display:none;" class="lity-hidex gd-notification ">
+							<?php
+							$height = "50";
+							if($raw_default_content){
+								echo geodir_notification( array('gd-warn'=>__('Default content has been modified by a plugin or theme.','geodirectory')) );
+								$height = "25";
+							}
+							?>
+							<textarea style="min-width: calc(50vw - 32px);min-height: <?php echo $height;?>vh; display:block;"><?php echo $value['default_content'];?></textarea>
+							<?php
+							if ( $raw_default_content ) {
+								echo geodir_notification( array('gd-info'=>__('Original content below.','geodirectory')) );
+								?>
+								<textarea style="min-width: 50vw;min-height: <?php echo $height;?>vh;display:block;"><?php echo $raw_default_content;?></textarea>
+							<?php }
+							?>
+						</div>
+						<?php
+					}
+
+					if ( ! empty( $value['create_template'] ) ) {
+						$buttons_links['#new-template'] = __( 'Create New Template','geodirectory' );
+					}
+
+					if ( ! empty( $buttons_links ) ) {
+						?>
+						<button class="btn btn-outline-primary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><?php _e( "Actions", "geodirectory" ); ?></button>
+						<div class="dropdown-menu">
+							<?php
+							foreach( $buttons_links as $link => $title ) {
+								if ( $link == '#new-template' ) {
+									$attrs = 'data-page="' . esc_attr( $value['id'] ) . '"';
+									$reload = true;
+									if ( ! empty( $value['page_cpt'] ) ) {
+										$attrs .= ' data-post-type="' . esc_attr( $value['page_cpt'] ) . '"';
+
+										if ( ! geodir_is_gd_post_type( $value['page_cpt'] ) ) {
+											$reload = false;
+										}
+									}
+									$attrs .= ' data-reload="' . (int) $reload . '"';
+									echo '<a class="dropdown-item gd-wp-tmpl-new" href="javascript:void(0);" ' . $attrs . '>' . $title . '</a>';
+								} else if ( substr( $link, 0, 1 ) === "#" ) {
+									echo '<a class="dropdown-item thickbox" href="' . esc_attr( $link ) . '">' . $title . '</a>';
+								} else {
+									echo '<a class="dropdown-item" href="' . esc_attr( $link ) . '">' . $title . '</a>';
+								}
+							}
+							?>
+						</div>
+						<?php
+					}
+					$buttons = ob_get_clean();
+
+					// Placeholder
+					if ( ! empty( $parsed_args['show_option_none'] ) ) {
+						$placeholder = $parsed_args['show_option_none'];
+					} elseif ( ! empty( $parsed_args['placeholder'] ) ) {
+						$placeholder = $parsed_args['placeholder'];
+					} else {
+						$placeholder = __( 'Select a template&hellip;', 'geodirectory' );
+					}
+
+					$output =  aui()->select(
+						array(
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'         => '3',
+							'label_class'       => 'font-weight-bold',
+							'multiple'          => 'multiselect' == $value['type'] ? true : false,
+							'class'             => $buttons ? $value['class']. ' mw-100 w-auto' : $value['class'].' mw-100 w-100',
+							'select2'           => strpos( $value['class'], 'geodir-select' ) !== false ? true : false,
+							'options'           => array( '' => esc_html( $placeholder ) ) + $page_options,
+							'wrap_class'        => ! empty( $value['advanced'] ) ? geodir_advanced_toggle_class() : '',
+							'label'             => $value['title'] . $tooltip_html,
 							'placeholder'       => esc_html( $placeholder ),
 							'value'             => $option_value,
 							'help_text'         => isset( $description ) ? $description : '',
@@ -1588,5 +1791,63 @@ class GeoDir_Admin_Settings {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Get the list of wp_template posts.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @param array $args Array of arguments.
+	 * @return array Lists of posts.
+	 */
+	public static function get_wp_templates( $args = array() ) {
+		$defaults = array(
+			'post_status'    => array( 'publish' ),
+			'post_type'      => 'wp_template',
+			'posts_per_page' => -1,
+			'no_found_rows'  => true,
+			'tax_query'      => array(
+				array(
+					'taxonomy' => 'wp_theme',
+					'field'    => 'name',
+					'terms'    => wp_get_theme()->get_stylesheet(),
+				),
+			),
+		);
+
+		$parsed_args = wp_parse_args( $args, $defaults );
+
+		$template_query = new WP_Query( $parsed_args );
+
+		return $template_query->posts;
+	}
+
+	/**
+	 * Get the site editor for requested post.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @param string $post_type The post type.
+	 * @param string $post_name Post name.
+	 * @param string $theme_slug Theme slug.
+	 * @return string Full site editor page url.
+	 */
+	public static function get_site_editor_url( $post_type, $post_name, $theme_slug = '' ) {
+		if ( empty( $theme_slug ) ) {
+			$theme_slug = wp_get_theme()->get_stylesheet();
+		}
+
+		$post_id = $theme_slug . '//' . $post_name;
+
+		return esc_url(
+			add_query_arg(
+				array(
+					'postType' => $post_type,
+					'postId' => $post_id,
+				),
+				admin_url( 'site-editor.php' )
+			)
+		);
 	}
 }

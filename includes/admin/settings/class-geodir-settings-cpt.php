@@ -192,6 +192,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 				'page_details' => '0',
 				'page_archive' => '0',
 				'page_archive_item' => '0',
+				'template_add' => '0',
+				'template_details' => '0',
+				'template_archive' => '0'
 			) );
 
 			$post_type_values['order'] = ( isset( $post_type_option['listing_order'] ) ? $post_type_option['listing_order'] : '' );
@@ -201,372 +204,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$post_type_values['meta_title'] = ( ! empty( $post_type_option['seo']['meta_title'] ) ? $post_type_option['seo']['meta_title'] : '' );
 			$post_type_values['meta_description'] = ( ! empty( $post_type_option['seo']['meta_description'] ) ? $post_type_option['seo']['meta_description'] : '' );
 
-			// we need to trick the settings to show the current values
-			$settings  = apply_filters( "geodir_cpt_settings_{$post_type}", array(
-
-
-//				array(
-//					'name' => __( 'Post Type', 'geodirectory' ),
-//					'type' => 'title',
-//					'desc' => '',
-//					'id'   => 'cpt_settings'
-//				),
-
-				array(
-					'name' => __( 'Post Type Settings', 'geodirectory' ),
-					'type' => 'sectionstart',
-					'id'   => 'cpt_settings'
-				),
-
-				array(
-					'name'     => __( 'Post type', 'geodirectory' ),
-					'desc'     => __( 'The new post type system name ( max. 17 characters ). Lower-case characters and underscores only. Min 2 letters. Once added the post type system name cannot be changed. <b>Usually Singular.</b>', 'geodirectory' ),
-					'id'       => 'post_type',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => false,
-					'custom_attributes' => array(
-						'required' => 'required',
-						'maxlength' => 17
-					),
-					'value'	   => $post_type_values['post_type']
-				),
-				array(
-					'name'     => __( 'Slug', 'geodirectory' ),
-					'desc'     => __( 'The listing slug name ( max. 20 characters ). Alphanumeric lower-case characters and underscores and hyphen(-) only. Min 2 letters. <b>Usually Plural.</b>', 'geodirectory' ),
-					'id'       => 'slug',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => false,
-					'custom_attributes' => array(
-						'required' => 'required',
-						'maxlength' => 20
-					),
-					'value'	   => $post_type_values['slug']
-				),
-				array(
-					'name'     => __( 'Order in post type list', 'geodirectory' ),
-					'desc'     => __( 'Position at which this post type will appear in post type list everywhere on the website.
-<b>Note: If the entered value is already an order of other post type then this will not make any effect.</b>', 'geodirectory' ),
-					'id'       => 'order',
-					'type'     => 'number',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['order']
-				),
-				array(
-					'name'     => __( 'Default image', 'geodirectory' ),
-					'desc'     => __( 'Upload default post type image.  This will be used in some areas if the listing has no image and the category has no default image.', 'geodirectory' ),
-					'id'       => 'default_image',
-					'type'     => 'image',
-					'default'  => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['default_image']
-				),
-				array(
-					'name'     => __( 'Menu icon', 'geodirectory' ),
-					'desc'     => __( 'The icon to be used in the admin menu from the post type.', 'geodirectory' ),
-					'class'    => 'geodir-select',
-					'id'       => 'menu_icon',
-					'type'     => 'dashicon',
-					'default'  => 'admin-site',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['menu_icon'],
-					'custom_attributes' => array(
-						'data-dashicons' => true
-					)
-				),
-
-				array(
-					'name' => __( 'Disable comments', 'geodirectory' ),
-					'desc' => __( 'Disable comments for all posts for this post type.', 'geodirectory' ),
-					'id' => 'disable_comments',
-					'type' => 'checkbox',
-					'std' => '0',
-					'advanced' => true,
-					'value' => ( isset( $post_type_values['disable_comments'] ) ? $post_type_values['disable_comments'] : 0 )
-				),
-
-				array(
-					'name' => __( 'Disable ratings', 'geodirectory' ),
-					'desc' => __( 'Disable review stars without disabling comments.', 'geodirectory' ),
-					'id'   => 'disable_reviews',
-					'type' => 'checkbox',
-					'std'  => '0',
-					'advanced' => true,
-					'value'	   => $post_type_values['disable_reviews']
-				),
-
-				array(
-					'name' => __( 'Single review', 'geodirectory' ),
-					'desc' => __( 'Restrict user to leave more than one review per post.', 'geodirectory' ),
-					'id' => 'single_review',
-					'type' => 'checkbox',
-					'std' => '0',
-					'advanced' => true,
-					'value' => ( isset( $post_type_values['single_review'] ) && $post_type_values['single_review'] ? absint( $post_type_values['single_review'] ) : 0 )
-				),
-
-				array(
-					'name' => __( 'Disable favorites', 'geodirectory' ),
-					'desc' => __( 'Disable favorites for this post type?', 'geodirectory' ),
-					'id'   => 'disable_favorites',
-					'type' => 'checkbox',
-					'std'  => '0',
-					'advanced' => true,
-					'value'	   => $post_type_values['disable_favorites']
-				),
-
-				array(
-					'name' => __( 'Disable frontend add', 'geodirectory' ),
-					'desc' => __( 'Prevent this post type from being added from the frontend?', 'geodirectory' ),
-					'id'   => 'disable_frontend_add',
-					'type' => 'checkbox',
-					'std'  => '0',
-					'advanced' => true,
-					'value'	   => $post_type_values['disable_frontend_add']
-				),
-
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings' ),
-
-				// author settings
-				array(
-					'title'    => __( 'Author page', 'geodirectory' ),
-					'type'     => 'title',
-					'desc'     => 'Settings for the author page url.',
-					'id'       => 'cpt_settings_author',
-					'desc_tip' => true,
-				),
-				array(
-					'name' => __( 'Authors posts', 'geodirectory' ),
-					'desc' => __( 'Select the visibility of the authors posts on the authors posts url.', 'geodirectory' ),
-					'id'   => 'author_posts_private',
-					'type' => 'select',
-					'options'  => array(
-						"0"   => __( 'Public', 'geodirectory' ),
-						"1" => __( 'Private', 'geodirectory' ),
-					),
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['author_posts_private']
-				),
-				array(
-					'name' => __( 'Authors favorites', 'geodirectory' ),
-					'desc' => __( 'Select the visibility of the authors favorites posts on the authors favorites url.', 'geodirectory' ),
-					'id'   => 'author_favorites_private',
-					'type' => 'select',
-					'options'  => array(
-						"0"   => __( 'Public', 'geodirectory' ),
-						"1" => __( 'Private', 'geodirectory' ),
-					),
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['author_favorites_private']
-				),
-				array(
-					'type' => 'number',
-					'id' => 'limit_posts',
-					'name' => __( 'Limit Posts Per User', 'geodirectory' ),
-					'desc' => __( 'Limit total posts allowed per user. Leave blank or enter 0 to allow unlimited posts.', 'geodirectory' ),
-					'std' => '',
-					'placeholder' => __( 'Unlimited', 'geodirectory' ),
-					'value' => ( (int) $post_type_values['limit_posts'] === 0 ? '' : ( (int) $post_type_values['limit_posts'] < 0 ? -1 : (int) $post_type_values['limit_posts'] ) ),
-					'custom_attributes' => array(
-						'min' => '-1',
-						'step' => '1'
-					),
-					'desc_tip' => true,
-					'advanced' => true
-				),
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_author' ),
-
-
-				array(
-					'title'    => __( 'Labels', 'geodirectory' ),
-					'type'     => 'title',
-					'desc'     => 'Labels are used around WordPress to describe the post type and its actions.',
-					'id'       => 'cpt_settings_labels',
-					'desc_tip' => true,
-				),
-
-				array(
-					'name'     => __( 'Name', 'geodirectory' ),
-					'desc'     => __( 'General name for the post type, <b>Usually Plural.</b>', 'geodirectory' ),
-					'id'       => 'name',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => false,
-					'custom_attributes' => array(
-						'required' => 'required'
-					),
-					'value'	   => $post_type_values['name']
-				),
-				array(
-					'name'     => __( 'Singular name', 'geodirectory' ),
-					'desc'     => __( 'Name for one object of this post type. Defaults to value of name.', 'geodirectory' ),
-					'id'       => 'singular_name',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => false,
-					'custom_attributes' => array(
-						'required' => 'required'
-					),
-					'value'	   => $post_type_values['singular_name']
-				),
-				array(
-					'name'     => __( 'Add new', 'geodirectory' ),
-					'desc'     => __( 'The add new text. The default is Add New for both hierarchical and non-hierarchical types.', 'geodirectory' ),
-					'id'       => 'add_new',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['add_new']
-				),
-				array(
-					'name'     => __( 'Add new item', 'geodirectory' ),
-					'desc'     => __( 'The add new item text. Default is Add New Post/Add New Page.', 'geodirectory' ),
-					'id'       => 'add_new_item',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['add_new_item']
-				),
-				array(
-					'name'     => __( 'Edit item', 'geodirectory' ),
-					'desc'     => __( 'The edit item text. Default is Edit Post/Edit Page.', 'geodirectory' ),
-					'id'       => 'edit_item',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['edit_item']
-				),
-				array(
-					'name'     => __( 'New item', 'geodirectory' ),
-					'desc'     => __( 'The new item text. Default is New Post/New Page.', 'geodirectory' ),
-					'id'       => 'new_item',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['new_item']
-				),
-				array(
-					'name'     => __( 'View item', 'geodirectory' ),
-					'desc'     => __( 'The view item text. Default is View Post/View Page.', 'geodirectory' ),
-					'id'       => 'view_item',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['view_item']
-				),
-				array(
-					'name'     => __( 'Search items', 'geodirectory' ),
-					'desc'     => __( 'The search items text. Default is Search Posts/Search Pages.', 'geodirectory' ),
-					'id'       => 'search_items',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['search_items']
-				),
-				array(
-					'name'     => __( 'Not found', 'geodirectory' ),
-					'desc'     => __( 'The not found text. Default is No posts found/No pages found.', 'geodirectory' ),
-					'id'       => 'not_found',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['not_found']
-				),
-				array(
-					'name'     => __( 'Not found in trash', 'geodirectory' ),
-					'desc'     => __( 'The not found in trash text. Default is No posts found in Trash/No pages found in Trash.', 'geodirectory' ),
-					'id'       => 'not_found_in_trash',
-					'type'     => 'text',
-					'std'      => '',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['not_found_in_trash']
-				),
-				
-
-
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_labels' ),
-
-				array(
-					'title'    => __( 'Description', 'geodirectory' ),
-					'type'     => 'title',
-					'desc'     => '',
-					'id'       => 'cpt_settings_description',
-					'desc_tip' => false,
-					'advanced' => true,
-				),
-				array(
-					'name'     => __( 'Description', 'geodirectory' ),
-					'desc'     => __( 'A short descriptive summary of what the post type is.', 'geodirectory' ),
-					'id'       => 'description',
-					'type'     => 'textarea',
-					'class'    => 'active-placeholder',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['description']
-				),
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_description' ),
-
-				array(
-					'title'    => __( 'SEO Overrides', 'geodirectory' ),
-					'type'     => 'title',
-					'desc'     => __( 'Main settings are set from the General>Titles & Meta settings, here you can override those per CPT.', 'geodirectory' ),
-					'id'       => 'cpt_settings_seo',
-					'desc_tip' => true,
-					'advanced' => true,
-				),
-				array(
-					'name'     => __( 'Title', 'geodirectory' ),
-					'desc'     => __( 'The page title will appear on the post type archive page.', 'geodirectory' ),
-					'id'       => 'title',
-					'type'     => 'text',
-					'class'    => 'active-placeholder',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['title']
-				),
-				array(
-					'name'     => __( 'Meta Title', 'geodirectory' ),
-					'desc'     => __( 'Meta title will appear in head tag of this post type archive page.', 'geodirectory' ),
-					'id'       => 'meta_title',
-					'type'     => 'text',
-					'class'    => 'active-placeholder',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['meta_title']
-				),
-				array(
-					'name'     => __( 'Meta Description', 'geodirectory' ),
-					'desc'     => __( 'Meta description will appear in head tag of this post type archive page.', 'geodirectory' ),
-					'id'       => 'meta_description',
-					'type'     => 'textarea',
-					'class'    => 'active-placeholder',
-					'desc_tip' => true,
-					'advanced' => true,
-					'value'	   => $post_type_values['meta_description']
-				),
-
-				// Page template
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_seo' ),
-
+			$cpt_page_settings = array(
 				array(
 					'title'    => __( 'Template Page Settings', 'geodirectory' ),
 					'type'     => 'title',
@@ -641,12 +279,377 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 						'sort_column' => 'post_title',
 					)
 				),
+				array(
+					'type' => 'sectionend',
+					'id' => 'cpt_settings_page'
+				)
+			);
+			$cpt_page_settings = apply_filters( 'geodir_cpt_page_options', $cpt_page_settings, $post_type_values, $post_type );
+
+			// we need to trick the settings to show the current values
+			$settings  = apply_filters( "geodir_cpt_settings_{$post_type}", array_merge(
+				array(
+					array(
+						'name' => __( 'Post Type Settings', 'geodirectory' ),
+						'type' => 'sectionstart',
+						'id'   => 'cpt_settings'
+					),
+
+					array(
+						'name'     => __( 'Post type', 'geodirectory' ),
+						'desc'     => __( 'The new post type system name ( max. 17 characters ). Lower-case characters and underscores only. Min 2 letters. Once added the post type system name cannot be changed. <b>Usually Singular.</b>', 'geodirectory' ),
+						'id'       => 'post_type',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => false,
+						'custom_attributes' => array(
+							'required' => 'required',
+							'maxlength' => 17
+						),
+						'value'	   => $post_type_values['post_type']
+					),
+					array(
+						'name'     => __( 'Slug', 'geodirectory' ),
+						'desc'     => __( 'The listing slug name ( max. 20 characters ). Alphanumeric lower-case characters and underscores and hyphen(-) only. Min 2 letters. <b>Usually Plural.</b>', 'geodirectory' ),
+						'id'       => 'slug',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => false,
+						'custom_attributes' => array(
+							'required' => 'required',
+							'maxlength' => 20
+						),
+						'value'	   => $post_type_values['slug']
+					),
+					array(
+						'name'     => __( 'Order in post type list', 'geodirectory' ),
+						'desc'     => __( 'Position at which this post type will appear in post type list everywhere on the website.
+	<b>Note: If the entered value is already an order of other post type then this will not make any effect.</b>', 'geodirectory' ),
+						'id'       => 'order',
+						'type'     => 'number',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['order']
+					),
+					array(
+						'name'     => __( 'Default image', 'geodirectory' ),
+						'desc'     => __( 'Upload default post type image.  This will be used in some areas if the listing has no image and the category has no default image.', 'geodirectory' ),
+						'id'       => 'default_image',
+						'type'     => 'image',
+						'default'  => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['default_image']
+					),
+					array(
+						'name'     => __( 'Menu icon', 'geodirectory' ),
+						'desc'     => __( 'The icon to be used in the admin menu from the post type.', 'geodirectory' ),
+						'class'    => 'geodir-select',
+						'id'       => 'menu_icon',
+						'type'     => 'dashicon',
+						'default'  => 'admin-site',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['menu_icon'],
+						'custom_attributes' => array(
+							'data-dashicons' => true
+						)
+					),
+
+					array(
+						'name' => __( 'Disable comments', 'geodirectory' ),
+						'desc' => __( 'Disable comments for all posts for this post type.', 'geodirectory' ),
+						'id' => 'disable_comments',
+						'type' => 'checkbox',
+						'std' => '0',
+						'advanced' => true,
+						'value' => ( isset( $post_type_values['disable_comments'] ) ? $post_type_values['disable_comments'] : 0 )
+					),
+
+					array(
+						'name' => __( 'Disable ratings', 'geodirectory' ),
+						'desc' => __( 'Disable review stars without disabling comments.', 'geodirectory' ),
+						'id'   => 'disable_reviews',
+						'type' => 'checkbox',
+						'std'  => '0',
+						'advanced' => true,
+						'value'	   => $post_type_values['disable_reviews']
+					),
+
+					array(
+						'name' => __( 'Single review', 'geodirectory' ),
+						'desc' => __( 'Restrict user to leave more than one review per post.', 'geodirectory' ),
+						'id' => 'single_review',
+						'type' => 'checkbox',
+						'std' => '0',
+						'advanced' => true,
+						'value' => ( isset( $post_type_values['single_review'] ) && $post_type_values['single_review'] ? absint( $post_type_values['single_review'] ) : 0 )
+					),
+
+					array(
+						'name' => __( 'Disable favorites', 'geodirectory' ),
+						'desc' => __( 'Disable favorites for this post type?', 'geodirectory' ),
+						'id'   => 'disable_favorites',
+						'type' => 'checkbox',
+						'std'  => '0',
+						'advanced' => true,
+						'value'	   => $post_type_values['disable_favorites']
+					),
+
+					array(
+						'name' => __( 'Disable frontend add', 'geodirectory' ),
+						'desc' => __( 'Prevent this post type from being added from the frontend?', 'geodirectory' ),
+						'id'   => 'disable_frontend_add',
+						'type' => 'checkbox',
+						'std'  => '0',
+						'advanced' => true,
+						'value'	   => $post_type_values['disable_frontend_add']
+					),
+
+					array( 'type' => 'sectionend', 'id' => 'cpt_settings' ),
+
+					// author settings
+					array(
+						'title'    => __( 'Author page', 'geodirectory' ),
+						'type'     => 'title',
+						'desc'     => 'Settings for the author page url.',
+						'id'       => 'cpt_settings_author',
+						'desc_tip' => true,
+					),
+					array(
+						'name' => __( 'Authors posts', 'geodirectory' ),
+						'desc' => __( 'Select the visibility of the authors posts on the authors posts url.', 'geodirectory' ),
+						'id'   => 'author_posts_private',
+						'type' => 'select',
+						'options'  => array(
+							"0"   => __( 'Public', 'geodirectory' ),
+							"1" => __( 'Private', 'geodirectory' ),
+						),
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['author_posts_private']
+					),
+					array(
+						'name' => __( 'Authors favorites', 'geodirectory' ),
+						'desc' => __( 'Select the visibility of the authors favorites posts on the authors favorites url.', 'geodirectory' ),
+						'id'   => 'author_favorites_private',
+						'type' => 'select',
+						'options'  => array(
+							"0"   => __( 'Public', 'geodirectory' ),
+							"1" => __( 'Private', 'geodirectory' ),
+						),
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['author_favorites_private']
+					),
+					array(
+						'type' => 'number',
+						'id' => 'limit_posts',
+						'name' => __( 'Limit Posts Per User', 'geodirectory' ),
+						'desc' => __( 'Limit total posts allowed per user. Leave blank or enter 0 to allow unlimited posts.', 'geodirectory' ),
+						'std' => '',
+						'placeholder' => __( 'Unlimited', 'geodirectory' ),
+						'value' => ( (int) $post_type_values['limit_posts'] === 0 ? '' : ( (int) $post_type_values['limit_posts'] < 0 ? -1 : (int) $post_type_values['limit_posts'] ) ),
+						'custom_attributes' => array(
+							'min' => '-1',
+							'step' => '1'
+						),
+						'desc_tip' => true,
+						'advanced' => true
+					),
+					array( 'type' => 'sectionend', 'id' => 'cpt_settings_author' ),
 
 
-				array( 'type' => 'sectionend', 'id' => 'cpt_settings_page' ),
+					array(
+						'title'    => __( 'Labels', 'geodirectory' ),
+						'type'     => 'title',
+						'desc'     => 'Labels are used around WordPress to describe the post type and its actions.',
+						'id'       => 'cpt_settings_labels',
+						'desc_tip' => true,
+					),
+
+					array(
+						'name'     => __( 'Name', 'geodirectory' ),
+						'desc'     => __( 'General name for the post type, <b>Usually Plural.</b>', 'geodirectory' ),
+						'id'       => 'name',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => false,
+						'custom_attributes' => array(
+							'required' => 'required'
+						),
+						'value'	   => $post_type_values['name']
+					),
+					array(
+						'name'     => __( 'Singular name', 'geodirectory' ),
+						'desc'     => __( 'Name for one object of this post type. Defaults to value of name.', 'geodirectory' ),
+						'id'       => 'singular_name',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => false,
+						'custom_attributes' => array(
+							'required' => 'required'
+						),
+						'value'	   => $post_type_values['singular_name']
+					),
+					array(
+						'name'     => __( 'Add new', 'geodirectory' ),
+						'desc'     => __( 'The add new text. The default is Add New for both hierarchical and non-hierarchical types.', 'geodirectory' ),
+						'id'       => 'add_new',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['add_new']
+					),
+					array(
+						'name'     => __( 'Add new item', 'geodirectory' ),
+						'desc'     => __( 'The add new item text. Default is Add New Post/Add New Page.', 'geodirectory' ),
+						'id'       => 'add_new_item',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['add_new_item']
+					),
+					array(
+						'name'     => __( 'Edit item', 'geodirectory' ),
+						'desc'     => __( 'The edit item text. Default is Edit Post/Edit Page.', 'geodirectory' ),
+						'id'       => 'edit_item',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['edit_item']
+					),
+					array(
+						'name'     => __( 'New item', 'geodirectory' ),
+						'desc'     => __( 'The new item text. Default is New Post/New Page.', 'geodirectory' ),
+						'id'       => 'new_item',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['new_item']
+					),
+					array(
+						'name'     => __( 'View item', 'geodirectory' ),
+						'desc'     => __( 'The view item text. Default is View Post/View Page.', 'geodirectory' ),
+						'id'       => 'view_item',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['view_item']
+					),
+					array(
+						'name'     => __( 'Search items', 'geodirectory' ),
+						'desc'     => __( 'The search items text. Default is Search Posts/Search Pages.', 'geodirectory' ),
+						'id'       => 'search_items',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['search_items']
+					),
+					array(
+						'name'     => __( 'Not found', 'geodirectory' ),
+						'desc'     => __( 'The not found text. Default is No posts found/No pages found.', 'geodirectory' ),
+						'id'       => 'not_found',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['not_found']
+					),
+					array(
+						'name'     => __( 'Not found in trash', 'geodirectory' ),
+						'desc'     => __( 'The not found in trash text. Default is No posts found in Trash/No pages found in Trash.', 'geodirectory' ),
+						'id'       => 'not_found_in_trash',
+						'type'     => 'text',
+						'std'      => '',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['not_found_in_trash']
+					),
+					
 
 
-			) );
+					array( 'type' => 'sectionend', 'id' => 'cpt_settings_labels' ),
+
+					array(
+						'title'    => __( 'Description', 'geodirectory' ),
+						'type'     => 'title',
+						'desc'     => '',
+						'id'       => 'cpt_settings_description',
+						'desc_tip' => false,
+						'advanced' => true,
+					),
+					array(
+						'name'     => __( 'Description', 'geodirectory' ),
+						'desc'     => __( 'A short descriptive summary of what the post type is.', 'geodirectory' ),
+						'id'       => 'description',
+						'type'     => 'textarea',
+						'class'    => 'active-placeholder',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['description']
+					),
+					array( 'type' => 'sectionend', 'id' => 'cpt_settings_description' ),
+
+					array(
+						'title'    => __( 'SEO Overrides', 'geodirectory' ),
+						'type'     => 'title',
+						'desc'     => __( 'Main settings are set from the General>Titles & Meta settings, here you can override those per CPT.', 'geodirectory' ),
+						'id'       => 'cpt_settings_seo',
+						'desc_tip' => true,
+						'advanced' => true,
+					),
+					array(
+						'name'     => __( 'Title', 'geodirectory' ),
+						'desc'     => __( 'The page title will appear on the post type archive page.', 'geodirectory' ),
+						'id'       => 'title',
+						'type'     => 'text',
+						'class'    => 'active-placeholder',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['title']
+					),
+					array(
+						'name'     => __( 'Meta Title', 'geodirectory' ),
+						'desc'     => __( 'Meta title will appear in head tag of this post type archive page.', 'geodirectory' ),
+						'id'       => 'meta_title',
+						'type'     => 'text',
+						'class'    => 'active-placeholder',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['meta_title']
+					),
+					array(
+						'name'     => __( 'Meta Description', 'geodirectory' ),
+						'desc'     => __( 'Meta description will appear in head tag of this post type archive page.', 'geodirectory' ),
+						'id'       => 'meta_description',
+						'type'     => 'textarea',
+						'class'    => 'active-placeholder',
+						'desc_tip' => true,
+						'advanced' => true,
+						'value'	   => $post_type_values['meta_description']
+					),
+
+					// Page template
+					array(
+						'type' => 'sectionend',
+						'id' => 'cpt_settings_seo'
+					)
+				),
+				$cpt_page_settings
+				) 
+			);
 
 			//set_current_values()
 
@@ -830,6 +833,9 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt', false ) ) :
 			$output[$post_type]['page_details'] = isset( $raw['page_details'] ) ? (int)$raw['page_details'] : 0;
 			$output[$post_type]['page_archive'] = isset( $raw['page_archive'] ) ? (int)$raw['page_archive'] : 0;
 			$output[$post_type]['page_archive_item'] = isset( $raw['page_archive_item'] ) ? (int)$raw['page_archive_item'] : 0;
+			$output[$post_type]['template_add'] = isset( $raw['template_add'] ) ? (int)$raw['template_add'] : 0;
+			$output[$post_type]['template_details'] = isset( $raw['template_details'] ) ? (int)$raw['template_details'] : 0;
+			$output[$post_type]['template_archive'] = isset( $raw['template_archive'] ) ? (int)$raw['template_archive'] : 0;
 
 			return apply_filters('geodir_save_post_type', $output, $post_type, $raw);
 

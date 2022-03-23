@@ -458,7 +458,7 @@ function geodir_add_column_if_not_exist( $db, $column, $column_attr = "VARCHAR( 
  * @return string[]
  */
 function geodir_get_core_supported_themes() {
-	return array( 'whoop','supreme-directory','directory-starter', 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten' );
+	return array( 'whoop','supreme-directory','directory-starter', 'twentyseventeen', 'twentysixteen', 'twentyfifteen', 'twentyfourteen', 'twentythirteen', 'twentyeleven', 'twentytwelve', 'twentyten', 'twentytwentytwo' );
 }
 
 function geodir_setup_timezone_api( $prefix ) {
@@ -1404,3 +1404,46 @@ function geodir_add_aui_screens( $screen_ids ) {
 	return $screen_ids;
 }
 add_filter( 'aui_screen_ids', 'geodir_add_aui_screens' );
+
+/**
+ * Create a template.
+ *
+ * @since 2.2.4
+ *
+ * @global object $wpdb WordPress Database object.
+ * @global object $current_user Current user object.
+ *
+ * @param string $option The option meta key.
+ * @param array  $args Template arguments.
+ * @param bool   $update_option True to update option.
+ * @return int|WP_Error Post ID on success and WP Error on fail.
+ */
+function geodir_create_wp_template( $option, $args = array(), $update_option = true ) {
+	global $wpdb, $current_user;
+
+	$defaults = array(
+		'post_status'    => 'publish',
+		'post_type'      => 'wp_template',
+		'post_author'    => $current_user->ID,
+		'post_name'      => '',
+		'post_title'     => '',
+		'post_content'   => '',
+		'post_parent'    => 0,
+		'comment_status' => 'closed',
+		'tax_input'      => array(),
+	);
+
+	$page_data = wp_parse_args( $args, $defaults );
+
+	$post_id = wp_insert_post( $page_data, true );
+
+	if ( is_wp_error( $post_id ) ) {
+		return $post_id;
+	}
+
+	if ( absint( $post_id ) > 0 && $update_option ) {
+		geodir_update_option( $option, absint( $post_id ) );
+	}
+
+	return $post_id;
+}

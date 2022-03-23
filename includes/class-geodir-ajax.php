@@ -74,6 +74,7 @@ class GeoDir_AJAX {
 			'post_author_action' => false,
 			'report_post_form' => true,
 			'submit_report_post' => true,
+			'new_wp_template' => true,
 		);
 
 		foreach ( $ajax_events as $ajax_event => $nopriv ) {
@@ -1550,6 +1551,26 @@ class GeoDir_AJAX {
 		check_ajax_referer( 'geodir_basic_nonce', 'security' );
 
 		GeoDir_Report_Post::handle_request( $_POST );
+
+		wp_die();
+	}
+
+	/**
+	 * Handle new template request.
+	 *
+	 * @since 2.2.4
+	 *
+	 * @return mixed
+	 */
+	public static function new_wp_template() {
+		if ( ! class_exists( 'GeoDir_Block_Theme' ) ) {
+			wp_die( -1 );
+		}
+
+		// Security
+		check_ajax_referer( 'geodir_basic_nonce', 'security' );
+
+		GeoDir_Block_Theme::handle_new_template_request( $_POST );
 
 		wp_die();
 	}
