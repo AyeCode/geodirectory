@@ -2109,7 +2109,24 @@ function geodir_cfi_tags( $html, $cf ) {
         $admin_only = geodir_cfi_admin_only($cf);
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
 
-        /**
+        $validation_text = '';
+		// Required message
+		if ( $required && ! empty( $cf['required_msg'] ) ) {
+			$validation_text = __( $cf['required_msg'], 'geodirectory' );
+		}
+
+		// Validation message
+		if ( ! empty( $cf['validation_msg'] ) ) {
+			$validation_text = __( $cf['validation_msg'], 'geodirectory' );
+		}
+
+		// Set validation message
+		if ( ! empty( $validation_text ) ) {
+			$extra_attributes['oninvalid'] = 'try{this.setCustomValidity(\'' . esc_attr( addslashes( $validation_text ) ) . '\')}catch(e){}';
+			$extra_attributes['onchange'] = 'try{this.setCustomValidity(\'\')}catch(e){}';
+		}
+
+		/**
          * Filter the post tags extra attributes.
          *
          * @since 2.2.4
@@ -2128,7 +2145,7 @@ function geodir_cfi_tags( $html, $cf ) {
             'label_show'         => true,
             'label_type'         => !empty($geodir_label_type) ? $geodir_label_type : 'horizontal',
             'label'              => __($cf['frontend_title'], 'geodirectory').$admin_only.$required,
-            'validation_text'    => !empty($cf['validation_msg']) ? $cf['validation_msg'] : '',
+            'validation_text'    => $validation_text,
             'validation_pattern' => !empty($cf['validation_pattern']) ? $cf['validation_pattern'] : '',
             'help_text'          => $help_text,
             'multiple'           => true,
@@ -2391,14 +2408,37 @@ function geodir_cfi_files( $html, $cf ) {
         $show_image_input_box = apply_filters( 'geodir_file_uploader_on_add_listing', $show_image_input_box, $cf['post_type'] );
 
         if ( $show_image_input_box ) {
+            $extra_attributes = array();
+            if ( ! empty( $cf['is_required'] ) ) {
+                $extra_attributes['required'] = 'required';
+                $extra_attributes['style'] = 'height:0!important;padding:0!important;margin:0!important;font-size:0!important;line-height:0!important;border:0!important;outline:none!important;position:absolute!important;top:80px!important';
+                $extra_attributes['aria-label'] = esc_html__( $cf['frontend_title'], 'geodirectory' );
+            }
+
+            $validation_text = '';
+            // Required message
+            if ( ! empty( $cf['is_required'] ) && ! empty( $cf['required_msg'] ) ) {
+                $validation_text = __( $cf['required_msg'], 'geodirectory' );
+            }
+
+            // Validation message
+            if ( ! empty( $cf['validation_msg'] ) ) {
+                $validation_text = __( $cf['validation_msg'], 'geodirectory' );
+            }
+
+            // Set validation message
+            if ( ! empty( $validation_text ) ) {
+                $extra_attributes['oninvalid'] = 'try{this.setCustomValidity(\'' . esc_attr( addslashes( $validation_text ) ) . '\')}catch(e){}';
+                $extra_attributes['onchange'] = 'try{this.setCustomValidity(\'\')}catch(e){}';
+            }
+
+            $extra_attributes = class_exists( "AUI_Component_Helper" ) ? AUI_Component_Helper::extra_attributes( $extra_attributes ) : '';
 
             // admin only
             $admin_only = geodir_cfi_admin_only($cf);
             $conditional_attrs = geodir_conditional_field_attrs( $cf, $cf['name'], 'hidden' );
             ?>
-
             <div id="<?php echo $cf['name']; ?>_row" class="<?php if ( $cf['is_required'] ) {echo 'required_field';} ?> form-group row"<?php echo $conditional_attrs; ?>>
-
                 <label for="<?php echo $id; ?>" class="<?php echo $horizontal ? '  col-sm-2 col-form-label' : '';?>">
                     <?php $frontend_title = esc_attr__( $cf['frontend_title'], 'geodirectory' );
                     echo ( trim( $frontend_title ) ) ? $frontend_title : '&nbsp;'; echo $admin_only;?>
@@ -2406,14 +2446,10 @@ function geodir_cfi_files( $html, $cf ) {
                         echo '<span>*</span>';
                     } ?>
                 </label>
-
                 <?php
-
                 if($horizontal){echo "<div class='col-sm-10'>";}
                 echo class_exists("AUI_Component_Helper") ? AUI_Component_Helper::help_text(__( $cf['desc'], 'geodirectory' )) : '';
                 if($horizontal){echo "</div>";}
-
-
 
                 // params for file upload
                 $is_required = $cf['is_required'];
@@ -2423,21 +2459,16 @@ function geodir_cfi_files( $html, $cf ) {
                 echo geodir_get_template_html( "bootstrap/file-upload.php", array(
                     'id'                  => $id,
                     'is_required'         => $is_required,
-                    'files'	              => $files,
+                    'files'               => $files,
                     'image_limit'         => $image_limit,
                     'total_files'         => $total_files,
                     'allowed_file_types'  => $allowed_file_types,
                     'display_file_types'  => $display_file_types,
                     'multiple'            => $multiple,
+                    'extra_attributes'    => $extra_attributes
                 ) );
                 if($horizontal){echo "</div>";}
-
-                if ( $is_required ) { ?>
-                    <span class="geodir_message_error"><?php esc_attr_e($cf['required_msg'], 'geodirectory'); ?></span>
-                <?php } ?>
-            </div>
-
-            <?php
+            ?></div><?php
         }
         $html = ob_get_clean();
     }

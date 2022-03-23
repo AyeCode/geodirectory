@@ -11,6 +11,7 @@
 * Missing no rating class on listing grid - FIXED
 * Option added in tags field to enable spell check - CHANGED
 * Prevent activation redirect on plugin install during setup wizard - FIXED
+* Tags & file required validation not working - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
