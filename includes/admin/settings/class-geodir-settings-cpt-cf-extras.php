@@ -950,6 +950,45 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 
 			if ( $field->htmlvar_name == 'post_tags' ) {
 				$extra = maybe_unserialize( $field->extra_fields );
+
+				if ( geodir_design_style() ) {
+					// Disable New Tags
+					$output .= aui()->input(
+						array(
+							'id'               => 'disable_new_tags',
+							'type'             => 'checkbox',
+							'name'             => 'extra[disable_new_tags]',
+							'label_type'       => 'horizontal',
+							'label_col'        => '4',
+							'label'            => __( 'Disable New Tags', 'geodirectory' ) ,
+							'checked'          => ( is_array( $extra ) && ! empty( $extra['disable_new_tags'] ) ? 1 : 0 ),
+							'value'            => '1',
+							'switch'           => 'md',
+							'label_force_left' => true,
+							'wrap_class'       => geodir_advanced_toggle_class(),
+							'help_text'        => geodir_help_tip( __( 'Disable create a new tags dynamically from frontend users.', 'geodirectory' ) )
+						)
+					);
+				}
+
+				// Spell Check
+				$output .= aui()->input(
+					array(
+						'id'               => 'spellcheck',
+						'type'             => 'checkbox',
+						'name'             => 'extra[spellcheck]',
+						'label_type'       => 'horizontal',
+						'label_col'        => '4',
+						'label'            => __( 'Spell Check', 'geodirectory' ) ,
+						'checked'          => ( is_array( $extra ) && ! empty( $extra['spellcheck'] ) ? 1 : 0 ),
+						'value'            => '1',
+						'switch'           => 'md',
+						'label_force_left' => true,
+						'wrap_class'       => geodir_advanced_toggle_class(),
+						'help_text'        => geodir_help_tip( __( 'Enable spell check for the new tag.', 'geodirectory' ) )
+					)
+				);
+
 				if ( is_array( $extra ) && ! empty( $extra['no_of_tag'] ) ) {
 					$no_of_tag = $extra['no_of_tag'];
 				} else {
@@ -972,6 +1011,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 					)
 				);
 			}
+
 			return $output;
 		}
 

@@ -2029,17 +2029,31 @@ function geodir_cfi_tags( $html, $cf ) {
         // placeholder
         $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter tags separated by a comma ,', 'geodirectory' );
 
+        $extra_fields = maybe_unserialize( $cf['extra_fields'] );
+
         //extra
         $extra_attributes['data-placeholder'] = esc_attr( $placeholder );
         $extra_attributes['option-ajaxchosen'] = 'false';
-        $extra_attributes['data-tags'] = 'true';
         $extra_attributes['data-token-separators'] = "[',']";
+        $extra_attributes['data-tags'] = 'true';
+        $extra_attributes['spellcheck'] = 'false';
+
+        if ( is_array( $extra_fields ) ) {
+            // Disable new tags
+            if ( ! empty( $extra_fields['disable_new_tags'] ) ) {
+                $extra_attributes['data-tags'] = 'false';
+            }
+
+            // Enable spell check
+            if ( ! empty( $extra_fields['spellcheck'] ) && empty( $extra_fields['disable_new_tags'] ) ) {
+                $extra_attributes['spellcheck'] = 'true';
+            }
+        }
 
         $post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
         $term_array = array();
         $options = array();
         if ( $post_type ) {
-            $extra_fields = maybe_unserialize( $cf['extra_fields'] );
             $tag_no       = 10;
             if ( is_array( $extra_fields ) && ! empty( $extra_fields['no_of_tag'] ) ) {
                 $tag_no = absint( $extra_fields['no_of_tag'] );
@@ -2094,6 +2108,15 @@ function geodir_cfi_tags( $html, $cf ) {
         // admin only
         $admin_only = geodir_cfi_admin_only($cf);
         $conditional_attrs = geodir_conditional_field_attrs( $cf );
+
+        /**
+         * Filter the post tags extra attributes.
+         *
+         * @since 2.2.4
+         *
+         * @param array $extra_attributes Tags attributes.
+         */
+        $extra_attributes = apply_filters( 'geodir_cfi_aui_post_tags_attributes', $extra_attributes, $cf );
 
         $html = aui()->select( array(
             'id'                 => $cf['name'],

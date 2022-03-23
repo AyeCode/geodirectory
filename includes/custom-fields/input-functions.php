@@ -1649,6 +1649,7 @@ function geodir_cfi_tags( $html, $cf ) {
     if ( empty( $html ) ) {
         ob_start(); // Start  buffering;
 
+        $extra_fields = maybe_unserialize( $cf['extra_fields'] );
         $value = geodir_get_cf_value( $cf );
 
         $placeholder = ! empty( $cf['placeholder_value'] ) ? __( $cf['placeholder_value'], 'geodirectory' ) : __( 'Enter tags separated by a comma ,', 'geodirectory' );
@@ -1657,8 +1658,7 @@ function geodir_cfi_tags( $html, $cf ) {
         $post_type = isset( $_REQUEST['listing_type'] ) ? geodir_clean_slug( $_REQUEST['listing_type'] ) : '';
         $term_array = array();
 
-		if ( $post_type ) {
-            $extra_fields = maybe_unserialize( $cf['extra_fields'] );
+        if ( $post_type ) {
             $tag_no       = 10;
             if ( is_array( $extra_fields ) && ! empty( $extra_fields['no_of_tag'] ) ) {
                 $tag_no = absint( $extra_fields['no_of_tag'] );
@@ -1683,6 +1683,9 @@ function geodir_cfi_tags( $html, $cf ) {
             }
         }
 
+        // Enable spell check
+        $spellcheck = is_array( $extra_fields ) && ! empty( $extra_fields['spellcheck'] ) ? 'true' : '';
+
         ?>
         <div id="<?php echo $cf['name']; ?>_row"
              class="<?php if ($cf['is_required']) echo 'required_field'; ?> geodir_form_row clearfix gd-fieldset-details">
@@ -1693,10 +1696,7 @@ function geodir_cfi_tags( $html, $cf ) {
             </label>
             <input type="hidden" name="gd_field_<?php echo $cf['name']; ?>" value="1"/>
             <div class="geodir_multiselect_list">
-                <select field_type="<?php echo $cf['type']; ?>" name="tax_input[<?php echo wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"; ?>][]" id="<?php echo $cf['name']; ?>"
-                        multiple="multiple" class="geodir_textfield textfield geodir-select-tags"
-                        data-placeholder="<?php echo esc_attr( $placeholder ); ?>"
-                        >
+                <select field_type="<?php echo $cf['type']; ?>" name="tax_input[<?php echo wp_strip_all_tags( esc_attr($post_type ) ) ."_tags"; ?>][]" id="<?php echo $cf['name']; ?>" multiple="multiple" class="geodir_textfield textfield geodir-select-tags" data-placeholder="<?php echo esc_attr( $placeholder ); ?>" spellcheck="<?php echo $spellcheck; ?>">
                     <?php
                     // current tags
                     $current_tags_arr = geodir_string_values_to_options($value, true);
