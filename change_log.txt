@@ -13,6 +13,7 @@
 * Prevent activation redirect on plugin install during setup wizard - FIXED
 * Tags & file required validation not working - FIXED
 * Block Theme compatibility - ADDED
+* Sort field cache not updated on field update - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
