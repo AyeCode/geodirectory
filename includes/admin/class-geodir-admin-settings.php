@@ -490,6 +490,16 @@ class GeoDir_Admin_Settings {
 					}
 
 					$rows = !empty( $value['size'] ) ? absint($value['size']) : 4;
+					// Editor
+					$wysiwyg = false;
+					if ( ! empty( $value['wysiwyg'] ) ) {
+						if ( is_array( $value['wysiwyg'] ) ) {
+							$wysiwyg = $value['wysiwyg'];
+						} else {
+							$wysiwyg = array( 'quicktags' => true );
+						}
+						$value['allow_tags'] = true;
+					}
 
 					echo aui()->textarea(
 						array(
@@ -506,6 +516,7 @@ class GeoDir_Admin_Settings {
 							'help_text'        => isset( $description ) ? $description : '',
 							'extra_attributes' => ! empty( $custom_attributes ) ? $custom_attributes : array(),
 							'rows'             => $rows,
+							'wysiwyg'          => $wysiwyg,
 							'allow_tags'       => isset( $value['allow_tags'] ) ? $value['allow_tags'] : true, // Allow HTML Tags. Default True.
 							'element_require'  => ! empty( $value['element_require'] ) ? $value['element_require'] : '',
 						)
