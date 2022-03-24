@@ -14,6 +14,7 @@
 * Tags & file required validation not working - FIXED
 * Block Theme compatibility - ADDED
 * Sort field cache not updated on field update - FIXED
+* Street address not set properly for address within Japan - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
