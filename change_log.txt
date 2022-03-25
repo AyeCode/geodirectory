@@ -15,6 +15,7 @@
 * Block Theme compatibility - ADDED
 * Sort field cache not updated on field update - FIXED
 * Street address not set properly for address within Japan - FIXED
+* Email tags missing from below textarea - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED
