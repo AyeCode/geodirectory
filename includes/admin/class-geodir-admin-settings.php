@@ -519,6 +519,8 @@ class GeoDir_Admin_Settings {
 							'wysiwyg'          => $wysiwyg,
 							'allow_tags'       => isset( $value['allow_tags'] ) ? $value['allow_tags'] : true, // Allow HTML Tags. Default True.
 							'element_require'  => ! empty( $value['element_require'] ) ? $value['element_require'] : '',
+							'input_group_right' => ! empty( $value['custom_desc'] ) ? "<div class='d-flex flex-wrap pt-3 text-muted'>" . $value['custom_desc'] . "</div>" : '',
+
 						)
 					);
 
