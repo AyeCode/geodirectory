@@ -41,17 +41,11 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			self::$post_type = ( ! empty( $_REQUEST['post_type'] ) && is_scalar( $_REQUEST['post_type'] ) ) ? sanitize_title( $_REQUEST['post_type'] ) : 'gd_place';
 			self::$sub_tab   = ! empty( $_REQUEST['tab'] ) ? sanitize_title( $_REQUEST['tab'] ) : 'general';
 
-
 			$this->id    = 'cpt-sorting';
 			$this->label = __( 'Sorting', 'geodirectory' );
 
 			add_filter( 'geodir_settings_tabs_array', array( $this, 'add_settings_page' ), 20 );
 			add_action( 'geodir_settings_' . $this->id, array( $this, 'output' ) );
-			//add_action( 'geodir_sections_' . $this->id, array( $this, 'output_toggle_advanced' ) );
-			//add_action( 'geodir_settings_save_' . $this->id, array( $this, 'save' ) );
-			//add_action( 'geodir_sections_' . $this->id, array( $this, 'output_sections' ) );
-
-
 		}
 
 		/**
@@ -623,42 +617,28 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 *
 		 * @return int|string
 		 */
-		public static function save_custom_field($field = array()){
+		public static function save_custom_field( $field = array() ) {
 			global $wpdb, $plugin_prefix;
 
-
-
-			$field = self::sanatize_custom_field($field);
-
-
-
-			//print_r($field);exit;
+			$field = self::sanatize_custom_field( $field );
 
 			// Check field exists.
 			$exists = self::field_exists($field->htmlvar_name,$field->post_type);
-//			$exists = isset($field->field_id) && $field->field_id > 0 ? true : false;
 
-
-//			if($exists){echo '###exizts';}else{echo '###nonexists';}
-//			print_r($_REQUEST);
-//			echo 'xxxx';
-//			print_r($field);
-
-			//exit;
-
-			if(is_wp_error( $exists ) ){
+			if ( is_wp_error( $exists ) ) {
 				return new WP_Error( 'failed', $exists->get_error_message() );
-			}elseif( $exists && $field->field_id==='' ){ // field id blank for dummy data and 0 for new
-				return ''; // return blank, probably dummy data being inserted.
-			}elseif($exists && $field->field_id===0){// its new
+			} else if ( $exists && $field->field_id==='' ) {
+				// Field id blank for dummy data and 0 for new
+				return ''; // Return blank, probably dummy data being inserted.
+			} else if ( $exists && $field->field_id === 0 ) {
+				// Its new
 				$exists = false;
 			}
 
-			// if this is set as the default blank all the others first just incase.
-			if($field->is_default){
-				self::blank_default($field->post_type);
+			// If this is set as the default blank all the others first just incase.
+			if ( $field->is_default ) {
+				self::blank_default( $field->post_type );
 			}
-
 
 			$db_data = array(
 				'post_type' => $field->post_type,
@@ -672,8 +652,6 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 				'is_default' => $field->is_default,
 			);
 
-			//print_r($db_data);exit;
-
 			$db_format = array(
 				'%s', // post_type
 				'%s', // data_type
@@ -686,21 +664,19 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 				'%d', // is_default
 			);
 
-			if($exists){
-
+			if ( $exists ) {
 				// Update the field settings.
 				$result = $wpdb->update(
 					GEODIR_CUSTOM_SORT_FIELDS_TABLE,
 					$db_data,
-					array('id' => $field->field_id),
+					array( 'id' => $field->field_id ),
 					$db_format
 				);
 
-				if($result === false){
+				if ( $result === false ) {
 					return new WP_Error( 'failed', __( "Field update failed.", "geodirectory" ) );
 				}
-
-			}else{
+			} else {
 				// Insert the field settings.
 				$result = $wpdb->insert(
 					GEODIR_CUSTOM_SORT_FIELDS_TABLE,
@@ -708,14 +684,15 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 					$db_format
 				);
 
-				if($result === false){
+				if ( $result === false ) {
 					return new WP_Error( 'failed', __( "Field create failed.", "geodirectory" ) );
-				}else{
+				} else {
 					$field->field_id = $wpdb->insert_id;
 				}
-
 			}
 
+			// Clear cache.
+			self::clear_sort_cache( $field->post_type );
 
 			/**
 			 * Called after all custom sort fields are saved for a post.
@@ -723,13 +700,10 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			 * @since 1.0.0
 			 * @param int $lastid The post ID.
 			 */
-			do_action('geodir_after_custom_sort_fields_updated', $field->field_id);
-
+			do_action( 'geodir_after_custom_sort_fields_updated', $field->field_id, $field );
 
 			return $field->field_id;
-
 		}
-
 
         /**
          * Blank all defaults for a post type.
@@ -744,8 +718,7 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 			global $wpdb;
 
 			// blank all first
-			$wpdb->query($wpdb->prepare("update " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " set is_default='0' where post_type = %s", array($post_type)));
-
+			$wpdb->query( $wpdb->prepare( "UPDATE " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " SET is_default='0' WHERE post_type = %s", array( $post_type ) ) );
 		}
 
 
@@ -758,20 +731,25 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @param string $field_id The field ID.
 		 * @return int|string Returns field id when successful deletion, else returns 0.
 		 */
-		public static function delete_custom_field($field_id = '')
-		{
-
+		public static function delete_custom_field( $field_id = '' ) {
 			global $wpdb;
-			if ($field_id != '') {
-				$cf = trim($field_id, '_');
 
-				$wpdb->query($wpdb->prepare("delete from " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " where id= %d OR tab_parent= %d ", array($cf,$cf)));
+			if ( $field_id != '' ) {
+				$cf = trim( $field_id, '_' );
+
+				$field = self::get_field( $cf );
+
+				$wpdb->query( $wpdb->prepare( "DELETE FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE id = %d OR tab_parent = %d", array( $cf, $cf ) ) );
+
+				if ( ! empty( $field ) ) {
+					// Clear cache.
+					self::clear_sort_cache( $field->post_type );
+				}
 
 				return $field_id;
-
-			} else
+			} else {
 				return 0;
-
+			}
 		}
 
 		/**
@@ -783,34 +761,67 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Sorting', false ) ) :
 		 * @param array $field_ids List of field ids.
 		 * @return array|bool Returns field ids when success, else returns false.
 		 */
-		public function set_field_orders($tabs = array()){
+		public function set_field_orders( $tabs = array() ) {
 			global $wpdb;
 
 			$count = 0;
-			if (!empty($tabs)) {
+			if ( ! empty( $tabs ) ) {
 				$result = false;
+				$field_id = 0;
+
 				foreach ( $tabs as $index => $info ) {
+					if ( empty( $field_id ) ) {
+						$field_id = absint( $info['id'] );
+					}
+
 					$result = $wpdb->update(
 						GEODIR_CUSTOM_SORT_FIELDS_TABLE,
-						array('sort_order' => $index,'tab_level' => $info['tab_level'],'tab_parent' => $info['tab_parent']),
-						array('id' => absint($info['id'])),
-						array('%d','%d','%d')
+						array( 'sort_order' => $index, 'tab_level' => $info['tab_level'], 'tab_parent' => $info['tab_parent'] ),
+						array( 'id' => absint( $info['id'] ) ),
+						array( '%d', '%d', '%d' )
 					);
 					$count ++;
 				}
-				if($result !== false){
+
+				if ( $result !== false ) {
+					if ( $field_id && ( $field = self::get_field( $field_id ) ) ) {
+						// Clear cache.
+						self::clear_sort_cache( $field->post_type );
+					}
+
 					return true;
-				}else{
+				} else {
 					return new WP_Error( 'failed', __( "Failed to sort tab items.", "geodirectory" ) );
 				}
-			}else{
+			} else {
 				return new WP_Error( 'failed', __( "Failed to sort tab items.", "geodirectory" ) );
 			}
 		}
 
+		public static function get_field( $field_id ) {
+			global $wpdb;
 
+			if ( empty( $field_id ) ) {
+				return array();
+			}
 
+			$field = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE id = %d", array( (int) $field_id ) ) );
 
+			return $field;
+		}
+
+		/**
+		 * Clear the post type sorting cache.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param string $post_type The post type.
+		 * @return mixed.
+		 */
+		public static function clear_sort_cache( $post_type ) {
+			wp_cache_delete( "geodir_get_posts_default_sort_{$post_type}" );
+			wp_cache_delete( "geodir_get_sort_options_{$post_type}" );
+		}
 	}
 
 endif;

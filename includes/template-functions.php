@@ -967,3 +967,132 @@ function geodir_advanced_toggle_class( $default = "" ) {
 
 	return $class;
 }
+
+/**
+ * Retrieve wp_template ids.
+ *
+ * @since 2.2.4
+ *
+ * @param string $page
+ * @param string $post_type Post type.
+ * @param  bool $translated Optional. Translated page ID .Default true.
+ *
+ * @return int
+ */
+function geodir_get_template_id( $page, $post_type = '', $translated = true ) {
+	$page_id = 0;
+	if ( ! empty( $post_type ) ) {
+		$page_id = geodir_get_cpt_template_id( $page, $post_type );
+	}
+
+	if ( ! $page_id ) {
+		$page_id = geodir_get_option( 'template_' . $page );
+	}
+
+	$page_id = apply_filters( 'geodir_get_template_id', $page_id, $page, $post_type, $translated );
+
+	return $page_id ? absint( $page_id ) : - 1;
+}
+
+/**
+ * Retrieve CPT wp_template id.
+ *
+ * @since 2.2.4
+ *
+ * @param string $page
+ * @param string $post_type Post type.
+ *
+ * @return int
+ */
+function geodir_get_cpt_template_id( $page, $post_type = '' ) {
+	$page_id = 0;
+	$pages   = array( 'template_add', 'template_details', 'template_archive' );
+
+	if ( empty( $page ) || ! in_array( 'template_' . $page, $pages ) ) {
+		return $page_id;;
+	}
+
+	$page_id = wp_cache_get( "geodir_cpt_template_template_id:{$post_type}:{$page}", 'geodir_cpt_template_template' );
+
+	if ( $page_id !== false ) {
+		return $page_id;
+	}
+
+	$post_types = geodir_get_posttypes( 'array' );
+	if ( ! empty( $post_types ) && ! empty( $post_types[ $post_type ][ 'template_' . $page ] ) ) {
+		$page_id = (int) $post_types[ $post_type ][ 'template_' . $page ];
+	}
+
+	wp_cache_set( "geodir_cpt_template_template_id:{$post_type}:{$page}", $page_id, 'geodir_cpt_template_template' );
+
+	return $page_id;
+}
+
+/**
+ * Get the template ID of the add location page.
+ *
+ * @since 2.2.4
+ *
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_location_template_id(){
+    $gd_page_id = geodir_get_template_id( 'location' );
+
+	return apply_filters( 'geodir_location_template_id', $gd_page_id );
+}
+
+/**
+ * Get the template ID of the add listing page.
+ *
+ * @since 2.2.4
+ *
+ * @param string $post_type The post type.
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_add_listing_template_id( $post_type = '' ) {
+    $gd_page_id = geodir_get_template_id( 'add', $post_type );
+
+	return apply_filters( 'geodir_add_listing_template_id', $gd_page_id, $post_type );
+}
+
+/**
+ * Get the template ID of the GD search page.
+ *
+ * @since 2.2.4
+ *
+ * @param string $post_type Post type.
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_search_template_id( $post_type = '' ) {
+	$gd_page_id = geodir_get_template_id( 'search', $post_type );
+
+	return apply_filters( 'geodir_search_template_id', $gd_page_id, $post_type );
+}
+
+/**
+ * Get the template ID of the GD archive page.
+ *
+ * @since 2.2.4
+ *
+ * @param string $post_type Post type.
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_archive_template_id( $post_type = '' ) {
+	$gd_page_id = geodir_get_template_id( 'archive', $post_type );
+
+	return apply_filters( 'geodir_archive_template_id', $gd_page_id, $post_type );
+}
+
+/**
+ * Get the template ID of the GD details page.
+ *
+ * @since 2.2.4
+ *
+ * @param string $post_type Post type.
+ * @return int|null Return the page ID if present or null if not.
+ */
+function geodir_details_template_id( $post_type = '' ) {
+	$gd_page_id = geodir_get_template_id( 'details', $post_type );
+
+	return apply_filters( 'geodir_details_template_id', $gd_page_id, $post_type );
+}

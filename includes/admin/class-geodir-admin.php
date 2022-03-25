@@ -189,6 +189,16 @@ class GeoDir_Admin {
 	 * Output buffering allows admin screens to make redirects later on.
 	 */
 	public function buffer() {
+		// Prevent plugin activation redirect on plugin install during setup wizard.
+		if ( isset( $_REQUEST['page'] ) && $_REQUEST['page'] == 'gd-setup' && ! empty( $_REQUEST['step'] ) ) {
+			if ( $_REQUEST['step'] == 'features' || $_REQUEST['step'] == 'content' ) {
+				if ( get_option( 'uwp_activation_redirect', false ) ) {
+					delete_option( 'uwp_activation_redirect' );
+					update_option( "uwp_setup_wizard_notice", 1 );
+				}
+			}
+		}
+
 		ob_start();
 	}
 

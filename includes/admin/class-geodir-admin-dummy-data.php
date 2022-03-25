@@ -550,7 +550,7 @@ class GeoDir_Admin_Dummy_Data {
 
 					$select_disabled = $post_counts > 0 ? 'disabled' : '';
 					echo "<td class='d-flex flex-row'>";
-					echo "<select title='".__( "Select the data type", "geodirectory" )."' data-toggle=\"tooltip\" id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='flex-fill form-control form-control-sm' style='min-width:200px'>";
+					echo "<select title='".__( "Select the data type", "geodirectory" )."' data-toggle=\"tooltip\" id='" . $post_type . "_data_type' onchange='geodir_dummy_set_count(this,\"$post_type\");' $select_disabled class='flex-fill form-control form-control-sm' style='min-width:180px'>";
 
 					$c = 0;
 					foreach ( $data_types as $key => $val ) {

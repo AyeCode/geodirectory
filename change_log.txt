@@ -8,7 +8,13 @@
 * GeoDirectory Elementor widgets not showing in searches - FIXED
 * Backend settings textarea options strips HTML tags - FIXED
 * Imported external linked image not working for og:image - FIXED
-* missing no rating class on listing grid - FIXED
+* Missing no rating class on listing grid - FIXED
+* Option added in tags field to enable spell check - CHANGED
+* Prevent activation redirect on plugin install during setup wizard - FIXED
+* Tags & file required validation not working - FIXED
+* Block Theme compatibility - ADDED
+* Sort field cache not updated on field update - FIXED
+* Street address not set properly for address within Japan - FIXED
 
 = 2.2.3 =
 * CPT sorting unable to save descending order - FIXED

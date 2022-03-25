@@ -102,6 +102,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
     <?php if($lat_lng_blank){$lat='';$lng='';}?>
     var <?php echo $prefix;?>CITY_MAP_ZOOMING_FACT = <?php echo ($mapzoom) ? absint( $mapzoom ) : 12;?>;
     var minZoomLevel = <?php echo ($is_map_restrict) ? 5 : 0; ?>;
+    var mapLang = '<?php echo esc_js( GeoDir_Maps::map_language() ); ?>';
     var oldstr_address;
     var oldstr_address2;
     var oldstr_zip;
@@ -136,6 +137,7 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
 
             getCountryISO = '';
 
+            formatted_address = '';
             street_number = '';
             premise = ''; // In Russian ;
             establishment = '';
@@ -236,6 +238,9 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
                     postal_code = postal_code_prefix;
                 }
                 if (responses[0].formatted_address != '') {
+                    if (formatted_address == '') {
+                        formatted_address = responses[0].formatted_address;
+                    }
                     address_array = responses[0].formatted_address.split(",", 2);
                     
                     if (address_array.length > 1) {
@@ -312,8 +317,6 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if (country.short_name) {
                 rr = country.short_name;
             }
-
-
             //$country_arr = ["US", "CA", "IN","DE","NL"];
             // fix for regions in GB
 
@@ -433,6 +436,24 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
             if (postal_code.long_name) {
                 getZip = postal_code.long_name;
             }
+
+            // Adjust Japanese street address.
+            if (getCountryISO == 'JP' && formatted_address != '' && !getAddress && mapLang == 'ja') {
+                formatted_address = formatted_address.replace(getCountry + "、", "");
+                if (getZip) {
+                    formatted_address = formatted_address.replace(getCountry + " 〒" + getZip, "〒" + getZip);
+                    formatted_address = formatted_address.replace("〒" + getZip + " ", "");
+                }
+                _formatted_address = '';
+                if (getCity && formatted_address.indexOf(getCity) !== -1) {
+                    _formatted_address = formatted_address.split(getCity);
+                    
+                } else if (getState && formatted_address.indexOf(getState) !== -1) {
+                    _formatted_address = formatted_address.split(getState);
+                }
+                getAddress = _formatted_address.length > 1 ? _formatted_address[((_formatted_address.length)-1)] : formatted_address;
+            }
+            console.log(getAddress+', '+getCity+', '+getState+', '+getCountry);
             <?php 
             /**
              * Fires to add javascript variable to use in google map.
@@ -941,13 +962,18 @@ $icon_size = GeoDir_Maps::get_marker_size($marker_icon, array('w' => 20, 'h' => 
      * @var string $height The map height setting.
      * @var string $width The map width setting.
      */
-    $map_options = array();
     $map_type = 'add_listing';
     $map_canvas = $prefix .'map' ;
     $height = '350px';
     $width = '100%';
     $wrap_class = '';
     $hide_expand_map = true;
+    $map_options = array(
+        'map_canvas' => $map_canvas,
+        'map_type' => $map_type,
+        'height' => $height,
+        'width' => $width
+    );
     include( GEODIRECTORY_PLUGIN_DIR . 'templates/bootstrap/map/map.php' );
     ?>
 </div>

@@ -629,16 +629,13 @@ add_filter('geodir_add_custom_sort_options', 'geodir_add_custom_sort_options', 0
  * @param string $post_type The post type.
  * @return array Returns the fields.
  */
-function geodir_add_custom_sort_options($fields, $post_type)
-{
+function geodir_add_custom_sort_options( $fields, $post_type ) {
     global $wpdb;
 
     if ($post_type != '') {
-
         $all_postypes = geodir_get_posttypes();
 
-        if (in_array($post_type, $all_postypes)) {
-
+        if ( in_array( $post_type, $all_postypes ) ) {
             $custom_fields = $wpdb->get_results(
                 $wpdb->prepare(
                     "select post_type,data_type,field_type,frontend_title,htmlvar_name,field_icon from " . GEODIR_CUSTOM_FIELDS_TABLE . " where post_type = %s and is_active='1' and cat_sort='1' AND field_type != 'address' order by sort_order asc",
@@ -646,23 +643,38 @@ function geodir_add_custom_sort_options($fields, $post_type)
                 ), 'ARRAY_A'
             );
 
-            if (!empty($custom_fields)) {
-
-                foreach ($custom_fields as $val) {
-                    $fields[] = $val;
+            if ( ! empty( $custom_fields ) ) {
+                foreach ( $custom_fields as $val ) {
+                    $fields[ esc_attr( $val['htmlvar_name'] ) ] = $val;
                 }
             }
 
-        }
+            if ( GeoDir_Post_types::supports( $post_type, 'location' ) ) {
+                $fields['street'] = array(
+                    'post_type'      => $post_type,
+                    'data_type'      => '',
+                    'field_type'     => 'text',
+                    'frontend_title' => __( 'Address', 'geodirectory' ),
+                    'htmlvar_name'   => 'street',
+                    'field_icon'     => 'fas fa-map-marker-alt',
+                    'description'    => __( 'Sort by address.', 'geodirectory' )
+                );
 
+                $fields['zip'] = array(
+                    'post_type'      => $post_type,
+                    'data_type'      => '',
+                    'field_type'     => 'text',
+                    'frontend_title' => __( 'Zip/Post Code', 'geodirectory' ),
+                    'htmlvar_name'   => 'zip',
+                    'field_icon'     => 'fas fa-map-marker-alt',
+                    'description'    => __( 'Sort by zip/post code.', 'geodirectory' )
+                );
+            }
+        }
     }
 
     return $fields;
 }
-
-
-
-
 
 /**
  * Set custom sort field order.

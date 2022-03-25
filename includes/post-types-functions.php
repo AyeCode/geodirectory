@@ -589,43 +589,49 @@ function geodir_get_current_posttype() {
  * @return bool|null|string Returns default sort results, when the post type is valid. Otherwise returns false.
  */
 function geodir_get_posts_default_sort( $post_type ) {
-    global $wpdb;
+	global $wpdb;
 
-    // check cache
-    $cache = wp_cache_get("geodir_get_posts_default_sort_{$post_type}");
-    if($cache !== false){
-        return $cache;
-    }
+	// Check cache.
+	$cache = wp_cache_get( "geodir_get_posts_default_sort_{$post_type}" );
+	if ( $cache !== false ) {
+		return $cache;
+	}
 
 	$default_sort = '';
 
-    if ( $post_type != '' ) {
-        $all_postypes = geodir_get_posttypes();
+	if ( $post_type != '' ) {
+		$all_postypes = geodir_get_posttypes();
 
-        if ( ! in_array( $post_type, $all_postypes ) ) {
-            return false;
-        }
+		if ( ! in_array( $post_type, $all_postypes ) ) {
+			return false;
+		}
 
-        $field = $wpdb->get_row( $wpdb->prepare( "SELECT field_type, htmlvar_name, sort FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND is_active = %d AND is_default = %d", array(
-            $post_type,
-            1,
-            1
-        ) ) );
+		$field = $wpdb->get_row( $wpdb->prepare( "SELECT field_type, htmlvar_name, sort FROM " . GEODIR_CUSTOM_SORT_FIELDS_TABLE . " WHERE post_type = %s AND is_active = %d AND is_default = %d", array( $post_type, 1, 1 ) ) );
 
-        if ( ! empty( $field ) ) {
-            if ( $field->field_type == 'random' ) {
+		if ( ! empty( $field ) ) {
+			if ( $field->field_type == 'random' ) {
 				$default_sort = 'random';
 			} else {
 				$default_sort = $field->htmlvar_name . '_' . $field->sort;
 			}
-        }
-    }
+		}
 
-    wp_cache_set("geodir_get_posts_default_sort_{$post_type}", $default_sort );
+		/**
+		 * Filter post default sort options.
+		 *
+		 * @since 2.2.4
+		 *
+		 * @param string $default_sort Default sort.
+		 * @param string $post_type The post type.
+		 * @param object $field Field object.
+		 */
+		$default_sort = apply_filters( 'geodir_get_posts_default_sort_by', $default_sort, $post_type, $field );
+	}
+
+	wp_cache_set("geodir_get_posts_default_sort_{$post_type}", $default_sort );
 
 	return $default_sort;
 }
-
 
 /**
  * Returns sort options of a post type.

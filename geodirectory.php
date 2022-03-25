@@ -219,6 +219,11 @@ final class GeoDirectory {
 		    GeoDir_Elementor::init();
 	    }
 
+		// Block Theme comaptibility
+		if ( function_exists( 'wp_is_block_theme' ) && wp_is_block_theme() ) {
+			GeoDir_Block_Theme::init();
+		}
+
 	    GeoDir_SEO::init();
 
         require_once( GEODIRECTORY_PLUGIN_DIR . 'includes/general-functions.php' );

@@ -360,6 +360,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_delete'                                   => strip_tags( __( 'Delete', 'geodirectory' ) ),
 		'txt_cancel'                                   => strip_tags( __( 'Cancel', 'geodirectory' ) ),
 		'txt_confirm'                                   => strip_tags( __( 'Confirm', 'geodirectory' ) ),
+		'txt_continue'                                 => strip_tags( __( 'Continue', 'geodirectory' ) ),
 		'txt_yes'                                   => strip_tags( __( 'Yes', 'geodirectory' ) ),
 		'txt_deleted'                                   => strip_tags( __( 'Deleted', 'geodirectory' ) ),
 		'txt_google_key_error'                         => __( 'Google API key Error', 'geodirectory' ),
@@ -371,6 +372,7 @@ function geodir_params() {// check_ajax_referer function is used to make sure no
 		'txt_google_key_error_referer'                 => __( 'This URL is not allowed for this API Key', 'geodirectory' ),
 		'txt_google_key_error_billing'                 => __( 'You must enable billing on your Google account.', 'geodirectory' ),
 		'txt_google_key_error_brave'                 => __( 'Brave browser shield will block this check and return a false positive', 'geodirectory' ),
+		'confirm_new_wp_template' => __( 'Are you sure want to create a new template to customize?', 'geodirectory' ),
 		'gmt_offset'                                   => geodir_gmt_offset(),
 		'timezone_string'                              => geodir_timezone_string(),
 		'autosave'                                     => apply_filters('geodir_autosave',10000),// 10000 = 10 seconds, set to 0 to disable

@@ -125,6 +125,13 @@ jQuery(function($) {
         }
         e.preventDefault(); // avoid to execute the actual submit of the form.
     });
+
+    /* post_tags spellcheck */
+    if (jQuery('select#post_tags').prop('spellcheck')) {
+        setTimeout(function(){
+            jQuery('#post_tags_row input.select2-search__field').prop('spellcheck', 'true');
+        }, 5000);
+    }
 });
 /**
  * Prevent navigation away if there are unsaved changes.

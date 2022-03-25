@@ -157,6 +157,13 @@ jQuery(function($) {
         geodir_populate_default_category_input();jQuery('[name="default_category"]').trigger('change');
     });
     geodir_populate_default_category_input();
+
+    /* post_tags spellcheck */
+    if (jQuery('select#post_tags').prop('spellcheck')) {
+        setTimeout(function(){
+            jQuery('[data-argument="post_tags"] input.select2-search__field').prop('spellcheck', 'true');
+        }, 5000);
+    }
 });
 /**
  * Prevent navigation away if there are unsaved changes.
