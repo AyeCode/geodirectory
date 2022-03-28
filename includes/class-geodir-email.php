@@ -288,7 +288,7 @@ class GeoDir_Email {
 			$comment = get_comment( $email_vars['comment_ID'] );
 		}
 		if ( ! empty( $comment ) ) {
-			$comment_ID = $comment->comment_ID;
+			$comment_ID = (int) $comment->comment_ID;
 
 			$replace_array['[#comment_ID#]']              = $comment_ID;
 			$replace_array['[#comment_author#]']          = $comment->comment_author;
@@ -296,10 +296,36 @@ class GeoDir_Email {
 			$replace_array['[#comment_author_email#]']    = $comment->comment_author_email;
 			$replace_array['[#comment_date#]']            = $comment->comment_date;
 			$replace_array['[#comment_content#]']         = wp_specialchars_decode( $comment->comment_content );
+			$replace_array['[#comment_post_ID#]']         = (int) $comment->comment_post_ID;
+			$replace_array['[#comment_post_title#]']      = html_entity_decode( get_the_title( (int) $comment->comment_post_ID ), ENT_COMPAT, 'UTF-8' );
+			$replace_array['[#comment_post_url#]']        = get_permalink( (int) $comment->comment_post_ID );
 			$replace_array['[#comment_approve_link#]']    = admin_url( "comment.php?action=approve&c={$comment_ID}#wpbody-content" );
 			$replace_array['[#comment_trash_link#]']      = admin_url( "comment.php?action=trash&c={$comment_ID}#wpbody-content" );
 			$replace_array['[#comment_spam_link#]']       = admin_url( "comment.php?action=spam&c={$comment_ID}#wpbody-content" );
 			$replace_array['[#comment_moderation_link#]'] = admin_url( "edit-comments.php?comment_status=moderated#wpbody-content" );
+
+			// Review Rating data
+			if ( ! geodir_cpt_has_rating_disabled( get_post_type( (int) $comment->comment_post_ID ) ) && ( $rating = GeoDir_Comments::get_review( $comment_ID ) ) ) {
+				$rating_titles = GeoDir_Comments::rating_texts();
+				$rating_star = absint( $rating->rating );
+
+				$replace_array['[#review_rating_star#]']  = $rating_star;
+				$replace_array['[#review_rating_title#]'] = isset( $rating_titles[ $rating_star ] ) ? html_entity_decode( $rating_titles[ $rating_star ], ENT_COMPAT, 'UTF-8' ) : '';
+				$replace_array['[#review_city#]']         = ! empty( $rating->city ) ? html_entity_decode( $rating->city, ENT_COMPAT, 'UTF-8' ) : '';
+				$replace_array['[#review_region#]']       = ! empty( $rating->region ) ? html_entity_decode( $rating->region, ENT_COMPAT, 'UTF-8' ) : '';
+				$replace_array['[#review_country#]']      = ! empty( $rating->country ) ? html_entity_decode( $rating->country, ENT_COMPAT, 'UTF-8' ) : '';
+				$replace_array['[#review_latitude#]']     = ! empty( $rating->latitude ) ? $rating->latitude : '';
+				$replace_array['[#review_longitude#]']    = ! empty( $rating->longitude ) ? $rating->longitude : '';
+
+			} else {
+				$replace_array['[#review_rating_star#]']  = '';
+				$replace_array['[#review_rating_title#]'] = '';
+				$replace_array['[#review_city#]']         = '';
+				$replace_array['[#review_region#]']       = '';
+				$replace_array['[#review_country#]']      = '';
+				$replace_array['[#review_latitude#]']     = '';
+				$replace_array['[#review_longitude#]']    = '';
+			}
 		}
 
 		foreach ( $email_vars as $key => $value ) {
