@@ -1037,13 +1037,13 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf_Extras', false ) ) :
 			}
 			echo aui()->input(
 				array(
-					'id'                => 'validation_pattern',
-					'name'              => 'validation_pattern',
-					'label_type'        => 'top',
-					'label'              => __('Validation Pattern','geodirectory') . geodir_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'geodirectory' )),
-					'type'              => 'text',
+					'id'         => 'validation_pattern',
+					'name'       => 'validation_pattern',
+					'label_type' => 'top',
+					'label'      => __('Validation Pattern','geodirectory') . geodir_help_tip( __( 'Enter regex expression for HTML5 pattern validation.', 'geodirectory' )),
+					'type'       => 'text',
 					'wrap_class' => geodir_advanced_toggle_class(),
-					'value' => $value,
+					'value'      => addslashes_gpc( $value ), // Keep slashes
 				)
 			);
 
