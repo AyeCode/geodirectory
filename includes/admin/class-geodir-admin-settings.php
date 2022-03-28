@@ -501,26 +501,31 @@ class GeoDir_Admin_Settings {
 						$value['allow_tags'] = true;
 					}
 
+					// Select placeholder on empty textarea focus.
+					$class = ! empty( $value['class'] ) ? $value['class'] : 'active-placeholder';
+					if ( strpos( $class, 'active-placeholder' ) === false ) {
+						$class .= ' active-placeholder';
+					}
+
 					echo aui()->textarea(
 						array(
-							'id'               => $value['id'],
-							'name'             => $value['id'],
-							'label_type'       => $label_type,
-							'label_col'        => '3',
-							'class'            => ! empty( $value['class'] ) ? $value['class'] : '',
-							'label_class'      => 'font-weight-bold',
-							'wrap_class'       => isset( $value['advanced'] ) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
-							'label'            => $value['title'] . $tooltip_html,
-							'placeholder'      => $value['placeholder'],
-							'value'            => $option_value,
-							'help_text'        => isset( $description ) ? $description : '',
-							'extra_attributes' => ! empty( $custom_attributes ) ? $custom_attributes : array(),
-							'rows'             => $rows,
-							'wysiwyg'          => $wysiwyg,
-							'allow_tags'       => isset( $value['allow_tags'] ) ? $value['allow_tags'] : true, // Allow HTML Tags. Default True.
-							'element_require'  => ! empty( $value['element_require'] ) ? $value['element_require'] : '',
+							'id'                => $value['id'],
+							'name'              => $value['id'],
+							'label_type'        => $label_type,
+							'label_col'         => '3',
+							'class'             => $class,
+							'label_class'       => 'font-weight-bold',
+							'wrap_class'        => isset( $value['advanced'] ) && $value['advanced'] ? geodir_advanced_toggle_class() : '',
+							'label'             => $value['title'] . $tooltip_html,
+							'placeholder'       => $value['placeholder'],
+							'value'             => $option_value,
+							'help_text'         => isset( $description ) ? $description : '',
+							'extra_attributes'  => ! empty( $custom_attributes ) ? $custom_attributes : array(),
+							'rows'              => $rows,
+							'wysiwyg'           => $wysiwyg,
+							'allow_tags'        => isset( $value['allow_tags'] ) ? $value['allow_tags'] : true, // Allow HTML Tags. Default True.
+							'element_require'   => ! empty( $value['element_require'] ) ? $value['element_require'] : '',
 							'input_group_right' => ! empty( $value['custom_desc'] ) ? "<div class='d-flex flex-wrap pt-3 text-muted'>" . $value['custom_desc'] . "</div>" : '',
-
 						)
 					);
 
