@@ -2153,18 +2153,24 @@ if ( ! class_exists( 'GeoDir_Settings_Cpt_Cf', false ) ) :
 						}
 					}
 
-					$column_attr .= "( $op_size ) NULL ";
-					if ($field->db_default != '') {
-						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
+					if ( $field->data_type == 'TEXT' ) {
+						$column_attr .= " NULL ";
+					} else {
+						$column_attr .= "( $op_size ) NULL ";
 					}
 
 					// Update the field size to new max
-					if($exists) {
-						$meta_field_add = "ALTER TABLE {$table} CHANGE `" . $field->htmlvar_name . "` `" . $field->htmlvar_name . "` VARCHAR( $op_size ) NULL";
+					if ( $exists ) {
+						$meta_field_add = "ALTER TABLE {$table} CHANGE `" . $field->htmlvar_name . "` `" . $field->htmlvar_name . "` {$column_attr}";
 						$alter_result   = $wpdb->query( $meta_field_add );
+
 						if ( $alter_result === false ) {
 							return new WP_Error( 'failed', __( "Column change failed, you may have too many columns.", "geodirectory" ) );
 						}
+					}
+
+					if ( $field->db_default != '' ) {
+						$column_attr.= $wpdb->prepare(" DEFAULT %s ",$field->db_default);
 					}
 					break;
 				case 'textarea':
