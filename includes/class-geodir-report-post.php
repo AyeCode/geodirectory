@@ -246,7 +246,7 @@ if ( isset( $_REQUEST['resolved'] ) || isset( $_REQUEST['rejected'] ) || isset( 
 				'id' => 'email_admin_report_post_subject',
 				'name' => __( 'Subject', 'geodirectory' ),
 				'desc' => __( 'The email subject.', 'geodirectory' ),
-				'class' => 'large-text',
+				'class' => 'active-placeholder',
 				'desc_tip' => true,
 				'placeholder' => GeoDir_Defaults::email_admin_report_post_subject(),
 				'advanced' => true
